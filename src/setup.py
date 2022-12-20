@@ -189,7 +189,7 @@ setup(
         'django-scopes==1.2.*',
         'django-statici18n==2.3.*',
         'djangorestframework==3.14.*',
-        'dnspython<2.0',  # do not upgrade, causes issues with eventlet / gunicorn 19 and we cannot upgrade gunicorn right now
+        'dnspython==2.2.*',
         'drf_ujson2==1.7.*',
         'isoweek',
         'jsonschema',
