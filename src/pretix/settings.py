@@ -130,6 +130,7 @@ DATABASES = {
         'HOST': config.get('database', 'host', fallback=''),
         'PORT': config.get('database', 'port', fallback=''),
         'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
+        'CONN_HEALTH_CHECKS': db_backend != 'sqlite3',  # Will only be used from Django 4.1 onwards
         'OPTIONS': db_options,
         'TEST': {
             'CHARSET': 'utf8mb4',
