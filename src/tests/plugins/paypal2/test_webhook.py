@@ -26,6 +26,7 @@ from decimal import Decimal
 import pytest
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
+from paypalhttp.http_response import Result
 
 from pretix.base.models import (
     Event, Order, OrderPayment, OrderRefund, Organizer, Team, User,
@@ -262,7 +263,7 @@ def init_api(self):
 @pytest.mark.django_db
 def test_webhook_all_good(env, client, monkeypatch):
     order = env[1]
-    pp_order = get_test_order()
+    pp_order = Result(get_test_order())
     monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
     monkeypatch.setattr("pretix.plugins.paypal2.payment.PaypalMethod.init_api", init_api)
 
@@ -406,7 +407,7 @@ def test_webhook_mark_paid(env, client, monkeypatch):
     with scopes_disabled():
         order.payments.update(state=OrderPayment.PAYMENT_STATE_PENDING)
 
-    pp_order = get_test_order()
+    pp_order = Result(get_test_order())
     monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
     monkeypatch.setattr("pretix.plugins.paypal2.payment.PaypalMethod.init_api", init_api)
     with scopes_disabled():
@@ -503,8 +504,8 @@ def test_webhook_mark_paid(env, client, monkeypatch):
 @pytest.mark.django_db
 def test_webhook_refund1(env, client, monkeypatch):
     order = env[1]
-    pp_order = get_test_order()
-    pp_refund = get_test_refund()
+    pp_order = Result(get_test_order())
+    pp_refund = Result(get_test_refund())
 
     monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
     monkeypatch.setattr("paypalcheckoutsdk.payments.RefundsGetRequest", lambda *args: pp_refund)
@@ -597,8 +598,8 @@ def test_webhook_refund1(env, client, monkeypatch):
 @pytest.mark.django_db
 def test_webhook_refund2(env, client, monkeypatch):
     order = env[1]
-    pp_order = get_test_order()
-    pp_refund = get_test_refund()
+    pp_order = Result(get_test_order())
+    pp_refund = Result(get_test_refund())
 
     monkeypatch.setattr("paypalcheckoutsdk.orders.OrdersGetRequest", lambda *args: pp_order)
     monkeypatch.setattr("paypalcheckoutsdk.payments.RefundsGetRequest", lambda *args: pp_refund)

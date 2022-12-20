@@ -428,7 +428,7 @@ def webhook(request, *args, **kwargs):
 
     payment.order.log_action('pretix.plugins.paypal.event', data={
         'event': event_json,
-        'sale': sale,
+        'sale': sale.dict(),
     })
 
     if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED and sale['status'] in ('PARTIALLY_REFUNDED', 'REFUNDED', 'COMPLETED'):
@@ -473,7 +473,8 @@ def webhook(request, *args, **kwargs):
     elif payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED,
                            OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED) \
             and sale['status'] == 'COMPLETED':
-        capture_completed = True
+        any_captures = False
+        all_captures_completed = True
         for purchaseunit in sale['purchase_units']:
             for capture in purchaseunit['payments']['captures']:
                 try:
@@ -483,10 +484,12 @@ def webhook(request, *args, **kwargs):
                     pass
 
                 if capture['status'] not in ('COMPLETED', 'REFUNDED', 'PARTIALLY_REFUNDED'):
-                    capture_completed = False
-        if capture_completed:
+                    all_captures_completed = False
+                else:
+                    any_captures = True
+        if any_captures and all_captures_completed:
             try:
-                payment.info = json.dumps(sale)
+                payment.info = json.dumps(sale.dict())
                 payment.save(update_fields=['info'])
                 payment.confirm()
             except Quota.QuotaExceededException:
