@@ -18,13 +18,13 @@ If you want to add a custom view to the control area of an event, just register 
 
 .. code-block:: python
 
-    from django.conf.urls import url
+    from django.urls import re_path
 
     from . import views
 
     urlpatterns = [
-        url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/mypluginname/',
-            views.admin_view, name='backend'),
+        re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/mypluginname/',
+                views.admin_view, name='backend'),
     ]
 
 It is required that your URL parameters are called ``organizer`` and ``event``. If you want to

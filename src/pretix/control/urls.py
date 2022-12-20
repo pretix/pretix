@@ -33,8 +33,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from django.conf.urls import re_path
-from django.urls import include
+from django.urls import include, re_path
 from django.views.generic.base import RedirectView
 
 from pretix.control.views import (
