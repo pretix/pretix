@@ -427,8 +427,8 @@ def webhook(request, *args, **kwargs):
         return HttpResponse('Payment not found', status=200)
 
     payment.order.log_action('pretix.plugins.paypal.event', data={
-        'event': event_json,
-        'sale': sale.dict(),
+        **event_json,
+        '_order_state': sale.dict(),
     })
 
     if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED and sale['status'] in ('PARTIALLY_REFUNDED', 'REFUNDED', 'COMPLETED'):
