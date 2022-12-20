@@ -140,7 +140,7 @@ error_messages = {
     'addon_min_count': _('You need to select at least %(min)s add-ons from the category %(cat)s for the '
                          'product %(base)s.'),
     'addon_no_multi': _('You can select every add-ons from the category %(cat)s for the product %(base)s at most once.'),
-    'addon_only': _('One of the products you selected can only be bought as an add-on to another project.'),
+    'addon_only': _('One of the products you selected can only be bought as an add-on to another product.'),
     'bundled_only': _('One of the products you selected can only be bought part of a bundle.'),
     'seat_required': _('You need to select a specific seat.'),
     'seat_invalid': _('Please select a valid seat.'),
