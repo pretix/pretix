@@ -172,6 +172,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "waiting_list_enabled": False,
             "error": None,
             "has_seating_plan": False,
+            "has_seating_plan_waitinglist": False,
             'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">ticketing powered by pretix</a>',
             "items_by_category": [
                 {
@@ -348,6 +349,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "show_variations_expanded": False,
             "display_net_prices": False,
             "has_seating_plan": False,
+            "has_seating_plan_waitinglist": False,
             "vouchers_exist": True,
             "waiting_list_enabled": False,
             "error": None,
@@ -401,6 +403,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "display_net_prices": False,
             "vouchers_exist": True,
             "has_seating_plan": False,
+            "has_seating_plan_waitinglist": False,
             "waiting_list_enabled": False,
             "error": None,
             'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">ticketing powered by pretix</a>',
@@ -469,6 +472,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "show_variations_expanded": False,
             "display_net_prices": False,
             "has_seating_plan": False,
+            "has_seating_plan_waitinglist": False,
             "vouchers_exist": True,
             "waiting_list_enabled": False,
             "error": "This voucher is expired.",
