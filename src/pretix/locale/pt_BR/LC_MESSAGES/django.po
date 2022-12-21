@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2022-12-14 13:09+0000\n"
-"PO-Revision-Date: 2021-09-27 06:00+0000\n"
-"Last-Translator: Diego Rodrigo <diegorodrigo90@gmail.com>\n"
+"PO-Revision-Date: 2022-12-21 20:00+0000\n"
+"Last-Translator: Fazenda Dengo <fazendadengo@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 4.15\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -9268,10 +9268,8 @@ msgstr "Nome do evento"
 #: pretix/base/settings.py:3031 pretix/base/settings.py:3045
 #: pretix/base/settings.py:3096 pretix/base/settings.py:3114
 #: pretix/base/settings.py:3133
-#, fuzzy
-#| msgid "Full name"
 msgid "Family name"
-msgstr "Nome completo"
+msgstr "Sobrenome"
 
 #: pretix/base/settings.py:2943 pretix/base/settings.py:2959
 #: pretix/base/settings.py:2975 pretix/base/settings.py:2990
