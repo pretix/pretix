@@ -59,10 +59,10 @@ class RelativeDateWrapper:
     def date(self, event) -> datetime.date:
         from .models import SubEvent
 
-        if isinstance(self.data, datetime.date):
-            return self.data
-        elif isinstance(self.data, datetime.datetime):
+        if isinstance(self.data, datetime.datetime):
             return self.data.date()
+        elif isinstance(self.data, datetime.date):
+            return self.data
         else:
             if self.data.minutes_before is not None:
                 raise ValueError('A minute-based relative datetime can not be used as a date')
