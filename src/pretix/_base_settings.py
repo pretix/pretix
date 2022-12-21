@@ -30,7 +30,6 @@ from django.utils.translation import gettext_lazy as _  # NOQA
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 
 INSTALLED_APPS = [
