@@ -331,6 +331,28 @@
     width: 100%;
   }
 
+  .pretix-widget-seating-waitinglist {
+    margin: 15px 0;
+  }
+
+  .pretix-widget-seating-waitinglist-text {
+    padding: 0 15px;
+    width: 75%;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  .pretix-widget-seating-waitinglist-button-wrap {
+    padding: 0 15px;
+    width: 25%;
+    box-sizing: border-box;
+    float: left;
+  }
+
+  .pretix-widget-seating-waitinglist-button {
+    width: 100%;
+  }
+
   .pretix-widget-item-with-picture .pretix-widget-main-item-row .pretix-widget-item-title-and-description {
     margin-left: 70px;
   }

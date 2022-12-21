@@ -243,6 +243,7 @@ class WidgetAPIProductList(EventListMixin, View):
             voucher=self.voucher,
             channel=self.request.sales_channel.identifier,
             base_qs=qs,
+            require_seat=None,
             memberships=(
                 self.request.customer.usable_memberships(
                     for_event=self.subevent or self.request.event,
@@ -252,7 +253,7 @@ class WidgetAPIProductList(EventListMixin, View):
         )
 
         grps = []
-        for cat, g in item_group_by_category(items):
+        for cat, g in item_group_by_category([i for i in items if not i.requires_seat]):
             grps.append({
                 'id': cat.pk if cat else None,
                 'name': str(cat.name) if cat else None,
@@ -312,7 +313,7 @@ class WidgetAPIProductList(EventListMixin, View):
                     } for item in g
                 ]
             })
-        return grps, display_add_to_cart, len(items)
+        return grps, display_add_to_cart, len(items), items
 
     def post_process(self, data):
         data['poweredby'] = get_powered_by(self.request, safelink=False)
@@ -711,14 +712,30 @@ class WidgetAPIProductList(EventListMixin, View):
                 fail = True
 
         if not fail and (ev.presale_is_running or request.event.settings.show_items_outside_presale_period):
-            data['items_by_category'], data['display_add_to_cart'], data['itemnum'] = self._get_items()
+            data['items_by_category'], data['display_add_to_cart'], data['itemnum'], items = self._get_items()
             data['display_add_to_cart'] = data['display_add_to_cart'] and ev.presale_is_running
         else:
+            items = []
             data['items_by_category'] = []
             data['display_add_to_cart'] = False
             data['itemnum'] = 0
 
         data['has_seating_plan'] = ev.seating_plan is not None
+        data['has_seating_plan_waitinglist'] = False
+        if request.event.settings.waiting_list_enabled and ev.presale_is_running:
+            for i in items:
+                if not i.allow_waitinglist or not i.requires_seat:
+                    continue
+
+                if i.has_variations:
+                    for v in i.available_variations:
+                        if v.cached_availability[0] != Quota.AVAILABILITY_OK:
+                            data['has_seating_plan_waitinglist'] = True
+                            break
+                else:
+                    if i.cached_availability[0] != Quota.AVAILABILITY_OK:
+                        data['has_seating_plan_waitinglist'] = True
+                        break
 
         vouchers_exist = self.request.event.get_cache().get('vouchers_exist')
         if vouchers_exist is None:

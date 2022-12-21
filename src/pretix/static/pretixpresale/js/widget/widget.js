@@ -53,6 +53,7 @@ var strings = {
     'next_week': django.pgettext('widget', 'Next week'),
     'previous_week': django.pgettext('widget', 'Previous week'),
     'show_seating': django.pgettext('widget', 'Open seat selection'),
+    'seating_plan_waiting_list': django.pgettext('widget', 'Some or all ticket categories are currently sold out. If you want, you can add yourself to the waiting list. We will then notify if seats are available again.'),
     'load_more': django.pgettext('widget', 'Load more'),
     'days': {
         'MO': django.gettext('Mo'),
@@ -793,6 +794,17 @@ Vue.component('pretix-widget-event-form', {
         + strings['show_seating']
         + '</button>'
         + '</div>'
+        + '<div class="pretix-widget-seating-waitinglist" v-if="this.$root.has_seating_plan && this.$root.has_seating_plan_waitinglist">'
+        + '<div class="pretix-widget-seating-waitinglist-text">'
+        + strings['seating_plan_waiting_list']
+        + '</div>'
+        + '<div class="pretix-widget-seating-waitinglist-button-wrap">'
+        + '<button class="pretix-widget-seating-waitinglist-button" @click.prevent.stop="$root.startseating">'
+        + strings['waiting_list']
+        + '</button>'
+        + '</div>'
+        + '<div class="pretix-widget-clear"></div>'
+        + '</div>'
         + '<category v-for="category in this.$root.categories" :category="category" :key="category.id"></category>'
         + '<div class="pretix-widget-action" v-if="$root.display_add_to_cart">'
         + '<button @click="$parent.buy" type="submit" :disabled="buy_disabled">{{ this.buy_label }}</button>'
@@ -812,6 +824,7 @@ Vue.component('pretix-widget-event-form', {
         + '<div class="pretix-widget-voucher-button-wrap">'
         + '<button @click="$parent.redeem">' + strings.redeem + '</button>'
         + '</div>'
+        + '<div class="pretix-widget-clear"></div>'
         + '</div>'
         + '</form>'
         + '</div>'
@@ -1472,6 +1485,7 @@ var shared_root_methods = {
                 root.cart_exists = data.cart_exists;
                 root.vouchers_exist = data.vouchers_exist;
                 root.has_seating_plan = data.has_seating_plan;
+                root.has_seating_plan_waitinglist = data.has_seating_plan_waitinglist;
                 root.itemnum = data.itemnum;
             }
             root.poweredby = data.poweredby;
@@ -1479,7 +1493,7 @@ var shared_root_methods = {
                 root.loading--;
                 root.trigger_load_callback();
             }
-            if (root.parent_stack.length > 0 && root.has_seating_plan && root.categories.length === 0 && !root.frame_dismissed && root.useIframe && !root.error) {
+            if (root.parent_stack.length > 0 && root.has_seating_plan && root.categories.length === 0 && !root.frame_dismissed && root.useIframe && !root.error && !root.has_seating_plan_waitinglist) {
                 // If we're on desktop and someone selects a seating-only event in a calendar, let's open it right away,
                 // but only if the person didn't close it before.
                 root.startseating()
@@ -1727,7 +1741,8 @@ var create_widget = function (element) {
                 itemcount: 0,
                 overlay: null,
                 poweredby: "",
-                has_seating_plan: false
+                has_seating_plan: false,
+                has_seating_plan_waitinglist: false,
             }
         },
         created: function () {
