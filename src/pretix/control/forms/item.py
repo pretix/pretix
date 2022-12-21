@@ -592,7 +592,7 @@ class ItemUpdateForm(I18nModelForm):
                     'tax_rule',
                     _("Gift card products should use a tax rule with a rate of 0 percent since sales tax will be applied when the gift card is redeemed.")
                 )
-            if d['admission']:
+            if d.get('admission'):
                 self.add_error(
                     'admission',
                     _(
@@ -608,7 +608,7 @@ class ItemUpdateForm(I18nModelForm):
                 )
             )
 
-        if not d['admission']:
+        if not d.get('admission'):
             d['personalized'] = False
 
         if d.get('grant_membership_type'):

@@ -80,7 +80,7 @@ def env():
     )
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
                                  category=None, default_price=23,
-                                 admission=True)
+                                 admission=True, personalized=True)
     event.settings.set('attendee_names_asked', True)
     event.settings.set('locales', ['en', 'de'])
     OrderPosition.objects.create(
@@ -106,7 +106,7 @@ def test_order_list(client, env):
     with scopes_disabled():
         otherticket = Item.objects.create(event=env[0], name='Early-bird ticket',
                                           category=None, default_price=23,
-                                          admission=True)
+                                          admission=True, personalized=True)
     client.login(email='dummy@dummy.dummy', password='dummy')
     response = client.get('/control/event/dummy/dummy/orders/')
     assert 'FOO' in response.content.decode()

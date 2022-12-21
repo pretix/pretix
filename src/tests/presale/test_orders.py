@@ -77,7 +77,7 @@ class BaseOrdersTest(TestCase):
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=5)
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                           category=self.category, default_price=23,
-                                          admission=True)
+                                          admission=True, personalized=True)
         self.quota_tickets.items.add(self.ticket)
         self.event.settings.set('attendee_names_asked', True)
         self.question = Question.objects.create(question='Foo', type=Question.TYPE_STRING, event=self.event,

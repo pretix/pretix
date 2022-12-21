@@ -89,7 +89,7 @@ class BaseQuotaTestCase(TestCase):
         )
         self.quota = Quota.objects.create(name="Test", size=2, event=self.event)
         self.item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
-                                         admission=True)
+                                         admission=True, personalized=True)
         self.item2 = Item.objects.create(event=self.event, name="T-Shirt", default_price=23)
         self.item3 = Item.objects.create(event=self.event, name="Goodie", default_price=23)
         self.var1 = ItemVariation.objects.create(item=self.item2, value='S')
