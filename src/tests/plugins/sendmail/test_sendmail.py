@@ -68,13 +68,21 @@ def subevent(event):
     event.has_subevents = True
     event.save()
     se = event.subevents.create(name='se1', date_from=now())
-
     return se
+
+
+@pytest.fixture
+def waitinglistentry(event, item):
+    return event.waitinglistentries.create(
+        item=item,
+        created=now(),
+        email='john@example.org',
+    )
 
 
 @pytest.mark.django_db
 def test_sendmail_view(logged_in_client, sendmail_url, expected=200):
-    response = logged_in_client.get(sendmail_url)
+    response = logged_in_client.get(sendmail_url + 'orders/')
 
     assert response.status_code == expected
 
@@ -82,7 +90,7 @@ def test_sendmail_view(logged_in_client, sendmail_url, expected=200):
 @pytest.mark.django_db
 def test_sendmail_simple_case(logged_in_client, sendmail_url, event, order, pos):
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'action': 'send',
                                       'recipients': 'orders',
@@ -109,7 +117,7 @@ def test_sendmail_simple_case(logged_in_client, sendmail_url, event, order, pos)
 @pytest.mark.django_db
 def test_sendmail_email_not_sent_if_order_not_match(logged_in_client, sendmail_url, event, order, pos):
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'p',
                                       'action': 'send',
                                       'recipients': 'orders',
@@ -126,7 +134,7 @@ def test_sendmail_email_not_sent_if_order_not_match(logged_in_client, sendmail_u
 @pytest.mark.django_db
 def test_sendmail_preview(logged_in_client, sendmail_url, event, order, pos):
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'recipients': 'orders',
                                       'items': pos.item_id,
@@ -144,7 +152,7 @@ def test_sendmail_preview(logged_in_client, sendmail_url, event, order, pos):
 @pytest.mark.django_db
 def test_sendmail_invalid_data(logged_in_client, sendmail_url, event, order, pos):
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'action': 'send',
                                       'recipients': 'orders',
@@ -172,7 +180,7 @@ def test_sendmail_multi_locales(logged_in_client, sendmail_url, event, item):
                                  locale='de')
         OrderPosition.objects.create(order=o, item=item, price=13)
 
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'p',
                                       'action': 'send',
                                       'recipients': 'orders',
@@ -211,7 +219,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order, pos):
     op.save()
 
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'action': 'send',
                                       'recipients': 'orders',
@@ -226,7 +234,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order, pos):
     assert len(djmail.outbox) == 1
 
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'action': 'send',
                                       'recipients': 'orders',
@@ -248,7 +256,7 @@ def test_sendmail_subevents(logged_in_client, sendmail_url, event, order, pos):
 @pytest.mark.django_db
 def test_sendmail_placeholder(logged_in_client, sendmail_url, event, order, pos):
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'recipients': 'orders',
                                       'items': pos.item_id,
@@ -272,7 +280,7 @@ def test_sendmail_attendee_mails(logged_in_client, sendmail_url, event, order, p
     p.save()
 
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'action': 'send',
                                       'recipients': 'attendees',
@@ -297,7 +305,7 @@ def test_sendmail_both_mails(logged_in_client, sendmail_url, event, order, pos):
     p.save()
 
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'action': 'send',
                                       'recipients': 'both',
@@ -325,7 +333,7 @@ def test_sendmail_both_but_same_address(logged_in_client, sendmail_url, event, o
     p.save()
 
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'action': 'send',
                                       'recipients': 'both',
@@ -350,7 +358,7 @@ def test_sendmail_attendee_fallback(logged_in_client, sendmail_url, event, order
     p.save()
 
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'action': 'send',
                                       'recipients': 'attendees',
@@ -380,7 +388,7 @@ def test_sendmail_attendee_product_filter(logged_in_client, sendmail_url, event,
         )
 
         djmail.outbox = []
-        response = logged_in_client.post(sendmail_url,
+        response = logged_in_client.post(sendmail_url + 'orders/',
                                          {'sendto': 'na',
                                           'action': 'send',
                                           'recipients': 'attendees',
@@ -409,7 +417,7 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
         Checkin.objects.create(position=pos2, list=chkl2)
 
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'action': 'send',
                                       'recipients': 'attendees',
@@ -428,7 +436,7 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
     assert '/order/' not in djmail.outbox[0].body
 
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'action': 'send',
                                       'recipients': 'attendees',
@@ -447,7 +455,7 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
     assert '/order/' not in djmail.outbox[0].body
 
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'action': 'send',
                                       'recipients': 'attendees',
@@ -467,7 +475,7 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
 
     # Test that filtering is ignored if filter_checkins is not set
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'action': 'send',
                                       'recipients': 'attendees',
@@ -489,7 +497,7 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
 
     # Test that filtering is ignored if filter_checkins is not set
     djmail.outbox = []
-    response = logged_in_client.post(sendmail_url,
+    response = logged_in_client.post(sendmail_url + 'orders/',
                                      {'sendto': 'na',
                                       'action': 'send',
                                       'recipients': 'attendees',
@@ -508,3 +516,28 @@ def test_sendmail_attendee_checkin_filter(logged_in_client, sendmail_url, event,
     assert '/order/' not in djmail.outbox[1].body
     to_emails = set(*zip(*[mail.to for mail in djmail.outbox]))
     assert to_emails == {'attendee1@dummy.test', 'attendee2@dummy.test'}
+
+
+@pytest.mark.django_db
+def test_waitinglist_sendmail_simple_case(logged_in_client, sendmail_url, event, waitinglistentry):
+    djmail.outbox = []
+    response = logged_in_client.post(sendmail_url + 'waitinglist/',
+                                     {'action': 'send',
+                                      'items': waitinglistentry.item_id,
+                                      'subject_0': 'Test subject',
+                                      'message_0': 'This is a test file for sending mails.',
+                                      },
+                                     follow=True)
+    assert response.status_code == 200
+    assert 'alert-success' in response.rendered_content
+
+    assert len(djmail.outbox) == 1
+    assert djmail.outbox[0].to == [waitinglistentry.email]
+    assert djmail.outbox[0].subject == 'Test subject'
+    assert 'This is a test file for sending mails.' in djmail.outbox[0].body
+
+    url = sendmail_url + 'history/'
+    response = logged_in_client.get(url)
+
+    assert response.status_code == 200
+    assert 'Test subject' in response.rendered_content

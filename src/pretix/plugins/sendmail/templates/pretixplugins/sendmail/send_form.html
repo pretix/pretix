@@ -4,7 +4,10 @@
 {% load humanize %}
 {% block title %}{% trans "Send out emails" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Send out emails" %}</h1>
+    <h1>
+        {% trans "Send out emails" %}
+        <small>{{ view_title }}</small>
+    </h1>
     {% block inner %}
         <form class="form-horizontal" method="post" action="" enctype="multipart/form-data">
             {% csrf_token %}
@@ -20,40 +23,16 @@
             {% bootstrap_form_errors form %}
             <fieldset>
                 <legend>{% trans "Recipients" %}</legend>
-                {% bootstrap_field form.recipients layout='horizontal' %}
-                {% bootstrap_field form.sendto layout='horizontal' %}
-                {% if form.subevent %}
-                    {% bootstrap_field form.subevent layout='horizontal' %}
-                    {% bootstrap_field form.subevents_from layout='horizontal' %}
-                    {% bootstrap_field form.subevents_to layout='horizontal' %}
-                {% endif %}
-                {% bootstrap_field form.created_from layout='horizontal' %}
-                {% bootstrap_field form.created_to layout='horizontal' %}
-                {% bootstrap_field form.items layout='horizontal' %}
-                <div class="row">
-                    <div class="col-md-9 col-md-offset-3">
-                        <div class="panel-group">
-                            <div class="panel panel-default">
-                                <div class="panel-heading">
-                                    <label data-toggle="collapse" data-target="#checkin_filter">
-                                        {{ form.filter_checkins }} {{ form.filter_checkins.label }}
-                                    </label>
-                                </div>
-                                <div id="checkin_filter" class="panel-body panel-collapse collapse {% if form.filter_checkins.value %} in {% else %} out {% endif %}">
-                                    {% bootstrap_field form.not_checked_in layout='horizontal' %}
-                                    {% bootstrap_field form.checkin_lists layout='horizontal' %}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                {% include form_fragment_name with form=form %}
             </fieldset>
             <fieldset {% if is_preview %}class="hidden"{% endif %}>
                 <legend>{% trans "Content" %}</legend>
                 {% bootstrap_field form.subject layout='horizontal' %}
                 {% bootstrap_field form.message layout='horizontal' %}
                 {% bootstrap_field form.attachment layout='horizontal' %}
-                {% bootstrap_field form.attach_tickets layout='horizontal' %}
+                {% if form.attach_tickets %}
+                    {% bootstrap_field form.attach_tickets layout='horizontal' %}
+                {% endif %}
             </fieldset>
             {% if is_preview %}
             <fieldset>
@@ -97,12 +76,7 @@
                     </button>
                     <button type="submit" class="btn btn-danger btn-save" name="action" value="send">
                         <span class="fa fa-send" aria-hidden="true"></span>
-                        {% trans "Send" %}
-                        ({% blocktrans trimmed with number=order_count|default_if_none:0|intcomma count c=order_count|default_if_none:0 %}
-                            {{ number }} matching order
-                        {% plural %}
-                            {{ number }} matching orders
-                        {% endblocktrans %})
+                        {% trans "Send" %} ({{ match_size }})
                     </button>
                 {% endif %}
             </div>

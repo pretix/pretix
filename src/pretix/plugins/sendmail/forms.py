@@ -70,14 +70,7 @@ class FormPlaceholderMixin:
         )
 
 
-class MailForm(FormPlaceholderMixin, forms.Form):
-    recipients = forms.ChoiceField(
-        label=_('Send email to'),
-        widget=forms.RadioSelect,
-        initial='orders',
-        choices=[]
-    )
-    sendto = forms.MultipleChoiceField()  # overridden later
+class BaseMailForm(FormPlaceholderMixin, forms.Form):
     subject = forms.CharField(label=_("Subject"))
     message = forms.CharField(label=_("Message"))
     attachment = CachedFileField(
@@ -91,7 +84,95 @@ class MailForm(FormPlaceholderMixin, forms.Form):
         help_text=_('Sending an attachment increases the chance of your email not arriving or being sorted into spam folders. We recommend only using PDFs '
                     'of no more than 2 MB in size.'),
         max_size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT
-    )  # TODO i18n
+    )
+
+    def __init__(self, *args, **kwargs):
+        event = self.event = kwargs.pop('event')
+        context_parameters = kwargs.pop('context_parameters')
+        super().__init__(*args, **kwargs)
+        self.fields['subject'] = I18nFormField(
+            label=_('Subject'),
+            widget=I18nTextInput, required=True,
+            locales=event.settings.get('locales'),
+        )
+        self.fields['message'] = I18nFormField(
+            label=_('Message'),
+            widget=I18nTextarea, required=True,
+            locales=event.settings.get('locales'),
+        )
+        self._set_field_placeholders('subject', context_parameters)
+        self._set_field_placeholders('message', context_parameters)
+
+
+class WaitinglistMailForm(BaseMailForm):
+    items = forms.ModelMultipleChoiceField(
+        widget=forms.CheckboxSelectMultiple(
+            attrs={'class': 'scrolling-multiple-choice'}
+        ),
+        label=_('Only send to people who are waiting for'),
+        required=True,
+        queryset=Item.objects.none()
+    )
+    subevent = forms.ModelChoiceField(
+        SubEvent.objects.none(),
+        label=_('Only send to customers of'),
+        required=False,
+        empty_label=pgettext_lazy('subevent', 'All dates')
+    )
+    subevents_from = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(),
+        label=pgettext_lazy('subevent', 'Only send to customers of dates starting at or after'),
+        required=False,
+    )
+    subevents_to = forms.SplitDateTimeField(
+        widget=SplitDateTimePickerWidget(),
+        label=pgettext_lazy('subevent', 'Only send to customers of dates starting before'),
+        required=False,
+    )
+
+    def clean(self):
+        d = super().clean()
+        if d.get('subevent') and (d.get('subevents_from') or d.get('subevents_to')):
+            raise ValidationError(pgettext_lazy('subevent', 'Please either select a specific date or a date range, not both.'))
+        if bool(d.get('subevents_from')) != bool(d.get('subevents_to')):
+            raise ValidationError(pgettext_lazy('subevent', 'If you set a date range, please set both a start and an end.'))
+        return d
+
+    def __init__(self, *args, **kwargs):
+        event = self.event = kwargs['event']
+        super().__init__(*args, **kwargs)
+
+        self.fields['items'].queryset = event.items.all()
+        if not self.initial.get('items'):
+            self.initial['items'] = event.items.all()
+
+        if event.has_subevents:
+            self.fields['subevent'].queryset = event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': event.slug,
+                        'organizer': event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'Date')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+        else:
+            del self.fields['subevent']
+            del self.fields['subevents_from']
+            del self.fields['subevents_to']
+
+
+class OrderMailForm(BaseMailForm):
+    recipients = forms.ChoiceField(
+        label=_('Send email to'),
+        widget=forms.RadioSelect,
+        initial='orders',
+        choices=[]
+    )
+    sendto = forms.MultipleChoiceField()  # overridden later
     items = forms.ModelMultipleChoiceField(
         widget=forms.CheckboxSelectMultiple(
             attrs={'class': 'scrolling-multiple-choice'}
@@ -147,7 +228,7 @@ class MailForm(FormPlaceholderMixin, forms.Form):
         return d
 
     def __init__(self, *args, **kwargs):
-        event = self.event = kwargs.pop('event')
+        event = self.event = kwargs['event']
         super().__init__(*args, **kwargs)
 
         recp_choices = [
@@ -161,18 +242,6 @@ class MailForm(FormPlaceholderMixin, forms.Form):
             ]
         self.fields['recipients'].choices = recp_choices
 
-        self.fields['subject'] = I18nFormField(
-            label=_('Subject'),
-            widget=I18nTextInput, required=True,
-            locales=event.settings.get('locales'),
-        )
-        self.fields['message'] = I18nFormField(
-            label=_('Message'),
-            widget=I18nTextarea, required=True,
-            locales=event.settings.get('locales'),
-        )
-        self._set_field_placeholders('subject', ['event', 'order', 'position_or_address'])
-        self._set_field_placeholders('message', ['event', 'order', 'position_or_address'])
         choices = [(e, l) for e, l in Order.STATUS_CHOICE if e != 'n']
         choices.insert(0, ('na', _('payment pending (except unapproved)')))
         choices.insert(0, ('pa', _('approval pending')))

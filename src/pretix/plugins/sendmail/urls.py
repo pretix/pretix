@@ -40,8 +40,12 @@ from . import views
 from .api import RuleViewSet
 
 urlpatterns = [
-    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/$', views.SenderView.as_view(),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/$', views.IndexView.as_view(),
             name='send'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/orders/$', views.OrderSendView.as_view(),
+            name='send.orders'),
+    re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/waitinglist/$', views.WaitinglistSendView.as_view(),
+            name='send.waitinglist'),
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/history/', views.EmailHistoryView.as_view(),
             name='history'),
     re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/sendmail/rules/create', views.CreateRule.as_view(),
