@@ -144,6 +144,7 @@ class RegistrationForm(forms.Form):
         self.standalone = kwargs.pop('standalone')
         self.signer = signing.TimestampSigner(salt=f'customer-registration-captcha-{get_client_ip(request)}')
         super().__init__(*args, **kwargs)
+        self.instance = None
 
         event = getattr(request, "event", None)
         if event and event.settings.order_phone_asked:
@@ -214,14 +215,17 @@ class RegistrationForm(forms.Form):
 
         if email is not None:
             try:
-                self.request.organizer.customers.get(email=email.lower())
+                existing = self.request.organizer.customers.get(email=email.lower())
             except Customer.DoesNotExist:
                 pass
             else:
-                raise forms.ValidationError(
-                    {'email': self.error_messages['duplicate']},
-                    code='duplicate',
-                )
+                if not existing.is_active or existing.is_verified or existing.has_usable_password():
+                    raise forms.ValidationError(
+                        {'email': self.error_messages['duplicate']},
+                        code='duplicate',
+                    )
+                else:
+                    self.instance = existing
 
         if self.standalone:
             expect = -1
@@ -256,19 +260,29 @@ class RegistrationForm(forms.Form):
         return self.cleaned_data
 
     def create(self):
-        customer = self.request.organizer.customers.create(
-            email=self.cleaned_data['email'],
-            name_parts=self.cleaned_data['name_parts'],
-            phone=self.cleaned_data.get('phone'),
-            is_active=True,
-            is_verified=False,
-            locale=get_language_without_region(),
-        )
-        customer.set_unusable_password()
-        customer.save()
-        customer.log_action('pretix.customer.created', {})
-        customer.send_activation_mail()
-        return customer
+        if self.instance:
+            self.instance.name_parts = self.cleaned_data['name_parts']
+            if self.cleaned_data.get('phone'):
+                self.instance.phone = self.cleaned_data.get('phone')
+            self.instance.locale = get_language_without_region()
+            self.instance.save()
+            self.instance.log_action('pretix.customer.claimed', {})
+            self.instance.send_activation_mail()
+            return self.instance
+        else:
+            customer = self.request.organizer.customers.create(
+                email=self.cleaned_data['email'],
+                name_parts=self.cleaned_data['name_parts'],
+                phone=self.cleaned_data.get('phone'),
+                is_active=True,
+                is_verified=False,
+                locale=get_language_without_region(),
+            )
+            customer.set_unusable_password()
+            customer.save()
+            customer.log_action('pretix.customer.created', {})
+            customer.send_activation_mail()
+            return customer
 
 
 class SetPasswordForm(forms.Form):
