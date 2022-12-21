@@ -353,6 +353,12 @@ class Recover(TemplateView):
             user.save()
             messages.success(request, _('You can now login using your new password.'))
             user.log_action('pretix.control.auth.user.forgot_password.recovered')
+
+            has_redis = settings.HAS_REDIS
+            if has_redis:
+                from django_redis import get_redis_connection
+                rc = get_redis_connection("redis")
+                rc.delete('pretix_pwreset_%s' % user.id)
             return redirect('control:auth.login')
         else:
             return self.get(request, *args, **kwargs)
