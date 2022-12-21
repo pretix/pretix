@@ -35,6 +35,12 @@ tax_rule                              integer                    The internal ID
 admission                             boolean                    ``true`` for items that grant admission to the event
                                                                  (such as primary tickets) and ``false`` for others
                                                                  (such as add-ons or merchandise).
+personalized                          boolean                    ``true`` for items that require personalization according
+                                                                 to event settings. Only affects system-level fields, not
+                                                                 custom questions. Currently only allowed for products with
+                                                                 ``admission`` set to ``true``. For backwards compatibility,
+                                                                 when creating new items and this field is not given, it defaults
+                                                                 to the same value as ``admission``.
 position                              integer                    An integer, used for sorting
 picture                               file                       A product picture to be displayed in the shop
                                                                  (can be ``null``).
@@ -158,7 +164,7 @@ meta_data                             object                     Values set for 
 
 .. versionchanged:: 4.16
 
-   The ``variations[x].meta_data`` attribute has been added.
+   The ``variations[x].meta_data`` attribute has been added. The ``personalized`` attribute has been added.
 
 Notes
 -----
@@ -213,6 +219,7 @@ Endpoints
             "tax_rate": "0.00",
             "tax_rule": 1,
             "admission": false,
+            "personalized": false,
             "issue_giftcard": false,
             "meta_data": {},
             "position": 0,
@@ -329,6 +336,7 @@ Endpoints
         "tax_rate": "0.00",
         "tax_rule": 1,
         "admission": false,
+        "personalized": false,
         "issue_giftcard": false,
         "meta_data": {},
         "position": 0,
@@ -426,6 +434,7 @@ Endpoints
         "tax_rate": "0.00",
         "tax_rule": 1,
         "admission": false,
+        "personalized": false,
         "issue_giftcard": false,
         "meta_data": {},
         "position": 0,
@@ -510,6 +519,7 @@ Endpoints
         "tax_rate": "0.00",
         "tax_rule": 1,
         "admission": false,
+        "personalized": false,
         "issue_giftcard": false,
         "meta_data": {},
         "position": 0,
@@ -626,6 +636,7 @@ Endpoints
         "tax_rate": "0.00",
         "tax_rule": 1,
         "admission": false,
+        "personalized": false,
         "issue_giftcard": false,
         "meta_data": {},
         "position": 0,

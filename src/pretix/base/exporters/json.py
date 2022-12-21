@@ -78,6 +78,7 @@ class JSONExporter(BaseExporter):
                         'tax_rate': item.tax_rule.rate if item.tax_rule else Decimal('0.00'),
                         'tax_name': str(item.tax_rule.name) if item.tax_rule else None,
                         'admission': item.admission,
+                        'personalized': item.personalized,
                         'active': item.active,
                         'sales_channels': item.sales_channels,
                         'description': str(item.description),

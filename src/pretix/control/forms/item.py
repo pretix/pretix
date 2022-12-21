@@ -295,6 +295,7 @@ class ItemCreateForm(I18nModelForm):
         self.user = kwargs.pop('user')
         kwargs.setdefault('initial', {})
         kwargs['initial'].setdefault('admission', True)
+        kwargs['initial'].setdefault('personalized', True)
         super().__init__(*args, **kwargs)
 
         self.fields['category'].queryset = self.instance.event.categories.all()
@@ -403,6 +404,8 @@ class ItemCreateForm(I18nModelForm):
             self.instance.sales_channels = list(get_all_sales_channels().keys())
 
         self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
+        if not self.instance.admission:
+            self.instance.personalized = False
         instance = super().save(*args, **kwargs)
 
         if not self.event.has_subevents and not self.cleaned_data.get('has_variations'):
@@ -494,6 +497,7 @@ class ItemCreateForm(I18nModelForm):
             'internal_name',
             'category',
             'admission',
+            'personalized',
             'default_price',
             'tax_rule',
         ]
@@ -595,6 +599,7 @@ class ItemUpdateForm(I18nModelForm):
                         "Gift card products should not be admission products at the same time."
                     )
                 )
+
         if d.get('require_membership') and not d.get('require_membership_types'):
             self.add_error(
                 'require_membership_types',
@@ -602,6 +607,18 @@ class ItemUpdateForm(I18nModelForm):
                     "If a valid membership is required, at least one valid membership type needs to be selected."
                 )
             )
+
+        if not d['admission']:
+            d['personalized'] = False
+
+        if d.get('grant_membership_type'):
+            if not d['grant_membership_type'].transferable and not d['personalized']:
+                self.add_error(
+                    'personalized' if d['admission'] else 'admission',
+                    _("Your product grants a non-transferable membership and should therefore be a personalized "
+                      "admission ticket. Otherwise customers might not be able to use the membership later. If you "
+                      "want the membership to be non-personalized, set the membership type to be transferable.")
+                )
         return d
 
     def clean_picture(self):
@@ -622,6 +639,7 @@ class ItemUpdateForm(I18nModelForm):
             'active',
             'sales_channels',
             'admission',
+            'personalized',
             'description',
             'picture',
             'default_price',

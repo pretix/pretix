@@ -1204,7 +1204,7 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
             initial['tax_rule'] = trs[0]
 
         if self.copy_from:
-            fields = ('name', 'internal_name', 'category', 'admission', 'default_price', 'tax_rule')
+            fields = ('name', 'internal_name', 'category', 'admission', 'personalized', 'default_price', 'tax_rule')
             for f in fields:
                 initial[f] = getattr(self.copy_from, f)
             initial['copy_from'] = self.copy_from

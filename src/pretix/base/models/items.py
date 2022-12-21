@@ -310,6 +310,8 @@ class Item(LoggedModel):
     :type tax_rate: decimal.Decimal
     :param admission: ``True``, if this item allows persons to enter the event (as opposed to e.g. merchandise)
     :type admission: bool
+    :param personalized: ``True``, if attendee information should be collected for this ticket
+    :type personalized: bool
     :param picture: A product picture to be shown next to the product description
     :type picture: File
     :param available_from: The date this product goes on sale
@@ -396,8 +398,14 @@ class Item(LoggedModel):
     admission = models.BooleanField(
         verbose_name=_("Is an admission ticket"),
         help_text=_(
-            'Whether or not buying this product allows a person to enter '
-            'your event'
+            'Whether or not buying this product allows a person to enter your event'
+        ),
+        default=False
+    )
+    personalized = models.BooleanField(
+        verbose_name=_("Is a personalized ticket"),
+        help_text=_(
+            'Whether or not buying this product allows to enter attendee information'
         ),
         default=False
     )
@@ -577,6 +585,10 @@ class Item(LoggedModel):
         if self.show_quota_left is None:
             return self.event.settings.show_quota_left
         return self.show_quota_left
+
+    @property
+    def ask_attendee_data(self):
+        return self.admission and self.personalized
 
     def tax(self, price=None, base_price_is='auto', currency=None, invoice_address=None, override_tax_rate=None, include_bundled=False):
         price = price if price is not None else self.default_price

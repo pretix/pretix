@@ -27,13 +27,19 @@
                                 {% endfor %}
                                 <div class="big-radio radio">
                                     <label>
-                                        <input type="radio" value="on" name="{{ form.admission.html_name }}" {% if form.admission.value %}checked{% endif %}>
+                                        <input type="radio" value="on" name="{{ form.admission.html_name }}" {% if form.admission.value %}checked{% endif %} id="admission_on">
                                         <span class="fa fa-fw fa-user"></span>
                                         <strong>{% trans "Admission product" %}</strong><br>
                                         <div class="help-block">
                                             {% blocktrans trimmed %}
                                                 Every purchase of this product represents one person who is allowed to enter your event.
-                                                By default, pretix will only ask for attendee information and offer ticket downloads for these products.
+                                                By default, we will only offer ticket downloads for these products.
+                                            {% endblocktrans %}
+                                        </div>
+                                        <div class="help-block">
+                                            {% blocktrans trimmed %}
+                                                Only purchases of such products will be considered "attendees" for most statistical
+                                                purposes or within some plugins.
                                             {% endblocktrans %}
                                         </div>
                                         <div class="help-block">
@@ -51,13 +57,50 @@
                                         <strong>{% trans "Non-admission product" %}</strong>
                                         <div class="help-block">
                                             {% blocktrans trimmed %}
-                                                A product that does not represent a person. By default, pretix will not ask for attendee information or offer
-                                                ticket downloads.
+                                                A product that does not represent a person. By default, we will not offer ticket downloads
+                                                (but you can still enable ticket downloads in event settings or product settings).
                                             {% endblocktrans %}
                                         </div>
                                         <div class="help-block">
                                             {% blocktrans trimmed %}
                                                 Examples: Merchandise, donations, gift cards, add-ons to a main ticket.
+                                            {% endblocktrans %}
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-group" data-display-dependency="#admission_on">
+                            <label class="col-md-3 control-label">{% trans "Personalization" %}</label>
+                            <div class="col-md-9">
+                                {% for e in form.errors.personalized %}
+                                    <div class="alert alert-danger has-error">
+                                        {{ e }}
+                                    </div>
+                                {% endfor %}
+                                <div class="big-radio radio">
+                                    <label>
+                                        <input type="radio" value="on" name="{{ form.personalized.html_name }}" {% if form.personalized.value %}checked{% endif %}>
+                                        <span class="fa fa-fw fa-id-card-o"></span>
+                                        <strong>{% trans "Personalized ticket" %}</strong><br>
+                                        <div class="help-block">
+                                            {% blocktrans trimmed %}
+                                                When this ticket is purchased, the system will ask for a name or other details according
+                                                to your event settings.
+                                            {% endblocktrans %}
+                                        </div>
+                                    </label>
+                                </div>
+                                <div class="big-radio radio">
+                                    <label>
+                                        <input type="radio" value="" name="{{ form.personalized.html_name }}" {% if not form.personalized.value %}checked{% endif %}>
+                                        <span class="fa fa-fw fa-circle-o"></span>
+                                        <strong>{% trans "Non-personalized ticket" %}</strong>
+                                        <div class="help-block">
+                                            {% blocktrans trimmed %}
+                                                The system will not ask for a name or other attendee details. This only affects
+                                                system-provided fields, you can still add your own questions.
                                             {% endblocktrans %}
                                         </div>
                                     </label>

@@ -1354,7 +1354,7 @@ class OrderChangeTests(SoupTest):
             mtype = self.event.organizer.membership_types.create(name='Week pass', transferable=True, allow_parallel_usage=True)
             self.ticket.require_membership = True
             self.ticket.require_membership_types.add(mtype)
-            self.ticket.admission = True
+            self.ticket.personalized = True
             self.ticket.save()
             customer = self.event.organizer.customers.create(email='john@example.org', is_verified=True)
             self.order.customer = customer
