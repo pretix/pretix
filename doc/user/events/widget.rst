@@ -87,6 +87,18 @@ website. If you confident to have a good reason for not using SSL, you can overr
 
    <pretix-widget event="https://pretix.eu/demo/democon/" skip-ssl-check></pretix-widget>
 
+Seating plans
+-------------
+
+By default, events with seating plans just show a button that opens the seating plan. You can also have the seating
+plan embedded into the widget directly by using::
+
+   <pretix-widget event="https://pretix.eu/demo/democon/" seating-embedded></pretix-widget>
+
+Note that the seating plan will only be embedded if the widget has enough space (currently min. 992 pixels width, may change
+in the future) and that the seating plan part of the widget can unfortunately *not* be styled with CSS like the rest of
+the widget.
+
 Always open a new tab
 ---------------------
 
