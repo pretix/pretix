@@ -859,12 +859,19 @@ class DeviceQueryMixin:
     @cached_property
     def request_data(self):
         if self.request.method == "POST":
-            return self.request.POST
-        return self.request.GET
+            d = self.request.POST
+        else:
+            d = self.request.GET
+        d = d.copy()
+        d.setdefault('state', 'active')
+        return d
 
     @cached_property
     def filter_form(self):
-        return DeviceFilterForm(data=self.request_data, request=self.request)
+        return DeviceFilterForm(
+            data=self.request_data,
+            request=self.request,
+        )
 
     def get_queryset(self):
         qs = self.request.organizer.devices.prefetch_related(
