@@ -174,7 +174,8 @@ def test_underpaid(env, job):
         assert env[2].pending_sum == Decimal('0.50')
 
     assert len(djmail.outbox) == 1
-    assert djmail.outbox[0].subject == 'Your order received an incomplete payment: 1Z3AS'
+    assert djmail.outbox[0].subject == 'Incomplete payment received: 1Z3AS'
+    assert '€0.50' in djmail.outbox[0].body
 
 
 @pytest.mark.django_db

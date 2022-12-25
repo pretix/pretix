@@ -395,6 +395,11 @@ def base_placeholders(sender, **kwargs):
             lambda event_or_subevent: LazyCurrencyNumber(Decimal('42.23'), event_or_subevent.currency)
         ),
         SimpleFunctionalMailTextPlaceholder(
+            'pending_sum', ['event', 'pending_sum'],
+            lambda event, pending_sum: LazyCurrencyNumber(pending_sum, event.currency),
+            lambda event: LazyCurrencyNumber(Decimal('42.23'), event.currency)
+        ),
+        SimpleFunctionalMailTextPlaceholder(
             'total_with_currency', ['event', 'order'], lambda event, order: LazyCurrencyNumber(order.total,
                                                                                                event.currency),
             lambda event: LazyCurrencyNumber(Decimal('42.23'), event.currency)
