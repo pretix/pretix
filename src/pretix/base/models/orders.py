@@ -2688,7 +2688,7 @@ class CartPosition(AbstractPosition):
         category_key = (self.item.category.position, self.item.category.id) if self.item.category_id is not None else (0, 0)
         item_key = self.item.position, self.item_id
         variation_key = (self.variation.position, self.variation.id) if self.variation_id is not None else (0, 0)
-        line_key = (self.price, (self.voucher_id or 0), (self.seat.sorting_rank if self.seat_id else None), self.pk)
+        line_key = (self.price, (self.voucher_id or 0), (self.seat.sorting_rank if self.seat_id else 0), self.pk)
         sort_key = subevent_key + category_key + item_key + variation_key + line_key
 
         if self.addon_to_id:
