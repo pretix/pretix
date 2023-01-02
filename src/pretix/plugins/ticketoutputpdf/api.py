@@ -19,11 +19,16 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from django.conf import settings
+from django.db import transaction
 from rest_framework import viewsets
+from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
 
+from ...api.serializers.fields import UploadedFileField
+from ...base.pdf import PdfLayoutValidator
 from ...multidomain.utils import static_absolute
 from .models import TicketLayout, TicketLayoutItem
 
@@ -43,8 +48,13 @@ class NestedItemAssignmentSerializer(I18nAwareModelSerializer):
 
 
 class TicketLayoutSerializer(I18nAwareModelSerializer):
-    layout = CompatibleJSONField()
-    item_assignments = NestedItemAssignmentSerializer(many=True)
+    layout = CompatibleJSONField(
+        validators=[PdfLayoutValidator()]
+    )
+    item_assignments = NestedItemAssignmentSerializer(many=True, read_only=True)
+    background = UploadedFileField(required=False, allow_null=True, allowed_types=(
+        'application/pdf',
+    ), max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE)
 
     class Meta:
         model = TicketLayout
@@ -56,14 +66,62 @@ class TicketLayoutSerializer(I18nAwareModelSerializer):
             d['background'] = static_absolute(instance.event, "pretixpresale/pdf/ticket_default_a4.pdf")
         return d
 
+    def validate(self, attrs):
+        if attrs.get('default') and self.context['event'].ticket_layouts.filter(default=True).exists:
+            raise ValidationError('You cannot have two layouts with default = True')
+        return attrs
 
-class TicketLayoutViewSet(viewsets.ReadOnlyModelViewSet):
+    def create(self, validated_data):
+        validated_data["event"] = self.context["event"]
+        return super().create(validated_data)
+
+
+class TicketLayoutViewSet(viewsets.ModelViewSet):
     serializer_class = TicketLayoutSerializer
     queryset = TicketLayout.objects.none()
     lookup_field = 'id'
 
     def get_queryset(self):
         return self.request.event.ticket_layouts.all()
+
+    def get_serializer_context(self):
+        return {
+            **super().get_serializer_context(),
+            'event': self.request.event,
+        }
+
+    @transaction.atomic()
+    def perform_destroy(self, instance):
+        instance.log_action(
+            action='pretix.plugins.ticketoutputpdf.layout.deleted',
+            user=self.request.user, auth=self.request.auth
+        )
+        super().perform_destroy(instance)
+        if not self.request.event.ticket_layouts.filter(default=True).exists():
+            f = self.request.event.ticket_layouts.first()
+            if f:
+                f.default = True
+                f.save(update_fields=['default'])
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        super().perform_create(serializer)
+        serializer.instance.log_action(
+            action='pretix.plugins.ticketoutputpdf.layout.added',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        super().perform_update(serializer)
+        serializer.instance.log_action(
+            action='pretix.plugins.ticketoutputpdf.layout.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
 
 
 class TicketLayoutItemViewSet(viewsets.ReadOnlyModelViewSet):

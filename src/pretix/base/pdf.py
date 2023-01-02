@@ -35,6 +35,7 @@
 import copy
 import hashlib
 import itertools
+import json
 import logging
 import os
 import re
@@ -46,12 +47,15 @@ from collections import OrderedDict
 from functools import partial
 from io import BytesIO
 
+import jsonschema
 from arabic_reshaper import ArabicReshaper
 from bidi.algorithm import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
+from django.core.exceptions import ValidationError
 from django.db.models import Max, Min
 from django.dispatch import receiver
+from django.utils.deconstruct import deconstructible
 from django.utils.formats import date_format
 from django.utils.functional import SimpleLazyObject
 from django.utils.html import conditional_escape
@@ -740,9 +744,9 @@ class Renderer:
 
         if o['content'] == 'other' or o['content'] == 'other_i18n':
             if o['content'] == 'other_i18n':
-                text = str(LazyI18nString(o['text_i18n']))
+                text = str(LazyI18nString(o.get('text_i18n', {})))
             else:
-                text = o['text']
+                text = o.get('text', '')
 
             def replace(x):
                 if x.group(1).startswith('itemmeta:'):
@@ -975,3 +979,22 @@ class Renderer:
             output.write(outbuffer)
             outbuffer.seek(0)
             return outbuffer
+
+
+@deconstructible
+class PdfLayoutValidator:
+    def __call__(self, value):
+        if not isinstance(value, dict):
+            try:
+                val = json.loads(value)
+            except ValueError:
+                raise ValidationError(_('Your layout file is not a valid JSON file.'))
+        else:
+            val = value
+        with open(finders.find('schema/pdf-layout.schema.json'), 'r') as f:
+            schema = json.loads(f.read())
+        try:
+            jsonschema.validate(val, schema)
+        except jsonschema.ValidationError as e:
+            e = str(e).replace('%', '%%')
+            raise ValidationError(_('Your layout file is not a valid layout. Error message: {}').format(e))

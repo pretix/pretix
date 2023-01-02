@@ -118,6 +118,7 @@ var editor = {
     uploaded_file_id: null,
     _window_loaded: false,
     _fabric_loaded: false,
+    schema: null,
 
     _px2mm: function (v) {
         return v / editor.pdf_scale / 72 * editor.pdf_page.userUnit * 25.4;
@@ -988,8 +989,26 @@ var editor = {
     },
 
     _source_save: function () {
-        editor.load(JSON.parse($("#source-textarea").val()));
-        $("#source-container").hide();
+        try {
+            var Ajv = window.ajv2020
+            var ajv = new Ajv()
+            var validate = ajv.compile(editor.schema)
+            var data = JSON.parse($("#source-textarea").val())
+            var valid = validate(data)
+            editor.load(data);
+
+            if (!valid) {
+                console.log(validate.errors)
+                alert("Invalid input syntax. If you're familiar with this, check out the developer console for a full " +
+                      "error log. Otherwise, please contact support.")
+            } else {
+                $("#source-container").hide();
+            }
+        } catch (e) {
+            console.error(e)
+            alert("Parsing error. If you're familiar with this, check out the developer console for a full " +
+                "error log. Otherwise, please contact support.")
+        }
     },
 
     _create_empty_background: function () {
@@ -1098,6 +1117,10 @@ var editor = {
         $("#toolbox-source").bind('click', editor._source_show);
         $("#source-close").bind('click', editor._source_close);
         $("#source-save").bind('click', editor._source_save);
+
+        $.getJSON($("#schema-url").text(), function (data) {
+            editor.schema = data;
+        })
     }
 };
 
