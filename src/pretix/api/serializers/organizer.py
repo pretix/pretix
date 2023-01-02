@@ -79,6 +79,13 @@ class CustomerSerializer(I18nAwareModelSerializer):
             validated_data['external_identifier'] = instance.external_identifier
         return super().update(instance, validated_data)
 
+    def validate(self, data):
+        if data.get('name_parts') and not isinstance(data.get('name_parts'), dict):
+            raise ValidationError({'name_parts': ['Invalid data type']})
+        if data.get('name_parts') and '_scheme' not in data.get('name_parts'):
+            data['name_parts']['_scheme'] = self.context['request'].organizer.settings.name_scheme
+        return data
+
 
 class CustomerCreateSerializer(CustomerSerializer):
     send_email = serializers.BooleanField(default=False, required=False, allow_null=True)

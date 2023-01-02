@@ -118,6 +118,10 @@ class InvoiceAddressSerializer(I18nAwareModelSerializer):
             raise ValidationError(
                 {'name': ['Do not specify name if you specified name_parts.']}
             )
+
+        if data.get('name_parts') and not isinstance(data.get('name_parts'), dict):
+            raise ValidationError({'name_parts': ['Invalid data type']})
+
         if data.get('name_parts') and '_scheme' not in data.get('name_parts'):
             data['name_parts']['_scheme'] = self.context['request'].event.settings.name_scheme
 
@@ -841,6 +845,10 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError(
                 {'attendee_name': ['Do not specify attendee_name if you specified attendee_name_parts.']}
             )
+
+        if data.get('attendee_name_parts') and not isinstance(data.get('attendee_name_parts'), dict):
+            raise ValidationError({'attendee_name_parts': ['Invalid data type']})
+
         if data.get('attendee_name_parts') and '_scheme' not in data.get('attendee_name_parts'):
             data['attendee_name_parts']['_scheme'] = self.context['request'].event.settings.name_scheme
 

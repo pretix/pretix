@@ -179,3 +179,15 @@ def test_customer_delete(token_client, organizer, customer):
         '/api/v1/organizers/{}/customers/{}/'.format(organizer.slug, customer.identifier),
     )
     assert resp.status_code == 405
+
+
+@pytest.mark.django_db
+def test_customer_patch_invalid_name(token_client, organizer, customer):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/customers/{}/'.format(organizer.slug, customer.identifier),
+        format='json',
+        data={
+            'name_parts': 'should be a dictionary',
+        }
+    )
+    assert resp.status_code == 400
