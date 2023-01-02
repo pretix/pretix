@@ -29,4 +29,4 @@ class UploadRenderer(BaseRenderer):
 
     def render(self, data, accepted_media_type=None, renderer_context=None):
         self.media_type = data['media_type']
-        return data['file']
+        return data['file'].read()

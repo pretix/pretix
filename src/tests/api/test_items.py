@@ -43,6 +43,7 @@ from django.core.files.base import ContentFile
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from pytz import UTC
+from tests.const import SAMPLE_PNG
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import (
@@ -1119,7 +1120,7 @@ def test_item_file_upload(token_client, organizer, event, item):
         '/api/v1/upload',
         data={
             'media_type': 'image/png',
-            'file': ContentFile('file.png', 'invalid png content')
+            'file': ContentFile(SAMPLE_PNG)
         },
         format='upload',
         HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',
@@ -1143,7 +1144,7 @@ def test_item_file_upload(token_client, organizer, event, item):
         '/api/v1/upload',
         data={
             'media_type': 'image/png',
-            'file': ContentFile('file.png', 'invalid png content')
+            'file': ContentFile(SAMPLE_PNG)
         },
         format='upload',
         HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',

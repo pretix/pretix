@@ -19,34 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import pytest
-from django.core.files.base import ContentFile
 
-
-@pytest.mark.django_db
-def test_upload_file(token_client):
-    r = token_client.post(
-        '/api/v1/upload',
-        data={
-            'media_type': 'application/pdf',
-            'file': ContentFile('invalid pdf content')
-        },
-        format='upload',
-        HTTP_CONTENT_DISPOSITION='attachment; filename="file.pdf"',
-    )
-    assert r.status_code == 201
-    assert r.data['id'].startswith('file:')
-
-
-@pytest.mark.django_db
-def test_upload_file_extension_mismatch(token_client):
-    r = token_client.post(
-        '/api/v1/upload',
-        data={
-            'media_type': 'application/pdf',
-            'file': ContentFile('invalid pdf content')
-        },
-        format='upload',
-        HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',
-    )
-    assert r.status_code == 400
+# This is a very short, but valid PNG
+SAMPLE_PNG = b'\x89PNG\r\n\x1a\n\x00\x00\x00\rIHDR\x00\x00\x01\x00\x00\x00\x01\x00\x01\x03\x00\x00\x00f\xbc:%\x00\x00' \
+             b'\x00\x03PLTE\xb5\xd0\xd0c\x04\x16\xea\x00\x00\x00\x1fIDATh\x81\xed\xc1\x01\r\x00\x00\x00\xc2\xa0\xf7Om' \
+             b'\x0e7\xa0\x00\x00\x00\x00\x00\x00\x00\x00\xbe\r!\x00\x00\x01\x9a`\xe1\xd5\x00\x00\x00\x00IEND\xaeB`\x82'
