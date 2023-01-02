@@ -321,6 +321,10 @@ def success(request, *args, **kwargs):
             'secret': payment.order.secret
         }) + ('?paid=yes' if payment.order.status == Order.STATUS_PAID else ''))
     else:
+        # There can only be one payment method that does not have multi_use_supported, remove all
+        # previous ones.
+        cs = cart_session(request)
+        cs['payments'] = [p for p in cs.get('payments', []) if p.get('multi_use_supported')]
         add_payment_to_cart(request, PaypalWallet(request.event), None, None, None)
         urlkwargs['step'] = 'confirm'
         return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs=urlkwargs))
