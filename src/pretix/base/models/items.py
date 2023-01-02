@@ -62,6 +62,7 @@ from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
 from pretix.base.models.tax import TaxedPrice
 
+from ...helpers.images import ImageSizeValidator
 from .event import Event, SubEvent
 
 
@@ -429,7 +430,8 @@ class Item(LoggedModel):
     picture = models.ImageField(
         verbose_name=_("Product picture"),
         null=True, blank=True, max_length=255,
-        upload_to=itempicture_upload_to
+        upload_to=itempicture_upload_to,
+        validators=[ImageSizeValidator()]
     )
     available_from = models.DateTimeField(
         verbose_name=_("Available from"),

@@ -33,6 +33,9 @@ from pretix.api.auth.device import DeviceTokenAuthentication
 from pretix.api.auth.permission import AnyAuthenticatedClientPermission
 from pretix.api.auth.token import TeamTokenAuthentication
 from pretix.base.models import CachedFile
+from pretix.helpers.images import (
+    IMAGE_TYPES, validate_uploaded_file_for_valid_image,
+)
 
 ALLOWED_TYPES = {
     'image/gif': {'.gif'},
@@ -61,6 +64,10 @@ class UploadView(APIView):
                 name=file_obj.name,
                 type=content_type
             ))
+
+        if content_type in IMAGE_TYPES:
+            validate_uploaded_file_for_valid_image(file_obj)
+
         cf = CachedFile.objects.create(
             expires=now() + datetime.timedelta(days=1),
             date=now(),

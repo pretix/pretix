@@ -51,6 +51,9 @@ from django_scopes.forms import SafeModelMultipleChoiceField
 from pretix.helpers.hierarkey import clean_filename
 
 from ...base.forms import I18nModelForm
+from ...helpers.images import (
+    IMAGE_EXTS, validate_uploaded_file_for_valid_image,
+)
 
 # Import for backwards compatibility with okd import paths
 from ...base.forms.widgets import (  # noqa
@@ -220,6 +223,10 @@ class ExtValidationMixin:
             ext = ext.lower()
             if ext not in self.ext_whitelist:
                 raise forms.ValidationError(_("Filetype not allowed!"))
+
+            if ext in IMAGE_EXTS:
+                validate_uploaded_file_for_valid_image(data)
+
         return data
 
 
