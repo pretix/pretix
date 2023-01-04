@@ -308,6 +308,26 @@ def test_manual_checkins(client, checkin_list_env):
 
 
 @pytest.mark.django_db
+def test_manual_checkins_revert_requires_order_change_permission(client, checkin_list_env):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        assert not checkin_list_env[5][3].checkins.exists()
+        Team.objects.update(can_change_orders=False, can_checkin_orders=True)
+    client.post('/control/event/dummy/dummy/checkinlists/{}/bulk_action'.format(checkin_list_env[6].pk), {
+        'checkin': [checkin_list_env[5][3].pk]
+    })
+    with scopes_disabled():
+        assert checkin_list_env[5][3].checkins.exists()
+    r = client.post('/control/event/dummy/dummy/checkinlists/{}/bulk_action'.format(checkin_list_env[6].pk), {
+        'checkin': [checkin_list_env[5][3].pk],
+        'revert': 'true'
+    })
+    assert r.status_code == 403
+    with scopes_disabled():
+        assert checkin_list_env[5][3].checkins.exists()
+
+
+@pytest.mark.django_db
 def test_manual_checkins_revert(client, checkin_list_env):
     client.login(email='dummy@dummy.dummy', password='dummy')
     with scopes_disabled():

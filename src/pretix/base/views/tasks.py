@@ -28,7 +28,7 @@ from celery import states
 from celery.result import AsyncResult
 from django.conf import settings
 from django.contrib import messages
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.http import HttpResponse, JsonResponse, QueryDict
 from django.shortcuts import redirect, render
 from django.test import RequestFactory
@@ -149,6 +149,8 @@ class AsyncMixin:
         return redirect(self.get_success_url(value))
 
     def error(self, exception):
+        if isinstance(exception, PermissionDenied):
+            raise exception
         messages.error(self.request, self.get_error_message(exception))
         if "ajax" in self.request.POST or "ajax" in self.request.GET:
             return JsonResponse({
@@ -337,8 +339,8 @@ class AsyncPostView(AsyncMixin, View):
     depend on the request object unless specifically supported by this class. File upload is currently also
     not supported.
     """
-    known_errortypes = ['ValidationError']
-    expected_exceptions = (ValidationError,)
+    known_errortypes = ['ValidationError', 'PermissionDenied']
+    expected_exceptions = (ValidationError, PermissionDenied)
     task_base = ProfiledEventTask
 
     def async_set_progress(self, percentage):

@@ -386,6 +386,7 @@ event_permission_urls = [
     ("can_view_orders", "checkinlists/", 200, HTTP_GET),
     ("can_view_orders", "checkinlists/1/", 404, HTTP_GET),
     ("can_change_orders", "checkinlists/1/bulk_action", 404, HTTP_POST),
+    ("can_checkin_orders", "checkinlists/1/bulk_action", 404, HTTP_POST),
     ("can_change_event_settings", "checkinlists/add", 200, HTTP_GET),
     ("can_change_event_settings", "checkinlists/1/change", 404, HTTP_GET),
     ("can_change_event_settings", "checkinlists/1/delete", 404, HTTP_GET),

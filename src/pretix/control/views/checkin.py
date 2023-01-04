@@ -34,6 +34,7 @@
 
 import dateutil.parser
 from django.contrib import messages
+from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models import Exists, Max, OuterRef, Prefetch, Subquery
 from django.http import Http404, HttpResponseRedirect
@@ -171,7 +172,7 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, CheckInList
 
 class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMixin, AsyncPostView):
     template_name = 'pretixcontrol/organizers/device_bulk_edit.html'
-    permission = 'can_change_orders'
+    permission = ('can_change_orders', 'can_checkin_orders')
     context_object_name = 'device'
 
     def dispatch(self, request, *args, **kwargs):
@@ -181,11 +182,16 @@ class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMi
     def get_queryset(self):
         return super().get_queryset().prefetch_related(None).order_by()
 
+    def get_error_url(self):
+        return self.get_success_url(None)
+
     @transaction.atomic()
     def async_post(self, request, *args, **kwargs):
         self.list = get_object_or_404(request.event.checkin_lists.all(), pk=kwargs.get("list"))
         positions = self.get_queryset()
         if request.POST.get('revert') == 'true':
+            if not request.user.has_event_permission(request.organizer, request.event, 'can_change_orders', request=request):
+                raise PermissionDenied()
             for op in positions:
                 if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
                     Checkin.objects.filter(position=op, list=self.list).delete()

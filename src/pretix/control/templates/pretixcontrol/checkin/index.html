@@ -82,8 +82,10 @@
                     <thead>
                     <tr>
                         <th>
-                            <label aria-label="{% trans "select all rows for batch-operation" %}"
-                                   class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
+                            {% if "can_change_orders" in request.eventpermset or "can_checkin_orders" in request.eventpermset %}
+                                <label aria-label="{% trans "select all rows for batch-operation" %}"
+                                       class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
+                            {% endif %}
                         </th>
                         <th>{% trans "Order code" %} <a href="?{% url_replace request 'ordering' '-code'%}"><i class="fa fa-caret-down"></i></a>
                       <a href="?{% url_replace request 'ordering' 'code'%}"><i class="fa fa-caret-up"></i></a></th>
@@ -125,7 +127,7 @@
                     {% for e in entries %}
                         <tr>
                             <td>
-                                {% if "can_change_orders" in request.eventpermset %}
+                                {% if "can_change_orders" in request.eventpermset or "can_checkin_orders" in request.eventpermset %}
                                     <input type="checkbox" name="checkin" id="id_checkin" class="" value="{{ e.pk }}"/>
                                 {% endif %}
                             </td>
@@ -198,7 +200,7 @@
                     </tbody>
                 </table>
             </div>
-            {% if "can_change_orders" in request.eventpermset %}
+            {% if "can_change_orders" in request.eventpermset or "can_checkin_orders" in request.eventpermset %}
                 <button type="submit" class="btn btn-primary btn-save">
                     <span class="fa fa-sign-in" aria-hidden="true"></span>
                     {% trans "Check-In selected attendees" %}
@@ -207,6 +209,8 @@
                     <span class="fa fa-sign-out" aria-hidden="true"></span>
                     {% trans "Check-Out selected attendees" %}
                 </button>
+            {% endif %}
+            {% if "can_change_orders" in request.eventpermset %}
                 <button type="submit" class="btn btn-danger btn-save" name="revert" value="true">
                     <span class="fa fa-trash" aria-hidden="true"></span>
                     {% trans "Delete all check-ins of selected attendees" %}
