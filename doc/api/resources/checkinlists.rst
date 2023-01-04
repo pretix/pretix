@@ -98,6 +98,8 @@ Endpoints
    :query string ends_after: Exclude all check-in lists attached to a sub-event that is already in the past at the given time.
    :query string expand: Expand a field into a full object. Currently only ``subevent`` is supported. Can be passed multiple times.
    :query string exclude: Exclude a field from the output, e.g. ``checkin_count``. Can be used as a performance optimization. Can be passed multiple times.
+   :query string ordering: Manually set the ordering of results. Valid fields to be used are ``id``, ``name``, and ``subevent__date_from``,
+                           Default: ``subevent__date_from,name``
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch
    :statuscode 200: no error

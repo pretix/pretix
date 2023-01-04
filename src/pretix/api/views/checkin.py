@@ -93,8 +93,10 @@ with scopes_disabled():
 class CheckinListViewSet(viewsets.ModelViewSet):
     serializer_class = CheckinListSerializer
     queryset = CheckinList.objects.none()
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, RichOrderingFilter)
     filterset_class = CheckinListFilter
+    ordering = ('subevent__date_from', 'name')
+    ordering_fields = ('subevent__date_from', 'id', 'name',)
 
     def _get_permission_name(self, request):
         if request.path.endswith('/failed_checkins/'):
