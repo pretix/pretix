@@ -81,7 +81,15 @@
                         <span class="label label-default">{% trans "Event series" %}</span>
                     {% elif e.presale_is_running and request.organizer.settings.event_list_availability %}
                         {% if e.best_availability_state == 100 %}
-                            <span class="label label-success">{% trans "Book now" %}</span>
+                            {% if e.settings.presale_end_show_date %}
+                                <span class="label label-success">
+                                {% blocktrans trimmed with date=e.effective_presale_end|date:"SHORT_DATE_FORMAT" %}
+                                    Book until {{ date }}
+                                {% endblocktrans %}
+                                </span>
+                            {% else %}
+                                <span class="label label-success">{% trans "Book now" %}</span>
+                            {% endif %}
                         {% elif e.settings.waiting_list_enabled and e.best_availability_state >= 0 %}
                             <span class="label label-warning">{% trans "Waiting list" %}</span>
                         {% elif e.best_availability_state == 20 %}
@@ -94,7 +102,15 @@
                             {% endif %}
                         {% endif %}
                     {% elif e.presale_is_running %}
-                        <span class="label label-success">{% trans "Book now" %}</span>
+                        {% if e.settings.presale_end_show_date %}
+                            <span class="label label-success">
+                            {% blocktrans trimmed with date=e.effective_presale_end|date:"SHORT_DATE_FORMAT" %}
+                                Book until {{ date }}
+                            {% endblocktrans %}
+                            </span>
+                        {% else %}
+                            <span class="label label-success">{% trans "Book now" %}</span>
+                        {% endif %}
                     {% elif e.presale_has_ended %}
                         <span class="label label-danger">{% trans "Sale over" %}</span>
                     {% elif e.settings.presale_start_show_date %}
