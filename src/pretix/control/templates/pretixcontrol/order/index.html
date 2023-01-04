@@ -184,9 +184,11 @@
                         <dt>{% trans "Order locale" %}</dt>
                         <dd>
                             {{ display_locale }}
-                            <a href="{% url "control:event.order.locale" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
-                                <span class="fa fa-edit"></span>
-                            </a>
+                            {% if "can_change_orders" in request.eventpermset %}
+                                <a href="{% url "control:event.order.locale" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
+                                    <span class="fa fa-edit"></span>
+                                </a>
+                            {% endif %}
                         </dd>
                         {% if order.status == "n" %}
                             <dt>{% trans "Expiry date" %}</dt>
@@ -206,9 +208,11 @@
                                         {{ order.customer.identifier }} – {{ order.customer.email }}
                                     </a>
                                 {% endif %}
-                                <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
-                                    <span class="fa fa-edit"></span>
-                                </a>
+                                {% if "can_change_orders" in request.eventpermset %}
+                                    <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
+                                        <span class="fa fa-edit"></span>
+                                    </a>
+                                {% endif %}
                             </dd>
                         {% endif %}
                         <dt>{% trans "Contact email" %}</dt>
@@ -217,21 +221,23 @@
                             {% if order.email and order.email_known_to_work %}
                                 <span class="fa fa-check-circle text-success" data-toggle="tooltip" title="{% trans "We know that this email address works because the user clicked a link we sent them." %}"></span>
                             {% endif %}
-                            <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
-                                <span class="fa fa-edit"></span>
-                            </a>
-                            {% if order.email %}
-                                <a href="{% url "control:event.order.sendmail" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
-                                    <span class="fa fa-envelope-o"></span>
+                            {% if "can_change_orders" in request.eventpermset %}
+                                <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
+                                    <span class="fa fa-edit"></span>
                                 </a>
-                                {% if order.status != "c" %}
-                                    <form class="form-inline helper-display-inline" method="post"
-                                          action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
-                                        {% csrf_token %}
-                                        <button class="btn btn-default btn-xs">
-                                            {% trans "Resend link" %}
-                                        </button>
-                                    </form>
+                                {% if order.email %}
+                                    <a href="{% url "control:event.order.sendmail" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
+                                        <span class="fa fa-envelope-o"></span>
+                                    </a>
+                                    {% if order.status != "c" %}
+                                        <form class="form-inline helper-display-inline" method="post"
+                                              action="{% url "control:event.order.resendlink" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                            {% csrf_token %}
+                                            <button class="btn btn-default btn-xs">
+                                                {% trans "Resend link" %}
+                                            </button>
+                                        </form>
+                                    {% endif %}
                                 {% endif %}
                             {% endif %}
                         </dd>
@@ -239,9 +245,11 @@
                             <dt>{% trans "Phone number" %}</dt>
                             <dd>
                                 {{ order.phone|default_if_none:""|phone_format }}
-                                <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
-                                    <span class="fa fa-edit"></span>
-                                </a>
+                                {% if "can_change_orders" in request.eventpermset %}
+                                    <a href="{% url "control:event.order.contact" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default btn-xs">
+                                        <span class="fa fa-edit"></span>
+                                    </a>
+                                {% endif %}
                             </dd>
                         {% endif %}
                         {% if invoices %}
@@ -306,7 +314,7 @@
                                         {% trans "Email invoices" %}
                                     </a>
                                 {% endif %}
-                                {% if can_generate_invoice %}
+                                {% if can_generate_invoice and 'can_change_orders' in request.eventpermset %}
                                     <br/>
                                     <form class="form-inline helper-display-inline" method="post"
                                             action="{% url "control:event.order.geninvoice" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
@@ -317,7 +325,7 @@
                                     </form>
                                 {% endif %}
                             </dd>
-                        {% elif can_generate_invoice %}
+                        {% elif can_generate_invoice and 'can_change_orders' in request.eventpermset %}
                             <dt>{% trans "Invoices" %}</dt>
                             <dd>
                                 <form class="form-inline helper-display-inline" method="post"
@@ -335,11 +343,11 @@
             <div class="panel panel-default items">
                 <div class="panel-heading">
                     <div class="pull-right flip">
-                        <a href="{% url "control:event.order.info" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
-                            <span class="fa fa-edit"></span>
-                            {% trans "Change answers" %}
-                        </a>
                         {% if 'can_change_orders' in request.eventpermset %}
+                            <a href="{% url "control:event.order.info" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
+                                <span class="fa fa-edit"></span>
+                                {% trans "Change answers" %}
+                            </a>
                             &middot; <a href="{% url "control:event.order.change" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}">
                                 <span class="fa fa-edit"></span>
                                 {% trans "Change products" %}
@@ -754,7 +762,7 @@
                                     {% endfor %}
                                     </tbody>
                                 </table>
-                                {% if order.payment_refund_sum > 0 %}
+                                {% if order.payment_refund_sum > 0 and "can_change_orders" in request.eventpermset %}
                                     <a href="{% url "control:event.order.refunds.start" event=request.event.slug organizer=request.event.organizer.slug code=order.code %}" class="btn btn-default">
                                         {% trans "Create a refund" %}
                                     </a>
@@ -942,9 +950,11 @@
                                 {% bootstrap_field comment_form.comment show_help=True show_label=False %}
                                 {% bootstrap_field comment_form.custom_followup_at %}
                                 {% bootstrap_field comment_form.checkin_attention show_help=True show_label=False %}
-                                <button class="btn btn-default">
-                                    {% trans "Update comment" %}
-                                </button>
+                                {% if "can_change_orders" in request.eventpermset %}
+                                    <button class="btn btn-default">
+                                        {% trans "Update comment" %}
+                                    </button>
+                                {% endif %}
                             </form>
                         </div>
                     </div>
