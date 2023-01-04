@@ -799,6 +799,8 @@ Vue.component('pretix-widget-event-form', {
 
         // Error message
         + '<div class="pretix-widget-error-message" v-if="$root.error">{{ $root.error }}</div>'
+        // Info message
+        + '<div class="pretix-widget-info-message" v-if="$root.info">{{ $root.info }}</div>'
 
         // Resume cart
         + '<div class="pretix-widget-info-message pretix-widget-clickable"'
@@ -1526,6 +1528,7 @@ var shared_root_methods = {
                 root.display_net_prices = data.display_net_prices;
                 root.voucher_explanation_text = data.voucher_explanation_text;
                 root.error = data.error;
+                root.info = data.info;
                 root.display_add_to_cart = data.display_add_to_cart;
                 root.waiting_list_enabled = data.waiting_list_enabled;
                 root.show_variations_expanded = data.show_variations_expanded || !!root.variation_filter;

@@ -652,6 +652,7 @@ class WidgetAPIProductList(EventListMixin, View):
             'waiting_list_enabled': request.event.settings.waiting_list_enabled,
             'voucher_explanation_text': str(rich_text(request.event.settings.voucher_explanation_text, safelinks=False)),
             'error': None,
+            'info': None,
             'cart_exists': False
         }
 
@@ -680,6 +681,12 @@ class WidgetAPIProductList(EventListMixin, View):
                 }
             else:
                 data['error'] = gettext('The booking period for this event has not yet started.')
+        else:
+            if request.event.settings.presale_end_show_date:
+                data['info'] = gettext('The booking period for this event will end on %(date)s at %(time)s.') % {
+                    'date': date_format(ev.effective_presale_end.astimezone(request.event.timezone), "SHORT_DATE_FORMAT"),
+                    'time': date_format(ev.effective_presale_end.astimezone(request.event.timezone), "TIME_FORMAT"),
+                }
 
         self.voucher = None
         if 'voucher' in request.GET:
