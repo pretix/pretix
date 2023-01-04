@@ -159,6 +159,20 @@
                     {% endblocktrans %}
                 {% endif %}
             </div>
+        {% else %}
+            {% if event.settings.presale_end_show_date %}
+                {% with date=ev.effective_presale_end|date:"SHORT_DATE_FORMAT" date_normalized=ev.effective_presale_end|date:"Y-m-d" %}
+                {% with time=ev.effective_presale_end|time:"TIME_FORMAT" time_24h=ev.effective_presale_end|time:"H:i" %}
+                    <div class="alert alert-info">
+                    <span data-time="{{ ev.effective_presale_end.isoformat }}" data-timezone="{{ request.event.timezone }}">
+                        {% blocktrans trimmed with date="<time datetime='"|add:date_normalized|add:"'>"|add:date|add:"</time>"|safe time="<time datetime='"|add:time_24h|add:"'>"|add:time|add:"</time>"|safe %}
+                            The booking period for this event will end on {{ date }} at {{ time }}.
+                        {% endblocktrans %}
+                    </span>
+                    </div>
+                {% endwith %}
+                {% endwith %}
+            {% endif %}
         {% endif %}
         {% if not cart_namespace or subevent %}
             <div>
