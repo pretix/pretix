@@ -782,6 +782,17 @@ DEFAULTS = {
             widget=forms.CheckboxInput,
         )
     },
+    'presale_end_show_date': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Show end date"),
+            help_text=_("Show the presale end date during active presale."),
+            widget=forms.CheckboxInput,
+        )
+    },
     'tax_rate_default': {
         'default': None,
         'type': TaxRule
