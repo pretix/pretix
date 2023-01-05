@@ -328,7 +328,10 @@ def process_banktransfers(self, job: int, data: list) -> None:
 
                 pattern = re.compile(
                     "(%s)[ \\-_]*([A-Z0-9]{%s,%s})" % (
-                        "|".join(re.escape(p).replace("\\-", r"[\- ]*") for p in prefixes),
+                        # We need to sort prefixes by length with long ones first. In case we have an event with slug
+                        # "CONF" and one with slug "CONF2022", we want CONF2022 to match first, to avoid the parser
+                        # thinking "2022" is already the order code.
+                        "|".join(sorted([re.escape(p).replace("\\-", r"[\- ]*") for p in prefixes], key=lambda p: len(p), reverse=True)),
                         min(code_len_agg['min'] or 1, inr_len_agg['min'] or 1),
                         max(code_len_agg['max'] or 5, inr_len_agg['max'] or 5)
                     )
