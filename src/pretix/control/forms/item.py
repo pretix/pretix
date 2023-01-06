@@ -595,6 +595,13 @@ class ItemUpdateForm(I18nModelForm):
                         "Gift card products should not be admission products at the same time."
                     )
                 )
+        if d.get('require_membership') and not d.get('require_membership_types'):
+            self.add_error(
+                'require_membership_types',
+                _(
+                    "If a valid membership is required, at least one valid membership type needs to be selected."
+                )
+            )
         return d
 
     def clean_picture(self):
@@ -791,6 +798,17 @@ class ItemVariationForm(I18nModelForm):
                 'class': 'scrolling-multiple-choice'
             }),
         }
+
+    def clean(self):
+        d = super().clean()
+        if d.get('require_membership') and not d.get('require_membership_types'):
+            self.add_error(
+                'require_membership_types',
+                _(
+                    "If a valid membership is required, at least one valid membership type needs to be selected."
+                )
+            )
+        return d
 
     def save(self, commit=True):
         instance = super().save(commit)
