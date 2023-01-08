@@ -23,7 +23,7 @@ installation guides):
 
 * A SMTP server to send out mails, e.g. `Postfix`_ on your machine or some third-party server you have credentials for
 * A HTTP reverse proxy, e.g. `nginx`_ or Apache to allow HTTPS connections
-* A `PostgreSQL`_ 9.6+, `MySQL`_ 5.7+, or MariaDB 10.2.7+ database server
+* A `PostgreSQL`_ 9.6+ database server
 * A `redis`_ server
 * A `nodejs`_ installation
 
@@ -47,9 +47,6 @@ In this guide, all code lines prepended with a ``#`` symbol are commands that yo
 Database
 --------
 
-.. warning:: **Please use PostgreSQL for all new installations**. If you need to go for MySQL, make sure you run
-             **MySQL 5.7 or newer** or **MariaDB 10.2.7 or newer**.
-
 Having the database server installed, we still need a database and a database user. We can create these with any kind
 of database managing tool or directly on our database's shell. Please make sure that UTF8 is used as encoding for the
 best compatibility. You can check this with the following command::
@@ -60,12 +57,6 @@ For PostgreSQL database creation, we would do::
 
     # sudo -u postgres createuser pretix
     # sudo -u postgres createdb -O pretix pretix
-
-When using MySQL, make sure you set the character set of the database to ``utf8mb4``, e.g. like this::
-
-    mysql > CREATE DATABASE pretix DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
-
-You will also need to make sure that ``sql_mode`` in your ``my.cnf`` file does **not** include ``ONLY_FULL_GROUP_BY``.
 
 Package dependencies
 --------------------
@@ -97,16 +88,12 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     trust_x_forwarded_proto=on
 
     [database]
-    ; For MySQL, replace with "mysql"
     backend=postgresql
     name=pretix
     user=pretix
-    ; For MySQL, enter the user password. For PostgreSQL on the same host,
-    ; we don't need one because we can use peer authentification if our
-    ; PostgreSQL user matches our unix user.
+    ; For PostgreSQL on the same host, we don't need a password because we can use
+    ; peer authentication if our PostgreSQL user matches our unix user.
     password=
-    ; For MySQL, use local socket, e.g. /var/run/mysqld/mysqld.sock
-    ; For a remote host, supply an IP address
     ; For local postgres authentication, you can leave it empty
     host=
 
@@ -139,10 +126,6 @@ python installation::
 We now install pretix, its direct dependencies and gunicorn::
 
     (venv)$ pip3 install pretix gunicorn
-
-If you're running MySQL, also install the client library::
-
-    (venv)$ pip3 install mysqlclient
 
 Note that you need Python 3.7 or newer. You can find out your Python version using ``python -V``.
 
@@ -344,7 +327,6 @@ Then, proceed like after any plugin installation::
 .. _nginx: https://botleg.com/stories/https-with-lets-encrypt-and-nginx/
 .. _Let's Encrypt: https://letsencrypt.org/
 .. _pretix.eu: https://pretix.eu/
-.. _MySQL: https://dev.mysql.com/doc/refman/5.7/en/linux-installation-apt-repo.html
 .. _PostgreSQL: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-20-04
 .. _redis: https://blog.programster.org/debian-8-install-redis-server/
 .. _ufw: https://en.wikipedia.org/wiki/Uncomplicated_Firewall

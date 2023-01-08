@@ -141,7 +141,7 @@ Database settings
 Example::
 
     [database]
-    backend=mysql
+    backend=postgresql
     name=pretix
     user=pretix
     password=abcd
@@ -149,7 +149,7 @@ Example::
     port=3306
 
 ``backend``
-    One of ``mysql``, ``sqlite3``, ``oracle`` and ``postgresql``.
+    One of ``mysql`` (deprecated), ``sqlite3`` and ``postgresql``.
     Default: ``sqlite3``.
 
     If you use MySQL, be sure to create your database using

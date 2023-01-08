@@ -17,11 +17,11 @@ Backups
 There are essentially two things which you should create backups of:
 
 Database
-    Your SQL database (MySQL or PostgreSQL). This is critical and you should **absolutely
-    always create automatic backups of your database**. There are tons of tutorials on the
-    internet on how to do this, and the exact process depends on the choice of your database.
-    For MySQL, see ``mysqldump`` and for PostgreSQL, see the ``pg_dump`` tool. You probably
-    want to create a cronjob that does the backups for you on a regular schedule.
+    Your SQL database. This is critical and you should **absolutely always create automatic
+    backups of your database**. There are tons of tutorials on the internet on how to do this,
+    and the exact process depends on the choice of your database. For PostgreSQL, see the
+    ``pg_dump`` tool. You probably want to create a cronjob that does the backups for you on a
+    regular schedule.
 
 Data directory
     The data directory of your pretix configuration might contain some things that you should
