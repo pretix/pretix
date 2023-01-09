@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-09 13:58+0000\n"
-"PO-Revision-Date: 2023-01-09 14:14+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2023-01-09 14:27+0000\n"
+"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -1515,7 +1515,7 @@ msgstr "Multiple-Choice-Fragen in einer Spalte gruppieren"
 
 #: pretix/base/exporters/orderlist.py:113
 msgid "Only include orders created on or after this date."
-msgstr "Nur Bestellungen erstellt an oder nach diesem Datum."
+msgstr "Nur Bestellungen an oder nach diesem Datum."
 
 #: pretix/base/exporters/orderlist.py:120
 msgid "Only include orders created on or before this date."
@@ -4667,7 +4667,7 @@ msgstr "Kann Bestellungen verändern"
 
 #: pretix/base/models/organizer.py:302
 msgid "Can perform check-ins"
-msgstr "Kann Tickets einchecken"
+msgstr "Darf Check-Ins durchführen"
 
 #: pretix/base/models/organizer.py:303
 msgid ""
@@ -8160,8 +8160,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1352
 msgid "Hide all unavailable dates from calendar or list views"
-msgstr ""
-"Verstecke alle nicht verfügbaren Termine in Kalender- oder Listenansichten"
+msgstr "Blende ausgebuchte Termine in Kalender- und Listenansichten aus"
 
 #: pretix/base/settings.py:1361
 msgid "Allow customers to modify their information after they checked in."
