@@ -95,7 +95,11 @@ class ItemVariationSerializer(I18nAwareModelSerializer):
     @transaction.atomic
     def create(self, validated_data):
         meta_data = validated_data.pop('meta_data', None)
+        require_membership_types = validated_data.pop('require_membership_types', [])
         variation = ItemVariation.objects.create(**validated_data)
+
+        if require_membership_types:
+            variation.require_membership_types.add(*require_membership_types)
 
         # Meta data
         if meta_data is not None:
