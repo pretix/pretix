@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-09 13:58+0000\n"
 "PO-Revision-Date: 2023-01-09 14:27+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -28033,7 +28033,7 @@ msgstr "Ihre Informationen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:288
 msgid "Change your information"
-msgstr "Kundendaten ändern"
+msgstr "Ihre Daten bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:333
 msgid "Internal Reference"
