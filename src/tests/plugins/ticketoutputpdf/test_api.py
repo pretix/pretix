@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import copy
+import json
 
 import pytest
 from django.core.files.base import ContentFile
@@ -176,12 +177,19 @@ def test_api_update(env, token_client):
         {
             "name": "Bar",
             "background": file_id_png,
+            "layout": [
+                {"type": "barcodearea", "left": "7.00", "bottom": "11.15", "size": "45.00", "content": "secret"}
+            ]
         },
         format='json'
     )
     assert resp.status_code == 200
     env[1].refresh_from_db()
     assert env[1].name == "Bar"
+    assert env[1].background
+    assert json.loads(env[1].layout) == [
+        {"type": "barcodearea", "left": "7.00", "bottom": "11.15", "size": "45.00", "content": "secret"}
+    ]
 
 
 @pytest.mark.django_db
