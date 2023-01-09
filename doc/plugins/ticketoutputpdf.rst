@@ -168,7 +168,7 @@ Endpoints
       {
         "name": "Default layout",
         "default": true,
-        "layout": {…},
+        "layout": […],
         "background": {},
         "item_assignments": []
       }
