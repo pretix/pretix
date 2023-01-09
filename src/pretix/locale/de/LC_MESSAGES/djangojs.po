@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2022-12-14 13:09+0000\n"
+"POT-Creation-Date: 2023-01-09 13:58+0000\n"
 "PO-Revision-Date: 2022-07-26 08:58+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -129,18 +129,18 @@ msgstr "WeChat Pay"
 msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:163
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:164
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Continue"
 msgstr "Fortfahren"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:221
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:222
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
 msgid "Confirming your payment …"
 msgstr "Zahlung wird bestätigt …"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:246
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:247
 msgid "Payment method unavailable"
 msgstr "Zahlungsmethode nicht verfügbar"
 
@@ -484,49 +484,49 @@ msgstr "Minuten"
 msgid "Check-in QR"
 msgstr "Check-in-QR-Code"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:384
+#: pretix/static/pretixcontrol/js/ui/editor.js:385
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Die Hintergrund-PDF-Datei konnte nicht geladen werden:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:653
+#: pretix/static/pretixcontrol/js/ui/editor.js:654
 msgid "Group of objects"
 msgstr "Gruppe von Objekten"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:659
+#: pretix/static/pretixcontrol/js/ui/editor.js:660
 msgid "Text object"
 msgstr "Text-Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:661
+#: pretix/static/pretixcontrol/js/ui/editor.js:662
 msgid "Barcode area"
 msgstr "QR-Code-Bereich"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:663
+#: pretix/static/pretixcontrol/js/ui/editor.js:664
 msgid "Image area"
 msgstr "Bildbereich"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:665
+#: pretix/static/pretixcontrol/js/ui/editor.js:666
 msgid "Powered by pretix"
 msgstr "Event-Ticketshop von pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:667
+#: pretix/static/pretixcontrol/js/ui/editor.js:668
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:671
+#: pretix/static/pretixcontrol/js/ui/editor.js:672
 msgid "Ticket design"
 msgstr "Ticket-Design"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:961
+#: pretix/static/pretixcontrol/js/ui/editor.js:962
 msgid "Saving failed."
 msgstr "Speichern fehlgeschlagen."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1011
-#: pretix/static/pretixcontrol/js/ui/editor.js:1050
+#: pretix/static/pretixcontrol/js/ui/editor.js:1030
+#: pretix/static/pretixcontrol/js/ui/editor.js:1069
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Es gab ein Problem beim Hochladen der PDF-Datei, bitte erneut versuchen."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1035
+#: pretix/static/pretixcontrol/js/ui/editor.js:1054
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Möchten Sie den Editor wirklich schließen ohne Ihre Änderungen zu speichern?"
@@ -864,82 +864,90 @@ msgstr "Saalplan öffnen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
 msgctxt "widget"
+msgid ""
+"Some or all ticket categories are currently sold out. If you want, you can "
+"add yourself to the waiting list. We will then notify if seats are available "
+"again."
+msgstr ""
+
+#: pretix/static/pretixpresale/js/widget/widget.js:57
+msgctxt "widget"
 msgid "Load more"
 msgstr "Mehr laden"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:58
+#: pretix/static/pretixpresale/js/widget/widget.js:59
 msgid "Mo"
 msgstr "Mo"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:59
+#: pretix/static/pretixpresale/js/widget/widget.js:60
 msgid "Tu"
 msgstr "Di"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:60
+#: pretix/static/pretixpresale/js/widget/widget.js:61
 msgid "We"
 msgstr "Mi"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:61
+#: pretix/static/pretixpresale/js/widget/widget.js:62
 msgid "Th"
 msgstr "Do"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:62
+#: pretix/static/pretixpresale/js/widget/widget.js:63
 msgid "Fr"
 msgstr "Fr"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:63
+#: pretix/static/pretixpresale/js/widget/widget.js:64
 msgid "Sa"
 msgstr "Sa"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:64
+#: pretix/static/pretixpresale/js/widget/widget.js:65
 msgid "Su"
 msgstr "So"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:67
+#: pretix/static/pretixpresale/js/widget/widget.js:68
 msgid "January"
 msgstr "Januar"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:68
+#: pretix/static/pretixpresale/js/widget/widget.js:69
 msgid "February"
 msgstr "Februar"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:69
+#: pretix/static/pretixpresale/js/widget/widget.js:70
 msgid "March"
 msgstr "März"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:70
+#: pretix/static/pretixpresale/js/widget/widget.js:71
 msgid "April"
 msgstr "April"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:71
+#: pretix/static/pretixpresale/js/widget/widget.js:72
 msgid "May"
 msgstr "Mai"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:72
+#: pretix/static/pretixpresale/js/widget/widget.js:73
 msgid "June"
 msgstr "Juni"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:73
+#: pretix/static/pretixpresale/js/widget/widget.js:74
 msgid "July"
 msgstr "Juli"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:74
+#: pretix/static/pretixpresale/js/widget/widget.js:75
 msgid "August"
 msgstr "August"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:75
+#: pretix/static/pretixpresale/js/widget/widget.js:76
 msgid "September"
 msgstr "September"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:76
+#: pretix/static/pretixpresale/js/widget/widget.js:77
 msgid "October"
 msgstr "Oktober"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:77
+#: pretix/static/pretixpresale/js/widget/widget.js:78
 msgid "November"
 msgstr "November"
 
-#: pretix/static/pretixpresale/js/widget/widget.js:78
+#: pretix/static/pretixpresale/js/widget/widget.js:79
 msgid "December"
 msgstr "Dezember"
 
