@@ -995,13 +995,13 @@ var editor = {
             var validate = ajv.compile(editor.schema)
             var data = JSON.parse($("#source-textarea").val())
             var valid = validate(data)
-            editor.load(data);
 
             if (!valid) {
                 console.log(validate.errors)
                 alert("Invalid input syntax. If you're familiar with this, check out the developer console for a full " +
                       "error log. Otherwise, please contact support.")
             } else {
+                editor.load(data);
                 $("#source-container").hide();
             }
         } catch (e) {
