@@ -77,6 +77,15 @@
                                     When this ticket is purchased, the system will ask for a name or other details according
                                     to your event settings.
                                 {% endblocktrans %}
+                                {% if not request.event.settings.attendee_names_asked and not request.event.settings.attendee_emails_asked and not request.event.settings.attendee_company_asked and not request.event.settings.attendee_addresses_asked %}
+                                    <br>
+                                    <span class="text-warning">
+                                        <span class="fa fa-warning" aria-hidden="true"></span>
+                                        {% trans "This will currently have no effect since all data fields are turned off in event settings." %}
+                                    </span>
+                                    <a href="{% url "control:event.settings" organizer=request.event.organizer.slug event=request.event.slug %}#tab-0-2-open"
+                                       class="btn btn-default btn-xs" target="_blank">{% trans "Change settings" %}</a>
+                               {% endif %}
                             </div>
                         </label>
                     </div>
