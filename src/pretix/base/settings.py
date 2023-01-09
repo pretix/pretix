@@ -2574,7 +2574,7 @@ Your {organizer} team"""))
             label=_("Attendee data explanation"),
             widget=I18nTextarea,
             widget_kwargs={'attrs': {'rows': '2'}},
-            help_text=_("This text will be shown above the questions asked for every admission product. You can use it e.g. to explain "
+            help_text=_("This text will be shown above the questions asked for every personalized product. You can use it e.g. to explain "
                         "why you need information from them.")
         )
     },
