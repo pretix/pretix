@@ -97,7 +97,7 @@
                     </summary>
                     <div>
                         <div class="panel-body questions-form">
-                            {% if event.settings.attendee_data_explanation_text and pos.item.admission %}
+                            {% if event.settings.attendee_data_explanation_text and pos.item.ask_attendee_data %}
                                 {{ event.settings.attendee_data_explanation_text|rich_text }}
                             {% endif %}
                             {% if pos.seat %}

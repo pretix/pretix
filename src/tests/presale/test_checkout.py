@@ -71,7 +71,7 @@ class BaseCheckoutTestCase:
         self.quota_tickets = Quota.objects.create(event=self.event, name='Tickets', size=5)
         self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                           category=self.category, default_price=23, admission=True,
-                                          tax_rule=self.tr19)
+                                          personalized=True, tax_rule=self.tr19)
         self.quota_tickets.items.add(self.ticket)
         self.event.settings.set('timezone', 'UTC')
         self.event.settings.set('attendee_names_asked', False)
@@ -986,6 +986,31 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.get(id=cr1.id)
         self.assertEqual(cr1.attendee_name, 'Peter')
+
+    def test_attendee_name_not_required_if_ticket_unpersonalized(self):
+        self.event.settings.set('attendee_names_asked', True)
+        self.event.settings.set('attendee_names_required', True)
+        self.ticket.personalized = False
+        self.ticket.save()
+        with scopes_disabled():
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.get('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_0"]' % cr1.id)), 0)
+
+        # Accepted request
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'email': 'admin@localhost'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        with scopes_disabled():
+            cr1 = CartPosition.objects.get(id=cr1.id)
+        self.assertEqual(cr1.attendee_name, None)
 
     def test_attendee_name_scheme(self):
         self.event.settings.set('attendee_names_asked', True)
@@ -4522,6 +4547,7 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.ticket.require_membership = True
         self.ticket.require_membership_types.add(mtype)
         self.ticket.admission = True
+        self.ticket.personalized = True
         self.ticket.save()
         self.event.settings.attendee_names_asked = True
 

@@ -262,6 +262,7 @@ TEST_ITEM_RES = {
     "tax_rate": "0.00",
     "tax_rule": None,
     "admission": False,
+    "personalized": False,
     "issue_giftcard": False,
     "position": 0,
     "generate_tickets": None,
@@ -472,9 +473,12 @@ def test_item_create(token_client, organizer, event, item, category, taxrule, me
     )
     assert resp.status_code == 201
     with scopes_disabled():
-        assert Item.objects.get(pk=resp.data['id']).sales_channels == ["web", "pretixpos"]
-        assert Item.objects.get(pk=resp.data['id']).meta_data == {'day': 'Wednesday'}
-        assert Item.objects.get(pk=resp.data['id']).require_membership_types.count() == 1
+        i = Item.objects.get(pk=resp.data['id'])
+        assert i.sales_channels == ["web", "pretixpos"]
+        assert i.meta_data == {'day': 'Wednesday'}
+        assert i.require_membership_types.count() == 1
+        assert i.personalized is True  # auto-set for backwards-compatibility
+        assert i.admission is True
 
 
 @pytest.mark.django_db
@@ -1076,6 +1080,32 @@ def test_item_update(token_client, organizer, event, item, category, item2, cate
     )
     assert resp.status_code == 400
     assert resp.content.decode() == '{"meta_data":["Item meta data property \'foo\' does not exist."]}'
+
+    item.personalized = True
+    item.admission = True
+    item.save()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "admission": False,
+            "personalized": True,
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.content.decode() == '{"non_field_errors":["Only admission products can currently be personalized."]}'
+
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
+        {
+            "admission": False
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    item.refresh_from_db()
+    assert not item.admission
+    assert not item.personalized  # also set for backwards compatibility
 
 
 @pytest.mark.django_db

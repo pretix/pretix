@@ -808,7 +808,7 @@ class Order(LockModel, LoggedModel):
             return True
         ask_names = self.event.settings.get('attendee_names_asked', as_type=bool)
         for cp in positions:
-            if (cp.item.admission and ask_names) or cp.item.questions.all():
+            if (cp.item.ask_attendee_data and ask_names) or cp.item.questions.all():
                 return True
 
         return False  # nothing there to modify

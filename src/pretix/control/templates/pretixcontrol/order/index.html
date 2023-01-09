@@ -468,12 +468,12 @@
                                 {% endif %}
                                 {% if line.has_questions %}
                                     <dl>
-                                        {% if line.item.admission and event.settings.attendee_names_asked %}
+                                        {% if line.item.ask_attendee_data and event.settings.attendee_names_asked %}
                                             <dt>{% trans "Attendee name" %}</dt>
                                             <dd>{% if line.attendee_name %}{{ line.attendee_name }}{% else %}
                                                 <em>{% trans "not answered" %}</em>{% endif %}</dd>
                                         {% endif %}
-                                        {% if line.item.admission and event.settings.attendee_emails_asked %}
+                                        {% if line.item.ask_attendee_data and event.settings.attendee_emails_asked %}
                                             <dt>{% trans "Attendee email" %}</dt>
                                             <dd>
                                                 {% if line.attendee_email %}
@@ -496,7 +496,7 @@
                                                 {% endif %}
                                             </dd>
                                         {% endif %}
-                                        {% if line.item.admission and event.settings.attendee_company_asked %}
+                                        {% if line.item.ask_attendee_data and event.settings.attendee_company_asked %}
                                             <dt>
                                                 {% trans "Attendee company" %}
                                             </dt>
@@ -504,7 +504,7 @@
                                                 {% if line.company %}{{ line.company }}{% else %}<em>{% trans "not answered" %}</em>{% endif %}
                                             </dd>
                                         {% endif %}
-                                        {% if line.item.admission and event.settings.attendee_addresses_asked %}
+                                        {% if line.item.ask_attendee_data and event.settings.attendee_addresses_asked %}
                                             <dt>
                                                 {% trans "Attendee address" %}
                                             </dt>

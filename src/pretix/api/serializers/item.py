@@ -234,7 +234,7 @@ class ItemSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Item
         fields = ('id', 'category', 'name', 'internal_name', 'active', 'sales_channels', 'description',
-                  'default_price', 'free_price', 'tax_rate', 'tax_rule', 'admission',
+                  'default_price', 'free_price', 'tax_rate', 'tax_rule', 'admission', 'personalized',
                   'position', 'picture', 'available_from', 'available_until',
                   'require_voucher', 'hide_without_voucher', 'allow_cancel', 'require_bundling',
                   'min_per_order', 'max_per_order', 'checkin_attention', 'has_variations', 'variations',
@@ -261,6 +261,15 @@ class ItemSerializer(I18nAwareModelSerializer):
 
         Item.clean_per_order(data.get('min_per_order'), data.get('max_per_order'))
         Item.clean_available(data.get('available_from'), data.get('available_until'))
+
+        if data.get('personalized') and not data.get('admission'):
+            raise ValidationError(_('Only admission products can currently be personalized.'))
+
+        if data.get('admission') and 'personalized' not in data and not self.instance:
+            # Backwards compatibility
+            data['personalized'] = True
+        elif not data.get('admission'):
+            data['personalized'] = False
 
         if data.get('issue_giftcard'):
             if data.get('tax_rule') and data.get('tax_rule').rate > 0:

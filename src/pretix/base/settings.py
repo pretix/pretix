@@ -206,7 +206,7 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_("Ask for attendee names"),
-            help_text=_("Ask for a name for all tickets which include admission to the event."),
+            help_text=_("Ask for a name for all personalized tickets."),
         )
     },
     'attendee_names_required': {
@@ -229,10 +229,10 @@ DEFAULTS = {
             label=_("Ask for email addresses per ticket"),
             help_text=_("Normally, pretix asks for one email address per order and the order confirmation will be sent "
                         "only to that email address. If you enable this option, the system will additionally ask for "
-                        "individual email addresses for every admission ticket. This might be useful if you want to "
+                        "individual email addresses for every personalized ticket. This might be useful if you want to "
                         "obtain individual addresses for every attendee even in case of group orders. However, "
                         "pretix will send the order confirmation by default only to the one primary email address, not to "
-                        "the per-attendee addresses. You can however enable this in the E-mail settings."),
+                        "the per-attendee addresses. You can however enable this in the email settings."),
         )
     },
     'attendee_emails_required': {
@@ -242,7 +242,7 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_("Require email addresses per ticket"),
-            help_text=_("Require customers to fill in individual e-mail addresses for all admission tickets. See the "
+            help_text=_("Require customers to fill in individual email addresses for all personalized tickets. See the "
                         "above option for more details. One email address for the order confirmation will always be "
                         "required regardless of this setting."),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-attendee_emails_asked'}),
@@ -2574,7 +2574,7 @@ Your {organizer} team"""))
             label=_("Attendee data explanation"),
             widget=I18nTextarea,
             widget_kwargs={'attrs': {'rows': '2'}},
-            help_text=_("This text will be shown above the questions asked for every admission product. You can use it e.g. to explain "
+            help_text=_("This text will be shown above the questions asked for every personalized product. You can use it e.g. to explain "
                         "why you need information from them.")
         )
     },

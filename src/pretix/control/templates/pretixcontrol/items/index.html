@@ -81,7 +81,11 @@
                             </td>
                             <td>
                                 {% if i.admission %}
-                                    <span class="fa fa-user fa-fw text-muted" data-toggle="tooltip" title="{% trans "Admission ticket" %}"></span>
+                                    {% if i.personalized %}
+                                        <span class="fa fa-id-card-o fa-fw text-muted" data-toggle="tooltip" title="{% trans "Personalized admission ticket" %}"></span>
+                                    {% else %}
+                                        <span class="fa fa-user fa-fw text-muted" data-toggle="tooltip" title="{% trans "Admission ticket without personalization" %}"></span>
+                                    {% endif %}
                                 {% elif i.issue_giftcard %}
                                     <span class="fa fa-gift fa-fw text-muted" data-toggle="tooltip" title="{% trans "Gift card" %}"></span>
                                 {% endif %}

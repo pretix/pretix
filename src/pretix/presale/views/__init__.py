@@ -149,7 +149,7 @@ class CartMixin:
         # We do this by list manipulations instead of a GROUP BY query, as
         # Django is unable to join related models in a .values() query
         def group_key(pos):  # only used for grouping, sorting is done before already
-            has_attendee_data = pos.item.admission and (
+            has_attendee_data = pos.item.ask_attendee_data and (
                 self.request.event.settings.attendee_names_asked
                 or self.request.event.settings.attendee_emails_asked
                 or self.request.event.settings.attendee_company_asked

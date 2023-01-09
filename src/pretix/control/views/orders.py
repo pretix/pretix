@@ -383,8 +383,8 @@ class OrderDetail(OrderView):
 
             p.has_questions = (
                 p.additional_fields or
-                (p.item.admission and self.request.event.settings.attendee_names_asked) or
-                (p.item.admission and self.request.event.settings.attendee_emails_asked) or
+                (p.item.ask_attendee_data and self.request.event.settings.attendee_names_asked) or
+                (p.item.ask_attendee_data and self.request.event.settings.attendee_emails_asked) or
                 p.item.questions.all()
             )
             p.cache_answers()

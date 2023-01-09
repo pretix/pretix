@@ -575,7 +575,7 @@ class BaseQuestionsForm(forms.Form):
 
         add_fields = {}
 
-        if item.admission and event.settings.attendee_names_asked:
+        if item.ask_attendee_data and event.settings.attendee_names_asked:
             add_fields['attendee_name_parts'] = NamePartsFormField(
                 max_length=255,
                 required=event.settings.attendee_names_required and not self.all_optional,
@@ -584,7 +584,7 @@ class BaseQuestionsForm(forms.Form):
                 label=_('Attendee name'),
                 initial=(cartpos.attendee_name_parts if cartpos else orderpos.attendee_name_parts),
             )
-        if item.admission and event.settings.attendee_emails_asked:
+        if item.ask_attendee_data and event.settings.attendee_emails_asked:
             add_fields['attendee_email'] = forms.EmailField(
                 required=event.settings.attendee_emails_required and not self.all_optional,
                 label=_('Attendee email'),
@@ -595,7 +595,7 @@ class BaseQuestionsForm(forms.Form):
                     }
                 )
             )
-        if item.admission and event.settings.attendee_company_asked:
+        if item.ask_attendee_data and event.settings.attendee_company_asked:
             add_fields['company'] = forms.CharField(
                 required=event.settings.attendee_company_required and not self.all_optional,
                 label=_('Company'),
@@ -603,7 +603,7 @@ class BaseQuestionsForm(forms.Form):
                 initial=(cartpos.company if cartpos else orderpos.company),
             )
 
-        if item.admission and event.settings.attendee_addresses_asked:
+        if item.ask_attendee_data and event.settings.attendee_addresses_asked:
             add_fields['street'] = forms.CharField(
                 required=event.settings.attendee_addresses_required and not self.all_optional,
                 label=_('Address'),
