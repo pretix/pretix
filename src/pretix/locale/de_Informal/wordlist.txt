@@ -193,6 +193,7 @@ PayPal
 PayPals
 PayU
 PCI
+Personalisierung
 Platzhalterzeichen
 Play
 Plugin
