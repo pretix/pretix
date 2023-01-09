@@ -185,7 +185,7 @@ Endpoints
         "id": 1,
         "name": "Default layout",
         "default": true,
-        "layout": {…},
+        "layout": […],
         "background": {},
         "item_assignments": []
       }
