@@ -1226,7 +1226,7 @@ class StripeBancontact(StripeMethod):
 class StripeSofort(StripeMethod):
     identifier = 'stripe_sofort'
     verbose_name = _('SOFORT via Stripe')
-    public_name = _('SOFORT')
+    public_name = _('SOFORT (instant bank transfer)')
     method = 'sofort'
 
     def payment_form_render(self, request) -> str:
