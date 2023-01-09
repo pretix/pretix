@@ -62,7 +62,7 @@ Endpoints
             "name": "Default layout",
             "default": true,
             "layout": {…},
-            "background": {},
+            "background": null,
             "item_assignments": []
           }
         ]
@@ -100,7 +100,7 @@ Endpoints
         "name": "Default layout",
         "default": true,
         "layout": {…},
-        "background": {},
+        "background": null,
         "item_assignments": []
       }
 
@@ -169,7 +169,7 @@ Endpoints
         "name": "Default layout",
         "default": true,
         "layout": […],
-        "background": {},
+        "background": null,
         "item_assignments": []
       }
 
@@ -186,7 +186,7 @@ Endpoints
         "name": "Default layout",
         "default": true,
         "layout": […],
-        "background": {},
+        "background": null,
         "item_assignments": []
       }
 
@@ -230,7 +230,7 @@ Endpoints
         "name": "Default layout",
         "default": true,
         "layout": […],
-        "background": {},
+        "background": null,
         "item_assignments": []
       }
 
