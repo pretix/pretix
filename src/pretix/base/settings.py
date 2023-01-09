@@ -232,7 +232,7 @@ DEFAULTS = {
                         "individual email addresses for every personalized ticket. This might be useful if you want to "
                         "obtain individual addresses for every attendee even in case of group orders. However, "
                         "pretix will send the order confirmation by default only to the one primary email address, not to "
-                        "the per-attendee addresses. You can however enable this in the E-mail settings."),
+                        "the per-attendee addresses. You can however enable this in the email settings."),
         )
     },
     'attendee_emails_required': {
@@ -242,7 +242,7 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_("Require email addresses per ticket"),
-            help_text=_("Require customers to fill in individual e-mail addresses for all personalized tickets. See the "
+            help_text=_("Require customers to fill in individual email addresses for all personalized tickets. See the "
                         "above option for more details. One email address for the order confirmation will always be "
                         "required regardless of this setting."),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_settings-attendee_emails_asked'}),
