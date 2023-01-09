@@ -321,7 +321,7 @@
                                 <dt>{% trans "State" context "address" %}</dt>
                                 <dd>{{ order.invoice_address.state_name }}</dd>
                             {% endif %}
-                            {% if request.event.settings.invoice_address_vatid %}
+                            {% if request.event.settings.invoice_address_vatid and order.invoice_address.vat_id %}
                                 <dt>{% trans "VAT ID" %}</dt>
                                 <dd>{{ order.invoice_address.vat_id }}</dd>
                             {% endif %}
@@ -329,8 +329,10 @@
                                 <dt>{{ request.event.settings.invoice_address_custom_field }}</dt>
                                 <dd>{{ order.invoice_address.custom_field }}</dd>
                             {% endif %}
-                            <dt>{% trans "Internal Reference" %}</dt>
-                            <dd>{{ order.invoice_address.internal_reference }}</dd>
+                            {% if order.invoice_address.internal_reference %}
+                                <dt>{% trans "Internal Reference" %}</dt>
+                                <dd>{{ order.invoice_address.internal_reference }}</dd>
+                            {% endif %}
                         {% endif %}
                     </dl>
                 </div>
