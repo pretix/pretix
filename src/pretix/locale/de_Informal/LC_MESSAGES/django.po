@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-09 13:58+0000\n"
-"PO-Revision-Date: 2022-12-14 15:23+0000\n"
+"PO-Revision-Date: 2023-01-09 14:14+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.15\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -151,7 +151,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:266
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "Derzeit können nur Zutrittsprodukte personalisiert sein."
 
 #: pretix/api/serializers/item.py:277
 msgid ""
@@ -1358,10 +1358,8 @@ msgstr "Berechtigt zum Eintritt"
 #: pretix/base/exporters/items.py:76
 #: pretix/control/templates/pretixcontrol/item/create.html:74
 #: pretix/control/templates/pretixcontrol/item/index.html:86
-#, fuzzy
-#| msgid "Alternative ticket"
 msgid "Personalized ticket"
-msgstr "Alternative Tickets"
+msgstr "Personalisiertes Ticket"
 
 #: pretix/base/exporters/items.py:77 pretix/base/models/items.py:413
 msgid "Generate tickets"
@@ -3523,17 +3521,14 @@ msgid "Whether or not buying this product allows a person to enter your event"
 msgstr "Aktivieren, wenn dieses Produkt den Käufer zum Eintritt berechtigt."
 
 #: pretix/base/models/items.py:406
-#, fuzzy
-#| msgid "Is an admission ticket"
 msgid "Is a personalized ticket"
-msgstr "Berechtigt zum Eintritt"
+msgstr "Ist ein personalisiertes Ticket"
 
 #: pretix/base/models/items.py:408
-#, fuzzy
-#| msgid ""
-#| "Whether or not buying this product allows a person to enter your event"
 msgid "Whether or not buying this product allows to enter attendee information"
-msgstr "Aktivieren, wenn dieses Produkt den Käufer zum Eintritt berechtigt."
+msgstr ""
+"Aktivieren, wenn beim Kauf dieses Produkts Teilnehmerinformationen eingeben "
+"werden müssen"
 
 #: pretix/base/models/items.py:417
 msgid "Show a waiting list for this ticket"
@@ -6078,10 +6073,8 @@ msgid "Ticket"
 msgstr "Ticket"
 
 #: pretix/base/pdf.py:1000
-#, fuzzy
-#| msgid "Your layout file is not a valid seating plan. Error message: {}"
 msgid "Your layout file is not a valid layout. Error message: {}"
-msgstr "Die Datei ist kein gültiger Sitzplan. Fehlermeldung: {}"
+msgstr "Die Layout-Datei enthält kein gültiges Layout. Fehlermeldung: {}"
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
@@ -6380,10 +6373,6 @@ msgstr ""
 "%(base)s höchstens ein mal auswählen."
 
 #: pretix/base/services/cart.py:143
-#, fuzzy
-#| msgid ""
-#| "One of the products you selected can only be bought as an add-on to "
-#| "another project."
 msgid ""
 "One of the products you selected can only be bought as an add-on to another "
 "product."
@@ -7203,10 +7192,8 @@ msgid "Ask for attendee names"
 msgstr "Namen der Teilnehmer*innen erfragen"
 
 #: pretix/base/settings.py:209
-#, fuzzy
-#| msgid "Ask for a name for all tickets which include admission to the event."
 msgid "Ask for a name for all personalized tickets."
-msgstr "Frage für alle Eintritts-Tickets nach dem Namen des/der Teilnehmer*in."
+msgstr "Frage für alle personalisierten Tickets nach dem Namen des Teilnehmers."
 
 #: pretix/base/settings.py:218
 msgid "Require attendee names"
@@ -7221,16 +7208,6 @@ msgid "Ask for email addresses per ticket"
 msgstr "E-Mail-Adressen pro Ticket erfassen"
 
 #: pretix/base/settings.py:230
-#, fuzzy
-#| msgid ""
-#| "Normally, pretix asks for one email address per order and the order "
-#| "confirmation will be sent only to that email address. If you enable this "
-#| "option, the system will additionally ask for individual email addresses "
-#| "for every admission ticket. This might be useful if you want to obtain "
-#| "individual addresses for every attendee even in case of group orders. "
-#| "However, pretix will send the order confirmation by default only to the "
-#| "one primary email address, not to the per-attendee addresses. You can "
-#| "however enable this in the E-mail settings."
 msgid ""
 "Normally, pretix asks for one email address per order and the order "
 "confirmation will be sent only to that email address. If you enable this "
@@ -7244,9 +7221,9 @@ msgstr ""
 "Üblicherweise fragt pretix nach einer E-Mail-Adresse pro Bestellung und "
 "sendet die Bestellbestätigung an diese Adresse. Wenn du diese Option "
 "aktivierst, fragt das System zusätzlich nach einzelnen E-Mail-Adressen für "
-"jedes Zutritts-Ticket in der Bestellung. Dies könnte z.B. nützlich sein, "
-"wenn du auch im Falle von Gruppenbestellungen individuelle Adressen von "
-"jeder Teilnehmer*in benötigst. pretix sendet die Bestellbestätigung "
+"jedes personalisierte Ticket in der Bestellung. Dies könnte z.B. nützlich "
+"sein, wenn du auch im Falle von Gruppenbestellungen individuelle Adressen "
+"von jeder Teilnehmer*in benötigst. pretix sendet die Bestellbestätigung "
 "standardmäßig nach wie vor nur an die primäre Adresse, dies kann jedoch in "
 "den E-Mail-Einstellungen angepasst werden."
 
@@ -7255,20 +7232,14 @@ msgid "Require email addresses per ticket"
 msgstr "E-Mail-Adressen pro Ticket erfordern"
 
 #: pretix/base/settings.py:245
-#, fuzzy
-#| msgid ""
-#| "Require customers to fill in individual e-mail addresses for all "
-#| "admission tickets. See the above option for more details. One email "
-#| "address for the order confirmation will always be required regardless of "
-#| "this setting."
 msgid ""
 "Require customers to fill in individual email addresses for all personalized "
 "tickets. See the above option for more details. One email address for the "
 "order confirmation will always be required regardless of this setting."
 msgstr ""
-"Erfordere, dass für jedes Zutritts-Ticket eine einzelne E-Mail-Adresse "
-"eingegeben wird. Mehr Infos findest du bei der vorherigen Option. Eine E-"
-"Mail-Adresse für die Bestellbestätigung ist immer erforderlich."
+"Erfordere, dass für jedes personalisierte Ticket eine einzelne E-Mail-"
+"Adresse eingegeben wird. Mehr Infos findest du bei der vorherigen Option. "
+"Eine E-Mail-Adresse für die Bestellbestätigung ist immer erforderlich."
 
 #: pretix/base/settings.py:257
 msgid "Ask for company per ticket"
@@ -9482,16 +9453,11 @@ msgid "Attendee data explanation"
 msgstr "Erklärung zu Teilnehmerdatenerfassung"
 
 #: pretix/base/settings.py:2577
-#, fuzzy
-#| msgid ""
-#| "This text will be shown above the questions asked for every admission "
-#| "product. You can use it e.g. to explain why you need information from "
-#| "them."
 msgid ""
 "This text will be shown above the questions asked for every personalized "
 "product. You can use it e.g. to explain why you need information from them."
 msgstr ""
-"Dieser Text wird oberhalb der Dateneingabe für jedes Zutrittsprodukt "
+"Dieser Text wird oberhalb der Dateneingabe für jedes personalisierte Ticket "
 "angezeigt. Du kannst hierüber z.B. erklären, warum du die angeforderten "
 "Informationen benötigst."
 
@@ -11771,6 +11737,8 @@ msgid ""
 "If a valid membership is required, at least one valid membership type needs "
 "to be selected."
 msgstr ""
+"Wenn eine gültige Mitgliedschaft erforderlich ist, muss mindestens ein "
+"passender Mitgliedschaftstyp ausgewählt werden."
 
 #: pretix/control/forms/item.py:618
 msgid ""
@@ -11779,6 +11747,10 @@ msgid ""
 "the membership later. If you want the membership to be non-personalized, set "
 "the membership type to be transferable."
 msgstr ""
+"Dein Produkt erstellt eine nicht-übertragbare Mitgliedschaft und sollte "
+"daher ein personalisiertes Zutrittsprodukt sein. Andernfalls können Kunden "
+"ggf. die Mitgliedschaft später nicht nutzen. Wenn die Mitgliedschaft nicht "
+"personalisiert sein soll, ändere den Mitgliedschaftstyp auf \"übertragbar\"."
 
 #: pretix/control/forms/item.py:703
 #, python-format
@@ -16255,10 +16227,8 @@ msgid "See invoice settings"
 msgstr "Siehe Rechnungseinstellungen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:93
-#, fuzzy
-#| msgid "Attendee data (once per admission ticket)"
 msgid "Attendee data (once per personalized ticket)"
-msgstr "Teilnehmerdaten (einmal pro Zutrittsprodukt)"
+msgstr "Teilnehmerdaten (einmal pro personalisiertem Ticket)"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:102
 msgid "Custom fields"
@@ -17004,19 +16974,14 @@ msgstr "Zutrittsprodukt"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:27
 #: pretix/control/templates/pretixcontrol/item/index.html:34
-#, fuzzy
-#| msgid ""
-#| "Every purchase of this product represents one person who is allowed to "
-#| "enter your event. By default, pretix will only ask for attendee "
-#| "information and offer ticket downloads for these products."
 msgid ""
 "Every purchase of this product represents one person who is allowed to enter "
 "your event. By default, we will only offer ticket downloads for these "
 "products."
 msgstr ""
 "Jeder Kauf dieses Produktes repräsentiert eine Person, die die Veranstaltung "
-"betreten darf. Standardmäßig fragt pretix nur bei diesen Produkten "
-"Teilnehmerdaten ab und bietet nur für diese Produkte Ticket-Downloads an."
+"betreten darf. Standardmäßig bieten wir nur für diese Produkte Ticket-"
+"Downloads an."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:33
 #: pretix/control/templates/pretixcontrol/item/index.html:40
@@ -17024,6 +16989,8 @@ msgid ""
 "Only purchases of such products will be considered \"attendees\" for most "
 "statistical purposes or within some plugins."
 msgstr ""
+"Nur Käufe eines solchen Produkts werden als \"Teilnehmer*innen\" gewertet, "
+"z.B. in Statistiken oder in Funktionen von Erweiterungen."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:39
 #: pretix/control/templates/pretixcontrol/item/index.html:46
@@ -17046,17 +17013,14 @@ msgstr "Kein Zutrittsprodukt"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:52
 #: pretix/control/templates/pretixcontrol/item/index.html:59
-#, fuzzy
-#| msgid ""
-#| "A product that does not represent a person. By default, pretix will not "
-#| "ask for attendee information or offer ticket downloads."
 msgid ""
 "A product that does not represent a person. By default, we will not offer "
 "ticket downloads (but you can still enable ticket downloads in event "
 "settings or product settings)."
 msgstr ""
-"Ein Produkt, das keine Person repräsentiert. pretix fragt standardmäßig "
-"nicht nach Teilnehmerdaten und bietet keine Ticketdownloads an."
+"Ein Produkt, das keine Person repräsentiert. Wir bieten standardmäßig keine "
+"Ticketdownloads an (dies kann jedoch in den Veranstaltungs- oder Produkt-"
+"Einstellungen überschrieben werden)."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:58
 #: pretix/control/templates/pretixcontrol/item/index.html:65
@@ -17067,10 +17031,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:68
 #: pretix/control/templates/pretixcontrol/item/index.html:75
-#, fuzzy
-#| msgid "Localization"
 msgid "Personalization"
-msgstr "Lokalisierung"
+msgstr "Personalisierung"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:76
 #: pretix/control/templates/pretixcontrol/item/index.html:88
@@ -17078,6 +17040,8 @@ msgid ""
 "When this ticket is purchased, the system will ask for a name or other "
 "details according to your event settings."
 msgstr ""
+"Wenn dieses Ticket gekauft wird, fragt das System nach Namen und anderen "
+"Details entsprechend der Veranstaltungs-Einstellungen."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:84
 #: pretix/control/templates/pretixcontrol/item/index.html:96
@@ -17085,20 +17049,18 @@ msgid ""
 "This will currently have no effect since all data fields are turned off in "
 "event settings."
 msgstr ""
+"Dies hat derzeit keinen Effekt, da alle Dateneingabefelder in den "
+"Veranstaltungseinstellungen abgeschaltet sind."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:87
 #: pretix/control/templates/pretixcontrol/item/index.html:99
-#, fuzzy
-#| msgid "Base settings"
 msgid "Change settings"
-msgstr "Grundeinstellungen"
+msgstr "Einstellungen bearbeiten"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:96
 #: pretix/control/templates/pretixcontrol/item/index.html:108
-#, fuzzy
-#| msgid "Alternative ticket"
 msgid "Non-personalized ticket"
-msgstr "Alternative Tickets"
+msgstr "Nicht-personalisiertes Ticket"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:98
 #: pretix/control/templates/pretixcontrol/item/index.html:110
@@ -17106,6 +17068,9 @@ msgid ""
 "The system will not ask for a name or other attendee details. This only "
 "affects system-provided fields, you can still add your own questions."
 msgstr ""
+"Das System wird nicht nach einem Namen oder anderen Teilnehmer*innen-Daten "
+"fragen. Dies betrifft nur systemeigene Felder, eigene Fragen können trotzdem "
+"hinzugefügt werden."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:117
 msgid "Product without variations"
@@ -17503,14 +17468,12 @@ msgid "Create a new product"
 msgstr "Neues Produkt erstellen"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:85
-#, fuzzy
-#| msgid "Is an admission ticket"
 msgid "Personalized admission ticket"
-msgstr "Berechtigt zum Eintritt"
+msgstr "Personalisiertes Zutrittsprodukt"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:87
 msgid "Admission ticket without personalization"
-msgstr ""
+msgstr "Zutrittsprodukt ohne Personalisierung"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:95
 msgid "Product with variations"
@@ -17649,10 +17612,8 @@ msgid "Ask during check-in"
 msgstr "Beim Check-in fragen"
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:79
-#, fuzzy
-#| msgid "All admission products"
 msgid "All personalized products"
-msgstr "Alle Produkte, die Eintritt erlauben"
+msgstr "Alle personalisierten Produkte"
 
 #: pretix/control/templates/pretixcontrol/items/quota.html:6
 #: pretix/control/templates/pretixcontrol/items/quota.html:9
@@ -19226,12 +19187,12 @@ msgstr "Passwort-Reset-Link verschicken"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:78
 msgid "This includes all paid orders by this customer across all your events."
 msgstr ""
+"Dies enthält alle vollständig bezahlten Bestellungen dieses Kunden aus allen "
+"Veranstaltungen."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:79
-#, fuzzy
-#| msgid "Payment pending"
 msgid "Lifetime spending"
-msgstr "Zahlung ausstehend"
+msgstr "Gesamtumsatz"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:101
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:39
@@ -22384,18 +22345,17 @@ msgid ""
 "generated. Please copy and save it right now as it will not be shown again: "
 "{secret}"
 msgstr ""
+"Die Anwendung wurde erstellt und ein Schlüssel wurde generiert. Bitte "
+"kopiere und speichere ihn jetzt, da er nicht erneut angezeigt wird: {secret}"
 
 #: pretix/control/views/oauth.py:107
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "The SSO client has been created. Please note down the following client "
-#| "secret, it will never be shown again: {secret}"
+#, python-brace-format
 msgid ""
 "A new client secret has been generated. Please copy and save it right now as "
 "it will not be shown again: {secret}"
 msgstr ""
-"Der SSO-Client wurde erstellt. Bitte notiere das folgende Client-Secret, es "
-"wird nicht erneut angezeigt: {secret}"
+"Der neue Client wurde erstellt. Bitte kopiere und speichere das folgende "
+"Client-Secret, da es nicht erneut angezeigt wird: {secret}"
 
 #: pretix/control/views/oauth.py:166
 msgid "Access for the selected application has been revoked."
@@ -25992,10 +25952,8 @@ msgid "SOFORT via Stripe"
 msgstr "SOFORT via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1229
-#, fuzzy
-#| msgid "Payment by bank transfer"
 msgid "SOFORT (instant bank transfer)"
-msgstr "Zahlung per Banküberweisung"
+msgstr "SOFORT (Sofortüberweisung)"
 
 #: pretix/plugins/stripe/payment.py:1245
 msgid "Country of your bank"
