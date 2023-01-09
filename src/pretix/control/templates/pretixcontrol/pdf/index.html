@@ -458,7 +458,9 @@
             </form>
         </div>
     </div>
+    <script type="text/plain" id="schema-url">{% static "schema/pdf-layout.schema.json" %}</script>
     <script type="text/javascript" src="{% static "pdfjs/pdf.js" %}"></script>
+    <script type="text/javascript" src="{% static "ajv/ajv2020.bundle.min.js" %}"></script>
     <script type="text/javascript" src="{% static "fabric/fabric.min.js" %}"></script>
     <script type="text/javascript" src="{% static "pretixcontrol/js/ui/editor.js" %}"></script>
     <img src="{% static 'pretixpresale/pdf/powered_by_pretix_dark.png' %}" id="poweredby-dark" class="sr-only">

@@ -17,9 +17,13 @@ Field                                 Type                       Description
 id                                    integer                    Internal layout ID
 name                                  string                     Internal layout description
 default                               boolean                    ``true`` if this is the default layout
-layout                                object                     Layout specification for libpretixprint
+layout                                list                       Dynamic layout specification. Each list element
+                                                                 corresponds to one dynamic element of the layout.
+                                                                 The current version of the schema in use can be found
+                                                                 `here`_.
+                                                                 Submitting invalid content can lead to application errors.
 background                            URL                        Background PDF file
-item_assignments                      list of objects            Products this layout is assigned to
+item_assignments                      list of objects            Products this layout is assigned to (currently read-only)
 ├ sales_channel                       string                     Sales channel (defaults to ``web``).
 └ item                                integer                    Item ID
 ===================================== ========================== =======================================================
@@ -58,7 +62,7 @@ Endpoints
             "name": "Default layout",
             "default": true,
             "layout": {…},
-            "background": {},
+            "background": null,
             "item_assignments": []
           }
         ]
@@ -96,7 +100,7 @@ Endpoints
         "name": "Default layout",
         "default": true,
         "layout": {…},
-        "background": {},
+        "background": null,
         "item_assignments": []
       }
 
@@ -147,3 +151,122 @@ Endpoints
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view it.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/ticketlayouts/
+
+   Creates a new ticket layout
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/ticketlayouts/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+      {
+        "name": "Default layout",
+        "default": true,
+        "layout": […],
+        "background": null,
+        "item_assignments": []
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 201 Created
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "name": "Default layout",
+        "default": true,
+        "layout": […],
+        "background": null,
+        "item_assignments": []
+      }
+
+   :param organizer: The ``slug`` field of the organizer of the event to create a layout for
+   :param event: The ``slug`` field of the event to create a layout for
+   :statuscode 201: no error
+   :statuscode 400: The layout could not be created due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to create this resource.
+
+.. http:patch:: /api/v1/organizers/(organizer)/events/(event)/ticketlayouts/(id)/
+
+   Update a layout. You can also use ``PUT`` instead of ``PATCH``. With ``PUT``, you have to provide all fields of
+   the resource, other fields will be reset to default. With ``PATCH``, you only need to provide the fields that you
+   want to change.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/ticketlayouts/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+      Content-Length: 94
+
+      {
+        "name": "Default layout"
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "id": 1,
+        "name": "Default layout",
+        "default": true,
+        "layout": […],
+        "background": null,
+        "item_assignments": []
+      }
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param id: The ``id`` field of the layout to modify
+   :statuscode 200: no error
+   :statuscode 400: The layout could not be modified due to invalid submitted data
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
+
+.. http:delete:: /api/v1/organizers/(organizer)/events/(event)/ticketlayouts/(id)/
+
+   Delete a layout.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/ticketlayouts/1/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param id: The ``id`` field of the layout to delete
+   :statuscode 204: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.
+
+
+.. _here: https://github.com/pretix/pretix/blob/master/src/pretix/static/schema/pdf-layout.schema.json
