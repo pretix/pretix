@@ -344,7 +344,7 @@
             ]
           },
           "content": {
-            "description": "Name of a variable to use. The available values depend on event configuration and installed plugins.",
+            "description": "Name of a style to use. The available values currently are 'dark' and 'white'.",
             "type": "string",
             "enum": [
               "dark",
