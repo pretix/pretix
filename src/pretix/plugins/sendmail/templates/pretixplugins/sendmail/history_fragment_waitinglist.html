@@ -1,0 +1,9 @@
+{% load i18n %}
+{% if log.pdata.items %}
+    <br/><span class="fa fa-shopping-cart fa-fw"></span> {{ log.pdata.items|join:", " }}
+{% endif %}
+{% if log.pdata.subevent_obj %}
+    <br/><span class="fa fa-calendar fa-fw"></span> {{ log.pdata.subevent_obj }}
+{% elif log.pdata.subevents_from %}
+    <br/><span class="fa fa-calendar fa-fw"></span> {{ log.pdata.subevents_from }} – {{ log.pdata.subevents_to }}
+{% endif %}

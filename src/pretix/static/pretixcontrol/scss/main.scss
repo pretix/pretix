@@ -792,6 +792,27 @@ tbody th {
     background: $table-bg-hover;
 }
 
+.large-link-group {
+    a.list-group-item {
+        &::before {
+            font-family: FontAwesome;
+            font-size: 30px;
+            content: $fa-var-chevron-right;
+            float: right;
+            color: $link-color;
+        }
+        h4 {
+            color: $link-color;
+        }
+        &:hover &::before {
+            color: $link-hover-color;
+        }
+        &:hover h4 {
+            color: $link-hover-color;
+        }
+    }
+}
+
 
 .withoutjs {
     display: none !important;

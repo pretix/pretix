@@ -1,0 +1,16 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Send out emails" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Send out emails" %}</h1>
+    <div class="list-group large-link-group">
+        {% for view in views %}
+            <a class="list-group-item" href="{{ view.url }}">
+                <h4>{{ view.title }}</h4>
+                <p>
+                    {{ view.description }}
+                </p>
+            </a>
+        {% endfor %}
+    </div>
+{% endblock %}

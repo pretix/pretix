@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 from datetime import timedelta
+from typing import Any, Dict, Union
 
 from django.core.exceptions import ObjectDoesNotExist, ValidationError
 from django.db import models, transaction
@@ -27,14 +28,16 @@ from django.db.models import F, Q, Sum
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager
+from i18nfield.strings import LazyI18nString
 from phonenumber_field.modelfields import PhoneNumberField
 
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
-from pretix.base.models import Voucher
-from pretix.base.services.mail import mail
+from pretix.base.models import User, Voucher
+from pretix.base.services.mail import SendMailException, mail, render_mail
 from pretix.base.settings import PERSON_NAME_SCHEMES
 
+from ...helpers.format import format_map
 from .base import LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation
@@ -213,15 +216,74 @@ class WaitingListEntry(LoggedModel):
             self.voucher = v
             self.save()
 
+        self.send_mail(
+            self.event.settings.mail_subject_waiting_list,
+            self.event.settings.mail_text_waiting_list,
+            get_email_context(
+                event=self.event,
+                waiting_list_entry=self,
+                waiting_list_voucher=v,
+                event_or_subevent=self.subevent or self.event,
+            ),
+            user=user,
+            auth=auth,
+        )
+
+    def send_mail(self, subject: Union[str, LazyI18nString], template: Union[str, LazyI18nString],
+                  context: Dict[str, Any]=None, log_entry_type: str='pretix.waitinglist.email.sent',
+                  user: User=None, headers: dict=None, sender: str=None, auth=None, auto_email=True,
+                  attach_other_files: list=None, attach_cached_files: list=None):
+        """
+        Sends an email to the entry's contact address.
+
+        * Call ``pretix.base.services.mail.mail`` with useful values for the ``event``, ``locale``, and ``recipient``
+          parameters.
+
+        * Create a ``LogEntry`` with the email contents.
+
+        :param subject: Subject of the email
+        :param template: LazyI18nString or template filename, see ``pretix.base.services.mail.mail`` for more details
+        :param context: Dictionary to use for rendering the template
+        :param log_entry_type: Key to be used for the log entry
+        :param user: Administrative user who triggered this mail to be sent
+        :param headers: Dictionary with additional mail headers
+        :param sender: Custom email sender.
+        """
+        if not self.email:
+            return
+
+        for k, v in self.event.meta_data.items():
+            context['meta_' + k] = v
+
         with language(self.locale, self.event.settings.region):
-            mail(
-                self.email,
-                self.event.settings.mail_subject_waiting_list,
-                self.event.settings.mail_text_waiting_list,
-                get_email_context(event=self.event, waiting_list_entry=self),
-                self.event,
-                locale=self.locale
-            )
+            recipient = self.email
+
+            try:
+                email_content = render_mail(template, context)
+                subject = format_map(subject, context)
+                mail(
+                    recipient, subject, template, context,
+                    self.event,
+                    self.locale,
+                    headers=headers,
+                    sender=sender,
+                    auto_email=auto_email,
+                    attach_other_files=attach_other_files,
+                    attach_cached_files=attach_cached_files,
+                )
+            except SendMailException:
+                raise
+            else:
+                self.log_action(
+                    log_entry_type,
+                    user=user,
+                    auth=auth,
+                    data={
+                        'subject': subject,
+                        'message': email_content,
+                        'recipient': recipient,
+                    }
+                )
 
     @staticmethod
     def clean_itemvar(event, item, variation):

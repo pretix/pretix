@@ -1,0 +1,8 @@
+{% load i18n %}
+{% load bootstrap3 %}
+{% bootstrap_field form.items layout='horizontal' %}
+{% if form.subevent %}
+    {% bootstrap_field form.subevent layout='horizontal' %}
+    {% bootstrap_field form.subevents_from layout='horizontal' %}
+    {% bootstrap_field form.subevents_to layout='horizontal' %}
+{% endif %}

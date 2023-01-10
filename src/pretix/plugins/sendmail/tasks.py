@@ -44,12 +44,12 @@ from pretix.helpers.format import format_map
 
 
 @app.task(base=ProfiledEventTask, acks_late=True)
-def send_mails(event: Event, user: int, subject: dict, message: dict, orders: list, items: list,
-               recipients: str, filter_checkins: bool, not_checked_in: bool, checkin_lists: list,
-               attachments: list = None, attach_tickets: bool = False) -> None:
+def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, objects: list, items: list,
+                         recipients: str, filter_checkins: bool, not_checked_in: bool, checkin_lists: list,
+                         attachments: list = None, attach_tickets: bool = False) -> None:
     failures = []
     user = User.objects.get(pk=user) if user else None
-    orders = Order.objects.filter(pk__in=orders, event=event)
+    orders = Order.objects.filter(pk__in=objects, event=event)
     subject = LazyI18nString(subject)
     message = LazyI18nString(message)
 
@@ -138,7 +138,7 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
                         locale=o.locale,
                         order=o,
                         attach_tickets=attach_tickets,
-                        attach_cached_files=attachments
+                        attach_cached_files=attachments,
                     )
                     o.log_action(
                         'pretix.plugins.sendmail.order.email.sent',
@@ -151,3 +151,27 @@ def send_mails(event: Event, user: int, subject: dict, message: dict, orders: li
                     )
             except SendMailException:
                 failures.append(o.email)
+
+
+@app.task(base=ProfiledEventTask, acks_late=True)
+def send_mails_to_waitinglist(event: Event, user: int, subject: dict, message: dict, objects: list,
+                              attachments: list = None) -> None:
+    user = User.objects.get(pk=user) if user else None
+    entries = event.waitinglistentries.filter(pk__in=objects).select_related(
+        'subevent'
+    )
+    subject = LazyI18nString(subject)
+    message = LazyI18nString(message)
+
+    for e in entries:
+        e.send_mail(
+            subject,
+            message,
+            get_email_context(
+                event=e.event,
+                waiting_list_entry=e,
+                event_or_subevent=e.subevent or e.event,
+            ),
+            user=user,
+            attach_cached_files=attachments,
+        )
