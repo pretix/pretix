@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-10 11:04+0000\n"
-"PO-Revision-Date: 2023-01-09 14:32+0000\n"
+"PO-Revision-Date: 2023-01-10 11:26+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -25114,48 +25114,34 @@ msgstr ""
 "2 MB zu verwenden."
 
 #: pretix/plugins/sendmail/forms.py:112
-#, fuzzy
-#| msgid "Waiting"
 msgctxt "sendmail_form"
 msgid "Waiting for"
-msgstr "Wartet"
+msgstr "Wartende auf"
 
 #: pretix/plugins/sendmail/forms.py:118 pretix/plugins/sendmail/forms.py:192
-#, fuzzy
-#| msgid "Restrict to specific sales channels"
 msgctxt "sendmail_form"
 msgid "Restrict to a specific event date"
-msgstr "Auf bestimmte Verkaufskanäle einschränken"
+msgstr "Auf bestimmten Termin einschränken"
 
 #: pretix/plugins/sendmail/forms.py:124 pretix/plugins/sendmail/forms.py:198
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates starting at or after"
 msgctxt "sendmail_form"
 msgid "Restrict to event dates starting at or after"
-msgstr "Alle Termine beginnend am oder nach"
+msgstr "Auf Termine beginnend am oder nach einschränken"
 
 #: pretix/plugins/sendmail/forms.py:129 pretix/plugins/sendmail/forms.py:203
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates starting before"
 msgctxt "sendmail_form"
 msgid "Restrict to event dates starting before"
-msgstr "Alle Termine beginnend vor"
+msgstr "Auf Termine beginnend vor einschränken"
 
 #: pretix/plugins/sendmail/forms.py:170
-#, fuzzy
-#| msgid "Send to"
 msgctxt "sendmail_from"
 msgid "Send to"
-msgstr "Senden an"
+msgstr "Sende an"
 
 #: pretix/plugins/sendmail/forms.py:180
-#, fuzzy
-#| msgid "Restrict to countries"
 msgctxt "sendmail_form"
 msgid "Restrict to products"
-msgstr "Auf Länder einschränken"
+msgstr "Auf Produkte einschränken"
 
 #: pretix/plugins/sendmail/forms.py:185
 msgid "Filter check-in status"
@@ -25164,28 +25150,21 @@ msgstr "Nach Check-in-Status filtern"
 #: pretix/plugins/sendmail/forms.py:189
 msgctxt "sendmail_from"
 msgid "Restrict to recipients without check-in"
-msgstr ""
+msgstr "Auf Empfänger ohne Check-in einschränken"
 
 #: pretix/plugins/sendmail/forms.py:208
-#, fuzzy
-#| msgid "Order placed at or after"
 msgctxt "sendmail_form"
 msgid "Restrict to orders created at or after"
-msgstr "Bestellung getätigt um oder nach"
+msgstr "Auf Bestellungen erstellt am oder nach einschränken"
 
 #: pretix/plugins/sendmail/forms.py:213
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Only send to customers with orders created before"
 msgctxt "sendmail_form"
 msgid "Restrict to orders created before"
-msgstr "Nur an Kunden mit Bestelldatum bevor"
+msgstr "Auf Bestellungen erstellt vor einschränken"
 
 #: pretix/plugins/sendmail/forms.py:235
-#, fuzzy
-#| msgid "Everyone who created a ticket order"
 msgid "Everyone who placed an order"
-msgstr "Jeden, der ein Ticket bestellt hat"
+msgstr "Jeden, der eine Bestellung aufgegeben hat"
 
 #: pretix/plugins/sendmail/forms.py:239 pretix/plugins/sendmail/models.py:183
 msgid ""
@@ -25213,18 +25192,14 @@ msgid "pending with payment overdue"
 msgstr "Zahlung ausstehend aber überfällig"
 
 #: pretix/plugins/sendmail/forms.py:253
-#, fuzzy
-#| msgid "List of orders with taxes"
 msgctxt "sendmail_from"
 msgid "Restrict to orders with status"
-msgstr "Liste der Bestellungen mit Steuern"
+msgstr "Auf Bestellungen mit Status einschränken"
 
 #: pretix/plugins/sendmail/forms.py:277 pretix/plugins/sendmail/forms.py:281
-#, fuzzy
-#| msgid "Restrict to specific sales channels"
 msgctxt "sendmail_from"
 msgid "Restrict to recipients with check-in on list"
-msgstr "Auf bestimmte Verkaufskanäle einschränken"
+msgstr "Auf Empfänger mit Check-in auf dieser Liste einschränken"
 
 #: pretix/plugins/sendmail/forms.py:358
 msgid "Type of schedule time"
@@ -25346,16 +25321,12 @@ msgid "Automated emails"
 msgstr "Automatisierte E-Mails"
 
 #: pretix/plugins/sendmail/signals.py:121
-#, fuzzy
-#| msgid "A custom email has been sent to an attendee."
 msgid "Mass email was sent to customers or attendees."
-msgstr "Eine individuelle E-Mail wurde an eine Teilnehmer*in verschickt."
+msgstr "Rundmail wurde an Kunden oder Teilnehmer*innen verschickt."
 
 #: pretix/plugins/sendmail/signals.py:122
-#, fuzzy
-#| msgid "A custom email has been sent to an attendee."
 msgid "Mass email was sent to waiting list entries."
-msgstr "Eine individuelle E-Mail wurde an eine Teilnehmer*in verschickt."
+msgstr "Rundmail wurde an Wartelisten-Einträge verschickt."
 
 #: pretix/plugins/sendmail/signals.py:123
 msgid "The order received a mass email."
@@ -25549,35 +25520,29 @@ msgid "You supplied an invalid log entry ID"
 msgstr "Ungültige Log-ID übergeben"
 
 #: pretix/plugins/sendmail/views.py:183
-#, fuzzy
-#| msgid "There are no orders matching this selection."
 msgid "There are no matching recipients for your selection."
-msgstr ""
-"Es existiert keine Bestellung, die zu den eingegebenen Kriterien passt."
+msgstr "Es gibt keine passenden Empfänger für deine Auswahl."
 
 #: pretix/plugins/sendmail/views.py:220
-#, fuzzy, python-format
-#| msgid ""
-#| "Your message has been queued and will be sent to the contact addresses of "
-#| "%d orders in the next few minutes."
+#, python-format
 msgid ""
 "Your message has been queued and will be sent to the contact addresses of %s "
 "in the next few minutes."
 msgstr ""
 "Die Nachricht wurde gespeichert und wird in den nächsten Minuten an die "
-"Kontaktadressen von %d Bestellungen versendet."
+"Kontaktadressen von %s versendet."
 
 #: pretix/plugins/sendmail/views.py:250
-#, fuzzy
-#| msgid "Import attendees"
 msgid "Orders or attendees"
-msgstr "Teilnehmer importieren"
+msgstr "Bestellungen oder Teilnehmer*innen"
 
 #: pretix/plugins/sendmail/views.py:251
 msgid ""
 "Send an email to every customer, or to every person a ticket has been "
 "purchased for, or a combination of both."
 msgstr ""
+"Sende eine E-Mail an alle Ticketkäufer*innen, alle Ticketinhaber*innen oder "
+"eine Kombination aus beiden Gruppen."
 
 #: pretix/plugins/sendmail/views.py:409
 #, python-format
@@ -25591,14 +25556,15 @@ msgid ""
 "Send an email to every person currently waiting to receive a voucher through "
 "the waiting list feature."
 msgstr ""
+"Sende eine E-Mail an jede Person, die derzeit über die Wartelistenfunktion "
+"auf einen Gutscheincode wartet."
 
 #: pretix/plugins/sendmail/views.py:504
-#, fuzzy, python-format
-#| msgid "Waiting list entry"
+#, python-format
 msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
-msgstr[0] "Wartelisten-Eintrag"
-msgstr[1] "Wartelisten-Eintrag"
+msgstr[0] "%(number)s Wartelisteneintrag"
+msgstr[1] "%(number)s Wartelisteneinträge"
 
 #: pretix/plugins/sendmail/views.py:602
 msgid "Your rule has been created."
