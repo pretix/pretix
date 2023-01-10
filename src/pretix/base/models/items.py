@@ -870,6 +870,13 @@ class ItemVariation(models.Model):
         help_text=_('This variation will be hidden from the event page until the user enters a voucher '
                     'that unlocks this variation.')
     )
+    checkin_attention = models.BooleanField(
+        verbose_name=_('Requires special attention'),
+        default=False,
+        help_text=_('If you set this, the check-in app will show a visible warning that this ticket requires special '
+                    'attention. You can use this for example for student tickets to indicate to the person at '
+                    'check-in that the student ID card still needs to be checked.')
+    )
 
     objects = ScopedManager(organizer='item__event__organizer')
 
