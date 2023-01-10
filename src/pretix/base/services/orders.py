@@ -1405,12 +1405,17 @@ class OrderChangeManager:
     TaxRuleOperation = namedtuple('TaxRuleOperation', ('position', 'tax_rule'))
     MembershipOperation = namedtuple('MembershipOperation', ('position', 'membership'))
     CancelOperation = namedtuple('CancelOperation', ('position', 'price_diff'))
-    AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat', 'membership'))
+    AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat', 'membership',
+                                               'valid_from', 'valid_until'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
     FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value', 'price_diff'))
     AddFeeOperation = namedtuple('AddFeeOperation', ('fee', 'price_diff'))
     CancelFeeOperation = namedtuple('CancelFeeOperation', ('fee', 'price_diff'))
     RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
+    ChangeValidFromOperation = namedtuple('ChangeValidFromOperation', ('position', 'valid_from'))
+    ChangeValidUntilOperation = namedtuple('ChangeValidUntilOperation', ('position', 'valid_until'))
+    AddBlockOperation = namedtuple('AddBlockOperation', ('position', 'block_name'))
+    RemoveBlockOperation = namedtuple('RemoveBlockOperation', ('position', 'block_name'))
 
     def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True):
         self.order = order
@@ -1514,6 +1519,18 @@ class OrderChangeManager:
     def regenerate_secret(self, position: OrderPosition):
         self._operations.append(self.RegenerateSecretOperation(position))
 
+    def change_valid_from(self, position: OrderPosition, new_value: datetime):
+        self._operations.append(self.ChangeValidFromOperation(position, new_value))
+
+    def change_valid_until(self, position: OrderPosition, new_value: datetime):
+        self._operations.append(self.ChangeValidUntilOperation(position, new_value))
+
+    def add_block(self, position: OrderPosition, block_name: str):
+        self._operations.append(self.AddBlockOperation(position, block_name))
+
+    def remove_block(self, position: OrderPosition, block_name: str):
+        self._operations.append(self.RemoveBlockOperation(position, block_name))
+
     def change_price(self, position: OrderPosition, price: Decimal):
         tax_rule = self._current_tax_rules().get(position.pk, position.tax_rule) or TaxRule.zero()
         price = tax_rule.tax(price, base_price_is='gross')
@@ -1595,7 +1612,8 @@ class OrderChangeManager:
             self._invoice_dirty = True
 
     def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: OrderPosition = None,
-                     subevent: SubEvent = None, seat: Seat = None, membership: Membership = None):
+                     subevent: SubEvent = None, seat: Seat = None, membership: Membership = None,
+                     valid_from: datetime = None, valid_until: datetime = None):
         if isinstance(seat, str):
             if not seat:
                 seat = None
@@ -1649,7 +1667,8 @@ class OrderChangeManager:
         self._quotadiff.update(new_quotas)
         if seat:
             self._seatdiff.update([seat])
-        self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat, membership))
+        self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat, membership,
+                                                  valid_from, valid_until))
 
     def split(self, position: OrderPosition):
         if self.order.event.settings.invoice_include_free or position.price != Decimal('0.00'):
@@ -2156,7 +2175,7 @@ class OrderChangeManager:
                     price=op.price.gross, order=self.order, tax_rate=op.price.rate,
                     tax_value=op.price.tax, tax_rule=op.item.tax_rule,
                     positionid=nextposid, subevent=op.subevent, seat=op.seat,
-                    used_membership=op.membership,
+                    used_membership=op.membership, valid_from=op.valid_from, valid_until=op.valid_until,
                 )
                 nextposid += 1
                 self.order.log_action('pretix.event.order.changed.add', user=self.user, auth=self.auth, data={
@@ -2169,6 +2188,8 @@ class OrderChangeManager:
                     'membership': pos.used_membership_id,
                     'subevent': op.subevent.pk if op.subevent else None,
                     'seat': op.seat.pk if op.seat else None,
+                    'valid_from': op.valid_from.isoformat() if op.valid_from else None,
+                    'valid_until': op.valid_until.isoformat() if op.valid_until else None,
                 })
             elif isinstance(op, self.SplitOperation):
                 split_positions.append(op.position)
@@ -2182,6 +2203,47 @@ class OrderChangeManager:
                     'position': op.position.pk,
                     'positionid': op.position.positionid,
                 })
+            elif isinstance(op, self.ChangeValidFromOperation):
+                self.order.log_action('pretix.event.order.changed.valid_from', user=self.user, auth=self.auth, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                    'new_value': op.valid_from.isoformat() if op.valid_from else None,
+                    'old_value': op.position.valid_from.isoformat() if op.position.valid_from else None,
+                })
+                op.position.valid_from = op.valid_from
+                op.position.save(update_fields=['valid_from'])
+            elif isinstance(op, self.ChangeValidUntilOperation):
+                self.order.log_action('pretix.event.order.changed.valid_until', user=self.user, auth=self.auth, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                    'new_value': op.valid_until.isoformat() if op.valid_until else None,
+                    'old_value': op.position.valid_until.isoformat() if op.position.valid_until else None,
+                })
+                op.position.valid_until = op.valid_until
+                op.position.save(update_fields=['valid_until'])
+            elif isinstance(op, self.AddBlockOperation):
+                self.order.log_action('pretix.event.order.changed.add_block', user=self.user, auth=self.auth, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                    'block_name': op.block_name,
+                })
+                if op.position.blocked:
+                    if op.block_name not in op.position.blocked:
+                        op.position.blocked = op.position.blocked + [op.block_name]
+                else:
+                    op.position.blocked = [op.block_name]
+                op.position.save(update_fields=['blocked'])
+            elif isinstance(op, self.RemoveBlockOperation):
+                self.order.log_action('pretix.event.order.changed.remove_block', user=self.user, auth=self.auth, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                    'block_name': op.block_name,
+                })
+                if op.position.blocked and op.block_name in op.position.blocked:
+                    op.position.blocked = [b for b in op.position.blocked if b != op.block_name]
+                    if not op.position.blocked:
+                        op.position.blocked = None
+                    op.position.save(update_fields=['blocked'])
 
         if split_positions:
             self.split_order = self._create_split_order(split_positions)

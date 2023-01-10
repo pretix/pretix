@@ -437,11 +437,12 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'discount',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
-                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled')
+                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled',
+                  'valid_from', 'valid_until', 'blocked')
         read_only_fields = (
             'id', 'order', 'positionid', 'item', 'variation', 'price', 'voucher', 'tax_rate', 'tax_value', 'secret',
             'addon_to', 'subevent', 'checkins', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data',
-            'seat', 'canceled', 'discount',
+            'seat', 'canceled', 'discount', 'valid_from', 'valid_until', 'blocked'
         )
 
     def __init__(self, *args, **kwargs):
@@ -784,7 +785,7 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
         model = OrderPosition
         fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'is_bundled',
-                  'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher')
+                  'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher', 'valid_from', 'valid_until')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

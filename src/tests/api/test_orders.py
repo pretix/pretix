@@ -173,6 +173,9 @@ TEST_ORDERPOSITION_RES = {
     "city": None,
     "country": None,
     "state": None,
+    "valid_from": None,
+    "valid_until": None,
+    "blocked": None,
     "answers": [
         {
             "question": 1,

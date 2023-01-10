@@ -162,6 +162,25 @@ def _display_order_changed(event: Event, logentry: LogEntry):
         return text + ' ' + _('A new secret has been generated for position #{posid}.').format(
             posid=data.get('positionid', '?'),
         )
+    elif logentry.action_type == 'pretix.event.order.changed.valid_from':
+        return text + ' ' + _('The validity start date for position #{posid} has been changed to {value}.').format(
+            posid=data.get('positionid', '?'),
+            value=date_format(dateutil.parser.parse(data.get('new_value')), 'SHORT_DATETIME_FORMAT') if data.get(
+                'new_value') else '–'
+        )
+    elif logentry.action_type == 'pretix.event.order.changed.valid_until':
+        return text + ' ' + _('The validity end date for position #{posid} has been changed to {value}.').format(
+            posid=data.get('positionid', '?'),
+            value=date_format(dateutil.parser.parse(data.get('new_value')), 'SHORT_DATETIME_FORMAT') if data.get('new_value') else '–'
+        )
+    elif logentry.action_type == 'pretix.event.order.changed.add_block':
+        return text + ' ' + _('A block has been added for position #{posid}.').format(
+            posid=data.get('positionid', '?'),
+        )
+    elif logentry.action_type == 'pretix.event.order.changed.remove_block':
+        return text + ' ' + _('A block has been removed for position #{posid}.').format(
+            posid=data.get('positionid', '?'),
+        )
     elif logentry.action_type == 'pretix.event.order.changed.split':
         old_item = str(event.items.get(pk=data['old_item']))
         if data['old_variation']:
@@ -376,6 +395,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.custom_followup_at': _('The order\'s follow-up date has been updated.'),
         'pretix.event.order.checkin_attention': _('The order\'s flag to require attention at check-in has been '
                                                   'toggled.'),
+        'pretix.event.order.pretix.event.order.valid_if_pending': _('The order\'s flag to be considered valid even if '
+                                                                    'unpaid has been toggled.'),
         'pretix.event.order.payment.changed': _('A new payment {local_id} has been started instead of the previous one.'),
         'pretix.event.order.email.sent': _('An unidentified type email has been sent.'),
         'pretix.event.order.email.error': _('Sending of an email has failed.'),

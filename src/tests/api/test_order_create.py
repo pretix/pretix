@@ -348,6 +348,9 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
                 'discount': None,
                 'checkins': [],
                 'downloads': [],
+                "valid_from": None,
+                "valid_until": None,
+                "blocked": None,
                 'answers': [
                     {'question': question.pk, 'answer': 'L', 'question_identifier': 'ABC',
                      'options': [opt.pk],
@@ -416,13 +419,13 @@ def test_order_create_positionids_addons_simulated(token_client, organizer, even
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
          'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00', 'discount': None,
          'addon_to': None, 'subevent': None, 'checkins': [], 'downloads': [], 'answers': [], 'tax_rule': None,
-         'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False},
+         'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None},
         {'id': 0, 'order': '', 'positionid': 2, 'item': item.pk, 'variation': None, 'price': '23.00',
          'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
          'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00', 'discount': None,
          'addon_to': 1, 'subevent': None, 'checkins': [], 'downloads': [], 'answers': [], 'tax_rule': None,
-         'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False}
+         'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None}
     ]
 
 

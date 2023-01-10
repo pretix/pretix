@@ -56,8 +56,8 @@ from pretix.api.serializers.order import (
     SimulatedOrderSerializer,
 )
 from pretix.api.serializers.orderchange import (
-    OrderChangeOperationSerializer, OrderFeeChangeSerializer,
-    OrderPositionChangeSerializer,
+    BlockNameSerializer, OrderChangeOperationSerializer,
+    OrderFeeChangeSerializer, OrderPositionChangeSerializer,
     OrderPositionCreateForExistingOrderSerializer,
     OrderPositionInfoPatchSerializer,
 )
@@ -1228,6 +1228,54 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
                 reissue_invoice=False,
             )
             ocm.regenerate_secret(instance)
+            ocm.commit()
+        except OrderError as e:
+            raise ValidationError(str(e))
+        except Quota.QuotaExceededException as e:
+            raise ValidationError(str(e))
+        return self.retrieve(request, [], **kwargs)
+
+    @action(detail=True, methods=['POST'])
+    def add_block(self, request, **kwargs):
+        serializer = BlockNameSerializer(
+            data=request.data,
+            context=self.get_serializer_context(),
+        )
+        serializer.is_valid(raise_exception=True)
+        instance = self.get_object()
+        try:
+            ocm = OrderChangeManager(
+                instance.order,
+                user=self.request.user if self.request.user.is_authenticated else None,
+                auth=self.request.auth,
+                notify=False,
+                reissue_invoice=False,
+            )
+            ocm.add_block(instance, serializer.validated_data['name'])
+            ocm.commit()
+        except OrderError as e:
+            raise ValidationError(str(e))
+        except Quota.QuotaExceededException as e:
+            raise ValidationError(str(e))
+        return self.retrieve(request, [], **kwargs)
+
+    @action(detail=True, methods=['POST'])
+    def remove_block(self, request, **kwargs):
+        serializer = BlockNameSerializer(
+            data=request.data,
+            context=self.get_serializer_context(),
+        )
+        serializer.is_valid(raise_exception=True)
+        instance = self.get_object()
+        try:
+            ocm = OrderChangeManager(
+                instance.order,
+                user=self.request.user if self.request.user.is_authenticated else None,
+                auth=self.request.auth,
+                notify=False,
+                reissue_invoice=False,
+            )
+            ocm.remove_block(instance, serializer.validated_data['name'])
             ocm.commit()
         except OrderError as e:
             raise ValidationError(str(e))

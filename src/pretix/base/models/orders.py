@@ -122,7 +122,7 @@ class Order(LockModel, LoggedModel):
         * ``STATUS_EXPIRED``
         * ``STATUS_CANCELED``
 
-    :param valid_if_pending: Treat this order like a paid order for most purposes (such as checkin), even if it is
+    :param valid_if_pending: Treat this order like a paid order for most purposes (such as check-in), even if it is
                              still unpaid.
     :type valid_if_pending: bool
     :param event: The event this order belongs to
@@ -2403,7 +2403,7 @@ class OrderPosition(AbstractPosition):
 
         if not self.blocked:
             self.blocked = None
-        elif not isinstance(self.blocked, list) or any(not isinstance(self.blocked, str) for b in self.blocked):
+        elif not isinstance(self.blocked, list) or any(not isinstance(b, str) for b in self.blocked):
             raise TypeError("blocked needs to be a list of strings")
 
         if not self.pseudonymization_id:
