@@ -216,7 +216,7 @@ class CheckInListMixin(BaseExporter):
             )
 
         if form_data.get('attention_only'):
-            qs = qs.filter(Q(item__checkin_attention=True) | Q(order__checkin_attention=True))
+            qs = qs.filter(Q(item__checkin_attention=True) | Q(order__checkin_attention=True) | Q(variation__checkin_attention=True))
 
         if not cl.include_pending:
             qs = qs.filter(order__status=Order.STATUS_PAID)
@@ -364,7 +364,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
             if op.seat:
                 item += '<br/>' + str(op.seat)
             row = [
-                '!!' if op.item.checkin_attention or op.order.checkin_attention else '',
+                '!!' if op.require_checkin_attention else '',
                 CBFlowable(bool(op.last_checked_in)),
                 '✘' if op.order.status != Order.STATUS_PAID else '✔',
                 op.order.code,
@@ -565,7 +565,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             row.append(op.voucher.code if op.voucher else "")
             row.append(op.order.datetime.astimezone(self.event.timezone).strftime('%Y-%m-%d'))
             row.append(op.order.datetime.astimezone(self.event.timezone).strftime('%H:%M:%S'))
-            row.append(_('Yes') if op.order.checkin_attention or op.item.checkin_attention else _('No'))
+            row.append(_('Yes') if op.require_checkin_attention else _('No'))
             row.append(op.order.comment or "")
 
             if op.seat:

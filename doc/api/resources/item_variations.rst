@@ -24,6 +24,9 @@ active                                boolean                    If ``false``, t
 description                           multi-lingual string       A public description of the variation. May contain
                                                                  Markdown syntax or can be ``null``.
 position                              integer                    An integer, used for sorting
+checkin_attention                     boolean                    If ``true``, the check-in app should show a warning
+                                                                 that this ticket requires special attention if such
+                                                                 a variation is being scanned.
 require_approval                      boolean                    If ``true``, orders with this variation will need to be
                                                                  approved by the event organizer before they can be
                                                                  paid.
@@ -84,6 +87,7 @@ Endpoints
               "en": "S"
             },
             "active": true,
+            "checkin_attention": false,
             "require_approval": false,
             "require_membership": false,
             "require_membership_hidden": false,
@@ -107,6 +111,7 @@ Endpoints
               "en": "L"
             },
             "active": true,
+            "checkin_attention": false,
             "require_approval": false,
             "require_membership": false,
             "require_membership_hidden": false,
@@ -159,6 +164,7 @@ Endpoints
         "price": "10.00",
         "original_price": null,
         "active": true,
+        "checkin_attention": false,
         "require_approval": false,
         "require_membership": false,
         "require_membership_hidden": false,
@@ -197,6 +203,7 @@ Endpoints
         "value": {"en": "Student"},
         "default_price": "10.00",
         "active": true,
+        "checkin_attention": false,
         "require_approval": false,
         "require_membership": false,
         "require_membership_hidden": false,
@@ -225,6 +232,7 @@ Endpoints
         "price": "10.00",
         "original_price": null,
         "active": true,
+        "checkin_attention": false,
         "require_approval": false,
         "require_membership": false,
         "require_membership_hidden": false,
@@ -284,6 +292,7 @@ Endpoints
         "price": "10.00",
         "original_price": null,
         "active": false,
+        "checkin_attention": false,
         "require_approval": false,
         "require_membership": false,
         "require_membership_hidden": false,

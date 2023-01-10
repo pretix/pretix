@@ -582,7 +582,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'status': 'error',
                 'reason': Checkin.REASON_AMBIGUOUS,
                 'reason_explanation': None,
-                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                'require_attention': op.require_checkin_attention,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
@@ -627,7 +627,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
         except RequiredQuestionsError as e:
             return Response({
                 'status': 'incomplete',
-                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                'require_attention': op.require_checkin_attention,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'questions': [
                     QuestionSerializer(q).data for q in e.questions
@@ -656,14 +656,14 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'status': 'error',
                 'reason': e.code,
                 'reason_explanation': e.reason,
-                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                'require_attention': op.require_checkin_attention,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         else:
             return Response({
                 'status': 'ok',
-                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                'require_attention': op.require_checkin_attention,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=201)

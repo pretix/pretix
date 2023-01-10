@@ -2298,6 +2298,10 @@ class OrderPosition(AbstractPosition):
     def sort_key(self):
         return self.addon_to.positionid if self.addon_to else self.positionid, self.addon_to_id or 0, self.positionid
 
+    @cached_property
+    def require_checkin_attention(self):
+        return self.order.checkin_attention or self.item.checkin_attention or (self.variation_id and self.variation.checkin_attention)
+
     @property
     def checkins(self):
         """
