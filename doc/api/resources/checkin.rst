@@ -203,6 +203,8 @@ Checking a ticket in
 
    * ``invalid`` - Ticket is not known.
    * ``unpaid`` - Ticket is not paid for.
+   * ``blocked`` - Ticket has been blocked.
+   * ``invalid_time`` - Ticket is not valid at this time.
    * ``canceled`` – Ticket is canceled or expired.
    * ``already_redeemed`` - Ticket already has been redeemed.
    * ``product`` - Tickets with this product may not be scanned at this device.

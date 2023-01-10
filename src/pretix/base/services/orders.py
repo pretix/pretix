@@ -1980,6 +1980,7 @@ class OrderChangeManager:
     def _perform_operations(self):
         nextposid = self.order.all_positions.aggregate(m=Max('positionid'))['m'] + 1
         split_positions = []
+        secret_dirty = set()
 
         for op in self._operations:
             if isinstance(op, self.ItemOperation):
@@ -2005,9 +2006,7 @@ class OrderChangeManager:
                     else:
                         price_after_voucher = max(op.position.price - op.position.tax_value, op.position.voucher.calculate_price(listed_price))
                     op.position.voucher_budget_use = max(listed_price - price_after_voucher, Decimal('0.00'))
-                assign_ticket_secret(
-                    event=self.event, position=op.position, force_invalidate=False, save=False
-                )
+                secret_dirty.add(op.position)
                 op.position.save()
             elif isinstance(op, self.MembershipOperation):
                 self.order.log_action('pretix.event.order.changed.membership', user=self.user, auth=self.auth, data={
@@ -2028,9 +2027,7 @@ class OrderChangeManager:
                     'new_seat_id': op.seat.pk if op.seat else None,
                 })
                 op.position.seat = op.seat
-                assign_ticket_secret(
-                    event=self.event, position=op.position, force_invalidate=False, save=False
-                )
+                secret_dirty.add(op.position)
                 op.position.save()
             elif isinstance(op, self.SubeventOperation):
                 self.order.log_action('pretix.event.order.changed.subevent', user=self.user, auth=self.auth, data={
@@ -2042,9 +2039,7 @@ class OrderChangeManager:
                     'new_price': op.position.price
                 })
                 op.position.subevent = op.subevent
-                assign_ticket_secret(
-                    event=self.event, position=op.position, force_invalidate=False, save=False
-                )
+                secret_dirty.add(op.position)
                 if op.position.voucher_budget_use is not None and op.position.voucher and not op.position.addon_to_id:
                     listed_price = get_listed_price(op.position.item, op.position.variation, op.position.subevent)
                     if not op.position.item.tax_rule or op.position.item.tax_rule.price_includes_tax:
@@ -2150,8 +2145,10 @@ class OrderChangeManager:
                     opa.canceled = True
                     if opa.voucher:
                         Voucher.objects.filter(pk=opa.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
+                    if opa in secret_dirty:
+                        secret_dirty.remove(opa)
                     assign_ticket_secret(
-                        event=self.event, position=op.position, force_invalidate_if_revokation_list_used=True, force_invalidate=False, save=False
+                        event=self.event, position=opa, force_invalidate_if_revokation_list_used=True, force_invalidate=False, save=False
                     )
                     opa.save(update_fields=['canceled', 'secret'])
                 self.order.log_action('pretix.event.order.changed.cancel', user=self.user, auth=self.auth, data={
@@ -2168,6 +2165,8 @@ class OrderChangeManager:
                 assign_ticket_secret(
                     event=self.event, position=op.position, force_invalidate_if_revokation_list_used=True, force_invalidate=False, save=False
                 )
+                if op.position in secret_dirty:
+                    secret_dirty.remove(op.position)
                 op.position.save(update_fields=['canceled', 'secret'])
             elif isinstance(op, self.AddOperation):
                 pos = OrderPosition.objects.create(
@@ -2197,6 +2196,8 @@ class OrderChangeManager:
                 assign_ticket_secret(
                     event=self.event, position=op.position, force_invalidate=True, save=True
                 )
+                if op.position in secret_dirty:
+                    secret_dirty.remove(op.position)
                 tickets.invalidate_cache.apply_async(kwargs={'event': self.event.pk,
                                                              'order': self.order.pk})
                 self.order.log_action('pretix.event.order.changed.secret', user=self.user, auth=self.auth, data={
@@ -2212,6 +2213,7 @@ class OrderChangeManager:
                 })
                 op.position.valid_from = op.valid_from
                 op.position.save(update_fields=['valid_from'])
+                secret_dirty.add(op.position)
             elif isinstance(op, self.ChangeValidUntilOperation):
                 self.order.log_action('pretix.event.order.changed.valid_until', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
@@ -2221,6 +2223,7 @@ class OrderChangeManager:
                 })
                 op.position.valid_until = op.valid_until
                 op.position.save(update_fields=['valid_until'])
+                secret_dirty.add(op.position)
             elif isinstance(op, self.AddBlockOperation):
                 self.order.log_action('pretix.event.order.changed.add_block', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
@@ -2233,6 +2236,7 @@ class OrderChangeManager:
                 else:
                     op.position.blocked = [op.block_name]
                 op.position.save(update_fields=['blocked'])
+                # todo: revoke list handling
             elif isinstance(op, self.RemoveBlockOperation):
                 self.order.log_action('pretix.event.order.changed.remove_block', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
@@ -2244,6 +2248,12 @@ class OrderChangeManager:
                     if not op.position.blocked:
                         op.position.blocked = None
                     op.position.save(update_fields=['blocked'])
+                # todo: revoke list handling
+
+        for p in secret_dirty:
+            assign_ticket_secret(
+                event=self.event, position=p, force_invalidate=False, save=False
+            )
 
         if split_positions:
             self.split_order = self._create_split_order(split_positions)

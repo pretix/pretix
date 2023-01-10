@@ -131,6 +131,9 @@ TEST_ORDERPOSITION1_RES = {
     "country": None,
     "state": None,
     "subevent": None,
+    "valid_from": None,
+    "valid_until": None,
+    "blocked": None,
     "pseudonymization_id": "ABCDEFGHKL",
 }
 
@@ -163,6 +166,9 @@ TEST_ORDERPOSITION2_RES = {
     "country": None,
     "state": None,
     "subevent": None,
+    "valid_from": None,
+    "valid_until": None,
+    "blocked": None,
     "pseudonymization_id": "BACDEFGHKL",
 }
 
@@ -195,6 +201,9 @@ TEST_ORDERPOSITION3_RES = {
     "country": None,
     "state": None,
     "subevent": None,
+    "valid_from": None,
+    "valid_until": None,
+    "blocked": None,
     "pseudonymization_id": "FOOBAR12345",
 }
 

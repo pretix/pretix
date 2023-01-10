@@ -743,6 +743,8 @@ Order position endpoints
 
    * ``invalid`` - Ticket code not known.
    * ``unpaid`` - Ticket is not paid for.
+   * ``blocked`` - Ticket has been blocked.
+   * ``invalid_time`` - Ticket is not valid at this time.
    * ``canceled`` – Ticket is canceled or expired. This reason is only sent when your request sets.
      ``canceled_supported`` to ``true``, otherwise these orders return ``unpaid``.
    * ``already_redeemed`` - Ticket already has been redeemed.

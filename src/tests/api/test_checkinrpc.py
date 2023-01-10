@@ -168,6 +168,9 @@ TEST_ORDERPOSITION1_RES = {
     "country": None,
     "state": None,
     "subevent": None,
+    "valid_from": None,
+    "valid_until": None,
+    "blocked": None,
     "pseudonymization_id": "ABCDEFGHKL",
 }
 

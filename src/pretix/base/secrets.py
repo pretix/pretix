@@ -23,6 +23,7 @@ import base64
 import inspect
 import struct
 from collections import namedtuple
+from datetime import datetime
 from typing import Optional
 
 from cryptography.hazmat.backends.openssl.backend import Backend
@@ -34,6 +35,7 @@ from cryptography.hazmat.primitives.serialization import (
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
+from pytz import UTC
 
 from pretix.base.models import Item, ItemVariation, SubEvent
 from pretix.base.secretgenerators import pretix_sig1_pb2
@@ -85,10 +87,12 @@ class BaseTicketSecretGenerator:
         return None
 
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
-                        attendee_name: str = None, current_secret: str = None, force_invalidate=False) -> str:
+                        attendee_name: str = None, valid_from: datetime = None, valid_until: datetime = None,
+                        current_secret: str = None, force_invalidate=False) -> str:
         """
         Generate a new secret for a ticket with product ``item``, variation ``variation``, subevent ``subevent``,
-        attendee name ``attendee_name`` (can be ``None``) and the current secret ``current_secret`` (if any).
+        attendee name ``attendee_name`` (can be ``None``), earliest validity ``valid_from``, lastest validity
+         ``valid_until``, and the current secret ``current_secret`` (if any).
 
         The result must be a string that should only contain the characters ``A-Za-z0-9+/=``.
 
@@ -118,7 +122,8 @@ class RandomTicketSecretGenerator(BaseTicketSecretGenerator):
     use_revocation_list = False
 
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
-                        attendee_name: str = None, current_secret: str = None, force_invalidate=False):
+                        attendee_name: str = None, valid_from: datetime = None, valid_until: datetime = None,
+                        current_secret: str = None, force_invalidate=False) -> str:
         if current_secret and not force_invalidate:
             return current_secret
         return get_random_string(
@@ -202,15 +207,24 @@ class Sig1TicketSecretGenerator(BaseTicketSecretGenerator):
             opaque_id = ticket.seed
             return self.ParsedSecret(item=item, subevent=subevent, variation=variation, opaque_id=opaque_id, attendee_name=None)
 
+    def _encode_time(self, t):
+        if t is None:
+            return 0
+        t0 = datetime(2020, 1, 1, 0, 0, 0, 0, tzinfo=UTC)
+        return (t - t0).total_seconds() // 60
+
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
-                        current_secret: str = None, force_invalidate=False):
+                        attendee_name: str = None, valid_from: datetime = None, valid_until: datetime = None,
+                        current_secret: str = None, force_invalidate=False) -> str:
         if current_secret and not force_invalidate:
             ticket = self._parse(current_secret)
             if ticket:
                 unchanged = (
                     ticket.item == item.pk and
                     ticket.variation == (variation.pk if variation else 0) and
-                    ticket.subevent == (subevent.pk if subevent else 0)
+                    ticket.subevent == (subevent.pk if subevent else 0) and
+                    ticket.validFromInMinutesSince2020 == self._encode_time(valid_from) and
+                    ticket.validUntilInMinutesSince2020 == self._encode_time(valid_until)
                 )
                 if unchanged:
                     return current_secret
@@ -220,6 +234,8 @@ class Sig1TicketSecretGenerator(BaseTicketSecretGenerator):
         t.item = item.pk
         t.variation = variation.pk if variation else 0
         t.subevent = subevent.pk if subevent else 0
+        t.validFromInMinutesSince2020 = self._encode_time(valid_from)
+        t.validUntilInMinutesSince2020 = self._encode_time(valid_until)
         payload = t.SerializeToString()
         result = base64.b64encode(self._sign_payload(payload)).decode()[::-1]
         return result
@@ -236,8 +252,13 @@ def assign_ticket_secret(event, position, force_invalidate_if_revokation_list_us
         force_invalidate = True
 
     kwargs = {}
-    if 'attendee_name' in inspect.signature(gen.generate_secret).parameters:
+    params = inspect.signature(gen.generate_secret).parameters
+    if 'attendee_name' in params:
         kwargs['attendee_name'] = position.attendee_name
+    if 'valid_from' in params:
+        kwargs['valid_from'] = position.valid_from
+    if 'valid_until' in params:
+        kwargs['valid_until'] = position.valid_until
     secret = gen.generate_secret(
         item=position.item,
         variation=position.variation,

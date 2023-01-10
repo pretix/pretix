@@ -2300,7 +2300,9 @@ class OrderPosition(AbstractPosition):
 
     @cached_property
     def require_checkin_attention(self):
-        return self.order.checkin_attention or self.item.checkin_attention or (self.variation_id and self.variation.checkin_attention)
+        if self.order.checkin_attention or self.item.checkin_attention or (self.variation_id and self.variation.checkin_attention):
+            return True
+        return False
 
     @property
     def checkins(self):
