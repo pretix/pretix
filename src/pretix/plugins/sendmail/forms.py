@@ -232,7 +232,7 @@ class OrderMailForm(BaseMailForm):
         super().__init__(*args, **kwargs)
 
         recp_choices = [
-            ('orders', _('Everyone who created a ticket order'))
+            ('orders', _('Everyone who placed an order'))
         ]
         if event.settings.attendee_emails_asked:
             recp_choices += [
