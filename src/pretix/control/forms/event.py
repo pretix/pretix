@@ -34,6 +34,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+from decimal import Decimal
 from urllib.parse import urlencode, urlparse
 
 from django import forms
@@ -135,6 +136,8 @@ class EventWizardBasicsForm(I18nModelForm):
         help_text=_("Do you need to pay sales tax on your tickets? In this case, please enter the applicable tax rate "
                     "here in percent. If you have a more complicated tax situation, you can add more tax rates and "
                     "detailed configuration later."),
+        max_value=Decimal("100.00"),
+        min_value=Decimal("0.00"),
         required=False
     )
 
