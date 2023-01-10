@@ -109,24 +109,24 @@ class WaitinglistMailForm(BaseMailForm):
         widget=forms.CheckboxSelectMultiple(
             attrs={'class': 'scrolling-multiple-choice'}
         ),
-        label=_('Only send to people who are waiting for'),
+        label=pgettext_lazy('sendmail_form', 'Waiting for'),
         required=True,
         queryset=Item.objects.none()
     )
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
-        label=_('Only send to customers of'),
+        label=pgettext_lazy('sendmail_form', 'Restrict to a specific event date'),
         required=False,
         empty_label=pgettext_lazy('subevent', 'All dates')
     )
     subevents_from = forms.SplitDateTimeField(
         widget=SplitDateTimePickerWidget(),
-        label=pgettext_lazy('subevent', 'Only send to customers of dates starting at or after'),
+        label=pgettext_lazy('sendmail_form', 'Restrict to event dates starting at or after'),
         required=False,
     )
     subevents_to = forms.SplitDateTimeField(
         widget=SplitDateTimePickerWidget(),
-        label=pgettext_lazy('subevent', 'Only send to customers of dates starting before'),
+        label=pgettext_lazy('sendmail_form', 'Restrict to event dates starting before'),
         required=False,
     )
 
@@ -167,7 +167,7 @@ class WaitinglistMailForm(BaseMailForm):
 
 class OrderMailForm(BaseMailForm):
     recipients = forms.ChoiceField(
-        label=_('Send email to'),
+        label=pgettext_lazy('sendmail_from', 'Send to'),
         widget=forms.RadioSelect,
         initial='orders',
         choices=[]
@@ -177,7 +177,7 @@ class OrderMailForm(BaseMailForm):
         widget=forms.CheckboxSelectMultiple(
             attrs={'class': 'scrolling-multiple-choice'}
         ),
-        label=_('Only send to people who bought'),
+        label=pgettext_lazy('sendmail_form', 'Restrict to products'),
         required=True,
         queryset=Item.objects.none()
     )
@@ -186,31 +186,31 @@ class OrderMailForm(BaseMailForm):
         required=False
     )
     checkin_lists = SafeModelMultipleChoiceField(queryset=CheckinList.objects.none(), required=False)  # overridden later
-    not_checked_in = forms.BooleanField(label=_("Send to customers not checked in"), required=False)
+    not_checked_in = forms.BooleanField(label=pgettext_lazy('sendmail_from', 'Restrict to recipients without check-in'), required=False)
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
-        label=_('Only send to customers of'),
+        label=pgettext_lazy('sendmail_form', 'Restrict to a specific event date'),
         required=False,
         empty_label=pgettext_lazy('subevent', 'All dates')
     )
     subevents_from = forms.SplitDateTimeField(
         widget=SplitDateTimePickerWidget(),
-        label=pgettext_lazy('subevent', 'Only send to customers of dates starting at or after'),
+        label=pgettext_lazy('sendmail_form', 'Restrict to event dates starting at or after'),
         required=False,
     )
     subevents_to = forms.SplitDateTimeField(
         widget=SplitDateTimePickerWidget(),
-        label=pgettext_lazy('subevent', 'Only send to customers of dates starting before'),
+        label=pgettext_lazy('sendmail_form', 'Restrict to event dates starting before'),
         required=False,
     )
     created_from = forms.SplitDateTimeField(
         widget=SplitDateTimePickerWidget(),
-        label=pgettext_lazy('subevent', 'Only send to customers with orders created after'),
+        label=pgettext_lazy('sendmail_form', 'Restrict to orders created at or after'),
         required=False,
     )
     created_to = forms.SplitDateTimeField(
         widget=SplitDateTimePickerWidget(),
-        label=pgettext_lazy('subevent', 'Only send to customers with orders created before'),
+        label=pgettext_lazy('sendmail_form', 'Restrict to orders created before'),
         required=False,
     )
     attach_tickets = forms.BooleanField(
@@ -250,7 +250,7 @@ class OrderMailForm(BaseMailForm):
                 ('overdue', _('pending with payment overdue'))
             )
         self.fields['sendto'] = forms.MultipleChoiceField(
-            label=_("Send to customers with order status"),
+            label=pgettext_lazy('sendmail_from', 'Restrict to orders with status'),
             widget=forms.CheckboxSelectMultiple(
                 attrs={'class': 'scrolling-multiple-choice no-search'}
             ),
@@ -274,11 +274,11 @@ class OrderMailForm(BaseMailForm):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                 }),
-                'data-placeholder': _('Send to customers checked in on list'),
+                'data-placeholder': pgettext_lazy('sendmail_from', 'Restrict to recipients with check-in on list')
             }
         )
         self.fields['checkin_lists'].widget.choices = self.fields['checkin_lists'].choices
-        self.fields['checkin_lists'].label = _('Send to customers checked in on list')
+        self.fields['checkin_lists'].label = pgettext_lazy('sendmail_from', 'Restrict to recipients with check-in on list')
 
         if event.has_subevents:
             self.fields['subevent'].queryset = event.subevents.all()
