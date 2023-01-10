@@ -1124,8 +1124,13 @@ class PaymentStep(CartMixin, TemplateFlowStep):
     def _total_order_value(self):
         cart = get_cart(self.request)
         total = get_cart_total(self.request)
-        total += sum([f.value for f in get_fees(self.request.event, self.request, total, self.invoice_address, None,
-                                                cart)])
+        total += sum([
+            f.value for f in get_fees(
+                self.request.event, self.request, total, self.invoice_address,
+                [p for p in self.cart_session.get('payments', []) if p.get('multi_use_supported')],
+                cart,
+            )
+        ])
         return Decimal(total)
 
     @cached_property
@@ -1211,6 +1216,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                                                        f'and returned True from payment_prepare, but did not call '
                                                        f'add_payment_to_cart')
 
+                        cart = self.get_cart()
                         valid, remainder = self.current_payments_valid(cart['total'])
                         if valid:
                             return redirect(self.get_next_url(request))
