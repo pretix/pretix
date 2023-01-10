@@ -523,7 +523,7 @@ def base_placeholders(sender, **kwargs):
             'url_remove', ['waiting_list_voucher', 'event'],
             lambda waiting_list_voucher, event: build_absolute_uri(
                 event, 'presale:event.waitinglist.remove'
-            ) + '?voucher=' + waiting_list_voucher.voucher.code,
+            ) + '?voucher=' + waiting_list_voucher.code,
             lambda event: build_absolute_uri(
                 event,
                 'presale:event.waitinglist.remove',
