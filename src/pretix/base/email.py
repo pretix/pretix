@@ -588,7 +588,7 @@ def base_placeholders(sender, **kwargs):
             _('Sample Admission Ticket')
         ),
         SimpleFunctionalMailTextPlaceholder(
-            'code', ['waiting_list_entry'], lambda waiting_list_entry: waiting_list_entry.voucher.code,
+            'code', ['waiting_list_voucher'], lambda waiting_list_voucher: waiting_list_voucher.code,
             '68CYU2H6ZTP3WLK5'
         ),
         SimpleFunctionalMailTextPlaceholder(
