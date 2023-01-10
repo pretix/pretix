@@ -960,7 +960,7 @@ def test_item_create_with_bundle(token_client, organizer, event, item, category,
     assert resp.content.decode() == '{"bundles":["The chosen variation does not belong to this item."]}'
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_item_update(token_client, organizer, event, item, category, item2, category2, taxrule2):
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
@@ -1056,6 +1056,10 @@ def test_item_update(token_client, organizer, event, item, category, item2, cate
     assert resp.content.decode() == '{"non_field_errors":["Updating add-ons, bundles, or variations via PATCH/PUT is not supported. Please use ' \
                                     'the dedicated nested endpoint."]}'
 
+    item.personalized = True
+    item.admission = True
+    item.save()
+
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
         {
@@ -1069,6 +1073,10 @@ def test_item_update(token_client, organizer, event, item, category, item2, cate
     with scopes_disabled():
         assert Item.objects.get(pk=item.pk).meta_data == {'day': 'Friday'}
 
+    item.refresh_from_db()
+    assert item.admission
+    assert item.personalized
+
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
         {
@@ -1081,9 +1089,6 @@ def test_item_update(token_client, organizer, event, item, category, item2, cate
     assert resp.status_code == 400
     assert resp.content.decode() == '{"meta_data":["Item meta data property \'foo\' does not exist."]}'
 
-    item.personalized = True
-    item.admission = True
-    item.save()
     resp = token_client.patch(
         '/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug, item.pk),
         {

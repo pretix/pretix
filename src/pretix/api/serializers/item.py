@@ -268,7 +268,7 @@ class ItemSerializer(I18nAwareModelSerializer):
         if data.get('admission') and 'personalized' not in data and not self.instance:
             # Backwards compatibility
             data['personalized'] = True
-        elif not data.get('admission'):
+        elif 'admission' in data and not data['admission']:
             data['personalized'] = False
 
         if data.get('issue_giftcard'):
