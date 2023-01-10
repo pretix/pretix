@@ -3,7 +3,7 @@
 {% block title %}{% trans "Send out emails" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Send out emails" %}</h1>
-    <ul class="list-group large-link-group">
+    <div class="list-group large-link-group">
         {% for view in views %}
             <a class="list-group-item" href="{{ view.url }}">
                 <h4>{{ view.title }}</h4>
@@ -12,5 +12,5 @@
                 </p>
             </a>
         {% endfor %}
-    </ul>
+    </div>
 {% endblock %}
