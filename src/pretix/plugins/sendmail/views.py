@@ -434,7 +434,7 @@ class WaitinglistSendView(BaseSenderView):
 
     ACTION_TYPE = 'pretix.plugins.sendmail.sent.waitinglist'
     TITLE = _("Waiting list")
-    DESCRIPTION = _("Send an email to every customer who is currently waiting to receive a ticket through the waiting "
+    DESCRIPTION = _("Send an email to every person currently waiting to receive a voucher through the waiting "
                     "list feature.")
 
     @classmethod
