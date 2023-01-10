@@ -271,6 +271,7 @@ TEST_ORDER_RES = {
         "vat_id_validated": True
     },
     "require_approval": False,
+    "valid_if_pending": False,
     "positions": [TEST_ORDERPOSITION_RES],
     "downloads": [],
     "payments": TEST_PAYMENTS_RES,

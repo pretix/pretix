@@ -91,6 +91,10 @@ require_approval                      boolean                    If ``true`` and
                                                                  needs approval by an organizer before it can
                                                                  continue. If ``true`` and the order is canceled,
                                                                  this order has been denied by the event organizer.
+valid_if_pending                      boolean                    If ``true`` and the order is pending, this order
+                                                                 is still treated like a paid order for most purposes,
+                                                                 such as checkin. This may be used e.g. for trusted
+                                                                 customers who only need to pay after the event.
 url                                   string                     The full URL to the order confirmation page
 payments                              list of objects            List of payment processes (see below)
 refunds                               list of objects            List of refund processes (see below)
@@ -121,6 +125,10 @@ last_modified                         datetime                   Last modificati
 .. versionchanged:: 4.15
 
    The ``include`` query parameter has been added.
+
+.. versionchanged:: 4.16
+
+   The ``valid_if_pending`` attribute has been added.
 
 
 .. _order-position-resource:
@@ -294,6 +302,7 @@ List of all orders
             "custom_followup_at": null,
             "checkin_attention": false,
             "require_approval": false,
+            "valid_if_pending": false,
             "invoice_address": {
                 "last_modified": "2017-12-01T10:00:00Z",
                 "is_business": true,
@@ -467,6 +476,7 @@ Fetching individual orders
         "custom_followup_at": null,
         "checkin_attention": false,
         "require_approval": false,
+        "valid_if_pending": false,
         "invoice_address": {
             "last_modified": "2017-12-01T10:00:00Z",
             "company": "Sample company",
@@ -639,6 +649,8 @@ Updating order fields
    * ``custom_followup_at``
 
    * ``invoice_address`` (you always need to supply the full object, or ``null`` to delete the current address)
+
+   * ``valid_if_pending``
 
    **Example request**:
 
@@ -845,6 +857,7 @@ Creating orders
    * ``custom_followup_at`` (optional)
    * ``checkin_attention`` (optional)
    * ``require_approval`` (optional)
+   * ``valid_if_pending`` (optional)
    * ``invoice_address`` (optional)
 
       * ``company``

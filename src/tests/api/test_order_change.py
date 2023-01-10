@@ -255,6 +255,7 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
             organizer.slug, event.slug, order.code
         ), format='json', data={
             'comment': 'Here is a comment',
+            'valid_if_pending': True,
             'custom_followup_at': '2021-06-12',
             'checkin_attention': True,
             'email': 'foo@bar.com',
@@ -283,6 +284,7 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
     assert order.email == 'foo@bar.com'
     assert order.phone == '+4962219999'
     assert order.locale == 'de'
+    assert order.valid_if_pending
     assert order.invoice_address.company == "This is my company name"
     assert order.invoice_address.name_cached == "John Doe"
     assert order.invoice_address.name_parts == {'_legacy': 'John Doe'}

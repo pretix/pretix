@@ -51,7 +51,7 @@ meta_data                             object                     Values set for 
 
 .. versionchanged:: 4.16
 
-   The ``meta_data`` attribute has been added.
+   The ``meta_data`` and ``checkin_attention`` attributes have been added.
 
 Endpoints
 ---------

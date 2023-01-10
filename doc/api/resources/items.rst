@@ -170,7 +170,8 @@ meta_data                             object                     Values set for 
 
 .. versionchanged:: 4.16
 
-   The ``variations[x].meta_data`` attribute has been added. The ``personalized`` attribute has been added.
+   The ``variations[x].meta_data`` and ``variations[x].checkin_attention`` attributes has been added.
+   The ``personalized`` attribute has been added.
 
 Notes
 -----

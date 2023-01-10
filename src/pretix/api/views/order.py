@@ -763,6 +763,16 @@ class OrderViewSet(viewsets.ModelViewSet):
                     }
                 )
 
+            if 'valid_if_pending' in self.request.data and serializer.instance.valid_if_pending != self.request.data.get('valid_if_pending'):
+                serializer.instance.log_action(
+                    'pretix.event.order.valid_if_pending',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'new_value': self.request.data.get('valid_if_pending')
+                    }
+                )
+
             if 'email' in self.request.data and serializer.instance.email != self.request.data.get('email'):
                 serializer.instance.email_known_to_work = False
                 serializer.instance.log_action(

@@ -153,6 +153,7 @@ ORDER_CREATE_PAYLOAD = {
     "phone": "+49622112345",
     "locale": "en",
     "sales_channel": "web",
+    "valid_if_pending": True,
     "fees": [
         {
             "fee_type": "payment",
@@ -223,6 +224,7 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert o.total == Decimal('23.25')
     assert o.status == Order.STATUS_PENDING
     assert o.sales_channel == "web"
+    assert o.valid_if_pending
     assert not o.testmode
 
     with scopes_disabled():
@@ -295,6 +297,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
         'datetime': None,
         'payment_date': None,
         'payment_provider': None,
+        'valid_if_pending': True,
         'fees': [
             {
                 'id': 0,
