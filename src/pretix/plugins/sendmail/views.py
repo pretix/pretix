@@ -304,7 +304,7 @@ class OrderSendView(BaseSenderView):
         if 'recipients' in logentry.parsed_data:
             initial['recipients'] = logentry.parsed_data.get('recipients', 'orders')
         if 'sendto' in logentry.parsed_data:
-            initial['sendto'] = logentry.parsed_data.get('recipients', 'sendto')
+            initial['sendto'] = logentry.parsed_data.get('sendto')
         if 'items' in logentry.parsed_data:
             initial['items'] = self.request.event.items.filter(
                 id__in=[a['id'] for a in logentry.parsed_data['items']]
