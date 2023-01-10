@@ -248,7 +248,7 @@ class OrderSendView(BaseSenderView):
 
     ACTION_TYPE = 'pretix.plugins.sendmail.sent'
     TITLE = _("Orders or attendees")
-    DESCRIPTION = _("Send an email to every customer who purchased a ticket, to every person a ticket has been "
+    DESCRIPTION = _("Send an email to every customer, or to every person a ticket has been "
                     "purchased for, or a combination of both.")
 
     @classmethod
