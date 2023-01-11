@@ -46,7 +46,7 @@ class EventDataExporter(ListExporter):
     identifier = 'eventdata'
     verbose_name = _('Event data')
     category = pgettext_lazy('export_category', 'Event data')
-    description = _('Download a spread sheet with information on all events in this organizer account.')
+    description = _('Download a spreadsheet with information on all events in this organizer account.')
 
     @cached_property
     def providers(self):
