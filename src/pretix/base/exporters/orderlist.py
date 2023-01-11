@@ -47,7 +47,9 @@ from django.db.models.functions import Coalesce
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, make_aware, now
-from django.utils.translation import gettext as _, gettext_lazy, pgettext
+from django.utils.translation import (
+    gettext as _, gettext_lazy, pgettext, pgettext_lazy,
+)
 
 from pretix.base.models import (
     GiftCard, GiftCardTransaction, Invoice, InvoiceAddress, Order,
@@ -71,6 +73,11 @@ from ..signals import (
 class OrderListExporter(MultiSheetListExporter):
     identifier = 'orderlist'
     verbose_name = gettext_lazy('Order data')
+    category = pgettext_lazy('export_category', 'Order data')
+    description = gettext_lazy('Download a spreadsheet of all orders. The spreadsheet will include three sheets, one '
+                               'with a line for every order, one with a line for every order position, and one with '
+                               'a line for every additional fee charged in an order.')
+    featured = True
 
     @cached_property
     def providers(self):
@@ -776,7 +783,10 @@ class OrderListExporter(MultiSheetListExporter):
 
 class PaymentListExporter(ListExporter):
     identifier = 'paymentlist'
-    verbose_name = gettext_lazy('Order payments and refunds')
+    verbose_name = gettext_lazy('Payments and refunds')
+    category = pgettext_lazy('export_category', 'Order data')
+    description = gettext_lazy('Download a spreadsheet of all payments or refunds of every order.')
+    featured = True
 
     @property
     def additional_form_fields(self):
@@ -855,6 +865,8 @@ class PaymentListExporter(ListExporter):
 class QuotaListExporter(ListExporter):
     identifier = 'quotalist'
     verbose_name = gettext_lazy('Quota availabilities')
+    category = pgettext_lazy('export_category', 'Product data')
+    description = gettext_lazy('Download a spreadsheet of all quotas including their current availability.')
 
     def iterate_list(self, form_data):
         has_subevents = self.event.has_subevents
@@ -908,6 +920,8 @@ class GiftcardTransactionListExporter(OrganizerLevelExportMixin, ListExporter):
     identifier = 'giftcardtransactionlist'
     verbose_name = gettext_lazy('Gift card transactions')
     organizer_required_permission = 'can_manage_gift_cards'
+    category = pgettext_lazy('export_category', 'Gift cards')
+    description = gettext_lazy('Download a spreadsheet of all gift card transactions.')
 
     @property
     def additional_form_fields(self):
@@ -978,6 +992,8 @@ class GiftcardTransactionListExporter(OrganizerLevelExportMixin, ListExporter):
 class GiftcardRedemptionListExporter(ListExporter):
     identifier = 'giftcardredemptionlist'
     verbose_name = gettext_lazy('Gift card redemptions')
+    category = pgettext_lazy('export_category', 'Order data')
+    description = gettext_lazy('Download a spreadsheet of all payments or refunds that involve gift cards.')
 
     def iterate_list(self, form_data):
         payments = OrderPayment.objects.filter(
@@ -1023,6 +1039,8 @@ class GiftcardListExporter(OrganizerLevelExportMixin, ListExporter):
     identifier = 'giftcardlist'
     verbose_name = gettext_lazy('Gift cards')
     organizer_required_permission = 'can_manage_gift_cards'
+    category = pgettext_lazy('export_category', 'Gift cards')
+    description = gettext_lazy('Download a spreadsheet of all gift cards including their current value.')
 
     @property
     def additional_form_fields(self):

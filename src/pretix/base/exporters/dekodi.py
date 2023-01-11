@@ -27,7 +27,7 @@ import dateutil
 from django import forms
 from django.core.serializers.json import DjangoJSONEncoder
 from django.dispatch import receiver
-from django.utils.translation import gettext, gettext_lazy
+from django.utils.translation import gettext, gettext_lazy, pgettext_lazy
 
 from pretix.base.i18n import language
 from pretix.base.models import Invoice, OrderPayment
@@ -39,6 +39,8 @@ from ..signals import register_data_exporters
 class DekodiNREIExporter(BaseExporter):
     identifier = 'dekodi_nrei'
     verbose_name = 'dekodi NREI (JSON)'
+    category = pgettext_lazy('export_category', 'Invoices')
+    description = gettext_lazy("Download invoices in a format that can be used by the dekodi NREI conversion software.")
 
     # Specification: http://manuals.dekodi.de/nexuspub/schnittstellenbuch/
 

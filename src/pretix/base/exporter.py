@@ -36,7 +36,7 @@ import io
 import tempfile
 from collections import OrderedDict, namedtuple
 from decimal import Decimal
-from typing import Tuple, Optional
+from typing import Optional, Tuple
 
 import pytz
 from defusedcsv import csv
@@ -97,6 +97,13 @@ class BaseExporter:
         A category name for this exporter, or ``None``.
         """
         return None
+
+    @property
+    def featured(self) -> bool:
+        """
+        If ``True``, this exporter will be highlighted.
+        """
+        return False
 
     @property
     def identifier(self) -> str:

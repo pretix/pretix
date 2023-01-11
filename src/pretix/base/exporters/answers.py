@@ -39,7 +39,7 @@ from zipfile import ZipFile
 
 from django import forms
 from django.dispatch import receiver
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.models import QuestionAnswer
 
@@ -49,7 +49,10 @@ from ..signals import register_data_exporters
 
 class AnswerFilesExporter(BaseExporter):
     identifier = 'answerfiles'
-    verbose_name = _('Answers to file upload questions')
+    verbose_name = _('Question answer file uploads')
+    category = pgettext_lazy('export_category', 'Order data')
+    description = _('Download a ZIP file including all files that have been uploaded by your customers while creating '
+                    'an order.')
 
     @property
     def export_form_fields(self):

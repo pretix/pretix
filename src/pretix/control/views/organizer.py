@@ -1566,7 +1566,7 @@ class ExportMixin:
         ]
         return sorted(
             raw_exporters,
-            key=lambda ex: (0 if ex.category else 1, ex.category or "", str(ex.verbose_name).lower())
+            key=lambda ex: (0 if ex.category else 1, ex.category or "", 0 if ex.featured else 1, str(ex.verbose_name).lower())
         )
 
     def get_context_data(self, **kwargs):

@@ -36,7 +36,7 @@ from collections import OrderedDict
 
 from django.dispatch import receiver
 from django.utils.timezone import get_current_timezone
-from django.utils.translation import gettext as _, gettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
 
 from pretix.base.settings import PERSON_NAME_SCHEMES
 
@@ -48,6 +48,8 @@ class CustomerListExporter(OrganizerLevelExportMixin, ListExporter):
     identifier = 'customerlist'
     verbose_name = gettext_lazy('Customer accounts')
     organizer_required_permission = 'can_manage_customers'
+    category = pgettext_lazy('export_category', 'Customer accounts')
+    description = gettext_lazy('Download a spreadsheet of all currently registered customer accounts.')
 
     @property
     def additional_form_fields(self):

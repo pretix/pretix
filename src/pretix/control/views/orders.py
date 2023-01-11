@@ -2240,7 +2240,7 @@ class ExportMixin:
         responses = register_data_exporters.send(self.request.event)
         return sorted(
             [response(self.request.event, self.request.organizer) for r, response in responses if response],
-            key=lambda ex: (0 if ex.category else 1, ex.category or "", str(ex.verbose_name).lower())
+            key=lambda ex: (0 if ex.category else 1, ex.category or "", 0 if ex.featured else 1, str(ex.verbose_name).lower())
         )
 
     @cached_property
@@ -2295,16 +2295,6 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, Templ
 
     def get_check_url(self, task_id, ajax):
         return self.request.path + '?async_id=%s&exporter=%s' % (task_id, self.exporter.identifier) + ('&ajax=1' if ajax else '')
-
-    @cached_property
-    def exporter(self):
-        if self.request.method == "POST":
-            identifier = self.request.POST.get("exporter")
-        else:
-            identifier = self.request.GET.get("exporter")
-        for ex in self.exporters:
-            if ex.identifier == identifier:
-                return ex
 
     def get(self, request, *args, **kwargs):
         if 'async_id' in request.GET and settings.HAS_CELERY:

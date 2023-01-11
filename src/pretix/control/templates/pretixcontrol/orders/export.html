@@ -17,7 +17,12 @@
         <div class="list-group large-link-group">
             {% for e in c_ex %}
                 <a class="list-group-item" href="?identifier={{ e.identifier }}">
-                    <h4>{{ e.verbose_name }}</h4>
+                    <h4>
+                        {{ e.verbose_name }}
+                        {% if e.featured %}
+                            <span class="fa fa-star text-success" data-toggle="tooltip" title="{% trans "Recommended for new users" %}" aria-hidden="true"></span>
+                        {% endif %}
+                    </h4>
                     {% if e.description %}
                         <p>
                             {{ e.description }}
