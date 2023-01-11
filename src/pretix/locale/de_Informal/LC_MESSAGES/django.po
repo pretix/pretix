@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:07+0000\n"
-"PO-Revision-Date: 2023-01-10 11:26+0000\n"
+"PO-Revision-Date: 2023-01-11 12:30+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -596,10 +596,8 @@ msgid "Combined Excel (.xlsx)"
 msgstr "Kombiniertes Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:52
-#, fuzzy
-#| msgid "Question answers"
 msgid "Question answer file uploads"
-msgstr "Antworten auf Fragen"
+msgstr "Antworten mit hochgeladenen Dateien"
 
 #: pretix/base/exporters/answers.py:53 pretix/base/exporters/json.py:51
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:76
@@ -607,8 +605,6 @@ msgstr "Antworten auf Fragen"
 #: pretix/base/exporters/orderlist.py:995
 #: pretix/plugins/reports/exporters.py:391
 #: pretix/plugins/reports/exporters.py:564
-#, fuzzy
-#| msgid "Order data"
 msgctxt "export_category"
 msgid "Order data"
 msgstr "Bestelldaten"
@@ -618,6 +614,8 @@ msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
 msgstr ""
+"ZIP-Datei mit allen Dateien, die von Kund*innen im Betellprozess als Antwort "
+"auf eine Frage hochgeladen wurden."
 
 #: pretix/base/exporters/answers.py:64 pretix/base/models/items.py:1355
 #: pretix/control/navigation.py:182
@@ -632,15 +630,13 @@ msgid "Customer accounts"
 msgstr "Kundenkonten"
 
 #: pretix/base/exporters/customers.py:51
-#, fuzzy
-#| msgid "Customer accounts"
 msgctxt "export_category"
 msgid "Customer accounts"
 msgstr "Kundenkonten"
 
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
-msgstr ""
+msgstr "Tabelle (Excel oder CSV) mit allen derzeit registrierten Kundenkonten."
 
 #: pretix/base/exporters/customers.py:64 pretix/base/models/customers.py:81
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:28
@@ -816,8 +812,6 @@ msgid "No"
 msgstr "Nein"
 
 #: pretix/base/exporters/dekodi.py:42 pretix/base/exporters/invoices.py:65
-#, fuzzy
-#| msgid "Invoices"
 msgctxt "export_category"
 msgid "Invoices"
 msgstr "Rechnungen"
@@ -827,6 +821,8 @@ msgid ""
 "Download invoices in a format that can be used by the dekodi NREI conversion "
 "software."
 msgstr ""
+"Alle Rechnungen in einem Format, das von der Konvertierungssoftware dekodi "
+"NREI eingelesen werden kann."
 
 #: pretix/base/exporters/dekodi.py:105
 #, python-brace-format
@@ -894,8 +890,6 @@ msgid "Event data"
 msgstr "Veranstaltungsdaten"
 
 #: pretix/base/exporters/events.py:48
-#, fuzzy
-#| msgid "Event data"
 msgctxt "export_category"
 msgid "Event data"
 msgstr "Veranstaltungsdaten"
@@ -905,6 +899,7 @@ msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
 msgstr ""
+"Tabelle (Excel oder CSV) mit Veranstaltungen in diesem Veranstalterkonto."
 
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/waitinglist.py:114
 #: pretix/base/models/event.py:482 pretix/base/pdf.py:219
@@ -1019,6 +1014,8 @@ msgstr "Alle Rechnungen"
 #: pretix/base/exporters/invoices.py:135
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
 msgstr ""
+"Alle im System erstellten Rechnungen als PDF-Rechnung in einer großen ZIP-"
+"Datei."
 
 #: pretix/base/exporters/invoices.py:186
 msgid "Invoice data"
@@ -1030,6 +1027,9 @@ msgid ""
 "The spreadsheet includes two sheets, one with a line for every invoice, and "
 "one with a line for every position of every invoice."
 msgstr ""
+"Tabelle (Excel oder CSV) mit den Daten aus allen im System erzeugten "
+"Rechnungen. Das erste Tabellenblatt enthält eine Zeile für jede Rechnung, "
+"das zweite eine Zeile für jede Rechnungsposition."
 
 #: pretix/base/exporters/invoices.py:199 pretix/base/shredder.py:390
 #: pretix/control/templates/pretixcontrol/order/index.html:256
@@ -1359,15 +1359,13 @@ msgid "Product data"
 msgstr "Produktdaten"
 
 #: pretix/base/exporters/items.py:51 pretix/base/exporters/orderlist.py:868
-#, fuzzy
-#| msgid "Product data"
 msgctxt "export_category"
 msgid "Product data"
 msgstr "Produktdaten"
 
 #: pretix/base/exporters/items.py:52
 msgid "Download a spreadsheet with details about all products and variations."
-msgstr ""
+msgstr "Tabelle (Excel oder CSV) mit Details zu allen Produkten und Varianten."
 
 #: pretix/base/exporters/items.py:58
 msgid "Product ID"
@@ -1555,6 +1553,8 @@ msgid ""
 "Download a structured JSON representation of all orders. This might be "
 "useful for the import in third-party systems."
 msgstr ""
+"Strukturierte JSON-Datei mit allen Bestellungen. Kann für die Übernahme in "
+"Drittsysteme nützlich sein."
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
@@ -1565,6 +1565,8 @@ msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
 msgstr ""
+"Textdatei mit allen E-Mail-Adressen, die von Käufer*innen und Ticketinhaber*"
+"innen eingesammelt wurden."
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:400
 #: pretix/plugins/reports/exporters.py:582
@@ -1581,6 +1583,10 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
+"Tabelle (Excel oder CSV) mit allen Bestellungen. Das erste Taellenblatt "
+"enthält eine Zeile für jede Bestellung, das zweite eine Zeile für jede "
+"Bestellposition und das dritte eine Zeile für jede zusätzlich erhobene "
+"Gebühr."
 
 #: pretix/base/exporters/orderlist.py:89 pretix/base/models/orders.py:263
 #: pretix/control/navigation.py:253 pretix/control/navigation.py:360
@@ -2024,14 +2030,14 @@ msgid "Invoice address state"
 msgstr "Rechnungsadresse: Bundesstaat"
 
 #: pretix/base/exporters/orderlist.py:786
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Payments and refunds"
 msgstr "Bezahlungen und Erstattungen"
 
 #: pretix/base/exporters/orderlist.py:788
 msgid "Download a spreadsheet of all payments or refunds of every order."
 msgstr ""
+"Tabelle (Excel oder CSV) mit den Daten aller Zahlungen und Erstattungen zu "
+"allen Bestellungen."
 
 #: pretix/base/exporters/orderlist.py:797
 msgid "Payment states"
@@ -2112,6 +2118,8 @@ msgstr "Kontingent-Verfügbarkeiten"
 msgid ""
 "Download a spreadsheet of all quotas including their current availability."
 msgstr ""
+"Tabelle (Excel oder CSV) mit allen Kontingenten sowie deren aktueller "
+"Verfügbarkeit."
 
 #: pretix/base/exporters/orderlist.py:874
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
@@ -2162,15 +2170,13 @@ msgstr "Wertgutschein-Transaktionen"
 
 #: pretix/base/exporters/orderlist.py:923
 #: pretix/base/exporters/orderlist.py:1042
-#, fuzzy
-#| msgid "Gift cards"
 msgctxt "export_category"
 msgid "Gift cards"
 msgstr "Wertgutscheine"
 
 #: pretix/base/exporters/orderlist.py:924
 msgid "Download a spreadsheet of all gift card transactions."
-msgstr ""
+msgstr "Tabelle (Excel oder CSV) mit allen Wertgutschein-Buchungen."
 
 #: pretix/base/exporters/orderlist.py:968
 #: pretix/base/exporters/orderlist.py:1013
@@ -2239,6 +2245,8 @@ msgstr "Wertgutschein-Einlösungen"
 msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
 msgstr ""
+"Tabelle (Excel oder CSV) mit allen Zahlungen und Erstattungen, die "
+"Wertgutscheine involvieren."
 
 #: pretix/base/exporters/orderlist.py:1013
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
@@ -2253,6 +2261,7 @@ msgstr "Wertgutscheine"
 #: pretix/base/exporters/orderlist.py:1043
 msgid "Download a spreadsheet of all gift cards including their current value."
 msgstr ""
+"Tabelle (Excel oder CSV) mit allen Wertgutscheinen und deren aktuellen Wert."
 
 #: pretix/base/exporters/orderlist.py:1050
 msgid "Show value at"
@@ -2339,15 +2348,13 @@ msgid "Last invoice date of order"
 msgstr "Datum der letzten Rechnung dieser Bestellung"
 
 #: pretix/base/exporters/waitinglist.py:42
-#, fuzzy
-#| msgid "Waiting list"
 msgctxt "export_category"
 msgid "Waiting list"
 msgstr "Warteliste"
 
 #: pretix/base/exporters/waitinglist.py:43
 msgid "Download a spread sheet with all your waiting list data."
-msgstr ""
+msgstr "Tabelle (Excel oder CSV) mit allen Daten der Warteliste."
 
 #: pretix/base/exporters/waitinglist.py:49
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
@@ -19097,16 +19104,12 @@ msgstr "Datenexport"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:15
 #: pretix/control/templates/pretixcontrol/organizers/export.html:15
-#, fuzzy
-#| msgid "Start export"
 msgid "Other exports"
-msgstr "Exportieren"
+msgstr "Sonstige Datenexporte"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:23
-#, fuzzy
-#| msgid "Attachment for new orders"
 msgid "Recommended for new users"
-msgstr "Anhang für neue Bestellungen"
+msgstr "Empfohlen für neue Benutzer*innen"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:26
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:26
@@ -23532,15 +23535,13 @@ msgstr "Teilnehmer-Badges"
 
 #: pretix/plugins/badges/exporters.py:249
 #: pretix/plugins/ticketoutputpdf/exporters.py:67
-#, fuzzy
-#| msgid "All directions"
 msgctxt "export_category"
 msgid "PDF collections"
-msgstr "Alle Richtungen"
+msgstr "PDF-Sammlungen"
 
 #: pretix/plugins/badges/exporters.py:250
 msgid "Download all attendee badges as one large PDF for printing."
-msgstr ""
+msgstr "Alle Teilnehmer*innen-Badges in einer großen PDF-Datei für den Druck."
 
 #: pretix/plugins/badges/exporters.py:271 pretix/plugins/sendmail/models.py:198
 #: pretix/plugins/ticketoutputpdf/exporters.py:78
@@ -24550,17 +24551,17 @@ msgstr "Check-in-Liste (PDF)"
 #: pretix/plugins/checkinlists/exporters.py:268
 #: pretix/plugins/checkinlists/exporters.py:428
 #: pretix/plugins/checkinlists/exporters.py:612
-#, fuzzy
-#| msgid "Check-in"
 msgctxt "export_category"
 msgid "Check-in"
-msgstr "Check-ins"
+msgstr "Check-in"
 
 #: pretix/plugins/checkinlists/exporters.py:269
 msgid ""
 "Download a PDF version of a check-in list that can be used to check people "
 "in at the event without digital methods."
 msgstr ""
+"PDF-Version der Check-in-Liste, die genutzt werden kann um Personen ohne "
+"digitale Prozesse einzuchecken."
 
 #. Translators: maximum 5 characters
 #: pretix/plugins/checkinlists/exporters.py:336
@@ -24573,6 +24574,8 @@ msgid ""
 "Download a spreadsheet with all attendees that are included in a check-in "
 "list."
 msgstr ""
+"Tabelle (Excel oder CSV) mit allen Teilnehmer*innen, die in einer Check-in-"
+"Liste zutrittsberechtigt sind."
 
 #: pretix/plugins/checkinlists/exporters.py:452
 msgid "Checked out"
@@ -24598,6 +24601,8 @@ msgid ""
 "Download a spreadsheet with one line for every scan that happened at your "
 "check-in stations."
 msgstr ""
+"Tabelle (Excel oder CSV) mit einer Zeile für jeden Scan an einer Check-in-"
+"Station."
 
 #: pretix/plugins/checkinlists/exporters.py:632
 msgid "Offline"
@@ -25188,9 +25193,6 @@ msgid "Order overview (PDF)"
 msgstr "Bestellübersicht (PDF)"
 
 #: pretix/plugins/reports/exporters.py:202
-#, fuzzy
-#| msgctxt "cookie_usage"
-#| msgid "Analytics"
 msgctxt "export_category"
 msgid "Analysis"
 msgstr "Analyse"
@@ -25198,6 +25200,8 @@ msgstr "Analyse"
 #: pretix/plugins/reports/exporters.py:203
 msgid "Download a PDF version of the key sales numbers per ticket type."
 msgstr ""
+"PDF-Variante der Veranstaltungsübersicht mit den wichtigsten Verkaufszahlen "
+"pro Tickettyp."
 
 #: pretix/plugins/reports/exporters.py:232
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:58
@@ -25227,14 +25231,12 @@ msgid "#"
 msgstr "#"
 
 #: pretix/plugins/reports/exporters.py:390
-#, fuzzy
-#| msgid "Check-in list (PDF)"
 msgid "Tax split list (PDF)"
-msgstr "Check-in-Liste (PDF)"
+msgstr "Steuer-Aufteilungsliste (PDF)"
 
 #: pretix/plugins/reports/exporters.py:392
 msgid "Download a PDF list with the tax amounts included in each order."
-msgstr ""
+msgstr "PDF-Liste mit den Steuersummen jeder einzelnen Bestellung."
 
 #: pretix/plugins/reports/exporters.py:469
 #, python-brace-format
@@ -25256,14 +25258,13 @@ msgid "Tax"
 msgstr "Steuer"
 
 #: pretix/plugins/reports/exporters.py:563
-#, fuzzy
-#| msgid "Default list"
 msgid "Tax split list"
-msgstr "Standard-Liste"
+msgstr "Steuer-Aufteilungsliste"
 
 #: pretix/plugins/reports/exporters.py:565
 msgid "Download a spreadsheet with the tax amounts included in each order."
 msgstr ""
+"Tabelle (Excel oder CSV) mit den Steuersummen jeder einzelnen Bestellung."
 
 #: pretix/plugins/reports/exporters.py:571
 msgid "Taxes by country"
@@ -26526,7 +26527,7 @@ msgstr "Standard-Layout"
 #: pretix/plugins/ticketoutputpdf/exporters.py:68
 msgid ""
 "Download PDF versions of all tickets in your event as one large PDF file."
-msgstr ""
+msgstr "Die PDF-Versionen aller Tickets in einer großen PDF-Datei."
 
 #: pretix/plugins/ticketoutputpdf/forms.py:47
 #, python-brace-format
