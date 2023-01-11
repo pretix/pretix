@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-11 12:07+0000\n"
-"PO-Revision-Date: 2023-01-11 12:48+0000\n"
+"PO-Revision-Date: 2023-01-11 12:51+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -6053,7 +6053,7 @@ msgstr "31.05.2016 19:00"
 
 #: pretix/base/pdf.py:302
 msgid "Event admission time"
-msgstr "Einlassuhrzeit"
+msgstr "Einlass-Uhrzeit"
 
 #: pretix/base/pdf.py:303 pretix/base/pdf.py:404
 msgid "19:00"
