@@ -38,7 +38,8 @@ from decimal import Decimal
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db.models import Prefetch
 from django.dispatch import receiver
-from django.utils.translation import gettext_lazy, pgettext_lazy
+from django.utils.functional import lazy
+from django.utils.translation import gettext, gettext_lazy, pgettext_lazy
 
 from ..exporter import BaseExporter
 from ..models import ItemMetaValue, ItemVariation, ItemVariationMetaValue
@@ -47,7 +48,7 @@ from ..signals import register_data_exporters
 
 class JSONExporter(BaseExporter):
     identifier = 'json'
-    verbose_name = 'Order data (JSON)'
+    verbose_name = lazy(lambda *args: gettext('Order data') + ' (JSON)', str)()
     category = pgettext_lazy('export_category', 'Order data')
     description = gettext_lazy('Download a structured JSON representation of all orders. This might be useful for the '
                                'import in third-party systems.')
