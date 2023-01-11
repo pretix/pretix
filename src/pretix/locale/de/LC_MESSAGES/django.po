@@ -2033,7 +2033,6 @@ msgid "Payments and refunds"
 msgstr "Bezahlungen und Erstattungen"
 
 #: pretix/base/exporters/orderlist.py:788
-#, fuzzy
 msgid "Download a spreadsheet of all payments or refunds of every order."
 msgstr ""
 "Tabelle (Excel oder CSV) mit den Daten aller Zahlungen und Erstattungen zu "
