@@ -76,6 +76,10 @@ The exporter class
 
       This is an abstract attribute, you **must** override this!
 
+   .. autoattribute:: description
+
+   .. autoattribute:: category
+
    .. autoattribute:: export_form_fields
 
    .. automethod:: render

@@ -1564,7 +1564,10 @@ class ExportMixin:
                 self.request.user.has_organizer_permission(self.request.organizer, ex.organizer_required_permission, self.request)
             )
         ]
-        return sorted(raw_exporters, key=lambda ex: str(ex.verbose_name).lower())
+        return sorted(
+            raw_exporters,
+            key=lambda ex: (0 if ex.category else 1, ex.category or "", str(ex.verbose_name).lower())
+        )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

@@ -44,7 +44,7 @@ from django.db.models import CharField, Exists, F, OuterRef, Q, Subquery, Sum
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
-from django.utils.translation import gettext, gettext_lazy as _, pgettext
+from django.utils.translation import gettext, gettext_lazy as _, pgettext, pgettext_lazy
 
 from pretix.base.models import Invoice, InvoiceLine, OrderPayment
 

@@ -2240,7 +2240,7 @@ class ExportMixin:
         responses = register_data_exporters.send(self.request.event)
         return sorted(
             [response(self.request.event, self.request.organizer) for r, response in responses if response],
-            key=lambda ex: str(ex.verbose_name).lower()
+            key=lambda ex: (0 if ex.category else 1, ex.category or "", str(ex.verbose_name).lower())
         )
 
     @cached_property

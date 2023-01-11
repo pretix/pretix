@@ -7,16 +7,24 @@
     <h1>
         {% trans "Data export" %}
     </h1>
-    <div class="list-group large-link-group">
-        {% for e in exporters %}
-            <a class="list-group-item" href="?identifier={{ e.identifier }}">
-                <h4>{{ e.verbose_name }}</h4>
-                {% if e.description %}
-                    <p>
-                        {{ e.description }}
-                    </p>
-                {% endif %}
-            </a>
-        {% endfor %}
-    </div>
+    {% regroup exporters by category as category_list %}
+    {% for c, c_ex in category_list %}
+        {% if c %}
+            <h2>{{ c }}</h2>
+        {% else %}
+            <h2>{% trans "Other exports" %}</h2>
+        {% endif %}
+        <div class="list-group large-link-group">
+            {% for e in c_ex %}
+                <a class="list-group-item" href="?identifier={{ e.identifier }}">
+                    <h4>{{ e.verbose_name }}</h4>
+                    {% if e.description %}
+                        <p>
+                            {{ e.description }}
+                        </p>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </div>
+    {% endfor %}
 {% endblock %}
