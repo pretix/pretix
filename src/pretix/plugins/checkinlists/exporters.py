@@ -45,7 +45,9 @@ from django.db.models.functions import Coalesce, NullIf
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.timezone import is_aware, make_aware
-from django.utils.translation import gettext as _, gettext_lazy, pgettext
+from django.utils.translation import (
+    gettext as _, gettext_lazy, pgettext, pgettext_lazy,
+)
 from pytz import UTC
 from reportlab.lib.units import mm
 from reportlab.platypus import Flowable, Paragraph, Spacer, Table, TableStyle
@@ -263,6 +265,9 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
     name = "overview"
     identifier = 'checkinlistpdf'
     verbose_name = gettext_lazy('Check-in list (PDF)')
+    category = pgettext_lazy('export_category', 'Check-in')
+    description = gettext_lazy("Download a PDF version of a check-in list that can be used to check people in at the "
+                               "event without digital methods.")
 
     @property
     def export_form_fields(self):
@@ -420,6 +425,9 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
     name = "overview"
     identifier = 'checkinlist'
     verbose_name = gettext_lazy('Check-in list')
+    category = pgettext_lazy('export_category', 'Check-in')
+    description = gettext_lazy("Download a spreadsheet with all attendees that are included in a check-in list.")
+    featured = True
 
     @property
     def additional_form_fields(self):
@@ -601,6 +609,9 @@ class CheckinLogList(ListExporter):
     name = "checkinlog"
     identifier = 'checkinlog'
     verbose_name = gettext_lazy('Check-in log (all scans)')
+    category = pgettext_lazy('export_category', 'Check-in')
+    description = gettext_lazy("Download a spreadsheet with one line for every scan that happened at your check-in "
+                               "stations.")
 
     @property
     def additional_form_fields(self):

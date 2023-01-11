@@ -36,7 +36,7 @@ from collections import OrderedDict
 
 from django import forms
 from django.dispatch import receiver
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.models import OrderPosition
 
@@ -50,6 +50,8 @@ from ..signals import (
 class MailExporter(BaseExporter):
     identifier = 'mailaddrs'
     verbose_name = _('Email addresses (text file)')
+    category = pgettext_lazy('export_category', 'Order data')
+    description = _("Download a text file with all email addresses collected either from buyers or from ticket holders.")
 
     def render(self, form_data: dict):
         qs = Order.objects.filter(event__in=self.events, status__in=form_data['status']).prefetch_related('event')

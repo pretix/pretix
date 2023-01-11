@@ -22,7 +22,7 @@
 from django.db.models import Prefetch
 from django.dispatch import receiver
 from django.utils.formats import date_format
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from openpyxl.styles import Alignment
 from openpyxl.utils import get_column_letter
 
@@ -48,6 +48,8 @@ def _min(a1, a2):
 class ItemDataExporter(ListExporter):
     identifier = 'itemdata'
     verbose_name = _('Product data')
+    category = pgettext_lazy('export_category', 'Product data')
+    description = _('Download a spreadsheet with details about all products and variations.')
 
     def iterate_list(self, form_data):
         locales = self.event.settings.locales

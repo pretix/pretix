@@ -48,7 +48,9 @@ from django.db.models import DateTimeField, Max, OuterRef, Subquery, Sum
 from django.template.defaultfilters import floatformat
 from django.utils.formats import date_format, localize
 from django.utils.timezone import get_current_timezone, make_aware, now
-from django.utils.translation import gettext as _, gettext_lazy, pgettext
+from django.utils.translation import (
+    gettext as _, gettext_lazy, pgettext, pgettext_lazy,
+)
 from django_countries.fields import Country
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER
@@ -197,6 +199,9 @@ class OverviewReport(Report):
     name = "overview"
     identifier = 'pdfreport'
     verbose_name = gettext_lazy('Order overview (PDF)')
+    category = pgettext_lazy('export_category', 'Analysis')
+    description = gettext_lazy('Download a PDF version of the key sales numbers per ticket type.')
+    featured = True
 
     @property
     def pagesize(self):
@@ -382,7 +387,9 @@ class OverviewReport(Report):
 class OrderTaxListReportPDF(Report):
     name = "ordertaxlist"
     identifier = 'ordertaxes'
-    verbose_name = gettext_lazy('List of orders with taxes (PDF)')
+    verbose_name = gettext_lazy('Tax split list (PDF)')
+    category = pgettext_lazy('export_category', 'Order data')
+    description = gettext_lazy("Download a PDF list with the tax amounts included in each order.")
 
     @property
     def export_form_fields(self):
@@ -553,7 +560,9 @@ class OrderTaxListReportPDF(Report):
 
 class OrderTaxListReport(MultiSheetListExporter):
     identifier = 'ordertaxeslist'
-    verbose_name = gettext_lazy('List of orders with taxes')
+    verbose_name = gettext_lazy('Tax split list')
+    category = pgettext_lazy('export_category', 'Order data')
+    description = gettext_lazy("Download a spreadsheet with the tax amounts included in each order.")
 
     @property
     def sheets(self):

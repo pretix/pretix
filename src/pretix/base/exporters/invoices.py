@@ -44,7 +44,9 @@ from django.db.models import CharField, Exists, F, OuterRef, Q, Subquery, Sum
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
-from django.utils.translation import gettext, gettext_lazy as _, pgettext
+from django.utils.translation import (
+    gettext, gettext_lazy as _, pgettext, pgettext_lazy,
+)
 
 from pretix.base.models import Invoice, InvoiceLine, OrderPayment
 
@@ -60,6 +62,7 @@ from ..signals import (
 
 
 class InvoiceExporterMixin:
+    category = pgettext_lazy('export_category', 'Invoices')
 
     @property
     def invoice_exporter_form_fields(self):
@@ -129,6 +132,7 @@ class InvoiceExporterMixin:
 class InvoiceExporter(InvoiceExporterMixin, BaseExporter):
     identifier = 'invoices'
     verbose_name = _('All invoices')
+    description = _('Download all invoices created by the system as a ZIP file of PDF files.')
 
     def render(self, form_data: dict, output_file=None):
         qs = self.invoices_queryset(form_data).filter(shredded=False)
@@ -180,6 +184,10 @@ class InvoiceExporter(InvoiceExporterMixin, BaseExporter):
 class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
     identifier = 'invoicedata'
     verbose_name = _('Invoice data')
+    description = _('Download a spreadsheet with the data of all invoices created by the system. The spreadsheet '
+                    'includes two sheets, one with a line for every invoice, and one with a line for every position of '
+                    'every invoice.')
+    featured = True
 
     @property
     def additional_form_fields(self):

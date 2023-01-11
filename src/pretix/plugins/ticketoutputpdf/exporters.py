@@ -44,7 +44,7 @@ from django.db import DataError, models
 from django.db.models import OuterRef, Q, Subquery
 from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import make_aware
-from django.utils.translation import gettext as _, gettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
 from PyPDF2 import PdfMerger
 
 from pretix.base.exporter import BaseExporter
@@ -63,7 +63,9 @@ logger = logging.getLogger(__name__)
 
 class AllTicketsPDF(BaseExporter):
     name = "alltickets"
-    verbose_name = gettext_lazy("All PDF tickets in one file")
+    verbose_name = gettext_lazy("Tickets")
+    category = pgettext_lazy('export_category', 'PDF collections')
+    description = gettext_lazy("Download PDF versions of all tickets in your event as one large PDF file.")
     identifier = "pdfoutput_all_tickets"
 
     @property

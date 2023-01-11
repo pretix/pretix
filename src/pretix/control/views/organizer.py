@@ -1507,29 +1507,13 @@ class GiftCardUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
 
 class ExportMixin:
     @cached_property
-    def exporters(self):
-        exporters = []
-        events = self.request.user.get_events_with_permission('can_view_orders', request=self.request).filter(
-            organizer=self.request.organizer
-        )
-        responses = register_multievent_data_exporters.send(self.request.organizer)
+    def exporter(self):
         id = self.request.GET.get("identifier") or self.request.POST.get("exporter")
-        raw_exporters = [
-            response(Event.objects.none() if issubclass(response, OrganizerLevelExportMixin) else events, self.request.organizer)
-            for r, response in responses
-            if response
-        ]
-        raw_exporters = [
-            ex for ex in raw_exporters
-            if (
-                not isinstance(ex, OrganizerLevelExportMixin) or
-                self.request.user.has_organizer_permission(self.request.organizer, ex.organizer_required_permission, self.request)
-            )
-        ]
-        for ex in sorted(raw_exporters, key=lambda ex: str(ex.verbose_name)):
-            if id and ex.identifier != id:
+        if not id:
+            return None
+        for ex in self.exporters:
+            if id != ex.identifier:
                 continue
-
             # Use form parse cycle to generate useful defaults
             test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
             test_form.fields = ex.export_form_fields
@@ -1548,8 +1532,8 @@ class ExportMixin:
                 ex.form.fields.update([
                     ('events',
                      forms.ModelMultipleChoiceField(
-                         queryset=events,
-                         initial=events,
+                         queryset=self.events,
+                         initial=self.events,
                          widget=forms.CheckboxSelectMultiple(
                              attrs={'class': 'scrolling-multiple-choice'}
                          ),
@@ -1557,11 +1541,37 @@ class ExportMixin:
                          required=True
                      )),
                 ])
-            exporters.append(ex)
-        return exporters
+            return ex
+
+    @cached_property
+    def events(self):
+        return self.request.user.get_events_with_permission('can_view_orders', request=self.request).filter(
+            organizer=self.request.organizer
+        )
+
+    @cached_property
+    def exporters(self):
+        responses = register_multievent_data_exporters.send(self.request.organizer)
+        raw_exporters = [
+            response(Event.objects.none() if issubclass(response, OrganizerLevelExportMixin) else self.events, self.request.organizer)
+            for r, response in responses
+            if response
+        ]
+        raw_exporters = [
+            ex for ex in raw_exporters
+            if (
+                not isinstance(ex, OrganizerLevelExportMixin) or
+                self.request.user.has_organizer_permission(self.request.organizer, ex.organizer_required_permission, self.request)
+            )
+        ]
+        return sorted(
+            raw_exporters,
+            key=lambda ex: (0 if ex.category else 1, ex.category or "", 0 if ex.featured else 1, str(ex.verbose_name).lower())
+        )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
+        ctx['exporter'] = self.exporter
         ctx['exporters'] = self.exporters
         return ctx
 
@@ -1581,12 +1591,6 @@ class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, T
         return reverse('control:organizer.export', kwargs={
             'organizer': self.request.organizer.slug
         })
-
-    @cached_property
-    def exporter(self):
-        for ex in self.exporters:
-            if ex.identifier == self.request.POST.get("exporter"):
-                return ex
 
     def get(self, request, *args, **kwargs):
         if 'async_id' in request.GET and settings.HAS_CELERY:
@@ -1621,7 +1625,10 @@ class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, T
 
 
 class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, TemplateView):
-    template_name = 'pretixcontrol/organizers/export.html'
+    def get_template_names(self):
+        if self.exporter:
+            return ['pretixcontrol/organizers/export_form.html']
+        return ['pretixcontrol/organizers/export.html']
 
 
 class GateListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):

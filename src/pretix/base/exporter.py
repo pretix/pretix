@@ -36,7 +36,7 @@ import io
 import tempfile
 from collections import OrderedDict, namedtuple
 from decimal import Decimal
-from typing import Tuple
+from typing import Optional, Tuple
 
 import pytz
 from defusedcsv import csv
@@ -83,6 +83,27 @@ class BaseExporter:
         self-explaining. Good examples include 'Orders as JSON' or 'Orders as Microsoft Excel'.
         """
         raise NotImplementedError()  # NOQA
+
+    @property
+    def description(self) -> str:
+        """
+        A description for this exporter.
+        """
+        return ""
+
+    @property
+    def category(self) -> Optional[str]:
+        """
+        A category name for this exporter, or ``None``.
+        """
+        return None
+
+    @property
+    def featured(self) -> bool:
+        """
+        If ``True``, this exporter will be highlighted.
+        """
+        return False
 
     @property
     def identifier(self) -> str:

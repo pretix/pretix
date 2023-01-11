@@ -35,7 +35,7 @@
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from ...control.forms.filter import get_all_payment_providers
 from ..exporter import ListExporter
@@ -45,6 +45,8 @@ from ..signals import register_multievent_data_exporters
 class EventDataExporter(ListExporter):
     identifier = 'eventdata'
     verbose_name = _('Event data')
+    category = pgettext_lazy('export_category', 'Event data')
+    description = _('Download a spreadsheet with information on all events in this organizer account.')
 
     @cached_property
     def providers(self):

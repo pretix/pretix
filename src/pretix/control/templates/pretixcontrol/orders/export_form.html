@@ -1,0 +1,30 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load order_overview %}
+{% block title %}{% trans "Data export" %}{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Data export" %}
+        {% if exporter %}
+            <small>
+                {{ exporter.verbose_name }}
+            </small>
+        {% endif %}
+    </h1>
+    {% if exporter.description %}
+        <p class="help-block">{{ exporter.description }}</p>
+    {% endif %}
+    <form action="{% url "control:event.orders.export.do" event=request.event.slug organizer=request.organizer.slug %}"
+          method="post" class="form-horizontal" data-asynctask data-asynctask-download
+          data-asynctask-long>
+        {% csrf_token %}
+        <input type="hidden" name="exporter" value="{{ exporter.identifier }}"/>
+        {% bootstrap_form exporter.form layout='control' %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Start export" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

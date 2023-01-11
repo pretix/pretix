@@ -39,6 +39,8 @@ from ..signals import (
 class WaitingListExporter(ListExporter):
     identifier = 'waitinglist'
     verbose_name = _('Waiting list')
+    category = pgettext_lazy('export_category', 'Waiting list')
+    description = _('Download a spread sheet with all your waiting list data.')
 
     # map selected status to label and queryset-filter
     status_filters = [

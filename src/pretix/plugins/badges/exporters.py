@@ -49,7 +49,7 @@ from django.db import DataError, models
 from django.db.models import Exists, OuterRef, Q, Subquery
 from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import make_aware
-from django.utils.translation import gettext as _, gettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
 from PyPDF2 import PdfMerger, PdfReader, PdfWriter, Transformation
 from PyPDF2.generic import RectangleObject
 from reportlab.lib import pagesizes
@@ -246,6 +246,9 @@ def render_pdf(event, positions, opt):
 class BadgeExporter(BaseExporter):
     identifier = "badges"
     verbose_name = _("Attendee badges")
+    category = pgettext_lazy('export_category', 'PDF collections')
+    description = gettext_lazy('Download all attendee badges as one large PDF for printing.')
+    featured = True
 
     @property
     def export_form_fields(self):

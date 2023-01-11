@@ -2237,11 +2237,19 @@ class OrderGo(EventPermissionRequiredMixin, View):
 class ExportMixin:
     @cached_property
     def exporters(self):
-        exporters = []
         responses = register_data_exporters.send(self.request.event)
+        return sorted(
+            [response(self.request.event, self.request.organizer) for r, response in responses if response],
+            key=lambda ex: (0 if ex.category else 1, ex.category or "", 0 if ex.featured else 1, str(ex.verbose_name).lower())
+        )
+
+    @cached_property
+    def exporter(self):
         id = self.request.GET.get("identifier") or self.request.POST.get("exporter")
-        for ex in sorted([response(self.request.event, self.request.organizer) for r, response in responses if response], key=lambda ex: str(ex.verbose_name)):
-            if id and ex.identifier != id:
+        if not id:
+            return None
+        for ex in self.exporters:
+            if id != ex.identifier:
                 continue
 
             # Use form parse cycle to generate useful defaults
@@ -2258,12 +2266,12 @@ class ExportMixin:
                 initial=initial
             )
             ex.form.fields = ex.export_form_fields
-            exporters.append(ex)
-        return exporters
+            return ex
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['exporters'] = self.exporters
+        ctx['exporter'] = self.exporter
         return ctx
 
 
@@ -2287,16 +2295,6 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, Templ
 
     def get_check_url(self, task_id, ajax):
         return self.request.path + '?async_id=%s&exporter=%s' % (task_id, self.exporter.identifier) + ('&ajax=1' if ajax else '')
-
-    @cached_property
-    def exporter(self):
-        if self.request.method == "POST":
-            identifier = self.request.POST.get("exporter")
-        else:
-            identifier = self.request.GET.get("exporter")
-        for ex in self.exporters:
-            if ex.identifier == identifier:
-                return ex
 
     def get(self, request, *args, **kwargs):
         if 'async_id' in request.GET and settings.HAS_CELERY:
@@ -2324,7 +2322,11 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, Templ
 
 class ExportView(EventPermissionRequiredMixin, ExportMixin, TemplateView):
     permission = 'can_view_orders'
-    template_name = 'pretixcontrol/orders/export.html'
+
+    def get_template_names(self):
+        if self.exporter:
+            return ['pretixcontrol/orders/export_form.html']
+        return ['pretixcontrol/orders/export.html']
 
 
 class RefundList(EventPermissionRequiredMixin, PaginationMixin, ListView):
