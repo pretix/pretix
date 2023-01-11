@@ -33,6 +33,7 @@ customizable
 Customizations
 customizations
 datetime
+dekodi
 deliverability
 DSS
 DNS
@@ -75,6 +76,7 @@ Multibanco
 Mx
 MyBank
 multiline
+NREI
 OpenCage
 OpenID
 OpenStreetMap
@@ -152,4 +154,5 @@ XXXX
 XXXXX
 Yubikey
 Zimpler
+ZIP
 ZVT

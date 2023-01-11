@@ -13,6 +13,7 @@ App
 Apps
 APM
 as
+Aufteilungsliste
 auschecken
 Ausgangsscan
 Ausgangsscans
@@ -68,6 +69,7 @@ Cronjob
 csv
 Customer
 Debug
+dekodi
 deliverability
 DNS
 Di
@@ -85,7 +87,8 @@ Eingangsscan
 Einlassbuchung
 Einlassdatum
 Einlasskontrolle
-Einlassuhrzeit
+Einlassuhrzeita
+einzuchecken
 email
 Enterprise
 EPC
@@ -176,6 +179,7 @@ MwSt
 MyBank
 name
 Nr
+NREI
 number
 OK
 On
@@ -350,9 +354,11 @@ Zehnerkarten
 zeitbasiert
 Zeitslotbuchung
 Zimpler
+ZIP
 zubuchbaren
 zurückbuchen
 zurückgeleitet
 zurückwechseln
+zutrittsberechtigt
 zzgl
 ZVT
