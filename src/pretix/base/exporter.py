@@ -85,6 +85,13 @@ class BaseExporter:
         raise NotImplementedError()  # NOQA
 
     @property
+    def description(self) -> str:
+        """
+        A description for this exporter.
+        """
+        return ""
+
+    @property
     def identifier(self) -> str:
         """
         A short and unique identifier for this exporter.
