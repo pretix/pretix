@@ -44,6 +44,7 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from pytz import UTC
+from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
     Event, InvoiceAddress, Order, OrderPosition, Organizer, SeatingPlan,
@@ -1351,7 +1352,7 @@ def test_patch_event_settings_file(token_client, organizer, event):
         '/api/v1/upload',
         data={
             'media_type': 'image/png',
-            'file': ContentFile('file.png', 'invalid png content')
+            'file': ContentFile(SAMPLE_PNG)
         },
         format='upload',
         HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',
@@ -1363,7 +1364,7 @@ def test_patch_event_settings_file(token_client, organizer, event):
         '/api/v1/upload',
         data={
             'media_type': 'application/pdf',
-            'file': ContentFile('file.pdf', 'invalid pdf content')
+            'file': ContentFile('invalid pdf content')
         },
         format='upload',
         HTTP_CONTENT_DISPOSITION='attachment; filename="file.pdf"',

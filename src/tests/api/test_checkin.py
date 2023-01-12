@@ -32,6 +32,7 @@ from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
 from pytz import UTC
+from tests.const import SAMPLE_PNG
 
 from pretix.api.serializers.item import QuestionSerializer
 from pretix.base.models import (
@@ -1057,7 +1058,7 @@ def test_question_upload(token_client, organizer, clist, event, order, question)
         '/api/v1/upload',
         data={
             'media_type': 'image/png',
-            'file': ContentFile('file.png', 'invalid png content')
+            'file': ContentFile(SAMPLE_PNG)
         },
         format='upload',
         HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',

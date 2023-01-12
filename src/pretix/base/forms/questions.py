@@ -531,7 +531,7 @@ class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileFiel
                     code='aspect_ratio_not_3_by_4',
                 )
         except Exception as exc:
-            logger.exception('foo')
+            logger.exception('Could not parse image')
             # Pillow doesn't recognize it as an image.
             if isinstance(exc, ValidationError):
                 raise

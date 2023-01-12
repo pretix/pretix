@@ -29,6 +29,7 @@ from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from pytz import UTC
+from tests.const import SAMPLE_PNG
 
 from pretix.base.models import Question, SeatingPlan
 from pretix.base.models.orders import CartPosition
@@ -467,7 +468,7 @@ def test_cartpos_create_answer_validation(token_client, organizer, event, item, 
         '/api/v1/upload',
         data={
             'media_type': 'image/png',
-            'file': ContentFile('file.png', 'invalid png content')
+            'file': ContentFile(SAMPLE_PNG)
         },
         format='upload',
         HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',

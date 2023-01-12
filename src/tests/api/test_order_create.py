@@ -32,6 +32,7 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from pytz import UTC
+from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
     InvoiceAddress, Order, OrderPosition, Question, SeatingPlan,
@@ -1424,7 +1425,7 @@ def test_order_create_answer_validation(token_client, organizer, event, item, qu
         '/api/v1/upload',
         data={
             'media_type': 'image/png',
-            'file': ContentFile('file.png', 'invalid png content')
+            'file': ContentFile(SAMPLE_PNG)
         },
         format='upload',
         HTTP_CONTENT_DISPOSITION='attachment; filename="file.png"',

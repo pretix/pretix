@@ -21,6 +21,7 @@
 #
 import datetime
 
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils.timezone import now
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from rest_framework.authentication import SessionAuthentication
@@ -33,6 +34,9 @@ from pretix.api.auth.device import DeviceTokenAuthentication
 from pretix.api.auth.permission import AnyAuthenticatedClientPermission
 from pretix.api.auth.token import TeamTokenAuthentication
 from pretix.base.models import CachedFile
+from pretix.helpers.images import (
+    IMAGE_TYPES, validate_uploaded_file_for_valid_image,
+)
 
 ALLOWED_TYPES = {
     'image/gif': {'.gif'},
@@ -61,6 +65,13 @@ class UploadView(APIView):
                 name=file_obj.name,
                 type=content_type
             ))
+
+        if content_type in IMAGE_TYPES:
+            try:
+                validate_uploaded_file_for_valid_image(file_obj)
+            except DjangoValidationError as e:
+                raise ValidationError(e.message)
+
         cf = CachedFile.objects.create(
             expires=now() + datetime.timedelta(days=1),
             date=now(),
