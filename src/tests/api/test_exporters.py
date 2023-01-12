@@ -72,19 +72,11 @@ SAMPLE_EXPORTER_CONFIG = {
             "required": False
         },
         {
-            "name": "date_from",
+            "name": "date_range",
             "required": False
         },
         {
-            "name": "date_to",
-            "required": False
-        },
-        {
-            "name": "event_date_from",
-            "required": False
-        },
-        {
-            "name": "event_date_to",
+            "name": "event_date_range",
             "required": False
         },
     ]

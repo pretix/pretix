@@ -34,16 +34,14 @@
 
 import logging
 from collections import OrderedDict
-from datetime import datetime, time, timedelta
 from io import BytesIO
 
-import dateutil.parser
 from django import forms
 from django.core.files.base import ContentFile
 from django.db import DataError, models
 from django.db.models import OuterRef, Q, Subquery
 from django.db.models.functions import Cast, Coalesce
-from django.utils.timezone import make_aware
+from django.utils.timezone import now
 from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
 from PyPDF2 import PdfMerger
 
@@ -55,6 +53,10 @@ from pretix.base.models import (
 from pretix.base.settings import PERSON_NAME_SCHEMES
 
 from ...base.services.export import ExportError
+from ...base.timeframes import (
+    DateFrameField,
+    resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
+)
 from ...helpers.templatetags.jsonfield import JSONExtract
 from .ticketoutput import PdfTicketOutput
 
@@ -78,19 +80,12 @@ class AllTicketsPDF(BaseExporter):
                      label=_('Include pending orders'),
                      required=False
                  )),
-                ('date_from',
-                 forms.DateField(
-                     label=_('Start date'),
-                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                ('date_range',
+                 DateFrameField(
+                     label=_('Date range'),
+                     include_future_frames=True,
                      required=False,
-                     help_text=_('Only include tickets for dates on or after this date.')
-                 )),
-                ('date_to',
-                 forms.DateField(
-                     label=_('End date'),
-                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
-                     required=False,
-                     help_text=_('Only include tickets for dates on or before this date.')
+                     help_text=_('Only include tickets for dates within this range.')
                  )),
                 ('order_by',
                  forms.ChoiceField(
@@ -117,8 +112,7 @@ class AllTicketsPDF(BaseExporter):
         )
 
         if not self.is_multievent and not self.event.has_subevents:
-            del d['date_from']
-            del d['date_to']
+            del d['date_range']
 
         return d
 
@@ -135,19 +129,10 @@ class AllTicketsPDF(BaseExporter):
         else:
             qs = qs.filter(order__status__in=[Order.STATUS_PAID])
 
-        if form_data.get('date_from'):
-            dt = make_aware(datetime.combine(
-                dateutil.parser.parse(form_data['date_from']).date(),
-                time(hour=0, minute=0, second=0)
-            ), self.timezone)
-            qs = qs.filter(Q(subevent__date_from__gte=dt) | Q(subevent__isnull=True, order__event__date_from__gte=dt))
-
-        if form_data.get('date_to'):
-            dt = make_aware(datetime.combine(
-                dateutil.parser.parse(form_data['date_to']).date() + timedelta(days=1),
-                time(hour=0, minute=0, second=0)
-            ), self.timezone)
-            qs = qs.filter(Q(subevent__date_from__lt=dt) | Q(subevent__isnull=True, order__event__date_from__lt=dt))
+        if form_data.get('date_range'):
+            dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['date_range'], self.timezone)
+            qs = qs.filter(Q(subevent__date_from__gte=dt_start) | Q(subevent__isnull=True, order__event__date_from__gte=dt_start))
+            qs = qs.filter(Q(subevent__date_from__lt=dt_end) | Q(subevent__isnull=True, order__event__date_from__lt=dt_end))
 
         if form_data.get('order_by') == 'name':
             qs = qs.order_by('attendee_name_cached', 'order__code')

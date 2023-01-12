@@ -1,0 +1,18 @@
+{% load i18n %}
+{% with widget.subwidgets.0 as widget %}
+{% include widget.template_name %}
+{% endwith %}
+<div class="row" data-display-dependency-value="custom" data-display-dependency="#{{ widget.subwidgets.0.attrs.id }}">
+    <br>
+    <div class="col-sm-6">
+        {% with widget.subwidgets.1 as widget %}
+        {% include widget.template_name %}
+        {% endwith %}
+    </div>
+    <div class="col-sm-6">
+        {% with widget.subwidgets.2 as widget %}
+        {% include widget.template_name %}
+        {% endwith %}
+    </div>
+</div>
+{% spaceless %}{% for widget in widget.subwidgets %}{% endfor %}{% endspaceless %}

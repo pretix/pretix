@@ -33,10 +33,8 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from collections import OrderedDict
-from datetime import date, datetime, time
 from decimal import Decimal
 
-import dateutil
 import pytz
 from django import forms
 from django.db.models import (
@@ -46,7 +44,7 @@ from django.db.models import (
 from django.db.models.functions import Coalesce
 from django.dispatch import receiver
 from django.utils.functional import cached_property
-from django.utils.timezone import get_current_timezone, make_aware, now
+from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import (
     gettext as _, gettext_lazy, pgettext, pgettext_lazy,
 )
@@ -67,6 +65,10 @@ from ..exporter import (
 )
 from ..signals import (
     register_data_exporters, register_multievent_data_exporters,
+)
+from ..timeframes import (
+    DateFrameField,
+    resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
 )
 
 
@@ -112,41 +114,25 @@ class OrderListExporter(MultiSheetListExporter):
                  initial=False,
                  required=False
              )),
-            ('date_from',
-             forms.DateField(
-                 label=_('Start date'),
-                 widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+            ('date_range',
+             DateFrameField(
+                 label=_('Date range'),
+                 include_future_frames=False,
                  required=False,
-                 help_text=_('Only include orders created on or after this date.')
+                 help_text=_('Only include orders created within this date range.')
              )),
-            ('date_to',
-             forms.DateField(
-                 label=_('End date'),
-                 widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+            ('event_date_range',
+             DateFrameField(
+                 label=_('Event date'),
+                 include_future_frames=True,
                  required=False,
-                 help_text=_('Only include orders created on or before this date.')
-             )),
-            ('event_date_from',
-             forms.DateField(
-                 label=_('Start event date'),
-                 widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
-                 required=False,
-                 help_text=_('Only include orders including at least one ticket for a date on or after this date. '
-                             'Will also include other dates in case of mixed orders!')
-             )),
-            ('event_date_to',
-             forms.DateField(
-                 label=_('End event date'),
-                 widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
-                 required=False,
-                 help_text=_('Only include orders including at least one ticket for a date on or before this date. '
+                 help_text=_('Only include orders including at least one ticket for a date in this range. '
                              'Will also include other dates in case of mixed orders!')
              )),
         ]
         d = OrderedDict(d)
         if not self.is_multievent and not self.event.has_subevents:
-            del d['event_date_from']
-            del d['event_date_to']
+            del d['event_date_range']
         return d
 
     def _get_all_payment_methods(self, qs):
@@ -186,48 +172,27 @@ class OrderListExporter(MultiSheetListExporter):
         return {e.pk: e for e in self.events}
 
     def _date_filter(self, qs, form_data, rel):
+        print(form_data)
         annotations = {}
         filters = {}
 
-        if form_data.get('date_from'):
-            date_value = form_data.get('date_from')
-            if not isinstance(date_value, date):
-                date_value = dateutil.parser.parse(date_value).date()
-            datetime_value = make_aware(datetime.combine(date_value, time(0, 0, 0)), self.timezone)
+        if form_data.get('date_range'):
+            dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['date_range'], self.timezone)
+            filters[f'{rel}datetime__gte'] = dt_start
+            filters[f'{rel}datetime__lt'] = dt_end
 
-            filters[f'{rel}datetime__gte'] = datetime_value
-
-        if form_data.get('date_to'):
-            date_value = form_data.get('date_to')
-            if not isinstance(date_value, date):
-                date_value = dateutil.parser.parse(date_value).date()
-            datetime_value = make_aware(datetime.combine(date_value, time(23, 59, 59, 999999)), self.timezone)
-
-            filters[f'{rel}datetime__lte'] = datetime_value
-
-        if form_data.get('event_date_from'):
-            date_value = form_data.get('event_date_from')
-            if not isinstance(date_value, date):
-                date_value = dateutil.parser.parse(date_value).date()
-            datetime_value = make_aware(datetime.combine(date_value, time(0, 0, 0)), self.timezone)
-
+        if form_data.get('event_date_range'):
+            dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['event_date_range'], self.timezone)
             annotations['event_date_max'] = Case(
                 When(**{f'{rel}event__has_subevents': True}, then=Max(f'{rel}all_positions__subevent__date_from')),
                 default=F(f'{rel}event__date_from'),
             )
-            filters['event_date_max__gte'] = datetime_value
-
-        if form_data.get('event_date_to'):
-            date_value = form_data.get('event_date_to')
-            if not isinstance(date_value, date):
-                date_value = dateutil.parser.parse(date_value).date()
-            datetime_value = make_aware(datetime.combine(date_value, time(23, 59, 59, 999999)), self.timezone)
-
+            filters['event_date_max__gte'] = dt_start
             annotations['event_date_min'] = Case(
                 When(**{f'{rel}event__has_subevents': True}, then=Min(f'{rel}all_positions__subevent__date_from')),
                 default=F(f'{rel}event__date_from'),
             )
-            filters['event_date_min__lte'] = datetime_value
+            filters['event_date_min__lt'] = dt_end
 
         if filters:
             return qs.annotate(**annotations).filter(**filters)
@@ -926,17 +891,11 @@ class GiftcardTransactionListExporter(OrganizerLevelExportMixin, ListExporter):
     @property
     def additional_form_fields(self):
         d = [
-            ('date_from',
-             forms.DateField(
-                 label=_('Start date'),
-                 widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
-                 required=False,
-             )),
-            ('date_to',
-             forms.DateField(
-                 label=_('End date'),
-                 widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
-                 required=False,
+            ('date_range',
+             DateFrameField(
+                 label=_('Date range'),
+                 include_future_frames=False,
+                 required=False
              )),
         ]
         d = OrderedDict(d)
@@ -947,22 +906,9 @@ class GiftcardTransactionListExporter(OrganizerLevelExportMixin, ListExporter):
             card__issuer=self.organizer,
         ).order_by('datetime').select_related('card', 'order', 'order__event')
 
-        if form_data.get('date_from'):
-            date_value = form_data.get('date_from')
-            if isinstance(date_value, str):
-                date_value = dateutil.parser.parse(date_value).date()
-            qs = qs.filter(
-                datetime__gte=make_aware(datetime.combine(date_value, time(0, 0, 0)), self.timezone)
-            )
-
-        if form_data.get('date_to'):
-            date_value = form_data.get('date_to')
-            if isinstance(date_value, str):
-                date_value = dateutil.parser.parse(date_value).date()
-
-            qs = qs.filter(
-                datetime__lte=make_aware(datetime.combine(date_value, time(23, 59, 59, 999999)), self.timezone)
-            )
+        if form_data.get('date_range'):
+            dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['date_range'], self.timezone)
+            qs = qs.filter(datetime__gte=dt_start, datetime__lt=dt_end)
 
         headers = [
             _('Gift card code'),
@@ -1048,7 +994,8 @@ class GiftcardListExporter(OrganizerLevelExportMixin, ListExporter):
             [
                 ('date', forms.DateTimeField(
                     label=_('Show value at'),
-                    initial=now(),
+                    required=False,
+                    help_text=_('Defaults to the time of report.')
                 )),
                 ('testmode', forms.ChoiceField(
                     label=_('Test mode'),
@@ -1076,12 +1023,13 @@ class GiftcardListExporter(OrganizerLevelExportMixin, ListExporter):
         )
 
     def iterate_list(self, form_data):
+        d = form_data.get('date') or now()
         s = GiftCardTransaction.objects.filter(
             card=OuterRef('pk'),
-            datetime__lte=form_data['date']
+            datetime__lte=d
         ).order_by().values('card').annotate(s=Sum('value')).values('s')
         qs = self.organizer.issued_gift_cards.filter(
-            issuance__lte=form_data['date']
+            issuance__lte=d
         ).annotate(
             cached_value=Coalesce(Subquery(s), Decimal('0.00')),
         ).order_by('issuance').prefetch_related(
@@ -1096,11 +1044,11 @@ class GiftcardListExporter(OrganizerLevelExportMixin, ListExporter):
         if form_data.get('state') == 'empty':
             qs = qs.filter(cached_value=0)
         elif form_data.get('state') == 'valid_value':
-            qs = qs.exclude(cached_value=0).filter(Q(expires__isnull=True) | Q(expires__gte=form_data['date']))
+            qs = qs.exclude(cached_value=0).filter(Q(expires__isnull=True) | Q(expires__gte=d))
         elif form_data.get('state') == 'expired_value':
-            qs = qs.exclude(cached_value=0).filter(expires__lt=form_data['date'])
+            qs = qs.exclude(cached_value=0).filter(expires__lt=d)
         elif form_data.get('state') == 'expired':
-            qs = qs.filter(expires__lt=form_data['date'])
+            qs = qs.filter(expires__lt=d)
 
         headers = [
             _('Gift card code'),

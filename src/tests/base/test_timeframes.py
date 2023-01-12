@@ -19,12 +19,15 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 
-from datetime import datetime, date
+from datetime import date, datetime
 
 import pytest
 import pytz
 
-from pretix.control.timeframes import REPORTING_DATE_TIMEFRAMES
+from pretix.base.timeframes import (
+    REPORTING_DATE_TIMEFRAMES, resolve_timeframe_to_dates_inclusive,
+    resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
+)
 
 tz = pytz.timezone("Europe/Berlin")
 
@@ -69,3 +72,14 @@ def test_timeframe(ref_dt, identifier, expected_start, expected_end):
             break
     else:
         assert False, "identifier not found"
+
+
+def test_resolve():
+    assert resolve_timeframe_to_dates_inclusive(ref_date, "week_previous", tz) == (
+        date(2023, 3, 20),
+        date(2023, 3, 26),
+    )
+    assert resolve_timeframe_to_datetime_start_inclusive_end_exclusive(ref_date, "week_previous", tz) == (
+        dt(2023, 3, 20, 0, 0, 0, 0),
+        dt(2023, 3, 27, 0, 0, 0, 0),
+    )

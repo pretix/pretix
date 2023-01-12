@@ -35,7 +35,6 @@
 import copy
 import tempfile
 from collections import OrderedDict, defaultdict
-from datetime import date, datetime, time, timedelta
 from decimal import Decimal
 
 import pytz
@@ -47,7 +46,7 @@ from django.db import models
 from django.db.models import DateTimeField, Max, OuterRef, Subquery, Sum
 from django.template.defaultfilters import floatformat
 from django.utils.formats import date_format, localize
-from django.utils.timezone import get_current_timezone, make_aware, now
+from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import (
     gettext as _, gettext_lazy, pgettext, pgettext_lazy,
 )
@@ -59,11 +58,14 @@ from reportlab.platypus import PageBreak, Paragraph, Spacer, Table, TableStyle
 
 from pretix.base.decimal import round_decimal
 from pretix.base.exporter import BaseExporter, MultiSheetListExporter
-from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import Order, OrderPosition
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import OrderFee, OrderPayment
 from pretix.base.services.stats import order_overview
+from pretix.base.timeframes import (
+    DateFrameField, resolve_timeframe_to_dates_inclusive,
+    resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
+)
 from pretix.control.forms.filter import OverviewFilterForm
 
 
@@ -236,12 +238,13 @@ class OverviewReport(Report):
 
     def _filter_story(self, doc, form_data, net=False):
         story = []
-        if form_data.get('date_axis') and (form_data.get('date_from') or form_data.get('date_until')):
+        if form_data.get('date_axis') and form_data.get('date_range'):
+            d_start, d_end = resolve_timeframe_to_dates_inclusive(now(), form_data['date_range'], self.timezone)
             story += [
                 Paragraph(_('{axis} between {start} and {end}').format(
                     axis=dict(OverviewFilterForm(event=self.event).fields['date_axis'].choices)[form_data.get('date_axis')],
-                    start=date_format(form_data.get('date_from'), 'SHORT_DATE_FORMAT') if form_data.get('date_from') else '–',
-                    end=date_format(form_data.get('date_until'), 'SHORT_DATE_FORMAT') if form_data.get('date_until') else '–',
+                    start=date_format(d_start, 'SHORT_DATE_FORMAT') if d_start else '–',
+                    end=date_format(d_end, 'SHORT_DATE_FORMAT') if d_end else '–',
                 ), self.get_style()),
                 Spacer(1, 5 * mm)
             ]
@@ -256,12 +259,16 @@ class OverviewReport(Report):
         return story
 
     def _get_data(self, form_data):
+        if form_data.get('date_range'):
+            d_start, d_end = resolve_timeframe_to_dates_inclusive(now(), form_data['date_range'], self.timezone)
+        else:
+            d_start, d_end = None, None
         return order_overview(
             self.event,
             subevent=form_data.get('subevent'),
             date_filter=form_data.get('date_axis'),
-            date_from=form_data.get('date_from'),
-            date_until=form_data.get('date_until'),
+            date_from=d_start,
+            date_until=d_end,
             fees=True
         )
 
@@ -381,6 +388,13 @@ class OverviewReport(Report):
     def export_form_fields(self) -> dict:
         f = OverviewFilterForm(event=self.event)
         del f.fields['ordering']
+        del f.fields['date_from']
+        del f.fields['date_until']
+        f.fields['date_range'] = DateFrameField(
+            label=_('Date range'),
+            include_future_frames=False,
+            required=False,
+        )
         return f.fields
 
 
@@ -606,48 +620,28 @@ class OrderTaxListReport(MultiSheetListExporter):
                      ),
                      required=False,
                  )),
-                ('date_from', forms.DateField(
-                    label=_('Date from'),
-                    required=False,
-                    widget=DatePickerWidget,
-                )),
-                ('date_until', forms.DateField(
-                    label=_('Date until'),
-                    required=False,
-                    widget=DatePickerWidget,
-                ))
+                ('date_range',
+                 DateFrameField(
+                     label=_('Date range'),
+                     include_future_frames=False,
+                     required=False,
+                     help_text=_('Only include orders created within this date range.')
+                 )),
             ]
         ))
         return f
 
     def filter_qs(self, qs, form_data):
-        date_from = form_data.get('date_from')
-        date_until = form_data.get('date_until')
+        date_range = form_data.get('date_range')
         date_filter = form_data.get('date_axis')
-        if date_from:
-            if isinstance(date_from, str):
-                date_from = parse(date_from).date()
-            if isinstance(date_from, date):
-                date_from = make_aware(datetime.combine(
-                    date_from,
-                    time(hour=0, minute=0, second=0, microsecond=0)
-                ), self.event.timezone)
 
-        if date_until:
-            if isinstance(date_until, str):
-                date_until = parse(date_until).date()
-            if isinstance(date_until, date):
-                date_until = make_aware(datetime.combine(
-                    date_until + timedelta(days=1),
-                    time(hour=0, minute=0, second=0, microsecond=0)
-                ), self.event.timezone)
+        if date_range:
+            dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), date_range, self.timezone)
 
-        if date_filter == 'order_date':
-            if date_from:
-                qs = qs.filter(order__datetime__gte=date_from)
-            if date_until:
-                qs = qs.filter(order__datetime__lt=date_until)
-        elif date_filter == 'last_payment_date':
+        if date_filter == 'order_date' and date_range:
+            qs = qs.filter(order__datetime__gte=dt_start)
+            qs = qs.filter(order__datetime__lt=dt_end)
+        elif date_filter == 'last_payment_date' and date_range:
             p_date = OrderPayment.objects.filter(
                 order=OuterRef('order'),
                 state__in=[OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED],
@@ -656,10 +650,8 @@ class OrderTaxListReport(MultiSheetListExporter):
                 m=Max('payment_date')
             ).values('m').order_by()
             qs = qs.annotate(payment_date=Subquery(p_date, output_field=DateTimeField()))
-            if date_from:
-                qs = qs.filter(payment_date__gte=date_from)
-            if date_until:
-                qs = qs.filter(payment_date__lt=date_until)
+            qs = qs.filter(payment_date__gte=dt_start)
+            qs = qs.filter(payment_date__lt=dt_end)
         return qs
 
     def iterate_sheet(self, form_data, sheet):

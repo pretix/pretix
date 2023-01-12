@@ -355,7 +355,16 @@ var form_handlers = function (el) {
         var dependent = $(this),
             dependency = $($(this).attr("data-display-dependency")),
             update = function (ev) {
-                var enabled = dependency.toArray().some(function(d) {return (d.type === 'checkbox' || d.type === 'radio') ? d.checked : (!!d.value && !d.value.match(/^0\.?0*$/g))});
+                var enabled = dependency.toArray().some(function(d) {
+                    if (d.type === 'checkbox' || d.type === 'radio') {
+                        return d.checked;
+                    } else if (d.type === 'select-one') {
+                        return d.value === dependent.attr("data-display-dependency-value");
+                    } else {
+                        return (!!d.value && !d.value.match(/^0\.?0*$/g));
+                    }
+                });
+                console.log(dependent, dependency, enabled)
                 if (dependent.is("[data-inverse]")) {
                     enabled = !enabled;
                 }

@@ -38,12 +38,12 @@ from collections import OrderedDict
 from decimal import Decimal
 from zipfile import ZipFile
 
-import dateutil.parser
 from django import forms
 from django.db.models import CharField, Exists, F, OuterRef, Q, Subquery, Sum
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import (
     gettext, gettext_lazy as _, pgettext, pgettext_lazy,
 )
@@ -59,6 +59,7 @@ from ..services.invoices import invoice_pdf_task
 from ..signals import (
     register_data_exporters, register_multievent_data_exporters,
 )
+from ..timeframes import DateFrameField, resolve_timeframe_to_dates_inclusive
 
 
 class InvoiceExporterMixin:
@@ -68,21 +69,13 @@ class InvoiceExporterMixin:
     def invoice_exporter_form_fields(self):
         return OrderedDict(
             [
-                ('date_from',
-                 forms.DateField(
-                     label=_('Start date'),
-                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                ('date_range',
+                 DateFrameField(
+                     label=_('Date range'),
+                     include_future_frames=False,
                      required=False,
-                     help_text=_('Only include invoices issued on or after this date. Note that the invoice date does '
+                     help_text=_('Only include invoices issued in this time frame. Note that the invoice date does '
                                  'not always correspond to the order or payment date.')
-                 )),
-                ('date_to',
-                 forms.DateField(
-                     label=_('End date'),
-                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
-                     required=False,
-                     help_text=_('Only include invoices issued on or before this date. Note that the invoice date '
-                                 'does not always correspond to the order or payment date.')
                  )),
                 ('payment_provider',
                  forms.ChoiceField(
@@ -115,16 +108,9 @@ class InvoiceExporterMixin:
                 )
             )
             qs = qs.filter(has_payment_with_provider=1)
-        if form_data.get('date_from'):
-            date_value = form_data.get('date_from')
-            if isinstance(date_value, str):
-                date_value = dateutil.parser.parse(date_value).date()
-            qs = qs.filter(date__gte=date_value)
-        if form_data.get('date_to'):
-            date_value = form_data.get('date_to')
-            if isinstance(date_value, str):
-                date_value = dateutil.parser.parse(date_value).date()
-            qs = qs.filter(date__lte=date_value)
+        if form_data.get('date_range'):
+            d_start, d_end = resolve_timeframe_to_dates_inclusive(now(), form_data['date_range'], self.timezone)
+            qs = qs.filter(date__gte=d_start, date__lte=d_end)
 
         return qs
 
