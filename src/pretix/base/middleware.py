@@ -30,7 +30,6 @@ from django.urls import get_script_prefix
 from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin
-from django.utils.translation import LANGUAGE_SESSION_KEY
 from django.utils.translation.trans_real import (
     check_for_language, get_supported_language_variant, language_code_re,
     parse_accept_lang_header,
@@ -128,12 +127,7 @@ def get_language_from_user_settings(request: HttpRequest) -> str:
             return lang_code
 
 
-def get_language_from_session_or_cookie(request: HttpRequest) -> str:
-    if hasattr(request, 'session'):
-        lang_code = request.session.get(LANGUAGE_SESSION_KEY)
-        if lang_code in _supported and lang_code is not None and check_for_language(lang_code):
-            return lang_code
-
+def get_language_from_cookie(request: HttpRequest) -> str:
     lang_code = request.COOKIES.get(settings.LANGUAGE_COOKIE_NAME)
     try:
         return get_supported_language_variant(lang_code)
@@ -187,14 +181,14 @@ def get_language_from_request(request: HttpRequest) -> str:
         return (
             get_language_from_user_settings(request)
             or get_language_from_customer_settings(request)
-            or get_language_from_session_or_cookie(request)
+            or get_language_from_cookie(request)
             or get_language_from_browser(request)
             or get_language_from_event(request)
             or get_default_language()
         )
     else:
         return (
-            get_language_from_session_or_cookie(request)
+            get_language_from_cookie(request)
             or get_language_from_customer_settings(request)
             or get_language_from_user_settings(request)
             or get_language_from_browser(request)
