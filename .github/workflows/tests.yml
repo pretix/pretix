@@ -83,3 +83,4 @@ jobs:
           file: src/coverage.xml
           fail_ci_if_error: true
         if: matrix.database == 'postgres' && matrix.python-version == '3.10'
+        token: ${{ secrets.CODECOV_TOKEN }}
