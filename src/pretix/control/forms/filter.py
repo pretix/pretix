@@ -2264,7 +2264,7 @@ class DeviceFilterForm(FilterForm):
     state = forms.ChoiceField(
         label=_('Device status'),
         choices=[
-            ('', _('All devices')),
+            ('all', _('All devices')),
             ('active', _('Active devices')),
             ('revoked', _('Revoked devices'))
         ],
