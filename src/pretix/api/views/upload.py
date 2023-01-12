@@ -21,6 +21,7 @@
 #
 import datetime
 
+from django.core.exceptions import ValidationError as DjangoValidationError
 from django.utils.timezone import now
 from oauth2_provider.contrib.rest_framework import OAuth2Authentication
 from rest_framework.authentication import SessionAuthentication
@@ -66,7 +67,10 @@ class UploadView(APIView):
             ))
 
         if content_type in IMAGE_TYPES:
-            validate_uploaded_file_for_valid_image(file_obj)
+            try:
+                validate_uploaded_file_for_valid_image(file_obj)
+            except DjangoValidationError as e:
+                raise ValidationError(e.message)
 
         cf = CachedFile.objects.create(
             expires=now() + datetime.timedelta(days=1),
