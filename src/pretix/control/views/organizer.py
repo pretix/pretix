@@ -1515,7 +1515,7 @@ class GiftCardUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
 class ExportMixin:
     @cached_property
     def exporter(self):
-        id = self.request.GET.get("identifier") or self.request.POST.get("exporter")
+        id = self.request.GET.get("identifier") or self.request.POST.get("exporter") or self.request.GET.get("exporter")
         if not id:
             return None
         for ex in self.exporters:
