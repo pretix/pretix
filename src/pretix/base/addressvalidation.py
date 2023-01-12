@@ -42,7 +42,6 @@ from localflavor.fr.forms import FRZipCodeField
 from localflavor.gb.forms import GBPostcodeField
 from localflavor.gr.forms import GRPostalCodeField
 from localflavor.hr.forms import HRPostalCodeField
-from localflavor.id_.forms import IDPostCodeField
 from localflavor.ie.forms import EircodeField
 from localflavor.il.forms import ILPostalCodeField
 from localflavor.in_.forms import INZipCodeField
@@ -167,7 +166,6 @@ _zip_code_fields = {
     'GB': GBPostcodeField,
     'GR': GRPostalCodeField,
     'HR': HRPostalCodeField,
-    'ID': IDPostCodeField,
     'IE': EircodeField,
     'IL': ILPostalCodeField,
     'IN': INZipCodeField,
