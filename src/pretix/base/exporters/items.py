@@ -191,6 +191,7 @@ class ItemDataExporter(ListExporter):
                     _("Yes") if i.free_price else "",
                     str(i.tax_rule) if i.tax_rule else "",
                     _("Yes") if i.admission else "",
+                    _("Yes") if i.personalized else "",
                     _("Yes") if i.generate_tickets else (_("Default") if i.generate_tickets is None else ""),
                     _("Yes") if i.allow_waitinglist else "",
                     date_format(i.available_from.astimezone(self.timezone),
