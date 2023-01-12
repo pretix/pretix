@@ -217,7 +217,7 @@ class ExtValidationMixin:
 
     def clean(self, *args, **kwargs):
         data = super().clean(*args, **kwargs)
-        if isinstance(data, File):
+        if isinstance(data, UploadedFile):
             filename = data.name
             ext = os.path.splitext(filename)[1]
             ext = ext.lower()
