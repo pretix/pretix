@@ -42,7 +42,6 @@ from localflavor.fr.forms import FRZipCodeField
 from localflavor.gb.forms import GBPostcodeField
 from localflavor.gr.forms import GRPostalCodeField
 from localflavor.hr.forms import HRPostalCodeField
-from localflavor.id_.forms import IDPostCodeField
 from localflavor.ie.forms import EircodeField
 from localflavor.il.forms import ILPostalCodeField
 from localflavor.in_.forms import INZipCodeField
@@ -80,8 +79,8 @@ COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED = {
     # We don't presume this for countries we don't have knowledge about, there are countries in the
     # world e.g. without zipcodes
     'AR', 'AT', 'AU', 'BE', 'BR', 'CA', 'CH', 'CN', 'CU', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR',
-    'GB', 'GR', 'HR', 'ID', 'IE', 'IL', 'IN', 'IR', 'IS', 'IT', 'JP', 'LT', 'LV', 'MA', 'MT', 'MX',
-    'NL', 'NO', 'NZ', 'PK', 'PL', 'PT', 'RO', 'RU', 'SE', 'SG', 'SI', 'SK', 'TR', 'UA', 'US', 'ZA',
+    'GB', 'GR', 'HR', 'IE', 'IL', 'IN', 'IR', 'IS', 'IT', 'JP', 'LT', 'LV', 'MA', 'MT', 'MX', 'NL',
+    'NO', 'NZ', 'PK', 'PL', 'PT', 'RO', 'RU', 'SE', 'SG', 'SI', 'SK', 'TR', 'UA', 'US', 'ZA',
 }
 
 
@@ -167,7 +166,6 @@ _zip_code_fields = {
     'GB': GBPostcodeField,
     'GR': GRPostalCodeField,
     'HR': HRPostalCodeField,
-    'ID': IDPostCodeField,
     'IE': EircodeField,
     'IL': ILPostalCodeField,
     'IN': INZipCodeField,
