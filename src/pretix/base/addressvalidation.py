@@ -80,8 +80,8 @@ COUNTRIES_WITH_STREET_ZIPCODE_AND_CITY_REQUIRED = {
     # We don't presume this for countries we don't have knowledge about, there are countries in the
     # world e.g. without zipcodes
     'AR', 'AT', 'AU', 'BE', 'BR', 'CA', 'CH', 'CN', 'CU', 'CZ', 'DE', 'DK', 'EE', 'ES', 'FI', 'FR',
-    'GB', 'GR', 'HR', 'ID', 'IE', 'IL', 'IN', 'IR', 'IS', 'IT', 'JP', 'LT', 'LV', 'MA', 'MT', 'MX',
-    'NL', 'NO', 'NZ', 'PK', 'PL', 'PT', 'RO', 'RU', 'SE', 'SG', 'SI', 'SK', 'TR', 'UA', 'US', 'ZA',
+    'GB', 'GR', 'HR', 'IE', 'IL', 'IN', 'IR', 'IS', 'IT', 'JP', 'LT', 'LV', 'MA', 'MT', 'MX', 'NL',
+    'NO', 'NZ', 'PK', 'PL', 'PT', 'RO', 'RU', 'SE', 'SG', 'SI', 'SK', 'TR', 'UA', 'US', 'ZA',
 }
 
 
