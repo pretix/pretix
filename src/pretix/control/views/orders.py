@@ -2279,7 +2279,7 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, Templ
     permission = 'can_view_orders'
     known_errortypes = ['ExportError']
     task = export
-    template_name = 'pretixcontrol/orders/export.html'
+    template_name = 'pretixcontrol/orders/export_form.html'
 
     def get_success_message(self, value):
         return None
