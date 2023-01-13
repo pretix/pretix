@@ -457,7 +457,7 @@ $(function () {
                 }
             };
         update();
-        dependency.closest('.form-group, form').find('input[name=' + dependency.attr("name") + ']').on("change", update);
+        dependency.closest('.form-group, form').find('input[name=' + dependency.attr("name") + '], select[name=' + dependency.attr("name") + ']').on("change", update);
         dependency.closest('.form-group, form').find('input[name=' + dependency.attr("name") + ']').on("dp.change", update);
     });
 

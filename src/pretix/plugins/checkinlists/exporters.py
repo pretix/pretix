@@ -33,7 +33,6 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from collections import OrderedDict
-from datetime import datetime, time, timedelta
 
 import bleach
 import dateutil.parser
@@ -44,7 +43,7 @@ from django.db.models import (
 from django.db.models.functions import Coalesce, NullIf
 from django.urls import reverse
 from django.utils.formats import date_format
-from django.utils.timezone import is_aware, make_aware
+from django.utils.timezone import is_aware, make_aware, now
 from django.utils.translation import (
     gettext as _, gettext_lazy, pgettext, pgettext_lazy,
 )
@@ -58,6 +57,10 @@ from pretix.base.models import (
 )
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.templatetags.money import money_filter
+from pretix.base.timeframes import (
+    DateFrameField,
+    resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
+)
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.templatetags.jsonfield import JSONExtract
 from pretix.plugins.reports.exporters import ReportlabExportMixin
@@ -78,19 +81,12 @@ class CheckInListMixin(BaseExporter):
                      ),
                      initial=self.event.checkin_lists.first()
                  )),
-                ('date_from',
-                 forms.DateField(
-                     label=_('Start date'),
-                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
+                ('date_range',
+                 DateFrameField(
+                     label=_('Date range'),
+                     include_future_frames=True,
                      required=False,
-                     help_text=_('Only include tickets for dates on or after this date.')
-                 )),
-                ('date_to',
-                 forms.DateField(
-                     label=_('End date'),
-                     widget=forms.DateInput(attrs={'class': 'datepickerfield'}),
-                     required=False,
-                     help_text=_('Only include tickets for dates on or before this date.')
+                     help_text=_('Only include tickets for dates within this range.')
                  )),
                 ('secrets',
                  forms.BooleanField(
@@ -129,8 +125,7 @@ class CheckInListMixin(BaseExporter):
         )
 
         if not self.event.has_subevents:
-            del d['date_from']
-            del d['date_to']
+            del d['date_range']
 
         d['list'].queryset = self.event.checkin_lists.all()
         d['list'].widget = Select2(
@@ -181,19 +176,12 @@ class CheckInListMixin(BaseExporter):
         if cl.subevent:
             qs = qs.filter(subevent=cl.subevent)
 
-        if form_data.get('date_from'):
-            dt = make_aware(datetime.combine(
-                dateutil.parser.parse(form_data['date_from']).date(),
-                time(hour=0, minute=0, second=0)
-            ), self.event.timezone)
-            qs = qs.filter(subevent__date_from__gte=dt)
-
-        if form_data.get('date_to'):
-            dt = make_aware(datetime.combine(
-                dateutil.parser.parse(form_data['date_to']).date() + timedelta(days=1),
-                time(hour=0, minute=0, second=0)
-            ), self.event.timezone)
-            qs = qs.filter(subevent__date_from__lt=dt)
+        if form_data.get('date_range'):
+            dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['date_range'], self.timezone)
+            if dt_start:
+                qs = qs.filter(subevent__date_from__gte=dt_start)
+            if dt_end:
+                qs = qs.filter(subevent__date_to__lt=dt_end)
 
         o = ()
         if self.event.has_subevents and not cl.subevent:
