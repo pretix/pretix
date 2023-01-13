@@ -347,7 +347,7 @@ def resolve_timeframe_to_dates_inclusive(ref_dt, frame, timezone) -> Tuple[date,
     """
     Given a serialized timeframe, evaluate it relative to `ref_dt` and return a tuple of dates
     where the first element ist the first possible date value within the timeframe and the second
-    element is the last possible date value in the tiemframe.
+    element is the last possible date value in the timeframe.
     """
     if isinstance(ref_dt, datetime):
         ref_dt = ref_dt.astimezone(timezone).date()
