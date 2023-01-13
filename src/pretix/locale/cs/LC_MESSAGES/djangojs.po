@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-11 12:07+0000\n"
+"POT-Creation-Date: 2023-01-13 14:07+0000\n"
 "PO-Revision-Date: 2023-01-13 08:00+0000\n"
 "Last-Translator: tree <jan.stransky@arnal.cz>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -557,31 +557,31 @@ msgstr ""
 "Tato barva je pro text na bílém pozadí špatně kontrastní, zvolte prosím "
 "tmavší odstín."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:454
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "All"
 msgstr "Všechny"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:455
+#: pretix/static/pretixcontrol/js/ui/main.js:464
 msgid "None"
 msgstr "Žádný"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:456
+#: pretix/static/pretixcontrol/js/ui/main.js:465
 msgid "Search query"
 msgstr "Hledaný výraz"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:459
+#: pretix/static/pretixcontrol/js/ui/main.js:468
 msgid "Selected only"
 msgstr "Pouze vybrané"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:862
+#: pretix/static/pretixcontrol/js/ui/main.js:871
 msgid "Use a different name internally"
 msgstr "Interně používat jiný název"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:898
+#: pretix/static/pretixcontrol/js/ui/main.js:907
 msgid "Click to close"
 msgstr "Kliknutím zavřete"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:970
+#: pretix/static/pretixcontrol/js/ui/main.js:979
 msgid "You have unsaved changes!"
 msgstr "Máte neuložené změny!"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-11 12:07+0000\n"
+"POT-Creation-Date: 2023-01-13 14:07+0000\n"
 "PO-Revision-Date: 2021-12-03 08:37+0000\n"
 "Last-Translator: ExtremeX-BB <qq754163444@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -559,31 +559,31 @@ msgid ""
 "darker shade."
 msgstr "你的配色在白色背景下的文本对比度很差，请选择较深的颜色。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:454
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "All"
 msgstr "所有"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:455
+#: pretix/static/pretixcontrol/js/ui/main.js:464
 msgid "None"
 msgstr "无"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:456
+#: pretix/static/pretixcontrol/js/ui/main.js:465
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:459
+#: pretix/static/pretixcontrol/js/ui/main.js:468
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:862
+#: pretix/static/pretixcontrol/js/ui/main.js:871
 msgid "Use a different name internally"
 msgstr "在内部使用一个不同的名称"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:898
+#: pretix/static/pretixcontrol/js/ui/main.js:907
 msgid "Click to close"
 msgstr "点此关闭"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:970
+#: pretix/static/pretixcontrol/js/ui/main.js:979
 msgid "You have unsaved changes!"
 msgstr ""
 

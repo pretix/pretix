@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-11 12:07+0000\n"
+"POT-Creation-Date: 2023-01-13 14:07+0000\n"
 "PO-Revision-Date: 2022-06-20 02:00+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
@@ -550,31 +550,31 @@ msgid ""
 "darker shade."
 msgstr "Fargen du valgte har dårlig kontrast mot hvit, velg en mørkere farge."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:454
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:455
+#: pretix/static/pretixcontrol/js/ui/main.js:464
 msgid "None"
 msgstr "Ingen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:456
+#: pretix/static/pretixcontrol/js/ui/main.js:465
 msgid "Search query"
 msgstr "Søkeord"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:459
+#: pretix/static/pretixcontrol/js/ui/main.js:468
 msgid "Selected only"
 msgstr "Kun valgte"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:862
+#: pretix/static/pretixcontrol/js/ui/main.js:871
 msgid "Use a different name internally"
 msgstr "Bruk et annet navn internt"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:898
+#: pretix/static/pretixcontrol/js/ui/main.js:907
 msgid "Click to close"
 msgstr "Klikk for å lukke"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:970
+#: pretix/static/pretixcontrol/js/ui/main.js:979
 msgid "You have unsaved changes!"
 msgstr "Du har ikke-lagrede endringer!"
 
