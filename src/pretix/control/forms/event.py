@@ -40,7 +40,7 @@ from urllib.parse import urlencode, urlparse
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import MaxValueValidator, validate_email
+from django.core.validators import MaxValueValidator
 from django.db.models import Prefetch, Q, prefetch_related_objects
 from django.forms import (
     CheckboxSelectMultiple, formset_factory, inlineformset_factory,
@@ -66,6 +66,7 @@ from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.settings import (
     PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_event_settings,
 )
+from pretix.base.validators import multimail_validate
 from pretix.control.forms import (
     MultipleLanguagesWidget, SlugWidget, SplitDateTimeField,
     SplitDateTimePickerWidget,
@@ -862,13 +863,6 @@ class InvoiceSettingsForm(SettingsForm):
         settings_dict.update(data)
         validate_event_settings(self.obj, data)
         return data
-
-
-def multimail_validate(val):
-    s = val.split(',')
-    for part in s:
-        validate_email(part.strip())
-    return s
 
 
 def contains_web_channel_validate(val):

@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load order_overview %}
+{% load captureas %}
 {% block title %}{% trans "Data export" %}{% endblock %}
 {% block content %}
     <h1>
@@ -15,16 +16,164 @@
     {% if exporter.description %}
         <p class="help-block">{{ exporter.description }}</p>
     {% endif %}
+    {% if schedule_form %}
+        {% bootstrap_form_errors schedule_form layout='control' %}
+    {% endif %}
     <form action="{% url "control:event.orders.export.do" event=request.event.slug organizer=request.organizer.slug %}"
           method="post" class="form-horizontal" data-asynctask data-asynctask-download
           data-asynctask-long>
         {% csrf_token %}
         <input type="hidden" name="exporter" value="{{ exporter.identifier }}"/>
-        {% bootstrap_form exporter.form layout='control' %}
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Start export" %}
-            </button>
-        </div>
+        <fieldset>
+            <legend>{% trans "Export options" %}</legend>
+            {% bootstrap_form exporter.form layout='control' %}
+        </fieldset>
+        {% if schedule_form %}
+            <fieldset>
+                <legend>{% trans "Schedule" %}</legend>
+                {% bootstrap_field schedule_form.schedule_rrule_time layout='control' %}
+                {% bootstrap_form_errors rrule_form layout='control' %}
+
+                {% bootstrap_field rrule_form.dtstart layout="control" %}
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="id_schedule-owner">{% trans "Repetition schedule" %}</label>
+                    <div class="col-md-9">
+                        <div class="form-inline rrule-form">
+                            {% captureas ffield_freq %}
+                                {% bootstrap_field rrule_form.freq layout="inline" %}
+                            {% endcaptureas %}
+                            {% captureas ffield_interval %}
+                                {% bootstrap_field rrule_form.interval layout="inline" %}
+                            {% endcaptureas %}
+                            {% captureas ffield_yearly_bysetpos %}
+                                {% bootstrap_field rrule_form.yearly_bysetpos layout="inline" %}
+                            {% endcaptureas %}
+                            {% captureas ffield_yearly_byweekday %}
+                                {% bootstrap_field rrule_form.yearly_byweekday layout="inline" %}
+                            {% endcaptureas %}
+                            {% captureas ffield_yearly_bymonth %}
+                                {% bootstrap_field rrule_form.yearly_bymonth layout="inline" %}
+                            {% endcaptureas %}
+                            {% captureas ffield_monthly_bysetpos %}
+                                {% bootstrap_field rrule_form.monthly_bysetpos layout="inline" %}
+                            {% endcaptureas %}
+                            {% captureas ffield_monthly_byweekday %}
+                                {% bootstrap_field rrule_form.monthly_byweekday layout="inline" %}
+                            {% endcaptureas %}
+                            {% captureas ffield_count %}
+                                {% bootstrap_field rrule_form.count layout="inline" %}
+                            {% endcaptureas %}
+                            {% captureas ffield_until %}
+                                {% bootstrap_field rrule_form.until layout="inline" %}
+                            {% endcaptureas %}
+
+                            {% blocktrans trimmed with freq=ffield_freq interval=ffield_interval start=ffield_dtstart %}
+                                Repeat every {{ interval }} {{ freq }}
+                            {% endblocktrans %}<br>
+
+                            <div class="repeat-yearly">
+                                <div class="radio">
+                                    <label>
+                                        {{ rrule_form.yearly_same.0 }}
+                                        {% trans "At the same date every year" %}
+                                    </label><br>
+                                    <label>
+                                        {{ rrule_form.yearly_same.1 }}
+                                        {% blocktrans trimmed with setpos=ffield_yearly_bysetpos weekday=ffield_yearly_byweekday month=ffield_yearly_bymonth %}
+                                            On the {{ setpos }} {{ weekday }} of {{ month }}
+                                        {% endblocktrans %}<br>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="repeat-monthly">
+                                <div class="radio">
+                                    <label>
+                                        {{ rrule_form.monthly_same.0 }}
+                                        {% trans "At the same date every month" %}
+                                    </label><br>
+                                    <label>
+                                        {{ rrule_form.monthly_same.1 }}
+                                        {% blocktrans trimmed with setpos=ffield_monthly_bysetpos weekday=ffield_monthly_byweekday %}
+                                            On the {{ setpos }} {{ weekday }}
+                                        {% endblocktrans %}<br>
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="repeat-weekly">
+                                {% bootstrap_field rrule_form.weekly_byweekday layout="inline" %}
+                            </div>
+                            <div class="repeat-until">
+                                <div class="radio">
+                                    <label>
+                                        {{ rrule_form.end.0 }}
+                                        {% blocktrans trimmed with count=ffield_count %}
+                                            Repeat for {{ count }} times
+                                        {% endblocktrans %}
+                                    </label><br>
+                                    <label>
+                                        {{ rrule_form.end.1 }}
+                                        {% blocktrans trimmed with until=ffield_until %}
+                                            Repeat until {{ until }}
+                                        {% endblocktrans %}<br>
+                                    </label><br>
+                                    <label>
+                                        {{ rrule_form.end.2 }}
+                                        {% blocktrans trimmed %}
+                                            Forever
+                                        {% endblocktrans %}<br>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset>
+                <legend>{% trans "Email" %}</legend>
+                <div class="alert alert-info">
+                    {% trans "Every time your schedule is executed, the report will be sent via email." %}
+                    {% trans "Please note the following limitations:" %}
+                    <ul>
+                        <li>
+                            {% trans "Email is not a strongly encrypted medium. We only recommend using this for exports that output e.g. statistical data, not for reports that include sensitive personal data." %}
+                        </li>
+                        <li>
+                            {% trans "Email is not made for large files. If your export ends up to be larger than 20 megabytes, it will not be sent." %}
+                        </li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label class="col-md-3 control-label" for="id_schedule-owner">{% trans "Primary recipient" %}</label>
+                    <div class="col-md-9">
+                        <input type="text" name="schedule-owner" value="{{ request.user.email }}" disabled
+                               class="form-control" title=""
+                               id="id_schedule-owner">
+                    </div>
+                </div>
+                {% bootstrap_field schedule_form.mail_additional_recipients layout='control' %}
+                {% bootstrap_field schedule_form.mail_additional_recipients_cc layout='control' %}
+                {% bootstrap_field schedule_form.mail_additional_recipients_bcc layout='control' %}
+                {% bootstrap_field schedule_form.mail_subject layout='control' %}
+                {% bootstrap_field schedule_form.mail_template layout='control' %}
+            </fieldset>
+            <div class="form-group submit-group">
+                <button formaction="{{ request.get_full_path }}" name="schedule" value="save" type="submit"
+                        class="btn btn-default btn-save" data-no-asynctask>
+                    {% trans "Save" %}
+                </button>
+            </div>
+        {% else %}
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-primary btn-save">
+                    <span class="fa fa-download" aria-hidden="true"></span>
+                    {% trans "Start export" %}
+                </button>
+                <button formaction="{{ request.get_full_path }}" name="schedule" value="start" type="submit"
+                        class="btn btn-default btn-alternative" data-no-asynctask>
+                    <span class="fa fa-clock-o" aria-hidden="true"></span>
+                    {% trans "Schedule export" %}
+                </button>
+            </div>
+        {% endif %}
     </form>
 {% endblock %}

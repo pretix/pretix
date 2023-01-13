@@ -111,6 +111,7 @@ from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
+from pretix.control.forms.exports import ScheduledEventExportForm
 from pretix.control.forms.filter import (
     EventOrderExpertFilterForm, EventOrderFilterForm, OverviewFilterForm,
     RefundFilterForm,
@@ -122,6 +123,7 @@ from pretix.control.forms.orders import (
     OrderPositionAddFormset, OrderPositionChangeForm, OrderPositionMailForm,
     OrderRefundForm, OtherOperationsForm, ReactivateOrderForm,
 )
+from pretix.control.forms.rrule import RRuleForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import order_search_forms
 from pretix.control.views import PaginationMixin
@@ -2327,6 +2329,30 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, TemplateView):
         if self.exporter:
             return ['pretixcontrol/orders/export_form.html']
         return ['pretixcontrol/orders/export.html']
+
+    def post(self, *args, **kwargs):
+        return super().get(*args, **kwargs)
+
+    @cached_property
+    def rrule_form(self):
+        return RRuleForm(
+            data=self.request.POST if self.request.method == 'POST' and self.request.POST.get("schedule") == "save" else None,
+            prefix="rrule",
+        )
+
+    @cached_property
+    def schedule_form(self):
+        return ScheduledEventExportForm(
+            data=self.request.POST if self.request.method == 'POST' and self.request.POST.get("schedule") == "save" else None,
+            prefix="schedule",
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        if "schedule" in self.request.POST:
+            ctx['schedule_form'] = self.schedule_form
+            ctx['rrule_form'] = self.rrule_form
+        return ctx
 
 
 class RefundList(EventPermissionRequiredMixin, PaginationMixin, ListView):

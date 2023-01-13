@@ -36,7 +36,7 @@ import copy
 from collections import defaultdict
 from datetime import datetime, time, timedelta
 
-from dateutil.rrule import DAILY, MONTHLY, WEEKLY, YEARLY, rrule, rruleset
+from dateutil.rrule import rruleset
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.core.files import File
@@ -789,41 +789,10 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
             if f in self.rrule_formset.deleted_forms:
                 continue
 
-            rule_kwargs = {}
-            rule_kwargs['dtstart'] = f.cleaned_data['dtstart']
-            rule_kwargs['interval'] = f.cleaned_data['interval']
-
-            if f.cleaned_data['freq'] == 'yearly':
-                freq = YEARLY
-                if f.cleaned_data['yearly_same'] == "off":
-                    rule_kwargs['bysetpos'] = int(f.cleaned_data['yearly_bysetpos'])
-                    rule_kwargs['byweekday'] = f.parse_weekdays(f.cleaned_data['yearly_byweekday'])
-                    rule_kwargs['bymonth'] = int(f.cleaned_data['yearly_bymonth'])
-
-            elif f.cleaned_data['freq'] == 'monthly':
-                freq = MONTHLY
-
-                if f.cleaned_data['monthly_same'] == "off":
-                    rule_kwargs['bysetpos'] = int(f.cleaned_data['monthly_bysetpos'])
-                    rule_kwargs['byweekday'] = f.parse_weekdays(f.cleaned_data['monthly_byweekday'])
-            elif f.cleaned_data['freq'] == 'weekly':
-                freq = WEEKLY
-
-                if f.cleaned_data['weekly_byweekday']:
-                    rule_kwargs['byweekday'] = [f.parse_weekdays(a) for a in f.cleaned_data['weekly_byweekday']]
-
-            elif f.cleaned_data['freq'] == 'daily':
-                freq = DAILY
-
-            if f.cleaned_data['end'] == 'count':
-                rule_kwargs['count'] = f.cleaned_data['count']
-            else:
-                rule_kwargs['until'] = f.cleaned_data['until']
-
             if f.cleaned_data['exclude']:
-                s.exrule(rrule(freq, **rule_kwargs))
+                s.exrule(f.to_rrule())
             else:
-                s.rrule(rrule(freq, **rule_kwargs))
+                s.rrule(f.to_rrule())
 
         return s
 

@@ -192,6 +192,13 @@ function async_task_error(jqXHR, textStatus, errorThrown) {
 $(function () {
     "use strict";
     $("body").on('submit', 'form[data-asynctask]', function (e) {
+        // Not supported on IE, may lead to wrong results, but we don't support IE in the backend anymore
+        var submitter = e.originalEvent ? e.originalEvent.submitter : null;
+
+        if (submitter && submitter.hasAttribute("data-no-asynctask")) {
+            return;
+        }
+
         e.preventDefault();
         $(this).removeClass("dirty");  // Avoid problems with are-you-sure.js
         if ($("body").data('ajaxing')) {
@@ -218,17 +225,19 @@ $(function () {
             'this page and try again.'
         ));
 
+        var action = this.action;
         var formData = new FormData(this);
         formData.append('ajax', '1');
-        // Not supported on IE, may lead to wrong results, but we don't support IE in the backend anymore
-        var submitter = e.originalEvent ? e.originalEvent.submitter : null;
         if (submitter && submitter.name) {
             formData.append(submitter.name, submitter.value);
+        }
+        if (submitter && submitter.getAttribute("formaction")) {
+            action = submitter.getAttribute("formaction");
         }
         $.ajax(
             {
                 'type': 'POST',
-                'url': this.action,
+                'url': action,
                 'data': formData,
                 processData: false,
                 contentType: false,
