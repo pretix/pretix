@@ -30,6 +30,8 @@ from django.utils.formats import date_format
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext_lazy, pgettext_lazy
 
+from pretix.helpers.daterange import daterange
+
 
 def _quarter_start(ref_d):
     return ref_d.replace(day=1, month=1 + (ref_d.month - 1) // 3 * 3)
@@ -48,7 +50,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d,
         False,
         pgettext_lazy('reporting_timeframe', 'by day'),
-        None
+        daterange
     ),
     (
         'days_last7',
@@ -57,7 +59,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d + timedelta(days=6),
         False,
         pgettext_lazy('reporting_timeframe', 'by day'),
-        None
+        daterange
     ),
     (
         'days_last14',
@@ -66,7 +68,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d + timedelta(days=13),
         False,
         pgettext_lazy('reporting_timeframe', 'by day'),
-        None
+        daterange
     ),
     (
         'days_tomorrow',
@@ -75,7 +77,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d,
         True,
         pgettext_lazy('reporting_timeframe', 'by day'),
-        None
+        daterange
     ),
     (
         'days_next7',
@@ -84,7 +86,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d + timedelta(days=6),
         True,
         pgettext_lazy('reporting_timeframe', 'by day'),
-        None
+        daterange
     ),
     (
         'days_next14',
@@ -93,7 +95,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d + timedelta(days=13),
         True,
         pgettext_lazy('reporting_timeframe', 'by day'),
-        None
+        daterange
     ),
     (
         'week_this',
@@ -102,7 +104,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d + timedelta(days=6),
         True,
         pgettext_lazy('reporting_timeframe', 'by week'),
-        lambda start_d: date_format(start_d, 'WEEK_FORMAT'),
+        lambda start_d, end_d: date_format(start_d, 'WEEK_FORMAT') + ' - ' + daterange(start_d, end_d),
     ),
     (
         'week_to_date',
@@ -111,7 +113,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: ref_d,
         False,
         pgettext_lazy('reporting_timeframe', 'by week'),
-        lambda start_d: date_format(start_d, 'WEEK_FORMAT'),
+        lambda start_d, end_d: date_format(start_d, 'WEEK_FORMAT') + ' - ' + daterange(start_d, end_d),
     ),
     (
         'week_previous',
@@ -120,7 +122,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d + timedelta(days=6),
         False,
         pgettext_lazy('reporting_timeframe', 'by week'),
-        lambda start_d: date_format(start_d, 'WEEK_FORMAT'),
+        lambda start_d, end_d: date_format(start_d, 'WEEK_FORMAT') + ' - ' + daterange(start_d, end_d),
     ),
     (
         'week_next',
@@ -129,7 +131,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d + timedelta(days=6),
         True,
         pgettext_lazy('reporting_timeframe', 'by week'),
-        lambda start_d: date_format(start_d, 'WEEK_FORMAT'),
+        lambda start_d, end_d: date_format(start_d, 'WEEK_FORMAT') + ' - ' + daterange(start_d, end_d),
     ),
     (
         'month_this',
@@ -138,7 +140,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d.replace(day=calendar.monthrange(start_d.year, start_d.month)[1]),
         True,
         pgettext_lazy('reporting_timeframe', 'by month'),
-        lambda start_d: date_format(start_d, 'YEAR_MONTH_FORMAT'),
+        lambda start_d, end_d: date_format(start_d, 'YEAR_MONTH_FORMAT'),
     ),
     (
         'month_to_date',
@@ -147,7 +149,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: ref_d,
         False,
         pgettext_lazy('reporting_timeframe', 'by month'),
-        lambda start_d: date_format(start_d, 'YEAR_MONTH_FORMAT'),
+        lambda start_d, end_d: date_format(start_d, 'YEAR_MONTH_FORMAT'),
     ),
     (
         'month_previous',
@@ -156,7 +158,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d.replace(day=calendar.monthrange(start_d.year, start_d.month)[1]),
         False,
         pgettext_lazy('reporting_timeframe', 'by month'),
-        lambda start_d: date_format(start_d, 'YEAR_MONTH_FORMAT'),
+        lambda start_d, end_d: date_format(start_d, 'YEAR_MONTH_FORMAT'),
     ),
     (
         'month_next',
@@ -165,7 +167,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d.replace(day=calendar.monthrange(start_d.year, start_d.month)[1]),
         True,
         pgettext_lazy('reporting_timeframe', 'by month'),
-        lambda start_d: date_format(start_d, 'YEAR_MONTH_FORMAT'),
+        lambda start_d, end_d: date_format(start_d, 'YEAR_MONTH_FORMAT'),
     ),
     (
         'quarter_this',
@@ -174,7 +176,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d.replace(day=calendar.monthrange(start_d.year, start_d.month + 2)[1], month=start_d.month + 2),
         True,
         pgettext_lazy('reporting_timeframe', 'by quarter'),
-        lambda start_d: f"Q{(start_d.month - 1) // 3 + 1}/{start_d.year}",
+        lambda start_d, end_d: f"Q{(start_d.month - 1) // 3 + 1}/{start_d.year}",
     ),
     (
         'quarter_to_date',
@@ -183,7 +185,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: ref_d,
         False,
         pgettext_lazy('reporting_timeframe', 'by quarter'),
-        lambda start_d: f"Q{(start_d.month - 1) // 3 + 1}/{start_d.year}",
+        lambda start_d, end_d: f"Q{(start_d.month - 1) // 3 + 1}/{start_d.year}",
     ),
     (
         'quarter_previous',
@@ -192,7 +194,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d.replace(day=calendar.monthrange(start_d.year, start_d.month + 2)[1], month=start_d.month + 2),
         False,
         pgettext_lazy('reporting_timeframe', 'by quarter'),
-        lambda start_d: f"Q{(start_d.month - 1) // 3 + 1}/{start_d.year}",
+        lambda start_d, end_d: f"Q{(start_d.month - 1) // 3 + 1}/{start_d.year}",
     ),
     (
         'quarter_next',
@@ -203,7 +205,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d.replace(day=calendar.monthrange(start_d.year, start_d.month + 2)[1], month=start_d.month + 2),
         True,
         pgettext_lazy('reporting_timeframe', 'by quarter'),
-        lambda start_d: f"Q{(start_d.month - 1) // 3 + 1}/{start_d.year}",
+        lambda start_d, end_d: f"Q{(start_d.month - 1) // 3 + 1}/{start_d.year}",
     ),
     (
         'year_this',
@@ -212,7 +214,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d.replace(day=31, month=12),
         True,
         pgettext_lazy('reporting_timeframe', 'by year'),
-        lambda start_d: str(start_d.year),
+        lambda start_d, end_d: str(start_d.year),
     ),
     (
         'year_to_date',
@@ -221,7 +223,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: ref_d,
         False,
         pgettext_lazy('reporting_timeframe', 'by year'),
-        lambda start_d: str(start_d.year),
+        lambda start_d, end_d: str(start_d.year),
     ),
     (
         'year_previous',
@@ -230,7 +232,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d.replace(day=31, month=12),
         False,
         pgettext_lazy('reporting_timeframe', 'by year'),
-        lambda start_d: str(start_d.year),
+        lambda start_d, end_d: str(start_d.year),
     ),
     (
         'year_next',
@@ -239,7 +241,7 @@ REPORTING_DATE_TIMEFRAMES = (
         lambda ref_d, start_d: start_d.replace(day=31, month=12),
         True,
         pgettext_lazy('reporting_timeframe', 'by year'),
-        lambda start_d: str(start_d.year),
+        lambda start_d, end_d: str(start_d.year),
     ),
 )
 
@@ -274,12 +276,9 @@ class DateFrameWidget(forms.MultiWidget):
 
 
 def _describe_timeframe(label, start, end, future, describe):
-    from pretix.helpers.daterange import daterange # todo: probably import at top
     d_start = start(now())
     d_end = end(now(), d_start)
-    details = daterange(d_start, d_end)
-    if describe:
-        details = f'{describe(start(now()))}: {details}'
+    details = describe(d_start, d_end)
     return f'{label} ({details})'
 
 
