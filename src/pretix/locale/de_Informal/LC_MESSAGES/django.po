@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-13 14:07+0000\n"
-"PO-Revision-Date: 2023-01-11 12:51+0000\n"
+"PO-Revision-Date: 2023-01-13 14:28+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -836,22 +836,16 @@ msgstr "Ticket {event}-{code}"
 #: pretix/plugins/reports/exporters.py:394
 #: pretix/plugins/reports/exporters.py:625
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date range"
-msgstr "Datum und Uhrzeit"
+msgstr "Datumsbereich"
 
 #: pretix/base/exporters/dekodi.py:223 pretix/base/exporters/invoices.py:77
-#, fuzzy
-#| msgid ""
-#| "Only include invoices issued on or after this date. Note that the invoice "
-#| "date does not always correspond to the order or payment date."
 msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
 msgstr ""
-"Nur Rechnungen, die an oder nach diesem Tag erstellt wurden. Achtung: Das "
-"Rechnungsdatum korrespondiert nicht zwingend zum Bestell- oder Zahlungsdatum."
+"Nur Rechnungen, die in diesem Zeitraum wurden. Achtung: Das Rechnungsdatum "
+"korrespondiert nicht zwingend zum Bestell- oder Zahlungsdatum."
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
@@ -1589,10 +1583,8 @@ msgstr "Multiple-Choice-Fragen in einer Spalte gruppieren"
 
 #: pretix/base/exporters/orderlist.py:122
 #: pretix/plugins/reports/exporters.py:628
-#, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Only include orders created within this date range."
-msgstr "Nur Bestellungen an oder nach diesem Datum."
+msgstr "Nur Bestellungen, die in diesem Zeitraum erstellt wurden."
 
 #: pretix/base/exporters/orderlist.py:126 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:229 pretix/plugins/badges/exporters.py:310
@@ -1601,16 +1593,12 @@ msgid "Event date"
 msgstr "Veranstaltungsdatum"
 
 #: pretix/base/exporters/orderlist.py:129
-#, fuzzy
-#| msgid ""
-#| "Only include orders including at least one ticket for a date on or after "
-#| "this date. Will also include other dates in case of mixed orders!"
 msgid ""
 "Only include orders including at least one ticket for a date in this range. "
 "Will also include other dates in case of mixed orders!"
 msgstr ""
-"Nur Bestellungen, die mindestens ein Ticket für einen Termin an oder nach "
-"diesem Datum enthalten. Enthält auch andere Termine, wenn es gemischte "
+"Nur Bestellungen, die mindestens ein Ticket für einen Termin in diesem "
+"Zeitraum enthalten. Enthält auch andere Termine, wenn es gemischte "
 "Bestellungen gibt!"
 
 #: pretix/base/exporters/orderlist.py:248
@@ -2259,7 +2247,7 @@ msgstr "Wert zum Stichtag anzeigen"
 
 #: pretix/base/exporters/orderlist.py:1004
 msgid "Defaults to the time of report."
-msgstr ""
+msgstr "Standardmäßig wird der Zeitpunkt der Berichtserstellung verwendet."
 
 #: pretix/base/exporters/orderlist.py:1009
 #: pretix/base/exporters/orderlist.py:1019 pretix/control/forms/filter.py:498
@@ -10302,236 +10290,187 @@ msgstr "Ticket herunterladen"
 #: pretix/base/timeframes.py:50
 msgctxt "reporting_timeframe"
 msgid "Today"
-msgstr ""
+msgstr "Heute"
 
 #: pretix/base/timeframes.py:54 pretix/base/timeframes.py:63
 #: pretix/base/timeframes.py:72 pretix/base/timeframes.py:81
 #: pretix/base/timeframes.py:90 pretix/base/timeframes.py:99
 #: pretix/base/timeframes.py:108
-#, fuzzy
-#| msgid "Orders by day"
 msgctxt "reporting_timeframe"
 msgid "by day"
-msgstr "Bestellungen nach Datum"
+msgstr "nach Tag"
 
 #: pretix/base/timeframes.py:59
 msgctxt "reporting_timeframe"
 msgid "Yesterday"
-msgstr ""
+msgstr "Gestern"
 
 #: pretix/base/timeframes.py:68
-#, fuzzy
-#| msgid "Last date"
 msgctxt "reporting_timeframe"
 msgid "Last 7 days"
-msgstr "Letztes Datum"
+msgstr "Letzte 7 Tage"
 
 #: pretix/base/timeframes.py:77
-#, fuzzy
-#| msgid "Last date"
 msgctxt "reporting_timeframe"
 msgid "Last 14 days"
-msgstr "Letztes Datum"
+msgstr "Letzte 14 Tage"
 
 #: pretix/base/timeframes.py:86
 msgctxt "reporting_timeframe"
 msgid "Tomorrow"
-msgstr ""
+msgstr "Morgen"
 
 #: pretix/base/timeframes.py:95
-#, fuzzy
-#| msgid "Number of days"
 msgctxt "reporting_timeframe"
 msgid "Next 7 days"
-msgstr "Anzahl Tage"
+msgstr "Nächste 7 Tage"
 
 #: pretix/base/timeframes.py:104
-#, fuzzy
-#| msgid "Number of days"
 msgctxt "reporting_timeframe"
 msgid "Next 14 days"
-msgstr "Anzahl Tage"
+msgstr "Nächste 14 Tage"
 
 #: pretix/base/timeframes.py:113
-#, fuzzy
-#| msgid "Current value"
 msgctxt "reporting_timeframe"
 msgid "Current week"
-msgstr "Aktueller Wert"
+msgstr "Diese Woche"
 
 #: pretix/base/timeframes.py:117 pretix/base/timeframes.py:126
 #: pretix/base/timeframes.py:135 pretix/base/timeframes.py:144
 msgctxt "reporting_timeframe"
 msgid "by week"
-msgstr ""
+msgstr "nach Woche"
 
 #: pretix/base/timeframes.py:122
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create date"
 msgctxt "reporting_timeframe"
 msgid "Current week to date"
-msgstr "Termin erstellen"
+msgstr "Diese Woche bis heute"
 
 #: pretix/base/timeframes.py:131
-#, fuzzy
-#| msgid "Preview"
 msgctxt "reporting_timeframe"
 msgid "Previous week"
-msgstr "Vorschau"
+msgstr "Letzte Woche"
 
 #: pretix/base/timeframes.py:140
 msgctxt "reporting_timeframe"
 msgid "Next week"
-msgstr ""
+msgstr "Nächste Woche"
 
 #: pretix/base/timeframes.py:149
-#, fuzzy
-#| msgid "Current:"
 msgctxt "reporting_timeframe"
 msgid "Current month"
-msgstr "Aktuell:"
+msgstr "Dieser Monat"
 
 #: pretix/base/timeframes.py:153 pretix/base/timeframes.py:162
 #: pretix/base/timeframes.py:171 pretix/base/timeframes.py:180
-#, fuzzy
-#| msgid "months"
 msgctxt "reporting_timeframe"
 msgid "by month"
-msgstr "Monate"
+msgstr "nach Monaten"
 
 #: pretix/base/timeframes.py:158
-#, fuzzy
-#| msgid "Creation date"
 msgctxt "reporting_timeframe"
 msgid "Current month to date"
-msgstr "Erstellungsdatum"
+msgstr "Dieser Monat bis heute"
 
 #: pretix/base/timeframes.py:167
 msgctxt "reporting_timeframe"
 msgid "Previous month"
-msgstr ""
+msgstr "Letzter Monat"
 
 #: pretix/base/timeframes.py:176
-#, fuzzy
-#| msgid "Text content"
 msgctxt "reporting_timeframe"
 msgid "Next month"
-msgstr "Textinhalt"
+msgstr "Nächster Monat"
 
 #: pretix/base/timeframes.py:185
-#, fuzzy
-#| msgid "Current value"
 msgctxt "reporting_timeframe"
 msgid "Current quarter"
-msgstr "Aktueller Wert"
+msgstr "Dieses Quartal"
 
 #: pretix/base/timeframes.py:189 pretix/base/timeframes.py:198
 #: pretix/base/timeframes.py:207 pretix/base/timeframes.py:218
 msgctxt "reporting_timeframe"
 msgid "by quarter"
-msgstr ""
+msgstr "nach Quartal"
 
 #: pretix/base/timeframes.py:194
-#, fuzzy
-#| msgid "Current user's carts"
 msgctxt "reporting_timeframe"
 msgid "Current quarter to date"
-msgstr "Aktuelle Warenkörbe"
+msgstr "Dieses Quartal bis heute"
 
 #: pretix/base/timeframes.py:203
 msgctxt "reporting_timeframe"
 msgid "Previous quarter"
-msgstr ""
+msgstr "Letztes Quartal"
 
 #: pretix/base/timeframes.py:212
 msgctxt "reporting_timeframe"
 msgid "Next quarter"
-msgstr ""
+msgstr "Nächstes Quartal"
 
 #: pretix/base/timeframes.py:223
-#, fuzzy
-#| msgid "Current value"
 msgctxt "reporting_timeframe"
 msgid "Current year"
-msgstr "Aktueller Wert"
+msgstr "Dieses Jahr"
 
 #: pretix/base/timeframes.py:227 pretix/base/timeframes.py:236
 #: pretix/base/timeframes.py:245 pretix/base/timeframes.py:254
 msgctxt "reporting_timeframe"
 msgid "by year"
-msgstr ""
+msgstr "nach Jahr"
 
 #: pretix/base/timeframes.py:232
-#, fuzzy
-#| msgid "Currently for sale"
 msgctxt "reporting_timeframe"
 msgid "Current year to date"
-msgstr "Aktuell zum Verkauf"
+msgstr "Dieses Jahr bis heute"
 
 #: pretix/base/timeframes.py:241
-#, fuzzy
-#| msgid "Preview email"
 msgctxt "reporting_timeframe"
 msgid "Previous year"
-msgstr "E-Mail-Vorschau"
+msgstr "Letztes Jahr"
 
 #: pretix/base/timeframes.py:250
 msgctxt "reporting_timeframe"
 msgid "Next year"
-msgstr ""
+msgstr "Nächstes Jahr"
 
 #: pretix/base/timeframes.py:259
 msgctxt "reporting_timeframe"
 msgid "All future (excluding today)"
-msgstr ""
+msgstr "Zukunft (ab morgen)"
 
 #: pretix/base/timeframes.py:263 pretix/base/timeframes.py:272
-#, fuzzy
-#| msgid "Other"
 msgctxt "reporting_timeframe"
 msgid "Other"
-msgstr "Sonstiges"
+msgstr "Sonstige"
 
 #: pretix/base/timeframes.py:268
-#, fuzzy
-#| msgid "All products (including newly created ones)"
 msgctxt "reporting_timeframe"
 msgid "All past (including today)"
-msgstr "Alle Produkte (auch neu erstellte)"
+msgstr "Vergangenheit (inkl. heute)"
 
 #: pretix/base/timeframes.py:285
-#, fuzzy
-#| msgid "Start date"
 msgctxt "timeframe"
 msgid "Start"
 msgstr "Beginn"
 
 #: pretix/base/timeframes.py:286
-#, fuzzy
-#| msgid "Enabled"
 msgctxt "timeframe"
 msgid "End"
-msgstr "Aktiviert"
+msgstr "Ende"
 
 #: pretix/base/timeframes.py:317
-#, fuzzy
-#| msgid "The end of the event has to be later than its start."
 msgid "The end date must be after the start date."
-msgstr "Das Ende der Veranstaltung muss nach ihrem Beginn liegen."
+msgstr "Das Enddatum muss nach dem Startdatum liegen."
 
 #: pretix/base/timeframes.py:323
-#, fuzzy
-#| msgid "End of time frame"
 msgid "Custom timeframe"
-msgstr "Ende des Zeitraums"
+msgstr "Eigener Zeitraum"
 
 #: pretix/base/timeframes.py:325
-#, fuzzy
-#| msgid "All entries"
 msgctxt "reporting_timeframe"
 msgid "All time"
-msgstr "Alle Einträge"
+msgstr "Gesamter Zeitraum"
 
 #: pretix/base/timeline.py:59
 msgctxt "timeline"
@@ -24751,10 +24690,8 @@ msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:89
 #: pretix/plugins/ticketoutputpdf/exporters.py:88
-#, fuzzy
-#| msgid "Only include tickets for dates on or after this date."
 msgid "Only include tickets for dates within this range."
-msgstr "Nur Tickets für Termine an oder nach diesem Datum."
+msgstr "Nur Tickets innerhalb dieses Zeitraums."
 
 #: pretix/plugins/checkinlists/exporters.py:93
 msgid "Include QR-code secret"
