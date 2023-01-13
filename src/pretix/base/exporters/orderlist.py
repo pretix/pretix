@@ -177,21 +177,25 @@ class OrderListExporter(MultiSheetListExporter):
 
         if form_data.get('date_range'):
             dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['date_range'], self.timezone)
-            filters[f'{rel}datetime__gte'] = dt_start
-            filters[f'{rel}datetime__lt'] = dt_end
+            if dt_start:
+                filters[f'{rel}datetime__gte'] = dt_start
+            if dt_end:
+                filters[f'{rel}datetime__lt'] = dt_end
 
         if form_data.get('event_date_range'):
             dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['event_date_range'], self.timezone)
-            annotations['event_date_max'] = Case(
-                When(**{f'{rel}event__has_subevents': True}, then=Max(f'{rel}all_positions__subevent__date_from')),
-                default=F(f'{rel}event__date_from'),
-            )
-            filters['event_date_max__gte'] = dt_start
-            annotations['event_date_min'] = Case(
-                When(**{f'{rel}event__has_subevents': True}, then=Min(f'{rel}all_positions__subevent__date_from')),
-                default=F(f'{rel}event__date_from'),
-            )
-            filters['event_date_min__lt'] = dt_end
+            if dt_start:
+                annotations['event_date_max'] = Case(
+                    When(**{f'{rel}event__has_subevents': True}, then=Max(f'{rel}all_positions__subevent__date_from')),
+                    default=F(f'{rel}event__date_from'),
+                )
+                filters['event_date_max__gte'] = dt_start
+            if dt_end:
+                annotations['event_date_min'] = Case(
+                    When(**{f'{rel}event__has_subevents': True}, then=Min(f'{rel}all_positions__subevent__date_from')),
+                    default=F(f'{rel}event__date_from'),
+                )
+                filters['event_date_min__lt'] = dt_end
 
         if filters:
             return qs.annotate(**annotations).filter(**filters)
@@ -907,7 +911,10 @@ class GiftcardTransactionListExporter(OrganizerLevelExportMixin, ListExporter):
 
         if form_data.get('date_range'):
             dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['date_range'], self.timezone)
-            qs = qs.filter(datetime__gte=dt_start, datetime__lt=dt_end)
+            if dt_start:
+                qs = qs.filter(datetime__gte=dt_start)
+            if dt_end:
+                qs = qs.filter(datetime__lt=dt_end)
 
         headers = [
             _('Gift card code'),

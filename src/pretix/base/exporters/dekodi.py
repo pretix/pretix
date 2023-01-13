@@ -196,7 +196,10 @@ class DekodiNREIExporter(BaseExporter):
 
         if form_data.get('date_range'):
             d_start, d_end = resolve_timeframe_to_dates_inclusive(now(), form_data['date_range'], self.timezone)
-            qs = qs.filter(date__gte=d_start, date__lte=d_end)
+            if d_start:
+                qs = qs.filter(date__gte=d_start)
+            if d_end:
+                qs = qs.filter(date__lte=d_end)
 
         jo = {
             'Format': 'NREI',

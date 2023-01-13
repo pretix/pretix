@@ -192,6 +192,9 @@ Relative date         *either* String in ISO 8601  ``"2017-12-27"``,
 File                  URL in responses, ``file:``  ``"https://…"``, ``"file:…"``
                       specifiers in requests
                       (see below).
+Date range            *either* two dates separated ``2022-03-18/2022-03-23``, ``2022-03-18/``,
+                      by ``/`` *or* the name of a  ``/2022-03-23``, ``week_this``, ``week_next``,
+                      defined range.               ``month_this``
 ===================== ============================ ===================================
 
 Query parameters

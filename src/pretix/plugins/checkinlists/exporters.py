@@ -178,7 +178,10 @@ class CheckInListMixin(BaseExporter):
 
         if form_data.get('date_range'):
             dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['date_range'], self.timezone)
-            qs = qs.filter(subevent__date_from__gte=dt_start, subevent__date_to__lt=dt_end)
+            if dt_start:
+                qs = qs.filter(subevent__date_from__gte=dt_start)
+            if dt_end:
+                qs = qs.filter(subevent__date_to__lt=dt_end)
 
         o = ()
         if self.event.has_subevents and not cl.subevent:

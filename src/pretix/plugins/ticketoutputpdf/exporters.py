@@ -131,8 +131,10 @@ class AllTicketsPDF(BaseExporter):
 
         if form_data.get('date_range'):
             dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['date_range'], self.timezone)
-            qs = qs.filter(Q(subevent__date_from__gte=dt_start) | Q(subevent__isnull=True, order__event__date_from__gte=dt_start))
-            qs = qs.filter(Q(subevent__date_from__lt=dt_end) | Q(subevent__isnull=True, order__event__date_from__lt=dt_end))
+            if dt_start:
+                qs = qs.filter(Q(subevent__date_from__gte=dt_start) | Q(subevent__isnull=True, order__event__date_from__gte=dt_start))
+            if dt_end:
+                qs = qs.filter(Q(subevent__date_from__lt=dt_end) | Q(subevent__isnull=True, order__event__date_from__lt=dt_end))
 
         if form_data.get('order_by') == 'name':
             qs = qs.order_by('attendee_name_cached', 'order__code')

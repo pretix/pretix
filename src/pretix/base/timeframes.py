@@ -22,7 +22,7 @@
 import calendar
 from datetime import date, datetime, time, timedelta
 from itertools import groupby
-from typing import Tuple
+from typing import Optional, Tuple
 
 from django import forms
 from django.core.exceptions import ValidationError
@@ -243,6 +243,24 @@ REPORTING_DATE_TIMEFRAMES = (
         pgettext_lazy('reporting_timeframe', 'by year'),
         lambda start_d, end_d: str(start_d.year),
     ),
+    (
+        'future',
+        pgettext_lazy('reporting_timeframe', 'All future (excluding today)'),
+        lambda ref_d: ref_d + timedelta(days=1),
+        lambda ref_d, start_d: None,
+        True,
+        pgettext_lazy('reporting_timeframe', 'Other'),
+        lambda start_d, end_d: date_format(start_d, "SHORT_DATE_FORMAT") + ' – ',
+    ),
+    (
+        'past',
+        pgettext_lazy('reporting_timeframe', 'All past (including today)'),
+        lambda ref_d: None,
+        lambda ref_d, start_d: ref_d,
+        True,  # technically false, but only makes sense to have in a selection that also allows the future, otherwise redundant
+        pgettext_lazy('reporting_timeframe', 'Other'),
+        lambda start_d, end_d: ' – ' + date_format(end_d, "SHORT_DATE_FORMAT"),
+    ),
 )
 
 
@@ -283,6 +301,11 @@ def _describe_timeframe(label, start, end, future, describe):
 
 
 class DateFrameField(forms.MultiValueField):
+    default_error_messages = {
+        **forms.MultiValueField.default_error_messages,
+        'inconsistent': gettext_lazy('The end date must be after the start date.'),
+    }
+
     def __init__(self, *args, **kwargs):
         include_future_frames = kwargs.pop('include_future_frames')
 
@@ -292,11 +315,13 @@ class DateFrameField(forms.MultiValueField):
 
         _choices = []
         for grouper, group in groupby(REPORTING_DATE_TIMEFRAMES, key=lambda i: i[5]):
-            _choices.append((grouper, [
+            options = [
                 (identifier, _describe_timeframe(label, start, end, future, describe))
                 for identifier, label, start, end, future, group, describe in group
                 if include_future_frames or not future
-            ]))
+            ]
+            if options:
+                _choices.append((grouper, options))
 
         timeframe_choices = [
             ('', top_choices)
@@ -328,7 +353,7 @@ class DateFrameField(forms.MultiValueField):
         if data_list[0] == 'unset':
             return None
         elif data_list[0] == 'custom':
-            return f'{data_list[1].isoformat()}/{data_list[2].isoformat()}'
+            return f'{data_list[1].isoformat() if data_list[1] else ""}/{data_list[2].isoformat() if data_list[2] else ""}'
         else:
             return data_list[0]
 
@@ -339,23 +364,25 @@ class DateFrameField(forms.MultiValueField):
 
     def clean(self, value):
         if value[0] == 'custom':
-            if not value[1] or not value[2]:
+            if not value[1] and not value[2]:
                 raise ValidationError(self.error_messages['incomplete'])
-            # todo validate start<end
+            if value[1] and value[2] and value[2] < value[1]:
+                raise ValidationError(self.error_messages['inconsistent'])
         return super().clean(value)
 
 
-def resolve_timeframe_to_dates_inclusive(ref_dt, frame, timezone) -> Tuple[date, date]:
+def resolve_timeframe_to_dates_inclusive(ref_dt, frame, timezone) -> Tuple[Optional[date], Optional[date]]:
     """
     Given a serialized timeframe, evaluate it relative to `ref_dt` and return a tuple of dates
     where the first element ist the first possible date value within the timeframe and the second
     element is the last possible date value in the timeframe.
+    Both returned values may be ``None`` for an unlimited interval.
     """
     if isinstance(ref_dt, datetime):
         ref_dt = ref_dt.astimezone(timezone).date()
     if "/" in frame:
         start, end = frame.split("/", 1)
-        return date.fromisoformat(start), date.fromisoformat(end)
+        return date.fromisoformat(start) if start else None, date.fromisoformat(end) if end else None
     for idf, label, start, end, includes_future, *args in REPORTING_DATE_TIMEFRAMES:
         if frame == idf:
             d_start = start(ref_dt)
@@ -364,27 +391,14 @@ def resolve_timeframe_to_dates_inclusive(ref_dt, frame, timezone) -> Tuple[date,
     raise ValueError(f"Invalid timeframe '{frame}'")
 
 
-def resolve_timeframe_to_datetime_start_inclusive_end_exclusive(ref_dt, frame, timezone) -> Tuple[datetime, datetime]:
+def resolve_timeframe_to_datetime_start_inclusive_end_exclusive(ref_dt, frame, timezone) -> Tuple[Optional[date], Optional[date]]:
     """
     Given a serialized timeframe, evaluate it relative to `ref_dt` and return a tuple of datetimes
     where the first element ist the first possible datetime within the timeframe and the second
     element is the first possible datetime value *not* in the timeframe.
+    Both returned values may be ``None`` for an unlimited interval.
     """
-    if isinstance(ref_dt, datetime):
-        ref_dt = ref_dt.astimezone(timezone).date()
-    if "/" in frame:
-        start, end = frame.split("/", 1)
-        d_start = date.fromisoformat(start)
-        d_end = date.fromisoformat(end)
-    else:
-        for idf, label, start, end, includes_future, *args in REPORTING_DATE_TIMEFRAMES:
-            if frame == idf:
-                d_start = start(ref_dt)
-                d_end = end(ref_dt, d_start)
-                break
-        else:
-            raise ValueError(f"Invalid timeframe '{frame}'")
-
-    dt_start = make_aware(datetime.combine(d_start, time(0, 0, 0)), timezone)
-    dt_end = make_aware(datetime.combine(d_end + timedelta(days=1), time(0, 0, 0)), timezone)
+    d_start, d_end = resolve_timeframe_to_dates_inclusive(ref_dt, frame, timezone)
+    dt_start = make_aware(datetime.combine(d_start, time(0, 0, 0)), timezone) if d_start else None
+    dt_end = make_aware(datetime.combine(d_end + timedelta(days=1), time(0, 0, 0)), timezone) if d_end else None
     return dt_start, dt_end

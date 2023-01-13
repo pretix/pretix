@@ -639,8 +639,10 @@ class OrderTaxListReport(MultiSheetListExporter):
             dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), date_range, self.timezone)
 
         if date_filter == 'order_date' and date_range:
-            qs = qs.filter(order__datetime__gte=dt_start)
-            qs = qs.filter(order__datetime__lt=dt_end)
+            if dt_start:
+                qs = qs.filter(order__datetime__gte=dt_start)
+            if dt_end:
+                qs = qs.filter(order__datetime__lt=dt_end)
         elif date_filter == 'last_payment_date' and date_range:
             p_date = OrderPayment.objects.filter(
                 order=OuterRef('order'),
@@ -650,8 +652,10 @@ class OrderTaxListReport(MultiSheetListExporter):
                 m=Max('payment_date')
             ).values('m').order_by()
             qs = qs.annotate(payment_date=Subquery(p_date, output_field=DateTimeField()))
-            qs = qs.filter(payment_date__gte=dt_start)
-            qs = qs.filter(payment_date__lt=dt_end)
+            if dt_start:
+                qs = qs.filter(payment_date__gte=dt_start)
+            if dt_end:
+                qs = qs.filter(payment_date__lt=dt_end)
         return qs
 
     def iterate_sheet(self, form_data, sheet):
