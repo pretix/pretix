@@ -366,7 +366,7 @@ def resolve_timeframe_to_datetime_start_inclusive_end_exclusive(ref_dt, frame, t
     """
     Given a serialized timeframe, evaluate it relative to `ref_dt` and return a tuple of datetimes
     where the first element ist the first possible datetime within the timeframe and the second
-    element is the first possible datetime value *not* in the tiemframe.
+    element is the first possible datetime value *not* in the timeframe.
     """
     if isinstance(ref_dt, datetime):
         ref_dt = ref_dt.astimezone(timezone).date()
