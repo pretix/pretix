@@ -294,7 +294,7 @@ class DateFrameWidget(forms.MultiWidget):
                 date.fromisoformat(value.split('/', 1)[0]),
                 date.fromisoformat(value.split('/', 1)[-1]),
             ]
-        return []
+        return [value, None, None]
 
     def get_context(self, name, value, attrs):
         ctx = super().get_context(name, value, attrs)
@@ -372,6 +372,8 @@ class DateFrameField(forms.MultiValueField):
         return super().has_changed(initial, data)
 
     def clean(self, value):
+        if not value:
+            return None
         if value[0] == 'custom':
             if not value[1] and not value[2]:
                 raise ValidationError(self.error_messages['incomplete'])
