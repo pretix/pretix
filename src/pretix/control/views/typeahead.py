@@ -400,9 +400,13 @@ def items_select2(request, **kwargs):
     except ValueError:
         page = 1
 
-    qs = request.event.items.filter(
-        name__icontains=i18ncomp(query)
-    ).order_by(
+    q = Q(name__icontains=i18ncomp(query)) | Q(internal_name__icontains=query)
+    try:
+        if query.isdigit():
+            q |= Q(pk=int(query))
+    except ValueError:
+        pass
+    qs = request.event.items.filter(q).order_by(
         F('category__position').asc(nulls_first=True),
         'category',
         'position',
