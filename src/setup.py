@@ -206,7 +206,7 @@ setup(
         'paypal-checkout-serversdk==1.0.*',
         'PyJWT==2.6.*',
         'phonenumberslite==8.13.*',
-        'Pillow==9.3.*',
+        'Pillow==9.4.*',
         'protobuf==4.21.*',
         'psycopg2-binary',
         'pycountry',
