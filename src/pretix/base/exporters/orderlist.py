@@ -172,7 +172,6 @@ class OrderListExporter(MultiSheetListExporter):
         return {e.pk: e for e in self.events}
 
     def _date_filter(self, qs, form_data, rel):
-        print(form_data)
         annotations = {}
         filters = {}
 
