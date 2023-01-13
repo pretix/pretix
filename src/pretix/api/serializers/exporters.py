@@ -22,8 +22,10 @@
 from django import forms
 from django.http import QueryDict
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from pretix.base.exporter import OrganizerLevelExportMixin
+from pretix.base.timeframes import DateFrameField, SerializerDateFrameField
 
 
 class FormFieldWrapperField(serializers.Field):
@@ -142,6 +144,12 @@ class JobRunSerializer(serializers.Serializer):
                     allow_null=not v.required,
                     validators=v.validators,
                 )
+            elif isinstance(v, DateFrameField):
+                self.fields[k] = SerializerDateFrameField(
+                    required=v.required,
+                    allow_null=not v.required,
+                    validators=v.validators,
+                )
             else:
                 self.fields[k] = FormFieldWrapperField(form_field=v, required=v.required, allow_null=not v.required)
 
@@ -151,5 +159,40 @@ class JobRunSerializer(serializers.Serializer):
         for k, v in self.fields.items():
             if isinstance(v, serializers.ManyRelatedField) and k not in data:
                 data[k] = []
+
+        for fk in self.fields.keys():
+            # Backwards compatibility for exports that used to take e.g. (date_from, date_to) or (event_date_from, event_date_to)
+            # and now only take date_range.
+            if fk.endswith("_range") and isinstance(self.fields[fk], SerializerDateFrameField) and fk not in data:
+                if fk.replace("_range", "_from") in data:
+                    d_from = data.pop(fk.replace("_range", "_from"))
+                    if d_from:
+                        d_from = serializers.DateField().to_internal_value(d_from)
+                else:
+                    d_from = None
+                if fk.replace("_range", "_to") in data:
+                    d_to = data.pop(fk.replace("_range", "_to"))
+                    if d_to:
+                        d_to = serializers.DateField().to_internal_value(d_to)
+                else:
+                    d_to = None
+                data[fk] = f'{d_from.isoformat() if d_from else ""}/{d_to.isoformat() if d_to else ""}'
+
         data = super().to_internal_value(data)
         return data
+
+    def is_valid(self, raise_exception=False):
+        super().is_valid(raise_exception=raise_exception)
+
+        fields_keys = set(self.fields.keys())
+        input_keys = set(self.initial_data.keys())
+
+        additional_fields = input_keys - fields_keys
+
+        if bool(additional_fields):
+            self._errors['fields'] = ['Additional fields not allowed: {}.'.format(list(additional_fields))]
+
+        if self._errors and raise_exception:
+            raise ValidationError(self.errors)
+
+        return not bool(self._errors)

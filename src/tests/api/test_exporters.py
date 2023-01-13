@@ -162,12 +162,47 @@ def test_org_validate_events(token_client, organizer, team, event):
 def test_run_success(token_client, organizer, team, event):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/exporters/orderlist/run/'.format(organizer.slug, event.slug), data={
         '_format': 'xlsx',
+        'date_range': 'year_this'
     }, format='json')
     assert resp.status_code == 202
     assert "download" in resp.data
     resp = token_client.get("/" + resp.data["download"].split("/", 3)[3])
     assert resp.status_code == 200
     assert resp["Content-Type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+
+@pytest.mark.django_db
+def test_run_success_old_date_frame(token_client, organizer, team, event):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/exporters/orderlist/run/'.format(organizer.slug, event.slug), data={
+        '_format': 'xlsx',
+        'date_from': '2020-01-01',
+        'date_to': '2023-12-31'
+    }, format='json')
+    assert resp.status_code == 202
+    assert "download" in resp.data
+    resp = token_client.get("/" + resp.data["download"].split("/", 3)[3])
+    assert resp.status_code == 200
+    assert resp["Content-Type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+
+
+@pytest.mark.django_db
+def test_run_date_frame_validation(token_client, organizer, team, event):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/exporters/orderlist/run/'.format(organizer.slug, event.slug), data={
+        '_format': 'xlsx',
+        'date_range': 'invalid'
+    }, format='json')
+    assert resp.status_code == 400
+    assert resp.data == {"date_range": ["Invalid date frame"]}
+
+
+@pytest.mark.django_db
+def test_run_additional_fields_forbidden(token_client, organizer, team, event):
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/exporters/orderlist/run/'.format(organizer.slug, event.slug), data={
+        '_format': 'xlsx',
+        'foobar': 'invalid'
+    }, format='json')
+    assert resp.status_code == 400
+    assert resp.data == {"fields": ["Additional fields not allowed: ['foobar']."]}
 
 
 @pytest.mark.django_db

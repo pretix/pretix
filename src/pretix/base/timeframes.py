@@ -24,11 +24,13 @@ from datetime import date, datetime, time, timedelta
 from itertools import groupby
 from typing import Optional, Tuple
 
+import pytz
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.formats import date_format
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext_lazy, pgettext_lazy
+from rest_framework import serializers
 
 from pretix.helpers.daterange import daterange
 
@@ -380,6 +382,22 @@ class DateFrameField(forms.MultiValueField):
             if value[1] and value[2] and value[2] < value[1]:
                 raise ValidationError(self.error_messages['inconsistent'])
         return super().clean(value)
+
+
+class SerializerDateFrameField(serializers.CharField):
+
+    def to_internal_value(self, data):
+        if data is None:
+            return None
+        try:
+            resolve_timeframe_to_dates_inclusive(now(), data, pytz.UTC)
+        except:
+            raise ValidationError("Invalid date frame")
+
+    def to_representation(self, value):
+        if value is None:
+            return None
+        return value
 
 
 def resolve_timeframe_to_dates_inclusive(ref_dt, frame, timezone) -> Tuple[Optional[date], Optional[date]]:
