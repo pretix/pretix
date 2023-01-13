@@ -53,6 +53,15 @@ REPORTING_DATE_TIMEFRAMES = (
         daterange
     ),
     (
+        'days_yesterday',
+        pgettext_lazy('reporting_timeframe', 'Yesterday'),
+        lambda ref_d: ref_d - timedelta(days=1),
+        lambda ref_d, start_d: start_d,
+        False,
+        pgettext_lazy('reporting_timeframe', 'by day'),
+        daterange
+    ),
+    (
         'days_last7',
         pgettext_lazy('reporting_timeframe', 'Last 7 days'),
         lambda ref_d: ref_d - timedelta(days=6),

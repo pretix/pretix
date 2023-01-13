@@ -42,6 +42,7 @@ ref_date = date(2023, 3, 28)
 
 @pytest.mark.parametrize("ref_dt,identifier,expected_start,expected_end,description", [
     (ref_date, 'days_today', date(2023, 3, 28), date(2023, 3, 28), None),
+    (ref_date, 'days_yesterday', date(2023, 3, 27), date(2023, 3, 27), None),
     (ref_date, 'days_last7', date(2023, 3, 22), date(2023, 3, 28), None),
     (ref_date, 'days_last14', date(2023, 3, 15), date(2023, 3, 28), None),
     (ref_date, 'days_tomorrow', date(2023, 3, 29), date(2023, 3, 29), None),
