@@ -274,7 +274,10 @@ class DateFrameWidget(forms.MultiWidget):
 
 
 def _describe_timeframe(label, start, end, future, describe):
-    details = f'{date_format(start(now()), "SHORT_DATE_FORMAT")} - {date_format(end(now(), start(now())), "SHORT_DATE_FORMAT")}'
+    from pretix.helpers.daterange import daterange # todo: probably import at top
+    d_start = start(now())
+    d_end = end(now(), d_start)
+    details = daterange(d_start, d_end)
     if describe:
         details = f'{describe(start(now()))}: {details}'
     return f'{label} ({details})'
