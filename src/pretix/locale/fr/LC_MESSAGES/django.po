@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:19+0000\n"
-"Last-Translator: Christophe Piret <cpiret@greenpeace.org>\n"
+"Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -258,8 +258,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:270
 msgid "Only admission products can currently be personalized."
-msgstr ""
-"Seuls les produits d'admission peuvent actuellement être personnalisés."
+msgstr "Seuls les produits d'admission peuvent actuellement être personnalisés."
 
 #: pretix/api/serializers/item.py:281
 msgid ""
