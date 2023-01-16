@@ -158,12 +158,14 @@ class OrderPositionInfoPatchSerializer(serializers.ModelSerializer):
                 a.question_id: a for a in instance.answers.all()
             }
             for answ_data in answers_data:
+                if not answ_data.get('answer'):
+                    continue
                 options = answ_data.pop('options', [])
                 if answ_data['question'].pk in qs_seen:
                     raise ValidationError(f'Question {answ_data["question"]} was sent twice.')
                 if answ_data['question'].pk in answercache:
                     a = answercache[answ_data['question'].pk]
-                    if isinstance(answ_data['answer'], File):
+                    if isinstance(answ_data.get('answer'), File):
                         a.file.save(answ_data['answer'].name, answ_data['answer'], save=False)
                         a.answer = 'file://' + a.file.name
                     elif a.answer.startswith('file://') and answ_data['answer'] == "file:keep":
@@ -173,7 +175,7 @@ class OrderPositionInfoPatchSerializer(serializers.ModelSerializer):
                             setattr(a, attr, value)
                     a.save()
                 else:
-                    if isinstance(answ_data['answer'], File):
+                    if isinstance(answ_data.get('answer'), File):
                         an = answ_data.pop('answer')
                         a = instance.answers.create(**answ_data, answer='')
                         a.file.save(os.path.basename(an.name), an, save=False)
