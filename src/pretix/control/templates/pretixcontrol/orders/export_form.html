@@ -36,7 +36,7 @@
 
                 {% bootstrap_field rrule_form.dtstart layout="control" %}
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="id_schedule-owner">{% trans "Repetition schedule" %}</label>
+                    <label class="col-md-3 control-label">{% trans "Repetition schedule" %}</label>
                     <div class="col-md-9">
                         <div class="form-inline rrule-form">
                             {% captureas ffield_freq %}
@@ -143,22 +143,29 @@
                     </ul>
                 </div>
                 <div class="form-group">
-                    <label class="col-md-3 control-label" for="id_schedule-owner">{% trans "Primary recipient" %}</label>
+                    <label class="col-md-3 control-label" for="id_schedule-owner">{% trans "Owner" %}</label>
                     <div class="col-md-9">
-                        <input type="text" name="schedule-owner" value="{{ request.user.email }}" disabled
+                        <input type="text" name="schedule-owner" value="{{ schedule_form.instance.owner.email }}" disabled
                                class="form-control" title=""
                                id="id_schedule-owner">
+                        <div class="help-block">
+                            {% trans "The export will be performed using the owner's permission level, i.e. if the owner loses access to the data, the report will stop." %}
+                            {% trans "The owner will receive the result as well as any error messages." %}
+                            {% trans "The additional recipients you add below will only receive an email if the report was successful." %}
+                            {% trans "All recipients of the export will be able to see who the owner of the report is." %}
+                        </div>
                     </div>
                 </div>
                 {% bootstrap_field schedule_form.mail_additional_recipients layout='control' %}
                 {% bootstrap_field schedule_form.mail_additional_recipients_cc layout='control' %}
                 {% bootstrap_field schedule_form.mail_additional_recipients_bcc layout='control' %}
+                {% bootstrap_field schedule_form.locale layout='control' %}
                 {% bootstrap_field schedule_form.mail_subject layout='control' %}
                 {% bootstrap_field schedule_form.mail_template layout='control' %}
             </fieldset>
             <div class="form-group submit-group">
                 <button formaction="{{ request.get_full_path }}" name="schedule" value="save" type="submit"
-                        class="btn btn-default btn-save" data-no-asynctask>
+                        class="btn btn-primary btn-save" data-no-asynctask>
                     {% trans "Save" %}
                 </button>
             </div>

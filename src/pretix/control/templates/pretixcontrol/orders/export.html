@@ -7,6 +7,68 @@
     <h1>
         {% trans "Data export" %}
     </h1>
+    {% if scheduled %}
+        <h2>{% trans "Scheduled exports" %}</h2>
+        <ul class="list-group">
+            {% for s in scheduled %}
+                <li class="list-group-item logentry">
+                    <div class="row">
+                        <div class="col-lg-5 col-md-4 col-xs-12">
+                            <span class="fa fa-fw fa-folder"></span>
+                            {{ s.export_verbose_name }}
+                            <br>
+                            <span class="text-muted">
+                                <span class="fa fa-fw fa-user"></span>
+                                {{ s.owner.fullname|default:s.owner.email }}
+                            </span>
+                        </div>
+                        <div class="col-lg-5 col-md-6 col-xs-12">
+                            {% if s.schedule_next_run %}
+                                <span class="fa fa-clock-o fa-fw"></span>
+                                {% trans "Next run:" %}
+                                {{ s.schedule_next_run|date:"SHORT_DATETIME_FORMAT" }}
+                            {% else %}
+                                <span class="fa fa-clock-o fa-fw"></span>
+                                {% trans "No next run scheduled" %}
+                            {% endif %}
+                            {% if s.error_counter > 0 %}
+                                <strong class="text-danger">
+                                    <span class="fa fa-warning fa-fw"></span>
+                                    {% trans "Failed recently" %}
+                                </strong>
+                            {% endif %}
+                            <span class="text-muted">
+                                <br>
+                                <span class="fa fa-fw fa-envelope-o"></span>
+                                {{ s.mail_subject }}
+                            </span>
+                        </div>
+                        <div class="col-lg-2 col-md-2 col-xs-12 text-right">
+                            <form action="{% url "control:event.orders.export.do" event=request.event.slug organizer=request.organizer.slug %}"
+                                  method="post" class="form-horizontal" data-asynctask data-asynctask-download
+                                  data-asynctask-long>
+                                {% csrf_token %}
+                                <input type="hidden" name="exporter" value="{{ s.export_identifier }}"/>
+                                <input type="hidden" name="scheduled" value="{{ s.pk }}"/>
+                                <button type="submit" class="btn btn-default" title="{% trans "Run export now" %}" data-toggle="tooltip">
+                                    <span class="fa fa-play"></span>
+                                </button>
+                                <a href="?identifier={{ s.export_identifier }}&scheduled={{ s.pk }}" class="btn btn-default" title="{% trans "Edit" %}" data-toggle="tooltip">
+                                    <span class="fa fa-edit"></span>
+                                </a>
+                                <a href="{% url "control:event.orders.export.scheduled.delete" event=request.event.slug organizer=request.event.organizer.slug pk=s.pk %}" class="btn btn-danger" title="{% trans "Delete" %}" data-toggle="tooltip">
+                                    <span class="fa fa-trash"></span>
+                                </a>
+                            </form>
+                        </div>
+                    </div>
+                </li>
+            {% endfor %}
+        </ul>
+        {% if is_paginated %}
+            {% include "pretixcontrol/pagination.html" %}
+        {% endif %}
+    {% endif %}
     {% regroup exporters by category as category_list %}
     {% for c, c_ex in category_list %}
         {% if c %}
@@ -20,7 +82,8 @@
                     <h4>
                         {{ e.verbose_name }}
                         {% if e.featured %}
-                            <span class="fa fa-star text-success" data-toggle="tooltip" title="{% trans "Recommended for new users" %}" aria-hidden="true"></span>
+                            <span class="fa fa-star text-success" data-toggle="tooltip"
+                                  title="{% trans "Recommended for new users" %}" aria-hidden="true"></span>
                         {% endif %}
                     </h4>
                     {% if e.description %}

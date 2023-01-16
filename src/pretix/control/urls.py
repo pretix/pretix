@@ -386,6 +386,7 @@ urlpatterns = [
         re_path(r'^orders/import/$', orderimport.ImportView.as_view(), name='event.orders.import'),
         re_path(r'^orders/import/(?P<file>[^/]+)/$', orderimport.ProcessView.as_view(), name='event.orders.import.process'),
         re_path(r'^orders/export/$', orders.ExportView.as_view(), name='event.orders.export'),
+        re_path(r'^orders/export/(?P<pk>[^/]+)/delete$', orders.DeleteScheduledExportView.as_view(), name='event.orders.export.scheduled.delete'),
         re_path(r'^orders/export/do$', orders.ExportDoView.as_view(), name='event.orders.export.do'),
         re_path(r'^orders/refunds/$', orders.RefundList.as_view(), name='event.orders.refunds'),
         re_path(r'^orders/go$', orders.OrderGo.as_view(), name='event.orders.go'),

@@ -66,7 +66,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from django.views.generic import (
-    DetailView, FormView, ListView, TemplateView, View,
+    DeleteView, DetailView, FormView, ListView, TemplateView, View,
 )
 from i18nfield.strings import LazyI18nString
 
@@ -77,7 +77,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedFile, CachedTicket, Checkin, Invoice,
     InvoiceAddress, Item, ItemVariation, LogEntry, Order, QuestionAnswer,
-    Quota, generate_secret,
+    Quota, ScheduledEventExport, generate_secret,
 )
 from pretix.base.models.orders import (
     CancellationRequest, OrderFee, OrderPayment, OrderPosition, OrderRefund,
@@ -2245,6 +2245,19 @@ class ExportMixin:
             key=lambda ex: (0 if ex.category else 1, ex.category or "", 0 if ex.featured else 1, str(ex.verbose_name).lower())
         )
 
+    def get_scheduled_queryset(self):
+        if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_change_event_settings',
+                                                      request=self.request):
+            return self.request.event.scheduled_exports.filter(owner=self.request.user).select_related('owner')
+        return self.request.event.scheduled_exports.select_related('owner')
+
+    @cached_property
+    def scheduled(self):
+        if "scheduled" in self.request.POST:
+            return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.POST.get("scheduled"))
+        elif "scheduled" in self.request.GET:
+            return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.GET.get("scheduled"))
+
     @cached_property
     def exporter(self):
         id = self.request.GET.get("identifier") or self.request.POST.get("exporter") or self.request.GET.get("exporter")
@@ -2311,48 +2324,146 @@ class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, Templ
                 'organizer': self.request.event.organizer.slug
             }))
 
-        if not self.exporter.form.is_valid():
-            messages.error(self.request, _('There was a problem processing your input. See below for error details.'))
-            return self.get(request, *args, **kwargs)
+        if self.scheduled:
+            data = self.scheduled.export_form_data
+        else:
+            if not self.exporter.form.is_valid():
+                messages.error(self.request, _('There was a problem processing your input. See below for error details.'))
+                return self.get(request, *args, **kwargs)
+            data = self.exporter.form.cleaned_data
 
         cf = CachedFile(web_download=True, session_key=request.session.session_key)
         cf.date = now()
         cf.expires = now() + timedelta(hours=24)
         cf.save()
-        return self.do(self.request.event.id, str(cf.id), self.exporter.identifier, self.exporter.form.cleaned_data)
+        return self.do(self.request.event.id, str(cf.id), self.exporter.identifier, data)
 
 
-class ExportView(EventPermissionRequiredMixin, ExportMixin, TemplateView):
+class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
     permission = 'can_view_orders'
+    paginate_by = 25
+    context_object_name = 'scheduled'
 
     def get_template_names(self):
         if self.exporter:
             return ['pretixcontrol/orders/export_form.html']
         return ['pretixcontrol/orders/export.html']
 
-    def post(self, *args, **kwargs):
-        return super().get(*args, **kwargs)
+    @transaction.atomic()
+    def post(self, request, *args, **kwargs):
+        if request.POST.get("schedule") == "save":
+            if self.exporter.form.is_valid() and self.rrule_form.is_valid() and self.schedule_form.is_valid():
+                self.schedule_form.instance.export_identifier = self.exporter.identifier
+                self.schedule_form.instance.export_form_data = self.exporter.form.cleaned_data
+                self.schedule_form.instance.schedule_rrule = str(self.rrule_form.to_rrule())
+                self.schedule_form.instance.error_counter = 0
+                self.schedule_form.instance.error_last_message = None
+                self.schedule_form.instance.compute_next_run()
+                self.schedule_form.instance.save()
+                if self.schedule_form.instance.schedule_next_run:
+                    messages.success(
+                        request,
+                        _('Your export schedule has been saved. The next export will start around {datetime}.').format(
+                            datetime=date_format(self.schedule_form.instance.schedule_next_run, 'SHORT_DATETIME_FORMAT')
+                        )
+                    )
+                else:
+                    messages.warning(request, _('Your export schedule has been saved, but no next export is planned.'))
+                self.request.event.log_action(
+                    'pretix.export.schedule.changed' if self.scheduled else 'pretix.export.schedule.added',
+                    user=self.request.user, data={
+                        'id': self.schedule_form.instance.id,
+                        'export_identifier': self.exporter.identifier,
+                        'export_form_data': self.exporter.form.cleaned_data,
+                        'schedule_rrule': self.schedule_form.instance.schedule_rrule,
+                        **self.schedule_form.cleaned_data,
+                    }
+                )
+                return redirect(reverse('control:event.orders.export', kwargs={
+                    'event': self.request.event.slug,
+                    'organizer': self.request.event.organizer.slug
+                }))
+            else:
+                return super().get(request, *args, **kwargs)
+        return super().get(request, *args, **kwargs)
 
     @cached_property
     def rrule_form(self):
+        if self.scheduled:
+            initial = RRuleForm.initial_from_rrule(self.scheduled.schedule_rrule)
+        else:
+            initial = {}
         return RRuleForm(
             data=self.request.POST if self.request.method == 'POST' and self.request.POST.get("schedule") == "save" else None,
             prefix="rrule",
+            initial=initial
         )
 
     @cached_property
     def schedule_form(self):
+        instance = self.scheduled or ScheduledEventExport(
+            event=self.request.event,
+            owner=self.request.user,
+        )
+        if not self.scheduled:
+            initial = {
+                "mail_subject": gettext("Export: {title}").format(title=self.exporter.verbose_name),
+                "mail_template": gettext("Hello,\n\nattached to this email, you can find a new scheduled report for {event}.").format(
+                    event=str(self.request.event.name)
+                ),
+                "schedule_rrule_time": time(4, 0, 0),
+            }
+        else:
+            initial = {}
         return ScheduledEventExportForm(
             data=self.request.POST if self.request.method == 'POST' and self.request.POST.get("schedule") == "save" else None,
             prefix="schedule",
+            instance=instance,
+            initial=initial,
         )
+
+    def get_queryset(self):
+        return self.get_scheduled_queryset()
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        if "schedule" in self.request.POST:
+        if "schedule" in self.request.POST or self.scheduled:
             ctx['schedule_form'] = self.schedule_form
             ctx['rrule_form'] = self.rrule_form
+        elif not self.exporter:
+            for s in ctx['scheduled']:
+                try:
+                    s.export_verbose_name = [e for e in self.exporters if e.identifier == s.export_identifier][0].verbose_name
+                except IndexError:
+                    s.export_verbose_name = "?"
         return ctx
+
+
+class DeleteScheduledExportView(EventPermissionRequiredMixin, DeleteView):
+    permission = 'can_view_orders'
+    template_name = 'pretixcontrol/orders/export_delete.html'
+    context_object_name = 'export'
+
+    def get_queryset(self):
+        if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_change_event_settings',
+                                                      request=self.request):
+            return self.request.event.scheduled_exports.filter(owner=self.request.user).select_related('owner')
+        return self.request.event.scheduled_exports.select_related('owner')
+
+    def get_success_url(self):
+        return redirect(reverse('control:event.orders.export', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug
+        }))
+
+    @transaction.atomic()
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.delete()
+        self.request.event.log_action('pretix.export.schedule.deleted', user=self.request.user, data={
+            'id': self.object.id,
+        })
+        return redirect(self.get_success_url())
 
 
 class RefundList(EventPermissionRequiredMixin, PaginationMixin, ListView):

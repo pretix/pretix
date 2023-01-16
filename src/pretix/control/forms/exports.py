@@ -21,6 +21,8 @@
 #
 
 from django import forms
+from django.conf import settings
+from django.utils.translation import gettext_lazy as _
 
 from pretix.base.models import ScheduledEventExport
 
@@ -29,10 +31,18 @@ class ScheduledEventExportForm(forms.ModelForm):
     class Meta:
         model = ScheduledEventExport
         fields = ['mail_additional_recipients', 'mail_additional_recipients_cc', 'mail_additional_recipients_bcc',
-                  'mail_subject', 'mail_template', 'schedule_rrule_time']
+                  'mail_subject', 'mail_template', 'schedule_rrule_time', 'locale']
         widgets = {
             'mail_additional_recipients': forms.TextInput,
             'mail_additional_recipients_cc': forms.TextInput,
             'mail_additional_recipients_bcc': forms.TextInput,
             'schedule_rrule_time': forms.TimeInput(attrs={'class': 'timepickerfield', 'autocomplete': 'off'}),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        locale_names = dict(settings.LANGUAGES)
+        self.fields['locale'] = forms.ChoiceField(
+            label=_('Language'),
+            choices=[(a, locale_names[a]) for a in self.instance.event.settings.locales]
+        )
