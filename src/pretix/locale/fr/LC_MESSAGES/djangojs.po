@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-13 14:07+0000\n"
-"PO-Revision-Date: 2023-01-16 06:00+0000\n"
+"PO-Revision-Date: 2023-01-17 01:00+0000\n"
 "Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
@@ -297,7 +297,7 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "Le code du billet est ambigu dans la liste"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 #, fuzzy
