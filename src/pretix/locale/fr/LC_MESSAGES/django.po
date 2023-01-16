@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-13 14:07+0000\n"
-"PO-Revision-Date: 2023-01-16 06:00+0000\n"
-"Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
+"PO-Revision-Date: 2023-01-16 08:32+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -485,7 +485,7 @@ msgstr "Fournisseur SSO incompatible \"{error}\"."
 #: pretix/base/customersso/oidc.py:109
 #, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "Vous n'êtes pas en train de demander {code}"
+msgstr "Vous n'êtes pas en train de demander {scope}"
 
 #: pretix/base/customersso/oidc.py:115
 #, python-brace-format
