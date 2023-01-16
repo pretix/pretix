@@ -31,7 +31,12 @@
                                 <span class="fa fa-clock-o fa-fw"></span>
                                 {% trans "No next run scheduled" %}
                             {% endif %}
-                            {% if s.error_counter > 0 %}
+                            {% if s.error_counter >= 5 %}
+                                <strong class="text-danger">
+                                    <span class="fa fa-warning fa-fw"></span>
+                                    {% trans "Disabled due to multiple failures" %}
+                                </strong>
+                            {% elif s.error_counter > 0 %}
                                 <strong class="text-danger">
                                     <span class="fa fa-warning fa-fw"></span>
                                     {% trans "Failed recently" %}

@@ -1,0 +1,12 @@
+{% load i18n %}
+{% trans "Your export failed." %}
+
+{% trans "Reason:" %} {{ reason }}
+
+{% if not soft %}
+{% trans "If your export fails five times in a row, it will no longer be sent." %}
+{% endif %}
+
+{% trans "Configuration link:" %}
+
+{{ configuration_url }}
