@@ -57,7 +57,7 @@ def get_public_ical(events):
         vevent.add('summary').value = str(ev.name)
         vevent.add('dtstamp').value = creation_time
         if ev.location:
-            vevent.add('location').value = str(ev.location)
+            vevent.add('location').value = ", ".join(l.strip() for l in str(ev.location).splitlines() if l.strip())
         vevent.add('uid').value = 'pretix-{}-{}-{}@{}'.format(
             event.organizer.slug, event.slug,
             ev.pk if not isinstance(ev, Event) else '0',
