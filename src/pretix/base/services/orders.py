@@ -1068,6 +1068,8 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
                 any_payment_failed = True
             except Exception:
                 logger.exception('Error during payment attempt')
+            else:
+                order.refresh_from_db()
 
     pending_sum = order.pending_sum
     free_order_flow = (
