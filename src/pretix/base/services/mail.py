@@ -211,7 +211,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
         subject = raw_subject = str(subject).replace('\n', ' ').replace('\r', '')[:900]
         signature = ""
 
-        bcc = list(bcc)
+        bcc = list(bcc or [])
 
         settings_holder = event or organizer
 
