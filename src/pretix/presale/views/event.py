@@ -515,7 +515,15 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
             # Regroup those by category
             context['items_by_category'] = item_group_by_category(items)
-            context['display_add_to_cart'] = len(items) > 0
+            context['display_add_to_cart'] = any(
+                item.order_max > 0 for item in items if not item.has_variations
+            ) or any(
+                any(
+                    var.order_max > 0
+                    for var in item.available_variations
+                )
+                for item in items if item.has_variations
+            )
 
         context['cart'] = self.get_cart()
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
