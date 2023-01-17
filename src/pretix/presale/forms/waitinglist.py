@@ -48,7 +48,7 @@ class WaitingListForm(forms.ModelForm):
         choices = [
             ('', '')
         ]
-        items, display_add_to_cart = get_grouped_items(
+        items = get_grouped_items(
             self.event, self.instance.subevent, require_seat=None,
             memberships=(
                 customer.usable_memberships(

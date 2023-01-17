@@ -1262,7 +1262,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
 
                     if ckey not in item_cache:
                         # Get all items to possibly show
-                        items, _btn = get_grouped_items(
+                        items = get_grouped_items(
                             self.request.event,
                             subevent=p.subevent,
                             voucher=None,

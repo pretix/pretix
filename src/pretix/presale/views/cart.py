@@ -543,7 +543,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
         context['max_times'] = self.voucher.max_usages - self.voucher.redeemed
 
         # Fetch all items
-        items, display_add_to_cart = get_grouped_items(
+        items = get_grouped_items(
             self.request.event,
             self.subevent,
             voucher=self.voucher,

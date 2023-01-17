@@ -526,7 +526,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
                 if ckey not in item_cache:
                     # Get all items to possibly show
-                    items, _btn = get_grouped_items(
+                    items = get_grouped_items(
                         self.request.event,
                         subevent=cartpos.subevent,
                         voucher=None,
