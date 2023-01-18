@@ -326,6 +326,7 @@ def scheduled_event_export(self, event: Event, schedule: int) -> None:
 def run_scheduled_exports(sender, **kwargs):
     qs = ScheduledEventExport.objects.filter(
         schedule_next_run__lt=now(),
+        error_counter__lt=5,
     ).select_related('event')
     for s in qs:
         scheduled_event_export.apply_async(kwargs={
@@ -336,6 +337,7 @@ def run_scheduled_exports(sender, **kwargs):
         s.save(update_fields=['schedule_next_run'])
     qs = ScheduledOrganizerExport.objects.filter(
         schedule_next_run__lt=now(),
+        error_counter__lt=5,
     ).select_related('organizer')
     for s in qs:
         scheduled_organizer_export.apply_async(kwargs={
