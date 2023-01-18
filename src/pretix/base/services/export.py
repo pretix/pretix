@@ -27,7 +27,7 @@ from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.files.base import ContentFile
 from django.dispatch import receiver
-from django.utils.timezone import override, now
+from django.utils.timezone import now, override
 from django.utils.translation import gettext
 from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
@@ -36,18 +36,18 @@ from pretix.base.email import get_email_context
 from pretix.base.exporter import OrganizerLevelExportMixin
 from pretix.base.i18n import LazyLocaleException, language
 from pretix.base.models import (
-    CachedFile, Device, Event, Organizer, TeamAPIToken, User, cachedfile_name, ScheduledEventExport,
+    CachedFile, Device, Event, Organizer, ScheduledEventExport, TeamAPIToken,
+    User, cachedfile_name,
 )
+from pretix.base.services.mail import mail
 from pretix.base.services.tasks import (
     ProfiledEventTask, ProfiledOrganizerUserTask,
 )
-from pretix.base.services.mail import mail
 from pretix.base.signals import (
-    register_data_exporters, register_multievent_data_exporters, periodic_task,
+    periodic_task, register_data_exporters, register_multievent_data_exporters,
 )
 from pretix.celery_app import app
 from pretix.helpers.urls import build_absolute_uri
-
 
 logger = logging.getLogger(__name__)
 

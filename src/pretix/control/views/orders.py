@@ -2248,8 +2248,10 @@ class ExportMixin:
     def get_scheduled_queryset(self):
         if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_change_event_settings',
                                                       request=self.request):
-            return self.request.event.scheduled_exports.filter(owner=self.request.user).select_related('owner')
-        return self.request.event.scheduled_exports.select_related('owner')
+            qs = self.request.event.scheduled_exports.filter(owner=self.request.user)
+        else:
+            qs = self.request.event.scheduled_exports
+        return qs.select_related('owner').order_by('export_identifier', 'schedule_next_run')
 
     @cached_property
     def scheduled(self):
