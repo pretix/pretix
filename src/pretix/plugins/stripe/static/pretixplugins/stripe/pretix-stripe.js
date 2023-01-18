@@ -28,6 +28,11 @@ var pretixstripe = {
                 // and submit
                 $form.get(0).submit();
             }
+        }).catch((e) => {
+            waitingDialog.hide();
+            $(".stripe-errors").stop().hide().removeClass("sr-only");
+            $(".stripe-errors").html("<div class='alert alert-danger'>Technical error, please contact support: " + e + "</div>");
+            $(".stripe-errors").slideDown();
         });
     },
     'load': function () {
