@@ -2254,13 +2254,16 @@ class ExportMixin:
             if id != ex.identifier:
                 continue
 
-            # Use form parse cycle to generate useful defaults
-            test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
-            test_form.fields = ex.export_form_fields
-            test_form.is_valid()
-            initial = {
-                k: v for k, v in test_form.cleaned_data.items() if ex.identifier + "-" + k in self.request.GET
-            }
+            if self.scheduled:
+                initial = self.scheduled.export_form_data
+            else:
+                # Use form parse cycle to generate useful defaults
+                test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
+                test_form.fields = ex.export_form_fields
+                test_form.is_valid()
+                initial = {
+                    k: v for k, v in test_form.cleaned_data.items() if ex.identifier + "-" + k in self.request.GET
+                }
 
             ex.form = ExporterForm(
                 data=(self.request.POST if self.request.method == 'POST' else None),

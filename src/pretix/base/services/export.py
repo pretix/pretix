@@ -123,7 +123,7 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
             timezone = organizer.settings.timezone or settings.TIME_ZONE
             region = organizer.settings.region
     with language(locale, region), override(timezone):
-        if form_data.get('events') is not None:
+        if form_data.get('events') is not None and not form_data.get('all_events'):
             if isinstance(form_data['events'][0], str):
                 events = allowed_events.filter(slug__in=form_data.get('events'), organizer=organizer)
             else:
@@ -229,7 +229,7 @@ def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, 
                 bcc=[r for r in schedule.mail_additional_recipients_bcc.split(",") if r],
                 subject=schedule.mail_subject,
                 template=LazyI18nString(schedule.mail_template),
-                context=get_email_context(),
+                context=get_email_context(event=context) if isinstance(context, Event) else {},
                 organizer=context.organizer if isinstance(context, Event) else context,
                 locale=schedule.locale,
                 attach_cached_files=[file],
@@ -251,7 +251,7 @@ def scheduled_organizer_export(self, organizer: Organizer, schedule: int) -> Non
     schedule = organizer.scheduled_exports.get(pk=schedule)
 
     allowed_events = schedule.owner.get_events_with_permission('can_view_orders')
-    if schedule.export_form_data.get('events') is not None:
+    if schedule.export_form_data.get('events') is not None and not schedule.export_form_data.get('all_events'):
         if isinstance(schedule.export_form_data['events'][0], str):
             events = allowed_events.filter(slug__in=schedule.export_form_data.get('events'), organizer=organizer)
         else:

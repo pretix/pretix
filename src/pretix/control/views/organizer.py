@@ -1524,13 +1524,18 @@ class ExportMixin:
         for ex in self.exporters:
             if id != ex.identifier:
                 continue
-            # Use form parse cycle to generate useful defaults
-            test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
-            test_form.fields = ex.export_form_fields
-            test_form.is_valid()
-            initial = {
-                k: v for k, v in test_form.cleaned_data.items() if ex.identifier + "-" + k in self.request.GET
-            }
+            if self.scheduled:
+                initial = self.scheduled.export_form_data
+            else:
+                # Use form parse cycle to generate useful defaults
+                test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
+                test_form.fields = ex.export_form_fields
+                test_form.is_valid()
+                initial = {
+                    k: v for k, v in test_form.cleaned_data.items() if ex.identifier + "-" + k in self.request.GET
+                }
+                if 'events' not in initial:
+                    initial.setdefault('all_events', True)
 
             ex.form = ExporterForm(
                 data=(self.request.POST if self.request.method == 'POST' else None),
@@ -1540,15 +1545,22 @@ class ExportMixin:
             ex.form.fields = ex.export_form_fields
             if not isinstance(ex, OrganizerLevelExportMixin):
                 ex.form.fields.update([
+                    ('all_events',
+                     forms.BooleanField(
+                         label=_("All events (that I have access to)"),
+                         required=False
+                     )),
                     ('events',
                      forms.ModelMultipleChoiceField(
                          queryset=self.events,
-                         initial=self.events,
                          widget=forms.CheckboxSelectMultiple(
-                             attrs={'class': 'scrolling-multiple-choice'}
+                             attrs={
+                                 'class': 'scrolling-multiple-choice',
+                                 'data-inverse-dependency': f'#id_{ex.identifier}-all_events',
+                             }
                          ),
                          label=_('Events'),
-                         required=True
+                         required=False
                      )),
                 ])
             return ex
