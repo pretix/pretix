@@ -100,7 +100,7 @@ To create the schema in your new PostgreSQL database, use the following commands
 Migrate your data
 -----------------
 
-Install pgloader::
+Install ``pgloader``::
 
     # apt install pgloader
 
@@ -143,6 +143,6 @@ Now, restart pretix. Maybe stop your MySQL server as a verification step that yo
     # systemctl stop mariadb
     # systemctl start pretix-web pretix-worker
 
-And you're done! After you've verified everything has been copied correctly, you can delete the old MySQL databsae.
+And you're done! After you've verified everything has been copied correctly, you can delete the old MySQL database.
 
 .. note:: Don't forget to update your backup process to back up your PostgreSQL database instead of your MySQL database now.
