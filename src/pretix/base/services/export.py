@@ -195,6 +195,7 @@ def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, 
 
         if not has_permission:
             _handle_error(gettext('Permission denied.'))
+            return
 
         try:
             if not exporter:
@@ -213,9 +214,9 @@ def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, 
             f = ContentFile(data)
             file.file.save(cachedfile_name(file, file.filename), f)
         except ExportEmptyError as e:
-            _handle_error(e, soft=True)
+            _handle_error(str(e), soft=True)
         except ExportError as e:
-            _handle_error(e, soft=False)
+            _handle_error(str(e), soft=False)
         except Exception:
             logger.exception("Scheduled export failed.")
             try:
@@ -223,6 +224,8 @@ def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, 
             except MaxRetriesExceededError:
                 _handle_error('Internal Error')
         else:
+            schedule.error_counter = 0
+            schedule.save(update_fields=['error_counter'])
             mail(
                 email=[schedule.owner.email] + [r for r in schedule.mail_additional_recipients.split(",") if r],
                 cc=[r for r in schedule.mail_additional_recipients_cc.split(",") if r],
