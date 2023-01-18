@@ -55,7 +55,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
-from django.utils.timezone import now
+from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views import View
 from django.views.generic import (
@@ -1716,6 +1716,7 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
         instance = self.scheduled or ScheduledOrganizerExport(
             organizer=self.request.organizer,
             owner=self.request.user,
+            timezone=get_current_timezone().zone,
         )
         if not self.scheduled:
             initial = {

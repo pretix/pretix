@@ -22,7 +22,6 @@
 
 from django import forms
 from django.conf import settings
-from django.utils.timezone import get_current_timezone
 from django.utils.translation import gettext_lazy as _
 from pytz import common_timezones
 
@@ -72,6 +71,5 @@ class ScheduledOrganizerExportForm(forms.ModelForm):
         )
         self.fields['timezone'] = forms.ChoiceField(
             choices=((a, a) for a in common_timezones),
-            initial=get_current_timezone().zone,
             label=_("Timezone"),
         )
