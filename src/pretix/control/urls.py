@@ -207,6 +207,8 @@ urlpatterns = [
     re_path(r'^organizer/(?P<organizer>[^/]+)/logs', organizer.LogView.as_view(), name='organizer.log'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/export/$', organizer.ExportView.as_view(), name='organizer.export'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/export/do$', organizer.ExportDoView.as_view(), name='organizer.export.do'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/export/(?P<pk>[^/]+)/delete$', organizer.DeleteScheduledExportView.as_view(),
+            name='organizer.export.scheduled.delete'),
     re_path(r'^nav/typeahead/$', typeahead.nav_context_list, name='nav.typeahead'),
     re_path(r'^events/$', main.EventList.as_view(), name='events'),
     re_path(r'^events/add$', main.EventWizard.as_view(), name='events.add'),

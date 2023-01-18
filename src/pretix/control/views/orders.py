@@ -2245,21 +2245,6 @@ class ExportMixin:
             key=lambda ex: (0 if ex.category else 1, ex.category or "", 0 if ex.featured else 1, str(ex.verbose_name).lower())
         )
 
-    def get_scheduled_queryset(self):
-        if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_change_event_settings',
-                                                      request=self.request):
-            qs = self.request.event.scheduled_exports.filter(owner=self.request.user)
-        else:
-            qs = self.request.event.scheduled_exports
-        return qs.select_related('owner').order_by('export_identifier', 'schedule_next_run')
-
-    @cached_property
-    def scheduled(self):
-        if "scheduled" in self.request.POST:
-            return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.POST.get("scheduled"))
-        elif "scheduled" in self.request.GET:
-            return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.GET.get("scheduled"))
-
     @cached_property
     def exporter(self):
         id = self.request.GET.get("identifier") or self.request.POST.get("exporter") or self.request.GET.get("exporter")
@@ -2284,6 +2269,21 @@ class ExportMixin:
             )
             ex.form.fields = ex.export_form_fields
             return ex
+
+    def get_scheduled_queryset(self):
+        if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_change_event_settings',
+                                                      request=self.request):
+            qs = self.request.event.scheduled_exports.filter(owner=self.request.user)
+        else:
+            qs = self.request.event.scheduled_exports
+        return qs.select_related('owner').order_by('export_identifier', 'schedule_next_run')
+
+    @cached_property
+    def scheduled(self):
+        if "scheduled" in self.request.POST:
+            return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.POST.get("scheduled"))
+        elif "scheduled" in self.request.GET:
+            return get_object_or_404(self.get_scheduled_queryset(), pk=self.request.GET.get("scheduled"))
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -2410,8 +2410,8 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
         if not self.scheduled:
             initial = {
                 "mail_subject": gettext("Export: {title}").format(title=self.exporter.verbose_name),
-                "mail_template": gettext("Hello,\n\nattached to this email, you can find a new scheduled report for {event}.").format(
-                    event=str(self.request.event.name)
+                "mail_template": gettext("Hello,\n\nattached to this email, you can find a new scheduled report for {name}.").format(
+                    name=str(self.request.event.name)
                 ),
                 "schedule_rrule_time": time(4, 0, 0),
             }

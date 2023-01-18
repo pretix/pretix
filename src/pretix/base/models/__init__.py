@@ -30,7 +30,7 @@ from .event import (
     Event, Event_SettingsStore, EventLock, EventMetaProperty, EventMetaValue,
     SubEvent, SubEventMetaValue, generate_invite_token,
 )
-from .exports import ScheduledEventExport
+from .exports import ScheduledEventExport, ScheduledOrganizerExport
 from .giftcards import GiftCard, GiftCardAcceptance, GiftCardTransaction
 from .invoices import Invoice, InvoiceLine, invoice_filename
 from .items import (

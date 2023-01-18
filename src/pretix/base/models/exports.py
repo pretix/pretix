@@ -23,6 +23,7 @@ from datetime import datetime, timedelta
 
 import pytz
 from dateutil.rrule import rrulestr
+from django.conf import settings
 from django.db import models
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext_lazy as _
@@ -31,11 +32,9 @@ from pretix.base.models import LoggedModel
 from pretix.base.validators import RRuleValidator, multimail_validate
 
 
-class ScheduledEventExport(LoggedModel):
+class AbstractScheduledExport(LoggedModel):
     id = models.BigAutoField(primary_key=True)
-    event = models.ForeignKey(
-        "pretixbase.Event", on_delete=models.CASCADE, related_name="scheduled_exports"
-    )
+
     export_identifier = models.CharField(
         max_length=190,
         verbose_name=_("Export"),
@@ -45,7 +44,6 @@ class ScheduledEventExport(LoggedModel):
     owner = models.ForeignKey(
         "pretixbase.User",
         on_delete=models.PROTECT,
-        related_name="scheduled_event_exports",
     )
     locale = models.CharField(
         verbose_name=_('Language'),
@@ -84,12 +82,15 @@ class ScheduledEventExport(LoggedModel):
     error_counter = models.IntegerField(default=0)
     error_last_message = models.TextField(null=True, blank=True)
 
+    class Meta:
+        abstract = True
+
     def __str__(self):
         return self.mail_subject
 
     def compute_next_run(self):
+        tz = self.tz
         r = rrulestr(self.schedule_rrule)
-        tz = self.event.timezone
         new_d = r.after(now().astimezone(tz).replace(tzinfo=None), inc=False)
         if not new_d:
             self.schedule_next_run = None
@@ -101,3 +102,26 @@ class ScheduledEventExport(LoggedModel):
             self.schedule_next_run = make_aware(datetime.combine(new_d.date(), self.schedule_rrule_time), tz, is_dst=False)
         except pytz.exceptions.NonExistentTimeError:
             self.schedule_next_run = make_aware(datetime.combine(new_d.date(), self.schedule_rrule_time) + timedelta(hours=1), tz)
+
+
+class ScheduledEventExport(AbstractScheduledExport):
+    event = models.ForeignKey(
+        "pretixbase.Event", on_delete=models.CASCADE, related_name="scheduled_exports"
+    )
+
+    @property
+    def tz(self):
+        return self.event.timezone
+
+
+class ScheduledOrganizerExport(AbstractScheduledExport):
+    organizer = models.ForeignKey(
+        "pretixbase.Organizer", on_delete=models.CASCADE, related_name="scheduled_exports"
+    )
+    timezone = models.CharField(max_length=100,
+                                default=settings.TIME_ZONE,
+                                verbose_name=_('Timezone'))
+
+    @property
+    def tz(self):
+        return pytz.timezone(self.timezone)
