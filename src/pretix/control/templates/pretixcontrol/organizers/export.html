@@ -31,7 +31,12 @@
                                 <span class="fa fa-clock-o fa-fw"></span>
                                 {% trans "No next run scheduled" %}
                             {% endif %}
-                            {% if s.error_counter >= 5 %}
+                            {% if s.export_verbose_name == "?" %}
+                                <strong class="text-danger">
+                                    <span class="fa fa-warning fa-fw"></span>
+                                    {% trans "Exporter not found" %}
+                                </strong>
+                            {% elif s.error_counter >= 5 %}
                                 <strong class="text-danger">
                                     <span class="fa fa-warning fa-fw"></span>
                                     {% trans "Disabled due to multiple failures" %}
@@ -55,12 +60,14 @@
                                 {% csrf_token %}
                                 <input type="hidden" name="exporter" value="{{ s.export_identifier }}"/>
                                 <input type="hidden" name="scheduled" value="{{ s.pk }}"/>
-                                <button type="submit" class="btn btn-default" title="{% trans "Run export now" %}" data-toggle="tooltip">
-                                    <span class="fa fa-play"></span>
-                                </button>
-                                <a href="?identifier={{ s.export_identifier }}&scheduled={{ s.pk }}" class="btn btn-default" title="{% trans "Edit" %}" data-toggle="tooltip">
-                                    <span class="fa fa-edit"></span>
-                                </a>
+                                {% if s.export_verbose_name != "?" %}
+                                    <button type="submit" class="btn btn-default" title="{% trans "Run export now" %}" data-toggle="tooltip">
+                                        <span class="fa fa-play"></span>
+                                    </button>
+                                    <a href="?identifier={{ s.export_identifier }}&scheduled={{ s.pk }}" class="btn btn-default" title="{% trans "Edit" %}" data-toggle="tooltip">
+                                        <span class="fa fa-edit"></span>
+                                    </a>
+                                {% endif %}
                                 <a href="{% url "control:organizer.export.scheduled.delete" organizer=request.organizer.slug pk=s.pk %}" class="btn btn-danger" title="{% trans "Delete" %}" data-toggle="tooltip">
                                     <span class="fa fa-trash"></span>
                                 </a>
