@@ -167,7 +167,7 @@
 {% endblock %}
 {% block footernav %}
     {% if request.event.settings.contact_mail %}
-        <li><a href="mailto:{{ request.event.settings.contact_mail }}">{% trans "Contact event organizer" %}</a></li>
+        <li><a href="mailto:{{ request.event.settings.contact_mail }}" target="_blank" rel="noopener">{% trans "Contact event organizer" %}</a></li>
     {% endif %}
     {% if request.event.settings.privacy_url %}
         <li><a href="{% safelink request.event.settings.privacy_url %}" target="_blank" rel="noopener">{% trans "Privacy policy" %}</a></li>

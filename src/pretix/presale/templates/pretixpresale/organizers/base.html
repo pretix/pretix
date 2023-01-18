@@ -85,7 +85,7 @@
 {% endblock %}
 {% block footernav %}
     {% if not request.event and request.organizer.settings.contact_mail %}
-        <li><a href="mailto:{{ request.organizer.settings.contact_mail }}">{% trans "Contact event organizer" %}</a></li>
+        <li><a href="mailto:{{ request.organizer.settings.contact_mail }}" target="_blank" rel="noopener">{% trans "Contact event organizer" %}</a></li>
     {% endif %}
     {% if not request.event and request.organizer.settings.privacy_url %}
         <li><a href="{% safelink request.organizer.settings.privacy_url %}" target="_blank" rel="noopener">{% trans "Privacy policy" %}</a></li>
