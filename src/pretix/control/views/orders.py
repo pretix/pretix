@@ -2372,7 +2372,7 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
                 else:
                     messages.warning(request, _('Your export schedule has been saved, but no next export is planned.'))
                 self.request.event.log_action(
-                    'pretix.export.schedule.changed' if self.scheduled else 'pretix.export.schedule.added',
+                    'pretix.event.export.schedule.changed' if self.scheduled else 'pretix.event.export.schedule.added',
                     user=self.request.user, data={
                         'id': self.schedule_form.instance.id,
                         'export_identifier': self.exporter.identifier,
@@ -2462,7 +2462,7 @@ class DeleteScheduledExportView(EventPermissionRequiredMixin, DeleteView):
     def delete(self, request, *args, **kwargs):
         self.object = self.get_object()
         self.object.delete()
-        self.request.event.log_action('pretix.export.schedule.deleted', user=self.request.user, data={
+        self.request.event.log_action('pretix.event.export.schedule.deleted', user=self.request.user, data={
             'id': self.object.id,
         })
         return redirect(self.get_success_url())

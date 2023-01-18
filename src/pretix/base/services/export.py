@@ -167,6 +167,16 @@ def scheduled_export(self, event: Event, schedule: int) -> None:
         file.save()
 
         def _handle_error(msg, soft=False):
+            event.log_action(
+                'pretix.event.export.schedule.failed',
+                user=self.request.user, data={
+                    'id': schedule.id,
+                    'export_identifier': schedule.export_identifier,
+                    'export_form_data': schedule.export_form_data,
+                    'reason': msg,
+                    'soft': soft,
+                }
+            )
             mail(
                 email=schedule.owner.email,
                 subject=gettext('Export failed'),
@@ -206,7 +216,8 @@ def scheduled_export(self, event: Event, schedule: int) -> None:
                             gettext('Your export did not contain any data.')
                         )
                     file.filename, file.type, data = d
-                    if len(data) > 20 * 1024 * 1024:  # 20 MB
+                    filesize = len(data)
+                    if filesize > 20 * 1024 * 1024:  # 20 MB
                         raise ExportError(
                             gettext('Your exported data exceeded the size limit for scheduled exports.')
                         )
@@ -237,7 +248,16 @@ def scheduled_export(self, event: Event, schedule: int) -> None:
                 locale=schedule.locale,
                 attach_cached_files=[file],
             )
-            return True
+            event.log_action(
+                'pretix.event.export.schedule.executed',
+                data={
+                    'id': schedule.id,
+                    'export_identifier': schedule.export_identifier,
+                    'export_form_data': schedule.export_form_data,
+                    'result_file_size': filesize,
+                    'result_file_name': file.file.name,
+                }
+            )
 
 
 @receiver(signal=periodic_task)
