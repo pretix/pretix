@@ -272,6 +272,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         'min_price': item.min_price if item.has_variations else None,
                         'max_price': item.max_price if item.has_variations else None,
                         'allow_waitinglist': item.allow_waitinglist,
+                        'mandatory_priced_addons': item.mandatory_priced_addons,
                         'free_price': item.free_price,
                         'avail': [
                             item.cached_availability[0],
