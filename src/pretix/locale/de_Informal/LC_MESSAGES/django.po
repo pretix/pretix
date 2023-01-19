@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-19 10:47+0000\n"
-"PO-Revision-Date: 2023-01-13 14:28+0000\n"
+"PO-Revision-Date: 2023-01-19 12:13+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -3532,27 +3532,21 @@ msgid "Export"
 msgstr "Export"
 
 #: pretix/base/models/exports.py:54
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Additional recipients"
-msgstr "Zusätzliche Einstellungen"
+msgstr "Zusätzliche Empfänger"
 
 #: pretix/base/models/exports.py:56 pretix/base/models/exports.py:61
 #: pretix/base/models/exports.py:66
 msgid "You can specify multiple recipients separated by commas."
-msgstr ""
+msgstr "Du kannst mehrere Adressen mit Komma getrennt angeben."
 
 #: pretix/base/models/exports.py:59
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Additional recipients (Cc)"
-msgstr "Zusätzliche Einstellungen"
+msgstr "Zusätzliche Empfänger (Cc)"
 
 #: pretix/base/models/exports.py:64
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Additional recipients (Bcc)"
-msgstr "Zusätzliche Einstellungen"
+msgstr "Zusätzliche Empfänger (Bcc)"
 
 #: pretix/base/models/exports.py:69 pretix/control/forms/event.py:1012
 #: pretix/control/forms/event.py:1069 pretix/control/forms/event.py:1079
@@ -3573,14 +3567,13 @@ msgid "Message"
 msgstr "Nachricht"
 
 #: pretix/base/models/exports.py:80
-#, fuzzy
-#| msgid "Event start time"
 msgid "Requested start time"
-msgstr "Veranstaltungsbeginn"
+msgstr "Gewünschte Startzeit"
 
 #: pretix/base/models/exports.py:81
 msgid "The actual start time might be delayed depending on system load."
 msgstr ""
+"Die tatsächliche Startzeit kann abhängig von der Systemlast verzögert sein."
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
@@ -6717,20 +6710,17 @@ msgid "You do not have sufficient permission to perform this export."
 msgstr "Du hast nicht die nötige Berechtigung, um diesen Export durchzuführen."
 
 #: pretix/base/services/export.py:181
-#, fuzzy
-#| msgid "Exported files"
 msgid "Export failed"
-msgstr "Exportierte Dateien"
+msgstr "Export fehlgeschlagen"
 
 #: pretix/base/services/export.py:198
-#, fuzzy
-#| msgid "Permission denied"
 msgid "Permission denied."
-msgstr "Keine Berechtigung"
+msgstr "Keine Berechtigung."
 
 #: pretix/base/services/export.py:213
 msgid "Your exported data exceeded the size limit for scheduled exports."
 msgstr ""
+"Die exportierten Daten übersteigen das Größenlimit für geplante Exporte."
 
 #: pretix/base/services/invoices.py:106
 #, python-brace-format
@@ -10237,27 +10227,21 @@ msgid "powered by <a %(a_attr)s>pretix</a>"
 msgstr "powered by <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:2
-#, fuzzy
-#| msgid "Create new export file"
 msgid "Your export failed."
-msgstr "Neue Export-Datei erstellen"
+msgstr "Der Export ist fehlgeschlagen."
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:4
-#, fuzzy
-#| msgid "Refund reason"
 msgid "Reason:"
-msgstr "Grund für die Erstattung"
+msgstr "Grund:"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:7
 msgid "If your export fails five times in a row, it will no longer be sent."
 msgstr ""
+"Wenn der Export fünf mal in Folge fehlschlägt, wird er nicht mehr verschickt."
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:10
-#, fuzzy
-#| msgctxt "order state"
-#| msgid "Confirmation pending"
 msgid "Configuration link:"
-msgstr "Bestätigung ausstehend"
+msgstr "Konfiguration:"
 
 #: pretix/base/templates/pretixbase/email/notification.html:55
 #: pretix/base/templates/pretixbase/email/notification.txt:14
@@ -11302,10 +11286,8 @@ msgstr "Verfügbare Anzahl"
 
 #: pretix/control/forms/exports.py:56 pretix/control/forms/exports.py:62
 #: pretix/control/forms/exports.py:68
-#, fuzzy
-#| msgid "Please enter the correct result."
 msgid "Please enter less than 25 recipients."
-msgstr "Dieses Ergebnis ist nicht korrekt."
+msgstr "Bitte weniger als 25 Adressen eingeben."
 
 #: pretix/control/forms/filter.py:193 pretix/control/forms/filter.py:195
 #: pretix/control/forms/filter.py:852 pretix/control/forms/filter.py:854
@@ -12367,10 +12349,8 @@ msgid "Payment date"
 msgstr "Zahlungsdatum"
 
 #: pretix/control/forms/orders.py:232
-#, fuzzy
-#| msgid "Please select a valid seat."
 msgid "Please select some events."
-msgstr "Bitte wähle einen gültigen Sitzplatz aus."
+msgstr "Bitte wähle Veranstaltungen aus."
 
 #: pretix/control/forms/orders.py:252
 msgid "Re-calculate taxes"
@@ -13308,33 +13288,25 @@ msgid "The footer links have been changed."
 msgstr "Die Links im Footer wurden geändert."
 
 #: pretix/control/logdisplay.py:318 pretix/control/logdisplay.py:417
-#, fuzzy
-#| msgid "The quota has been added."
 msgid "A scheduled export has been added."
-msgstr "Das Kontingent wurde erstellt."
+msgstr "Ein geplanter Export wurde hinzugefügt."
 
 #: pretix/control/logdisplay.py:319 pretix/control/logdisplay.py:418
-#, fuzzy
-#| msgid "The product has been changed."
 msgid "A scheduled export has been changed."
-msgstr "Das Produkt wurde verändert."
+msgstr "Ein geplanter Export wurde geändert."
 
 #: pretix/control/logdisplay.py:320 pretix/control/logdisplay.py:419
-#, fuzzy
-#| msgid "The selected property has been deleted."
 msgid "A scheduled export has been deleted."
-msgstr "Die ausgewählte Eigenschaft wurde gelöscht."
+msgstr "Ein geplanter Export wurde gelöscht."
 
 #: pretix/control/logdisplay.py:321 pretix/control/logdisplay.py:420
-#, fuzzy
-#| msgid "The selected property has been deleted."
 msgid "A scheduled export has been executed."
-msgstr "Die ausgewählte Eigenschaft wurde gelöscht."
+msgstr "Ein geplanter Export wurde ausgeführt."
 
 #: pretix/control/logdisplay.py:322 pretix/control/logdisplay.py:421
 #, python-brace-format
 msgid "A scheduled export has failed: {reason}."
-msgstr ""
+msgstr "Ein geplanter Export ist fehlgeschlagen: {reason}."
 
 #: pretix/control/logdisplay.py:323
 msgid "Gift card acceptance for another organizer has been added."
@@ -19394,47 +19366,37 @@ msgstr "Datenexport"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:11
 #: pretix/control/templates/pretixcontrol/organizers/export.html:11
-#, fuzzy
-#| msgid "Scheduled time"
 msgid "Scheduled exports"
-msgstr "Geplanter Zeitpunkt"
+msgstr "Geplante Exporte"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:28
 #: pretix/control/templates/pretixcontrol/organizers/export.html:28
-#, fuzzy
-#| msgid "Next execution:"
 msgid "Next run:"
 msgstr "Nächste Ausführung:"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:32
 #: pretix/control/templates/pretixcontrol/organizers/export.html:32
-#, fuzzy
-#| msgid "scheduled"
 msgid "No next run scheduled"
-msgstr "geplant"
+msgstr "Keine nächste Ausführung geplant"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:37
 #: pretix/control/templates/pretixcontrol/organizers/export.html:37
-#, fuzzy
-#| msgid "Export refunds"
 msgid "Exporter not found"
-msgstr "Erstattungen exportieren"
+msgstr "Export nicht gefunden"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:42
 #: pretix/control/templates/pretixcontrol/organizers/export.html:42
 msgid "Disabled due to multiple failures"
-msgstr ""
+msgstr "Wegen mehrfacher Fehler deaktiviert"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:47
 #: pretix/control/templates/pretixcontrol/organizers/export.html:47
 msgid "Failed recently"
-msgstr ""
+msgstr "Kürzlich fehlgeschlagen"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:64
-#, fuzzy
-#| msgid "Retry now"
 msgid "Run export now"
-msgstr "Jetzt wiederholen"
+msgstr "Export jetzt ausführen"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:69
 #: pretix/control/templates/pretixcontrol/organizers/export.html:69
@@ -19442,6 +19404,8 @@ msgid ""
 "Run export and send via email now. This will not change the next scheduled "
 "execution."
 msgstr ""
+"Export jetzt ausführen und per E-Mail verschicken. Dies verändert die "
+"nächste geplante Ausführung nicht."
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:95
 #: pretix/control/templates/pretixcontrol/organizers/export.html:95
@@ -19456,28 +19420,23 @@ msgstr "Empfohlen für neue Benutzer*innen"
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:6
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:4
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:6
-#, fuzzy
-#| msgid "Delete selected"
 msgid "Delete scheduled export"
-msgstr "Ausgewählte löschen"
+msgstr "Geplanten Export löschen"
 
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:9
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:9
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the quota <strong>%(quota)s</strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to delete the scheduled export <strong>%(export)s</"
 "strong>?"
 msgstr ""
-"Möchtest du das Kontingent <strong>%(quota)s</strong> wirklich löschen?"
+"Möchtest du den geplanten Export <strong>%(export)s</strong> wirklich "
+"löschen?"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:26
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:27
-#, fuzzy
-#| msgid "Quota options"
 msgid "Export options"
-msgstr "Kontingent-Optionen"
+msgstr "Export-Optionen"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:41
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:42
@@ -19486,28 +19445,21 @@ msgstr "Exportieren"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:46
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:47
-#, fuzzy
-#| msgid "Scheduled time"
 msgid "Schedule export"
-msgstr "Geplanter Zeitpunkt"
+msgstr "Export planen"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:6
-#, fuzzy
-#| msgid "scheduled"
 msgid "Schedule"
-msgstr "geplant"
+msgstr "Zeitplan"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:15
-#, fuzzy
-#| msgid "Repetition rule"
 msgid "Repetition schedule"
-msgstr "Regel zur Wiederholung"
+msgstr "Wiederholungsschema"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:46
-#, fuzzy, python-format
-#| msgid "Repeat every %(interval)s %(freq)s, starting at %(start)s."
+#, python-format
 msgid "Repeat every %(interval)s %(freq)s"
-msgstr "Wiederhole alle %(interval)s %(freq)s mit Beginn am %(start)s."
+msgstr "Wiederhole alle %(interval)s %(freq)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:54
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:89
@@ -19550,21 +19502,19 @@ msgid "Repeat until %(until)s"
 msgstr "Wiederhole bis zum %(until)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:97
-#, fuzzy
-#| msgid "Never"
 msgid "Forever"
-msgstr "Niemals"
+msgstr "Für immer"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:110
 msgid ""
 "Every time your schedule is executed, the report will be sent via email."
 msgstr ""
+"Jedes mal, wenn der Zeitplan ausgeführt wird, wird der Export per E-Mail "
+"verschickt."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:111
-#, fuzzy
-#| msgid "Please confirm the following payment details."
 msgid "Please note the following limitations:"
-msgstr "Bitte bestätige die folgenden Zahlungsdetails."
+msgstr "Bitte beachte die folgenden Beschränkungen:"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:114
 msgid ""
@@ -19572,38 +19522,48 @@ msgid ""
 "exports that output e.g. statistical data, not for reports that include "
 "sensitive personal data."
 msgstr ""
+"E-Mail ist kein Medium mit starker Verschlüsselung. Wir empfehlen diesen "
+"Mechanismus daher nur für Exporte, die z.B. statistische Daten ausgeben, und "
+"nicht für Exporte, die sensible personenbezogene Daten enthalten."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:117
 msgid ""
 "Email is not made for large files. If your export ends up to be larger than "
 "20 megabytes, it will not be sent."
 msgstr ""
+"E-Mail ist nicht für große Dateien geeignet. Wenn der Export größer als 20 "
+"Megabytes ist, wird er nicht verschickt."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:122
 msgid "Owner"
-msgstr ""
+msgstr "Besitzer"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:128
 msgid ""
 "The export will be performed using the owner's permission level, i.e. if the "
 "owner loses access to the data, the report will stop."
 msgstr ""
+"Der Export wird mit den Berechtigungen dieses Benutzers durchgeführt, d.h. "
+"wenn diese Person keinen Zugriff mehr auf die Daten hat, stoppt der Export."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:129
 msgid "The owner will receive the result as well as any error messages."
-msgstr ""
+msgstr "Der Besitzer erhält das Ergebnis des Exports sowie Fehlermeldungen."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:130
 msgid ""
 "The additional recipients you add below will only receive an email if the "
 "report was successful."
 msgstr ""
+"Die zusätzlichen Empfänger, die weiter unten hinzugefügt werden können, "
+"erhalten nur eine E-Mail, wenn der Export erfolgreich war."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:131
 msgid ""
 "All recipients of the export will be able to see who the owner of the report "
 "is."
 msgstr ""
+"Alle Empfänger des Exports können sehen, wer der Besitzer des Exports ist."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:20
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:18
@@ -20224,7 +20184,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/export.html:64
 msgid "Run export now and download result"
-msgstr ""
+msgstr "Export jetzt ausführen und Ergebnis herunterladen"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:5
 msgid "Delete gate:"
@@ -23401,16 +23361,19 @@ msgid ""
 "Your export schedule has been saved. The next export will start around "
 "{datetime}."
 msgstr ""
+"Der geplante Export wurde gespeichert. Der nächste Export startet ca. "
+"{datetime}."
 
 #: pretix/control/views/orders.py:2376 pretix/control/views/organizer.py:1696
 msgid "Your export schedule has been saved, but no next export is planned."
 msgstr ""
+"Der geplante Export wurde gespeichert, aber es ist keine nächste Ausführung "
+"geplant."
 
 #: pretix/control/views/orders.py:2415 pretix/control/views/organizer.py:1735
-#, fuzzy, python-brace-format
-#| msgid "Export date"
+#, python-brace-format
 msgid "Export: {title}"
-msgstr "Exportdatum"
+msgstr "Export: {title}"
 
 #: pretix/control/views/orders.py:2416 pretix/control/views/organizer.py:1736
 #, python-brace-format
@@ -23419,6 +23382,9 @@ msgid ""
 "\n"
 "attached to this email, you can find a new scheduled report for {name}."
 msgstr ""
+"Hallo,\n"
+"\n"
+"im Anhang dieser E-Mail findest du einen neuen Bericht für {name}."
 
 #: pretix/control/views/orders.py:2484 pretix/control/views/organizer.py:1802
 msgid ""
@@ -23426,6 +23392,9 @@ msgid ""
 "Depending on system load and type and size of export, this may take a few "
 "minutes."
 msgstr ""
+"Wir haben den Export eingeplant. Das Ergebnis wird per E-Mail verschickt. "
+"Abhängig von der Systemlast und Art und Größe des Exports kann dies einige "
+"Minuten dauern."
 
 #: pretix/control/views/orders.py:2562
 msgid "All orders have been canceled."
@@ -23625,7 +23594,7 @@ msgstr "Der Wertgutschein wurde erstellt und kann nun verwendet werden."
 
 #: pretix/control/views/organizer.py:1550
 msgid "All events (that I have access to)"
-msgstr ""
+msgstr "Alle Veranstaltungen (auf die ich Zugriff habe)"
 
 #: pretix/control/views/organizer.py:1907
 msgid "The selected gate has been deleted."
