@@ -632,10 +632,10 @@ class Event(EventMixin, LoggedModel):
             return super().presale_has_ended
 
     def delete_all_orders(self, really=False):
+        from .checkin import Checkin
         from .orders import (
             OrderFee, OrderPayment, OrderPosition, OrderRefund, Transaction,
         )
-        from .checkin import Checkin
 
         if not really:
             raise TypeError("Pass really=True as a parameter.")
