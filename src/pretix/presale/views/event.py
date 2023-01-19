@@ -309,8 +309,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                              base_price_is='net' if event.settings.display_net_prices else 'gross')  # backwards-compat
                     if item.original_price else None
                 )
-
-            display_add_to_cart = display_add_to_cart or item.order_max > 0
+            if not display_add_to_cart:
+                display_add_to_cart = not item.requires_seat and item.order_max > 0
         else:
             for var in item.available_variations:
                 if var.require_membership and var.require_membership_hidden:
@@ -355,7 +355,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                                 base_price_is='net' if event.settings.display_net_prices else 'gross')  # backwards-compat
                     ) if var.original_price or item.original_price else None
 
-                display_add_to_cart = display_add_to_cart or var.order_max > 0
+                if not display_add_to_cart:
+                    display_add_to_cart = not item.requires_seat and var.order_max > 0
 
             item.original_price = (
                 item.tax(item.original_price, currency=event.currency, include_bundled=True,
