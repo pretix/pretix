@@ -2484,8 +2484,9 @@ class RunScheduledExportView(EventPermissionRequiredMixin, ExportMixin, View):
         messages.success(self.request, _('Your export is queued to start soon. The results will be send via email. '
                                          'Depending on system load and type and size of export, this may take a few '
                                          'minutes.'))
-        return redirect(reverse('control:organizer.export', kwargs={
-            'organizer': self.request.organizer.slug
+        return redirect(reverse('control:event.orders.export', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.event.organizer.slug
         }))
 
 

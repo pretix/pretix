@@ -42,6 +42,7 @@ def event():
         date_from=datetime(2023, 1, 19, 2, 30, 0, tzinfo=pytz.UTC),
         plugins='pretix.plugins.banktransfer'
     )
+    o.settings.timezone = "Europe/Berlin"
     with scope(organizer=o):
         yield event
 
@@ -191,7 +192,7 @@ def test_event_ok(event, user, team):
 @pytest.mark.django_db
 @freeze_time("2023-01-18 03:00:00+01:00")
 def test_organizer_run_sets_new_time(event, user):
-    s = ScheduledOrganizerExport(organizer=event.organizer, owner=user)
+    s = ScheduledOrganizerExport(organizer=event.organizer, owner=user, timezone="Europe/Berlin")
     s.schedule_rrule = "DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO"
     s.schedule_rrule_time = time(2, 30, 0)
     s.schedule_next_run = now() - timedelta(minutes=5)

@@ -2791,6 +2791,14 @@ class ScheduledExportTestCase(TestCase):
             s.compute_next_run()
             assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 1, 19, 6, 30, 0))
 
+        with freeze_time("2023-01-19 06:28:00+01:00"):
+            s.compute_next_run()
+            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 1, 19, 6, 30, 0))
+
+        with freeze_time("2023-01-19 06:30:00+01:00"):
+            s.compute_next_run()
+            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 1, 24, 6, 30, 0))
+
         with freeze_time("2024-01-18 15:08:00+01:00"):
             s.compute_next_run()
             assert s.schedule_next_run is None

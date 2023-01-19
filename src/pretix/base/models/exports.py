@@ -94,7 +94,12 @@ class AbstractScheduledExport(LoggedModel):
     def compute_next_run(self):
         tz = self.tz
         r = rrulestr(self.schedule_rrule)
-        new_d = r.after(now().astimezone(tz).replace(tzinfo=None), inc=False)
+
+        base_dt = now().astimezone(tz).replace(tzinfo=None)
+        if now().astimezone(tz).time() < self.schedule_rrule_time:
+            base_dt -= timedelta(days=1)
+
+        new_d = r.after(base_dt, inc=False)
         if not new_d:
             self.schedule_next_run = None
             return
