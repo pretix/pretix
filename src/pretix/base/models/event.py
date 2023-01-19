@@ -635,6 +635,7 @@ class Event(EventMixin, LoggedModel):
         from .orders import (
             OrderFee, OrderPayment, OrderPosition, OrderRefund, Transaction,
         )
+        from .checkin import Checkin
 
         if not really:
             raise TypeError("Pass really=True as a parameter.")
@@ -645,6 +646,7 @@ class Event(EventMixin, LoggedModel):
         OrderFee.objects.filter(order__event=self).delete()
         OrderRefund.objects.filter(order__event=self).delete()
         OrderPayment.objects.filter(order__event=self).delete()
+        Checkin.objects.filter(list__event=self).delete()
         self.orders.all().delete()
 
     def save(self, *args, **kwargs):
