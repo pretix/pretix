@@ -22,6 +22,7 @@
 
 from django import forms
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from pytz import common_timezones
 
@@ -50,13 +51,22 @@ class ScheduledEventExportForm(forms.ModelForm):
         )
 
     def clean_mail_additional_recipients(self):
-        return self.cleaned_data['mail_additional_recipients'].replace(' ', '')
+        d = self.cleaned_data['mail_additional_recipients'].replace(' ', '')
+        if len(d.split(',')) > 25:
+            raise ValidationError(_('Please enter less than 25 recipients.'))
+        return d
 
     def clean_mail_additional_recipients_cc(self):
-        return self.cleaned_data['mail_additional_recipients_cc'].replace(' ', '')
+        d = self.cleaned_data['mail_additional_recipients_cc'].replace(' ', '')
+        if len(d.split(',')) > 25:
+            raise ValidationError(_('Please enter less than 25 recipients.'))
+        return d
 
     def clean_mail_additional_recipients_bcc(self):
-        return self.cleaned_data['mail_additional_recipients_bcc'].replace(' ', '')
+        d = self.cleaned_data['mail_additional_recipients_bcc'].replace(' ', '')
+        if len(d.split(',')) > 25:
+            raise ValidationError(_('Please enter less than 25 recipients.'))
+        return d
 
 
 class ScheduledOrganizerExportForm(forms.ModelForm):
