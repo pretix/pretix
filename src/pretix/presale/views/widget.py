@@ -313,15 +313,7 @@ class WidgetAPIProductList(EventListMixin, View):
                     } for item in g
                 ]
             })
-        display_add_to_cart = any(
-            item.order_max > 0 for item in items if not item.has_variations and not item.requires_seat
-        ) or any(
-            any(
-                var.order_max > 0
-                for var in item.available_variations
-            )
-            for item in items if item.has_variations and not item.requires_seat
-        )
+        display_add_to_cart = any(not i.requires_seat for i in items)
         return grps, display_add_to_cart, len(items), items
 
     def post_process(self, data):
