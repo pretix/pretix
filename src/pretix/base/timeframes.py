@@ -379,7 +379,7 @@ class DateFrameField(forms.MultiValueField):
         if value[0] == 'custom':
             if not value[1] and not value[2]:
                 raise ValidationError(self.error_messages['incomplete'])
-            if value[1] and value[2] and value[2] < value[1]:
+            if value[1] and value[2] and self.fields[2].to_python(value[2]) < self.fields[1].to_python(value[1]):
                 raise ValidationError(self.error_messages['inconsistent'])
         return super().clean(value)
 
