@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 14:07+0000\n"
+"POT-Creation-Date: 2023-01-19 10:47+0000\n"
 "PO-Revision-Date: 2019-09-24 19:00+0000\n"
 "Last-Translator: Serge Bazanski <q3k@hackerspace.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -141,8 +141,8 @@ msgid "Continue"
 msgstr "Dalej"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:222
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:157
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:188
 msgid "Confirming your payment …"
 msgstr "Potwierdzanie płatności…"
 
@@ -168,11 +168,11 @@ msgstr "Całkowity dochód"
 msgid "Contacting Stripe …"
 msgstr "Kontaktowanie Stripe…"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:65
 msgid "Total"
 msgstr "Razem"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:164
 msgid "Contacting your bank …"
 msgstr "Łączenie z bankiem…"
 
@@ -393,11 +393,11 @@ msgid ""
 msgstr ""
 "Błąd komunikacji z serwerem. Prosimy spróbować ponownie. Kod błędu: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:208
+#: pretix/static/pretixbase/js/asynctask.js:215
 msgid "We are processing your request …"
 msgstr "Zapytanie jest przetwarzane…"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:223
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -407,7 +407,7 @@ msgstr ""
 "dłuższego niż minuta prosimy o sprawdzenie łączności z Internetem a "
 "następnie o przeładowanie strony i ponowienie próby."
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:285
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Zamknięcie wiadomości"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 14:07+0000\n"
+"POT-Creation-Date: 2023-01-19 10:47+0000\n"
 "PO-Revision-Date: 2022-11-16 16:12+0000\n"
 "Last-Translator: David Vaz <davidmgvaz@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
@@ -140,8 +140,8 @@ msgid "Continue"
 msgstr "Continuar"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:222
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:157
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:188
 msgid "Confirming your payment …"
 msgstr "A confirmar o seu pagamento…"
 
@@ -167,11 +167,11 @@ msgstr "Total de receitas"
 msgid "Contacting Stripe …"
 msgstr "A contactar o Stripe…"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:65
 msgid "Total"
 msgstr "Total"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:164
 msgid "Contacting your bank …"
 msgstr "A contactar o seu banco…"
 
@@ -379,11 +379,11 @@ msgstr ""
 "Atualmente não conseguimos chegar ao servidor. Por favor tente outra vez. "
 "Código de erro: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:208
+#: pretix/static/pretixbase/js/asynctask.js:215
 msgid "We are processing your request …"
 msgstr "Estamos processando o seu pedido …"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:223
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -393,7 +393,7 @@ msgstr ""
 "de um minuto, verifique a sua ligação à Internet e, em seguida, recarregue "
 "esta página e tente novamente."
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:285
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Fechar mensagem"

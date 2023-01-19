@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 14:07+0000\n"
+"POT-Creation-Date: 2023-01-19 10:47+0000\n"
 "PO-Revision-Date: 2021-09-15 11:22+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -138,8 +138,8 @@ msgid "Continue"
 msgstr "المتابعة"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:222
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:157
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:188
 msgid "Confirming your payment …"
 msgstr "جاري تأكيد الدفع الخاص بك …"
 
@@ -165,11 +165,11 @@ msgstr "إجمالي الإيرادات"
 msgid "Contacting Stripe …"
 msgstr "جاري الاتصال بStripe …"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:65
 msgid "Total"
 msgstr "المجموع"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:164
 msgid "Contacting your bank …"
 msgstr "جاري الاتصال بالبنك الذي تتعامل معه …"
 
@@ -367,11 +367,11 @@ msgid ""
 msgstr ""
 "لا يمكننا الوصول إلى الخادم حاليا، حاول مرة أخرى من فضلك. رمز الخطأ : {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:208
+#: pretix/static/pretixbase/js/asynctask.js:215
 msgid "We are processing your request …"
 msgstr "جاري معالجة طلبك …"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:223
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -380,7 +380,7 @@ msgstr ""
 "نعمل الآن على ارسال طلبك إلى الخادم، إذا أستغرقت العملية أكثر من دقيقة، يرجى "
 "التحقق من اتصالك بالإنترنت ثم أعد تحميل الصفحة مرة أخرى."
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:285
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "أغلق الرسالة"

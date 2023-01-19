@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 14:07+0000\n"
+"POT-Creation-Date: 2023-01-19 10:47+0000\n"
 "PO-Revision-Date: 2022-06-20 02:00+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
@@ -135,8 +135,8 @@ msgid "Continue"
 msgstr "Fortsett"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:222
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:157
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:188
 msgid "Confirming your payment …"
 msgstr "Bekrefter betalingen din…"
 
@@ -162,11 +162,11 @@ msgstr "Total inntekt"
 msgid "Contacting Stripe …"
 msgstr "Kontakter Stripe…"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:65
 msgid "Total"
 msgstr "Totalt"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:164
 msgid "Contacting your bank …"
 msgstr "Kontakter banken din…"
 
@@ -360,11 +360,11 @@ msgid ""
 msgstr ""
 "Vi kan ikke nå serveren akkurat nå. Vennligst prøv igjen. Feilkode: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:208
+#: pretix/static/pretixbase/js/asynctask.js:215
 msgid "We are processing your request …"
 msgstr "Vi gjennomfører forespørselen din…"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:223
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -373,7 +373,7 @@ msgstr ""
 "Vi sender forespørslene dine til serveren. Hvis dette tar langre tid en ett "
 "minutt, sjekk internett koblingen din og deretter last siden og prøv på nytt."
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:285
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Lukk melding"

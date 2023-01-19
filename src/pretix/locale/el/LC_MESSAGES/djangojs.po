@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-13 14:07+0000\n"
+"POT-Creation-Date: 2023-01-19 10:47+0000\n"
 "PO-Revision-Date: 2019-10-03 19:00+0000\n"
 "Last-Translator: Chris Spy <chrispiropoulou@hotmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -140,8 +140,8 @@ msgid "Continue"
 msgstr "Συνέχεια"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:222
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:152
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:183
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:157
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:188
 msgid "Confirming your payment …"
 msgstr ""
 
@@ -167,11 +167,11 @@ msgstr "Συνολικά κέρδη"
 msgid "Contacting Stripe …"
 msgstr "Επικοινωνία με το Stripe …"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:60
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:65
 msgid "Total"
 msgstr "Σύνολο"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:159
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:164
 #, fuzzy
 #| msgid "Contacting Stripe …"
 msgid "Contacting your bank …"
@@ -395,11 +395,11 @@ msgstr ""
 "Αυτήν τη στιγμή δεν μπορούμε να συνδεθούμε με το διακομιστή. Παρακαλώ "
 "προσπαθήστε ξανά. Κωδικός σφάλματος: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:208
+#: pretix/static/pretixbase/js/asynctask.js:215
 msgid "We are processing your request …"
 msgstr "Επεξεργαζόμαστε το αίτημά σας …"
 
-#: pretix/static/pretixbase/js/asynctask.js:216
+#: pretix/static/pretixbase/js/asynctask.js:223
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -409,7 +409,7 @@ msgstr ""
 "περισσότερο από ένα λεπτό, ελέγξτε τη σύνδεσή σας στο διαδίκτυο και στη "
 "συνέχεια επαναλάβετε τη φόρτωση αυτής της σελίδας και δοκιμάστε ξανά."
 
-#: pretix/static/pretixbase/js/asynctask.js:276
+#: pretix/static/pretixbase/js/asynctask.js:285
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Κλείσιμο μηνύματος"
