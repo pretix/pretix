@@ -26,6 +26,7 @@ from typing import Any, Dict, Union
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.files.base import ContentFile
+from django.db import connection
 from django.dispatch import receiver
 from django.utils.timezone import now, override
 from django.utils.translation import gettext
@@ -331,7 +332,7 @@ def run_scheduled_exports(sender, **kwargs):
     qs = ScheduledEventExport.objects.filter(
         schedule_next_run__lt=now(),
         error_counter__lt=5,
-    ).select_related('event')
+    ).select_for_update(skip_locked=connection.features.has_select_for_update_skip_locked).select_related('event')
     for s in qs:
         scheduled_event_export.apply_async(kwargs={
             'event': s.event_id,
@@ -342,7 +343,7 @@ def run_scheduled_exports(sender, **kwargs):
     qs = ScheduledOrganizerExport.objects.filter(
         schedule_next_run__lt=now(),
         error_counter__lt=5,
-    ).select_related('organizer')
+    ).select_for_update(skip_locked=connection.features.has_select_for_update_skip_locked).select_related('organizer')
     for s in qs:
         scheduled_organizer_export.apply_async(kwargs={
             'organizer': s.organizer_id,
