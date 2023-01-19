@@ -26,7 +26,7 @@ from typing import Any, Dict, Union
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.files.base import ContentFile
-from django.db import connection
+from django.db import connection, transaction
 from django.dispatch import receiver
 from django.utils.timezone import now, override
 from django.utils.translation import gettext
@@ -328,6 +328,7 @@ def scheduled_event_export(self, event: Event, schedule: int) -> None:
 
 @receiver(signal=periodic_task)
 @scopes_disabled()
+@transaction.atomic
 def run_scheduled_exports(sender, **kwargs):
     qs = ScheduledEventExport.objects.filter(
         schedule_next_run__lt=now(),
