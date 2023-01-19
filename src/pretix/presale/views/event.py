@@ -204,6 +204,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
     if filter_categories:
         items = items.filter(category_id__in=[a for a in filter_categories if a.isdigit()])
 
+    display_add_to_cart = False
     quota_cache_key = f'item_quota_cache:{subevent.id if subevent else 0}:{channel}:{bool(require_seat)}'
     quota_cache = quota_cache or event.cache.get(quota_cache_key) or {}
     quota_cache_existed = bool(quota_cache)
@@ -308,6 +309,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                              base_price_is='net' if event.settings.display_net_prices else 'gross')  # backwards-compat
                     if item.original_price else None
                 )
+
+            display_add_to_cart = display_add_to_cart or item.order_max > 0
         else:
             for var in item.available_variations:
                 if var.require_membership and var.require_membership_hidden:
@@ -352,6 +355,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                                 base_price_is='net' if event.settings.display_net_prices else 'gross')  # backwards-compat
                     ) if var.original_price or item.original_price else None
 
+                display_add_to_cart = display_add_to_cart or var.order_max > 0
+
             item.original_price = (
                 item.tax(item.original_price, currency=event.currency, include_bundled=True,
                          base_price_is='net' if event.settings.display_net_prices else 'gross')  # backwards-compat
@@ -385,7 +390,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         event.cache.set(quota_cache_key, quota_cache, 5)
     items = [item for item in items
              if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove]
-    return items
+    return items, display_add_to_cart
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
@@ -471,7 +476,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items
-            items = get_grouped_items(
+            items, display_add_to_cart = get_grouped_items(
                 self.request.event, self.subevent,
                 filter_items=self.request.GET.getlist('item'),
                 filter_categories=self.request.GET.getlist('category'),
@@ -515,7 +520,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
             # Regroup those by category
             context['items_by_category'] = item_group_by_category(items)
-            context['display_add_to_cart'] = len(items) > 0
+            context['display_add_to_cart'] = display_add_to_cart
 
         context['cart'] = self.get_cart()
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))

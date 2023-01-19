@@ -237,7 +237,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 ).values_list('item_id', flat=True)
             )
 
-        items = get_grouped_items(
+        items, display_add_to_cart = get_grouped_items(
             self.request.event,
             subevent=self.subevent,
             voucher=self.voucher,
@@ -313,7 +313,6 @@ class WidgetAPIProductList(EventListMixin, View):
                     } for item in g
                 ]
             })
-        display_add_to_cart = any(not i.requires_seat for i in items)
         return grps, display_add_to_cart, len(items), items
 
     def post_process(self, data):
