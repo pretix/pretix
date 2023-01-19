@@ -63,6 +63,7 @@ from ...helpers.iter import chunked_iterable
 from ..exporter import (
     ListExporter, MultiSheetListExporter, OrganizerLevelExportMixin,
 )
+from ..forms.widgets import SplitDateTimePickerWidget
 from ..signals import (
     register_data_exporters, register_multievent_data_exporters,
 )
@@ -998,9 +999,10 @@ class GiftcardListExporter(OrganizerLevelExportMixin, ListExporter):
     def additional_form_fields(self):
         return OrderedDict(
             [
-                ('date', forms.DateTimeField(
+                ('date', forms.SplitDateTimeField(
                     label=_('Show value at'),
                     required=False,
+                    widget=SplitDateTimePickerWidget(),
                     help_text=_('Defaults to the time of report.')
                 )),
                 ('testmode', forms.ChoiceField(
