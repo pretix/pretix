@@ -56,6 +56,8 @@ bspw
 Boleto
 Bundles
 bzw
+ca
+Cc
 chardet
 charge
 Checkout
