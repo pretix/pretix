@@ -49,6 +49,15 @@ class ScheduledEventExportForm(forms.ModelForm):
             choices=[(a, locale_names[a]) for a in self.instance.event.settings.locales]
         )
 
+    def clean_mail_additional_recipients(self):
+        return self.cleaned_data['mail_additional_recipients'].replace(' ', '')
+
+    def clean_mail_additional_recipients_cc(self):
+        return self.cleaned_data['mail_additional_recipients_cc'].replace(' ', '')
+
+    def clean_mail_additional_recipients_bcc(self):
+        return self.cleaned_data['mail_additional_recipients_bcc'].replace(' ', '')
+
 
 class ScheduledOrganizerExportForm(forms.ModelForm):
     class Meta:
@@ -73,3 +82,12 @@ class ScheduledOrganizerExportForm(forms.ModelForm):
             choices=((a, a) for a in common_timezones),
             label=_("Timezone"),
         )
+
+    def clean_mail_additional_recipients(self):
+        return self.cleaned_data['mail_additional_recipients'].replace(' ', '')
+
+    def clean_mail_additional_recipients_cc(self):
+        return self.cleaned_data['mail_additional_recipients_cc'].replace(' ', '')
+
+    def clean_mail_additional_recipients_bcc(self):
+        return self.cleaned_data['mail_additional_recipients_bcc'].replace(' ', '')

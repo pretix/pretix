@@ -211,7 +211,7 @@ class RRuleForm(forms.Form):
 
         if self.cleaned_data['end'] == 'count':
             rule_kwargs['count'] = self.cleaned_data['count']
-        else:
+        elif self.cleaned_data['end'] == 'until':
             rule_kwargs['until'] = self.cleaned_data['until']
         return rrule(freq, **rule_kwargs)
 

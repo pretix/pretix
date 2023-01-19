@@ -52,15 +52,18 @@ class AbstractScheduledExport(LoggedModel):
 
     mail_additional_recipients = models.TextField(
         verbose_name=_('Additional recipients'),
-        null=False, blank=True, validators=[multimail_validate]
+        null=False, blank=True, validators=[multimail_validate],
+        help_text=_("You can specify multiple recipients separated by commas.")
     )
     mail_additional_recipients_cc = models.TextField(
         verbose_name=_('Additional recipients (Cc)'),
-        null=False, blank=True, validators=[multimail_validate]
+        null=False, blank=True, validators=[multimail_validate],
+        help_text=_("You can specify multiple recipients separated by commas.")
     )
     mail_additional_recipients_bcc = models.TextField(
         verbose_name=_('Additional recipients (Bcc)'),
-        null=False, blank=True, validators=[multimail_validate]
+        null=False, blank=True, validators=[multimail_validate],
+        help_text=_("You can specify multiple recipients separated by commas.")
     )
     mail_subject = models.CharField(
         verbose_name=_('Subject'),
