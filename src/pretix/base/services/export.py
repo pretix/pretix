@@ -334,7 +334,7 @@ def run_scheduled_exports(sender, **kwargs):
     ).select_related('event')
     for s in qs:
         scheduled_event_export.apply_async(kwargs={
-            'event': s.event.pk,
+            'event': s.event_id,
             'schedule': s.pk,
         })
         s.compute_next_run()
@@ -345,7 +345,7 @@ def run_scheduled_exports(sender, **kwargs):
     ).select_related('organizer')
     for s in qs:
         scheduled_organizer_export.apply_async(kwargs={
-            'organizer': s.organizer.pk,
+            'organizer': s.organizer_id,
             'schedule': s.pk,
         })
         s.compute_next_run()

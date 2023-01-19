@@ -82,7 +82,7 @@ from pretix.base.models.giftcards import (
 from pretix.base.models.orders import CancellationRequest
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.payment import PaymentException
-from pretix.base.services.export import multiexport
+from pretix.base.services.export import multiexport, scheduled_organizer_export
 from pretix.base.services.mail import SendMailException, mail
 from pretix.base.settings import SETTINGS_AFFECTING_CSS
 from pretix.base.signals import register_multievent_data_exporters
@@ -1764,15 +1764,12 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
         return ctx
 
 
-class DeleteScheduledExportView(OrganizerPermissionRequiredMixin, DeleteView):
+class DeleteScheduledExportView(OrganizerPermissionRequiredMixin, ExportMixin, DeleteView):
     template_name = 'pretixcontrol/organizers/export_delete.html'
     context_object_name = 'export'
 
     def get_queryset(self):
-        if not self.request.user.has_organizer_permission(self.request.organizer, 'can_change_organizer_settings',
-                                                          request=self.request):
-            return self.request.organizer.scheduled_exports.filter(owner=self.request.user).select_related('owner')
-        return self.request.organizer.scheduled_exports.select_related('owner')
+        return self.get_scheduled_queryset()
 
     def get_success_url(self):
         return reverse('control:organizer.export', kwargs={
@@ -1787,6 +1784,27 @@ class DeleteScheduledExportView(OrganizerPermissionRequiredMixin, DeleteView):
             'id': self.object.id,
         })
         return redirect(self.get_success_url())
+
+
+class RunScheduledExportView(OrganizerPermissionRequiredMixin, ExportMixin, View):
+
+    def post(self, request, *args, **kwargs):
+        s = get_object_or_404(self.get_scheduled_queryset(), pk=kwargs.get('pk'))
+        scheduled_organizer_export.apply_async(
+            kwargs={
+                'organizer': s.organizer_id,
+                'schedule': s.pk,
+            },
+            # Scheduled exports usually run on the low-prio queue "background" but if they're manually triggered,
+            # we run them with normal priority
+            queue='default',
+        )
+        messages.success(self.request, _('Your export is queued to start soon. The results will be send via email. '
+                                         'Depending on system load and type and size of export, this may take a few '
+                                         'minutes.'))
+        return redirect(reverse('control:organizer.export', kwargs={
+            'organizer': self.request.organizer.slug
+        }))
 
 
 class GateListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
