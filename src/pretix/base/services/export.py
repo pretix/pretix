@@ -175,19 +175,20 @@ def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, 
                     'soft': soft,
                 }
             )
-            mail(
-                email=schedule.owner.email,
-                subject=gettext('Export failed'),
-                template='pretixbase/email/export_failed.txt',
-                context={
-                    'configuration_url': config_url,
-                    'reason': msg,
-                    'soft': soft,
-                },
-                event=context if isinstance(context, Event) else None,
-                organizer=context.organizer if isinstance(context, Event) else context,
-                locale=schedule.locale,
-            )
+            if schedule.owner.is_active:
+                mail(
+                    email=schedule.owner.email,
+                    subject=gettext('Export failed'),
+                    template='pretixbase/email/export_failed.txt',
+                    context={
+                        'configuration_url': config_url,
+                        'reason': msg,
+                        'soft': soft,
+                    },
+                    event=context if isinstance(context, Event) else None,
+                    organizer=context.organizer if isinstance(context, Event) else context,
+                    locale=schedule.locale,
+                )
             if not soft:
                 schedule.error_counter += 1
                 schedule.error_last_message = msg

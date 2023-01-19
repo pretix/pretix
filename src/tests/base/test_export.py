@@ -128,10 +128,7 @@ def test_event_fail_user_inactive(event, user):
     s.refresh_from_db()
     assert s.schedule_next_run > now()
     assert s.error_counter == 1
-    assert len(djmail.outbox) == 1
-    assert djmail.outbox[0].subject == "Export failed"
-    assert "Reason: Permission denied." in djmail.outbox[0].body
-    assert djmail.outbox[0].to == [user.email]
+    assert len(djmail.outbox) == 0  # no mails sent to inactive user
 
 
 @pytest.mark.django_db
@@ -256,6 +253,28 @@ def test_organizer_fail_user_inactive(event, user):
 
     user.is_active = False
     user.save()
+
+    run_scheduled_exports(None)
+    s.refresh_from_db()
+    assert s.schedule_next_run > now()
+    assert s.error_counter == 1
+    assert len(djmail.outbox) == 0  # no mails sent to inactive user
+
+
+@pytest.mark.django_db
+@freeze_time("2023-01-18 03:00:00+01:00")
+def test_organizer_fail_user_does_not_have_specific_permission(event, user, team):
+    djmail.outbox = []
+    s = ScheduledOrganizerExport(organizer=event.organizer, owner=user)
+    s.export_identifier = "customerlist"
+    s.schedule_rrule = "DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO"
+    s.schedule_rrule_time = time(2, 30, 0)
+    s.schedule_next_run = now() - timedelta(minutes=5)
+    s.error_counter = 0
+    s.save()
+
+    team.can_manage_customers = False
+    team.save()
 
     run_scheduled_exports(None)
     s.refresh_from_db()
