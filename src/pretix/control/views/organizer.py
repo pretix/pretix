@@ -1775,9 +1775,9 @@ class DeleteScheduledExportView(OrganizerPermissionRequiredMixin, DeleteView):
         return self.request.organizer.scheduled_exports.select_related('owner')
 
     def get_success_url(self):
-        return redirect(reverse('control:organizer.export', kwargs={
+        return reverse('control:organizer.export', kwargs={
             'organizer': self.request.organizer.slug
-        }))
+        })
 
     @transaction.atomic()
     def delete(self, request, *args, **kwargs):
