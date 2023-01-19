@@ -822,6 +822,8 @@ CELERY_TASK_QUEUES = (
 )
 CELERY_TASK_ROUTES = ([
     ('pretix.base.services.cart.*', {'queue': 'checkout'}),
+    ('pretix.base.services.export.scheduled_organizer_export', {'queue': 'background'}),
+    ('pretix.base.services.export.scheduled_event_export', {'queue': 'background'}),
     ('pretix.base.services.orders.*', {'queue': 'checkout'}),
     ('pretix.base.services.mail.*', {'queue': 'mail'}),
     ('pretix.base.services.update_check.*', {'queue': 'background'}),
