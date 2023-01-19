@@ -19,6 +19,12 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from dateutil.rrule import rrulestr
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
+from django.utils.deconstruct import deconstructible
+from django.utils.translation import gettext_lazy as _
 
 # This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
 # the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
@@ -31,11 +37,6 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
-from django.conf import settings
-from django.core.exceptions import ValidationError
-from django.utils.deconstruct import deconstructible
-from django.utils.translation import gettext_lazy as _
 
 
 class BanlistValidator:
@@ -101,3 +102,18 @@ class EmailBanlistValidator(BanlistValidator):
     banlist = [
         settings.PRETIX_EMAIL_NONE_VALUE,
     ]
+
+
+def multimail_validate(val):
+    s = val.split(',')
+    for part in s:
+        validate_email(part.strip())
+    return s
+
+
+class RRuleValidator:
+    def __call__(self, value):
+        try:
+            rrulestr(value)
+        except Exception:
+            raise ValidationError("Not a valid rrule.")

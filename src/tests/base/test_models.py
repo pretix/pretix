@@ -48,12 +48,14 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.utils.timezone import now
 from django_scopes import scope, scopes_disabled
+from freezegun import freeze_time
 
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, CartPosition, Checkin, CheckinList, Event, Item, ItemCategory,
     ItemVariation, Order, OrderFee, OrderPayment, OrderPosition, OrderRefund,
-    Organizer, Question, Quota, SeatingPlan, User, Voucher, WaitingListEntry,
+    Organizer, Question, Quota, ScheduledEventExport, SeatingPlan, User,
+    Voucher, WaitingListEntry,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
@@ -2766,3 +2768,44 @@ def test_subevent_date_updates_order_date():
 
         assert order1.last_modified > o1lm
         assert order2.last_modified == o2lm
+
+
+class ScheduledExportTestCase(TestCase):
+
+    @scopes_disabled()
+    def setUp(self):
+        self.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.event = Event.objects.create(
+            organizer=self.organizer, name='Dummy', slug='dummy',
+            date_from=now(), date_to=now() - timedelta(hours=1), has_subevents=True
+        )
+        self.event.settings.timezone = 'Europe/Berlin'
+
+    @classscope(attr='organizer')
+    def test_compute_next_time(self):
+        s = ScheduledEventExport(event=self.event)
+        s.schedule_rrule = "DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;COUNT=30;INTERVAL=1;WKST=MO;BYDAY=TU,TH"
+        s.schedule_rrule_time = datetime.time(6, 30, 0)
+
+        with freeze_time("2023-01-18 15:08:00+01:00"):
+            s.compute_next_run()
+            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 1, 19, 6, 30, 0))
+
+        with freeze_time("2024-01-18 15:08:00+01:00"):
+            s.compute_next_run()
+            assert s.schedule_next_run is None
+
+    @classscope(attr='organizer')
+    def test_compute_next_time_handle_dst(self):
+        s = ScheduledEventExport(event=self.event)
+        s.schedule_rrule = "DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO"
+        s.schedule_rrule_time = datetime.time(2, 30, 0)
+        with freeze_time("2023-03-25 18:00:00+01:00"):
+            s.compute_next_run()
+            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 3, 26, 3, 30, 0))
+        with freeze_time("2023-03-26 18:00:00+01:00"):
+            s.compute_next_run()
+            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 3, 27, 2, 30, 0))
+        with freeze_time("2023-10-28 18:00:00+01:00"):
+            s.compute_next_run()
+            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 10, 29, 2, 30, 0, fold=0))

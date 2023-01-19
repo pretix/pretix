@@ -100,7 +100,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
          position: OrderPosition = None, *, headers: dict = None, sender: str = None, organizer: Organizer = None,
          customer: Customer = None, invoices: Sequence = None, attach_tickets=False, auto_email=True, user=None,
          attach_ical=False, attach_cached_files: Sequence = None, attach_other_files: list=None,
-         plain_text_only=False, no_order_links=False):
+         plain_text_only=False, no_order_links=False, cc: Sequence[str]=None, bcc: Sequence[str]=None):
     """
     Sends out an email to a user. The mail will be sent synchronously or asynchronously depending on the installation.
 
@@ -211,7 +211,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
         subject = raw_subject = str(subject).replace('\n', ' ').replace('\r', '')[:900]
         signature = ""
 
-        bcc = []
+        bcc = list(bcc or [])
 
         settings_holder = event or organizer
 
@@ -305,6 +305,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
 
         send_task = mail_send_task.si(
             to=[email] if isinstance(email, str) else list(email),
+            cc=cc,
             bcc=bcc,
             subject=subject,
             body=body_plain,
@@ -357,11 +358,11 @@ class CustomEmail(EmailMultiAlternatives):
 
 @app.task(base=TransactionAwareTask, bind=True, acks_late=True)
 def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: str, sender: str,
-                   event: int = None, position: int = None, headers: dict = None, bcc: List[str] = None,
+                   event: int = None, position: int = None, headers: dict = None, cc: List[str] = None, bcc: List[str] = None,
                    invoices: List[int] = None, order: int = None, attach_tickets=False, user=None,
                    organizer=None, customer=None, attach_ical=False, attach_cached_files: List[int] = None,
                    attach_other_files: List[str] = None) -> bool:
-    email = CustomEmail(subject, body, sender, to=to, bcc=bcc, headers=headers)
+    email = CustomEmail(subject, body, sender, to=to, cc=cc, bcc=bcc, headers=headers)
     if html is not None:
         html_message = SafeMIMEMultipart(_subtype='related', encoding=settings.DEFAULT_CHARSET)
         html_with_cid, cid_images = replace_images_with_cid_paths(html)

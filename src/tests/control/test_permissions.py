@@ -352,6 +352,7 @@ event_permission_urls = [
     ("can_change_event_settings", "subevents/add", 200, HTTP_GET),
     ("can_view_orders", "orders/overview/", 200, HTTP_GET),
     ("can_view_orders", "orders/export/", 200, HTTP_GET),
+    ("can_view_orders", "orders/export/do", 302, HTTP_POST),
     ("can_view_orders", "orders/", 200, HTTP_GET),
     ("can_view_orders", "orders/FOO/", 200, HTTP_GET),
     ("can_change_orders", "orders/FOO/extend", 200, HTTP_GET),

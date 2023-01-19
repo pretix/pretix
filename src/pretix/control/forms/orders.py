@@ -227,6 +227,10 @@ class ExporterForm(forms.Form):
             elif isinstance(v, models.QuerySet):
                 data[k] = [m.pk for m in v]
 
+        if 'all_events' in self.fields and 'events' in self.fields:
+            if not data.get('all_events') and not data.get('events'):
+                raise ValidationError(_('Please select some events.'))
+
         return data
 
 

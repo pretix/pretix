@@ -78,7 +78,7 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
     // btn-lg
     @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $btn-border-radius-large);
   }
-  .btn-cancel {
+  .btn-cancel, .btn-alternative {
     float: left !important;
     // btn-lg
     @include button-size($padding-large-vertical, $padding-large-horizontal, $font-size-large, $line-height-large, $btn-border-radius-large);
@@ -461,7 +461,7 @@ table td > .checkbox input[type="checkbox"] {
   width: 100px;
   display: inline;
 }
-.form-horizontal [data-formset] .rrule-form .form-group {
+.form-horizontal .rrule-form .form-group {
   margin: 0;
   width: auto;
 }
