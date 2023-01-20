@@ -2,16 +2,24 @@
 
 <p>
     {% if method == "wallet" %}
-        {% blocktrans trimmed %}
-            The total amount listed above will be withdrawn from your PayPal account after the
-            confirmation of your purchase.
-        {% endblocktrans %}
         {% if url.url_name == "event.order.pay.confirm" %}
-            <div class='alert alert-info'>
-                {% blocktrans trimmed %}
-                    Please click on the "Pay now"-button below to confirm your payment and finalize your order.
-                {% endblocktrans %}
+            <div class="text-center" aria-hidden="true">
+                <span class="fa fa-info-circle fa-4x text-primary"></span>
             </div>
+            <h2 class="text-center">
+                {% trans "Almost done…" %}
+            </h2>
+            <h4 class="text-center">
+                {% trans 'Please click on the "Pay now" button below to confirm your payment.' %}
+            </h4>
+            <h4 class="text-center text-muted">
+                {% trans "We will then charge your PayPal account and finalize the order." %}
+            </h4>
+        {% else %}
+            {% blocktrans trimmed %}
+                The total amount listed above will be withdrawn from your PayPal account after the
+                confirmation of your purchase.
+            {% endblocktrans %}
         {% endif %}
     {% else %}
         {% blocktrans trimmed %}
