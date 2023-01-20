@@ -35,14 +35,17 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.db import models
-from django.db.models import Exists, F, Max, OuterRef, Q, Subquery
+from django.db import connection, models
+from django.db.models import (
+    Count, Exists, F, Max, OuterRef, Q, Subquery, Value, Window,
+)
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager, scopes_disabled
 
 from pretix.base.models import LoggedModel
 from pretix.base.models.fields import MultiStringField
+from pretix.helpers import PostgresWindowFrame
 
 
 class CheckinList(LoggedModel):
@@ -140,7 +143,54 @@ class CheckinList(LoggedModel):
 
     @property
     def inside_count(self):
-        return self.positions_inside.count()
+        if "postgresql" not in settings.DATABASES["default"]["ENGINE"]:
+            # Use the simple query that works on all databases
+            return self.positions_inside.count()
+
+        # Use the PostgreSQL-specific query using Window functions, which is a lot faster.
+        # On a real-world example with ~100k tickets, of which ~17k are checked in, we observed
+        # a speed-up from 29s (old) to a few hundred milliseconds (new)!
+        # Why is this so much faster? The regular query get's PostgreSQL all busy with filtering
+        # the tickets both by their belonging the event and checkin status at the same time, while
+        # this query just iterates over all successful checkins on the list, and -- by the power
+        # of window functions -- asks "is this an entry that is followed by no exit?". Then we
+        # dedupliate by position and count it up.
+        cl = self
+        base_q, base_params = (
+            Checkin.all.filter(successful=True, position__in=cl.positions, list=cl)
+            .annotate(
+                cnt_exists_after=Window(
+                    expression=Count("position_id", filter=Q(type=Value("exit"))),
+                    partition_by=[F("position_id"), F("list_id")],
+                    order_by=F("datetime").asc(),
+                    frame=PostgresWindowFrame(
+                        "ROWS", start="1 following", end="unbounded following"
+                    ),
+                )
+            )
+            .values("position_id", "type", "datetime", "cnt_exists_after")
+            .query.sql_with_params()
+        )
+
+        with connection.cursor() as cursor:
+            cursor.execute(
+                f"""
+                SELECT COUNT(*) FROM (
+                    SELECT COUNT("position_id")
+                    FROM ({str(base_q)} ) s
+                    WHERE "type" = %s AND "cnt_exists_after" = 0
+                    GROUP BY "position_id"
+                ) a;
+                """,
+                [
+                    *base_params,
+                    "entry",
+                ],
+            )
+            rows = cursor.fetchall()
+            if rows:
+                return rows[0][0]
+            return 0
 
     @property
     @scopes_disabled()
