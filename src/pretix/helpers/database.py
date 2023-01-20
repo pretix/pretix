@@ -22,7 +22,7 @@
 import contextlib
 
 from django.db import transaction
-from django.db.models import Aggregate, Field, Lookup
+from django.db.models import Aggregate, Expression, Field, Lookup, Value
 
 
 class DummyRollbackException(Exception):
@@ -103,3 +103,42 @@ class NotEqual(Lookup):
         rhs, rhs_params = self.process_rhs(compiler, connection)
         params = lhs_params + rhs_params
         return '%s <> %s' % (lhs, rhs), params
+
+
+class PostgresWindowFrame(Expression):
+    template = "%(frame_type)s BETWEEN %(start)s AND %(end)s"
+
+    def __init__(self, frame_type=None, start=None, end=None):
+        self.frame_type = frame_type
+        self.start = Value(start)
+        self.end = Value(end)
+
+    def set_source_expressions(self, exprs):
+        self.start, self.end = exprs
+
+    def get_source_expressions(self):
+        return [self.start, self.end]
+
+    def as_sql(self, compiler, connection):
+        return (
+            self.template
+            % {
+                "frame_type": self.frame_type,
+                "start": self.start.value,
+                "end": self.end.value,
+            },
+            [],
+        )
+
+    def __repr__(self):
+        return "<%s: %s>" % (self.__class__.__name__, self)
+
+    def get_group_by_cols(self, alias=None):
+        return []
+
+    def __str__(self):
+        return self.template % {
+            "frame_type": self.frame_type,
+            "start": self.start.value,
+            "end": self.end.value,
+        }
