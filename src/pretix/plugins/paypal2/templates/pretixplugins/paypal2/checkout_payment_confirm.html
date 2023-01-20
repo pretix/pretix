@@ -6,6 +6,13 @@
             The total amount listed above will be withdrawn from your PayPal account after the
             confirmation of your purchase.
         {% endblocktrans %}
+        {% if url.url_name == "event.order.pay.confirm" %}
+            <div class='alert alert-info'>
+                {% blocktrans trimmed %}
+                    Please click on the "Pay now"-button below to confirm your payment and finalize your order.
+                {% endblocktrans %}
+            </div>
+        {% endif %}
     {% else %}
         {% blocktrans trimmed %}
             After placing your order, you will be able to select your desired payment method, including PayPal.
