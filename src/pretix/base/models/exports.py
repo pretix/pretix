@@ -24,6 +24,7 @@ from datetime import datetime, timedelta
 import pytz
 from dateutil.rrule import rrulestr
 from django.conf import settings
+from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext_lazy as _
@@ -39,7 +40,10 @@ class AbstractScheduledExport(LoggedModel):
         max_length=190,
         verbose_name=_("Export"),
     )
-    export_form_data = models.JSONField(default=dict)
+    export_form_data = models.JSONField(
+        default=dict,
+        encoder=DjangoJSONEncoder,
+    )
 
     owner = models.ForeignKey(
         "pretixbase.User",
