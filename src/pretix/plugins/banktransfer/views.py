@@ -752,7 +752,7 @@ class OrganizerRefundExportListView(OrganizerPermissionRequiredMixin, RefundExpo
     def get_unexported(self):
         return OrderRefund.objects.filter(
             order__event__organizer=self.request.organizer,
-            provider='banktransfer',
+            provider__in=['banktransfer', 'sepadebit'],
             state=OrderRefund.REFUND_STATE_CREATED,
             order__testmode=False,
         )
