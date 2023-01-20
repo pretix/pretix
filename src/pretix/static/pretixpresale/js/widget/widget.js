@@ -307,7 +307,8 @@ Vue.component('pricebox', {
         price: Object,
         free_price: Boolean,
         field_name: String,
-        original_price: String
+        original_price: String,
+        mandatory_priced_addons: Boolean,
     },
     computed: {
         display_price: function () {
@@ -329,6 +330,9 @@ Vue.component('pricebox', {
         },
         priceline: function () {
             if (this.price.gross === "0.00") {
+                if (this.mandatory_priced_addons) {
+                    return "\xA0"; // nbsp, because an empty string would cause the HTML element to collapse
+                }
                 return strings.free;
             } else {
                 return this.$root.currency + " " + this.display_price;
@@ -375,7 +379,8 @@ Vue.component('variation', {
 
         // Price
         + '<div class="pretix-widget-item-price-col">'
-        + '<pricebox :price="variation.price" :free_price="item.free_price" :original_price="orig_price"'
+        + '<pricebox :price="variation.price" :free_price="item.free_price" :original_price="orig_price" '
+        + '          :mandatory_priced_addons="item.mandatory_priced_addons"'
         + '          :field_name="\'price_\' + item.id + \'_\' + variation.id" v-if="$root.showPrices">'
         + '</pricebox>'
         + '<span v-if="!$root.showPrices">&nbsp;</span>'
@@ -432,6 +437,7 @@ Vue.component('item', {
         // Price
         + '<div class="pretix-widget-item-price-col">'
         + '<pricebox :price="item.price" :free_price="item.free_price" v-if="!item.has_variations && $root.showPrices"'
+        + '          :mandatory_priced_addons="item.mandatory_priced_addons"'
         + '          :field_name="\'price_\' + item.id" :original_price="item.original_price">'
         + '</pricebox>'
         + '<div class="pretix-widget-pricebox" v-if="item.has_variations && $root.showPrices">{{ pricerange }}</div>'
@@ -500,6 +506,9 @@ Vue.component('item', {
                 return this.$root.currency + " " + floatformat(this.item.min_price, 2) + " – "
                     + floatformat(this.item.max_price, 2);
             } else if (this.item.min_price === "0.00" && this.item.max_price === "0.00") {
+                if (this.item.mandatory_priced_addons) {
+                    return "\xA0"; // nbsp, because an empty string would cause the HTML element to collapse
+                }
                 return strings.free;
             } else {
                 return this.$root.currency + " " + floatformat(this.item.min_price, 2);
