@@ -182,8 +182,8 @@ def test_event_ok(event, user, team):
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].subject == "Report 1"
     assert "Here is the report." in djmail.outbox[0].body
-    assert djmail.outbox[0].to == [user.email, "boss@example.org", "boss@example.net"]
-    assert djmail.outbox[0].cc == ["assistant@example.net"]
+    assert djmail.outbox[0].to == ["boss@example.org", "boss@example.net"]
+    assert djmail.outbox[0].cc == ["assistant@example.net", user.email]
     assert djmail.outbox[0].bcc == ["archive@example.net"]
     assert len(djmail.outbox[0].attachments) == 1
     assert djmail.outbox[0].attachments[0][0] == "dummy_orders.xlsx"
@@ -355,8 +355,8 @@ def test_organizer_ok(event, user, team):
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].subject == "Report 1"
     assert "Here is the report." in djmail.outbox[0].body
-    assert djmail.outbox[0].to == [user.email, "boss@example.org", "boss@example.net"]
-    assert djmail.outbox[0].cc == ["assistant@example.net"]
+    assert djmail.outbox[0].to == ["boss@example.org", "boss@example.net"]
+    assert djmail.outbox[0].cc == ["assistant@example.net", user.email]
     assert djmail.outbox[0].bcc == ["archive@example.net"]
     assert len(djmail.outbox[0].attachments) == 1
     assert djmail.outbox[0].attachments[0][0] == "dummy_events.csv"
