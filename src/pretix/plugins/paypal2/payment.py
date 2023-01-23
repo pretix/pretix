@@ -31,7 +31,7 @@ from django.contrib import messages
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.templatetags.static import static
-from django.urls import reverse, resolve
+from django.urls import resolve, reverse
 from django.utils.crypto import get_random_string
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
