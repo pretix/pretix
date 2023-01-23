@@ -538,6 +538,19 @@ keyword argument will contain the event to **copy from**. The keyword arguments
 in the new event of the respective types.
 """
 
+orderposition_blocked_display = EventPluginSignal()
+"""
+Arguments: ``orderposition``, ``block_name``
+
+To display the reason for a blocked ticket to a backend user,
+``pretix.base.signals.orderposition_block_display`` will be sent out.
+
+The first received response that is not ``None`` will be used to display the block
+to the user. The receivers are expected to return plain text.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 item_copy_data = EventPluginSignal()
 """
 Arguments: ``source``, ``target``

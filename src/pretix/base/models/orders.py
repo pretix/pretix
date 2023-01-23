@@ -2316,10 +2316,29 @@ class OrderPosition(AbstractPosition):
     def generate_ticket(self):
         if self.item.generate_tickets is not None:
             return self.item.generate_tickets
+        if self.blocked:
+            return False
         return (
             (self.order.event.settings.ticket_download_addons or not self.addon_to_id) and
             (self.event.settings.ticket_download_nonadm or self.item.admission)
         )
+
+    @property
+    def blocked_reasons(self):
+        from ..signals import orderposition_blocked_display
+
+        if not self.blocked:
+            return []
+
+        reasons = {}
+        for b in self.blocked:
+            for recv, response in orderposition_blocked_display.send(self.event, orderposition=self, block_name=b):
+                if response:
+                    reasons[b] = response
+                    break
+            else:
+                reasons[b] = b
+        return reasons
 
     @classmethod
     def transform_cart_positions(cls, cp: List, order) -> list:

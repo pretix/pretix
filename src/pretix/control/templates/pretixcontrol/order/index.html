@@ -390,6 +390,15 @@
                                         {% endif %}
                                     {% endfor %}
                                 {% endif %}
+                                {% if line.blocked %}
+                                    <br />
+                                    <strong class="text-danger">
+                                        <span class="fa fa-ban fa-fw text-danger"></span>
+                                        {% for k, block_reason in line.blocked_reasons.items %}
+                                            {{ block_reason }}
+                                        {% endfor %}
+                                    </strong>
+                                {% endif %}
                                 {% if line.seat %}
                                     <br />
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 4.7624999 3.7041668" class="svg-icon">

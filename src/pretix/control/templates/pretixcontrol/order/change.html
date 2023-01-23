@@ -191,6 +191,24 @@
 
                         <div class="row">
                             <div class="col-sm-3">
+                                <strong>{% trans "Ticket block" %}</strong>
+                            </div>
+                            <div class="col-sm-5">
+                                {% if "admin" in position.blocked %}
+                                    {% trans "Blocked" %}
+                                {% elif position.blocked %}
+                                    {% trans "Blocked due to external constraints" %}
+                                {% else %}
+                                    {% trans "Not blocked" %}
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-4">
+                                {% bootstrap_field position.form.blocked layout='inline' %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
                                 <strong>{% trans "Ticket secret" %}</strong>
                             </div>
                             <div class="col-sm-5">

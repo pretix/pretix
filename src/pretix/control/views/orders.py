@@ -1773,6 +1773,11 @@ class OrderChange(OrderView):
                 if p.form.cleaned_data['tax_rule'] and p.form.cleaned_data['tax_rule'] != p.tax_rule:
                     ocm.change_tax_rule(p, p.form.cleaned_data['tax_rule'])
 
+                if p.form.cleaned_data["blocked"] and "admin" not in (p.blocked or []):
+                    ocm.add_block(p, "admin")
+                elif not p.form.cleaned_data["blocked"] and "admin" in (p.blocked or []):
+                    ocm.remove_block(p, "admin")
+
                 if p.form.cleaned_data.get('operation_split'):
                     ocm.split(p)
 

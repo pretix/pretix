@@ -435,6 +435,10 @@ class OrderPositionChangeForm(forms.Form):
         localize=True,
         label=_('New price (gross)')
     )
+    blocked = forms.BooleanField(
+        required=False,
+        label=_('Ticket is blocked')
+    )
     used_membership = forms.ChoiceField(
         required=False,
     )
@@ -466,6 +470,7 @@ class OrderPositionChangeForm(forms.Form):
         initial = kwargs.get('initial', {})
 
         initial['price'] = instance.price
+        initial['blocked'] = instance.blocked and "admin" in instance.blocked
 
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)

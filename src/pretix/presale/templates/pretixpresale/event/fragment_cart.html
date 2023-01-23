@@ -29,7 +29,7 @@
                     – {{ line.variation }}
                 {% endif %}
                 </p>
-                {% if line.seat or line.voucher or line.subevent or line.used_membership%}
+                {% if line.seat or line.voucher or line.subevent or line.used_membership or line.blocked %}
                     <dl class="dl-inline">
                 {% elif event.settings.show_checkin_number_user and line.checkin_count %}
                     <dl class="dl-inline">
@@ -96,6 +96,16 @@
                         </dd>
                     </div>
                 {% endif %}
+                {% if line.blocked %}
+                    <div class="cart-icon-details">
+                        <dd class="text-danger">
+                            <span class="fa fa-ban fa-fw text-danger" aria-hidden="true"></span>
+                            <strong>
+                                {% trans "This ticket is blocked." %}
+                            </strong>
+                        </dd>
+                    </div>
+                {% endif %}
                 {% if event.settings.show_checkin_number_user and line.checkin_count %}
                     <div class="cart-icon-details">
                         <dt class="sr-only">{% trans "Usage:" context "ticket_checkins" %}</dt>
@@ -111,7 +121,7 @@
                         </dd>
                     </div>
                 {% endif %}
-                {% if line.seat or line.voucher or line.subevent or line.used_membership%}
+                {% if line.seat or line.voucher or line.subevent or line.used_membership or line.blocked %}
                     </dl>
                 {% elif event.settings.show_checkin_number_user and line.checkin_count %}
                     </dl>

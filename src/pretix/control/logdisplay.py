@@ -52,7 +52,7 @@ from pretix.base.models import (
     Checkin, CheckinList, Event, ItemVariation, LogEntry, OrderPosition,
     TaxRule,
 )
-from pretix.base.signals import logentry_display
+from pretix.base.signals import logentry_display, orderposition_blocked_display
 from pretix.base.templatetags.money import money_filter
 
 OVERVIEW_BANLIST = [
@@ -668,3 +668,11 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if logentry.action_type == 'pretix.control.auth.user.impersonate_stopped':
         return str(_('You stopped impersonating {}.')).format(data['other_email'])
+
+
+@receiver(signal=orderposition_blocked_display, dispatch_uid="pretixcontrol_orderposition_blocked_display")
+def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, block_name, **kwargs):
+    if block_name == 'admin':
+        return _('Blocked manually')
+    elif block_name.startswith('api:'):
+        return _('Blocked because of an API integration')
