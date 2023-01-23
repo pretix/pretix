@@ -438,6 +438,26 @@
                                         </a>
                                     </span>
                                 {% endif %}
+                                {% if line.valid_from or line.valid_until %}
+                                    <div class="cart-icon-details">
+                                        <dd>
+                                            <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>
+                                            {% if line.valid_from and line.valid_until %}
+                                                {% blocktrans trimmed with datetime_from=line.valid_from|date:"SHORT_DATETIME_FORMAT" datetime_until=line.valid_until|date:"SHORT_DATETIME_FORMAT" %}
+                                                    Valid from {{ datetime_from }} until {{ datetime_until }}
+                                                {% endblocktrans %}
+                                            {% elif line.valid_from %}
+                                                {% blocktrans trimmed with datetime=line.valid_from|date:"SHORT_DATETIME_FORMAT" %}
+                                                    Valid from {{ datetime }}
+                                                {% endblocktrans %}
+                                            {% elif line.valid_until %}
+                                                {% blocktrans trimmed with datetime=line.valid_until|date:"SHORT_DATETIME_FORMAT" %}
+                                                    Valid until {{ datetime }}
+                                                {% endblocktrans %}
+                                            {% endif %}
+                                        </dd>
+                                    </div>
+                                {% endif %}
                                 {% if not line.canceled %}
                                     <div class="position-buttons">
                                         {% if line.generate_ticket %}

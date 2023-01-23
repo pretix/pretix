@@ -439,6 +439,16 @@ class OrderPositionChangeForm(forms.Form):
         required=False,
         label=_('Ticket is blocked')
     )
+    valid_from = SplitDateTimeField(
+        required=False,
+        widget=SplitDateTimePickerWidget,
+        label=_('Validity start')
+    )
+    valid_until = SplitDateTimeField(
+        required=False,
+        widget=SplitDateTimePickerWidget,
+        label=_('Validity end')
+    )
     used_membership = forms.ChoiceField(
         required=False,
     )
@@ -471,6 +481,8 @@ class OrderPositionChangeForm(forms.Form):
 
         initial['price'] = instance.price
         initial['blocked'] = instance.blocked and "admin" in instance.blocked
+        initial['valid_from'] = instance.valid_from
+        initial['valid_until'] = instance.valid_until
 
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)

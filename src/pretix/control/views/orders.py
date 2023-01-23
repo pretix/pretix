@@ -1778,6 +1778,12 @@ class OrderChange(OrderView):
                 elif not p.form.cleaned_data["blocked"] and "admin" in (p.blocked or []):
                     ocm.remove_block(p, "admin")
 
+                if p.form.cleaned_data['valid_from'] != p.valid_from:
+                    ocm.change_valid_from(p, p.form.cleaned_data['valid_from'])
+
+                if p.form.cleaned_data['valid_until'] != p.valid_until:
+                    ocm.change_valid_until(p, p.form.cleaned_data['valid_until'])
+
                 if p.form.cleaned_data.get('operation_split'):
                     ocm.split(p)
 

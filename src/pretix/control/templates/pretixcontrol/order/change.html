@@ -209,6 +209,37 @@
 
                         <div class="row">
                             <div class="col-sm-3">
+                                <strong>{% trans "Validity time" %}</strong>
+                            </div>
+                            <div class="col-sm-5">
+                                {% if position.valid_from %}
+                                    {% blocktrans trimmed with datetime=position.valid_from|date:"SHORT_DATETIME_FORMAT" %}
+                                        Valid from {{ datetime }}
+                                    {% endblocktrans %}
+                                {% endif %}
+                                {% if position.valid_until %}
+                                    {% if position.valid_from %}
+                                        <br />
+                                    {% endif %}
+                                    {% blocktrans trimmed with datetime=position.valid_from|date:"SHORT_DATETIME_FORMAT" %}
+                                        Valid until {{ datetime }}
+                                    {% endblocktrans %}
+                                {% endif %}
+                                {% if not position.valid_from and not position.valid_until %}
+                                    {% trans "Unconstrained" %}
+                                {% endif %}
+                            </div>
+                            <div class="col-sm-4">
+                                {% bootstrap_field position.form.valid_from layout='inline' %}
+                                <div class="text-center">
+                                    {% trans "–" %}
+                                </div>
+                                {% bootstrap_field position.form.valid_until layout='inline' %}
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-sm-3">
                                 <strong>{% trans "Ticket secret" %}</strong>
                             </div>
                             <div class="col-sm-5">

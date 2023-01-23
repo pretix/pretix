@@ -211,7 +211,7 @@ class Sig1TicketSecretGenerator(BaseTicketSecretGenerator):
         if t is None:
             return 0
         t0 = datetime(2020, 1, 1, 0, 0, 0, 0, tzinfo=UTC)
-        return (t - t0).total_seconds() // 60
+        return int((t - t0).total_seconds() // 60)
 
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
                         attendee_name: str = None, valid_from: datetime = None, valid_until: datetime = None,

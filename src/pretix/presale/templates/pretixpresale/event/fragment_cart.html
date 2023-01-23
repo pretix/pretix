@@ -29,7 +29,7 @@
                     – {{ line.variation }}
                 {% endif %}
                 </p>
-                {% if line.seat or line.voucher or line.subevent or line.used_membership or line.blocked %}
+                {% if line.seat or line.voucher or line.subevent or line.used_membership or line.blocked or line.valid_from or line.valid_until %}
                     <dl class="dl-inline">
                 {% elif event.settings.show_checkin_number_user and line.checkin_count %}
                     <dl class="dl-inline">
@@ -96,6 +96,26 @@
                         </dd>
                     </div>
                 {% endif %}
+                {% if line.valid_from or line.valid_until %}
+                    <div class="cart-icon-details">
+                        <dd>
+                            <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>
+                            {% if line.valid_from and line.valid_until %}
+                                {% blocktrans trimmed with datetime_from=line.valid_from|date:"SHORT_DATETIME_FORMAT" datetime_until=line.valid_until|date:"SHORT_DATETIME_FORMAT" %}
+                                    Valid from {{ datetime_from }} until {{ datetime_until }}
+                                {% endblocktrans %}
+                            {% elif line.valid_from %}
+                                {% blocktrans trimmed with datetime=line.valid_from|date:"SHORT_DATETIME_FORMAT" %}
+                                    Valid from {{ datetime }}
+                                {% endblocktrans %}
+                            {% elif line.valid_until %}
+                                {% blocktrans trimmed with datetime=line.valid_until|date:"SHORT_DATETIME_FORMAT" %}
+                                    Valid until {{ datetime }}
+                                {% endblocktrans %}
+                            {% endif %}
+                        </dd>
+                    </div>
+                {% endif %}
                 {% if line.blocked %}
                     <div class="cart-icon-details">
                         <dd class="text-danger">
@@ -121,7 +141,7 @@
                         </dd>
                     </div>
                 {% endif %}
-                {% if line.seat or line.voucher or line.subevent or line.used_membership or line.blocked %}
+                {% if line.seat or line.voucher or line.subevent or line.used_membership or line.blocked or line.valid_from or line.valid_until %}
                     </dl>
                 {% elif event.settings.show_checkin_number_user and line.checkin_count %}
                     </dl>
