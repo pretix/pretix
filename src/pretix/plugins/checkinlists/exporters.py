@@ -363,12 +363,15 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                 )
             if op.seat:
                 item += '<br/>' + str(op.seat)
+            name = bleach.clean(str(name), tags=['br']).strip().replace('<br>', '<br/>')
+            if op.blocked:
+                name = '<font face="OpenSansBd">[' + _('Blocked') + ']</font> ' + name
             row = [
                 '!!' if op.require_checkin_attention else '',
-                CBFlowable(bool(op.last_checked_in)),
+                CBFlowable(bool(op.last_checked_in)) if not op.blocked else '—',
                 '✘' if op.order.status != Order.STATUS_PAID else '✔',
                 op.order.code,
-                Paragraph(bleach.clean(str(name), tags=['br']).strip().replace('<br>', '<br/>'), self.get_style()),
+                Paragraph(name, self.get_style()),
                 Paragraph(bleach.clean(str(item), tags=['br']).strip().replace('<br>', '<br/>'), self.get_style()),
             ]
             acache = {}
@@ -400,6 +403,12 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
                     ('BACKGROUND', (2, len(tdata)), (2, len(tdata)), '#990000'),
                     ('TEXTCOLOR', (2, len(tdata)), (2, len(tdata)), '#ffffff'),
                     ('ALIGN', (2, len(tdata)), (2, len(tdata)), 'CENTER'),
+                ]
+            if op.blocked:
+                tstyledata += [
+                    ('BACKGROUND', (1, len(tdata)), (1, len(tdata)), '#990000'),
+                    ('TEXTCOLOR', (1, len(tdata)), (1, len(tdata)), '#ffffff'),
+                    ('ALIGN', (1, len(tdata)), (1, len(tdata)), 'CENTER'),
                 ]
             tdata.append(row)
 
@@ -470,6 +479,9 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
         headers.append(_('Seat zone'))
         headers.append(_('Seat row'))
         headers.append(_('Seat number'))
+        headers.append(_('Blocked'))
+        headers.append(_('Valid from'))
+        headers.append(_('Valid until'))
         headers += [
             _('Address'),
             _('ZIP code'),
@@ -580,6 +592,9 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
                 row += ['', '', '', '', '']
 
             row += [
+                _('Yes') if op.blocked else '',
+                date_format(op.valid_from, 'SHORT_DATETIME_FORMAT') if op.valid_from else '',
+                date_format(op.valid_until, 'SHORT_DATETIME_FORMAT') if op.valid_until else '',
                 op.street or '',
                 op.zipcode or '',
                 op.city or '',

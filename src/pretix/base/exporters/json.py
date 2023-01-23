@@ -195,6 +195,9 @@ class JSONExporter(BaseExporter):
                                 'state': position.state,
                                 'secret': position.secret,
                                 'addon_to': position.addon_to_id,
+                                'valid_from': position.valid_from,
+                                'valid_until': position.valid_until,
+                                'blocked': position.blocked,
                                 'answers': [
                                     {
                                         'question': answer.question_id,
