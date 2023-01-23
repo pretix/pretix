@@ -646,6 +646,52 @@ class Locale(ImportColumn):
         order.locale = value
 
 
+class ValidFrom(ImportColumn):
+    identifier = 'valid_from'
+    verbose_name = gettext_lazy('Valid from')
+
+    def clean(self, value, previous_values):
+        if not value:
+            return
+
+        input_formats = formats.get_format('DATETIME_INPUT_FORMATS', use_l10n=True)
+        for format in input_formats:
+            try:
+                d = datetime.datetime.strptime(value, format)
+                d = self.event.timezone.localize(d)
+                return d
+            except (ValueError, TypeError):
+                pass
+        else:
+            raise ValidationError(_("Could not parse {value} as a date and time.").format(value=value))
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        position.valid_from = value
+
+
+class ValidUntil(ImportColumn):
+    identifier = 'valid_until'
+    verbose_name = gettext_lazy('Valid until')
+
+    def clean(self, value, previous_values):
+        if not value:
+            return
+
+        input_formats = formats.get_format('DATETIME_INPUT_FORMATS', use_l10n=True)
+        for format in input_formats:
+            try:
+                d = datetime.datetime.strptime(value, format)
+                d = self.event.timezone.localize(d)
+                return d
+            except (ValueError, TypeError):
+                pass
+        else:
+            raise ValidationError(_("Could not parse {value} as a date and time.").format(value=value))
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        position.valid_until = value
+
+
 class Saleschannel(ImportColumn):
     identifier = 'sales_channel'
     verbose_name = gettext_lazy('Sales channel')
@@ -816,7 +862,9 @@ def get_all_columns(event):
         Locale(event),
         Saleschannel(event),
         SeatColumn(event),
-        Comment(event)
+        Comment(event),
+        ValidFrom(event),
+        ValidUntil(event),
     ]
     for q in event.questions.prefetch_related('options').exclude(type=Question.TYPE_FILE):
         default.append(QuestionColumn(event, q))
