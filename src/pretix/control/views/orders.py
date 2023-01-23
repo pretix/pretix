@@ -2256,6 +2256,15 @@ class ExportMixin:
 
             if self.scheduled:
                 initial = self.scheduled.export_form_data
+
+                test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
+                test_form.fields = ex.export_form_fields
+                for k in initial:
+                    if initial[k] and k in test_form.fields:
+                        try:
+                            initial[k] = test_form.fields[k].to_python(initial[k])
+                        except Exception:
+                            pass
             else:
                 # Use form parse cycle to generate useful defaults
                 test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
