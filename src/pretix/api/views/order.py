@@ -49,11 +49,11 @@ from rest_framework.response import Response
 
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.order import (
-    InvoiceSerializer, OrderCreateSerializer, OrderPaymentCreateSerializer,
-    OrderPaymentSerializer, OrderPositionSerializer,
-    OrderRefundCreateSerializer, OrderRefundSerializer, OrderSerializer,
-    PriceCalcSerializer, RevokedTicketSecretSerializer,
-    SimulatedOrderSerializer,
+    BlockedTicketSecretSerializer, InvoiceSerializer, OrderCreateSerializer,
+    OrderPaymentCreateSerializer, OrderPaymentSerializer,
+    OrderPositionSerializer, OrderRefundCreateSerializer,
+    OrderRefundSerializer, OrderSerializer, PriceCalcSerializer,
+    RevokedTicketSecretSerializer, SimulatedOrderSerializer,
 )
 from pretix.api.serializers.orderchange import (
     BlockNameSerializer, OrderChangeOperationSerializer,
@@ -70,7 +70,9 @@ from pretix.base.models import (
     OrderRefund, Quota, SubEvent, SubEventMetaValue, TaxRule, TeamAPIToken,
     generate_secret,
 )
-from pretix.base.models.orders import QuestionAnswer, RevokedTicketSecret
+from pretix.base.models.orders import (
+    BlockedTicketSecret, QuestionAnswer, RevokedTicketSecret,
+)
 from pretix.base.payment import PaymentException
 from pretix.base.pdf import get_images
 from pretix.base.secrets import assign_ticket_secret
@@ -1843,3 +1845,26 @@ class RevokedSecretViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return RevokedTicketSecret.objects.filter(event=self.request.event)
+
+
+with scopes_disabled():
+    class BlockedSecretFilter(FilterSet):
+        updated_since = django_filters.IsoDateTimeFilter(field_name='updated', lookup_expr='gte')
+
+        class Meta:
+            model = BlockedTicketSecret
+            fields = ['blocked']
+
+
+class BlockedSecretViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = BlockedTicketSecretSerializer
+    queryset = BlockedTicketSecret.objects.none()
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    ordering = ('-updated',)
+    ordering_fields = ('updated', 'secret')
+    filterset_class = BlockedSecretFilter
+    permission = 'can_view_orders'
+    write_permission = 'can_change_orders'
+
+    def get_queryset(self):
+        return BlockedTicketSecret.objects.filter(event=self.request.event)

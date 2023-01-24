@@ -52,7 +52,8 @@ from pretix.base.models import (
     SubEvent, TaxRule, Voucher,
 )
 from pretix.base.models.orders import (
-    CartPosition, OrderFee, OrderPayment, OrderRefund, RevokedTicketSecret,
+    BlockedTicketSecret, CartPosition, OrderFee, OrderPayment, OrderRefund,
+    RevokedTicketSecret,
 )
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
@@ -1535,3 +1536,10 @@ class RevokedTicketSecretSerializer(I18nAwareModelSerializer):
     class Meta:
         model = RevokedTicketSecret
         fields = ('id', 'secret', 'created')
+
+
+class BlockedTicketSecretSerializer(I18nAwareModelSerializer):
+
+    class Meta:
+        model = BlockedTicketSecret
+        fields = ('id', 'secret', 'updated', 'blocked')

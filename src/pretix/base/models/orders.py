@@ -3005,6 +3005,19 @@ class RevokedTicketSecret(models.Model):
     created = models.DateTimeField(auto_now_add=True)
 
 
+class BlockedTicketSecret(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='blocked_secrets')
+    position = models.ForeignKey(
+        OrderPosition,
+        on_delete=models.SET_NULL,
+        related_name='blocked_secrets',
+        null=True,
+    )
+    secret = models.TextField(db_index=True)
+    blocked = models.BooleanField()
+    updated = models.DateTimeField(auto_now=True)
+
+
 @receiver(post_delete, sender=CachedTicket)
 def cachedticket_delete(sender, instance, **kwargs):
     if instance.file:

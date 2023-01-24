@@ -1757,6 +1757,22 @@ def test_revoked_secret_list(token_client, organizer, event):
 
 
 @pytest.mark.django_db
+def test_blocked_secret_list(token_client, organizer, event):
+    r = event.blocked_secrets.create(secret="abcd", blocked=True)
+    res = {
+        "id": r.id,
+        "secret": "abcd",
+        "blocked": True,
+        "updated": r.updated.isoformat().replace("+00:00", "Z")
+    }
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/blockedsecrets/'.format(
+        organizer.slug, event.slug,
+    ))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+
+@pytest.mark.django_db
 def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_queries):
     # order detail
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?pdf_data=true'.format(

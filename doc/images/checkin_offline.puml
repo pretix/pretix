@@ -113,20 +113,25 @@ partition "dataless check" {
         --> if "" then
             -right->[yes] "Return error REVOKED"
         else
-            -down->[yes] "If this is not an exit, is the valid_from/valid_until\nconstraint on the ticket fulfilled? "
+            -down->[yes] "Is the ticket secret on the block list?"
             --> if "" then
-                -right->[no] "Return error INVALID_TIME "
+                -right->[yes] "Return error BLOCKED "
             else
-                -down->[no] "Is the product part of the check-in list? "
+                -down->[yes] "If this is not an exit, is the valid_from/valid_until\nconstraint on the ticket fulfilled? "
                 --> if "" then
-                    -right->[no] "Return error PRODUCT "
+                    -right->[no] "Return error INVALID_TIME "
                 else
-                    -down->[yes] "Is the subevent part of the check-in list? "
+                    -down->[no] "Is the product part of the check-in list? "
                     --> if "" then
-                        -right->[no] "Return error INVALID  "
-                        note bottom: TODO\ninconsistent\nwith online\ncheck
+                        -right->[no] "Return error PRODUCT "
                     else
-                      --> "Is this an entry or exit? "
+                        -down->[yes] "Is the subevent part of the check-in list? "
+                        --> if "" then
+                            -right->[no] "Return error INVALID  "
+                            note bottom: TODO\ninconsistent\nwith online\ncheck
+                        else
+                          --> "Is this an entry or exit? "
+                        endif
                     endif
                 endif
             endif
