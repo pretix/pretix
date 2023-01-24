@@ -92,7 +92,12 @@ class CheckInListQueryMixin:
             last_entry=Subquery(cqs),
             last_exit=Subquery(cqs_exit),
             auto_checked_in=Exists(
-                Checkin.objects.filter(position_id=OuterRef('pk'), list_id=self.list.pk, auto_checked_in=True)
+                Checkin.objects.filter(
+                    position_id=OuterRef('pk'),
+                    type=Checkin.TYPE_ENTRY,
+                    list_id=self.list.pk,
+                    auto_checked_in=True
+                )
             )
         ).select_related(
             'item', 'variation', 'order', 'addon_to'
