@@ -270,7 +270,7 @@ class OtherOperationsForm(forms.Form):
     notify = forms.BooleanField(
         label=_('Notify user'),
         required=False,
-        initial=True,
+        initial=False,
         help_text=_(
             'Send an email to the customer notifying that their order has been changed.'
         )
