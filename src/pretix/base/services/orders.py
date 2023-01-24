@@ -1310,8 +1310,7 @@ def send_download_reminders(sender, **kwargs):
             positions = o.positions.select_related('item')
 
             if o.status != Order.STATUS_PAID:
-                if o.status != Order.STATUS_PENDING or o.require_approval or not \
-                        o.event.settings.ticket_download_pending:
+                if o.status != Order.STATUS_PENDING or o.require_approval or (not o.valid_if_pending and not o.event.settings.ticket_download_pending):
                     continue
             send = False
             for p in positions:

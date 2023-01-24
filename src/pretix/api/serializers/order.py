@@ -301,7 +301,9 @@ class FailedCheckinSerializer(I18nAwareModelSerializer):
 class OrderDownloadsField(serializers.Field):
     def to_representation(self, instance: Order):
         if instance.status != Order.STATUS_PAID:
-            if instance.status != Order.STATUS_PENDING or instance.require_approval or not instance.event.settings.ticket_download_pending:
+            if instance.status != Order.STATUS_PENDING or instance.require_approval or (
+                not instance.valid_if_pending and not instance.event.settings.ticket_download_pending
+            ):
                 return []
 
         request = self.context['request']
@@ -325,7 +327,9 @@ class OrderDownloadsField(serializers.Field):
 class PositionDownloadsField(serializers.Field):
     def to_representation(self, instance: OrderPosition):
         if instance.order.status != Order.STATUS_PAID:
-            if instance.order.status != Order.STATUS_PENDING or instance.order.require_approval or not instance.order.event.settings.ticket_download_pending:
+            if instance.order.status != Order.STATUS_PENDING or instance.order.require_approval or (
+                not instance.order.valid_if_pending and not instance.order.event.settings.ticket_download_pending
+            ):
                 return []
         if not instance.generate_ticket:
             return []

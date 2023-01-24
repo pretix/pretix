@@ -289,7 +289,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         if order.status in (Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
             raise PermissionDenied("Downloads are not available for canceled or expired orders.")
 
-        if order.status == Order.STATUS_PENDING and not request.event.settings.ticket_download_pending:
+        if order.status == Order.STATUS_PENDING and not (order.valid_if_pending or request.event.settings.ticket_download_pending):
             raise PermissionDenied("Downloads are not available for pending orders.")
 
         ct = CachedCombinedTicket.objects.filter(
@@ -1195,7 +1195,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
         if pos.order.status in (Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
             raise PermissionDenied("Downloads are not available for canceled or expired orders.")
 
-        if pos.order.status == Order.STATUS_PENDING and not request.event.settings.ticket_download_pending:
+        if pos.order.status == Order.STATUS_PENDING and not (pos.order.valid_if_pending or request.event.settings.ticket_download_pending):
             raise PermissionDenied("Downloads are not available for pending orders.")
         if not pos.generate_ticket:
             raise PermissionDenied("Downloads are not enabled for this product.")

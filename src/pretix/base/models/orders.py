@@ -854,7 +854,7 @@ class Order(LockModel, LoggedModel):
         ) and (
             self.status == Order.STATUS_PAID
             or (
-                (self.event.settings.ticket_download_pending or self.total == Decimal("0.00")) and
+                (self.valid_if_pending or self.event.settings.ticket_download_pending) and
                 self.status == Order.STATUS_PENDING and
                 not self.require_approval
             )
