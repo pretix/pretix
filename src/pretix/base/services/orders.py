@@ -2238,7 +2238,14 @@ class OrderChangeManager:
                     op.position.blocked = [op.block_name]
                 op.position.save(update_fields=['blocked'])
                 if op.position.blocked:
-                    op.position.blocked_secrets.create(event=self.event, secret=op.position.secret, blocked=True)
+                    op.position.blocked_secrets.update_or_create(
+                        event=self.event,
+                        secret=op.position.secret,
+                        defaults={
+                            'blocked': True,
+                            'updated': now(),
+                        }
+                    )
             elif isinstance(op, self.RemoveBlockOperation):
                 self.order.log_action('pretix.event.order.changed.remove_block', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,

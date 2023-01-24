@@ -123,6 +123,10 @@ def test_checkin_blocked_position(position, clist):
         perform_checkin(position, clist, {})
     assert excinfo.value.code == 'blocked'
     assert position.checkins.count() == 0
+    with pytest.raises(CheckInError) as excinfo:
+        perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
+    assert excinfo.value.code == 'blocked'
+    assert position.checkins.count() == 0
 
 
 @pytest.mark.django_db
