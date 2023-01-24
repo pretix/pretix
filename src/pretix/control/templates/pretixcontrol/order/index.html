@@ -194,7 +194,10 @@
                             <dt>{% trans "Expiry date" %}</dt>
                             <dd>
                                 {{ order.expires|date:"SHORT_DATETIME_FORMAT" }}
-                                {% if has_cancellation_fee and request.event.settings.payment_term_expire_automatically %}
+                                {% if order.valid_if_pending %}
+                                    <span class="fa fa-warning text-danger" data-toggle="tooltip"
+                                          title="{% trans "This order will not expire automatically since it is already confirmed and can be used." %}"></span>
+                                {% elif has_cancellation_fee and request.event.settings.payment_term_expire_automatically %}
                                     <span class="fa fa-warning text-danger" data-toggle="tooltip"
                                           title="{% trans "This order will not expire automatically as it has an open cancellation fee." %}"></span>
                                 {% endif %}

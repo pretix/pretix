@@ -116,6 +116,46 @@ def test_checkin_canceled_position(position, clist):
 
 
 @pytest.mark.django_db
+def test_checkin_blocked_position(position, clist):
+    position.blocked = ["admin"]
+    position.save()
+    with pytest.raises(CheckInError) as excinfo:
+        perform_checkin(position, clist, {})
+    assert excinfo.value.code == 'blocked'
+    assert position.checkins.count() == 0
+
+
+@pytest.mark.django_db
+def test_checkin_valid_from(event, position, clist):
+    position.valid_from = event.timezone.localize(datetime(2020, 1, 1, 12, 0, 0))
+    position.save()
+    with freeze_time("2020-01-01 10:45:00"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'invalid_time'
+        assert excinfo.value.reason == 'This ticket is only valid after 2020-01-01 12:00.'
+        assert position.checkins.count() == 0
+
+        perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
+        assert position.checkins.count() == 1
+
+
+@pytest.mark.django_db
+def test_checkin_valid_until(event, position, clist):
+    position.valid_until = event.timezone.localize(datetime(2020, 1, 1, 9, 0, 0))
+    position.save()
+    with freeze_time("2020-01-01 10:45:00"):
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'invalid_time'
+        assert excinfo.value.reason == 'This ticket was only valid before 2020-01-01 09:00.'
+        assert position.checkins.count() == 0
+
+        perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
+        assert position.checkins.count() == 1
+
+
+@pytest.mark.django_db
 def test_checkin_invalid_product(position, clist):
     clist.all_products = False
     clist.save()
@@ -163,6 +203,17 @@ def test_unpaid(position, clist):
 
 
 @pytest.mark.django_db
+def test_unpaid_but_valid(position, clist):
+    o = position.order
+    o.status = Order.STATUS_PENDING
+    o.valid_if_pending = True
+    o.save()
+    clist.include_pending = False
+    clist.save()
+    perform_checkin(position, clist, {})
+
+
+@pytest.mark.django_db
 def test_unpaid_include_pending_ignore(position, clist):
     o = position.order
     o.status = Order.STATUS_PENDING
@@ -173,7 +224,7 @@ def test_unpaid_include_pending_ignore(position, clist):
 
 
 @pytest.mark.django_db
-def test_unpaid_ignore_without_include_pendung(position, clist):
+def test_unpaid_ignore_without_include_pending(position, clist):
     o = position.order
     o.status = Order.STATUS_PENDING
     o.save()

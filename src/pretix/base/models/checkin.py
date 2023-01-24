@@ -106,10 +106,14 @@ class CheckinList(LoggedModel):
             order__event=self.event,
         )
         if not ignore_status:
-            qs = qs.filter(
-                canceled=False,
-                order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.include_pending else [Order.STATUS_PAID],
-            )
+            if self.include_pending:
+                qs = qs.filter(order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING], canceled=False)
+            else:
+                qs = qs.filter(
+                    Q(order__status=Order.STATUS_PAID) |
+                    Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True),
+                    canceled=False
+                )
 
         if self.subevent_id:
             qs = qs.filter(subevent_id=self.subevent_id)

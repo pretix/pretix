@@ -7,11 +7,13 @@
         {% trans "Confirmation pending" context "order state" %}
     {% elif event.settings.payment_pending_hidden %}
         {# intentionally left blank #}
+    {% elif order.valid_if_pending %}
+        {% trans "Confirmed" context "order state" %}
     {% else %}
         {% trans "Payment pending" %}
     {% endif %}
     {% if not event.settings.payment_pending_hidden %}
-        <i class="status-dot fa fa-circle text-warning" aria-hidden="true"></i>
+        <i class="status-dot fa fa-circle {% if order.valid_if_pending %}text-info{% else %}text-warning{% endif %}" aria-hidden="true"></i>
     {% endif %}
 {% elif order.status == "p" %}
     {% if order.count_positions == 0 %}

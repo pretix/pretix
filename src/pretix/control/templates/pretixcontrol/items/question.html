@@ -18,6 +18,7 @@
             <select name="status" class="form-control">
                 <option value="" {% if request.GET.status == "" %}selected="selected"{% endif %}>{% trans "All orders" %}</option>
                 <option value="p" {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "Paid" %}</option>
+                <option value="pv" {% if request.GET.status == "pv" %}selected="selected"{% endif %}>{% trans "Paid or confirmed" %}</option>
                 <option value="n" {% if request.GET.status == "n" %}selected="selected"{% endif %}>{% trans "Pending" %}</option>
                 <option value="np" {% if request.GET.status == "np" or "status" not in request.GET %}selected="selected"{% endif %}>{% trans "Pending or paid" %}</option>
                 <option value="o" {% if request.GET.status == "o" %}selected="selected"{% endif %}>{% trans "Pending (overdue)" %}</option>

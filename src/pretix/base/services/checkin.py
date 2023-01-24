@@ -732,7 +732,10 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             _('This ticket is only valid after {datetime}.').format(
                 datetime=date_format(op.valid_from, 'SHORT_DATETIME_FORMAT')
             ),
-            'invalid_time'
+            'invalid_time',
+            _('This ticket is only valid after {datetime}.').format(
+                datetime=date_format(op.valid_from, 'SHORT_DATETIME_FORMAT')
+            ),
         )
 
     if type != Checkin.TYPE_EXIT and op.valid_until and op.valid_until < now():
@@ -740,7 +743,10 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             _('This ticket was only valid before {datetime}.').format(
                 datetime=date_format(op.valid_until, 'SHORT_DATETIME_FORMAT')
             ),
-            'invalid_time'
+            'invalid_time',
+            _('This ticket was only valid before {datetime}.').format(
+                datetime=date_format(op.valid_until, 'SHORT_DATETIME_FORMAT')
+            ),
         )
 
     # Do this outside of transaction so it is saved even if the checkin fails for some other reason

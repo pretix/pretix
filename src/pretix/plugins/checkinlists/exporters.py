@@ -219,7 +219,10 @@ class CheckInListMixin(BaseExporter):
             qs = qs.filter(Q(item__checkin_attention=True) | Q(order__checkin_attention=True) | Q(variation__checkin_attention=True))
 
         if not cl.include_pending:
-            qs = qs.filter(order__status=Order.STATUS_PAID)
+            qs = qs.filter(
+                Q(order__status=Order.STATUS_PAID) |
+                Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
+            )
         else:
             qs = qs.filter(order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING))
 
@@ -449,7 +452,10 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             _('Product'), _('Price'), _('Checked in'), _('Checked out'), _('Automatically checked in')
         ]
         if not cl.include_pending:
-            qs = qs.filter(order__status=Order.STATUS_PAID)
+            qs = qs.filter(
+                Q(order__status=Order.STATUS_PAID) |
+                Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
+            )
         else:
             qs = qs.filter(order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING))
             headers.append(_('Paid'))

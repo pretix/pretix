@@ -22,7 +22,7 @@
 from datetime import datetime, time, timedelta
 
 from django.db import models
-from django.db.models import Exists, OuterRef
+from django.db.models import Exists, OuterRef, Q
 from django.utils import timezone
 from django.utils.formats import date_format
 from django.utils.timezone import make_aware
@@ -118,7 +118,13 @@ class ScheduledMail(models.Model):
                 Exists(OrderPosition.objects.filter(order=OuterRef('pk'), item_id__in=limit_products))
             )
 
-        status = [Order.STATUS_PENDING, Order.STATUS_PAID] if self.rule.include_pending else [Order.STATUS_PAID]
+        if self.rule.include_pending:
+            status_q = Q(status__in=[Order.STATUS_PAID, Order.STATUS_PENDING])
+        else:
+            status_q = Q(
+                Q(status=Order.STATUS_PAID) |
+                Q(status=Order.STATUS_PENDING, valid_if_pending=True)
+            )
 
         if self.last_successful_order_id:
             orders = orders.filter(
@@ -126,7 +132,7 @@ class ScheduledMail(models.Model):
             )
 
         orders = orders.filter(
-            status__in=status,
+            status_q,
             require_approval=False,
         ).order_by('pk').select_related('invoice_address').prefetch_related('positions')
 

@@ -127,7 +127,7 @@ class AllTicketsPDF(BaseExporter):
         if form_data.get('include_pending'):
             qs = qs.filter(order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING])
         else:
-            qs = qs.filter(order__status__in=[Order.STATUS_PAID])
+            qs = qs.filter(Q(order__status=Order.STATUS_PAID) | Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True))
 
         if form_data.get('date_range'):
             dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['date_range'], self.timezone)

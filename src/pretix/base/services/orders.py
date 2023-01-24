@@ -68,7 +68,8 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
-    InvoiceAddress, OrderFee, OrderRefund, generate_secret,
+    BlockedTicketSecret, InvoiceAddress, OrderFee, OrderRefund,
+    generate_secret,
 )
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
@@ -1203,6 +1204,7 @@ def expire_orders(sender, **kwargs):
     qs = Order.objects.filter(
         expires__lt=now(),
         status=Order.STATUS_PENDING,
+        valid_if_pending=False,
         require_approval=False
     ).exclude(
         Exists(
@@ -2235,7 +2237,8 @@ class OrderChangeManager:
                 else:
                     op.position.blocked = [op.block_name]
                 op.position.save(update_fields=['blocked'])
-                # todo: revoke list handling
+                if op.position.blocked:
+                    op.position.blocked_secrets.create(event=self.event, secret=op.position.secret, blocked=True)
             elif isinstance(op, self.RemoveBlockOperation):
                 self.order.log_action('pretix.event.order.changed.remove_block', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
@@ -2247,11 +2250,18 @@ class OrderChangeManager:
                     if not op.position.blocked:
                         op.position.blocked = None
                     op.position.save(update_fields=['blocked'])
+                    if not op.position.blocked:
+                        try:
+                            bs = op.position.blocked_secrets.get(secret=op.position.secret)
+                            bs.blocked = False
+                            bs.save()
+                        except BlockedTicketSecret.DoesNotExist:
+                            pass
                 # todo: revoke list handling
 
         for p in secret_dirty:
             assign_ticket_secret(
-                event=self.event, position=p, force_invalidate=False, save=False
+                event=self.event, position=p, force_invalidate=False, save=True
             )
 
         if split_positions:
