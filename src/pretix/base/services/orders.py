@@ -134,7 +134,7 @@ error_messages = {
     ),
     'not_started': gettext_lazy('The booking period for this event has not yet started.'),
     'ended': gettext_lazy('The booking period has ended.'),
-    'voucher_min_usages': gettext_lazy(
+    'voucher_min_usages': ngettext_lazy(
         'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products.',
         'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products.',
         'number'
