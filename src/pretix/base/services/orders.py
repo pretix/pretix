@@ -54,14 +54,14 @@ from django.db.transaction import get_connection
 from django.dispatch import receiver
 from django.utils.functional import cached_property
 from django.utils.timezone import make_aware, now
-from django.utils.translation import gettext as _
+from django.utils.translation import gettext as _, gettext_lazy, ngettext_lazy
 from django_scopes import scopes_disabled
 
 from pretix.api.models import OAuthApplication
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_email_context
 from pretix.base.i18n import (
-    LazyLocaleException, get_language_without_region, language,
+    get_language_without_region, language,
 )
 from pretix.base.models import (
     CartPosition, Device, Event, GiftCard, Item, ItemVariation, Membership,
@@ -100,47 +100,86 @@ from pretix.celery_app import app
 from pretix.helpers.models import modelcopy
 from pretix.helpers.periodic import minimum_interval
 
+
+class OrderError(Exception):
+    def __init__(self, msg):
+        # force msg to string to make sure lazy-translation is done in current locale-context
+        # otherwise translation might happen in celery-context, which uses default-locale
+        super().__init__(str(msg))
+
+
 error_messages = {
-    'unavailable': _('Some of the products you selected were no longer available. '
-                     'Please see below for details.'),
-    'in_part': _('Some of the products you selected were no longer available in '
-                 'the quantity you selected. Please see below for details.'),
-    'price_changed': _('The price of some of the items in your cart has changed in the '
-                       'meantime. Please see below for details.'),
-    'internal': _("An internal error occurred, please try again."),
-    'empty': _("Your cart is empty."),
-    'max_items_per_product': _("You cannot select more than %(max)s items of the product %(product)s. We removed the "
-                               "surplus items from your cart."),
-    'busy': _('We were not able to process your request completely as the '
-              'server was too busy. Please try again.'),
-    'not_started': _('The booking period for this event has not yet started.'),
-    'ended': _('The booking period has ended.'),
-    'voucher_min_usages': _('The voucher code "%(voucher)s" can only be used if you select at least %(number)s '
-                            'matching products.'),
-    'voucher_invalid': _('The voucher code used for one of the items in your cart is not known in our database.'),
-    'voucher_redeemed': _('The voucher code used for one of the items in your cart has already been used the maximum '
-                          'number of times allowed. We removed this item from your cart.'),
-    'voucher_budget_used': _('The voucher code used for one of the items in your cart has already been too often. We '
-                             'adjusted the price of the item in your cart.'),
-    'voucher_expired': _('The voucher code used for one of the items in your cart is expired. We removed this item '
-                         'from your cart.'),
-    'voucher_invalid_item': _('The voucher code used for one of the items in your cart is not valid for this item. We '
-                              'removed this item from your cart.'),
-    'voucher_required': _('You need a valid voucher code to order one of the products.'),
-    'some_subevent_not_started': _('The booking period for one of the events in your cart has not yet started. The '
-                                   'affected positions have been removed from your cart.'),
-    'some_subevent_ended': _('The booking period for one of the events in your cart has ended. The affected '
-                             'positions have been removed from your cart.'),
-    'seat_invalid': _('One of the seats in your order was invalid, we removed the position from your cart.'),
-    'seat_unavailable': _('One of the seats in your order has been taken in the meantime, we removed the position from your cart.'),
-    'country_blocked': _('One of the selected products is not available in the selected country.'),
-    'not_for_sale': _('You selected a product which is not available for sale.'),
-    'addon_invalid_base': _('You can not select an add-on for the selected product.'),
-    'addon_duplicate_item': _('You can not select two variations of the same add-on product.'),
-    'addon_max_count': _('You can select at most %(max)s add-ons from the category %(cat)s for the product %(base)s.'),
-    'addon_min_count': _('You need to select at least %(min)s add-ons from the category %(cat)s for the '
-                         'product %(base)s.'),
-    'addon_no_multi': _('You can select every add-ons from the category %(cat)s for the product %(base)s at most once.'),
+    'unavailable': gettext_lazy(
+        'Some of the products you selected were no longer available. '
+        'Please see below for details.'
+    ),
+    'in_part': gettext_lazy(
+        'Some of the products you selected were no longer available in '
+        'the quantity you selected. Please see below for details.'
+    ),
+    'price_changed': gettext_lazy(
+        'The price of some of the items in your cart has changed in the '
+        'meantime. Please see below for details.'
+    ),
+    'internal': gettext_lazy("An internal error occurred, please try again."),
+    'empty': gettext_lazy("Your cart is empty."),
+    'max_items_per_product': ngettext_lazy(
+        "You cannot select more than %(max)s item of the product %(product)s. We removed the surplus items from your cart.",
+        "You cannot select more than %(max)s items of the product %(product)s. We removed the surplus items from your cart.",
+        "max"
+    ),
+    'busy': gettext_lazy(
+        'We were not able to process your request completely as the '
+        'server was too busy. Please try again.'
+    ),
+    'not_started': gettext_lazy('The booking period for this event has not yet started.'),
+    'ended': gettext_lazy('The booking period has ended.'),
+    'voucher_min_usages': gettext_lazy(
+        'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products.',
+        'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products.',
+        'number'
+    ),
+    'voucher_invalid': gettext_lazy('The voucher code used for one of the items in your cart is not known in our database.'),
+    'voucher_redeemed': gettext_lazy(
+        'The voucher code used for one of the items in your cart has already been used the maximum '
+        'number of times allowed. We removed this item from your cart.'
+    ),
+    'voucher_budget_used': gettext_lazy(
+        'The voucher code used for one of the items in your cart has already been too often. We '
+        'adjusted the price of the item in your cart.'
+    ),
+    'voucher_expired': gettext_lazy(
+        'The voucher code used for one of the items in your cart is expired. We removed this item from your cart.'
+    ),
+    'voucher_invalid_item': gettext_lazy(
+        'The voucher code used for one of the items in your cart is not valid for this item. We removed this item from your cart.'
+    ),
+    'voucher_required': gettext_lazy('You need a valid voucher code to order one of the products.'),
+    'some_subevent_not_started': gettext_lazy(
+        'The booking period for one of the events in your cart has not yet started. The '
+        'affected positions have been removed from your cart.'
+    ),
+    'some_subevent_ended': gettext_lazy(
+        'The booking period for one of the events in your cart has ended. The affected '
+        'positions have been removed from your cart.'
+    ),
+    'seat_invalid': gettext_lazy('One of the seats in your order was invalid, we removed the position from your cart.'),
+    'seat_unavailable': gettext_lazy('One of the seats in your order has been taken in the meantime, we removed the position from your cart.'),
+    'country_blocked': gettext_lazy('One of the selected products is not available in the selected country.'),
+    'not_for_sale': gettext_lazy('You selected a product which is not available for sale.'),
+    'addon_invalid_base': gettext_lazy('You can not select an add-on for the selected product.'),
+    'addon_duplicate_item': gettext_lazy('You can not select two variations of the same add-on product.'),
+    'addon_max_count': ngettext_lazy(
+        'You can select at most %(max)s add-on from the category %(cat)s for the product %(base)s.',
+        'You can select at most %(max)s add-ons from the category %(cat)s for the product %(base)s.',
+        'max'
+    ),
+    'addon_min_count': ngettext_lazy(
+        'You need to select at least %(min)s add-on from the category %(cat)s for the product %(base)s.',
+        'You need to select at least %(min)s add-ons from the category %(cat)s for the product %(base)s.',
+        'min'
+    ),
+    'addon_no_multi': gettext_lazy('You can select every add-ons from the category %(cat)s for the product %(base)s at most once.'),
 }
 
 logger = logging.getLogger(__name__)
@@ -156,7 +195,7 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
     enough quota.
     """
     if order.status != Order.STATUS_CANCELED:
-        raise OrderError('The order was not canceled.')
+        raise OrderError(_('The order was not canceled.'))
 
     with order.event.lock() as now_dt:
         is_available = order._is_still_available(now_dt, count_waitinglist=False, check_voucher_usage=True,
@@ -537,18 +576,6 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
     return order.pk
 
 
-class OrderError(LazyLocaleException):
-    def __init__(self, *args):
-        msg = args[0]
-        msgargs = args[1] if len(args) > 1 else None
-        self.args = args
-        if msgargs:
-            msg = _(msg) % msgargs
-        else:
-            msg = _(msg)
-        super().__init__(msg)
-
-
 def _check_date(event: Event, now_dt: datetime):
     if event.presale_start and now_dt < event.presale_start:
         raise OrderError(error_messages['not_started'])
@@ -569,7 +596,6 @@ def _check_date(event: Event, now_dt: datetime):
 def _check_positions(event: Event, now_dt: datetime, positions: List[CartPosition], address: InvoiceAddress=None,
                      sales_channel='web', customer=None):
     err = None
-    errargs = None
     _check_date(event, now_dt)
 
     products_seen = Counter()
@@ -606,9 +632,10 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
         products_seen[cp.item] += 1
         if cp.item.max_per_order and products_seen[cp.item] > cp.item.max_per_order:
-            err = error_messages['max_items_per_product']
-            errargs = {'max': cp.item.max_per_order,
-                       'product': cp.item.name}
+            err = error_messages['max_items_per_product'] % {
+                'max': cp.item.max_per_order,
+                'product': cp.item.name
+            }
             delete(cp)
             break
 
@@ -727,7 +754,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
     for voucher, cnt in v_usages.items():
         if 0 < cnt < voucher.min_usages_remaining:
-            raise OrderError(error_messages['voucher_min_usages'], {
+            raise OrderError(error_messages['voucher_min_usages'] % {
                 'voucher': voucher.code,
                 'number': voucher.min_usages_remaining,
             })
@@ -790,7 +817,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         cp.save()
 
     if err:
-        raise OrderError(err, errargs)
+        raise OrderError(err)
 
 
 def _get_fees(positions: List[CartPosition], payment_requests: List[dict], address: InvoiceAddress,
@@ -1343,22 +1370,26 @@ def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
 
 class OrderChangeManager:
     error_messages = {
-        'product_without_variation': _('You need to select a variation of the product.'),
-        'quota': _('The quota {name} does not have enough capacity left to perform the operation.'),
-        'quota_missing': _('There is no quota defined that allows this operation.'),
-        'product_invalid': _('The selected product is not active or has no price set.'),
-        'complete_cancel': _('This operation would leave the order empty. Please cancel the order itself instead.'),
-        'paid_to_free_exceeded': _('This operation would make the order free and therefore immediately paid, however '
-                                   'no quota is available.'),
-        'addon_to_required': _('This is an add-on product, please select the base position it should be added to.'),
-        'addon_invalid': _('The selected base position does not allow you to add this product as an add-on.'),
-        'subevent_required': _('You need to choose a subevent for the new position.'),
-        'seat_unavailable': _('The selected seat "{seat}" is not available.'),
-        'seat_subevent_mismatch': _('You selected seat "{seat}" for a date that does not match the selected ticket date. Please choose a seat again.'),
-        'seat_required': _('The selected product requires you to select a seat.'),
-        'seat_forbidden': _('The selected product does not allow to select a seat.'),
-        'tax_rule_country_blocked': _('The selected country is blocked by your tax rule.'),
-        'gift_card_change': _('You cannot change the price of a position that has been used to issue a gift card.'),
+        'product_without_variation': gettext_lazy('You need to select a variation of the product.'),
+        'quota': gettext_lazy('The quota {name} does not have enough capacity left to perform the operation.'),
+        'quota_missing': gettext_lazy('There is no quota defined that allows this operation.'),
+        'product_invalid': gettext_lazy('The selected product is not active or has no price set.'),
+        'complete_cancel': gettext_lazy('This operation would leave the order empty. Please cancel the order itself instead.'),
+        'paid_to_free_exceeded': gettext_lazy(
+            'This operation would make the order free and therefore immediately paid, however '
+            'no quota is available.'
+        ),
+        'addon_to_required': gettext_lazy('This is an add-on product, please select the base position it should be added to.'),
+        'addon_invalid': gettext_lazy('The selected base position does not allow you to add this product as an add-on.'),
+        'subevent_required': gettext_lazy('You need to choose a subevent for the new position.'),
+        'seat_unavailable': gettext_lazy('The selected seat "{seat}" is not available.'),
+        'seat_subevent_mismatch': gettext_lazy(
+            'You selected seat "{seat}" for a date that does not match the selected ticket date. Please choose a seat again.'
+        ),
+        'seat_required': gettext_lazy('The selected product requires you to select a seat.'),
+        'seat_forbidden': gettext_lazy('The selected product does not allow to select a seat.'),
+        'tax_rule_country_blocked': gettext_lazy('The selected country is blocked by your tax rule.'),
+        'gift_card_change': gettext_lazy('You cannot change the price of a position that has been used to issue a gift card.'),
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation'))
     SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent'))
@@ -1765,22 +1796,16 @@ class OrderChangeManager:
                 for (i, v), c in selected.items():
                     n_per_i[i] += c
                 if sum(selected.values()) > iao.max_count:
-                    # TODO: Proper i18n
-                    # TODO: Proper pluralization
                     raise OrderError(
-                        error_messages['addon_max_count'],
-                        {
+                        error_messages['addon_max_count'] % {
                             'base': str(item.name),
                             'max': iao.max_count,
                             'cat': str(iao.addon_category.name),
                         }
                     )
                 elif sum(selected.values()) < iao.min_count:
-                    # TODO: Proper i18n
-                    # TODO: Proper pluralization
                     raise OrderError(
-                        error_messages['addon_min_count'],
-                        {
+                        error_messages['addon_min_count'] % {
                             'base': str(item.name),
                             'min': iao.min_count,
                             'cat': str(iao.addon_category.name),
@@ -1788,8 +1813,7 @@ class OrderChangeManager:
                     )
                 elif any(v > 1 for v in n_per_i.values()) and not iao.multi_allowed:
                     raise OrderError(
-                        error_messages['addon_no_multi'],
-                        {
+                        error_messages['addon_no_multi'] % {
                             'base': str(item.name),
                             'cat': str(iao.addon_category.name),
                         }
@@ -2470,7 +2494,7 @@ def perform_order(self, event: Event, payments: List[dict], positions: List[str]
             except LockTimeoutException:
                 self.retry()
         except (MaxRetriesExceededError, LockTimeoutException):
-            raise OrderError(str(error_messages['busy']))
+            raise OrderError(error_messages['busy'])
 
 
 _unset = object()
