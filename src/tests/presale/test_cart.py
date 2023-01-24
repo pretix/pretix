@@ -1529,7 +1529,7 @@ class CartTest(CartTestMixin, TestCase):
         response = self.client.get('/%s/%s/redeem' % (self.orga.slug, self.event.slug),
                                    {'voucher': v.code},
                                    follow=True)
-        assert error_messages['voucher_item_not_available'] in response.rendered_content
+        assert str(error_messages['voucher_item_not_available']) in response.rendered_content
 
     def test_voucher_price(self):
         with scopes_disabled():
