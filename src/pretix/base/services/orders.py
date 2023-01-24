@@ -102,10 +102,18 @@ from pretix.helpers.periodic import minimum_interval
 
 
 class OrderError(Exception):
-    def __init__(self, msg):
-        # force msg to string to make sure lazy-translation is done in current locale-context
-        # otherwise translation might happen in celery-context, which uses default-locale
-        super().__init__(str(msg))
+    def __init__(self, *args):
+        msg = args[0]
+        msgargs = args[1] if len(args) > 1 else None
+        self.args = args
+        if msgargs:
+            msg = _(msg) % msgargs
+        else:
+            # force msg to string to make sure lazy-translation is done in current locale-context
+            # otherwise translation might happen in celery-context, which uses default-locale
+            # also translate with _/gettext to keep it backwards compatible
+            msg = _(str(msg))
+        super().__init__(msg)
 
 
 error_messages = {
