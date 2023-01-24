@@ -218,8 +218,10 @@ class EmailAddressShredder(BaseDataShredder):
                 o.meta_info = json.dumps(d)
             o.save(update_fields=['meta_info', 'email', 'customer'])
 
-        for le in self.event.logentry_set.filter(action_type__contains="order.email"):
-            shred_log_fields(le, banlist=['recipient', 'message', 'subject'])
+        for le in self.event.logentry_set.filter(
+            Q(action_type__contains="order.email") | Q(action_type__contains="position.email"),
+        ):
+            shred_log_fields(le, banlist=['recipient', 'message', 'subject', 'full_mail'])
 
         for le in self.event.logentry_set.filter(action_type="pretix.event.order.contact.changed"):
             shred_log_fields(le, banlist=['old_email', 'new_email'])
