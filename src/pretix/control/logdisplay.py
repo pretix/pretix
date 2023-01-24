@@ -370,6 +370,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.unpaid': _('The order has been marked as unpaid.'),
         'pretix.event.order.secret.changed': _('The order\'s secret has been changed.'),
         'pretix.event.order.expirychanged': _('The order\'s expiry date has been changed.'),
+        'pretix.event.order.valid_if_pending.set': _('The order has been set to be usable before it is paid.'),
+        'pretix.event.order.valid_if_pending.unset': _('The order has been set to require payment before use.'),
         'pretix.event.order.expired': _('The order has been marked as expired.'),
         'pretix.event.order.paid': _('The order has been marked as paid.'),
         'pretix.event.order.cancellationrequest.deleted': _('The cancellation request has been deleted.'),

@@ -1520,6 +1520,7 @@ class OrderExtend(OrderView):
                     self.order,
                     new_date=self.form.cleaned_data.get('expires'),
                     force=self.form.cleaned_data.get('quota_ignore', False),
+                    valid_if_pending=self.form.cleaned_data.get('valid_if_pending', False),
                     user=self.request.user
                 )
                 messages.success(self.request, _('The payment term has been changed.'))

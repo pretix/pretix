@@ -251,7 +251,7 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
         generate_invoice(order)
 
 
-def extend_order(order: Order, new_date: datetime, force: bool=False, user: User=None, auth=None):
+def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_pending: bool=None, user: User=None, auth=None):
     """
     Extends the deadline of an order. If the order is already expired, the quota will be checked to
     see if this is actually still possible. If ``force`` is set to ``True``, the result of this check
@@ -262,19 +262,36 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
 
     @transaction.atomic
     def change(was_expired=True):
+        old_date = order.expires
         order.expires = new_date
         if was_expired:
             order.status = Order.STATUS_PENDING
-        order.save(update_fields=['expires'] + (['status'] if was_expired else []))
-        order.log_action(
-            'pretix.event.order.expirychanged',
-            user=user,
-            auth=auth,
-            data={
-                'expires': order.expires,
-                'state_change': was_expired
-            }
-        )
+        print(valid_if_pending, order.valid_if_pending)
+        if valid_if_pending is not None and valid_if_pending != order.valid_if_pending:
+            order.valid_if_pending = valid_if_pending
+            if valid_if_pending:
+                order.log_action(
+                    'pretix.event.order.valid_if_pending.set',
+                    user=user,
+                    auth=auth,
+                )
+            else:
+                order.log_action(
+                    'pretix.event.order.valid_if_pending.unset',
+                    user=user,
+                    auth=auth,
+                )
+        order.save(update_fields=['valid_if_pending', 'expires'] + (['status'] if was_expired else []))
+        if old_date != new_date:
+            order.log_action(
+                'pretix.event.order.expirychanged',
+                user=user,
+                auth=auth,
+                data={
+                    'expires': order.expires,
+                    'state_change': was_expired
+                }
+            )
 
         if was_expired:
             num_invoices = order.invoices.filter(is_cancellation=False).count()
