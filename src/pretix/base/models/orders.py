@@ -3017,6 +3017,9 @@ class BlockedTicketSecret(models.Model):
     blocked = models.BooleanField()
     updated = models.DateTimeField(auto_now=True)
 
+    class Meta:
+        unique_together = (('event', 'secret'),)
+
 
 @receiver(post_delete, sender=CachedTicket)
 def cachedticket_delete(sender, instance, **kwargs):
