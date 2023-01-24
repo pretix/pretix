@@ -1343,6 +1343,7 @@ def notify_user_changed_order(order, user=None, auth=None, invoices=[]):
 
 class OrderChangeManager:
     error_messages = {
+        'order_canceled': _('You cannot change a canceled order.'),
         'product_without_variation': _('You need to select a variation of the product.'),
         'quota': _('The quota {name} does not have enough capacity left to perform the operation.'),
         'quota_missing': _('There is no quota defined that allows this operation.'),
@@ -1389,6 +1390,9 @@ class OrderChangeManager:
         self.notify = notify
         self._invoice_dirty = False
         self._invoices = []
+
+        if order.status == Order.STATUS_CANCELED:
+            raise OrderError(self.error_messages['order_canceled'])
 
     def change_item(self, position: OrderPosition, item: Item, variation: Optional[ItemVariation]):
         if (not variation and item.has_variations) or (variation and variation.item_id != item.pk):
