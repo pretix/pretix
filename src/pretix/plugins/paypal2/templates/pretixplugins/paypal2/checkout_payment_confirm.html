@@ -15,10 +15,12 @@
             {% trans "We will then charge your PayPal account and finalize the order." %}
         </p>
     {% else %}
+        <p>
         {% blocktrans trimmed %}
             The total amount listed above will be withdrawn from your PayPal account after the
             confirmation of your purchase.
         {% endblocktrans %}
+        </p>
     {% endif %}
 {% else %}
     <p>
