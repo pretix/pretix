@@ -31,7 +31,7 @@ from django.contrib import messages
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.templatetags.static import static
-from django.urls import reverse
+from django.urls import resolve, reverse
 from django.utils.crypto import get_random_string
 from django.utils.safestring import mark_safe
 from django.utils.timezone import now
@@ -583,7 +583,13 @@ class PaypalMethod(BasePaymentProvider):
         on the 'confirm order' page.
         """
         template = get_template('pretixplugins/paypal2/checkout_payment_confirm.html')
-        ctx = {'request': request, 'event': self.event, 'settings': self.settings, 'method': self.method}
+        ctx = {
+            'request': request,
+            'url': resolve(request.path_info),
+            'event': self.event,
+            'settings': self.settings,
+            'method': self.method
+        }
         return template.render(ctx)
 
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
