@@ -43,7 +43,7 @@ from django.db import DatabaseError, transaction
 from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Value
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
-from django.utils.translation import gettext_lazy as _, pgettext_lazy
+from django.utils.translation import gettext as _, gettext_lazy, ngettext_lazy, pgettext_lazy
 from django_scopes import scopes_disabled
 
 from pretix.base.channels import get_all_sales_channels
@@ -74,81 +74,118 @@ from pretix.presale.signals import (
 
 
 class CartError(Exception):
-    def __init__(self, *args):
-        msg = args[0]
-        msgargs = args[1] if len(args) > 1 else None
-        self.args = args
-        if msgargs:
-            msg = _(msg) % msgargs
-        else:
-            msg = _(msg)
-        super().__init__(msg)
+    def __init__(self, msg):
+        # force msg to string to make sure lazy-translation is done in current locale-context
+        # otherwise translation might happen in celery-context, which uses default-locale
+        super().__init__(str(msg))
 
 
 error_messages = {
-    'busy': _('We were not able to process your request completely as the '
-              'server was too busy. Please try again.'),
-    'empty': _('You did not select any products.'),
-    'unknown_position': _('Unknown cart position.'),
+    'busy': gettext_lazy(
+        'We were not able to process your request completely as the '
+        'server was too busy. Please try again.'
+    ),
+    'empty': gettext_lazy('You did not select any products.'),
+    'unknown_position': gettext_lazy('Unknown cart position.'),
     'subevent_required': pgettext_lazy('subevent', 'No date was specified.'),
-    'not_for_sale': _('You selected a product which is not available for sale.'),
-    'unavailable': _('Some of the products you selected are no longer available. '
-                     'Please see below for details.'),
-    'in_part': _('Some of the products you selected are no longer available in '
-                 'the quantity you selected. Please see below for details.'),
-    'max_items': _("You cannot select more than %s items per order."),
-    'max_items_per_product': _("You cannot select more than %(max)s items of the product %(product)s."),
-    'min_items_per_product': _("You need to select at least %(min)s items of the product %(product)s."),
-    'min_items_per_product_removed': _("We removed %(product)s from your cart as you can not buy less than "
-                                       "%(min)s items of it."),
-    'not_started': _('The booking period for this event has not yet started.'),
-    'ended': _('The booking period for this event has ended.'),
-    'payment_ended': _('All payments for this event need to be confirmed already, so no new orders can be created.'),
-    'some_subevent_not_started': _('The booking period for this event has not yet started. The affected positions '
-                                   'have been removed from your cart.'),
-    'some_subevent_ended': _('The booking period for one of the events in your cart has ended. The affected '
-                             'positions have been removed from your cart.'),
-    'price_too_high': _('The entered price is to high.'),
-    'voucher_invalid': _('This voucher code is not known in our database.'),
-    'voucher_min_usages': _('The voucher code "%(voucher)s" can only be used if you select at least %(number)s '
-                            'matching products.'),
-    'voucher_min_usages_removed': _('The voucher code "%(voucher)s" can only be used if you select at least '
-                                    '%(number)s matching products. We have therefore removed some positions from '
-                                    'your cart that can no longer be purchased like this.'),
-    'voucher_redeemed': _('This voucher code has already been used the maximum number of times allowed.'),
-    'voucher_redeemed_cart': _('This voucher code is currently locked since it is already contained in a cart. This '
-                               'might mean that someone else is redeeming this voucher right now, or that you tried '
-                               'to redeem it before but did not complete the checkout process. You can try to use it '
-                               'again in %d minutes.'),
-    'voucher_redeemed_partial': _('This voucher code can only be redeemed %d more times.'),
-    'voucher_double': _('You already used this voucher code. Remove the associated line from your '
-                        'cart if you want to use it for a different product.'),
-    'voucher_expired': _('This voucher is expired.'),
-    'voucher_invalid_item': _('This voucher is not valid for this product.'),
-    'voucher_invalid_seat': _('This voucher is not valid for this seat.'),
-    'voucher_no_match': _('We did not find any position in your cart that we could use this voucher for. If you want '
-                          'to add something new to your cart using that voucher, you can do so with the voucher '
-                          'redemption option on the bottom of the page.'),
-    'voucher_item_not_available': _(
+    'not_for_sale': gettext_lazy('You selected a product which is not available for sale.'),
+    'unavailable': gettext_lazy(
+        'Some of the products you selected are no longer available. '
+        'Please see below for details.'
+    ),
+    'in_part': gettext_lazy(
+        'Some of the products you selected are no longer available in '
+        'the quantity you selected. Please see below for details.'
+    ),
+    'max_items': ngettext_lazy(
+        "You cannot select more than %s item per order.",
+        "You cannot select more than %s items per order."
+    ),
+    'max_items_per_product': ngettext_lazy(
+        "You cannot select more than %(max)s item of the product %(product)s.",
+        "You cannot select more than %(max)s items of the product %(product)s.",
+        "max"
+    ),
+    'min_items_per_product': ngettext_lazy(
+        "You need to select at least %(min)s item of the product %(product)s.",
+        "You need to select at least %(min)s items of the product %(product)s.",
+        "min"
+    ),
+    'min_items_per_product_removed': ngettext_lazy(
+        "We removed %(product)s from your cart as you can not buy less than %(min)s item of it.",
+        "We removed %(product)s from your cart as you can not buy less than %(min)s items of it.",
+        "min"
+    ),
+    'not_started': gettext_lazy('The booking period for this event has not yet started.'),
+    'ended': gettext_lazy('The booking period for this event has ended.'),
+    'payment_ended': gettext_lazy('All payments for this event need to be confirmed already, so no new orders can be created.'),
+    'some_subevent_not_started': gettext_lazy(
+        'The booking period for this event has not yet started. The affected positions '
+        'have been removed from your cart.'),
+    'some_subevent_ended': gettext_lazy(
+        'The booking period for one of the events in your cart has ended. The affected '
+        'positions have been removed from your cart.'),
+    'price_too_high': gettext_lazy('The entered price is to high.'),
+    'voucher_invalid': gettext_lazy('This voucher code is not known in our database.'),
+    'voucher_min_usages': gettext_lazy(
+        'The voucher code "%(voucher)s" can only be used if you select at least %(number)s '
+        'matching products.'
+    ),
+    'voucher_min_usages_removed': ngettext_lazy(
+        'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products. '
+        'We have therefore removed some positions from your cart that can no longer be purchased like this.',
+        'The voucher code "%(voucher)s" can only be used if you select at least %(number)s matching products. '
+        'We have therefore removed some positions from your cart that can no longer be purchased like this.',
+        'number'
+    ),
+    'voucher_redeemed': gettext_lazy('This voucher code has already been used the maximum number of times allowed.'),
+    'voucher_redeemed_cart': gettext_lazy(
+        'This voucher code is currently locked since it is already contained in a cart. This '
+        'might mean that someone else is redeeming this voucher right now, or that you tried '
+        'to redeem it before but did not complete the checkout process. You can try to use it '
+        'again in %d minutes.'
+    ),
+    'voucher_redeemed_partial': gettext_lazy('This voucher code can only be redeemed %d more times.'),
+    'voucher_whole_cart_not_combined': gettext_lazy('Applying a voucher to the whole cart should not be combined with other operations.'),
+    'voucher_double': gettext_lazy(
+        'You already used this voucher code. Remove the associated line from your '
+        'cart if you want to use it for a different product.'
+    ),
+    'voucher_expired': gettext_lazy('This voucher is expired.'),
+    'voucher_invalid_item': gettext_lazy('This voucher is not valid for this product.'),
+    'voucher_invalid_seat': gettext_lazy('This voucher is not valid for this seat.'),
+    'voucher_no_match': gettext_lazy(
+        'We did not find any position in your cart that we could use this voucher for. If you want '
+        'to add something new to your cart using that voucher, you can do so with the voucher '
+        'redemption option on the bottom of the page.'
+    ),
+    'voucher_item_not_available': gettext_lazy(
         'Your voucher is valid for a product that is currently not for sale.'),
     'voucher_invalid_subevent': pgettext_lazy('subevent', 'This voucher is not valid for this event date.'),
-    'voucher_required': _('You need a valid voucher code to order this product.'),
+    'voucher_required': gettext_lazy('You need a valid voucher code to order this product.'),
     'inactive_subevent': pgettext_lazy('subevent', 'The selected event date is not active.'),
-    'addon_invalid_base': _('You can not select an add-on for the selected product.'),
-    'addon_duplicate_item': _('You can not select two variations of the same add-on product.'),
-    'addon_max_count': _('You can select at most %(max)s add-ons from the category %(cat)s for the product %(base)s.'),
-    'addon_min_count': _('You need to select at least %(min)s add-ons from the category %(cat)s for the '
-                         'product %(base)s.'),
-    'addon_no_multi': _('You can select every add-ons from the category %(cat)s for the product %(base)s at most once.'),
-    'addon_only': _('One of the products you selected can only be bought as an add-on to another product.'),
-    'bundled_only': _('One of the products you selected can only be bought part of a bundle.'),
-    'seat_required': _('You need to select a specific seat.'),
-    'seat_invalid': _('Please select a valid seat.'),
-    'seat_forbidden': _('You can not select a seat for this position.'),
-    'seat_unavailable': _('The seat you selected has already been taken. Please select a different seat.'),
-    'seat_multiple': _('You can not select the same seat multiple times.'),
-    'gift_card': _("You entered a gift card instead of a voucher. Gift cards can be entered later on when you're asked for your payment details."),
-    'country_blocked': _('One of the selected products is not available in the selected country.'),
+    'addon_invalid_base': gettext_lazy('You can not select an add-on for the selected product.'),
+    'addon_duplicate_item': gettext_lazy('You can not select two variations of the same add-on product.'),
+    'addon_max_count': ngettext_lazy(
+        'You can select at most %(max)s add-on from the category %(cat)s for the product %(base)s.',
+        'You can select at most %(max)s add-ons from the category %(cat)s for the product %(base)s.',
+        'max'
+    ),
+    'addon_min_count': ngettext_lazy(
+        'You need to select at least %(min)s add-on from the category %(cat)s for the product %(base)s.',
+        'You need to select at least %(min)s add-ons from the category %(cat)s for the product %(base)s.',
+        'min'
+    ),
+    'addon_no_multi': gettext_lazy('You can select every add-ons from the category %(cat)s for the product %(base)s at most once.'),
+    'addon_only': gettext_lazy('One of the products you selected can only be bought as an add-on to another product.'),
+    'bundled_only': gettext_lazy('One of the products you selected can only be bought part of a bundle.'),
+    'seat_required': gettext_lazy('You need to select a specific seat.'),
+    'seat_invalid': gettext_lazy('Please select a valid seat.'),
+    'seat_forbidden': gettext_lazy('You can not select a seat for this position.'),
+    'seat_unavailable': gettext_lazy('The seat you selected has already been taken. Please select a different seat.'),
+    'seat_multiple': gettext_lazy('You can not select the same seat multiple times.'),
+    'gift_card': gettext_lazy("You entered a gift card instead of a voucher. Gift cards can be entered later on when you're asked for your payment details."),
+    'country_blocked': gettext_lazy('One of the selected products is not available in the selected country.'),
 }
 
 
@@ -320,8 +357,7 @@ class CartManager:
             cartsize -= len([1 for op in self._operations if isinstance(op, self.RemoveOperation) if
                              not op.position.addon_to_id])
             if cartsize > int(self.event.settings.max_items_per_order):
-                # TODO: i18n plurals
-                raise CartError(_(error_messages['max_items']) % (self.event.settings.max_items_per_order,))
+                raise CartError(error_messages['max_items'] % self.event.settings.max_items_per_order)
 
     def _check_item_constraints(self, op, current_ops=[]):
         if isinstance(op, (self.AddOperation, self.ExtendOperation)):
@@ -494,7 +530,7 @@ class CartManager:
 
     def apply_voucher(self, voucher_code: str):
         if self._operations:
-            raise CartError('Applying a voucher to the whole cart should not be combined with other operations.')
+            raise CartError(error_messages['voucher_whole_cart_not_combined'])
         try:
             voucher = self.event.vouchers.get(code__iexact=voucher_code.strip())
         except Voucher.DoesNotExist:
@@ -539,7 +575,7 @@ class CartManager:
         for voucher, cnt in list(voucher_use_diff.items()):
             if 0 < cnt < voucher.min_usages_remaining:
                 raise CartError(
-                    _(error_messages['voucher_min_usages']) % {
+                    error_messages['voucher_min_usages'] % {
                         'voucher': voucher.code,
                         'number': voucher.min_usages_remaining,
                     }
@@ -843,22 +879,16 @@ class CartManager:
                 for (i, v), c in selected.items():
                     n_per_i[i] += c
                 if sum(selected.values()) > iao.max_count:
-                    # TODO: Proper i18n
-                    # TODO: Proper pluralization
                     raise CartError(
-                        error_messages['addon_max_count'],
-                        {
+                        error_messages['addon_max_count'] % {
                             'base': str(item.name),
                             'max': iao.max_count,
                             'cat': str(iao.addon_category.name),
                         }
                     )
                 elif sum(selected.values()) < iao.min_count:
-                    # TODO: Proper i18n
-                    # TODO: Proper pluralization
                     raise CartError(
-                        error_messages['addon_min_count'],
-                        {
+                        error_messages['addon_min_count'] % {
                             'base': str(item.name),
                             'min': iao.min_count,
                             'cat': str(iao.addon_category.name),
@@ -866,8 +896,7 @@ class CartManager:
                     )
                 elif any(v > 1 for v in n_per_i.values()) and not iao.multi_allowed:
                     raise CartError(
-                        error_messages['addon_no_multi'],
-                        {
+                        error_messages['addon_no_multi'] % {
                             'base': str(item.name),
                             'cat': str(iao.addon_category.name),
                         }
@@ -931,7 +960,7 @@ class CartManager:
 
             if item.max_per_order and count > item.max_per_order:
                 raise CartError(
-                    _(error_messages['max_items_per_product']) % {
+                    error_messages['max_items_per_product'] % {
                         'max': item.max_per_order,
                         'product': item.name
                     }
@@ -945,13 +974,13 @@ class CartManager:
                 for p in self.positions:
                     if p.item_id == item.pk and p.pk not in removals:
                         self._operations.append(self.RemoveOperation(position=p))
-                        err = _(error_messages['min_items_per_product_removed']) % {
+                        err = error_messages['min_items_per_product_removed'] % {
                             'min': item.min_per_order,
                             'product': item.name
                         }
                 if not err:
                     raise CartError(
-                        _(error_messages['min_items_per_product']) % {
+                        error_messages['min_items_per_product'] % {
                             'min': item.min_per_order,
                             'product': item.name
                         }
@@ -980,13 +1009,13 @@ class CartManager:
                 for p in self.positions:
                     if p.voucher_id == voucher.pk and p.pk not in removals:
                         self._operations.append(self.RemoveOperation(position=p))
-                        err = _(error_messages['voucher_min_usages_removed']) % {
+                        err = error_messages['voucher_min_usages_removed'] % {
                             'voucher': voucher.code,
                             'number': voucher.min_usages_remaining,
                         }
                 if not err:
                     raise CartError(
-                        _(error_messages['voucher_min_usages']) % {
+                        error_messages['voucher_min_usages'] % {
                             'voucher': voucher.code,
                             'number': voucher.min_usages_remaining,
                         }
