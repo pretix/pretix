@@ -35,7 +35,6 @@ from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
-from django.views.generic.edit import DeleteView
 
 from pretix.base.models import CartPosition, Discount
 from pretix.control.forms.discounts import DiscountForm
@@ -45,10 +44,11 @@ from pretix.control.permissions import (
 from pretix.helpers.models import modelcopy
 
 from ...base.channels import get_all_sales_channels
+from ...helpers.compat import CompatDeleteView
 from . import CreateView, PaginationMixin, UpdateView
 
 
-class DiscountDelete(EventPermissionRequiredMixin, DeleteView):
+class DiscountDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = Discount
     template_name = 'pretixcontrol/items/discount_delete.html'
     permission = 'can_change_items'

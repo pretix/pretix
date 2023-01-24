@@ -52,9 +52,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
-from django.views.generic import (
-    CreateView, DeleteView, FormView, ListView, UpdateView,
-)
+from django.views.generic import CreateView, FormView, ListView, UpdateView
 
 from pretix.base.models import CartPosition, LogEntry
 from pretix.base.models.checkin import CheckinList
@@ -80,6 +78,7 @@ from pretix.control.signals import subevent_forms
 from pretix.control.views import PaginationMixin
 from pretix.control.views.event import MetaDataEditorMixin
 from pretix.helpers import GroupConcat
+from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.models import modelcopy
 
 
@@ -148,7 +147,7 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryM
         return ctx
 
 
-class SubEventDelete(EventPermissionRequiredMixin, DeleteView):
+class SubEventDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = SubEvent
     template_name = 'pretixcontrol/subevents/delete.html'
     permission = 'can_change_settings'

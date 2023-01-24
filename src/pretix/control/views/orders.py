@@ -66,7 +66,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext, gettext_lazy as _, ngettext
 from django.views.generic import (
-    DeleteView, DetailView, FormView, ListView, TemplateView, View,
+    DetailView, FormView, ListView, TemplateView, View,
 )
 from i18nfield.strings import LazyI18nString
 
@@ -127,6 +127,7 @@ from pretix.control.forms.rrule import RRuleForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import order_search_forms
 from pretix.control.views import PaginationMixin
+from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.format import format_map
 from pretix.helpers.safedownload import check_token
 from pretix.presale.signals import question_form_fields
@@ -2453,7 +2454,7 @@ class ExportView(EventPermissionRequiredMixin, ExportMixin, ListView):
         return ctx
 
 
-class DeleteScheduledExportView(EventPermissionRequiredMixin, ExportMixin, DeleteView):
+class DeleteScheduledExportView(EventPermissionRequiredMixin, ExportMixin, CompatDeleteView):
     permission = 'can_view_orders'
     template_name = 'pretixcontrol/orders/export_delete.html'
     context_object_name = 'export'

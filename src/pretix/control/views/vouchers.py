@@ -53,7 +53,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
-    CreateView, DeleteView, ListView, TemplateView, UpdateView, View,
+    CreateView, ListView, TemplateView, UpdateView, View,
 )
 
 from pretix.base.models import CartPosition, LogEntry, Voucher
@@ -66,6 +66,7 @@ from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
 from pretix.control.views import PaginationMixin
+from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.models import modelcopy
 
 
@@ -182,7 +183,7 @@ class VoucherTags(EventPermissionRequiredMixin, TemplateView):
         return VoucherTagFilterForm(data=self.request.GET, event=self.request.event)
 
 
-class VoucherDeleteCarts(EventPermissionRequiredMixin, DeleteView):
+class VoucherDeleteCarts(EventPermissionRequiredMixin, CompatDeleteView):
     model = Voucher
     template_name = 'pretixcontrol/vouchers/delete_carts.html'
     permission = 'can_change_vouchers'
@@ -214,7 +215,7 @@ class VoucherDeleteCarts(EventPermissionRequiredMixin, DeleteView):
         })
 
 
-class VoucherDelete(EventPermissionRequiredMixin, DeleteView):
+class VoucherDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = Voucher
     template_name = 'pretixcontrol/vouchers/delete.html'
     permission = 'can_change_vouchers'

@@ -56,7 +56,6 @@ from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
 from django.views.generic.detail import DetailView, SingleObjectMixin
-from django.views.generic.edit import DeleteView
 from django_countries.fields import Country
 
 from pretix.api.serializers.item import (
@@ -85,6 +84,7 @@ from pretix.control.signals import item_forms, item_formsets
 from pretix.helpers.models import modelcopy
 
 from ...base.channels import get_all_sales_channels
+from ...helpers.compat import CompatDeleteView
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
 
@@ -189,9 +189,8 @@ def reorder_items(request, organizer, event):
     return HttpResponse()
 
 
-class CategoryDelete(EventPermissionRequiredMixin, DeleteView):
+class CategoryDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = ItemCategory
-    form_class = CategoryForm
     template_name = 'pretixcontrol/items/category_delete.html'
     permission = 'can_change_items'
     context_object_name = 'category'
@@ -523,7 +522,7 @@ def reorder_questions(request, organizer, event):
     return HttpResponse()
 
 
-class QuestionDelete(EventPermissionRequiredMixin, DeleteView):
+class QuestionDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = Question
     template_name = 'pretixcontrol/items/question_delete.html'
     permission = 'can_change_items'
@@ -1090,7 +1089,7 @@ class QuotaUpdate(EventPermissionRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class QuotaDelete(EventPermissionRequiredMixin, DeleteView):
+class QuotaDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = Quota
     template_name = 'pretixcontrol/items/quota_delete.html'
     permission = 'can_change_items'
@@ -1464,7 +1463,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
         return f
 
 
-class ItemDelete(EventPermissionRequiredMixin, DeleteView):
+class ItemDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = Item
     template_name = 'pretixcontrol/item/delete.html'
     permission = 'can_change_items'

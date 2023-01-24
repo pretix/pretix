@@ -43,7 +43,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import is_aware, make_aware, now
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import DeleteView, ListView
+from django.views.generic import ListView
 from pytz import UTC
 
 from pretix.base.channels import get_all_sales_channels
@@ -57,6 +57,7 @@ from pretix.control.forms.filter import (
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import CreateView, PaginationMixin, UpdateView
+from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.models import modelcopy
 
 
@@ -394,7 +395,7 @@ class CheckinListUpdate(EventPermissionRequiredMixin, UpdateView):
         return super().form_invalid(form)
 
 
-class CheckinListDelete(EventPermissionRequiredMixin, DeleteView):
+class CheckinListDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = CheckinList
     template_name = 'pretixcontrol/checkin/list_delete.html'
     permission = 'can_change_event_settings'

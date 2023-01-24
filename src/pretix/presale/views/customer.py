@@ -44,7 +44,7 @@ from django.utils.translation import gettext_lazy as _
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_protect
 from django.views.decorators.debug import sensitive_post_parameters
-from django.views.generic import DeleteView, FormView, ListView, View
+from django.views.generic import FormView, ListView, View
 
 from pretix.base.customersso.oidc import (
     oidc_authorize_url, oidc_validate_authorization,
@@ -52,6 +52,7 @@ from pretix.base.customersso.oidc import (
 from pretix.base.models import Customer, InvoiceAddress, Order, OrderPosition
 from pretix.base.services.mail import mail
 from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.models import KnownDomain
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
@@ -423,7 +424,7 @@ class MembershipUsageView(CustomerRequiredMixin, ListView):
         return ctx
 
 
-class AddressDeleteView(CustomerRequiredMixin, DeleteView):
+class AddressDeleteView(CustomerRequiredMixin, CompatDeleteView):
     template_name = 'pretixpresale/organizers/customer_address_delete.html'
     context_object_name = 'address'
 
@@ -434,7 +435,7 @@ class AddressDeleteView(CustomerRequiredMixin, DeleteView):
         return eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
 
 
-class ProfileDeleteView(CustomerRequiredMixin, DeleteView):
+class ProfileDeleteView(CustomerRequiredMixin, CompatDeleteView):
     template_name = 'pretixpresale/organizers/customer_profile_delete.html'
     context_object_name = 'profile'
 

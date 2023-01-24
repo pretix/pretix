@@ -37,7 +37,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views import View
-from django.views.generic import CreateView, DeleteView, DetailView, ListView
+from django.views.generic import CreateView, DetailView, ListView
 from reportlab.lib import pagesizes
 from reportlab.pdfgen import canvas
 
@@ -51,6 +51,7 @@ from pretix.plugins.ticketoutputpdf.forms import TicketLayoutForm
 from pretix.plugins.ticketoutputpdf.ticketoutput import PdfTicketOutput
 
 from ...base.views.tasks import AsyncAction
+from ...helpers.compat import CompatDeleteView
 from .models import TicketLayout
 from .tasks import tickets_create_pdf
 
@@ -182,7 +183,7 @@ class LayoutSetDefault(EventPermissionRequiredMixin, DetailView):
         })
 
 
-class LayoutDelete(EventPermissionRequiredMixin, DeleteView):
+class LayoutDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = TicketLayout
     template_name = 'pretixplugins/ticketoutputpdf/delete.html'
     permission = 'can_change_event_settings'

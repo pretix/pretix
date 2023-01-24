@@ -127,6 +127,9 @@ class OAuthApplicationDeleteView(ApplicationDelete):
         self.object.save()
         return HttpResponseRedirect(self.success_url)
 
+    def form_valid(self, form):
+        return self.delete(self.request, self.args, self.kwargs)
+
 
 class AuthorizationListView(ListView):
     template_name = 'pretixcontrol/oauth/authorized.html'

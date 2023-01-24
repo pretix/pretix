@@ -111,6 +111,7 @@ from pretix.control.signals import nav_organizer
 from pretix.control.views import PaginationMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.helpers import GroupConcat
+from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.format import format_map
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
@@ -626,7 +627,7 @@ class TeamUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         return super().form_invalid(form)
 
 
-class TeamDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DeleteView):
+class TeamDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = Team
     template_name = 'pretixcontrol/organizers/team_delete.html'
     permission = 'can_change_teams'
@@ -1893,7 +1894,7 @@ class GateUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
         return super().form_invalid(form)
 
 
-class GateDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DeleteView):
+class GateDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = Gate
     template_name = 'pretixcontrol/organizers/gate_delete.html'
     permission = 'can_change_organizer_settings'
@@ -1984,7 +1985,7 @@ class EventMetaPropertyUpdateView(OrganizerDetailViewMixin, OrganizerPermissionR
         return super().form_invalid(form)
 
 
-class EventMetaPropertyDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DeleteView):
+class EventMetaPropertyDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = EventMetaProperty
     template_name = 'pretixcontrol/organizers/property_delete.html'
     permission = 'can_change_organizer_settings'
@@ -2107,7 +2108,7 @@ class MembershipTypeUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
         return super().form_invalid(form)
 
 
-class MembershipTypeDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DeleteView):
+class MembershipTypeDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = MembershipType
     template_name = 'pretixcontrol/organizers/membershiptype_delete.html'
     permission = 'can_change_organizer_settings'
@@ -2220,7 +2221,7 @@ class SSOProviderUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
         return super().form_invalid(form)
 
 
-class SSOProviderDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DeleteView):
+class SSOProviderDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = CustomerSSOProvider
     template_name = 'pretixcontrol/organizers/ssoprovider_delete.html'
     permission = 'can_change_organizer_settings'
@@ -2348,7 +2349,7 @@ class SSOClientUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredM
         return super().form_invalid(form)
 
 
-class SSOClientDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DeleteView):
+class SSOClientDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     model = CustomerSSOClient
     template_name = 'pretixcontrol/organizers/ssoclient_delete.html'
     permission = 'can_change_organizer_settings'
@@ -2611,7 +2612,7 @@ class MembershipUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequired
         })
 
 
-class MembershipDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, DeleteView):
+class MembershipDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
     template_name = 'pretixcontrol/organizers/customer_membership_delete.html'
     permission = 'can_manage_customers'
     context_object_name = 'membership'

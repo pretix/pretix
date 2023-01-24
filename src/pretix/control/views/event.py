@@ -58,7 +58,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
-from django.views.generic import DeleteView, FormView, ListView
+from django.views.generic import FormView, ListView
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
 from i18nfield.strings import LazyI18nString
@@ -94,6 +94,7 @@ from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
 )
 from ...base.settings import SETTINGS_AFFECTING_CSS, LazyI18nStringList
+from ...helpers.compat import CompatDeleteView
 from ...helpers.format import format_map
 from ..logdisplay import OVERVIEW_BANLIST
 from . import CreateView, PaginationMixin, UpdateView
@@ -1243,7 +1244,7 @@ class TaxUpdate(EventSettingsViewMixin, EventPermissionRequiredMixin, UpdateView
         return super().form_invalid(form)
 
 
-class TaxDelete(EventSettingsViewMixin, EventPermissionRequiredMixin, DeleteView):
+class TaxDelete(EventSettingsViewMixin, EventPermissionRequiredMixin, CompatDeleteView):
     model = TaxRule
     template_name = 'pretixcontrol/event/tax_delete.html'
     permission = 'can_change_event_settings'

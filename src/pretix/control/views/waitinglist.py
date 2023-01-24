@@ -48,7 +48,6 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from django.views import View
 from django.views.generic import ListView
-from django.views.generic.edit import DeleteView
 
 from pretix.base.models import Item, Quota, WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
@@ -58,6 +57,7 @@ from pretix.control.forms.waitinglist import WaitingListEntryTransferForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import PaginationMixin
 
+from ...helpers.compat import CompatDeleteView
 from . import UpdateView
 
 
@@ -338,7 +338,7 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
         return '{}_waitinglist'.format(self.request.event.slug)
 
 
-class EntryDelete(EventPermissionRequiredMixin, DeleteView):
+class EntryDelete(EventPermissionRequiredMixin, CompatDeleteView):
     model = WaitingListEntry
     template_name = 'pretixcontrol/waitinglist/delete.html'
     permission = 'can_change_orders'
