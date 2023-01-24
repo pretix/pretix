@@ -43,7 +43,9 @@ from django.db import DatabaseError, transaction
 from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Value
 from django.dispatch import receiver
 from django.utils.timezone import make_aware, now
-from django.utils.translation import gettext as _, gettext_lazy, ngettext_lazy, pgettext_lazy
+from django.utils.translation import (
+    gettext as _, gettext_lazy, ngettext_lazy, pgettext_lazy,
+)
 from django_scopes import scopes_disabled
 
 from pretix.base.channels import get_all_sales_channels

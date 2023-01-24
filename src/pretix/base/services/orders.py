@@ -60,9 +60,7 @@ from django_scopes import scopes_disabled
 from pretix.api.models import OAuthApplication
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_email_context
-from pretix.base.i18n import (
-    get_language_without_region, language,
-)
+from pretix.base.i18n import get_language_without_region, language
 from pretix.base.models import (
     CartPosition, Device, Event, GiftCard, Item, ItemVariation, Membership,
     Order, OrderPayment, OrderPosition, Quota, Seat, SeatCategoryMapping, User,
