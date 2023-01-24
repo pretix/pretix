@@ -1,29 +1,29 @@
 {% load i18n %}
 
-<p>
-    {% if method == "wallet" %}
-        {% if url.url_name == "event.order.pay.confirm" %}
-            <div class="text-center" aria-hidden="true">
-                <span class="fa fa-info-circle fa-4x text-primary"></span>
-            </div>
-            <h2 class="text-center">
-                {% trans "Almost done…" %}
-            </h2>
-            <h4 class="text-center">
-                {% trans 'Please click on the "Pay now" button below to confirm your payment.' %}
-            </h4>
-            <h4 class="text-center text-muted">
-                {% trans "We will then charge your PayPal account and finalize the order." %}
-            </h4>
-        {% else %}
-            {% blocktrans trimmed %}
-                The total amount listed above will be withdrawn from your PayPal account after the
-                confirmation of your purchase.
-            {% endblocktrans %}
-        {% endif %}
+{% if method == "wallet" %}
+    {% if url.url_name == "event.order.pay.confirm" %}
+        <div class="text-center" aria-hidden="true">
+            <span class="fa fa-info-circle fa-4x text-primary"></span>
+        </div>
+        <h2 class="text-center">
+            {% trans "Almost done …" %}
+        </h2>
+        <p class="h4 text-center">
+            {% trans 'Please click on the "Pay now" button below to confirm your payment.' %}
+        </p>
+        <p class="h4 text-center text-muted">
+            {% trans "We will then charge your PayPal account and finalize the order." %}
+        </p>
     {% else %}
+        {% blocktrans trimmed %}
+            The total amount listed above will be withdrawn from your PayPal account after the
+            confirmation of your purchase.
+        {% endblocktrans %}
+    {% endif %}
+{% else %}
+    <p>
         {% blocktrans trimmed %}
             After placing your order, you will be able to select your desired payment method, including PayPal.
         {% endblocktrans %}
-    {% endif %}
-</p>
+    </p>
+{% endif %}
