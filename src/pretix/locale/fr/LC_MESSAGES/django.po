@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-19 10:47+0000\n"
 "PO-Revision-Date: 2023-01-26 04:00+0000\n"
-"Last-Translator: Mossroy <mossroy@mossroy.fr>\n"
+"Last-Translator: Christophe Piret <cpiret@greenpeace.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -30647,9 +30647,8 @@ msgid "View other date"
 msgstr "Afficher une autre date"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:87
-#, fuzzy
 msgid "Choose date to book a ticket"
-msgstr "Choisissez une date pour acheter un billet"
+msgstr "Sélectionnez une date pour réserver un billet"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:92
 msgctxt "subevent"
