@@ -252,7 +252,7 @@ class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMi
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
             'list': self.list.pk
-        }) + ('?' + value[1] if value[1] else '')
+        }) + ('?' + value[1] if value and value[1] else '')
 
 
 class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
