@@ -1703,9 +1703,7 @@ class CheckinListAttendeeFilterForm(FilterForm):
             if s == '1':
                 qs = qs.filter(last_entry__isnull=False)
             elif s == '2':
-                qs = qs.filter(last_entry__isnull=False).filter(
-                    Q(last_exit__isnull=True) | Q(last_exit__lt=F('last_entry'))
-                )
+                qs = qs.filter(pk__in=self.list.positions_inside.values_list('pk'))
             elif s == '3':
                 qs = qs.filter(last_entry__isnull=False).filter(
                     Q(last_exit__isnull=False) & Q(last_exit__gte=F('last_entry'))
