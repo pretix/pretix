@@ -21,8 +21,9 @@
 #
 import contextlib
 
-from django.db import transaction
+from django.db import connection, transaction
 from django.db.models import Aggregate, Expression, Field, Lookup, Value
+from django.utils.functional import lazy
 
 
 class DummyRollbackException(Exception):
@@ -142,3 +143,8 @@ class PostgresWindowFrame(Expression):
             "start": self.start.value,
             "end": self.end.value,
         }
+
+
+# This is a short-hand for .select_for_update(of=("self,")), that falls back gracefully on databases that don't support
+# the SELECT FOR UPDATE OF ... query.
+OF_SELF = lazy(lambda: ("self",) if connection.features.has_select_for_update_of else (), tuple)()

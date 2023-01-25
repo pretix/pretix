@@ -41,6 +41,7 @@ from pretix.base.services.orders import (
 )
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
+from pretix.helpers import OF_SELF
 from pretix.helpers.format import format_map
 
 logger = logging.getLogger(__name__)
@@ -239,7 +240,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
 
     for o in orders_to_change.values_list('id', flat=True).iterator():
         with transaction.atomic():
-            o = event.orders.select_for_update().get(pk=o)
+            o = event.orders.select_for_update(of=OF_SELF).get(pk=o)
             total = Decimal('0.00')
             fee = Decimal('0.00')
             positions = []

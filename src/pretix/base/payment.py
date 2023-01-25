@@ -67,6 +67,7 @@ from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
+from pretix.helpers import OF_SELF
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.format import format_map
 from pretix.helpers.money import DecimalTextInput
@@ -1399,7 +1400,7 @@ class GiftCardPayment(BasePaymentProvider):
         try:
             with transaction.atomic():
                 try:
-                    gc = GiftCard.objects.select_for_update().get(pk=gcpk)
+                    gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gcpk)
                 except GiftCard.DoesNotExist:
                     raise PaymentException(_("This gift card does not support this currency."))
                 if gc.currency != self.event.currency:  # noqa - just a safeguard

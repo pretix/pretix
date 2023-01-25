@@ -32,6 +32,7 @@ from rest_framework import status
 
 from pretix.api.models import ApiCall
 from pretix.base.models import Organizer
+from pretix.helpers import OF_SELF
 
 
 class IdempotencyMiddleware:
@@ -56,7 +57,7 @@ class IdempotencyMiddleware:
         idempotency_key = request.headers.get('X-Idempotency-Key', '')
 
         with transaction.atomic():
-            call, created = ApiCall.objects.select_for_update().get_or_create(
+            call, created = ApiCall.objects.select_for_update(of=OF_SELF).get_or_create(
                 auth_hash=auth_hash,
                 idempotency_key=idempotency_key,
                 defaults={

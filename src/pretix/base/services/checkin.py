@@ -56,6 +56,7 @@ from pretix.base.models import (
     Checkin, CheckinList, Device, Order, OrderPosition, QuestionOption,
 )
 from pretix.base.signals import checkin_created, order_placed, periodic_task
+from pretix.helpers import OF_SELF
 from pretix.helpers.jsonlogic import Logic
 from pretix.helpers.jsonlogic_boolalg import convert_to_dnf
 from pretix.helpers.jsonlogic_query import (
@@ -729,8 +730,11 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         _save_answers(op, answers, given_answers)
 
     with transaction.atomic():
-        # Lock order positions
-        op = OrderPosition.all.select_for_update().get(pk=op.pk)
+        # Lock order positions, if it is an entry. We don't need it for exits, as a race condition wouldn't be problematic
+        opqs = OrderPosition.all
+        if type != Checkin.TYPE_EXIT:
+            opqs = opqs.select_for_update(of=OF_SELF)
+        op = opqs.get(pk=op.pk)
 
         if not clist.all_products and op.item_id not in [i.pk for i in clist.limit_products.all()]:
             raise CheckInError(

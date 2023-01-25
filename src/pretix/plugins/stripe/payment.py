@@ -63,6 +63,7 @@ from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.plugins import get_all_plugins
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
+from pretix.helpers import OF_SELF
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.plugins.stripe.forms import StripeKeyValidator
@@ -586,7 +587,7 @@ class StripeMethod(BasePaymentProvider):
         self._init_api()
 
         payment_info = refund.payment.info_data
-        OrderPayment.objects.select_for_update().get(pk=refund.payment.pk)
+        OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=refund.payment.pk)
 
         if not payment_info:
             raise PaymentException(_('No payment information found.'))
