@@ -98,5 +98,8 @@
         <dd>{{ payment_info.payment_data.posEntryMode }}</dd>
         <dt>{% trans "Result Code" %}</dt>
         <dd>{{ payment_info.payment_data.posResultCode }}</dd>
+    {% elif payment_info.payment_type == "cash" %}
+        <dt>{% trans "Payment method" %}</dt>
+        <dd>{% trans "Cash" %}</dd>
     {% endif %}
 </dl>
