@@ -95,7 +95,7 @@ class CheckinListViewSet(viewsets.ModelViewSet):
     queryset = CheckinList.objects.none()
     filter_backends = (DjangoFilterBackend, RichOrderingFilter)
     filterset_class = CheckinListFilter
-    ordering = ('subevent__date_from', 'name')
+    ordering = ('subevent__date_from', 'name', 'id')
     ordering_fields = ('subevent__date_from', 'id', 'name',)
 
     def _get_permission_name(self, request):
