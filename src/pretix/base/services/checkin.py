@@ -290,6 +290,11 @@ def _logic_explain(rules, ev, rule_data):
         p for i, p in enumerate(paths) if path_weights[i] == min_weight
     ]
 
+    # Step 7: All things equal, prefer shorter explanations
+    paths_with_min_weight.sort(
+        key=lambda p: len([v for v in p if not _var_values[v]])
+    )
+
     # Finally, return the text for one of them
     return ', '.join(var_texts[v] for v in paths_with_min_weight[0] if not _var_values[v])
 
