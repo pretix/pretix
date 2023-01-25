@@ -842,10 +842,7 @@ def process_exit_all(sender, **kwargs):
         exit_all_at__isnull=False
     ).select_related('event', 'event__organizer')
     for cl in qs:
-        positions = cl.positions_inside.filter(
-            Q(last_exit__isnull=True) | Q(last_exit__lte=cl.exit_all_at),
-            last_entry__lte=cl.exit_all_at,
-        )
+        positions = cl.positions_inside_query(ignore_status=True, at_time=cl.exit_all_at)
         for p in positions:
             with scope(organizer=cl.event.organizer):
                 ci = Checkin.objects.create(

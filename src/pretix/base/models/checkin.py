@@ -35,10 +35,11 @@ from datetime import timedelta
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.db import connection, models
+from django.db import models
 from django.db.models import (
     Count, Exists, F, Max, OuterRef, Q, Subquery, Value, Window,
 )
+from django.db.models.expressions import RawSQL
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager, scopes_disabled
@@ -98,15 +99,18 @@ class CheckinList(LoggedModel):
     class Meta:
         ordering = ('subevent__date_from', 'name')
 
-    @property
-    def positions(self):
+    def positions_query(self, ignore_status=False):
         from . import Order, OrderPosition
 
-        qs = OrderPosition.objects.filter(
+        qs = OrderPosition.all.filter(
             order__event=self.event,
-            order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.include_pending else [
-                Order.STATUS_PAID],
         )
+        if not ignore_status:
+            qs = qs.filter(
+                canceled=False,
+                order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.include_pending else [Order.STATUS_PAID],
+            )
+
         if self.subevent_id:
             qs = qs.filter(subevent_id=self.subevent_id)
         if not self.all_products:
@@ -114,38 +118,46 @@ class CheckinList(LoggedModel):
         return qs
 
     @property
-    def positions_inside(self):
-        return self.positions.annotate(
-            last_entry=Subquery(
-                Checkin.objects.filter(
-                    position_id=OuterRef('pk'),
-                    list_id=self.pk,
-                    type=Checkin.TYPE_ENTRY,
-                ).order_by().values('position_id').annotate(
-                    m=Max('datetime')
-                ).values('m')
-            ),
-            last_exit=Subquery(
-                Checkin.objects.filter(
-                    position_id=OuterRef('pk'),
-                    list_id=self.pk,
-                    type=Checkin.TYPE_EXIT,
-                ).order_by().values('position_id').annotate(
-                    m=Max('datetime')
-                ).values('m')
-            ),
-        ).filter(
-            Q(last_entry__isnull=False)
-            & Q(
-                Q(last_exit__isnull=True) | Q(last_exit__lt=F('last_entry'))
-            )
-        )
+    def positions(self):
+        return self.positions_query(ignore_status=True)
 
-    @property
-    def inside_count(self):
+    @scopes_disabled()
+    def positions_inside_query(self, ignore_status=False, at_time=None):
+        if at_time is None:
+            c_q = []
+        else:
+            c_q = [Q(datetime__lt=at_time)]
+
         if "postgresql" not in settings.DATABASES["default"]["ENGINE"]:
-            # Use the simple query that works on all databases
-            return self.positions_inside.count()
+            # Use a simple approach that works on all databases
+            qs = self.positions_query(ignore_status=ignore_status).annotate(
+                last_entry=Subquery(
+                    Checkin.objects.filter(
+                        *c_q,
+                        position_id=OuterRef('pk'),
+                        list_id=self.pk,
+                        type=Checkin.TYPE_ENTRY,
+                    ).order_by().values('position_id').annotate(
+                        m=Max('datetime')
+                    ).values('m')
+                ),
+                last_exit=Subquery(
+                    Checkin.objects.filter(
+                        *c_q,
+                        position_id=OuterRef('pk'),
+                        list_id=self.pk,
+                        type=Checkin.TYPE_EXIT,
+                    ).order_by().values('position_id').annotate(
+                        m=Max('datetime')
+                    ).values('m')
+                ),
+            ).filter(
+                Q(last_entry__isnull=False)
+                & Q(
+                    Q(last_exit__isnull=True) | Q(last_exit__lt=F('last_entry'))
+                )
+            )
+            return qs
 
         # Use the PostgreSQL-specific query using Window functions, which is a lot faster.
         # On a real-world example with ~100k tickets, of which ~17k are checked in, we observed
@@ -157,7 +169,7 @@ class CheckinList(LoggedModel):
         # dedupliate by position and count it up.
         cl = self
         base_q, base_params = (
-            Checkin.all.filter(successful=True, position__in=cl.positions, list=cl)
+            Checkin.all.filter(*c_q, successful=True, list=cl)
             .annotate(
                 cnt_exists_after=Window(
                     expression=Count("position_id", filter=Q(type=Value("exit"))),
@@ -171,26 +183,25 @@ class CheckinList(LoggedModel):
             .values("position_id", "type", "datetime", "cnt_exists_after")
             .query.sql_with_params()
         )
-
-        with connection.cursor() as cursor:
-            cursor.execute(
+        return self.positions.filter(
+            pk__in=RawSQL(
                 f"""
-                SELECT COUNT(*) FROM (
-                    SELECT COUNT("position_id")
-                    FROM ({str(base_q)} ) s
-                    WHERE "type" = %s AND "cnt_exists_after" = 0
-                    GROUP BY "position_id"
-                ) a;
+                SELECT "position_id"
+                FROM ({str(base_q)}) s
+                WHERE "type" = %s AND "cnt_exists_after" = 0
+                GROUP BY "position_id"
                 """,
-                [
-                    *base_params,
-                    "entry",
-                ],
+                [*base_params, Checkin.TYPE_ENTRY]
             )
-            rows = cursor.fetchall()
-            if rows:
-                return rows[0][0]
-            return 0
+        )
+
+    @property
+    def positions_inside(self):
+        return self.positions_inside_query(None)
+
+    @property
+    def inside_count(self):
+        return self.positions_inside_query(None).count()
 
     @property
     @scopes_disabled()
