@@ -32,6 +32,7 @@ from pretix.base.models import (
     AbstractPosition, Customer, Event, Item, Membership, Order, OrderPosition,
     SubEvent,
 )
+from pretix.helpers import OF_SELF
 
 
 def membership_validity(item: Item, subevent: Optional[SubEvent], event: Event):
@@ -118,7 +119,7 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
     base_qs = Membership.objects.with_usages(ignored_order=ignored_order)
 
     if lock:
-        base_qs = base_qs.select_for_update()
+        base_qs = base_qs.select_for_update(of=OF_SELF)
 
     membership_cache = base_qs\
         .select_related('membership_type')\

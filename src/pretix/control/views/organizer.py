@@ -110,7 +110,7 @@ from pretix.control.permissions import (
 from pretix.control.signals import nav_organizer
 from pretix.control.views import PaginationMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
-from pretix.helpers import GroupConcat
+from pretix.helpers import OF_SELF, GroupConcat
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.dicts import merge_dicts
 from pretix.helpers.format import format_map
@@ -1381,7 +1381,7 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
 
     @transaction.atomic()
     def post(self, request, *args, **kwargs):
-        self.object = GiftCard.objects.select_for_update().get(pk=self.get_object().pk)
+        self.object = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
         if 'revert' in request.POST:
             t = get_object_or_404(self.object.transactions.all(), pk=request.POST.get('revert'), order__isnull=False)
             if self.object.value - t.value < Decimal('0.00'):

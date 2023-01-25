@@ -63,7 +63,7 @@ from pretix.base.services.tasks import TransactionAwareTask
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.signals import invoice_line_text, periodic_task
 from pretix.celery_app import app
-from pretix.helpers.database import rolledback_transaction
+from pretix.helpers.database import OF_SELF, rolledback_transaction
 from pretix.helpers.models import modelcopy
 
 logger = logging.getLogger(__name__)
@@ -500,7 +500,7 @@ def send_invoices_to_organizer(sender, **kwargs):
         with transaction.atomic():
             qs = Invoice.objects.filter(
                 sent_to_organizer__isnull=True
-            ).prefetch_related('event').select_for_update(skip_locked=connection.features.has_select_for_update_skip_locked)
+            ).prefetch_related('event').select_for_update(of=OF_SELF, skip_locked=connection.features.has_select_for_update_skip_locked)
             for i in qs[:batch_size]:
                 if i.event.settings.invoice_email_organizer:
                     with language(i.event.settings.locale):

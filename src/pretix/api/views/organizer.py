@@ -51,6 +51,7 @@ from pretix.base.models import (
     User,
 )
 from pretix.base.settings import SETTINGS_AFFECTING_CSS
+from pretix.helpers import OF_SELF
 from pretix.helpers.dicts import merge_dicts
 from pretix.presale.style import regenerate_organizer_css
 
@@ -178,7 +179,7 @@ class GiftCardViewSet(viewsets.ModelViewSet):
     def perform_update(self, serializer):
         if 'include_accepted' in self.request.GET:
             raise PermissionDenied("Accepted gift cards cannot be updated, use transact instead.")
-        GiftCard.objects.select_for_update().get(pk=self.get_object().pk)
+        GiftCard.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
         old_value = serializer.instance.value
         value = serializer.validated_data.pop('value')
         inst = serializer.save(secret=serializer.instance.secret, currency=serializer.instance.currency,
@@ -196,7 +197,7 @@ class GiftCardViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=["POST"])
     @transaction.atomic()
     def transact(self, request, **kwargs):
-        gc = GiftCard.objects.select_for_update().get(pk=self.get_object().pk)
+        gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
         value = serializers.DecimalField(max_digits=10, decimal_places=2).to_internal_value(
             request.data.get('value')
         )

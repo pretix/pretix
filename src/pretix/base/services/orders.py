@@ -97,6 +97,7 @@ from pretix.base.signals import (
     order_placed, order_split, periodic_task, validate_order,
 )
 from pretix.celery_app import app
+from pretix.helpers import OF_SELF
 from pretix.helpers.models import modelcopy
 from pretix.helpers.periodic import minimum_interval
 
@@ -184,7 +185,7 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
                         Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') + 1))
 
                     for gc in position.issued_gift_cards.all():
-                        gc = GiftCard.objects.select_for_update().get(pk=gc.pk)
+                        gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
                         gc.transactions.create(value=position.price, order=order)
                         break
 
@@ -397,7 +398,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
     # If new actions are added to this function, make sure to add the reverse operation to reactivate_order()
     with transaction.atomic():
         if isinstance(order, int):
-            order = Order.objects.select_for_update().get(pk=order)
+            order = Order.objects.select_for_update(of=OF_SELF).get(pk=order)
         if isinstance(user, int):
             user = User.objects.get(pk=user)
         if isinstance(api_token, int):
@@ -419,7 +420,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
 
         for position in order.positions.all():
             for gc in position.issued_gift_cards.all():
-                gc = GiftCard.objects.select_for_update().get(pk=gc.pk)
+                gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
                 if gc.value < position.price:
                     raise OrderError(
                         _('This order can not be canceled since the gift card {card} purchased in '
@@ -1205,7 +1206,7 @@ def send_expiry_warnings(sender, **kwargs):
 
         if days and (o.expires - today).days <= days:
             with transaction.atomic():
-                o = Order.objects.select_related('event').select_for_update().get(pk=o.pk)
+                o = Order.objects.select_related('event').select_for_update(of=OF_SELF).get(pk=o.pk)
                 if o.status != Order.STATUS_PENDING or o.expiry_reminder_sent:
                     # Race condition
                     continue
@@ -1264,7 +1265,7 @@ def send_download_reminders(sender, **kwargs):
             continue
 
         with transaction.atomic():
-            o = Order.objects.select_for_update().get(pk=o.pk)
+            o = Order.objects.select_for_update(of=OF_SELF).get(pk=o.pk)
             if o.download_reminder_sent:
                 # Race condition
                 continue
@@ -2059,7 +2060,7 @@ class OrderChangeManager:
                 op.fee.save(update_fields=['canceled'])
             elif isinstance(op, self.CancelOperation):
                 for gc in op.position.issued_gift_cards.all():
-                    gc = GiftCard.objects.select_for_update().get(pk=gc.pk)
+                    gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
                     if gc.value < op.position.price:
                         raise OrderError(_(
                             'A position can not be canceled since the gift card {card} purchased in this order has '
@@ -2075,7 +2076,7 @@ class OrderChangeManager:
 
                 for opa in op.position.addons.all():
                     for gc in opa.issued_gift_cards.all():
-                        gc = GiftCard.objects.select_for_update().get(pk=gc.pk)
+                        gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
                         if gc.value < opa.position.price:
                             raise OrderError(_(
                                 'A position can not be canceled since the gift card {card} purchased in this order has '
@@ -2648,9 +2649,9 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
 
     open_payment = None
     if new_payment:
-        lp = order.payments.select_for_update().exclude(pk=new_payment.pk).last()
+        lp = order.payments.select_for_update(of=OF_SELF).exclude(pk=new_payment.pk).last()
     else:
-        lp = order.payments.select_for_update().last()
+        lp = order.payments.select_for_update(of=OF_SELF).last()
 
     if lp and lp.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
         open_payment = lp

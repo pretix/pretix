@@ -79,6 +79,7 @@ from pretix.base.services.locking import LOCK_TIMEOUT, NoLockManager
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import order_gracefully_delete
 
+from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
 from ...helpers.format import format_map
 from ._transactions import (
@@ -1628,7 +1629,7 @@ class OrderPayment(models.Model):
         been marked as paid.
         """
         with transaction.atomic():
-            locked_instance = OrderPayment.objects.select_for_update().get(pk=self.pk)
+            locked_instance = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=self.pk)
             if locked_instance.state not in (OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING):
                 # Race condition detected, this payment is already confirmed
                 logger.info('Failed payment {} but ignored due to likely race condition.'.format(
@@ -1673,7 +1674,7 @@ class OrderPayment(models.Model):
         :raises Quota.QuotaExceededException: if the quota is exceeded and ``force`` is ``False``
         """
         with transaction.atomic():
-            locked_instance = OrderPayment.objects.select_for_update().get(pk=self.pk)
+            locked_instance = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=self.pk)
             if locked_instance.state == self.PAYMENT_STATE_CONFIRMED:
                 # Race condition detected, this payment is already confirmed
                 logger.info('Confirmed payment {} but ignored due to likely race condition.'.format(
