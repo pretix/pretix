@@ -730,7 +730,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         _save_answers(op, answers, given_answers)
 
     with transaction.atomic():
-        # Lock order positions, if it is an entry. We don't need it for exists, as a race condition wouldn't be problematic
+        # Lock order positions, if it is an entry. We don't need it for exits, as a race condition wouldn't be problematic
         opqs = OrderPosition.all
         if type != Checkin.TYPE_EXIT:
             opqs = opqs.select_for_update(of=OF_SELF)
