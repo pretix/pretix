@@ -556,7 +556,7 @@ class TeamListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, P
             memcount=Count('members', distinct=True),
             eventcount=Count('limit_events', distinct=True),
             invcount=Count('invites', distinct=True)
-        ).all().order_by('name')
+        ).all().order_by('name', 'pk')
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
         return qs
@@ -2040,6 +2040,8 @@ class LogView(OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
     context_object_name = 'logs'
 
     def get_queryset(self):
+        # technically, we'd also need to sort by pk since this is a paginated list, but in this case we just can't
+        # bear the performance cost
         qs = self.request.organizer.all_logentries().select_related(
             'user', 'content_type', 'api_token', 'oauth_application', 'device'
         ).order_by('-datetime')
@@ -2437,7 +2439,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             q |= Q(email__iexact=self.customer.email)
         qs = Order.objects.filter(
             q
-        ).select_related('event').order_by('-datetime')
+        ).select_related('event').order_by('-datetime', 'pk')
         return qs
 
     @cached_property

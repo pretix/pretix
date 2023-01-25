@@ -700,7 +700,7 @@ class ListRules(EventPermissionRequiredMixin, PaginationMixin, ListView):
             ),
         ).prefetch_related(
             'limit_products'
-        )
+        ).order_by('-send_date', 'subject', 'pk')
 
 
 class DeleteRule(EventPermissionRequiredMixin, DeleteView):
@@ -746,7 +746,7 @@ class ScheduleView(EventPermissionRequiredMixin, PaginationMixin, ListView):
 
     def get_queryset(self):
         return self.rule.scheduledmail_set.select_related('subevent').order_by(
-            '-computed_datetime'
+            '-computed_datetime', '-pk'
         )
 
     def get_context_data(self, **kwargs):

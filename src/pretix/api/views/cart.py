@@ -29,11 +29,11 @@ from django.utils.translation import gettext as _
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import ValidationError
-from rest_framework.filters import OrderingFilter
 from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
 from rest_framework.response import Response
 from rest_framework.serializers import as_serializer_error
 
+from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.cart import (
     CartPositionCreateSerializer, CartPositionSerializer,
 )
@@ -47,7 +47,7 @@ from pretix.base.services.locking import NoLockManager
 class CartPositionViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnlyModelViewSet):
     serializer_class = CartPositionSerializer
     queryset = CartPosition.objects.none()
-    filter_backends = (OrderingFilter,)
+    filter_backends = (TotalOrderingFilter,)
     ordering = ('datetime',)
     ordering_fields = ('datetime', 'cart_id')
     lookup_field = 'id'

@@ -21,8 +21,11 @@
 #
 import contextlib
 
+from django.core.exceptions import FieldDoesNotExist
 from django.db import connection, transaction
-from django.db.models import Aggregate, Expression, Field, Lookup, Value
+from django.db.models import (
+    Aggregate, Expression, F, Field, Lookup, OrderBy, Value,
+)
 from django.utils.functional import lazy
 
 
@@ -148,3 +151,74 @@ class PostgresWindowFrame(Expression):
 # This is a short-hand for .select_for_update(of=("self,")), that falls back gracefully on databases that don't support
 # the SELECT FOR UPDATE OF ... query.
 OF_SELF = lazy(lambda: ("self",) if connection.features.has_select_for_update_of else (), tuple)()
+
+
+def get_deterministic_ordering(model, ordering):
+    """
+    Ensure a deterministic order across all database backends. Search for a
+    single field or unique together set of fields providing a total
+    ordering. If these are missing, augment the ordering with a descendant
+    primary key.
+
+    This has mostly been vendored from
+    https://github.com/django/django/blob/d8e1442ce2c56282785dd806e5c1147975e8c857/django/contrib/admin/views/main.py#L390
+    """
+    if isinstance(ordering, str):
+        ordering = (ordering,)
+    ordering = list(ordering)
+    ordering_fields = set()
+    total_ordering_fields = {"pk"} | {
+        field.attname
+        for field in model._meta.fields
+        if field.unique and not field.null
+    }
+    for part in ordering:
+        # Search for single field providing a total ordering.
+        field_name = None
+        if isinstance(part, str):
+            field_name = part.lstrip("-")
+        elif isinstance(part, F):
+            field_name = part.name
+        elif isinstance(part, OrderBy) and isinstance(part.expression, F):
+            field_name = part.expression.name
+        if field_name:
+            # Normalize attname references by using get_field().
+            try:
+                field = model._meta.get_field(field_name)
+            except FieldDoesNotExist:
+                # Could be "?" for random ordering or a related field
+                # lookup. Skip this part of introspection for now.
+                continue
+            # Ordering by a related field name orders by the referenced
+            # model's ordering. Skip this part of introspection for now.
+            if field.remote_field and field_name == field.name:
+                continue
+            if field.attname in total_ordering_fields:
+                break
+            ordering_fields.add(field.attname)
+    else:
+        # No single total ordering field, try unique_together and total
+        # unique constraints.
+        constraint_field_names = (
+            *model._meta.unique_together,
+            *(
+                constraint.fields
+                for constraint in model._meta.total_unique_constraints
+            ),
+        )
+        for field_names in constraint_field_names:
+            # Normalize attname references by using get_field().
+            fields = [
+                model._meta.get_field(field_name) for field_name in field_names
+            ]
+            # Composite unique constraints containing a nullable column
+            # cannot ensure total ordering.
+            if any(field.null for field in fields):
+                continue
+            if ordering_fields.issuperset(field.attname for field in fields):
+                break
+        else:
+            # If no set of unique fields is present in the ordering, rely
+            # on the primary key to provide total ordering.
+            ordering.append("-pk")
+    return ordering

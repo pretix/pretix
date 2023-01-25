@@ -84,6 +84,7 @@ from pretix.control.signals import item_forms, item_formsets
 from pretix.helpers.models import modelcopy
 
 from ...base.channels import get_all_sales_channels
+from ...helpers import get_deterministic_ordering
 from ...helpers.compat import CompatDeleteView
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
@@ -825,7 +826,9 @@ class QuotaList(PaginationMixin, ListView):
         }
 
         if self.request.GET.get("ordering", "-date") in valid_orders:
-            qs = qs.order_by(*valid_orders[self.request.GET.get("ordering", "-date")])
+            qs = qs.order_by(*get_deterministic_ordering(Quota, valid_orders[self.request.GET.get("ordering", "-date")]))
+        else:
+            qs = qs.order_by('name', 'subevent__date_from', 'pk')
 
         return qs
 

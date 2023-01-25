@@ -93,7 +93,7 @@ class Organizer(LoggedModel):
     class Meta:
         verbose_name = _("Organizer")
         verbose_name_plural = _("Organizers")
-        ordering = ("name",)
+        ordering = ("name", "slug")
 
     def __str__(self) -> str:
         return self.name

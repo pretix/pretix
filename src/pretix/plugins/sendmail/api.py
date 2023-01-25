@@ -23,8 +23,8 @@ from django.core.exceptions import ValidationError
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from rest_framework import viewsets
-from rest_framework.filters import OrderingFilter
 
+from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.plugins.sendmail.models import Rule
 
@@ -73,7 +73,7 @@ with scopes_disabled():
 class RuleViewSet(viewsets.ModelViewSet):
     queryset = Rule.objects.none()
     serializer_class = RuleSerializer
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     filterset_class = RuleFilter
     ordering = ('id',)
     ordering_fields = ('id',)

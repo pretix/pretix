@@ -112,7 +112,7 @@ class WaitingListEntry(LoggedModel):
     class Meta:
         verbose_name = _("Waiting list entry")
         verbose_name_plural = _("Waiting list entries")
-        ordering = ('-priority', 'created')
+        ordering = ('-priority', 'created', 'pk')
 
     def __str__(self):
         return '%s waits for %s' % (str(self.email), str(self.item))

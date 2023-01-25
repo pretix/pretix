@@ -97,7 +97,7 @@ class CheckinList(LoggedModel):
     objects = ScopedManager(organizer='event__organizer')
 
     class Meta:
-        ordering = ('subevent__date_from', 'name')
+        ordering = ('subevent__date_from', 'name', 'pk')
 
     def positions_query(self, ignore_status=False):
         from . import Order, OrderPosition
