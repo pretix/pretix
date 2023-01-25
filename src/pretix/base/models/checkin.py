@@ -183,7 +183,7 @@ class CheckinList(LoggedModel):
             .values("position_id", "type", "datetime", "cnt_exists_after")
             .query.sql_with_params()
         )
-        return self.positions.filter(
+        return self.positions_query(ignore_status=ignore_status).filter(
             pk__in=RawSQL(
                 f"""
                 SELECT "position_id"
