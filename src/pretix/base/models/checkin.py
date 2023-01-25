@@ -119,7 +119,7 @@ class CheckinList(LoggedModel):
 
     @property
     def positions(self):
-        return self.positions_query(ignore_status=True)
+        return self.positions_query(ignore_status=False)
 
     @scopes_disabled()
     def positions_inside_query(self, ignore_status=False, at_time=None):
