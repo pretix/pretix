@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-19 10:47+0000\n"
-"PO-Revision-Date: 2022-05-30 20:00+0000\n"
+"PO-Revision-Date: 2023-01-26 14:07+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12\n"
+"X-Generator: Weblate 4.15\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -2662,8 +2662,8 @@ msgid ""
 "Please enter your current password if you want to change your e-mail address "
 "or password."
 msgstr ""
-"Por favor ingrese su contraseña actual si desea cambiar su e-mail o "
-"contraseña."
+"Por favor ingrese su contraseña actual si desea cambiar su correo "
+"electrónico o contraseña."
 
 #: pretix/base/forms/user.py:55 pretix/presale/forms/customer.py:364
 #: pretix/presale/forms/customer.py:437
@@ -9035,8 +9035,8 @@ msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
 msgstr ""
-"Si se selecciona, se enviará un archivo de calendario .ics a los e-mails "
-"dados en la confirmación de la orden."
+"Si se selecciona, se enviará un archivo de calendario .ics a los correos "
+"electrónicos dados en la confirmación del pedido."
 
 #: pretix/base/settings.py:1694
 msgid "Attach calendar files only after order has been paid"
@@ -10376,7 +10376,7 @@ msgstr ""
 
 #: pretix/base/shredder.py:193
 msgid "E-mails"
-msgstr "E-mails"
+msgstr "Correos electrónicos"
 
 #: pretix/base/shredder.py:195
 #, fuzzy
@@ -28816,7 +28816,7 @@ msgstr ""
 
 #: pretix/presale/forms/checkout.py:70
 msgid "E-mail address (repeated)"
-msgstr "Direccion de E-mail (repetida)"
+msgstr "Dirección de correo electrónico (repetida)"
 
 #: pretix/presale/forms/checkout.py:71
 msgid ""
@@ -30211,7 +30211,7 @@ msgstr "Agregar al carrito"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:308
 msgid "If you already ordered a ticket"
-msgstr "Si ya ha pedido un ticket"
+msgstr "Si ya ha pedido una entrada"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:312
 msgid ""
