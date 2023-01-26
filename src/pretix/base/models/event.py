@@ -374,7 +374,7 @@ class EventMixin:
                 if q.active_items:
                     items_reserved.update(q.active_items.split(","))
                 if q.active_variations:
-                    vars_available.update(q.active_variations.split(","))
+                    vars_reserved.update(q.active_variations.split(","))
             elif res[0] < Quota.AVAILABILITY_RESERVED:
                 if q.active_items:
                     items_gone.update(q.active_items.split(","))
