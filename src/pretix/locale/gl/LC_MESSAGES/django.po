@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-19 10:47+0000\n"
-"PO-Revision-Date: 2022-09-15 08:59+0000\n"
+"PO-Revision-Date: 2023-01-26 14:07+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14\n"
+"X-Generator: Weblate 4.15\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -2612,13 +2612,12 @@ msgstr ""
 "otro."
 
 #: pretix/base/forms/user.py:53
-#, fuzzy
 msgid ""
 "Please enter your current password if you want to change your e-mail address "
 "or password."
 msgstr ""
-"Por favor ingrese su contraseña actual si desea cambiar su e-mail o "
-"contraseña."
+"Por favor ingrese o seu contrasinal actual se desexa cambiar o seu e-mail ou "
+"contrasinal."
 
 #: pretix/base/forms/user.py:55 pretix/presale/forms/customer.py:364
 #: pretix/presale/forms/customer.py:437
@@ -9169,13 +9168,12 @@ msgid "Attach calendar files"
 msgstr "Archivos de tickets en caché"
 
 #: pretix/base/settings.py:1685
-#, fuzzy
 msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
 msgstr ""
-"Si se selecciona, se enviará un archivo de calendario .ics a los e-mails "
-"dados en la confirmación de la orden."
+"Se se selecciona, enviarase un arquivo de calendario .ics aos e-mails dados "
+"na confirmación da orde."
 
 #: pretix/base/settings.py:1694
 msgid "Attach calendar files only after order has been paid"
@@ -10519,9 +10517,8 @@ msgstr ""
 "espera."
 
 #: pretix/base/shredder.py:193
-#, fuzzy
 msgid "E-mails"
-msgstr "E-mails"
+msgstr "Enderezos electrónicos"
 
 #: pretix/base/shredder.py:195
 #, fuzzy
@@ -29389,7 +29386,7 @@ msgstr ""
 
 #: pretix/presale/forms/checkout.py:70
 msgid "E-mail address (repeated)"
-msgstr "Correo electrónico (repetido)"
+msgstr "Enderezo electrónico (repetido)"
 
 #: pretix/presale/forms/checkout.py:71
 msgid ""
@@ -30740,7 +30737,7 @@ msgstr "Engadir ao pedido"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:308
 msgid "If you already ordered a ticket"
-msgstr "Se xa pediu un tícket"
+msgstr "Se xa pediu unha entrada"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:312
 msgid ""
