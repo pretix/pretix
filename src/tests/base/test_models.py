@@ -2299,24 +2299,37 @@ class SubEventTest(TestCase):
 
     @classscope(attr='organizer')
     def test_best_availability(self):
+        # 1 quota - 1 item
         q = Quota.objects.create(event=self.event, name='Quota', size=0,
                                  subevent=self.se)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
         q.items.add(item)
         obj = SubEvent.annotated(SubEvent.objects).first()
         assert len(obj.active_quotas) == 1
-        assert obj.best_availability_state == Quota.AVAILABILITY_GONE
+        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 0)
+
+        # 2 quotas - 1 item. Lowest quota wins.
         q2 = Quota.objects.create(event=self.event, name='Quota 2', size=1,
                                   subevent=self.se)
         q2.items.add(item)
         obj = SubEvent.annotated(SubEvent.objects).first()
         assert len(obj.active_quotas) == 2
-        assert obj.best_availability_state == Quota.AVAILABILITY_GONE
+        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 0)
+
+        # 2 quotas - 2 items. Higher quota wins since second item is only connected to second quota.
         item2 = Item.objects.create(event=self.event, name='Regular ticket', default_price=10, active=True)
         q2.items.add(item2)
         obj = SubEvent.annotated(SubEvent.objects).first()
         assert len(obj.active_quotas) == 2
-        assert obj.best_availability_state == Quota.AVAILABILITY_OK
+        assert obj.best_availability == (Quota.AVAILABILITY_OK, 1, 1)
+
+        # 1 quotas - 2 items. Higher quota wins, but is not counted twice!
+        q.size = 10
+        q.save()
+        q2.delete()
+        obj = SubEvent.annotated(SubEvent.objects).first()
+        assert len(obj.active_quotas) == 1
+        assert obj.best_availability == (Quota.AVAILABILITY_OK, 10, 10)
 
 
 class CachedFileTestCase(TestCase):

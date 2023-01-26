@@ -36,7 +36,7 @@ import logging
 import os
 import string
 import uuid
-from collections import OrderedDict
+from collections import OrderedDict, Counter, defaultdict
 from datetime import datetime, time, timedelta
 from operator import attrgetter
 from urllib.parse import urljoin
@@ -340,64 +340,104 @@ class EventMixin:
             )
         )
 
-    @cached_property
+    @property
     def best_availability_state(self):
+        return self.best_availability[0]
+
+    @property
+    def best_availability_is_low(self):
+        """
+        Returns ``True`` if the availability of tickets in this event is lower than the percentage
+        given in setting ``low_availability_percentage``.
+        """
+        ba = self.best_availability
+        if ba[1] is None or not ba[2]:
+            return False
+        if not self.settings.low_availability_percentage:
+            return False
+
+        percentage = ba[1] / ba[2]
+        return percentage < self.settings.low_availability_percentage
+
+    @cached_property
+    def best_availability(self):
+        """
+        Returns a 3-tuple of
+
+        - The availability state of this event (one of the ``Quota.AVAILABILITY_*`` constants)
+        - The number of tickets currently available (or ``None``)
+        - The number of tickets "originally" available (or ``None``)
+
+        This can only be called on objects obtained through a queryset that has been passed through ``.annotated()``.
+        """
         from .items import Quota
 
         if not hasattr(self, 'active_quotas'):
             raise TypeError("Call this only if you fetched the subevents via Event/SubEvent.annotated()")
-        items_available = set()
-        vars_available = set()
-        items_reserved = set()
-        vars_reserved = set()
-        items_gone = set()
-        vars_gone = set()
-        items_disabled = set()
-        vars_disabled = set()
 
         if hasattr(self, 'disabled_items'):  # SubEventItem
             items_disabled = set(self.disabled_items.split(","))
+        else:
+            items_disabled = set()
 
         if hasattr(self, 'disabled_vars'):  # SubEventItemVariation
             vars_disabled = set(self.disabled_vars.split(","))
+        else:
+            vars_disabled = set()
 
+        # Compute the availability of all quotas and build a item→quotas mapping with all non-disabled items
         r = getattr(self, '_quota_cache', {})
+        quotas_for_item = defaultdict(list)
+        quotas_for_variation = defaultdict(list)
         for q in self.active_quotas:
-            res = r[q] if q in r else q.availability(allow_cache=True)
+            if q not in r:
+                r[q] = q.availability(allow_cache=True)
 
-            if res[0] == Quota.AVAILABILITY_OK:
-                if q.active_items:
-                    items_available.update(q.active_items.split(","))
-                if q.active_variations:
-                    vars_available.update(q.active_variations.split(","))
-            elif res[0] == Quota.AVAILABILITY_RESERVED:
-                if q.active_items:
-                    items_reserved.update(q.active_items.split(","))
-                if q.active_variations:
-                    vars_reserved.update(q.active_variations.split(","))
-            elif res[0] < Quota.AVAILABILITY_RESERVED:
-                if q.active_items:
-                    items_gone.update(q.active_items.split(","))
-                if q.active_variations:
-                    vars_gone.update(q.active_variations.split(","))
+            if q.active_items:
+                for item_id in q.active_items.split(","):
+                    if item_id not in items_disabled:
+                        quotas_for_item[item_id].append(q)
+            if q.active_variations:
+                for var_id in q.active_variations.split(","):
+                    if var_id not in vars_disabled:
+                        quotas_for_variation[var_id].append(q)
 
-        items_available -= items_disabled
-        items_reserved -= items_disabled
-        items_gone -= items_disabled
-        vars_available -= vars_disabled
-        vars_reserved -= vars_disabled
-        vars_gone -= vars_disabled
+        if not self.active_quotas or (not quotas_for_item and not quotas_for_variation):
+            # No item is enabled for this event, treat the event as "unknown"
+            return None, None, None
 
-        if not self.active_quotas or (
-            not items_available and not items_reserved and not items_gone and not vars_gone and not vars_available and not vars_reserved
-        ):
-            return None
+        # We iterate over all items and variations and keep track of
+        # - `best_state_found` - the best availability state we have seen so far. If one item is available, the event is available!
+        # - `num_tickets_found` - the number of tickets currently available in total. We sum up all the items and variations, but keep
+        #   track of them per-quota in `quota_used_for_found_tickets` to make sure we don't count the same tickets twice if two or more
+        #   items share the same quota
+        # - `num_tickets_possible` - basically the same thing, just with the total size of quotas instead of their currently availability
+        #   since we need that for the percentage calculation
+        best_state_found = Quota.AVAILABILITY_GONE
+        num_tickets_found = 0
+        num_tickets_possible = 0
+        quota_used_for_found_tickets = Counter()
+        quota_used_for_possible_tickets = Counter()
+        for quota_list in list(quotas_for_item.values()) + list(quotas_for_variation.values()):
+            worst_state_for_ticket = min(r[q][0] for q in quota_list)
+            quotas_that_are_not_unlimited = [q for q in quota_list if q.size is not None]
+            if not quotas_that_are_not_unlimited:
+                # We found an unlimited ticket, no more need to do anything else
+                return Quota.AVAILABILITY_OK, None, None
 
-        if items_available - items_reserved - items_gone or vars_available - vars_reserved - vars_gone:
-            return Quota.AVAILABILITY_OK
-        if items_reserved - items_gone or vars_reserved - vars_gone:
-            return Quota.AVAILABILITY_RESERVED
-        return Quota.AVAILABILITY_GONE
+            if worst_state_for_ticket == Quota.AVAILABILITY_OK:
+                availability_of_this = min(max(0, r[q][1] - quota_used_for_found_tickets[q]) for q in quotas_that_are_not_unlimited)
+                num_tickets_found += availability_of_this
+                for q in quota_list:
+                    quota_used_for_found_tickets[q] += availability_of_this
+
+            possible_of_this = min(max(0, q.size - quota_used_for_possible_tickets[q]) for q in quotas_that_are_not_unlimited)
+            num_tickets_possible += possible_of_this
+            for q in quota_list:
+                quota_used_for_possible_tickets[q] += possible_of_this
+
+            best_state_found = max(best_state_found, worst_state_for_ticket)
+        return best_state_found, num_tickets_found, num_tickets_possible
 
     def free_seats(self, ignore_voucher=None, sales_channel='web', include_blocked=False):
         qs_annotated = self._seats(ignore_voucher=ignore_voucher)
@@ -591,6 +631,7 @@ class Event(EventMixin, LoggedModel):
         self.settings.invoice_email_attachment = True
         self.settings.name_scheme = 'given_family'
         self.settings.payment_banktransfer_invoice_immediately = True
+        self.settings.low_availability_percentage = 10
 
     @property
     def social_image(self):

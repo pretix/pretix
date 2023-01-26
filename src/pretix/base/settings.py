@@ -1308,6 +1308,24 @@ DEFAULTS = {
                         "the email. Does not affect orders performed through other sales channels."),
         )
     },
+    'low_availability_percentage': {
+        'default': None,
+        'type': int,
+        'serializer_class': serializers.IntegerField,
+        'form_class': forms.IntegerField,
+        'serializer_kwargs': dict(
+            min_value=0,
+            max_value=100,
+        ),
+        'form_kwargs': dict(
+            label=_('Low availability threshold'),
+            help_text=_('If the availability of tickets falls below this percentage, the event (or a date, if it is an '
+                        'event series) will be highlighted to have low availability in the event list.'),
+            min_value=0,
+            max_value=100,
+            required=False
+        )
+    },
     'event_list_availability': {
         'default': 'True',
         'type': bool,

@@ -314,7 +314,8 @@
                 {% if sform.event_list_available_only %}
                     {% bootstrap_field sform.event_list_available_only layout="control" %}
                 {% endif %}
-                
+                {% bootstrap_field sform.low_availability_percentage layout="control" %}
+
                 {% url "control:organizer.edit" organizer=request.organizer.slug as org_url %}
                 {% propagated request.event org_url "meta_noindex" %}
                     {% bootstrap_field sform.meta_noindex layout="control" %}
