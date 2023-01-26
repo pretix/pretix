@@ -37,7 +37,7 @@
     {% endif %}
 {% endblock %}
 {% block page %}
-    <div class="page-header {% if organizer_logo and organizer.settings.organizer_logo_image_large %}logo-large{% endif %}">
+    <div class="page-header{% if organizer_logo %} pager-header-with-logo{% endif %}{% if organizer_logo and organizer.settings.organizer_logo_image_large %} logo-large{% endif %}">
         <div class="{% if not organizer_logo or not organizer.settings.organizer_logo_image_large %}pull-left flip{% endif %}">
             {% if organizer_logo and organizer.settings.organizer_logo_image_large %}
                 <a href="{% eventurl organizer "presale:organizer.index" %}" title="{{ organizer.name }}">

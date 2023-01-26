@@ -19,6 +19,9 @@
     height: auto;
   }
 }
+.pager-header-with-logo a {
+  display: inline-block;
+}
 
 .main-box {
   background: $main-box-bg;
