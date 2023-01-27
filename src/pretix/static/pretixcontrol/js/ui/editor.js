@@ -483,7 +483,7 @@ var editor = {
             var col = (new fabric.Color(o.getFill()))._source;
             $("#toolbox-col").val("#" + ((1 << 24) + (col[0] << 16) + (col[1] << 8) + col[2]).toString(16).slice(1));
             $("#toolbox-fontsize").val(editor._px2pt(o.fontSize).toFixed(1));
-            $("#toolbox-lineheight").val(o.lineHeight);
+            $("#toolbox-lineheight").val(o.lineHeight || 1);
             $("#toolbox-fontfamily").val(o.fontFamily);
             $("#toolbox").find("button[data-action=bold]").toggleClass('active', o.fontWeight === 'bold');
             $("#toolbox").find("button[data-action=italic]").toggleClass('active', o.fontStyle === 'italic');
