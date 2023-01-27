@@ -861,6 +861,7 @@ var editor = {
                 thing.setCoords();
                 editor._create_savepoint();
                 break;
+            case 8:  /* Backspace */
             case 46:  /* Delete */
                 editor._delete();
                 break;
