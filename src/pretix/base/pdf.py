@@ -849,8 +849,8 @@ class Renderer:
             'right': TA_RIGHT
         }
         # lineheight display differs from browser canvas. This calc is just empirical values to get
-        # reportlab render similarly to browser canvas. Basically increase lineheight-offset from 1 (fontsize) by 1.25
-        lineheight = (float(o.get('lineheight', 1.0)) - 1.0) * 1.25 + 1.0
+        # reportlab render similarly to browser canvas.
+        lineheight = (float(o.get('lineheight', 1.0))) * 1.15
         style = ParagraphStyle(
             name=uuid.uuid4().hex,
             fontName=font,
