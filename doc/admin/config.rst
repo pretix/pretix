@@ -194,7 +194,7 @@ Example::
 
     [urls]
     media=/media/
-    static=/media/
+    static=/static/
 
 ``media``
     The URL to be used to serve user-uploaded content. You should not need to modify
