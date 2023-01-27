@@ -74,7 +74,7 @@ We recommend reading up on tuning your web server for high concurrency. For ngin
 processes and the number of connections each worker process accepts. Double-check that TLS session caching works, because TLS
 handshakes can get really expensive.
 
-During a traffic peak, your web server will be able to make us of more CPU resources, while memory usage will stay comparatively low,
+During a traffic peak, your web server will be able to make use of more CPU resources, while memory usage will stay comparatively low,
 so if you invest in more hardware here, invest in more and faster CPU cores.
 
 Make sure that pretix' static files (such as CSS and JavaScript assets) as well as user-uploaded media files (event logos, etc)
