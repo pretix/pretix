@@ -276,6 +276,18 @@
                                     id="toolbox-fontsize">
                         </div>
                         <div class="col-sm-6">
+                            <label>{% trans "Line height" %}</label><br>
+                            <input type="number" value="1" class="input-block-level form-control" step="0.1"
+                                    id="toolbox-lineheight">
+                        </div>
+                    </div>
+                    <div class="row control-group text">
+                        <div class="col-sm-6">
+                            <label>{% trans "Text color" %}</label><br>
+                            <input type="text" value="#000000" class="input-block-level form-control colorpickerfield"
+                                    id="toolbox-col">
+                        </div>
+                        <div class="col-sm-6">
                             <label>&nbsp;</label><br>
                             <div class="btn-group btn-group-justified" role="group">
                                 <div class="btn-group" role="group">
@@ -295,15 +307,6 @@
                                     </button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row control-group text">
-                        <div class="col-sm-6">
-                            <label>{% trans "Text color" %}</label><br>
-                            <input type="text" value="#000000" class="input-block-level form-control colorpickerfield"
-                                    id="toolbox-col">
-                        </div>
-                        <div class="col-sm-6">
                             <label>&nbsp;</label><br>
                             <div class="btn-group btn-group-justified" id="toolbox-align">
                                 <div class="btn-group" role="group">
