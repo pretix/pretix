@@ -887,7 +887,7 @@ class Renderer:
             p.drawOn(canvas, 0, -h - ad[1] / 2.5)
         else:
             if lineheight != 1.0:
-                # lineheight adds to ascent/descent offsets, just empirical values again to get 
+                # lineheight adds to ascent/descent offsets, just empirical values again to get
                 # reportlab to render similarly to browser canvas
                 ad = (
                     ad[0],
