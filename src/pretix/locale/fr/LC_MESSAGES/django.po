@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-19 10:47+0000\n"
-"PO-Revision-Date: 2023-01-26 04:00+0000\n"
+"PO-Revision-Date: 2023-01-27 18:00+0000\n"
 "Last-Translator: Christophe Piret <cpiret@greenpeace.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -29725,7 +29725,7 @@ msgstr "Veuillez vérifier les détails ci-dessous et valider votre commande."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:14
 msgid "Please hang tight, we're finalizing your order!"
-msgstr ""
+msgstr "Veuillez patienter, nous finalisons votre commande !"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:22
 #, fuzzy
@@ -30935,11 +30935,9 @@ msgid "Internal Reference"
 msgstr "Référence interne"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:347
-#, fuzzy
-#| msgid "Change for all events"
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr "Changement pour tous les événements"
+msgstr "Modifier ou annuler votre commande"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:354
 msgid ""
@@ -31356,8 +31354,6 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
-#, fuzzy
-#| msgid "Resend order link"
 msgid "Resend order links"
 msgstr "Renvoyer les liens de la commande"
 
@@ -31374,7 +31370,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:30
 msgid "Send links"
-msgstr "Envoyer des liens"
+msgstr "Envoyer le lien"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:16
