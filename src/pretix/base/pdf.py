@@ -848,11 +848,14 @@ class Renderer:
             'center': TA_CENTER,
             'right': TA_RIGHT
         }
+        # lineheight display differs from browser canvas. This calc is just empirical values to get
+        # reportlab render similarly to browser canvas. Basically increase lineheight-offset from 1 (fontsize) by 1.25
+        lineheight = (float(o.get('lineheight', 1.0)) - 1.0) * 1.25 + 1.0
         style = ParagraphStyle(
             name=uuid.uuid4().hex,
             fontName=font,
             fontSize=float(o['fontsize']),
-            leading=float(o['fontsize']),
+            leading=lineheight * float(o['fontsize']),
             autoLeading="max",
             textColor=Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255),
             alignment=align_map[o['align']]
@@ -881,8 +884,15 @@ class Renderer:
         if o.get('downward', False):
             canvas.translate(float(o['left']) * mm, float(o['bottom']) * mm)
             canvas.rotate(o.get('rotation', 0) * -1)
-            p.drawOn(canvas, 0, -h - ad[1] / 2)
+            p.drawOn(canvas, 0, -h - ad[1] / 2.5)
         else:
+            if lineheight != 1.0:
+                # lineheight adds to ascent/descent offsets, just empirical values again to get 
+                # reportlab to render similarly to browser canvas
+                ad = (
+                    ad[0],
+                    ad[1] + (lineheight - 1.0) * float(o['fontsize']) * 1.05
+                )
             canvas.translate(float(o['left']) * mm, float(o['bottom']) * mm + h)
             canvas.rotate(o.get('rotation', 0) * -1)
             p.drawOn(canvas, 0, -h - ad[1])
