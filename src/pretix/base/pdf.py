@@ -856,6 +856,8 @@ class Renderer:
             fontName=font,
             fontSize=float(o['fontsize']),
             leading=lineheight * float(o['fontsize']),
+            # for backwards compatability use autoLeading if no lineheight is given
+            autoLeading='off' if 'lineheight' in o else 'max',
             textColor=Color(o['color'][0] / 255, o['color'][1] / 255, o['color'][2] / 255),
             alignment=align_map[o['align']]
         )
