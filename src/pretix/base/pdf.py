@@ -850,7 +850,8 @@ class Renderer:
         }
         # lineheight display differs from browser canvas. This calc is just empirical values to get
         # reportlab render similarly to browser canvas.
-        lineheight = (float(o.get('lineheight', 1.0))) * 1.15
+        # for backwards compatability use „uncorrected“ lineheight of 1.0 instead of 1.15
+        lineheight = float(o['lineheight']) * 1.15 if 'lineheight' in o else 1.0
         style = ParagraphStyle(
             name=uuid.uuid4().hex,
             fontName=font,
