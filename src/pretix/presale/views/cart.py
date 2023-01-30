@@ -525,7 +525,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
                 return JsonResponse({
                     'redirect': self.get_error_url(),
                     'success': False,
-                    'message': _(error_messages['empty'])
+                    'message': str(error_messages['empty'])
                 })
             else:
                 return redirect(self.get_error_url())
@@ -597,8 +597,6 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
         return context
 
     def dispatch(self, request, *args, **kwargs):
-        from pretix.base.services.cart import error_messages
-
         err = None
         v = request.GET.get('voucher')
 
@@ -652,7 +650,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
             pass
 
         if err:
-            messages.error(request, _(err))
+            messages.error(request, str(err))
             return redirect_to_url(self.get_next_url() + "?voucher_invalid")
 
         return super().dispatch(request, *args, **kwargs)
