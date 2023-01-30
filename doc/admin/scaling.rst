@@ -42,7 +42,7 @@ A pretix installation usually consists of the following components which run per
 
 * ``pretix-worker`` is a Celery-based application that processes tasks that should be run asynchronously outside of the web application process.
 
-* A **SQL database** keeps all the important data and processes the actual transactions. We recommend using PostgreSQL, but MySQL/MariaDB works as well.
+* A **PostgreSQL database** keeps all the important data and processes the actual transactions.
 
 * A **web server** that terminates TLS and HTTP connections and forwards them to ``pretix-web``. In some cases, e.g. when serving static files, the web servers might return a response directly. We recommend using ``nginx``.
 

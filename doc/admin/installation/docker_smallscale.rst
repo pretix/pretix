@@ -14,7 +14,7 @@ This has some trade-offs in terms of performance and isolation but allows a rath
              get it right. If you're not feeling comfortable managing a Linux server, check out our hosting and service
              offers at `pretix.eu`_.
 
-We tested this guide on the Linux distribution **Debian 8.0** but it should work very similar on other
+We tested this guide on the Linux distribution **Debian 11.0** but it should work very similar on other
 modern distributions, especially on all systemd-based ones.
 
 Requirements
@@ -26,7 +26,7 @@ installation guides):
 * `Docker`_
 * A SMTP server to send out mails, e.g. `Postfix`_ on your machine or some third-party server you have credentials for
 * A HTTP reverse proxy, e.g. `nginx`_ or Apache to allow HTTPS connections
-* A `PostgreSQL`_ 9.6+, `MySQL`_ 5.7+, or MariaDB 10.2.7+ database server
+* A `PostgreSQL`_ 9.6+ database server
 * A `redis`_ server
 
 We also recommend that you use a firewall, although this is not a pretix-specific recommendation. If you're new to
@@ -58,9 +58,6 @@ directory writable to the user that runs pretix inside the docker container::
 Database
 --------
 
-.. warning:: **Please use PostgreSQL for all new installations**. If you need to go for MySQL, make sure you run
-             **MySQL 5.7 or newer** or **MariaDB 10.2.7 or newer**.
-
 Next, we need a database and a database user. We can create these with any kind of database managing tool or directly on
 our database's shell. Please make sure that UTF8 is used as encoding for the best compatibility. You can check this with
 the following command::
@@ -85,13 +82,6 @@ Restart PostgreSQL after you changed these files::
     # systemctl restart postgresql
 
 If you have a firewall running, you should also make sure that port 5432 is reachable from the ``172.17.0.1/16`` subnet.
-
-For MySQL, you can either also use network-based connections or mount the ``/var/run/mysqld/mysqld.sock`` socket into the docker container.
-When using MySQL, make sure you set the character set of the database to ``utf8mb4``, e.g. like this::
-
-    mysql > CREATE DATABASE pretix DEFAULT CHARACTER SET utf8mb4 DEFAULT COLLATE utf8mb4_unicode_ci;
-
-You will also need to make sure that ``sql_mode`` in your ``my.cnf`` file does **not** include ``ONLY_FULL_GROUP_BY``.
 
 Redis
 -----
@@ -152,15 +142,13 @@ Fill the configuration file ``/etc/pretix/pretix.cfg`` with the following conten
     trust_x_forwarded_proto=on
 
     [database]
-    ; Replace postgresql with mysql for MySQL
     backend=postgresql
     name=pretix
     user=pretix
     ; Replace with the password you chose above
     password=*********
     ; In most docker setups, 172.17.0.1 is the address of the docker host. Adjust
-    ; this to wherever your database is running, e.g. the name of a linked container
-    ; or of a mounted MySQL socket.
+    ; this to wherever your database is running, e.g. the name of a linked container.
     host=172.17.0.1
 
     [mail]
@@ -211,8 +199,6 @@ named ``/etc/systemd/system/pretix.service`` with the following content::
 
     [Install]
     WantedBy=multi-user.target
-
-When using MySQL and socket mounting, you'll need the additional flag ``-v /var/run/mysqld:/var/run/mysqld`` in the command.
 
 You can now run the following commands
 to enable and start the service::
@@ -339,7 +325,6 @@ workers, e.g. ``docker run … taskworker -Q notifications --concurrency 32``.
 .. _nginx: https://botleg.com/stories/https-with-lets-encrypt-and-nginx/
 .. _Let's Encrypt: https://letsencrypt.org/
 .. _pretix.eu: https://pretix.eu/
-.. _MySQL: https://dev.mysql.com/doc/refman/5.7/en/linux-installation-apt-repo.html
 .. _PostgreSQL: https://www.digitalocean.com/community/tutorials/how-to-install-and-use-postgresql-on-ubuntu-20-04
 .. _redis: https://blog.programster.org/debian-8-install-redis-server/
 .. _ufw: https://en.wikipedia.org/wiki/Uncomplicated_Firewall
