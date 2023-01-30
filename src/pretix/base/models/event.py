@@ -36,7 +36,7 @@ import logging
 import os
 import string
 import uuid
-from collections import OrderedDict, Counter, defaultdict
+from collections import Counter, OrderedDict, defaultdict
 from datetime import datetime, time, timedelta
 from operator import attrgetter
 from urllib.parse import urljoin
