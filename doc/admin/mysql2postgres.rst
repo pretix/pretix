@@ -70,7 +70,7 @@ Of course, instead of all this you can also run a PostgreSQL docker container an
 Stop pretix
 -----------
 
-To create the schema in your new PostgreSQL database, use the following commands::
+To prevent any more changes to your data, stop pretix from running::
 
     # systemctl stop pretix-web pretix-worker
 
