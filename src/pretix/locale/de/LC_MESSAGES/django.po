@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-01-30 11:33+0000\n"
-"PO-Revision-Date: 2023-01-19 12:13+0000\n"
+"PO-Revision-Date: 2023-01-30 11:49+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15\n"
+"X-Generator: Weblate 4.15.2\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/api/auth/devicesecurity.py:28
@@ -14999,7 +14999,7 @@ msgstr "Ergebniscode"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:103
 msgid "Cash"
-msgstr ""
+msgstr "Bargeld"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:9
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:41
@@ -25585,20 +25585,19 @@ msgstr "PayPal ISU/Connect: Endpunkt"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:9
 msgid "Almost done …"
-msgstr ""
+msgstr "Fast fertig …"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:12
-#, fuzzy
-#| msgid ""
-#| "Please click the \"Pay with PayPal\" button below to start your payment."
 msgid "Please click on the \"Pay now\" button below to confirm your payment."
 msgstr ""
-"Bitte klicken Sie auf den \"Mit PayPal bezahlen\" um mit der Zahlung zu "
-"beginnen."
+"Bitte klicken Sie auf den \"Jetzt bezahlen\"-Button, um die Zahlung zu "
+"bestätigen."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:15
 msgid "We will then charge your PayPal account and finalize the order."
 msgstr ""
+"Wir buchen den Betrag dann von Ihrem PayPal-Konto ab und finalisieren die "
+"Bestellung."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:27
 msgid ""
