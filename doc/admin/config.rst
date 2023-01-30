@@ -163,7 +163,7 @@ Example::
     Connection details for the database connection. Empty by default.
 
 ``galera``
-    Indicates if the database backend is a MySQL/MariaDB Galera cluster and
+    (Deprecated) Indicates if the database backend is a MySQL/MariaDB Galera cluster and
     turns on some optimizations/special case handlers. Default: ``False``
 
 .. _`config-replica`:
