@@ -27,7 +27,7 @@
                                     <li><a class="event {% if event.continued %}continued{% endif %} {% spaceless %}
     {% if event.event.presale_is_running and show_avail %}
         {% if event.event.best_availability_state == 100 %}
-            available
+            available {% if event.event.best_availability_is_low %} low {% endif %}
         {% elif event.event.settings.waiting_list_enabled and event.event.best_availability_state >= 0 %}
             waitinglist
         {% elif event.event.best_availability_state == 20 %}

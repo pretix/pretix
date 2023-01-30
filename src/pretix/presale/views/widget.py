@@ -371,7 +371,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 if ev.best_availability_is_low:
                     availability['color'] = 'green'
                     availability['text'] = gettext('Few tickets left')
-                    availability['reason'] = 'ok'
+                    availability['reason'] = 'low'
                 else:
                     availability['color'] = 'green'
                     availability['text'] = gettext('Book now')
@@ -381,7 +381,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 availability['text'] = gettext('Waiting list')
                 availability['reason'] = 'waitinglist'
             elif ev.best_availability_state == Quota.AVAILABILITY_RESERVED:
-                availability['color'] = 'orange'
+                availability['color'] = 'red'
                 availability['text'] = gettext('Reserved')
                 availability['reason'] = 'reserved'
             elif ev.best_availability_state is not None and ev.best_availability_state < Quota.AVAILABILITY_RESERVED:
