@@ -1384,7 +1384,7 @@ Vue.component('pretix-widget', {
     },
     computed: {
         classObject: function () {
-            o = {'pretix-widget': true};
+            var o = {'pretix-widget': true};
             if (this.mobile) {
                 o['pretix-widget-mobile'] = true;
             }
