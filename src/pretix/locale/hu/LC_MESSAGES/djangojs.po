@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-19 10:47+0000\n"
+"POT-Creation-Date: 2023-01-30 11:33+0000\n"
 "PO-Revision-Date: 2020-01-24 08:00+0000\n"
 "Last-Translator: Prokaj Miklós <mixolid0@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -570,16 +570,16 @@ msgstr "Üzenetek generálása…"
 msgid "Unknown error."
 msgstr "Ismeretlen hiba."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:308
+#: pretix/static/pretixcontrol/js/ui/main.js:307
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "A választott színek remek kontrasztot adnak, és nagyon könnyű olvasni!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:312
+#: pretix/static/pretixcontrol/js/ui/main.js:311
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "A választott színek kontrasztja elégséges, és valószínűleg jól olvasható!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:316
+#: pretix/static/pretixcontrol/js/ui/main.js:315
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -587,31 +587,31 @@ msgstr ""
 "A választott színek kontrasztja elégtelen, kérjük válassz sötétebb "
 "árnyalatot."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:463
+#: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
 msgstr "Összes"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:464
+#: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
 msgstr "Semmi"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:465
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:468
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:871
+#: pretix/static/pretixcontrol/js/ui/main.js:869
 msgid "Use a different name internally"
 msgstr "Használj másik nevet"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:907
+#: pretix/static/pretixcontrol/js/ui/main.js:905
 msgid "Click to close"
 msgstr "Bezárásért kattints"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:979
+#: pretix/static/pretixcontrol/js/ui/main.js:977
 msgid "You have unsaved changes!"
 msgstr "Mentetlen változtatások!"
 

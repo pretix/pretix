@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-19 10:47+0000\n"
+"POT-Creation-Date: 2023-01-30 11:33+0000\n"
 "PO-Revision-Date: 2023-01-13 08:00+0000\n"
 "Last-Translator: tree <jan.stransky@arnal.cz>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -540,16 +540,16 @@ msgstr "Vytváření zpráv…"
 msgid "Unknown error."
 msgstr "Neznámá chyba."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:308
+#: pretix/static/pretixcontrol/js/ui/main.js:307
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Tato barva má velmi dobrý kontrast a je velmi dobře čitelná!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:312
+#: pretix/static/pretixcontrol/js/ui/main.js:311
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Tato barva má slušný kontrast a pravděpodobně je dostatečně dobře čitelná!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:316
+#: pretix/static/pretixcontrol/js/ui/main.js:315
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -557,31 +557,31 @@ msgstr ""
 "Tato barva je pro text na bílém pozadí špatně kontrastní, zvolte prosím "
 "tmavší odstín."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:463
+#: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
 msgstr "Všechny"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:464
+#: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
 msgstr "Žádný"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:465
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
 msgstr "Hledaný výraz"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:468
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
 msgstr "Pouze vybrané"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:871
+#: pretix/static/pretixcontrol/js/ui/main.js:869
 msgid "Use a different name internally"
 msgstr "Interně používat jiný název"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:907
+#: pretix/static/pretixcontrol/js/ui/main.js:905
 msgid "Click to close"
 msgstr "Kliknutím zavřete"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:979
+#: pretix/static/pretixcontrol/js/ui/main.js:977
 msgid "You have unsaved changes!"
 msgstr "Máte neuložené změny!"
 

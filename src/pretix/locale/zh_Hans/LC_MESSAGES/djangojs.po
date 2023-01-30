@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-01-19 10:47+0000\n"
+"POT-Creation-Date: 2023-01-30 11:33+0000\n"
 "PO-Revision-Date: 2021-12-03 08:37+0000\n"
 "Last-Translator: ExtremeX-BB <qq754163444@gmail.com>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -545,45 +545,45 @@ msgstr "生成消息…"
 msgid "Unknown error."
 msgstr "未知错误。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:308
+#: pretix/static/pretixcontrol/js/ui/main.js:307
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "你的配色有很高的对比度，非常易读!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:312
+#: pretix/static/pretixcontrol/js/ui/main.js:311
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr "你的配色有很好的对比度，可能足够易读!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:316
+#: pretix/static/pretixcontrol/js/ui/main.js:315
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr "你的配色在白色背景下的文本对比度很差，请选择较深的颜色。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:463
+#: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
 msgstr "所有"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:464
+#: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
 msgstr "无"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:465
+#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:468
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:871
+#: pretix/static/pretixcontrol/js/ui/main.js:869
 msgid "Use a different name internally"
 msgstr "在内部使用一个不同的名称"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:907
+#: pretix/static/pretixcontrol/js/ui/main.js:905
 msgid "Click to close"
 msgstr "点此关闭"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:979
+#: pretix/static/pretixcontrol/js/ui/main.js:977
 msgid "You have unsaved changes!"
 msgstr ""
 
