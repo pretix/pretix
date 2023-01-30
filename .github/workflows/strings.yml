@@ -24,10 +24,10 @@ jobs:
     name: Check gettext syntax
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.9
+      - name: Set up Python 3.11
         uses: actions/setup-python@v1
         with:
-          python-version: 3.9
+          python-version: 3.11
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
@@ -50,10 +50,10 @@ jobs:
     name: Spellcheck
     steps:
       - uses: actions/checkout@v2
-      - name: Set up Python 3.9
+      - name: Set up Python 3.11
         uses: actions/setup-python@v1
         with:
-          python-version: 3.9
+          python-version: 3.11
       - uses: actions/cache@v1
         with:
           path: ~/.cache/pip
