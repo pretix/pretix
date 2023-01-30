@@ -556,7 +556,7 @@ def itemvarquota_select2(request, **kwargs):
 
     if not request.event.has_subevents:
         # We are very unlikely to need pagination
-        itemqs = request.event.items.prefetch_related('variations').filter(name__icontains=i18ncomp(query))
+        itemqs = request.event.items.prefetch_related('variations').filter(Q(name__icontains=i18ncomp(query)) | Q(internal_name__icontains=query))
         quotaqs = request.event.quotas.filter(name__icontains=query)
         more = False
     else:
