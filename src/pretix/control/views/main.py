@@ -280,7 +280,9 @@ class EventWizard(SafeSessionWizardView):
                 elif event.organizer.settings.event_team_provisioning:
                     t = Team.objects.create(
                         organizer=event.organizer,
-                        name=_('Team {event}').format(event=str(event.name)[:188] + "…" if len(str(event.name)) > 190 else str(event.name)),
+                        name=_('Team {event}').format(
+                            event=str(event.name)[:100] + "…" if len(str(event.name)) > 100 else str(event.name)
+                        ),
                         can_change_event_settings=True, can_change_items=True,
                         can_view_orders=True, can_change_orders=True, can_view_vouchers=True,
                         can_change_vouchers=True
