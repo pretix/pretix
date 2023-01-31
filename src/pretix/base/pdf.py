@@ -862,15 +862,16 @@ class Renderer:
             self._get_text_content(op, order, o) or "",
         ).replace("\n", "<br/>\n").replace("-", "-&hairsp;")
 
+        # reportlab does not support unicode combination characters
+        # It's important we do this before we use ArabicReshaper
+        text = unicodedata.normalize("NFKC", text)
+
         # reportlab does not support RTL, ligature-heavy scripts like Arabic. Therefore, we use ArabicReshaper
         # to resolve all ligatures and python-bidi to switch RTL texts.
         try:
             text = "<br/>".join(get_display(reshaper.reshape(l)) for l in text.split("<br/>"))
         except:
             logger.exception('Reshaping/Bidi fixes failed on string {}'.format(repr(text)))
-
-        # reportlab does not support unicode combination characters
-        text = unicodedata.normalize("NFKC", text)
 
         p = Paragraph(text, style=style)
         w, h = p.wrapOn(canvas, float(o['width']) * mm, 1000 * mm)
