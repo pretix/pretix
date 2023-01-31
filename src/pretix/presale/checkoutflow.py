@@ -631,35 +631,30 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                     selected[i, None] = val, price
 
         if sum(a[0] for a in selected.values()) > category['max_count']:
-            # TODO: Proper pluralization
             raise ValidationError(
-                _(error_messages['addon_max_count']),
-                'addon_max_count',
-                {
+                error_messages['addon_max_count'] % {
                     'base': str(form['item'].name),
                     'max': category['max_count'],
                     'cat': str(category['category'].name),
-                }
+                },
+                'addon_max_count'
             )
         elif sum(a[0] for a in selected.values()) < category['min_count']:
-            # TODO: Proper pluralization
             raise ValidationError(
-                _(error_messages['addon_min_count']),
-                'addon_min_count',
-                {
+                error_messages['addon_min_count'] % {
                     'base': str(form['item'].name),
                     'min': category['min_count'],
                     'cat': str(category['category'].name),
-                }
+                },
+                'addon_min_count',
             )
         elif any(sum(v[0] for k, v in selected.items() if k[0] == i) > 1 for i in category['items']) and not category['multi_allowed']:
             raise ValidationError(
-                _(error_messages['addon_no_multi']),
-                'addon_no_multi',
-                {
+                error_messages['addon_no_multi'] % {
                     'base': str(form['item'].name),
                     'cat': str(category['category'].name),
-                }
+                },
+                'addon_no_multi',
             )
         try:
             validate_cart_addons.send(

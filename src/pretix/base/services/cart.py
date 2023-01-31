@@ -1073,11 +1073,11 @@ class CartManager:
 
                 if voucher_available_count < 1:
                     if op.voucher in self._voucher_depend_on_cart:
-                        err = err or _(error_messages['voucher_redeemed_cart']) % self.event.settings.reservation_time
+                        err = err or (error_messages['voucher_redeemed_cart'] % self.event.settings.reservation_time)
                     else:
                         err = err or error_messages['voucher_redeemed']
                 elif voucher_available_count < requested_count:
-                    err = err or _(error_messages['voucher_redeemed_partial']) % voucher_available_count
+                    err = err or (error_messages['voucher_redeemed_partial'] % voucher_available_count)
 
                 available_count = min(quota_available_count, voucher_available_count)
 
