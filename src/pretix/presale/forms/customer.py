@@ -166,31 +166,31 @@ class RegistrationForm(forms.Form):
             label=_('Name'),
         )
 
-        if self.standalone:
-            # In the setandalone registration form, we add a simple CAPTCHA. We don't expect
-            # this to actually turn away and motivated attacker, it's mainly a protection
-            # against spam bots looking for contact forms. Since the standalone registration
-            # form is one of the simplest public forms we have in the application it is the
-            # most common target for untargeted bots.
-            a = random.randint(1, 9)
-            b = random.randint(1, 9)
-            if 'challenge' in self.data:
-                try:
-                    a, b = self.signer.unsign(self.data.get('challenge'), max_age=3600).split('+')
-                    a, b = int(a), int(b)
-                except:
-                    pass
-            self.fields['challenge'] = forms.CharField(
-                widget=forms.HiddenInput,
-                initial=self.signer.sign(f'{a}+{b}')
-
-            )
-            self.fields['response'] = forms.IntegerField(
-                label=_('What is the result of {num1} + {num2}?').format(
-                    num1=a, num2=b,
-                ),
-                min_value=0,
-            )
+        # if self.standalone:
+        #     # In the setandalone registration form, we add a simple CAPTCHA. We don't expect
+        #     # this to actually turn away and motivated attacker, it's mainly a protection
+        #     # against spam bots looking for contact forms. Since the standalone registration
+        #     # form is one of the simplest public forms we have in the application it is the
+        #     # most common target for untargeted bots.
+        #     a = random.randint(1, 9)
+        #     b = random.randint(1, 9)
+        #     if 'challenge' in self.data:
+        #         try:
+        #             a, b = self.signer.unsign(self.data.get('challenge'), max_age=3600).split('+')
+        #             a, b = int(a), int(b)
+        #         except:
+        #             pass
+        #     self.fields['challenge'] = forms.CharField(
+        #         widget=forms.HiddenInput,
+        #         initial=self.signer.sign(f'{a}+{b}')
+        #
+        #     )
+        #     self.fields['response'] = forms.IntegerField(
+        #         label=_('What is the result of {num1} + {num2}?').format(
+        #             num1=a, num2=b,
+        #         ),
+        #         min_value=0,
+        #     )
 
     @cached_property
     def ratelimit_key(self):
