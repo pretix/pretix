@@ -240,7 +240,19 @@
             "pattern": "[a-zA-Z-]*"
           },
           "fontsize": {
-            "description": "Font size.",
+            "description": "Font size",
+            "oneOf": [
+              {
+                "type": "number"
+              },
+              {
+                "type": "string",
+                "pattern": "^[0-9]+(\\.[0-9]+)?$"
+              }
+            ]
+          },
+          "lineheight": {
+            "description": "Line height",
             "oneOf": [
               {
                 "type": "number"
