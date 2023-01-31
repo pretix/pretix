@@ -223,18 +223,18 @@ class RegistrationForm(forms.Form):
                     code='duplicate',
                 )
 
-        if self.standalone:
-            expect = -1
-            try:
-                a, b = self.signer.unsign(self.cleaned_data.get('challenge'), max_age=3600).split('+')
-                expect = int(a) + int(b)
-            except:
-                pass
-            if self.cleaned_data.get('response') != expect:
-                raise forms.ValidationError(
-                    {'response': _('Please enter the correct result.')},
-                    code='challenge_invalid'
-                )
+        # if self.standalone:
+        #     expect = -1
+        #     try:
+        #         a, b = self.signer.unsign(self.cleaned_data.get('challenge'), max_age=3600).split('+')
+        #         expect = int(a) + int(b)
+        #     except:
+        #         pass
+        #     if self.cleaned_data.get('response') != expect:
+        #         raise forms.ValidationError(
+        #             {'response': _('Please enter the correct result.')},
+        #             code='challenge_invalid'
+        #         )
 
         if not self.cleaned_data.get('email'):
             raise forms.ValidationError(
