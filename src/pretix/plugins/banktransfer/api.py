@@ -100,7 +100,7 @@ class BankImportJobViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
 
         if BankImportJob.objects.filter(Q(organizer=request.organizer)).filter(
             state=BankImportJob.STATE_RUNNING,
-            created__lte=now() - timedelta(minutes=30)  # safety timeout
+            created__gte=now() - timedelta(minutes=30)  # safety timeout
         ).exists():
             return Response({'error': ['A job is currently running.']}, status=status.HTTP_409_CONFLICT)
 
