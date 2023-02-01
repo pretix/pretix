@@ -1635,7 +1635,7 @@ class OrderPayment(models.Model):
                 logger.info('Failed payment {} but ignored due to likely race condition.'.format(
                     self.full_id,
                 ))
-                return
+                return False
 
             if isinstance(info, str):
                 locked_instance.info = info
@@ -1651,6 +1651,7 @@ class OrderPayment(models.Model):
             'info': info,
             'data': log_data,
         }, user=user, auth=auth)
+        return True
 
     def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
                 ignore_date=False, lock=True, payment_date=None, generate_invoice=True):
