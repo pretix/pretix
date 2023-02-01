@@ -70,6 +70,7 @@ Lead
 Leaflet
 LLC
 MapQuest
+MariaDB
 Mercado
 MOTO
 Multibanco
@@ -90,6 +91,7 @@ percentual
 personalization
 POS
 postfix
+PostgreSQL
 prepended
 presale
 pretix

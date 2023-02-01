@@ -48,6 +48,7 @@ BezahlCode
 Bezahlmethode
 Blackberry
 BLIK
+Blogpost
 BN
 Branding
 Browsereinstellungen
@@ -165,6 +166,7 @@ Linktext
 loszulegen
 Ltd
 max
+MariaDB
 MapQuest
 Mercado
 Merchandise
@@ -206,6 +208,7 @@ Plugin
 Plugins
 POS
 Postfix
+PostgreSQL
 prefix
 pretix
 pretixdesk
