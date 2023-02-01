@@ -1320,7 +1320,8 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_('Low availability threshold'),
             help_text=_('If the availability of tickets falls below this percentage, the event (or a date, if it is an '
-                        'event series) will be highlighted to have low availability in the event list.'),
+                        'event series) will be highlighted to have low availability in the event list or calendar. If '
+                        'you keep this option empty, low availability will not be shown publicly.'),
             min_value=0,
             max_value=100,
             required=False

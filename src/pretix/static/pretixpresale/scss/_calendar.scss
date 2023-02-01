@@ -58,7 +58,7 @@
       }
     }
 
-    &.available, {
+    &.available {
       background: lighten($brand-success, 48%);
       border-color: lighten($brand-success, 30%);
       border-left-color: $brand-success;
@@ -87,7 +87,6 @@
       &:hover {
         background: lighten($brand-warning, 43%);
         border-color: $brand-warning;
-      }
       }
     }
 
