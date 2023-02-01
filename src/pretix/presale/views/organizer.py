@@ -620,8 +620,8 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             raise Http404()
 
         tz = get_current_timezone()
-        before = datetime(self.year, self.month, 1, 0, 0, 0, tzinfo=tz) - timedelta(days=1)
-        after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=tz) + timedelta(days=1)
+        before = tz.localize(datetime(self.year, self.month, 1, 0, 0, 0)) - timedelta(days=1)
+        after = tz.localize(datetime(self.year, self.month, ndays, 0, 0, 0)) + timedelta(days=1)
 
         ctx['date'] = date(self.year, self.month, 1)
         ctx['before'] = before
