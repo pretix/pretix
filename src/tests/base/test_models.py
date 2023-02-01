@@ -2299,37 +2299,61 @@ class SubEventTest(TestCase):
 
     @classscope(attr='organizer')
     def test_best_availability(self):
-        # 1 quota - 1 item
-        q = Quota.objects.create(event=self.event, name='Quota', size=0,
-                                 subevent=self.se)
         item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True)
+        o = Order.objects.create(
+            code='FOO', event=self.event, email='dummy@dummy.test',
+            status=Order.STATUS_PAID,
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=Decimal("30"), locale='en'
+        )
+        OrderPosition.objects.create(
+            order=o,
+            item=item,
+            subevent=self.se,
+            variation=None,
+            price=Decimal("12"),
+        )
+        self.event.settings.low_availability_percentage = 60
+
+        # 1 quota - 1 item
+        q = Quota.objects.create(event=self.event, name='Quota', size=1,
+                                 subevent=self.se)
         q.items.add(item)
         obj = SubEvent.annotated(SubEvent.objects).first()
         assert len(obj.active_quotas) == 1
-        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 0)
+        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1)
 
         # 2 quotas - 1 item. Lowest quota wins.
-        q2 = Quota.objects.create(event=self.event, name='Quota 2', size=1,
+        q2 = Quota.objects.create(event=self.event, name='Quota 2', size=2,
                                   subevent=self.se)
         q2.items.add(item)
         obj = SubEvent.annotated(SubEvent.objects).first()
         assert len(obj.active_quotas) == 2
-        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 0)
+        assert obj.best_availability == (Quota.AVAILABILITY_GONE, 0, 1)
 
         # 2 quotas - 2 items. Higher quota wins since second item is only connected to second quota.
         item2 = Item.objects.create(event=self.event, name='Regular ticket', default_price=10, active=True)
         q2.items.add(item2)
         obj = SubEvent.annotated(SubEvent.objects).first()
         assert len(obj.active_quotas) == 2
-        assert obj.best_availability == (Quota.AVAILABILITY_OK, 1, 1)
+        assert obj.best_availability == (Quota.AVAILABILITY_OK, 1, 2)
+        assert obj.best_availability_is_low
 
-        # 1 quotas - 2 items. Higher quota wins, but is not counted twice!
+        # 1 quota - 2 items. Quota is not counted twice!
         q.size = 10
         q.save()
         q2.delete()
         obj = SubEvent.annotated(SubEvent.objects).first()
         assert len(obj.active_quotas) == 1
-        assert obj.best_availability == (Quota.AVAILABILITY_OK, 10, 10)
+        assert obj.best_availability == (Quota.AVAILABILITY_OK, 9, 10)
+        assert not obj.best_availability_is_low
+
+        # Unlimited quota
+        q.size = None
+        q.save()
+        obj = SubEvent.annotated(SubEvent.objects).first()
+        assert obj.best_availability == (Quota.AVAILABILITY_OK, None, None)
+        assert not obj.best_availability_is_low
 
 
 class CachedFileTestCase(TestCase):

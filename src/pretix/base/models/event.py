@@ -356,7 +356,7 @@ class EventMixin:
         if ba[1] is None or not ba[2]:
             return False
 
-        percentage = ba[1] / ba[2]
+        percentage = ba[1] / ba[2] * 100
         return percentage < self.settings.low_availability_percentage
 
     @cached_property
