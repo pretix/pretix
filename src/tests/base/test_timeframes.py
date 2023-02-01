@@ -21,20 +21,20 @@
 #
 
 from datetime import date, datetime
-from zoneinfo import ZoneInfo
 
 import pytest
+import pytz
 
 from pretix.base.timeframes import (
     REPORTING_DATE_TIMEFRAMES, resolve_timeframe_to_dates_inclusive,
     resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
 )
 
-tz = ZoneInfo("Europe/Berlin")
+tz = pytz.timezone("Europe/Berlin")
 
 
 def dt(*args):
-    return datetime(*args, tzinfo=tz)
+    return tz.localize(datetime(*args))
 
 
 ref_date = date(2023, 3, 28)

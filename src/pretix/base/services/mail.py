@@ -45,8 +45,8 @@ from email.mime.image import MIMEImage
 from email.utils import formataddr
 from typing import Any, Dict, List, Sequence, Union
 from urllib.parse import urljoin, urlparse
-from zoneinfo import ZoneInfo
 
+import pytz
 import requests
 from bs4 import BeautifulSoup
 from celery import chain
@@ -218,11 +218,11 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
         if event:
             timezone = event.timezone
         elif user:
-            timezone = ZoneInfo(user.timezone)
+            timezone = pytz.timezone(user.timezone)
         elif organizer:
             timezone = organizer.timezone
         else:
-            timezone = ZoneInfo(settings.TIME_ZONE)
+            timezone = pytz.timezone(settings.TIME_ZONE)
 
         if settings_holder:
             if settings_holder.settings.mail_bcc:

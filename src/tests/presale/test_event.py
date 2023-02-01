@@ -37,7 +37,6 @@ import datetime
 import re
 from decimal import Decimal
 from json import loads
-from zoneinfo import ZoneInfo
 
 from django.conf import settings
 from django.core import mail
@@ -45,6 +44,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
+from pytz import timezone
 from tests.base import SoupTest
 from tests.testdummy.signals import FoobarSalesChannel
 
@@ -1390,11 +1390,11 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         fmt = '%Y%m%dT%H%M%S'
         self.assertIn('DTSTART;TZID=%s:%s' %
                       (self.event.settings.timezone,
-                       self.event.date_from.astimezone(ZoneInfo(self.event.settings.timezone)).strftime(fmt)),
+                       self.event.date_from.astimezone(timezone(self.event.settings.timezone)).strftime(fmt)),
                       ical, 'incorrect start time')
         self.assertIn('DTEND;TZID=%s:%s' %
                       (self.event.settings.timezone,
-                       self.event.date_to.astimezone(ZoneInfo(self.event.settings.timezone)).strftime(fmt)),
+                       self.event.date_to.astimezone(timezone(self.event.settings.timezone)).strftime(fmt)),
                       ical, 'incorrect end time')
         self.assertIn('TZID:%s' % self.event.settings.timezone, ical, 'missing VCALENDAR')
 
@@ -1413,7 +1413,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         fmt = '%Y%m%dT%H%M%S'
         self.assertIn('DTSTART;TZID=%s:%s' %
                       (self.event.settings.timezone,
-                       self.event.date_from.astimezone(ZoneInfo(self.event.settings.timezone)).strftime(fmt)),
+                       self.event.date_from.astimezone(timezone(self.event.settings.timezone)).strftime(fmt)),
                       ical, 'incorrect start time')
         self.assertNotIn('DTEND', ical, 'unexpected end time attribute')
 

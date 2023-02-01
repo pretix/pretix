@@ -37,6 +37,7 @@ import tempfile
 from collections import OrderedDict, defaultdict
 from decimal import Decimal
 
+import pytz
 from dateutil.parser import parse
 from django import forms
 from django.conf import settings
@@ -82,7 +83,7 @@ class ReportlabExportMixin:
         return 'report-%s.pdf' % self.event.slug, 'application/pdf', self.create(form_data)
 
     def get_filename(self):
-        tz = self.event.timezone
+        tz = pytz.timezone(self.event.settings.timezone)
         return "%s-%s.pdf" % (self.name, now().astimezone(tz).strftime("%Y-%m-%d-%H-%M-%S"))
 
     @staticmethod
@@ -443,7 +444,7 @@ class OrderTaxListReportPDF(Report):
         headlinestyle = self.get_style()
         headlinestyle.fontSize = 15
         headlinestyle.fontName = 'OpenSansBd'
-        tz = self.event.timezone
+        tz = pytz.timezone(self.event.settings.timezone)
 
         tax_rates = set(
             a for a

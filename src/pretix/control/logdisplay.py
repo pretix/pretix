@@ -39,6 +39,7 @@ from decimal import Decimal
 
 import bleach
 import dateutil.parser
+import pytz
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.formats import date_format
@@ -189,7 +190,7 @@ def _display_checkin(event, logentry):
     if 'datetime' in data:
         dt = dateutil.parser.parse(data.get('datetime'))
         show_dt = abs((logentry.datetime - dt).total_seconds()) > 5 or 'forced' in data
-        tz = event.timezone
+        tz = pytz.timezone(event.settings.timezone)
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
 
     if 'list' in data:
@@ -581,7 +582,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
     if logentry.action_type == 'pretix.control.views.checkin':
         # deprecated
         dt = dateutil.parser.parse(data.get('datetime'))
-        tz = sender.timezone
+        tz = pytz.timezone(sender.settings.timezone)
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
         if 'list' in data:
             try:

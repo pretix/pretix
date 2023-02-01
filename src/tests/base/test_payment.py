@@ -34,9 +34,9 @@
 
 import datetime
 from decimal import Decimal
-from zoneinfo import ZoneInfo
 
 import pytest
+import pytz
 from django.utils.timezone import now
 from django_scopes import scope
 from tests.testdummy.payment import DummyPaymentProvider
@@ -112,18 +112,18 @@ def test_availability_date_not_available(event):
 @pytest.mark.django_db
 def test_availability_date_relative(event):
     event.settings.set('timezone', 'US/Pacific')
-    tz = ZoneInfo('US/Pacific')
-    event.date_from = datetime.datetime(2016, 12, 3, 12, 0, 0, tzinfo=tz)
+    tz = pytz.timezone('US/Pacific')
+    event.date_from = tz.localize(datetime.datetime(2016, 12, 3, 12, 0, 0))
     event.save()
     prov = DummyPaymentProvider(event)
     prov.settings.set('_availability_date', RelativeDateWrapper(
         RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
     ))
 
-    utc = datetime.timezone.utc
-    assert prov._is_still_available(datetime.datetime(2016, 11, 30, 23, 0, 0, tzinfo=tz).astimezone(utc))
-    assert prov._is_still_available(datetime.datetime(2016, 12, 1, 23, 59, 0, tzinfo=tz).astimezone(utc))
-    assert not prov._is_still_available(datetime.datetime(2016, 12, 2, 0, 0, 1, tzinfo=tz).astimezone(utc))
+    utc = pytz.timezone('UTC')
+    assert prov._is_still_available(tz.localize(datetime.datetime(2016, 11, 30, 23, 0, 0)).astimezone(utc))
+    assert prov._is_still_available(tz.localize(datetime.datetime(2016, 12, 1, 23, 59, 0)).astimezone(utc))
+    assert not prov._is_still_available(tz.localize(datetime.datetime(2016, 12, 2, 0, 0, 1)).astimezone(utc))
 
 
 @pytest.mark.django_db
@@ -132,11 +132,11 @@ def test_availability_date_timezones(event):
     prov = DummyPaymentProvider(event)
     prov.settings.set('_availability_date', '2016-12-01')
 
-    tz = ZoneInfo('US/Pacific')
-    utc = ZoneInfo('UTC')
-    assert prov._is_still_available(datetime.datetime(2016, 11, 30, 23, 0, 0, tzinfo=tz).astimezone(utc))
-    assert prov._is_still_available(datetime.datetime(2016, 12, 1, 23, 59, 0, tzinfo=tz).astimezone(utc))
-    assert not prov._is_still_available(datetime.datetime(2016, 12, 2, 0, 0, 1, tzinfo=tz).astimezone(utc))
+    tz = pytz.timezone('US/Pacific')
+    utc = pytz.timezone('UTC')
+    assert prov._is_still_available(tz.localize(datetime.datetime(2016, 11, 30, 23, 0, 0)).astimezone(utc))
+    assert prov._is_still_available(tz.localize(datetime.datetime(2016, 12, 1, 23, 59, 0)).astimezone(utc))
+    assert not prov._is_still_available(tz.localize(datetime.datetime(2016, 12, 2, 0, 0, 1)).astimezone(utc))
 
 
 @pytest.mark.django_db

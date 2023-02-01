@@ -34,8 +34,8 @@
 
 from collections import OrderedDict
 from decimal import Decimal
-from zoneinfo import ZoneInfo
 
+import pytz
 from django import forms
 from django.db.models import (
     Case, CharField, Count, DateTimeField, F, IntegerField, Max, Min, OuterRef,
@@ -319,7 +319,7 @@ class OrderListExporter(MultiSheetListExporter):
 
         yield self.ProgressSetTotal(total=qs.count())
         for order in qs.order_by('datetime').iterator():
-            tz = ZoneInfo(self.event_object_cache[order.event_id].settings.timezone)
+            tz = pytz.timezone(self.event_object_cache[order.event_id].settings.timezone)
 
             row = [
                 self.event_object_cache[order.event_id].slug,
@@ -452,7 +452,7 @@ class OrderListExporter(MultiSheetListExporter):
         yield self.ProgressSetTotal(total=qs.count())
         for op in qs.order_by('order__datetime').iterator():
             order = op.order
-            tz = ZoneInfo(order.event.settings.timezone)
+            tz = pytz.timezone(order.event.settings.timezone)
             row = [
                 self.event_object_cache[order.event_id].slug,
                 order.code,
@@ -621,7 +621,7 @@ class OrderListExporter(MultiSheetListExporter):
 
             for op in ops:
                 order = op.order
-                tz = ZoneInfo(self.event_object_cache[order.event_id].settings.timezone)
+                tz = pytz.timezone(self.event_object_cache[order.event_id].settings.timezone)
                 row = [
                     self.event_object_cache[order.event_id].slug,
                     order.code,
@@ -803,7 +803,7 @@ class PaymentListExporter(ListExporter):
 
         yield self.ProgressSetTotal(total=len(objs))
         for obj in objs:
-            tz = ZoneInfo(obj.order.event.settings.timezone)
+            tz = pytz.timezone(obj.order.event.settings.timezone)
             if isinstance(obj, OrderPayment) and obj.payment_date:
                 d2 = obj.payment_date.astimezone(tz).date().strftime('%Y-%m-%d')
             elif isinstance(obj, OrderRefund) and obj.execution_date:
@@ -968,7 +968,7 @@ class GiftcardRedemptionListExporter(ListExporter):
         yield headers
 
         for obj in objs:
-            tz = ZoneInfo(obj.order.event.settings.timezone)
+            tz = pytz.timezone(obj.order.event.settings.timezone)
             gc = GiftCard.objects.get(pk=obj.info_data.get('gift_card'))
             row = [
                 obj.order.event.slug,

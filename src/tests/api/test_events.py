@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import copy
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from decimal import Decimal
 from unittest import mock
 
@@ -43,6 +43,7 @@ from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
+from pytz import UTC
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
@@ -62,15 +63,15 @@ def variations(item):
 
 @pytest.fixture
 def order(event, item, taxrule):
-    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=timezone.utc)
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
-            datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=timezone.utc),
-            expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=timezone.utc),
+            datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
+            expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
             total=23, locale='en'
         )
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),

@@ -42,10 +42,10 @@ from collections import Counter
 from datetime import datetime, time, timedelta
 from decimal import Decimal
 from typing import Any, Dict, List, Union
-from zoneinfo import ZoneInfo
 
 import dateutil
 import pycountry
+import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
@@ -485,7 +485,7 @@ class Order(LockModel, LoggedModel):
 
     def set_expires(self, now_dt=None, subevents=None):
         now_dt = now_dt or now()
-        tz = ZoneInfo(self.event.settings.timezone)
+        tz = pytz.timezone(self.event.settings.timezone)
         mode = self.event.settings.get('payment_term_mode')
         if mode == 'days':
             exp_by_date = now_dt.astimezone(tz) + timedelta(days=self.event.settings.get('payment_term_days', as_type=int))
@@ -856,7 +856,7 @@ class Order(LockModel, LoggedModel):
 
     @property
     def payment_term_last(self):
-        tz = ZoneInfo(self.event.settings.timezone)
+        tz = pytz.timezone(self.event.settings.timezone)
         term_last = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
         if term_last:
             if self.event.has_subevents:
@@ -1216,7 +1216,7 @@ class QuestionAnswer(models.Model):
             try:
                 d = dateutil.parser.parse(self.answer)
                 if self.orderposition:
-                    tz = ZoneInfo(self.orderposition.order.event.settings.timezone)
+                    tz = pytz.timezone(self.orderposition.order.event.settings.timezone)
                     d = d.astimezone(tz)
                 return date_format(d, "SHORT_DATETIME_FORMAT")
             except ValueError:

@@ -29,6 +29,7 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
+from pytz import UTC
 from tests.const import SAMPLE_PNG
 
 from pretix.api.serializers.item import QuestionSerializer
@@ -56,15 +57,15 @@ def other_item(event):
 
 @pytest.fixture
 def order(event, item, other_item, taxrule):
-    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc)
+    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PAID, secret="k24fiuwvu8kxz3y1",
-            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
-            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
+            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
+            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
             total=46, locale='en'
         )
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
@@ -103,15 +104,15 @@ def order(event, item, other_item, taxrule):
 
 @pytest.fixture
 def order2(event2, item_on_event2):
-    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc)
+    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
         o = Order.objects.create(
             code='BAR', event=event2, email='dummy@dummy.test',
             status=Order.STATUS_PAID, secret="ylptCPNOxTyA",
-            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
-            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
+            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
+            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
             total=46, locale='en'
         )
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))

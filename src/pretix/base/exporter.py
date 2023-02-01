@@ -37,8 +37,8 @@ import tempfile
 from collections import OrderedDict, namedtuple
 from decimal import Decimal
 from typing import Optional, Tuple
-from zoneinfo import ZoneInfo
 
+import pytz
 from defusedcsv import csv
 from django import forms
 from django.conf import settings
@@ -68,7 +68,7 @@ class BaseExporter:
             self.events = event
             self.event = None
             e = self.events.first()
-            self.timezone = e.timezone if e else ZoneInfo(settings.TIME_ZONE)
+            self.timezone = e.timezone if e else pytz.timezone(settings.TIME_ZONE)
         else:
             self.events = Event.objects.filter(pk=event.pk)
             self.timezone = event.timezone

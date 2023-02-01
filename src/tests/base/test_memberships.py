@@ -21,9 +21,9 @@
 #
 from datetime import datetime, timedelta
 from decimal import Decimal
-from zoneinfo import ZoneInfo
 
 import pytest
+import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.timezone import now
@@ -42,7 +42,7 @@ from pretix.base.services.orders import (
 )
 from pretix.plugins.banktransfer.payment import BankTransfer
 
-TZ = ZoneInfo('Europe/Berlin')
+TZ = pytz.timezone('Europe/Berlin')
 
 
 @pytest.fixture(scope='function')
@@ -51,9 +51,9 @@ def event():
     o.settings.customer_accounts = True
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=datetime(2021, 4, 27, 10, 0, 0, 0, tzinfo=TZ),
-        date_to=datetime(2021, 4, 28, 10, 0, 0, 0, tzinfo=TZ),
-        presale_end=datetime(2221, 4, 28, 10, 0, 0, 0, tzinfo=TZ),
+        date_from=TZ.localize(datetime(2021, 4, 27, 10, 0, 0, 0)),
+        date_to=TZ.localize(datetime(2021, 4, 28, 10, 0, 0, 0)),
+        presale_end=TZ.localize(datetime(2221, 4, 28, 10, 0, 0, 0)),
         plugins='pretix.plugins.banktransfer'
     )
     event.settings.timezone = 'Europe/Berlin'
@@ -75,8 +75,8 @@ def membership_type(event):
 def membership(event, membership_type, customer):
     return customer.memberships.create(
         membership_type=membership_type,
-        date_start=datetime(2021, 4, 1, 0, 0, 0, 0, tzinfo=TZ),
-        date_end=datetime(2021, 4, 30, 23, 59, 59, 999999, tzinfo=TZ),
+        date_start=TZ.localize(datetime(2021, 4, 1, 0, 0, 0, 0)),
+        date_end=TZ.localize(datetime(2021, 4, 30, 23, 59, 59, 999999)),
     )
 
 
@@ -107,7 +107,7 @@ def subevent(event):
     event.has_subevents = True
     return event.subevents.create(
         name='Foo',
-        date_from=datetime(2021, 4, 29, 10, 0, 0, 0, tzinfo=TZ),
+        date_from=TZ.localize(datetime(2021, 4, 29, 10, 0, 0, 0)),
     )
 
 
@@ -115,8 +115,8 @@ def subevent(event):
 def test_validity_membership_duration_like_event(event, granting_ticket, membership_type):
     granting_ticket.grant_membership_duration_like_event = True
     assert membership_validity(granting_ticket, None, event) == (
-        datetime(2021, 4, 27, 10, 0, 0, 0, tzinfo=TZ),
-        datetime(2021, 4, 28, 10, 0, 0, 0, tzinfo=TZ),
+        TZ.localize(datetime(2021, 4, 27, 10, 0, 0, 0)),
+        TZ.localize(datetime(2021, 4, 28, 10, 0, 0, 0)),
     )
 
 
@@ -124,8 +124,8 @@ def test_validity_membership_duration_like_event(event, granting_ticket, members
 def test_validity_membership_duration_like_subevent_without_end(event, granting_ticket, subevent, membership_type):
     granting_ticket.grant_membership_duration_like_event = True
     assert membership_validity(granting_ticket, subevent, event) == (
-        datetime(2021, 4, 29, 10, 0, 0, 0, tzinfo=TZ),
-        datetime(2021, 4, 29, 23, 59, 59, 999999, tzinfo=TZ),
+        TZ.localize(datetime(2021, 4, 29, 10, 0, 0, 0)),
+        TZ.localize(datetime(2021, 4, 29, 23, 59, 59, 999999)),
     )
 
 
@@ -135,8 +135,8 @@ def test_validity_membership_duration_days(event, granting_ticket, membership_ty
     granting_ticket.grant_membership_duration_days = 3
     with freeze_time("2021-04-10T11:00:00+02:00"):
         assert membership_validity(granting_ticket, subevent, event) == (
-            datetime(2021, 4, 10, 0, 0, 0, 0, tzinfo=TZ),
-            datetime(2021, 4, 12, 23, 59, 59, 999999, tzinfo=TZ),
+            TZ.localize(datetime(2021, 4, 10, 0, 0, 0, 0)),
+            TZ.localize(datetime(2021, 4, 12, 23, 59, 59, 999999)),
         )
 
 
@@ -146,13 +146,13 @@ def test_validity_membership_duration_months(event, granting_ticket, membership_
     granting_ticket.grant_membership_duration_months = 1
     with freeze_time("2021-02-01T11:00:00+01:00"):
         assert membership_validity(granting_ticket, subevent, event) == (
-            datetime(2021, 2, 1, 0, 0, 0, 0, tzinfo=TZ),
-            datetime(2021, 2, 28, 23, 59, 59, 999999, tzinfo=TZ),
+            TZ.localize(datetime(2021, 2, 1, 0, 0, 0, 0)),
+            TZ.localize(datetime(2021, 2, 28, 23, 59, 59, 999999)),
         )
     with freeze_time("2021-02-28T11:00:00+01:00"):
         assert membership_validity(granting_ticket, subevent, event) == (
-            datetime(2021, 2, 28, 0, 0, 0, 0, tzinfo=TZ),
-            datetime(2021, 3, 27, 23, 59, 59, 999999, tzinfo=TZ),
+            TZ.localize(datetime(2021, 2, 28, 0, 0, 0, 0)),
+            TZ.localize(datetime(2021, 3, 27, 23, 59, 59, 999999)),
         )
 
 
@@ -163,13 +163,13 @@ def test_validity_membership_duration_months_plus_days(event, granting_ticket, m
     granting_ticket.grant_membership_duration_days = 2
     with freeze_time("2021-02-01T11:00:00+01:00"):
         assert membership_validity(granting_ticket, subevent, event) == (
-            datetime(2021, 2, 1, 0, 0, 0, 0, tzinfo=TZ),
-            datetime(2021, 3, 2, 23, 59, 59, 999999, tzinfo=TZ),
+            TZ.localize(datetime(2021, 2, 1, 0, 0, 0, 0)),
+            TZ.localize(datetime(2021, 3, 2, 23, 59, 59, 999999)),
         )
     with freeze_time("2021-02-28T11:00:00+01:00"):
         assert membership_validity(granting_ticket, subevent, event) == (
-            datetime(2021, 2, 28, 0, 0, 0, 0, tzinfo=TZ),
-            datetime(2021, 3, 29, 23, 59, 59, 999999, tzinfo=TZ),
+            TZ.localize(datetime(2021, 2, 28, 0, 0, 0, 0)),
+            TZ.localize(datetime(2021, 3, 29, 23, 59, 59, 999999)),
         )
 
 
@@ -420,7 +420,7 @@ def test_validate_membership_max_usages(event, customer, membership, requiring_t
 def test_validate_membership_parallel(event, customer, membership, subevent, requiring_ticket, membership_type):
     se2 = event.subevents.create(
         name='Foo',
-        date_from=datetime(2021, 4, 28, 10, 0, 0, 0, tzinfo=TZ),
+        date_from=TZ.localize(datetime(2021, 4, 28, 10, 0, 0, 0)),
     )
 
     membership_type.allow_parallel_usage = False
@@ -585,5 +585,5 @@ def test_grant_when_paid_and_changed(event, customer, granting_ticket):
     m = customer.memberships.get()
     assert m.granted_in == order.positions.first()
     assert m.membership_type == granting_ticket.grant_membership_type
-    assert m.date_start == datetime(2021, 4, 27, 10, 0, 0, 0, tzinfo=TZ)
-    assert m.date_end == datetime(2021, 4, 28, 10, 0, 0, 0, tzinfo=TZ)
+    assert m.date_start == TZ.localize(datetime(2021, 4, 27, 10, 0, 0, 0))
+    assert m.date_end == TZ.localize(datetime(2021, 4, 28, 10, 0, 0, 0))

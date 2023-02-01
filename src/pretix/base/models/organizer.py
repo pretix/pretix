@@ -35,7 +35,7 @@
 import string
 from datetime import date, datetime, time
 
-import pytz_deprecation_shim
+import pytz
 from django.conf import settings
 from django.core.mail import get_connection
 from django.core.validators import MinLengthValidator, RegexValidator
@@ -140,7 +140,7 @@ class Organizer(LoggedModel):
 
     @property
     def timezone(self):
-        return pytz_deprecation_shim.timezone(self.settings.timezone)
+        return pytz.timezone(self.settings.timezone)
 
     @cached_property
     def all_logentries_link(self):

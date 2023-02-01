@@ -40,9 +40,8 @@ from collections import OrderedDict
 from datetime import datetime, time, timedelta
 from operator import attrgetter
 from urllib.parse import urljoin
-from zoneinfo import ZoneInfo
 
-import pytz_deprecation_shim
+import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
@@ -215,7 +214,7 @@ class EventMixin:
 
     @property
     def timezone(self):
-        return pytz_deprecation_shim.timezone(self.settings.timezone)
+        return pytz.timezone(self.settings.timezone)
 
     @property
     def effective_presale_end(self):
@@ -719,7 +718,7 @@ class Event(EventMixin, LoggedModel):
         """
         The last datetime of payments for this event.
         """
-        tz = ZoneInfo(self.settings.timezone)
+        tz = pytz.timezone(self.settings.timezone)
         return make_aware(datetime.combine(
             self.settings.get('payment_term_last', as_type=RelativeDateWrapper).datetime(self).date(),
             time(hour=23, minute=59, second=59)

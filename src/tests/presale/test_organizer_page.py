@@ -19,11 +19,12 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 
 import pytest
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
+from pytz import UTC
 
 from pretix.base.models import Event, Organizer
 
@@ -148,7 +149,7 @@ def test_calendar(env, client):
     env[0].settings.event_list_type = 'calendar'
     e = Event.objects.create(
         organizer=env[0], name='MRMCD2017', slug='2017',
-        date_from=datetime(now().year + 1, 9, 1, tzinfo=timezone.utc),
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
         live=True, is_public=False
     )
     r = client.get('/mrmcd/?style=calendar')
@@ -168,7 +169,7 @@ def test_week_calendar(env, client):
     env[0].settings.event_list_type = 'calendar'
     e = Event.objects.create(
         organizer=env[0], name='MRMCD2017', slug='2017',
-        date_from=datetime(now().year + 1, 9, 1, tzinfo=timezone.utc),
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
         live=True, is_public=False
     )
     r = client.get('/mrmcd/?style=week')
@@ -186,7 +187,7 @@ def test_attributes_in_calendar(env, client):
     env[0].settings.event_list_type = 'calendar'
     e = Event.objects.create(
         organizer=env[0], name='MRMCD2017', slug='2017',
-        date_from=datetime(now().year + 1, 9, 1, tzinfo=timezone.utc),
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
         live=True, is_public=True
     )
     prop = env[0].meta_properties.create(name='loc')
@@ -202,7 +203,7 @@ def test_attributes_in_calendar(env, client):
 def test_ics(env, client):
     e = Event.objects.create(
         organizer=env[0], name='MRMCD2017', slug='2017',
-        date_from=datetime(now().year + 1, 9, 1, tzinfo=timezone.utc),
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
         live=True, is_public=False
     )
     r = client.get('/mrmcd/events/ical/')
@@ -217,7 +218,7 @@ def test_ics(env, client):
 def test_ics_subevents(env, client):
     e = Event.objects.create(
         organizer=env[0], name='MRMCD2017', slug='2017',
-        date_from=datetime(now().year + 1, 9, 1, tzinfo=timezone.utc),
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
         live=True, is_public=True, has_subevents=True
     )
     with scopes_disabled():
@@ -231,12 +232,12 @@ def test_ics_subevents(env, client):
 def test_ics_subevents_attributes(env, client):
     e0 = Event.objects.create(
         organizer=env[0], name='DS2017', slug='DS2017',
-        date_from=datetime(now().year + 1, 9, 1, tzinfo=timezone.utc),
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
         live=True, is_public=True
     )
     e = Event.objects.create(
         organizer=env[0], name='MRMCD2017', slug='2017',
-        date_from=datetime(now().year + 1, 9, 1, tzinfo=timezone.utc),
+        date_from=datetime(now().year + 1, 9, 1, tzinfo=UTC),
         live=True, is_public=True, has_subevents=True
     )
     with scopes_disabled():

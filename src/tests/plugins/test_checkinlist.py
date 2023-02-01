@@ -23,6 +23,7 @@ import datetime
 from decimal import Decimal
 
 import pytest
+import pytz
 from django.utils.timezone import now
 from django_scopes import scope
 
@@ -50,7 +51,7 @@ def event():
         order_paid = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test', phone="+498912345678",
             status=Order.STATUS_PAID,
-            datetime=datetime.datetime(2019, 2, 22, 14, 0, 0, tzinfo=datetime.timezone.utc), expires=now() + datetime.timedelta(days=10),
+            datetime=datetime.datetime(2019, 2, 22, 14, 0, 0, tzinfo=pytz.UTC), expires=now() + datetime.timedelta(days=10),
             total=33, locale='en'
         )
         item_ticket = Item.objects.create(event=event, name="Ticket", default_price=23, admission=True)
@@ -146,7 +147,7 @@ def test_csv_order_by_inherited_name_parts(event):  # noqa
         order2 = Order.objects.create(
             code='BAR', event=event, email='dummy@dummy.test', phone='+498912345678',
             status=Order.STATUS_PAID,
-            datetime=datetime.datetime(2019, 2, 22, 14, 0, 0, tzinfo=datetime.timezone.utc), expires=now() + datetime.timedelta(days=10),
+            datetime=datetime.datetime(2019, 2, 22, 14, 0, 0, tzinfo=pytz.UTC), expires=now() + datetime.timedelta(days=10),
             total=33, locale='en'
         )
         OrderPosition.objects.create(

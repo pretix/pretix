@@ -21,16 +21,16 @@
 #
 from datetime import datetime
 from decimal import Decimal
-from zoneinfo import ZoneInfo
 
 import pytest
+import pytz
 from django_scopes import scope
 
 from pretix.base.i18n import language
 from pretix.base.models import Event, Organizer
 from pretix.base.timeline import timeline_for_event
 
-tz = ZoneInfo('Europe/Berlin')
+tz = pytz.timezone('Europe/Berlin')
 
 
 def one(iterable):

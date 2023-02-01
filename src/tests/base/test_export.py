@@ -19,9 +19,10 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from datetime import datetime, time, timedelta, timezone
+from datetime import datetime, time, timedelta
 
 import pytest
+import pytz
 from django.core import mail as djmail
 from django.utils.timezone import now
 from django_scopes import scope
@@ -38,7 +39,7 @@ def event():
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=datetime(2023, 1, 19, 2, 30, 0, tzinfo=timezone.utc),
+        date_from=datetime(2023, 1, 19, 2, 30, 0, tzinfo=pytz.UTC),
         plugins='pretix.plugins.banktransfer'
     )
     o.settings.timezone = "Europe/Berlin"
@@ -303,7 +304,7 @@ def test_organizer_limited_to_events(event, user, team):
 
     event2 = Event.objects.create(
         organizer=event.organizer, name='Dummy', slug='dummy2',
-        date_from=datetime(2023, 1, 19, 2, 30, 0, tzinfo=timezone.utc),
+        date_from=datetime(2023, 1, 19, 2, 30, 0, tzinfo=pytz.UTC),
         plugins='pretix.plugins.banktransfer'
     )
     team.all_events = False
@@ -343,7 +344,7 @@ def test_organizer_ok(event, user, team):
 
     Event.objects.create(
         organizer=event.organizer, name='Dummy', slug='dummy2',
-        date_from=datetime(2023, 1, 19, 2, 30, 0, tzinfo=timezone.utc),
+        date_from=datetime(2023, 1, 19, 2, 30, 0, tzinfo=pytz.UTC),
         plugins='pretix.plugins.banktransfer'
     )
 

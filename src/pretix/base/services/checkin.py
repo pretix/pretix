@@ -32,7 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 import os
-from datetime import datetime, timedelta, timezone
+from datetime import datetime, timedelta
 from functools import partial, reduce
 
 import dateutil
@@ -439,7 +439,7 @@ class SQLLogic:
 
         if operator == 'buildTime':
             if values[0] == "custom":
-                return Value(dateutil.parser.parse(values[1]).astimezone(timezone.utc))
+                return Value(dateutil.parser.parse(values[1]).astimezone(pytz.UTC))
             elif values[0] == "customtime":
                 parsed = dateutil.parser.parse(values[1])
                 return Value(now().astimezone(self.list.event.timezone).replace(
@@ -447,7 +447,7 @@ class SQLLogic:
                     minute=parsed.minute,
                     second=parsed.second,
                     microsecond=parsed.microsecond,
-                ).astimezone(timezone.utc))
+                ).astimezone(pytz.UTC))
             elif values[0] == 'date_from':
                 return Coalesce(
                     F('subevent__date_from'),
@@ -475,7 +475,7 @@ class SQLLogic:
             return int(values[1])
         elif operator == 'var':
             if values[0] == 'now':
-                return Value(now().astimezone(timezone.utc))
+                return Value(now().astimezone(pytz.UTC))
             elif values[0] == 'now_isoweekday':
                 return Value(now().astimezone(self.list.event.timezone).isoweekday())
             elif values[0] == 'product':

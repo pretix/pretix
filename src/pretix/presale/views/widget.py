@@ -26,9 +26,9 @@ import logging
 from collections import defaultdict
 from datetime import date, datetime, timedelta
 from urllib.parse import urljoin
-from zoneinfo import ZoneInfo
 
 import isoweek
+import pytz
 from compressor.filters.jsmin import rJSMinFilter
 from django.conf import settings
 from django.contrib.staticfiles import finders
@@ -427,7 +427,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 event = ev.event
             else:
                 event = ev
-            tz = ZoneInfo(e['timezone'])
+            tz = pytz.timezone(e['timezone'])
             time = date_format(ev.date_from.astimezone(tz), 'TIME_FORMAT') if e.get('time') and event.settings.show_times else None
             if time and ev.date_to and ev.date_from.astimezone(tz).date() == ev.date_to.astimezone(tz).date() and event.settings.show_date_to:
                 time += ' – ' + date_format(ev.date_to.astimezone(tz), 'TIME_FORMAT')
@@ -607,7 +607,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 data['events'] = []
                 qs = self._get_event_queryset()
                 for event in qs:
-                    tz = ZoneInfo(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
+                    tz = pytz.timezone(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
                     if event.has_subevents:
                         dr = daterange(
                             event.min_from.astimezone(tz),

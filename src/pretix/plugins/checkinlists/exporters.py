@@ -33,7 +33,6 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from collections import OrderedDict
-from datetime import timezone
 
 import bleach
 import dateutil.parser
@@ -48,6 +47,7 @@ from django.utils.timezone import is_aware, make_aware, now
 from django.utils.translation import (
     gettext as _, gettext_lazy, pgettext, pgettext_lazy,
 )
+from pytz import UTC
 from reportlab.lib.units import mm
 from reportlab.platypus import Flowable, Paragraph, Spacer, Table, TableStyle
 
@@ -493,7 +493,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             elif op.last_checked_in:
                 last_checked_in = op.last_checked_in
             if last_checked_in and not is_aware(last_checked_in):
-                last_checked_in = make_aware(last_checked_in, timezone.utc)
+                last_checked_in = make_aware(last_checked_in, UTC)
 
             last_checked_out = None
             if isinstance(op.last_checked_out, str):  # SQLite
@@ -501,7 +501,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             elif op.last_checked_out:
                 last_checked_out = op.last_checked_out
             if last_checked_out and not is_aware(last_checked_out):
-                last_checked_out = make_aware(last_checked_out, timezone.utc)
+                last_checked_out = make_aware(last_checked_out, UTC)
 
             row = [
                 op.order.code,
