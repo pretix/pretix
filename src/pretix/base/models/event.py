@@ -350,10 +350,10 @@ class EventMixin:
         Returns ``True`` if the availability of tickets in this event is lower than the percentage
         given in setting ``low_availability_percentage``.
         """
+        if not self.settings.low_availability_percentage:
+            return False
         ba = self.best_availability
         if ba[1] is None or not ba[2]:
-            return False
-        if not self.settings.low_availability_percentage:
             return False
 
         percentage = ba[1] / ba[2]
