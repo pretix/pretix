@@ -21,13 +21,12 @@
 #
 import copy
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from unittest import mock
 
 import pytest
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
-from pytz import UTC
 
 from pretix.base.models import (
     Event, Item, Order, OrderPosition, Organizer, Quota, Team, User,
@@ -91,7 +90,7 @@ RES_JOB = {
 
 @pytest.mark.django_db
 def test_api_list(env, client):
-    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=timezone.utc)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
@@ -111,7 +110,7 @@ def test_api_list(env, client):
 
 @pytest.mark.django_db
 def test_api_detail(env, client):
-    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=timezone.UTC)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime

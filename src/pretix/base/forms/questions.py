@@ -38,10 +38,10 @@ import logging
 from datetime import timedelta
 from decimal import Decimal
 from io import BytesIO
+from zoneinfo import ZoneInfo
 
 import dateutil.parser
 import pycountry
-import pytz
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -733,7 +733,7 @@ class BaseQuestionsForm(forms.Form):
                 initial = answers[0]
             else:
                 initial = None
-            tz = pytz.timezone(event.settings.timezone)
+            tz = ZoneInfo(event.settings.timezone)
             help_text = rich_text(q.help_text)
             label = escape(q.question)  # django-bootstrap3 calls mark_safe
             required = q.required and not self.all_optional

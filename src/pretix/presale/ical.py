@@ -22,7 +22,6 @@
 import datetime
 from urllib.parse import urlparse
 
-import pytz
 import vobject
 from django.conf import settings
 from django.utils.formats import date_format
@@ -41,11 +40,11 @@ def get_public_ical(events):
     """
     cal = vobject.iCalendar()
     cal.add('prodid').value = '-//pretix//{}//'.format(settings.PRETIX_INSTANCE_NAME.replace(" ", "_"))
-    creation_time = datetime.datetime.now(pytz.utc)
+    creation_time = datetime.datetime.now(datetime.timezone.utc)
 
     for ev in events:
         event = ev if isinstance(ev, Event) else ev.event
-        tz = pytz.timezone(event.settings.timezone)
+        tz = event.timezone
         if isinstance(ev, Event):
             url = build_absolute_uri(event, 'presale:event.index')
         else:
@@ -114,9 +113,9 @@ def get_private_icals(event, positions):
     - It would be pretty hard to implement it in a way that doesn't require us to use distinct
       settings fields for emails to customers and to attendees, which feels like an overcomplication.
     """
-    tz = pytz.timezone(event.settings.timezone)
+    tz = event.timezone
 
-    creation_time = datetime.datetime.now(pytz.utc)
+    creation_time = datetime.datetime.now(datetime.timezone.utc)
     calobjects = []
 
     evs = set(p.subevent or event for p in positions)

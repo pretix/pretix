@@ -39,7 +39,6 @@ from datetime import date, timedelta
 from decimal import Decimal
 
 import pytest
-import pytz
 from dateutil.tz import tzoffset
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -1204,13 +1203,13 @@ class OrderTestCase(BaseQuotaTestCase):
     @classscope(attr='o')
     def test_payment_term_last_relative(self):
         self.event.settings.set('payment_term_last', date(2017, 5, 3))
-        assert self.order.payment_term_last == datetime.datetime(2017, 5, 3, 23, 59, 59, tzinfo=pytz.UTC)
-        self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=pytz.UTC)
+        assert self.order.payment_term_last == datetime.datetime(2017, 5, 3, 23, 59, 59, tzinfo=datetime.timezone.utc)
+        self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=datetime.timezone.utc)
         self.event.save()
         self.event.settings.set('payment_term_last', RelativeDateWrapper(
             RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
         ))
-        assert self.order.payment_term_last == datetime.datetime(2017, 5, 1, 23, 59, 59, tzinfo=pytz.UTC)
+        assert self.order.payment_term_last == datetime.datetime(2017, 5, 1, 23, 59, 59, tzinfo=datetime.timezone.utc)
 
     @classscope(attr='o')
     def test_payment_term_last_subevent(self):
@@ -1235,14 +1234,14 @@ class OrderTestCase(BaseQuotaTestCase):
 
     @classscope(attr='o')
     def test_ticket_download_date_relative(self):
-        self.event.settings.set('ticket_download_date', datetime.datetime(2017, 5, 3, 12, 59, 59, tzinfo=pytz.UTC))
-        assert self.order.ticket_download_date == datetime.datetime(2017, 5, 3, 12, 59, 59, tzinfo=pytz.UTC)
-        self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=pytz.UTC)
+        self.event.settings.set('ticket_download_date', datetime.datetime(2017, 5, 3, 12, 59, 59, tzinfo=datetime.timezone.utc))
+        assert self.order.ticket_download_date == datetime.datetime(2017, 5, 3, 12, 59, 59, tzinfo=datetime.timezone.utc)
+        self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=datetime.timezone.utc)
         self.event.save()
         self.event.settings.set('ticket_download_date', RelativeDateWrapper(
             RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
         ))
-        assert self.order.ticket_download_date == datetime.datetime(2017, 5, 1, 12, 0, 0, tzinfo=pytz.UTC)
+        assert self.order.ticket_download_date == datetime.datetime(2017, 5, 1, 12, 0, 0, tzinfo=datetime.timezone.utc)
 
     @classscope(attr='o')
     def test_ticket_download_date_subevent(self):
