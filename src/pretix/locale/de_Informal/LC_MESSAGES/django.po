@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 13:31+0000\n"
-"PO-Revision-Date: 2023-01-30 11:49+0000\n"
+"PO-Revision-Date: 2023-02-01 13:45+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -6352,17 +6352,14 @@ msgstr ""
 "gewünschten Anzahl verfügbar, bitte überprüfe deinen Warenkorb."
 
 #: pretix/base/services/cart.py:111
-#, fuzzy, python-format
-#| msgid "You cannot select more than %s items per order."
+#, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] "Du kannst nicht mehr als %s Produkte pro Bestellung auswählen."
+msgstr[0] "Du kannst nicht mehr als %s Produkt pro Bestellung auswählen."
 msgstr[1] "Du kannst nicht mehr als %s Produkte pro Bestellung auswählen."
 
 #: pretix/base/services/cart.py:115
-#, fuzzy, python-format
-#| msgid ""
-#| "You cannot select more than %(max)s items of the product %(product)s."
+#, python-format
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
@@ -6374,9 +6371,7 @@ msgstr[1] ""
 "auswählen."
 
 #: pretix/base/services/cart.py:120
-#, fuzzy, python-format
-#| msgid ""
-#| "You need to select at least %(min)s items of the product %(product)s."
+#, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
@@ -6384,10 +6379,7 @@ msgstr[0] "Du musst das Produkt %(product)s mindestens %(min)s mal auswählen."
 msgstr[1] "Du musst das Produkt %(product)s mindestens %(min)s mal auswählen."
 
 #: pretix/base/services/cart.py:125
-#, fuzzy, python-format
-#| msgid ""
-#| "We removed %(product)s from your cart as you can not buy less than "
-#| "%(min)s items of it."
+#, python-format
 msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "item of it."
@@ -6444,10 +6436,7 @@ msgid "This voucher code is not known in our database."
 msgstr "Dieser Gutscheincode ist uns nicht bekannt."
 
 #: pretix/base/services/cart.py:141 pretix/base/services/orders.py:145
-#, fuzzy, python-format
-#| msgid ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products."
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
@@ -6459,14 +6448,10 @@ msgstr[0] ""
 "mindestens %(number)s passende Produkte auswählst."
 msgstr[1] ""
 "Der Gutscheincode \"%(voucher)s\" kann nur verwendet werden, wenn du "
-"mindestens %(number)s passende Produkte auswählst."
+"mindestens %(number)s passendes Produkt auswählst."
 
 #: pretix/base/services/cart.py:145
-#, fuzzy, python-format
-#| msgid ""
-#| "The voucher code \"%(voucher)s\" can only be used if you select at least "
-#| "%(number)s matching products. We have therefore removed some positions "
-#| "from your cart that can no longer be purchased like this."
+#, python-format
 msgid ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products. We have therefore removed some positions from "
@@ -6477,7 +6462,7 @@ msgid_plural ""
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
 "Der Gutscheincode \"%(voucher)s\" kann nur verwendet werden, wenn du "
-"mindestens %(number)s passende Produkte auswählst. Wir haben daher einige "
+"mindestens %(number)s passendes Produkt auswählst. Wir haben daher einige "
 "Positionen aus deinem Warenkorb entfernt, die deswegen nicht weiter gekauft "
 "werden können."
 msgstr[1] ""
@@ -6516,6 +6501,8 @@ msgid ""
 "Applying a voucher to the whole cart should not be combined with other "
 "operations."
 msgstr ""
+"Das Anwenden eines Gutscheins auf den Warenkorb kann nicht mit anderen "
+"Operationen kombiniert werden."
 
 #: pretix/base/services/cart.py:161
 msgid ""
@@ -6577,10 +6564,7 @@ msgid "You can not select two variations of the same add-on product."
 msgstr "Du kannst nur eine Variante von jedem Zusatzprodukt auswählen."
 
 #: pretix/base/services/cart.py:180 pretix/base/services/orders.py:180
-#, fuzzy, python-format
-#| msgid ""
-#| "You can select at most %(max)s add-ons from the category %(cat)s for the "
-#| "product %(base)s."
+#, python-format
 msgid ""
 "You can select at most %(max)s add-on from the category %(cat)s for the "
 "product %(base)s."
@@ -6588,17 +6572,14 @@ msgid_plural ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr[0] ""
-"Du kannst maximal %(max)s Zusatzprodukte aus der Kategorie %(cat)s für das "
+"Du kannst maximal %(max)s Zusatzprodukt aus der Kategorie %(cat)s für das "
 "Produkt %(base)s auswählen."
 msgstr[1] ""
 "Du kannst maximal %(max)s Zusatzprodukte aus der Kategorie %(cat)s für das "
 "Produkt %(base)s auswählen."
 
 #: pretix/base/services/cart.py:185 pretix/base/services/orders.py:185
-#, fuzzy, python-format
-#| msgid ""
-#| "You need to select at least %(min)s add-ons from the category %(cat)s for "
-#| "the product %(base)s."
+#, python-format
 msgid ""
 "You need to select at least %(min)s add-on from the category %(cat)s for the "
 "product %(base)s."
@@ -6606,7 +6587,7 @@ msgid_plural ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr[0] ""
-"Du musst mindestens %(min)s Zusatzprodukte aus der Kategorie %(cat)s für das "
+"Du musst mindestens %(min)s Zusatzprodukt aus der Kategorie %(cat)s für das "
 "Produkt %(base)s auswählen."
 msgstr[1] ""
 "Du musst mindestens %(min)s Zusatzprodukte aus der Kategorie %(cat)s für das "
@@ -7024,10 +7005,7 @@ msgid "Your cart is empty."
 msgstr "Dein Warenkorb ist leer."
 
 #: pretix/base/services/orders.py:134
-#, fuzzy, python-format
-#| msgid ""
-#| "You cannot select more than %(max)s items of the product %(product)s. We "
-#| "removed the surplus items from your cart."
+#, python-format
 msgid ""
 "You cannot select more than %(max)s item of the product %(product)s. We "
 "removed the surplus items from your cart."
@@ -7122,10 +7100,8 @@ msgstr ""
 "aus deinem Warenkorb entfernt."
 
 #: pretix/base/services/orders.py:205
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The order was not canceled."
-msgstr "Die Bestellung wurde storniert."
+msgstr "Die Bestellung war nicht storniert."
 
 #: pretix/base/services/orders.py:260 pretix/control/forms/orders.py:107
 msgid "The new expiry date needs to be in the future."
@@ -8400,10 +8376,8 @@ msgstr ""
 "keine Bestellungen, die über andere Kanäle getätigt wurden."
 
 #: pretix/base/settings.py:1321
-#, fuzzy
-#| msgid "Quota availabilities"
 msgid "Low availability threshold"
-msgstr "Kontingent-Verfügbarkeiten"
+msgstr "Grenze für niedrige Verfügbarkeit"
 
 #: pretix/base/settings.py:1322
 msgid ""
@@ -8412,6 +8386,10 @@ msgid ""
 "in the event list or calendar. If you keep this option empty, low "
 "availability will not be shown publicly."
 msgstr ""
+"Wenn die Verfügbarkeit von Tickets unter diesen Schwellwert fällt, wird die "
+"Veranstaltung (oder der Termin einer Veranstaltungsreihe) im Kalender oder "
+"in der Veranstaltungsliste als \"wenige Tickets verfügbar\" hervorgehoben. "
+"Wenn das Feld leer bleibt, wird die Verfügbarkeit nicht öffentlich angezeigt."
 
 #: pretix/base/settings.py:1336
 msgid "Show availability in event overviews"
@@ -14918,6 +14896,10 @@ msgid ""
 "migrate to PostgreSQL. Please see the pretix administrator documentation for "
 "a migration guide, and the pretix 4.16 release notes for more information."
 msgstr ""
+"Du nutzt MySQL oder MariaDB als Datenbank-Backend für pretix. Ab pretix 5.0 "
+"wird dies nicht länger unterstützt werden und du musst zu PostgreSQL "
+"migrieren. Eine Migrationsanleitung findest du in der pretix-Dokumentation "
+"und weitere Infos im Blogpost zur Veröffentlichung von pretix 4.16."
 
 #: pretix/control/templates/pretixcontrol/base.html:439
 msgid ""
@@ -22679,6 +22661,8 @@ msgid ""
 "Specifically, the following plugins still contain data depends on this "
 "event: {plugin_names}"
 msgstr ""
+"Insbesondere benötigen die folgenden Erweiterungen noch Daten aus dieser "
+"Veranstaltung: {plugin_names}"
 
 #: pretix/control/views/event.py:1126 pretix/control/views/orders.py:548
 msgid "The comment has been updated."
@@ -23560,6 +23544,8 @@ msgid ""
 "The following database models still contain data that cannot be deleted "
 "automatically: {affected_models}"
 msgstr ""
+"Die folgenden Datenbankmodelle enthalten noch Daten, die nicht automatisch "
+"gelöscht werden können: {affected_models}"
 
 #: pretix/control/views/organizer.py:529
 msgid "The new organizer has been created."
@@ -28525,10 +28511,8 @@ msgstr "Nächste Woche %(week)s anzeigen"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:57
 #: pretix/presale/templates/pretixpresale/organizers/index.html:85
 #: pretix/presale/views/widget.py:373
-#, fuzzy
-#| msgid "PDF ticket layout"
 msgid "Few tickets left"
-msgstr "PDF-Ticketlayout"
+msgstr "Wenige verfügbar"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:27
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:41
