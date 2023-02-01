@@ -79,14 +79,15 @@
     }
 
     &.waitinglist {
-      background: lighten($brand-warning, 43%);
+      background: lighten($brand-warning, 41%);
       border-color: lighten($brand-warning, 30%);
-      border-left-color: lighten($brand-warning, 30%);
-      color: darken($brand-warning, 5%);
+      border-left-color: lighten($brand-warning, 12%);
+      color: #963;
 
       &:hover {
-        background: lighten($brand-warning, 45%);
-        border-color: lighten($brand-warning, 25%);
+        background: lighten($brand-warning, 43%);
+        border-color: $brand-warning;
+      }
       }
     }
 
