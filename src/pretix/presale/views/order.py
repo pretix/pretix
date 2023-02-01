@@ -1420,7 +1420,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
             self.order,
             user=self.request.user,
             notify=True,
-            reissue_invoice=True,
+            reissue_invoice=self.order.invoices.exists() or self.request.event.settings.get('invoice_generate') == 'True',
         )
 
         form_valid = True
