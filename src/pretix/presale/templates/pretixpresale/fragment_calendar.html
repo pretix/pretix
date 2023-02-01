@@ -27,7 +27,7 @@
                                     <li><a class="event {% if event.continued %}continued{% endif %} {% spaceless %}
     {% if event.event.presale_is_running and show_avail %}
         {% if event.event.best_availability_state == 100 %}
-            available
+            available {% if event.event.best_availability_is_low %} low {% endif %}
         {% elif event.event.settings.waiting_list_enabled and event.event.best_availability_state >= 0 %}
             waitinglist
         {% elif event.event.best_availability_state == 20 %}
@@ -68,7 +68,11 @@
                                             <span class="event-status">
                                                 {% if event.event.presale_is_running and show_avail %}
                                                     {% if event.event.best_availability_state == 100 %}
-                                                        <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Book now" %}
+                                                        {% if event.event.best_availability_is_low %}
+                                                            <span class="fa fa-exclamation-circle" aria-hidden="true"></span> {% trans "Few tickets left" %}
+                                                        {% else %}
+                                                            <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Book now" %}
+                                                        {% endif %}
                                                     {% elif event.event.settings.waiting_list_enabled and event.event.best_availability_state >= 0 %}
                                                         <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Waiting list" %}
                                                     {% elif event.event.best_availability_state == 20 %}

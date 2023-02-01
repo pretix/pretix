@@ -507,6 +507,7 @@ class EventSettingsForm(SettingsForm):
         'meta_noindex',
         'redirect_to_checkout_directly',
         'frontpage_subevent_ordering',
+        'low_availability_percentage',
         'event_list_type',
         'event_list_available_only',
         'frontpage_text',

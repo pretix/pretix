@@ -121,3 +121,33 @@ footer {
     padding-bottom: 0;
   }
 }
+
+.label-success-warning {
+  @include label-variant($label-success-bg);
+
+  padding-left: 2.5em;
+  position: relative;
+  &::before {
+    font-family: FontAwesome;
+    text-rendering: auto;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    color: white;
+    content: $fa-var-exclamation;
+    background: $label-warning-bg;
+
+    display: block;
+
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 2em;
+
+    padding-top: .5em;
+    text-align: center;
+
+    border-top-left-radius: .25em;
+    border-bottom-left-radius: .25em;
+  }
+}
