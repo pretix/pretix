@@ -212,7 +212,7 @@ setup(
         'pycountry',
         'pycparser==2.21',
         'pycryptodome==3.16.*',
-        'PyPDF2==2.12.*',
+        'PyPDF2==3.0.*',
         'python-bidi==0.4.*',  # Support for Arabic in reportlab
         'python-dateutil==2.8.*',
         'python-u2flib-server==4.*',
