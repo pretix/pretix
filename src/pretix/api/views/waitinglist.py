@@ -25,9 +25,9 @@ from django_scopes import scopes_disabled
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
-from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
+from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.waitinglist import WaitingListSerializer
 from pretix.base.models import WaitingListEntry
 from pretix.base.models.waitinglist import WaitingListException
@@ -47,8 +47,8 @@ with scopes_disabled():
 class WaitingListViewSet(viewsets.ModelViewSet):
     serializer_class = WaitingListSerializer
     queryset = WaitingListEntry.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
-    ordering = ('created',)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
+    ordering = ('created', 'pk',)
     ordering_fields = ('id', 'created', 'email', 'item')
     filterset_class = WaitingListFilter
     permission = 'can_view_orders'
