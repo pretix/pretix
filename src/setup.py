@@ -200,7 +200,7 @@ setup(
         # We can upgrade markdown again once django-bootstrap3 upgrades or once we drop Python 3.6 and 3.7
         'mt-940==4.23.*',
         'oauthlib==3.2.*',
-        'openpyxl==3.0.*',
+        'openpyxl>=3.0,<3.2',
         'packaging',
         'paypalrestsdk==1.13.*',
         'paypal-checkout-serversdk==1.0.*',
