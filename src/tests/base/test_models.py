@@ -1860,11 +1860,10 @@ class ItemCategoryTest(TestCase):
     This test case tests various methods around the category model.
     """
 
-    @classmethod
-    def setUpTestData(cls):
-        cls.o = Organizer.objects.create(name='Dummy', slug='dummy')
-        cls.event = Event.objects.create(
-            organizer=cls.o, name='Dummy', slug='dummy',
+    def setUp(self):
+        self.o = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.event = Event.objects.create(
+            organizer=self.o, name='Dummy', slug='dummy',
             date_from=now(),
         )
 
@@ -1889,11 +1888,10 @@ class ItemTest(TestCase):
     This test case tests various methods around the item model.
     """
 
-    @classmethod
-    def setUpTestData(cls):
-        cls.o = Organizer.objects.create(name='Dummy', slug='dummy')
-        cls.event = Event.objects.create(
-            organizer=cls.o, name='Dummy', slug='dummy',
+    def setUp(self):
+        self.o = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.event = Event.objects.create(
+            organizer=self.o, name='Dummy', slug='dummy',
             date_from=now(),
         )
 
@@ -1992,9 +1990,8 @@ class ItemTest(TestCase):
 
 
 class EventTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+    def setUp(self):
+        self.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
 
     @classscope(attr='organizer')
     def test_event_end_before_start(self):
@@ -2241,16 +2238,15 @@ class EventTest(TestCase):
 
 
 class SubEventTest(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
-        cls.event = Event.objects.create(
-            organizer=cls.organizer, name='Dummy', slug='dummy',
+    def setUp(self):
+        self.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.event = Event.objects.create(
+            organizer=self.organizer, name='Dummy', slug='dummy',
             date_from=now(), date_to=now() - timedelta(hours=1),
             has_subevents=True
         )
-        cls.se = SubEvent.objects.create(
-            name='Testsub', date_from=now(), event=cls.event
+        self.se = SubEvent.objects.create(
+            name='Testsub', date_from=now(), event=self.event
         )
 
     @classscope(attr='organizer')
@@ -2336,71 +2332,70 @@ class CachedFileTestCase(TestCase):
 
 
 class CheckinListTestCase(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
-        with scope(organizer=cls.organizer):
-            cls.event = Event.objects.create(
-                organizer=cls.organizer, name='Dummy', slug='dummy',
+    def setUp(self):
+        self.organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+        with scope(organizer=self.organizer):
+            self.event = Event.objects.create(
+                organizer=self.organizer, name='Dummy', slug='dummy',
                 date_from=now(), date_to=now() - timedelta(hours=1),
             )
-            cls.item1 = cls.event.items.create(name="Ticket", default_price=12)
-            cls.item2 = cls.event.items.create(name="Shirt", default_price=6)
-            cls.cl_all = cls.event.checkin_lists.create(
+            self.item1 = self.event.items.create(name="Ticket", default_price=12)
+            self.item2 = self.event.items.create(name="Shirt", default_price=6)
+            self.cl_all = self.event.checkin_lists.create(
                 name='All', all_products=True
             )
-            cls.cl_all_pending = cls.event.checkin_lists.create(
+            self.cl_all_pending = self.event.checkin_lists.create(
                 name='Z Pending', all_products=True, include_pending=True
             )
-            cls.cl_both = cls.event.checkin_lists.create(
+            self.cl_both = self.event.checkin_lists.create(
                 name='Both', all_products=False
             )
-            cls.cl_both.limit_products.add(cls.item1)
-            cls.cl_both.limit_products.add(cls.item2)
-            cls.cl_tickets = cls.event.checkin_lists.create(
+            self.cl_both.limit_products.add(self.item1)
+            self.cl_both.limit_products.add(self.item2)
+            self.cl_tickets = self.event.checkin_lists.create(
                 name='Tickets', all_products=False
             )
-            cls.cl_tickets.limit_products.add(cls.item1)
+            self.cl_tickets.limit_products.add(self.item1)
             o = Order.objects.create(
-                code='FOO', event=cls.event, email='dummy@dummy.test',
+                code='FOO', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_PAID,
                 datetime=now(), expires=now() + timedelta(days=10),
                 total=Decimal("30"), locale='en'
             )
             OrderPosition.objects.create(
                 order=o,
-                item=cls.item1,
+                item=self.item1,
                 variation=None,
                 price=Decimal("12"),
             )
             op2 = OrderPosition.objects.create(
                 order=o,
-                item=cls.item1,
+                item=self.item1,
                 variation=None,
                 price=Decimal("12"),
             )
             op3 = OrderPosition.objects.create(
                 order=o,
-                item=cls.item2,
+                item=self.item2,
                 variation=None,
                 price=Decimal("6"),
             )
-            op2.checkins.create(list=cls.cl_tickets)
-            op3.checkins.create(list=cls.cl_both)
+            op2.checkins.create(list=self.cl_tickets)
+            op3.checkins.create(list=self.cl_both)
 
             o = Order.objects.create(
-                code='FOO', event=cls.event, email='dummy@dummy.test',
+                code='FOO', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING,
                 datetime=now(), expires=now() + timedelta(days=10),
                 total=Decimal("30"), locale='en'
             )
             op4 = OrderPosition.objects.create(
                 order=o,
-                item=cls.item2,
+                item=self.item2,
                 variation=None,
                 price=Decimal("6"),
             )
-            op4.checkins.create(list=cls.cl_all_pending)
+            op4.checkins.create(list=self.cl_all_pending)
 
     @classscope(attr='organizer')
     def test_attributes(self):

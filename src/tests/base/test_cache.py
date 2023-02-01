@@ -39,15 +39,12 @@ class CacheTest(TestCase):
     This test case tests the invalidation of the event related
     cache.
     """
-    @classmethod
-    def setUpTestData(cls):
+    def setUp(self):
         o = Organizer.objects.create(name='Dummy', slug='dummy')
-        cls.event = Event.objects.create(
+        self.event = Event.objects.create(
             organizer=o, name='Dummy', slug='dummy',
             date_from=now(),
         )
-
-    def setUp(self):
         self.cache = self.event.get_cache()
         randint = random.random()
         self.testkey = "test" + str(randint)

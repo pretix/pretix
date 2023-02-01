@@ -37,15 +37,13 @@ from pretix.testutils.scope import classscope
 
 
 class WaitingListTestCase(TestCase):
-    @classmethod
-    def setUpTestData(cls):
-        cls.o = Organizer.objects.create(name='Dummy', slug='dummy')
-        cls.event = Event.objects.create(
-            organizer=cls.o, name='Dummy', slug='dummy',
-            date_from=now(), live=True
-        )
 
     def setUp(self):
+        self.o = Organizer.objects.create(name='Dummy', slug='dummy')
+        self.event = Event.objects.create(
+            organizer=self.o, name='Dummy', slug='dummy',
+            date_from=now(), live=True
+        )
         djmail.outbox = []
         with scope(organizer=self.o):
             self.quota = Quota.objects.create(name="Test", size=2, event=self.event)
