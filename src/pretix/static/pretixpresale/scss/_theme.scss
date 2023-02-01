@@ -129,6 +129,9 @@ footer {
   position: relative;
   &::before {
     font-family: FontAwesome;
+    text-rendering: auto;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
     color: white;
     content: $fa-var-exclamation-circle;
     background: $label-warning-bg;
