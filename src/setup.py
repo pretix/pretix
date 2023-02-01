@@ -217,6 +217,7 @@ setup(
         'python-dateutil==2.8.*',
         'python-u2flib-server==4.*',
         'pytz',
+        'pytz-deprecation-shim==0.1.*',
         'pyuca',
         'redis==4.4.*',
         'reportlab==3.6.*',

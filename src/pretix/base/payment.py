@@ -39,8 +39,8 @@ import logging
 from collections import OrderedDict
 from decimal import ROUND_HALF_UP, Decimal
 from typing import Any, Dict, Union
+from zoneinfo import ZoneInfo
 
-import pytz
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -508,7 +508,7 @@ class BasePaymentProvider:
 
     def _is_still_available(self, now_dt=None, cart_id=None, order=None):
         now_dt = now_dt or now()
-        tz = pytz.timezone(self.event.settings.timezone)
+        tz = ZoneInfo(self.event.settings.timezone)
 
         availability_date = self.settings.get('_availability_date', as_type=RelativeDateWrapper)
         if availability_date:

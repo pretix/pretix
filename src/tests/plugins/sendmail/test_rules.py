@@ -21,9 +21,9 @@
 #
 
 import datetime
+from zoneinfo import ZoneInfo
 
 import pytest
-import pytz
 from django.core import mail as djmail
 from django.utils.timezone import now, utc
 from django_scopes import scopes_disabled
@@ -46,8 +46,8 @@ def test_sendmail_rule_create_single(event):
 
 
 dt_now = now()
-NZ = pytz.timezone('NZ')
-Berlin = pytz.timezone('Europe/Berlin')
+NZ = ZoneInfo('NZ')
+Berlin = ZoneInfo('Europe/Berlin')
 
 
 @pytest.mark.django_db
@@ -101,28 +101,28 @@ Berlin = pytz.timezone('Europe/Berlin')
             datetime.datetime(2020, 2, 29, 9, tzinfo=utc)
         ),
         (  # Test timezone far off from UTC
-            NZ.localize(datetime.datetime(2021, 5, 17, 22)),
+            datetime.datetime(2021, 5, 17, 22, tzinfo=NZ),
             None,
             'NZ',
             Rule(date_is_absolute=False, offset_is_after=True, send_offset_days=1, send_offset_time=datetime.time(hour=9)),
-            NZ.localize(datetime.datetime(2021, 5, 18, 9))
+            datetime.datetime(2021, 5, 18, 9, tzinfo=NZ)
         ),
         (  # Test across DST change
-            Berlin.localize(datetime.datetime(2021, 10, 29, 16, 30)),
+            datetime.datetime(2021, 10, 29, 16, 30, tzinfo=Berlin),
             None,
             'Europe/Berlin',
             Rule(date_is_absolute=False, offset_is_after=True, send_offset_days=4, send_offset_time=datetime.time(hour=2, minute=30)),
-            Berlin.localize(datetime.datetime(2021, 11, 2, 2, 30))
+            datetime.datetime(2021, 11, 2, 2, 30, tzinfo=Berlin)
         ),
         (  # Test ambiguous time at DST change
-            Berlin.localize(datetime.datetime(2021, 10, 29, 18, 30)),
+            datetime.datetime(2021, 10, 29, 18, 30, tzinfo=Berlin),
             None,
             'Europe/Berlin',
             Rule(date_is_absolute=False, offset_is_after=True, send_offset_days=2, send_offset_time=datetime.time(hour=2, minute=30)),
             datetime.datetime(2021, 10, 31, 1, 30, tzinfo=utc)
         ),
         (  # Test non-existing time at DST change
-            Berlin.localize(datetime.datetime(2021, 3, 29, 14, 30)),
+            datetime.datetime(2021, 3, 29, 14, 30, tzinfo=Berlin),
             None,
             'Europe/Berlin',
             Rule(date_is_absolute=False, offset_is_after=False, send_offset_days=1, send_offset_time=datetime.time(hour=2, minute=30)),

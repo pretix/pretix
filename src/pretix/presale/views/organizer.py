@@ -38,10 +38,10 @@ from collections import defaultdict
 from datetime import date, datetime, time, timedelta
 from functools import reduce
 from urllib.parse import quote, urlencode
+from zoneinfo import ZoneInfo
 
 import dateutil
 import isoweek
-import pytz
 from django.conf import settings
 from django.core.cache import caches
 from django.db.models import Exists, Max, Min, OuterRef, Prefetch, Q
@@ -392,7 +392,7 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         for event in ctx['events']:
-            event.tzname = pytz.timezone(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
+            event.tzname = ZoneInfo(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
             if event.has_subevents:
                 event.daterange = daterange(
                     event.min_from.astimezone(event.tzname),
@@ -508,7 +508,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
                 continue
 
         timezones.add(s.timezone)
-        tz = pytz.timezone(s.timezone)
+        tz = ZoneInfo(s.timezone)
         datetime_from = se.date_from.astimezone(tz)
         date_from = datetime_from.date()
         if s.show_date_to and se.date_to:

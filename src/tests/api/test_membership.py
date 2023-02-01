@@ -19,10 +19,9 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from datetime import datetime
+from datetime import datetime, timezone
 
 import pytest
-import pytz
 from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
 
@@ -54,8 +53,8 @@ def customer(organizer):
 def membership(organizer, customer, membershiptype):
     return customer.memberships.create(
         membership_type=membershiptype,
-        date_start=datetime(2021, 4, 1, 0, 0, 0, 0, tzinfo=pytz.UTC),
-        date_end=datetime(2021, 4, 8, 23, 59, 59, 999999, tzinfo=pytz.UTC),
+        date_start=datetime(2021, 4, 1, 0, 0, 0, 0, tzinfo=timezone.utc),
+        date_end=datetime(2021, 4, 8, 23, 59, 59, 999999, tzinfo=timezone.utc),
         attendee_name_parts={
             "_scheme": "given_family",
             'given_name': 'John',

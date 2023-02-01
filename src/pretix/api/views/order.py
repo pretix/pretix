@@ -23,9 +23,9 @@ import datetime
 import mimetypes
 import os
 from decimal import Decimal
+from zoneinfo import ZoneInfo
 
 import django_filters
-import pytz
 from django.db import transaction
 from django.db.models import (
     Exists, F, OuterRef, Prefetch, Q, Subquery, prefetch_related_objects,
@@ -602,7 +602,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        tz = pytz.timezone(self.request.event.settings.timezone)
+        tz = ZoneInfo(self.request.event.settings.timezone)
         new_date = make_aware(datetime.datetime.combine(
             new_date,
             datetime.time(hour=23, minute=59, second=59)

@@ -20,11 +20,10 @@
 # <https://www.gnu.org/licenses/>.
 #
 import calendar
-from datetime import date, datetime, time, timedelta
+from datetime import date, datetime, time, timedelta, timezone
 from itertools import groupby
 from typing import Optional, Tuple
 
-import pytz
 from django import forms
 from django.core.exceptions import ValidationError
 from django.utils.formats import date_format
@@ -390,7 +389,7 @@ class SerializerDateFrameField(serializers.CharField):
         if data is None:
             return None
         try:
-            resolve_timeframe_to_dates_inclusive(now(), data, pytz.UTC)
+            resolve_timeframe_to_dates_inclusive(now(), data, timezone.utc)
         except:
             raise ValidationError("Invalid date frame")
 

@@ -19,18 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
-# This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
-# the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
-#
-# This file may have since been changed and any changes are released under the terms of AGPLv3 as described above. A
-# full history of changes and contributors is available at <https://github.com/pretix/pretix>.
-#
-# This file contains Apache-licensed contributions copyrighted by: Jakob Schnell, jasonwaiting@live.hk, pajowu
-#
-# Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
-# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations under the License.
+from datetime import timezone
 
 import dateutil.parser
 from django.contrib import messages
@@ -44,7 +33,6 @@ from django.utils.functional import cached_property
 from django.utils.timezone import is_aware, make_aware, now
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import ListView
-from pytz import UTC
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import Checkin, Order, OrderPosition
@@ -59,6 +47,18 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import CreateView, PaginationMixin, UpdateView
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.models import modelcopy
+
+# This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
+# the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
+#
+# This file may have since been changed and any changes are released under the terms of AGPLv3 as described above. A
+# full history of changes and contributors is available at <https://github.com/pretix/pretix>.
+#
+# This file contains Apache-licensed contributions copyrighted by: Jakob Schnell, jasonwaiting@live.hk, pajowu
+#
+# Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
+# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations under the License.
 
 
 class CheckInListQueryMixin:
@@ -156,20 +156,20 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, CheckInList
             if e.last_entry:
                 if isinstance(e.last_entry, str):
                     # Apparently only happens on SQLite
-                    e.last_entry_aware = make_aware(dateutil.parser.parse(e.last_entry), UTC)
+                    e.last_entry_aware = make_aware(dateutil.parser.parse(e.last_entry), timezone.utc)
                 elif not is_aware(e.last_entry):
                     # Apparently only happens on MySQL
-                    e.last_entry_aware = make_aware(e.last_entry, UTC)
+                    e.last_entry_aware = make_aware(e.last_entry, timezone.utc)
                 else:
                     # This would be correct, so guess on which database it works… Yes, it's PostgreSQL.
                     e.last_entry_aware = e.last_entry
             if e.last_exit:
                 if isinstance(e.last_exit, str):
                     # Apparently only happens on SQLite
-                    e.last_exit_aware = make_aware(dateutil.parser.parse(e.last_exit), UTC)
+                    e.last_exit_aware = make_aware(dateutil.parser.parse(e.last_exit), timezone.utc)
                 elif not is_aware(e.last_exit):
                     # Apparently only happens on MySQL
-                    e.last_exit_aware = make_aware(e.last_exit, UTC)
+                    e.last_exit_aware = make_aware(e.last_exit, timezone.utc)
                 else:
                     # This would be correct, so guess on which database it works… Yes, it's PostgreSQL.
                     e.last_exit_aware = e.last_exit

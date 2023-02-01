@@ -27,7 +27,6 @@ import freezegun
 import pytest
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
-from pytz import UTC
 
 from pretix.base.models import InvoiceAddress, Order, OrderPosition
 from pretix.base.models.orders import OrderFee
@@ -75,7 +74,7 @@ def quota(event, item):
 
 @pytest.fixture
 def order(event, item, taxrule, question):
-    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc)
     event.plugins += ",pretix.plugins.stripe"
     event.save()
 
@@ -84,8 +83,8 @@ def order(event, item, taxrule, question):
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
-            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
-            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
+            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
             total=23, locale='en'
         )
         p1 = o.payments.create(
@@ -140,7 +139,7 @@ def order(event, item, taxrule, question):
 
 @pytest.fixture
 def invoice(order):
-    testtime = datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC)
+    testtime = datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime

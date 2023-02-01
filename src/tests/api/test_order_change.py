@@ -30,7 +30,6 @@ from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
-from pytz import UTC
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
@@ -90,7 +89,7 @@ def seat(event, organizer, item):
 
 @pytest.fixture
 def order(event, item, taxrule, question):
-    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc)
     event.plugins += ",pretix.plugins.stripe"
     event.save()
 
@@ -99,8 +98,8 @@ def order(event, item, taxrule, question):
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
-            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
-            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
+            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
             total=23, locale='en'
         )
         p1 = o.payments.create(
@@ -659,7 +658,7 @@ def test_orderposition_price_calculation_subevent(token_client, organizer, event
 def test_orderposition_price_calculation_subevent_with_override(token_client, organizer, event, order, subevent):
     with scopes_disabled():
         item2 = event.items.create(name="Budget Ticket", default_price=23)
-        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=datetime.timezone.utc))
         se2.subeventitem_set.create(item=item2, price=12)
         op = order.positions.first()
     op.subevent = subevent
@@ -1201,7 +1200,7 @@ def test_position_update_change_item_variation_mismatch(token_client, organizer,
 @pytest.mark.django_db
 def test_position_update_change_subevent(token_client, organizer, event, order, quota, item, subevent):
     with scopes_disabled():
-        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=datetime.timezone.utc))
         q2 = se2.quotas.create(name="foo", size=1, event=event)
         q2.items.add(item)
         op = order.positions.first()
@@ -1223,7 +1222,7 @@ def test_position_update_change_subevent(token_client, organizer, event, order, 
 @pytest.mark.django_db
 def test_position_update_change_subevent_quota_empty(token_client, organizer, event, order, quota, item, subevent):
     with scopes_disabled():
-        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=datetime.timezone.utc))
         q2 = se2.quotas.create(name="foo", size=0, event=event)
         q2.items.add(item)
         op = order.positions.first()
@@ -1304,7 +1303,7 @@ def test_position_update_change_subevent_keep_seat(token_client, organizer, even
     with scopes_disabled():
         seat.subevent = subevent
         seat.save()
-        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=datetime.timezone.utc))
         seat2 = event.seats.create(seat_number="A1", product=item, seat_guid="A1", subevent=se2)
         q2 = se2.quotas.create(name="foo", size=1, event=event)
         q2.items.add(item)
@@ -1331,7 +1330,7 @@ def test_position_update_change_subevent_missing_seat(token_client, organizer, e
     with scopes_disabled():
         seat.subevent = subevent
         seat.save()
-        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=datetime.timezone.utc))
         q2 = se2.quotas.create(name="foo", size=1, event=event)
         q2.items.add(item)
         op = order.positions.first()

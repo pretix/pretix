@@ -40,6 +40,7 @@ from collections import OrderedDict
 from decimal import Decimal
 from itertools import groupby
 from urllib.parse import urlsplit
+from zoneinfo import ZoneInfo
 
 import bleach
 from django.apps import apps
@@ -64,7 +65,6 @@ from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
 from i18nfield.strings import LazyI18nString
 from i18nfield.utils import I18nJSONEncoder
-from pytz import timezone
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_available_placeholders
@@ -250,7 +250,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
                 self.item_meta_property_formset.is_valid() and self.confirm_texts_formset.is_valid() and \
                 self.footer_links_formset.is_valid():
             # reset timezone
-            zone = timezone(self.sform.cleaned_data['timezone'])
+            zone = ZoneInfo(self.sform.cleaned_data['timezone'])
             event = form.instance
             event.date_from = self.reset_timezone(zone, event.date_from)
             event.date_to = self.reset_timezone(zone, event.date_to)
@@ -263,7 +263,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
 
     @staticmethod
     def reset_timezone(tz, dt):
-        return tz.localize(dt.replace(tzinfo=None)) if dt is not None else None
+        return dt.replace(tzinfo=tz) if dt is not None else None
 
     @cached_property
     def item_meta_property_formset(self):

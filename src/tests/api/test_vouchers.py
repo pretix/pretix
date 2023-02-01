@@ -40,7 +40,6 @@ import pytest
 from django.utils import timezone
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
-from pytz import UTC
 
 from pretix.base.models import Event, SeatingPlan, Voucher
 
@@ -249,7 +248,7 @@ def test_voucher_list(token_client, organizer, event, voucher, item, quota, sube
         '/api/v1/organizers/{}/events/{}/vouchers/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
     assert [res] == resp.data['results']
     with scopes_disabled():
-        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=timezone.utc))
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/vouchers/?subevent={}'.format(organizer.slug, event.slug,
                                                                        se2.pk))
@@ -611,7 +610,7 @@ def test_change_to_item_of_other_event(token_client, organizer, event, item):
             organizer=organizer,
             name='Dummy2',
             slug='dummy2',
-            date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC),
+            date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=timezone.utc),
             plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf'
         )
         ticket2 = e2.items.create(name='Late-bird ticket', default_price=23)
@@ -1254,8 +1253,8 @@ def test_set_seat_subevent(token_client, organizer, event, seatingplan, seat1, i
     with scopes_disabled():
         event.has_subevents = True
         event.save()
-        se1 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
-        se2 = event.subevents.create(name="Baz", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se1 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=timezone.utc))
+        se2 = event.subevents.create(name="Baz", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=timezone.utc))
         seat1 = event.seats.create(seat_number="A1", product=item, seat_guid="A1", subevent=se1)
         event.seats.create(seat_number="A1", product=item, seat_guid="A1", subevent=se2)
         v = event.vouchers.create(item=item)
@@ -1277,8 +1276,8 @@ def test_set_seat_subevent_required(token_client, organizer, event, seatingplan,
     with scopes_disabled():
         event.has_subevents = True
         event.save()
-        se1 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
-        se2 = event.subevents.create(name="Baz", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se1 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=timezone.utc))
+        se2 = event.subevents.create(name="Baz", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=timezone.utc))
         seat1 = event.seats.create(seat_number="A1", product=item, seat_guid="A1", subevent=se1)
         event.seats.create(seat_number="A1", product=item, seat_guid="A1", subevent=se2)
         event.vouchers.create(item=item, seat=seat1)
@@ -1297,8 +1296,8 @@ def test_set_seat_subevent_invalid(token_client, organizer, event, seatingplan, 
     with scopes_disabled():
         event.has_subevents = True
         event.save()
-        se1 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
-        se2 = event.subevents.create(name="Baz", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se1 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=timezone.utc))
+        se2 = event.subevents.create(name="Baz", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=timezone.utc))
         seat1 = event.seats.create(seat_number="A1", product=item, seat_guid="A1", subevent=se1)
         event.seats.create(seat_number="B1", product=item, seat_guid="B1", subevent=se2)
         event.vouchers.create(item=item, seat=seat1, subevent=se2)

@@ -25,7 +25,6 @@ from unittest import mock
 
 import pytest
 from django_scopes import scopes_disabled
-from pytz import UTC
 
 from pretix.base.models import WaitingListEntry
 
@@ -44,7 +43,7 @@ def quota(event, item):
 
 @pytest.fixture
 def wle(event, item):
-    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.UTC)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
@@ -140,7 +139,7 @@ def test_wle_list(token_client, organizer, event, wle, item, subevent):
         '/api/v1/organizers/{}/events/{}/waitinglistentries/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
     assert [res] == resp.data['results']
     with scopes_disabled():
-        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=datetime.timezone.UTC))
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/waitinglistentries/?subevent={}'.format(organizer.slug, event.slug,
                                                                                  se2.pk))

@@ -33,8 +33,8 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from datetime import datetime, time
+from zoneinfo import ZoneInfo
 
-import pytz
 from dateutil.parser import parse
 from django.core.exceptions import PermissionDenied
 from django.db.models import F, Max, Min, Q
@@ -87,7 +87,7 @@ def serialize_event(e):
         if e.min_from is None:
             dr = pgettext('subevent', 'No dates')
         else:
-            tz = pytz.timezone(e.settings.timezone)
+            tz = ZoneInfo(e.settings.timezone)
             dr = _('Series:') + ' ' + daterange(
                 e.min_from.astimezone(tz),
                 (e.max_fromto or e.max_to or e.max_from).astimezone(tz)
