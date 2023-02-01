@@ -42,6 +42,7 @@ from itertools import groupby
 from urllib.parse import urlsplit
 
 import bleach
+from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
@@ -1025,9 +1026,27 @@ class EventDelete(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixi
                 self.request.event.delete()
             messages.success(self.request, _('The event has been deleted.'))
             return redirect(self.get_success_url())
-        except ProtectedError:
-            messages.error(self.request, _('The event could not be deleted as some constraints (e.g. data created by '
-                                           'plug-ins) do not allow it.'))
+        except ProtectedError as e:
+            err = gettext('The event could not be deleted as some constraints (e.g. data created by plug-ins) do not allow it.')
+
+            app_labels = set()
+            for e in e.protected_objects:
+                app_labels.add(type(e)._meta.app_label)
+
+            plugin_names = []
+            for app_label in app_labels:
+                app = apps.get_app_config(app_label)
+                if hasattr(app, 'PretixPluginMeta'):
+                    plugin_names.append(str(app.PretixPluginMeta.name))
+                else:
+                    plugin_names.append(str(app.verbose_name))
+
+            if plugin_names:
+                err += ' ' + gettext(
+                    'Specifically, the following plugins still contain data depends on this event: {plugin_names}'
+                ).format(plugin_names=', '.join(plugin_names))
+
+            messages.error(self.request, err)
             return self.get(self.request, *self.args, **self.kwargs)
 
     def get_success_url(self) -> str:

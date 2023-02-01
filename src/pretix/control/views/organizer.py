@@ -393,9 +393,23 @@ class OrganizerDelete(AdministratorPermissionRequiredMixin, FormView):
                 self.request.organizer.delete()
             messages.success(self.request, _('The organizer has been deleted.'))
             return redirect(self.get_success_url())
-        except ProtectedError:
-            messages.error(self.request, _('The organizer could not be deleted as some constraints (e.g. data created by '
-                                           'plug-ins) do not allow it.'))
+        except ProtectedError as e:
+            err = gettext('The organizer could not be deleted as some constraints (e.g. data created by plug-ins) do not allow it.')
+
+            # Unlike deleting events (which is done by regular backend users), this feature can only be used by sysadmins,
+            # so we expose more technical / less polished information.
+            affected_models = set()
+            for m in e.protected_objects:
+                affected_models.add(type(m)._meta.label)
+
+            if affected_models:
+                err += ' ' + gettext(
+                    'The following database models still contain data that cannot be deleted automatically: {affected_models}'
+                ).format(
+                    affected_models=', '.join(list(affected_models))
+                )
+
+            messages.error(self.request, err)
             return self.get(self.request, *self.args, **self.kwargs)
 
     def get_success_url(self) -> str:
