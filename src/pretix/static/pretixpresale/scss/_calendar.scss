@@ -65,7 +65,7 @@
       color: darken($brand-success, 12%);
 
       &.low {
-        border-left-color: $brand-warning;
+        border-left-color: lighten($brand-warning, 12%);
       }
 
       &:hover {
