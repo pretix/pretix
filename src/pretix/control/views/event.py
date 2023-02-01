@@ -1059,11 +1059,9 @@ class EventLog(EventPermissionRequiredMixin, PaginationMixin, ListView):
     context_object_name = 'logs'
 
     def get_queryset(self):
-        # technically, we'd also need to sort by pk since this is a paginated list, but in this case we just can't
-        # bear the performance cost
         qs = self.request.event.logentry_set.all().select_related(
             'user', 'content_type', 'api_token', 'oauth_application', 'device'
-        ).order_by('-datetime')
+        ).order_by('-datetime', '-pk')
         qs = qs.exclude(action_type__in=OVERVIEW_BANLIST)
         if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_orders',
                                                       request=self.request):
