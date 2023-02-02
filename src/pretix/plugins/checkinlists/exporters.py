@@ -521,9 +521,9 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             row += [
                 str(op.item) + (" – " + str(op.variation.value) if op.variation else ""),
                 op.price,
-                date_format(last_checked_in.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
+                last_checked_in.astimezone(self.event.timezone).strftime('%Y-%m-%d %H:%M')
                 if last_checked_in else '',
-                date_format(last_checked_out.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
+                last_checked_out.astimezone(self.event.timezone).strftime('%Y-%m-%d %H:%M')
                 if last_checked_out else '',
                 _('Yes') if op.auto_checked_in else _('No'),
             ]
@@ -535,10 +535,10 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             row.append(str(op.order.phone) if op.order.phone else '')
             if self.event.has_subevents:
                 row.append(str(op.subevent.name))
-                row.append(date_format(op.subevent.date_from.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT'))
+                row.append(op.subevent.date_from.astimezone(self.event.timezone).strftime('%Y-%m-%d %H:%M'))
                 if op.subevent.date_to:
                     row.append(
-                        date_format(op.subevent.date_to.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
+                        op.subevent.date_to.astimezone(self.event.timezone).strftime('%Y-%m-%d %H:%M')
                     )
                 else:
                     row.append('')
