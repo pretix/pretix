@@ -161,8 +161,8 @@ var editor = {
                     left: editor._px2mm(left).toFixed(2),
                     bottom: editor._px2mm(bottom).toFixed(2),
                     fontsize: editor._px2pt(o.getFontSize()).toFixed(1),
+                    lineheight: o.lineHeight,
                     color: col,
-                    //lineheight: o.lineHeight,
                     fontfamily: o.fontFamily,
                     bold: o.fontWeight === 'bold',
                     italic: o.fontStyle === 'italic',
@@ -241,7 +241,7 @@ var editor = {
             o = editor._add_text();
             o.setColor('rgb(' + d.color[0] + ',' + d.color[1] + ',' + d.color[2] + ')');
             o.setFontSize(editor._pt2px(d.fontsize));
-            //o.setLineHeight(d.lineheight);
+            o.setLineHeight(d.lineheight || 1);
             o.setFontFamily(d.fontfamily);
             o.setFontWeight(d.bold ? 'bold' : 'normal');
             o.setFontStyle(d.italic ? 'italic' : 'normal');
@@ -483,7 +483,7 @@ var editor = {
             var col = (new fabric.Color(o.getFill()))._source;
             $("#toolbox-col").val("#" + ((1 << 24) + (col[0] << 16) + (col[1] << 8) + col[2]).toString(16).slice(1));
             $("#toolbox-fontsize").val(editor._px2pt(o.fontSize).toFixed(1));
-            //$("#toolbox-lineheight").val(o.lineHeight);
+            $("#toolbox-lineheight").val(o.lineHeight || 1);
             $("#toolbox-fontfamily").val(o.fontFamily);
             $("#toolbox").find("button[data-action=bold]").toggleClass('active', o.fontWeight === 'bold');
             $("#toolbox").find("button[data-action=italic]").toggleClass('active', o.fontStyle === 'italic');
@@ -600,7 +600,7 @@ var editor = {
         } else if (o.type === "textarea" || o.type === "text") {
             o.setColor($("#toolbox-col").val());
             o.setFontSize(editor._pt2px($("#toolbox-fontsize").val()));
-            //o.setLineHeight($("#toolbox-lineheight").val());
+            o.setLineHeight($("#toolbox-lineheight").val() || 1);
             o.setFontFamily($("#toolbox-fontfamily").val());
             o.setFontWeight($("#toolbox").find("button[data-action=bold]").is('.active') ? 'bold' : 'normal');
             o.setFontStyle($("#toolbox").find("button[data-action=italic]").is('.active') ? 'italic' : 'normal');
@@ -861,6 +861,7 @@ var editor = {
                 thing.setCoords();
                 editor._create_savepoint();
                 break;
+            case 8:  /* Backspace */
             case 46:  /* Delete */
                 editor._delete();
                 break;
