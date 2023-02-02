@@ -1246,6 +1246,7 @@ class SubEventFilterForm(FilterForm):
                 filter_allowed=True,
             )
 
+
 class OrganizerFilterForm(FilterForm):
     orders = {
         'slug': 'slug',

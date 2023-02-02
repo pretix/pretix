@@ -743,6 +743,7 @@ def meta_values(request):
         ]
     })
 
+
 def subevent_meta_values(request, organizer, event):
     q = request.GET.get('q')
     propname = request.GET.get('property')
@@ -778,7 +779,8 @@ def subevent_meta_values(request, organizer, event):
             {'name': v, 'id': v}
             for v in sorted(set(defaults.values_list('default', flat=True)[:10]) | set(matches.values_list('value', flat=True)[:10]))
         ]
-    })  
+    })
+
 
 def item_meta_values(request, organizer, event):
     q = request.GET.get('q')
