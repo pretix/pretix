@@ -46,6 +46,7 @@ class WaitingListForm(forms.ModelForm):
         self.channel = kwargs.pop('channel')
         customer = kwargs.pop('customer')
         super().__init__(*args, **kwargs)
+        self.fields["email"].disabled = True
 
         choices = [
             ('', '')
