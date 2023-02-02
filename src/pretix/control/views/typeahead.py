@@ -755,14 +755,23 @@ def subevent_meta_values(request, organizer, event):
         default__icontains=q
     )
 
+    # TODO: do we need the organizer-permission at all? Just for defaults on properties?
     organizer = get_object_or_404(Organizer, slug=organizer)
     if not request.user.has_organizer_permission(organizer, request=request):
         raise PermissionDenied()
 
     event = get_object_or_404(Event, slug=event)
+    # TODO: do we need to check read permissions on the event here?
 
     defaults = defaults.filter(organizer_id=organizer.pk)
     matches = matches.filter(subevent__event_id=event.pk)
+    # TODO: we anyway filter on one event, so we do not filter down to allowed events - see above if we need to check permissions on event
+#    all_access = (
+#        (request and request.user.has_active_staff_session(request.session.session_key))
+#        or request.user.teams.filter(all_events=True, organizer=organizer).exists()
+#    )
+#    if not all_access:
+#        matches = matches.filter(subevent__event__id__in=request.user.teams.values_list('limit_events__id', flat=True))
 
     return JsonResponse({
         'results': [
