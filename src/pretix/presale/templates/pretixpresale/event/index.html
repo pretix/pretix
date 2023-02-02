@@ -166,10 +166,6 @@
             </div>
             {% eventsignal event "pretix.presale.signals.front_page_top" request=request subevent=subevent %}
         {% endif %}
-<div class="alert alert-warning">
-<!--    <h1><strong>{% trans "Hyperborea is a vaccinated-only event." %}</strong></h1>-->
-    <h3>{% trans "By selecting or ordering tickets on this page, you are confirming that you are fully vaccinated and may be asked to show proof of vaccination at the gate." %} </h3>
-</div >
         {% if ev.presale_is_running or event.settings.show_items_outside_presale_period %}
             <form method="post" data-asynctask
                     data-asynctask-headline="{% trans "We're now trying to reserve this for you!" %}"

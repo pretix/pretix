@@ -2529,11 +2529,11 @@ msgstr "Bloquer les bons de réduction"
 msgid "Current user's carts"
 msgstr "Panier de l'utilisateur actuel"
 
-msgid "How do tickets work for Hyperborea?"
-msgstr "Comment fonctionnent les billets pour Hyperborea ?"
+msgid "How do tickets work for SideBurn?"
+msgstr "Comment fonctionnent les billets pour SideBurn ?"
 
-msgid "Since demand for Hyperborea tickets outnumbers supply,"
-msgstr "Étant donné que la demande de billets Hyperborea dépasse l'offre,"
+msgid "Since demand for SideBurn tickets outnumbers supply,"
+msgstr "Étant donné que la demande de billets SideBurn dépasse l'offre,"
 
 msgid "the first stage of getting a ticket is registering for the ticket lottery"
 msgstr "la première étape pour obtenir un billet consiste à s'inscrire à la loterie de billets"
@@ -2541,20 +2541,11 @@ msgstr "la première étape pour obtenir un billet consiste à s'inscrire à la 
 msgid "Our ticket registration opens on"
 msgstr "Notre inscription aux billets ouvre le"
 
-msgid "If you’ve completed the required volunteer hours in 2019, don't worry! We have a guaranteed ticket for you! You will receive a separate email from us with your voucher."
-msgstr "Si vous avez effectué les heures de bénévolat requises en 2019, ne vous inquiétez pas ! Nous avons un billet garanti pour vous! Vous recevrez un e-mail séparé de notre part avec votre bon. "
+msgid "The registrations for the general sale are drawn in a lottery, ensuring that everyone registered has an equal chance of being offered a ticket."
+msgstr "Les inscriptions à la vente générale sont mélangées dans une loterie garantissant que chaque inscrit a une chance égale de se voir offrir un billet."
 
-msgid "Completing your volunteer hours is the best way to ensure a Hyperborea ticket next year!"
-msgstr "Compléter ses heures de bénévolat est le meilleur moyen de s'assurer un ticket Hyperborea l'année prochaine!"
-
-msgid "The registrations for the general sale are shuffled in a “lottery” ensuring that everyone registered has an equal chance of being offered a ticket."
-msgstr "Les inscriptions à la vente générale sont mélangées dans une << loterie >> garantissant que chaque inscrit a une chance égale de se voir offrir un billet."
-
-msgid "General ticket sales for Hyperborea opens on"
-msgstr "La vente générale des billets pour Hyperborea ouvre le"
-
-msgid "Available tickets are then offered in the order of the lottery, and registrants have two days to buy their available ticket before it’s added back to the pool and offered to the next in the list."
-msgstr "Les billets disponibles sont ensuite proposés dans l'ordre de la loterie, et les inscrits ont deux jours pour acheter leur billet disponible avant qu'il ne soit rajouté au groupe et offert et offert au suivant dans la liste."
+msgid "Available tickets are then offered in the order of the lottery, and registrants have three days to buy their available ticket before it’s added back to the pool and offered to the next in the list."
+msgstr "Les billets disponibles sont ensuite proposés dans l'ordre de la loterie, et les inscrits ont trois jours pour acheter leur billet disponible avant qu'il ne soit rajouté au groupe et offert et offert au suivant dans la liste."
 
 msgid "If you register for a ticket after sales are already in progress, you simply get added to the bottom of the list."
 msgstr "Si vous vous inscrivez pour un billet alors que les ventes sont déjà en cours, vous êtes simplement ajouté au bas de la liste."
@@ -2872,21 +2863,6 @@ msgid ""
 msgstr ""
 "Pour des raisons techniques, vous ne pouvez pas saisir les entrées, qui "
 "doivent être masquées (par exemple, les mots de passe), sur %(value)s."
-
-msgid "Hyperborea is a vaccinated-only event."
-msgstr "Hyperborea est un événement vacciné uniquement ."
-
-msgid "By selecting or ordering tickets on this page, you are confirming that you are fully vaccinated and may be asked to show proof of vaccination at the gate."
-msgstr "En sélectionnant ou en commandant des billets sur cette page, vous confirmez que vous êtes entièrement vacciné et peux être invité à présenter une preuve de vaccination à la porte.."
-
-msgid "A person is considered Fully Vaccinated if they meet the definition of Fully Vaccinated approved by the Ontario Ministry of Health, plus 14 days from receiving their last dose."
-msgstr "Une personne est considérée comme entièrement vaccinée si elle répond à la définition d'entièrement vaccinée approuvée par le ministère de la Santé de l'Ontario, plus 14 jours après avoir reçu sa dernière dose."
-
-msgid "This also applies to minors of age 5 and over."
-msgstr "Ceci s'applique également aux mineurs de 5 ans et plus."
-
-msgid "Failure to show proof of vaccination will result in you being turned back at the gate!"
-msgstr "Le défaut de présenter une preuve de vaccination entrainera votre retour à la porte !"
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:168
 msgid "Keep me logged in"
@@ -30912,8 +30888,8 @@ msgstr "Il n' y a pas d'add-ons disponibles pour ce produit."
 msgid "FULLY BOOKED"
 msgstr "COMPLÈTEMENT RÉSERVÉ"
 
-msgid "Hyperborea general sale tickets will be assigned by lottery"
-msgstr "Les billets de la vente générale Hyperborea seront attribués par lotterie"
+msgid "SideBurn general sale tickets will be assigned by lottery"
+msgstr "Les billets de la vente générale SideBurn seront attribués par lotterie"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:73
