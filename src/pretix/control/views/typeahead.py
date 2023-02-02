@@ -755,7 +755,6 @@ def subevent_meta_values(request, organizer, event):
         default__icontains=q
     )
 
-    # TODO: do we need the organizer-permission at all? Just for defaults on properties?
     organizer = get_object_or_404(Organizer, slug=organizer)
     if not request.user.has_organizer_permission(organizer, request=request):
         raise PermissionDenied()
