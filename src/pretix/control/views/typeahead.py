@@ -48,7 +48,8 @@ from django.utils.translation import gettext as _, pgettext
 
 from pretix.base.models import (
     Event, EventMetaProperty, EventMetaValue, ItemMetaProperty, ItemMetaValue,
-    ItemVariation, ItemVariationMetaValue, Order, Organizer, SubEventMetaValue, User, Voucher,
+    ItemVariation, ItemVariationMetaValue, Order, Organizer, SubEventMetaValue,
+    User, Voucher,
 )
 from pretix.control.forms.event import EventWizardCopyForm
 from pretix.control.permissions import (
