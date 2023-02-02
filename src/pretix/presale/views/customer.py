@@ -639,7 +639,7 @@ class SSOLoginView(RedirectBackMixin, View):
 
         # FIXME:Hacky solution to get around the fact that there is no event variable in the customer request context. Will need update
 
-        default_url='/hyperborea/hyperborea2022'
+        default_url='/sideburn/sideburn2022'
         # default_url =  eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
         # default_url = eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs)
         # if not url:ss
