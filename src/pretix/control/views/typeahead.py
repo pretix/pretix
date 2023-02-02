@@ -47,8 +47,8 @@ from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, pgettext
 
 from pretix.base.models import (
-    EventMetaProperty, EventMetaValue, ItemMetaProperty, ItemMetaValue,
-    ItemVariation, ItemVariationMetaValue, Order, Organizer, User, Voucher,
+    Event, EventMetaProperty, EventMetaValue, ItemMetaProperty, ItemMetaValue,
+    ItemVariation, ItemVariationMetaValue, Order, Organizer, SubEventMetaValue, User, Voucher,
 )
 from pretix.control.forms.event import EventWizardCopyForm
 from pretix.control.permissions import (
@@ -742,6 +742,34 @@ def meta_values(request):
         ]
     })
 
+def subevent_meta_values(request, organizer, event):
+    q = request.GET.get('q')
+    propname = request.GET.get('property')
+
+    matches = SubEventMetaValue.objects.filter(
+        value__icontains=q,
+        property__name=propname
+    )
+    defaults = EventMetaProperty.objects.filter(
+        name=propname,
+        default__icontains=q
+    )
+
+    organizer = get_object_or_404(Organizer, slug=organizer)
+    if not request.user.has_organizer_permission(organizer, request=request):
+        raise PermissionDenied()
+
+    event = get_object_or_404(Event, slug=event)
+
+    defaults = defaults.filter(organizer_id=organizer.pk)
+    matches = matches.filter(subevent__event_id=event.pk)
+
+    return JsonResponse({
+        'results': [
+            {'name': v, 'id': v}
+            for v in sorted(set(defaults.values_list('default', flat=True)[:10]) | set(matches.values_list('value', flat=True)[:10]))
+        ]
+    })  
 
 def item_meta_values(request, organizer, event):
     q = request.GET.get('q')

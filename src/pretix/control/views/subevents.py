@@ -110,7 +110,7 @@ class SubEventQueryMixin:
 
     @cached_property
     def filter_form(self):
-        return SubEventFilterForm(data=self.request_data, prefix='filter')
+        return SubEventFilterForm(data=self.request_data, prefix='filter', organizer=self.request.organizer, event=self.request.event)
 
 
 class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryMixin, ListView):
@@ -125,6 +125,9 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryM
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['filter_form'] = self.filter_form
+        ctx['meta_fields'] = [
+            self.filter_form['meta_{}'.format(p.name)] for p in self.request.organizer.meta_properties.filter(filter_allowed=True)
+        ]
 
         quotas = []
         for s in ctx['subevents']:
