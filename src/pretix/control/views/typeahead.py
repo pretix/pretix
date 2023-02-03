@@ -47,7 +47,7 @@ from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, pgettext
 
 from pretix.base.models import (
-    Event, EventMetaProperty, EventMetaValue, ItemMetaProperty, ItemMetaValue,
+    EventMetaProperty, EventMetaValue, ItemMetaProperty, ItemMetaValue,
     ItemVariation, ItemVariationMetaValue, Order, Organizer, SubEventMetaValue,
     User, Voucher,
 )

@@ -1237,6 +1237,7 @@ class SubEventFilterForm(FilterForm):
     def meta_properties(self):
         return self.organizer.meta_properties.filter(filter_allowed=True)
 
+
 class OrganizerFilterForm(FilterForm):
     orders = {
         'slug': 'slug',
