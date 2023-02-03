@@ -35,7 +35,6 @@ from cryptography.hazmat.primitives.serialization import (
 from django.dispatch import receiver
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
-from pytz import UTC
 
 from pretix.base.models import Item, ItemVariation, SubEvent
 from pretix.base.secretgenerators import pretix_sig1_pb2
@@ -210,8 +209,7 @@ class Sig1TicketSecretGenerator(BaseTicketSecretGenerator):
     def _encode_time(self, t):
         if t is None:
             return 0
-        t0 = datetime(2020, 1, 1, 0, 0, 0, 0, tzinfo=UTC)
-        return int((t - t0).total_seconds() // 60)
+        return t.timestamp()
 
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
                         attendee_name: str = None, valid_from: datetime = None, valid_until: datetime = None,
@@ -223,8 +221,8 @@ class Sig1TicketSecretGenerator(BaseTicketSecretGenerator):
                     ticket.item == item.pk and
                     ticket.variation == (variation.pk if variation else 0) and
                     ticket.subevent == (subevent.pk if subevent else 0) and
-                    ticket.validFromInMinutesSince2020 == self._encode_time(valid_from) and
-                    ticket.validUntilInMinutesSince2020 == self._encode_time(valid_until)
+                    ticket.validFromUnixTime == self._encode_time(valid_from) and
+                    ticket.validUntilUnixTime == self._encode_time(valid_until)
                 )
                 if unchanged:
                     return current_secret
@@ -234,8 +232,8 @@ class Sig1TicketSecretGenerator(BaseTicketSecretGenerator):
         t.item = item.pk
         t.variation = variation.pk if variation else 0
         t.subevent = subevent.pk if subevent else 0
-        t.validFromInMinutesSince2020 = self._encode_time(valid_from)
-        t.validUntilInMinutesSince2020 = self._encode_time(valid_until)
+        t.validFromUnixTime = self._encode_time(valid_from)
+        t.validUntilUnixTime = self._encode_time(valid_until)
         payload = t.SerializeToString()
         result = base64.b64encode(self._sign_payload(payload)).decode()[::-1]
         return result
