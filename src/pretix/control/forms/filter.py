@@ -1136,7 +1136,7 @@ class SubEventFilterForm(FilterForm):
                             'event': self.event.slug
                         }) + '?' + urlencode({
                             'property': p.name,
-                            'organizer': self.organizer.slug if self.organizer else ''
+                            'organizer': self.organizer.slug
                         })
                     }
                 )
