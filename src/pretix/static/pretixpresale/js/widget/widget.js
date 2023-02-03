@@ -362,7 +362,7 @@ Vue.component('pricebox', {
     }
 });
 Vue.component('variation', {
-    template: ('<div class="pretix-widget-variation">'
+    template: ('<div class="pretix-widget-variation" :data-id="variation.id">'
         + '<div class="pretix-widget-item-row">'
 
         // Variation description
@@ -411,7 +411,7 @@ Vue.component('variation', {
     }
 });
 Vue.component('item', {
-    template: ('<div v-bind:class="classObject">'
+    template: ('<div v-bind:class="classObject" :data-id="item.id">'
         + '<div class="pretix-widget-item-row pretix-widget-main-item-row">'
 
         // Product description
@@ -517,7 +517,7 @@ Vue.component('item', {
     }
 });
 Vue.component('category', {
-    template: ('<div class="pretix-widget-category">'
+    template: ('<div class="pretix-widget-category" :data-id="category.id">'
         + '<h3 class="pretix-widget-category-name" v-if="category.name">{{ category.name }}</h3>'
         + '<div class="pretix-widget-category-description" v-if="category.description" v-html="category.description">'
         + '</div>'
