@@ -759,13 +759,6 @@ def subevent_meta_values(request, organizer, event):
 
     defaults = defaults.filter(organizer_id=request.organizer.pk)
     matches = matches.filter(subevent__event_id=request.event.pk)
-    # TODO: we anyway filter on one event, so we do not filter down to allowed events - see above if we need to check permissions on event
-#    all_access = (
-#        (request and request.user.has_active_staff_session(request.session.session_key))
-#        or request.user.teams.filter(all_events=True, organizer=organizer).exists()
-#    )
-#    if not all_access:
-#        matches = matches.filter(subevent__event__id__in=request.user.teams.values_list('limit_events__id', flat=True))
 
     return JsonResponse({
         'results': [
