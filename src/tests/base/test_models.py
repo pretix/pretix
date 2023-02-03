@@ -1310,7 +1310,7 @@ class OrderTestCase(BaseQuotaTestCase):
         assert self.order.user_cancel_allowed
 
     @classscope(attr='o')
-    def test_can_cancel_checked_in(self):
+    def test_can_not_cancel_checked_in(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()
         self.event.settings.cancel_allow_user = False
@@ -1320,6 +1320,17 @@ class OrderTestCase(BaseQuotaTestCase):
             position=self.order.positions.first(),
             list=CheckinList.objects.create(event=self.event, name='Default')
         )
+        assert not self.order.user_cancel_allowed
+
+    @classscope(attr='o')
+    def test_can_not_cancel_blocked(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        self.event.settings.cancel_allow_user = False
+        self.event.settings.cancel_allow_user_paid = True
+        assert self.order.user_cancel_allowed
+        self.op1.blocked = ["admin"]
+        self.op1.save()
         assert not self.order.user_cancel_allowed
 
     @classscope(attr='o')
