@@ -331,6 +331,8 @@ class Checkin(models.Model):
     REASON_ALREADY_REDEEMED = 'already_redeemed'
     REASON_AMBIGUOUS = 'ambiguous'
     REASON_ERROR = 'error'
+    REASON_BLOCKED = 'blocked'
+    REASON_INVALID_TIME = 'invalid_time'
     REASONS = (
         (REASON_CANCELED, _('Order canceled')),
         (REASON_INVALID, _('Unknown ticket')),
@@ -342,6 +344,8 @@ class Checkin(models.Model):
         (REASON_PRODUCT, _('Ticket type not allowed here')),
         (REASON_AMBIGUOUS, _('Ticket code is ambiguous on list')),
         (REASON_ERROR, _('Server error')),
+        (REASON_BLOCKED, _('Ticket blocked')),
+        (REASON_INVALID_TIME, _('Ticket not valid at this time')),
     )
 
     successful = models.BooleanField(

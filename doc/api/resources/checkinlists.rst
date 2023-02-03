@@ -364,7 +364,7 @@ Endpoints
    Stores a failed check-in. Only necessary for statistical purposes if you perform scan validation offline.
 
    :<json boolean error_reason: One of ``canceled``, ``invalid``, ``unpaid``, ``product``, ``rules``, ``revoked``,
-                                ``incomplete``, ``already_redeemed``, or ``error``. Required.
+                                ``incomplete``, ``already_redeemed``, ``blocked``, ``invalid_time``, or ``error``. Required.
    :<json raw_barcode: The raw barcode you scanned. Required.
    :<json datetime: Date and time of the scan. Optional.
    :<json type: Type of scan, defaults to ``"entry"``.

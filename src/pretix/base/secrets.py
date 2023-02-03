@@ -209,7 +209,7 @@ class Sig1TicketSecretGenerator(BaseTicketSecretGenerator):
     def _encode_time(self, t):
         if t is None:
             return 0
-        return t.timestamp()
+        return int(t.timestamp())
 
     def generate_secret(self, item: Item, variation: ItemVariation = None, subevent: SubEvent = None,
                         attendee_name: str = None, valid_from: datetime = None, valid_until: datetime = None,

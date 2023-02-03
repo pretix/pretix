@@ -2669,7 +2669,8 @@ Blocked ticket secrets
 
 With some non-default ticket secret generation methods, a list of blocked ticket secrets is required for proper validation.
 This endpoint returns all secrets that are currently blocked **or have been blocked before and are now unblocked**, so
-be sure to check the ``blocked`` attribute for its actual value.
+be sure to check the ``blocked`` attribute for its actual value. The list is currently always ordered with the most
+recently updated ones first.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/blockedsecrets/
 
@@ -2707,7 +2708,6 @@ be sure to check the ``blocked`` attribute for its actual value.
       }
 
    :query integer page: The page number in case of a multi-page result set, default is 1
-   :query string ordering: Manually set the ordering of results. Valid fields to be used are ``secret`` and ``updated``. Default: ``-updated``
    :query datetime updated_since: Only return records that have been updated since the given date.
    :query boolean blocked: Only return blocked / non-blocked records.
    :param organizer: The ``slug`` field of the organizer to fetch
