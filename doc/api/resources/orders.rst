@@ -93,7 +93,7 @@ require_approval                      boolean                    If ``true`` and
                                                                  this order has been denied by the event organizer.
 valid_if_pending                      boolean                    If ``true`` and the order is pending, this order
                                                                  is still treated like a paid order for most purposes,
-                                                                 such as checkin. This may be used e.g. for trusted
+                                                                 such as check-in. This may be used e.g. for trusted
                                                                  customers who only need to pay after the event.
 url                                   string                     The full URL to the order confirmation page
 payments                              list of objects            List of payment processes (see below)
@@ -167,7 +167,7 @@ secret                                string                     Secret code pri
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
 subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``).
 discount                              integer                    ID of a discount that has been used during the creation of this position in some way (or ``null``).
-blocked                               list of strings            A list of strings, or ``null``. Whenever not ``null``, the ticket may not be used (e.g. for checkin).
+blocked                               list of strings            A list of strings, or ``null``. Whenever not ``null``, the ticket may not be used (e.g. for check-in).
 valid_from                            datetime                   The ticket will not be valid before this time. Can be ``null``.
 valid_until                           datetime                   The ticket will not be valid after this time. Can be ``null``.
 pseudonymization_id                   string                     A random ID, e.g. for use in lead scanning apps
@@ -1883,7 +1883,7 @@ Manipulating individual positions
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/add_block/
 
    Blocks an order position from being used. The block name either needs to be ``"admin"`` or start with ``"api:"``. It
-   may only contern letters, numbers, dots and underscores. ``"admin"`` represents the regular block that can be set
+   may only contain letters, numbers, dots and underscores. ``"admin"`` represents the regular block that can be set
    in the backend user interface.
 
    **Example request**:
@@ -1921,7 +1921,7 @@ Manipulating individual positions
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/remove_block/
 
    Unblocks an order position from being used. The block name either needs to be ``"admin"`` or start with ``"api:"``. It
-   may only contern letters, numbers, dots and underscores. ``"admin"`` represents the regular block that can be set
+   may only contain letters, numbers, dots and underscores. ``"admin"`` represents the regular block that can be set
    in the backend user interface. Blocks set by plugins cannot be lifted through this API.
 
    **Example request**:

@@ -2207,7 +2207,7 @@ class OrderPosition(AbstractPosition):
     :type canceled: bool
     :param pseudonymization_id: The QR code content for lead scanning
     :type pseudonymization_id: str
-    :param blocked: A list of reasons why this order position is blocked. Blocked positions can't be used for checkin and
+    :param blocked: A list of reasons why this order position is blocked. Blocked positions can't be used for check-in and
                     other purposes. Each entry should be a short string that can be translated into a human-readable
                     description by a plugin. If the position is not blocked, the value must be ``None``, not an empty
                     list.

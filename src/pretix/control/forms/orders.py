@@ -786,7 +786,8 @@ class EventCancelForm(forms.Form):
         label=_('Automatically refund money if possible'),
         initial=True,
         required=False,
-        help_text=_('Only available for payment method that support automatic refunds.')
+        help_text=_('Only available for payment method that support automatic refunds. Tickets that have been blocked '
+                    '(manually or by a plugin) are not auto-canceled and you will need to deal with them manually.')
     )
     manual_refund = forms.BooleanField(
         label=_('Create refund in the manual refund to-do list'),

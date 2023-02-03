@@ -266,7 +266,6 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_p
         order.expires = new_date
         if was_expired:
             order.status = Order.STATUS_PENDING
-        print(valid_if_pending, order.valid_if_pending)
         if valid_if_pending is not None and valid_if_pending != order.valid_if_pending:
             order.valid_if_pending = valid_if_pending
             if valid_if_pending:
