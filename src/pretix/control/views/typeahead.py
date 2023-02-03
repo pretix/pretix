@@ -750,15 +750,14 @@ def subevent_meta_values(request, organizer, event):
 
     matches = SubEventMetaValue.objects.filter(
         value__icontains=q,
-        property__name=propname
+        property__name=propname,
+        subevent__event_id=request.event.pk,
     )
     defaults = EventMetaProperty.objects.filter(
+        default__icontains=q,
         name=propname,
-        default__icontains=q
+        organizer_id=request.organizer.pk,
     )
-
-    defaults = defaults.filter(organizer_id=request.organizer.pk)
-    matches = matches.filter(subevent__event_id=request.event.pk)
 
     return JsonResponse({
         'results': [
