@@ -3018,7 +3018,11 @@ class BlockedTicketSecret(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        unique_together = (('event', 'secret'),)
+        if 'mysql' not in settings.DATABASES['default']['ENGINE']:
+            # MySQL does not support indexes on TextField(). Django knows this and just ignores db_index, but it will
+            # not silently ignore the UNIQUE index, causing this table to fail. I'm so glad we're deprecating MySQL
+            # in a few months, so we'll just live without an unique index until then.
+            unique_together = (('event', 'secret'),)
 
 
 @receiver(post_delete, sender=CachedTicket)
