@@ -757,15 +757,8 @@ def subevent_meta_values(request, organizer, event):
         default__icontains=q
     )
 
-    organizer = get_object_or_404(Organizer, slug=organizer)
-    if not request.user.has_organizer_permission(organizer, request=request):
-        raise PermissionDenied()
-
-    event = get_object_or_404(Event, slug=event)
-    # TODO: do we need to check read permissions on the event here?
-
-    defaults = defaults.filter(organizer_id=organizer.pk)
-    matches = matches.filter(subevent__event_id=event.pk)
+    defaults = defaults.filter(organizer_id=request.organizer.pk)
+    matches = matches.filter(subevent__event_id=request.event.pk)
     # TODO: we anyway filter on one event, so we do not filter down to allowed events - see above if we need to check permissions on event
 #    all_access = (
 #        (request and request.user.has_active_staff_session(request.session.session_key))
