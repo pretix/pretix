@@ -36,6 +36,7 @@ import json
 import logging
 from collections import OrderedDict
 from datetime import datetime, time, timedelta
+from decimal import Decimal
 from io import BytesIO
 from typing import Tuple
 
@@ -221,17 +222,17 @@ def render_pdf(event, positions, opt):
         di = i % badges_per_page
         if di == 0:
             nup_page = nup_pdf.add_blank_page(
-                width=opt['pagesize'][0],
-                height=opt['pagesize'][1],
+                width=Decimal('%.5f' % (opt['pagesize'][0])),
+                height=Decimal('%.5f' % (opt['pagesize'][1])),
             )
         tx = opt['margins'][3] + (di % opt['cols']) * opt['offsets'][0]
         ty = opt['margins'][2] + (opt['rows'] - 1 - (di // opt['cols'])) * opt['offsets'][1]
         page.add_transformation(Transformation().translate(tx, ty))
         page.mediabox = RectangleObject((
-            page.mediabox.left.as_numeric() + tx,
-            page.mediabox.bottom.as_numeric() + ty,
-            page.mediabox.right.as_numeric() + tx,
-            page.mediabox.top.as_numeric() + ty
+            Decimal('%.5f' % (page.mediabox.left.as_numeric() + tx)),
+            Decimal('%.5f' % (page.mediabox.bottom.as_numeric() + ty)),
+            Decimal('%.5f' % (page.mediabox.right.as_numeric() + tx)),
+            Decimal('%.5f' % (page.mediabox.top.as_numeric() + ty))
         ))
         page.trimbox = page.mediabox
         nup_page.merge_page(page)
