@@ -244,7 +244,8 @@
                                 <a href="{% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=e.voucher.pk %}">
                                     {{ e.voucher }}
                                 </a>
-                            {% elif not e.voucher and e.availability.0 == 100 and e.availability.1|default_if_none:"none" != "none" %}
+<!--                            {% elif not e.voucher and e.availability.0 == 100 %}-->
+                                {% elif not e.voucher %}
                                 <button name="assign" value="{{ e.pk }}" class="btn btn-default btn-xs">
                                     {% trans "Send a voucher" %}
                                 </button>
