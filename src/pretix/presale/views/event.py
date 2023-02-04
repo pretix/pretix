@@ -76,6 +76,7 @@ from pretix.presale.views.organizer import (
     EventListMixin, add_subevents_for_days, days_for_template,
     filter_qs_by_attr, has_before_after, weeks_for_template,
 )
+from pretix.presale.views.customer import CustomerRequiredMixin
 
 from ...helpers.formats.en.formats import SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT
 from . import (
@@ -396,7 +397,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
 @method_decorator(iframe_entry_view_wrapper, 'dispatch')
-class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
+class EventIndex(CustomerRequiredMixin, EventViewMixin, EventListMixin, CartMixin, TemplateView):
     template_name = "pretixpresale/event/index.html"
 
     def get(self, request, *args, **kwargs):
