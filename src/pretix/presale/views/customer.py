@@ -64,6 +64,7 @@ from pretix.presale.forms.customer import (
 from pretix.presale.utils import (
     customer_login, customer_logout, update_customer_session_auth_hash,
 )
+from pretix.presale.views.organizer import EventListMixin
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
@@ -351,7 +352,7 @@ class CustomerRequiredMixin:
         return super().dispatch(request, *args, **kwargs)
 
 
-class ProfileView(CustomerRequiredMixin, ListView):
+class ProfileView(CustomerRequiredMixin, ListView, EventListMixin):
     template_name = 'pretixpresale/organizers/customer_profile.html'
     context_object_name = 'orders'
     paginate_by = 20
