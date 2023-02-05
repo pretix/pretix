@@ -64,10 +64,11 @@ from pretix.presale.forms.customer import (
 from pretix.presale.utils import (
     customer_login, customer_logout, update_customer_session_auth_hash,
 )
-from pretix.presale.views.organizer import EventListMixin
-
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
+# FIXME:Hacky solution to get around the fact that there is no event variable in the customer request context. Will need update every year.
+
+STOREFRONT_URL='/sideburn/sideburn2023'
 
 class RedirectBackMixin:
     redirect_field_name = 'next'
@@ -135,7 +136,8 @@ class LoginView(RedirectBackMixin, FormView):
         url = self.get_redirect_url()
 
         if not url:
-            return eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
+            return STOREFRONT_URL
+            # return eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
 
         if self.request.GET.get("request_cross_domain_customer_auth") == "true":
             otpstore = SessionStore()
@@ -352,7 +354,7 @@ class CustomerRequiredMixin:
         return super().dispatch(request, *args, **kwargs)
 
 
-class ProfileView(CustomerRequiredMixin, ListView, EventListMixin):
+class ProfileView(CustomerRequiredMixin, ListView):
     template_name = 'pretixpresale/organizers/customer_profile.html'
     context_object_name = 'orders'
     paginate_by = 20
@@ -638,16 +640,14 @@ class SSOLoginView(RedirectBackMixin, View):
     def get_success_url(self):
         url = self.get_redirect_url()
 
-        # FIXME:Hacky solution to get around the fact that there is no event variable in the customer request context. Will need update
 
-        default_url='/sideburn/sideburn2022'
         # default_url =  eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
         # default_url = eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs)
         # if not url:ss
         #     default_url = '/'
         # else:
         #     default_url = eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
-        return url or default_url
+        return url or STOREFRONT_URL
 
 
 class SSOLoginReturnView(RedirectBackMixin, View):
@@ -868,7 +868,8 @@ class SSOLoginReturnView(RedirectBackMixin, View):
         url = self.get_redirect_url(redirect_to)
 
         if not url:
-            return eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
+            return STOREFRONT_URL
+            # return eventreverse(self.request.organizer, 'presale:organizer.customer.profile', kwargs={})
         else:
             if self.request.session.get(f'pretix_customerauth_{self.provider.pk}_cross_domain_requested'):
                 otpstore = SessionStore()
