@@ -35,8 +35,8 @@ from django.utils.formats import date_format, localize
 from django.utils.translation import (
     get_language, gettext, gettext_lazy, pgettext,
 )
-from reportlab.lib import pagesizes
-from reportlab.lib.enums import TA_LEFT, TA_RIGHT
+from reportlab.lib import pagesizes, colors
+from reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER
 from reportlab.lib.styles import ParagraphStyle, StyleSheet1
 from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
@@ -147,6 +147,8 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         """
         stylesheet = StyleSheet1()
         stylesheet.add(ParagraphStyle(name='Normal', fontName=self.font_regular, fontSize=10, leading=12))
+        stylesheet.add(ParagraphStyle(name='BoldInverseCenter', fontName=self.font_bold, fontSize=10, leading=12,
+                                      textColor=colors.white, alignment=TA_CENTER))
         stylesheet.add(ParagraphStyle(name='InvoiceFrom', parent=stylesheet['Normal']))
         stylesheet.add(ParagraphStyle(name='Heading1', fontName=self.font_bold, fontSize=15, leading=15 * 1.2))
         stylesheet.add(ParagraphStyle(name='FineprintHeading', fontName=self.font_bold, fontSize=8, leading=12))
@@ -612,7 +614,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             tdata.append([
                 pgettext('invoice', 'Invoice total'), '', money_filter(total, self.invoice.event.currency)
             ])
-            colwidths = [a * doc.width for a in (.65, .05, .30)]
+            colwidths = [a * doc.width for a in (.65, .20, .15)]
 
         if self.invoice.event.settings.invoice_show_payments and not self.invoice.is_cancellation:
             if self.invoice.order.status == Order.STATUS_PENDING:
@@ -644,6 +646,16 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 ])
                 tstyledata += [
                     ('FONTNAME', (0, len(tdata) - 3), (-1, len(tdata) - 3), self.font_bold),
+                ]
+            elif self.invoice.order.status == Order.STATUS_PAID:
+                tdata[-1][1] = Paragraph(gettext('will be charged from'), self.stylesheet['BoldInverseCenter'])
+                if has_taxes:
+                    tstyledata += [
+                        ('SPAN', (1, len(tdata) - 1), (3, len(tdata) - 1)),
+                    ]
+                green = colors.HexColor(self.event.settings.theme_color_success)
+                tstyledata += [
+                    ('BACKGROUND', (1, len(tdata) - 1), (1, len(tdata) - 1), green),
                 ]
 
         table = Table(tdata, colWidths=colwidths, repeatRows=1)
