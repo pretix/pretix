@@ -57,8 +57,8 @@ from pretix.base.forms.widgets import (
 from pretix.base.models import (
     Checkin, CheckinList, Device, Event, EventMetaProperty, EventMetaValue,
     Gate, Invoice, InvoiceAddress, Item, Order, OrderPayment, OrderPosition,
-    OrderRefund, Organizer, Question, QuestionAnswer, SubEvent, Team,
-    TeamAPIToken, TeamInvite,
+    OrderRefund, Organizer, Question, QuestionAnswer, SubEvent,
+    SubEventMetaValue, Team, TeamAPIToken, TeamInvite,
 )
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.widgets import Select2
@@ -1116,9 +1116,25 @@ class SubEventFilterForm(FilterForm):
     )
 
     def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
         self.fields['date_from'].widget = DatePickerWidget()
         self.fields['date_until'].widget = DatePickerWidget()
+        for p in self.meta_properties.all():
+            self.fields['meta_{}'.format(p.name)] = forms.CharField(
+                label=p.name,
+                required=False,
+                widget=forms.TextInput(
+                    attrs={
+                        'data-typeahead-url': reverse('control:event.subevents.meta.typeahead', kwargs={
+                            'organizer': self.event.organizer.slug,
+                            'event': self.event.slug
+                        }) + '?' + urlencode({
+                            'property': p.name,
+                        })
+                    }
+                )
+            )
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data
@@ -1181,12 +1197,41 @@ class SubEventFilterForm(FilterForm):
         if fdata.get('time_from'):
             qs = qs.filter(date_from__time__gte=fdata.get('time_from'))
 
+        filters_by_property_name = {}
+        for i, p in enumerate(self.meta_properties):
+            d = fdata.get('meta_{}'.format(p.name))
+            if d:
+                semv_with_value = SubEventMetaValue.objects.filter(
+                    subevent=OuterRef('pk'),
+                    property__pk=p.pk,
+                    value=d
+                )
+                semv_with_any_value = SubEventMetaValue.objects.filter(
+                    subevent=OuterRef('pk'),
+                    property__pk=p.pk,
+                )
+                qs = qs.annotate(**{'attr_{}'.format(i): Exists(semv_with_value)})
+                if p.name in filters_by_property_name:
+                    filters_by_property_name[p.name] |= Q(**{'attr_{}'.format(i): True})
+                else:
+                    filters_by_property_name[p.name] = Q(**{'attr_{}'.format(i): True})
+                default = self.event.meta_data[p.name]
+                if default == d:
+                    qs = qs.annotate(**{'attr_{}_any'.format(i): Exists(semv_with_any_value)})
+                    filters_by_property_name[p.name] |= Q(**{'attr_{}_any'.format(i): False})
+        for f in filters_by_property_name.values():
+            qs = qs.filter(f)
+
         if fdata.get('ordering'):
             qs = qs.order_by(self.get_order_by())
         else:
             qs = qs.order_by('-date_from')
 
         return qs
+
+    @cached_property
+    def meta_properties(self):
+        return self.event.organizer.meta_properties.filter(filter_allowed=True)
 
 
 class OrganizerFilterForm(FilterForm):

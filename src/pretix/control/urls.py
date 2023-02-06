@@ -261,6 +261,7 @@ urlpatterns = [
         re_path(r'^subevents/bulk_add$', subevents.SubEventBulkCreate.as_view(), name='event.subevents.bulk'),
         re_path(r'^subevents/bulk_action$', subevents.SubEventBulkAction.as_view(), name='event.subevents.bulkaction'),
         re_path(r'^subevents/bulk_edit$', subevents.SubEventBulkEdit.as_view(), name='event.subevents.bulkedit'),
+        re_path(r'^subevents/typeahead/meta/$', typeahead.subevent_meta_values, name='event.subevents.meta.typeahead'),
         re_path(r'^items/$', item.ItemList.as_view(), name='event.items'),
         re_path(r'^items/add$', item.ItemCreate.as_view(), name='event.items.add'),
         re_path(r'^items/(?P<item>\d+)/$', item.ItemUpdateGeneral.as_view(), name='event.item'),

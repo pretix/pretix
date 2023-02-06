@@ -50,6 +50,11 @@
                     <div class="col-xs-12 one-line-checkboxes">
                         {% bootstrap_field filter_form.weekday %}
                     </div>
+                    {% for mf in meta_fields %}
+                        <div class="col-md-3 col-sm-6 col-xs-12">
+                            {% bootstrap_field mf %}
+                        </div>
+                    {% endfor %}
                 </div>
 
                 <div class="text-right flip">
