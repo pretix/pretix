@@ -1116,23 +1116,18 @@ class SubEventFilterForm(FilterForm):
     )
 
     def __init__(self, *args, **kwargs):
-        self.organizer = kwargs.pop('organizer')
         self.event = kwargs.pop('event')
         super().__init__(*args, **kwargs)
         self.fields['date_from'].widget = DatePickerWidget()
         self.fields['date_until'].widget = DatePickerWidget()
-        seen = set()
         for p in self.meta_properties.all():
-            if p.name in seen:
-                continue
-            seen.add(p.name)
             self.fields['meta_{}'.format(p.name)] = forms.CharField(
                 label=p.name,
                 required=False,
                 widget=forms.TextInput(
                     attrs={
                         'data-typeahead-url': reverse('control:event.subevents.meta.typeahead', kwargs={
-                            'organizer': self.organizer.slug,
+                            'organizer': self.event.organizer.slug,
                             'event': self.event.slug
                         }) + '?' + urlencode({
                             'property': p.name,
@@ -1220,7 +1215,8 @@ class SubEventFilterForm(FilterForm):
                     filters_by_property_name[p.name] |= Q(**{'attr_{}'.format(i): True})
                 else:
                     filters_by_property_name[p.name] = Q(**{'attr_{}'.format(i): True})
-                if p.default == d:
+                default = self.event.meta_data[p.name]
+                if default == d:
                     qs = qs.annotate(**{'attr_{}_any'.format(i): Exists(semv_with_any_value)})
                     filters_by_property_name[p.name] |= Q(**{'attr_{}_any'.format(i): False})
         for f in filters_by_property_name.values():
@@ -1235,7 +1231,7 @@ class SubEventFilterForm(FilterForm):
 
     @cached_property
     def meta_properties(self):
-        return self.organizer.meta_properties.filter(filter_allowed=True)
+        return self.event.organizer.meta_properties.filter(filter_allowed=True)
 
 
 class OrganizerFilterForm(FilterForm):

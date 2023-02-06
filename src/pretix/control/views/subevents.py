@@ -110,7 +110,7 @@ class SubEventQueryMixin:
 
     @cached_property
     def filter_form(self):
-        return SubEventFilterForm(data=self.request_data, prefix='filter', organizer=self.request.organizer, event=self.request.event)
+        return SubEventFilterForm(data=self.request_data, prefix='filter', event=self.request.event)
 
 
 class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryMixin, ListView):

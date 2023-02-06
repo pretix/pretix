@@ -753,6 +753,11 @@ def subevent_meta_values(request, organizer, event):
         property__name=propname,
         subevent__event_id=request.event.pk,
     )
+    event_matches = EventMetaValue.objects.filter(
+        value__icontains=q,
+        property__name=propname,
+        event_id=request.event.pk,
+    )
     defaults = EventMetaProperty.objects.filter(
         default__icontains=q,
         name=propname,
@@ -762,7 +767,11 @@ def subevent_meta_values(request, organizer, event):
     return JsonResponse({
         'results': [
             {'name': v, 'id': v}
-            for v in sorted(set(defaults.values_list('default', flat=True)[:10]) | set(matches.values_list('value', flat=True)[:10]))
+            for v in sorted(
+                set(defaults.values_list('default', flat=True)[:10]) |
+                set(matches.values_list('value', flat=True)[:10]) |
+                set(event_matches.values_list('value', flat=True)[:10])
+            )
         ]
     })
 
