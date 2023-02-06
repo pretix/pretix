@@ -301,6 +301,8 @@ class DateFrameWidget(forms.MultiWidget):
     def get_context(self, name, value, attrs):
         ctx = super().get_context(name, value, attrs)
         ctx['required'] = self.timeframe_choices[0][0] == 'unset'
+        ctx['widget']['subwidgets'][1]['attrs'].pop('required', None)
+        ctx['widget']['subwidgets'][2]['attrs'].pop('required', None)
         return ctx
 
 
