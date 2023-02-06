@@ -104,6 +104,12 @@ Install ``pgloader``::
 
     # apt install pgloader
 
+.. note::
+
+   If you are using Ubuntu 20.04, the ``pgloader`` version from the repositories seems to be incompatible with PostgreSQL
+   12+. You can install ``pgloader`` from the `PostgreSQL repositories`_ instead.
+   See also `this discussion <https://github.com/pretix/pretix/issues/3090>`_.
+
 Create a new file ``/tmp/pretix.load``, replacing the MySQL and PostgreSQL connection strings with the correct user names, passwords, and/or database names::
 
     LOAD DATABASE
@@ -146,3 +152,5 @@ Now, restart pretix. Maybe stop your MySQL server as a verification step that yo
 And you're done! After you've verified everything has been copied correctly, you can delete the old MySQL database.
 
 .. note:: Don't forget to update your backup process to back up your PostgreSQL database instead of your MySQL database now.
+
+.. _PostgreSQL repositories: https://wiki.postgresql.org/wiki/Apt
