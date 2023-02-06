@@ -90,7 +90,7 @@
             </div>
         </details>
     {% empty %}
-        <div class="alert-info">{% trans "This webhook did not receive any events in the last 30 days." %}</div>
+        <div class="alert alert-info">{% trans "This webhook did not receive any events in the last 30 days." %}</div>
     {% endfor %}
     {% include "pretixcontrol/pagination.html" %}
 {% endblock %}

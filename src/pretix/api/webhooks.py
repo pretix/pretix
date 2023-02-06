@@ -96,7 +96,7 @@ def get_all_webhook_events():
     return types
 
 
-class ParametrizedOrderWebhookEvent(WebhookEvent):
+class ParametrizedWebhookEvent(WebhookEvent):
     def __init__(self, action_type, verbose_name):
         self._action_type = action_type
         self._verbose_name = verbose_name
@@ -110,6 +110,8 @@ class ParametrizedOrderWebhookEvent(WebhookEvent):
     def verbose_name(self):
         return self._verbose_name
 
+
+class ParametrizedOrderWebhookEvent(ParametrizedWebhookEvent):
     def build_payload(self, logentry: LogEntry):
         order = logentry.content_object
         if not order:
@@ -124,19 +126,7 @@ class ParametrizedOrderWebhookEvent(WebhookEvent):
         }
 
 
-class ParametrizedEventWebhookEvent(WebhookEvent):
-    def __init__(self, action_type, verbose_name):
-        self._action_type = action_type
-        self._verbose_name = verbose_name
-        super().__init__()
-
-    @property
-    def action_type(self):
-        return self._action_type
-
-    @property
-    def verbose_name(self):
-        return self._verbose_name
+class ParametrizedEventWebhookEvent(ParametrizedWebhookEvent):
 
     def build_payload(self, logentry: LogEntry):
         if logentry.action_type == 'pretix.event.deleted':
@@ -160,19 +150,7 @@ class ParametrizedEventWebhookEvent(WebhookEvent):
         }
 
 
-class ParametrizedSubEventWebhookEvent(WebhookEvent):
-    def __init__(self, action_type, verbose_name):
-        self._action_type = action_type
-        self._verbose_name = verbose_name
-        super().__init__()
-
-    @property
-    def action_type(self):
-        return self._action_type
-
-    @property
-    def verbose_name(self):
-        return self._verbose_name
+class ParametrizedSubEventWebhookEvent(ParametrizedWebhookEvent):
 
     def build_payload(self, logentry: LogEntry):
         # do not use content_object, this is also called in deletion
@@ -181,6 +159,19 @@ class ParametrizedSubEventWebhookEvent(WebhookEvent):
             'organizer': logentry.event.organizer.slug,
             'event': logentry.event.slug,
             'subevent': logentry.object_id,
+            'action': logentry.action_type,
+        }
+
+
+class ParametrizedItemWebhookEvent(ParametrizedWebhookEvent):
+
+    def build_payload(self, logentry: LogEntry):
+        # do not use content_object, this is also called in deletion
+        return {
+            'notification_id': logentry.pk,
+            'organizer': logentry.event.organizer.slug,
+            'event': logentry.event.slug,
+            'item': logentry.object_id,
             'action': logentry.action_type,
         }
 
@@ -304,6 +295,11 @@ def register_default_webhook_events(sender, **kwargs):
         ParametrizedSubEventWebhookEvent(
             'pretix.subevent.deleted',
             pgettext_lazy('subevent', 'Event series date deleted'),
+        ),
+        ParametrizedItemWebhookEvent(
+            'pretix.event.item.*',
+            _('Product changed (including product added or deleted and including changes to nested objects like '
+              'variations or bundles)'),
         ),
         ParametrizedEventWebhookEvent(
             'pretix.event.live.activated',
