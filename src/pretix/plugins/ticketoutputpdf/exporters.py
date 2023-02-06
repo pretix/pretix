@@ -43,7 +43,7 @@ from django.db.models import OuterRef, Q, Subquery
 from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import now
 from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
-from PyPDF2 import PdfMerger
+from pypdf import PdfMerger
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.i18n import language

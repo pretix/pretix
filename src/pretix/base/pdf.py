@@ -62,7 +62,7 @@ from django.utils.html import conditional_escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from i18nfield.strings import LazyI18nString
-from PyPDF2 import PdfReader
+from pypdf import PdfReader
 from pytz import timezone
 from reportlab.graphics import renderPDF
 from reportlab.graphics.barcode.qr import QrCodeWidget
@@ -950,8 +950,8 @@ class Renderer:
                 with open(os.path.join(d, 'out.pdf'), 'rb') as f:
                     return BytesIO(f.read())
         else:
-            from PyPDF2 import PdfReader, PdfWriter, Transformation
-            from PyPDF2.generic import RectangleObject
+            from pypdf import PdfReader, PdfWriter, Transformation
+            from pypdf.generic import RectangleObject
             buffer.seek(0)
             new_pdf = PdfReader(buffer)
             output = PdfWriter()
