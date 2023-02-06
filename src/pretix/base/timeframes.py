@@ -293,8 +293,8 @@ class DateFrameWidget(forms.MultiWidget):
         if '/' in value:
             return [
                 'custom',
-                date.fromisoformat(value.split('/', 1)[0]),
-                date.fromisoformat(value.split('/', 1)[-1]),
+                date.fromisoformat(value.split('/', 1)[0]) if value.split('/', 1)[0] else None,
+                date.fromisoformat(value.split('/', 1)[-1]) if value.split('/', 1)[-1] else None,
             ]
         return [value, None, None]
 
