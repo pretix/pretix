@@ -218,6 +218,19 @@ def test_unpaid_but_valid(position, clist):
 
 
 @pytest.mark.django_db
+def test_require_approval(position, clist):
+    o = position.order
+    o.status = Order.STATUS_PENDING
+    o.require_approval = True
+    o.save()
+    clist.include_pending = False
+    clist.save()
+    with pytest.raises(CheckInError) as excinfo:
+        perform_checkin(position, clist, {}, ignore_unpaid=True)
+    assert excinfo.value.code == 'unpaid'
+
+
+@pytest.mark.django_db
 def test_unpaid_include_pending_ignore(position, clist):
     o = position.order
     o.status = Order.STATUS_PENDING

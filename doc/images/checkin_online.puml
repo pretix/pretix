@@ -58,21 +58,26 @@ else
                 else
                     -down->[yes] "Is the order in status PAID\nor is this a forced upload?"
                     --> if "" then
-                        -right->[no] "Is Order.valid_if_pending set?"
+                        -right->[no] "Is Order.require_approval set?"
                         --> if "" then
-                            -down->[yes] "Is this an entry or exit?\nIs the upload forced?"
-                        else
-                            -right->[no] "Does the check-in list include pending orders?"
+                            -->[no] "Is Order.valid_if_pending set?"
                             --> if "" then
-                                -right->[no] "Return error UNPAID "
+                                -down->[yes] "Is this an entry or exit?\nIs the upload forced?"
                             else
-                                -down->[yes] "Is ignore_unpaid set on the request?\n(Has the operator confirmed\nthe checkin?)"
+                                -right->[no] "Does the check-in list include pending orders?"
                                 --> if "" then
                                     -right->[no] "Return error UNPAID "
                                 else
-                                    -down->[yes] "Is this an entry or exit?\nIs the upload forced?"
+                                    -down->[yes] "Is ignore_unpaid set on the request?\n(Has the operator confirmed\nthe checkin?)"
+                                    --> if "" then
+                                        -right->[no] "Return error UNPAID "
+                                    else
+                                        -down->[yes] "Is this an entry or exit?\nIs the upload forced?"
+                                    endif
                                 endif
                             endif
+                        else
+                            -->[yes] "Return error UNPAID "
                         endif
                     else
                         -down->[yes] "Is this an entry or exit?\nIs the upload forced?"

@@ -779,6 +779,11 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 _('This order position has an invalid date for this check-in list.'),
                 'product'
             )
+        elif op.order.status != Order.STATUS_PAID and not force and op.order.require_approval:
+            raise CheckInError(
+                _('This order is not yet approved.'),
+                'unpaid'
+            )
         elif op.order.status != Order.STATUS_PAID and not force and not op.order.valid_if_pending and not (
             ignore_unpaid and clist.include_pending and op.order.status == Order.STATUS_PENDING
         ):

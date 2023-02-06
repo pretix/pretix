@@ -42,19 +42,24 @@ partition "data-based check" {
                     else
                         -down->[yes] "Is the order in status PAID?"
                         --> if "" then
-                            -right->[no] "Is Order.valid_if_pending set?"
+                            -right->[no] "Is Order.require_approval set?"
                             --> if "" then
-                                -down->[yes] "Is this an entry or exit?"
+                                -->[yes] "Return error UNPAID "
                             else
-                                -right->[no] "Does the check-in list include pending orders?"
+                                -right->[no] "Is Order.valid_if_pending set?"
                                 --> if "" then
-                                    -right->[no] "Return error UNPAID "
+                                    -->[yes] "Is this an entry or exit?"
                                 else
-                                    -down->[yes] "Is ignore_unpaid set on the request?\n(Has the operator confirmed\nthe checkin?)"
+                                    -->[no] "Does the check-in list include pending orders?"
                                     --> if "" then
-                                        -right->[no] "Return error UNPAID "
+                                        -->[no] "Return error UNPAID "
                                     else
-                                        -down->[yes] "Is this an entry or exit?"
+                                        -->[yes] "Is ignore_unpaid set on the request?\n(Has the operator confirmed\nthe checkin?)"
+                                        --> if "" then
+                                            -->[no] "Return error UNPAID "
+                                        else
+                                            -->[yes] "Is this an entry or exit?"
+                                        endif
                                     endif
                                 endif
                             endif
