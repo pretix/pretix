@@ -119,6 +119,7 @@ $(document).ready(function () {
           date_tolerance: gettext('Tolerance (minutes)'),
           condition_add: gettext('Add condition'),
           minutes: gettext('minutes'),
+          duplicate: gettext('Duplicate'),
         },
         hasRules: false,
       };

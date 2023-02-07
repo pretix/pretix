@@ -1,6 +1,10 @@
 <template>
     <div v-bind:class="classObject">
         <div class="btn-group pull-right">
+            <button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="duplicate"
+                  v-if="level > 0" data-toggle="tooltip" :title="texts.duplicate">
+              <span class="fa fa-copy"></span>
+            </button>
             <button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="wrapWithOR">OR
             </button>
             <button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="wrapWithAND">AND
@@ -259,6 +263,10 @@
       },
       remove: function () {
         this.$parent.rule[this.$parent.operator].splice(this.index, 1);
+      },
+      duplicate: function () {
+        var r = JSON.parse(JSON.stringify(this.rule));
+        this.$parent.rule[this.$parent.operator].splice(this.index, 0, r);
       },
     }
   }
