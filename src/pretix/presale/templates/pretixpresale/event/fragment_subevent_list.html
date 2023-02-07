@@ -24,7 +24,7 @@
                         {% if subev.best_availability_is_low %}
                             <span class="label label-success-warning">{% trans "Few tickets left" %}</span>
                         {% else %}
-                            {% if event.event.has_paid_item %}
+                            {% if subev.has_paid_item %}
                                 <span class="label label-success">{% trans "Buy now" context "available_event_in_list" %}</span>
                             {% else %}
                                 <span class="label label-success">{% trans "Book now" %}</span>
