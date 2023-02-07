@@ -648,7 +648,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     ('FONTNAME', (0, len(tdata) - 3), (-1, len(tdata) - 3), self.font_bold),
                 ]
             elif self.invoice.order.status == Order.STATUS_PAID:
-                tdata[-1][1] = Paragraph(gettext('will be charged from'), self.stylesheet['BoldInverseCenter'])
+                tdata[-1][1] = Paragraph(gettext('bezahlt'), self.stylesheet['BoldInverseCenter'])
                 if has_taxes:
                     tstyledata += [
                         ('SPAN', (1, len(tdata) - 1), (3, len(tdata) - 1)),
