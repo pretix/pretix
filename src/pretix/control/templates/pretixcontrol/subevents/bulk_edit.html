@@ -151,6 +151,7 @@
         <fieldset>
             <legend>{% trans "Item prices" %}</legend>
             {% for f in itemvar_forms %}
+                {% bootstrap_form_errors f %}
                 <div class="form-group subevent-itemvar-group">
                     <label class="col-md-3 control-label" for="id_{{ f.prefix }}-price">
                         {% if f.variation %}{{ f.item }} – {{ f.variation }}{% else %}{{ f.item }}{% endif %}

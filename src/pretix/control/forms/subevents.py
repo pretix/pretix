@@ -23,6 +23,7 @@ from datetime import datetime
 from urllib.parse import urlencode
 
 from django import forms
+from django.core.exceptions import ValidationError
 from django.forms import formset_factory
 from django.forms.utils import ErrorDict
 from django.urls import reverse
@@ -273,6 +274,13 @@ class SubEventItemForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
             'available_until': SplitDateTimeField,
         }
 
+    def clean(self):
+        d = super().clean()
+        if d.get('available_from') and d.get('available_until'):
+            if d.get('available_from') > d.get('available_until'):
+                raise ValidationError(_('The end of availability should be after the start of availability.'))
+        return d
+
 
 class SubEventItemVariationForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
@@ -292,6 +300,13 @@ class SubEventItemVariationForm(SubEventItemOrVariationFormMixin, forms.ModelFor
             'available_from': SplitDateTimeField,
             'available_until': SplitDateTimeField,
         }
+
+    def clean(self):
+        d = super().clean()
+        if d.get('available_from') and d.get('available_until'):
+            if d.get('available_from') > d.get('available_until'):
+                raise ValidationError(_('The end of availability should be after the start of availability.'))
+        return d
 
 
 class BulkSubEventItemForm(SubEventItemForm):
