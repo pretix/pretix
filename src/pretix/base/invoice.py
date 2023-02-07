@@ -35,8 +35,8 @@ from django.utils.formats import date_format, localize
 from django.utils.translation import (
     get_language, gettext, gettext_lazy, pgettext,
 )
-from reportlab.lib import pagesizes, colors
-from reportlab.lib.enums import TA_LEFT, TA_RIGHT, TA_CENTER
+from reportlab.lib import colors, pagesizes
+from reportlab.lib.enums import TA_CENTER, TA_LEFT, TA_RIGHT
 from reportlab.lib.styles import ParagraphStyle, StyleSheet1
 from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
@@ -44,8 +44,8 @@ from reportlab.pdfbase.pdfmetrics import stringWidth
 from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import (
-    BaseDocTemplate, Frame, KeepTogether, NextPageTemplate, PageTemplate,
-    Paragraph, Spacer, Table, TableStyle,
+    BaseDocTemplate, Flowable, Frame, KeepTogether, NextPageTemplate,
+    PageTemplate, Paragraph, Spacer, Table, TableStyle,
 )
 
 from pretix.base.decimal import round_decimal
@@ -249,6 +249,31 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
             text,
             tags=tags or []
         ).strip().replace('<br>', '<br />').replace('\n', '<br />\n')
+
+
+class PaidMarker(Flowable):
+    def __init__(self, text='paid', color=None, font='OpenSansBd', size=20):
+        super().__init__()
+        self.text = text
+        self.color = color
+        self.font = font
+        self.size = size
+        self._showBoundary = True
+
+    def wrap(self, availwidth, availheight):
+        # Fake a size, we don't care if we exceed the table
+        return 10, self.size / 2
+
+    def draw(self):
+        self.canv.translate(0, - self.size / 2)
+        self.canv.rotate(2)
+        self.canv.setFont(self.font, self.size)
+        self.canv.setFillColor(self.color)
+        width = self.canv.stringWidth(self.text, self.font, self.size)
+        self.canv.drawRightString(0, 0, self.text)
+
+        self.canv.setStrokeColor(self.color)
+        self.canv.roundRect(-width - self.size / 2, -self.size / 4, width + self.size, self.size + self.size / 4, 3)
 
 
 class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
@@ -616,8 +641,8 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             ])
             colwidths = [a * doc.width for a in (.65, .20, .15)]
 
-        if self.invoice.event.settings.invoice_show_payments and not self.invoice.is_cancellation:
-            if self.invoice.order.status == Order.STATUS_PENDING:
+        if not self.invoice.is_cancellation:
+            if self.invoice.event.settings.invoice_show_payments and self.invoice.order.status == Order.STATUS_PENDING:
                 pending_sum = self.invoice.order.pending_sum
                 if pending_sum != total:
                     tdata.append([pgettext('invoice', 'Received payments')] + (['', '', ''] if has_taxes else ['']) + [
@@ -629,7 +654,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     tstyledata += [
                         ('FONTNAME', (0, len(tdata) - 3), (-1, len(tdata) - 3), self.font_bold),
                     ]
-            elif self.invoice.order.payments.filter(
+            elif self.invoice.event.settings.invoice_show_payments and self.invoice.order.payments.filter(
                 state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED), provider='giftcard'
             ).exists():
                 giftcard_sum = self.invoice.order.payments.filter(
@@ -647,16 +672,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 tstyledata += [
                     ('FONTNAME', (0, len(tdata) - 3), (-1, len(tdata) - 3), self.font_bold),
                 ]
-            elif self.invoice.order.status == Order.STATUS_PAID:
-                tdata[-1][1] = Paragraph(gettext('bezahlt'), self.stylesheet['BoldInverseCenter'])
-                if has_taxes:
-                    tstyledata += [
-                        ('SPAN', (1, len(tdata) - 1), (3, len(tdata) - 1)),
-                    ]
-                green = colors.HexColor(self.event.settings.theme_color_success)
-                tstyledata += [
-                    ('BACKGROUND', (1, len(tdata) - 1), (1, len(tdata) - 1), green),
-                ]
+            elif self.invoice.payment_provider_stamp:
+                pm = PaidMarker(
+                    text=self.invoice.payment_provider_stamp,
+                    color=colors.HexColor(self.event.settings.theme_color_success),
+                    size=16
+                )
+                tdata[-1][-2] = pm
 
         table = Table(tdata, colWidths=colwidths, repeatRows=1)
         table.setStyle(TableStyle(tstyledata))

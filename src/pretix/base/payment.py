@@ -464,6 +464,16 @@ class BasePaymentProvider:
             return pgettext_lazy('invoice', 'The payment for this invoice has already been received.')
         return self.settings.get('_invoice_text', as_type=LazyI18nString, default='')
 
+    def render_invoice_stamp(self, order: Order, payment: OrderPayment) -> str:
+        """
+        This is called when an invoice for an order with this payment provider is generated.
+        The default implementation returns "paid" if the order was already paid, and ``None``
+        otherwise. You can override this with a string, but it should be *really* short to make
+        the invoice look pretty.
+        """
+        if order.status == Order.STATUS_PAID:
+            return _('paid')
+
     @property
     def payment_form_fields(self) -> dict:
         """

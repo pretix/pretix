@@ -445,6 +445,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
         'introductory_text': '',
         'additional_text': '',
         'payment_provider_text': '',
+        'payment_provider_stamp': None,
         'footer_text': '',
         'lines': [
             {

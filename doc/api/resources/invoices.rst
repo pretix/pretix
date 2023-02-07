@@ -42,6 +42,7 @@ introductory_text                     string                     Text to be prin
 additional_text                       string                     Text to be printed below the product list
 payment_provider_text                 string                     Text to be printed below the product list with
                                                                  payment information
+payment_provider_stamp                string                     Short text to be visibly printed to indicate payment status
 footer_text                           string                     Text to be printed in the page footer area
 lines                                 list of objects            The actual invoice contents
 ├ position                            integer                    Number of the line within an invoice.
@@ -178,6 +179,7 @@ Endpoints
             "internal_reference": "",
             "additional_text": "We are looking forward to see you on our conference!",
             "payment_provider_text": "Please transfer the money to our account ABC…",
+            "payment_provider_stamp": null,
             "footer_text": "Big Events LLC - Registration No. 123456 - VAT ID: EU0987654321",
             "lines": [
               {
@@ -268,6 +270,7 @@ Endpoints
         "internal_reference": "",
         "additional_text": "We are looking forward to see you on our conference!",
         "payment_provider_text": "Please transfer the money to our account ABC…",
+        "payment_provider_stamp": null,
         "footer_text": "Big Events LLC - Registration No. 123456 - VAT ID: EU0987654321",
         "lines": [
           {

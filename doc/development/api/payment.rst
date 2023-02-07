@@ -102,6 +102,8 @@ The provider class
 
    .. automethod:: render_invoice_text
 
+   .. automethod:: render_invoice_stamp
+
    .. automethod:: order_change_allowed
 
    .. automethod:: payment_prepare

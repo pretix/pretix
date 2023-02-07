@@ -176,6 +176,7 @@ TEST_INVOICE_RES = {
     "internal_reference": "",
     "additional_text": "",
     "payment_provider_text": "",
+    "payment_provider_stamp": None,
     "footer_text": "",
     "foreign_currency_display": None,
     "foreign_currency_rate": None,

@@ -1484,9 +1484,9 @@ class InvoiceSerializer(I18nAwareModelSerializer):
                   'invoice_to', 'invoice_to_company', 'invoice_to_name', 'invoice_to_street', 'invoice_to_zipcode',
                   'invoice_to_city', 'invoice_to_state', 'invoice_to_country', 'invoice_to_vat_id', 'invoice_to_beneficiary',
                   'custom_field', 'date', 'refers', 'locale',
-                  'introductory_text', 'additional_text', 'payment_provider_text', 'footer_text', 'lines',
-                  'foreign_currency_display', 'foreign_currency_rate', 'foreign_currency_rate_date',
-                  'internal_reference')
+                  'introductory_text', 'additional_text', 'payment_provider_text', 'payment_provider_stamp',
+                  'footer_text', 'lines', 'foreign_currency_display', 'foreign_currency_rate',
+                  'foreign_currency_rate_date', 'internal_reference')
 
 
 class OrderPaymentCreateSerializer(I18nAwareModelSerializer):
