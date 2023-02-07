@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-01 13:31+0000\n"
+"POT-Creation-Date: 2023-02-07 17:02+0000\n"
 "PO-Revision-Date: 2019-08-27 08:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -509,6 +509,10 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:122
+msgid "Duplicate"
+msgstr ""
+
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
 msgstr "QR koda za check-in"
@@ -547,16 +551,16 @@ msgstr "Objekt"
 msgid "Ticket design"
 msgstr "Oblikovanje vstopnice"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:962
+#: pretix/static/pretixcontrol/js/ui/editor.js:963
 msgid "Saving failed."
 msgstr "Shranjevanje ni bilo uspešno."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1030
-#: pretix/static/pretixcontrol/js/ui/editor.js:1069
+#: pretix/static/pretixcontrol/js/ui/editor.js:1031
+#: pretix/static/pretixcontrol/js/ui/editor.js:1070
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Napaka pri nalaganju datoteke PDF. Poskusite ponovno."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1054
+#: pretix/static/pretixcontrol/js/ui/editor.js:1055
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Ali zares želite zapustiti urejevalnik ne da bi shranili spremembe?"
 

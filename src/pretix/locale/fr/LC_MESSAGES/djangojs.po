@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-01 13:31+0000\n"
+"POT-Creation-Date: 2023-02-07 17:02+0000\n"
 "PO-Revision-Date: 2023-01-17 01:00+0000\n"
 "Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -502,6 +502,10 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:122
+msgid "Duplicate"
+msgstr ""
+
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
 msgstr "Enregistrement QR code"
@@ -542,17 +546,17 @@ msgstr "Objet"
 msgid "Ticket design"
 msgstr "Conception des billets"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:962
+#: pretix/static/pretixcontrol/js/ui/editor.js:963
 msgid "Saving failed."
 msgstr "L'enregistrement a échoué."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1030
-#: pretix/static/pretixcontrol/js/ui/editor.js:1069
+#: pretix/static/pretixcontrol/js/ui/editor.js:1031
+#: pretix/static/pretixcontrol/js/ui/editor.js:1070
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Erreur lors du téléchargement de votre fichier PDF, veuillez réessayer."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1054
+#: pretix/static/pretixcontrol/js/ui/editor.js:1055
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Voulez-vous vraiment quitter l'éditeur sans sauvegarder vos modifications ?"

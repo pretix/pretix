@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-01 13:31+0000\n"
+"POT-Creation-Date: 2023-02-07 17:02+0000\n"
 "PO-Revision-Date: 2022-03-03 07:00+0000\n"
 "Last-Translator: MaLund13 <mart.lund13@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -477,6 +477,10 @@ msgstr "Lägg till villkor"
 msgid "minutes"
 msgstr "minuter"
 
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:122
+msgid "Duplicate"
+msgstr ""
+
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
 msgstr "QR-kod för att Checka in"
@@ -513,16 +517,16 @@ msgstr "Objekt"
 msgid "Ticket design"
 msgstr "Biljettdesign"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:962
+#: pretix/static/pretixcontrol/js/ui/editor.js:963
 msgid "Saving failed."
 msgstr "Misslyckades att spara."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1030
-#: pretix/static/pretixcontrol/js/ui/editor.js:1069
+#: pretix/static/pretixcontrol/js/ui/editor.js:1031
+#: pretix/static/pretixcontrol/js/ui/editor.js:1070
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Ett fel uppstod när du laddade upp din PDF-fil, vänligen försök igen."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1054
+#: pretix/static/pretixcontrol/js/ui/editor.js:1055
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Vill du verkligen lämna editorn utan att spara dina ändringar?"
 

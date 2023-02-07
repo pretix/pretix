@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-01 13:31+0000\n"
+"POT-Creation-Date: 2023-02-07 17:02+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -464,6 +464,10 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:122
+msgid "Duplicate"
+msgstr ""
+
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
 msgstr ""
@@ -500,16 +504,16 @@ msgstr ""
 msgid "Ticket design"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:962
+#: pretix/static/pretixcontrol/js/ui/editor.js:963
 msgid "Saving failed."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1030
-#: pretix/static/pretixcontrol/js/ui/editor.js:1069
+#: pretix/static/pretixcontrol/js/ui/editor.js:1031
+#: pretix/static/pretixcontrol/js/ui/editor.js:1070
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1054
+#: pretix/static/pretixcontrol/js/ui/editor.js:1055
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 

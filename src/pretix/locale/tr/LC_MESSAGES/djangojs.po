@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-01 13:31+0000\n"
+"POT-Creation-Date: 2023-02-07 17:02+0000\n"
 "PO-Revision-Date: 2018-09-03 06:36+0000\n"
 "Last-Translator: Yunus Fırat Pişkin <firat.piskin@idvlabs.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -514,6 +514,10 @@ msgstr ""
 msgid "minutes"
 msgstr ""
 
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:122
+msgid "Duplicate"
+msgstr ""
+
 #: pretix/static/pretixcontrol/js/ui/editor.js:71
 msgid "Check-in QR"
 msgstr "Giriş QR"
@@ -552,16 +556,16 @@ msgstr "Nesne"
 msgid "Ticket design"
 msgstr "Bilet tasarımı"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:962
+#: pretix/static/pretixcontrol/js/ui/editor.js:963
 msgid "Saving failed."
 msgstr "Kaydetme başarısız oldu."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1030
-#: pretix/static/pretixcontrol/js/ui/editor.js:1069
+#: pretix/static/pretixcontrol/js/ui/editor.js:1031
+#: pretix/static/pretixcontrol/js/ui/editor.js:1070
 msgid "Error while uploading your PDF file, please try again."
 msgstr "PDF dosyanızı yüklerken hata oluştu, lütfen tekrar deneyin."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1054
+#: pretix/static/pretixcontrol/js/ui/editor.js:1055
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr ""
 "Değişiklikleri kaydetmeden editörden gerçekten ayrılmak istiyor musunuz?"
