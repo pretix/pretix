@@ -10,25 +10,29 @@
         '        <slot></slot>\n' +
         '      </select>'),
     mounted: function () {
-      var vm = this;
-      var multiple = this.multiple;
-      $(this.$el)
-          .select2(this.opts())
-          .val(this.value || "")
-          .trigger("change")
-          // emit event on change.
-          .on("change", function (e) {
-            vm.$emit("input", $(this).select2('data'));
-          });
-      if (vm.value) {
-        for (var i = 0; i < vm.value["objectList"].length; i++) {
-          var option = new Option(vm.value["objectList"][i]["lookup"][2], vm.value["objectList"][i]["lookup"][1], true, true);
-          $(vm.$el).append(option);
-        }
-      }
-      $(vm.$el).trigger("change");
+      this.build();
     },
     methods: {
+      build: function () {
+        var vm = this;
+        var multiple = this.multiple;
+        $(this.$el)
+            .empty()
+            .select2(this.opts())
+            .val(this.value || "")
+            .trigger("change")
+            // emit event on change.
+            .on("change", function (e) {
+              vm.$emit("input", $(this).select2('data'));
+            });
+        if (vm.value) {
+          for (var i = 0; i < vm.value["objectList"].length; i++) {
+            var option = new Option(vm.value["objectList"][i]["lookup"][2], vm.value["objectList"][i]["lookup"][1], true, true);
+            $(vm.$el).append(option);
+          }
+        }
+        $(vm.$el).trigger("change");
+      },
       opts: function () {
         return {
           theme: "bootstrap",
@@ -60,16 +64,28 @@
     },
     watch: {
       placeholder: function (val) {
-        $(this.$el).empty().select2(this.opts());
+        $(this.$el).select2("destroy");
         this.build();
       },
       required: function (val) {
-        $(this.$el).empty().select2(this.opts());
+        $(this.$el).select2("destroy");
         this.build();
       },
       url: function (val) {
-        $(this.$el).empty().select2(this.opts());
+        $(this.$el).select2("destroy");
         this.build();
+      },
+      value: function (newval, oldval) {
+        if (JSON.stringify(newval) !== JSON.stringify(oldval)) {
+          $(this.$el).empty();
+          if (newval) {
+            for (var i = 0; i < newval["objectList"].length; i++) {
+              var option = new Option(newval["objectList"][i]["lookup"][2], newval["objectList"][i]["lookup"][1], true, true);
+              $(this.$el).append(option);
+            }
+          }
+          $(this.$el).trigger("change");
+        }
       },
     },
     destroyed: function () {
