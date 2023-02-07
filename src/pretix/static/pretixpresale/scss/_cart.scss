@@ -1,6 +1,6 @@
 .cart-row {
     /* Cart grid */
-    padding: 10px 0;
+    padding: 0.75*$line-height-computed 0;
 
     .product>*:last-child {
         margin-bottom: 0;
@@ -100,6 +100,9 @@
     }
 }
 
+.cart .firstchild-in-panel .cart-row:first-child {
+    padding-top: 0;
+}
 .cart [role=rowgroup]:last-child {
     border-top: 1px solid $table-border-color;
 }

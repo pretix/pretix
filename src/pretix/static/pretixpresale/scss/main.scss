@@ -351,8 +351,8 @@ body.loading .container {
 
 .panel-title a[data-toggle="collapse"], details .panel-title {
     display: flex;
-    padding: 10px 15px;
-    margin: -10px -15px;
+    padding: 0.75*$line-height-computed;
+    margin: -0.75*$line-height-computed;
     align-items: center;
     justify-content: space-between;
     outline: 0;
