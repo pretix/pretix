@@ -101,7 +101,7 @@ Endpoints
             "all_events": false,
             "limit_events": ["democon"],
             "action_types": ["pretix.event.order.modified", "pretix.event.order.changed.*"],
-            "comment": null,
+            "comment": null
           }
         ]
       }
@@ -139,7 +139,7 @@ Endpoints
         "all_events": false,
         "limit_events": ["democon"],
         "action_types": ["pretix.event.order.modified", "pretix.event.order.changed.*"],
-        "comment": null,
+        "comment": null
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -167,7 +167,7 @@ Endpoints
         "all_events": false,
         "limit_events": ["democon"],
         "action_types": ["pretix.event.order.modified", "pretix.event.order.changed.*"],
-        "comment": null,
+        "comment": null
       }
 
    **Example response**:
@@ -185,7 +185,7 @@ Endpoints
         "all_events": false,
         "limit_events": ["democon"],
         "action_types": ["pretix.event.order.modified", "pretix.event.order.changed.*"],
-        "comment": null,
+        "comment": null
       }
 
    :param organizer: The ``slug`` field of the organizer to create a webhook for
@@ -231,7 +231,7 @@ Endpoints
         "all_events": false,
         "limit_events": ["democon"],
         "action_types": ["pretix.event.order.modified", "pretix.event.order.changed.*"],
-        "comment": null,
+        "comment": null
       }
 
    :param organizer: The ``slug`` field of the organizer to modify
