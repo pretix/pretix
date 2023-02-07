@@ -71,7 +71,11 @@
                                                         {% if event.event.best_availability_is_low %}
                                                             <span class="fa fa-exclamation-circle" aria-hidden="true"></span> {% trans "Few tickets left" %}
                                                         {% else %}
-                                                            <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Book now" %}
+                                                            {% if event.event.has_paid_item %}
+                                                                <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Buy now" context "available_event_in_list" %}
+                                                            {% else %}
+                                                                <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Book now" %}
+                                                            {% endif %}
                                                         {% endif %}
                                                     {% elif event.event.settings.waiting_list_enabled and event.event.best_availability_state >= 0 %}
                                                         <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Waiting list" %}

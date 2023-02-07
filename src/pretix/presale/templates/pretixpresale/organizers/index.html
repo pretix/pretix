@@ -84,7 +84,11 @@
                             {% if e.best_availability_is_low %}
                                 <span class="label label-success-warning">{% trans "Few tickets left" %}</span>
                             {% else %}
-                                <span class="label label-success">{% trans "Book now" %}</span>
+                                {% if e.has_paid_item %}
+                                    <span class="label label-success">{% trans "Buy now" context "available_event_in_list" %}</span>
+                                {% else %}
+                                    <span class="label label-success">{% trans "Book now" %}</span>
+                                {% endif %}
                             {% endif %}
                         {% elif e.settings.waiting_list_enabled and e.best_availability_state >= 0 %}
                             <span class="label label-warning">{% trans "Waiting list" %}</span>
