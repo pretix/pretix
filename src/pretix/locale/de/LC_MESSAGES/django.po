@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-07 17:01+0000\n"
-"PO-Revision-Date: 2023-02-01 13:45+0000\n"
+"PO-Revision-Date: 2023-02-07 17:22+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -398,6 +398,8 @@ msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
 msgstr ""
+"Produkt geändert (inkl. Produkt hinzugefügt oder gelöscht und inkl. "
+"Änderungen an Unterobjekten wie z.B. Varianten oder enthaltenen Produkten)"
 
 #: pretix/api/webhooks.py:306
 msgid "Shop taken live"
@@ -13007,10 +13009,9 @@ msgid "Selection contains various values"
 msgstr "Auswahl enthält verschiedene Werte"
 
 #: pretix/control/forms/subevents.py:281 pretix/control/forms/subevents.py:308
-#, fuzzy
-#| msgid "The end date must be after the start date."
 msgid "The end of availability should be after the start of availability."
-msgstr "Das Enddatum muss nach dem Startdatum liegen."
+msgstr ""
+"Das Ende der Verfügbarkeit muss nach dem Start der Verfügbarkeit liegen."
 
 #: pretix/control/forms/subevents.py:341
 msgid "Available_until"
@@ -20984,10 +20985,8 @@ msgid "Font size (pt)"
 msgstr "Schriftgröße (pt)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:279
-#, fuzzy
-#| msgid "Light"
 msgid "Line height"
-msgstr "Hell"
+msgstr "Zeilenhöhe"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:286
 msgid "Text color"
@@ -28602,11 +28601,9 @@ msgstr "Wenige verfügbar"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:60
 #: pretix/presale/templates/pretixpresale/organizers/index.html:88
 #: pretix/presale/views/widget.py:378
-#, fuzzy
-#| msgid "Pay now"
 msgctxt "available_event_in_list"
 msgid "Buy now"
-msgstr "Jetzt bezahlen"
+msgstr "Jetzt buchen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:30
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:45
