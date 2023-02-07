@@ -1,5 +1,12 @@
 @import "../../pretixbase/scss/_contrast.scss";
 
+h1, .h1,
+h2, .h2,
+h3, .h3 {
+  margin-top: 2.25 * $line-height-computed;
+  margin-bottom: 0.75 * $line-height-computed;
+}
+
 .page-header {
   position: relative;
   padding-bottom: 9px;

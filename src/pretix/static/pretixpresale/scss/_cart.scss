@@ -1,6 +1,6 @@
 .cart-row {
     /* Cart grid */
-    padding: 10px 0;
+    padding: 0.75*$line-height-computed 0;
 
     .product>*:last-child {
         margin-bottom: 0;
