@@ -55,7 +55,7 @@ class WebHookSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = WebHook
-        fields = ('id', 'enabled', 'target_url', 'all_events', 'limit_events', 'action_types')
+        fields = ('id', 'enabled', 'target_url', 'all_events', 'limit_events', 'action_types', 'comment')
 
     def validate(self, data):
         data = super().validate(data)

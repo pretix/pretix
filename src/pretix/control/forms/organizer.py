@@ -564,7 +564,7 @@ class WebHookForm(forms.ModelForm):
 
     class Meta:
         model = WebHook
-        fields = ['target_url', 'enabled', 'all_events', 'limit_events']
+        fields = ['target_url', 'enabled', 'all_events', 'limit_events', 'comment']
         widgets = {
             'limit_events': forms.CheckboxSelectMultiple(attrs={
                 'data-inverse-dependency': '#id_all_events'
