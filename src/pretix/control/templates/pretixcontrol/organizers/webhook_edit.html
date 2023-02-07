@@ -11,6 +11,7 @@
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         {% bootstrap_field form.target_url layout="control" %}
+        {% bootstrap_field form.comment layout="control" %}
         {% bootstrap_field form.enabled layout="control" %}
         {% bootstrap_field form.events layout="control" %}
         {% bootstrap_field form.all_events layout="control" %}

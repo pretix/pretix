@@ -112,6 +112,7 @@ class WebHook(models.Model):
     target_url = models.URLField(verbose_name=_("Target URL"), max_length=255)
     all_events = models.BooleanField(default=True, verbose_name=_("All events (including newly created ones)"))
     limit_events = models.ManyToManyField('pretixbase.Event', verbose_name=_("Limit to events"), blank=True)
+    comment = models.CharField(verbose_name=_("Comment"), max_length=255, null=True, blank=True)
 
     class Meta:
         ordering = ('id',)

@@ -47,6 +47,7 @@ TEST_WEBHOOK_RES = {
     "all_events": False,
     "limit_events": ['dummy'],
     "action_types": ['pretix.event.order.paid', 'pretix.event.order.placed'],
+    "comment": None,
 }
 
 
