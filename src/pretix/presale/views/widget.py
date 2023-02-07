@@ -41,7 +41,7 @@ from django.template import Context, Engine
 from django.template.loader import get_template
 from django.utils.formats import date_format
 from django.utils.timezone import now
-from django.utils.translation import get_language, gettext
+from django.utils.translation import get_language, gettext, pgettext
 from django.utils.translation.trans_real import DjangoTranslation
 from django.views import View
 from django.views.decorators.cache import cache_page
@@ -374,7 +374,10 @@ class WidgetAPIProductList(EventListMixin, View):
                     availability['reason'] = 'low'
                 else:
                     availability['color'] = 'green'
-                    availability['text'] = gettext('Book now')
+                    if ev.has_paid_item:
+                        availability['text'] = pgettext('available_event_in_list', 'Buy now')
+                    else:
+                        availability['text'] = gettext('Book now')
                     availability['reason'] = 'ok'
             elif event.settings.waiting_list_enabled and (ev.best_availability_state is not None and ev.best_availability_state >= 0):
                 availability['color'] = 'orange'
