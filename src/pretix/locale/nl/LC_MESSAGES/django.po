@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-01 13:31+0000\n"
-"PO-Revision-Date: 2022-09-11 21:00+0000\n"
+"PO-Revision-Date: 2023-02-07 10:00+0000\n"
 "Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -149,7 +149,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:266
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "Momenteel kunnen enkel toegangsproducten gepersonaliseerd worden."
 
 #: pretix/api/serializers/item.py:277
 msgid ""
@@ -186,10 +186,9 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Deze soort vraag kan niet bij het inchecken worden gesteld."
 
 #: pretix/api/serializers/order.py:74
-#, fuzzy, python-brace-format
-#| msgid "{value} is not a valid email address."
+#, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr "{value} is geen geldig e-mailadres."
+msgstr "\"{input}\" is geen geldige keuze."
 
 #: pretix/api/serializers/order.py:1167 pretix/api/views/cart.py:210
 #: pretix/base/services/orders.py:1392
@@ -15336,10 +15335,8 @@ msgstr "Server-transactiecode"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:78
-#, fuzzy
-#| msgid "Payer and reference"
 msgid "Payment reference"
-msgstr "Betaler en kenmerk"
+msgstr "Betalingsreferentie"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65
 msgid "Payment Application"
