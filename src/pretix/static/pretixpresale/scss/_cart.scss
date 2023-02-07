@@ -100,6 +100,9 @@
     }
 }
 
+.cart .firstchild-in-panel .cart-row:first-child {
+    padding-top: 0;
+}
 .cart [role=rowgroup]:last-child {
     border-top: 1px solid $table-border-color;
 }
