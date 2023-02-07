@@ -167,7 +167,7 @@ Endpoints
         "all_events": false,
         "limit_events": ["democon"],
         "action_types": ["pretix.event.order.modified", "pretix.event.order.changed.*"],
-        "comment": null
+        "comment": "Called for changes"
       }
 
    **Example response**:
@@ -185,7 +185,7 @@ Endpoints
         "all_events": false,
         "limit_events": ["democon"],
         "action_types": ["pretix.event.order.modified", "pretix.event.order.changed.*"],
-        "comment": null
+        "comment": "Called for changes"
       }
 
    :param organizer: The ``slug`` field of the organizer to create a webhook for
