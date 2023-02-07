@@ -218,7 +218,7 @@ setup(
         'python-u2flib-server==4.*',
         'pytz',
         'pyuca',
-        'redis==4.4.*',
+        'redis>=4.4,<4.6',
         'reportlab==3.6.*',
         'requests==2.28.*',
         'sentry-sdk==1.10.*',  # when upgrading, check https://github.com/getsentry/sentry-python/issues/1700
