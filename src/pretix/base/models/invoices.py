@@ -95,6 +95,8 @@ class Invoice(models.Model):
     :type additional_text: str
     :param payment_provider_text: A payment provider specific text
     :type payment_provider_text: str
+    :param payment_provider_stamp: A payment provider specific stamp
+    :type payment_provider_stamp: str
     :param footer_text: A footer text, displayed smaller and centered on every page
     :type footer_text: str
     :param foreign_currency_display: A different currency that taxes should also be displayed in.
@@ -144,6 +146,7 @@ class Invoice(models.Model):
     additional_text = models.TextField(blank=True)
     reverse_charge = models.BooleanField(default=False)
     payment_provider_text = models.TextField(blank=True)
+    payment_provider_stamp = models.CharField(max_length=100, null=True, blank=True)
     footer_text = models.TextField(blank=True)
 
     foreign_currency_display = models.CharField(max_length=50, null=True, blank=True)

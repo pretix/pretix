@@ -98,8 +98,10 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 payment = str(lp.payment_provider.render_invoice_text(invoice.order, lp))
             else:
                 payment = str(lp.payment_provider.render_invoice_text(invoice.order))
+            payment_stamp = lp.payment_provider.render_invoice_stamp(invoice.order, lp)
         else:
             payment = ""
+            payment_stamp = None
         if invoice.event.settings.invoice_include_expire_date and invoice.order.status == Order.STATUS_PENDING:
             if payment:
                 payment += "<br /><br />"
@@ -111,6 +113,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
         invoice.additional_text = str(additional).replace('\n', '<br />')
         invoice.footer_text = str(footer)
         invoice.payment_provider_text = str(payment).replace('\n', '<br />')
+        invoice.payment_provider_stamp = str(payment_stamp) if payment_stamp else None
 
         try:
             ia = invoice.order.invoice_address
@@ -325,6 +328,7 @@ def generate_cancellation(invoice: Invoice, trigger_pdf=True):
     cancellation.is_cancellation = True
     cancellation.date = timezone.now().date()
     cancellation.payment_provider_text = ''
+    cancellation.payment_provider_stamp = ''
     cancellation.file = None
     cancellation.sent_to_organizer = None
     cancellation.sent_to_customer = None
@@ -436,6 +440,7 @@ def build_preview_invoice_pdf(event):
         invoice.additional_text = str(additional).replace('\n', '<br />')
         invoice.footer_text = str(footer)
         invoice.payment_provider_text = str(payment).replace('\n', '<br />')
+        invoice.payment_provider_stamp = _('paid')
         invoice.invoice_to_name = _("John Doe")
         invoice.invoice_to_street = _("214th Example Street")
         invoice.invoice_to_zipcode = _("012345")
