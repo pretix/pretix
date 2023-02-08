@@ -568,6 +568,17 @@ class PaymentReminderTests(TestCase):
         self.event.settings.mail_days_order_expire_warning = 10
         send_expiry_warnings(sender=self.event)
         assert len(djmail.outbox) == 1
+        assert "only guarantee your order" in djmail.outbox[0].body
+
+    @classscope(attr='o')
+    def test_sent_no_expiry(self):
+        self.order.valid_if_pending = True
+        self.order.save()
+        self.event.settings.mail_days_order_expire_warning = 10
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 1
+        assert "only guarantee your order" not in djmail.outbox[0].body
+        assert "required to pay" in djmail.outbox[0].body
 
     @classscope(attr='o')
     def test_sent_not_immediately_after_purchase(self):

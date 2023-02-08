@@ -1265,11 +1265,17 @@ def send_expiry_warnings(sender, **kwargs):
                 with language(o.locale, settings.region):
                     o.expiry_reminder_sent = True
                     o.save(update_fields=['expiry_reminder_sent'])
-                    email_template = settings.mail_text_order_expire_warning
                     email_context = get_email_context(event=o.event, order=o)
-                    if settings.payment_term_expire_automatically:
+                    can_autoexpire = (
+                        settings.payment_term_expire_automatically and
+                        not o.valid_if_pending and
+                        not o.fees.filter(fee_type=OrderFee.FEE_TYPE_CANCELLATION).exists()
+                    )
+                    if can_autoexpire:
+                        email_template = settings.mail_text_order_expire_warning
                         email_subject = settings.mail_subject_order_expire_warning
                     else:
+                        email_template = settings.mail_text_order_pending_warning
                         email_subject = settings.mail_subject_order_pending_warning
 
                     try:
