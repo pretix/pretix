@@ -303,6 +303,22 @@ def test_sendmail_rule_send_order_pending_excluded(event, order):
 
 
 @pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_send_order_valid_if_pending(event, order):
+    order.valid_if_pending = True
+    order.status = Order.STATUS_PENDING
+    order.save()
+    djmail.outbox = []
+
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=False,
+                                subject='meow', template='meow meow meow')
+
+    sendmail_run_rules(None)
+
+    assert len(djmail.outbox) == 1
+
+
+@pytest.mark.django_db
 @pytest.mark.parametrize('status', [
     Order.STATUS_EXPIRED,
     Order.STATUS_CANCELED,

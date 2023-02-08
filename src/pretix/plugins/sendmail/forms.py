@@ -243,7 +243,8 @@ class OrderMailForm(BaseMailForm):
         self.fields['recipients'].choices = recp_choices
 
         choices = [(e, l) for e, l in Order.STATUS_CHOICE if e != 'n']
-        choices.insert(0, ('na', _('payment pending (except unapproved)')))
+        choices.insert(0, ('valid_if_pending', _('payment pending but already confirmed')))
+        choices.insert(0, ('na', _('payment pending (except unapproved or already confirmed)')))
         choices.insert(0, ('pa', _('approval pending')))
         if not event.settings.get('payment_term_expire_automatically', as_type=bool):
             choices.append(
@@ -257,10 +258,11 @@ class OrderMailForm(BaseMailForm):
             choices=choices
         )
         if not self.initial.get('sendto'):
-            self.initial['sendto'] = ['p', 'na']
+            self.initial['sendto'] = ['p', 'na', 'valid_if_pending']
         elif 'n' in self.initial['sendto']:
             self.initial['sendto'].append('pa')
             self.initial['sendto'].append('na')
+            self.initial['sendto'].append('valid_if_pending')
 
         self.fields['items'].queryset = event.items.all()
         if not self.initial.get('items'):
