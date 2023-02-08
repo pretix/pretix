@@ -35,7 +35,6 @@ from pretix.api.models import ApiCall
 from pretix.base.models import Organizer
 from pretix.helpers import OF_SELF
 
-
 logger = logging.getLogger(__name__)
 
 

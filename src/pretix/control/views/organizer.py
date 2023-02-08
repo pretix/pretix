@@ -64,7 +64,7 @@ from django.views.generic import (
     UpdateView,
 )
 
-from pretix.api.models import WebHook, ApiCall
+from pretix.api.models import ApiCall, WebHook
 from pretix.api.webhooks import manually_retry_all_calls
 from pretix.base.auth import get_auth_backends
 from pretix.base.channels import get_all_sales_channels
