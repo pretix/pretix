@@ -1442,6 +1442,7 @@ class QuickSetupView(FormView):
                 default_price=f.cleaned_data['default_price'] or 0,
                 tax_rule=tax_rule,
                 admission=True,
+                personalized=True,
                 position=i,
                 sales_channels=list(get_all_sales_channels().keys())
             )
