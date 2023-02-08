@@ -339,7 +339,17 @@ class Item(LoggedModel):
     :type sales_channels: bool
     :param issue_giftcard: If ``True``, buying this product will give you a gift card with the value of the product's price
     :type issue_giftcard: bool
+    :param validity_mode: Instruction how to set ``valid_from``/``valid_until`` on tickets, ``null`` is default event validity.
+    :type validity_mode: str
+    :param validity_value:
+    :type validity_value: int
     """
+    VALIDITY_MODES = (
+        (None, _('Event validity')),
+        ('set', _('Set product price to')),
+        ('subtract', _('Subtract from product price')),
+        ('percent', _('Reduce product price by (%)')),
+    )
 
     objects = ItemQuerySetManager()
 

@@ -34,6 +34,8 @@ class TicketLayoutForm(forms.ModelForm):
 
 
 class TicketLayoutItemForm(forms.ModelForm):
+    is_layouts = True
+
     class Meta:
         model = TicketLayoutItem
         fields = ('layout',)

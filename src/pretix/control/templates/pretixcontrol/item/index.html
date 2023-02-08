@@ -176,14 +176,21 @@
                         </fieldset>
                     {% endfor %}
                     <fieldset>
-                        <legend>{% trans "Tickets & check-in" %}</legend>
+                        <legend>{% trans "Tickets & Badges" %}</legend>
                         {% bootstrap_field form.generate_tickets layout="control" %}
+                        {% for f in plugin_forms %}
+                            {% if f.is_layouts %}
+                                {% bootstrap_form f layout="control" %}
+                            {% endif %}
+                        {% endfor %}
+                    </fieldset>
+                    <fieldset>
+                        <legend>{% trans "Check-in & Validity" %}</legend>
                         {% bootstrap_field form.checkin_attention layout="control" %}
                     </fieldset>
                     <fieldset>
                         <legend>{% trans "Additional settings" %}</legend>
                         {% bootstrap_field form.issue_giftcard layout="control" %}
-                        {% bootstrap_field form.show_quota_left layout="control" %}
                         {% if form.grant_membership_type %}
                             {% bootstrap_field form.grant_membership_type layout="control" %}
                             <div data-display-dependency="#id_grant_membership_type">
@@ -206,8 +213,11 @@
                                 </div>
                             </div>
                         {% endif %}
+                        {% bootstrap_field form.show_quota_left layout="control" %}
                         {% for f in plugin_forms %}
-                            {% bootstrap_form f layout="control" %}
+                            {% if not f.is_layouts %}
+                                {% bootstrap_form f layout="control" %}
+                            {% endif %}
                         {% endfor %}
                     </fieldset>
                 </div>
