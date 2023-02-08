@@ -195,6 +195,19 @@ DEFAULTS = {
 
         )
     },
+    'hide_prices_from_attendees': {
+        'default': 'True',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Hide prices on attendee ticket page"),
+            help_text=_("If a person buys multiple tickets and you send emails to all of the attendees, with this "
+                        "option the ticket price will not be shown on the ticket page of the individual attendees. "
+                        "The ticket buyer will of course see the price."),
+
+        )
+    },
     'system_question_order': {
         'default': {},
         'type': dict,

@@ -10,15 +10,17 @@
             <span role="columnheader" aria-sort="none">{% trans "Product" %}</span>
             {% if download %}
                 <span role="columnheader" aria-sort="none">{% trans "Ticket download" %}</span>
-            {% else %}
+            {% elif not hide_prices %}
                 <span role="columnheader" aria-sort="none">{% trans "Price per item" %}</span>
             {% endif %}
-            <span role="columnheader" aria-sort="none">{% trans "Price total" %}</span>
+            {% if not hide_prices %}
+               <span role="columnheader" aria-sort="none">{% trans "Price total" %}</span>
+            {% endif %}
         </div>
     </div>
     <div role="rowgroup" class="firstchild-in-panel">
     {% for line in cart.positions %}
-        <div role="row" class="row cart-row {% if download %}has-downloads{% endif %}{% if editable %}editable{% endif %}">
+        <div role="row" class="row cart-row {% if hide_prices %}hide-prices{% endif %} {% if download %}has-downloads{% endif %}{% if editable %}editable{% endif %}">
             <div role="cell" class="product">
                 <p>
                 {% if line.addon_to %}
@@ -225,20 +227,22 @@
                 </div>
             {% elif line.addon_to %}
                 <div role="cell" class="count">{% if line.count == 1 %}&nbsp;{% else %}{{ line.count }}{% endif %}</div>
-                <div role="cell" class="singleprice price">
-                    {% if event.settings.display_net_prices %}
-                        {{ line.net_price|money:event.currency }}
-                    {% else %}
-                        {{ line.price|money:event.currency }}
-                    {% endif %}
-                    {% if line.discount and line.line_price_gross != line.price %}
-                        <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
-                            <br>
-                            <span class="fa fa-percent fa-fw" aria-hidden="true"></span>
-                            {% trans "Discounted" %}
-                        </span>
-                    {% endif %}
-                </div>
+                {% if not hide_prices %}
+                    <div role="cell" class="singleprice price">
+                        {% if event.settings.display_net_prices %}
+                            {{ line.net_price|money:event.currency }}
+                        {% else %}
+                            {{ line.price|money:event.currency }}
+                        {% endif %}
+                        {% if line.discount and line.line_price_gross != line.price %}
+                            <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
+                                <br>
+                                <span class="fa fa-percent fa-fw" aria-hidden="true"></span>
+                                {% trans "Discounted" %}
+                            </span>
+                        {% endif %}
+                    </div>
+                {% endif %}
             {% else %}
                 <div role="cell" class="count">
                     {% if editable %}
@@ -290,44 +294,48 @@
                     </form>
                     {% endif %}
                 </div>
-                <div role="cell" class="singleprice price">
+                {% if not hide_prices %}
+                    <div role="cell" class="singleprice price">
+                        {% if event.settings.display_net_prices %}
+                            {{ line.net_price|money:event.currency }}
+                        {% else %}
+                            {{ line.price|money:event.currency }}
+                        {% endif %}
+                        {% if line.discount and line.line_price_gross != line.price %}
+                            <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
+                                <br>
+                                <span class="fa fa-percent fa-fw" aria-hidden="true"></span>
+                                {% trans "Discounted" %}
+                            </span>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            {% endif %}
+            {% if not hide_prices %}
+                <div role="cell" class="totalprice price">
                     {% if event.settings.display_net_prices %}
-                        {{ line.net_price|money:event.currency }}
+                        <strong>{{ line.net_total|money:event.currency }}</strong>
+                        {% if line.tax_rate and line.total %}
+                            <br />
+                            <small>
+                                {% blocktrans trimmed with rate=line.tax_rate|floatformat:-2 taxname=line.tax_rule.name|default:s_taxes %}
+                                    <strong>plus</strong> {{ rate }}% {{ taxname }}
+                                {% endblocktrans %}
+                            </small>
+                        {% endif %}
                     {% else %}
-                        {{ line.price|money:event.currency }}
-                    {% endif %}
-                    {% if line.discount and line.line_price_gross != line.price %}
-                        <span class="text-success discounted" data-toggle="tooltip" title="{% trans "The price of this product was reduced because of an automatic discount." %}">
-                            <br>
-                            <span class="fa fa-percent fa-fw" aria-hidden="true"></span>
-                            {% trans "Discounted" %}
-                        </span>
+                        <strong>{{ line.total|money:event.currency }}</strong>
+                        {% if line.tax_rate and line.total %}
+                            <br />
+                            <small>
+                                {% blocktrans trimmed with rate=line.tax_rate|floatformat:-2 taxname=line.tax_rule.name|default:s_taxes %}
+                                    incl. {{ rate }}% {{ taxname }}
+                                {% endblocktrans %}
+                            </small>
+                        {% endif %}
                     {% endif %}
                 </div>
             {% endif %}
-            <div role="cell" class="totalprice price">
-                {% if event.settings.display_net_prices %}
-                    <strong>{{ line.net_total|money:event.currency }}</strong>
-                    {% if line.tax_rate and line.total %}
-                        <br />
-                        <small>
-                            {% blocktrans trimmed with rate=line.tax_rate|floatformat:-2 taxname=line.tax_rule.name|default:s_taxes %}
-                                <strong>plus</strong> {{ rate }}% {{ taxname }}
-                            {% endblocktrans %}
-                        </small>
-                    {% endif %}
-                {% else %}
-                    <strong>{{ line.total|money:event.currency }}</strong>
-                    {% if line.tax_rate and line.total %}
-                        <br />
-                        <small>
-                            {% blocktrans trimmed with rate=line.tax_rate|floatformat:-2 taxname=line.tax_rule.name|default:s_taxes %}
-                                incl. {{ rate }}% {{ taxname }}
-                            {% endblocktrans %}
-                        </small>
-                    {% endif %}
-                {% endif %}
-            </div>
             <div class="clearfix"></div>
         </div>
     {% endfor %}
@@ -336,85 +344,89 @@
             <div class="col-md-4 col-xs-6">
                 <strong>{{ fee.get_fee_type_display }}</strong>
             </div>
-            <div class="col-md-3 col-xs-6 col-md-offset-5 price">
-                {% if event.settings.display_net_prices %}
-                    <strong>{{ fee.net_value|money:event.currency }}</strong>
-                    {% if fee.tax_rate %}
-                        <br />
-                        <small>
-                            {% blocktrans trimmed with rate=fee.tax_rate|floatformat:-2 taxname=fee.tax_rule.name|default:s_taxes %}
-                                <strong>plus</strong> {{ rate }}% {{ taxname }}
-                            {% endblocktrans %}
-                        </small>
+            {% if not hide_prices %}
+                <div class="col-md-3 col-xs-6 col-md-offset-5 price">
+                    {% if event.settings.display_net_prices %}
+                        <strong>{{ fee.net_value|money:event.currency }}</strong>
+                        {% if fee.tax_rate %}
+                            <br />
+                            <small>
+                                {% blocktrans trimmed with rate=fee.tax_rate|floatformat:-2 taxname=fee.tax_rule.name|default:s_taxes %}
+                                    <strong>plus</strong> {{ rate }}% {{ taxname }}
+                                {% endblocktrans %}
+                            </small>
+                        {% endif %}
+                    {% else %}
+                        <strong>{{ fee.value|money:event.currency }}</strong>
+                        {% if fee.tax_rate %}
+                            <br />
+                            <small>
+                                {% blocktrans trimmed with rate=fee.tax_rate|floatformat:-2 taxname=fee.tax_rule.name|default:s_taxes %}
+                                    incl. {{ rate }}% {{ taxname }}
+                                {% endblocktrans %}
+                            </small>
+                        {% endif %}
                     {% endif %}
-                {% else %}
-                    <strong>{{ fee.value|money:event.currency }}</strong>
-                    {% if fee.tax_rate %}
-                        <br />
-                        <small>
-                            {% blocktrans trimmed with rate=fee.tax_rate|floatformat:-2 taxname=fee.tax_rule.name|default:s_taxes %}
-                                incl. {{ rate }}% {{ taxname }}
-                            {% endblocktrans %}
-                        </small>
-                    {% endif %}
-                {% endif %}
-            </div>
+                </div>
+            {% endif %}
             <div class="clearfix"></div>
         </div>
     {% endfor %}
     </div>
-    <div role="rowgroup">
-    {% if event.settings.display_net_prices and cart.tax_total %}
-        <div role="row" class="row cart-row">
-            <div role="cell" class="product">
-                <strong>{% trans "Net total" %}</strong>
+    {% if not hide_prices %}
+        <div role="rowgroup rowgroup-total">
+        {% if event.settings.display_net_prices and cart.tax_total %}
+            <div role="row" class="row cart-row">
+                <div role="cell" class="product">
+                    <strong>{% trans "Net total" %}</strong>
+                </div>
+                <div role="cell" class="count hidden-xs hidden-sm"></div>
+                <div role="cell" class="singleprice price"></div>
+                <div role="cell" class="totalprice price">
+                    {{ cart.net_total|money:event.currency }}
+                </div>
+                <div class="clearfix"></div>
             </div>
-            <div role="cell" class="count hidden-xs hidden-sm"></div>
-            <div role="cell" class="singleprice price"></div>
-            <div role="cell" class="totalprice price">
-                {{ cart.net_total|money:event.currency }}
+            <div role="row" class="row cart-row">
+                <div role="cell" class="product">
+                    <strong>{% trans "Taxes" %}</strong>
+                </div>
+                <div role="cell" class="count hidden-xs hidden-sm"></div>
+                <div role="cell" class="singleprice price"></div>
+                <div role="cell" class="totalprice price">
+                    {{ cart.tax_total|money:event.currency }}
+                </div>
+                <div class="clearfix"></div>
             </div>
-            <div class="clearfix"></div>
-        </div>
-        <div role="row" class="row cart-row">
-            <div role="cell" class="product">
-                <strong>{% trans "Taxes" %}</strong>
+        {% endif %}
+            <div role="row" class="row cart-row total">
+                <div role="cell" class="product">
+                    <strong>{% trans "Total" %}</strong><br>
+                    <span class="text-muted">
+                        {% blocktrans trimmed count num=cart.itemcount %}
+                            One product
+                        {% plural %}
+                            {{ num }} products
+                        {% endblocktrans %}
+                    </span>
+                </div>
+                <div role="cell" class="count hidden-xs hidden-sm"></div>
+                <div role="cell" class="singleprice price"></div>
+                <div role="cell" class="totalprice price">
+                    <strong>{{ cart.total|money:event.currency }}</strong>
+
+                    {% if not event.settings.display_net_prices and cart.tax_total %}
+                        <small class="text-muted">
+                            {% blocktrans trimmed with tax_sum=cart.tax_total|money:event.currency %}
+                                incl. {{ tax_sum }} taxes
+                            {% endblocktrans %}
+                        </small>
+                    {% endif %}
+                </div>
+                <div class="clearfix"></div>
             </div>
-            <div role="cell" class="count hidden-xs hidden-sm"></div>
-            <div role="cell" class="singleprice price"></div>
-            <div role="cell" class="totalprice price">
-                {{ cart.tax_total|money:event.currency }}
-            </div>
-            <div class="clearfix"></div>
         </div>
     {% endif %}
-        <div role="row" class="row cart-row total">
-            <div role="cell" class="product">
-                <strong>{% trans "Total" %}</strong><br>
-                <span class="text-muted">
-                    {% blocktrans trimmed count num=cart.itemcount %}
-                        One product
-                    {% plural %}
-                        {{ num }} products
-                    {% endblocktrans %}
-                </span>
-            </div>
-            <div role="cell" class="count hidden-xs hidden-sm"></div>
-            <div role="cell" class="singleprice price"></div>
-            <div role="cell" class="totalprice price">
-                <strong>{{ cart.total|money:event.currency }}</strong>
-
-                {% if not event.settings.display_net_prices and cart.tax_total %}
-                    <small class="text-muted">
-                        {% blocktrans trimmed with tax_sum=cart.tax_total|money:event.currency %}
-                            incl. {{ tax_sum }} taxes
-                        {% endblocktrans %}
-                    </small>
-                {% endif %}
-            </div>
-            <div class="clearfix"></div>
-        </div>
-    </div>
 </div>
 
 <div class="row">

@@ -32,7 +32,7 @@
             </h3>
         </div>
         <div class="panel-body">
-            {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event download=can_download position_page=True editable=False %}
+            {% include "pretixpresale/event/fragment_cart.html" with cart=cart event=request.event download=can_download position_page=True editable=False hide_prices=request.event.settings.hide_prices_from_attendees %}
         </div>
     </div>
     <div class="panel panel-primary">
