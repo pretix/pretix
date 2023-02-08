@@ -350,7 +350,7 @@ class Item(LoggedModel):
     """
     VALIDITY_MODES = (
         (None, _('Event validity (default)')),
-        ('static', _('Fixed time frame')),
+        ('fixed', _('Fixed time frame')),
         ('dynamic', _('Dynamic validity')),
     )
 
@@ -578,12 +578,18 @@ class Item(LoggedModel):
         choices=VALIDITY_MODES,
         null=True, blank=True, max_length=16,
         verbose_name=_('Validity'),
+        help_text=_(
+            'When setting up a regular event, or an event series with time slots, you typically to NOT need to change '
+            'this value. The default setting means that the validity time of tickets will not be decided by the '
+            'product, but by the event and check-in configuration. Only use the other options if you need them to '
+            'realize e.g. a booking of a year-long ticket with a dynamic start date.'
+        )
     )
     validity_fixed_from = models.DateTimeField(null=True, blank=True, verbose_name=_('Start of validity'))
     validity_fixed_until = models.DateTimeField(null=True, blank=True, verbose_name=_('End of validity'))
     validity_dynamic_duration_minutes = models.PositiveIntegerField(
         blank=True, null=True,
-        verbose_name=_('Minutes')
+        verbose_name=_('Minutes'),
     )
     validity_dynamic_duration_hours = models.PositiveIntegerField(
         blank=True, null=True,
@@ -595,11 +601,11 @@ class Item(LoggedModel):
     )
     validity_dynamic_duration_months = models.PositiveIntegerField(
         blank=True, null=True,
-        verbose_name=_('Months')
+        verbose_name=_('Months'),
     )
     validity_dynamic_duration_years = models.PositiveIntegerField(
         blank=True, null=True,
-        verbose_name=_('Years')
+        verbose_name=_('Years'),
     )
     validity_dynamic_start_choice = models.BooleanField(
         verbose_name=_('Customers can select the validity start date'),

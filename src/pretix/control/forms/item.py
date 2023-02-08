@@ -667,6 +667,16 @@ class ItemUpdateForm(I18nModelForm):
             'grant_membership_duration_like_event',
             'grant_membership_duration_days',
             'grant_membership_duration_months',
+            'validity_mode',
+            'validity_fixed_from',
+            'validity_fixed_until',
+            'validity_dynamic_duration_minutes',
+            'validity_dynamic_duration_hours',
+            'validity_dynamic_duration_days',
+            'validity_dynamic_duration_months',
+            'validity_dynamic_duration_years',
+            'validity_dynamic_start_choice',
+            'validity_dynamic_start_choice_day_limit',
         ]
         field_classes = {
             'available_from': SplitDateTimeField,
