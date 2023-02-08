@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import json
+import logging
 from hashlib import sha1
 
 from django.conf import settings
@@ -33,6 +34,9 @@ from rest_framework import status
 from pretix.api.models import ApiCall
 from pretix.base.models import Organizer
 from pretix.helpers import OF_SELF
+
+
+logger = logging.getLogger(__name__)
 
 
 class IdempotencyMiddleware:
@@ -97,6 +101,9 @@ class IdempotencyMiddleware:
             return resp
         else:
             if call.locked:
+                logger.info(
+                    f'Concurrent request with idempotency key {idempotency_key} blocked.'
+                )
                 r = JsonResponse(
                     {'detail': 'Concurrent request with idempotency key.'},
                     status=status.HTTP_409_CONFLICT,
@@ -111,6 +118,7 @@ class IdempotencyMiddleware:
                 content=content,
                 status=call.response_code,
             )
+            logger.info(f'API response replayed from idempotency store for key {idempotency_key} [{call.response_code}]')
             for k, v in json.loads(call.response_headers).values():
                 r[k] = v
             return r
