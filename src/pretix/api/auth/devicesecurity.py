@@ -19,8 +19,11 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import logging
 
 from django.utils.translation import gettext_lazy as _
+
+logger = logging.getLogger(__name__)
 
 
 class FullAccessSecurityProfile:
@@ -36,7 +39,13 @@ class AllowListSecurityProfile:
 
     def is_allowed(self, request):
         key = (request.method, f"{request.resolver_match.namespace}:{request.resolver_match.url_name}")
-        return key in self.allowlist
+        if key in self.allowlist:
+            return True
+        else:
+            logger.info(
+                f'Request {key} not allowed in profile {self.identifier}'
+            )
+            return False
 
 
 class PretixScanSecurityProfile(AllowListSecurityProfile):
