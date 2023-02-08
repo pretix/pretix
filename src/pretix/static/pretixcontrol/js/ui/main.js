@@ -366,7 +366,6 @@ var form_handlers = function (el) {
                         return (!!d.value && !d.value.match(/^0\.?0*$/g));
                     }
                 });
-                console.log(dependent, dependency, enabled)
                 if (dependent.is("[data-inverse]")) {
                     enabled = !enabled;
                 }
