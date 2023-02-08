@@ -208,7 +208,7 @@
         .product, &.has-downloads .product, &.has-downloads.hide-prices .product {
             width: 100%;
         }
-        n&.has-downloads.hide-prices .download-desktop {
+        &.has-downloads.hide-prices .download-desktop {
             margin-left: 50%;
         }
         &.total .product {
