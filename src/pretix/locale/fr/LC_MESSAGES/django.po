@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-07 17:01+0000\n"
-"PO-Revision-Date: 2023-01-27 18:00+0000\n"
-"Last-Translator: Christophe Piret <cpiret@greenpeace.org>\n"
+"PO-Revision-Date: 2023-02-09 02:00+0000\n"
+"Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: pretix/api/auth/devicesecurity.py:28
 msgid ""
@@ -398,6 +398,9 @@ msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
 msgstr ""
+"Produit modifié (y compris le produit ajouté ou supprimé et y compris les "
+"modifications apportées aux objets imbriqués comme les variantes ou les "
+"offres groupées)"
 
 #: pretix/api/webhooks.py:306
 msgid "Shop taken live"
@@ -2299,7 +2302,7 @@ msgstr "Tous"
 
 #: pretix/base/exporters/orderlist.py:1013 pretix/control/forms/filter.py:1283
 msgid "Live"
-msgstr ""
+msgstr "En direct"
 
 #: pretix/base/exporters/orderlist.py:1022 pretix/control/forms/filter.py:1291
 #: pretix/control/templates/pretixcontrol/pdf/index.html:366
@@ -3263,16 +3266,12 @@ msgid "Apply to all products (including newly created ones)"
 msgstr "Appliquer à tous les produits (y compris ceux nouvellement créés)"
 
 #: pretix/base/models/discount.py:97
-#, fuzzy
-#| msgid "Apply to products"
 msgid "Apply to specific products"
 msgstr "Appliquer à des produits spécifiques"
 
 #: pretix/base/models/discount.py:102
-#, fuzzy
-#| msgid "Apply to products"
 msgid "Apply to add-on products"
-msgstr "Appliquer aux produits"
+msgstr "Appliquer aux produits additionnels"
 
 #: pretix/base/models/discount.py:103
 msgid "Discounts never apply to bundled products"
@@ -3280,7 +3279,7 @@ msgstr "Les remises ne s'appliquent jamais aux produits groupés"
 
 #: pretix/base/models/discount.py:107
 msgid "Ignore products discounted by a voucher"
-msgstr "Ignorer les produits avec rabais par un bon"
+msgstr "Ignorer les produits avec rabais par bon"
 
 #: pretix/base/models/discount.py:108
 msgid ""
@@ -3348,6 +3347,8 @@ msgid ""
 "You cannot apply the discount only to some of the matched products if you "
 "are matching on a minimum value."
 msgstr ""
+"Vous ne pouvez pas appliquer la réduction seulement à certains produits "
+"correspondants si vous ciblez une valeur minimale."
 
 #: pretix/base/models/discount.py:186
 msgid ""
@@ -30836,8 +30837,7 @@ msgstr "La période de prévente pour cet événement est terminée."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:150
 #: pretix/presale/views/widget.py:686
-#, fuzzy, python-format
-#| msgid "The presale for this event will start on %(date)s at %(time)s."
+#, python-format
 msgid "The booking period for this event will start on %(date)s at %(time)s."
 msgstr "La prévente de cet événement débutera le %(date)s à %(time)s."
 
