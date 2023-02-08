@@ -2,6 +2,7 @@
 
 import django.core.serializers.json
 import django.db.models.deletion
+from django.conf import settings
 from django.db import migrations, models
 
 
@@ -49,6 +50,6 @@ class Migration(migrations.Migration):
             ],
             options={
                 'unique_together': {('event', 'secret')},
-            },
+            } if 'mysql' not in settings.DATABASES['default']['ENGINE'] else {}
         ),
     ]
