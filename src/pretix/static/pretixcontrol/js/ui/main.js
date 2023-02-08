@@ -357,7 +357,11 @@ var form_handlers = function (el) {
                     if (d.type === 'checkbox' || d.type === 'radio') {
                         return d.checked;
                     } else if (d.type === 'select-one') {
-                        return d.value === dependent.attr("data-display-dependency-value");
+                        if (dependent.attr("data-display-dependency-value")) {
+                            return d.value === dependent.attr("data-display-dependency-value");
+                        } else {
+                            return !!d.value
+                        }
                     } else {
                         return (!!d.value && !d.value.match(/^0\.?0*$/g));
                     }
