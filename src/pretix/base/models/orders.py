@@ -2730,6 +2730,9 @@ class CartPosition(AbstractPosition):
     line_price_gross = models.DecimalField(
         decimal_places=2, max_digits=10, null=True,
     )
+    requested_valid_from = models.DateTimeField(
+        null=True,
+    )
 
     objects = ScopedManager(organizer='event__organizer')
 

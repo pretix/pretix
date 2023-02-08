@@ -681,6 +681,8 @@ class ItemUpdateForm(I18nModelForm):
         field_classes = {
             'available_from': SplitDateTimeField,
             'available_until': SplitDateTimeField,
+            'validity_fixed_from': SplitDateTimeField,
+            'validity_fixed_until': SplitDateTimeField,
             'hidden_if_available': SafeModelChoiceField,
             'grant_membership_type': SafeModelChoiceField,
             'require_membership_types': SafeModelMultipleChoiceField,
@@ -688,6 +690,8 @@ class ItemUpdateForm(I18nModelForm):
         widgets = {
             'available_from': SplitDateTimePickerWidget(),
             'available_until': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_available_from_0'}),
+            'validity_fixed_from': SplitDateTimePickerWidget(),
+            'validity_fixed_until': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_validity_fixed_from_0'}),
             'require_membership_types': forms.CheckboxSelectMultiple(attrs={
                 'class': 'scrolling-multiple-choice'
             }),

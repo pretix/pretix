@@ -61,4 +61,9 @@ class Migration(migrations.Migration):
             name='validity_mode',
             field=models.CharField(max_length=16, null=True),
         ),
+        migrations.AddField(
+            model_name='cartposition',
+            name='requested_valid_from',
+            field=models.DateTimeField(null=True),
+        ),
     ]
