@@ -343,12 +343,15 @@ class Item(LoggedModel):
     :type validity_mode: str
     :param validity_value:
     :type validity_value: int
+    :param validity_fixed_from:
+    :type validity_fixed_from: datetime
+    :param validity_fixed_until:
+    :type validity_fixed_until: datetime
     """
     VALIDITY_MODES = (
-        (None, _('Event validity')),
-        ('set', _('Set product price to')),
-        ('subtract', _('Subtract from product price')),
-        ('percent', _('Reduce product price by (%)')),
+        (None, _('Event validity (default)')),
+        ('static', _('Fixed time frame')),
+        ('dynamic', _('Dynamic validity')),
     )
 
     objects = ItemQuerySetManager()
@@ -570,6 +573,45 @@ class Item(LoggedModel):
         verbose_name=_('Membership duration in months'),
         default=0,
     )
+
+    validity_mode = models.CharField(
+        choices=VALIDITY_MODES,
+        null=True, blank=True, max_length=16,
+        verbose_name=_('Validity'),
+    )
+    validity_fixed_from = models.DateTimeField(null=True, blank=True, verbose_name=_('Start of validity'))
+    validity_fixed_until = models.DateTimeField(null=True, blank=True, verbose_name=_('End of validity'))
+    validity_dynamic_duration_minutes = models.PositiveIntegerField(
+        blank=True, null=True,
+        verbose_name=_('Minutes')
+    )
+    validity_dynamic_duration_hours = models.PositiveIntegerField(
+        blank=True, null=True,
+        verbose_name=_('Hours')
+    )
+    validity_dynamic_duration_days = models.PositiveIntegerField(
+        blank=True, null=True,
+        verbose_name=_('Days'),
+    )
+    validity_dynamic_duration_months = models.PositiveIntegerField(
+        blank=True, null=True,
+        verbose_name=_('Months')
+    )
+    validity_dynamic_duration_years = models.PositiveIntegerField(
+        blank=True, null=True,
+        verbose_name=_('Years')
+    )
+    validity_dynamic_start_choice = models.BooleanField(
+        verbose_name=_('Customers can select the validity start date'),
+        help_text=_('If not selected, the validity always starts at the time of purchase.'),
+        default=False
+    )
+    validity_dynamic_start_choice_day_limit = models.PositiveIntegerField(
+        blank=True, null=True,
+        verbose_name=_('Maximum future start'),
+        help_text=_('The selected start date may only be this many days in the future.')
+    )
+
     # !!! Attention: If you add new fields here, also add them to the copying code in
     # pretix/control/forms/item.py if applicable.
 
