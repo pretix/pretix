@@ -36,6 +36,7 @@ import json
 import re
 from datetime import time, timedelta
 from decimal import Decimal
+from hashlib import sha1
 
 import bleach
 from django import forms
@@ -63,7 +64,7 @@ from django.views.generic import (
     UpdateView,
 )
 
-from pretix.api.models import WebHook
+from pretix.api.models import WebHook, ApiCall
 from pretix.api.webhooks import manually_retry_all_calls
 from pretix.base.auth import get_auth_backends
 from pretix.base.channels import get_all_sales_channels
@@ -1003,6 +1004,15 @@ class DeviceUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
                 k: getattr(self.object, k) if k != 'limit_events' else [e.id for e in getattr(self.object, k).all()]
                 for k in form.changed_data
             })
+
+            # If the permission of the device have changed, let's clear "permission denied" errors from the idempotency store
+            auth_hash_parts = f'Device {self.object.api_token}:'
+            auth_hash = sha1(auth_hash_parts.encode()).hexdigest()
+            ApiCall.objects.filter(
+                auth_hash=auth_hash,
+                response_code=403,
+            ).delete()
+
         messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
