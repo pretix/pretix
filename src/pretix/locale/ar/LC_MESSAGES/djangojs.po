@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-07 17:02+0000\n"
+"POT-Creation-Date: 2023-02-09 13:36+0000\n"
 "PO-Revision-Date: 2021-09-15 11:22+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -292,22 +292,34 @@ msgid "Ticket code revoked/changed"
 msgstr "تم إلغاء رمز التذكرة أو تبديله"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
+#, fuzzy
+#| msgid "Ticket not paid"
+msgid "Ticket blocked"
+msgstr "لم يتم دفع قيمة التذكرة"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+#, fuzzy
+#| msgid "Ticket not paid"
+msgid "Ticket not valid at this time"
+msgstr "لم يتم دفع قيمة التذكرة"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Order canceled"
 msgstr "تم إلغاء الطلب"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket code is ambiguous on list"
 msgstr ""
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Checked-in Tickets"
 msgstr "تذاكر الدخول"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Valid Tickets"
 msgstr "تذاكر سارية المفعول"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Currently inside"
 msgstr "حاليا بالداخل"
 
@@ -561,31 +573,31 @@ msgid ""
 "darker shade."
 msgstr "تباين اللون سيئ للخلفية البيضاء، الرجاء اختيار لون غامق."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:461
+#: pretix/static/pretixcontrol/js/ui/main.js:464
 msgid "All"
 msgstr "الكل"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:462
+#: pretix/static/pretixcontrol/js/ui/main.js:465
 msgid "None"
 msgstr "لا شيء"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:463
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Search query"
 msgstr "البحث في الاستفسارات"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:466
+#: pretix/static/pretixcontrol/js/ui/main.js:469
 msgid "Selected only"
 msgstr "المختارة فقط"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:869
+#: pretix/static/pretixcontrol/js/ui/main.js:872
 msgid "Use a different name internally"
 msgstr "قم باستخدم اسم مختلف داخليا"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:905
+#: pretix/static/pretixcontrol/js/ui/main.js:908
 msgid "Click to close"
 msgstr "اضغط لاغلاق الصفحة"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:977
+#: pretix/static/pretixcontrol/js/ui/main.js:980
 msgid "You have unsaved changes!"
 msgstr "لم تقم بحفظ التعديلات!"
 

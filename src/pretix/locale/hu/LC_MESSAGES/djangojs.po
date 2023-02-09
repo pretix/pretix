@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-07 17:02+0000\n"
+"POT-Creation-Date: 2023-02-09 13:36+0000\n"
 "PO-Revision-Date: 2020-01-24 08:00+0000\n"
 "Last-Translator: Prokaj Miklós <mixolid0@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -298,24 +298,32 @@ msgid "Ticket code revoked/changed"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-msgid "Order canceled"
+msgid "Ticket blocked"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-msgid "Ticket code is ambiguous on list"
+msgid "Ticket not valid at this time"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
+msgid "Order canceled"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+msgid "Ticket code is ambiguous on list"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 #, fuzzy
 #| msgid "Check-in QR"
 msgid "Checked-in Tickets"
 msgstr "Check in QR"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Valid Tickets"
 msgstr ""
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Currently inside"
 msgstr ""
 
@@ -591,31 +599,31 @@ msgstr ""
 "A választott színek kontrasztja elégtelen, kérjük válassz sötétebb "
 "árnyalatot."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:461
+#: pretix/static/pretixcontrol/js/ui/main.js:464
 msgid "All"
 msgstr "Összes"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:462
+#: pretix/static/pretixcontrol/js/ui/main.js:465
 msgid "None"
 msgstr "Semmi"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:463
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:466
+#: pretix/static/pretixcontrol/js/ui/main.js:469
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:869
+#: pretix/static/pretixcontrol/js/ui/main.js:872
 msgid "Use a different name internally"
 msgstr "Használj másik nevet"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:905
+#: pretix/static/pretixcontrol/js/ui/main.js:908
 msgid "Click to close"
 msgstr "Bezárásért kattints"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:977
+#: pretix/static/pretixcontrol/js/ui/main.js:980
 msgid "You have unsaved changes!"
 msgstr "Mentetlen változtatások!"
 

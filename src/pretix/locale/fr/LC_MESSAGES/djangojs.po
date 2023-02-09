@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-07 17:02+0000\n"
+"POT-Creation-Date: 2023-02-09 13:36+0000\n"
 "PO-Revision-Date: 2023-01-17 01:00+0000\n"
 "Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -292,24 +292,36 @@ msgid "Ticket code revoked/changed"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
+#, fuzzy
+#| msgid "Ticket not paid"
+msgid "Ticket blocked"
+msgstr "Ticket non payé"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+#, fuzzy
+#| msgid "Ticket not paid"
+msgid "Ticket not valid at this time"
+msgstr "Ticket non payé"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Order canceled"
 msgstr ""
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket code is ambiguous on list"
 msgstr "Le code du billet est ambigu dans la liste"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 #, fuzzy
 #| msgid "Check-in QR"
 msgid "Checked-in Tickets"
 msgstr "Enregistrement QR code"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Valid Tickets"
 msgstr ""
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Currently inside"
 msgstr ""
 
@@ -590,31 +602,31 @@ msgstr ""
 "Votre choix de couleur n'a pas un bon contraste avec du texte sur un fond "
 "blanc, SVP choisissez un ton plus sombre."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:461
+#: pretix/static/pretixcontrol/js/ui/main.js:464
 msgid "All"
 msgstr "Tous"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:462
+#: pretix/static/pretixcontrol/js/ui/main.js:465
 msgid "None"
 msgstr "Aucun"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:463
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:466
+#: pretix/static/pretixcontrol/js/ui/main.js:469
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:869
+#: pretix/static/pretixcontrol/js/ui/main.js:872
 msgid "Use a different name internally"
 msgstr "Utiliser un nom différent en interne"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:905
+#: pretix/static/pretixcontrol/js/ui/main.js:908
 msgid "Click to close"
 msgstr "Cliquez pour fermer"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:977
+#: pretix/static/pretixcontrol/js/ui/main.js:980
 msgid "You have unsaved changes!"
 msgstr "Vous avez des modifications non sauvegardées !"
 

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-07 17:02+0000\n"
+"POT-Creation-Date: 2023-02-09 13:36+0000\n"
 "PO-Revision-Date: 2023-01-13 08:00+0000\n"
 "Last-Translator: tree <jan.stransky@arnal.cz>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -287,22 +287,34 @@ msgid "Ticket code revoked/changed"
 msgstr "Kód vstupenky změněn"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
+#, fuzzy
+#| msgid "Ticket not paid"
+msgid "Ticket blocked"
+msgstr "Vstupenka není zaplacena"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+#, fuzzy
+#| msgid "Ticket not paid"
+msgid "Ticket not valid at this time"
+msgstr "Vstupenka není zaplacena"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Order canceled"
 msgstr "Objednávka zrušena"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket code is ambiguous on list"
 msgstr "Kód vstupenky je v seznamu nejednoznačný"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Checked-in Tickets"
 msgstr "Vyřízené vstupenky"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Valid Tickets"
 msgstr "Platné vstupenky"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Currently inside"
 msgstr "Aktuálně uvnitř"
 
@@ -561,31 +573,31 @@ msgstr ""
 "Tato barva je pro text na bílém pozadí špatně kontrastní, zvolte prosím "
 "tmavší odstín."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:461
+#: pretix/static/pretixcontrol/js/ui/main.js:464
 msgid "All"
 msgstr "Všechny"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:462
+#: pretix/static/pretixcontrol/js/ui/main.js:465
 msgid "None"
 msgstr "Žádný"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:463
+#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Search query"
 msgstr "Hledaný výraz"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:466
+#: pretix/static/pretixcontrol/js/ui/main.js:469
 msgid "Selected only"
 msgstr "Pouze vybrané"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:869
+#: pretix/static/pretixcontrol/js/ui/main.js:872
 msgid "Use a different name internally"
 msgstr "Interně používat jiný název"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:905
+#: pretix/static/pretixcontrol/js/ui/main.js:908
 msgid "Click to close"
 msgstr "Kliknutím zavřete"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:977
+#: pretix/static/pretixcontrol/js/ui/main.js:980
 msgid "You have unsaved changes!"
 msgstr "Máte neuložené změny!"
 
