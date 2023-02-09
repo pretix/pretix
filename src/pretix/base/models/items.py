@@ -33,10 +33,11 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import calendar
 import sys
 import uuid
 from collections import Counter, OrderedDict
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
 from typing import Tuple
 
@@ -830,6 +831,55 @@ class Item(LoggedModel):
             data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
 
         return OrderedDict((k, v) for k, v in sorted(data.items(), key=lambda k: k[0]))
+
+    def compute_validity(self, *, requested_start: datetime, override_tz=None):
+        if self.validity_mode == "fixed":
+            return self.validity_fixed_from, self.validity_fixed_until
+        elif self.validity_mode == "dynamic":
+            tz = override_tz or self.event.timezone
+            valid_until = requested_start.astimezone(tz)
+
+            if self.validity_dynamic_duration_months:
+                replace_year = valid_until.year
+                replace_month = valid_until.month + self.validity_dynamic_duration_months
+                while replace_month > 12:
+                    replace_month -= 12
+                    replace_year += 1
+                max_day = calendar.monthrange(replace_year, replace_month)[1]
+                replace_date = date(
+                    year=replace_year,
+                    month=replace_month,
+                    day=min(valid_until.day, max_day),
+                )
+                if self.validity_dynamic_duration_days:
+                    replace_date += timedelta(days=self.validity_dynamic_duration_days)
+                valid_until = tz.localize(valid_until.replace(
+                    year=replace_date.year,
+                    month=replace_date.month,
+                    day=replace_date.day,
+                    hour=23, minute=59, second=59, microsecond=0,
+                    tzinfo=None,
+                ))
+            elif self.validity_dynamic_duration_days:
+                replace_date = valid_until.date() + timedelta(days=self.validity_dynamic_duration_days - 1)
+                valid_until = tz.localize(valid_until.replace(
+                    year=replace_date.year,
+                    month=replace_date.month,
+                    day=replace_date.day,
+                    hour=23, minute=59, second=59, microsecond=0,
+                    tzinfo=None
+                ))
+
+            if self.validity_dynamic_duration_hours:
+                valid_until += timedelta(hours=self.validity_dynamic_duration_hours)
+
+            if self.validity_dynamic_duration_minutes:
+                valid_until += timedelta(minutes=self.validity_dynamic_duration_minutes)
+
+            return requested_start, valid_until
+
+        else:
+            return None, None
 
 
 def _all_sales_channels_identifiers():
