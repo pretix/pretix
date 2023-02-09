@@ -1081,8 +1081,8 @@ class MailSettingsForm(SettingsForm):
         label=_("Text"),
         required=False,
         widget=I18nTextarea,
-        help_text=_("This email only applies to payment methods like bank transfer that can receive "
-                    "incomplete payments."),
+        help_text=_("This email only applies to payment methods that can receive incomplete payments, "
+                    "such as bank transfer."),
     )
     mail_subject_waiting_list = I18nFormField(
         label=_("Subject"),
