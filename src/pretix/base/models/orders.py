@@ -2357,6 +2357,19 @@ class OrderPosition(AbstractPosition):
             op._calculate_tax()
             if cartpos.voucher:
                 op.voucher_budget_use = cartpos.listed_price - cartpos.price_after_voucher
+
+            if cartpos.item.validity_mode:
+                valid_from, valid_until = cartpos.item.compute_validity(
+                    requested_start=(
+                        max(cartpos.requested_valid_from, now())
+                        if cartpos.requested_valid_from and cartpos.item.validity_dynamic_start_choice
+                        else now()
+                    ),
+                    override_tz=order.event.timezone,
+                )
+                op.valid_from = valid_from
+                op.valid_until = valid_until
+
             op.positionid = i + 1
             op.save()
             ops.append(op)
@@ -2825,6 +2838,25 @@ class CartPosition(AbstractPosition):
     def addons_without_bundled(self):
         addons = [op for op in self.addons.all() if not op.is_bundled]
         return sorted(addons, key=lambda cp: cp.sort_key)
+
+    @cached_property
+    def predicted_validity(self):
+        return self.item.compute_validity(
+            requested_start=(
+                max(self.requested_valid_from, now())
+                if self.requested_valid_from and self.item.validity_dynamic_start_choice
+                else now()
+            ),
+            override_tz=self.event.timezone,
+        )
+
+    @property
+    def valid_from(self):
+        return self.predicted_validity[0]
+
+    @property
+    def valid_until(self):
+        return self.predicted_validity[1]
 
 
 class InvoiceAddress(models.Model):

@@ -39,7 +39,7 @@ import uuid
 from collections import Counter, OrderedDict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
-from typing import Tuple
+from typing import Optional, Tuple
 
 import dateutil.parser
 import pytz
@@ -832,7 +832,7 @@ class Item(LoggedModel):
 
         return OrderedDict((k, v) for k, v in sorted(data.items(), key=lambda k: k[0]))
 
-    def compute_validity(self, *, requested_start: datetime, override_tz=None):
+    def compute_validity(self, *, requested_start: datetime, override_tz=None) -> Tuple[Optional[datetime], Optional[datetime]]:
         if self.validity_mode == "fixed":
             return self.validity_fixed_from, self.validity_fixed_until
         elif self.validity_mode == "dynamic":
