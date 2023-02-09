@@ -1660,6 +1660,7 @@ class OrderChange(OrderView):
         ctx['fees'] = self.fees
         ctx['add_formset'] = self.add_formset
         ctx['other_form'] = self.other_form
+        ctx['use_revocation_list'] = self.request.event.ticket_secret_generator.use_revocation_list
         return ctx
 
     def _process_other(self, ocm):

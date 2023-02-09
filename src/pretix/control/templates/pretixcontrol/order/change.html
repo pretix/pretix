@@ -102,6 +102,11 @@
                             <div class="row">
                                 <div class="col-sm-3">
                                     <strong>{% trans "Date" context "subevent" %}</strong>
+                                    {% if use_revocation_list %}
+                                        <span class="fa fa-info-circle text-warning"
+                                              title="{% trans "If you change this, it might cause a new ticket QR code to be generated and the old one to be invalidated." %}"
+                                              data-toggle="tooltip"></span>
+                                    {% endif %}
                                 </div>
                                 <div class="col-sm-5">
                                     {{ position.subevent }}
@@ -128,6 +133,11 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <strong>{% trans "Product" %}</strong>
+                                {% if use_revocation_list %}
+                                    <span class="fa fa-info-circle text-warning"
+                                          title="{% trans "If you change this, it might cause a new ticket QR code to be generated and the old one to be invalidated." %}"
+                                          data-toggle="tooltip"></span>
+                                {% endif %}
                             </div>
                             <div class="col-sm-5">
                                 {{ position.item }}
@@ -210,6 +220,11 @@
                         <div class="row">
                             <div class="col-sm-3">
                                 <strong>{% trans "Validity time" %}</strong>
+                                {% if use_revocation_list %}
+                                    <span class="fa fa-info-circle text-warning"
+                                          title="{% trans "If you change this, it might cause a new ticket QR code to be generated and the old one to be invalidated." %}"
+                                          data-toggle="tooltip"></span>
+                                {% endif %}
                             </div>
                             <div class="col-sm-5">
                                 {% if position.valid_from %}
