@@ -405,7 +405,55 @@ DEFAULT_VARIABLES = OrderedDict((
         "evaluate": lambda op, order, ev: date_format(
             now().astimezone(timezone(ev.settings.timezone)),
             "TIME_FORMAT"
-        ) if ev.date_admission else ""
+        )
+    }),
+    ("valid_from_date", {
+        "label": _("Validity start date"),
+        "editor_sample": _("2017-05-31"),
+        "evaluate": lambda op, order, ev: date_format(
+            now().astimezone(timezone(ev.settings.timezone)),
+            "SHORT_DATE_FORMAT"
+        ) if op.valid_from else ""
+    }),
+    ("valid_from_datetime", {
+        "label": _("Validity start date and time"),
+        "editor_sample": _("2017-05-31 19:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            op.valid_from.astimezone(timezone(ev.settings.timezone)),
+            "SHORT_DATETIME_FORMAT"
+        ) if op.valid_from else ""
+    }),
+    ("valid_from_time", {
+        "label": _("Validity start time"),
+        "editor_sample": _("19:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            op.valid_from.astimezone(timezone(ev.settings.timezone)),
+            "TIME_FORMAT"
+        ) if op.valid_from else ""
+    }),
+    ("valid_until_date", {
+        "label": _("Validity end date"),
+        "editor_sample": _("2017-05-31"),
+        "evaluate": lambda op, order, ev: date_format(
+            now().astimezone(timezone(ev.settings.timezone)),
+            "SHORT_DATE_FORMAT"
+        ) if op.valid_until else ""
+    }),
+    ("valid_until_datetime", {
+        "label": _("Validity end date and time"),
+        "editor_sample": _("2017-05-31 19:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            op.valid_until.astimezone(timezone(ev.settings.timezone)),
+            "SHORT_DATETIME_FORMAT"
+        ) if op.valid_until else ""
+    }),
+    ("valid_until_time", {
+        "label": _("Validity end time"),
+        "editor_sample": _("19:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            op.valid_until.astimezone(timezone(ev.settings.timezone)),
+            "TIME_FORMAT"
+        ) if op.valid_until else ""
     }),
     ("seat", {
         "label": _("Seat: Full name"),
