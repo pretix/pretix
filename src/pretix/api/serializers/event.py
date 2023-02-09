@@ -662,6 +662,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'show_times',
         'show_items_outside_presale_period',
         'display_net_prices',
+        'hide_prices_from_attendees',
         'presale_start_show_date',
         'locales',
         'locale',

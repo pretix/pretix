@@ -64,8 +64,14 @@
     .singleprice, .totalprice {
         width: percentage((3 / $grid-columns));
     }
+    &.hide-prices .product {
+        width: percentage((10 / $grid-columns));
+    }
     &.has-downloads .product {
         width: percentage((5 / $grid-columns));
+    }
+    &.has-downloads.hide-prices .product {
+        width: percentage((8 / $grid-columns));
     }
     .addon-signifier {
         display: inline-block;
@@ -103,7 +109,7 @@
 .cart .firstchild-in-panel .cart-row:first-child {
     padding-top: 0;
 }
-.cart [role=rowgroup]:last-child {
+.cart .cart-rowgroup-total {
     border-top: 1px solid $table-border-color;
 }
 .cart .total strong {
@@ -196,15 +202,23 @@
         .totalprice {
             width: 50%;
         }
-        .product, &.has-downloads .product {
+        &.hide-prices .product {
+            width: 75%;
+        }
+        .product, &.has-downloads .product, &.has-downloads.hide-prices .product {
             width: 100%;
+        }
+        &.has-downloads.hide-prices .download-desktop {
+            margin-left: 50%;
         }
         &.total .product {
             width: 50%;
         }
         .count {
-            clear: both;
             width: 25%;
+        }
+        &:not(.hide-prices) .count {
+            clear: both;
             text-align: left;
         }
         .singleprice {
