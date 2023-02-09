@@ -1361,6 +1361,8 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
         selected_payments = self.current_selected_payments(ctx['cart']['total'], total_includes_payment_fees=True)
         ctx['payments'] = []
         for p in selected_payments:
+            if p['provider'] == 'free':
+                continue
             if 'info_data' in inspect.signature(p['pprov'].checkout_confirm_render).parameters:
                 block = p['pprov'].checkout_confirm_render(self.request, info_data=p['info_data'])
             else:
