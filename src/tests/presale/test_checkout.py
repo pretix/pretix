@@ -38,6 +38,7 @@ from django.utils.crypto import get_random_string
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
+from freezegun import freeze_time
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
@@ -2352,6 +2353,98 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             cr1 = CartPosition.objects.get(id=cr1.id)
             self.assertEqual(cr1.price, 24)
+
+    @freeze_time("2023-01-18 03:00:00+01:00")
+    def test_validity_requested_start_date(self):
+        self.ticket.validity_mode = Item.VALIDITY_MODE_DYNAMIC
+        self.ticket.validity_dynamic_duration_days = 1
+        self.ticket.validity_dynamic_start_choice = True
+        self.ticket.validity_dynamic_start_choice_day_limit = 30
+        self.ticket.save()
+        with scopes_disabled():
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=42, listed_price=42, price_after_voucher=42, expires=now() + timedelta(minutes=10)
+            )
+
+        # Date too far in the future, expected to fail
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-requested_valid_from' % cr1.id: '2024-01-20',
+            'email': 'admin@localhost'
+        }, follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertGreaterEqual(len(doc.select('.has-error')), 1)
+
+        # Corrected request
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-requested_valid_from' % cr1.id: '2023-01-20',
+            'email': 'admin@localhost'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        cr1.refresh_from_db()
+        assert cr1.requested_valid_from.isoformat() == '2023-01-20T00:00:00+00:00'
+
+        self._set_payment()
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        with scopes_disabled():
+            self.assertEqual(len(doc.select(".thank-you")), 1)
+            self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+            self.assertEqual(Order.objects.count(), 1)
+            self.assertEqual(OrderPosition.objects.count(), 1)
+            op = OrderPosition.objects.get()
+            assert op.valid_from.isoformat() == '2023-01-20T00:00:00+00:00'
+            assert op.valid_until.isoformat() == '2023-01-20T23:59:59+00:00'
+
+    @freeze_time("2023-01-18 03:00:00+01:00")
+    def test_validity_requested_start_date_and_time(self):
+        self.ticket.validity_mode = Item.VALIDITY_MODE_DYNAMIC
+        self.ticket.validity_dynamic_duration_hours = 2
+        self.ticket.validity_dynamic_start_choice = True
+        self.ticket.validity_dynamic_start_choice_day_limit = 30
+        self.ticket.save()
+        with scopes_disabled():
+            cr1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=42, listed_price=42, price_after_voucher=42, expires=now() + timedelta(minutes=10)
+            )
+
+        # Date too far in the future, expected to fail
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-requested_valid_from_0' % cr1.id: '2024-01-20',
+            '%s-requested_valid_from_1' % cr1.id: '11:00:00',
+            'email': 'admin@localhost'
+        }, follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertGreaterEqual(len(doc.select('.has-error')), 1)
+
+        # Corrected request
+        response = self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            '%s-requested_valid_from_0' % cr1.id: '2023-01-20',
+            '%s-requested_valid_from_1' % cr1.id: '11:00:00',
+            'email': 'admin@localhost'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        cr1.refresh_from_db()
+        assert cr1.requested_valid_from.isoformat() == '2023-01-20T11:00:00+00:00'
+
+        self._set_payment()
+
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        with scopes_disabled():
+            self.assertEqual(len(doc.select(".thank-you")), 1)
+            self.assertFalse(CartPosition.objects.filter(id=cr1.id).exists())
+            self.assertEqual(Order.objects.count(), 1)
+            self.assertEqual(OrderPosition.objects.count(), 1)
+            op = OrderPosition.objects.get()
+            assert op.valid_from.isoformat() == '2023-01-20T11:00:00+00:00'
+            assert op.valid_until.isoformat() == '2023-01-20T13:00:00+00:00'
 
     def test_voucher(self):
         with scopes_disabled():
