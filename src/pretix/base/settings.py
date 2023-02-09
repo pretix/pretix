@@ -2060,7 +2060,7 @@ Your {event} team"""))
 
 we received a payment for your order for {event}.
 
-Unfortunately, the received amount is smaller than the full amount
+Unfortunately, the received amount is less than the full amount
 required. Your order is therefore still considered unpaid, as it is
 missing additional payment of **{pending_sum}**.
 
