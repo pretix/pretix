@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-09 13:36+0000\n"
-"PO-Revision-Date: 2023-02-09 13:56+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2023-02-10 02:00+0000\n"
+"Last-Translator: Jan Felix Wiebe <mail@jfwie.be>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -29966,7 +29966,7 @@ msgstr "Neues Passwort anfordern"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:8
 msgid "Event list"
-msgstr "Veranstaltungs-Liste"
+msgstr "Veranstaltungsliste"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:25
 msgid "Past events"
