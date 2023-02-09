@@ -360,10 +360,12 @@ class Item(LoggedModel):
     :type validity_dynamic_start_choice_day_limnit: int
 
     """
+    VALIDITY_MODE_FIXED = 'fixed'
+    VALIDITY_MODE_DYNAMIC = 'dynamic'
     VALIDITY_MODES = (
         (None, _('Event validity (default)')),
-        ('fixed', _('Fixed time frame')),
-        ('dynamic', _('Dynamic validity')),
+        (VALIDITY_MODE_FIXED, _('Fixed time frame')),
+        (VALIDITY_MODE_DYNAMIC, _('Dynamic validity')),
     )
 
     objects = ItemQuerySetManager()
@@ -835,9 +837,9 @@ class Item(LoggedModel):
     def compute_validity(
         self, *, requested_start: datetime, override_tz=None, enforce_start_limit=False
     ) -> Tuple[Optional[datetime], Optional[datetime]]:
-        if self.validity_mode == "fixed":
+        if self.validity_mode == Item.VALIDITY_MODE_FIXED:
             return self.validity_fixed_from, self.validity_fixed_until
-        elif self.validity_mode == "dynamic":
+        elif self.validity_mode == Item.VALIDITY_MODE_DYNAMIC:
             tz = override_tz or self.event.timezone
             requested_start = requested_start or now()
             if enforce_start_limit and not self.validity_dynamic_start_choice:

@@ -2365,6 +2365,7 @@ class OrderPosition(AbstractPosition):
                         if cartpos.requested_valid_from and cartpos.item.validity_dynamic_start_choice
                         else now()
                     ),
+                    enforce_start_limit=True,
                     override_tz=order.event.timezone,
                 )
                 op.valid_from = valid_from
