@@ -2019,10 +2019,6 @@ Your {event} team"""))
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("Your order is about to expire: {code}")),
     },
-    'mail_subject_order_pending_warning': {
-        'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(gettext_noop("Your order is pending payment: {code}")),
-    },
     'mail_text_order_expire_warning': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
@@ -2037,12 +2033,36 @@ You can view the payment information and the status of your order at
 Best regards,
 Your {event} team"""))
     },
+    'mail_subject_order_pending_warning': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your order is pending payment: {code}")),
+    },
     'mail_text_order_pending_warning': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
 we did not yet receive a full payment for your order for {event}.
 Please keep in mind that you are required to pay before {expire_date}.
+
+You can view the payment information and the status of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
+    'mail_subject_order_incomplete_payment': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Incomplete payment received: {code}")),
+    },
+    'mail_text_order_incomplete_payment': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+we received a payment for your order for {event}.
+
+Unfortunately, the received amount is less than the full amount
+required. Your order is therefore still considered unpaid, as it is
+missing additional payment of **{pending_sum}**.
 
 You can view the payment information and the status of your order at
 {url}

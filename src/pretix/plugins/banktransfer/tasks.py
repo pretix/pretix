@@ -42,7 +42,7 @@ from django.conf import settings
 from django.db import transaction
 from django.db.models import Max, Min, Q
 from django.db.models.functions import Length
-from django.utils.translation import gettext, gettext_noop
+from django.utils.translation import gettext_noop
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.email import get_email_context
@@ -64,9 +64,9 @@ logger = logging.getLogger(__name__)
 
 def notify_incomplete_payment(o: Order):
     with language(o.locale, o.event.settings.region):
-        email_template = o.event.settings.mail_text_order_expire_warning
-        email_context = get_email_context(event=o.event, order=o)
-        email_subject = gettext('Your order received an incomplete payment: %(code)s') % {'code': o.code}
+        email_template = o.event.settings.mail_text_order_incomplete_payment
+        email_context = get_email_context(event=o.event, order=o, pending_sum=o.pending_sum)
+        email_subject = o.event.settings.mail_subject_order_incomplete_payment
 
         try:
             o.send_mail(
