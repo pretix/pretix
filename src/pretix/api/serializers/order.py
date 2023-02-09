@@ -785,12 +785,14 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     voucher = serializers.SlugRelatedField(slug_field='code', queryset=Voucher.objects.none(),
                                            required=False, allow_null=True)
     country = CompatibleCountryField(source='*')
+    requested_valid_from = serializers.DateTimeField(required=False, allow_null=True)
 
     class Meta:
         model = OrderPosition
         fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'is_bundled',
-                  'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher', 'valid_from', 'valid_until')
+                  'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher', 'valid_from', 'valid_until',
+                  'requested_valid_from')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -1176,6 +1178,20 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         seats_seen.add(seat)
                 elif seated:
                     errs[i]['seat'] = ['The specified product requires to choose a seat.']
+
+                requested_valid_from = pos_data.pop('requested_valid_from', None)
+                if 'valid_from' not in pos_data and 'valid_until' not in pos_data:
+                    valid_from, valid_until = pos_data['item'].compute_validity(
+                        requested_start=(
+                            max(requested_valid_from, now())
+                            if requested_valid_from and pos_data['item'].validity_dynamic_start_choice
+                            else now()
+                        ),
+                        enforce_start_limit=True,
+                        override_tz=self.context['event'].timezone,
+                    )
+                    pos_data['valid_from'] = valid_from
+                    pos_data['valid_until'] = valid_until
 
             if not force:
                 for i, pos_data in enumerate(positions_data):

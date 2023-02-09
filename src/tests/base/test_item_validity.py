@@ -74,6 +74,7 @@ def dt(*args, is_dst=None, **kwargs):
 def test_dynamic_validity(minutes, hours, days, months, start, expected_end):
     i = Item(
         validity_mode="dynamic",
+        validity_dynamic_start_choice=True,
         validity_dynamic_duration_minutes=minutes,
         validity_dynamic_duration_hours=hours,
         validity_dynamic_duration_days=days,

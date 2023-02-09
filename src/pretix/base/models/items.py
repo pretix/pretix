@@ -832,11 +832,19 @@ class Item(LoggedModel):
 
         return OrderedDict((k, v) for k, v in sorted(data.items(), key=lambda k: k[0]))
 
-    def compute_validity(self, *, requested_start: datetime, override_tz=None) -> Tuple[Optional[datetime], Optional[datetime]]:
+    def compute_validity(
+        self, *, requested_start: datetime, override_tz=None, enforce_start_limit=False
+    ) -> Tuple[Optional[datetime], Optional[datetime]]:
         if self.validity_mode == "fixed":
             return self.validity_fixed_from, self.validity_fixed_until
         elif self.validity_mode == "dynamic":
             tz = override_tz or self.event.timezone
+            requested_start = requested_start or now()
+            if enforce_start_limit and not self.validity_dynamic_start_choice:
+                requested_start = now()
+            if enforce_start_limit and self.validity_dynamic_start_choice_day_limit is not None:
+                requested_start = min(requested_start, now() + timedelta(days=self.validity_dynamic_start_choice_day_limit))
+
             valid_until = requested_start.astimezone(tz)
 
             if self.validity_dynamic_duration_months:
