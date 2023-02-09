@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-09 13:36+0000\n"
-"PO-Revision-Date: 2023-02-07 17:22+0000\n"
+"PO-Revision-Date: 2023-02-09 13:56+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -3082,16 +3082,12 @@ msgid "Server error"
 msgstr "Serverfehler"
 
 #: pretix/base/models/checkin.py:347
-#, fuzzy
-#| msgid "Ticket code"
 msgid "Ticket blocked"
-msgstr "Ticket-Code"
+msgstr "Ticket gesperrt"
 
 #: pretix/base/models/checkin.py:348
-#, fuzzy
-#| msgid "This voucher is not valid for this seat."
 msgid "Ticket not valid at this time"
-msgstr "Dieser Gutschein ist für diesen Sitzplatz nicht gültig."
+msgstr "Ticket aktuell nicht gültig"
 
 #: pretix/base/models/customers.py:54
 msgid "Provider name"
@@ -5607,7 +5603,7 @@ msgstr "Bitte geben Sie einen gültigen Sprachcode ein."
 #: pretix/base/orderimport.py:666 pretix/base/orderimport.py:689
 #, python-brace-format
 msgid "Could not parse {value} as a date and time."
-msgstr ""
+msgstr "Konnte {value} nicht als Datum und Zeit erkennen."
 
 #: pretix/base/orderimport.py:708
 msgid "Please enter a valid sales channel."
@@ -6789,23 +6785,18 @@ msgid "This order position has been canceled."
 msgstr "Die Bestellposition wurde storniert."
 
 #: pretix/base/services/checkin.py:726
-#, fuzzy
-#| msgid "This ticket has been used once."
-#| msgid_plural "This ticket has been used %(count)s times."
 msgid "This ticket has been blocked."
-msgstr "Das Ticket wurde bereits einmal verwendet."
+msgstr "Das Ticket wurde gesperrt."
 
 #: pretix/base/services/checkin.py:732 pretix/base/services/checkin.py:736
-#, fuzzy, python-brace-format
-#| msgid "Only allowed after {datetime}"
+#, python-brace-format
 msgid "This ticket is only valid after {datetime}."
-msgstr "Erst erlaubt ab {datetime}"
+msgstr "Erst ab {datetime} gültig."
 
 #: pretix/base/services/checkin.py:743 pretix/base/services/checkin.py:747
-#, fuzzy, python-brace-format
-#| msgid "This ticket has already been redeemed."
+#, python-brace-format
 msgid "This ticket was only valid before {datetime}."
-msgstr "Das Ticket wurde bereits eingelöst."
+msgstr "Nur bis {datetime} gültig."
 
 #: pretix/base/services/checkin.py:774
 msgid "This order position has an invalid product for this check-in list."
@@ -6816,10 +6807,8 @@ msgid "This order position has an invalid date for this check-in list."
 msgstr "Diese Bestellposition hat ein für diese Liste ungültiges Datum."
 
 #: pretix/base/services/checkin.py:784
-#, fuzzy
-#| msgid "This order is not pending approval."
 msgid "This order is not yet approved."
-msgstr "Diese Bestellung wartet nicht auf Freigabe."
+msgstr "Diese Bestellung wurde noch nicht freigegeben."
 
 #: pretix/base/services/checkin.py:791
 msgid "This order is not marked as paid."
@@ -9232,19 +9221,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:2029
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we did not yet receive a full payment for your order for {event}.\n"
-#| "Please keep in mind that we only guarantee your order if we receive\n"
-#| "your payment before {expire_date}.\n"
-#| "\n"
-#| "You can view the payment information and the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -9261,9 +9238,8 @@ msgstr ""
 "\n"
 "wir haben für Ihre Bestellung für {event} noch keine vollständige Zahlung "
 "erhalten.\n"
-"Bitte beachten Sie, dass wir Ihre Bestellung nur garantieren können, wenn "
-"wir das\n"
-"Geld bis zum {expire_date} erhalten.\n"
+"Bitte beachten Sie, dass das Geld bis zum {expire_date} bei uns eingehen "
+"muss.\n"
 "\n"
 "Sie können Ihre Bestellung unter folgender Adresse einsehen und ändern:\n"
 "{url}\n"
@@ -11268,20 +11244,16 @@ msgid "Text (requested by user)"
 msgstr "Text (vom Benutzer beantragt)"
 
 #: pretix/control/forms/event.py:1055
-#, fuzzy
-#| msgid "Subject (if order will expire automatically)"
 msgid "Text (if order will expire automatically)"
-msgstr "Betreff (wenn Bestellung automatisch abläuft)"
+msgstr "Text (wenn Bestellung automatisch abläuft)"
 
 #: pretix/control/forms/event.py:1060
 msgid "Subject (if order will expire automatically)"
 msgstr "Betreff (wenn Bestellung automatisch abläuft)"
 
 #: pretix/control/forms/event.py:1065
-#, fuzzy
-#| msgid "Subject (if order will not expire automatically)"
 msgid "Text (if order will not expire automatically)"
-msgstr "Betreff (wenn Bestellung nicht automatisch abläuft)"
+msgstr "Text (wenn Bestellung nicht automatisch abläuft)"
 
 #: pretix/control/forms/event.py:1070
 msgid "Subject (if order will not expire automatically)"
@@ -11536,11 +11508,8 @@ msgstr "Bezahlt (oder storniert mit Gebühr)"
 
 #: pretix/control/forms/filter.py:213
 #: pretix/control/templates/pretixcontrol/items/question.html:21
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Order confirmed"
 msgid "Paid or confirmed"
-msgstr "Bestellbestätigung"
+msgstr "Bezahlt oder bestätigt"
 
 #: pretix/control/forms/filter.py:214
 #: pretix/control/templates/pretixcontrol/items/question.html:22
@@ -12503,10 +12472,8 @@ msgid "CSV column: \"{name}\""
 msgstr "CSV-Spalte: \"{name}\""
 
 #: pretix/control/forms/orders.py:79
-#, fuzzy
-#| msgid "Confirm payment"
 msgid "Confirm order regardless of payment"
-msgstr "Zahlung bestätigen"
+msgstr "Bestellung unabhängig von ausstehender Zahlung bestätigen"
 
 #: pretix/control/forms/orders.py:80
 msgid ""
@@ -12518,6 +12485,14 @@ msgid ""
 "deadline arrives, since we expect that you want to collect the amount "
 "somehow and not auto-cancel the order."
 msgstr ""
+"Wenn Sie diese Option wählen, wird die Bestellung in fast allen Fragen wie "
+"eine bezahlte Bestellung behandelt, obwohl sie noch nicht bezahlt wurde. Das "
+"bedeutet, dass der Kunde unabhängig von den Veranstaltungseinstellungen "
+"bereits die Tickets herunterladen kann und die Bestellung von einigen "
+"Erweiterungen als bezahlt behandelt wird. Wenn Sie diese Option wählen, wird "
+"die Bestellung bei Erreichen der Zahlungsfrist nicht mehr automatisch "
+"ablaufen, da wir davon ausgehen, dass Sie den Betrag eintreiben möchten und "
+"die Bestellung nicht automatisch storniert werden soll."
 
 #: pretix/control/forms/orders.py:88
 msgid "Overbook quota"
@@ -12698,20 +12673,16 @@ msgid "New price (gross)"
 msgstr "Neuer Preis (brutto)"
 
 #: pretix/control/forms/orders.py:453
-#, fuzzy
-#| msgid "Ticket secret"
 msgid "Ticket is blocked"
-msgstr "Ticket-Code"
+msgstr "Ticket gesperrt"
 
 #: pretix/control/forms/orders.py:458
 msgid "Validity start"
-msgstr ""
+msgstr "Gültigkeitsbeginn"
 
 #: pretix/control/forms/orders.py:463
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity end"
-msgstr "Gültig bis"
+msgstr "Gültigkeitsende"
 
 #: pretix/control/forms/orders.py:475
 msgid "Generate a new secret"
@@ -12810,6 +12781,9 @@ msgid ""
 "that have been blocked (manually or by a plugin) are not auto-canceled and "
 "you will need to deal with them manually."
 msgstr ""
+"Nur verfügbar für Zahlungsarten, die automatische Erstattungen unterstützen. "
+"Tickets, die (manuell oder von einer Erweiterung) gesperrt wurden, werden "
+"nicht automatisch storniert und müssen manuell behandelt werden."
 
 #: pretix/control/forms/orders.py:793
 msgid "Create refund in the manual refund to-do list"
@@ -13436,30 +13410,26 @@ msgid "A new secret has been generated for position #{posid}."
 msgstr "Ein neuer Ticket-Code für Position #{posid} wurde generiert."
 
 #: pretix/control/logdisplay.py:166
-#, fuzzy, python-brace-format
-#| msgid "This order position has been canceled."
+#, python-brace-format
 msgid ""
 "The validity start date for position #{posid} has been changed to {value}."
-msgstr "Die Bestellposition wurde storniert."
+msgstr "Der Gültigkeitsbeginn für Position #{posid} wurde zu {value} geändert."
 
 #: pretix/control/logdisplay.py:172
-#, fuzzy, python-brace-format
-#| msgid "This order position has been canceled."
+#, python-brace-format
 msgid ""
 "The validity end date for position #{posid} has been changed to {value}."
-msgstr "Die Bestellposition wurde storniert."
+msgstr "Das Gültigkeitsende für Position #{posid} wurde zu {value} geändert."
 
 #: pretix/control/logdisplay.py:177
-#, fuzzy, python-brace-format
-#| msgid "A new secret has been generated for position #{posid}."
+#, python-brace-format
 msgid "A block has been added for position #{posid}."
-msgstr "Ein neuer Ticket-Code für Position #{posid} wurde generiert."
+msgstr "Eine Sperre wurde zu Position #{posid} hinzugefügt."
 
 #: pretix/control/logdisplay.py:181
-#, fuzzy, python-brace-format
-#| msgid "A new secret has been generated for position #{posid}."
+#, python-brace-format
 msgid "A block has been removed for position #{posid}."
-msgstr "Ein neuer Ticket-Code für Position #{posid} wurde generiert."
+msgstr "Eine Sperre wurde von Position #{posid} entfernt."
 
 #: pretix/control/logdisplay.py:193
 #, python-brace-format
@@ -13738,16 +13708,12 @@ msgid "The order's expiry date has been changed."
 msgstr "Die Zahlungsfrist wurde geändert."
 
 #: pretix/control/logdisplay.py:373
-#, fuzzy
-#| msgid "The order has been marked as paid."
 msgid "The order has been set to be usable before it is paid."
-msgstr "Die Bestellung wurde als bezahlt markiert."
+msgstr "Die Bestellung wurde trotz ausstehender Zahlung als nutzbar bestätigt."
 
 #: pretix/control/logdisplay.py:374
-#, fuzzy
-#| msgid "The voucher has been sent to {recipient}."
 msgid "The order has been set to require payment before use."
-msgstr "Der Gutschein wurde an {recipient} verschickt."
+msgstr "Die Bestellung erfordert nun eine Zahlung um verwendet zu werden."
 
 #: pretix/control/logdisplay.py:375 pretix/control/views/orders.py:1304
 msgid "The order has been marked as expired."
@@ -13849,11 +13815,11 @@ msgid "The order's flag to require attention at check-in has been toggled."
 msgstr "Der interne Kommentar wurde geändert."
 
 #: pretix/control/logdisplay.py:400
-#, fuzzy
-#| msgid "The order's flag to require attention at check-in has been toggled."
 msgid ""
 "The order's flag to be considered valid even if unpaid has been toggled."
-msgstr "Der interne Kommentar wurde geändert."
+msgstr ""
+"Die Einstellung der Bestellung, ob sie auch ohne Zahlung nutzbar sein soll, "
+"wurde geändert."
 
 #: pretix/control/logdisplay.py:402
 #, python-brace-format
@@ -14557,14 +14523,12 @@ msgid "You stopped impersonating {}."
 msgstr "Sie haben aufgehört, als der Benutzer {} zu arbeiten."
 
 #: pretix/control/logdisplay.py:678
-#, fuzzy
-#| msgid "Blocked Seats"
 msgid "Blocked manually"
-msgstr "Gesperrte Sitze"
+msgstr "Manuell blockiert"
 
 #: pretix/control/logdisplay.py:680
 msgid "Blocked because of an API integration"
-msgstr ""
+msgstr "Gesperrt durch eine API-Integration"
 
 #: pretix/control/middleware.py:150 pretix/control/middleware.py:164
 msgid ""
@@ -18846,50 +18810,42 @@ msgid "including all taxes"
 msgstr "inklusive aller Steuern"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:194
-#, fuzzy
-#| msgid "Ticket layout"
 msgid "Ticket block"
-msgstr "Ticket-Layout"
+msgstr "Ticket-Sperre"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:200
 msgid "Blocked due to external constraints"
-msgstr ""
+msgstr "Wegen externer Bedingungen gesperrt"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:202
-#, fuzzy
-#| msgid "Blocked"
 msgid "Not blocked"
-msgstr "Gesperrt"
+msgstr "Nicht gesperrt"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:212
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity time"
-msgstr "Gültig bis"
+msgstr "Gültigkeitszeitraum"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:216
 #: pretix/control/templates/pretixcontrol/order/index.html:453
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:108
-#, fuzzy, python-format
-#| msgid "Admission: %(datetime)s"
+#, python-format
 msgid "Valid from %(datetime)s"
-msgstr "Einlass: %(datetime)s"
+msgstr "Gültig ab %(datetime)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:224
 #: pretix/control/templates/pretixcontrol/order/index.html:457
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:112
-#, fuzzy, python-format
-#| msgid "Admission: %(datetime)s"
+#, python-format
 msgid "Valid until %(datetime)s"
-msgstr "Einlass: %(datetime)s"
+msgstr "Gültig bis %(datetime)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:229
 msgid "Unconstrained"
-msgstr ""
+msgstr "Unbeschränkt"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:235
 msgid "–"
-msgstr ""
+msgstr "–"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:259
 msgid ""
@@ -19095,16 +19051,12 @@ msgid "Cancellation date"
 msgstr "Stornodatum"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:199
-#, fuzzy
-#| msgid ""
-#| "This order will not expire automatically as it has an open cancellation "
-#| "fee."
 msgid ""
 "This order will not expire automatically since it is already confirmed and "
 "can be used."
 msgstr ""
-"Diese Bestellung wird nicht automatisch ablaufen, da sie eine offene "
-"Stornogebühr hat."
+"Diese Bestellung wird nicht automatisch ablaufen, da sie bereits bestätigt "
+"wurde und genutzt werden kann."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:202
 msgid ""
@@ -19234,7 +19186,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:104
 #, python-format
 msgid "Valid from %(datetime_from)s until %(datetime_until)s"
-msgstr ""
+msgstr "Gültig von %(datetime_from)s bis %(datetime_until)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:487
 msgid "Ticket page"
@@ -19989,11 +19941,9 @@ msgstr ""
 "Alle Empfänger des Exports können sehen, wer der Besitzer des Exports ist."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:12
-#, fuzzy
-#| msgid "Pending (expired)"
 msgctxt "order state"
 msgid "Pending (confirmed)"
-msgstr "ausstehend (abgelaufen)"
+msgstr "ausstehend (bestätigt)"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:25
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:20
@@ -26344,16 +26294,12 @@ msgstr ""
 "Beide (alle Bestell-Kontaktadressen und alle Teilnehmer-E-Mail-Adressen)"
 
 #: pretix/plugins/sendmail/forms.py:246 pretix/plugins/sendmail/views.py:267
-#, fuzzy
-#| msgid "payment pending (except unapproved)"
 msgid "payment pending but already confirmed"
-msgstr "Zahlung ausstehend (außer nicht freigegebene)"
+msgstr "Zahlung ausstehend (aber bereits bestätigt)"
 
 #: pretix/plugins/sendmail/forms.py:247 pretix/plugins/sendmail/views.py:268
-#, fuzzy
-#| msgid "payment pending (except unapproved)"
 msgid "payment pending (except unapproved or already confirmed)"
-msgstr "Zahlung ausstehend (außer nicht freigegebene)"
+msgstr "Zahlung ausstehend (außer nicht freigegebene oder bereits bestätigte)"
 
 #: pretix/plugins/sendmail/forms.py:248 pretix/plugins/sendmail/views.py:269
 msgid "approval pending"
@@ -28566,11 +28512,8 @@ msgid "Membership:"
 msgstr "Mitgliedschaft:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:124
-#, fuzzy
-#| msgid "This ticket has been used once."
-#| msgid_plural "This ticket has been used %(count)s times."
 msgid "This ticket is blocked."
-msgstr "Das Ticket wurde bereits einmal verwendet."
+msgstr "Dieses Ticket ist gesperrt."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:131
 msgctxt "ticket_checkins"
