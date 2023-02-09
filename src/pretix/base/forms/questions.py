@@ -74,7 +74,7 @@ from pretix.base.forms.widgets import (
 from pretix.base.i18n import (
     get_babel_locale, get_language_without_region, language,
 )
-from pretix.base.models import InvoiceAddress, Question, QuestionOption, Item
+from pretix.base.models import InvoiceAddress, Item, Question, QuestionOption
 from pretix.base.models.tax import VAT_ID_COUNTRIES, ask_for_vat_id
 from pretix.base.services.tax import (
     VATIDFinalError, VATIDTemporaryError, validate_vat_id,
@@ -588,7 +588,7 @@ class BaseQuestionsForm(forms.Form):
                     help_text=_('If you keep this empty, the ticket will be valid starting at the time of purchase.'),
                     required=False,
                     widget=DatePickerWidget(attrs),
-                    validators=[MaxDateValidator(max_date)] if max_date else []
+                    validators=[MaxDateValidator(max_date.date())] if max_date else []
                 )
             else:
                 self.fields['requested_valid_from'] = forms.SplitDateTimeField(
