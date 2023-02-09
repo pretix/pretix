@@ -122,6 +122,9 @@ class Order(LockModel, LoggedModel):
         * ``STATUS_EXPIRED``
         * ``STATUS_CANCELED``
 
+    :param valid_if_pending: Treat this order like a paid order for most purposes (such as check-in), even if it is
+                             still unpaid.
+    :type valid_if_pending: bool
     :param event: The event this order belongs to
     :type event: Event
     :param customer: The customer this order belongs to
@@ -176,6 +179,9 @@ class Order(LockModel, LoggedModel):
         choices=STATUS_CHOICE,
         verbose_name=_("Status"),
         db_index=True
+    )
+    valid_if_pending = models.BooleanField(
+        default=False,
     )
     testmode = models.BooleanField(default=False)
     event = models.ForeignKey(
@@ -645,7 +651,7 @@ class Order(LockModel, LoggedModel):
                 has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk')))
             ).select_related('item').prefetch_related('issued_gift_cards')
         )
-        cancelable = all([op.item.allow_cancel and not op.has_checkin for op in positions])
+        cancelable = all([op.item.allow_cancel and not op.has_checkin and not op.blocked for op in positions])
         if not cancelable or not positions:
             return False
         for op in positions:
@@ -848,7 +854,7 @@ class Order(LockModel, LoggedModel):
         ) and (
             self.status == Order.STATUS_PAID
             or (
-                (self.event.settings.ticket_download_pending or self.total == Decimal("0.00")) and
+                (self.valid_if_pending or self.event.settings.ticket_download_pending) and
                 self.status == Order.STATUS_PENDING and
                 not self.require_approval
             )
@@ -2201,17 +2207,31 @@ class OrderPosition(AbstractPosition):
     :type canceled: bool
     :param pseudonymization_id: The QR code content for lead scanning
     :type pseudonymization_id: str
+    :param blocked: A list of reasons why this order position is blocked. Blocked positions can't be used for check-in and
+                    other purposes. Each entry should be a short string that can be translated into a human-readable
+                    description by a plugin. If the position is not blocked, the value must be ``None``, not an empty
+                    list.
+    :type blocked: list
+    :param valid_from: The ticket will not be considered valid before this date. If the value is ``None``, no check on
+                       ticket level is made.
+    :type valid_from: datetime
+    :param valid_until: The ticket will not be considered valid after this date. If the value is ``None``, no check on
+                       ticket level is made.
+    :type valid_until: datetime
     """
     positionid = models.PositiveIntegerField(default=1)
+
     order = models.ForeignKey(
         Order,
         verbose_name=_("Order"),
         related_name='all_positions',
         on_delete=models.PROTECT
     )
+
     voucher_budget_use = models.DecimalField(
         max_digits=10, decimal_places=2, null=True, blank=True,
     )
+
     tax_rate = models.DecimalField(
         max_digits=7, decimal_places=2,
         verbose_name=_('Tax rate')
@@ -2225,6 +2245,7 @@ class OrderPosition(AbstractPosition):
         max_digits=10, decimal_places=2,
         verbose_name=_('Tax value')
     )
+
     secret = models.CharField(max_length=255, null=False, blank=False, db_index=True)
     web_secret = models.CharField(max_length=32, default=generate_secret, db_index=True)
     pseudonymization_id = models.CharField(
@@ -2232,7 +2253,20 @@ class OrderPosition(AbstractPosition):
         unique=True,
         db_index=True
     )
+
     canceled = models.BooleanField(default=False)
+
+    blocked = models.JSONField(null=True, blank=True)
+    valid_from = models.DateTimeField(
+        verbose_name=_("Valid from"),
+        null=True,
+        blank=True,
+    )
+    valid_until = models.DateTimeField(
+        verbose_name=_("Valid until"),
+        null=True,
+        blank=True,
+    )
 
     all = ScopedManager(organizer='order__event__organizer')
     objects = ActivePositionManager()
@@ -2264,6 +2298,12 @@ class OrderPosition(AbstractPosition):
     def sort_key(self):
         return self.addon_to.positionid if self.addon_to else self.positionid, self.addon_to_id or 0, self.positionid
 
+    @cached_property
+    def require_checkin_attention(self):
+        if self.order.checkin_attention or self.item.checkin_attention or (self.variation_id and self.variation.checkin_attention):
+            return True
+        return False
+
     @property
     def checkins(self):
         """
@@ -2276,10 +2316,29 @@ class OrderPosition(AbstractPosition):
     def generate_ticket(self):
         if self.item.generate_tickets is not None:
             return self.item.generate_tickets
+        if self.blocked:
+            return False
         return (
             (self.order.event.settings.ticket_download_addons or not self.addon_to_id) and
             (self.event.settings.ticket_download_nonadm or self.item.admission)
         )
+
+    @property
+    def blocked_reasons(self):
+        from ..signals import orderposition_blocked_display
+
+        if not self.blocked:
+            return []
+
+        reasons = {}
+        for b in self.blocked:
+            for recv, response in orderposition_blocked_display.send(self.event, orderposition=self, block_name=b):
+                if response:
+                    reasons[b] = response
+                    break
+            else:
+                reasons[b] = b
+        return reasons
 
     @classmethod
     def transform_cart_positions(cls, cp: List, order) -> list:
@@ -2362,6 +2421,11 @@ class OrderPosition(AbstractPosition):
                 assign_ticket_secret(
                     event=self.order.event, position=self, force_invalidate=True, save=False
                 )
+
+        if not self.blocked:
+            self.blocked = None
+        elif not isinstance(self.blocked, list) or any(not isinstance(b, str) for b in self.blocked):
+            raise TypeError("blocked needs to be a list of strings")
 
         if not self.pseudonymization_id:
             self.assign_pseudonymization_id()
@@ -2939,6 +3003,26 @@ class RevokedTicketSecret(models.Model):
     )
     secret = models.TextField(db_index=True)
     created = models.DateTimeField(auto_now_add=True)
+
+
+class BlockedTicketSecret(models.Model):
+    event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='blocked_secrets')
+    position = models.ForeignKey(
+        OrderPosition,
+        on_delete=models.SET_NULL,
+        related_name='blocked_secrets',
+        null=True,
+    )
+    secret = models.TextField(db_index=True)
+    blocked = models.BooleanField()
+    updated = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        if 'mysql' not in settings.DATABASES['default']['ENGINE']:
+            # MySQL does not support indexes on TextField(). Django knows this and just ignores db_index, but it will
+            # not silently ignore the UNIQUE index, causing this table to fail. I'm so glad we're deprecating MySQL
+            # in a few months, so we'll just live without an unique index until then.
+            unique_together = (('event', 'secret'),)
 
 
 @receiver(post_delete, sender=CachedTicket)

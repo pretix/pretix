@@ -107,6 +107,7 @@
                             {% bootstrap_field form.require_membership_hidden layout="control" %}
                         </div>
                     {% endif %}
+                    {% bootstrap_field form.checkin_attention layout="control" %}
                 </div>
             </details>
         {% endfor %}
@@ -204,6 +205,7 @@
                             {% bootstrap_field formset.empty_form.require_membership_hidden layout="control" %}
                         </div>
                     {% endif %}
+                    {% bootstrap_field formset.empty_form.checkin_attention layout="control" %}
                 </div>
             </details>
         {% endescapescript %}

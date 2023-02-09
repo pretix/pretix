@@ -681,6 +681,19 @@ def test_import_seat(user, event, item):
 
 @pytest.mark.django_db
 @scopes_disabled()
+def test_import_validity(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['valid_until'] = 'csv:J'
+
+    import_orders.apply(
+        args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+    ).get()
+    assert OrderPosition.objects.first().valid_until.isoformat() == '2021-06-28T11:00:00+00:00'
+
+
+@pytest.mark.django_db
+@scopes_disabled()
 def test_import_subevent_invalid(user, event, item):
     settings = dict(DEFAULT_SETTINGS)
     event.has_subevents = True

@@ -112,6 +112,12 @@ variations                            list of objects            A list with one
                                                                  for price calculations (or ``null``).
 ├ active                              boolean                    If ``false``, this variation will not be sold or shown.
 ├ description                         multi-lingual string       A public description of the variation. May contain
+├ checkin_attention                   boolean                    If ``true``, the check-in app should show a warning
+                                                                 that this ticket requires special attention if such
+                                                                 a variation is being scanned.
+├ require_approval                    boolean                    If ``true``, orders with this variation will need to be
+                                                                 approved by the event organizer before they can be
+                                                                 paid.
 ├ require_membership                  boolean                    If ``true``, booking this variation requires an active membership.
 ├ require_membership_hidden           boolean                    If ``true`` and ``require_membership`` is set, this variation will
                                                                  be hidden from users without a valid membership.
@@ -164,7 +170,8 @@ meta_data                             object                     Values set for 
 
 .. versionchanged:: 4.16
 
-   The ``variations[x].meta_data`` attribute has been added. The ``personalized`` attribute has been added.
+   The ``variations[x].meta_data`` and ``variations[x].checkin_attention`` attributes has been added.
+   The ``personalized`` attribute has been added.
 
 Notes
 -----
@@ -252,6 +259,8 @@ Endpoints
                  "price": "10.00",
                  "original_price": null,
                  "active": true,
+                 "checkin_attention": false,
+                 "require_approval": false,
                  "require_membership": false,
                  "require_membership_types": [],
                  "sales_channels": ["web"],
@@ -268,6 +277,8 @@ Endpoints
                  "price": "23.00",
                  "original_price": null,
                  "active": true,
+                 "checkin_attention": false,
+                 "require_approval": false,
                  "require_membership": false,
                  "require_membership_types": [],
                  "sales_channels": ["web"],
@@ -369,6 +380,8 @@ Endpoints
              "price": "10.00",
              "original_price": null,
              "active": true,
+             "checkin_attention": false,
+             "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
              "description": null,
@@ -385,6 +398,8 @@ Endpoints
              "price": "23.00",
              "original_price": null,
              "active": true,
+             "checkin_attention": false,
+             "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
              "sales_channels": ["web"],
@@ -466,6 +481,8 @@ Endpoints
              "price": "10.00",
              "original_price": null,
              "active": true,
+             "checkin_attention": false,
+             "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
              "sales_channels": ["web"],
@@ -482,6 +499,8 @@ Endpoints
              "price": "23.00",
              "original_price": null,
              "active": true,
+             "checkin_attention": false,
+             "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
              "sales_channels": ["web"],
@@ -552,6 +571,8 @@ Endpoints
              "price": "10.00",
              "original_price": null,
              "active": true,
+             "checkin_attention": false,
+             "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
              "sales_channels": ["web"],
@@ -568,6 +589,8 @@ Endpoints
              "price": "23.00",
              "original_price": null,
              "active": true,
+             "checkin_attention": false,
+             "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
              "sales_channels": ["web"],
@@ -669,6 +692,8 @@ Endpoints
              "price": "10.00",
              "original_price": null,
              "active": true,
+             "checkin_attention": false,
+             "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
              "sales_channels": ["web"],
@@ -685,6 +710,8 @@ Endpoints
              "price": "23.00",
              "original_price": null,
              "active": true,
+             "checkin_attention": false,
+             "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
              "sales_channels": ["web"],

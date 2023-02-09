@@ -23,30 +23,50 @@ partition "data-based check" {
     "Is the order in status PAID or PENDING\nand is the position not canceled?" --> if "" then
         -right->[no] "Return error CANCELED"
     else
-        -down->[yes] "Is the product part of the check-in list?"
+        -down->[yes] "Is one or more block set on the ticket?"
         --> if "" then
-            -right->[no] "Return error PRODUCT"
+            -right->[no] "Return error BLOCKED"
         else
-            -down->[yes] "Is the subevent part of the check-in list?"
+            -down->[yes] "If this is not an exit, is the valid_from/valid_until\nconstraint on the ticket fulfilled?"
             --> if "" then
-                -right->[no] "Return error INVALID"
-                note bottom: TODO\ninconsistent\nwith online\ncheck
+                -right->[no] "Return error INVALID_TIME"
             else
-                -down->[yes] "Is the order in status PAID?"
+                -down->[yes] "Is the product part of the check-in list?"
                 --> if "" then
-                    -right->[no] "Does the check-in list include pending orders?"
+                    -right->[no] "Return error PRODUCT"
+                else
+                    -down->[yes] "Is the subevent part of the check-in list?"
                     --> if "" then
-                        -right->[no] "Return error UNPAID "
+                        -right->[no] "Return error INVALID"
+                        note bottom: TODO\ninconsistent\nwith online\ncheck
                     else
-                        -down->[yes] "Is ignore_unpaid set?\n(Has the operator confirmed\nthe checkin?)"
+                        -down->[yes] "Is the order in status PAID?"
                         --> if "" then
-                            -right->[no] "Return error UNPAID "
+                            -right->[no] "Is Order.require_approval set?"
+                            --> if "" then
+                                -->[yes] "Return error UNPAID "
+                            else
+                                -right->[no] "Is Order.valid_if_pending set?"
+                                --> if "" then
+                                    -->[yes] "Is this an entry or exit?"
+                                else
+                                    -->[no] "Does the check-in list include pending orders?"
+                                    --> if "" then
+                                        -->[no] "Return error UNPAID "
+                                    else
+                                        -->[yes] "Is ignore_unpaid set on the request?\n(Has the operator confirmed\nthe checkin?)"
+                                        --> if "" then
+                                            -->[no] "Return error UNPAID "
+                                        else
+                                            -->[yes] "Is this an entry or exit?"
+                                        endif
+                                    endif
+                                endif
+                            endif
                         else
                             -down->[yes] "Is this an entry or exit?"
                         endif
                     endif
-                else
-                    -down->[yes] "Is this an entry or exit?"
                 endif
             endif
         endif
@@ -98,16 +118,26 @@ partition "dataless check" {
         --> if "" then
             -right->[yes] "Return error REVOKED"
         else
-            -down->[no] "Is the product part of the check-in list? "
+            -down->[yes] "Is the ticket secret on the block list?"
             --> if "" then
-                -right->[no] "Return error PRODUCT "
+                -right->[yes] "Return error BLOCKED "
             else
-                -down->[yes] "Is the subevent part of the check-in list? "
+                -down->[yes] "If this is not an exit, is the valid_from/valid_until\nconstraint on the ticket fulfilled? "
                 --> if "" then
-                    -right->[no] "Return error INVALID  "
-                    note bottom: TODO\ninconsistent\nwith online\ncheck
+                    -right->[no] "Return error INVALID_TIME "
                 else
-                  --> "Is this an entry or exit? "
+                    -down->[no] "Is the product part of the check-in list? "
+                    --> if "" then
+                        -right->[no] "Return error PRODUCT "
+                    else
+                        -down->[yes] "Is the subevent part of the check-in list? "
+                        --> if "" then
+                            -right->[no] "Return error INVALID  "
+                            note bottom: TODO\ninconsistent\nwith online\ncheck
+                        else
+                          --> "Is this an entry or exit? "
+                        endif
+                    endif
                 endif
             endif
         endif

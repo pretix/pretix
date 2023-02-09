@@ -1520,6 +1520,7 @@ class OrderExtend(OrderView):
                     self.order,
                     new_date=self.form.cleaned_data.get('expires'),
                     force=self.form.cleaned_data.get('quota_ignore', False),
+                    valid_if_pending=self.form.cleaned_data.get('valid_if_pending', False),
                     user=self.request.user
                 )
                 messages.success(self.request, _('The payment term has been changed.'))
@@ -1772,6 +1773,17 @@ class OrderChange(OrderView):
 
                 if p.form.cleaned_data['tax_rule'] and p.form.cleaned_data['tax_rule'] != p.tax_rule:
                     ocm.change_tax_rule(p, p.form.cleaned_data['tax_rule'])
+
+                if p.form.cleaned_data["blocked"] and "admin" not in (p.blocked or []):
+                    ocm.add_block(p, "admin")
+                elif not p.form.cleaned_data["blocked"] and "admin" in (p.blocked or []):
+                    ocm.remove_block(p, "admin")
+
+                if p.form.cleaned_data['valid_from'] != p.valid_from:
+                    ocm.change_valid_from(p, p.form.cleaned_data['valid_from'])
+
+                if p.form.cleaned_data['valid_until'] != p.valid_until:
+                    ocm.change_valid_until(p, p.form.cleaned_data['valid_until'])
 
                 if p.form.cleaned_data.get('operation_split'):
                     ocm.split(p)

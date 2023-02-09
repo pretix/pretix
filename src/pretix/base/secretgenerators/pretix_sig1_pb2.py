@@ -37,7 +37,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11pretix_sig1.proto\"I\n\x06Ticket\x12\x0c\n\x04seed\x18\x01 \x01(\t\x12\x0c\n\x04item\x18\x02 \x01(\x03\x12\x11\n\tvariation\x18\x03 \x01(\x03\x12\x10\n\x08subevent\x18\x04 \x01(\x03\x42\x33\n#eu.pretix.libpretixsync.crypto.sig1B\x0cTicketProtosb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x11pretix_sig1.proto\"\xb7\x01\n\x06Ticket\x12\x0c\n\x04seed\x18\x01 \x01(\t\x12\x0c\n\x04item\x18\x02 \x01(\x03\x12\x11\n\tvariation\x18\x03 \x01(\x03\x12\x10\n\x08subevent\x18\x04 \x01(\x03\x12\x1e\n\x11validFromUnixTime\x18\x05 \x01(\x03H\x00\x88\x01\x01\x12\x1f\n\x12validUntilUnixTime\x18\x06 \x01(\x03H\x01\x88\x01\x01\x42\x14\n\x12_validFromUnixTimeB\x15\n\x13_validUntilUnixTimeB3\n#eu.pretix.libpretixsync.crypto.sig1B\x0cTicketProtosb\x06proto3')
 
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, globals())
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'pretix_sig1_pb2', globals())
@@ -45,6 +45,6 @@ if _descriptor._USE_C_DESCRIPTORS == False:
 
   DESCRIPTOR._options = None
   DESCRIPTOR._serialized_options = b'\n#eu.pretix.libpretixsync.crypto.sig1B\014TicketProtos'
-  _TICKET._serialized_start=21
-  _TICKET._serialized_end=94
+  _TICKET._serialized_start=22
+  _TICKET._serialized_end=205
 # @@protoc_insertion_point(module_scope)

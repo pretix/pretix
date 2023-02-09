@@ -99,6 +99,42 @@ class EventCancelTests(TestCase):
         assert self.order.status == Order.STATUS_CANCELED
 
     @classscope(attr='o')
+    def test_cancel_auto_refund_skip_blocked(self):
+        gc = self.o.issued_gift_cards.create(currency="EUR")
+        p1 = self.order.payments.create(
+            amount=Decimal('46.00'),
+            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
+            provider='giftcard',
+            info='{"gift_card": %d}' % gc.pk
+        )
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+
+        self.op1.blocked = ["admin"]
+        self.op1.save()
+
+        cancel_event(
+            self.event.pk, subevent=None,
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-(",
+            user=None
+        )
+
+        self.op1.refresh_from_db()
+        assert not self.op1.canceled
+        self.op2.refresh_from_db()
+        assert self.op2.canceled
+
+        r = self.order.refunds.get()
+        assert r.state == OrderRefund.REFUND_STATE_DONE
+        assert r.amount == Decimal('23.00')
+        assert r.source == OrderRefund.REFUND_SOURCE_ADMIN
+        assert r.payment == p1
+        assert self.order.all_logentries().filter(action_type='pretix.event.order.refund.created').exists()
+        assert not self.order.all_logentries().filter(action_type='pretix.event.order.refund.requested').exists()
+        assert gc.value == Decimal('23.00')
+
+    @classscope(attr='o')
     def test_cancel_auto_refund(self):
         gc = self.o.issued_gift_cards.create(currency="EUR")
         p1 = self.order.payments.create(
@@ -523,6 +559,24 @@ class SubEventCancelTests(TestCase):
         )
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_CANCELED
+
+    @classscope(attr='o')
+    def test_cancel_skip_blocked(self):
+        self.op2.subevent = self.se1
+        self.op2.blocked = ["admin"]
+        self.op2.save()
+        cancel_event(
+            self.event.pk, subevent=self.se1.pk,
+            auto_refund=True, keep_fee_fixed="0.00", keep_fee_percentage="0.00", keep_fee_per_ticket="",
+            send=True, send_subject="Event canceled", send_message="Event canceled :-(",
+            user=None
+        )
+        self.order.refresh_from_db()
+        assert self.order.status == Order.STATUS_PENDING
+        self.op1.refresh_from_db()
+        assert self.op1.canceled
+        self.op2.refresh_from_db()
+        assert not self.op2.canceled
 
     @classscope(attr='o')
     def test_cancel_all_subevents(self):

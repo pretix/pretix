@@ -264,7 +264,8 @@ class OrderSendView(BaseSenderView):
         if 'status' not in _cache_store:
             status = dict(Order.STATUS_CHOICE)
             status['overdue'] = _('pending with payment overdue')
-            status['na'] = _('payment pending (except unapproved)')
+            status['valid_if_pending'] = _('payment pending but already confirmed')
+            status['na'] = _('payment pending (except unapproved or already confirmed)')
             status['pa'] = _('approval pending')
             status['r'] = status['c']
             _cache_store['status'] = status
@@ -346,7 +347,9 @@ class OrderSendView(BaseSenderView):
         if 'pa' in form.cleaned_data['sendto']:
             statusq |= Q(status=Order.STATUS_PENDING, require_approval=True)
         if 'na' in form.cleaned_data['sendto']:
-            statusq |= Q(status=Order.STATUS_PENDING, require_approval=False)
+            statusq |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=False)
+        if 'valid_if_pending' in form.cleaned_data['sendto']:
+            statusq |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=True)
         orders = qs.filter(statusq)
 
         opq = OrderPosition.objects.filter(

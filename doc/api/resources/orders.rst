@@ -91,6 +91,10 @@ require_approval                      boolean                    If ``true`` and
                                                                  needs approval by an organizer before it can
                                                                  continue. If ``true`` and the order is canceled,
                                                                  this order has been denied by the event organizer.
+valid_if_pending                      boolean                    If ``true`` and the order is pending, this order
+                                                                 is still treated like a paid order for most purposes,
+                                                                 such as check-in. This may be used e.g. for trusted
+                                                                 customers who only need to pay after the event.
 url                                   string                     The full URL to the order confirmation page
 payments                              list of objects            List of payment processes (see below)
 refunds                               list of objects            List of refund processes (see below)
@@ -121,6 +125,10 @@ last_modified                         datetime                   Last modificati
 .. versionchanged:: 4.15
 
    The ``include`` query parameter has been added.
+
+.. versionchanged:: 4.16
+
+   The ``valid_if_pending`` attribute has been added.
 
 
 .. _order-position-resource:
@@ -159,6 +167,9 @@ secret                                string                     Secret code pri
 addon_to                              integer                    Internal ID of the position this position is an add-on for (or ``null``)
 subevent                              integer                    ID of the date inside an event series this position belongs to (or ``null``).
 discount                              integer                    ID of a discount that has been used during the creation of this position in some way (or ``null``).
+blocked                               list of strings            A list of strings, or ``null``. Whenever not ``null``, the ticket may not be used (e.g. for check-in).
+valid_from                            datetime                   The ticket will not be valid before this time. Can be ``null``.
+valid_until                           datetime                   The ticket will not be valid after this time. Can be ``null``.
 pseudonymization_id                   string                     A random ID, e.g. for use in lead scanning apps
 checkins                              list of objects            List of **successful** check-ins with this ticket
 ├ id                                  integer                    Internal ID of the check-in event
@@ -185,6 +196,10 @@ pdf_data                              object                     Data object req
                                                                  this field is missing. It will be added only if you add the
                                                                  ``pdf_data=true`` query parameter to your request.
 ===================================== ========================== =======================================================
+
+.. versionchanged:: 4.16
+
+   The attributes ``blocked``, ``valid_from`` and ``valid_until`` have been added.
 
 .. _order-payment-resource:
 
@@ -294,6 +309,7 @@ List of all orders
             "custom_followup_at": null,
             "checkin_attention": false,
             "require_approval": false,
+            "valid_if_pending": false,
             "invoice_address": {
                 "last_modified": "2017-12-01T10:00:00Z",
                 "is_business": true,
@@ -336,6 +352,9 @@ List of all orders
                 "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
                 "addon_to": null,
                 "subevent": null,
+                "valid_from": null,
+                "valid_until": null,
+                "blocked": null,
                 "discount": null,
                 "pseudonymization_id": "MQLJvANO3B",
                 "seat": null,
@@ -467,6 +486,7 @@ Fetching individual orders
         "custom_followup_at": null,
         "checkin_attention": false,
         "require_approval": false,
+        "valid_if_pending": false,
         "invoice_address": {
             "last_modified": "2017-12-01T10:00:00Z",
             "company": "Sample company",
@@ -509,6 +529,9 @@ Fetching individual orders
             "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
             "addon_to": null,
             "subevent": null,
+            "valid_from": null,
+            "valid_until": null,
+            "blocked": null,
             "discount": null,
             "pseudonymization_id": "MQLJvANO3B",
             "seat": null,
@@ -639,6 +662,8 @@ Updating order fields
    * ``custom_followup_at``
 
    * ``invoice_address`` (you always need to supply the full object, or ``null`` to delete the current address)
+
+   * ``valid_if_pending``
 
    **Example request**:
 
@@ -845,6 +870,7 @@ Creating orders
    * ``custom_followup_at`` (optional)
    * ``checkin_attention`` (optional)
    * ``require_approval`` (optional)
+   * ``valid_if_pending`` (optional)
    * ``invoice_address`` (optional)
 
       * ``company``
@@ -880,6 +906,8 @@ Creating orders
       * ``secret`` (optional)
       * ``addon_to`` (optional, see below)
       * ``subevent`` (optional)
+      * ``valid_from`` (optional)
+      * ``valid_until`` (optional)
       * ``answers``
 
         * ``question``
@@ -1448,6 +1476,9 @@ List of all order positions
             "seat": null,
             "addon_to": null,
             "subevent": null,
+            "valid_from": null,
+            "valid_until": null,
+            "blocked": null,
             "checkins": [
               {
                 "list": 44,
@@ -1554,6 +1585,9 @@ Fetching individual positions
         "secret": "z3fsn8jyufm5kpk768q69gkbyr5f4h6w",
         "addon_to": null,
         "subevent": null,
+        "valid_from": null,
+        "valid_until": null,
+        "blocked": null,
         "discount": null,
         "pseudonymization_id": "MQLJvANO3B",
         "seat": null,
@@ -1659,6 +1693,10 @@ Manipulating individual positions
    The ``PATCH`` method now supports changing items, variations, subevents, seats, prices, and tax rules.
    The ``POST`` endpoint to add individual positions has been added.
 
+.. versionadded:: 4.16
+
+   The endpoints to manage blocks have been added.
+
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/
 
    Updates specific fields on an order position. Currently, only the following fields are supported:
@@ -1696,6 +1734,10 @@ Manipulating individual positions
    * ``price``
 
    * ``tax_rule``
+
+   * ``valid_from``
+
+   * ``valid_until``
 
    Changing parameters such as ``item`` or ``price`` will **not** automatically trigger creation of a new invoice,
    you need to take care of that yourself.
@@ -1771,6 +1813,10 @@ Manipulating individual positions
      and ``option_identifiers`` will be ignored. As a special case, you can submit the magic value
      ``"file:keep"`` as the answer to a file question to keep the current value without re-uploading it.
 
+   * ``valid_from``
+
+   * ``valid_until``
+
    This will **not** automatically trigger creation of a new invoice, you need to take care of that yourself.
 
    **Example request**:
@@ -1834,6 +1880,82 @@ Manipulating individual positions
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 404: The requested order position does not exist.
 
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/add_block/
+
+   Blocks an order position from being used. The block name either needs to be ``"admin"`` or start with ``"api:"``. It
+   may only contain letters, numbers, dots and underscores. ``"admin"`` represents the regular block that can be set
+   in the backend user interface.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23/add_block/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+     {
+       "name": "api:block1"
+     }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      (Full order position resource, see above.)
+
+   :param organizer: The ``slug`` field of the organizer of the event
+   :param event: The ``slug`` field of the event
+   :param code: The ``id`` field of the order position to update
+
+   :statuscode 200: no error
+   :statuscode 400: The order position could not be updated due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order position.
+
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orderpositions/(id)/remove_block/
+
+   Unblocks an order position from being used. The block name either needs to be ``"admin"`` or start with ``"api:"``. It
+   may only contain letters, numbers, dots and underscores. ``"admin"`` represents the regular block that can be set
+   in the backend user interface. Blocks set by plugins cannot be lifted through this API.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orderpositions/23/remove_block/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+     {
+       "name": "api:block1"
+     }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      (Full order position resource, see above.)
+
+   :param organizer: The ``slug`` field of the organizer of the event
+   :param event: The ``slug`` field of the event
+   :param code: The ``id`` field of the order position to update
+
+   :statuscode 200: no error
+   :statuscode 400: The order position could not be updated due to invalid submitted data.
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to update this order position.
+
 Changing order contents
 -----------------------
 
@@ -1852,7 +1974,7 @@ otherwise, such as splitting an order or changing fees.
 
    * ``patch_positions``: A list of objects with the two keys ``position`` specifying an order position ID and
      ``body`` specifying the desired changed values of the position (``item``, ``variation``, ``subevent``, ``seat``,
-     ``price``, ``tax_rule``).
+     ``price``, ``tax_rule``, ``valid_from``, ``valid_until``).
 
    * ``cancel_positions``: A list of objects with the single key ``position`` specifying an order position ID.
 
@@ -2538,6 +2660,60 @@ With some non-default ticket secret generation methods, a list of revoked ticket
    :param event: The ``slug`` field of the event to fetch
    :resheader X-Page-Generated: The server time at the beginning of the operation. If you're using this API to fetch
                                 differences, this is the value you want to use as ``created_since`` in your next call.
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+Blocked ticket secrets
+----------------------
+
+With some non-default ticket secret generation methods, a list of blocked ticket secrets is required for proper validation.
+This endpoint returns all secrets that are currently blocked **or have been blocked before and are now unblocked**, so
+be sure to check the ``blocked`` attribute for its actual value. The list is currently always ordered with the most
+recently updated ones first.
+
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/blockedsecrets/
+
+   Returns a list of all blocked or historically blocked secrets within a given event.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/blockedsecrets/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+      X-Page-Generated: 2017-12-01T10:00:00Z
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "id": 1234,
+            "secret": "k24fiuwvu8kxz3y1",
+            "blocked": true,
+            "updated": "2017-12-01T10:00:00Z",
+          }
+        ]
+      }
+
+   :query integer page: The page number in case of a multi-page result set, default is 1
+   :query datetime updated_since: Only return records that have been updated since the given date.
+   :query boolean blocked: Only return blocked / non-blocked records.
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :param event: The ``slug`` field of the event to fetch
+   :resheader X-Page-Generated: The server time at the beginning of the operation. If you're using this API to fetch
+                                differences, this is the value you want to use as ``updated_since`` in your next call.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.

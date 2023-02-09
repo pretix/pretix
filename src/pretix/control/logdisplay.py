@@ -52,7 +52,7 @@ from pretix.base.models import (
     Checkin, CheckinList, Event, ItemVariation, LogEntry, OrderPosition,
     TaxRule,
 )
-from pretix.base.signals import logentry_display
+from pretix.base.signals import logentry_display, orderposition_blocked_display
 from pretix.base.templatetags.money import money_filter
 
 OVERVIEW_BANLIST = [
@@ -160,6 +160,25 @@ def _display_order_changed(event: Event, logentry: LogEntry):
             )
     elif logentry.action_type == 'pretix.event.order.changed.secret':
         return text + ' ' + _('A new secret has been generated for position #{posid}.').format(
+            posid=data.get('positionid', '?'),
+        )
+    elif logentry.action_type == 'pretix.event.order.changed.valid_from':
+        return text + ' ' + _('The validity start date for position #{posid} has been changed to {value}.').format(
+            posid=data.get('positionid', '?'),
+            value=date_format(dateutil.parser.parse(data.get('new_value')), 'SHORT_DATETIME_FORMAT') if data.get(
+                'new_value') else '–'
+        )
+    elif logentry.action_type == 'pretix.event.order.changed.valid_until':
+        return text + ' ' + _('The validity end date for position #{posid} has been changed to {value}.').format(
+            posid=data.get('positionid', '?'),
+            value=date_format(dateutil.parser.parse(data.get('new_value')), 'SHORT_DATETIME_FORMAT') if data.get('new_value') else '–'
+        )
+    elif logentry.action_type == 'pretix.event.order.changed.add_block':
+        return text + ' ' + _('A block has been added for position #{posid}.').format(
+            posid=data.get('positionid', '?'),
+        )
+    elif logentry.action_type == 'pretix.event.order.changed.remove_block':
+        return text + ' ' + _('A block has been removed for position #{posid}.').format(
             posid=data.get('positionid', '?'),
         )
     elif logentry.action_type == 'pretix.event.order.changed.split':
@@ -351,6 +370,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.unpaid': _('The order has been marked as unpaid.'),
         'pretix.event.order.secret.changed': _('The order\'s secret has been changed.'),
         'pretix.event.order.expirychanged': _('The order\'s expiry date has been changed.'),
+        'pretix.event.order.valid_if_pending.set': _('The order has been set to be usable before it is paid.'),
+        'pretix.event.order.valid_if_pending.unset': _('The order has been set to require payment before use.'),
         'pretix.event.order.expired': _('The order has been marked as expired.'),
         'pretix.event.order.paid': _('The order has been marked as paid.'),
         'pretix.event.order.cancellationrequest.deleted': _('The cancellation request has been deleted.'),
@@ -376,6 +397,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.custom_followup_at': _('The order\'s follow-up date has been updated.'),
         'pretix.event.order.checkin_attention': _('The order\'s flag to require attention at check-in has been '
                                                   'toggled.'),
+        'pretix.event.order.pretix.event.order.valid_if_pending': _('The order\'s flag to be considered valid even if '
+                                                                    'unpaid has been toggled.'),
         'pretix.event.order.payment.changed': _('A new payment {local_id} has been started instead of the previous one.'),
         'pretix.event.order.email.sent': _('An unidentified type email has been sent.'),
         'pretix.event.order.email.error': _('Sending of an email has failed.'),
@@ -647,3 +670,11 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if logentry.action_type == 'pretix.control.auth.user.impersonate_stopped':
         return str(_('You stopped impersonating {}.')).format(data['other_email'])
+
+
+@receiver(signal=orderposition_blocked_display, dispatch_uid="pretixcontrol_orderposition_blocked_display")
+def pretixcontrol_orderposition_blocked_display(sender: Event, orderposition, block_name, **kwargs):
+    if block_name == 'admin':
+        return _('Blocked manually')
+    elif block_name.startswith('api:'):
+        return _('Blocked because of an API integration')

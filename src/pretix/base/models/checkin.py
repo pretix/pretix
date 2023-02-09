@@ -106,10 +106,14 @@ class CheckinList(LoggedModel):
             order__event=self.event,
         )
         if not ignore_status:
-            qs = qs.filter(
-                canceled=False,
-                order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.include_pending else [Order.STATUS_PAID],
-            )
+            if self.include_pending:
+                qs = qs.filter(order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING], canceled=False)
+            else:
+                qs = qs.filter(
+                    Q(order__status=Order.STATUS_PAID) |
+                    Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True),
+                    canceled=False
+                )
 
         if self.subevent_id:
             qs = qs.filter(subevent_id=self.subevent_id)
@@ -327,6 +331,8 @@ class Checkin(models.Model):
     REASON_ALREADY_REDEEMED = 'already_redeemed'
     REASON_AMBIGUOUS = 'ambiguous'
     REASON_ERROR = 'error'
+    REASON_BLOCKED = 'blocked'
+    REASON_INVALID_TIME = 'invalid_time'
     REASONS = (
         (REASON_CANCELED, _('Order canceled')),
         (REASON_INVALID, _('Unknown ticket')),
@@ -338,6 +344,8 @@ class Checkin(models.Model):
         (REASON_PRODUCT, _('Ticket type not allowed here')),
         (REASON_AMBIGUOUS, _('Ticket code is ambiguous on list')),
         (REASON_ERROR, _('Server error')),
+        (REASON_BLOCKED, _('Ticket blocked')),
+        (REASON_INVALID_TIME, _('Ticket not valid at this time')),
     )
 
     successful = models.BooleanField(

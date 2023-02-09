@@ -210,6 +210,7 @@ class OrderFilterForm(FilterForm):
             ('', _('All orders')),
             (_('Valid orders'), (
                 (Order.STATUS_PAID, _('Paid (or canceled with paid fee)')),
+                (Order.STATUS_PAID + 'v', _('Paid or confirmed')),
                 (Order.STATUS_PENDING, _('Pending')),
                 (Order.STATUS_PENDING + Order.STATUS_PAID, _('Pending or paid')),
             )),
@@ -296,6 +297,8 @@ class OrderFilterForm(FilterForm):
                 qs = qs.filter(status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
             elif s == 'ne':
                 qs = qs.filter(status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
+            elif s == 'pv':
+                qs = qs.filter(Q(status=Order.STATUS_PAID) | Q(status=Order.STATUS_PENDING, valid_if_pending=True))
             elif s in ('p', 'n', 'e', 'c', 'r'):
                 qs = qs.filter(status=s)
             elif s == 'overpaid':

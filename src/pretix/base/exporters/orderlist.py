@@ -43,6 +43,7 @@ from django.db.models import (
 )
 from django.db.models.functions import Coalesce
 from django.dispatch import receiver
+from django.utils.formats import date_format
 from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import (
@@ -569,6 +570,9 @@ class OrderListExporter(MultiSheetListExporter):
             _('Seat zone'),
             _('Seat row'),
             _('Seat number'),
+            _('Blocked'),
+            _('Valid from'),
+            _('Valid until'),
             _('Order comment'),
             _('Follow-up date'),
         ]
@@ -682,6 +686,11 @@ class OrderListExporter(MultiSheetListExporter):
                 else:
                     row += ['', '', '', '', '']
 
+                row += [
+                    _('Yes') if op.blocked else '',
+                    date_format(op.valid_from, 'SHORT_DATETIME_FORMAT') if op.valid_from else '',
+                    date_format(op.valid_until, 'SHORT_DATETIME_FORMAT') if op.valid_until else '',
+                ]
                 row.append(order.comment)
                 row.append(order.custom_followup_at.strftime("%Y-%m-%d") if order.custom_followup_at else "")
                 acache = {}

@@ -24,6 +24,7 @@ import os
 
 import pycountry
 from django.core.files import File
+from django.core.validators import RegexValidator
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
@@ -53,7 +54,7 @@ class OrderPositionCreateForExistingOrderSerializer(OrderPositionCreateSerialize
         model = OrderPosition
         fields = ('order', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
                   'company', 'street', 'zipcode', 'city', 'country', 'state',
-                  'secret', 'addon_to', 'subevent', 'answers', 'seat')
+                  'secret', 'addon_to', 'subevent', 'answers', 'seat', 'valid_from', 'valid_until')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -89,6 +90,8 @@ class OrderPositionCreateForExistingOrderSerializer(OrderPositionCreateSerialize
                 addon_to=validated_data.get('addon_to'),
                 subevent=validated_data.get('subevent'),
                 seat=validated_data.get('seat'),
+                valid_from=validated_data.get('valid_from'),
+                valid_until=validated_data.get('valid_until'),
             )
             if self.context.get('commit', True):
                 ocm.commit()
@@ -198,7 +201,7 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
     class Meta:
         model = OrderPosition
         fields = (
-            'item', 'variation', 'subevent', 'seat', 'price', 'tax_rule',
+            'item', 'variation', 'subevent', 'seat', 'price', 'tax_rule', 'valid_from', 'valid_until'
         )
 
     def __init__(self, *args, **kwargs):
@@ -264,6 +267,8 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
         price = validated_data.get('price', instance.price)
         seat = validated_data.get('seat', current_seat)
         tax_rule = validated_data.get('tax_rule', instance.tax_rule)
+        valid_from = validated_data.get('valid_from', instance.valid_from)
+        valid_until = validated_data.get('valid_until', instance.valid_until)
 
         change_item = None
         if item != instance.item or variation != instance.variation:
@@ -289,6 +294,12 @@ class OrderPositionChangeSerializer(serializers.ModelSerializer):
 
             if tax_rule != instance.tax_rule:
                 ocm.change_tax_rule(instance, tax_rule)
+
+            if valid_from != instance.valid_from:
+                ocm.change_valid_from(instance, valid_from)
+
+            if valid_until != instance.valid_until:
+                ocm.change_valid_until(instance, valid_until)
 
             if self.context.get('commit', True):
                 ocm.commit()
@@ -423,3 +434,7 @@ class OrderChangeOperationSerializer(serializers.Serializer):
             seen_positions.add(d['fee'])
 
         return data
+
+
+class BlockNameSerializer(serializers.Serializer):
+    name = serializers.CharField(validators=[RegexValidator('^(admin|api:[a-zA-Z0-9._]+)$')])

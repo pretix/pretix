@@ -44,6 +44,7 @@ from pretix.base.payment import (
     FreeOrderProvider, GiftCardPayment, PaymentException,
 )
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
+from pretix.base.secrets import assign_ticket_secret
 from pretix.base.services.invoices import generate_invoice
 from pretix.base.services.orders import (
     OrderChangeManager, OrderError, _create_order, approve_order, cancel_order,
@@ -567,6 +568,17 @@ class PaymentReminderTests(TestCase):
         self.event.settings.mail_days_order_expire_warning = 10
         send_expiry_warnings(sender=self.event)
         assert len(djmail.outbox) == 1
+        assert "only guarantee your order" in djmail.outbox[0].body
+
+    @classscope(attr='o')
+    def test_sent_no_expiry(self):
+        self.order.valid_if_pending = True
+        self.order.save()
+        self.event.settings.mail_days_order_expire_warning = 10
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 1
+        assert "only guarantee your order" not in djmail.outbox[0].body
+        assert "required to pay" in djmail.outbox[0].body
 
     @classscope(attr='o')
     def test_sent_not_immediately_after_purchase(self):
@@ -2903,6 +2915,62 @@ class OrderChangeManagerTests(TestCase):
         self.op1.refresh_from_db()
         assert self.op1.used_membership is None
         assert self.op1.item == self.ticket
+
+    @classscope(attr='o')
+    def test_add_block(self):
+        self.ocm.add_block(self.op1, "admin")
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        assert self.op1.blocked == ["admin"]
+        bs = self.op1.blocked_secrets.get()
+        assert bs.secret == self.op1.secret
+        assert bs.blocked
+
+    @classscope(attr='o')
+    def test_remove_block(self):
+        self.op1.blocked = ["admin"]
+        self.op1.save()
+        bs = self.op1.blocked_secrets.create(event=self.event, secret=self.op1.secret, blocked=True)
+        self.ocm.remove_block(self.op1, "admin")
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        assert self.op1.blocked is None
+        bs.refresh_from_db()
+        assert not bs.blocked
+
+    @classscope(attr='o')
+    def test_set_valid_from(self):
+        old_secret = self.op1.secret
+        dt = make_aware(datetime(2016, 9, 20, 15, 0, 0, 0))
+        self.ocm.change_valid_from(self.op1, dt)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        assert self.op1.valid_from == dt
+        assert self.op1.secret == old_secret
+
+    @classscope(attr='o')
+    def test_set_valid_until(self):
+        self.event.settings.ticket_secret_generator = "pretix_sig1"
+        assign_ticket_secret(self.event, self.op1, force_invalidate=True, save=True)
+        old_secret = self.op1.secret
+
+        dt = make_aware(datetime(2022, 9, 20, 15, 0, 0, 0))
+        self.ocm.change_valid_until(self.op1, dt)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        assert self.op1.secret != old_secret
+
+    @classscope(attr='o')
+    def test_unset_valid_from_until(self):
+        self.op1.valid_from = make_aware(datetime(2016, 9, 20, 15, 0, 0, 0))
+        self.op1.valid_until = make_aware(datetime(2016, 9, 20, 15, 0, 0, 0))
+        self.op1.save()
+        self.ocm.change_valid_from(self.op1, None)
+        self.ocm.change_valid_until(self.op1, None)
+        self.ocm.commit()
+        self.op1.refresh_from_db()
+        assert self.op1.valid_from is None
+        assert self.op1.valid_until is None
 
 
 @pytest.mark.django_db

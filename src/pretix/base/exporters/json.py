@@ -109,6 +109,8 @@ class JSONExporter(BaseExporter):
                                 'name': str(variation),
                                 'description': str(variation.description),
                                 'position': variation.position,
+                                'checkin_attention': variation.checkin_attention,
+                                'require_approval': variation.require_approval,
                                 'require_membership': variation.require_membership,
                                 'sales_channels': variation.sales_channels,
                                 'available_from': variation.available_from,
@@ -193,6 +195,9 @@ class JSONExporter(BaseExporter):
                                 'state': position.state,
                                 'secret': position.secret,
                                 'addon_to': position.addon_to_id,
+                                'valid_from': position.valid_from,
+                                'valid_until': position.valid_until,
+                                'blocked': position.blocked,
                                 'answers': [
                                     {
                                         'question': answer.question_id,

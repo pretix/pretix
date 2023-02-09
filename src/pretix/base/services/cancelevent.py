@@ -23,7 +23,7 @@ import logging
 from decimal import Decimal
 
 from django.db import transaction
-from django.db.models import Count, Exists, IntegerField, OuterRef, Subquery
+from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Subquery
 from django.utils.translation import gettext
 from i18nfield.strings import LazyI18nString
 
@@ -122,9 +122,13 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
     s = OrderPosition.objects.filter(
         order=OuterRef('pk')
     ).order_by().values('order').annotate(k=Count('id')).values('k')
-    orders_to_cancel = event.orders.annotate(pcnt=Subquery(s, output_field=IntegerField())).filter(
+    has_blocked = OrderPosition.objects.filter(order_id=OuterRef('pk'), blocked__isnull=False)
+    orders_to_cancel = event.orders.annotate(
+        pcnt=Subquery(s, output_field=IntegerField()),
+        has_blocked=Exists(has_blocked),
+    ).filter(
         status__in=[Order.STATUS_PAID, Order.STATUS_PENDING, Order.STATUS_EXPIRED],
-        pcnt__gt=0
+        pcnt__gt=0,
     ).all()
 
     if subevent or subevents_from:
@@ -146,13 +150,14 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
             has_subevent=Exists(has_subevent),
             has_other_subevent=Exists(has_other_subevent),
         ).filter(
-            has_subevent=True, has_other_subevent=True
+            Q(has_subevent=True, has_other_subevent=True) |
+            Q(has_subevent=True, has_blocked=True)
         )
         orders_to_cancel = orders_to_cancel.annotate(
             has_subevent=Exists(has_subevent),
             has_other_subevent=Exists(has_other_subevent),
         ).filter(
-            has_subevent=True, has_other_subevent=False
+            has_subevent=True, has_other_subevent=False, has_blocked=False
         )
 
         for se in subevents:
@@ -167,7 +172,8 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
     else:
         subevents = None
         subevent_ids = set()
-        orders_to_change = event.orders.none()
+        orders_to_change = orders_to_cancel.filter(has_blocked=True)
+        orders_to_cancel = orders_to_cancel.filter(has_blocked=False)
         event.log_action(
             'pretix.event.canceled', user=user,
         )
@@ -247,7 +253,7 @@ def cancel_event(self, event: Event, subevent: int, auto_refund: bool,
 
             ocm = OrderChangeManager(o, user=user, notify=False)
             for p in o.positions.all():
-                if p.subevent_id in subevent_ids:
+                if (not event.has_subevents or p.subevent_id in subevent_ids) and not p.blocked:
                     total += p.price
                     ocm.cancel(p)
                     positions.append(p)

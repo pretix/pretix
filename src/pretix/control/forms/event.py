@@ -1052,7 +1052,7 @@ class MailSettingsForm(SettingsForm):
                     "value is 0, the mail will never be sent.")
     )
     mail_text_order_expire_warning = I18nFormField(
-        label=_("Text"),
+        label=_("Text (if order will expire automatically)"),
         required=False,
         widget=I18nTextarea,
     )
@@ -1060,6 +1060,11 @@ class MailSettingsForm(SettingsForm):
         label=_("Subject (if order will expire automatically)"),
         required=False,
         widget=I18nTextInput,
+    )
+    mail_text_order_pending_warning = I18nFormField(
+        label=_("Text (if order will not expire automatically)"),
+        required=False,
+        widget=I18nTextarea,
     )
     mail_subject_order_pending_warning = I18nFormField(
         label=_("Subject (if order will not expire automatically)"),

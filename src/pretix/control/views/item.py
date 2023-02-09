@@ -629,6 +629,11 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
                                orderposition__order__expires__lt=now().replace(hour=0, minute=0, second=0))
             elif s == 'np':
                 qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_PAID])
+            elif s == 'pv':
+                qs = qs.filter(
+                    Q(orderposition__order__status=Order.STATUS_PAID) |
+                    Q(orderposition__order__status=Order.STATUS_PENDING, orderposition__order__valid_if_pending=True)
+                )
             elif s == 'ne':
                 qs = qs.filter(orderposition__order__status__in=[Order.STATUS_PENDING, Order.STATUS_EXPIRED])
             else:

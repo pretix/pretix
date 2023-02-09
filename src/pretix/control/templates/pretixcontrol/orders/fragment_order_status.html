@@ -6,6 +6,11 @@
             <span class="fa fa-question-circle"></span>
             {% trans "Approval pending" %}
         </span>
+    {% elif order.valid_if_pending %}
+        <span data-toggle="tooltip" class="label label-info {{ class }}">
+            <span class="fa fa-money"></span>
+            {% trans "Pending (confirmed)" context "order state" %}
+        </span>
     {% else %}
         <span data-toggle="tooltip" title="{{ order.expires|date:"SHORT_DATETIME_FORMAT" }}"
                 class="label label-warning {{ class }}">

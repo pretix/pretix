@@ -68,7 +68,8 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
-    InvoiceAddress, OrderFee, OrderRefund, generate_secret,
+    BlockedTicketSecret, InvoiceAddress, OrderFee, OrderRefund,
+    generate_secret,
 )
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
@@ -250,7 +251,7 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
         generate_invoice(order)
 
 
-def extend_order(order: Order, new_date: datetime, force: bool=False, user: User=None, auth=None):
+def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_pending: bool=None, user: User=None, auth=None):
     """
     Extends the deadline of an order. If the order is already expired, the quota will be checked to
     see if this is actually still possible. If ``force`` is set to ``True``, the result of this check
@@ -261,19 +262,35 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, user: User
 
     @transaction.atomic
     def change(was_expired=True):
+        old_date = order.expires
         order.expires = new_date
         if was_expired:
             order.status = Order.STATUS_PENDING
-        order.save(update_fields=['expires'] + (['status'] if was_expired else []))
-        order.log_action(
-            'pretix.event.order.expirychanged',
-            user=user,
-            auth=auth,
-            data={
-                'expires': order.expires,
-                'state_change': was_expired
-            }
-        )
+        if valid_if_pending is not None and valid_if_pending != order.valid_if_pending:
+            order.valid_if_pending = valid_if_pending
+            if valid_if_pending:
+                order.log_action(
+                    'pretix.event.order.valid_if_pending.set',
+                    user=user,
+                    auth=auth,
+                )
+            else:
+                order.log_action(
+                    'pretix.event.order.valid_if_pending.unset',
+                    user=user,
+                    auth=auth,
+                )
+        order.save(update_fields=['valid_if_pending', 'expires'] + (['status'] if was_expired else []))
+        if old_date != new_date:
+            order.log_action(
+                'pretix.event.order.expirychanged',
+                user=user,
+                auth=auth,
+                data={
+                    'expires': order.expires,
+                    'state_change': was_expired
+                }
+            )
 
         if was_expired:
             num_invoices = order.invoices.filter(is_cancellation=False).count()
@@ -1203,6 +1220,7 @@ def expire_orders(sender, **kwargs):
     qs = Order.objects.filter(
         expires__lt=now(),
         status=Order.STATUS_PENDING,
+        valid_if_pending=False,
         require_approval=False
     ).exclude(
         Exists(
@@ -1247,11 +1265,17 @@ def send_expiry_warnings(sender, **kwargs):
                 with language(o.locale, settings.region):
                     o.expiry_reminder_sent = True
                     o.save(update_fields=['expiry_reminder_sent'])
-                    email_template = settings.mail_text_order_expire_warning
                     email_context = get_email_context(event=o.event, order=o)
-                    if settings.payment_term_expire_automatically:
+                    can_autoexpire = (
+                        settings.payment_term_expire_automatically and
+                        not o.valid_if_pending and
+                        not o.fees.filter(fee_type=OrderFee.FEE_TYPE_CANCELLATION).exists()
+                    )
+                    if can_autoexpire:
+                        email_template = settings.mail_text_order_expire_warning
                         email_subject = settings.mail_subject_order_expire_warning
                     else:
+                        email_template = settings.mail_text_order_pending_warning
                         email_subject = settings.mail_subject_order_pending_warning
 
                     try:
@@ -1310,8 +1334,7 @@ def send_download_reminders(sender, **kwargs):
             positions = o.positions.select_related('item')
 
             if o.status != Order.STATUS_PAID:
-                if o.status != Order.STATUS_PENDING or o.require_approval or not \
-                        o.event.settings.ticket_download_pending:
+                if o.status != Order.STATUS_PENDING or o.require_approval or (not o.valid_if_pending and not o.event.settings.ticket_download_pending):
                     continue
             send = False
             for p in positions:
@@ -1405,12 +1428,17 @@ class OrderChangeManager:
     TaxRuleOperation = namedtuple('TaxRuleOperation', ('position', 'tax_rule'))
     MembershipOperation = namedtuple('MembershipOperation', ('position', 'membership'))
     CancelOperation = namedtuple('CancelOperation', ('position', 'price_diff'))
-    AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat', 'membership'))
+    AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat', 'membership',
+                                               'valid_from', 'valid_until'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
     FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value', 'price_diff'))
     AddFeeOperation = namedtuple('AddFeeOperation', ('fee', 'price_diff'))
     CancelFeeOperation = namedtuple('CancelFeeOperation', ('fee', 'price_diff'))
     RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
+    ChangeValidFromOperation = namedtuple('ChangeValidFromOperation', ('position', 'valid_from'))
+    ChangeValidUntilOperation = namedtuple('ChangeValidUntilOperation', ('position', 'valid_until'))
+    AddBlockOperation = namedtuple('AddBlockOperation', ('position', 'block_name'))
+    RemoveBlockOperation = namedtuple('RemoveBlockOperation', ('position', 'block_name'))
 
     def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True):
         self.order = order
@@ -1514,6 +1542,18 @@ class OrderChangeManager:
     def regenerate_secret(self, position: OrderPosition):
         self._operations.append(self.RegenerateSecretOperation(position))
 
+    def change_valid_from(self, position: OrderPosition, new_value: datetime):
+        self._operations.append(self.ChangeValidFromOperation(position, new_value))
+
+    def change_valid_until(self, position: OrderPosition, new_value: datetime):
+        self._operations.append(self.ChangeValidUntilOperation(position, new_value))
+
+    def add_block(self, position: OrderPosition, block_name: str):
+        self._operations.append(self.AddBlockOperation(position, block_name))
+
+    def remove_block(self, position: OrderPosition, block_name: str):
+        self._operations.append(self.RemoveBlockOperation(position, block_name))
+
     def change_price(self, position: OrderPosition, price: Decimal):
         tax_rule = self._current_tax_rules().get(position.pk, position.tax_rule) or TaxRule.zero()
         price = tax_rule.tax(price, base_price_is='gross')
@@ -1595,7 +1635,8 @@ class OrderChangeManager:
             self._invoice_dirty = True
 
     def add_position(self, item: Item, variation: ItemVariation, price: Decimal, addon_to: OrderPosition = None,
-                     subevent: SubEvent = None, seat: Seat = None, membership: Membership = None):
+                     subevent: SubEvent = None, seat: Seat = None, membership: Membership = None,
+                     valid_from: datetime = None, valid_until: datetime = None):
         if isinstance(seat, str):
             if not seat:
                 seat = None
@@ -1649,7 +1690,8 @@ class OrderChangeManager:
         self._quotadiff.update(new_quotas)
         if seat:
             self._seatdiff.update([seat])
-        self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat, membership))
+        self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat, membership,
+                                                  valid_from, valid_until))
 
     def split(self, position: OrderPosition):
         if self.order.event.settings.invoice_include_free or position.price != Decimal('0.00'):
@@ -1961,6 +2003,7 @@ class OrderChangeManager:
     def _perform_operations(self):
         nextposid = self.order.all_positions.aggregate(m=Max('positionid'))['m'] + 1
         split_positions = []
+        secret_dirty = set()
 
         for op in self._operations:
             if isinstance(op, self.ItemOperation):
@@ -1986,9 +2029,7 @@ class OrderChangeManager:
                     else:
                         price_after_voucher = max(op.position.price - op.position.tax_value, op.position.voucher.calculate_price(listed_price))
                     op.position.voucher_budget_use = max(listed_price - price_after_voucher, Decimal('0.00'))
-                assign_ticket_secret(
-                    event=self.event, position=op.position, force_invalidate=False, save=False
-                )
+                secret_dirty.add(op.position)
                 op.position.save()
             elif isinstance(op, self.MembershipOperation):
                 self.order.log_action('pretix.event.order.changed.membership', user=self.user, auth=self.auth, data={
@@ -2009,9 +2050,7 @@ class OrderChangeManager:
                     'new_seat_id': op.seat.pk if op.seat else None,
                 })
                 op.position.seat = op.seat
-                assign_ticket_secret(
-                    event=self.event, position=op.position, force_invalidate=False, save=False
-                )
+                secret_dirty.add(op.position)
                 op.position.save()
             elif isinstance(op, self.SubeventOperation):
                 self.order.log_action('pretix.event.order.changed.subevent', user=self.user, auth=self.auth, data={
@@ -2023,9 +2062,7 @@ class OrderChangeManager:
                     'new_price': op.position.price
                 })
                 op.position.subevent = op.subevent
-                assign_ticket_secret(
-                    event=self.event, position=op.position, force_invalidate=False, save=False
-                )
+                secret_dirty.add(op.position)
                 if op.position.voucher_budget_use is not None and op.position.voucher and not op.position.addon_to_id:
                     listed_price = get_listed_price(op.position.item, op.position.variation, op.position.subevent)
                     if not op.position.item.tax_rule or op.position.item.tax_rule.price_includes_tax:
@@ -2131,8 +2168,10 @@ class OrderChangeManager:
                     opa.canceled = True
                     if opa.voucher:
                         Voucher.objects.filter(pk=opa.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
+                    if opa in secret_dirty:
+                        secret_dirty.remove(opa)
                     assign_ticket_secret(
-                        event=self.event, position=op.position, force_invalidate_if_revokation_list_used=True, force_invalidate=False, save=False
+                        event=self.event, position=opa, force_invalidate_if_revokation_list_used=True, force_invalidate=False, save=False
                     )
                     opa.save(update_fields=['canceled', 'secret'])
                 self.order.log_action('pretix.event.order.changed.cancel', user=self.user, auth=self.auth, data={
@@ -2149,6 +2188,8 @@ class OrderChangeManager:
                 assign_ticket_secret(
                     event=self.event, position=op.position, force_invalidate_if_revokation_list_used=True, force_invalidate=False, save=False
                 )
+                if op.position in secret_dirty:
+                    secret_dirty.remove(op.position)
                 op.position.save(update_fields=['canceled', 'secret'])
             elif isinstance(op, self.AddOperation):
                 pos = OrderPosition.objects.create(
@@ -2156,7 +2197,7 @@ class OrderChangeManager:
                     price=op.price.gross, order=self.order, tax_rate=op.price.rate,
                     tax_value=op.price.tax, tax_rule=op.item.tax_rule,
                     positionid=nextposid, subevent=op.subevent, seat=op.seat,
-                    used_membership=op.membership,
+                    used_membership=op.membership, valid_from=op.valid_from, valid_until=op.valid_until,
                 )
                 nextposid += 1
                 self.order.log_action('pretix.event.order.changed.add', user=self.user, auth=self.auth, data={
@@ -2169,6 +2210,8 @@ class OrderChangeManager:
                     'membership': pos.used_membership_id,
                     'subevent': op.subevent.pk if op.subevent else None,
                     'seat': op.seat.pk if op.seat else None,
+                    'valid_from': op.valid_from.isoformat() if op.valid_from else None,
+                    'valid_until': op.valid_until.isoformat() if op.valid_until else None,
                 })
             elif isinstance(op, self.SplitOperation):
                 split_positions.append(op.position)
@@ -2176,12 +2219,79 @@ class OrderChangeManager:
                 assign_ticket_secret(
                     event=self.event, position=op.position, force_invalidate=True, save=True
                 )
+                if op.position in secret_dirty:
+                    secret_dirty.remove(op.position)
                 tickets.invalidate_cache.apply_async(kwargs={'event': self.event.pk,
                                                              'order': self.order.pk})
                 self.order.log_action('pretix.event.order.changed.secret', user=self.user, auth=self.auth, data={
                     'position': op.position.pk,
                     'positionid': op.position.positionid,
                 })
+            elif isinstance(op, self.ChangeValidFromOperation):
+                self.order.log_action('pretix.event.order.changed.valid_from', user=self.user, auth=self.auth, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                    'new_value': op.valid_from.isoformat() if op.valid_from else None,
+                    'old_value': op.position.valid_from.isoformat() if op.position.valid_from else None,
+                })
+                op.position.valid_from = op.valid_from
+                op.position.save(update_fields=['valid_from'])
+                secret_dirty.add(op.position)
+            elif isinstance(op, self.ChangeValidUntilOperation):
+                self.order.log_action('pretix.event.order.changed.valid_until', user=self.user, auth=self.auth, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                    'new_value': op.valid_until.isoformat() if op.valid_until else None,
+                    'old_value': op.position.valid_until.isoformat() if op.position.valid_until else None,
+                })
+                op.position.valid_until = op.valid_until
+                op.position.save(update_fields=['valid_until'])
+                secret_dirty.add(op.position)
+            elif isinstance(op, self.AddBlockOperation):
+                self.order.log_action('pretix.event.order.changed.add_block', user=self.user, auth=self.auth, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                    'block_name': op.block_name,
+                })
+                if op.position.blocked:
+                    if op.block_name not in op.position.blocked:
+                        op.position.blocked = op.position.blocked + [op.block_name]
+                else:
+                    op.position.blocked = [op.block_name]
+                op.position.save(update_fields=['blocked'])
+                if op.position.blocked:
+                    op.position.blocked_secrets.update_or_create(
+                        event=self.event,
+                        secret=op.position.secret,
+                        defaults={
+                            'blocked': True,
+                            'updated': now(),
+                        }
+                    )
+            elif isinstance(op, self.RemoveBlockOperation):
+                self.order.log_action('pretix.event.order.changed.remove_block', user=self.user, auth=self.auth, data={
+                    'position': op.position.pk,
+                    'positionid': op.position.positionid,
+                    'block_name': op.block_name,
+                })
+                if op.position.blocked and op.block_name in op.position.blocked:
+                    op.position.blocked = [b for b in op.position.blocked if b != op.block_name]
+                    if not op.position.blocked:
+                        op.position.blocked = None
+                    op.position.save(update_fields=['blocked'])
+                    if not op.position.blocked:
+                        try:
+                            bs = op.position.blocked_secrets.get(secret=op.position.secret)
+                            bs.blocked = False
+                            bs.save()
+                        except BlockedTicketSecret.DoesNotExist:
+                            pass
+                # todo: revoke list handling
+
+        for p in secret_dirty:
+            assign_ticket_secret(
+                event=self.event, position=p, force_invalidate=False, save=True
+            )
 
         if split_positions:
             self.split_order = self._create_split_order(split_positions)

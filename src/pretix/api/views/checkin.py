@@ -273,7 +273,13 @@ with scopes_disabled():
         def check_rules_qs(self, queryset, name, value):
             if not self.checkinlist.rules:
                 return queryset
-            return queryset.filter(SQLLogic(self.checkinlist).apply(self.checkinlist.rules))
+            return queryset.filter(
+                SQLLogic(self.checkinlist).apply(self.checkinlist.rules)
+            ).filter(
+                Q(valid_from__isnull=True) | Q(valid_from__lte=now()),
+                Q(valid_until__isnull=True) | Q(valid_until__gte=now()),
+                blocked__isnull=True,
+            )
 
 
 def _handle_file_upload(data, user, auth):
@@ -325,7 +331,13 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
         if checkinlist.subevent:
             list_q &= Q(subevent=checkinlist.subevent)
         if not ignore_status:
-            list_q &= Q(order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if checkinlist.include_pending else [Order.STATUS_PAID])
+            if checkinlist.include_pending:
+                list_q &= Q(order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING])
+            else:
+                list_q &= Q(
+                    Q(order__status=Order.STATUS_PAID) |
+                    Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
+                )
         if not checkinlist.all_products and not ignore_products:
             list_q &= Q(item__in=checkinlist.limit_products.values_list('id', flat=True))
         lists_qs.append(list_q)
@@ -582,7 +594,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'status': 'error',
                 'reason': Checkin.REASON_AMBIGUOUS,
                 'reason_explanation': None,
-                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                'require_attention': op.require_checkin_attention,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
@@ -627,7 +639,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
         except RequiredQuestionsError as e:
             return Response({
                 'status': 'incomplete',
-                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                'require_attention': op.require_checkin_attention,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'questions': [
                     QuestionSerializer(q).data for q in e.questions
@@ -656,14 +668,14 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'status': 'error',
                 'reason': e.code,
                 'reason_explanation': e.reason,
-                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                'require_attention': op.require_checkin_attention,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         else:
             return Response({
                 'status': 'ok',
-                'require_attention': op.item.checkin_attention or op.order.checkin_attention,
+                'require_attention': op.require_checkin_attention,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=201)

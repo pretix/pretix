@@ -721,6 +721,34 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             'canceled' if canceled_supported else 'unpaid'
         )
 
+    if op.blocked:
+        raise CheckInError(
+            _('This ticket has been blocked.'),  # todo provide reason
+            'blocked'
+        )
+
+    if type != Checkin.TYPE_EXIT and op.valid_from and op.valid_from > now():
+        raise CheckInError(
+            _('This ticket is only valid after {datetime}.').format(
+                datetime=date_format(op.valid_from, 'SHORT_DATETIME_FORMAT')
+            ),
+            'invalid_time',
+            _('This ticket is only valid after {datetime}.').format(
+                datetime=date_format(op.valid_from, 'SHORT_DATETIME_FORMAT')
+            ),
+        )
+
+    if type != Checkin.TYPE_EXIT and op.valid_until and op.valid_until < now():
+        raise CheckInError(
+            _('This ticket was only valid before {datetime}.').format(
+                datetime=date_format(op.valid_until, 'SHORT_DATETIME_FORMAT')
+            ),
+            'invalid_time',
+            _('This ticket was only valid before {datetime}.').format(
+                datetime=date_format(op.valid_until, 'SHORT_DATETIME_FORMAT')
+            ),
+        )
+
     # Do this outside of transaction so it is saved even if the checkin fails for some other reason
     checkin_questions = list(
         clist.event.questions.filter(ask_during_checkin=True, items__in=[op.item_id])
@@ -751,8 +779,13 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 _('This order position has an invalid date for this check-in list.'),
                 'product'
             )
-        elif op.order.status != Order.STATUS_PAID and not force and not (
-                ignore_unpaid and clist.include_pending and op.order.status == Order.STATUS_PENDING
+        elif op.order.status != Order.STATUS_PAID and not force and op.order.require_approval:
+            raise CheckInError(
+                _('This order is not yet approved.'),
+                'unpaid'
+            )
+        elif op.order.status != Order.STATUS_PAID and not force and not op.order.valid_if_pending and not (
+            ignore_unpaid and clist.include_pending and op.order.status == Order.STATUS_PENDING
         ):
             raise CheckInError(
                 _('This order is not marked as paid.'),

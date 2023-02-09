@@ -52,7 +52,8 @@ from pretix.base.models import (
     SubEvent, TaxRule, Voucher,
 )
 from pretix.base.models.orders import (
-    CartPosition, OrderFee, OrderPayment, OrderRefund, RevokedTicketSecret,
+    BlockedTicketSecret, CartPosition, OrderFee, OrderPayment, OrderRefund,
+    RevokedTicketSecret,
 )
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
@@ -300,7 +301,9 @@ class FailedCheckinSerializer(I18nAwareModelSerializer):
 class OrderDownloadsField(serializers.Field):
     def to_representation(self, instance: Order):
         if instance.status != Order.STATUS_PAID:
-            if instance.status != Order.STATUS_PENDING or instance.require_approval or not instance.event.settings.ticket_download_pending:
+            if instance.status != Order.STATUS_PENDING or instance.require_approval or (
+                not instance.valid_if_pending and not instance.event.settings.ticket_download_pending
+            ):
                 return []
 
         request = self.context['request']
@@ -324,7 +327,9 @@ class OrderDownloadsField(serializers.Field):
 class PositionDownloadsField(serializers.Field):
     def to_representation(self, instance: OrderPosition):
         if instance.order.status != Order.STATUS_PAID:
-            if instance.order.status != Order.STATUS_PENDING or instance.order.require_approval or not instance.order.event.settings.ticket_download_pending:
+            if instance.order.status != Order.STATUS_PENDING or instance.order.require_approval or (
+                not instance.order.valid_if_pending and not instance.order.event.settings.ticket_download_pending
+            ):
                 return []
         if not instance.generate_ticket:
             return []
@@ -437,11 +442,12 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'discount',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
-                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled')
+                  'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled',
+                  'valid_from', 'valid_until', 'blocked')
         read_only_fields = (
             'id', 'order', 'positionid', 'item', 'variation', 'price', 'voucher', 'tax_rate', 'tax_value', 'secret',
             'addon_to', 'subevent', 'checkins', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data',
-            'seat', 'canceled', 'discount',
+            'seat', 'canceled', 'discount', 'valid_from', 'valid_until', 'blocked'
         )
 
     def __init__(self, *args, **kwargs):
@@ -463,7 +469,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
 
 class RequireAttentionField(serializers.Field):
     def to_representation(self, instance: OrderPosition):
-        return instance.order.checkin_attention or instance.item.checkin_attention
+        return instance.require_checkin_attention
 
 
 class AttendeeNameField(serializers.Field):
@@ -508,7 +514,7 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
                   'company', 'street', 'zipcode', 'city', 'country', 'state',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
                   'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'require_attention',
-                  'order__status')
+                  'order__status', 'valid_from', 'valid_until', 'blocked')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -622,7 +628,7 @@ class OrderSerializer(I18nAwareModelSerializer):
             'code', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
             'payment_provider', 'fees', 'total', 'comment', 'custom_followup_at', 'invoice_address', 'positions', 'downloads',
             'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
-            'url', 'customer'
+            'url', 'customer', 'valid_if_pending'
         )
         read_only_fields = (
             'code', 'status', 'testmode', 'secret', 'datetime', 'expires', 'payment_date',
@@ -677,7 +683,8 @@ class OrderSerializer(I18nAwareModelSerializer):
     def update(self, instance, validated_data):
         # Even though all fields that shouldn't be edited are marked as read_only in the serializer
         # (hopefully), we'll be extra careful here and be explicit about the model fields we update.
-        update_fields = ['comment', 'custom_followup_at', 'checkin_attention', 'email', 'locale', 'phone']
+        update_fields = ['comment', 'custom_followup_at', 'checkin_attention', 'email', 'locale', 'phone',
+                         'valid_if_pending']
 
         if 'invoice_address' in validated_data:
             iadata = validated_data.pop('invoice_address')
@@ -783,7 +790,7 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
         model = OrderPosition
         fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'is_bundled',
-                  'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher')
+                  'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher', 'valid_from', 'valid_until')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -941,7 +948,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         model = Order
         fields = ('code', 'status', 'testmode', 'email', 'phone', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'payment_date', 'consume_carts',
-                  'force', 'send_email', 'simulate', 'customer', 'custom_followup_at', 'require_approval')
+                  'force', 'send_email', 'simulate', 'customer', 'custom_followup_at', 'require_approval',
+                  'valid_if_pending')
 
     def validate_payment_provider(self, pp):
         if pp is None:
@@ -1532,3 +1540,10 @@ class RevokedTicketSecretSerializer(I18nAwareModelSerializer):
     class Meta:
         model = RevokedTicketSecret
         fields = ('id', 'secret', 'created')
+
+
+class BlockedTicketSecretSerializer(I18nAwareModelSerializer):
+
+    class Meta:
+        model = BlockedTicketSecret
+        fields = ('id', 'secret', 'updated', 'blocked')

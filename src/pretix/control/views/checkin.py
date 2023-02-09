@@ -36,7 +36,7 @@ import dateutil.parser
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.db.models import Exists, Max, OuterRef, Prefetch, Subquery
+from django.db.models import Exists, Max, OuterRef, Prefetch, Q, Subquery
 from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 from django.urls import reverse
@@ -85,9 +85,16 @@ class CheckInListQueryMixin:
             m=Max('datetime')
         ).values('m')
 
+        if self.list.include_pending:
+            status_q = Q(order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING])
+        else:
+            status_q = Q(
+                Q(order__status=Order.STATUS_PAID) |
+                Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
+            )
         qs = OrderPosition.objects.filter(
+            status_q,
             order__event=self.request.event,
-            order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING] if self.list.include_pending else [Order.STATUS_PAID],
         ).annotate(
             last_entry=Subquery(cqs),
             last_exit=Subquery(cqs_exit),
@@ -199,7 +206,9 @@ class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMi
             if not request.user.has_event_permission(request.organizer, request.event, 'can_change_orders', request=request):
                 raise PermissionDenied()
             for op in positions:
-                if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
+                if op.order.status == Order.STATUS_PAID or (
+                    (self.list.include_pending or op.order.valid_if_pending) and op.order.status == Order.STATUS_PENDING
+                ):
                     Checkin.objects.filter(position=op, list=self.list).delete()
                     op.order.log_action('pretix.event.checkin.reverted', data={
                         'position': op.id,
@@ -213,7 +222,9 @@ class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMi
         else:
             t = Checkin.TYPE_EXIT if request.POST.get('checkout') == 'true' else Checkin.TYPE_ENTRY
             for op in positions:
-                if op.order.status == Order.STATUS_PAID or (self.list.include_pending and op.order.status == Order.STATUS_PENDING):
+                if op.order.status == Order.STATUS_PAID or (
+                    (self.list.include_pending or op.order.valid_if_pending) and op.order.status == Order.STATUS_PENDING
+                ):
                     lci = op.checkins.filter(list=self.list).first()
                     if self.list.allow_multiple_entries or t != Checkin.TYPE_ENTRY or (lci and lci.type != Checkin.TYPE_ENTRY):
                         ci = Checkin.objects.create(position=op, list=self.list, datetime=now(), type=t)

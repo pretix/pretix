@@ -173,6 +173,9 @@ TEST_ORDERPOSITION_RES = {
     "city": None,
     "country": None,
     "state": None,
+    "valid_from": None,
+    "valid_until": None,
+    "blocked": None,
     "answers": [
         {
             "question": 1,
@@ -271,6 +274,7 @@ TEST_ORDER_RES = {
         "vat_id_validated": True
     },
     "require_approval": False,
+    "valid_if_pending": False,
     "positions": [TEST_ORDERPOSITION_RES],
     "downloads": [],
     "payments": TEST_PAYMENTS_RES,
@@ -1746,6 +1750,22 @@ def test_revoked_secret_list(token_client, organizer, event):
         "created": r.created.isoformat().replace("+00:00", "Z")
     }
     resp = token_client.get('/api/v1/organizers/{}/events/{}/revokedsecrets/'.format(
+        organizer.slug, event.slug,
+    ))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_blocked_secret_list(token_client, organizer, event):
+    r = event.blocked_secrets.create(secret="abcd", blocked=True)
+    res = {
+        "id": r.id,
+        "secret": "abcd",
+        "blocked": True,
+        "updated": r.updated.isoformat().replace("+00:00", "Z")
+    }
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/blockedsecrets/'.format(
         organizer.slug, event.slug,
     ))
     assert resp.status_code == 200

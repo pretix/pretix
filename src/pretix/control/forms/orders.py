@@ -68,12 +68,6 @@ from pretix.helpers.money import change_decimal_field
 
 
 class ExtendForm(I18nModelForm):
-    quota_ignore = forms.BooleanField(
-        label=_('Overbook quota'),
-        help_text=_('If you check this box, this operation will be performed even if it leads to an overbooked quota '
-                    'and you having sold more tickets than you planned!'),
-        required=False
-    )
     expires = forms.DateField(
         label=_("Expiration date"),
         widget=forms.DateInput(attrs={
@@ -81,16 +75,35 @@ class ExtendForm(I18nModelForm):
             'data-is-payment-date': 'true'
         }),
     )
+    valid_if_pending = forms.BooleanField(
+        label=_('Confirm order regardless of payment'),
+        help_text=_('If you check this box, this order will behave like a paid order for most purposes, even though it '
+                    'is not yet paid. This means that the customer can already download and use tickets regardless '
+                    'of your event settings, and the order might be treated as paid by some plugins. If you check '
+                    'this, this order will not be marked as "expired" automatically if the payment deadline arrives, '
+                    'since we expect that you want to collect the amount somehow and not auto-cancel the order.'),
+        required=False
+    )
+    quota_ignore = forms.BooleanField(
+        label=_('Overbook quota'),
+        help_text=_('If you check this box, this operation will be performed even if it leads to an overbooked quota '
+                    'and you having sold more tickets than you planned!'),
+        required=False
+    )
 
     class Meta:
         model = Order
         fields = []
 
     def __init__(self, *args, **kwargs):
+        kwargs.setdefault('initial', {})
+        kwargs['initial'].setdefault('valid_if_pending', kwargs['instance'].valid_if_pending)
+        kwargs['initial'].setdefault('expires', kwargs['instance'].expires)
         super().__init__(*args, **kwargs)
-        if self.instance.status == Order.STATUS_PENDING or self.instance._is_still_available(now(),
-                                                                                             count_waitinglist=False)\
-                is True:
+        if (
+            self.instance.status == Order.STATUS_PENDING or
+            self.instance._is_still_available(now(), count_waitinglist=False) is True
+        ):
             del self.fields['quota_ignore']
 
     def clean(self):
@@ -435,6 +448,20 @@ class OrderPositionChangeForm(forms.Form):
         localize=True,
         label=_('New price (gross)')
     )
+    blocked = forms.BooleanField(
+        required=False,
+        label=_('Ticket is blocked')
+    )
+    valid_from = SplitDateTimeField(
+        required=False,
+        widget=SplitDateTimePickerWidget,
+        label=_('Validity start')
+    )
+    valid_until = SplitDateTimeField(
+        required=False,
+        widget=SplitDateTimePickerWidget,
+        label=_('Validity end')
+    )
     used_membership = forms.ChoiceField(
         required=False,
     )
@@ -466,6 +493,9 @@ class OrderPositionChangeForm(forms.Form):
         initial = kwargs.get('initial', {})
 
         initial['price'] = instance.price
+        initial['blocked'] = instance.blocked and "admin" in instance.blocked
+        initial['valid_from'] = instance.valid_from
+        initial['valid_until'] = instance.valid_until
 
         kwargs['initial'] = initial
         super().__init__(*args, **kwargs)
@@ -756,7 +786,8 @@ class EventCancelForm(forms.Form):
         label=_('Automatically refund money if possible'),
         initial=True,
         required=False,
-        help_text=_('Only available for payment method that support automatic refunds.')
+        help_text=_('Only available for payment method that support automatic refunds. Tickets that have been blocked '
+                    '(manually or by a plugin) are not auto-canceled and you will need to deal with them manually.')
     )
     manual_refund = forms.BooleanField(
         label=_('Create refund in the manual refund to-do list'),

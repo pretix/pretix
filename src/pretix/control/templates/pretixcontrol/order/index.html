@@ -194,7 +194,10 @@
                             <dt>{% trans "Expiry date" %}</dt>
                             <dd>
                                 {{ order.expires|date:"SHORT_DATETIME_FORMAT" }}
-                                {% if has_cancellation_fee and request.event.settings.payment_term_expire_automatically %}
+                                {% if order.valid_if_pending %}
+                                    <span class="fa fa-warning text-danger" data-toggle="tooltip"
+                                          title="{% trans "This order will not expire automatically since it is already confirmed and can be used." %}"></span>
+                                {% elif has_cancellation_fee and request.event.settings.payment_term_expire_automatically %}
                                     <span class="fa fa-warning text-danger" data-toggle="tooltip"
                                           title="{% trans "This order will not expire automatically as it has an open cancellation fee." %}"></span>
                                 {% endif %}
@@ -390,6 +393,15 @@
                                         {% endif %}
                                     {% endfor %}
                                 {% endif %}
+                                {% if line.blocked %}
+                                    <br />
+                                    <strong class="text-danger">
+                                        <span class="fa fa-ban fa-fw text-danger"></span>
+                                        {% for k, block_reason in line.blocked_reasons.items %}
+                                            {{ block_reason }}
+                                        {% endfor %}
+                                    </strong>
+                                {% endif %}
                                 {% if line.seat %}
                                     <br />
                                     <svg xmlns="http://www.w3.org/2000/svg" width="18" height="14" viewBox="0 0 4.7624999 3.7041668" class="svg-icon">
@@ -428,6 +440,26 @@
                                             {{ line.discount.internal_name }}
                                         </a>
                                     </span>
+                                {% endif %}
+                                {% if line.valid_from or line.valid_until %}
+                                    <div class="cart-icon-details">
+                                        <dd>
+                                            <span class="fa fa-clock-o fa-fw" aria-hidden="true"></span>
+                                            {% if line.valid_from and line.valid_until %}
+                                                {% blocktrans trimmed with datetime_from=line.valid_from|date:"SHORT_DATETIME_FORMAT" datetime_until=line.valid_until|date:"SHORT_DATETIME_FORMAT" %}
+                                                    Valid from {{ datetime_from }} until {{ datetime_until }}
+                                                {% endblocktrans %}
+                                            {% elif line.valid_from %}
+                                                {% blocktrans trimmed with datetime=line.valid_from|date:"SHORT_DATETIME_FORMAT" %}
+                                                    Valid from {{ datetime }}
+                                                {% endblocktrans %}
+                                            {% elif line.valid_until %}
+                                                {% blocktrans trimmed with datetime=line.valid_until|date:"SHORT_DATETIME_FORMAT" %}
+                                                    Valid until {{ datetime }}
+                                                {% endblocktrans %}
+                                            {% endif %}
+                                        </dd>
+                                    </div>
                                 {% endif %}
                                 {% if not line.canceled %}
                                     <div class="position-buttons">

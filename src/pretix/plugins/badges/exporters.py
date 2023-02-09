@@ -340,7 +340,7 @@ class BadgeExporter(BaseExporter):
         if form_data.get('include_pending'):
             qs = qs.filter(order__status__in=[Order.STATUS_PAID, Order.STATUS_PENDING])
         else:
-            qs = qs.filter(order__status__in=[Order.STATUS_PAID])
+            qs = qs.filter(Q(order__status=Order.STATUS_PAID) | Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True))
 
         if form_data.get('date_from'):
             dt = make_aware(datetime.combine(

@@ -49,15 +49,15 @@ from rest_framework.response import Response
 
 from pretix.api.models import OAuthAccessToken
 from pretix.api.serializers.order import (
-    InvoiceSerializer, OrderCreateSerializer, OrderPaymentCreateSerializer,
-    OrderPaymentSerializer, OrderPositionSerializer,
-    OrderRefundCreateSerializer, OrderRefundSerializer, OrderSerializer,
-    PriceCalcSerializer, RevokedTicketSecretSerializer,
-    SimulatedOrderSerializer,
+    BlockedTicketSecretSerializer, InvoiceSerializer, OrderCreateSerializer,
+    OrderPaymentCreateSerializer, OrderPaymentSerializer,
+    OrderPositionSerializer, OrderRefundCreateSerializer,
+    OrderRefundSerializer, OrderSerializer, PriceCalcSerializer,
+    RevokedTicketSecretSerializer, SimulatedOrderSerializer,
 )
 from pretix.api.serializers.orderchange import (
-    OrderChangeOperationSerializer, OrderFeeChangeSerializer,
-    OrderPositionChangeSerializer,
+    BlockNameSerializer, OrderChangeOperationSerializer,
+    OrderFeeChangeSerializer, OrderPositionChangeSerializer,
     OrderPositionCreateForExistingOrderSerializer,
     OrderPositionInfoPatchSerializer,
 )
@@ -70,7 +70,9 @@ from pretix.base.models import (
     OrderRefund, Quota, SubEvent, SubEventMetaValue, TaxRule, TeamAPIToken,
     generate_secret,
 )
-from pretix.base.models.orders import QuestionAnswer, RevokedTicketSecret
+from pretix.base.models.orders import (
+    BlockedTicketSecret, QuestionAnswer, RevokedTicketSecret,
+)
 from pretix.base.payment import PaymentException
 from pretix.base.pdf import get_images
 from pretix.base.secrets import assign_ticket_secret
@@ -287,7 +289,7 @@ class OrderViewSet(viewsets.ModelViewSet):
         if order.status in (Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
             raise PermissionDenied("Downloads are not available for canceled or expired orders.")
 
-        if order.status == Order.STATUS_PENDING and not request.event.settings.ticket_download_pending:
+        if order.status == Order.STATUS_PENDING and not (order.valid_if_pending or request.event.settings.ticket_download_pending):
             raise PermissionDenied("Downloads are not available for pending orders.")
 
         ct = CachedCombinedTicket.objects.filter(
@@ -763,6 +765,16 @@ class OrderViewSet(viewsets.ModelViewSet):
                     }
                 )
 
+            if 'valid_if_pending' in self.request.data and serializer.instance.valid_if_pending != self.request.data.get('valid_if_pending'):
+                serializer.instance.log_action(
+                    'pretix.event.order.valid_if_pending',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'new_value': self.request.data.get('valid_if_pending')
+                    }
+                )
+
             if 'email' in self.request.data and serializer.instance.email != self.request.data.get('email'):
                 serializer.instance.email_known_to_work = False
                 serializer.instance.log_action(
@@ -1183,7 +1195,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
         if pos.order.status in (Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
             raise PermissionDenied("Downloads are not available for canceled or expired orders.")
 
-        if pos.order.status == Order.STATUS_PENDING and not request.event.settings.ticket_download_pending:
+        if pos.order.status == Order.STATUS_PENDING and not (pos.order.valid_if_pending or request.event.settings.ticket_download_pending):
             raise PermissionDenied("Downloads are not available for pending orders.")
         if not pos.generate_ticket:
             raise PermissionDenied("Downloads are not enabled for this product.")
@@ -1218,6 +1230,54 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
                 reissue_invoice=False,
             )
             ocm.regenerate_secret(instance)
+            ocm.commit()
+        except OrderError as e:
+            raise ValidationError(str(e))
+        except Quota.QuotaExceededException as e:
+            raise ValidationError(str(e))
+        return self.retrieve(request, [], **kwargs)
+
+    @action(detail=True, methods=['POST'])
+    def add_block(self, request, **kwargs):
+        serializer = BlockNameSerializer(
+            data=request.data,
+            context=self.get_serializer_context(),
+        )
+        serializer.is_valid(raise_exception=True)
+        instance = self.get_object()
+        try:
+            ocm = OrderChangeManager(
+                instance.order,
+                user=self.request.user if self.request.user.is_authenticated else None,
+                auth=self.request.auth,
+                notify=False,
+                reissue_invoice=False,
+            )
+            ocm.add_block(instance, serializer.validated_data['name'])
+            ocm.commit()
+        except OrderError as e:
+            raise ValidationError(str(e))
+        except Quota.QuotaExceededException as e:
+            raise ValidationError(str(e))
+        return self.retrieve(request, [], **kwargs)
+
+    @action(detail=True, methods=['POST'])
+    def remove_block(self, request, **kwargs):
+        serializer = BlockNameSerializer(
+            data=request.data,
+            context=self.get_serializer_context(),
+        )
+        serializer.is_valid(raise_exception=True)
+        instance = self.get_object()
+        try:
+            ocm = OrderChangeManager(
+                instance.order,
+                user=self.request.user if self.request.user.is_authenticated else None,
+                auth=self.request.auth,
+                notify=False,
+                reissue_invoice=False,
+            )
+            ocm.remove_block(instance, serializer.validated_data['name'])
             ocm.commit()
         except OrderError as e:
             raise ValidationError(str(e))
@@ -1785,3 +1845,25 @@ class RevokedSecretViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         return RevokedTicketSecret.objects.filter(event=self.request.event)
+
+
+with scopes_disabled():
+    class BlockedSecretFilter(FilterSet):
+        updated_since = django_filters.IsoDateTimeFilter(field_name='updated', lookup_expr='gte')
+
+        class Meta:
+            model = BlockedTicketSecret
+            fields = ['blocked']
+
+
+class BlockedSecretViewSet(viewsets.ReadOnlyModelViewSet):
+    serializer_class = BlockedTicketSecretSerializer
+    queryset = BlockedTicketSecret.objects.none()
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    ordering = ('-updated', '-pk')
+    filterset_class = BlockedSecretFilter
+    permission = 'can_view_orders'
+    write_permission = 'can_change_orders'
+
+    def get_queryset(self):
+        return BlockedTicketSecret.objects.filter(event=self.request.event)
