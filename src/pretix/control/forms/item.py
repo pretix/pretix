@@ -674,7 +674,6 @@ class ItemUpdateForm(I18nModelForm):
             'validity_dynamic_duration_hours',
             'validity_dynamic_duration_days',
             'validity_dynamic_duration_months',
-            'validity_dynamic_duration_years',
             'validity_dynamic_start_choice',
             'validity_dynamic_start_choice_day_limit',
         ]

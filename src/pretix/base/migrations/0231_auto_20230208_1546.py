@@ -33,11 +33,6 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name='item',
-            name='validity_dynamic_duration_years',
-            field=models.PositiveIntegerField(null=True),
-        ),
-        migrations.AddField(
-            model_name='item',
             name='validity_dynamic_start_choice',
             field=models.BooleanField(default=False),
         ),

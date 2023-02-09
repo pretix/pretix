@@ -341,12 +341,23 @@ class Item(LoggedModel):
     :type issue_giftcard: bool
     :param validity_mode: Instruction how to set ``valid_from``/``valid_until`` on tickets, ``null`` is default event validity.
     :type validity_mode: str
-    :param validity_value:
-    :type validity_value: int
-    :param validity_fixed_from:
+    :param validity_fixed_from: Start of validity if ``validity_mode`` is ``"fixed"``.
     :type validity_fixed_from: datetime
-    :param validity_fixed_until:
+    :param validity_fixed_until: End of validity if ``validity_mode`` is ``"fixed"``.
     :type validity_fixed_until: datetime
+    :param validity_dynamic_duration_minutes: Number of minutes if ``validity_mode`` is ``"dnyamic"``.
+    :type validity_dynamic_duration_minutes: int
+    :param validity_dynamic_duration_hours: Number of hours if ``validity_mode`` is ``"dnyamic"``.
+    :type validity_dynamic_duration_hours: int
+    :param validity_dynamic_duration_days: Number of days if ``validity_mode`` is ``"dnyamic"``.
+    :type validity_dynamic_duration_days: int
+    :param validity_dynamic_duration_months: Number of months if ``validity_mode`` is ``"dnyamic"``.
+    :type validity_dynamic_duration_months: int
+    :param validity_dynamic_start_choice: Whether customers can choose the start date if ``validity_mode`` is ``"dnyamic"``.
+    :type validity_dynamic_start_choice: bool
+    :param validity_dynamic_start_choice_day_limit: Start date may be maximum this many days in the future if ``validity_mode`` is ``"dnyamic"``.
+    :type validity_dynamic_start_choice_day_limnit: int
+
     """
     VALIDITY_MODES = (
         (None, _('Event validity (default)')),
@@ -604,10 +615,6 @@ class Item(LoggedModel):
     validity_dynamic_duration_months = models.PositiveIntegerField(
         blank=True, null=True,
         verbose_name=_('Months'),
-    )
-    validity_dynamic_duration_years = models.PositiveIntegerField(
-        blank=True, null=True,
-        verbose_name=_('Years'),
     )
     validity_dynamic_start_choice = models.BooleanField(
         verbose_name=_('Customers can select the validity start date'),

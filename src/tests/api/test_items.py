@@ -303,7 +303,6 @@ TEST_ITEM_RES = {
     "validity_dynamic_duration_hours": None,
     "validity_dynamic_duration_days": None,
     "validity_dynamic_duration_months": None,
-    "validity_dynamic_duration_years": None,
     "validity_dynamic_start_choice": False,
     "validity_dynamic_start_choice_day_limit": None,
 }

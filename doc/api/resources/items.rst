@@ -96,7 +96,6 @@ validity_dynamic_duration_minutes       integer                    If ``validity
 validity_dynamic_duration_hours         integer                    If ``validity_mode`` is ``"dynamic"``, this is the "hours" component of the ticket validity duration.
 validity_dynamic_duration_days          integer                    If ``validity_mode`` is ``"dynamic"``, this is the "days" component of the ticket validity duration.
 validity_dynamic_duration_months        integer                    If ``validity_mode`` is ``"dynamic"``, this is the "months" component of the ticket validity duration.
-validity_dynamic_duration_years         integer                    If ``validity_mode`` is ``"dynamic"``, this is the "years" component of the ticket validity duration.
 validity_dynamic_start_choice           boolean                    If ``validity_mode`` is ``"dynamic"`` and this is ``true``, customers can choose the start of validity.
 validity_dynamic_start_choice_day_limit boolean                    If ``validity_mode`` is ``"dynamic"`` and ``validity_dynamic_start_choice`` is ``true``,
                                                                    this is the maximum number of days the start can be in the future.
@@ -275,7 +274,6 @@ Endpoints
             "validity_dynamic_duration_hours": null,
             "validity_dynamic_duration_days": null,
             "validity_dynamic_duration_months": null,
-            "validity_dynamic_duration_years": null,
             "validity_dynamic_start_choice": false,
             "validity_dynamic_start_choice_day_limit": null,
             "variations": [
@@ -405,7 +403,6 @@ Endpoints
         "validity_dynamic_duration_hours": null,
         "validity_dynamic_duration_days": null,
         "validity_dynamic_duration_months": null,
-        "validity_dynamic_duration_years": null,
         "validity_dynamic_start_choice": false,
         "validity_dynamic_start_choice_day_limit": null,
         "variations": [
@@ -515,7 +512,6 @@ Endpoints
         "validity_dynamic_duration_hours": null,
         "validity_dynamic_duration_days": null,
         "validity_dynamic_duration_months": null,
-        "validity_dynamic_duration_years": null,
         "validity_dynamic_start_choice": false,
         "validity_dynamic_start_choice_day_limit": null,
         "variations": [
@@ -614,7 +610,6 @@ Endpoints
         "validity_dynamic_duration_hours": null,
         "validity_dynamic_duration_days": null,
         "validity_dynamic_duration_months": null,
-        "validity_dynamic_duration_years": null,
         "validity_dynamic_start_choice": false,
         "validity_dynamic_start_choice_day_limit": null,
         "variations": [
@@ -744,7 +739,6 @@ Endpoints
         "validity_dynamic_duration_hours": null,
         "validity_dynamic_duration_days": null,
         "validity_dynamic_duration_months": null,
-        "validity_dynamic_duration_years": null,
         "validity_dynamic_start_choice": false,
         "validity_dynamic_start_choice_day_limit": null,
         "variations": [
