@@ -105,6 +105,7 @@ def widget_css(request, **kwargs):
     et = html.fromstring(tpl.render({})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
     f = finders.find(et)
     resp = FileResponse(open(f, 'rb'), content_type='text/css')
+    resp._csp_ignore = True
     return resp
 
 
@@ -196,6 +197,7 @@ def widget_js(request, lang, **kwargs):
             gs.settings.set('widget_checksum_{}'.format(lang), checksum)
             cache.set('widget_js_data_{}'.format(lang), data, 3600 * 4)
         resp = HttpResponse(data, content_type='text/javascript')
+    resp._csp_ignore = True
     return resp
 
 
@@ -323,6 +325,7 @@ class WidgetAPIProductList(EventListMixin, View):
         self.post_process(data)
         resp = JsonResponse(data)
         resp['Access-Control-Allow-Origin'] = '*'
+        resp._csp_ignore = True
         return resp
 
     def get(self, request, *args, **kwargs):
