@@ -374,7 +374,7 @@
     {% endfor %}
     </div>
     {% if not hide_prices %}
-        <div role="rowgroup rowgroup-total">
+        <div role="rowgroup" class="cart-rowgroup-total">
         {% if event.settings.display_net_prices and cart.tax_total %}
             <div role="row" class="row cart-row">
                 <div role="cell" class="product">
