@@ -1,4 +1,4 @@
-.. spelling:: checkin
+.. spelling:word-list:: checkin
 
 Data shredders
 ==============

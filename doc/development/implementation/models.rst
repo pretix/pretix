@@ -1,7 +1,7 @@
 .. highlight:: python
    :linenothreshold: 5
 
-.. spelling:: answ contrib
+.. spelling:word-list:: answ contrib
 
 Data model
 ==========

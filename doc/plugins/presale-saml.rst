@@ -1,5 +1,5 @@
 .. highlight:: ini
-.. spelling::
+.. spelling:word-list::
 
    IdP
    skIDentity
