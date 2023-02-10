@@ -55,7 +55,6 @@ visible            boolean (optional)   ``True`` by default, can hide a plugin s
 restricted         boolean (optional)   ``False`` by default, restricts a plugin such that it can only be enabled
                                         for an event by system administrators / superusers.
 experimental       boolean (optional)   ``False`` by default, marks a plugin as an experimental feature in the plugins list.
-picture            string (optional)    Path to a picture resolvable through the static file system.
 compatibility      string               Specifier for compatible pretix versions.
 ================== ==================== ===========================================================
 
