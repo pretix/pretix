@@ -1,4 +1,4 @@
-.. spelling::
+.. spelling:word-list::
 
    checkin
    datetime

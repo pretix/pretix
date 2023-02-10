@@ -790,6 +790,7 @@ class ItemVariation(models.Model):
     :param require_approval: If set to ``True``, orders containing this variation can only be processed and paid after
     approval by an administrator
     :type require_approval: bool
+
     """
     item = models.ForeignKey(
         Item,

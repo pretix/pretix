@@ -1,7 +1,7 @@
 Invoice settings
 ================
 
-.. spelling:: Inv
+.. spelling:word-list:: Inv
 
 The settings at "Settings" → "Invoice" allow you to specify if and how pretix should generate invoices for your orders.
 

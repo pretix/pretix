@@ -107,9 +107,9 @@ You can supply a valid access token as a ``Bearer``-type token in the ``Authoriz
 .. sourcecode:: http
    :emphasize-lines: 3
 
-       GET /api/v1/organizers/ HTTP/1.1
-       Host: pretix.eu
-       Authorization: Bearer i3ytqTSRWsKp16fqjekHXa4tdM4qNC
+   GET /api/v1/organizers/ HTTP/1.1
+   Host: pretix.eu
+   Authorization: Bearer i3ytqTSRWsKp16fqjekHXa4tdM4qNC
 
 Refreshing an access token
 --------------------------

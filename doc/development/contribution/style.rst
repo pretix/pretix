@@ -1,4 +1,4 @@
-.. spelling:: Rebase rebasing
+.. spelling:word-list:: Rebase rebasing
 
 Coding style and quality
 ========================
