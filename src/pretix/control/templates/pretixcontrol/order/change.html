@@ -221,7 +221,7 @@
                                     {% if position.valid_from %}
                                         <br />
                                     {% endif %}
-                                    {% blocktrans trimmed with datetime=position.valid_from|date:"SHORT_DATETIME_FORMAT" %}
+                                    {% blocktrans trimmed with datetime=position.valid_until|date:"SHORT_DATETIME_FORMAT" %}
                                         Valid until {{ datetime }}
                                     {% endblocktrans %}
                                 {% endif %}
