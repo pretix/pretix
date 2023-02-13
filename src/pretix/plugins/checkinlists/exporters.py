@@ -181,7 +181,7 @@ class CheckInListMixin(BaseExporter):
             if dt_start:
                 qs = qs.filter(subevent__date_from__gte=dt_start)
             if dt_end:
-                qs = qs.filter(subevent__date_to__lt=dt_end)
+                qs = qs.filter(subevent__date_from__lt=dt_end)
 
         o = ()
         if self.event.has_subevents and not cl.subevent:
