@@ -1642,6 +1642,9 @@ class EventMetaProperty(LoggedModel):
         if self.default and self.allowed_values and self.default not in self.allowed_values.splitlines():
             raise ValidationError(_("You cannot set a default value that is not a valid value."))
 
+    class Meta:
+        ordering = ("name",)
+
 
 class EventMetaValue(LoggedModel):
     """

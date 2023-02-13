@@ -1800,6 +1800,9 @@ class ItemMetaProperty(LoggedModel):
     )
     default = models.TextField(blank=True)
 
+    class Meta:
+        ordering = ("name",)
+
 
 class ItemMetaValue(LoggedModel):
     """
