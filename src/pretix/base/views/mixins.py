@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import datetime
 import json
 from collections import OrderedDict
 from decimal import Decimal
@@ -28,6 +29,7 @@ from django.core.files.uploadedfile import UploadedFile
 from django.db import IntegrityError
 from django.db.models import Prefetch, QuerySet
 from django.utils.functional import cached_property
+from django.utils.timezone import make_aware
 
 from pretix.base.forms.questions import (
     BaseInvoiceAddressForm, BaseInvoiceNameForm, BaseQuestionsForm,
@@ -155,6 +157,16 @@ class BaseQuestionsViewMixin:
                         v = v if v != '' else None
                         setattr(form.pos, k, v)
                         setattr(prof, k, v)
+                    elif k == 'requested_valid_from':
+                        if isinstance(v, datetime.datetime):
+                            form.pos.requested_valid_from = v
+                        elif isinstance(v, datetime.date):
+                            form.pos.requested_valid_from = make_aware(datetime.datetime.combine(
+                                v,
+                                datetime.time(hour=0, minute=0, second=0, microsecond=0)
+                            ), self.request.event.timezone)
+                        else:
+                            form.pos.requested_valid_from = None
                     elif k.startswith('question_'):
                         field = form.fields[k]
                         if hasattr(field, 'answer'):

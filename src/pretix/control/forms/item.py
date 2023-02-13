@@ -618,6 +618,14 @@ class ItemUpdateForm(I18nModelForm):
                       "admission ticket. Otherwise customers might not be able to use the membership later. If you "
                       "want the membership to be non-personalized, set the membership type to be transferable.")
                 )
+
+        if d.get('validity_mode') == Item.VALIDITY_MODE_FIXED and d.get('validity_fixed_from') and d.get('validity_fixed_until'):
+            if d.get('validity_fixed_from') > d.get('validity_fixed_until'):
+                self.add_error(
+                    'validity_fixed_from',
+                    _("The start of validity must be before the end of validity.")
+                )
+
         return d
 
     def clean_picture(self):
@@ -667,10 +675,21 @@ class ItemUpdateForm(I18nModelForm):
             'grant_membership_duration_like_event',
             'grant_membership_duration_days',
             'grant_membership_duration_months',
+            'validity_mode',
+            'validity_fixed_from',
+            'validity_fixed_until',
+            'validity_dynamic_duration_minutes',
+            'validity_dynamic_duration_hours',
+            'validity_dynamic_duration_days',
+            'validity_dynamic_duration_months',
+            'validity_dynamic_start_choice',
+            'validity_dynamic_start_choice_day_limit',
         ]
         field_classes = {
             'available_from': SplitDateTimeField,
             'available_until': SplitDateTimeField,
+            'validity_fixed_from': SplitDateTimeField,
+            'validity_fixed_until': SplitDateTimeField,
             'hidden_if_available': SafeModelChoiceField,
             'grant_membership_type': SafeModelChoiceField,
             'require_membership_types': SafeModelMultipleChoiceField,
@@ -678,6 +697,8 @@ class ItemUpdateForm(I18nModelForm):
         widgets = {
             'available_from': SplitDateTimePickerWidget(),
             'available_until': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_available_from_0'}),
+            'validity_fixed_from': SplitDateTimePickerWidget(),
+            'validity_fixed_until': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_validity_fixed_from_0'}),
             'require_membership_types': forms.CheckboxSelectMultiple(attrs={
                 'class': 'scrolling-multiple-choice'
             }),

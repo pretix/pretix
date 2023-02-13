@@ -296,6 +296,15 @@ TEST_ITEM_RES = {
     "grant_membership_duration_like_event": True,
     "grant_membership_duration_days": 0,
     "grant_membership_duration_months": 0,
+    "validity_mode": None,
+    "validity_fixed_from": None,
+    "validity_fixed_until": None,
+    "validity_dynamic_duration_minutes": None,
+    "validity_dynamic_duration_hours": None,
+    "validity_dynamic_duration_days": None,
+    "validity_dynamic_duration_months": None,
+    "validity_dynamic_start_choice": False,
+    "validity_dynamic_start_choice_day_limit": None,
 }
 
 

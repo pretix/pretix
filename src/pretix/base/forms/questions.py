@@ -35,6 +35,7 @@
 import copy
 import json
 import logging
+from datetime import timedelta
 from decimal import Decimal
 from io import BytesIO
 
@@ -55,7 +56,7 @@ from django.forms.widgets import FILE_INPUT_CONTRADICTION
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.utils.timezone import get_current_timezone
+from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries import countries
 from django_countries.fields import Country, CountryField
@@ -73,7 +74,7 @@ from pretix.base.forms.widgets import (
 from pretix.base.i18n import (
     get_babel_locale, get_language_without_region, language,
 )
-from pretix.base.models import InvoiceAddress, Question, QuestionOption
+from pretix.base.models import InvoiceAddress, Item, Question, QuestionOption
 from pretix.base.models.tax import VAT_ID_COUNTRIES, ask_for_vat_id
 from pretix.base.services.tax import (
     VATIDFinalError, VATIDTemporaryError, validate_vat_id,
@@ -572,6 +573,34 @@ class BaseQuestionsForm(forms.Form):
         self.all_optional = kwargs.pop('all_optional', False)
 
         super().__init__(*args, **kwargs)
+
+        if cartpos and item.validity_mode == Item.VALIDITY_MODE_DYNAMIC and item.validity_dynamic_start_choice:
+            if item.validity_dynamic_start_choice_day_limit:
+                max_date = now().astimezone(event.timezone) + timedelta(days=item.validity_dynamic_start_choice_day_limit)
+            else:
+                max_date = None
+            if item.validity_dynamic_duration_months or item.validity_dynamic_duration_days:
+                attrs = {}
+                if max_date:
+                    attrs['data-max'] = max_date.date().isoformat()
+                self.fields['requested_valid_from'] = forms.DateField(
+                    label=_('Start date'),
+                    help_text=_('If you keep this empty, the ticket will be valid starting at the time of purchase.'),
+                    required=False,
+                    widget=DatePickerWidget(attrs),
+                    validators=[MaxDateValidator(max_date.date())] if max_date else []
+                )
+            else:
+                self.fields['requested_valid_from'] = forms.SplitDateTimeField(
+                    label=_('Start date'),
+                    help_text=_('If you keep this empty, the ticket will be valid starting at the time of purchase.'),
+                    required=False,
+                    widget=SplitDateTimePickerWidget(
+                        time_format=get_format_without_seconds('TIME_INPUT_FORMATS'),
+                        max_date=max_date
+                    ),
+                    validators=[MaxDateTimeValidator(max_date)] if max_date else []
+                )
 
         add_fields = {}
 

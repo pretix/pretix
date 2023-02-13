@@ -61,6 +61,7 @@ class BadgeLayoutChoiceField(forms.ModelChoiceField):
 
 
 class BadgeItemForm(forms.ModelForm):
+    is_layouts = True
     layout = BadgeLayoutChoiceField(queryset=BadgeLayout.objects.none())
 
     class Meta:

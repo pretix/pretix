@@ -32,11 +32,12 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from datetime import date
+from datetime import date, datetime
 
 from django.utils import translation
 
-from pretix.helpers.daterange import daterange
+from pretix.base.i18n import language
+from pretix.helpers.daterange import daterange, datetimerange
 
 
 def test_same_day_german():
@@ -147,3 +148,33 @@ def test_different_dates_other_lang():
         assert daterange(df, dt) == "01 Şubat 2003 – 03 Nisan 2005"
         assert daterange(df, dt, as_html=True) == '<time datetime="2003-02-01">01 Şubat 2003</time> – ' \
                                                   '<time datetime="2005-04-03">03 Nisan 2005</time>'
+
+
+def test_datetime_same_day():
+    with translation.override('de'):
+        df = datetime(2003, 2, 1, 9, 0)
+        dt = datetime(2003, 2, 1, 10, 0)
+        assert datetimerange(df, dt) == "01.02.2003 09:00 – 10:00"
+        assert datetimerange(df, dt, as_html=True) == '<time datetime="2003-02-01 09:00">01.02.2003 09:00</time> – ' \
+                                                      '<time datetime="2003-02-01 10:00">10:00</time>'
+    with language('en', 'US'):
+        df = datetime(2003, 2, 1, 9, 0)
+        dt = datetime(2003, 2, 1, 10, 0)
+        assert datetimerange(df, dt) == "02/01/2003 9 a.m. – 10 a.m."
+        assert datetimerange(df, dt, as_html=True) == '<time datetime="2003-02-01 09:00">02/01/2003 9 a.m.</time> – ' \
+                                                      '<time datetime="2003-02-01 10:00">10 a.m.</time>'
+
+
+def test_datetime_different_day():
+    with translation.override('de'):
+        df = datetime(2003, 2, 1, 9, 0)
+        dt = datetime(2003, 2, 2, 10, 0)
+        assert datetimerange(df, dt) == "01.02.2003 09:00 – 02.02.2003 10:00"
+        assert datetimerange(df, dt, as_html=True) == '<time datetime="2003-02-01 09:00">01.02.2003 09:00</time> – ' \
+                                                      '<time datetime="2003-02-02 10:00">02.02.2003 10:00</time>'
+    with language('en', 'US'):
+        df = datetime(2003, 2, 1, 9, 0)
+        dt = datetime(2003, 2, 2, 10, 0)
+        assert datetimerange(df, dt) == "02/01/2003 9 a.m. – 02/02/2003 10 a.m."
+        assert datetimerange(df, dt, as_html=True) == '<time datetime="2003-02-01 09:00">02/01/2003 9 a.m.</time> – ' \
+                                                      '<time datetime="2003-02-02 10:00">02/02/2003 10 a.m.</time>'

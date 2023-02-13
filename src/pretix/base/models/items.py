@@ -33,12 +33,13 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import calendar
 import sys
 import uuid
 from collections import Counter, OrderedDict
-from datetime import date, datetime, time
+from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
-from typing import Tuple
+from typing import Optional, Tuple
 
 import dateutil.parser
 import pytz
@@ -339,7 +340,33 @@ class Item(LoggedModel):
     :type sales_channels: bool
     :param issue_giftcard: If ``True``, buying this product will give you a gift card with the value of the product's price
     :type issue_giftcard: bool
+    :param validity_mode: Instruction how to set ``valid_from``/``valid_until`` on tickets, ``null`` is default event validity.
+    :type validity_mode: str
+    :param validity_fixed_from: Start of validity if ``validity_mode`` is ``"fixed"``.
+    :type validity_fixed_from: datetime
+    :param validity_fixed_until: End of validity if ``validity_mode`` is ``"fixed"``.
+    :type validity_fixed_until: datetime
+    :param validity_dynamic_duration_minutes: Number of minutes if ``validity_mode`` is ``"dnyamic"``.
+    :type validity_dynamic_duration_minutes: int
+    :param validity_dynamic_duration_hours: Number of hours if ``validity_mode`` is ``"dnyamic"``.
+    :type validity_dynamic_duration_hours: int
+    :param validity_dynamic_duration_days: Number of days if ``validity_mode`` is ``"dnyamic"``.
+    :type validity_dynamic_duration_days: int
+    :param validity_dynamic_duration_months: Number of months if ``validity_mode`` is ``"dnyamic"``.
+    :type validity_dynamic_duration_months: int
+    :param validity_dynamic_start_choice: Whether customers can choose the start date if ``validity_mode`` is ``"dnyamic"``.
+    :type validity_dynamic_start_choice: bool
+    :param validity_dynamic_start_choice_day_limit: Start date may be maximum this many days in the future if ``validity_mode`` is ``"dnyamic"``.
+    :type validity_dynamic_start_choice_day_limnit: int
+
     """
+    VALIDITY_MODE_FIXED = 'fixed'
+    VALIDITY_MODE_DYNAMIC = 'dynamic'
+    VALIDITY_MODES = (
+        (None, _('Event validity (default)')),
+        (VALIDITY_MODE_FIXED, _('Fixed time frame')),
+        (VALIDITY_MODE_DYNAMIC, _('Dynamic validity')),
+    )
 
     objects = ItemQuerySetManager()
 
@@ -560,6 +587,49 @@ class Item(LoggedModel):
         verbose_name=_('Membership duration in months'),
         default=0,
     )
+
+    validity_mode = models.CharField(
+        choices=VALIDITY_MODES,
+        null=True, blank=True, max_length=16,
+        verbose_name=_('Validity'),
+        help_text=_(
+            'When setting up a regular event, or an event series with time slots, you typically to NOT need to change '
+            'this value. The default setting means that the validity time of tickets will not be decided by the '
+            'product, but by the event and check-in configuration. Only use the other options if you need them to '
+            'realize e.g. a booking of a year-long ticket with a dynamic start date. Note that the validity will be '
+            'stored with the ticket, so if you change the settings here later, existing tickets will not be affected '
+            'by the change but keep their current validity.'
+        )
+    )
+    validity_fixed_from = models.DateTimeField(null=True, blank=True, verbose_name=_('Start of validity'))
+    validity_fixed_until = models.DateTimeField(null=True, blank=True, verbose_name=_('End of validity'))
+    validity_dynamic_duration_minutes = models.PositiveIntegerField(
+        blank=True, null=True,
+        verbose_name=_('Minutes'),
+    )
+    validity_dynamic_duration_hours = models.PositiveIntegerField(
+        blank=True, null=True,
+        verbose_name=_('Hours')
+    )
+    validity_dynamic_duration_days = models.PositiveIntegerField(
+        blank=True, null=True,
+        verbose_name=_('Days'),
+    )
+    validity_dynamic_duration_months = models.PositiveIntegerField(
+        blank=True, null=True,
+        verbose_name=_('Months'),
+    )
+    validity_dynamic_start_choice = models.BooleanField(
+        verbose_name=_('Customers can select the validity start date'),
+        help_text=_('If not selected, the validity always starts at the time of purchase.'),
+        default=False
+    )
+    validity_dynamic_start_choice_day_limit = models.PositiveIntegerField(
+        blank=True, null=True,
+        verbose_name=_('Maximum future start'),
+        help_text=_('The selected start date may only be this many days in the future.')
+    )
+
     # !!! Attention: If you add new fields here, also add them to the copying code in
     # pretix/control/forms/item.py if applicable.
 
@@ -763,6 +833,63 @@ class Item(LoggedModel):
             data.update({v.property.name: v.value for v in self.meta_values.select_related('property').all()})
 
         return OrderedDict((k, v) for k, v in sorted(data.items(), key=lambda k: k[0]))
+
+    def compute_validity(
+        self, *, requested_start: datetime, override_tz=None, enforce_start_limit=False
+    ) -> Tuple[Optional[datetime], Optional[datetime]]:
+        if self.validity_mode == Item.VALIDITY_MODE_FIXED:
+            return self.validity_fixed_from, self.validity_fixed_until
+        elif self.validity_mode == Item.VALIDITY_MODE_DYNAMIC:
+            tz = override_tz or self.event.timezone
+            requested_start = requested_start or now()
+            if enforce_start_limit and not self.validity_dynamic_start_choice:
+                requested_start = now()
+            if enforce_start_limit and self.validity_dynamic_start_choice_day_limit is not None:
+                requested_start = min(requested_start, now() + timedelta(days=self.validity_dynamic_start_choice_day_limit))
+
+            valid_until = requested_start.astimezone(tz)
+
+            if self.validity_dynamic_duration_months:
+                replace_year = valid_until.year
+                replace_month = valid_until.month + self.validity_dynamic_duration_months
+                while replace_month > 12:
+                    replace_month -= 12
+                    replace_year += 1
+                max_day = calendar.monthrange(replace_year, replace_month)[1]
+                replace_date = date(
+                    year=replace_year,
+                    month=replace_month,
+                    day=min(valid_until.day, max_day),
+                )
+                if self.validity_dynamic_duration_days:
+                    replace_date += timedelta(days=self.validity_dynamic_duration_days)
+                valid_until = tz.localize(valid_until.replace(
+                    year=replace_date.year,
+                    month=replace_date.month,
+                    day=replace_date.day,
+                    hour=23, minute=59, second=59, microsecond=0,
+                    tzinfo=None,
+                ))
+            elif self.validity_dynamic_duration_days:
+                replace_date = valid_until.date() + timedelta(days=self.validity_dynamic_duration_days - 1)
+                valid_until = tz.localize(valid_until.replace(
+                    year=replace_date.year,
+                    month=replace_date.month,
+                    day=replace_date.day,
+                    hour=23, minute=59, second=59, microsecond=0,
+                    tzinfo=None
+                ))
+
+            if self.validity_dynamic_duration_hours:
+                valid_until += timedelta(hours=self.validity_dynamic_duration_hours)
+
+            if self.validity_dynamic_duration_minutes:
+                valid_until += timedelta(minutes=self.validity_dynamic_duration_minutes)
+
+            return requested_start, valid_until
+
+        else:
+            return None, None
 
 
 def _all_sales_channels_identifiers():
