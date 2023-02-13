@@ -618,6 +618,14 @@ class ItemUpdateForm(I18nModelForm):
                       "admission ticket. Otherwise customers might not be able to use the membership later. If you "
                       "want the membership to be non-personalized, set the membership type to be transferable.")
                 )
+
+        if d.get('validity_mode') == Item.VALIDITY_MODE_FIXED and d.get('validity_fixed_from') and d.get('validity_fixed_until'):
+            if d.get('validity_fixed_from') > d.get('validity_fixed_until'):
+                self.add_error(
+                    'validity_fixed_from',
+                    _("The start of validity must be before the end of validity.")
+                )
+
         return d
 
     def clean_picture(self):
