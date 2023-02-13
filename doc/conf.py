@@ -49,6 +49,7 @@ extensions = [
     'sphinx.ext.coverage',
     'sphinxcontrib.httpdomain',
     'sphinxcontrib.images',
+    'sphinxcontrib.jquery',
     'sphinxemoji.sphinxemoji',
 ]
 if HAS_PYENCHANT:
