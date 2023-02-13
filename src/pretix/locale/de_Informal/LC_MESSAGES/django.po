@@ -25357,7 +25357,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:89
 #: pretix/plugins/ticketoutputpdf/exporters.py:88
 msgid "Only include tickets for dates within this range."
-msgstr "Nur Tickets innerhalb dieses Zeitraums."
+msgstr "Nur Tickets für Termine innerhalb dieses Zeitraums."
 
 #: pretix/plugins/checkinlists/exporters.py:93
 msgid "Include QR-code secret"
