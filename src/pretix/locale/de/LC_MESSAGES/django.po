@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-13 13:58+0000\n"
-"PO-Revision-Date: 2023-02-10 02:00+0000\n"
-"Last-Translator: Jan Felix Wiebe <mail@jfwie.be>\n"
+"PO-Revision-Date: 2023-02-13 15:07+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -2543,6 +2543,7 @@ msgid ""
 "If you keep this empty, the ticket will be valid starting at the time of "
 "purchase."
 msgstr ""
+"Wenn Sie dieses Feld leer lassen, ist das Ticket ab dem Kaufzeitpunkt gültig."
 
 #: pretix/base/forms/questions.py:641 pretix/base/forms/questions.py:961
 msgid "Street and Number"
@@ -3718,22 +3719,16 @@ msgid "This product will not be sold after the given date."
 msgstr "Dieses Produkt wird nach diesem Termin nicht mehr verkauft."
 
 #: pretix/base/models/items.py:366
-#, fuzzy
-#| msgid "(Event default)"
 msgid "Event validity (default)"
-msgstr "(Veranstaltungs-Standard)"
+msgstr "Gültigkeit entsprechend der Veranstaltung (Standard)"
 
 #: pretix/base/models/items.py:367
-#, fuzzy
-#| msgid "Price in time frame"
 msgid "Fixed time frame"
-msgstr "Preis im Zeitraum"
+msgstr "Fester Zeitraum"
 
 #: pretix/base/models/items.py:368
-#, fuzzy
-#| msgid "Gift card validity"
 msgid "Dynamic validity"
-msgstr "Gültigkeit von Wertgutscheinen"
+msgstr "Dynamischer Zeitraum"
 
 #: pretix/base/models/items.py:384 pretix/base/models/items.py:1196
 #: pretix/control/templates/pretixcontrol/items/index.html:40
@@ -3969,10 +3964,8 @@ msgid "Membership duration in months"
 msgstr "Dauer der Mitgliedschaft in Monaten"
 
 #: pretix/base/models/items.py:594
-#, fuzzy
-#| msgid "Validity end"
 msgid "Validity"
-msgstr "Gültigkeitsende"
+msgstr "Gültigkeit"
 
 #: pretix/base/models/items.py:596
 msgid ""
@@ -3985,60 +3978,59 @@ msgid ""
 "change the settings here later, existing tickets will not be affected by the "
 "change but keep their current validity."
 msgstr ""
+"Wenn Sie eine normale Veranstaltung oder eine Veranstaltungsreihe mit "
+"Zeitfenstern anlegen, müssen Sie diese Einstellung üblicherweise NICHT "
+"ändern. Die Standardeinstellung bedeutet, dass die Gültigkeit des Tickets "
+"sich nicht nach dem Produkt, sondern nach den Veranstaltungs- und Check-in-"
+"Einstellungen richtet. Die anderen Optionen benötigen Sie nur, wenn Sie "
+"spezielle Anwendungsfälle wie z.B. eine Jahreskarte mit dynamischem "
+"Startdatum umsetzen möchten. Bitte beachten Sie, dass die Gültigkeit als "
+"Teil des einzelnen Tickets gespeichert wird. Wenn Sie die Einstellungen hier "
+"später ändern, werden bereits bestehende Tickets nicht verändert sondern "
+"behalten ihre aktuelle Gültigkeit."
 
 #: pretix/base/models/items.py:604
-#, fuzzy
-#| msgid "Gift card validity"
 msgid "Start of validity"
-msgstr "Gültigkeit von Wertgutscheinen"
+msgstr "Beginn der Gültigkeit"
 
 #: pretix/base/models/items.py:605
-#, fuzzy
-#| msgid "End of presale"
 msgid "End of validity"
-msgstr "Ende des Vorverkaufs"
+msgstr "Ende der Gültigkeit"
 
 #: pretix/base/models/items.py:608
-#, fuzzy
-#| msgid "minutes"
 msgid "Minutes"
 msgstr "Minuten"
 
 #: pretix/base/models/items.py:612
 msgid "Hours"
-msgstr ""
+msgstr "Stunden"
 
 #: pretix/base/models/items.py:616
 msgid "Days"
-msgstr ""
+msgstr "Tage"
 
 #: pretix/base/models/items.py:620
-#, fuzzy
-#| msgid "Month"
 msgid "Months"
-msgstr "Monat"
+msgstr "Monate"
 
 #: pretix/base/models/items.py:623
-#, fuzzy
-#| msgid "Customers can cancel their paid orders"
 msgid "Customers can select the validity start date"
-msgstr "Kunden können bezahlte Bestellungen stornieren"
+msgstr "Kunden könnten den Startzeitpunkt selbst wählen"
 
 #: pretix/base/models/items.py:624
 msgid "If not selected, the validity always starts at the time of purchase."
 msgstr ""
+"Wenn diese Option nicht ausgewählt ist, startet die Gültigkeit immer mit dem "
+"Kaufzeitpunkt."
 
 #: pretix/base/models/items.py:629
-#, fuzzy
-#| msgid "Maximum order total"
 msgid "Maximum future start"
-msgstr "Maximaler Gesamtbetrag"
+msgstr "Spätester Start in der Zukunft"
 
 #: pretix/base/models/items.py:630
-#, fuzzy
-#| msgid "The selected date does not exist in this event series."
 msgid "The selected start date may only be this many days in the future."
-msgstr "Der ausgewählte Termin gehört nicht zu dieser Veranstaltungsreihe."
+msgstr ""
+"Der ausgewählte Starttermin darf nur so viele Tage in der Zukunft liegen."
 
 #: pretix/base/models/items.py:638 pretix/base/models/items.py:1437
 #: pretix/control/forms/filter.py:403 pretix/control/forms/filter.py:1681
@@ -6326,40 +6318,28 @@ msgid "Printing time"
 msgstr "Druckzeit"
 
 #: pretix/base/pdf.py:411
-#, fuzzy
-#| msgid "Validity start"
 msgid "Validity start date"
-msgstr "Gültigkeitsbeginn"
+msgstr "Gültigkeitsbeginn: Datum"
 
 #: pretix/base/pdf.py:419
-#, fuzzy
-#| msgid "Validity start"
 msgid "Validity start date and time"
-msgstr "Gültigkeitsbeginn"
+msgstr "Gültigkeitsbeginn: Datum und Uhrzeit"
 
 #: pretix/base/pdf.py:427
-#, fuzzy
-#| msgid "Validity start"
 msgid "Validity start time"
-msgstr "Gültigkeitsbeginn"
+msgstr "Gültigkeitsbeginn: Uhrzeit"
 
 #: pretix/base/pdf.py:435
-#, fuzzy
-#| msgid "Validity end"
 msgid "Validity end date"
-msgstr "Gültigkeitsende"
+msgstr "Gültigkeitsende: Datum"
 
 #: pretix/base/pdf.py:443
-#, fuzzy
-#| msgid "Event end date and time"
 msgid "Validity end date and time"
-msgstr "Veranstaltungsende und Uhrzeit"
+msgstr "Gültigkeitsende: Datum und Uhrzeit"
 
 #: pretix/base/pdf.py:451
-#, fuzzy
-#| msgid "Validity time"
 msgid "Validity end time"
-msgstr "Gültigkeitszeitraum"
+msgstr "Gültigkeitsende: Uhrzeit"
 
 #: pretix/base/pdf.py:459
 msgid "Seat: Full name"
@@ -7657,7 +7637,7 @@ msgstr ""
 
 #: pretix/base/settings.py:204
 msgid "Hide prices on attendee ticket page"
-msgstr ""
+msgstr "Preise auf Teilnehmer*innen-Ticket-Seite verstecken"
 
 #: pretix/base/settings.py:205
 msgid ""
@@ -7666,6 +7646,10 @@ msgid ""
 "page of the individual attendees. The ticket buyer will of course see the "
 "price."
 msgstr ""
+"Wenn eine Person mehrere Tickets erwirbt und E-Mails an alle Teilnehmer*"
+"innen verschickt werden, wird mit dieser Option der Ticketpreis auf der "
+"Ticket-Seite der einzelnen Teilnehmer*innen verschickt. Nur die Person, die "
+"die Tickets kauft, sieht den Preis."
 
 #: pretix/base/settings.py:221
 msgid "Ask for attendee names"
@@ -9397,25 +9381,12 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:2055
-#, fuzzy, python-brace-format
-#| msgid "Payment received for your order: {code}"
+#, python-brace-format
 msgid "Incomplete payment received: {code}"
-msgstr "Zahlung erhalten für die Bestellung: {code}"
+msgstr "Unvollständige Zahlung erhalten: {code}"
 
 #: pretix/base/settings.py:2059
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we did not yet receive a full payment for your order for {event}.\n"
-#| "Please keep in mind that we only guarantee your order if we receive\n"
-#| "your payment before {expire_date}.\n"
-#| "\n"
-#| "You can view the payment information and the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -9433,11 +9404,13 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"wir haben für Ihre Bestellung für {event} noch keine vollständige Zahlung "
-"erhalten.\n"
-"Bitte beachten Sie, dass wir Ihre Bestellung nur garantieren können, wenn "
-"wir das\n"
-"Geld bis zum {expire_date} erhalten.\n"
+"wir haben für Ihre Bestellung für {event} eine Zahlung erhalten.\n"
+"\n"
+"Leider ist der eingegangene Betrag niedriger als der erforderliche "
+"Gesamtbetrag.\n"
+"Ihre Bestellung gilt daher nach wie vor als unbezahlt, da eine Zahlung in "
+"Höhe von\n"
+"**{pending_sum}** noch offen ist.\n"
 "\n"
 "Sie können Ihre Bestellung unter folgender Adresse einsehen und ändern:\n"
 "{url}\n"
@@ -11458,12 +11431,12 @@ msgid "Subject (if order will not expire automatically)"
 msgstr "Betreff (wenn Bestellung nicht automatisch abläuft)"
 
 #: pretix/control/forms/event.py:1084
-#, fuzzy
-#| msgid "This plugin allows you to receive payments via bank transfer."
 msgid ""
 "This email only applies to payment methods that can receive incomplete "
 "payments, such as bank transfer."
-msgstr "Dieses Plugin erlaubt, Zahlungen per Banküberweisung anzunehmen."
+msgstr ""
+"Diese E-Mail wird nur bei Zahlungsmethoden eingesetzt, bei denen "
+"unvollständige Zahlungen eingehen können, wie z.B. Banküberweisung."
 
 #: pretix/control/forms/event.py:1142
 msgid ""
@@ -12552,11 +12525,8 @@ msgstr ""
 "\"übertragbar\"."
 
 #: pretix/control/forms/item.py:626
-#, fuzzy
-#| msgid "The last payment date cannot be before the end of presale."
 msgid "The start of validity must be before the end of validity."
-msgstr ""
-"Das letzte Zahlungsdatum kann nicht vor dem Ende des Vorverkaufs liegen."
+msgstr "Der Gültigkeitsbeginn muss vor dem Gültigkeitsende liegen."
 
 #: pretix/control/forms/item.py:723
 #, python-format
@@ -18183,22 +18153,16 @@ msgid "Availability"
 msgstr "Verfügbarkeit"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:179
-#, fuzzy
-#| msgid "Ticket page"
 msgid "Tickets & Badges"
-msgstr "Ticket-Seite"
+msgstr "Tickets & Badges"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:188
-#, fuzzy
-#| msgid "Check-in list"
 msgid "Check-in & Validity"
-msgstr "Check-in-Liste"
+msgstr "Check-in & Gültigkeit"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:197
-#, fuzzy
-#| msgid "Variation"
 msgid "Duration"
-msgstr "Variante"
+msgstr "Dauer"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:199
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
@@ -18208,7 +18172,7 @@ msgstr "Minuten"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:200
 msgid "hours"
-msgstr ""
+msgstr "Stunden"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:201
 #: pretix/control/templates/pretixcontrol/item/index.html:220
@@ -18222,10 +18186,8 @@ msgid "months"
 msgstr "Monate"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:203
-#, fuzzy
-#| msgid "year(s)"
 msgid "years"
-msgstr "Jahr(e)"
+msgstr "Jahre"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:209
 msgid ""
@@ -18235,6 +18197,11 @@ msgid ""
 "if you enter \"1 day\", the ticket will be valid until the end of the day it "
 "starts on."
 msgstr ""
+"Wenn Sie eine Gültigkeit in Tagen, Monaten oder Jahren angeben, endet die "
+"Gültigkeit immer am Ende eines vollen Tages (Mitternacht), plus der "
+"ausgewählten Anzahl an Minuten und Stunden. Der Starttermin wird in die "
+"Berechnung eingeschlossen, d.h. wenn Sie \"1 Tag\" auswählen ist das Ticket "
+"gültig bis zum Ende des Tages, an dem die Gültigkeit beginnt."
 
 #: pretix/control/templates/pretixcontrol/item/index.html:226
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:593
@@ -19066,6 +19033,8 @@ msgid ""
 "If you change this, it might cause a new ticket QR code to be generated and "
 "the old one to be invalidated."
 msgstr ""
+"Eine Änderung dieser Eigenschaft kann dazu führen, dass der Ticket-QR-Code "
+"neu generiert werden muss und der alte Ticket-Code gesperrt wird."
 
 #: pretix/control/templates/pretixcontrol/order/change.html:198
 #: pretix/control/templates/pretixcontrol/order/change.html:410
@@ -19447,10 +19416,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:450
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:107
-#, fuzzy, python-format
-#| msgid "Valid from %(datetime)s"
+#, python-format
 msgid "Valid %(datetime_range)s"
-msgstr "Gültig ab %(datetime)s"
+msgstr "Gültig %(datetime_range)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:488
 msgid "Ticket page"
