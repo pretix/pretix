@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-09 13:36+0000\n"
+"POT-Creation-Date: 2023-02-13 13:59+0000\n"
 "PO-Revision-Date: 2023-01-17 01:00+0000\n"
 "Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -295,28 +295,24 @@ msgstr "Ticket non payé"
 msgid "Ticket not valid at this time"
 msgstr "Ticket non payé"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Order canceled"
 msgstr "Commande annulée"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Ticket code is ambiguous on list"
 msgstr "Le code du billet est ambigu dans la liste"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 #, fuzzy
 msgid "Checked-in Tickets"
 msgstr "Enregistrement QR code"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Valid Tickets"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Currently inside"
 msgstr ""
 
@@ -587,37 +583,30 @@ msgstr ""
 "blanc, SVP choisissez un ton plus sombre."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:464
-#: pretix/static/pretixcontrol/js/ui/main.js:461
 msgid "All"
 msgstr "Tous"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:465
-#: pretix/static/pretixcontrol/js/ui/main.js:462
 msgid "None"
 msgstr "Aucun"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:466
-#: pretix/static/pretixcontrol/js/ui/main.js:463
 msgid "Search query"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:469
-#: pretix/static/pretixcontrol/js/ui/main.js:466
 msgid "Selected only"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:872
-#: pretix/static/pretixcontrol/js/ui/main.js:869
 msgid "Use a different name internally"
 msgstr "Utiliser un nom différent en interne"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:908
-#: pretix/static/pretixcontrol/js/ui/main.js:905
 msgid "Click to close"
 msgstr "Cliquez pour fermer"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:980
-#: pretix/static/pretixcontrol/js/ui/main.js:977
 msgid "You have unsaved changes!"
 msgstr "Vous avez des modifications non sauvegardées !"
 
@@ -1011,8 +1000,8 @@ msgstr "Décembre"
 #~ "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener\">event "
 #~ "ticketing powered by pretix</a>"
 #~ msgstr ""
-#~ "<a href=\"https://pretix.eu\" target=\"_blank\" rel=\"noopener"
-#~ "\">Billetterie en ligne propulsée par Pretix</a>"
+#~ "<a href=\"https://pretix.eu\" target=\"_blank\" "
+#~ "rel=\"noopener\">Billetterie en ligne propulsée par Pretix</a>"
 
 #~ msgid ""
 #~ "Your request has been queued on the server and will now be processed. If "
