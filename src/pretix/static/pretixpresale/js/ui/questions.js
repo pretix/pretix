@@ -83,6 +83,7 @@ function questions_init_photos(el) {
         var $inp = $(this)
         var $container = $inp.parent().parent()
 
+        $inp.prop("required", false)
         $container.find(".photo-input").addClass("hidden")
         $container.find(".photo-buttons").removeClass("hidden")
 
