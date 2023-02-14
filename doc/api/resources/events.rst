@@ -49,6 +49,7 @@ valid_keys                            object                     Cryptographic k
                                                                  only contained in detail views. Value can be cached.
 sales_channels                        list                       A list of sales channels this event is available for
                                                                  sale on.
+public_url                            string                     The public, customer-facing URL of the event (read-only).
 ===================================== ========================== =======================================================
 
 
@@ -64,6 +65,10 @@ Endpoints
     The ``with_availability_for`` parameter has been added.
 
     The ``search`` query parameter has been added to filter events by their slug, name, or location in any language.
+
+.. versionchanged:: 4.17
+
+    The ``public_url`` field has been added.
 
 .. http:get:: /api/v1/organizers/(organizer)/events/
 
@@ -123,7 +128,8 @@ Endpoints
               "web",
               "pretixpos",
               "resellers"
-            ]
+            ],
+            "public_url": "https://pretix.eu/bigevents/sampleconf/"
           }
         ]
       }
@@ -211,7 +217,8 @@ Endpoints
           "web",
           "pretixpos",
           "resellers"
-        ]
+        ],
+        "public_url": "https://pretix.eu/bigevents/sampleconf/"
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -307,7 +314,8 @@ Endpoints
           "web",
           "pretixpos",
           "resellers"
-        ]
+        ],
+        "public_url": "https://pretix.eu/bigevents/sampleconf/"
       }
 
    :param organizer: The ``slug`` field of the organizer of the event to create.
@@ -411,7 +419,8 @@ Endpoints
           "web",
           "pretixpos",
           "resellers"
-        ]
+        ],
+        "public_url": "https://pretix.eu/bigevents/sampleconf/"
       }
 
    :param organizer: The ``slug`` field of the organizer of the event to create.
@@ -485,7 +494,8 @@ Endpoints
           "web",
           "pretixpos",
           "resellers"
-        ]
+        ],
+        "public_url": "https://pretix.eu/bigevents/sampleconf/"
       }
 
    :param organizer: The ``slug`` field of the organizer of the event to update
