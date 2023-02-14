@@ -27,7 +27,8 @@ from pretix.testutils.mock import mocker_context
 
 TEST_ORGANIZER_RES = {
     "name": "Dummy",
-    "slug": "dummy"
+    "slug": "dummy",
+    "public_url": "http://example.com/dummy/"
 }
 
 

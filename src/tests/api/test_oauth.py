@@ -319,7 +319,9 @@ def test_use_token_for_access_one_organizer(client, admin_user, organizer, appli
     resp = client.get('/api/v1/organizers/', HTTP_AUTHORIZATION='Bearer %s' % access_token)
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
-    assert data == {'count': 1, 'next': None, 'previous': None, 'results': [{'name': 'Dummy', 'slug': 'dummy'}]}
+    assert data == {'count': 1, 'next': None, 'previous': None, 'results': [
+        {'name': 'Dummy', 'slug': 'dummy', 'public_url': 'http://example.com/dummy/'}
+    ]}
     resp = client.get('/api/v1/organizers/dummy/events/', HTTP_AUTHORIZATION='Bearer %s' % access_token)
     assert resp.status_code == 200
     resp = client.get('/api/v1/organizers/a/events/', HTTP_AUTHORIZATION='Bearer %s' % access_token)
@@ -362,8 +364,8 @@ def test_use_token_for_access_two_organizers(client, admin_user, organizer, appl
     assert resp.status_code == 200
     data = json.loads(resp.content.decode())
     assert data == {'count': 2, 'next': None, 'previous': None, 'results': [
-        {'name': 'A', 'slug': 'a'},
-        {'name': 'Dummy', 'slug': 'dummy'},
+        {'name': 'A', 'slug': 'a', 'public_url': 'http://example.com/a/'},
+        {'name': 'Dummy', 'slug': 'dummy', 'public_url': 'http://example.com/dummy/'},
     ]}
     resp = client.get('/api/v1/organizers/dummy/events/', HTTP_AUTHORIZATION='Bearer %s' % access_token)
     assert resp.status_code == 200
