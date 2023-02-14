@@ -1469,7 +1469,7 @@ class OrderChangeManager:
         self._quotadiff.subtract(position.quotas)
         self._operations.append(self.ItemOperation(position, item, variation))
 
-    def change_seat(self, position: OrderPosition, seat: Seat):
+    def change_seat(self, position: OrderPosition, seat: Optional[Seat]):
         if isinstance(seat, str):
             subev = None
             if self.event.has_subevents:
