@@ -850,8 +850,18 @@ class Item(LoggedModel):
             valid_until = requested_start.astimezone(tz)
 
             if self.validity_dynamic_duration_months:
+                valid_until -= timedelta(days=1)
+
+                replace_day = valid_until.day
+                max_day_start_month = calendar.monthrange(valid_until.year, valid_until.month)[1]
+                if replace_day == max_day_start_month:
+                    # This is a correction for month passes that start e.g. on March 1st – their previous day should
+                    # be "last of previous month", not "28th of previous month".
+                    replace_day = 31
+
                 replace_year = valid_until.year
                 replace_month = valid_until.month + self.validity_dynamic_duration_months
+
                 while replace_month > 12:
                     replace_month -= 12
                     replace_year += 1
@@ -859,7 +869,7 @@ class Item(LoggedModel):
                 replace_date = date(
                     year=replace_year,
                     month=replace_month,
-                    day=min(valid_until.day, max_day),
+                    day=min(replace_day, max_day),
                 )
                 if self.validity_dynamic_duration_days:
                     replace_date += timedelta(days=self.validity_dynamic_duration_days)
