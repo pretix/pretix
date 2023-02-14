@@ -41,15 +41,21 @@ from pretix.base.models import (
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
 from pretix.base.settings import validate_organizer_settings
-from pretix.helpers.urls import build_absolute_uri
+from pretix.helpers.urls import build_absolute_uri as build_global_uri
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 logger = logging.getLogger(__name__)
 
 
 class OrganizerSerializer(I18nAwareModelSerializer):
+    url = serializers.SerializerMethodField('get_organizer_url', read_only=True)
+
+    def get_organizer_url(self, organizer):
+        return build_absolute_uri(organizer, 'presale:organizer.index')
+
     class Meta:
         model = Organizer
-        fields = ('name', 'slug')
+        fields = ('name', 'slug', 'url')
 
 
 class SeatingPlanSerializer(I18nAwareModelSerializer):
@@ -227,7 +233,7 @@ class TeamInviteSerializer(serializers.ModelSerializer):
                     'user': self,
                     'organizer': self.context['organizer'].name,
                     'team': instance.team.name,
-                    'url': build_absolute_uri('control:auth.invite', kwargs={
+                    'url': build_global_uri('control:auth.invite', kwargs={
                         'token': instance.token
                     })
                 },
