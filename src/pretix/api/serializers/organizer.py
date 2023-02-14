@@ -48,14 +48,14 @@ logger = logging.getLogger(__name__)
 
 
 class OrganizerSerializer(I18nAwareModelSerializer):
-    url = serializers.SerializerMethodField('get_organizer_url', read_only=True)
+    public_url = serializers.SerializerMethodField('get_organizer_url', read_only=True)
 
     def get_organizer_url(self, organizer):
         return build_absolute_uri(organizer, 'presale:organizer.index')
 
     class Meta:
         model = Organizer
-        fields = ('name', 'slug', 'url')
+        fields = ('name', 'slug', 'public_url')
 
 
 class SeatingPlanSerializer(I18nAwareModelSerializer):

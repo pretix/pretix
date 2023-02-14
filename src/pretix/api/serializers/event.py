@@ -165,7 +165,7 @@ class EventSerializer(I18nAwareModelSerializer):
     timezone = TimeZoneField(required=False, choices=[(a, a) for a in common_timezones])
     valid_keys = ValidKeysField(source='*', read_only=True)
     best_availability_state = serializers.IntegerField(allow_null=True, read_only=True)
-    url = serializers.SerializerMethodField('get_event_url', read_only=True)
+    public_url = serializers.SerializerMethodField('get_event_url', read_only=True)
 
     def get_event_url(self, event):
         return build_absolute_uri(event, 'presale:event.index')
@@ -176,7 +176,7 @@ class EventSerializer(I18nAwareModelSerializer):
                   'date_to', 'date_admission', 'is_public', 'presale_start',
                   'presale_end', 'location', 'geo_lat', 'geo_lon', 'has_subevents', 'meta_data', 'seating_plan',
                   'plugins', 'seat_category_mapping', 'timezone', 'item_meta_properties', 'valid_keys',
-                  'sales_channels', 'best_availability_state', 'url')
+                  'sales_channels', 'best_availability_state', 'public_url')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
