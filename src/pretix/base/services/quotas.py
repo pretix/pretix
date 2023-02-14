@@ -295,6 +295,8 @@ class QuotaAvailability:
                 Q(item_id__in={i['item_id'] for i in q_items if i['quota_id'] in quota_ids})
             ) | Q(
                 variation_id__in={i['itemvariation_id'] for i in q_vars if i['quota_id'] in quota_ids})
+        ).filter(
+            ~Q(Q(ignore_from_quota_while_blocked=True) & Q(blocked__isnull=False))
         ).order_by()
         if any(q.release_after_exit for q in quotas):
             op_lookup = op_lookup.annotate(
