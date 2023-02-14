@@ -638,6 +638,8 @@ class Locale(ImportColumn):
     def clean(self, value, previous_values):
         if not value:
             value = self.event.settings.locale
+        if isinstance(value, str):
+            value = value.lower()
         if value not in self.event.settings.locales:
             raise ValidationError(_("Please enter a valid language code."))
         return value
