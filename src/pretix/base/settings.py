@@ -377,13 +377,27 @@ DEFAULTS = {
     },
     'invoice_eu_currencies': {
         'default': 'True',
-        'type': bool,
-        'form_class': forms.BooleanField,
-        'serializer_class': serializers.BooleanField,
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
         'form_kwargs': dict(
-            label=_("On invoices from one EU country into another EU country with a different currency, print the "
-                    "tax amounts in both currencies if possible"),
-        )
+            label=_("Show exchange rates"),
+            widget=forms.RadioSelect,
+            choices=(
+                ('False', _('Never')),
+                ('True', _('Based on European Central Bank daily rates, whenever the invoice recipient is in an EU '
+                           'country that uses a different currency.')),
+                ('CZK', _('Based on Czech National Bank daily rates, whenever the invoice amount is not in CZK.')),
+            ),
+        ),
+        'serializer_kwargs': dict(
+            choices=(
+                ('False', _('Never')),
+                ('True', _('Based on European Central Bank daily rates, whenever the invoice recipient is in an EU '
+                           'country that uses a different currency.')),
+                ('CZK', _('Based on Czech National Bank daily rates, whenever the invoice amount is not in CZK.')),
+            ),
+        ),
     },
     'invoice_address_required': {
         'default': 'False',

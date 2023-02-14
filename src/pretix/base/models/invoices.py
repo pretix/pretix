@@ -105,6 +105,8 @@ class Invoice(models.Model):
     :type foreign_currency_rate: Decimal
     :param foreign_currency_rate_date: The date of the foreign currency exchange rates.
     :type foreign_currency_rate_date: date
+    :param foreign_currency_rate_source: The source of the foreign currency rate.
+    :type foreign_currency_rate_source: str
     :param file: The filename of the rendered invoice
     :type file: File
     """
@@ -152,6 +154,7 @@ class Invoice(models.Model):
     foreign_currency_display = models.CharField(max_length=50, null=True, blank=True)
     foreign_currency_rate = models.DecimalField(decimal_places=4, max_digits=10, null=True, blank=True)
     foreign_currency_rate_date = models.DateField(null=True, blank=True)
+    foreign_currency_source = models.CharField(max_length=100, null=True, blank=True)
 
     shredded = models.BooleanField(default=False)
 

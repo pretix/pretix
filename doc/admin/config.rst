@@ -84,7 +84,7 @@ Example::
     Enables or disables the "keep me logged in" button. Defaults to ``on``.
 
 ``ecb_rates``
-    By default, pretix periodically downloads a XML file from the European Central Bank to retrieve exchange rates
+    By default, pretix periodically downloads currency rates from the European Central Bank as well as other authorities
     that are used to print tax amounts in the customer currency on invoices for some currencies. Set to ``off`` to
     disable this feature. Defaults to ``on``.
 
