@@ -557,6 +557,9 @@ class StripeMethod(BasePaymentProvider):
     def matching_id(self, payment: OrderPayment):
         return payment.info_data.get("id", None)
 
+    def refund_matching_id(self, refund: OrderRefund):
+        return refund.info_data.get('id', None)
+
     def api_payment_details(self, payment: OrderPayment):
         return {
             "id": payment.info_data.get("id", None),

@@ -132,6 +132,8 @@ The provider class
 
    .. automethod:: matching_id
 
+   .. automethod:: refund_matching_id
+
    .. automethod:: shred_payment_info
 
    .. automethod:: cancel_payment

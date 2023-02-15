@@ -957,6 +957,16 @@ class BasePaymentProvider:
         """
         return None
 
+    def refund_matching_id(self, refund: OrderRefund):
+        """
+        Will be called to get an ID for matching this refund when comparing pretix records with records of an external
+        source. This should return the main transaction ID for your API.
+
+        :param refund: The refund in question.
+        :return: A string or None
+        """
+        return None
+
 
 class PaymentException(Exception):
     pass
