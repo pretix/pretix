@@ -566,6 +566,11 @@ class StripeMethod(BasePaymentProvider):
             "payment_method": payment.info_data.get("payment_method", None)
         }
 
+    def api_refund_details(self, refund: OrderRefund):
+        return {
+            "id": refund.info_data.get("id", None),
+        }
+
     def payment_control_render(self, request, payment) -> str:
         if payment.info:
             payment_info = json.loads(payment.info)
