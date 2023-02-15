@@ -331,8 +331,12 @@ class Voucher(LoggedModel):
             if item:
                 raise ValidationError(_('You cannot select a quota and a specific product at the same time.'))
         elif item:
+            if item.require_bundling or item.category.is_addon:
+                raise ValidationError(_('You cannot select a product that is only available as an add-on product or '
+                                        'as part of a bundle, since vouchers cannot be applied to add-on products or '
+                                        'bundled products.'))
             if item.event != event:
-                raise ValidationError(_('You cannot select an item that belongs to a different event.'))
+                raise ValidationError(_('You cannot select a product that belongs to a different event.'))
             if variation and (not item or not item.has_variations):
                 raise ValidationError(_('You cannot select a variation without having selected a product that provides '
                                         'variations.'))
