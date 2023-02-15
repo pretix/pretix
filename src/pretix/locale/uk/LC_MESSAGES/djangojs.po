@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-13 13:59+0000\n"
+"POT-Creation-Date: 2023-02-15 12:25+0000\n"
 "PO-Revision-Date: 2022-05-10 02:00+0000\n"
 "Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -618,12 +618,12 @@ msgid "Count"
 msgstr "Підрахувати"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:136
-#: pretix/static/pretixpresale/js/ui/questions.js:269
+#: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "Yes"
 msgstr "Так"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:269
+#: pretix/static/pretixpresale/js/ui/questions.js:270
 msgid "No"
 msgstr "Ні"
 
