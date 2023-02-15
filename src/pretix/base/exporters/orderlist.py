@@ -770,6 +770,19 @@ class PaymentListExporter(ListExporter):
     def additional_form_fields(self):
         return OrderedDict(
             [
+                ('end_date_range',
+                 DateFrameField(
+                     label=_('Date range (payment date)'),
+                     include_future_frames=False,
+                     required=False,
+                     help_text=_('Note that using this will exclude any non-confirmed payments or non-completed refunds.'),
+                 )),
+                ('start_date_range',
+                 DateFrameField(
+                     label=_('Date range (start of transaction)'),
+                     include_future_frames=False,
+                     required=False
+                 )),
                 ('payment_states',
                  forms.MultipleChoiceField(
                      label=_('Payment states'),
@@ -801,6 +814,24 @@ class PaymentListExporter(ListExporter):
             order__event__in=self.events,
             state__in=form_data.get('refund_states', [])
         ).select_related('order').prefetch_related('order__event').order_by('created')
+
+        if form_data.get('end_date_range'):
+            dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['end_date_range'], self.timezone)
+            if dt_start:
+                payments = payments.filter(created__gte=dt_start)
+                refunds = refunds .filter(created__gte=dt_start)
+            if dt_end:
+                payments = payments.filter(created__lt=dt_end)
+                refunds = refunds .filter(created__lt=dt_end)
+
+        if form_data.get('start_end_date_range'):
+            dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['start_date_range'], self.timezone)
+            if dt_start:
+                payments = payments.filter(payment_date__gte=dt_start)
+                refunds = refunds .filter(execution_date__gte=dt_start)
+            if dt_end:
+                payments = payments.filter(payment_date__lt=dt_end)
+                refunds = refunds.filter(execution_date__lt=dt_end)
 
         objs = sorted(list(payments) + list(refunds), key=lambda o: o.created)
 
