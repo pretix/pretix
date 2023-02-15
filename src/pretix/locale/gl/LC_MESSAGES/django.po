@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-13 13:58+0000\n"
-"PO-Revision-Date: 2023-01-26 14:07+0000\n"
+"PO-Revision-Date: 2023-02-15 07:46+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix/"
 "gl/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -7022,14 +7022,10 @@ msgstr[1] ""
 #: pretix/base/services/cart.py:129 pretix/base/services/orders.py:143
 #: pretix/presale/templates/pretixpresale/event/index.html:157
 #: pretix/presale/views/waiting.py:102 pretix/presale/views/widget.py:694
-#, fuzzy
-#| msgid "The presale period for this event has not yet started."
 msgid "The booking period for this event has not yet started."
 msgstr "O período de prevenda deste evento aínda non comezou."
 
 #: pretix/base/services/cart.py:130
-#, fuzzy
-#| msgid "The presale period for this event has ended."
 msgid "The booking period for this event has ended."
 msgstr "O período de prevenda deste evento finalizou."
 
@@ -7686,8 +7682,6 @@ msgstr[1] ""
 "Retiramos as entradas sobrantes do seu carro."
 
 #: pretix/base/services/orders.py:144
-#, fuzzy
-#| msgid "The presale period has ended."
 msgid "The booking period has ended."
 msgstr "O período de prevenda rematou."
 
@@ -7739,10 +7733,6 @@ msgid "You need a valid voucher code to order one of the products."
 msgstr "Necesita un código de recibo válido para pedir este produto."
 
 #: pretix/base/services/orders.py:167
-#, fuzzy
-#| msgid ""
-#| "The presale period for one of the events in your cart has not yet "
-#| "started. The affected positions have been removed from your cart."
 msgid ""
 "The booking period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
@@ -31265,15 +31255,12 @@ msgstr "Outras datas"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:142
 #: pretix/presale/views/waiting.py:98 pretix/presale/views/widget.py:687
-#, fuzzy
-#| msgid "The presale period for this event is over."
 msgid "The booking period for this event is over."
-msgstr "O período de prevenda para este evento terminou."
+msgstr "O período de prevenda para este evento finalizou."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:150
 #: pretix/presale/views/widget.py:689
-#, fuzzy, python-format
-#| msgid "The presale for this event will start on %(date)s at %(time)s."
+#, python-format
 msgid "The booking period for this event will start on %(date)s at %(time)s."
 msgstr "A prevenda para este evento comezará en %(date)s a %(time)s."
 
@@ -32517,8 +32504,6 @@ msgid "Your cart is empty"
 msgstr "O seu pedido está baleiro"
 
 #: pretix/presale/views/checkout.py:59
-#, fuzzy
-#| msgid "The presale for this event is over or has not yet started."
 msgid "The booking period for this event is over or has not yet started."
 msgstr "A preventa desde evento terminou ou aínda non comezou."
 
