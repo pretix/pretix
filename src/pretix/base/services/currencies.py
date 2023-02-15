@@ -26,6 +26,7 @@ import requests
 from django.conf import settings
 from django.db.models import Max
 from django.dispatch import receiver
+from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from lxml import etree
 
@@ -57,7 +58,7 @@ def fetch_rates(sender, **kwargs):
             continue
 
         last_fetch_date = ExchangeRate.objects.filter(source=source_name).aggregate(m=Max('updated'))['m']
-        if last_fetch_date and last_fetch_date >= datetime.utcnow() - timedelta(hours=1):
+        if last_fetch_date and last_fetch_date >= now() - timedelta(hours=1):
             # Only try to fetch once per hour
             continue
 
