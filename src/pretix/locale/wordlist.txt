@@ -32,6 +32,7 @@ Ctrl
 customizable
 Customizations
 customizations
+CZK
 datetime
 dekodi
 deliverability

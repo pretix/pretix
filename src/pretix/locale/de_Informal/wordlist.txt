@@ -71,6 +71,7 @@ Copyleft
 Cronjob
 csv
 Customer
+CZK
 Debug
 dekodi
 deliverability
