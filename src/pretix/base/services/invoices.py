@@ -33,16 +33,12 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import inspect
-import json
 import logging
-import urllib.error
-from datetime import date, timedelta
+from datetime import timedelta
 from decimal import ROUND_HALF_UP, Decimal
 
-import vat_moss.exchange_rates
 from django.conf import settings
 from django.core.files.base import ContentFile
-from django.core.serializers.json import DjangoJSONEncoder
 from django.db import connection, transaction
 from django.db.models import Count
 from django.dispatch import receiver
@@ -56,11 +52,10 @@ from i18nfield.strings import LazyI18nString
 
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Invoice, InvoiceAddress, InvoiceLine, Order, OrderFee,
+    ExchangeRate, Invoice, InvoiceAddress, InvoiceLine, Order, OrderFee,
 )
 from pretix.base.models.tax import EU_CURRENCIES
 from pretix.base.services.tasks import TransactionAwareTask
-from pretix.base.settings import GlobalSettingsObject
 from pretix.base.signals import invoice_line_text, periodic_task
 from pretix.celery_app import app
 from pretix.helpers.database import OF_SELF, rolledback_transaction
@@ -144,27 +139,54 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 invoice.invoice_to += "\n" + pgettext("invoice", "VAT-ID: %s") % ia.vat_id
                 invoice.invoice_to_vat_id = ia.vat_id
 
-            cc = str(ia.country)
+            if invoice.event.settings.invoice_eu_currencies == 'True':
+                cc = str(ia.country)
+                if cc in EU_CURRENCIES and EU_CURRENCIES[cc] != invoice.event.currency:
+                    invoice.foreign_currency_display = EU_CURRENCIES[cc]
 
-            if cc in EU_CURRENCIES and EU_CURRENCIES[cc] != invoice.event.currency and invoice.event.settings.invoice_eu_currencies:
-                invoice.foreign_currency_display = EU_CURRENCIES[cc]
-
+                    if settings.FETCH_ECB_RATES:
+                        rate = ExchangeRate.objects.filter(
+                            source='eu:ecb:eurofxref-daily',
+                            source_currency=invoice.event.currency,
+                            other_currency=invoice.foreign_currency_display,
+                            source_date__gt=now().date() - timedelta(days=7)
+                        ).first()
+                        if rate:
+                            invoice.foreign_currency_rate = rate.rate.quantize(Decimal('0.0001'), ROUND_HALF_UP)
+                            invoice.foreign_currency_rate_date = rate.source_date
+                            invoice.foreign_currency_source = 'eu:ecb:eurofxref-daily'
+                        else:
+                            rate_eur_to_event = ExchangeRate.objects.filter(
+                                source='eu:ecb:eurofxref-daily',
+                                source_currency='EUR',
+                                other_currency=invoice.event.currency,
+                                source_date__gt=now().date() - timedelta(days=7)
+                            ).first()
+                            rate_eur_to_wanted = ExchangeRate.objects.filter(
+                                source='eu:ecb:eurofxref-daily',
+                                source_currency='EUR',
+                                other_currency=invoice.foreign_currency_display,
+                                source_date__gt=now().date() - timedelta(days=7)
+                            ).first()
+                            if rate_eur_to_wanted and rate_eur_to_event:
+                                invoice.foreign_currency_rate = (
+                                    rate_eur_to_wanted.rate / rate_eur_to_event.rate
+                                ).quantize(Decimal('0.0001'), ROUND_HALF_UP)
+                                invoice.foreign_currency_rate_date = min(rate_eur_to_wanted.source_date, rate_eur_to_event.source_date)
+                                invoice.foreign_currency_source = 'eu:ecb:eurofxref-daily'
+            elif invoice.event.settings.invoice_eu_currencies == 'CZK' and invoice.event.currency != 'CZK':
+                invoice.foreign_currency_display = 'CZK'
                 if settings.FETCH_ECB_RATES:
-                    gs = GlobalSettingsObject()
-                    rates_date = gs.settings.get('ecb_rates_date', as_type=date)
-                    rates_dict = gs.settings.get('ecb_rates_dict', as_type=dict)
-                    convert = (
-                        rates_date and rates_dict and
-                        rates_date > (now() - timedelta(days=7)).date() and
-                        invoice.event.currency in rates_dict and
-                        invoice.foreign_currency_display in rates_dict
-                    )
-                    if convert:
-                        invoice.foreign_currency_rate = (
-                            Decimal(rates_dict[invoice.foreign_currency_display])
-                            / Decimal(rates_dict[invoice.event.currency])
-                        ).quantize(Decimal('0.0001'), ROUND_HALF_UP)
-                        invoice.foreign_currency_rate_date = rates_date
+                    rate = ExchangeRate.objects.filter(
+                        source='cz:cnb:rate-fixing-daily',
+                        source_currency=invoice.event.currency,
+                        other_currency=invoice.foreign_currency_display,
+                        source_date__gt=now().date() - timedelta(days=7)
+                    ).first()
+                    if rate:
+                        invoice.foreign_currency_rate = rate.rate.quantize(Decimal('0.0001'), ROUND_HALF_UP)
+                        invoice.foreign_currency_rate_date = rate.source_date
+                        invoice.foreign_currency_source = 'cz:cnb:rate-fixing-daily'
 
         except InvoiceAddress.DoesNotExist:
             ia = None
@@ -472,23 +494,6 @@ def build_preview_invoice_pdf(event):
                 )
 
         return event.invoice_renderer.generate(invoice)
-
-
-@receiver(signal=periodic_task)
-def fetch_ecb_rates(sender, **kwargs):
-    if not settings.FETCH_ECB_RATES:
-        return
-
-    gs = GlobalSettingsObject()
-    if gs.settings.ecb_rates_date == now().strftime("%Y-%m-%d"):
-        return
-
-    try:
-        date, rates = vat_moss.exchange_rates.fetch()
-        gs.settings.ecb_rates_date = date
-        gs.settings.ecb_rates_dict = json.dumps(rates, cls=DjangoJSONEncoder)
-    except urllib.error.URLError:
-        logger.exception('Could not retrieve rates from ECB')
 
 
 @receiver(signal=periodic_task)

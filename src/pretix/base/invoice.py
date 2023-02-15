@@ -50,6 +50,7 @@ from reportlab.platypus import (
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import Event, Invoice, Order, OrderPayment
+from pretix.base.services.currencies import SOURCE_NAMES
 from pretix.base.signals import register_invoice_renderers
 from pretix.base.templatetags.money import money_filter
 from pretix.helpers.reportlab import ThumbnailingImageReader
@@ -773,9 +774,10 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     Spacer(1, height=2 * mm),
                     Paragraph(
                         pgettext(
-                            'invoice', 'Using the conversion rate of 1:{rate} as published by the European Central Bank on '
+                            'invoice', 'Using the conversion rate of 1:{rate} as published by the {authority} on '
                                        '{date}, this corresponds to:'
                         ).format(rate=localize(self.invoice.foreign_currency_rate),
+                                 authority=SOURCE_NAMES.get(self.invoice.foreign_currency_source, "?"),
                                  date=date_format(self.invoice.foreign_currency_rate_date, "SHORT_DATE_FORMAT")),
                         self.stylesheet['Fineprint']
                     ),
@@ -787,10 +789,11 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             story.append(Spacer(1, 5 * mm))
             story.append(Paragraph(
                 pgettext(
-                    'invoice', 'Using the conversion rate of 1:{rate} as published by the European Central Bank on '
+                    'invoice', 'Using the conversion rate of 1:{rate} as published by the {authority} on '
                                '{date}, the invoice total corresponds to {total}.'
                 ).format(rate=localize(self.invoice.foreign_currency_rate),
                          date=date_format(self.invoice.foreign_currency_rate_date, "SHORT_DATE_FORMAT"),
+                         authority=SOURCE_NAMES.get(self.invoice.foreign_currency_source, "?"),
                          total=fmt(foreign_total)),
                 self.stylesheet['Fineprint']
             ))

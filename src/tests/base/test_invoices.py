@@ -37,15 +37,14 @@ from datetime import date, timedelta
 from decimal import Decimal
 
 import pytest
-from django.core.serializers.json import DjangoJSONEncoder
 from django.db import DatabaseError, transaction
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.models import (
-    Event, Invoice, InvoiceAddress, Item, ItemVariation, Order, OrderPosition,
-    Organizer,
+    Event, ExchangeRate, Invoice, InvoiceAddress, Item, ItemVariation, Order,
+    OrderPosition, Organizer,
 )
 from pretix.base.models.orders import OrderFee
 from pretix.base.services.invoices import (
@@ -53,7 +52,6 @@ from pretix.base.services.invoices import (
     invoice_pdf_task, invoice_qualified, regenerate_invoice,
 )
 from pretix.base.services.orders import OrderChangeManager
-from pretix.base.settings import GlobalSettingsObject
 
 
 @pytest.fixture
@@ -102,9 +100,7 @@ def env():
             positionid=3,
             canceled=True
         )
-        gs = GlobalSettingsObject()
-        gs.settings.ecb_rates_date = date.today()
-        gs.settings.ecb_rates_dict = json.dumps({
+        rates = {
             "USD": "1.1648",
             "RON": "4.5638",
             "CZK": "26.024",
@@ -117,7 +113,11 @@ def env():
             "PLN": "4.2408",
             "GBP": "0.89350",
             "SEK": "9.5883"
-        }, cls=DjangoJSONEncoder)
+        }
+        for currency, rate in rates.items():
+            ExchangeRate.objects.create(source_date=date.today(), source='eu:ecb:eurofxref-daily', source_currency='EUR', other_currency=currency, rate=rate)
+        ExchangeRate.objects.create(source_date=date.today(), source='cz:cnb:rate-fixing-daily', source_currency='EUR',
+                                    other_currency='CZK', rate=Decimal('25.0000'))
         yield event, o
 
 
@@ -232,6 +232,7 @@ def test_reverse_charge_note(env):
     assert inv.foreign_currency_display == "PLN"
     assert inv.foreign_currency_rate == Decimal("4.2408")
     assert inv.foreign_currency_rate_date == date.today()
+    assert inv.foreign_currency_source == 'eu:ecb:eurofxref-daily'
 
 
 @pytest.mark.django_db
@@ -271,8 +272,7 @@ def test_custom_tax_note(env):
 @pytest.mark.django_db
 def test_reverse_charge_foreign_currency_data_too_old(env):
     event, order = env
-    gs = GlobalSettingsObject()
-    gs.settings.ecb_rates_date = date.today() - timedelta(days=14)
+    ExchangeRate.objects.update(source_date=date.today() - timedelta(days=14))
 
     tr = event.tax_rules.first()
     tr.eu_reverse_charge = True
@@ -296,9 +296,9 @@ def test_reverse_charge_foreign_currency_data_too_old(env):
 
 
 @pytest.mark.django_db
-def test_reverse_charge_foreign_currency_disabvled(env):
+def test_reverse_charge_foreign_currency_disabled(env):
     event, order = env
-    event.settings.invoice_eu_currencies = False
+    event.settings.invoice_eu_currencies = 'False'
 
     tr = event.tax_rules.first()
     tr.eu_reverse_charge = True
@@ -319,6 +319,41 @@ def test_reverse_charge_foreign_currency_disabvled(env):
     assert "reverse charge" in inv.additional_text.lower()
     assert inv.foreign_currency_rate is None
     assert inv.foreign_currency_rate_date is None
+
+
+@pytest.mark.django_db
+def test_invoice_indirect_currency_conversion(env):
+    event, order = env
+    event.currency = 'SEK'
+    event.save()
+
+    event.settings.set('invoice_language', 'en')
+    InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street', zipcode='12345', city='Warsaw',
+                                  country=Country('PL'), vat_id='PL123456780', vat_id_validated=True, order=order,
+                                  is_business=True)
+
+    inv = generate_invoice(order)
+    assert inv.foreign_currency_display == "PLN"
+    assert inv.foreign_currency_rate == Decimal("0.4423")
+    assert inv.foreign_currency_rate_date == date.today()
+    assert inv.foreign_currency_source == 'eu:ecb:eurofxref-daily'
+
+
+@pytest.mark.django_db
+def test_invoice_czk_currency_conversion(env):
+    event, order = env
+    event.settings.invoice_eu_currencies = 'CZK'
+
+    event.settings.set('invoice_language', 'en')
+    InvoiceAddress.objects.create(company='Acme Company', street='221B Baker Street', zipcode='12345', city='Warsaw',
+                                  country=Country('PL'), vat_id='PL123456780', vat_id_validated=True, order=order,
+                                  is_business=True)
+
+    inv = generate_invoice(order)
+    assert inv.foreign_currency_display == "CZK"
+    assert inv.foreign_currency_rate == Decimal("25.0000")
+    assert inv.foreign_currency_rate_date == date.today()
+    assert inv.foreign_currency_source == 'cz:cnb:rate-fixing-daily'
 
 
 @pytest.mark.django_db
