@@ -62,6 +62,7 @@ from django.urls import reverse
 from django.utils import formats
 from django.utils.formats import date_format, get_format
 from django.utils.functional import cached_property
+from django.utils.html import conditional_escape
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext, gettext_lazy as _, ngettext
@@ -1126,7 +1127,7 @@ class OrderRefundView(OrderView):
 
         for p in payments:
             if p.payment_provider:
-                p.html_info = (p.payment_provider.payment_control_render_short(p) or "").strip()
+                p.html_info = conditional_escape(p.payment_provider.payment_control_render_short(p) or "").strip()
 
         return render(self.request, 'pretixcontrol/order/refund_choose.html', {
             'payments': payments,

@@ -796,17 +796,17 @@ class PaymentListExporter(ListExporter):
         payments = OrderPayment.objects.filter(
             order__event__in=self.events,
             state__in=form_data.get('payment_states', [])
-        ).order_by('created')
+        ).select_related('order').prefetch_related('order__event').order_by('created')
         refunds = OrderRefund.objects.filter(
             order__event__in=self.events,
             state__in=form_data.get('refund_states', [])
-        ).order_by('created')
+        ).select_related('order').prefetch_related('order__event').order_by('created')
 
         objs = sorted(list(payments) + list(refunds), key=lambda o: o.created)
 
         headers = [
             _('Event slug'), _('Order'), _('Payment ID'), _('Creation date'), _('Completion date'), _('Status'),
-            _('Status code'), _('Amount'), _('Payment method'), _('Comment'),
+            _('Status code'), _('Amount'), _('Payment method'), _('Comment'), _('Matching ID'), _('Payment details'),
         ]
         yield headers
 
@@ -819,6 +819,18 @@ class PaymentListExporter(ListExporter):
                 d2 = obj.execution_date.astimezone(tz).date().strftime('%Y-%m-%d')
             else:
                 d2 = ''
+            matching_id = ''
+            payment_details = ''
+            try:
+                if isinstance(obj, OrderPayment):
+                    matching_id = obj.payment_provider.matching_id(obj) or ''
+                    payment_details = obj.payment_provider.payment_control_render_short(obj)
+                elif isinstance(obj, OrderRefund):
+                    matching_id = obj.payment_provider.refund_matching_id(obj) or ''
+                    payment_details = obj.payment_provider.refund_control_render_short(obj)
+            except Exception:
+                pass
+
             row = [
                 obj.order.event.slug,
                 obj.order.code,
@@ -830,6 +842,8 @@ class PaymentListExporter(ListExporter):
                 obj.amount * (-1 if isinstance(obj, OrderRefund) else 1),
                 provider_names.get(obj.provider, obj.provider),
                 obj.comment if isinstance(obj, OrderRefund) else "",
+                matching_id,
+                payment_details,
             ]
             yield row
 
