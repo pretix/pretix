@@ -1541,19 +1541,24 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             amount=amount,
             provider=payment.provider
         )
+        payment.order.log_action('pretix.event.order.refund.created', {
+            'local_id': r.local_id,
+            'provider': r.provider,
+        }, user=self.request.user if self.request.user.is_authenticated else None, auth=self.request.auth)
 
         try:
             r.payment_provider.execute_refund(r)
         except PaymentException as e:
             r.state = OrderRefund.REFUND_STATE_FAILED
             r.save()
+            payment.order.log_action('pretix.event.order.refund.failed', {
+                'local_id': r.local_id,
+                'provider': r.provider,
+                'error': str(e)
+            })
             return Response({'detail': 'External error: {}'.format(str(e))},
                             status=status.HTTP_400_BAD_REQUEST)
         else:
-            payment.order.log_action('pretix.event.order.refund.created', {
-                'local_id': r.local_id,
-                'provider': r.provider,
-            }, user=self.request.user if self.request.user.is_authenticated else None, auth=self.request.auth)
             if payment.order.pending_sum > 0:
                 if mark_refunded:
                     mark_order_refunded(payment.order,

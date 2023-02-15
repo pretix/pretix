@@ -1071,6 +1071,12 @@ class OrderRefundView(OrderView):
                     else:
                         any_success = True
 
+                        if r.state == OrderRefund.REFUND_STATE_DONE:
+                            self.order.log_action('pretix.event.order.refund.done', {
+                                'local_id': r.local_id,
+                                'provider': r.provider,
+                            }, user=self.request.user)
+
                 if any_success:
                     if self.start_form.cleaned_data.get('action') == 'mark_refunded':
                         if self.order.cancel_allowed():
