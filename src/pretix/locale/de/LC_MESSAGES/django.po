@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 12:25+0000\n"
-"PO-Revision-Date: 2023-02-13 15:07+0000\n"
+"PO-Revision-Date: 2023-02-15 12:37+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -2132,10 +2132,8 @@ msgid "Payment method"
 msgstr "Zahlungsmethode"
 
 #: pretix/base/exporters/orderlist.py:809
-#, fuzzy
-#| msgid "Payment matching IDs"
 msgid "Matching ID"
-msgstr "IDs zur Zahlungszuordnung"
+msgstr "ID zur Zuordnung"
 
 #: pretix/base/exporters/orderlist.py:809
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
@@ -2883,32 +2881,22 @@ msgid "Included taxes"
 msgstr "Enthaltene Umsatzsteuer"
 
 #: pretix/base/invoice.py:777
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "Using the conversion rate of 1:{rate} as published by the European "
-#| "Central Bank on {date}, this corresponds to:"
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
-msgstr ""
-"Mit dem am {date} von der Europäischen Zentralbank veröffentlichten "
-"Wechselkurs von 1:{rate} entspricht dies:"
+msgstr "Mit dem Wechselkurs von 1:{rate} ({authority}, {date}) entspricht dies:"
 
 #: pretix/base/invoice.py:792
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "Using the conversion rate of 1:{rate} as published by the European "
-#| "Central Bank on {date}, the invoice total corresponds to {total}."
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
 msgstr ""
-"Mit dem am {date} von der Europäischen Zentralbank veröffentlichten "
-"Wechselkurs von 1:{rate} entspricht der Rechnungsbetrag {total}."
+"Mit dem Wechselkurs von 1:{rate} ({authority}, {date}) entspricht der "
+"Rechnungsbetrag {total}."
 
 #: pretix/base/invoice.py:806
 msgid "Modern Invoice Renderer (pretix 2.7)"
@@ -6964,14 +6952,12 @@ msgid "This ticket has already been redeemed."
 msgstr "Das Ticket wurde bereits eingelöst."
 
 #: pretix/base/services/currencies.py:37 pretix/base/services/currencies.py:38
-#, fuzzy
-#| msgid "European Union"
 msgid "European Central Bank"
-msgstr "Europäische Union"
+msgstr "Europäische Zentralbank"
 
 #: pretix/base/services/currencies.py:39
 msgid "Czech National Bank"
-msgstr ""
+msgstr "Tschechische Nationalbank"
 
 #: pretix/base/services/export.py:86 pretix/base/services/export.py:154
 #: pretix/base/services/export.py:209
@@ -7801,10 +7787,8 @@ msgstr ""
 "einzeln angezeigt."
 
 #: pretix/base/settings.py:384
-#, fuzzy
-#| msgid "Show event end date"
 msgid "Show exchange rates"
-msgstr "Zeige Veranstaltungsende"
+msgstr "Wechselkurse anzeigen"
 
 #: pretix/base/settings.py:387 pretix/base/settings.py:395
 #: pretix/control/forms/item.py:529
@@ -7816,12 +7800,16 @@ msgid ""
 "Based on European Central Bank daily rates, whenever the invoice recipient "
 "is in an EU country that uses a different currency."
 msgstr ""
+"Basierend auf den Kursen der Europäischen Zentralbank, immer wenn der "
+"Rechnungsempfänger in einem EU-Land ist, das eine andere Währung verwendet."
 
 #: pretix/base/settings.py:390 pretix/base/settings.py:398
 msgid ""
 "Based on Czech National Bank daily rates, whenever the invoice amount is not "
 "in CZK."
 msgstr ""
+"Basierend auf den Kursen der Tschechischen Nationalbank, immer wenn der "
+"Rechnungsbetrag nicht in CZK ist."
 
 #: pretix/base/settings.py:408
 msgid "Require invoice address"
