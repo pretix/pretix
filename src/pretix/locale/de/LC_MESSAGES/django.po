@@ -21995,7 +21995,7 @@ msgstr "Geben Sie den angezeigten Code hier ein:"
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:83
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_webauthn.html:19
 msgid "Require second factor for future logins"
-msgstr "Zeiten Faktor für zukünftige Anmeldungen erfordern"
+msgstr "Zweiten Faktor für zukünftige Anmeldungen erfordern"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_webauthn.html:11
 msgid ""
