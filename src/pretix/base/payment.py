@@ -821,11 +821,11 @@ class BasePaymentProvider:
         """
         Will be called if the *event administrator* performs an action on the payment. Should
         return a very short version of the payment method. Usually, this should return e.g.
-        a transaction ID or account identifier, but no information on status, dates, etc.
+        an account identifier of the payee, but no information on status, dates, etc.
 
         The default implementation falls back to ``payment_presale_render``.
 
-        :param order: The order object
+        :param payment: The payment object
         """
         return self.payment_presale_render(payment)
 
@@ -835,6 +835,18 @@ class BasePaymentProvider:
 
         It should return HTML code containing information regarding the current refund
         status and, if applicable, next steps.
+
+        The default implementation returns an empty string.
+
+        :param refund: The refund object
+        """
+        return ''
+
+    def refund_control_render_short(self, refund: OrderRefund) -> str:
+        """
+        Will be called if the *event administrator* performs an action on the refund. Should
+        return a very short description of the refund method. Usually, this should return e.g.
+        an account identifier of the refund recipient, but no information on status, dates, etc.
 
         The default implementation returns an empty string.
 
@@ -1290,6 +1302,14 @@ class GiftCardPayment(BasePaymentProvider):
             }
             return template.render(ctx)
 
+    def payment_control_render_short(self, payment: OrderPayment) -> str:
+        d = payment.info_data
+        return d.get('gift_card_secret', self.public_name)
+
+    def refund_control_render_short(self, refund: OrderRefund) -> str:
+        d = refund.info_data
+        return d.get('gift_card_secret', d.get('gift_card_code', self.public_name))
+
     def api_payment_details(self, payment: OrderPayment):
         from .models import GiftCard
         try:
@@ -1464,7 +1484,7 @@ class GiftCardPayment(BasePaymentProvider):
         )
         refund.info_data = {
             'gift_card': gc.pk,
-            'gift_card_code': gc.secret,
+            'gift_card_secret': gc.secret,
             'transaction_id': trans.pk,
         }
         refund.done()
