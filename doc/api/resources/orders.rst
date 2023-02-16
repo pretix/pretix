@@ -980,7 +980,7 @@ Creating orders
           "street": "Sesam Street 12",
           "zipcode": "12345",
           "city": "Sample City",
-          "country": "UK",
+          "country": "GB",
           "state": "",
           "internal_reference": "",
           "vat_id": ""
