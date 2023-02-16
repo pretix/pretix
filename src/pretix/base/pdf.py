@@ -777,6 +777,18 @@ class Renderer:
         qr_y = float(o['bottom']) * mm
         renderPDF.draw(d, canvas, qr_x, qr_y)
 
+        # Add QR content + PDF issuer as a hidden string (fully transparent & off page)
+        # This helps automated processing of the PDF file by 3rd parties, e.g. when checking tickets for resale
+        data = {
+            "issuer": settings.SITE_URL,
+            o.get('content', 'secret'): content
+        }
+        canvas.saveState()
+        canvas.setFont('Open Sans', 1)
+        canvas.setFillColorRGB(0, 0, 0, 0)
+        canvas.drawString(-1000 * mm, -1000 * mm, json.dumps(data, sort_keys=True))
+        canvas.restoreState()
+
     def _get_ev(self, op, order):
         return op.subevent or order.event
 
