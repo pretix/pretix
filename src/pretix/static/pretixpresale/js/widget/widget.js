@@ -330,7 +330,7 @@ Vue.component('pricebox', {
         },
         priceline: function () {
             if (this.price.gross === "0.00") {
-                if (this.mandatory_priced_addons) {
+                if (this.mandatory_priced_addons && !this.original_price) {
                     return "\xA0"; // nbsp, because an empty string would cause the HTML element to collapse
                 }
                 return strings.free;
