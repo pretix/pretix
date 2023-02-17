@@ -456,6 +456,24 @@ var form_handlers = function (el) {
         dependency.on("change", update);
     });
 
+    el.find("div.scrolling-choice:not(.no-search)").each(function () {
+        if ($(this).find("input[type=text]").length > 0) {
+            return;
+        }
+        var $menu = $("<div>").addClass("choice-options-menu");
+        var $inp_search = $("<input>").addClass("form-control").attr("type", "text").attr("placeholder", gettext("Search query"));
+        $menu.append($inp_search);
+        $(this).prepend($menu);
+
+        $inp_search.on("keyup change", function (e) {
+            var term = $inp_search.val().toLowerCase();
+
+            $(this).closest(".scrolling-choice").find("div.radio").each(function () {
+                $(this).toggleClass("hidden", !$(this).text().toLowerCase().includes(term));
+            })
+        })
+    });
+
     el.find("div.scrolling-multiple-choice").each(function () {
         if ($(this).find(".choice-options-all").length > 0) {
             return;

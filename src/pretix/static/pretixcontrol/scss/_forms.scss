@@ -433,6 +433,9 @@ div.scrolling-multiple-choice, div.scrolling-choice {
       height: auto;
       padding: 2px 6px;
     }
+    .form-control:first-child {
+      margin: 0;
+    }
   }
 }
 table td > .checkbox {
