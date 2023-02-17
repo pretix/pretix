@@ -51,8 +51,8 @@ from django.db.models import Exists, OuterRef, Q, Subquery
 from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
-from pypdf import PdfMerger, PdfReader, PdfWriter, Transformation
-from pypdf.generic import RectangleObject
+from PyPDF2 import PdfMerger, PdfReader, PdfWriter, Transformation
+from PyPDF2.generic import RectangleObject
 from reportlab.lib import pagesizes
 from reportlab.lib.units import mm
 from reportlab.pdfgen import canvas

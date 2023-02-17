@@ -212,6 +212,7 @@ setup(
         'pycountry',
         'pycparser==2.21',
         'pycryptodome==3.17.*',
+        'PyPDF2==2.12.*',   # until https://github.com/py-pdf/pypdf/issues/1640 is fixed
         'pypdf==3.4.*',
         'python-bidi==0.4.*',  # Support for Arabic in reportlab
         'python-dateutil==2.8.*',
