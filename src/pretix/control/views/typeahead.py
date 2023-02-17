@@ -815,7 +815,7 @@ def item_meta_values(request, organizer, event):
                 'limit_events__id', flat=True
             )
         )
-        var_matches = matches.filter(
+        var_matches = var_matches.filter(
             variation__item__event__id__in=request.user.teams.filter(can_change_items=True).values_list(
                 'limit_events__id', flat=True
             )
