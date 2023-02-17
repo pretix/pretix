@@ -35,6 +35,7 @@
 import calendar
 import hashlib
 import sys
+import urllib.parse
 from collections import defaultdict
 from datetime import date, datetime, timedelta
 from decimal import Decimal
@@ -423,9 +424,11 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         elif request.GET.get('iframe', '') == '1' and 'take_cart_id' in request.GET:
             # Widget just opened, a cart already exists. Let's to a stupid redirect to check if cookies are disabled
             get_or_create_cart_id(request)
-            return redirect(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?require_cookie=true&cart_id={}'.format(
-                request.GET.get('take_cart_id')
-            ))
+            return redirect(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urllib.parse.urlencode({
+                'require_cookie': 'true',
+                'cart_id': request.GET.get('take_cart_id'),
+                **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
+            }))
         elif request.GET.get('iframe', '') == '1' and len(self.request.GET.get('widget_data', '{}')) > 3:
             # We've been passed data from a widget, we need to create a cart session to store it.
             get_or_create_cart_id(request)
@@ -434,10 +437,11 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             r = render(request, 'pretixpresale/event/cookies.html', {
                 'url': eventreverse(
                     request.event, "presale:event.index", kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''}
-                ) + (
-                    "?src=widget&take_cart_id={}".format(request.GET.get('cart_id'))
-                    if "cart_id" in request.GET else ""
-                )
+                ) + "?" + urllib.parse.urlencode({
+                    "src": "widget",
+                    **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
+                    **({"take_cart_id": request.GET.get('cart_id')} if request.GET.get('cart_id') else {}),
+                })
             })
             r._csp_ignore = True
             return r

@@ -35,6 +35,7 @@
 import json
 import mimetypes
 import os
+import urllib
 from decimal import Decimal
 from urllib.parse import quote
 
@@ -90,16 +91,22 @@ class CartActionMixin:
             if 'cart_namespace' in self.kwargs:
                 kwargs['cart_namespace'] = self.kwargs['cart_namespace']
             u = eventreverse(self.request.event, 'presale:event.index', kwargs=kwargs)
-        if '?' in u:
-            u += '&require_cookie=true'
-        else:
-            u += '?require_cookie=true'
+
+        query = {'require_cookie': 'true'}
+
+        if 'locale' in self.request.GET:
+            query['locale'] = self.request.GET['locale']
         disclose_cart_id = (
             'iframe' in self.request.GET or settings.SESSION_COOKIE_NAME not in self.request.COOKIES
         ) and self.kwargs.get('cart_namespace')
         if disclose_cart_id:
             cart_id = get_or_create_cart_id(self.request)
-            u += '&cart_id={}'.format(cart_id)
+            query['cart_id'] = cart_id
+
+        if '?' in u:
+            u += '&' + urllib.parse.urlencode(query)
+        else:
+            u += '?' + urllib.parse.urlencode(query)
         return u
 
     def get_success_url(self, value=None):
@@ -489,6 +496,8 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
         u = super().get_check_url(task_id, ajax)
         if "next" in self.request.GET:
             u += "&next=" + quote(self.request.GET.get('next'))
+        if "locale" in self.request.GET and "locale=" not in u:
+            u += "&locale=" + quote(self.request.GET.get('locale'))
         if "next_error" in self.request.GET:
             u += "&next_error=" + quote(self.request.GET.get('next_error'))
         if ajax:
