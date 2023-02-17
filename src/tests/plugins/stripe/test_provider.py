@@ -85,6 +85,13 @@ class MockedCharge():
     id = 'ch_123345345'
     refunds = MockedRefunds()
 
+    def __str__(self):
+        return json.dumps({
+            'id': self.id,
+            'status': self.status,
+            'paid': self.paid,
+        })
+
     def refresh(self):
         pass
 

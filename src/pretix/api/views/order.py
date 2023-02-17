@@ -1539,7 +1539,8 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
             source=OrderRefund.REFUND_SOURCE_ADMIN,
             state=OrderRefund.REFUND_STATE_CREATED,
             amount=amount,
-            provider=payment.provider
+            provider=payment.provider,
+            info='{}',
         )
         payment.order.log_action('pretix.event.order.refund.created', {
             'local_id': r.local_id,
