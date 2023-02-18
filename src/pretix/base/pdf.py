@@ -455,6 +455,11 @@ DEFAULT_VARIABLES = OrderedDict((
             "TIME_FORMAT"
         ) if op.valid_until else ""
     }),
+    ("medium_identifier", {
+        "label": _("Physical medium ID"),
+        "editor_sample": _("ABC1234DEF4567"),
+        "evaluate": lambda op, order, ev: op.physical_medium.identifier if hasattr(op, 'physical_medium') else "",
+    }),
     ("seat", {
         "label": _("Seat: Full name"),
         "editor_sample": _("Ground floor, Row 3, Seat 4"),

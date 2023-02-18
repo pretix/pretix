@@ -142,6 +142,7 @@ class Customer(LoggedModel):
         self.save()
         self.all_logentries().update(data={}, shredded=True)
         self.orders.all().update(customer=None)
+        self.physical_media.all().update(customer=None)
         self.memberships.all().update(attendee_name_parts=None)
         self.attendee_profiles.all().delete()
         self.invoice_addresses.all().delete()

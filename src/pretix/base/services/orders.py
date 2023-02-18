@@ -62,6 +62,7 @@ from pretix.api.models import OAuthApplication
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_email_context
 from pretix.base.i18n import get_language_without_region, language
+from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
     CartPosition, Device, Event, GiftCard, Item, ItemVariation, Membership,
     Order, OrderPayment, OrderPosition, Quota, Seat, SeatCategoryMapping, User,
@@ -2911,3 +2912,23 @@ def signal_listener_issue_memberships(sender: Event, order: Order, **kwargs):
     for p in order.positions.all():
         if p.item.grant_membership_type_id:
             create_membership(order.customer, p)
+
+
+@receiver(order_placed, dispatch_uid="pretixbase_order_placed_media")
+@receiver(order_changed, dispatch_uid="pretixbase_order_changed_media")
+@transaction.atomic()
+def signal_listener_issue_media(sender: Event, order: Order, **kwargs):
+    from pretix.base.models import PhysicalMedium
+
+    for p in order.positions.all():
+        if p.item.media_policy in (Item.MEDIA_POLICY_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW):
+            mt = MEDIA_TYPES[p.item.media_type]
+            if mt.medium_created_by_server and not hasattr(p, 'physical_medium'):
+                PhysicalMedium.objects.create(
+                    organizer=sender.organizer,
+                    type=p.item.media_type,
+                    identifier=mt.generate_identifier(sender.organizer),
+                    active=True,
+                    customer=order.customer,
+                    linked_orderposition=p,
+                )

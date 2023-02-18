@@ -169,6 +169,41 @@ DEFAULTS = {
                         "was not logged in during the purchase.")
         )
     },
+    'media_active': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Use re-usable physical media"),
+        )
+    },
+    'media_type_barcode_identifier_length': {
+        'default': 24,
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'serializer_kwargs': dict(
+            validators=[
+                MinValueValidator(12),
+                MaxValueValidator(64),
+            ]
+        ),
+        'form_kwargs': dict(
+            label=_('Length of barcodes'),
+            validators=[
+                MinValueValidator(12),
+                MaxValueValidator(64),
+            ],
+            required=True,
+            widget=forms.NumberInput(
+                attrs={
+                    'min': '12',
+                    'max': '64',
+                },
+            ),
+        )
+    },
     'max_items_per_order': {
         'default': '10',
         'type': int,
