@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from django.core.exceptions import ValidationError
 from django.http import Http404, HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
@@ -39,7 +40,7 @@ class DownloadView(TemplateView):
                 if o.session_key != self.request.session.session_key:
                     raise Http404()
             return o
-        except ValueError:   # Invalid URLs
+        except (ValueError, ValidationError):   # Invalid URLs
             raise Http404()
 
     def get(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
