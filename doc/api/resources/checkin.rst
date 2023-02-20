@@ -213,8 +213,8 @@ Checking a ticket in
    * ``revoked`` - Ticket code has been revoked.
    * ``error`` - Internal error.
 
-   In case of reason ``rules``, there might be an additional response field ``reason_explanation`` with a human-readable
-   description of the violated rules. However, that field can also be missing or be ``null``.
+   In case of reason ``rules`` and ``invalid_time``, there might be an additional response field ``reason_explanation``
+   with a human-readable description of the violated rules. However, that field can also be missing or be ``null``.
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :statuscode 201: no error
