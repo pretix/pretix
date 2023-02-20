@@ -245,7 +245,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                         Prefetch('meta_values', to_attr='meta_values_cached', queryset=SubEventMetaValue.objects.select_related('property'))
                     )),
                     Prefetch('addons', opq.select_related('item', 'variation', 'seat')),
-                    'physical_medium',
+                    'linked_media',
                 ).select_related('seat', 'addon_to', 'addon_to__seat')
             )
         else:
@@ -1006,7 +1006,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
                     Prefetch('meta_values', to_attr='meta_values_cached',
                              queryset=SubEventMetaValue.objects.select_related('property'))
                 )),
-                'physical_medium',
+                'linked_media',
                 Prefetch('order', self.request.event.orders.select_related('invoice_address').prefetch_related(
                     Prefetch(
                         'positions',

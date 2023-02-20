@@ -39,7 +39,7 @@ def second_team(organizer, event):
 TEST_TEAM_RES = {
     'id': 1, 'name': 'Test-Team', 'all_events': True, 'limit_events': [], 'can_create_events': True,
     'can_change_teams': True, 'can_change_organizer_settings': True, 'can_manage_gift_cards': True,
-    'can_manage_customers': True,
+    'can_manage_customers': True, 'can_manage_reusable_media': True,
     'can_change_event_settings': True, 'can_change_items': True, 'can_view_orders': True, 'can_change_orders': True,
     'can_view_vouchers': True, 'can_change_vouchers': True, 'can_checkin_orders': False
 }
@@ -47,7 +47,7 @@ TEST_TEAM_RES = {
 SECOND_TEAM_RES = {
     'id': 1, 'name': 'User team', 'all_events': False, 'limit_events': ['dummy'],
     'can_create_events': False,
-    'can_manage_customers': False,
+    'can_manage_customers': False, 'can_manage_reusable_media': True,
     'can_change_teams': False, 'can_change_organizer_settings': False, 'can_manage_gift_cards': False,
     'can_change_event_settings': False, 'can_change_items': False, 'can_view_orders': False, 'can_change_orders': False,
     'can_view_vouchers': False, 'can_change_vouchers': False, 'can_checkin_orders': False

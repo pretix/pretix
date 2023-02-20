@@ -62,9 +62,9 @@ from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
 from pretix.base.models.tax import TaxedPrice
-from ..media import MEDIA_TYPES
 
 from ...helpers.images import ImageSizeValidator
+from ..media import MEDIA_TYPES
 from .event import Event, SubEvent
 
 

@@ -20,82 +20,100 @@
 # <https://www.gnu.org/licenses/>.
 #
 from django.db import models
+from django.db.models import Q
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager
 
 from pretix.base.media import MEDIA_TYPES
+from pretix.base.models import LoggedModel
 from pretix.base.models.customers import Customer
 from pretix.base.models.giftcards import GiftCard
 from pretix.base.models.orders import OrderPosition
 from pretix.base.models.organizer import Organizer
 
 
-class PhysicalMediumQuerySet(models.QuerySet):
+class ReusableMediumQuerySet(models.QuerySet):
 
     def active(self, ev):
         return self.filter(
+            Q(expires__isnull=True) | Q(expires__gte=now()),
             active=True,
-            expires__gte=now(),
         )
 
 
-class PhysicalMediumQuerySetManager(ScopedManager(organizer='organizer').__class__):
+class ReusableMediumQuerySetManager(ScopedManager(organizer='organizer').__class__):
     def __init__(self):
         super().__init__()
-        self._queryset_class = PhysicalMediumQuerySet
+        self._queryset_class = ReusableMediumQuerySet
 
     def active(self, ev):
         return self.get_queryset().active(ev)
 
 
-class PhysicalMedium(models.Model):
+class ReusableMedium(LoggedModel):
     id = models.BigAutoField(primary_key=True)
     created = models.DateTimeField(auto_now_add=True)
     updated = models.DateTimeField(auto_now=True)
 
     organizer = models.ForeignKey(
         Organizer,
-        related_name='physical_media',
+        related_name='reusable_media',
         on_delete=models.PROTECT
     )
 
     type = models.CharField(
-        max_length=100,
+        verbose_name=pgettext_lazy('reusable_medium', 'Media type'),
         choices=((k, v) for k, v in MEDIA_TYPES.items()),
+        max_length=100,
     )
     identifier = models.CharField(
         max_length=200,
+        verbose_name=pgettext_lazy('reusable_medium', 'Identifier'),
     )
 
     active = models.BooleanField(
         verbose_name=_('Active'),
         default=True
     )
-    expires = models.DateTimeField(null=True)
+    expires = models.DateTimeField(
+        verbose_name=_('Expiration date'),
+        null=True, blank=True
+    )
 
     customer = models.ForeignKey(
         Customer,
-        related_name='physical_media',
+        null=True, blank=True,
+        related_name='reusable_media',
         on_delete=models.SET_NULL
     )
-    linked_orderposition = models.OneToOneField(  # TODO: OneToOne or ForeignKey?
+    linked_orderposition = models.ForeignKey(
         OrderPosition,
-        related_name='physical_medium',
+        null=True, blank=True,
+        related_name='linked_media',
         on_delete=models.SET_NULL
     )
-    linked_giftcard = models.OneToOneField(  # TODO: OneToOne or ForeignKey?
+    linked_giftcard = models.ForeignKey(
         GiftCard,
-        related_name='physical_medium',
+        null=True, blank=True,
+        related_name='linked_media',
         on_delete=models.SET_NULL
     )
 
-    objects = PhysicalMediumQuerySetManager()
+    info = models.JSONField(
+        default=dict
+    )
+
+    objects = ReusableMediumQuerySetManager()
 
     @cached_property
     def media_type(self):
         return MEDIA_TYPES[self.type]
+
+    @property
+    def is_expired(self):
+        return self.expires and self.expires > now()
 
     class Meta:
         unique_together = (("identifier", "type", "organizer"),)

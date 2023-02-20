@@ -42,6 +42,7 @@ from django.db.models import Q
 from django.forms import inlineformset_factory
 from django.forms.utils import ErrorDict
 from django.utils.crypto import get_random_string
+from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelMultipleChoiceField
@@ -62,7 +63,7 @@ from pretix.base.forms.questions import (
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
     Customer, Device, EventMetaProperty, Gate, GiftCard, Membership,
-    MembershipType, Organizer, Team,
+    MembershipType, Organizer, ReusableMedium, Team,
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.organizer import OrganizerFooterLink
@@ -208,6 +209,7 @@ class TeamForm(forms.ModelForm):
         fields = ['name', 'all_events', 'limit_events', 'can_create_events',
                   'can_change_teams', 'can_change_organizer_settings',
                   'can_manage_gift_cards', 'can_manage_customers',
+                  'can_manage_reusable_media',
                   'can_change_event_settings', 'can_change_items',
                   'can_view_orders', 'can_change_orders', 'can_checkin_orders',
                   'can_view_vouchers', 'can_change_vouchers']
@@ -389,6 +391,9 @@ class OrganizerSettingsForm(SettingsForm):
         'cookie_consent_dialog_text_secondary',
         'cookie_consent_dialog_button_yes',
         'cookie_consent_dialog_button_no',
+        'reusable_media_active',
+        'reusable_media_type_barcode',
+        'reusable_media_type_barcode_identifier_length',
     ]
 
     organizer_logo_image = ExtFileField(
@@ -431,6 +436,18 @@ class OrganizerSettingsForm(SettingsForm):
             ))
             for k, v in PERSON_NAME_TITLE_GROUPS.items()
         ]
+        self.fields['reusable_media_active'].label = mark_safe(
+            conditional_escape(self.fields['reusable_media_active'].label) +
+            ' ' +
+            '<span class="label label-info">{}</span>'.format(_('experimental'))
+        )
+        self.fields['reusable_media_active'].help_text = mark_safe(
+            conditional_escape(self.fields['reusable_media_active'].help_text) +
+            ' ' +
+            '<br/><span class="fa fa-flask"></span> ' +
+            _('This feature is currently in an experimental stage. It only supports very limited use cases and might '
+              'change at any point.')
+        )
 
 
 class MailSettingsForm(SettingsForm):
@@ -623,6 +640,55 @@ class GiftCardUpdateForm(forms.ModelForm):
         widgets = {
             'expires': SplitDateTimePickerWidget,
             'conditions': forms.Textarea(attrs={"rows": 2})
+        }
+
+
+class ReusableMediumUpdateForm(forms.ModelForm):
+    error_messages = {
+        'duplicate': _("An medium with this type and identifier is already registered."),
+    }
+
+    class Meta:
+        model = ReusableMedium
+        fields = ['active', 'expires']
+        field_classes = {
+            'expires': SplitDateTimeField
+        }
+        widgets = {
+            'expires': SplitDateTimePickerWidget,
+        }
+
+    def clean(self):
+        identifier = self.cleaned_data.get('identifier')
+        type = self.cleaned_data.get('type')
+
+        if identifier is not None and type is not None:
+            try:
+                self.instance.organizer.reusable_media.exclude(pk=self.instance.pk).get(
+                    identifier=identifier,
+                    type=type,
+                )
+            except ReusableMedium.DoesNotExist:
+                pass
+            else:
+                raise forms.ValidationError(
+                    self.error_messages['duplicate'],
+                    code='duplicate',
+                )
+
+        return self.cleaned_data
+
+
+class ReusableMediumCreateForm(ReusableMediumUpdateForm):
+
+    class Meta:
+        model = ReusableMedium
+        fields = ['active', 'type', 'identifier', 'expires']
+        field_classes = {
+            'expires': SplitDateTimeField
+        }
+        widgets = {
+            'expires': SplitDateTimePickerWidget,
         }
 
 

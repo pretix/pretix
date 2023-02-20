@@ -456,9 +456,9 @@ DEFAULT_VARIABLES = OrderedDict((
         ) if op.valid_until else ""
     }),
     ("medium_identifier", {
-        "label": _("Physical medium ID"),
+        "label": _("Reusable Medium ID"),
         "editor_sample": _("ABC1234DEF4567"),
-        "evaluate": lambda op, order, ev: op.physical_medium.identifier if hasattr(op, 'physical_medium') else "",
+        "evaluate": lambda op, order, ev: op.linked_media.all()[0].identifier if op.linked_media.all() else "",
     }),
     ("seat", {
         "label": _("Seat: Full name"),

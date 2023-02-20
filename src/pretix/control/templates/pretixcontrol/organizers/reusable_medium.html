@@ -1,0 +1,64 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load money %}
+{% block title %}
+    {% blocktrans trimmed with id=medium.identifier context "reusable_media" %}
+        Medium {{ id }}
+    {% endblocktrans %}
+{% endblock %}
+{% block inner %}
+    <h1>
+        {% blocktrans trimmed with id=medium.identifier context "reusable_media" %}
+            Medium {{ id }}
+        {% endblocktrans %}
+    </h1>
+    <div class="row">
+        <div class="col-md-10 col-xs-12">
+            <div class="panel panel-primary items">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Details" %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <form action="" method="post" class="row">
+                        {% csrf_token %}
+                        <dl class="dl-horizontal col-lg-6 col-sm-12">
+                            <dt>{% trans "Media type" context "reusable_medium" %}</dt>
+                            <dd>{{ medium.get_type_display }}</dd>
+                            <dt>{% trans "Identifier" context "reusable_medium" %}</dt>
+                            <dd><code>{{ medium.identifier }}</code></dd>
+                            <dt>{% trans "Status" %}</dt>
+                            <dd>
+                                {% if not medium.active %}
+                                    {% trans "disabled" %}
+                                {% elif not medium.is_expired %}
+                                    {% trans "expired" %}
+                                {% else %}
+                                    {% trans "active" %}
+                                {% endif %}
+                            </dd>
+                        </dl>
+                    </form>
+                    <div class="text-right">
+                        <a href="{% url "control:organizer.reusable_medium.edit" organizer=request.organizer.slug pk=medium.pk %}"
+                           class="btn btn-default">
+                            <i class="fa fa-edit"></i> {% trans "Edit" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Medium history" context "reusable_media" %}
+                    </h3>
+                </div>
+                {% include "pretixcontrol/includes/logs.html" with obj=medium %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

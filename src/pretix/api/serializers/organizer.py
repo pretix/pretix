@@ -183,7 +183,7 @@ class TeamSerializer(serializers.ModelSerializer):
             'id', 'name', 'all_events', 'limit_events', 'can_create_events', 'can_change_teams',
             'can_change_organizer_settings', 'can_manage_gift_cards', 'can_change_event_settings',
             'can_change_items', 'can_view_orders', 'can_change_orders', 'can_view_vouchers',
-            'can_change_vouchers', 'can_checkin_orders', 'can_manage_customers'
+            'can_change_vouchers', 'can_checkin_orders', 'can_manage_customers', 'can_manage_reusable_media'
         )
 
     def validate(self, data):
@@ -333,6 +333,9 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'cookie_consent_dialog_text_secondary',
         'cookie_consent_dialog_button_yes',
         'cookie_consent_dialog_button_no',
+        'reusable_media_active',
+        'reusable_media_type_barcode',
+        'reusable_media_type_barcode_identifier_length',
     ]
 
     def __init__(self, *args, **kwargs):

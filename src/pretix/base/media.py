@@ -42,6 +42,12 @@ class BaseMediaType:
         else:
             raise ValueError("Media type does not allow to generate identifier")
 
+    def is_active(self, organizer):
+        return organizer.settings.get(f'reusable_media_type_{self.identifier}_active', as_type=bool, default=False)
+
+    def __str__(self):
+        return str(self.verbose_name)
+
 
 class BarcodePlainMediaType(BaseMediaType):
     identifier = 'barcode'
@@ -52,7 +58,7 @@ class BarcodePlainMediaType(BaseMediaType):
 
     def generate_identifier(self, organizer):
         return get_random_string(
-            length=organizer.settings.media_type_barcode_identifier_length,
+            length=organizer.settings.reusable_media_type_barcode_identifier_length,
             # Exclude o,0,1,i to avoid confusion with bad fonts/printers
             # We use upper case to make collisions with ticket secrets less likely
             allowed_chars='ABCDEFGHJKLMNPQRSTUVWXYZ23456789'

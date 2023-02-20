@@ -73,7 +73,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Customer, Device, Gate, GiftCard, Invoice, LogEntry,
     Membership, MembershipType, Order, OrderPayment, OrderPosition, Organizer,
-    ScheduledOrganizerExport, Team, TeamInvite, User,
+    ReusableMedium, ScheduledOrganizerExport, Team, TeamInvite, User,
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
@@ -92,7 +92,7 @@ from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.exports import ScheduledOrganizerExportForm
 from pretix.control.forms.filter import (
     CustomerFilterForm, DeviceFilterForm, EventFilterForm, GiftCardFilterForm,
-    OrganizerFilterForm, TeamFilterForm,
+    OrganizerFilterForm, ReusableMediaFilterForm, TeamFilterForm,
 )
 from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
@@ -100,8 +100,9 @@ from pretix.control.forms.organizer import (
     EventMetaPropertyForm, GateForm, GiftCardCreateForm, GiftCardUpdateForm,
     MailSettingsForm, MembershipTypeForm, MembershipUpdateForm,
     OrganizerDeleteForm, OrganizerFooterLinkFormset, OrganizerForm,
-    OrganizerSettingsForm, OrganizerUpdateForm, SSOClientForm, SSOProviderForm,
-    TeamForm, WebHookForm,
+    OrganizerSettingsForm, OrganizerUpdateForm, ReusableMediumCreateForm,
+    ReusableMediumUpdateForm, SSOClientForm, SSOProviderForm, TeamForm,
+    WebHookForm,
 )
 from pretix.control.forms.rrule import RRuleForm
 from pretix.control.logdisplay import OVERVIEW_BANLIST
@@ -533,7 +534,7 @@ class OrganizerCreate(CreateView):
             organizer=form.instance, name=_('Administrators'),
             all_events=True, can_create_events=True, can_change_teams=True, can_manage_gift_cards=True,
             can_change_organizer_settings=True, can_change_event_settings=True, can_change_items=True,
-            can_manage_customers=True,
+            can_manage_customers=True, can_manage_reusable_media=True,
             can_view_orders=True, can_change_orders=True, can_view_vouchers=True, can_change_vouchers=True
         )
         t.members.add(self.request.user)
@@ -2737,4 +2738,102 @@ class CustomerAnonymizeView(OrganizerDetailViewMixin, OrganizerPermissionRequire
         return reverse('control:organizer.customer', kwargs={
             'organizer': self.request.organizer.slug,
             'customer': self.object.identifier,
+        })
+
+
+class ReusableMediaListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
+    model = ReusableMedium
+    template_name = 'pretixcontrol/organizers/reusable_media.html'
+    permission = 'can_manage_reusable_media'
+    context_object_name = 'media'
+
+    def get_queryset(self):
+        qs = self.request.organizer.reusable_media.select_related(
+            'customer', 'linked_orderposition', 'linked_orderposition__order', 'linked_orderposition__order__event',
+            'linked_giftcard'
+        )
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['filter_form'] = self.filter_form
+        return ctx
+
+    @cached_property
+    def filter_form(self):
+        return ReusableMediaFilterForm(data=self.request.GET, request=self.request)
+
+
+class ReusableMediumDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, TemplateView):
+    template_name = 'pretixcontrol/organizers/reusable_medium.html'
+    permission = 'can_manage_reusable_media'
+
+    @cached_property
+    def medium(self):
+        return get_object_or_404(
+            self.request.organizer.reusable_media,
+            pk=self.kwargs.get('pk')
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['medium'] = self.medium
+        return ctx
+
+
+class ReusableMediumCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
+    template_name = 'pretixcontrol/organizers/reusable_medium_edit.html'
+    permission = 'can_manage_reusable_media'
+    context_object_name = 'medium'
+    form_class = ReusableMediumCreateForm
+
+    def get_form_kwargs(self):
+        ctx = super().get_form_kwargs()
+        c = ReusableMedium(organizer=self.request.organizer)
+        ctx['instance'] = c
+        return ctx
+
+    def form_valid(self, form):
+        r = super().form_valid(form)
+        form.instance.log_action('pretix.reusable_medium.created', user=self.request.user, data={
+            k: getattr(form.instance, k)
+            for k in form.changed_data
+        })
+        messages.success(self.request, _('Your changes have been saved.'))
+        return r
+
+    def get_success_url(self):
+        return reverse('control:organizer.reusable_medium', kwargs={
+            'organizer': self.request.organizer.slug,
+            'pk': self.object.pk,
+        })
+
+
+class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
+    template_name = 'pretixcontrol/organizers/reusable_medium_edit.html'
+    permission = 'can_manage_reusable_media'
+    context_object_name = 'medium'
+    form_class = ReusableMediumUpdateForm
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(
+            self.request.organizer.reusable_media,
+            pk=self.kwargs.get('pk')
+        )
+
+    def form_valid(self, form):
+        if form.has_changed():
+            self.object.log_action('pretix.reusable_medium.changed', user=self.request.user, data={
+                k: getattr(self.object, k)
+                for k in form.changed_data
+            })
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return reverse('control:organizer.reusable_medium', kwargs={
+            'organizer': self.request.organizer.slug,
+            'pk': self.object.pk,
         })

@@ -169,16 +169,28 @@ DEFAULTS = {
                         "was not logged in during the purchase.")
         )
     },
-    'media_active': {
+    'reusable_media_active': {
         'default': 'False',
         'type': bool,
         'form_class': forms.BooleanField,
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
-            label=_("Use re-usable physical media"),
+            label=_("Activate re-usable media"),
+            help_text=_("The re-usable media feature allows you to connect tickets and gift cards with physical media "
+                        "such as wristbands or chip cards that may be re-used for different tickets or gift cards "
+                        "later.")
         )
     },
-    'media_type_barcode_identifier_length': {
+    'reusable_media_type_barcode': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Active"),
+        )
+    },
+    'reusable_media_type_barcode_identifier_length': {
         'default': 24,
         'type': int,
         'form_class': forms.IntegerField,

@@ -1419,6 +1419,62 @@ class CustomerFilterForm(FilterForm):
         return qs.distinct()
 
 
+class ReusableMediaFilterForm(FilterForm):
+    orders = {
+        'type': 'type',
+        'identifier': 'identifier',
+    }
+    query = forms.CharField(
+        label=_('Search query'),
+        widget=forms.TextInput(attrs={
+            'placeholder': _('Search query'),
+            'autofocus': 'autofocus'
+        }),
+        required=False
+    )
+    status = forms.ChoiceField(
+        label=_('Status'),
+        required=False,
+        choices=(
+            ('', _('All')),
+            ('active', _('active')),
+            ('disabled', _('disabled')),
+            ('expired', _('expired')),
+        )
+    )
+
+    def __init__(self, *args, **kwargs):
+        kwargs.pop('request')
+        super().__init__(*args, **kwargs)
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('query'):
+            query = fdata.get('query')
+            qs = qs.filter(
+                Q(identifier__icontains=query)
+                | Q(customer__identifier__icontains=query)
+                | Q(customer__external_identifier__istartswith=query)
+                | Q(linked_orderposition__order__code__icontains=query)
+                | Q(linked_giftcard__secret__icontains=query)
+            )
+
+        if fdata.get('status') == 'active':
+            qs = qs.filter(Q(expires__gt=now()) | Q(expires__isnull=False), active=True)
+        elif fdata.get('status') == 'disabled':
+            qs = qs.filter(active=False)
+        elif fdata.get('status') == 'expired':
+            qs = qs.filter(expires__lte=now())
+
+        if fdata.get('ordering'):
+            qs = qs.order_by(self.get_order_by())
+        else:
+            qs = qs.order_by("identifier", "type", "organizer")
+
+        return qs.distinct()
+
+
 class TeamFilterForm(FilterForm):
     orders = {
         'name': 'name',
