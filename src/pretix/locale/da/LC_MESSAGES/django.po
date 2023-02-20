@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 12:25+0000\n"
-"PO-Revision-Date: 2022-12-01 17:00+0000\n"
-"Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
+"PO-Revision-Date: 2023-02-20 21:00+0000\n"
+"Last-Translator: Simon Breum <smbr@itu.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
 "Language: da\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.2\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -27116,7 +27116,7 @@ msgstr "Billetter: {url}"
 #: pretix/presale/ical.py:84 pretix/presale/ical.py:138
 #, python-brace-format
 msgid "Admission: {datetime}"
-msgstr ""
+msgstr "Dørene åbnes: {datetime}"
 
 #: pretix/presale/ical.py:88 pretix/presale/ical.py:142
 #, python-brace-format
@@ -28224,13 +28224,13 @@ msgstr "Slut: %(time)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:50
 #, python-format
 msgid "Admission: %(time)s"
-msgstr ""
+msgstr "Dørene åbnes: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:211
 #: pretix/presale/templates/pretixpresale/event/voucher.html:56
 #, python-format
 msgid "Admission: %(datetime)s"
-msgstr ""
+msgstr "Dørene åbnes: %(datetime)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:224
 #: pretix/presale/templates/pretixpresale/event/voucher.html:68
