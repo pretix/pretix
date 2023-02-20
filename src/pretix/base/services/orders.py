@@ -1218,6 +1218,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
             )
             # send_mail will trigger PDF generation later
 
+    block_email = False
     if order.email:
         if order.require_approval:
             email_template = event.settings.mail_text_order_placed_require_approval
@@ -1234,15 +1235,17 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
             email_attendees_template = event.settings.mail_text_order_free_attendee
             subject_attendees_template = event.settings.mail_subject_order_free_attendee
         else:
-            email_template = event.settings.mail_text_order_placed
-            subject_template = event.settings.mail_subject_order_placed
-            log_entry = 'pretix.event.order.email.order_placed'
+            block_email = True
+            # email_template = event.settings.mail_text_order_placed
+            # subject_template = event.settings.mail_subject_order_placed
+            # log_entry = 'pretix.event.order.email.order_placed'
+            #
+            # email_attendees = event.settings.mail_send_order_placed_attendee
+            # email_attendees_template = event.settings.mail_text_order_placed_attendee
+            # subject_attendees_template = event.settings.mail_subject_order_placed_attendee
 
-            email_attendees = event.settings.mail_send_order_placed_attendee
-            email_attendees_template = event.settings.mail_text_order_placed_attendee
-            subject_attendees_template = event.settings.mail_subject_order_placed_attendee
 
-        if sales_channel in event.settings.mail_sales_channel_placed_paid:
+        if not block_email and sales_channel in event.settings.mail_sales_channel_placed_paid:
             _order_placed_email(event, order, email_template, subject_template, log_entry, invoice, payment_objs,
                                 is_free=free_order_flow)
             if email_attendees:
