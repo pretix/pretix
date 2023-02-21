@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 12:25+0000\n"
-"PO-Revision-Date: 2023-02-16 15:00+0000\n"
+"PO-Revision-Date: 2023-02-21 18:00+0000\n"
 "Last-Translator: danijossnet <danijoss@yahoo.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
@@ -31110,10 +31110,8 @@ msgid "View other date"
 msgstr "Δείτε άλλη ημερομηνία"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:87
-#, fuzzy
-#| msgid "Choose date to buy a ticket"
 msgid "Choose date to book a ticket"
-msgstr "Επιλέξτε ημερομηνία για να αγοράσετε ένα εισιτήριο"
+msgstr "Επιλέξτε ημερομηνία για να κλείσετε εισιτήριο"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:92
 #, fuzzy
