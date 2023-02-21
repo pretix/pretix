@@ -458,7 +458,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
             # layer to not set pdf_data=true in the first place.
             request and hasattr(request, 'event') and 'can_view_orders' not in request.eventpermset
         )
-        if ('pdf_data' in self.context and not self.context['pdf_data']) or pdf_data_forbidden:
+        if ('pdf_data' in self.context and not self.context['pdf_data']) or pdf_data_forbidden or ('event' not in self.context and not request):
             self.fields.pop('pdf_data', None)
 
     def validate(self, data):

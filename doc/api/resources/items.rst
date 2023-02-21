@@ -108,6 +108,9 @@ generate_tickets                        boolean                    If ``false``,
 allow_waitinglist                       boolean                    If ``false``, no waiting list will be shown for this
                                                                    product when it is sold out.
 issue_giftcard                          boolean                    If ``true``, buying this product will yield a gift card.
+media_policy                            string                     Policy on how to handle reusable media (experimental feature).
+                                                                   Possible values are ``null``, ``"new"``, ``"reuse"``, and ``"reuse_or_new"``.
+media_type                              string                     Type of reusable media to work on (experimental feature).
 show_quota_left                         boolean                    Publicly show how many tickets are still available.
                                                                    If this is ``null``, the event default is used.
 has_variations                          boolean                    Shows whether or not this item has variations.
@@ -189,6 +192,10 @@ meta_data                               object                     Values set fo
 
    The ``validity_*`` attributes have been added.
 
+.. versionchanged:: 4.18
+
+   The ``media_policy`` and ``media_type`` attributes have been added.
+
 Notes
 -----
 
@@ -244,6 +251,8 @@ Endpoints
             "admission": false,
             "personalized": false,
             "issue_giftcard": false,
+            "media_policy": null,
+            "media_type": null,
             "meta_data": {},
             "position": 0,
             "picture": null,
@@ -373,6 +382,8 @@ Endpoints
         "admission": false,
         "personalized": false,
         "issue_giftcard": false,
+        "media_policy": null,
+        "media_type": null,
         "meta_data": {},
         "position": 0,
         "picture": null,
@@ -483,6 +494,8 @@ Endpoints
         "admission": false,
         "personalized": false,
         "issue_giftcard": false,
+        "media_policy": null,
+        "media_type": null,
         "meta_data": {},
         "position": 0,
         "picture": null,
@@ -580,6 +593,8 @@ Endpoints
         "admission": false,
         "personalized": false,
         "issue_giftcard": false,
+        "media_policy": null,
+        "media_type": null,
         "meta_data": {},
         "position": 0,
         "picture": null,
@@ -709,6 +724,8 @@ Endpoints
         "admission": false,
         "personalized": false,
         "issue_giftcard": false,
+        "media_policy": null,
+        "media_type": null,
         "meta_data": {},
         "position": 0,
         "picture": null,

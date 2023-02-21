@@ -36,6 +36,7 @@ logger = logging.getLogger(__name__)
 
 class SettingsSerializer(serializers.Serializer):
     default_fields = []
+    readonly_fields = []
 
     def __init__(self, *args, **kwargs):
         self.changed_data = []
@@ -59,8 +60,13 @@ class SettingsSerializer(serializers.Serializer):
             f.parent = self
             self.fields[fname] = f
 
+    def validate(self, attrs):
+        return {k: v for k, v in attrs.items() if k not in self.readonly_fields}
+
     def update(self, instance: HierarkeyProxy, validated_data):
         for attr, value in validated_data.items():
+            if attr in self.readonly_fields:
+                continue
             if isinstance(value, FieldFile):
                 # Delete old file
                 fname = instance.get(attr, as_type=File)

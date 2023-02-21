@@ -644,7 +644,7 @@ class Item(LoggedModel):
     media_policy = models.CharField(
         choices=MEDIA_POLICIES,
         null=True, blank=True, max_length=16,
-        verbose_name=_('Physical media policy'),
+        verbose_name=_('Reusable media policy'),
         help_text=_(
             'If this product should be stored on a re-usable physical medium, you can attach a physical media policy. '
             'This is not required for regular tickets, which just use a one-time barcode, but only for products like '
@@ -655,7 +655,8 @@ class Item(LoggedModel):
     media_type = models.CharField(
         max_length=100,
         null=True, blank=True,
-        choices=((k, v) for k, v in MEDIA_TYPES.items()),
+        choices=[(None, _("Don't use re-usable media, use regular one-off tickets"))] + [(k, v) for k, v in MEDIA_TYPES.items()],
+        verbose_name=_('Reusable media type'),
         help_text=_(
             'Select the type of physical medium that should be used for this product. Note that not all media types '
             'support all types of products, and not all media types are supported across all sales channels or '
@@ -833,6 +834,20 @@ class Item(LoggedModel):
     @cached_property
     def has_variations(self):
         return self.variations.exists()
+
+    @staticmethod
+    def clean_media_settings(event, media_policy, media_type, issue_giftcard):
+        if media_policy:
+            if not media_type:
+                raise ValidationError(_('If you select a reusable media policy, you also need to select a reusable '
+                                        'media type.'))
+            mt = MEDIA_TYPES[media_type]
+            if not mt.supports_orderposition:
+                raise ValidationError(_('The selected media type does not support usage for tickets currently.'))
+            if issue_giftcard:
+                raise ValidationError(_('You currently cannot create gift cards with a reusable media policy. Instead, '
+                                        'gift cards for some reusable media types can be created or re-charged directly '
+                                        'at the POS.'))
 
     @staticmethod
     def clean_per_order(min_per_order, max_per_order):

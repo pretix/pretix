@@ -797,6 +797,14 @@ class EventSettingsSerializer(SettingsSerializer):
         'logo_show_title',
         'og_image',
         'name_scheme',
+        'reusable_media_active',
+        'reusable_media_type_barcode',
+        'reusable_media_type_barcode_identifier_length',
+    ]
+    readonly_fields = [
+        'reusable_media_active',
+        'reusable_media_type_barcode',
+        'reusable_media_type_barcode_identifier_length',
     ]
 
     def __init__(self, *args, **kwargs):

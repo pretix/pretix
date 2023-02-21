@@ -547,6 +547,9 @@ Therefore, we're also not including a list of the options here, but instead reco
 to see available options. The ``explain=true`` flag enables a verbose mode that provides you with human-readable
 information about the properties.
 
+Note that some settings are read-only, e.g. because they can be read on event level but currently only be changed on
+organizer level.
+
 .. note:: Please note that this is not a complete representation of all event settings. You will find more settings
           in the web interface.
 
@@ -593,6 +596,7 @@ information about the properties.
           {
             "value": "https://pretix.eu",
             "label": "Imprint URL",
+            "readonly": false,
             "help_text": "This should point e.g. to a part of your website that has your contact details and legal information."
           }
         },

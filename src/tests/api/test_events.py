@@ -1212,7 +1212,8 @@ def test_get_event_settings(token_client, organizer, event):
         "value": "https://example.org",
         "label": "Imprint URL",
         "help_text": "This should point e.g. to a part of your website that has your contact details and legal "
-                     "information."
+                     "information.",
+        "readonly": False,
     }
 
 
@@ -1229,14 +1230,17 @@ def test_patch_event_settings(token_client, organizer, event):
                     {
                         'de': 'Ich bin mit den AGB einverstanden.'
                     }
-                ]
+                ],
+                'reusable_media_active': True,  # readonly, ignored
             },
             format='json'
         )
         assert resp.status_code == 200
         assert resp.data['imprint_url'] == "https://example.com"
+        assert not resp.data['reusable_media_active']
         event.settings.flush()
         assert event.settings.imprint_url == 'https://example.com'
+        assert not event.settings.reusable_media_active
         mocked.assert_not_called()
 
         resp = token_client.patch(

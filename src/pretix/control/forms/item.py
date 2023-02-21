@@ -592,6 +592,10 @@ class ItemUpdateForm(I18nModelForm):
             del self.fields['grant_membership_duration_days']
             del self.fields['grant_membership_duration_months']
 
+        if not self.event.settings.reusable_media_active:
+            del self.fields['media_type']
+            del self.fields['media_policy']
+
     def clean(self):
         d = super().clean()
         if d['issue_giftcard']:
@@ -634,6 +638,8 @@ class ItemUpdateForm(I18nModelForm):
                     'validity_fixed_from',
                     _("The start of validity must be before the end of validity.")
                 )
+
+        Item.clean_media_settings(self.event, d.get('media_policy'), d.get('media_type'), d.get('issue_giftcard'))
 
         return d
 
@@ -693,6 +699,8 @@ class ItemUpdateForm(I18nModelForm):
             'validity_dynamic_duration_months',
             'validity_dynamic_start_choice',
             'validity_dynamic_start_choice_day_limit',
+            'media_policy',
+            'media_type',
         ]
         field_classes = {
             'available_from': SplitDateTimeField,

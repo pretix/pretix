@@ -60,7 +60,7 @@ class Migration(migrations.Migration):
             options={
                 'ordering': ('identifier', 'type', 'organizer'),
                 'unique_together': {('identifier', 'type', 'organizer')},
-                'index_together': {('identifier', 'type', 'organizer')},
+                'index_together': {('identifier', 'type', 'organizer'), ('updated', 'id')},
             },
             bases=(models.Model, pretix.base.models.base.LoggingMixin),
         ),

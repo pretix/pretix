@@ -48,12 +48,12 @@
             <table class="table table-condensed table-hover">
                 <thead>
                 <tr>
-                    <th>{% trans "Identifier" %}
+                    <th>{% trans "Identifier" context "reusable_media" %}
                         <a href="?{% url_replace request 'ordering' '-identifier' %}"><i
                                 class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'identifier' %}"><i class="fa fa-caret-up"></i></a>
                     </th>
-                    <th>{% trans "Media type" %}
+                    <th>{% trans "Media type" context "reusable_media" %}
                         <a href="?{% url_replace request 'ordering' '-email' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'email' %}"><i class="fa fa-caret-up"></i></a></th>
                     <th>{% trans "Connections" context "reusable_media" %}</th>
@@ -78,22 +78,22 @@
                                 <span class="helper-display-block">
                                     <span class="fa fa-user fa-fw"></span>
                                     <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=m.customer.identifier %}">
-                                        <strong>{{ m.customer }}</strong>
+                                        {{ m.customer }}
                                     </a>
                                 </span>
                             {% endif %}
                             {% if m.linked_orderposition %}
                                 <span class="helper-display-block">
                                     <span class="fa fa-ticket fa-fw"></span>
-                                    <a href="{% url "control:event.order" event=linked_orderposition.order.event.slug organizer=request.organizer.slug code=linked_orderposition.order.code %}">
-                                        {{ m.linked_orderposition.code }}</a>-{{ m.positionid }}
+                                    <a href="{% url "control:event.order" event=m.linked_orderposition.order.event.slug organizer=request.organizer.slug code=m.linked_orderposition.order.code %}">
+                                        {{ m.linked_orderposition.order.code }}</a>-{{ m.linked_orderposition.positionid }}
                                 </span>
                             {% endif %}
-                            {% if m.linked_orderposition %}
+                            {% if m.linked_giftcard %}
                                 <span class="helper-display-block">
                                     <span class="fa fa-credit-card fa-fw"></span>
                                     <a href="{% url "control:organizer.giftcard" organizer=request.organizer.slug giftcard=m.linked_giftcard.id %}">
-                                        <strong>{{ m.linked_giftcard.secret }}</strong></a>
+                                        {{ m.linked_giftcard.secret }}</a>
                                 </span>
                             {% endif %}
                         </td>

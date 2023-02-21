@@ -157,6 +157,7 @@ information about the properties.
           {
             "value": "calendar",
             "label": "Default overview style",
+            "readonly": false,
             "help_text": "If your event series has more than 50 dates in the future, only the month or week calendar can be used."
           }
         },

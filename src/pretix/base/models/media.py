@@ -117,5 +117,5 @@ class ReusableMedium(LoggedModel):
 
     class Meta:
         unique_together = (("identifier", "type", "organizer"),)
-        index_together = (("identifier", "type", "organizer"),)
+        index_together = (("identifier", "type", "organizer"), ("updated", "id"))
         ordering = "identifier", "type", "organizer"

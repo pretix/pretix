@@ -25,18 +25,43 @@
                     <form action="" method="post" class="row">
                         {% csrf_token %}
                         <dl class="dl-horizontal col-lg-6 col-sm-12">
-                            <dt>{% trans "Media type" context "reusable_medium" %}</dt>
+                            <dt>{% trans "Media type" context "reusable_media" %}</dt>
                             <dd>{{ medium.get_type_display }}</dd>
-                            <dt>{% trans "Identifier" context "reusable_medium" %}</dt>
+                            <dt>{% trans "Identifier" context "reusable_media" %}</dt>
                             <dd><code>{{ medium.identifier }}</code></dd>
                             <dt>{% trans "Status" %}</dt>
                             <dd>
                                 {% if not medium.active %}
                                     {% trans "disabled" %}
-                                {% elif not medium.is_expired %}
+                                {% elif medium.is_expired %}
                                     {% trans "expired" %}
                                 {% else %}
                                     {% trans "active" %}
+                                {% endif %}
+                            </dd>
+                            <dt>{% trans "Connections" context "reusable_media" %}</dt>
+                            <dd>
+                                {% if m.customer %}
+                                    <span class="helper-display-block">
+                                    <span class="fa fa-user fa-fw"></span>
+                                    <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=medium.customer.identifier %}">
+                                        {{ medium.customer }}
+                                    </a>
+                                </span>
+                                {% endif %}
+                                {% if medium.linked_orderposition %}
+                                    <span class="helper-display-block">
+                                    <span class="fa fa-ticket fa-fw"></span>
+                                    <a href="{% url "control:event.order" event=medium.linked_orderposition.order.event.slug organizer=request.organizer.slug code=medium.linked_orderposition.order.code %}">
+                                        {{ medium.linked_orderposition.order.code }}</a>-{{ medium.linked_orderposition.positionid }}
+                                </span>
+                                {% endif %}
+                                {% if medium.linked_giftcard %}
+                                    <span class="helper-display-block">
+                                    <span class="fa fa-credit-card fa-fw"></span>
+                                    <a href="{% url "control:organizer.giftcard" organizer=request.organizer.slug giftcard=medium.linked_giftcard.id %}">
+                                        {{ medium.linked_giftcard.secret }}</a>
+                                </span>
                                 {% endif %}
                             </dd>
                         </dl>
