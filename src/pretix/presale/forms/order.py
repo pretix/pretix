@@ -72,10 +72,15 @@ class OrderPositionChangeForm(forms.Form):
             quota_cache.update(qa.results)
 
             for v in variations:
-
                 label = f'{i.name} – {v.value}'
                 if instance.variation_id == v.id:
                     choices.append((f'{i.pk}-{v.pk}', label))
+                    continue
+
+                if instance.voucher and not instance.voucher.applies_to(i, v):
+                    continue
+
+                if v.hide_without_voucher and not (instance.voucher and instance.voucher.show_hidden_items):
                     continue
 
                 if not v.active:

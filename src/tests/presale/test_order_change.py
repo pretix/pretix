@@ -344,6 +344,98 @@ class OrderChangeVariationTest(BaseOrdersTest):
         assert response.status_code == 200
         assert 'alert-danger' in response.content.decode()
 
+    def test_change_variation_hidden_variations(self):
+        self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_user_price = 'any'
+        self.shirt_red.value = "RED SHIRT"
+        self.shirt_red.hide_without_voucher = True
+        self.shirt_red.save()
+
+        with scopes_disabled():
+            shirt_pos = OrderPosition.objects.create(
+                order=self.order,
+                item=self.shirt,
+                variation=self.shirt_blue,
+                price=Decimal("12"),
+            )
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'RED SHIRT' not in response.content.decode()
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                f'op-{shirt_pos.pk}-itemvar': f'{self.shirt.pk}-{self.shirt_red.pk}',
+                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
+            }, follow=True)
+        assert response.status_code == 200
+        assert 'alert-danger' in response.content.decode()
+
+    def test_change_variation_hidden_variations_with_voucher(self):
+        self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_user_price = 'any'
+        self.shirt_red.value = "RED SHIRT"
+        self.shirt_red.hide_without_voucher = True
+        self.shirt_red.save()
+
+        with scopes_disabled():
+            shirt_pos = OrderPosition.objects.create(
+                order=self.order,
+                item=self.shirt,
+                variation=self.shirt_blue,
+                voucher=self.event.vouchers.create(code="ABCDE", item=self.shirt),
+                price=Decimal("12"),
+            )
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'RED SHIRT' in response.content.decode()
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                f'op-{shirt_pos.pk}-itemvar': f'{self.shirt.pk}-{self.shirt_red.pk}',
+                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
+            }, follow=True)
+        assert response.status_code == 200
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        shirt_pos.refresh_from_db()
+        assert 'alert-success' in response.content.decode()
+        assert shirt_pos.variation == self.shirt_red
+        assert shirt_pos.price == Decimal('14.00')
+
+    def test_change_variation_hidden_variations_with_useless_voucher(self):
+        self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_user_price = 'any'
+        self.shirt_red.value = "RED SHIRT"
+        self.shirt_red.hide_without_voucher = True
+        self.shirt_red.save()
+
+        with scopes_disabled():
+            shirt_pos = OrderPosition.objects.create(
+                order=self.order,
+                item=self.shirt,
+                variation=self.shirt_blue,
+                voucher=self.event.vouchers.create(code="ABCDE", item=self.shirt, show_hidden_items=False),
+                price=Decimal("12"),
+            )
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'RED SHIRT' not in response.content.decode()
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                f'op-{shirt_pos.pk}-itemvar': f'{self.shirt.pk}-{self.shirt_red.pk}',
+                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
+            }, follow=True)
+        assert response.status_code == 200
+        assert 'alert-danger' in response.content.decode()
+
     def test_change_variation_require_quota(self):
         self.event.settings.change_allow_user_variation = True
         self.event.settings.change_allow_user_price = 'any'
