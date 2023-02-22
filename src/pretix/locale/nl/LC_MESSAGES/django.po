@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 12:25+0000\n"
-"PO-Revision-Date: 2023-02-08 05:00+0000\n"
-"Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2023-02-22 11:22+0000\n"
+"Last-Translator: Toon Toetenel <toon@toetenel.com>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -245,13 +245,9 @@ msgid "This user already has permissions for this team."
 msgstr "Deze gebruiker heeft al rechten voor dit team."
 
 #: pretix/api/views/cart.py:199
-#, fuzzy
-#| msgid ""
-#| "This voucher code has already been used the maximum number of times "
-#| "allowed."
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr "Deze vouchercode is al het maximale aantal keren gebruikt."
+msgstr "Deze voucher is al het maximale aantal keren gebruikt."
 
 #: pretix/api/views/oauth.py:106 pretix/control/logdisplay.py:457
 #, python-brace-format
@@ -312,10 +308,8 @@ msgid "Order expired"
 msgstr "Bestelling is verlopen"
 
 #: pretix/api/webhooks.py:221
-#, fuzzy
-#| msgid "The order's expiry date has been changed."
 msgid "Order expiry date changed"
-msgstr "De verloopdatum van de bestelling is aangepast."
+msgstr "Verloopdatum aangepast."
 
 #: pretix/api/webhooks.py:225 pretix/base/notifications.py:269
 msgid "Order information changed"
@@ -331,38 +325,28 @@ msgid "Order changed"
 msgstr "Bestelling gewijzigd"
 
 #: pretix/api/webhooks.py:237
-#, fuzzy
-#| msgid "Refund to original payment method"
 msgid "Refund of payment created"
-msgstr "Terugbetalen naar oorspronkelijke betalingsmethode"
+msgstr "Terugbetaling aangemaakt"
 
 #: pretix/api/webhooks.py:241 pretix/base/notifications.py:293
 msgid "External refund of payment"
 msgstr "Externe terugbetaling van betaling"
 
 #: pretix/api/webhooks.py:245
-#, fuzzy
-#| msgid "Text (requested by user)"
 msgid "Refund of payment requested by customer"
-msgstr "Tekst (aangevraagd door gebruiker)"
+msgstr "Terugbetaling aangevraagd door gebruiker"
 
 #: pretix/api/webhooks.py:249
-#, fuzzy
-#| msgid "Payment completed."
 msgid "Refund of payment completed"
-msgstr "Betaling voltooid."
+msgstr "Terugbetaling voltooid"
 
 #: pretix/api/webhooks.py:253
-#, fuzzy
-#| msgid "Refund {local_id} has been canceled."
 msgid "Refund of payment canceled"
-msgstr "Terugbetaling {local_id} is geannuleerd."
+msgstr "Terugbetaling geannuleerd"
 
 #: pretix/api/webhooks.py:257
-#, fuzzy
-#| msgid "Refund for overpayment"
 msgid "Refund of payment failed"
-msgstr "Terugbetaling voor overbetaling"
+msgstr "Terugbetaling mislukt"
 
 #: pretix/api/webhooks.py:261
 msgid "Order approved"
@@ -412,30 +396,24 @@ msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
 msgstr ""
+"Product veranderd (incl. toevoeging of verwijdering van product en incl. "
+"aanpassingen in afgeleide variaties of bundels)"
 
 #: pretix/api/webhooks.py:306
-#, fuzzy
-#| msgid "Shop not live"
 msgid "Shop taken live"
-msgstr "Winkel is niet live"
+msgstr "Winkel live gezet"
 
 #: pretix/api/webhooks.py:310
-#, fuzzy
-#| msgid "The shop has been taken offline."
 msgid "Shop taken offline"
-msgstr "De winkel is offline gehaald."
+msgstr "Winkel offline gehaald"
 
 #: pretix/api/webhooks.py:314
-#, fuzzy
-#| msgid "The order has been reactivated."
 msgid "Test-Mode of shop has been activated"
-msgstr "De bestelling is opnieuw geactiveerd."
+msgstr "Testmode van winkel geactiveerd"
 
 #: pretix/api/webhooks.py:318
-#, fuzzy
-#| msgid "The order has been reactivated."
 msgid "Test-Mode of shop has been deactivated"
-msgstr "De bestelling is opnieuw geactiveerd."
+msgstr "Testmode van winkel gedeactiveerd"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:907
@@ -521,13 +499,12 @@ msgstr ""
 #: pretix/base/customersso/oidc.py:98 pretix/base/customersso/oidc.py:103
 #, python-brace-format
 msgid "Incompatible SSO provider: \"{error}\"."
-msgstr ""
+msgstr "SSO-aanbieder niet compatibel : \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:109
-#, fuzzy, python-brace-format
-#| msgid "Your event registration: {code}"
+#, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "Uw aanmelding: {code}"
+msgstr "U vraagt \"{code}\" niet aan"
 
 #: pretix/base/customersso/oidc.py:115
 #, python-brace-format
@@ -535,6 +512,7 @@ msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
 msgstr ""
+"U vraag scope \"{scope}\" aan, maar aanbieder ondersteund alleen: {scopes}."
 
 #: pretix/base/customersso/oidc.py:123
 #, python-brace-format
@@ -542,6 +520,8 @@ msgid ""
 "You are requesting field \"{field}\" but provider only supports these: "
 "{fields}."
 msgstr ""
+"U vraag het veld \"{field}\" op, maar de aanbieder ondersteund alleen: "
+"{fields}."
 
 #: pretix/base/customersso/oidc.py:169 pretix/base/customersso/oidc.py:176
 #: pretix/base/customersso/oidc.py:195 pretix/base/customersso/oidc.py:212
@@ -550,13 +530,15 @@ msgstr ""
 #: pretix/presale/views/customer.py:792
 #, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr ""
+msgstr "Login niet gelukt. Foutmelding: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:202
 msgid ""
 "The email address on this account is not yet verified. Please first confirm "
 "the email address in your customer account."
 msgstr ""
+"Het e-mailadres van uw account is nog niet gevalideerd. Valideer a.u.b. "
+"eerst het e-mailadres in uw klantenaccount."
 
 #: pretix/base/email.py:200 pretix/base/exporters/items.py:151
 #: pretix/base/exporters/items.py:195 pretix/control/views/main.py:310
@@ -629,10 +611,8 @@ msgid "Combined Excel (.xlsx)"
 msgstr "Gecombineerde Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:52
-#, fuzzy
-#| msgid "Question answers"
 msgid "Question answer file uploads"
-msgstr "Antwoorden op vragen"
+msgstr "Vraag-antwoordbestand uploads"
 
 #: pretix/base/exporters/answers.py:53 pretix/base/exporters/json.py:52
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:80
@@ -640,17 +620,17 @@ msgstr "Antwoorden op vragen"
 #: pretix/base/exporters/orderlist.py:971
 #: pretix/plugins/reports/exporters.py:405
 #: pretix/plugins/reports/exporters.py:578
-#, fuzzy
-#| msgid "Order data"
 msgctxt "export_category"
 msgid "Order data"
-msgstr "Besteldatums"
+msgstr "Besteldata"
 
 #: pretix/base/exporters/answers.py:54
 msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
 msgstr ""
+"Download een ZIP-bestand met daarin alle bestanden die zijn geüpload als "
+"antwoord op een vraag tijdens het bestelproces."
 
 #: pretix/base/exporters/answers.py:64 pretix/base/models/items.py:1502
 #: pretix/control/navigation.py:182
@@ -665,15 +645,13 @@ msgid "Customer accounts"
 msgstr "Klantenaccounts"
 
 #: pretix/base/exporters/customers.py:51
-#, fuzzy
-#| msgid "Customer accounts"
 msgctxt "export_category"
 msgid "Customer accounts"
 msgstr "Klantenaccounts"
 
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
-msgstr ""
+msgstr "Download een spreadsheet van alle geregistreerde klantenaccounts."
 
 #: pretix/base/exporters/customers.py:64 pretix/base/models/customers.py:81
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:28
@@ -685,10 +663,8 @@ msgstr "Klantnummer"
 
 #: pretix/base/exporters/customers.py:65
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:31
-#, fuzzy
-#| msgid "Payment provider"
 msgid "SSO provider"
-msgstr "Betalingsprovider"
+msgstr "SSO-aanbieder"
 
 #: pretix/base/exporters/customers.py:66 pretix/base/models/customers.py:107
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:35
@@ -865,6 +841,8 @@ msgid ""
 "Download invoices in a format that can be used by the dekodi NREI conversion "
 "software."
 msgstr ""
+"Download facturen in een formaat dat gebruikt kan worden door de dekodi NREI "
+"conversiesoftware."
 
 #: pretix/base/exporters/dekodi.py:105
 #, python-brace-format
@@ -878,22 +856,16 @@ msgstr "Ticket {event}-{code}"
 #: pretix/plugins/reports/exporters.py:394
 #: pretix/plugins/reports/exporters.py:625
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date range"
-msgstr "Datum en tijd"
+msgstr "Datumbereik"
 
 #: pretix/base/exporters/dekodi.py:223 pretix/base/exporters/invoices.py:77
-#, fuzzy
-#| msgid ""
-#| "Only include invoices issued on or after this date. Note that the invoice "
-#| "date does not always correspond to the order or payment date."
 msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
 msgstr ""
-"Neem alleen facturen mee die op of na deze datum zijn uitgegeven. Merk op "
-"dat de factuurdatum niet altijd overeenkomt met de bestel- of betaaldatum."
+"Neem alleen facturen mee die in dit datumbereik zijn uitgegeven. Merk op dat "
+"de factuurdatum niet altijd overeenkomt met de bestel- of betaaldatum."
 
 #: pretix/base/exporters/events.py:47
 #, fuzzy
@@ -902,11 +874,9 @@ msgid "Event data"
 msgstr "Evenementdatum"
 
 #: pretix/base/exporters/events.py:48
-#, fuzzy
-#| msgid "Event date"
 msgctxt "export_category"
 msgid "Event data"
-msgstr "Evenementdatum"
+msgstr "Evenementdata"
 
 #: pretix/base/exporters/events.py:49
 msgid ""
