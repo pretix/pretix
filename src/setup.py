@@ -207,7 +207,7 @@ setup(
         'PyJWT==2.6.*',
         'phonenumberslite==8.13.*',
         'Pillow==9.4.*',
-        'protobuf==4.21.*',
+        'protobuf==4.22.*',
         'psycopg2-binary',
         'pycountry',
         'pycparser==2.21',
