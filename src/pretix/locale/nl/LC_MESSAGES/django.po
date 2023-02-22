@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 12:25+0000\n"
-"PO-Revision-Date: 2023-02-22 11:28+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2023-02-23 07:00+0000\n"
+"Last-Translator: Toon Toetenel <toon@toetenel.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -1008,6 +1008,9 @@ msgid ""
 "The spreadsheet includes two sheets, one with a line for every invoice, and "
 "one with a line for every position of every invoice."
 msgstr ""
+"Download een spreadsheet (Excel of CSV) met de gegevens van alle in het "
+"systeem gegenereerde facturen. De eerste spreadsheet bevat één rij voor elke "
+"factuur, de tweede één rij voor elke factuurregel."
 
 #: pretix/base/exporters/invoices.py:188 pretix/base/shredder.py:392
 #: pretix/control/templates/pretixcontrol/order/index.html:260
@@ -1333,33 +1336,26 @@ msgid "Event end date"
 msgstr "Einddatum van het evenement"
 
 #: pretix/base/exporters/items.py:50
-#, fuzzy
-#| msgid "Product name"
 msgid "Product data"
-msgstr "Productnaam"
+msgstr "Productgegevens"
 
 #: pretix/base/exporters/items.py:51 pretix/base/exporters/orderlist.py:860
-#, fuzzy
-#| msgid "Product name"
 msgctxt "export_category"
 msgid "Product data"
-msgstr "Productnaam"
+msgstr "Productgegevens"
 
 #: pretix/base/exporters/items.py:52
 msgid "Download a spreadsheet with details about all products and variations."
 msgstr ""
+"Download een spreadsheet met de details van alle producten en variaties."
 
 #: pretix/base/exporters/items.py:58
-#, fuzzy
-#| msgid "Product"
 msgid "Product ID"
-msgstr "Product"
+msgstr "Product ID"
 
 #: pretix/base/exporters/items.py:59
-#, fuzzy
-#| msgid "Variation"
 msgid "Variation ID"
-msgstr "Variant"
+msgstr "Variant ID"
 
 #: pretix/base/exporters/items.py:60 pretix/base/models/items.py:110
 #: pretix/base/pdf.py:146
@@ -1422,10 +1418,8 @@ msgstr "Is een toegangsbewijs"
 #: pretix/base/exporters/items.py:78
 #: pretix/control/templates/pretixcontrol/item/create.html:74
 #: pretix/control/templates/pretixcontrol/item/index.html:86
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Personalized ticket"
-msgstr "Genereer tickets"
+msgstr "Gepersonaliseerde ticket"
 
 #: pretix/base/exporters/items.py:79 pretix/base/models/items.py:441
 msgid "Generate tickets"
@@ -1544,6 +1538,8 @@ msgid ""
 "Download a structured JSON representation of all orders. This might be "
 "useful for the import in third-party systems."
 msgstr ""
+"Download een gestructureerd JSON-bestand van alle orders. Dit kan handig "
+"zijn om te importeren in systemen van derden."
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
@@ -1554,6 +1550,8 @@ msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
 msgstr ""
+"Download een tekstbestand met alle e-mailadressen verzameld van kopers én "
+"tickethouders."
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:414
 #: pretix/plugins/reports/exporters.py:596
@@ -1566,6 +1564,10 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
+"Download een spreadsheet van alle bestellingen. De spreadsheet bevat drie "
+"bladen, één met een regel voor elke bestelling, één met een regel voor elke "
+"factuurregel, en één met een regel voor elke extra vergoeding die in een "
+"bestelling in rekening wordt gebracht."
 
 #: pretix/base/exporters/orderlist.py:93 pretix/base/models/orders.py:270
 #: pretix/control/navigation.py:253 pretix/control/navigation.py:360
@@ -1600,10 +1602,8 @@ msgstr "Toon antwoorden voor meerkeuzevragen gegroepeerd in één kolom"
 
 #: pretix/base/exporters/orderlist.py:124
 #: pretix/plugins/reports/exporters.py:628
-#, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Only include orders created within this date range."
-msgstr "Alleen bestellingen aangemaakt op of na deze datum."
+msgstr "Alleen bestellingen aangemaakt tussen deze data."
 
 #: pretix/base/exporters/orderlist.py:128 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:229 pretix/plugins/badges/exporters.py:311
@@ -1612,17 +1612,13 @@ msgid "Event date"
 msgstr "Evenementdatum"
 
 #: pretix/base/exporters/orderlist.py:131
-#, fuzzy
-#| msgid ""
-#| "Only include orders including at least one ticket for a date on or after "
-#| "this date. Will also include other dates in case of mixed orders!"
 msgid ""
 "Only include orders including at least one ticket for a date in this range. "
 "Will also include other dates in case of mixed orders!"
 msgstr ""
-"Laat alleen bestellingen zien die ten minste één ticket bevatten voor een "
-"subevenement op of na deze datum. Als zo'n bestelling tickets bevat voor "
-"andere datums zullen deze ook worden getoond!"
+"Laat alleen bestellingen zien die ten minste één ticket bevatten tussen deze "
+"datums. Als zo'n bestelling tickets bevat voor andere datums zullen deze ook "
+"worden getoond!"
 
 #: pretix/base/exporters/orderlist.py:250
 #: pretix/base/exporters/orderlist.py:422
@@ -2044,21 +2040,18 @@ msgid "Invoice address country"
 msgstr "Factuuradres: land"
 
 #: pretix/base/exporters/orderlist.py:605
-#, fuzzy
-#| msgid "Invoice address state"
 msgctxt "address"
 msgid "Invoice address state"
 msgstr "Factuuradres: staat"
 
 #: pretix/base/exporters/orderlist.py:764
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Payments and refunds"
-msgstr "Betalingen en terugbetalingen van bestelling"
+msgstr "Betalingen en terugbetalingen"
 
 #: pretix/base/exporters/orderlist.py:766
 msgid "Download a spreadsheet of all payments or refunds of every order."
 msgstr ""
+"Download een spreadsheet met alle (terug)betalingen van elke bestellingen."
 
 #: pretix/base/exporters/orderlist.py:775
 msgid "Payment states"
@@ -2133,10 +2126,8 @@ msgid "Payment method"
 msgstr "Betalingsmethode"
 
 #: pretix/base/exporters/orderlist.py:809
-#, fuzzy
-#| msgid "Payment matching IDs"
 msgid "Matching ID"
-msgstr "ID's voor betalingstoewijzing"
+msgstr "Toewijzings-ID"
 
 #: pretix/base/exporters/orderlist.py:809
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
@@ -2151,6 +2142,7 @@ msgstr "Quota beschikbaarheid"
 msgid ""
 "Download a spreadsheet of all quotas including their current availability."
 msgstr ""
+"Download een spreadsheet met alle quota inclusief de huidige beschikbaarheid."
 
 #: pretix/base/exporters/orderlist.py:866
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
@@ -2201,15 +2193,13 @@ msgstr "Cadeaubontransacties"
 
 #: pretix/base/exporters/orderlist.py:915
 #: pretix/base/exporters/orderlist.py:1018
-#, fuzzy
-#| msgid "Gift cards"
 msgctxt "export_category"
 msgid "Gift cards"
 msgstr "Cadeaubonnen"
 
 #: pretix/base/exporters/orderlist.py:916
 msgid "Download a spreadsheet of all gift card transactions."
-msgstr ""
+msgstr "Download een spreadsheet met alle transacties van cadeaubonnen."
 
 #: pretix/base/exporters/orderlist.py:944
 #: pretix/base/exporters/orderlist.py:989
@@ -2278,6 +2268,8 @@ msgstr "Cadeaubonverzilveringen"
 msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
 msgstr ""
+"Download een spreadsheet van alle (terug)betalingen waarbij cadeaubonnen "
+"zijn gebruikt."
 
 #: pretix/base/exporters/orderlist.py:989
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
@@ -2291,7 +2283,7 @@ msgstr "Cadeaubonnen"
 
 #: pretix/base/exporters/orderlist.py:1019
 msgid "Download a spreadsheet of all gift cards including their current value."
-msgstr ""
+msgstr "Download een spreadsheet van alle cadeaubonnen met hun huidige waarde."
 
 #: pretix/base/exporters/orderlist.py:1026
 msgid "Show value at"
@@ -2299,7 +2291,7 @@ msgstr "Toon waarde op"
 
 #: pretix/base/exporters/orderlist.py:1029
 msgid "Defaults to the time of report."
-msgstr ""
+msgstr "Standaard wordt aanmaakdatum van het rapport gebruikt."
 
 #: pretix/base/exporters/orderlist.py:1034
 #: pretix/base/exporters/orderlist.py:1044 pretix/control/forms/filter.py:501
@@ -2382,15 +2374,13 @@ msgid "Last invoice date of order"
 msgstr "Laatste factuurdatum van bestelling"
 
 #: pretix/base/exporters/waitinglist.py:42
-#, fuzzy
-#| msgid "Waiting list"
 msgctxt "export_category"
 msgid "Waiting list"
 msgstr "Wachtlijst"
 
 #: pretix/base/exporters/waitinglist.py:43
 msgid "Download a spread sheet with all your waiting list data."
-msgstr ""
+msgstr "Download een spreadsheet met alle gegevens van de wachtlijst."
 
 #: pretix/base/exporters/waitinglist.py:49
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
@@ -2462,6 +2452,8 @@ msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
 msgstr ""
+"Om technische redenen kunt u invoer die moet worden gemaskeerd (bv. "
+"wachtwoorden) niet instellen op %(value)s."
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:168
 msgid "Keep me logged in"
@@ -2556,6 +2548,7 @@ msgid ""
 "If you keep this empty, the ticket will be valid starting at the time of "
 "purchase."
 msgstr ""
+"Als u dit leeg laat, wordt het ticket geldig vanaf het moment van aankoop."
 
 #: pretix/base/forms/questions.py:641 pretix/base/forms/questions.py:961
 msgid "Street and Number"
@@ -2828,14 +2821,13 @@ msgstr "Bedrag"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {net_price} net / {gross_price} gross"
-msgstr ""
+msgstr "Eenheidsprijs: {net_price} netto / {gross_price} bruto"
 
 #: pretix/base/invoice.py:618
-#, fuzzy, python-brace-format
-#| msgid "Single price"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "Eenheidsprijs"
+msgstr "Eenheidsprijs: {price}"
 
 #: pretix/base/invoice.py:636 pretix/base/invoice.py:641
 msgctxt "invoice"
@@ -2853,15 +2845,11 @@ msgid "Outstanding payments"
 msgstr "Openstaande betalingen"
 
 #: pretix/base/invoice.py:667
-#, fuzzy
-#| msgid "Issued gift cards"
 msgctxt "invoice"
 msgid "Paid by gift card"
-msgstr "Uitgegeven cadeaubonnen"
+msgstr "Betaald met cadeaubon"
 
 #: pretix/base/invoice.py:670
-#, fuzzy
-#| msgid "Pending amount"
 msgctxt "invoice"
 msgid "Remaining amount"
 msgstr "Openstaand bedrag"
@@ -2887,32 +2875,24 @@ msgid "Included taxes"
 msgstr "Inbegrepen belastingen"
 
 #: pretix/base/invoice.py:777
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "Using the conversion rate of 1:{rate} as published by the European "
-#| "Central Bank on {date}, this corresponds to:"
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
-"Op basis van de wisselkoers van 1:{rate} zoals gepubliceerd door de Europese "
-"Centrale Bank op {date} komt dit overeen met:"
+"Op basis van de wisselkoers van 1:{rate} zoals gepubliceerd door de "
+"{authority} op {date} komt dit overeen met:"
 
 #: pretix/base/invoice.py:792
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "Using the conversion rate of 1:{rate} as published by the European "
-#| "Central Bank on {date}, the invoice total corresponds to {total}."
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
 msgstr ""
-"Op basis van de wisselkoers van 1:{rate} zoals gepubliceerd door de Europese "
-"Centrale Bank op {date} komt het factuurtotaal uit op {total}."
+"Op basis van de wisselkoers van 1:{rate} zoals gepubliceerd door de "
+"{authority} op {date} komt het factuurtotaal uit op {total}."
 
 #: pretix/base/invoice.py:806
 msgid "Modern Invoice Renderer (pretix 2.7)"
@@ -3007,6 +2987,8 @@ msgstr ""
 #: pretix/base/models/checkin.py:64
 msgid "Allow checking in add-on tickets by scanning the main ticket"
 msgstr ""
+"Inchecken van extra producten mogelijk maken door het scannen van het "
+"hoofdticket"
 
 #: pretix/base/models/checkin.py:66
 msgid ""
@@ -3014,6 +2996,9 @@ msgid ""
 "there is always exactly one matching add-on ticket. Ambiguous scans will be "
 "rejected.."
 msgstr ""
+"Een scan is alleen mogelijk als de inchecklijst zodanig is geconfigureerd "
+"dat er altijd precies één overeenstemmend add-on ticket is. Dubbelzinnige "
+"scans worden geweigerd."
 
 #: pretix/base/models/checkin.py:70 pretix/control/navigation.py:597
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
@@ -3102,39 +3087,31 @@ msgstr "Tickettype hier niet toegestaan"
 
 #: pretix/base/models/checkin.py:345
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "Ticketcode is niet uniek in de lijst"
 
 #: pretix/base/models/checkin.py:346
 msgid "Server error"
 msgstr "Serverfout"
 
 #: pretix/base/models/checkin.py:347
-#, fuzzy
-#| msgid "Ticket code"
 msgid "Ticket blocked"
-msgstr "Ticketcode"
+msgstr "Ticket geblokkeerd"
 
 #: pretix/base/models/checkin.py:348
-#, fuzzy
-#| msgid "This voucher is not valid for this seat."
 msgid "Ticket not valid at this time"
-msgstr "Deze voucher is niet geldig voor deze stoel."
+msgstr "Ticket is niet geldig op dit moment"
 
 #: pretix/base/models/customers.py:54
-#, fuzzy
-#| msgid "Product name"
 msgid "Provider name"
 msgstr "Productnaam"
 
 #: pretix/base/models/customers.py:59
 msgid "Login button label"
-msgstr ""
+msgstr "Login-knop label"
 
 #: pretix/base/models/customers.py:63
-#, fuzzy
-#| msgid "Refund method"
 msgid "Single-sign-on method"
-msgstr "Terugbetalingsmethode"
+msgstr "Single-sign-on methode"
 
 #: pretix/base/models/customers.py:84 pretix/base/models/devices.py:72
 #: pretix/base/models/items.py:1421 pretix/base/models/items.py:1651
@@ -3168,18 +3145,14 @@ msgstr "Selecteer land"
 #: pretix/base/models/customers.py:367
 msgctxt "openidconnect"
 msgid "Confidential"
-msgstr ""
+msgstr "Vertrouwelijk"
 
 #: pretix/base/models/customers.py:368
-#, fuzzy
-#| msgid "Public profile"
 msgctxt "openidconnect"
 msgid "Public"
-msgstr "Openbaar profiel"
+msgstr "Openbaar"
 
 #: pretix/base/models/customers.py:374
-#, fuzzy
-#| msgid "Authorization Code"
 msgctxt "openidconnect"
 msgid "Authorization code"
 msgstr "Autorisatiecode"
@@ -3187,41 +3160,31 @@ msgstr "Autorisatiecode"
 #: pretix/base/models/customers.py:375
 msgctxt "openidconnect"
 msgid "Implicit"
-msgstr ""
+msgstr "Impliciet"
 
 #: pretix/base/models/customers.py:379
 msgid "OpenID Connect access (required)"
-msgstr ""
+msgstr "OpenID Connect toegang (vereist)"
 
 #: pretix/base/models/customers.py:380
-#, fuzzy
-#| msgid "Create new address"
 msgid "Profile data (name, addresses)"
-msgstr "Nieuw adres aanmaken"
+msgstr "Profielgegevens (naam, adres)"
 
 #: pretix/base/models/customers.py:400
-#, fuzzy
-#| msgid "Event type"
 msgid "Client type"
-msgstr "Evenementstype"
+msgstr "Klanttype"
 
 #: pretix/base/models/customers.py:403
-#, fuzzy
-#| msgid "Scan type"
 msgid "Grant type"
-msgstr "Scantype"
+msgstr "Soort subsidie"
 
 #: pretix/base/models/customers.py:414
-#, fuzzy
-#| msgid "Allowed membership types"
 msgid "Allowed access scopes"
-msgstr "Toegestane lidmaatschapstypen"
+msgstr "Toegestane scopes"
 
 #: pretix/base/models/customers.py:415
-#, fuzzy
-#| msgid "Create multiple vouchers"
 msgid "Separate multiple values with spaces"
-msgstr "Maak meerdere vouchers aan"
+msgstr "Scheid meerdere waarden door spaties"
 
 #: pretix/base/models/devices.py:71 pretix/base/models/items.py:1420
 msgid "Internal identifier"
@@ -3269,11 +3232,8 @@ msgid "Position"
 msgstr "Plaats"
 
 #: pretix/base/models/discount.py:85
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Event series date changed"
 msgid "Event series handling"
-msgstr "Evenementenreeks: datum aangepast"
+msgstr "Behandeling van evenementenreeksen"
 
 #: pretix/base/models/discount.py:93
 msgid "Apply to all products (including newly created ones)"
@@ -3284,10 +3244,8 @@ msgid "Apply to specific products"
 msgstr "Pas toe op specifieke producten"
 
 #: pretix/base/models/discount.py:102
-#, fuzzy
-#| msgid "Apply to products"
 msgid "Apply to add-on products"
-msgstr "Toepassen op producten"
+msgstr "Toepassen op add-on producten"
 
 #: pretix/base/models/discount.py:103
 msgid "Discounts never apply to bundled products"
@@ -3310,18 +3268,16 @@ msgstr ""
 "te krijgen tot uitverkochte producten zullen nog steeds een korting krijgen."
 
 #: pretix/base/models/discount.py:113
-#, fuzzy
-#| msgid "Maximum number of items per order"
 msgid "Minimum number of matching products"
-msgstr "Maximale aantal producten per bestelling"
+msgstr "Minimum aantal overeenkomstige producten"
 
 #: pretix/base/models/discount.py:117
 msgid "Minimum gross value of matching products"
-msgstr ""
+msgstr "Minimum bruto waarde van overeenkomstige producten"
 
 #: pretix/base/models/discount.py:124
 msgid "Percentual discount on matching products"
-msgstr ""
+msgstr "Percentuele korting op overeenkomstige producten"
 
 #: pretix/base/models/discount.py:131
 msgid "Apply discount only to this number of matching products"
@@ -3336,18 +3292,28 @@ msgid ""
 "discounted. If you want to grant the discount on all matching products, keep "
 "this field empty."
 msgstr ""
+"Met deze optie kunt u kortingen creëren van het type \"koop X krijg Y met "
+"korting/gratis\". Als u bijvoorbeeld \"Minimum aantal overeenkomstige "
+"producten\" instelt op vier en deze waarde op twee, wordt de winkelwagen van "
+"de klant opgesplitst in groepen van vier tickets en krijgen de goedkoopste "
+"twee tickets binnen elke groep korting. Als u de korting op alle "
+"overeenkomende producten wilt toekennen, laat u dit veld leeg."
 
 #: pretix/base/models/discount.py:170
 msgid ""
 "You can either set a minimum number of matching products or a minimum value, "
 "not both."
 msgstr ""
+"U kunt ofwel een minimumaantal overeenstemmende producten ofwel een "
+"minimumwaarde instellen, niet beide."
 
 #: pretix/base/models/discount.py:175
 msgid ""
 "You need to either set a minimum number of matching products or a minimum "
 "value."
 msgstr ""
+"U moet ofwel een minimumaantal overeenstemmende producten ofwel een "
+"minimumwaarde instellen."
 
 #: pretix/base/models/discount.py:180
 msgid ""
