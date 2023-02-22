@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 12:25+0000\n"
-"PO-Revision-Date: 2023-02-09 02:00+0000\n"
+"PO-Revision-Date: 2023-02-22 11:22+0000\n"
 "Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -30620,7 +30620,6 @@ msgstr ""
 "actuellement disponible."
 
 #: pretix/presale/views/waiting.py:128
-#, fuzzy
 msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "this product gets available again."
