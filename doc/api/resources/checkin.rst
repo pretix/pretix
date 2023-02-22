@@ -73,6 +73,7 @@ Checking a ticket in
 
       {
         "secret": "M5BO19XmFwAjLd4nDYUAL9ISjhti0e9q",
+        "source_type": "barcode",
         "lists": [1],
         "force": false,
         "ignore_unpaid": false,
