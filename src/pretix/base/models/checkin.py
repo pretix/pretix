@@ -44,6 +44,7 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager, scopes_disabled
 
+from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import LoggedModel
 from pretix.base.models.fields import MultiStringField
 from pretix.helpers import PostgresWindowFrame
@@ -377,6 +378,11 @@ class Checkin(models.Model):
     # For "raw" scans where we do not know which position they belong to (e.g. scan of signed
     # barcode that is not in database).
     raw_barcode = models.TextField(null=True, blank=True)
+    raw_source_type = models.CharField(
+        max_length=100,
+        null=True, blank=True,
+        choices=[(k, v) for k, v in MEDIA_TYPES.items()],
+    )
     raw_item = models.ForeignKey(
         'pretixbase.Item',
         related_name='checkins',

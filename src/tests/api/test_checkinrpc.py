@@ -33,7 +33,9 @@ from pytz import UTC
 from tests.const import SAMPLE_PNG
 
 from pretix.api.serializers.item import QuestionSerializer
-from pretix.base.models import Checkin, InvoiceAddress, Order, OrderPosition
+from pretix.base.models import (
+    Checkin, InvoiceAddress, Order, OrderPosition, ReusableMedium,
+)
 
 # Lots of this code is overlapping with test_checkin.py, and some of it is arguably redundant since it's triggering
 # the same backend code paths (for now). However, this is SUCH a critical part of pretix that we don't want to take
@@ -273,6 +275,68 @@ def test_by_secret_special_chars(token_client, organizer, clist, event, order):
     resp = _redeem(token_client, organizer, clist, p.secret, {})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_by_medium(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        ReusableMedium.objects.create(
+            type="barcode",
+            identifier="abcdef",
+            organizer=organizer,
+            linked_orderposition=order.positions.first(),
+        )
+    resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_by_medium_not_connected(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        ReusableMedium.objects.create(
+            type="barcode",
+            identifier="abcdef",
+            organizer=organizer,
+        )
+    resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+    assert resp.status_code == 404
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'invalid'
+
+
+@pytest.mark.django_db
+def test_by_medium_wrong_type(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        ReusableMedium.objects.create(
+            type="ntag_password_pretix1",
+            identifier="abcdef",
+            organizer=organizer,
+            linked_orderposition=order.positions.first(),
+        )
+    resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+    assert resp.status_code == 404
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'invalid'
+    resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "ntag_password_pretix1"})
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+
+
+@pytest.mark.django_db
+def test_by_medium_inactive(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        ReusableMedium.objects.create(
+            type="barcode",
+            identifier="abcdef",
+            organizer=organizer,
+            active=False,
+            linked_orderposition=order.positions.first(),
+        )
+    resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+    assert resp.status_code == 404
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'invalid'
 
 
 @pytest.mark.django_db

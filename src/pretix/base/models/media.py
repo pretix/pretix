@@ -36,7 +36,7 @@ from pretix.base.models.organizer import Organizer
 
 class ReusableMediumQuerySet(models.QuerySet):
 
-    def active(self, ev):
+    def active(self):
         return self.filter(
             Q(expires__isnull=True) | Q(expires__gte=now()),
             active=True,
@@ -48,8 +48,8 @@ class ReusableMediumQuerySetManager(ScopedManager(organizer='organizer').__class
         super().__init__()
         self._queryset_class = ReusableMediumQuerySet
 
-    def active(self, ev):
-        return self.get_queryset().active(ev)
+    def active(self):
+        return self.get_queryset().active()
 
 
 class ReusableMedium(LoggedModel):

@@ -43,7 +43,7 @@ class Migration(migrations.Migration):
                 ('type', models.CharField(max_length=100)),
                 ('identifier', models.CharField(max_length=200)),
                 ('active', models.BooleanField(default=True)),
-                ('expires', models.DateTimeField(null=True)),
+                ('expires', models.DateTimeField(blank=True, null=True)),
                 ('info', models.JSONField(default=dict)),
                 ('customer', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL,
                                                related_name='reusable_media', to='pretixbase.customer')),
@@ -63,6 +63,11 @@ class Migration(migrations.Migration):
                 'index_together': {('identifier', 'type', 'organizer'), ('updated', 'id')},
             },
             bases=(models.Model, pretix.base.models.base.LoggingMixin),
+        ),
+        migrations.AddField(
+            model_name='checkin',
+            name='raw_source_type',
+            field=models.CharField(max_length=100, null=True),
         ),
         migrations.RunPython(
             set_can_manage_reusable_media,

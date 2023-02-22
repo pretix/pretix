@@ -28,6 +28,7 @@ Checking a ticket in
    passed needs to be from a distinct event.
 
    :<json string secret: Scanned QR code corresponding to the ``secret`` attribute of a ticket.
+   :<json string source_type: Type of source the ``secret`` was obtained form. Defaults to ``"barcode"``.
    :<json array lists: List of check-in list IDs to search on. No two check-in lists may be from the same event.
    :<json string type: Send ``"exit"`` for an exit and ``"entry"`` (default) for an entry.
    :<json datetime datetime: Specifies the datetime of the check-in. If not supplied, the current time will be used.
