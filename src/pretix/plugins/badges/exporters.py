@@ -168,6 +168,14 @@ OPTIONS = OrderedDict([
         'offsets': [46 * mm, 46 * mm],
         'pagesize': pagesizes.A4,
     }),
+    ('lyreco_70x36', {
+        'name': 'Lyreco 70 x 36 mm (143.344)',
+        'cols': 3,
+        'rows': 8,
+        'margins': [4.5 * mm, 0 * mm, 4.5 * mm, 0 * mm],
+        'offsets': [70 * mm, 36 * mm],
+        'pagesize': pagesizes.A4,
+    }),
 ])
 
 
