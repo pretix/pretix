@@ -226,7 +226,7 @@ setup(
         'sepaxml==2.6.*',
         'slimit',
         'static3==0.7.*',
-        'stripe==5.1.*',
+        'stripe>=5.1,<5.3',
         'text-unidecode==1.*',
         'tlds>=2020041600',
         'tqdm==4.*',
