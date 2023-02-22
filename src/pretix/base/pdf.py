@@ -766,6 +766,9 @@ class Renderer:
         else:
             content = self._get_text_content(op, order, o)
 
+        if len(content) == 0:
+            return
+
         level = 'H'
         if len(content) > 32:
             level = 'M'
