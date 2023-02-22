@@ -33,6 +33,7 @@ from django.utils.encoding import force_str
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy
 from django_countries.fields import Country
+from django_scopes import scopes_disabled
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
@@ -458,7 +459,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
             # layer to not set pdf_data=true in the first place.
             request and hasattr(request, 'event') and 'can_view_orders' not in request.eventpermset
         )
-        if ('pdf_data' in self.context and not self.context['pdf_data']) or pdf_data_forbidden or ('event' not in self.context and not request):
+        if ('pdf_data' in self.context and not self.context['pdf_data']) or pdf_data_forbidden:
             self.fields.pop('pdf_data', None)
 
     def validate(self, data):
@@ -801,8 +802,8 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 v.required = False
                 v.allow_blank = True
                 v.allow_null = True
-        if 'event' in self.context:
-            self.fields['use_reusable_medium'].queryset = self.context['event'].organizer.reusable_media.all()
+        with scopes_disabled():
+            self.fields['use_reusable_medium'].queryset = ReusableMedium.objects.all()
 
     def validate_secret(self, secret):
         if secret and OrderPosition.all.filter(order__event=self.context['event'], secret=secret).exists():
@@ -810,6 +811,13 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 'You cannot assign a position secret that already exists.'
             )
         return secret
+
+    def validate_use_reusable_medium(self, m):
+        if m.organizer_id != self.context['event'].organizer_id:
+            raise ValidationError(
+                'The specified medium does not belong to this organizer.'
+            )
+        return m
 
     def validate_item(self, item):
         if item.event != self.context['event']:
