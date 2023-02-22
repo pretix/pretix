@@ -2258,7 +2258,7 @@ class OrderChangeManager:
                         op.position.blocked = op.position.blocked + [op.block_name]
                 else:
                     op.position.blocked = [op.block_name]
-                if op.ignore_from_quota_while_blocked:
+                if op.ignore_from_quota_while_blocked is not None:
                     op.position.ignore_from_quota_while_blocked = op.ignore_from_quota_while_blocked
                 op.position.save(update_fields=['blocked', 'ignore_from_quota_while_blocked'])
                 if op.position.blocked:
@@ -2280,7 +2280,7 @@ class OrderChangeManager:
                     op.position.blocked = [b for b in op.position.blocked if b != op.block_name]
                     if not op.position.blocked:
                         op.position.blocked = None
-                    if op.ignore_from_quota_while_blocked:
+                    if op.ignore_from_quota_while_blocked is not None:
                         op.position.ignore_from_quota_while_blocked = op.ignore_from_quota_while_blocked
                     op.position.save(update_fields=['blocked', 'ignore_from_quota_while_blocked'])
                     if not op.position.blocked:
