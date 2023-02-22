@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 12:25+0000\n"
-"PO-Revision-Date: 2023-02-22 11:22+0000\n"
+"PO-Revision-Date: 2023-02-22 11:28+0000\n"
 "Last-Translator: Toon Toetenel <toon@toetenel.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -830,8 +830,6 @@ msgid "No"
 msgstr "Nee"
 
 #: pretix/base/exporters/dekodi.py:42 pretix/base/exporters/invoices.py:66
-#, fuzzy
-#| msgid "Invoices"
 msgctxt "export_category"
 msgid "Invoices"
 msgstr "Facturen"
@@ -868,10 +866,8 @@ msgstr ""
 "de factuurdatum niet altijd overeenkomt met de bestel- of betaaldatum."
 
 #: pretix/base/exporters/events.py:47
-#, fuzzy
-#| msgid "Event date"
 msgid "Event data"
-msgstr "Evenementdatum"
+msgstr "Evenementdata"
 
 #: pretix/base/exporters/events.py:48
 msgctxt "export_category"
@@ -883,6 +879,8 @@ msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
 msgstr ""
+"Download een bestand (Excel of CSV) met alle informatie over de evenementen "
+"in dit organisatie-account."
 
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/waitinglist.py:114
 #: pretix/base/models/event.py:522 pretix/base/pdf.py:219
@@ -997,6 +995,8 @@ msgstr "Alle facturen"
 #: pretix/base/exporters/invoices.py:124
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
 msgstr ""
+"Download alle door het systeem gegenereerde PDF-facturen in een groot ZIP-"
+"bestand."
 
 #: pretix/base/exporters/invoices.py:175
 msgid "Invoice data"
