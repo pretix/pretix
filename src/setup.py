@@ -222,7 +222,7 @@ setup(
         'redis==4.5.*',
         'reportlab==3.6.*',
         'requests==2.28.*',
-        'sentry-sdk==1.10.*',  # when upgrading, check https://github.com/getsentry/sentry-python/issues/1700
+        'sentry-sdk==1.15.*',
         'sepaxml==2.6.*',
         'slimit',
         'static3==0.7.*',
