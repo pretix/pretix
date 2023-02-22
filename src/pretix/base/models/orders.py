@@ -2212,6 +2212,9 @@ class OrderPosition(AbstractPosition):
                     description by a plugin. If the position is not blocked, the value must be ``None``, not an empty
                     list.
     :type blocked: list
+    :param ignore_from_quota_while_blocked: Ignore this order position from quota, as long as ``blocked`` is set. Only
+                                            to be used carefully by specific plugins.
+    :type ignore_from_quota_while_blocked: boolean
     :param valid_from: The ticket will not be considered valid before this date. If the value is ``None``, no check on
                        ticket level is made.
     :type valid_from: datetime
@@ -2257,6 +2260,7 @@ class OrderPosition(AbstractPosition):
     canceled = models.BooleanField(default=False)
 
     blocked = models.JSONField(null=True, blank=True)
+    ignore_from_quota_while_blocked = models.BooleanField(default=False)
     valid_from = models.DateTimeField(
         verbose_name=_("Valid from"),
         null=True,

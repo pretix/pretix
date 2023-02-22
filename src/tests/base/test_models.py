@@ -484,6 +484,22 @@ class QuotaTestCase(BaseQuotaTestCase):
             self.assertEqual(self.var1.check_quotas(_cache=cache, count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
 
     @classscope(attr='o')
+    def test_ignore_if_blocked(self):
+        q1 = self.event.quotas.create(name="Q1", size=50)
+        q1.items.add(self.item1)
+
+        # Create orders
+        order = Order.objects.create(event=self.event, status=Order.STATUS_PAID,
+                                     expires=now() + timedelta(days=3),
+                                     total=6)
+        OrderPosition.objects.create(order=order, item=self.item1, price=2)
+        OrderPosition.objects.create(order=order, item=self.item1, price=2, blocked=["foo"])
+        OrderPosition.objects.create(order=order, item=self.item1, price=2, blocked=["foo"], ignore_from_quota_while_blocked=True)
+        OrderPosition.objects.create(order=order, item=self.item1, price=2, ignore_from_quota_while_blocked=True)
+
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 47))
+
+    @classscope(attr='o')
     def test_subevent_isolation(self):
         self.event.has_subevents = True
         self.event.save()

@@ -1437,8 +1437,8 @@ class OrderChangeManager:
     RegenerateSecretOperation = namedtuple('RegenerateSecretOperation', ('position',))
     ChangeValidFromOperation = namedtuple('ChangeValidFromOperation', ('position', 'valid_from'))
     ChangeValidUntilOperation = namedtuple('ChangeValidUntilOperation', ('position', 'valid_until'))
-    AddBlockOperation = namedtuple('AddBlockOperation', ('position', 'block_name'))
-    RemoveBlockOperation = namedtuple('RemoveBlockOperation', ('position', 'block_name'))
+    AddBlockOperation = namedtuple('AddBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
+    RemoveBlockOperation = namedtuple('RemoveBlockOperation', ('position', 'block_name', 'ignore_from_quota_while_blocked'))
 
     def __init__(self, order: Order, user=None, auth=None, notify=True, reissue_invoice=True):
         self.order = order
@@ -1548,11 +1548,11 @@ class OrderChangeManager:
     def change_valid_until(self, position: OrderPosition, new_value: datetime):
         self._operations.append(self.ChangeValidUntilOperation(position, new_value))
 
-    def add_block(self, position: OrderPosition, block_name: str):
-        self._operations.append(self.AddBlockOperation(position, block_name))
+    def add_block(self, position: OrderPosition, block_name: str, ignore_from_quota_while_blocked=None):
+        self._operations.append(self.AddBlockOperation(position, block_name, ignore_from_quota_while_blocked))
 
-    def remove_block(self, position: OrderPosition, block_name: str):
-        self._operations.append(self.RemoveBlockOperation(position, block_name))
+    def remove_block(self, position: OrderPosition, block_name: str, ignore_from_quota_while_blocked=None):
+        self._operations.append(self.RemoveBlockOperation(position, block_name, ignore_from_quota_while_blocked))
 
     def change_price(self, position: OrderPosition, price: Decimal):
         tax_rule = self._current_tax_rules().get(position.pk, position.tax_rule) or TaxRule.zero()
@@ -2258,7 +2258,9 @@ class OrderChangeManager:
                         op.position.blocked = op.position.blocked + [op.block_name]
                 else:
                     op.position.blocked = [op.block_name]
-                op.position.save(update_fields=['blocked'])
+                if op.ignore_from_quota_while_blocked is not None:
+                    op.position.ignore_from_quota_while_blocked = op.ignore_from_quota_while_blocked
+                op.position.save(update_fields=['blocked', 'ignore_from_quota_while_blocked'])
                 if op.position.blocked:
                     op.position.blocked_secrets.update_or_create(
                         event=self.event,
@@ -2278,7 +2280,9 @@ class OrderChangeManager:
                     op.position.blocked = [b for b in op.position.blocked if b != op.block_name]
                     if not op.position.blocked:
                         op.position.blocked = None
-                    op.position.save(update_fields=['blocked'])
+                    if op.ignore_from_quota_while_blocked is not None:
+                        op.position.ignore_from_quota_while_blocked = op.ignore_from_quota_while_blocked
+                    op.position.save(update_fields=['blocked', 'ignore_from_quota_while_blocked'])
                     if not op.position.blocked:
                         try:
                             bs = op.position.blocked_secrets.get(secret=op.position.secret)
