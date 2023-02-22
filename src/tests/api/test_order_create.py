@@ -56,6 +56,14 @@ def taxrule(event):
 
 
 @pytest.fixture
+def medium(organizer):
+    return organizer.reusable_media.create(
+        type="barcode",
+        identifier="ABCDE"
+    )
+
+
+@pytest.fixture
 def question(event, item):
     q = event.questions.create(question="T-Shirt size", type="S", identifier="ABC")
     q.items.add(item)
@@ -2810,3 +2818,20 @@ def test_create_cart_and_consume_cart_with_addons(token_client, organizer, event
         ), format='json', data=res
     )
     assert resp.status_code == 201
+
+
+@pytest.mark.django_db
+def test_order_create_use_medium(token_client, organizer, event, item, quota, question, medium):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['use_reusable_medium'] = medium.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        medium.refresh_from_db()
+        assert o.positions.first() == medium.linked_orderposition

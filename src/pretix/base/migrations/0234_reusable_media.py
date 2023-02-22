@@ -15,7 +15,7 @@ def set_can_manage_reusable_media(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('pretixbase', '0232_exchangerate'),
+        ('pretixbase', '0233_ignore_from_quota_while_blocked'),
     ]
 
     operations = [

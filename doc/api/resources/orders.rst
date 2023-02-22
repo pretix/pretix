@@ -910,6 +910,7 @@ Creating orders
       * ``valid_from`` (optional, if both ``valid_from`` and ``valid_until`` are **missing** (not ``null``) the availability will be computed from the given product)
       * ``valid_until`` (optional, if both ``valid_from`` and ``valid_until`` are **missing** (not ``null``) the availability will be computed from the given product)
       * ``requested_valid_from`` (optional, can be set **instead** of ``valid_from`` and ``valid_until`` to signal a user choice for the start time that may or may not be respected)
+      * ``use_reusable_medium`` (optional, causes the new ticket to take over the given reusable medium, identified by its ID)
       * ``answers``
 
         * ``question``
