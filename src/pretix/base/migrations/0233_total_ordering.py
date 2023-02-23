@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0228_scheduledeventexport_scheduledorganizerexport'),
+        ('pretixbase', '0232_exchangerate.py'),
     ]
 
     operations = [
