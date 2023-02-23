@@ -2826,7 +2826,7 @@ def test_order_create_use_medium(token_client, organizer, event, item, quota, qu
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['use_reusable_medium'] = medium.pk
     resp = token_client.post(
-        '/api/v1/organizers/{}/events/{}/orders/'.format(
+        '/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
             organizer.slug, event.slug
         ), format='json', data=res
     )
@@ -2835,3 +2835,4 @@ def test_order_create_use_medium(token_client, organizer, event, item, quota, qu
         o = Order.objects.get(code=resp.data['code'])
         medium.refresh_from_db()
         assert o.positions.first() == medium.linked_orderposition
+        assert resp.data['positions'][0]['pdf_data']['medium_identifier'] == medium.identifier

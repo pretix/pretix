@@ -640,13 +640,11 @@ class OrderViewSet(viewsets.ModelViewSet):
                 raise ValidationError(_('One of the selected products is not available in the selected country.'))
             send_mail = serializer._send_mail
             order = serializer.instance
+
             if not order.pk:
-                # Simulation
+                # Simulation -- exit here
                 serializer = SimulatedOrderSerializer(order, context=serializer.context)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                prefetch_related_objects([order], self._positions_prefetch(request))
-                serializer = OrderSerializer(order, context=serializer.context)
 
             order.log_action(
                 'pretix.event.order.placed',
@@ -679,6 +677,10 @@ class OrderViewSet(viewsets.ModelViewSet):
             invoice = None
             if gen_invoice:
                 invoice = generate_invoice(order, trigger_pdf=True)
+
+            # Refresh serializer only after running signals
+            prefetch_related_objects([order], self._positions_prefetch(request))
+            serializer = OrderSerializer(order, context=serializer.context)
 
             if send_mail:
                 free_flow = (

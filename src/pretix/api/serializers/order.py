@@ -357,6 +357,9 @@ class PdfDataSerializer(serializers.Field):
     def to_representation(self, instance: OrderPosition):
         res = {}
 
+        if 'event' not in self.context:
+            return {}
+
         ev = instance.subevent or instance.order.event
         with language(instance.order.locale, instance.order.event.settings.region):
             # This needs to have some extra performance improvements to avoid creating hundreds of queries when
