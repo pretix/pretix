@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 12:25+0000\n"
-"PO-Revision-Date: 2023-02-23 07:00+0000\n"
+"PO-Revision-Date: 2023-02-23 23:00+0000\n"
 "Last-Translator: Toon Toetenel <toon@toetenel.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -3320,12 +3320,16 @@ msgid ""
 "You cannot apply the discount only to some of the matched products if you "
 "are matching on a minimum value."
 msgstr ""
+"U kunt de korting niet toepassen op slechts enkele van de producten als u op "
+"een minimumwaarde filtert."
 
 #: pretix/base/models/discount.py:186
 msgid ""
 "You cannot apply the discount only to bookings of different dates if you are "
 "matching on a minimum value."
 msgstr ""
+"U kunt de korting niet toepassen op boekingen van verschillende data als u "
+"op een minimumwaarde filtert."
 
 #: pretix/base/models/event.py:85
 msgid "The end of the presale period has to be later than its start."
@@ -3552,7 +3556,7 @@ msgstr ""
 
 #: pretix/base/models/event.py:1633
 msgid "Can be used for filtering"
-msgstr ""
+msgstr "Kan gebruikt worden om te filteren"
 
 #: pretix/base/models/event.py:1634
 msgid ""
@@ -3560,6 +3564,9 @@ msgid ""
 "can also be used for hidden filter parameters in the frontend (e.g. using "
 "the widget)."
 msgstr ""
+"Dit veld wordt getoond om gebeurtenissen of rapporten te filteren in de "
+"backend en het kan ook worden gebruikt als verborgen filterparameters in de "
+"frontend (bijv. met behulp van de widget)."
 
 #: pretix/base/models/event.py:1641
 msgid "A property can either be required or have a default value, not both."
@@ -3574,16 +3581,12 @@ msgstr ""
 "waarden staat."
 
 #: pretix/base/models/event.py:1718 pretix/base/models/organizer.py:479
-#, fuzzy
-#| msgid "Info text"
 msgid "Link text"
-msgstr "Infotekst"
+msgstr "Linktekst"
 
 #: pretix/base/models/event.py:1721 pretix/base/models/organizer.py:482
-#, fuzzy
-#| msgid "Imprint URL"
 msgid "Link URL"
-msgstr "Imprint-URL"
+msgstr "Link-URL"
 
 #: pretix/base/models/exports.py:41 pretix/control/navigation.py:227
 #: pretix/control/navigation.py:607
@@ -3591,27 +3594,21 @@ msgid "Export"
 msgstr "Exporteren"
 
 #: pretix/base/models/exports.py:58
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Additional recipients"
-msgstr "Extra instellingen"
+msgstr "Extra ontvangers"
 
 #: pretix/base/models/exports.py:60 pretix/base/models/exports.py:65
 #: pretix/base/models/exports.py:70
 msgid "You can specify multiple recipients separated by commas."
-msgstr ""
+msgstr "U kunt meerdere ontvangers opgeven, gescheiden met komma's."
 
 #: pretix/base/models/exports.py:63
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Additional recipients (Cc)"
-msgstr "Extra instellingen"
+msgstr "Extra ontvangers (Cc)"
 
 #: pretix/base/models/exports.py:68
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Additional recipients (Bcc)"
-msgstr "Extra instellingen"
+msgstr "Extra ontvangers (Bcc)"
 
 #: pretix/base/models/exports.py:73 pretix/control/forms/event.py:1014
 #: pretix/control/forms/event.py:1076 pretix/control/forms/event.py:1088
@@ -3633,14 +3630,14 @@ msgid "Message"
 msgstr "Bericht"
 
 #: pretix/base/models/exports.py:84
-#, fuzzy
-#| msgid "Event start time"
 msgid "Requested start time"
-msgstr "Starttijd van het evenement"
+msgstr "Gewenste starttijd"
 
 #: pretix/base/models/exports.py:85
 msgid "The actual start time might be delayed depending on system load."
 msgstr ""
+"De daadwerkelijke starttijd kan zijn vertraagd, afhankelijk van de "
+"systeembelasting."
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
@@ -3725,22 +3722,16 @@ msgid "This product will not be sold after the given date."
 msgstr "Dit product zal niet na de opgegeven datum verkocht worden."
 
 #: pretix/base/models/items.py:366
-#, fuzzy
-#| msgid "(Event default)"
 msgid "Event validity (default)"
-msgstr "(Standaard van evenement)"
+msgstr "Geldigheid van evenement (standaard)"
 
 #: pretix/base/models/items.py:367
-#, fuzzy
-#| msgid "Customer"
 msgid "Fixed time frame"
-msgstr "Klant"
+msgstr "Vast tijdvak"
 
 #: pretix/base/models/items.py:368
-#, fuzzy
-#| msgid "Gift card validity"
 msgid "Dynamic validity"
-msgstr "Geldigheid van cadeaubonnen"
+msgstr "Dynamische geldigheid"
 
 #: pretix/base/models/items.py:384 pretix/base/models/items.py:1206
 #: pretix/control/templates/pretixcontrol/items/index.html:40
@@ -3789,17 +3780,14 @@ msgid "Whether or not buying this product allows a person to enter your event"
 msgstr "Het kopen van dit product staat iemand toe om uw evenement te betreden"
 
 #: pretix/base/models/items.py:434
-#, fuzzy
-#| msgid "Is an admission ticket"
 msgid "Is a personalized ticket"
-msgstr "Is een toegangsbewijs"
+msgstr "Is een gepersonaliseerd toegangsbewijs"
 
 #: pretix/base/models/items.py:436
-#, fuzzy
-#| msgid ""
-#| "Whether or not buying this product allows a person to enter your event"
 msgid "Whether or not buying this product allows to enter attendee information"
-msgstr "Het kopen van dit product staat iemand toe om uw evenement te betreden"
+msgstr ""
+"Activeer als bij het aan kopen van zit product deelnemersinformatie "
+"opgegeven moet worden"
 
 #: pretix/base/models/items.py:445
 msgid "Show a waiting list for this ticket"
@@ -3979,10 +3967,8 @@ msgid "Membership duration in months"
 msgstr "Duur van lidmaatschap in maanden"
 
 #: pretix/base/models/items.py:594
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity"
-msgstr "Geldig tot"
+msgstr "Geldigheid"
 
 #: pretix/base/models/items.py:596
 msgid ""
@@ -3995,60 +3981,58 @@ msgid ""
 "change the settings here later, existing tickets will not be affected by the "
 "change but keep their current validity."
 msgstr ""
+"Bij het opzetten van een gewoon evenement, of een reeks evenementen met "
+"tijdsloten, hoeft u deze waarde meestal NIET te veranderen. De "
+"standaardinstelling betekent dat de geldigheidsduur van tickets niet wordt "
+"bepaald door het product, maar door het evenement en de incheckconfiguratie. "
+"Gebruik de andere opties alleen als u ze nodig hebt om bijv. een boeking van "
+"een jaarkaart met een dynamische startdatum te realiseren. Indien de "
+"geldigheid wordt opgeslagen bij het ticket, dus als u de instellingen hier "
+"later wijzigt, zullen bestaande tickets niet worden beïnvloed door de "
+"wijziging, maar hun huidige geldigheid behouden."
 
 #: pretix/base/models/items.py:604
-#, fuzzy
-#| msgid "Gift card validity"
 msgid "Start of validity"
-msgstr "Geldigheid van cadeaubonnen"
+msgstr "Start geldigheid"
 
 #: pretix/base/models/items.py:605
-#, fuzzy
-#| msgid "End of presale"
 msgid "End of validity"
-msgstr "Einde van de voorverkoop"
+msgstr "Einde geldigheid"
 
 #: pretix/base/models/items.py:608
-#, fuzzy
-#| msgid "minutes"
 msgid "Minutes"
-msgstr "minuten"
+msgstr "Minuten"
 
 #: pretix/base/models/items.py:612
 msgid "Hours"
-msgstr ""
+msgstr "Uren"
 
 #: pretix/base/models/items.py:616
 msgid "Days"
-msgstr ""
+msgstr "Dagen"
 
 #: pretix/base/models/items.py:620
-#, fuzzy
-#| msgid "Month"
 msgid "Months"
-msgstr "Maand"
+msgstr "Maanden"
 
 #: pretix/base/models/items.py:623
-#, fuzzy
-#| msgid "Customers can cancel their paid orders"
 msgid "Customers can select the validity start date"
-msgstr "Klanten kunnen hun betaalde bestellingen annuleren"
+msgstr "Klanten kunnen de startdatum zelf kiezen"
 
 #: pretix/base/models/items.py:624
 msgid "If not selected, the validity always starts at the time of purchase."
 msgstr ""
+"Indien niet geselecteerd zal de geldigheid starten op het moment van "
+"aanschaf."
 
 #: pretix/base/models/items.py:629
-#, fuzzy
-#| msgid "Maximum order total"
 msgid "Maximum future start"
-msgstr "Maximum totaalbedrag bestelling"
+msgstr "Uiterlijke toekomstige start"
 
 #: pretix/base/models/items.py:630
-#, fuzzy
-#| msgid "The selected date does not exist in this event series."
 msgid "The selected start date may only be this many days in the future."
-msgstr "De geselecteerde datum bestaat niet in deze evenementenreeks."
+msgstr ""
+"De geselecteerde startdatum mag maximaal zoveel dagen in de toekomst liggen."
 
 #: pretix/base/models/items.py:638 pretix/base/models/items.py:1447
 #: pretix/control/forms/filter.py:403 pretix/control/forms/filter.py:1681
@@ -4093,25 +4077,17 @@ msgid "This is shown below the variation name in lists."
 msgstr "Dit wordt weergegeven onder de variantnaam in lijsten."
 
 #: pretix/base/models/items.py:967
-#, fuzzy
-#| msgid "New order requires approval"
 msgid "Require approval"
-msgstr "Nieuwe bestelling vereist goedkeuring"
+msgstr "Vereist goedkeuring"
 
 #: pretix/base/models/items.py:969
-#, fuzzy
-#| msgid ""
-#| "If this product is part of an order, the order will be put into an "
-#| "\"approval\" state and will need to be confirmed by you before it can be "
-#| "paid and completed. You can use this e.g. for discounted tickets that are "
-#| "only available to specific groups."
 msgid ""
 "If this variation is part of an order, the order will be put into an "
 "\"approval\" state and will need to be confirmed by you before it can be "
 "paid and completed. You can use this e.g. for discounted tickets that are "
 "only available to specific groups."
 msgstr ""
-"Als dit product deel uitmaakt van een bestelling zal de bestelling in een "
+"Als deze variatie deel uitmaakt van een bestelling zal de bestelling in een "
 "goedkeuringsstatus worden gezet, en moet de bestelling door u worden "
 "bevestigd voordat de bestelling kan worden betaald en voltooid. U kunt dit "
 "bijvoorbeeld gebruiken voor tickets met korting die alleen beschikbaar zijn "
@@ -4142,14 +4118,8 @@ msgstr ""
 "product zal de variant niet beschikbaar zijn in dit verkoopkanaal."
 
 #: pretix/base/models/items.py:1006
-#, fuzzy
-#| msgid ""
-#| "This product will only be shown if a voucher matching the product is "
-#| "redeemed."
 msgid "Show only if a matching voucher is redeemed."
-msgstr ""
-"Dit product wordt alleen getoond als een voucher die overeenkomt met het "
-"product wordt ingewisseld."
+msgstr "Alleen tonen als een overeenkomstig voucher wordt ingewisseld."
 
 #: pretix/base/models/items.py:1008
 msgid ""
@@ -4312,14 +4282,12 @@ msgid "Question"
 msgstr "Vraag"
 
 #: pretix/base/models/items.py:1426 pretix/base/models/items.py:1656
-#, fuzzy
-#| msgid "The property name may only contain letters, numbers and underscores."
 msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores."
 msgstr ""
-"De naam van de eigenschap mag alleen letters, cijfers en "
-"onderstrepingstekens bevatten."
+"De naam van de eigenschap mag alleen letters, cijfers, punten, streepjes en "
+"underscores bevatten."
 
 #: pretix/base/models/items.py:1431
 msgid "Help text"
@@ -4398,10 +4366,8 @@ msgid "An answer to this question is required to proceed."
 msgstr "Een antwoord op deze vraag is vereist om door te gaan."
 
 #: pretix/base/models/items.py:1557
-#, fuzzy
-#| msgid "Invalid input data."
 msgid "Invalid input type."
-msgstr "Ongeldige invoergegevens."
+msgstr "Ongeldig invoertype."
 
 #: pretix/base/models/items.py:1563 pretix/base/models/items.py:1581
 #: pretix/base/orderimport.py:790 pretix/base/orderimport.py:798
@@ -4595,10 +4561,9 @@ msgid "Quota {val}"
 msgstr "Quotum {val}"
 
 #: pretix/base/models/log.py:206
-#, fuzzy, python-brace-format
-#| msgid "Product {val}"
+#, python-brace-format
 msgid "Discount {val}"
-msgstr "Product {val}"
+msgstr "Korting {val}"
 
 #: pretix/base/models/log.py:216
 #, python-brace-format
@@ -5089,7 +5054,7 @@ msgstr "Stoel {number}"
 
 #: pretix/base/models/tax.py:146
 msgid "Official name"
-msgstr ""
+msgstr "Officiële naam"
 
 #: pretix/base/models/tax.py:147
 msgid "Should be short, e.g. \"VAT\""
@@ -5104,6 +5069,8 @@ msgid ""
 "Keep gross amount constant if the tax rate changes based on the invoice "
 "address"
 msgstr ""
+"Houd het brutobedrag constant als het BTW-tarief verandert op basis van het "
+"factuuradres"
 
 #: pretix/base/models/tax.py:172
 msgid "Use EU reverse charge taxation rules"
@@ -5196,10 +5163,8 @@ msgid "Redeemed"
 msgstr "Gebruikt"
 
 #: pretix/base/models/vouchers.py:205
-#, fuzzy
-#| msgid "Maximum usages"
 msgid "Minimum usages"
-msgstr "Maximum aantal keren te gebruiken"
+msgstr "Minimum aantal keren te gebruiken"
 
 #: pretix/base/models/vouchers.py:206
 msgid ""
