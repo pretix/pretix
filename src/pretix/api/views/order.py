@@ -1865,7 +1865,7 @@ with scopes_disabled():
 class BlockedSecretViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BlockedTicketSecretSerializer
     queryset = BlockedTicketSecret.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     ordering = ('-updated', '-pk')
     filterset_class = BlockedSecretFilter
     permission = 'can_view_orders'
