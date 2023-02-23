@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-15 12:25+0000\n"
-"PO-Revision-Date: 2022-11-09 11:00+0000\n"
-"Last-Translator: exbu <meharmsen@me.com>\n"
+"PO-Revision-Date: 2023-02-23 23:00+0000\n"
+"Last-Translator: Toon Toetenel <toon@toetenel.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
 "Language: nl_Informal\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -533,7 +533,7 @@ msgstr ""
 #: pretix/presale/views/customer.py:792
 #, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr ""
+msgstr "Inloggen niet gelukt. Foutmelding: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:202
 msgid ""
