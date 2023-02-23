@@ -29,6 +29,7 @@ from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from rest_framework import viewsets
 from rest_framework.exceptions import MethodNotAllowed
+from rest_framework.filters import OrderingFilter
 
 from pretix.api.serializers.media import ReusableMediaSerializer
 from pretix.base.models import (
@@ -53,7 +54,9 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
     queryset = ReusableMedium.objects.none()
     permission = 'can_manage_reusable_media'
     write_permission = 'can_manage_reusable_media'
-    filter_backends = (DjangoFilterBackend,)
+    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    ordering = ('-updated', '-id')
+    ordering_fields = ('created', 'updated', 'identifier', 'type', 'id')
     filterset_class = ReusableMediumFilter
 
     def get_queryset(self):

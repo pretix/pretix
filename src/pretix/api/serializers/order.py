@@ -1389,6 +1389,13 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     if use_reusable_medium:
                         use_reusable_medium.linked_orderposition = pos
                         use_reusable_medium.save(update_fields=['linked_orderposition'])
+                        use_reusable_medium.log_action(
+                            'pretix.reusable_medium.linked_orderposition.changed',
+                            data={
+                                'by_order': order.code,
+                                'linked_orderposition': pos.pk,
+                            }
+                        )
 
             if not simulate:
                 for cp in delete_cps:

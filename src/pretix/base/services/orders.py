@@ -2924,11 +2924,20 @@ def signal_listener_issue_media(sender: Event, order: Order, **kwargs):
         if p.item.media_policy in (Item.MEDIA_POLICY_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW):
             mt = MEDIA_TYPES[p.item.media_type]
             if mt.medium_created_by_server and not p.linked_media.exists():
-                ReusableMedium.objects.create(
+                rm = ReusableMedium.objects.create(
                     organizer=sender.organizer,
                     type=p.item.media_type,
                     identifier=mt.generate_identifier(sender.organizer),
                     active=True,
                     customer=order.customer,
                     linked_orderposition=p,
+                )
+                rm.log_action(
+                    'pretix.reusable_medium.created',
+                    data={
+                        'by_order': order.code,
+                        'linked_orderposition': p.pk,
+                        'active': True,
+                        'customer': order.customer_id,
+                    }
                 )
