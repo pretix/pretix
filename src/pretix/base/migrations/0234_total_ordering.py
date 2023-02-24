@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0232_exchangerate'),
+        ('pretixbase', '0233_ignore_from_quota_while_blocked'),
     ]
 
     operations = [
