@@ -150,7 +150,7 @@ def get_private_icals(event, positions):
         vevent.add('description').value = description
         vevent.add('dtstamp').value = creation_time
         if ev.location:
-            vevent.add('location').value = str(ev.location)
+            vevent.add('location').value = ", ".join(l.strip() for l in str(ev.location).splitlines() if l.strip())
 
         vevent.add('uid').value = 'pretix-{}-{}-{}@{}'.format(
             event.organizer.slug,
