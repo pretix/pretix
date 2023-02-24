@@ -36,8 +36,8 @@ from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from rest_framework import viewsets
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.filters import OrderingFilter
 
+from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.discount import DiscountSerializer
 from pretix.api.views import ConditionalListView
 from pretix.base.models import CartPosition, Discount
@@ -52,7 +52,7 @@ with scopes_disabled():
 class DiscountViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = DiscountSerializer
     queryset = Discount.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     filterset_class = DiscountFilter
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')

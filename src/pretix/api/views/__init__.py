@@ -24,10 +24,11 @@ from calendar import timegm
 from django.db.models import Max
 from django.http import HttpResponse
 from django.utils.http import http_date, parse_http_date_safe
-from rest_framework.filters import OrderingFilter
+
+from pretix.api.pagination import TotalOrderingFilter
 
 
-class RichOrderingFilter(OrderingFilter):
+class RichOrderingFilter(TotalOrderingFilter):
 
     def filter_queryset(self, request, queryset, view):
         ordering = self.get_ordering(request, queryset, view)

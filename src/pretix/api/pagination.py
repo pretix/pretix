@@ -19,9 +19,19 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from rest_framework.filters import OrderingFilter
 from rest_framework.pagination import PageNumberPagination
+
+from pretix.helpers import get_deterministic_ordering
 
 
 class Pagination(PageNumberPagination):
     page_size_query_param = 'page_size'
     max_page_size = 50
+
+
+class TotalOrderingFilter(OrderingFilter):
+    def get_ordering(self, request, queryset, view):
+        o = super().get_ordering(request, queryset, view)
+        o = get_deterministic_ordering(queryset.model, o)
+        return o

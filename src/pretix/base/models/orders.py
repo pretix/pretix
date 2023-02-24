@@ -211,7 +211,7 @@ class Order(LockModel, LoggedModel):
     )
     secret = models.CharField(max_length=32, default=generate_secret)
     datetime = models.DateTimeField(
-        verbose_name=_("Date"), db_index=True
+        verbose_name=_("Date"), db_index=False
     )
     cancellation_date = models.DateTimeField(
         null=True, blank=True
@@ -252,7 +252,7 @@ class Order(LockModel, LoggedModel):
         null=True, blank=True
     )
     last_modified = models.DateTimeField(
-        auto_now=True, db_index=True
+        auto_now=True, db_index=False
     )
     require_approval = models.BooleanField(
         default=False
@@ -268,7 +268,11 @@ class Order(LockModel, LoggedModel):
     class Meta:
         verbose_name = _("Order")
         verbose_name_plural = _("Orders")
-        ordering = ("-datetime",)
+        ordering = ("-datetime", "-pk")
+        index_together = [
+            ["datetime", "id"],
+            ["last_modified", "id"],
+        ]
 
     def __str__(self):
         return self.full_code
@@ -2618,7 +2622,6 @@ class Transaction(models.Model):
     )
     datetime = models.DateTimeField(
         verbose_name=_("Date"),
-        db_index=True,
     )
     migrated = models.BooleanField(
         default=False
@@ -2669,6 +2672,9 @@ class Transaction(models.Model):
 
     class Meta:
         ordering = 'datetime', 'pk'
+        index_together = [
+            ['datetime', 'id']
+        ]
 
     def save(self, *args, **kwargs):
         if not self.fee_type and not self.item:

@@ -28,9 +28,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
-from rest_framework import (
-    filters, mixins, serializers, status, views, viewsets,
-)
+from rest_framework import mixins, serializers, status, views, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import MethodNotAllowed, PermissionDenied
 from rest_framework.mixins import CreateModelMixin, DestroyModelMixin
@@ -38,6 +36,7 @@ from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from pretix.api.models import OAuthAccessToken
+from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.organizer import (
     CustomerCreateSerializer, CustomerSerializer, DeviceSerializer,
     GiftCardSerializer, GiftCardTransactionSerializer, MembershipSerializer,
@@ -62,7 +61,7 @@ class OrganizerViewSet(viewsets.ReadOnlyModelViewSet):
     lookup_field = 'slug'
     lookup_url_kwarg = 'organizer'
     lookup_value_regex = '[^/]+'
-    filter_backends = (filters.OrderingFilter,)
+    filter_backends = (TotalOrderingFilter,)
     ordering = ('slug',)
     ordering_fields = ('name', 'slug')
 

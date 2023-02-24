@@ -58,13 +58,15 @@ from pretix.base.models import (
     Checkin, CheckinList, Device, Event, EventMetaProperty, EventMetaValue,
     Gate, Invoice, InvoiceAddress, Item, Order, OrderPayment, OrderPosition,
     OrderRefund, Organizer, Question, QuestionAnswer, SubEvent,
-    SubEventMetaValue, Team, TeamAPIToken, TeamInvite,
+    SubEventMetaValue, Team, TeamAPIToken, TeamInvite, Voucher,
 )
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.widgets import Select2
 from pretix.control.signals import order_search_filter_q
 from pretix.helpers.countries import CachedCountries
-from pretix.helpers.database import rolledback_transaction
+from pretix.helpers.database import (
+    get_deterministic_ordering, rolledback_transaction,
+)
 from pretix.helpers.dicts import move_to_end
 from pretix.helpers.i18n import i18ncomp
 
@@ -380,7 +382,9 @@ class OrderFilterForm(FilterForm):
                 )
 
         if fdata.get('ordering'):
-            qs = qs.order_by(self.get_order_by())
+            qs = qs.order_by(*get_deterministic_ordering(Order, self.get_order_by()))
+        else:
+            qs = qs.order_by('-datetime', '-pk')
 
         if fdata.get('provider'):
             qs = qs.annotate(
@@ -1044,11 +1048,11 @@ class OrderPaymentSearchFilterForm(forms.Form):
         if fdata.get('ordering'):
             p = self.cleaned_data.get('ordering')
             if p.startswith('-') and p not in self.orders:
-                qs = qs.order_by('-' + self.orders[p[1:]])
+                qs = qs.order_by(*get_deterministic_ordering(OrderPayment, '-' + self.orders[p[1:]]))
             else:
-                qs = qs.order_by(self.orders[p])
+                qs = qs.order_by(*get_deterministic_ordering(OrderPayment, self.orders[p]))
         else:
-            qs = qs.order_by('-created')
+            qs = qs.order_by('-created', '-pk')
 
         return qs
 
@@ -1226,9 +1230,9 @@ class SubEventFilterForm(FilterForm):
             qs = qs.filter(f)
 
         if fdata.get('ordering'):
-            qs = qs.order_by(self.get_order_by())
+            qs = qs.order_by(*get_deterministic_ordering(SubEvent, self.get_order_by()))
         else:
-            qs = qs.order_by('-date_from')
+            qs = qs.order_by('-date_from', '-pk')
 
         return qs
 
@@ -1462,9 +1466,7 @@ class TeamFilterForm(FilterForm):
             )
 
         if fdata.get('ordering'):
-            qs = qs.order_by(self.get_order_by())
-        else:
-            qs = qs.order_by('name')
+            qs = qs.order_by(*get_deterministic_ordering(Team, self.get_order_by()))
 
         return qs.distinct()
 
@@ -1619,7 +1621,7 @@ class EventFilterForm(FilterForm):
             qs = qs.filter(f)
 
         if fdata.get('ordering'):
-            qs = qs.order_by(self.get_order_by())
+            qs = qs.order_by(*get_deterministic_ordering(Event, self.get_order_by()))
 
         return qs
 
@@ -1764,11 +1766,11 @@ class CheckinListAttendeeFilterForm(FilterForm):
             if isinstance(ob, dict):
                 ob = dict(ob)
                 o = ob.pop('_order')
-                qs = qs.annotate(**ob).order_by(o)
+                qs = qs.annotate(**ob).order_by(*get_deterministic_ordering(OrderPosition, [o]))
             elif isinstance(ob, (list, tuple)):
-                qs = qs.order_by(*ob)
+                qs = qs.order_by(*get_deterministic_ordering(OrderPosition, ob))
             else:
-                qs = qs.order_by(ob)
+                qs = qs.order_by(*get_deterministic_ordering(OrderPosition, [ob]))
 
         if fdata.get('item'):
             qs = qs.filter(item=fdata.get('item'))
@@ -2011,11 +2013,11 @@ class VoucherFilterForm(FilterForm):
             if isinstance(ob, dict):
                 ob = dict(ob)
                 o = ob.pop('_order')
-                qs = qs.annotate(**ob).order_by(o)
+                qs = qs.annotate(**ob).order_by(*get_deterministic_ordering(Voucher, o))
             elif isinstance(ob, (list, tuple)):
-                qs = qs.order_by(*ob)
+                qs = qs.order_by(*get_deterministic_ordering(Voucher, ob))
             else:
-                qs = qs.order_by(ob)
+                qs = qs.order_by(*get_deterministic_ordering(Voucher, ob))
 
         return qs
 
@@ -2098,9 +2100,7 @@ class RefundFilterForm(FilterForm):
                                       OrderRefund.REFUND_STATE_EXTERNAL])
 
         if fdata.get('ordering'):
-            qs = qs.order_by(self.get_order_by())
-        else:
-            qs = qs.order_by('-created')
+            qs = qs.order_by(*get_deterministic_ordering(OrderRefund, self.get_order_by()))
         return qs
 
 

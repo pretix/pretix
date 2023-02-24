@@ -39,11 +39,12 @@ from django.db.models import Prefetch, ProtectedError, Q
 from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
-from rest_framework import filters, serializers, views, viewsets
+from rest_framework import serializers, views, viewsets
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
 
 from pretix.api.auth.permission import EventCRUDPermission
+from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.event import (
     CloneEventSerializer, DeviceEventSettingsSerializer, EventSerializer,
     EventSettingsSerializer, SubEventSerializer, TaxRuleSerializer,
@@ -127,7 +128,7 @@ class EventViewSet(viewsets.ModelViewSet):
     lookup_url_kwarg = 'event'
     lookup_value_regex = '[^/]+'
     permission_classes = (EventCRUDPermission,)
-    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     ordering = ('slug',)
     ordering_fields = ('date_from', 'slug')
     filterset_class = EventFilter
@@ -379,7 +380,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = SubEventSerializer
     queryset = SubEvent.objects.none()
     write_permission = 'can_change_event_settings'
-    filter_backends = (DjangoFilterBackend, filters.OrderingFilter)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     filterset_class = SubEventFilter
     ordering = ('date_from',)
     ordering_fields = ('id', 'date_from', 'last_modified')

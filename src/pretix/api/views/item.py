@@ -41,9 +41,9 @@ from django_scopes import scopes_disabled
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied
-from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
+from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.item import (
     ItemAddOnSerializer, ItemBundleSerializer, ItemCategorySerializer,
     ItemSerializer, ItemVariationSerializer, QuestionOptionSerializer,
@@ -75,7 +75,7 @@ with scopes_disabled():
 class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = ItemSerializer
     queryset = Item.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
     filterset_class = ItemFilter
@@ -138,7 +138,7 @@ class ItemViewSet(ConditionalListView, viewsets.ModelViewSet):
 class ItemVariationViewSet(viewsets.ModelViewSet):
     serializer_class = ItemVariationSerializer
     queryset = ItemVariation.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter,)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter,)
     ordering_fields = ('id', 'position')
     ordering = ('id',)
     permission = None
@@ -208,7 +208,7 @@ class ItemVariationViewSet(viewsets.ModelViewSet):
 class ItemBundleViewSet(viewsets.ModelViewSet):
     serializer_class = ItemBundleSerializer
     queryset = ItemBundle.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter,)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter,)
     ordering_fields = ('id',)
     ordering = ('id',)
     permission = None
@@ -260,7 +260,7 @@ class ItemBundleViewSet(viewsets.ModelViewSet):
 class ItemAddOnViewSet(viewsets.ModelViewSet):
     serializer_class = ItemAddOnSerializer
     queryset = ItemAddOn.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter,)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter,)
     ordering_fields = ('id', 'position')
     ordering = ('id',)
     permission = None
@@ -318,7 +318,7 @@ class ItemCategoryFilter(FilterSet):
 class ItemCategoryViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = ItemCategorySerializer
     queryset = ItemCategory.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     filterset_class = ItemCategoryFilter
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
@@ -373,7 +373,7 @@ with scopes_disabled():
 class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = QuestionSerializer
     queryset = Question.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     filterset_class = QuestionFilter
     ordering_fields = ('id', 'position')
     ordering = ('position', 'id')
@@ -418,7 +418,7 @@ class QuestionViewSet(ConditionalListView, viewsets.ModelViewSet):
 class QuestionOptionViewSet(viewsets.ModelViewSet):
     serializer_class = QuestionOptionSerializer
     queryset = QuestionOption.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter,)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter,)
     ordering_fields = ('id', 'position')
     ordering = ('position',)
     permission = None
@@ -475,7 +475,7 @@ with scopes_disabled():
 class QuotaViewSet(ConditionalListView, viewsets.ModelViewSet):
     serializer_class = QuotaSerializer
     queryset = Quota.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter,)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter,)
     filterset_class = QuotaFilter
     ordering_fields = ('id', 'size')
     ordering = ('id',)

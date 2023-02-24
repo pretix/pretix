@@ -43,11 +43,11 @@ from rest_framework.decorators import action
 from rest_framework.exceptions import (
     APIException, NotFound, PermissionDenied, ValidationError,
 )
-from rest_framework.filters import OrderingFilter
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 
 from pretix.api.models import OAuthAccessToken
+from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.order import (
     BlockedTicketSecretSerializer, InvoiceSerializer, OrderCreateSerializer,
     OrderPaymentCreateSerializer, OrderPaymentSerializer,
@@ -181,7 +181,7 @@ with scopes_disabled():
 class OrderViewSet(viewsets.ModelViewSet):
     serializer_class = OrderSerializer
     queryset = Order.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     ordering = ('datetime',)
     ordering_fields = ('datetime', 'code', 'status', 'last_modified')
     filterset_class = OrderFilter
@@ -1749,7 +1749,7 @@ class RetryException(APIException):
 class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = InvoiceSerializer
     queryset = Invoice.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     ordering = ('nr',)
     ordering_fields = ('nr', 'date')
     filterset_class = InvoiceFilter
@@ -1842,7 +1842,7 @@ with scopes_disabled():
 class RevokedSecretViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = RevokedTicketSecretSerializer
     queryset = RevokedTicketSecret.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     ordering = ('-created',)
     ordering_fields = ('created', 'secret')
     filterset_class = RevokedSecretFilter
@@ -1865,7 +1865,7 @@ with scopes_disabled():
 class BlockedSecretViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BlockedTicketSecretSerializer
     queryset = BlockedTicketSecret.objects.none()
-    filter_backends = (DjangoFilterBackend, OrderingFilter)
+    filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
     ordering = ('-updated', '-pk')
     filterset_class = BlockedSecretFilter
     permission = 'can_view_orders'

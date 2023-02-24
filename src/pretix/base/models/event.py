@@ -612,7 +612,7 @@ class Event(EventMixin, LoggedModel):
     class Meta:
         verbose_name = _("Event")
         verbose_name_plural = _("Events")
-        ordering = ("date_from", "name")
+        ordering = ("date_from", "name", "slug")
         unique_together = (('organizer', 'slug'),)
 
     def __str__(self):

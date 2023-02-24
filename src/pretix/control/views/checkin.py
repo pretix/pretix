@@ -447,6 +447,7 @@ class CheckinListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
     context_object_name = 'checkins'
     permission = 'can_view_orders'
     template_name = 'pretixcontrol/checkin/checkins.html'
+    ordering = ('-datetime', '-pk')
 
     def get_queryset(self):
         qs = Checkin.all.filter(

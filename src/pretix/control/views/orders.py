@@ -2529,7 +2529,7 @@ class RefundList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def get_queryset(self):
         qs = OrderRefund.objects.filter(
             order__event=self.request.event
-        ).select_related('order')
+        ).select_related('order').order_by('-created', '-pk')
 
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
