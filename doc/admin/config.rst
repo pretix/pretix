@@ -106,6 +106,11 @@ Example::
     proxy that actively removes and re-adds the header to make sure the correct value is set.
     Defaults to ``off``.
 
+``trust_x_forwarded_host``
+    Specifies whether the ``X-Forwarded-Host`` header can be trusted. Only set to ``on`` if you have a reverse
+    proxy that actively removes and re-adds the header to make sure the correct value is set.
+    Defaults to ``off``.
+
 ``csp_log``
     Log violations of the Content Security Policy (CSP). Defaults to ``on``.
 

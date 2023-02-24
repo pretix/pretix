@@ -178,6 +178,8 @@ if SITE_URL.endswith('/'):
 CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).hostname]
 
 TRUST_X_FORWARDED_FOR = config.get('pretix', 'trust_x_forwarded_for', fallback=False)
+USE_X_FORWARDED_HOST = config.get('pretix', 'trust_x_forwarded_host', fallback=False)
+
 
 REQUEST_ID_HEADER = config.get('pretix', 'request_id_header', fallback=False)
 
