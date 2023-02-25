@@ -100,6 +100,10 @@ class WaitingListQuerySetMixin:
             'item__quotas', 'variation__quotas'
         )
 
+        if self.request_data.get("email", "") != "":
+            n = self.request_data.get("email", "")
+            qs = qs.filter(email=n)
+
         s = self.request_data.get("status", "")
         if s == 's':
             qs = qs.filter(voucher__isnull=False)

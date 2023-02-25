@@ -82,6 +82,8 @@
 
     <p>
     <form class="form-inline helper-display-inline" action="" method="get">
+        <label for="email"> Email </label>
+        <input type="email" name="email">
         <select name="status" class="form-control">
             <option value="a"
                     {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "All entries" %}</option>
