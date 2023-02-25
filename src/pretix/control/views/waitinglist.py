@@ -101,8 +101,12 @@ class WaitingListQuerySetMixin:
         )
 
         if self.request_data.get("email", "") != "":
-            n = self.request_data.get("email", "")
-            qs = qs.filter(email=n)
+            ms = self.request_data.get("email", "")
+            ms_list = ms.split(",")
+            mainq = Q()
+            for m in ms_list:
+                mainq = mainq | Q(email=m)
+            qs = qs.filter(mainq)
 
         s = self.request_data.get("status", "")
         if s == 's':
