@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-27 08:00+0000\n"
-"PO-Revision-Date: 2023-01-31 23:00+0000\n"
-"Last-Translator: Mauro Amico <mauro.amico@gmail.com>\n"
+"PO-Revision-Date: 2023-02-28 07:00+0000\n"
+"Last-Translator: Michele Pagnozzi <michele.pagnozzi@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -197,6 +197,7 @@ msgstr ""
 #: pretix/api/serializers/item.py:268
 msgid "Only admission products can currently be personalized."
 msgstr ""
+"Solo i prodotti di tipo Admission possono al momento essere personalizzati."
 
 #: pretix/api/serializers/item.py:279
 msgid ""
@@ -235,7 +236,7 @@ msgstr "Questo tipo di domanda non può essere fatta durante il check-in."
 #: pretix/api/serializers/order.py:75
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr ""
+msgstr "\"{input}\" non è una scelta valida."
 
 #: pretix/api/serializers/order.py:1177 pretix/api/views/cart.py:210
 #: pretix/base/services/orders.py:1415
@@ -281,6 +282,7 @@ msgstr "Questo utente è già stato inviatato a questo team."
 msgid ""
 "The specified voucher has already been used the maximum number of times."
 msgstr ""
+"Il voucher specificato è già stato utilizzato il numero massimo di volte."
 
 #: pretix/api/views/oauth.py:106 pretix/control/logdisplay.py:457
 #, python-brace-format
@@ -428,6 +430,8 @@ msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
 msgstr ""
+"Prodotto modificato (compresi i prodotti aggiunti od eliminati e comprese le "
+"modifiche agli oggetti nidificati come varianti o pacchetti)"
 
 #: pretix/api/webhooks.py:306
 msgid "Shop taken live"
@@ -459,11 +463,11 @@ msgstr "Questo campo è obbligatorio."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr ""
+msgstr "Inserire un codice di avviamento postale nel formato XXX."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr ""
+msgstr "Inserire un codice di avviamento postale nel formato XXX."
 
 #: pretix/base/auth.py:143
 #, python-brace-format
@@ -543,6 +547,8 @@ msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
 msgstr ""
+"Si richiede l'ambito \"{scope}\" ma il provider supporta solo questi: "
+"{scope}."
 
 #: pretix/base/customersso/oidc.py:123
 #, python-brace-format
@@ -550,6 +556,8 @@ msgid ""
 "You are requesting field \"{field}\" but provider only supports these: "
 "{fields}."
 msgstr ""
+"Si richiede il campo \"{field}\" ma il provider supporta solo questi: "
+"{fields}."
 
 #: pretix/base/customersso/oidc.py:169 pretix/base/customersso/oidc.py:176
 #: pretix/base/customersso/oidc.py:195 pretix/base/customersso/oidc.py:212
@@ -558,13 +566,15 @@ msgstr ""
 #: pretix/presale/views/customer.py:792
 #, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr ""
+msgstr "L'accesso non è riuscito. Messaggio di errore: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:202
 msgid ""
 "The email address on this account is not yet verified. Please first confirm "
 "the email address in your customer account."
 msgstr ""
+"L'indirizzo e-mail di questo account non è ancora stato verificato. "
+"Confermare prima l'indirizzo e-mail nel proprio account cliente."
 
 #: pretix/base/email.py:200 pretix/base/exporters/items.py:151
 #: pretix/base/exporters/items.py:195 pretix/control/views/main.py:310
@@ -648,17 +658,17 @@ msgstr "Risposte alle domande di invio file"
 #: pretix/base/exporters/orderlist.py:1002
 #: pretix/plugins/reports/exporters.py:405
 #: pretix/plugins/reports/exporters.py:578
-#, fuzzy
-#| msgid "Order data"
 msgctxt "export_category"
 msgid "Order data"
-msgstr "Data dell'ordine"
+msgstr "Dati dell'ordine"
 
 #: pretix/base/exporters/answers.py:54
 msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
 msgstr ""
+"Scarica un file ZIP contenente tutti i file caricati dai clienti durante la "
+"creazione di un ordine."
 
 #: pretix/base/exporters/answers.py:64 pretix/base/models/items.py:1502
 #: pretix/control/navigation.py:182
