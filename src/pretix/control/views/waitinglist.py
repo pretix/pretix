@@ -155,6 +155,13 @@ class WaitingListQuerySetMixin:
         elif force_filtered and '__ALL' not in self.request_data:
             qs = qs.none()
 
+        if self.request_data.get("ordering", "") != "":
+            o = self.request_data.get("ordering", "")
+            if o == "name":
+                qs = sorted(qs, key=lambda w: w.name, reverse=False)
+            elif o == "-name":
+                qs = sorted(qs, key=lambda w: w.name, reverse=True)
+
         return qs
 
 

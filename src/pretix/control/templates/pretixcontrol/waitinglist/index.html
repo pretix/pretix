@@ -153,7 +153,9 @@
                         {% endif %}
                     </th>
                     {% if request.event.settings.waiting_list_names_asked %}
-                    <th>{% trans "Name" %}</th>
+                    <th>{% trans "Name" %}
+                      <a href="?{% url_replace request 'ordering' '-name' %}"><i class="fa fa-caret-down"></i></a>
+                      <a href="?{% url_replace request 'ordering' 'name' %}"><i class="fa fa-caret-up"></i></a></th>
                     {% endif %}
                     <th>{% trans "Email" %}</th>
                     {% if request.event.settings.waiting_list_phones_asked %}
