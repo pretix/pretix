@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-27 08:00+0000\n"
-"PO-Revision-Date: 2023-02-15 12:37+0000\n"
+"PO-Revision-Date: 2023-02-27 08:21+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -2092,20 +2092,20 @@ msgstr ""
 "allen Bestellungen."
 
 #: pretix/base/exporters/orderlist.py:775
-#, fuzzy
-#| msgid "Extend payment term"
 msgid "Date range (payment date)"
-msgstr "Zahlungsfrist verändern"
+msgstr "Datumsbereich (Zahlungsdatum)"
 
 #: pretix/base/exporters/orderlist.py:778
 msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
 msgstr ""
+"Bitte beachte, dass ein Filter auf Zahlungsdatum alle nicht-abgeschlossenen "
+"Zahlungen oder Erstattungen ausschließen wird."
 
 #: pretix/base/exporters/orderlist.py:782
 msgid "Date range (start of transaction)"
-msgstr ""
+msgstr "Datumsbereich (Beginn der Transaktion)"
 
 #: pretix/base/exporters/orderlist.py:788
 msgid "Payment states"
@@ -5344,14 +5344,14 @@ msgid ""
 "as part of a bundle, since vouchers cannot be applied to add-on products or "
 "bundled products."
 msgstr ""
+"Du kannst kein Produkt auswählen, das nur als Zusatzprodukt oder nur als "
+"enthaltenes Produkt verfügbar ist, da Gutscheine nicht auf Zusatzprodukte "
+"oder enthaltene Produkte angewendet werden können."
 
 #: pretix/base/models/vouchers.py:339
-#, fuzzy
-#| msgid "You cannot select a quota that belongs to a different event."
 msgid "You cannot select a product that belongs to a different event."
 msgstr ""
-"Du kannst kein Kontingent auswählen, das zu einer anderen Veranstaltung "
-"gehört."
+"Du kannst kein Produkt auswählen, das zu einer anderen Veranstaltung gehört."
 
 #: pretix/base/models/vouchers.py:341 pretix/base/models/vouchers.py:354
 msgid ""
