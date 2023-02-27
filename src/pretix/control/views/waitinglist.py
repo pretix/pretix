@@ -108,6 +108,13 @@ class WaitingListQuerySetMixin:
                 mainq = mainq | Q(email=m)
             qs = qs.filter(mainq)
 
+
+        if self.request_data.get("name", "") != "":
+            n = self.request_data.get("name", "")
+            qs_list = [w.id for w in qs if w.name is not None and n in w.name.casefold()]
+            qs = WaitingListEntry.objects.filter(id__in=qs_list)
+
+
         s = self.request_data.get("status", "")
         if s == 's':
             qs = qs.filter(voucher__isnull=False)

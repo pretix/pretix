@@ -84,6 +84,8 @@
     <form class="form-inline helper-display-inline" action="" method="get">
         <label for="email"> Email </label>
         <input type="email" title="enter 1 or more emails separated by comma" name="email" multiple>
+        <label for="name"> Name </label>
+        <input type="text" name="name">
         <select name="status" class="form-control">
             <option value="a"
                     {% if request.GET.status == "p" %}selected="selected"{% endif %}>{% trans "All entries" %}</option>
