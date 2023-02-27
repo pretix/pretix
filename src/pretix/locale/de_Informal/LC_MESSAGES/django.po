@@ -2925,7 +2925,7 @@ msgstr "Steuer"
 #: pretix/base/invoice.py:749
 msgctxt "invoice"
 msgid "Included taxes"
-msgstr "Enthaltene Umsatzsteuer"
+msgstr "Enthaltene Steuern"
 
 #: pretix/base/invoice.py:777
 #, python-brace-format
