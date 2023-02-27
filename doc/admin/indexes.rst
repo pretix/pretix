@@ -45,8 +45,8 @@ Here is the currently recommended set of commands::
     CREATE INDEX CONCURRENTLY pretix_addidx_order_comment
         ON pretixbase_order
         USING gin (upper("comment") gin_trgm_ops);
-    CREATE INDEX CONCURRENTLY pretix_addidx_order_event_date
-        ON public.pretixbase_order (event_id, datetime);
+    CREATE INDEX CONCURRENTLY pretix_addidx_order_event_date_id
+        ON public.pretixbase_order (event_id, datetime, id);
     CREATE INDEX CONCURRENTLY pretix_addidx_orderpos_name
         ON pretixbase_orderposition
         USING gin (upper("attendee_name_cached") gin_trgm_ops);
@@ -66,10 +66,10 @@ Here is the currently recommended set of commands::
         ON public.pretixbase_orderposition (upper((attendee_email)::text));
     CREATE INDEX CONCURRENTLY pretix_addidx_voucher_code_upper
         ON public.pretixbase_voucher (upper((code)::text));
-    CREATE INDEX CONCURRENTLY pretix_addidx_logentry_event_date
-        ON public.pretixbase_logentry (event_id, datetime);
-    CREATE INDEX CONCURRENTLY pretix_addidx_logentry_event_cid_date
-        ON public.pretixbase_logentry (event_id, content_type_id, datetime);
+    CREATE INDEX CONCURRENTLY pretix_addidx_logentry_event_date_id
+        ON public.pretixbase_logentry (event_id, datetime, id);
+    CREATE INDEX CONCURRENTLY pretix_addidx_logentry_event_cid_date_id
+        ON public.pretixbase_logentry (event_id, content_type_id, datetime, id);
 
 
 Also, if you use our ``pretix-shipping`` plugin::
