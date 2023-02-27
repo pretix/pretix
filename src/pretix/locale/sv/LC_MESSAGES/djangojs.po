@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 12:25+0000\n"
+"POT-Creation-Date: 2023-02-27 08:00+0000\n"
 "PO-Revision-Date: 2022-03-03 07:00+0000\n"
 "Last-Translator: MaLund13 <mart.lund13@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -571,30 +571,31 @@ msgstr ""
 "mörkare nyans."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:464
-msgid "All"
-msgstr "Alla"
-
-#: pretix/static/pretixcontrol/js/ui/main.js:465
-msgid "None"
-msgstr "Ingen"
-
-#: pretix/static/pretixcontrol/js/ui/main.js:466
+#: pretix/static/pretixcontrol/js/ui/main.js:484
 msgid "Search query"
 msgstr "Sökterm"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:469
+#: pretix/static/pretixcontrol/js/ui/main.js:482
+msgid "All"
+msgstr "Alla"
+
+#: pretix/static/pretixcontrol/js/ui/main.js:483
+msgid "None"
+msgstr "Ingen"
+
+#: pretix/static/pretixcontrol/js/ui/main.js:487
 msgid "Selected only"
 msgstr "Endast valda"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:872
+#: pretix/static/pretixcontrol/js/ui/main.js:890
 msgid "Use a different name internally"
 msgstr "Använd ett annat namn internt"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:908
+#: pretix/static/pretixcontrol/js/ui/main.js:926
 msgid "Click to close"
 msgstr "Klicka för att stänga"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:980
+#: pretix/static/pretixcontrol/js/ui/main.js:998
 msgid "You have unsaved changes!"
 msgstr "Du har osparade ändringar!"
 

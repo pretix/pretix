@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 12:25+0000\n"
+"POT-Creation-Date: 2023-02-27 08:00+0000\n"
 "PO-Revision-Date: 2021-11-25 21:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -578,30 +578,31 @@ msgstr ""
 "escoge un tono más oscuro."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:464
-msgid "All"
-msgstr "Todos"
-
-#: pretix/static/pretixcontrol/js/ui/main.js:465
-msgid "None"
-msgstr "Ninguno"
-
-#: pretix/static/pretixcontrol/js/ui/main.js:466
+#: pretix/static/pretixcontrol/js/ui/main.js:484
 msgid "Search query"
 msgstr "Consultar búsqueda"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:469
+#: pretix/static/pretixcontrol/js/ui/main.js:482
+msgid "All"
+msgstr "Todos"
+
+#: pretix/static/pretixcontrol/js/ui/main.js:483
+msgid "None"
+msgstr "Ninguno"
+
+#: pretix/static/pretixcontrol/js/ui/main.js:487
 msgid "Selected only"
 msgstr "Solamente seleccionados"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:872
+#: pretix/static/pretixcontrol/js/ui/main.js:890
 msgid "Use a different name internally"
 msgstr "Usar un nombre diferente internamente"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:908
+#: pretix/static/pretixcontrol/js/ui/main.js:926
 msgid "Click to close"
 msgstr "Click para cerrar"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:980
+#: pretix/static/pretixcontrol/js/ui/main.js:998
 msgid "You have unsaved changes!"
 msgstr "¡Tienes cambios sin guardar!"
 

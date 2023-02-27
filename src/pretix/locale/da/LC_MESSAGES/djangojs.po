@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-02-15 12:25+0000\n"
+"POT-Creation-Date: 2023-02-27 08:00+0000\n"
 "PO-Revision-Date: 2022-12-01 17:00+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -588,30 +588,31 @@ msgid ""
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/main.js:464
-msgid "All"
-msgstr "Alle"
-
-#: pretix/static/pretixcontrol/js/ui/main.js:465
-msgid "None"
-msgstr "Ingen"
-
-#: pretix/static/pretixcontrol/js/ui/main.js:466
+#: pretix/static/pretixcontrol/js/ui/main.js:484
 msgid "Search query"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:469
+#: pretix/static/pretixcontrol/js/ui/main.js:482
+msgid "All"
+msgstr "Alle"
+
+#: pretix/static/pretixcontrol/js/ui/main.js:483
+msgid "None"
+msgstr "Ingen"
+
+#: pretix/static/pretixcontrol/js/ui/main.js:487
 msgid "Selected only"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:872
+#: pretix/static/pretixcontrol/js/ui/main.js:890
 msgid "Use a different name internally"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:908
+#: pretix/static/pretixcontrol/js/ui/main.js:926
 msgid "Click to close"
 msgstr "Klik for at lukke"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:980
+#: pretix/static/pretixcontrol/js/ui/main.js:998
 msgid "You have unsaved changes!"
 msgstr "Du har ændringer, der ikke er gemt!"
 
