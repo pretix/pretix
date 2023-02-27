@@ -111,7 +111,7 @@ class WaitingListQuerySetMixin:
 
         if self.request_data.get("name", "") != "":
             n = self.request_data.get("name", "")
-            qs_list = [w.id for w in qs if w.name is not None and n in w.name.casefold()]
+            qs_list = [w.id for w in qs if w.name is not None and n.casefold() in w.name.casefold()]
             qs = WaitingListEntry.objects.filter(id__in=qs_list)
 
 
