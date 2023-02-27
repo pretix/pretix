@@ -98,7 +98,7 @@
     &.headline, &.simple {
         border-top: 1px solid transparent;
         &::before {
-            border-top: 1px solid $table-border-color;
+            border-top: 2px solid $table-border-color;
         }
     }
 }
@@ -117,7 +117,7 @@ article.item-with-variations:last-child, .product-row:last-child {
         left: 15px;
         width: calc(100% - 30px);
         content: '';
-        border-bottom: 1px solid $table-border-color;
+        border-bottom: 2px solid $table-border-color;
     }
 }
 article.item-with-variations .product-row:last-child:after {
