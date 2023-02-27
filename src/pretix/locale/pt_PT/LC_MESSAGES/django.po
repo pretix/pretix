@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-04-24 19:00+0000\n"
+"PO-Revision-Date: 2023-05-30 21:25+0000\n"
 "Last-Translator: Vasco Baleia <vb2003.12@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -6306,8 +6306,7 @@ msgstr ""
 
 #: pretix/base/payment.py:1113
 msgid "Payment process description in order confirmation emails"
-msgstr ""
-"Descrição do processo de pagamento nos e-mails de confirmação de pedido"
+msgstr "Descrição do processo de pagamento nos e-mails de confirmação de pedido"
 
 #: pretix/base/payment.py:1114
 #, python-brace-format
@@ -8415,8 +8414,7 @@ msgstr "Gerar facturas com números consecutivos"
 
 #: pretix/base/settings.py:620
 msgid "If deactivated, the order code will be used in the invoice number."
-msgstr ""
-"Se for desactivado, o código do pedido será usado no número da factura."
+msgstr "Se for desactivado, o código do pedido será usado no número da factura."
 
 #: pretix/base/settings.py:629
 msgid "Invoice number prefix"
@@ -12908,8 +12906,8 @@ msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
 msgstr ""
-"Esta instalação do pretix inclui alterações ou extensões feitas no código -"
-"fonte."
+"Esta instalação do pretix inclui alterações ou extensões feitas no código "
+"-fonte."
 
 #: pretix/control/forms/global_settings.py:143
 msgid "Usage of pretix"
@@ -12930,9 +12928,9 @@ msgid ""
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
 "as-a-Service company)."
 msgstr ""
-"Eu uso o Pretix para vender ingressos de outros organizadores de eventos "
-"(por exemplo, uma empresa de ingressos) ou ofereço a funcionalidade do "
-"pretix a outras pessoas (por exemplo, uma empresa de software como serviço)."
+"Eu uso o Pretix para vender ingressos de outros organizadores de eventos ("
+"por exemplo, uma empresa de ingressos) ou ofereço a funcionalidade do pretix "
+"a outras pessoas (por exemplo, uma empresa de software como serviço)."
 
 #: pretix/control/forms/global_settings.py:150
 msgid "I'm not sure which option applies."
@@ -15932,8 +15930,8 @@ msgid ""
 "We've detected that you are using <strong>Microsoft Internet Explorer</"
 "strong>."
 msgstr ""
-"Detectamos que você está usando <strong> Microsoft Internet Explorer </"
-"strong>."
+"Detectamos que você está usando <strong> Microsoft Internet Explorer "
+"</strong>."
 
 #: pretix/control/templates/pretixcontrol/base.html:328
 msgid ""
@@ -24163,8 +24161,8 @@ msgid ""
 msgstr ""
 "Você precisa fazer todas as alterações que você fez no código -fonte do "
 "pretix disponível gratuitamente para todos os visitantes do seu site no "
-"formulário de código -fonte nos mesmos termos de licença que o pretix "
-"(AGPLV3 + restrições adicionais). Certifique -se de mantê -lo atualizado!"
+"formulário de código -fonte nos mesmos termos de licença que o pretix ("
+"AGPLV3 + restrições adicionais). Certifique -se de mantê -lo atualizado!"
 
 #: pretix/control/views/global_settings.py:227
 msgid ""
@@ -24503,8 +24501,7 @@ msgstr[1] ""
 #: pretix/presale/views/order.py:1036 pretix/presale/views/order.py:1208
 #: pretix/presale/views/order.py:1589 pretix/presale/views/order.py:1620
 msgid "Unknown order code or not authorized to access this order."
-msgstr ""
-"Código de pedido desconhecido ou não autorizado a aceder a este pedido."
+msgstr "Código de pedido desconhecido ou não autorizado a aceder a este pedido."
 
 #: pretix/control/views/orders.py:470 pretix/presale/views/order.py:1040
 msgid "Ticket download is not enabled for this product."
@@ -26312,8 +26309,8 @@ msgstr[0] ""
 "Está a tentar fazer download de um reembolso exportado em %(date)s com um "
 "pedido e um total de %(sum)s."
 msgstr[1] ""
-"Está a tentar fazer download de um reembolso exportado em %(date)s com "
-"%(cnt)s pedidos e um total de %(sum)s."
+"Está a tentar fazer download de um reembolso exportado em %(date)s com %(cnt)"
+"s pedidos e um total de %(sum)s."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
@@ -28981,8 +28978,7 @@ msgstr "Por favor, insira o resultado correto."
 
 #: pretix/presale/forms/customer.py:322
 msgid "For security reasons, please wait 10 minutes before you try again."
-msgstr ""
-"Por motivos de segurança, aguarde 10 minutos antes de tentar novamente."
+msgstr "Por motivos de segurança, aguarde 10 minutos antes de tentar novamente."
 
 #: pretix/presale/forms/customer.py:323
 msgid "A user with this email address is not known in our system."
@@ -31096,8 +31092,7 @@ msgstr "Iniciamos o processo solicitado em uma nova janela."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:18
 msgid "If you do not see the new window, we can help you launch it again."
-msgstr ""
-"Se você não vê a nova janela, podemos ajudá -lo a iniciá -la novamente."
+msgstr "Se você não vê a nova janela, podemos ajudá -lo a iniciá -la novamente."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:23
 msgid "Open window again"
