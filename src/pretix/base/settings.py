@@ -2407,6 +2407,8 @@ Once the ticket lottery has taken place, those selected will receive an email wi
 If you are not selected in the initial lottery, you will be added to a waiting list
 and will receive an email when a ticket is available for you.
 
+Want to stay in the loop about the latest news about SideBurn? Subscribe to our newsletter here: http://eepurl.com/ij4Off
+
 Best regards,
 Your {event} ticketing team"""))
     },
