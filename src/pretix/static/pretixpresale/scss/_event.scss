@@ -21,8 +21,6 @@
     }
     .availability-box {
         text-align: center;
-        margin-top: -6px;
-        margin-bottom: -6px;
 
         &.gone, .gone {
             color: $alert-danger-text;
@@ -200,6 +198,19 @@ div.front-page {
     }
     .row-voucher > div:first-child {
         margin-bottom: 15px;
+    }
+}
+
+.col-xs-6.availability-box {
+    margin-top: -6px;
+    margin-bottom: -6px;
+}
+@media (max-width: $screen-xs-max) {
+    .product-description p:last-child {
+        margin-bottom: 15px;
+    }
+    .product-row .price {
+        text-align: left;
     }
 }
 
