@@ -7,6 +7,10 @@
 <p class="help-block">{% trans "The registrations for the general sale are drawn in a lottery, ensuring that everyone registered has an equal chance of being offered a ticket." %}</p>
 <p class="help-block">{% trans "Available tickets are then offered in the order of the lottery, and registrants have three days to buy their available ticket before it’s added back to the pool and offered to the next in the list." %}</p>
 <p class="help-block">{% trans "If you register for a ticket after sales are already in progress, you simply get added to the bottom of the list." %}</p>
+<p class="help-block">&nbsp;</p>
+<p class="help-block"><h3 class="text-danger"><b>{% trans "Register only once per person" %}</b></h3></p>
+<p class="help-block"><h5><b>{% trans "Registering again with another email - or trying again with the same one - could disqualify you from the ticketing lottery!" %}</b></h5></p>
+<p class="help-block">&nbsp;</p>
     <h3>{% trans "Add me to the list" %}</h3>
     <form action="{{ request.get_full_path }}" method="post">
         {% csrf_token %}

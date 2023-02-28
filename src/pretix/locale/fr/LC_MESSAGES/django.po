@@ -2550,6 +2550,12 @@ msgstr "Les billets disponibles sont ensuite proposés dans l'ordre de la loteri
 msgid "If you register for a ticket after sales are already in progress, you simply get added to the bottom of the list."
 msgstr "Si vous vous inscrivez pour un billet alors que les ventes sont déjà en cours, vous êtes simplement ajouté au bas de la liste."
 
+msgid "Register only once per person"
+msgstr "Inscrivez-vous une seule fois par personne"
+
+msgid "Registering again with another email - or trying again with the same one - could disqualify you from the ticketing lottery!"
+msgstr "Vous inscrire à nouveau avec une autre adresse e-mail - ou réessayer avec la même - pourrait vous disqualifier de la loterie de billetterie !"
+
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:77
 msgid "Register here"
 msgstr "Inscrivez-vous ici"
