@@ -389,7 +389,9 @@ details summary {
     -webkit-user-select: none;
     user-select: none;
 }
-.nojs details[open] .collapse-indicator, details.details-open .collapse-indicator {
+.nojs details[open] .panel-heading .collapse-indicator,
+details.details-open .panel-heading .collapse-indicator,
+[aria-expanded=true]>.collapse-indicator {
     -webkit-transform: rotate(180deg);
     -ms-transform: rotate(180deg);
     -moz-transform: rotate(180deg);

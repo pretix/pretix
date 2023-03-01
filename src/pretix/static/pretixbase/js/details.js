@@ -70,7 +70,7 @@ setup_collapsible_details = function (el) {
 
         var altLabel = $button.attr("data-label-alt");
         $button.attr("data-label-alt", $button.text());
-        $button.text(altLabel);
+        $button.find("span").text(altLabel);
         $button.attr("aria-expanded", !isOpen);
 
         if (isOpen) {

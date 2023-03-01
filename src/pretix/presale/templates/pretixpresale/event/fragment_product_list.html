@@ -89,7 +89,8 @@
                                     data-label-alt="{% trans "Hide variants" %}"
                                     aria-expanded="false"
                                     aria-label="{% blocktrans trimmed with item=item.name count=item.available_variations|length %}Show {{count}} variants of {{ item }}{% endblocktrans %}">
-                                    {% trans "Show variants" %}
+                                    <span>{% trans "Show variants" %}</span>
+                                    <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                                 </button>
                             {% endif %}
                         </div>
