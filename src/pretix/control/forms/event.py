@@ -1213,6 +1213,7 @@ class MailSettingsForm(SettingsForm):
         'mail_subject_order_canceled': ['event', 'order', 'comment'],
         'mail_text_order_expire_warning': ['event', 'order'],
         'mail_subject_order_expire_warning': ['event', 'order'],
+        'mail_text_order_pending_warning': ['event', 'order'],
         'mail_subject_order_pending_warning': ['event', 'order'],
         'mail_text_order_incomplete_payment': ['event', 'order', 'pending_sum'],
         'mail_subject_order_incomplete_payment': ['event', 'order'],
