@@ -578,7 +578,8 @@ class WebHookForm(forms.ModelForm):
 class GiftCardCreateForm(forms.ModelForm):
     value = forms.DecimalField(
         label=_('Gift card value'),
-        min_value=Decimal('0.00')
+        min_value=Decimal('0.00'),
+        max_value=Decimal('99999999.99'),
     )
 
     def __init__(self, *args, **kwargs):
