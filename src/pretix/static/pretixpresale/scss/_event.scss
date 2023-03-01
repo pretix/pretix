@@ -163,16 +163,20 @@ article.item-with-variations .product-row:last-child:after {
     &.total {
         border-top: 1px solid $table-border-color;
     }
+    &.variation h5 {
+        position: relative;
+        padding-inline-start: 1.3em;
+    }
     &.variation h5:before {
         content: "";
-        display: inline-block;
-        width: 8px;
+        display: block;
+        width: .65em;
         height: 6px;
+        position: absolute;
+        left: 1px;
+        top: 0.35em;
         border-width: 0 0 1px 1px;
         border-style: solid;
-        margin-bottom: 4px;
-        margin-left: 1px;
-        margin-right: .65em;
     }
 }
 .panel-contact dl {
@@ -222,6 +226,9 @@ div.front-page {
     }
     .product-row .price {
         text-align: left;
+    }
+    .product-row.variation .price {
+        padding-inline-start: calc(1.3em + 15px);
     }
 }
 

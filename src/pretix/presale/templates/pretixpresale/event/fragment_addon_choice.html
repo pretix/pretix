@@ -68,7 +68,7 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <div class="col-md-2 col-sm-3 col-xs-12 price">
+                        <div class="col-md-2 col-sm-3 col-xs-6 price">
                             <p>
                                 {% if c.price_included %}
                                     <span class="sr-only">{% trans "free" context "price" %}</span>
@@ -89,7 +89,7 @@
                                 {% endif %}
                             </p>
                         </div>
-                        <div class="col-md-2 col-sm-3 col-xs-12 availability-box">
+                        <div class="col-md-2 col-sm-3 col-xs-6 availability-box">
                             {% if not event.settings.show_variations_expanded %}
                                 <button type="button" data-toggle="variations" class="btn btn-default btn-block js-only"
                                         data-label-alt="{% trans "Hide variants" %}"

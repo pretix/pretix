@@ -14,8 +14,8 @@ html.rtl {
       margin-left: 10px;
   }
   .product-row.variation h5:before {
-    margin-right: 1px;
-    margin-left: .65em;
+    left: auto;
+    right: 1px;
     border-width: 0 1px 1px 0;
   }
   .cart-row > div {
