@@ -2516,7 +2516,7 @@ class OrderChangeManager:
                 positions_to_fake_cart[op.position].seat = op.seat
             elif isinstance(op, self.MembershipOperation):
                 positions_to_fake_cart[op.position].used_membership = op.membership
-            elif isinstance(op, self.CancelOperation):
+            elif isinstance(op, self.CancelOperation) and op.position in positions_to_fake_cart:
                 fake_cart.remove(positions_to_fake_cart[op.position])
             elif isinstance(op, self.AddOperation):
                 cp = CartPosition(
