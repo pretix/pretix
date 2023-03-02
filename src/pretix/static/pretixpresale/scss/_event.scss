@@ -215,11 +215,14 @@ div.front-page {
         margin-bottom: 15px;
     }
 }
-
-.col-xs-6.availability-box {
-    margin-top: -6px;
-    margin-bottom: -6px;
+@media (min-width: $screen-sm-min) {
+    .col-xs-6.availability-box,
+    .col-xs-6.price:has(.input-group-price) {
+        margin-top: -6px;
+        margin-bottom: -6px;
+    }
 }
+
 @media (max-width: $screen-xs-max) {
     .product-description p:last-child {
         margin-bottom: 15px;
