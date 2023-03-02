@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import re
+import types
 from inspect import isgenerator
 
 from openpyxl import Workbook
@@ -140,9 +141,9 @@ class SafeWorkbook(Workbook):
             # monkeypatch existing sheets
             for s in self._sheets:
                 if self.write_only:
-                    s.append = SafeWriteOnlyWorksheet.append
+                    s.append = types.MethodType(SafeWriteOnlyWorksheet.append, s)
                 else:
-                    s.append = SafeWorksheet.append
+                    s.append = types.MethodType(SafeWorksheet.append, s)
 
     def create_sheet(self, title=None, index=None):
         if self.read_only:
