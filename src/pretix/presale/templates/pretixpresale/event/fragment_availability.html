@@ -1,7 +1,7 @@
 {% load i18n %}
 {% load eventurl %}
 {% if avail <= 10 %}
-    <div class="col-md-2 col-xs-6 availability-box gone">
+    <div class="col-md-2 col-sm-3 col-xs-6 availability-box gone">
         {% if price != None and not price %}
             <strong>{% trans "FULLY BOOKED" %}</strong>
         {% else %}
@@ -16,7 +16,7 @@
         {% endif %}
     </div>
 {% elif avail < 100 %}
-    <div class="col-md-2 col-xs-6 availability-box unavailable">
+    <div class="col-md-2 col-sm-3 col-xs-6 availability-box unavailable">
         <strong>{% trans "Reserved" %}</strong>
         <br/>
         {% trans "All remaining products are reserved but might become available again." %}
