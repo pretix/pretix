@@ -151,16 +151,19 @@ class BaseDataShredder:
 
 def shred_log_fields(logentry, banlist=None, whitelist=None):
     d = logentry.parsed_data
+    shredded = False
     if whitelist:
         for k, v in d.items():
             if k not in whitelist:
                 d[k] = '█'
+                shredded = True
     elif banlist:
         for f in banlist:
             if f in d:
                 d[f] = '█'
+                shredded = True
     logentry.data = json.dumps(d)
-    logentry.shredded = True
+    logentry.shredded = logentry.shredded or shredded
     logentry.save(update_fields=['data', 'shredded'])
 
 
