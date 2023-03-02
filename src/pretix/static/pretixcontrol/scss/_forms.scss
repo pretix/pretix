@@ -181,7 +181,7 @@ div.mail-preview {
   border-top-width: 0;
   margin-bottom: 0;
   padding-right: 15px;
-  padding-bottom: 15px;
+  padding-bottom: 8px;
 
   &:first-child {
     @include border-top-radius($input-border-radius);
@@ -216,6 +216,12 @@ div.mail-preview {
   }
   p:last-child {
     margin-bottom: 0;
+  }
+  /* Reset styling from bootstrap that we don't actually have in emails */
+  pre {
+    background: none;
+    border: none;
+    padding: 0;
   }
 }
 

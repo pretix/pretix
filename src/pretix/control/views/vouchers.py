@@ -35,6 +35,7 @@
 
 import io
 
+import bleach
 from defusedcsv import csv
 from django.conf import settings
 from django.contrib import messages
@@ -56,10 +57,12 @@ from django.views.generic import (
     CreateView, ListView, TemplateView, UpdateView, View,
 )
 
+from pretix.base.email import get_available_placeholders
 from pretix.base.models import CartPosition, LogEntry, Voucher
 from pretix.base.models.vouchers import generate_codes
 from pretix.base.services.locking import NoLockManager
 from pretix.base.services.vouchers import vouchers_send
+from pretix.base.templatetags.rich_text import markdown_compile_email
 from pretix.base.views.tasks import AsyncFormView
 from pretix.control.forms.filter import VoucherFilterForm, VoucherTagFilterForm
 from pretix.control.forms.vouchers import VoucherBulkForm, VoucherForm
@@ -67,6 +70,7 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import voucher_form_class
 from pretix.control.views import PaginationMixin
 from pretix.helpers.compat import CompatDeleteView
+from pretix.helpers.format import format_map
 from pretix.helpers.models import modelcopy
 
 
@@ -507,6 +511,49 @@ class VoucherBulkCreate(EventPermissionRequiredMixin, AsyncFormView):
     def form_invalid(self, form):
         messages.error(self.request, _('We could not save your changes. See below for details.'))
         return super().form_invalid(form)
+
+
+class VoucherBulkMailPreview(EventPermissionRequiredMixin, View):
+    permission = 'can_change_vouchers'
+
+    # return the origin text if key is missing in dict
+    class SafeDict(dict):
+        def __missing__(self, key):
+            return '{' + key + '}'
+
+    # get all supported placeholders with dummy values
+    def placeholders(self, item):
+        ctx = {}
+        for p in get_available_placeholders(self.request.event, ['event', 'voucher_list', 'name']).values():
+            s = str(p.render_sample(self.request.event))
+            if s.strip().startswith('* ') or s.startswith('  '):
+                ctx[p.identifier] = '<div class="placeholder" title="{}">{}</div>'.format(
+                    _('This value will be replaced based on dynamic parameters.'),
+                    markdown_compile_email(s)
+                )
+            else:
+                ctx[p.identifier] = '<span class="placeholder" title="{}">{}</span>'.format(
+                    _('This value will be replaced based on dynamic parameters.'),
+                    s
+                )
+        return self.SafeDict(ctx)
+
+    def post(self, request, *args, **kwargs):
+        preview_item = request.POST.get('item', '')
+        if preview_item not in ('send_message', 'send_subject'):
+            return HttpResponseBadRequest(_('invalid item'))
+        msgs = {}
+        if "subject" in preview_item:
+            msgs["all"] = format_map(bleach.clean(request.POST.get(preview_item, "")), self.placeholders(preview_item))
+        else:
+            msgs["all"] = markdown_compile_email(
+                format_map(request.POST.get(preview_item), self.placeholders(preview_item))
+            )
+
+        return JsonResponse({
+            'item': preview_item,
+            'msgs': msgs
+        })
 
 
 class VoucherRNG(EventPermissionRequiredMixin, View):
