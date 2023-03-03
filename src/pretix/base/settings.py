@@ -63,7 +63,8 @@ from rest_framework import serializers
 from pretix.api.serializers.fields import (
     ListMultipleChoiceField, UploadedFileField,
 )
-from pretix.api.serializers.i18n import I18nField
+from pretix.api.serializers.i18n import I18nField, I18nURLField
+from pretix.base.forms import I18nURLFormField
 from pretix.base.models.tax import VAT_ID_COUNTRIES, TaxRule
 from pretix.base.reldate import (
     RelativeDateField, RelativeDateTimeField, RelativeDateWrapper,
@@ -1689,14 +1690,15 @@ DEFAULTS = {
     },
     'privacy_url': {
         'default': None,
-        'type': str,
-        'form_class': forms.URLField,
+        'type': LazyI18nString,
+        'form_class': I18nURLFormField,
         'form_kwargs': dict(
             label=_("Privacy Policy URL"),
             help_text=_("This should point e.g. to a part of your website that explains how you use data gathered in "
                         "your ticket shop."),
+            widget=I18nTextInput,
         ),
-        'serializer_class': serializers.URLField,
+        'serializer_class': I18nURLField,
     },
     'confirm_texts': {
         'default': LazyI18nStringList(),
