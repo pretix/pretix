@@ -120,12 +120,16 @@ class WaitingListTestCase(TestCase):
     def test_send_custom_validity(self):
         self.event.settings.set('waiting_list_hours', 24)
         wle = WaitingListEntry.objects.create(
-            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com'
+            event=self.event, item=self.item2, variation=self.var1, email='foo@bar.com',
+            name_parts={'_legacy': 'Max'}
         )
         wle.send_voucher()
         wle.refresh_from_db()
 
         assert 3600 * 23 < (wle.voucher.valid_until - now()).seconds < 3600 * 24
+
+        assert 'foo@bar.com' in wle.voucher.comment
+        assert 'Max' in wle.voucher.comment
 
     def test_send_auto(self):
         with scope(organizer=self.o):

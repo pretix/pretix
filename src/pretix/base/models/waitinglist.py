@@ -188,6 +188,9 @@ class WaitingListEntry(LoggedModel):
             raise WaitingListException(_('This entry is anonymized and can no longer be used.'))
 
         with transaction.atomic():
+            e = self.email
+            if self.name:
+                e += ' / ' + self.name
             v = Voucher.objects.create(
                 event=self.event,
                 max_usages=1,
@@ -196,7 +199,7 @@ class WaitingListEntry(LoggedModel):
                 variation=self.variation,
                 tag='waiting-list',
                 comment=_('Automatically created from waiting list entry for {email}').format(
-                    email=self.email
+                    email=e
                 ),
                 block_quota=True,
                 subevent=self.subevent,
