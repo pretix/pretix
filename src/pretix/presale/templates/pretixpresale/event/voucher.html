@@ -121,7 +121,7 @@
                         {% if item.has_variations %}
                             <article aria-labelledby="item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="item-{{ item.pk }}-description"{% endif %} class="item-with-variations" id="item-{{ item.pk }}">
                                 <div class="row product-row headline">
-                                    <div class="col-md-8 col-xs-12">
+                                    <div class="col-md-8 col-sm-6 col-xs-12">
                                         {% if item.picture %}
                                             <a href="{{ item.picture.url }}" class="productpicture"
                                                data-title="{{ item.name|force_escape|force_escape }}"
@@ -143,7 +143,7 @@
                                             {% endif %}
                                         </div>
                                     </div>
-                                    <div class="col-md-2 col-xs-6 price">
+                                    <div class="col-md-2 col-sm-3 col-xs-6 price">
                                         {% if item.min_price != item.max_price or item.free_price %}
                                             {% blocktrans trimmed with minprice=item.min_price|money:event.currency %}
                                                 from {{ minprice }}
@@ -156,14 +156,14 @@
                                             {{ item.min_price|money:event.currency }}
                                         {% endif %}
                                     </div>
-                                    <div class="col-md-2 col-xs-6 availability-box">
+                                    <div class="col-md-2 col-sm-3 col-xs-6 availability-box">
                                     </div>
                                     <div class="clearfix"></div>
                                 </div>
                                 <div class="variations">
                                     {% for var in item.available_variations %}
                                         <article aria-labelledby="item-{{ item.pk }}-{{ var.pk }}-legend"{% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %} class="row product-row variation" id="item-{{ item.pk }}-{{ var.pk }}">
-                                            <div class="col-md-8 col-xs-12">
+                                            <div class="col-md-8 col-sm-6 col-xs-12">
                                                 <h5 id="item-{{ item.pk }}-{{ var.pk }}-legend">{{ var }}</h5>
                                                 {% if var.description %}
                                                     <div id="item-{{ item.pk }}-{{ var.pk }}-description" class="variation-description">
@@ -174,7 +174,7 @@
                                                     {% include "pretixpresale/event/fragment_quota_left.html" with avail=var.cached_availability %}
                                                 {% endif %}
                                             </div>
-                                            <div class="col-md-2 col-xs-6 price">
+                                            <div class="col-md-2 col-sm-3 col-xs-6 price">
                                                 {% if var.original_price %}
                                                     <p>
                                                     <del><span class="sr-only">{% trans "Original price:" %}</span>
@@ -236,7 +236,7 @@
                                                 </p>
                                             </div>
                                             {% if var.cached_availability.0 == 100 %}
-                                                <div class="col-md-2 col-xs-6 availability-box available radio-box">
+                                                <div class="col-md-2 col-sm-3 col-xs-6 availability-box available radio-box">
                                                     {% if max_times > 1 %}
                                                         {% if var.order_max == 1 %}
                                                             <label class="item-checkbox-label">
@@ -278,7 +278,7 @@
                             </article>
                         {% else %}
                             <article aria-labelledby="item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="item-{{ item.pk }}-description"{% endif %} class="row product-row simple" id="item-{{ item.pk }}">
-                                <div class="col-md-8 col-xs-12">
+                                <div class="col-md-8 col-sm-6 col-xs-12">
                                     {% if item.picture %}
                                         <a href="{{ item.picture.url }}" class="productpicture"
                                            data-title="{{ item.name|force_escape|force_escape }}"
@@ -310,7 +310,7 @@
                                         {% endif %}
                                     </div>
                                 </div>
-                                <div class="col-md-2 col-xs-6 price">
+                                <div class="col-md-2 col-sm-3 col-xs-6 price">
                                     {% if item.original_price %}
                                         <p>
                                         <del><span class="sr-only">{% trans "Original price:" %}</span>
@@ -370,7 +370,7 @@
                                     </p>
                                 </div>
                                 {% if item.cached_availability.0 == 100 %}
-                                    <div class="col-md-2 col-xs-6 availability-box available radio-box">
+                                    <div class="col-md-2 col-sm-3 col-xs-6 availability-box available radio-box">
                                         {% if max_times > 1 %}
                                             {% if item.order_max == 1 %}
                                                 <label class="item-checkbox-label">

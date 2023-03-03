@@ -17,7 +17,7 @@
             {% if item.has_variations %}
                 <article aria-labelledby="item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="item-{{ item.pk }}-description"{% endif %} class="item-with-variations{% if event.settings.show_variations_expanded %} details-open{% endif %}" id="item-{{ item.pk }}">
                     <div class="row product-row headline">
-                        <div class="col-md-8 col-xs-12">
+                        <div class="col-md-8 col-sm-6 col-xs-12">
                             {% if item.picture %}
                                 <a href="{{ item.picture.url }}" class="productpicture"
                                    data-title="{{ item.name|force_escape|force_escape }}"
@@ -46,7 +46,7 @@
                                 {% endif %}
                             </div>
                         </div>
-                        <div class="col-md-2 col-xs-6 price">
+                        <div class="col-md-2 col-sm-3 col-xs-6 price">
                             {% if item.free_price %}
                                 {% blocktrans trimmed with price=item.min_price|money:event.currency %}
                                     from {{ price }}
@@ -64,7 +64,7 @@
                                 {{ item.min_price|money:event.currency }}
                             {% endif %}
                         </div>
-                        <div class="col-md-2 col-xs-6 availability-box">
+                        <div class="col-md-2 col-sm-3 col-xs-6 availability-box">
                             {% if not event.settings.show_variations_expanded %}
                                 {% if item.best_variation_availability <= 10 %}
                                     {% if not item.min_price %}
@@ -89,7 +89,8 @@
                                     data-label-alt="{% trans "Hide variants" %}"
                                     aria-expanded="false"
                                     aria-label="{% blocktrans trimmed with item=item.name count=item.available_variations|length %}Show {{count}} variants of {{ item }}{% endblocktrans %}">
-                                    {% trans "Show variants" %}
+                                    <span>{% trans "Show variants" %}</span>
+                                    <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                                 </button>
                             {% endif %}
                         </div>
@@ -98,7 +99,7 @@
                     <div class="variations {% if not event.settings.show_variations_expanded %}variations-collapsed{% endif %}">
                         {% for var in item.available_variations %}
                             <article aria-labelledby="item-{{ item.pk }}-{{ var.pk }}-legend"{% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %} class="row product-row variation" id="item-{{ item.pk }}-{{ var.pk }}">
-                                <div class="col-md-8 col-xs-12">
+                                <div class="col-md-8 col-sm-6 col-xs-12">
                                     <h5 id="item-{{ item.pk }}-{{ var.pk }}-legend">{{ var }}</h5>
                                     {% if var.description %}
                                         <div id="item-{{ item.pk }}-{{ var.pk }}-description" class="variation-description">
@@ -109,7 +110,7 @@
                                         {% include "pretixpresale/event/fragment_quota_left.html" with avail=var.cached_availability %}
                                     {% endif %}
                                 </div>
-                                <div class="col-md-2 col-xs-6 price">
+                                <div class="col-md-2 col-sm-3 col-xs-6 price">
                                     {% if var.original_price %}
                                         <p>
                                         <del><span class="sr-only">{% trans "Original price:" %}</span>
@@ -173,11 +174,11 @@
                                     </p>
                                 </div>
                                 {% if item.require_voucher %}
-                                    <div class="col-md-2 col-xs-6 availability-box unavailable">
+                                    <div class="col-md-2 col-sm-3 col-xs-6 availability-box unavailable">
                                         <p><small><a href="#voucher">{% trans "Enter a voucher code below to buy this ticket." %}</a></small></p>
                                     </div>
                                 {% elif var.cached_availability.0 == 100 %}
-                                    <div class="col-md-2 col-xs-6 availability-box available">
+                                    <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
 										{% if var.order_max == 1 %}
                                             <label class="item-checkbox-label">
                                                 <input type="checkbox" value="1"
@@ -213,7 +214,7 @@
                 </article>
             {% else %}
                 <article aria-labelledby="item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="item-{{ item.pk }}-description"{% endif %} class="row product-row simple" id="item-{{ item.pk }}">
-                    <div class="col-md-8 col-xs-12">
+                    <div class="col-md-8 col-sm-6 col-xs-12">
                         {% if item.picture %}
                             <a href="{{ item.picture.url }}" class="productpicture"
                                data-title="{{ item.name|force_escape|force_escape }}"
@@ -245,7 +246,7 @@
                             {% endif %}
                         </div>
                     </div>
-                    <div class="col-md-2 col-xs-6 price">
+                    <div class="col-md-2 col-sm-3 col-xs-6 price">
                         {% if item.original_price %}
                             <p>
                             <del><span class="sr-only">{% trans "Original price:" %}</span>
@@ -307,11 +308,11 @@
                         </p>
                     </div>
                     {% if item.require_voucher %}
-                        <div class="col-md-2 col-xs-6 availability-box unavailable">
+                        <div class="col-md-2 col-sm-3 col-xs-6 availability-box unavailable">
                             <p><small><a href="#voucher">{% trans "Enter a voucher code below to buy this ticket." %}</a></small></p>
                         </div>
                     {% elif item.cached_availability.0 == 100 %}
-                        <div class="col-md-2 col-xs-6 availability-box available">
+                        <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
 							{% if item.order_max == 1 %}
                                 <label class="item-checkbox-label">
                                     <input type="checkbox" value="1" {% if itemnum == 1 %}checked{% endif %}
