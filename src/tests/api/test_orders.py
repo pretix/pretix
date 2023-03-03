@@ -324,6 +324,21 @@ def test_order_list_filter_subevent_date(token_client, organizer, event, order, 
     assert resp.status_code == 200
     assert [res] == resp.data['results']
 
+    # Test distinct-ness of results
+    with scopes_disabled():
+        OrderPosition.objects.create(
+            order=order,
+            item=item,
+            variation=None,
+            price=Decimal("23"),
+            canceled=False,
+            positionid=3,
+            subevent=subevent,
+        )
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/orders/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
+    assert len(resp.data['results']) == 1
+
 
 @pytest.mark.django_db
 def test_order_list(token_client, organizer, event, order, item, taxrule, question):
