@@ -55,7 +55,12 @@ class CheckinList(LoggedModel):
     all_products = models.BooleanField(default=True, verbose_name=_("All products (including newly created ones)"))
     limit_products = models.ManyToManyField('Item', verbose_name=_("Limit to products"), blank=True)
     subevent = models.ForeignKey('SubEvent', null=True, blank=True,
-                                 verbose_name=pgettext_lazy('subevent', 'Date'), on_delete=models.CASCADE)
+                                 verbose_name=pgettext_lazy('subevent', 'Date'),
+                                 on_delete=models.CASCADE,
+                                 help_text=_('If you choose "all dates", tickets will be considered part of this list '
+                                             'and valid for check-in regardless of which date they are purchased for. '
+                                             'You can limit their validity through the advanced check-in rules, '
+                                             'though.'))
     include_pending = models.BooleanField(verbose_name=pgettext_lazy('checkin', 'Include pending orders'),
                                           default=False,
                                           help_text=_('With this option, people will be able to check in even if the '

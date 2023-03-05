@@ -251,7 +251,9 @@ class SubEventEditorMixin(MetaDataEditorMixin):
                     'include_pending': False,
                 }
             ]
-            extra = 0
+
+            if not self.request.event.checkin_lists.filter(subevent__isnull=True).exists():
+                extra = 1
 
         formsetclass = inlineformset_factory(
             SubEvent, CheckinList,
