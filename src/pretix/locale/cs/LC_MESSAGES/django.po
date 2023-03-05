@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-02-27 08:00+0000\n"
-"PO-Revision-Date: 2023-01-13 08:00+0000\n"
-"Last-Translator: tree <jan.stransky@arnal.cz>\n"
-"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
-">\n"
+"PO-Revision-Date: 2023-03-06 04:00+0000\n"
+"Last-Translator: Michael <michael.happl@gmx.at>\n"
+"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15\n"
+"X-Generator: Weblate 4.15.2\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -3768,10 +3768,8 @@ msgid "Event validity (default)"
 msgstr "Začátek akce"
 
 #: pretix/base/models/items.py:367
-#, fuzzy
-#| msgid "Customer"
 msgid "Fixed time frame"
-msgstr "Zákazník"
+msgstr "Pevný časový rozsah"
 
 #: pretix/base/models/items.py:368
 msgid "Dynamic validity"
@@ -3999,10 +3997,8 @@ msgid "Membership duration in months"
 msgstr "Délka členství ve měsících"
 
 #: pretix/base/models/items.py:594
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity"
-msgstr "Platí do"
+msgstr "Platnost"
 
 #: pretix/base/models/items.py:596
 msgid ""
@@ -4017,22 +4013,16 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/items.py:604
-#, fuzzy
-#| msgid "Start of presale"
 msgid "Start of validity"
-msgstr "Začátek předprodeje"
+msgstr "Začátek platnosti"
 
 #: pretix/base/models/items.py:605
-#, fuzzy
-#| msgid "End of presale"
 msgid "End of validity"
-msgstr "Konec předprodeje"
+msgstr "Konec platnosti"
 
 #: pretix/base/models/items.py:608
-#, fuzzy
-#| msgid "minutes"
 msgid "Minutes"
-msgstr "minuty"
+msgstr "Minuty"
 
 #: pretix/base/models/items.py:612
 msgid "Hours"
@@ -4047,21 +4037,16 @@ msgid "Months"
 msgstr ""
 
 #: pretix/base/models/items.py:623
-#, fuzzy
-#| msgctxt "timeline"
-#| msgid "Customers can no longer cancel paid orders"
 msgid "Customers can select the validity start date"
-msgstr "Zákazníci již nemohou zrušit zaplacené objednávky"
+msgstr "Zákazníci si mohou vybrat datum začátku platnosti"
 
 #: pretix/base/models/items.py:624
 msgid "If not selected, the validity always starts at the time of purchase."
 msgstr ""
 
 #: pretix/base/models/items.py:629
-#, fuzzy
-#| msgid "Maximum order total"
 msgid "Maximum future start"
-msgstr "Maximální celkový počet objednávek"
+msgstr "Maximální budoucí začátek"
 
 #: pretix/base/models/items.py:630
 msgid "The selected start date may only be this many days in the future."
@@ -5298,10 +5283,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/vouchers.py:339
-#, fuzzy
-#| msgid "You cannot select a quota that belongs to a different event."
 msgid "You cannot select a product that belongs to a different event."
-msgstr "Nelze vybrat kvótu, která patří k jiné akci."
+msgstr "Nelze vybrat produkt, který patří k jiné akci."
 
 #: pretix/base/models/vouchers.py:341 pretix/base/models/vouchers.py:354
 msgid ""
@@ -6302,40 +6285,28 @@ msgid "Printing time"
 msgstr "Datum tisku"
 
 #: pretix/base/pdf.py:411
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity start date"
-msgstr "Platí do"
+msgstr "Datum začátku platnosti"
 
 #: pretix/base/pdf.py:419
-#, fuzzy
-#| msgid "Printing date and time"
 msgid "Validity start date and time"
-msgstr "Datum a čas tisku"
+msgstr "Datum a čas začátku platnosti"
 
 #: pretix/base/pdf.py:427
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity start time"
-msgstr "Platí do"
+msgstr "Čas začátku platnosti"
 
 #: pretix/base/pdf.py:435
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity end date"
-msgstr "Platí do"
+msgstr "Datum konce platnosti"
 
 #: pretix/base/pdf.py:443
-#, fuzzy
-#| msgid "Event end date and time"
 msgid "Validity end date and time"
-msgstr "Datum a čas ukončení akce"
+msgstr "Datum a čas konce platnosti"
 
 #: pretix/base/pdf.py:451
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity end time"
-msgstr "Platí do"
+msgstr "Čas konce platnosti"
 
 #: pretix/base/pdf.py:459
 msgid "Seat: Full name"
@@ -6419,10 +6390,8 @@ msgid "Ticket"
 msgstr "Lístek"
 
 #: pretix/base/pdf.py:1073
-#, fuzzy
-#| msgid "Your layout file is not a valid seating plan. Error message: {}"
 msgid "Your layout file is not a valid layout. Error message: {}"
-msgstr "Soubor není platným plánem zasedání. Chyba: {}"
+msgstr "Soubor rozvržení neobsahuje platné rozvržení. Chyba: {}"
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
@@ -6518,41 +6487,33 @@ msgstr ""
 "zkontrolujte prosím svůj nákupní košík."
 
 #: pretix/base/services/cart.py:111
-#, fuzzy, python-format
-#| msgid "You cannot select more than %s items per order."
+#, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] "V jedné objednávce nelze vybrat více než %s produktů."
+msgstr[0] "V jedné objednávce nelze vybrat více než %s produkt."
 msgstr[1] "V jedné objednávce nelze vybrat více než %s produktů."
 msgstr[2] "V jedné objednávce nelze vybrat více než %s produktů."
 
 #: pretix/base/services/cart.py:115
-#, fuzzy, python-format
-#| msgid ""
-#| "You cannot select more than %(max)s items of the product %(product)s."
+#, python-format
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
-msgstr[0] "Nelze vybrat více než %(max)s položek produktu %(product)s."
+msgstr[0] "Nelze vybrat více než %(max)s položku produktu %(product)s."
 msgstr[1] "Nelze vybrat více než %(max)s položek produktu %(product)s."
 msgstr[2] "Nelze vybrat více než %(max)s položek produktu %(product)s."
 
 #: pretix/base/services/cart.py:120
-#, fuzzy, python-format
-#| msgid ""
-#| "You need to select at least %(min)s items of the product %(product)s."
+#, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] "Je třeba vybrat alespoň %(min)s položek produktu %(product)s."
+msgstr[0] "Je třeba vybrat alespoň %(min)s položku produktu %(product)s."
 msgstr[1] "Je třeba vybrat alespoň %(min)s položek produktu %(product)s."
 msgstr[2] "Je třeba vybrat alespoň %(min)s položek produktu %(product)s."
 
 #: pretix/base/services/cart.py:125
-#, fuzzy, python-format
-#| msgid ""
-#| "We removed %(product)s from your cart as you can not buy less than "
-#| "%(min)s items of it."
+#, python-format
 msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "item of it."
@@ -6561,7 +6522,7 @@ msgid_plural ""
 "items of it."
 msgstr[0] ""
 "Odstranili jsme %(product)s z vašeho košíku, protože nelze koupit méně než "
-"%(min)s položek."
+"%(min)s položku."
 msgstr[1] ""
 "Odstranili jsme %(product)s z vašeho košíku, protože nelze koupit méně než "
 "%(min)s položek."
