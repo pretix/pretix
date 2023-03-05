@@ -1470,6 +1470,19 @@ DEFAULTS = {
             label=_("Do not allow changes after"),
         )
     },
+    'change_allow_attendee': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Allow individual attendees to change their ticket"),
+            help_text=_("By default, only the person who ordered the tickets can make any changes. If you check this "
+                        "box, individual attendees can also make changes. However, individual attendees can always "
+                        "only make changes that do not change the total price of the order. Such changes can always "
+                        "only be made by the main customer."),
+        )
+    },
     'cancel_allow_user': {
         'default': 'True',
         'type': bool,

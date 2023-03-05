@@ -784,6 +784,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'change_allow_user_addons',
         'change_allow_user_until',
         'change_allow_user_price',
+        'change_allow_attendee',
         'primary_color',
         'theme_color_success',
         'theme_color_danger',

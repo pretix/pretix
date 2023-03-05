@@ -51,4 +51,33 @@
         </div>
     </div>
     {% eventsignal event "pretix.presale.signals.position_info" order=order position=position request=request %}
+    {% if user_change_allowed %}
+        <div class="panel panel-default panel-cancellation">
+            <div class="panel-heading">
+                <h3 class="panel-title">
+                    {% trans "Change your ticket" context "action" %}
+                </h3>
+            </div>
+            <div class="panel-body">
+                <p>
+                    {% blocktrans trimmed %}
+                        If you want to make changes to the components of your ticket, you can click on the following button.
+                    {% endblocktrans %}
+                </p>
+                <p class="help-block">
+                    {% blocktrans trimmed with email=order.email %}
+                        You can only make some changes to this ticket yourself. For additional changes, please
+                        get in touch with the person who bought the ticket ({{ email }}).
+                    {% endblocktrans %}
+                </p>
+                <p>
+                    <a href="{% eventurl event 'presale:event.order.position.change' secret=position.web_secret position=position.positionid order=order.code %}"
+                       class="btn btn-default">
+                        <span class="fa fa-edit" aria-hidden="true"></span>
+                        {% trans "Change ticket" %}
+                    </a>
+                </p>
+            </div>
+        </div>
+    {% endif %}
 {% endblock %}

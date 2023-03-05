@@ -1,0 +1,191 @@
+{% load i18n %}
+{% load classname %}
+{% load eventurl %}
+{% load money %}
+
+<div class="row-fluid">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Change summary" %}
+            </h3>
+        </div>
+        <table class="panel-body table table-hover">
+            {% for op in operations %}
+                {% if op|classname == "ItemOperation" %}
+                    <tr>
+                        <td>
+                            {% if op.position.variation or op.variation %}
+                                {% blocktrans trimmed with positionid=op.position.positionid old_item=op.position.item.name old_variation=op.position.variation new_item=op.item.name new_variation=op.variation %}
+                                    Change position #{{ positionid }} from "{{ old_item }} – {{ old_variation }}" to "{{ new_item }} – {{ new_variation }}"
+                                {% endblocktrans %}
+                            {% else %}
+                                {% blocktrans trimmed with positionid=op.position.positionid old_item=op.position.item.name new_item=op.item.name %}
+                                    Change position #{{ positionid }} from "{{ old_item }}" to "{{ new_item }}"
+                                {% endblocktrans %}
+                            {% endif %}
+                            {% if op.position.addon_to %}
+                                <span class="text-muted">
+                                    <br>
+                                    <small>{% blocktrans with positionid=op.position.addon_to.positionid %}Add-on product to position #{{ positionid }}{% endblocktrans %}</small>
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-right flip">
+                        </td>
+                    </tr>
+                {% elif op|classname == "SubeventOperation" %}
+                    <tr>
+                        <td>
+                            {% blocktrans trimmed with positionid=op.position.positionid old=op.position.subevent new=op.subevent %}
+                                Change date of position #{{ positionid }} from "{{ old }}" to "{{ new }}"
+                            {% endblocktrans %}
+                        </td>
+                        <td class="text-right flip">
+                        </td>
+                    </tr>
+                {% elif op|classname == "PriceOperation" %}
+                    <tr>
+                        <td>
+                            {% blocktrans trimmed with positionid=op.position.positionid old=op.position.price new=op.price %}
+                                Change price of position #{{ positionid }} from {{ old }} to {{ new }}
+                            {% endblocktrans %}
+                            {% if op.position.addon_to %}
+                                <span class="text-muted">
+                                    <br>
+                                    <small>{% blocktrans with positionid=op.position.addon_to.positionid %}Add-on product to position #{{ positionid }}{% endblocktrans %}</small>
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-right flip">
+                            {% if not hide_prices %}
+                                {{ op.price_diff|money:request.event.currency }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% elif op|classname == "AddOperation" %}
+                    <tr>
+                        <td>
+                            {% if op.variation %}
+                                {% blocktrans trimmed with item=op.item.name variation=op.variation.value %}
+                                    Add position ({{ item }} – {{ variation }})
+                                {% endblocktrans %}
+                            {% else %}
+                                {% blocktrans trimmed with item=op.item.name %}
+                                    Add position ({{ item }})
+                                {% endblocktrans %}
+                            {% endif %}
+                            {% if op.addon_to %}
+                                <span class="text-muted">
+                                    <br>
+                                    <small>{% blocktrans with positionid=op.addon_to.positionid %}Add-on product to position #{{ positionid }}{% endblocktrans %}</small>
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-right flip">
+                            {% if not hide_prices %}
+                                {{ op.price.gross|money:request.event.currency }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% elif op|classname == "CancelOperation" %}
+                    <tr>
+                        <td>
+                            {% if op.position.variation %}
+                                {% blocktrans trimmed with positionid=op.position.positionid item=op.position.item.name variation=op.position.variation.value %}
+                                    Remove position #{{ positionid }} ({{ item }} – {{ variation }})
+                                {% endblocktrans %}
+                            {% else %}
+                                {% blocktrans trimmed with positionid=op.position.positionid item=op.position.item.name %}
+                                    Remove position #{{ positionid }} ({{ item }})
+                                {% endblocktrans %}
+                            {% endif %}
+                            {% if op.position.addon_to %}
+                                <span class="text-muted">
+                                    <br>
+                                    <small>{% blocktrans with positionid=op.position.addon_to.positionid %}Add-on product to position #{{ positionid }}{% endblocktrans %}</small>
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-right flip">
+                            {% if not hide_prices %}
+                                {{ op.price_diff|money:request.event.currency }}
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endif %}
+            {% endfor %}
+            {% if not hide_prices %}
+                <tfoot>
+                <tr>
+                    <td><strong>{% trans "Total price change" %}</strong></td>
+                    <td class="text-right flip">
+                        <strong>
+                            {{ totaldiff|money:request.event.currency }}
+                        </strong>
+                    </td>
+                </tr>
+                {% if totaldiff %}
+                <tr>
+                    <td><strong>{% trans "New order total" %}</strong></td>
+                    <td class="text-right flip">
+                        {{ totaldiff|add:order.total|money:request.event.currency }}
+                    </td>
+                </tr>
+                <tr>
+                    <td><strong>{% trans "You already paid" %}</strong></td>
+                    <td class="text-right flip">
+                        {{ order.payment_refund_sum|money:request.event.currency }}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        {% if new_pending_sum > 0 %}
+                            <strong>{% trans "You will need to pay" %}</strong>
+                            <br>
+                            <span class="text-muted">
+                                {% trans "Your entire order will be considered unpaid until you paid this difference." %}
+                            </span>
+                        {% else %}
+                            <strong>{% trans "You will be refunded" %}</strong>
+                            <br>
+                            <span class="text-muted">
+                                {% if request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "manually" %}
+                                    {% trans "The organizer will get in touch with you to clarify the details of your refund." %}
+                                {% elif request.event.settings.cancel_allow_user_paid_refund_as_giftcard == "force" %}
+                                    {% trans "The refund will be issued in form of a gift card that you can use for further purchases." %}
+                                {% else %}
+                                    {% if can_auto_refund %}
+                                        {% blocktrans trimmed %}
+                                            The refund amount will automatically be sent back to your original payment method. Depending
+                                            on the payment method, please allow for up to two weeks before this appears on your
+                                            statement.
+                                        {% endblocktrans %}
+                                    {% else %}
+                                        {% blocktrans trimmed %}
+                                            With the payment method you used, the refund amount <strong>can not be sent back to you
+                                            automatically</strong>. Instead, the event organizer will need to initiate the transfer
+                                            manually. Please be patient as this might take a bit longer.
+                                        {% endblocktrans %}
+                                    {% endif %}
+                                {% endif %}
+                            </span>
+                        {% endif %}
+                    </td>
+                    <td class="text-right flip">
+                        <strong>
+                            {{ new_pending_sum|money:request.event.currency }}
+                        </strong>
+                    </td>
+                    </tr>
+                {% endif %}
+                </tfoot>
+            {% endif %}
+        </table>
+    </div>
+</div>
+{% for k, l in request.POST.lists %}
+    {% for v in l %}
+        <input type="hidden" name="{{ k }}" value="{{ v }}">
+    {% endfor %}
+{% endfor %}

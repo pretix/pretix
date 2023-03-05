@@ -150,6 +150,9 @@ event_patterns = [
     re_path(r'^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<pid>[0-9]+)/(?P<output>[^/]+)$',
             pretix.presale.views.order.OrderPositionDownload.as_view(),
             name='event.order.position.download'),
+    re_path(r'^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/change$',
+            pretix.presale.views.order.OrderPositionChange.as_view(),
+            name='event.order.position.change'),
 
     re_path(r'^ical/?$',
             pretix.presale.views.event.EventIcalDownload.as_view(),
