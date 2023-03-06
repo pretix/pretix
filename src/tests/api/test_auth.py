@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import time
+
 import pytest
 
 from pretix.base.models import Organizer
@@ -46,6 +48,19 @@ def test_session_auth_with_teams(client, user, team):
     resp = client.get('/api/v1/organizers/')
     assert resp.status_code == 200
     assert len(resp.data['results']) == 1
+
+
+@pytest.mark.django_db
+def test_session_auth_relative_timeout(client, user, team):
+    client.login(email=user.email, password='dummy')
+    session = client.session
+    session['pretix_auth_long_session'] = False
+    session['pretix_auth_login_time'] = int(time.time()) - 3600 * 6
+    session['pretix_auth_last_used'] = int(time.time()) - 3600 * 3 - 60
+    session.save()
+
+    resp = client.get('/api/v1/organizers/')
+    assert resp.status_code == 403
 
 
 @pytest.mark.django_db
