@@ -112,7 +112,7 @@ class PermissionMiddleware:
         url = resolve(request.path_info)
         url_name = url.url_name
 
-        if not request.path.startswith(get_script_prefix() + 'control'):
+        if not request.path.startswith(get_script_prefix() + 'control') and not (url.namespace.startswith("api-") and url_name == "authorize"):
             # This middleware should only touch the /control subpath
             return self.get_response(request)
 

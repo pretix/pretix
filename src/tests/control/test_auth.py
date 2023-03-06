@@ -757,7 +757,7 @@ class SessionTimeOutTest(TestCase):
         # Regression test added after a security problem in 1.9.1
         # The problem was that, once the relative timeout happened, the user was redirected
         # to /control/reauth/, but loading /control/reauth/ was already considered to be
-        # "session activitiy". Therefore, after loding /control/reauth/, the session was no longer
+        # "session activity". Therefore, after loding /control/reauth/, the session was no longer
         # in the timeout state and the user was able to access pages again without re-entering the
         # password.
         session = self.client.session
