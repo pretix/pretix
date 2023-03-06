@@ -497,6 +497,10 @@ class WidgetAPIProductList(EventListMixin, View):
                 tz = self.request.organizer.timezone
             before = datetime(self.year, self.month, 1, 0, 0, 0, tzinfo=tz) - timedelta(days=1)
             after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=tz) + timedelta(days=1)
+            if hasattr(self.request, 'event') and self.request.event.settings.event_calendar_future_only:
+                limit_before = min(after, now().astimezone(tz))
+            else:
+                limit_before = before
 
             ebd = defaultdict(list)
 
@@ -507,7 +511,7 @@ class WidgetAPIProductList(EventListMixin, View):
                             event__sales_channels__contains=self.request.sales_channel.identifier
                         ), self.request
                     ),
-                    before, after, ebd, set(), self.request.event,
+                    limit_before, after, ebd, set(), self.request.event,
                     kwargs.get('cart_namespace')
                 )
             else:
@@ -519,7 +523,7 @@ class WidgetAPIProductList(EventListMixin, View):
                             sales_channels__contains=self.request.sales_channel.identifier
                         ), self.request
                     ),
-                    before, after, ebd, timezones
+                    limit_before, after, ebd, timezones
                 )
                 add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
                     event__organizer=self.request.organizer,
@@ -528,7 +532,7 @@ class WidgetAPIProductList(EventListMixin, View):
                     event__sales_channels__contains=self.request.sales_channel.identifier
                 ).prefetch_related(
                     'event___settings_objects', 'event__organizer___settings_objects'
-                )), self.request), before, after, ebd, timezones)
+                )), self.request), limit_before, after, ebd, timezones)
 
             data['weeks'] = weeks_for_template(ebd, self.year, self.month)
             for w in data['weeks']:
@@ -553,11 +557,16 @@ class WidgetAPIProductList(EventListMixin, View):
                 week.sunday().year, week.sunday().month, week.sunday().day, 0, 0, 0, tzinfo=tz
             ) + timedelta(days=1)
 
+            if hasattr(self.request, 'event') and self.request.event.settings.event_calendar_future_only:
+                limit_before = now().astimezone(tz)
+            else:
+                limit_before = before
+
             ebd = defaultdict(list)
             if hasattr(self.request, 'event'):
                 add_subevents_for_days(
                     filter_qs_by_attr(self.request.event.subevents_annotated('web'), self.request),
-                    before, after, ebd, set(), self.request.event,
+                    limit_before, after, ebd, set(), self.request.event,
                     kwargs.get('cart_namespace')
                 )
             else:
@@ -565,7 +574,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 add_events_for_days(
                     self.request,
                     filter_qs_by_attr(Event.annotated(self.request.organizer.events, 'web'), self.request),
-                    before, after, ebd, timezones
+                    limit_before, after, ebd, timezones
                 )
                 add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
                     event__organizer=self.request.organizer,
@@ -573,7 +582,7 @@ class WidgetAPIProductList(EventListMixin, View):
                     event__live=True,
                 ).prefetch_related(
                     'event___settings_objects', 'event__organizer___settings_objects'
-                )), self.request), before, after, ebd, timezones)
+                )), self.request), limit_before, after, ebd, timezones)
 
             data['days'] = days_for_template(ebd, week)
             for d in data['days']:
@@ -582,9 +591,8 @@ class WidgetAPIProductList(EventListMixin, View):
             offset = int(self.request.GET.get("offset", 0))
             limit = 50
             if hasattr(self.request, 'event'):
-                evs = self.request.event.subevents_sorted(
-                    filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier), self.request)
-                )
+                evs = filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier), self.request)
+                evs = self.request.event.subevents_sorted(evs)
                 ordering = self.request.event.settings.get('frontpage_subevent_ordering', default='date_ascending', as_type=str)
                 data['has_more_events'] = False
                 if ordering in ("date_ascending", "date_descending"):
