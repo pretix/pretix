@@ -216,6 +216,24 @@ DEFAULTS = {
             ),
         )
     },
+    'reusable_media_type_ntag_uid': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Active"),
+        )
+    },
+    'reusable_media_type_ntag_uid_autocreate_giftcard': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Automatically create a new gift card if a previously unknown chip is seen"),
+        )
+    },
     'max_items_per_order': {
         'default': '10',
         'type': int,

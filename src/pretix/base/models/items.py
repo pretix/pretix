@@ -842,6 +842,8 @@ class Item(LoggedModel):
                 raise ValidationError(_('If you select a reusable media policy, you also need to select a reusable '
                                         'media type.'))
             mt = MEDIA_TYPES[media_type]
+            if not mt.is_active(event.organizer):
+                raise ValidationError(_('The selected media type is not enabled in your organizer settings.'))
             if not mt.supports_orderposition:
                 raise ValidationError(_('The selected media type does not support usage for tickets currently.'))
             if issue_giftcard:

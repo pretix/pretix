@@ -309,7 +309,7 @@ def test_by_medium_not_connected(token_client, organizer, clist, event, order):
 def test_by_medium_wrong_type(token_client, organizer, clist, event, order):
     with scopes_disabled():
         ReusableMedium.objects.create(
-            type="ntag_password_pretix1",
+            type="ntag_uid",
             identifier="abcdef",
             organizer=organizer,
             linked_orderposition=order.positions.first(),
@@ -318,7 +318,7 @@ def test_by_medium_wrong_type(token_client, organizer, clist, event, order):
     assert resp.status_code == 404
     assert resp.data['status'] == 'error'
     assert resp.data['reason'] == 'invalid'
-    resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "ntag_password_pretix1"})
+    resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "ntag_uid"})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
 

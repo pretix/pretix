@@ -43,7 +43,7 @@ class BaseMediaType:
             raise ValueError("Media type does not allow to generate identifier")
 
     def is_active(self, organizer):
-        return organizer.settings.get(f'reusable_media_type_{self.identifier}_active', as_type=bool, default=False)
+        return organizer.settings.get(f'reusable_media_type_{self.identifier}', as_type=bool, default=False)
 
     def __str__(self):
         return str(self.verbose_name)
@@ -65,9 +65,9 @@ class BarcodePlainMediaType(BaseMediaType):
         )
 
 
-class NtagPasswordPretix1MediaType(BaseMediaType):
-    identifier = 'ntag_password_pretix1'
-    verbose_name = _('NFC NTAG (pretix scheme 1)')
+class NtagUidMediaType(BaseMediaType):
+    identifier = 'ntag_uid'
+    verbose_name = _('NFC NTAG UID-based')
     medium_created_by_server = False
     supports_giftcard = True
     supports_orderposition = False
@@ -76,6 +76,6 @@ class NtagPasswordPretix1MediaType(BaseMediaType):
 MEDIA_TYPES = {
     m.identifier: m for m in [
         BarcodePlainMediaType(),
-        NtagPasswordPretix1MediaType(),
+        NtagUidMediaType(),
     ]
 }
