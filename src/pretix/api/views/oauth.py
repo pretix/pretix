@@ -112,7 +112,7 @@ class AuthorizationView(RecentAuthenticationRequiredMixin, BaseAuthorizationView
         self.request.user.log_action('pretix.user.oauth.authorized', user=self.request.user, data={
             'application_id': application.pk,
             'application_name': application.name,
-            'organizers': [o.pk for o in form.cleaned_data.get("organizers")]
+            'organizers': [o.pk for o in form.cleaned_data.get("organizers")] if form.cleaned_data.get("organizers") else []
         })
 
         return self.redirect(self.success_url, application)
