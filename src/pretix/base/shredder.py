@@ -383,7 +383,7 @@ class QuestionAnswerShredder(BaseDataShredder):
             d = le.parsed_data
             if 'data' in d:
                 for i, row in enumerate(d['data']):
-                    if isinstance(d['data'], dict):
+                    if isinstance(d['data'], list):
                         for f in row:
                             if f not in ('attendee_name', 'attendee_email'):
                                 d['data'][i][f] = '█'
