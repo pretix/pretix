@@ -383,8 +383,6 @@ class OrderFilterForm(FilterForm):
 
         if fdata.get('ordering'):
             qs = qs.order_by(*get_deterministic_ordering(Order, self.get_order_by()))
-        else:
-            qs = qs.order_by('-datetime', '-pk')
 
         if fdata.get('provider'):
             qs = qs.annotate(
