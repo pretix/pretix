@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:27+0000\n"
-"Last-Translator: Iryna Loik <iraloyik@gmail.com>\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
 "Language: uk\n"
@@ -6870,8 +6870,7 @@ msgstr "Квиток"
 #, fuzzy
 #| msgid "Your layout file is not a valid seating plan. Error message: {}"
 msgid "Your layout file is not a valid layout. Error message: {}"
-msgstr ""
-"Ваш файл макета не є дійсним планом місць. Повідомлення про помилку: {}"
+msgstr "Ваш файл макета не є дійсним планом місць. Повідомлення про помилку: {}"
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
@@ -6986,12 +6985,9 @@ msgstr[2] "Ви не можете вибрати більше ніж %s пози
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
-msgstr[0] ""
-"Ви не можете вибрати більше ніж %(max)s позицій продукту %(product)s."
-msgstr[1] ""
-"Ви не можете вибрати більше ніж %(max)s позицій продукту %(product)s."
-msgstr[2] ""
-"Ви не можете вибрати більше ніж %(max)s позицій продукту %(product)s."
+msgstr[0] "Ви не можете вибрати більше ніж %(max)s позицій продукту %(product)s."
+msgstr[1] "Ви не можете вибрати більше ніж %(max)s позицій продукту %(product)s."
+msgstr[2] "Ви не можете вибрати більше ніж %(max)s позицій продукту %(product)s."
 
 #: pretix/base/services/cart.py:123 pretix/base/services/orders.py:1467
 #, fuzzy, python-format
@@ -7000,12 +6996,9 @@ msgstr[2] ""
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] ""
-"Вам потрібно вибрати принаймні %(min)s позицій продукту %(product)s."
-msgstr[1] ""
-"Вам потрібно вибрати принаймні %(min)s позицій продукту %(product)s."
-msgstr[2] ""
-"Вам потрібно вибрати принаймні %(min)s позицій продукту %(product)s."
+msgstr[0] "Вам потрібно вибрати принаймні %(min)s позицій продукту %(product)s."
+msgstr[1] "Вам потрібно вибрати принаймні %(min)s позицій продукту %(product)s."
+msgstr[2] "Вам потрібно вибрати принаймні %(min)s позицій продукту %(product)s."
 
 #: pretix/base/services/cart.py:128
 #, fuzzy, python-format
@@ -14768,8 +14761,7 @@ msgstr ""
 #| msgid "The order's flag to require attention at check-in has been toggled."
 msgid ""
 "The order's flag to be considered valid even if unpaid has been toggled."
-msgstr ""
-"Прапорець замовлення, який вимагає уваги під час реєстрації, увімкнено."
+msgstr "Прапорець замовлення, який вимагає уваги під час реєстрації, увімкнено."
 
 #: pretix/control/logdisplay.py:406
 #, python-brace-format
