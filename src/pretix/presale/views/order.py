@@ -1436,7 +1436,7 @@ class OrderChangeMixin:
                             'price': price,
                         })
             try:
-                ocm.set_addons(addons_data)
+                ocm.set_addons(addons_data, self.get_position_queryset())
             except OrderError as e:
                 messages.error(self.request, str(e))
                 form_valid = False
@@ -1543,7 +1543,7 @@ class OrderChange(OrderChangeMixin, EventViewMixin, OrderDetailMixin, TemplateVi
         return self.get_order_url()
 
     def get_position_queryset(self):
-        return self.order.positions
+        return self.order.positions.all()
 
     def get_price_requirement(self):
         return self.request.event.settings.change_allow_user_price

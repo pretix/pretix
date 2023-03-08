@@ -1514,9 +1514,9 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             {
                 f'cp_{ticket_pos2.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
             },
-            follow=False
+            follow=True
         )
-        assert response.status_code == 302  # nothing changed
+        assert 'did not make any changes' in response.content.decode()
 
     def test_attendee_needs_to_keep_price(self):
         self.event.settings.change_allow_user_price = 'any'  # ignored, for attendees its always "eq"
@@ -1556,3 +1556,46 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             follow=True
         )
         assert '€' in response.content.decode()
+
+    def test_attendee_change_of_addons_does_not_affect_other_positions(self):
+        with scopes_disabled():
+            ticket_pos2 = OrderPosition.objects.create(
+                order=self.order,
+                item=self.ticket,
+                variation=None,
+                price=Decimal("23"),
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            a1 = OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("0"),
+                addon_to=self.ticket_pos,
+            )
+            a2 = OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("0"),
+                addon_to=ticket_pos2,
+            )
+
+        self.event.settings.change_allow_attendee = True
+
+        response = self.client.get(
+            '/%s/%s/ticket/%s/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.ticket_pos.positionid, self.ticket_pos.web_secret),
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/ticket/%s/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.ticket_pos.positionid, self.ticket_pos.web_secret),
+            form_data, follow=True
+        )
+        assert 'alert-success' in response.content.decode()
+
+        a1.refresh_from_db()
+        a2.refresh_from_db()
+        assert not a1.canceled
+        assert not a2.canceled
