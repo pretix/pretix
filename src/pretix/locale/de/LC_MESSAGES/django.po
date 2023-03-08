@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
-"PO-Revision-Date: 2023-02-27 08:21+0000\n"
+"PO-Revision-Date: 2023-03-08 15:21+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -8709,13 +8709,12 @@ msgid ""
 "This option currently only affects the calendar of this event series, not "
 "the organizer-wide calendar."
 msgstr ""
+"Diese Option wirkt sich derzeit nur auf den Kalender dieser "
+"Veranstaltungsreihe aus, nicht den veranstalterweiten Kalender."
 
 #: pretix/base/settings.py:1410
-#, fuzzy
-#| msgid "Hide all unavailable dates from calendar or list views"
 msgid "Hide all past dates from calendar"
-msgstr ""
-"Verstecke alle nicht verfügbaren Termine in Kalender- oder Listenansichten"
+msgstr "Alle vergangenen Termine im Kalender verstecken"
 
 #: pretix/base/settings.py:1421
 msgid "Allow customers to modify their information after they checked in."
@@ -8783,7 +8782,7 @@ msgstr "Umbuchungen nur erlauben bis"
 
 #: pretix/base/settings.py:1493
 msgid "Allow individual attendees to change their ticket"
-msgstr ""
+msgstr "Erlaubt einzelnen Teilnehmer*innen ihr Ticket zu ändern"
 
 #: pretix/base/settings.py:1494
 msgid ""
@@ -8793,6 +8792,12 @@ msgid ""
 "total price of the order. Such changes can always only be made by the main "
 "customer."
 msgstr ""
+"Standardmäßig kann nur die Person, die die Tickets gekauft hat, Änderungen "
+"an der Bestellung vornehmen. Wenn diese Option aktiv ist, können auch "
+"einzelne Teilnehmer*innen Änderungen vornehmen. Teilnehmer*innen können "
+"jedoch immer nur Änderungen vornehmen, die die Gesamtkosten der Bestellung "
+"nicht verändern. Solche Änderungen können nur vom Ticketkäufer vorgenommen "
+"werden."
 
 #: pretix/base/settings.py:1506
 msgid "Customers can cancel their unpaid orders"
@@ -28970,10 +28975,7 @@ msgid "Change summary"
 msgstr "Zusammenfassung der Änderungen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:19
-#, fuzzy, python-format
-#| msgid ""
-#| "Change position #%(positionid)s from \"%(old_item)s – %(old_variation)s "
-#| "\" to \"%(new_item)s – %(new_variation)s\""
+#, python-format
 msgid ""
 "Change position #%(positionid)s from \"%(old_item)s – %(old_variation)s\" to "
 "\"%(new_item)s – %(new_variation)s\""
@@ -28992,10 +28994,9 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:81
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:106
-#, fuzzy, python-format
-#| msgid "Add-On to position #%(posid)s"
+#, python-format
 msgid "Add-on product to position #%(positionid)s"
-msgstr "Zusatz zu Position #%(posid)s"
+msgstr "Zusatz-Produkt zu Position #%(positionid)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:40
 #, python-format
@@ -29901,23 +29902,17 @@ msgstr ""
 "Bestellung."
 
 #: pretix/presale/templates/pretixpresale/event/position.html:58
-#, fuzzy
-#| msgid "Change price to"
 msgctxt "action"
 msgid "Change your ticket"
-msgstr "Preis ändern auf"
+msgstr "Ticket ändern"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:63
-#, fuzzy
-#| msgid ""
-#| "If you want to make changes to the products you bought, you can click on "
-#| "the button to change your order."
 msgid ""
 "If you want to make changes to the components of your ticket, you can click "
 "on the following button."
 msgstr ""
-"Wenn Sie Änderungen an den bestellten Produkten vornehmen wollen, klicken "
-"Sie den Button um Ihre Bestellung umzubuchen."
+"Wenn Sie Änderungen an den Komponenten Ihres Tickets vornehmen wollen, "
+"klicken Sie den folgenden Button."
 
 #: pretix/presale/templates/pretixpresale/event/position.html:68
 #, python-format
@@ -29926,28 +29921,30 @@ msgid ""
 "changes, please get in touch with the person who bought the ticket "
 "(%(email)s)."
 msgstr ""
+"Sie können nur manche der Änderungen am Ticket selbst vornehmen. Für weitere "
+"Änderungen kontaktieren Sie bitte die Person, die das Ticket gekauft hat "
+"(%(email)s)."
 
 #: pretix/presale/templates/pretixpresale/event/position.html:77
 #: pretix/presale/templates/pretixpresale/event/position_change.html:5
 #: pretix/presale/templates/pretixpresale/event/position_change.html:10
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:11
-#, fuzzy
-#| msgid "Change price to"
 msgid "Change ticket"
-msgstr "Preis ändern auf"
+msgstr "Ticket ändern"
 
 #: pretix/presale/templates/pretixpresale/event/position_change.html:16
 msgid ""
 "Please select the desired changes to your ticket. Note that you can only "
 "perform changes that do not change the total price of the ticket."
 msgstr ""
+"Bitte wählen Sie die gewünschten Änderungen am Ticket aus. Bitte beachten "
+"Sie, dass Sie nur Änderungen vornehmen können, die den Gesamtpreis des "
+"Tickets nicht verändern."
 
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:19
-#, fuzzy
-#| msgid "Please confirm the following changes to your order."
 msgid "Please confirm the following changes to your ticket."
-msgstr "Bitte bestätigen Sie die folgenden Änderungen an Ihrer Bestellung."
+msgstr "Bitte bestätigen Sie die folgenden Änderungen an Ihrem Ticket."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
