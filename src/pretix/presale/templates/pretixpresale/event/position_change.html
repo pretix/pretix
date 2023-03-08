@@ -2,23 +2,25 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load rich_text %}
-{% block title %}{% blocktrans trimmed with code=order.code %}
-    Change order: {{ code }}
+{% block title %}{% blocktrans trimmed %}
+    Change ticket
 {% endblocktrans %}{% endblock %}
 {% block content %}
     <h2>
-        {% blocktrans trimmed with code=order.code %}
-            Change order: {{ code }}
+        {% blocktrans trimmed %}
+            Change ticket
         {% endblocktrans %}
     </h2>
     <form method="post" href="">
         {% csrf_token %}
-        {% include "pretixpresale/event/fragment_change_form.html" %}
+        <p>{% trans "Please select the desired changes to your ticket. Note that you can only perform changes that do not change the total price of the ticket." %}</p>
+
+        {% include "pretixpresale/event/fragment_change_form.html" with hide_prices=request.event.settings.hide_prices_from_attendees %}
 
         <div class="row checkout-button-row">
             <div class="col-md-4">
                 <a class="btn btn-block btn-default btn-lg"
-                        href="{{ view.get_order_url }}">
+                        href="{{ view.get_position_url }}">
                     {% trans "Cancel" %}
                 </a>
             </div>

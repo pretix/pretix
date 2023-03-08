@@ -70,6 +70,7 @@
                         </div>
                         <div class="col-md-2 col-sm-3 col-xs-6 price">
                             <p>
+                                {% if not hide_prices %}
                                 {% if c.price_included %}
                                     <span class="sr-only">{% trans "free" context "price" %}</span>
                                 {% elif item.free_price %}
@@ -86,6 +87,7 @@
                                 {% elif not item.min_price and not item.max_price %}
                                 {% else %}
                                     {{ item.min_price|money:event.currency }}
+                                {% endif %}
                                 {% endif %}
                             </p>
                         </div>
@@ -117,6 +119,7 @@
                                     {% endif %}
                                 </div>
                                 <div class="col-md-2 col-sm-3 col-xs-6 price">
+                                    {% if not hide_prices %}
                                     {% if not c.price_included %}
                                         {% if var.original_price %}
                                             <del><span class="sr-only">{% trans "Original price:" %}</span>
@@ -168,6 +171,7 @@
                                         {% endif %}
                                     {% else %}
                                         <span class="sr-only">{% trans "free" context "price" %}</span>
+                                    {% endif %}
                                     {% endif %}
                                 </div>
                                 {% if var.cached_availability.0 == 100 or var.initial %}
@@ -240,6 +244,7 @@
                     </div>
                     <div class="col-md-2 col-sm-3 col-xs-6 price">
                         <p>
+                            {% if not hide_prices %}
                             {% if not c.price_included %}
                                 {% if item.original_price %}
                                     <del><span class="sr-only">{% trans "Original price:" %}</span>
@@ -289,6 +294,7 @@
                                 {% endif %}
                             {% else %}
                                 <span class="sr-only">{% trans "free" context "price" %}</span>
+                            {% endif %}
                             {% endif %}
                         </p>
                     </div>
