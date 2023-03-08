@@ -2557,7 +2557,7 @@ class OrderPosition(AbstractPosition):
 
     @property
     @scopes_disabled()
-    def user_change_allowed(self) -> bool:
+    def attendee_change_allowed(self) -> bool:
         """
         Returns whether or not this order can be changed by the attendee.
         """

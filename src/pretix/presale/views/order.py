@@ -371,7 +371,7 @@ class OrderPositionDetails(EventViewMixin, OrderPositionDetailMixin, CartMixin, 
             order=self.order
         )
         ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p.generate_ticket]
-        ctx['user_change_allowed'] = self.position.user_change_allowed
+        ctx['attendee_change_allowed'] = self.position.attendee_change_allowed
         return ctx
 
 
@@ -1566,7 +1566,7 @@ class OrderPositionChange(OrderChangeMixin, EventViewMixin, OrderPositionDetailM
         self.kwargs = kwargs
         if not self.position:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if not self.position.user_change_allowed:
+        if not self.position.attendee_change_allowed:
             messages.error(request, _('You cannot change this order.'))
             return redirect(self.get_position_url())
         return super().dispatch(request, *args, **kwargs)
