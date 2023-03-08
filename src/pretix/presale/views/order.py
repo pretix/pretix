@@ -1410,7 +1410,6 @@ class OrderChangeMixin:
         was_paid = self.order.status == Order.STATUS_PAID
         ocm = OrderChangeManager(
             self.order,
-            user=self.request.user,
             notify=True,
             reissue_invoice=self.order.invoices.exists() or self.request.event.settings.get('invoice_generate') == 'True',
         )
