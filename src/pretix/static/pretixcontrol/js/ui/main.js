@@ -922,10 +922,17 @@ function setup_basics(el) {
                 height: 196
             }
         );
-        $div.append($("<div>").text($(this).attr("data-qrcode").slice(0, 10)).get(0).innerHTML + "…<br>");
+        var $inner = $("<div>").text($(this).attr("data-qrcode").slice(0, 10) + "…");
+        $inner.append($("<btn>").addClass("btn btn-link btn-xs btn-clipboard").attr("data-clipboard-text", $(this).attr("data-qrcode")).append(
+            $("<span>").addClass("fa fa-clipboard").attr("aria-hidden", "true")
+        ))
+        $div.append($inner.get(0).innerHTML + "<br>");
         $div.append(gettext("Click to close"));
         $div.slideDown(200);
         $div.click(function (e) {
+            if ($(e.target).closest(".btn").length) {
+                return;
+            }
             $(".qr-code-overlay").attr("data-qrcode", "").slideUp(200);
         });
         return false;
