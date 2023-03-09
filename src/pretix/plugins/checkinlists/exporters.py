@@ -659,6 +659,13 @@ class CheckinLogList(ListExporter):
         if form_data.get('successful_only'):
             qs = qs.filter(successful=True)
 
+        if form_data.get('date_range'):
+            dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['date_range'], self.timezone)
+            if dt_start:
+                qs = qs.filter(datetime__gte=dt_start)
+            if dt_end:
+                qs = qs.filter(datetime__lt=dt_end)
+
         yield self.ProgressSetTotal(total=qs.count())
 
         qs = qs.select_related(
@@ -723,6 +730,12 @@ class CheckinLogList(ListExporter):
                  forms.BooleanField(
                      label=_('Successful scans only'),
                      initial=True,
+                     required=False,
+                 )),
+                ('date_range',
+                 DateFrameField(
+                     label=_('Date range'),
+                     include_future_frames=False,
                      required=False,
                  )),
             ]
