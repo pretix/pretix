@@ -513,6 +513,7 @@ organizer_permission_urls = [
     ("can_change_organizer_settings", "organizer/dummy/settings/email", 200),
     ("can_change_organizer_settings", "organizer/dummy/settings/email/setup", 200),
     ("can_change_organizer_settings", "organizer/dummy/devices", 200),
+    ("can_change_organizer_settings", "organizer/dummy/devices/select2", 200),
     ("can_change_organizer_settings", "organizer/dummy/device/add", 200),
     ("can_change_organizer_settings", "organizer/dummy/device/1/edit", 404),
     ("can_change_organizer_settings", "organizer/dummy/device/1/connect", 404),

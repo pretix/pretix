@@ -2202,6 +2202,18 @@ class CheckinFilterForm(FilterForm):
         super().__init__(*args, **kwargs)
 
         self.fields['device'].queryset = self.event.organizer.devices.all().order_by('device_id')
+        self.fields['device'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:organizer.devices.select2', kwargs={
+                    'organizer': self.event.organizer.slug,
+                }),
+                'data-placeholder': _('All devices'),
+            }
+        )
+        self.fields['device'].widget.choices = self.fields['device'].choices
+        self.fields['device'].label = _('Device')
+
         self.fields['gate'].queryset = self.event.organizer.gates.all()
 
         self.fields['checkin_list'].queryset = self.event.checkin_lists.all()

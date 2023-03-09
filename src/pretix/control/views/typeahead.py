@@ -831,3 +831,41 @@ def item_meta_values(request, organizer, event):
             )
         ]
     })
+
+
+@organizer_permission_required(("can_view_orders", "can_change_organizer_settings"))
+# This decorator is a bit of a hack since this is not technically an organizer permission, but it does the job here --
+# anyone who can see orders for any event can see the check-in log view where this is used as a filter
+def devices_select2(request, **kwargs):
+    query = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    qq = (
+        Q(name__icontains=query) | Q(hardware_brand__icontains=query) | Q(hardware_model__icontains=query) |
+        Q(unique_serial__istartswith=query)
+    )
+    try:
+        qq |= Q(device_id=int(query))
+    except ValueError:
+        pass
+    qs = request.organizer.devices.filter(qq).order_by('device_id')
+
+    total = qs.count()
+    pagesize = 20
+    offset = (page - 1) * pagesize
+    doc = {
+        'results': [
+            {
+                'id': e.pk,
+                'text': str(e),
+            }
+            for e in qs[offset:offset + pagesize]
+        ],
+        'pagination': {
+            "more": total >= (offset + pagesize)
+        }
+    }
+    return JsonResponse(doc)

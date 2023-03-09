@@ -177,6 +177,7 @@ urlpatterns = [
     re_path(r'^organizer/(?P<organizer>[^/]+)/webhook/(?P<webhook>[^/]+)/logs$', organizer.WebHookLogsView.as_view(),
             name='organizer.webhook.logs'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/devices$', organizer.DeviceListView.as_view(), name='organizer.devices'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/devices/select2$', typeahead.devices_select2, name='organizer.devices.select2'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/device/add$', organizer.DeviceCreateView.as_view(),
             name='organizer.device.add'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/device/bulk_edit$', organizer.DeviceBulkUpdateView.as_view(),
