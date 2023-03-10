@@ -158,6 +158,13 @@ def test_event_list(token_client, organizer, event):
     assert resp.status_code == 200
     assert [TEST_EVENT_RES] == resp.data['results']
 
+    resp = token_client.get('/api/v1/organizers/{}/events/?testmode=true'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
+    resp = token_client.get('/api/v1/organizers/{}/events/?testmode=false'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [TEST_EVENT_RES] == resp.data['results']
+
     resp = token_client.get('/api/v1/organizers/{}/events/?is_public=false'.format(organizer.slug))
     assert resp.status_code == 200
     assert [] == resp.data['results']
