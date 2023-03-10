@@ -191,6 +191,7 @@ urlpatterns = [
     re_path(r'^organizer/(?P<organizer>[^/]+)/device/(?P<device>[^/]+)/logs$', organizer.DeviceLogView.as_view(),
             name='organizer.device.logs'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/gates$', organizer.GateListView.as_view(), name='organizer.gates'),
+    re_path(r'^organizer/(?P<organizer>[^/]+)/gates/select2$', typeahead.gate_select2, name='organizer.gates.select2'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/gate/add$', organizer.GateCreateView.as_view(), name='organizer.gate.add'),
     re_path(r'^organizer/(?P<organizer>[^/]+)/gate/(?P<gate>[^/]+)/edit$', organizer.GateUpdateView.as_view(),
             name='organizer.gate.edit'),

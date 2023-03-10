@@ -519,6 +519,7 @@ organizer_permission_urls = [
     ("can_change_organizer_settings", "organizer/dummy/device/1/connect", 404),
     ("can_change_organizer_settings", "organizer/dummy/device/1/revoke", 404),
     ("can_change_organizer_settings", "organizer/dummy/gates", 200),
+    ("can_change_organizer_settings", "organizer/dummy/gates/select2", 200),
     ("can_change_organizer_settings", "organizer/dummy/gate/add", 200),
     ("can_change_organizer_settings", "organizer/dummy/gate/1/edit", 404),
     ("can_change_organizer_settings", "organizer/dummy/gate/1/delete", 404),
