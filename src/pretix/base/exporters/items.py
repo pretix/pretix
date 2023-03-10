@@ -218,7 +218,9 @@ class ItemDataExporter(ListExporter):
                 yield row
 
     def get_filename(self):
-        return '{}_products'.format(self.events.first().organizer.slug)
+        if self.is_multievent:
+            return '{}_products'.format(self.events.first().organizer.slug)
+        return '{}_products'.format(self.event.slug)
 
     def prepare_xlsx_sheet(self, ws):
         self.__ws = ws
