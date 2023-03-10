@@ -273,6 +273,7 @@ urlpatterns = [
         re_path(r'^items/(?P<item>\d+)/delete$', item.ItemDelete.as_view(), name='event.items.delete'),
         re_path(r'^items/typeahead/meta/$', typeahead.item_meta_values, name='event.items.meta.typeahead'),
         re_path(r'^items/select2$', typeahead.items_select2, name='event.items.select2'),
+        re_path(r'^items/select2/itemvar$', typeahead.itemvar_select2, name='event.items.itemvar.select2'),
         re_path(r'^items/select2/variation$', typeahead.variations_select2, name='event.items.variations.select2'),
         re_path(r'^categories/$', item.CategoryList.as_view(), name='event.items.categories'),
         re_path(r'^categories/select2$', typeahead.category_select2, name='event.items.categories.select2'),

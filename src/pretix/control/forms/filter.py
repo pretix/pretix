@@ -61,7 +61,7 @@ from pretix.base.models import (
     SubEventMetaValue, Team, TeamAPIToken, TeamInvite, Voucher,
 )
 from pretix.base.signals import register_payment_providers
-from pretix.control.forms.widgets import Select2
+from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
 from pretix.control.signals import order_search_filter_q
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.database import (
@@ -2251,6 +2251,20 @@ class CheckinFilterForm(FilterForm):
             else:
                 choices.append((str(i.pk), str(i)))
         self.fields['itemvar'].choices = choices
+
+        self.fields['itemvar'].choices = choices
+        self.fields['itemvar'].widget = Select2ItemVarQuota(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:event.items.itemvar.select2', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                }),
+                'data-placeholder': _('All products')
+            }
+        )
+        self.fields['itemvar'].required = False
+        self.fields['itemvar'].widget.choices = self.fields['itemvar'].choices
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data

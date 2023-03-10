@@ -11881,7 +11881,7 @@ msgstr "Alle Produkte"
 #: pretix/control/views/typeahead.py:601
 #, python-brace-format
 msgid "{product} – Any variation"
-msgstr "{product} - Beliebige Variante"
+msgstr "{product} – Beliebige Variante"
 
 #: pretix/control/forms/filter.py:514 pretix/control/forms/orders.py:775
 msgctxt "subevent"
