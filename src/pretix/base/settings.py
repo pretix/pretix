@@ -234,6 +234,19 @@ DEFAULTS = {
             label=_("Automatically create a new gift card if a previously unknown chip is seen"),
         )
     },
+    'reusable_media_type_nfc_uid_autocreate_giftcard_currency': {
+        'default': 'EUR',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'esrializer_kwargs': dict(
+            choices=[(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES],
+        ),
+        'form_kwargs': dict(
+            choices=[(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES],
+            label=_("Gift card currency"),
+        )
+    },
     'max_items_per_order': {
         'default': '10',
         'type': int,

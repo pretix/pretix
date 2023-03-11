@@ -36,6 +36,7 @@ from rest_framework.response import Response
 from pretix.api.serializers.media import (
     MediaLookupInputSerializer, ReusableMediaSerializer,
 )
+from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
     Checkin, GiftCard, GiftCardTransaction, OrderPosition, ReusableMedium,
 )
@@ -134,4 +135,11 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
             s = self.get_serializer(m)
             return Response({"result": s.data})
         except ReusableMedium.DoesNotExist:
+            mt = MEDIA_TYPES.get(s.validated_data["type"])
+            if mt:
+                m = mt.handle_unknown(request.organizer, s.validated_data["identifier"])
+                if m:
+                    s = self.get_serializer(m)
+                    return Response({"result": s.data})
+
             return Response({"result": None})

@@ -254,6 +254,9 @@
                                     {% bootstrap_field sform.reusable_media_type_nfc_uid layout="control" %}
                                     <div data-display-dependency="#{{ sform.reusable_media_type_nfc_uid.id_for_label }}">
                                         {% bootstrap_field sform.reusable_media_type_nfc_uid_autocreate_giftcard layout="control" %}
+                                        <div data-display-dependency="#{{ sform.reusable_media_type_nfc_uid_autocreate_giftcard.id_for_label }}">
+                                            {% bootstrap_field sform.reusable_media_type_nfc_uid_autocreate_giftcard_currency layout="control" %}
+                                        </div>
                                     </div>
                                 </div>
                             </div>

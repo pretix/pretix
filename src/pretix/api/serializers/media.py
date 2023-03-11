@@ -20,7 +20,6 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
-from decimal import Decimal
 
 from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
@@ -48,8 +47,14 @@ class NestedOrderPositionSerializer(OrderPositionSerializer):
 
 
 class NestedGiftCardSerializer(GiftCardSerializer):
-    value = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0.00'),
-                                     source='cached_value')
+
+    def to_representation(self, instance):
+        d = super().to_representation(instance)
+        if hasattr(instance, 'cached_value'):
+            d['value'] = str(instance.cached_value)
+        else:
+            d['value'] = str(instance.value)
+        return d
 
 
 class ReusableMediaSerializer(I18nAwareModelSerializer):
@@ -63,8 +68,7 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
             qs = GiftCard.objects.filter(
                 secret=s
             ).filter(
-                Q(issuer=self.context["organizer"]) | Q(
-                    issuer__gift_card_collector_acceptance__collector=self.context["organizer"])
+                Q(issuer=self.context["organizer"]) | Q(issuer__gift_card_collector_acceptance__collector=self.context["organizer"])
             )
             if self.instance:
                 qs = qs.exclude(pk=self.instance.pk)
