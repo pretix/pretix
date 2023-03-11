@@ -15,7 +15,7 @@ def set_can_manage_reusable_media(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('pretixbase', '0233_ignore_from_quota_while_blocked'),
+        ('pretixbase', '0234_total_ordering'),
     ]
 
     operations = [
@@ -72,5 +72,10 @@ class Migration(migrations.Migration):
         migrations.RunPython(
             set_can_manage_reusable_media,
             migrations.RunPython.noop,
+        ),
+        migrations.AddField(
+            model_name='device',
+            name='media_nfc_shared_key_seen',
+            field=models.BooleanField(default=False),
         ),
     ]

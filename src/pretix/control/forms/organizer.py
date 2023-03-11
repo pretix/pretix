@@ -70,7 +70,9 @@ from pretix.base.models import (
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.organizer import OrganizerFooterLink
-from pretix.base.settings import PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS
+from pretix.base.settings import (
+    PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_organizer_settings,
+)
 from pretix.control.forms import ExtFileField, SplitDateTimeField
 from pretix.control.forms.event import (
     SafeEventMultipleChoiceField, multimail_validate,
@@ -401,6 +403,9 @@ class OrganizerSettingsForm(SettingsForm):
         'reusable_media_type_nfc_uid',
         'reusable_media_type_nfc_uid_autocreate_giftcard',
         'reusable_media_type_nfc_uid_autocreate_giftcard_currency',
+        'reusable_media_type_ntag_pretix1',
+        'reusable_media_type_ntag_pretix1_autocreate_giftcard',
+        'reusable_media_type_ntag_pretix1_autocreate_giftcard_currency',
     ]
 
     organizer_logo_image = ExtFileField(
@@ -455,6 +460,14 @@ class OrganizerSettingsForm(SettingsForm):
             _('This feature is currently in an experimental stage. It only supports very limited use cases and might '
               'change at any point.')
         )
+
+    def clean(self):
+        data = super().clean()
+        settings_dict = self.obj.settings.freeze()
+        settings_dict.update(data)
+
+        validate_organizer_settings(self.obj, data)
+        return data
 
 
 class MailSettingsForm(SettingsForm):

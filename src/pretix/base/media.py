@@ -79,7 +79,7 @@ class NfcUidMediaType(BaseMediaType):
     def handle_unknown(self, organizer, identifier, user, auth):
         from pretix.base.models import GiftCard, ReusableMedium
 
-        if organizer.settings.reusable_media_type_nfc_uid_autocreate_giftcard:
+        if organizer.settings.get(f'reusable_media_type_{self.identifier}_autocreate_giftcard', as_type=bool):
             if identifier.startswith("08"):
                 # Don't create gift cards for NFC UIDs that start with 08, which represents NFC cards that issue random
                 # UIDs on every read, so they won't be useful.
@@ -108,9 +108,18 @@ class NfcUidMediaType(BaseMediaType):
                 return m
 
 
+class NtagPretix1MediaType(NfcUidMediaType):
+    identifier = 'ntag_pretix1'
+    verbose_name = _('NFC NTAG21x UID-based with password protection')
+    medium_created_by_server = False
+    supports_giftcard = True
+    supports_orderposition = False
+
+
 MEDIA_TYPES = {
     m.identifier: m for m in [
         BarcodePlainMediaType(),
         NfcUidMediaType(),
+        NtagPretix1MediaType(),
     ]
 }

@@ -165,6 +165,7 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('POST', 'api-v1:device.update'),
         ('POST', 'api-v1:device.revoke'),
         ('POST', 'api-v1:device.roll'),
+        ('GET', 'api-v1:device.nfc_shared_key'),
         ('GET', 'api-v1:event-list'),
         ('GET', 'api-v1:event-detail'),
         ('GET', 'api-v1:subevent-list'),

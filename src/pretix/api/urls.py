@@ -143,6 +143,7 @@ urlpatterns = [
     re_path(r"^device/revoke$", device.RevokeKeyView.as_view(), name="device.revoke"),
     re_path(r"^device/info$", device.InfoView.as_view(), name="device.info"),
     re_path(r"^device/eventselection$", device.EventSelectionView.as_view(), name="device.eventselection"),
+    re_path(r"^device/nfc_shared_key$", device.NfcSharedKeyView.as_view(), name="device.nfc_shared_key"),
     re_path(r"^idempotency_query$", idempotency.IdempotencyQueryView.as_view(), name="idempotency.query"),
     re_path(r"^upload$", upload.UploadView.as_view(), name="upload"),
     re_path(r"^me$", user.MeView.as_view(), name="user.me"),

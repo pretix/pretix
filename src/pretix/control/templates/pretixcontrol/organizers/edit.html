@@ -248,8 +248,10 @@
                                     </p>
                                     <p class="help-block">
                                         <span class="fa fa-warning text-warning"></span>
-                                        This method does not provide a high level of protection against abuse since it
-                                        is possible for malicious users to clone someones chip with the same UID.
+                                        {% blocktrans trimmed %}
+                                            This method does not provide a high level of protection against abuse since it
+                                            is possible for malicious users to clone someones chip with the same UID.
+                                        {% endblocktrans %}
                                     </p>
                                     {% bootstrap_field sform.reusable_media_type_nfc_uid layout="control" %}
                                     <div data-display-dependency="#{{ sform.reusable_media_type_nfc_uid.id_for_label }}">
@@ -261,6 +263,60 @@
                                 </div>
                             </div>
 
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">{% trans "NFC NTAG21x UID-based with password protection" %}</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <p class="help-block">
+                                        {% blocktrans trimmed %}
+                                            This medium type only works with the NTAG 213/215/216 series NFC tags from
+                                            NXP. While only the UID of the NFC chip is used for identification, a
+                                            password-protected segment is written on the chip. This provides a higher
+                                            level of security, since a tag cannot be easily cloned in passing. A tag
+                                            can still be cloned if an attacker can record wireless signals close to the
+                                            tag being used by a device.
+                                        {% endblocktrans %}
+                                        {% blocktrans trimmed %}
+                                            NFC media can currently only be connected to gift cards.
+                                        {% endblocktrans %}
+                                    </p>
+                                    {% bootstrap_field sform.reusable_media_type_ntag_pretix1 layout="control" %}
+                                    <div data-display-dependency="#{{ sform.reusable_media_type_ntag_pretix1.id_for_label }}">
+                                        {% bootstrap_field sform.reusable_media_type_ntag_pretix1_autocreate_giftcard layout="control" %}
+                                        <div data-display-dependency="#{{ sform.reusable_media_type_ntag_pretix1_autocreate_giftcard.id_for_label }}">
+                                            {% bootstrap_field sform.reusable_media_type_ntag_pretix1_autocreate_giftcard_currency layout="control" %}
+                                        </div>
+
+                                        <p class="help-block">
+                                            <span class="fa fa-warning text-warning"></span>
+                                            {% blocktrans trimmed %}
+                                                The system will mercilessly password-protect any NTAG chip it sees that
+                                                includes empty sectors at the end and is not yet password-protected. This has
+                                                the advantage that the same chip can be used for other purposes that only write
+                                                to the sectors at the beginning, but the disadvantage that if customers
+                                                present a NTAG chip of their own, it will be reconfigured.
+                                            {% endblocktrans %}
+                                        </p>
+                                        <p class="help-block">
+                                            <span class="fa fa-warning text-warning"></span>
+                                            {% blocktrans trimmed %}
+                                                For security reasons, an authentication limit will be set for the password
+                                                protection. If a user or attacker tries to guess the password of the chip more
+                                                than seven times, the chip will self-destroy its protected sector permanently.
+                                            {% endblocktrans %}
+                                        </p>
+                                        <p class="help-block">
+                                            <span class="fa fa-warning text-warning"></span>
+                                            {% blocktrans trimmed %}
+                                                If one of your connected devices gets compromised, the attacker may get access
+                                                to the key that allows cloning all chips in your system. The older your
+                                                devices are, the easier it is to extract the key from the system key store.
+                                            {% endblocktrans %}
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </fieldset>
                     <fieldset>
