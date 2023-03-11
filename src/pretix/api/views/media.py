@@ -28,10 +28,12 @@ from django.db.models.functions import Coalesce
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
 from rest_framework import viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.filters import OrderingFilter
+from rest_framework.response import Response
 
-from pretix.api.serializers.media import ReusableMediaSerializer
+from pretix.api.serializers.media import ReusableMediaSerializer, MediaLookupInputSerializer
 from pretix.base.models import (
     Checkin, GiftCard, GiftCardTransaction, OrderPosition, ReusableMedium,
 )
@@ -113,3 +115,21 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
 
     def perform_destroy(self, instance):
         raise MethodNotAllowed("Media cannot be deleted.")
+
+    @action(methods=["POST"], detail=False)
+    def lookup(self, request, *args, **kwargs):
+        s = MediaLookupInputSerializer(
+            data=request.data,
+        )
+        s.is_valid(raise_exception=True)
+
+        try:
+            m = ReusableMedium.objects.get(
+                type=s.validated_data["type"],
+                identifier=s.validated_data["identifier"],
+                organizer=request.organizer,
+            )
+            s = self.get_serializer(m)
+            return Response({"result": s.data})
+        except ReusableMedium.DoesNotExist:
+            return Response({"result": None})

@@ -90,3 +90,8 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
             'linked_giftcard',
             'info',
         )
+
+
+class MediaLookupInputSerializer(serializers.Serializer):
+    type = serializers.CharField(required=True)
+    identifier = serializers.CharField(required=True)
