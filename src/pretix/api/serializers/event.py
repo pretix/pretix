@@ -800,15 +800,15 @@ class EventSettingsSerializer(SettingsSerializer):
         'reusable_media_active',
         'reusable_media_type_barcode',
         'reusable_media_type_barcode_identifier_length',
-        'reusable_media_type_ntag_uid',
-        'reusable_media_type_ntag_uid_autocreate_giftcard',
+        'reusable_media_type_nfc_uid',
+        'reusable_media_type_nfc_uid_autocreate_giftcard',
     ]
     readonly_fields = [
         'reusable_media_active',
         'reusable_media_type_barcode',
         'reusable_media_type_barcode_identifier_length',
-        'reusable_media_type_ntag_uid',
-        'reusable_media_type_ntag_uid_autocreate_giftcard',
+        'reusable_media_type_nfc_uid',
+        'reusable_media_type_nfc_uid_autocreate_giftcard',
     ]
 
     def __init__(self, *args, **kwargs):
@@ -876,7 +876,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'invoice_address_from_vat_id',
         'name_scheme',
         'reusable_media_type_barcode',
-        'reusable_media_type_ntag_uid',
+        'reusable_media_type_nfc_uid',
     ]
 
     def __init__(self, *args, **kwargs):

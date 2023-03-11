@@ -216,7 +216,7 @@ DEFAULTS = {
             ),
         )
     },
-    'reusable_media_type_ntag_uid': {
+    'reusable_media_type_nfc_uid': {
         'default': 'False',
         'type': bool,
         'form_class': forms.BooleanField,
@@ -225,7 +225,7 @@ DEFAULTS = {
             label=_("Active"),
         )
     },
-    'reusable_media_type_ntag_uid_autocreate_giftcard': {
+    'reusable_media_type_nfc_uid_autocreate_giftcard': {
         'default': 'False',
         'type': bool,
         'form_class': forms.BooleanField,

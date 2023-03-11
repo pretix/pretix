@@ -65,9 +65,9 @@ class BarcodePlainMediaType(BaseMediaType):
         )
 
 
-class NtagUidMediaType(BaseMediaType):
-    identifier = 'ntag_uid'
-    verbose_name = _('NFC NTAG UID-based')
+class NfcUidMediaType(BaseMediaType):
+    identifier = 'nfc_uid'
+    verbose_name = _('NFC UID-based')
     medium_created_by_server = False
     supports_giftcard = True
     supports_orderposition = False
@@ -76,6 +76,6 @@ class NtagUidMediaType(BaseMediaType):
 MEDIA_TYPES = {
     m.identifier: m for m in [
         BarcodePlainMediaType(),
-        NtagUidMediaType(),
+        NfcUidMediaType(),
     ]
 }

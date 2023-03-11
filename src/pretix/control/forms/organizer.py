@@ -394,8 +394,8 @@ class OrganizerSettingsForm(SettingsForm):
         'reusable_media_active',
         'reusable_media_type_barcode',
         'reusable_media_type_barcode_identifier_length',
-        'reusable_media_type_ntag_uid',
-        'reusable_media_type_ntag_uid_autocreate_giftcard',
+        'reusable_media_type_nfc_uid',
+        'reusable_media_type_nfc_uid_autocreate_giftcard',
     ]
 
     organizer_logo_image = ExtFileField(
