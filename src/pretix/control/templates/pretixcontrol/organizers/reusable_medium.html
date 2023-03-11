@@ -22,9 +22,9 @@
                     </h3>
                 </div>
                 <div class="panel-body">
-                    <form action="" method="post" class="row">
+                    <form action="" method="post">
                         {% csrf_token %}
-                        <dl class="dl-horizontal col-lg-6 col-sm-12">
+                        <dl class="dl-horizontal">
                             <dt>{% trans "Media type" context "reusable_media" %}</dt>
                             <dd>{{ medium.get_type_display }}</dd>
                             <dt>{% trans "Identifier" context "reusable_media" %}</dt>
@@ -41,7 +41,7 @@
                             </dd>
                             <dt>{% trans "Connections" context "reusable_media" %}</dt>
                             <dd>
-                                {% if m.customer %}
+                                {% if medium.customer %}
                                     <span class="helper-display-block">
                                     <span class="fa fa-user fa-fw"></span>
                                     <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=medium.customer.identifier %}">

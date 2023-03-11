@@ -33,7 +33,9 @@ from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.filters import OrderingFilter
 from rest_framework.response import Response
 
-from pretix.api.serializers.media import ReusableMediaSerializer, MediaLookupInputSerializer
+from pretix.api.serializers.media import (
+    MediaLookupInputSerializer, ReusableMediaSerializer,
+)
 from pretix.base.models import (
     Checkin, GiftCard, GiftCardTransaction, OrderPosition, ReusableMedium,
 )

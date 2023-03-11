@@ -41,11 +41,14 @@ from django.core.exceptions import ValidationError
 from django.db.models import Q
 from django.forms import inlineformset_factory
 from django.forms.utils import ErrorDict
+from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from django_scopes.forms import SafeModelMultipleChoiceField
+from django_scopes.forms import (
+    SafeModelChoiceField, SafeModelMultipleChoiceField,
+)
 from i18nfield.forms import (
     I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
 )
@@ -63,7 +66,7 @@ from pretix.base.forms.questions import (
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
     Customer, Device, EventMetaProperty, Gate, GiftCard, Membership,
-    MembershipType, Organizer, ReusableMedium, Team,
+    MembershipType, OrderPosition, Organizer, ReusableMedium, Team,
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.organizer import OrganizerFooterLink
@@ -72,6 +75,7 @@ from pretix.control.forms import ExtFileField, SplitDateTimeField
 from pretix.control.forms.event import (
     SafeEventMultipleChoiceField, multimail_validate,
 )
+from pretix.control.forms.widgets import Select2
 from pretix.multidomain.models import KnownDomain
 from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -645,6 +649,12 @@ class GiftCardUpdateForm(forms.ModelForm):
         }
 
 
+class SafeOrderPositionChoiceField(forms.ModelChoiceField):
+    def __init__(self, queryset, **kwargs):
+        queryset = queryset.model.all.none()
+        super().__init__(queryset, **kwargs)
+
+
 class ReusableMediumUpdateForm(forms.ModelForm):
     error_messages = {
         'duplicate': _("An medium with this type and identifier is already registered."),
@@ -652,13 +662,62 @@ class ReusableMediumUpdateForm(forms.ModelForm):
 
     class Meta:
         model = ReusableMedium
-        fields = ['active', 'expires']
+        fields = ['active', 'expires', 'customer', 'linked_giftcard', 'linked_orderposition']
         field_classes = {
-            'expires': SplitDateTimeField
+            'expires': SplitDateTimeField,
+            'customer': SafeModelChoiceField,
+            'linked_giftcard': SafeModelChoiceField,
+            'linked_orderposition': SafeOrderPositionChoiceField,
         }
         widgets = {
             'expires': SplitDateTimePickerWidget,
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        organizer = self.instance.organizer
+
+        self.fields['linked_orderposition'].queryset = OrderPosition.all.filter(order__event__organizer=organizer).all()
+        self.fields['linked_orderposition'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:organizer.ticket_select2', kwargs={
+                    'organizer': organizer.slug,
+                }),
+                'data-placeholder': _('Ticket')
+            }
+        )
+        self.fields['linked_orderposition'].widget.choices = self.fields['linked_orderposition'].choices
+        self.fields['linked_orderposition'].required = False
+
+        self.fields['linked_giftcard'].queryset = organizer.issued_gift_cards.all()
+        self.fields['linked_giftcard'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:organizer.giftcards.select2', kwargs={
+                    'organizer': organizer.slug,
+                }),
+                'data-placeholder': _('Gift card')
+            }
+        )
+        self.fields['linked_giftcard'].widget.choices = self.fields['linked_giftcard'].choices
+        self.fields['linked_giftcard'].required = False
+
+        if organizer.settings.customer_accounts:
+            self.fields['customer'].queryset = organizer.customers.all()
+            self.fields['customer'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'generic',
+                    'data-select2-url': reverse('control:organizer.customers.select2', kwargs={
+                        'organizer': organizer.slug,
+                    }),
+                    'data-placeholder': _('Customer')
+                }
+            )
+            self.fields['customer'].widget.choices = self.fields['customer'].choices
+            self.fields['customer'].required = False
+        else:
+            del self.fields['customer']
 
     def clean(self):
         identifier = self.cleaned_data.get('identifier')
@@ -685,9 +744,12 @@ class ReusableMediumCreateForm(ReusableMediumUpdateForm):
 
     class Meta:
         model = ReusableMedium
-        fields = ['active', 'type', 'identifier', 'expires']
+        fields = ['active', 'type', 'identifier', 'expires', 'linked_orderposition', 'linked_giftcard', 'customer']
         field_classes = {
-            'expires': SplitDateTimeField
+            'expires': SplitDateTimeField,
+            'customer': SafeModelChoiceField,
+            'linked_giftcard': SafeModelChoiceField,
+            'linked_orderposition': SafeOrderPositionChoiceField,
         }
         widgets = {
             'expires': SplitDateTimePickerWidget,

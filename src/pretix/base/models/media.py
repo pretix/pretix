@@ -86,19 +86,22 @@ class ReusableMedium(LoggedModel):
         Customer,
         null=True, blank=True,
         related_name='reusable_media',
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
+        verbose_name=_('Customer account'),
     )
     linked_orderposition = models.ForeignKey(
         OrderPosition,
         null=True, blank=True,
         related_name='linked_media',
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
+        verbose_name=_('Linked ticket'),
     )
     linked_giftcard = models.ForeignKey(
         GiftCard,
         null=True, blank=True,
         related_name='linked_media',
-        on_delete=models.SET_NULL
+        on_delete=models.SET_NULL,
+        verbose_name=_('Linked gift card'),
     )
 
     info = models.JSONField(
