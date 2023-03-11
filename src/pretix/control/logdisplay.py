@@ -363,6 +363,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.customer.password.resetrequested': _('A new password has been requested.'),
         'pretix.customer.password.set': _('A new password has been set.'),
         'pretix.reusable_medium.created': _('The reusable medium has been created.'),
+        'pretix.reusable_medium.created.auto': _('The reusable medium has been created automatically.'),
         'pretix.reusable_medium.changed': _('The reusable medium has been changed.'),
         'pretix.reusable_medium.linked_orderposition.changed': _('The medium has been connected to a new ticket.'),
         'pretix.email.error': _('Sending of an email has failed.'),

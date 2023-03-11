@@ -46,7 +46,7 @@ class BaseMediaType:
     def is_active(self, organizer):
         return organizer.settings.get(f'reusable_media_type_{self.identifier}', as_type=bool, default=False)
 
-    def handle_unknown(self, organizer, identifier):
+    def handle_unknown(self, organizer, identifier, user, auth):
         pass
 
     def __str__(self):
@@ -76,7 +76,7 @@ class NfcUidMediaType(BaseMediaType):
     supports_giftcard = True
     supports_orderposition = False
 
-    def handle_unknown(self, organizer, identifier):
+    def handle_unknown(self, organizer, identifier, user, auth):
         from pretix.base.models import GiftCard, ReusableMedium
 
         if organizer.settings.reusable_media_type_nfc_uid_autocreate_giftcard:
@@ -90,13 +90,22 @@ class NfcUidMediaType(BaseMediaType):
                     expires=organizer.default_gift_card_expiry,
                     currency=organizer.settings.reusable_media_type_nfc_uid_autocreate_giftcard_currency,
                 )
-                return ReusableMedium.objects.create(
+                m = ReusableMedium.objects.create(
                     type=self.identifier,
                     identifier=identifier,
                     organizer=organizer,
                     active=True,
                     linked_giftcard=gc
                 )
+                m.log_action(
+                    'pretix.reusable_medium.created.auto',
+                    user=user, auth=auth,
+                )
+                gc.log_action(
+                    'pretix.giftcards.created',
+                    user=user, auth=auth,
+                )
+                return m
 
 
 MEDIA_TYPES = {

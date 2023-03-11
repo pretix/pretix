@@ -137,7 +137,7 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
         except ReusableMedium.DoesNotExist:
             mt = MEDIA_TYPES.get(s.validated_data["type"])
             if mt:
-                m = mt.handle_unknown(request.organizer, s.validated_data["identifier"])
+                m = mt.handle_unknown(request.organizer, s.validated_data["identifier"], request.user, request.auth)
                 if m:
                     s = self.get_serializer(m)
                     return Response({"result": s.data})
