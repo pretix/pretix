@@ -467,6 +467,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 identifier=raw_barcode,
                 linked_orderposition__isnull=False,
             )
+            raw_barcode_for_checkin = raw_barcode
         except ReusableMedium.DoesNotExist:
             revoked_matches = list(
                 RevokedTicketSecret.objects.filter(event_id__in=list_by_event.keys(), secret=raw_barcode))
@@ -534,7 +535,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 op_candidates = [revoked_matches[0].position]
                 if list_by_event[revoked_matches[0].event_id].addon_match:
                     op_candidates += list(revoked_matches[0].position.addons.all())
-                raw_barcode_for_checkin = raw_barcode
+                raw_barcode_for_checkin = raw_barcode_for_checkin or raw_barcode
                 from_revoked_secret = True
             else:
                 op = revoked_matches[0].position
