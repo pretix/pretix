@@ -93,9 +93,7 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
 
     @transaction.atomic()
     def perform_create(self, serializer):
-        value = serializer.validated_data.pop('value')
-        inst = serializer.save(issuer=self.request.organizer)
-        inst.transactions.create(value=value)
+        inst = serializer.save(organizer=self.request.organizer)
         inst.log_action(
             'pretix.reusable_medium.created',
             user=self.request.user,
@@ -106,8 +104,7 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
     @transaction.atomic()
     def perform_update(self, serializer):
         ReusableMedium.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
-        inst = serializer.save(secret=serializer.instance.secret, currency=serializer.instance.currency,
-                               testmode=serializer.instance.testmode)
+        inst = serializer.save(identifier=serializer.instance.identifier, type=serializer.instance.type)
         inst.log_action(
             'pretix.reusable_medium.changed',
             user=self.request.user,

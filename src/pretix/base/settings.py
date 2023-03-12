@@ -239,7 +239,7 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.ChoiceField,
         'serializer_class': serializers.ChoiceField,
-        'esrializer_kwargs': dict(
+        'serializer_kwargs': dict(
             choices=[(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES],
         ),
         'form_kwargs': dict(
@@ -270,7 +270,7 @@ DEFAULTS = {
         'type': str,
         'form_class': forms.ChoiceField,
         'serializer_class': serializers.ChoiceField,
-        'esrializer_kwargs': dict(
+        'serializer_kwargs': dict(
             choices=[(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES],
         ),
         'form_kwargs': dict(

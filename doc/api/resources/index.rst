@@ -32,6 +32,7 @@ at :ref:`plugin-docs`.
    membershiptypes
    memberships
    giftcards
+   reusablemedia
    carts
    teams
    devices

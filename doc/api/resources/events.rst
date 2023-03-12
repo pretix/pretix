@@ -610,6 +610,10 @@ organizer level.
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
+   .. versionchanged:: 4.18
+
+       The ``readonly`` flag has been added.
+
 .. http:patch:: /api/v1/organizers/(organizer)/events/(event)/settings/
 
    Updates event settings. Note that ``PUT`` is not allowed here, only ``PATCH``.

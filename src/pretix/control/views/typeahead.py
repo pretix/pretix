@@ -223,17 +223,18 @@ def ticket_select2(request, **kwargs):
     ).order_by()
 
     exact_match = Q(secret__iexact=query)
+    soft_match = Q(secret__icontains=query)
 
     qsplit = query.split("-")
 
     if len(qsplit) >= 3 and qsplit[2].isdigit():
-        soft_match = Q(order__event__slug__iexact=qsplit[0], order__code__iexact=qsplit[1], positionid=qsplit[2])
+        soft_match |= Q(order__event__slug__iexact=qsplit[0], order__code__iexact=qsplit[1], positionid=qsplit[2])
     elif len(qsplit) >= 2 and qsplit[1].isdigit():
-        soft_match = Q(order__code__istartswith=qsplit[0], positionid=qsplit[1])
+        soft_match |= Q(order__code__istartswith=qsplit[0], positionid=qsplit[1])
     elif len(qsplit) >= 2:
-        soft_match = Q(order__event__slug__iexact=qsplit[0], order__code__istartswith=qsplit[1])
+        soft_match |= Q(order__event__slug__iexact=qsplit[0], order__code__istartswith=qsplit[1])
     else:
-        soft_match = Q(order__code__istartswith=qsplit[0])
+        soft_match |= Q(order__code__istartswith=qsplit[0])
 
     if not request.user.has_active_staff_session(request.session.session_key):
         qs_orders = qs_orders.filter(

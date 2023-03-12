@@ -37,6 +37,10 @@ can_change_vouchers                   boolean
 can_checkin_orders                    boolean
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 4.18
+
+    The ``can_manage_reusable_media`` permission has been added.
+
 Team member resource
 --------------------
 

@@ -20,16 +20,18 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+from decimal import Decimal
 
-from django.db.models import Q
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import OrderPositionSerializer
-from pretix.api.serializers.organizer import GiftCardSerializer
-from pretix.base.models import GiftCard, Order, ReusableMedium
+from pretix.api.serializers.organizer import (
+    CustomerSerializer, GiftCardSerializer,
+)
+from pretix.base.models import Order, OrderPosition, ReusableMedium
 
 logger = logging.getLogger(__name__)
 
@@ -51,31 +53,55 @@ class NestedGiftCardSerializer(GiftCardSerializer):
     def to_representation(self, instance):
         d = super().to_representation(instance)
         if hasattr(instance, 'cached_value'):
-            d['value'] = str(instance.cached_value)
+            d['value'] = str(Decimal(instance.cached_value).quantize(Decimal("0.01")))
         else:
-            d['value'] = str(instance.value)
+            d['value'] = str(Decimal(instance.value).quantize(Decimal("0.01")))
         return d
 
 
 class ReusableMediaSerializer(I18nAwareModelSerializer):
-    linked_orderposition = NestedOrderPositionSerializer(read_only=True)
-    linked_giftcard = NestedGiftCardSerializer(read_only=True)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if 'linked_giftcard' in self.context['request'].query_params.getlist('expand'):
+            self.fields['linked_giftcard'] = NestedGiftCardSerializer(read_only=True)
+        else:
+            self.fields['linked_giftcard'] = serializers.PrimaryKeyRelatedField(
+                required=False,
+                allow_null=True,
+                queryset=self.context['organizer'].issued_gift_cards.all()
+            )
+
+        if 'linked_orderposition' in self.context['request'].query_params.getlist('expand'):
+            self.fields['linked_orderposition'] = NestedOrderPositionSerializer(read_only=True)
+        else:
+            self.fields['linked_orderposition'] = serializers.PrimaryKeyRelatedField(
+                required=False,
+                allow_null=True,
+                queryset=OrderPosition.all.filter(order__event__organizer=self.context['organizer']),
+            )
+
+        if 'customer' in self.context['request'].query_params.getlist('expand'):
+            self.fields['customer'] = CustomerSerializer(read_only=True)
+        else:
+            self.fields['customer'] = serializers.SlugRelatedField(
+                required=False,
+                allow_null=True,
+                slug_field='identifier',
+                queryset=self.context['organizer'].customers.all()
+            )
 
     def validate(self, data):
         data = super().validate(data)
-        if '' in data:
-            s = data['secret']
-            qs = GiftCard.objects.filter(
-                secret=s
-            ).filter(
-                Q(issuer=self.context["organizer"]) | Q(issuer__gift_card_collector_acceptance__collector=self.context["organizer"])
+        if 'type' in data and 'identifier' in data:
+            qs = self.context['organizer'].reusable_media.filter(
+                identifier=data['identifier'], type=data['type']
             )
             if self.instance:
                 qs = qs.exclude(pk=self.instance.pk)
             if qs.exists():
                 raise ValidationError(
-                    {'secret': _(
-                        'A gift card with the same secret already exists in your or an affiliated organizer account.')}
+                    {'identifier': _('A medium with the same identifier and type already exists in your organizer account.')}
                 )
         return data
 

@@ -88,7 +88,7 @@ class NfcUidMediaType(BaseMediaType):
                 gc = GiftCard.objects.create(
                     issuer=organizer,
                     expires=organizer.default_gift_card_expiry,
-                    currency=organizer.settings.reusable_media_type_nfc_uid_autocreate_giftcard_currency,
+                    currency=organizer.settings.get(f'reusable_media_type_{self.identifier}_autocreate_giftcard_currency'),
                 )
                 m = ReusableMedium.objects.create(
                     type=self.identifier,

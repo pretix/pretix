@@ -3632,3 +3632,34 @@ class OrderReactivateTest(TestCase):
         reactivate_order(self.order)
         m.refresh_from_db()
         assert not m.canceled
+
+
+@pytest.mark.django_db
+def test_autocreate_medium(event):
+    ticket = Item.objects.create(event=event, name='Early-bird ticket', issue_giftcard=True,
+                                 default_price=Decimal('23.00'), admission=True, media_type='barcode',
+                                 media_policy=Item.MEDIA_POLICY_REUSE_OR_NEW)
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
+    q = event.quotas.create(size=None, name="foo")
+    q.items.add(ticket)
+    order = _create_order(
+        event, email='dummy@example.org', positions=[cp1],
+        now_dt=now(),
+        payment_requests=[
+            {
+                "id": "test1",
+                "provider": "banktransfer",
+                "max_value": None,
+                "min_value": None,
+                "multi_use_supported": False,
+                "info_data": {},
+                "pprov": BankTransfer(event),
+            },
+        ],
+        locale='de'
+    )[0]
+    op = order.positions.first()
+    m = op.linked_media.get()
+    assert m.type == "barcode"

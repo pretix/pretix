@@ -806,7 +806,8 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 v.allow_blank = True
                 v.allow_null = True
         with scopes_disabled():
-            self.fields['use_reusable_medium'].queryset = ReusableMedium.objects.all()
+            if 'use_reusable_medium' in self.fields:
+                self.fields['use_reusable_medium'].queryset = ReusableMedium.objects.all()
 
     def validate_secret(self, secret):
         if secret and OrderPosition.all.filter(order__event=self.context['event'], secret=secret).exists():

@@ -289,6 +289,10 @@ def test_by_medium(token_client, organizer, clist, event, order):
     resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        ci = clist.checkins.get(position=order.positions.first())
+    assert ci.raw_barcode == "abcdef"
+    assert ci.raw_source_type == "barcode"
 
 
 @pytest.mark.django_db

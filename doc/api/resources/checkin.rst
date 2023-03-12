@@ -13,6 +13,10 @@ failed scans.
 
     The endpoints listed on this page have been added.
 
+.. versionchanged:: 4.18
+
+    The ``source_type`` parameter has been added.
+
 .. _`rest-checkin-redeem`:
 
 Checking a ticket in
