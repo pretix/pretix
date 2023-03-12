@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
-"PO-Revision-Date: 2023-03-11 19:00+0000\n"
+"PO-Revision-Date: 2023-03-13 04:00+0000\n"
 "Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -2309,7 +2309,7 @@ msgstr "Zobrazit hodnotu v"
 
 #: pretix/base/exporters/orderlist.py:1060
 msgid "Defaults to the time of report."
-msgstr ""
+msgstr "Výchozí hodnota je čas odeslání zprávy."
 
 #: pretix/base/exporters/orderlist.py:1065
 #: pretix/base/exporters/orderlist.py:1075 pretix/control/forms/filter.py:503
@@ -2560,6 +2560,8 @@ msgid ""
 "If you keep this empty, the ticket will be valid starting at the time of "
 "purchase."
 msgstr ""
+"Pokud toto políčko necháte prázdné, bude vstupenka platná od okamžiku "
+"zakoupení."
 
 #: pretix/base/forms/questions.py:641 pretix/base/forms/questions.py:961
 msgid "Street and Number"
@@ -3104,16 +3106,12 @@ msgid "Server error"
 msgstr "Chyba serveru"
 
 #: pretix/base/models/checkin.py:347
-#, fuzzy
-#| msgid "Ticket code"
 msgid "Ticket blocked"
-msgstr "Kód vstupenky"
+msgstr "Vstupenka zablokována"
 
 #: pretix/base/models/checkin.py:348
-#, fuzzy
-#| msgid "Ticket not paid"
 msgid "Ticket not valid at this time"
-msgstr "Vstupenka není zaplacena"
+msgstr "Vstupenka je v tuto chvíli neplatná"
 
 #: pretix/base/models/customers.py:54
 msgid "Provider name"
@@ -3592,13 +3590,11 @@ msgstr "URL odkazu"
 #: pretix/base/models/exports.py:41 pretix/control/navigation.py:227
 #: pretix/control/navigation.py:607
 msgid "Export"
-msgstr ""
+msgstr "export"
 
 #: pretix/base/models/exports.py:58
-#, fuzzy
-#| msgid "Additional fee"
 msgid "Additional recipients"
-msgstr "Příplatek"
+msgstr "Další příjemci"
 
 #: pretix/base/models/exports.py:60 pretix/base/models/exports.py:65
 #: pretix/base/models/exports.py:70
@@ -3606,16 +3602,12 @@ msgid "You can specify multiple recipients separated by commas."
 msgstr "Můžete zadat více příjemců a oddělit je čárkami."
 
 #: pretix/base/models/exports.py:63
-#, fuzzy
-#| msgid "Additional fee"
 msgid "Additional recipients (Cc)"
-msgstr "Příplatek"
+msgstr "Další příjemci (Cc)"
 
 #: pretix/base/models/exports.py:68
-#, fuzzy
-#| msgid "Additional fee"
 msgid "Additional recipients (Bcc)"
-msgstr "Příplatek"
+msgstr "Další příjemci (Bcc)"
 
 #: pretix/base/models/exports.py:73 pretix/control/forms/event.py:1017
 #: pretix/control/forms/event.py:1079 pretix/control/forms/event.py:1091
@@ -3637,14 +3629,12 @@ msgid "Message"
 msgstr "Zpráva"
 
 #: pretix/base/models/exports.py:84
-#, fuzzy
-#| msgid "Event start time"
 msgid "Requested start time"
-msgstr "Čas začátku události"
+msgstr "Požadovaný čas zahájení"
 
 #: pretix/base/models/exports.py:85
 msgid "The actual start time might be delayed depending on system load."
-msgstr ""
+msgstr "Skutečný čas spuštění se může zpozdit v závislosti na zatížení systému."
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
@@ -3727,10 +3717,8 @@ msgid "This product will not be sold after the given date."
 msgstr "Tento produkt nebude po uvedeném datu prodáván."
 
 #: pretix/base/models/items.py:366
-#, fuzzy
-#| msgid "Event start date"
 msgid "Event validity (default)"
-msgstr "Začátek akce"
+msgstr "platnost akce (výchozí nastavení)"
 
 #: pretix/base/models/items.py:367
 msgid "Fixed time frame"
@@ -3738,7 +3726,7 @@ msgstr "Pevný časový rozsah"
 
 #: pretix/base/models/items.py:368
 msgid "Dynamic validity"
-msgstr ""
+msgstr "Dynamická platnost"
 
 #: pretix/base/models/items.py:384 pretix/base/models/items.py:1206
 #: pretix/control/templates/pretixcontrol/items/index.html:40
@@ -4007,7 +3995,7 @@ msgstr "Zákazníci si mohou vybrat datum začátku platnosti"
 
 #: pretix/base/models/items.py:624
 msgid "If not selected, the validity always starts at the time of purchase."
-msgstr ""
+msgstr "Pokud tuto možnost nezvolíte, začíná platnost vždy v okamžiku nákupu."
 
 #: pretix/base/models/items.py:629
 msgid "Maximum future start"
@@ -6288,23 +6276,23 @@ msgstr "Všeobecné vstupné"
 
 #: pretix/base/pdf.py:465
 msgid "Seat: zone"
-msgstr ""
+msgstr "Sedadlo: zóna"
 
 #: pretix/base/pdf.py:466
 msgid "Ground floor"
-msgstr ""
+msgstr "parket"
 
 #: pretix/base/pdf.py:471
 msgid "Seat: row"
-msgstr ""
+msgstr "sedadlo: řada"
 
 #: pretix/base/pdf.py:476
 msgid "Seat: seat number"
-msgstr ""
+msgstr "sedadlo: číslo"
 
 #: pretix/base/pdf.py:481
 msgid "Date and time of first scan"
-msgstr ""
+msgstr "datum a čas prvního skenování"
 
 #: pretix/base/pdf.py:487
 msgid "Gift card: Issuance date"
@@ -6388,15 +6376,15 @@ msgstr "Relativní datum:"
 
 #: pretix/base/reldate.py:210
 msgid "Relative time:"
-msgstr ""
+msgstr "Relativní čas:"
 
 #: pretix/base/reldate.py:218 pretix/base/reldate.py:325
 msgid "Not set"
-msgstr ""
+msgstr "Nenastaveno"
 
 #: pretix/base/secrets.py:119
 msgid "Random (default, works with all pretix apps)"
-msgstr ""
+msgstr "Náhodný (výchozí, funguje se všemi aplikacemi pretix)"
 
 #: pretix/base/secrets.py:150
 msgid ""
@@ -6529,7 +6517,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:138
 msgid "The entered price is to high."
-msgstr ""
+msgstr "Uvedená cena je příliš vysoká."
 
 #: pretix/base/services/cart.py:139
 msgid "This voucher code is not known in our database."
@@ -6565,6 +6553,7 @@ msgstr[2] ""
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
 msgstr ""
+"Tento poukaz již nelze použít, protože byl již příliš mnohokrát uplatněn."
 
 #: pretix/base/services/cart.py:153
 #, python-format
@@ -6602,7 +6591,7 @@ msgstr "Tento poukaz není platný pro tento produkt."
 
 #: pretix/base/services/cart.py:166
 msgid "This voucher is not valid for this seat."
-msgstr ""
+msgstr "Tento poukaz není platný pro toto sedadlo."
 
 #: pretix/base/services/cart.py:168
 msgid ""
@@ -6610,6 +6599,9 @@ msgid ""
 "for. If you want to add something new to your cart using that voucher, you "
 "can do so with the voucher redemption option on the bottom of the page."
 msgstr ""
+"Ve vašem nákupním košíku jsme nenašli žádné položky, které by odpovídaly "
+"tomuto poukazu. Pokud chcete do košíku přidat něco nového, můžete tak učinit "
+"pomocí pole pro zadání poukazu v dolní části stránky."
 
 #: pretix/base/services/cart.py:173
 msgid "Your voucher is valid for a product that is currently not for sale."
@@ -6618,7 +6610,7 @@ msgstr "Váš poukaz platí na produkt, který se momentálně neprodává."
 #: pretix/base/services/cart.py:174
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr ""
+msgstr "Tento poukaz není platný pro tento termín."
 
 #: pretix/base/services/cart.py:175
 msgid "You need a valid voucher code to order this product."
@@ -6742,15 +6734,15 @@ msgstr ""
 
 #: pretix/base/services/checkin.py:234
 msgid "number of days with an entry"
-msgstr ""
+msgstr "Počet dnů se vstupem"
 
 #: pretix/base/services/checkin.py:235
 msgid "number of entries"
-msgstr ""
+msgstr "počet vstupů"
 
 #: pretix/base/services/checkin.py:236
 msgid "number of entries today"
-msgstr ""
+msgstr "dnešní počet vstupů"
 
 #: pretix/base/services/checkin.py:237
 msgid "week day"
@@ -6783,7 +6775,7 @@ msgstr "Neděle"
 #: pretix/base/services/checkin.py:269
 #, python-brace-format
 msgid "{variable} is not {value}"
-msgstr ""
+msgstr "{variable} není {value}"
 
 #: pretix/base/services/checkin.py:271
 #, python-brace-format
@@ -6798,7 +6790,7 @@ msgstr "Minimální hodnota {variable} nedosažena"
 #: pretix/base/services/checkin.py:275
 #, python-brace-format
 msgid "{variable} is {value}"
-msgstr ""
+msgstr "{variable} je {value}"
 
 #: pretix/base/services/checkin.py:720
 msgid "This order position has been canceled."
@@ -6820,11 +6812,11 @@ msgstr "Tento tiket byl platný pouze před datem {datetime}."
 
 #: pretix/base/services/checkin.py:774
 msgid "This order position has an invalid product for this check-in list."
-msgstr ""
+msgstr "Tato položka objednávky obsahuje pro tento seznam neplatný produkt."
 
 #: pretix/base/services/checkin.py:779
 msgid "This order position has an invalid date for this check-in list."
-msgstr ""
+msgstr "Tato položka objednávky má pro tento seznam neplatné datum."
 
 #: pretix/base/services/checkin.py:784
 msgid "This order is not yet approved."
@@ -6832,12 +6824,12 @@ msgstr "Tato objednávka dosud nebyla schválena."
 
 #: pretix/base/services/checkin.py:791
 msgid "This order is not marked as paid."
-msgstr ""
+msgstr "Objednávka není označena jako zaplacená."
 
 #: pretix/base/services/checkin.py:801
 #, python-brace-format
 msgid "Entry not permitted: {explanation}."
-msgstr ""
+msgstr "Vstup není povolen: {explanation}."
 
 #: pretix/base/services/checkin.py:810
 msgid "You need to answer questions to complete this check-in."
@@ -6845,7 +6837,7 @@ msgstr "Pro dokončení odbavení musíte odpovědět na otázky."
 
 #: pretix/base/services/checkin.py:857
 msgid "This ticket has already been redeemed."
-msgstr ""
+msgstr "Tato vstupenka již byla uplatněna."
 
 #: pretix/base/services/currencies.py:38 pretix/base/services/currencies.py:39
 msgid "European Central Bank"
@@ -6951,6 +6943,11 @@ msgid ""
 "We are sending this email because you configured us to do so in your event "
 "settings."
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"byla vytvořena nová faktura pro {event} viz. příloha.\n"
+"\n"
+"Tento e-mail obdržíte, protože jste to zadali v nastavení akce."
 
 #: pretix/base/services/mail.py:258
 #, python-brace-format
@@ -6958,6 +6955,8 @@ msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
 msgstr ""
+"Tento e-mail jste obdrželi, protože pro vás někdo zadal objednávku na "
+"{event}."
 
 #: pretix/base/services/mail.py:262 pretix/base/services/mail.py:278
 #, python-brace-format
@@ -6985,13 +6984,14 @@ msgid ""
 "You selected a membership for the product \"{product}\" which does not "
 "require a membership."
 msgstr ""
+"Vybrali jste členství pro produkt \"{product}\", který členství nevyžaduje."
 
 #: pretix/base/services/memberships.py:113
 #, python-brace-format
 msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
-msgstr ""
+msgstr "Vybrali jste produkt \"{product}\", který vyžaduje aktivní členství."
 
 #: pretix/base/services/memberships.py:142
 msgid ""
@@ -7013,6 +7013,8 @@ msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "an event taking place at {date}."
 msgstr ""
+"Vybrali jste členství platné od {start} do {end}, ale vybrali jste akci, "
+"která se koná v {date}."
 
 #: pretix/base/services/memberships.py:174
 #, python-brace-format
@@ -7020,6 +7022,8 @@ msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
 "product \"{product}\"."
 msgstr ""
+"Vybrali jste členství typu \"{type}\", které není pro produkt \"{product}\" "
+"povoleno."
 
 #: pretix/base/services/memberships.py:183
 #, python-brace-format
@@ -7027,6 +7031,8 @@ msgid ""
 "You are trying to use a membership of type \"{type}\" more than {number} "
 "times, which is the maximum amount."
 msgstr ""
+"Snažíte se použít členství typu \"{type}\" více než {number}krát, což je "
+"maximální počet."
 
 #: pretix/base/services/memberships.py:194
 #, python-brace-format
@@ -7042,6 +7048,8 @@ msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
+"Chyba při importu hodnoty \"{value}\" pro sloupec \"{column}\" v řádku \""
+"{line}\": {message}"
 
 #: pretix/base/services/orderimport.py:147
 #, python-brace-format
@@ -7313,6 +7321,8 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already sold."
 msgstr ""
+"Plán nelze změnit, protože místo \"%s\" se v novém plánu nenachází a je již "
+"prodáno."
 
 #: pretix/base/services/seating.py:131
 #, python-format
