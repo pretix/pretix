@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
-"PO-Revision-Date: 2023-03-13 04:00+0000\n"
-"Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
+"PO-Revision-Date: 2023-03-14 03:00+0000\n"
+"Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -2884,32 +2884,24 @@ msgid "Included taxes"
 msgstr "Obsahuje daň"
 
 #: pretix/base/invoice.py:777
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "Using the conversion rate of 1:{rate} as published by the European "
-#| "Central Bank on {date}, this corresponds to:"
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
-"Při použití konverzního kurzu 1: {rate} zveřejněného Evropskou centrální "
-"bankou dne {date} to odpovídá:"
+"Při použití konverzního kurzu 1: {rate} zveřejněného {authority} dne {date} "
+"to odpovídá:"
 
 #: pretix/base/invoice.py:792
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "Using the conversion rate of 1:{rate} as published by the European "
-#| "Central Bank on {date}, the invoice total corresponds to {total}."
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
 msgstr ""
-"Při použití konverzního kurzu 1: {rate} zveřejněného Evropskou centrální "
-"bankou dne {date} odpovídá celková částka faktury {total}."
+"Při použití konverzního kurzu 1: {rate} zveřejněného {authority} dne {date} "
+"odpovídá celková částka faktury {total}."
 
 #: pretix/base/invoice.py:806
 msgid "Modern Invoice Renderer (pretix 2.7)"
@@ -3011,6 +3003,9 @@ msgid ""
 "there is always exactly one matching add-on ticket. Ambiguous scans will be "
 "rejected.."
 msgstr ""
+"Skenování je možné pouze tehdy, pokud je seznam check-inů nakonfigurován "
+"tak, že v něm vždy existuje přesně jeden odpovídající doplňkový vstup. "
+"Nejednoznačné skenování bude odmítnuto.."
 
 #: pretix/base/models/checkin.py:70 pretix/control/navigation.py:597
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
@@ -5234,6 +5229,9 @@ msgid ""
 "as part of a bundle, since vouchers cannot be applied to add-on products or "
 "bundled products."
 msgstr ""
+"Nelze vybrat produkt, který je k dispozici pouze jako doplňkový produkt nebo "
+"jako součást balíčku, protože na doplňkové produkty nebo balíčky nelze "
+"uplatnit poukázky."
 
 #: pretix/base/models/vouchers.py:339
 msgid "You cannot select a product that belongs to a different event."
@@ -5627,7 +5625,7 @@ msgstr "Zadejte platný kód jazyka."
 #: pretix/base/orderimport.py:668 pretix/base/orderimport.py:691
 #, python-brace-format
 msgid "Could not parse {value} as a date and time."
-msgstr ""
+msgstr "Nepodařilo se analyzovat {value} jako datum a čas."
 
 #: pretix/base/orderimport.py:710
 msgid "Please enter a valid sales channel."
@@ -6391,6 +6389,8 @@ msgid ""
 "pretix signature scheme 1 (for very large events, changes semantics of "
 "offline scanning – please refer to documentation or support for details)"
 msgstr ""
+"pretix podpisové schéma 1 (pro velmi velké akce, mění sémantiku offline "
+"skenování - podrobnosti naleznete v dokumentaci nebo u technické podpory)"
 
 #: pretix/base/services/cancelevent.py:229
 #: pretix/base/services/cancelevent.py:287
@@ -6498,6 +6498,8 @@ msgid ""
 "All payments for this event need to be confirmed already, so no new orders "
 "can be created."
 msgstr ""
+"Všechny platby na tuto akci již musí být potvrzeny, takže nelze vytvářet "
+"nové objednávky."
 
 #: pretix/base/services/cart.py:133
 msgid ""
@@ -6532,8 +6534,14 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
+"Kód voucheru \"%(voucher)s\" lze použít pouze v případě, že vyberete alespoň "
+"%(number)s odpovídající produkt."
 msgstr[1] ""
+"Kód poukázky \"%(voucher)s\" lze použít pouze v případě, že si vyberete "
+"alespoň %(number)s odpovídající produkty."
 msgstr[2] ""
+"Kód voucheru \"%(voucher)s\" lze použít pouze v případě, že vyberete alespoň "
+"%(number)s odpovídajících produktů."
 
 #: pretix/base/services/cart.py:145
 #, python-format
@@ -6546,8 +6554,17 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
+"Kód voucheru \"%(voucher)s\" lze použít pouze v případě, že vyberete alespoň "
+"%(number)s odpovídající produkt. Z košíku jsme proto odstranili některé "
+"pozice, které již takto nelze zakoupit."
 msgstr[1] ""
+"Kód poukázky \"%(voucher)s\" lze použít pouze v případě, že si vyberete "
+"alespoň %(number)s odpovídající produkty. Z košíku jsme proto odstranili "
+"některé pozice, které již takto nelze zakoupit."
 msgstr[2] ""
+"Kód voucheru \"%(voucher)s\" lze použít pouze v případě, že vyberete alespoň "
+"%(number)s odpovídajících produktů. Z košíku jsme proto odstranili některé "
+"pozice, které již takto nelze zakoupit."
 
 #: pretix/base/services/cart.py:151
 msgid ""
@@ -6563,23 +6580,30 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"Tento kód poukázky je v současné době uzamčen, protože je již obsažen v "
+"košíku. To může znamenat, že tento poukaz právě uplatňuje někdo jiný, nebo "
+"že jste se jej pokusili uplatnit již dříve, ale nedokončili jste proces "
+"objednávky. Můžete se jej pokusit znovu použít za %d minut."
 
 #: pretix/base/services/cart.py:158
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr ""
+msgstr "Tento kód poukázky lze uplatnit pouze %dkrát."
 
 #: pretix/base/services/cart.py:159
 msgid ""
 "Applying a voucher to the whole cart should not be combined with other "
 "operations."
 msgstr ""
+"Použití poukazu na celý vozík by se nemělo kombinovat s jinými operacemi."
 
 #: pretix/base/services/cart.py:161
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
 msgstr ""
+"Tento kód poukázky jste již použili. Pokud jej chcete použít na jiný "
+"produkt, odstraňte související řádek z košíku."
 
 #: pretix/base/services/cart.py:164
 msgid "This voucher is expired."
@@ -6726,11 +6750,11 @@ msgstr "Typ vstupenky není povolen"
 
 #: pretix/base/services/checkin.py:232
 msgid "time since last entry"
-msgstr ""
+msgstr "doba od posledního vstupu"
 
 #: pretix/base/services/checkin.py:233
 msgid "time since first entry"
-msgstr ""
+msgstr "doba od prvního vstupu"
 
 #: pretix/base/services/checkin.py:234
 msgid "number of days with an entry"
@@ -7041,6 +7065,8 @@ msgid ""
 "place at {date}, however you already used the same membership for a "
 "different ticket at the same time."
 msgstr ""
+"Snažíte se použít účast typu \"{type}\" pro akci, která se koná v {date}, "
+"ale stejnou účast jste již použili pro jinou vstupenku ve stejnou dobu."
 
 #: pretix/base/services/orderimport.py:113
 #, python-brace-format
@@ -7330,6 +7356,8 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already used in a voucher."
 msgstr ""
+"Plán nelze změnit, protože místo \"%s\" se v novém plánu nenachází a je již "
+"použito v poukazu."
 
 #: pretix/base/services/shredder.py:110 pretix/control/views/shredder.py:85
 msgid ""
@@ -7446,6 +7474,8 @@ msgstr "Umožnit zákazníkům přihlášení pomocí e-mailové adresy a hesla"
 msgid ""
 "If disabled, you will need to connect one or more single-sign-on providers."
 msgstr ""
+"Pokud je funkce vypnuta, je třeba připojit jednoho nebo více poskytovatelů "
+"služby single sign-on."
 
 #: pretix/base/settings.py:167
 msgid "Match orders based on email address"
@@ -7669,6 +7699,11 @@ msgid ""
 "details as well as for displaying the value on the invoice. It will be shown "
 "on the invoice below the headline. The field will not be required."
 msgstr ""
+"Pokud chcete do formuláře pro fakturační adresu přidat vlastní textové pole, "
+"např. pro registrační číslo pro danou zemi, vyplňte zde popisek. Tento "
+"štítek bude použit jak pro výzvu uživateli k zadání údajů, tak pro zobrazení "
+"hodnoty na faktuře. Bude zobrazen na faktuře pod nadpisem. Pole nebude "
+"povinné."
 
 #: pretix/base/settings.py:455
 msgid "Ask for VAT ID"
@@ -7681,6 +7716,9 @@ msgid ""
 "only requested from business customers in the following countries: "
 "{countries}"
 msgstr ""
+"Funguje pouze v případě, že je požadována fakturační adresa. DIČ není nikdy "
+"vyžadováno a je vyžadováno pouze od firemních zákazníků v následujících "
+"zemích: {countries}"
 
 #: pretix/base/settings.py:470
 msgid "Invoice address explanation"
@@ -7693,13 +7731,15 @@ msgstr ""
 
 #: pretix/base/settings.py:482
 msgid "Show paid amount on partially paid invoices"
-msgstr ""
+msgstr "Zobrazení uhrazené částky na částečně uhrazených fakturách"
 
 #: pretix/base/settings.py:483
 msgid ""
 "If an invoice has already been paid partially, this option will add the paid "
 "and pending amount to the invoice."
 msgstr ""
+"Pokud již byla faktura částečně uhrazena, přidá tato možnost k faktuře "
+"uhrazenou a čekající částku."
 
 #: pretix/base/settings.py:493
 msgid "Show free products on invoices"
@@ -7734,6 +7774,8 @@ msgid ""
 "The part of your invoice number after your prefix will be filled up with "
 "leading zeros up to this length, e.g. INV-001 or INV-00001."
 msgstr ""
+"Část čísla faktury za předčíslím bude doplněna počátečními nulami až do této "
+"délky, např. INV-001 nebo INV-00001."
 
 #: pretix/base/settings.py:526
 msgid "Generate invoices with consecutive numbers"
@@ -7757,6 +7799,13 @@ msgid ""
 "can use %Y (with century) %y (without century) to insert the year of the "
 "invoice, or %m and %d for the day of month."
 msgstr ""
+"Tento údaj bude připojen k číslům faktur. Pokud necháte toto pole prázdné, "
+"bude použit váš příznak akce, za kterým bude následovat pomlčka. Pozor: "
+"Pokud více akcí v rámci jedné organizace použije stejnou hodnotu v tomto "
+"poli, budou sdílet svůj číselný rozsah, tj. každé celé číslo bude použito "
+"maximálně jednou v rámci všech vašich akcí. Toto nastavení má vliv pouze na "
+"budoucí faktury. Pro vložení roku vystavení faktury můžete použít %Y (se "
+"stoletími) %y (bez století) nebo %m a %d pro den v měsíci."
 
 #: pretix/base/settings.py:551
 msgid "Invoice number prefix for cancellations"
@@ -7885,10 +7934,13 @@ msgid ""
 "configured above. If you use the event series feature and an order contains "
 "tickets for multiple dates, the earliest date will be used."
 msgstr ""
+"Poslední datum, kdy jsou přijímány jakékoli platby. Toto má přednost před "
+"výše uvedenými podmínkami. Pokud používáte funkci série akcí a objednávka "
+"obsahuje vstupenky na více termínů, použije se nejstarší datum."
 
 #: pretix/base/settings.py:752
 msgid "Automatically expire unpaid orders"
-msgstr ""
+msgstr "Automatické vypršení platnosti nezaplacených objednávek"
 
 #: pretix/base/settings.py:753
 msgid ""
@@ -7896,10 +7948,13 @@ msgid ""
 "'expired' after the end of their payment deadline. This means that those "
 "tickets go back to the pool and can be ordered by other people."
 msgstr ""
+"Pokud je zaškrtnuto, všechny nezaplacené objednávky se po uplynutí lhůty pro "
+"zaplacení automaticky změní z \"čekající\" na \"prošlé\". To znamená, že se "
+"tyto vstupenky vrátí do fondu a mohou si je objednat další zájemci."
 
 #: pretix/base/settings.py:764
 msgid "Hide \"payment pending\" state on customer-facing pages"
-msgstr ""
+msgstr "Skrytí stavu \"čeká na platbu\" na stránkách pro zákazníky"
 
 #: pretix/base/settings.py:765
 msgid ""
@@ -7907,6 +7962,9 @@ msgid ""
 "but no indication of missing payment will be visible on the ticket pages of "
 "attendees who did not buy the ticket themselves."
 msgstr ""
+"Panel s pokyny k platbě se stále zobrazuje primárnímu zákazníkovi, ale na "
+"stránkách vstupenek účastníků, kteří si vstupenku sami nezakoupili, se "
+"nezobrazí žádný údaj o chybějící platbě."
 
 #: pretix/base/settings.py:780
 msgid ""
@@ -7915,6 +7973,10 @@ msgid ""
 "shown this page again and you can either redeem another gift card or select "
 "a different payment method for the difference."
 msgstr ""
+"Pokud máte dárkovou kartu, zadejte zde její kód. Pokud na dárkové kartě není "
+"dostatek kreditu na zaplacení celé objednávky, zobrazí se vám tato stránka "
+"znovu a vy můžete buď uplatnit jinou dárkovou kartu, nebo zvolit jiný způsob "
+"platby rozdílu."
 
 #: pretix/base/settings.py:796
 msgid "Accept late payments"
@@ -7926,6 +7988,9 @@ msgid ""
 "enough capacity is available. No payments will ever be accepted after the "
 "'Last date of payments' configured above."
 msgstr ""
+"Přijímat platby za objednávky, i když jsou ve stavu \"prošlé\", pokud je k "
+"dispozici dostatečná kapacita. Žádné platby nebudou nikdy přijímány po výše "
+"nastaveném \"Posledním datu plateb\"."
 
 #: pretix/base/settings.py:808
 msgid "Show start date"
@@ -7973,10 +8038,13 @@ msgid ""
 "will automatically be canceled and a new invoice will be issued. This "
 "setting does not affect changes made through the backend."
 msgstr ""
+"Pokud zákazníci změní svou fakturační adresu u stávající objednávky, faktura "
+"se automaticky zruší a vystaví se nová. Toto nastavení nemá vliv na změny "
+"provedené prostřednictvím backendu."
 
 #: pretix/base/settings.py:862
 msgid "Allow to update existing invoices"
-msgstr ""
+msgstr "Umožnit aktualizaci stávajících faktur"
 
 #: pretix/base/settings.py:863
 msgid ""
@@ -7984,6 +8052,9 @@ msgid ""
 "most countries, we recommend to leave this option turned off and always "
 "issue a new invoice if a change needs to be made."
 msgstr ""
+"Ve výchozím nastavení nelze faktury po jejich vystavení již nikdy změnit. Ve "
+"většině zemí doporučujeme nechat tuto možnost vypnutou a v případě potřeby "
+"změny vždy vystavit novou fakturu."
 
 #: pretix/base/settings.py:878
 msgid "Address line"
@@ -7995,15 +8066,15 @@ msgstr "ulice Alberta-Einstein 52"
 
 #: pretix/base/settings.py:934
 msgid "Domestic tax ID"
-msgstr ""
+msgstr "Domácí daňové identifikační číslo"
 
 #: pretix/base/settings.py:935
 msgid "e.g. tax number in Germany, ABN in Australia, …"
-msgstr ""
+msgstr "např. daňové číslo v Německu, číslo ABN v Austrálii, …"
 
 #: pretix/base/settings.py:944
 msgid "EU VAT ID"
-msgstr ""
+msgstr "DIČ EU pro DPH"
 
 #: pretix/base/settings.py:957
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
@@ -8060,6 +8131,10 @@ msgid ""
 "on payment, they will be attached to the payment confirmation mail. If they "
 "are not automatically generated, they will not be attached to emails."
 msgstr ""
+"Pokud jsou faktury automaticky generovány pro všechny objednávky, budou "
+"přiloženy k potvrzení objednávky. Pokud jsou automaticky generovány při "
+"platbě, budou přiloženy k e-mailu s potvrzením platby. Pokud nejsou "
+"generovány automaticky, nebudou k e-mailům přiloženy."
 
 #: pretix/base/settings.py:1021
 msgid "Email address to receive a copy of each invoice"
@@ -8071,15 +8146,19 @@ msgid ""
 "creation. You can use this for an automated import of invoices to your "
 "accounting system. The invoice will be the only attachment of the email."
 msgstr ""
+"Každá nově vytvořená faktura bude krátce po vytvoření odeslána na tuto e-"
+"mailovou adresu. Tuto adresu můžete použít pro automatický import faktur do "
+"účetního systému. Faktura bude jedinou přílohou e-mailu."
 
 #: pretix/base/settings.py:1033
 msgid "Show items outside presale period"
-msgstr ""
+msgstr "Zobrazit produkty mimo předprodejní období"
 
 #: pretix/base/settings.py:1034
 msgid ""
 "Show item details before presale has started and after presale has ended"
 msgstr ""
+"Zobrazit detaily o produktu před začátkem předprodeje a po jeho skončení"
 
 #: pretix/base/settings.py:1054
 msgid "Available languages"
@@ -8100,6 +8179,10 @@ msgid ""
 "less priority than the language and is therefore mostly relevant for "
 "languages used in different regions globally (like English)."
 msgstr ""
+"Použije se k určení formátování data a času a výchozí země pro adresy a "
+"telefonní čísla zákazníků. Pro formátování má menší prioritu než jazyk, a "
+"proto je relevantní hlavně pro jazyky používané v různých regionech po celém "
+"světě (například angličtina)."
 
 #: pretix/base/settings.py:1093
 msgid "Show event times and dates on the ticket shop"
@@ -8110,6 +8193,9 @@ msgid ""
 "If disabled, no date or time will be shown on the ticket shop's front page. "
 "This settings does however not affect the display in other locations."
 msgstr ""
+"Pokud je tato funkce vypnutá, na titulní stránce obchodu s letenkami se "
+"nezobrazí žádné datum ani čas. Toto nastavení však nemá vliv na zobrazení na "
+"jiných místech."
 
 #: pretix/base/settings.py:1104
 msgid "Show event end date"
@@ -8128,14 +8214,15 @@ msgid ""
 "If disabled, the event's start and end date will be displayed without the "
 "time of day."
 msgstr ""
+"Pokud je vypnuto, zobrazí se datum začátku a konce akce bez denního času."
 
 #: pretix/base/settings.py:1124
 msgid "Hide all products that are sold out"
-msgstr ""
+msgstr "Skrýt všechny vyprodané produkty"
 
 #: pretix/base/settings.py:1134 pretix/control/forms/event.py:1480
 msgid "Publicly show how many tickets of a certain type are still available."
-msgstr ""
+msgstr "Veřejně zobrazit, kolik vstupenek určitého typu je ještě k dispozici."
 
 #: pretix/base/settings.py:1143
 msgid "Ask search engines not to index the ticket shop"
@@ -8156,10 +8243,14 @@ msgid ""
 "person on the waiting list and this person will receive an email "
 "notification with a voucher that can be used to buy a ticket."
 msgstr ""
+"Po vyprodání vstupenek se zájemci mohou zapsat na čekací listinu. Jakmile "
+"bude vstupenka opět k dispozici, bude rezervována pro první osobu na čekacím "
+"listině a tato osoba obdrží e-mailové oznámení s poukazem, který lze použít "
+"k zakoupení vstupenky."
 
 #: pretix/base/settings.py:1173
 msgid "Automatic waiting list assignments"
-msgstr ""
+msgstr "Automatické přiřazení na čekací listinu"
 
 #: pretix/base/settings.py:1174
 msgid ""
@@ -8169,10 +8260,15 @@ msgid ""
 "via the control panel. If you disable the waiting list but keep this option "
 "enabled, tickets will still be sent out."
 msgstr ""
+"Pokud se kapacita vstupenek uvolní, automaticky vytvoříte poukaz a odešlete "
+"jej první osobě na čekací listině na daný produkt. Pokud tato funkce není "
+"aktivní, maily se automaticky neodešlou, ale můžete je odeslat ručně "
+"prostřednictvím ovládacího panelu. Pokud vypnete čekací listinu, ale "
+"ponecháte tuto možnost aktivní, budou se vstupenky odesílat i nadále."
 
 #: pretix/base/settings.py:1190
 msgid "Waiting list response time"
-msgstr ""
+msgstr "Doba reakce čekací listiny"
 
 #: pretix/base/settings.py:1193
 msgid ""
@@ -8180,6 +8276,9 @@ msgid ""
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
 msgstr ""
+"Pokud je poukázka na vstupenku zaslána osobě na čekací listině, musí být "
+"uplatněna během tohoto počtu hodin, dokud nevyprší její platnost a může být "
+"znovu přidělena další osobě na listině."
 
 #: pretix/base/settings.py:1204
 msgid "Ask for a name"
@@ -8187,7 +8286,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1205
 msgid "Ask for a name when signing up to the waiting list."
-msgstr ""
+msgstr "Při zápisu na čekací listinu si vyžádejte jméno."
 
 #: pretix/base/settings.py:1214
 msgid "Require name"
@@ -8203,7 +8302,7 @@ msgstr "Požádat o telefonní číslo"
 
 #: pretix/base/settings.py:1226
 msgid "Ask for a phone number when signing up to the waiting list."
-msgstr ""
+msgstr "Při zápisu do čekací listiny si vyžádejte telefonní číslo."
 
 #: pretix/base/settings.py:1235
 msgid "Require phone number"
@@ -8222,10 +8321,12 @@ msgid ""
 "If you ask for a phone number, explain why you do so and what you will use "
 "the phone number for."
 msgstr ""
+"Pokud žádáte o telefonní číslo, vysvětlete, proč tak činíte a k čemu budete "
+"telefonní číslo používat."
 
 #: pretix/base/settings.py:1258
 msgid "Show number of check-ins to customer"
-msgstr ""
+msgstr "Zobrazit počet check-inů pro zákazníka"
 
 #: pretix/base/settings.py:1259
 msgid ""
@@ -8236,14 +8337,19 @@ msgid ""
 "failed scans will not be counted, and the user will not see the different "
 "check-in lists."
 msgstr ""
+"Pokud tuto možnost povolíte, budou vaši zákazníci moci zjistit, kolikrát "
+"vstoupili do akce. Obvykle to není nutné, ale může to být užitečné v "
+"kombinaci se vstupenkami, které lze použít určitý početkrát, aby zákazníci "
+"viděli, kolikrát již byly použity. Odchody nebo neúspěšná skenování se "
+"nezapočítávají a uživatelé nevidí různé seznamy odbavení."
 
 #: pretix/base/settings.py:1272
 msgid "Allow users to download tickets"
-msgstr ""
+msgstr "Umožnit uživatelům stahovat vstupenky"
 
 #: pretix/base/settings.py:1273
 msgid "If this is off, nobody can download a ticket."
-msgstr ""
+msgstr "Pokud je tato funkce vypnutá, nikdo si vstupenku nemůže stáhnout."
 
 #: pretix/base/settings.py:1282
 msgid "Download date"
@@ -8255,10 +8361,13 @@ msgid ""
 "feature and an order contains tickets for multiple event dates, download of "
 "all tickets will be available if at least one of the event dates allows it."
 msgstr ""
+"Po tomto datu budou vstupenky ke stažení. Pokud používáte funkci série akcí "
+"a objednávka obsahuje vstupenky na více termínů akcí, bude stažení všech "
+"vstupenek k dispozici, pokud to alespoň jeden z termínů akcí umožňuje."
 
 #: pretix/base/settings.py:1294
 msgid "Generate tickets for add-on products"
-msgstr ""
+msgstr "Generování vstupenek pro doplňkové produkty"
 
 #: pretix/base/settings.py:1295
 msgid ""
@@ -8266,10 +8375,13 @@ msgid ""
 "for add-on products. With this option, a separate ticket is issued for every "
 "add-on product as well."
 msgstr ""
+"Ve výchozím nastavení se vstupenky vystavují pouze pro jednotlivě vybrané "
+"produkty, nikoli pro doplňkové produkty. Při použití této možnosti se pro "
+"každý doplňkový produkt vystaví také samostatný vstupenka."
 
 #: pretix/base/settings.py:1307
 msgid "Generate tickets for all products"
-msgstr ""
+msgstr "Generování vstupenek pro všechny produkty"
 
 #: pretix/base/settings.py:1308
 msgid ""
@@ -8277,20 +8389,25 @@ msgid ""
 "\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
+"Pokud je vypnuto, vstupenky se vystavují pouze pro produkty, které jsou v "
+"nastavení produktu označeny jako \"vstupenka\". Vydávání vstupenek můžete "
+"vypnout také u každého produktu zvlášť."
 
 #: pretix/base/settings.py:1320
 msgid "Generate tickets for pending orders"
-msgstr ""
+msgstr "Generování vstupenek pro nevyřízené objednávky"
 
 #: pretix/base/settings.py:1321
 msgid ""
 "If turned off, ticket downloads are only possible after an order has been "
 "marked as paid."
 msgstr ""
+"Pokud je vypnuto, je stažení vstupenek možné až po označení objednávky jako "
+"zaplacené."
 
 #: pretix/base/settings.py:1332
 msgid "Do not issue ticket before email address is validated"
-msgstr ""
+msgstr "Nevydávat vstupenku před ověřením e-mailové adresy"
 
 #: pretix/base/settings.py:1333
 msgid ""
@@ -8775,7 +8892,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1952
 msgid "Attachment for new orders"
-msgstr ""
+msgstr "Příloha pro nové objednávky"
 
 #: pretix/base/settings.py:1955
 #, python-brace-format
@@ -8900,19 +9017,7 @@ msgid "Your order is pending payment: {code}"
 msgstr "Vaše objednávka čeká na platbu: {code}"
 
 #: pretix/base/settings.py:2084
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "your order for {event} was successful. As you only ordered free "
-#| "products,\n"
-#| "no payment is required.\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -8927,11 +9032,10 @@ msgid ""
 msgstr ""
 "Dobrý den,\n"
 "\n"
-"vaše objednávka na {event} byla úspěšná. Vzhledem k tomu, že jste si "
-"objednali pouze produkty zdarma,\n"
-"není vyžadována žádná platba.\n"
+"dosud jsme neobdrželi celou platbu za vaši objednávku na {event}.\n"
+"Mějte prosím na paměti, že jste povinni zaplatit před datem {expire_date}.\n"
 "\n"
-"Údaje o objednávce můžete změnit a stav objednávky si prohlédnout na adrese\n"
+"Informace o platbě a stav vaší objednávky si můžete prohlédnout na adrese\n"
 "{url}\n"
 "\n"
 "S pozdravem,\n"
@@ -8943,19 +9047,7 @@ msgid "Incomplete payment received: {code}"
 msgstr "Přijetí neúplné platby: {code}"
 
 #: pretix/base/settings.py:2101
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "your order for {event} was successful. As you only ordered free "
-#| "products,\n"
-#| "no payment is required.\n"
-#| "\n"
-#| "You can change your order details and view the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -8973,11 +9065,13 @@ msgid ""
 msgstr ""
 "Dobrý den,\n"
 "\n"
-"vaše objednávka na {event} byla úspěšná. Vzhledem k tomu, že jste si "
-"objednali pouze produkty zdarma,\n"
-"není vyžadována žádná platba.\n"
+"obdrželi jsme platbu za Vaši objednávku na {event}.\n"
 "\n"
-"Údaje o objednávce můžete změnit a stav objednávky si prohlédnout na adrese\n"
+"Přijatá částka je bohužel nižší než celá částka. požadovaná.\n"
+"Vaše objednávka je proto stále považována za nezaplacenou,\n"
+"neboť je chybí doplatek ve výši **{pending_sum}**.\n"
+"\n"
+"Informace o platbě a stav vaší objednávky si můžete prohlédnout na adrese\n"
 "{url}\n"
 "\n"
 "S pozdravem,\n"
@@ -11140,10 +11234,8 @@ msgid "All payments"
 msgstr "Všichni poskytovatelé plateb"
 
 #: pretix/control/forms/filter.py:902
-#, fuzzy
-#| msgid "Payment date"
 msgid "Payment created from"
-msgstr "Datum splatnosti"
+msgstr "Platba vytvořená z"
 
 #: pretix/control/forms/filter.py:907
 #, fuzzy
@@ -11158,10 +11250,8 @@ msgid "Paid from"
 msgstr "dostupný z"
 
 #: pretix/control/forms/filter.py:917
-#, fuzzy
-#| msgid "Available until"
 msgid "Paid until"
-msgstr "K dispozici do"
+msgstr "Zaplaceno do"
 
 #: pretix/control/forms/filter.py:1069 pretix/control/forms/filter.py:1485
 msgid "Shop live and presale running"
@@ -12752,18 +12842,16 @@ msgid "A new secret has been generated for position #{posid}."
 msgstr ""
 
 #: pretix/control/logdisplay.py:166
-#, fuzzy, python-brace-format
-#| msgid "This order position has been canceled."
+#, python-brace-format
 msgid ""
 "The validity start date for position #{posid} has been changed to {value}."
-msgstr "Položka objednávky byla stornována."
+msgstr "Datum začátku platnosti pro pozici #{posid} bylo změněno na {value}."
 
 #: pretix/control/logdisplay.py:172
-#, fuzzy, python-brace-format
-#| msgid "This order position has been canceled."
+#, python-brace-format
 msgid ""
 "The validity end date for position #{posid} has been changed to {value}."
-msgstr "Položka objednávky byla stornována."
+msgstr "Datum konce platnosti pro pozici #{posid} bylo změněno na {value}."
 
 #: pretix/control/logdisplay.py:177
 #, python-brace-format
@@ -14395,50 +14483,54 @@ msgid ""
 "pretix is running in debug mode. For security reasons, please never run "
 "debug mode on a production instance."
 msgstr ""
+"pretix je spuštěn v režimu pro debugování. Z bezpečnostních důvodů nikdy "
+"nespouštějte debug režim na provozní instanci."
 
 #: pretix/control/templates/pretixcontrol/base.html:445
 msgid ""
 "For security reasons, please change your password before you continue. "
 "Afterwards you will be redirected to your original destination."
 msgstr ""
+"Z bezpečnostních důvodů si před pokračováním změňte heslo. Poté budete "
+"přesměrováni na původní místo určení."
 
 #: pretix/control/templates/pretixcontrol/base.html:457
 #, python-format
 msgid "Times displayed in %(tz)s"
-msgstr ""
+msgstr "Časy zobrazené v %(tz)s"
 
 #: pretix/control/templates/pretixcontrol/base.html:463
 msgid "running in development mode"
-msgstr ""
+msgstr "běží v režimu vývoje"
 
 #: pretix/control/templates/pretixcontrol/base.html:479
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:42
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:25
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
+msgstr "Pokud to trvá déle než několik minut, kontaktujte nás."
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:71
 msgid "Device ID"
-msgstr ""
+msgstr "ID přístroje"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:6
 msgid "Receipt ID"
-msgstr ""
+msgstr "Číslo transakce"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:11
 msgid "ID"
-msgstr ""
+msgstr "ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:15
 msgid "ZVT Terminal"
-msgstr ""
+msgstr "ZVT terminál"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:16
 msgctxt "terminal_zvt"
 msgid "Trace number"
-msgstr ""
+msgstr "Číslo sledování"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:18
 #, fuzzy
@@ -14450,7 +14542,7 @@ msgstr "Předprodej zatím nezačal"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:20
 msgctxt "terminal_zvt"
 msgid "Additional text"
-msgstr ""
+msgstr "Doplňkový text"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:22
 msgctxt "terminal_zvt"
@@ -14460,36 +14552,36 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:24
 msgctxt "terminal_zvt"
 msgid "Receipt number"
-msgstr ""
+msgstr "Číslo účtenky"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:26
 msgctxt "terminal_zvt"
 msgid "Card type"
-msgstr ""
+msgstr "Typ karty"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:28
 msgctxt "terminal_zvt"
 msgid "Card expiration"
-msgstr ""
+msgstr "Konec platnosti karty"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:33
 msgid "Transaction Code"
-msgstr ""
+msgstr "Kód transakce"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:35
 msgid "Merchant Code"
-msgstr ""
+msgstr "Kód obchodníka"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:41
 #: pretix/control/templates/pretixcontrol/items/questions.html:22
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:43
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:67
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:97
 msgid "Card Entry Mode"
-msgstr ""
+msgstr "Způsob zadávání karty"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:45
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:69
@@ -14499,22 +14591,20 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:13
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:43
 msgid "Card number"
-msgstr ""
+msgstr "Číslo kreditní karty"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:52
 msgid "Client Transaction Code"
-msgstr ""
+msgstr "Klientský transakční kód"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:55
 msgid "Server Transaction Code"
-msgstr ""
+msgstr "Kód transakce serveru"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:62
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:78
-#, fuzzy
-#| msgid "Payment states"
 msgid "Payment reference"
-msgstr "Stavy platby"
+msgstr "Platební reference"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65
 #, fuzzy
@@ -14524,7 +14614,7 @@ msgstr "Jméno aplikace"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:73
 msgid "Authorization Code"
-msgstr ""
+msgstr "Autorizační kód"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:80
 #, fuzzy
@@ -14536,11 +14626,11 @@ msgstr "ID pozice"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:32
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
 msgid "Reference"
-msgstr ""
+msgstr "Důvod převodu"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:87
 msgid "Terminal ID"
-msgstr ""
+msgstr "ID terminálu"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:91
 #, fuzzy
@@ -14562,7 +14652,7 @@ msgstr "Výsledek"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:103
 msgid "Cash"
-msgstr ""
+msgstr "Hotovost"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:9
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:41
@@ -14609,17 +14699,15 @@ msgstr "Filtrovat"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:50
 msgid "Your search did not match any check-ins."
-msgstr ""
+msgstr "Vaše vyhledávání neodpovídá žádnému check-inu."
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:52
 msgid "You haven't scanned any tickets yet."
-msgstr ""
+msgstr "Zatím jste neskenovali žádné vstupenky."
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:63
-#, fuzzy
-#| msgid "Timezone"
 msgid "Time of scan"
-msgstr "Časové pásmo"
+msgstr "Čas skenování"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:65
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
@@ -14631,38 +14719,38 @@ msgstr "Výsledek"
 #: pretix/control/templates/pretixcontrol/order/index.html:384
 #, python-format
 msgid "Automatically marked not present: %(date)s"
-msgstr ""
+msgstr "Automaticky označeno jako nepřítomno: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:82
 #: pretix/control/templates/pretixcontrol/order/index.html:389
 #, python-format
 msgid "Additional entry scan: %(date)s"
-msgstr ""
+msgstr "Další vstupní kontrola: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:85
 #, python-format
 msgid "Offline scan. Upload time: %(date)s"
-msgstr ""
+msgstr "Offline skenování. Doba nahrávání: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:88
 #: pretix/control/templates/pretixcontrol/order/index.html:391
 #, python-format
 msgid "Automatically checked in: %(date)s"
-msgstr ""
+msgstr "Automatické check-in: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:92
 msgid "Failed in offline mode"
-msgstr ""
+msgstr "Neúspěšně v režimu offline"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:107
 msgctxt "checkin_result"
 msgid "Successful"
-msgstr ""
+msgstr "Úspěšné"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:112
 msgctxt "checkin_result"
 msgid "Denied"
-msgstr ""
+msgstr "Odmítnuto"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:7
 #: pretix/control/templates/pretixcontrol/checkin/index.html:11
@@ -14670,25 +14758,25 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:15
 #, python-format
 msgid "Check-in list: %(name)s"
-msgstr ""
+msgstr "Check-in seznam: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:16
 msgid "Edit list configuration"
-msgstr ""
+msgstr "Konfigurace seznamu"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:22
 #: pretix/control/templates/pretixcontrol/orders/overview.html:20
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:64
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:27
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:68
 msgid "No attendee record was found."
-msgstr ""
+msgstr "Nebyl nalezen žádný záznam o účastnících."
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:86
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:68
@@ -14866,7 +14954,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:32
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:125
 msgid "Advanced"
-msgstr ""
+msgstr "Pokročilý"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:40
 msgid ""
@@ -14874,18 +14962,25 @@ msgid ""
 "specific check-in situations. Please reach out to support if you have "
 "questions about setting this up."
 msgstr ""
+"Tato nastavení na této stránce jsou určena pro profesionální uživatele s "
+"velmi specifickými situacemi při check-inu. V případě dotazů ohledně tohoto "
+"nastavení se obraťte na podporu."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:47
 msgid ""
 "Make sure to always use the latest version of our scanning apps for these "
 "options to work."
 msgstr ""
+"Aby tyto možnosti fungovaly, ujistěte se, že vždy používáte nejnovější verzi "
+"našich skenovacích aplikací."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:51
 msgid ""
 "If you make use of these advanced options, we recommend using our Android "
 "and Desktop apps."
 msgstr ""
+"Pokud tyto pokročilé možnosti využíváte, doporučujeme používat naše aplikace "
+"pro Android a počítače."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:65
 msgid "Custom check-in rule"
@@ -16519,10 +16614,9 @@ msgid "Currently available: %(num)s"
 msgstr "Aktuálně dostupné: %(num)s"
 
 #: pretix/control/templates/pretixcontrol/giftcards/checkout_confirm.html:4
-#, fuzzy, python-format
-#| msgid "This gift card can only be used in test mode."
+#, python-format
 msgid "Your gift card %(card)s will be used to pay for this order."
-msgstr "Tuto dárkovou poukázku lze použít pouze v testovacím režimu."
+msgstr "K zaplacení této objednávky bude použita vaše dárková %(card)s."
 
 #: pretix/control/templates/pretixcontrol/global_license.html:8
 msgid ""
@@ -17743,10 +17837,9 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/change.html:239
 #: pretix/control/templates/pretixcontrol/order/index.html:458
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:115
-#, fuzzy, python-format
-#| msgid "Valid until"
+#, python-format
 msgid "Valid until %(datetime)s"
-msgstr "Platí do"
+msgstr "Platí do %(datetime)s"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:244
 msgid "Unconstrained"
@@ -18074,10 +18167,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:450
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:107
-#, fuzzy, python-format
-#| msgid "Valid until"
+#, python-format
 msgid "Valid %(datetime_range)s"
-msgstr "Platí do"
+msgstr "Platný %(datetime_range)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:488
 msgid "Ticket page"
@@ -23193,10 +23285,9 @@ msgid "The invoice was sent to the designated email address."
 msgstr ""
 
 #: pretix/plugins/banktransfer/signals.py:132
-#, fuzzy, python-brace-format
-#| msgid "Invoice number"
+#, python-brace-format
 msgid "Invoice {invoice_number}"
-msgstr "Číslo faktury"
+msgstr "Faktura {invoice_number}"
 
 #: pretix/plugins/banktransfer/signals.py:137
 #, python-brace-format
@@ -24892,13 +24983,12 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/sendmail/views.py:507
-#, fuzzy, python-format
-#| msgid "Waiting list entry"
+#, python-format
 msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
-msgstr[0] "Zápis na čekací listinu"
-msgstr[1] "Zápis na čekací listinu"
-msgstr[2] "Zápis na čekací listinu"
+msgstr[0] "%(number)s zápis na čekací listině"
+msgstr[1] "%(number)s položky na čekací listině"
+msgstr[2] "%(number)s položek na čekací listině"
 
 #: pretix/plugins/sendmail/views.py:605
 msgid "Your rule has been created."
