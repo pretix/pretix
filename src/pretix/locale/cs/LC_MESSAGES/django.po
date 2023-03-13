@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
 "PO-Revision-Date: 2023-03-14 03:00+0000\n"
-"Last-Translator: Michael <michael.happl@gmx.at>\n"
+"Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -7902,7 +7902,7 @@ msgstr ""
 
 #: pretix/base/settings.py:699
 msgid "Only end payment terms on weekdays"
-msgstr ""
+msgstr "Platební termín pouze v pracovní dny"
 
 #: pretix/base/settings.py:700
 msgid ""
@@ -7926,7 +7926,7 @@ msgstr ""
 
 #: pretix/base/settings.py:740
 msgid "Last date of payments"
-msgstr ""
+msgstr "Poslední datum platby"
 
 #: pretix/base/settings.py:741
 msgid ""
@@ -7980,7 +7980,7 @@ msgstr ""
 
 #: pretix/base/settings.py:796
 msgid "Accept late payments"
-msgstr ""
+msgstr "Přijímat opožděné platby"
 
 #: pretix/base/settings.py:797
 msgid ""
@@ -7998,7 +7998,7 @@ msgstr "Zobrazit začátek předprodejního období"
 
 #: pretix/base/settings.py:809
 msgid "Show the presale start date before presale has started."
-msgstr ""
+msgstr "Zobrazení data zahájení předprodeje před zahájením předprodeje."
 
 #: pretix/base/settings.py:824 pretix/base/settings.py:835
 msgid "Do not generate invoices"
@@ -8006,19 +8006,19 @@ msgstr "Nevytvářet faktury"
 
 #: pretix/base/settings.py:825 pretix/base/settings.py:836
 msgid "Only manually in admin panel"
-msgstr ""
+msgstr "Pouze ručně v panelu administrátora"
 
 #: pretix/base/settings.py:826 pretix/base/settings.py:837
 msgid "Automatically on user request"
-msgstr ""
+msgstr "Automaticky na základě požadavku uživatele"
 
 #: pretix/base/settings.py:827 pretix/base/settings.py:838
 msgid "Automatically for all created orders"
-msgstr ""
+msgstr "Automaticky pro všechny nové objednávky"
 
 #: pretix/base/settings.py:828 pretix/base/settings.py:839
 msgid "Automatically on payment or when required by payment method"
-msgstr ""
+msgstr "Automaticky při platbě nebo když to vyžaduje způsob platby"
 
 #: pretix/base/settings.py:832
 msgid "Generate invoices"
@@ -8026,11 +8026,11 @@ msgstr "Vystavit faktury"
 
 #: pretix/base/settings.py:841
 msgid "Invoices will never be automatically generated for free orders."
-msgstr ""
+msgstr "U bezplatných objednávek se nikdy automaticky negenerují faktury."
 
 #: pretix/base/settings.py:850
 msgid "Automatically cancel and reissue invoice on address changes"
-msgstr ""
+msgstr "Automatické zrušení a nové vystavení faktury při změně adresy"
 
 #: pretix/base/settings.py:851
 msgid ""
@@ -8102,13 +8102,14 @@ msgstr "Doplňkový text"
 
 #: pretix/base/settings.py:978
 msgid "Will be printed on every invoice below the invoice total."
-msgstr ""
+msgstr "Bude vytištěno na každé faktuře pod celkovou částkou faktury."
 
 #: pretix/base/settings.py:991
 msgid ""
 "e.g. your bank details, legal details like your VAT ID, registration "
 "numbers, etc."
 msgstr ""
+"např. Vaše bankovní spojení a právní údaje, jako DIČ, registrační čísla apod."
 
 #: pretix/base/settings.py:994
 msgid "Footer"
@@ -8118,11 +8119,11 @@ msgstr "Zápatí"
 msgid ""
 "Will be printed centered and in a smaller font at the end of every invoice "
 "page."
-msgstr ""
+msgstr "Tištěno menším písmem vycentrovaně na spodní části každé stránky."
 
 #: pretix/base/settings.py:1008
 msgid "Attach invoices to emails"
-msgstr ""
+msgstr "Faktury připojit k mailu"
 
 #: pretix/base/settings.py:1009
 msgid ""
@@ -8138,7 +8139,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1021
 msgid "Email address to receive a copy of each invoice"
-msgstr ""
+msgstr "E-mailová adresa pro zasílání kopie každé faktury"
 
 #: pretix/base/settings.py:1022
 msgid ""
@@ -8199,15 +8200,15 @@ msgstr ""
 
 #: pretix/base/settings.py:1104
 msgid "Show event end date"
-msgstr ""
+msgstr "Zobrazit konec akce"
 
 #: pretix/base/settings.py:1105
 msgid "If disabled, only event's start date will be displayed to the public."
-msgstr ""
+msgstr "Pokud je vypnuto, zobrazí se veřejnosti pouze datum začátku akce."
 
 #: pretix/base/settings.py:1114
 msgid "Show dates with time"
-msgstr ""
+msgstr "Zobrazit datumy s časem"
 
 #: pretix/base/settings.py:1115
 msgid ""
@@ -8230,7 +8231,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1152
 msgid "Show variations of a product expanded by default"
-msgstr ""
+msgstr "Zobrazení rozložených variant produktu ve výchozím nastavení"
 
 #: pretix/base/settings.py:1161
 msgid "Enable waiting list"
@@ -8282,7 +8283,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1204
 msgid "Ask for a name"
-msgstr ""
+msgstr "Ptát se na jméno"
 
 #: pretix/base/settings.py:1205
 msgid "Ask for a name when signing up to the waiting list."
@@ -8443,12 +8444,13 @@ msgstr ""
 
 #: pretix/base/settings.py:1378 pretix/base/settings.py:1386
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:8
+#, fuzzy
 msgid "List"
-msgstr ""
+msgstr "Seznam"
 
 #: pretix/base/settings.py:1379 pretix/base/settings.py:1387
 msgid "Week calendar"
-msgstr ""
+msgstr "Týdenní kalendář"
 
 #: pretix/base/settings.py:1380 pretix/base/settings.py:1388
 msgid "Month calendar"
