@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
 "PO-Revision-Date: 2023-03-14 20:25+0000\n"
-"Last-Translator: Michael <michael.happl@gmx.at>\n"
+"Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -3987,7 +3987,7 @@ msgstr "Maximální budoucí začátek"
 
 #: pretix/base/models/items.py:630
 msgid "The selected start date may only be this many days in the future."
-msgstr ""
+msgstr "Zvolené datum zahájení může být až za tolik dní."
 
 #: pretix/base/models/items.py:638 pretix/base/models/items.py:1447
 #: pretix/control/forms/filter.py:405 pretix/control/forms/filter.py:1681
@@ -8461,11 +8461,11 @@ msgstr "Týdenní kalendář"
 
 #: pretix/base/settings.py:1380 pretix/base/settings.py:1388
 msgid "Month calendar"
-msgstr ""
+msgstr "Měsíční kalendář"
 
 #: pretix/base/settings.py:1384
 msgid "Default overview style"
-msgstr ""
+msgstr "Standardní styl přehledu"
 
 #: pretix/base/settings.py:1390
 msgid ""
@@ -8485,7 +8485,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1410
 msgid "Hide all past dates from calendar"
-msgstr ""
+msgstr "Skrýt všechny minulé termíny z kalendáře"
 
 #: pretix/base/settings.py:1421
 msgid "Allow customers to modify their information after they checked in."
@@ -8493,7 +8493,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1430
 msgid "Last date of modifications"
-msgstr ""
+msgstr "Datum poslední změny"
 
 #: pretix/base/settings.py:1431
 msgid ""
@@ -8676,15 +8676,15 @@ msgstr ""
 
 #: pretix/base/settings.py:1702 pretix/control/forms/event.py:1508
 msgid "Contact address"
-msgstr ""
+msgstr "Kontaktní e-mail"
 
 #: pretix/base/settings.py:1703 pretix/control/forms/event.py:1510
 msgid "We'll show this publicly to allow attendees to contact you."
-msgstr ""
+msgstr "Tento údaj zobrazíme veřejně, aby vás účastníci mohli kontaktovat."
 
 #: pretix/base/settings.py:1711 pretix/control/forms/event.py:1502
 msgid "Imprint URL"
-msgstr ""
+msgstr "Impressum (adresa URL)"
 
 #: pretix/base/settings.py:1712 pretix/control/forms/event.py:1503
 msgid ""
@@ -11106,7 +11106,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:322
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:5
 msgid "Approval pending"
-msgstr ""
+msgstr "Čeká se na schválení"
 
 #: pretix/control/forms/filter.py:239
 msgid "Follow-up configured"
