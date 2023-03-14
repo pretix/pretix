@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
-"PO-Revision-Date: 2023-03-14 20:25+0000\n"
+"PO-Revision-Date: 2023-03-14 20:46+0000\n"
 "Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -8440,7 +8440,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1364
 msgid "Show availability in event overviews"
-msgstr "Zobrazení dostupnosti v přehledech akcí"
+msgstr "Zobrazení dostupnosti v přehledu akcí"
 
 #: pretix/base/settings.py:1365
 msgid ""
@@ -8475,7 +8475,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1399
 msgid "Hide all unavailable dates from calendar or list views"
-msgstr ""
+msgstr "Skrytí všech nedostupných dat ze zobrazení kalendáře nebo seznamu"
 
 #: pretix/base/settings.py:1400 pretix/base/settings.py:1411
 msgid ""
@@ -8489,7 +8489,7 @@ msgstr "Skrýt všechny minulé termíny z kalendáře"
 
 #: pretix/base/settings.py:1421
 msgid "Allow customers to modify their information after they checked in."
-msgstr ""
+msgstr "Umožněte zákazníkům upravit své údaje po přihlášení."
 
 #: pretix/base/settings.py:1430
 msgid "Last date of modifications"
@@ -8505,11 +8505,11 @@ msgstr ""
 
 #: pretix/base/settings.py:1442
 msgid "Customers can change the variation of the products they purchased"
-msgstr ""
+msgstr "Zákazníci mohou měnit varianty zakoupených produktů"
 
 #: pretix/base/settings.py:1451
 msgid "Customers can change their selected add-on products"
-msgstr ""
+msgstr "Zákazníci mohou měnit vybrané doplňkové produkty"
 
 #: pretix/base/settings.py:1461 pretix/base/settings.py:1470
 msgid ""
