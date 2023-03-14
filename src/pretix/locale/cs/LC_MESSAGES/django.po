@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
-"PO-Revision-Date: 2023-03-14 21:26+0000\n"
+"PO-Revision-Date: 2023-03-17 21:07+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -14460,11 +14460,9 @@ msgid "Trace number"
 msgstr "Číslo sledování"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:18
-#, fuzzy
-#| msgid "Presale not started"
 msgctxt "terminal_zvt"
 msgid "Payment type"
-msgstr "Předprodej zatím nezačal"
+msgstr "Typ platby"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:20
 msgctxt "terminal_zvt"
@@ -14534,10 +14532,8 @@ msgid "Payment reference"
 msgstr "Platební reference"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:65
-#, fuzzy
-#| msgid "Application name"
 msgid "Payment Application"
-msgstr "Jméno aplikace"
+msgstr "Aplikace platby"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:73
 msgid "Authorization Code"
@@ -15740,7 +15736,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:105
 msgid "Payment reminder"
-msgstr ""
+msgstr "Připomínka platby"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:108
 msgid "Waiting list notification"
@@ -15765,7 +15761,7 @@ msgstr "Přílohy"
 #: pretix/control/templates/pretixcontrol/event/payment.html:5
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:5
 msgid "Payment settings"
-msgstr ""
+msgstr "Nastavení platby"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:22
 #: pretix/control/templates/pretixcontrol/user/settings.html:48
@@ -22606,10 +22602,8 @@ msgid "This is not an event series."
 msgstr ""
 
 #: pretix/control/views/waitinglist.py:391
-#, fuzzy
-#| msgid "The amount has been charged to your card."
 msgid "The waitinglist entry has been transferred."
-msgstr "Částka byla stržena z vaší karty."
+msgstr "Zápis na čekací listině byl přenesen."
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"
@@ -22682,11 +22676,9 @@ msgstr ""
 
 #: pretix/plugins/badges/exporters.py:258
 #: pretix/plugins/ticketoutputpdf/exporters.py:69
-#, fuzzy
-#| msgid "Redirection URIs"
 msgctxt "export_category"
 msgid "PDF collections"
-msgstr "URI použité pro přesměrování"
+msgstr "Sbírky PDF"
 
 #: pretix/plugins/badges/exporters.py:259
 msgid "Download all attendee badges as one large PDF for printing."
@@ -22894,11 +22886,11 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:121
 msgid "Name of bank"
-msgstr ""
+msgstr "Název banky"
 
 #: pretix/plugins/banktransfer/payment.py:131
 msgid "Bank account details"
-msgstr ""
+msgstr "Bankovní údaje"
 
 #: pretix/plugins/banktransfer/payment.py:134
 msgid ""
@@ -22980,17 +22972,12 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:228
-#, fuzzy
-#| msgid "Invoice number"
 msgid "Invoice email subject"
-msgstr "Číslo faktury"
+msgstr "Předmět e-mailu s fakturou"
 
 #: pretix/plugins/banktransfer/payment.py:240
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice date"
 msgid "Invoice email text"
-msgstr "Datum faktury"
+msgstr "Text e-mailu s fakturou"
 
 #: pretix/plugins/banktransfer/payment.py:273
 msgid "Please fill out your bank account details."
@@ -23005,10 +22992,8 @@ msgid "Please send my invoice directly to our accounting department"
 msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:299
-#, fuzzy
-#| msgid "Invoice recipient:"
 msgid "Invoice recipient e-mail"
-msgstr "Příjemce faktury:"
+msgstr "E-mail příjemce faktury"
 
 #: pretix/plugins/banktransfer/payment.py:301
 msgid ""
@@ -23143,11 +23128,8 @@ msgid "We will send a copy of your invoice directly to %(recipient)s."
 msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:6
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Invoice to"
 msgid "Send invoice to"
-msgstr "Faktura na"
+msgstr "Fakturu zaslat na adresu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:14
 msgid "Account"
@@ -23588,10 +23570,8 @@ msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:89
 #: pretix/plugins/ticketoutputpdf/exporters.py:88
-#, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Only include tickets for dates within this range."
-msgstr "Zahrň pouze objednávky vytvořené k tomuto datu nebo po tomto datu."
+msgstr "Zahrňte pouze vstupenky na data v tomto rozmezí."
 
 #: pretix/plugins/checkinlists/exporters.py:93
 msgid "Include QR-code secret"
@@ -23673,10 +23653,8 @@ msgid "Error message"
 msgstr "Chybová zpráva"
 
 #: pretix/plugins/checkinlists/exporters.py:647
-#, fuzzy
-#| msgid "End date"
 msgid "Upload date"
-msgstr "Datum konce"
+msgstr "Datum nahrání"
 
 #: pretix/plugins/checkinlists/exporters.py:648
 msgid "Upload time"
@@ -23902,10 +23880,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/paypal2/payment.py:95
-#, fuzzy
-#| msgid "Payment ID"
 msgid "PayPal Merchant ID"
-msgstr "ID platby"
+msgstr "ID obchodníka PayPal"
 
 #: pretix/plugins/paypal2/payment.py:137
 msgid ""
@@ -23915,10 +23891,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/paypal2/payment.py:145
-#, fuzzy
-#| msgid "Payment method"
 msgid "Alternative Payment Methods"
-msgstr "Způsob platby"
+msgstr "Alternativní platební metody"
 
 #: pretix/plugins/paypal2/payment.py:147
 msgid ""
@@ -23959,10 +23933,8 @@ msgid "-- Automatic --"
 msgstr ""
 
 #: pretix/plugins/paypal2/payment.py:218
-#, fuzzy
-#| msgid "Select country"
 msgid "Buyer country"
-msgstr "Vyberte zemi"
+msgstr "Stát nakupujícího"
 
 #: pretix/plugins/paypal2/payment.py:242
 msgid ""
@@ -24018,10 +23990,8 @@ msgid "PayPal APM"
 msgstr ""
 
 #: pretix/plugins/paypal2/payment.py:998
-#, fuzzy
-#| msgid "Payment method"
 msgid "PayPal Alternative Payment Methods"
-msgstr "Způsob platby"
+msgstr "Alternativní platební metody PayPal"
 
 #: pretix/plugins/paypal2/signals.py:59
 msgid "Payment completed."
@@ -24052,22 +24022,16 @@ msgid "PayPal reported an event: {}"
 msgstr ""
 
 #: pretix/plugins/paypal2/signals.py:80
-#, fuzzy
-#| msgid "Payment ID"
 msgid "PayPal ISU/Connect: Client ID"
-msgstr "ID platby"
+msgstr "PayPal ISU/Connect: ID klienta"
 
 #: pretix/plugins/paypal2/signals.py:84
-#, fuzzy
-#| msgid "Payment ID"
 msgid "PayPal ISU/Connect: Secret key"
-msgstr "ID platby"
+msgstr "PayPal ISU/Connect: Tajný klíč"
 
 #: pretix/plugins/paypal2/signals.py:88
-#, fuzzy
-#| msgid "Payment ID"
 msgid "PayPal ISU/Connect: Partner Merchant ID"
-msgstr "ID platby"
+msgstr "PayPal ISU/Connect: ID obchodního partnera"
 
 #: pretix/plugins/paypal2/signals.py:89
 msgid ""
@@ -24076,10 +24040,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/paypal2/signals.py:93
-#, fuzzy
-#| msgid "Payment ID"
 msgid "PayPal ISU/Connect Endpoint"
-msgstr "ID platby"
+msgstr "Koncový bod služby PayPal ISU/Connect"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:9
 msgid "Almost done …"
@@ -24269,10 +24231,8 @@ msgid "Tax"
 msgstr ""
 
 #: pretix/plugins/reports/exporters.py:577
-#, fuzzy
-#| msgid "Default list"
 msgid "Tax split list"
-msgstr "Výchozí seznam"
+msgstr "Seznam rozdělení daní"
 
 #: pretix/plugins/reports/exporters.py:579
 msgid "Download a spreadsheet with the tax amounts included in each order."
@@ -24338,18 +24298,14 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:112
-#, fuzzy
-#| msgid "Waiting list"
 msgctxt "sendmail_form"
 msgid "Waiting for"
-msgstr "Čekací seznam"
+msgstr "Čeká se na"
 
 #: pretix/plugins/sendmail/forms.py:118 pretix/plugins/sendmail/forms.py:192
-#, fuzzy
-#| msgid "Restrict to specific sales channels"
 msgctxt "sendmail_form"
 msgid "Restrict to a specific event date"
-msgstr "Omezit na konkrétní prodejní kanály"
+msgstr "Omezit na konkrétní datum akce"
 
 #: pretix/plugins/sendmail/forms.py:124 pretix/plugins/sendmail/forms.py:198
 msgctxt "sendmail_form"
@@ -24362,18 +24318,14 @@ msgid "Restrict to event dates starting before"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:170
-#, fuzzy
-#| msgid "End date"
 msgctxt "sendmail_from"
 msgid "Send to"
-msgstr "Datum konce"
+msgstr "Odeslat na"
 
 #: pretix/plugins/sendmail/forms.py:180
-#, fuzzy
-#| msgid "Restrict to countries"
 msgctxt "sendmail_form"
 msgid "Restrict to products"
-msgstr "Omezit na země"
+msgstr "Omezit na produkty"
 
 #: pretix/plugins/sendmail/forms.py:185
 msgid "Filter check-in status"
@@ -24385,11 +24337,9 @@ msgid "Restrict to recipients without check-in"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:208
-#, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgctxt "sendmail_form"
 msgid "Restrict to orders created at or after"
-msgstr "Zahrň pouze objednávky vytvořené k tomuto datu nebo po tomto datu."
+msgstr "Omezit na objednávky vytvořené v nebo po"
 
 #: pretix/plugins/sendmail/forms.py:213
 msgctxt "sendmail_form"
@@ -24427,18 +24377,14 @@ msgid "pending with payment overdue"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:254
-#, fuzzy
-#| msgid "Restrict to countries"
 msgctxt "sendmail_from"
 msgid "Restrict to orders with status"
-msgstr "Omezit na země"
+msgstr "Omezit na objednávky se stavem"
 
 #: pretix/plugins/sendmail/forms.py:279 pretix/plugins/sendmail/forms.py:283
-#, fuzzy
-#| msgid "Restrict to specific sales channels"
 msgctxt "sendmail_from"
 msgid "Restrict to recipients with check-in on list"
-msgstr "Omezit na konkrétní prodejní kanály"
+msgstr "Omezit na příjemce s check-in na seznamu"
 
 #: pretix/plugins/sendmail/forms.py:360
 msgid "Type of schedule time"
@@ -24449,28 +24395,20 @@ msgid "Absolute"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:364
-#, fuzzy
-#| msgid "External refund of payment"
 msgid "Relative, before event start"
-msgstr "Externí vrácení platby"
+msgstr "Relativní, před začátkem akce"
 
 #: pretix/plugins/sendmail/forms.py:365
-#, fuzzy
-#| msgid "External refund of payment"
 msgid "Relative, before event end"
-msgstr "Externí vrácení platby"
+msgstr "Relativní, před koncem akce"
 
 #: pretix/plugins/sendmail/forms.py:366
-#, fuzzy
-#| msgid "External refund of payment"
 msgid "Relative, after event start"
-msgstr "Externí vrácení platby"
+msgstr "Relativní, po začátku akce"
 
 #: pretix/plugins/sendmail/forms.py:367
-#, fuzzy
-#| msgid "Create a new event"
 msgid "Relative, after event end"
-msgstr "Vytvořit novou událost"
+msgstr "Relativní, po skončení akce"
 
 #: pretix/plugins/sendmail/forms.py:380
 msgid "Please specify the send date"
@@ -24505,20 +24443,16 @@ msgid "Everyone who created a ticket order"
 msgstr ""
 
 #: pretix/plugins/sendmail/models.py:202
-#, fuzzy
-#| msgid "Limit to events"
 msgid "Limit products"
-msgstr "Omezit na události"
+msgstr "Omezit produkty"
 
 #: pretix/plugins/sendmail/models.py:207
 msgid "By default, only paid orders will receive the email"
 msgstr ""
 
 #: pretix/plugins/sendmail/models.py:211
-#, fuzzy
-#| msgid "End date"
 msgid "Send date"
-msgstr "Datum konce"
+msgstr "Datum odeslání"
 
 #: pretix/plugins/sendmail/models.py:213
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:8
@@ -24642,10 +24576,8 @@ msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:6
-#, fuzzy
-#| msgid "Create a new event"
 msgid "Create Email Rule"
-msgstr "Vytvořit novou událost"
+msgstr "Vytvořit e-mailové pravidlo"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:36
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:50
@@ -24667,10 +24599,8 @@ msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:6
-#, fuzzy
-#| msgid "Create a new event"
 msgid "Inspect Email Rule"
-msgstr "Vytvořit novou událost"
+msgstr "Kontrolovat pravidlo e-mailu"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:8
 msgid "This page shows when your rule is planned to be sent."
@@ -24704,10 +24634,8 @@ msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:17
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:95
-#, fuzzy
-#| msgid "Create a new event"
 msgid "Create a new rule"
-msgstr "Vytvořit novou událost"
+msgstr "Vytvořit nové pravidlo"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:28
 msgctxt "subevent"
@@ -24776,10 +24704,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/sendmail/views.py:250
-#, fuzzy
-#| msgid "Ask for attendee names"
 msgid "Orders or attendees"
-msgstr "Zeptejte se na jména účastníků"
+msgstr "Objednávky nebo účastníci"
 
 #: pretix/plugins/sendmail/views.py:251
 msgid ""
@@ -25093,10 +25019,8 @@ msgid "WeChat Pay"
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py:316
-#, fuzzy
-#| msgid "Description"
 msgid "Destination"
-msgstr "Popis"
+msgstr "Destinace"
 
 #: pretix/plugins/stripe/payment.py:342
 #, python-brace-format
@@ -25505,10 +25429,8 @@ msgid "Ticket layout {val}"
 msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/control_order_position_buttons.html:7
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Alternative ticket"
-msgstr "Vygenerovat lístky"
+msgstr "Alternativní vstupenka"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:4
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:6
@@ -25624,14 +25546,9 @@ msgid "Customer account"
 msgstr "Účet zákazníka"
 
 #: pretix/presale/checkoutflow.py:326
-#, fuzzy
-#| msgid ""
-#| "We were not able to process your request completely as the server was too "
-#| "busy. Please try again."
 msgid "We failed to process your authentication request, please try again."
 msgstr ""
-"Váš požadavek jsme nemohli kompletně zpracovat, protože server byl příliš "
-"zaneprázdněn. Zkuste to prosím znovu."
+"Váš požadavek na ověření se nám nepodařilo zpracovat, zkuste to prosím znovu."
 
 #: pretix/presale/checkoutflow.py:389
 msgctxt "checkoutflow"
@@ -25693,16 +25610,12 @@ msgid "Payment"
 msgstr "Platba"
 
 #: pretix/presale/checkoutflow.py:1222
-#, fuzzy
-#| msgid ""
-#| "Your gift card has been applied, but {} still need to be paid. Please "
-#| "select a payment method."
 msgid ""
 "Your payment method has been applied, but {} still need to be paid. Please "
 "select a payment method for the remainder."
 msgstr ""
-"Vaše dárková poukázka byla použita, ale je třeba ji ještě zaplatit. Vyberte "
-"prosím způsob platby."
+"Váš způsob platby byl použitý, ale ještě je třeba zaplatit {}. Zvolte prosím "
+"způsob platby pro zbývající část."
 
 #: pretix/presale/checkoutflow.py:1247 pretix/presale/views/order.py:694
 msgid "Please select a payment method."
@@ -25710,10 +25623,8 @@ msgstr ""
 
 #: pretix/presale/checkoutflow.py:1274 pretix/presale/checkoutflow.py:1284
 #: pretix/presale/checkoutflow.py:1295
-#, fuzzy
-#| msgid "Please select a specific variation of this product."
 msgid "Please select a payment method to proceed."
-msgstr "Vyberte prosím konkrétní variantu tohoto produktu."
+msgstr "K pokračování vyberte způsob platby."
 
 #: pretix/presale/checkoutflow.py:1300 pretix/presale/views/order.py:464
 #: pretix/presale/views/order.py:534
@@ -25751,10 +25662,8 @@ msgid "Please enter the same email address twice."
 msgstr ""
 
 #: pretix/presale/forms/checkout.py:125
-#, fuzzy
-#| msgid "Street address"
 msgid "Save to address"
-msgstr "Ulice"
+msgstr "Uložit k adrese"
 
 #: pretix/presale/forms/checkout.py:126
 #, fuzzy
