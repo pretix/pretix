@@ -524,7 +524,10 @@ class VoucherBulkMailPreview(EventPermissionRequiredMixin, View):
     # get all supported placeholders with dummy values
     def placeholders(self, item):
         ctx = {}
-        for p in get_available_placeholders(self.request.event, ['event', 'voucher_list', 'name']).values():
+        base_ctx = ['event', 'name']
+        if item == 'send_message':
+            base_ctx += ['voucher_list']
+        for p in get_available_placeholders(self.request.event, base_ctx).values():
             s = str(p.render_sample(self.request.event))
             if s.strip().startswith('* ') or s.startswith('  '):
                 ctx[p.identifier] = '<div class="placeholder" title="{}">{}</div>'.format(
