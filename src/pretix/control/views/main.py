@@ -306,10 +306,11 @@ class EventWizard(SafeSessionWizardView):
                 event.set_active_plugins(settings.PRETIX_PLUGINS_DEFAULT.split(","),
                                          allow_restricted=settings.PRETIX_PLUGINS_DEFAULT.split(","))
                 event.save(update_fields=['plugins'])
-                event.checkin_lists.create(
-                    name=_('Default'),
-                    all_products=True
-                )
+                if not event.has_subevents:
+                    event.checkin_lists.create(
+                        name=_('Default'),
+                        all_products=True
+                    )
                 event.set_defaults()
 
             if basics_data['tax_rate']:
