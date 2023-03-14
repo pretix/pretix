@@ -50,6 +50,7 @@ from django.utils.translation import (
     gettext as _, gettext_lazy, pgettext, pgettext_lazy,
 )
 
+from pretix.base.email import get_name_parts_localized
 from pretix.base.models import (
     GiftCard, GiftCardTransaction, Invoice, InvoiceAddress, Order,
     OrderPosition, Question,
@@ -340,7 +341,7 @@ class OrderListExporter(MultiSheetListExporter):
                 if name_scheme and len(name_scheme['fields']) > 1:
                     for k, label, w in name_scheme['fields']:
                         row.append(
-                            order.invoice_address.name_parts.get(k, '')
+                            get_name_parts_localized(order.invoice_address.name_parts, k)
                         )
                 row += [
                     order.invoice_address.street,
@@ -477,7 +478,7 @@ class OrderListExporter(MultiSheetListExporter):
                 if name_scheme and len(name_scheme['fields']) > 1:
                     for k, label, w in name_scheme['fields']:
                         row.append(
-                            order.invoice_address.name_parts.get(k, '')
+                            get_name_parts_localized(order.invoice_address.name_parts, k)
                         )
                 row += [
                     order.invoice_address.street,
@@ -660,7 +661,7 @@ class OrderListExporter(MultiSheetListExporter):
                 if name_scheme and len(name_scheme['fields']) > 1:
                     for k, label, w in name_scheme['fields']:
                         row.append(
-                            op.attendee_name_parts.get(k, '')
+                            get_name_parts_localized(op.attendee_name_parts, k)
                         )
                 row += [
                     op.attendee_email,
@@ -721,7 +722,7 @@ class OrderListExporter(MultiSheetListExporter):
                     if name_scheme and len(name_scheme['fields']) > 1:
                         for k, label, w in name_scheme['fields']:
                             row.append(
-                                order.invoice_address.name_parts.get(k, '')
+                                get_name_parts_localized(order.invoice_address.name_parts, k)
                             )
                     row += [
                         order.invoice_address.street,
