@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 from django.conf import settings
+from django.core.validators import URLValidator
 from i18nfield.fields import I18nCharField, I18nTextField
 from i18nfield.strings import LazyI18nString
 from rest_framework.exceptions import ValidationError
@@ -69,3 +70,17 @@ class I18nAwareModelSerializer(ModelSerializer):
 
 I18nAwareModelSerializer.serializer_field_mapping[I18nCharField] = I18nField
 I18nAwareModelSerializer.serializer_field_mapping[I18nTextField] = I18nField
+
+
+class I18nURLField(I18nField):
+    def to_internal_value(self, value):
+        value = super().to_internal_value(value)
+        if not value:
+            return value
+        if isinstance(value.data, dict):
+            for v in value.data.values():
+                if v:
+                    URLValidator()(v)
+        else:
+            URLValidator()(value.data)
+        return value

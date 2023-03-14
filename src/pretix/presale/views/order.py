@@ -371,6 +371,7 @@ class OrderPositionDetails(EventViewMixin, OrderPositionDetailMixin, CartMixin, 
             order=self.order
         )
         ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p.generate_ticket]
+        ctx['attendee_change_allowed'] = self.position.attendee_change_allowed
         return ctx
 
 
@@ -1192,19 +1193,7 @@ class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
         return resp
 
 
-@method_decorator(xframe_options_exempt, 'dispatch')
-class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
-    template_name = "pretixpresale/event/order_change.html"
-
-    def dispatch(self, request, *args, **kwargs):
-        self.request = request
-        self.kwargs = kwargs
-        if not self.order:
-            raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if not self.order.user_change_allowed:
-            messages.error(request, _('You cannot change this order.'))
-            return redirect(self.get_order_url())
-        return super().dispatch(request, *args, **kwargs)
+class OrderChangeMixin:
 
     @cached_property
     def formdict(self):
@@ -1232,7 +1221,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
     @cached_property
     def positions(self):
         positions = list(
-            self.order.positions.select_related('item', 'item__tax_rule').prefetch_related(
+            self.get_position_queryset().select_related('item', 'item__tax_rule').prefetch_related(
                 'item__variations', 'addons',
             )
         )
@@ -1245,7 +1234,8 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
         for p in positions:
             p.form = OrderPositionChangeForm(prefix='op-{}'.format(p.pk), instance=p,
                                              invoice_address=ia, event=self.request.event, quota_cache=quota_cache,
-                                             data=self.request.POST if self.request.method == "POST" else None)
+                                             data=self.request.POST if self.request.method == "POST" else None,
+                                             hide_prices=self.get_hide_prices())
 
             if p.addon_to_id is None and self.request.event.settings.change_allow_user_addons:
                 p.addon_form = {
@@ -1420,7 +1410,6 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
         was_paid = self.order.status == Order.STATUS_PAID
         ocm = OrderChangeManager(
             self.order,
-            user=self.request.user,
             notify=True,
             reissue_invoice=self.order.invoices.exists() or self.request.event.settings.get('invoice_generate') == 'True',
         )
@@ -1447,7 +1436,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                             'price': price,
                         })
             try:
-                ocm.set_addons(addons_data)
+                ocm.set_addons(addons_data, self.get_position_queryset())
             except OrderError as e:
                 messages.error(self.request, str(e))
                 form_valid = False
@@ -1470,7 +1459,7 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                 except OrderError as e:
                     messages.error(self.request, str(e))
                 else:
-                    if self.order.pending_sum < Decimal('0.00'):
+                    if self.order.pending_sum < Decimal('0.00') and ocm._totaldiff < Decimal('0.00'):
                         auto_refund = (
                             not self.request.event.settings.cancel_allow_user_paid_require_approval
                             and self.request.event.settings.cancel_allow_user_paid_refund_as_giftcard != "manually"
@@ -1493,10 +1482,10 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                     else:
                         messages.success(self.request, _('The order has been changed.'))
 
-                    return redirect(self.get_order_url())
+                    return redirect(self.get_self_url())
             elif not ocm._operations:
                 messages.info(self.request, _('You did not make any changes.'))
-                return redirect(self.get_order_url())
+                return redirect(self.get_self_url())
             else:
                 new_pending_sum = self.order.pending_sum + ocm._totaldiff
                 can_auto_refund = False
@@ -1504,23 +1493,25 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
                     proposals = self.order.propose_auto_refunds(Decimal('-1.00') * new_pending_sum)
                     can_auto_refund = sum(proposals.values()) == Decimal('-1.00') * new_pending_sum
 
-                return render(request, 'pretixpresale/event/order_change_confirm.html', {
+                return render(request, self.confirm_template_name, {
                     'operations': ocm._operations,
                     'totaldiff': ocm._totaldiff,
                     'order': self.order,
                     'payment_refund_sum': self.order.payment_refund_sum,
                     'new_pending_sum': new_pending_sum,
                     'can_auto_refund': can_auto_refund,
+                    **self.get_confirm_context_data(),
                 })
 
         return self.get(request, *args, **kwargs)
 
     def _validate_total_diff(self, ocm):
-        if ocm._totaldiff < Decimal('0.00') and self.request.event.settings.change_allow_user_price == 'gte':
+        pr = self.get_price_requirement()
+        if ocm._totaldiff < Decimal('0.00') and pr == 'gte':
             raise OrderError(_('You may not change your order in a way that reduces the total price.'))
-        if ocm._totaldiff <= Decimal('0.00') and self.request.event.settings.change_allow_user_price == 'gt':
+        if ocm._totaldiff <= Decimal('0.00') and pr == 'gt':
             raise OrderError(_('You may only change your order in a way that increases the total price.'))
-        if ocm._totaldiff != Decimal('0.00') and self.request.event.settings.change_allow_user_price == 'eq':
+        if ocm._totaldiff != Decimal('0.00') and pr == 'eq':
             raise OrderError(_('You may not change your order in a way that changes the total price.'))
 
         if ocm._totaldiff > Decimal('0.00') and self.order.status == Order.STATUS_PAID:
@@ -1531,3 +1522,70 @@ class OrderChange(EventViewMixin, OrderDetailMixin, TemplateView):
             if self.order.expires < now():
                 raise OrderError(_('You may not change your order in a way that increases the total price since '
                                    'payments are no longer being accepted for this event.'))
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderChange(OrderChangeMixin, EventViewMixin, OrderDetailMixin, TemplateView):
+    template_name = "pretixpresale/event/order_change.html"
+    confirm_template_name = 'pretixpresale/event/order_change_confirm.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        self.kwargs = kwargs
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        if not self.order.user_change_allowed:
+            messages.error(request, _('You cannot change this order.'))
+            return redirect(self.get_order_url())
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_self_url(self):
+        return self.get_order_url()
+
+    def get_position_queryset(self):
+        return self.order.positions.all()
+
+    def get_price_requirement(self):
+        return self.request.event.settings.change_allow_user_price
+
+    def get_confirm_context_data(self):
+        return {}
+
+    def get_hide_prices(self):
+        return False
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderPositionChange(OrderChangeMixin, EventViewMixin, OrderPositionDetailMixin, TemplateView):
+    template_name = "pretixpresale/event/position_change.html"
+    confirm_template_name = 'pretixpresale/event/position_change_confirm.html'
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        self.kwargs = kwargs
+        if not self.position:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        if not self.position.attendee_change_allowed:
+            messages.error(request, _('You cannot change this order.'))
+            return redirect(self.get_position_url())
+        return super().dispatch(request, *args, **kwargs)
+
+    def get_self_url(self):
+        return self.get_position_url()
+
+    def get_position_queryset(self):
+        return self.order.positions.filter(Q(pk=self.position.pk) | Q(addon_to_id=self.position.id))
+
+    def get_price_requirement(self):
+        return 'eq'
+
+    def get_confirm_context_data(self):
+        return {'position': self.position}
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['position'] = self.position
+        return ctx
+
+    def get_hide_prices(self):
+        return self.request.event.settings.hide_prices_from_attendees

@@ -1703,20 +1703,29 @@ class OrderTestCase(BaseQuotaTestCase):
 
     @classscope(attr='o')
     def test_can_change_order(self):
+        self.event.settings.change_allow_attendee = True
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
                                     admission=True, allow_cancel=True)
         v = item1.variations.create(value="V")
-        OrderPosition.objects.create(order=self.order, item=item1,
-                                     variation=v, price=23)
+        op = OrderPosition.objects.create(order=self.order, item=item1,
+                                          variation=v, price=23)
         assert not self.order.user_change_allowed
+        assert not op.attendee_change_allowed
         self.event.settings.change_allow_user_variation = True
         assert self.order.user_change_allowed
+        assert op.attendee_change_allowed
+
+        self.event.settings.change_allow_attendee = False
+        assert not op.attendee_change_allowed
+        self.event.settings.change_allow_attendee = True
 
         self.event.settings.change_allow_user_variation = False
         self.order.require_approval = True
         assert not self.order.user_change_allowed
+        assert not op.attendee_change_allowed
         self.event.settings.change_allow_user_variation = True
         assert not self.order.user_change_allowed
+        assert not op.attendee_change_allowed
 
     @classscope(attr='o')
     def test_can_change_order_with_giftcard(self):
@@ -1726,10 +1735,12 @@ class OrderTestCase(BaseQuotaTestCase):
         p = OrderPosition.objects.create(order=self.order, item=item1,
                                          variation=v, price=23)
         self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_attendee = True
         self.event.organizer.issued_gift_cards.create(
             currency="EUR", issued_in=p
         )
         assert not self.order.user_change_allowed
+        assert not p.attendee_change_allowed
 
     @classscope(attr='o')
     def test_can_change_checked_in(self):
@@ -1738,12 +1749,14 @@ class OrderTestCase(BaseQuotaTestCase):
         self.order.status = Order.STATUS_PAID
         self.order.save()
         self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_attendee = True
         assert self.order.user_change_allowed
         Checkin.objects.create(
             position=self.order.positions.first(),
             list=CheckinList.objects.create(event=self.event, name='Default')
         )
         assert not self.order.user_change_allowed
+        assert not self.order.positions.first().attendee_change_allowed
 
     @classscope(attr='o')
     def test_can_change_order_multiple(self):
@@ -1758,7 +1771,9 @@ class OrderTestCase(BaseQuotaTestCase):
         OrderPosition.objects.create(order=self.order, item=item2,
                                      variation=v2, price=23)
         self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_attendee = True
         assert self.order.user_change_allowed
+        assert not self.order.positions.first().attendee_change_allowed
 
     @classscope(attr='o')
     def test_can_not_change_order(self):
@@ -1768,22 +1783,26 @@ class OrderTestCase(BaseQuotaTestCase):
         OrderPosition.objects.create(order=self.order, item=item1,
                                      variation=v, price=23)
         self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_attendee = True
         assert self.order.user_change_allowed is False
 
     @classscope(attr='o')
     def test_require_any_variation(self):
         item1 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
                                     admission=True, allow_cancel=True)
-        OrderPosition.objects.create(order=self.order, item=item1,
-                                     variation=None, price=23)
+        p = OrderPosition.objects.create(order=self.order, item=item1,
+                                         variation=None, price=23)
         self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_attendee = True
         assert self.order.user_change_allowed is False
         item2 = Item.objects.create(event=self.event, name="Ticket", default_price=23,
                                     admission=True, allow_cancel=True)
         v2 = item2.variations.create(value="V")
-        OrderPosition.objects.create(order=self.order, item=item2,
-                                     variation=v2, price=23)
+        p2 = OrderPosition.objects.create(order=self.order, item=item2,
+                                          variation=v2, price=23)
         assert self.order.user_change_allowed is True
+        assert p.attendee_change_allowed is False
+        assert p2.attendee_change_allowed is True
 
     @classscope(attr='o')
     def test_can_not_change_order_multiple(self):

@@ -34,6 +34,7 @@ from oauth2_provider.views import (
 
 from pretix.api.models import OAuthApplication
 from pretix.base.models import Organizer
+from pretix.control.views.user import RecentAuthenticationRequiredMixin
 
 logger = logging.getLogger(__name__)
 
@@ -54,7 +55,7 @@ class OAuthAllowForm(AllowForm):
             del self.fields['organizers']
 
 
-class AuthorizationView(BaseAuthorizationView):
+class AuthorizationView(RecentAuthenticationRequiredMixin, BaseAuthorizationView):
     template_name = "pretixcontrol/auth/oauth_authorization.html"
     form_class = OAuthAllowForm
 
@@ -111,6 +112,7 @@ class AuthorizationView(BaseAuthorizationView):
         self.request.user.log_action('pretix.user.oauth.authorized', user=self.request.user, data={
             'application_id': application.pk,
             'application_name': application.name,
+            'organizers': [o.pk for o in form.cleaned_data.get("organizers")] if form.cleaned_data.get("organizers") else []
         })
 
         return self.redirect(self.success_url, application)

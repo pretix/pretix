@@ -2555,6 +2555,27 @@ class OrderPosition(AbstractPosition):
                 attach_tickets=True
             )
 
+    @property
+    @scopes_disabled()
+    def attendee_change_allowed(self) -> bool:
+        """
+        Returns whether or not this order can be changed by the attendee.
+        """
+        from .items import ItemAddOn
+
+        if not self.event.settings.change_allow_attendee or not self.order.user_change_allowed:
+            return False
+
+        positions = list(
+            self.order.positions.filter(Q(pk=self.pk) | Q(addon_to_id=self.pk)).annotate(
+                has_variations=Exists(ItemVariation.objects.filter(item_id=OuterRef('item_id'))),
+            ).select_related('item').prefetch_related('issued_gift_cards')
+        )
+        return (
+            (self.order.event.settings.change_allow_user_variation and any([op.has_variations for op in positions])) or
+            (self.order.event.settings.change_allow_user_addons and ItemAddOn.objects.filter(base_item_id__in=[op.item_id for op in positions]).exists())
+        )
+
 
 class Transaction(models.Model):
     """

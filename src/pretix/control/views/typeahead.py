@@ -546,6 +546,47 @@ def checkinlist_select2(request, **kwargs):
 
 
 @event_permission_required(None)
+def itemvar_select2(request, **kwargs):
+    query = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    pagesize = 20
+    offset = (page - 1) * pagesize
+
+    choices = []
+
+    # We are very unlikely to need pagination
+    itemqs = request.event.items.prefetch_related('variations').filter(Q(name__icontains=i18ncomp(query)) | Q(internal_name__icontains=query))
+    total = itemqs.count()
+
+    for i in itemqs[offset:offset + pagesize]:
+        variations = list(i.variations.all())
+        if variations:
+            choices.append((str(i.pk), _('{product} – Any variation').format(product=i), not i.active))
+            for v in variations:
+                choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i, v.value), not v.active))
+        else:
+            choices.append((str(i.pk), str(i), not i.active))
+
+    doc = {
+        'results': [
+            {
+                'id': k,
+                'text': str(v),
+            }
+            for k, v, d in choices
+        ],
+        'pagination': {
+            "more": total >= (offset + pagesize)
+        }
+    }
+    return JsonResponse(doc)
+
+
+@event_permission_required(None)
 def itemvarquota_select2(request, **kwargs):
     query = request.GET.get('query', '')
     try:
@@ -831,3 +872,71 @@ def item_meta_values(request, organizer, event):
             )
         ]
     })
+
+
+@organizer_permission_required(("can_view_orders", "can_change_organizer_settings"))
+# This decorator is a bit of a hack since this is not technically an organizer permission, but it does the job here --
+# anyone who can see orders for any event can see the check-in log view where this is used as a filter
+def devices_select2(request, **kwargs):
+    query = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    qq = (
+        Q(name__icontains=query) | Q(hardware_brand__icontains=query) | Q(hardware_model__icontains=query) |
+        Q(unique_serial__istartswith=query)
+    )
+    try:
+        qq |= Q(device_id=int(query))
+    except ValueError:
+        pass
+    qs = request.organizer.devices.filter(qq).order_by('device_id')
+
+    total = qs.count()
+    pagesize = 20
+    offset = (page - 1) * pagesize
+    doc = {
+        'results': [
+            {
+                'id': e.pk,
+                'text': str(e),
+            }
+            for e in qs[offset:offset + pagesize]
+        ],
+        'pagination': {
+            "more": total >= (offset + pagesize)
+        }
+    }
+    return JsonResponse(doc)
+
+
+@organizer_permission_required(("can_view_orders", "can_change_organizer_settings"))
+# This decorator is a bit of a hack since this is not technically an organizer permission, but it does the job here --
+# anyone who can see orders for any event can see the check-in log view where this is used as a filter
+def gate_select2(request, **kwargs):
+    query = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    qs = request.organizer.gates.filter(Q(name__icontains=query) | Q(identifier__icontains=query)).order_by('name')
+
+    total = qs.count()
+    pagesize = 20
+    offset = (page - 1) * pagesize
+    doc = {
+        'results': [
+            {
+                'id': e.pk,
+                'text': str(e),
+            }
+            for e in qs[offset:offset + pagesize]
+        ],
+        'pagination': {
+            "more": total >= (offset + pagesize)
+        }
+    }
+    return JsonResponse(doc)

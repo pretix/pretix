@@ -63,7 +63,8 @@ from rest_framework import serializers
 from pretix.api.serializers.fields import (
     ListMultipleChoiceField, UploadedFileField,
 )
-from pretix.api.serializers.i18n import I18nField
+from pretix.api.serializers.i18n import I18nField, I18nURLField
+from pretix.base.forms import I18nURLFormField
 from pretix.base.models.tax import VAT_ID_COUNTRIES, TaxRule
 from pretix.base.reldate import (
     RelativeDateField, RelativeDateTimeField, RelativeDateWrapper,
@@ -1396,6 +1397,19 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_("Hide all unavailable dates from calendar or list views"),
+            help_text=_("This option currently only affects the calendar of this event series, not the organizer-wide "
+                        "calendar.")
+        )
+    },
+    'event_calendar_future_only': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Hide all past dates from calendar"),
+            help_text=_("This option currently only affects the calendar of this event series, not the organizer-wide "
+                        "calendar.")
         )
     },
     'allow_modifications_after_checkin': {
@@ -1468,6 +1482,19 @@ DEFAULTS = {
         'serializer_class': SerializerRelativeDateTimeField,
         'form_kwargs': dict(
             label=_("Do not allow changes after"),
+        )
+    },
+    'change_allow_attendee': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Allow individual attendees to change their ticket"),
+            help_text=_("By default, only the person who ordered the tickets can make any changes. If you check this "
+                        "box, individual attendees can also make changes. However, individual attendees can always "
+                        "only make changes that do not change the total price of the order. Such changes can always "
+                        "only be made by the main customer."),
         )
     },
     'cancel_allow_user': {
@@ -1689,14 +1716,15 @@ DEFAULTS = {
     },
     'privacy_url': {
         'default': None,
-        'type': str,
-        'form_class': forms.URLField,
+        'type': LazyI18nString,
+        'form_class': I18nURLFormField,
         'form_kwargs': dict(
             label=_("Privacy Policy URL"),
             help_text=_("This should point e.g. to a part of your website that explains how you use data gathered in "
                         "your ticket shop."),
+            widget=I18nTextInput,
         ),
-        'serializer_class': serializers.URLField,
+        'serializer_class': I18nURLField,
     },
     'confirm_texts': {
         'default': LazyI18nStringList(),

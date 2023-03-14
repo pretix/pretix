@@ -137,6 +137,7 @@ Endpoints
    :query page: The page number in case of a multi-page result set, default is 1
    :query is_public: If set to ``true``/``false``, only events with a matching value of ``is_public`` are returned.
    :query live: If set to ``true``/``false``, only events with a matching value of ``live`` are returned.
+   :query testmode: If set to ``true``/``false``, only events with a matching value of ``testmode`` are returned.
    :query has_subevents: If set to ``true``/``false``, only events with a matching value of ``has_subevents`` are returned.
    :query is_future: If set to ``true`` (``false``), only events that happen currently or in the future are (not) returned. Event series are never (always) returned.
    :query is_past: If set to ``true`` (``false``), only events that are over are (not) returned. Event series are never (always) returned.

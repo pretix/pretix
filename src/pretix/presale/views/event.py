@@ -63,7 +63,7 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import (
     ItemVariation, Quota, SeatCategoryMapping, Voucher,
 )
-from pretix.base.models.event import SubEvent
+from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.items import (
     ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
 )
@@ -74,7 +74,7 @@ from pretix.presale.ical import get_public_ical
 from pretix.presale.signals import item_description
 from pretix.presale.views.organizer import (
     EventListMixin, add_subevents_for_days, days_for_template,
-    filter_qs_by_attr, weeks_for_template,
+    filter_qs_by_attr, has_before_after, weeks_for_template,
 )
 
 from ...helpers.formats.en.formats import SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT
@@ -586,6 +586,11 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             before = datetime(self.year, self.month, 1, 0, 0, 0, tzinfo=tz) - timedelta(days=1)
             after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=tz) + timedelta(days=1)
 
+            if self.request.event.settings.event_calendar_future_only:
+                limit_before = now().astimezone(tz)
+            else:
+                limit_before = before
+
             context['date'] = date(self.year, self.month, 1)
             context['before'] = before
             context['after'] = after
@@ -593,7 +598,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             ebd = defaultdict(list)
             add_subevents_for_days(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
-                before, after, ebd, set(), self.request.event,
+                limit_before, after, ebd, set(), self.request.event,
                 self.kwargs.get('cart_namespace'),
                 voucher,
             )
@@ -606,9 +611,22 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 lambda: len(set(str(n) for n in self.request.event.subevents.order_by().values_list('name', flat=True).annotate(c=Count('*'))[:250])) != 1,
                 timeout=120,
             )
-            context['weeks'] = weeks_for_template(ebd, self.year, self.month)
+            context['weeks'] = weeks_for_template(ebd, self.year, self.month, future_only=self.request.event.settings.event_calendar_future_only)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
-            context['years'] = range(now().year - 2, now().year + 3)
+            if self.request.event.settings.event_calendar_future_only:
+                context['years'] = range(now().year, now().year + 3)
+            else:
+                context['years'] = range(now().year - 2, now().year + 3)
+
+            context['has_before'], context['has_after'] = has_before_after(
+                Event.objects.none(),
+                SubEvent.objects.filter(
+                    event=self.request.event,
+                ),
+                before,
+                after,
+                future_only=self.request.event.settings.event_calendar_future_only
+            )
         elif context['list_type'] == "week":
             self._set_week_year()
             tz = self.request.event.timezone
@@ -620,6 +638,11 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 week.sunday().year, week.sunday().month, week.sunday().day, 0, 0, 0, tzinfo=tz
             ) + timedelta(days=1)
 
+            if self.request.event.settings.event_calendar_future_only:
+                limit_before = now().astimezone(tz)
+            else:
+                limit_before = before
+
             context['date'] = week.monday()
             context['before'] = before
             context['after'] = after
@@ -627,7 +650,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             ebd = defaultdict(list)
             add_subevents_for_days(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
-                before, after, ebd, set(), self.request.event,
+                limit_before, after, ebd, set(), self.request.event,
                 self.kwargs.get('cart_namespace'),
                 voucher,
             )
@@ -640,13 +663,15 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 lambda: len(set(str(n) for n in self.request.event.subevents.order_by().values_list('name', flat=True).annotate(c=Count('*'))[:250])) != 1,
                 timeout=120,
             )
-            context['days'] = days_for_template(ebd, week)
+            context['days'] = days_for_template(ebd, week, future_only=self.request.event.settings.event_calendar_future_only)
             years = (self.year - 1, self.year, self.year + 1)
             weeks = []
             for year in years:
                 weeks += [
                     (date_fromisocalendar(year, i + 1, 1), date_fromisocalendar(year, i + 1, 7))
                     for i in range(53 if date(year, 12, 31).isocalendar()[1] == 53 else 52)
+                    if not self.request.event.settings.event_calendar_future_only or
+                    date_fromisocalendar(year, i + 1, 7) > now().astimezone(tz).replace(tzinfo=None)
                 ]
             context['weeks'] = [[w for w in weeks if w[0].year == year] for year in years]
             context['week_format'] = get_format('WEEK_FORMAT')
@@ -655,6 +680,16 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['short_month_day_format'] = get_format('SHORT_MONTH_DAY_FORMAT')
             if context['short_month_day_format'] == 'SHORT_MONTH_DAY_FORMAT':
                 context['short_month_day_format'] = SHORT_MONTH_DAY_FORMAT
+
+            context['has_before'], context['has_after'] = has_before_after(
+                Event.objects.none(),
+                SubEvent.objects.filter(
+                    event=self.request.event,
+                ),
+                before,
+                after,
+                future_only=self.request.event.settings.event_calendar_future_only
+            )
         else:
             context['subevent_list'] = self.request.event.subevents_sorted(
                 filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request)

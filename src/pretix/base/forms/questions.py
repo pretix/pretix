@@ -719,7 +719,7 @@ class BaseQuestionsForm(forms.Form):
             label = escape(q.question)  # django-bootstrap3 calls mark_safe
             required = q.required and not self.all_optional
             if q.type == Question.TYPE_BOOLEAN:
-                if q.required:
+                if required:
                     # For some reason, django-bootstrap3 does not set the required attribute
                     # itself.
                     widget = forms.CheckboxInput(attrs={'required': 'required'})

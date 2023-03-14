@@ -117,6 +117,11 @@ class OrderChangeVariationTest(BaseOrdersTest):
         )
         assert response.status_code == 302
 
+        response = self.client.get(
+            '/%s/%s/ticket/%s/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.ticket_pos.positionid, self.ticket_pos.web_secret)
+        )
+        assert response.status_code == 302
+
     def test_change_variation_paid(self):
         self.event.settings.change_allow_user_variation = True
         self.event.settings.change_allow_user_price = 'any'
@@ -153,6 +158,13 @@ class OrderChangeVariationTest(BaseOrdersTest):
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PENDING
         assert self.order.total == Decimal('35.00')
+
+        # Attendee is not allowed
+        response = self.client.get(
+            '/%s/%s/ticket/%s/%s/%s/change' % (
+                self.orga.slug, self.event.slug, self.order.code, self.ticket_pos.positionid, self.ticket_pos.web_secret)
+        )
+        assert response.status_code == 302
 
     def test_change_variation_require_higher_price(self):
         self.event.settings.change_allow_user_variation = True
@@ -1464,3 +1476,126 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             assert self.order.total == Decimal('23.00')
             r = self.order.refunds.get()
             assert r.provider == 'giftcard'
+
+    def test_attendee(self):
+        self.workshop2a.default_price = Decimal('0.00')
+        self.workshop2a.save()
+        self.event.settings.change_allow_attendee = True
+        response = self.client.post(
+            '/%s/%s/ticket/%s/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.ticket_pos.positionid, self.ticket_pos.web_secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+
+        with scopes_disabled():
+            a = self.ticket_pos.addons.get()
+            assert a.variation == self.workshop2a
+
+    def test_attendee_limited_to_own_ticket(self):
+        with scopes_disabled():
+            ticket_pos2 = OrderPosition.objects.create(
+                order=self.order,
+                item=self.ticket,
+                variation=None,
+                price=Decimal("23"),
+                attendee_name_parts={'full_name': "Peter"}
+            )
+        self.event.settings.change_allow_attendee = True
+        response = self.client.post(
+            '/%s/%s/ticket/%s/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.ticket_pos.positionid, self.ticket_pos.web_secret),
+            {
+                f'cp_{ticket_pos2.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        assert 'did not make any changes' in response.content.decode()
+
+    def test_attendee_needs_to_keep_price(self):
+        self.event.settings.change_allow_user_price = 'any'  # ignored, for attendees its always "eq"
+        self.event.settings.change_allow_attendee = True
+        response = self.client.post(
+            '/%s/%s/ticket/%s/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.ticket_pos.positionid, self.ticket_pos.web_secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+        assert 'changes' in response.content.decode()
+
+        self.workshop2a.default_price = Decimal('0.00')
+        self.workshop2a.save()
+
+        response = self.client.post(
+            '/%s/%s/ticket/%s/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.ticket_pos.positionid, self.ticket_pos.web_secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        assert 'alert-danger' not in response.content.decode()
+
+    def test_attendee_price_hidden(self):
+        self.event.settings.change_allow_attendee = True
+        response = self.client.get(
+            '/%s/%s/ticket/%s/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.ticket_pos.positionid, self.ticket_pos.web_secret),
+            follow=True
+        )
+        assert '€' not in response.content.decode()
+        self.event.settings.hide_prices_from_attendees = False
+        response = self.client.get(
+            '/%s/%s/ticket/%s/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.ticket_pos.positionid, self.ticket_pos.web_secret),
+            follow=True
+        )
+        assert '€' in response.content.decode()
+
+    def test_attendee_change_of_addons_does_not_affect_other_positions(self):
+        with scopes_disabled():
+            ticket_pos2 = OrderPosition.objects.create(
+                order=self.order,
+                item=self.ticket,
+                variation=None,
+                price=Decimal("23"),
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            a1 = OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("0"),
+                addon_to=self.ticket_pos,
+            )
+            a2 = OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("0"),
+                addon_to=ticket_pos2,
+            )
+
+        self.event.settings.change_allow_attendee = True
+
+        response = self.client.get(
+            '/%s/%s/ticket/%s/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.ticket_pos.positionid, self.ticket_pos.web_secret),
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/ticket/%s/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.ticket_pos.positionid, self.ticket_pos.web_secret),
+            form_data, follow=True
+        )
+        assert 'alert-success' in response.content.decode()
+
+        a1.refresh_from_db()
+        a2.refresh_from_db()
+        assert not a1.canceled
+        assert not a2.canceled

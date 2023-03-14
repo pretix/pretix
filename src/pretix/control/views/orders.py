@@ -2276,7 +2276,7 @@ class ExportMixin:
                 continue
 
             if self.scheduled:
-                initial = self.scheduled.export_form_data
+                initial = dict(self.scheduled.export_form_data)
 
                 test_form = ExporterForm(data=self.request.GET, prefix=ex.identifier)
                 test_form.fields = ex.export_form_fields

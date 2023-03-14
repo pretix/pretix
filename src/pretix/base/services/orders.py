@@ -47,7 +47,8 @@ from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.db.models import (
-    Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, Sum, Value,
+    Count, Exists, F, IntegerField, Max, Min, OuterRef, Q, QuerySet, Sum,
+    Value,
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.db.transaction import get_connection
@@ -1701,7 +1702,19 @@ class OrderChangeManager:
         for a in position.addons.all():
             self._operations.append(self.SplitOperation(a))
 
-    def set_addons(self, addons):
+    def set_addons(self, addons, limit_main_positions=None):
+        """
+        This is a convenience method to change the add-on products selected on an order. The input structure is similar
+        to CartManager.set_addons. It will automatically compute the correct operations to add, cancel, or change
+        positions on the order. Every existing add-on not in the input will be canceled. Availability of the
+        products is validated (with some exceptions).
+
+        :param addons: A list of dictionaries with the keys ``"addon_to"``, ``"item"``, ``"variation"`` (all ID values),
+                       ``"count"``, and ``"price"``.
+        :param limit_main_positions: By default, the method works on all methods of the order. If you set this to a
+                                     queryset or a list of positions, all other positions and their add-ons will be kept
+                                     untouched.
+        """
         if self._operations:
             raise ValueError("Setting addons should be the first/only operation")
 
@@ -1713,7 +1726,13 @@ class OrderChangeManager:
         quota_diff = Counter()  # Quota -> Number of usages
         available_categories = defaultdict(set)  # OrderPos -> Category IDs to choose from
         price_included = defaultdict(dict)  # OrderPos -> CategoryID -> bool(price is included)
-        toplevel_op = self.order.positions.filter(
+        if isinstance(limit_main_positions, QuerySet):
+            toplevel_qs = limit_main_positions
+        elif limit_main_positions is not None:
+            toplevel_qs = self.order.positions.filter(pk__in=[p.pk for p in limit_main_positions])
+        else:
+            toplevel_qs = self.order.position
+        toplevel_op = toplevel_qs.filter(
             addon_to__isnull=True
         ).prefetch_related(
             'addons', 'item__addons', 'item__addons__addon_category'

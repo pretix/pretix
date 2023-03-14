@@ -401,11 +401,11 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
         return ctx
 
 
-def has_before_after(eventqs, subeventqs, before, after):
+def has_before_after(eventqs, subeventqs, before, after, future_only=False):
     eqs = eventqs.filter(is_public=True, live=True, has_subevents=False)
     sqs = subeventqs.filter(active=True, is_public=True)
     return (
-        eqs.filter(Q(date_from__lte=before)).exists() or sqs.filter(Q(date_from__lte=before)).exists(),
+        (not future_only or before > now()) and (eqs.filter(Q(date_from__lte=before)).exists() or sqs.filter(Q(date_from__lte=before)).exists()),
         eqs.filter(Q(date_to__gte=after) | Q(date_from__gte=after)).exists() or sqs.filter(Q(date_to__gte=after) | Q(date_from__gte=after)).exists()
     )
 
@@ -413,7 +413,6 @@ def has_before_after(eventqs, subeventqs, before, after):
 def add_events_for_days(request, baseqs, before, after, ebd, timezones):
     qs = baseqs.filter(is_public=True, live=True, has_subevents=False).filter(
         Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
-        Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
         Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
     ).order_by(
         'date_from'
@@ -471,7 +470,6 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
 def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_namespace=None, voucher=None):
     qs = qs.filter(active=True, is_public=True).filter(
         Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
-        Q(Q(date_from__lte=after) & Q(date_to__gte=before)) |
         Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
     ).order_by(
         'date_from'
@@ -562,7 +560,7 @@ def sort_ev(e):
     return e['time'] or time(0, 0, 0), str(e['event'].name)
 
 
-def days_for_template(ebd, week):
+def days_for_template(ebd, week, future_only=False):
     day_format = get_format('WEEK_DAY_FORMAT')
     if day_format == 'WEEK_DAY_FORMAT':
         day_format = 'SHORT_DATE_FORMAT'
@@ -574,11 +572,13 @@ def days_for_template(ebd, week):
             'events': sorted(ebd.get(day), key=sort_ev) if day in ebd else []
         }
         for day in week.days()
+        if not future_only or day > now().astimezone(get_current_timezone()).date()
     ]
 
 
-def weeks_for_template(ebd, year, month):
+def weeks_for_template(ebd, year, month, future_only=False):
     calendar.setfirstweekday(0)  # TODO: Configurable
+    today = now().astimezone(get_current_timezone()).date()
     return [
         [
             {
@@ -594,6 +594,9 @@ def weeks_for_template(ebd, year, month):
             for day in week
         ]
         for week in calendar.monthcalendar(year, month)
+        if not future_only or (
+            any(day != 0 and date(year, month, day) > today for day in week)
+        )
     ]
 
 

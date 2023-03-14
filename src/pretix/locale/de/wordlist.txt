@@ -333,6 +333,7 @@ Veranstaltername
 Veranstalterprofil
 Veranstalterseite
 Veranstalterübersicht
+veranstalterweiten
 Veranstaltungs
 veranstaltungsweiten
 Verfügbarkeitsberechnung

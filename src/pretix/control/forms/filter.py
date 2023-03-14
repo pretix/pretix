@@ -61,7 +61,7 @@ from pretix.base.models import (
     SubEventMetaValue, Team, TeamAPIToken, TeamInvite, Voucher,
 )
 from pretix.base.signals import register_payment_providers
-from pretix.control.forms.widgets import Select2
+from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
 from pretix.control.signals import order_search_filter_q
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.database import (
@@ -383,8 +383,6 @@ class OrderFilterForm(FilterForm):
 
         if fdata.get('ordering'):
             qs = qs.order_by(*get_deterministic_ordering(Order, self.get_order_by()))
-        else:
-            qs = qs.order_by('-datetime', '-pk')
 
         if fdata.get('provider'):
             qs = qs.annotate(
@@ -2204,7 +2202,30 @@ class CheckinFilterForm(FilterForm):
         super().__init__(*args, **kwargs)
 
         self.fields['device'].queryset = self.event.organizer.devices.all().order_by('device_id')
+        self.fields['device'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:organizer.devices.select2', kwargs={
+                    'organizer': self.event.organizer.slug,
+                }),
+                'data-placeholder': _('All devices'),
+            }
+        )
+        self.fields['device'].widget.choices = self.fields['device'].choices
+        self.fields['device'].label = _('Device')
+
         self.fields['gate'].queryset = self.event.organizer.gates.all()
+        self.fields['gate'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:organizer.gates.select2', kwargs={
+                    'organizer': self.event.organizer.slug,
+                }),
+                'data-placeholder': _('All gates'),
+            }
+        )
+        self.fields['gate'].widget.choices = self.fields['gate'].choices
+        self.fields['gate'].label = _('Gate')
 
         self.fields['checkin_list'].queryset = self.event.checkin_lists.all()
         self.fields['checkin_list'].widget = Select2(
@@ -2230,6 +2251,20 @@ class CheckinFilterForm(FilterForm):
             else:
                 choices.append((str(i.pk), str(i)))
         self.fields['itemvar'].choices = choices
+
+        self.fields['itemvar'].choices = choices
+        self.fields['itemvar'].widget = Select2ItemVarQuota(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:event.items.itemvar.select2', kwargs={
+                    'event': self.event.slug,
+                    'organizer': self.event.organizer.slug,
+                }),
+                'data-placeholder': _('All products')
+            }
+        )
+        self.fields['itemvar'].required = False
+        self.fields['itemvar'].widget.choices = self.fields['itemvar'].choices
 
     def filter_qs(self, qs):
         fdata = self.cleaned_data

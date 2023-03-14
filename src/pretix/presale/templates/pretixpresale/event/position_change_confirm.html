@@ -3,25 +3,25 @@
 {% load classname %}
 {% load eventurl %}
 {% load money %}
-{% block title %}{% blocktrans trimmed with code=order.code %}
-    Change order: {{ code }}
+{% block title %}{% blocktrans trimmed %}
+    Change ticket
 {% endblocktrans %}{% endblock %}
 {% block content %}
     <h2>
-        {% blocktrans trimmed with code=order.code %}
-            Change order: {{ code }}
+        {% blocktrans trimmed %}
+            Change ticket
         {% endblocktrans %}
     </h2>
 
     <form method="post" class="form-horizontal" href="">
         {% csrf_token %}
 
-        <p>{% trans "Please confirm the following changes to your order." %}</p>
-        {% include "pretixpresale/event/fragment_change_confirm.html" %}
+        <p>{% trans "Please confirm the following changes to your ticket." %}</p>
+        {% include "pretixpresale/event/fragment_change_confirm.html" with hide_prices=request.event.settings.hide_prices_from_attendees %}
         <div class="row checkout-button-row">
             <div class="col-md-4">
                 <a class="btn btn-block btn-default btn-lg"
-                   href="{% eventurl request.event "presale:event.order.change" secret=order.secret order=order.code %}">
+                   href="{% eventurl request.event "presale:event.order.position.change" secret=position.web_secret position=position.positionid order=order.code %}">
                     {% trans "Back" %}
                 </a>
             </div>
