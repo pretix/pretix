@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
 "PO-Revision-Date: 2023-03-14 20:46+0000\n"
-"Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
+"Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -7921,6 +7921,11 @@ msgid ""
 "methods. Please note that for technical reasons, the actual time frame might "
 "be a few minutes longer before the order is marked as expired."
 msgstr ""
+"Počet minut po zadání objednávky, které musí uživatel zaplatit, aby si "
+"zachoval rezervaci. Tento údaj použijte pouze v případě, že nabízíte "
+"výhradně způsoby platby v reálném čase. Upozorňujeme, že z technických "
+"důvodů může být skutečný časový rámec o několik minut delší, než bude "
+"objednávka označena jako prošlá."
 
 #: pretix/base/settings.py:740
 msgid "Last date of payments"
@@ -8567,10 +8572,13 @@ msgid ""
 "never charged. Note that it will be your responsibility to claim the "
 "cancellation fee from the user."
 msgstr ""
+"Týká se pouze objednávek čekajících na platbu, storno poplatek za bezplatné "
+"objednávky není nikdy účtován. Upozorňujeme, že je vaše odpovědnost "
+"požadovat storno poplatek od uživatele."
 
 #: pretix/base/settings.py:1529
 msgid "Charge payment, shipping and service fees"
-msgstr ""
+msgstr "Účtování poplatků za platby, dopravu a služby"
 
 #: pretix/base/settings.py:1543
 msgid "Charge a percentual cancellation fee"
@@ -8589,6 +8597,9 @@ msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
 msgstr ""
+"Zaplacené peníze budou automaticky vráceny, pokud to způsob platby umožňuje. "
+"V opačném případě bude vytvořena manuální náhrada, kterou budete muset "
+"zpracovat ručně."
 
 #: pretix/base/settings.py:1577 pretix/control/forms/orders.py:822
 msgid "Keep a fixed cancellation fee"
@@ -8596,7 +8607,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1586
 msgid "Keep payment, shipping and service fees"
-msgstr ""
+msgstr "Udržujte poplatky za platby, dopravu a služby"
 
 #: pretix/base/settings.py:1598 pretix/control/forms/orders.py:833
 msgid "Keep a percentual cancellation fee"
@@ -8654,12 +8665,14 @@ msgstr ""
 
 #: pretix/base/settings.py:1668 pretix/base/settings.py:1678
 msgid "All refunds are issued to the original payment method"
-msgstr ""
+msgstr "Všechny náhrady jsou vydávány na původní způsob platby"
 
 #: pretix/base/settings.py:1669 pretix/base/settings.py:1679
 msgid ""
 "Customers can choose between a gift card and a refund to their payment method"
 msgstr ""
+"Zákazníci si mohou vybrat mezi dárkovou kartou a vrácením peněz na svůj "
+"způsob platby"
 
 #: pretix/base/settings.py:1670 pretix/base/settings.py:1680
 msgid "All refunds are issued as gift cards"
@@ -8968,6 +8981,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"úspěšně jsme obdrželi vaši platbu za {event}. Děkujeme!\n"
+"\n"
+"{payment_info}\n"
+"\n"
+"Údaje o své objednávce můžete změnit a zobrazit stav své\n"
+"objednávky na adrese {url}\n"
+"\n"
+"S pozdravem,\n"
+"Váš tým {event}"
 
 #: pretix/base/settings.py:2031
 #, python-brace-format
@@ -9019,6 +9043,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"dosud jsme nepřijali celou platbu za vaši objednávku na {event}.\n"
+"Mějte prosím na paměti, že vaši objednávku garantujeme pouze v případě,\n"
+"že obdržíme vaši platbu před datem {expire_date}.\n"
+"\n"
+"Informace o platbě a stav vaší objednávky si můžete prohlédnout na adrese\n"
+"{url}\n"
+"\n"
+"S pozdravem,\n"
+"Váš tým {event}"
 
 #: pretix/base/settings.py:2080
 #, python-brace-format
@@ -9165,6 +9200,19 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"schválili jsme Vaši objednávku na {event} a rádi Vás přivítáme\n"
+"na naší akci.\n"
+"\n"
+"Pokračujte prosím zaplacením objednávky do {expire_date}.\n"
+"\n"
+"Způsob platby si můžete vybrat a platbu provést zde:\n"
+"\n"
+"{url}\n"
+"\n"
+"S pozdravem,\n"
+"Váš tým {event}"
 
 #: pretix/base/settings.py:2188
 #, python-brace-format
@@ -9185,6 +9233,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"schválili jsme Vaši objednávku na {event} a rádi Vás přivítáme na naší\n"
+"akci. Vzhledem k tomu, že jste si objednali pouze bezplatnéprodukty,\n"
+"není vyžadována žádná platba.\n"
+"\n"
+"Údaje o své objednávce můžete změnit a stav objednávky si\n"
+"prohlédnout na adrese {url}\n"
+"\n"
+"S pozdravem,\n"
+"Váš tým {event}"
 
 #: pretix/base/settings.py:2205
 #, python-brace-format
@@ -9780,7 +9839,7 @@ msgstr ""
 
 #: pretix/base/settings.py:3384
 msgid "The last payment date cannot be before the end of presale."
-msgstr ""
+msgstr "Datum poslední platby nesmí být před koncem předprodeje."
 
 #: pretix/base/shredder.py:73 pretix/base/shredder.py:76
 msgid "Your event needs to be over to use this feature."
