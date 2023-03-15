@@ -1731,7 +1731,7 @@ class OrderChangeManager:
         elif limit_main_positions is not None:
             toplevel_qs = self.order.positions.filter(pk__in=[p.pk for p in limit_main_positions])
         else:
-            toplevel_qs = self.order.position
+            toplevel_qs = self.order.positions
         toplevel_op = toplevel_qs.filter(
             addon_to__isnull=True
         ).prefetch_related(
