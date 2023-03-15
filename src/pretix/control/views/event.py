@@ -712,8 +712,11 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         ctx = {}
         for p in get_available_placeholders(self.request.event, MailSettingsForm.base_context[item]).values():
             s = str(p.render_sample(self.request.event))
-            if s.strip().startswith('*'):
-                ctx[p.identifier] = s
+            if s.strip().startswith('* '):
+                ctx[p.identifier] = '<div class="placeholder" title="{}">{}</div>'.format(
+                    _('This value will be replaced based on dynamic parameters.'),
+                    markdown_compile_email(s)
+                )
             else:
                 ctx[p.identifier] = '<span class="placeholder" title="{}">{}</span>'.format(
                     _('This value will be replaced based on dynamic parameters.'),

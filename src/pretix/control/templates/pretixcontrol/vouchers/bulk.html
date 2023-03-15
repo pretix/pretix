@@ -5,7 +5,7 @@
 {% block title %}{% trans "Voucher" %}{% endblock %}
 {% block inside %}
     <h1>{% trans "Create multiple vouchers" %}</h1>
-    <form action="" method="post" class="form-horizontal" data-asynctask>
+    <form action="" method="post" class="form-horizontal" data-asynctask mail-preview-url="{% url "control:event.vouchers.bulk.mail_preview" event=request.event.slug organizer=request.event.organizer.slug %}">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         <fieldset>
@@ -82,8 +82,54 @@
         <fieldset>
             <legend>{% trans "Send out emails" %}</legend>
             {% bootstrap_field form.send layout="control" %}
-            {% bootstrap_field form.send_subject layout="horizontal" %}
-            {% bootstrap_field form.send_message layout="horizontal" %}
+
+            <div id="send_subject_panel" class="preview-panel form-group" for="send_subject">
+                {% with field=form.send_subject item="send_subject" %}
+                    <label class="col-md-3 control-label">{{ field.label }}</label>
+                    <div class="col-md-9">
+                        <ul class="nav nav-tabs">
+                            <li role="presentation" class="active">
+                                <a data-toggle="tab" type="edit" href="#{{ item }}_edit"><i class="fa fa-pencil-square-o fa-fw"></i> {% trans "Edit" %}</a>
+                            </li>
+                            <li role="presentation">
+                                <a data-toggle="tab" type="preview" href="#{{ item }}_preview"><i class="fa fa-tv fa-fw"></i> {% trans "Preview" %}</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="{{ item }}_edit" class="tab-pane fade in active">
+                                {% bootstrap_field field show_label=False form_group_class="" %}
+                            </div>
+                            <div id="{{ item }}_preview" class="tab-pane mail-preview-group">
+                                <div lang="all" for="{{ item }}" class="mail-preview"></div>
+                            </div>
+                        </div>
+                    </div>
+                {% endwith %}
+            </div>
+            <div id="send_message_panel" class="preview-panel form-group" for="send_message">
+                {% with field=form.send_message item="send_message" %}
+                    <label class="col-md-3 control-label">{{ field.label }}</label>
+                    <div class="col-md-9">
+                        <ul class="nav nav-tabs">
+                            <li role="presentation" class="active">
+                                <a data-toggle="tab" type="edit" href="#{{ item }}_edit"><i class="fa fa-pencil-square-o fa-fw"></i> {% trans "Edit" %}</a>
+                            </li>
+                            <li role="presentation">
+                                <a data-toggle="tab" type="preview" href="#{{ item }}_preview"><i class="fa fa-tv fa-fw"></i> {% trans "Preview" %}</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content">
+                            <div id="{{ item }}_edit" class="tab-pane fade in active">
+                                {% bootstrap_field field show_label=False form_group_class="" %}
+                            </div>
+                            <div id="{{ item }}_preview" class="tab-pane mail-preview-group">
+                                <div lang="all" for="{{ item }}" class="mail-preview"></div>
+                            </div>
+                        </div>
+                    </div>
+                {% endwith %}
+            </div>
+
             {% bootstrap_field form.send_recipients layout="horizontal" %}
         </fieldset>
         {% eventsignal request.event "pretix.control.signals.voucher_form_html" form=form %}
