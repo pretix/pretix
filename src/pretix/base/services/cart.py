@@ -1141,7 +1141,7 @@ class CartManager:
                             custom_price_input=op.custom_price_input,
                             custom_price_input_is_net=op.custom_price_input_is_net,
                             line_price_gross=line_price.gross,
-                            tax_rate=line_price.tax,
+                            tax_rate=line_price.rate,
                             price=line_price.gross,
                         )
                         if self.event.settings.attendee_names_asked:
@@ -1188,7 +1188,7 @@ class CartManager:
                                         custom_price_input=b.custom_price_input,
                                         custom_price_input_is_net=b.custom_price_input_is_net,
                                         line_price_gross=bline_price.gross,
-                                        tax_rate=bline_price.tax,
+                                        tax_rate=bline_price.rate,
                                         price=bline_price.gross,
                                         is_bundled=True
                                     ))
