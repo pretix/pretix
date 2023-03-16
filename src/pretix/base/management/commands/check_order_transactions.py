@@ -44,8 +44,8 @@ class Command(BaseCommand):
                     OrderPosition.objects.filter(
                         order=OuterRef('pk')
                     ).order_by().values('order').annotate(p=Sum('price')).values('p'),
-                    output_field=models.DecimalField(decimal_places=2, max_digits=10)
-                ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=10)
+                    output_field=models.DecimalField(decimal_places=2, max_digits=13)
+                ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=13)
             ),
             position_cnt=Case(
                 When(Q(status__in=('e', 'c')) | Q(require_approval=True), then=Value(0)),
@@ -64,16 +64,16 @@ class Command(BaseCommand):
                     OrderFee.objects.filter(
                         order=OuterRef('pk')
                     ).order_by().values('order').annotate(p=Sum('value')).values('p'),
-                    output_field=models.DecimalField(decimal_places=2, max_digits=10)
-                ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=10)
+                    output_field=models.DecimalField(decimal_places=2, max_digits=13)
+                ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=13)
             ),
             tx_total=Coalesce(
                 Subquery(
                     Transaction.objects.filter(
                         order=OuterRef('pk')
                     ).order_by().values('order').annotate(p=Sum(F('price') * F('count'))).values('p'),
-                    output_field=models.DecimalField(decimal_places=2, max_digits=10)
-                ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=10)
+                    output_field=models.DecimalField(decimal_places=2, max_digits=13)
+                ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=13)
             ),
             tx_cnt=Coalesce(
                 Subquery(
@@ -81,15 +81,15 @@ class Command(BaseCommand):
                         order=OuterRef('pk'),
                         item__isnull=False,
                     ).order_by().values('order').annotate(p=Sum(F('count'))).values('p'),
-                    output_field=models.DecimalField(decimal_places=2, max_digits=10)
-                ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=10)
+                    output_field=models.DecimalField(decimal_places=2, max_digits=13)
+                ), Value(0), output_field=models.DecimalField(decimal_places=2, max_digits=13)
             ),
         ).annotate(
             correct_total=Case(
                 When(Q(status=Order.STATUS_CANCELED) | Q(status=Order.STATUS_EXPIRED) | Q(require_approval=True),
                      then=Value(0)),
                 default=F('position_total') + F('fee_total'),
-                output_field=models.DecimalField(decimal_places=2, max_digits=10)
+                output_field=models.DecimalField(decimal_places=2, max_digits=13)
             ),
         ).exclude(
             total=F('position_total') + F('fee_total'),

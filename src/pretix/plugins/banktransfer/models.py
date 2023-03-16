@@ -83,7 +83,7 @@ class BankTransaction(models.Model):
     checksum = models.CharField(max_length=190, db_index=True)
     payer = models.TextField(blank=True)
     reference = models.TextField(blank=True)
-    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    amount = models.DecimalField(max_digits=13, decimal_places=2)
     date = models.CharField(max_length=50)
     date_parsed = models.DateField(null=True)
     iban = models.CharField(max_length=250, blank=True)

@@ -116,7 +116,7 @@ class Discount(LoggedModel):
     condition_min_value = models.DecimalField(
         verbose_name=_('Minimum gross value of matching products'),
         decimal_places=2,
-        max_digits=10,
+        max_digits=13,
         default=Decimal('0.00'),
     )
 

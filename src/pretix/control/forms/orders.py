@@ -167,7 +167,7 @@ class CancelForm(ForceQuotaConfirmationForm):
     )
     cancellation_fee = forms.DecimalField(
         required=False,
-        max_digits=10, decimal_places=2,
+        max_digits=13, decimal_places=2,
         localize=True,
         label=_('Keep a cancellation fee of'),
         help_text=_('If you keep a fee, all positions within this order will be canceled and the order will be reduced '
@@ -213,7 +213,7 @@ class MarkPaidForm(ConfirmPaymentForm):
     )
     amount = forms.DecimalField(
         required=True,
-        max_digits=10, decimal_places=2,
+        max_digits=13, decimal_places=2,
         localize=True,
         label=_('Payment amount'),
     )
@@ -318,7 +318,7 @@ class OrderPositionAddForm(forms.Form):
     )
     price = forms.DecimalField(
         required=False,
-        max_digits=10, decimal_places=2,
+        max_digits=13, decimal_places=2,
         localize=True,
         label=_('Gross price'),
         help_text=_("Including taxes, if any. Keep empty for the product's default price")
@@ -444,7 +444,7 @@ class OrderPositionChangeForm(forms.Form):
     )
     price = forms.DecimalField(
         required=False,
-        max_digits=10, decimal_places=2,
+        max_digits=13, decimal_places=2,
         localize=True,
         label=_('New price (gross)')
     )
@@ -566,7 +566,7 @@ class OrderPositionChangeForm(forms.Form):
 class OrderFeeChangeForm(forms.Form):
     value = forms.DecimalField(
         required=False,
-        max_digits=10, decimal_places=2,
+        max_digits=13, decimal_places=2,
         localize=True,
         label=_('New price (gross)')
     )
@@ -731,7 +731,7 @@ class OrderRefundForm(forms.Form):
         )
     )
     partial_amount = forms.DecimalField(
-        required=False, max_digits=10, decimal_places=2,
+        required=False, max_digits=13, decimal_places=2,
         localize=True
     )
 
@@ -820,18 +820,18 @@ class EventCancelForm(forms.Form):
     )
     keep_fee_fixed = forms.DecimalField(
         label=_("Keep a fixed cancellation fee"),
-        max_digits=10, decimal_places=2,
+        max_digits=13, decimal_places=2,
         required=False
     )
     keep_fee_per_ticket = forms.DecimalField(
         label=_("Keep a fixed cancellation fee per ticket"),
         help_text=_("Free tickets and add-on products are not counted"),
-        max_digits=10, decimal_places=2,
+        max_digits=13, decimal_places=2,
         required=False
     )
     keep_fee_percentage = forms.DecimalField(
         label=_("Keep a percentual cancellation fee"),
-        max_digits=10, decimal_places=2,
+        max_digits=13, decimal_places=2,
         required=False
     )
     keep_fees = forms.MultipleChoiceField(

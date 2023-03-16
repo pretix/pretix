@@ -213,7 +213,7 @@ class Voucher(LoggedModel):
         verbose_name=_("Maximum discount budget"),
         help_text=_("This is the maximum monetary amount that will be discounted using this voucher across all usages. "
                     "If this is sum reached, the voucher can no longer be used."),
-        decimal_places=2, max_digits=10,
+        decimal_places=2, max_digits=13,
         null=True, blank=True
     )
     valid_until = models.DateTimeField(
@@ -243,7 +243,7 @@ class Voucher(LoggedModel):
     )
     value = models.DecimalField(
         verbose_name=_("Voucher value"),
-        decimal_places=2, max_digits=10, null=True, blank=True,
+        decimal_places=2, max_digits=13, null=True, blank=True,
     )
     item = models.ForeignKey(
         Item, related_name='vouchers',
@@ -599,7 +599,7 @@ class Voucher(LoggedModel):
                 Order.STATUS_PENDING
             ]
         ).order_by().values('voucher_id').annotate(s=Sum('voucher_budget_use')).values('s')
-        return qs.annotate(budget_used_orders=Coalesce(Subquery(opq, output_field=models.DecimalField(max_digits=10, decimal_places=2)), Decimal('0.00')))
+        return qs.annotate(budget_used_orders=Coalesce(Subquery(opq, output_field=models.DecimalField(max_digits=13, decimal_places=2)), Decimal('0.00')))
 
     def budget_used(self):
         ops = OrderPosition.objects.filter(

@@ -197,7 +197,7 @@ class GiftCardViewSet(viewsets.ModelViewSet):
     @transaction.atomic()
     def transact(self, request, **kwargs):
         gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
-        value = serializers.DecimalField(max_digits=10, decimal_places=2).to_internal_value(
+        value = serializers.DecimalField(max_digits=13, decimal_places=2).to_internal_value(
             request.data.get('value')
         )
         text = serializers.CharField(allow_blank=True, allow_null=True).to_internal_value(

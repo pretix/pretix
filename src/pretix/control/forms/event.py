@@ -1568,7 +1568,7 @@ class QuickSetupProductForm(I18nForm):
     )
     default_price = forms.DecimalField(
         label=_("Price (optional)"),
-        max_digits=7, decimal_places=2, required=False,
+        max_digits=13, decimal_places=2, required=False,
         localize=True,
         widget=forms.TextInput(
             attrs={

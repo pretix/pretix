@@ -781,7 +781,7 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
     attendee_name = serializers.CharField(required=False, allow_null=True)
     seat = serializers.CharField(required=False, allow_null=True)
     price = serializers.DecimalField(required=False, allow_null=True, decimal_places=2,
-                                     max_digits=10)
+                                     max_digits=13)
     voucher = serializers.SlugRelatedField(slug_field='code', queryset=Voucher.objects.none(),
                                            required=False, allow_null=True)
     country = CompatibleCountryField(source='*')

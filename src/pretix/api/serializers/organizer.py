@@ -128,7 +128,7 @@ class MembershipSerializer(I18nAwareModelSerializer):
 
 
 class GiftCardSerializer(I18nAwareModelSerializer):
-    value = serializers.DecimalField(max_digits=10, decimal_places=2, min_value=Decimal('0.00'))
+    value = serializers.DecimalField(max_digits=13, decimal_places=2, min_value=Decimal('0.00'))
 
     def validate(self, data):
         data = super().validate(data)

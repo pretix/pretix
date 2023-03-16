@@ -1507,7 +1507,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     @action(detail=True, methods=['POST'])
     def refund(self, request, **kwargs):
         payment = self.get_object()
-        amount = serializers.DecimalField(max_digits=10, decimal_places=2).to_internal_value(
+        amount = serializers.DecimalField(max_digits=13, decimal_places=2).to_internal_value(
             request.data.get('amount', str(payment.amount))
         )
         if 'mark_refunded' in request.data:

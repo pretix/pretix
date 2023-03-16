@@ -47,7 +47,7 @@ class OrderPositionCreateForExistingOrderSerializer(OrderPositionCreateSerialize
     attendee_name = serializers.CharField(required=False, allow_null=True)
     seat = serializers.CharField(required=False, allow_null=True)
     price = serializers.DecimalField(required=False, allow_null=True, decimal_places=2,
-                                     max_digits=10)
+                                     max_digits=13)
     country = CompatibleCountryField(source='*')
 
     class Meta:

@@ -129,7 +129,7 @@ class GiftCardTransaction(models.Model):
     )
     value = models.DecimalField(
         decimal_places=2,
-        max_digits=10
+        max_digits=13
     )
     order = models.ForeignKey(
         'Order',

@@ -164,7 +164,7 @@ class SubEventItem(models.Model):
     """
     subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
     item = models.ForeignKey('Item', on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    price = models.DecimalField(max_digits=13, decimal_places=2, null=True, blank=True)
     disabled = models.BooleanField(default=False, verbose_name=_('Disable product for this date'))
     available_from = models.DateTimeField(
         verbose_name=_("Available from"),
@@ -220,7 +220,7 @@ class SubEventItemVariation(models.Model):
     """
     subevent = models.ForeignKey('SubEvent', on_delete=models.CASCADE)
     variation = models.ForeignKey('ItemVariation', on_delete=models.CASCADE)
-    price = models.DecimalField(max_digits=7, decimal_places=2, null=True, blank=True)
+    price = models.DecimalField(max_digits=13, decimal_places=2, null=True, blank=True)
     disabled = models.BooleanField(default=False, verbose_name=_('Disable product for this date'))
     available_from = models.DateTimeField(
         verbose_name=_("Available from"),
@@ -407,7 +407,7 @@ class Item(LoggedModel):
         help_text=_("If this product has multiple variations, you can set different prices for each of the "
                     "variations. If a variation does not have a special price or if you do not have variations, "
                     "this price will be used."),
-        max_digits=7, decimal_places=2, null=True
+        max_digits=13, decimal_places=2, null=True
     )
     free_price = models.BooleanField(
         default=False,
@@ -538,7 +538,7 @@ class Item(LoggedModel):
     original_price = models.DecimalField(
         verbose_name=_('Original price'),
         blank=True, null=True,
-        max_digits=7, decimal_places=2,
+        max_digits=13, decimal_places=2,
         help_text=_('If set, this will be displayed next to the current price to show that the current price is a '
                     'discounted one. This is just a cosmetic setting and will not actually impact pricing.')
     )
@@ -952,14 +952,14 @@ class ItemVariation(models.Model):
         verbose_name=_("Position")
     )
     default_price = models.DecimalField(
-        decimal_places=2, max_digits=7,
+        decimal_places=2, max_digits=13,
         null=True, blank=True,
         verbose_name=_("Default price"),
     )
     original_price = models.DecimalField(
         verbose_name=_('Original price'),
         blank=True, null=True,
-        max_digits=7, decimal_places=2,
+        max_digits=13, decimal_places=2,
         help_text=_('If set, this will be displayed next to the current price to show that the current price is a '
                     'discounted one. This is just a cosmetic setting and will not actually impact pricing.')
     )
@@ -1304,7 +1304,7 @@ class ItemBundle(models.Model):
     )
     designated_price = models.DecimalField(
         default=Decimal('0.00'), blank=True,
-        decimal_places=2, max_digits=10,
+        decimal_places=2, max_digits=13,
         verbose_name=_('Designated price part'),
         help_text=_('If set, it will be shown that this bundled item is responsible for the given value of the total '
                     'gross price. This might be important in cases of mixed taxation, but can be kept blank otherwise. This '

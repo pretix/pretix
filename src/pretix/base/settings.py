@@ -1512,7 +1512,7 @@ DEFAULTS = {
         'form_class': forms.DecimalField,
         'serializer_class': serializers.DecimalField,
         'serializer_kwargs': dict(
-            max_digits=10, decimal_places=2
+            max_digits=13, decimal_places=2
         ),
         'form_kwargs': dict(
             label=_("Charge a fixed cancellation fee"),
@@ -1537,7 +1537,7 @@ DEFAULTS = {
         'form_class': forms.DecimalField,
         'serializer_class': serializers.DecimalField,
         'serializer_kwargs': dict(
-            max_digits=10, decimal_places=2
+            max_digits=13, decimal_places=2
         ),
         'form_kwargs': dict(
             label=_("Charge a percentual cancellation fee"),
@@ -1571,7 +1571,7 @@ DEFAULTS = {
         'form_class': forms.DecimalField,
         'serializer_class': serializers.DecimalField,
         'serializer_kwargs': dict(
-            max_digits=10, decimal_places=2
+            max_digits=13, decimal_places=2
         ),
         'form_kwargs': dict(
             label=_("Keep a fixed cancellation fee"),
@@ -1592,7 +1592,7 @@ DEFAULTS = {
         'form_class': forms.DecimalField,
         'serializer_class': serializers.DecimalField,
         'serializer_kwargs': dict(
-            max_digits=10, decimal_places=2
+            max_digits=13, decimal_places=2
         ),
         'form_kwargs': dict(
             label=_("Keep a percentual cancellation fee"),
@@ -1631,10 +1631,10 @@ DEFAULTS = {
         'form_class': forms.DecimalField,
         'serializer_class': serializers.DecimalField,
         'serializer_kwargs': dict(
-            max_digits=10, decimal_places=2
+            max_digits=13, decimal_places=2
         ),
         'form_kwargs': dict(
-            max_digits=10, decimal_places=2,
+            max_digits=13, decimal_places=2,
             label=_("Step size for reduction amount"),
             help_text=_('By default, customers can choose an arbitrary amount for you to keep. If you set this to e.g. '
                         '10, they will only be able to choose values in increments of 10.')
