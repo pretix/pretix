@@ -70,7 +70,7 @@ def get_price(item: Item, variation: ItemVariation = None,
     elif item.free_price and custom_price is not None and custom_price != "":
         if not isinstance(custom_price, Decimal):
             custom_price = Decimal(str(custom_price).replace(",", "."))
-        if custom_price > 100000000:
+        if custom_price > 99_999_999_999:
             raise ValueError('price_too_high')
 
         price = tax_rule.tax(price, invoice_address=invoice_address)

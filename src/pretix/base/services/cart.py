@@ -726,7 +726,7 @@ class CartManager:
             custom_price = None
             if item.free_price and i.get('price'):
                 custom_price = Decimal(str(i.get('price')).replace(",", "."))
-                if custom_price > 100000000:
+                if custom_price > 99_999_999_999:
                     raise ValueError('price_too_high')
 
             op = self.AddOperation(
@@ -841,7 +841,7 @@ class CartManager:
             custom_price = None
             if item.free_price and a.get('price'):
                 custom_price = Decimal(str(a.get('price')).replace(",", "."))
-                if custom_price > 100000000:
+                if custom_price > 99_999_999_999:
                     raise ValueError('price_too_high')
 
             # Fix positions with wrong price (TODO: happens out-of-cartmanager-transaction and therefore a little hacky)

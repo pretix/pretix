@@ -2843,7 +2843,7 @@ class CartPosition(AbstractPosition):
         # Migrate from pre-discounts position
         if self.item.free_price and self.custom_price_input is None:
             custom_price = self.price
-            if custom_price > 100000000:
+            if custom_price > 99_999_999_999:
                 raise ValueError('price_too_high')
             self.custom_price_input = custom_price
             self.custom_price_input_is_net = not False
