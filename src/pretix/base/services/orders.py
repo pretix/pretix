@@ -189,6 +189,7 @@ error_messages = {
         'min'
     ),
     'addon_no_multi': gettext_lazy('You can select every add-ons from the category %(cat)s for the product %(base)s at most once.'),
+    'addon_already_checked_in': gettext_lazy('You cannot remove the position %(addon)s since it has already been checked in.'),
 }
 
 logger = logging.getLogger(__name__)
@@ -1896,6 +1897,12 @@ class OrderChangeManager:
                     for a in current_addons[cp][k][:current_num - input_num]:
                         if a.canceled:
                             continue
+                        if a.checkins.exists():
+                            raise OrderError(
+                                error_messages['addon_already_checked_in'] % {
+                                    'addon': str(a.item.name),
+                                }
+                            )
                         self.cancel(a)
 
     def _check_seats(self):

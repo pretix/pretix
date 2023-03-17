@@ -626,7 +626,10 @@ class Order(LockModel, LoggedModel):
                 has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk')))
             ).select_related('item').prefetch_related('issued_gift_cards')
         )
-        cancelable = all([op.item.allow_cancel and not op.has_checkin for op in positions])
+        if self.event.settings.change_allow_user_if_checked_in:
+            cancelable = all([op.item.allow_cancel for op in positions])
+        else:
+            cancelable = all([op.item.allow_cancel and not op.has_checkin for op in positions])
         if not cancelable or not positions:
             return False
         for op in positions:

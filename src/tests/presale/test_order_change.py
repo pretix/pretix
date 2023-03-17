@@ -122,6 +122,25 @@ class OrderChangeVariationTest(BaseOrdersTest):
         )
         assert response.status_code == 302
 
+    def test_change_with_checkin(self):
+        with scopes_disabled():
+            shirt_pos = OrderPosition.objects.create(
+                order=self.order,
+                item=self.shirt,
+                variation=self.shirt_red,
+                price=Decimal("14"),
+            )
+            shirt_pos.checkins.create(list=self.event.checkin_lists.create(name="Test"))
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 302
+        self.event.settings.change_allow_user_if_checked_in = True
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 302
+
     def test_change_variation_paid(self):
         self.event.settings.change_allow_user_variation = True
         self.event.settings.change_allow_user_price = 'any'
@@ -745,6 +764,40 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             assert a.canceled
             self.order.refresh_from_db()
             assert self.order.total == Decimal('23.00')
+
+    def test_remove_addon_checked_in(self):
+        with scopes_disabled():
+            self.event.settings.change_allow_user_if_checked_in = True
+            op = OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            op.checkins.create(list=self.event.checkin_lists.create(name="Test"))
+            self.order.total += Decimal("12")
+            self.order.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}]')[0].attrs['checked']
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert 'alert-danger' in response.content.decode()
+        assert 'You cannot remove the position' in response.content.decode()
 
     def test_increase_existing_addon_free_price_net(self):
         self.event.settings.display_net_prices = True

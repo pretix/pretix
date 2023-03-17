@@ -690,6 +690,7 @@ class CancelSettingsForm(SettingsForm):
         'change_allow_user_price',
         'change_allow_user_until',
         'change_allow_user_addons',
+        'change_allow_user_if_checked_in',
         'change_allow_attendee',
     ]
 

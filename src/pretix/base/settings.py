@@ -1484,6 +1484,19 @@ DEFAULTS = {
             label=_("Do not allow changes after"),
         )
     },
+    'change_allow_user_if_checked_in': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Allow change even though the ticket has already been checked in"),
+            help_text=_("By default, order changes are disabled after any ticket in the order has been checked in. "
+                        "If you check this box, this requirement is lifted. It is still not possible to remove an "
+                        "add-on product that has already been checked in individually. Use with care, and preferably "
+                        "only in combination with a limitation on price changes above."),
+        )
+    },
     'change_allow_attendee': {
         'default': 'False',
         'type': bool,
