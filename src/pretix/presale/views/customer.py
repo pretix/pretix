@@ -690,7 +690,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
             if nonce != request.session.get(f'pretix_customerauth_{self.provider.pk}_nonce'):
                 return self._fail(
                     _('Login was not successful. Error message: "{error}".').format(
-                        error='invalid nonce',
+                        error='invalid one-time token',
                     ),
                     popup_origin,
                 )
