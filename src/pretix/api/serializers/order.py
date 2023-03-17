@@ -381,11 +381,9 @@ class PdfDataSerializer(serializers.Field):
                 res['meta:' + k] = v
 
             if instance.variation_id:
-                print(instance, instance.variation, instance.variation_id, instance.item)
                 if not hasattr(instance.variation, '_cached_meta_data'):
                     instance.variation.item = instance.item  # saves some database lookups
                     instance.variation._cached_meta_data = instance.variation.meta_data
-                print(instance.variation._cached_meta_data.items())
                 for k, v in instance.variation._cached_meta_data.items():
                     res['itemmeta:' + k] = v
             else:
