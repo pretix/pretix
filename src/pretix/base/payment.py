@@ -1125,6 +1125,12 @@ class ManualPayment(BasePaymentProvider):
                     widget=I18nTextarea,
                     validators=[PlaceholderValidator(['{order}', '{amount}', '{currency}', '{amount_with_currency}'])],
                 )),
+                ('invoice_immediately',
+                 forms.BooleanField(
+                     label=_('Create an invoice for orders using bank transfer immediately if the event is otherwise '
+                             'configured to create invoices after payment is completed.'),
+                     required=False,
+                 )),
             ] + list(super().settings_form_fields.items())
         )
         d.move_to_end('_enabled', last=False)
@@ -1163,6 +1169,10 @@ class ManualPayment(BasePaymentProvider):
         return rich_text(
             format_map(self.settings.get('pending_description', as_type=LazyI18nString), self.format_map(payment.order, payment))
         )
+
+    @property
+    def requires_invoice_immediately(self):
+        return self.settings.get('invoice_immediately', False, as_type=bool)
 
 
 class OffsettingProvider(BasePaymentProvider):
