@@ -184,10 +184,10 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
                 'forbidden': self.get_queryset().filter(voucher__isnull=False),
             })
         elif request.POST.get('action') == 'delete_confirm':
-            for obj in self.get_queryset(force_filtered=True):
-                if not obj.voucher_id:
-                    obj.log_action('pretix.event.orders.waitinglist.deleted', user=self.request.user)
-                    obj.delete()
+            for obj in self.get_queryset():
+                # if not obj.voucher_id:
+                obj.log_action('pretix.event.orders.waitinglist.deleted', user=self.request.user)
+                obj.delete()
             messages.success(request, _('The selected entries have been deleted.'))
             return self._redirect_back()
 
@@ -464,7 +464,7 @@ class EntryDelete(EventPermissionRequiredMixin, CompatDeleteView):
         try:
             return self.request.event.waitinglistentries.get(
                 id=self.kwargs['entry'],
-                voucher__isnull=True,
+                # voucher__isnull=True,
             )
         except WaitingListEntry.DoesNotExist:
             raise Http404(_("The requested entry does not exist."))

@@ -258,7 +258,7 @@
                             {% endif %}
                         </td>
                         <td class="text-right flip">
-                            {% if not e.voucher %}
+<!--                            {% if not e.voucher %}-->
                                 <button name="move_top" value="{{ e.pk }}" class="btn btn-default btn-sm"
                                         data-toggle="tooltip" title="{% trans "Move to the top of the list" %}">
                                     <span class="fa fa-thumbs-up"></span>
@@ -267,23 +267,27 @@
                                     data-toggle="tooltip" title="{% trans "Move to the end of the list" %}">
                                     <span class="fa fa-thumbs-down"></span>
                                 </button>
-                                {% if request.event.has_subevents %}
-                                    <a href="{% url "control:event.orders.waitinglist.transfer" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}"
-                                       class="btn btn-default btn-sm" title="{% trans "Transfer to other date" context "subevent" %}"
-                                        data-toggle="tooltip">
-                                        <i class="fa fa-calendar" aria-hidden="true"></i>
-                                    </a>
-                                {% endif %}
-                                <a href="{% url "control:event.orders.waitinglist.delete" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-                            {% else %}
-                                <button class="btn btn-default btn-sm disabled">
-                                    <span class="fa fa-thumbs-up"></span>
-                                </button>
-                                <button class="btn btn-default btn-sm disabled">
-                                    <span class="fa fa-thumbs-down"></span>
-                                </button>
-                                <span class="btn btn-danger btn-sm disabled"><i class="fa fa-trash"></i></span>
+                            {% if not e.voucher %}
+                            <a href="{% url "control:event.orders.waitinglist.delete" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             {% endif %}
+<!--                                {% if request.event.has_subevents %}-->
+<!--                                    <a href="{% url "control:event.orders.waitinglist.transfer" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}"-->
+<!--                                       class="btn btn-default btn-sm" title="{% trans "Transfer to other date" context "subevent" %}"-->
+<!--                                        data-toggle="tooltip">-->
+<!--                                        <i class="fa fa-calendar" aria-hidden="true"></i>-->
+<!--                                    </a>-->
+<!--                                {% endif %}-->
+<!--                                <a href="{% url "control:event.orders.waitinglist.delete" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>-->
+<!--                            {% else %}-->
+<!--                                <button class="btn btn-default btn-sm disabled">-->
+<!--                                    <span class="fa fa-thumbs-up"></span>-->
+<!--                                </button>-->
+<!--                                <button class="btn btn-default btn-sm disabled">-->
+<!--                                    <span class="fa fa-thumbs-down"></span>-->
+<!--                                </button>-->
+                                <a href="{% url "control:event.orders.waitinglist.delete" organizer=request.event.organizer.slug event=request.event.slug entry=e.id %}?next={{ request.get_full_path|urlencode }}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+<!--                                <span class="btn btn-danger btn-sm disabled"><i class="fa fa-trash"></i></span>-->
+<!--                            {% endif %}-->
                         </td>
                     </tr>
                 {% endfor %}
