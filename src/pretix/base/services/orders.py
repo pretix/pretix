@@ -1609,6 +1609,7 @@ class OrderChangeManager:
                                            override_tax_rate=new_rate)
                 self._totaldiff += new_tax.gross - pos.price
                 self._operations.append(self.PriceOperation(pos, new_tax, new_tax.gross - pos.price))
+                self._invoice_dirty = True
 
     def cancel_fee(self, fee: OrderFee):
         self._totaldiff -= fee.value

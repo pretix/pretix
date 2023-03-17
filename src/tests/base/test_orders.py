@@ -1736,6 +1736,20 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.invoices.count() == 3
 
     @classscope(attr='o')
+    def test_reissue_invoice_after_tax_change(self):
+        generate_invoice(self.order)
+        self.tr7.rate = Decimal('18.00')
+        self.tr7.save()
+        assert self.order.invoices.count() == 1
+        self.ocm.recalculate_taxes(keep='gross')
+        print(self.ocm._operations)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.invoices.count() == 3
+        new_inv = self.order.invoices.get(is_cancellation=False, refered__isnull=True)
+        assert new_inv.lines.first().tax_rate == Decimal('18.00')
+
+    @classscope(attr='o')
     def test_no_new_invoice_for_free_order(self):
         generate_invoice(self.order)
         assert self.order.invoices.count() == 1
