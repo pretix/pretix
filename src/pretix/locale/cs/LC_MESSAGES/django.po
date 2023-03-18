@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-04-03 01:00+0000\n"
+"PO-Revision-Date: 2023-05-30 21:21+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
-"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
-">\n"
+"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -7300,8 +7300,7 @@ msgstr "Povolení odepřeno."
 
 #: pretix/base/services/export.py:215
 msgid "Your exported data exceeded the size limit for scheduled exports."
-msgstr ""
-"Vaše exportovaná data překročila limit velikosti pro plánované exporty."
+msgstr "Vaše exportovaná data překročila limit velikosti pro plánované exporty."
 
 #: pretix/base/services/invoices.py:103
 #, python-brace-format
@@ -9455,8 +9454,8 @@ msgstr ""
 "\n"
 "byli jste přihlášeni na {event}.\n"
 "\n"
-"Podrobnosti a stav Vašeho lístku si můžete prohlédnout na následující "
-"adrese:\n"
+"Podrobnosti a stav Vašeho lístku si můžete prohlédnout na následující adrese:"
+"\n"
 "{url}\n"
 "\n"
 "S pozdravem,\n"
@@ -9562,13 +9561,13 @@ msgid ""
 "vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
 "Tento soubor bude přiložen k prvnímu e-mailu, který odešleme u každé nové "
-"objednávky. Proto bude kombinován s texty \"Podána objednávka\", "
-"\"Objednávka zdarma\" nebo \"Přijatá objednávka\" z výše uvedených. Bude "
-"zasílán jak kontaktům na objednávky, tak účastníkům. Můžete jej použít např. "
-"k zaslání podmínek služby. Nepoužívejte jej k zasílání neveřejných "
-"informací, protože tento soubor může být odeslán před potvrzením platby nebo "
-"schválením objednávky. Aby tento důležitý e-mail nešel do spamu, můžete "
-"odesílat pouze soubory PDF o velikosti do {size} MB."
+"objednávky. Proto bude kombinován s texty \"Podána objednávka\", \"Objednávka"
+" zdarma\" nebo \"Přijatá objednávka\" z výše uvedených. Bude zasílán jak "
+"kontaktům na objednávky, tak účastníkům. Můžete jej použít např. k zaslání "
+"podmínek služby. Nepoužívejte jej k zasílání neveřejných informací, protože "
+"tento soubor může být odeslán před potvrzením platby nebo schválením "
+"objednávky. Aby tento důležitý e-mail nešel do spamu, můžete odesílat pouze "
+"soubory PDF o velikosti do {size} MB."
 
 #: pretix/base/settings.py:2148
 #, python-brace-format
@@ -13915,8 +13914,8 @@ msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
 "\"{new_event}\" ({new_price})."
 msgstr ""
-"Pozice #{posid}: Datum akce \"{old_event}\" ({old_price}) změněno na "
-"\"{new_event}\" ({new_price})."
+"Pozice #{posid}: Datum akce \"{old_event}\" ({old_price}) změněno na \""
+"{new_event}\" ({new_price})."
 
 #: pretix/control/logdisplay.py:102
 #, python-brace-format
@@ -14026,8 +14025,8 @@ msgstr ""
 msgid ""
 "Unknown scan of code \"{barcode}…\" for list \"{list}\", type \"{type}\"."
 msgstr ""
-"Neznámé skenování kódu \"{barcode}...\" pro seznam \"{list}\", typ "
-"\"{type}\"."
+"Neznámé skenování kódu \"{barcode}...\" pro seznam \"{list}\", typ \"{type}\""
+"."
 
 #: pretix/control/logdisplay.py:247
 #, python-brace-format
@@ -14035,8 +14034,8 @@ msgid ""
 "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", "
 "type \"{type}\", was uploaded."
 msgstr ""
-"Byl nahrán sken zrušeného kódu \"{barcode}...\" v {datetime} pro seznam "
-"\"{list}\", typ \"{type}\"."
+"Byl nahrán sken zrušeného kódu \"{barcode}...\" v {datetime} pro seznam \""
+"{list}\", typ \"{type}\"."
 
 #: pretix/control/logdisplay.py:257
 #, python-brace-format
@@ -14044,8 +14043,8 @@ msgid ""
 "Scan of revoked code \"{barcode}\" for list \"{list}\", type \"{type}\", was "
 "uploaded."
 msgstr ""
-"Byl nahrán sken zrušeného kódu \"{barcode}\" pro seznam \"{list}\", typ "
-"\"{type}\"."
+"Byl nahrán sken zrušeného kódu \"{barcode}\" pro seznam \"{list}\", typ \""
+"{type}\"."
 
 #: pretix/control/logdisplay.py:268
 #, python-brace-format
@@ -14454,8 +14453,7 @@ msgstr "Uživateli byl odeslán e-mail s oznámením, že akce byla zrušena."
 #: pretix/control/logdisplay.py:420
 msgid ""
 "An email has been sent to notify the user that the order has been changed."
-msgstr ""
-"Uživateli byl odeslán e-mail s upozorněním, že objednávka byla změněna."
+msgstr "Uživateli byl odeslán e-mail s upozorněním, že objednávka byla změněna."
 
 #: pretix/control/logdisplay.py:421
 msgid ""
@@ -14470,14 +14468,12 @@ msgstr "Uživateli byl poslán e-mail s upozorněním, že platba byla přijata.
 #: pretix/control/logdisplay.py:423
 msgid ""
 "An email has been sent to notify the user that the order has been denied."
-msgstr ""
-"Uživateli byl odeslán e-mail s oznámením, že objednávka byla odmítnuta."
+msgstr "Uživateli byl odeslán e-mail s oznámením, že objednávka byla odmítnuta."
 
 #: pretix/control/logdisplay.py:424
 msgid ""
 "An email has been sent to notify the user that the order has been approved."
-msgstr ""
-"Uživateli byl odeslán e-mail s oznámením, že objednávka byla schválena."
+msgstr "Uživateli byl odeslán e-mail s oznámením, že objednávka byla schválena."
 
 #: pretix/control/logdisplay.py:426
 msgid ""
@@ -15036,8 +15032,7 @@ msgstr ""
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
-msgstr ""
-"Pozice #{posid} byla znovu odbavena v {datetime} na seznamu \"{list}\"."
+msgstr "Pozice #{posid} byla znovu odbavena v {datetime} na seznamu \"{list}\"."
 
 #: pretix/control/logdisplay.py:639
 #, python-brace-format
@@ -16390,8 +16385,8 @@ msgid ""
 msgstr ""
 "Dobrý den,\n"
 "\n"
-"někdo požádal o použití %(address)s jako adresu odesílatele na "
-"%(instance)s.\n"
+"někdo požádal o použití %(address)s jako adresu odesílatele na %(instance)s."
+"\n"
 "To mu umožní odesílat e-maily, u kterých se zobrazí, že pocházejí z této e-"
 "mailové adresy.\n"
 "Pokud jste to byli vy, zadejte prosím následující potvrzovací kód:\n"
@@ -16456,8 +16451,8 @@ msgstr ""
 "Organizátor: %(organizer)s\n"
 "Tým: %(team)s\n"
 "\n"
-"Pokud se chcete k tomuto týmu připojit, stačí kliknout na následující "
-"odkaz:\n"
+"Pokud se chcete k tomuto týmu připojit, stačí kliknout na následující odkaz:"
+"\n"
 "%(url)s\n"
 "\n"
 "Pokud se nechcete připojit, můžete tento e-mail bez obav ignorovat nebo "
@@ -16807,8 +16802,8 @@ msgid ""
 "To confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
-"Chcete-li potvrdit, že to opravdu chcete, zadejte zde zkrácený název akce "
-"(\"%(slug)s\"):"
+"Chcete-li potvrdit, že to opravdu chcete, zadejte zde zkrácený název akce (\""
+"%(slug)s\"):"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:36
 msgid "Your event can not be deleted as it already contains orders."
@@ -20133,8 +20128,8 @@ msgid ""
 "Are you sure you want to delete the scheduled export <strong>%(export)s</"
 "strong>?"
 msgstr ""
-"Jste si jisti, že chcete odstranit naplánovaný export <strong>%(export)s</"
-"strong>?"
+"Jste si jisti, že chcete odstranit naplánovaný export "
+"<strong>%(export)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:26
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:27
@@ -20263,8 +20258,7 @@ msgstr ""
 msgid ""
 "All recipients of the export will be able to see who the owner of the report "
 "is."
-msgstr ""
-"Všichni příjemci exportu budou moci zjistit, kdo je vlastníkem reportu."
+msgstr "Všichni příjemci exportu budou moci zjistit, kdo je vlastníkem reportu."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:12
 msgctxt "order state"
@@ -21241,8 +21235,7 @@ msgstr "Opravdu chcete odstranit tohoto poskytovatele SSO?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:11
 msgid "This SSO provider cannot be deleted since it has already been used."
-msgstr ""
-"Tohoto zprostředkovatele SSO nelze odstranit, protože již byl používán."
+msgstr "Tohoto zprostředkovatele SSO nelze odstranit, protože již byl používán."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:6
 msgid "SSO provider:"
@@ -21390,8 +21383,7 @@ msgstr "Tato stránka zobrazuje všechna vyvolání webhooku za posledních 30 d
 msgid "One webhook is scheduled to be retried."
 msgid_plural "%(count)s webhooks are scheduled to be retried."
 msgstr[0] "Je naplánováno opakování jednoho webhooku."
-msgstr[1] ""
-"Jsou naplánovány %(count)s webhooky, které mají být znovu vyzkoušeny."
+msgstr[1] "Jsou naplánovány %(count)s webhooky, které mají být znovu vyzkoušeny."
 msgstr[2] "Je naplánováno %(count)s webhooků, které mají být znovu vyzkoušeny."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:22
@@ -28702,8 +28694,8 @@ msgid ""
 "Change position #%(positionid)s from \"%(old_item)s – %(old_variation)s\" to "
 "\"%(new_item)s – %(new_variation)s\""
 msgstr ""
-"Změna pozice #%(positionid)s z \"%(old_item)s – %(old_variation)s\" na "
-"\"%(new_item)s – %(new_variation)s\""
+"Změna pozice #%(positionid)s z \"%(old_item)s – %(old_variation)s\" na \""
+"%(new_item)s – %(new_variation)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:23
 #, python-format
@@ -30241,8 +30233,8 @@ msgid ""
 "We were unable to use your login since the email address {email} is already "
 "used for a different account in this system."
 msgstr ""
-"Vaše přihlašovací údaje jsme nemohli použít, protože e-mailová adresa "
-"{email} je v tomto systému již použita pro jiný účet."
+"Vaše přihlašovací údaje jsme nemohli použít, protože e-mailová adresa {email}"
+" je v tomto systému již použita pro jiný účet."
 
 #: pretix/presale/views/event.py:789
 msgid "Unknown event code or not authorized to access this event."
@@ -30367,8 +30359,7 @@ msgstr ""
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."
-msgstr ""
-"Právě máme potíže s odesíláním e-mailů, zkontrolujte to prosím později."
+msgstr "Právě máme potíže s odesíláním e-mailů, zkontrolujte to prosím později."
 
 #: pretix/presale/views/user.py:94
 msgid ""
