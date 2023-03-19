@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
-"PO-Revision-Date: 2023-03-19 11:29+0000\n"
-"Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
+"PO-Revision-Date: 2023-03-19 21:00+0000\n"
+"Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -8918,7 +8918,7 @@ msgstr ""
 "\n"
 "Podrobnosti a stav Vašeho lístku si můžete prohlédnout na následující adrese:"
 "\n"
-"{url}: na adrese: {url}\n"
+"{url}\n"
 "\n"
 "S pozdravem,\n"
 "Tým {event}"
@@ -9285,7 +9285,7 @@ msgstr ""
 "\n"
 "Nyní pro vás máme připravenou vstupenku! Můžete ji uplatnit v našem obchodě "
 "se vstupenkami\n"
-"během následujících {hodin} hodin zadáním následujícího kódu voucheru:\n"
+"během následujících {hours} hodin zadáním následujícího kódu voucheru:\n"
 "\n"
 "{code}\n"
 "\n"
@@ -14569,7 +14569,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:20
 msgid "Save"
-msgstr ""
+msgstr "Uložit"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html:7
 msgid "Create a new account"
@@ -17194,22 +17194,22 @@ msgstr "minuty"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:200
 msgid "hours"
-msgstr ""
+msgstr "hodiny"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:201
 #: pretix/control/templates/pretixcontrol/item/index.html:220
 #: pretix/control/templates/pretixcontrol/item/index.html:233
 msgid "days"
-msgstr ""
+msgstr "dny"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:202
 #: pretix/control/templates/pretixcontrol/item/index.html:234
 msgid "months"
-msgstr ""
+msgstr "měsíce"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:203
 msgid "years"
-msgstr ""
+msgstr "roky"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:209
 msgid ""
@@ -17266,7 +17266,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/discount.html:4
 #: pretix/control/templates/pretixcontrol/items/discount.html:6
 msgid "Automatic discount"
-msgstr ""
+msgstr "Automatická sleva"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:21
 msgctxt "discount"
@@ -17280,7 +17280,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/discount.html:40
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_cc.html:50
 msgid "OR"
-msgstr ""
+msgstr "NEBO"
 
 #: pretix/control/templates/pretixcontrol/items/discount.html:50
 msgctxt "discount"
@@ -17319,7 +17319,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/discounts.html:3
 #: pretix/control/templates/pretixcontrol/items/discounts.html:5
 msgid "Automatic discounts"
-msgstr ""
+msgstr "Automatické slevy"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:7
 #, python-format
@@ -18196,11 +18196,11 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:208
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:136
 msgid "Customer account"
-msgstr ""
+msgstr "Účet zákazníka"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:222
 msgid "Contact email"
-msgstr ""
+msgstr "Kontaktní e-mail"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:226
 msgid ""
@@ -26076,7 +26076,7 @@ msgstr "Uživatel s touto e-mailovou adresou není v našem systému uveden."
 
 #: pretix/presale/forms/customer.py:444
 msgid "Only required if you change your email address"
-msgstr ""
+msgstr "Vyžaduje se pouze v případě změny e-mailové adresy"
 
 #: pretix/presale/forms/customer.py:480
 #, python-brace-format
@@ -27908,30 +27908,37 @@ msgstr "Uplatnění poukázky"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:21
 msgid "This voucher is valid only for the following specific date and time."
-msgstr ""
+msgstr "Tento poukázka je platná pouze pro následující konkrétní datum a čas."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:78
 msgid ""
 "For the selected date, there are currently no products available that can be "
 "bought with this voucher. Please try a different date or a different voucher."
 msgstr ""
+"Pro vybrané datum nejsou v současné době k dispozici žádné produkty, které "
+"lze za tento poukázku zakoupit. Zkuste prosím zvolit jiné datum nebo jinou "
+"poukázku."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:82
 msgid ""
 "There are currently no products available that can be bought with this "
 "voucher."
 msgstr ""
+"V současné době nejsou k dispozici žádné produkty, které lze za tento "
+"poukázku zakoupit."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:87
 msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
 msgstr ""
+"Zadali jste kód poukázky, který vám umožňuje zakoupit jeden z následujících "
+"produktů za uvedenou cenu:"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:148
 #, python-format
 msgid "from %(minprice)s"
-msgstr ""
+msgstr "od %(minprice)s"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:423
 #, python-format
@@ -27949,6 +27956,9 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
+"Pokud budou vstupenky opět k dispozici, budeme informovat první osoby na "
+"čekací listině. Pokud budete informováni, budete mít %(hours)s hodin čas na "
+"zakoupení vstupenky, dokud ji nepřidělíme další osobě na seznamu."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:27
 msgid ""
@@ -27976,11 +27986,14 @@ msgid ""
 "need the ticket any more, please be so kind and remove your ticket from the "
 "list so we can pass it on to the next person waiting as quickly as possible!"
 msgstr ""
+"Byli jste vybráni z naší čekací listiny na vstupenku. Pokud již vstupenku "
+"nepotřebujete, buďte prosím tak laskaví a odstraňte svou vstupenku ze "
+"seznamu, abychom ji mohli co nejrychleji předat dalšímu čekajícímu!"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:16
 msgctxt "waitinglist"
 msgid "Yes, remove my ticket"
-msgstr ""
+msgstr "Ano, odstraňte moji vstupenku"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:5
 msgid "Calendar"
@@ -27996,7 +28009,7 @@ msgstr "(pokračuje)"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:46
 msgctxt "timerange"
 msgid "until"
-msgstr ""
+msgstr "do"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:98
 #, python-format
@@ -28039,39 +28052,42 @@ msgid ""
 "                                    from %(start_date)s\n"
 "                                "
 msgstr ""
+"\n"
+"                                    od %(start_date)s\n"
+"                                "
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:5
 msgid "customer account"
-msgstr ""
+msgstr "Účet zákazníka"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:8
 msgid "View customer account"
-msgstr ""
+msgstr "Zobrazit účet zákazníka"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:9
 msgid "View user profile"
-msgstr ""
+msgstr "Zobrazit profil uživatele"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:15
 msgid "We've started the requested process in a new window."
-msgstr ""
+msgstr "Spustili jsme požadovaný proces v novém okně."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:18
 msgid "If you do not see the new window, we can help you launch it again."
-msgstr ""
+msgstr "Pokud se vám nové okno nezobrazí, pomůžeme vám ho znovu spustit."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:23
 msgid "Open window again"
-msgstr ""
+msgstr "Znovu otevřít okno"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:27
 msgid ""
 "Once the process in the new window has been completed, you can continue here."
-msgstr ""
+msgstr "Po dokončení procesu v novém okně můžete pokračovat zde."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:69
 msgid "Adjust settings in detail"
-msgstr ""
+msgstr "Podrobné nastavení"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:74
 msgid "Required cookies"
@@ -28088,26 +28104,26 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:89
 msgctxt "cookie_usage"
 msgid "Functionality"
-msgstr ""
+msgstr "Funkčnost"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:91
 msgctxt "cookie_usage"
 msgid "Analytics"
-msgstr ""
+msgstr "Analytika"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:93
 msgctxt "cookie_usage"
 msgid "Marketing"
-msgstr ""
+msgstr "Marketing"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:95
 msgctxt "cookie_usage"
 msgid "Social features"
-msgstr ""
+msgstr "Sociální funkce"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:114
 msgid "Save selection"
-msgstr ""
+msgstr "Uložit volbu"
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
 #, python-format
@@ -28116,10 +28132,13 @@ msgid ""
 "                                        from %(start_date)s\n"
 "                                    "
 msgstr ""
+"\n"
+"                                        od %(start_date)s\n"
+"                                    "
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
-msgstr ""
+msgstr "Ahoj!"
 
 #: pretix/presale/templates/pretixpresale/index.html:9
 #, python-format
@@ -28127,12 +28146,16 @@ msgid ""
 "This is a self-hosted installation of <a %(a_attr)s>pretix, your free and "
 "open source ticket sales software</a>."
 msgstr ""
+"Jedná se o samostatně hostovanou instalaci <a %(a_attr)s>pretixu, vašeho "
+"bezplatného a otevřeného softwaru pro prodej vstupenek</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:15
 msgid ""
 "If you're looking to buy a ticket, you need to follow a direct link to an "
 "event or organizer profile."
 msgstr ""
+"Pokud si chcete koupit vstupenku, musíte následovat přímý odkaz na akci nebo "
+"profil pořadatele."
 
 #: pretix/presale/templates/pretixpresale/index.html:20
 #, python-format
@@ -28140,22 +28163,23 @@ msgid ""
 "If you're looking to configure this installation, please <a %(a_attr)s>head "
 "over here</a>."
 msgstr ""
+"Pokud chcete tuto instalaci nakonfigurovat, přejděte <a %(a_attr)s> sem</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
-msgstr ""
+msgstr "Příjemnou zábavu!"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:6
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:6
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:6
 msgid "Event overview"
-msgstr ""
+msgstr "Přehled akce"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:60
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:69
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:81
 msgid "Note that the events in this view are in different timezones."
-msgstr ""
+msgstr "Všimněte si, že akce v tomto zobrazení jsou v různých časových zónách."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:7
@@ -28164,7 +28188,7 @@ msgstr "Smazat adresu"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:12
 msgid "Do you really want to delete the following address from your account?"
-msgstr ""
+msgstr "Opravdu chcete ze svého účtu odstranit následující adresu?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:15
@@ -28178,7 +28202,7 @@ msgstr "Aktualizace údajů vašeho účtu"
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:11
 #, python-format
 msgid "Sign in to your account at %(org)s"
-msgstr ""
+msgstr "Přihlásit se ke svému účtu u %(org)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:38
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:20
@@ -28188,7 +28212,7 @@ msgstr "Vytvořit účet"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:10
 msgid "Your membership"
-msgstr ""
+msgstr "Vaše členství"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:6
@@ -28200,7 +28224,7 @@ msgstr "Obnovení hesla"
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:11
 msgid "Set a new password for your account"
-msgstr ""
+msgstr "Nastavit nové heslo pro svůj účet"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:10
@@ -28229,28 +28253,28 @@ msgstr "Profily účastníků"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:179
 msgid "No memberships are stored in your account."
-msgstr ""
+msgstr "Na vašem účtu nejsou uloženy žádné členství."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:211
 msgid "No addresses are stored in your account."
-msgstr ""
+msgstr "Ve vašem účtu nejsou uloženy žádné adresy."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:222
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:244
 msgid "No attendee profiles are stored in your account."
-msgstr ""
+msgstr "Ve vašem účtu nejsou uloženy žádné profily účastníků."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:7
 msgid "Delete profile"
-msgstr ""
+msgstr "Smazat profil"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:12
 msgid "Do you really want to delete the following profile from your account?"
-msgstr ""
+msgstr "Opravdu chcete ze svého účtu smazat následující profil?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
 msgid "Registration"
