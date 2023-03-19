@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
 "PO-Revision-Date: 2023-03-19 21:00+0000\n"
-"Last-Translator: Michael <michael.happl@gmx.at>\n"
+"Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -10370,6 +10370,7 @@ msgid ""
 "You are receiving this email because someone signed you up for the following "
 "event:"
 msgstr ""
+"Tento e-mail jste obdrželi, protože vás někdo přihlásil na následující akci:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:12
 #: pretix/base/templates/pretixbase/email/order_details.html:62
@@ -10434,6 +10435,8 @@ msgid ""
 "The link you clicked on wants to redirect you to a destination on the "
 "website %(host)s."
 msgstr ""
+"Odkaz, na který jste klikli, vás chce přesměrovat na cíl na webové stránce "
+"%(host)s."
 
 #: pretix/base/templates/pretixbase/redirect.html:14
 msgid "Please only proceed if you trust this website to be safe."
@@ -10470,7 +10473,7 @@ msgstr "Stáhnout vstupenku"
 #: pretix/base/timeframes.py:50
 msgctxt "reporting_timeframe"
 msgid "Today"
-msgstr ""
+msgstr "Dnes"
 
 #: pretix/base/timeframes.py:54 pretix/base/timeframes.py:63
 #: pretix/base/timeframes.py:72 pretix/base/timeframes.py:81
@@ -10483,32 +10486,32 @@ msgstr "podle dne"
 #: pretix/base/timeframes.py:59
 msgctxt "reporting_timeframe"
 msgid "Yesterday"
-msgstr ""
+msgstr "včera"
 
 #: pretix/base/timeframes.py:68
 msgctxt "reporting_timeframe"
 msgid "Last 7 days"
-msgstr ""
+msgstr "posledních 7 dnů"
 
 #: pretix/base/timeframes.py:77
 msgctxt "reporting_timeframe"
 msgid "Last 14 days"
-msgstr ""
+msgstr "posledních 14 dnů"
 
 #: pretix/base/timeframes.py:86
 msgctxt "reporting_timeframe"
 msgid "Tomorrow"
-msgstr ""
+msgstr "Zítra"
 
 #: pretix/base/timeframes.py:95
 msgctxt "reporting_timeframe"
 msgid "Next 7 days"
-msgstr ""
+msgstr "Následujích 7 dnů"
 
 #: pretix/base/timeframes.py:104
 msgctxt "reporting_timeframe"
 msgid "Next 14 days"
-msgstr ""
+msgstr "Následujících 14 dnů"
 
 #: pretix/base/timeframes.py:113
 msgctxt "reporting_timeframe"
@@ -10519,7 +10522,7 @@ msgstr "Aktuální týden"
 #: pretix/base/timeframes.py:135 pretix/base/timeframes.py:144
 msgctxt "reporting_timeframe"
 msgid "by week"
-msgstr ""
+msgstr "Po týdnu"
 
 #: pretix/base/timeframes.py:122
 msgctxt "reporting_timeframe"
@@ -10529,12 +10532,12 @@ msgstr "Tento týden až do dneška"
 #: pretix/base/timeframes.py:131
 msgctxt "reporting_timeframe"
 msgid "Previous week"
-msgstr ""
+msgstr "minulý týden"
 
 #: pretix/base/timeframes.py:140
 msgctxt "reporting_timeframe"
 msgid "Next week"
-msgstr ""
+msgstr "následující týden"
 
 #: pretix/base/timeframes.py:149
 msgctxt "reporting_timeframe"
@@ -10545,7 +10548,7 @@ msgstr "Tento měsíc"
 #: pretix/base/timeframes.py:171 pretix/base/timeframes.py:180
 msgctxt "reporting_timeframe"
 msgid "by month"
-msgstr ""
+msgstr "po měsících"
 
 #: pretix/base/timeframes.py:158
 msgctxt "reporting_timeframe"
@@ -10555,12 +10558,12 @@ msgstr "Tento měsíc až do dneška"
 #: pretix/base/timeframes.py:167
 msgctxt "reporting_timeframe"
 msgid "Previous month"
-msgstr ""
+msgstr "minulý měsíc"
 
 #: pretix/base/timeframes.py:176
 msgctxt "reporting_timeframe"
 msgid "Next month"
-msgstr ""
+msgstr "následující měsíc"
 
 #: pretix/base/timeframes.py:185
 msgctxt "reporting_timeframe"
@@ -10571,7 +10574,7 @@ msgstr "Toto čtvrtletí"
 #: pretix/base/timeframes.py:207 pretix/base/timeframes.py:218
 msgctxt "reporting_timeframe"
 msgid "by quarter"
-msgstr ""
+msgstr "podle čtvrtletí"
 
 #: pretix/base/timeframes.py:194
 msgctxt "reporting_timeframe"
@@ -10581,12 +10584,12 @@ msgstr "Toto čtvrtletí až do dneška"
 #: pretix/base/timeframes.py:203
 msgctxt "reporting_timeframe"
 msgid "Previous quarter"
-msgstr ""
+msgstr "poslední čtvrtletí"
 
 #: pretix/base/timeframes.py:212
 msgctxt "reporting_timeframe"
 msgid "Next quarter"
-msgstr ""
+msgstr "následující čtvrtletí"
 
 #: pretix/base/timeframes.py:223
 msgctxt "reporting_timeframe"
@@ -10597,7 +10600,7 @@ msgstr "Tento rok"
 #: pretix/base/timeframes.py:245 pretix/base/timeframes.py:254
 msgctxt "reporting_timeframe"
 msgid "by year"
-msgstr ""
+msgstr "podle roku"
 
 #: pretix/base/timeframes.py:232
 msgctxt "reporting_timeframe"
@@ -10607,17 +10610,17 @@ msgstr "Letos až do dneška"
 #: pretix/base/timeframes.py:241
 msgctxt "reporting_timeframe"
 msgid "Previous year"
-msgstr ""
+msgstr "minulý rok"
 
 #: pretix/base/timeframes.py:250
 msgctxt "reporting_timeframe"
 msgid "Next year"
-msgstr ""
+msgstr "následující rok"
 
 #: pretix/base/timeframes.py:259
 msgctxt "reporting_timeframe"
 msgid "All future (excluding today)"
-msgstr ""
+msgstr "budoucnost (od zítřka)"
 
 #: pretix/base/timeframes.py:263 pretix/base/timeframes.py:272
 msgctxt "reporting_timeframe"
@@ -10637,7 +10640,7 @@ msgstr "Začátek"
 #: pretix/base/timeframes.py:286
 msgctxt "timeframe"
 msgid "End"
-msgstr ""
+msgstr "konec"
 
 #: pretix/base/timeframes.py:319
 msgid "The end date must be after the start date."
@@ -10712,20 +10715,20 @@ msgstr ""
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes available"
-msgstr ""
+msgstr "Produkt \"{name}\" je k dispozici"
 
 #: pretix/base/timeline.py:191 pretix/base/timeline.py:215
 #: pretix/base/timeline.py:264
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
-msgstr ""
+msgstr "Produkt \"{name}\" již není k dispozici"
 
 #: pretix/base/timeline.py:229
 #, python-brace-format
 msgctxt "timeline"
 msgid "Discount \"{name}\" becomes active"
-msgstr ""
+msgstr "Sleva \"{name}\" je k dispozici"
 
 #: pretix/base/timeline.py:240
 #, python-brace-format
@@ -10737,13 +10740,13 @@ msgstr "Sleva \"{name}\" se zneaktivní"
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes available"
-msgstr ""
+msgstr "Varianta produktu \"{product} - {variation}\" je k dispozici"
 
 #: pretix/base/timeline.py:294
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes unavailable"
-msgstr ""
+msgstr "Varianta produktu \"{product} - {variation}\" již není k dispozici"
 
 #: pretix/base/timeline.py:325
 #, python-brace-format
@@ -10754,7 +10757,7 @@ msgstr "Poskytovatel platby \"{name}\" již nelze vybrat"
 #: pretix/base/validators.py:50
 #, python-format
 msgid "This field has an invalid value: %(value)s."
-msgstr ""
+msgstr "Toto pole má neplatnou hodnotu: %(value)s."
 
 #: pretix/base/views/errors.py:48
 msgid ""
@@ -10783,6 +10786,8 @@ msgid ""
 "If you have configured your browser to disable cookies, please re-enable "
 "them, at least for this site, or for 'same-origin' requests."
 msgstr ""
+"Pokud jste ve svém prohlížeči deaktivovali soubory cookie, aktivujte je "
+"prosím alespoň pro tuto webovou stránku."
 
 #: pretix/base/views/tasks.py:171
 msgid "An unexpected error has occurred, please try again later."
@@ -10842,11 +10847,11 @@ msgstr "Tuto zkratku jste již použili pro jinou akci. Zvolte prosím nový."
 
 #: pretix/control/forms/event.py:129 pretix/control/forms/event.py:463
 msgid "Event timezone"
-msgstr ""
+msgstr "Časové pásmo akce"
 
 #: pretix/control/forms/event.py:136
 msgid "Sales tax rate"
-msgstr ""
+msgstr "Daň z obratu"
 
 #: pretix/control/forms/event.py:137
 msgid ""
