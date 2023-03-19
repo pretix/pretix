@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
 "PO-Revision-Date: 2023-03-19 11:29+0000\n"
-"Last-Translator: Michael <michael.happl@gmx.at>\n"
+"Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -8531,32 +8531,35 @@ msgid ""
 "Only allow changes if the resulting price is higher or equal than the "
 "previous price."
 msgstr ""
+"Změny povolit pouze v případě, že výsledná cena je vyšší nebo stejná jako "
+"předchozí cena."
 
 #: pretix/base/settings.py:1462 pretix/base/settings.py:1471
 msgid ""
 "Only allow changes if the resulting price is higher than the previous price."
 msgstr ""
+"Změny povolit pouze v případě, že výsledná cena je vyšší než předchozí cena."
 
 #: pretix/base/settings.py:1463 pretix/base/settings.py:1472
 msgid ""
 "Only allow changes if the resulting price is equal to the previous price."
-msgstr ""
+msgstr "Změny povolit pouze tehdy, pokud se výsledná cena rovná předchozí ceně."
 
 #: pretix/base/settings.py:1464 pretix/base/settings.py:1473
 msgid "Allow changes regardless of price, even if this results in a refund."
-msgstr ""
+msgstr "Povolit změny bez ohledu na cenu, i když bude nutné vrácení peněz."
 
 #: pretix/base/settings.py:1468
 msgid "Requirement for changed prices"
-msgstr ""
+msgstr "Požadavky na změnu cen"
 
 #: pretix/base/settings.py:1484
 msgid "Do not allow changes after"
-msgstr ""
+msgstr "Povolit změny do"
 
 #: pretix/base/settings.py:1493
 msgid "Allow individual attendees to change their ticket"
-msgstr ""
+msgstr "Umožnit jednotlivým účastníkům měnit lístek"
 
 #: pretix/base/settings.py:1494
 msgid ""
@@ -8574,7 +8577,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1506
 msgid "Customers can cancel their unpaid orders"
-msgstr ""
+msgstr "Zákazníci mohou zrušit nezaplacené objednávky"
 
 #: pretix/base/settings.py:1518
 msgid "Charge a fixed cancellation fee"
@@ -8601,11 +8604,11 @@ msgstr "Účtovat pevný storno poplatek"
 
 #: pretix/base/settings.py:1554 pretix/base/settings.py:1693
 msgid "Do not allow cancellations after"
-msgstr ""
+msgstr "Storna jsou povolena pouze do"
 
 #: pretix/base/settings.py:1563
 msgid "Customers can cancel their paid orders"
-msgstr ""
+msgstr "Zákazníci mohou zrušit zaplacené objednávky"
 
 #: pretix/base/settings.py:1564
 msgid ""
@@ -8618,7 +8621,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1577 pretix/control/forms/orders.py:822
 msgid "Keep a fixed cancellation fee"
-msgstr ""
+msgstr "Zachování fixního storno poplatku"
 
 #: pretix/base/settings.py:1586
 msgid "Keep payment, shipping and service fees"
@@ -8626,7 +8629,7 @@ msgstr "Udržujte poplatky za platby, dopravu a služby"
 
 #: pretix/base/settings.py:1598 pretix/control/forms/orders.py:833
 msgid "Keep a percentual cancellation fee"
-msgstr ""
+msgstr "Zachovat procentuální storno poplatek"
 
 #: pretix/base/settings.py:1607
 msgid "Allow customers to voluntarily choose a lower refund"
@@ -8702,7 +8705,7 @@ msgstr "Vůbec nezpracovávat náhrady automaticky"
 #: pretix/base/settings.py:1676
 #: pretix/control/templates/pretixcontrol/order/index.html:141
 msgid "Refund method"
-msgstr ""
+msgstr "Způsob vracení peněz"
 
 #: pretix/base/settings.py:1702 pretix/control/forms/event.py:1508
 msgid "Contact address"
@@ -8721,20 +8724,24 @@ msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
 msgstr ""
+"Mělo by jít například o odkaz na část vašich webových stránek, kde lze "
+"nalézt kontaktní údaje a právní informace."
 
 #: pretix/base/settings.py:1722
 msgid "Privacy Policy URL"
-msgstr ""
+msgstr "URL adresa zásad ochrany osobních údajů"
 
 #: pretix/base/settings.py:1723
 msgid ""
 "This should point e.g. to a part of your website that explains how you use "
 "data gathered in your ticket shop."
 msgstr ""
+"Mělo by odkazovat např. na část vašich webových stránek, kde je vysvětleno, "
+"jak používáte údaje získané v e-shopu."
 
 #: pretix/base/settings.py:1745
 msgid "Attach ticket files"
-msgstr ""
+msgstr "Přiložení souborů lístků"
 
 #: pretix/base/settings.py:1747
 #, python-brace-format
@@ -8807,22 +8814,24 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/mail.html:39
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:40
 msgid "Sender address"
-msgstr ""
+msgstr "Adresa odesílatele"
 
 #: pretix/base/settings.py:1810 pretix/control/forms/mailsetup.py:36
 #: pretix/control/forms/mailsetup.py:109
 msgid "Sender address for outgoing emails"
-msgstr ""
+msgstr "Adresa odesílatele odchozích e-mailů"
 
 #: pretix/base/settings.py:1819
 msgid "Sender name"
-msgstr ""
+msgstr "jméno odesílatele"
 
 #: pretix/base/settings.py:1820
 msgid ""
 "Sender name used in conjunction with the sender address for outgoing emails. "
 "Defaults to your event name."
 msgstr ""
+"Jméno odesílatele používané ve spojení s adresou odesílatele pro odchozí e-"
+"maily. Výchozí hodnota je název akce."
 
 #: pretix/base/settings.py:1838 pretix/base/settings.py:1895
 #: pretix/base/settings.py:1912 pretix/base/settings.py:1930
@@ -8850,11 +8859,21 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"Tato zpráva se vám zobrazuje, protože jste si vyžádali nový odkaz na vaši "
+"objednávku pro {event}.\n"
+"\n"
+"Svou objednávku můžete změnit a zobrazit na následující adrese:\n"
+"na adrese: {url}.\n"
+"\n"
+"S pozdravem,\n"
+"Tým {event}"
 
 #: pretix/base/settings.py:1859
 #, python-brace-format
 msgid "Your orders for {event}"
-msgstr ""
+msgstr "Vaše objednávky pro {event}"
 
 #: pretix/base/settings.py:1863
 #, python-brace-format
@@ -8869,6 +8888,16 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"Tuto zprávu jste obdrželi, protože jste si vyžádali nový odkaz na své "
+"objednávky pro\n"
+"{event}. \n"
+"\n"
+"Vaše objednávky najdete na následujících odkazech:\n"
+"{orders}\n"
+"\n"
+"S pozdreavem Váš {event} tým"
 
 #: pretix/base/settings.py:1879
 #, python-brace-format
@@ -8883,6 +8912,16 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den, {attendee_name},\n"
+"\n"
+"byli jste přihlášeni na {event}.\n"
+"\n"
+"Podrobnosti a stav Vašeho lístku si můžete prohlédnout na následující adrese:"
+"\n"
+"{url}: na adrese: {url}\n"
+"\n"
+"S pozdravem,\n"
+"Tým {event}"
 
 #: pretix/base/settings.py:1899
 #, python-brace-format
@@ -8925,6 +8964,19 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"obdrželi jsme vaši objednávku na {event}. Vzhledem k tomu, že jste si "
+"objednali produkt,\n"
+"který vyžaduje schválení organizátorem akce, prosíme Vás o trpělivost.\n"
+"Počkejte na náš další e-mail.\n"
+"\n"
+"Údaje o své objednávce můžete změnit a stav objednávky si prohlédnout na "
+"adrese\n"
+"{url}\n"
+"\n"
+"S pozdravem,\n"
+"Váš tým {event}"
 
 #: pretix/base/settings.py:1934
 #, python-brace-format
@@ -8943,6 +8995,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"obdrželi jsme Vaši objednávku na {event} v celkové výši\n"
+"{total_with_currency}. Prosíme, dokončete platbu do {expire_date}.\n"
+"{payment_info}\n"
+"\n"
+"Svou objednávku si můžete prohlédnout a změnit na následující adrese:\n"
+"{url}\n"
+"\n"
+"S pozdravem,\n"
+"Tým {event}"
 
 #: pretix/base/settings.py:1952
 msgid "Attachment for new orders"
@@ -8973,6 +9036,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den, {attendee_name},\n"
+"\n"
+"byla pro vás objednána vstupenka na akci {event}.\n"
+"\n"
+"Podrobnosti a stav vaší vstupenky si můžete prohlédnout zde:\n"
+"{url}.\n"
+"\n"
+"S pozdravem,\n"
+"Tým {event}"
 
 #: pretix/base/settings.py:1993
 #, python-brace-format
@@ -8992,6 +9064,15 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"vaše objednávka na {event} byla změněna.\n"
+"\n"
+"Stav vaší objednávky si můžete prohlédnout na adrese\n"
+"{url}\n"
+"\n"
+"S pozdravem,\n"
+"Váš tým {event}"
 
 #: pretix/base/settings.py:2009
 #, python-brace-format
@@ -9043,11 +9124,20 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den, {attendee_name},\n"
+"\n"
+"vstupenka na {event}}, která pro vás byla objednána, je nyní zaplacena.\n"
+"\n"
+"Podrobnosti a stav vaší vstupenky si můžete prohlédnout zde:\n"
+"{url}.\n"
+"\n"
+"S pozdravem,\n"
+"Váš tým {event}"
 
 #: pretix/base/settings.py:2052 pretix/control/forms/event.py:1052
 #: pretix/control/forms/event.py:1142 pretix/plugins/sendmail/models.py:212
 msgid "Number of days"
-msgstr ""
+msgstr "Počet dnů"
 
 #: pretix/base/settings.py:2054 pretix/control/forms/event.py:1055
 msgid ""
@@ -9188,6 +9278,34 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"přihlásili jste se na čekací listinu na {event},\n"
+"na produkt {product}.\n"
+"\n"
+"Nyní pro vás máme připravenou vstupenku! Můžete ji uplatnit v našem obchodě "
+"se vstupenkami\n"
+"během následujících {hodin} hodin zadáním následujícího kódu voucheru:\n"
+"\n"
+"{code}\n"
+"\n"
+"Případně stačí kliknout na následující odkaz:\n"
+"\n"
+"{url}\n"
+"\n"
+"Upozorňujeme, že tento odkaz je platný pouze během následujících {hours} "
+"hodin!\n"
+"Pokud tak neučiníte, přidělíme vstupenku další osobě na seznamu.\n"
+"voucher v této lhůtě neuplatníte.\n"
+"\n"
+"Pokud již vstupenku NEpotřebujete, prosíme vás, abyste klikli na\n"
+"následující odkaz a dali nám to vědět. Takto můžeme vstupenku\n"
+"co nejrychleji poslat další osobě na čekací listině:\n"
+"\n"
+"{url_remove}\n"
+"\n"
+"S pozdravem,\n"
+"Váš tým {event{event}"
 
 #: pretix/base/settings.py:2150
 #, python-brace-format
@@ -9209,6 +9327,17 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"vaše objednávka {code} na {event} byla zrušena.\n"
+"\n"
+"{comment}\n"
+"\n"
+"Podrobnosti o vaší objednávce si můžete prohlédnout na adrese\n"
+"{url}\n"
+"\n"
+"S pozdravem,\n"
+"Váš tým {event}"
 
 #: pretix/base/settings.py:2168
 #, python-brace-format
@@ -9298,6 +9427,18 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"Vaše objednávka na {event} byla bohužel zamítnuta.\n"
+"\n"
+"{comment}\n"
+"\n"
+"Vaši objednávku si můžete prohlédnout na následující adrese:\n"
+"\n"
+" {url}\n"
+"\n"
+"S pozdravem,\n"
+"Tým {event}"
 
 #: pretix/base/settings.py:2224
 #, python-brace-format
@@ -9310,6 +9451,13 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"svou objednávku můžete změnit a zobrazit na následující adrese:\n"
+"{url}\n"
+"\n"
+"S pozdravem,\n"
+"Tým {event}"
 
 #: pretix/base/settings.py:2242 pretix/base/settings.py:2258
 #, python-brace-format
@@ -9329,6 +9477,15 @@ msgid ""
 "    Best regards,\n"
 "    Your {event} team"
 msgstr ""
+"Dobrý den, {attendee_name},\n"
+"\n"
+"Jste přihlášeni na akci {event}.\n"
+"\n"
+"Pokud jste tak ještě neučinili, můžete si stáhnout vstupenku zde:\n"
+"{url}.\n"
+"\n"
+"S pozdravem,\n"
+"Tým {event}"
 
 #: pretix/base/settings.py:2262
 #, python-brace-format
@@ -9343,11 +9500,20 @@ msgid ""
 "Best regards,\n"
 "Your {event} team"
 msgstr ""
+"Dobrý den,\n"
+"\n"
+"Zakoupili jste si vstupenku na {event}.\n"
+"\n"
+"Pokud jste tak ještě neučinili, můžete si vstupenku stáhnout zde:\n"
+"{url}\n"
+"\n"
+"S pozdravem,\n"
+"Tým {event}"
 
 #: pretix/base/settings.py:2274
 #, python-brace-format
 msgid "Activate your account at {organizer}"
-msgstr ""
+msgstr "Aktivujte si účet na adrese {organizer}"
 
 #: pretix/base/settings.py:2278
 #, python-brace-format
@@ -9368,11 +9534,27 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Dobrý den, {name},\n"
+"\n"
+"děkujeme Vám za registraci účtu u {organizer}!\n"
+"\n"
+"Chcete-li aktivovat svůj zákaznický účet a zvolit si heslo, klikněte zde:\n"
+"\n"
+"{url}.\n"
+"\n"
+"Tento odkaz je platný jeden den.\n"
+"\n"
+"Pokud jste se sami nezaregistrovali, můžete tento e-mail ignorovat.\n"
+"\n"
+"S pozdravem\n"
+"\n"
+"Tým {organizer}"
 
 #: pretix/base/settings.py:2296
 #, python-brace-format
 msgid "Confirm email address for your account at {organizer}"
 msgstr ""
+"Potvrzení e-mailové adresy pro váš zákaznický účet na adrese {organizer}"
 
 #: pretix/base/settings.py:2300
 #, python-brace-format
@@ -9393,11 +9575,26 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Dobrý den, {name},\n"
+"\n"
+"děkujeme Vám za registraci účtu u {organizer}!\n"
+"\n"
+"Chcete-li aktivovat svůj zákaznický účet a zvolit si heslo, klikněte zde:\n"
+"\n"
+"{url}.\n"
+"\n"
+"Tento odkaz je platný jeden den.\n"
+"\n"
+"Pokud jste se sami nezaregistrovali, můžete tento e-mail ignorovat.\n"
+"\n"
+"S pozdravem\n"
+"\n"
+"Tým {organizer}"
 
 #: pretix/base/settings.py:2318
 #, python-brace-format
 msgid "Set a new password for your account at {organizer}"
-msgstr ""
+msgstr "Nastavení nového hesla pro váš zákaznický účet na adrese {organizer}"
 
 #: pretix/base/settings.py:2322
 #, python-brace-format
@@ -9418,6 +9615,21 @@ msgid ""
 "\n"
 "Your {organizer} team"
 msgstr ""
+"Dobrý den, {name},\n"
+"\n"
+"požádali jste o nové heslo pro svůj zákaznický účet {organizer}.\n"
+"\n"
+"Pro výběr nového hesla klikněte zde:\n"
+"\n"
+"{url}\n"
+"\n"
+"Tento odkaz je platný jeden den.\n"
+"\n"
+"Pokud jste o nové heslo nepožádali, můžete tento e-mail ignorovat.\n"
+"\n"
+"S pozdravem\n"
+"\n"
+"Tým {organizer}"
 
 #: pretix/base/settings.py:2374 pretix/base/settings.py:2381
 #: pretix/base/settings.py:2395 pretix/base/settings.py:2403
@@ -9432,41 +9644,41 @@ msgstr "Hlavní barva"
 
 #: pretix/base/settings.py:2399
 msgid "Accent color for success"
-msgstr ""
+msgstr "Barva akcentu pro úspěch"
 
 #: pretix/base/settings.py:2400
 msgid "We strongly suggest to use a shade of green."
-msgstr ""
+msgstr "Doporučujeme použít zelený odstín."
 
 #: pretix/base/settings.py:2421
 msgid "Accent color for errors"
-msgstr ""
+msgstr "Barva akcentu pro chyby"
 
 #: pretix/base/settings.py:2422
 msgid "We strongly suggest to use a shade of red."
-msgstr ""
+msgstr "Důrazně doporučujeme použít červený odstín."
 
 #: pretix/base/settings.py:2443
 msgid "Page background color"
-msgstr ""
+msgstr "Barva pozadí stránky"
 
 #: pretix/base/settings.py:2458
 msgid "Use round edges"
-msgstr ""
+msgstr "Použijte oblé hrany"
 
 #: pretix/base/settings.py:2468
 #: pretix/control/templates/pretixcontrol/pdf/index.html:332
 msgid "Font"
-msgstr ""
+msgstr "Písmo"
 
 #: pretix/base/settings.py:2469
 msgid "Only respected by modern browsers."
-msgstr ""
+msgstr "Respektují je pouze moderní prohlížeče."
 
 #: pretix/base/settings.py:2496 pretix/base/settings.py:2539
 #: pretix/control/forms/organizer.py:395
 msgid "Header image"
-msgstr ""
+msgstr "Obrázek v záhlaví"
 
 #: pretix/base/settings.py:2499
 msgid ""
@@ -9479,15 +9691,15 @@ msgstr ""
 
 #: pretix/base/settings.py:2519 pretix/base/settings.py:2561
 msgid "Use header image in its full size"
-msgstr ""
+msgstr "Použití obrázku v záhlaví v plné velikosti"
 
 #: pretix/base/settings.py:2520 pretix/base/settings.py:2562
 msgid "We recommend to upload a picture at least 1170 pixels wide."
-msgstr ""
+msgstr "Obrázek v záhlaví by měl mít šířku alespoň 1170 pixelů."
 
 #: pretix/base/settings.py:2529
 msgid "Show event title even if a header image is present"
-msgstr ""
+msgstr "Zobrazení názvu akce, i když je přítomen obrázek záhlaví"
 
 #: pretix/base/settings.py:2530
 msgid ""
@@ -9524,7 +9736,7 @@ msgstr ""
 
 #: pretix/base/settings.py:2600
 msgid "Logo image"
-msgstr ""
+msgstr "Logo"
 
 #: pretix/base/settings.py:2604
 msgid "We will show your logo with a maximal height and width of 2.5 cm."
@@ -9532,7 +9744,7 @@ msgstr ""
 
 #: pretix/base/settings.py:2630 pretix/base/settings.py:2736
 msgid "Info text"
-msgstr ""
+msgstr "Informační text"
 
 #: pretix/base/settings.py:2633 pretix/base/settings.py:2738
 msgid ""
@@ -9549,6 +9761,8 @@ msgid ""
 "This text will be shown above every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
+"Tento text se zobrazuje nad každou stránkou obchodu. Používejte jej prosím "
+"pouze pro velmi důležité zprávy."
 
 #: pretix/base/settings.py:2655
 msgid "Banner text (bottom)"
@@ -9559,10 +9773,12 @@ msgid ""
 "This text will be shown below every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
+"Tento text se zobrazuje pod každou stránkou obchodu. Používejte jej prosím "
+"pouze pro velmi důležité zprávy."
 
 #: pretix/base/settings.py:2668
 msgid "Voucher explanation"
-msgstr ""
+msgstr "Vysvětlení k poukazu"
 
 #: pretix/base/settings.py:2671
 msgid ""
@@ -9572,7 +9788,7 @@ msgstr ""
 
 #: pretix/base/settings.py:2681
 msgid "Attendee data explanation"
-msgstr ""
+msgstr "Vysvětlení sběru dat účastníků"
 
 #: pretix/base/settings.py:2684
 msgid ""
@@ -9582,17 +9798,19 @@ msgstr ""
 
 #: pretix/base/settings.py:2694
 msgid "Additional success message"
-msgstr ""
+msgstr "Doplňková zpráva po dokončení objednávky"
 
 #: pretix/base/settings.py:2695
 msgid ""
 "This message will be shown after an order has been created successfully. It "
 "will be shown in additional to the default text."
 msgstr ""
+"Tato zpráva se zobrazí po úspěšném provedení objednávky. Zobrazí se jako "
+"doplněk k výchozímu textu."
 
 #: pretix/base/settings.py:2707
 msgid "Help text of the phone number field"
-msgstr ""
+msgstr "Nápověda pro pole telefonního čísla"
 
 #: pretix/base/settings.py:2714
 msgid ""
@@ -9604,7 +9822,7 @@ msgstr ""
 
 #: pretix/base/settings.py:2721
 msgid "Help text of the email field"
-msgstr ""
+msgstr "Nápověda k textu pole e-mailu"
 
 #: pretix/base/settings.py:2747
 msgid "Allow creating a new team during event creation"
@@ -9620,16 +9838,16 @@ msgstr ""
 
 #: pretix/base/settings.py:2820 pretix/base/settings.py:2830
 msgid "Event start time (descending)"
-msgstr ""
+msgstr "Začátek akce (sestupně)"
 
 #: pretix/base/settings.py:2822 pretix/base/settings.py:2832
 msgid "Name (descending)"
-msgstr ""
+msgstr "Jméno (sestupně)"
 
 #: pretix/base/settings.py:2827
 msgctxt "subevent"
 msgid "Date ordering"
-msgstr ""
+msgstr "Řazení termínů"
 
 #: pretix/base/settings.py:2843
 msgid "Link back to organizer overview on all event pages"
@@ -9637,11 +9855,11 @@ msgstr ""
 
 #: pretix/base/settings.py:2852
 msgid "Homepage text"
-msgstr ""
+msgstr "Text na úvodní stránce"
 
 #: pretix/base/settings.py:2854
 msgid "This will be displayed on the organizer homepage."
-msgstr ""
+msgstr "Tento text se zobrazí na stránce organizátora."
 
 #: pretix/base/settings.py:2869
 msgid "Length of gift card codes"
@@ -9673,6 +9891,8 @@ msgid ""
 "By clicking \"Accept all cookies\", you agree to the storing of cookies and "
 "use of similar technologies on your device."
 msgstr ""
+"Kliknutím na tlačítko \"Přijmout vše\" souhlasíte s ukládáním souborů cookie "
+"a používáním podobných technologií."
 
 #: pretix/base/settings.py:2903
 msgid "Dialog text"
@@ -9685,6 +9905,10 @@ msgid ""
 "use cookies if they are essential to providing the services this website "
 "offers."
 msgstr ""
+"Soubory cookie a podobné technologie používáme ke shromažďování údajů, které "
+"nám umožňují zlepšovat tyto webové stránky a naši nabídku. Pokud s tím "
+"nesouhlasíte, budeme soubory cookie používat pouze v případě, že jsou "
+"nezbytné pro poskytování služeb, které tyto webové stránky nabízejí."
 
 #: pretix/base/settings.py:2918
 msgid "Secondary dialog text"
@@ -9700,7 +9924,7 @@ msgstr ""
 
 #: pretix/base/settings.py:2935
 msgid "Accept all cookies"
-msgstr ""
+msgstr "Přijmout všechny"
 
 #: pretix/base/settings.py:2940
 msgid "\"Accept\" button description"
@@ -9740,17 +9964,18 @@ msgstr ""
 #: pretix/base/settings.py:3018
 msgctxt "person_name_salutation"
 msgid "Ms"
-msgstr ""
+msgstr "Paní"
 
 #: pretix/base/settings.py:3019
 msgctxt "person_name_salutation"
 msgid "Mr"
-msgstr ""
+msgstr "Pán"
 
 #: pretix/base/settings.py:3020
+#, fuzzy
 msgctxt "person_name_salutation"
 msgid "Mx"
-msgstr ""
+msgstr "Mx"
 
 #: pretix/base/settings.py:3045 pretix/base/settings.py:3058
 #: pretix/base/settings.py:3074 pretix/base/settings.py:3124
@@ -9793,22 +10018,22 @@ msgstr ""
 #: pretix/base/settings.py:3238
 msgctxt "person_name"
 msgid "Title"
-msgstr ""
+msgstr "Titul"
 
 #: pretix/base/settings.py:3065 pretix/base/settings.py:3081
 #: pretix/base/settings.py:3114 pretix/base/settings.py:3229
 #: pretix/base/settings.py:3253
 msgctxt "person_name_sample"
 msgid "Dr"
-msgstr ""
+msgstr "Dr."
 
 #: pretix/base/settings.py:3089 pretix/base/settings.py:3106
 msgid "First name"
-msgstr ""
+msgstr "Jméno"
 
 #: pretix/base/settings.py:3090 pretix/base/settings.py:3107
 msgid "Middle name"
-msgstr ""
+msgstr "Prostřední jméno"
 
 #: pretix/base/settings.py:3171 pretix/base/settings.py:3182
 #: pretix/control/forms/organizer.py:514
@@ -9818,38 +10043,39 @@ msgstr "Jan Novák"
 
 #: pretix/base/settings.py:3177
 msgid "Calling name"
-msgstr ""
+msgstr "Volací jméno"
 
 #: pretix/base/settings.py:3190
 msgid "Latin transcription"
-msgstr ""
+msgstr "Transkripce"
 
 #: pretix/base/settings.py:3201 pretix/base/settings.py:3218
 #: pretix/base/settings.py:3237
 msgctxt "person_name"
 msgid "Salutation"
-msgstr ""
+msgstr "Oslovení"
 
 #: pretix/base/settings.py:3210 pretix/base/settings.py:3228
 #: pretix/base/settings.py:3252
 msgctxt "person_name_sample"
 msgid "Mr"
-msgstr ""
+msgstr "Pan"
 
 #: pretix/base/settings.py:3241
 msgctxt "person_name"
 msgid "Degree (after name)"
-msgstr ""
+msgstr "titul (za jménem)"
 
 #: pretix/base/settings.py:3256
 msgctxt "person_name_sample"
 msgid "MA"
-msgstr ""
+msgstr "MA"
 
 #: pretix/base/settings.py:3361 pretix/control/forms/event.py:216
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
+"Pro vaši akci musí být také povoleno výchozí nastavení (viz rámeček výše)."
 
 #: pretix/base/settings.py:3365
 msgid ""
@@ -9891,7 +10117,7 @@ msgstr ""
 
 #: pretix/base/shredder.py:196
 msgid "E-mails"
-msgstr ""
+msgstr "E-maily"
 
 #: pretix/base/shredder.py:198
 msgid ""
@@ -9905,35 +10131,42 @@ msgid ""
 "This will remove all names, email addresses, and phone numbers from the "
 "waiting list."
 msgstr ""
+"Tímto způsobem odstraníte z čekacího seznamu všechna jména, e-mailové adresy "
+"a telefonní čísla."
 
 #: pretix/base/shredder.py:279
 msgid "Attendee info"
-msgstr ""
+msgstr "Informace o účastnících"
 
 #: pretix/base/shredder.py:281
 msgid ""
 "This will remove all attendee names and postal addresses from order "
 "positions, as well as logged changes to them."
 msgstr ""
+"Tím se odstraní všechna jména a poštovní adresy účastníků z objednávkových "
+"pozic a zaznamenané změny v nich."
 
 #: pretix/base/shredder.py:335
 msgid "Invoice addresses"
-msgstr ""
+msgstr "Fakturační adresy"
 
 #: pretix/base/shredder.py:338
 msgid ""
 "This will remove all invoice addresses from orders, as well as logged "
 "changes to them."
 msgstr ""
+"Tímto se odstraní všechny fakturační adresy z objednávek i zaznamenané změny "
+"v nich."
 
 #: pretix/base/shredder.py:362
 msgid "Question answers"
-msgstr ""
+msgstr "Odpovědi na dotazy"
 
 #: pretix/base/shredder.py:364
 msgid ""
 "This will remove all answers to questions, as well as logged changes to them."
 msgstr ""
+"Tímto se odstraní všechny odpovědi na dotazy i zaznamenané změny v nich."
 
 #: pretix/base/shredder.py:399
 msgid ""
@@ -10023,11 +10256,11 @@ msgstr ""
 
 #: pretix/base/templates/403.html:4 pretix/base/templates/403.html:8
 msgid "Permission denied"
-msgstr ""
+msgstr "Žádné oprávnění"
 
 #: pretix/base/templates/403.html:9
 msgid "You do not have access to this page."
-msgstr ""
+msgstr "Na tuto stránku nemáte přístup."
 
 #: pretix/base/templates/403.html:20 pretix/base/templates/404.html:19
 #: pretix/control/templates/pretixcontrol/base.html:193
@@ -10058,7 +10291,7 @@ msgstr "Pokud problém přetrvává, obraťte se na nás."
 
 #: pretix/base/templates/500.html:13
 msgid "If you contact us, please send us the following code:"
-msgstr ""
+msgstr "Pokud nás kontaktujete, zašlete nám prosím následující kód:"
 
 #: pretix/base/templates/csrffail.html:4 pretix/base/templates/csrffail.html:8
 msgid "Verification failed"
@@ -10080,13 +10313,15 @@ msgstr ""
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:21
 msgid "We are preparing your file for download …"
-msgstr ""
+msgstr "Připravujeme váš soubor ke stažení…"
 
 #: pretix/base/templates/pretixbase/cachedfiles/pending.html:23
 msgid ""
 "If this takes longer than a few minutes, please refresh this page or contact "
 "us."
 msgstr ""
+"Pokud to trvá déle než několik minut, obnovte prosím tuto stránku nebo nás "
+"kontaktujte."
 
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
@@ -10095,7 +10330,7 @@ msgstr ""
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:2
 msgid "Your export failed."
-msgstr ""
+msgstr "Export se nezdařil."
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:4
 msgid "Reason:"
@@ -10103,7 +10338,7 @@ msgstr "Důvod:"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:7
 msgid "If your export fails five times in a row, it will no longer be sent."
-msgstr ""
+msgstr "Pokud export selže pětkrát za sebou, nebude již odeslán."
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:10
 msgid "Configuration link:"
@@ -10116,7 +10351,7 @@ msgstr ""
 
 #: pretix/base/templates/pretixbase/email/notification.html:57
 msgid "Click here to view and change your notification settings"
-msgstr ""
+msgstr "Chcete-li tato nastavení změnit, klikněte zde"
 
 #: pretix/base/templates/pretixbase/email/notification.html:60
 msgid "Click here disable all notifications immediately."
