@@ -137,7 +137,7 @@ error_messages = {
     'some_subevent_ended': gettext_lazy(
         'The booking period for one of the events in your cart has ended. The affected '
         'positions have been removed from your cart.'),
-    'price_not_a_number': gettext_lazy('The entered price is is not a number.'),
+    'price_not_a_number': gettext_lazy('The entered price is not a number.'),
     'price_too_high': gettext_lazy('The entered price is to high.'),
     'voucher_invalid': gettext_lazy('This voucher code is not known in our database.'),
     'voucher_min_usages': gettext_lazy(
