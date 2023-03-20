@@ -30,6 +30,7 @@ if os.path.exists('test/sqlite.cfg'):
 
 from pretix.settings import *  # NOQA
 
+LANGUAGE_CODE = 'en'
 DATA_DIR = tmpdir.name
 LOG_DIR = os.path.join(DATA_DIR, 'logs')
 MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
