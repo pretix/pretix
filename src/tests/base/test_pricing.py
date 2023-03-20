@@ -211,7 +211,7 @@ def test_free_price_float(item):
 def test_free_price_limit(item):
     item.free_price = True
     with pytest.raises(ValueError):
-        get_price(item, custom_price=Decimal('200000000'))
+        get_price(item, custom_price=Decimal('200000000000'))
 
 
 @pytest.mark.django_db
