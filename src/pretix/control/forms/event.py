@@ -1379,7 +1379,10 @@ class TaxRuleLineForm(I18nForm):
     invoice_text = I18nFormField(
         label=_('Text on invoice'),
         required=False,
-        widget=I18nTextInput
+        widget=I18nTextInput,
+        widget_kwargs=dict(attrs={
+            'placeholder': _('Text on invoice'),
+        })
     )
 
 
