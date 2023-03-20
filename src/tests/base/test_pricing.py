@@ -23,6 +23,7 @@ import json
 from decimal import Decimal
 
 import pytest
+from django.utils import translation
 from django.utils.timezone import now
 from django_countries.fields import Country
 
@@ -196,7 +197,8 @@ def test_free_price_accepted(item):
 @pytest.mark.django_db
 def test_free_price_string(item):
     item.free_price = True
-    assert get_price(item, custom_price='42,00').gross == Decimal('42.00')
+    with translation.override('de'):
+        assert get_price(item, custom_price='42,00').gross == Decimal('42.00')
 
 
 @pytest.mark.django_db
