@@ -137,7 +137,7 @@ error_messages = {
     'some_subevent_ended': gettext_lazy(
         'The booking period for one of the events in your cart has ended. The affected '
         'positions have been removed from your cart.'),
-    'price_nan': gettext_lazy('The entered price is is not a number.'),
+    'price_not_a_number': gettext_lazy('The entered price is is not a number.'),
     'price_too_high': gettext_lazy('The entered price is to high.'),
     'voucher_invalid': gettext_lazy('This voucher code is not known in our database.'),
     'voucher_min_usages': gettext_lazy(
@@ -730,14 +730,14 @@ class CartManager:
             if item.free_price and i.get('price'):
                 custom_price = re.sub('[^0-9.,]', '', str(i.get('price')))
                 if not custom_price:
-                    raise CartError(error_messages['price_nan'])
+                    raise CartError(error_messages['price_not_a_number'])
                 try:
                     custom_price = forms.DecimalField(localize=True).to_python(custom_price)
                 except:
                     try:
                         custom_price = Decimal(custom_price)
                     except:
-                        raise CartError(error_messages['price_nan'])
+                        raise CartError(error_messages['price_not_a_number'])
                 if custom_price > 99_999_999_999:
                     raise CartError(error_messages['price_too_high'])
 
@@ -854,14 +854,14 @@ class CartManager:
             if item.free_price and a.get('price'):
                 custom_price = re.sub('[^0-9.,]', '', a.get('price'))
                 if not custom_price:
-                    raise CartError(error_messages['price_nan'])
+                    raise CartError(error_messages['price_not_a_number'])
                 try:
                     custom_price = forms.DecimalField(localize=True).to_python(custom_price)
                 except:
                     try:
                         custom_price = Decimal(custom_price)
                     except:
-                        raise CartError(error_messages['price_nan'])
+                        raise CartError(error_messages['price_not_a_number'])
                 if custom_price > 99_999_999_999:
                     raise CartError(error_messages['price_too_high'])
 
