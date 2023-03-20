@@ -304,9 +304,9 @@ class ItemSerializer(I18nAwareModelSerializer):
         if not self.instance:
             for addon_data in value:
                 ItemAddOn.clean_categories(self.context['event'], None, self.instance, addon_data['addon_category'])
-                ItemAddOn.clean_min_count(addon_data['min_count'])
-                ItemAddOn.clean_max_count(addon_data['max_count'])
-                ItemAddOn.clean_max_min_count(addon_data['max_count'], addon_data['min_count'])
+                ItemAddOn.clean_min_count(addon_data.get('min_count', 0))
+                ItemAddOn.clean_max_count(addon_data.get('max_count', 0))
+                ItemAddOn.clean_max_min_count(addon_data.get('max_count', 0), addon_data.get('min_count', 0))
         return value
 
     @cached_property
