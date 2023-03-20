@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
-"PO-Revision-Date: 2023-03-20 12:07+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2023-03-21 07:47+0000\n"
+"Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -18833,7 +18833,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/export.html:47
 #: pretix/control/templates/pretixcontrol/organizers/export.html:47
 msgid "Failed recently"
-msgstr ""
+msgstr "Nedávno neúspěšně"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:64
 msgid "Run export now"
@@ -18845,6 +18845,7 @@ msgid ""
 "Run export and send via email now. This will not change the next scheduled "
 "execution."
 msgstr ""
+"Spustit export a odeslat e-mailem. To nezmění příští naplánované spuštění."
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:95
 #: pretix/control/templates/pretixcontrol/organizers/export.html:95
@@ -18853,14 +18854,14 @@ msgstr "Další exporty"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:104
 msgid "Recommended for new users"
-msgstr ""
+msgstr "Doporučeno pro nové uživatele"
 
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:4
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:6
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:4
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:6
 msgid "Delete scheduled export"
-msgstr ""
+msgstr "Odstranit naplánovaný export"
 
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:9
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:9
@@ -18869,6 +18870,8 @@ msgid ""
 "Are you sure you want to delete the scheduled export <strong>%(export)s</"
 "strong>?"
 msgstr ""
+"Jste si jisti, že chcete odstranit naplánovaný export "
+"<strong>%(export)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:26
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:27
@@ -18878,7 +18881,7 @@ msgstr "Možnosti pro export"
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:41
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:42
 msgid "Start export"
-msgstr ""
+msgstr "Spustit export"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:46
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:47
@@ -18887,69 +18890,69 @@ msgstr "Plánování exportu"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:6
 msgid "Schedule"
-msgstr ""
+msgstr "Plán"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:15
 msgid "Repetition schedule"
-msgstr ""
+msgstr "Plán opakování"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:46
 #, python-format
 msgid "Repeat every %(interval)s %(freq)s"
-msgstr ""
+msgstr "Opakovat každý %(interval)s %(freq)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:54
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:89
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:200
 msgid "At the same date every year"
-msgstr ""
+msgstr "Každý rok ve stejný den"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:58
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:93
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:204
 #, python-format
 msgid "On the %(setpos)s %(weekday)s of %(month)s"
-msgstr ""
+msgstr "%(setpos)s %(weekday)s v %(month)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:68
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:103
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:214
 msgid "At the same date every month"
-msgstr ""
+msgstr "Každý měsíc ve stejný den"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:72
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:107
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:218
 #, python-format
 msgid "On the %(setpos)s %(weekday)s"
-msgstr ""
+msgstr "V %(setpos)s %(weekday)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:85
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:120
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:231
 #, python-format
 msgid "Repeat for %(count)s times"
-msgstr ""
+msgstr "Opakovat %(count)s krát"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:91
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:126
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:237
 #, python-format
 msgid "Repeat until %(until)s"
-msgstr ""
+msgstr "Opakovat do %(until)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:97
 msgid "Forever"
-msgstr ""
+msgstr "Navždy"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:110
 msgid ""
 "Every time your schedule is executed, the report will be sent via email."
-msgstr ""
+msgstr "Při každém spuštění plánu bude e-mailem odeslána zpráva."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:111
 msgid "Please note the following limitations:"
-msgstr ""
+msgstr "Vezměte na vědomí následující omezení:"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:114
 msgid ""
@@ -18957,38 +18960,47 @@ msgid ""
 "exports that output e.g. statistical data, not for reports that include "
 "sensitive personal data."
 msgstr ""
+"E-mail není šifrované médium. Doporučujeme jej používat pouze pro exporty, "
+"jejichž obsahem jsou např. statistické údaje, nikoli pro zprávy, které "
+"obsahují citlivé osobní údaje."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:117
 msgid ""
 "Email is not made for large files. If your export ends up to be larger than "
 "20 megabytes, it will not be sent."
 msgstr ""
+"E-mail není určen pro velké soubory. Pokud bude váš export větší než 20 "
+"megabajtů, nebude odeslán."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:122
 msgid "Owner"
-msgstr ""
+msgstr "Majitel"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:128
 msgid ""
 "The export will be performed using the owner's permission level, i.e. if the "
 "owner loses access to the data, the report will stop."
 msgstr ""
+"Export se provede s využitím úrovně oprávnění vlastníka, tj. pokud vlastník "
+"ztratí přístup k údajům, export se zastaví."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:129
 msgid "The owner will receive the result as well as any error messages."
-msgstr ""
+msgstr "Vlastník obdrží výsledek i případné chybové zprávy."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:130
 msgid ""
 "The additional recipients you add below will only receive an email if the "
 "report was successful."
 msgstr ""
+"Další příjemci, které přidáte níže, obdrží e-mail pouze v případě, že "
+"hlášení bylo úspěšné."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:131
 msgid ""
 "All recipients of the export will be able to see who the owner of the report "
 "is."
-msgstr ""
+msgstr "Všichni příjemci exportu budou moci zjistit, kdo je vlastníkem reportu."
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:12
 msgctxt "order state"
@@ -18998,82 +19010,86 @@ msgstr "Čeká se (potvrzeno)"
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:25
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:20
 msgid "Canceled (paid fee)"
-msgstr ""
+msgstr "Zrušeno (zaplacený poplatek)"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:6
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:8
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:4
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:6
 msgid "Import attendees"
-msgstr ""
+msgstr "Importovat účastníky"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:13
 msgid "Data preview"
-msgstr ""
+msgstr "Náhled údajů"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:43
 msgid "Import settings"
-msgstr ""
+msgstr "Nastavení importování"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:49
 msgid ""
 "The import will be performed regardless of your quotas, so it will be "
 "possible to overbook your event using this option."
 msgstr ""
+"Import se provede bez ohledu na vaše kvóty, takže pomocí této možnosti bude "
+"možné vaši akci přeplnit."
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:57
 msgid "Perform import"
-msgstr ""
+msgstr "Provést import"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:10
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:16
 msgid "Upload a new file"
-msgstr ""
+msgstr "Nahrát nový soubor"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:16
 msgid ""
 "The uploaded file should be a CSV file with a header row. You will be able "
 "to assign the meanings of the different columns in the next step."
 msgstr ""
+"Nahraný soubor by měl být soubor CSV s řádkem záhlaví. V dalším kroku budete "
+"moci přiřadit význam jednotlivých sloupců."
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:22
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:35
 msgid "Import file"
-msgstr ""
+msgstr "Importovat soubor"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:26
 msgid "Start import"
-msgstr ""
+msgstr "Spustit import"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:13
 msgid "Nobody ordered a ticket yet."
-msgstr ""
+msgstr "Nikdo si zatím neobjednal vstupenku."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:21
 msgid "Take your shop live"
-msgstr ""
+msgstr "Převezměte svůj obchod naživo"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:25
 msgid "Go to the ticket shop"
-msgstr ""
+msgstr "Přejít do prodejny vstupenek"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:33
 msgid "Search query:"
-msgstr ""
+msgstr "Vyhledávací dotaz:"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:47
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:20
 msgid "Go!"
-msgstr ""
+msgstr "Vyhledat!"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:86
 msgid "Advanced search"
-msgstr ""
+msgstr "Pokročilé vyhledávání"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:99
 #, python-format
 msgid "List filtered by answers to question \"%(question)s\"."
-msgstr ""
+msgstr "Seznam filtrovaný podle odpovědí na otázku \"%(question)s\"."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:104
 msgid "Remove filter"
@@ -19082,7 +19098,7 @@ msgstr "Odstranit filtr"
 #: pretix/control/templates/pretixcontrol/orders/index.html:122
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:206
 msgid "Order paid / total"
-msgstr ""
+msgstr "Zaplacená částka / celkem"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:144
 #: pretix/control/templates/pretixcontrol/orders/index.html:146
@@ -19091,7 +19107,7 @@ msgstr ""
 #, python-format
 msgctxt "followup"
 msgid "TODO %(date)s"
-msgstr ""
+msgstr "TODO %(date)s"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:162
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:240
