@@ -148,6 +148,7 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         """
         stylesheet = StyleSheet1()
         stylesheet.add(ParagraphStyle(name='Normal', fontName=self.font_regular, fontSize=10, leading=12))
+        stylesheet.add(ParagraphStyle(name='NormalRight', fontName=self.font_regular, fontSize=10, leading=12, alignment=TA_RIGHT))
         stylesheet.add(ParagraphStyle(name='BoldInverseCenter', fontName=self.font_bold, fontSize=10, leading=12,
                                       textColor=colors.white, alignment=TA_CENTER))
         stylesheet.add(ParagraphStyle(name='InvoiceFrom', parent=stylesheet['Normal']))
@@ -610,8 +611,8 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     ),
                     str(len(lines)),
                     localize(tax_rate) + " %",
-                    money_filter(net_value * len(lines), self.invoice.event.currency),
-                    money_filter(gross_value * len(lines), self.invoice.event.currency),
+                    Paragraph(money_filter(net_value * len(lines), self.invoice.event.currency).replace('\xa0', ' '), self.stylesheet['NormalRight']),
+                    Paragraph(money_filter(gross_value * len(lines), self.invoice.event.currency).replace('\xa0', ' '), self.stylesheet['NormalRight']),
                 ))
             else:
                 if len(lines) > 1:
@@ -625,7 +626,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                         self.stylesheet['Normal']
                     ),
                     str(len(lines)),
-                    money_filter(gross_value * len(lines), self.invoice.event.currency),
+                    Paragraph(money_filter(gross_value * len(lines), self.invoice.event.currency).replace('\xa0', ' '), self.stylesheet['NormalRight']),
                 ))
             taxvalue_map[tax_rate, tax_name] += (gross_value - net_value) * len(lines)
             grossvalue_map[tax_rate, tax_name] += gross_value * len(lines)
@@ -633,12 +634,14 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         if has_taxes:
             tdata.append([
-                pgettext('invoice', 'Invoice total'), '', '', '', money_filter(total, self.invoice.event.currency)
+                pgettext('invoice', 'Invoice total'), '', '', '',
+                money_filter(total, self.invoice.event.currency)
             ])
             colwidths = [a * doc.width for a in (.50, .05, .15, .15, .15)]
         else:
             tdata.append([
-                pgettext('invoice', 'Invoice total'), '', money_filter(total, self.invoice.event.currency)
+                pgettext('invoice', 'Invoice total'), '',
+                money_filter(total, self.invoice.event.currency)
             ])
             colwidths = [a * doc.width for a in (.65, .20, .15)]
 
