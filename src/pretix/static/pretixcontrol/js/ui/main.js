@@ -100,7 +100,9 @@ var i18nToString = function (i18nstring) {
 $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
     waitingDialog.hide();
     var c = $(jqXHR.responseText).filter('.container');
-    if (c.length > 0) {
+    if (jqXHR.responseText.indexOf("<!-- pretix-login-marker -->") !== -1) {
+        location.href = '/control/login?next=' + encodeURIComponent(location.pathname + location.search + location.hash)
+    } else if (c.length > 0) {
         ajaxErrDialog.show(c.first().html());
     } else if (thrownError !== "abort" && thrownError !== "") {
         console.log(thrownError);
