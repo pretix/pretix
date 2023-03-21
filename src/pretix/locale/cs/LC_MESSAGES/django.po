@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
-"PO-Revision-Date: 2023-03-21 07:47+0000\n"
+"PO-Revision-Date: 2023-03-21 16:19+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -19113,7 +19113,7 @@ msgstr "TODO %(date)s"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:240
 #: pretix/control/templates/pretixcontrol/search/orders.html:95
 msgid "CANCELLATION REQUESTED"
-msgstr ""
+msgstr "ŽÁDOST O ZRUŠENÍ"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:165
 #: pretix/control/templates/pretixcontrol/orders/index.html:167
@@ -19122,59 +19122,59 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/search/orders.html:98
 #: pretix/control/templates/pretixcontrol/search/orders.html:100
 msgid "REFUND PENDING"
-msgstr ""
+msgstr "NÁHRADA PROBÍHÁ"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:170
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:248
 #: pretix/control/templates/pretixcontrol/search/orders.html:103
 msgid "OVERPAID"
-msgstr ""
+msgstr "PŘEPLACENO"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:172
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:250
 #: pretix/control/templates/pretixcontrol/search/orders.html:105
 msgid "UNDERPAID"
-msgstr ""
+msgstr "PODPLACENO"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:174
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:252
 #: pretix/control/templates/pretixcontrol/search/orders.html:107
 msgid "FULLY PAID"
-msgstr ""
+msgstr "PLNĚ ZAPLACENO"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:186
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:264
 msgid "INVOICE NOT CANCELED"
-msgstr ""
+msgstr "NEZRUŠENÁ FAKTURA"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:197
 msgid "Sum over all pages"
-msgstr ""
+msgstr "Součet přes všechny stránky"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:200
 #, python-format
 msgid "1 order"
 msgid_plural "%(s)s orders"
-msgstr[0] ""
-msgstr[1] ""
-msgstr[2] ""
+msgstr[0] "1 objednávka"
+msgstr[1] "%(s)s objednávky"
+msgstr[2] "%(s)s objednávek"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:5
 #: pretix/control/templates/pretixcontrol/orders/overview.html:16
 msgid "Order overview"
-msgstr ""
+msgstr "Přehled objednávek"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:10
 msgid "Sales"
-msgstr ""
+msgstr "Prodeje"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:11
 msgid "Revenue (gross)"
-msgstr ""
+msgstr "Příjmy (hrubé)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:12
 msgid "Revenue (net)"
-msgstr ""
+msgstr "Příjmy (čisté)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:58
 msgctxt "subevent"
@@ -19182,6 +19182,8 @@ msgid ""
 "If you select a single date, fees will not be listed here as it might not be "
 "clear which date they belong to."
 msgstr ""
+"Pokud vyberete jedno datum, poplatky zde nebudou uvedeny, protože možná "
+"nebude jasné, ke kterému datu patří."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:72
 #: pretix/plugins/reports/exporters.py:324
@@ -19194,21 +19196,24 @@ msgid ""
 "canceled completely, while the numbers also include single canceled "
 "positions within valid orders."
 msgstr ""
+"Pokud kliknete na odkazy v tomto sloupci, najdete pouze zcela zrušené "
+"objednávky, zatímco čísla zahrnují i jednotlivé zrušené pozice v rámci "
+"platných objednávek."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:34
 msgid "No refunds are currently open."
-msgstr ""
+msgstr "V současné době neprobíhají žádné náhrady."
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:74
 msgid "Actions"
-msgstr ""
+msgstr "Akce"
 
 #: pretix/control/templates/pretixcontrol/orders/search.html:7
 #: pretix/control/templates/pretixcontrol/orders/search.html:9
 #: pretix/control/templates/pretixcontrol/search/orders.html:7
 #: pretix/control/templates/pretixcontrol/search/orders.html:9
 msgid "Order search"
-msgstr ""
+msgstr "Vyhledat objednávky"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:12
@@ -19216,7 +19221,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:18
 #, python-format
 msgid "Customer #%(id)s"
-msgstr ""
+msgstr "Zákazník #%(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:21
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:15
@@ -19237,16 +19242,18 @@ msgstr "Odeslat odkaz pro obnovení hesla"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:78
 msgid "This includes all paid orders by this customer across all your events."
 msgstr ""
+"To obsahuje všechny zaplacené objednávky tohoto zákazníka ve všech vašich "
+"akcích."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:79
 msgid "Lifetime spending"
-msgstr ""
+msgstr "Celkový obrat"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:101
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:39
 #: pretix/control/templates/pretixcontrol/users/form.html:18
 msgid "Anonymize"
-msgstr ""
+msgstr "Anonymizovat"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:120
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:35
@@ -19254,50 +19261,54 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:40
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:134
 msgid "Usages"
-msgstr ""
+msgstr "Použití"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:187
 msgid "Add membership"
-msgstr ""
+msgstr "Přidat členství"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:234
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:103
 msgid "Matched to the account based on the email address."
-msgstr ""
+msgstr "Přiřazeno k účtu na základě e-mailové adresy."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:280
 msgid "Customer history"
-msgstr ""
+msgstr "Historie zákazníka"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:5
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:11
 #, python-format
 msgid "Anonymize customer #%(id)s"
-msgstr ""
+msgstr "Anonymizovat zákazníka #%(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:16
 msgid "Are you sure you want to anonymize this customer account?"
-msgstr ""
+msgstr "Opravdu chcete tento účet zákazníka anonymizovat?"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:20
 msgid "All orders will be disconnected from this customer account."
-msgstr ""
+msgstr "Všechny objednávky budou od tohoto zákaznického účtu odpojeny."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:22
 msgid ""
 "The orders themselves will not be anonymized and can still contain personal "
 "information!"
 msgstr ""
+"Samotné objednávky nebudou anonymizovány a mohou stále obsahovat osobní "
+"údaje!"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:26
 msgid ""
 "The customer will no longer be able to log in and will lose access to any "
 "membership benefits."
 msgstr ""
+"Zákazník se již nebude moci přihlásit a ztratí přístup ke všem členským "
+"výhodám."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:29
 msgid "This action is irreversible."
-msgstr ""
+msgstr "Tato akce je nevratná."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:6
 #: pretix/control/templates/pretixcontrol/organizers/customer_edit.html:16
@@ -19306,17 +19317,19 @@ msgstr "Nový zákazník"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:15
 msgid "Are you sure you want to delete this membership?"
-msgstr ""
+msgstr "Opravdu chcete toto členství smazat?"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:17
 msgid ""
 "This membership cannot be deleted since it has been used in an order. Change "
 "its end date to the past instead."
 msgstr ""
+"Toto členství nelze smazat, protože bylo použito v objednávce. Místo toho "
+"změňte jeho datum ukončení do minulosti."
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:14
 msgid "No customer accounts have been created yet."
-msgstr ""
+msgstr "Zatím nebyly vytvořeny žádné účty zákazníků."
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:19
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:48
@@ -19325,13 +19338,15 @@ msgstr "Vytvořit nového zákazníka"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:5
 msgid "Delete organizer"
-msgstr ""
+msgstr "Smazat organizátora"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:9
 msgid ""
 "This operation will destroy this organizer including all events, "
 "configuration, products, quotas, questions, vouchers, lists, etc."
 msgstr ""
+"Tato operace zničí tohoto organizátora včetně všech akcí, konfigurací, "
+"produktů, kvót, otázek, poukázek, seznamů atd."
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:22
 #, python-format
@@ -19339,44 +19354,51 @@ msgid ""
 "To confirm you really want this, please type out the organizer's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
+"Chcete-li potvrdit, že to opravdu chcete, zadejte zde zkrácený název "
+"organizátora (\"%(slug)s\"):"
 
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:36
 msgid ""
 "This organizer account can not be deleted as it already contains orders, "
 "invoices, or devices."
 msgstr ""
+"Tento účet organizátora nelze smazat, protože již obsahuje objednávky, "
+"faktury nebo zařízení."
 
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:6
 #, python-format
 msgid "Organizer: %(name)s"
-msgstr ""
+msgstr "Organizátor: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:6
 msgid "Change multiple devices"
-msgstr ""
+msgstr "Změnit více zařízení"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:8
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:13
 #, python-format
 msgid "%(number)s selected"
-msgstr ""
+msgstr "%(number)s vybráno"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:36
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:24
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:73
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:85
 msgid "Advanced settings"
-msgstr ""
+msgstr "Rozšířená nastavení"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:6
 msgid "Connect to device:"
-msgstr ""
+msgstr "Připojit k zařízení:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:11
 msgid ""
 "Download an app that is compatible with pretix. For example, our check-in "
 "app <strong>pretixSCAN</strong> is available on all major platforms."
 msgstr ""
+"Stáhněte si aplikaci, která je kompatibilní s aplikací pretix. Například "
+"naše aplikace pro odbavení <strong>pretixSCAN</strong> je k dispozici na "
+"všech hlavních platformách."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:14
 msgid "Download pretixSCAN"
@@ -19387,63 +19409,69 @@ msgid ""
 "Open the app that you want to connect and optionally reset it to the "
 "original state."
 msgstr ""
+"Otevřete aplikaci, kterou chcete připojit, a případně ji obnovte do "
+"původního stavu."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:20
 msgid "Scan the following configuration code:"
-msgstr ""
+msgstr "Naskenujte následující konfigurační kód:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:22
 msgid ""
 "If your app/device does not support scanning a QR code, you can also enter "
 "the following information:"
 msgstr ""
+"Pokud vaše aplikace/zařízení nepodporuje skenování QR kódu, můžete zadat "
+"také následující informace:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:24
 msgid "System URL:"
-msgstr ""
+msgstr "Adresa systému:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:25
 msgid "Token:"
-msgstr ""
+msgstr "Token:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:31
 msgid "Device overview"
-msgstr ""
+msgstr "Přehled zařízení"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:6
 msgid "Device:"
-msgstr ""
+msgstr "Zařízení:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:8
 msgid "Connect a new device"
-msgstr ""
+msgstr "Připojit nové zařízení"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_edit.html:40
 msgid "Device history"
-msgstr ""
+msgstr "Historie zařízení"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html:4
 #: pretix/control/templates/pretixcontrol/organizers/device_logs.html:6
 msgid "Device logs"
-msgstr ""
+msgstr "Protokoly zařízení"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:5
 msgid "Revoke device access:"
-msgstr ""
+msgstr "Zrušit přístup k zařízení:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:9
 msgid "Are you sure you want remove access for this device?"
-msgstr ""
+msgstr "Jste si jisti, že chcete odebrat přístup pro toto zařízení?"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:10
 msgid ""
 "All data of this device will stay available, but you can't use the device "
 "any more."
 msgstr ""
+"Všechny údaje tohoto zařízení zůstanou k dispozici, ale zařízení již "
+"nemůžete používat."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:14
 msgid "All data uploaded by this device will stay available online."
-msgstr ""
+msgstr "Všechny údaje nahrané tímto zařízením zůstanou dostupné online."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:15
 msgid ""
