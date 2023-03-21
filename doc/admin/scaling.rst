@@ -25,7 +25,7 @@ and what you should think of.
 Scaling reasons
 ---------------
 
-There's mainly two reasons to scale up a pretix installation beyond a single server:
+There are two main reasons for scaling up a pretix installation beyond a single server:
 
 * **Availability:** Distributing pretix over multiple servers can allow you to survive failure of one or more single machines, leading to a higher uptime and reliability of your system.
 
@@ -92,7 +92,7 @@ them from a different URL <config-urls>`.
 pretix-web
 """"""""""
 
-The ``pretix-web`` process does not carry any internal state can be easily started on as many machines as you like, and you can
+The ``pretix-web`` process does not carry any internal state and can be easily started on as many machines as you like, and you can
 use the load balancing features of your frontend web server to redirect to all of them.
 
 You can adjust the number of processes in the ``gunicorn`` command line, and we recommend choosing roughly two times the number
@@ -154,7 +154,7 @@ files, otherwise you **will** run into errors with the user interface.
 The easiest solution for this is probably to store them on a NFS server that you mount
 on each of the other servers.
 
-Since we use Django's file storage mechanism internally, you can in theory also use a object-storage solution like Amazon S3, Ceph, or Minio to store these files, although we currently do not expose this through pretix' configuration file and this would require you to ship your own variant of ``pretix/settings.py`` and reference it through the ``DJANGO_SETTINGS_MODULE`` environment variable.
+Since we use Django's file storage mechanism internally, you can in theory also use an object-storage solution like Amazon S3, Ceph, or Minio to store these files, although we currently do not expose this through pretix' configuration file and this would require you to ship your own variant of ``pretix/settings.py`` and reference it through the ``DJANGO_SETTINGS_MODULE`` environment variable.
 
 At pretix.eu, we use a custom-built `object storage cluster`_.
 
@@ -171,12 +171,12 @@ you configure, so make sure to set this memory usage as high as you can afford. 
 memory available allows your database to make more use of caching, which is usually good.
 
 Scaling your database to multiple machines needs to be treated with great caution. It's a
-good to have a replica of your database for availability reasons. In case your primary
+good idea to have a replica of your database for availability reasons. In case your primary
 database server fails, you can easily switch over to the replica and continue working.
 
-However, using database replicas for performance gains is much more complicated. When using
+However, using database replicas for performance gain is much more complicated. When using
 replicated database systems, you are always trading in consistency or availability to get
-additional performance and the consequences of this can be subtle and it is important
+additional performance and the consequences of this can be subtle. It is important
 that you have a deep understanding of the semantics of your replication mechanism.
 
 .. warning::
@@ -187,7 +187,7 @@ that you have a deep understanding of the semantics of your replication mechanis
    As an example, if you buy a ticket, pretix first needs to calculate how many tickets
    are left to sell. If this calculation is done on a database replica that lags behind
    even for fractions of a second, the decision to allow selling the ticket will be made
-   on out-of-data data and you can end up with more tickets sold than configured. Similarly,
+   on stale data and you can end up with more tickets sold than configured. Similarly,
    you could imagine situations leading to double payments etc.
 
 If you do have a replica, you *can* tell pretix about it :ref:`in your configuration <config-replica>`.
@@ -204,9 +204,9 @@ redis
 While redis is a very important part that glues together some of the components, it isn't used
 heavily and can usually handle a fairly large pretix installation easily on a single modern
 CPU core.
-Having some memory available is good in case of e.g. lots of tasks queuing up during a traffic peak, but we wouldn't expect ever needing more than a gigabyte of it.
+Having some memory available is good, e.g. if lots of tasks queue up during a traffic peak, but we wouldn't expect ever needing more than a gigabyte of it.
 
-Feel free to set up a redis cluster for availability – but you won't need it for performance in a long time.
+Feel free to set up a redis cluster for availability – but you probably won't need it for performance.
 
 The limitations
 ---------------
@@ -228,7 +228,7 @@ if you add more hardware.
 If you have an unlimited number of tickets, we can apply fewer locking and we've reached **approx.
 1500 orders per minute per event** in benchmarks, although even more should be possible.
 
-We're working to reduce the number of cases in which this is relevant and thereby improve the possible
+We're working on reducing the number of cases in which this is relevant and thereby improve the possible
 throughput. If you want to use pretix for an event with 10,000+ tickets that are likely to be sold out
 within minutes, please get in touch to discuss possible solutions. We'll work something out for you!
 
