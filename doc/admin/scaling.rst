@@ -25,7 +25,7 @@ and what you should think of.
 Scaling reasons
 ---------------
 
-The two main reasons for scaling up a pretix installation beyond a single server:
+There are two main reasons for scaling up a pretix installation beyond a single server:
 
 * **Availability:** Distributing pretix over multiple servers can allow you to survive failure of one or more single machines, leading to a higher uptime and reliability of your system.
 
