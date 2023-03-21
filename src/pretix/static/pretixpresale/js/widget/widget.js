@@ -1577,6 +1577,9 @@ var shared_root_methods = {
             redirect_url += '/' + this.$root.subevent;
         }
         redirect_url += '/seatingframe/?iframe=1&locale=' + lang;
+        if (this.$root.voucher_code) {
+            redirect_url += '&voucher=' + encodeURIComponent(this.$root.voucher_code);
+        }
         if (this.$root.cart_id) {
             redirect_url += '&take_cart_id=' + this.$root.cart_id;
         }
