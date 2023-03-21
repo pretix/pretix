@@ -31,6 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
+import re
 import uuid
 from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
@@ -38,6 +39,7 @@ from decimal import Decimal
 from typing import List, Optional
 
 from celery.exceptions import MaxRetriesExceededError
+from django import forms
 from django.core.exceptions import ValidationError
 from django.db import DatabaseError, transaction
 from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Value
@@ -135,6 +137,7 @@ error_messages = {
     'some_subevent_ended': gettext_lazy(
         'The booking period for one of the events in your cart has ended. The affected '
         'positions have been removed from your cart.'),
+    'price_not_a_number': gettext_lazy('The entered price is not a number.'),
     'price_too_high': gettext_lazy('The entered price is to high.'),
     'voucher_invalid': gettext_lazy('This voucher code is not known in our database.'),
     'voucher_min_usages': gettext_lazy(
@@ -725,9 +728,18 @@ class CartManager:
                 price_after_voucher = listed_price
             custom_price = None
             if item.free_price and i.get('price'):
-                custom_price = Decimal(str(i.get('price')).replace(",", "."))
+                custom_price = re.sub('[^0-9.,]', '', str(i.get('price')))
+                if not custom_price:
+                    raise CartError(error_messages['price_not_a_number'])
+                try:
+                    custom_price = forms.DecimalField(localize=True).to_python(custom_price)
+                except:
+                    try:
+                        custom_price = Decimal(custom_price)
+                    except:
+                        raise CartError(error_messages['price_not_a_number'])
                 if custom_price > 99_999_999_999:
-                    raise ValueError('price_too_high')
+                    raise CartError(error_messages['price_too_high'])
 
             op = self.AddOperation(
                 count=i['count'],
@@ -840,9 +852,18 @@ class CartManager:
                 listed_price = get_listed_price(item, variation, cp.subevent)
             custom_price = None
             if item.free_price and a.get('price'):
-                custom_price = Decimal(str(a.get('price')).replace(",", "."))
+                custom_price = re.sub('[^0-9.,]', '', a.get('price'))
+                if not custom_price:
+                    raise CartError(error_messages['price_not_a_number'])
+                try:
+                    custom_price = forms.DecimalField(localize=True).to_python(custom_price)
+                except:
+                    try:
+                        custom_price = Decimal(custom_price)
+                    except:
+                        raise CartError(error_messages['price_not_a_number'])
                 if custom_price > 99_999_999_999:
-                    raise ValueError('price_too_high')
+                    raise CartError(error_messages['price_too_high'])
 
             # Fix positions with wrong price (TODO: happens out-of-cartmanager-transaction and therefore a little hacky)
             for ca in current_addons[cp][a['item'], a['variation']]:

@@ -19,9 +19,11 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import re
 from decimal import Decimal
 from typing import List, Optional, Tuple
 
+from django import forms
 from django.db.models import Q
 from django.utils.timezone import now
 
@@ -69,7 +71,16 @@ def get_price(item: Item, variation: ItemVariation = None,
                                  subtract_from_gross=bundled_sum)
     elif item.free_price and custom_price is not None and custom_price != "":
         if not isinstance(custom_price, Decimal):
-            custom_price = Decimal(str(custom_price).replace(",", "."))
+            custom_price = re.sub('[^0-9.,]', '', str(custom_price))
+            if not custom_price:
+                raise ValueError('price_not_a_number')
+            try:
+                custom_price = forms.DecimalField(localize=True).to_python(custom_price)
+            except:
+                try:
+                    custom_price = Decimal(custom_price)
+                except:
+                    raise ValueError('price_not_a_number')
         if custom_price > 99_999_999_999:
             raise ValueError('price_too_high')
 

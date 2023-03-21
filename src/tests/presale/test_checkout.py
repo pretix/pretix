@@ -3138,6 +3138,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             assert cp1.addons.last().item == self.workshop1
 
     def test_set_addon_free_price(self):
+        self.event.settings.locales = ['de']
+        self.event.settings.locale = 'de'
+
         with scopes_disabled():
             self.workshop1.free_price = True
             self.workshop1.save()
