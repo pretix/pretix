@@ -26,7 +26,7 @@ from django.db.models import Q
 from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from rest_framework import serializers, status, viewsets
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.mixins import CreateModelMixin
 from rest_framework.response import Response
 
@@ -46,7 +46,7 @@ class BankTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = BankTransaction
         fields = ('state', 'message', 'checksum', 'payer', 'reference', 'amount', 'date', 'order',
-                  'comment', 'iban', 'bic')
+                  'comment', 'iban', 'bic', 'currency')
 
 
 class BankImportJobSerializer(serializers.ModelSerializer):
@@ -57,13 +57,25 @@ class BankImportJobSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = BankImportJob
-        fields = ('id', 'event', 'created', 'state', 'transactions')
+        fields = ('id', 'event', 'created', 'state', 'transactions', 'currency')
 
     def __init__(self, *args, **kwargs):
         self.organizer = kwargs.pop('organizer')
         self.fields['event'].read_only = False
         self.fields['event'].queryset = self.organizer.events.all()
         super().__init__(*args, **kwargs)
+
+    def validate(self, attrs):
+        if not attrs.get("event"):
+            if "currency" not in attrs:
+                currencies = list(
+                    self.organizer.events.order_by('currency').values_list('currency', flat=True).distinct()
+                )
+                if len(currencies) != 1:
+                    raise ValidationError({"currency": ["Currency is ambiguous, please set explicitly."]})
+                else:
+                    attrs["currency"] = currencies[0]
+        return attrs
 
     def create(self, validated_data):
         trans_data = validated_data.pop('transactions')

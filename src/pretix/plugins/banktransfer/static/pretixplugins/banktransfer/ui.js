@@ -131,6 +131,7 @@ var bankimport_transactionlist = {
                     for (var i = 0; i < reslen; i++) {
                         suggs.push(results[i]);
                     }
+                    console.log(results, suggs);
                     return suggs;
                 }
             }

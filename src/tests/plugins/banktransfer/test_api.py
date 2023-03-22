@@ -79,11 +79,13 @@ RES_JOB = {
          'amount': '0.00',
          'date': 'unknown',
          'state': 'error',
+         'currency': 'EUR',
          'order': None
          }
     ],
     'created': '2017-06-27T09:13:35.785251Z',
-    'state': 'pending'
+    'state': 'pending',
+    'currency': 'EUR'
 }
 
 
@@ -93,10 +95,10 @@ def test_api_list(env, client):
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
-        job = BankImportJob.objects.create(event=env[0], organizer=env[0].organizer)
+        job = BankImportJob.objects.create(event=env[0], organizer=env[0].organizer, currency='EUR')
         BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
                                        state=BankTransaction.STATE_ERROR,
-                                       amount=0, date='unknown')
+                                       amount=0, date='unknown', currency='EUR')
     res = copy.copy(RES_JOB)
     res['id'] = job.pk
     res['created'] = testtime.isoformat().replace('+00:00', 'Z')
@@ -113,10 +115,10 @@ def test_api_detail(env, client):
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
-        job = BankImportJob.objects.create(event=env[0], organizer=env[0].organizer)
+        job = BankImportJob.objects.create(event=env[0], organizer=env[0].organizer, currency='EUR')
         BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
                                        state=BankTransaction.STATE_ERROR,
-                                       amount=0, date='unknown')
+                                       amount=0, date='unknown', currency='EUR')
     res = copy.copy(RES_JOB)
     res['id'] = job.pk
     res['created'] = testtime.isoformat().replace('+00:00', 'Z')
@@ -151,6 +153,7 @@ def test_api_create(env, client):
     assert rdata['state'] == 'completed'
     assert len(rdata['transactions']) == 1
     assert rdata['transactions'][0]['checksum']
+    assert rdata['transactions'][0]['currency'] == 'EUR'
     env[2].refresh_from_db()
     assert env[2].status == Order.STATUS_PAID
 
@@ -179,7 +182,79 @@ def test_api_create_with_iban_bic(env, client):
     assert rdata['state'] == 'completed'
     assert len(rdata['transactions']) == 1
     assert rdata['transactions'][0]['checksum']
+    assert rdata['transactions'][0]['currency'] == 'EUR'
     env[2].refresh_from_db()
     assert env[2].status == Order.STATUS_PAID
     with scopes_disabled():
         assert env[2].payments.first().info_data['iban'] == 'NL79RABO5373380466'
+
+
+@pytest.mark.django_db(transaction=True)
+def test_api_create_org_auto_currency(env, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = client.post(
+        '/api/v1/organizers/{}/bankimportjobs/'.format(env[0].organizer.slug), json.dumps({
+            'transactions': [
+                {
+                    'payer': 'Foo',
+                    'reference': 'DUMMY-1Z3AS',
+                    'amount': '23.00',
+                    'date': 'yesterday'  # test bogus date format
+                }
+            ]
+        }), content_type="application/json"
+    )
+    assert r.status_code == 201
+    rdata = json.loads(r.content.decode('utf-8'))
+    # This is only because we don't run celery in tests, otherwise it wouldn't be completed yet.
+    assert rdata['state'] == 'completed'
+    assert len(rdata['transactions']) == 1
+    assert rdata['transactions'][0]['checksum']
+    assert rdata['transactions'][0]['currency'] == 'EUR'
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID
+
+
+@pytest.mark.django_db(transaction=True)
+def test_api_create_org_unclear_currency(env, client):
+    Event.objects.create(
+        organizer=env[0].organizer, name='Dummy', slug='dummy2', currency='HUF',
+        date_from=now(), plugins='pretix.plugins.banktransfer'
+    )
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = client.post(
+        '/api/v1/organizers/{}/bankimportjobs/'.format(env[0].organizer.slug), json.dumps({
+            'transactions': [
+                {
+                    'payer': 'Foo',
+                    'reference': 'DUMMY-1Z3AS',
+                    'amount': '23.00',
+                    'date': 'yesterday'  # test bogus date format
+                }
+            ]
+        }), content_type="application/json"
+    )
+    assert r.status_code == 400
+
+    r = client.post(
+        '/api/v1/organizers/{}/bankimportjobs/'.format(env[0].organizer.slug), json.dumps({
+            'currency': 'EUR',
+            'transactions': [
+                {
+                    'payer': 'Foo',
+                    'reference': 'DUMMY-1Z3AS',
+                    'amount': '23.00',
+                    'date': 'yesterday'  # test bogus date format
+                }
+            ]
+        }), content_type="application/json"
+    )
+    assert r.status_code == 201
+    rdata = json.loads(r.content.decode('utf-8'))
+    # This is only because we don't run celery in tests, otherwise it wouldn't be completed yet.
+    assert rdata['state'] == 'completed'
+    assert len(rdata['transactions']) == 1
+    assert rdata['transactions'][0]['checksum']
+    assert rdata['transactions'][0]['currency'] == 'EUR'
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PAID

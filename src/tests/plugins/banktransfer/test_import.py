@@ -339,6 +339,19 @@ def test_mark_paid_organizer(env, orga_job):
 
 
 @pytest.mark.django_db
+def test_incorrect_currency(env, orga_job):
+    BankImportJob.objects.filter(pk=orga_job).update(currency='HUF')
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY-1234S',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    env[2].refresh_from_db()
+    assert env[2].status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
 def test_mark_paid_double_reference(env, orga_job):
     process_banktransfers(orga_job, [{
         'payer': 'Karla Kundin',

@@ -171,6 +171,12 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = N
             trans.save()
             return
 
+        if trans.currency is not None and trans.currency != o.event.currency:
+            trans.state = BankTransaction.STATE_ERROR
+            trans.message = gettext_noop('Currencies do not match.')
+            trans.save()
+            return
+
     if len(orders) > 1:
         # Multi-match! Can we split this automatically?
         order_pending_sum = sum(o.pending_sum for o in orders)
@@ -280,7 +286,8 @@ def _get_unknown_transactions(job: BankImportJob, data: list, event: Event = Non
                                 payer=row.get('payer', ''),
                                 reference=row.get('reference', ''),
                                 amount=amount, date=row.get('date', ''),
-                                iban=row.get('iban', ''), bic=row.get('bic', ''))
+                                iban=row.get('iban', ''), bic=row.get('bic', ''),
+                                currency=event.currency if event else job.currency)
 
         trans.date_parsed = parse_date(trans.date)
 

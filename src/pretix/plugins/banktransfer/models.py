@@ -42,6 +42,7 @@ class BankImportJob(models.Model):
 
     event = models.ForeignKey('pretixbase.Event', null=True, on_delete=models.CASCADE)
     organizer = models.ForeignKey('pretixbase.Organizer', null=True, on_delete=models.CASCADE)
+    currency = models.CharField(max_length=10, null=True)
     created = models.DateTimeField(auto_now_add=True)
     state = models.CharField(max_length=32, choices=STATES, default=STATE_PENDING)
 
@@ -78,6 +79,7 @@ class BankTransaction(models.Model):
     event = models.ForeignKey('pretixbase.Event', null=True, on_delete=models.CASCADE)
     organizer = models.ForeignKey('pretixbase.Organizer', null=True, on_delete=models.CASCADE)
     import_job = models.ForeignKey('BankImportJob', related_name='transactions', on_delete=models.CASCADE)
+    currency = models.CharField(max_length=10, null=True)
     state = models.CharField(max_length=32, choices=STATES, default=STATE_UNCHECKED)
     message = models.TextField()
     checksum = models.CharField(max_length=190, db_index=True)
@@ -112,6 +114,7 @@ class BankTransaction(models.Model):
 class RefundExport(models.Model):
     event = models.ForeignKey('pretixbase.Event', related_name='banktransfer_refund_exports', on_delete=models.CASCADE, null=True, blank=True)
     organizer = models.ForeignKey('pretixbase.Organizer', related_name='banktransfer_refund_exports', on_delete=models.PROTECT, null=True, blank=True)
+    currency = models.CharField(max_length=10, null=True)
     datetime = models.DateTimeField(auto_now_add=True)
     testmode = models.BooleanField(default=False)
     rows = models.TextField(default="[]")
@@ -123,12 +126,6 @@ class RefundExport(models.Model):
             return self.organizer.slug
         else:
             return self.event.slug
-
-    @cached_property
-    def currency(self):
-        if self.event:
-            return self.event.currency
-        return self.organizer.events.first().currency
 
     @property
     def rows_data(self):
