@@ -36,7 +36,7 @@ from django.template.loader import get_template
 from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import (
-    get_language, gettext_lazy as _, pgettext_lazy,
+    get_language, gettext_lazy as _,
 )
 
 from pretix.base.i18n import (
@@ -44,7 +44,7 @@ from pretix.base.i18n import (
 )
 from pretix.base.models import Event
 from pretix.base.reldate import RelativeDateWrapper
-from pretix.base.settings import get_name_parts_localized, PERSON_NAME_SCHEMES
+from pretix.base.settings import PERSON_NAME_SCHEMES, get_name_parts_localized
 from pretix.base.signals import (
     register_html_mail_renderers, register_mail_placeholders,
 )
