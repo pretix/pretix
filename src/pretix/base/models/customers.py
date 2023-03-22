@@ -221,7 +221,7 @@ class Customer(LoggedModel):
         return salted_hmac(key_salt, payload).hexdigest()
 
     def get_email_context(self):
-        from pretix.base.email import get_name_parts_localized
+        from pretix.base.settings import get_name_parts_localized
         ctx = {
             'name': self.name,
             'organizer': self.organizer.name,
