@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
-"PO-Revision-Date: 2023-03-21 16:19+0000\n"
+"PO-Revision-Date: 2023-03-22 12:12+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -19478,6 +19478,8 @@ msgid ""
 "If data (e.g. POS transactions or check-ins) has been created on this device "
 "and has not been uploaded, you will no longer be able to upload it."
 msgstr ""
+"Pokud byly v tomto zařízení vytvořeny údaje (např. pokladní transakce nebo "
+"check-iny), které nebyly nahrány, nebudete je již moci nahrát."
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:16
 msgid ""
@@ -19486,65 +19488,73 @@ msgid ""
 "data such as event metadata and POS transactions will persist until you "
 "uninstall or reset the software manually."
 msgstr ""
+"Pokud to software zařízení podporuje, budou osobní údaje, například "
+"objednávky, při dalším pokusu o synchronizaci ze zařízení odstraněny. "
+"Neosobní data, jako jsou metadata akcí a pokladní transakce, zůstanou "
+"zachována, dokud software ručně neodinstalujete nebo neresetujete."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:10
 msgid ""
 "This menu allows you to connect hardware devices such as box office "
 "terminals or scanning terminals to your account."
 msgstr ""
+"Tato nabídka umožňuje připojit k účtu hardwarové zařízení, jako jsou "
+"pokladní terminály nebo skenovací terminály."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:18
 msgid "You haven't connected any hardware devices yet."
-msgstr ""
+msgstr "Zatím jste nepřipojili žádné hardwarové zařízení."
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:24
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:56
 msgid "Connect a device"
-msgstr ""
+msgstr "Připojit zařízení"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:81
 msgid "Hardware model"
-msgstr ""
+msgstr "Model hardwaru"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:109
 #: pretix/control/templates/pretixcontrol/subevents/index.html:128
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:177
 msgid "select row for batch-operation"
-msgstr ""
+msgstr "vybrat řádek pro sériovou operaci"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:139
 msgid "Not yet initialized"
-msgstr ""
+msgstr "Zatím neinicializováno"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:142
 msgid "Revoked"
-msgstr ""
+msgstr "Zrušeno"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:164
 msgid "Connect"
-msgstr ""
+msgstr "Připojit"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:173
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:76
 msgid "Logs"
-msgstr ""
+msgstr "Protokoly"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:185
 #: pretix/control/templates/pretixcontrol/subevents/index.html:198
 msgid "Edit selected"
-msgstr ""
+msgstr "Upravit vybrané"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:12
 msgid "Organizer settings"
-msgstr ""
+msgstr "Nastavení organizéru"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:44
 msgid "Organizer page"
-msgstr ""
+msgstr "Stránka organizátora"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:68
 msgid "The links you configure here will also be shown on all of your events."
 msgstr ""
+"Odkazy, které zde nakonfigurujete, se budou zobrazovat také na všech vašich "
+"akcích."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:142
 msgid ""
@@ -19552,10 +19562,12 @@ msgid ""
 "default settings for all events in this account that do not have their own "
 "design settings."
 msgstr ""
+"Tato nastavení se použijí pro stránku organizátora i pro standardní "
+"nastavení všech akcí v tomto účtu, které nemají vlastní nastavení vzhledu."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:161
 msgid "Privacy"
-msgstr ""
+msgstr "Ochrana osobních údajů"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:165
 msgid ""
@@ -19563,6 +19575,9 @@ msgid ""
 "before you are allowed to use cookies or similar technology for analytics, "
 "tracking, payment, or similar purposes."
 msgstr ""
+"Některé jurisdikce, včetně Evropské unie, vyžadují souhlas uživatele, abyste "
+"mohli používat soubory cookie nebo podobné technologie pro analytické, "
+"sledovací, platební nebo podobné účely."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:172
 msgid ""
@@ -19571,6 +19586,10 @@ msgid ""
 "security. Therefore, cookies set by pretix itself do not require consent in "
 "all jurisdictions that we are aware of."
 msgstr ""
+"pretix sám vždy nastavuje pouze soubory cookie, které jsou potřebné k "
+"poskytování služby požadované uživatelem nebo k udržení odpovídající úrovně "
+"zabezpečení. Soubory cookie nastavené samotnou službou pretix proto "
+"nevyžadují souhlas ve všech jurisdikcích, o kterých víme."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:180
 msgid ""
@@ -19578,6 +19597,10 @@ msgid ""
 "affect if you use <strong>plugins</strong> that require additional cookies "
 "<strong>and</strong> participate in our cookie consent mechanism."
 msgstr ""
+"Proto budou mít nastavení na této stránce vliv <strong>pouze</strong> v "
+"případě, že používáte <strong>pluginy</strong>, které vyžadují další soubory "
+"cookie <strong>a</strong> jsou zapojeny do našeho mechanismu souhlasu se "
+"soubory cookie."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:187
 msgid ""
@@ -19587,86 +19610,99 @@ msgid ""
 "usage, the legal details in your specific jurisdiction, or the agreements "
 "you have with third parties such as payment or tracking providers."
 msgstr ""
+"V konečném důsledku je vaší odpovědností zajistit, abyste dodržovali všechny "
+"platné legislativní předpisy. Snažíme se vám pomoci tím, že poskytujeme tato "
+"nastavení, ale nemůžeme převzít odpovědnost, protože neznáme přesnou "
+"konfiguraci vaší aplikace pretix, právní podrobnosti ve vaší konkrétní "
+"jurisdikci ani dohody, které máte uzavřeny s třetími stranami, jako jsou "
+"poskytovatelé plateb nebo služby sledování."
 
 #: pretix/control/templates/pretixcontrol/organizers/export.html:64
 msgid "Run export now and download result"
-msgstr ""
+msgstr "Spustit export a stáhnout výsledek"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:5
 msgid "Delete gate:"
-msgstr ""
+msgstr "Smazat stanici:"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:8
 msgid "Are you sure you want to delete the gate?"
-msgstr ""
+msgstr "Opravdu chcete stanici odstranit?"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:6
 msgid "Gate:"
-msgstr ""
+msgstr "Stanice:"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:11
 msgid "Create a new gate"
-msgstr ""
+msgstr "Vytvořit novou stanici"
 
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:7
 msgid "The list below shows gates that you can use to group check-in devices."
 msgstr ""
+"V níže uvedeném seznamu jsou uvedeny všechny stanice, které můžete použít "
+"pro seskupení odbavovacích zařízení."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:7
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_edit.html:6
 #, python-format
 msgid "Gift card: %(card)s"
-msgstr ""
+msgstr "Dárková karta: %(card)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:36
 msgid "Expire date"
-msgstr ""
+msgstr "Datum vypršení platnosti"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:43
 msgid "Issued through sale"
-msgstr ""
+msgstr "Vydáno prodejem"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:55
 msgid "Transactions"
-msgstr ""
+msgstr "Transakce"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:81
 msgid ""
 "Create a payment on the respective order that cancels out with this "
 "transaction. The order will then likely be overpaid."
 msgstr ""
+"Vytvořit platbu v příslušné objednávce, která se touto transakcí zruší. "
+"Objednávka pak bude pravděpodobně přeplacena."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:83
 msgid "Revert"
-msgstr ""
+msgstr "Vrátit"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:87
 msgid "Manual transaction"
-msgstr ""
+msgstr "Ruční transakce"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:120
 msgid "Gift card history"
-msgstr ""
+msgstr "Historie dárkových karet"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:8
 msgid "Issued gift cards"
-msgstr ""
+msgstr "Vydané dárkové karty"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:13
 msgid ""
 "You haven't issued any gift cards yet. You can either set up a product in an "
 "event shop to sell gift cards, or you can manually issue gift cards."
 msgstr ""
+"Zatím jste nevydali žádné dárkové karty. V obchodu akce můžete nastavit "
+"produkt, který bude dárkové karty prodávat, nebo můžete dárkové karty "
+"vydávat ručně."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:20
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:50
 msgid "Manually issue a gift card"
-msgstr ""
+msgstr "Ručně vystavit dárkovou kartu"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:106
 msgid "Accepted gift cards of other organizers"
-msgstr ""
+msgstr "Přijaté dárkové karty jiných organizátorů"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:108
 msgid ""
@@ -19674,21 +19710,26 @@ msgid ""
 "ticket shops in this account will also accept gift codes issued through a "
 "different organizer account, and vice versa."
 msgstr ""
+"Pokud máte přístup k více organizátorským účtům, můžete nastavit, aby "
+"prodejny vstupenek v tomto účtu přijímaly také dárkové kódy vydané "
+"prostřednictvím jiného organizátorského účtu a naopak."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:124
 msgid "You are currently not accepting gift cards from other organizers."
-msgstr ""
+msgstr "V současné době nepřijímáte dárkové karty od jiných organizátorů."
 
 #: pretix/control/templates/pretixcontrol/organizers/index.html:9
 msgid ""
 "The list below shows all organizer accounts you have administrative access "
 "to."
 msgstr ""
+"V následujícím seznamu jsou uvedeny všechny účty organizátorů, ke kterým "
+"máte přístup pro administraci."
 
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:4
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:6
 msgid "Organizer logs"
-msgstr ""
+msgstr "Protokoly organizátora"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:60
 msgid "Customer account registration"
@@ -19704,19 +19745,19 @@ msgstr "Reset hesla zákaznického účtu"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:5
 msgid "Delete membership type:"
-msgstr ""
+msgstr "Odstranit typ členství:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:9
 msgid "Are you sure you want to delete this membership type?"
-msgstr ""
+msgstr "Opravdu chcete tento typ členství odstranit?"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:11
 msgid "This membership type cannot be deleted since it has already been used."
-msgstr ""
+msgstr "Tento typ členství nelze smazat, protože již byl použitý."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:6
 msgid "Membership type:"
-msgstr ""
+msgstr "Typ členství:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:21
@@ -19730,11 +19771,16 @@ msgid ""
 "in one event, and require valid memberships to allow purchases in another "
 "event."
 msgstr ""
+"Můžete definovat typy členství. Ty umožňují propojit produkty z různých "
+"akcí. Můžete prodávat členství jako součást produktu v jedné akci a "
+"vyžadovat platné členství, které umožní nákup v jiné akci."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:15
 msgid ""
 "This can be used to enable products like year passes, tickets of ten, etc."
 msgstr ""
+"To lze využít pro produkty, jako jsou roční permanentky, desetidenní "
+"vstupenky apod."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:7
 msgid ""
@@ -19742,6 +19788,9 @@ msgid ""
 "can later set for your events and re-use in places like ticket layouts. This "
 "is an useful timesaver if you create lots and lots of events."
 msgstr ""
+"Zde můžete definovat sadu vlastností metadat (tj. proměnných), které můžete "
+"později nastavit pro své akce a opakovaně je použít například v rozvržení "
+"vstupenek. To je užitečná úspora času, pokud vytváříte velké množství akcí."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:15
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:8
@@ -19750,19 +19799,19 @@ msgstr "Vytvořit novou vlastnost"
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:20
 msgid "Property"
-msgstr ""
+msgstr "Vlastnost"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:5
 msgid "Delete property:"
-msgstr ""
+msgstr "Odstranit vlastnost:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:8
 msgid "Are you sure you want to delete the property?"
-msgstr ""
+msgstr "Jste si jisti, že chcete vlastnost odstranit?"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:6
 msgid "Property:"
-msgstr ""
+msgstr "Vlastnost:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:5
 msgid "Delete SSO client:"
@@ -19770,15 +19819,15 @@ msgstr "Odstranit klienta SSO:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:9
 msgid "Are you sure you want to delete this SSO client?"
-msgstr ""
+msgstr "Opravdu chcete odstranit tohoto klienta SSO?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:11
 msgid "This SSO client cannot be deleted since it has already been used."
-msgstr ""
+msgstr "Tohoto klienta SSO nelze odstranit, protože již byl použitý."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:6
 msgid "SSO client:"
-msgstr ""
+msgstr "Klient SSO:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:15
@@ -19791,6 +19840,9 @@ msgid ""
 "account credentials by setting up your other systems as a Single-Sign-On "
 "(SSO) client based on OpenID Connect."
 msgstr ""
+"Svým zákazníkům můžete umožnit přihlašování do jiných systémů pomocí "
+"přihlašovacích údajů k jejich zákaznickému účtu nastavením jiných systémů "
+"jako klienta jednotného přihlášení (SSO) na základě služby OpenID Connect."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:5
 msgid "Delete SSO provider:"
@@ -19798,11 +19850,11 @@ msgstr "Odstranění poskytovatele SSO:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:9
 msgid "Are you sure you want to delete this SSO provider?"
-msgstr ""
+msgstr "Opravdu chcete odstranit tohoto poskytovatele SSO?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:11
 msgid "This SSO provider cannot be deleted since it has already been used."
-msgstr ""
+msgstr "Tohoto zprostředkovatele SSO nelze odstranit, protože již byl používán."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:6
 msgid "SSO provider:"
@@ -19823,30 +19875,34 @@ msgid ""
 "You can connect existing Single-Sign-On (SSO) providers to allow your "
 "customers to log in using your own account system."
 msgstr ""
+"Můžete připojit existující poskytovatele jednotného přihlášení (SSO) a "
+"umožnit tak svým zákazníkům přihlašovat se pomocí vlastního systému účtů."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:5
 msgid "Delete team:"
-msgstr ""
+msgstr "Smazat tým:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:7
 msgid ""
 "You cannot delete the team because there would be no one left who could "
 "change team permissions afterwards."
 msgstr ""
+"Tým nemůžete odstranit, protože by nezbyl nikdo, kdo by poté mohl změnit "
+"oprávnění týmu."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:17
 msgid "Are you sure you want to delete the team?"
-msgstr ""
+msgstr "Jste si jisti, že chcete tým odstranit?"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:6
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:6
 msgid "Team:"
-msgstr ""
+msgstr "Tým:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:30
 msgid "Create a new team"
-msgstr ""
+msgstr "Vytvořit nový tým"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:10
 msgid "You will be able to add team members in the next step."
