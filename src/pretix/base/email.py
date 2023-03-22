@@ -35,9 +35,7 @@ from django.dispatch import receiver
 from django.template.loader import get_template
 from django.utils.formats import date_format
 from django.utils.timezone import now
-from django.utils.translation import (
-    get_language, gettext_lazy as _,
-)
+from django.utils.translation import get_language, gettext_lazy as _
 
 from pretix.base.i18n import (
     LazyCurrencyNumber, LazyDate, LazyExpiresDate, LazyNumber,
