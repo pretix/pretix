@@ -56,7 +56,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 from pretix.base.services.quotas import QuotaAvailability
-from pretix.base.settings import get_name_parts_localized, PERSON_NAME_SCHEMES
+from pretix.base.settings import PERSON_NAME_SCHEMES, get_name_parts_localized
 
 from ...control.forms.filter import get_all_payment_providers
 from ...helpers import GroupConcat
