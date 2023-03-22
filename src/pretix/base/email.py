@@ -44,7 +44,7 @@ from pretix.base.i18n import (
 )
 from pretix.base.models import Event
 from pretix.base.reldate import RelativeDateWrapper
-from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.base.settings import get_name_parts_localized, PERSON_NAME_SCHEMES
 from pretix.base.signals import (
     register_html_mail_renderers, register_mail_placeholders,
 )
@@ -689,10 +689,3 @@ def base_placeholders(sender, **kwargs):
         ))
 
     return ph
-
-
-def get_name_parts_localized(name_parts, key):
-    value = name_parts.get(key, "")
-    if key == "salutation":
-        return pgettext_lazy("person_name_salutation", value)
-    return value

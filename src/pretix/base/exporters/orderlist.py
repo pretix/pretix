@@ -50,14 +50,13 @@ from django.utils.translation import (
     gettext as _, gettext_lazy, pgettext, pgettext_lazy,
 )
 
-from pretix.base.email import get_name_parts_localized
 from pretix.base.models import (
     GiftCard, GiftCardTransaction, Invoice, InvoiceAddress, Order,
     OrderPosition, Question,
 )
 from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
 from pretix.base.services.quotas import QuotaAvailability
-from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.base.settings import get_name_parts_localized, PERSON_NAME_SCHEMES
 
 from ...control.forms.filter import get_all_payment_providers
 from ...helpers import GroupConcat

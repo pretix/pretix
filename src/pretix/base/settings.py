@@ -3038,6 +3038,13 @@ def concatenation_for_salutation(d):
     return " ".join(filter(None, (salutation, title, given_name, family_name)))
 
 
+def get_name_parts_localized(name_parts, key):
+    value = name_parts.get(key, "")
+    if key == "salutation":
+        return pgettext_lazy("person_name_salutation", value)
+    return value
+
+
 PERSON_NAME_SCHEMES = OrderedDict([
     ('given_family', {
         'fields': (
