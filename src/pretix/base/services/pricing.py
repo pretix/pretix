@@ -81,6 +81,7 @@ def get_price(item: Item, variation: ItemVariation = None,
                     custom_price = Decimal(custom_price)
                 except:
                     raise ValueError('price_not_a_number')
+        print('custom_price', custom_price, 99_999_999_999, custom_price > 99_999_999_999)
         if custom_price > 99_999_999_999:
             raise ValueError('price_too_high')
 
