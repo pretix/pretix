@@ -716,18 +716,14 @@
     text-align: center;
   }
 
-  .pretix-widget-frame-close button {
+  .pretix-widget-frame-close a {
     color: white;
     font-weight: bold;
     font-family: sans-serif;
     text-decoration: none;
-    padding: 4px;
-    margin: 0;
-    border: none;
-    background: transparent;
+    padding: 4px 0;
     display: block;
     line-height: 16px;
-    cursor: pointer;
   }
 
   .pretix-widget-frame-inner iframe {

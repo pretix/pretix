@@ -705,9 +705,9 @@ var shared_iframe_fragment = (
     + '        referrerpolicy="origin">'
     + 'Please enable frames in your browser!'
     + '</iframe>'
-    + '<div class="pretix-widget-frame-close"><button type="button" @click.prevent.stop="close" aria-label="'+strings.close+'">'
+    + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent.stop="close">'
     + '<svg height="16px" viewBox="0 0 512 512" width="16px" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
-    + '</button></div>'
+    + '</a></div>'
     + '</div>'
     + '</div>'
 );
