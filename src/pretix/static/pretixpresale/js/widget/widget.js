@@ -14,6 +14,10 @@ var Vue = module.exports;
 Vue.component('resize-observer', VueResize.ResizeObserver)
 
 var strings = {
+    'quantity': django.pgettext('widget', 'Quantity'),
+    'price': django.pgettext('widget', 'Price'),
+    'select_item': django.pgettext('widget', 'Select %s'),
+    'select_variant': django.pgettext('widget', 'Select variant %s'),
     'sold_out': django.pgettext('widget', 'Sold out'),
     'buy': django.pgettext('widget', 'Buy'),
     'register': django.pgettext('widget', 'Register'),
@@ -210,10 +214,13 @@ Vue.component('availbox', {
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!require_voucher && avail[0] === 100">'
         + '<label class="pretix-widget-item-count-single-label" v-if="order_max === 1">'
-        + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name">'
+        + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name"'
+        + '       v-bind:aria-label="label_select_item"'
+        + '>'
         + '</label>'
         + '<input type="number" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
         + '       v-model="amount_selected" :max="order_max" :name="input_name"'
+        + '       aria-label="' + strings.quantity + '"'
         + '       v-if="order_max !== 1">'
         + '</div>'
         + '</div>'),
@@ -251,6 +258,11 @@ Vue.component('availbox', {
                 }
                 this.$root.$emit("amounts_changed")
             }
+        },
+        label_select_item: function () {
+            return this.item.has_variations
+                ? strings.select_variant.replace("%s", this.variation.value)
+                : strings.select_item.replace("%s", this.item.name)
         },
         input_name: function () {
             if (this.item.has_variations) {
@@ -297,7 +309,7 @@ Vue.component('pricebox', {
         + '{{ $root.currency }} '
         + '<input type="number" class="pretix-widget-pricebox-price-input" placeholder="0" '
         + '       :min="display_price_nonlocalized" :value="display_price_nonlocalized" :name="field_name"'
-        + '       step="any">'
+        + '       step="any" aria-label="'+strings.price+'">'
         + '</div>'
         + '<small class="pretix-widget-pricebox-tax" v-if="price.rate != \'0.00\' && price.gross != \'0.00\'">'
         + '{{ taxline }}'
@@ -446,7 +458,7 @@ Vue.component('item', {
 
         // Availability
         + '<div class="pretix-widget-item-availability-col">'
-        + '<a v-if="show_toggle" href="#" @click.prevent.stop="expand">'+ strings.variations + '</a>'
+        + '<a v-if="show_toggle" href="#" @click.prevent.stop="expand" role="button" v-bind:aria-expanded="expanded ? \'true\': \'false\'">'+ strings.variations + '</a>'
         + '<availbox v-if="!item.has_variations" :item="item"></availbox>'
         + '</div>'
 
