@@ -430,8 +430,9 @@ Vue.component('item', {
         + '<div class="pretix-widget-item-info-col">'
         + '<img :src="item.picture" v-if="item.picture" class="pretix-widget-item-picture">'
         + '<div class="pretix-widget-item-title-and-description">'
-        + '<a v-if="item.has_variations && show_toggle" class="pretix-widget-item-title" href="#"'
-        + '   @click.prevent.stop="expand">'
+        + '<a v-if="item.has_variations && show_toggle" class="pretix-widget-item-title" :href="\'#\' + item.id + \'-variants\'"'
+        + '   @click.prevent.stop="expand" role="button" tabindex="0"'
+        + '   v-bind:aria-expanded="expanded ? \'true\': \'false\'" v-bind:aria-controls="item.id + \'-variants\'">'
         + '{{ item.name }}'
         + '</a>'
         + '<strong v-else class="pretix-widget-item-title">{{ item.name }}</strong>'
@@ -458,7 +459,8 @@ Vue.component('item', {
 
         // Availability
         + '<div class="pretix-widget-item-availability-col">'
-        + '<a v-if="show_toggle" href="#" @click.prevent.stop="expand" role="button" v-bind:aria-expanded="expanded ? \'true\': \'false\'">'+ strings.variations + '</a>'
+        + '<a v-if="show_toggle" :href="\'#\' + item.id + \'-variants\'" @click.prevent.stop="expand" role="button" tabindex="0"'
+        + '   v-bind:aria-expanded="expanded ? \'true\': \'false\'" v-bind:aria-controls="item.id + \'-variants\'">'+ strings.variations + '</a>'
         + '<availbox v-if="!item.has_variations" :item="item"></availbox>'
         + '</div>'
 
@@ -466,7 +468,7 @@ Vue.component('item', {
         + '</div>'
 
         // Variations
-        + '<div :class="varClasses" v-if="item.has_variations">'
+        + '<div :class="varClasses" v-if="item.has_variations" :id="item.id + \'-variants\'" ref="variations">'
         + '<variation v-for="variation in item.variations" :variation="variation" :item="item" :key="variation.id">'
         + '</variation>'
         + '</div>'
@@ -479,6 +481,24 @@ Vue.component('item', {
         return {
             expanded: this.$root.show_variations_expanded
         };
+    },
+    watch: {
+        expanded: function (newValue) {
+            if (newValue) {
+                this.$refs.variations.hidden = false;
+                this.$refs.variations.style.maxHeight = this.$refs.variations.scrollHeight + 'px';
+            } else {
+                this.$refs.variations.addEventListener('transitionend', function (event) {
+                    this.hidden = true;
+                }, {once: true});
+                this.$refs.variations.style.maxHeight = 0;
+            }
+        }
+    },
+    mounted: function () {
+        if (this.$refs.variations) {
+            this.$refs.variations.hidden = !this.expanded;
+        }
     },
     methods: {
         expand: function () {
