@@ -198,7 +198,7 @@ var widget_id = makeid(16);
 Vue.component('availbox', {
     template: ('<div class="pretix-widget-availability-box">'
         + '<div class="pretix-widget-availability-unavailable" v-if="require_voucher">'
-        + '<small><a @click.prevent.stop="focus_voucher_field">' + strings.voucher_required + '</a></small>'
+        + '<small><a @click.prevent.stop="focus_voucher_field" role="button">' + strings.voucher_required + '</a></small>'
         + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
         + '       v-if="!require_voucher && avail[0] < 100 && avail[0] > 10">'
@@ -1032,7 +1032,7 @@ Vue.component('pretix-widget-event-list-entry', {
 Vue.component('pretix-widget-event-list', {
     template: ('<div class="pretix-widget-event-list">'
         + '<div class="pretix-widget-back" v-if="$root.weeks || $root.parent_stack.length > 0">'
-        + '<a href="#" @click.prevent.stop="back_to_calendar">&lsaquo; '
+        + '<a href="#" @click.prevent.stop="back_to_calendar" role="button">&lsaquo; '
         + strings['back']
         + '</a>'
         + '</div>'
@@ -1233,7 +1233,7 @@ Vue.component('pretix-widget-event-calendar', {
 
         // Back navigation
         + '<div class="pretix-widget-back" v-if="$root.events !== undefined">'
-        + '<a href="#" @click.prevent.stop="back_to_list">&lsaquo; '
+        + '<a href="#" @click.prevent.stop="back_to_list" role="button">&lsaquo; '
         + strings['back']
         + '</a>'
         + '</div>'
@@ -1246,11 +1246,11 @@ Vue.component('pretix-widget-event-calendar', {
 
         // Calendar navigation
         + '<div class="pretix-widget-event-calendar-head">'
-        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevmonth">&laquo; '
+        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevmonth" role="button">&laquo; '
         + strings['previous_month']
         + '</a> '
         + '<strong>{{ monthname }}</strong> '
-        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextmonth">'
+        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextmonth" role="button">'
         + strings['next_month']
         + ' &raquo;</a>'
         + '</div>'
@@ -1316,7 +1316,7 @@ Vue.component('pretix-widget-event-week-calendar', {
     template: ('<div class="pretix-widget-event-calendar pretix-widget-event-week-calendar" ref="weekcalendar">'
         // Back navigation
         + '<div class="pretix-widget-back" v-if="$root.events !== undefined">'
-        + '<a href="#" @click.prevent.stop="back_to_list">&lsaquo; '
+        + '<a href="#" @click.prevent.stop="back_to_list" role="button">&lsaquo; '
         + strings['back']
         + '</a>'
         + '</div>'
@@ -1329,11 +1329,11 @@ Vue.component('pretix-widget-event-week-calendar', {
         // Calendar navigation
         + '<div class="pretix-widget-event-description" v-if="$root.parent_stack.length > 0 && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
         + '<div class="pretix-widget-event-calendar-head">'
-        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevweek">&laquo; '
+        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevweek" role="button">&laquo; '
         + strings['previous_week']
         + '</a> '
         + '<strong>{{ weekname }}</strong> '
-        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextweek">'
+        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextweek" role="button">'
         + strings['next_week']
         + ' &raquo;</a>'
         + '</div>'
