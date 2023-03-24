@@ -33,7 +33,7 @@ def event():
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=now(),
+        date_from=now(), live=True,
         plugins='pretix.plugins.sendmail,tests.testdummy',
     )
     return event

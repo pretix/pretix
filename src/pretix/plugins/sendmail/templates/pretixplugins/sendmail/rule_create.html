@@ -4,6 +4,11 @@
 {% block title %}{% trans "Create Email Rule" %}{% endblock %}
 {% block content %}
     <h1>{% trans "Create Email Rule" %}</h1>
+    {% if not request.event.live %}
+        <div class="alert alert-warning">
+            {% trans "Automated emails are not sent as long as your ticket shop is offline." %}
+        </div>
+    {% endif %}
     {% block inner %}
         <form class="form-horizontal" method="post" action="" enctype="multipart/form-data">
             {% csrf_token %}
