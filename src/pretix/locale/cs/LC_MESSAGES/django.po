@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
-"PO-Revision-Date: 2023-03-23 15:00+0000\n"
+"PO-Revision-Date: 2023-03-24 15:00+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -9719,6 +9719,11 @@ msgid ""
 "recommend not using small details on the picture as it will be resized on "
 "smaller screens."
 msgstr ""
+"Pokud zadáte logo, ve výchozím nastavení se v záhlaví stránky nezobrazí "
+"název a datum vaší akci. Ve výchozím nastavení zobrazíme vaše logo o "
+"velikosti až 1140x120 pixelů. Velikost můžete zvětšit pomocí níže uvedeného "
+"nastavení. Doporučujeme nepoužívat na obrázku malé detaily, protože na "
+"menších obrazovkách se velikost změní."
 
 #: pretix/base/settings.py:2519 pretix/base/settings.py:2561
 msgid "Use header image in its full size"
@@ -9764,6 +9769,12 @@ msgid ""
 "preview, so we recommend to make sure it still looks good only the center "
 "square is shown. If you do not fill this, we will use the logo given above."
 msgstr ""
+"Tento obrázek bude použit jako náhled, pokud na sociálních sítích zveřejníte "
+"odkazy na svůj prodej vstupenek. Facebook doporučuje použít obrázek o "
+"velikosti 1200 x 630 pixelů, nicméně některé platformy, jako je WhatsApp a "
+"Reddit, zobrazují pouze čtvercový náhled, takže doporučujeme, abyste se "
+"ujistili, že stále vypadá dobře, zobrazí se pouze středový čtverec. Pokud "
+"jej nevyplníte, použijeme logo uvedené výše."
 
 #: pretix/base/settings.py:2600
 msgid "Logo image"
@@ -11921,6 +11932,11 @@ msgid ""
 "any IP addresses and we will not know who you are or where to find your "
 "instance. You can disable this behavior here at any time."
 msgstr ""
+"Během kontroly aktualizace nahlásí pretix na servery vývojářů pretixu "
+"anonymní, jedinečné ID instalace, aktuální verzi pretixu a nainstalovaných "
+"pluginů a počet aktivních a neaktivních akcí ve vaší instalaci. Budeme "
+"ukládat pouze anonymní údaje, nikdy žádné IP adresy a nebudeme vědět, kdo "
+"jste ani kde najít vaši instanci. Toto chování můžete kdykoli zakázat zde."
 
 #: pretix/control/forms/global_settings.py:119
 msgid "E-mail notifications"
@@ -12588,6 +12604,11 @@ msgid ""
 "manual refund to-do list. Do not check if you want to refund some of the "
 "orders by offsetting with different orders or issuing gift cards."
 msgstr ""
+"Budou vytvořeny ruční náhrady, které budou uvedeny v seznamu úkolů k ručnímu "
+"vrácení. V kombinaci s funkcí automatické refundace budou v seznamu úkolů k "
+"ruční refundaci pouze platby se způsobem platby, který nepodporuje "
+"automatické refundace. Nezaškrtávejte, pokud chcete některé objednávky "
+"vrátit započtením s jinými objednávkami nebo vystavením dárkových karet."
 
 #: pretix/control/forms/orders.py:802
 msgid ""
@@ -15268,6 +15289,13 @@ msgid ""
 "festival with festival passes that allow access to every or multiple "
 "performances as well as tickets only valid for single performances."
 msgstr ""
+"Můžete vytvořit více seznamů pro check-in a tím rozdělit akci na více částí, "
+"například pokud máte zvláštní položky pro více typů vstupenek. Různé check-"
+"in seznamy jsou zcela nezávislé: Pokud se vstupenka objeví ve dvou "
+"seznamech, platí v každém seznamu jednou. To může být užitečné, pokud "
+"provozujete festival s festivalovými vstupenkami, které umožňují vstup na "
+"každé nebo více představení, a také se vstupenkami platnými pouze na "
+"jednotlivá představení."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:23
 msgid ""
@@ -17270,6 +17298,10 @@ msgid ""
 "if you enter \"1 day\", the ticket will be valid until the end of the day it "
 "starts on."
 msgstr ""
+"Pokud zvolíte délku ve dnech, měsících nebo letech, platnost vždy skončí na "
+"konci celého dne (o půlnoci) plus výše zvolený počet minut a hodin. Datum "
+"začátku platnosti je zahrnuto do výpočtu, takže pokud zadáte \"1 den\", bude "
+"vstupenka platit do konce dne, kdy začíná."
 
 #: pretix/control/templates/pretixcontrol/item/index.html:226
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:593
@@ -20493,6 +20525,10 @@ msgid ""
 "will be removed from the server's database. The data might still exist in "
 "backups for a limited period of time."
 msgstr ""
+"Tato funkce umožňuje odstranit osobní údaje z této události. Nejprve "
+"vyberete, jaký druh dat chcete skartovat, poté můžete stáhnout dotčená data "
+"a po potvrzení stažení budou data odstraněna z databáze serveru. Data mohou "
+"po omezenou dobu stále existovat v zálohách."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:18
 msgid ""
@@ -21364,6 +21400,11 @@ msgid ""
 "capacity is available, so don't worry if entries do not disappear here "
 "immediately. If you want, you can also send them out manually right now."
 msgstr ""
+"Nastavili jste, že poukazy budou automaticky zasílány osobám z tohoto "
+"seznamu, které čekaly nejdéle, jakmile se uvolní kapacita. Odeslání poukazů "
+"po uvolnění kapacity může trvat až půl hodiny, takže se nemusíte obávat, "
+"pokud zde záznamy nezmizí okamžitě. Pokud chcete, můžete je rozeslat i ručně "
+"hned teď."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:36
 msgid ""
@@ -21379,6 +21420,11 @@ msgid ""
 "quota is available) or you can press the big button below this text to send "
 "out as many vouchers as currently possible to the persons who waited longest."
 msgstr ""
+"Nastavili jste, že poukázky <strong>nebudou</strong> zasílány automaticky. "
+"Můžete je posílat buď po jednom ve zvoleném pořadí kliknutím na tlačítka "
+"vedle řádku v této tabulce (pokud je k dispozici dostatečná kvóta), nebo "
+"můžete stisknutím velkého tlačítka pod tímto textem rozeslat co nejvíce "
+"poukazů osobám, které nejdéle čekají."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:62
 msgid "Send as many vouchers as possible"
@@ -21634,7 +21680,7 @@ msgstr "celková délka čekací listiny"
 #: pretix/control/views/dashboards.py:249
 #, python-brace-format
 msgid "{quota} left"
-msgstr ""
+msgstr "{quota} zbývá"
 
 #: pretix/control/views/dashboards.py:269
 msgid "Your ticket shop is"
@@ -21696,7 +21742,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:107
 #: pretix/presale/views/widget.py:410
 msgid "Sale over"
-msgstr ""
+msgstr "Prodej skončil"
 
 #: pretix/control/views/dashboards.py:533
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:103
@@ -21783,7 +21829,7 @@ msgstr ""
 
 #: pretix/control/views/event.py:727 pretix/control/views/organizer.py:332
 msgid "invalid item"
-msgstr ""
+msgstr "neplatná položka"
 
 #: pretix/control/views/event.py:779
 #, python-format
@@ -21882,11 +21928,11 @@ msgstr ""
 
 #: pretix/control/views/event.py:1493
 msgid "Regular ticket"
-msgstr ""
+msgstr "Pravidelná vstupenka"
 
 #: pretix/control/views/event.py:1498
 msgid "Reduced ticket"
-msgstr ""
+msgstr "Zlevněná vstupenka"
 
 #: pretix/control/views/global_settings.py:65
 #: pretix/control/views/global_settings.py:88
@@ -22013,7 +22059,7 @@ msgstr ""
 
 #: pretix/control/views/item.py:651
 msgid "File uploaded"
-msgstr ""
+msgstr "Soubor byl nahrán"
 
 #: pretix/control/views/item.py:783
 msgid "The new question has been created."
@@ -22102,6 +22148,11 @@ msgid ""
 "domain. You can do so through the DNS settings at the provider you "
 "registered your domain with."
 msgstr ""
+"Nepodařilo se nám najít záznam SPF nastavený pro doménu, kterou se snažíte "
+"použít. Můžete pokračovat, ale zvýší se pravděpodobnost, že e-maily budou "
+"odeslány do spamu nebo odmítnuty. Důrazně doporučujeme nastavit záznam SPF "
+"pro danou doménu. Můžete tak učinit prostřednictvím nastavení DNS u "
+"poskytovatele, u kterého jste doménu zaregistrovali."
 
 #: pretix/control/views/mailsetup.py:202
 msgid ""
@@ -22111,6 +22162,11 @@ msgid ""
 "update the DNS settings of your domain to include this system in the SPF "
 "record."
 msgstr ""
+"Našli jsme záznam SPF nastavený pro doménu, kterou se snažíte použít, ale "
+"neobsahuje e-mailový server tohoto systému. To znamená, že je velmi vysoká "
+"pravděpodobnost, že většina e-mailů bude odmítnuta nebo označena jako spam. "
+"Měli byste aktualizovat nastavení DNS své domény tak, aby zahrnovalo tento "
+"systém v záznamu SPF."
 
 #: pretix/control/views/mailsetup.py:210
 msgid "The verification code was incorrect, please try again."
@@ -22141,7 +22197,7 @@ msgstr ""
 #: pretix/control/views/main.py:283
 #, python-brace-format
 msgid "Team {event}"
-msgstr ""
+msgstr "Tým {event}"
 
 #: pretix/control/views/oauth.py:69
 #, python-brace-format
@@ -22399,7 +22455,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:1402 pretix/control/views/orders.py:1433
 msgid "Unknown invoice."
-msgstr ""
+msgstr "Neznámá faktura."
 
 #: pretix/control/views/orders.py:1405
 msgid "Invoices may not be changed after they are created."
@@ -22489,7 +22545,7 @@ msgstr ""
 #: pretix/plugins/sendmail/views.py:675
 #, python-brace-format
 msgid "Subject: {subject}"
-msgstr ""
+msgstr "Předmět: {subject}"
 
 #: pretix/control/views/orders.py:2075 pretix/control/views/orders.py:2141
 msgid "Your message has been queued and will be sent to {}."
@@ -22567,7 +22623,7 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:153
 msgid "Token name"
-msgstr ""
+msgstr "Název tokenu"
 
 #: pretix/control/views/organizer.py:373
 msgid "This organizer can not be deleted."
@@ -22953,11 +23009,11 @@ msgstr ""
 
 #: pretix/control/views/vouchers.py:109
 msgid "Reserve quota"
-msgstr ""
+msgstr "Rezervovat kvótu"
 
 #: pretix/control/views/vouchers.py:109
 msgid "Bypass quota"
-msgstr ""
+msgstr "Obejít kvótu"
 
 #: pretix/control/views/vouchers.py:124
 msgid "Any product"
@@ -23051,11 +23107,11 @@ msgstr "Zápis na čekací listině byl přenesen."
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"
-msgstr ""
+msgstr "Známá doména"
 
 #: pretix/multidomain/models.py:37
 msgid "Known domains"
-msgstr ""
+msgstr "Známé domény"
 
 #: pretix/plugins/badges/apps.py:30 pretix/plugins/badges/apps.py:33
 #: pretix/plugins/badges/signals.py:55
@@ -23163,7 +23219,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:604
 #: pretix/plugins/ticketoutputpdf/exporters.py:92
 msgid "Sort by"
-msgstr ""
+msgstr "Seřadit podle"
 
 #: pretix/plugins/badges/exporters.py:430
 #: pretix/plugins/ticketoutputpdf/exporters.py:223
@@ -23661,11 +23717,11 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:40
 msgid "Start upload"
-msgstr ""
+msgstr "Spustit nahrávání"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:50
 msgid "Unresolved transactions"
-msgstr ""
+msgstr "Nevyřešené transakce"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:55
 msgid ""
@@ -23692,7 +23748,7 @@ msgstr "Prázdný"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:90
 msgid "Discard all"
-msgstr ""
+msgstr "Vyřadit vše"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:102
 msgid "Your search matched no transactions."
@@ -23700,7 +23756,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:5
 msgid "Import result"
-msgstr ""
+msgstr "Importovat výsledek"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:12
 msgid ""
@@ -23879,7 +23935,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:25
 msgid "Accept anyway"
-msgstr ""
+msgstr "Přijmout i tak"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:31
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:44
@@ -24034,7 +24090,7 @@ msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:118
 msgid "Include questions"
-msgstr ""
+msgstr "Zobrazit otázky"
 
 #: pretix/plugins/checkinlists/exporters.py:258
 msgid "Check-in list (PDF)"
@@ -24362,6 +24418,11 @@ msgid ""
 "on the shoppers location. For German merchants, this is the direct successor "
 "of PayPal Plus."
 msgstr ""
+"Kromě plateb přes účet PayPal můžete svým zákazníkům nabídnout také možnost "
+"platit kreditními kartami a dalšími místními platebními metodami, jako jsou "
+"SOFORT, giropay, iDEAL a mnoho dalších - i když nemají účet PayPal. Způsoby "
+"platby budou určeny na základě místa, kde se nakupující nachází. Pro německé "
+"obchodníky se jedná o přímého nástupce služby PayPal Plus."
 
 #: pretix/plugins/paypal2/payment.py:162
 msgid "Disable SEPA Direct Debit"
@@ -24375,6 +24436,11 @@ msgid ""
 "nature of your event - you might want to disabled the option of SEPA Direct "
 "Debit payments in order to reduce the risk of costly chargebacks."
 msgstr ""
+"Zatímco většinu platebních metod nemůže zákazník odvolat, aniž by "
+"obchodníkům přesně vysvětlil důvody, SEPA inkaso lze odvolat stisknutím "
+"jediného tlačítka. Z tohoto důvodu - a v závislosti na povaze vaší akce - "
+"možná budete chtít vypnout možnost plateb SEPA inkasem, abyste snížili "
+"riziko nákladných zpětných plateb."
 
 #: pretix/plugins/paypal2/payment.py:178
 msgid "Enable Buy Now Pay Later"
@@ -24609,7 +24675,7 @@ msgstr ""
 
 #: pretix/plugins/reports/apps.py:44 pretix/plugins/reports/apps.py:47
 msgid "Report exporter"
-msgstr ""
+msgstr "Exportér sestavy"
 
 #: pretix/plugins/reports/apps.py:51
 msgid "Generate printable reports about your sales."
@@ -25375,10 +25441,15 @@ msgid ""
 "like the 40 page SAQ D. Please consult the %s for further information on "
 "this subject."
 msgstr ""
+"Transakci kreditní kartou, kterou provedete přes obchodní rozhraní, můžeme "
+"označit jako MOTO (Mail Order / Telephone Order), čímž se na ni nevztahují "
+"požadavky na silné ověření zákazníka (SCA). Nicméně: Povolením této funkce "
+"budete muset každoročně vyplňovat formuláře pro sebehodnocení PCI-DSS, jako "
+"je 40stránkový SAQ D. Další informace k tomuto tématu naleznete v %s."
 
 #: pretix/plugins/stripe/payment.py:167 pretix/plugins/stripe/payment.py:172
 msgid "Stripe account"
-msgstr ""
+msgstr "Účet Stripe"
 
 #: pretix/plugins/stripe/payment.py:180
 msgctxt "stripe"
@@ -25398,11 +25469,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:196
 msgid "Publishable key"
-msgstr ""
+msgstr "Zveřejnitelný klíč"
 
 #: pretix/plugins/stripe/payment.py:207
 msgid "Secret key"
-msgstr ""
+msgstr "Tajný klíč"
 
 #: pretix/plugins/stripe/payment.py:216
 msgid ""
