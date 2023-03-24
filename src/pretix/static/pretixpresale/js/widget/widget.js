@@ -1980,7 +1980,6 @@ window.PretixWidget.open = function (target_url, voucher, subevent, items, widge
         if (this.$root.useIframe) {
             this.$refs.btn.buy();
         } else {
-            console.log(this.$refs.btn.$refs.form);
             this.$refs.btn.$refs.form.submit();
         }
     })
