@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
-"PO-Revision-Date: 2023-03-25 07:00+0000\n"
+"PO-Revision-Date: 2023-03-26 06:00+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -11231,7 +11231,7 @@ msgstr "Předmět (pokud objednávka automaticky vyprší)"
 
 #: pretix/control/forms/event.py:1069
 msgid "Text (if order will not expire automatically)"
-msgstr ""
+msgstr "Text (pokud objednávka nevyprší automaticky)"
 
 #: pretix/control/forms/event.py:1074
 msgid "Subject (if order will not expire automatically)"
@@ -11255,11 +11255,11 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1149
 msgid "Subject for received order"
-msgstr ""
+msgstr "Předmět pro přijaté objednávky"
 
 #: pretix/control/forms/event.py:1154
 msgid "Text for received order"
-msgstr ""
+msgstr "Text pro přijaté objednávky"
 
 #: pretix/control/forms/event.py:1159
 msgid "Subject for approved order"
@@ -11274,6 +11274,9 @@ msgid ""
 "This will only be sent out for non-free orders. Free orders will receive the "
 "free order template from below instead."
 msgstr ""
+"To bude odesláno pouze v případě objednávek, které nejsou zdarma. Bezplatným "
+"objednávkám bude místo toho zaslána níže uvedená šablona bezplatné "
+"objednávky."
 
 #: pretix/control/forms/event.py:1171
 msgid "Subject for approved free order"
@@ -11288,10 +11291,13 @@ msgid ""
 "This will only be sent out for free orders. Non-free orders will receive the "
 "non-free order template from above instead."
 msgstr ""
+"To bude odesláno pouze u bezplatných objednávek. Objednávky, které nejsou "
+"zdarma, obdrží místo toho šablonu objednávky, která není zdarma, uvedenou "
+"výše."
 
 #: pretix/control/forms/event.py:1183
 msgid "Subject for denied order"
-msgstr ""
+msgstr "Předmět pro odmítnutí objednávky"
 
 #: pretix/control/forms/event.py:1188
 msgid "Text for denied order"
@@ -11304,15 +11310,15 @@ msgstr "Text pro zamítnutou objednávku"
 #: pretix/plugins/sendmail/forms.py:61
 #, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr ""
+msgstr "Dostupné zástupné symboly: {list}"
 
 #: pretix/control/forms/event.py:1285
 msgid "Ticket code generator"
-msgstr ""
+msgstr "Generátor kódů vstupenek"
 
 #: pretix/control/forms/event.py:1286
 msgid "For advanced users, usually does not need to be changed."
-msgstr ""
+msgstr "Pro pokročilé uživatele, obvykle není třeba nic měnit."
 
 #: pretix/control/forms/event.py:1343
 msgid "Any country"
@@ -11336,7 +11342,7 @@ msgstr "Společnost"
 
 #: pretix/control/forms/event.py:1360
 msgid "Business with valid VAT ID"
-msgstr ""
+msgstr "Podnik s platným DIČ"
 
 #: pretix/control/forms/event.py:1366
 msgid "Charge VAT"
@@ -11356,11 +11362,11 @@ msgstr "Objednávka vyžaduje schválení"
 
 #: pretix/control/forms/event.py:1374
 msgid "Deviating tax rate"
-msgstr ""
+msgstr "Odlišná sazba daně"
 
 #: pretix/control/forms/event.py:1379
 msgid "Text on invoice"
-msgstr ""
+msgstr "Text na faktuře"
 
 #: pretix/control/forms/event.py:1419
 msgid "Pre-selected voucher"
@@ -11373,6 +11379,10 @@ msgid ""
 "can for example be used to provide widgets that give discounts or unlock "
 "secret products."
 msgstr ""
+"Pokud je nastaveno, widget bude zobrazovat produkty, jako by byl tento "
+"poukaz zadán, a při nákupu produktu prostřednictvím widgetu bude tento "
+"poukaz použit. To lze například použít k poskytování widgetů, které "
+"poskytují slevy nebo odemykají tajné produkty."
 
 #: pretix/control/forms/event.py:1426
 msgid "Compatibility mode"
@@ -11383,15 +11393,17 @@ msgid ""
 "Our regular widget doesn't work in all website builders. If you run into "
 "trouble, try using this compatibility mode."
 msgstr ""
+"Náš běžný widget nefunguje ve všech nástrojích pro tvorbu webových stránek. "
+"Pokud se setkáte s problémy, zkuste použít tento režim kompatibility."
 
 #: pretix/control/forms/event.py:1449
 msgid "The given voucher code does not exist."
-msgstr ""
+msgstr "Uvedený kód poukázky neexistuje."
 
 #: pretix/control/forms/event.py:1456 pretix/control/forms/organizer.py:99
 #: pretix/control/views/shredder.py:163
 msgid "The slug you entered was not correct."
-msgstr ""
+msgstr "Zkrácený název akce nebyl správný."
 
 #: pretix/control/forms/event.py:1491
 msgid "Ticket downloads"
@@ -11403,13 +11415,15 @@ msgstr "Vaši zákazníci si budou moci stáhnout vstupenky ve formátu PDF."
 
 #: pretix/control/forms/event.py:1496
 msgid "Require all attendees to fill in their names"
-msgstr ""
+msgstr "Vyžadovat, aby všichni účastníci vyplnili svá jména"
 
 #: pretix/control/forms/event.py:1497
 msgid ""
 "By default, we will ask for names but not require them. You can turn this "
 "off completely in the settings."
 msgstr ""
+"Ve výchozím nastavení se budeme ptát na jména, ale nebudeme je vyžadovat. "
+"Tuto funkci můžete v nastavení zcela vypnout."
 
 #: pretix/control/forms/event.py:1523
 msgid "Payment via Stripe"
@@ -11471,11 +11485,11 @@ msgstr "Všechny objednávky"
 
 #: pretix/control/forms/filter.py:213
 msgid "Valid orders"
-msgstr ""
+msgstr "Platné objednávky"
 
 #: pretix/control/forms/filter.py:214
 msgid "Paid (or canceled with paid fee)"
-msgstr ""
+msgstr "Zaplaceno (nebo zrušeno se zaplaceným poplatkem)"
 
 #: pretix/control/forms/filter.py:215
 #: pretix/control/templates/pretixcontrol/items/question.html:21
@@ -11493,7 +11507,7 @@ msgstr "Čeká se na"
 #: pretix/control/forms/filter.py:217
 #: pretix/control/templates/pretixcontrol/items/question.html:23
 msgid "Pending or paid"
-msgstr ""
+msgstr "Probíhající nebo zaplacené"
 
 #: pretix/control/forms/filter.py:219
 msgid "Cancellations"
@@ -11522,7 +11536,7 @@ msgstr "Proces platby"
 #: pretix/control/forms/filter.py:227
 #: pretix/control/templates/pretixcontrol/items/question.html:26
 msgid "Pending or expired"
-msgstr ""
+msgstr "Probíhající nebo prošlé"
 
 #: pretix/control/forms/filter.py:228
 #: pretix/control/templates/pretixcontrol/items/question.html:24
@@ -11535,19 +11549,19 @@ msgstr "Přeplacené"
 
 #: pretix/control/forms/filter.py:230
 msgid "Partially paid"
-msgstr ""
+msgstr "Částečně uhrazené"
 
 #: pretix/control/forms/filter.py:231
 msgid "Underpaid (but confirmed)"
-msgstr ""
+msgstr "Nedostatečně placený (ale potvrzený)"
 
 #: pretix/control/forms/filter.py:232
 msgid "Pending (but fully paid)"
-msgstr ""
+msgstr "Probíhající (ale plně zaplacené)"
 
 #: pretix/control/forms/filter.py:234
 msgid "Approval process"
-msgstr ""
+msgstr "Schvalovací proces"
 
 #: pretix/control/forms/filter.py:235
 msgid "Approved, payment pending"
@@ -11562,8 +11576,9 @@ msgid "Approval pending"
 msgstr "Čeká se na schválení"
 
 #: pretix/control/forms/filter.py:239
+#, fuzzy
 msgid "Follow-up configured"
-msgstr ""
+msgstr "Sada pro opětovné předložení"
 
 #: pretix/control/forms/filter.py:240
 msgid "Follow-up due"
@@ -11583,25 +11598,25 @@ msgstr "Všechny produkty"
 #: pretix/control/views/typeahead.py:601
 #, python-brace-format
 msgid "{product} – Any variation"
-msgstr ""
+msgstr "{product} – Jakákoli varianta"
 
 #: pretix/control/forms/filter.py:514 pretix/control/forms/orders.py:775
 msgctxt "subevent"
 msgid "All dates starting at or after"
-msgstr ""
+msgstr "Všechna data začínající dnem nebo po dni"
 
 #: pretix/control/forms/filter.py:520 pretix/control/forms/orders.py:782
 msgctxt "subevent"
 msgid "All dates starting before"
-msgstr ""
+msgstr "Všechny termíny začínající před"
 
 #: pretix/control/forms/filter.py:526
 msgid "Order placed at or after"
-msgstr ""
+msgstr "Objednávka zadaná v nebo po"
 
 #: pretix/control/forms/filter.py:532
 msgid "Order placed before"
-msgstr ""
+msgstr "Objednávka zadaná před"
 
 #: pretix/control/forms/filter.py:561
 msgid "Minimal sum of payments and refunds"
@@ -11615,7 +11630,7 @@ msgstr "Maximální součet plateb a náhrad"
 #: pretix/control/forms/filter.py:639 pretix/control/forms/filter.py:644
 #: pretix/control/forms/filter.py:659
 msgid "Exact matches only"
-msgstr ""
+msgstr "Pouze přesné shody"
 
 #: pretix/control/forms/filter.py:761 pretix/control/forms/filter.py:766
 #: pretix/control/forms/filter.py:880 pretix/control/forms/filter.py:885
@@ -11649,7 +11664,7 @@ msgstr "Zaplaceno do"
 
 #: pretix/control/forms/filter.py:1069 pretix/control/forms/filter.py:1485
 msgid "Shop live and presale running"
-msgstr ""
+msgstr "Obchod naživo a předprodej běží"
 
 #: pretix/control/forms/filter.py:1070 pretix/control/forms/filter.py:1797
 msgid "Inactive"
@@ -11673,12 +11688,12 @@ msgstr "Předprodej ukončen"
 #: pretix/control/forms/filter.py:2122
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:73
 msgid "Date from"
-msgstr ""
+msgstr "Datum od"
 
 #: pretix/control/forms/filter.py:1084 pretix/control/forms/filter.py:1087
 #: pretix/control/forms/filter.py:2127
 msgid "Date until"
-msgstr ""
+msgstr "Datum do"
 
 #: pretix/control/forms/filter.py:1091
 msgid "Start time from"
@@ -11733,7 +11748,7 @@ msgstr "Má nějaká členství"
 
 #: pretix/control/forms/filter.py:1379
 msgid "Has valid membership"
-msgstr ""
+msgstr "Má aktivní členství"
 
 #: pretix/control/forms/filter.py:1484
 msgid "Shop live"
@@ -11741,15 +11756,15 @@ msgstr "Obchod živě"
 
 #: pretix/control/forms/filter.py:1486
 msgid "Shop not live"
-msgstr ""
+msgstr "Obchod není živě"
 
 #: pretix/control/forms/filter.py:1489
 msgid "Single event running or in the future"
-msgstr ""
+msgstr "Jedna probíhající nebo budoucí akce"
 
 #: pretix/control/forms/filter.py:1490
 msgid "Single event in the past"
-msgstr ""
+msgstr "Jednotlivá událost v minulosti"
 
 #: pretix/control/forms/filter.py:1662 pretix/control/forms/filter.py:1664
 msgid "Search attendee…"
@@ -11766,7 +11781,7 @@ msgstr "Všechny účastníky"
 #: pretix/control/forms/filter.py:1673
 msgctxt "checkin state"
 msgid "Checked in but left"
-msgstr ""
+msgstr "Přihlášen, ale odešel"
 
 #: pretix/control/forms/filter.py:1674
 msgctxt "checkin state"
@@ -11783,17 +11798,17 @@ msgstr "Odbavení"
 #: pretix/control/forms/filter.py:1676
 #: pretix/control/templates/pretixcontrol/checkin/index.html:173
 msgid "Not checked in"
-msgstr ""
+msgstr "Nepřihlášen"
 
 #: pretix/control/forms/filter.py:1695
 msgctxt "subevent"
 msgid "Date start from"
-msgstr ""
+msgstr "Datum začátku od"
 
 #: pretix/control/forms/filter.py:1701
 msgctxt "subevent"
 msgid "Date start until"
-msgstr ""
+msgstr "Datum začátku do"
 
 #: pretix/control/forms/filter.py:1802 pretix/control/forms/filter.py:1805
 #: pretix/control/templates/pretixcontrol/users/index.html:52
@@ -11814,7 +11829,7 @@ msgstr "Nevyužité"
 
 #: pretix/control/forms/filter.py:1879
 msgid "Redeemed at least once"
-msgstr ""
+msgstr "Uplatněno alespoň jednou"
 
 #: pretix/control/forms/filter.py:1880
 msgid "Fully redeemed"
@@ -11822,7 +11837,7 @@ msgstr "Plně vykoupeno"
 
 #: pretix/control/forms/filter.py:1882
 msgid "Redeemed and checked in with ticket"
-msgstr ""
+msgstr "Uplatněno a odbaveno s vstupenkou"
 
 #: pretix/control/forms/filter.py:1887
 msgid "Quota handling"
@@ -11830,11 +11845,11 @@ msgstr "Nastavení kvót"
 
 #: pretix/control/forms/filter.py:1891
 msgid "Allow to ignore quota"
-msgstr ""
+msgstr "Povolit ignorování kvóty"
 
 #: pretix/control/forms/filter.py:1896 pretix/control/forms/filter.py:1898
 msgid "Filter by tag"
-msgstr ""
+msgstr "Filtrovat podle tagů"
 
 #: pretix/control/forms/filter.py:1903 pretix/control/forms/filter.py:1905
 msgid "Search voucher"
@@ -11845,11 +11860,11 @@ msgstr "Hledat poukázku"
 #: pretix/control/views/vouchers.py:122
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
-msgstr ""
+msgstr "Jakýkoli produkt v kvótě \"{quota}\""
 
 #: pretix/control/forms/filter.py:2072
 msgid "Refund status"
-msgstr ""
+msgstr "Stav náhrady"
 
 #: pretix/control/forms/filter.py:2074
 msgid "All open refunds"
@@ -11857,15 +11872,15 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:2075
 msgid "All refunds"
-msgstr ""
+msgstr "Všechny náhrady"
 
 #: pretix/control/forms/filter.py:2113 pretix/plugins/reports/exporters.py:615
 msgid "Date filter"
-msgstr ""
+msgstr "Datumový filtr"
 
 #: pretix/control/forms/filter.py:2115 pretix/plugins/reports/exporters.py:617
 msgid "Filter by…"
-msgstr ""
+msgstr "Filtrovat podle…"
 
 #: pretix/control/forms/filter.py:2117 pretix/plugins/reports/exporters.py:619
 msgid "Date of last successful payment"
@@ -11873,21 +11888,21 @@ msgstr "Datum poslední platby"
 
 #: pretix/control/forms/filter.py:2157
 msgid "All check-ins"
-msgstr ""
+msgstr "Všechny check-iny"
 
 #: pretix/control/forms/filter.py:2158
 msgid "Successful check-ins"
-msgstr ""
+msgstr "Úspěšné check-iny"
 
 #: pretix/control/forms/filter.py:2159
 msgid "Unsuccessful check-ins"
-msgstr ""
+msgstr "Neúspěšné check-iny"
 
 #: pretix/control/forms/filter.py:2164
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:64
 #: pretix/plugins/checkinlists/exporters.py:634
 msgid "Scan type"
-msgstr ""
+msgstr "Typ skenování"
 
 #: pretix/control/forms/filter.py:2166
 msgid "All directions"
@@ -11948,35 +11963,35 @@ msgstr "Odvolaná zařízení"
 
 #: pretix/control/forms/global_settings.py:59
 msgid "Additional footer text"
-msgstr ""
+msgstr "Další text v zápatí"
 
 #: pretix/control/forms/global_settings.py:60
 msgid "Will be included as additional text in the footer, site-wide."
-msgstr ""
+msgstr "Bude uveden jako další text v zápatí celého webu."
 
 #: pretix/control/forms/global_settings.py:65
 msgid "Additional footer link"
-msgstr ""
+msgstr "Další odkaz v zápatí"
 
 #: pretix/control/forms/global_settings.py:66
 msgid "Will be included as the link in the additional footer text."
-msgstr ""
+msgstr "Bude uveden jako odkaz v doplňkovém textu v zápatí."
 
 #: pretix/control/forms/global_settings.py:71
 msgid "Global message banner"
-msgstr ""
+msgstr "Globální banner oznámení"
 
 #: pretix/control/forms/global_settings.py:76
 msgid "Global message banner detail text"
-msgstr ""
+msgstr "Detailní text banneru globálního oznámení"
 
 #: pretix/control/forms/global_settings.py:80
 msgid "OpenCage API key for geocoding"
-msgstr ""
+msgstr "Klíč API OpenCage pro geokódování"
 
 #: pretix/control/forms/global_settings.py:84
 msgid "MapQuest API key for geocoding"
-msgstr ""
+msgstr "Klíč API MapQuest pro geokódování"
 
 #: pretix/control/forms/global_settings.py:88
 msgid "Leaflet tiles URL pattern"
@@ -11986,7 +12001,7 @@ msgstr ""
 #: pretix/control/forms/global_settings.py:94
 #, python-brace-format
 msgid "e.g. {sample}"
-msgstr ""
+msgstr "např. {sample}"
 
 #: pretix/control/forms/global_settings.py:93
 msgid "Leaflet tiles attribution"
@@ -11994,7 +12009,7 @@ msgstr ""
 
 #: pretix/control/forms/global_settings.py:110
 msgid "Perform update checks"
-msgstr ""
+msgstr "Provádět kontrolu aktualizací"
 
 #: pretix/control/forms/global_settings.py:111
 msgid ""
@@ -12021,6 +12036,9 @@ msgid ""
 "available. This address will not be transmitted to pretix.eu, the emails "
 "will be sent by this server locally."
 msgstr ""
+"Na tuto adresu vás budeme informovat, pokud zjistíme, že je k dispozici nová "
+"aktualizace. Tato adresa nebude přenášena na pretix.eu, e-maily budou "
+"odesílány tímto serverem lokálně."
 
 #: pretix/control/forms/global_settings.py:133
 msgid "Changes to pretix"
@@ -12031,22 +12049,27 @@ msgid ""
 "This installation of pretix is running without any custom modifications or "
 "extensions (except for installed plugins)."
 msgstr ""
+"Tato instalace pretixu je spuštěna bez jakýchkoli vlastních úprav nebo "
+"rozšíření (kromě nainstalovaných pluginů)."
 
 #: pretix/control/forms/global_settings.py:138
 msgid ""
 "This installation of pretix includes changes or extensions made to the "
 "source code."
-msgstr ""
+msgstr "Tato instalace pretixu obsahuje změny nebo rozšíření zdrojového kódu."
 
 #: pretix/control/forms/global_settings.py:143
 msgid "Usage of pretix"
-msgstr ""
+msgstr "Použití pretixu"
 
 #: pretix/control/forms/global_settings.py:146
 msgid ""
 "I only use pretix to organize events which are executed by my own company or "
 "its affiliated companies, or to sell products sold by my own company."
 msgstr ""
+"Pretix používám pouze k organizaci akcí, které realizuje moje vlastní "
+"společnost nebo její spojené společnosti, nebo k prodeji produktů "
+"prodávaných mou vlastní společností."
 
 #: pretix/control/forms/global_settings.py:148
 msgid ""
@@ -12054,14 +12077,17 @@ msgid ""
 "company) or I offer the functionality of pretix to others (e.g. a Software-"
 "as-a-Service company)."
 msgstr ""
+"Používám pretix k prodeji vstupenek jiných organizátorů akcí (např. "
+"společnosti prodávající vstupenky) nebo nabízím funkce pretixu jiným (např. "
+"společnost poskytující software jako službu)."
 
 #: pretix/control/forms/global_settings.py:150
 msgid "I'm not sure which option applies."
-msgstr ""
+msgstr "Nejsem si jistý, která možnost platí."
 
 #: pretix/control/forms/global_settings.py:155
 msgid "License choice"
-msgstr ""
+msgstr "Výběr licence"
 
 #: pretix/control/forms/global_settings.py:158
 msgid ""
@@ -12108,7 +12134,7 @@ msgstr ""
 
 #: pretix/control/forms/global_settings.py:187
 msgid "Footer: \"powered by\" name (optional)"
-msgstr ""
+msgstr "Zápatí: \"powered by\" název (nepovinné)"
 
 #: pretix/control/forms/global_settings.py:188
 msgid ""
@@ -12116,19 +12142,24 @@ msgid ""
 "name of your company or organization (if you made any changes to pretix), "
 "set the name here."
 msgstr ""
+"Pokud chcete, aby zpráva \"powered by\" v zápatí stránky obsahovala název "
+"vaší společnosti nebo organizace (pokud jste v systému pretix provedli "
+"nějaké změny), nastavte tento název zde."
 
 #: pretix/control/forms/global_settings.py:193
 msgid "Link for powered by name"
-msgstr ""
+msgstr "Odkaz pro název powered by"
 
 #: pretix/control/forms/global_settings.py:194
 msgid ""
 "If you used the previous option, you can set an URL to link to in the footer."
 msgstr ""
+"Pokud jste použili předchozí možnost, můžete nastavit adresu URL, na kterou "
+"se má odkazovat v zápatí."
 
 #: pretix/control/forms/global_settings.py:198
 msgid "Source code instructions"
-msgstr ""
+msgstr "Instrukce ke zdrojovému kódu"
 
 #: pretix/control/forms/global_settings.py:200
 msgid ""
@@ -12143,21 +12174,23 @@ msgstr ""
 
 #: pretix/control/forms/item.py:146
 msgid "Dependencies between questions are not supported during check-in."
-msgstr ""
+msgstr "Závislosti mezi otázkami nejsou při check-inu podporovány."
 
 #: pretix/control/forms/item.py:288
 msgid "The product should exist in multiple variations"
-msgstr ""
+msgstr "Produkt by měl existovat ve více variantách"
 
 #: pretix/control/forms/item.py:289
 msgid ""
 "Select this option e.g. for t-shirts that come in multiple sizes. You can "
 "select the variations in the next step."
 msgstr ""
+"Tuto možnost vyberte např. u triček, která se dodávají v několika "
+"velikostech. Varianty můžete vybrat v dalším kroku."
 
 #: pretix/control/forms/item.py:309 pretix/control/forms/item.py:577
 msgid "No category"
-msgstr ""
+msgstr "Žádná kategorie"
 
 #: pretix/control/forms/item.py:316
 msgid "No taxation"
@@ -12165,7 +12198,7 @@ msgstr "Žádné daně"
 
 #: pretix/control/forms/item.py:318
 msgid "Copy product information"
-msgstr ""
+msgstr "Kopírovat informace o produktu"
 
 #: pretix/control/forms/item.py:329
 msgid "Do not add to a quota now"
