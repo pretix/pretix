@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-08 15:03+0000\n"
-"PO-Revision-Date: 2023-03-26 06:00+0000\n"
+"PO-Revision-Date: 2023-03-27 03:00+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -9777,11 +9777,11 @@ msgstr ""
 
 #: pretix/base/settings.py:2571
 msgid "Use header image also for events without an individually uploaded logo"
-msgstr ""
+msgstr "Použít obrázek v záhlaví i pro akce bez individuálně nahraného loga"
 
 #: pretix/base/settings.py:2579
 msgid "Social media image"
-msgstr ""
+msgstr "Obrázek pro sociální média"
 
 #: pretix/base/settings.py:2582
 msgid ""
@@ -9804,7 +9804,7 @@ msgstr "Logo"
 
 #: pretix/base/settings.py:2604
 msgid "We will show your logo with a maximal height and width of 2.5 cm."
-msgstr ""
+msgstr "Vaše logo zobrazíme s maximální výškou a šířkou 2,5 cm."
 
 #: pretix/base/settings.py:2630 pretix/base/settings.py:2736
 msgid "Info text"
@@ -9815,10 +9815,12 @@ msgid ""
 "Not displayed anywhere by default, but if you want to, you can use this e.g. "
 "in ticket templates."
 msgstr ""
+"Ve standardním nastavení se nikde nezobrazuje, ale pokud chcete, můžete to "
+"použít např. v šablonách vstupenek."
 
 #: pretix/base/settings.py:2642
 msgid "Banner text (top)"
-msgstr ""
+msgstr "Text banneru (nahoře)"
 
 #: pretix/base/settings.py:2645
 msgid ""
@@ -9830,7 +9832,7 @@ msgstr ""
 
 #: pretix/base/settings.py:2655
 msgid "Banner text (bottom)"
-msgstr ""
+msgstr "Text banneru (dole)"
 
 #: pretix/base/settings.py:2658
 msgid ""
@@ -9849,6 +9851,8 @@ msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
 msgstr ""
+"Tento text se zobrazí vedle pole pro zadání kódu poukázky. Můžete jej použít "
+"např. k vysvětlení, jak získat kód poukázky."
 
 #: pretix/base/settings.py:2681
 msgid "Attendee data explanation"
@@ -9859,6 +9863,9 @@ msgid ""
 "This text will be shown above the questions asked for every personalized "
 "product. You can use it e.g. to explain why you need information from them."
 msgstr ""
+"Tento text se zobrazí nad otázkami u každého personalizovaného produktu. "
+"Můžete jej použít např. k vysvětlení, proč potřebujete informace od "
+"zákazníků."
 
 #: pretix/base/settings.py:2694
 msgid "Additional success message"
@@ -9890,7 +9897,7 @@ msgstr "Nápověda k textu pole e-mailu"
 
 #: pretix/base/settings.py:2747
 msgid "Allow creating a new team during event creation"
-msgstr ""
+msgstr "Umožnit vytvoření nového týmu během vytváření akce"
 
 #: pretix/base/settings.py:2748
 msgid ""
@@ -12202,15 +12209,15 @@ msgstr "Kopírovat informace o produktu"
 
 #: pretix/control/forms/item.py:329
 msgid "Do not add to a quota now"
-msgstr ""
+msgstr "Teď do kvóty nepřidávat"
 
 #: pretix/control/forms/item.py:330
 msgid "Add product to an existing quota"
-msgstr ""
+msgstr "Přidat produkt do existující kvóty"
 
 #: pretix/control/forms/item.py:331
 msgid "Create a new quota for this product"
-msgstr ""
+msgstr "Vytvořit novou kvótu pro tento produkt"
 
 #: pretix/control/forms/item.py:337
 msgid "Quota options"
@@ -12218,11 +12225,11 @@ msgstr "Možnosti kvót"
 
 #: pretix/control/forms/item.py:345
 msgid "Add to existing quota"
-msgstr ""
+msgstr "Přidat do existující kvóty"
 
 #: pretix/control/forms/item.py:354
 msgid "New quota name"
-msgstr ""
+msgstr "Název nové kvóty"
 
 #: pretix/control/forms/item.py:360
 msgid "Size"
@@ -12234,24 +12241,24 @@ msgstr "Počet vstupenek"
 
 #: pretix/control/forms/item.py:490
 msgid "Quota name is required."
-msgstr ""
+msgstr "Název kvóty je povinný."
 
 #: pretix/control/forms/item.py:495
 msgid "Please select a quota."
-msgstr ""
+msgstr "Vyberte prosím kvótu."
 
 #: pretix/control/forms/item.py:517 pretix/plugins/badges/forms.py:76
 #: pretix/plugins/ticketoutputpdf/forms.py:55
 msgid "(Event default)"
-msgstr ""
+msgstr "(Standardní nastavení akce)"
 
 #: pretix/control/forms/item.py:527
 msgid "Choose automatically depending on event settings"
-msgstr ""
+msgstr "Automatická volba v závislosti na nastavení akce"
 
 #: pretix/control/forms/item.py:528
 msgid "Yes, if ticket generation is enabled in general"
-msgstr ""
+msgstr "Ano, pokud je generování vstupenek obecně zapnuto"
 
 #: pretix/control/forms/item.py:539
 msgid ""
@@ -12259,14 +12266,17 @@ msgid ""
 "people over 65. This ticket includes access to all parts of the event, "
 "except the VIP area."
 msgstr ""
+"Např. tuto sníženou cenu mohou využít studenti, nezaměstnaní a osoby starší "
+"65 let. Tato vstupenka obsahuje vstup do všech částí akce s výjimkou VIP "
+"zóny."
 
 #: pretix/control/forms/item.py:563
 msgid "Shown independently of other products"
-msgstr ""
+msgstr "Zobrazeno bez ohledu na ostatní produkty"
 
 #: pretix/control/forms/item.py:586
 msgid "No membership granted"
-msgstr ""
+msgstr "Členství nebylo uděleno"
 
 #: pretix/control/forms/item.py:601
 msgid ""
@@ -12281,6 +12291,8 @@ msgid ""
 "If a valid membership is required, at least one valid membership type needs "
 "to be selected."
 msgstr ""
+"Pokud je vyžadováno platné členství, je třeba vybrat alespoň jeden platný "
+"typ členství."
 
 #: pretix/control/forms/item.py:626
 msgid ""
@@ -12289,6 +12301,10 @@ msgid ""
 "the membership later. If you want the membership to be non-personalized, set "
 "the membership type to be transferable."
 msgstr ""
+"Váš produkt uděluje nepřenosné členství, a proto by měl být personalizovanou "
+"vstupenkou. Jinak by se mohlo stát, že zákazníci nebudou moci členství "
+"později využít. Pokud chcete, aby členství bylo nepersonalizované, nastavte "
+"typ členství jako přenosné."
 
 #: pretix/control/forms/item.py:635
 msgid "The start of validity must be before the end of validity."
@@ -12301,6 +12317,9 @@ msgid ""
 "by a user or currently is in a user's cart. Please set the variation as "
 "\"inactive\" instead."
 msgstr ""
+"Variantu \"%s\" nelze smazat, protože již byla uživatelem objednána nebo se "
+"právě nachází v jeho košíku. Nastavte prosím místo toho variantu jako "
+"\"neaktivní\"."
 
 #: pretix/control/forms/item.py:805
 msgid "Use value from product"
@@ -12312,13 +12331,15 @@ msgstr "Doplňky"
 
 #: pretix/control/forms/item.py:907
 msgid "You added the same add-on category twice"
-msgstr ""
+msgstr "Dvakrát jste přidali stejnou kategorii doplňků"
 
 #: pretix/control/forms/item.py:952
 msgid ""
 "Be aware that setting a minimal number makes it impossible to buy this "
 "product if all available add-ons are sold out."
 msgstr ""
+"Uvědomte si, že nastavení minimálního počtu znemožňuje nákup tohoto "
+"produktu, pokud jsou všechny dostupné doplňky vyprodány."
 
 #: pretix/control/forms/item.py:959
 msgid "Bundled products"
@@ -12332,7 +12353,7 @@ msgstr "Dvakrát jste přidali stejný balíček produktů."
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:23
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:50
 msgid "Bundled product"
-msgstr ""
+msgstr "Balený produkt"
 
 #: pretix/control/forms/item.py:1040 pretix/control/forms/orders.py:347
 #: pretix/control/forms/orders.py:535
@@ -12357,7 +12378,7 @@ msgstr "Použít STARTTLS"
 
 #: pretix/control/forms/mailsetup.py:60
 msgid "Commonly enabled on port 587."
-msgstr ""
+msgstr "Běžně je povolen na portu 587."
 
 #: pretix/control/forms/mailsetup.py:64
 msgid "Use SSL"
@@ -12365,39 +12386,42 @@ msgstr "Použít SSL"
 
 #: pretix/control/forms/mailsetup.py:65
 msgid "Commonly enabled on port 465."
-msgstr ""
+msgstr "Běžně je povolen na portu 465."
 
 #: pretix/control/forms/mailsetup.py:72
 msgid ""
 "You can activate either SSL or STARTTLS security, but not both at the same "
 "time."
 msgstr ""
+"Můžete aktivovat buď zabezpečení SSL, nebo STARTTLS, ale ne obojí současně."
 
 #: pretix/control/forms/mailsetup.py:84 pretix/control/forms/mailsetup.py:89
 msgid ""
 "You are not allowed to use this mail server, please choose one with a public "
 "IP address instead."
 msgstr ""
+"Tento e-mailový server nemůžete používat, vyberte si místo něj server s "
+"veřejnou IP adresou."
 
 #: pretix/control/forms/mailsetup.py:92
 msgid "We were unable to resolve this hostname."
-msgstr ""
+msgstr "Tento název hostitele se nám nepodařilo vyřešit."
 
 #: pretix/control/forms/orderimport.py:30
 msgid "Import mode"
-msgstr ""
+msgstr "Režim importu"
 
 #: pretix/control/forms/orderimport.py:32
 msgid "Create a separate order for each line"
-msgstr ""
+msgstr "Vytvořit samostatnou objednávku pro každý řádek"
 
 #: pretix/control/forms/orderimport.py:33
 msgid "Create one order with one position per line"
-msgstr ""
+msgstr "Vytvořit jednu objednávku s jednou položkou na řádek"
 
 #: pretix/control/forms/orderimport.py:39
 msgid "Create orders as fully paid"
-msgstr ""
+msgstr "Vytvořit objednávky jako plně zaplacené"
 
 #: pretix/control/forms/orderimport.py:40
 msgid "Create orders as pending and still require payment"
@@ -12405,12 +12429,12 @@ msgstr "Vytvořit objednávky jako čekající a stále vyžadovat platbu"
 
 #: pretix/control/forms/orderimport.py:44
 msgid "Create orders as test mode orders"
-msgstr ""
+msgstr "Vytvořit objednávky jako objednávky v testovacím režimu"
 
 #: pretix/control/forms/orderimport.py:57
 #, python-brace-format
 msgid "CSV column: \"{name}\""
-msgstr ""
+msgstr "Sloupec CSV: \"{name}\""
 
 #: pretix/control/forms/orders.py:79
 msgid "Confirm order regardless of payment"
@@ -12443,10 +12467,12 @@ msgid ""
 "If you check this box, this operation will be performed even if it leads to "
 "an overbooked quota and you having sold more tickets than you planned!"
 msgstr ""
+"Pokud toto políčko zaškrtnete, bude tato operace provedena i v případě, že "
+"dojde k překročení kvóty a prodáte více vstupenek, než jste plánovali!"
 
 #: pretix/control/forms/orders.py:130
 msgid "Overbook quota and ignore late payment"
-msgstr ""
+msgstr "Překročit kvótu a ignorovat zpožděné platby"
 
 #: pretix/control/forms/orders.py:131
 msgid ""
@@ -12455,14 +12481,17 @@ msgid ""
 "operation will also be performed regardless of the settings for late "
 "payments."
 msgstr ""
+"Pokud toto políčko zaškrtnete, bude tato operace provedena, i když dojde k "
+"překročení kvóty a prodáte více vstupenek, než jste plánovali! Operace bude "
+"provedena také bez ohledu na nastavení pro opožděné platby."
 
 #: pretix/control/forms/orders.py:165 pretix/control/forms/orders.py:211
 msgid "Notify customer by email"
-msgstr ""
+msgstr "Oznámit zákazníka e-mailem"
 
 #: pretix/control/forms/orders.py:172
 msgid "Keep a cancellation fee of"
-msgstr ""
+msgstr "Ponechat si storno poplatek ve výši"
 
 #: pretix/control/forms/orders.py:173
 msgid ""
@@ -12480,18 +12509,20 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:179
 msgid "Generate cancellation for invoice"
-msgstr ""
+msgstr "Vytvořit storno pro fakturu"
 
 #: pretix/control/forms/orders.py:184
 #: pretix/control/templates/pretixcontrol/order/deny.html:23
 msgid "Comment (will be sent to the user)"
-msgstr ""
+msgstr "Komentář (bude zaslán uživateli)"
 
 #: pretix/control/forms/orders.py:185
 msgid ""
 "Will be included in the notification email when the respective placeholder "
 "is present in the configured email text."
 msgstr ""
+"Bude součástí e-mailu s oznámením, pokud je příslušný zástupný symbol "
+"obsažen v nakonfigurovaném textu e-mailu."
 
 #: pretix/control/forms/orders.py:218
 msgid "Payment amount"
@@ -12516,29 +12547,35 @@ msgstr "Přepočítat daně"
 
 #: pretix/control/forms/orders.py:268
 msgid "Do not re-calculate taxes"
-msgstr ""
+msgstr "Nepřepočítávat daně"
 
 #: pretix/control/forms/orders.py:269
 msgid ""
 "Re-calculate taxes based on address and product settings, keep gross amount "
 "the same."
 msgstr ""
+"Přepočítat daně na základě adresy a nastavení produktu, přičemž hrubá částka "
+"zůstane stejná."
 
 #: pretix/control/forms/orders.py:270
 msgid ""
 "Re-calculate taxes based on address and product settings, keep net amount "
 "the same."
 msgstr ""
+"Přepočítat daně na základě adresy a nastavení produktu, zachovat stejnou "
+"čistou částku."
 
 #: pretix/control/forms/orders.py:275
 msgid "Issue a new invoice if required"
-msgstr ""
+msgstr "V případě potřeby vystavit novou fakturu"
 
 #: pretix/control/forms/orders.py:279
 msgid ""
 "If an invoice exists for this order and this operation would change its "
 "contents, the old invoice will be canceled and a new invoice will be issued."
 msgstr ""
+"Pokud pro tuto objednávku existuje faktura a tato operace by změnila její "
+"obsah, stará faktura bude zrušena a bude vystavena nová faktura."
 
 #: pretix/control/forms/orders.py:284
 msgid "Notify user"
@@ -12548,10 +12585,11 @@ msgstr "Oznámit uživatele"
 msgid ""
 "Send an email to the customer notifying that their order has been changed."
 msgstr ""
+"Odeslat zákazníkovi e-mail s oznámením, že jeho objednávka byla změněna."
 
 #: pretix/control/forms/orders.py:292
 msgid "Allow to overbook quotas when performing this operation"
-msgstr ""
+msgstr "Povolit překročení kvót při provádění této operace"
 
 #: pretix/control/forms/orders.py:308
 msgid "Add-on to"
@@ -12607,15 +12645,15 @@ msgstr "Konec platnosti"
 
 #: pretix/control/forms/orders.py:475
 msgid "Generate a new secret"
-msgstr ""
+msgstr "Generovat nový kód vstupenky"
 
 #: pretix/control/forms/orders.py:479
 msgid "Cancel this position"
-msgstr ""
+msgstr "Zrušit tuto pozici"
 
 #: pretix/control/forms/orders.py:483
 msgid "Split into new order"
-msgstr ""
+msgstr "Rozdělení do nové objednávky"
 
 #: pretix/control/forms/orders.py:549
 msgid "(No membership)"
@@ -12635,6 +12673,9 @@ msgid ""
 "to the order page to the user and the user will need to download his tickets "
 "again. The old versions will be invalid."
 msgstr ""
+"Regeneruje kódy objednávek a vstupenek. Budete muset uživateli znovu zaslat "
+"odkaz na stránku s objednávkou a uživatel si bude muset znovu stáhnout "
+"vstupenky. Staré verze budou neplatné."
 
 #: pretix/control/forms/orders.py:653 pretix/plugins/sendmail/forms.py:217
 msgid "Attach tickets"
@@ -12675,23 +12716,23 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:722
 msgid "Do nothing and keep the order as it is."
-msgstr ""
+msgstr "Nic nedělat a ponechat stav objednávky v původním stavu."
 
 #: pretix/control/forms/orders.py:749
 msgid "The refund amount needs to be positive and less than {}."
-msgstr ""
+msgstr "Částka náhrady musí být kladná a menší než {}."
 
 #: pretix/control/forms/orders.py:755
 msgid "You need to specify an amount for a partial refund."
-msgstr ""
+msgstr "Pro částečnou náhradu je třeba zadat částku."
 
 #: pretix/control/forms/orders.py:767
 msgid "Cancel all dates"
-msgstr ""
+msgstr "Zrušit všechny termíny"
 
 #: pretix/control/forms/orders.py:786
 msgid "Automatically refund money if possible"
-msgstr ""
+msgstr "Automaticky vracet peníze, pokud je to možné"
 
 #: pretix/control/forms/orders.py:789
 msgid ""
@@ -12705,7 +12746,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:793
 msgid "Create refund in the manual refund to-do list"
-msgstr ""
+msgstr "Vytvoření náhrady v seznamu úkolů pro ruční náhradu"
 
 #: pretix/control/forms/orders.py:796
 msgid ""
@@ -12742,7 +12783,7 @@ msgstr "Bezplatné vstupenky a doplňkové produkty se nepočítají"
 
 #: pretix/control/forms/orders.py:838
 msgid "Keep fees"
-msgstr ""
+msgstr "Ponechat si poplatky"
 
 #: pretix/control/forms/orders.py:841
 msgid ""
@@ -12757,16 +12798,16 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:847
 msgid "Send information via email"
-msgstr ""
+msgstr "Odeslat informace e-mailem"
 
 #: pretix/control/forms/orders.py:853
 msgid "Send information to waiting list"
-msgstr ""
+msgstr "Odeslat informace na čekací listinu"
 
 #: pretix/control/forms/orders.py:884 pretix/control/forms/orders.py:910
 #, python-brace-format
 msgid "Canceled: {event}"
-msgstr ""
+msgstr "Zrušeno: {event}"
 
 #: pretix/control/forms/orders.py:895
 #, python-brace-format
@@ -12785,6 +12826,19 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Ahoj,\n"
+"\n"
+"tímto e-mailem vám s lítostí oznamujeme, že {event} byl zrušen.\n"
+"\n"
+"Vrátíme vám {refund_amount} na váš původní způsob platby.\n"
+"\n"
+"Aktuální stav vaší objednávky si můžete prohlédnout zde:\n"
+"\n"
+"{url}\n"
+"\n"
+"S pozdravem,\n"
+"\n"
+"Váš tým {event}"
 
 #: pretix/control/forms/orders.py:922
 #, python-brace-format
@@ -12799,42 +12853,53 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Ahoj,\n"
+"\n"
+"tímto e-mailem vám s lítostí oznamujeme, že {event} byl zrušen.\n"
+"\n"
+"Vstupenku z čekací listiny proto neobdržíte.\n"
+"\n"
+"S pozdravem,\n"
+"\n"
+"Váš tým {event}"
 
 #: pretix/control/forms/orders.py:954 pretix/plugins/sendmail/forms.py:136
 #: pretix/plugins/sendmail/forms.py:225
 msgctxt "subevent"
 msgid "Please either select a specific date or a date range, not both."
-msgstr ""
+msgstr "Vyberte buď konkrétní datum, nebo rozsah dat, nikoli obojí."
 
 #: pretix/control/forms/orders.py:956
 msgctxt "subevent"
 msgid "Please either select all dates or a date range, not both."
-msgstr ""
+msgstr "Vyberte buď všechna data, nebo rozsah dat, nikoli obojí."
 
 #: pretix/control/forms/orders.py:958 pretix/plugins/sendmail/forms.py:138
 #: pretix/plugins/sendmail/forms.py:227
 msgctxt "subevent"
 msgid "If you set a date range, please set both a start and an end."
-msgstr ""
+msgstr "Pokud zadáváte rozsah dat, zadejte začátek i konec."
 
 #: pretix/control/forms/orders.py:960
 msgid "Please confirm that you want to cancel ALL dates in this event series."
-msgstr ""
+msgstr "Potvrďte prosím, že chcete zrušit VŠECHNY termíny této série akcí."
 
 #: pretix/control/forms/organizer.py:80
 msgid "This slug is already in use. Please choose a different one."
-msgstr ""
+msgstr "Tato zkratka se již používá. Zvolte prosím jinou."
 
 #: pretix/control/forms/organizer.py:230
 msgid ""
 "The changes could not be saved because there would be no remaining team with "
 "the permission to change teams and permissions."
 msgstr ""
+"Změny nebylo možné uložit, protože by nezůstal žádný tým s oprávněním měnit "
+"týmy a oprávnění."
 
 #: pretix/control/forms/organizer.py:260 pretix/control/forms/organizer.py:293
 msgid ""
 "Your device will not have access to anything, please select some events."
-msgstr ""
+msgstr "Vaše zařízení nebude mít k ničemu přístup, vyberte nějaké akce."
 
 #: pretix/control/forms/organizer.py:405
 msgid "Favicon"
@@ -12845,10 +12910,12 @@ msgid ""
 "If you provide a favicon, we will show it instead of the default pretix "
 "icon. We recommend a size of at least 200x200px to accommodate most devices."
 msgstr ""
+"Pokud zadáte favicon, zobrazíme ji místo výchozí ikony pretixu. Doporučujeme "
+"velikost alespoň 200x200px, aby se přizpůsobila většině zařízení."
 
 #: pretix/control/forms/organizer.py:452
 msgid "This will be attached to every email."
-msgstr ""
+msgstr "Bude přiložen ke každému e-mailu."
 
 #: pretix/control/forms/organizer.py:549
 msgctxt "webhooks"
@@ -12861,7 +12928,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:631 pretix/presale/forms/customer.py:439
 msgid "An account with this email address is already registered."
-msgstr ""
+msgstr "Účet s touto e-mailovou adresou je už registrován."
 
 #: pretix/control/forms/organizer.py:647
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:60
