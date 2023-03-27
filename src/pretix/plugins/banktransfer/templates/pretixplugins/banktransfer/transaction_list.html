@@ -87,7 +87,7 @@
                 <td>
                     {% if trans.currency %}
                         {{ trans.amount|money:trans.currency }}
-                    {% else %}}
+                    {% else %}
                         {{ trans.amount|floatformat:2 }}
                     {% endif %}
                 </td>
