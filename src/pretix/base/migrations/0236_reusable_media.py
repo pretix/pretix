@@ -15,7 +15,7 @@ def set_can_manage_reusable_media(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ('pretixbase', '0234_total_ordering'),
+        ('pretixbase', '0235_auto_20230316_2023'),
     ]
 
     operations = [
