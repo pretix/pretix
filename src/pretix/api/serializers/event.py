@@ -863,6 +863,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'invoice_address_from_tax_id',
         'invoice_address_from_vat_id',
         'name_scheme',
+        'system_question_order',
     ]
 
     def __init__(self, *args, **kwargs):
