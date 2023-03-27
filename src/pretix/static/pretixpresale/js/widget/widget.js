@@ -484,20 +484,28 @@ Vue.component('item', {
     },
     watch: {
         expanded: function (newValue) {
+            var v = this.$refs.variations;
             if (newValue) {
-                this.$refs.variations.hidden = false;
-                this.$refs.variations.style.maxHeight = this.$refs.variations.scrollHeight + 'px';
+                v.hidden = false;
             } else {
-                this.$refs.variations.addEventListener('transitionend', function (event) {
-                    this.hidden = true;
-                }, {once: true});
-                this.$refs.variations.style.maxHeight = 0;
+                // Vue.nextTick does not work here
+                window.setTimeout(function () {
+                    v.style.maxHeight = 0;
+                }, 50);
             }
+            v.style.maxHeight = v.scrollHeight + 'px';
         }
     },
     mounted: function () {
         if (this.$refs.variations) {
             this.$refs.variations.hidden = !this.expanded;
+            this.$refs.variations.addEventListener('transitionend', function (event) {
+                if (this.style.maxHeight && this.style.maxHeight != '0px') {
+                    this.style.maxHeight = 'none';
+                } else {
+                    this.hidden = true;
+                }
+            });
         }
     },
     methods: {
