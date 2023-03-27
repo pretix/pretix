@@ -714,40 +714,53 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     # !!!!!!!!!
 
     dt = datetime or now()
+    force_used = False
 
     if op.canceled or op.order.status not in (Order.STATUS_PAID, Order.STATUS_PENDING):
-        raise CheckInError(
-            _('This order position has been canceled.'),
-            'canceled' if canceled_supported else 'unpaid'
-        )
+        if force:
+            force_used = True
+        else:
+            raise CheckInError(
+                _('This order position has been canceled.'),
+                'canceled' if canceled_supported else 'unpaid'
+            )
 
     if op.blocked:
-        raise CheckInError(
-            _('This ticket has been blocked.'),  # todo provide reason
-            'blocked'
-        )
+        if force:
+            force_used = True
+        else:
+            raise CheckInError(
+                _('This ticket has been blocked.'),  # todo provide reason
+                'blocked'
+            )
 
     if type != Checkin.TYPE_EXIT and op.valid_from and op.valid_from > now():
-        raise CheckInError(
-            _('This ticket is only valid after {datetime}.').format(
-                datetime=date_format(op.valid_from, 'SHORT_DATETIME_FORMAT')
-            ),
-            'invalid_time',
-            _('This ticket is only valid after {datetime}.').format(
-                datetime=date_format(op.valid_from, 'SHORT_DATETIME_FORMAT')
-            ),
-        )
+        if force:
+            force_used = True
+        else:
+            raise CheckInError(
+                _('This ticket is only valid after {datetime}.').format(
+                    datetime=date_format(op.valid_from, 'SHORT_DATETIME_FORMAT')
+                ),
+                'invalid_time',
+                _('This ticket is only valid after {datetime}.').format(
+                    datetime=date_format(op.valid_from, 'SHORT_DATETIME_FORMAT')
+                ),
+            )
 
     if type != Checkin.TYPE_EXIT and op.valid_until and op.valid_until < now():
-        raise CheckInError(
-            _('This ticket was only valid before {datetime}.').format(
-                datetime=date_format(op.valid_until, 'SHORT_DATETIME_FORMAT')
-            ),
-            'invalid_time',
-            _('This ticket was only valid before {datetime}.').format(
-                datetime=date_format(op.valid_until, 'SHORT_DATETIME_FORMAT')
-            ),
-        )
+        if force:
+            force_used = True
+        else:
+            raise CheckInError(
+                _('This ticket was only valid before {datetime}.').format(
+                    datetime=date_format(op.valid_until, 'SHORT_DATETIME_FORMAT')
+                ),
+                'invalid_time',
+                _('This ticket was only valid before {datetime}.').format(
+                    datetime=date_format(op.valid_until, 'SHORT_DATETIME_FORMAT')
+                ),
+            )
 
     # Do this outside of transaction so it is saved even if the checkin fails for some other reason
     checkin_questions = list(
@@ -770,40 +783,57 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         op = opqs.get(pk=op.pk)
 
         if not clist.all_products and op.item_id not in [i.pk for i in clist.limit_products.all()]:
-            raise CheckInError(
-                _('This order position has an invalid product for this check-in list.'),
-                'product'
-            )
-        elif clist.subevent_id and op.subevent_id != clist.subevent_id:
-            raise CheckInError(
-                _('This order position has an invalid date for this check-in list.'),
-                'product'
-            )
-        elif op.order.status != Order.STATUS_PAID and not force and op.order.require_approval:
-            raise CheckInError(
-                _('This order is not yet approved.'),
-                'unpaid'
-            )
-        elif op.order.status != Order.STATUS_PAID and not force and not op.order.valid_if_pending and not (
+            if force:
+                force_used = True
+            else:
+                raise CheckInError(
+                    _('This order position has an invalid product for this check-in list.'),
+                    'product'
+                )
+
+        if clist.subevent_id and op.subevent_id != clist.subevent_id:
+            if force:
+                force_used = True
+            else:
+                raise CheckInError(
+                    _('This order position has an invalid date for this check-in list.'),
+                    'product'
+                )
+
+        if op.order.status != Order.STATUS_PAID and op.order.require_approval:
+            if force:
+                force_used = True
+            else:
+                raise CheckInError(
+                    _('This order is not yet approved.'),
+                    'unpaid'
+                )
+        elif op.order.status != Order.STATUS_PAID and not op.order.valid_if_pending and not (
             ignore_unpaid and clist.include_pending and op.order.status == Order.STATUS_PENDING
         ):
-            raise CheckInError(
-                _('This order is not marked as paid.'),
-                'unpaid'
-            )
+            if force:
+                force_used = True
+            else:
+                raise CheckInError(
+                    _('This order is not marked as paid.'),
+                    'unpaid'
+                )
 
-        if type == Checkin.TYPE_ENTRY and clist.rules and not force:
+        if type == Checkin.TYPE_ENTRY and clist.rules:
             rule_data = LazyRuleVars(op, clist, dt)
             logic = _get_logic_environment(op.subevent or clist.event)
             if not logic.apply(clist.rules, rule_data):
-                reason = _logic_explain(clist.rules, op.subevent or clist.event, rule_data)
-                raise CheckInError(
-                    _('Entry not permitted: {explanation}.').format(
-                        explanation=reason
-                    ),
-                    'rules',
-                    reason=reason
-                )
+                if force:
+                    force_used = True
+                else:
+                    reason = _logic_explain(clist.rules, op.subevent or clist.event, rule_data)
+                    raise CheckInError(
+                        _('Entry not permitted: {explanation}.').format(
+                            explanation=reason
+                        ),
+                        'rules',
+                        reason=reason
+                    )
 
         if require_answers and not force and questions_supported:
             raise RequiredQuestionsError(
@@ -837,7 +867,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 device=device,
                 gate=device.gate if device else None,
                 nonce=nonce,
-                forced=force and (not entry_allowed or from_revoked_secret),
+                forced=force and (not entry_allowed or from_revoked_secret or force_used),
                 force_sent=force,
                 raw_barcode=raw_barcode,
             )

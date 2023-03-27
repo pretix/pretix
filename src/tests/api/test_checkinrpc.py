@@ -357,6 +357,24 @@ def test_forced_multiple(token_client, organizer, clist, event, order):
 
 
 @pytest.mark.django_db
+def test_forced_canceled(token_client, organizer, clist, event, order):
+    order.status = Order.STATUS_CANCELED
+    order.save()
+    with scopes_disabled():
+        p = order.positions.first()
+    resp = _redeem(token_client, organizer, clist, p.secret, {})
+    assert resp.status_code == 400
+    assert resp.data['status'] == 'error'
+    resp = _redeem(token_client, organizer, clist, p.secret, {'force': True})
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        ci = p.checkins.get()
+        assert ci.force_sent
+        assert ci.forced
+
+
+@pytest.mark.django_db
 def test_forced_flag_set_if_required(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()

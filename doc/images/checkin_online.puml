@@ -38,27 +38,27 @@ else
 endif
 
 "Is the order in status PAID or PENDING\nand is the position not canceled?" --> if "" then
-    -right->[no] "Return error CANCELED"
+    -right->[no && !force] "Return error CANCELED"
 else
-    -down->[yes] "Is one or more block set on the ticket?"
+    -down->[yes || force] "Is one or more block set on the ticket?"
     --> if "" then
-        -right->[no] "Return error BLOCKED"
+        -right->[no && !force] "Return error BLOCKED"
     else
-        -down->[yes] "If this is not an exit, is the valid_from/valid_until\nconstraint on the ticket fulfilled?"
+        -down->[yes || force] "If this is not an exit, is the valid_from/valid_until\nconstraint on the ticket fulfilled?"
         --> if "" then
-            -right->[no] "Return error INVALID_TIME"
+            -right->[no && !force] "Return error INVALID_TIME"
         else
-            -down->[yes] "Is the product part of the check-in list?"
+            -down->[yes || force] "Is the product part of the check-in list?"
             --> if "" then
-                -right->[no] "Return error PRODUCT"
+                -right->[no && !force] "Return error PRODUCT"
             else
-                -down->[yes] "Is the subevent part of the check-in list?"
+                -down->[yes || force] "Is the subevent part of the check-in list?"
                 --> if "" then
-                    -right->[no] "Return error PRODUCT "
+                    -right->[no && !force] "Return error PRODUCT "
                 else
-                    -down->[yes] "Is the order in status PAID\nor is this a forced upload?"
+                    -down->[yes] "Is the order in status PAID?"
                     --> if "" then
-                        -right->[no] "Is Order.require_approval set?"
+                        -right->[no && !force] "Is Order.require_approval set?"
                         --> if "" then
                             -->[no] "Is Order.valid_if_pending set?"
                             --> if "" then
@@ -80,7 +80,7 @@ else
                             -->[yes] "Return error UNPAID "
                         endif
                     else
-                        -down->[yes] "Is this an entry or exit?\nIs the upload forced?"
+                        -down->[yes || force] "Is this an entry or exit?\nIs the upload forced?"
                     endif
                 endif
             endif
