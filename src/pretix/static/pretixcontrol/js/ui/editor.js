@@ -672,6 +672,7 @@ var editor = {
             $("#toolbox-heading").text(gettext("Ticket design"));
             $("#pdf-info-width").val(editor._px2mm(editor.pdf_viewport.width).toFixed(2));
             $("#pdf-info-height").val(editor._px2mm(editor.pdf_viewport.height).toFixed(2));
+            editor._paper_size_warning();
         }
         editor._update_toolbox_values();
     },
@@ -1017,6 +1018,7 @@ var editor = {
     },
 
     _create_empty_background: function () {
+        editor._paper_size_warning();
         $("#loading-container, #loading-upload").show();
         $("#loading-upload .progress").show();
         $('#loading-upload .progress-bar').css('width', 0);
@@ -1038,6 +1040,14 @@ var editor = {
             $("#fileupload").prop('disabled', false);
             $(".background-button").removeClass("disabled");
         }, 'json');
+    },
+
+    _paper_size_warning: function () {
+        var warn = editor.pdf_viewport && (
+            Math.abs(parseFloat($("#pdf-info-height").val()) - editor._px2mm(editor.pdf_viewport.height)) > 0.001 ||
+            Math.abs(parseFloat($("#pdf-info-width").val()) - editor._px2mm(editor.pdf_viewport.width)) > 0.001
+        );
+        $("#pdf-empty").toggleClass("btn-primary", warn).toggleClass("btn-default", !warn);
     },
 
     init: function () {
@@ -1122,6 +1132,7 @@ var editor = {
         $("#toolbox-source").bind('click', editor._source_show);
         $("#source-close").bind('click', editor._source_close);
         $("#source-save").bind('click', editor._source_save);
+        $("#pdf-info-width, #pdf-info-height").bind('change', editor._paper_size_warning);
 
         $.getJSON($("#schema-url").text(), function (data) {
             editor.schema = data;
