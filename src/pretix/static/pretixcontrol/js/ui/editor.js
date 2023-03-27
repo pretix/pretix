@@ -949,11 +949,15 @@ var editor = {
     _save: function () {
         $("#editor-save").prop('disabled', true).prepend('<span class="fa fa-cog fa-spin"></span>');
         var dump = editor.dump();
-        $.post(window.location.href, {
+        var payload = {
             'data': JSON.stringify(dump),
             'csrfmiddlewaretoken': $("input[name=csrfmiddlewaretoken]").val(),
             'background': editor.uploaded_file_id,
-        }, function (data) {
+        };
+        if ($("#pdf-info-name").length > 0) {
+            payload.name = $("#pdf-info-name").val();
+        }
+        $.post(window.location.href, payload, function (data) {
             if (data.status === 'ok') {
                 $("#editor-save span").remove();
                 $("#editor-save").prop('disabled', false);
