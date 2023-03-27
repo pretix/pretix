@@ -37,6 +37,7 @@ import csv
 import itertools
 import json
 import logging
+from collections import defaultdict
 from datetime import timedelta
 from decimal import Decimal
 from typing import Set
@@ -94,6 +95,11 @@ class ActionView(View):
         return self._accept_ignore_amount(trans)
 
     def _accept_ignore_amount(self, trans):
+        if trans.currency and trans.order and trans.currency != trans.order.event.currency:
+            return JsonResponse({
+                'status': 'error',
+                'message': _('Currencies do not match.')
+            })
         if trans.amount < Decimal('0.00'):
             ref = trans.order.refunds.filter(
                 amount=trans.amount * -1,
@@ -176,6 +182,11 @@ class ActionView(View):
                 trans.order = self.order_qs().get(code=code.rsplit('-', 1)[1], event__slug__iexact=code.rsplit('-', 1)[0])
             else:
                 trans.order = self.order_qs().get(code=code.rsplit('-', 1)[-1])
+            if trans.currency and trans.order and trans.currency != trans.order.event.currency:
+                return JsonResponse({
+                    'status': 'error',
+                    'message': _('Currencies do not match.')
+                })
         except Order.DoesNotExist:
             return JsonResponse({
                 'status': 'error',
@@ -422,6 +433,11 @@ class ImportView(ListView):
             messages.error(self.request, _('We were unable to process your input.'))
             return self.redirect_back()
 
+    def _hint_settings_name(self, currency):
+        if len(self.currencies) > 1:
+            return f'banktransfer_csvhint_{currency}'
+        return 'banktransfer_csvhint'
+
     def process_csv_file(self):
         o = getattr(self.request, 'event', self.request.organizer)
         try:
@@ -436,8 +452,8 @@ class ImportView(ListView):
             messages.error(self.request, _('I\'m sorry, but we detected this file as empty. Please '
                                            'contact support for help.'))
 
-        if o.settings.get('banktransfer_csvhint') is not None:
-            hint = o.settings.get('banktransfer_csvhint', as_type=dict)
+        if o.settings.get(self._hint_settings_name(self.request.POST.get('currency'))) is not None:
+            hint = o.settings.get(self._hint_settings_name(self.request.POST.get('currency')), as_type=dict)
 
             try:
                 parsed, good = csvimport.parse(data, hint)
@@ -467,7 +483,7 @@ class ImportView(ListView):
             return self.assign_view(data)
         o = getattr(self.request, 'event', self.request.organizer)
         try:
-            o.settings.set('banktransfer_csvhint', hint)
+            o.settings.set(self._hint_settings_name(self.request.POST.get('currency')), hint)
         except Exception as e:  # TODO: narrow down
             logger.error('Import using stored hint failed: ' + str(e))
             pass
@@ -517,6 +533,15 @@ class ImportView(ListView):
             kwargs['event'] = self.kwargs['event']
         return redirect(reverse('plugins:banktransfer:import', kwargs=kwargs))
 
+    @cached_property
+    def currencies(self):
+        if hasattr(self.request, 'event'):
+            return [self.request.event.currency]
+        else:
+            return list(
+                self.request.organizer.events.order_by('currency').values_list('currency', flat=True).distinct()
+            )
+
     def start_processing(self, parsed):
         if self.job_running:
             messages.error(self.request,
@@ -525,7 +550,15 @@ class ImportView(ListView):
         if 'event' in self.kwargs:
             job = BankImportJob.objects.create(event=self.request.event, organizer=self.request.organizer)
         else:
-            job = BankImportJob.objects.create(organizer=self.request.organizer)
+            if len(self.currencies) != 1:
+                currency = self.request.POST.get("currency")
+                if not currency or currency not in self.currencies:
+                    messages.error(self.request,
+                                   _('No currency has been selected.'))
+                    return self.redirect_back()
+                job = BankImportJob.objects.create(organizer=self.request.organizer, currency=currency)
+            else:
+                job = BankImportJob.objects.create(organizer=self.request.organizer, currency=self.currencies[0])
         process_banktransfers.apply_async(kwargs={
             'job': job.pk,
             'data': parsed
@@ -543,6 +576,9 @@ class ImportView(ListView):
         ctx['job_running'] = self.job_running
         ctx['no_more_payments'] = False
         ctx['filter_form'] = BankTransactionFilterForm(self.request.GET or None)
+
+        if not hasattr(self.request, 'event'):
+            ctx['currencies'] = self.currencies
 
         if 'event' in self.kwargs:
             ctx['basetpl'] = 'pretixplugins/banktransfer/import_base.html'
@@ -577,10 +613,6 @@ class ImportView(ListView):
 
 class OrganizerBanktransferView:
     def dispatch(self, request, *args, **kwargs):
-        if len(request.organizer.events.order_by('currency').values_list('currency', flat=True).distinct()) > 1:
-            messages.error(request, _('Please perform per-event bank imports as this organizer has events with '
-                                      'multiple currencies.'))
-            return redirect('control:organizer', organizer=request.organizer.slug)
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -679,11 +711,11 @@ class RefundExportListView(ListView):
                 valid_refunds.add(refund)
 
         if valid_refunds:
-            transaction_rows = []
+            transaction_rows = defaultdict(list)
 
             for refund in valid_refunds:
                 data = refund.info_data
-                transaction_rows.append({
+                transaction_rows[refund.order.event.currency].append({
                     "amount": refund.amount,
                     "id": refund.full_id,
                     "comment": refund.comment,
@@ -692,13 +724,15 @@ class RefundExportListView(ListView):
                 refund.done(user=self.request.user)
 
             if unite_transactions:
-                transaction_rows = _unite_transaction_rows(transaction_rows)
+                for currency, rows in transaction_rows.items():
+                    transaction_rows[currency] = _unite_transaction_rows(rows)
 
-            rows_data = json.dumps(transaction_rows, cls=CustomJSONEncoder)
-            if hasattr(request, 'event'):
-                RefundExport.objects.create(event=self.request.event, testmode=self.request.event.testmode, rows=rows_data)
-            else:
-                RefundExport.objects.create(organizer=self.request.organizer, testmode=False, rows=rows_data)
+            for currency, rows in transaction_rows.items():
+                rows_data = json.dumps(rows, cls=CustomJSONEncoder)
+                if hasattr(request, 'event'):
+                    RefundExport.objects.create(event=self.request.event, testmode=self.request.event.testmode, rows=rows_data, currency=currency)
+                else:
+                    RefundExport.objects.create(organizer=self.request.organizer, testmode=False, rows=rows_data, currency=currency)
 
         else:
             messages.warning(request, _('No valid orders have been found.'))
@@ -731,13 +765,6 @@ class EventRefundExportListView(EventPermissionRequiredMixin, RefundExportListVi
 
 class OrganizerRefundExportListView(OrganizerPermissionRequiredMixin, RefundExportListView):
     permission = 'can_change_orders'
-
-    def dispatch(self, request, *args, **kwargs):
-        if len(request.organizer.events.order_by('currency').values_list('currency', flat=True).distinct()) > 1:
-            messages.error(request, _('Please perform per-event refund exports as this organizer has events with '
-                                      'multiple currencies.'))
-            return redirect('control:organizer', organizer=request.organizer.slug)
-        return super().dispatch(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse('plugins:banktransfer:refunds.list', kwargs={

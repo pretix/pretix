@@ -84,7 +84,13 @@
                         </a>
                     </div>
                 </td>
-                <td>{{ trans.amount|floatformat:2 }}</td>
+                <td>
+                    {% if trans.currency %}
+                        {{ trans.amount|money:trans.currency }}
+                    {% else %}
+                        {{ trans.amount|floatformat:2 }}
+                    {% endif %}
+                </td>
                 <td>
                     {% if trans.message %}
                         {% trans trans.message %}

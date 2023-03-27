@@ -69,7 +69,11 @@
                     </td>
                     <td>{{ export.cnt }}</td>
                     <td>
+                        {% if export.currency %}
                         {{ export.sum|default_if_none:0|money:export.currency }}
+                        {% else %}
+                        {{ export.sum|default_if_none:0|floatformat:2 }}
+                        {% endif %}
                     </td>
                     <td class="text-right">
                         {% if not export.downloaded %}

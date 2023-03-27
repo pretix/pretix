@@ -31,9 +31,20 @@
                 {% else %}
                     <form action="" method="post" enctype="multipart/form-data" class="form-inline">
                         {% csrf_token %}
+                        {% if currencies|length > 1 %}
+                            <div class="form-group helper-display-block">
+                                <label for="currency">{% trans "Currency" %}: </label>
+                                <select required name="currency" class="form-control">
+                                    <option></option>
+                                    {% for c in currencies %}
+                                        <option value="{{c}}">{{c}}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        {% endif %}
                         <div class="form-group">
-                            <label for="file">{% trans "Import file" %}: </label> <input id="file" type="file"
-                                                                                         name="file"/>
+                            <label for="file">{% trans "Import file" %}: </label>
+                            <input id="file" type="file" name="file" required />
                         </div>
                         <div class="clearfix"></div>
                         <button class="btn btn-primary pull-right flip" type="submit">

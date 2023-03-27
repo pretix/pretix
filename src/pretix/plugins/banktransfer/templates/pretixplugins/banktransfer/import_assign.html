@@ -99,6 +99,9 @@
                 </tbody>
             </table>
         </div>
+        {% if "currency" in request.POST %}
+            <input type="hidden" name="currency" value="{{ request.POST.currency }}"/>
+        {% endif %}
         <input type="hidden" name="cols" value="{{ rows.0|length }}"/>
         <input type="hidden" name="rows" value="{{ rows|length }}"/>
         <textarea class="helper-display-none" name="data">

@@ -97,6 +97,21 @@ def test_assign_order(env, client):
 
 
 @pytest.mark.django_db
+def test_assign_order_invalid_currency(env, client):
+    job = BankImportJob.objects.create(event=env[0])
+    trans = BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',
+                                           state=BankTransaction.STATE_NOMATCH,
+                                           amount=23, date='unknown', currency='HUF')
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = json.loads(client.post('/control/event/{}/{}/banktransfer/action/'.format(env[0].organizer.slug, env[0].slug), {
+        'action_{}'.format(trans.pk): 'assign:FOO'
+    }).content.decode('utf-8'))
+    assert r['status'] == 'error'
+    trans.refresh_from_db()
+    assert trans.state == BankTransaction.STATE_NOMATCH
+
+
+@pytest.mark.django_db
 def test_assign_order_unknown(env, client):
     job = BankImportJob.objects.create(event=env[0])
     trans = BankTransaction.objects.create(event=env[0], import_job=job, payer='Foo',

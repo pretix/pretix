@@ -64,6 +64,32 @@ def env():
     return event, user, refund
 
 
+@pytest.fixture
+def refund_huf(env):
+    event = Event.objects.create(
+        organizer=env[0].organizer, name='Dummy', slug='dummy2', currency='HUF',
+        date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal'
+    )
+    order = Order.objects.create(
+        code='1Z3AS', event=event, email='admin@localhost',
+        status=Order.STATUS_PAID,
+        datetime=now(), expires=now() + timedelta(days=10),
+        total=42
+    )
+    refund = OrderRefund.objects.create(
+        order=order,
+        amount=Decimal("42"),
+        provider='banktransfer',
+        state=OrderRefund.REFUND_STATE_CREATED,
+        info=json.dumps({
+            'payer': "Abc Def",
+            'iban': "DE27520521540534534466",
+            'bic': "HELADEF1MEG",
+        })
+    )
+    return refund
+
+
 url_prefixes = [
     "/control/event/dummy/dummy/",
     "/control/organizer/dummy/"
@@ -104,6 +130,18 @@ def test_export_refunds(client, env, url_prefix):
     r = "".join(str(part) for part in r.streaming_content)
     assert "DE27520521540534534466" in r
     assert "HELADEF" in r
+
+
+@pytest.mark.django_db
+def test_export_refunds_multi_currency(client, env, refund_huf):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    r = client.get('/control/organizer/dummy/banktransfer/refunds/')
+    assert r.status_code == 200
+    r = client.post('/control/organizer/dummy/banktransfer/refunds/', {"unite_transactions": True}, follow=True)
+    assert r.status_code == 200
+    assert RefundExport.objects.count() == 2
+    assert RefundExport.objects.get(currency="EUR").sum == Decimal("23.00")
+    assert RefundExport.objects.get(currency="HUF").sum == Decimal("42.00")
 
 
 @pytest.mark.django_db
