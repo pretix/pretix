@@ -9,6 +9,11 @@
             This page shows when your rule is planned to be sent.
         {% endblocktrans %}
     </p>
+    {% if not request.event.live %}
+        <div class="alert alert-warning">
+            {% trans "Automated emails are not sent as long as your ticket shop is offline." %}
+        </div>
+    {% endif %}
     <dl class="dl-horizontal">
         <dt>{% trans "Email subject" %}</dt>
         <dd>{{ rule.subject }}</dd>
