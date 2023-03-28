@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-28 08:31+0000\n"
-"PO-Revision-Date: 2023-03-08 15:21+0000\n"
+"PO-Revision-Date: 2023-03-28 08:50+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -3001,6 +3001,10 @@ msgid ""
 "and valid for check-in regardless of which date they are purchased for. You "
 "can limit their validity through the advanced check-in rules, though."
 msgstr ""
+"Wenn du \"alle Termine\" auswählst, werden Tickets als Teil dieser Liste und "
+"gültig zum Check-in betrachtet, unabhängig davon für welchen Termin sie "
+"gekauft wurden. Du kannst die Gültigkeit jedoch über unsere erweiterten "
+"Check-in-Regeln beschränken."
 
 #: pretix/base/models/checkin.py:64
 msgctxt "checkin"
@@ -6643,10 +6647,8 @@ msgstr ""
 "beendet. Die betroffenen Positionen wurden aus dem Warenkorb entfernt."
 
 #: pretix/base/services/cart.py:140
-#, fuzzy
-#| msgid "The entered price is to high."
 msgid "The entered price is not a number."
-msgstr "Der eingegebene Preis ist zu hoch."
+msgstr "Der eingegebene Preis ist keine Zahl."
 
 #: pretix/base/services/cart.py:141
 msgid "The entered price is to high."
@@ -7347,16 +7349,13 @@ msgstr ""
 "aus deinem Warenkorb entfernt."
 
 #: pretix/base/services/orders.py:192
-#, fuzzy, python-format
-#| msgid ""
-#| "You cannot delete the product <strong>%(item)s</strong> because it "
-#| "already has been ordered."
+#, python-format
 msgid ""
 "You cannot remove the position %(addon)s since it has already been checked "
 "in."
 msgstr ""
-"Das Produkt <strong>%(item)s</strong> kann nicht gelöscht werden, da es "
-"bereits bestellt wurde."
+"Die Position %(addon)s kann nicht entfernt werden, da sie bereits "
+"eingecheckt wurde."
 
 #: pretix/base/services/orders.py:208
 msgid "The order was not canceled."
@@ -8803,10 +8802,8 @@ msgid "Do not allow changes after"
 msgstr "Umbuchungen nur erlauben bis"
 
 #: pretix/base/settings.py:1495
-#, fuzzy
-#| msgid "The payment for this invoice has already been received."
 msgid "Allow change even though the ticket has already been checked in"
-msgstr "Die Rechnung wurde bereits beglichen."
+msgstr "Änderungen selbst dann erlauben, wenn Tickets eingecheckt wurden"
 
 #: pretix/base/settings.py:1496
 msgid ""
@@ -8816,6 +8813,12 @@ msgid ""
 "in individually. Use with care, and preferably only in combination with a "
 "limitation on price changes above."
 msgstr ""
+"Standardmäßig sind Änderungen an der Bestellung deaktiviert, sobald "
+"irgendein Ticket der Bestellung eingecheckt wurde. Wenn diese Option gewählt "
+"ist, wird diese Beschränkung aufgehoben. Es ist jedoch nach wie vor nicht "
+"möglich, ein Zusatzprodukt zu stornieren, das bereits einzeln eingecheckt "
+"wurde. Bitte nutze diese Option vorsichtig und idealerweise nur in "
+"Kombination mit einer Beschränkung der Preisänderung (siehe oben)."
 
 #: pretix/base/settings.py:1508
 msgid "Allow individual attendees to change their ticket"
@@ -15680,7 +15683,7 @@ msgstr "Abgelehnt"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:151
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "In Zwischenablage kopieren"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:7
 #: pretix/control/templates/pretixcontrol/checkin/index.html:11
@@ -21489,10 +21492,8 @@ msgid "Copy"
 msgstr "Kopieren"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:180
-#, fuzzy
-#| msgid "Seat name"
 msgid "Layout name"
-msgstr "Sitzbezeichnung"
+msgstr "Layout-Name"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:187
 #: pretix/control/templates/pretixcontrol/pdf/index.html:251
@@ -21923,6 +21924,15 @@ msgid ""
 "or even overlapping time slots, working with just one large check-in list "
 "will be easier."
 msgstr ""
+"Du kannst entweder eine oder mehrere Check-in-Listen für jeden Termin deiner "
+"Veranstaltungsreihe einzeln anlegen oder nur eine Check-in-Liste für alle "
+"Ihre Termine verwenden und den Einlass über Check-in-Regeln limitieren. "
+"Welcher Ansatz besser geeignet ist, hängt von mehreren Faktoren ab, wie z.B. "
+"der Menge an Terminen in deiner Veranstaltungsreihe. Für Reihen mit weniger "
+"als einem Termin pro Tag sind einzelne Check-in-Listen in der Regel "
+"nützlicher. Wenn du Termine nutzt, um viele Zeitslots am selben Tag "
+"darzustellen oder sogar überlappende Termine hast, ist die Arbeit mit einer "
+"großen Liste in der Regel einfacher."
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:598
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:354
@@ -25217,7 +25227,7 @@ msgstr "Die Rechnung wurde bereits storniert."
 #: pretix/plugins/banktransfer/views.py:101
 #: pretix/plugins/banktransfer/views.py:188
 msgid "Currencies do not match."
-msgstr ""
+msgstr "Währungen passen nicht zusammen."
 
 #: pretix/plugins/banktransfer/tasks.py:186
 msgid "Automatic split to multiple orders not possible."
@@ -25704,10 +25714,8 @@ msgid "You need to select the column containing the payment reference."
 msgstr "Du musst die Spalte auswählen, die den Verwendungszweck enthält."
 
 #: pretix/plugins/banktransfer/views.py:557
-#, fuzzy
-#| msgid "Not all discounts have been selected."
 msgid "No currency has been selected."
-msgstr "Es wurden nicht alle Rabatte ausgewählt."
+msgstr "Es wurde keine Währung ausgewählt."
 
 #: pretix/plugins/banktransfer/views.py:705
 #, python-brace-format
@@ -26841,6 +26849,8 @@ msgstr "Neue Regel erstellen"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:10
 msgid "Automated emails are not sent as long as your ticket shop is offline."
 msgstr ""
+"Automatische E-Mails werden nicht verschickt, solange Ihr Ticketshop offline "
+"ist."
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:41
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:55
