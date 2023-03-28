@@ -14,10 +14,6 @@ var Vue = module.exports;
 Vue.component('resize-observer', VueResize.ResizeObserver)
 
 var strings = {
-    'quantity': django.pgettext('widget', 'Quantity'),
-    'price': django.pgettext('widget', 'Price'),
-    'select_item': django.pgettext('widget', 'Select %s'),
-    'select_variant': django.pgettext('widget', 'Select variant %s'),
     'sold_out': django.pgettext('widget', 'Sold out'),
     'buy': django.pgettext('widget', 'Buy'),
     'register': django.pgettext('widget', 'Register'),
@@ -198,7 +194,7 @@ var widget_id = makeid(16);
 Vue.component('availbox', {
     template: ('<div class="pretix-widget-availability-box">'
         + '<div class="pretix-widget-availability-unavailable" v-if="require_voucher">'
-        + '<small><a @click.prevent.stop="focus_voucher_field" role="button">' + strings.voucher_required + '</a></small>'
+        + '<small><a @click.prevent.stop="focus_voucher_field">' + strings.voucher_required + '</a></small>'
         + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
         + '       v-if="!require_voucher && avail[0] < 100 && avail[0] > 10">'
@@ -214,13 +210,10 @@ Vue.component('availbox', {
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!require_voucher && avail[0] === 100">'
         + '<label class="pretix-widget-item-count-single-label" v-if="order_max === 1">'
-        + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name"'
-        + '       v-bind:aria-label="label_select_item"'
-        + '>'
+        + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name">'
         + '</label>'
         + '<input type="number" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
         + '       v-model="amount_selected" :max="order_max" :name="input_name"'
-        + '       aria-label="' + strings.quantity + '"'
         + '       v-if="order_max !== 1">'
         + '</div>'
         + '</div>'),
@@ -258,11 +251,6 @@ Vue.component('availbox', {
                 }
                 this.$root.$emit("amounts_changed")
             }
-        },
-        label_select_item: function () {
-            return this.item.has_variations
-                ? strings.select_variant.replace("%s", this.variation.value)
-                : strings.select_item.replace("%s", this.item.name)
         },
         input_name: function () {
             if (this.item.has_variations) {
@@ -309,7 +297,7 @@ Vue.component('pricebox', {
         + '{{ $root.currency }} '
         + '<input type="number" class="pretix-widget-pricebox-price-input" placeholder="0" '
         + '       :min="display_price_nonlocalized" :value="display_price_nonlocalized" :name="field_name"'
-        + '       step="any" aria-label="'+strings.price+'">'
+        + '       step="any">'
         + '</div>'
         + '<small class="pretix-widget-pricebox-tax" v-if="price.rate != \'0.00\' && price.gross != \'0.00\'">'
         + '{{ taxline }}'
@@ -430,9 +418,8 @@ Vue.component('item', {
         + '<div class="pretix-widget-item-info-col">'
         + '<img :src="item.picture" v-if="item.picture" class="pretix-widget-item-picture">'
         + '<div class="pretix-widget-item-title-and-description">'
-        + '<a v-if="item.has_variations && show_toggle" class="pretix-widget-item-title" :href="\'#\' + item.id + \'-variants\'"'
-        + '   @click.prevent.stop="expand" role="button" tabindex="0"'
-        + '   v-bind:aria-expanded="expanded ? \'true\': \'false\'" v-bind:aria-controls="item.id + \'-variants\'">'
+        + '<a v-if="item.has_variations && show_toggle" class="pretix-widget-item-title" href="#"'
+        + '   @click.prevent.stop="expand">'
         + '{{ item.name }}'
         + '</a>'
         + '<strong v-else class="pretix-widget-item-title">{{ item.name }}</strong>'
@@ -459,8 +446,7 @@ Vue.component('item', {
 
         // Availability
         + '<div class="pretix-widget-item-availability-col">'
-        + '<a v-if="show_toggle" :href="\'#\' + item.id + \'-variants\'" @click.prevent.stop="expand" role="button" tabindex="0"'
-        + '   v-bind:aria-expanded="expanded ? \'true\': \'false\'" v-bind:aria-controls="item.id + \'-variants\'">'+ strings.variations + '</a>'
+        + '<a v-if="show_toggle" href="#" @click.prevent.stop="expand">'+ strings.variations + '</a>'
         + '<availbox v-if="!item.has_variations" :item="item"></availbox>'
         + '</div>'
 
@@ -468,7 +454,7 @@ Vue.component('item', {
         + '</div>'
 
         // Variations
-        + '<div :class="varClasses" v-if="item.has_variations" :id="item.id + \'-variants\'" ref="variations">'
+        + '<div :class="varClasses" v-if="item.has_variations">'
         + '<variation v-for="variation in item.variations" :variation="variation" :item="item" :key="variation.id">'
         + '</variation>'
         + '</div>'
@@ -481,32 +467,6 @@ Vue.component('item', {
         return {
             expanded: this.$root.show_variations_expanded
         };
-    },
-    watch: {
-        expanded: function (newValue) {
-            var v = this.$refs.variations;
-            if (newValue) {
-                v.hidden = false;
-            } else {
-                // Vue.nextTick does not work here
-                window.setTimeout(function () {
-                    v.style.maxHeight = 0;
-                }, 50);
-            }
-            v.style.maxHeight = v.scrollHeight + 'px';
-        }
-    },
-    mounted: function () {
-        if (this.$refs.variations) {
-            this.$refs.variations.hidden = !this.expanded;
-            this.$refs.variations.addEventListener('transitionend', function (event) {
-                if (this.style.maxHeight && this.style.maxHeight != '0px') {
-                    this.style.maxHeight = 'none';
-                } else {
-                    this.hidden = true;
-                }
-            });
-        }
     },
     methods: {
         expand: function () {
@@ -739,14 +699,14 @@ var shared_iframe_fragment = (
     + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
     + '</div>'
     + '<div class="pretix-widget-frame-inner" ref="frame-container" v-show="$root.frame_shown">'
-    + '<iframe frameborder="0" width="650" height="650" @load="iframeLoaded" '
+    + '<iframe frameborder="0" width="650px" height="650px" @load="iframeLoaded" '
     + '        :name="$root.parent.widget_id" src="about:blank" v-once'
     + '        allow="autoplay *; camera *; fullscreen *; payment *"'
     + '        referrerpolicy="origin">'
     + 'Please enable frames in your browser!'
     + '</iframe>'
     + '<div class="pretix-widget-frame-close"><a href="#" @click.prevent.stop="close" role="button" aria-label="'+strings.close+'">'
-    + '<svg height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
+    + '<svg height="16px" viewBox="0 0 512 512" width="16px" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
     + '</a></div>'
     + '</div>'
     + '</div>'
@@ -1040,7 +1000,7 @@ Vue.component('pretix-widget-event-list-entry', {
 Vue.component('pretix-widget-event-list', {
     template: ('<div class="pretix-widget-event-list">'
         + '<div class="pretix-widget-back" v-if="$root.weeks || $root.parent_stack.length > 0">'
-        + '<a href="#" @click.prevent.stop="back_to_calendar" role="button">&lsaquo; '
+        + '<a href="#" @click.prevent.stop="back_to_calendar">&lsaquo; '
         + strings['back']
         + '</a>'
         + '</div>'
@@ -1255,7 +1215,7 @@ Vue.component('pretix-widget-event-calendar', {
 
         // Back navigation
         + '<div class="pretix-widget-back" v-if="$root.events !== undefined">'
-        + '<a href="#" @click.prevent.stop="back_to_list" role="button">&lsaquo; '
+        + '<a href="#" @click.prevent.stop="back_to_list">&lsaquo; '
         + strings['back']
         + '</a>'
         + '</div>'
@@ -1268,11 +1228,11 @@ Vue.component('pretix-widget-event-calendar', {
 
         // Calendar navigation
         + '<div class="pretix-widget-event-calendar-head">'
-        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevmonth" role="button">&laquo; '
+        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevmonth">&laquo; '
         + strings['previous_month']
         + '</a> '
         + '<strong>{{ monthname }}</strong> '
-        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextmonth" role="button">'
+        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextmonth">'
         + strings['next_month']
         + ' &raquo;</a>'
         + '</div>'
@@ -1338,7 +1298,7 @@ Vue.component('pretix-widget-event-week-calendar', {
     template: ('<div class="pretix-widget-event-calendar pretix-widget-event-week-calendar" ref="weekcalendar">'
         // Back navigation
         + '<div class="pretix-widget-back" v-if="$root.events !== undefined">'
-        + '<a href="#" @click.prevent.stop="back_to_list" role="button">&lsaquo; '
+        + '<a href="#" @click.prevent.stop="back_to_list">&lsaquo; '
         + strings['back']
         + '</a>'
         + '</div>'
@@ -1351,11 +1311,11 @@ Vue.component('pretix-widget-event-week-calendar', {
         // Calendar navigation
         + '<div class="pretix-widget-event-description" v-if="$root.parent_stack.length > 0 && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
         + '<div class="pretix-widget-event-calendar-head">'
-        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevweek" role="button">&laquo; '
+        + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevweek">&laquo; '
         + strings['previous_week']
         + '</a> '
         + '<strong>{{ weekname }}</strong> '
-        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextweek" role="button">'
+        + '<a class="pretix-widget-event-calendar-next-month" href="#" @click.prevent.stop="nextweek">'
         + strings['next_week']
         + ' &raquo;</a>'
         + '</div>'
@@ -2002,6 +1962,7 @@ window.PretixWidget.open = function (target_url, voucher, subevent, items, widge
         if (this.$root.useIframe) {
             this.$refs.btn.buy();
         } else {
+            console.log(this.$refs.btn.$refs.form);
             this.$refs.btn.$refs.form.submit();
         }
     })
