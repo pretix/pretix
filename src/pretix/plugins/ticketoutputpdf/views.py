@@ -250,10 +250,13 @@ class LayoutEditorView(BaseEditorView):
         return _('Ticket PDF layout: {}').format(self.layout)
 
     def save_layout(self):
-        self.layout.layout = self.request.POST.get("data")
-        self.layout.save(update_fields=['layout'])
+        update_fields = ['layout']
+        if "name" in self.request.POST:
+            self.layout.name = self.request.POST.get("name")
+            update_fields.append('name')
+        self.layout.save(update_fields=update_fields)
         self.layout.log_action(action='pretix.plugins.ticketoutputpdf.layout.changed', user=self.request.user,
-                               data={'layout': self.request.POST.get("data")})
+                               data={'layout': self.request.POST.get("data"), 'name': self.request.POST.get("name")})
         invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'provider': 'pdf'})
 
     def get_default_background(self):
@@ -291,6 +294,11 @@ class LayoutEditorView(BaseEditorView):
             self.layout.background.delete()
         self.layout.background.save('background.pdf', f.file)
         invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'provider': 'pdf'})
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['name'] = self.layout.name
+        return ctx
 
 
 class OrderPrintDo(EventPermissionRequiredMixin, AsyncAction, View):
