@@ -193,6 +193,7 @@ class LayoutEditorView(BaseEditorView):
 
     def save_layout(self):
         update_fields = ['layout']
+        self.layout.layout = self.request.POST.get("data")
         if "name" in self.request.POST:
             self.layout.name = self.request.POST.get("name")
             update_fields.append('name')
