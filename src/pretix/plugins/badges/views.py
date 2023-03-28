@@ -192,11 +192,11 @@ class LayoutEditorView(BaseEditorView):
         return _('Badge layout: {}').format(self.layout)
 
     def save_layout(self):
-        self.layout.layout = self.request.POST.get("data")
-        self.layout.save(update_fields=['layout'])
+        update_fields = ['layout']
         if "name" in self.request.POST:
             self.layout.name = self.request.POST.get("name")
-            self.layout.save(update_fields=['name'])
+            update_fields.append('name')
+        self.layout.save(update_fields=update_fields)
         self.layout.log_action(action='pretix.plugins.badges.layout.changed', user=self.request.user,
                                data={'layout': self.request.POST.get("data"), 'name': self.request.POST.get("name")})
 
