@@ -794,6 +794,9 @@
       &.pretix-widget-day-availability-green {
         background: $brand-success;
       }
+      &.pretix-widget-day-availability-low {
+        border-right: 5px solid $brand-warning;
+      }
       &.pretix-widget-day-availability-orange {
         background: $brand-warning;
       }

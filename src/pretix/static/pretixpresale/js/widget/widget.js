@@ -1154,15 +1154,22 @@ Vue.component('pretix-widget-event-week-cell', {
             if (this.day && this.day.events.length > 0) {
                 o['pretix-widget-has-events'] = true;
                 var best = 'red';
+                var all_low = true;
                 for (var i = 0; i < this.day.events.length; i++) {
                     var ev = this.day.events[i];
                     if (ev.availability.color === 'green') {
                         best = 'green';
+                        if (ev.availability.reason !== 'low') {
+                            all_low = false;
+                        }
                     } else if (ev.availability.color === 'orange' && best !== 'green') {
                         best = 'orange'
                     }
                 }
                 o['pretix-widget-day-availability-' + best] = true;
+                if (best === 'green' && all_low) {
+                    o['pretix-widget-day-availability-low'] = true;
+                }
             }
             return o
         }
@@ -1212,15 +1219,22 @@ Vue.component('pretix-widget-event-calendar-cell', {
             if (this.day && this.day.events.length > 0) {
                 o['pretix-widget-has-events'] = true;
                 var best = 'red';
+                var all_low = true;
                 for (var i = 0; i < this.day.events.length; i++) {
                     var ev = this.day.events[i];
                     if (ev.availability.color === 'green') {
                         best = 'green';
+                        if (ev.availability.reason !== 'low') {
+                            all_low = false;
+                        }
                     } else if (ev.availability.color === 'orange' && best !== 'green') {
                         best = 'orange'
                     }
                 }
                 o['pretix-widget-day-availability-' + best] = true;
+                if (best === 'green' && all_low) {
+                    o['pretix-widget-day-availability-low'] = true;
+                }
             }
             return o
         }
