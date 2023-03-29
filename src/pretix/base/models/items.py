@@ -844,8 +844,10 @@ class Item(LoggedModel):
             mt = MEDIA_TYPES[media_type]
             if not mt.is_active(event.organizer):
                 raise ValidationError(_('The selected media type is not enabled in your organizer settings.'))
-            if not mt.supports_orderposition:
+            if not mt.supports_orderposition and not issue_giftcard:
                 raise ValidationError(_('The selected media type does not support usage for tickets currently.'))
+            if not mt.supports_giftcard and issue_giftcard:
+                raise ValidationError(_('The selected media type does not support usage for gift cards currently.'))
             if issue_giftcard:
                 raise ValidationError(_('You currently cannot create gift cards with a reusable media policy. Instead, '
                                         'gift cards for some reusable media types can be created or re-charged directly '
