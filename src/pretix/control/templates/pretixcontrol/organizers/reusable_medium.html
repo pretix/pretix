@@ -64,6 +64,10 @@
                                 </span>
                                 {% endif %}
                             </dd>
+                            {% if medium.notes %}
+                                <dt>{% trans "Notes" %}</dt>
+                                <dd>{{ medium.notes }}</dd>
+                            {% endif %}
                         </dl>
                     </form>
                     <div class="text-right">

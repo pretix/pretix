@@ -679,7 +679,7 @@ class ReusableMediumUpdateForm(forms.ModelForm):
 
     class Meta:
         model = ReusableMedium
-        fields = ['active', 'expires', 'customer', 'linked_giftcard', 'linked_orderposition']
+        fields = ['active', 'expires', 'customer', 'linked_giftcard', 'linked_orderposition', 'notes']
         field_classes = {
             'expires': SplitDateTimeField,
             'customer': SafeModelChoiceField,
@@ -761,7 +761,7 @@ class ReusableMediumCreateForm(ReusableMediumUpdateForm):
 
     class Meta:
         model = ReusableMedium
-        fields = ['active', 'type', 'identifier', 'expires', 'linked_orderposition', 'linked_giftcard', 'customer']
+        fields = ['active', 'type', 'identifier', 'expires', 'linked_orderposition', 'linked_giftcard', 'customer', 'notes']
         field_classes = {
             'expires': SplitDateTimeField,
             'customer': SafeModelChoiceField,

@@ -119,6 +119,7 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
             'linked_orderposition',
             'linked_giftcard',
             'info',
+            'notes',
         )
 
 

@@ -107,6 +107,7 @@ class ReusableMedium(LoggedModel):
     info = models.JSONField(
         default=dict
     )
+    notes = models.TextField(verbose_name=_('Notes'), null=True, blank=True)
 
     objects = ReusableMediumQuerySetManager()
 

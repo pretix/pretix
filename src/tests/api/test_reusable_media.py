@@ -74,7 +74,8 @@ TEST_MEDIUM_RES = {
     "customer": None,
     "linked_orderposition": None,
     "linked_giftcard": None,
-    "info": {}
+    "notes": None,
+    "info": {},
 }
 
 

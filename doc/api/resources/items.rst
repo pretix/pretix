@@ -110,7 +110,7 @@ allow_waitinglist                       boolean                    If ``false``,
 issue_giftcard                          boolean                    If ``true``, buying this product will yield a gift card.
 media_policy                            string                     Policy on how to handle reusable media (experimental feature).
                                                                    Possible values are ``null``, ``"new"``, ``"reuse"``, and ``"reuse_or_new"``.
-media_type                              string                     Type of reusable media to work on (experimental feature).
+media_type                              string                     Type of reusable media to work on (experimental feature). See :ref:`rest-reusablemedia` for possible choices.
 show_quota_left                         boolean                    Publicly show how many tickets are still available.
                                                                    If this is ``null``, the event default is used.
 has_variations                          boolean                    Shows whether or not this item has variations.

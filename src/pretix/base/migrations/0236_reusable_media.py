@@ -45,6 +45,7 @@ class Migration(migrations.Migration):
                 ('active', models.BooleanField(default=True)),
                 ('expires', models.DateTimeField(blank=True, null=True)),
                 ('info', models.JSONField(default=dict)),
+                ('notes', models.TextField(null=True, blank=True)),
                 ('customer', models.ForeignKey(null=True, on_delete=django.db.models.deletion.SET_NULL,
                                                related_name='reusable_media', to='pretixbase.customer')),
                 ('linked_giftcard',

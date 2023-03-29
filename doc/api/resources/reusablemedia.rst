@@ -25,8 +25,15 @@ expires                               datetime                   Expiry date (or
 customer                              string                     Identifier of a customer account this medium belongs to.
 linked_orderposition                  integer                    Internal ID of a ticket this medium is linked to.
 linked_giftcard                       integer                    Internal ID of a gift card this medium is linked to.
-info                                  object                     Additional data, content depends on the ``type``.
+info                                  object                     Additional data, content depends on the ``type``. Consider
+                                                                 this internal to the system and don't use it for your own data.
+notes                                 string                     Internal notes and comments (or ``null``)
 ===================================== ========================== =======================================================
+
+Existing media types are:
+
+- ``barcode``
+- ``nfc_uid``
 
 Endpoints
 ---------
@@ -65,6 +72,7 @@ Endpoints
             "customer": None,
             "linked_orderposition": None,
             "linked_giftcard": None,
+            "notes": None,
             "info": {}
           }
         ]
@@ -116,6 +124,7 @@ Endpoints
         "customer": None,
         "linked_orderposition": None,
         "linked_giftcard": None,
+        "notes": None,
         "info": {}
       }
 
@@ -166,6 +175,7 @@ Endpoints
         "customer": None,
         "linked_orderposition": None,
         "linked_giftcard": None,
+        "notes": None,
         "info": {}
       }
 
@@ -201,6 +211,7 @@ Endpoints
         "customer": None,
         "linked_orderposition": None,
         "linked_giftcard": None,
+        "notes": None,
         "info": {}
       }
 
@@ -221,6 +232,7 @@ Endpoints
         "customer": None,
         "linked_orderposition": None,
         "linked_giftcard": None,
+        "notes": None,
         "info": {}
       }
 
@@ -274,6 +286,7 @@ Endpoints
         "customer": None,
         "linked_orderposition": 13,
         "linked_giftcard": None,
+        "notes": None,
         "info": {}
       }
 
