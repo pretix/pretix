@@ -182,7 +182,7 @@
                         {% if form.media_policy %}
                             {% bootstrap_field form.media_policy layout="control" %}
                         {% endif %}
-                        {% if "media_type" in form %}
+                        {% if form.media_type %}
                             {% bootstrap_field form.media_type layout="control" %}
                         {% endif %}
                         {% for f in plugin_forms %}
