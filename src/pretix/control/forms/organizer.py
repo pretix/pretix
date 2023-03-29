@@ -668,6 +668,9 @@ class SafeOrderPositionChoiceField(forms.ModelChoiceField):
         queryset = queryset.model.all.none()
         super().__init__(queryset, **kwargs)
 
+    def label_from_instance(self, op):
+        return f'{op.order.code}-{op.positionid} ({str(op.item) + ((" - " + str(op.variation)) if op.variation else "")})'
+
 
 class ReusableMediumUpdateForm(forms.ModelForm):
     error_messages = {

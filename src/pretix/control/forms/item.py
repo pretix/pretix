@@ -401,6 +401,8 @@ class ItemCreateForm(I18nModelForm):
                 'validity_dynamic_duration_months',
                 'validity_dynamic_start_choice',
                 'validity_dynamic_start_choice_day_limit',
+                'media_type',
+                'media_policy',
             )
             for f in fields:
                 setattr(self.instance, f, getattr(src, f))
