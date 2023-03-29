@@ -25,9 +25,10 @@ import django_filters
 from django.db import transaction
 from django.db.models import OuterRef, Prefetch, Subquery, Sum
 from django.db.models.functions import Coalesce
+from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
-from rest_framework import viewsets
+from rest_framework import viewsets, serializers
 from rest_framework.decorators import action
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.filters import OrderingFilter
@@ -48,6 +49,8 @@ with scopes_disabled():
         identifier = django_filters.CharFilter(field_name='identifier')
         type = django_filters.CharFilter(field_name='type')
         customer = django_filters.CharFilter(field_name='customer__identifier')
+        updated_since = django_filters.IsoDateTimeFilter(field_name='updated', lookup_expr='gte')
+        created_since = django_filters.IsoDateTimeFilter(field_name='created', lookup_expr='gte')
 
         class Meta:
             model = ReusableMedium
@@ -140,3 +143,18 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
                     return Response({"result": s.data})
 
             return Response({"result": None})
+
+    @scopes_disabled()  # we are sure enough that get_queryset() is correct, so we save some perforamnce
+    def list(self, request, **kwargs):
+        date = serializers.DateTimeField().to_representation(now())
+        queryset = self.filter_queryset(self.get_queryset())
+
+        page = self.paginate_queryset(queryset)
+        if page is not None:
+            serializer = self.get_serializer(page, many=True)
+            resp = self.get_paginated_response(serializer.data)
+            resp['X-Page-Generated'] = date
+            return resp
+
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, headers={'X-Page-Generated': date})
