@@ -179,7 +179,7 @@
                     <fieldset>
                         <legend>{% trans "Tickets & Badges" %}</legend>
                         {% bootstrap_field form.generate_tickets layout="control" %}
-                        {% if "media_policy" in form %}
+                        {% if form.media_policy %}
                             {% bootstrap_field form.media_policy layout="control" %}
                         {% endif %}
                         {% if "media_type" in form %}
