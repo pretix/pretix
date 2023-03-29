@@ -161,12 +161,14 @@ def sendmail_run_rules(sender, **kwargs):
         mails.filter(
             state=ScheduledMail.STATE_SCHEDULED,
             computed_datetime__lte=timezone.now() - datetime.timedelta(days=2),
+            event__live=True,
         ).update(
             state=ScheduledMail.STATE_MISSED
         )
         for m_id in mails.filter(
             state__in=(ScheduledMail.STATE_SCHEDULED, ScheduledMail.STATE_FAILED),
             rule__enabled=True,
+            event__live=True,
             computed_datetime__gte=timezone.now() - datetime.timedelta(days=2),
             computed_datetime__lte=timezone.now(),
         ).values_list('pk', flat=True):

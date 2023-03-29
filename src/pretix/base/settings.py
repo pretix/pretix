@@ -325,6 +325,8 @@ DEFAULTS = {
     'system_question_order': {
         'default': {},
         'type': dict,
+        'serializer_class': serializers.DictField,
+        'serializer_kwargs': lambda: dict(read_only=True, allow_empty=True),
     },
     'attendee_names_asked': {
         'default': 'True',

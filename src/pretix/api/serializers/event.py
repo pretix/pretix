@@ -887,6 +887,7 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'reusable_media_type_barcode',
         'reusable_media_type_nfc_uid',
         'reusable_media_type_ntag_pretix1',
+        'system_question_order',
     ]
 
     def __init__(self, *args, **kwargs):

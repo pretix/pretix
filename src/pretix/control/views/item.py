@@ -136,6 +136,11 @@ def item_move(request, item, up=True):
         if item.position != i:
             item.position = i
             item.save()
+            item.log_action(
+                'pretix.event.item.reordered', user=request.user, data={
+                    'position': i,
+                }
+            )
     messages.success(request, _('The order of items has been updated.'))
 
 
@@ -185,6 +190,11 @@ def reorder_items(request, organizer, event):
         if pos != i.position:  # Save unneccessary UPDATE queries
             i.position = pos
             i.save(update_fields=['position'])
+            i.log_action(
+                'pretix.event.item.reordered', user=request.user, data={
+                    'position': i,
+                }
+            )
 
     return HttpResponse()
 
@@ -243,7 +253,7 @@ class CategoryUpdate(EventPermissionRequiredMixin, UpdateView):
         messages.success(self.request, _('Your changes have been saved.'))
         if form.has_changed():
             self.object.log_action(
-                'pretix.event.category.changed', user=self.request.user, data={
+                'pretix.event.category.reordered', user=self.request.user, data={
                     k: form.cleaned_data.get(k) for k in form.changed_data
                 }
             )
@@ -338,6 +348,11 @@ def category_move(request, category, up=True):
         if cat.position != i:
             cat.position = i
             cat.save()
+            cat.log_action(
+                'pretix.event.category.reordered', user=request.user, data={
+                    'position': i,
+                }
+            )
     messages.success(request, _('The order of categories has been updated.'))
 
 
@@ -381,6 +396,11 @@ def reorder_categories(request, organizer, event):
         if pos != c.position:  # Save unneccessary UPDATE queries
             c.position = pos
             c.save(update_fields=['position'])
+            c.log_action(
+                'pretix.event.category.reordered', user=request.user, data={
+                    'position': pos,
+                }
+            )
 
     return HttpResponse()
 
@@ -510,6 +530,11 @@ def reorder_questions(request, organizer, event):
         if pos != q.position:  # Save unneccessary UPDATE queries
             q.position = pos
             q.save(update_fields=['position'])
+            q.log_action(
+                'pretix.event.question.reordered', user=request.user, data={
+                    'position': pos,
+                }
+            )
 
     system_question_order = {}
     for s in ('attendee_name_parts', 'attendee_email', 'company', 'street', 'zipcode', 'city', 'country'):
@@ -518,6 +543,11 @@ def reorder_questions(request, organizer, event):
         else:
             system_question_order[s] = -1
     request.event.settings.system_question_order = system_question_order
+    request.event.log_action(
+        'pretix.event.settings', user=request.user, data={
+            'system_question_order': system_question_order,
+        }
+    )
 
     return HttpResponse()
 
@@ -731,7 +761,7 @@ class QuestionUpdate(EventPermissionRequiredMixin, QuestionMixin, UpdateView):
 
         if form.has_changed():
             self.object.log_action(
-                'pretix.event.question.changed', user=self.request.user, data={
+                'pretix.event.question.reordered', user=self.request.user, data={
                     k: form.cleaned_data.get(k) for k in form.changed_data
                 }
             )
