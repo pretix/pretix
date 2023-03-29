@@ -247,41 +247,6 @@ DEFAULTS = {
             label=_("Gift card currency"),
         )
     },
-    'reusable_media_type_ntag_pretix1': {
-        'default': 'False',
-        'type': bool,
-        'form_class': forms.BooleanField,
-        'serializer_class': serializers.BooleanField,
-        'form_kwargs': dict(
-            label=_("Active"),
-        )
-    },
-    'reusable_media_type_ntag_pretix1_autocreate_giftcard': {
-        'default': 'False',
-        'type': bool,
-        'form_class': forms.BooleanField,
-        'serializer_class': serializers.BooleanField,
-        'form_kwargs': dict(
-            label=_("Automatically create a new gift card if a previously unknown chip is seen"),
-        )
-    },
-    'reusable_media_type_ntag_pretix1_autocreate_giftcard_currency': {
-        'default': 'EUR',
-        'type': str,
-        'form_class': forms.ChoiceField,
-        'serializer_class': serializers.ChoiceField,
-        'serializer_kwargs': dict(
-            choices=[(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES],
-        ),
-        'form_kwargs': dict(
-            choices=[(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES],
-            label=_("Gift card currency"),
-        )
-    },
-    'reusable_media_nfc_shared_key': {
-        'default': None,
-        'type': str,
-    },
     'max_items_per_order': {
         'default': '10',
         'type': int,
@@ -3529,10 +3494,12 @@ def validate_organizer_settings(organizer, settings_dict):
     # organizer-settings either.
     #
     # N.B.: When actually fleshing out this stub, adding it to the OrganizerUpdateForm should be considered.
+    """
     if settings_dict.get('reusable_media_type_ntag_pretix1') and settings_dict.get('reusable_media_type_nfc_uid'):
         raise ValidationError({
             'reusable_media_type_nfc_uid': _('This needs to be disabled if other NFC-based types are active.')
         })
+    """
 
 
 def global_settings_object(holder):

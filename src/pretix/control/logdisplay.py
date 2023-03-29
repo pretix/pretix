@@ -549,7 +549,6 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.device.initialized': _('The device has been initialized.'),
         'pretix.device.keyroll': _('The access token of the device has been regenerated.'),
         'pretix.device.updated': _('The device has notified the server of an hardware or software update.'),
-        'pretix.device.nfc_shared_key_viewed': _('The device has downloaded the shared key for NFC communication.'),
         'pretix.giftcards.created': _('The gift card has been created.'),
         'pretix.giftcards.modified': _('The gift card has been changed.'),
         'pretix.giftcards.transaction.manual': _('A manual transaction has been performed.'),

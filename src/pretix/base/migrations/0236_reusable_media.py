@@ -74,9 +74,4 @@ class Migration(migrations.Migration):
             set_can_manage_reusable_media,
             migrations.RunPython.noop,
         ),
-        migrations.AddField(
-            model_name='device',
-            name='media_nfc_shared_key_seen',
-            field=models.BooleanField(default=False),
-        ),
     ]

@@ -156,7 +156,6 @@ class Device(LoggedModel):
         null=True,
         blank=False
     )
-    media_nfc_shared_key_seen = models.BooleanField(default=False)
     info = models.JSONField(
         null=True, blank=True,
     )

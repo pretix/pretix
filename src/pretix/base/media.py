@@ -108,18 +108,9 @@ class NfcUidMediaType(BaseMediaType):
                 return m
 
 
-class NtagPretix1MediaType(NfcUidMediaType):
-    identifier = 'ntag_pretix1'
-    verbose_name = _('NFC NTAG21x UID-based with password protection')
-    medium_created_by_server = False
-    supports_giftcard = True
-    supports_orderposition = False
-
-
 MEDIA_TYPES = {
     m.identifier: m for m in [
         BarcodePlainMediaType(),
         NfcUidMediaType(),
-        NtagPretix1MediaType(),
     ]
 }

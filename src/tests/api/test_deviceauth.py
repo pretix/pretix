@@ -183,14 +183,3 @@ def test_device_info(device_client, device: Device):
     assert 'unique_serial' in resp.data['device']
     assert 'api_token' in resp.data['device']
     assert 'pretix' in resp.data['server']['version']
-
-
-@pytest.mark.django_db
-def test_device_nfc_shared_key(device_client, device: Device):
-    resp = device_client.get('/api/v1/device/nfc_shared_key')
-    assert resp.status_code == 200
-    assert 'pretix_nfc_shared_key' in resp.data
-    # Can only be requested once
-    resp = device_client.get('/api/v1/device/nfc_shared_key')
-    assert resp.status_code == 403
-    assert 'pretix_nfc_shared_key' not in resp.data

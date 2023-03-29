@@ -19,9 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import base64
 import logging
-import secrets
 
 from django.db.models import Exists, OuterRef, Q
 from django.db.models.functions import Coalesce
@@ -339,22 +337,3 @@ class EventSelectionView(APIView):
         }:
             return Response(status=status.HTTP_304_NOT_MODIFIED)
         return Response(r)
-
-
-class NfcSharedKeyView(APIView):
-    authentication_classes = (DeviceTokenAuthentication,)
-
-    def get(self, request, format=None):
-        device = request.auth
-        if device.media_nfc_shared_key_seen:
-            return Response({"error": "Key has been fetched before."}, status=status.HTTP_403_FORBIDDEN)
-
-        if not device.organizer.settings.reusable_media_nfc_shared_key:
-            k = base64.b64encode(secrets.token_bytes(256)).decode()
-            device.organizer.settings.reusable_media_nfc_shared_key = k
-
-        device.media_nfc_shared_key_seen = True
-        device.save(update_fields=['media_nfc_shared_key_seen'])
-
-        device.log_action('pretix.device.nfc_shared_key_viewed', auth=device)
-        return Response({"pretix_nfc_shared_key": device.organizer.settings.reusable_media_nfc_shared_key})

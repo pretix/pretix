@@ -803,9 +803,6 @@ class EventSettingsSerializer(SettingsSerializer):
         'reusable_media_type_nfc_uid',
         'reusable_media_type_nfc_uid_autocreate_giftcard',
         'reusable_media_type_nfc_uid_autocreate_giftcard_currency',
-        'reusable_media_type_ntag_pretix1',
-        'reusable_media_type_ntag_pretix1_autocreate_giftcard',
-        'reusable_media_type_ntag_pretix1_autocreate_giftcard_currency',
     ]
     readonly_fields = [
         # These are read-only since they are currently only settable on organizers, not events
@@ -815,9 +812,6 @@ class EventSettingsSerializer(SettingsSerializer):
         'reusable_media_type_nfc_uid',
         'reusable_media_type_nfc_uid_autocreate_giftcard',
         'reusable_media_type_nfc_uid_autocreate_giftcard_currency',
-        'reusable_media_type_ntag_pretix1',
-        'reusable_media_type_ntag_pretix1_autocreate_giftcard',
-        'reusable_media_type_ntag_pretix1_autocreate_giftcard_currency',
     ]
 
     def __init__(self, *args, **kwargs):
@@ -886,7 +880,6 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'name_scheme',
         'reusable_media_type_barcode',
         'reusable_media_type_nfc_uid',
-        'reusable_media_type_ntag_pretix1',
         'system_question_order',
     ]
 

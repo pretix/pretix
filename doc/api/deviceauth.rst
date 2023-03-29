@@ -225,31 +225,3 @@ You can get three response codes:
       "subevent": 23,
       "checkinlist": 5
    }
-
-
-Shared key for NFC handling
----------------------------
-
-A device can request access to the shared key used for NFC authentication. However, this endpoint can only be called
-**once** per device.
-
-.. sourcecode:: http
-
-   GET /api/v1/device/nfc_shared_key HTTP/1.1
-   Host: pretix.eu
-   Authorization: Device 1kcsh572fonm3hawalrncam4l1gktr2rzx25a22l8g9hx108o9oi0rztpcvwnfnd
-
-You can get three response codes:
-
-* ``200`` The server things you already selected a good event
-* ``403`` The key has already been requested before.
-
-.. sourcecode:: http
-
-   HTTP/1.1 200 OK
-   Content-Type: application/json
-
-   {
-      "pretix_nfc_shared_key": "base64-encoded-value"
-   }
-
