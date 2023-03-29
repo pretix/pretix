@@ -350,6 +350,8 @@ class VoucherBulkForm(VoucherForm):
                 reader = csv.DictReader(StringIO(raw), dialect=dialect)
             except csv.Error as e:
                 raise ValidationError(_('CSV parsing failed: {error}.').format(error=str(e)))
+            if len(reader.fieldnames) == 1 and ',' in reader.fieldnames[0]:
+                raise ValidationError(_('CSV input was not recognized to have multiple columns, maybe you have some invalid quoted field in your input.'))
             if 'email' not in reader.fieldnames:
                 raise ValidationError(_('CSV input needs to contain a field with the header "{header}".').format(header="email"))
             unknown_fields = [f for f in reader.fieldnames if f not in ('email', 'name', 'tag', 'number')]
