@@ -482,33 +482,27 @@ Vue.component('item', {
             expanded: this.$root.show_variations_expanded
         };
     },
-    watch: {
-        expanded: function (newValue) {
-            var v = this.$refs.variations;
-            if (newValue) {
-                v.hidden = false;
-            } else {
-                // Vue.nextTick does not work here
-                window.setTimeout(function () {
-                    v.style.maxHeight = 0;
-                }, 50);
-            }
-            v.style.maxHeight = v.scrollHeight + 'px';
-        }
-    },
     mounted: function () {
         if (this.$refs.variations) {
-            this.$refs.variations.hidden = !this.expanded;
             if (!this.expanded) {
-                this.$refs.variations.style.maxHeight = '0px';
+                var $this = this;
+                this.$refs.variations.hidden = true;
+                this.$refs.variations.addEventListener('transitionend', function (event) {
+                    if (event.target == this) {
+                        this.hidden = !$this.expanded;
+                        this.style.maxHeight = 'none';
+                    }
+                });
+                this.$watch('expanded', function (newValue) {
+                    var v = this.$refs.variations;
+                    v.hidden = false;
+                    v.style.maxHeight = (newValue ? 0 : v.scrollHeight) + 'px';
+                    // Vue.nextTick does not work here
+                    window.setTimeout(function () {
+                        v.style.maxHeight = (!newValue ? 0 : v.scrollHeight) + 'px';
+                    }, 50);
+                })
             }
-            this.$refs.variations.addEventListener('transitionend', function (event) {
-                if (this.style.maxHeight && this.style.maxHeight != '0px') {
-                    this.style.maxHeight = 'none';
-                } else {
-                    this.hidden = true;
-                }
-            });
         }
     },
     methods: {
