@@ -708,8 +708,13 @@
     font-family: sans-serif;
     text-decoration: none;
     padding: 4px 0;
-    display: block;
+    display: inline-block;
     line-height: 16px;
+  }
+
+  .pretix-widget-frame-close svg {
+    display: inline-block;
+    border: none;
   }
 
   .pretix-widget-frame-inner iframe {
