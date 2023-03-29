@@ -21,6 +21,8 @@ id                                    integer                    Internal ID of 
 type                                  string                     Type of medium, e.g. ``"barcode"`` or ``"nfc_uid"``.
 identifier                            string                     Unique identifier of the medium. The format depends on the ``type``.
 active                                boolean                    Whether this medium may be used.
+created                               datetime                   Date of creation
+updated                               datetime                   Date of last modification
 expires                               datetime                   Expiry date (or ``null``)
 customer                              string                     Identifier of a customer account this medium belongs to.
 linked_orderposition                  integer                    Internal ID of a ticket this medium is linked to.
@@ -66,6 +68,8 @@ Endpoints
           {
             "id": 1,
             "identifier": "ABCDEFGH",
+            "created": "2021-04-06T13:44:22.809377Z",
+            "updated": "2021-04-06T13:44:22.809377Z",
             "type": "barcode",
             "active": True,
             "expires": None,
@@ -83,6 +87,8 @@ Endpoints
    :query string type: Only show media with the given type.
    :query boolean active: Only show media that are (not) active.
    :query string customer: Only show media linked to the given customer.
+   :query string created_since: Only show media created since a given date.
+   :query string updated_since: Only show media updated since a given date.
    :query integer linked_orderposition: Only show media linked to the given ticket.
    :query integer linked_giftcard: Only show media linked to the given gift card.
    :query string expand: If you pass ``"linked_giftcard"``, ``"linked_orderposition"``, oder ``"customer"``, the respective
@@ -118,6 +124,8 @@ Endpoints
       {
         "id": 1,
         "identifier": "ABCDEFGH",
+        "created": "2021-04-06T13:44:22.809377Z",
+        "updated": "2021-04-06T13:44:22.809377Z",
         "type": "barcode",
         "active": True,
         "expires": None,
@@ -169,6 +177,8 @@ Endpoints
       {
         "id": 1,
         "identifier": "ABCDEFGH",
+        "created": "2021-04-06T13:44:22.809377Z",
+        "updated": "2021-04-06T13:44:22.809377Z",
         "type": "barcode",
         "active": True,
         "expires": None,
@@ -226,6 +236,8 @@ Endpoints
       {
         "id": 1,
         "identifier": "ABCDEFGH",
+        "created": "2021-04-06T13:44:22.809377Z",
+        "updated": "2021-04-06T13:44:22.809377Z",
         "type": "barcode",
         "active": True,
         "expires": None,
@@ -280,6 +292,8 @@ Endpoints
       {
         "id": 1,
         "identifier": "ABCDEFGH",
+        "created": "2021-04-06T13:44:22.809377Z",
+        "updated": "2021-04-06T13:44:22.809377Z",
         "type": "barcode",
         "active": True,
         "expires": None,
