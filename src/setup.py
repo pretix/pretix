@@ -218,7 +218,7 @@ setup(
         'python-u2flib-server==4.*',
         'pytz',
         'pyuca',
-        'redis==4.5.*',
+        'redis==4.5.*,>=4.5.4',
         'reportlab==3.6.*',
         'requests==2.28.*',
         'sentry-sdk==1.15.*',
