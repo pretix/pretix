@@ -221,7 +221,7 @@ setup(
         'redis==4.5.*,>=4.5.4',
         'reportlab==3.6.*',
         'requests==2.28.*',
-        'sentry-sdk==1.15.*',
+        'sentry-sdk>=1.15,<1.19',
         'sepaxml==2.6.*',
         'slimit',
         'static3==0.7.*',
