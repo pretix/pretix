@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-28 08:31+0000\n"
-"PO-Revision-Date: 2023-03-27 03:00+0000\n"
+"PO-Revision-Date: 2023-03-31 07:00+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
-"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
-">\n"
+"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3056,6 +3056,10 @@ msgid ""
 "and valid for check-in regardless of which date they are purchased for. You "
 "can limit their validity through the advanced check-in rules, though."
 msgstr ""
+"Pokud zvolíte možnost \"všechny termíny\", budou vstupenky považovány za "
+"součást tohoto seznamu a budou platné pro check-in bez ohledu na to, na "
+"který termín byly zakoupeny. Jejich platnost však můžete omezit "
+"prostřednictvím pravidel pro pokročilé check-in."
 
 #: pretix/base/models/checkin.py:64 pretix/base/models/checkin.py:59
 msgctxt "checkin"
@@ -7354,11 +7358,11 @@ msgstr ""
 "košíku odstranili."
 
 #: pretix/base/services/orders.py:192
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You cannot remove the position %(addon)s since it has already been checked "
 "in."
-msgstr "Nelze použít již existující kód vstupenky."
+msgstr "Pozici %(addon)s nelze odstranit, protože již byla zaškrtnuta."
 
 #: pretix/base/services/orders.py:208 pretix/base/services/orders.py:206
 msgid "The order was not canceled."
@@ -8771,9 +8775,8 @@ msgid "Do not allow changes after"
 msgstr "Povolit změny do"
 
 #: pretix/base/settings.py:1495
-#, fuzzy
 msgid "Allow change even though the ticket has already been checked in"
-msgstr "Platbu za tuto fakturu jsme již obdrželi."
+msgstr "Platbu za tuto fakturu jsme již obdrželi"
 
 #: pretix/base/settings.py:1496
 msgid ""
@@ -8783,6 +8786,11 @@ msgid ""
 "in individually. Use with care, and preferably only in combination with a "
 "limitation on price changes above."
 msgstr ""
+"Ve výchozím nastavení jsou změny objednávky zakázány poté, co byla odbavena "
+"jakákoliv vstupenka v objednávce. Pokud toto políčko zaškrtnete, tento "
+"požadavek se zruší. Stále však není možné odebrat doplňkový produkt, který "
+"již byl jednotlivě odbaven. Používejte opatrně a nejlépe pouze v kombinaci s "
+"výše uvedeným omezením změn ceny."
 
 #: pretix/base/settings.py:1508 pretix/base/settings.py:1493
 msgid "Allow individual attendees to change their ticket"
@@ -13604,22 +13612,22 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:124
 msgid "A fee has been added"
-msgstr ""
+msgstr "Byl přidán poplatek"
 
 #: pretix/control/logdisplay.py:126
 #, python-brace-format
 msgid "A fee was changed from {old_price} to {new_price}."
-msgstr ""
+msgstr "Poplatek byl změněn z {old_price} na {new_price}."
 
 #: pretix/control/logdisplay.py:131
 #, python-brace-format
 msgid "A fee of {old_price} was removed."
-msgstr ""
+msgstr "Byl odstraněn poplatek ve výši {old_price}."
 
 #: pretix/control/logdisplay.py:138
 #, python-brace-format
 msgid "Position #{posid} ({old_item}, {old_price}) canceled."
-msgstr ""
+msgstr "Pozice #{posid} ({old_item}, {old_price}) zrušena."
 
 #: pretix/control/logdisplay.py:149
 #, python-brace-format
@@ -13627,16 +13635,18 @@ msgid ""
 "Position #{posid} created: {item} ({price}) as an add-on to position "
 "#{addon_to}."
 msgstr ""
+"Pozice #{posid} vytvořena: {item} ({price}) jako doplněk k pozici "
+"#{addon_to}."
 
 #: pretix/control/logdisplay.py:156
 #, python-brace-format
 msgid "Position #{posid} created: {item} ({price})."
-msgstr ""
+msgstr "Pozice #{posid} vytvořena: {item} ({price})."
 
 #: pretix/control/logdisplay.py:162
 #, python-brace-format
 msgid "A new secret has been generated for position #{posid}."
-msgstr ""
+msgstr "Pro pozici #{posid} byl vytvořen nový kód."
 
 #: pretix/control/logdisplay.py:166
 #, python-brace-format
@@ -13653,23 +13663,25 @@ msgstr "Datum konce platnosti pro pozici #{posid} bylo změněno na {value}."
 #: pretix/control/logdisplay.py:177
 #, python-brace-format
 msgid "A block has been added for position #{posid}."
-msgstr ""
+msgstr "Na pozici #{posid} byl přidán blok."
 
 #: pretix/control/logdisplay.py:181
 #, python-brace-format
 msgid "A block has been removed for position #{posid}."
-msgstr ""
+msgstr "Blok byl odstraněn z pozice #{posid}."
 
 #: pretix/control/logdisplay.py:193
 #, python-brace-format
 msgid ""
 "Position #{posid} ({old_item}, {old_price}) split into new order: {order}"
 msgstr ""
+"Pozice #{posid} ( {old_item}, {old_price}) rozdělena do nové objednávky: "
+"{order}"
 
 #: pretix/control/logdisplay.py:200
 #, python-brace-format
 msgid "This order has been created by splitting the order {order}"
-msgstr ""
+msgstr "Tato objednávka byla vytvořena rozdělením objednávky {order}"
 
 #: pretix/control/logdisplay.py:219 pretix/control/logdisplay.py:221
 #: pretix/control/logdisplay.py:593 pretix/control/logdisplay.py:595
@@ -13683,12 +13695,16 @@ msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
+"Neznámé skenování kódu \"{barcode}...\" v {datetime} pro seznam \"{list}\", "
+"typ \"{type}\"."
 
 #: pretix/control/logdisplay.py:236
 #, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}…\" for list \"{list}\", type \"{type}\"."
 msgstr ""
+"Neznámé skenování kódu \"{barcode}...\" pro seznam \"{list}\", typ \"{type}\""
+"."
 
 #: pretix/control/logdisplay.py:247
 #, python-brace-format
@@ -13696,6 +13712,8 @@ msgid ""
 "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", "
 "type \"{type}\", was uploaded."
 msgstr ""
+"Byl nahrán sken zrušeného kódu \"{barcode}...\" v {datetime} pro seznam \""
+"{list}\", typ \"{type}\"."
 
 #: pretix/control/logdisplay.py:257
 #, python-brace-format
@@ -13703,6 +13721,8 @@ msgid ""
 "Scan of revoked code \"{barcode}\" for list \"{list}\", type \"{type}\", was "
 "uploaded."
 msgstr ""
+"Byl nahrán sken zrušeného kódu \"{barcode}\" pro seznam \"{list}\", typ \""
+"{type}\"."
 
 #: pretix/control/logdisplay.py:268
 #, python-brace-format
@@ -13710,6 +13730,8 @@ msgid ""
 "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\", error code \"{errorcode}\"."
 msgstr ""
+"Odmítnuto skenování pozice #{posid} v {datetime} pro seznam \"{list}\", typ "
+"\"{type}\", kód chyby \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:279
 #, python-brace-format
@@ -13717,28 +13739,30 @@ msgid ""
 "Denied scan of position #{posid} for list \"{list}\", type \"{type}\", error "
 "code \"{errorcode}\"."
 msgstr ""
+"Odmítnuto skenování pozice #{posid} pro seznam \"{list}\", typ \"{type}\", "
+"kód chyby \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:289
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked out at {datetime} for list \"{list}\"."
-msgstr ""
+msgstr "Pozice #{posid} byla odhlášena v {datetime} pro seznam \"{list}\"."
 
 #: pretix/control/logdisplay.py:295
 #, python-brace-format
 msgid "Position #{posid} has been checked out for list \"{list}\"."
-msgstr ""
+msgstr "Pozice #{posid} byla odhlášena pro seznam \"{list}\"."
 
 #: pretix/control/logdisplay.py:301
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
-msgstr ""
+msgstr "Pozice #{posid} byla zapsána v {datetime} pro seznam \"{list}\"."
 
 #: pretix/control/logdisplay.py:307
 #, python-brace-format
 msgid "Position #{posid} has been checked in for list \"{list}\"."
-msgstr ""
+msgstr "Pozice #{posid} byla zapsána pro seznam \"{list}\"."
 
 #: pretix/control/logdisplay.py:314
 #, python-brace-format
@@ -13746,6 +13770,8 @@ msgid ""
 "A scan for position #{posid} at {datetime} for list \"{list}\" has been "
 "uploaded even though it has been scanned already."
 msgstr ""
+"Bylo nahráno skenování pozice #{posid} v {datetime} pro seznam \"{list}\", "
+"přestože již bylo skenováno."
 
 #: pretix/control/logdisplay.py:322
 #, python-brace-format
@@ -13753,18 +13779,20 @@ msgid ""
 "Position #{posid} has been scanned and rejected because it has already been "
 "scanned before on list \"{list}\"."
 msgstr ""
+"Pozice #{posid} byla skenována a odmítnuta, protože již byla skenována dříve "
+"v seznamu \"{list}\"."
 
 #: pretix/control/logdisplay.py:333
 msgid "This object has been created by cloning."
-msgstr ""
+msgstr "Tento objekt byl vytvořen pomocí klonování."
 
 #: pretix/control/logdisplay.py:334
 msgid "The organizer has been changed."
-msgstr ""
+msgstr "Pořadatel byl změněn."
 
 #: pretix/control/logdisplay.py:335
 msgid "The organizer settings have been changed."
-msgstr ""
+msgstr "Nastavení organizátoru byla změněna."
 
 #: pretix/control/logdisplay.py:336 pretix/control/logdisplay.py:513
 msgid "The footer links have been changed."
@@ -13789,15 +13817,15 @@ msgstr "Plánovaný export byl proveden."
 #: pretix/control/logdisplay.py:341 pretix/control/logdisplay.py:444
 #, python-brace-format
 msgid "A scheduled export has failed: {reason}."
-msgstr ""
+msgstr "Naplánovaný export se nepodařil: {reason}."
 
 #: pretix/control/logdisplay.py:342
 msgid "Gift card acceptance for another organizer has been added."
-msgstr ""
+msgstr "Bylo přidáno přijímání dárkových karet pro dalšího organizátora."
 
 #: pretix/control/logdisplay.py:343
 msgid "Gift card acceptance for another organizer has been removed."
-msgstr ""
+msgstr "Přijímání dárkových karet pro jiného organizátora bylo odstraněno."
 
 #: pretix/control/logdisplay.py:344
 msgid "The webhook has been created."
@@ -13841,79 +13869,79 @@ msgstr "Klient SSO byl odstraněn."
 
 #: pretix/control/logdisplay.py:354 pretix/control/views/organizer.py:2090
 msgid "The membership type has been created."
-msgstr ""
+msgstr "Typ členství byl vytvořen."
 
 #: pretix/control/logdisplay.py:355
 msgid "The membership type has been changed."
-msgstr ""
+msgstr "Typ členství byl změněn."
 
 #: pretix/control/logdisplay.py:356
 msgid "The membership type has been deleted."
-msgstr ""
+msgstr "Typ členství byl odstraněn."
 
 #: pretix/control/logdisplay.py:357
 msgid "The account has been created."
-msgstr ""
+msgstr "Účet byl vytvořen."
 
 #: pretix/control/logdisplay.py:358
 msgid "The account has been changed."
-msgstr ""
+msgstr "Účet byl změněn."
 
 #: pretix/control/logdisplay.py:359
 msgid "A membership for this account has been added."
-msgstr ""
+msgstr "Bylo přidáno členství pro tento účet."
 
 #: pretix/control/logdisplay.py:360
 msgid "A membership of this account has been changed."
-msgstr ""
+msgstr "Členství tohoto účtu bylo změněno."
 
 #: pretix/control/logdisplay.py:361
 msgid "A membership of this account has been deleted."
-msgstr ""
+msgstr "Členství tohoto účtu bylo smazáno."
 
 #: pretix/control/logdisplay.py:362
 msgid "The account has been disabled and anonymized."
-msgstr ""
+msgstr "Účet byl deaktivován a anonymizován."
 
 #: pretix/control/logdisplay.py:363
 msgid "A new password has been requested."
-msgstr ""
+msgstr "Bylo vyžádáno nové heslo."
 
 #: pretix/control/logdisplay.py:364
 msgid "A new password has been set."
-msgstr ""
+msgstr "Bylo nastaveno nové heslo."
 
 #: pretix/control/logdisplay.py:365 pretix/control/logdisplay.py:404
 msgid "Sending of an email has failed."
-msgstr ""
+msgstr "Odeslání e-mailu se nezdařilo."
 
 #: pretix/control/logdisplay.py:366
 msgid "The event's internal comment has been updated."
-msgstr ""
+msgstr "Interní komentář k akci byl aktualizován."
 
 #: pretix/control/logdisplay.py:367
 msgid "The event has been canceled."
-msgstr ""
+msgstr "Akce byla zrušena."
 
 #: pretix/control/logdisplay.py:368
 msgid "An event has been deleted."
-msgstr ""
+msgstr "Akce byla odstraněna."
 
 #: pretix/control/logdisplay.py:369
 msgid "The order details have been changed."
-msgstr ""
+msgstr "Údaje o objednávce byly změněny."
 
 #: pretix/control/logdisplay.py:370
 msgid "The order has been marked as unpaid."
-msgstr ""
+msgstr "Objednávka byla označena jako nezaplacená."
 
 #: pretix/control/logdisplay.py:371
 msgid "The order's secret has been changed."
-msgstr ""
+msgstr "Kód objednávky byl změněn."
 
 #: pretix/control/logdisplay.py:372
 msgid "The order's expiry date has been changed."
-msgstr ""
+msgstr "Lhůta splatnosti byla změněna."
 
 #: pretix/control/logdisplay.py:373
 msgid "The order has been set to be usable before it is paid."
@@ -13927,102 +13955,106 @@ msgstr "Objednávka byla nastavena tak, aby před použitím vyžadovala platbu.
 
 #: pretix/control/logdisplay.py:375 pretix/control/views/orders.py:1311
 msgid "The order has been marked as expired."
-msgstr ""
+msgstr "Objednávka byla označena jako prošlá."
 
 #: pretix/control/logdisplay.py:376 pretix/control/views/orders.py:1209
 msgid "The order has been marked as paid."
-msgstr ""
+msgstr "Objednávka byla označena jako zaplacená."
 
 #: pretix/control/logdisplay.py:377
 msgid "The cancellation request has been deleted."
-msgstr ""
+msgstr "Žádost o zrušení byla smazána."
 
 #: pretix/control/logdisplay.py:378
 msgid "The order has been refunded."
-msgstr ""
+msgstr "Objednávka byla vrácena."
 
 #: pretix/control/logdisplay.py:379 pretix/control/views/orders.py:1590
 msgid "The order has been reactivated."
-msgstr ""
+msgstr "Objednávka byla reaktivována."
 
 #: pretix/control/logdisplay.py:380
 #, python-brace-format
 msgid "The test mode order {code} has been deleted."
-msgstr ""
+msgstr "Objednávka v testovacím režimu {code} byla odstraněna."
 
 #: pretix/control/logdisplay.py:381
 msgid "The order has been created."
-msgstr ""
+msgstr "Objednávka byla vytvořena."
 
 #: pretix/control/logdisplay.py:382
 msgid "The order requires approval before it can continue to be processed."
-msgstr ""
+msgstr "Před dalším zpracováním objednávky je třeba ji schválit."
 
 #: pretix/control/logdisplay.py:383 pretix/control/views/orders.py:568
 msgid "The order has been approved."
-msgstr ""
+msgstr "Objednávka byla schválena."
 
 #: pretix/control/logdisplay.py:384
 #, python-brace-format
 msgid "The order has been denied (comment: \"{comment}\")."
-msgstr ""
+msgstr "Objednávka byla zamítnuta (komentář: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:385
 #, python-brace-format
 msgid ""
 "The email address has been changed from \"{old_email}\" to \"{new_email}\"."
-msgstr ""
+msgstr "E-mailová adresa byla změněna z \"{old_email}\" na \"{new_email}\"."
 
 #: pretix/control/logdisplay.py:387
 msgid ""
 "The email address has been confirmed to be working (the user clicked on a "
 "link in the email for the first time)."
 msgstr ""
+"Bylo potvrzeno, že e-mailová adresa je funkční (uživatel kliknul na odkaz v "
+"e-mailu poprvé)."
 
 #: pretix/control/logdisplay.py:389
 #, python-brace-format
 msgid ""
 "The phone number has been changed from \"{old_phone}\" to \"{new_phone}\"."
-msgstr ""
+msgstr "Telefonní číslo bylo změněno z \" {old_phone}\" na \"{new_phone}\"."
 
 #: pretix/control/logdisplay.py:391
 msgid "The customer account has been changed."
-msgstr ""
+msgstr "Účet zákazníka byl změněn."
 
 #: pretix/control/logdisplay.py:392
 msgid "The order locale has been changed."
-msgstr ""
+msgstr "Jazyk objednávky byl změněn."
 
 #: pretix/control/logdisplay.py:393 pretix/control/views/orders.py:1348
 #: pretix/presale/views/order.py:755 pretix/presale/views/order.py:828
 msgid "The invoice has been generated."
-msgstr ""
+msgstr "Faktura byla vytvořena."
 
 #: pretix/control/logdisplay.py:394 pretix/control/views/orders.py:1419
 msgid "The invoice has been regenerated."
-msgstr ""
+msgstr "Faktura byla přegenerována."
 
 #: pretix/control/logdisplay.py:395 pretix/control/views/orders.py:1448
 #: pretix/presale/views/order.py:841
 msgid "The invoice has been reissued."
-msgstr ""
+msgstr "Faktura byla vystavena znovu."
 
 #: pretix/control/logdisplay.py:396
 msgid "The order's internal comment has been updated."
-msgstr ""
+msgstr "Interní komentář k objednávce byl aktualizován."
 
 #: pretix/control/logdisplay.py:397
 msgid "The order's follow-up date has been updated."
-msgstr ""
+msgstr "Datum následné kontroly objednávky bylo aktualizováno."
 
 #: pretix/control/logdisplay.py:398
 msgid "The order's flag to require attention at check-in has been toggled."
-msgstr ""
+msgstr "Byl přepnutý příznak objednávky k vyžádání upozornění při odbavení."
 
 #: pretix/control/logdisplay.py:400
 msgid ""
 "The order's flag to be considered valid even if unpaid has been toggled."
 msgstr ""
+"Označení objednávky, aby byla považována za platnou, i když nebyla zaplacena "
+"bylo přepnuto."
 
 #: pretix/control/logdisplay.py:402
 #, python-brace-format
@@ -14033,7 +14065,7 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:403
 msgid "An unidentified type email has been sent."
-msgstr ""
+msgstr "Byl odeslán e-mail neidentifikovaného typu."
 
 #: pretix/control/logdisplay.py:405
 msgid ""
@@ -14045,42 +14077,42 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:407
 msgid "A custom email has been sent."
-msgstr ""
+msgstr "Byl odeslán přizpůsobený e-mail."
 
 #: pretix/control/logdisplay.py:408
 msgid "A custom email has been sent to an attendee."
-msgstr ""
+msgstr "Účastníkovi byl odeslán přizpůsobený e-mail."
 
 #: pretix/control/logdisplay.py:409
 msgid ""
 "An email has been sent with a reminder that the ticket is available for "
 "download."
-msgstr ""
+msgstr "Byl odeslán e-mail s upozorněním, že vstupenka je ke stažení."
 
 #: pretix/control/logdisplay.py:411
 msgid ""
 "An email has been sent with a warning that the order is about to expire."
-msgstr ""
+msgstr "Byl odeslán e-mail s upozorněním, že platnost objednávky brzy vyprší."
 
 #: pretix/control/logdisplay.py:413
 msgid ""
 "An email has been sent to notify the user that the order has been canceled."
-msgstr ""
+msgstr "Uživateli byl odeslán e-mail s oznámením, že objednávka byla zrušena."
 
 #: pretix/control/logdisplay.py:414
 msgid ""
 "An email has been sent to notify the user that the event has been canceled."
-msgstr ""
+msgstr "Uživateli byl odeslán e-mail s oznámením, že akce byla zrušena."
 
 #: pretix/control/logdisplay.py:416
 msgid ""
 "An email has been sent to notify the user that the order has been changed."
-msgstr ""
+msgstr "Uživateli byl odeslán e-mail s upozorněním, že objednávka byla změněna."
 
 #: pretix/control/logdisplay.py:417
 msgid ""
 "An email has been sent to notify the user that the order has been received."
-msgstr ""
+msgstr "Uživateli byl odeslán e-mail s oznámením, že objednávka byla přijata."
 
 #: pretix/control/logdisplay.py:418
 msgid ""
@@ -14090,12 +14122,12 @@ msgstr "Uživateli byl poslán e-mail s upozorněním, že platba byla přijata.
 #: pretix/control/logdisplay.py:419
 msgid ""
 "An email has been sent to notify the user that the order has been denied."
-msgstr ""
+msgstr "Uživateli byl odeslán e-mail s oznámením, že objednávka byla odmítnuta."
 
 #: pretix/control/logdisplay.py:420
 msgid ""
 "An email has been sent to notify the user that the order has been approved."
-msgstr ""
+msgstr "Uživateli byl odeslán e-mail s oznámením, že objednávka byla schválena."
 
 #: pretix/control/logdisplay.py:422
 msgid ""
@@ -14110,11 +14142,15 @@ msgid ""
 "An email has been sent to notify the user that the order has been received "
 "and requires approval."
 msgstr ""
+"Uživateli byl odeslán e-mail s oznámením, že objednávka byla přijata a "
+"vyžaduje schválení."
 
 #: pretix/control/logdisplay.py:426
 msgid ""
 "An email with a link to the order detail page has been resent to the user."
 msgstr ""
+"Uživateli byl znovu zaslán e-mail s odkazem na stránku s podrobnostmi "
+"objednávky."
 
 #: pretix/control/logdisplay.py:427
 #, python-brace-format
@@ -14144,44 +14180,44 @@ msgstr "Platba {local_id} se nezdařila."
 #: pretix/control/logdisplay.py:432
 #, python-brace-format
 msgid "The order could not be marked as paid: {message}"
-msgstr ""
+msgstr "Objednávku nebylo možné označit jako zaplacenou: {message}"
 
 #: pretix/control/logdisplay.py:433
 msgid "The order has been overpaid."
-msgstr ""
+msgstr "Objednávka byla přeplacena."
 
 #: pretix/control/logdisplay.py:434
 #, python-brace-format
 msgid "Refund {local_id} has been created."
-msgstr ""
+msgstr "Byla vytvořena náhrada {local_id}."
 
 #: pretix/control/logdisplay.py:435
 #, python-brace-format
 msgid "Refund {local_id} has been created by an external entity."
-msgstr ""
+msgstr "Náhrada {local_id} byla vytvořena externí jednotkou."
 
 #: pretix/control/logdisplay.py:436
 msgid "The customer requested you to issue a refund."
-msgstr ""
+msgstr "Zákazník vás požádal o vrácení peněz."
 
 #: pretix/control/logdisplay.py:437
 #, python-brace-format
 msgid "Refund {local_id} has been completed."
-msgstr ""
+msgstr "Vrácení peněz {local_id} bylo dokončeno."
 
 #: pretix/control/logdisplay.py:438
 #, python-brace-format
 msgid "Refund {local_id} has been canceled."
-msgstr ""
+msgstr "Náhrada {local_id} byla zrušena."
 
 #: pretix/control/logdisplay.py:439
 #, python-brace-format
 msgid "Refund {local_id} has failed."
-msgstr ""
+msgstr "Náhrada {local_id} se nezdařila."
 
 #: pretix/control/logdisplay.py:445
 msgid "The user has been created."
-msgstr ""
+msgstr "Uživatel byl vytvořen."
 
 #: pretix/control/logdisplay.py:446 pretix/control/views/user.py:479
 #: pretix/control/views/user.py:539 pretix/control/views/user.py:576
