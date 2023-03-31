@@ -318,8 +318,9 @@ Currently, the following attributes are understood by pretix itself:
 
 * If ``data-consent="…"`` is given, the cookie consent mechanism will be initialized with consent for the given cookie
   providers. All other providers will be disabled, no consent dialog will be shown. This is useful if you already
-  asked the user for consent and don't want them to be asked again. Example: ``data-consent="facebook,google_analytics"``
-  Currently the following values are supported: 
+  asked the user for consent and don't want them to be asked again. Example: ``data-consent="facebook,google_analytics"``  
+  
+  Currently the following values are supported:  
   ``adform, facebook, gosquared, google_ads, google_analytics, hubspot, linkedin, matomo, twitter``
 
 Any configured pretix plugins might understand more data fields. For example, if the appropriate plugins on pretix
