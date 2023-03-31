@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-28 08:31+0000\n"
-"PO-Revision-Date: 2023-03-31 07:00+0000\n"
+"PO-Revision-Date: 2023-03-31 22:00+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -14222,16 +14222,16 @@ msgstr "Uživatel byl vytvořen."
 #: pretix/control/logdisplay.py:446 pretix/control/views/user.py:479
 #: pretix/control/views/user.py:539 pretix/control/views/user.py:576
 msgid "Two-factor authentication has been enabled."
-msgstr ""
+msgstr "Bylo povoleno dvoufaktorové ověřování."
 
 #: pretix/control/logdisplay.py:447 pretix/control/views/user.py:365
 #: pretix/control/views/user.py:592
 msgid "Two-factor authentication has been disabled."
-msgstr ""
+msgstr "Dvoufaktorové ověřování bylo vypnuto."
 
 #: pretix/control/logdisplay.py:448 pretix/control/views/user.py:609
 msgid "Your two-factor emergency codes have been regenerated."
-msgstr ""
+msgstr "Vaše dvoufaktorové nouzové kódy byly obnoveny."
 
 #: pretix/control/logdisplay.py:449
 #, python-brace-format
@@ -14239,6 +14239,7 @@ msgid ""
 "A new two-factor authentication device \"{name}\" has been added to your "
 "account."
 msgstr ""
+"K vašemu účtu bylo přidáno nové dvoufaktorové ověřovací zařízení \"{name}\"."
 
 #: pretix/control/logdisplay.py:451
 #, python-brace-format
@@ -14246,18 +14247,19 @@ msgid ""
 "The two-factor authentication device \"{name}\" has been removed from your "
 "account."
 msgstr ""
+"Dvoufaktorové ověřovací zařízení \"{name}\" bylo z vašeho účtu odstraněno."
 
 #: pretix/control/logdisplay.py:453
 msgid "Notifications have been enabled."
-msgstr ""
+msgstr "Oznámení byla povolena."
 
 #: pretix/control/logdisplay.py:454
 msgid "Notifications have been disabled."
-msgstr ""
+msgstr "Oznámení byla vypnuta."
 
 #: pretix/control/logdisplay.py:455
 msgid "Your notification settings have been changed."
-msgstr ""
+msgstr "Nastavení oznámení bylo změněno."
 
 #: pretix/control/logdisplay.py:456
 msgid "This user has been anonymized."
