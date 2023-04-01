@@ -8,10 +8,10 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-28 08:31+0000\n"
-"PO-Revision-Date: 2023-03-20 12:07+0000\n"
+"PO-Revision-Date: 2023-04-02 10:00+0000\n"
 "Last-Translator: chondaen12 <chondaen12@gmail.com>\n"
-"Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/"
-">\n"
+"Language-Team: Thai <https://translate.pretix.eu/projects/pretix/pretix/th/>"
+"\n"
 "Language: th\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -32,15 +32,15 @@ msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:89
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr ""
+msgstr "pretixSCAN (โหมดคีออส, ไม่มีการซิงค์, ไม่มีการค้นหา)"
 
 #: pretix/api/auth/devicesecurity.py:123
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "pretixSCAN (ออนไลน์เท่านั้น, ไม่มีการซิงค์คำสั่งซื้อ)"
 
 #: pretix/api/auth/devicesecurity.py:158
 msgid "pretixPOS"
-msgstr ""
+msgstr "pretixPOS"
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:388
 msgid "Application name"
@@ -48,7 +48,7 @@ msgstr "ชื่อแอปพลิเคชัน"
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:407
 msgid "Redirection URIs"
-msgstr ""
+msgstr "Redirection URIs"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:408
 msgid "Allowed URIs list, space separated"
@@ -75,12 +75,12 @@ msgstr ""
 #: pretix/api/models.py:113 pretix/base/models/devices.py:121
 #: pretix/base/models/organizer.py:259
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "งานทั้งหมด (รวมถึงที่สร้างใหม่)"
 
 #: pretix/api/models.py:114 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:260
 msgid "Limit to events"
-msgstr ""
+msgstr "จำกัดสำหรับงาน"
 
 #: pretix/api/models.py:115 pretix/base/exporters/orderlist.py:272
 #: pretix/base/exporters/orderlist.py:840 pretix/base/models/orders.py:227
@@ -93,11 +93,11 @@ msgstr ""
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/checkinlists/exporters.py:482
 msgid "Comment"
-msgstr ""
+msgstr "ความคิดเห็น"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1215
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "สินค้านี้ยังไม่ได้ถูกกำหนดโควต้า"
 
 #: pretix/api/serializers/checkin.py:65 pretix/base/models/event.py:1573
 #: pretix/base/models/items.py:1644 pretix/base/models/items.py:1895
