@@ -147,6 +147,16 @@ DEFAULTS = {
                         "advanced features like memberships.")
         )
     },
+    'customer_accounts_required': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Require a customer account to use this shop"),
+            help_text=_("If enabled, all requests are redirected to the login form.")
+        )
+    },
     'customer_accounts_native': {
         'default': 'True',
         'type': bool,

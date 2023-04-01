@@ -35,7 +35,7 @@ import re
 import time
 import warnings
 from importlib import import_module
-from urllib.parse import urljoin
+from urllib.parse import quote, urljoin
 
 from django.conf import settings
 from django.core.exceptions import PermissionDenied
@@ -55,7 +55,7 @@ from django_scopes import scope
 from pretix.base.middleware import LocaleMiddleware
 from pretix.base.models import Customer, Event, Organizer
 from pretix.multidomain.urlreverse import (
-    get_event_domain, get_organizer_domain,
+    eventreverse, get_event_domain, get_organizer_domain,
 )
 from pretix.presale.signals import process_request, process_response
 
@@ -299,6 +299,15 @@ def _detect_event(request, require_live=True, require_plugin=None):
 
         if not hasattr(request, 'customer'):
             add_customer_to_request(request)
+
+            if request.organizer.settings.customer_accounts_required and (not request.customer) and url.url_name != 'organizer.customer.login':
+                login_url = eventreverse(
+                    request.organizer,
+                    'presale:organizer.customer.login',
+                    kwargs={}) + '?next=' + quote(request.path)
+                r = redirect(login_url)
+                r['Access-Control-Allow-Origin'] = '*'
+                return r
 
         if hasattr(request, 'event'):
             # Restrict locales to the ones available for this event

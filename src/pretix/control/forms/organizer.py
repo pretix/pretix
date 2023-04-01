@@ -358,6 +358,7 @@ class OrganizerSettingsForm(SettingsForm):
     auto_fields = [
         'allowed_restricted_plugins',
         'customer_accounts',
+        'customer_accounts_required',
         'customer_accounts_native',
         'customer_accounts_link_by_email',
         'invoice_regenerate_allowed',
