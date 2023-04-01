@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-28 08:31+0000\n"
-"PO-Revision-Date: 2023-03-31 22:00+0000\n"
+"PO-Revision-Date: 2023-04-02 10:00+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -13318,6 +13318,9 @@ msgid ""
 "verified to really belong the the user. If this can't be guaranteed, "
 "security issues might arise."
 msgstr ""
+"Budeme předpokládat, že všechny e-mailové adresy přijaté od poskytovatele "
+"SSO jsou ověřeny, že skutečně patří uživateli. Pokud to nelze zajistit, "
+"mohou vzniknout problémy se zabezpečením."
 
 #: pretix/control/forms/organizer.py:774
 msgctxt "sso_oidc"
@@ -13328,11 +13331,11 @@ msgstr "Pole telefonu"
 #, python-brace-format
 msgctxt "sso_oidc"
 msgid "{label} field"
-msgstr ""
+msgstr "{label} pole"
 
 #: pretix/control/forms/organizer.py:825
 msgid "Invalidate old client secret and generate a new one"
-msgstr ""
+msgstr "Zneplatnit staré klientské tajemství a vygenerovat nové"
 
 #: pretix/control/forms/renderers.py:54
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:135
@@ -13371,7 +13374,7 @@ msgstr "Interval"
 
 #: pretix/control/forms/rrule.py:69
 msgid "Number of repetitions"
-msgstr ""
+msgstr "Počet opakování"
 
 #: pretix/control/forms/rrule.py:79
 msgid "Last date"
@@ -13408,11 +13411,11 @@ msgstr "Den o víkendu"
 
 #: pretix/control/forms/subevents.py:117
 msgid "Keep the current values"
-msgstr ""
+msgstr "Zachovat současné hodnoty"
 
 #: pretix/control/forms/subevents.py:134 pretix/control/forms/subevents.py:142
 msgid "Selection contains various values"
-msgstr ""
+msgstr "Výběr obsahuje různé hodnoty"
 
 #: pretix/control/forms/subevents.py:281 pretix/control/forms/subevents.py:308
 msgid "The end of availability should be after the start of availability."
@@ -13424,15 +13427,15 @@ msgstr "K dispozici do"
 
 #: pretix/control/forms/subevents.py:459
 msgid "Exclude these dates instead of adding them."
-msgstr ""
+msgstr "Místo přidání těchto dat je vylučte."
 
 #: pretix/control/forms/users.py:122 pretix/control/views/user.py:213
 msgid "Your changes could not be saved. See below for details."
-msgstr ""
+msgstr "Vaše změny se nepodařilo uložit. Podrobnosti naleznete níže."
 
 #: pretix/control/forms/vouchers.py:154
 msgid "Specific seat ID"
-msgstr ""
+msgstr "ID konkrétního místa"
 
 #: pretix/control/forms/vouchers.py:195 pretix/presale/forms/waitinglist.py:124
 msgid "Invalid product selected."
@@ -13443,6 +13446,8 @@ msgid ""
 "The voucher only matches hidden products but you have not selected that it "
 "should show them."
 msgstr ""
+"Poukázka odpovídá pouze skrytým produktům, ale nezvolili jste, že je mají "
+"zobrazit."
 
 #: pretix/control/forms/vouchers.py:251
 msgid "Codes"
@@ -13453,15 +13458,17 @@ msgid ""
 "Add one voucher code per line. We suggest that you copy this list and save "
 "it into a file."
 msgstr ""
+"Přidat jeden kód voucheru na řádek. Doporučujeme tento seznam zkopírovat a "
+"uložit do souboru."
 
 #: pretix/control/forms/vouchers.py:258
 msgid "Send vouchers via email"
-msgstr ""
+msgstr "Odeslat poukázky e-mailem"
 
 #: pretix/control/forms/vouchers.py:265
 #, python-brace-format
 msgid "Your voucher for {event}"
-msgstr ""
+msgstr "Vaše poukázka na {event}"
 
 #: pretix/control/forms/vouchers.py:271
 #, python-brace-format
@@ -13480,6 +13487,19 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
+"Ahoj,\n"
+"\n"
+"tímto e-mailem vám zasíláme jeden nebo více poukázek na {event}:\n"
+"\n"
+"{voucher_list}\n"
+"\n"
+"Můžete je uplatnit zde v našem obchodě se vstupenkami:\n"
+"\n"
+"{url}.\n"
+"\n"
+"S pozdravem,\n"
+"\n"
+"Váš tým {event}"
 
 #: pretix/control/forms/vouchers.py:277
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:25
@@ -13500,76 +13520,83 @@ msgid ""
 "line, or a CSV file with a title column and one or more of the columns "
 "\"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
+"Můžete zadat buď seznam e-mailových adres s jednou e-mailovou adresou na "
+"řádek, nebo soubor CSV se sloupcem s názvem a jedním nebo více sloupci \"e-"
+"mail\", \"number\", \"name\" nebo \"tag\"."
 
 #: pretix/control/forms/vouchers.py:321
 msgid "Maximum usages per voucher"
-msgstr ""
+msgstr "Maximální počet použití na jednu poukázku"
 
 #: pretix/control/forms/vouchers.py:324
 msgid "Number of times times EACH of these vouchers can be redeemed."
-msgstr ""
+msgstr "Kolikrát lze KAŽDOU z těchto poukázek uplatnit."
 
 #: pretix/control/forms/vouchers.py:333
 msgid "Specific seat IDs"
-msgstr ""
+msgstr "ID konkrétních míst"
 
 #: pretix/control/forms/vouchers.py:347
 msgid "CSV input needs to contain a header row in the first line."
-msgstr ""
+msgstr "Soubor CSV musí v prvním řádku obsahovat záhlaví."
 
 #: pretix/control/forms/vouchers.py:352
 #, python-brace-format
 msgid "CSV parsing failed: {error}."
-msgstr ""
+msgstr "Zpracování CSV se nezdařilo: {error}."
 
 #: pretix/control/forms/vouchers.py:354
 #, python-brace-format
 msgid "CSV input needs to contain a field with the header \"{header}\"."
-msgstr ""
+msgstr "Soubor CSV musí obsahovat pole se záhlavím \"{header}\"."
 
 #: pretix/control/forms/vouchers.py:357
 #, python-brace-format
 msgid "CSV input contains an unknown field with the header \"{header}\"."
-msgstr ""
+msgstr "Soubor CSV obsahuje neznámé pole se záhlavím \"{header}\"."
 
 #: pretix/control/forms/vouchers.py:362 pretix/control/forms/vouchers.py:377
 #, python-brace-format
 msgid "{value} is not a valid email address."
-msgstr ""
+msgstr "{value} není platná e-mailová adresa."
 
 #: pretix/control/forms/vouchers.py:371
 #, python-brace-format
 msgid "Invalid value in row {number}."
-msgstr ""
+msgstr "Neplatná hodnota v řádku {number}."
 
 #: pretix/control/forms/vouchers.py:389
 msgid "A voucher with one of these codes already exists."
-msgstr ""
+msgstr "Poukázka s jedním z těchto kódů již existuje."
 
 #: pretix/control/forms/vouchers.py:394
 #, python-brace-format
 msgid "The voucher code {code} appears in your list twice."
-msgstr ""
+msgstr "Kód poukázky {code} se v seznamu vyskytne dvakrát."
 
 #: pretix/control/forms/vouchers.py:398
 msgid ""
 "If vouchers should be sent by email, subject, message and recipients need to "
 "be specified."
 msgstr ""
+"Pokud mají být poukázky zasílány e-mailem, je třeba zadat předmět, zprávu a "
+"příjemce."
 
 #: pretix/control/forms/vouchers.py:405
 #, python-brace-format
 msgid ""
 "You generated {codes} vouchers, but entered recipients for {recp} vouchers."
 msgstr ""
+"Vytvořili jste {codes} poukázek, ale zadali jste příjemce pro {recp} "
+"poukázek."
 
 #: pretix/control/forms/vouchers.py:410
 msgid "You need to specify as many seats as voucher codes."
-msgstr ""
+msgstr "Je třeba zadat tolik míst, kolik je kódů poukázek."
 
 #: pretix/control/logdisplay.py:66
 msgid "The order has been changed:"
-msgstr ""
+msgstr "Objednávka byla změněna:"
 
 #: pretix/control/logdisplay.py:74
 #, python-brace-format
@@ -13577,16 +13604,18 @@ msgid ""
 "Position #{posid}: {old_item} ({old_price}) changed to {new_item} "
 "({new_price})."
 msgstr ""
+"Pozice #{posid}: {old_item} ({old_price}) změněna na {new_item} "
+"({new_price})."
 
 #: pretix/control/logdisplay.py:82
 #, python-brace-format
 msgid "Position #{posid}: Used membership changed."
-msgstr ""
+msgstr "Pozice #{posid}: Použité členství bylo změněno."
 
 #: pretix/control/logdisplay.py:86
 #, python-brace-format
 msgid "Position #{posid}: Seat \"{old_seat}\" changed to \"{new_seat}\"."
-msgstr ""
+msgstr "Pozice #{posid}: Sedadlo \" {old_seat}\" se změnilo na \"{new_seat}\"."
 
 #: pretix/control/logdisplay.py:94
 #, python-brace-format
@@ -13594,21 +13623,23 @@ msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
 "\"{new_event}\" ({new_price})."
 msgstr ""
+"Pozice #{posid}: Datum akce \"{old_event}\" ({old_price}) změněno na \""
+"{new_event}\" ({new_price})."
 
 #: pretix/control/logdisplay.py:102
 #, python-brace-format
 msgid "Price of position #{posid} changed from {old_price} to {new_price}."
-msgstr ""
+msgstr "Cena pozice #{posid} se změnila z {old_price} na {new_price}."
 
 #: pretix/control/logdisplay.py:110
 #, python-brace-format
 msgid "Tax rule of position #{posid} changed from {old_rule} to {new_rule}."
-msgstr ""
+msgstr "Daňové pravidlo pozice #{posid} změněno z {old_rule} na {new_rule}."
 
 #: pretix/control/logdisplay.py:117
 #, python-brace-format
 msgid "Tax rule of fee #{fee} changed from {old_rule} to {new_rule}."
-msgstr ""
+msgstr "Daňové pravidlo poplatku #{fee} změněno z {old_rule} na {new_rule}."
 
 #: pretix/control/logdisplay.py:124
 msgid "A fee has been added"
@@ -14263,148 +14294,152 @@ msgstr "Nastavení oznámení bylo změněno."
 
 #: pretix/control/logdisplay.py:456
 msgid "This user has been anonymized."
-msgstr ""
+msgstr "Tento uživatel byl anonymizován."
 
 #: pretix/control/logdisplay.py:459
 msgid "Password reset mail sent."
-msgstr ""
+msgstr "E-mail s žádostí o obnovení hesla byl odeslán."
 
 #: pretix/control/logdisplay.py:460
 msgid "The password has been reset."
-msgstr ""
+msgstr "Heslo bylo obnoveno."
 
 #: pretix/control/logdisplay.py:461
 msgid ""
 "A repeated password reset has been denied, as the last request was less than "
 "24 hours ago."
 msgstr ""
+"Opakované obnovení hesla bylo zamítnuto, protože poslední žádost byla podána "
+"před méně než 24 hodin."
 
 #: pretix/control/logdisplay.py:463
 #, python-brace-format
 msgid "The organizer \"{name}\" has been deleted."
-msgstr ""
+msgstr "Organizátor \"{name}\" byl smazán."
 
 #: pretix/control/logdisplay.py:464
 msgid "The voucher has been created."
-msgstr ""
+msgstr "Poukázka byla vytvořena."
 
 #: pretix/control/logdisplay.py:466
 msgid "The voucher has been created and sent to a person on the waiting list."
-msgstr ""
+msgstr "Poukázka byla vytvořena a odeslána osobě na čekací listině."
 
 #: pretix/control/logdisplay.py:467
 msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
 msgstr ""
+"Platnost poukázky vypršela, protože se příjemce sám vyřadil ze seznamu "
+"čekajících."
 
 #: pretix/control/logdisplay.py:468
 msgid "The voucher has been changed."
-msgstr ""
+msgstr "Poukázka byla změněna."
 
 #: pretix/control/logdisplay.py:469
 msgid "The voucher has been deleted."
-msgstr ""
+msgstr "Poukázka byla smazána."
 
 #: pretix/control/logdisplay.py:470
 #, python-brace-format
 msgid "The voucher has been redeemed in order {order_code}."
-msgstr ""
+msgstr "Poukázka byla uplatněna v objednávce {order_code}."
 
 #: pretix/control/logdisplay.py:471
 msgid "The product has been created."
-msgstr ""
+msgstr "Produkt byl vytvořen."
 
 #: pretix/control/logdisplay.py:472
 msgid "The product has been changed."
-msgstr ""
+msgstr "Produkt byl změněn."
 
 #: pretix/control/logdisplay.py:473
 msgid "The product has been deleted."
-msgstr ""
+msgstr "Produkt byl odstraněn."
 
 #: pretix/control/logdisplay.py:474
 #, python-brace-format
 msgid "The variation \"{value}\" has been created."
-msgstr ""
+msgstr "Byla vytvořena varianta \"{value}\"."
 
 #: pretix/control/logdisplay.py:475
 #, python-brace-format
 msgid "The variation \"{value}\" has been deleted."
-msgstr ""
+msgstr "Varianta \"{value}\" byla odstraněna."
 
 #: pretix/control/logdisplay.py:476
 #, python-brace-format
 msgid "The variation \"{value}\" has been changed."
-msgstr ""
+msgstr "Varianta \"{value}\" byla změněna."
 
 #: pretix/control/logdisplay.py:477
 msgid "An add-on has been added to this product."
-msgstr ""
+msgstr "K tomuto produktu byl přidán doplněk."
 
 #: pretix/control/logdisplay.py:478
 msgid "An add-on has been removed from this product."
-msgstr ""
+msgstr "Doplněk byl z tohoto produktu odstraněn."
 
 #: pretix/control/logdisplay.py:479
 msgid "An add-on has been changed on this product."
-msgstr ""
+msgstr "U tohoto produktu byl změněn doplněk."
 
 #: pretix/control/logdisplay.py:480
 msgid "A bundled item has been added to this product."
-msgstr ""
+msgstr "K tomuto produktu byla přidána balíčková položka."
 
 #: pretix/control/logdisplay.py:481
 msgid "A bundled item has been removed from this product."
-msgstr ""
+msgstr "Balíčková položka byla z tohoto produktu odstraněna."
 
 #: pretix/control/logdisplay.py:482
 msgid "A bundled item has been changed on this product."
-msgstr ""
+msgstr "U tohoto produktu byla změněna balíčková položka."
 
 #: pretix/control/logdisplay.py:483
 msgid "The quota has been added."
-msgstr ""
+msgstr "Kvóta byla přidána."
 
 #: pretix/control/logdisplay.py:484
 msgid "The quota has been deleted."
-msgstr ""
+msgstr "Kvóta byla odstraněna."
 
 #: pretix/control/logdisplay.py:485
 msgid "The quota has been changed."
-msgstr ""
+msgstr "Kvóta byla změněna."
 
 #: pretix/control/logdisplay.py:486
 msgid "The quota has closed."
-msgstr ""
+msgstr "Kvóta je uzavřena."
 
 #: pretix/control/logdisplay.py:487 pretix/control/views/item.py:1021
 msgid "The quota has been re-opened."
-msgstr ""
+msgstr "Kvóta byla znovu otevřena."
 
 #: pretix/control/logdisplay.py:488
 msgid "The category has been added."
-msgstr ""
+msgstr "Kategorie byla přidána."
 
 #: pretix/control/logdisplay.py:489
 msgid "The category has been deleted."
-msgstr ""
+msgstr "Kategorie byla odstraněna."
 
 #: pretix/control/logdisplay.py:490
 msgid "The category has been changed."
-msgstr ""
+msgstr "Kategorie byla změněna."
 
 #: pretix/control/logdisplay.py:491
 msgid "The question has been added."
-msgstr ""
+msgstr "Otázka byla přidána."
 
 #: pretix/control/logdisplay.py:492
 msgid "The question has been deleted."
-msgstr ""
+msgstr "Otázka byla smazána."
 
 #: pretix/control/logdisplay.py:493
 msgid "The question has been changed."
-msgstr ""
+msgstr "Otázka byla změněna."
 
 #: pretix/control/logdisplay.py:494
 msgid "The discount has been added."
@@ -14420,127 +14455,127 @@ msgstr "Sleva byla změněna."
 
 #: pretix/control/logdisplay.py:497
 msgid "The tax rule has been added."
-msgstr ""
+msgstr "Daňové pravidlo bylo přidáno."
 
 #: pretix/control/logdisplay.py:498
 msgid "The tax rule has been deleted."
-msgstr ""
+msgstr "Daňové pravidlo bylo odstraněno."
 
 #: pretix/control/logdisplay.py:499
 msgid "The tax rule has been changed."
-msgstr ""
+msgstr "Daňové pravidlo bylo změněno."
 
 #: pretix/control/logdisplay.py:500
 msgid "The check-in list has been added."
-msgstr ""
+msgstr "Byl přidán seznam pro check-in."
 
 #: pretix/control/logdisplay.py:501
 msgid "The check-in list has been deleted."
-msgstr ""
+msgstr "Seznam pro check-in byl smazán."
 
 #: pretix/control/logdisplay.py:502
 msgid "The check-in list has been changed."
-msgstr ""
+msgstr "Seznam pro check-in byl změněn."
 
 #: pretix/control/logdisplay.py:503
 msgid "The event settings have been changed."
-msgstr ""
+msgstr "Nastavení akce byla změněna."
 
 #: pretix/control/logdisplay.py:504
 msgid "The ticket download settings have been changed."
-msgstr ""
+msgstr "Nastavení stahování vstupenek byla změněna."
 
 #: pretix/control/logdisplay.py:505
 msgid "A plugin has been enabled."
-msgstr ""
+msgstr "Plugin byl povolen."
 
 #: pretix/control/logdisplay.py:506
 msgid "A plugin has been disabled."
-msgstr ""
+msgstr "Plugin byl deaktivován."
 
 #: pretix/control/logdisplay.py:507
 msgid "The shop has been taken live."
-msgstr ""
+msgstr "Prodejna vstupenek byla spuštěna."
 
 #: pretix/control/logdisplay.py:508
 msgid "The shop has been taken offline."
-msgstr ""
+msgstr "Prodejna vstupenek byla vypnuta."
 
 #: pretix/control/logdisplay.py:509
 msgid "The shop has been taken into test mode."
-msgstr ""
+msgstr "Prodejna vstupenek byla převedena do testovacího režimu."
 
 #: pretix/control/logdisplay.py:510
 msgid "The test mode has been disabled."
-msgstr ""
+msgstr "Testovací režim byl vypnutý."
 
 #: pretix/control/logdisplay.py:511
 msgid "The event has been created."
-msgstr ""
+msgstr "Akce byla vytvořena."
 
 #: pretix/control/logdisplay.py:512
 msgid "The event details have been changed."
-msgstr ""
+msgstr "Podrobnosti o akci byly změněny."
 
 #: pretix/control/logdisplay.py:514
 msgid "An answer option has been added to the question."
-msgstr ""
+msgstr "K otázce byla přidána možnost odpovědi."
 
 #: pretix/control/logdisplay.py:515
 msgid "An answer option has been removed from the question."
-msgstr ""
+msgstr "Z otázky byla odstraněna možnost odpovědi."
 
 #: pretix/control/logdisplay.py:516
 msgid "An answer option has been changed."
-msgstr ""
+msgstr "Možnost odpovědi byla změněna."
 
 #: pretix/control/logdisplay.py:517
 msgid "A user has been added to the event team."
-msgstr ""
+msgstr "Uživatel byl přidán do týmu akce."
 
 #: pretix/control/logdisplay.py:518
 msgid "A user has been invited to the event team."
-msgstr ""
+msgstr "Uživatel byl pozván do týmu akce."
 
 #: pretix/control/logdisplay.py:519
 msgid "A user's permissions have been changed."
-msgstr ""
+msgstr "Oprávnění uživatele byla změněna."
 
 #: pretix/control/logdisplay.py:520
 msgid "A user has been removed from the event team."
-msgstr ""
+msgstr "Uživatel byl odstraněn z týmu akce."
 
 #: pretix/control/logdisplay.py:521
 msgid "A voucher has been sent to a person on the waiting list."
-msgstr ""
+msgstr "Osobě na čekací listině byla zaslána poukázka."
 
 #: pretix/control/logdisplay.py:522
 msgid "An entry has been removed from the waiting list."
-msgstr ""
+msgstr "Záznam byl odstraněn z čekacího seznamu."
 
 #: pretix/control/logdisplay.py:523
 msgid "An entry has been transferred to another waiting list."
-msgstr ""
+msgstr "Záznam byl přesunut na jiný čekací seznam."
 
 #: pretix/control/logdisplay.py:524
 msgid "An entry has been changed on the waiting list."
-msgstr ""
+msgstr "Záznam na čekací listině byl změněn."
 
 #: pretix/control/logdisplay.py:525
 msgid "An entry has been added to the waiting list."
-msgstr ""
+msgstr "Na čekací listinu byl přidán záznam."
 
 #: pretix/control/logdisplay.py:526
 msgid "The team has been created."
-msgstr ""
+msgstr "Tým byl vytvořen."
 
 #: pretix/control/logdisplay.py:527
 msgid "The team settings have been changed."
-msgstr ""
+msgstr "Nastavení týmu byla změněna."
 
 #: pretix/control/logdisplay.py:528
 msgid "The team has been deleted."
-msgstr ""
+msgstr "Tým byl smazán."
 
 #: pretix/control/logdisplay.py:529 pretix/control/views/organizer.py:1874
 msgid "The gate has been created."
@@ -14557,73 +14592,73 @@ msgstr ""
 #: pretix/control/logdisplay.py:532
 msgctxt "subevent"
 msgid "The event date has been deleted."
-msgstr ""
+msgstr "Termín akce byl odstraněn."
 
 #: pretix/control/logdisplay.py:533
 msgctxt "subevent"
 msgid "The event date has been canceled."
-msgstr ""
+msgstr "Termín akce byl zrušen."
 
 #: pretix/control/logdisplay.py:534
 msgctxt "subevent"
 msgid "The event date has been changed."
-msgstr ""
+msgstr "Termín akce byl změněn."
 
 #: pretix/control/logdisplay.py:535
 msgctxt "subevent"
 msgid "The event date has been created."
-msgstr ""
+msgstr "Termín akce byl vytvořen."
 
 #: pretix/control/logdisplay.py:536
 msgctxt "subevent"
 msgid "A quota has been added to the event date."
-msgstr ""
+msgstr "K termínu akce byla přidána kvóta."
 
 #: pretix/control/logdisplay.py:537
 msgctxt "subevent"
 msgid "A quota has been changed on the event date."
-msgstr ""
+msgstr "Pro datum akce byla změněna kvóta."
 
 #: pretix/control/logdisplay.py:538
 msgctxt "subevent"
 msgid "A quota has been removed from the event date."
-msgstr ""
+msgstr "Z termínu akce byla odstraněna kvóta."
 
 #: pretix/control/logdisplay.py:539
 msgid "The device has been created."
-msgstr ""
+msgstr "Zařízení bylo vytvořeno."
 
 #: pretix/control/logdisplay.py:540
 msgid "The device has been changed."
-msgstr ""
+msgstr "Zařízení bylo změněno."
 
 #: pretix/control/logdisplay.py:541
 msgid "Access of the device has been revoked."
-msgstr ""
+msgstr "Přístup zařízení byl zrušen."
 
 #: pretix/control/logdisplay.py:542
 msgid "The device has been initialized."
-msgstr ""
+msgstr "Zařízení bylo inicializováno."
 
 #: pretix/control/logdisplay.py:543
 msgid "The access token of the device has been regenerated."
-msgstr ""
+msgstr "Přístupový token zařízení byl obnoven."
 
 #: pretix/control/logdisplay.py:544
 msgid "The device has notified the server of an hardware or software update."
-msgstr ""
+msgstr "Zařízení oznámilo serveru aktualizaci hardwaru nebo softwaru."
 
 #: pretix/control/logdisplay.py:545
 msgid "The gift card has been created."
-msgstr ""
+msgstr "Dárková karta byla vytvořena."
 
 #: pretix/control/logdisplay.py:546 pretix/control/views/organizer.py:1531
 msgid "The gift card has been changed."
-msgstr ""
+msgstr "Dárková karta byla změněna."
 
 #: pretix/control/logdisplay.py:547
 msgid "A manual transaction has been performed."
-msgstr ""
+msgstr "Byla provedena manuální transakce."
 
 #: pretix/control/logdisplay.py:571
 msgid "The settings of a payment provider have been changed."
@@ -14635,22 +14670,22 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:577
 msgid "The user confirmed the following message: \"{}\""
-msgstr ""
+msgstr "Uživatel potvrdil následující zprávu: \"{}\""
 
 #: pretix/control/logdisplay.py:584
 #, python-brace-format
 msgid "The order has been canceled (comment: \"{comment}\")."
-msgstr ""
+msgstr "Objednávka byla zrušena (komentář: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:586 pretix/control/views/orders.py:1306
 #: pretix/presale/views/order.py:986
 msgid "The order has been canceled."
-msgstr ""
+msgstr "Objednávka byla zrušena."
 
 #: pretix/control/logdisplay.py:597
 #, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
-msgstr ""
+msgstr "Check-in pozice #{posid} na seznamu \"{list}\" byl navrácen."
 
 #: pretix/control/logdisplay.py:619
 #, python-brace-format
@@ -14658,81 +14693,82 @@ msgid ""
 "Position #{posid} has been checked in manually at {datetime} on list "
 "\"{list}\"."
 msgstr ""
+"Pozice #{posid} byla ručně zkontrolována v {datetime} na seznamu \"{list}\"."
 
 #: pretix/control/logdisplay.py:624
 #, python-brace-format
 msgid ""
 "Position #{posid} has been checked in again at {datetime} on list \"{list}\"."
-msgstr ""
+msgstr "Pozice #{posid} byla znovu odbavena v {datetime} na seznamu \"{list}\"."
 
 #: pretix/control/logdisplay.py:631
 #, python-brace-format
 msgid "{user} has been added to the team."
-msgstr ""
+msgstr "{user} byl přidán do týmu."
 
 #: pretix/control/logdisplay.py:634
 #, python-brace-format
 msgid "{user} has been removed from the team."
-msgstr ""
+msgstr "{user} byl odstraněn z týmu."
 
 #: pretix/control/logdisplay.py:637
 #, python-brace-format
 msgid "{user} has joined the team using the invite sent to {email}."
-msgstr ""
+msgstr "{user} vstoupil do týmu na základě pozvánky zaslané na adresu {email}."
 
 #: pretix/control/logdisplay.py:642
 #, python-brace-format
 msgid "{user} has been invited to the team."
-msgstr ""
+msgstr "{user} byl pozván do týmu."
 
 #: pretix/control/logdisplay.py:645
 #, python-brace-format
 msgid "Invite for {user} has been resent."
-msgstr ""
+msgstr "Pozvánka pro {user} byla znovu odeslána."
 
 #: pretix/control/logdisplay.py:648
 #, python-brace-format
 msgid "The invite for {user} has been revoked."
-msgstr ""
+msgstr "Pozvánka pro {user} byla zrušena."
 
 #: pretix/control/logdisplay.py:651
 #, python-brace-format
 msgid "The token \"{name}\" has been created."
-msgstr ""
+msgstr "Byl vytvořen token \"{name}\"."
 
 #: pretix/control/logdisplay.py:654
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
-msgstr ""
+msgstr "Token \"{name}\" byl odvolán."
 
 #: pretix/control/logdisplay.py:657
 msgid "Your account settings have been changed."
-msgstr ""
+msgstr "Nastavení vašeho účtu byla změněna."
 
 #: pretix/control/logdisplay.py:659 pretix/control/views/user.py:234
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
-msgstr ""
+msgstr "Vaše e-mailová adresa byla změněna na {email}."
 
 #: pretix/control/logdisplay.py:661 pretix/control/views/user.py:231
 msgid "Your password has been changed."
-msgstr ""
+msgstr "Vaše heslo bylo změněno."
 
 #: pretix/control/logdisplay.py:663
 msgid "Your account has been enabled."
-msgstr ""
+msgstr "Váš účet byl aktivován."
 
 #: pretix/control/logdisplay.py:665
 msgid "Your account has been disabled."
-msgstr ""
+msgstr "Váš účet byl deaktivován."
 
 #: pretix/control/logdisplay.py:669
 msgid "You impersonated {}."
-msgstr ""
+msgstr "Pracovali jste jako uživatel {}."
 
 #: pretix/control/logdisplay.py:672
 msgid "You stopped impersonating {}."
-msgstr ""
+msgstr "Přestali jste pracovat jako uživatel {}."
 
 #: pretix/control/logdisplay.py:678
 msgid "Blocked manually"
@@ -14746,13 +14782,13 @@ msgstr ""
 msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
-msgstr ""
+msgstr "Vybraná akce nebyla nalezena nebo nemáte oprávnění k její správě."
 
 #: pretix/control/middleware.py:177 pretix/control/middleware.py:187
 msgid ""
 "The selected organizer was not found or you have no permission to "
 "administrate it."
-msgstr ""
+msgstr "Vybraný organizátor nebyl nalezen nebo nemáte oprávnění k jeho správě."
 
 #: pretix/control/navigation.py:37 pretix/control/navigation.py:336
 #: pretix/control/templates/pretixcontrol/dashboard.html:3
@@ -14938,7 +14974,7 @@ msgstr "Kontrola licence"
 #: pretix/control/navigation.py:487
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
 msgid "Event metadata"
-msgstr ""
+msgstr "Metadata akce"
 
 #: pretix/control/navigation.py:501
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:6
@@ -14955,7 +14991,7 @@ msgstr "Zákazníci"
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:4
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:6
 msgid "SSO clients"
-msgstr ""
+msgstr "Klienti SSO"
 
 #: pretix/control/navigation.py:564
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:4
@@ -14970,13 +15006,13 @@ msgstr "Zařízení"
 #: pretix/control/permissions.py:71 pretix/control/permissions.py:108
 #: pretix/control/permissions.py:139 pretix/control/permissions.py:156
 msgid "You do not have permission to view this content."
-msgstr ""
+msgstr "K zobrazení tohoto obsahu nemáte oprávnění."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:44
 #: pretix/control/templates/pretixcontrol/base.html:357
 #, python-format
 msgid "You are currently working on behalf of %(user)s."
-msgstr ""
+msgstr "V současné době pracujete ve jménu %(user)s."
 
 #: pretix/control/templates/pretixcontrol/auth/base.html:49
 #: pretix/control/templates/pretixcontrol/base.html:362
@@ -14985,11 +15021,11 @@ msgstr "Zpět k vlastnímu uživateli"
 
 #: pretix/control/templates/pretixcontrol/auth/forgot.html:14
 msgid "Send recovery information"
-msgstr ""
+msgstr "Odeslat informace o obnovení"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:7
 msgid "Accept an invitation"
-msgstr ""
+msgstr "Přijmout pozvání"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:10
 #, python-format
@@ -14998,6 +15034,9 @@ msgid ""
 "you can <a %(login_href)s>log in</a> first and then click this link again to "
 "accept the invitation with your existing account."
 msgstr ""
+"Pokud již máte na této stránce účet s jinou e-mailovou adresou, můžete se "
+"nejprve <a %(login_href)s>přihlásit</a> a poté znovu kliknout na tento odkaz "
+"a přijmout pozvánku se svým existujícím účtem."
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:23
 #: pretix/control/templates/pretixcontrol/auth/register.html:18
@@ -15031,6 +15070,8 @@ msgid ""
 "You configured your account to require authentication with a second medium, "
 "e.g. your phone. Please enter your verification code here:"
 msgstr ""
+"Nakonfigurovali jste svůj účet tak, aby vyžadoval ověření pomocí druhého "
+"média, např. telefonu. Zde zadejte svůj ověřovací kód:"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:14
 msgid "Token"
@@ -15076,7 +15117,7 @@ msgstr "Pokračovat"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
-msgstr ""
+msgstr "Autorizovat aplikaci"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:18
 #, python-format
@@ -15084,20 +15125,22 @@ msgid ""
 "Do you really want to grant the application <strong>%(application)s</strong> "
 "access to your pretix account?"
 msgstr ""
+"Opravdu chcete aplikaci <strong>%(application)s</strong> povolit přístup k "
+"vašemu účtu pretix?"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:24
 #, python-format
 msgid "You are currently logged in as <strong>%(user)s</strong>."
-msgstr ""
+msgstr "V současné době jste přihlášeni jako <strong>%(user)s</strong>."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:28
 msgid "The application requires the following permissions:"
-msgstr ""
+msgstr "Aplikace vyžaduje následující oprávnění:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:35
 msgid ""
 "Please select the organizer accounts this application should get access to:"
-msgstr ""
+msgstr "Vyberte účty organizátorů, ke kterým má tato aplikace získat přístup:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:41
 msgid ""
@@ -17694,6 +17737,10 @@ msgid ""
 "except if the add-on products or bundled products represent additional "
 "people (e.g. group bundles)."
 msgstr ""
+"Tato možnost by měla být nastavena pro většinu věcí, které se nazývají \" "
+"vstupenka\". U doplňkových produktů nebo balíčků by měla být nastavena na "
+"hlavní vstupence, s výjimkou případů, kdy doplňkové produkty nebo balíčky "
+"představují další osoby (např. skupinové balíčky)."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:50
 #: pretix/control/templates/pretixcontrol/item/index.html:57
@@ -17863,7 +17910,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:68
 msgid "Add a new bundled product"
-msgstr ""
+msgstr "Přidat nový balíčkový produkt"
 
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:35
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:142
@@ -23957,7 +24004,7 @@ msgstr ""
 
 #: pretix/plugins/badges/exporters.py:285
 msgid "Include add-on or bundled positions"
-msgstr ""
+msgstr "Zahrnout doplňkové nebo balíčkové pozice"
 
 #: pretix/plugins/badges/exporters.py:290
 msgid "Rendering option"
