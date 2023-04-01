@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:21+0000\n"
-"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -3862,8 +3862,7 @@ msgstr "Požadovaný čas zahájení"
 
 #: pretix/base/models/exports.py:85
 msgid "The actual start time might be delayed depending on system load."
-msgstr ""
-"Skutečný čas spuštění se může zpozdit v závislosti na zatížení systému."
+msgstr "Skutečný čas spuštění se může zpozdit v závislosti na zatížení systému."
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
@@ -6105,9 +6104,9 @@ msgid ""
 "Don't forget to set the correct fees above!"
 msgstr ""
 "Pokud chcete, aby uživatelé platili poplatky poskytovateli platebních "
-"služeb, doporučujeme tuto funkci povolit. <a href=\"{docs_url}\" "
-"target=\"_blank\" rel=\"noopener\">Kliněte zde pro další informace</a> "
-"Nezapomeňte výše nastavit správné poplatky!"
+"služeb, doporučujeme tuto funkci povolit. <a href=\"{docs_url}\" target="
+"\"_blank\" rel=\"noopener\">Kliněte zde pro další informace</a> Nezapomeňte "
+"výše nastavit správné poplatky!"
 
 #: pretix/base/payment.py:378
 msgid "Text on invoices"
@@ -7397,8 +7396,8 @@ msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
 msgstr ""
-"Podrobnosti o své objednávce si můžete prohlédnout na následující adrese "
-"URL:\n"
+"Podrobnosti o své objednávce si můžete prohlédnout na následující adrese URL:"
+"\n"
 "{orderurl}."
 
 #: pretix/base/services/mail.py:282
@@ -7483,8 +7482,8 @@ msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
-"Chyba při importu hodnoty \"{value}\" pro sloupec \"{column}\" v řádku "
-"\"{line}\": {message}"
+"Chyba při importu hodnoty \"{value}\" pro sloupec \"{column}\" v řádku \""
+"{line}\": {message}"
 
 #: pretix/base/services/orderimport.py:147
 #, python-brace-format
@@ -8587,8 +8586,8 @@ msgid ""
 "e.g. Thank you for your purchase! You can find more information on the event "
 "at ..."
 msgstr ""
-"Např. Děkujeme vám za zakoupení vstupenky! Další informace o akci najdete "
-"na ..."
+"Např. Děkujeme vám za zakoupení vstupenky! Další informace o akci najdete na "
+"..."
 
 #: pretix/base/settings.py:1115
 msgid "Additional text"
@@ -9047,8 +9046,7 @@ msgstr ""
 #: pretix/base/settings.py:1617 pretix/base/settings.py:1626
 msgid ""
 "Only allow changes if the resulting price is equal to the previous price."
-msgstr ""
-"Změny povolit pouze tehdy, pokud se výsledná cena rovná předchozí ceně."
+msgstr "Změny povolit pouze tehdy, pokud se výsledná cena rovná předchozí ceně."
 
 #: pretix/base/settings.py:1618 pretix/base/settings.py:1627
 msgid "Allow changes regardless of price, even if this results in a refund."
