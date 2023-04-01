@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-28 08:31+0000\n"
 "PO-Revision-Date: 2023-04-02 10:00+0000\n"
-"Last-Translator: Michael <michael.happl@gmx.at>\n"
+"Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -11907,7 +11907,7 @@ msgstr "Sada pro opětovné předložení"
 
 #: pretix/control/forms/filter.py:240
 msgid "Follow-up due"
-msgstr ""
+msgstr "Termín opětovného předložení"
 
 #: pretix/control/forms/filter.py:446 pretix/control/forms/filter.py:1684
 #: pretix/control/forms/filter.py:1941 pretix/control/forms/filter.py:2244
@@ -12251,7 +12251,7 @@ msgstr "Všechny přístroje"
 #: pretix/control/forms/filter.py:2182 pretix/control/forms/filter.py:2224
 #: pretix/control/forms/filter.py:2335 pretix/control/forms/filter.py:2298
 msgid "All gates"
-msgstr ""
+msgstr "Všechny brány"
 
 #: pretix/control/forms/filter.py:2190
 msgctxt "filter"
@@ -12329,7 +12329,7 @@ msgstr "Klíč API MapQuest pro geokódování"
 
 #: pretix/control/forms/global_settings.py:88
 msgid "Leaflet tiles URL pattern"
-msgstr ""
+msgstr "Formát URL pro letáky"
 
 #: pretix/control/forms/global_settings.py:89
 #: pretix/control/forms/global_settings.py:94
@@ -12339,7 +12339,7 @@ msgstr "např. {sample}"
 
 #: pretix/control/forms/global_settings.py:93
 msgid "Leaflet tiles attribution"
-msgstr ""
+msgstr "Práva na letáky"
 
 #: pretix/control/forms/global_settings.py:110
 msgid "Perform update checks"
@@ -12429,6 +12429,9 @@ msgid ""
 "the copyright holders which allows me to not share modifications if I only "
 "use pretix internally."
 msgstr ""
+"Chci používat pretix na základě dodatečného povolení uděleného všem "
+"držitelům autorských práv, které mi umožňuje nesdílet modifikace, pokud "
+"pretix používám pouze interně."
 
 #: pretix/control/forms/global_settings.py:161
 msgid ""
@@ -12436,35 +12439,49 @@ msgid ""
 "restriction on the scope of usage and therefore without making use of any "
 "additional permission."
 msgstr ""
+"Rád/a bych pretix používal/a za podmínek AGPLv3 bez omezení rozsahu a druhů "
+"použití, a proto nevyužívám dodatečnou autorizaci."
 
 #: pretix/control/forms/global_settings.py:163
 msgid ""
 "I have obtained a paid pretix Enterprise license which is currently valid."
 msgstr ""
+"Mám zakoupenou placenou licenci pretix Enterprise, která je v současné době "
+"platná."
 
 #: pretix/control/forms/global_settings.py:168
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a non-copyleft license (Apache License, MIT License, BSD license, …)."
 msgstr ""
+"V této instalaci pretixu jsou nainstalovány zásuvné moduly, které jsou volně "
+"dostupné pod licencí, která není copyleftová (Apache licence, MIT licence, "
+"BSD licence, ...)."
 
 #: pretix/control/forms/global_settings.py:173
 msgid ""
 "This installation of pretix has installed plugins which are available freely "
 "under a license with strong copyleft (GPL, AGPL, …)."
 msgstr ""
+"V této instalaci pretixu jsou nainstalovány zásuvné moduly, které jsou volně "
+"dostupné pod licencí se silným copyleftem (GPL, AGPL, ...)."
 
 #: pretix/control/forms/global_settings.py:178
 msgid ""
 "This installation of pretix has installed plugins which have been created "
 "internally or obtained under a proprietary license by a third party."
 msgstr ""
+"V této instalaci aplikace pretix jsou nainstalovány zásuvné moduly, které "
+"byly vytvořeny interně nebo získány na základě proprietární licence třetí "
+"stranou."
 
 #: pretix/control/forms/global_settings.py:183
 msgid ""
 "This installation of pretix has installed pretix Enterprise plugins with a "
 "valid license."
 msgstr ""
+"Tato instalace pretixu má nainstalované zásuvné moduly pretix Enterprise s "
+"platnou licencí."
 
 #: pretix/control/forms/global_settings.py:187
 msgid "Footer: \"powered by\" name (optional)"
@@ -12501,6 +12518,10 @@ msgid ""
 "current source code of the site including all modifications and installed "
 "plugins. This will be publicly available. Make sure to keep it up to date!"
 msgstr ""
+"Pokud používáte pretix pod podmínkami AGPLv3, popište přesně, jak stáhnout "
+"aktuální zdrojový kód webu včetně všech modifikací a nainstalovaných "
+"zásuvných modulů. Ten bude veřejně dostupný. Ujistěte se, že je neustále "
+"aktualizován!"
 
 #: pretix/control/forms/item.py:144
 msgid "This field is required"
@@ -13860,15 +13881,15 @@ msgstr "Přijímání dárkových karet pro jiného organizátora bylo odstraně
 
 #: pretix/control/logdisplay.py:344
 msgid "The webhook has been created."
-msgstr ""
+msgstr "Webový příkaz byl vytvořen."
 
 #: pretix/control/logdisplay.py:345
 msgid "The webhook has been changed."
-msgstr ""
+msgstr "Webový příkaz byl změněn."
 
 #: pretix/control/logdisplay.py:346
 msgid "The webhook call retry jobs have been manually expedited."
-msgstr ""
+msgstr "Opakované úlohy webových háčků byly ručně urychleny."
 
 #: pretix/control/logdisplay.py:347
 msgid "The webhook call retry jobs have been dropped."
@@ -14579,15 +14600,15 @@ msgstr "Tým byl smazán."
 
 #: pretix/control/logdisplay.py:529 pretix/control/views/organizer.py:1874
 msgid "The gate has been created."
-msgstr ""
+msgstr "Stanice byla vytvořena."
 
 #: pretix/control/logdisplay.py:530
 msgid "The gate has been changed."
-msgstr ""
+msgstr "Stanice byla změněna."
 
 #: pretix/control/logdisplay.py:531
 msgid "The gate has been deleted."
-msgstr ""
+msgstr "Stanice byla zrušena."
 
 #: pretix/control/logdisplay.py:532
 msgctxt "subevent"
@@ -14666,7 +14687,7 @@ msgstr "Nastavení jedné z platebních metod bylo změněno."
 
 #: pretix/control/logdisplay.py:574
 msgid "The settings of a ticket output provider have been changed."
-msgstr ""
+msgstr "Bylo změněno nastavení metody stahování lístků."
 
 #: pretix/control/logdisplay.py:577
 msgid "The user confirmed the following message: \"{}\""
@@ -14772,11 +14793,11 @@ msgstr "Přestali jste pracovat jako uživatel {}."
 
 #: pretix/control/logdisplay.py:678
 msgid "Blocked manually"
-msgstr ""
+msgstr "Ručně zablokováno"
 
 #: pretix/control/logdisplay.py:680
 msgid "Blocked because of an API integration"
-msgstr ""
+msgstr "Zablokováno pomocí integrace API"
 
 #: pretix/control/middleware.py:150 pretix/control/middleware.py:164
 msgid ""
@@ -14955,7 +14976,7 @@ msgstr "Všechny uživatelé"
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:5
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:7
 msgid "Admin sessions"
-msgstr ""
+msgstr "Relace správce"
 
 #: pretix/control/navigation.py:427
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:5
@@ -14965,7 +14986,7 @@ msgstr "Globální nastavení"
 
 #: pretix/control/navigation.py:438
 msgid "Update check"
-msgstr ""
+msgstr "Kontrola aktualizace"
 
 #: pretix/control/navigation.py:443
 msgid "License check"
@@ -15147,6 +15168,8 @@ msgid ""
 "This application has <strong>not</strong> been reviewed by the pretix team. "
 "Granting access to your pretix account happens at your own risk."
 msgstr ""
+"Tato aplikace <strong>nebyla</strong> zkontrolována týmem pretix. Udělení "
+"přístupu k účtu pretix se děje na vaše vlastní riziko."
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:54
 msgid "Error:"
@@ -15154,7 +15177,7 @@ msgstr "Chyba:"
 
 #: pretix/control/templates/pretixcontrol/auth/recover.html:7
 msgid "Set new password"
-msgstr ""
+msgstr "Nastavit nové heslo"
 
 #: pretix/control/templates/pretixcontrol/auth/recover.html:15
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:113
@@ -15232,7 +15255,7 @@ msgstr "Uložit"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html:7
 msgid "Create a new account"
-msgstr ""
+msgstr "Vytvořit nový účet uživatele"
 
 #: pretix/control/templates/pretixcontrol/base.html:99
 msgid "Toggle navigation"
@@ -15243,17 +15266,17 @@ msgstr "Přepnout navigaci"
 #: pretix/control/templates/pretixcontrol/base.html:141
 #: pretix/control/templates/pretixcontrol/base.html:142
 msgid "Go to shop"
-msgstr ""
+msgstr "Přejít do obchodu"
 
 #: pretix/control/templates/pretixcontrol/base.html:120
 #: pretix/control/templates/pretixcontrol/base.html:148
 #: pretix/control/templates/pretixcontrol/base.html:149
 msgid "Public profile"
-msgstr ""
+msgstr "Veřejný profil"
 
 #: pretix/control/templates/pretixcontrol/base.html:200
 msgid "End admin session"
-msgstr ""
+msgstr "Ukončení režimu administrátora"
 
 #: pretix/control/templates/pretixcontrol/base.html:212
 msgid "Account Settings"
@@ -15272,13 +15295,14 @@ msgstr "Účet organizátora"
 
 #: pretix/control/templates/pretixcontrol/base.html:268
 msgid "Search for events"
-msgstr ""
+msgstr "Vyhledávání akcí"
 
 #: pretix/control/templates/pretixcontrol/base.html:325
 msgid ""
 "We've detected that you are using <strong>Microsoft Internet Explorer</"
 "strong>."
 msgstr ""
+"Zjistili jsme, že používáte <strong>Microsoft Internet Explorer</strong>."
 
 #: pretix/control/templates/pretixcontrol/base.html:328
 msgid ""
@@ -15287,17 +15311,25 @@ msgid ""
 "plan on no longer supporting Internet Explorer in our administrative backend "
 "in the next months."
 msgstr ""
+"Internet Explorer je starý prohlížeč, který nepodporuje mnoho nejnovějších "
+"webových technologií. Některé funkce již nyní nemusí fungovat správně, "
+"plánujeme, že v příštích měsících přestaneme prohlížeč Internet Explorer v "
+"našem administrativním zázemí podporovat."
 
 #: pretix/control/templates/pretixcontrol/base.html:333
 msgid ""
 "We kindly ask you to move to one of our supported browsers, such as "
 "Microsoft Edge, Mozilla Firefox, Google Chrome, or Safari."
 msgstr ""
+"Žádáme vás, abyste přešli na některý z podporovaných prohlížečů, například "
+"Microsoft Edge, Mozilla Firefox, Google Chrome nebo Safari."
 
 #: pretix/control/templates/pretixcontrol/base.html:342
 msgid ""
 "Please leave a short comment on what you did in the following admin sessions:"
 msgstr ""
+"Zanechte prosím krátký komentář k tomu, co jste dělali v následujících "
+"relacích administrace:"
 
 #: pretix/control/templates/pretixcontrol/base.html:373
 msgid "Read more"
