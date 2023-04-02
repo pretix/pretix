@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-28 08:31+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-04-03 01:00+0000\n"
+"Last-Translator: 전윤수 <jeonyunsoo123@gmail.com>\n"
+"Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
+">\n"
 "Language: ko\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -45,7 +47,7 @@ msgstr ""
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:407
 msgid "Redirection URIs"
-msgstr ""
+msgstr "리다이렉션URI"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:408
 msgid "Allowed URIs list, space separated"
@@ -62,7 +64,7 @@ msgstr ""
 
 #: pretix/api/models.py:111
 msgid "Enable webhook"
-msgstr ""
+msgstr "Webhook 활성화"
 
 #: pretix/api/models.py:112
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
