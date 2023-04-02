@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-28 08:31+0000\n"
-"PO-Revision-Date: 2023-04-02 10:00+0000\n"
-"Last-Translator: Hana Happl <hana.happl@gmx.at>\n"
+"PO-Revision-Date: 2023-04-03 01:00+0000\n"
+"Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
 "Language: cs\n"
@@ -15342,10 +15342,14 @@ msgid ""
 "to make sure they do not show up in your reports and statistics and block "
 "people from actually buying tickets."
 msgstr ""
+"Vaše akce obsahuje <strong>objednávky v testovacím režimu</strong>, přestože "
+"<strong>byl testovací režim vypnutý</strong>. Tyto objednávky byste měli "
+"odstranit, aby se nezobrazovaly v přehledech a statistikách a neblokovaly "
+"lidem skutečný nákup vstupenek."
 
 #: pretix/control/templates/pretixcontrol/base.html:397
 msgid "Show all test mode orders"
-msgstr ""
+msgstr "Zobrazit všechny objednávky v testovacím režimu"
 
 #: pretix/control/templates/pretixcontrol/base.html:405
 msgid ""
@@ -15374,6 +15378,10 @@ msgid ""
 "migrate to PostgreSQL. Please see the pretix administrator documentation for "
 "a migration guide, and the pretix 4.16 release notes for more information."
 msgstr ""
+"Jako databázový backend pro pretix používáte MySQL nebo MariaDB. Od verze "
+"pretix 5.0 již nebudou tyto databáze podporovány a budete muset přejít na "
+"PostgreSQL. Průvodce migrací naleznete v dokumentaci správce systému pretix "
+"a další informace v poznámkách k vydání verze 4.16 systému pretix."
 
 #: pretix/control/templates/pretixcontrol/base.html:439
 msgid ""
@@ -15640,7 +15648,7 @@ msgstr "Odmítnuto"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:151
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "Kopírování do schránky"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:7
 #: pretix/control/templates/pretixcontrol/checkin/index.html:11
@@ -15673,7 +15681,7 @@ msgstr "Nebyl nalezen žádný záznam o účastnících."
 #: pretix/control/templates/pretixcontrol/subevents/index.html:89
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:140
 msgid "select all rows for batch-operation"
-msgstr ""
+msgstr "vybrat všechny řádky pro dávkovou operaci"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:109
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:29
@@ -15685,7 +15693,7 @@ msgstr "Čas"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:117
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:166
 msgid "Select all results on other pages as well"
-msgstr ""
+msgstr "Vybrat všechny výsledky i na dalších stránkách"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:137
 msgid "unpaid"
@@ -15693,46 +15701,47 @@ msgstr "nezaplaceno"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:176
 msgid "Checked in but left"
-msgstr ""
+msgstr "Přihlášen, ale odešel"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:181
 msgid "Checked in automatically"
-msgstr ""
+msgstr "Automaticky odbavený"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:192
 #, python-format
 msgid "Exit: %(date)s"
-msgstr ""
+msgstr "Odchod: %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:206
 msgid "Check-In selected attendees"
-msgstr ""
+msgstr "Check-In vybraných účastníků"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:210
 msgid "Check-Out selected attendees"
-msgstr ""
+msgstr "Check-Out vybraných účastníků"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:216
 msgid "Delete all check-ins of selected attendees"
-msgstr ""
+msgstr "Odstranit všechny check-iny vybraných účastníků"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
 msgid "Delete check-in list"
-msgstr ""
+msgstr "Odstranit seznam odbavení"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:9
 #, python-format
 msgid ""
 "Are you sure you want to delete the check-in list <strong>%(name)s</strong>?"
 msgstr ""
+"Jste si jisti, že chcete odstranit seznam odbavení <strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:11
 #, python-format
 msgid ""
 "This will delete the information of <strong>%(num)s</strong> check-ins as "
 "well."
-msgstr ""
+msgstr "Tím se odstraní i informace o <strong>%(num)s</strong> check-inech."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:17
@@ -15874,7 +15883,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:65
 msgid "Custom check-in rule"
-msgstr ""
+msgstr "Vlastní pravidlo pro check-in"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:72
 #: pretix/control/templates/pretixcontrol/event/mail.html:33
@@ -15906,10 +15915,13 @@ msgid ""
 "or variations are not contained in any of your rule parts so people with "
 "these tickets will not get in:"
 msgstr ""
+"Vaše pravidlo vždy filtruje podle produktu nebo variant, ale následující "
+"produkty nebo varianty nejsou součástí žádného z vašich pravidel, takže lidé "
+"s těmito vstupenkami nebudou vpuštěni:"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:102
 msgid "Please double-check if this was intentional."
-msgstr ""
+msgstr "Zkontrolujte prosím, jestli to bylo záměrné."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:7
 msgid ""
@@ -15948,29 +15960,33 @@ msgid ""
 "are connected on the organizer level, you do not have to create a new device "
 "for every event but can reuse them over and over again."
 msgstr ""
+"Pokud máte oprávnění na úrovni organizátora, můžete ke svému účtu připojit "
+"nová zařízení a používat je k ověřování vstupenek. Protože jsou zařízení "
+"připojena na úrovni organizátora, nemusíte pro každou akci vytvářet nové "
+"zařízení, ale můžete je používat znovu a znovu."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:40
 msgid "Your search did not match any check-in lists."
-msgstr ""
+msgstr "Vaše vyhledávání neodpovídá žádnému seznamu check-inů."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:42
 msgid "You haven't created any check-in lists yet."
-msgstr ""
+msgstr "Zatím jste nevytvořili žádné seznamy pro check-in."
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:50
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:61
 msgid "Create a new check-in list"
-msgstr ""
+msgstr "Vytvořit nový seznam pro check-in"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:54
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:65
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:7
 msgid "Connected devices"
-msgstr ""
+msgstr "Připojené zařízení"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:77
 msgid "Automated check-in"
-msgstr ""
+msgstr "Automatizovaný check-in"
 
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:133
 #: pretix/control/templates/pretixcontrol/items/categories.html:52
@@ -16006,19 +16022,19 @@ msgstr "Zobrazit všechny nadcházející události"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:44
 msgid "Your most recent events"
-msgstr ""
+msgstr "Vaše poslední akce"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:60
 msgid "View all recent events"
-msgstr ""
+msgstr "Zobrazit všechny nedávné akce"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:65
 msgid "Your event series"
-msgstr ""
+msgstr "Vaše série akcí"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:81
 msgid "View all event series"
-msgstr ""
+msgstr "Zobrazit všechny série akcí"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:86
 msgid "Other features"
@@ -16165,13 +16181,15 @@ msgstr "Odesílání e-mailu"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:21
 msgid "Use system default"
-msgstr ""
+msgstr "Použít výchozí nastavení systému"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:29
 msgid ""
 "E-mails will be sent through the system's default server. They will show the "
 "following sender information:"
 msgstr ""
+"E-maily budou odesílány prostřednictvím výchozího serveru systému. Budou "
+"zobrazovat následující informace o odesílateli:"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:35
 msgctxt "mail_header"
@@ -16186,7 +16204,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/email_setup.html:56
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:18
 msgid "Use system email server with a custom sender address"
-msgstr ""
+msgstr "Použít systémový e-mailový server s vlastní adresou odesílatele"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:64
 msgid ""
@@ -16195,17 +16213,23 @@ msgid ""
 "directly from you, but it also might require some extra steps to ensure good "
 "deliverability."
 msgstr ""
+"E-maily budou odesílány přes výchozí server systému, ale s vaší vlastní "
+"adresou odesílatele. Díky tomu budou vaše e-maily vypadat osobnější a "
+"pocházejí přímo od vás, ale může to také vyžadovat některé další kroky k "
+"zajištění dobré doručitelnosti."
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:84
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:18
 msgid "Use a custom SMTP server"
-msgstr ""
+msgstr "Použít vlastní server SMTP"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:92
 msgid ""
 "For full customization, you can configure your own SMTP server that will be "
 "used for email sending."
 msgstr ""
+"Pro úplné přizpůsobení můžete nakonfigurovat vlastní server SMTP, který se "
+"bude používat pro odesílání e-mailů."
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:110
 msgid "Reset to organizer settings"
@@ -16213,25 +16237,27 @@ msgstr "Obnovení nastavení organizátora"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:29
 msgid "This is the SPF record we found on your domain:"
-msgstr ""
+msgstr "Toto je záznam SPF, který jsme našli na vaší doméně:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:33
 msgid "To fix this, include the following part before the last word:"
-msgstr ""
+msgstr "Chcete-li to napravit, vložte před poslední slovo následující část:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:38
 msgid "Your new SPF record could look like this:"
-msgstr ""
+msgstr "Váš nový záznam SPF může vypadat takto:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:43
 msgid ""
 "Please keep in mind that updates to DNS might require multiple hours to take "
 "effect."
 msgstr ""
+"Uvědomte si, že aktualizace DNS se mohou projevit až po několika hodinách."
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:48
 msgid "We found an SPF record on your domain that includes this system. Great!"
 msgstr ""
+"Našli jsme záznam SPF na vaší doméně, který obsahuje tento systém. Skvělé!"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:54
 msgid "Verification"
@@ -16243,6 +16269,9 @@ msgid ""
 "We've sent an email to %(recp)s with a confirmation code to verify that this "
 "email address is owned by you. Please enter the verification code below:"
 msgstr ""
+"Na adresu %(recp)s jsme odeslali e-mail s potvrzovacím kódem, abychom "
+"ověřili, že tato e-mailová adresa patří vám. Zadejte prosím níže uvedený "
+"ověřovací kód:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:63
 msgid "Verification code"
@@ -16253,14 +16282,16 @@ msgid ""
 "A test connection to your SMTP server was successful. You can now save your "
 "new settings to put them in use."
 msgstr ""
+"Testovací připojení k serveru SMTP proběhlo úspěšně. Nyní můžete nová "
+"nastavení uložit a začít je používat."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:5
 msgid "Cancellation settings"
-msgstr ""
+msgstr "Nastavení pro zrušení"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:11
 msgid "Unpaid or free orders"
-msgstr ""
+msgstr "Nezaplacené nebo bezplatné objednávky"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:37
 msgid ""
@@ -16269,15 +16300,18 @@ msgid ""
 "take manual action. However, you have currently turned off notifications for "
 "this event."
 msgstr ""
+"Pokud uživatel požádá o zrušení zaplacené objednávky a peníze nelze vrátit "
+"automaticky, např. kvůli zvolenému způsobu platby, je třeba provést akci "
+"ručně. V současné době však máte pro tuto akci vypnutá oznámení."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:43
 #: pretix/control/templates/pretixcontrol/user/settings.html:29
 msgid "Change notification settings"
-msgstr ""
+msgstr "Změnit nastavení oznámení"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:49
 msgid "Order changes"
-msgstr ""
+msgstr "Změny objednávek"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:52
 msgid ""
@@ -16285,18 +16319,25 @@ msgid ""
 "the many different options pretix provides. Therefore, this feature "
 "currently has the following limitations:"
 msgstr ""
+"Umožnit zákazníkům měnit vlastní objednávky je složitý proces vzhledem k "
+"mnoha různým možnostem, které společnost pretix nabízí. Proto má tato funkce "
+"v současné době následující omezení:"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:58
 msgid ""
 "It is possible to switch to a different variation of the same product, but "
 "not to an entirely different product (except for add-on products)."
 msgstr ""
+"Je možné přejít na jinou variantu stejného produktu, ale ne na zcela jiný "
+"produkt (s výjimkou doplňkových produktů)."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:59
 msgid ""
 "Changing the seat or the event date in an event series will become available "
 "in the future, but is not possible now."
 msgstr ""
+"Změna místa nebo termínu akce v sérii akcí bude k dispozici v budoucnosti, "
+"ale nyní to není možné."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:60
 msgid ""
@@ -16304,24 +16345,31 @@ msgid ""
 "as payment, service, or shipping fees, even though an additional payment "
 "might be required."
 msgstr ""
+"Pokud změna vede ke změně ceny, nedojde ke změně poplatků, jako jsou "
+"poplatky za platby, služby nebo dopravu, i když může být vyžadována "
+"dodatečná platba."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:61
 msgid ""
 "If an add-on product is newly added, the system currently does not validate "
 "if there are required questions or fields that need to be filled out."
 msgstr ""
+"Pokud je doplňkový produkt nově přidán, systém v současné době neověřuje, "
+"jestli je třeba vyplnit povinné otázky nebo pole."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:62
 msgid ""
 "Customers currently cannot switch to a product variation or add an add-on "
 "product that requires them to use a voucher or membership."
 msgstr ""
+"Zákazníci v současné době nemohou přejít na variantu produktu nebo přidat "
+"doplňkový produkt, který vyžaduje použití poukázky nebo členství."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:63
 msgid ""
 "Additional constraints and validation steps added by plugins are not "
 "enforced."
-msgstr ""
+msgstr "Další omezení a validační kroky přidané plug-inem nejsou vyžadovány."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:74
 #: pretix/control/templates/pretixcontrol/event/cancel.html:73
@@ -16330,6 +16378,8 @@ msgid ""
 "for self-service cancellations, the system will try to refund the money "
 "automatically."
 msgstr ""
+"Pokud změna vede ke snížení ceny a pro samoobslužné zrušení je povoleno "
+"automatické vracení peněz, systém se pokusí peníze vrátit automaticky."
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:78
 #: pretix/control/templates/pretixcontrol/event/cancel.html:77
@@ -16337,12 +16387,15 @@ msgid ""
 "Refunds can be issued as a gift card if the respective option is set, but "
 "there is no customer choice between gift card and direct refund."
 msgstr ""
+"Náhrady lze vystavit jako dárkovou kartu, pokud je nastavena příslušná "
+"možnost, ale zákazník nemá možnost volby mezi dárkovou kartou a přímou "
+"náhradou."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:5
 #: pretix/control/templates/pretixcontrol/event/live.html:131
 #: pretix/control/templates/pretixcontrol/event/settings.html:433
 msgid "Cancel or delete event"
-msgstr ""
+msgstr "Zrušit nebo smazat akci"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:9
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:25
@@ -16356,13 +16409,15 @@ msgid ""
 "You can take your event offline. Nobody except your team will be able to see "
 "or access it any more."
 msgstr ""
+"Můžete svou akci přenést do režimu offline. Nikdo kromě vašeho týmu ji již "
+"nebude moci vidět ani k ní mít přístup."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:34
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:47
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:5
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:7
 msgid "Cancel event"
-msgstr ""
+msgstr "Zrušit akci"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:38
 msgid ""
@@ -16377,7 +16432,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/delete.html:56
 #: pretix/control/templates/pretixcontrol/event/delete.html:70
 msgid "Delete personal data"
-msgstr ""
+msgstr "Smazat osobní údaje"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:59
 msgid ""
@@ -16385,6 +16440,9 @@ msgid ""
 "event and only retain the financial information such as the number and type "
 "of tickets sold."
 msgstr ""
+"Z akce můžete odstranit osobní údaje, jako jsou jména a e-mailové adresy, a "
+"ponechat si pouze finanční informace, například počet a typ prodaných "
+"vstupenek."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:76
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:89
@@ -16397,18 +16455,23 @@ msgid ""
 "You can delete your event completely only as long as it does not contain any "
 "undeletable data, such as orders not performed in test mode."
 msgstr ""
+"Vaši akci můžete zcela odstranit pouze tehdy, pokud neobsahuje žádná "
+"nesmazatelná data, například objednávky, které nebyly provedeny v testovacím "
+"režimu."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:9
 msgid ""
 "This operation will destroy your event including all configuration, "
 "products, quotas, questions, vouchers, lists, etc."
 msgstr ""
+"Tato operace zničí vaši akci včetně všech konfigurací, produktů, kvót, "
+"otázek, poukázek, seznamů atd."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:15
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:15
 msgid ""
 "This operation is irreversible and there is no way to bring your data back."
-msgstr ""
+msgstr "Tato operace je nevratná a data nelze vrátit zpět."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:22
 #, python-format
@@ -16416,10 +16479,12 @@ msgid ""
 "To confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
+"Chcete-li potvrdit, že to opravdu chcete, zadejte zde zkrácený název akce (\""
+"%(slug)s\"):"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:36
 msgid "Your event can not be deleted as it already contains orders."
-msgstr ""
+msgstr "Vaši akci nelze smazat, protože již obsahuje objednávky."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:39
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:39
@@ -16427,23 +16492,29 @@ msgid ""
 "pretix does not allow deleting orders once they have been placed in order to "
 "be audit-proof and trustable by financial authorities."
 msgstr ""
+"pretix neumožňuje smazat objednávky po jejich zadání, aby bylo možné provést "
+"audit a aby finanční úřady mohly příkazům důvěřovat."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:46
 msgid ""
 "You can instead take your shop offline. This will hide it from everyone "
 "except from the organizer teams you configured to have access to the event."
 msgstr ""
+"Místo toho můžete svůj obchod přepnout do režimu offline. Tím se skryje před "
+"všemi kromě týmů organizátorů, kterým jste nastavili přístup k události."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:66
 msgid ""
 "However, since your shop is offline, it is only visible to the organizing "
 "team according to the permissions you configured."
 msgstr ""
+"Protože je však váš obchod offline, je viditelný pouze pro tým organizátorů "
+"podle oprávnění, která jste nakonfigurovali."
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:14
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:42
 msgid "Geo coordinates"
-msgstr ""
+msgstr "Zeměpisné souřadnice"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:15
 #: pretix/control/templates/pretixcontrol/event/settings.html:129
@@ -16458,45 +16529,45 @@ msgstr "Volitelné"
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:22
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:57
 msgid "Geocoding data © OpenStreetMap"
-msgstr ""
+msgstr "Geokódovací data © OpenStreetMap"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:4
 msgid "Failed to retrieve geo coordinates"
-msgstr ""
+msgstr "Nepodařilo se načíst zeměpisné souřadnice"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:5
 msgid "Retrieving geo coordinates …"
-msgstr ""
+msgstr "Vyhledání zeměpisných souřadnic …"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:6
 msgid "Geo coordinates updated"
-msgstr ""
+msgstr "Geografické souřadnice byly aktualizovány"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:7
 msgid "Update map?"
-msgstr ""
+msgstr "Aktualizovat mapu?"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:5
 #, python-format
 msgid "by <em>%(a)s</em>"
-msgstr ""
+msgstr "od <em>%(a)s</em>"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:14
 msgid ""
 "This plugin needs to be enabled by a system administrator for your account."
-msgstr ""
+msgstr "Tento plugin musí být povolen správcem systému pro váš účet."
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:19
 msgid "This plugin cannot be enabled for the following reasons:"
-msgstr ""
+msgstr "Tento plugin nelze povolit z následujících důvodů:"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:29
 msgid "This plugin reports the following problems:"
-msgstr ""
+msgstr "Tento plugin hlásí následující problémy:"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_timeline.html:5
 msgid "Your timeline"
-msgstr ""
+msgstr "Váš časový plán"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:21
 msgid ""
@@ -16504,40 +16575,49 @@ msgid ""
 "duplicate payment attempts. You should review the cases and consider "
 "refunding the overpaid amount to the user."
 msgstr ""
+"Tato akce obsahuje <strong>přeplacené objednávky</strong>, například z "
+"důvodu duplicitních pokusů o platbu. Měli byste tyto případy zkontrolovat a "
+"uvažovat možnost vrácení přeplacené částky uživateli."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:26
 msgid "Show overpaid orders"
-msgstr ""
+msgstr "Zobrazit přeplacené objednávky"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:31
 msgid ""
 "This event contains <strong>pending refunds</strong> that you should take "
 "care of."
 msgstr ""
+"Tato akce obsahuje <strong>nevyřízené náhrady</strong>, o které byste se "
+"měli postarat."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:35
 msgid "Show pending refunds"
-msgstr ""
+msgstr "Zobrazit čekající náhrady"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:40
 msgid ""
 "This event contains <strong>requested cancellations</strong> that you should "
 "take care of."
 msgstr ""
+"Tato akce obsahuje <strong>vyžádaná zrušení</strong>, o které byste se měli "
+"postarat."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:44
 msgid "Show orders requesting cancellation"
-msgstr ""
+msgstr "Zobrazit objednávky s požadavkem na zrušení"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:49
 msgid ""
 "This event contains <strong>pending approvals</strong> that you should take "
 "care of."
 msgstr ""
+"Tato akce obsahuje <strong>nevyřízená schválení</strong>, o která byste se "
+"měli postarat."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:53
 msgid "Show orders pending approval"
-msgstr ""
+msgstr "Zobrazit objednávky čekající na schválení"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:58
 msgid ""
@@ -29914,6 +29994,8 @@ msgid ""
 "Please perform per-event refund exports as this organizer has events with "
 "multiple currencies."
 msgstr ""
+"Provádějte prosím exporty pro jednotlivé události, protože tento organizátor "
+"má akce s různými měnami."
 
 #~ msgid "You cannot select an item that belongs to a different event."
 #~ msgstr "Nelze vybrat položku, která patří k jiné akci."
