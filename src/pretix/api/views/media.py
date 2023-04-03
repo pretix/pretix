@@ -28,7 +28,7 @@ from django.db.models.functions import Coalesce
 from django.utils.timezone import now
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
-from rest_framework import viewsets, serializers
+from rest_framework import serializers, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import MethodNotAllowed
 from rest_framework.filters import OrderingFilter
