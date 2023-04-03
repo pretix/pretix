@@ -360,7 +360,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("List of Add-Ons"),
         "editor_sample": _("Add-on 1\nAdd-on 2"),
         "evaluate": lambda op, order, ev: "\n".join([
-            '{} - {}'.format(p.item, p.variation) if p.variation else str(p.item)
+            '{} - {}'.format(p.item.name, p.variation.value) if p.variation else str(p.item.name)
             for p in (
                 op.addons.all() if 'addons' in getattr(op, '_prefetched_objects_cache', {})
                 else op.addons.select_related('item', 'variation')
