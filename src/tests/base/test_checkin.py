@@ -100,6 +100,8 @@ def test_checkin_canceled_order(position, clist):
         perform_checkin(position, clist, {}, canceled_supported=True)
     assert excinfo.value.code == 'canceled'
     assert position.checkins.count() == 0
+    perform_checkin(position, clist, {}, canceled_supported=True, force=True)
+    assert position.checkins.count() == 1
 
 
 @pytest.mark.django_db
@@ -127,6 +129,8 @@ def test_checkin_blocked_position(position, clist):
         perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
     assert excinfo.value.code == 'blocked'
     assert position.checkins.count() == 0
+    perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT, force=True)
+    assert position.checkins.count() == 1
 
 
 @pytest.mark.django_db
@@ -139,9 +143,12 @@ def test_checkin_valid_from(event, position, clist):
         assert excinfo.value.code == 'invalid_time'
         assert excinfo.value.reason == 'This ticket is only valid after 2020-01-01 12:00.'
         assert position.checkins.count() == 0
+        # Force is allowed
+        perform_checkin(position, clist, {}, force=True)
+        assert position.checkins.count() == 1
 
         perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
-        assert position.checkins.count() == 1
+        assert position.checkins.count() == 2
 
 
 @pytest.mark.django_db
@@ -154,18 +161,25 @@ def test_checkin_valid_until(event, position, clist):
         assert excinfo.value.code == 'invalid_time'
         assert excinfo.value.reason == 'This ticket was only valid before 2020-01-01 09:00.'
         assert position.checkins.count() == 0
+        # Force is allowed
+        perform_checkin(position, clist, {}, force=True)
+        assert position.checkins.count() == 1
 
         perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
-        assert position.checkins.count() == 1
+        assert position.checkins.count() == 2
 
 
 @pytest.mark.django_db
 def test_checkin_invalid_product(position, clist):
     clist.all_products = False
+    clist.allow_multiple_entries = True
     clist.save()
     with pytest.raises(CheckInError) as excinfo:
         perform_checkin(position, clist, {})
     assert excinfo.value.code == 'product'
+
+    perform_checkin(position, clist, {}, force=True)
+
     clist.limit_products.add(position.item)
     perform_checkin(position, clist, {})
 
@@ -184,6 +198,8 @@ def test_checkin_invalid_subevent(position, clist, event):
     with pytest.raises(CheckInError) as excinfo:
         perform_checkin(position, clist, {})
     assert excinfo.value.code == 'product'
+
+    perform_checkin(position, clist, {}, force=True)
 
 
 @pytest.mark.django_db
@@ -228,6 +244,8 @@ def test_require_approval(position, clist):
     with pytest.raises(CheckInError) as excinfo:
         perform_checkin(position, clist, {}, ignore_unpaid=True)
     assert excinfo.value.code == 'unpaid'
+    perform_checkin(position, clist, {}, ignore_unpaid=True, force=True)
+    assert position.checkins.count() == 1
 
 
 @pytest.mark.django_db
