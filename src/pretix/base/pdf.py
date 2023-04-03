@@ -588,10 +588,11 @@ def variables_from_questions(sender, *args, **kwargs):
 
 
 def _get_attendee_name_part(key, op, order, ev):
+    name_parts = op.attendee_name_parts or (op.addon_to.attendee_name_parts if op.addon_to else {})
     if isinstance(key, tuple):
-        parts = [_get_attendee_name_part(c[0], op, order, ev) for c in key if not (c[0] == 'salutation' and op.attendee_name_parts.get(c[0], '') == "Mx")]
+        parts = [_get_attendee_name_part(c[0], op, order, ev) for c in key if not (c[0] == 'salutation' and name_parts.get(c[0], '') == "Mx")]
         return ' '.join(p for p in parts if p)
-    value = op.attendee_name_parts.get(key, '')
+    value = name_parts.get(key, '')
     if key == 'salutation':
         return pgettext('person_name_salutation', value)
     return value
@@ -622,7 +623,7 @@ def get_variables(event):
     v['attendee_name_for_salutation'] = {
         'label': _("Attendee name for salutation"),
         'editor_sample': _("Mr Doe"),
-        'evaluate': lambda op, order, ev: concatenation_for_salutation(op.attendee_name_parts or {})
+        'evaluate': lambda op, order, ev: concatenation_for_salutation(op.attendee_name_parts or (op.addon_to.attendee_name_parts if op.addon_to else {}))
     }
 
     for key, label, weight in scheme['fields']:
