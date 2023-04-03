@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {},
   "dependencies": {
-    "@babel/core": "^7.21.0",
+    "@babel/core": "^7.21.4",
     "@babel/preset-env": "^7.21.4",
     "@rollup/plugin-babel": "^6.0.3",
     "@rollup/plugin-node-resolve": "^15.0.1",
