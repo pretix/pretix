@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-03-28 08:31+0000\n"
-"PO-Revision-Date: 2023-04-03 01:00+0000\n"
+"PO-Revision-Date: 2023-04-03 11:39+0000\n"
 "Last-Translator: 전윤수 <jeonyunsoo123@gmail.com>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -43,7 +43,7 @@ msgstr ""
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:388
 msgid "Application name"
-msgstr ""
+msgstr "어플리케이션 이름"
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:407
 msgid "Redirection URIs"
@@ -51,16 +51,16 @@ msgstr "리다이렉션URI"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:408
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "허용된 URI 리스트,  스페이스로 구분"
 
 #: pretix/api/models.py:46 pretix/base/models/customers.py:392
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:106
 msgid "Client ID"
-msgstr ""
+msgstr "클라이언트 ID"
 
 #: pretix/api/models.py:50
 msgid "Client secret"
-msgstr ""
+msgstr "클라이언트 Secret"
 
 #: pretix/api/models.py:111
 msgid "Enable webhook"
@@ -69,17 +69,17 @@ msgstr "Webhook 활성화"
 #: pretix/api/models.py:112
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "대상 URL"
 
 #: pretix/api/models.py:113 pretix/base/models/devices.py:121
 #: pretix/base/models/organizer.py:259
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "모든 이벤트 (향후 생성될 이벤트들도 포함)"
 
 #: pretix/api/models.py:114 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:260
 msgid "Limit to events"
-msgstr ""
+msgstr "다음 이벤트로 제한하기"
 
 #: pretix/api/models.py:115 pretix/base/exporters/orderlist.py:272
 #: pretix/base/exporters/orderlist.py:840 pretix/base/models/orders.py:227
@@ -92,7 +92,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/checkinlists/exporters.py:482
 msgid "Comment"
-msgstr ""
+msgstr "코멘트"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1215
 msgid "The product \"{}\" is not assigned to a quota."
