@@ -455,6 +455,11 @@ DEFAULT_VARIABLES = OrderedDict((
             "TIME_FORMAT"
         ) if op.valid_until else ""
     }),
+    ("medium_identifier", {
+        "label": _("Reusable Medium ID"),
+        "editor_sample": _("ABC1234DEF4567"),
+        "evaluate": lambda op, order, ev: op.linked_media.all()[0].identifier if op.linked_media.all() else "",
+    }),
     ("seat", {
         "label": _("Seat: Full name"),
         "editor_sample": _("Ground floor, Row 3, Seat 4"),
@@ -760,6 +765,9 @@ class Renderer:
             content = op.secret
         else:
             content = self._get_text_content(op, order, o)
+
+        if len(content) == 0:
+            return
 
         level = 'H'
         if len(content) > 32:

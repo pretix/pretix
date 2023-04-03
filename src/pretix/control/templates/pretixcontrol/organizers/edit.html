@@ -201,6 +201,70 @@
                         {% bootstrap_field sform.cookie_consent_dialog_button_no layout="control" %}
                     </fieldset>
                     <fieldset>
+                        <legend>{% trans "Reusable media" %}</legend>
+                        {% bootstrap_field sform.reusable_media_active layout="control" %}
+                        <div data-display-dependency="#{{ sform.reusable_media_active.id_for_label }}">
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">{% trans "Barcode media" %}</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <p class="help-block">
+                                        {% blocktrans trimmed %}
+                                            A "barcode medium" can be any printed or digital representation of a barcode.
+                                            The medium will initially be created through the sale of a product that has a
+                                            media policy requiring such a medium as well as a ticket or badge layout that
+                                            includes the "Reusable Medium ID" as a QR code. Later, the same barcode may
+                                            be re-used during the sale of a different product.
+                                        {% endblocktrans %}
+                                        {% blocktrans trimmed %}
+                                            Barcode media can currently only be connected to tickets.
+                                        {% endblocktrans %}
+                                        {% blocktrans trimmed %}
+                                            This subsequent reuse of the barcode is currently only supported during POS sales.
+                                        {% endblocktrans %}
+                                    </p>
+                                    {% bootstrap_field sform.reusable_media_type_barcode layout="control" %}
+                                    <div data-display-dependency="#{{ sform.reusable_media_type_barcode.id_for_label }}">
+                                        {% bootstrap_field sform.reusable_media_type_barcode_identifier_length layout="control" %}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">{% trans "NFC UID-based" %}</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <p class="help-block">
+                                        {% blocktrans trimmed %}
+                                            This medium type can work with almost any type of NFC chip. With this
+                                            option, only the UID of the NFC chip is used for identification.
+                                        {% endblocktrans %}
+                                        {% blocktrans trimmed %}
+                                            NFC media can currently only be connected to gift cards.
+                                        {% endblocktrans %}
+                                    </p>
+                                    <p class="help-block">
+                                        <span class="fa fa-warning text-warning"></span>
+                                        {% blocktrans trimmed %}
+                                            This method does not provide a high level of protection against abuse since it
+                                            is possible for malicious users to clone someone's chip with the same UID.
+                                        {% endblocktrans %}
+                                    </p>
+                                    {% bootstrap_field sform.reusable_media_type_nfc_uid layout="control" %}
+                                    <div data-display-dependency="#{{ sform.reusable_media_type_nfc_uid.id_for_label }}">
+                                        {% bootstrap_field sform.reusable_media_type_nfc_uid_autocreate_giftcard layout="control" %}
+                                        <div data-display-dependency="#{{ sform.reusable_media_type_nfc_uid_autocreate_giftcard.id_for_label }}">
+                                            {% bootstrap_field sform.reusable_media_type_nfc_uid_autocreate_giftcard_currency layout="control" %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
                         <legend>{% trans "Invoices" %}</legend>
                         {% bootstrap_field sform.invoice_regenerate_allowed layout="control" %}
                     </fieldset>

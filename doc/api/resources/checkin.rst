@@ -13,6 +13,10 @@ failed scans.
 
     The endpoints listed on this page have been added.
 
+.. versionchanged:: 4.18
+
+    The ``source_type`` parameter has been added.
+
 .. _`rest-checkin-redeem`:
 
 Checking a ticket in
@@ -28,6 +32,7 @@ Checking a ticket in
    passed needs to be from a distinct event.
 
    :<json string secret: Scanned QR code corresponding to the ``secret`` attribute of a ticket.
+   :<json string source_type: Type of source the ``secret`` was obtained form. Defaults to ``"barcode"``.
    :<json array lists: List of check-in list IDs to search on. No two check-in lists may be from the same event.
    :<json string type: Send ``"exit"`` for an exit and ``"entry"`` (default) for an entry.
    :<json datetime datetime: Specifies the datetime of the check-in. If not supplied, the current time will be used.
@@ -72,6 +77,7 @@ Checking a ticket in
 
       {
         "secret": "M5BO19XmFwAjLd4nDYUAL9ISjhti0e9q",
+        "source_type": "barcode",
         "lists": [1],
         "force": false,
         "ignore_unpaid": false,
@@ -213,8 +219,8 @@ Checking a ticket in
    * ``revoked`` - Ticket code has been revoked.
    * ``error`` - Internal error.
 
-   In case of reason ``rules``, there might be an additional response field ``reason_explanation`` with a human-readable
-   description of the violated rules. However, that field can also be missing or be ``null``.
+   In case of reason ``rules`` and ``invalid_time``, there might be an additional response field ``reason_explanation``
+   with a human-readable description of the violated rules. However, that field can also be missing or be ``null``.
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :statuscode 201: no error

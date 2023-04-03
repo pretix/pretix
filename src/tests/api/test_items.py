@@ -296,6 +296,8 @@ TEST_ITEM_RES = {
     "grant_membership_duration_like_event": True,
     "grant_membership_duration_days": 0,
     "grant_membership_duration_months": 0,
+    "media_policy": None,
+    "media_type": None,
     "validity_mode": None,
     "validity_fixed_from": None,
     "validity_fixed_until": None,

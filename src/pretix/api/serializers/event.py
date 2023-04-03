@@ -797,6 +797,21 @@ class EventSettingsSerializer(SettingsSerializer):
         'logo_show_title',
         'og_image',
         'name_scheme',
+        'reusable_media_active',
+        'reusable_media_type_barcode',
+        'reusable_media_type_barcode_identifier_length',
+        'reusable_media_type_nfc_uid',
+        'reusable_media_type_nfc_uid_autocreate_giftcard',
+        'reusable_media_type_nfc_uid_autocreate_giftcard_currency',
+    ]
+    readonly_fields = [
+        # These are read-only since they are currently only settable on organizers, not events
+        'reusable_media_active',
+        'reusable_media_type_barcode',
+        'reusable_media_type_barcode_identifier_length',
+        'reusable_media_type_nfc_uid',
+        'reusable_media_type_nfc_uid_autocreate_giftcard',
+        'reusable_media_type_nfc_uid_autocreate_giftcard_currency',
     ]
 
     def __init__(self, *args, **kwargs):
@@ -863,6 +878,8 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         'invoice_address_from_tax_id',
         'invoice_address_from_vat_id',
         'name_scheme',
+        'reusable_media_type_barcode',
+        'reusable_media_type_nfc_uid',
         'system_question_order',
     ]
 

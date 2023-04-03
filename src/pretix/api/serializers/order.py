@@ -33,6 +33,7 @@ from django.utils.encoding import force_str
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy
 from django_countries.fields import Country
+from django_scopes import scopes_disabled
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
@@ -48,8 +49,8 @@ from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Checkin, Customer, Invoice, InvoiceAddress, InvoiceLine, Item,
-    ItemVariation, Order, OrderPosition, Question, QuestionAnswer, Seat,
-    SubEvent, TaxRule, Voucher,
+    ItemVariation, Order, OrderPosition, Question, QuestionAnswer,
+    ReusableMedium, Seat, SubEvent, TaxRule, Voucher,
 )
 from pretix.base.models.orders import (
     BlockedTicketSecret, CartPosition, OrderFee, OrderPayment, OrderRefund,
@@ -355,6 +356,9 @@ class PositionDownloadsField(serializers.Field):
 class PdfDataSerializer(serializers.Field):
     def to_representation(self, instance: OrderPosition):
         res = {}
+
+        if 'event' not in self.context:
+            return {}
 
         ev = instance.subevent or instance.order.event
         with language(instance.order.locale, instance.order.event.settings.region):
@@ -784,13 +788,15 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                                            required=False, allow_null=True)
     country = CompatibleCountryField(source='*')
     requested_valid_from = serializers.DateTimeField(required=False, allow_null=True)
+    use_reusable_medium = serializers.PrimaryKeyRelatedField(queryset=ReusableMedium.objects.none(),
+                                                             required=False, allow_null=True)
 
     class Meta:
         model = OrderPosition
         fields = ('positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts', 'attendee_email',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'is_bundled',
                   'secret', 'addon_to', 'subevent', 'answers', 'seat', 'voucher', 'valid_from', 'valid_until',
-                  'requested_valid_from')
+                  'requested_valid_from', 'use_reusable_medium')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -799,6 +805,9 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 v.required = False
                 v.allow_blank = True
                 v.allow_null = True
+        with scopes_disabled():
+            if 'use_reusable_medium' in self.fields:
+                self.fields['use_reusable_medium'].queryset = ReusableMedium.objects.all()
 
     def validate_secret(self, secret):
         if secret and OrderPosition.all.filter(order__event=self.context['event'], secret=secret).exists():
@@ -806,6 +815,13 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 'You cannot assign a position secret that already exists.'
             )
         return secret
+
+    def validate_use_reusable_medium(self, m):
+        if m.organizer_id != self.context['event'].organizer_id:
+            raise ValidationError(
+                'The specified medium does not belong to this organizer.'
+            )
+        return m
 
     def validate_item(self, item):
         if item.event != self.context['event']:
@@ -1264,7 +1280,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     pos_data['attendee_name_parts'] = {
                         '_legacy': attendee_name
                     }
-                pos = OrderPosition(**{k: v for k, v in pos_data.items() if k != 'answers' and k != '_quotas'})
+                pos = OrderPosition(**{k: v for k, v in pos_data.items() if k != 'answers' and k != '_quotas' and k != 'use_reusable_medium'})
                 if simulate:
                     pos.order = order._wrapped
                 else:
@@ -1332,6 +1348,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             # Save instances
             for pos_data in positions_data:
                 answers_data = pos_data.pop('answers', [])
+                use_reusable_medium = pos_data.pop('use_reusable_medium', None)
                 pos = pos_data['__instance']
                 pos._calculate_tax()
 
@@ -1369,6 +1386,17 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         else:
                             answ = pos.answers.create(**answ_data)
                             answ.options.add(*options)
+
+                    if use_reusable_medium:
+                        use_reusable_medium.linked_orderposition = pos
+                        use_reusable_medium.save(update_fields=['linked_orderposition'])
+                        use_reusable_medium.log_action(
+                            'pretix.reusable_medium.linked_orderposition.changed',
+                            data={
+                                'by_order': order.code,
+                                'linked_orderposition': pos.pk,
+                            }
+                        )
 
             if not simulate:
                 for cp in delete_cps:

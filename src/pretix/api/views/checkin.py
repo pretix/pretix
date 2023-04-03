@@ -59,7 +59,7 @@ from pretix.api.views.order import OrderPositionFilter
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Checkin, CheckinList, Device, Event, Order, OrderPosition,
-    Question, RevokedTicketSecret, TeamAPIToken,
+    Question, ReusableMedium, RevokedTicketSecret, TeamAPIToken,
 )
 from pretix.base.services.checkin import (
     CheckInError, RequiredQuestionsError, SQLLogic, perform_checkin,
@@ -396,7 +396,7 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 
 def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force, checkin_type, ignore_unpaid, nonce,
                     untrusted_input, user, auth, expand, pdf_data, request, questions_supported, canceled_supported,
-                    legacy_url_support=False):
+                    source_type='barcode', legacy_url_support=False):
     if not checkinlists:
         raise ValidationError('No check-in list passed.')
 
@@ -422,6 +422,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
 
     common_checkin_args = dict(
         raw_barcode=raw_barcode,
+        raw_source_type=source_type,
         type=checkin_type,
         list=checkinlists[0],
         datetime=datetime,
@@ -433,7 +434,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     raw_barcode_for_checkin = None
     from_revoked_secret = False
 
-    # 1. Gather a list of positions that could be the one we looking fore, either from their ID, secret or
+    # 1. Gather a list of positions that could be the one we looking for, either from their ID, secret or
     #    parent secret
     queryset = _checkin_list_position_queryset(checkinlists, pdf_data=pdf_data, ignore_status=True, ignore_products=True).order_by(
         F('addon_to').asc(nulls_first=True)
@@ -457,98 +458,111 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
 
     # 2. Handle the "nothing found" case: Either it's really a bogus secret that we don't know (-> error), or it
     #    might be a revoked one that we actually know (-> error, but with better error message and logging and
-    #    with respecting the force option).
+    #    with respecting the force option), or it's a reusable medium (-> proceed with that)
     if not op_candidates:
-        revoked_matches = list(RevokedTicketSecret.objects.filter(event_id__in=list_by_event.keys(), secret=raw_barcode))
-        if len(revoked_matches) == 0:
-            checkinlists[0].event.log_action('pretix.event.checkin.unknown', data={
-                'datetime': datetime,
-                'type': checkin_type,
-                'list': checkinlists[0].pk,
-                'barcode': raw_barcode,
-                'searched_lists': [cl.pk for cl in checkinlists]
-            }, user=user, auth=auth)
+        try:
+            media = ReusableMedium.objects.select_related('linked_orderposition').active().get(
+                organizer_id=checkinlists[0].event.organizer_id,
+                type=source_type,
+                identifier=raw_barcode,
+                linked_orderposition__isnull=False,
+            )
+            raw_barcode_for_checkin = raw_barcode
+        except ReusableMedium.DoesNotExist:
+            revoked_matches = list(
+                RevokedTicketSecret.objects.filter(event_id__in=list_by_event.keys(), secret=raw_barcode))
+            if len(revoked_matches) == 0:
+                checkinlists[0].event.log_action('pretix.event.checkin.unknown', data={
+                    'datetime': datetime,
+                    'type': checkin_type,
+                    'list': checkinlists[0].pk,
+                    'barcode': raw_barcode,
+                    'searched_lists': [cl.pk for cl in checkinlists]
+                }, user=user, auth=auth)
 
-            for cl in checkinlists:
-                for k, s in cl.event.ticket_secret_generators.items():
+                for cl in checkinlists:
+                    for k, s in cl.event.ticket_secret_generators.items():
+                        try:
+                            parsed = s.parse_secret(raw_barcode)
+                            common_checkin_args.update({
+                                'raw_item': parsed.item,
+                                'raw_variation': parsed.variation,
+                                'raw_subevent': parsed.subevent,
+                            })
+                        except:
+                            pass
+
+                Checkin.objects.create(
+                    position=None,
+                    successful=False,
+                    error_reason=Checkin.REASON_INVALID,
+                    **common_checkin_args,
+                )
+
+                if force and legacy_url_support and isinstance(auth, Device):
+                    # There was a bug in libpretixsync: If you scanned a ticket in offline mode that was
+                    # valid at the time but no longer exists at time of upload, the device would retry to
+                    # upload the same scan over and over again. Since we can't update all devices quickly,
+                    # here's a dirty workaround to make it stop.
                     try:
-                        parsed = s.parse_secret(raw_barcode)
-                        common_checkin_args.update({
-                            'raw_item': parsed.item,
-                            'raw_variation': parsed.variation,
-                            'raw_subevent': parsed.subevent,
-                        })
-                    except:
+                        brand = auth.software_brand
+                        ver = parse(auth.software_version)
+                        legacy_mode = (
+                            (brand == 'pretixSCANPROXY' and ver < parse('0.0.3')) or
+                            (brand == 'pretixSCAN Android' and ver < parse('1.11.2')) or
+                            (brand == 'pretixSCAN' and ver < parse('1.11.2'))
+                        )
+                        if legacy_mode:
+                            return Response({
+                                'status': 'error',
+                                'reason': Checkin.REASON_ALREADY_REDEEMED,
+                                'reason_explanation': None,
+                                'require_attention': False,
+                                '__warning': 'Compatibility hack active due to detected old pretixSCAN version',
+                            }, status=400)
+                    except:  # we don't care e.g. about invalid version numbers
                         pass
 
-            Checkin.objects.create(
-                position=None,
-                successful=False,
-                error_reason=Checkin.REASON_INVALID,
-                **common_checkin_args,
-            )
-
-            if force and legacy_url_support and isinstance(auth, Device):
-                # There was a bug in libpretixsync: If you scanned a ticket in offline mode that was
-                # valid at the time but no longer exists at time of upload, the device would retry to
-                # upload the same scan over and over again. Since we can't update all devices quickly,
-                # here's a dirty workaround to make it stop.
-                try:
-                    brand = auth.software_brand
-                    ver = parse(auth.software_version)
-                    legacy_mode = (
-                        (brand == 'pretixSCANPROXY' and ver < parse('0.0.3')) or
-                        (brand == 'pretixSCAN Android' and ver < parse('1.11.2')) or
-                        (brand == 'pretixSCAN' and ver < parse('1.11.2'))
-                    )
-                    if legacy_mode:
-                        return Response({
-                            'status': 'error',
-                            'reason': Checkin.REASON_ALREADY_REDEEMED,
-                            'reason_explanation': None,
-                            'require_attention': False,
-                            '__warning': 'Compatibility hack active due to detected old pretixSCAN version',
-                        }, status=400)
-                except:  # we don't care e.g. about invalid version numbers
-                    pass
-
-            return Response({
-                'detail': 'Not found.',  # for backwards compatibility
-                'status': 'error',
-                'reason': Checkin.REASON_INVALID,
-                'reason_explanation': None,
-                'require_attention': False,
-                'list': MiniCheckinListSerializer(checkinlists[0]).data,
-            }, status=404)
-        elif revoked_matches and force:
-            op_candidates = [revoked_matches[0].position]
-            if list_by_event[revoked_matches[0].event_id].addon_match:
-                op_candidates += list(revoked_matches[0].position.addons.all())
-            raw_barcode_for_checkin = raw_barcode
-            from_revoked_secret = True
+                return Response({
+                    'detail': 'Not found.',  # for backwards compatibility
+                    'status': 'error',
+                    'reason': Checkin.REASON_INVALID,
+                    'reason_explanation': None,
+                    'require_attention': False,
+                    'list': MiniCheckinListSerializer(checkinlists[0]).data,
+                }, status=404)
+            elif revoked_matches and force:
+                op_candidates = [revoked_matches[0].position]
+                if list_by_event[revoked_matches[0].event_id].addon_match:
+                    op_candidates += list(revoked_matches[0].position.addons.all())
+                raw_barcode_for_checkin = raw_barcode_for_checkin or raw_barcode
+                from_revoked_secret = True
+            else:
+                op = revoked_matches[0].position
+                op.order.log_action('pretix.event.checkin.revoked', data={
+                    'datetime': datetime,
+                    'type': checkin_type,
+                    'list': list_by_event[revoked_matches[0].event_id].pk,
+                    'barcode': raw_barcode
+                }, user=user, auth=auth)
+                common_checkin_args['list'] = list_by_event[revoked_matches[0].event_id]
+                Checkin.objects.create(
+                    position=op,
+                    successful=False,
+                    error_reason=Checkin.REASON_REVOKED,
+                    **common_checkin_args
+                )
+                return Response({
+                    'status': 'error',
+                    'reason': Checkin.REASON_REVOKED,
+                    'reason_explanation': None,
+                    'require_attention': False,
+                    'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, revoked_matches[
+                        0].event)).data,
+                    'list': MiniCheckinListSerializer(list_by_event[revoked_matches[0].event_id]).data,
+                }, status=400)
         else:
-            op = revoked_matches[0].position
-            op.order.log_action('pretix.event.checkin.revoked', data={
-                'datetime': datetime,
-                'type': checkin_type,
-                'list': list_by_event[revoked_matches[0].event_id].pk,
-                'barcode': raw_barcode
-            }, user=user, auth=auth)
-            common_checkin_args['list'] = list_by_event[revoked_matches[0].event_id]
-            Checkin.objects.create(
-                position=op,
-                successful=False,
-                error_reason=Checkin.REASON_REVOKED,
-                **common_checkin_args
-            )
-            return Response({
-                'status': 'error',
-                'reason': Checkin.REASON_REVOKED,
-                'reason_explanation': None,
-                'require_attention': False,
-                'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, revoked_matches[0].event)).data,
-                'list': MiniCheckinListSerializer(list_by_event[revoked_matches[0].event_id]).data,
-            }, status=400)
+            op_candidates = [media.linked_orderposition] + list(media.linked_orderposition.addons.all())
 
     # 3. Handle the "multiple options found" case: Except for the unlikely case of a secret being also a valid primary
     #    key on the same list, we're probably dealing with the ``addon_match`` case here and need to figure out
@@ -634,6 +648,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 auth=auth,
                 type=checkin_type,
                 raw_barcode=raw_barcode_for_checkin,
+                raw_source_type=source_type,
                 from_revoked_secret=from_revoked_secret,
             )
         except RequiredQuestionsError as e:
@@ -812,6 +827,7 @@ class CheckinRPCRedeemView(views.APIView):
         return _redeem_process(
             checkinlists=s.validated_data['lists'],
             raw_barcode=s.validated_data['secret'],
+            source_type=s.validated_data['source_type'],
             answers_data=s.validated_data.get('answers'),
             datetime=s.validated_data.get('datetime') or now(),
             force=s.validated_data['force'],

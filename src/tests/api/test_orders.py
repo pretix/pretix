@@ -1802,7 +1802,7 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
     assert not resp.data['positions'][0].get('pdf_data')
 
     # order list
-    with django_assert_max_num_queries(29):
+    with django_assert_max_num_queries(30):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))
@@ -1815,7 +1815,7 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
     assert not resp.data['results'][0]['positions'][0].get('pdf_data')
 
     # position list
-    with django_assert_max_num_queries(32):
+    with django_assert_max_num_queries(33):
         resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/?pdf_data=true'.format(
             organizer.slug, event.slug
         ))

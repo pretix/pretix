@@ -64,6 +64,7 @@ from pretix.base.models.fields import MultiStringField
 from pretix.base.models.tax import TaxedPrice
 
 from ...helpers.images import ImageSizeValidator
+from ..media import MEDIA_TYPES
 from .event import Event, SubEvent
 
 
@@ -368,6 +369,16 @@ class Item(LoggedModel):
         (VALIDITY_MODE_DYNAMIC, _('Dynamic validity')),
     )
 
+    MEDIA_POLICY_REUSE = 'reuse'
+    MEDIA_POLICY_NEW = 'new'
+    MEDIA_POLICY_REUSE_OR_NEW = 'reuse_or_new'
+    MEDIA_POLICIES = (
+        (None, _("Don't use re-usable media, use regular one-off tickets")),
+        (MEDIA_POLICY_REUSE, _('Require an existing medium to be re-used')),
+        (MEDIA_POLICY_NEW, _('Require a previously unknown medium to be newly added')),
+        (MEDIA_POLICY_REUSE_OR_NEW, _('Require either an existing or a new medium to be used')),
+    )
+
     objects = ItemQuerySetManager()
 
     event = models.ForeignKey(
@@ -630,6 +641,29 @@ class Item(LoggedModel):
         help_text=_('The selected start date may only be this many days in the future.')
     )
 
+    media_policy = models.CharField(
+        choices=MEDIA_POLICIES,
+        null=True, blank=True, max_length=16,
+        verbose_name=_('Reusable media policy'),
+        help_text=_(
+            'If this product should be stored on a re-usable physical medium, you can attach a physical media policy. '
+            'This is not required for regular tickets, which just use a one-time barcode, but only for products like '
+            'renewable season tickets or re-chargable gift card wristbands. '
+            'This is an advanced feature that also requires specific configuration of ticketing and printing settings.'
+        )
+    )
+    media_type = models.CharField(
+        max_length=100,
+        null=True, blank=True,
+        choices=[(None, _("Don't use re-usable media, use regular one-off tickets"))] + [(k, v) for k, v in MEDIA_TYPES.items()],
+        verbose_name=_('Reusable media type'),
+        help_text=_(
+            'Select the type of physical medium that should be used for this product. Note that not all media types '
+            'support all types of products, and not all media types are supported across all sales channels or '
+            'check-in processes.'
+        )
+    )
+
     # !!! Attention: If you add new fields here, also add them to the copying code in
     # pretix/control/forms/item.py if applicable.
 
@@ -800,6 +834,24 @@ class Item(LoggedModel):
     @cached_property
     def has_variations(self):
         return self.variations.exists()
+
+    @staticmethod
+    def clean_media_settings(event, media_policy, media_type, issue_giftcard):
+        if media_policy:
+            if not media_type:
+                raise ValidationError(_('If you select a reusable media policy, you also need to select a reusable '
+                                        'media type.'))
+            mt = MEDIA_TYPES[media_type]
+            if not mt.is_active(event.organizer):
+                raise ValidationError(_('The selected media type is not enabled in your organizer settings.'))
+            if not mt.supports_orderposition and not issue_giftcard:
+                raise ValidationError(_('The selected media type does not support usage for tickets currently.'))
+            if not mt.supports_giftcard and issue_giftcard:
+                raise ValidationError(_('The selected media type does not support usage for gift cards currently.'))
+            if issue_giftcard:
+                raise ValidationError(_('You currently cannot create gift cards with a reusable media policy. Instead, '
+                                        'gift cards for some reusable media types can be created or re-charged directly '
+                                        'at the POS.'))
 
     @staticmethod
     def clean_per_order(min_per_order, max_per_order):

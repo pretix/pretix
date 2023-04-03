@@ -52,6 +52,7 @@ from django_scopes import scopes_disabled
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.i18n import language
+from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
     CartPosition, Event, InvoiceAddress, Item, ItemVariation, Seat,
     SeatCategoryMapping, Voucher,
@@ -199,6 +200,8 @@ error_messages = {
     'seat_multiple': gettext_lazy('You can not select the same seat multiple times.'),
     'gift_card': gettext_lazy("You entered a gift card instead of a voucher. Gift cards can be entered later on when you're asked for your payment details."),
     'country_blocked': gettext_lazy('One of the selected products is not available in the selected country.'),
+    'media_usage_not_implemented': gettext_lazy('The configuration of this product requires mapping to a physical '
+                                                'medium, which is currently not available online.'),
 }
 
 
@@ -393,6 +396,13 @@ class CartManager:
 
             if not op.item.is_available() or (op.variation and not op.variation.is_available()):
                 raise CartError(error_messages['unavailable'])
+
+            if op.item.media_policy in (Item.MEDIA_POLICY_NEW, Item.MEDIA_POLICY_REUSE_OR_NEW):
+                mt = MEDIA_TYPES[op.item.media_type]
+                if not mt.medium_created_by_server:
+                    raise CartError(error_messages['media_usage_not_implemented'])
+            elif op.item.media_policy == Item.MEDIA_POLICY_REUSE:
+                raise CartError(error_messages['media_usage_not_implemented'])
 
             if self._sales_channel not in op.item.sales_channels or (op.variation and self._sales_channel not in op.variation.sales_channels):
                 raise CartError(error_messages['unavailable'])

@@ -48,8 +48,8 @@ from django.utils.translation import gettext as _, pgettext
 
 from pretix.base.models import (
     EventMetaProperty, EventMetaValue, ItemMetaProperty, ItemMetaValue,
-    ItemVariation, ItemVariationMetaValue, Order, Organizer, SubEventMetaValue,
-    User, Voucher,
+    ItemVariation, ItemVariationMetaValue, Order, OrderPosition, Organizer,
+    SubEventMetaValue, User, Voucher,
 )
 from pretix.control.forms.event import EventWizardCopyForm
 from pretix.control.permissions import (
@@ -164,6 +164,104 @@ def event_list(request):
     doc = {
         'results': [
             serialize_event(e) for e in qs.select_related('organizer')[offset:offset + pagesize]
+        ],
+        'pagination': {
+            "more": total >= (offset + pagesize)
+        }
+    }
+    return JsonResponse(doc)
+
+
+@organizer_permission_required(("can_manage_gift_cards", "can_manage_reusable_media"))
+def giftcard_select2(request, **kwargs):
+    query = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    if request.user.has_organizer_permission(request.organizer, 'can_manage_gift_cards', request):
+        qs = request.organizer.issued_gift_cards.filter(
+            Q(secret__icontains=query)
+        ).order_by('secret')
+    else:
+        qs = request.organizer.issued_gift_cards.filter(
+            Q(secret__iexact=query)
+        ).order_by('secret')
+
+    if not query:
+        qs = qs.none()
+
+    total = qs.count()
+    pagesize = 20
+    offset = (page - 1) * pagesize
+    doc = {
+        'results': [
+            {
+                'id': e.pk,
+                'text': str(e),
+            }
+            for e in qs[offset:offset + pagesize]
+        ],
+        'pagination': {
+            "more": total >= (offset + pagesize)
+        }
+    }
+    return JsonResponse(doc)
+
+
+@organizer_permission_required(("can_manage_reusable_media"))
+def ticket_select2(request, **kwargs):
+    query = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    qs_orders = OrderPosition.all.select_related('order', 'order__event', 'item', 'variation').filter(
+        order__event__organizer=request.organizer,
+    ).order_by()
+
+    exact_match = Q(secret__iexact=query)
+    soft_match = Q(secret__icontains=query)
+
+    qsplit = query.split("-")
+
+    if len(qsplit) >= 3 and qsplit[2].isdigit():
+        soft_match |= Q(order__event__slug__iexact=qsplit[0], order__code__iexact=qsplit[1], positionid=qsplit[2])
+    elif len(qsplit) >= 2 and qsplit[1].isdigit():
+        soft_match |= Q(order__code__istartswith=qsplit[0], positionid=qsplit[1])
+    elif len(qsplit) >= 2:
+        soft_match |= Q(order__event__slug__iexact=qsplit[0], order__code__istartswith=qsplit[1])
+    else:
+        soft_match |= Q(order__code__istartswith=qsplit[0])
+
+    if not request.user.has_active_staff_session(request.session.session_key):
+        qs_orders = qs_orders.filter(
+            exact_match | (
+                soft_match & (
+                    Q(order__event__organizer_id__in=request.user.teams.filter(all_events=True, can_view_orders=True).values_list('organizer', flat=True))
+                    | Q(order__event_id__in=request.user.teams.filter(can_view_orders=True).values_list('limit_events__id', flat=True))
+                )
+            )
+        )
+    else:
+        qs_orders = qs_orders.filter(exact_match | soft_match)
+
+    if not query:
+        qs_orders = qs_orders.none()
+
+    total = qs_orders.count()
+    pagesize = 20
+    offset = (page - 1) * pagesize
+    doc = {
+        'results': [
+            {
+                'id': op.pk,
+                'text': f'{op.order.code}-{op.positionid} ({str(op.item) + ((" - " + str(op.variation)) if op.variation else "")})',
+                'event': str(op.order.event)
+            }
+            for op in qs_orders[offset:offset + pagesize]
         ],
         'pagination': {
             "more": total >= (offset + pagesize)

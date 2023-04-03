@@ -244,7 +244,8 @@ class OrderViewSet(viewsets.ModelViewSet):
                     Prefetch('subevent', queryset=self.request.event.subevents.prefetch_related(
                         Prefetch('meta_values', to_attr='meta_values_cached', queryset=SubEventMetaValue.objects.select_related('property'))
                     )),
-                    Prefetch('addons', opq.select_related('item', 'variation', 'seat'))
+                    Prefetch('addons', opq.select_related('item', 'variation', 'seat')),
+                    'linked_media',
                 ).select_related('seat', 'addon_to', 'addon_to__seat')
             )
         else:
@@ -639,13 +640,11 @@ class OrderViewSet(viewsets.ModelViewSet):
                 raise ValidationError(_('One of the selected products is not available in the selected country.'))
             send_mail = serializer._send_mail
             order = serializer.instance
+
             if not order.pk:
-                # Simulation
+                # Simulation -- exit here
                 serializer = SimulatedOrderSerializer(order, context=serializer.context)
                 return Response(serializer.data, status=status.HTTP_201_CREATED)
-            else:
-                prefetch_related_objects([order], self._positions_prefetch(request))
-                serializer = OrderSerializer(order, context=serializer.context)
 
             order.log_action(
                 'pretix.event.order.placed',
@@ -678,6 +677,10 @@ class OrderViewSet(viewsets.ModelViewSet):
             invoice = None
             if gen_invoice:
                 invoice = generate_invoice(order, trigger_pdf=True)
+
+            # Refresh serializer only after running signals
+            prefetch_related_objects([order], self._positions_prefetch(request))
+            serializer = OrderSerializer(order, context=serializer.context)
 
             if send_mail:
                 free_flow = (
@@ -1005,6 +1008,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
                     Prefetch('meta_values', to_attr='meta_values_cached',
                              queryset=SubEventMetaValue.objects.select_related('property'))
                 )),
+                'linked_media',
                 Prefetch('order', self.request.event.orders.select_related('invoice_address').prefetch_related(
                     Prefetch(
                         'positions',

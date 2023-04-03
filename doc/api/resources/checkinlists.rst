@@ -753,8 +753,8 @@ Order position endpoints
    * ``ambiguous`` - Multiple tickets match scan, rejected.
    * ``revoked`` - Ticket code has been revoked.
 
-   In case of reason ``rules``, there might be an additional response field ``reason_explanation`` with a human-readable
-   description of the violated rules. However, that field can also be missing or be ``null``.
+   In case of reason ``rules`` or ``invalid_time``, there might be an additional response field ``reason_explanation``
+   with a human-readable description of the violated rules. However, that field can also be missing or be ``null``.
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param event: The ``slug`` field of the event to fetch

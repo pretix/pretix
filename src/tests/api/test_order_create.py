@@ -35,7 +35,8 @@ from pytz import UTC
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
-    InvoiceAddress, Order, OrderPosition, Question, SeatingPlan,
+    InvoiceAddress, Item, Order, OrderPosition, Organizer, Question,
+    SeatingPlan,
 )
 from pretix.base.models.orders import CartPosition, OrderFee, QuestionAnswer
 
@@ -53,6 +54,27 @@ def item2(event2):
 @pytest.fixture
 def taxrule(event):
     return event.tax_rules.create(rate=Decimal('19.00'))
+
+
+@pytest.fixture
+def medium(organizer):
+    return organizer.reusable_media.create(
+        type="barcode",
+        identifier="ABCDE"
+    )
+
+
+@pytest.fixture
+def organizer2():
+    return Organizer.objects.create(name='Partner', slug='partner')
+
+
+@pytest.fixture
+def medium2(organizer2):
+    return organizer2.reusable_media.create(
+        type="barcode",
+        identifier="ABCDE"
+    )
 
 
 @pytest.fixture
@@ -2810,3 +2832,72 @@ def test_create_cart_and_consume_cart_with_addons(token_client, organizer, event
         ), format='json', data=res
     )
     assert resp.status_code == 201
+
+
+@pytest.mark.django_db
+def test_order_create_use_medium(token_client, organizer, event, item, quota, question, medium):
+    item.media_type = medium.type
+    item.media_policy = Item.MEDIA_POLICY_REUSE_OR_NEW
+    item.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['use_reusable_medium'] = medium.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        medium.refresh_from_db()
+        assert o.positions.first() == medium.linked_orderposition
+        assert resp.data['positions'][0]['pdf_data']['medium_identifier'] == medium.identifier
+
+
+@pytest.mark.django_db
+def test_order_create_use_medium_other_organizer(token_client, organizer, event, item, quota, question, medium2):
+    item.media_type = medium2.type
+    item.media_policy = Item.MEDIA_POLICY_REUSE_OR_NEW
+    item.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['use_reusable_medium'] = medium2.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.data == {
+        "positions": [
+            {
+                "use_reusable_medium": ["The specified medium does not belong to this organizer."]
+            }
+        ]
+    }
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_order_create_create_medium(token_client, organizer, event, item, quota, question):
+    item.media_type = 'barcode'
+    item.media_policy = Item.MEDIA_POLICY_REUSE_OR_NEW
+    item.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/?pdf_data=true'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        i = resp.data['positions'][0]['pdf_data']['medium_identifier']
+        assert i
+        m = organizer.reusable_media.get(identifier=i)
+        assert m.linked_orderposition == o.positions.first()
+        assert m.type == "barcode"

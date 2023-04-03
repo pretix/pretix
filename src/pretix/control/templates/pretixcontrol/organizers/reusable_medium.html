@@ -1,0 +1,93 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load money %}
+{% block title %}
+    {% blocktrans trimmed with id=medium.identifier context "reusable_media" %}
+        Medium {{ id }}
+    {% endblocktrans %}
+{% endblock %}
+{% block inner %}
+    <h1>
+        {% blocktrans trimmed with id=medium.identifier context "reusable_media" %}
+            Medium {{ id }}
+        {% endblocktrans %}
+    </h1>
+    <div class="row">
+        <div class="col-md-10 col-xs-12">
+            <div class="panel panel-primary items">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Details" %}
+                    </h3>
+                </div>
+                <div class="panel-body">
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <dl class="dl-horizontal">
+                            <dt>{% trans "Media type" context "reusable_media" %}</dt>
+                            <dd>{{ medium.get_type_display }}</dd>
+                            <dt>{% trans "Identifier" context "reusable_media" %}</dt>
+                            <dd><code>{{ medium.identifier }}</code></dd>
+                            <dt>{% trans "Status" %}</dt>
+                            <dd>
+                                {% if not medium.active %}
+                                    {% trans "disabled" %}
+                                {% elif medium.is_expired %}
+                                    {% trans "expired" %}
+                                {% else %}
+                                    {% trans "active" %}
+                                {% endif %}
+                            </dd>
+                            <dt>{% trans "Connections" context "reusable_media" %}</dt>
+                            <dd>
+                                {% if medium.customer %}
+                                    <span class="helper-display-block">
+                                    <span class="fa fa-user fa-fw"></span>
+                                    <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=medium.customer.identifier %}">
+                                        {{ medium.customer }}
+                                    </a>
+                                </span>
+                                {% endif %}
+                                {% if medium.linked_orderposition %}
+                                    <span class="helper-display-block">
+                                    <span class="fa fa-ticket fa-fw"></span>
+                                    <a href="{% url "control:event.order" event=medium.linked_orderposition.order.event.slug organizer=request.organizer.slug code=medium.linked_orderposition.order.code %}">
+                                        {{ medium.linked_orderposition.order.code }}</a>-{{ medium.linked_orderposition.positionid }}
+                                </span>
+                                {% endif %}
+                                {% if medium.linked_giftcard %}
+                                    <span class="helper-display-block">
+                                    <span class="fa fa-credit-card fa-fw"></span>
+                                    <a href="{% url "control:organizer.giftcard" organizer=request.organizer.slug giftcard=medium.linked_giftcard.id %}">
+                                        {{ medium.linked_giftcard.secret }}</a>
+                                </span>
+                                {% endif %}
+                            </dd>
+                            {% if medium.notes %}
+                                <dt>{% trans "Notes" %}</dt>
+                                <dd>{{ medium.notes }}</dd>
+                            {% endif %}
+                        </dl>
+                    </form>
+                    <div class="text-right">
+                        <a href="{% url "control:organizer.reusable_medium.edit" organizer=request.organizer.slug pk=medium.pk %}"
+                           class="btn btn-default">
+                            <i class="fa fa-edit"></i> {% trans "Edit" %}
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 col-xs-12">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h3 class="panel-title">
+                        {% trans "Medium history" context "reusable_media" %}
+                    </h3>
+                </div>
+                {% include "pretixcontrol/includes/logs.html" with obj=medium %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

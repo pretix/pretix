@@ -42,9 +42,9 @@ from rest_framework import routers
 from pretix.api.views import cart
 
 from .views import (
-    checkin, device, discount, event, exporters, idempotency, item, oauth,
-    order, organizer, shredders, upload, user, version, voucher, waitinglist,
-    webhooks,
+    checkin, device, discount, event, exporters, idempotency, item, media,
+    oauth, order, organizer, shredders, upload, user, version, voucher,
+    waitinglist, webhooks,
 )
 
 router = routers.DefaultRouter()
@@ -59,6 +59,7 @@ orga_router.register(r'giftcards', organizer.GiftCardViewSet)
 orga_router.register(r'customers', organizer.CustomerViewSet)
 orga_router.register(r'memberships', organizer.MembershipViewSet)
 orga_router.register(r'membershiptypes', organizer.MembershipTypeViewSet)
+orga_router.register(r'reusablemedia', media.ReusableMediaViewSet)
 orga_router.register(r'teams', organizer.TeamViewSet)
 orga_router.register(r'devices', organizer.DeviceViewSet)
 orga_router.register(r'exporters', exporters.OrganizerExportersViewSet, basename='exporters')

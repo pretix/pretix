@@ -62,7 +62,8 @@ def test_get_settings(token_client, organizer):
     assert resp.data['event_list_type'] == {
         "value": "week",
         "label": "Default overview style",
-        "help_text": "If your event series has more than 50 dates in the future, only the month or week calendar can be used."
+        "help_text": "If your event series has more than 50 dates in the future, only the month or week calendar can be used.",
+        "readonly": False,
     }
 
 

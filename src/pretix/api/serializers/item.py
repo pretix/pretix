@@ -244,7 +244,8 @@ class ItemSerializer(I18nAwareModelSerializer):
                   'grant_membership_duration_like_event', 'grant_membership_duration_days',
                   'grant_membership_duration_months', 'validity_mode', 'validity_fixed_from', 'validity_fixed_until',
                   'validity_dynamic_duration_minutes', 'validity_dynamic_duration_hours', 'validity_dynamic_duration_days',
-                  'validity_dynamic_duration_months', 'validity_dynamic_start_choice', 'validity_dynamic_start_choice_day_limit')
+                  'validity_dynamic_duration_months', 'validity_dynamic_start_choice', 'validity_dynamic_start_choice_day_limit',
+                  'media_policy', 'media_type')
         read_only_fields = ('has_variations',)
 
     def __init__(self, *args, **kwargs):
@@ -263,6 +264,7 @@ class ItemSerializer(I18nAwareModelSerializer):
 
         Item.clean_per_order(data.get('min_per_order'), data.get('max_per_order'))
         Item.clean_available(data.get('available_from'), data.get('available_until'))
+        Item.clean_media_settings(self.context['event'], data.get('media_policy'), data.get('media_type'), data.get('issue_giftcard'))
 
         if data.get('personalized') and not data.get('admission'):
             raise ValidationError(_('Only admission products can currently be personalized.'))

@@ -1,0 +1,32 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}
+    {% if not medium.pk %}
+        {% trans "New medium" context "reusable_media" %}
+    {% else %}
+        {% blocktrans trimmed with id=medium.identifier context "reusable_media" %}
+            Medium {{ id }}
+        {% endblocktrans %}
+    {% endif %}
+{% endblock %}
+{% block inner %}
+    <h1>
+        {% if not medium.pk %}
+            {% trans "New medium" context "reusable_media" %}
+        {% else %}
+            {% blocktrans trimmed with id=medium.identifier context "reusable_media" %}
+                Medium {{ id }}
+            {% endblocktrans %}
+        {% endif %}
+    </h1>
+    <form class="form-horizontal" action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form layout="control" %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

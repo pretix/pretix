@@ -225,4 +225,3 @@ You can get three response codes:
       "subevent": 23,
       "checkinlist": 5
    }
-

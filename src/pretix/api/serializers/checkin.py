@@ -26,6 +26,7 @@ from rest_framework.exceptions import ValidationError
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.channels import get_all_sales_channels
+from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import Checkin, CheckinList
 
 
@@ -84,6 +85,7 @@ class CheckinRPCRedeemInputSerializer(serializers.Serializer):
     lists = serializers.PrimaryKeyRelatedField(required=True, many=True, queryset=CheckinList.objects.none())
     secret = serializers.CharField(required=True, allow_null=False)
     force = serializers.BooleanField(default=False, required=False)
+    source_type = serializers.ChoiceField(choices=[(k, v) for k, v in MEDIA_TYPES.items()], default='barcode')
     type = serializers.ChoiceField(choices=Checkin.CHECKIN_TYPES, default=Checkin.TYPE_ENTRY)
     ignore_unpaid = serializers.BooleanField(default=False, required=False)
     questions_supported = serializers.BooleanField(default=True, required=False)

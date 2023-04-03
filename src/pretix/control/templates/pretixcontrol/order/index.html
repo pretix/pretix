@@ -462,6 +462,14 @@
                                         </dd>
                                     </div>
                                 {% endif %}
+                                {% for m in line.linked_media.all %}
+                                    <div class="cart-icon-details">
+                                        <dd>
+                                            <span class="fa fa-key fa-fw" aria-hidden="true"></span>
+                                            <a href="{% url "control:organizer.reusable_medium" organizer=request.organizer.slug pk=m.pk %}">{{ m.identifier }}</a> <span class="text-muted">({{ m.get_type_display }})</span>
+                                        </dd>
+                                    </div>
+                                {% endfor %}
                                 {% if not line.canceled %}
                                     <div class="position-buttons">
                                         {% if line.generate_ticket %}

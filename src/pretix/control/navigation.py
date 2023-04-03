@@ -578,6 +578,16 @@ def get_organizer_navigation(request):
                 'children': children,
             })
 
+    if request.organizer.settings.reusable_media_active:
+        nav.append({
+            'label': _('Reusable media'),
+            'url': reverse('control:organizer.reusable_media', kwargs={
+                'organizer': request.organizer.slug
+            }),
+            'icon': 'key',
+            'active': 'organizer.reusable_medi' in url.url_name,
+        })
+
     if 'can_change_organizer_settings' in request.orgapermset:
         nav.append({
             'label': _('Devices'),

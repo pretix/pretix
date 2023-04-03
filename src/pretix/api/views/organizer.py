@@ -457,7 +457,8 @@ class OrganizerSettingsView(views.APIView):
                 fname: {
                     'value': s.data[fname],
                     'label': getattr(field, '_label', fname),
-                    'help_text': getattr(field, '_help_text', None)
+                    'help_text': getattr(field, '_help_text', None),
+                    'readonly': fname in s.readonly_fields,
                 } for fname, field in s.fields.items()
             })
         return Response(s.data)

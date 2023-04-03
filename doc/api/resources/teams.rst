@@ -26,6 +26,7 @@ can_create_events                     boolean
 can_change_teams                      boolean
 can_change_organizer_settings         boolean
 can_manage_customers                  boolean
+can_manage_reusable_media             boolean
 can_manage_gift_cards                 boolean
 can_change_event_settings             boolean
 can_change_items                      boolean
@@ -35,6 +36,10 @@ can_view_vouchers                     boolean
 can_change_vouchers                   boolean
 can_checkin_orders                    boolean
 ===================================== ========================== =======================================================
+
+.. versionchanged:: 4.18
+
+    The ``can_manage_reusable_media`` permission has been added.
 
 Team member resource
 --------------------

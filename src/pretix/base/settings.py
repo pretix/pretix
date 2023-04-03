@@ -169,6 +169,84 @@ DEFAULTS = {
                         "was not logged in during the purchase.")
         )
     },
+    'reusable_media_active': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Activate re-usable media"),
+            help_text=_("The re-usable media feature allows you to connect tickets and gift cards with physical media "
+                        "such as wristbands or chip cards that may be re-used for different tickets or gift cards "
+                        "later.")
+        )
+    },
+    'reusable_media_type_barcode': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Active"),
+        )
+    },
+    'reusable_media_type_barcode_identifier_length': {
+        'default': 24,
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'serializer_kwargs': dict(
+            validators=[
+                MinValueValidator(12),
+                MaxValueValidator(64),
+            ]
+        ),
+        'form_kwargs': dict(
+            label=_('Length of barcodes'),
+            validators=[
+                MinValueValidator(12),
+                MaxValueValidator(64),
+            ],
+            required=True,
+            widget=forms.NumberInput(
+                attrs={
+                    'min': '12',
+                    'max': '64',
+                },
+            ),
+        )
+    },
+    'reusable_media_type_nfc_uid': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Active"),
+        )
+    },
+    'reusable_media_type_nfc_uid_autocreate_giftcard': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Automatically create a new gift card if a previously unknown chip is seen"),
+        )
+    },
+    'reusable_media_type_nfc_uid_autocreate_giftcard_currency': {
+        'default': 'EUR',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=[(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES],
+        ),
+        'form_kwargs': dict(
+            choices=[(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES],
+            label=_("Gift card currency"),
+        )
+    },
     'max_items_per_order': {
         'default': '10',
         'type': int,
@@ -3416,7 +3494,12 @@ def validate_organizer_settings(organizer, settings_dict):
     # organizer-settings either.
     #
     # N.B.: When actually fleshing out this stub, adding it to the OrganizerUpdateForm should be considered.
-    pass
+    """
+    if settings_dict.get('reusable_media_type_ntag_pretix1') and settings_dict.get('reusable_media_type_nfc_uid'):
+        raise ValidationError({
+            'reusable_media_type_nfc_uid': _('This needs to be disabled if other NFC-based types are active.')
+        })
+    """
 
 
 def global_settings_object(holder):

@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import json
 from datetime import timedelta
 
 import pytest
@@ -191,3 +192,27 @@ def test_manage_acceptance_permission_required(organizer, organizer2, admin_user
         'add': organizer2.slug
     })
     assert not organizer.gift_card_issuer_acceptance.filter(issuer=organizer2).exists()
+
+
+@pytest.mark.django_db
+def test_typeahead(organizer, admin_user, client, gift_card):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    with scopes_disabled():
+        team = organizer.teams.get()
+
+    # Privileged user can search
+    r = client.get('/control/organizer/dummy/giftcards/select2?query=' + gift_card.secret[0:3])
+    d = json.loads(r.content)
+    assert d == {"results": [{"id": gift_card.pk, "text": gift_card.secret}], "pagination": {"more": False}}
+
+    # Unprivileged user can only do exact match
+    team.can_manage_gift_cards = False
+    team.can_manage_reusable_media = True
+    team.save()
+
+    r = client.get('/control/organizer/dummy/giftcards/select2?query=' + gift_card.secret[0:3])
+    d = json.loads(r.content)
+    assert d == {"results": [], "pagination": {"more": False}}
+    r = client.get('/control/organizer/dummy/giftcards/select2?query=' + gift_card.secret)
+    d = json.loads(r.content)
+    assert d == {"results": [{"id": gift_card.pk, "text": gift_card.secret}], "pagination": {"more": False}}

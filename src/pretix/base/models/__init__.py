@@ -40,6 +40,7 @@ from .items import (
     SubEventItem, SubEventItemVariation, itempicture_upload_to,
 )
 from .log import LogEntry
+from .media import ReusableMedium
 from .memberships import Membership, MembershipType
 from .notifications import NotificationSetting
 from .orders import (

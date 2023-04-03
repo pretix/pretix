@@ -1,0 +1,113 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load urlreplace %}
+{% load bootstrap3 %}
+{% load money %}
+{% block title %}{% trans "Reusable media" %}{% endblock %}
+{% block inner %}
+    <h1>
+        {% trans "Reusable media" %}
+    </h1>
+    {% if media|length == 0 and not filter_form.filtered %}
+        <div class="empty-collection">
+            <p>
+                {% blocktrans trimmed %}
+                    No media have been created yet.
+                {% endblocktrans %}
+            </p>
+            <a href="{% url "control:organizer.reusable_medium.create" organizer=request.organizer.slug %}"
+               class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new medium" %}</a>
+        </div>
+    {% else %}
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <h3 class="panel-title">{% trans "Filter" %}</h3>
+            </div>
+            <form class="panel-body filter-form" action="" method="get">
+                <div class="row">
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        {% bootstrap_field filter_form.query layout='inline' %}
+                    </div>
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        {% bootstrap_field filter_form.status layout='inline' %}
+                    </div>
+                </div>
+                <div class="text-right">
+                    <button class="btn btn-primary btn-lg" type="submit">
+                        <span class="fa fa-filter"></span>
+                        {% trans "Filter" %}
+                    </button>
+                </div>
+            </form>
+        </div>
+        <p>
+            <a href="{% url "control:organizer.reusable_medium.create" organizer=request.organizer.slug %}"
+               class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new medium" %}</a>
+        </p>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans "Identifier" context "reusable_media" %}
+                        <a href="?{% url_replace request 'ordering' '-identifier' %}"><i
+                                class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'identifier' %}"><i class="fa fa-caret-up"></i></a>
+                    </th>
+                    <th>{% trans "Media type" context "reusable_media" %}
+                        <a href="?{% url_replace request 'ordering' '-email' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'email' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Connections" context "reusable_media" %}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for m in media %}
+                    <tr>
+                        <td>
+                            <a href="{% url "control:organizer.reusable_medium" organizer=request.organizer.slug pk=m.pk %}">
+                                {% if not m.active %}<strike>{% endif %}
+                                <strong>{{ m.identifier }}</strong>
+                                {% if not m.active %}</strike>{% endif %}
+                            </a>
+                        </td>
+                        <td>
+                            {{ m.get_type_display }}
+                        </td>
+                        <td>
+                            {% if m.customer %}
+                                <span class="helper-display-block">
+                                    <span class="fa fa-user fa-fw"></span>
+                                    <a href="{% url "control:organizer.customer" organizer=request.organizer.slug customer=m.customer.identifier %}">
+                                        {{ m.customer }}
+                                    </a>
+                                </span>
+                            {% endif %}
+                            {% if m.linked_orderposition %}
+                                <span class="helper-display-block">
+                                    <span class="fa fa-ticket fa-fw"></span>
+                                    <a href="{% url "control:event.order" event=m.linked_orderposition.order.event.slug organizer=request.organizer.slug code=m.linked_orderposition.order.code %}">
+                                        {{ m.linked_orderposition.order.code }}</a>-{{ m.linked_orderposition.positionid }}
+                                </span>
+                            {% endif %}
+                            {% if m.linked_giftcard %}
+                                <span class="helper-display-block">
+                                    <span class="fa fa-credit-card fa-fw"></span>
+                                    <a href="{% url "control:organizer.giftcard" organizer=request.organizer.slug giftcard=m.linked_giftcard.id %}">
+                                        {{ m.linked_giftcard.secret }}</a>
+                                </span>
+                            {% endif %}
+                        </td>
+                        <td class="text-right">
+                            <a href="{% url "control:organizer.reusable_medium" organizer=request.organizer.slug pk=m.pk %}"
+                                    class="btn btn-default btn-sm" data-toggle="tooltip" title="{% trans "Details" %}">
+                                <i class="fa fa-eye"></i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% include "pretixcontrol/pagination.html" %}
+    {% endif %}
+{% endblock %}
