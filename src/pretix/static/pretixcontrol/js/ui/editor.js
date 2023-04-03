@@ -5,7 +5,10 @@ fabric.Poweredby = fabric.util.createClass(fabric.Image, {
     initialize: function (options) {
         options || (options = {});
 
-        this.callSuper('initialize', $("#poweredby-" + options.content).get(0), options);
+        var el = $("#poweredby-" + options.content).get(0)
+        delete options.content;
+        console.log(el, options);
+        this.callSuper('initialize', el, options);
         this.set('label', options.label || '');
     },
 
@@ -588,7 +591,7 @@ var editor = {
                 var data = editor.dump([o]);
                 data[0].content = $("#toolbox-poweredby-style").val();
                 var newo = editor._add_from_data(data[0]);
-                o.remove();
+                editor.fabric.remove(o);
                 editor.fabric.discardActiveObject();
                 editor.fabric.setActiveObject(newo);
             }
@@ -712,10 +715,9 @@ var editor = {
             width: 205,
             height: 126,
             lockRotation: true,
-            lockUniScaling: true,
             content: content
         });
-        rect.setControlsVisibility({'mtr': false});
+        rect.setControlsVisibility({'mtr': false, 'mb': false, 'mt': false, 'mr': false, 'ml': false});
         editor.fabric.add(rect);
         editor._create_savepoint();
         return rect;
@@ -744,13 +746,12 @@ var editor = {
             width: 100,
             height: 100,
             lockRotation: true,
-            lockUniScaling: true,
             fill: '#666',
             content: $(this).attr("data-content"),
             text: '',
             nowhitespace: true,
         });
-        rect.setControlsVisibility({'mtr': false});
+        rect.setControlsVisibility({'mtr': false, 'mb': false, 'mt': false, 'mr': false, 'ml': false});
         editor.fabric.add(rect);
         editor._create_savepoint();
         return rect;
