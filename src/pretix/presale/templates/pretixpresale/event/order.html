@@ -68,7 +68,8 @@
             <span class="label label-warning">{% trans "TEST MODE" %}</span>
         {% endif %}
         {% if backend_user %}
-            <a href="{% url "control:event.order" event=request.event.slug organizer=request.organizer.slug code=order.code %}" class="btn btn-default">
+            <a href="{% url "control:event.order" event=request.event.slug organizer=request.organizer.slug code=order.code %}" class="btn btn-default"
+               target="_blank">
                 {% trans "View in backend" %}
             </a>
         {% endif %}
