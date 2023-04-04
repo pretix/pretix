@@ -574,12 +574,12 @@ class EventSettingsForm(SettingsForm):
 
     def clean(self):
         data = super().clean()
+        data = self._resolve_virtual_keys_input(data)
+
         settings_dict = self.event.settings.freeze()
         settings_dict.update(data)
 
-        data = self._resolve_virtual_keys_input(data)
-
-        validate_event_settings(self.event, data)
+        validate_event_settings(self.event, settings_dict)
         return data
 
     def __init__(self, *args, **kwargs):
@@ -738,7 +738,7 @@ class PaymentSettingsForm(SettingsForm):
         data = super().clean()
         settings_dict = self.obj.settings.freeze()
         settings_dict.update(data)
-        validate_event_settings(self.obj, data)
+        validate_event_settings(self.obj, settings_dict)
         return data
 
     def __init__(self, *args, **kwargs):
@@ -867,7 +867,7 @@ class InvoiceSettingsForm(SettingsForm):
         data = super().clean()
         settings_dict = self.obj.settings.freeze()
         settings_dict.update(data)
-        validate_event_settings(self.obj, data)
+        validate_event_settings(self.obj, settings_dict)
         return data
 
 
