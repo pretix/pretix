@@ -836,6 +836,9 @@ Vue.component('pretix-widget-event-form', {
         + '{{ $root.date_range }}'
         + '</div>'
 
+        // Date range
+        + '<div class="pretix-widget-event-location" v-if="($root.events || $root.weeks || $root.days) && $root.location" v-html="$root.location"></div>'
+
         // Form start
         + '<div class="pretix-widget-event-description" v-if="($root.events || $root.weeks || $root.days) && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
         + '<form method="post" :action="$root.formAction" ref="form" :target="$root.formTarget">'
@@ -1581,6 +1584,7 @@ var shared_root_methods = {
                 root.name = data.name;
                 root.frontpage_text = data.frontpage_text;
                 root.date_range = data.date_range;
+                root.location = data.location;
                 root.categories = data.items_by_category;
                 root.currency = data.currency;
                 root.display_net_prices = data.display_net_prices;
@@ -1818,6 +1822,7 @@ var create_widget = function (element) {
                 currency: null,
                 name: null,
                 date_range: null,
+                location: null,
                 offset: 0,
                 has_more_events: false,
                 append_events: false,

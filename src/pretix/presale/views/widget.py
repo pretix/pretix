@@ -682,8 +682,10 @@ class WidgetAPIProductList(EventListMixin, View):
         data['name'] = str(ev.name)
         if self.subevent:
             data['frontpage_text'] = str(rich_text(self.subevent.frontpage_text, safelinks=False))
+            data['location'] = str(rich_text(self.subevent.location, safelinks=False))
         else:
             data['frontpage_text'] = str(rich_text(request.event.settings.frontpage_text, safelinks=False))
+            data['location'] = str(rich_text(request.event.location, safelinks=False))
         data['date_range'] = self._get_date_range(ev, request.event)
         fail = False
 
