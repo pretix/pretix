@@ -6,8 +6,6 @@ fabric.Poweredby = fabric.util.createClass(fabric.Image, {
         options || (options = {});
 
         var el = $("#poweredby-" + options.content).get(0)
-        delete options.content;
-        console.log(el, options);
         this.callSuper('initialize', el, options);
         this.set('label', options.label || '');
     },
@@ -243,7 +241,7 @@ var editor = {
             o.scaleToHeight(editor._mm2px(d.size));
         } else if (d.type === "textarea" || o.type === "text") {
             o = editor._add_text();
-            o.set('color', 'rgb(' + d.color[0] + ',' + d.color[1] + ',' + d.color[2] + ')');
+            o.set('fill', 'rgb(' + d.color[0] + ',' + d.color[1] + ',' + d.color[2] + ')');
             o.set('fontSize', editor._pt2px(d.fontsize));
             o.set('lineHeight', d.lineheight || 1);
             o.set('fontFamily', d.fontfamily);
@@ -357,7 +355,7 @@ var editor = {
                 }
                 $("#page_nav").append($li)
                 $a.on("click", function (event) {
-                    editor.fabric.deactivateAll();
+                    editor.fabric.discardActiveObject();
                     editor._load_page(parseInt($(this).attr("data-page")));
                     event.preventDefault();
                     return true;
@@ -400,6 +398,7 @@ var editor = {
         editor.fabric.on('object:added', editor._create_savepoint);
         editor.fabric.on('selection:cleared', editor._update_toolbox);
         editor.fabric.on('selection:created', editor._update_toolbox);
+        editor.fabric.on('selection:updated', editor._update_toolbox);
         editor.fabric.on('object:selected', editor._update_toolbox);
         editor.fabric.on('object:moving', editor._update_toolbox_values);
         editor.fabric.on('object:modified', editor._update_toolbox_values);
@@ -596,7 +595,7 @@ var editor = {
                 editor.fabric.setActiveObject(newo);
             }
         } else if (o.type === "textarea" || o.type === "text") {
-            o.set('color', $("#toolbox-col").val());
+            o.set('fill', $("#toolbox-col").val());
             o.set('fontSize', editor._pt2px($("#toolbox-fontsize").val()));
             o.set('lineHeight', $("#toolbox-lineheight").val() || 1);
             o.set('fontFamily', $("#toolbox-fontfamily").val());
@@ -712,11 +711,12 @@ var editor = {
         var rect = new fabric.Poweredby({
             left: 100,
             top: 100,
-            width: 205,
-            height: 126,
+            height: 629,
+            width: 1024,
             lockRotation: true,
             content: content
         });
+        rect.scaleToHeight(126);
         rect.setControlsVisibility({'mtr': false, 'mb': false, 'mt': false, 'mr': false, 'ml': false});
         editor.fabric.add(rect);
         editor._create_savepoint();
@@ -799,14 +799,8 @@ var editor = {
         }
         editor.fabric.discardActiveObject();
         if (editor.clipboard.length > 1) {
-            var group = new fabric.Group(objs, {
-                originX: 'left',
-                originY: 'top',
-                left: 100,
-                top: 100,
-            });
-            group.setCoords();
-            editor.fabric.setActiveObject(group);
+            var selection = new fabric.ActiveSelection(objs, {canvas: editor.fabric});
+            editor.fabric.setActiveObject(selection);
         } else {
             editor.fabric.setActiveObject(objs[0]);
         }
@@ -913,12 +907,8 @@ var editor = {
     },
 
     _selectAll: function () {
-        var group = new fabric.Group(editor.fabric.getObjects(), {
-            originX: 'center',
-            originY: 'center',
-        });
-        group.setCoords();
-        editor.fabric.setActiveObject(group);
+        var selection = new fabric.ActiveSelection(editor.fabric._objects, {canvas: editor.fabric});
+        editor.fabric.setActiveObject(selection);
     },
 
     _undo: function undo() {
