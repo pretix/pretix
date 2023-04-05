@@ -12,6 +12,7 @@ availabilities
 backend
 Bancontact
 barcode
+barcodes
 Bcc
 BCC
 BezahlCode
@@ -78,6 +79,7 @@ Multibanco
 Mx
 MyBank
 multiline
+NFC
 NREI
 OpenCage
 OpenID

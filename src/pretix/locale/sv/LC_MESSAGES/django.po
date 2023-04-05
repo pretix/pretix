@@ -4242,7 +4242,7 @@ msgid ""
 "If this product should be stored on a re-usable physical medium, you can "
 "attach a physical media policy. This is not required for regular tickets, "
 "which just use a one-time barcode, but only for products like renewable "
-"season tickets or re-chargable gift card wristbands. This is an advanced "
+"season tickets or re-chargeable gift card wristbands. This is an advanced "
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
@@ -6661,10 +6661,6 @@ msgstr "Giltig till"
 
 #: pretix/base/pdf.py:459
 msgid "Reusable Medium ID"
-msgstr ""
-
-#: pretix/base/pdf.py:460
-msgid "ABC1234DEF4567"
 msgstr ""
 
 #: pretix/base/pdf.py:464

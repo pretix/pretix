@@ -29,6 +29,7 @@ Badge
 Badges
 Bancontact
 Banking
+barcodes
 Bcc
 BCC
 Beispielevent
@@ -143,6 +144,7 @@ Inc
 inkl
 innenname
 innennamen
+Input
 Installations
 integrationen
 INV
@@ -183,6 +185,7 @@ Multibanco
 MwSt
 MyBank
 name
+NFC
 Nr
 NREI
 number

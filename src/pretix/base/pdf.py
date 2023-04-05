@@ -457,7 +457,7 @@ DEFAULT_VARIABLES = OrderedDict((
     }),
     ("medium_identifier", {
         "label": _("Reusable Medium ID"),
-        "editor_sample": _("ABC1234DEF4567"),
+        "editor_sample": "ABC1234DEF4567",
         "evaluate": lambda op, order, ev: op.linked_media.all()[0].identifier if op.linked_media.all() else "",
     }),
     ("seat", {

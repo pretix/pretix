@@ -648,7 +648,7 @@ class Item(LoggedModel):
         help_text=_(
             'If this product should be stored on a re-usable physical medium, you can attach a physical media policy. '
             'This is not required for regular tickets, which just use a one-time barcode, but only for products like '
-            'renewable season tickets or re-chargable gift card wristbands. '
+            'renewable season tickets or re-chargeable gift card wristbands. '
             'This is an advanced feature that also requires specific configuration of ticketing and printing settings.'
         )
     )
