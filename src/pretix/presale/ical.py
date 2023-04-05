@@ -88,6 +88,10 @@ def get_public_ical(events):
         descr.append(_('Organizer: {organizer}').format(organizer=event.organizer.name))
 
         vevent.add('description').value = '\n'.join(descr)
+        if event.settings.contact_mail:
+            org = vevent.add('organizer')
+            org.params['CN'] = [event.organizer.name]
+            org.value = 'MAILTO:' + event.settings.contact_mail
     return cal
 
 
@@ -148,6 +152,10 @@ def get_private_icals(event, positions):
         vevent = cal.add('vevent')
         vevent.add('summary').value = str(ev.name)
         vevent.add('description').value = description
+        if event.settings.contact_mail:
+            org = vevent.add('organizer')
+            org.params['CN'] = [event.organizer.name]
+            org.value = 'MAILTO:' + event.settings.contact_mail
         vevent.add('dtstamp').value = creation_time
         if ev.location:
             vevent.add('location').value = ", ".join(l.strip() for l in str(ev.location).splitlines() if l.strip())
