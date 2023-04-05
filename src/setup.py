@@ -218,6 +218,7 @@ setup(
         'python-u2flib-server==4.*',
         'pytz',
         'pyuca',
+        'qrcode==7.4.*',
         'redis==4.5.*,>=4.5.4',
         'reportlab==3.6.*',
         'requests==2.28.*',

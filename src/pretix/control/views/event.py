@@ -38,10 +38,12 @@ import operator
 import re
 from collections import OrderedDict
 from decimal import Decimal
+from io import BytesIO
 from itertools import groupby
 from urllib.parse import urlsplit
 
 import bleach
+import qrcode
 from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
@@ -86,7 +88,7 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
-from pretix.multidomain.urlreverse import get_event_domain
+from pretix.multidomain.urlreverse import get_event_domain, build_absolute_uri
 from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 
@@ -1504,3 +1506,35 @@ class QuickSetupView(FormView):
                 },
             ] if self.request.method != "POST" else []
         )
+
+
+class EventQRCode(EventPermissionRequiredMixin, View):
+    permission = 'can_change_event_settings'
+
+    def get(self, request, *args, filetype, **kwargs):
+        url = build_absolute_uri(request.event, 'presale:event.index')
+
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_M,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(url)
+        qr.make(fit=True)
+
+        if filetype == 'svg':
+            factory = qrcode.image.svg.SvgPathImage
+            img = qrcode.make('Some data here', image_factory=factory)
+            r = HttpResponse(img.to_string(), content_type='image/svg+xml')
+            r['Content-Disposition'] = f'inline; filename="qrcode-{request.event.slug}.{filetype}"'
+            return r
+        elif filetype in ('jpeg', 'png', 'gif'):
+            img = qr.make_image(fill_color="black", back_color="white")
+
+            byte_io = BytesIO()
+            img.save(byte_io, filetype.upper())
+            byte_io.seek(0)
+            r = HttpResponse(byte_io.read(), content_type='image/' + filetype)
+            r['Content-Disposition'] = f'inline; filename="qrcode-{request.event.slug}.{filetype}"'
+            return r
