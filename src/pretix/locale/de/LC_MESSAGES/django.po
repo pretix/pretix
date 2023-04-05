@@ -230,16 +230,12 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Diese Art von Frage kann nicht beim Check-In gestellt werden."
 
 #: pretix/api/serializers/media.py:104
-#, fuzzy
-#| msgid ""
-#| "A gift card with the same secret already exists in your or an affiliated "
-#| "organizer account."
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
-"Ein Wertgutschein mit dem gleichen Code existiert bereits in diesem oder "
-"einem verbundenen Veranstalterkonto."
+"Ein Medium mit der gleichen Nummer und dem gleichen Typ existiert bereits in "
+"diesem Veranstalterkonto."
 
 #: pretix/api/serializers/order.py:76
 #, python-brace-format
@@ -2971,12 +2967,12 @@ msgstr "Modern (pretix 2.7)"
 
 #: pretix/base/media.py:58
 msgid "Barcode / QR-Code"
-msgstr ""
+msgstr "Barcode / QR-Code"
 
 #: pretix/base/media.py:74
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:237
 msgid "NFC UID-based"
-msgstr ""
+msgstr "NFC auf UID-Basis"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -3826,19 +3822,19 @@ msgstr "Dynamischer Zeitraum"
 
 #: pretix/base/models/items.py:376 pretix/base/models/items.py:658
 msgid "Don't use re-usable media, use regular one-off tickets"
-msgstr ""
+msgstr "Keine wiederverwendbaren Medien verwenden, nur reguläre Tickets"
 
 #: pretix/base/models/items.py:377
 msgid "Require an existing medium to be re-used"
-msgstr ""
+msgstr "Erfordere die Wiederverwendung eines existierenden Mediums"
 
 #: pretix/base/models/items.py:378
 msgid "Require a previously unknown medium to be newly added"
-msgstr ""
+msgstr "Erfordere das Hinzufügen eines neuen Mediums"
 
 #: pretix/base/models/items.py:379
 msgid "Require either an existing or a new medium to be used"
-msgstr ""
+msgstr "Erfordere wahlweise ein existierendes oder ein neues Medium"
 
 #: pretix/base/models/items.py:395 pretix/base/models/items.py:1258
 #: pretix/control/templates/pretixcontrol/items/index.html:40
@@ -3949,10 +3945,10 @@ msgstr ""
 
 #: pretix/base/models/items.py:504
 msgid ""
-"If this product is part of an order, the order will be put into an "
-"\"approval\" state and will need to be confirmed by you before it can be "
-"paid and completed. You can use this e.g. for discounted tickets that are "
-"only available to specific groups."
+"If this product is part of an order, the order will be put into an \"approval"
+"\" state and will need to be confirmed by you before it can be paid and "
+"completed. You can use this e.g. for discounted tickets that are only "
+"available to specific groups."
 msgstr ""
 "Wenn dieses Produkt Teil einer Bestellung ist, wird die Bestellung nicht "
 "direkt freigegeben, sondern muss von Ihnen bestätigt werden, bevor sie "
@@ -4144,7 +4140,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:647
 msgid "Reusable media policy"
-msgstr ""
+msgstr "Verwendung wiederverwendbarer Medien"
 
 #: pretix/base/models/items.py:649
 msgid ""
@@ -4158,7 +4154,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:659
 msgid "Reusable media type"
-msgstr ""
+msgstr "Medientyp"
 
 #: pretix/base/models/items.py:661
 msgid ""
@@ -4166,6 +4162,10 @@ msgid ""
 "Note that not all media types support all types of products, and not all "
 "media types are supported across all sales channels or check-in processes."
 msgstr ""
+"Auswahl des Typs von physikalischem Medium, das für dieses Produkt verwendet "
+"werden soll. Nicht alle Medientypen unterstützen alle Produkttypen und nicht "
+"alle Medientypen werden in allen Verkaufskanälen oder Check-in-Prozesse "
+"unterstützt."
 
 #: pretix/base/models/items.py:672 pretix/base/models/items.py:1499
 #: pretix/control/forms/filter.py:405 pretix/control/forms/filter.py:1737
@@ -4187,25 +4187,27 @@ msgid ""
 "If you select a reusable media policy, you also need to select a reusable "
 "media type."
 msgstr ""
+"Wenn eine Regelung für wiederverwendbare Medien ausgewählt ist, muss auch "
+"ein Medientyp ausgewählt werden."
 
 #: pretix/base/models/items.py:846
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "The selected media type is not enabled in your organizer settings."
-msgstr "Das ausgewählte Produkt ist nicht aktiv oder hat keinen Preis."
+msgstr ""
+"Der ausgewählte Medientyp ist in den Veranstalter-Einstellungen nicht "
+"aktiviert."
 
 #: pretix/base/models/items.py:848
-#, fuzzy
-#| msgid "The selected item does not belong to this event."
 msgid "The selected media type does not support usage for tickets currently."
-msgstr "Dieser Termin gehört nicht zu dieser Veranstaltungsreihe."
+msgstr ""
+"Der ausgewählte Medientyp unterstützt derzeit die Verwendung für Tickets "
+"nicht."
 
 #: pretix/base/models/items.py:850
-#, fuzzy
-#| msgid "The selected item does not belong to this event."
 msgid ""
 "The selected media type does not support usage for gift cards currently."
-msgstr "Dieser Termin gehört nicht zu dieser Veranstaltungsreihe."
+msgstr ""
+"Der ausgewählte Medientyp unterstützt derzeit die Verwendung für "
+"Wertgutscheine nicht."
 
 #: pretix/base/models/items.py:852
 msgid ""
@@ -4213,6 +4215,9 @@ msgid ""
 "Instead, gift cards for some reusable media types can be created or re-"
 "charged directly at the POS."
 msgstr ""
+"Wertgutschein-Produkte können derzeit keine Regeln für wiederverwendbare "
+"Medien haben. Stattdessen können Wertgutscheine für manche Medientypen "
+"direkt an der Kasse erzeugt und aufgeladen werden."
 
 #: pretix/base/models/items.py:860
 msgid ""
@@ -4750,18 +4755,14 @@ msgid "Tax rule {val}"
 msgstr "Steuer-Regel {val}"
 
 #: pretix/base/models/media.py:67
-#, fuzzy
-#| msgid "Fee type"
 msgctxt "reusable_medium"
 msgid "Media type"
-msgstr "Art der Gebühr"
+msgstr "Medientyp"
 
 #: pretix/base/models/media.py:73
-#, fuzzy
-#| msgid "Internal identifier"
 msgctxt "reusable_medium"
 msgid "Identifier"
-msgstr "Interne Referenz"
+msgstr "Nummer"
 
 #: pretix/base/models/media.py:81 pretix/base/models/orders.py:220
 #: pretix/base/models/orders.py:2758 pretix/control/forms/orders.py:72
@@ -4776,16 +4777,12 @@ msgid "Customer account"
 msgstr "Kundenkonto"
 
 #: pretix/base/models/media.py:97
-#, fuzzy
-#| msgid "Link text"
 msgid "Linked ticket"
-msgstr "Linktext"
+msgstr "Verknüpftes Ticket"
 
 #: pretix/base/models/media.py:104
-#, fuzzy
-#| msgid "Issued gift cards"
 msgid "Linked gift card"
-msgstr "Ausgestellte Wertgutscheine"
+msgstr "Verknüpfter Wertgutschein"
 
 #: pretix/base/models/memberships.py:44
 msgid "Membership is transferable"
@@ -5175,10 +5172,8 @@ msgid "Can manage customer accounts"
 msgstr "Kann Kundenkonten verwalten"
 
 #: pretix/base/models/organizer.py:284
-#, fuzzy
-#| msgid "Can manage customer accounts"
 msgid "Can manage reusable media"
-msgstr "Kann Kundenkonten verwalten"
+msgstr "Kann wiederverwendbare Medien verwalten"
 
 #: pretix/base/models/organizer.py:288
 msgid "Can manage gift cards"
@@ -6004,15 +5999,14 @@ msgstr "Berechne die Gebühr als Anteil vom Endbetrag."
 #, python-brace-format
 msgid ""
 "We recommend to enable this if you want your users to pay the payment fees "
-"of your payment provider. <a href=\"{docs_url}\" target=\"_blank\" "
-"rel=\"noopener\">Click here for detailed information on what this does.</a> "
+"of your payment provider. <a href=\"{docs_url}\" target=\"_blank\" rel="
+"\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
 "Wir empfehlen, diese Option zu aktivieren, wenn Sie die Gebühren Ihres "
 "Zahlungsdienstleisters an Ihre Kunden weitergeben wollen. Denken Sie daran, "
-"oben die richtigen Gebührensätze des Zahlungsanbieters einzustellen. <a "
-"href=\"{docs_url}\" target=\"_blank\" rel=\"noopener\">Weitere "
-"Informationen</a>."
+"oben die richtigen Gebührensätze des Zahlungsanbieters einzustellen. <a href="
+"\"{docs_url}\" target=\"_blank\" rel=\"noopener\">Weitere Informationen</a>."
 
 #: pretix/base/payment.py:378
 msgid "Text on invoices"
@@ -6570,7 +6564,7 @@ msgstr "Gültigkeitsende: Uhrzeit"
 
 #: pretix/base/pdf.py:459
 msgid "Reusable Medium ID"
-msgstr ""
+msgstr "Medien-Nummer"
 
 #: pretix/base/pdf.py:464
 msgid "Seat: Full name"
@@ -7050,6 +7044,8 @@ msgid ""
 "The configuration of this product requires mapping to a physical medium, "
 "which is currently not available online."
 msgstr ""
+"Die Konfiguration dieses Produkts erfordert die Zuordnung zu einem "
+"physischen Medium, was online derzeit nicht möglich ist."
 
 #: pretix/base/services/checkin.py:152
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:36
@@ -7871,10 +7867,8 @@ msgstr ""
 "Kunde zum Kaufzeitpunkt nicht angemeldet war."
 
 #: pretix/base/settings.py:178
-#, fuzzy
-#| msgid "Activate selected"
 msgid "Activate re-usable media"
-msgstr "Ausgewählte aktivieren"
+msgstr "Wiederverwendbare Medien aktivieren"
 
 #: pretix/base/settings.py:179
 msgid ""
@@ -7882,23 +7876,24 @@ msgid ""
 "with physical media such as wristbands or chip cards that may be re-used for "
 "different tickets or gift cards later."
 msgstr ""
+"Diese Funktion erlaubt Ihnen, Tickets und Wertgutscheine mit physischen "
+"Medien wie z.B. Armbändern oder Chipkarten zu verknüpfen, die später für "
+"andere Tickets oder Wertgutscheine wiederverwendet werden können."
 
 #: pretix/base/settings.py:205
-#, fuzzy
-#| msgid "Length of gift card codes"
 msgid "Length of barcodes"
-msgstr "Code-Länge für Wertgutscheine"
+msgstr "Länge von Barcodes"
 
 #: pretix/base/settings.py:234
 msgid ""
 "Automatically create a new gift card if a previously unknown chip is seen"
 msgstr ""
+"Automatisch neuen Wertgutschein erstellen, wenn ein neuer Chip detektiert "
+"wird"
 
 #: pretix/base/settings.py:247
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift card currency"
-msgstr "Gutscheincode"
+msgstr "Wertgutschein-Währung"
 
 #: pretix/base/settings.py:261
 msgid "Maximum number of items per order"
@@ -9527,12 +9522,12 @@ msgstr "Anhang für neue Bestellungen"
 #, python-brace-format
 msgid ""
 "This file will be attached to the first email that we send for every new "
-"order. Therefore it will be combined with the \"Placed order\", \"Free "
-"order\", or \"Received order\" texts from above. It will be sent to both "
-"order contacts and attendees. You can use this e.g. to send your terms of "
-"service. Do not use it to send non-public information as this file might be "
-"sent before payment is confirmed or the order is approved. To avoid this "
-"vital email going to spam, you can only upload PDF files of up to {size} MB."
+"order. Therefore it will be combined with the \"Placed order\", \"Free order"
+"\", or \"Received order\" texts from above. It will be sent to both order "
+"contacts and attendees. You can use this e.g. to send your terms of service. "
+"Do not use it to send non-public information as this file might be sent "
+"before payment is confirmed or the order is approved. To avoid this vital "
+"email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
 "Diese Datei wird an die erste E-Mail angehängt, die wir beim Eingang einer "
 "neuen Bestellung verschicken. Sie kann daher mit den Textvorlagen "
@@ -13492,16 +13487,16 @@ msgstr ""
 "abzudecken."
 
 #: pretix/control/forms/organizer.py:451
-#, fuzzy
-#| msgid "Experimental feature"
 msgid "experimental"
-msgstr "Experimentelle Funktion"
+msgstr "experimentell"
 
 #: pretix/control/forms/organizer.py:457
 msgid ""
 "This feature is currently in an experimental stage. It only supports very "
 "limited use cases and might change at any point."
 msgstr ""
+"Diese Funktion ist in einem experimentellen Stadium. Sie unterstützt derzeit "
+"nur eingeschränkte Use-Cases und kann sich jederzeit ändern."
 
 #: pretix/control/forms/organizer.py:486
 msgid "This will be attached to every email."
@@ -13517,10 +13512,8 @@ msgid "Gift card value"
 msgstr "Wert des Wertgutscheins"
 
 #: pretix/control/forms/organizer.py:674
-#, fuzzy
-#| msgid "An account with this email address is already registered."
 msgid "An medium with this type and identifier is already registered."
-msgstr "Ein Kundenkonto mit dieser E-Mail-Adresse ist bereits registriert."
+msgstr "Ein Medium mit diesem Typ und dieser Nummer ist bereits erstellt."
 
 #: pretix/control/forms/organizer.py:775 pretix/presale/forms/customer.py:439
 msgid "An account with this email address is already registered."
@@ -13817,6 +13810,8 @@ msgid ""
 "CSV input was not recognized to have multiple columns, maybe you have some "
 "invalid quoted field in your input."
 msgstr ""
+"Im CSV-Input wurden keine unterschiedlichen Spalten erkannt, möglicherweise "
+"haben Sie ungültige Felder in der Eingabe."
 
 #: pretix/control/forms/vouchers.py:356
 #, python-brace-format
@@ -14225,28 +14220,20 @@ msgid "A new password has been set."
 msgstr "Ein neues Passwort wurde gesetzt."
 
 #: pretix/control/logdisplay.py:365
-#, fuzzy
-#| msgid "The team has been created."
 msgid "The reusable medium has been created."
-msgstr "Das Team wurde erstellt."
+msgstr "Das wiederverwendbare Medium wurde erstellt."
 
 #: pretix/control/logdisplay.py:366
-#, fuzzy
-#| msgid "The payment has been created successfully."
 msgid "The reusable medium has been created automatically."
-msgstr "Die Zahlung wurde erfolgreich verbucht."
+msgstr "Das wiederverwendbare Medium wurde automatisch erstellt."
 
 #: pretix/control/logdisplay.py:367
-#, fuzzy
-#| msgid "The tax rule has been changed."
 msgid "The reusable medium has been changed."
-msgstr "Die Steuer-Regel wurde geändert."
+msgstr "Das wiederverwendbare Medium wurde geändert."
 
 #: pretix/control/logdisplay.py:368
-#, fuzzy
-#| msgid "The email has been queued to be sent."
 msgid "The medium has been connected to a new ticket."
-msgstr "Die E-Mail wurde zum Versenden gespeichert."
+msgstr "Das Medium wurde mit einem neuen Ticket verknüpft."
 
 #: pretix/control/logdisplay.py:369 pretix/control/logdisplay.py:408
 msgid "Sending of an email has failed."
@@ -14674,10 +14661,8 @@ msgid "The product has been changed."
 msgstr "Das Produkt wurde verändert."
 
 #: pretix/control/logdisplay.py:477
-#, fuzzy
-#| msgid "The product has been created."
 msgid "The product has been reordered."
-msgstr "Das Produkt wurde erstellt."
+msgstr "Das Produkt wurde umsortiert."
 
 #: pretix/control/logdisplay.py:478
 msgid "The product has been deleted."
@@ -14755,10 +14740,8 @@ msgid "The category has been changed."
 msgstr "Die Kategorie wurde verändert."
 
 #: pretix/control/logdisplay.py:496
-#, fuzzy
-#| msgid "The category has been deleted."
 msgid "The category has been reordered."
-msgstr "Die Kategorie wurde gelöscht."
+msgstr "Die Kategorie wurde umsortiert."
 
 #: pretix/control/logdisplay.py:497
 msgid "The question has been added."
@@ -14773,10 +14756,8 @@ msgid "The question has been changed."
 msgstr "Die Frage wurde verändert."
 
 #: pretix/control/logdisplay.py:500
-#, fuzzy
-#| msgid "The question has been deleted."
 msgid "The question has been reordered."
-msgstr "Die Frage wurde gelöscht."
+msgstr "Die Frage wurde umsortiert."
 
 #: pretix/control/logdisplay.py:501
 msgid "The discount has been added."
@@ -15348,7 +15329,7 @@ msgstr "SSO-Provider"
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:9
 msgid "Reusable media"
-msgstr ""
+msgstr "Wiederverwendbare Medien"
 
 #: pretix/control/navigation.py:593 pretix/control/navigation.py:600
 msgid "Devices"
@@ -17756,10 +17737,10 @@ msgstr "Steuer-Regel: %(name)s"
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:34
 #, python-format
 msgid ""
-"These settings are intended for advanced users. See the <a "
-"href=\"%(docs)s\">documentation</a> for more information. Note that we are "
-"not responsible for the correct handling of taxes in your ticket shop. If in "
-"doubt, please contact a lawyer or tax consultant."
+"These settings are intended for advanced users. See the <a href=\"%(docs)s"
+"\">documentation</a> for more information. Note that we are not responsible "
+"for the correct handling of taxes in your ticket shop. If in doubt, please "
+"contact a lawyer or tax consultant."
 msgstr ""
 "Diese Einstellungen sind für fortgeschrittene Benutzer gedacht. Mehr Infos "
 "gibt es in der <a href=\"%(docs)s\">Dokumentation</a>. Bitte beachten Sie, "
@@ -18429,9 +18410,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:132
 msgid ""
-"Examples: Ticket category with variations for \"full price\" and "
-"\"reduced\", merchandise with variations for different sizes, workshop add-"
-"on with variations for simultaneous workshops."
+"Examples: Ticket category with variations for \"full price\" and \"reduced"
+"\", merchandise with variations for different sizes, workshop add-on with "
+"variations for simultaneous workshops."
 msgstr ""
 "Beispiele: Ticketkategorie mit Varianten für \"Regulär\" und \"Ermäßigt\", "
 "Merchandise mit Varianten für verschiedene Größen, Workshop-Zusatzprodukte "
@@ -18734,8 +18715,8 @@ msgstr "Automatische Rabatte"
 msgid ""
 "With automatic discounts, you can automatically apply a discount to "
 "purchases from your customers based on certain conditions. For example, you "
-"can create group discounts like \"get 20%% off if you buy 3 or more "
-"tickets\" or \"buy 2 tickets, get 1 free\"."
+"can create group discounts like \"get 20%% off if you buy 3 or more tickets"
+"\" or \"buy 2 tickets, get 1 free\"."
 msgstr ""
 "Mit automatischen Rabatten können Sie automatisch Rabatte auf Käufe von "
 "Kunden basierend auf bestimmten Bedingungen gewähren. Beispielsweise können "
@@ -18747,8 +18728,8 @@ msgid ""
 "Automatic discounts are available to all customers as long as they are "
 "active. If you want to offer special prices only to specific customers, you "
 "can use vouchers instead. If you want to offer discounts across multiple "
-"purchases (\"buy a package of 10 you can turn into individual tickets "
-"later\"), you can use customer accounts and memberships instead."
+"purchases (\"buy a package of 10 you can turn into individual tickets later"
+"\"), you can use customer accounts and memberships instead."
 msgstr ""
 "Automatische Rabatte sind, solange sie aktiv sind, für alle Kunden "
 "verfügbar. Wenn Sie Rabatte nur bestimmten Kunden anbieten möchten, nutzen "
@@ -19208,8 +19189,8 @@ msgid ""
 "Are you sure you want to generate a new client secret for the application "
 "<strong>%(application)s</strong>?"
 msgstr ""
-"Möchten Sie wirklich einen neuen Schlüssel für die App "
-"<strong>%(application)s</strong> generieren?"
+"Möchten Sie wirklich einen neuen Schlüssel für die App <strong>"
+"%(application)s</strong> generieren?"
 
 #: pretix/control/templates/pretixcontrol/oauth/app_rollkeys.html:15
 msgid "Roll secret"
@@ -20189,14 +20170,14 @@ msgstr "Als erledigt markieren"
 msgid ""
 "We received notice that <strong>%(amount)s</strong> have been refunded via "
 "<strong>%(method)s</strong>. If this refund is processed, the order will be "
-"underpaid by <strong>%(pending)s</strong>. The order total is "
-"<strong>%(total)s</strong>."
+"underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
+"%(total)s</strong>."
 msgstr ""
-"Uns wurde mitgeteilt, dass <strong>%(amount)s</strong> über "
-"<strong>%(method)s</strong> erstattet wurden. Wenn diese Erstattung "
-"verarbeitet wird, wird die Bestellung einen ausstehenden Betrag von "
-"<strong>%(pending)s</strong> haben. Der Gesamtbetrag der Bestellung ist "
-"<strong>%(total)s</strong>."
+"Uns wurde mitgeteilt, dass <strong>%(amount)s</strong> über <strong>"
+"%(method)s</strong> erstattet wurden. Wenn diese Erstattung verarbeitet "
+"wird, wird die Bestellung einen ausstehenden Betrag von <strong>%(pending)s</"
+"strong> haben. Der Gesamtbetrag der Bestellung ist <strong>%(total)s</"
+"strong>."
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
@@ -21204,7 +21185,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:210
 msgid "Barcode media"
-msgstr ""
+msgstr "Barcode-Medien"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:214
 msgid ""
@@ -21214,32 +21195,45 @@ msgid ""
 "layout that includes the \"Reusable Medium ID\" as a QR code. Later, the "
 "same barcode may be re-used during the sale of a different product."
 msgstr ""
+"Ein Barcode-Medium kann jede gedruckte oder digitale Repräsentation eines "
+"Barcodes sein. Das Medium wird initial durch den Verkauf eines Produkts "
+"erzeugt, das eine entsprechende Regel zur Verwendung von Medium hat, sowie "
+"ein Ticket- oder Badge-Layout, das den Platzhalter \"Medien-ID\" als QR-Code "
+"enthält. Später kann der Barcode beim Verkauf eines weiteren Produktes neu "
+"verwendet werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:221
 msgid "Barcode media can currently only be connected to tickets."
-msgstr ""
+msgstr "Barcode-Medien können derzeit nur mit Tickets verbunden werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:224
 msgid ""
 "This subsequent reuse of the barcode is currently only supported during POS "
 "sales."
 msgstr ""
+"Die spätere Wiederverwendung von Barcodes ist derzeit nur bei Verkäufen über "
+"das Kassensystem unterstützt."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:241
 msgid ""
 "This medium type can work with almost any type of NFC chip. With this "
 "option, only the UID of the NFC chip is used for identification."
 msgstr ""
+"Dieser Medien-Typ kann mit fast jeder Art von NFC-Chip verwendet werden. Mit "
+"dieser Option wird nur die UID des NFC-Chips zur Identifizierung verwendet."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:245
 msgid "NFC media can currently only be connected to gift cards."
-msgstr ""
+msgstr "NFC-Medien können derzeit nur mit Wertgutscheinen verbunden werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:251
 msgid ""
 "This method does not provide a high level of protection against abuse since "
 "it is possible for malicious users to clone someone's chip with the same UID."
 msgstr ""
+"Diese Methode bietet keinen hohen Schutz gegen Missbrauch, da es einem "
+"böswilligen Nutzer möglich ist, den Chip einer anderen Person mit der selben "
+"UID zu kopieren."
 
 #: pretix/control/templates/pretixcontrol/organizers/export.html:64
 msgid "Run export now and download result"
@@ -21442,64 +21436,51 @@ msgid "Property:"
 msgstr "Eigenschaft:"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:14
-#, fuzzy
-#| msgid "No exports have been created yet."
 msgid "No media have been created yet."
-msgstr "Es wurden noch keine Dateien exportiert."
+msgstr "Es wurden bisher keine Medien erzeugt."
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:19
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:45
-#, fuzzy
-#| msgid "Create a new team"
 msgid "Create a new medium"
-msgstr "Neues Team erstellen"
+msgstr "Neues Medium erstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:51
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:30
-#, fuzzy
-#| msgid "Internal identifier"
 msgctxt "reusable_media"
 msgid "Identifier"
-msgstr "Interne Referenz"
+msgstr "Nummer"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:56
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:28
-#, fuzzy
-#| msgid "Fee type"
 msgctxt "reusable_media"
 msgid "Media type"
-msgstr "Art der Gebühr"
+msgstr "Medientyp"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:59
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:42
-#, fuzzy
-#| msgid "Connect"
 msgctxt "reusable_media"
 msgid "Connections"
-msgstr "Verbinden"
+msgstr "Verbindungen"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:12
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html:18
-#, fuzzy, python-format
-#| msgid "Customer #%(id)s"
+#, python-format
 msgctxt "reusable_media"
 msgid "Medium %(id)s"
-msgstr "Kunde #%(id)s"
+msgstr "Medium %(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:86
-#, fuzzy
-#| msgid "Team history"
 msgctxt "reusable_media"
 msgid "Medium history"
-msgstr "Team-Verlauf"
+msgstr "Medien-Verlauf"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html:16
 msgctxt "reusable_media"
 msgid "New medium"
-msgstr ""
+msgstr "Neues Medium"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:5
 msgid "Delete SSO client:"
@@ -22153,8 +22134,8 @@ msgid ""
 msgstr ""
 "Bitte prüfen Sie erneut, dass Sie wirklich die ausgewählten Daten von der "
 "Veranstaltung <strong>%(event)s</strong> entfernen wollen. Wenn dies der "
-"Fall ist, geben Sie bitte hier den Kurznamen der Veranstaltung "
-"(\"%(slug)s\") ein:"
+"Fall ist, geben Sie bitte hier den Kurznamen der Veranstaltung (\"%(slug)s"
+"\") ein:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
 msgid "Event short name"
@@ -23002,8 +22983,8 @@ msgstr "Warenkörbe löschen"
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:9
 #, python-format
 msgid ""
-"Are you sure you want to delete any cart positions with voucher "
-"<strong>%(voucher)s</strong>?"
+"Are you sure you want to delete any cart positions with voucher <strong>"
+"%(voucher)s</strong>?"
 msgstr ""
 "Möchten Sie den alle Warenkorbpositionen mit Gutschein <strong>%(voucher)s</"
 "strong> wirklich löschen?"
@@ -23132,8 +23113,8 @@ msgstr "Eintrag löschen"
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:9
 #, python-format
 msgid ""
-"Are you sure you want to delete the following waiting list entry "
-"<strong>%(entry)s</strong>?"
+"Are you sure you want to delete the following waiting list entry <strong>"
+"%(entry)s</strong>?"
 msgstr "Möchten Sie den Eintrag <strong>%(entry)s</strong> wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:4
@@ -23218,12 +23199,12 @@ msgstr "Umsatz-Schätzung"
 #, python-format
 msgid ""
 "If you can make enough room at your event to fit all the persons on the "
-"waiting list in, you could sell tickets worth an additional "
-"<strong>%(amount)s</strong>."
+"waiting list in, you could sell tickets worth an additional <strong>"
+"%(amount)s</strong>."
 msgstr ""
 "Wenn Sie Ihre Veranstaltung so vergrößern können, dass Sie allen Personen "
-"auf dieser Liste Tickets verkaufen könnten, würden Sie zusätzliche "
-"<strong>%(amount)s</strong> einnehmen."
+"auf dieser Liste Tickets verkaufen könnten, würden Sie zusätzliche <strong>"
+"%(amount)s</strong> einnehmen."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:98
 msgid "Successfully redeemed"
@@ -27605,10 +27586,10 @@ msgstr "Verbindung mit Stripe trennen"
 
 #: pretix/plugins/stripe/payment.py:129
 msgid ""
-"Please configure a <a href=\"https://dashboard.stripe.com/account/"
-"webhooks\">Stripe Webhook</a> to the following endpoint in order to "
-"automatically cancel orders when charges are refunded externally and to "
-"process asynchronous payment methods like SOFORT."
+"Please configure a <a href=\"https://dashboard.stripe.com/account/webhooks"
+"\">Stripe Webhook</a> to the following endpoint in order to automatically "
+"cancel orders when charges are refunded externally and to process "
+"asynchronous payment methods like SOFORT."
 msgstr ""
 "Bitte konfigurieren Sie einen <a href=\"https://dashboard.stripe.com/account/"
 "webhooks\">Stripe Webhook</a> zum folgenden Endpunkt, damit Bestellungen "
@@ -28504,8 +28485,8 @@ msgid ""
 msgstr ""
 "Sie haben dieses Konto bisher nicht aktiviert und ein Passwort gesetzt. "
 "Bitte klicken Sie den Link in der E-Mail an, die wir Ihnen zugeschickt "
-"haben. Wenn Sie die E-Mail nicht finden, wählen Sie \"Passwort "
-"zurücksetzen\" um eine neue E-Mail anzufordern."
+"haben. Wenn Sie die E-Mail nicht finden, wählen Sie \"Passwort zurücksetzen"
+"\" um eine neue E-Mail anzufordern."
 
 #: pretix/presale/forms/customer.py:134
 msgid ""
@@ -30152,9 +30133,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:412
 #, python-format
 msgid ""
-"You can cancel this order. In this case, a cancellation fee of "
-"<strong>%(fee)s</strong> will be kept and you will receive a refund of the "
-"remainder."
+"You can cancel this order. In this case, a cancellation fee of <strong>"
+"%(fee)s</strong> will be kept and you will receive a refund of the remainder."
 msgstr ""
 "Sie können diese Bestellung stornieren. In diesem Fall wird eine "
 "Stornogebühr von <strong>%(fee)s</strong> einbehalten und der Restbetrag "
@@ -30181,8 +30161,8 @@ msgid ""
 "required to pay a cancellation fee of <strong>%(fee)s</strong>."
 msgstr ""
 "Sie können diese Bestellung stornieren. Aufgrund unserer Stornobedingungen "
-"sind Sie trotzdem verpflichtet, eine Stornogebühr in Höhe von "
-"<strong>%(fee)s</strong> zu zahlen."
+"sind Sie trotzdem verpflichtet, eine Stornogebühr in Höhe von <strong>"
+"%(fee)s</strong> zu zahlen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:463
 msgid "You can cancel this order using the following button."
@@ -31284,6 +31264,26 @@ msgstr "Schreibzugriff"
 msgid "Kosovo"
 msgstr "Kosovo"
 
+#: pretix/base/models/items.py:649
+msgid ""
+"If this product should be stored on a re-usable physical medium, you can "
+"attach a physical media policy. This is not required for regular tickets, "
+"which just use a one-time barcode, but only for products like renewable "
+"season tickets or re-chargable gift card wristbands. This is an advanced "
+"feature that also requires specific configuration of ticketing and printing "
+"settings."
+msgstr ""
+"Wenn dieses Produkt auf einem wiederverwendbaren Medium gespeichert werden "
+"soll, können Sie hier die Regeln für die Verwendung vorgeben. Dies ist für "
+"reguläre Tickets mit einem einmal verwendeten Barcode nicht nötig, aber z.B. "
+"für verlängerbare Saisonkarten oder wiederaufladbare Wertguthaben-Armbänder. "
+"Dies ist eine fortgeschrittene Funktion, die auch eine spezifische "
+"Konfiguration von Ticket- und Druck-Einstellungen erfordert."
+
+#: pretix/base/pdf.py:460
+msgid "ABC1234DEF4567"
+msgstr "ABC1234DEF4567"
+
 #~ msgid ""
 #~ "Please perform per-event bank imports as this organizer has events with "
 #~ "multiple currencies."
@@ -31313,8 +31313,8 @@ msgstr "Kosovo"
 #, python-format
 #~ msgid ""
 #~ "Add-on product\n"
-#~ "                                                to position "
-#~ "#%(positionid)s"
+#~ "                                                to position #"
+#~ "%(positionid)s"
 #~ msgstr "Zusatzprodukt zu Position #%(positionid)s"
 
 #~ msgid "You cannot select an item that belongs to a different event."
