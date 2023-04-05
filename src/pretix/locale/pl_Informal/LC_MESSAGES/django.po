@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 20:37+0000\n"
+"POT-Creation-Date: 2023-04-05 09:17+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -17,37 +17,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-
-#: htmlcov/pretix_control_views_dashboards_py.html:963
-#: pretix/control/templates/pretixcontrol/events/index.html:140
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:104
-#: pretix/control/views/dashboards.py:529
-msgid "Shop disabled"
-msgstr ""
-
-#: htmlcov/pretix_control_views_dashboards_py.html:965
-#: pretix/control/forms/filter.py:1072 pretix/control/forms/filter.py:1544
-#: pretix/control/templates/pretixcontrol/events/index.html:142
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:106
-#: pretix/control/templates/pretixcontrol/subevents/index.html:157
-msgid "Presale over"
-msgstr ""
-
-#: htmlcov/pretix_control_views_dashboards_py.html:967
-#: pretix/control/forms/filter.py:1071 pretix/control/forms/filter.py:1543
-#: pretix/control/templates/pretixcontrol/events/index.html:144
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:108
-#: pretix/control/templates/pretixcontrol/subevents/index.html:159
-msgid "Presale not started"
-msgstr ""
-
-#: htmlcov/pretix_control_views_dashboards_py.html:969
-#: pretix/control/templates/pretixcontrol/events/index.html:146
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
-#: pretix/control/templates/pretixcontrol/subevents/index.html:161
-#: pretix/control/views/dashboards.py:535
-msgid "On sale"
-msgstr ""
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -10728,6 +10697,20 @@ msgstr ""
 msgid "Inactive"
 msgstr ""
 
+#: pretix/control/forms/filter.py:1071 pretix/control/forms/filter.py:1543
+#: pretix/control/templates/pretixcontrol/events/index.html:144
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:108
+#: pretix/control/templates/pretixcontrol/subevents/index.html:159
+msgid "Presale not started"
+msgstr ""
+
+#: pretix/control/forms/filter.py:1072 pretix/control/forms/filter.py:1544
+#: pretix/control/templates/pretixcontrol/events/index.html:142
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:106
+#: pretix/control/templates/pretixcontrol/subevents/index.html:157
+msgid "Presale over"
+msgstr ""
+
 #: pretix/control/forms/filter.py:1077 pretix/control/forms/filter.py:1080
 #: pretix/control/forms/filter.py:2178
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:84
@@ -15941,6 +15924,19 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:132
 #: pretix/control/templates/pretixcontrol/subevents/index.html:147
 msgid "More quotas"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/events/index.html:140
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:104
+#: pretix/control/views/dashboards.py:529
+msgid "Shop disabled"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/events/index.html:146
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
+#: pretix/control/templates/pretixcontrol/subevents/index.html:161
+#: pretix/control/views/dashboards.py:535
+msgid "On sale"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/events/index.html:151

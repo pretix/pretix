@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-04 20:37+0000\n"
+"POT-Creation-Date: 2023-04-05 09:17+0000\n"
 "PO-Revision-Date: 2019-10-31 14:39+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -18,37 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
 "X-Generator: Weblate 3.5.1\n"
-
-#: htmlcov/pretix_control_views_dashboards_py.html:963
-#: pretix/control/templates/pretixcontrol/events/index.html:140
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:104
-#: pretix/control/views/dashboards.py:529
-msgid "Shop disabled"
-msgstr "Mağaza devre dışı"
-
-#: htmlcov/pretix_control_views_dashboards_py.html:965
-#: pretix/control/forms/filter.py:1072 pretix/control/forms/filter.py:1544
-#: pretix/control/templates/pretixcontrol/events/index.html:142
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:106
-#: pretix/control/templates/pretixcontrol/subevents/index.html:157
-msgid "Presale over"
-msgstr "Ön satış bitti"
-
-#: htmlcov/pretix_control_views_dashboards_py.html:967
-#: pretix/control/forms/filter.py:1071 pretix/control/forms/filter.py:1543
-#: pretix/control/templates/pretixcontrol/events/index.html:144
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:108
-#: pretix/control/templates/pretixcontrol/subevents/index.html:159
-msgid "Presale not started"
-msgstr "Ön satış başlamadı"
-
-#: htmlcov/pretix_control_views_dashboards_py.html:969
-#: pretix/control/templates/pretixcontrol/events/index.html:146
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
-#: pretix/control/templates/pretixcontrol/subevents/index.html:161
-#: pretix/control/views/dashboards.py:535
-msgid "On sale"
-msgstr "Satılık"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -13035,6 +13004,20 @@ msgstr "Canlı ve satış öncesi alışveriş yapın"
 msgid "Inactive"
 msgstr "etkisiz"
 
+#: pretix/control/forms/filter.py:1071 pretix/control/forms/filter.py:1543
+#: pretix/control/templates/pretixcontrol/events/index.html:144
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:108
+#: pretix/control/templates/pretixcontrol/subevents/index.html:159
+msgid "Presale not started"
+msgstr "Ön satış başlamadı"
+
+#: pretix/control/forms/filter.py:1072 pretix/control/forms/filter.py:1544
+#: pretix/control/templates/pretixcontrol/events/index.html:142
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:106
+#: pretix/control/templates/pretixcontrol/subevents/index.html:157
+msgid "Presale over"
+msgstr "Ön satış bitti"
+
 #: pretix/control/forms/filter.py:1077 pretix/control/forms/filter.py:1080
 #: pretix/control/forms/filter.py:2178
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:84
@@ -19273,6 +19256,19 @@ msgstr "Seri"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:147
 msgid "More quotas"
 msgstr "Daha fazla kota"
+
+#: pretix/control/templates/pretixcontrol/events/index.html:140
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:104
+#: pretix/control/views/dashboards.py:529
+msgid "Shop disabled"
+msgstr "Mağaza devre dışı"
+
+#: pretix/control/templates/pretixcontrol/events/index.html:146
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
+#: pretix/control/templates/pretixcontrol/subevents/index.html:161
+#: pretix/control/views/dashboards.py:535
+msgid "On sale"
+msgstr "Satılık"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:151
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:115
