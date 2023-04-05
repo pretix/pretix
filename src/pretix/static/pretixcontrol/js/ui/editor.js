@@ -246,7 +246,6 @@ var editor = {
             o.setFontFamily(d.fontfamily);
             o.setFontWeight(d.bold ? 'bold' : 'normal');
             o.setFontStyle(d.italic ? 'italic' : 'normal');
-            o.setWidth(editor._mm2px(d.width));
             o.downward = d.downward || false;
             o.content = d.content;
             o.setTextAlign(d.align);
@@ -261,6 +260,7 @@ var editor = {
             } else if (d.content) {
                 o.setText(editor._get_text_sample(d.content));
             }
+            o.setWidth(editor._mm2px(d.width));  // needs to be after setText
             if (d.locale) {
                 // The data format allows to set the locale per text field but we currently only expose a global field
                 $("#pdf-info-locale").val(d.locale);
@@ -610,7 +610,6 @@ var editor = {
             if (align) {
                 o.setTextAlign(align);
             }
-            o.setWidth(editor._mm2px($("#toolbox-textwidth").val()));
             o.downward = $("#toolbox").find("button[data-action=downward]").is('.active');
             o.rotate(parseFloat($("#toolbox-textrotation").val()));
             $("#toolbox-content-other").toggle($("#toolbox-content").val() === "other");
@@ -636,6 +635,7 @@ var editor = {
             } else {
                 o.setText(editor._get_text_sample($("#toolbox-content").val()));
             }
+            o.setWidth(editor._mm2px($("#toolbox-textwidth").val()));
         }
 
         // empty text-inputs if not in use
