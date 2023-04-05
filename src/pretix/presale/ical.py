@@ -86,6 +86,7 @@ def get_public_ical(events):
             ))
 
         descr.append(_('Organizer: {organizer}').format(organizer=event.organizer.name))
+        # Actual ical organizer field is not useful since it will cause "your invitation was accepted" emails to the organizer
 
         vevent.add('description').value = '\n'.join(descr)
     return cal
@@ -139,6 +140,7 @@ def get_private_icals(event, positions):
                     datetime=date_format(ev.date_admission.astimezone(tz), 'SHORT_DATETIME_FORMAT')
                 ))
 
+            # Actual ical organizer field is not useful since it will cause "your invitation was accepted" emails to the organizer
             descr.append(_('Organizer: {organizer}').format(organizer=event.organizer.name))
             description = '\n'.join(descr)
 
