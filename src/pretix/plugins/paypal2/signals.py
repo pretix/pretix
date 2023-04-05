@@ -23,6 +23,7 @@ import json
 from collections import OrderedDict
 
 from django import forms
+from django.conf import settings
 from django.dispatch import receiver
 from django.http import HttpRequest, HttpResponse
 from django.template.loader import get_template
@@ -30,7 +31,6 @@ from django.urls import resolve
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 
-from pretix import settings
 from pretix.base.forms import SecretKeySettingsField
 from pretix.base.middleware import _merge_csp, _parse_csp, _render_csp
 from pretix.base.settings import settings_hierarkey

@@ -27,6 +27,7 @@ from collections import OrderedDict
 from decimal import Decimal
 
 from django import forms
+from django.conf import settings
 from django.contrib import messages
 from django.http import HttpRequest
 from django.template.loader import get_template
@@ -45,7 +46,6 @@ from paypalcheckoutsdk.orders import (
 from paypalcheckoutsdk.payments import CapturesRefundRequest, RefundsGetRequest
 from paypalhttp import HttpError
 
-from pretix import settings
 from pretix.base.decimal import round_decimal
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota

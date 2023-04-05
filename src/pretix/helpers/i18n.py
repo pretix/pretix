@@ -22,10 +22,9 @@
 import json
 import re
 
+from django.conf import settings
 from django.utils import translation
 from django.utils.formats import get_format
-
-from pretix import settings
 
 date_conversion_to_moment = {
     '%a': 'ddd',
