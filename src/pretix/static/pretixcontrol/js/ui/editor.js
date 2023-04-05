@@ -150,7 +150,7 @@ var editor = {
                 left += o.group.left + o.group.width / 2;
             }
             if (o.type === "textarea") {
-                var col = (new fabric.Color(o.getFill()))._source;
+                var col = (new fabric.Color(o.fill))._source;
                 var bottom = editor.pdf_viewport.height - o.height - top;
                 if (o.downward) {
                     bottom = editor.pdf_viewport.height - top;
@@ -161,7 +161,7 @@ var editor = {
                     locale: $("#pdf-info-locale").val(),
                     left: editor._px2mm(left).toFixed(2),
                     bottom: editor._px2mm(bottom).toFixed(2),
-                    fontsize: editor._px2pt(o.getFontSize()).toFixed(1),
+                    fontsize: editor._px2pt(o.fontSize).toFixed(1),
                     lineheight: o.lineHeight,
                     color: col,
                     fontfamily: o.fontFamily,
@@ -230,37 +230,37 @@ var editor = {
         } else if (d.type === "imagearea") {
             o = editor._add_imagearea(d.content);
             o.content = d.content;
-            o.setHeight(editor._mm2px(d.height));
-            o.setWidth(editor._mm2px(d.width));
-            o.setScaleX(1);
-            o.setScaleY(1);
+            o.set('height', editor._mm2px(d.height));
+            o.set('width', editor._mm2px(d.width));
+            o.set('scaleX', 1);
+            o.set('scaleY', 1);
         } else if (d.type === "poweredby") {
             o = editor._add_poweredby(d.content);
             o.content = d.content;
             o.scaleToHeight(editor._mm2px(d.size));
         } else if (d.type === "textarea" || o.type === "text") {
             o = editor._add_text();
-            o.setColor('rgb(' + d.color[0] + ',' + d.color[1] + ',' + d.color[2] + ')');
-            o.setFontSize(editor._pt2px(d.fontsize));
-            o.setLineHeight(d.lineheight || 1);
-            o.setFontFamily(d.fontfamily);
-            o.setFontWeight(d.bold ? 'bold' : 'normal');
-            o.setFontStyle(d.italic ? 'italic' : 'normal');
+            o.set('color', 'rgb(' + d.color[0] + ',' + d.color[1] + ',' + d.color[2] + ')');
+            o.set('fontSize', editor._pt2px(d.fontsize));
+            o.set('lineHeight', d.lineheight || 1);
+            o.set('fontFamily', d.fontfamily);
+            o.set('fontWeight', d.bold ? 'bold' : 'normal');
+            o.set('fontStyle', d.italic ? 'italic' : 'normal');
             o.downward = d.downward || false;
             o.content = d.content;
-            o.setTextAlign(d.align);
+            o.set('textAlign', d.align);
             if (d.rotation) {
                 o.rotate(d.rotation);
             }
             if (d.content === "other") {
-                o.setText(d.text);
+                o.set('text', d.text);
             } else if (d.content === "other_i18n") {
                 o.text_i18n = d.text_i18n
-                o.setText(d.text_i18n[Object.keys(d.text_i18n)[0]]);
+                o.set('text', d.text_i18n[Object.keys(d.text_i18n)[0]]);
             } else if (d.content) {
-                o.setText(editor._get_text_sample(d.content));
+                o.set('text', editor._get_text_sample(d.content));
             }
-            o.setWidth(editor._mm2px(d.width));  // needs to be after setText
+            o.set('width', editor._mm2px(d.width));  // needs to be after setText
             if (d.locale) {
                 // The data format allows to set the locale per text field but we currently only expose a global field
                 $("#pdf-info-locale").val(d.locale);
@@ -459,10 +459,7 @@ var editor = {
     _update_toolbox_values: function () {
         var o = editor.fabric.getActiveObject();
         if (!o) {
-            o = editor.fabric.getActiveGroup();
-            if (!o) {
-                return;
-            }
+            return;
         }
         var bottom = editor.pdf_viewport.height - o.height * o.scaleY - o.top;
         if (o.downward) {
@@ -482,7 +479,7 @@ var editor = {
             $("#toolbox-squaresize").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
             $("#toolbox-poweredby-style").val(o.content);
         } else if (o.type === "text" || o.type === "textarea") {
-            var col = (new fabric.Color(o.getFill()))._source;
+            var col = (new fabric.Color(o.fill))._source;
             $("#toolbox-col").val("#" + ((1 << 24) + (col[0] << 16) + (col[1] << 8) + col[2]).toString(16).slice(1));
             $("#toolbox-fontsize").val(editor._px2pt(o.fontSize).toFixed(1));
             $("#toolbox-lineheight").val(o.lineHeight || 1);
@@ -525,10 +522,7 @@ var editor = {
     _update_values_from_toolbox: function (e) {
         var o = editor.fabric.getActiveObject();
         if (!o) {
-            o = editor.fabric.getActiveGroup();
-            if (!o) {
-                return;
-            }
+            return;
         }
 
         var new_top = editor.pdf_viewport.height - editor._mm2px($("#toolbox-position-y").val()) - o.height * o.scaleY;
@@ -543,10 +537,10 @@ var editor = {
         if (o.type === "barcodearea") {
             var new_h = editor._mm2px($("#toolbox-squaresize").val());
             new_top += o.height * o.scaleY - new_h;
-            o.setHeight(new_h);
-            o.setWidth(new_h);
-            o.setScaleX(1);
-            o.setScaleY(1);
+            o.set('height', new_h);
+            o.set('width', new_h);
+            o.set('scaleX', 1);
+            o.set('scaleY', 1);
             o.set('top', new_top)
             o.nowhitespace = $("#toolbox-qrwhitespace").prop("checked") || false;
 
@@ -576,39 +570,38 @@ var editor = {
             var new_w = editor._mm2px($("#toolbox-width").val());
             var new_h = editor._mm2px($("#toolbox-height").val());
             new_top += o.height * o.scaleY - new_h;
-            o.setHeight(new_h);
-            o.setWidth(new_w);
-            o.setScaleX(1);
-            o.setScaleY(1);
+            o.set('height', new_h);
+            o.set('width', new_w);
+            o.set('scaleX', 1);
+            o.set('scaleY', 1);
             o.set('top', new_top)
             o.content = $("#toolbox-imagecontent").val();
         } else if (o.type === "poweredby") {
             var new_h = Math.max(1, editor._mm2px($("#toolbox-squaresize").val()));
             new_top += o.height * o.scaleY - new_h;
-            o.setWidth(new_h / o.height * o.width);
-            o.setHeight(new_h);
-            o.setScaleX(1);
-            o.setScaleY(1);
+            o.set('width', new_h / o.height * o.width);
+            o.set('height', new_h);
+            o.set('scaleX', 1);
+            o.set('scaleY', 1);
             o.set('top', new_top)
             if ($("#toolbox-poweredby-style").val() !== o.content) {
                 var data = editor.dump([o]);
                 data[0].content = $("#toolbox-poweredby-style").val();
                 var newo = editor._add_from_data(data[0]);
                 o.remove();
-                editor.fabric.discardActiveGroup();
                 editor.fabric.discardActiveObject();
                 editor.fabric.setActiveObject(newo);
             }
         } else if (o.type === "textarea" || o.type === "text") {
-            o.setColor($("#toolbox-col").val());
-            o.setFontSize(editor._pt2px($("#toolbox-fontsize").val()));
-            o.setLineHeight($("#toolbox-lineheight").val() || 1);
-            o.setFontFamily($("#toolbox-fontfamily").val());
-            o.setFontWeight($("#toolbox").find("button[data-action=bold]").is('.active') ? 'bold' : 'normal');
-            o.setFontStyle($("#toolbox").find("button[data-action=italic]").is('.active') ? 'italic' : 'normal');
+            o.set('color', $("#toolbox-col").val());
+            o.set('fontSize', editor._pt2px($("#toolbox-fontsize").val()));
+            o.set('lineHeight', $("#toolbox-lineheight").val() || 1);
+            o.set('fontFamily', $("#toolbox-fontfamily").val());
+            o.set('fontWeight', $("#toolbox").find("button[data-action=bold]").is('.active') ? 'bold' : 'normal');
+            o.set('fontStyle', $("#toolbox").find("button[data-action=italic]").is('.active') ? 'italic' : 'normal');
             var align = $("#toolbox-align").find(".active").attr("data-action");
             if (align) {
-                o.setTextAlign(align);
+                o.set('textAlign', align);
             }
             o.downward = $("#toolbox").find("button[data-action=downward]").is('.active');
             o.rotate(parseFloat($("#toolbox-textrotation").val()));
@@ -621,7 +614,7 @@ var editor = {
                     // user used dropdown to switch content-type, update value with value from i18n textarea
                     $("#toolbox-content-other").val($("#toolbox-content-other-i18n textarea").val());
                 }
-                o.setText($("#toolbox-content-other").val());
+                o.set('text', $("#toolbox-content-other").val());
             } else if ($("#toolbox-content").val() === "other_i18n") {
                 if (e.target.id === "toolbox-content") {
                     // user used dropdown to switch content-type, update value with value from "other" textarea
@@ -631,11 +624,11 @@ var editor = {
                 $("#toolbox-content-other-i18n textarea").each(function () {
                     o.text_i18n[$(this).attr("lang")] = $(this).val();
                 });
-                o.setText($("#toolbox-content-other-i18n textarea").first().val());
+                o.set('text', $("#toolbox-content-other-i18n textarea").first().val());
             } else {
-                o.setText(editor._get_text_sample($("#toolbox-content").val()));
+                o.set('text', editor._get_text_sample($("#toolbox-content").val()));
             }
-            o.setWidth(editor._mm2px($("#toolbox-textwidth").val()));
+            o.set('width', editor._mm2px($("#toolbox-textwidth").val()));
         }
 
         // empty text-inputs if not in use
@@ -651,12 +644,12 @@ var editor = {
     },
 
     _update_toolbox: function () {
-        if (editor.fabric.getActiveGroup()) {
+        var selected = editor.fabric.getActiveObjects();
+        if (selected.length > 1) {
             $("#toolbox").attr("data-type", "group");
             $("#toolbox-heading").text(gettext("Group of objects"));
-            var g = editor.fabric.getActiveGroup();
-        } else if (editor.fabric.getActiveObject()) {
-            var o = editor.fabric.getActiveObject();
+        } else if (selected.length == 1) {
+            var o = selected[0];
             $("#toolbox").attr("data-type", o.type);
             if (o.type === "textarea" || o.type === "text") {
                 $("#toolbox-heading").text(gettext("Text object"));
@@ -765,18 +758,17 @@ var editor = {
 
     _cut: function () {
         editor._history_modification_in_progress = true;
-        var thing = editor.fabric.getActiveObject() ? editor.fabric.getActiveObject() : editor.fabric.getActiveGroup();
-        if (thing.type === "group") {
+        var thing = editor.fabric.getActiveObject();
+        if (thing.type === "activeSelection") {
             editor.clipboard = editor.dump(thing._objects);
             thing.forEachObject(function (o) {
-                o.remove();
+                editor.fabric.remove(o);
             });
-            thing.remove();
+            editor.fabric.remove(thing);
         } else {
             editor.clipboard = editor.dump([thing]);
-            thing.remove();
+            editor.fabric.remove(thing);
         }
-        editor.fabric.discardActiveGroup();
         editor.fabric.discardActiveObject();
         editor._history_modification_in_progress = false;
         editor._create_savepoint();
@@ -784,8 +776,8 @@ var editor = {
 
     _copy: function () {
         editor._history_modification_in_progress = true;
-        var thing = editor.fabric.getActiveObject() ? editor.fabric.getActiveObject() : editor.fabric.getActiveGroup();
-        if (thing.type === "group") {
+        var thing = editor.fabric.getActiveObject();
+        if (thing.type === "activeSelection") {
             editor.clipboard = editor.dump(thing._objects);
         } else {
             editor.clipboard = editor.dump([thing]);
@@ -805,7 +797,6 @@ var editor = {
             objs.push(editor._add_from_data(editor.clipboard[i]));
         }
         editor.fabric.discardActiveObject();
-        editor.fabric.discardActiveGroup();
         if (editor.clipboard.length > 1) {
             var group = new fabric.Group(objs, {
                 originX: 'left',
@@ -814,7 +805,7 @@ var editor = {
                 top: 100,
             });
             group.setCoords();
-            editor.fabric.setActiveGroup(group);
+            editor.fabric.setActiveObject(group);
         } else {
             editor.fabric.setActiveObject(objs[0]);
         }
@@ -823,15 +814,15 @@ var editor = {
     },
 
     _delete: function () {
-        var thing = editor.fabric.getActiveObject() ? editor.fabric.getActiveObject() : editor.fabric.getActiveGroup();
-        if (thing.type === "group") {
+        var thing = editor.fabric.getActiveObject();
+        if (thing.type === "activeSelection") {
             thing.forEachObject(function (o) {
-                o.remove();
+                editor.fabric.remove(o);
             });
-            thing.remove();
-            editor.fabric.discardActiveGroup();
+            editor.fabric.remove(thing);
+            editor.fabric.discardActiveObject();
         } else {
-            thing.remove();
+            editor.fabric.remove(thing);
             editor.fabric.discardActiveObject();
         }
         editor._create_savepoint();
@@ -839,7 +830,7 @@ var editor = {
 
     _on_keydown: function (e) {
         var step = e.shiftKey ? editor._mm2px(10) : editor._mm2px(1);
-        var thing = editor.fabric.getActiveObject() ? editor.fabric.getActiveObject() : editor.fabric.getActiveGroup();
+        var thing = editor.fabric.getActiveObject();
         if ($("#source-container").is(':visible')) {
             return true;
         }
@@ -926,7 +917,7 @@ var editor = {
             originY: 'center',
         });
         group.setCoords();
-        editor.fabric.setActiveGroup(group);
+        editor.fabric.setActiveObject(group);
     },
 
     _undo: function undo() {
