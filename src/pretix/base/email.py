@@ -662,6 +662,11 @@ def base_placeholders(sender, **kwargs):
         concatenation_for_salutation = name_scheme["concatenation"]
 
     ph.append(SimpleFunctionalMailTextPlaceholder(
+        "name_for_salutation", ["waiting_list_entry"],
+        lambda waiting_list_entry: concatenation_for_salutation(waiting_list_entry.name_parts),
+        _("Mr Doe"),
+    ))
+    ph.append(SimpleFunctionalMailTextPlaceholder(
         "name_for_salutation", ["position_or_address"],
         lambda position_or_address: concatenation_for_salutation(get_best_name(position_or_address, parts=True)),
         _("Mr Doe"),
@@ -670,6 +675,10 @@ def base_placeholders(sender, **kwargs):
     for f, l, w in name_scheme['fields']:
         if f == 'full_name':
             continue
+        ph.append(SimpleFunctionalMailTextPlaceholder(
+            'name_%s' % f, ['waiting_list_entry'], lambda waiting_list_entry, f=f: get_name_parts_localized(waiting_list_entry.name_parts, f),
+            name_scheme['sample'][f]
+        ))
         ph.append(SimpleFunctionalMailTextPlaceholder(
             'attendee_name_%s' % f, ['position'], lambda position, f=f: get_name_parts_localized(position.attendee_name_parts, f),
             name_scheme['sample'][f]
