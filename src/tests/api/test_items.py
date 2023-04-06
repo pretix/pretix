@@ -2066,6 +2066,7 @@ TEST_QUESTION_RES = {
     "valid_datetime_min": None,
     "valid_datetime_max": None,
     "valid_file_portrait": False,
+    "valid_string_length_max": None,
     "help_text": {"en": "This is an example question"},
     "options": [
         {

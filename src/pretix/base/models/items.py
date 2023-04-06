@@ -45,7 +45,9 @@ import dateutil.parser
 import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.core.validators import MinValueValidator, RegexValidator
+from django.core.validators import (
+    MaxLengthValidator, MinValueValidator, RegexValidator,
+)
 from django.db import models
 from django.db.models import Q
 from django.utils import formats
@@ -1540,6 +1542,11 @@ class Question(LoggedModel):
     valid_datetime_max = models.DateTimeField(null=True, blank=True,
                                               verbose_name=_('Maximum value'),
                                               help_text=_('Currently not supported in our apps and during check-in'))
+    valid_string_length_max = models.PositiveIntegerField(null=True, blank=True,
+                                                          verbose_name=_('Maximum length'),
+                                                          help_text=_(
+                                                              'Currently not supported in our apps and during check-in'
+                                                          ))
     valid_file_portrait = models.BooleanField(
         default=False,
         verbose_name=_('Validate file to be a portrait'),
@@ -1686,6 +1693,12 @@ class Question(LoggedModel):
                 return answer
             else:
                 raise ValidationError(_('Unknown country code.'))
+        elif self.type in (Question.TYPE_STRING, Question.TYPE_TEXT):
+            if self.valid_string_length_max is not None and len(answer) > self.valid_string_length_max:
+                raise ValidationError(MaxLengthValidator.message % {
+                    'limit_value': self.valid_string_length_max,
+                    'show_value': len(answer)
+                })
 
         return answer
 

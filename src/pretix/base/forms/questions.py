@@ -747,12 +747,14 @@ class BaseQuestionsForm(forms.Form):
             elif q.type == Question.TYPE_STRING:
                 field = forms.CharField(
                     label=label, required=required,
+                    max_length=q.valid_string_length_max,
                     help_text=help_text,
                     initial=initial.answer if initial else None,
                 )
             elif q.type == Question.TYPE_TEXT:
                 field = forms.CharField(
                     label=label, required=required,
+                    max_length=q.valid_string_length_max,
                     help_text=help_text,
                     widget=forms.Textarea,
                     initial=initial.answer if initial else None,
