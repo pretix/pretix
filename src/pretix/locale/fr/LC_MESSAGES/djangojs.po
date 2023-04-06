@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-05 09:17+0000\n"
-"PO-Revision-Date: 2023-01-17 01:00+0000\n"
-"Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
+"PO-Revision-Date: 2023-04-06 22:00+0000\n"
+"Last-Translator: Loïc Alejandro <loic.alejandro@e.email>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
 "Language: fr\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -286,14 +286,12 @@ msgid "Ticket code revoked/changed"
 msgstr "Code du billet révoqué/changé"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-#, fuzzy
 msgid "Ticket blocked"
-msgstr "Ticket non payé"
+msgstr "Billet bloqué"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-#, fuzzy
 msgid "Ticket not valid at this time"
-msgstr "Ticket non payé"
+msgstr "Billet non valable pour le moment"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Order canceled"
