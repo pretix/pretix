@@ -15,6 +15,7 @@
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
+        {% bootstrap_form_errors sform %}
         <div class="tabbed-form">
             <fieldset>
                 <legend>{% trans "Basics" %}</legend>

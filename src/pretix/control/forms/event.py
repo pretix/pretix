@@ -39,7 +39,7 @@ from urllib.parse import urlencode, urlparse
 
 from django import forms
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.core.validators import MaxValueValidator
 from django.db.models import Prefetch, Q, prefetch_related_objects
 from django.forms import (
@@ -457,7 +457,49 @@ class EventUpdateForm(I18nModelForm):
         }
 
 
-class EventSettingsForm(SettingsForm):
+class EventSettingsValidationMixin:
+
+    def clean(self):
+        data = super().clean()
+        settings_dict = self.obj.settings.freeze()
+        settings_dict.update(data)
+        validate_event_settings(self.obj, settings_dict)
+        return data
+
+    def add_error(self, field, error):
+        # Copied from Django, but with improved handling for validation errors on fields that are not part of this form
+
+        if not isinstance(error, ValidationError):
+            error = ValidationError(error)
+
+        if hasattr(error, 'error_dict'):
+            if field is not None:
+                raise TypeError(
+                    "The argument `field` must be `None` when the `error` "
+                    "argument contains errors for multiple fields."
+                )
+            else:
+                error = error.error_dict
+        else:
+            error = {field or NON_FIELD_ERRORS: error.error_list}
+
+        for field, error_list in error.items():
+            if field != NON_FIELD_ERRORS and field not in self.fields:
+                field = NON_FIELD_ERRORS
+                for e in error_list:
+                    e.message = _('A validation error has occurred on a setting that is not part of this form: {error}').format(error=e.message)
+
+            if field not in self.errors:
+                if field == NON_FIELD_ERRORS:
+                    self._errors[field] = self.error_class(error_class='nonfield')
+                else:
+                    self._errors[field] = self.error_class()
+            self._errors[field].extend(error_list)
+            if field in self.cleaned_data:
+                del self.cleaned_data[field]
+
+
+class EventSettingsForm(EventSettingsValidationMixin, SettingsForm):
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
         label=_("Event timezone"),
@@ -573,13 +615,8 @@ class EventSettingsForm(SettingsForm):
         return data
 
     def clean(self):
+        self.cleaned_data = self._resolve_virtual_keys_input(self.cleaned_data)
         data = super().clean()
-        data = self._resolve_virtual_keys_input(data)
-
-        settings_dict = self.event.settings.freeze()
-        settings_dict.update(data)
-
-        validate_event_settings(self.event, settings_dict)
         return data
 
     def __init__(self, *args, **kwargs):
@@ -702,7 +739,7 @@ class CancelSettingsForm(SettingsForm):
             ).format(self.obj.settings.giftcard_expiry_years)
 
 
-class PaymentSettingsForm(SettingsForm):
+class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
     auto_fields = [
         'payment_term_mode',
         'payment_term_days',
@@ -733,13 +770,6 @@ class PaymentSettingsForm(SettingsForm):
         if self.cleaned_data.get('payment_term_mode') == 'minutes' and value is None:
             raise ValidationError(_("This field is required."))
         return value
-
-    def clean(self):
-        data = super().clean()
-        settings_dict = self.obj.settings.freeze()
-        settings_dict.update(data)
-        validate_event_settings(self.obj, settings_dict)
-        return data
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -788,7 +818,7 @@ class ProviderForm(SettingsForm):
         return cleaned_data
 
 
-class InvoiceSettingsForm(SettingsForm):
+class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
 
     auto_fields = [
         'invoice_address_asked',
@@ -862,13 +892,6 @@ class InvoiceSettingsForm(SettingsForm):
             (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
         )
         self.fields['invoice_numbers_counter_length'].validators.append(MaxValueValidator(15))
-
-    def clean(self):
-        data = super().clean()
-        settings_dict = self.obj.settings.freeze()
-        settings_dict.update(data)
-        validate_event_settings(self.obj, settings_dict)
-        return data
 
 
 def contains_web_channel_validate(val):
