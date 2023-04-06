@@ -139,11 +139,17 @@ p.bigger {
     font-size: 16px;
 }
 
+.helper-position-relative {
+    position: relative;
+}
 .helper-display-block {
     display: block !important;
 }
 .helper-display-inline {
     display: inline !important;
+}
+.helper-display-inline-block {
+    display: inline-block !important;
 }
 .helper-display-none-soft {
     display: none;

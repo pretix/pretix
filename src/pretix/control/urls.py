@@ -231,6 +231,7 @@ urlpatterns = [
     re_path(r'^search/payments/$', search.PaymentSearch.as_view(), name='search.payments'),
     re_path(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
         re_path(r'^$', dashboards.event_index, name='event.index'),
+        re_path(r'^qrcode.(?P<filetype>(png|jpeg|gif|svg))$', event.EventQRCode.as_view(), name='event.qrcode'),
         re_path(r'^widgets.json$', dashboards.event_index_widgets_lazy, name='event.index.widgets'),
         re_path(r'^logs/embed$', dashboards.event_index_log_lazy, name='event.index.logs'),
         re_path(r'^live/$', event.EventLive.as_view(), name='event.live'),
