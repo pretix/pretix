@@ -218,10 +218,14 @@ Vue.component('availbox', {
         + '       v-bind:aria-label="label_select_item"'
         + '>'
         + '</label>'
-        + '<input type="number" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
-        + '       v-model="amount_selected" :max="order_max" :name="input_name"'
+        + '<div class="pretix-widget-item-count-group" v-if="order_max !== 1">'
+        + '<button type="button" @click="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" aria-label="' + strings.quantity_dec + '">-</button>'
+        + '<input type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
+        + '       v-model="amount_selected" :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
         + '       aria-label="' + strings.quantity + '"'
-        + '       v-if="order_max !== 1">'
+        + '       >'
+        + '<button type="button" @click="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" aria-label="' + strings.quantity_inc + '">+</button>'
+        + '</div>'
         + '</div>'
         + '</div>'),
     props: {
@@ -296,6 +300,13 @@ Vue.component('availbox', {
     methods: {
         focus_voucher_field: function () {
             this.$root.$emit('focus_voucher_field')
+        },
+        on_step: function (e) {
+            e.preventDefault();
+            var t = e.target.tagName == 'BUTTON' ? e.target : e.target.closest.button;
+            var step = parseFloat(t.getAttribute("data-step"));
+            var controls = document.getElementById(t.getAttribute("data-controls"));
+            this.amount_selected = Math.max(controls.min, Math.min(controls.max, (this.amount_selected || 0) + step));
         }
     }
 });
