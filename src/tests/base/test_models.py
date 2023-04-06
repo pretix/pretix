@@ -2693,6 +2693,7 @@ class SeatingTestCase(TestCase):
 @pytest.mark.parametrize("qtype,answer,expected", [
     (Question.TYPE_STRING, "a", "a"),
     (Question.TYPE_TEXT, "v", "v"),
+    (Question.TYPE_TEXT, "waaaaay tooooo long", ValidationError),
     (Question.TYPE_NUMBER, "0.9", ValidationError),
     (Question.TYPE_NUMBER, "1", Decimal("1")),
     (Question.TYPE_NUMBER, "3", Decimal("3")),
@@ -2745,6 +2746,7 @@ def test_question_answer_validation(qtype, answer, expected):
             valid_datetime_max=datetime.datetime(2018, 1, 16, 16, 0, 0, tzinfo=tzoffset(None, 3600)),
             valid_number_min=Decimal('1'),
             valid_number_max=Decimal('100'),
+            valid_string_length_max=8,
         )
         if isinstance(expected, type) and issubclass(expected, Exception):
             with pytest.raises(expected):
