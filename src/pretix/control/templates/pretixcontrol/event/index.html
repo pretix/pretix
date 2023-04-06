@@ -27,25 +27,25 @@
             <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" title="{% trans "Create QR code" %}" aria-haspopup="true" aria-expanded="false">
                 <i class="fa fa-qrcode" aria-hidden="true"></i>
             </button>
-            <ul class="dropdown-menu">
+            <ul class="dropdown-menu dropdown-menu-right">
                 <li>
                     <a href="{% url "control:event.qrcode" event=request.event.slug organizer=request.organizer.slug filetype="png" %}" target="_blank" download>
-                        {% blocktrans with filetype="PNG" %}Download QR-code as {{ filetype }} image{% endblocktrans %}
+                        {% blocktrans with filetype="PNG" %}Download QR code as {{ filetype }} image{% endblocktrans %}
                     </a>
                 </li>
                 <li>
                     <a href="{% url "control:event.qrcode" event=request.event.slug organizer=request.organizer.slug filetype="svg" %}" target="_blank" download>
-                        {% blocktrans with filetype="SVG" %}Download QR-code as {{ filetype }} image{% endblocktrans %}
+                        {% blocktrans with filetype="SVG" %}Download QR code as {{ filetype }} image{% endblocktrans %}
                     </a>
                 </li>
                 <li>
                     <a href="{% url "control:event.qrcode" event=request.event.slug organizer=request.organizer.slug filetype="jpeg" %}" target="_blank" download>
-                        {% blocktrans with filetype="JPG" %}Download QR-code as {{ filetype }} image{% endblocktrans %}
+                        {% blocktrans with filetype="JPG" %}Download QR code as {{ filetype }} image{% endblocktrans %}
                     </a>
                 </li>
                 <li>
                     <a href="{% url "control:event.qrcode" event=request.event.slug organizer=request.organizer.slug filetype="gif" %}" target="_blank" download>
-                        {% blocktrans with filetype="GIF" %}Download QR-code as {{ filetype }} image{% endblocktrans %}
+                        {% blocktrans with filetype="GIF" %}Download QR code as {{ filetype }} image{% endblocktrans %}
                     </a>
                 </li>
             </ul>

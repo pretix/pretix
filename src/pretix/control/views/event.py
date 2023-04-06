@@ -44,6 +44,7 @@ from urllib.parse import urlsplit
 
 import bleach
 import qrcode
+import qrcode.image.svg
 from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
@@ -88,7 +89,7 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
-from pretix.multidomain.urlreverse import get_event_domain, build_absolute_uri
+from pretix.multidomain.urlreverse import build_absolute_uri, get_event_domain
 from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 
