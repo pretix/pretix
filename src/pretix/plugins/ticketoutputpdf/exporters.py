@@ -39,7 +39,7 @@ from io import BytesIO
 from django import forms
 from django.core.files.base import ContentFile
 from django.db import DataError, models
-from django.db.models import OuterRef, Q, Subquery
+from django.db.models import Case, OuterRef, Q, Subquery, When
 from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import now
 from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
@@ -145,7 +145,11 @@ class AllTicketsPDF(BaseExporter):
         elif form_data.get('order_by', '').startswith('name:'):
             part = form_data['order_by'][5:]
             qs = qs.annotate(
-                resolved_name=Coalesce('attendee_name_parts', 'addon_to__attendee_name_parts', 'order__invoice_address__name_parts')
+                resolved_name=Case(
+                    When(attendee_name_cached__ne='', then='attendee_name_parts'),
+                    When(addon_to__attendee_name_cached__isnull=False, addon_to__attendee_name_cached__ne='', then='addon_to__attendee_name_parts'),
+                    default='order__invoice_address__name_parts',
+                )
             ).annotate(
                 resolved_name_part=JSONExtract('resolved_name', part)
             ).order_by(
