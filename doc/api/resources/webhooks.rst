@@ -47,6 +47,7 @@ The following values for ``action_types`` are valid with pretix core:
     * ``pretix.event.order.refund.done``
     * ``pretix.event.order.refund.canceled``
     * ``pretix.event.order.refund.failed``
+    * ``pretix.event.order.payment.confirmed``
     * ``pretix.event.order.approved``
     * ``pretix.event.order.denied``
     * ``pretix.event.checkin``

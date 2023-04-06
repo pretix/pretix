@@ -257,6 +257,10 @@ def register_default_webhook_events(sender, **kwargs):
             _('Refund of payment failed'),
         ),
         ParametrizedOrderWebhookEvent(
+            'pretix.event.order.payment.confirmed',
+            _('Payment confirmed'),
+        ),
+        ParametrizedOrderWebhookEvent(
             'pretix.event.order.approved',
             _('Order approved'),
         ),
