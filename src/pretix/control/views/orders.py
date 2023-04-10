@@ -2052,7 +2052,11 @@ class OrderSendMail(EventPermissionRequiredMixin, OrderViewMixin, FormView):
         )
         self.preview_output = {}
         with language(order.locale, self.request.event.settings.region):
-            email_context = get_email_context(event=order.event, order=order)
+            email_context = get_email_context(
+                event=order.event,
+                order=order,
+                event_or_subevent=order.subevent or order.event,
+            )
         email_template = LazyI18nString(form.cleaned_data['message'])
         email_subject = format_map(str(form.cleaned_data['subject']), email_context)
         email_content = render_mail(email_template, email_context)

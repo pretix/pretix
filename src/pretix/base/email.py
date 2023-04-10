@@ -505,6 +505,17 @@ def base_placeholders(sender, **kwargs):
             lambda event: str(event.location or ''),
         ),
         SimpleFunctionalMailTextPlaceholder(
+            'event_date_from', ['event_or_subevent'],
+            lambda event_or_subevent: str(date_format(
+                event_or_subevent.date_from,
+                'SHORT_DATETIME_FORMAT'
+            )),
+            lambda event: str(date_format(
+                event.date_from,
+                'SHORT_DATETIME_FORMAT'
+            )),
+        ),
+        SimpleFunctionalMailTextPlaceholder(
             'event_admission_time', ['event_or_subevent'],
             lambda event_or_subevent:
                 date_format(event_or_subevent.date_admission.astimezone(event_or_subevent.timezone), 'TIME_FORMAT')

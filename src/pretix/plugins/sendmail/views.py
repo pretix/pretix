@@ -243,7 +243,7 @@ class BaseSenderView(EventPermissionRequiredMixin, FormView):
 class OrderSendView(BaseSenderView):
     form_class = forms.OrderMailForm
     form_fragment_name = "pretixplugins/sendmail/send_form_fragment_orders.html"
-    context_parameters = ['event', 'order', 'position_or_address']
+    context_parameters = ['event', 'order', 'position_or_address', 'event_or_subevent']
     task = send_mails_to_orders
 
     ACTION_TYPE = 'pretix.plugins.sendmail.sent'
