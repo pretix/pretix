@@ -330,6 +330,8 @@ class OrderSendView(BaseSenderView):
             initial['created_to'] = dateutil.parser.parse(logentry.parsed_data['created_to'])
         if logentry.parsed_data.get('attach_tickets'):
             initial['attach_tickets'] = logentry.parsed_data['attach_tickets']
+        if logentry.parsed_data.get('attach_ical'):
+            initial['attach_ical'] = logentry.parsed_data['attach_ical']
         if logentry.parsed_data.get('subevent'):
             try:
                 initial['subevent'] = self.request.event.subevents.get(
@@ -425,6 +427,7 @@ class OrderSendView(BaseSenderView):
             'checkin_lists': [i.pk for i in form.cleaned_data.get('checkin_lists')],
             'filter_checkins': form.cleaned_data.get('filter_checkins'),
             'attach_tickets': form.cleaned_data.get('attach_tickets'),
+            'attach_ical': form.cleaned_data.get('attach_ical'),
         })
         return kwargs
 

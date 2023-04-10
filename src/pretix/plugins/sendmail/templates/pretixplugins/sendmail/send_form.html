@@ -33,6 +33,9 @@
                 {% if form.attach_tickets %}
                     {% bootstrap_field form.attach_tickets layout='horizontal' %}
                 {% endif %}
+                {% if form.attach_ical %}
+                    {% bootstrap_field form.attach_ical layout='horizontal' %}
+                {% endif %}
             </fieldset>
             {% if is_preview %}
             <fieldset>
@@ -55,6 +58,12 @@
                                 <p>
                                     <span class="fa fa-file" aria-hidden="true"></span>
                                     {% trans "Tickets" %}
+                                </p>
+                            {% endif %}
+                            {% if form.cleaned_data.attach_ical %}
+                                <p>
+                                    <span class="fa fa-file" aria-hidden="true"></span>
+                                    {% trans "Attach calendar files" %}
                                 </p>
                             {% endif %}
                         </div>
