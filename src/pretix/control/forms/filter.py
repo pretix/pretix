@@ -569,6 +569,11 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
         label=_('Sales channel'),
         required=False,
     )
+    checkin_attention = forms.NullBooleanField(
+        required=False,
+        widget=FilterNullBooleanSelect,
+        label=_('Requires special attention'),
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -689,6 +694,8 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             qs = qs.filter(total=fdata.get('total'))
         if fdata.get('email_known_to_work') is not None:
             qs = qs.filter(email_known_to_work=fdata.get('email_known_to_work'))
+        if fdata.get('checkin_attention') is not None:
+            qs = qs.filter(checkin_attention=fdata.get('checkin_attention'))
         if fdata.get('locale'):
             qs = qs.filter(locale=fdata.get('locale'))
         if fdata.get('payment_sum_min') is not None:
