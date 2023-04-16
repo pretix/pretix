@@ -1370,12 +1370,18 @@ class OrderChangeMixin:
         for i in category['items']:
             if i.has_variations:
                 for v in i.available_variations:
-                    val = int(self.request.POST.get(f'cp_{form["pos"].pk}_variation_{i.pk}_{v.pk}') or '0')
+                    try:
+                        val = int(self.request.POST.get(f'cp_{form["pos"].pk}_variation_{i.pk}_{v.pk}') or '0')
+                    except ValueError:
+                        raise ValidationError(_('Please enter numbers only.'))
                     price = self.request.POST.get(f'cp_{form["pos"].pk}_variation_{i.pk}_{v.pk}_price') or '0'
                     if val:
                         selected[i, v] = val, price
             else:
-                val = int(self.request.POST.get(f'cp_{form["pos"].pk}_item_{i.pk}') or '0')
+                try:
+                    val = int(self.request.POST.get(f'cp_{form["pos"].pk}_item_{i.pk}') or '0')
+                except ValueError:
+                    raise ValidationError(_('Please enter numbers only.'))
                 price = self.request.POST.get(f'cp_{form["pos"].pk}_item_{i.pk}_price') or '0'
                 if val:
                     selected[i, None] = val, price
