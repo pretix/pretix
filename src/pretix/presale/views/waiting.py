@@ -48,6 +48,7 @@ class WaitingView(EventViewMixin, FormView):
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
+        kwargs['request'] = self.request
         kwargs['event'] = self.request.event
         kwargs['instance'] = WaitingListEntry(
             event=self.request.event, locale=get_language_without_region(),
