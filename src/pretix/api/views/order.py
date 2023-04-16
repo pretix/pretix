@@ -314,7 +314,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['POST'])
     def mark_paid(self, request, **kwargs):
         order = self.get_object()
-        send_mail = request.data.get('send_email', True)
+        send_mail = request.data.get('send_email', True) if request.data else True
 
         if order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
 
@@ -373,7 +373,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def mark_canceled(self, request, **kwargs):
-        send_mail = request.data.get('send_email', True)
+        send_mail = request.data.get('send_email', True) if request.data else True
         comment = request.data.get('comment', None)
         cancellation_fee = request.data.get('cancellation_fee', None)
         if cancellation_fee:
@@ -432,7 +432,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def approve(self, request, **kwargs):
-        send_mail = request.data.get('send_email', True)
+        send_mail = request.data.get('send_email', True) if request.data else True
 
         order = self.get_object()
         try:
@@ -450,7 +450,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def deny(self, request, **kwargs):
-        send_mail = request.data.get('send_email', True)
+        send_mail = request.data.get('send_email', True) if request.data else True
         comment = request.data.get('comment', '')
 
         order = self.get_object()
@@ -1444,7 +1444,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         return order.payments.all()
 
     def create(self, request, *args, **kwargs):
-        send_mail = request.data.get('send_email', True)
+        send_mail = request.data.get('send_email', True) if request.data else True
         serializer = OrderPaymentCreateSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         with transaction.atomic():
@@ -1489,7 +1489,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     def confirm(self, request, **kwargs):
         payment = self.get_object()
         force = request.data.get('force', False)
-        send_mail = request.data.get('send_email', True)
+        send_mail = request.data.get('send_email', True) if request.data else True
 
         if payment.state not in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
             return Response({'detail': 'Invalid state of payment'}, status=status.HTTP_400_BAD_REQUEST)
