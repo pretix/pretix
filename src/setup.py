@@ -160,7 +160,7 @@ setup(
     install_requires=[
         'arabic-reshaper==3.0.0',  # Support for Arabic in reportlab
         'babel',
-        'BeautifulSoup4==4.11.*',
+        'BeautifulSoup4==4.12.*',
         'bleach==5.0.*',
         'celery==5.2.*',
         'chardet==5.1.*',
