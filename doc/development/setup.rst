@@ -150,6 +150,13 @@ Add this to your ``src/pretix.cfg``::
 
 Then execute ``python -m smtpd -n -c DebuggingServer localhost:1025``.
 
+Working with periodic tasks
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Periodic tasks (like sendmail rules) are run when an external scheduler (like cron)
+triggers the ``runperiodic`` command.
+
+To run periodic tasks, execute ``python manage.py runperiodic``.
+
 Working with translations
 ^^^^^^^^^^^^^^^^^^^^^^^^^
 If you want to translate new strings that are not yet known to the translation system,
