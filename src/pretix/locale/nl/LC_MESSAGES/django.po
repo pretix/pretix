@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-05 09:17+0000\n"
-"PO-Revision-Date: 2023-02-23 23:00+0000\n"
-"Last-Translator: Toon Toetenel <toon@toetenel.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2023-04-16 20:05+0000\n"
+"Last-Translator: MaartenUreel <maarten@ureel.be>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -199,16 +199,10 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Deze soort vraag kan niet bij het inchecken worden gesteld."
 
 #: pretix/api/serializers/media.py:104
-#, fuzzy
-#| msgid ""
-#| "A gift card with the same secret already exists in your or an affiliated "
-#| "organizer account."
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
-msgstr ""
-"Een cadeaukaart met dezelfde code bestaat al in uw organisatoraccount of een "
-"met uw account verbonden organisatoraccount."
+msgstr "Een medium met dezelfde code bestaat al in uw organisatoraccount."
 
 #: pretix/api/serializers/order.py:76
 #, python-brace-format
@@ -2072,10 +2066,8 @@ msgstr ""
 "Download een spreadsheet met alle (terug)betalingen van elke bestellingen."
 
 #: pretix/base/exporters/orderlist.py:775
-#, fuzzy
-#| msgid "Extend payment term"
 msgid "Date range (payment date)"
-msgstr "Betalingstermijn verlengen"
+msgstr "Betalingstermijn (betaaldatum)"
 
 #: pretix/base/exporters/orderlist.py:778
 msgid ""
@@ -2935,7 +2927,7 @@ msgstr "Moderne factuurrenderer (pretix 2.7)"
 
 #: pretix/base/media.py:58
 msgid "Barcode / QR-Code"
-msgstr ""
+msgstr "Barcode / QR-Code"
 
 #: pretix/base/media.py:74
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:237
@@ -6784,16 +6776,12 @@ msgstr[1] ""
 #: pretix/base/services/cart.py:132 pretix/base/services/orders.py:145
 #: pretix/presale/templates/pretixpresale/event/index.html:157
 #: pretix/presale/views/waiting.py:102 pretix/presale/views/widget.py:702
-#, fuzzy
-#| msgid "The presale period for this event has not yet started."
 msgid "The booking period for this event has not yet started."
-msgstr "De voorverkoopperiode van dit evenement is nog niet begonnen."
+msgstr "De verkoopperiode van dit evenement is nog niet begonnen."
 
 #: pretix/base/services/cart.py:133
-#, fuzzy
-#| msgid "The presale period for this event has ended."
 msgid "The booking period for this event has ended."
-msgstr "De voorverkoopperiode van dit evenement is afgelopen."
+msgstr "De verkoopperiode van dit evenement is afgelopen."
 
 #: pretix/base/services/cart.py:134
 msgid ""
@@ -6804,28 +6792,20 @@ msgstr ""
 "voor dit evenement al moeten zijn ontvangen."
 
 #: pretix/base/services/cart.py:136
-#, fuzzy
-#| msgid ""
-#| "The presale period for this event has not yet started. The affected "
-#| "positions have been removed from your cart."
 msgid ""
 "The booking period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
-"De voorverkoopperiode van dit evenement is nog niet begonnen. De getroffen "
+"De verkoopperiode van dit evenement is nog niet begonnen. De betreffende "
 "tickets zijn uit uw winkelwagen verwijderd."
 
 #: pretix/base/services/cart.py:139 pretix/base/services/orders.py:173
-#, fuzzy
-#| msgid ""
-#| "The presale period for one of the events in your cart has ended. The "
-#| "affected positions have been removed from your cart."
 msgid ""
 "The booking period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
-"De voorverkoopperiode voor een van de evenementen in uw winkelwagen is "
-"afgelopen. De getroffen plaatsen zijn verwijderd uit uw winkelwagen."
+"De verkoopperiode voor een van de evenementen in uw winkelwagen is "
+"afgelopen. De betreffende plaatsen zijn verwijderd uit uw winkelwagen."
 
 #: pretix/base/services/cart.py:141
 #, fuzzy
@@ -7478,10 +7458,8 @@ msgstr[1] ""
 "hebben het overschot uit uw winkelwagen verwijderd."
 
 #: pretix/base/services/orders.py:146
-#, fuzzy
-#| msgid "The presale period has ended."
 msgid "The booking period has ended."
-msgstr "De voorverkoopperiode is afgelopen."
+msgstr "De verkoopperiode is afgelopen."
 
 #: pretix/base/services/orders.py:152
 msgid ""
@@ -7533,16 +7511,12 @@ msgid "You need a valid voucher code to order one of the products."
 msgstr "U heeft een geldige vouchercode nodig om dit product te bestellen."
 
 #: pretix/base/services/orders.py:169
-#, fuzzy
-#| msgid ""
-#| "The presale period for one of the events in your cart has not yet "
-#| "started. The affected positions have been removed from your cart."
 msgid ""
 "The booking period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
 msgstr ""
-"De voorverkoopperiode voor een van de evenementen in uw winkelwagen is nog "
-"niet begonnen. De bijbehorende kaartjes zijn uit uw winkelwagen verwijderd."
+"De verkoopperiode voor een van de evenementen in uw winkelwagen is nog niet "
+"begonnen. De bijbehorende tickets zijn uit uw winkelwagen verwijderd."
 
 #: pretix/base/services/orders.py:176
 msgid ""
@@ -30193,18 +30167,14 @@ msgstr "Andere datums"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:142
 #: pretix/presale/views/waiting.py:98 pretix/presale/views/widget.py:695
-#, fuzzy
-#| msgid "The presale period for this event is over."
 msgid "The booking period for this event is over."
-msgstr "De voorverkoopperiode voor dit evenement is afgelopen."
+msgstr "De verkoopperiode voor dit evenement is afgelopen."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:150
 #: pretix/presale/views/widget.py:697
-#, fuzzy, python-format
-#| msgid "The presale for this event will start on %(date)s at %(time)s."
+#, python-format
 msgid "The booking period for this event will start on %(date)s at %(time)s."
-msgstr ""
-"De voorverkoopperiode voor dit evenement begint op %(date)s om %(time)s."
+msgstr "De verkoopperiode voor dit evenement begint op %(date)s om %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:167
 #: pretix/presale/templates/pretixpresale/event/index.html:168
@@ -31333,11 +31303,9 @@ msgid "Your cart is empty"
 msgstr "Uw winkelwagen is leeg"
 
 #: pretix/presale/views/checkout.py:59
-#, fuzzy
-#| msgid "The presale for this event is over or has not yet started."
 msgid "The booking period for this event is over or has not yet started."
 msgstr ""
-"De voorverkoop voor dit evenement is afgelopen of is nog niet begonnen."
+"De verkoopperiode voor dit evenement is afgelopen of is nog niet begonnen."
 
 #: pretix/presale/views/customer.py:243
 msgid ""
