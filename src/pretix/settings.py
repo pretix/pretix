@@ -37,13 +37,13 @@ import configparser
 import logging
 import os
 import sys
+from importlib import metadata
 from urllib.parse import urlparse
 from json import loads
 
 import django.conf.locale
 from django.utils.crypto import get_random_string
 from kombu import Queue
-from pkg_resources import iter_entry_points
 from pycountry import currencies
 
 from . import __version__
@@ -395,11 +395,11 @@ except ImportError:
     pass
 
 PLUGINS = []
-for entry_point in iter_entry_points(group='pretix.plugin', name=None):
-    if entry_point.module_name in PRETIX_PLUGINS_EXCLUDE:
+for entry_point in metadata.entry_points(group='pretix.plugin'):
+    if entry_point.module in PRETIX_PLUGINS_EXCLUDE:
         continue
-    PLUGINS.append(entry_point.module_name)
-    INSTALLED_APPS.append(entry_point.module_name)
+    PLUGINS.append(entry_point.module)
+    INSTALLED_APPS.append(entry_point.module)
 
 HIJACK_PERMISSION_CHECK = "hijack.permissions.superusers_and_staff"
 HIJACK_INSERT_BEFORE = None
