@@ -219,7 +219,7 @@ class ItemDataExporter(ListExporter):
 
     def get_filename(self):
         if self.is_multievent:
-            return '{}_products'.format(self.events.first().organizer.slug)
+            return '{}_products'.format(self.organizer.slug)
         return '{}_products'.format(self.event.slug)
 
     def prepare_xlsx_sheet(self, ws):

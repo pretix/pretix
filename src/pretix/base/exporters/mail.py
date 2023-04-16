@@ -63,7 +63,7 @@ class MailExporter(BaseExporter):
                            | set(a['attendee_email'] for a in pos if a['attendee_email']))
 
         if self.is_multievent:
-            return '{}_pretixemails.txt'.format(self.events.first().organizer.slug), 'text/plain', data.encode("utf-8")
+            return '{}_pretixemails.txt'.format(self.organizer.slug), 'text/plain', data.encode("utf-8")
         else:
             return '{}_pretixemails.txt'.format(self.event.slug), 'text/plain', data.encode("utf-8")
 

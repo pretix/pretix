@@ -155,7 +155,7 @@ class InvoiceExporter(InvoiceExporterMixin, BaseExporter):
                         self.progress_callback(counter / total * 100)
 
             if self.is_multievent:
-                filename = '{}_invoices.zip'.format(self.events.first().organizer.slug)
+                filename = '{}_invoices.zip'.format(self.organizer.slug)
             else:
                 filename = '{}_invoices.zip'.format(self.event.slug)
 
@@ -415,7 +415,7 @@ class InvoiceDataExporter(InvoiceExporterMixin, MultiSheetListExporter):
 
     def get_filename(self):
         if self.is_multievent:
-            return '{}_invoices'.format(self.events.first().organizer.slug)
+            return '{}_invoices'.format(self.organizer.slug)
         else:
             return '{}_invoices'.format(self.event.slug)
 

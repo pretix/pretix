@@ -94,7 +94,7 @@ class EventDataExporter(ListExporter):
             ]
 
     def get_filename(self):
-        return '{}_events'.format(self.events.first().organizer.slug)
+        return '{}_events'.format(self.organizer.slug)
 
 
 @receiver(register_multievent_data_exporters, dispatch_uid="multiexporter_eventdata")

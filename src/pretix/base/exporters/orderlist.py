@@ -754,7 +754,7 @@ class OrderListExporter(MultiSheetListExporter):
 
     def get_filename(self):
         if self.is_multievent:
-            return '{}_orders'.format(self.events.first().organizer.slug)
+            return '{}_orders'.format(self.organizer.slug)
         else:
             return '{}_orders'.format(self.event.slug)
 
@@ -880,7 +880,7 @@ class PaymentListExporter(ListExporter):
 
     def get_filename(self):
         if self.is_multievent:
-            return '{}_payments'.format(self.events.first().organizer.slug)
+            return '{}_payments'.format(self.organizer.slug)
         else:
             return '{}_payments'.format(self.event.slug)
 
@@ -1037,7 +1037,7 @@ class GiftcardRedemptionListExporter(ListExporter):
 
     def get_filename(self):
         if self.is_multievent:
-            return '{}_giftcardredemptions'.format(self.events.first().organizer.slug)
+            return '{}_giftcardredemptions'.format(self.organizer.slug)
         else:
             return '{}_giftcardredemptions'.format(self.event.slug)
 
