@@ -169,7 +169,7 @@ setup(
         'defusedcsv>=1.1.0',
         'dj-static',
         'Django==3.2.*,>=3.2.18',
-        'django-bootstrap3==22.2.*',
+        'django-bootstrap3==23.1.*',
         'django-compressor==4.3.*',
         'django-countries==7.5.*',
         'django-filter==22.1',
