@@ -21,8 +21,8 @@
                 <script type="text/json" data-replace-with-qr>{{ qrdata|safe }}</script><br>
                 {% trans "If your app/device does not support scanning a QR code, you can also enter the following information:" %}
                 <br>
-                <strong>{% trans "System URL:" %}</strong> {{ settings.SITE_URL }}<br>
-                <strong>{% trans "Token:" %}</strong> {{ device.initialization_token }}
+                <strong>{% trans "System URL:" %}</strong> <code>{{ settings.SITE_URL }}</code><br>
+                <strong>{% trans "Token:" %}</strong> <code>{{ device.initialization_token }}</code>
             </li>
         </ol>
     </div>
