@@ -37,11 +37,11 @@ import configparser
 import logging
 import os
 import sys
-from importlib import metadata
 from urllib.parse import urlparse
 from json import loads
 
 import django.conf.locale
+import importlib_metadata as metadata
 from django.utils.crypto import get_random_string
 from kombu import Queue
 from pycountry import currencies

@@ -22,13 +22,13 @@
 import os
 import sys
 from enum import Enum
-from importlib import metadata
 from typing import List
 
+import importlib_metadata as metadata
 from django.apps import AppConfig, apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
-from pkg_resources import Requirement
+from packaging.requirements import Requirement
 
 
 class PluginType(Enum):
