@@ -573,6 +573,7 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
         required=False,
         widget=FilterNullBooleanSelect,
         label=_('Requires special attention'),
+        help_text=_('Only matches orders with the attention checkbox set directly for the order, not based on the product.'),
     )
 
     def __init__(self, *args, **kwargs):
