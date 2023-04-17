@@ -45,7 +45,7 @@ from phonenumber_field.formfields import PhoneNumberField
 
 from pretix.base.forms.questions import (
     BaseInvoiceAddressForm, BaseQuestionsForm, WrappedPhoneNumberPrefixWidget,
-    guess_phone_prefix,
+    guess_phone_prefix_from_request,
 )
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.base.validators import EmailBanlistValidator
@@ -73,7 +73,7 @@ class ContactForm(forms.Form):
 
         if self.event.settings.order_phone_asked:
             if not self.initial.get('phone'):
-                phone_prefix = guess_phone_prefix(self.event)
+                phone_prefix = guess_phone_prefix_from_request(self.request, self.event)
                 if phone_prefix:
                     # We now exploit an implementation detail in PhoneNumberPrefixWidget to allow us to pass just
                     # a country code but no number as an initial value. It's a bit hacky, but should be stable for

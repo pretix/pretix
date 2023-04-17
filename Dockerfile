@@ -19,6 +19,8 @@ RUN apt-get update && \
             python3-dev \
             sudo \
             supervisor \
+            libmaxminddb0 \
+            libmaxminddb-dev \
             zlib1g-dev && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \

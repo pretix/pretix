@@ -45,6 +45,7 @@ import pytz
 from django import forms
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.gis.geoip2 import GeoIP2
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.core.validators import (
@@ -91,6 +92,7 @@ from pretix.helpers.countries import (
     CachedCountries, get_phone_prefixes_sorted_and_localized,
 )
 from pretix.helpers.escapejson import escapejson_attr
+from pretix.helpers.http import get_client_ip
 from pretix.helpers.i18n import get_format_without_seconds
 from pretix.presale.signals import question_form_fields
 
@@ -351,6 +353,15 @@ class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
         return ""
 
 
+def guess_country_from_request(request, event):
+    if settings.HAS_GEOIP:
+        g = GeoIP2()
+        res = g.country(get_client_ip(request))
+        if res['country_code'] and len(res['country_code']) == 2:
+            return Country(res['country_code'])
+    return guess_country(event)
+
+
 def guess_country(event):
     # Try to guess the initial country from either the country of the merchant
     # or the locale. This will hopefully save at least some users some scrolling :)
@@ -379,6 +390,12 @@ def get_country_by_locale(locale):
 def guess_phone_prefix(event):
     with language(get_babel_locale()):
         country = str(guess_country(event))
+        return get_phone_prefix(country)
+
+
+def guess_phone_prefix_from_request(request, event):
+    with language(get_babel_locale()):
+        country = str(guess_country_from_request(request, event))
         return get_phone_prefix(country)
 
 
@@ -564,6 +581,7 @@ class BaseQuestionsForm(forms.Form):
         :param cartpos: The cart position the form should be for
         :param event: The event this belongs to
         """
+        request = kwargs.pop('request', None)
         cartpos = self.cartpos = kwargs.pop('cartpos', None)
         orderpos = self.orderpos = kwargs.pop('orderpos', None)
         pos = cartpos or orderpos
@@ -661,7 +679,7 @@ class BaseQuestionsForm(forms.Form):
                     'autocomplete': 'address-level2',
                 }),
             )
-            country = (cartpos.country if cartpos else orderpos.country) or guess_country(event)
+            country = (cartpos.country if cartpos else orderpos.country) or guess_country_from_request(request, event)
             add_fields['country'] = CountryField(
                 countries=CachedCountries
             ).formfield(
@@ -768,7 +786,7 @@ class BaseQuestionsForm(forms.Form):
                     help_text=help_text,
                     widget=forms.Select,
                     empty_label=' ',
-                    initial=initial.answer if initial else (guess_country(event) if required else None),
+                    initial=initial.answer if initial else (guess_country_from_request(request, event) if required else None),
                 )
             elif q.type == Question.TYPE_CHOICE:
                 field = forms.ModelChoiceField(
@@ -856,7 +874,7 @@ class BaseQuestionsForm(forms.Form):
                         initial = None
 
                 if not initial:
-                    phone_prefix = guess_phone_prefix(event)
+                    phone_prefix = guess_phone_prefix_from_request(request, event)
                     if phone_prefix:
                         initial = "+{}.".format(phone_prefix)
 
@@ -992,7 +1010,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
 
         kwargs.setdefault('initial', {})
         if not kwargs.get('instance') or not kwargs['instance'].country:
-            kwargs['initial']['country'] = guess_country(self.event)
+            kwargs['initial']['country'] = guess_country_from_request(self.request, self.event)
 
         super().__init__(*args, **kwargs)
         if not event.settings.invoice_address_vatid:

@@ -481,3 +481,18 @@ You can configure the maximum file size for uploading various files::
     ; Max upload size for other files in MiB, defaults to 10 MiB
     ; This includes all file upload type order questions
     max_size_other = 100
+
+
+GeoIP
+-----
+
+pretix can optionally make use of a GeoIP database for some features. It needs a file in ``mmdb`` format, for example
+`GeoLite2`_ or `GeoAcumen`_::
+
+    [geoip]
+    path=/var/geoipdata/
+    filename_country=GeoLite2-Country.mmdb
+
+
+.. _GeoAcumen: https://github.com/geoacumen/geoacumen-country
+.. _GeoLite2: https://dev.maxmind.com/geoip/geolite2-free-geolocation-data

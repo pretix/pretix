@@ -191,6 +191,7 @@ setup(
         'djangorestframework==3.14.*',
         'dnspython==2.2.*',
         'drf_ujson2==1.7.*',
+        'geoip2==4.*',
         'isoweek',
         'jsonschema',
         'kombu==5.2.*',

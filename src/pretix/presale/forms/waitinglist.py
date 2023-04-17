@@ -25,7 +25,8 @@ from django.utils.translation import gettext_lazy as _
 from phonenumber_field.formfields import PhoneNumberField
 
 from pretix.base.forms.questions import (
-    NamePartsFormField, WrappedPhoneNumberPrefixWidget, guess_phone_prefix,
+    NamePartsFormField, WrappedPhoneNumberPrefixWidget,
+    guess_phone_prefix_from_request,
 )
 from pretix.base.models import Quota, WaitingListEntry
 from pretix.base.templatetags.rich_text import rich_text
@@ -40,6 +41,7 @@ class WaitingListForm(forms.ModelForm):
         fields = ('name_parts', 'email', 'phone')
 
     def __init__(self, *args, **kwargs):
+        request = kwargs.pop('request')
         self.event = kwargs.pop('event')
         self.channel = kwargs.pop('channel')
         customer = kwargs.pop('customer')
@@ -93,7 +95,7 @@ class WaitingListForm(forms.ModelForm):
 
         if event.settings.waiting_list_phones_asked:
             if not self.initial.get('phone'):
-                phone_prefix = guess_phone_prefix(event)
+                phone_prefix = guess_phone_prefix_from_request(request, event)
                 if phone_prefix:
                     self.initial['phone'] = "+{}.".format(phone_prefix)
 
