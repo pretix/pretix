@@ -47,6 +47,7 @@ from django_otp.oath import TOTP
 from django_otp.plugins.otp_totp.models import TOTPDevice
 
 from pretix.base.models import U2FDevice, User
+from pretix.helpers import security
 
 
 class LoginFormTest(TestCase):
@@ -796,6 +797,24 @@ class SessionTimeOutTest(TestCase):
         self.client.defaults['HTTP_USER_AGENT'] = 'Mozilla/5.0 (X11; Linux x86_64) Something else'
         response = self.client.get('/control/')
         self.assertEqual(response.status_code, 302)
+
+    def test_pinned_country(self):
+        class FakeGeoIp:
+            def country(self, ip):
+                if ip == '1.2.3.4':
+                    return {'country_code': 'DE'}
+                return {'country_code': 'US'}
+
+        security._geoip = FakeGeoIp()
+        self.client.defaults['REMOTE_ADDR'] = '1.2.3.4'
+        response = self.client.get('/control/')
+        self.assertEqual(response.status_code, 200)
+
+        self.client.defaults['REMOTE_ADDR'] = '4.3.2.1'
+        response = self.client.get('/control/')
+        self.assertEqual(response.status_code, 302)
+
+        security._geoip = None
 
 
 @pytest.fixture
