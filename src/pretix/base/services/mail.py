@@ -95,6 +95,18 @@ class SendMailException(Exception):
     pass
 
 
+def clean_sender_name(sender_name: str) -> str:
+    # Emails with @ in their sender name are rejected by some mailservers (e.g. Microsoft) because it looks like
+    # a phishing attempt.
+    sender_name = sender_name.replace("@", " ")
+
+    # Emails with excessively long sender names are rejected by some mailservers
+    if len(sender_name) > 75:
+        sender_name = sender_name[:75] + "..."
+
+    return sender_name
+
+
 def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, LazyI18nString],
          context: Dict[str, Any] = None, event: Event = None, locale: str = None, order: Order = None,
          position: OrderPosition = None, *, headers: dict = None, sender: str = None, organizer: Organizer = None,
@@ -196,17 +208,13 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
             settings.MAIL_FROM
         )
         if event:
-            sender_name = event.settings.mail_from_name or str(event.name)
-            if len(sender_name) > 75:
-                sender_name = sender_name[:75] + "..."
+            sender_name = clean_sender_name(event.settings.mail_from_name or str(event.name))
             sender = formataddr((sender_name, sender))
         elif organizer:
-            sender_name = organizer.settings.mail_from_name or str(organizer.name)
-            if len(sender_name) > 75:
-                sender_name = sender_name[:75] + "..."
+            sender_name = clean_sender_name(organizer.settings.mail_from_name or str(organizer.name))
             sender = formataddr((sender_name, sender))
         else:
-            sender = formataddr((settings.PRETIX_INSTANCE_NAME, sender))
+            sender = formataddr((clean_sender_name(settings.PRETIX_INSTANCE_NAME), sender))
 
         subject = raw_subject = str(subject).replace('\n', ' ').replace('\r', '')[:900]
         signature = ""
