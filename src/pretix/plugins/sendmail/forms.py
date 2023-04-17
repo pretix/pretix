@@ -218,6 +218,10 @@ class OrderMailForm(BaseMailForm):
         help_text=_("Will be ignored if tickets exceed a given size limit to ensure email deliverability."),
         required=False
     )
+    attach_ical = forms.BooleanField(
+        label=_("Attach calendar files"),
+        required=False
+    )
 
     def clean(self):
         d = super().clean()
@@ -305,7 +309,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
     class Meta:
         model = Rule
 
-        fields = ['subject', 'template',
+        fields = ['subject', 'template', 'attach_ical',
                   'send_date', 'send_offset_days', 'send_offset_time',
                   'include_pending', 'all_products', 'limit_products',
                   'send_to', 'enabled']

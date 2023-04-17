@@ -46,7 +46,8 @@ from pretix.helpers.format import format_map
 @app.task(base=ProfiledEventTask, acks_late=True)
 def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, objects: list, items: list,
                          recipients: str, filter_checkins: bool, not_checked_in: bool, checkin_lists: list,
-                         attachments: list = None, attach_tickets: bool = False) -> None:
+                         attachments: list = None, attach_tickets: bool = False,
+                         attach_ical: bool = False) -> None:
     failures = []
     user = User.objects.get(pk=user) if user else None
     orders = Order.objects.filter(pk__in=objects, event=event)
@@ -110,6 +111,7 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                             order=o,
                             position=p,
                             attach_tickets=attach_tickets,
+                            attach_ical=attach_ical,
                             attach_cached_files=attachments
                         )
                         o.log_action(
@@ -138,6 +140,7 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                         locale=o.locale,
                         order=o,
                         attach_tickets=attach_tickets,
+                        attach_ical=attach_ical,
                         attach_cached_files=attachments,
                     )
                     o.log_action(
