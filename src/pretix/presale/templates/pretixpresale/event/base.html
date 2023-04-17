@@ -76,7 +76,7 @@
             {% elif event_logo %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
                    aria-label="{% trans 'Homepage' %}" title="{% trans 'Homepage' %}">
-                    <img src="{{ event_logo|thumb:'5000x120' }}" alt="" class="event-logo" />
+                    <img src="{{ event_logo|thumb:'5000x120' }}" srcset="{{ event_logo|thumb:'5000x240' }} 2x, {{ event_logo|thumb:'5000x360' }} 3x" alt="" class="event-logo" />
                 </a>
             {% else %}
                 <h1>
