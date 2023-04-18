@@ -42,11 +42,13 @@
             {% if organizer_logo and organizer.settings.organizer_logo_image_large %}
                 <a href="{% eventurl organizer "presale:organizer.index" %}" title="{{ organizer.name }}">
                     <img src="{{ organizer_logo|thumb:'1170x5000' }}" alt="{{ organizer.name }}"
+                         srcset="{{ organizer_logo|thumb:'2340x5000' }} 2x, {{ organizer_logo|thumb:'3510x5000' }} 3x"
                          class="organizer-logo" />
                 </a>
             {% elif organizer_logo %}
                 <a href="{% eventurl organizer "presale:organizer.index" %}" title="{{ organizer.name }}">
                     <img src="{{ organizer_logo|thumb:'5000x120' }}" alt="{{ organizer.name }}"
+                            srcset="{{ organizer_logo|thumb:'5000x240' }} 2x, {{ organizer_logo|thumb:'5000x360' }} 3x"
                             class="organizer-logo" />
                 </a>
             {% else %}
