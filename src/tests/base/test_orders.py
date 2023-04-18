@@ -483,7 +483,7 @@ def test_approve_send_to_attendees(event):
     assert djmail.outbox[0].to == ['dummy@dummy.test']
     assert djmail.outbox[1].to == ['attendee@dummy.test']
     assert 'awaiting payment' in djmail.outbox[0].subject
-    assert 'awaiting payment' in djmail.outbox[1].subject
+    assert 'awaiting payment' not in djmail.outbox[1].subject
 
 
 @pytest.mark.django_db
@@ -535,7 +535,7 @@ def test_approve_free_send_to_attendees(event):
     assert djmail.outbox[0].to == ['dummy@dummy.test']
     assert djmail.outbox[1].to == ['attendee@dummy.test']
     assert 'confirmed' in djmail.outbox[0].subject
-    assert 'confirmed' in djmail.outbox[1].subject
+    assert 'registration' in djmail.outbox[1].subject
 
 
 @pytest.mark.django_db

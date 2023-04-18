@@ -2282,16 +2282,13 @@ Your {event} team"""))
     },
     'mail_subject_order_approved_attendee': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(gettext_noop("Order approved and awaiting payment: {code}")),
+        'default': LazyI18nString.from_gettext(gettext_noop("Your event registration: {code}")),
     },
     'mail_text_order_approved_attendee': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
-we approved a ticket ordered for you for {event} and will be happy to welcome you
-at our event.
-
-The order needs to be paid before {expire_date}.
+we approved a ticket ordered for you for {event}.
 
 You can view the details and status of your ticket here:
 {url}
@@ -2322,14 +2319,13 @@ Your {event} team"""))
     },
     'mail_subject_order_approved_free_attendee': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(gettext_noop("Order approved and confirmed: {code}")),
+        'default': LazyI18nString.from_gettext(gettext_noop("Your event registration: {code}")),
     },
     'mail_text_order_approved_free_attendee': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
-we approved a ticket ordered for you for {event} and will be happy to welcome you
-at our event. As only free products were ordered, no payment is required.
+we approved a ticket ordered for you for {event}.
 
 You can view the details and status of your ticket here:
 {url}
