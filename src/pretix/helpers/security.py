@@ -23,6 +23,10 @@ import hashlib
 import time
 
 from django.conf import settings
+from django.contrib.gis.geoip2 import GeoIP2
+from django.core.cache import cache
+
+from pretix.helpers.http import get_client_ip
 
 
 class SessionInvalid(Exception):
@@ -35,6 +39,19 @@ class SessionReauthRequired(Exception):
 
 def get_user_agent_hash(request):
     return hashlib.sha256(request.headers['User-Agent'].encode()).hexdigest()
+
+
+_geoip = None
+
+
+def _get_country(request):
+    global _geoip
+
+    if not _geoip:
+        _geoip = GeoIP2()
+
+    res = _geoip.country(get_client_ip(request))
+    return res['country_code']
 
 
 def assert_session_valid(request):
@@ -53,6 +70,17 @@ def assert_session_valid(request):
                 raise SessionInvalid()
         else:
             request.session['pinned_user_agent'] = get_user_agent_hash(request)
+
+    if settings.HAS_GEOIP:
+        client_ip = get_client_ip(request)
+        hashed_client_ip = hashlib.sha256(client_ip.encode()).hexdigest()
+        country = cache.get_or_set(f'geoip_country_{hashed_client_ip}', lambda: _get_country(request), timeout=300)
+
+        if 'pinned_country' in request.session:
+            if request.session.get('pinned_country') != country:
+                raise SessionInvalid()
+        else:
+            request.session['pinned_country'] = country
 
     request.session['pretix_auth_last_used'] = int(time.time())
     return True
