@@ -1674,7 +1674,7 @@ QuickSetupProductFormSet = formset_factory(
 
 class ItemMetaPropertyForm(forms.ModelForm):
     class Meta:
-        fields = ['name', 'default']
+        fields = ['name', 'default', 'required', 'allowed_values']
         widgets = {
             'default': forms.TextInput()
         }

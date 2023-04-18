@@ -378,41 +378,55 @@
                     {% bootstrap_formset_errors item_meta_property_formset %}
                     <div data-formset-body>
                         {% for form in item_meta_property_formset %}
-                            <div class="row formset-row" data-formset-form>
+                            <div class="panel panel-default" data-formset-form>
                                 <div class="sr-only">
                                     {{ form.id }}
                                     {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
                                 </div>
-                                <div class="col-md-5">
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <h3 class="panel-title">{% trans "Property" %}</h3>
+                                        </div>
+                                        <div class="col-sm-4 text-right flip">
+                                            <button type="button" class="btn btn-xs btn-danger" data-formset-delete-button>
+                                                <i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="panel-body form-horizontal">
                                     {% bootstrap_form_errors form %}
-                                    {% bootstrap_field form.name layout='inline' form_group_class="" %}
-                                </div>
-                                <div class="col-md-5 col-lg-6">
-                                    {% bootstrap_field form.default layout='inline' form_group_class="" %}
-                                </div>
-                                <div class="col-md-2 col-lg-1 text-right flip">
-                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                        <i class="fa fa-trash"></i></button>
+                                    {% bootstrap_field form.name layout="control" %}
+                                    {% bootstrap_field form.default layout="control" %}
+                                    {% bootstrap_field form.required layout="control" %}
+                                    {% bootstrap_field form.allowed_values layout="control" %}
                                 </div>
                             </div>
                         {% endfor %}
                     </div>
                     <script type="form-template" data-formset-empty-form>
                         {% escapescript %}
-                            <div class="row formset-row" data-formset-form>
+                            <div class="panel panel-default" data-formset-form>
                                 <div class="sr-only">
                                     {{ item_meta_property_formset.empty_form.id }}
                                     {% bootstrap_field item_meta_property_formset.empty_form.DELETE form_group_class="" layout="inline" %}
                                 </div>
-                                <div class="col-md-5">
-                                    {% bootstrap_field item_meta_property_formset.empty_form.name layout='inline' form_group_class="" %}
+                                <div class="panel-heading">
+                                    <div class="row">
+                                        <div class="col-sm-8">
+                                            <h3 class="panel-title">{% trans "Property" %}</h3>
+                                        </div>
+                                        <div class="col-sm-4 text-right flip">
+                                            <button type="button" class="btn btn-xs btn-danger" data-formset-delete-button>
+                                                <i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="col-md-5 col-lg-6">
-                                    {% bootstrap_field item_meta_property_formset.empty_form.default layout='inline' form_group_class="" %}
-                                </div>
-                                <div class="col-md-2 col-lg-1 text-right flip">
-                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                        <i class="fa fa-trash"></i></button>
+                                <div class="panel-body form-horizontal">
+                                    {% bootstrap_field item_meta_property_formset.empty_form.name layout="control" %}
+                                    {% bootstrap_field item_meta_property_formset.empty_form.default layout="control" %}
+                                    {% bootstrap_field item_meta_property_formset.empty_form.required layout="control" %}
+                                    {% bootstrap_field item_meta_property_formset.empty_form.allowed_values layout="control" %}
                                 </div>
                             </div>
                         {% endescapescript %}
