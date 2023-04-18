@@ -20,6 +20,9 @@
                 <legend>{% trans "Content" %}</legend>
                 {% bootstrap_field form.subject layout='control' %}
                 {% bootstrap_field form.template layout='control' %}
+                {% if form.attach_ical %}
+                    {% bootstrap_field form.attach_ical layout='horizontal' %}
+                {% endif %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Recipients" %}</legend>

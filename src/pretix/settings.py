@@ -330,6 +330,12 @@ ENTROPY = {
     'giftcard_secret': config.getint('entropy', 'giftcard_secret', fallback=12),
 }
 
+HAS_GEOIP = False
+if config.has_option('geoip', 'path'):
+    HAS_GEOIP = True
+    GEOIP_PATH = config.get('geoip', 'path')
+    GEOIP_COUNTRY = config.get('geoip', 'filename_country', fallback='GeoLite2-Country.mmdb')
+
 # Internal settings
 PRETIX_EMAIL_NONE_VALUE = 'none@well-known.pretix.eu'
 

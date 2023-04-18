@@ -71,6 +71,7 @@ class BaseQuestionsViewMixin:
             kwargs = self.question_form_kwargs(cr)
             form = self.form_class(event=self.request.event,
                                    prefix=cr.id,
+                                   request=self.request,
                                    cartpos=cartpos,
                                    orderpos=orderpos,
                                    all_optional=self.all_optional,

@@ -454,7 +454,7 @@ class Voucher(LoggedModel):
 
     @staticmethod
     def clean_voucher_code(data, event, pk):
-        if 'code' in data and Voucher.objects.filter(Q(code__iexact=data['code']) & Q(event=event) & ~Q(pk=pk)).exists():
+        if 'code' in data and Voucher.objects.filter(Q(code__iexact=data['code'].upper()) & Q(event=event) & ~Q(pk=pk)).exists():
             raise ValidationError(_('A voucher with this code already exists.'))
 
     @staticmethod

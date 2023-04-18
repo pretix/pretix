@@ -153,6 +153,7 @@ class ScheduledMail(models.Model):
                     email_ctx = get_email_context(event=e, order=o, invoice_address=ia)
                     try:
                         o.send_mail(self.rule.subject, self.rule.template, email_ctx,
+                                    attach_ical=self.rule.attach_ical,
                                     log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
                         o_sent = True
                     except SendMailException:
@@ -169,10 +170,12 @@ class ScheduledMail(models.Model):
                             if p.attendee_email and (p.attendee_email != o.email or not o_sent):
                                 email_ctx = get_email_context(event=e, order=o, invoice_address=ia, position=p)
                                 p.send_mail(self.rule.subject, self.rule.template, email_ctx,
+                                            attach_ical=self.rule.attach_ical,
                                             log_entry_type='pretix.plugins.sendmail.rule.order.position.email.sent')
                             elif not o_sent and o.email:
                                 email_ctx = get_email_context(event=e, order=o, invoice_address=ia)
                                 o.send_mail(self.rule.subject, self.rule.template, email_ctx,
+                                            attach_ical=self.rule.attach_ical,
                                             log_entry_type='pretix.plugins.sendmail.rule.order.email.sent')
                                 o_sent = True
                         except SendMailException:
@@ -205,6 +208,11 @@ class Rule(models.Model, LoggingMixin):
         default=False,
         verbose_name=_('Include pending orders'),
         help_text=_('By default, only paid orders will receive the email')
+    )
+
+    attach_ical = models.BooleanField(
+        default=False,
+        verbose_name=_("Attach calendar files"),
     )
 
     # either send_date or send_offset_* have to be set

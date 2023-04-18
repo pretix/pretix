@@ -19,17 +19,14 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import pyuca
 from babel.core import Locale
 from django.core.cache import cache
 from django.utils import translation
-from django_countries import Countries
+from django_countries import Countries, collator
 from django_countries.fields import CountryField
 from phonenumbers.data import _COUNTRY_CODE_TO_REGION_CODE
 
 from pretix.base.i18n import get_babel_locale, get_language_without_region
-
-_collator = pyuca.Collator()
 
 
 class CachedCountries(Countries):
@@ -116,7 +113,7 @@ def get_phone_prefixes_sorted_and_localized():
             if country_name:
                 val.append((prefix, "{} {}".format(country_name, prefix)))
 
-    val = sorted(val, key=lambda item: _collator.sort_key(item[1]))
+    val = sorted(val, key=lambda item: collator.sort_key(item[1]))
 
     _cached_phone_prefixes[cache_key] = val
     cache.set(cache_key, val, 3600 * 24 * 30)

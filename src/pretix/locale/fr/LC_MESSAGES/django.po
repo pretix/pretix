@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-05 09:17+0000\n"
-"PO-Revision-Date: 2023-02-22 11:22+0000\n"
-"Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
+"PO-Revision-Date: 2023-04-06 22:00+0000\n"
+"Last-Translator: Loïc Alejandro <loic.alejandro@e.email>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -203,16 +203,12 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Ce genre de questions ne peut pas être posé lors de l'enregistrement."
 
 #: pretix/api/serializers/media.py:104
-#, fuzzy
-#| msgid ""
-#| "A gift card with the same secret already exists in your or an affiliated "
-#| "organizer account."
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
-"Un chèque-cadeau avec le même secret existe déjà dans ce ou un compte "
-"organisateur lié."
+"Un chèque-cadeau avec le même identifiant et type existe déjà votre compte "
+"organisateur."
 
 #: pretix/api/serializers/order.py:76
 #, python-brace-format
@@ -2025,7 +2021,7 @@ msgstr "Numéro de siège"
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:108
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:110
 msgid "Blocked"
-msgstr ""
+msgstr "Bloqué"
 
 #: pretix/base/exporters/orderlist.py:574 pretix/base/models/orders.py:2272
 #: pretix/base/orderimport.py:653
@@ -2033,9 +2029,8 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:489
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:22
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:131
-#, fuzzy
 msgid "Valid from"
-msgstr "Valable"
+msgstr "Valable depuis"
 
 #: pretix/base/exporters/orderlist.py:575 pretix/base/models/orders.py:2277
 #: pretix/base/models/vouchers.py:221 pretix/base/orderimport.py:676
@@ -2083,20 +2078,20 @@ msgstr ""
 "chaque commande."
 
 #: pretix/base/exporters/orderlist.py:775
-#, fuzzy
-#| msgid "Extend payment term"
 msgid "Date range (payment date)"
-msgstr "Prolonger le délai de paiement"
+msgstr "Plage de dates (date de paiement)"
 
 #: pretix/base/exporters/orderlist.py:778
 msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
 msgstr ""
+"Notez que cette option exclut les paiements non confirmés ou les "
+"remboursements non effectués."
 
 #: pretix/base/exporters/orderlist.py:782
 msgid "Date range (start of transaction)"
-msgstr ""
+msgstr "Plage de dates (début de la transaction)"
 
 #: pretix/base/exporters/orderlist.py:788
 msgid "Payment states"
@@ -2171,16 +2166,13 @@ msgid "Payment method"
 msgstr "Mode de paiement"
 
 #: pretix/base/exporters/orderlist.py:840
-#, fuzzy
-#| msgid "Payment matching IDs"
 msgid "Matching ID"
-msgstr "IDs de correspondance des paiements"
+msgstr "ID correspondant"
 
 #: pretix/base/exporters/orderlist.py:840
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
-#, fuzzy
 msgid "Payment details"
-msgstr "Paramètres de paiement"
+msgstr "Détails du paiement"
 
 #: pretix/base/exporters/orderlist.py:890
 msgid "Quota availabilities"
@@ -2601,6 +2593,8 @@ msgid ""
 "If you keep this empty, the ticket will be valid starting at the time of "
 "purchase."
 msgstr ""
+"Si vous laissez ce champ vide, le billet sera valable à partir du moment de "
+"l'achat."
 
 #: pretix/base/forms/questions.py:641 pretix/base/forms/questions.py:961
 msgid "Street and Number"
@@ -2929,32 +2923,24 @@ msgid "Included taxes"
 msgstr "Taxes incluses"
 
 #: pretix/base/invoice.py:780
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "Using the conversion rate of 1:{rate} as published by the European "
-#| "Central Bank on {date}, this corresponds to:"
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
-"En utilisant le taux de conversion de 1:{rate} publié par la Banque centrale "
-"européenne le {date}, cela correspond à:"
+"En utilisant le taux de conversion de 1:{rate} publié par {authority} le "
+"{date}, cela correspond à :"
 
 #: pretix/base/invoice.py:795
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "Using the conversion rate of 1:{rate} as published by the European "
-#| "Central Bank on {date}, the invoice total corresponds to {total}."
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
 msgstr ""
-"En utilisant le taux de conversion de 1:{rate} publié par la Banque centrale "
-"européenne le {date}, le total de la facture correspond à {total}."
+"En utilisant le taux de conversion de 1:{rate} publié par {authority} le "
+"{date}, le total de la facture correspond à {total}."
 
 #: pretix/base/invoice.py:809
 msgid "Modern Invoice Renderer (pretix 2.7)"
@@ -2962,12 +2948,12 @@ msgstr "Rendu de facture moderne (pretix 2.7)"
 
 #: pretix/base/media.py:58
 msgid "Barcode / QR-Code"
-msgstr ""
+msgstr "Code-barres / QR-Code"
 
 #: pretix/base/media.py:74
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:237
 msgid "NFC UID-based"
-msgstr ""
+msgstr "NFC Basé sur l'UID"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -3048,6 +3034,11 @@ msgid ""
 "and valid for check-in regardless of which date they are purchased for. You "
 "can limit their validity through the advanced check-in rules, though."
 msgstr ""
+"Si vous choisissez \"toutes les dates\", les billets seront considérés comme "
+"faisant partie de cette liste et seront valables pour l'enregistrement "
+"quelle que soit la date à laquelle ils ont été achetés. Vous pouvez "
+"toutefois limiter leur validité en appliquant les règles d'enregistrement "
+"avancé."
 
 #: pretix/base/models/checkin.py:65
 msgctxt "checkin"
@@ -3172,14 +3163,12 @@ msgid "Server error"
 msgstr "Erreur du serveur"
 
 #: pretix/base/models/checkin.py:353
-#, fuzzy
 msgid "Ticket blocked"
-msgstr "Conception des billets"
+msgstr "Billet bloqué"
 
 #: pretix/base/models/checkin.py:354
-#, fuzzy
 msgid "Ticket not valid at this time"
-msgstr "Ce bon n'est pas valable pour cette date."
+msgstr "Billet non valable pour le moment"
 
 #: pretix/base/models/customers.py:54
 msgid "Provider name"
@@ -3808,31 +3797,30 @@ msgid "This product will not be sold after the given date."
 msgstr "Ce produit ne sera pas vendu après la date indiquée."
 
 #: pretix/base/models/items.py:367
-#, fuzzy
 msgid "Event validity (default)"
-msgstr "Date de l'événement"
+msgstr "Validité de l'événement (par défaut)"
 
 #: pretix/base/models/items.py:368
-#, fuzzy
 msgid "Fixed time frame"
-msgstr "Tout client"
+msgstr "Cadre temporel fixe"
 
 #: pretix/base/models/items.py:369
-#, fuzzy
 msgid "Dynamic validity"
-msgstr "Carte-cadeau"
+msgstr "Validité dynamique"
 
 #: pretix/base/models/items.py:376 pretix/base/models/items.py:658
 msgid "Don't use re-usable media, use regular one-off tickets"
 msgstr ""
+"N'utilisez pas de supports réutilisables, mais plutôt des tickets uniques "
+"normaux."
 
 #: pretix/base/models/items.py:377
 msgid "Require an existing medium to be re-used"
-msgstr ""
+msgstr "Exiger la réutilisation d'un support existant"
 
 #: pretix/base/models/items.py:378
 msgid "Require a previously unknown medium to be newly added"
-msgstr ""
+msgstr "Exiger l'ajout d'un support inconnu jusqu'alors"
 
 #: pretix/base/models/items.py:379
 msgid "Require either an existing or a new medium to be used"
@@ -13070,9 +13058,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/orders.py:218
-#, fuzzy
 msgid "Payment amount"
-msgstr "Date de paiement"
+msgstr "Montant du paiement"
 
 #: pretix/control/forms/orders.py:222
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:24
@@ -25725,6 +25712,12 @@ msgid ""
 "    Amount: %(total)s\n"
 "%(bank)s\n"
 msgstr ""
+"\n"
+"Veuillez virer le montant total sur le compte bancaire suivant :\n"
+"\n"
+"    Référence : %(code)s\n"
+"    Montant : %(total)s\n"
+"%(bank)s\n"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:4
 msgid ""
@@ -25876,7 +25869,7 @@ msgstr "Révision des paiements invalides et ignorés"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:14
 msgid "Please transfer the full amount to the following bank account:"
-msgstr "Veuillez virer le montant total sur le compte bancaire suivant:"
+msgstr "Veuillez virer le montant total sur le compte bancaire suivant :"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:37
 msgid "Amount:"

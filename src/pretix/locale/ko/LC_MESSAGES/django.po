@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-05 09:17+0000\n"
-"PO-Revision-Date: 2023-04-03 11:39+0000\n"
+"PO-Revision-Date: 2023-04-06 02:00+0000\n"
 "Last-Translator: 전윤수 <jeonyunsoo123@gmail.com>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
@@ -1387,7 +1387,7 @@ msgstr ""
 
 #: pretix/base/exporters/items.py:79 pretix/base/models/items.py:452
 msgid "Generate tickets"
-msgstr ""
+msgstr "티켓 생성"
 
 #: pretix/base/exporters/items.py:80 pretix/base/exporters/orderlist.py:898
 #: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:244
@@ -18289,8 +18289,7 @@ msgstr ""
 #, python-format
 msgid "1 order"
 msgid_plural "%(s)s orders"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(s)s개 주문"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:5
 #: pretix/control/templates/pretixcontrol/orders/overview.html:16
@@ -19133,8 +19132,7 @@ msgstr ""
 #, python-format
 msgid "One webhook is scheduled to be retried."
 msgid_plural "%(count)s webhooks are scheduled to be retried."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)s개의 Webhook이 비활성화 될 예정입니다."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:22
 msgid "Retry now"
@@ -22917,8 +22915,8 @@ msgid ""
 msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(date)s에 발생한 총액 %(sum)s의 %(cnt)s개 주문에 대한 환불 목록을 "
+"다운로드합니다."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
@@ -25899,8 +25897,7 @@ msgstr ""
 #, python-format
 msgid "This ticket has been used once."
 msgid_plural "This ticket has been used %(count)s times."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "티켓이 %(count)s회 사용되었습니다."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:170
 msgid "No attendee name provided"
@@ -26455,7 +26452,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:287
 #: pretix/presale/templates/pretixpresale/event/voucher.html:437
 msgid "Add to cart"
-msgstr ""
+msgstr "목록에 추가하기"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:308
 msgid "If you already ordered a ticket"
@@ -27349,7 +27346,7 @@ msgstr ""
 
 #: pretix/presale/views/cart.py:486
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "성공적으로 추가되었습니다."
 
 #: pretix/presale/views/cart.py:510 pretix/presale/views/event.py:450
 #: pretix/presale/views/widget.py:342
