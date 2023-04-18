@@ -594,6 +594,7 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Minimum length of invoice number after prefix"),
             help_text=_("The part of your invoice number after your prefix will be filled up with leading zeros up to this length, e.g. INV-001 or INV-00001."),
+            max_value=12,
             required=True,
         )
     },

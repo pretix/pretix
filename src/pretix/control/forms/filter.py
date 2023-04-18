@@ -256,9 +256,13 @@ class OrderFilterForm(FilterForm):
             else:
                 code = Q(code__icontains=Order.normalize_code(u))
 
+            invoice_nos = {u, u.upper()}
+            if u.isdigit():
+                for i in range(2, 12):
+                    invoice_nos.add(u.zfill(i))
+
             matching_invoices = Invoice.objects.filter(
-                Q(invoice_no__iexact=u)
-                | Q(invoice_no__iexact=u.zfill(5))
+                Q(invoice_no__in=invoice_nos)
                 | Q(full_invoice_no__iexact=u)
             ).values_list('order_id', flat=True)
             matching_positions = OrderPosition.objects.filter(
@@ -1004,9 +1008,13 @@ class OrderPaymentSearchFilterForm(forms.Form):
         if fdata.get('query'):
             u = fdata.get('query')
 
+            invoice_nos = {u, u.upper()}
+            if u.isdigit():
+                for i in range(2, 12):
+                    invoice_nos.add(u.zfill(i))
+
             matching_invoices = Invoice.objects.filter(
-                Q(invoice_no__iexact=u)
-                | Q(invoice_no__iexact=u.zfill(5))
+                Q(invoice_no__in=invoice_nos)
                 | Q(full_invoice_no__iexact=u)
             ).values_list('order_id', flat=True)
 
