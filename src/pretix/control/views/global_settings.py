@@ -31,8 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
-import pkg_resources
+import importlib_metadata as metadata
 from django.contrib import messages
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, reverse
@@ -132,14 +131,14 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
         if not d:
             d['source_notice'] = 'pretix (AGPLv3 with additional terms): https://github.com/pretix/pretix'
             seen = set()
-            for entry_point in pkg_resources.iter_entry_points(group='pretix.plugin', name=None):
-                if entry_point.dist.key not in seen:
+            for entry_point in metadata.entry_points(group='pretix.plugin'):
+                if entry_point.dist.name not in seen:
                     try:
-                        license, url = self._get_license_for_pkg(entry_point.dist.key)
+                        license, url = self._get_license_for_pkg(entry_point.dist.name)
                     except FileNotFoundError:
                         license, url = '?', '?'
-                    d['source_notice'] += f'\n{entry_point.dist.key} ({license}): {url}'
-                    seen.add(entry_point.dist.key)
+                    d['source_notice'] += f'\n{entry_point.dist.name} ({license}): {url}'
+                    seen.add(entry_point.dist.name)
 
         return d
 
@@ -168,17 +167,15 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
     def _get_license_for_pkg(self, pkg):
         license, url = None, None
         try:
-            pkg = pkg_resources.get_distribution(pkg)
+            pkg = metadata.distribution(pkg)
         except:
             return None, None
         try:
-            for line in pkg.get_metadata_lines(pkg.PKG_INFO):
-                if ': ' in line:
-                    (k, v) = line.split(': ', 1)
-                    if k == "License":
-                        license = v
-                    if k == "Home-page":
-                        url = v
+            for k, v in pkg.metadata.items():
+                if k == "License":
+                    license = v
+                if k == "Home-page":
+                    url = v
         except FileNotFoundError:
             license = '?'
             url = '?'
@@ -232,14 +229,14 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
                       'restrictions). Make sure to keep it up to date!')
                 ))
 
-        for entry_point in pkg_resources.iter_entry_points(group='pretix.plugin', name=None):
-            license, url = self._get_license_for_pkg(entry_point.dist.key)
+        for entry_point in metadata.entry_points(group='pretix.plugin'):
+            license, url = self._get_license_for_pkg(entry_point.dist.name)
 
             if not license or not any(l in license for l in ('Apache', 'MIT', 'BSD', 'pretix Enterprise', 'GPL')):
                 res.append((
                     'muted', 'warning',
                     _('We found the plugin "{plugin}" with license "{license}" which this tool does not know about and '
-                      'therefore cannot give any recommendations.').format(plugin=entry_point.dist.key, license=license)
+                      'therefore cannot give any recommendations.').format(plugin=entry_point.dist.name, license=license)
                 ))
                 continue
 
@@ -247,21 +244,21 @@ class LicenseCheckView(StaffMemberRequiredMixin, FormView):
                 res.append((
                     'danger', 'exclamation-circle',
                     _('You selected that you have no active pretix Enterprise licenses, but we found the following '
-                      'Enterprise plugin: {plugin}').format(plugin=entry_point.dist.key)
+                      'Enterprise plugin: {plugin}').format(plugin=entry_point.dist.name)
                 ))
 
             if not input.get('plugins_copyleft') and any(l in license for l in ('GPL',)):
                 res.append((
                     'danger', 'exclamation-circle',
                     _('You selected that you have no copyleft-licensed plugins installed, but we found the '
-                      'plugin "{plugin}" with license "{license}".').format(plugin=entry_point.dist.key, license=license)
+                      'plugin "{plugin}" with license "{license}".').format(plugin=entry_point.dist.name, license=license)
                 ))
 
             if not input.get('plugins_free') and any(l in license for l in ('Apache', 'MIT', 'BSD')):
                 res.append((
                     'danger', 'exclamation-circle',
                     _('You selected that you have no free plugins installed, but we found the '
-                      'plugin "{plugin}" with license "{license}".').format(plugin=entry_point.dist.key, license=license)
+                      'plugin "{plugin}" with license "{license}".').format(plugin=entry_point.dist.name, license=license)
                 ))
 
         return res

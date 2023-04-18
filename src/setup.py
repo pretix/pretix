@@ -192,6 +192,7 @@ setup(
         'dnspython==2.2.*',
         'drf_ujson2==1.7.*',
         'geoip2==4.*',
+        'importlib-metadata==6.4.*',  # Polyfill, we can probably drop this once we require Python 3.10+
         'isoweek',
         'jsonschema',
         'kombu==5.2.*',
