@@ -798,6 +798,7 @@ class SessionTimeOutTest(TestCase):
         response = self.client.get('/control/')
         self.assertEqual(response.status_code, 302)
 
+    @override_settings(HAS_GEOIP=True)
     def test_pinned_country(self):
         class FakeGeoIp:
             def country(self, ip):
