@@ -21,7 +21,6 @@
 #
 import logging
 
-import sentry_sdk
 from django.core.signals import request_finished
 from django.dispatch import receiver
 
@@ -56,6 +55,7 @@ class RequestIdMiddleware:
             local.request_id = request.request_id = request.headers[settings.REQUEST_ID_HEADER]
 
             if settings.SENTRY_ENABLED:
+                import sentry_sdk
                 sentry_sdk.set_tag("request_id", request.request_id)
         else:
             local.request_id = request.request_id = None
