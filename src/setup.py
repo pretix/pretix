@@ -256,7 +256,7 @@ setup(
             'pytest-rerunfailures==11.*',
             'pytest-sugar',
             'pytest-xdist==3.2.*',
-            'pytest==7.2.*',
+            'pytest>=7.2,<7.4',
             'responses',
         ],
         'memcached': ['pylibmc'],
