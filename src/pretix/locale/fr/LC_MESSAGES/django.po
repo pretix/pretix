@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-05 09:17+0000\n"
-"PO-Revision-Date: 2023-04-06 22:00+0000\n"
-"Last-Translator: Loïc Alejandro <loic.alejandro@e.email>\n"
+"PO-Revision-Date: 2023-04-20 20:00+0000\n"
+"Last-Translator: Yvan Cadoux <yvan@cadoux.ch>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -3824,7 +3824,7 @@ msgstr "Exiger l'ajout d'un support inconnu jusqu'alors"
 
 #: pretix/base/models/items.py:379
 msgid "Require either an existing or a new medium to be used"
-msgstr ""
+msgstr "Nécessiter l'utilisation d'un support existant ou d'un nouveau support"
 
 #: pretix/base/models/items.py:395 pretix/base/models/items.py:1258
 #: pretix/control/templates/pretixcontrol/items/index.html:40
@@ -4065,7 +4065,6 @@ msgid "Membership duration in months"
 msgstr "Durée d'adhésion en mois"
 
 #: pretix/base/models/items.py:605
-#, fuzzy
 msgid "Validity"
 msgstr "Valable jusqu'au"
 
@@ -4082,15 +4081,14 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/items.py:615
-#, fuzzy
 msgid "Start of validity"
-msgstr "Carte-cadeau"
+msgstr "Début de validité"
 
 #: pretix/base/models/items.py:616
 #, fuzzy
 #| msgid "End of presale"
 msgid "End of validity"
-msgstr "Fin de la prévente"
+msgstr "Fin de validité"
 
 #: pretix/base/models/items.py:619
 #, fuzzy
@@ -4099,15 +4097,13 @@ msgstr "jours avant"
 
 #: pretix/base/models/items.py:623
 msgid "Hours"
-msgstr ""
+msgstr "Heures"
 
 #: pretix/base/models/items.py:627
 msgid "Days"
-msgstr ""
+msgstr "Jours"
 
 #: pretix/base/models/items.py:631
-#, fuzzy
-#| msgid "Month"
 msgid "Months"
 msgstr "Mois"
 
