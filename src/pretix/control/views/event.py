@@ -1526,7 +1526,7 @@ class EventQRCode(EventPermissionRequiredMixin, View):
 
         if filetype == 'svg':
             factory = qrcode.image.svg.SvgPathImage
-            img = qrcode.make('Some data here', image_factory=factory)
+            img = qr.make_image(image_factory=factory)
             r = HttpResponse(img.to_string(), content_type='image/svg+xml')
             r['Content-Disposition'] = f'inline; filename="qrcode-{request.event.slug}.{filetype}"'
             return r
