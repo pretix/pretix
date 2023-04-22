@@ -166,7 +166,7 @@
                     <div class="info-row">
                         <span class="fa fa-map-marker fa-fw" aria-hidden="true" title="{% trans "Where does the event happen?" %}"></span>
                         <p><span class="sr-only">{% trans "Where does the event happen?" %}</span>
-                            {{ ev.location|linebreaksbr }}
+                            {{ ev.location|urlize|linebreaksbr }}
                         </p>
                     </div>
                 {% endif %}

@@ -113,7 +113,7 @@
                                         {% endif %}
                                         {% if groupkey.2.location %}
                                             <br>
-                                            {{ groupkey.2.location|oneline }}
+                                            {{ groupkey.2.location|urlize|linebreaksbr }}
                                         {% endif %}
                                     {% endif %}
                                     {% if groupkey.3 %} {# attendee name #}
