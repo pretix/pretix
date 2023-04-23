@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-23 16:01+0000\n"
-"PO-Revision-Date: 2023-04-17 23:00+0000\n"
-"Last-Translator: Dennis Lichtenthäler <lichtenthaeler@rami.io>\n"
+"PO-Revision-Date: 2023-04-23 16:18+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -390,10 +390,8 @@ msgid "Refund of payment failed"
 msgstr "Erstattung fehlgeschlagen"
 
 #: pretix/api/webhooks.py:261
-#, fuzzy
-#| msgid "Payment confirmation date"
 msgid "Payment confirmed"
-msgstr "Bestätigung der Zahlung"
+msgstr "Zahlung bestätigt"
 
 #: pretix/api/webhooks.py:265
 msgid "Order approved"
@@ -4536,10 +4534,8 @@ msgid "Maximum value"
 msgstr "Maximaler Wert"
 
 #: pretix/base/models/items.py:1546
-#, fuzzy
-#| msgid "Maximum value"
 msgid "Maximum length"
-msgstr "Maximaler Wert"
+msgstr "Maximale Länge"
 
 #: pretix/base/models/items.py:1552
 msgid "Validate file to be a portrait"
@@ -8848,25 +8844,19 @@ msgstr ""
 "Zeitpunkt für einen der Termine erreicht ist."
 
 #: pretix/base/settings.py:1375
-#, fuzzy
-#| msgid "Generate tickets for add-on products"
 msgid "Generate tickets for add-on products and bundled products"
-msgstr "Tickets für Zusatzprodukte generieren"
+msgstr "Tickets für Zusatzprodukte und enthaltene Produkte generieren"
 
 #: pretix/base/settings.py:1376
-#, fuzzy
-#| msgid ""
-#| "By default, tickets are only issued for products selected individually, "
-#| "not for add-on products. With this option, a separate ticket is issued "
-#| "for every add-on product as well."
 msgid ""
 "By default, tickets are only issued for products selected individually, not "
 "for add-on products or bundled products. With this option, a separate ticket "
 "is issued for every add-on product or bundled product as well."
 msgstr ""
 "Standardmäßig werden Tickets nur für einzeln gekaufte Produkte ausgestellt, "
-"nicht für Zusatzprodukte. Mit dieser Option wird auch für Zusatzprodukte "
-"jeweils ein separates Ticket ausgestellt."
+"nicht für Zusatzprodukte oder enthaltene Produkte. Mit dieser Option wird "
+"auch für Zusatzprodukte oder enthaltene Produkte jeweils ein separates "
+"Ticket ausgestellt."
 
 #: pretix/base/settings.py:1389
 msgid "Generate tickets for all products"
@@ -11593,6 +11583,8 @@ msgid ""
 "A validation error has occurred on a setting that is not part of this form: "
 "{error}"
 msgstr ""
+"Ein Validierungsfehler ist bei einer Einstellung aufgetreten, die nicht Teil "
+"dieses Formulars ist: {error}"
 
 #: pretix/control/forms/event.py:508 pretix/control/forms/organizer.py:355
 msgid "Name format"
@@ -12214,6 +12206,8 @@ msgid ""
 "Only matches orders with the attention checkbox set directly for the order, "
 "not based on the product."
 msgstr ""
+"Filtert nur Bestellungen bei der die Option für besondere Aufmerksamkeit "
+"direkt gesetzt ist, nicht basierend auf dem gekauften Produkt."
 
 #: pretix/control/forms/filter.py:618 pretix/control/forms/filter.py:623
 #: pretix/control/forms/filter.py:649 pretix/control/forms/filter.py:654
@@ -16952,16 +16946,12 @@ msgid "Your timeline"
 msgstr "Ihr Ablauf"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:20
-#, fuzzy
-#| msgid "System URL:"
 msgid "Shop URL:"
-msgstr "System-Adresse:"
+msgstr "Shop-Adresse:"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:27
-#, fuzzy
-#| msgid "Other QR code"
 msgid "Create QR code"
-msgstr "Anderer QR-Code"
+msgstr "QR-Code erstellen"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:33
 #: pretix/control/templates/pretixcontrol/event/index.html:38
@@ -16969,7 +16959,7 @@ msgstr "Anderer QR-Code"
 #: pretix/control/templates/pretixcontrol/event/index.html:48
 #, python-format
 msgid "Download QR code as %(filetype)s image"
-msgstr ""
+msgstr "QR-Code als %(filetype)s-Bild herunterladen"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:57
 msgid ""
@@ -25696,8 +25686,7 @@ msgid ""
 "following bank account, using a personal reference code:"
 msgstr ""
 "Nach Abschluss der Bestellung bitten wir Sie, das Geld unter Verwendung des "
-"persönlichen Verwendungszwecks, den wir Ihnen dann mitteilen, auf das "
-"folgende Bankkonto zu überweisen:"
+"persönlichen Verwendungszwecks auf das folgende Bankkonto zu überweisen:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:24
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:24
