@@ -1372,9 +1372,10 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_class': forms.BooleanField,
         'form_kwargs': dict(
-            label=_("Generate tickets for add-on products"),
-            help_text=_('By default, tickets are only issued for products selected individually, not for add-on '
-                        'products. With this option, a separate ticket is issued for every add-on product as well.'),
+            label=_("Generate tickets for add-on products and bundled products"),
+            help_text=_('By default, tickets are only issued for products selected individually, not for add-on products '
+                        'or bundled products. With this option, a separate ticket is issued for every add-on product '
+                        'or bundled product as well.'),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_ticket_download',
                                               'data-checkbox-dependency-visual': 'on'}),
         )
