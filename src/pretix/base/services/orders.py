@@ -1432,7 +1432,7 @@ class OrderChangeManager:
     MembershipOperation = namedtuple('MembershipOperation', ('position', 'membership'))
     CancelOperation = namedtuple('CancelOperation', ('position', 'price_diff'))
     AddOperation = namedtuple('AddOperation', ('item', 'variation', 'price', 'addon_to', 'subevent', 'seat', 'membership',
-                                               'valid_from', 'valid_until'))
+                                               'valid_from', 'valid_until', 'is_bundled'))
     SplitOperation = namedtuple('SplitOperation', ('position',))
     FeeValueOperation = namedtuple('FeeValueOperation', ('fee', 'value', 'price_diff'))
     AddFeeOperation = namedtuple('AddFeeOperation', ('fee', 'price_diff'))
@@ -1662,6 +1662,7 @@ class OrderChangeManager:
         except TaxRule.SaleNotAllowed:
             raise OrderError(self.error_messages['tax_rule_country_blocked'])
 
+        is_bundled = False
         if price is None:
             raise OrderError(self.error_messages['product_invalid'])
         if item.variations.exists() and not variation:
@@ -1670,7 +1671,10 @@ class OrderChangeManager:
             raise OrderError(self.error_messages['addon_to_required'])
         if addon_to:
             if not item.category or item.category_id not in addon_to.item.addons.values_list('addon_category', flat=True):
-                raise OrderError(self.error_messages['addon_invalid'])
+                if addon_to.item.bundles.filter(bundled_item=item, bundled_variation=variation).exists():
+                    is_bundled = True
+                else:
+                    raise OrderError(self.error_messages['addon_invalid'])
         if self.order.event.has_subevents and not subevent:
             raise OrderError(self.error_messages['subevent_required'])
 
@@ -1695,7 +1699,7 @@ class OrderChangeManager:
         if seat:
             self._seatdiff.update([seat])
         self._operations.append(self.AddOperation(item, variation, price, addon_to, subevent, seat, membership,
-                                                  valid_from, valid_until))
+                                                  valid_from, valid_until, is_bundled))
 
     def split(self, position: OrderPosition):
         if self.order.event.settings.invoice_include_free or position.price != Decimal('0.00'):
@@ -2226,6 +2230,7 @@ class OrderChangeManager:
                     tax_value=op.price.tax, tax_rule=op.item.tax_rule,
                     positionid=nextposid, subevent=op.subevent, seat=op.seat,
                     used_membership=op.membership, valid_from=op.valid_from, valid_until=op.valid_until,
+                    is_bundled=op.is_bundled,
                 )
                 nextposid += 1
                 self.order.log_action('pretix.event.order.changed.add', user=self.user, auth=self.auth, data={

@@ -1695,6 +1695,19 @@ class OrderChangeManagerTests(TestCase):
         assert nop.addon_to == self.op1
 
     @classscope(attr='o')
+    def test_add_item_addon_is_bundle(self):
+        self.shirt.category = self.event.categories.create(name='Add-ons', is_addon=True)
+        self.ticket.bundles.create(bundled_item=self.shirt)
+        self.ocm.add_position(self.shirt, None, Decimal('13.00'), self.op1)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 3
+        nop = self.order.positions.last()
+        assert nop.item == self.shirt
+        assert nop.addon_to == self.op1
+        assert nop.is_bundled
+
+    @classscope(attr='o')
     def test_add_item_addon_invalid(self):
         with self.assertRaises(OrderError):
             self.ocm.add_position(self.shirt, None, Decimal('13.00'), self.op1)
