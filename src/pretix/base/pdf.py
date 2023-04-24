@@ -411,7 +411,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Validity start date"),
         "editor_sample": _("2017-05-31"),
         "evaluate": lambda op, order, ev: date_format(
-            now().astimezone(timezone(ev.settings.timezone)),
+            op.valid_from.astimezone(timezone(ev.settings.timezone)),
             "SHORT_DATE_FORMAT"
         ) if op.valid_from else ""
     }),
