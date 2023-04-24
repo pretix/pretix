@@ -399,7 +399,6 @@ var editor = {
         editor.fabric.on('selection:cleared', editor._update_toolbox);
         editor.fabric.on('selection:created', editor._update_toolbox);
         editor.fabric.on('selection:updated', editor._update_toolbox);
-        editor.fabric.on('object:selected', editor._update_toolbox);
         editor.fabric.on('object:moving', editor._update_toolbox_values);
         editor.fabric.on('object:modified', editor._update_toolbox_values);
         editor.fabric.on('object:rotating', editor._update_toolbox_values);
