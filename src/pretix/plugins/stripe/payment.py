@@ -833,7 +833,7 @@ class StripePaymentIntentMethod(StripeMethod):
         request.session['payment_stripe_{}_payment_method_id'.format(self.method)] = payment_method_id
 
         if payment_method_id == '':
-            messages.warning(request, _('You may need to enable JavaScript for Stripe payments.2'))
+            messages.warning(request, _('You may need to enable JavaScript for Stripe payments.'))
             return False
         return True
 
