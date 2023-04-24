@@ -82,7 +82,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # State of the payment methods
 #
 # Source: https://stripe.com/docs/payments/payment-methods/overview
-# Last Update: 2022-02-24
+# Last Update: 2023-04-24
 #
 # Cards
 # - Credit and Debit Cards: ✓
@@ -103,6 +103,10 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - iDEAL: ✓
 # - P24: ✓
 # - Sofort: ✓
+# - FPX: ✗
+# - PayNow: ✗
+# - UPI: ✗
+# - Netbanking: ✗
 #
 # Bank transfers
 # - ACH Bank Transfer: ✗
@@ -110,11 +114,17 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - UK Bank Transfer: ✗
 # - Multibanco: ✗
 # - Furikomi (Japan): ✗
+# - Mexico Bank Transfer: ✗
 #
 # Buy now, pay later
-# - Klarna: ✗
-# - Afterpay/Clearpay: ✗
 # - Affirm: ✗
+# - Afterpay/Clearpay: ✗
+# - Klarna: ✗
+#
+# Real-time payments
+# - PayNow: ✗
+# - PromptPay: ✗
+# - Pix: ✗
 #
 # Vouchers
 # - Konbini: ✗
@@ -124,8 +134,10 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # Wallets
 # - Apple Pay: ✓ (Cards)
 # - Google Pay: ✓ (Cards)
-# - Microsoft Pay: ✓ (Cards)
 # - Secure Remote Commerce: ✗
+# - Link: ✓ (PaymentRequestButton)
+# - Cash App Pay: ✗
+# - MobilePay: ✗
 # - Alipay: ✓
 # - WeChat Pay: ✓
 # - GrabPay: ✓
