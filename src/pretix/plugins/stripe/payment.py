@@ -58,7 +58,7 @@ from django_countries import countries
 from pretix import __version__
 from pretix.base.decimal import round_decimal
 from pretix.base.forms import SecretKeySettingsField
-from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
+from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota, InvoiceAddress
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.plugins import get_all_plugins
 from pretix.base.services.mail import SendMailException
@@ -1096,9 +1096,26 @@ class StripeSEPADirectDebit(StripePaymentIntentMethod):
     verbose_name = _('SEPA Debit via Stripe')
     public_name = _('SEPA Debit')
     method = 'sepa_debit'
+    ia = InvoiceAddress()
 
     def payment_form_render(self, request: HttpRequest, total: Decimal, order: Order=None) -> str:
+        def get_invoice_address():
+            if order:
+                request._checkout_flow_invoice_address = order.invoice_address
+            if not hasattr(request, '_checkout_flow_invoice_address'):
+                cs = cart_session(request)
+                iapk = cs.get('invoice_address')
+                if not iapk:
+                    request._checkout_flow_invoice_address = InvoiceAddress()
+                else:
+                    try:
+                        request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                    except InvoiceAddress.DoesNotExist:
+                        request._checkout_flow_invoice_address = InvoiceAddress()
+            return request._checkout_flow_invoice_address
+
         cs = cart_session(request)
+        self.ia = get_invoice_address()
 
         template = get_template('pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html')
         ctx = {
@@ -1117,6 +1134,7 @@ class StripeSEPADirectDebit(StripePaymentIntentMethod):
                 ('accountname',
                  forms.CharField(
                      label=_('Account Holder Name'),
+                     initial=self.ia.name,
                  )),
                 ('line1',
                  forms.CharField(
@@ -1128,6 +1146,7 @@ class StripeSEPADirectDebit(StripePaymentIntentMethod):
                              'data-required-if': '#stripe_sepa_debit_country'
                          }
                      ),
+                     initial=self.ia.street,
                  )),
                 ('postal_code',
                  forms.CharField(
@@ -1139,6 +1158,7 @@ class StripeSEPADirectDebit(StripePaymentIntentMethod):
                              'data-required-if': '#stripe_sepa_debit_country'
                          }
                      ),
+                     initial=self.ia.zipcode,
                  )),
                 ('city',
                  forms.CharField(
@@ -1150,6 +1170,7 @@ class StripeSEPADirectDebit(StripePaymentIntentMethod):
                              'data-required-if': '#stripe_sepa_debit_country'
                          }
                      ),
+                     initial=self.ia.city,
                  )),
                 ('country',
                  forms.ChoiceField(
@@ -1162,6 +1183,7 @@ class StripeSEPADirectDebit(StripePaymentIntentMethod):
                              'data-required-if': '#stripe_sepa_debit_country'
                          }
                      ),
+                     initial=self.ia.country,
                  )),
             ])
 
