@@ -247,11 +247,12 @@ $(function () {
     if (!$(".stripe-container").length)
         return;
 
-    if ($("input[name=payment][value=stripe]").is(':checked') || $(".payment-redo-form").length) {
+    if ($("input[name=payment][value=stripe]").is(':checked') || $("input[name=payment][value=stripe_sepa_debit]").is(':checked') || $(".payment-redo-form").length) {
         pretixstripe.load();
     } else {
         $("input[name=payment]").change(function () {
-            if (['stripe', 'stripe_sepa_debit'].indexOf($(this).val()) > 0) {
+            console.log($(this).val())
+            if (['stripe', 'stripe_sepa_debit'].indexOf($(this).val()) > -1) {
                 pretixstripe.load();
             }
         })
