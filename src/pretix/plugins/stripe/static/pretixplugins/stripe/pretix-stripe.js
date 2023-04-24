@@ -145,16 +145,18 @@ var pretixstripe = {
                             }
                         });
                         pretixstripe.sepa.on('change', function(event) {
-                           if (['AD', 'PF', 'TF', 'GI', 'GB', 'GG', 'VA', 'IM', 'JE', 'MC', 'NC', 'BL', 'PM', 'SM', 'CH', 'WF'].includes(event.country)) {
-                               $("#stripe_sepa_debit_country").prop('checked', true);
-                               $("#stripe_sepa_debit_country").change();
-                           } else {
-                               $("#stripe_sepa_debit_country").prop('checked', false);
-                               $("#stripe_sepa_debit_country").change();
-                           }
-                           if (event.bankName) {
-                               $("#stripe_sepa_debit_bank").val(event.bankName);
-                           }
+                            // List of IBAN-countries, that require the country as well as line1-property according to
+                            // https://stripe.com/docs/payments/sepa-debit/accept-a-payment?platform=web&ui=element#web-submit-payment
+                            if (['AD', 'PF', 'TF', 'GI', 'GB', 'GG', 'VA', 'IM', 'JE', 'MC', 'NC', 'BL', 'PM', 'SM', 'CH', 'WF'].includes(event.country)) {
+                                $("#stripe_sepa_debit_country").prop('checked', true);
+                                $("#stripe_sepa_debit_country").change();
+                            } else {
+                                $("#stripe_sepa_debit_country").prop('checked', false);
+                                $("#stripe_sepa_debit_country").change();
+                            }
+                            if (event.bankName) {
+                                $("#stripe_sepa_debit_bank").val(event.bankName);
+                       }
                         });
                         pretixstripe.sepa.mount("#stripe-sepa");
                         pretixstripe.sepa.on('ready', function () {
