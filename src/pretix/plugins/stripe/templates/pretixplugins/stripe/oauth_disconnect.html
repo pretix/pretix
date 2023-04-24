@@ -1,0 +1,20 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Stripe Connect" %}{% endblock %}
+{% block content %}
+    <h1>
+        {% trans "Stripe Connect" %}
+    </h1>
+
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
+        {% csrf_token %}
+        <p>
+            {% trans "Do you really want to disconnect your Stripe account?" %}
+        </p>
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-danger btn-save">
+                {% trans "Disconnect" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

@@ -116,7 +116,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                 )
             else:
                 return (
-                    "<button formaction='{}' class='btn btn-danger'>{}</button>"
+                    "<a href='{}' class='btn btn-danger'>{}</a>"
                 ).format(
                     reverse('plugins:stripe:oauth.disconnect', kwargs={
                         'organizer': self.event.organizer.slug,
