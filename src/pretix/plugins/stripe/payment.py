@@ -82,7 +82,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # State of the payment methods
 #
 # Source: https://stripe.com/docs/payments/payment-methods/overview
-# Last Update: 24.02.2022
+# Last Update: 2022-02-24
 #
 # Cards
 # - Credit and Debit Cards: ✓
