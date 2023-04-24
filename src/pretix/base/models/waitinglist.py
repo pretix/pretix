@@ -219,18 +219,19 @@ class WaitingListEntry(LoggedModel):
             self.voucher = v
             self.save()
 
-        self.send_mail(
-            self.event.settings.mail_subject_waiting_list,
-            self.event.settings.mail_text_waiting_list,
-            get_email_context(
-                event=self.event,
-                waiting_list_entry=self,
-                waiting_list_voucher=v,
-                event_or_subevent=self.subevent or self.event,
-            ),
-            user=user,
-            auth=auth,
-        )
+        with language(self.locale, self.event.settings.region):
+            self.send_mail(
+                self.event.settings.mail_subject_waiting_list,
+                self.event.settings.mail_text_waiting_list,
+                get_email_context(
+                    event=self.event,
+                    waiting_list_entry=self,
+                    waiting_list_voucher=v,
+                    event_or_subevent=self.subevent or self.event,
+                ),
+                user=user,
+                auth=auth,
+            )
 
     def send_mail(self, subject: Union[str, LazyI18nString], template: Union[str, LazyI18nString],
                   context: Dict[str, Any]=None, log_entry_type: str='pretix.waitinglist.email.sent',
