@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-23 16:01+0000\n"
-"PO-Revision-Date: 2023-04-02 10:00+0000\n"
+"PO-Revision-Date: 2023-04-24 19:00+0000\n"
 "Last-Translator: Vasco Baleia <vb2003.12@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
@@ -193,7 +193,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:270
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "De momento, apenas produtos de admissão podem ser personalizados."
 
 #: pretix/api/serializers/item.py:281
 msgid ""
@@ -238,14 +238,12 @@ msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
-"Um cartão-prenda com o mesmo código já existe na sua ou numa conta de "
-"organizador afiliada."
+"Um identificador com o mesmo ID e tipo já existe nesta conta de organizador."
 
 #: pretix/api/serializers/order.py:76
-#, fuzzy, python-brace-format
-#| msgid "{value} is not a valid email address."
+#, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr "{input} não é um endereço de e-mail válido."
+msgstr "{input} não é uma escolha válida."
 
 #: pretix/api/serializers/order.py:1191 pretix/api/views/cart.py:210
 #: pretix/base/services/orders.py:1418
@@ -390,10 +388,8 @@ msgid "Refund of payment failed"
 msgstr "Reembolso do pagamento falhou"
 
 #: pretix/api/webhooks.py:261
-#, fuzzy
-#| msgid "Payment confirmation date"
 msgid "Payment confirmed"
-msgstr "Data de confirmação do pagamento"
+msgstr "Pagamento confirmado"
 
 #: pretix/api/webhooks.py:265
 msgid "Order approved"
@@ -443,6 +439,8 @@ msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
 msgstr ""
+"Produto alterado (inclui produtos adicionados ou apagados e inclui "
+"alterações a subprodutos como variações e conjuntos)"
 
 #: pretix/api/webhooks.py:310
 msgid "Shop taken live"
@@ -474,11 +472,11 @@ msgstr "Este campo é obrigatório."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr ""
+msgstr "Insira um código postal no formato XXX."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr ""
+msgstr "Insira um código postal no formato XXXX."
 
 #: pretix/base/auth.py:143
 #, python-brace-format
@@ -656,10 +654,8 @@ msgid "Combined Excel (.xlsx)"
 msgstr "Excel Combinado(.xlsx)"
 
 #: pretix/base/exporters/answers.py:52
-#, fuzzy
-#| msgid "Question answers"
 msgid "Question answer file uploads"
-msgstr "Respostas à pergunta"
+msgstr "Carregamento de Ficheiros de Resposta às Perguntas"
 
 #: pretix/base/exporters/answers.py:53 pretix/base/exporters/json.py:52
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:80
@@ -678,6 +674,8 @@ msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
 msgstr ""
+"Descarrega um ficheiro ZIP incluindo todos os ficheiros carregados pelos "
+"clientes durante a criação do pedido."
 
 #: pretix/base/exporters/answers.py:64 pretix/base/models/items.py:1561
 #: pretix/control/navigation.py:182
@@ -692,15 +690,13 @@ msgid "Customer accounts"
 msgstr "Contas de clientes"
 
 #: pretix/base/exporters/customers.py:51
-#, fuzzy
-#| msgid "Customer accounts"
 msgctxt "export_category"
 msgid "Customer accounts"
 msgstr "Contas de clientes"
 
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
-msgstr ""
+msgstr "Descarregar uma folha de cálculo de todas as contas de cliente."
 
 #: pretix/base/exporters/customers.py:64 pretix/base/models/customers.py:81
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:28
@@ -881,17 +877,17 @@ msgid "No"
 msgstr "Não"
 
 #: pretix/base/exporters/dekodi.py:42 pretix/base/exporters/invoices.py:66
-#, fuzzy
-#| msgid "Invoices"
 msgctxt "export_category"
 msgid "Invoices"
-msgstr "Facturas"
+msgstr "Faturas"
 
 #: pretix/base/exporters/dekodi.py:43
 msgid ""
 "Download invoices in a format that can be used by the dekodi NREI conversion "
 "software."
 msgstr ""
+"Descarregar faturas num formato que pode ser usado pelo software \"dekodi "
+"NREI\"."
 
 #: pretix/base/exporters/dekodi.py:105
 #, python-brace-format
@@ -906,22 +902,16 @@ msgstr "Bilhete do evento {event} - {code}"
 #: pretix/plugins/reports/exporters.py:394
 #: pretix/plugins/reports/exporters.py:625
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date range"
-msgstr "Data e hora"
+msgstr "Intervalo de Datas"
 
 #: pretix/base/exporters/dekodi.py:223 pretix/base/exporters/invoices.py:77
-#, fuzzy
-#| msgid ""
-#| "Only include invoices issued on or after this date. Note that the invoice "
-#| "date does not always correspond to the order or payment date."
 msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
 msgstr ""
-"Incluir apenas as facturas emitidas após esta data (inclusive). Note-se que "
-"a data da factura nem sempre corresponde à data de encomenda ou de pagamento."
+"Incluir apenas as faturas emitidas neste prazo. Note que a data da fatura "
+"nem sempre corresponde à data de encomenda ou de pagamento."
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
@@ -939,6 +929,8 @@ msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
 msgstr ""
+"Descarregar uma folha de cálculo com informação de todos os eventos nesta "
+"conta de organizador."
 
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/waitinglist.py:114
 #: pretix/base/models/event.py:522 pretix/base/pdf.py:219
@@ -1053,6 +1045,8 @@ msgstr "Todas as facturas"
 #: pretix/base/exporters/invoices.py:124
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
 msgstr ""
+"Descarregar todas as faturas criadas pelo sistema como um ZIP de ficheiros "
+"PDF."
 
 #: pretix/base/exporters/invoices.py:175
 msgid "Invoice data"
@@ -1064,6 +1058,9 @@ msgid ""
 "The spreadsheet includes two sheets, one with a line for every invoice, and "
 "one with a line for every position of every invoice."
 msgstr ""
+"Descarregar uma folha de cálculo com dados de todas as faturas criadas pelo "
+"sistema. Esta folha de cálculo inclui 2 folhas, uma com uma linha por cada "
+"fatura, e uma com uma linha para cada posição em todas as faturas."
 
 #: pretix/base/exporters/invoices.py:188 pretix/base/shredder.py:396
 #: pretix/control/templates/pretixcontrol/order/index.html:260
@@ -1393,15 +1390,15 @@ msgid "Product data"
 msgstr "Dados do Produto"
 
 #: pretix/base/exporters/items.py:51 pretix/base/exporters/orderlist.py:891
-#, fuzzy
-#| msgid "Product data"
 msgctxt "export_category"
 msgid "Product data"
-msgstr "Dados do Produto"
+msgstr "Informação do Produto"
 
 #: pretix/base/exporters/items.py:52
 msgid "Download a spreadsheet with details about all products and variations."
 msgstr ""
+"Descarregar uma folha de cálculo com detalhes sobre todos os produtos e "
+"variações."
 
 #: pretix/base/exporters/items.py:58
 msgid "Product ID"
@@ -1473,10 +1470,8 @@ msgstr "É um bilhete"
 #: pretix/base/exporters/items.py:78
 #: pretix/control/templates/pretixcontrol/item/create.html:74
 #: pretix/control/templates/pretixcontrol/item/index.html:87
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Personalized ticket"
-msgstr "Gerar bilhetes"
+msgstr "Bilhetes Personalizados"
 
 #: pretix/base/exporters/items.py:79 pretix/base/models/items.py:454
 msgid "Generate tickets"
@@ -1595,6 +1590,8 @@ msgid ""
 "Download a structured JSON representation of all orders. This might be "
 "useful for the import in third-party systems."
 msgstr ""
+"Descarregar uma representação estruturada em JSON de todos os pedidos. Pode "
+"ser útil para importar em sistemas de terceiros."
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
@@ -1605,6 +1602,8 @@ msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
 msgstr ""
+"Descarregar um ficheiro com todos os endereços de e-mail obtidos de "
+"compradores ou de portadores de bilhete."
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:414
 #: pretix/plugins/reports/exporters.py:596
@@ -1617,6 +1616,9 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
+"Descarregar uma folha de cálculo de todos os pedidos. Esta folha de cálculo "
+"inclui três folhas: uma com um pedido por linha, uma com uma posição dum "
+"pedido por linha, e uma com cada taxa adicional cobrada num pedido."
 
 #: pretix/base/exporters/orderlist.py:93 pretix/base/models/orders.py:270
 #: pretix/control/navigation.py:253 pretix/control/navigation.py:360
@@ -1651,10 +1653,8 @@ msgstr "Mostrar respostas de escolha múltipla agrupadas numa coluna"
 
 #: pretix/base/exporters/orderlist.py:124
 #: pretix/plugins/reports/exporters.py:628
-#, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Only include orders created within this date range."
-msgstr "Apenas incluem encomendas criadas a partir desta data (inclusivé)."
+msgstr "Apenas incluir pedidos criados a partir deste intervalo de datas."
 
 #: pretix/base/exporters/orderlist.py:128 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:229 pretix/plugins/badges/exporters.py:319
@@ -1663,17 +1663,12 @@ msgid "Event date"
 msgstr "Data do evento"
 
 #: pretix/base/exporters/orderlist.py:131
-#, fuzzy
-#| msgid ""
-#| "Only include orders including at least one ticket for a date on or after "
-#| "this date. Will also include other dates in case of mixed orders!"
 msgid ""
 "Only include orders including at least one ticket for a date in this range. "
 "Will also include other dates in case of mixed orders!"
 msgstr ""
-"Apenas incluem encomendas, incluindo pelo menos um bilhete para uma data "
-"depois desta data (inclusivé). Incluirá também outras datas em caso de "
-"encomendas mistas!"
+"Apenas incluir pedidos que incluem pelo menos um bilhete para uma data neste "
+"intervalo. Incluirá também outras datas em caso de encomendas mistas!"
 
 #: pretix/base/exporters/orderlist.py:250
 #: pretix/base/exporters/orderlist.py:422
@@ -2102,30 +2097,30 @@ msgid "Invoice address state"
 msgstr "Endereço de fatura: estado"
 
 #: pretix/base/exporters/orderlist.py:764
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Payments and refunds"
-msgstr "Pagamentos e reembolsos da encomenda"
+msgstr "Pagamentos e reembolsos"
 
 #: pretix/base/exporters/orderlist.py:766
 msgid "Download a spreadsheet of all payments or refunds of every order."
 msgstr ""
+"Descarregar uma folha de cálculo de todos os pagamentos ou reembolsos de "
+"todos os pedidos."
 
 #: pretix/base/exporters/orderlist.py:775
-#, fuzzy
-#| msgid "Extend payment term"
 msgid "Date range (payment date)"
-msgstr "Estender prazo de pagamento"
+msgstr "Intervalo de Datas (data de pagamento)"
 
 #: pretix/base/exporters/orderlist.py:778
 msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
 msgstr ""
+"Note que usar isto vai excluir quaisquer pagamentos não confirmados e/ou "
+"reembolsos incompletos."
 
 #: pretix/base/exporters/orderlist.py:782
 msgid "Date range (start of transaction)"
-msgstr ""
+msgstr "Intervalo de Datas (início da transação)"
 
 #: pretix/base/exporters/orderlist.py:788
 msgid "Payment states"
@@ -2200,10 +2195,8 @@ msgid "Payment method"
 msgstr "Forma de pagamento"
 
 #: pretix/base/exporters/orderlist.py:840
-#, fuzzy
-#| msgid "Payment matching IDs"
 msgid "Matching ID"
-msgstr "Pagamento IDs correspondentes"
+msgstr "ID correspondente"
 
 #: pretix/base/exporters/orderlist.py:840
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
@@ -2218,6 +2211,8 @@ msgstr "Quotas disponiveis"
 msgid ""
 "Download a spreadsheet of all quotas including their current availability."
 msgstr ""
+"Descarregar uma folha de cálculo de todas as quotas incluindo a sua "
+"disponibilidade atual."
 
 #: pretix/base/exporters/orderlist.py:897
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
@@ -2268,8 +2263,6 @@ msgstr "Transações de cartão-presente"
 
 #: pretix/base/exporters/orderlist.py:946
 #: pretix/base/exporters/orderlist.py:1049
-#, fuzzy
-#| msgid "Gift cards"
 msgctxt "export_category"
 msgid "Gift cards"
 msgstr "Cartões-presente"
@@ -2277,6 +2270,7 @@ msgstr "Cartões-presente"
 #: pretix/base/exporters/orderlist.py:947
 msgid "Download a spreadsheet of all gift card transactions."
 msgstr ""
+"Descarregar uma folha de cálculo de todas as transações com cartões-presente."
 
 #: pretix/base/exporters/orderlist.py:975
 #: pretix/base/exporters/orderlist.py:1020
@@ -2346,6 +2340,8 @@ msgstr "Resgates de cartão-presente"
 msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
 msgstr ""
+"Descarregar uma folha de cálculo de todos os pagamentos ou reembolsos que "
+"envolvam cartões-presente."
 
 #: pretix/base/exporters/orderlist.py:1020
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
@@ -2360,14 +2356,17 @@ msgstr "Cartões-presente"
 #: pretix/base/exporters/orderlist.py:1050
 msgid "Download a spreadsheet of all gift cards including their current value."
 msgstr ""
+"Descarregar uma folha de cálculo de todos os cartões-presente incluindo o "
+"seu valor atual."
 
 #: pretix/base/exporters/orderlist.py:1057
 msgid "Show value at"
 msgstr "Mostrar valor em"
 
 #: pretix/base/exporters/orderlist.py:1060
+#, fuzzy
 msgid "Defaults to the time of report."
-msgstr ""
+msgstr "Predefine para o tempo do relatório."
 
 #: pretix/base/exporters/orderlist.py:1065
 #: pretix/base/exporters/orderlist.py:1075 pretix/control/forms/filter.py:507
@@ -2450,8 +2449,6 @@ msgid "Last invoice date of order"
 msgstr "Data da última fatura do pedido"
 
 #: pretix/base/exporters/waitinglist.py:42
-#, fuzzy
-#| msgid "Waiting list"
 msgctxt "export_category"
 msgid "Waiting list"
 msgstr "Lista de espera"
@@ -2459,6 +2456,7 @@ msgstr "Lista de espera"
 #: pretix/base/exporters/waitinglist.py:43
 msgid "Download a spread sheet with all your waiting list data."
 msgstr ""
+"Descarregar uma folha de cálculo com toda a informação da lista da espera."
 
 #: pretix/base/exporters/waitinglist.py:49
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
@@ -2622,7 +2620,7 @@ msgstr ""
 msgid ""
 "If you keep this empty, the ticket will be valid starting at the time of "
 "purchase."
-msgstr ""
+msgstr "Se manter isto vazio, o bilhete será válido a partir da compra."
 
 #: pretix/base/forms/questions.py:659 pretix/base/forms/questions.py:981
 msgid "Street and Number"
@@ -2949,32 +2947,24 @@ msgid "Included taxes"
 msgstr "Impostos incluídos"
 
 #: pretix/base/invoice.py:780
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "Using the conversion rate of 1:{rate} as published by the European "
-#| "Central Bank on {date}, this corresponds to:"
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
 "Utilizando a taxa de conversão de 1: {rate} conforme publicado pelo "
-"{authority} em {date}, isto corresponde a:"
+"{authority} a {date}, isto corresponde a:"
 
 #: pretix/base/invoice.py:795
-#, fuzzy, python-brace-format
-#| msgctxt "invoice"
-#| msgid ""
-#| "Using the conversion rate of 1:{rate} as published by the European "
-#| "Central Bank on {date}, the invoice total corresponds to {total}."
+#, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
 msgstr ""
-"Utilizando a taxa de conversão de 1: {rate} conforme publicado pelo Banco "
-"Central Europeu em {date}, o total da factura corresponde a {total}."
+"Utilizando a taxa de conversão de 1: {rate} conforme publicado pelo "
+"{authority} a {date}, o total da factura corresponde a {total}."
 
 #: pretix/base/invoice.py:809
 msgid "Modern Invoice Renderer (pretix 2.7)"
@@ -2982,12 +2972,13 @@ msgstr "Renderizador Factura moderna (pretix 2,7)"
 
 #: pretix/base/media.py:58
 msgid "Barcode / QR-Code"
-msgstr ""
+msgstr "Código de Barras / Código QR"
 
 #: pretix/base/media.py:74
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:237
+#, fuzzy
 msgid "NFC UID-based"
-msgstr ""
+msgstr "NFC Baseado em UID"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -3068,6 +3059,10 @@ msgid ""
 "and valid for check-in regardless of which date they are purchased for. You "
 "can limit their validity through the advanced check-in rules, though."
 msgstr ""
+"Se escolher \"todas as datas\", os bilhetes vão ser considerados parte desta "
+"lista e válidos para check-in independentemente da data para a qual foram "
+"comprados. No entanto, pode limitar a sua validade através das regras de "
+"check-in avançadas."
 
 #: pretix/base/models/checkin.py:65
 msgctxt "checkin"
@@ -3191,16 +3186,12 @@ msgid "Server error"
 msgstr "Erro do servidor"
 
 #: pretix/base/models/checkin.py:353
-#, fuzzy
-#| msgid "Ticket code"
 msgid "Ticket blocked"
-msgstr "Código do bilhete"
+msgstr "Bilhete bloqueado"
 
 #: pretix/base/models/checkin.py:354
-#, fuzzy
-#| msgid "This voucher is not valid for this seat."
 msgid "Ticket not valid at this time"
-msgstr "Este voucher não é válido para este lugar."
+msgstr "O voucher não é válido neste momento"
 
 #: pretix/base/models/customers.py:54
 msgid "Provider name"
@@ -3686,27 +3677,21 @@ msgid "Export"
 msgstr "Exportar"
 
 #: pretix/base/models/exports.py:58
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Additional recipients"
-msgstr "Configurações adicionais"
+msgstr "Destinatários adicionais"
 
 #: pretix/base/models/exports.py:60 pretix/base/models/exports.py:65
 #: pretix/base/models/exports.py:70
 msgid "You can specify multiple recipients separated by commas."
-msgstr ""
+msgstr "Pode especificar vários destinatários separados por vírgulas."
 
 #: pretix/base/models/exports.py:63
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Additional recipients (Cc)"
-msgstr "Configurações adicionais"
+msgstr "Destinatários adicionais (CC)"
 
 #: pretix/base/models/exports.py:68
-#, fuzzy
-#| msgid "Additional settings"
 msgid "Additional recipients (Bcc)"
-msgstr "Configurações adicionais"
+msgstr "Destinatários adicionais (BCC)"
 
 #: pretix/base/models/exports.py:73 pretix/control/forms/event.py:1041
 #: pretix/control/forms/event.py:1103 pretix/control/forms/event.py:1115
@@ -3731,11 +3716,13 @@ msgstr "Mensagem"
 #, fuzzy
 #| msgid "Event start time"
 msgid "Requested start time"
-msgstr "Hora de início do evento"
+msgstr "Hora de início pedida"
 
 #: pretix/base/models/exports.py:85
 msgid "The actual start time might be delayed depending on system load."
 msgstr ""
+"A hora de início real pode ser atrasada devido à capacidade em uso do "
+"sistema."
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
@@ -3819,38 +3806,33 @@ msgid "This product will not be sold after the given date."
 msgstr "Este produto não será vendido após a data indicada."
 
 #: pretix/base/models/items.py:369
-#, fuzzy
-#| msgid "(Event default)"
 msgid "Event validity (default)"
-msgstr "(Evento padrão)"
+msgstr "Validade do Evento (predefinida)"
 
 #: pretix/base/models/items.py:370
-#, fuzzy
-#| msgid "Customer"
 msgid "Fixed time frame"
-msgstr "Comprador"
+msgstr "Intervalo de Tempo Fixo"
 
 #: pretix/base/models/items.py:371
-#, fuzzy
-#| msgid "Gift card validity"
 msgid "Dynamic validity"
-msgstr "Validade do cartão presente"
+msgstr "Validade dinâmica"
 
 #: pretix/base/models/items.py:378 pretix/base/models/items.py:660
 msgid "Don't use re-usable media, use regular one-off tickets"
 msgstr ""
+"Não usar identificadores reutilizáveis, usar bilhetes normais descartáveis"
 
 #: pretix/base/models/items.py:379
 msgid "Require an existing medium to be re-used"
-msgstr ""
+msgstr "Permitir apenas a reutilização de um identificador existente"
 
 #: pretix/base/models/items.py:380
 msgid "Require a previously unknown medium to be newly added"
-msgstr ""
+msgstr "Permitir adicionar apenas um identificador desconhecido"
 
 #: pretix/base/models/items.py:381
 msgid "Require either an existing or a new medium to be used"
-msgstr ""
+msgstr "Permitir apenas que seja utilizado um identificador, existente ou novo"
 
 #: pretix/base/models/items.py:397 pretix/base/models/items.py:1260
 #: pretix/control/templates/pretixcontrol/items/index.html:40
@@ -3899,18 +3881,14 @@ msgstr ""
 "Se vai ou não comprar este produto permite que a pessoa entre no seu evento"
 
 #: pretix/base/models/items.py:447
-#, fuzzy
-#| msgid "Is an admission ticket"
 msgid "Is a personalized ticket"
-msgstr "É um bilhete"
+msgstr "É um bilhete personalizado"
 
 #: pretix/base/models/items.py:449
-#, fuzzy
-#| msgid ""
-#| "Whether or not buying this product allows a person to enter your event"
 msgid "Whether or not buying this product allows to enter attendee information"
 msgstr ""
-"Se vai ou não comprar este produto permite que a pessoa entre no seu evento"
+"Se a compra ou não deste produto permite que a pessoa introduza a sua "
+"informação"
 
 #: pretix/base/models/items.py:458
 msgid "Show a waiting list for this ticket"
@@ -4087,10 +4065,8 @@ msgid "Membership duration in months"
 msgstr "Duração da associação em meses"
 
 #: pretix/base/models/items.py:607
-#, fuzzy
-#| msgid "Valid until"
 msgid "Validity"
-msgstr "Válido até"
+msgstr "Validade"
 
 #: pretix/base/models/items.py:609
 msgid ""
@@ -4103,64 +4079,60 @@ msgid ""
 "change the settings here later, existing tickets will not be affected by the "
 "change but keep their current validity."
 msgstr ""
+"Ao configurar um evento normal, ou uma série de eventos com intervalos de "
+"tempo, tipicamente NÃO precisa de alterar este valor. A definição "
+"predefinida significa que a validade dos bilhetes não vai ser decidida pelo "
+"produto, mas pelo evento e pela configuração de check-in. Use as outras "
+"opções se precisam que realizem, p.e. , uma reserva de um bilhete anual com "
+"uma data de início dinâmica. Note que a validade será guardada com o "
+"bilhete, pelo que, se mudar as definições daqui mais tarde, bilhetes já "
+"existentes não serão afetados pela mudança, manterão a sua validade."
 
 #: pretix/base/models/items.py:617
-#, fuzzy
-#| msgid "Gift card validity"
 msgid "Start of validity"
-msgstr "Validade do cartão presente"
+msgstr "Início da validade"
 
 #: pretix/base/models/items.py:618
-#, fuzzy
-#| msgid "End of presale"
 msgid "End of validity"
-msgstr "Fim da pré-venda"
+msgstr "Fim da validade"
 
 #: pretix/base/models/items.py:621
-#, fuzzy
-#| msgid "minutes"
 msgid "Minutes"
-msgstr "minutos"
+msgstr "Minutos"
 
 #: pretix/base/models/items.py:625
 msgid "Hours"
-msgstr ""
+msgstr "Horas"
 
 #: pretix/base/models/items.py:629
 msgid "Days"
-msgstr ""
+msgstr "Dias"
 
 #: pretix/base/models/items.py:633
-#, fuzzy
-#| msgid "Month"
 msgid "Months"
-msgstr "Mês"
+msgstr "Meses"
 
 #: pretix/base/models/items.py:636
-#, fuzzy
-#| msgid "Customers can cancel their paid orders"
 msgid "Customers can select the validity start date"
-msgstr "Os clientes podem cancelar as suas encomendas pagas"
+msgstr "Os clientes podem selecionar o início da data de validade"
 
 #: pretix/base/models/items.py:637
 msgid "If not selected, the validity always starts at the time of purchase."
-msgstr ""
+msgstr "Se não for selecionado, a validade começa sempre na altura da compra."
 
 #: pretix/base/models/items.py:642
 #, fuzzy
 #| msgid "Maximum order total"
 msgid "Maximum future start"
-msgstr "Máximo total da encomenda"
+msgstr "Início Futuro Máximo"
 
 #: pretix/base/models/items.py:643
-#, fuzzy
-#| msgid "The selected date does not exist in this event series."
 msgid "The selected start date may only be this many days in the future."
-msgstr "A data selecionada não existe nesta série de eventos."
+msgstr "A data selecionada só pode ser estes tantos dias no futuro."
 
 #: pretix/base/models/items.py:649
 msgid "Reusable media policy"
-msgstr ""
+msgstr "Condições de Identificador"
 
 #: pretix/base/models/items.py:651
 msgid ""
@@ -4171,10 +4143,16 @@ msgid ""
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
+"Se este produto deve ser colocado num identificador reutilizável, pode "
+"incluir condições para identificadores físicos. Isto não é necessário para "
+"bilhetes normais, com um código de barras de uso único, mas apenas para "
+"produtos como bilhetes de temporada renováveis ou pulseiras recarregáveis. "
+"Isto é uma funcionalidade avançada que requer também configurações "
+"específicas de emissão de bilhetes e de impressão."
 
 #: pretix/base/models/items.py:661
 msgid "Reusable media type"
-msgstr ""
+msgstr "Tipo de identificador reutilizável"
 
 #: pretix/base/models/items.py:663
 msgid ""
@@ -4182,6 +4160,10 @@ msgid ""
 "Note that not all media types support all types of products, and not all "
 "media types are supported across all sales channels or check-in processes."
 msgstr ""
+"Selecione o tipo de identificador físico que deve ser usado para este "
+"produto Note que nem todos os identificadores suportam todos os tipos de "
+"produtos, e que nem todos os tipos de identificadores são suportados em "
+"todos os canais de venda os processos de check-in."
 
 #: pretix/base/models/items.py:674 pretix/base/models/items.py:1501
 #: pretix/control/forms/filter.py:409 pretix/control/forms/filter.py:1753
@@ -4203,18 +4185,18 @@ msgid ""
 "If you select a reusable media policy, you also need to select a reusable "
 "media type."
 msgstr ""
+"Se selecionar condições de identificadores reutilizáveis, tem que selecionar "
+"também um tipo de identificador reutilizável."
 
 #: pretix/base/models/items.py:848
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "The selected media type is not enabled in your organizer settings."
-msgstr "O produto selecionado não está ativo ou não tem preço definido."
+msgstr ""
+"O tipo de identificador selecionado não está ativo nas definições de "
+"organizador."
 
 #: pretix/base/models/items.py:850
-#, fuzzy
-#| msgid "The selected item does not belong to this event."
 msgid "The selected media type does not support usage for tickets currently."
-msgstr "O item selecionado não pertence a este evento."
+msgstr "O tipo de identificador selecionado não suporta bilhetes de momento."
 
 #: pretix/base/models/items.py:852
 #, fuzzy
