@@ -186,7 +186,7 @@ setup(
         'django-otp==1.1.*',
         'django-phonenumber-field==7.0.*',
         'django-redis==5.2.*',
-        'django-scopes==1.2.*',
+        'django-scopes>=1.2,<2.1',
         'django-statici18n==2.3.*',
         'djangorestframework==3.14.*',
         'dnspython==2.2.*',
