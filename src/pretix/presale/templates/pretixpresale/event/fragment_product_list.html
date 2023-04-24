@@ -163,13 +163,17 @@
                                             <small>{% trans "incl. taxes" %}</small>
                                         {% endif %}
                                     {% elif var.display_price.rate and var.display_price.gross and event.settings.display_net_prices %}
-                                        <small>{% blocktrans trimmed with rate=var.display_price.rate|floatformat:-2 name=var.display_price.name %}
-                                            <strong>plus</strong> {{ rate }}% {{ name }}
-                                        {% endblocktrans %}</small>
+                                        <small data-toggle="tooltip" title="{% blocktrans trimmed with value=var.display_price.gross|money:event.currency %}{{ value }} incl. taxes{% endblocktrans %}" data-placement="bottom">
+                                            {% blocktrans trimmed with rate=var.display_price.rate|floatformat:-2 name=var.display_price.name %}
+                                                <strong>plus</strong> {{ rate }}% {{ name }}
+                                            {% endblocktrans %}
+                                        </small>
                                     {% elif var.display_price.rate and var.display_price.gross %}
-                                        <small>{% blocktrans trimmed with rate=var.display_price.rate|floatformat:-2 name=var.display_price.name %}
-                                            incl. {{ rate }}% {{ name }}
-                                        {% endblocktrans %}</small>
+                                        <small data-toggle="tooltip" title="{% blocktrans trimmed with value=var.display_price.net|money:event.currency %}{{ value }} without taxes{% endblocktrans %}" data-placement="bottom">
+                                            {% blocktrans trimmed with rate=var.display_price.rate|floatformat:-2 name=var.display_price.name %}
+                                                incl. {{ rate }}% {{ name }}
+                                            {% endblocktrans %}
+                                        </small>
                                     {% endif %}
                                     </p>
                                 </div>
@@ -297,13 +301,17 @@
                                 <small>{% trans "incl. taxes" %}</small>
                             {% endif %}
                         {% elif item.display_price.rate and item.display_price.gross and event.settings.display_net_prices %}
-                            <small>{% blocktrans trimmed with rate=item.display_price.rate|floatformat:-2 name=item.display_price.name %}
-                                <strong>plus</strong> {{ rate }}% {{ name }}
-                            {% endblocktrans %}</small>
+                            <small data-toggle="tooltip" title="{% blocktrans trimmed with value=item.display_price.gross|money:event.currency %}{{ value }} incl. taxes{% endblocktrans %}" data-placement="bottom">
+                                {% blocktrans trimmed with rate=item.display_price.rate|floatformat:-2 name=item.display_price.name %}
+                                    <strong>plus</strong> {{ rate }}% {{ name }}
+                                {% endblocktrans %}
+                            </small>
                         {% elif item.display_price.rate and item.display_price.gross %}
-                            <small>{% blocktrans trimmed with rate=item.display_price.rate|floatformat:-2 name=item.display_price.name %}
-                                incl. {{ rate }}% {{ name }}
-                            {% endblocktrans %}</small>
+                            <small data-toggle="tooltip" title="{% blocktrans trimmed with value=item.display_price.net|money:event.currency %}{{ value }} without taxes{% endblocktrans %}" data-placement="bottom">
+                                {% blocktrans trimmed with rate=item.display_price.rate|floatformat:-2 name=item.display_price.name %}
+                                    incl. {{ rate }}% {{ name }}
+                                {% endblocktrans %}
+                            </small>
                         {% endif %}
                         </p>
                     </div>
