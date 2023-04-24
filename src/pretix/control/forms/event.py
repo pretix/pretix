@@ -1191,6 +1191,24 @@ class MailSettingsForm(SettingsForm):
         help_text=_("This will only be sent out for non-free orders. Free orders will receive the free order "
                     "template from below instead."),
     )
+    mail_send_order_approved_attendee = forms.BooleanField(
+        label=_("Send an email to attendees"),
+        help_text=_('If the order contains attendees with email addresses different from the person who orders the '
+                    'tickets, the following email will be sent out to the attendees.'),
+        required=False,
+    )
+    mail_subject_order_approved_attendee = I18nFormField(
+        label=_("Subject sent to attendees"),
+        required=False,
+        widget=I18nTextInput,
+    )
+    mail_text_order_approved_attendee = I18nFormField(
+        label=_("Text sent to attendees"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("This will only be sent out for non-free orders. Free orders will receive the free order "
+                    "template from below instead."),
+    )
     mail_subject_order_approved_free = I18nFormField(
         label=_("Subject for approved free order"),
         required=False,
@@ -1198,6 +1216,24 @@ class MailSettingsForm(SettingsForm):
     )
     mail_text_order_approved_free = I18nFormField(
         label=_("Text for approved free order"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("This will only be sent out for free orders. Non-free orders will receive the non-free order "
+                    "template from above instead."),
+    )
+    mail_send_order_approved_free_attendee = forms.BooleanField(
+        label=_("Send an email to attendees"),
+        help_text=_('If the order contains attendees with email addresses different from the person who orders the '
+                    'tickets, the following email will be sent out to the attendees.'),
+        required=False,
+    )
+    mail_subject_order_approved_free_attendee = I18nFormField(
+        label=_("Subject sent to attendees"),
+        required=False,
+        widget=I18nTextInput,
+    )
+    mail_text_order_approved_free_attendee = I18nFormField(
+        label=_("Text sent to attendees"),
         required=False,
         widget=I18nTextarea,
         help_text=_("This will only be sent out for free orders. Non-free orders will receive the non-free order "

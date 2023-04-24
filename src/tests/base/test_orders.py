@@ -454,12 +454,42 @@ def test_approve(event):
     assert o1.invoices.count() == 1
     assert len(djmail.outbox) == 1
     assert 'awaiting payment' in djmail.outbox[0].subject
+    assert djmail.outbox[0].to == ['dummy@dummy.test']
+
+
+@pytest.mark.django_db
+def test_approve_send_to_attendees(event):
+    djmail.outbox = []
+    event.settings.invoice_generate = True
+    event.settings.mail_send_order_approved_attendee = True
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=10, require_approval=True, locale='en'
+    )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None, price=Decimal("23.00"),
+        attendee_name_parts={'full_name': "Peter"}, attendee_email='attendee@dummy.test',
+        positionid=1
+    )
+    o1.create_transactions()
+    assert o1.transactions.count() == 0
+    approve_order(o1)
+    o1.refresh_from_db()
+    assert len(djmail.outbox) == 2
+    assert djmail.outbox[0].to == ['dummy@dummy.test']
+    assert djmail.outbox[1].to == ['attendee@dummy.test']
+    assert 'awaiting payment' in djmail.outbox[0].subject
+    assert 'awaiting payment' not in djmail.outbox[1].subject
 
 
 @pytest.mark.django_db
 def test_approve_free(event):
     djmail.outbox = []
-    event.settings.invoice_generate = 'True'
+    event.settings.invoice_generate = True
     o1 = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
@@ -474,6 +504,38 @@ def test_approve_free(event):
     assert o1.invoices.count() == 0
     assert len(djmail.outbox) == 1
     assert 'confirmed' in djmail.outbox[0].subject
+    assert djmail.outbox[0].to == ['dummy@dummy.test']
+
+
+@pytest.mark.django_db
+def test_approve_free_send_to_attendees(event):
+    djmail.outbox = []
+    event.settings.invoice_generate = True
+    event.settings.mail_send_order_approved_free_attendee = True
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=0, require_approval=True
+    )
+    ticket = Item.objects.create(event=event, name='Free ticket',
+                                 default_price=Decimal('0.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None, price=Decimal("0.00"),
+        attendee_name_parts={'full_name': "Peter"}, attendee_email='attendee@dummy.test',
+        positionid=1
+    )
+    approve_order(o1)
+    o1.refresh_from_db()
+    assert o1.expires > now()
+    assert o1.status == Order.STATUS_PAID
+    assert not o1.require_approval
+    assert o1.invoices.count() == 0
+    assert len(djmail.outbox) == 2
+    assert djmail.outbox[0].to == ['dummy@dummy.test']
+    assert djmail.outbox[1].to == ['attendee@dummy.test']
+    assert 'confirmed' in djmail.outbox[0].subject
+    assert 'registration' in djmail.outbox[1].subject
 
 
 @pytest.mark.django_db

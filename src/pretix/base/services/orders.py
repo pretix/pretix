@@ -391,9 +391,15 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
             if order.total == Decimal('0.00'):
                 email_template = order.event.settings.mail_text_order_approved_free
                 email_subject = order.event.settings.mail_subject_order_approved_free
+                email_attendees = order.event.settings.mail_send_order_approved_free_attendee
+                email_attendee_template = order.event.settings.mail_text_order_approved_free_attendee
+                email_attendee_subject = order.event.settings.mail_subject_order_approved_free_attendee
             else:
                 email_template = order.event.settings.mail_text_order_approved
                 email_subject = order.event.settings.mail_subject_order_approved
+                email_attendees = order.event.settings.mail_send_order_approved_attendee
+                email_attendee_template = order.event.settings.mail_text_order_approved_attendee
+                email_attendee_subject = order.event.settings.mail_subject_order_approved_attendee
 
             email_context = get_email_context(event=order.event, order=order)
             try:
@@ -405,6 +411,19 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
                 )
             except SendMailException:
                 logger.exception('Order approved email could not be sent')
+
+            if email_attendees:
+                for p in order.positions.all():
+                    if p.addon_to_id is None and p.attendee_email and p.attendee_email != order.email:
+                        email_attendee_context = get_email_context(event=order.event, order=order, position=p)
+                        try:
+                            p.send_mail(
+                                email_attendee_subject, email_attendee_template, email_attendee_context,
+                                'pretix.event.order.email.order_approved', user,
+                                attach_tickets=True,
+                            )
+                        except SendMailException:
+                            logger.exception('Order approved email could not be sent to attendee')
 
     return order.pk
 

@@ -2278,6 +2278,26 @@ You can select a payment method and perform the payment here:
 Best regards,
 Your {event} team"""))
     },
+    'mail_send_order_approved_attendee': {
+        'type': bool,
+        'default': 'False'
+    },
+    'mail_subject_order_approved_attendee': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your event registration: {code}")),
+    },
+    'mail_text_order_approved_attendee': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+we approved a ticket ordered for you for {event}.
+
+You can view the details and status of your ticket here:
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
     'mail_subject_order_approved_free': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("Order approved and confirmed: {code}")),
@@ -2290,6 +2310,26 @@ we approved your order for {event} and will be happy to welcome you
 at our event. As you only ordered free products, no payment is required.
 
 You can change your order details and view the status of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
+    'mail_send_order_approved_free_attendee': {
+        'type': bool,
+        'default': 'False'
+    },
+    'mail_subject_order_approved_free_attendee': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your event registration: {code}")),
+    },
+    'mail_text_order_approved_free_attendee': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+we approved a ticket ordered for you for {event}.
+
+You can view the details and status of your ticket here:
 {url}
 
 Best regards,
