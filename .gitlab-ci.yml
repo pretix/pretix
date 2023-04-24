@@ -5,8 +5,8 @@ tests:
         - virtualenv env
         - source env/bin/activate
         - pip install -U pip wheel setuptools
-        - cd src
         - XDG_CACHE_HOME=/cache pip3 install -e ".[dev]"
+        - cd src
         - python manage.py check
         - make all compress
         - py.test --reruns 3 -n 3 tests
@@ -21,8 +21,8 @@ pypi:
         - virtualenv env
         - source env/bin/activate
         - pip install -U pip wheel setuptools check-manifest twine
-        - cd src
         - XDG_CACHE_HOME=/cache pip3 install -e ".[dev]"
+        - cd src
         - python setup.py sdist
         - pip install dist/pretix-*.tar.gz
         - python -m pretix migrate
