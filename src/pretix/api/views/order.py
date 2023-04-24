@@ -67,8 +67,8 @@ from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Checkin, Device, EventMetaValue,
     Invoice, InvoiceAddress, ItemMetaValue, ItemVariation,
     ItemVariationMetaValue, Order, OrderFee, OrderPayment, OrderPosition,
-    OrderRefund, Quota, SubEvent, SubEventMetaValue, TaxRule, TeamAPIToken,
-    generate_secret,
+    OrderRefund, Quota, ReusableMedium, SubEvent, SubEventMetaValue, TaxRule,
+    TeamAPIToken, generate_secret,
 )
 from pretix.base.models.orders import (
     BlockedTicketSecret, QuestionAnswer, RevokedTicketSecret,
@@ -166,12 +166,15 @@ with scopes_disabled():
                 )
             ).values('id')
 
+            matching_media = ReusableMedium.objects.filter(identifier=u).values_list('linked_orderposition__order_id', flat=True)
+
             mainq = (
                 code
                 | Q(email__icontains=u)
                 | Q(invoice_address__name_cached__icontains=u)
                 | Q(invoice_address__company__icontains=u)
                 | Q(pk__in=matching_invoices)
+                | Q(pk__in=matching_media)
                 | Q(comment__icontains=u)
                 | Q(has_pos=True)
             )
@@ -924,6 +927,7 @@ with scopes_disabled():
         search = django_filters.CharFilter(method='search_qs')
 
         def search_qs(self, queryset, name, value):
+            matching_media = ReusableMedium.objects.filter(identifier=value).values_list('linked_orderposition', flat=True)
             return queryset.filter(
                 Q(secret__istartswith=value)
                 | Q(attendee_name_cached__icontains=value)
@@ -933,6 +937,7 @@ with scopes_disabled():
                 | Q(order__code__istartswith=value)
                 | Q(order__invoice_address__name_cached__icontains=value)
                 | Q(order__email__icontains=value)
+                | Q(pk__in=matching_media)
             )
 
         def has_checkin_qs(self, queryset, name, value):
