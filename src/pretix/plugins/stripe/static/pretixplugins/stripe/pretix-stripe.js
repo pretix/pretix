@@ -251,7 +251,6 @@ $(function () {
         pretixstripe.load();
     } else {
         $("input[name=payment]").change(function () {
-            console.log($(this).val())
             if (['stripe', 'stripe_sepa_debit'].indexOf($(this).val()) > -1) {
                 pretixstripe.load();
             }
