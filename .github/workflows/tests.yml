@@ -64,7 +64,6 @@ jobs:
         run: sudo apt update && sudo apt install gettext mariadb-client
       - name: Install Python dependencies
         run: pip3 install --ignore-requires-python -e ".[dev]" mysqlclient psycopg2-binary  # We ignore that flake8 needs newer python as we don't run flake8 during tests
-        working-directory: ./src
       - name: Run checks
         run: python manage.py check
         working-directory: ./src

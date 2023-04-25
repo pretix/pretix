@@ -36,7 +36,6 @@ jobs:
             ${{ runner.os }}-pip-
       - name: Install Dependencies
         run: pip3 install -e ".[dev]" mysqlclient psycopg2-binary
-        working-directory: ./src
       - name: Run isort
         run: isort -c .
         working-directory: ./src
@@ -57,7 +56,6 @@ jobs:
             ${{ runner.os }}-pip-
       - name: Install Dependencies
         run: pip3 install -e ".[dev]" mysqlclient psycopg2-binary
-        working-directory: ./src
       - name: Run flake8
         run: flake8 .
         working-directory: ./src
