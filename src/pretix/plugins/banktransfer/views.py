@@ -250,7 +250,7 @@ class ActionView(View):
         invoice_nos = {u, u.upper()}
         if u.isdigit():
             if hasattr(request, 'event'):
-                invoice_nos.add(u.zfill(request.event.invoice_numbers_counter_length))
+                invoice_nos.add(u.zfill(request.event.settings.invoice_numbers_counter_length))
             else:
                 for i in range(2, 12):
                     invoice_nos.add(u.zfill(i))
