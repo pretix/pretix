@@ -5,7 +5,7 @@ sphinx-rtd-theme
 sphinxcontrib-httpdomain
 sphinxcontrib-images
 sphinxcontrib-jquery
-sphinxcontrib-spelling==7.*
+sphinxcontrib-spelling==8.*
 sphinxemoji
 pygments-markdown-lexer
 pyenchant==3.2.*
