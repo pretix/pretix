@@ -7,6 +7,10 @@ setup_collapsible_details = function (el) {
             return true;
         }
         var $details = $(this).closest("details");
+        if ($details.hasClass('sneak-peek')) {
+            // if sneak-peek is active, needs to be handled differently
+            return true;
+        }
         var isOpen = $details.prop("open");
         var $detailsNotSummary = $details.children(':not(summary)');
         if ($detailsNotSummary.is(':animated')) {

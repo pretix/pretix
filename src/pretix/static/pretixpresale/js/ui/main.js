@@ -288,6 +288,27 @@ $(function () {
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
 
+    $('details.sneak-peek:not([open])').each(function() {
+        this.open = true;
+        var $elements = $("> :not(summary)", this).show().filter(':not(.sneak-peek-trigger)').attr('aria-hidden', 'true');
+
+        var container = this;
+        $('summary, .sneak-peek-trigger button', container).one('click', function(e) {
+            e.preventDefault();
+
+            container.addEventListener('transitionend', function() {
+                $(container).removeClass('sneak-peek');
+                container.style.removeProperty('height');
+            }, {once: true});
+            container.style.height = container.scrollHeight + 'px';
+            $('.sneak-peek-trigger', container).fadeOut(function() {
+                $(this).remove();
+            });
+            $elements.removeAttr('aria-hidden');
+            $('summary', container).focus();
+        });
+    });
+
     // Copy answers
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();
