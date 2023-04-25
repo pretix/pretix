@@ -120,7 +120,7 @@ dev = [
   "freezegun",
   "isort==5.12.*",
   "oauthlib==3.2.*",
-  "pep8-naming==0.12.*",
+  "pep8-naming==0.13.*",
   "potypo",
   "pycodestyle==2.10.*",
   "pyflakes==3.0.*",
