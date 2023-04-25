@@ -37,7 +37,7 @@ dependencies = [
   "css-inline==0.8.*",
   "defusedcsv>=1.1.0",
   "dj-static",
-  "Django==3.2.*,>=3.2.18",
+  "Django==4.2",
   "django-bootstrap3==23.1.*",
   "django-compressor==4.3.*",
   "django-countries==7.5.*",
@@ -149,7 +149,7 @@ requires = [
   # These are runtime dependencies that we unfortunately need to be import in the step that generates
   # all CSS and JS asset files. We should keep their versions in sync with the definition above.
   "babel",
-  "Django==3.2.*,>=3.2.18",
+  "Django==4.2",
   "django-bootstrap3==23.1.*",
   "django-compressor==4.3.*",
   "django-countries==7.5.*",
