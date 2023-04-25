@@ -293,7 +293,8 @@ $(function () {
         var $elements = $("> :not(summary)", this).show().filter(':not(.sneak-peek-trigger)').attr('aria-hidden', 'true');
 
         var container = this;
-        $('summary, .sneak-peek-trigger button', container).one('click', function(e) {
+        var trigger = $('summary, .sneak-peek-trigger button', container);
+        function onclick(e) {
             e.preventDefault();
 
             container.addEventListener('transitionend', function() {
@@ -305,8 +306,10 @@ $(function () {
                 $(this).remove();
             });
             $elements.removeAttr('aria-hidden');
-            $('summary', container).focus();
-        });
+
+            trigger.off('click', onclick);
+        }
+        trigger.on('click', onclick);
     });
 
     // Copy answers
