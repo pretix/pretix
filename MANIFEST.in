@@ -1,5 +1,6 @@
 include LICENSE
 include README.rst
+include src/Makefile
 global-include *.proto
 recursive-include src/pretix/static *
 recursive-include src/pretix/static.dist *
@@ -31,3 +32,16 @@ recursive-include src/pretix/plugins/returnurl/templates *
 recursive-include src/pretix/plugins/returnurl/static *
 recursive-include src/pretix/plugins/webcheckin/templates *
 recursive-include src/pretix/plugins/webcheckin/static *
+ recursive-include src *.cfg
+ recursive-include src *.csv
+ recursive-include src *.gitkeep
+ recursive-include src *.jpg
+ recursive-include src *.json
+ recursive-include src *.py
+ recursive-include src *.svg
+ recursive-include src *.txt
+ recursive-include src Makefile
+
+recursive-exclude doc *
+recursive-exclude deployment *
+recursive-exclude res *
