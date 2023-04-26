@@ -59,7 +59,9 @@ from pretix import __version__
 from pretix.base.decimal import round_decimal
 from pretix.base.forms import SecretKeySettingsField
 from pretix.base.forms.questions import guess_country
-from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota, InvoiceAddress
+from pretix.base.models import (
+    Event, InvoiceAddress, Order, OrderPayment, OrderRefund, Quota,
+)
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.plugins import get_all_plugins
 from pretix.base.services.mail import SendMailException
