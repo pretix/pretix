@@ -58,6 +58,7 @@ from django_countries import countries
 from pretix import __version__
 from pretix.base.decimal import round_decimal
 from pretix.base.forms import SecretKeySettingsField
+from pretix.base.forms.questions import guess_country
 from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota, InvoiceAddress
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.plugins import get_all_plugins
@@ -1195,7 +1196,7 @@ class StripeSEPADirectDebit(StripePaymentIntentMethod):
                              'data-required-if': '#stripe_sepa_debit_country'
                          }
                      ),
-                     initial=self.ia.country,
+                     initial=self.ia.country or guess_country(self.event),
                  )),
             ])
 
