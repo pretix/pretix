@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-23 16:01+0000\n"
+"POT-Creation-Date: 2023-04-26 09:13+0000\n"
 "PO-Revision-Date: 2023-03-19 06:00+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -489,52 +489,52 @@ msgstr "minuty"
 msgid "Duplicate"
 msgstr "Duplikát"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:71
+#: pretix/static/pretixcontrol/js/ui/editor.js:72
 msgid "Check-in QR"
 msgstr "Check-in QR kód"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:386
+#: pretix/static/pretixcontrol/js/ui/editor.js:387
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Pozadí PDF nemohl být načten:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:656
+#: pretix/static/pretixcontrol/js/ui/editor.js:648
 msgid "Group of objects"
 msgstr "Skupina objektů"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:662
+#: pretix/static/pretixcontrol/js/ui/editor.js:653
 msgid "Text object"
 msgstr "Textový objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:664
+#: pretix/static/pretixcontrol/js/ui/editor.js:655
 msgid "Barcode area"
 msgstr "Oblast s QR kódem"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:666
+#: pretix/static/pretixcontrol/js/ui/editor.js:657
 msgid "Image area"
 msgstr "Oblast obrazu"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:668
+#: pretix/static/pretixcontrol/js/ui/editor.js:659
 msgid "Powered by pretix"
 msgstr "Poháněno společností pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:670
+#: pretix/static/pretixcontrol/js/ui/editor.js:661
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:674
+#: pretix/static/pretixcontrol/js/ui/editor.js:665
 msgid "Ticket design"
 msgstr "Design vstupenky"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:986
+#: pretix/static/pretixcontrol/js/ui/editor.js:964
 msgid "Saving failed."
 msgstr "Uložení se nepodařilo."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1055
-#: pretix/static/pretixcontrol/js/ui/editor.js:1105
+#: pretix/static/pretixcontrol/js/ui/editor.js:1033
+#: pretix/static/pretixcontrol/js/ui/editor.js:1083
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Při nahrávání souboru PDF došlo k problému, zkuste to prosím znovu."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1088
+#: pretix/static/pretixcontrol/js/ui/editor.js:1066
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Opravdu chcete opustit editor bez uložení změn?"
 

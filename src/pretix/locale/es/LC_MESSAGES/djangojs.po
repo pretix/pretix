@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-23 16:01+0000\n"
+"POT-Creation-Date: 2023-04-26 09:13+0000\n"
 "PO-Revision-Date: 2021-11-25 21:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -495,55 +495,55 @@ msgstr "minutos"
 msgid "Duplicate"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:71
+#: pretix/static/pretixcontrol/js/ui/editor.js:72
 msgid "Check-in QR"
 msgstr "QR de Chequeo"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:386
+#: pretix/static/pretixcontrol/js/ui/editor.js:387
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr ""
 "El archivo PDF de fondo no ha podido ser cargado debido al siguiente motivo:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:656
+#: pretix/static/pretixcontrol/js/ui/editor.js:648
 msgid "Group of objects"
 msgstr "Grupo de objetos"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:662
+#: pretix/static/pretixcontrol/js/ui/editor.js:653
 msgid "Text object"
 msgstr "Objeto de texto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:664
+#: pretix/static/pretixcontrol/js/ui/editor.js:655
 msgid "Barcode area"
 msgstr "Área para código de barras"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:666
+#: pretix/static/pretixcontrol/js/ui/editor.js:657
 msgid "Image area"
 msgstr "Área de imagen"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:668
+#: pretix/static/pretixcontrol/js/ui/editor.js:659
 msgid "Powered by pretix"
 msgstr "Proveído por pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:670
+#: pretix/static/pretixcontrol/js/ui/editor.js:661
 msgid "Object"
 msgstr "Objeto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:674
+#: pretix/static/pretixcontrol/js/ui/editor.js:665
 msgid "Ticket design"
 msgstr "Diseño del ticket"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:986
+#: pretix/static/pretixcontrol/js/ui/editor.js:964
 msgid "Saving failed."
 msgstr "El guardado falló."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1055
-#: pretix/static/pretixcontrol/js/ui/editor.js:1105
+#: pretix/static/pretixcontrol/js/ui/editor.js:1033
+#: pretix/static/pretixcontrol/js/ui/editor.js:1083
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Ha habido un error mientras se cargaba el archivo PDF, por favor, intente de "
 "nuevo."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1088
+#: pretix/static/pretixcontrol/js/ui/editor.js:1066
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "¿Realmente desea salir del editor sin haber guardado sus cambios?"
 

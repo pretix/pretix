@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-23 16:01+0000\n"
+"POT-Creation-Date: 2023-04-26 09:13+0000\n"
 "PO-Revision-Date: 2022-05-10 02:00+0000\n"
 "Last-Translator: Iryna N <in380@nyu.edu>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -498,52 +498,52 @@ msgstr ""
 msgid "Duplicate"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:71
+#: pretix/static/pretixcontrol/js/ui/editor.js:72
 msgid "Check-in QR"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:386
+#: pretix/static/pretixcontrol/js/ui/editor.js:387
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Не вдалося завантажити фоновий файл PDF з наступної причини:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:656
+#: pretix/static/pretixcontrol/js/ui/editor.js:648
 msgid "Group of objects"
 msgstr "Група об'єктів"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:662
+#: pretix/static/pretixcontrol/js/ui/editor.js:653
 msgid "Text object"
 msgstr "Текстовий об’єкт"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:664
+#: pretix/static/pretixcontrol/js/ui/editor.js:655
 msgid "Barcode area"
 msgstr "Область штрих-коду"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:666
+#: pretix/static/pretixcontrol/js/ui/editor.js:657
 msgid "Image area"
 msgstr "Область зображення"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:668
+#: pretix/static/pretixcontrol/js/ui/editor.js:659
 msgid "Powered by pretix"
 msgstr "На базі pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:670
+#: pretix/static/pretixcontrol/js/ui/editor.js:661
 msgid "Object"
 msgstr "Об'єкт"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:674
+#: pretix/static/pretixcontrol/js/ui/editor.js:665
 msgid "Ticket design"
 msgstr "Дизайн квитка"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:986
+#: pretix/static/pretixcontrol/js/ui/editor.js:964
 msgid "Saving failed."
 msgstr "Не вдалося зберегти."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1055
-#: pretix/static/pretixcontrol/js/ui/editor.js:1105
+#: pretix/static/pretixcontrol/js/ui/editor.js:1033
+#: pretix/static/pretixcontrol/js/ui/editor.js:1083
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Під час завантаження PDF-файлу сталася помилка. Повторіть спробу."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1088
+#: pretix/static/pretixcontrol/js/ui/editor.js:1066
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Ви дійсно хочете вийти з редактора, не зберігаючи зміни?"
 

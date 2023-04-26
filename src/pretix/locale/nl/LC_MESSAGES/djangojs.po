@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-23 16:01+0000\n"
+"POT-Creation-Date: 2023-04-26 09:13+0000\n"
 "PO-Revision-Date: 2021-10-29 02:00+0000\n"
 "Last-Translator: Maarten van den Berg <maartenberg1@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -493,52 +493,52 @@ msgstr "minuten"
 msgid "Duplicate"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:71
+#: pretix/static/pretixcontrol/js/ui/editor.js:72
 msgid "Check-in QR"
 msgstr "QR-code voor check-in"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:386
+#: pretix/static/pretixcontrol/js/ui/editor.js:387
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Het PDF-achtergrondbestand kon niet geladen worden met als reden:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:656
+#: pretix/static/pretixcontrol/js/ui/editor.js:648
 msgid "Group of objects"
 msgstr "Groep van objecten"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:662
+#: pretix/static/pretixcontrol/js/ui/editor.js:653
 msgid "Text object"
 msgstr "Tekstobject"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:664
+#: pretix/static/pretixcontrol/js/ui/editor.js:655
 msgid "Barcode area"
 msgstr "Barcode gebied"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:666
+#: pretix/static/pretixcontrol/js/ui/editor.js:657
 msgid "Image area"
 msgstr "Afbeeldingsgebied"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:668
+#: pretix/static/pretixcontrol/js/ui/editor.js:659
 msgid "Powered by pretix"
 msgstr "Mogelijk gemaakt door pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:670
+#: pretix/static/pretixcontrol/js/ui/editor.js:661
 msgid "Object"
 msgstr "Object"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:674
+#: pretix/static/pretixcontrol/js/ui/editor.js:665
 msgid "Ticket design"
 msgstr "Ticketontwerp"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:986
+#: pretix/static/pretixcontrol/js/ui/editor.js:964
 msgid "Saving failed."
 msgstr "Opslaan mislukt."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1055
-#: pretix/static/pretixcontrol/js/ui/editor.js:1105
+#: pretix/static/pretixcontrol/js/ui/editor.js:1033
+#: pretix/static/pretixcontrol/js/ui/editor.js:1083
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Probleem bij het uploaden van het PDF-bestand, probeer het opnieuw."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1088
+#: pretix/static/pretixcontrol/js/ui/editor.js:1066
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Wilt u de editor verlaten zonder uw wijzigingen op te slaan?"
 
