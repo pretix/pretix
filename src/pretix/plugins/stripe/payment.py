@@ -305,32 +305,6 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('Credit card payments'),
                      required=False,
                  )),
-                ('method_sepa_debit',
-                 forms.BooleanField(
-                     label=_('SEPA Direct Debit'),
-                     disabled=self.event.currency != 'EUR',
-                     help_text=(
-                         _('Needs to be enabled in your Stripe account first.') +
-                         '<div class="alert alert-warning">%s</div>' % _(
-                             'SEPA Direct Debit payments via Stripe are <strong>not</strong> processed '
-                             'instantly but might take up to <strong>14 days</strong> to be confirmed in some cases. '
-                             'Please only activate this payment method if your payment term allows for this lag.'
-                         )),
-                     required=False,
-                 )),
-                ('sepa_creditor_name',
-                 forms.CharField(
-                     label=_('SEPA Creditor Mandate Name'),
-                     disabled=self.event.currency != 'EUR',
-                     help_text=_('Please provide your SEPA Creditor Mandate Name, that will be displayed to the user.'),
-                     required=False,
-                     widget=forms.TextInput(
-                         attrs={
-                             'data-display-dependency': '#id_payment_stripe_method_sepa_debit',
-                             'data-required-if': '#id_payment_stripe_method_sepa_debit'
-                         }
-                     ),
-                 )),
                 ('method_giropay',
                  forms.BooleanField(
                      label=_('giropay'),
@@ -358,6 +332,32 @@ class StripeSettingsHolder(BasePaymentProvider):
                      disabled=self.event.currency != 'EUR',
                      help_text=_('Needs to be enabled in your Stripe account first.'),
                      required=False,
+                 )),
+                ('method_sepa_debit',
+                 forms.BooleanField(
+                     label=_('SEPA Direct Debit'),
+                     disabled=self.event.currency != 'EUR',
+                     help_text=(
+                             _('Needs to be enabled in your Stripe account first.') +
+                             '<div class="alert alert-warning">%s</div>' % _(
+                         'SEPA Direct Debit payments via Stripe are <strong>not</strong> processed '
+                         'instantly but might take up to <strong>14 days</strong> to be confirmed in some cases. '
+                         'Please only activate this payment method if your payment term allows for this lag.'
+                     )),
+                     required=False,
+                 )),
+                ('sepa_creditor_name',
+                 forms.CharField(
+                     label=_('SEPA Creditor Mandate Name'),
+                     disabled=self.event.currency != 'EUR',
+                     help_text=_('Please provide your SEPA Creditor Mandate Name, that will be displayed to the user.'),
+                     required=False,
+                     widget=forms.TextInput(
+                         attrs={
+                             'data-display-dependency': '#id_payment_stripe_method_sepa_debit',
+                             'data-required-if': '#id_payment_stripe_method_sepa_debit'
+                         }
+                     ),
                  )),
                 ('method_sofort',
                  forms.BooleanField(
