@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-26 09:13+0000\n"
-"PO-Revision-Date: 2023-04-23 16:30+0000\n"
+"PO-Revision-Date: 2023-04-26 09:42+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -9970,17 +9970,7 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:2291 pretix/base/settings.py:2328
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {attendee_name},\n"
-#| "\n"
-#| "a ticket for {event} has been ordered for you.\n"
-#| "\n"
-#| "You can view the details and status of your ticket here:\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -9994,7 +9984,8 @@ msgid ""
 msgstr ""
 "Hallo {attendee_name},\n"
 "\n"
-"ein Ticket für die Veranstaltung {event} wurde für dich bestellt\n"
+"ein Ticket, das für die Veranstaltung {event} für dich bestellt wurde, wurde "
+"freigegeben.\n"
 "\n"
 "Du kannst die Details und den Status deines Tickets hier einsehen:\n"
 "{url}\n"
@@ -28182,16 +28173,13 @@ msgid "MOTO"
 msgstr "MOTO"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:12
-#, fuzzy
-#| msgid "Do you really want to regenerate your emergency codes?"
 msgid "Do you really want to disconnect your Stripe account?"
-msgstr "Möchtest du wirklich neue Notfall-Tokens generieren?"
+msgstr ""
+"Möchtest du die Veranstaltung wirklich von deinem Stripe-Account trennen?"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:16
-#, fuzzy
-#| msgid "Discounts"
 msgid "Disconnect"
-msgstr "Rabatte"
+msgstr "Trennen"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:4
 msgid ""
@@ -29775,19 +29763,17 @@ msgstr "Zeige Bild von %(item)s in voller Größe"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:304
 #: pretix/presale/templates/pretixpresale/event/voucher.html:228
 #: pretix/presale/templates/pretixpresale/event/voucher.html:366
-#, fuzzy, python-format
-#| msgid "(incl. taxes)"
+#, python-format
 msgid "%(value)s incl. taxes"
-msgstr "(inkl. Steuern)"
+msgstr "%(value)s brutto"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:172
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:310
 #: pretix/presale/templates/pretixpresale/event/voucher.html:234
 #: pretix/presale/templates/pretixpresale/event/voucher.html:372
-#, fuzzy, python-format
-#| msgid "Total value (without taxes)"
+#, python-format
 msgid "%(value)s without taxes"
-msgstr "Gesamtbetrag (ohne Steuern)"
+msgstr "%(value)s netto"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:182
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:320
