@@ -740,11 +740,11 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         else:
             raise CheckInError(
                 _('This ticket is only valid after {datetime}.').format(
-                    datetime=date_format(op.valid_from, 'SHORT_DATETIME_FORMAT')
+                    datetime=date_format(op.valid_from.astimezone(clist.event.timezone), 'SHORT_DATETIME_FORMAT')
                 ),
                 'invalid_time',
                 _('This ticket is only valid after {datetime}.').format(
-                    datetime=date_format(op.valid_from, 'SHORT_DATETIME_FORMAT')
+                    datetime=date_format(op.valid_from.astimezone(clist.event.timezone), 'SHORT_DATETIME_FORMAT')
                 ),
             )
 
@@ -754,11 +754,11 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         else:
             raise CheckInError(
                 _('This ticket was only valid before {datetime}.').format(
-                    datetime=date_format(op.valid_until, 'SHORT_DATETIME_FORMAT')
+                    datetime=date_format(op.valid_until.astimezone(clist.event.timezone), 'SHORT_DATETIME_FORMAT')
                 ),
                 'invalid_time',
                 _('This ticket was only valid before {datetime}.').format(
-                    datetime=date_format(op.valid_until, 'SHORT_DATETIME_FORMAT')
+                    datetime=date_format(op.valid_until.astimezone(clist.event.timezone), 'SHORT_DATETIME_FORMAT')
                 ),
             )
 
