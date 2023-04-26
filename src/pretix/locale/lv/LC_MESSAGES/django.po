@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2022-09-15 21:00+0000\n"
-"Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
+"PO-Revision-Date: 2023-05-30 21:24+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
 "Language: lv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= "
 "19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\n"
-"X-Generator: Weblate 4.14\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -3137,8 +3137,8 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
-"Izmantojot maiņas kursu 1:{rate}, ko Eiropas Centrālā banka publicēja "
-"{date}, šis atbilst:"
+"Izmantojot maiņas kursu 1:{rate}, ko Eiropas Centrālā banka publicēja {date}"
+", šis atbilst:"
 
 #: pretix/base/invoice.py:844
 #, fuzzy, python-brace-format
@@ -3151,8 +3151,8 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
 msgstr ""
-"Izmantojot maiņas kursu 1:{rate}, ko Eiropas Centrālā banka publicēja "
-"{date}, rēķina kopsumma atbilst {total}."
+"Izmantojot maiņas kursu 1:{rate}, ko Eiropas Centrālā banka publicēja {date}"
+", rēķina kopsumma atbilst {total}."
 
 #: pretix/base/invoice.py:858
 msgid "Modern Invoice Renderer (pretix 2.7)"
@@ -6906,12 +6906,9 @@ msgstr[2] "Vienā pasūtījumā nevar atlasīt vairāk par %s vienumiem."
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
-msgstr[0] ""
-"Jūs nevarat atlasīt vairāk par %(max)s preces vienumiem %(product)s."
-msgstr[1] ""
-"Jūs nevarat atlasīt vairāk par %(max)s preces vienumiem %(product)s."
-msgstr[2] ""
-"Jūs nevarat atlasīt vairāk par %(max)s preces vienumiem %(product)s."
+msgstr[0] "Jūs nevarat atlasīt vairāk par %(max)s preces vienumiem %(product)s."
+msgstr[1] "Jūs nevarat atlasīt vairāk par %(max)s preces vienumiem %(product)s."
+msgstr[2] "Jūs nevarat atlasīt vairāk par %(max)s preces vienumiem %(product)s."
 
 #: pretix/base/services/cart.py:123 pretix/base/services/orders.py:1467
 #, fuzzy, python-format
@@ -17802,8 +17799,8 @@ msgstr ""
 #| "Are you sure you want to delete the rule <strong>%(subject)s</strong>?"
 msgid "Are you sure you want to delete the discount <strong>%(name)s</strong>?"
 msgstr ""
-"Vai esat pārliecināts/-a, ka vēlaties dzēst noteikumu <strong>%(subject)s</"
-"strong>?"
+"Vai esat pārliecināts/-a, ka vēlaties dzēst noteikumu "
+"<strong>%(subject)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:25
 #, python-format
@@ -19395,8 +19392,8 @@ msgid ""
 "Are you sure you want to delete the scheduled export <strong>%(export)s</"
 "strong>?"
 msgstr ""
-"Vai esat pārliecināts/-a, ka vēlaties dzēst noteikumu <strong>%(subject)s</"
-"strong>?"
+"Vai esat pārliecināts/-a, ka vēlaties dzēst noteikumu "
+"<strong>%(subject)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:26
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:27
