@@ -9,7 +9,7 @@ var pretixstripe = {
     paymentRequest: null,
     paymentRequestButton: null,
 
-    'pm_request': function (method, element, kwargs= {}) {
+    'pm_request': function (method, element, kwargs = {}) {
         waitingDialog.show(gettext("Contacting Stripe …"));
         $(".stripe-errors").hide();
 
@@ -144,7 +144,7 @@ var pretixstripe = {
                                 invalid: 'has-error',
                             }
                         });
-                        pretixstripe.sepa.on('change', function(event) {
+                        pretixstripe.sepa.on('change', function (event) {
                             // List of IBAN-countries, that require the country as well as line1-property according to
                             // https://stripe.com/docs/payments/sepa-debit/accept-a-payment?platform=web&ui=element#web-submit-payment
                             if (['AD', 'PF', 'TF', 'GI', 'GB', 'GG', 'VA', 'IM', 'JE', 'MC', 'NC', 'BL', 'PM', 'SM', 'CH', 'WF'].indexOf(event.country) > 0) {
@@ -156,7 +156,7 @@ var pretixstripe = {
                             }
                             if (event.bankName) {
                                 $("#stripe_sepa_debit_bank").val(event.bankName);
-                       }
+                            }
                         });
                         pretixstripe.sepa.mount("#stripe-sepa");
                         pretixstripe.sepa.on('ready', function () {
