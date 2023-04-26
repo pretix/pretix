@@ -1112,7 +1112,7 @@ class StripeSEPADirectDebit(StripePaymentIntentMethod):
 
     def payment_form_render(self, request: HttpRequest, total: Decimal, order: Order=None) -> str:
         def get_invoice_address():
-            if order:
+            if order and getattr(order, 'invoice_address', None):
                 request._checkout_flow_invoice_address = order.invoice_address
             if not hasattr(request, '_checkout_flow_invoice_address'):
                 cs = cart_session(request)
