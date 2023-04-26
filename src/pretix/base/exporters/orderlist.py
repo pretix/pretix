@@ -688,8 +688,8 @@ class OrderListExporter(MultiSheetListExporter):
 
                 row += [
                     _('Yes') if op.blocked else '',
-                    date_format(op.valid_from, 'SHORT_DATETIME_FORMAT') if op.valid_from else '',
-                    date_format(op.valid_until, 'SHORT_DATETIME_FORMAT') if op.valid_until else '',
+                    date_format(op.valid_from.astimezone(tz), 'SHORT_DATETIME_FORMAT') if op.valid_from else '',
+                    date_format(op.valid_until.astimezone(tz), 'SHORT_DATETIME_FORMAT') if op.valid_until else '',
                 ]
                 row.append(order.comment)
                 row.append(order.custom_followup_at.strftime("%Y-%m-%d") if order.custom_followup_at else "")
