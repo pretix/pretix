@@ -111,7 +111,7 @@ def test_payment(env, monkeypatch):
     paymentintent_create.called = False
     response = client.post('/%s/%s/checkout/payment/' % (ticket.event.organizer.slug, ticket.event.slug), {
         'payment': 'stripe',
-        'payment_method': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
+        'stripe_card_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
         'stripe_card_brand': 'visa',
         'stripe_card_last4': '1234'
     }, follow=True)

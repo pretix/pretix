@@ -107,7 +107,7 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
         return _('Stripe reported an event: {}').format(text)
 
 
-settings_hierarkey.add_default('payment_stripe_method_cc', True, bool)
+settings_hierarkey.add_default('payment_stripe_method_card', True, bool)
 settings_hierarkey.add_default('payment_stripe_reseller_moto', False, bool)
 
 
