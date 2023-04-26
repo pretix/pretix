@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-26 09:13+0000\n"
-"PO-Revision-Date: 2023-04-16 20:05+0000\n"
-"Last-Translator: MaartenUreel <maarten@ureel.be>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2023-04-27 01:00+0000\n"
+"Last-Translator: Julian Geraerds <julian.geraerds@itisours.nl>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -40,7 +40,7 @@ msgstr "Chinees (versimpeld)"
 
 #: pretix/_base_settings.py:83
 msgid "Czech"
-msgstr ""
+msgstr "Tsjechisch"
 
 #: pretix/_base_settings.py:84
 msgid "Danish"
@@ -92,7 +92,7 @@ msgstr "Portugees (Brazilië)"
 
 #: pretix/_base_settings.py:96
 msgid "Romanian"
-msgstr ""
+msgstr "Roemeens"
 
 #: pretix/_base_settings.py:97
 msgid "Russian"
@@ -108,7 +108,7 @@ msgstr "Turks"
 
 #: pretix/_base_settings.py:100
 msgid "Ukrainian"
-msgstr ""
+msgstr "Oekraïens"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -2172,10 +2172,12 @@ msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
 msgstr ""
+"Merk op dat niet-bevestigde betalingen of niet-voltooide terugbetalingen "
+"hierdoor worden uitgesloten."
 
 #: pretix/base/exporters/orderlist.py:782
 msgid "Date range (start of transaction)"
-msgstr ""
+msgstr "Datumbereik (begin van de transactie)"
 
 #: pretix/base/exporters/orderlist.py:788
 msgid "Payment states"
@@ -3030,7 +3032,7 @@ msgstr "Barcode / QR-Code"
 #: pretix/base/media.py:74
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:237
 msgid "NFC UID-based"
-msgstr ""
+msgstr "NFC op basis van UID"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -3111,6 +3113,10 @@ msgid ""
 "and valid for check-in regardless of which date they are purchased for. You "
 "can limit their validity through the advanced check-in rules, though."
 msgstr ""
+"Als u \"alle data\" kiest, worden de tickets beschouwd als onderdeel van "
+"deze lijst en zijn ze geldig voor inchecken, ongeacht de datum waarvoor ze "
+"zijn gekocht. U kunt echter de geldigheid ervan beperken via de geavanceerde "
+"incheckregels."
 
 #: pretix/base/models/checkin.py:65
 msgctxt "checkin"
