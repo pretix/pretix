@@ -341,12 +341,12 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('SEPA Direct Debit'),
                      disabled=self.event.currency != 'EUR',
                      help_text=(
-                             _('Needs to be enabled in your Stripe account first.') +
-                             '<div class="alert alert-warning">%s</div>' % _(
-                         'SEPA Direct Debit payments via Stripe are <strong>not</strong> processed '
-                         'instantly but might take up to <strong>14 days</strong> to be confirmed in some cases. '
-                         'Please only activate this payment method if your payment term allows for this lag.'
-                     )),
+                         _('Needs to be enabled in your Stripe account first.') +
+                         '<div class="alert alert-warning">%s</div>' % _(
+                             'SEPA Direct Debit payments via Stripe are <strong>not</strong> processed '
+                             'instantly but might take up to <strong>14 days</strong> to be confirmed in some cases. '
+                             'Please only activate this payment method if your payment term allows for this lag.'
+                         )),
                      required=False,
                  )),
                 ('sepa_creditor_name',
