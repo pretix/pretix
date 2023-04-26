@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
   hideDeselected(false);
 
   function hideDeselected(animate) {
