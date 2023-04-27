@@ -54,6 +54,32 @@ a.btn, button.btn {
   }
 }
 
+.input-item-count-group {
+  display: flex;
+}
+.input-item-count-group input {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+  padding-right: 12px;
+  -moz-appearance: textfield;
+}
+.input-item-count-group input::-webkit-outer-spin-button,
+.input-item-count-group input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+.input-item-count-dec {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  width: 2.5em;
+  z-index: 2;
+}
+.input-item-count-inc {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  width: 2.5em;
+}
 .required-legend span {
   color: $brand-primary;
   font-weight: bold;
