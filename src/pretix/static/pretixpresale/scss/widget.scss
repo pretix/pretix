@@ -89,7 +89,12 @@
     }
   }
   input[type=number] {
-    padding-right: 0; // Setting the padding-right to zero, as some versions Firefox render the arrow-buttons on number inputs useless.
+    -moz-appearance: textfield;
+  }
+  input[type=number]::-webkit-outer-spin-button,
+  input[type=number]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
   }
   input[type="checkbox"],
   input[type="radio"] {
