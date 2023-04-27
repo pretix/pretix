@@ -15,6 +15,8 @@ Vue.component('resize-observer', VueResize.ResizeObserver)
 
 var strings = {
     'quantity': django.pgettext('widget', 'Quantity'),
+    'quantity_dec': django.pgettext('widget', 'Decrease quantity'),
+    'quantity_inc': django.pgettext('widget', 'Increase quantity'),
     'price': django.pgettext('widget', 'Price'),
     'select_item': django.pgettext('widget', 'Select %s'),
     'select_variant': django.pgettext('widget', 'Select variant %s'),
