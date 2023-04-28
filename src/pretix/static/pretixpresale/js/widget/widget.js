@@ -220,13 +220,13 @@ Vue.component('availbox', {
         + '       v-bind:aria-label="label_select_item"'
         + '>'
         + '</label>'
-        + '<div class="pretix-widget-item-count-group" v-if="order_max !== 1">'
-        + '<button type="button" @click="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" aria-label="' + strings.quantity_dec + '"><span>-</span></button>'
+        + '<div :class="count_group_classes" v-else>'
+        + '<button v-if="$root.theme_custom_spinners" type="button" @click="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" aria-label="' + strings.quantity_dec + '"><span>-</span></button>'
         + '<input type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
         + '       v-model="amount_selected" :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
         + '       aria-label="' + strings.quantity + '"'
         + '       >'
-        + '<button type="button" @click="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" aria-label="' + strings.quantity_inc + '"><span>+</span></button>'
+        + '<button v-if="$root.theme_custom_spinners" type="button" @click="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" aria-label="' + strings.quantity_inc + '"><span>+</span></button>'
         + '</div>'
         + '</div>'
         + '</div>'),
@@ -244,6 +244,11 @@ Vue.component('availbox', {
         this.$root.$emit('amounts_changed')
     },
     computed: {
+        count_group_classes: function () {
+            return {
+                'pretix-widget-item-count-group': this.$root.theme_custom_spinners
+            }
+        },
         require_voucher: function () {
             return this.item.require_voucher && !this.$root.voucher_code
         },
@@ -1451,11 +1456,11 @@ Vue.component('pretix-widget', {
     },
     computed: {
         classObject: function () {
-            var o = {'pretix-widget': true};
-            if (this.mobile) {
-                o['pretix-widget-mobile'] = true;
-            }
-            return o;
+            return {
+                'pretix-widget': true,
+                'pretix-widget-mobile': this.mobile,
+                'pretix-widget-use-custom-spinners': this.$root.theme_custom_spinners
+            };
         }
     }
 });
@@ -1601,6 +1606,7 @@ var shared_root_methods = {
                 root.categories = data.items_by_category;
                 root.currency = data.currency;
                 root.display_net_prices = data.display_net_prices;
+                root.theme_custom_spinners = data.theme_custom_spinners;
                 root.voucher_explanation_text = data.voucher_explanation_text;
                 root.error = data.error;
                 root.display_add_to_cart = data.display_add_to_cart;
@@ -1846,6 +1852,7 @@ var create_widget = function (element) {
                 variation_filter: variations,
                 voucher_code: voucher,
                 display_net_prices: false,
+                theme_custom_spinners: true,
                 voucher_explanation_text: null,
                 show_variations_expanded: !!variations,
                 skip_ssl: skip_ssl,

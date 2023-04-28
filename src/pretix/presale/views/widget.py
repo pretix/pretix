@@ -668,6 +668,7 @@ class WidgetAPIProductList(EventListMixin, View):
         data = {
             'currency': request.event.currency,
             'display_net_prices': request.event.settings.display_net_prices,
+            'theme_custom_spinners': request.event.settings.theme_custom_spinners,
             'show_variations_expanded': request.event.settings.show_variations_expanded,
             'waiting_list_enabled': request.event.settings.waiting_list_enabled,
             'voucher_explanation_text': str(rich_text(request.event.settings.voucher_explanation_text, safelinks=False)),

@@ -89,12 +89,7 @@
     }
   }
   input[type=number] {
-    -moz-appearance: textfield;
-  }
-  input[type=number]::-webkit-outer-spin-button,
-  input[type=number]::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
+    padding-right: 0; // Setting the padding-right to zero, as some versions Firefox render the arrow-buttons on number inputs useless.
   }
   input[type="checkbox"],
   input[type="radio"] {
@@ -106,6 +101,15 @@
       outline-offset: -2px;
     }
   }
+}
+.pretix-widget-use-custom-spinners input[type=number] {
+  padding-right: $padding-base-horizontal;
+  -moz-appearance: textfield;
+}
+.pretix-widget-use-custom-spinners input[type=number]::-webkit-outer-spin-button,
+.pretix-widget-use-custom-spinners input[type=number]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
 }
 .pretix-widget {
   margin: 10px 0;
@@ -270,18 +274,11 @@
     border-radius: 0;
     border-left: none;
     border-right: none;
-    -moz-appearance: textfield;
   }
 
   .pretix-widget-item-count-group button span {
     vertical-align: 25%;
     line-height: 0.5;
-  }
-
-  .pretix-widget-item-count-group input::-webkit-outer-spin-button,
-  .pretix-widget-item-count-group input::-webkit-inner-spin-button {
-    -webkit-appearance: none;
-    margin: 0;
   }
 
   .pretix-widget-item-count-dec {
