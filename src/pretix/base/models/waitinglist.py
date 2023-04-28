@@ -119,7 +119,7 @@ class WaitingListEntry(LoggedModel):
 
     def clean(self):
         try:
-            WaitingListEntry.clean_duplicate(self.email, self.item, self.variation, self.subevent, self.pk)
+            WaitingListEntry.clean_duplicate(self.event, self.email, self.item, self.variation, self.subevent, self.pk)
             WaitingListEntry.clean_itemvar(self.event, self.item, self.variation)
             WaitingListEntry.clean_subevent(self.event, self.subevent)
         except ObjectDoesNotExist:
@@ -308,9 +308,9 @@ class WaitingListEntry(LoggedModel):
                 raise ValidationError(_('The subevent does not belong to this event.'))
 
     @staticmethod
-    def clean_duplicate(email, item, variation, subevent, pk):
+    def clean_duplicate(event, email, item, variation, subevent, pk):
         if WaitingListEntry.objects.filter(
                 item=item, variation=variation, email__iexact=email, voucher__isnull=True, subevent=subevent
-        ).exclude(pk=pk).exists():
+        ).exclude(pk=pk).count() >= event.settings.waiting_list_limit_per_user:
             raise ValidationError(_('You are already on this waiting list! We will notify '
                                     'you as soon as we have a ticket available for you.'))
