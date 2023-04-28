@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-04-26 09:13+0000\n"
-"PO-Revision-Date: 2023-02-27 08:21+0000\n"
+"PO-Revision-Date: 2023-04-28 11:49+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.16.4\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -28167,7 +28167,7 @@ msgstr "E-mailadresse"
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:61
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:174
 msgid "Fill form"
-msgstr ""
+msgstr "Udfyld formularen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:89
 msgid "Copy answers from above"
@@ -28219,8 +28219,8 @@ msgstr ""
 #, python-format
 msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Du skal vælge præcis én mulighed fra denne kategori."
+msgstr[1] "Du skal vælge %(min_count)s muligheder fra denne kategori."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:25
 #, fuzzy, python-format
