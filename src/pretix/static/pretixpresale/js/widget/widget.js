@@ -221,12 +221,12 @@ Vue.component('availbox', {
         + '>'
         + '</label>'
         + '<div :class="count_group_classes" v-else>'
-        + '<button v-if="$root.theme_custom_spinners" type="button" @click="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" aria-label="' + strings.quantity_dec + '"><span>-</span></button>'
+        + '<button v-if="!$root.use_native_spinners" type="button" @click="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" aria-label="' + strings.quantity_dec + '"><span>-</span></button>'
         + '<input type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
         + '       v-model="amount_selected" :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
         + '       aria-label="' + strings.quantity + '"'
         + '       >'
-        + '<button v-if="$root.theme_custom_spinners" type="button" @click="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" aria-label="' + strings.quantity_inc + '"><span>+</span></button>'
+        + '<button v-if="!$root.use_native_spinners" type="button" @click="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" aria-label="' + strings.quantity_inc + '"><span>+</span></button>'
         + '</div>'
         + '</div>'
         + '</div>'),
@@ -246,7 +246,7 @@ Vue.component('availbox', {
     computed: {
         count_group_classes: function () {
             return {
-                'pretix-widget-item-count-group': this.$root.theme_custom_spinners
+                'pretix-widget-item-count-group': !this.$root.use_native_spinners
             }
         },
         require_voucher: function () {
@@ -1459,7 +1459,7 @@ Vue.component('pretix-widget', {
             return {
                 'pretix-widget': true,
                 'pretix-widget-mobile': this.mobile,
-                'pretix-widget-use-custom-spinners': this.$root.theme_custom_spinners
+                'pretix-widget-use-custom-spinners': !this.$root.use_native_spinners
             };
         }
     }
@@ -1606,7 +1606,7 @@ var shared_root_methods = {
                 root.categories = data.items_by_category;
                 root.currency = data.currency;
                 root.display_net_prices = data.display_net_prices;
-                root.theme_custom_spinners = data.theme_custom_spinners;
+                root.use_native_spinners = data.use_native_spinners;
                 root.voucher_explanation_text = data.voucher_explanation_text;
                 root.error = data.error;
                 root.display_add_to_cart = data.display_add_to_cart;
@@ -1852,7 +1852,7 @@ var create_widget = function (element) {
                 variation_filter: variations,
                 voucher_code: voucher,
                 display_net_prices: false,
-                theme_custom_spinners: true,
+                use_native_spinners: false,
                 voucher_explanation_text: null,
                 show_variations_expanded: !!variations,
                 skip_ssl: skip_ssl,
