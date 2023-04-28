@@ -2003,7 +2003,7 @@ class ItemMetaProperty(LoggedModel):
     default = models.TextField(blank=True)
     required = models.BooleanField(
         default=False, verbose_name=_("Required for products"),
-        help_text=_("If checked, this property must be set in each product.")
+        help_text=_("If checked, this property must be set in each product. Does not apply if a default value is set.")
     )
     allowed_values = models.TextField(
         null=True, blank=True,
