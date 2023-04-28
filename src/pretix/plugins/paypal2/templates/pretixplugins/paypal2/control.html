@@ -23,7 +23,7 @@
         {% if payment_info.purchase_units.0.payments %}
             <dt>{% trans "Capture status" %}</dt>
             <dd>
-                {% if payment_info.purchase_units.0.payments.captures.0.status_details.reason == "PENDING_REVIEW" %}
+                {% if payment_info.purchase_units.0.payments.captures.0.status_details.reason in "PENDING_REVIEW, BUYER_COMPLAINT" %}
                     <span class="fa fa-warning fa-danger" data-toggle="tooltip" title="{% trans "This payment is being reviewed by PayPal. Until the review is lifted, the money will not be disbursed and the order remain in its pending state." %}"></span>
                 {% endif %}
                 {{ payment_info.purchase_units.0.payments.captures.0.status }}
