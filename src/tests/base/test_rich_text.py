@@ -30,6 +30,21 @@ from pretix.base.templatetags.rich_text import (
     # Test link detection
     ("google.com",
      '<a href="http://google.com" rel="noopener" target="_blank">google.com</a>'),
+    ("https://google.com",
+     '<a href="https://google.com" rel="noopener" target="_blank">https://google.com</a>'),
+    # Test IDNA conversion
+    ("https://xn--dmin-moa0i.com",
+     '<a href="https://xn--dmin-moa0i.com" rel="noopener" target="_blank">https://dömäin.com</a>'),
+    ("xn--dmin-moa0i.com",
+     '<a href="http://xn--dmin-moa0i.com" rel="noopener" target="_blank">dömäin.com</a>'),
+    ("[dömäin.com](https://xn--dmin-moa0i.com)",
+     '<a href="https://xn--dmin-moa0i.com" rel="noopener" target="_blank">dömäin.com</a>'),
+    ("https://dömäin.com",
+     '<a href="https://dömäin.com" rel="noopener" target="_blank">https://dömäin.com</a>'),
+    ("[https://dömäin.com](https://xn--dmin-moa0i.com)",
+     '<a href="https://xn--dmin-moa0i.com" rel="noopener" target="_blank">https://dömäin.com</a>'),
+    ("[xn--dmin-moa0i.com](https://xn--dmin-moa0i.com)",
+     '<a href="https://xn--dmin-moa0i.com" rel="noopener" target="_blank">dömäin.com</a>'),
     # Test abslink_callback
     ("[Call](tel:+12345)",
      '<a href="tel:+12345" rel="nofollow">Call</a>'),
@@ -54,6 +69,10 @@ from pretix.base.templatetags.rich_text import (
      '<a href="https://goodsite.com.evilsite.com" rel="noopener" target="_blank">https://goodsite.com.evilsite.com</a>'),
     ('<a href="https://evilsite.com/deep/path">evilsite.com</a>',
      '<a href="https://evilsite.com/deep/path" rel="noopener" target="_blank">evilsite.com</a>'),
+    ('<a href="https://evilsite.com/deep/path">evilsite.com/deep</a>',
+     '<a href="https://evilsite.com/deep/path" rel="noopener" target="_blank">evilsite.com/deep</a>'),
+    ('<a href="https://evilsite.com/deep/path">evilsite.com/other</a>',
+     '<a href="https://evilsite.com/deep/path" rel="noopener" target="_blank">https://evilsite.com/deep/path</a>'),
     ('<a>broken</a>', '<a>broken</a>'),
 ])
 def test_linkify_abs(link):

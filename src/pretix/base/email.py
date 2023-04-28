@@ -420,7 +420,7 @@ def base_placeholders(sender, **kwargs):
                     'order': 'F8VVL',
                     'secret': '6zzjnumtsx136ddy',
                     'hash': '98kusd8ofsj8dnkd'
-                }
+                },
             ),
         ),
         SimpleFunctionalMailTextPlaceholder(

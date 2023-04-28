@@ -33,9 +33,10 @@ register = template.Library()
 
 
 class EventURLNode(URLNode):
-    def __init__(self, event, view_name, kwargs, asvar, absolute):
+    def __init__(self, event, view_name, kwargs, asvar, absolute, human):
         self.event = event
         self.absolute = absolute
+        self.human = human
         super().__init__(view_name, [], kwargs, asvar)
 
     def render(self, context):
@@ -49,7 +50,7 @@ class EventURLNode(URLNode):
         url = ''
         try:
             if self.absolute:
-                url = build_absolute_uri(event, view_name, kwargs=kwargs)
+                url = build_absolute_uri(event, view_name, kwargs=kwargs, human_readable=self.human)
             else:
                 url = eventreverse(event, view_name, kwargs=kwargs)
         except NoReverseMatch:
@@ -66,7 +67,7 @@ class EventURLNode(URLNode):
 
 
 @register.tag
-def eventurl(parser, token, absolute=False):
+def eventurl(parser, token, absolute=False, human=False):
     """
     Similar to {% url %} in the same way that eventreverse() is similar to reverse().
 
@@ -95,7 +96,7 @@ def eventurl(parser, token, absolute=False):
             else:
                 raise TemplateSyntaxError('Event urls only have keyword arguments.')
 
-    return EventURLNode(event, viewname, kwargs, asvar, absolute)
+    return EventURLNode(event, viewname, kwargs, asvar, absolute, human)
 
 
 @register.tag
@@ -106,3 +107,13 @@ def abseventurl(parser, token):
     Returns an absolute URL.
     """
     return eventurl(parser, token, absolute=True)
+
+
+@register.tag
+def humanabseventurl(parser, token):
+    """
+    Similar to {% url %} in the same way that eventreverse() is similar to reverse().
+
+    Returns an absolute URL that is intended to be read by a human.
+    """
+    return eventurl(parser, token, absolute=True, human=False)

@@ -1513,7 +1513,7 @@ class EventQRCode(EventPermissionRequiredMixin, View):
     permission = 'can_change_event_settings'
 
     def get(self, request, *args, filetype, **kwargs):
-        url = build_absolute_uri(request.event, 'presale:event.index')
+        url = build_absolute_uri(request.event, 'presale:event.index', human_readable=True)
 
         qr = qrcode.QRCode(
             version=1,

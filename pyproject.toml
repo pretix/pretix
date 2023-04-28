@@ -62,6 +62,7 @@ dependencies = [
   "drf_ujson2==1.7.*",
   "geoip2==4.*",
   "importlib_metadata==6.6.*",  # Polyfill, we can probably drop this once we require Python 3.10+
+  "idna",
   "isoweek",
   "jsonschema",
   "kombu==5.2.*",

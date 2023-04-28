@@ -47,11 +47,11 @@ def get_public_ical(events):
         event = ev if isinstance(ev, Event) else ev.event
         tz = pytz.timezone(event.settings.timezone)
         if isinstance(ev, Event):
-            url = build_absolute_uri(event, 'presale:event.index')
+            url = build_absolute_uri(event, 'presale:event.index', human_readable=True)
         else:
             url = build_absolute_uri(event, 'presale:event.index', {
                 'subevent': ev.pk
-            })
+            }, human_readable=True)
 
         vevent = cal.add('vevent')
         vevent.add('summary').value = str(ev.name)
@@ -122,11 +122,11 @@ def get_private_icals(event, positions):
     evs = set(p.subevent or event for p in positions)
     for ev in evs:
         if isinstance(ev, Event):
-            url = build_absolute_uri(event, 'presale:event.index')
+            url = build_absolute_uri(event, 'presale:event.index', human_readable=True)
         else:
             url = build_absolute_uri(event, 'presale:event.index', {
                 'subevent': ev.pk
-            })
+            }, human_readable=True)
 
         if event.settings.mail_attach_ical_description:
             ctx = get_email_context(event=event, event_or_subevent=ev)

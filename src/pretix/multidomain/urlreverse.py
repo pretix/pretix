@@ -32,8 +32,9 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from urllib.parse import urljoin, urlsplit
+from urllib.parse import urljoin, urlsplit, urlparse
 
+import idna
 from django.conf import settings
 from django.db.models import Q
 from django.urls import reverse
@@ -171,8 +172,18 @@ def eventreverse(obj, name, kwargs=None):
     return url
 
 
-def build_absolute_uri(obj, urlname, kwargs=None):
+def build_absolute_uri(obj, urlname, kwargs=None, human_readable=True):
     reversedurl = eventreverse(obj, urlname, kwargs)
     if '://' in reversedurl:
         return reversedurl
-    return urljoin(settings.SITE_URL, reversedurl)
+    url = urljoin(settings.SITE_URL, reversedurl)
+
+    if human_readable and 'xn--' in url:
+        try:
+            u = urlparse(url)
+            netloc = idna.encode(u.netloc).decode()
+            url = u._replace(netloc=netloc).geturl()
+        except Exception:
+            pass
+
+    return url

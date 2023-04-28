@@ -36,6 +36,7 @@ import re
 import urllib.parse
 
 import bleach
+import idna
 import markdown
 from bleach import DEFAULT_CALLBACKS
 from bleach.linkifier import build_email_re, build_url_re
@@ -121,6 +122,12 @@ def safelink_callback(attrs, new=False):
     return attrs
 
 
+def idna_decode_safe(src):
+    v = idna.decode(src)
+
+    return v
+
+
 def truelink_callback(attrs, new=False):
     """
     Tries to prevent "phishing" attacks in which a link looks like it points to a safe place but instead
@@ -136,20 +143,40 @@ def truelink_callback(attrs, new=False):
 
         <a href="https://maps.google.com/location/foo">https://maps.google.com</a>
     """
-    text = re.sub(r'[^a-zA-Z0-9.\-/_ ]', '', attrs.get('_text'))  # clean up link text
+    text = re.sub(r'[^a-zA-Z0-9:.\-/_ ]', '', attrs.get('_text'))  # clean up link text
     url = attrs.get((None, 'href'), '/')
     href_url = urllib.parse.urlparse(url)
+    strip_http = False
     if (None, 'href') in attrs and URL_RE.match(text) and href_url.scheme not in ('tel', 'mailto'):
+        if URL_RE.match(attrs.get('_text').strip()):  # maybe we cleaned up too much
+            text = attrs.get('_text').strip()
         # link text looks like a url
         if text.startswith('//'):
             text = 'https:' + text
         elif not text.startswith('http'):
+            strip_http = True
             text = 'https://' + text
 
         text_url = urllib.parse.urlparse(text)
-        if text_url.netloc != href_url.netloc or not href_url.path.startswith(href_url.path):
+
+        if href_url.netloc.startswith('xn--'):
+            href_netloc_nice = idna_decode_safe(href_url.netloc)
+        else:
+            href_netloc_nice = href_url.netloc
+
+        if text_url.netloc not in (href_url.netloc, href_netloc_nice) or not href_url.path.startswith(text_url.path):
             # link text contains an URL that has a different base than the actual URL
             attrs['_text'] = attrs[None, 'href']
+            text_url = href_url
+
+        if text_url.netloc.startswith('xn--'):
+            # Show punicode nicely
+            text_netloc_nice = idna_decode_safe(text_url.netloc)
+            url = text_url._replace(netloc=text_netloc_nice, scheme=href_url.scheme).geturl()
+            if strip_http:
+                url = url[len(href_url.scheme + '://'):]
+            attrs['_text'] = url
+
     return attrs
 
 
