@@ -1330,6 +1330,21 @@ DEFAULTS = {
             help_text=_("If you ask for a phone number, explain why you do so and what you will use the phone number for.")
         )
     },
+    'waiting_list_limit_per_user': {
+        'default': '1',
+        'type': int,
+        'serializer_class': serializers.IntegerField,
+        'form_class': forms.IntegerField,
+        'serializer_kwargs': dict(
+            min_value=1,
+        ),
+        'form_kwargs': dict(
+            label=_("Maximum number of entries per email address for the same product"),
+            min_value=1,
+            required=True,
+            widget=forms.NumberInput(),
+        )
+    },
     'show_checkin_number_user': {
         'default': 'False',
         'type': bool,

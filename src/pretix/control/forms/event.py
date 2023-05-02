@@ -542,6 +542,7 @@ class EventSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'waiting_list_phones_asked',
         'waiting_list_phones_required',
         'waiting_list_phones_explanation_text',
+        'waiting_list_limit_per_user',
         'max_items_per_order',
         'reservation_time',
         'contact_mail',
