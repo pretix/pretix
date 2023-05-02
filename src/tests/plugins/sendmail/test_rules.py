@@ -25,7 +25,7 @@ from zoneinfo import ZoneInfo
 
 import pytest
 from django.core import mail as djmail
-from django.utils.timezone import now, utc
+from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import InvoiceAddress, Order
@@ -71,34 +71,34 @@ Berlin = ZoneInfo('Europe/Berlin')
             (dt_now + datetime.timedelta(days=1)).replace(hour=9, minute=0, second=0, microsecond=0)
         ),
         (  # "Relative, before event start"
-            datetime.datetime(2021, 5, 17, 12, 14, 0, tzinfo=utc),
+            datetime.datetime(2021, 5, 17, 12, 14, 0, tzinfo=datetime.timezone.utc),
             None,
             'UTC',
             Rule(date_is_absolute=False, send_offset_days=2, send_offset_time=datetime.time(hour=0)),
-            datetime.datetime(2021, 5, 15, 0, tzinfo=utc)
+            datetime.datetime(2021, 5, 15, 0, tzinfo=datetime.timezone.utc)
         ),
         (  # "Relative, after event end"
-            datetime.datetime(2021, 5, 17, 18, tzinfo=utc),
-            datetime.datetime(2021, 5, 18, 5, tzinfo=utc),
+            datetime.datetime(2021, 5, 17, 18, tzinfo=datetime.timezone.utc),
+            datetime.datetime(2021, 5, 18, 5, tzinfo=datetime.timezone.utc),
             'UTC',
             Rule(date_is_absolute=False, offset_to_event_end=True, offset_is_after=True, send_offset_days=1, send_offset_time=datetime.time(hour=10)),
-            datetime.datetime(2021, 5, 19, 10, tzinfo=utc)
+            datetime.datetime(2021, 5, 19, 10, tzinfo=datetime.timezone.utc)
         ),
         (  # "Relative, before event end"
-            datetime.datetime(2021, 5, 17, 18, tzinfo=utc),
-            datetime.datetime(2021, 5, 22, 5, tzinfo=utc),
+            datetime.datetime(2021, 5, 17, 18, tzinfo=datetime.timezone.utc),
+            datetime.datetime(2021, 5, 22, 5, tzinfo=datetime.timezone.utc),
             'UTC',
             Rule(date_is_absolute=False, offset_to_event_end=True, offset_is_after=False, send_offset_days=1, send_offset_time=datetime.time(hour=10)),
-            datetime.datetime(2021, 5, 21, 10, tzinfo=utc)
+            datetime.datetime(2021, 5, 21, 10, tzinfo=datetime.timezone.utc)
         ),
 
         # Tests for timezone quirks
         (  # Test sending on leap day
-            datetime.datetime(2020, 2, 27, 9, tzinfo=utc),
+            datetime.datetime(2020, 2, 27, 9, tzinfo=datetime.timezone.utc),
             None,
             'UTC',
             Rule(date_is_absolute=False, offset_is_after=True, send_offset_days=2, send_offset_time=datetime.time(hour=9)),
-            datetime.datetime(2020, 2, 29, 9, tzinfo=utc)
+            datetime.datetime(2020, 2, 29, 9, tzinfo=datetime.timezone.utc)
         ),
         (  # Test timezone far off from UTC
             datetime.datetime(2021, 5, 17, 22, tzinfo=NZ),
@@ -119,14 +119,14 @@ Berlin = ZoneInfo('Europe/Berlin')
             None,
             'Europe/Berlin',
             Rule(date_is_absolute=False, offset_is_after=True, send_offset_days=2, send_offset_time=datetime.time(hour=2, minute=30)),
-            datetime.datetime(2021, 10, 31, 1, 30, tzinfo=utc)
+            datetime.datetime(2021, 10, 31, 1, 30, tzinfo=datetime.timezone.utc)
         ),
         (  # Test non-existing time at DST change
             datetime.datetime(2021, 3, 29, 14, 30, tzinfo=Berlin),
             None,
             'Europe/Berlin',
             Rule(date_is_absolute=False, offset_is_after=False, send_offset_days=1, send_offset_time=datetime.time(hour=2, minute=30)),
-            datetime.datetime(2021, 3, 28, 1, 30, tzinfo=utc)
+            datetime.datetime(2021, 3, 28, 1, 30, tzinfo=datetime.timezone.utc)
         ),
 
     ])
@@ -166,7 +166,7 @@ def test_sendmail_rule_recompute(event):
     sendmail_run_rules(None)
 
     m = ScheduledMail.objects.filter(rule=rule).first()
-    assert m.computed_datetime.astimezone(utc) == expected
+    assert m.computed_datetime.astimezone(datetime.timezone.utc) == expected
 
 
 @pytest.mark.django_db

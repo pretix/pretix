@@ -2149,7 +2149,7 @@ class EventTest(TestCase):
 
     @classscope(attr='organizer')
     def test_presale_has_ended(self):
-        event = Event(
+        event = Event.objects.create(
             organizer=self.organizer, name='Download', slug='download',
             date_from=now()
         )

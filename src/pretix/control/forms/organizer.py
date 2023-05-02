@@ -602,7 +602,7 @@ class WebHookForm(forms.ModelForm):
                 mark_safe('{} – <code>{}</code>'.format(a.verbose_name, a.action_type))
             ) for a in get_all_webhook_events().values()
         ]
-        if self.instance:
+        if self.instance and self.instance.pk:
             self.fields['events'].initial = list(self.instance.listeners.values_list('action_type', flat=True))
 
     class Meta:

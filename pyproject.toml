@@ -22,7 +22,7 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
-  "Framework :: Django :: 4.0",
+  "Framework :: Django :: 4.1",
 ]
 
 dependencies = [
@@ -36,7 +36,7 @@ dependencies = [
   "css-inline==0.8.*",
   "defusedcsv>=1.1.0",
   "dj-static",
-  "Django==4.0.*",
+  "Django==4.1.*",
   "django-bootstrap3==23.1.*",
   "django-compressor==4.3.*",
   "django-countries==7.5.*",

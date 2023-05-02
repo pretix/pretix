@@ -29,7 +29,6 @@ from urllib.parse import parse_qs, urlencode, urlparse, urlunparse
 from Crypto.PublicKey import RSA
 from django.db import transaction
 from django.http import Http404, HttpResponse, JsonResponse
-from django.middleware.csrf import _does_token_match
 from django.shortcuts import redirect, render
 from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
@@ -103,8 +102,9 @@ class AuthorizeView(View):
         return self._process_auth_request(request, request.GET)
 
     def post(self, request, *args, **kwargs):
-        request_token = CsrfViewMiddleware(lambda: None)._get_token(request)
-        if not request_token or not _does_token_match(request.POST.get('csrfmiddlewaretoken', ''), request_token):
+        try:
+            CsrfViewMiddleware(lambda: None)._check_token(request)
+        except:
             # External request, we prefer GET and will redirect to prevent confusion with our login form
             return redirect(request.path + '?' + request.POST.urlencode())
         return self._process_auth_request(request, request.GET)

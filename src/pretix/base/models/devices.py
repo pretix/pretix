@@ -98,6 +98,8 @@ class Gate(LoggedModel):
                 if not Gate.objects.filter(organizer=self.organizer, identifier=code).exists():
                     self.identifier = code
                     break
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'identifier'}.union(kwargs['update_fields'])
         return super().save(*args, **kwargs)
 
 
@@ -173,6 +175,8 @@ class Device(LoggedModel):
     def save(self, *args, **kwargs):
         if not self.device_id:
             self.device_id = (self.organizer.devices.aggregate(m=Max('device_id'))['m'] or 0) + 1
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'device_id'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
 
     def permission_set(self) -> set:

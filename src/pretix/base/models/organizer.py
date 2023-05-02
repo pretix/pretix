@@ -102,6 +102,7 @@ class Organizer(LoggedModel):
         is_new = not self.pk
         obj = super().save(*args, **kwargs)
         if is_new:
+            kwargs.pop('update_fields', None)  # does not make sense here
             self.set_defaults()
         else:
             self.get_cache().clear()

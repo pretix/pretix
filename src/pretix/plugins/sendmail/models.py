@@ -70,6 +70,9 @@ class ScheduledMail(models.Model):
     def save(self, **kwargs):
         if not self.computed_datetime:
             self.recompute()
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'computed_datetime', 'last_computed', 'state'}.union(kwargs['update_fields'])
+
         super().save(**kwargs)
 
     def recompute(self):

@@ -1593,6 +1593,8 @@ class Question(LoggedModel):
                 if not Question.objects.filter(event=self.event, identifier=code).exists():
                     self.identifier = code
                     break
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'identifier'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
         if self.event:
             self.event.cache.clear()
@@ -1740,6 +1742,8 @@ class QuestionOption(models.Model):
                 if not QuestionOption.objects.filter(question__event=self.question.event, identifier=code).exists():
                     self.identifier = code
                     break
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'identifier'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
 
     @staticmethod

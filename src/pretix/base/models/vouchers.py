@@ -502,7 +502,10 @@ class Voucher(LoggedModel):
         return seat
 
     def save(self, *args, **kwargs):
-        self.code = self.code.upper()
+        if self.code != self.code.upper():
+            self.code = self.code.upper()
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'code'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
         self.event.cache.set('vouchers_exist', True)
 
