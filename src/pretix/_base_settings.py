@@ -67,6 +67,7 @@ INSTALLED_APPS = [
     'oauth2_provider',
     'phonenumber_field',
     'statici18n',
+    'django.forms',  # after pretix.base for overrides
 ]
 
 FORMAT_MODULE_PATH = [
@@ -178,6 +179,8 @@ TEMPLATES = [
         },
     },
 ]
+
+FORM_RENDERER = "django.forms.renderers.TemplatesSetting"
 
 STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static.dist')
 
