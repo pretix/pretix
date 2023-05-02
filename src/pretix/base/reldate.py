@@ -99,8 +99,7 @@ class RelativeDateWrapper:
             if self.data.minutes_before is not None:
                 return base_date.astimezone(tz) - datetime.timedelta(minutes=self.data.minutes_before)
             else:
-                oldoffset = base_date.astimezone(tz).utcoffset()
-                new_date = base_date.astimezone(tz) - datetime.timedelta(days=self.data.days_before)
+                new_date = (base_date.astimezone(tz) - datetime.timedelta(days=self.data.days_before)).astimezone(tz)
                 if self.data.time:
                     new_date = new_date.replace(
                         hour=self.data.time.hour,
@@ -108,8 +107,6 @@ class RelativeDateWrapper:
                         second=self.data.time.second
                     )
                 new_date = new_date.astimezone(tz)
-                new_offset = new_date.utcoffset()
-                new_date += oldoffset - new_offset
                 return new_date
 
     def to_string(self) -> str:

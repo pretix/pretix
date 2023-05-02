@@ -302,7 +302,7 @@ class AsyncFormView(AsyncMixin, FormView):
             'url_args': self.args,
             'url_kwargs': self.kwargs,
             'locale': get_language(),
-            'tz': get_current_timezone().zone,
+            'tz': str(get_current_timezone()),
         }
         if hasattr(self.request, 'organizer'):
             kwargs['organizer'] = self.request.organizer.pk
@@ -405,7 +405,7 @@ class AsyncPostView(AsyncMixin, View):
             'locale': get_language(),
             'url_args': args,
             'url_kwargs': kwargs,
-            'tz': get_current_timezone().zone,
+            'tz': str(get_current_timezone()),
         }
         if hasattr(self.request, 'organizer'):
             kwargs['organizer'] = self.request.organizer.pk

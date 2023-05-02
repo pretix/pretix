@@ -24,7 +24,6 @@ import json
 
 import pytest
 from django.utils.timezone import now
-from pytz import UTC
 
 from pretix.api.models import ApiCall
 from pretix.base.models import Order
@@ -159,8 +158,8 @@ def order(event):
     return Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
-        datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
-        expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+        datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
+        expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
         total=23, locale='en'
     )
 

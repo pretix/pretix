@@ -821,18 +821,18 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
             for t in self.get_times():
                 se = copy.copy(form.instance)
 
-                se.date_from = make_aware(datetime.combine(rdate, t['time_from']), tz, is_dst=False)
+                se.date_from = make_aware(datetime.combine(rdate, t['time_from'].replace(fold=1)), tz)
 
                 if t.get('time_to'):
                     se.date_to = (
-                        make_aware(datetime.combine(rdate, t['time_to']), tz, is_dst=False)
+                        make_aware(datetime.combine(rdate, t['time_to'].replace(fold=1)), tz)
                         if t.get('time_to') > t.get('time_from')
-                        else make_aware(datetime.combine(rdate + timedelta(days=1), t['time_to']), tz, is_dst=False)
+                        else make_aware(datetime.combine(rdate + timedelta(days=1), t['time_to'].replace(fold=1)), tz)
                     )
                 else:
                     se.date_to = None
                 se.date_admission = (
-                    make_aware(datetime.combine(rdate, t['time_admission'].replace(fold=1)), tz, is_dst=False)
+                    make_aware(datetime.combine(rdate, t['time_admission'].replace(fold=1)), tz)
                     if t.get('time_admission')
                     else None
                 )

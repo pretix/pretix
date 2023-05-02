@@ -747,7 +747,7 @@ def test_import_subevent_by_date(user, event, item):
     event.has_subevents = True
     event.save()
     event.settings.timezone = 'Europe/Berlin'
-    s = event.subevents.create(name='Test', date_from=event.timezone.localize(datetime.datetime(2021, 6, 28, 11, 0, 0, 0)), active=True)
+    s = event.subevents.create(name='Test', date_from=datetime.datetime(2021, 6, 28, 11, 0, 0, 0, tzinfo=event.timezone), active=True)
     settings['item'] = 'static:{}'.format(item.pk)
     settings['subevent'] = 'csv:J'
 

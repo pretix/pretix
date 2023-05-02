@@ -145,7 +145,7 @@ def test_sendmail_rule_send_time(event_from, event_to, event_tz, rule, expected,
     rule.save()
     m = ScheduledMail.objects.filter(rule=rule).get()
 
-    assert m.computed_datetime.astimezone(event.timezone) == expected
+    assert m.computed_datetime.astimezone(event.timezone) == expected.astimezone(event.timezone)
 
 
 @pytest.mark.django_db

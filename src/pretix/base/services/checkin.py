@@ -37,7 +37,7 @@ from functools import partial, reduce
 
 import dateutil
 import dateutil.parser
-import pytz
+from dateutil.tz import datetime_exists
 from django.core.files import File
 from django.db import IntegrityError, transaction
 from django.db.models import (
@@ -926,14 +926,11 @@ def process_exit_all(sender, **kwargs):
         if cl.event.settings.get(f'autocheckin_dst_hack_{cl.pk}'):  # move time back if yesterday was DST switch
             d -= timedelta(hours=1)
             cl.event.settings.delete(f'autocheckin_dst_hack_{cl.pk}')
-        try:
-            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time()), cl.event.timezone)
-        except pytz.exceptions.AmbiguousTimeError:
-            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time()), cl.event.timezone,
-                                        is_dst=False)
-        except pytz.exceptions.NonExistentTimeError:
+
+        cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time().replace(fold=1)), cl.event.timezone)
+        if not datetime_exists(cl.exit_all_at):
             cl.event.settings.set(f'autocheckin_dst_hack_{cl.pk}', True)
             d += timedelta(hours=1)
-            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time()), cl.event.timezone)
+            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time().replace(fold=1)), cl.event.timezone)
             # AmbiguousTimeError shouldn't be possible since d.time() includes fold=0
         cl.save(update_fields=['exit_all_at'])

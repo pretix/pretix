@@ -43,6 +43,7 @@ from typing import Optional, Tuple
 from zoneinfo import ZoneInfo
 
 import dateutil.parser
+from dateutil.tz import datetime_exists
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import (
@@ -927,28 +928,31 @@ class Item(LoggedModel):
                 )
                 if self.validity_dynamic_duration_days:
                     replace_date += timedelta(days=self.validity_dynamic_duration_days)
-                valid_until = tz.localize(valid_until.replace(
+                valid_until = valid_until.replace(
                     year=replace_date.year,
                     month=replace_date.month,
                     day=replace_date.day,
                     hour=23, minute=59, second=59, microsecond=0,
-                    tzinfo=None,
-                ))
+                    tzinfo=tz,
+                )
             elif self.validity_dynamic_duration_days:
                 replace_date = valid_until.date() + timedelta(days=self.validity_dynamic_duration_days - 1)
-                valid_until = tz.localize(valid_until.replace(
+                valid_until = valid_until.replace(
                     year=replace_date.year,
                     month=replace_date.month,
                     day=replace_date.day,
                     hour=23, minute=59, second=59, microsecond=0,
-                    tzinfo=None
-                ))
+                    tzinfo=tz
+                )
 
             if self.validity_dynamic_duration_hours:
                 valid_until += timedelta(hours=self.validity_dynamic_duration_hours)
 
             if self.validity_dynamic_duration_minutes:
                 valid_until += timedelta(minutes=self.validity_dynamic_duration_minutes)
+
+            if not datetime_exists(valid_until):
+                valid_until += timedelta(hours=1)
 
             return requested_start, valid_until
 

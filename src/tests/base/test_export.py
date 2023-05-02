@@ -69,7 +69,7 @@ def test_event_run_sets_new_time(event, user):
 
     run_scheduled_exports(None)
     s.refresh_from_db()
-    assert s.schedule_next_run == event.timezone.localize(datetime(2023, 1, 19, 2, 30, 0))
+    assert s.schedule_next_run == datetime(2023, 1, 19, 2, 30, 0, tzinfo=event.timezone)
 
 
 @pytest.mark.django_db
@@ -78,13 +78,13 @@ def test_event_not_run_when_failed_5_times(event, user):
     s = ScheduledEventExport(event=event, owner=user)
     s.schedule_rrule = "DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO"
     s.schedule_rrule_time = time(2, 30, 0)
-    s.schedule_next_run = event.timezone.localize(datetime(2023, 1, 18, 2, 30, 0))
+    s.schedule_next_run = datetime(2023, 1, 18, 2, 30, 0, tzinfo=event.timezone)
     s.error_counter = 5
     s.save()
 
     run_scheduled_exports(None)
     s.refresh_from_db()
-    assert s.schedule_next_run == event.timezone.localize(datetime(2023, 1, 18, 2, 30, 0))
+    assert s.schedule_next_run == datetime(2023, 1, 18, 2, 30, 0, tzinfo=event.timezone)
 
 
 @pytest.mark.django_db
@@ -199,7 +199,7 @@ def test_organizer_run_sets_new_time(event, user):
 
     run_scheduled_exports(None)
     s.refresh_from_db()
-    assert s.schedule_next_run == event.timezone.localize(datetime(2023, 1, 19, 2, 30, 0))
+    assert s.schedule_next_run == datetime(2023, 1, 19, 2, 30, 0, tzinfo=event.timezone)
 
 
 @pytest.mark.django_db
@@ -208,13 +208,13 @@ def test_organizer_not_run_when_failed_5_times(event, user):
     s = ScheduledOrganizerExport(organizer=event.organizer, owner=user)
     s.schedule_rrule = "DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO"
     s.schedule_rrule_time = time(2, 30, 0)
-    s.schedule_next_run = event.timezone.localize(datetime(2023, 1, 18, 2, 30, 0))
+    s.schedule_next_run = datetime(2023, 1, 18, 2, 30, 0, tzinfo=event.timezone)
     s.error_counter = 5
     s.save()
 
     run_scheduled_exports(None)
     s.refresh_from_db()
-    assert s.schedule_next_run == event.timezone.localize(datetime(2023, 1, 18, 2, 30, 0))
+    assert s.schedule_next_run == datetime(2023, 1, 18, 2, 30, 0, tzinfo=event.timezone)
 
 
 @pytest.mark.django_db

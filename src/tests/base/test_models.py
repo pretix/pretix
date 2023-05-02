@@ -2906,15 +2906,15 @@ class ScheduledExportTestCase(TestCase):
 
         with freeze_time("2023-01-18 15:08:00+01:00"):
             s.compute_next_run()
-            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 1, 19, 6, 30, 0))
+            assert s.schedule_next_run == datetime.datetime(2023, 1, 19, 6, 30, 0, tzinfo=self.event.timezone)
 
         with freeze_time("2023-01-19 06:28:00+01:00"):
             s.compute_next_run()
-            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 1, 19, 6, 30, 0))
+            assert s.schedule_next_run == datetime.datetime(2023, 1, 19, 6, 30, 0, tzinfo=self.event.timezone)
 
         with freeze_time("2023-01-19 06:30:00+01:00"):
             s.compute_next_run()
-            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 1, 24, 6, 30, 0))
+            assert s.schedule_next_run == datetime.datetime(2023, 1, 24, 6, 30, 0, tzinfo=self.event.timezone)
 
         with freeze_time("2024-01-18 15:08:00+01:00"):
             s.compute_next_run()
@@ -2927,10 +2927,10 @@ class ScheduledExportTestCase(TestCase):
         s.schedule_rrule_time = datetime.time(2, 30, 0)
         with freeze_time("2023-03-25 18:00:00+01:00"):
             s.compute_next_run()
-            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 3, 26, 3, 30, 0))
+            assert s.schedule_next_run == datetime.datetime(2023, 3, 26, 3, 30, 0, tzinfo=self.event.timezone)
         with freeze_time("2023-03-26 18:00:00+01:00"):
             s.compute_next_run()
-            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 3, 27, 2, 30, 0))
+            assert s.schedule_next_run == datetime.datetime(2023, 3, 27, 2, 30, 0, tzinfo=self.event.timezone)
         with freeze_time("2023-10-28 18:00:00+01:00"):
             s.compute_next_run()
-            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 10, 29, 2, 30, 0, fold=0))
+            assert s.schedule_next_run == datetime.datetime(2023, 10, 29, 2, 30, 0, fold=0, tzinfo=self.event.timezone)

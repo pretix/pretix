@@ -21,6 +21,7 @@
 #
 from datetime import datetime, time, timedelta
 
+from dateutil.tz import datetime_exists
 from django.db import models
 from django.db.models import Exists, OuterRef, Q
 from django.utils import timezone
@@ -88,10 +89,14 @@ class ScheduledMail(models.Model):
             base_time = (e.date_to or e.date_from) if self.rule.offset_to_event_end else e.date_from
             d = base_time.astimezone(self.event.timezone).date() + offset
             self.computed_datetime = make_aware(
-                datetime.combine(d, time(hour=st.hour, minute=st.minute, second=st.second, microsecond=0)),
+                datetime.combine(d, time(hour=st.hour, minute=st.minute, second=st.second, microsecond=0, fold=1)),
                 self.event.timezone,
-                is_dst=False,  # prevent AmbiguousTimeError
             )
+            if not datetime_exists(self.computed_datetime):
+                self.computed_datetime = make_aware(
+                    datetime.combine(d, time(hour=st.hour, minute=st.minute, second=st.second, microsecond=0)) + timedelta(hours=1),
+                    self.event.timezone,
+                )
 
         if self.computed_datetime > timezone.now() and self.state == self.STATE_MISSED:
             self.state = self.STATE_SCHEDULED
