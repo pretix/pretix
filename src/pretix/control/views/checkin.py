@@ -430,7 +430,7 @@ class CheckinListDelete(EventPermissionRequiredMixin, CompatDeleteView):
         self.object = self.get_object()
         success_url = self.get_success_url()
         self.object.checkins.all().delete()
-        self.object.log_action(action='pretix.event.checkinlists.deleted', user=request.user)
+        self.object.log_action(action='pretix.event.checkinlist.deleted', user=request.user)
         self.object.delete()
         messages.success(self.request, _('The selected list has been deleted.'))
         return HttpResponseRedirect(success_url)
