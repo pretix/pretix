@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-26 09:13+0000\n"
+"POT-Creation-Date: 2023-05-03 07:37+0000\n"
 "PO-Revision-Date: 2022-03-15 00:00+0000\n"
 "Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -656,20 +656,20 @@ msgstr "%(currency)s %(amount)s が払い戻されます"
 msgid "Please enter the amount the organizer can keep."
 msgstr "イベント開催者が受け取る料金を入力してください。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:393
+#: pretix/static/pretixpresale/js/ui/main.js:417
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "商品の総数を入力してください。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:429
+#: pretix/static/pretixpresale/js/ui/main.js:453
 msgid "required"
 msgstr "必須"
 
-#: pretix/static/pretixpresale/js/ui/main.js:532
-#: pretix/static/pretixpresale/js/ui/main.js:551
+#: pretix/static/pretixpresale/js/ui/main.js:556
+#: pretix/static/pretixpresale/js/ui/main.js:575
 msgid "Time zone:"
 msgstr "タイムゾーン："
 
-#: pretix/static/pretixpresale/js/ui/main.js:542
+#: pretix/static/pretixpresale/js/ui/main.js:566
 msgid "Your local time:"
 msgstr "現地時間："
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-04-26 09:13+0000\n"
+"POT-Creation-Date: 2023-05-03 07:37+0000\n"
 "PO-Revision-Date: 2023-04-06 22:00+0000\n"
 "Last-Translator: Loïc Alejandro <loic.alejandro@e.email>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -668,21 +668,21 @@ msgstr "de %(currency)s %(price)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:393
+#: pretix/static/pretixpresale/js/ui/main.js:417
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "SVP entrez une quantité pour un de vos types de billets."
 
-#: pretix/static/pretixpresale/js/ui/main.js:429
+#: pretix/static/pretixpresale/js/ui/main.js:453
 #, fuzzy
 msgid "required"
 msgstr "Panier expiré"
 
-#: pretix/static/pretixpresale/js/ui/main.js:532
-#: pretix/static/pretixpresale/js/ui/main.js:551
+#: pretix/static/pretixpresale/js/ui/main.js:556
+#: pretix/static/pretixpresale/js/ui/main.js:575
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:542
+#: pretix/static/pretixpresale/js/ui/main.js:566
 msgid "Your local time:"
 msgstr ""
 
