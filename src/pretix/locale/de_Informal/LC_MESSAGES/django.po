@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-03 07:36+0000\n"
-"PO-Revision-Date: 2023-04-26 09:46+0000\n"
+"PO-Revision-Date: 2023-05-03 08:07+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -8849,10 +8849,8 @@ msgstr ""
 "wofür die Nummer benutzt wird."
 
 #: pretix/base/settings.py:1342
-#, fuzzy
-#| msgid "Maximum number of items per order"
 msgid "Maximum number of entries per email address for the same product"
-msgstr "Maximale Anzahl von Produkten pro Bestellung"
+msgstr "Maximale Anzahl von Einträgen pro E-Mail-Adresse für das selbe Produkt"
 
 #: pretix/base/settings.py:1354
 msgid "Show number of check-ins to customer"
@@ -15873,11 +15871,9 @@ msgid "ZVT Terminal"
 msgstr "ZVT-Terminal"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:17
-#, fuzzy
-#| msgid "Confirmation code"
 msgctxt "terminal_zvt"
 msgid "Confirmation mode"
-msgstr "Bestätigungs-Code"
+msgstr "Bestätigungs-Modus"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:20
 msgctxt "terminal_zvt"
@@ -26853,16 +26849,17 @@ msgid "Error"
 msgstr "Fehler"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:24
-#, fuzzy
-#| msgid "Order status"
 msgid "Capture status"
-msgstr "Bestellstatus"
+msgstr "Buchungsstatus"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:27
 msgid ""
 "This payment is being reviewed by PayPal. Until the review is lifted, the "
 "money will not be disbursed and the order remain in its pending state."
 msgstr ""
+"Diese Zahlung wird von PayPal kontrolliert. Bis diese Kontrolle "
+"abgeschlossen ist, wird das Geld nicht ausgezahlt und die Bestellung "
+"verbleibt im ausstehenden Status."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:5
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:5
@@ -28896,10 +28893,8 @@ msgid "Cart expired"
 msgstr "Warenkorb abgelaufen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:37
-#, fuzzy
-#| msgid "Show full location"
 msgid "Show full cart"
-msgstr "Vollständigen Ort anzeigen"
+msgstr "Warenkorb anzeigen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:49
 #: pretix/presale/templates/pretixpresale/event/index.html:78
@@ -30632,21 +30627,14 @@ msgstr ""
 "der Liste weitergeben."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:28
-#, fuzzy
-#| msgid ""
-#| "Note that you will only receive one ticket. If you need multiple tickets, "
-#| "you need to add yourself to the waiting list multiple times with "
-#| "different email addresses. There is no guarantee that you will receive a "
-#| "certain number of tickets."
 msgid ""
 "Note that you will only receive one ticket. If you need multiple tickets, "
 "you need to add yourself to the waiting list multiple times. There is no "
 "guarantee that you will receive a certain number of tickets."
 msgstr ""
 "Beachte bitte, dass du nur ein Ticket erhältst. Wenn du mehrere Tickets "
-"benötigst, kannst du dich mit verschiedenen E-Mail-Adressen mehrfach "
-"eintragen. Es gibt jedoch keine Garantie, dass du eine bestimme Anzahl an "
-"Tickets erhältst."
+"benötigst, kannst du dich mehrfach eintragen. Es gibt jedoch keine Garantie, "
+"dass du eine bestimme Anzahl an Tickets erhältst."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:32
 msgid ""
