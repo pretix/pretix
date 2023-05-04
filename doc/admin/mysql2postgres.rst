@@ -51,7 +51,7 @@ For our standard docker installation, create the database and user like this::
     # sudo -u postgres createuser -P pretix
     # sudo -u postgres createdb -O pretix pretix
 
-Make sure that your database listens on the network. If PostgreSQL on the same same host as docker, but not inside a docker container, we recommend that you just listen on the Docker interface by changing the following line in ``/etc/postgresql/<version>/main/postgresql.conf``::
+Make sure that your database listens on the network. If PostgreSQL on the same same host as docker, but not inside a docker container, we recommend that you listen on the Docker interface by changing the following line in ``/etc/postgresql/<version>/main/postgresql.conf``::
 
     listen_addresses = 'localhost,172.17.0.1'
 
@@ -152,5 +152,90 @@ Now, restart pretix. Maybe stop your MySQL server as a verification step that yo
 And you're done! After you've verified everything has been copied correctly, you can delete the old MySQL database.
 
 .. note:: Don't forget to update your backup process to back up your PostgreSQL database instead of your MySQL database now.
+
+Troubleshooting
+---------------
+
+Peer authentication failed
+""""""""""""""""""""""""""
+
+Sometimes you might see an error message like this::
+
+    django.db.utils.OperationalError: connection to server on socket "/var/run/postgresql/.s.PGSQL.5432" failed: FATAL:  Peer authentication failed for user "pretix"
+
+It is important to understand that PostgreSQL by default offers two types of authentication:
+
+- **Peer authentication**, which works automatically based on the Linux user you are working as. This requires that
+  the connection is made through a local socket (empty ``host=`` in ``pretix.cfg``) and the name of the PostgreSQL user
+  and the Linux user are identical.
+
+  - Typically, you might run into this error if you accidentally execute ``python -m pretix`` commands as root instead
+    of the ``pretix`` user.
+
+- **Password authentication**, which requires a username and password and works over network connections. To force
+  password authentication instead of peer authentication, set ``host=127.0.0.1`` in ``pretix.cfg``.
+
+  - You can alter the password on a PostgreSQL shell using the command ``ALTER USER pretix WITH PASSWORD '***';``.
+    When creating a user with the ``createuser`` command, pass option ``-P`` to set a new password.
+
+  - Even with password authentication, PostgreSQL by default only allows local connections. To allow remote connections,
+    you need to adjust both the ``listen_address`` configuration parameter as well as the ``pg_hba.conf`` file (see above
+    for an example with the docker networking setup).
+
+Database error: relation does not exist
+"""""""""""""""""""""""""""""""""""""""
+
+If you see an error like this::
+
+    2023-04-17T19:20:47.744023Z ERROR Database error 42P01: relation "public.pretix_foobar" does not exist
+    QUERY: ALTER TABLE public.pretix_foobar DROP CONSTRAINT IF EXISTS pretix_foobar_order_id_57e2cb41_fk_pretixbas CASCADE;
+    2023-04-17T19:20:47.744023Z FATAL Failed to create the schema, see above.
+
+The reason is most likely that in the past, you installed a pretix plugin that you no longer have installed. However,
+the database still contains tables of that plugin. If you want to keep the data, reinstall the plugin and re-run the
+``migrate`` step from above. If you want to get rid of the data, manually drop the table mentioned in the error message
+from your MySQL database::
+
+    # mysql -u root pretix
+    mysql> DROP TABLE pretix_foobar;
+
+Then, retry. You might see a new error message with a new table, which you can handle the same way.
+
+Cleaning out a failed attempt
+"""""""""""""""""""""""""""""
+
+You might want to clean your PostgreSQL database before you try again after an error. You can do so like this::
+
+    # sudo -u postgres psql pretix
+    pretix=# DROP SCHEMA public CASCADE;
+    pretix=# CREATE SCHEMA public;
+    pretix=# ALTER SCHEMA public OWNER TO pretix;
+
+``pgloader`` crashes with heap exhaustion error
+"""""""""""""""""""""""""""""""""""""""""""""""
+
+On some larger databases, we've seen ``pgloader`` crash with error messages similar to this::
+
+    Heap exhausted during garbage collection: 16 bytes available, 48 requested.
+
+Or this::
+
+    2021-01-04T21:31:17.367000Z ERROR A SB-KERNEL::HEAP-EXHAUSTED-ERROR condition without bindings for heap statistics.  (If
+    you did not expect to see this message, please report it.
+    2021-01-04T21:31:17.382000Z ERROR The value
+      NIL
+    is not of type
+      NUMBER
+    when binding SB-KERNEL::X
+
+The ``pgloader`` version distributed for Debian and Ubuntu is compiled with the ``SBCL`` compiler. If compiled with
+``CCL``, these bugs go away. Unfortunately, it is pretty hard to compile ``pgloader`` manually with ``CCL``. If you
+run into this, we therefore recommend using the docker container provided by the ``pgloader`` maintainers::
+
+    sudo docker run --rm -v /tmp:/tmp --network host -it dimitri/pgloader:ccl.latest pgloader /tmp/pretix.load
+
+As peer authentication is not available from inside the container, this requires you to use password-based authentication
+in PostgreSQL (see above).
+
 
 .. _PostgreSQL repositories: https://wiki.postgresql.org/wiki/Apt
