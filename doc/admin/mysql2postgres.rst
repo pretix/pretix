@@ -51,7 +51,7 @@ For our standard docker installation, create the database and user like this::
     # sudo -u postgres createuser -P pretix
     # sudo -u postgres createdb -O pretix pretix
 
-Make sure that your database listens on the network. If PostgreSQL on the same same host as docker, but not inside a docker container, we recommend that you just listen on the Docker interface by changing the following line in ``/etc/postgresql/<version>/main/postgresql.conf``::
+Make sure that your database listens on the network. If PostgreSQL on the same same host as docker, but not inside a docker container, we recommend that you listen on the Docker interface by changing the following line in ``/etc/postgresql/<version>/main/postgresql.conf``::
 
     listen_addresses = 'localhost,172.17.0.1'
 
@@ -230,7 +230,7 @@ Or this::
 
 The ``pgloader`` version distributed for Debian and Ubuntu is compiled with the ``SBCL`` compiler. If compiled with
 ``CCL``, these bugs go away. Unfortunately, it is pretty hard to compile ``pgloader`` manually with ``CCL``. If you
-run into this, we therefore recommend just using the docker container provided by the ``pgloader`` maintainers::
+run into this, we therefore recommend using the docker container provided by the ``pgloader`` maintainers::
 
     sudo docker run --rm -v /tmp:/tmp --network host -it dimitri/pgloader:ccl.latest pgloader /tmp/pretix.load
 
