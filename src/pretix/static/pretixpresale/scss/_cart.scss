@@ -106,6 +106,16 @@
     }
 }
 
+.cart-row-giftcard {
+    border-radius: $border-radius-base;
+    padding: 10px 1.4em;
+    margin: 0 0 5px 1.4em;
+    background: $panel-footer-bg;
+    code {
+        color: $text-color;
+    }
+}
+
 .cart .firstchild-in-panel .cart-row:first-child {
     padding-top: 0;
 }

@@ -210,7 +210,7 @@ def giftcard_select2(request, **kwargs):
     return JsonResponse(doc)
 
 
-@organizer_permission_required(("can_manage_reusable_media"))
+@organizer_permission_required(("can_manage_reusable_media", "can_mange_gift_cards"))
 def ticket_select2(request, **kwargs):
     query = request.GET.get('query', '')
     try:

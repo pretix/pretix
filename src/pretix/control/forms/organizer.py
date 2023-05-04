@@ -186,6 +186,15 @@ class OrganizerUpdateForm(OrganizerForm):
         return instance
 
 
+class SafeOrderPositionChoiceField(forms.ModelChoiceField):
+    def __init__(self, queryset, **kwargs):
+        queryset = queryset.model.all.none()
+        super().__init__(queryset, **kwargs)
+
+    def label_from_instance(self, op):
+        return f'{op.order.code}-{op.positionid} ({str(op.item) + ((" - " + str(op.variation)) if op.variation else "")})'
+
+
 class EventMetaPropertyForm(forms.ModelForm):
     class Meta:
         model = EventMetaProperty
@@ -650,23 +659,32 @@ class GiftCardCreateForm(forms.ModelForm):
 class GiftCardUpdateForm(forms.ModelForm):
     class Meta:
         model = GiftCard
-        fields = ['expires', 'conditions']
+        fields = ['expires', 'conditions', 'owner_ticket']
         field_classes = {
-            'expires': SplitDateTimeField
+            'expires': SplitDateTimeField,
+            'owner_ticket': SafeOrderPositionChoiceField,
         }
         widgets = {
             'expires': SplitDateTimePickerWidget,
             'conditions': forms.Textarea(attrs={"rows": 2})
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        organizer = self.instance.issuer
 
-class SafeOrderPositionChoiceField(forms.ModelChoiceField):
-    def __init__(self, queryset, **kwargs):
-        queryset = queryset.model.all.none()
-        super().__init__(queryset, **kwargs)
-
-    def label_from_instance(self, op):
-        return f'{op.order.code}-{op.positionid} ({str(op.item) + ((" - " + str(op.variation)) if op.variation else "")})'
+        self.fields['owner_ticket'].queryset = OrderPosition.all.filter(order__event__organizer=organizer).all()
+        self.fields['owner_ticket'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:organizer.ticket_select2', kwargs={
+                    'organizer': organizer.slug,
+                }),
+                'data-placeholder': _('Ticket')
+            }
+        )
+        self.fields['owner_ticket'].widget.choices = self.fields['owner_ticket'].choices
+        self.fields['owner_ticket'].required = False
 
 
 class ReusableMediumUpdateForm(forms.ModelForm):

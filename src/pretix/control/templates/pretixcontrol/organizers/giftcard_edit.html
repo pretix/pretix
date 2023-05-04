@@ -14,6 +14,7 @@
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         {% bootstrap_field form.expires layout="control" %}
+        {% bootstrap_field form.owner_ticket layout="control" %}
         {% bootstrap_field form.conditions layout="control" %}
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
