@@ -50,7 +50,7 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.models import Device, Event, TaxRule, TeamAPIToken
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import SubEventItem, SubEventItemVariation
+from pretix.base.models.items import SubEventItem, SubEventItemVariation, ItemMetaProperty
 from pretix.base.services.seating import (
     SeatProtected, generate_seats, validate_plan_change,
 )
@@ -904,3 +904,9 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
                 else []
             )
         )
+
+
+class ItemMetaPropertiesSerializer(I18nAwareModelSerializer):
+    class Meta:
+        model = ItemMetaProperty
+        fields = ('id', 'name', 'default', 'required', 'allowed_values')

@@ -47,11 +47,11 @@ from pretix.api.auth.permission import EventCRUDPermission
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.event import (
     CloneEventSerializer, DeviceEventSettingsSerializer, EventSerializer,
-    EventSettingsSerializer, SubEventSerializer, TaxRuleSerializer,
+    EventSettingsSerializer, SubEventSerializer, TaxRuleSerializer, ItemMetaPropertiesSerializer,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
-    CartPosition, Device, Event, SeatCategoryMapping, TaxRule, TeamAPIToken,
+    CartPosition, Device, Event, SeatCategoryMapping, TaxRule, TeamAPIToken, ItemMetaProperty,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.services.quotas import QuotaAvailability
@@ -520,6 +520,52 @@ class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):
             auth=self.request.auth,
         )
         super().perform_destroy(instance)
+
+
+class ItemMetaPropertiesViewSet(viewsets.ModelViewSet):
+    serializer_class = ItemMetaPropertiesSerializer
+    queryset = ItemMetaProperty.objects.none()
+
+    def get_queryset(self):
+        qs = self.request.event.item_meta_properties.all()
+        return qs
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        ctx['event'] = self.request.event
+        return ctx
+
+    def perform_destroy(self, instance):
+        instance.log_action(
+            'pretix.event.item_meta_property.deleted',
+            user=self.request.user,
+            auth=self.request.auth,
+            data={'id': instance.pk}
+        )
+        instance.delete()
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        inst = serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.item_meta_property.created',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+        return inst
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        inst = serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.item_meta_property.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+        return inst
 
 
 class EventSettingsView(views.APIView):
