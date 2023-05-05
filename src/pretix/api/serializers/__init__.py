@@ -19,3 +19,30 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from rest_framework import serializers
+
+
+class AsymmetricField(serializers.Field):
+    def __init__(self, read, write, **kwargs):
+        self.read = read
+        self.write = write
+        super().__init__(
+            required=self.write.required,
+            default=self.write.default,
+            initial=self.write.initial,
+            source=self.write.source if self.write.source != self.write.field_name else None,
+            label=self.write.label,
+            allow_null=self.write.allow_null,
+            error_messages=self.write.error_messages,
+            validators=self.write.validators,
+            **kwargs
+        )
+
+    def to_internal_value(self, data):
+        return self.write.to_internal_value(data)
+
+    def to_representation(self, value):
+        return self.read.to_representation(value)
+
+    def run_validation(self, data=serializers.empty):
+        return self.write.run_validation(data)

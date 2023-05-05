@@ -20,6 +20,9 @@ currency                              string                     Currency of the
 testmode                              boolean                    Whether this is a test gift card
 expires                               datetime                   Expiry date (or ``null``)
 conditions                            string                     Special terms and conditions for this card (or ``null``)
+owner_ticket                          integer                    Internal ID of an order position that is the "owner" of
+                                                                 this gift card and can view all transactions. When setting
+                                                                 this field, you can also give a ``secret``.
 ===================================== ========================== =======================================================
 
 The gift card transaction resource contains the following public fields:

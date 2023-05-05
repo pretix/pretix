@@ -1338,6 +1338,7 @@ class GiftCardFilterForm(FilterForm):
                 Q(secret__icontains=query)
                 | Q(transactions__text__icontains=query)
                 | Q(transactions__order__code__icontains=query)
+                | Q(owner_ticket__order__code__icontains=query)
             )
         if fdata.get('testmode') == 'yes':
             qs = qs.filter(testmode=True)

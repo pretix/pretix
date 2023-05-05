@@ -22,12 +22,14 @@
 import logging
 from decimal import Decimal
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.utils.crypto import get_random_string
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
+from pretix.api.serializers import AsymmetricField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.order import CompatibleJSONField
 from pretix.api.serializers.settings import SettingsSerializer
@@ -35,8 +37,8 @@ from pretix.base.auth import get_auth_backends
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
     Customer, Device, GiftCard, GiftCardTransaction, Membership,
-    MembershipType, Organizer, SeatingPlan, Team, TeamAPIToken, TeamInvite,
-    User,
+    MembershipType, OrderPosition, Organizer, ReusableMedium, SeatingPlan,
+    Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
@@ -127,8 +129,51 @@ class MembershipSerializer(I18nAwareModelSerializer):
         return super().update(instance, validated_data)
 
 
+class FlexibleTicketRelatedField(serializers.PrimaryKeyRelatedField):
+
+    def to_internal_value(self, data):
+        queryset = self.get_queryset()
+
+        if isinstance(data, int):
+            try:
+                return queryset.get(pk=data)
+            except ObjectDoesNotExist:
+                self.fail('does_not_exist', pk_value=data)
+
+        elif isinstance(data, str):
+            try:
+                return queryset.get(
+                    Q(secret=data)
+                    | Q(pseudonymization_id=data)
+                    | Q(pk__in=ReusableMedium.objects.filter(
+                        organizer=self.context['organizer'],
+                        type='barcode',
+                        identifier=data
+                    ))
+                )
+            except ObjectDoesNotExist:
+                self.fail('does_not_exist', pk_value=data)
+
+        self.fail('incorrect_type', data_type=type(data).__name__)
+
+
 class GiftCardSerializer(I18nAwareModelSerializer):
     value = serializers.DecimalField(max_digits=13, decimal_places=2, min_value=Decimal('0.00'))
+    owner_ticket = FlexibleTicketRelatedField(required=False, allow_null=True, queryset=OrderPosition.all.none())
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['owner_ticket'].queryset = OrderPosition.objects.filter(order__event__organizer=self.context['organizer'])
+
+        if 'owner_ticket' in self.context['request'].query_params.getlist('expand'):
+            from pretix.api.serializers.media import (
+                NestedOrderPositionSerializer,
+            )
+
+            self.fields['owner_ticket'] = AsymmetricField(
+                NestedOrderPositionSerializer(read_only=True, context=self.context),
+                self.fields['owner_ticket'],
+            )
 
     def validate(self, data):
         data = super().validate(data)
@@ -151,7 +196,7 @@ class GiftCardSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = GiftCard
-        fields = ('id', 'secret', 'issuance', 'value', 'currency', 'testmode', 'expires', 'conditions')
+        fields = ('id', 'secret', 'issuance', 'value', 'currency', 'testmode', 'expires', 'conditions', 'owner_ticket')
 
 
 class OrderEventSlugField(serializers.RelatedField):

@@ -91,11 +91,11 @@ Endpoints
    :query string updated_since: Only show media updated since a given date.
    :query integer linked_orderposition: Only show media linked to the given ticket.
    :query integer linked_giftcard: Only show media linked to the given gift card.
-   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_orderposition"``, oder ``"customer"``, the respective
-                         field will be shown as a nested value instead of just an ID. The nested objects are identical to
-                         the respective resources, except that the ``linked_orderposition`` will have an attribute of the
-                         format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make matching easier. The parameter
-                         can be given multiple times.
+   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_giftcard.owner_ticket"``, ``"linked_orderposition"``,
+                         or ``"customer"``, the respective field will be shown as a nested value instead of just an ID.
+                         The nested objects are identical to the respective resources, except that the ``linked_orderposition``
+                         will have an attribute of the format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make
+                         matching easier. The parameter can be given multiple times.
    :param organizer: The ``slug`` field of the organizer to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure

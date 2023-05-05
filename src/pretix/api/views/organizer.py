@@ -179,18 +179,32 @@ class GiftCardViewSet(viewsets.ModelViewSet):
         if 'include_accepted' in self.request.GET:
             raise PermissionDenied("Accepted gift cards cannot be updated, use transact instead.")
         GiftCard.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
-        old_value = serializer.instance.value
-        value = serializer.validated_data.pop('value')
-        inst = serializer.save(secret=serializer.instance.secret, currency=serializer.instance.currency,
-                               testmode=serializer.instance.testmode)
-        diff = value - old_value
-        inst.transactions.create(value=diff)
-        inst.log_action(
-            'pretix.giftcards.transaction.manual',
-            user=self.request.user,
-            auth=self.request.auth,
-            data={'value': diff}
-        )
+
+        value = serializer.validated_data.pop('value', None)
+
+        if any(k != 'value' for k in self.request.data):
+            inst = serializer.save(secret=serializer.instance.secret, currency=serializer.instance.currency,
+                                   testmode=serializer.instance.testmode)
+            inst.log_action(
+                'pretix.giftcards.modified',
+                user=self.request.user,
+                auth=self.request.auth,
+                data=self.request.data,
+            )
+        else:
+            inst = serializer.instance
+
+        if 'value' in self.request.data and value is not None:
+            old_value = serializer.instance.value
+            diff = value - old_value
+            inst.transactions.create(value=diff)
+            inst.log_action(
+                'pretix.giftcards.transaction.manual',
+                user=self.request.user,
+                auth=self.request.auth,
+                data={'value': diff}
+            )
+
         return inst
 
     @action(detail=True, methods=["POST"])
@@ -214,7 +228,7 @@ class GiftCardViewSet(viewsets.ModelViewSet):
             auth=self.request.auth,
             data={'value': value, 'text': text}
         )
-        return Response(GiftCardSerializer(gc).data, status=status.HTTP_200_OK)
+        return Response(GiftCardSerializer(gc, context=self.get_serializer_context()).data, status=status.HTTP_200_OK)
 
     def perform_destroy(self, instance):
         raise MethodNotAllowed("Gift cards cannot be deleted.")
