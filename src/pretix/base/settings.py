@@ -160,13 +160,37 @@ DEFAULTS = {
     },
     'customer_accounts_link_by_email': {
         'default': 'False',
-        'type': bool,
-        'form_class': forms.BooleanField,
-        'serializer_class': serializers.BooleanField,
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=(
+                ('False', _('Keep guest orders separate and do not link them to customer accounts.')),
+                ('True', _('Do not attach guest orders to customer accounts, but show them in customer '
+                           'accounts with a verified matching email address.')),
+                ('attach', _('Attach guest orders to existing customer accounts with a matching email address if such '
+                             'an account exists.')),
+                ('create', _('Attach guest orders to existing customer accounts with a matching email and '
+                             'automatically create a customer account for all others.')),
+                ('forbidden', _('Do not allow guest orders.')),
+            ),
+        ),
         'form_kwargs': dict(
-            label=_("Match orders based on email address"),
-            help_text=_("This will allow registered customers to access orders made with the same email address, even if the customer "
-                        "was not logged in during the purchase.")
+            label=_("Guest order handling"),
+            widget=forms.RadioSelect,
+            choices=(
+                ('False', _('Keep guest orders separate and do not link them to customer accounts.')),
+                ('True', _('Do not attach guest orders to customer accounts, but show them in customer '
+                           'accounts with a verified matching email address.')),
+                ('attach', _('Attach guest orders to existing customer accounts with a matching email address if '
+                             'such an account exists.')),
+                ('create', _('Attach guest orders to existing customer accounts with a matching email address and '
+                             'automatically create a customer account for all others.')),
+                ('forbidden', _('Do not allow guest orders.')),
+            ),
+            help_text=_('Please be aware that creating customer accounts without a users consent might not be a '
+                        'good idea for privacy reasons in some jurisdictions or situations. We always recommend to '
+                        'let the user choose if they want an account.'),
         )
     },
     'reusable_media_active': {

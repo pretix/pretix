@@ -124,14 +124,38 @@ def test_org_register(env, client):
 
 @pytest.mark.django_db
 def test_org_register_duplicate_email(env, client):
+    signer = signing.TimestampSigner(salt='customer-registration-captcha-127.0.0.1')
     with scopes_disabled():
         env[0].customers.create(email='john@example.org')
     r = client.post('/bigevents/account/register', {
         'email': 'john@example.org',
         'name_parts_0': 'John Doe',
-    })
+        'challenge': signer.sign('1+2'),
+        'response': '3',
+    }, REMOTE_ADDR='127.0.0.1')
     assert b'already registered' in r.content
     assert r.status_code == 200
+
+
+@pytest.mark.django_db
+def test_org_register_duplicate_email_ignored_if_previously_autocreated(env, client):
+    signer = signing.TimestampSigner(salt='customer-registration-captcha-127.0.0.1')
+    with scopes_disabled():
+        c = env[0].customers.create(email='john@example.org', is_active=True, is_verified=False)
+        c.set_unusable_password()
+        c.save()
+    r = client.post('/bigevents/account/register', {
+        'email': 'john@example.org',
+        'name_parts_0': 'John Doe',
+        'challenge': signer.sign('1+2'),
+        'response': '3',
+    }, REMOTE_ADDR='127.0.0.1')
+    assert r.status_code == 302
+    assert len(djmail.outbox) == 1
+    with scopes_disabled():
+        customer = env[0].customers.get(email='john@example.org')
+        assert not customer.is_verified
+        assert customer.is_active
 
 
 @pytest.mark.django_db
@@ -479,7 +503,7 @@ def test_org_order_list(env, client):
     assert o2.code not in content
     assert o3.code in content
 
-    env[0].settings.customer_accounts_link_by_email = True
+    env[0].settings.customer_accounts_link_by_email = 'True'
 
     r = client.get('/bigevents/account/')
     assert r.status_code == 200

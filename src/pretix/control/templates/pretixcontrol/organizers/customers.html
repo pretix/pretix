@@ -79,9 +79,9 @@
                             </a>
                         </td>
                         <td>
-                            {% if not c.is_verified %}<strike>{% endif %}
+                            {% if not c.is_verified %}<span class="text-muted">{% endif %}
                             {{ c.email|default_if_none:"" }}
-                            {% if not c.is_verified %}</strike>{% endif %}
+                            {% if not c.is_verified %}</span>{% endif %}
                         </td>
                         <td>{{ c.name }}</td>
                         <td>{% if c.external_identifier %}{{ c.external_identifier }}{% endif %}</td>

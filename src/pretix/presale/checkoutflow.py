@@ -269,7 +269,7 @@ class CustomerStep(CartMixin, TemplateFlowStep):
 
     @cached_property
     def guest_allowed(self):
-        return not any(
+        return self.request.event.settings.customer_accounts_link_by_email != 'forbidden' and not any(
             p.item.require_membership or
             (p.variation and p.variation.require_membership) or
             p.item.grant_membership_type_id

@@ -2435,9 +2435,9 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
 
     def get_queryset(self):
         q = Q(customer=self.customer)
-        if self.request.organizer.settings.customer_accounts_link_by_email and self.customer.email:
+        if self.request.organizer.settings.customer_accounts_link_by_email == 'True' and self.customer.email:
             # This is safe because we only let customers with verified emails log in
-            q |= Q(email__iexact=self.customer.email)
+            q |= Q(customer__isnull=True, email__iexact=self.customer.email)
         qs = Order.objects.filter(
             q
         ).select_related('event').order_by('-datetime', 'pk')

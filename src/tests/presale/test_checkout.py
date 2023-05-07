@@ -4436,6 +4436,56 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
         assert order.email == 'admin@localhost'
         assert not order.customer
 
+    def test_guest_not_allowed(self):
+        self.orga.settings.customer_accounts_link_by_email = 'forbidden'
+        response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'guest'
+        }, follow=True)
+        self.assertEqual(response.status_code, 200)
+
+    def test_guest_attach(self):
+        self.orga.settings.customer_accounts_link_by_email = 'attach'
+        response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'guest'
+        }, follow=True)
+        self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'email': 'john@example.org'
+        }, follow=True)
+
+        order = self._finish()
+        assert order.email == 'john@example.org'
+        assert order.customer == self.customer
+
+    def test_guest_create(self):
+        self.orga.settings.customer_accounts_link_by_email = 'create'
+        response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'guest'
+        }, follow=True)
+        self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'email': 'jack@example.org'
+        }, follow=True)
+
+        order = self._finish()
+        assert order.email == 'jack@example.org'
+        assert order.customer
+        c = order.customer
+        assert c.email == order.email
+        assert not c.has_usable_password()
+        assert c.is_active
+        assert not c.is_verified
+
     def test_guest_even_if_logged_in(self):
         self.client.post('/%s/account/login' % self.orga.slug, {
             'email': 'john@example.org',
@@ -4530,6 +4580,24 @@ class CustomerCheckoutTestCase(BaseCheckoutTestCase, TestCase):
         }, follow=False)
         assert response.status_code == 200
         assert b'alert-danger' in response.content
+
+    def test_register_valid_account_previously_autocrated(self):
+        with scopes_disabled():
+            c = self.orga.customers.create(email='foo@example.com', is_active=True, is_verified=False)
+            c.set_unusable_password()
+            c.save()
+        response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)
+        self.assertRedirects(response, '/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+
+        response = self.client.post('/%s/%s/checkout/customer/' % (self.orga.slug, self.event.slug), {
+            'customer_mode': 'register',
+            'register-email': 'foo@example.com',
+            'register-name_parts_0': 'John Doe',
+        }, follow=False)
+        self.assertRedirects(response, '/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert len(djmail.outbox) == 1
 
     def test_register_valid(self):
         response = self.client.get('/%s/%s/checkout/start' % (self.orga.slug, self.event.slug), follow=True)

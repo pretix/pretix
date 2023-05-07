@@ -64,9 +64,9 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import get_language_without_region, language
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
-    CartPosition, Device, Event, GiftCard, Item, ItemVariation, Membership,
-    Order, OrderPayment, OrderPosition, Quota, Seat, SeatCategoryMapping, User,
-    Voucher,
+    CartPosition, Customer, Device, Event, GiftCard, Item, ItemVariation,
+    Membership, Order, OrderPayment, OrderPosition, Quota, Seat,
+    SeatCategoryMapping, User, Voucher,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.models.orders import (
@@ -922,7 +922,7 @@ def _get_fees(positions: List[CartPosition], payment_requests: List[dict], addre
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_requests: List[dict], locale: str=None, address: InvoiceAddress=None,
                   meta_info: dict=None, sales_channel: str='web', shown_total=None,
-                  customer=None):
+                  customer=None, customer_attached=False):
     payments = []
     sales_channel = get_all_sales_channels()[sales_channel]
 
@@ -1004,6 +1004,8 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         if meta_info:
             for msg in meta_info.get('confirm_messages', []):
                 order.log_action('pretix.event.order.consent', data={'msg': msg})
+        if customer and customer_attached:
+            customer.log_action('pretix.customer.order.attached', data={'order': order.code})
 
     order_placed.send(event, order=order)
     return order, payments
@@ -1054,9 +1056,6 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         if not p['pprov']:
             raise OrderError(error_messages['internal'])
 
-    if customer:
-        customer = event.organizer.customers.get(pk=customer)
-
     if email == settings.PRETIX_EMAIL_NONE_VALUE:
         email = None
 
@@ -1067,6 +1066,30 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
                 addr = InvoiceAddress.objects.get(pk=address)
         except InvoiceAddress.DoesNotExist:
             pass
+
+    customer_attached = False
+    if customer:
+        customer = event.organizer.customers.get(pk=customer)
+    elif event.settings.customer_accounts_link_by_email in ('attach', 'create') and email:
+        try:
+            customer = event.organizer.customers.get(email__iexact=email)
+            customer_attached = True
+        except Customer.MultipleObjectsReturned:
+            logger.warning(f'Multiple customer accounts found for {email}, not attaching.')
+        except Customer.DoesNotExist:
+            if event.settings.customer_accounts_link_by_email == 'create':
+                customer = event.organizer.customers.create(
+                    email=email,
+                    name_parts=addr.name_parts if addr else None,
+                    phone=(meta_info or {}).get('contact_form_data', {}).get('phone'),
+                    is_active=True,
+                    is_verified=False,
+                    locale=locale,
+                )
+                customer.set_unusable_password()
+                customer.save()
+                customer.log_action('pretix.customer.created.auto', {})
+                customer_attached = True
 
     requires_seat = Exists(
         SeatCategoryMapping.objects.filter(
@@ -1091,7 +1114,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         locale=locale,
         invoice_address=addr,
         meta_info=meta_info,
-        customer=customer,
+        customer=customer if not customer_attached else None,
     )
 
     lockfn = NoLockManager
@@ -1114,10 +1137,11 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
-        _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel, customer=customer)
+        _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel,
+                         customer=customer if not customer_attached else None)
         order, payment_objs = _create_order(event, email, positions, now_dt, payment_requests,
                                             locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
-                                            shown_total=shown_total, customer=customer)
+                                            shown_total=shown_total, customer=customer, customer_attached=customer_attached)
         try:
             for p in payment_objs:
                 if p.provider == 'free':
