@@ -47,11 +47,13 @@ from pretix.api.auth.permission import EventCRUDPermission
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.event import (
     CloneEventSerializer, DeviceEventSettingsSerializer, EventSerializer,
-    EventSettingsSerializer, SubEventSerializer, TaxRuleSerializer, ItemMetaPropertiesSerializer,
+    EventSettingsSerializer, ItemMetaPropertiesSerializer, SubEventSerializer,
+    TaxRuleSerializer,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
-    CartPosition, Device, Event, SeatCategoryMapping, TaxRule, TeamAPIToken, ItemMetaProperty,
+    CartPosition, Device, Event, ItemMetaProperty, SeatCategoryMapping,
+    TaxRule, TeamAPIToken,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.services.quotas import QuotaAvailability

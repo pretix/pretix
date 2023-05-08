@@ -50,7 +50,9 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.models import Device, Event, TaxRule, TeamAPIToken
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import SubEventItem, SubEventItemVariation, ItemMetaProperty
+from pretix.base.models.items import (
+    ItemMetaProperty, SubEventItem, SubEventItemVariation,
+)
 from pretix.base.services.seating import (
     SeatProtected, generate_seats, validate_plan_change,
 )
