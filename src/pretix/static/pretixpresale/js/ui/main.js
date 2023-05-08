@@ -421,7 +421,7 @@ $(function () {
                 }
             });
         }
-        if (!is_enabled && !$(".has-seating").length) {
+        if (!is_enabled) {
             $("#btn-add-to-cart").prop("disabled", !is_enabled).popover({
                 'content': function () { return gettext("Please enter a quantity for one of the ticket types.") },
                 'placement': 'top',
