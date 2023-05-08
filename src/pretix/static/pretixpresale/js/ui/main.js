@@ -123,6 +123,7 @@ var form_handlers = function (el) {
         var controls = document.getElementById(this.getAttribute("data-controls"));
         var currentValue = parseFloat(controls.value);
         controls.value = Math.max(controls.min, Math.min(controls.max, (currentValue || 0) + step));
+        controls.dispatchEvent(new Event("change"));
     });
 
     el.find("script[data-replace-with-qr]").each(function () {
