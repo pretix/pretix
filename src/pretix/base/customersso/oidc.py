@@ -117,13 +117,15 @@ def oidc_validate_and_complete_config(config):
                 scopes=", ".join(provider_config.get("scopes_supported", []))
             ))
 
-    for k, v in config.items():
-        if k.endswith('_field') and v:
-            if v not in provider_config.get("claims_supported", []):  # https://openid.net/specs/openid-connect-core-1_0.html#UserInfo
-                raise ValidationError(_('You are requesting field "{field}" but provider only supports these: {fields}.').format(
-                    field=v,
-                    fields=", ".join(provider_config.get("claims_supported", []))
-                ))
+    if "claims_supported" in provider_config:
+        claims_supported = provider_config.get("claims_supported", [])
+        for k, v in config.items():
+            if k.endswith('_field') and v:
+                if v not in claims_supported:  # https://openid.net/specs/openid-connect-core-1_0.html#UserInfo
+                    raise ValidationError(_('You are requesting field "{field}" but provider only supports these: {fields}.').format(
+                        field=v,
+                        fields=", ".join(provider_config.get("claims_supported", []))
+                    ))
 
     config['provider_config'] = provider_config
     return config
