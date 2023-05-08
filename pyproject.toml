@@ -78,7 +78,7 @@ dependencies = [
   "PyJWT==2.6.*",
   "phonenumberslite==8.13.*",
   "Pillow==9.5.*",
-  "protobuf==4.22.*",
+  "protobuf==4.23.*",
   "psycopg2-binary",
   "pycountry",
   "pycparser==2.21",
