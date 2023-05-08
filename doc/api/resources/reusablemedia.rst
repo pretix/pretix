@@ -93,7 +93,7 @@ Endpoints
    :query integer linked_giftcard: Only show media linked to the given gift card.
    :query string expand: If you pass ``"linked_giftcard"``, ``"linked_giftcard.owner_ticket"``, ``"linked_orderposition"``,
                          or ``"customer"``, the respective field will be shown as a nested value instead of just an ID.
-                         The nested objects are identical to the respective resources, except that the ``linked_orderposition``
+                         The nested objects are identical to the respective resources, except that order positions
                          will have an attribute of the format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make
                          matching easier. The parameter can be given multiple times.
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -138,11 +138,11 @@ Endpoints
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param id: The ``id`` field of the medium to fetch
-   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_orderposition"``, oder ``"customer"``, the respective
-                         field will be shown as a nested value instead of just an ID. The nested objects are identical to
-                         the respective resources, except that the ``linked_orderposition`` will have an attribute of the
-                         format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make matching easier. The parameter
-                         can be given multiple times.
+   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_giftcard.owner_ticket"``, ``"linked_orderposition"``,
+                         or ``"customer"``, the respective field will be shown as a nested value instead of just an ID.
+                         The nested objects are identical to the respective resources, except that order positions
+                         will have an attribute of the format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make
+                         matching easier. The parameter can be given multiple times.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view this resource.
