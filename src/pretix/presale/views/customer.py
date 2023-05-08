@@ -685,7 +685,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                     popup_origin,
                 )
 
-            nonce, redirect_to = re.split("[%#§]", request.GET['state'])  # Allow § and # for backwards-compatibility for a while
+            nonce, redirect_to = re.split("[%#§]", request.GET['state'], 1)  # Allow § and # for backwards-compatibility for a while
 
             if nonce != request.session.get(f'pretix_customerauth_{self.provider.pk}_nonce'):
                 return self._fail(
