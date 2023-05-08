@@ -117,6 +117,14 @@ var form_handlers = function (el) {
         $(this).datetimepicker(opts);
     });
 
+    el.find(".input-item-count-dec, .input-item-count-inc").on("click", function (e) {
+        e.preventDefault();
+        var step = parseFloat(this.getAttribute("data-step"));
+        var controls = document.getElementById(this.getAttribute("data-controls"));
+        var currentValue = parseFloat(controls.value);
+        controls.value = Math.max(controls.min, Math.min(controls.max, (currentValue || 0) + step));
+    });
+
     el.find("script[data-replace-with-qr]").each(function () {
         var $div = $("<div>");
         $div.insertBefore($(this));

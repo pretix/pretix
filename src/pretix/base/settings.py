@@ -2608,6 +2608,15 @@ Your {organizer} team"""))
             label=_("Use round edges"),
         )
     },
+    'widget_use_native_spinners': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Use native spinners in the widget instead of custom ones for numeric inputs such as quantity."),
+        )
+    },
     'primary_font': {
         'default': 'Open Sans',
         'type': str,

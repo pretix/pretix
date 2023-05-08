@@ -15,6 +15,8 @@ Vue.component('resize-observer', VueResize.ResizeObserver)
 
 var strings = {
     'quantity': django.pgettext('widget', 'Quantity'),
+    'quantity_dec': django.pgettext('widget', 'Decrease quantity'),
+    'quantity_inc': django.pgettext('widget', 'Increase quantity'),
     'price': django.pgettext('widget', 'Price'),
     'select_item': django.pgettext('widget', 'Select %s'),
     'select_variant': django.pgettext('widget', 'Select variant %s'),
@@ -218,10 +220,14 @@ Vue.component('availbox', {
         + '       v-bind:aria-label="label_select_item"'
         + '>'
         + '</label>'
-        + '<input type="number" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
-        + '       v-model="amount_selected" :max="order_max" :name="input_name"'
+        + '<div :class="count_group_classes" v-else>'
+        + '<button v-if="!$root.use_native_spinners" type="button" @click="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" aria-label="' + strings.quantity_dec + '"><span>-</span></button>'
+        + '<input type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
+        + '       v-model="amount_selected" :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
         + '       aria-label="' + strings.quantity + '"'
-        + '       v-if="order_max !== 1">'
+        + '       >'
+        + '<button v-if="!$root.use_native_spinners" type="button" @click="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" aria-label="' + strings.quantity_inc + '"><span>+</span></button>'
+        + '</div>'
         + '</div>'
         + '</div>'),
     props: {
@@ -238,6 +244,11 @@ Vue.component('availbox', {
         this.$root.$emit('amounts_changed')
     },
     computed: {
+        count_group_classes: function () {
+            return {
+                'pretix-widget-item-count-group': !this.$root.use_native_spinners
+            }
+        },
         require_voucher: function () {
             return this.item.require_voucher && !this.$root.voucher_code
         },
@@ -296,6 +307,13 @@ Vue.component('availbox', {
     methods: {
         focus_voucher_field: function () {
             this.$root.$emit('focus_voucher_field')
+        },
+        on_step: function (e) {
+            e.preventDefault();
+            var t = e.target.tagName == 'BUTTON' ? e.target : e.target.closest('button');
+            var step = parseFloat(t.getAttribute("data-step"));
+            var controls = document.getElementById(t.getAttribute("data-controls"));
+            this.amount_selected = Math.max(controls.min, Math.min(controls.max, (this.amount_selected || 0) + step));
         }
     }
 });
@@ -1438,11 +1456,11 @@ Vue.component('pretix-widget', {
     },
     computed: {
         classObject: function () {
-            var o = {'pretix-widget': true};
-            if (this.mobile) {
-                o['pretix-widget-mobile'] = true;
-            }
-            return o;
+            return {
+                'pretix-widget': true,
+                'pretix-widget-mobile': this.mobile,
+                'pretix-widget-use-custom-spinners': !this.$root.use_native_spinners
+            };
         }
     }
 });
@@ -1588,6 +1606,7 @@ var shared_root_methods = {
                 root.categories = data.items_by_category;
                 root.currency = data.currency;
                 root.display_net_prices = data.display_net_prices;
+                root.use_native_spinners = data.use_native_spinners;
                 root.voucher_explanation_text = data.voucher_explanation_text;
                 root.error = data.error;
                 root.display_add_to_cart = data.display_add_to_cart;
@@ -1833,6 +1852,7 @@ var create_widget = function (element) {
                 variation_filter: variations,
                 voucher_code: voucher,
                 display_net_prices: false,
+                use_native_spinners: false,
                 voucher_explanation_text: null,
                 show_variations_expanded: !!variations,
                 skip_ssl: skip_ssl,
