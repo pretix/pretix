@@ -53,11 +53,12 @@ from text_unidecode import unidecode
 from pretix.base.email import get_available_placeholders, get_email_context
 from pretix.base.forms import PlaceholderValidator
 from pretix.base.i18n import language
-from pretix.base.models import Order, OrderPayment, OrderRefund
+from pretix.base.models import InvoiceAddress, Order, OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.mail import SendMailException, mail, render_mail
 from pretix.helpers.format import format_map
 from pretix.plugins.banktransfer.templatetags.ibanformat import ibanformat
+from pretix.presale.views.cart import cart_session
 
 
 class BankTransfer(BasePaymentProvider):
@@ -249,8 +250,22 @@ class BankTransfer(BasePaymentProvider):
                  required=False
              )),
         ])
+        more_fields_first = OrderedDict([
+            ('_restricted_business',
+             forms.BooleanField(
+                 label=_('Restrict to business customers'),
+                 help_text=_('Only allow choosing this payment provider for customers who enter an invoice address '
+                             'and select "Business or institutional customer".'),
+                 required=False,
+             )),
+        ])
 
-        d = OrderedDict(list(super().settings_form_fields.items()) + list(BankTransfer.form_fields().items()) + list(more_fields.items()))
+        d = OrderedDict(
+            list(super().settings_form_fields.items()) +
+            list(more_fields_first.items()) +
+            list(BankTransfer.form_fields().items()) +
+            list(more_fields.items())
+        )
         d.move_to_end('invoice_immediately', last=False)
         d.move_to_end('bank_details', last=False)
         d.move_to_end('bank_details_sepa_bank', last=False)
@@ -286,6 +301,28 @@ class BankTransfer(BasePaymentProvider):
                 self.settings.get('invoice_immediately', as_type=bool)
             ))
         )
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        def get_invoice_address():
+            if not hasattr(request, '_checkout_flow_invoice_address'):
+                cs = cart_session(request)
+                iapk = cs.get('invoice_address')
+                if not iapk:
+                    request._checkout_flow_invoice_address = InvoiceAddress()
+                else:
+                    try:
+                        request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                    except InvoiceAddress.DoesNotExist:
+                        request._checkout_flow_invoice_address = InvoiceAddress()
+            return request._checkout_flow_invoice_address
+
+        restricted_business = self.settings.get('_restricted_business', as_type=bool)
+        if restricted_business:
+            ia = get_invoice_address()
+            if not ia.is_business:
+                return False
+
+        return super().is_allowed(request, total)
 
     @property
     def payment_form_fields(self) -> dict:
