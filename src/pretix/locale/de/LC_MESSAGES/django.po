@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 15:54+0000\n"
-"PO-Revision-Date: 2023-05-08 14:35+0000\n"
-"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
+"PO-Revision-Date: 2023-05-09 16:07+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -3797,10 +3797,8 @@ msgstr "Kein Wert darf den Trennwert enthalten."
 
 #: pretix/base/models/giftcards.py:74
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:50
-#, fuzzy
-#| msgid "Download your ticket here:"
 msgid "Owned by ticket holder"
-msgstr "Laden Sie Ihr Ticket hier herunter:"
+msgstr "Kontrolliert von Ticket-Inhaber"
 
 #: pretix/base/models/giftcards.py:86
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
@@ -10330,6 +10328,8 @@ msgid ""
 "Use native spinners in the widget instead of custom ones for numeric inputs "
 "such as quantity."
 msgstr ""
+"Nutze native Zahlenfelder im Widget statt eigenen für Zahleneingaben wie "
+"Mengenangaben."
 
 #: pretix/base/settings.py:2627
 #: pretix/control/templates/pretixcontrol/pdf/index.html:340
@@ -29032,23 +29032,16 @@ msgid "Confirmations"
 msgstr "Bestätigungen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:189
-#, fuzzy
-#| msgid ""
-#| "Your order requires approval by the event organizer before it can be "
-#| "confirmed and forms a valid contract."
 msgid ""
 "After you submitted your order using the button below, it will require "
 "approval by the event organizer before it can be confirmed and forms a valid "
 "contract."
 msgstr ""
-"Ihre Bestellung erfordert die Freigabe durch den Veranstalter, bevor sie "
-"bestätigt werden kann und einen gültigen Vertrag darstellt."
+"Nachdem Sie Ihre Bestellung mit dem untenstehenden Button abgeschickt haben, "
+"erfordert sie noch eine Freigabe durch den Veranstalter, bevor die "
+"Bestellung bestätigt werden kann und einen gültigen Vertrag darstellt."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:191
-#, fuzzy
-#| msgid ""
-#| "We will sent you an email as soon as the event organizer approved or "
-#| "rejected your order."
 msgid ""
 "We will send you an email as soon as the event organizer approved or "
 "rejected your order."
@@ -29422,10 +29415,8 @@ msgstr "Füge %(item)s, %(var)s zum Warenkorb hinzu"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:342
 #: pretix/presale/templates/pretixpresale/event/voucher.html:258
 #: pretix/presale/templates/pretixpresale/event/voucher.html:400
-#, fuzzy
-#| msgid "quantity"
 msgid "Decrease quantity"
-msgstr "Menge"
+msgstr "Menge reduzieren"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:203
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:210
@@ -29440,10 +29431,8 @@ msgstr "Anzahl an %(item)s, %(var)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:354
 #: pretix/presale/templates/pretixpresale/event/voucher.html:265
 #: pretix/presale/templates/pretixpresale/event/voucher.html:409
-#, fuzzy
-#| msgid "quantity"
 msgid "Increase quantity"
-msgstr "Menge"
+msgstr "Menge erhöhen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:321
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:336
@@ -29613,10 +29602,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:377
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:20
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:20
-#, fuzzy
-#| msgid "Current value"
 msgid "Current value:"
-msgstr "Aktueller Wert"
+msgstr "Aktueller Wert:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:451
 #, python-format
@@ -30550,10 +30537,9 @@ msgstr "Bitte bestätigen Sie die folgenden Änderungen an Ihrer Bestellung."
 
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:10
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:10
-#, fuzzy, python-format
-#| msgid "Gift card: %(card)s"
+#, python-format
 msgid "Gift card: %(code)s"
-msgstr "Wertgutschein: %(card)s"
+msgstr "Wertgutschein: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:5
 msgid "Modify order"
