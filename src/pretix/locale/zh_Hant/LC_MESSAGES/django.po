@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-03 07:36+0000\n"
 "PO-Revision-Date: 2023-05-09 13:18+0000\n"
-"Last-Translator: Allen Wang <alllenwang6212@gmail.com>\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -29,11 +29,11 @@ msgstr "德文"
 
 #: pretix/_base_settings.py:80
 msgid "German (informal)"
-msgstr ""
+msgstr "德文（非正式）"
 
 #: pretix/_base_settings.py:81
 msgid "Arabic"
-msgstr ""
+msgstr "阿拉伯文"
 
 #: pretix/_base_settings.py:82
 msgid "Chinese (simplified)"
@@ -41,27 +41,27 @@ msgstr "簡體中文"
 
 #: pretix/_base_settings.py:83
 msgid "Czech"
-msgstr ""
+msgstr "捷克文"
 
 #: pretix/_base_settings.py:84
 msgid "Danish"
-msgstr ""
+msgstr "丹麥文"
 
 #: pretix/_base_settings.py:85
 msgid "Dutch"
-msgstr ""
+msgstr "荷語"
 
 #: pretix/_base_settings.py:86
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "荷文"
 
 #: pretix/_base_settings.py:87
 msgid "French"
-msgstr ""
+msgstr "法文"
 
 #: pretix/_base_settings.py:88
 msgid "Finnish"
-msgstr ""
+msgstr "芬蘭文"
 
 #: pretix/_base_settings.py:89
 msgid "Galician"
