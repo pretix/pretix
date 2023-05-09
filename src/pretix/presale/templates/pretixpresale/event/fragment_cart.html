@@ -369,6 +369,20 @@
             {% endif %}
             <div class="clearfix"></div>
         </div>
+        {% for gc in line.owned_gift_cards.all %}
+            <div class="cart-row-giftcard">
+                <span class="fa fa-credit-card" aria-hidden="true"></span>
+                <strong>{% trans "Gift card" %}</strong>
+                <code>{{ gc.secret }}</code>
+                <strong>{% trans "Current value:" %}</strong>
+                {{ gc.value|money:gc.currency }}
+                <a href="{% if position_page and line.addon_to %}{% eventurl event "presale:event.order.position.giftcard" secret=line.addon_to.web_secret order=order.code pk=gc.pk position=line.addon_to.positionid %}{% elif position_page %}{% eventurl event "presale:event.order.position.giftcard" secret=line.web_secret order=order.code pk=gc.pk position=line.positionid %}{% else %}{% eventurl event "presale:event.order.giftcard" secret=order.secret order=order.code pk=gc.pk %}{% endif %}"
+                   class="btn btn-default btn-sm">
+                    <span class="fa fa-eye" aria-hidden="true"></span>
+                    {% trans "Details" %}
+                </a>
+            </div>
+        {% endfor %}
     {% endfor %}
     {% for fee in cart.fees %}
         <div class="row cart-row">

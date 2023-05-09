@@ -66,6 +66,13 @@ class GiftCard(LoggedModel):
         on_delete=models.PROTECT,
         null=True, blank=True
     )
+    owner_ticket = models.ForeignKey(
+        'OrderPosition',
+        related_name='owned_gift_cards',
+        on_delete=models.PROTECT,
+        null=True, blank=True,
+        verbose_name=_('Owned by ticket holder')
+    )
     issuance = models.DateTimeField(
         auto_now_add=True,
     )

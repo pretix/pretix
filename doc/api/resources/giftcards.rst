@@ -20,6 +20,10 @@ currency                              string                     Currency of the
 testmode                              boolean                    Whether this is a test gift card
 expires                               datetime                   Expiry date (or ``null``)
 conditions                            string                     Special terms and conditions for this card (or ``null``)
+owner_ticket                          integer                    Internal ID of an order position that is the "owner" of
+                                                                 this gift card and can view all transactions. When setting
+                                                                 this field, you can also give the ``secret`` of an order
+                                                                 position.
 ===================================== ========================== =======================================================
 
 The gift card transaction resource contains the following public fields:
@@ -72,6 +76,7 @@ Endpoints
             "testmode": false,
             "expires": null,
             "conditions": null,
+            "owner_ticket": null,
             "value": "13.37"
           }
         ]
@@ -81,6 +86,10 @@ Endpoints
    :query string secret: Only show gift cards with the given secret.
    :query boolean testmode: Filter for gift cards that are (not) in test mode.
    :query boolean include_accepted: Also show gift cards issued by other organizers that are accepted by this organizer.
+   :query string expand: If you pass ``"owner_ticket"``, the respective field will be shown as a nested value instead of just an ID.
+                         The nested objects are identical to the respective resources, except that the ``owner_ticket``
+                         will have an attribute of the format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make
+                         matching easier. The parameter can be given multiple times.
    :param organizer: The ``slug`` field of the organizer to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
@@ -113,6 +122,7 @@ Endpoints
         "testmode": false,
         "expires": null,
         "conditions": null,
+        "owner_ticket": null,
         "value": "13.37"
       }
 
@@ -157,10 +167,15 @@ Endpoints
         "currency": "EUR",
         "expires": null,
         "conditions": null,
+        "owner_ticket": null,
         "value": "13.37"
       }
 
    :param organizer: The ``slug`` field of the organizer to create a gift card for
+   :query string expand: If you pass ``"owner_ticket"``, the respective field will be shown as a nested value instead of just an ID.
+                         The nested objects are identical to the respective resources, except that the ``owner_ticket``
+                         will have an attribute of the format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make
+                         matching easier. The parameter can be given multiple times.
    :statuscode 201: no error
    :statuscode 400: The gift card could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
@@ -205,6 +220,7 @@ Endpoints
         "currency": "EUR",
         "expires": null,
         "conditions": null,
+        "owner_ticket": null,
         "value": "14.00"
       }
 
@@ -250,6 +266,7 @@ Endpoints
         "testmode": false,
         "expires": null,
         "conditions": null,
+        "owner_ticket": null,
         "value": "15.37"
       }
 

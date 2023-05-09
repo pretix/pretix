@@ -57,7 +57,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
-from django.views.generic import TemplateView, View
+from django.views.generic import ListView, TemplateView, View
 
 from pretix.base.models import (
     CachedTicket, Checkin, GiftCard, Invoice, Order, OrderPosition, Quota,
@@ -241,7 +241,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        qs = self.order.positions.prefetch_related('issued_gift_cards').select_related('tax_rule')
+        qs = self.order.positions.prefetch_related('issued_gift_cards', 'owned_gift_cards').select_related('tax_rule')
         if self.request.event.settings.show_checkin_number_user:
             qs = qs.annotate(
                 checkin_count=Subquery(
@@ -1126,6 +1126,53 @@ class OrderDownload(OrderDownloadMixin, EventViewMixin, OrderDetailMixin, AsyncA
             return self.order.positions.get(pk=self.kwargs.get('position'))
         except OrderPosition.DoesNotExist:
             return None
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderGiftCardDetails(EventViewMixin, OrderDetailMixin, ListView):
+    template_name = 'pretixpresale/event/order_giftcard.html'
+    context_object_name = 'transactions'
+    paginate_by = 50
+
+    @cached_property
+    def giftcard(self):
+        return GiftCard.objects.filter(
+            owner_ticket__order_id=self.order.pk
+        ).get(pk=self.kwargs['pk'])
+
+    def get_queryset(self):
+        return self.giftcard.transactions.order_by('-datetime', '-pk')
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            order=self.order,
+            giftcard=self.giftcard,
+            **kwargs,
+        )
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderPositionGiftCardDetails(EventViewMixin, OrderPositionDetailMixin, ListView):
+    template_name = 'pretixpresale/event/position_giftcard.html'
+    context_object_name = 'transactions'
+    paginate_by = 50
+
+    @cached_property
+    def giftcard(self):
+        return GiftCard.objects.filter(
+            Q(owner_ticket_id=self.position.pk) | Q(owner_ticket__addon_to_id=self.position.pk)
+        ).get(pk=self.kwargs['pk'])
+
+    def get_queryset(self):
+        return self.giftcard.transactions.order_by('-datetime', '-pk')
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            order=self.order,
+            position=self.position,
+            giftcard=self.giftcard,
+            **kwargs,
+        )
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')

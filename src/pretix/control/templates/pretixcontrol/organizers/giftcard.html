@@ -46,6 +46,14 @@
                                     {{ card.issued_in.order.full_code }}</a>-{{ card.issued_in.positionid }}
                             </dd>
                         {% endif %}
+                        {% if card.owner_ticket %}
+                            <dt>{% trans "Owned by ticket holder" %}</dt>
+                            <dd>
+                                <span class="fa fa-ticket fa-fw"></span>
+                                <a href="{% url "control:event.order" event=card.owner_ticket.order.event.slug organizer=request.organizer.slug code=card.owner_ticket.order.code %}">
+                                    {{ card.owner_ticket.order.code }}</a>-{{ card.owner_ticket.positionid }}
+                            </dd>
+                        {% endif %}
                     </dl>
                 </div>
             </div>
