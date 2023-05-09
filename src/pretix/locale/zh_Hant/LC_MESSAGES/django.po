@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-03 07:36+0000\n"
 "PO-Revision-Date: 2023-05-09 13:18+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -2219,7 +2219,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/cancel.html:19
 #: pretix/control/views/item.py:940
 msgid "Paid orders"
-msgstr ""
+msgstr "已付款訂單"
 
 #: pretix/base/exporters/orderlist.py:897 pretix/control/views/item.py:945
 msgid "Pending orders"
@@ -3078,67 +3078,67 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:326
 msgid "Entry"
-msgstr ""
+msgstr "進場"
 
 #: pretix/base/models/checkin.py:327
 msgid "Exit"
-msgstr ""
+msgstr "出場"
 
 #: pretix/base/models/checkin.py:344
 msgid "Unknown ticket"
-msgstr ""
+msgstr "不知名票券"
 
 #: pretix/base/models/checkin.py:345
 msgid "Ticket not paid"
-msgstr ""
+msgstr "票券還未付款"
 
 #: pretix/base/models/checkin.py:346
 msgid "Forbidden by custom rule"
-msgstr ""
+msgstr "因客戶規則而被禁止"
 
 #: pretix/base/models/checkin.py:347
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "票券代碼已經取消/改變"
 
 #: pretix/base/models/checkin.py:348
 msgid "Information required"
-msgstr ""
+msgstr "需要資訊"
 
 #: pretix/base/models/checkin.py:349
 msgid "Ticket already used"
-msgstr ""
+msgstr "票券已經使用了"
 
 #: pretix/base/models/checkin.py:350
 msgid "Ticket type not allowed here"
-msgstr ""
+msgstr "這裡不允許這種票券類型"
 
 #: pretix/base/models/checkin.py:351
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "票券代碼在清單上模糊"
 
 #: pretix/base/models/checkin.py:352
 msgid "Server error"
-msgstr ""
+msgstr "伺服器錯誤"
 
 #: pretix/base/models/checkin.py:353
 msgid "Ticket blocked"
-msgstr ""
+msgstr "票券已經封鎖"
 
 #: pretix/base/models/checkin.py:354
 msgid "Ticket not valid at this time"
-msgstr ""
+msgstr "這時間票券是無效的"
 
 #: pretix/base/models/customers.py:54
 msgid "Provider name"
-msgstr ""
+msgstr "提供者名稱"
 
 #: pretix/base/models/customers.py:59
 msgid "Login button label"
-msgstr ""
+msgstr "登入按鈕標籤"
 
 #: pretix/base/models/customers.py:63
 msgid "Single-sign-on method"
-msgstr ""
+msgstr "單一登入機制"
 
 #: pretix/base/models/customers.py:84 pretix/base/models/devices.py:72
 #: pretix/base/models/items.py:1475 pretix/base/models/items.py:1716
@@ -4562,7 +4562,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:29
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:78
 msgid "Canceled"
-msgstr ""
+msgstr "已取消"
 
 #: pretix/base/models/memberships.py:133
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:115
@@ -5057,7 +5057,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:201 pretix/control/views/vouchers.py:114
 msgid "Redeemed"
-msgstr ""
+msgstr "已兌換"
 
 #: pretix/base/models/vouchers.py:205
 msgid "Minimum usages"
@@ -10982,7 +10982,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1949
 msgid "Valid"
-msgstr ""
+msgstr "有效"
 
 #: pretix/control/forms/filter.py:1950
 msgid "Unredeemed"
@@ -13791,7 +13791,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:60
 #: pretix/presale/templates/pretixpresale/event/position_change.html:29
 msgid "Continue"
-msgstr ""
+msgstr "繼續"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
@@ -14234,7 +14234,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:14
 #: pretix/plugins/checkinlists/exporters.py:645
 msgid "Result"
-msgstr ""
+msgstr "結果"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:78
 #: pretix/control/templates/pretixcontrol/order/index.html:384
@@ -14432,7 +14432,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:40
 #: pretix/presale/templates/pretixpresale/event/position_change.html:24
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:21
 #: pretix/control/templates/pretixcontrol/event/delete.html:30
@@ -17684,7 +17684,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:884
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:435
 msgid "Total"
-msgstr ""
+msgstr "全部"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:699
 #: pretix/presale/templates/pretixpresale/event/order.html:209
@@ -23110,7 +23110,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
-msgstr ""
+msgstr "註解："
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:98
 msgid "No order code detected"
@@ -23341,7 +23341,7 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:134 pretix/plugins/paypal2/payment.py:990
 #: pretix/plugins/paypal2/payment.py:991
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/apps.py:53
 msgid ""
@@ -24631,7 +24631,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:244 pretix/plugins/stripe/payment.py:999
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/stripe/payment.py:246 pretix/plugins/stripe/payment.py:253
 #: pretix/plugins/stripe/payment.py:260 pretix/plugins/stripe/payment.py:267
@@ -24643,7 +24643,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:251 pretix/plugins/stripe/payment.py:1071
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:258 pretix/plugins/stripe/payment.py:1123
 msgid "Alipay"
@@ -24651,11 +24651,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:265 pretix/plugins/stripe/payment.py:1166
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:272
 msgid "SOFORT"
-msgstr ""
+msgstr "SOFORT"
 
 #: pretix/plugins/stripe/payment.py:277
 msgid ""
@@ -24675,11 +24675,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:300 pretix/plugins/stripe/payment.py:1437
 msgid "Przelewy24"
-msgstr ""
+msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:307 pretix/plugins/stripe/payment.py:1493
 msgid "WeChat Pay"
-msgstr ""
+msgstr "微信支付"
 
 #: pretix/plugins/stripe/payment.py:316
 msgid "Destination"
@@ -27798,4 +27798,4 @@ msgstr ""
 
 #: pretix/settings.py:684
 msgid "Kosovo"
-msgstr ""
+msgstr "柯索沃"
