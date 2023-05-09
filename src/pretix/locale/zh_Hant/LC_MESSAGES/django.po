@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 15:54+0000\n"
-"PO-Revision-Date: 2023-05-09 13:18+0000\n"
-"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
+"PO-Revision-Date: 2023-05-10 14:00+0000\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -127,51 +127,51 @@ msgstr "pretixSCAN（自助式服務終端機模式，無同步下單，無搜�
 
 #: pretix/api/auth/devicesecurity.py:124
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "pretixSCAN(只有在線，無訂單同步)"
 
 #: pretix/api/auth/devicesecurity.py:159
 msgid "pretixPOS"
-msgstr ""
+msgstr "pretixPOS"
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:389
 msgid "Application name"
-msgstr ""
+msgstr "應用程式名稱"
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:408
 msgid "Redirection URIs"
-msgstr ""
+msgstr "重定向URI"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:409
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "允許的URI列表，用空格分隔"
 
 #: pretix/api/models.py:46 pretix/base/models/customers.py:393
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:106
 msgid "Client ID"
-msgstr ""
+msgstr "客戶端ID"
 
 #: pretix/api/models.py:50
 msgid "Client secret"
-msgstr ""
+msgstr "客戶端密鑰"
 
 #: pretix/api/models.py:111
 msgid "Enable webhook"
-msgstr ""
+msgstr "啟用HTTP 的回調函數"
 
 #: pretix/api/models.py:112
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "目標URL"
 
 #: pretix/api/models.py:113 pretix/base/models/devices.py:121
 #: pretix/base/models/organizer.py:261
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "所有事件（包括新建立的事件）"
 
 #: pretix/api/models.py:114 pretix/base/models/devices.py:122
 #: pretix/base/models/organizer.py:262
 msgid "Limit to events"
-msgstr ""
+msgstr "限於事件"
 
 #: pretix/api/models.py:115 pretix/base/exporters/orderlist.py:272
 #: pretix/base/exporters/orderlist.py:840 pretix/base/models/orders.py:227
@@ -185,125 +185,125 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:482
 #: pretix/control/templates/pretixcontrol/order/index.html:891
 msgid "Comment"
-msgstr ""
+msgstr "評語"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1231
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "產品“{}”沒有分配配額。"
 
 #: pretix/api/serializers/checkin.py:66 pretix/base/models/event.py:1573
 #: pretix/base/models/items.py:1709 pretix/base/models/items.py:1960
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "一個或多個項目不屬於此事件。"
 
 #: pretix/api/serializers/checkin.py:70 pretix/api/serializers/checkin.py:73
 #: pretix/base/models/items.py:1971 pretix/base/models/items.py:1974
 #: pretix/base/models/waitinglist.py:305 pretix/base/models/waitinglist.py:308
 msgid "The subevent does not belong to this event."
-msgstr ""
+msgstr "子事件不屬於該事件。"
 
 #: pretix/api/serializers/checkin.py:77
 msgid "Unknown sales channel."
-msgstr ""
+msgstr "未知的銷售管道。"
 
 #: pretix/api/serializers/event.py:213
 msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
-msgstr ""
+msgstr "事件不能建立為“現場”。 必須先將配額和支付款項添加到活動中，然後才能開始銷售。"
 
 #: pretix/api/serializers/event.py:228 pretix/api/serializers/event.py:526
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "元數據屬性“{name}”不存在。"
 
 #: pretix/api/serializers/event.py:231 pretix/api/serializers/event.py:529
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr ""
+msgstr "元數據屬性“{name}”不存在元數據屬性“{name}”不存在."
 
 #: pretix/api/serializers/event.py:274
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "未知擴充: '{name}'."
 
 #: pretix/api/serializers/item.py:74 pretix/api/serializers/item.py:123
 #: pretix/api/serializers/item.py:323
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr ""
+msgstr "項目元數據屬性“{name}”不存在."
 
 #: pretix/api/serializers/item.py:182 pretix/control/forms/item.py:1082
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
+msgstr "捆綁商品不得與捆綁商品為同一商品。"
 
 #: pretix/api/serializers/item.py:185 pretix/control/forms/item.py:1084
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "捆綁商品不得單獨捆綁。"
 
 #: pretix/api/serializers/item.py:262
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
-msgstr ""
+msgstr "不支持通過 PATCH/PUT 更新附加組件、捆綁包或變體。 請使用專用的嵌套端點。"
 
 #: pretix/api/serializers/item.py:270
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "目前只能對入場商品進行個性化設置。"
 
 #: pretix/api/serializers/item.py:281
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
-msgstr ""
+msgstr "禮品卡產品不應與非零稅率相關聯，因為在兌換禮品卡時會徵收銷售稅。"
 
 #: pretix/api/serializers/item.py:286 pretix/control/forms/item.py:614
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
+msgstr "禮品卡產品不得同時為入場商品。"
 
 #: pretix/api/serializers/item.py:462
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
-msgstr ""
+msgstr "不支持通過 PATCH/PUT 更新選項附加組件、捆綁包或變體。 請使用專用的嵌套端點。"
 
 #: pretix/api/serializers/item.py:476 pretix/control/forms/item.py:118
 msgid "Question cannot depend on a question asked during check-in."
-msgstr ""
+msgstr "問題不能取決於登記時提出的問題。"
 
 #: pretix/api/serializers/item.py:481 pretix/control/forms/item.py:123
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "檢測到的問題之間存在循環依賴。"
 
 #: pretix/api/serializers/item.py:486 pretix/control/forms/item.py:132
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "此類問題不能在辦理登記時提出。"
 
 #: pretix/api/serializers/media.py:106 pretix/api/serializers/media.py:104
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
-msgstr ""
+msgstr "您的組織帳戶中已存在具有相同標識符和類型的媒體。"
 
 #: pretix/api/serializers/order.py:76
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr ""
+msgstr "\"{input}\"不是一個有效的選擇。"
 
 #: pretix/api/serializers/order.py:1191 pretix/api/views/cart.py:210
 #: pretix/base/services/orders.py:1437
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr ""
+msgstr "所選擇的座位\"{seat}\"不存在。"
 
 #: pretix/api/serializers/order.py:1218 pretix/api/serializers/order.py:1225
 msgid "The product \"{}\" is not available on this date."
-msgstr ""
+msgstr "產品“{}”在此日期不可用。"
 
 #: pretix/api/serializers/order.py:1243 pretix/api/views/cart.py:190
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
-msgstr ""
+msgstr "配額“{}”上沒有足夠的可用配額來執行該操作。"
 
 #: pretix/api/serializers/organizer.py:193
 #: pretix/control/forms/organizer.py:643
@@ -312,178 +312,178 @@ msgstr ""
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
-msgstr ""
+msgstr "您或相關組織帳戶中已存在具有相同密碼的禮品卡。"
 
 #: pretix/api/serializers/organizer.py:275
 #: pretix/control/views/organizer.py:724
 #: pretix/api/serializers/organizer.py:230
 msgid "pretix account invitation"
-msgstr ""
+msgstr "Pretix帳戶邀請"
 
 #: pretix/api/serializers/organizer.py:297
 #: pretix/control/views/organizer.py:823
 #: pretix/api/serializers/organizer.py:252
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "該用戶已被邀請加入該團隊。"
 
 #: pretix/api/serializers/organizer.py:313
 #: pretix/control/views/organizer.py:840
 #: pretix/api/serializers/organizer.py:268
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "此用戶已擁有該團隊的權限。"
 
 #: pretix/api/views/cart.py:199
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr ""
+msgstr "指定的優惠券已被使用至最高次數。"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:461
 #, python-brace-format
 msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
-msgstr ""
+msgstr "應用程序“{application_name}”已獲得訪問您帳戶的授權。"
 
 #: pretix/api/views/order.py:538 pretix/control/views/orders.py:1340
 #: pretix/presale/views/order.py:747 pretix/presale/views/order.py:820
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "您無法為此訂單產生發票。"
 
 #: pretix/api/views/order.py:543 pretix/control/views/orders.py:1342
 #: pretix/presale/views/order.py:749 pretix/presale/views/order.py:822
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "此訂單的發票已存在。"
 
 #: pretix/api/views/order.py:569 pretix/control/views/orders.py:1466
 #: pretix/control/views/users.py:141
 msgid "There was an error sending the mail. Please try again later."
-msgstr ""
+msgstr "發送郵件時發生錯誤。請稍後重試。"
 
 #: pretix/api/views/order.py:647 pretix/base/services/cart.py:202
 #: pretix/base/services/orders.py:178 pretix/presale/views/order.py:804
 msgid "One of the selected products is not available in the selected country."
-msgstr ""
+msgstr "所選產品之一在所選國家無法使用。"
 
 #: pretix/api/webhooks.py:197 pretix/base/notifications.py:233
 msgid "New order placed"
-msgstr ""
+msgstr "新訂單已下"
 
 #: pretix/api/webhooks.py:201 pretix/base/notifications.py:239
 msgid "New order requires approval"
-msgstr ""
+msgstr "新訂單需要批准"
 
 #: pretix/api/webhooks.py:205 pretix/base/notifications.py:245
 msgid "Order marked as paid"
-msgstr ""
+msgstr "標記為已付款的訂單"
 
 #: pretix/api/webhooks.py:209 pretix/base/models/checkin.py:343
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:111
 #: pretix/control/views/orders.py:1303
 msgid "Order canceled"
-msgstr ""
+msgstr "訂單取消"
 
 #: pretix/api/webhooks.py:213 pretix/base/notifications.py:257
 msgid "Order reactivated"
-msgstr ""
+msgstr "訂單已重新啟動"
 
 #: pretix/api/webhooks.py:217 pretix/base/notifications.py:263
 msgid "Order expired"
-msgstr ""
+msgstr "訂單過期"
 
 #: pretix/api/webhooks.py:221
 msgid "Order expiry date changed"
-msgstr ""
+msgstr "訂單到期日已更改"
 
 #: pretix/api/webhooks.py:225 pretix/base/notifications.py:269
 msgid "Order information changed"
-msgstr ""
+msgstr "訂單資訊已更改"
 
 #: pretix/api/webhooks.py:229 pretix/base/notifications.py:275
 msgid "Order contact address changed"
-msgstr ""
+msgstr "訂單聯絡地址已更改"
 
 #: pretix/api/webhooks.py:233 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
 msgid "Order changed"
-msgstr ""
+msgstr "訂單已更改"
 
 #: pretix/api/webhooks.py:237
 msgid "Refund of payment created"
-msgstr ""
+msgstr "建立退款的支付"
 
 #: pretix/api/webhooks.py:241 pretix/base/notifications.py:293
 msgid "External refund of payment"
-msgstr ""
+msgstr "外部退款"
 
 #: pretix/api/webhooks.py:245
 msgid "Refund of payment requested by customer"
-msgstr ""
+msgstr "客戶要求的付款退款"
 
 #: pretix/api/webhooks.py:249
 msgid "Refund of payment completed"
-msgstr ""
+msgstr "退款已完成"
 
 #: pretix/api/webhooks.py:253
 msgid "Refund of payment canceled"
-msgstr ""
+msgstr "退款已完成"
 
 #: pretix/api/webhooks.py:257
 msgid "Refund of payment failed"
-msgstr ""
+msgstr "退款已完成"
 
 #: pretix/api/webhooks.py:261
 msgid "Payment confirmed"
-msgstr ""
+msgstr "付款已確認"
 
 #: pretix/api/webhooks.py:265
 msgid "Order approved"
-msgstr ""
+msgstr "訂單已批准"
 
 #: pretix/api/webhooks.py:269
 msgid "Order denied"
-msgstr ""
+msgstr "訂單被拒絕"
 
 #: pretix/api/webhooks.py:273
 msgid "Ticket checked in"
-msgstr ""
+msgstr "票已登記"
 
 #: pretix/api/webhooks.py:277
 msgid "Ticket check-in reverted"
-msgstr ""
+msgstr "登記的票已還原"
 
 #: pretix/api/webhooks.py:281
 msgid "Event created"
-msgstr ""
+msgstr "事件已建立"
 
 #: pretix/api/webhooks.py:285
 msgid "Event details changed"
-msgstr ""
+msgstr "活動詳情已更改"
 
 #: pretix/api/webhooks.py:289
 msgid "Event deleted"
-msgstr ""
+msgstr "活動已刪除"
 
 #: pretix/api/webhooks.py:293
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr ""
+msgstr "活動系列添加日期"
 
 #: pretix/api/webhooks.py:297
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr ""
+msgstr "活動系列日期已更改"
 
 #: pretix/api/webhooks.py:301
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr ""
+msgstr "活動系列日期已刪除"
 
 #: pretix/api/webhooks.py:305
 msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
-msgstr ""
+msgstr "產品已更改（包括添加或刪除的產品，以及對嵌套對象（如變體或捆綁包）的更改）"
 
 #: pretix/api/webhooks.py:310
 msgid "Shop taken live"
@@ -3472,7 +3472,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:71
 msgid "Event"
-msgstr ""
+msgstr "活動"
 
 #: pretix/base/models/event.py:614 pretix/control/navigation.py:342
 #: pretix/control/navigation.py:463
@@ -27172,20 +27172,21 @@ msgid ""
 "If your request is approved, the organizer will determine if you will "
 "receive a full refund or if a cancellation fee is deducted according to "
 "their cancellation policy."
-msgstr ""
+msgstr "如果你的請求獲得批准，主辦方將根據取消政策，確定你是否會獲得全額退款或是否扣"
+"除取消費。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:384
 #: pretix/presale/templates/pretixpresale/event/order.html:420
 #: pretix/presale/templates/pretixpresale/event/order.html:441
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
-msgstr ""
+msgstr "退款可以分配到您原來的付款方式或作為禮品卡。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:386
 #: pretix/presale/templates/pretixpresale/event/order.html:422
 #: pretix/presale/templates/pretixpresale/event/order.html:443
 msgid "The refund will be issued to your original payment method."
-msgstr ""
+msgstr "退款將分發到你原來的付款方式。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:388
 #: pretix/presale/templates/pretixpresale/event/order.html:401
@@ -27193,16 +27194,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:445
 #: pretix/presale/templates/pretixpresale/event/order.html:467
 msgid "This will invalidate all tickets in this order."
-msgstr ""
+msgstr "這將會使該訂單所有的票無效。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:393
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
-msgstr ""
+msgstr "你可以取消此訂單，但不會收到退款。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:397
 msgid "You can cancel this order, but you will not receive a refund."
-msgstr ""
+msgstr "你可以取消此訂單，但不會收到退款。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:406
 #, python-format
@@ -27223,11 +27224,11 @@ msgstr ""
 msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
-msgstr ""
+msgstr "你可以要求取消此訂單。如果你的要求獲得批准，你將獲得全額退款。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:434
 msgid "You can cancel this order and receive a full refund."
-msgstr ""
+msgstr "你可以取消此訂單並獲得全額退款。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:458
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:54
@@ -27239,7 +27240,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:463
 msgid "You can cancel this order using the following button."
-msgstr ""
+msgstr "你可以使用以下按鈕取消此訂單。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:11
 #, python-format
@@ -27256,13 +27257,14 @@ msgid ""
 "You can request the cancellation of your order on this page. The event "
 "organizer will then decide on your request. If they approve, your order will "
 "be canceled and all tickets will be invalidated."
-msgstr ""
+msgstr "你可以在此頁面上要求取消訂單。然後，活動召集人將決定你的要求。如果他們批准，"
+"您的訂單將被取消，所有票將作廢。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:46
 msgid ""
 "If you cancel this order, all tickets will be invalidated and you can no "
 "longer use them. You cannot revert this action."
-msgstr ""
+msgstr "如果你取消此訂單，所有的票都將失效，你將無法再使用。你無法還原此操作。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:62
 #, python-format
@@ -27273,15 +27275,15 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:67
 msgid "If you want, you can request a full refund."
-msgstr ""
+msgstr "如果需要，你可以申請全額退款。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:96
 msgid "Enter custom amount"
-msgstr ""
+msgstr "輸入自定義總額"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:101
 msgid "Refund amount:"
-msgstr ""
+msgstr "退款金額:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:117
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:138
@@ -27291,24 +27293,24 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:126
 msgid "I want the refund as a gift card for later purchases"
-msgstr ""
+msgstr "我想要退款作為以後購買的禮品卡"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:132
 msgid "I want the refund to be sent to my original payment method"
-msgstr ""
+msgstr "我希望退款傳送到我原始的付款方式"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:154
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:185
 msgid "The following payment methods will be used to refund the money to you:"
-msgstr ""
+msgstr "將會以下付款方式退還款項給你："
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:218
 msgid "Yes, request cancellation"
-msgstr ""
+msgstr "是的，要求取消"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:19
 msgid "Please confirm the following changes to your order."
-msgstr ""
+msgstr "請確認你以下修改的訂單。"
 
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:10
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:10
@@ -27318,7 +27320,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:5
 msgid "Modify order"
-msgstr ""
+msgstr "修改訂單"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:8
 #, python-format
@@ -27329,15 +27331,15 @@ msgstr ""
 msgid ""
 "Modifying your invoice address will not automatically generate a new "
 "invoice. Please contact us if you need a new invoice."
-msgstr ""
+msgstr "修改發票地址不會自動生成新的發票。 如果你需要新發票，請聯繫我們。"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:87
 msgid "Save changes"
-msgstr ""
+msgstr "保存更改"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:5
 msgid "Change payment method"
-msgstr ""
+msgstr "更改支付方式"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:8
 #, python-format
@@ -27348,15 +27350,15 @@ msgstr ""
 msgid ""
 "Please note: If you change your payment method, your order total will change "
 "by the amount displayed to the right of each method."
-msgstr ""
+msgstr "請注意：如果你更改付款方式，你的訂單總額，將隨每種右側顯示方式的金額改變。"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:46
 msgid "There are no alternative payment providers available for this order."
-msgstr ""
+msgstr "此訂單沒有其它付款提供者。"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:16
 msgid "Please confirm the following payment details."
-msgstr ""
+msgstr "請確認以下付款詳情。"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:22
 #, python-format
@@ -27365,19 +27367,19 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/position.html:7
 msgid "Registration details"
-msgstr ""
+msgstr "註冊詳情"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:10
 msgid "Your registration"
-msgstr ""
+msgstr "你的註冊"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:31
 msgid "Your items"
-msgstr ""
+msgstr "你的物品"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:41
 msgid "Additional information"
-msgstr ""
+msgstr "額外資訊"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:46
 #, python-format
@@ -27389,13 +27391,13 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/position.html:58
 msgctxt "action"
 msgid "Change your ticket"
-msgstr ""
+msgstr "換你的票"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:63
 msgid ""
 "If you want to make changes to the components of your ticket, you can click "
 "on the following button."
-msgstr ""
+msgstr "如果你想更改票的組合，可以單擊以下按鈕。"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:68
 #, python-format
@@ -27411,61 +27413,63 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:11
 msgid "Change ticket"
-msgstr ""
+msgstr "更改票"
 
 #: pretix/presale/templates/pretixpresale/event/position_change.html:16
 msgid ""
 "Please select the desired changes to your ticket. Note that you can only "
 "perform changes that do not change the total price of the ticket."
-msgstr ""
+msgstr "請選擇所需的票的更改。請留意，你只能執行更改，不會修改票的總價。"
 
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:19
 msgid "Please confirm the following changes to your ticket."
-msgstr ""
+msgstr "請確認你的票的以下更改。"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
 msgid "Resend order links"
-msgstr ""
+msgstr "重新傳送訂單連結"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:15
 msgid ""
 "If you lost the link to your order or orders, please enter the email address "
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
-msgstr ""
+msgstr "如果你遺失了一項或多項訂單的連結，請輸入你用於訂單的電子郵件位址。我們將向你"
+"發送一封電子郵件，其中包含你使用此電子郵件位址下的所有訂單的連結。"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:30
 msgid "Send links"
-msgstr ""
+msgstr "傳送連結"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:16
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:9
 msgid "Voucher redemption"
-msgstr ""
+msgstr "兌換優惠券"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:21
 msgid "This voucher is valid only for the following specific date and time."
-msgstr ""
+msgstr "此優惠券僅在以下特定日期和時間有效。"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:78
 msgid ""
 "For the selected date, there are currently no products available that can be "
 "bought with this voucher. Please try a different date or a different voucher."
-msgstr ""
+msgstr "目前在此所選定的日期沒有可用使用此優惠券購買的商品。請嘗試其他日期或不同的優"
+"惠券。"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:82
 msgid ""
 "There are currently no products available that can be bought with this "
 "voucher."
-msgstr ""
+msgstr "目前沒有可用使用此優惠券購買的產品。"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:87
 msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
-msgstr ""
+msgstr "你輸入的優惠券代碼允許您以指定價格購買以下產品之一："
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:148
 #, python-format
@@ -27480,7 +27484,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:5
 msgid "Add me to the waiting list"
-msgstr ""
+msgstr "請把我加到候補名單"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:22
 #, python-format
@@ -27495,7 +27499,9 @@ msgid ""
 "Note that you will only receive one ticket. If you need multiple tickets, "
 "you need to add yourself to the waiting list multiple times. There is no "
 "guarantee that you will receive a certain number of tickets."
-msgstr ""
+msgstr "請留意，你只會收到一張票。 "
+"如果你需要多張票，你需要使用不同的電子郵件地址，多次將自己添加到候補名單。 "
+"無法保證你會收到一定數量的門票。"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:32
 msgid ""
@@ -27503,22 +27509,25 @@ msgid ""
 "you need to add yourself to the waiting list multiple times with different "
 "email addresses. There is no guarantee that you will receive a certain "
 "number of tickets."
-msgstr ""
+msgstr "請留意，你只會收到一張票。 "
+"如果你需要多張票，你需要使用不同的電子郵件地址，多次將自己添加到候補名單。 "
+"無法保證你會收到一定數量的門票。"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:39
 msgid "Add me to the list"
-msgstr ""
+msgstr "請將我加入名單"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:5
 msgid "Remove me from the waiting list"
-msgstr ""
+msgstr "請將我移出候補名單"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:9
 msgid ""
 "You have been selected from our waiting list to buy a ticket. If you do not "
 "need the ticket any more, please be so kind and remove your ticket from the "
 "list so we can pass it on to the next person waiting as quickly as possible!"
-msgstr ""
+msgstr "你已從我們的候補名單中被選中並已經購買門票。 如果你不再需要門票，請將你的門票"
+"從名單中刪除，以便我們盡快將其傳遞給下一個等待的人！"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:16
 msgctxt "waitinglist"
@@ -27527,13 +27536,13 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:5
 msgid "Calendar"
-msgstr ""
+msgstr "日曆"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:52
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:65
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:37
 msgid "(continued)"
-msgstr ""
+msgstr "（繼續）"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:61
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:46
@@ -27551,12 +27560,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:12
 msgid "Week"
-msgstr ""
+msgstr "周"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:17
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:25
 msgid "Month"
-msgstr ""
+msgstr "月"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:27
 msgid "iCal"
@@ -27565,7 +27574,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:24
 msgctxt "day calendar"
 msgid "Single events"
-msgstr ""
+msgstr "單項活動"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:78
 msgctxt "timerange"
@@ -27582,70 +27591,71 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:5
 msgid "customer account"
-msgstr ""
+msgstr "客戶帳戶"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:8
 msgid "View customer account"
-msgstr ""
+msgstr "查看客戶賬戶"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:9
 msgid "View user profile"
-msgstr ""
+msgstr "查看使用者帳戶"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:15
 msgid "We've started the requested process in a new window."
-msgstr ""
+msgstr "我們已經在新視窗中啟動所要求的流程。"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:18
 msgid "If you do not see the new window, we can help you launch it again."
-msgstr ""
+msgstr "如果你沒有看到新視窗，我們可以幫助你重新啟動。"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:23
 msgid "Open window again"
-msgstr ""
+msgstr "重開視窗"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:27
 msgid ""
 "Once the process in the new window has been completed, you can continue here."
-msgstr ""
+msgstr "完成新視窗中的流程后，你可以在此處繼續。"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:69
 msgid "Adjust settings in detail"
-msgstr ""
+msgstr "調整詳細設定"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:74
 msgid "Required cookies"
-msgstr ""
+msgstr "必需的 cookie"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:76
 msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
-msgstr ""
+msgstr "功能性 Cookie（例如購物車、登錄、付款、語言偏好）和技術 "
+"Cookie（例如安全目的）"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:89
 msgctxt "cookie_usage"
 msgid "Functionality"
-msgstr ""
+msgstr "功能性"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:91
 msgctxt "cookie_usage"
 msgid "Analytics"
-msgstr ""
+msgstr "數據分析"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:93
 msgctxt "cookie_usage"
 msgid "Marketing"
-msgstr ""
+msgstr "行銷"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:95
 msgctxt "cookie_usage"
 msgid "Social features"
-msgstr ""
+msgstr "社交功能"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:114
 msgid "Save selection"
-msgstr ""
+msgstr "保存所選內容"
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
 #, python-format
@@ -27657,7 +27667,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
-msgstr ""
+msgstr "喂 ！"
 
 #: pretix/presale/templates/pretixpresale/index.html:9
 #, python-format
@@ -27670,7 +27680,7 @@ msgstr ""
 msgid ""
 "If you're looking to buy a ticket, you need to follow a direct link to an "
 "event or organizer profile."
-msgstr ""
+msgstr "如果你想購買門票，則需要點擊活動或召集人個人資料的直接連結。"
 
 #: pretix/presale/templates/pretixpresale/index.html:20
 #, python-format
@@ -27681,37 +27691,37 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
-msgstr ""
+msgstr "請享用！"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:6
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:6
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:6
 msgid "Event overview"
-msgstr ""
+msgstr "活動概述"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:60
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:69
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:81
 msgid "Note that the events in this view are in different timezones."
-msgstr ""
+msgstr "留意此檢視中的活動位於不同的時區。"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:7
 msgid "Delete address"
-msgstr ""
+msgstr "刪除地址"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:12
 msgid "Do you really want to delete the following address from your account?"
-msgstr ""
+msgstr "是否確實要從帳戶中刪除以下個人資料？"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:15
 msgid "Account information"
-msgstr ""
+msgstr "帳戶資訊"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:11
 msgid "Update your account information"
-msgstr ""
+msgstr "更新你的帳戶資訊"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:11
 #, python-format
@@ -27721,78 +27731,78 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:38
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:20
 msgid "Create account"
-msgstr ""
+msgstr "創建帳戶"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:10
 msgid "Your membership"
-msgstr ""
+msgstr "你的會員資格"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:6
 msgid "Password reset"
-msgstr ""
+msgstr "密碼重設"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:11
 msgid "Set a new password for your account"
-msgstr ""
+msgstr "為你的帳戶設定新密碼"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:10
 msgid "Your account"
-msgstr ""
+msgstr "你的帳戶"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:23
 msgid "Login method"
-msgstr ""
+msgstr "登錄方式"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:39
 msgid "Change account information"
-msgstr ""
+msgstr "更新帳戶資訊"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:44
 msgid "Change password"
-msgstr ""
+msgstr "更新密碼"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:59
 msgid "Addresses"
-msgstr ""
+msgstr "地址"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:62
 msgid "Attendee profiles"
-msgstr ""
+msgstr "與會者個人資料"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:179
 msgid "No memberships are stored in your account."
-msgstr ""
+msgstr "你的帳戶中不會儲存任何會員資格。"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:211
 msgid "No addresses are stored in your account."
-msgstr ""
+msgstr "你的帳戶中沒有儲存任何地址。"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:222
 msgid "Profile"
-msgstr ""
+msgstr "帳戶"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:244
 msgid "No attendee profiles are stored in your account."
-msgstr ""
+msgstr "你的帳戶中沒有儲存與會者資料。"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:7
 msgid "Delete profile"
-msgstr ""
+msgstr "刪除帳戶"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:12
 msgid "Do you really want to delete the following profile from your account?"
-msgstr ""
+msgstr "是否確實要從帳戶中刪除以下個人資料？"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
 msgid "Registration"
-msgstr ""
+msgstr "註冊"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:11
 #, python-format
@@ -27801,43 +27811,43 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:24
 msgid "Log in to an existing account"
-msgstr ""
+msgstr "登錄現有帳戶"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:20
 msgid "Request a new password"
-msgstr ""
+msgstr "申請新密碼"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:8
 msgid "Event list"
-msgstr ""
+msgstr "活動列表"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:25
 msgid "Past events"
-msgstr ""
+msgstr "過去的活動"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:27
 msgid "Upcoming events"
-msgstr ""
+msgstr "即將舉行的活動"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:124
 msgid "More info"
-msgstr ""
+msgstr "更多資訊"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:133
 msgid "No archived events found."
-msgstr ""
+msgstr "未找到已存檔的活動。"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:133
 msgid "Show upcoming"
-msgstr ""
+msgstr "顯示將發生活動"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:135
 msgid "No public upcoming events found."
-msgstr ""
+msgstr "未找到即將舉行的公開活動。"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:135
 msgid "Show past events"
-msgstr ""
+msgstr "顯示過去的活動"
 
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
@@ -27847,211 +27857,213 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/postmessage.html:21
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr ""
+msgstr "我們正在處理你的要求…"
 
 #: pretix/presale/utils.py:242 pretix/presale/utils.py:365
 #: pretix/presale/utils.py:366
 msgid "The selected event was not found."
-msgstr ""
+msgstr "找不到所選活動。"
 
 #: pretix/presale/utils.py:329
 msgid "The selected ticket shop is currently not available."
-msgstr ""
+msgstr "所選售票商店目前不可用。"
 
 #: pretix/presale/utils.py:335
 msgid "This feature is not enabled."
-msgstr ""
+msgstr "此功能未啟用。"
 
 #: pretix/presale/utils.py:374 pretix/presale/utils.py:378
 msgid "The selected organizer was not found."
-msgstr ""
+msgstr "所選定的召集人找不到。"
 
 #: pretix/presale/views/__init__.py:254
 #, python-brace-format
 msgid ""
 "Your selected payment method can only be used for a payment of at least "
 "{amount}."
-msgstr ""
+msgstr "你選擇的付款方式，只能用於超過{amount}.的付款。"
 
 #: pretix/presale/views/cart.py:183
 msgid "Please enter positive numbers only."
-msgstr ""
+msgstr "請只輸入正數。"
 
 #: pretix/presale/views/cart.py:421
 msgid "We applied the voucher to as many products in your cart as we could."
-msgstr ""
+msgstr "我們盡可能將優惠券應用於購物車中的更多的商品品。"
 
 #: pretix/presale/views/cart.py:443
 msgid "Your cart has been updated."
-msgstr ""
+msgstr "你的購物車已更新。"
 
 #: pretix/presale/views/cart.py:446 pretix/presale/views/cart.py:471
 msgid "Your cart is now empty."
-msgstr ""
+msgstr "你的購物車現在是空的。"
 
 #: pretix/presale/views/cart.py:486
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "產品已成功添加到您的購物車。"
 
 #: pretix/presale/views/cart.py:510 pretix/presale/views/event.py:450
 #: pretix/presale/views/widget.py:342
 msgid "Tickets for this event cannot be purchased on this sales channel."
-msgstr ""
+msgstr "此活動的門票不能在此銷售管道上購買。"
 
 #: pretix/presale/views/cart.py:650
 msgctxt "subevent"
 msgid "We were unable to find the specified date."
-msgstr ""
+msgstr "我們無法找到指定的日期。"
 
 #: pretix/presale/views/checkout.py:55
 msgid "Your cart is empty"
-msgstr ""
+msgstr "您的購物車是空的"
 
 #: pretix/presale/views/checkout.py:59
 msgid "The booking period for this event is over or has not yet started."
-msgstr ""
+msgstr "此活動的預訂期已結束或尚未開始。"
 
 #: pretix/presale/views/customer.py:243
 msgid ""
 "Your account has been created. Please follow the link in the email we sent "
 "you to activate your account and choose a password."
-msgstr ""
+msgstr "您的帳戶已建立。請按照我們發送給你的電子郵件中的連結，啟動你的帳戶，並選擇密"
+"碼。"
 
 #: pretix/presale/views/customer.py:264 pretix/presale/views/customer.py:267
 #: pretix/presale/views/customer.py:553 pretix/presale/views/customer.py:559
 msgid "You clicked an invalid link."
-msgstr ""
+msgstr "你按下了無效的連結。"
 
 #: pretix/presale/views/customer.py:287
 msgid "Your new password has been set! You can now use it to log in."
-msgstr ""
+msgstr "您的新密碼已設定！你現在可以使用它來登錄。"
 
 #: pretix/presale/views/customer.py:327
 msgid ""
 "We've sent you an email with further instructions on resetting your password."
-msgstr ""
+msgstr "我們已向你發送一封電子郵件，其中包含有關重置密碼的進一步說明。"
 
 #: pretix/presale/views/customer.py:520
 msgid ""
 "Your changes have been saved. We've sent you an email with a link to update "
 "your email address. The email address of your account will be changed as "
 "soon as you click that link."
-msgstr ""
+msgstr "你的更改已保存。我們已向你發送一封電子郵件，其中包含用於更新電子郵件地址的連"
+"結。按兩下該連結後，你帳戶的電子郵件位址將立即更改。"
 
 #: pretix/presale/views/customer.py:569
 msgid "Your email address has been updated."
-msgstr ""
+msgstr "你的電子郵箱位址已更新。"
 
 #: pretix/presale/views/customer.py:770 pretix/presale/views/customer.py:781
 #, python-brace-format
 msgid ""
 "We were unable to use your login since the email address {email} is already "
 "used for a different account in this system."
-msgstr ""
+msgstr "我們無法使用你的登錄名稱，因為電子郵件地址{email}已用於此系統中的其他帳戶。"
 
 #: pretix/presale/views/event.py:771
 msgid "Unknown event code or not authorized to access this event."
-msgstr ""
+msgstr "活動代碼未知或無權訪問此事件。"
 
 #: pretix/presale/views/event.py:778
 msgctxt "subevent"
 msgid "No date selected."
-msgstr ""
+msgstr "未選擇日期。"
 
 #: pretix/presale/views/event.py:781
 msgctxt "subevent"
 msgid "Unknown date selected."
-msgstr ""
+msgstr "選擇的日期未知。"
 
 #: pretix/presale/views/event.py:806 pretix/presale/views/event.py:814
 #: pretix/presale/views/event.py:817
 msgid "Please go back and try again."
-msgstr ""
+msgstr "請返回並重試。"
 
 #: pretix/presale/views/order.py:395 pretix/presale/views/order.py:460
 #: pretix/presale/views/order.py:530
 msgid "The payment for this order cannot be continued."
-msgstr ""
+msgstr "此訂單的付款方式無法更改。"
 
 #: pretix/presale/views/order.py:400 pretix/presale/views/order.py:469
 #: pretix/presale/views/order.py:539 pretix/presale/views/order.py:580
 msgid "The payment is too late to be accepted."
-msgstr ""
+msgstr "付款太晚無法接受。"
 
 #: pretix/presale/views/order.py:483
 msgid "An invoice has been generated."
-msgstr ""
+msgstr "已生成發票"
 
 #: pretix/presale/views/order.py:575
 msgid "The payment method for this order cannot be changed."
-msgstr ""
+msgstr "此訂單的付款方式無法更改。"
 
 #: pretix/presale/views/order.py:586
 msgid "A payment is currently pending for this order."
-msgstr ""
+msgstr "此訂單目前正在等待付款。"
 
 #: pretix/presale/views/order.py:857
 msgid "You cannot modify this order"
-msgstr ""
+msgstr "您無法更改此訂單。"
 
 #: pretix/presale/views/order.py:947 pretix/presale/views/order.py:952
 #: pretix/presale/views/order.py:957
 msgid "You chose an invalid cancellation fee."
-msgstr ""
+msgstr "你選擇的取消費用無效。"
 
 #: pretix/presale/views/order.py:973
 msgid "Canceled by customer"
-msgstr ""
+msgstr "客戶取消"
 
 #: pretix/presale/views/order.py:984
 msgid "The cancellation has been requested."
-msgstr ""
+msgstr "已取消要求。"
 
 #: pretix/presale/views/order.py:1038
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr ""
+msgstr "此訂單（尚未）啟用票證下載。"
 
 #: pretix/presale/views/order.py:1047
 msgid "Please click the link we sent you via email to download your tickets."
-msgstr ""
+msgstr "請點擊我們通過電子郵件發送給你的連結下載你的門票。"
 
 #: pretix/presale/views/order.py:1528 pretix/presale/views/order.py:1481
 #, python-brace-format
 msgid ""
 "The order has been changed. You can now proceed by paying the open amount of "
 "{amount}."
-msgstr ""
+msgstr "訂單已更改。你現在可以通過支付 {amount} 的未清金額來繼續。"
 
 #: pretix/presale/views/order.py:1540 pretix/presale/views/order.py:1493
 msgid "You did not make any changes."
-msgstr ""
+msgstr "你沒有進行任何更改。"
 
 #: pretix/presale/views/order.py:1564 pretix/presale/views/order.py:1517
 msgid "You may not change your order in a way that reduces the total price."
-msgstr ""
+msgstr "您不得以降低總價的方式更改訂單。"
 
 #: pretix/presale/views/order.py:1566 pretix/presale/views/order.py:1519
 msgid "You may only change your order in a way that increases the total price."
-msgstr ""
+msgstr "你不得以更改總價的方式更改訂單。"
 
 #: pretix/presale/views/order.py:1568 pretix/presale/views/order.py:1521
 msgid "You may not change your order in a way that changes the total price."
-msgstr ""
+msgstr "你不得以更改總價的方式更改訂單。"
 
 #: pretix/presale/views/order.py:1576 pretix/presale/views/order.py:1529
 msgid ""
 "You may not change your order in a way that increases the total price since "
 "payments are no longer being accepted for this event."
-msgstr ""
+msgstr "由於此活動不再接受付款，因此您不得以增加總價的方式更改訂單。"
 
 #: pretix/presale/views/order.py:1591 pretix/presale/views/order.py:1622
 #: pretix/presale/views/order.py:1544 pretix/presale/views/order.py:1575
 msgid "You cannot change this order."
-msgstr ""
+msgstr "您無法更改此訂單。"
 
 #: pretix/presale/views/user.py:61
 msgid "We had difficulties processing your input."
-msgstr ""
+msgstr "我們無法處理您的輸入。"
 
 #: pretix/presale/views/user.py:70
 #, python-brace-format
@@ -28061,56 +28073,59 @@ msgid ""
 "{number} hours. If the email did not arrive, please check your spam folder "
 "and also double check that you used the correct email address."
 msgstr ""
+"如果你輸入的電子郵件位址有效且與票有相關，我們已經向你發送了一封電子郵件，"
+"其中包含過去 {number} 小時內你的票的連結。如果電子郵件沒有抵達，請檢查你的垃"
+"圾郵件資料夾，並仔細檢查你使用了正確的電子郵件位址。"
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."
-msgstr ""
+msgstr "我們現在無法發送電子郵件，請稍後再回來查看。"
 
 #: pretix/presale/views/user.py:94
 msgid ""
 "If there were any orders by this user, they will receive an email with their "
 "order codes."
-msgstr ""
+msgstr "如果該用戶有任何訂單，他們將收到一封包含訂單代碼的電子郵件。"
 
 #: pretix/presale/views/waiting.py:95
 msgid "Waiting lists are disabled for this event."
-msgstr ""
+msgstr "該活動的等候名單被禁用。"
 
 #: pretix/presale/views/waiting.py:124
 msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
-msgstr ""
+msgstr "你不能將自己添加到候補名單中，因為該商品目前有貨。"
 
 #: pretix/presale/views/waiting.py:129
 msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "this product gets available again."
-msgstr ""
+msgstr "我們已將你添加到候補名單中。 一旦該產品再次，您將收到一封電子郵件。"
 
 #: pretix/presale/views/waiting.py:156
 msgid "We could not find you on our waiting list."
-msgstr ""
+msgstr "我們在候補名單上找不到你。"
 
 #: pretix/presale/views/waiting.py:160
 msgid ""
 "Your waiting list spot is no longer valid or already used. There's nothing "
 "more to do here."
-msgstr ""
+msgstr "你的候補名單位置不再有效或已被使用。 這裡沒有什麼可做的了。"
 
 #: pretix/presale/views/waiting.py:170
 msgid ""
 "Thank you very much! We will assign your spot on the waiting list to someone "
 "else."
-msgstr ""
+msgstr "非常感謝你！我們會將你在候補名單上的位置分配給其他人。"
 
 #: pretix/presale/views/widget.py:337
 msgid "This ticket shop is currently disabled."
-msgstr ""
+msgstr "該售票商店目前停用。"
 
 #: pretix/presale/views/widget.py:351
 msgid "The selected date does not exist in this event series."
-msgstr ""
+msgstr "該活動系列中不存在所選日期。"
 
 #: pretix/presale/views/widget.py:414
 #, python-format
@@ -28119,15 +28134,15 @@ msgstr ""
 
 #: pretix/settings.py:671
 msgid "User profile only"
-msgstr ""
+msgstr "僅用戶個人資料"
 
 #: pretix/settings.py:672
 msgid "Read access"
-msgstr ""
+msgstr "讀取權限"
 
 #: pretix/settings.py:673
 msgid "Write access"
-msgstr ""
+msgstr "寫入權限"
 
 #: pretix/settings.py:684
 msgid "Kosovo"
@@ -28137,10 +28152,10 @@ msgstr "柯索沃"
 msgid ""
 "Your order requires approval by the event organizer before it can be "
 "confirmed and forms a valid contract."
-msgstr ""
+msgstr "您的訂單需要得到活動召集人的批准，然後才能確認並形成有效的合同。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:191
 msgid ""
 "We will sent you an email as soon as the event organizer approved or "
 "rejected your order."
-msgstr ""
+msgstr "一旦活動召集人批准或拒絕你的訂單，我們將立即向你發送電子郵件。"
