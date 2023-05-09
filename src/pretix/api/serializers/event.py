@@ -908,7 +908,21 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
         )
 
 
+class MultiLineStringField(serializers.Field):
+
+    def to_representation(self, value):
+        return [v.strip() for v in value.splitlines()]
+
+    def to_internal_value(self, data):
+        if isinstance(data, list):
+            return "\n".join(data)
+        else:
+            raise ValidationError('Invalid data type.')
+
+
 class ItemMetaPropertiesSerializer(I18nAwareModelSerializer):
+    allowed_values = MultiLineStringField()
+
     class Meta:
         model = ItemMetaProperty
         fields = ('id', 'name', 'default', 'required', 'allowed_values')

@@ -29,7 +29,7 @@ def item_meta_property(event):
         name="Color",
         default="Red",
         required=False,
-        allowed_values="",
+        allowed_values="",  # internally, this is a string
     )
 
 
@@ -38,7 +38,7 @@ TEST_TYPE_RES = {
     "name": "Color",
     "default": "Red",
     "required": False,
-    "allowed_values": "",
+    "allowed_values": [],  # the external representation is a list
 }
 
 
@@ -73,7 +73,7 @@ def test_meta_property_create(token_client, organizer, event):
             "name": "Color",
             "default": "Red",
             "required": False,
-            "allowed_values": "",
+            "allowed_values": ["Red", "Green", "Blue"]
         }
     )
     assert resp.status_code == 201
@@ -81,6 +81,7 @@ def test_meta_property_create(token_client, organizer, event):
         item_meta_property = event.item_meta_properties.get(id=resp.data['id'])
         assert item_meta_property.name == "Color"
         assert item_meta_property.default == "Red"
+        assert item_meta_property.allowed_values == "Red\nGreen\nBlue"
         assert not item_meta_property.required
         assert len(event.item_meta_properties.all()) == 2
 

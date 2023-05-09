@@ -53,7 +53,7 @@ Endpoints
             "name": "Color",
             "default": "red",
             "required": true,
-            "allowed_values": "red\r\ngreen\r\nblue"
+            "allowed_values": ["red", "green", "blue"]
           }
         ]
       }
@@ -86,7 +86,7 @@ Endpoints
         "name": "Color",
         "default": "red",
         "required": true,
-        "allowed_values": "red\r\ngreen\r\nblue"
+        "allowed_values": ["red", "green", "blue"]
       }
 
    :param organizer: The ``slug`` field of the organizer to modify
@@ -113,7 +113,7 @@ Endpoints
         "name": "ref-code",
         "default": "abcde",
         "required": True,
-        "allowed_values": "",
+        "allowed_values": []
       }
 
 
@@ -126,7 +126,7 @@ Endpoints
         "name": "ref-code",
         "default": "abcde",
         "required": True,
-        "allowed_values": "",
+        "allowed_values": []
     }
 
    :param organizer: The ``slug`` field of the organizer to modify
@@ -172,7 +172,7 @@ Endpoints
         "name": "ref-code",
         "default": "abcde",
         "required": False,
-        "allowed_values": "",
+        "allowed_values": []
       }
 
    :param organizer: The ``slug`` field of the organizer to modify
