@@ -282,9 +282,19 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
             if form in self.item_meta_property_formset.deleted_forms:
                 if not form.instance.pk:
                     continue
+                form.instance.log_action(
+                    'pretix.event.item_meta_property.removed',
+                    user=self.request.user,
+                    data={'id': form.instance.pk}
+                )
                 form.instance.delete()
                 form.instance.pk = None
             elif form.has_changed():
+                form.instance.log_action(
+                    'pretix.event.item_meta_property.changed',
+                    user=self.request.user,
+                    data={'id': form.instance.pk}
+                )
                 form.save()
 
         for form in self.item_meta_property_formset.extra_forms:
