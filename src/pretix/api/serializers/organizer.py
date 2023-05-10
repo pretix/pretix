@@ -211,7 +211,7 @@ class GiftCardTransactionSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = GiftCardTransaction
-        fields = ('id', 'datetime', 'value', 'event', 'order', 'text')
+        fields = ('id', 'datetime', 'value', 'event', 'order', 'text', 'info')
 
 
 class EventSlugField(serializers.SlugRelatedField):

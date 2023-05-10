@@ -160,6 +160,9 @@ class GiftCardTransaction(models.Model):
         on_delete=models.PROTECT
     )
     text = models.TextField(blank=True, null=True)
+    info = models.JSONField(
+        null=True, blank=True,
+    )
 
     class Meta:
         ordering = ("datetime",)

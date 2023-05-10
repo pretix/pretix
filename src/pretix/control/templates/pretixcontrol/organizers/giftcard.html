@@ -94,6 +94,9 @@
                                     {% else %}
                                         <em>{% trans "Manual transaction" %}{% if t.text %}: {{ t.text }}{% endif %}</em>
                                     {% endif %}
+                                    {% if staff_session and t.info %}
+                                        <pre><code>{{ t.info|pprint }}</code></pre>
+                                    {% endif %}
                                 </td>
                                 <td class="text-right">
                                     {{ t.value|money:card.currency }}

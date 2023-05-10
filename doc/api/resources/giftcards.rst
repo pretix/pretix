@@ -39,6 +39,7 @@ value                                 money (string)             Transaction amo
 event                                 string                     Event slug, if the gift card was used in the web shop (or ``null``)
 order                                 string                     Order code, if the gift card was used in the web shop (or ``null``)
 text                                  string                     Custom text of the transaction (or ``null``)
+info                                  object                     Additional data about the transaction (or ``null``)
 ===================================== ========================== =======================================================
 
 Endpoints
@@ -310,7 +311,10 @@ Endpoints
             "value": "50.00",
             "event": "democon",
             "order": "FXQYW",
-            "text": null
+            "text": null,
+            "info": {
+              "created_by": "plugin1"
+            }
           }
         ]
       }

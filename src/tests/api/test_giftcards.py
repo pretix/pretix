@@ -264,7 +264,8 @@ def test_giftcard_transact(token_client, organizer, event, giftcard):
         '/api/v1/organizers/{}/giftcards/{}/transact/'.format(organizer.slug, giftcard.pk),
         {
             'value': '10.00',
-            'text': 'bla'
+            'text': 'bla',
+            'info': {"a": "b"}
         },
         format='json'
     )
@@ -272,6 +273,7 @@ def test_giftcard_transact(token_client, organizer, event, giftcard):
     giftcard.refresh_from_db()
     assert giftcard.value == Decimal('43.00')
     assert giftcard.transactions.last().text == 'bla'
+    assert giftcard.transactions.last().info == {"a": "b"}
 
 
 @pytest.mark.django_db
@@ -314,7 +316,8 @@ def test_giftcard_transactions(token_client, organizer, giftcard):
                 "value": "23.00",
                 "event": None,
                 "order": None,
-                "text": None
+                "text": None,
+                "info": None
             }
         ]
     }
