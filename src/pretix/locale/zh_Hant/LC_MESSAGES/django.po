@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 15:54+0000\n"
-"PO-Revision-Date: 2023-05-10 14:00+0000\n"
-"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
+"PO-Revision-Date: 2023-05-10 14:41+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -220,7 +220,7 @@ msgstr "元數據屬性“{name}”不存在。"
 #: pretix/api/serializers/event.py:231 pretix/api/serializers/event.py:529
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "元數據屬性“{name}”不存在元數據屬性“{name}”不存在."
+msgstr ""
 
 #: pretix/api/serializers/event.py:274
 #, python-brace-format
