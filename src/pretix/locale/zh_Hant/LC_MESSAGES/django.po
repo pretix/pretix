@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 15:54+0000\n"
 "PO-Revision-Date: 2023-05-10 14:00+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -3140,7 +3140,7 @@ msgstr "出場"
 
 #: pretix/base/models/checkin.py:344
 msgid "Unknown ticket"
-msgstr "不知名票券"
+msgstr "不知名的票券"
 
 #: pretix/base/models/checkin.py:345
 msgid "Ticket not paid"
