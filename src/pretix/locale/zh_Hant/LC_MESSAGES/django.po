@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 15:54+0000\n"
 "PO-Revision-Date: 2023-05-10 14:41+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -27041,25 +27041,27 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:43
 msgid "Please note that we still await your payment to complete the process."
-msgstr ""
+msgstr "請留意，我們仍在等待你的付款，以便完成該過程。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
 msgid ""
 "Please bookmark or save the link to this exact page if you want to access "
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
-msgstr ""
+msgstr "如果你想稍後存取你的訂單，請將連結收藏，或保存該精確頁面。我們還向你傳送一封"
+"電子郵件，其中包含指向你指定地址的連結。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:58
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email containing the link to the address you specified."
-msgstr ""
+msgstr "如果你想稍後訪問你的訂單，請保存以下連結。我們還向你發送了一封電子郵件，其中"
+"包含指向您指定地址的連結。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:73
 #: pretix/presale/templates/pretixpresale/event/position.html:18
 msgid "View in backend"
-msgstr ""
+msgstr "在後端查看"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:90
 #, python-format
@@ -27073,13 +27075,13 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:107
 msgid "Re-try payment or choose another payment method"
-msgstr ""
+msgstr "重試付款或選擇其他付款方式"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:125
 msgid ""
 "We've received your request to cancel this order. Please stay patient while "
 "the event organizer decides on the cancellation."
-msgstr ""
+msgstr "我們已收到你取消此訂單的要求。請耐心等待活動召集人的取消決定。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:143
 #, python-format
@@ -27088,7 +27090,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:150
 msgid "Print"
-msgstr ""
+msgstr "列印"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:152
 #, python-format
@@ -27116,55 +27118,55 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
 msgid "Change ordered items"
-msgstr ""
+msgstr "更新已訂購的物品"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/order.html:290
 msgid "Change details"
-msgstr ""
+msgstr "更新詳情"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:262
 msgid ""
 "You need to select a payment method above before you can request an invoice."
-msgstr ""
+msgstr "你需要先選擇上述付款方式，然後才能索取發票。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:267
 #: pretix/presale/templates/pretixpresale/event/order.html:274
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:85
 msgid "Request invoice"
-msgstr ""
+msgstr "索取發票"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:286
 msgid "Your information"
-msgstr ""
+msgstr "你的資訊"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:289
 msgid "Change your information"
-msgstr ""
+msgstr "更新帳戶資訊"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:334
 msgid "Internal Reference"
-msgstr ""
+msgstr "內部參考"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:348
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr ""
+msgstr "更改或取消訂單"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:355
 msgid ""
 "If you want to make changes to the products you bought, you can click on the "
 "button to change your order."
-msgstr ""
+msgstr "如果你想更改購買的產品，可以按下按鈕更改訂單。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:363
 msgid "Change order"
-msgstr ""
+msgstr "更新訂單"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:373
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:27
 msgid "You can request to cancel this order."
-msgstr ""
+msgstr "你可以請求取消此訂單。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:376
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:30
