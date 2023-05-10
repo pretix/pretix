@@ -221,12 +221,12 @@ Vue.component('availbox', {
         + '>'
         + '</label>'
         + '<div :class="count_group_classes" v-else>'
-        + '<button v-if="!$root.use_native_spinners" type="button" @click="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" aria-label="' + strings.quantity_dec + '"><span>-</span></button>'
+        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" aria-label="' + strings.quantity_dec + '"><span>-</span></button>'
         + '<input type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
         + '       v-model="amount_selected" :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
-        + '       aria-label="' + strings.quantity + '"'
+        + '       aria-label="' + strings.quantity + '" ref="quantity"'
         + '       >'
-        + '<button v-if="!$root.use_native_spinners" type="button" @click="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" aria-label="' + strings.quantity_inc + '"><span>+</span></button>'
+        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" aria-label="' + strings.quantity_inc + '"><span>+</span></button>'
         + '</div>'
         + '</div>'
         + '</div>'),
@@ -253,6 +253,7 @@ Vue.component('availbox', {
             return this.item.require_voucher && !this.$root.voucher_code
         },
         amount_selected: {
+            cache: false,
             get: function () {
                 var selected = this.item.has_variations ? this.variation.amount_selected : this.item.amount_selected
                 if (selected === 0) return undefined;
@@ -266,6 +267,10 @@ Vue.component('availbox', {
                     this.variation.amount_selected = value;
                 } else {
                     this.item.amount_selected = value;
+                }
+                if (this.$refs.quantity) {
+                    // manually set value on quantity as on reload somehow v-model binding breaks
+                    this.$refs.quantity.value = value;
                 }
                 this.$root.$emit("amounts_changed")
             }
@@ -309,7 +314,6 @@ Vue.component('availbox', {
             this.$root.$emit('focus_voucher_field')
         },
         on_step: function (e) {
-            e.preventDefault();
             var t = e.target.tagName == 'BUTTON' ? e.target : e.target.closest('button');
             var step = parseFloat(t.getAttribute("data-step"));
             var controls = document.getElementById(t.getAttribute("data-controls"));
