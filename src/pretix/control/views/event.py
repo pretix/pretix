@@ -285,7 +285,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
                 form.instance.log_action(
                     'pretix.event.item_meta_property.removed',
                     user=self.request.user,
-                    data={'id': form.instance.pk}
+                    data=form.cleaned_data
                 )
                 form.instance.delete()
                 form.instance.pk = None
@@ -293,7 +293,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
                 form.instance.log_action(
                     'pretix.event.item_meta_property.changed',
                     user=self.request.user,
-                    data={'id': form.instance.pk}
+                    data=form.cleaned_data
                 )
                 form.save()
 
@@ -304,6 +304,11 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
                 continue
             form.instance.event = obj
             form.save()
+            form.instance.log_action(
+                'pretix.event.item_meta_property.created',
+                user=self.request.user,
+                data=form.cleaned_data
+            )
 
     @cached_property
     def confirm_texts_formset(self):
