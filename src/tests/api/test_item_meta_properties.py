@@ -34,7 +34,6 @@ def item_meta_property(event):
 
 
 TEST_TYPE_RES = {
-    "id": 2,
     "name": "Color",
     "default": "Red",
     "required": False,
@@ -49,6 +48,8 @@ def test_meta_property_list(token_client, organizer, event, item_meta_property):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/item_meta_properties/'
                             .format(organizer.slug, event.slug))
     assert resp.status_code == 200
+    item_meta_property.refresh_from_db()
+    res["id"] = item_meta_property.pk
     assert res in resp.data['results']
     assert len(resp.data['results']) == 2
     # there is another meta property created in conftest using the old way, we
@@ -61,6 +62,8 @@ def test_meta_property_detail(token_client, organizer, event, item_meta_property
     resp = token_client.get('/api/v1/organizers/{}/events/{}/item_meta_properties/{}/'
                             .format(organizer.slug, event.slug, item_meta_property.pk))
     assert resp.status_code == 200
+    item_meta_property.refresh_from_db()
+    res["id"] = item_meta_property.pk
     assert res == resp.data
 
 
