@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 15:54+0000\n"
-"PO-Revision-Date: 2023-05-10 14:00+0000\n"
+"PO-Revision-Date: 2023-05-11 08:35+0000\n"
 "Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/zh_Hant/>\n"
@@ -274,27 +274,27 @@ msgstr "不知名的票券"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Ticket type not allowed here"
-msgstr ""
+msgstr "這裡不允這種票券類型"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:59
 msgid "Entry not allowed"
-msgstr ""
+msgstr "不允許入場"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket code revoked/changed"
-msgstr ""
+msgstr "票券代碼已經取消/改變"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Ticket blocked"
-msgstr ""
+msgstr "票券已經封銷"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
 msgid "Ticket not valid at this time"
-msgstr ""
+msgstr "在這時間票券仍未有效"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Order canceled"
-msgstr ""
+msgstr "訂單已取消"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket code is ambiguous on list"
