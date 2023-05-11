@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-05-26 09:33+0000\n"
+"PO-Revision-Date: 2023-05-30 21:18+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -599,8 +599,8 @@ msgstr "Konfigurationsoption \"{name}\" fehlt."
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
 msgstr ""
-"Die Konfiguration von \"{url}\" konnte nicht abgerufen werden. "
-"Fehlermeldung: \"{error}\"."
+"Die Konfiguration von \"{url}\" konnte nicht abgerufen werden. Fehlermeldung:"
+" \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:78 pretix/base/customersso/oidc.py:83
 #: pretix/base/customersso/oidc.py:88 pretix/base/customersso/oidc.py:93
@@ -1673,8 +1673,8 @@ msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
 msgstr ""
-"Textdatei mit allen E-Mail-Adressen, die von Käufer*innen und "
-"Ticketinhaber*innen eingesammelt wurden."
+"Textdatei mit allen E-Mail-Adressen, die von Käufer*innen und Ticketinhaber*"
+"innen eingesammelt wurden."
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:461
 #: pretix/plugins/reports/exporters.py:643
@@ -2761,8 +2761,7 @@ msgstr ""
 
 #: pretix/base/forms/questions.py:467
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr ""
-"Bitte laden Sie ein Bild hoch, bei dem die Breite 3/4 der Höhe beträgt."
+msgstr "Bitte laden Sie ein Bild hoch, bei dem die Breite 3/4 der Höhe beträgt."
 
 #: pretix/base/forms/questions.py:470
 msgid ""
@@ -3116,8 +3115,7 @@ msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
-msgstr ""
-"Mit dem Wechselkurs von 1:{rate} ({authority}, {date}) entspricht dies:"
+msgstr "Mit dem Wechselkurs von 1:{rate} ({authority}, {date}) entspricht dies:"
 
 #: pretix/base/invoice.py:844
 #, python-brace-format
@@ -3672,8 +3670,7 @@ msgstr "Auf bestimmte Verkaufskanäle einschränken"
 
 #: pretix/base/models/event.py:619
 msgid "Only sell tickets for this event on the following sales channels."
-msgstr ""
-"Tickets für diese Veranstaltung nur über die folgenden Kanäle verkaufen"
+msgstr "Tickets für diese Veranstaltung nur über die folgenden Kanäle verkaufen"
 
 #: pretix/base/models/event.py:627 pretix/control/navigation.py:342
 #: pretix/control/navigation.py:463
@@ -5845,8 +5842,7 @@ msgstr "An diese Person wurde bereits ein Gutschein gesendet."
 
 #: pretix/base/models/waitinglist.py:184
 msgid "This entry is anonymized and can no longer be used."
-msgstr ""
-"Dieser Eintrag wurde anonymisiert und kann nicht mehr verwendet werden."
+msgstr "Dieser Eintrag wurde anonymisiert und kann nicht mehr verwendet werden."
 
 #: pretix/base/models/waitinglist.py:197
 #, python-brace-format
@@ -7587,8 +7583,8 @@ msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
-"Fehler beim Import des Wertes \"{value}\" für Spalte \"{column}\" in Zeile "
-"\"{line}\": {message}"
+"Fehler beim Import des Wertes \"{value}\" für Spalte \"{column}\" in Zeile \""
+"{line}\": {message}"
 
 #: pretix/base/services/orderimport.py:147
 #, python-brace-format
@@ -7765,8 +7761,7 @@ msgstr ""
 
 #: pretix/base/services/orders.py:918
 msgid "The selected payment methods do not cover the total balance."
-msgstr ""
-"Diese gewählten Zahlungsmethoden decken noch nicht den Gesamtbetrag ab."
+msgstr "Diese gewählten Zahlungsmethoden decken noch nicht den Gesamtbetrag ab."
 
 #: pretix/base/services/orders.py:984
 msgid ""
@@ -8125,8 +8120,7 @@ msgstr "Namen der Teilnehmer*innen erfragen"
 
 #: pretix/base/settings.py:315
 msgid "Ask for a name for all personalized tickets."
-msgstr ""
-"Frage für alle personalisierten Tickets nach dem Namen des Teilnehmers."
+msgstr "Frage für alle personalisierten Tickets nach dem Namen des Teilnehmers."
 
 #: pretix/base/settings.py:324
 msgid "Require attendee names"
@@ -8669,8 +8663,7 @@ msgstr ""
 
 #: pretix/base/settings.py:988
 msgid "Automatically cancel and reissue invoice on address changes"
-msgstr ""
-"Bei Adressänderungen automatisch Rechnung stornieren und neu ausstellen"
+msgstr "Bei Adressänderungen automatisch Rechnung stornieren und neu ausstellen"
 
 #: pretix/base/settings.py:989
 msgid ""
@@ -8829,8 +8822,8 @@ msgstr ""
 "Wird zur Feineinstellung von Datums- und Zeitformaten, sowie als "
 "Standardland für Kundenadressen und Telefonnummern verwenden. Für die "
 "Formatierung hat dies eine geringere Priorität als die Sprache und ist daher "
-"vor allem für Sprachen nützlich, die keiner Region fest zuzuordnen sind (z."
-"B. Englisch)."
+"vor allem für Sprachen nützlich, die keiner Region fest zuzuordnen sind ("
+"z.B. Englisch)."
 
 #: pretix/base/settings.py:1231
 msgid "Show event times and dates on the ticket shop"
@@ -9323,8 +9316,7 @@ msgstr "Prozentuale Stornogebühr einbehalten"
 
 #: pretix/base/settings.py:1774
 msgid "Allow customers to voluntarily choose a lower refund"
-msgstr ""
-"Kunden erlauben, freiwillig auf einen Teil der Erstattung zu verzichten"
+msgstr "Kunden erlauben, freiwillig auf einen Teil der Erstattung zu verzichten"
 
 #: pretix/base/settings.py:1775
 msgid ""
@@ -9470,8 +9462,8 @@ msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
 msgstr ""
-"Wenn diese Option aktiviert ist, hängen wir Bestellbestätigungs-E-Mails "
-"eine .ics-Kalenderdatei an."
+"Wenn diese Option aktiviert ist, hängen wir Bestellbestätigungs-E-Mails eine "
+".ics-Kalenderdatei an."
 
 #: pretix/base/settings.py:1935
 msgid "Attach calendar files only after order has been paid"
@@ -9738,12 +9730,12 @@ msgid ""
 "vital email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
 "Diese Datei wird an die erste E-Mail angehängt, die wir beim Eingang einer "
-"neuen Bestellung verschicken. Sie kann daher mit den Textvorlagen "
-"\"Getätigte Bestellung\", \"Kostenlose Bestellung\" oder \"Erhaltene "
-"Bestellung\" von oben auftreten. Sie wird ggf. sowohl an Besteller*innen als "
-"auch Teilnehmer*innen verschickt. Nicht geeignet zum Versand nicht-"
-"öffentlicher Informationen, da die Datei unabhängig davon verschickt wird, "
-"ob die Bestellung bezahlt oder freigegeben ist. Um zu vermeiden, dass diese "
+"neuen Bestellung verschicken. Sie kann daher mit den Textvorlagen \"Getätigte"
+" Bestellung\", \"Kostenlose Bestellung\" oder \"Erhaltene Bestellung\" von "
+"oben auftreten. Sie wird ggf. sowohl an Besteller*innen als auch Teilnehmer*"
+"innen verschickt. Nicht geeignet zum Versand nicht-öffentlicher "
+"Informationen, da die Datei unabhängig davon verschickt wird, ob die "
+"Bestellung bezahlt oder freigegeben ist. Um zu vermeiden, dass diese "
 "wichtige E-Mail nicht ankommt, können nur PDF-Dateien mit maximal {size} MB "
 "Größe verwendet werden."
 
@@ -10304,8 +10296,8 @@ msgstr ""
 "\n"
 "Dieser Link ist gültig für einen Tag.\n"
 "\n"
-"Wenn du dich nicht selbst angemeldet hast, kannst du diese E-Mail "
-"ignorieren.\n"
+"Wenn du dich nicht selbst angemeldet hast, kannst du diese E-Mail ignorieren."
+"\n"
 "\n"
 "Viele Grüße\n"
 "\n"
@@ -10346,8 +10338,8 @@ msgstr ""
 "\n"
 "Dieser Link ist gültig für einen Tag.\n"
 "\n"
-"Wenn du dich nicht selbst angemeldet hast, kannst du diese E-Mail "
-"ignorieren.\n"
+"Wenn du dich nicht selbst angemeldet hast, kannst du diese E-Mail ignorieren."
+"\n"
 "\n"
 "Viele Grüße\n"
 "\n"
@@ -10379,8 +10371,8 @@ msgid ""
 msgstr ""
 "Hallo {name},\n"
 "\n"
-"du hast ein neues Passwort für dein Kundenkonto bei {organizer} "
-"angefordert.\n"
+"du hast ein neues Passwort für dein Kundenkonto bei {organizer} angefordert."
+"\n"
 "\n"
 "Um ein neues Passwort auszuwählen, klicke bitte hier:\n"
 "\n"
@@ -10579,8 +10571,8 @@ msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
 msgstr ""
-"Dieser Text wird neben der Gutscheincode-Eingabe angezeigt. Du kannst ihn z."
-"B. nutzen um zu erklären, wie man an einen Gutscheincode gelangt."
+"Dieser Text wird neben der Gutscheincode-Eingabe angezeigt. Du kannst ihn "
+"z.B. nutzen um zu erklären, wie man an einen Gutscheincode gelangt."
 
 #: pretix/base/settings.py:2897
 msgid "Attendee data explanation"
@@ -10906,8 +10898,7 @@ msgstr ""
 #: pretix/base/settings.py:3611
 msgid ""
 "You have to ask for invoice addresses if you want to make them required."
-msgstr ""
-"Du musst Rechnungsadressen erfassen, wenn sie erforderlich sein sollen."
+msgstr "Du musst Rechnungsadressen erfassen, wenn sie erforderlich sein sollen."
 
 #: pretix/base/settings.py:3615
 msgid "You have to require invoice addresses to require for company names."
@@ -13344,8 +13335,8 @@ msgid ""
 "Will be included in the notification email when the respective placeholder "
 "is present in the configured email text."
 msgstr ""
-"Wird in der Benachrichtigungs-E-Mail eingefügt, sofern der konfigurierte E-"
-"Mail-Text den passenden Platzhalter enthält."
+"Wird in der Benachrichtigungs-E-Mail eingefügt, sofern der konfigurierte E"
+"-Mail-Text den passenden Platzhalter enthält."
 
 #: pretix/control/forms/orders.py:218
 msgid "Payment amount"
@@ -13710,8 +13701,7 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:231
 msgctxt "subevent"
 msgid "If you set a date range, please set both a start and an end."
-msgstr ""
-"Wenn du einen Datumsbereich verwendest, lege bitte Start und Ende fest."
+msgstr "Wenn du einen Datumsbereich verwendest, lege bitte Start und Ende fest."
 
 #: pretix/control/forms/orders.py:960
 msgid "Please confirm that you want to cancel ALL dates in this event series."
@@ -13856,8 +13846,7 @@ msgstr "{label}-Feld"
 
 #: pretix/control/forms/organizer.py:987
 msgid "Invalidate old client secret and generate a new one"
-msgstr ""
-"Bestehendes Client-Secret invalidieren und neues Client-Secret erzeugen"
+msgstr "Bestehendes Client-Secret invalidieren und neues Client-Secret erzeugen"
 
 #: pretix/control/forms/renderers.py:54
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:138
@@ -14147,8 +14136,7 @@ msgstr "Position #{posid}: Verwendete Mitgliedschaft geändert."
 #: pretix/control/logdisplay.py:86
 #, python-brace-format
 msgid "Position #{posid}: Seat \"{old_seat}\" changed to \"{new_seat}\"."
-msgstr ""
-"Position #{posid}: Sitzplatz \"{old_seat}\" geändert zu \"{new_seat}\"."
+msgstr "Position #{posid}: Sitzplatz \"{old_seat}\" geändert zu \"{new_seat}\"."
 
 #: pretix/control/logdisplay.py:94
 #, python-brace-format
@@ -14261,16 +14249,16 @@ msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
 msgstr ""
-"Unbekannter Scan von Code \"{barcode}…\" um {datetime} für die Liste "
-"\"{list}\" (Typ \"{type}\")."
+"Unbekannter Scan von Code \"{barcode}…\" um {datetime} für die Liste \"{list}"
+"\" (Typ \"{type}\")."
 
 #: pretix/control/logdisplay.py:236
 #, python-brace-format
 msgid ""
 "Unknown scan of code \"{barcode}…\" for list \"{list}\", type \"{type}\"."
 msgstr ""
-"Unbekannter Scan von Code \"{barcode}…\" für die Liste \"{list}\" (Typ "
-"\"{type}\")."
+"Unbekannter Scan von Code \"{barcode}…\" für die Liste \"{list}\" (Typ \""
+"{type}\")."
 
 #: pretix/control/logdisplay.py:247
 #, python-brace-format
@@ -14278,8 +14266,8 @@ msgid ""
 "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", "
 "type \"{type}\", was uploaded."
 msgstr ""
-"Unbekannter Scan von Code \"{barcode}…\" um {datetime} für die Liste "
-"\"{list}\" (Typ \"{type}\")."
+"Unbekannter Scan von Code \"{barcode}…\" um {datetime} für die Liste \"{list}"
+"\" (Typ \"{type}\")."
 
 #: pretix/control/logdisplay.py:257
 #, python-brace-format
@@ -14287,8 +14275,8 @@ msgid ""
 "Scan of revoked code \"{barcode}\" for list \"{list}\", type \"{type}\", was "
 "uploaded."
 msgstr ""
-"Unbekannter Scan von Code \"{barcode}…\" für die Liste \"{list}\" (Typ "
-"\"{type}\")."
+"Unbekannter Scan von Code \"{barcode}…\" für die Liste \"{list}\" (Typ \""
+"{type}\")."
 
 #: pretix/control/logdisplay.py:268
 #, python-brace-format
@@ -14296,8 +14284,8 @@ msgid ""
 "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\", error code \"{errorcode}\"."
 msgstr ""
-"Ein Scan für Ticket #{posid} am {datetime} für die Liste \"{list}\" (Typ: "
-"\"{type}\") wurde abgelehnt. Fehlercode: \"{errorcode}\"."
+"Ein Scan für Ticket #{posid} am {datetime} für die Liste \"{list}\" (Typ: \""
+"{type}\") wurde abgelehnt. Fehlercode: \"{errorcode}\"."
 
 #: pretix/control/logdisplay.py:279
 #, python-brace-format
@@ -15266,8 +15254,7 @@ msgstr "Die Bestellung wurde storniert."
 #: pretix/control/logdisplay.py:605
 #, python-brace-format
 msgid "The check-in of position #{posid} on list \"{list}\" has been reverted."
-msgstr ""
-"Der Check-in von Position #{posid} auf Liste \"{list}\" wurde gelöscht."
+msgstr "Der Check-in von Position #{posid} auf Liste \"{list}\" wurde gelöscht."
 
 #: pretix/control/logdisplay.py:627
 #, python-brace-format
@@ -15743,8 +15730,7 @@ msgstr "Die App wird folgende Berechtigungen haben:"
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:35
 msgid ""
 "Please select the organizer accounts this application should get access to:"
-msgstr ""
-"Bitte wähle die Veranstalterkonten aus, auf die die App zugreifen darf:"
+msgstr "Bitte wähle die Veranstalterkonten aus, auf die die App zugreifen darf:"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:41
 msgid ""
@@ -17231,8 +17217,8 @@ msgid ""
 "This event contains <strong>pending approvals</strong> that you should take "
 "care of."
 msgstr ""
-"Diese Veranstaltung enthält <strong>Bestellungen, die auf Freigabe warten</"
-"strong>."
+"Diese Veranstaltung enthält <strong>Bestellungen, die auf Freigabe "
+"warten</strong>."
 
 #: pretix/control/templates/pretixcontrol/event/index.html:89
 msgid "Show orders pending approval"
@@ -18604,8 +18590,8 @@ msgid ""
 "Only purchases of such products will be considered \"attendees\" for most "
 "statistical purposes or within some plugins."
 msgstr ""
-"Nur Käufe eines solchen Produkts werden als \"Teilnehmer*innen\" gewertet, z."
-"B. in Statistiken oder in Funktionen von Erweiterungen."
+"Nur Käufe eines solchen Produkts werden als \"Teilnehmer*innen\" gewertet, "
+"z.B. in Statistiken oder in Funktionen von Erweiterungen."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:39
 #: pretix/control/templates/pretixcontrol/item/index.html:47
@@ -19446,8 +19432,8 @@ msgid ""
 msgstr ""
 "Diese Übersetzung wird nicht vom pretix-Team gepflegt. Wir können für ihre "
 "Korrektheit nicht garantieren und neue oder kürzlich geänderte Funktionen "
-"können stattdessen auf Englisch erscheinen. Du kannst unter translate.pretix."
-"eu bei der Übersetzung helfen."
+"können stattdessen auf Englisch erscheinen. Du kannst unter "
+"translate.pretix.eu bei der Übersetzung helfen."
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:14
 msgid "Unofficial translation"
@@ -21360,8 +21346,7 @@ msgstr "Gerätezugriff entziehen:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:9
 msgid "Are you sure you want remove access for this device?"
-msgstr ""
-"Möchtest du diesem Gerät wirklich den Zugriff auf das System entziehen?"
+msgstr "Möchtest du diesem Gerät wirklich den Zugriff auf das System entziehen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:10
 msgid ""
@@ -21831,8 +21816,7 @@ msgstr "Möchtest du diesen SSO-Client wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:11
 msgid "This SSO client cannot be deleted since it has already been used."
-msgstr ""
-"Der SSO-Client kann nicht gelöscht werden, da er bereits genutzt wurde."
+msgstr "Der SSO-Client kann nicht gelöscht werden, da er bereits genutzt wurde."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:6
 msgid "SSO client:"
@@ -22006,8 +21990,7 @@ msgstr "Protokolle für Webhook %(url)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:7
 msgid "This page shows all calls to your webhook in the past 30 days."
-msgstr ""
-"Diese Seite zeigt alle Aufrufe des Webhooks in den letzten 30 Tagen an."
+msgstr "Diese Seite zeigt alle Aufrufe des Webhooks in den letzten 30 Tagen an."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:14
 #, python-format
@@ -22539,8 +22522,8 @@ msgid ""
 "as well as historical log data cannot be downloaded at the moment."
 msgstr ""
 "Für die meisten Arten personenbezogener Daten kannst du die Daten vorher "
-"teilweise herunterladen um sie offline aufzubewahren. Für manche Daten wie z."
-"B. Zahlungsdaten oder historische Daten steht im Moment kein Download zur "
+"teilweise herunterladen um sie offline aufzubewahren. Für manche Daten wie "
+"z.B. Zahlungsdaten oder historische Daten steht im Moment kein Download zur "
 "Verfügung."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:46
@@ -24905,8 +24888,8 @@ msgid ""
 "The organizer could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
-"Dieser Veranstalter konnte nicht gelöscht werden, da einige Bedingungen (z."
-"B. von Plugins erstellte Daten) es nicht erlauben."
+"Dieser Veranstalter konnte nicht gelöscht werden, da einige Bedingungen ("
+"z.B. von Plugins erstellte Daten) es nicht erlauben."
 
 #: pretix/control/views/organizer.py:409
 #, python-brace-format
@@ -27430,8 +27413,8 @@ msgid ""
 "Every attendee (falling back to the order contact when no attendee email "
 "address is given)"
 msgstr ""
-"Jeden Teilnehmer (oder stattdessen an den Besteller, wenn keine Teilnehmer-E-"
-"Mail-Adresse angegeben wurde)"
+"Jeden Teilnehmer (oder stattdessen an den Besteller, wenn keine Teilnehmer-E"
+"-Mail-Adresse angegeben wurde)"
 
 #: pretix/plugins/sendmail/forms.py:245 pretix/plugins/sendmail/models.py:195
 msgid "Both (all order contact addresses and all attendee email addresses)"
@@ -27494,8 +27477,7 @@ msgstr "Bitte wähle einen Versandzeitpunkt aus"
 
 #: pretix/plugins/sendmail/forms.py:389
 msgid "Please specify the offset days and time"
-msgstr ""
-"Bitte gib sowohl die Anzahl der Tage als auch die gewünschte Uhrzeit an"
+msgstr "Bitte gib sowohl die Anzahl der Tage als auch die gewünschte Uhrzeit an"
 
 #: pretix/plugins/sendmail/forms.py:400
 msgid "Please specify a product"
@@ -28022,8 +28004,7 @@ msgstr "MOTO-Zahlungen für Vorverkaufsstellen aktivieren"
 #: pretix/plugins/stripe/payment.py:143
 msgid ""
 "Gated feature (needs to be enabled for your account by Stripe support first)"
-msgstr ""
-"Eingeschränktes Feature (muss erst vom Stripe-Support aktiviert werden)"
+msgstr "Eingeschränktes Feature (muss erst vom Stripe-Support aktiviert werden)"
 
 #: pretix/plugins/stripe/payment.py:151
 msgid "Stripe Integration security guide"
@@ -28039,11 +28020,11 @@ msgid ""
 "like the 40 page SAQ D. Please consult the %s for further information on "
 "this subject."
 msgstr ""
-"Wir können von Vorverkaufsstellen ausgelöste Buchungen als MOTO (Mail "
-"Order / Telephone Order) markieren, wodurch keine Strong Customer "
-"Authentication (SCA) notwendig wird. Allerdings wirst du dadurch "
-"verpflichtet, jährlich PCI-DSS-Formulare wie z.B. das 40-seitige SAQ D "
-"auszufüllen. Bitte überprüfe %s für weitere Infos zum Thema."
+"Wir können von Vorverkaufsstellen ausgelöste Buchungen als MOTO (Mail Order /"
+" Telephone Order) markieren, wodurch keine Strong Customer Authentication "
+"(SCA) notwendig wird. Allerdings wirst du dadurch verpflichtet, jährlich PCI-"
+"DSS-Formulare wie z.B. das 40-seitige SAQ D auszufüllen. Bitte überprüfe %s "
+"für weitere Infos zum Thema."
 
 #: pretix/plugins/stripe/payment.py:167 pretix/plugins/stripe/payment.py:172
 msgid "Stripe account"
@@ -29467,10 +29448,8 @@ msgstr[1] ""
 #, python-format
 msgid "You can choose %(max_count)s option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] ""
-"Du kannst bis zu %(max_count)s Option aus dieser Kategorie auswählen."
-msgstr[1] ""
-"Du kannst bis zu %(max_count)s Optionen aus dieser Kategorie auswählen."
+msgstr[0] "Du kannst bis zu %(max_count)s Option aus dieser Kategorie auswählen."
+msgstr[1] "Du kannst bis zu %(max_count)s Optionen aus dieser Kategorie auswählen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:33
 #, python-format
