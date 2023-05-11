@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
-"PO-Revision-Date: 2023-05-11 08:35+0000\n"
-"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
+"PO-Revision-Date: 2023-05-11 16:13+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -2176,10 +2176,8 @@ msgid "Invoice address state"
 msgstr "Rechnungsadresse: Bundesstaat"
 
 #: pretix/base/exporters/orderlist.py:770
-#, fuzzy
-#| msgid "Server Transaction Code"
 msgid "Order transaction data"
-msgstr "Server-Transaktionscode"
+msgstr "Transaktionsdaten"
 
 #: pretix/base/exporters/orderlist.py:772
 msgid ""
@@ -2187,12 +2185,14 @@ msgid ""
 "changes to products, prices or tax rates. The information is only accurate "
 "for changes made with pretix versions released after October 2021."
 msgstr ""
+"Tabelle (Excel oder CSV) mit allen Änderungen an der Substanz einer "
+"Bestellung, d.h. allen Änderungen an Produkten, Preisen oder Steuersätzen. "
+"Die Informationen sind nur verlässlich für Änderungen, die mit pretix-"
+"Versionen von nach Oktober 2021 erstellt wurden."
 
 #: pretix/base/exporters/orderlist.py:788
-#, fuzzy
-#| msgid "Only include orders created within this date range."
 msgid "Only include transactions created within this date range."
-msgstr "Nur Bestellungen, die in diesem Zeitraum erstellt wurden."
+msgstr "Nur Transaktionen, die in diesem Zeitraum erstellt wurden."
 
 #: pretix/base/exporters/orderlist.py:823 pretix/base/models/event.py:613
 #: pretix/base/models/items.py:390 pretix/base/models/items.py:1822
@@ -2223,22 +2223,16 @@ msgid "Currency"
 msgstr "Währung"
 
 #: pretix/base/exporters/orderlist.py:831
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Transaction date"
-msgstr "Transaktionscode"
+msgstr "Transaktionsdatum"
 
 #: pretix/base/exporters/orderlist.py:832
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Transaction time"
-msgstr "Transaktionscode"
+msgstr "Transaktionsuhrzeit"
 
 #: pretix/base/exporters/orderlist.py:833
-#, fuzzy
-#| msgid "Order data"
 msgid "Old data"
-msgstr "Bestelldaten"
+msgstr "Alte Daten"
 
 #: pretix/base/exporters/orderlist.py:836 pretix/base/models/items.py:1357
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
@@ -2246,33 +2240,30 @@ msgid "Quantity"
 msgstr "Menge"
 
 #: pretix/base/exporters/orderlist.py:843
-#, fuzzy
-#| msgid "Internal reference"
 msgid "Internal fee type"
-msgstr "Interne Referenz"
+msgstr "Interner Gebührentyp"
 
 #: pretix/base/exporters/orderlist.py:845
-#, fuzzy
-#| msgid "Date"
 msgctxt "subevent"
 msgid "Date ID"
-msgstr "Datum"
+msgstr "Termin-ID"
 
 #: pretix/base/exporters/orderlist.py:850
-#, fuzzy
-#| msgid "Tax rule"
 msgid "Tax rule ID"
-msgstr "Steuerregel"
+msgstr "Steuerregel-ID"
 
 #: pretix/base/exporters/orderlist.py:862
 msgid ""
 "This value is supplied for informational purposes, it is not part of the "
 "original transaction data and might have changed since the transaction."
 msgstr ""
+"Dieser Wert ist nur zu Informationszwecken angegeben. Er ist nicht Teil der "
+"originalen Transaktionsdaten und könnte sich seit dem Transaktionszeitpunkt "
+"geändert haben."
 
 #: pretix/base/exporters/orderlist.py:885
 msgid "Converted from legacy version"
-msgstr ""
+msgstr "Von alter Version konvertiert"
 
 #: pretix/base/exporters/orderlist.py:945
 msgid "Payments and refunds"
@@ -3134,11 +3125,9 @@ msgid "Modern Invoice Renderer (pretix 2.7)"
 msgstr "Modern (pretix 2.7)"
 
 #: pretix/base/invoice.py:898
-#, fuzzy
-#| msgid "Please enter a valid state."
 msgctxt "invoice"
 msgid "(Please quote at all times.)"
-msgstr "Bitte wählen Sie einen gültigen Staat aus."
+msgstr "(Bitte stets angeben.)"
 
 #: pretix/base/media.py:58
 msgid "Barcode / QR-Code"
@@ -8414,13 +8403,11 @@ msgstr ""
 
 #: pretix/base/settings.py:643
 msgid "Highlight order code to make it stand out visibly"
-msgstr ""
+msgstr "Bestellnummer visuell hervorheben"
 
 #: pretix/base/settings.py:644
-#, fuzzy
-#| msgid "Only respected by modern browsers."
 msgid "Only respected by some invoice renderers."
-msgstr "Nur von modernen Browsern respektiert."
+msgstr "Nur von manchen Rechnungs-Layouts unterstützt."
 
 #: pretix/base/settings.py:667
 msgid "Length of ticket codes"
@@ -25791,16 +25778,16 @@ msgid "Invoice email text"
 msgstr "Rechnungs-E-Mail-Text"
 
 #: pretix/plugins/banktransfer/payment.py:256
-#, fuzzy
-#| msgid "Business customers"
 msgid "Restrict to business customers"
-msgstr "Firmenkunden"
+msgstr "Auf Firmenkunden einschränken"
 
 #: pretix/plugins/banktransfer/payment.py:257
 msgid ""
 "Only allow choosing this payment provider for customers who enter an invoice "
 "address and select \"Business or institutional customer\"."
 msgstr ""
+"Biete diese Zahlungsart nur Kunden an, die eine Rechnungsadresse eingegeben "
+"haben und bei dieser \"Firmenkunde oder Institution\" ausgewählt haben."
 
 #: pretix/plugins/banktransfer/payment.py:288
 msgid "Please fill out your bank account details."
