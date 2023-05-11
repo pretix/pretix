@@ -625,6 +625,7 @@ class Event(EventMixin, LoggedModel):
         """
         self.settings.invoice_renderer = 'modern1'
         self.settings.invoice_include_expire_date = True
+        self.settings.invoice_renderer_highlight_order_code = True
         self.settings.ticketoutput_pdf__enabled = True
         self.settings.ticketoutput_passbook__enabled = True
         self.settings.event_list_type = 'calendar'
