@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 15:54+0000\n"
-"PO-Revision-Date: 2023-05-11 08:35+0000\n"
-"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
+"PO-Revision-Date: 2023-05-11 11:30+0000\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -26976,24 +26976,24 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:266
 msgid "Join waiting list"
-msgstr ""
+msgstr "參加候補名單"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:282
 #: pretix/presale/templates/pretixpresale/event/voucher.html:448
 #: pretix/presale/templates/pretixpresale/event/voucher.html:440
 msgctxt "free_tickets"
 msgid "Register"
-msgstr ""
+msgstr "註冊"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:287
 #: pretix/presale/templates/pretixpresale/event/voucher.html:453
 #: pretix/presale/templates/pretixpresale/event/voucher.html:445
 msgid "Add to cart"
-msgstr ""
+msgstr "加入購物車"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:308
 msgid "If you already ordered a ticket"
-msgstr ""
+msgstr "如果你已訂購票"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:312
 msgid ""
@@ -27002,42 +27002,45 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
+"如果你想查看或更改訂單的狀態和詳細資訊，請按兩下我們在訂單過程中發送給你的一"
+"封電子郵件中的連結。如果你找不到連結，請按下以下按鈕，以請求再次將訂單連結發"
+"送給你。"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:321
 msgid "Resend order link"
-msgstr ""
+msgstr "重新傳送訂單連結"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
 msgid "Thank you!"
-msgstr ""
+msgstr "感謝你"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:14
 #: pretix/presale/templates/pretixpresale/event/order.html:32
 msgid "Your order has been placed successfully. See below for details."
-msgstr ""
+msgstr "你的訂單已成功處理！詳情見下文。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 msgid "Your order has been processed successfully! See below for details."
-msgstr ""
+msgstr "你的訂單已成功處理！詳情見下文。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:50
 msgid "We successfully received your payment. See below for details."
-msgstr ""
+msgstr "我們成功收到了你的付款。詳情見下文。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""
 "Please note that we still await approval by the event organizer before your "
 "order is confirmed."
-msgstr ""
+msgstr "請留意，在你付款並完成此訂單之前，我們仍在等待活動組織者的批准。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:39
 msgid ""
 "Please note that we still await approval by the event organizer before you "
 "can pay and complete this order."
-msgstr ""
+msgstr "請留意，在你付款並完成此訂單之前，我們仍在等待活動組織者的批准。"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:43
 msgid "Please note that we still await your payment to complete the process."
