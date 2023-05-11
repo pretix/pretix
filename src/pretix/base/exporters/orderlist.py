@@ -51,19 +51,22 @@ from django.utils.translation import (
 )
 from openpyxl.cell import WriteOnlyCell
 from openpyxl.comments import Comment
-from openpyxl.styles import PatternFill, Font
+from openpyxl.styles import Font, PatternFill
 
 from pretix.base.models import (
     GiftCard, GiftCardTransaction, Invoice, InvoiceAddress, Order,
     OrderPosition, Question,
 )
-from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund, Transaction
+from pretix.base.models.orders import (
+    OrderFee, OrderPayment, OrderRefund, Transaction,
+)
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.settings import PERSON_NAME_SCHEMES, get_name_parts_localized
 
 from ...control.forms.filter import get_all_payment_providers
 from ...helpers import GroupConcat
 from ...helpers.iter import chunked_iterable
+from ...helpers.safe_openpyxl import remove_invalid_excel_chars
 from ..exporter import (
     ListExporter, MultiSheetListExporter, OrganizerLevelExportMixin,
 )
@@ -75,7 +78,6 @@ from ..timeframes import (
     DateFrameField,
     resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
 )
-from ...helpers.safe_openpyxl import remove_invalid_excel_chars
 
 
 class OrderListExporter(MultiSheetListExporter):
