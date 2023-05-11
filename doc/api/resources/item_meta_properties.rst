@@ -16,8 +16,7 @@ name                                  string                     Name of the pro
 default                               string                     Value of the default option
 required                              boolean                    If ``true``, this property will have to be assigned a
                                                                  value in all items of the related event
-allowed_values                        list                       Optional list of all permitted value options for this
-                                                                 property
+allowed_values                        list                       Optional list of all permitted values for this property
 ===================================== ========================== =======================================================
 
 Endpoints
@@ -104,7 +103,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      POST /api/v1/organizers/bigevents/# Todo/ HTTP/1.1
+      POST /api/v1/organizers/bigevents/events/starevent/item_meta_properties/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
@@ -112,7 +111,7 @@ Endpoints
       {
         "name": "ref-code",
         "default": "abcde",
-        "required": True,
+        "required": true,
         "allowed_values": []
       }
 
@@ -125,7 +124,7 @@ Endpoints
         "id": 2,
         "name": "ref-code",
         "default": "abcde",
-        "required": True,
+        "required": true,
         "allowed_values": []
     }
 
@@ -156,7 +155,7 @@ Endpoints
       Content-Length: 94
 
       {
-        "required": False
+        "required": false
       }
 
    **Example response**:
@@ -171,7 +170,7 @@ Endpoints
         "id": 2,
         "name": "ref-code",
         "default": "abcde",
-        "required": False,
+        "required": false,
         "allowed_values": []
       }
 
