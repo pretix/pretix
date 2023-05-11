@@ -49,7 +49,7 @@ for app in apps.get_app_configs():
                     re_path(r'^(?P<event>[^/]+)/', include((patterns, app.label)))
                 )
             if hasattr(urlmod, 'organizer_patterns'):
-                patterns = urlmod.organizer_patterns
+                patterns = plugin_event_urls(urlmod.organizer_patterns, plugin=app.name)
                 raw_plugin_patterns.append(
                     re_path(r'', include((patterns, app.label)))
                 )

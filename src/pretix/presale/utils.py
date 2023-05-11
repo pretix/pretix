@@ -389,8 +389,9 @@ def _event_view(function=None, require_live=True, require_plugin=None):
             else:
                 with scope(organizer=getattr(request, 'organizer', None)):
                     response = func(request=request, *args, **kwargs)
-                    for receiver, r in process_response.send(request.event, request=request, response=response):
-                        response = r
+                    if getattr(request, 'event', None):
+                        for receiver, r in process_response.send(request.event, request=request, response=response):
+                            response = r
 
                     if isinstance(response, TemplateResponse):
                         response = response.render()
