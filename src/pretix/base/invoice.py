@@ -859,8 +859,12 @@ class Modern1Renderer(ClassicInvoiceRenderer):
 
     def _get_first_page_frames(self, doc):
         footer_length = 3.5 * len(self.invoice.footer_text.split('\n')) * mm
+        if self.event.settings.invoice_renderer_highlight_order_code:
+            margin_top = 100 * mm
+        else:
+            margin_top = 95 * mm
         return [
-            Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height - 95 * mm,
+            Frame(doc.leftMargin, doc.bottomMargin, doc.width, doc.height - margin_top,
                   leftPadding=0, rightPadding=0, topPadding=0, bottomPadding=footer_length,
                   id='normal')
         ]
@@ -871,21 +875,31 @@ class Modern1Renderer(ClassicInvoiceRenderer):
         # the font size until it fits.
         begin_top = 100 * mm
 
-        def _draw(label, value, value_size, x, width):
+        def _draw(label, value, value_size, x, width, bold=False, sublabel=None):
             if canvas.stringWidth(value, self.font_regular, value_size) > width and value_size > 6:
                 return False
             textobject = canvas.beginText(x, self.pagesize[1] - begin_top)
             textobject.setFont(self.font_regular, 8)
             textobject.textLine(label)
             textobject.moveCursor(0, 5)
-            textobject.setFont(self.font_regular, value_size)
+            textobject.setFont(self.font_bold if bold else self.font_regular, value_size)
             textobject.textLine(value)
+
+            if sublabel:
+                textobject.moveCursor(0, 1)
+                textobject.setFont(self.font_regular, 8)
+                textobject.textLine(sublabel)
+
             return textobject
 
         value_size = 10
         while value_size >= 5:
+            if self.event.settings.invoice_renderer_highlight_order_code:
+                kwargs = dict(bold=True, sublabel=pgettext('invoice', '(Please quote at all times.)'))
+            else:
+                kwargs = {}
             objects = [
-                _draw(pgettext('invoice', 'Order code'), self.invoice.order.full_code, value_size, self.left_margin, 45 * mm)
+                _draw(pgettext('invoice', 'Order code'), self.invoice.order.full_code, value_size, self.left_margin, 45 * mm, **kwargs)
             ]
 
             p = Paragraph(

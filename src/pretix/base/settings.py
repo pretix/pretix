@@ -634,6 +634,16 @@ DEFAULTS = {
                         "the same numbering scheme will be used that you configured for regular invoices."),
         )
     },
+    'invoice_renderer_highlight_order_code': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Highlight order code to make it stand out visibly"),
+            help_text=_("Only respected by some invoice renderers."),
+        )
+    },
     'invoice_renderer': {
         'default': 'classic',  # default for new events is 'modern1'
         'type': str,
