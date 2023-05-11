@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-09 15:54+0000\n"
-"PO-Revision-Date: 2023-05-10 14:41+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"PO-Revision-Date: 2023-05-11 08:35+0000\n"
+"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -381,7 +381,7 @@ msgstr "標記為已付款的訂單"
 #: pretix/control/templates/pretixcontrol/event/mail.html:111
 #: pretix/control/views/orders.py:1303
 msgid "Order canceled"
-msgstr "訂單取消"
+msgstr "訂單已取消"
 
 #: pretix/api/webhooks.py:213 pretix/base/notifications.py:257
 msgid "Order reactivated"
@@ -3164,7 +3164,7 @@ msgstr "票券已經使用了"
 
 #: pretix/base/models/checkin.py:350
 msgid "Ticket type not allowed here"
-msgstr "這裡不允許這種票券類型"
+msgstr "這裡不允這種票券類型"
 
 #: pretix/base/models/checkin.py:351
 msgid "Ticket code is ambiguous on list"
@@ -3176,11 +3176,11 @@ msgstr "伺服器錯誤"
 
 #: pretix/base/models/checkin.py:353
 msgid "Ticket blocked"
-msgstr "票券已經封鎖"
+msgstr "票券已經封銷"
 
 #: pretix/base/models/checkin.py:354
 msgid "Ticket not valid at this time"
-msgstr "這時間票券是無效的"
+msgstr "在這時間票券仍未有效"
 
 #: pretix/base/models/customers.py:54
 msgid "Provider name"
