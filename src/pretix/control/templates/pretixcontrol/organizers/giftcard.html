@@ -91,6 +91,12 @@
                                     {% if staff_session and t.info %}
                                         <pre><code>{{ t.info|pprint }}</code></pre>
                                     {% endif %}
+                                    {% if t.acceptor and t.acceptor != request.organizer %}
+                                        <span class="text-muted">
+                                            <br>
+                                            <span class="fa fa-group"></span> {{ t.acceptor }}
+                                        </span>
+                                    {% endif %}
                                 </td>
                                 <td class="text-right">
                                     {{ t.value|money:card.currency }}
