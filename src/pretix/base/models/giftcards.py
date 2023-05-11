@@ -188,7 +188,7 @@ class GiftCardTransaction(models.Model):
                 return response
 
         if self.order_id:
-            if self.text:
+            if not self.text:
                 if not customer_facing:
                     return format_html(
                         '<a href="{}">{}</a>',
