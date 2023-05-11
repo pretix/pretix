@@ -140,7 +140,7 @@ def test_card_detail_view_transact_revert_refund(organizer, admin_user, gift_car
         r = o.refunds.create(
             amount=o.total, provider='giftcard', state=OrderRefund.REFUND_STATE_DONE
         )
-        t = gift_card.transactions.create(value=14, order=o, refund=r)
+        t = gift_card.transactions.create(value=14, order=o, refund=r, acceptor=organizer)
 
     client.login(email='dummy@dummy.dummy', password='dummy')
     r = client.post('/control/organizer/dummy/giftcard/{}/'.format(gift_card.pk), {

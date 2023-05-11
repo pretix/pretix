@@ -1469,7 +1469,8 @@ class GiftCardPayment(BasePaymentProvider):
                 trans = gc.transactions.create(
                     value=-1 * payment.amount,
                     order=payment.order,
-                    payment=payment
+                    payment=payment,
+                    acceptor=self.event.organizer,
                 )
                 payment.info_data = {
                     'gift_card': gc.pk,
@@ -1490,7 +1491,8 @@ class GiftCardPayment(BasePaymentProvider):
         trans = gc.transactions.create(
             value=refund.amount,
             order=refund.order,
-            refund=refund
+            refund=refund,
+            acceptor=self.event.organizer,
         )
         refund.info_data = {
             'gift_card': gc.pk,

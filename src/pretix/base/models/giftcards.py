@@ -163,6 +163,17 @@ class GiftCardTransaction(models.Model):
     info = models.JSONField(
         null=True, blank=True,
     )
+    acceptor = models.ForeignKey(
+        'Organizer',
+        related_name='gift_card_transactions',
+        on_delete=models.PROTECT,
+        null=True, blank=True
+    )
 
     class Meta:
         ordering = ("datetime",)
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.acceptor:
+            raise ValueError("`acceptor` should be set on all new gift card transactions.")
+        super().save(*args, **kwargs)

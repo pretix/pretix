@@ -1440,7 +1440,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
     def test_giftcard_partial(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.orga)
         self.event.settings.set('payment_stripe__enabled', True)
         self.event.settings.set('payment_banktransfer__enabled', True)
         with scopes_disabled():
@@ -1483,9 +1483,9 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
     def test_giftcard_full_with_multiple(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.orga)
         gc2 = self.orga.issued_gift_cards.create(currency="EUR")
-        gc2.transactions.create(value=20)
+        gc2.transactions.create(value=20, acceptor=self.orga)
         self.event.settings.set('payment_stripe__enabled', True)
         self.event.settings.set('payment_banktransfer__enabled', True)
         with scopes_disabled():
@@ -1526,7 +1526,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
     def test_giftcard_full(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
-        gc.transactions.create(value=30)
+        gc.transactions.create(value=30, acceptor=self.orga)
         self.event.settings.set('payment_stripe__enabled', True)
         self.event.settings.set('payment_banktransfer__enabled', True)
         with scopes_disabled():
@@ -1555,7 +1555,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
     def test_giftcard_racecondition(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.orga)
         self.event.settings.set('payment_stripe__enabled', True)
         self.event.settings.set('payment_banktransfer__enabled', True)
         with scopes_disabled():
@@ -1584,7 +1584,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         assert '€20.00' in response.content.decode()
         assert '3.00' in response.content.decode()
 
-        gc.transactions.create(value=-2)
+        gc.transactions.create(value=-2, acceptor=self.orga)
 
         response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
         doc = BeautifulSoup(response.content.decode(), "lxml")
@@ -1601,7 +1601,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
     def test_giftcard_expired(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR", expires=now() - timedelta(days=1))
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.orga)
         self.event.settings.set('payment_banktransfer__enabled', True)
         with scopes_disabled():
             CartPosition.objects.create(
@@ -1616,7 +1616,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
     def test_giftcard_invalid_currency(self):
         gc = self.orga.issued_gift_cards.create(currency="USD")
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.orga)
         self.event.settings.set('payment_banktransfer__enabled', True)
         with scopes_disabled():
             CartPosition.objects.create(
@@ -1633,7 +1633,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.orga.issued_gift_cards.create(currency="EUR")
         orga2 = Organizer.objects.create(slug="foo2", name="foo2")
         gc = orga2.issued_gift_cards.create(currency="EUR")
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.orga)
         self.event.settings.set('payment_banktransfer__enabled', True)
         with scopes_disabled():
             CartPosition.objects.create(
@@ -1650,7 +1650,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.orga.issued_gift_cards.create(currency="EUR")
         orga2 = Organizer.objects.create(slug="foo2", name="foo2")
         gc = orga2.issued_gift_cards.create(currency="EUR")
-        gc.transactions.create(value=23)
+        gc.transactions.create(value=23, acceptor=orga2)
         self.orga.gift_card_issuer_acceptance.create(issuer=orga2)
         self.event.settings.set('payment_banktransfer__enabled', True)
         with scopes_disabled():
@@ -1670,11 +1670,15 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         self.assertEqual(len(doc.select(".thank-you")), 1)
         with scopes_disabled():
             o = Order.objects.last()
-            assert o.payments.get(provider='giftcard').amount == Decimal('23.00')
+            p = o.payments.get(provider='giftcard')
+            assert p.amount == Decimal('23.00')
+            gc.refresh_from_db()
+            assert gc.issuer == orga2
+            assert gc.transactions.last().acceptor == self.orga
 
     def test_giftcard_in_test_mode(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.orga)
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.event.testmode = True
         self.event.save()
@@ -1691,7 +1695,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
     def test_giftcard_not_in_test_mode(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR", testmode=True)
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.orga)
         self.event.settings.set('payment_banktransfer__enabled', True)
         with scopes_disabled():
             CartPosition.objects.create(
@@ -1720,7 +1724,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
     def test_giftcard_twice(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.orga)
         self.event.settings.set('payment_banktransfer__enabled', True)
         with scopes_disabled():
             CartPosition.objects.create(
@@ -1739,7 +1743,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
     def test_giftcard_swap(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.orga)
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.ticket.issue_giftcard = True
         self.ticket.save()
@@ -1756,7 +1760,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
 
     def test_giftcard_like_method_with_min_value(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.orga)
         self.event.settings.set('payment_stripe__enabled', True)
         self.event.settings.set('payment_banktransfer__enabled', True)
         with scopes_disabled():
@@ -1790,7 +1794,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         # Our built-in gift card payment does not actually support setting a payment fee, but we still want to
         # test the core behavior in case a gift-card plugin does
         gc = self.orga.issued_gift_cards.create(currency="EUR")
-        gc.transactions.create(value=27)
+        gc.transactions.create(value=27, acceptor=self.orga)
         self.event.settings.set('payment_giftcard__fee_percent', 10)
         self.event.settings.set('payment_giftcard__fee_reverse_calc', False)
         with scopes_disabled():
@@ -1829,7 +1833,7 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         # Our built-in gift card payment does not actually support setting a payment fee, but we still want to
         # test the core behavior in case a gift-card plugin does
         gc = self.orga.issued_gift_cards.create(currency="EUR")
-        gc.transactions.create(value=23)
+        gc.transactions.create(value=23, acceptor=self.orga)
         self.event.settings.set('payment_banktransfer__enabled', True)
         self.event.settings.set('payment_banktransfer__fee_percent', 20)
         self.event.settings.set('payment_banktransfer__fee_reverse_calc', False)
