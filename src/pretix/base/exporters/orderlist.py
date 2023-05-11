@@ -49,12 +49,15 @@ from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import (
     gettext as _, gettext_lazy, pgettext, pgettext_lazy,
 )
+from openpyxl.cell import WriteOnlyCell
+from openpyxl.comments import Comment
+from openpyxl.styles import PatternFill, Font
 
 from pretix.base.models import (
     GiftCard, GiftCardTransaction, Invoice, InvoiceAddress, Order,
     OrderPosition, Question,
 )
-from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund
+from pretix.base.models.orders import OrderFee, OrderPayment, OrderRefund, Transaction
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.settings import PERSON_NAME_SCHEMES, get_name_parts_localized
 
@@ -72,6 +75,7 @@ from ..timeframes import (
     DateFrameField,
     resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
 )
+from ...helpers.safe_openpyxl import remove_invalid_excel_chars
 
 
 class OrderListExporter(MultiSheetListExporter):
@@ -759,6 +763,181 @@ class OrderListExporter(MultiSheetListExporter):
             return '{}_orders'.format(self.event.slug)
 
 
+class TransactionListExporter(ListExporter):
+    identifier = 'transactions'
+    verbose_name = gettext_lazy('Order transaction data')
+    category = pgettext_lazy('export_category', 'Order data')
+    description = gettext_lazy('Download a spreadsheet of all substantial changes to orders, i.e. all changes to '
+                               'products, prices or tax rates. The information is only accurate for changes made with '
+                               'pretix versions released after October 2021.')
+
+    @cached_property
+    def providers(self):
+        return dict(get_all_payment_providers())
+
+    @property
+    def additional_form_fields(self):
+        d = [
+            ('date_range',
+             DateFrameField(
+                 label=_('Date range'),
+                 include_future_frames=False,
+                 required=False,
+                 help_text=_('Only include transactions created within this date range.')
+             )),
+        ]
+        d = OrderedDict(d)
+        return d
+
+    @cached_property
+    def event_object_cache(self):
+        return {e.pk: e for e in self.events}
+
+    def get_filename(self):
+        if self.is_multievent:
+            return '{}_transactions'.format(self.organizer.slug)
+        else:
+            return '{}_transactions'.format(self.event.slug)
+
+    def iterate_list(self, form_data):
+        qs = Transaction.objects.filter(
+            order__event__in=self.events,
+        )
+
+        if form_data.get('date_range'):
+            dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['date_range'], self.timezone)
+            if dt_start:
+                qs = qs.filter(datetime__gte=dt_start)
+            if dt_end:
+                qs = qs.filter(datetime__lt=dt_end)
+
+        qs = qs.select_related(
+            'order', 'order__event', 'item', 'variation', 'subevent',
+        ).order_by(
+            'datetime', 'id',
+        )
+
+        headers = [
+            _('Event'),
+            _('Event slug'),
+            _('Currency'),
+
+            _('Order code'),
+            _('Order date'),
+            _('Order time'),
+
+            _('Transaction date'),
+            _('Transaction time'),
+            _('Old data'),
+
+            _('Position ID'),
+            _('Quantity'),
+
+            _('Product ID'),
+            _('Product'),
+            _('Variation ID'),
+            _('Variation'),
+            _('Fee type'),
+            _('Internal fee type'),
+
+            pgettext('subevent', 'Date ID'),
+            pgettext('subevent', 'Date'),
+
+            _('Price'),
+            _('Tax rate'),
+            _('Tax rule ID'),
+            _('Tax rule'),
+            _('Tax value'),
+        ]
+
+        if form_data.get('_format') == 'xlsx':
+            for i in range(len(headers)):
+                headers[i] = WriteOnlyCell(self.__ws, value=headers[i])
+                if i in (0, 12, 14, 18, 22):
+                    headers[i].fill = PatternFill(start_color="FFB419", end_color="FFB419", fill_type="solid")
+                    headers[i].comment = Comment(
+                        text=_(
+                            "This value is supplied for informational purposes, it is not part of the original transaction "
+                            "data and might have changed since the transaction."
+                        ),
+                        author='system'
+                    )
+                headers[i].font = Font(bold=True)
+
+        yield headers
+
+        yield self.ProgressSetTotal(total=qs.count())
+
+        for t in qs.iterator():
+            row = [
+                str(t.order.event.name),
+                t.order.event.slug,
+                t.order.event.currency,
+
+                t.order.code,
+                t.order.datetime.astimezone(self.timezone).strftime('%Y-%m-%d'),
+                t.order.datetime.astimezone(self.timezone).strftime('%H:%M:%S'),
+
+                t.datetime.astimezone(self.timezone).strftime('%Y-%m-%d'),
+                t.datetime.astimezone(self.timezone).strftime('%H:%M:%S'),
+                _('Converted from legacy version') if t.migrated else '',
+
+                t.positionid,
+                t.count,
+
+                t.item_id,
+                str(t.item),
+                t.variation_id or '',
+                str(t.variation) if t.variation_id else '',
+                t.fee_type,
+                t.internal_type,
+                t.subevent_id or '',
+                str(t.subevent) if t.subevent else '',
+
+                t.price,
+                t.tax_rate,
+                t.tax_rule_id or '',
+                str(t.tax_rule.internal_name or t.tax_rule.name) if t.tax_rule_id else '',
+                t.tax_value,
+            ]
+
+            if form_data.get('_format') == 'xlsx':
+                for i in range(len(row)):
+                    if t.order.testmode:
+                        row[i] = WriteOnlyCell(self.__ws, value=remove_invalid_excel_chars(row[i]))
+                        row[i].fill = PatternFill(start_color="FFB419", end_color="FFB419", fill_type="solid")
+
+            yield row
+
+    def prepare_xlsx_sheet(self, ws):
+        self.__ws = ws
+        ws.freeze_panes = 'A2'
+        ws.column_dimensions['A'].width = 25
+        ws.column_dimensions['B'].width = 10
+        ws.column_dimensions['C'].width = 10
+        ws.column_dimensions['D'].width = 10
+        ws.column_dimensions['E'].width = 15
+        ws.column_dimensions['F'].width = 15
+        ws.column_dimensions['G'].width = 15
+        ws.column_dimensions['H'].width = 15
+        ws.column_dimensions['I'].width = 15
+        ws.column_dimensions['J'].width = 10
+        ws.column_dimensions['K'].width = 10
+        ws.column_dimensions['L'].width = 10
+        ws.column_dimensions['M'].width = 25
+        ws.column_dimensions['N'].width = 10
+        ws.column_dimensions['O'].width = 25
+        ws.column_dimensions['P'].width = 20
+        ws.column_dimensions['Q'].width = 20
+        ws.column_dimensions['R'].width = 10
+        ws.column_dimensions['S'].width = 25
+        ws.column_dimensions['T'].width = 15
+        ws.column_dimensions['U'].width = 10
+        ws.column_dimensions['V'].width = 10
+        ws.column_dimensions['W'].width = 20
+        ws.column_dimensions['X'].width = 15
+
+
 class PaymentListExporter(ListExporter):
     identifier = 'paymentlist'
     verbose_name = gettext_lazy('Payments and refunds')
@@ -1163,6 +1342,16 @@ def register_orderlist_exporter(sender, **kwargs):
 @receiver(register_multievent_data_exporters, dispatch_uid="multiexporter_orderlist")
 def register_multievent_orderlist_exporter(sender, **kwargs):
     return OrderListExporter
+
+
+@receiver(register_data_exporters, dispatch_uid="exporter_ordertransactionlist")
+def register_ordertransactionlist_exporter(sender, **kwargs):
+    return TransactionListExporter
+
+
+@receiver(register_multievent_data_exporters, dispatch_uid="multiexporter_ordertransactionlist")
+def register_multievent_ordertransactionlist_exporter(sender, **kwargs):
+    return TransactionListExporter
 
 
 @receiver(register_data_exporters, dispatch_uid="exporter_paymentlist")
