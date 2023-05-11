@@ -578,6 +578,20 @@ All plugins that are installed may send fields for the global settings form, as
 an OrderedDict of (setting name, form field).
 """
 
+gift_card_transaction_display = django.dispatch.Signal()
+"""
+Arguments: ``transaction``, ``customer_facing``
+
+To display an instance of the ``GiftCardTransaction`` model to a human user,
+``pretix.base.signals.gift_card_transaction_display`` will be sent out with a ``transaction`` argument.
+The ``customer_facing`` argument specifies whether the HTML will be shown to an end-user or if it is being
+used in the backend.
+
+The first received response that is not ``None`` will be used to display the log entry
+to the user. The receivers are expected to return a string (that might be marked with ``mark_safe`` from Django if
+it contains HTML).
+"""
+
 order_fee_calculation = EventPluginSignal()
 """
 Arguments: ``positions``, ``invoice_address``, ``meta_info``, ``total``, ``gift_cards``, ``payment_requests``

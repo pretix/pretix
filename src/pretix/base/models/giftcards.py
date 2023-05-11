@@ -25,7 +25,9 @@ from django.conf import settings
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Sum
+from django.urls import reverse
 from django.utils.crypto import get_random_string
+from django.utils.html import format_html
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
@@ -177,3 +179,44 @@ class GiftCardTransaction(models.Model):
         if not self.pk and not self.acceptor:
             raise ValueError("`acceptor` should be set on all new gift card transactions.")
         super().save(*args, **kwargs)
+
+    def display(self, customer_facing=True):
+        from ..signals import gift_card_transaction_display
+
+        for receiver, response in gift_card_transaction_display.send(self, transaction=self, customer_facing=customer_facing):
+            if response:
+                return response
+
+        if self.order_id:
+            if self.text:
+                if not customer_facing:
+                    return format_html(
+                        '<a href="{}">{}</a>',
+                        reverse(
+                            "control:event.order",
+                            kwargs={
+                                "event": self.order.event.slug,
+                                "organizer": self.order.event.organizer.slug,
+                                "code": self.order.code,
+                            }
+                        ),
+                        self.order.full_code
+                    )
+                return self.order.full_code
+            else:
+                return self.text
+        else:
+            if self.text:
+                return format_html(
+                    '<em>{}:</em> {}',
+                    _('Manual transaction'),
+                    self.text,
+                )
+            else:
+                return _('Manual transaction')
+
+    def display_backend(self):
+        return self.display(customer_facing=False)
+
+    def display_presale(self):
+        return self.display(customer_facing=True)

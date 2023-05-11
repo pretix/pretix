@@ -4,7 +4,7 @@
     <thead>
     <tr>
         <th>{% trans "Date" %}</th>
-        <th>{% trans "Order" %}</th>
+        <th>{% trans "Information" %}</th>
         <th class="text-right">{% trans "Value" %}</th>
     </tr>
     </thead>
@@ -13,11 +13,7 @@
         <tr>
             <td>{{ t.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
             <td>
-                {% if t.order %}
-                    {{ t.order.full_code }}
-                {% else %}
-                    <em>{% if t.text %}{{ t.text }}{% else %}{% trans "Manual transaction" %}{% endif %}</em>
-                {% endif %}
+                {{ t.display_presale }}
             </td>
             <td class="text-right">
                 {{ t.value|money:giftcard.currency }}

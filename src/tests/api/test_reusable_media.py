@@ -190,6 +190,7 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
             "expires": None,
             "conditions": None,
             "owner_ticket": resp.data["linked_orderposition"],
+            "issuer": "dummy",
         }
 
 

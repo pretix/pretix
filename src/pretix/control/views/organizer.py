@@ -1472,6 +1472,16 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                     ))
         return self.get(request, *args, **kwargs)
 
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            **kwargs,
+            transactions=self.object.transactions.select_related(
+                'order', 'order__event', 'order__event__organizer', 'payment', 'refund'
+            ).prefetch_related(
+                'acceptor'
+            )
+        )
+
 
 class GiftCardCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
     template_name = 'pretixcontrol/organizers/giftcard_create.html'
