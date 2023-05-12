@@ -44,7 +44,7 @@ def medium(organizer):
 @pytest.fixture
 def gift_card(organizer):
     gc = organizer.issued_gift_cards.create(currency="EUR")
-    gc.transactions.create(value=42)
+    gc.transactions.create(value=42, acceptor=organizer)
     return gc
 
 

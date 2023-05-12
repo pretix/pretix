@@ -33,7 +33,7 @@ from pretix.base.models import GiftCard, Order, Organizer
 @pytest.fixture
 def giftcard(organizer, event):
     gc = organizer.issued_gift_cards.create(secret="ABCDEF", currency="EUR")
-    gc.transactions.create(value=Decimal('23.00'))
+    gc.transactions.create(value=Decimal('23.00'), acceptor=organizer)
     return gc
 
 
@@ -53,6 +53,7 @@ TEST_GC_RES = {
     "expires": None,
     "conditions": None,
     "currency": "EUR",
+    "issuer": "dummy",
     "owner_ticket": None
 }
 
@@ -264,7 +265,8 @@ def test_giftcard_transact(token_client, organizer, event, giftcard):
         '/api/v1/organizers/{}/giftcards/{}/transact/'.format(organizer.slug, giftcard.pk),
         {
             'value': '10.00',
-            'text': 'bla'
+            'text': 'bla',
+            'info': {"a": "b"}
         },
         format='json'
     )
@@ -272,6 +274,23 @@ def test_giftcard_transact(token_client, organizer, event, giftcard):
     giftcard.refresh_from_db()
     assert giftcard.value == Decimal('43.00')
     assert giftcard.transactions.last().text == 'bla'
+    assert giftcard.transactions.last().info == {"a": "b"}
+    assert giftcard.transactions.last().acceptor == organizer
+
+
+@pytest.mark.django_db
+def test_giftcard_transact_cross_organizer(token_client, organizer, event, other_giftcard):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/giftcards/{}/transact/?include_accepted=true'.format(organizer.slug, other_giftcard.pk),
+        {
+            'value': '10.00',
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    other_giftcard.refresh_from_db()
+    assert other_giftcard.value == Decimal('10.00')
+    assert other_giftcard.transactions.last().acceptor == organizer
 
 
 @pytest.mark.django_db
@@ -314,7 +333,9 @@ def test_giftcard_transactions(token_client, organizer, giftcard):
                 "value": "23.00",
                 "event": None,
                 "order": None,
-                "text": None
+                "text": None,
+                "info": None,
+                "acceptor": organizer.slug
             }
         ]
     }

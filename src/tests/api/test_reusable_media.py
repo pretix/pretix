@@ -32,7 +32,7 @@ from pretix.base.models import Order, Organizer, ReusableMedium
 @pytest.fixture
 def giftcard(organizer):
     gc = organizer.issued_gift_cards.create(secret="ABCDEF", currency="EUR")
-    gc.transactions.create(value=Decimal('23.00'))
+    gc.transactions.create(value=Decimal('23.00'), acceptor=organizer)
     return gc
 
 
@@ -50,7 +50,7 @@ def organizer2():
 @pytest.fixture
 def giftcard2(organizer2):
     gc = organizer2.issued_gift_cards.create(secret="ABCDEF", currency="EUR")
-    gc.transactions.create(value=Decimal('23.00'))
+    gc.transactions.create(value=Decimal('23.00'), acceptor=organizer2)
     return gc
 
 
@@ -190,6 +190,7 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
             "expires": None,
             "conditions": None,
             "owner_ticket": resp.data["linked_orderposition"],
+            "issuer": "dummy",
         }
 
 

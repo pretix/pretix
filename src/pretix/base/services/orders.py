@@ -235,7 +235,7 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
 
                     for gc in position.issued_gift_cards.all():
                         gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
-                        gc.transactions.create(value=position.price, order=order)
+                        gc.transactions.create(value=position.price, order=order, acceptor=order.event.organizer)
                         break
 
                     for m in position.granted_memberships.all():
@@ -513,7 +513,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                         )
                     )
                 else:
-                    gc.transactions.create(value=-position.price, order=order)
+                    gc.transactions.create(value=-position.price, order=order, acceptor=order.event.organizer)
 
             for m in position.granted_memberships.all():
                 m.canceled = True
@@ -2186,7 +2186,7 @@ class OrderChangeManager:
                             card=gc.secret
                         ))
                     else:
-                        gc.transactions.create(value=-op.position.price, order=self.order)
+                        gc.transactions.create(value=-op.position.price, order=self.order, acceptor=self.order.event.organizer)
 
                 for m in op.position.granted_memberships.with_usages().all():
                     m.canceled = True
@@ -2202,7 +2202,7 @@ class OrderChangeManager:
                                 card=gc.secret
                             ))
                         else:
-                            gc.transactions.create(value=-opa.position.price, order=self.order)
+                            gc.transactions.create(value=-opa.position.price, order=self.order, acceptor=self.order.event.organizer)
 
                     for m in opa.granted_memberships.with_usages().all():
                         m.canceled = True
@@ -2918,7 +2918,7 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
                     currency=sender.currency, issued_in=p, testmode=order.testmode,
                     expires=sender.organizer.default_gift_card_expiry,
                 )
-                gc.transactions.create(value=p.price - issued, order=order)
+                gc.transactions.create(value=p.price - issued, order=order, acceptor=sender.organizer)
                 any_giftcards = True
                 p.secret = gc.secret
                 p.save(update_fields=['secret'])

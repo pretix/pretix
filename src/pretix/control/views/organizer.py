@@ -1452,6 +1452,7 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                     self.object.transactions.create(
                         value=value,
                         text=request.POST.get('text') or None,
+                        acceptor=request.organizer,
                     )
                     self.object.log_action(
                         'pretix.giftcards.transaction.manual',
@@ -1470,6 +1471,16 @@ class GiftCardDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
                         }
                     ))
         return self.get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            **kwargs,
+            transactions=self.object.transactions.select_related(
+                'order', 'order__event', 'order__event__organizer', 'payment', 'refund'
+            ).prefetch_related(
+                'acceptor'
+            )
+        )
 
 
 class GiftCardCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
@@ -1497,6 +1508,7 @@ class GiftCardCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
         form.instance.issuer = self.request.organizer
         super().form_valid(form)
         form.instance.transactions.create(
+            acceptor=self.request.organizer,
             value=form.cleaned_data['value']
         )
         form.instance.log_action('pretix.giftcards.created', user=self.request.user, data={})

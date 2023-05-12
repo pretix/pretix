@@ -24,6 +24,8 @@ owner_ticket                          integer                    Internal ID of 
                                                                  this gift card and can view all transactions. When setting
                                                                  this field, you can also give the ``secret`` of an order
                                                                  position.
+issuer                                string                     Organizer slug of the organizer who created this gift
+                                                                 card and is responsible for it.
 ===================================== ========================== =======================================================
 
 The gift card transaction resource contains the following public fields:
@@ -39,7 +41,16 @@ value                                 money (string)             Transaction amo
 event                                 string                     Event slug, if the gift card was used in the web shop (or ``null``)
 order                                 string                     Order code, if the gift card was used in the web shop (or ``null``)
 text                                  string                     Custom text of the transaction (or ``null``)
+info                                  object                     Additional data about the transaction (or ``null``)
+acceptor                              string                     Organizer slug of the organizer who created this transaction
+                                                                 (can be ``null`` for all transactions performed before
+                                                                 this field was added.)
 ===================================== ========================== =======================================================
+
+.. versionchanged:: 4.20
+
+    The ``owner_ticket`` and ``issuer`` attributes of the gift card and the ``info`` and ``acceptor`` attributes of the
+    gift card transaction resource have been added.
 
 Endpoints
 ---------
@@ -77,6 +88,7 @@ Endpoints
             "expires": null,
             "conditions": null,
             "owner_ticket": null,
+            "issuer": "bigevents",
             "value": "13.37"
           }
         ]
@@ -123,6 +135,7 @@ Endpoints
         "expires": null,
         "conditions": null,
         "owner_ticket": null,
+        "issuer": "bigevents",
         "value": "13.37"
       }
 
@@ -168,6 +181,7 @@ Endpoints
         "expires": null,
         "conditions": null,
         "owner_ticket": null,
+        "issuer": "bigevents",
         "value": "13.37"
       }
 
@@ -221,6 +235,7 @@ Endpoints
         "expires": null,
         "conditions": null,
         "owner_ticket": null,
+        "issuer": "bigevents",
         "value": "14.00"
       }
 
@@ -267,6 +282,7 @@ Endpoints
         "expires": null,
         "conditions": null,
         "owner_ticket": null,
+        "issuer": "bigevents",
         "value": "15.37"
       }
 
@@ -310,7 +326,11 @@ Endpoints
             "value": "50.00",
             "event": "democon",
             "order": "FXQYW",
-            "text": null
+            "text": null,
+            "acceptor": "bigevents",
+            "info": {
+              "created_by": "plugin1"
+            }
           }
         ]
       }

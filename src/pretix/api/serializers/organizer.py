@@ -160,6 +160,7 @@ class FlexibleTicketRelatedField(serializers.PrimaryKeyRelatedField):
 class GiftCardSerializer(I18nAwareModelSerializer):
     value = serializers.DecimalField(max_digits=13, decimal_places=2, min_value=Decimal('0.00'))
     owner_ticket = FlexibleTicketRelatedField(required=False, allow_null=True, queryset=OrderPosition.all.none())
+    issuer = serializers.SlugRelatedField(slug_field='slug', read_only=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -196,7 +197,8 @@ class GiftCardSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = GiftCard
-        fields = ('id', 'secret', 'issuance', 'value', 'currency', 'testmode', 'expires', 'conditions', 'owner_ticket')
+        fields = ('id', 'secret', 'issuance', 'value', 'currency', 'testmode', 'expires', 'conditions', 'owner_ticket',
+                  'issuer')
 
 
 class OrderEventSlugField(serializers.RelatedField):
@@ -207,11 +209,12 @@ class OrderEventSlugField(serializers.RelatedField):
 
 class GiftCardTransactionSerializer(I18nAwareModelSerializer):
     order = serializers.SlugRelatedField(slug_field='code', read_only=True)
+    acceptor = serializers.SlugRelatedField(slug_field='slug', read_only=True)
     event = OrderEventSlugField(source='order', read_only=True)
 
     class Meta:
         model = GiftCardTransaction
-        fields = ('id', 'datetime', 'value', 'event', 'order', 'text')
+        fields = ('id', 'datetime', 'value', 'event', 'order', 'text', 'info', 'acceptor')
 
 
 class EventSlugField(serializers.SlugRelatedField):
