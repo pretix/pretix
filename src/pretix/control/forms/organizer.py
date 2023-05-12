@@ -65,8 +65,8 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
-    Customer, Device, EventMetaProperty, Gate, GiftCard, Membership,
-    MembershipType, OrderPosition, Organizer, ReusableMedium, Team,
+    Customer, Device, EventMetaProperty, Gate, GiftCard, GiftCardAcceptance,
+    Membership, MembershipType, OrderPosition, Organizer, ReusableMedium, Team,
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.organizer import OrganizerFooterLink
@@ -637,7 +637,11 @@ class GiftCardCreateForm(forms.ModelForm):
         if GiftCard.objects.filter(
                 secret__iexact=s
         ).filter(
-            Q(issuer=self.organizer) | Q(issuer__gift_card_collector_acceptance__collector=self.organizer)
+            Q(issuer=self.organizer) |
+            Q(issuer__in=GiftCardAcceptance.objects.filter(
+                acceptor=self.organizer,
+                active=True,
+            ).values_list('issuer', flat=True))
         ).exists():
             raise ValidationError(
                 _('A gift card with the same secret already exists in your or an affiliated organizer account.')

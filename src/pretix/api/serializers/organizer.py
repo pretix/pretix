@@ -36,9 +36,9 @@ from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.auth import get_auth_backends
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
-    Customer, Device, GiftCard, GiftCardTransaction, Membership,
-    MembershipType, OrderPosition, Organizer, ReusableMedium, SeatingPlan,
-    Team, TeamAPIToken, TeamInvite, User,
+    Customer, Device, GiftCard, GiftCardAcceptance, GiftCardTransaction,
+    Membership, MembershipType, OrderPosition, Organizer, ReusableMedium,
+    SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
@@ -183,8 +183,11 @@ class GiftCardSerializer(I18nAwareModelSerializer):
             qs = GiftCard.objects.filter(
                 secret=s
             ).filter(
-                Q(issuer=self.context["organizer"]) | Q(
-                    issuer__gift_card_collector_acceptance__collector=self.context["organizer"])
+                Q(issuer=self.context["organizer"]) |
+                Q(issuer__in=GiftCardAcceptance.objects.filter(
+                    acceptor=self.context["organizer"],
+                    active=True,
+                ).values_list('issuer', flat=True))
             )
             if self.instance:
                 qs = qs.exclude(pk=self.instance.pk)

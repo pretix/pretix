@@ -1676,6 +1676,24 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             assert gc.issuer == orga2
             assert gc.transactions.last().acceptor == self.orga
 
+    def test_giftcard_cross_organizer_inactive(self):
+        self.orga.issued_gift_cards.create(currency="EUR")
+        orga2 = Organizer.objects.create(slug="foo2", name="foo2")
+        gc = orga2.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=23, acceptor=orga2)
+        self.orga.gift_card_issuer_acceptance.create(issuer=orga2, active=False)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        assert 'This gift card is not known.' in response.content.decode()
+
     def test_giftcard_in_test_mode(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")
         gc.transactions.create(value=20, acceptor=self.orga)

@@ -60,6 +60,8 @@ class NestedGiftCardSerializer(GiftCardSerializer):
 
 
 class ReusableMediaSerializer(I18nAwareModelSerializer):
+    organizer = serializers.SlugRelatedField(slug_field='slug', read_only=True)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
@@ -111,6 +113,7 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
         model = ReusableMedium
         fields = (
             'id',
+            'organizer',
             'created',
             'updated',
             'type',
