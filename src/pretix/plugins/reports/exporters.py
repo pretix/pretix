@@ -156,9 +156,9 @@ class ReportlabExportMixin:
 
         tz = get_current_timezone()
         canvas.setFont('OpenSans', 8)
-        canvas.drawString(15 * mm, 10 * mm, _("Page %d") % (doc.page,))
-        canvas.drawRightString(self.pagesize[0] - 15 * mm, 10 * mm,
-                               _("Created: %s") % now().astimezone(tz).strftime("%d.%m.%Y %H:%M:%S"))
+        canvas.drawString(doc.leftMargin, 10 * mm, _("Page %d") % (doc.page,))
+        canvas.drawRightString(self.pagesize[0] - doc.rightMargin, 10 * mm,
+                               _("Created: %s") % date_format(now().astimezone(tz), 'SHORT_DATETIME_FORMAT'))
 
     def get_right_header_string(self):
         return settings.PRETIX_INSTANCE_NAME
@@ -176,12 +176,12 @@ class ReportlabExportMixin:
         from reportlab.lib.units import mm
 
         canvas.setFont('OpenSans', 10)
-        canvas.drawString(15 * mm, self.pagesize[1] - 15 * mm, self.get_left_header_string())
-        canvas.drawRightString(self.pagesize[0] - 15 * mm, self.pagesize[1] - 15 * mm,
+        canvas.drawString(doc.leftMargin, self.pagesize[1] - 15 * mm, self.get_left_header_string())
+        canvas.drawRightString(self.pagesize[0] - doc.rightMargin, self.pagesize[1] - 15 * mm,
                                self.get_right_header_string())
         canvas.setStrokeColorRGB(0, 0, 0)
-        canvas.line(15 * mm, self.pagesize[1] - 17 * mm,
-                    self.pagesize[0] - 15 * mm, self.pagesize[1] - 17 * mm)
+        canvas.line(doc.leftMargin, self.pagesize[1] - 17 * mm,
+                    self.pagesize[0] - doc.rightMargin, self.pagesize[1] - 17 * mm)
 
 
 class Report(ReportlabExportMixin, BaseExporter):
