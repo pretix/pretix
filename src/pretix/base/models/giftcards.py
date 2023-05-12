@@ -55,7 +55,10 @@ class GiftCardAcceptance(models.Model):
         on_delete=models.CASCADE
     )
     active = models.BooleanField(default=True)
-    reusable_media = models.BooleanField(default=True)
+    reusable_media = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = (('issuer', 'acceptor'),)
 
 
 class GiftCard(LoggedModel):

@@ -77,7 +77,7 @@ from pretix.base.models import (
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.event import Event, EventMetaProperty, EventMetaValue
 from pretix.base.models.giftcards import (
-    GiftCardTransaction, gen_giftcard_secret,
+    GiftCardAcceptance, GiftCardTransaction, gen_giftcard_secret,
 )
 from pretix.base.models.orders import CancellationRequest
 from pretix.base.models.organizer import TeamAPIToken
@@ -96,12 +96,12 @@ from pretix.control.forms.filter import (
 from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
     CustomerCreateForm, CustomerUpdateForm, DeviceBulkEditForm, DeviceForm,
-    EventMetaPropertyForm, GateForm, GiftCardCreateForm, GiftCardUpdateForm,
-    MailSettingsForm, MembershipTypeForm, MembershipUpdateForm,
-    OrganizerDeleteForm, OrganizerFooterLinkFormset, OrganizerForm,
-    OrganizerSettingsForm, OrganizerUpdateForm, ReusableMediumCreateForm,
-    ReusableMediumUpdateForm, SSOClientForm, SSOProviderForm, TeamForm,
-    WebHookForm,
+    EventMetaPropertyForm, GateForm, GiftCardAcceptanceInviteForm,
+    GiftCardCreateForm, GiftCardUpdateForm, MailSettingsForm,
+    MembershipTypeForm, MembershipUpdateForm, OrganizerDeleteForm,
+    OrganizerFooterLinkFormset, OrganizerForm, OrganizerSettingsForm,
+    OrganizerUpdateForm, ReusableMediumCreateForm, ReusableMediumUpdateForm,
+    SSOClientForm, SSOProviderForm, TeamForm, WebHookForm,
 )
 from pretix.control.forms.rrule import RRuleForm
 from pretix.control.logdisplay import OVERVIEW_BANLIST
@@ -181,7 +181,8 @@ class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
         return self.request.organizer
 
     def get_queryset(self):
-        qs = self.request.user.get_events_with_any_permission(self.request).select_related('organizer').prefetch_related(
+        qs = self.request.user.get_events_with_any_permission(self.request).select_related(
+            'organizer').prefetch_related(
             'organizer', '_settings_objects', 'organizer___settings_objects',
             'organizer__meta_properties',
             Prefetch(
@@ -211,7 +212,8 @@ class OrganizerDetail(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
         ctx = super().get_context_data(**kwargs)
         ctx['filter_form'] = self.filter_form
         ctx['meta_fields'] = [
-            self.filter_form['meta_{}'.format(p.name)] for p in self.organizer.meta_properties.filter(filter_allowed=True)
+            self.filter_form['meta_{}'.format(p.name)] for p in
+            self.organizer.meta_properties.filter(filter_allowed=True)
         ]
         return ctx
 
@@ -316,7 +318,8 @@ class MailSettingsPreview(OrganizerPermissionRequiredMixin, View):
     # get all supported placeholders with dummy values
     def placeholders(self, item):
         ctx = {}
-        for p, s in MailSettingsForm(obj=self.request.organizer)._get_sample_context(MailSettingsForm.base_context[item]).items():
+        for p, s in MailSettingsForm(obj=self.request.organizer)._get_sample_context(
+                MailSettingsForm.base_context[item]).items():
             if s.strip().startswith('*'):
                 ctx[p] = s
             else:
@@ -341,7 +344,8 @@ class MailSettingsPreview(OrganizerPermissionRequiredMixin, View):
                 if idx in self.supported_locale:
                     with language(self.supported_locale[idx], self.request.organizer.settings.region):
                         if k.startswith('mail_subject_'):
-                            msgs[self.supported_locale[idx]] = format_map(bleach.clean(v), self.placeholders(preview_item))
+                            msgs[self.supported_locale[idx]] = format_map(bleach.clean(v),
+                                                                          self.placeholders(preview_item))
                         else:
                             msgs[self.supported_locale[idx]] = markdown_compile_email(
                                 format_map(v, self.placeholders(preview_item))
@@ -395,7 +399,8 @@ class OrganizerDelete(AdministratorPermissionRequiredMixin, FormView):
             messages.success(self.request, _('The organizer has been deleted.'))
             return redirect(self.get_success_url())
         except ProtectedError as e:
-            err = gettext('The organizer could not be deleted as some constraints (e.g. data created by plug-ins) do not allow it.')
+            err = gettext(
+                'The organizer could not be deleted as some constraints (e.g. data created by plug-ins) do not allow it.')
 
             # Unlike deleting events (which is done by regular backend users), this feature can only be used by sysadmins,
             # so we expose more technical / less polished information.
@@ -507,7 +512,8 @@ class OrganizerUpdate(OrganizerPermissionRequiredMixin, UpdateView):
 
     @cached_property
     def footer_links_formset(self):
-        return OrganizerFooterLinkFormset(self.request.POST if self.request.method == "POST" else None, organizer=self.object,
+        return OrganizerFooterLinkFormset(self.request.POST if self.request.method == "POST" else None,
+                                          organizer=self.object,
                                           prefix="footer-links", instance=self.object)
 
     def save_footer_links_formset(self, obj):
@@ -1328,6 +1334,95 @@ class WebHookLogsView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
         }))
 
 
+class GiftCardAcceptanceInviteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, FormView):
+    model = GiftCardAcceptance
+    template_name = 'pretixcontrol/organizers/giftcard_acceptance_invite.html'
+    permission = 'can_change_organizer_settings'
+    form_class = GiftCardAcceptanceInviteForm
+
+    def get_form_kwargs(self):
+        return {
+            **super().get_form_kwargs(),
+            'organizer': self.request.organizer,
+        }
+
+    def form_valid(self, form):
+        self.request.organizer.gift_card_acceptor_acceptance.get_or_create(
+            acceptor=form.cleaned_data['acceptor'],
+            reusable_media=form.cleaned_data['reusable_media'],
+            active=False,
+        )
+        self.request.organizer.log_action(
+            'pretix.giftcards.acceptance.acceptor.invited',
+            data={'acceptor': form.cleaned_data['acceptor'].slug,
+                  'reusable_media': form.cleaned_data['reusable_media']},
+            user=self.request.user
+        )
+        messages.success(self.request, _('The selected organizer has been invited.'))
+        return redirect(
+            reverse('control:organizer.giftcards.acceptance', kwargs={'organizer': self.request.organizer.slug}))
+
+
+class GiftCardAcceptanceListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    model = GiftCardAcceptance
+    template_name = 'pretixcontrol/organizers/giftcard_acceptance_list.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'acceptor_acceptance'
+    paginate_by = 50
+
+    def get_queryset(self):
+        qs = self.request.organizer.gift_card_acceptor_acceptance.select_related(
+            'acceptor'
+        ).order_by('acceptor__name', 'acceptor_id')
+        return qs
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['issuer_acceptance'] = self.request.organizer.gift_card_issuer_acceptance.select_related(
+            'issuer'
+        )
+        return ctx
+
+    @transaction.atomic()
+    def post(self, request, *args, **kwargs):
+        if "delete_acceptor" in request.POST:
+            done = self.request.organizer.gift_card_acceptor_acceptance.filter(
+                acceptor__slug=request.POST.get("delete_acceptor")
+            ).delete()
+            if done:
+                self.request.organizer.log_action(
+                    'pretix.giftcards.acceptance.acceptor.removed',
+                    data={'acceptor': request.POST.get("delete_acceptor")},
+                    user=request.user
+                )
+            messages.success(self.request, _('The selected connection has been removed.'))
+        elif "delete_issuer" in request.POST:
+            done = self.request.organizer.gift_card_issuer_acceptance.filter(
+                issuer__slug=request.POST.get("delete_issuer")
+            ).delete()
+            if done:
+                self.request.organizer.log_action(
+                    'pretix.giftcards.acceptance.issuer.removed',
+                    data={'issuer': request.POST.get("delete_acceptor")},
+                    user=request.user
+                )
+            messages.success(self.request, _('The selected connection has been removed.'))
+        if "accept_issuer" in request.POST:
+            done = self.request.organizer.gift_card_issuer_acceptance.filter(
+                issuer__slug=request.POST.get("accept_issuer")
+            ).update(active=True)
+            if done:
+                self.request.organizer.log_action(
+                    'pretix.giftcards.acceptance.issuer.accepted',
+                    data={'issuer': request.POST.get("accept_issuer")},
+                    user=request.user
+                )
+            messages.success(self.request, _('The selected connection has been accepted.'))
+
+        return redirect(
+            reverse('control:organizer.giftcards.acceptance', kwargs={'organizer': self.request.organizer.slug}))
+
+
 class GiftCardListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
     model = GiftCard
     template_name = 'pretixcontrol/organizers/giftcards.html'
@@ -1345,39 +1440,6 @@ class GiftCardListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
         return qs
-
-    def post(self, request, *args, **kwargs):
-        if "add" in request.POST:
-            o = self.request.user.get_organizers_with_permission(
-                'can_manage_gift_cards', self.request
-            ).exclude(pk=self.request.organizer.pk).filter(
-                slug=request.POST.get("add")
-            ).first()
-            if o:
-                self.request.organizer.gift_card_issuer_acceptance.get_or_create(
-                    issuer=o
-                )
-                self.request.organizer.log_action(
-                    'pretix.giftcards.acceptance.added',
-                    data={'issuer': o.slug},
-                    user=request.user
-                )
-                messages.success(self.request, _('The selected gift card issuer has been added.'))
-        if "del" in request.POST:
-            o = Organizer.objects.filter(
-                slug=request.POST.get("del")
-            ).first()
-            if o:
-                self.request.organizer.gift_card_issuer_acceptance.filter(
-                    issuer=o
-                ).delete()
-                self.request.organizer.log_action(
-                    'pretix.giftcards.acceptance.removed',
-                    data={'issuer': o.slug},
-                    user=request.user
-                )
-                messages.success(self.request, _('The selected gift card issuer has been removed.'))
-        return redirect(reverse('control:organizer.giftcards', kwargs={'organizer': self.request.organizer.slug}))
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -1621,7 +1683,8 @@ class ExportMixin:
     def exporters(self):
         responses = register_multievent_data_exporters.send(self.request.organizer)
         raw_exporters = [
-            response(Event.objects.none() if issubclass(response, OrganizerLevelExportMixin) else self.events, self.request.organizer)
+            response(Event.objects.none() if issubclass(response, OrganizerLevelExportMixin) else self.events,
+                     self.request.organizer)
             for r, response in responses
             if response
         ]
@@ -1629,12 +1692,14 @@ class ExportMixin:
             ex for ex in raw_exporters
             if (
                 not isinstance(ex, OrganizerLevelExportMixin) or
-                self.request.user.has_organizer_permission(self.request.organizer, ex.organizer_required_permission, self.request)
+                self.request.user.has_organizer_permission(self.request.organizer, ex.organizer_required_permission,
+                                                           self.request)
             )
         ]
         return sorted(
             raw_exporters,
-            key=lambda ex: (0 if ex.category else 1, ex.category or "", 0 if ex.featured else 1, str(ex.verbose_name).lower())
+            key=lambda ex: (
+                0 if ex.category else 1, ex.category or "", 0 if ex.featured else 1, str(ex.verbose_name).lower())
         )
 
     def get_context_data(self, **kwargs):
@@ -1691,7 +1756,8 @@ class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, T
             data = self.scheduled.export_form_data
         else:
             if not self.exporter.form.is_valid():
-                messages.error(self.request, _('There was a problem processing your input. See below for error details.'))
+                messages.error(self.request,
+                               _('There was a problem processing your input. See below for error details.'))
                 return self.get(request, *args, **kwargs)
             data = self.exporter.form.cleaned_data
 
@@ -1764,7 +1830,8 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
         else:
             initial = {}
         return RRuleForm(
-            data=self.request.POST if self.request.method == 'POST' and self.request.POST.get("schedule") == "save" else None,
+            data=self.request.POST if self.request.method == 'POST' and self.request.POST.get(
+                "schedule") == "save" else None,
             prefix="rrule",
             initial=initial
         )
@@ -1779,7 +1846,8 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
         if not self.scheduled:
             initial = {
                 "mail_subject": gettext("Export: {title}").format(title=self.exporter.verbose_name),
-                "mail_template": gettext("Hello,\n\nattached to this email, you can find a new scheduled report for {name}.").format(
+                "mail_template": gettext(
+                    "Hello,\n\nattached to this email, you can find a new scheduled report for {name}.").format(
                     name=str(self.request.organizer.name)
                 ),
                 "schedule_rrule_time": time(4, 0, 0),
@@ -1787,7 +1855,8 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
         else:
             initial = {}
         return ScheduledOrganizerExportForm(
-            data=self.request.POST if self.request.method == 'POST' and self.request.POST.get("schedule") == "save" else None,
+            data=self.request.POST if self.request.method == 'POST' and self.request.POST.get(
+                "schedule") == "save" else None,
             prefix="schedule",
             instance=instance,
             initial=initial,
@@ -1804,7 +1873,8 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
         elif not self.exporter:
             for s in ctx['scheduled']:
                 try:
-                    s.export_verbose_name = [e for e in self.exporters if e.identifier == s.export_identifier][0].verbose_name
+                    s.export_verbose_name = [e for e in self.exporters if e.identifier == s.export_identifier][
+                        0].verbose_name
                 except IndexError:
                     s.export_verbose_name = "?"
         return ctx
@@ -2236,9 +2306,10 @@ class SSOProviderUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequire
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['redirect_uri'] = build_absolute_uri(self.request.organizer, 'presale:organizer.customer.login.return', kwargs={
-            'provider': self.object.pk
-        })
+        ctx['redirect_uri'] = build_absolute_uri(self.request.organizer, 'presale:organizer.customer.login.return',
+                                                 kwargs={
+                                                     'provider': self.object.pk
+                                                 })
         return ctx
 
     def get_form_kwargs(self):
