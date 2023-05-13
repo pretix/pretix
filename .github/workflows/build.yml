@@ -21,7 +21,7 @@ env:
 jobs:
   test:
     runs-on: ubuntu-22.04
-    name: Tests
+    name: Packaging
     strategy:
       matrix:
         python-version: ["3.11"]
