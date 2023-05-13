@@ -21,7 +21,9 @@
 #
 from django.dispatch import receiver
 
-from pretix.base.signals import register_data_exporters
+from pretix.base.signals import (
+    register_data_exporters, register_multievent_data_exporters,
+)
 
 
 @receiver(register_data_exporters, dispatch_uid="export_overview_report_pdf")
@@ -40,3 +42,10 @@ def register_report_ordertaxlist(sender, **kwargs):
 def register_report_ordertaxlistpdf(sender, **kwargs):
     from .exporters import OrderTaxListReportPDF
     return OrderTaxListReportPDF
+
+
+@receiver(register_data_exporters, dispatch_uid="export_transaction_report_pdf")
+@receiver(register_multievent_data_exporters, dispatch_uid="multi_export_transaction_report_pdf")
+def register_report_transaction_report_pdf(sender, **kwargs):
+    from .transactionreport import ReportExporter
+    return ReportExporter

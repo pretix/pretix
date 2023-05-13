@@ -46,6 +46,7 @@ from django.db import models
 from django.db.models import DateTimeField, Max, OuterRef, Subquery, Sum
 from django.template.defaultfilters import floatformat
 from django.utils.formats import date_format, localize
+from django.utils.html import format_html
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import (
     gettext as _, gettext_lazy, pgettext, pgettext_lazy,
@@ -195,7 +196,7 @@ class ReportlabExportMixin:
 
         tz = get_current_timezone()
         canvas.setFont('OpenSans', 8)
-        if not self.numberedCanvas:
+        if not self.numbered_canvas:
             canvas.drawString(doc.leftMargin, 10 * mm, _("Page %d") % (doc.page,))
         canvas.drawRightString(self.pagesize[0] - doc.rightMargin, 10 * mm,
                                _("Created: %s") % date_format(now().astimezone(tz), 'SHORT_DATETIME_FORMAT'))
@@ -244,7 +245,6 @@ class OverviewReport(Report):
     verbose_name = gettext_lazy('Order overview (PDF)')
     category = pgettext_lazy('export_category', 'Analysis')
     description = gettext_lazy('Download a PDF version of the key sales numbers per ticket type.')
-    featured = True
 
     @property
     def pagesize(self):
@@ -435,6 +435,12 @@ class OverviewReport(Report):
             label=_('Date range'),
             include_future_frames=False,
             required=False,
+            help_text=format_html('<strong class="text-danger">{}</strong>', _(
+                'Filtering this report by date is not recommended as it might lead to misleading information since '
+                'this report only sees the current state of any order, not any changes made to the order previously. '
+                'This date filter might be removed in the future. '
+                'Use the "Accounting report" in the export section instead.'
+            ))
         )
         return f.fields
 
