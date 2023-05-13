@@ -19,8 +19,32 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import sys
+from pathlib import Path
 
 import setuptools
 
+
+sys.path.append(str(Path.cwd() / 'src'))
+
+
+def _CustomBuild(*args, **kwargs):
+    print(sys.path)
+    from pretix._build import CustomBuild
+    return CustomBuild(*args, **kwargs)
+
+
+def _CustomBuildExt(*args, **kwargs):
+    from pretix._build import CustomBuildExt
+    return CustomBuildExt(*args, **kwargs)
+
+
+cmdclass = {
+    'build': _CustomBuild,
+    'build_ext': _CustomBuildExt,
+}
+
 if __name__ == "__main__":
-    setuptools.setup()
+    setuptools.setup(
+        cmdclass=cmdclass,
+    )
