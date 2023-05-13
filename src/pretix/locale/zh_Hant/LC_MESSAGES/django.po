@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
-"PO-Revision-Date: 2023-05-13 03:00+0000\n"
+"PO-Revision-Date: 2023-05-13 10:30+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -2427,17 +2427,17 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:1184
 msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
-msgstr ""
+msgstr "下載包括禮物卡的相關所有付款或退款的活頁表格。"
 
 #: pretix/base/exporters/orderlist.py:1201
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
 msgid "Issuer"
-msgstr ""
+msgstr "發行人"
 
 #: pretix/base/exporters/orderlist.py:1228 pretix/control/navigation.py:523
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:156
 msgid "Gift cards"
-msgstr ""
+msgstr "禮物卡"
 
 #: pretix/base/exporters/orderlist.py:1231
 msgid "Download a spreadsheet of all gift cards including their current value."
