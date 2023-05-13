@@ -113,13 +113,9 @@ mysql = ["mysqlclient"]
 dev = [
   "coverage",
   "coveralls",
-  "django-debug-toolbar==4.0.*",
-  "django-formset-js-improved==0.5.0.3",
-  "django-oauth-toolkit==2.2.*",
   "flake8==6.0.*",
   "freezegun",
   "isort==5.12.*",
-  "oauthlib==3.2.*",
   "pep8-naming==0.13.*",
   "potypo",
   "pycodestyle==2.10.*",
@@ -140,31 +136,14 @@ build = "pretix._build:CustomBuild"
 build_ext = "pretix._build:CustomBuildExt"
 
 [build-system]
+build-backend = "backend"
+backend-path = ["_build"]
 requires = [
   "setuptools",
   "setuptools-rust",
   "wheel",
   "importlib_metadata",
-
-  # These are runtime dependencies that we unfortunately need to be import in the step that generates
-  # all CSS and JS asset files. We should keep their versions in sync with the definition above.
-  "babel",
-  "Django==3.2.*,>=3.2.18",
-  "django-bootstrap3==23.1.*",
-  "django-compressor==4.3.*",
-  "django-countries==7.5.*",
-  "django-formtools==2.4",
-  "django-hierarkey==1.1.*",
-  "django-i18nfield==1.9.*,>=1.9.4",
-  "django-libsass==0.9",
-  "django-phonenumber-field==7.1.*",
-  "django-statici18n==2.3.*",
-  "djangorestframework==3.14.*",
-  "libsass==0.22.*",
-  "phonenumberslite==8.13.*",
-  "pycountry",
-  "pyuca",
-  "slimit",
+  "tomli",
 ]
 
 [project.urls]

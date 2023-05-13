@@ -1,0 +1,47 @@
+name: Build
+
+on:
+  push:
+    branches: [ master ]
+    paths-ignore:
+      - 'doc/**'
+      - 'src/pretix/locale/**'
+  pull_request:
+    branches: [ master ]
+    paths-ignore:
+      - 'doc/**'
+      - 'src/pretix/locale/**'
+
+permissions:
+  contents: read  #  to fetch code (actions/checkout)
+
+env:
+  FORCE_COLOR: 1
+
+jobs:
+  test:
+    runs-on: ubuntu-22.04
+    name: Tests
+    strategy:
+      matrix:
+        python-version: ["3.11"]
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v1
+        with:
+          python-version: ${{ matrix.python-version }}
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Install system dependencies
+        run: sudo apt update && sudo apt install gettext unzip
+      - name: Install Python dependencies
+        run: pip3 install -U setuptools build pip
+      - name: Run build
+        run: python -m build
+      - name: Check files
+        run: unzip -l dist/pretix*whl | grep node_modules || exit 1

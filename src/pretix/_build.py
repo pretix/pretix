@@ -72,3 +72,4 @@ class CustomBuildExt(build_ext):
             return  # this is a hack to allow calling this file early in our docker build to make use of caching
         npm_install()
         build_ext.run(self)
+
