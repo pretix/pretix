@@ -54,6 +54,7 @@ from django_countries.fields import Country
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
+from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import PageBreak, Paragraph, Spacer, Table, TableStyle
 
 from pretix.base.decimal import round_decimal
@@ -69,8 +70,46 @@ from pretix.base.timeframes import (
 from pretix.control.forms.filter import OverviewFilterForm
 
 
+class NumberedCanvas(Canvas):
+    def __init__(self, *args, **kwargs):
+        self.font_regular = kwargs.pop('font_regular')
+        self.x = kwargs.pop('x', 15 * mm)
+        self.y = kwargs.pop('y', 10 * mm)
+        super().__init__(*args, **kwargs)
+        self._saved_page_states = []
+
+    def showPage(self):
+        self._saved_page_states.append(dict(self.__dict__))
+        self._startPage()
+
+    def save(self):
+        num_pages = len(self._saved_page_states)
+        for state in self._saved_page_states:
+            self.__dict__.update(state)
+            self.draw_page_number(num_pages)
+            Canvas.showPage(self)
+        Canvas.save(self)
+
+    def draw_page_number(self, page_count):
+        self.saveState()
+        self.setFont(self.font_regular, 8)
+        self.drawString(self.x, self.y, _("Page %d of %d") % (self._pageNumber, page_count,))
+        self.restoreState()
+
+
 class ReportlabExportMixin:
     multiBuild = False  # noqa
+    numbered_canvas = False
+
+    def canvas_class(self, doc):
+        if self.numbered_canvas:
+            def _cl(*args, **kwargs):
+                kwargs['font_regular'] = 'OpenSans'
+                kwargs['x'] = doc.leftMargin
+                kwargs['y'] = 10 * mm
+                return NumberedCanvas(*args, **kwargs)
+            return _cl
+        return Canvas
 
     @property
     def pagesize(self):
@@ -115,9 +154,9 @@ class ReportlabExportMixin:
                 PageTemplate(id='All', frames=self.get_frames(doc), onPage=self.on_page, pagesize=self.pagesize)
             ])
             if self.multiBuild:
-                doc.multiBuild(self.get_story(doc, form_data))
+                doc.multiBuild(self.get_story(doc, form_data), canvasmaker=self.canvas_class(doc))
             else:
-                doc.build(self.get_story(doc, form_data))
+                doc.build(self.get_story(doc, form_data), canvasmaker=self.canvas_class(doc))
             f.seek(0)
             return f.read()
 
@@ -156,7 +195,8 @@ class ReportlabExportMixin:
 
         tz = get_current_timezone()
         canvas.setFont('OpenSans', 8)
-        canvas.drawString(doc.leftMargin, 10 * mm, _("Page %d") % (doc.page,))
+        if not self.numberedCanvas:
+            canvas.drawString(doc.leftMargin, 10 * mm, _("Page %d") % (doc.page,))
         canvas.drawRightString(self.pagesize[0] - doc.rightMargin, 10 * mm,
                                _("Created: %s") % date_format(now().astimezone(tz), 'SHORT_DATETIME_FORMAT'))
 
@@ -186,6 +226,7 @@ class ReportlabExportMixin:
 
 class Report(ReportlabExportMixin, BaseExporter):
     name = "report"
+    numbered_canvas = True
 
     def verbose_name(self) -> str:
         raise NotImplementedError()
