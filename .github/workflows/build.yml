@@ -40,7 +40,9 @@ jobs:
       - name: Install system dependencies
         run: sudo apt update && sudo apt install gettext unzip
       - name: Install Python dependencies
-        run: pip3 install -U setuptools build pip
+        run: pip3 install -U setuptools build pip check-manifest
+      - name: Run check-manifest
+        run: check-manifest
       - name: Run build
         run: python -m build
       - name: Check files
