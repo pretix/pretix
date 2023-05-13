@@ -26,7 +26,6 @@ classifiers = [
 ]
 
 dependencies = [
-  # Note that many of these are repeated as build-time dependencies down below -- change them too in case of updates!
   "arabic-reshaper==3.0.0",  # Support for Arabic in reportlab
   "babel",
   "BeautifulSoup4==4.12.*",
