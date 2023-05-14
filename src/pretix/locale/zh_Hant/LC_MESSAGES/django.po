@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
-"PO-Revision-Date: 2023-05-13 10:30+0000\n"
+"PO-Revision-Date: 2023-05-14 09:00+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -485,19 +485,19 @@ msgstr ""
 
 #: pretix/api/webhooks.py:310
 msgid "Shop taken live"
-msgstr ""
+msgstr "店鋪直播"
 
 #: pretix/api/webhooks.py:314
 msgid "Shop taken offline"
-msgstr ""
+msgstr "店鋪下線"
 
 #: pretix/api/webhooks.py:318
 msgid "Test-Mode of shop has been activated"
-msgstr ""
+msgstr "商店的測試模式已啟動"
 
 #: pretix/api/webhooks.py:322
 msgid "Test-Mode of shop has been deactivated"
-msgstr ""
+msgstr "商店的測試模式已啟動"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:927
@@ -555,12 +555,12 @@ msgstr "網上商店"
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr ""
+msgstr "由 {name} 基於 <a {a_attr}>pretix 提供支援</a>"
 
 #: pretix/base/context.py:52
 #, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr ""
+msgstr "<a %（a_attr）s>票務由 pretix 提供支援</a>"
 
 #: pretix/base/context.py:61
 msgid "source code"
@@ -569,7 +569,7 @@ msgstr "原始程式碼"
 #: pretix/base/customersso/oidc.py:59
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr ""
+msgstr "缺少設定選項“{名稱}”。"
 
 #: pretix/base/customersso/oidc.py:67 pretix/base/customersso/oidc.py:72
 #, python-brace-format
@@ -2467,24 +2467,24 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:52
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:67
 msgid "All"
-msgstr ""
+msgstr "所有"
 
 #: pretix/base/exporters/orderlist.py:1248 pretix/control/forms/filter.py:1304
 msgid "Live"
-msgstr ""
+msgstr "實況"
 
 #: pretix/base/exporters/orderlist.py:1257 pretix/control/forms/filter.py:1312
 #: pretix/control/templates/pretixcontrol/pdf/index.html:374
 msgid "Empty"
-msgstr ""
+msgstr "空的"
 
 #: pretix/base/exporters/orderlist.py:1258 pretix/control/forms/filter.py:1313
 msgid "Valid and with value"
-msgstr ""
+msgstr "有效且有數值"
 
 #: pretix/base/exporters/orderlist.py:1259 pretix/control/forms/filter.py:1314
 msgid "Expired and with value"
-msgstr ""
+msgstr "已過期且有數值"
 
 #: pretix/base/exporters/orderlist.py:1260 pretix/control/forms/filter.py:226
 #: pretix/control/forms/filter.py:1315 pretix/control/forms/filter.py:1954
@@ -2495,21 +2495,21 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:320
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:27
 msgid "Expired"
-msgstr ""
+msgstr "過期"
 
 #: pretix/base/exporters/orderlist.py:1298 pretix/base/models/giftcards.py:91
 msgid "Test mode card"
-msgstr ""
+msgstr "測試模式卡片"
 
 #: pretix/base/exporters/orderlist.py:1300 pretix/base/models/giftcards.py:95
 #: pretix/control/templates/pretixcontrol/order/index.html:195
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:62
 msgid "Expiry date"
-msgstr ""
+msgstr "到期日"
 
 #: pretix/base/exporters/orderlist.py:1301 pretix/control/forms/orders.py:815
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "特殊條款和條件"
 
 #: pretix/base/exporters/orderlist.py:1303
 #: pretix/control/templates/pretixcontrol/order/change.html:94
@@ -2517,24 +2517,24 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:32
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:65
 msgid "Current value"
-msgstr ""
+msgstr "當前數值"
 
 #: pretix/base/exporters/orderlist.py:1304
 msgid "Created in order"
-msgstr ""
+msgstr "按順序創建"
 
 #: pretix/base/exporters/orderlist.py:1305
 msgid "Last invoice number of order"
-msgstr ""
+msgstr "最後的訂單發票編號"
 
 #: pretix/base/exporters/orderlist.py:1306
 msgid "Last invoice date of order"
-msgstr ""
+msgstr "最後的訂單發票日期"
 
 #: pretix/base/exporters/waitinglist.py:42
 msgctxt "export_category"
 msgid "Waiting list"
-msgstr ""
+msgstr "候補名單"
 
 #: pretix/base/exporters/waitinglist.py:43
 msgid "Download a spread sheet with all your waiting list data."
@@ -2622,86 +2622,87 @@ msgstr ""
 #: pretix/base/forms/auth.py:61 pretix/base/forms/user.py:57
 #: pretix/presale/forms/customer.py:366 pretix/presale/forms/customer.py:438
 msgid "For security reasons, please wait 5 minutes before you try again."
-msgstr ""
+msgstr "出於安全原因，請等待 5 分鐘，然後再重試。"
 
 #: pretix/base/forms/auth.py:62 pretix/base/forms/auth.py:262
 msgid "This account is inactive."
-msgstr ""
+msgstr "此帳戶處於非活躍。"
 
 #: pretix/base/forms/auth.py:145
 msgid ""
 "You already registered with that email address, please use the login form."
-msgstr ""
+msgstr "你已經使用該電子郵件地址註冊，請使用登錄表單。"
 
 #: pretix/base/forms/auth.py:146 pretix/base/forms/auth.py:204
 #: pretix/base/forms/user.py:56 pretix/control/forms/users.py:45
 #: pretix/presale/forms/customer.py:277 pretix/presale/forms/customer.py:365
 msgid "Please enter the same password twice"
-msgstr ""
+msgstr "請輸入相同的密碼兩次"
 
 #: pretix/base/forms/auth.py:149
 msgid "Email address"
-msgstr ""
+msgstr "電子郵箱位址"
 
 #: pretix/base/forms/auth.py:161 pretix/base/forms/auth.py:213
 #: pretix/presale/forms/customer.py:290 pretix/presale/forms/customer.py:384
 msgid "Repeat password"
-msgstr ""
+msgstr "重複"
 
 #: pretix/base/forms/questions.py:206
 msgid "Please do not use special characters in names."
-msgstr ""
+msgstr "請不要在名稱中使用特殊字元。"
 
 #: pretix/base/forms/questions.py:265
 msgid "Please enter a shorter name."
-msgstr ""
+msgstr "請輸入較短的名稱。"
 
 #: pretix/base/forms/questions.py:282
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr ""
+msgstr "國際地區區號"
 
 #: pretix/base/forms/questions.py:306
 msgctxt "phonenumber"
 msgid "Phone number (without international area code)"
-msgstr ""
+msgstr "電話號碼（無國際區號）"
 
 #: pretix/base/forms/questions.py:464
 msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
-msgstr ""
+msgstr "你以橫向方式上傳了圖片。請改以縱向上傳圖片。"
 
 #: pretix/base/forms/questions.py:467
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr ""
+msgstr "請上傳寬度為高度3/4的圖片。"
 
 #: pretix/base/forms/questions.py:470
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
-msgstr ""
+msgstr "您上傳的檔圖像素您上傳的檔圖像素非常大，請上傳不超過 10000 x 10000 "
+"像素的圖像。"
 
 #: pretix/base/forms/questions.py:473
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
-msgstr ""
+msgstr "上傳有效圖片。您上傳的檔案不是圖像或損壞的圖像。"
 
 #: pretix/base/forms/questions.py:606 pretix/base/forms/questions.py:614
 msgid ""
 "If you keep this empty, the ticket will be valid starting at the time of "
 "purchase."
-msgstr ""
+msgstr "如果您將其保留為空白，票將從購買時開始有效。"
 
 #: pretix/base/forms/questions.py:659 pretix/base/forms/questions.py:981
 msgid "Street and Number"
-msgstr ""
+msgstr "街道以及號碼"
 
 #: pretix/base/forms/questions.py:693 pretix/base/forms/questions.py:1033
 msgctxt "address"
 msgid "Select state"
-msgstr ""
+msgstr "選擇州"
 
 #: pretix/base/forms/questions.py:1020
 msgid ""
@@ -11672,6 +11673,11 @@ msgid ""
 "deadline arrives, since we expect that you want to collect the amount "
 "somehow and not auto-cancel the order."
 msgstr ""
+"如果你選中此框，則在大多數情況下，此訂單的行為將類似於付費訂單，即使尚未付款"
+"。這意味著無論你的活動設置如何，客戶都可以下載和使用門票，並且訂單可能會被視"
+"為由某些外掛程式支付。如果你勾選此選項，如果付款截止日期到來，此訂單將不會自"
+"動標記為「已過期」，因為我們希望你希望以某種方式收取金額，而不是自動取消訂單"
+"。"
 
 #: pretix/control/forms/orders.py:88
 msgid "Overbook quota"
@@ -17092,6 +17098,10 @@ msgid ""
 "total number of tickets sold and the number of a specific ticket type at the "
 "same time."
 msgstr ""
+"為了使你的產品實際可用，你還需要配額。配額定義了您的產品 pretix 將銷售多少個"
+"實例。這樣，你可以設定你的活動是否可以容納無限數量的出席者，或限制出席者數量"
+"。你可以將一項產品分配到多個配額，以滿足更複雜的要求，例如：倘若你想同時限制"
+"售出的門票總數，和特定門票類型的數量。"
 
 #: pretix/control/templates/pretixcontrol/items/quotas.html:25
 msgid "Your search did not match any quotas."
