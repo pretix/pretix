@@ -99,6 +99,8 @@ def test_payment(env, monkeypatch):
     monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
 
     client, ticket = env
+    ticket.default_price = 13.37
+    ticket.save()
     session_key = get_cart_session_key(client, ticket.event)
     CartPosition.objects.create(
         event=ticket.event, cart_id=session_key, item=ticket,
