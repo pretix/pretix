@@ -204,13 +204,21 @@
                             {% endblocktrans %}
                         </th>
                         <th class="text-right flip">
-                            {% if sums.s|default_if_none:"none" != "none" %}
-                                {{ sums.s|money:request.event.currency }}
+                            {% if not filter_form.filtered %}
+                                <span class="fa fa-info-circle text-warning" data-toggle="tooltip"
+                                    title="{% trans 'This sum includes canceled orders. For your ticket revenue, look at the "order overview".' %}"></span>
+                                {% if sums.s|default_if_none:"none" != "none" %}
+                                    {{ sums.s|money:request.event.currency }}
+                                {% endif %}
                             {% endif %}
                         </th>
                         <th class="text-right flip">
-                            {% if sums.pc %}
-                                {{ sums.pc }}
+                            {% if not filter_form.filtered %}
+                                <span class="fa fa-info-circle text-warning" data-toggle="tooltip"
+                                      title="{% trans 'This sum includes canceled orders. For your ticket revenue, look at the "order overview".' %}"></span>
+                                {% if sums.pc %}
+                                    {{ sums.pc }}
+                                {% endif %}
                             {% endif %}
                         </th>
                         <th></th>
