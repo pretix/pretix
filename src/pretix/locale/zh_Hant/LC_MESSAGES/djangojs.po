@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:21+0000\n"
-"PO-Revision-Date: 2023-05-15 07:46+0000\n"
+"PO-Revision-Date: 2023-05-15 15:41+0000\n"
 "Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/zh_Hant/>\n"
@@ -437,104 +437,104 @@ msgstr "自從第一次入場的分鐘(-1是第一次入場)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:112
 msgid "All of the conditions below (AND)"
-msgstr ""
+msgstr "以下所有的條件 (和)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:113
 msgid "At least one of the conditions below (OR)"
-msgstr ""
+msgstr "以下至少其中一個條件 (或)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:114
 msgid "Event start"
-msgstr ""
+msgstr "活動開始"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
 msgid "Event end"
-msgstr ""
+msgstr "活動結束"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:116
 msgid "Event admission"
-msgstr ""
+msgstr "活動管理"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:117
 msgid "custom date and time"
-msgstr ""
+msgstr "客製化日期與時間"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:118
 msgid "custom time"
-msgstr ""
+msgstr "客製化時間"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "Tolerance (minutes)"
-msgstr ""
+msgstr "容忍度 (分鐘)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:120
 msgid "Add condition"
-msgstr ""
+msgstr "增加條件"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
 msgid "minutes"
-msgstr ""
+msgstr "分鐘"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:122
 msgid "Duplicate"
-msgstr ""
+msgstr "重覆"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:72
 msgid "Check-in QR"
-msgstr ""
+msgstr "報到 QR code"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:387
 msgid "The PDF background file could not be loaded for the following reason:"
-msgstr ""
+msgstr "背景的PDF檔案因為下列原因無法載入："
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:648
 msgid "Group of objects"
-msgstr ""
+msgstr "物件群組"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:653
 msgid "Text object"
-msgstr ""
+msgstr "文字物件"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:655
 msgid "Barcode area"
-msgstr ""
+msgstr "二維條碼區域"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:657
 msgid "Image area"
-msgstr ""
+msgstr "圖片區域"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:659
 msgid "Powered by pretix"
-msgstr ""
+msgstr "pretix 驅動"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:661
 msgid "Object"
-msgstr ""
+msgstr "物件"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:665
 msgid "Ticket design"
-msgstr ""
+msgstr "票券設計"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:964
 msgid "Saving failed."
-msgstr ""
+msgstr "儲存失敗。"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1033
 #: pretix/static/pretixcontrol/js/ui/editor.js:1083
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
+msgstr "上傳你的PDF檔案時發生錯誤，請再試一次。"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1066
 msgid "Do you really want to leave the editor without saving your changes?"
-msgstr ""
+msgstr "你真得要不儲存就離開編輯器嗎？"
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:19
 msgid "An error has occurred."
-msgstr ""
+msgstr "發生錯誤了。"
 
 #: pretix/static/pretixcontrol/js/ui/mail.js:52
 msgid "Generating messages …"
-msgstr ""
+msgstr "產生訊息…"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:109
 msgid "Unknown error."
