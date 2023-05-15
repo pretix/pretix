@@ -456,7 +456,7 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
         self.request = request
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED or not self.order._can_be_paid():
+        if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED or self.order._can_be_paid() is not True:
             messages.error(request, _('The payment for this order cannot be continued.'))
             return redirect(self.get_order_url())
         if (not self.payment.payment_provider.payment_is_valid_session(request) or
@@ -526,7 +526,7 @@ class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
         self.request = request
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED or not self.order._can_be_paid():
+        if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED or self.order._can_be_paid() is not True:
             messages.error(request, _('The payment for this order cannot be continued.'))
             return redirect(self.get_order_url())
         if (not self.payment.payment_provider.payment_is_valid_session(request) or
@@ -571,7 +571,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
         self.request = request
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) or not self.order._can_be_paid():
+        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) or self.order._can_be_paid() is not True:
             messages.error(request, _('The payment method for this order cannot be changed.'))
             return redirect(self.get_order_url())
 
