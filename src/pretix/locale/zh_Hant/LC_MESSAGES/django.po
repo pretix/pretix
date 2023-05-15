@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
-"PO-Revision-Date: 2023-05-15 07:46+0000\n"
+"PO-Revision-Date: 2023-05-15 15:41+0000\n"
 "Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -220,18 +220,18 @@ msgstr "元數據屬性“{name}”不存在。"
 #: pretix/api/serializers/event.py:231 pretix/api/serializers/event.py:529
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "元數據屬性“{name}”不存在元數據屬性“{name}”不存在."
+msgstr "元數據屬性'{name}'不存在元數據屬性'{value}'不存在。"
 
 #: pretix/api/serializers/event.py:274
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr "未知擴充: '{name}'."
+msgstr "未知擴充：'{name}'。"
 
 #: pretix/api/serializers/item.py:74 pretix/api/serializers/item.py:123
 #: pretix/api/serializers/item.py:323
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr "項目元數據屬性“{name}”不存在."
+msgstr "項目元數據屬性“{name}”不存在。"
 
 #: pretix/api/serializers/item.py:182 pretix/control/forms/item.py:1082
 msgid "The bundled item must not be the same item as the bundling one."
@@ -517,7 +517,7 @@ msgstr "以 XXX 格式輸入郵遞區號。"
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr "以 XXX 格式輸入郵遞區號"
+msgstr "以 XXX 格式輸入郵遞區號。"
 
 #: pretix/base/auth.py:143
 #, python-brace-format
@@ -569,13 +569,13 @@ msgstr "原始程式碼"
 #: pretix/base/customersso/oidc.py:59
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr "缺少設定選項“{名稱}”。"
+msgstr "缺少設定選項“{name}”。"
 
 #: pretix/base/customersso/oidc.py:67 pretix/base/customersso/oidc.py:72
 #, python-brace-format
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
-msgstr ""
+msgstr "無法從\"{url}\"取得設定：錯誤訊息：\"{error}\"。"
 
 #: pretix/base/customersso/oidc.py:78 pretix/base/customersso/oidc.py:83
 #: pretix/base/customersso/oidc.py:88 pretix/base/customersso/oidc.py:93
@@ -662,31 +662,31 @@ msgstr ""
 #: pretix/base/email.py:667 pretix/base/email.py:672 pretix/base/pdf.py:625
 #: pretix/base/pdf.py:648 pretix/control/forms/organizer.py:563
 msgid "Mr Doe"
-msgstr ""
+msgstr "無名氏"
 
 #: pretix/base/exporter.py:180 pretix/base/exporter.py:310
 msgid "Export format"
-msgstr ""
+msgstr "匯出格式"
 
 #: pretix/base/exporter.py:182
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Excel (.xlsx)"
 
 #: pretix/base/exporter.py:183 pretix/base/exporter.py:302
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "CSV (有逗號)"
 
 #: pretix/base/exporter.py:184 pretix/base/exporter.py:303
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "CSV (Excel樣式)"
 
 #: pretix/base/exporter.py:185 pretix/base/exporter.py:304
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "CSV (有分隔號)"
 
 #: pretix/base/exporter.py:298
 msgid "Combined Excel (.xlsx)"
-msgstr ""
+msgstr "整合Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:52
 msgid "Question answer file uploads"
@@ -6325,15 +6325,15 @@ msgstr ""
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
-msgstr ""
+msgstr "活動開始"
 
 #: pretix/base/reldate.py:36
 msgid "Event end"
-msgstr ""
+msgstr "活動結束"
 
 #: pretix/base/reldate.py:37
 msgid "Event admission"
-msgstr ""
+msgstr "活動管理"
 
 #: pretix/base/reldate.py:38
 msgid "Presale start"
@@ -16633,7 +16633,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
 msgid "minutes"
-msgstr ""
+msgstr "分鐘"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:207
 msgid "hours"
@@ -25257,7 +25257,7 @@ msgstr ""
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:23
 msgid "Ticket design"
-msgstr ""
+msgstr "票券設計"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:3
 msgid ""
