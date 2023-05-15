@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
 "PO-Revision-Date: 2023-05-15 15:41+0000\n"
-"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -3116,7 +3116,8 @@ msgid ""
 "If you choose \"all dates\", tickets will be considered part of this list "
 "and valid for check-in regardless of which date they are purchased for. You "
 "can limit their validity through the advanced check-in rules, though."
-msgstr ""
+msgstr "如果你選擇「所有日期」，則無論購買日期如何，門票都將被視為此列表的一部分，並"
+"在辦理手續時有效。不過，你可以通過簽到規則限制其有效性。"
 
 #: pretix/base/models/checkin.py:65
 msgctxt "checkin"
@@ -3179,6 +3180,9 @@ msgid ""
 "be useful when tickets sold at the box office are not checked again before "
 "entry and should be considered validated directly upon purchase."
 msgstr ""
+"通過任何選定的銷售管道購買時，此簽到清單上的所有商品將自動標記為已簽到。當在"
+"售票處出售的票在入場前未再次檢查時，此選項可能很有用，並且應在購買時直接視為"
+"驗證。"
 
 #: pretix/base/models/checkin.py:326
 msgid "Entry"
@@ -3387,7 +3391,8 @@ msgid ""
 "a voucher will not be considered for this discount. However, products that "
 "use a voucher only to e.g. unlock a hidden product or gain access to sold-"
 "out quota will still receive the discount."
-msgstr ""
+msgstr "如果選中此選項，則已通過優惠券獲得折扣的產品將不被視為此折扣。但是，僅使用優"
+"惠券解鎖隱藏產品或獲得售罄配額的產品仍將獲得折扣。"
 
 #: pretix/base/models/discount.py:113
 msgid "Minimum number of matching products"
@@ -3414,6 +3419,10 @@ msgid ""
 "discounted. If you want to grant the discount on all matching products, keep "
 "this field empty."
 msgstr ""
+"此選項允許你創建「買 X 送 Y "
+"減價/免費」類型的折扣。例如，如果你將“最小匹配產品數”設置為 4，將此值設置為 2"
+"，則客戶的購物車將分為四張票的組，每組中最便宜的兩張票將打折。如果要為所有匹"
+"配的產品授予折扣，請將此字段留空。"
 
 #: pretix/base/models/discount.py:170
 msgid ""
@@ -3455,6 +3464,10 @@ msgid ""
 "you can also choose to use a random value. This will be used in URLs, order "
 "codes, invoice numbers, and bank transfer references."
 msgstr ""
+"應簡短，僅包含小寫字母、數位、點和短劃線，並且在活動項目中必須是唯一的。"
+"我們建議使用某種縮寫或少於 10 "
+"個字元的日期，以便輕鬆記住，但你也可以選擇使用隨機值。這將用於 "
+"URL、訂單代碼、發票編號和銀行轉帳參考。"
 
 #: pretix/base/models/event.py:534 pretix/base/models/organizer.py:85
 msgid "The slug may only contain letters, numbers, dots and dashes."
@@ -3748,7 +3761,8 @@ msgid ""
 "If selected, the products belonging to this category are not for sale on "
 "their own. They can only be bought in combination with a product that has "
 "this category configured as a possible source for add-ons."
-msgstr ""
+msgstr "如果選擇，則屬於此類別的產品不會單獨銷售。它們只能與將此類別配置為附加元件可"
+"能來源的商品一起購買。"
 
 #: pretix/base/models/items.py:114
 #: pretix/control/templates/pretixcontrol/items/categories.html:3
@@ -3824,7 +3838,8 @@ msgid ""
 "If this product has multiple variations, you can set different prices for "
 "each of the variations. If a variation does not have a special price or if "
 "you do not have variations, this price will be used."
-msgstr ""
+msgstr "如果此產品有多項類別，你可以為每個類別設定不同的價格。如果類別沒有特殊價格或"
+"你沒有變體，則將使用此價格。"
 
 #: pretix/base/models/items.py:428
 msgid ""
@@ -3880,6 +3895,9 @@ msgid ""
 "out. There might be a short period in which both products are visible while "
 "all tickets in the referenced quota are reserved, but not yet sold."
 msgstr ""
+"如果在此處選擇配額，則僅當該配額不可用時，才會顯示此產品。如果與隱藏售罄產品"
+"的選項結合使用，則允許你在售罄後將產品更換為更昂貴的產品。可能會在短時間內同"
+"時顯示兩種產品，而參考配額中的所有門票都已保留，但尚未售出。"
 
 #: pretix/base/models/items.py:500
 msgid ""
@@ -3893,7 +3911,8 @@ msgid ""
 "\"approval\" state and will need to be confirmed by you before it can be "
 "paid and completed. You can use this e.g. for discounted tickets that are "
 "only available to specific groups."
-msgstr ""
+msgstr "如果此產品是訂單的一部分，則該訂單將進入“批准”狀態，需要你確認才能付款和完成"
+"。例如，你可以將其用於僅適用於特定團體的折扣門票。"
 
 #: pretix/base/models/items.py:513
 msgid ""
@@ -3907,20 +3926,24 @@ msgid ""
 "products. Do <strong>not</strong> check this option if you want to use this "
 "product as an add-on product, but only for fixed bundles!"
 msgstr ""
+"如果設定此選項，則商品將僅作為捆綁產品的一部分出售。如果要將此商品用作附加產"
+"品，但僅適用於固定捆綁包，<strong>請不要選中此選項</strong>！"
 
 #: pretix/base/models/items.py:526
 msgid ""
 "If this is checked, the usual cancellation and order change settings of this "
 "event apply. If this is unchecked, orders containing this product can not be "
 "canceled by users but only by you."
-msgstr ""
+msgstr "如果選取此選項，則應用此事件的常規取消和訂單更改設定。如果未選取此選項，則使"
+"用者無法取消包含此產品的訂單，而只能由你取消。"
 
 #: pretix/base/models/items.py:533
 msgid ""
 "This product can only be bought if it is added to the cart at least this "
 "many times. If you keep the field empty or set it to 0, there is no special "
 "limit for this product."
-msgstr ""
+msgstr "該商品只有在，至少重複添加到購物車中才能購買。如果將該欄位保留為空，"
+"或將其設置為 0，則此產品沒有特殊限制。"
 
 #: pretix/base/models/items.py:540
 msgid ""
@@ -3929,6 +3952,8 @@ msgid ""
 "product. The limit for the maximum number of items in the whole order "
 "applies regardless."
 msgstr ""
+"該產品在一個訂單中最多只能購買這麼多次。如果將該欄位保留為空或將其設置為 "
+"0，則此產品沒有特殊限制。無論如何，整個訂單中的最大專案數限制都適用。"
 
 #: pretix/base/models/items.py:547 pretix/base/models/items.py:1068
 msgid ""
@@ -3937,6 +3962,8 @@ msgid ""
 "tickets to indicate to the person at check-in that the student ID card still "
 "needs to be checked."
 msgstr ""
+"如果設訂此選項，應用程式將隨機顯示一條可見警告，指出此票證需要特別注意。例如"
+"，你可以將其用於學生票，以在辦理登機手續時向該人表明仍需要檢查學生證。"
 
 #: pretix/base/models/items.py:555 pretix/base/models/items.py:1017
 msgid ""
@@ -4048,6 +4075,9 @@ msgid ""
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
+"如果此產品應儲存在可重複使用的物理媒體上，則可以附加物理媒體策略。普通票不需"
+"要這樣做，普通票只使用一次性條碼，但只適用於可重複的季節票或可充值禮品卡腕帶"
+"等產品。這是一項進階功能，還需要對票證和列印設置進行特定配置。"
 
 #: pretix/base/models/items.py:661
 msgid "Reusable media type"
@@ -4058,7 +4088,8 @@ msgid ""
 "Select the type of physical medium that should be used for this product. "
 "Note that not all media types support all types of products, and not all "
 "media types are supported across all sales channels or check-in processes."
-msgstr ""
+msgstr "選擇本產品應使用的物理媒體類型。請留意，並非所有媒體類型都支援所有類型的產品"
+"，並且並非所有媒體類型在所有銷售管道或簽到流程中都受支援。"
 
 #: pretix/base/models/items.py:674 pretix/base/models/items.py:1501
 #: pretix/control/forms/filter.py:409 pretix/control/forms/filter.py:1754
@@ -4133,7 +4164,8 @@ msgid ""
 "\"approval\" state and will need to be confirmed by you before it can be "
 "paid and completed. You can use this e.g. for discounted tickets that are "
 "only available to specific groups."
-msgstr ""
+msgstr "如果此變更是訂單的一部分，則該訂單將進入“批准”狀態，並且需要你確認才能付款和"
+"完成。例如，你可以將其用於僅適用於特定團體的折扣門票。"
 
 #: pretix/base/models/items.py:1033 pretix/control/navigation.py:546
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
@@ -4236,7 +4268,8 @@ msgid ""
 "value of the total gross price. This might be important in cases of mixed "
 "taxation, but can be kept blank otherwise. This value will NOT be added to "
 "the base item's price."
-msgstr ""
+msgstr "如果設定，將顯示此捆綁商品負責總價的給定值。這在混合稅收的情況下可能很重要，"
+"但可以保留為空白。此值不會添加到基本商品的價格中。"
 
 #: pretix/base/models/items.py:1386
 msgid "The bundled item must belong to the same event as the item."
@@ -4491,7 +4524,8 @@ msgid ""
 "If you enable this, when the quota is sold out once, no more tickets will be "
 "sold, even if tickets become available again through cancellations or "
 "expiring orders. Of course, you can always re-open it manually."
-msgstr ""
+msgstr "如果啟用此功能，當配額售罄一次時，即使門票通過取消或到期訂單再次可用，也不會"
+"再售出門票。當然，你始終可以手動重新啟動。"
 
 #: pretix/base/models/items.py:1871
 msgid "Allow to sell more tickets once people have checked out"
@@ -4631,7 +4665,8 @@ msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "events happening at the same time. Note that this will only check for an "
 "identical start time of the events, not for any overlap between events."
-msgstr ""
+msgstr "如果選擇此選項，則會員資格可用於購買同時發生的活動的門票。請注意，這隻會檢查"
+"事件的相同開始時間，而不是活動之間的任何重疊時間。"
 
 #: pretix/base/models/memberships.py:56 pretix/base/models/vouchers.py:196
 #: pretix/control/views/vouchers.py:114
@@ -5087,6 +5122,9 @@ msgid ""
 "option after consulting a tax counsel. No warranty given for correct tax "
 "calculation. USE AT YOUR OWN RISK."
 msgstr ""
+"不推薦。大多數活動不符合反向收費的條件，因為徵稅地點是活動的地點。此選項禁止"
+"對歐盟以外的所有客戶以及輸入有效歐盟增值稅號的不同歐盟國家/地區的企業客戶收取"
+"加值稅。僅在諮詢稅務顧問后啟用此選項。不保證正確計算稅款。使用風險自負。"
 
 #: pretix/base/models/tax.py:181 pretix/plugins/stripe/payment.py:215
 msgid "Merchant country"
@@ -5165,6 +5203,9 @@ msgid ""
 "usages in some cases can be lower than this limit, e.g. in case of "
 "cancellations."
 msgstr ""
+"如果設置為多個，則必須在首次使用時為這麼多項產品兌換優惠券。在以後的使用中，"
+"該設置也可以用於較少數量的產品。請注意，這意味著在某些情況下，你的使用總數可"
+"能低於此限制，例如在取消的情況下。"
 
 #: pretix/base/models/vouchers.py:213
 msgid "Maximum discount budget"
@@ -5690,7 +5731,8 @@ msgid ""
 "This payment will be available only if the order total is equal to or "
 "exceeds the given value. The order total for this purpose may be computed "
 "without taking the fees imposed by this payment method into account."
-msgstr ""
+msgstr "僅當訂單總額等於或超過給定值時，此付款才可用。為此目的計算的訂單總額可以在不"
+"考慮此付款方式收取的費用的情況下計算。"
 
 #: pretix/base/payment.py:342
 msgid "Maximum order total"
@@ -5701,7 +5743,8 @@ msgid ""
 "This payment will be available only if the order total is equal to or below "
 "the given value. The order total for this purpose may be computed without "
 "taking the fees imposed by this payment method into account."
-msgstr ""
+msgstr "僅當訂單總額等於或超過給定值時，此付款才可用。為此目的計算的訂單總額可以在不"
+"考慮此付款方式收取的費用的情況下計算。"
 
 #: pretix/base/payment.py:353 pretix/base/payment.py:362
 msgid "Additional fee"
@@ -5848,6 +5891,8 @@ msgid ""
 "It should instruct the user on how to proceed with the payment. You can use "
 "the placeholders {order}, {amount}, {currency} and {amount_with_currency}."
 msgstr ""
+"此文件將顯示在待處理訂單的訂單確認頁面上。文件應該指導使用者如何繼續付款。"
+"你可以使用佔位符 {order}、{amount}、{currency} 和 {amount_with_currency}。"
 
 #: pretix/base/payment.py:1130 pretix/plugins/banktransfer/payment.py:150
 msgid ""
@@ -6441,8 +6486,7 @@ msgid ""
 msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "我們從你的購物車中刪除 %(product)s，因為你不能購買少於 %(min)s的商品。"
 
 #: pretix/base/services/cart.py:132 pretix/base/services/orders.py:145
 #: pretix/presale/templates/pretixpresale/event/index.html:157
@@ -6556,7 +6600,8 @@ msgid ""
 "We did not find any position in your cart that we could use this voucher "
 "for. If you want to add something new to your cart using that voucher, you "
 "can do so with the voucher redemption option on the bottom of the page."
-msgstr ""
+msgstr "我們沒有在你的購物車中找到任何可以使用此憑證的位置。如果你想使用該優惠券將新"
+"商品添加到購物車你您可以使用頁面底部的優惠券兌換選項來實現。"
 
 #: pretix/base/services/cart.py:177
 msgid "Your voucher is valid for a product that is currently not for sale."
@@ -7255,7 +7300,8 @@ msgid ""
 "Your VAT ID could not be checked, as the VAT checking service of your "
 "country returned an incorrect result. We will therefore need to charge VAT "
 "on your invoice. Please contact support to resolve this manually."
-msgstr ""
+msgstr "無法檢查你的增值稅號，因為您所在國家/地區的加值稅檢查服務返回的結果不正確。因"
+"此，我們需要對您的發票收取加值稅。請聯繫支持人員手動解決此問題。"
 
 #: pretix/base/services/tickets.py:102 pretix/control/views/pdf.py:96
 msgid "Sample workshop"
@@ -7427,7 +7473,8 @@ msgid ""
 "Require customers to fill in individual email addresses for all personalized "
 "tickets. See the above option for more details. One email address for the "
 "order confirmation will always be required regardless of this setting."
-msgstr ""
+msgstr "要求客戶填寫所有個人電子郵件位址。有關更多詳細資訊，請參閱上述選項。無論此設"
+"置如何，始終需要一個電子郵件地址進行訂單確認。"
 
 #: pretix/base/settings.py:351
 msgid "Ask for company per ticket"
@@ -7538,6 +7585,9 @@ msgid ""
 "details as well as for displaying the value on the invoice. It will be shown "
 "on the invoice below the headline. The field will not be required."
 msgstr ""
+"如果你想在發票位址表單中添加自定義文本欄位，例如特定國家/地區的註冊號，請在此"
+"處填寫標籤。此標籤既用於要求使用者輸入其詳細資訊，也用於在發票上顯示值。這將"
+"顯示在標題下方的發票上。該欄位不是必需的。"
 
 #: pretix/base/settings.py:535
 msgid "Ask for VAT ID"
@@ -7668,7 +7718,8 @@ msgid ""
 "This text will be shown above the ticket shop once the designated sales "
 "timeframe for this event is over. You can use it to describe other options "
 "to get a ticket, such as a box office."
-msgstr ""
+msgstr "此活動的指定銷售時間範圍結束後，此文本將顯示在售票處上方。你可以使用它來描述"
+"獲取門票的其他選項，例如：票房。"
 
 #: pretix/base/settings.py:731
 msgid "Guidance text"
@@ -7721,6 +7772,8 @@ msgid ""
 "some countries by civil law. This will not effect the last date of payments "
 "configured below."
 msgstr ""
+"如果啟動此選項並且任何訂單的付款期限在週六或周日結束，則它將被移至下一個星期"
+"一。在某些國家/地區，民法要求這樣做。這不會影響下面配置的最後付款日期。"
 
 #: pretix/base/settings.py:807
 msgid "Payment term in minutes"
@@ -7743,7 +7796,8 @@ msgid ""
 "The last date any payments are accepted. This has precedence over the terms "
 "configured above. If you use the event series feature and an order contains "
 "tickets for multiple dates, the earliest date will be used."
-msgstr ""
+msgstr "接受任何付款的最後日期。這優先於上面設定的術語。如果你使用活動系列功能，並且"
+"此訂單包含多個日期的門票，則這將使用最早的日期。"
 
 #: pretix/base/settings.py:843
 msgid "Automatically expire unpaid orders"
@@ -7754,7 +7808,8 @@ msgid ""
 "If checked, all unpaid orders will automatically go from 'pending' to "
 "'expired' after the end of their payment deadline. This means that those "
 "tickets go back to the pool and can be ordered by other people."
-msgstr ""
+msgstr "如果選中，所有未付款的訂單，將在付款截止日期結束後自動從「待處理」變為“過期”"
+"。這意味著這些門票會回到總匯，並可以由其他人訂購。"
 
 #: pretix/base/settings.py:855
 msgid "Hide \"payment pending\" state on customer-facing pages"
@@ -7765,7 +7820,8 @@ msgid ""
 "The payment instructions panel will still be shown to the primary customer, "
 "but no indication of missing payment will be visible on the ticket pages of "
 "attendees who did not buy the ticket themselves."
-msgstr ""
+msgstr "付款說明表仍將顯示給主要客戶，但在未自行購買門票的出席者，在頁面上不會顯示，"
+"缺少付款的指示。"
 
 #: pretix/base/settings.py:871
 msgid ""
@@ -7842,7 +7898,8 @@ msgid ""
 "By default, invoices can never again be changed once they are issued. In "
 "most countries, we recommend to leave this option turned off and always "
 "issue a new invoice if a change needs to be made."
-msgstr ""
+msgstr "預設值情況下，發票一旦開出，就再也無法更改。在大多數國家/地區，我們建議將此選"
+"項保持關閉狀態，如果需要進行更改，請開新發票。"
 
 #: pretix/base/settings.py:969
 msgid "Address line"
@@ -7917,6 +7974,9 @@ msgid ""
 "on payment, they will be attached to the payment confirmation mail. If they "
 "are not automatically generated, they will not be attached to emails."
 msgstr ""
+"如果為所有訂單自動生成發票，發票將附加到訂單確認郵件中。如果發票是在付款時自"
+"動生成的，發票將附加到付款確認郵件中。如果發票不是自動生成的，則不會附加到電"
+"子郵件中。"
 
 #: pretix/base/settings.py:1112
 msgid "Email address to receive a copy of each invoice"
@@ -7927,7 +7987,8 @@ msgid ""
 "Each newly created invoice will be sent to this email address shortly after "
 "creation. You can use this for an automated import of invoices to your "
 "accounting system. The invoice will be the only attachment of the email."
-msgstr ""
+msgstr "每張新建立的發票將在建立后不久發送到此電子郵件位址。你可以使用它，自動將發票"
+"導入您的會計系統。發票將是電子郵件的唯一附件。"
 
 #: pretix/base/settings.py:1124
 msgid "Show items outside presale period"
@@ -7956,7 +8017,8 @@ msgid ""
 "country for customer addresses and phone numbers. For formatting, this takes "
 "less priority than the language and is therefore mostly relevant for "
 "languages used in different regions globally (like English)."
-msgstr ""
+msgstr "將用於確定日期和時間格式以及客戶位址和電話號碼的預設國家/地區。對於格式設置，"
+"這不如語言優先，因此主要與全球不同地區使用的語言（如英語）相關。"
 
 #: pretix/base/settings.py:1184
 msgid "Show event times and dates on the ticket shop"
@@ -8026,6 +8088,9 @@ msgid ""
 "via the control panel. If you disable the waiting list but keep this option "
 "enabled, tickets will still be sent out."
 msgstr ""
+"如果票證量變為免費，請自動創建優惠券並將其發送給該產品等候名單上的第一個人。"
+"如果未啟動，則不會自動發送郵件，但你可以通過控制面板手動發送。如你禁用候補名"
+"單但保持啟用此選項，則仍會發送門票。"
 
 #: pretix/base/settings.py:1281
 msgid "Waiting list response time"
@@ -8036,7 +8101,8 @@ msgid ""
 "If a ticket voucher is sent to a person on the waiting list, it has to be "
 "redeemed within this number of hours until it expires and can be re-assigned "
 "to the next person on the list."
-msgstr ""
+msgstr "如果將機票優惠券券發送給等候名單上的人，則必須在此（）小時內兌換，直到過期，"
+"並且可以重新分配給名單上的下一個人。"
 
 #: pretix/base/settings.py:1295
 msgid "Ask for a name"
@@ -8097,6 +8163,9 @@ msgid ""
 "failed scans will not be counted, and the user will not see the different "
 "check-in lists."
 msgstr ""
+"啟用此選項後，你的客戶將能夠知道他們進入活動的次數。這通常不是必需的，但與可"
+"使用特定次數的票證結合使用時可能很有用，因此客戶可以看到他們已被使用多少次。"
+"退出或失敗的掃描將不計算在內，使用者將看不到不同的簽入清單。"
 
 #: pretix/base/settings.py:1378
 msgid "Allow users to download tickets"
@@ -8126,7 +8195,8 @@ msgid ""
 "By default, tickets are only issued for products selected individually, not "
 "for add-on products or bundled products. With this option, a separate ticket "
 "is issued for every add-on product or bundled product as well."
-msgstr ""
+msgstr "預設值情況下，只針對單獨選擇的商品簽名票證，而不為附加產品或捆綁產品簽發票證"
+"。使用此選項，還會為每個附加產品，或捆綁產品簽發單獨的票證。"
 
 #: pretix/base/settings.py:1414
 msgid "Generate tickets for all products"
@@ -8161,6 +8231,9 @@ msgid ""
 "from the page as soon as they clicked a link in the email. Does not affect "
 "orders performed through other sales channels."
 msgstr ""
+"如果打開，門票將不會在購買后直接下載。門票將附加到付款確認電子郵件中（如果檔"
+"大小不太大），客戶只需按兩下電子郵件中的連結即可從頁面下載門票。不影響通過其"
+"他銷售管道執行的訂單。"
 
 #: pretix/base/settings.py:1456
 msgid "Low availability threshold"
@@ -8173,6 +8246,8 @@ msgid ""
 "in the event list or calendar. If you keep this option empty, low "
 "availability will not be shown publicly."
 msgstr ""
+"如果門票的可用性低於此百分比，則活動（或日期，如果是事件系列）將在事件清單或"
+"日曆中突出顯示為可用性較低。如果將此選項保留為空，則不會公開顯示低可用性。"
 
 #: pretix/base/settings.py:1471
 msgid "Show availability in event overviews"
@@ -8377,6 +8452,8 @@ msgid ""
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
 "help your organization."
 msgstr ""
+"此文本將顯示在退款如何運作的說明和滑塊之間，你的客戶可以使用滑塊來選擇他們想"
+"要收到的金額。例如，你可以使用它來解釋選擇較低的退款，這將有助於你的組織。"
 
 #: pretix/base/settings.py:1758
 msgid "Step size for reduction amount"
@@ -8496,6 +8573,9 @@ msgid ""
 "data as calendar entries are often shared with an unspecified number of "
 "people."
 msgstr ""
+"你可以使用它與出席者共用資訊，例如旅行資訊或數位活動的連結。如果你將其留空，"
+"我們將在其中放置活動商店，入場時間和召集人名稱的連結。我們不允許使用包含敏感"
+"人員特定數據的佔位元，因為日曆條目通常與未指定數量的人員共用。"
 
 #: pretix/base/settings.py:1914
 msgid "Subject prefix"
@@ -9122,6 +9202,9 @@ msgid ""
 "recommend not using small details on the picture as it will be resized on "
 "smaller screens."
 msgstr ""
+"如果你提供徽章標誌圖片，默認情況下，我們不會在頁眉中顯示您的活動名稱和日期。"
+"默認情況下，我們顯示的徽標大小最大為1140x120圖元。您可以使用以下設置增加大小"
+"。我們建議不要在圖片上使用小細節，因為它將在較小的螢幕上調整大小。"
 
 #: pretix/base/settings.py:2688 pretix/base/settings.py:2730
 msgid "Use header image in its full size"
@@ -9140,7 +9223,8 @@ msgid ""
 "The title will only be shown on the event front page. If no header image is "
 "uploaded for the event, but the header image from the organizer profile is "
 "used, this option will be ignored and the event title will always be shown."
-msgstr ""
+msgstr "標題只會顯示在活動首頁上。如果沒有為活動上傳標題圖像，但使用了召集人配置檔中"
+"的標題圖像，則將忽略此選項，並始終顯示活動標題。"
 
 #: pretix/base/settings.py:2711 pretix/control/forms/organizer.py:422
 msgid ""
@@ -9150,6 +9234,10 @@ msgid ""
 "recommend not using small details on the picture as it will be resized on "
 "smaller screens."
 msgstr ""
+"如果你提供徽章標誌圖片，預設值情況下，我們不會在頁面抬頭中顯示你的活動名稱和"
+"日期。預設值情況下，我們顯示的徽章標誌圖片大小最大為1140x120圖元。你可以使用"
+"以下設置增加大小。我們建議不要在圖片上使用小細節，因為圖片將在較小的螢幕上調"
+"整大小。"
 
 #: pretix/base/settings.py:2740
 msgid "Use header image also for events without an individually uploaded logo"
@@ -9167,6 +9255,10 @@ msgid ""
 "preview, so we recommend to make sure it still looks good only the center "
 "square is shown. If you do not fill this, we will use the logo given above."
 msgstr ""
+"如果你在社交媒體上發佈連向售票處的連結，此圖片將用作預覽。"
+"Facebook建議使用1200 x 630像素的圖片尺寸，但是WhatsApp和Reddit等某些平臺只顯"
+"示方形預覽，因此我們建議：確保只顯示中心正方形仍然有好看的圖片。如果你不填寫"
+"此內容，我們將使用上面給出的徽章標誌。"
 
 #: pretix/base/settings.py:2769
 msgid "Logo image"
@@ -9261,6 +9353,9 @@ msgid ""
 "allows users to create an event-specified team on-the-fly, even when they do "
 "not have \"Can change teams and permissions\" permission."
 msgstr ""
+"無權訪問此召集人名下的所有活動的用戶，必須選擇其團隊之一，才能訪問建立的活動"
+"。此設置允許使用者即時建立事件指定的團隊，即使他們沒有“可以更改團隊和許可權”"
+"許可權也是如此。"
 
 #: pretix/base/settings.py:2989 pretix/base/settings.py:2999
 msgid "Event start time (descending)"
@@ -9306,7 +9401,8 @@ msgid ""
 "If you set a number here, gift cards will by default expire at the end of "
 "the year after this many years. If you keep it empty, gift cards do not have "
 "an explicit expiry date."
-msgstr ""
+msgstr "如果你在此處設定一項數目，禮品卡將預設在這麼後來年份的年底到期。如果你將其保"
+"留為空，禮品卡將沒有明確的到期日期。"
 
 #: pretix/base/settings.py:3059
 msgid "Enable cookie consent management features"
@@ -9367,7 +9463,8 @@ msgid ""
 "If disabled, you will need to manually assign seats in the backend. Note "
 "that this can mean people will not know their seat after their purchase and "
 "it might not be written on their ticket."
-msgstr ""
+msgstr "如果禁用，則需要在後端手動分配席位。請留意，這可能意味著人們在購買后不會知道"
+"他們的座位，並且可能不會寫在他們的票上。"
 
 #: pretix/base/settings.py:3155
 msgid "Show button to copy user input from other products"
@@ -9638,7 +9735,8 @@ msgid ""
 "It looks like this is a fresh installation of pretix. This error message is "
 "probably caused due to the fact that either your configuration includes the "
 "wrong site URL or your reverse proxy is sending the wrong header."
-msgstr ""
+msgstr "看起來這是 pretix 的全新安裝。此錯誤消息可能是，"
+"由於你的安裝設定包含錯誤的網站 URL ，或反向代理發送了錯誤的標頭。"
 
 #: pretix/base/templates/400_hostname.html:24
 msgid "Expected host according to configuration"
@@ -10160,6 +10258,8 @@ msgid ""
 "required for security reasons, to ensure that your browser is not being "
 "hijacked by third parties."
 msgstr ""
+"你看到此消息是因為此HTTPS網站需要您的Web瀏覽器發送“Referer標頭”，但未發送任何"
+"標頭。出於安全原因，此標頭是必需的，以確保你的瀏覽器不會被第三方劫持。"
 
 #: pretix/base/views/errors.py:53
 msgid ""
@@ -10174,6 +10274,8 @@ msgid ""
 "submitting forms. This cookie is required for security reasons, to ensure "
 "that your browser is not being hijacked by third parties."
 msgstr ""
+"你看到此消息，是因為此網站在提交表單時需要 CSRF cookie。出於安全原因，此 "
+"Cookie 是必需的，以確保你的瀏覽器不會被第三方劫持。"
 
 #: pretix/base/views/errors.py:63
 msgid ""
@@ -10261,7 +10363,8 @@ msgid ""
 "You are allowed to create events under this organizer, however you do not "
 "have permission to edit all events under this organizer. Please select one "
 "of your existing teams that will be granted access to this event."
-msgstr ""
+msgstr "你可以在此召集人下建立活動，但是你無權編輯此召集人下的所有活動。請選擇將有權"
+"訪問此活動的現有團隊之一。"
 
 #: pretix/control/forms/event.py:152
 msgid "Create a new team for this event with me as the only member"
@@ -10656,6 +10759,8 @@ msgid ""
 "can for example be used to provide widgets that give discounts or unlock "
 "secret products."
 msgstr ""
+"如果設置，視窗小插件將顯示產品，就像已輸入此優惠券一樣，當透過小額購買產品時"
+"，將使用此優惠券。例如，這可用於提供提供折扣或解鎖秘密產品的小插件。"
 
 #: pretix/control/forms/event.py:1492
 msgid "Compatibility mode"
@@ -11292,6 +11397,10 @@ msgid ""
 "any IP addresses and we will not know who you are or where to find your "
 "instance. You can disable this behavior here at any time."
 msgstr ""
+"在更新檢查期間，pretix 將向 pretix 開發人員運營的伺服器報告匿名的唯一安裝 "
+"ID、pretix 的當前版本和你安裝的外掛程式以及安裝中的活動和非活動事件的數量。我"
+"們只會儲存匿名數據，絕不會存儲任何IP位址，我們不會知道你是誰或在哪裡可以找到"
+"你的實例。你可以隨時在此處禁用此行為。"
 
 #: pretix/control/forms/global_settings.py:119
 msgid "E-mail notifications"
@@ -11418,6 +11527,8 @@ msgid ""
 "current source code of the site including all modifications and installed "
 "plugins. This will be publicly available. Make sure to keep it up to date!"
 msgstr ""
+"如果你在 AGPLv3 術語下使用 pretix，請準確描述如何下載網站的當前原始程式碼，包"
+"括所有修改和已安裝的外掛程式。這將公開提供。確保保持最新狀態！"
 
 #: pretix/control/forms/item.py:144
 msgid "This field is required"
@@ -11872,7 +11983,8 @@ msgid ""
 "Regenerates the order and ticket secrets. You will need to re-send the link "
 "to the order page to the user and the user will need to download his tickets "
 "again. The old versions will be invalid."
-msgstr ""
+msgstr "重新生成訂單和機密票證。你需要將訂單頁面的連結重新發送給用戶，並且使用者需要"
+"再次下載他的票證。舊版本將無效。"
 
 #: pretix/control/forms/orders.py:653 pretix/plugins/sendmail/forms.py:217
 msgid "Attach tickets"
@@ -11944,6 +12056,9 @@ msgid ""
 "manual refund to-do list. Do not check if you want to refund some of the "
 "orders by offsetting with different orders or issuing gift cards."
 msgstr ""
+"將建立手動退款，該退款將列在手動退款待辦事項清單中。在功能上與自動退款結合使"
+"用時，只有使用不支援自動退款的付款方式的付款才會出現在你的手動退款待辦事項清"
+"單中。不要檢查你是否想通過用不同的訂單抵消或發行禮品卡來退還某些訂單。"
 
 #: pretix/control/forms/orders.py:802
 msgid ""
@@ -12333,6 +12448,8 @@ msgid ""
 "line, or a CSV file with a title column and one or more of the columns "
 "\"email\", \"number\", \"name\", or \"tag\"."
 msgstr ""
+"你可以提供電子郵件位址清單（每行一個電子郵件位址），也可以提供包含標題列和一"
+"個或多個列「電子郵件」、「數位」、「名稱」或「標籤」的 CSV 檔。"
 
 #: pretix/control/forms/vouchers.py:321
 msgid "Maximum usages per voucher"
@@ -13831,6 +13948,8 @@ msgid ""
 "you can <a %(login_href)s>log in</a> first and then click this link again to "
 "accept the invitation with your existing account."
 msgstr ""
+"如果你在此網站上已經有一個使用不同電子郵件地址的帳戶，您可以先 <a "
+"%(login_href)s>log in</a>，然後再次按下此連結，以使用現有帳戶接受邀請。"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:23
 #: pretix/control/templates/pretixcontrol/auth/register.html:18
@@ -14071,6 +14190,9 @@ msgid ""
 "plan on no longer supporting Internet Explorer in our administrative backend "
 "in the next months."
 msgstr ""
+"Internet Explorer是一個舊的瀏覽器，不支援許多最新的基於Web的技術。雖然某些功"
+"能可能已經無法正常工作，但我們計劃在未來幾個月內不再在我們的管理後端中支援 "
+"Internet Explorer。"
 
 #: pretix/control/templates/pretixcontrol/base.html:333
 msgid ""
@@ -14094,6 +14216,9 @@ msgid ""
 "to make sure they do not show up in your reports and statistics and block "
 "people from actually buying tickets."
 msgstr ""
+"即使<strong>已禁用</strong>測試模式，你的事件也包含<strong>測試模式順序</stro"
+"ng>。你應該刪除這些訂單，以確保它們不會顯示在你的報告和統計資訊中，並阻止人群"
+"購買實體門票。"
 
 #: pretix/control/templates/pretixcontrol/base.html:397
 msgid "Show all test mode orders"
@@ -14107,6 +14232,10 @@ msgid ""
 "disable this feature or enter your email address to get notified via email "
 "if a new update arrives. This message will disappear once you clicked it."
 msgstr ""
+"從版本 1.2.0 開始，pretix 會自動在後台檢查更新。在此檢查期間，匿名數據將傳輸"
+"到由pretix開發人員運營的伺服器。按兩下此消息以瞭解更多資訊，禁用此功能或輸入"
+"你的電子郵件位址，以便在有新更新到達時通過電子郵件收到通知。按兩下此消息後，"
+"此消息將消失。"
 
 #: pretix/control/templates/pretixcontrol/base.html:418
 msgid ""
@@ -15232,6 +15361,8 @@ msgid ""
 "arrived. You should review the cases and consider either refunding the "
 "customer or creating more space."
 msgstr ""
+"此事件包含未標記為已付款的<strong>已全額付款訂單</strong>，可能是因為在付款到"
+"達時沒有剩餘配額。你應該查看案例並考慮向客戶退款或創建更多空間。"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:100
 msgid "Show affected orders"
@@ -15340,7 +15471,8 @@ msgid ""
 "If you want to do some test orders, you can enable test mode for your shop. "
 "As long as the shop is in test mode, all orders that are created are marked "
 "as test orders and can be deleted again."
-msgstr ""
+msgstr "如果你想執行一些測試訂單，可以為商店啟用測試模式。只要商店處於測試模式，建立"
+"的所有訂單都會標記為測試訂單，並且可以再次刪除。"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:104
 msgid ""
@@ -15686,6 +15818,9 @@ msgid ""
 "ticket types in more detail, you can later do so in the \"Products\" section "
 "in the navigation. Don't worry, you can change everything you input here."
 msgstr ""
+"如果你想使用更高級的功能，如非入場產品、其他種類商品、自定義配額、附加產品，"
+"或者想要更詳細地修改您的門票類型，您可以稍後在導航的“產品”部分中執行此操作。"
+"別擔心，您可以在此處更改輸入的所有內容。"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:132
 #: pretix/control/views/event.py:345
@@ -15796,6 +15931,8 @@ msgid ""
 "feature to publish your terms of service, you don't need this setting since "
 "you can configure it there."
 msgstr ""
+"在購買之前，這些文件需要由用戶確認。例如，你可以在此處連結你的服務條款。如果"
+"你使用頁面功能發佈服務條款，則不需要此設置，因為你可以在其中進行設置。"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:191
 msgid "Add confirmation text"
@@ -15831,6 +15968,9 @@ msgid ""
 "privacy policy will be linked automatically (if you configured them), so you "
 "do not need to add them here."
 msgstr ""
+"這些鏈接將顯示在你的售票處的頁面腳注中。例如，您可以在此處連結您的服務條款。"
+"您的聯繫位址、版本說明和隱私政策將自動連結（如果您配置了它們），因此您無需在"
+"此處添加它們。"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:304
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:119
@@ -15870,7 +16010,8 @@ msgid ""
 "You can here define a set of metadata properties (i.e. variables) that you "
 "can later set for your items and re-use in places like ticket layouts. This "
 "is an useful timesaver if you create lots and lots of items."
-msgstr ""
+msgstr "你可以在此處定義一組元數據屬性（即變數），稍後可以為專案設定這些屬性，並在單"
+"位設置等位置重複使用。如果你創建大量專案，這將節省大量時間。"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:422
 msgid "Add property"
@@ -15923,6 +16064,9 @@ msgid ""
 "not responsible for the correct handling of taxes in your ticket shop. If in "
 "doubt, please contact a lawyer or tax consultant."
 msgstr ""
+"這些設定適用於進階使用者。有關詳細資訊，請參閱 <a href=\"%(docs)s\">文檔</a>"
+"。請注意，我們不負責在你的售票處正確處理稅款。如有疑問，請聯繫律師或稅務顧問"
+"。"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:44
 msgid "Custom taxation rules"
@@ -15936,6 +16080,9 @@ msgid ""
 "the first rule matches the order, it will be used and all further rules will "
 "be ignored. If no rule matches, tax will be charged."
 msgstr ""
+"這些設訂適用於有非常特定稅務情況的專業使用者。如果你在此處創建任何規則，則上"
+"述反向收費設定將被忽略。將按順序檢查規則，一旦第一個規則與順序雷同，規則將被"
+"使用，所有其他規則將被忽略。如果沒有規則匹配，將收取稅費。"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:52
 msgid "All of these rules will only apply if an invoice address is set."
@@ -16662,6 +16809,9 @@ msgid ""
 "if you enter \"1 day\", the ticket will be valid until the end of the day it "
 "starts on."
 msgstr ""
+"如果你選擇以天、月或年為單位的持續時間，則有效期將始終在一整天（午夜）結束時"
+"結束，加上上面選擇的分鐘數和小時數。開始日期包含在計算中，因此如果你輸入“1天”"
+"，則票證將有效到開始的那一天結束。"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:233
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:603
@@ -16772,6 +16922,9 @@ msgid ""
 "can create group discounts like \"get 20%% off if you buy 3 or more "
 "tickets\" or \"buy 2 tickets, get 1 free\"."
 msgstr ""
+"使用自動折扣，你可以根據特定條件自動將折扣應用於客戶的購買。例如，你可以創建"
+"團體折扣，例如“如果你購買 3 張或更多門票，可享受 20%%的折扣”或“買 2 張門票，"
+"送 1 張”。"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:14
 msgid ""
@@ -16946,7 +17099,8 @@ msgid ""
 "If you mark a Yes/No question as required, it means that the user has to "
 "select Yes and No is not accepted. If you want to allow both options, do not "
 "make this field required."
-msgstr ""
+msgstr "如果你將“是/否”問題標記為必填，則表示用戶必須選擇“是”，並且不接受“否”。如果要"
+"允許這兩個選項，請不要將此欄位設置為必填欄位。"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:54
 msgid "Answer options"
@@ -17138,6 +17292,8 @@ msgid ""
 "and will show in English instead. You can help translating at translate."
 "pretix.eu."
 msgstr ""
+"此翻譯不由 pretix 團隊維護。我們不能保證它的正確性，新的或最近更改的功能可能"
+"不會被翻譯，而是以英文顯示。你可以在 translate.pretix.eu 幫助翻譯。"
 
 #: pretix/control/templates/pretixcontrol/multi_languages_widget.html:14
 msgid "Unofficial translation"
@@ -17369,6 +17525,9 @@ msgid ""
 "not be able to exist otherwise. In most cases it is easier to cancel the "
 "order completely and create a new one."
 msgstr ""
+"請謹慎使用此工具。你在此處所做的更改是不可逆的。此外，如果你手動更改訂單，則"
+"不會檢查所有限制（例如，對所需附加元件的限制）。因此，你可以構造一個否則無法"
+"存在的訂單。在大多數情況下，完全取消訂單比建立一項新訂單更容易。"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:68
 #, python-format
@@ -17380,7 +17539,8 @@ msgid ""
 "This position has been created with a voucher with a limited budget. If you "
 "change the price or item, the discount will still be calculated from the "
 "original price at the time of purchase."
-msgstr ""
+msgstr "該職位是使用預算有限的優惠券創建的。如果你更改價格或商品，折扣仍將從購買時的"
+"原始價格計算。"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:97
 #: pretix/control/templates/pretixcontrol/order/change.html:391
@@ -17952,6 +18112,9 @@ msgid ""
 "products in the order are still available. If the order is pending payment, "
 "the expiry date will be reset."
 msgstr ""
+"透過重新啟動訂單，你可以撤消其取消，並將其轉換回待處理或已付款訂單。這只有在"
+"訂單中的所有商品仍然可用的情況下才有可能。如果訂單正在等待付款，則到期日將被"
+"重置。"
 
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:34
 msgid "Reactivate"
@@ -17973,6 +18136,8 @@ msgid ""
 "will just mark this transfer as aborted in pretix. This will also not "
 "reactivate the order, it will just allow you to choose a new refund method."
 msgstr ""
+"如果錢已經在退款的途中，這不會阻止這筆錢，這項動作只會在 pretix 中將這筆轉帳"
+"標記為取消。這也不會重新啟動訂單，這項動作只允許你選擇新的退款方式。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:32
 msgid "Yes, cancel refund"
@@ -17995,7 +18160,8 @@ msgid ""
 "communicate the refund request to the respective payment provider. Manual "
 "refunds will be created as pending refunds, you can then later mark them as "
 "done once you actually transferred the money back to the customer."
-msgstr ""
+msgstr "你選擇自動退款的任何付款都將立即傳達給相應的付款供應商。手動退款將創建為待處"
+"理退款，你可以在實際將款項轉回給客戶后將其標記為已完成。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:32
 msgid "Refund to original payment method"
@@ -18208,14 +18374,16 @@ msgid ""
 "explain to them how to access their gift cards. The easiest way to do this, "
 "is to include an explanation and a link to their order using the here "
 "provided email functionality."
-msgstr ""
+msgstr "由於你要將客戶的訂單退款到禮品卡，因此你應該向他們解釋如何使用他們的禮品卡。"
+"最簡單的方法是使用此處提供的電子郵件功能包含其訂單的說明和連結。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:64
 msgid ""
 "Your waiting list will not be deleted automatically, but it will receive no "
 "new tickets due to the products being disabled. You can choose to inform "
 "people on the waiting list by using this option."
-msgstr ""
+msgstr "你的候補名單不會自動刪除，但由於商品被禁用，你不會收到新的門票。你可以選擇使"
+"用此選項通知候補名單上的人。"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:71
 msgid ""
@@ -18962,6 +19130,8 @@ msgid ""
 "security. Therefore, cookies set by pretix itself do not require consent in "
 "all jurisdictions that we are aware of."
 msgstr ""
+"Pretix 本身只會設置提供使用者請求的服務或保持適當安全級別所需的cookie。因此，"
+"pretix 本身設置的 cookie 在我們所知道的所有司法管轄區都不需要同意。"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:180
 msgid ""
@@ -18978,6 +19148,9 @@ msgid ""
 "usage, the legal details in your specific jurisdiction, or the agreements "
 "you have with third parties such as payment or tracking providers."
 msgstr ""
+"最終，你有責任確保您遵守所有相關法律。我們試圖通過提供這些設定來提供説明，但"
+"我們不能承擔責任，因為我們不知道你的pretix使用的確切設定，你所在司法管轄區的"
+"法律細節，或你與第三方（如付款或跟蹤供應商）的協定。"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:210
 msgid "Barcode media"
@@ -18991,6 +19164,9 @@ msgid ""
 "layout that includes the \"Reusable Medium ID\" as a QR code. Later, the "
 "same barcode may be re-used during the sale of a different product."
 msgstr ""
+"“條碼媒質”可以是條碼的任何印刷或數位表示。該媒體最初將透過，具有銷售媒體政策"
+"要求此類媒體的產品，以及包含「可重複使用媒體 ID」作為二維碼的票證或徽章設置建"
+"立。以後在銷售其他產品時，可以重複使用相同的條碼。"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:221
 msgid "Barcode media can currently only be connected to tickets."
@@ -19161,6 +19337,9 @@ msgid ""
 "in one event, and require valid memberships to allow purchases in another "
 "event."
 msgstr ""
+"你可以定義成員資格類型。這些允許你將來自不同事件的產品連結在一起。你可以在一"
+"個活動中將會員資格作為產品的一部分進行銷售，並要求有效的會員資格才能在另一個"
+"活動中購買。"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:15
 msgid ""
@@ -19172,7 +19351,8 @@ msgid ""
 "You can here define a set of metadata properties (i.e. variables) that you "
 "can later set for your events and re-use in places like ticket layouts. This "
 "is an useful timesaver if you create lots and lots of events."
-msgstr ""
+msgstr "你可以在此處定義一組元數據屬性（即變數），稍後可以為事件設置這些屬性，並在票"
+"證設定的位置重複使用。如果你創建大量事件，這將節省大量時間。"
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:15
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:8
@@ -19370,6 +19550,8 @@ msgid ""
 "have a pretix account, they will immediately be added to the event. "
 "Otherwise, they will be sent an email with an invitation."
 msgstr ""
+"要添加新使用者，你可以在此處輸入其電子郵件位址。如果他們已經有一個pretix帳戶"
+"，他們將立即被添加到活動中。否則，他們將收到一封包含邀請的電子郵件。"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:81
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:122
@@ -19551,7 +19733,8 @@ msgid ""
 "This editor allows you to create a design for the PDF tickets of your event. "
 "You can upload a background PDF and then use this tool to place texts and a "
 "QR code on the ticket."
-msgstr ""
+msgstr "這個編輯器允許你為活動的 PDF 門票創建設計。你可以上傳背景 "
+"PDF，然後使用此工具在票證上放置文本和二維碼。"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:109
 msgid ""
@@ -19559,7 +19742,8 @@ msgid ""
 "for example in text rendering, might look slightly different in the final "
 "tickets. You can use the \"Preview\" button on the right for a more precise "
 "preview."
-msgstr ""
+msgstr "請注意，編輯器只能提供粗略的預覽。某些細節（例如文本渲染）在最終工單中可能看"
+"起來略有不同。你可以使用右側的「預覽」 按鈕進行更精確的預覽。"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:123
 msgid ""
@@ -19568,6 +19752,9 @@ msgid ""
 "might have problems displaying your background PDF or loading the correct "
 "fonts."
 msgstr ""
+"該編輯器使用最新版本的Google Chrome，Mozilla "
+"Firefox和Opera進行了測試。其他瀏覽器（尤其是 Internet Explorer 或 Microsoft "
+"Edge）在顯示背景 PDF 或載入正確字體時可能會遇到問題。"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:131
 msgid ""
@@ -19765,6 +19952,10 @@ msgid ""
 "however most of them can also be empty in some cases depending on "
 "configuration."
 msgstr ""
+"你可以在工單上的自定義文本中使用佔位元元，以使用個人數據富文本。哪些佔位元可"
+"用取決於您的事件設訂及啟動的外掛程式、所選產品以及用戶輸入。此頁面列出了技術"
+"上可用的你活動的所有佔位元，但在某些情況下，大多數佔位符也可能為空，具體情況"
+"取決於設定。"
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:31
 msgid "Placeholder"
@@ -19815,7 +20006,8 @@ msgid ""
 "You are about to permanently delete data from the server, even though you "
 "might be required to keep some of this data on file. You can therefore "
 "download the following file and store it in a safe place:"
-msgstr ""
+msgstr "你將要從伺服器中永久刪除資料，即使可能需要將其中一些數據存檔。因此，你可以下"
+"載以下檔並將其存儲在安全的地方："
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:29
 msgid "Download data"
@@ -19861,6 +20053,9 @@ msgid ""
 "will be removed from the server's database. The data might still exist in "
 "backups for a limited period of time."
 msgstr ""
+"此功能允許你從此事件中刪除個人數據。你將首先選擇要攪碎的數據類型，然後你可以"
+"下載受影響的數據，並在確認下載后，數據將從伺服器的資料庫中刪除。數據可能存在"
+"於有時間限期的備份中。"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:18
 msgid ""
@@ -19873,14 +20068,16 @@ msgid ""
 "It is within your own responsibility to check if you are allowed to delete "
 "the affected data in your legislation, e.g. for reasons of taxation. In many "
 "countries, you need to keep some data in the live system in case of an audit."
-msgstr ""
+msgstr "你有責任檢查你是否被允許刪除立法中受影響的數據，例如出於稅收原因。在許多國家/"
+"地區，你需要在實時系統中保留一些數據，以防審計。"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:32
 msgid ""
 "For most categories of data, you will be able to partially download the data "
 "to store it offline. Some kinds of data (such as some payment information) "
 "as well as historical log data cannot be downloaded at the moment."
-msgstr ""
+msgstr "對於大多數類別的數據，你能夠將部份下載數據並以離線存儲。某些類型的數據（例如"
+"某些付款資訊）以及歷史日誌數據目前無法下載。"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:46
 msgid "Data selection"
@@ -20554,7 +20751,8 @@ msgid ""
 "If you choose \"any product\" for a specific quota and choose to reserve "
 "quota for this voucher above, the product can still be unavailable to the "
 "voucher holder if another quota associated with the product is sold out!"
-msgstr ""
+msgstr "如果你為特定配額選擇「任何產品」並選擇為上述此優惠券保留配額，則如果與該產品"
+"關聯的其他配額售罄，優惠券持有人仍然可以使用該產品！"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:6
@@ -20599,7 +20797,8 @@ msgid ""
 "This will silently remove products from the cart of a user currently making "
 "a purchase. This can be really confusing. Only use this if you know that the "
 "session is no longer in use."
-msgstr ""
+msgstr "這將安靜地從當前進行購買的用戶的購物車中刪除產品。這可能真的很令人困惑。只有"
+"當你知道對話不再使用時，才使用此選項。"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:11
 msgid "This voucher already has been used. It is not recommended to modify it."
@@ -20743,6 +20942,9 @@ msgid ""
 "capacity is available, so don't worry if entries do not disappear here "
 "immediately. If you want, you can also send them out manually right now."
 msgstr ""
+"你已配置為：一旦容量可用，憑證將自動發送給此列表中等待時間最長的人員。 容量可"
+"用後，憑證可能需要半小時才能發送，所以如果此處條目沒有立即消失，請不要擔心。 "
+"如果需要，你也可以立即手動發送給等待人員。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:36
 msgid ""
@@ -20758,6 +20960,9 @@ msgid ""
 "quota is available) or you can press the big button below this text to send "
 "out as many vouchers as currently possible to the persons who waited longest."
 msgstr ""
+"你已設定憑證<strong>不會</strong>自動發送。你可以通過按下此表中一行旁邊的按鈕"
+"（如果有足夠的配額）按你選擇的順序逐個發送它們，或者你可以按此文字下方的大按"
+"鈕向等待時間最長的人發送盡可能優惠券。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:62
 msgid "Send as many vouchers as possible"
@@ -20918,7 +21123,8 @@ msgid ""
 "You clicked on an invalid link. Please check that you copied the full web "
 "address into your address bar. Please note that the link is only valid for "
 "three days and that the link can only be used once."
-msgstr ""
+msgstr "你點擊無效連結。請檢查你是否將完整的網址複製到位址列中。請注意，該連結僅在三"
+"天內有效，並且該連結只能使用一次。"
 
 #: pretix/control/views/auth.py:321
 msgid "We were unable to find the user you requested a new password for."
@@ -21285,6 +21491,8 @@ msgid ""
 "license if you install any plugins licensed with strong copyleft, otherwise "
 "you are likely in violation of the license of these plugins."
 msgstr ""
+"如果你安裝了任何使用強大的 copyleft 許可的外掛程式，則不得使用附加許可權或 "
+"pretix 企業許可證，否則你可能會違反這些外掛程式的許可證。"
 
 #: pretix/control/views/global_settings.py:206
 msgid ""
@@ -21312,6 +21520,8 @@ msgid ""
 "visitor of your site in source code form under the same license terms as "
 "pretix (AGPLv3 + additional restrictions). Make sure to keep it up to date!"
 msgstr ""
+"你需要在與 pretix 相同的許可條款（AGPLv3 + 附加限制）下，以原始程式碼形式，免"
+"費向網站的每個訪問者，提供所有已安裝的外掛程式，以確保保持最新狀態！"
 
 #: pretix/control/views/global_settings.py:238
 #, python-brace-format
@@ -21479,6 +21689,10 @@ msgid ""
 "domain. You can do so through the DNS settings at the provider you "
 "registered your domain with."
 msgstr ""
+"我們找不到你嘗試使用的網域的 SPF 記錄集。 "
+"你仍然可以繼續，但這會增加電子郵件變成垃圾郵件或被拒絕的可能性。 "
+"我們強烈建議在網域上設置 SPF 記錄。你 可以通過你註冊網域的提供商的 DNS "
+"設置來執行此操作。"
 
 #: pretix/control/views/mailsetup.py:202
 msgid ""
@@ -21488,6 +21702,10 @@ msgid ""
 "update the DNS settings of your domain to include this system in the SPF "
 "record."
 msgstr ""
+"我們為你嘗試使用的網域找到了一個 SPF "
+"記錄集，但它不包括該系統的電子郵件服務器。 "
+"這意味著大多數電子郵件很可能會被拒絕或標記為垃圾郵件。 你應該更新網域的 DNS "
+"設置以將此系統包含在 SPF 記錄中。"
 
 #: pretix/control/views/mailsetup.py:210
 msgid "The verification code was incorrect, please try again."
@@ -22655,6 +22873,10 @@ msgid ""
 "import a digital bank statement in order to give pretix the required "
 "information."
 msgstr ""
+"我知道人們會直接將票價支付到我的銀行賬戶，而 pretix "
+"無法自動知道收到了哪些款項。 "
+"因此，我將手動將付款標記為完成，或定期匯數位銀行帳單，以便為 Pretix "
+"提供所需信息。"
 
 #: pretix/plugins/banktransfer/payment.py:81
 msgid "Bank account type"
@@ -22770,7 +22992,8 @@ msgid ""
 "created right after the payment method was chosen. Only the invoice will be "
 "sent to this email address, subsequent invoice corrections will not be sent "
 "automatically. Only the invoice will be sent, no additional information."
-msgstr ""
+msgstr "這要求發票創建設置允許在選擇付款方式后立即建立發票。只有發票將發送到此電子郵"
+"件地址，後續發票更正不會自動發送。只會發送發票，不會發送其他資訊。"
 
 #: pretix/plugins/banktransfer/payment.py:229
 msgid "Invoice email subject"
@@ -23694,6 +23917,9 @@ msgid ""
 "on the shoppers location. For German merchants, this is the direct successor "
 "of PayPal Plus."
 msgstr ""
+"除了通過PayPal帳戶付款外，你還可以為客戶提供使用信用卡和其他本地付款方式（如S"
+"OFORT，giropay，iDEAL等）付款的選項 - 即使客戶沒有PayPal帳戶。符合條件的付款"
+"方式將根據購物者的位置確定。對於德國商家來說，這是PayPal Plus的直接繼承者。"
 
 #: pretix/plugins/paypal2/payment.py:162
 msgid "Disable SEPA Direct Debit"
@@ -23707,6 +23933,9 @@ msgid ""
 "nature of your event - you might want to disabled the option of SEPA Direct "
 "Debit payments in order to reduce the risk of costly chargebacks."
 msgstr ""
+"雖然大多數付款方式都無法被客戶在不概述他們對商家的確切損失的情況下被召回，但"
+"只需按一下按鈕，即可調用 SEPA 直接轉帳。出於這個原因 - 並且根據你活動的性質 -"
+" 你可能希望禁用 SEPA 直接轉帳付款選項，以降低代價高昂的拒付風險。"
 
 #: pretix/plugins/paypal2/payment.py:178
 msgid "Enable Buy Now Pay Later"
@@ -23862,7 +24091,8 @@ msgid ""
 "After you clicked continue, we will be able to select how you want to pay "
 "and to fill in your payment details. You will then be redirected back here "
 "to review and confirm your order."
-msgstr ""
+msgstr "繼續點擊後，我們將能夠選擇你想要的付款方式，並填寫你的付款詳細資訊。然後，你"
+"將被重定向回此處以查看並確認你的訂單。"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:16
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:19
@@ -24384,7 +24614,8 @@ msgid ""
 "For technical reasons, the email might actually be sent a bit later than "
 "your configured date. Typically, this will not be more than 10 minutes. Your "
 "email will never be sent earlier than the time you configured."
-msgstr ""
+msgstr "由於技術原因，電子郵件實際上可能會比你設定的日期晚一點。通常，這不會超過 10 "
+"分鐘。你的電子郵件永遠不會早於你配置的時間發送。"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:6
@@ -24710,6 +24941,9 @@ msgid ""
 "like the 40 page SAQ D. Please consult the %s for further information on "
 "this subject."
 msgstr ""
+"我們可以將你透過轉銷商介面進行的信用卡交易標記為MOTO（郵購/電話訂單），這將使"
+"顧客免於強效客戶身份驗證（SCA）要求。但是：啟用此功能后，你需要填寫年度PCI-"
+"DSS自我評估表，例如40頁的SAQ D。有關此主題的更多資訊，請參閱 %s。"
 
 #: pretix/plugins/stripe/payment.py:167 pretix/plugins/stripe/payment.py:172
 msgid "Stripe account"
@@ -24798,6 +25032,9 @@ msgid ""
 "confirmed in some cases. Please only activate this payment method if your "
 "payment term allows for this lag."
 msgstr ""
+"儘管有這個名字，但通過 Stripe 進行的 Sofort "
+"付款<strong>不會</strong>立即處理，但在某些情況下可能需要長達 <strong>14 "
+"天</strong>才能確認。請僅在你的付款期限，允許此延遲時啟動此付款方式。"
 
 #: pretix/plugins/stripe/payment.py:286 pretix/plugins/stripe/payment.py:1318
 msgid "EPS"
@@ -25267,6 +25504,10 @@ msgid ""
 "choice. The editor is easy to use thanks to its drag-and-drop user "
 "interface, but it requires a modern browser and a decent internet connection."
 msgstr ""
+"你可以使用我們的PDF票證編輯器自定義工單設計。在那裡，"
+"你可以上傳用作門票背景的 PDF 檔，然後將各種文本和二維碼放置在你選擇的位置的背"
+"景上。由於其拖放式使用者介面，該編輯器易於使用，但這需要現代瀏覽器和良好的互"
+"聯網連接。"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/form.html:14
 msgid "Open Layout Designer"
@@ -25507,7 +25748,8 @@ msgid ""
 "You have not yet activated your account and set a password. Please click the "
 "link in the email we sent you. Click \"Reset password\" to receive a new "
 "email in case you cannot find it again."
-msgstr ""
+msgstr "你尚未啟動帳戶並設定密碼。請點擊我們發送給你的電子郵件中的連結。按兩下「重設"
+"密碼」以接收新電子郵件，以確保你找不到它。"
 
 #: pretix/presale/forms/customer.py:134
 msgid ""
@@ -25836,7 +26078,8 @@ msgid ""
 "If you created a customer account at %(org)s before, you can log in now and "
 "connect your order to your account. This will allow you to see all your "
 "orders in one place and access them at any time."
-msgstr ""
+msgstr "如果你之前在 %(org)s 創建了客戶帳戶，你則可以立即登錄並將訂單連接到你的帳戶。"
+"這將允許你在一個地方查看所有訂單並隨時訪問客戶帳戶。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:60
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:44
@@ -25864,7 +26107,8 @@ msgid ""
 "You are not required to create an account. If you proceed as a guest, you "
 "will be able to access the details and status of your order any time through "
 "the secret link we will send you via email once the order is complete."
-msgstr ""
+msgstr "你無需建立帳戶。如果你以訪客身份繼續，你可以隨時通過訂單完成，事後我們將通過"
+"電子郵件發送，給你的秘密連結訪問訂單的詳細資訊和狀態。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:6
 msgid ""
@@ -26490,6 +26734,8 @@ msgid ""
 "to initiate the transfer manually. Please be patient as this might take a "
 "bit longer."
 msgstr ""
+"使用你使用的付款方式，退款金額<strong>無法自動退還給您</strong>。相反，活動召"
+"集人需要手動啟動傳輸。請耐心等待，因為這可能需要更長的時間。"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:2
 msgctxt "checkoutflow"
@@ -27339,6 +27585,8 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
+"如果門票可再次使用，我們將通知候補名單上的第一批人。如果我們通知你，您將有 "
+"%(hours)s小時的時間購買票，直到我們將票分配給清單中的下一個人。"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:28
 msgid ""
