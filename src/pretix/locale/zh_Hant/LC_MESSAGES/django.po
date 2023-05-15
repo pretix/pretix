@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
 "PO-Revision-Date: 2023-05-15 07:46+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -1992,7 +1992,7 @@ msgstr "終止日期"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:45
 msgid "Product"
-msgstr "商品"
+msgstr "產品"
 
 #: pretix/base/exporters/orderlist.py:557
 #: pretix/base/exporters/orderlist.py:562 pretix/base/forms/questions.py:631
@@ -3218,7 +3218,7 @@ msgstr "這裡不允這種票券類型"
 
 #: pretix/base/models/checkin.py:351
 msgid "Ticket code is ambiguous on list"
-msgstr "票券代碼在清單上模糊"
+msgstr "清單上的票券代碼不清楚"
 
 #: pretix/base/models/checkin.py:352
 msgid "Server error"
@@ -4169,7 +4169,7 @@ msgstr ""
 #: pretix/base/models/items.py:1076 pretix/base/models/vouchers.py:262
 #: pretix/base/models/waitinglist.py:99 pretix/base/orderimport.py:284
 msgid "Product variation"
-msgstr ""
+msgstr "產品變體"
 
 #: pretix/base/models/items.py:1077
 #: pretix/control/templates/pretixcontrol/item/create.html:111
@@ -27705,7 +27705,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/postmessage.html:21
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr "我們正在處理你的要求…"
+msgstr "我們正在處理你的請求…"
 
 #: pretix/presale/utils.py:242 pretix/presale/utils.py:365
 #: pretix/presale/utils.py:366
