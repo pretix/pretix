@@ -44,8 +44,8 @@ def register_report_ordertaxlistpdf(sender, **kwargs):
     return OrderTaxListReportPDF
 
 
-@receiver(register_data_exporters, dispatch_uid="export_transaction_report_pdf")
-@receiver(register_multievent_data_exporters, dispatch_uid="multi_export_transaction_report_pdf")
-def register_report_transaction_report_pdf(sender, **kwargs):
-    from .transactionreport import ReportExporter
+@receiver(register_data_exporters, dispatch_uid="export_accounting_report_pdf")
+@receiver(register_multievent_data_exporters, dispatch_uid="multi_export_accounting_report_pdf")
+def register_report_accounting_report_pdf(sender, **kwargs):
+    from .accountingreport import ReportExporter
     return ReportExporter
