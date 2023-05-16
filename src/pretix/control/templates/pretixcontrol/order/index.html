@@ -511,7 +511,7 @@
                                     <dl>
                                         {% if line.item.ask_attendee_data and event.settings.attendee_names_asked %}
                                             <dt>{% trans "Attendee name" %}</dt>
-                                            <dd>{% if line.attendee_name %}{{ line.attendee_name }}{% else %}
+                                            <dd>{% if line.attendee_name %}{{ line.attendee_name_all_components }}{% else %}
                                                 <em>{% trans "not answered" %}</em>{% endif %}</dd>
                                         {% endif %}
                                         {% if line.item.ask_attendee_data and event.settings.attendee_emails_asked %}

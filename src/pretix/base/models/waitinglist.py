@@ -146,6 +146,18 @@ class WaitingListEntry(LoggedModel):
             scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
         return scheme['concatenation'](self.name_parts).strip()
 
+    @property
+    def name_all_components(self):
+        if not self.name_parts:
+            return None
+        if '_legacy' in self.name_parts:
+            return self.name_parts['_legacy']
+        if '_scheme' in self.name_parts:
+            scheme = PERSON_NAME_SCHEMES[self.name_parts['_scheme']]
+        else:
+            scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
+        return scheme.get('concatenation_all_components', scheme['concatenation'])(self.name_parts).strip()
+
     def send_voucher(self, quota_cache=None, user=None, auth=None):
         availability = (
             self.variation.check_quotas(count_waitinglist=False, subevent=self.subevent, _cache=quota_cache)

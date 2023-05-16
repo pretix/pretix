@@ -1462,6 +1462,18 @@ class AbstractPosition(models.Model):
         return scheme['concatenation'](self.attendee_name_parts).strip()
 
     @property
+    def attendee_name_all_components(self):
+        if not self.attendee_name_parts:
+            return None
+        if '_legacy' in self.attendee_name_parts:
+            return self.attendee_name_parts['_legacy']
+        if '_scheme' in self.attendee_name_parts:
+            scheme = PERSON_NAME_SCHEMES[self.attendee_name_parts['_scheme']]
+        else:
+            scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
+        return scheme.get('concatenation_all_components', scheme['concatenation'])(self.attendee_name_parts).strip()
+
+    @property
     def state_name(self):
         sd = pycountry.subdivisions.get(code='{}-{}'.format(self.country, self.state))
         if sd:
@@ -2989,6 +3001,18 @@ class InvoiceAddress(models.Model):
         else:
             raise TypeError("Invalid name given.")
         return scheme['concatenation'](self.name_parts).strip()
+
+    @property
+    def name_all_components(self):
+        if not self.name_parts:
+            return ""
+        if '_legacy' in self.name_parts:
+            return self.name_parts['_legacy']
+        if '_scheme' in self.name_parts:
+            scheme = PERSON_NAME_SCHEMES[self.name_parts['_scheme']]
+        else:
+            raise TypeError("Invalid name given.")
+        return scheme.get('concatenation_all_components', scheme['concatenation'])(self.name_parts).strip()
 
     def for_js(self):
         d = {}
