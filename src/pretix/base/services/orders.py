@@ -1945,7 +1945,7 @@ class OrderChangeManager:
                                 }
                             )
                         self.cancel(a)
-                        item_counts[a.item] += 1
+                        item_counts[a.item] -= 1
 
         for item, count in item_counts.items():
             if count == 0:
