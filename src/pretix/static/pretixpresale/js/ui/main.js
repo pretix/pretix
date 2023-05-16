@@ -122,7 +122,7 @@ var form_handlers = function (el) {
         var step = parseFloat(this.getAttribute("data-step"));
         var controls = document.getElementById(this.getAttribute("data-controls"));
         var currentValue = parseFloat(controls.value);
-        controls.value = Math.max(controls.min, Math.min(controls.max, (currentValue || 0) + step));
+        controls.value = Math.max(controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (currentValue || 0) + step));
         controls.dispatchEvent(new Event("change"));
     });
 
