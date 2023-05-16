@@ -10,6 +10,6 @@ def build_name(parts, concatenation=None):
         scheme = PERSON_NAME_SCHEMES[parts["_scheme"]]
     else:
         raise TypeError("Invalid name given.")
-    if concatenation:
-        return scheme.get(concatenation, scheme["concatenation"])(parts).strip()
-    return scheme["concatenation"](parts).strip()
+    if not concatenation or concatenation not in scheme:
+        concatenation = "concatenation"
+    return scheme[concatenation](parts).strip()
