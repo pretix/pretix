@@ -257,7 +257,7 @@
                                                             <div class="input-item-count-group">
                                                                 <button type="button" data-step="-1" data-controls="variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
                                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                                    max="{{ item.order_max }}"
+                                                                    max="{{ var.order_max }}"
                                                                     id="variation_{{ item.id }}_{{ var.id }}"
                                                                     name="variation_{{ item.id }}_{{ var.id }}"
                                                                     {% if options == 1 %}value="1"{% endif %}
