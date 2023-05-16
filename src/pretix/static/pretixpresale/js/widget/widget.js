@@ -894,7 +894,7 @@ Vue.component('pretix-widget-event-form', {
         + strings['seating_plan_waiting_list']
         + '</div>'
         + '<div class="pretix-widget-seating-waitinglist-button-wrap">'
-        + '<button class="pretix-widget-seating-waitinglist-button" @click.prevent.stop="$root.startseating">'
+        + '<button class="pretix-widget-seating-waitinglist-button" @click.prevent.stop="$root.startwaiting">'
         + strings['waiting_list']
         + '</button>'
         + '</div>'
@@ -1648,6 +1648,20 @@ var shared_root_methods = {
                 root.trigger_load_callback();
             }
         });
+    },
+    startwaiting: function () {
+        var redirect_url = this.$root.target_url + 'w/' + widget_id;
+        if (this.$root.subevent){
+            redirect_url += '/' + this.$root.subevent;
+        }
+        redirect_url += '/waitinglist/?iframe=1&locale=' + lang;
+        if (this.$root.useIframe) {
+            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
+            this.$root.overlay.frame_loading = true;
+            iframe.src = redirect_url;
+        } else {
+            window.open(redirect_url);
+        }
     },
     startseating: function () {
         var redirect_url = this.$root.target_url + 'w/' + widget_id;
