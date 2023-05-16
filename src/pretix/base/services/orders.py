@@ -1442,6 +1442,16 @@ class OrderChangeManager:
         'seat_forbidden': gettext_lazy('The selected product does not allow to select a seat.'),
         'tax_rule_country_blocked': gettext_lazy('The selected country is blocked by your tax rule.'),
         'gift_card_change': gettext_lazy('You cannot change the price of a position that has been used to issue a gift card.'),
+        'max_items_per_product': ngettext_lazy(
+            "You cannot select more than %(max)s item of the product %(product)s.",
+            "You cannot select more than %(max)s items of the product %(product)s.",
+            "max"
+        ),
+        'min_items_per_product': ngettext_lazy(
+            "You need to select at least %(min)s item of the product %(product)s.",
+            "You need to select at least %(min)s items of the product %(product)s.",
+            "min"
+        ),
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation'))
     SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent'))
@@ -1744,6 +1754,11 @@ class OrderChangeManager:
         if self._operations:
             raise ValueError("Setting addons should be the first/only operation")
 
+        # Prepare containers for min/max check of products
+        item_counts = Counter()
+        for p in self.order.positions.all():
+            item_counts[p.item] += 1
+
         # Prepare various containers to hold data later
         current_addons = defaultdict(lambda: defaultdict(list))  # OrderPos -> currently attached add-ons
         input_addons = defaultdict(Counter)  # OrderPos -> final desired set of add-ons
@@ -1880,6 +1895,7 @@ class OrderChangeManager:
                         item=item, variation=variation, price=price,
                         addon_to=op, subevent=op.subevent, seat=None,
                     )
+                    item_counts[item] += 1
 
         # Check constraints on the add-on combinations
         for op in toplevel_op:
@@ -1929,6 +1945,27 @@ class OrderChangeManager:
                                 }
                             )
                         self.cancel(a)
+                        item_counts[a.item] += 1
+
+        for item, count in item_counts.items():
+            if count == 0:
+                continue
+
+            if item.max_per_order and count > item.max_per_order:
+                raise OrderError(
+                    self.error_messages['max_items_per_product'] % {
+                        'max': item.max_per_order,
+                        'product': item.name
+                    }
+                )
+
+            if item.min_per_order and count < item.min_per_order:
+                raise OrderError(
+                    self.error_messages['min_items_per_product'] % {
+                        'min': item.min_per_order,
+                        'product': item.name
+                    }
+                )
 
     def _check_seats(self):
         for seat, diff in self._seatdiff.items():
