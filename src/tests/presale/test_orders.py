@@ -968,6 +968,17 @@ class OrdersTest(BaseOrdersTest):
         )
         assert 'alert-danger' in response.content.decode()
 
+    def test_change_paymentmethod_expired_not_available(self):
+        self.order.status = Order.STATUS_EXPIRED
+        self.order.save()
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
     def test_pay_wrong_payment_state(self):
         with scopes_disabled():
             p = self.order.payments.create(
@@ -990,6 +1001,33 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/%d/complete' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
                                                     p.pk),
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
+    def test_pay_expired_not_available(self):
+        self.order.status = Order.STATUS_EXPIRED
+        self.order.save()
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        with scopes_disabled():
+            p = self.order.payments.create(
+                provider='banktransfer',
+                state=OrderPayment.PAYMENT_STATE_CREATED,
+                amount=Decimal('10.00'),
+            )
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/%d/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret, p.pk),
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/%d/confirm' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret, p.pk),
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/%d/complete' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret, p.pk),
             follow=True
         )
         assert 'alert-danger' in response.content.decode()
