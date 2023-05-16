@@ -317,7 +317,7 @@ Vue.component('availbox', {
             var t = e.target.tagName == 'BUTTON' ? e.target : e.target.closest('button');
             var step = parseFloat(t.getAttribute("data-step"));
             var controls = document.getElementById(t.getAttribute("data-controls"));
-            this.amount_selected = Math.max(controls.min, Math.min(controls.max, (this.amount_selected || 0) + step));
+            this.amount_selected = Math.max(controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (this.amount_selected || 0) + step));
         }
     }
 });
