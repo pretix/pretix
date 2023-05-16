@@ -332,37 +332,47 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             sum_price_by_tax_rate[r["tax_rate"]] += r["sum_price"]
             sum_tax_by_tax_rate[r["tax_rate"]] += r["sum_tax"]
 
-        for tax_rate in sorted(sum_tax_by_tax_rate.keys(), reverse=True):
-            tdata.append(
-                [
-                    Paragraph(_("Sum"), tstyle),
-                    Paragraph("", tstyle_right),
-                    Paragraph(localize(tax_rate.normalize()) + " %", tstyle_right),
-                    Paragraph(str(sum_cnt_by_tax_rate[tax_rate]), tstyle_right),
-                    Paragraph(
-                        money_filter(
-                            sum_price_by_tax_rate[tax_rate]
-                            - sum_tax_by_tax_rate[tax_rate],
-                            "EUR",
+        if len(sum_tax_by_tax_rate) > 1:
+            for tax_rate in sorted(sum_tax_by_tax_rate.keys(), reverse=True):
+                tdata.append(
+                    [
+                        Paragraph(_("Sum"), tstyle),
+                        Paragraph("", tstyle_right),
+                        Paragraph(localize(tax_rate.normalize()) + " %", tstyle_right),
+                        Paragraph("", tstyle_right),
+                        Paragraph(
+                            money_filter(
+                                sum_price_by_tax_rate[tax_rate]
+                                - sum_tax_by_tax_rate[tax_rate],
+                                "EUR",
+                            ),
+                            tstyle_right,
                         ),
-                        tstyle_right,
-                    ),
-                    Paragraph(
-                        money_filter(sum_tax_by_tax_rate[tax_rate], "EUR"), tstyle_right
-                    ),
-                    Paragraph(
-                        money_filter(sum_price_by_tax_rate[tax_rate], "EUR"),
-                        tstyle_right,
-                    ),
-                ]
-            )
+                        Paragraph(
+                            money_filter(sum_tax_by_tax_rate[tax_rate], "EUR"), tstyle_right
+                        ),
+                        Paragraph(
+                            money_filter(sum_price_by_tax_rate[tax_rate], "EUR"),
+                            tstyle_right,
+                        ),
+                    ]
+                )
+            tstyledata += [
+                (
+                    "LINEABOVE",
+                    (0, -len(sum_tax_by_tax_rate) - 1),
+                    (-1, -len(sum_tax_by_tax_rate) - 1),
+                    0.5,
+                    colors.black,
+                ),
+            ]
 
         tdata.append(
             [
                 Paragraph(_("Sum"), tstyle_bold),
                 Paragraph("", tstyle_right),
                 Paragraph("", tstyle_right),
-                Paragraph(str(sum(sum_cnt_by_tax_rate.values())), tstyle_bold_right),
+                Paragraph("", tstyle_bold_right),
                 Paragraph(
                     money_filter(
                         sum(sum_price_by_tax_rate.values())
@@ -383,13 +393,6 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
         )
         tstyledata += [
             ("LINEBELOW", (0, 0), (-1, 0), 0.5, colors.black),
-            (
-                "LINEABOVE",
-                (0, -len(sum_tax_by_tax_rate) - 1),
-                (-1, -len(sum_tax_by_tax_rate) - 1),
-                0.5,
-                colors.black,
-            ),
             ("LINEABOVE", (0, -1), (-1, -1), 0.5, colors.black),
             ("VALIGN", (0, 0), (-1, -1), "TOP"),
             ("BOTTOMPADDING", (0, 0), (-1, -1), 2),
