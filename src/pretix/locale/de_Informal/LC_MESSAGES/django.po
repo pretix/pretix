@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
-"PO-Revision-Date: 2023-05-11 16:12+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2023-05-16 23:00+0000\n"
+"Last-Translator: Moritz Lerch <dev@moritz-lerch.de>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -25598,7 +25598,7 @@ msgstr "Anderes Bankkonto"
 
 #: pretix/plugins/banktransfer/payment.py:90
 msgid "Name of account holder"
-msgstr "Kontoinhaber"
+msgstr "Kontoinhaber*in"
 
 #: pretix/plugins/banktransfer/payment.py:92
 msgid ""
@@ -25779,7 +25779,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:22
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:25
 msgid "Account holder"
-msgstr "Kontoinhaber"
+msgstr "Kontoinhaber*in"
 
 #: pretix/plugins/banktransfer/payment.py:464
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:15
