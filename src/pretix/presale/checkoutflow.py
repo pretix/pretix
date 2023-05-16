@@ -585,7 +585,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 if items:
                     formsetentry['categories'].append({
                         'category': iao.addon_category,
-                        'price_included': iao.price_included,
+                        'price_included': iao.price_included or (cartpos.voucher_id and cartpos.voucher.all_addons_included),
                         'multi_allowed': iao.multi_allowed,
                         'min_count': iao.min_count,
                         'max_count': iao.max_count,

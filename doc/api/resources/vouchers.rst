@@ -47,6 +47,8 @@ tag                                   string                     A string that i
 comment                               string                     An internal comment on the voucher
 subevent                              integer                    ID of the date inside an event series this voucher belongs to (or ``null``).
 show_hidden_items                     boolean                    Only if set to ``true``, this voucher allows to buy products with the property ``hide_without_voucher``. Defaults to ``true``.
+all_addons_included                   boolean                    If set to ``true``, all add-on products for the product purchased with this voucher are included in the base price.
+all_bundles_included                  boolean                    If set to ``true``, all bundled products for the product purchased with this voucher are added without their designated price.
 ===================================== ========================== =======================================================
 
 
@@ -95,6 +97,9 @@ Endpoints
             "comment": "",
             "seat": null,
             "subevent": null,
+            "show_hidden_items": false,
+            "all_addons_included": false,
+            "all_bundles_included": false
           }
         ]
       }
@@ -161,7 +166,10 @@ Endpoints
         "tag": "testvoucher",
         "comment": "",
         "seat": null,
-        "subevent": null
+        "subevent": null,
+        "show_hidden_items": false,
+        "all_addons_included": false,
+        "all_bundles_included": false
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -198,7 +206,10 @@ Endpoints
         "quota": null,
         "tag": "testvoucher",
         "comment": "",
-        "subevent": null
+        "subevent": null,
+        "show_hidden_items": false,
+        "all_addons_included": false,
+        "all_bundles_included": false
       }
 
    **Example response**:
@@ -225,7 +236,10 @@ Endpoints
         "tag": "testvoucher",
         "comment": "",
         "seat": null,
-        "subevent": null
+        "subevent": null,
+        "show_hidden_items": false,
+        "all_addons_included": false,
+        "all_bundles_included": false
       }
 
    :param organizer: The ``slug`` field of the organizer to create a voucher for
@@ -264,7 +278,10 @@ Endpoints
           "quota": null,
           "tag": "testvoucher",
           "comment": "",
-          "subevent": null
+          "subevent": null,
+          "show_hidden_items": false,
+          "all_addons_included": false,
+          "all_bundles_included": false
         },
         {
           "code": "ASDKLJCYXCASDASD",
@@ -279,7 +296,10 @@ Endpoints
           "quota": null,
           "tag": "testvoucher",
           "comment": "",
-          "subevent": null
+          "subevent": null,
+          "show_hidden_items": false,
+          "all_addons_included": false,
+          "all_bundles_included": false
         },
 
    **Example response**:
@@ -353,7 +373,10 @@ Endpoints
         "tag": "testvoucher",
         "comment": "",
         "seat": null,
-        "subevent": null
+        "subevent": null,
+        "show_hidden_items": false,
+        "all_addons_included": false,
+        "all_bundles_included": false
       }
 
    :param organizer: The ``slug`` field of the organizer to modify

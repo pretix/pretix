@@ -2263,6 +2263,29 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         with scopes_disabled():
             self.assertEqual(OrderPosition.objects.filter(item=self.workshop1).last().price, 0)
 
+    def test_addon_price_included_in_voucher(self):
+        with scopes_disabled():
+            v = Voucher.objects.create(item=self.ticket, value=Decimal('0.00'), event=self.event, price_mode='set',
+                                       valid_until=now() + timedelta(days=2), all_addons_included=True)
+            ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat, min_count=1,
+                                     price_included=False)
+            cp1 = CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=0, expires=now() - timedelta(minutes=10), voucher=v
+            )
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.workshop1,
+                price=0, expires=now() - timedelta(minutes=10),
+                addon_to=cp1
+            )
+
+        self._set_payment()
+        response = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select(".thank-you")), 1)
+        with scopes_disabled():
+            self.assertEqual(OrderPosition.objects.filter(item=self.workshop1).last().price, 0)
+
     def test_confirm_price_changed_reverse_charge(self):
         self._enable_reverse_charge()
         self.ticket.default_price = 24
@@ -3969,6 +3992,27 @@ class CheckoutBundleTest(BaseCheckoutTestCase, TestCase):
         a = cp.addons.get()
         assert a.item == self.trans
         assert a.price == 1.5
+
+    @classscope(attr='orga')
+    def test_expired_bundle_with_voucher_bundles_included(self):
+        v = Voucher.objects.create(item=self.ticket, value=Decimal('12.00'), event=self.event, price_mode='none',
+                                   valid_until=now() + timedelta(days=2), all_bundles_included=True)
+        self.cp1.voucher = v
+        self.cp1.price = 23
+        self.cp1.expires = now() - timedelta(minutes=10)
+        self.cp1.save()
+        self.bundled1.price = 0
+        self.bundled1.expires = now() - timedelta(minutes=10)
+        self.bundled1.save()
+        oid = _perform_order(self.event, self._manual_payment(), [self.cp1.pk, self.bundled1.pk], 'admin@example.org', 'en', None, {}, 'web')
+        o = Order.objects.get(pk=oid['order_id'])
+        cp = o.positions.get(addon_to__isnull=True)
+        assert cp.item == self.ticket
+        assert cp.price == 23
+        assert cp.addons.count() == 1
+        a = cp.addons.get()
+        assert a.item == self.trans
+        assert a.price == 0
 
     @classscope(attr='orga')
     def test_expired_keep_price(self):

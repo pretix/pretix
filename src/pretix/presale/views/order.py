@@ -1361,7 +1361,7 @@ class OrderChangeMixin:
                     if items:
                         p.addon_form['categories'].append({
                             'category': iao.addon_category,
-                            'price_included': iao.price_included,
+                            'price_included': iao.price_included or (p.voucher_id and p.voucher.all_addons_included),
                             'multi_allowed': iao.multi_allowed,
                             'min_count': iao.min_count,
                             'max_count': iao.max_count,

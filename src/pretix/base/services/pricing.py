@@ -110,6 +110,8 @@ def is_included_for_free(item: Item, addon_to: AbstractPosition):
                 return True
         except ItemAddOn.DoesNotExist:
             pass
+        if addon_to.voucher_id and addon_to.voucher.all_addons_included:
+            return True
     return False
 
 

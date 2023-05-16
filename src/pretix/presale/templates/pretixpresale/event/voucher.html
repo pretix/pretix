@@ -149,7 +149,7 @@
                                                 from {{ minprice }}
                                             {% endblocktrans %}
                                         {% elif not item.min_price and not item.max_price %}
-                                            {% if not item.mandatory_priced_addons %}
+                                            {% if not item.mandatory_priced_addons or voucher.all_addons_included %}
                                                 <span class="text-uppercase">{% trans "free" context "price" %}</span>
                                             {% endif %}
                                         {% else %}
@@ -207,7 +207,7 @@
                                                     </div>
                                                     <p>
                                                 {% elif not var.display_price.gross %}
-                                                    {% if not item.mandatory_priced_addons or var.original_price %}
+                                                    {% if not item.mandatory_priced_addons or var.original_price or voucher.all_addons_included %}
                                                         <span class="text-uppercase">{% trans "free" context "price" %}</span>
                                                     {% endif %}
                                                 {% elif event.settings.display_net_prices %}
@@ -349,7 +349,7 @@
                                     </div>
                                     <p>
                                     {% elif not item.display_price.gross %}
-                                        {% if not item.mandatory_priced_addons or item.original_price %}
+                                        {% if not item.mandatory_priced_addons or item.original_price or voucher.all_addons_included %}
                                             <span class="text-uppercase">{% trans "free" context "price" %}</span>
                                         {% endif %}
                                     {% elif event.settings.display_net_prices %}

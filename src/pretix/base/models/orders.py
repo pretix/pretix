@@ -2834,8 +2834,12 @@ class CartPosition(AbstractPosition):
         if self.is_bundled:
             bundle = self.addon_to.item.bundles.filter(bundled_item=self.item, bundled_variation=self.variation).first()
             if bundle:
-                listed_price = bundle.designated_price
-                price_after_voucher = bundle.designated_price
+                if self.addon_to.voucher_id and self.addon_to.voucher.all_bundles_included:
+                    listed_price = Decimal('0.00')
+                    price_after_voucher = Decimal('0.00')
+                else:
+                    listed_price = bundle.designated_price
+                    price_after_voucher = bundle.designated_price
 
         if listed_price != self.listed_price or price_after_voucher != self.price_after_voucher:
             self.listed_price = listed_price
