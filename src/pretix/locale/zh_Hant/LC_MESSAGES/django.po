@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
-"PO-Revision-Date: 2023-05-15 15:41+0000\n"
+"PO-Revision-Date: 2023-05-16 08:23+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -594,14 +594,14 @@ msgstr "你沒有請求“{scope}”。"
 msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
-msgstr ""
+msgstr "你正在請求範圍\"{scope}\"，但提供程式僅支持這些範圍: {scopes}."
 
 #: pretix/base/customersso/oidc.py:125
 #, python-brace-format
 msgid ""
 "You are requesting field \"{field}\" but provider only supports these: "
 "{fields}."
-msgstr ""
+msgstr "你正在請求欄位“{field}”，但提供程式僅支持這些欄位： {fields}。"
 
 #: pretix/base/customersso/oidc.py:171 pretix/base/customersso/oidc.py:178
 #: pretix/base/customersso/oidc.py:197 pretix/base/customersso/oidc.py:214
@@ -653,11 +653,11 @@ msgstr "可以在此處插入帶有原因的單項文本。"
 
 #: pretix/base/email.py:637
 msgid "The amount has been charged to your card."
-msgstr ""
+msgstr "該金額已從你的卡中扣除。"
 
 #: pretix/base/email.py:641
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr ""
+msgstr "請將錢轉入此銀行帳戶：9999-9999-9999-9999"
 
 #: pretix/base/email.py:667 pretix/base/email.py:672 pretix/base/pdf.py:625
 #: pretix/base/pdf.py:648 pretix/control/forms/organizer.py:563
@@ -690,7 +690,7 @@ msgstr "整合Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:52
 msgid "Question answer file uploads"
-msgstr ""
+msgstr "上傳問答檔"
 
 #: pretix/base/exporters/answers.py:53 pretix/base/exporters/json.py:52
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:86
@@ -701,7 +701,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:578
 msgctxt "export_category"
 msgid "Order data"
-msgstr ""
+msgstr "訂單數據"
 
 #: pretix/base/exporters/answers.py:54
 msgid ""
@@ -7069,7 +7069,8 @@ msgid ""
 "The voucher code used for one of the items in your cart has already been "
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
-msgstr ""
+msgstr "用於購物車中某件商品的優惠券代碼，已使用被允許的最大次數。我們已從您的購物車"
+"中移除了此商品。"
 
 #: pretix/base/services/orders.py:158
 msgid ""
@@ -8389,7 +8390,8 @@ msgid ""
 "Only affects orders pending payments, a cancellation fee for free orders is "
 "never charged. Note that it will be your responsibility to claim the "
 "cancellation fee from the user."
-msgstr ""
+msgstr "僅影響待付款的訂單，免費訂單的取消費用從不收取。請注意，你有責任向使用者索要"
+"取消費用。"
 
 #: pretix/base/settings.py:1649
 msgid "Charge payment, shipping and service fees"
@@ -9681,7 +9683,8 @@ msgid ""
 "This will remove all invoice PDFs, as well as any of their text content that "
 "might contain personal data from the database. Invoice numbers and totals "
 "will be conserved."
-msgstr ""
+msgstr "這將從資料庫中刪除所有發票 PDF "
+"及其可能包含個人數據的任何文本內容。發票編號和總計將被保留。"
 
 #: pretix/base/shredder.py:426
 msgid "Cached ticket files"
@@ -11459,7 +11462,8 @@ msgid ""
 "I want to use pretix under the additional permission granted to everyone by "
 "the copyright holders which allows me to not share modifications if I only "
 "use pretix internally."
-msgstr ""
+msgstr "我想在版權擁有者授予每個人的額外許可下使用 pretix，如果我只在內部使用 "
+"pretix，我就可以不共用修改。"
 
 #: pretix/control/forms/global_settings.py:161
 msgid ""
@@ -11658,7 +11662,8 @@ msgid ""
 "The variation \"%s\" cannot be deleted because it has already been ordered "
 "by a user or currently is in a user's cart. Please set the variation as "
 "\"inactive\" instead."
-msgstr ""
+msgstr "類別「%s」 無法刪除，因為該類型已由使用者訂購或當前在使用者的購物車中。請將類"
+"別設定為「非活動」。"
 
 #: pretix/control/forms/item.py:816
 msgid "Use value from product"
@@ -12267,7 +12272,8 @@ msgid ""
 "We will assume that all email addresses received from the SSO provider are "
 "verified to really belong the the user. If this can't be guaranteed, "
 "security issues might arise."
-msgstr ""
+msgstr "我們假設從 SSO 供應商收到的所有電子郵件地址都經過驗證，是否確實屬於使用者。如"
+"果無法保證這一點，則可能會出現安全問題。"
 
 #: pretix/control/forms/organizer.py:936
 msgctxt "sso_oidc"
@@ -15183,7 +15189,8 @@ msgid ""
 "You can remove personal data such as names and email addresses from your "
 "event and only retain the financial information such as the number and type "
 "of tickets sold."
-msgstr ""
+msgstr "你可以從活動中刪除個人數據，例如：姓名和電子郵件位址，並僅保留財務資訊，例如"
+"售出的門票數量和類型。"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:76
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:89
@@ -15486,7 +15493,8 @@ msgid ""
 "Also, test mode only covers the main web shop. Orders created through other "
 "sales channels such as the box office or resellers module are still created "
 "as production orders."
-msgstr ""
+msgstr "此外，測試模式僅包含主要網上商店。通過其他銷售管道（如票房或經銷商模組）。建"
+"立的訂單仍建立成為生產訂單。"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:112
 msgid ""
@@ -15847,7 +15855,8 @@ msgid ""
 "After you saved this page, we will redirect you to Stripe to create or "
 "connect an account there. Once you completed this, you will be taken back to "
 "pretix."
-msgstr ""
+msgstr "在你保存此頁面后，我們會將你重定向到 Stripe "
+"以在那裡建立或連接帳戶。完成此操作后，你將被帶回pretix。"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:188
 msgid "Getting in touch with you"
@@ -16163,7 +16172,8 @@ msgid ""
 "The pretix widget is a way to embed your ticket shop into your event "
 "website. This way, your visitors can buy their ticket right away without "
 "leaving your website."
-msgstr ""
+msgstr "pretix 小組件是一種將售票店嵌入活動網站的方法。這樣，您的訪問者可以在不離開您"
+"的網站的情況下立即購買門票。"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:17
 msgid ""
@@ -16459,7 +16469,8 @@ msgid ""
 "No update check has been performed yet since the last update of this "
 "installation. Update checks are performed on a daily basis if your cronjob "
 "is set up properly."
-msgstr ""
+msgstr "自上次更新此安裝以來，尚未執行任何更新檢查。如果你的cronjob設置正確，則每天執"
+"行更新檢查。"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:20
 #: pretix/control/templates/pretixcontrol/global_update.html:39
@@ -24875,6 +24886,8 @@ msgid ""
 "Stripe supports payments via credit cards as well as many local payment "
 "methods such as giropay, iDEAL, Alipay,and many more."
 msgstr ""
+"通過全球流行的支付服務提供者 Stripe 接受付款。Stripe "
+"支援通過信用卡以及許多本地支付方式（如 giropay、iDEAL、支付寶等）付款。"
 
 #: pretix/plugins/stripe/forms.py:40
 #, python-format
@@ -25634,7 +25647,8 @@ msgid ""
 "Due to the invoice address you entered, we need to apply a different tax "
 "rate to your purchase and the price of the products in your cart has changed "
 "accordingly."
-msgstr ""
+msgstr "由於你輸入的發票地址，我們需要對你的購買應用不同的稅率，並且你購物車中產品的"
+"價格也相應更改。"
 
 #: pretix/presale/checkoutflow.py:935 pretix/presale/checkoutflow.py:941
 msgid "Please enter a valid email address."
