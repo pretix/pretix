@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
-"PO-Revision-Date: 2023-05-16 08:24+0000\n"
+"PO-Revision-Date: 2023-05-16 23:00+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -707,28 +707,28 @@ msgstr "訂單數據"
 msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
-msgstr ""
+msgstr "下載一個 ZIP 檔，其中包含你的客戶在建立訂單時上傳的所有檔。"
 
 #: pretix/base/exporters/answers.py:64 pretix/base/models/items.py:1561
 #: pretix/control/navigation.py:182
 #: pretix/control/templates/pretixcontrol/items/questions.html:3
 #: pretix/control/templates/pretixcontrol/items/questions.html:5
 msgid "Questions"
-msgstr ""
+msgstr "問題"
 
 #: pretix/base/exporters/customers.py:49 pretix/control/navigation.py:573
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:132
 msgid "Customer accounts"
-msgstr ""
+msgstr "客戶帳戶"
 
 #: pretix/base/exporters/customers.py:51
 msgctxt "export_category"
 msgid "Customer accounts"
-msgstr ""
+msgstr "客戶帳戶"
 
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
-msgstr ""
+msgstr "下載所有當前註冊的客戶帳戶的活頁表格。"
 
 #: pretix/base/exporters/customers.py:64 pretix/base/models/customers.py:81
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:28
@@ -736,19 +736,19 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:40
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:20
 msgid "Customer ID"
-msgstr ""
+msgstr "客戶ID"
 
 #: pretix/base/exporters/customers.py:65
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:31
 msgid "SSO provider"
-msgstr ""
+msgstr "SSO提供者"
 
 #: pretix/base/exporters/customers.py:66 pretix/base/models/customers.py:107
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:35
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:65
 #: pretix/control/templates/pretixcontrol/users/form.html:43
 msgid "External identifier"
-msgstr ""
+msgstr "外部標識碼"
 
 #: pretix/base/exporters/customers.py:68 pretix/base/exporters/orderlist.py:256
 #: pretix/base/exporters/orderlist.py:432
@@ -934,7 +934,7 @@ msgstr "活動票 {event}-{code}"
 #: pretix/plugins/reports/exporters.py:625
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
 msgid "Date range"
-msgstr ""
+msgstr "日期範圍"
 
 #: pretix/base/exporters/dekodi.py:223 pretix/base/exporters/invoices.py:77
 msgid ""
@@ -975,7 +975,7 @@ msgstr "簡寫"
 
 #: pretix/base/exporters/events.py:59 pretix/base/models/event.py:540
 msgid "Shop is live"
-msgstr ""
+msgstr "實況商店上線"
 
 #: pretix/base/exporters/events.py:60 pretix/base/models/event.py:542
 msgid "Event currency"
@@ -1092,11 +1092,11 @@ msgstr "發票"
 
 #: pretix/base/exporters/invoices.py:189
 msgid "Invoice lines"
-msgstr ""
+msgstr "發票行數"
 
 #: pretix/base/exporters/invoices.py:196 pretix/base/exporters/invoices.py:315
 msgid "Invoice number"
-msgstr ""
+msgstr "發票編號"
 
 #: pretix/base/exporters/invoices.py:197 pretix/base/exporters/invoices.py:324
 #: pretix/base/exporters/orderlist.py:1158
@@ -1112,7 +1112,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html:6
 #: pretix/presale/templates/pretixpresale/organizers/index.html:43
 msgid "Date"
-msgstr ""
+msgstr "日期"
 
 #: pretix/base/exporters/invoices.py:198 pretix/base/exporters/invoices.py:325
 #: pretix/base/exporters/orderlist.py:256
@@ -1327,7 +1327,7 @@ msgstr ""
 
 #: pretix/base/exporters/invoices.py:222
 msgid "Foreign currency rate"
-msgstr ""
+msgstr "外幣匯率"
 
 #: pretix/base/exporters/invoices.py:223
 msgid "Total value (with taxes)"
@@ -16959,7 +16959,8 @@ msgid ""
 "Every product in the cart can only be affected by one discount. If you have "
 "overlapping discounts, the first one in the order of the list below will "
 "apply."
-msgstr ""
+msgstr "購物車中的每個商品只能受到一項折扣的影響。如果你有重複的折扣，則按以下清單順"
+"序的第一個折扣適用。"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:36
 msgid "You haven't created any discounts yet."
@@ -17451,7 +17452,8 @@ msgid ""
 "The configured cancellation fee for a self-service cancellation would be "
 "%(fee)s for this order, but for a cancellation performed by you, you need to "
 "set the cancellation fee here:"
-msgstr ""
+msgstr "對於此訂單，自助取消的配置取消費用為 %(fee)s "
+"，但對於你取消的執行，你需要在此處設定取消費用："
 
 #: pretix/control/templates/pretixcontrol/order/cancel.html:51
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:220
@@ -18647,7 +18649,8 @@ msgstr ""
 msgid ""
 "The uploaded file should be a CSV file with a header row. You will be able "
 "to assign the meanings of the different columns in the next step."
-msgstr ""
+msgstr "外部標識碼上載的檔應為帶有標題行的 CSV "
+"檔。你將能夠在下一步中分配不同列的含義。"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:22
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:46
@@ -19276,7 +19279,8 @@ msgstr ""
 msgid ""
 "You haven't issued any gift cards yet. You can either set up a product in an "
 "event shop to sell gift cards, or you can manually issue gift cards."
-msgstr ""
+msgstr "你尚未發行任何禮物卡。你可以在活動商店中設定產品以銷售禮物卡，也可以手動發行"
+"禮物卡。"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:20
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:50
@@ -20051,7 +20055,8 @@ msgid ""
 "In the downloaded file, there is a text file named \"CONFIRM_CODE.txt\" with "
 "a six-character code. Please enter this code here to confirm that you "
 "successfully downloaded the file."
-msgstr ""
+msgstr "在下載的檔中，有一個名為“CONFIRM_CODE.txt”的文本檔，其中包含六個字元的代碼。"
+"請在此處輸入此代碼以確認你已成功下載檔。"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:53
 msgid "Confirmation code"
@@ -21676,7 +21681,8 @@ msgid ""
 "You disabled this item, but it is still part of a product bundle. Your "
 "participants won't be able to buy the bundle unless you remove this item "
 "from it."
-msgstr ""
+msgstr "你禁用了此商品，但商品仍然是捆綁商品的一部分。除非你從捆綁包中刪除此項目，否"
+"則你的參與者將無法購買捆綁包。"
 
 #: pretix/control/views/item.py:1545
 msgid ""
