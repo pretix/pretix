@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
 "PO-Revision-Date: 2023-05-16 08:23+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -517,7 +517,7 @@ msgstr "以 XXX 格式輸入郵遞區號。"
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr "以 XXX 格式輸入郵遞區號。"
+msgstr "以 XXXX 格式輸入郵遞區號。"
 
 #: pretix/base/auth.py:143
 #, python-brace-format
