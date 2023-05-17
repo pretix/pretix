@@ -160,7 +160,7 @@ class Membership(models.Model):
 
     @property
     def attendee_name(self):
-        return build_name(self.attendee_name_parts)
+        return build_name(self.attendee_name_parts, fallback_scheme=self.customer.organizer.settings.name_scheme)
 
     def is_valid(self, ev=None):
         if ev:

@@ -1449,14 +1449,15 @@ class AbstractPosition(models.Model):
         if self.attendee_name_parts is None:
             self.attendee_name_parts = {}
         super().save(*args, **kwargs)
+        print(self.pk, self.attendee_name_cached)
 
     @property
     def attendee_name(self):
-        return build_name(self.attendee_name_parts)
+        return build_name(self.attendee_name_parts, fallback_scheme=self.event.settings.name_scheme)
 
     @property
     def attendee_name_all_components(self):
-        return build_name(self.attendee_name_parts, "concatenation_all_components")
+        return build_name(self.attendee_name_parts, "concatenation_all_components", fallback_scheme=self.event.settings.name_scheme)
 
     @property
     def state_name(self):
@@ -2977,11 +2978,11 @@ class InvoiceAddress(models.Model):
 
     @property
     def name(self):
-        return build_name(self.name_parts)
+        return build_name(self.name_parts, fallback_scheme=self.order.event.settings.name_scheme)
 
     @property
     def name_all_components(self):
-        return build_name(self.name_parts, "concatenation_all_components")
+        return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=self.order.event.settings.name_scheme)
 
     def for_js(self):
         d = {}
