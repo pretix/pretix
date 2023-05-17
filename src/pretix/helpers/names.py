@@ -24,7 +24,7 @@ from pretix.base.settings import PERSON_NAME_SCHEMES
 
 def build_name(parts, concatenation=None, fallback_scheme=None):
     if not parts:
-        return ""
+        return None
     if "_legacy" in parts:
         return parts["_legacy"]
     if "_scheme" in parts:

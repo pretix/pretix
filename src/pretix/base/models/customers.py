@@ -172,11 +172,11 @@ class Customer(LoggedModel):
 
     @property
     def name(self):
-        return build_name(self.name_parts, fallback_scheme=self.organizer.settings.name_scheme)
+        return build_name(self.name_parts, fallback_scheme=self.organizer.settings.name_scheme) or ""
 
     @property
     def name_all_components(self):
-        return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=self.organizer.settings.name_scheme)
+        return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=self.organizer.settings.name_scheme) or ""
 
     def __str__(self):
         s = f'#{self.identifier}'
