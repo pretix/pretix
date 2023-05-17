@@ -108,9 +108,18 @@ class NfcUidMediaType(BaseMediaType):
                 return m
 
 
+class NfcMf0aesMediaType(BaseMediaType):
+    identifier = 'nfc_mf0aes'
+    verbose_name = 'NFC Mifare Ultralight AES'
+    medium_created_by_server = False
+    supports_giftcard = True
+    supports_orderposition = False
+
+
 MEDIA_TYPES = {
     m.identifier: m for m in [
         BarcodePlainMediaType(),
         NfcUidMediaType(),
+        NfcMf0aesMediaType(),
     ]
 }

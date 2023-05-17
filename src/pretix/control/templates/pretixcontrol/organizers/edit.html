@@ -262,6 +262,31 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <h4 class="panel-title">NFC Mifare Ultralight AES</h4>
+                                </div>
+                                <div class="panel-body">
+                                    <p class="help-block">
+                                        {% blocktrans trimmed %}
+                                            This medium type works only with NFC chips of the type Mifare Ultralight AES
+                                            made by NXP. This provides a higher level of security than other approaches, but
+                                            requires all chips to be encoded prior to use.
+                                        {% endblocktrans %}
+                                        {% blocktrans trimmed %}
+                                            NFC media can currently only be connected to gift cards.
+                                        {% endblocktrans %}
+                                    </p>
+                                    {% bootstrap_field sform.reusable_media_type_nfc_mf0aes layout="control" %}
+                                    <div data-display-dependency="#{{ sform.reusable_media_type_nfc_mf0aes.id_for_label }}">
+                                        {% bootstrap_field sform.reusable_media_type_nfc_mf0aes_autocreate_giftcard layout="control" %}
+                                        <div data-display-dependency="#{{ sform.reusable_media_type_nfc_mf0aes_autocreate_giftcard.id_for_label }}">
+                                            {% bootstrap_field sform.reusable_media_type_nfc_mf0aes_autocreate_giftcard_currency layout="control" %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </fieldset>
                     <fieldset>

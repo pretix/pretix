@@ -412,6 +412,9 @@ class OrganizerSettingsForm(SettingsForm):
         'reusable_media_type_nfc_uid',
         'reusable_media_type_nfc_uid_autocreate_giftcard',
         'reusable_media_type_nfc_uid_autocreate_giftcard_currency',
+        'reusable_media_type_nfc_mf0aes',
+        'reusable_media_type_nfc_mf0aes_autocreate_giftcard',
+        'reusable_media_type_nfc_mf0aes_autocreate_giftcard_currency',
     ]
 
     organizer_logo_image = ExtFileField(
