@@ -136,11 +136,11 @@ class WaitingListEntry(LoggedModel):
 
     @property
     def name(self):
-        return build_name(self.name_parts, fallback_scheme=self.event.settings.name_scheme)
+        return build_name(self.name_parts, fallback_scheme=lambda: self.event.settings.name_scheme)
 
     @property
     def name_all_components(self):
-        return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=self.event.settings.name_scheme)
+        return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=lambda: self.event.settings.name_scheme)
 
     def send_voucher(self, quota_cache=None, user=None, auth=None):
         availability = (

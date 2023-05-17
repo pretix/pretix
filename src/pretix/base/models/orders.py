@@ -1453,11 +1453,11 @@ class AbstractPosition(models.Model):
 
     @property
     def attendee_name(self):
-        return build_name(self.attendee_name_parts, fallback_scheme=self.event.settings.name_scheme)
+        return build_name(self.attendee_name_parts, fallback_scheme=lambda: self.event.settings.name_scheme)
 
     @property
     def attendee_name_all_components(self):
-        return build_name(self.attendee_name_parts, "concatenation_all_components", fallback_scheme=self.event.settings.name_scheme)
+        return build_name(self.attendee_name_parts, "concatenation_all_components", fallback_scheme=lambda: self.event.settings.name_scheme)
 
     @property
     def state_name(self):
@@ -2978,11 +2978,11 @@ class InvoiceAddress(models.Model):
 
     @property
     def name(self):
-        return build_name(self.name_parts, fallback_scheme=self.order.event.settings.name_scheme) or ""
+        return build_name(self.name_parts, fallback_scheme=lambda: self.order.event.settings.name_scheme) or ""
 
     @property
     def name_all_components(self):
-        return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=self.order.event.settings.name_scheme) or ""
+        return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=lambda: self.order.event.settings.name_scheme) or ""
 
     def for_js(self):
         d = {}

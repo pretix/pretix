@@ -30,7 +30,7 @@ def build_name(parts, concatenation=None, fallback_scheme=None):
     if "_scheme" in parts:
         scheme = PERSON_NAME_SCHEMES[parts["_scheme"]]
     elif fallback_scheme:
-        scheme = PERSON_NAME_SCHEMES[fallback_scheme]
+        scheme = PERSON_NAME_SCHEMES[fallback_scheme() if callable(fallback_scheme) else fallback_scheme]
     else:
         raise TypeError("Invalid name given.")
     if not concatenation or concatenation not in scheme:
