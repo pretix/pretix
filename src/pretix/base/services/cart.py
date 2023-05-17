@@ -515,7 +515,7 @@ class CartManager:
                     if cp.addon_to.voucher_id and cp.addon_to.voucher.all_bundles_included:
                         listed_price = Decimal('0.00')
                     else:
-                        listed_price = bundle.designated_price or Decimal('0.00')
+                        listed_price = bundle.designated_price
                 else:
                     listed_price = cp.price
                 price_after_voucher = listed_price
