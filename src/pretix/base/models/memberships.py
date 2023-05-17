@@ -31,7 +31,7 @@ from i18nfield.fields import I18nCharField
 from pretix.base.models import Customer
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.organizer import Organizer
-from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.helpers.names import build_name
 
 
 class MembershipType(LoggedModel):
@@ -160,15 +160,7 @@ class Membership(models.Model):
 
     @property
     def attendee_name(self):
-        if not self.attendee_name_parts:
-            return None
-        if '_legacy' in self.attendee_name_parts:
-            return self.attendee_name_parts['_legacy']
-        if '_scheme' in self.attendee_name_parts:
-            scheme = PERSON_NAME_SCHEMES[self.attendee_name_parts['_scheme']]
-        else:
-            scheme = PERSON_NAME_SCHEMES[self.customer.organizer.settings.name_scheme]
-        return scheme['concatenation'](self.attendee_name_parts).strip()
+        return build_name(self.attendee_name_parts, fallback_scheme=lambda: self.customer.organizer.settings.name_scheme)
 
     def is_valid(self, ev=None):
         if ev:

@@ -82,6 +82,7 @@ from pretix.base.signals import order_gracefully_delete
 from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
 from ...helpers.format import format_map
+from ...helpers.names import build_name
 from ._transactions import (
     _fail, _transactions_mark_order_clean, _transactions_mark_order_dirty,
 )
@@ -1448,18 +1449,15 @@ class AbstractPosition(models.Model):
         if self.attendee_name_parts is None:
             self.attendee_name_parts = {}
         super().save(*args, **kwargs)
+        print(self.pk, self.attendee_name_cached)
 
     @property
     def attendee_name(self):
-        if not self.attendee_name_parts:
-            return None
-        if '_legacy' in self.attendee_name_parts:
-            return self.attendee_name_parts['_legacy']
-        if '_scheme' in self.attendee_name_parts:
-            scheme = PERSON_NAME_SCHEMES[self.attendee_name_parts['_scheme']]
-        else:
-            scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
-        return scheme['concatenation'](self.attendee_name_parts).strip()
+        return build_name(self.attendee_name_parts, fallback_scheme=lambda: self.event.settings.name_scheme)
+
+    @property
+    def attendee_name_all_components(self):
+        return build_name(self.attendee_name_parts, "concatenation_all_components", fallback_scheme=lambda: self.event.settings.name_scheme)
 
     @property
     def state_name(self):
@@ -2980,15 +2978,11 @@ class InvoiceAddress(models.Model):
 
     @property
     def name(self):
-        if not self.name_parts:
-            return ""
-        if '_legacy' in self.name_parts:
-            return self.name_parts['_legacy']
-        if '_scheme' in self.name_parts:
-            scheme = PERSON_NAME_SCHEMES[self.name_parts['_scheme']]
-        else:
-            raise TypeError("Invalid name given.")
-        return scheme['concatenation'](self.name_parts).strip()
+        return build_name(self.name_parts, fallback_scheme=lambda: self.order.event.settings.name_scheme) or ""
+
+    @property
+    def name_all_components(self):
+        return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=lambda: self.order.event.settings.name_scheme) or ""
 
     def for_js(self):
         d = {}

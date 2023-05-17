@@ -178,7 +178,7 @@
                             {% endif %}
                         </td>
                         {% if request.event.settings.waiting_list_names_asked %}
-                        <td>{{ e.name|default:"" }}</td>
+                        <td>{{ e.name_all_components|default:"" }}</td>
                         {% endif %}
                         <td>{{ e.email }}</td>
                         {% if request.event.settings.waiting_list_phones_asked %}

@@ -39,6 +39,7 @@ from pretix.base.models.fields import MultiStringField
 from pretix.base.models.organizer import Organizer
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.helpers.countries import FastCountryField
+from pretix.helpers.names import build_name
 
 
 class CustomerSSOProvider(LoggedModel):
@@ -171,15 +172,11 @@ class Customer(LoggedModel):
 
     @property
     def name(self):
-        if not self.name_parts:
-            return ""
-        if '_legacy' in self.name_parts:
-            return self.name_parts['_legacy']
-        if '_scheme' in self.name_parts:
-            scheme = PERSON_NAME_SCHEMES[self.name_parts['_scheme']]
-        else:
-            raise TypeError("Invalid name given.")
-        return scheme['concatenation'](self.name_parts).strip()
+        return build_name(self.name_parts, fallback_scheme=lambda: self.organizer.settings.name_scheme) or ""
+
+    @property
+    def name_all_components(self):
+        return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=lambda: self.organizer.settings.name_scheme) or ""
 
     def __str__(self):
         s = f'#{self.identifier}'
@@ -302,15 +299,11 @@ class AttendeeProfile(models.Model):
 
     @property
     def attendee_name(self):
-        if not self.attendee_name_parts:
-            return None
-        if '_legacy' in self.attendee_name_parts:
-            return self.attendee_name_parts['_legacy']
-        if '_scheme' in self.attendee_name_parts:
-            scheme = PERSON_NAME_SCHEMES[self.attendee_name_parts['_scheme']]
-        else:
-            scheme = PERSON_NAME_SCHEMES[self.customer.organizer.settings.name_scheme]
-        return scheme['concatenation'](self.attendee_name_parts).strip()
+        return build_name(self.attendee_name_parts, fallback_scheme=lambda: self.customer.organizer.settings.name_scheme)
+
+    @property
+    def attendee_name_all_components(self):
+        return build_name(self.attendee_name_parts, "concatenation_all_components", fallback_scheme=lambda: self.customer.organizer.settings.name_scheme)
 
     @property
     def state_name(self):

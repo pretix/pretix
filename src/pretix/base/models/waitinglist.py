@@ -35,9 +35,9 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import User, Voucher
 from pretix.base.services.mail import SendMailException, mail, render_mail
-from pretix.base.settings import PERSON_NAME_SCHEMES
 
 from ...helpers.format import format_map
+from ...helpers.names import build_name
 from .base import LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation
@@ -136,15 +136,11 @@ class WaitingListEntry(LoggedModel):
 
     @property
     def name(self):
-        if not self.name_parts:
-            return None
-        if '_legacy' in self.name_parts:
-            return self.name_parts['_legacy']
-        if '_scheme' in self.name_parts:
-            scheme = PERSON_NAME_SCHEMES[self.name_parts['_scheme']]
-        else:
-            scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
-        return scheme['concatenation'](self.name_parts).strip()
+        return build_name(self.name_parts, fallback_scheme=lambda: self.event.settings.name_scheme)
+
+    @property
+    def name_all_components(self):
+        return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=lambda: self.event.settings.name_scheme)
 
     def send_voucher(self, quota_cache=None, user=None, auth=None):
         availability = (
