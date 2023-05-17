@@ -147,8 +147,20 @@ The response will look like this:
          "pretix": "3.6.0.dev0",
          "pretix_numeric": 30060001000
        }
-     }
+     },
+     "medium_key_sets": [
+       {
+         "public_id": 3456349,
+         "organizer": "foo",
+         "active": true,
+         "media_type": "nfc_mf0aes",
+         "uid_key": "base64-encoded-encrypted-key",
+         "diversification_key": "base64-encoded-encrypted-key",
+       }
+     ]
    }
+
+``"medium_key_sets`` will always be empty if you did not set an ``rsa_key``.
 
 Creating a new API key
 ----------------------
