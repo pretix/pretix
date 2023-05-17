@@ -1,0 +1,48 @@
+version: '3'
+services:
+  app:
+    container_name: pretix_app
+    image: pretix/standalone:stable
+    restart: always
+    depends_on:
+      - database
+      - cache
+    volumes:
+      - pretix_data:/data
+      - ./pretix.cfg:/etc/pretix/pretix.cfg
+    ports:
+      - "8000:80"
+    networks:
+      - backend
+
+  database:
+    image: postgres:13-alpine3.18
+    container_name: database
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=pretix
+      - POSTGRES_PASSWORD=pretix
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - backend
+
+  cache:
+    image: redis:alpine3.18
+    container_name: redis
+    ports:
+      - "6379:6379"
+    restart: always
+    networks:
+      - backend
+
+volumes:
+  postgres_data:
+    driver: local
+  pretix_data:
+    driver: local
+
+networks:
+  backend:
+    external: false
