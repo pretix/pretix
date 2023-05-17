@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
-"PO-Revision-Date: 2023-05-09 16:07+0000\n"
+"PO-Revision-Date: 2023-05-18 01:00+0000\n"
 "Last-Translator: M C <micasadmail@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -65,51 +65,51 @@ msgstr "Finlandese"
 
 #: pretix/_base_settings.py:89
 msgid "Galician"
-msgstr ""
+msgstr "Galiziano"
 
 #: pretix/_base_settings.py:90
 msgid "Greek"
-msgstr ""
+msgstr "Greco"
 
 #: pretix/_base_settings.py:91
 msgid "Italian"
-msgstr ""
+msgstr "Italiano"
 
 #: pretix/_base_settings.py:92
 msgid "Latvian"
-msgstr ""
+msgstr "Lettone"
 
 #: pretix/_base_settings.py:93
 msgid "Polish"
-msgstr ""
+msgstr "Polacco"
 
 #: pretix/_base_settings.py:94
 msgid "Portuguese (Portugal)"
-msgstr ""
+msgstr "Portoghese (Portogallo)"
 
 #: pretix/_base_settings.py:95
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portoghese (Brasile)"
 
 #: pretix/_base_settings.py:96
 msgid "Romanian"
-msgstr ""
+msgstr "Rumeno"
 
 #: pretix/_base_settings.py:97
 msgid "Russian"
-msgstr ""
+msgstr "Russo"
 
 #: pretix/_base_settings.py:98
 msgid "Spanish"
-msgstr ""
+msgstr "Spagnolo"
 
 #: pretix/_base_settings.py:99
 msgid "Turkish"
-msgstr ""
+msgstr "Turco"
 
 #: pretix/_base_settings.py:100
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ucraino"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -577,12 +577,12 @@ msgstr "Vendite online"
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "powered by {name} basato su <a {a_attr}>pretix</a>"
+msgstr "fornito da {name} basato su <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
 #, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr "<a %(a_attr)s>biglietteria powered by pretix</a>"
+msgstr "<a %(a_attr)s>biglietteria fornita da pretix</a>"
 
 #: pretix/base/context.py:61
 msgid "source code"
@@ -608,9 +608,9 @@ msgid "Incompatible SSO provider: \"{error}\"."
 msgstr "SSO provider incompatibile. \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:109
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "Il tuo evento: {code}"
+msgstr "Non stai richiedendo \"{scope}\"."
 
 #: pretix/base/customersso/oidc.py:115
 #, python-brace-format
@@ -855,7 +855,7 @@ msgstr "Nome"
 
 #: pretix/base/exporters/customers.py:77 pretix/base/models/customers.py:98
 msgid "Account active"
-msgstr "Account attivo."
+msgstr "Account attivo"
 
 #: pretix/base/exporters/customers.py:78 pretix/base/models/customers.py:99
 #, fuzzy
@@ -2122,7 +2122,7 @@ msgstr "Numero di posto"
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:108
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:110
 msgid "Blocked"
-msgstr ""
+msgstr "Bloccato"
 
 #: pretix/base/exporters/orderlist.py:580 pretix/base/models/orders.py:2272
 #: pretix/base/orderimport.py:653
@@ -3043,10 +3043,10 @@ msgid "Single price: {net_price} net / {gross_price} gross"
 msgstr ""
 
 #: pretix/base/invoice.py:619
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "Prezzo netto"
+msgstr "Prezzo singolo: {price}"
 
 #: pretix/base/invoice.py:637 pretix/base/invoice.py:643
 msgctxt "invoice"
@@ -3332,9 +3332,8 @@ msgid "Ticket blocked"
 msgstr "Codice biglietto"
 
 #: pretix/base/models/checkin.py:354
-#, fuzzy
 msgid "Ticket not valid at this time"
-msgstr "Questo Voucher non è valido per questo posto."
+msgstr "Biglietto al momento non valido"
 
 #: pretix/base/models/customers.py:54
 #, fuzzy
@@ -4824,7 +4823,7 @@ msgstr "Tipo di tariffa"
 
 #: pretix/base/models/orders.py:166
 msgid "pending"
-msgstr ""
+msgstr "in attesa"
 
 #: pretix/base/models/orders.py:167 pretix/base/payment.py:475
 #: pretix/base/services/invoices.py:465
@@ -4834,7 +4833,7 @@ msgstr "pagato"
 #: pretix/base/models/orders.py:168 pretix/control/forms/filter.py:1459
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:37
 msgid "expired"
-msgstr ""
+msgstr "scaduto"
 
 #: pretix/base/models/orders.py:195 pretix/control/forms/orders.py:625
 #: pretix/control/forms/organizer.py:746
@@ -8813,13 +8812,14 @@ msgid ""
 msgstr ""
 "Ciao,\n"
 "\n"
-"hai richiesto di inviarti il link del tuo ordine per {event}.\n"
+"ricevi questo messaggio perchè ci hai chiesto di inviarti il link \n"
+"del tuo ordine per {event}.\n"
 "\n"
 "Puoi cambiare i dettagli del tuo ordine e vedere lo stato qui:\n"
 "{url}\n"
 "\n"
 "Un saluto,\n"
-" {event}"
+" Il team di {event}"
 
 #: pretix/base/settings.py:1979
 #, python-brace-format
@@ -8866,10 +8866,11 @@ msgstr ""
 "\n"
 "sei stato registrato per l'evento {event}.\n"
 "\n"
-"Puoi vedere i dettagli e lo stato del tuo bliglietto qui:\n"
+"Puoi vedere i dettagli e lo stato del tuo biglietto qui:\n"
 "{url}\n"
+"\n"
 "Un saluto,\n"
-"{event} "
+"Il team di {event}"
 
 #: pretix/base/settings.py:2019
 #, python-brace-format
@@ -8887,14 +8888,15 @@ msgid ""
 msgstr ""
 "Ciao,\n"
 "\n"
-"il tuo ordine per {event} è stato accettato. Il pagamento non è richiesto "
-"perchè hai ordinato solo prodotti gratuiti.\n"
+"il tuo ordine per {event} è stato accettato. Hai ordinato solo prodotti "
+"gratuiti, \n"
+"perciò non è richiesto nessun pagamento.\n"
 "\n"
 "Puoi cambiare i dettagli dell'ordine e vedere lo stato qui:\n"
 "{url}\n"
 "\n"
 "Un saluto,\n"
-"{event} "
+"Il team di {event}"
 
 #: pretix/base/settings.py:2036
 #, python-brace-format
@@ -9116,15 +9118,16 @@ msgid ""
 msgstr ""
 "Ciao,\n"
 "\n"
-"non abbiamo ancora ricevuto il pagamento per il tuo ordine per {event}.\n"
+"non abbiamo ancora ricevuto il pagamento del tuo ordine per {event}.\n"
 "Considera che possiamo garantire il tuo ordine se riceviamo il pagamento "
-"entro il {expire_date}.\n"
+"entro il \n"
+"{expire_date}.\n"
 "\n"
 "Puoi vedere le informazioni sul pagamento e lo stato del tuo ordine qui:\n"
 "{url}\n"
 "\n"
 "Un saluto,\n"
-"{event}"
+"Il team di {event}"
 
 #: pretix/base/settings.py:2200
 #, python-brace-format
@@ -9163,7 +9166,7 @@ msgid "Incomplete payment received: {code}"
 msgstr "Pagamento ricevuto per il tuo ordine: {code}"
 
 #: pretix/base/settings.py:2221
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -9181,15 +9184,19 @@ msgid ""
 msgstr ""
 "Ciao,\n"
 "\n"
-"non abbiamo ancora ricevuto il pagamento per il tuo ordine per {event}.\n"
-"Considera che possiamo garantire il tuo ordine se riceviamo il pagamento "
-"entro il {expire_date}.\n"
+"abbiamo ricevuto un pagamento per il tuo ordine per {event}.\n"
 "\n"
-"Puoi vedere le informazioni sul pagamento e lo stato del tuo ordine qui:\n"
-"{url}\n"
+"Sfortunatamente, l'importo ricevuto è inferiore all'intero importo "
+"necessario.\n"
+"Il tuo ordine è quindi ancora considerato non pagato,\n"
+"poichè manca di un pagamento aggiuntivo di **{pending_sum}**.\n"
+"\n"
+"Puoi visualizzare le informazioni di pagamento e lo stato del tuo ordine su:"
+"\n"
+" {url}\n"
 "\n"
 "Un saluto,\n"
-"{event}"
+"Il team di {event}"
 
 #: pretix/base/settings.py:2237
 #, python-brace-format
@@ -9283,16 +9290,17 @@ msgid ""
 msgstr ""
 "Ciao,\n"
 "\n"
-"abbiamo approvato il tuo ordine per l'evento {event} e saremo felici di "
-"accoglierti.\n"
+"abbiamo approvato il tuo ordine per {event} \n"
+"e saremo felici di accoglierti al nostro evento.\n"
 "\n"
 "Ti preghiamo di effettuare il pagamento entro il {expire_date}.\n"
 "\n"
 "Puoi scegliere un metodo di pagamento qui:\n"
+"\n"
 "{url}\n"
 "\n"
 "Un saluto,\n"
-"{event}"
+"Il team di {event}"
 
 #: pretix/base/settings.py:2316 pretix/base/settings.py:2353
 #, fuzzy, python-brace-format
@@ -9338,8 +9346,9 @@ msgid ""
 msgstr ""
 "Ciao,\n"
 "\n"
-"il tuo ordine per {event} è stato accettato. Il pagamento non è richiesto "
-"perchè hai ordinato solo prodotti gratuiti.\n"
+"abbiamo accettato il tuo ordine per {event} e saremo felici di accoglierti "
+"al nostro evento. \n"
+"Il pagamento non è richiesto poichè hai ordinato solo prodotti gratuiti.\n"
 "\n"
 "Puoi cambiare i dettagli dell'ordine e vedere lo stato qui:\n"
 "{url}\n"
@@ -10211,7 +10220,7 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr ""
+msgstr "fornito da <a %(a_attr)s>pretix</a>"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:2
 #, fuzzy
@@ -10341,6 +10350,8 @@ msgid ""
 "This site is powered by free software. If you want to read the license terms "
 "or obtain the source code, follow these links or instructions:"
 msgstr ""
+"Questo sito è basato su software libero. Se vuoi leggere i termini della "
+"licenza o ottenere il codice sorgente, segui questi link o le istruzioni:"
 
 #: pretix/base/ticketoutput.py:179
 msgid "Enable ticket format"
@@ -11442,9 +11453,8 @@ msgid "All payments"
 msgstr "Tutti i servizi di pagamento"
 
 #: pretix/control/forms/filter.py:914
-#, fuzzy
 msgid "Payment created from"
-msgstr "Pagamento completato."
+msgstr "Pagamento creato da"
 
 #: pretix/control/forms/filter.py:919
 #, fuzzy
@@ -11945,7 +11955,7 @@ msgstr ""
 
 #: pretix/control/forms/global_settings.py:187
 msgid "Footer: \"powered by\" name (optional)"
-msgstr ""
+msgstr "Footer: \"fornito da\" nome (optional)"
 
 #: pretix/control/forms/global_settings.py:188
 msgid ""
@@ -11953,6 +11963,9 @@ msgid ""
 "name of your company or organization (if you made any changes to pretix), "
 "set the name here."
 msgstr ""
+"Se vuoi che il messaggio \"fornito da\" nel footer della pagina includa il "
+"nome della tua azienda o organizzazione (se hai fatto delle modifiche a "
+"pretix), imposta qui il nome."
 
 #: pretix/control/forms/global_settings.py:193
 msgid "Link for powered by name"
@@ -12931,7 +12944,7 @@ msgstr "Destinatari"
 
 #: pretix/control/forms/vouchers.py:281
 msgid "or"
-msgstr "oppure"
+msgstr "o"
 
 #: pretix/control/forms/vouchers.py:285
 msgid ""
@@ -16240,7 +16253,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:25
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:16
 msgid "Back"
-msgstr ""
+msgstr "Indietro"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:15
 msgid "Payment provider:"
@@ -21897,7 +21910,7 @@ msgstr "Nessuna data"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:107
 #: pretix/presale/views/widget.py:410
 msgid "Sale over"
-msgstr "Prenotazioni chiuse"
+msgstr "Vendite conclusa"
 
 #: pretix/control/views/dashboards.py:533
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:103
@@ -23567,7 +23580,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:50
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:23
 msgid "IBAN"
-msgstr ""
+msgstr "IBAN"
 
 #: pretix/plugins/banktransfer/payment.py:112
 #: pretix/plugins/banktransfer/payment.py:463
@@ -24573,9 +24586,10 @@ msgstr "Il processo di pagamento è stato inziato in una nuova finestra."
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
+#, fuzzy
 msgid "The window to enter your payment data was not opened or was closed?"
 msgstr ""
-"La finestra di inserimento dati di PayPal non è stata aperta o si è chiusa?"
+"La finestra per inserire i dati di pagamento non era aperta o era chiusa?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:25
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25
@@ -26114,9 +26128,8 @@ msgid "MOTO"
 msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:12
-#, fuzzy
 msgid "Do you really want to disconnect your Stripe account?"
-msgstr "Vuoi veramente annullare il pagamento? L'operazione non è reversibile."
+msgstr "Vuoi veramente disconnettere il tuo account Stripe?"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:16
 #, fuzzy
@@ -26188,7 +26201,7 @@ msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
-"Spiacenti, c'è stato un problema durante il pagamento. Segui il link "
+"Spiacenti, c'è stato un errore durante il pagamento. Segui il link "
 "nell'email per continuare."
 
 #: pretix/plugins/stripe/views.py:566
@@ -27768,10 +27781,9 @@ msgstr "Abilita formato biglietti"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:60
 #: pretix/presale/templates/pretixpresale/organizers/index.html:88
 #: pretix/presale/views/widget.py:381
-#, fuzzy
 msgctxt "available_event_in_list"
 msgid "Buy now"
-msgstr "Prenota"
+msgstr "Compra ora"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:30
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:45
@@ -27785,7 +27797,7 @@ msgstr "Prenota"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:105
 #: pretix/presale/views/widget.py:383 pretix/presale/views/widget.py:406
 msgid "Book now"
-msgstr "Prenota"
+msgstr "Prenota ora"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:41
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:88
@@ -28497,14 +28509,13 @@ msgstr "Aggiungi o rimuovi biglietti"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:5
 msgid "Calendar"
-msgstr ""
+msgstr "Calendario"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:52
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:65
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:37
-#, fuzzy
 msgid "(continued)"
-msgstr "Continua"
+msgstr "(continua)"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:61
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:46
@@ -28807,7 +28818,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:27
 msgid "Upcoming events"
-msgstr ""
+msgstr "Prossimi eventi"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:124
 msgid "More info"
@@ -28823,11 +28834,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:135
 msgid "No public upcoming events found."
-msgstr ""
+msgstr "Nessun prossimo evento pubblico trovato."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:135
 msgid "Show past events"
-msgstr ""
+msgstr "Mostra eventi conclusi"
 
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
