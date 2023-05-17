@@ -160,7 +160,9 @@ The response will look like this:
      ]
    }
 
-``"medium_key_sets`` will always be empty if you did not set an ``rsa_key``.
+``"medium_key_sets`` will always be empty if you did not set an ``rsa_pubkey``.
+The individual keys in the key sets are encrypted with the device's ``rsa_pubkey``
+using ``RSA/ECB/PKCS1Padding``.
 
 Creating a new API key
 ----------------------

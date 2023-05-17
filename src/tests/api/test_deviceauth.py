@@ -22,7 +22,6 @@
 import base64
 
 import pytest
-from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.serialization import load_pem_private_key
 from django_scopes import scopes_disabled
@@ -381,17 +380,9 @@ def test_device_info_key_sets(device_client, device: Device):
     )
     assert keyset.uid_key == private_key.decrypt(
         base64.b64decode(ks['uid_key']),
-        padding.OAEP(
-            mgf=padding.MGF1(algorithm=hashes.SHA256()),
-            algorithm=hashes.SHA256(),
-            label=None
-        )
+        padding.PKCS1v15()
     )
     assert keyset.diversification_key == private_key.decrypt(
         base64.b64decode(ks['diversification_key']),
-        padding.OAEP(
-            mgf=padding.MGF1(algorithm=hashes.SHA256()),
-            algorithm=hashes.SHA256(),
-            label=None
-        )
+        padding.PKCS1v15()
     )

@@ -23,7 +23,6 @@ import base64
 import logging
 
 from cryptography.hazmat.backends.openssl.backend import Backend
-from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from django.db.models import Exists, OuterRef, Q
@@ -94,13 +93,9 @@ class RSAEncryptedField(serializers.Field):
             self.context['device'].rsa_pubkey.encode(), Backend()
         )
         cipher_text = public_key.encrypt(
-            # RSA/ECB/OAEPwithSHA-1andMGF1Padding
+            # RSA/ECB/PKCS1Padding
             value,
-            padding.OAEP(
-                mgf=padding.MGF1(algorithm=hashes.SHA256()),
-                algorithm=hashes.SHA256(),
-                label=None
-            )
+            padding.PKCS1v15()
         )
         return base64.b64encode(cipher_text).decode()
 

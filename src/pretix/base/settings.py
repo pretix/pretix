@@ -290,6 +290,15 @@ DEFAULTS = {
             label=_("Gift card currency"),
         )
     },
+    'reusable_media_type_nfc_mf0aes_random_uid': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Use UID protection feature of NFC chip"),
+        )
+    },
     'max_items_per_order': {
         'default': '10',
         'type': int,
