@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
-"PO-Revision-Date: 2023-05-18 01:00+0000\n"
+"PO-Revision-Date: 2023-05-19 07:23+0000\n"
 "Last-Translator: M C <micasadmail@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -750,15 +750,13 @@ msgstr "Domande"
 
 #: pretix/base/exporters/customers.py:49 pretix/control/navigation.py:573
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:132
-#, fuzzy
 msgid "Customer accounts"
-msgstr "Domande"
+msgstr "Profili cliente"
 
 #: pretix/base/exporters/customers.py:51
-#, fuzzy
 msgctxt "export_category"
 msgid "Customer accounts"
-msgstr "Domande"
+msgstr "Profili cliente"
 
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
@@ -783,7 +781,7 @@ msgstr "Servizio di pagamento"
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:65
 #: pretix/control/templates/pretixcontrol/users/form.html:43
 msgid "External identifier"
-msgstr ""
+msgstr "Identificatore esterno"
 
 #: pretix/base/exporters/customers.py:68 pretix/base/exporters/orderlist.py:256
 #: pretix/base/exporters/orderlist.py:432
@@ -858,14 +856,13 @@ msgid "Account active"
 msgstr "Account attivo"
 
 #: pretix/base/exporters/customers.py:78 pretix/base/models/customers.py:99
-#, fuzzy
 msgid "Verified email address"
-msgstr "Email partecipante"
+msgstr "Indirizzo email verificato"
 
 #: pretix/base/exporters/customers.py:79 pretix/base/models/customers.py:100
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:67
 msgid "Last login"
-msgstr ""
+msgstr "Ultimo accesso"
 
 #: pretix/base/exporters/customers.py:80 pretix/base/models/customers.py:101
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:65
@@ -885,7 +882,7 @@ msgstr "Lingua"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:71
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:68
 msgid "Notes"
-msgstr ""
+msgstr "Note"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:81
@@ -955,6 +952,8 @@ msgid ""
 "Download invoices in a format that can be used by the dekodi NREI conversion "
 "software."
 msgstr ""
+"Scarica le fatture in un formato che può essere usato dal software di "
+"conversione dekodi NREI."
 
 #: pretix/base/exporters/dekodi.py:105
 #, python-brace-format
@@ -970,9 +969,8 @@ msgstr "Biglietto dell'evento {event}-{code}"
 #: pretix/plugins/reports/exporters.py:394
 #: pretix/plugins/reports/exporters.py:625
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
-#, fuzzy
 msgid "Date range"
-msgstr "Data di iscrizione"
+msgstr "Intervallo di date"
 
 #: pretix/base/exporters/dekodi.py:223 pretix/base/exporters/invoices.py:77
 #, fuzzy
@@ -6611,11 +6609,11 @@ msgstr ""
 "selezionata. Vedi sotto i dettagli."
 
 #: pretix/base/services/cart.py:114
-#, fuzzy, python-format
+#, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] "Non puoi creare una fattura per questo ordine."
-msgstr[1] "Non puoi creare una fattura per questo ordine."
+msgstr[0] "Non puoi selezionare più di %s elemento per ogni ordine."
+msgstr[1] "Non puoi selezionare più di %s elementi per ogni ordine."
 
 #: pretix/base/services/cart.py:118
 #, fuzzy, python-format
@@ -11467,9 +11465,8 @@ msgid "Paid from"
 msgstr "Ordini pagati"
 
 #: pretix/control/forms/filter.py:929
-#, fuzzy
 msgid "Paid until"
-msgstr "Data fino a"
+msgstr "Pagato fino a"
 
 #: pretix/control/forms/filter.py:1085 pretix/control/forms/filter.py:1558
 msgid "Shop live and presale running"
