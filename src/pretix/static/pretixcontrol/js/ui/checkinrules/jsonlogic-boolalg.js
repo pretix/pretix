@@ -2,7 +2,7 @@ function convert_to_dnf(rules) {
   // Converts a set of rules to disjunctive normal form, i.e. returns something of the form
   // `(a AND b AND c) OR (a AND d AND f)`
   // without further nesting.
-  if (typeof rules !== "object" || Array.isArray(rules)) {
+  if (typeof rules !== "object" || Array.isArray(rules) || rules === null) {
     return rules
   }
 
