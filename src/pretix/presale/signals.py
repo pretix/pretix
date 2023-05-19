@@ -185,17 +185,6 @@ You will receive the request triggering the order creation as the ``request`` ke
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-valid_if_pending_from_request = EventPluginSignal()
-"""
-Arguments: ``request``
-
-This signal is sent before an order is created through the pretixpresale frontend. It allows you
-to return a dictionary that will be merged in the meta_info attribute of the order.
-You will receive the request triggering the order creation as the ``request`` keyword argument.
-
-As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
-"""
-
 checkout_confirm_page_content = EventPluginSignal()
 """
 Arguments: ``request``
