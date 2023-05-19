@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-19 11:24+0000\n"
+"PO-Revision-Date: 2023-05-20 07:00+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -3765,7 +3765,7 @@ msgstr "特殊條款和條件"
 
 #: pretix/base/models/giftcards.py:212 pretix/base/models/giftcards.py:216
 msgid "Manual transaction"
-msgstr ""
+msgstr "手動交易"
 
 #: pretix/base/models/invoices.py:185
 #, python-format
@@ -3845,34 +3845,34 @@ msgstr "動態有效性"
 
 #: pretix/base/models/items.py:378 pretix/base/models/items.py:660
 msgid "Don't use re-usable media, use regular one-off tickets"
-msgstr ""
+msgstr "不要使用可重複使用的媒體，使用一次性普通的票證"
 
 #: pretix/base/models/items.py:379
 msgid "Require an existing medium to be re-used"
-msgstr ""
+msgstr "要求重複使用現有媒體"
 
 #: pretix/base/models/items.py:380
 msgid "Require a previously unknown medium to be newly added"
-msgstr ""
+msgstr "需要新添加以前未知的媒體"
 
 #: pretix/base/models/items.py:381
 msgid "Require either an existing or a new medium to be used"
-msgstr ""
+msgstr "需要使用現有或新媒體"
 
 #: pretix/base/models/items.py:397 pretix/base/models/items.py:1260
 #: pretix/control/templates/pretixcontrol/items/index.html:40
 msgid "Category"
-msgstr ""
+msgstr "產品類別"
 
 #: pretix/base/models/items.py:398
 msgid ""
 "If you have many products, you can optionally sort them into categories to "
 "keep things organized."
-msgstr ""
+msgstr "如果你有許多產品，則可以選擇將它們分類，以保持井井有條。"
 
 #: pretix/base/models/items.py:415
 msgid "This is shown below the product name in lists."
-msgstr ""
+msgstr "這顯示在清單中的商品名稱下方。"
 
 #: pretix/base/models/items.py:420
 msgid ""
@@ -3897,40 +3897,40 @@ msgstr ""
 
 #: pretix/base/models/items.py:442
 msgid "Whether or not buying this product allows a person to enter your event"
-msgstr ""
+msgstr "是否允許用戶進入你的活動購買此商品"
 
 #: pretix/base/models/items.py:447
 msgid "Is a personalized ticket"
-msgstr ""
+msgstr "是個人化的門票"
 
 #: pretix/base/models/items.py:449
 msgid "Whether or not buying this product allows to enter attendee information"
-msgstr ""
+msgstr "是否允許輸入與會者資訊購買此商品"
 
 #: pretix/base/models/items.py:458
 msgid "Show a waiting list for this ticket"
-msgstr ""
+msgstr "顯示此票的候補名單"
 
 #: pretix/base/models/items.py:459
 msgid "This will only work if waiting lists are enabled for this event."
-msgstr ""
+msgstr "僅當為此活動啟用了等候名單時，此操作才有效。"
 
 #: pretix/base/models/items.py:463 pretix/base/settings.py:1224
 #: pretix/control/forms/event.py:1545
 msgid "Show number of tickets left"
-msgstr ""
+msgstr "顯示剩餘票數量"
 
 #: pretix/base/models/items.py:464
 msgid "Publicly show how many tickets are still available."
-msgstr ""
+msgstr "公開顯示仍有多少票可利用。"
 
 #: pretix/base/models/items.py:471
 msgid "Product picture"
-msgstr ""
+msgstr "商品圖片"
 
 #: pretix/base/models/items.py:490
 msgid "Only show after sellout of"
-msgstr ""
+msgstr "僅在售罄後顯示"
 
 #: pretix/base/models/items.py:491
 msgid ""
@@ -3948,7 +3948,7 @@ msgstr ""
 msgid ""
 "To buy this product, the user needs a voucher that applies to this product "
 "either directly or via a quota."
-msgstr ""
+msgstr "要此產品，使用者需要直接或透過額度，購買適用於此產品的優惠券。"
 
 #: pretix/base/models/items.py:506
 msgid ""
@@ -3964,7 +3964,7 @@ msgstr ""
 msgid ""
 "This product will be hidden from the event page until the user enters a "
 "voucher that unlocks this product."
-msgstr ""
+msgstr "此產品將從活動頁面中隱藏，直到使用者輸入解鎖此商品的優惠券。"
 
 #: pretix/base/models/items.py:519
 msgid ""
@@ -4018,45 +4018,47 @@ msgid ""
 "If set, this will be displayed next to the current price to show that the "
 "current price is a discounted one. This is just a cosmetic setting and will "
 "not actually impact pricing."
-msgstr ""
+msgstr "如果設定，這將顯示在當前價格旁邊，以顯示當前價格是折扣價格。這只是一項裝飾性"
+"設定，實際上不會影響定價。"
 
 #: pretix/base/models/items.py:565
 msgid ""
 "When a customer buys this product, they will get a gift card with a value "
 "corresponding to the product price."
-msgstr ""
+msgstr "當客戶購買此產品時，他們將獲得一張禮品卡，其價值與產品價格相對應。"
 
 #: pretix/base/models/items.py:575
 msgid "Allowed membership types"
-msgstr ""
+msgstr "允許的會員資格類型"
 
 #: pretix/base/models/items.py:580 pretix/base/models/items.py:1038
 msgid ""
 "Do not show this unless the customer is logged in and has a valid "
 "membership. Be aware that this means it will never be visible in the widget."
-msgstr ""
+msgstr "除非客戶已登錄並具有有效的會員資格，否則不要顯示此資訊。請注意，這意味著它永"
+"遠不會在小組件中可見。"
 
 #: pretix/base/models/items.py:589
 msgid "This product creates a membership of type"
-msgstr ""
+msgstr "此產品建立會員資格的類型"
 
 #: pretix/base/models/items.py:592
 msgid ""
 "The duration of the membership is the same as the duration of the event or "
 "event series date"
-msgstr ""
+msgstr "會員資格的期限與活動或事件系列日期的期限時間相同"
 
 #: pretix/base/models/items.py:596
 msgid "Membership duration in days"
-msgstr ""
+msgstr "會員資格有效期（天）"
 
 #: pretix/base/models/items.py:600
 msgid "Membership duration in months"
-msgstr ""
+msgstr "會員資格有效期（月）"
 
 #: pretix/base/models/items.py:607
 msgid "Validity"
-msgstr ""
+msgstr "有效性"
 
 #: pretix/base/models/items.py:609
 msgid ""
@@ -4077,47 +4079,47 @@ msgstr ""
 
 #: pretix/base/models/items.py:617
 msgid "Start of validity"
-msgstr ""
+msgstr "有效期開始"
 
 #: pretix/base/models/items.py:618
 msgid "End of validity"
-msgstr ""
+msgstr "有效期結束"
 
 #: pretix/base/models/items.py:621
 msgid "Minutes"
-msgstr ""
+msgstr "分鐘"
 
 #: pretix/base/models/items.py:625
 msgid "Hours"
-msgstr ""
+msgstr "小時"
 
 #: pretix/base/models/items.py:629
 msgid "Days"
-msgstr ""
+msgstr "日"
 
 #: pretix/base/models/items.py:633
 msgid "Months"
-msgstr ""
+msgstr "月"
 
 #: pretix/base/models/items.py:636
 msgid "Customers can select the validity start date"
-msgstr ""
+msgstr "客戶可以選擇有效期開始日期"
 
 #: pretix/base/models/items.py:637
 msgid "If not selected, the validity always starts at the time of purchase."
-msgstr ""
+msgstr "如果未選擇，有效期始終從購買時開始。"
 
 #: pretix/base/models/items.py:642
 msgid "Maximum future start"
-msgstr ""
+msgstr "未來最遠啟動時間"
 
 #: pretix/base/models/items.py:643
 msgid "The selected start date may only be this many days in the future."
-msgstr ""
+msgstr "所選的開始日期可能只有未來這幾天。"
 
 #: pretix/base/models/items.py:649
 msgid "Reusable media policy"
-msgstr ""
+msgstr "可重複使用的媒體策略"
 
 #: pretix/base/models/items.py:651
 msgid ""
@@ -4134,7 +4136,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:661
 msgid "Reusable media type"
-msgstr ""
+msgstr "可重複使用的媒體類型"
 
 #: pretix/base/models/items.py:663
 msgid ""
@@ -4158,59 +4160,60 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/quotas.html:49
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:32
 msgid "Products"
-msgstr ""
+msgstr "商品"
 
 #: pretix/base/models/items.py:844
 msgid ""
 "If you select a reusable media policy, you also need to select a reusable "
 "media type."
-msgstr ""
+msgstr "如果選擇可重用媒體策略，則還需要選擇可重用媒體類型。"
 
 #: pretix/base/models/items.py:848
 msgid "The selected media type is not enabled in your organizer settings."
-msgstr ""
+msgstr "在你的管理員設置中未啟用所選取媒體類型。"
 
 #: pretix/base/models/items.py:850
 msgid "The selected media type does not support usage for tickets currently."
-msgstr ""
+msgstr "所選媒體類型目前不支援門票使用。"
 
 #: pretix/base/models/items.py:852
 msgid ""
 "The selected media type does not support usage for gift cards currently."
-msgstr ""
+msgstr "所選媒體類型目前不支援禮品卡的使用。"
 
 #: pretix/base/models/items.py:854
 msgid ""
 "You currently cannot create gift cards with a reusable media policy. "
 "Instead, gift cards for some reusable media types can be created or re-"
 "charged directly at the POS."
-msgstr ""
+msgstr "你目前無法使用可重複使用的媒體策略建立禮品卡。相反的，某些可重複使用媒體類型"
+"的禮品卡，可以直接在 POS 上建立或重新收費。"
 
 #: pretix/base/models/items.py:862
 msgid ""
 "The maximum number per order can not be lower than the minimum number per "
 "order."
-msgstr ""
+msgstr "每則訂單的最大數量不能低於，每則訂單的最小數量。"
 
 #: pretix/base/models/items.py:868
 msgid "The item's category must belong to the same event as the item."
-msgstr ""
+msgstr "項目的類別必須與項目屬於同一事件。"
 
 #: pretix/base/models/items.py:873
 msgid "The item's tax rule must belong to the same event as the item."
-msgstr ""
+msgstr "項目的稅收規則必須與項目屬於同一活動。"
 
 #: pretix/base/models/items.py:879
 msgid "The item's availability cannot end before it starts."
-msgstr ""
+msgstr "專案的可用性不能在開始之前結束。"
 
 #: pretix/base/models/items.py:1001
 msgid "This is shown below the variation name in lists."
-msgstr ""
+msgstr "這顯示在清單中的類別名稱下方。"
 
 #: pretix/base/models/items.py:1021
 msgid "Require approval"
-msgstr ""
+msgstr "需要批准"
 
 #: pretix/base/models/items.py:1023
 msgid ""
@@ -4226,32 +4229,33 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:6
 msgid "Membership types"
-msgstr ""
+msgstr "會員資格類型"
 
 #: pretix/base/models/items.py:1045
 msgid "This variation will not be sold before the given date."
-msgstr ""
+msgstr "此類別不會在給定日期之前出售。"
 
 #: pretix/base/models/items.py:1050
 msgid "This variation will not be sold after the given date."
-msgstr ""
+msgstr "此類別在給定日期之後將不會出售。"
 
 #: pretix/base/models/items.py:1055 pretix/control/forms/item.py:791
 msgid ""
 "The sales channel selection for the product as a whole takes precedence, so "
 "if a sales channel is selected here but not on product level, the variation "
 "will not be available."
-msgstr ""
+msgstr "整個產品的銷售管道將被選擇優先，因此，如果在此處選擇了銷售管道，但未在產品級"
+"別選擇銷售管道，則類別將不可用。"
 
 #: pretix/base/models/items.py:1060
 msgid "Show only if a matching voucher is redeemed."
-msgstr ""
+msgstr "只有在兌換對應的優惠券時才顯示。"
 
 #: pretix/base/models/items.py:1062
 msgid ""
 "This variation will be hidden from the event page until the user enters a "
 "voucher that unlocks this variation."
-msgstr ""
+msgstr "此類別將在活動頁面中隱藏，直到使用者輸入解鎖此類別的憑證。"
 
 #: pretix/base/models/items.py:1076 pretix/base/models/vouchers.py:262
 #: pretix/base/models/waitinglist.py:99 pretix/base/orderimport.py:284
@@ -4261,61 +4265,61 @@ msgstr "產品變體"
 #: pretix/base/models/items.py:1077
 #: pretix/control/templates/pretixcontrol/item/create.html:111
 msgid "Product variations"
-msgstr ""
+msgstr "其他種類商品"
 
 #: pretix/base/models/items.py:1265
 msgid "Minimum number"
-msgstr ""
+msgstr "最小數量"
 
 #: pretix/base/models/items.py:1269
 msgid "Maximum number"
-msgstr ""
+msgstr "最大數量"
 
 #: pretix/base/models/items.py:1273
 msgid "Add-Ons are included in the price"
-msgstr ""
+msgstr "附加部份包含在價格中"
 
 #: pretix/base/models/items.py:1274
 msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
-msgstr ""
+msgstr "如果選擇，向此票證添加附加部份是免費的，即使附加部份通常會單獨花錢。"
 
 #: pretix/base/models/items.py:1279
 msgid "Allow the same product to be selected multiple times"
-msgstr ""
+msgstr "允許多次選擇同一商品"
 
 #: pretix/base/models/items.py:1298
 msgid "The add-on's category must belong to the same event as the item."
-msgstr ""
+msgstr "附加部份類別必須與活動屬於同一事件。"
 
 #: pretix/base/models/items.py:1303
 msgid "The item already has an add-on of this category."
-msgstr ""
+msgstr "該項目已有此類別的附加組件。"
 
 #: pretix/base/models/items.py:1308
 msgid "The minimum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "最小計數需要等於或大於零。"
 
 #: pretix/base/models/items.py:1313
 msgid "The maximum count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "最大計數需要等於或大於零。"
 
 #: pretix/base/models/items.py:1318
 msgid "The maximum count needs to be greater than the minimum count."
-msgstr ""
+msgstr "最大計數需要大於最小計數。"
 
 #: pretix/base/models/items.py:1345
 msgid "Bundled item"
-msgstr ""
+msgstr "捆綁商品"
 
 #: pretix/base/models/items.py:1351
 msgid "Bundled variation"
-msgstr ""
+msgstr "捆綁類別"
 
 #: pretix/base/models/items.py:1362
 msgid "Designated price part"
-msgstr ""
+msgstr "指定價格部份"
 
 #: pretix/base/models/items.py:1363
 msgid ""
@@ -4329,62 +4333,62 @@ msgstr ""
 
 #: pretix/base/models/items.py:1386
 msgid "The bundled item must belong to the same event as the item."
-msgstr ""
+msgstr "捆綁商品必須與商品屬於同一活動。"
 
 #: pretix/base/models/items.py:1388
 msgid "A variation needs to be set for this item."
-msgstr ""
+msgstr "需要為此項目設定類別。"
 
 #: pretix/base/models/items.py:1390
 msgid "The chosen variation does not belong to this item."
-msgstr ""
+msgstr "所選類別不屬於此專案。"
 
 #: pretix/base/models/items.py:1395
 msgid "The count needs to be equal to or greater than zero."
-msgstr ""
+msgstr "計數需要等於或大於零。"
 
 #: pretix/base/models/items.py:1448
 msgid "Number"
-msgstr ""
+msgstr "號碼"
 
 #: pretix/base/models/items.py:1449
 msgid "Text (one line)"
-msgstr ""
+msgstr "文字（一行）"
 
 #: pretix/base/models/items.py:1450
 msgid "Multiline text"
-msgstr ""
+msgstr "多行文件"
 
 #: pretix/base/models/items.py:1451
 msgid "Yes/No"
-msgstr ""
+msgstr "是與否"
 
 #: pretix/base/models/items.py:1452
 msgid "Choose one from a list"
-msgstr ""
+msgstr "從列表中選擇一則"
 
 #: pretix/base/models/items.py:1453
 msgid "Choose multiple from a list"
-msgstr ""
+msgstr "從列表中選擇多項"
 
 #: pretix/base/models/items.py:1454
 msgid "File upload"
-msgstr ""
+msgstr "上傳檔案"
 
 #: pretix/base/models/items.py:1456 pretix/base/reldate.py:183
 #: pretix/plugins/checkinlists/exporters.py:633
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:35
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:49
 msgid "Time"
-msgstr ""
+msgstr "時間"
 
 #: pretix/base/models/items.py:1457
 msgid "Date and time"
-msgstr ""
+msgstr "日期和時間"
 
 #: pretix/base/models/items.py:1458
 msgid "Country code (ISO 3166-1 alpha-2)"
-msgstr ""
+msgstr "國家代碼 （ISO 3166-1 alpha-2）"
 
 #: pretix/base/models/items.py:1470 pretix/base/models/items.py:1560
 #: pretix/base/orderimport.py:780 pretix/control/forms/item.py:89
@@ -4392,30 +4396,30 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:17
 #: pretix/control/templates/pretixcontrol/items/questions.html:21
 msgid "Question"
-msgstr ""
+msgstr "問題"
 
 #: pretix/base/models/items.py:1480 pretix/base/models/items.py:1721
 msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores."
-msgstr ""
+msgstr "標識碼只能包含字母、數字、點、短劃線和下劃線。"
 
 #: pretix/base/models/items.py:1485
 msgid "Help text"
-msgstr ""
+msgstr "説明文本"
 
 #: pretix/base/models/items.py:1486
 msgid "If the question needs to be explained or clarified, do it here!"
-msgstr ""
+msgstr "如果需要解釋或澄清問題，請在此處進行！"
 
 #: pretix/base/models/items.py:1492
 msgid "Question type"
-msgstr ""
+msgstr "問題類型"
 
 #: pretix/base/models/items.py:1496
 #: pretix/control/templates/pretixcontrol/items/questions.html:55
 msgid "Required question"
-msgstr ""
+msgstr "必填題"
 
 #: pretix/base/models/items.py:1503
 msgid "This question will be asked to buyers of the selected products"
