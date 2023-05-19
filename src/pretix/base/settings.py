@@ -3385,7 +3385,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
         ),
         'concatenation_for_salutation': concatenation_for_salutation,
         'concatenation_all_components': lambda d: ' '.join(
-            str(p) for p in (d.get(key, '') for key in ["salutation", "given_name", "family_name"]) if p
+            str(p) for p in (get_name_parts_localized(d, key) for key in ["salutation", "given_name", "family_name"]) if p
         ),
         'sample': {
             'salutation': pgettext_lazy('person_name_sample', 'Mr'),
@@ -3406,7 +3406,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
         ),
         'concatenation_for_salutation': concatenation_for_salutation,
         'concatenation_all_components': lambda d: ' '.join(
-            str(p) for p in (d.get(key, '') for key in ["salutation", "title", "given_name", "family_name"]) if p
+            str(p) for p in (get_name_parts_localized(d, key) for key in ["salutation", "title", "given_name", "family_name"]) if p
         ),
         'sample': {
             'salutation': pgettext_lazy('person_name_sample', 'Mr'),
@@ -3434,7 +3434,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
         'concatenation_for_salutation': concatenation_for_salutation,
         'concatenation_all_components': lambda d: (
             ' '.join(
-                str(p) for p in (d.get(key, '') for key in ["salutation", "title", "given_name", "family_name"]) if p
+                str(p) for p in (get_name_parts_localized(d, key) for key in ["salutation", "title", "given_name", "family_name"]) if p
             ) +
             str((', ' if d.get('degree') else '')) +
             str(d.get('degree', ''))
