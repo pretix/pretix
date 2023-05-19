@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
-"PO-Revision-Date: 2023-05-19 07:28+0000\n"
+"PO-Revision-Date: 2023-05-19 08:05+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -3558,29 +3558,29 @@ msgstr "你需要填寫元參數“{property}”。"
 #: pretix/base/models/event.py:1322
 msgid ""
 "Once created an event cannot change between an series and a single event."
-msgstr ""
+msgstr "活動建立後，活動不能在系列集和單項活動之間切換。"
 
 #: pretix/base/models/event.py:1328
 msgid "The event slug cannot be changed."
-msgstr ""
+msgstr "無法更改活動slug。"
 
 #: pretix/base/models/event.py:1331
 msgid "This slug has already been used for a different event."
-msgstr ""
+msgstr "此 slug 已用於其他事件。"
 
 #: pretix/base/models/event.py:1337
 msgid "The event cannot end before it starts."
-msgstr ""
+msgstr "活動無法在開始之前結束。"
 
 #: pretix/base/models/event.py:1343
 msgid "The event's presale cannot end before it starts."
-msgstr ""
+msgstr "活動的預售不能在開始前結束。"
 
 #: pretix/base/models/event.py:1373
 msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
-msgstr ""
+msgstr "只有啟用此複選框，此日期才會在用戶的前端可見。"
 
 #: pretix/base/models/event.py:1377
 msgid ""
@@ -3685,11 +3685,11 @@ msgstr "你可以指定多個收件者，以逗號分隔。"
 
 #: pretix/base/models/exports.py:63
 msgid "Additional recipients (Cc)"
-msgstr "Additional recipients (附件抄送)"
+msgstr "Additional recipients (副本)"
 
 #: pretix/base/models/exports.py:68
 msgid "Additional recipients (Bcc)"
-msgstr ""
+msgstr "其他收件者（密件副本）"
 
 #: pretix/base/models/exports.py:73 pretix/control/forms/event.py:1043
 #: pretix/control/forms/event.py:1105 pretix/control/forms/event.py:1117
@@ -3700,7 +3700,7 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:74 pretix/plugins/sendmail/forms.py:94
 #: pretix/plugins/sendmail/models.py:201
 msgid "Subject"
-msgstr ""
+msgstr "主題"
 
 #: pretix/base/models/exports.py:77 pretix/control/forms/orders.py:690
 #: pretix/control/forms/orders.py:706 pretix/control/forms/orders.py:889
@@ -3708,63 +3708,63 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:75 pretix/plugins/sendmail/forms.py:99
 #: pretix/plugins/sendmail/models.py:202
 msgid "Message"
-msgstr ""
+msgstr "消息"
 
 #: pretix/base/models/exports.py:84
 msgid "Requested start time"
-msgstr ""
+msgstr "要求的開始時間"
 
 #: pretix/base/models/exports.py:85
 msgid "The actual start time might be delayed depending on system load."
-msgstr ""
+msgstr "實際開始時間可能會延後，具體時間取決於系統承載。"
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
-msgstr ""
+msgstr "任何值都不能包含分隔符。"
 
 #: pretix/base/models/giftcards.py:74
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:50
 msgid "Owned by ticket holder"
-msgstr ""
+msgstr "由持票人擁有"
 
 #: pretix/base/models/giftcards.py:86
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
-msgstr ""
+msgstr "禮品卡代碼只能包含字母、數字、點和破折號。"
 
 #: pretix/base/models/giftcards.py:98
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
 msgctxt "giftcard"
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "特殊條款和條件"
 
 #: pretix/base/models/invoices.py:185
 #, python-format
 msgctxt "invoice"
 msgid "Tax ID: %s"
-msgstr ""
+msgstr "稅號： %s"
 
 #: pretix/base/models/invoices.py:191 pretix/base/services/invoices.py:139
 #, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr ""
+msgstr "增值稅: %s"
 
 #: pretix/base/models/items.py:91
 msgid "Category name"
-msgstr ""
+msgstr "產品類別名稱"
 
 #: pretix/base/models/items.py:95 pretix/base/models/items.py:406
 msgid ""
 "If you set this, this will be used instead of the public name in the backend."
-msgstr ""
+msgstr "如果設定此選項，則將使用此名稱，代替後端中的公共名稱。"
 
 #: pretix/base/models/items.py:99
 msgid "Category description"
-msgstr ""
+msgstr "產品類別描述"
 
 #: pretix/base/models/items.py:106
 msgid "Products in this category are add-on products"
-msgstr ""
+msgstr "此類別中的產品是附加產品"
 
 #: pretix/base/models/items.py:107
 msgid ""
@@ -3779,7 +3779,7 @@ msgstr "如果選擇，則屬於此類別的產品不會單獨銷售。它們只
 #: pretix/control/templates/pretixcontrol/items/categories.html:5
 #: pretix/control/templates/pretixcontrol/items/categories.html:33
 msgid "Product categories"
-msgstr ""
+msgstr "產品類別"
 
 #: pretix/base/models/items.py:120
 #, python-brace-format
