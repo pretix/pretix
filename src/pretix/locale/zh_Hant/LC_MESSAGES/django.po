@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
-"PO-Revision-Date: 2023-05-19 07:23+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2023-05-19 07:28+0000\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -3650,41 +3650,42 @@ msgid ""
 "This field will be shown to filter events or reports in the backend, and it "
 "can also be used for hidden filter parameters in the frontend (e.g. using "
 "the widget)."
-msgstr ""
+msgstr "此欄位將顯示以篩選後端中的活動或報告，也可用於前端中的隱藏過濾器參數（例如使"
+"用小組件）。"
 
 #: pretix/base/models/event.py:1642
 msgid "A property can either be required or have a default value, not both."
-msgstr ""
+msgstr "可以是必需的屬性，也可以是預設值，不能同時具有兩者。"
 
 #: pretix/base/models/event.py:1644
 msgid "You cannot set a default value that is not a valid value."
-msgstr ""
+msgstr "不能設定無效的預設值。"
 
 #: pretix/base/models/event.py:1719 pretix/base/models/organizer.py:485
 msgid "Link text"
-msgstr ""
+msgstr "連結文件"
 
 #: pretix/base/models/event.py:1722 pretix/base/models/organizer.py:488
 msgid "Link URL"
-msgstr ""
+msgstr "連結 URL"
 
 #: pretix/base/models/exports.py:41 pretix/control/navigation.py:227
 #: pretix/control/navigation.py:617
 msgid "Export"
-msgstr ""
+msgstr "輸出"
 
 #: pretix/base/models/exports.py:58
 msgid "Additional recipients"
-msgstr ""
+msgstr "其他收件者"
 
 #: pretix/base/models/exports.py:60 pretix/base/models/exports.py:65
 #: pretix/base/models/exports.py:70
 msgid "You can specify multiple recipients separated by commas."
-msgstr ""
+msgstr "你可以指定多個收件者，以逗號分隔。"
 
 #: pretix/base/models/exports.py:63
 msgid "Additional recipients (Cc)"
-msgstr ""
+msgstr "Additional recipients (附件抄送)"
 
 #: pretix/base/models/exports.py:68
 msgid "Additional recipients (Bcc)"
