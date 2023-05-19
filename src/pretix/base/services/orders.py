@@ -95,7 +95,8 @@ from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
 from pretix.base.signals import (
     allow_ticket_download, order_approved, order_canceled, order_changed,
     order_denied, order_expired, order_fee_calculation, order_paid,
-    order_placed, order_split, periodic_task, validate_order,
+    order_placed, order_split, order_valid_if_pending, periodic_task,
+    validate_order,
 )
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
@@ -922,7 +923,7 @@ def _get_fees(positions: List[CartPosition], payment_requests: List[dict], addre
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_requests: List[dict], locale: str=None, address: InvoiceAddress=None,
                   meta_info: dict=None, sales_channel: str='web', shown_total=None,
-                  customer=None):
+                  customer=None, valid_if_pending=False):
     payments = []
     sales_channel = get_all_sales_channels()[sales_channel]
 
@@ -950,6 +951,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             require_approval=require_approval,
             sales_channel=sales_channel.identifier,
             customer=customer,
+            valid_if_pending=valid_if_pending,
         )
         if customer:
             order.email_known_to_work = customer.is_verified
@@ -1094,6 +1096,20 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         customer=customer,
     )
 
+    valid_if_pending = False
+    for recv, result in order_valid_if_pending.send(
+            event,
+            payments=payment_requests,
+            email=email,
+            positions=positions,
+            locale=locale,
+            invoice_address=addr,
+            meta_info=meta_info,
+            customer=customer,
+    ):
+        if result:
+            valid_if_pending = True
+
     lockfn = NoLockManager
     locked = False
     if positions.filter(Q(voucher__isnull=False) | Q(expires__lt=now() + timedelta(minutes=2)) | Q(seat__isnull=False)).exists():
@@ -1117,7 +1133,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel, customer=customer)
         order, payment_objs = _create_order(event, email, positions, now_dt, payment_requests,
                                             locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
-                                            shown_total=shown_total, customer=customer)
+                                            shown_total=shown_total, customer=customer, valid_if_pending=valid_if_pending)
         try:
             for p in payment_objs:
                 if p.provider == 'free':
