@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-16 23:00+0000\n"
-"Last-Translator: Moritz Lerch <dev@moritz-lerch.de>\n"
+"PO-Revision-Date: 2023-05-19 12:41+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -21046,6 +21046,8 @@ msgid ""
 "This sum includes canceled orders. For your ticket revenue, look at the "
 "\"order overview\"."
 msgstr ""
+"Diese Summe enthält stornierte Bestellungen. Für Ihren Ticketumsatz "
+"betrachten Sie den \"Bestellüberblick\"."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:5
 #: pretix/control/templates/pretixcontrol/orders/overview.html:16
@@ -21073,6 +21075,12 @@ msgid ""
 "be removed in the future. Use the \"Accounting report\" in the export "
 "section instead."
 msgstr ""
+"Diesen Bericht nach Datum zu filtern wird nicht empfohlen. Die Ergebnisse "
+"können irreführend sein, da dieser Bericht immer nur den aktuellen Zustand "
+"einer Bestellung in Betracht zieht und keine Änderungen, die früher an der "
+"Bestellung passiert sind. Dieser Datumsfilter wird möglicherweise in der "
+"Zukunft entfernt. Nutzen Sie stattdessen den \"Abrechnungsbericht\" im "
+"Exportbereich."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:66
 msgctxt "subevent"
@@ -21619,9 +21627,6 @@ msgstr "Transaktionen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:73
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html:7
-#, fuzzy
-#| msgctxt "alert-messages"
-#| msgid "Information"
 msgid "Information"
 msgstr "Information"
 
@@ -27157,15 +27162,15 @@ msgstr ""
 "Dieses Plugin erlaubt, die pretixdroid- und pretixdesk-Apps zu verwenden."
 
 #: pretix/plugins/reports/accountingreport.py:57
-#, fuzzy
-#| msgid "Account information"
 msgid "Accounting report"
-msgstr "Konto-Informationen"
+msgstr "Abrechnungsbericht"
 
 #: pretix/plugins/reports/accountingreport.py:59
 msgid ""
 "Download a PDF report of all sales and payments within a given time frame."
 msgstr ""
+"PDF-Bericht mit allen Verkaufs- und Zahlungsvorgängen eines bestimmten "
+"Zeitraums."
 
 #: pretix/plugins/reports/accountingreport.py:61
 #: pretix/plugins/reports/exporters.py:246
@@ -27174,21 +27179,18 @@ msgid "Analysis"
 msgstr "Analyse"
 
 #: pretix/plugins/reports/accountingreport.py:81
-#, fuzzy
-#| msgid "Show all test mode orders"
 msgid "Ignore test mode orders"
-msgstr "Alle Testbestellungen anzeigen"
+msgstr "Testmodus-Bestellungen ignorieren"
 
 #: pretix/plugins/reports/accountingreport.py:117
-#, fuzzy
-#| msgctxt "timeframe"
-#| msgid "End"
 msgid "End"
 msgstr "Ende"
 
 #: pretix/plugins/reports/accountingreport.py:128
 msgid "Report includes test orders which may be deleted later!"
 msgstr ""
+"Der Bericht enthält Testbestellungen, die später wieder gelöscht werden "
+"könnten!"
 
 #: pretix/plugins/reports/accountingreport.py:133
 msgid ""
@@ -27197,39 +27199,34 @@ msgid ""
 "might therefore be inaccurate with regards to orders that were changed in "
 "the time frame."
 msgstr ""
+"Der Berichtszeitraum enthält Daten, die mit einer alten Softwareversion "
+"erstellt wurden, die noch nicht alle Daten gespeichert hat, die nötig sind "
+"um diesen Bericht zu erstellen. Der Bericht könnte daher Ungenauigkeiten in "
+"Bezug auf Bestellungen haben, die in diesem Zeitraum verändert wurden."
 
 #: pretix/plugins/reports/accountingreport.py:230
-#, fuzzy
-#| msgid "Total"
 msgid "Tax total"
-msgstr "Gesamt"
+msgstr "Steuersumme"
 
 #: pretix/plugins/reports/accountingreport.py:231
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Gross value"
 msgid "Gross total"
-msgstr "Brutto"
+msgstr "Gesamt (brutto)"
 
 #: pretix/plugins/reports/accountingreport.py:575
 #: pretix/plugins/reports/accountingreport.py:625
-#, fuzzy, python-brace-format
-#| msgid "Extend payment term"
+#, python-brace-format
 msgid "Pending payments at {datetime}"
-msgstr "Zahlungsfrist verändern"
+msgstr "Ausstehende Zahlungen am {datetime}"
 
 #: pretix/plugins/reports/accountingreport.py:682
 #: pretix/plugins/reports/accountingreport.py:710
-#, fuzzy, python-brace-format
-#| msgid "Could not parse {value} as a date and time."
+#, python-brace-format
 msgid "Total gift card value at {datetime}"
-msgstr "Konnte {value} nicht als Datum und Zeit erkennen."
+msgstr "Gesamtwert der Wertgutscheine am {datetime}"
 
 #: pretix/plugins/reports/accountingreport.py:786
-#, fuzzy
-#| msgid "Ordered items"
 msgid "Open items"
-msgstr "Bestellte Produkte"
+msgstr "Offene Posten"
 
 #: pretix/plugins/reports/apps.py:44 pretix/plugins/reports/apps.py:47
 msgid "Report exporter"
@@ -27240,9 +27237,7 @@ msgid "Generate printable reports about your sales."
 msgstr "Erstellen Sie ausdruckbare Berichte über Ihre Verkaufszahlen."
 
 #: pretix/plugins/reports/exporters.py:97
-#, fuzzy, python-format
-#| msgctxt "invoice"
-#| msgid "Page %d of %d"
+#, python-format
 msgid "Page %d of %d"
 msgstr "Seite %d von %d"
 
