@@ -304,8 +304,7 @@ multiple events. Receivers should return a subclass of pretix.base.exporter.Base
 The ``sender`` keyword argument will contain an organizer.
 """
 
-validate_order = EventPluginSignal(
-)
+validate_order = EventPluginSignal()
 """
 Arguments: ``payments``, ``positions``, ``email``, ``locale``, ``invoice_address``,
 ``meta_info``, ``customer``
@@ -319,6 +318,18 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 
 **DEPRECTATION:** Stop listening to the ``payment_provider`` attribute, it will be removed
 in the future, as the ``payments`` attribute gives more information.
+"""
+
+order_valid_if_pending = EventPluginSignal()
+"""
+Arguments: ``payments``, ``positions``, ``email``, ``locale``, ``invoice_address``,
+``meta_info``, ``customer``
+
+This signal is sent out when the user tries to confirm the order, before we actually create
+the order. It allows you to set the ``valid_if_pending`` of the order even before it is
+created. Whenever any plugin returns ``True``, the order will be valid if pending.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
 validate_cart = EventPluginSignal()
