@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-11 15:20+0000\n"
-"PO-Revision-Date: 2023-05-19 08:05+0000\n"
+"PO-Revision-Date: 2023-05-19 11:24+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -3784,33 +3784,33 @@ msgstr "產品類別"
 #: pretix/base/models/items.py:120
 #, python-brace-format
 msgid "{category} (Add-On products)"
-msgstr ""
+msgstr "{category}（附加產品）"
 
 #: pretix/base/models/items.py:171 pretix/base/models/items.py:227
 msgid "Disable product for this date"
-msgstr ""
+msgstr "禁用此日期的商品"
 
 #: pretix/base/models/items.py:175 pretix/base/models/items.py:231
 #: pretix/base/models/items.py:479
 msgid "This product will not be sold before the given date."
-msgstr ""
+msgstr "本商品不會在給定日期之前出售。"
 
 #: pretix/base/models/items.py:180 pretix/base/models/items.py:236
 #: pretix/base/models/items.py:484
 msgid "This product will not be sold after the given date."
-msgstr ""
+msgstr "本產品在給定日期后將不出售。"
 
 #: pretix/base/models/items.py:369
 msgid "Event validity (default)"
-msgstr ""
+msgstr "事件有效性（預設值）"
 
 #: pretix/base/models/items.py:370
 msgid "Fixed time frame"
-msgstr ""
+msgstr "固定時間範圍"
 
 #: pretix/base/models/items.py:371
 msgid "Dynamic validity"
-msgstr ""
+msgstr "動態有效性"
 
 #: pretix/base/models/items.py:378 pretix/base/models/items.py:660
 msgid "Don't use re-usable media, use regular one-off tickets"
