@@ -6303,7 +6303,7 @@ msgstr "範例城市"
 
 #: pretix/base/pdf.py:350
 msgid "Invoice address state"
-msgstr ""
+msgstr "發票地址的州"
 
 #: pretix/base/pdf.py:351
 msgid "Sample State"
