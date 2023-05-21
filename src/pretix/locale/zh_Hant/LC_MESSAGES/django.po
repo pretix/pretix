@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-21 08:45+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"PO-Revision-Date: 2023-05-21 08:47+0000\n"
+"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6136,23 +6136,23 @@ msgstr "123.45歐元"
 
 #: pretix/base/pdf.py:158
 msgid "Price including add-ons"
-msgstr ""
+msgstr "費用包括附加費"
 
 #: pretix/base/pdf.py:172
 #: pretix/control/templates/pretixcontrol/order/index.html:542
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:186
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:189
 msgid "Attendee company"
-msgstr ""
+msgstr "參與者公司"
 
 #: pretix/base/pdf.py:173 pretix/base/pdf.py:331
 #: pretix/base/services/tickets.py:117 pretix/control/views/pdf.py:110
 msgid "Sample company"
-msgstr ""
+msgstr "範例公司"
 
 #: pretix/base/pdf.py:177
 msgid "Full attendee address"
-msgstr ""
+msgstr "完整參與者地址"
 
 #: pretix/base/pdf.py:178
 msgid ""
@@ -6162,26 +6162,31 @@ msgid ""
 "12345 Any City\n"
 "Atlantis"
 msgstr ""
+"王小明\n"
+"範例公司\n"
+"台北市\n"
+"中正區\n"
+"中正路42號"
 
 #: pretix/base/pdf.py:182
 msgid "Attendee street"
-msgstr ""
+msgstr "參與者所在街道"
 
 #: pretix/base/pdf.py:187
 msgid "Attendee ZIP code"
-msgstr ""
+msgstr "參與者所在郵遞區號"
 
 #: pretix/base/pdf.py:192
 msgid "Attendee city"
-msgstr ""
+msgstr "參與者所在城市"
 
 #: pretix/base/pdf.py:197
 msgid "Attendee state"
-msgstr ""
+msgstr "參與者所在的州"
 
 #: pretix/base/pdf.py:202
 msgid "Attendee country"
-msgstr ""
+msgstr "參與者所在的國家"
 
 #: pretix/base/pdf.py:214
 msgid "Pseudonymization ID (lead scanning)"
