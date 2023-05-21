@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-21 08:48+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"PO-Revision-Date: 2023-05-21 08:49+0000\n"
+"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6206,7 +6206,7 @@ msgstr "活動日期區間"
 
 #: pretix/base/pdf.py:235
 msgid "May 31st – June 4th, 2017"
-msgstr ""
+msgstr "2017年5月31日-6月4日"
 
 #: pretix/base/pdf.py:239
 msgid "Event begin date and time"
