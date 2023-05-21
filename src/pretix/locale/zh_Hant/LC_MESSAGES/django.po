@@ -6299,7 +6299,7 @@ msgstr "12345"
 
 #: pretix/base/pdf.py:346 pretix/base/services/invoices.py:469
 msgid "Sample city"
-msgstr ""
+msgstr "範例城市"
 
 #: pretix/base/pdf.py:350
 msgid "Invoice address state"
