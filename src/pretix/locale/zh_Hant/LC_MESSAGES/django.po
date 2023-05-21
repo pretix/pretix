@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-21 08:52+0000\n"
+"PO-Revision-Date: 2023-05-21 08:53+0000\n"
 "Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -6307,15 +6307,15 @@ msgstr "發票地址的州"
 
 #: pretix/base/pdf.py:351
 msgid "Sample State"
-msgstr ""
+msgstr "範例的州"
 
 #: pretix/base/pdf.py:356
 msgid "Atlantis"
-msgstr ""
+msgstr "台北市"
 
 #: pretix/base/pdf.py:360
 msgid "List of Add-Ons"
-msgstr ""
+msgstr "外掛清單"
 
 #: pretix/base/pdf.py:361
 msgid ""
