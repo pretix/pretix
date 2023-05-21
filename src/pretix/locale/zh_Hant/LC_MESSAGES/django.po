@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
 "PO-Revision-Date: 2023-05-21 08:51+0000\n"
-"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6236,7 +6236,7 @@ msgstr "20:00"
 
 #: pretix/base/pdf.py:260
 msgid "Event begin weekday"
-msgstr "活動開始的星期幾"
+msgstr "活動從工作日開始"
 
 #: pretix/base/pdf.py:261 pretix/base/pdf.py:290
 #: pretix/base/services/checkin.py:263 pretix/control/forms/filter.py:1123
@@ -6257,7 +6257,7 @@ msgstr "22:00"
 
 #: pretix/base/pdf.py:289
 msgid "Event end weekday"
-msgstr "活動結束的星期幾"
+msgstr "活動在工作日結束"
 
 #: pretix/base/pdf.py:294
 msgid "Event admission date and time"
