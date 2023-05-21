@@ -6353,11 +6353,11 @@ msgstr "印刷日期"
 
 #: pretix/base/pdf.py:395
 msgid "Printing date and time"
-msgstr ""
+msgstr "印刷日期與時間"
 
 #: pretix/base/pdf.py:403
 msgid "Printing time"
-msgstr ""
+msgstr "印刷時間"
 
 #: pretix/base/pdf.py:411
 msgid "Validity start date"
