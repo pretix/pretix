@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
 "PO-Revision-Date: 2023-05-21 08:59+0000\n"
-"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6422,11 +6422,11 @@ msgstr "第一掃描的日期與時間"
 
 #: pretix/base/pdf.py:492
 msgid "Gift card: Issuance date"
-msgstr "禮物卡：發售日期"
+msgstr "禮品卡：發售日期"
 
 #: pretix/base/pdf.py:497
 msgid "Gift card: Expiration date"
-msgstr "禮物卡：失效日期"
+msgstr "禮品卡：失效日期"
 
 #: pretix/base/pdf.py:538 pretix/base/pdf.py:576 pretix/base/pdf.py:582
 #: pretix/plugins/badges/exporters.py:324
