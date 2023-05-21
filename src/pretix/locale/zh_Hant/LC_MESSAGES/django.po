@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-21 08:49+0000\n"
+"PO-Revision-Date: 2023-05-21 08:50+0000\n"
 "Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -6228,11 +6228,11 @@ msgstr "2017-05-31"
 
 #: pretix/base/pdf.py:255
 msgid "Event begin time"
-msgstr ""
+msgstr "活動開始時間"
 
 #: pretix/base/pdf.py:256
 msgid "20:00"
-msgstr ""
+msgstr "20:00"
 
 #: pretix/base/pdf.py:260
 msgid "Event begin weekday"
