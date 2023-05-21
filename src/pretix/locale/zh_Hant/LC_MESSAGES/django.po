@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
 "PO-Revision-Date: 2023-05-21 09:14+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6471,7 +6471,7 @@ msgstr "票"
 
 #: pretix/base/pdf.py:1082
 msgid "Your layout file is not a valid layout. Error message: {}"
-msgstr ""
+msgstr "你的樣式檔案並非有效樣式。錯誤訊息：{}"
 
 #: pretix/base/reldate.py:35
 msgid "Event start"
@@ -6487,31 +6487,31 @@ msgstr "活動管理"
 
 #: pretix/base/reldate.py:38
 msgid "Presale start"
-msgstr ""
+msgstr "預購開始"
 
 #: pretix/base/reldate.py:39
 msgid "Presale end"
-msgstr ""
+msgstr "預購結束"
 
 #: pretix/base/reldate.py:208 pretix/base/reldate.py:321
 msgid "Fixed date:"
-msgstr ""
+msgstr "固定日期："
 
 #: pretix/base/reldate.py:209 pretix/base/reldate.py:322
 msgid "Relative date:"
-msgstr ""
+msgstr "相關日期："
 
 #: pretix/base/reldate.py:210
 msgid "Relative time:"
-msgstr ""
+msgstr "相關時間："
 
 #: pretix/base/reldate.py:218 pretix/base/reldate.py:325
 msgid "Not set"
-msgstr ""
+msgstr "還沒有確定"
 
 #: pretix/base/secrets.py:119
 msgid "Random (default, works with all pretix apps)"
-msgstr ""
+msgstr "隨機 (預設，能在所有 pretix app 作用)"
 
 #: pretix/base/secrets.py:150
 msgid ""
