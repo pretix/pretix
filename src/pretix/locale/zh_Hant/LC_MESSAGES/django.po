@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-21 08:47+0000\n"
+"PO-Revision-Date: 2023-05-21 08:48+0000\n"
 "Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -6190,19 +6190,19 @@ msgstr "參與者所在的國家"
 
 #: pretix/base/pdf.py:214
 msgid "Pseudonymization ID (lead scanning)"
-msgstr ""
+msgstr "暱名化的編號 (主要在掃描時)"
 
 #: pretix/base/pdf.py:220 pretix/base/pdf.py:225
 msgid "Sample event name"
-msgstr ""
+msgstr "活動名稱範例"
 
 #: pretix/base/pdf.py:230
 msgid "May 31st, 2017"
-msgstr ""
+msgstr "2017年5月31日"
 
 #: pretix/base/pdf.py:234
 msgid "Event date range"
-msgstr ""
+msgstr "活動日期區間"
 
 #: pretix/base/pdf.py:235
 msgid "May 31st – June 4th, 2017"
