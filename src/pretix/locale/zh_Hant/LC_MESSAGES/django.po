@@ -6322,8 +6322,8 @@ msgid ""
 "Add-on 1\n"
 "Add-on 2"
 msgstr ""
-"外掛1\n"
-"外掛2"
+"附加1\n"
+"附加2"
 
 #: pretix/base/pdf.py:372 pretix/control/forms/filter.py:1264
 #: pretix/control/forms/filter.py:1266
