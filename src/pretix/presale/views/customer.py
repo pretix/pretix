@@ -626,7 +626,7 @@ class SSOLoginView(RedirectBackMixin, View):
         })
 
         if self.provider.method == "oidc":
-            return redirect_to_url(oidc_authorize_url(self.provider, f'{nonce}§{next_url}', redirect_uri))
+            return redirect_to_url(oidc_authorize_url(self.provider, f'{nonce}%{next_url}', redirect_uri))
         else:
             raise Http404("Unknown SSO method.")
 
@@ -685,7 +685,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                     popup_origin,
                 )
 
-            nonce, redirect_to = re.split("[#§]", request.GET['state'])  # Allow # for backwards-compatibility for a while
+            nonce, redirect_to = re.split("[%#§]", request.GET['state'], 1)  # Allow § and # for backwards-compatibility for a while
 
             if nonce != request.session.get(f'pretix_customerauth_{self.provider.pk}_nonce'):
                 return self._fail(

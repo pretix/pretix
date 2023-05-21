@@ -7,6 +7,10 @@ setup_collapsible_details = function (el) {
             return true;
         }
         var $details = $(this).closest("details");
+        if ($details.hasClass('sneak-peek')) {
+            // if sneak-peek is active, needs to be handled differently
+            return true;
+        }
         var isOpen = $details.prop("open");
         var $detailsNotSummary = $details.children(':not(summary)');
         if ($detailsNotSummary.is(':animated')) {
@@ -27,6 +31,10 @@ setup_collapsible_details = function (el) {
         e.preventDefault();
         return false;
     }).keyup(function (event) {
+        if ($details.hasClass('sneak-peek')) {
+            // if sneak-peek is active, needs to be handled differently
+            return true;
+        }
         if (32 == event.keyCode || (13 == event.keyCode && !isOpera)) {
             // Space or Enter is pressed — trigger the `click` event on the `summary` element
             // Opera already seems to trigger the `click` event when Enter is pressed

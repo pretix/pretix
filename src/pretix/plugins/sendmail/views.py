@@ -330,6 +330,8 @@ class OrderSendView(BaseSenderView):
             initial['created_to'] = dateutil.parser.parse(logentry.parsed_data['created_to'])
         if logentry.parsed_data.get('attach_tickets'):
             initial['attach_tickets'] = logentry.parsed_data['attach_tickets']
+        if logentry.parsed_data.get('attach_ical'):
+            initial['attach_ical'] = logentry.parsed_data['attach_ical']
         if logentry.parsed_data.get('subevent'):
             try:
                 initial['subevent'] = self.request.event.subevents.get(
@@ -359,7 +361,7 @@ class OrderSendView(BaseSenderView):
                     item_id__in=[i.pk for i in form.cleaned_data.get('items')]
                 )
             )),
-            order=OuterRef('pk'),
+            order__event=self.request.event,
             canceled=False,
         )
 
@@ -405,7 +407,9 @@ class OrderSendView(BaseSenderView):
         if form.cleaned_data.get('created_to'):
             opq = opq.filter(order__datetime__lt=form.cleaned_data.get('created_to'))
 
-        return orders.annotate(match_pos=Exists(opq)).filter(match_pos=True).distinct()
+        # pk__in turns out to be faster than Exists(subquery) in many cases since we often filter on a large subset
+        # of orderpositions
+        return orders.filter(pk__in=opq.values_list('order_id'))
 
     def describe_match_size(self, cnt):
         return ngettext(
@@ -425,6 +429,7 @@ class OrderSendView(BaseSenderView):
             'checkin_lists': [i.pk for i in form.cleaned_data.get('checkin_lists')],
             'filter_checkins': form.cleaned_data.get('filter_checkins'),
             'attach_tickets': form.cleaned_data.get('attach_tickets'),
+            'attach_ical': form.cleaned_data.get('attach_ical'),
         })
         return kwargs
 

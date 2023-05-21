@@ -1,0 +1,24 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load money %}
+{% load eventurl %}
+{% load l10n %}
+{% load rich_text %}
+{% block title %}{% trans "Gift card" %}{% endblock %}
+{% block content %}
+    <h2>
+        {% blocktrans trimmed with code=giftcard.secret %}
+            Gift card: {{ code }}
+        {% endblocktrans %}
+        <a href="{% eventurl request.event "presale:event.order.position" secret=position.web_secret order=order.code position=position.positionid %}"
+           class="btn btn-default btn-sm btn-link">
+            <span class="fa fa-caret-left"></span>
+            {% trans "Back" %}
+        </a>
+    </h2>
+    <p>
+        <strong>{% trans "Current value:" %} {{ giftcard.value|money:giftcard.currency }}</strong>
+    </p>
+    <h3>{% trans "Transaction history" %}</h3>
+    {% include "pretixpresale/event/fragment_giftcard_history.html" %}
+{% endblock %}

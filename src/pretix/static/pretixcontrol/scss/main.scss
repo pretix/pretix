@@ -101,6 +101,16 @@ nav.navbar .danger, nav.navbar .danger:hover, nav.navbar .danger:active {
     }
 }
 
+.product-row-giftcard {
+    border-radius: $border-radius-base;
+    padding: 10px 1.4em;
+    margin: 0 0 5px 1.4em;
+    background: $panel-footer-bg;
+    code {
+        color: $text-color;
+    }
+}
+
 h1 .btn-sm {
     margin-top: -5px;
 }

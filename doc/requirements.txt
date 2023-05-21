@@ -1,11 +1,11 @@
--e ../src/
-sphinx==6.1.*
+-e ../
+sphinx==7.0.*
 jinja2==3.1.*
 sphinx-rtd-theme
 sphinxcontrib-httpdomain
 sphinxcontrib-images
 sphinxcontrib-jquery
-sphinxcontrib-spelling==7.*
+sphinxcontrib-spelling==8.*
 sphinxemoji
 pygments-markdown-lexer
 pyenchant==3.2.*

@@ -104,6 +104,7 @@ $(function () {
 
         $("#valid-date").toggle($("#id_type").val() == "D");
         $("#valid-datetime").toggle($("#id_type").val() == "W");
+        $("#valid-string").toggle($("#id_type").val() == "T" || $("#id_type").val() == "S");
         $("#valid-number").toggle($("#id_type").val() == "N");
         $("#valid-file").toggle($("#id_type").val() == "F");
 

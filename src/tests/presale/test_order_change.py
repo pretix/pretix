@@ -1293,6 +1293,75 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         )
         assert 'alert-danger' in response.content.decode()
 
+    def test_max_per_order_enforced(self):
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '2'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
+        self.workshop2.max_per_order = 2
+        self.workshop2.save()
+        self.iao.multi_allowed = True
+        self.iao.max_count = 10
+        self.iao.save()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '2'
+            },
+            follow=True
+        )
+        assert 'alert-danger' not in response.content.decode()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '3'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
+    def test_min_per_order_enforced(self):
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '2'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
+        self.workshop2.min_per_order = 2
+        self.workshop2.save()
+        self.iao.multi_allowed = True
+        self.iao.max_count = 10
+        self.iao.save()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '2'
+            },
+            follow=True
+        )
+        print(response.content.decode())
+        assert 'alert-danger' not in response.content.decode()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
     def test_allow_user_price_gte(self):
         self.event.settings.change_allow_user_price = 'gte'
         with scopes_disabled():

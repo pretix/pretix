@@ -66,7 +66,7 @@ for app in apps.get_app_configs():
                 single_plugin_patterns.append(re_path(r'^(?P<organizer>[^/]+)/(?P<event>[^/]+)/',
                                                       include(patterns)))
             if hasattr(urlmod, 'organizer_patterns'):
-                patterns = urlmod.organizer_patterns
+                patterns = plugin_event_urls(urlmod.organizer_patterns, plugin=app.name)
                 single_plugin_patterns.append(re_path(r'^(?P<organizer>[^/]+)/',
                                                       include(patterns)))
             raw_plugin_patterns.append(

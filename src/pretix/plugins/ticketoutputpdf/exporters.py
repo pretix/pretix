@@ -229,6 +229,6 @@ class AllTicketsPDF(BaseExporter):
             )
 
         if self.is_multievent:
-            return '{}_tickets.pdf'.format(self.events.first().organizer.slug), 'application/pdf', outbuffer.read()
+            return '{}_tickets.pdf'.format(self.organizer.slug), 'application/pdf', outbuffer.read()
         else:
             return '{}_tickets.pdf'.format(self.event.slug), 'application/pdf', outbuffer.read()

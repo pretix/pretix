@@ -20,7 +20,7 @@ function async_task_check() {
     );
 }
 
-function async_task_check_callback(data, jqXHR, status) {
+function async_task_check_callback(data, textStatus, jqXHR) {
     "use strict";
     if (data.ready && data.redirect) {
         if (async_task_is_download && data.success) {

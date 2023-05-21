@@ -968,6 +968,17 @@ class OrdersTest(BaseOrdersTest):
         )
         assert 'alert-danger' in response.content.decode()
 
+    def test_change_paymentmethod_expired_not_available(self):
+        self.order.status = Order.STATUS_EXPIRED
+        self.order.save()
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
     def test_pay_wrong_payment_state(self):
         with scopes_disabled():
             p = self.order.payments.create(
@@ -990,6 +1001,33 @@ class OrdersTest(BaseOrdersTest):
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/%d/complete' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret,
                                                     p.pk),
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
+    def test_pay_expired_not_available(self):
+        self.order.status = Order.STATUS_EXPIRED
+        self.order.save()
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        with scopes_disabled():
+            p = self.order.payments.create(
+                provider='banktransfer',
+                state=OrderPayment.PAYMENT_STATE_CREATED,
+                amount=Decimal('10.00'),
+            )
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/%d/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret, p.pk),
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/%d/confirm' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret, p.pk),
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/pay/%d/complete' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret, p.pk),
             follow=True
         )
         assert 'alert-danger' in response.content.decode()
@@ -1276,7 +1314,7 @@ class OrdersTest(BaseOrdersTest):
                 amount=Decimal('10.00'),
             )
             gc = self.orga.issued_gift_cards.create(currency="EUR")
-            gc.transactions.create(value=10)
+            gc.transactions.create(value=10, acceptor=self.orga)
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )
@@ -1315,7 +1353,7 @@ class OrdersTest(BaseOrdersTest):
                 amount=Decimal('10.00'),
             )
             gc = self.orga.issued_gift_cards.create(currency="EUR")
-            gc.transactions.create(value=10)
+            gc.transactions.create(value=10, acceptor=self.orga)
             self.ticket.issue_giftcard = True
             self.ticket.save()
         response = self.client.post(
@@ -1330,7 +1368,7 @@ class OrdersTest(BaseOrdersTest):
     def test_change_paymentmethod_giftcard_wrong_currency(self):
         with scopes_disabled():
             gc = self.orga.issued_gift_cards.create(currency="USD")
-            gc.transactions.create(value=10)
+            gc.transactions.create(value=10, acceptor=self.orga)
         response = self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
@@ -1345,7 +1383,7 @@ class OrdersTest(BaseOrdersTest):
             self.order.testmode = True
             self.order.save()
             gc = self.orga.issued_gift_cards.create(currency="EUR")
-            gc.transactions.create(value=10)
+            gc.transactions.create(value=10, acceptor=self.orga)
         response = self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
@@ -1358,7 +1396,7 @@ class OrdersTest(BaseOrdersTest):
     def test_change_paymentmethod_giftcard_not_in_test_mode(self):
         with scopes_disabled():
             gc = self.orga.issued_gift_cards.create(currency="EUR", testmode=True)
-            gc.transactions.create(value=10)
+            gc.transactions.create(value=10, acceptor=self.orga)
         response = self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
@@ -1385,7 +1423,7 @@ class OrdersTest(BaseOrdersTest):
             o = Organizer.objects.create(slug='Foo', name='bar')
             self.orga.issued_gift_cards.create(currency="EUR")
             gc = o.issued_gift_cards.create(currency="EUR")
-            gc.transactions.create(value=10)
+            gc.transactions.create(value=10, acceptor=self.orga)
         response = self.client.post(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
@@ -1403,7 +1441,7 @@ class OrdersTest(BaseOrdersTest):
                 amount=Decimal('10.00'),
             )
             gc = self.orga.issued_gift_cards.create(currency="EUR")
-            gc.transactions.create(value=100)
+            gc.transactions.create(value=100, acceptor=self.orga)
         response = self.client.get(
             '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
         )

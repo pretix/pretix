@@ -39,7 +39,7 @@ from urllib.parse import urlencode, urlparse
 
 from django import forms
 from django.conf import settings
-from django.core.exceptions import ValidationError
+from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.core.validators import MaxValueValidator
 from django.db.models import Prefetch, Q, prefetch_related_objects
 from django.forms import (
@@ -457,7 +457,49 @@ class EventUpdateForm(I18nModelForm):
         }
 
 
-class EventSettingsForm(SettingsForm):
+class EventSettingsValidationMixin:
+
+    def clean(self):
+        data = super().clean()
+        settings_dict = self.obj.settings.freeze()
+        settings_dict.update(data)
+        validate_event_settings(self.obj, settings_dict)
+        return data
+
+    def add_error(self, field, error):
+        # Copied from Django, but with improved handling for validation errors on fields that are not part of this form
+
+        if not isinstance(error, ValidationError):
+            error = ValidationError(error)
+
+        if hasattr(error, 'error_dict'):
+            if field is not None:
+                raise TypeError(
+                    "The argument `field` must be `None` when the `error` "
+                    "argument contains errors for multiple fields."
+                )
+            else:
+                error = error.error_dict
+        else:
+            error = {field or NON_FIELD_ERRORS: error.error_list}
+
+        for field, error_list in error.items():
+            if field != NON_FIELD_ERRORS and field not in self.fields:
+                field = NON_FIELD_ERRORS
+                for e in error_list:
+                    e.message = _('A validation error has occurred on a setting that is not part of this form: {error}').format(error=e.message)
+
+            if field not in self.errors:
+                if field == NON_FIELD_ERRORS:
+                    self._errors[field] = self.error_class(error_class='nonfield')
+                else:
+                    self._errors[field] = self.error_class()
+            self._errors[field].extend(error_list)
+            if field in self.cleaned_data:
+                del self.cleaned_data[field]
+
+
+class EventSettingsForm(EventSettingsValidationMixin, SettingsForm):
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
         label=_("Event timezone"),
@@ -500,6 +542,7 @@ class EventSettingsForm(SettingsForm):
         'waiting_list_phones_asked',
         'waiting_list_phones_required',
         'waiting_list_phones_explanation_text',
+        'waiting_list_limit_per_user',
         'max_items_per_order',
         'reservation_time',
         'contact_mail',
@@ -573,13 +616,8 @@ class EventSettingsForm(SettingsForm):
         return data
 
     def clean(self):
+        self.cleaned_data = self._resolve_virtual_keys_input(self.cleaned_data)
         data = super().clean()
-        data = self._resolve_virtual_keys_input(data)
-
-        settings_dict = self.event.settings.freeze()
-        settings_dict.update(data)
-
-        validate_event_settings(self.event, settings_dict)
         return data
 
     def __init__(self, *args, **kwargs):
@@ -702,7 +740,7 @@ class CancelSettingsForm(SettingsForm):
             ).format(self.obj.settings.giftcard_expiry_years)
 
 
-class PaymentSettingsForm(SettingsForm):
+class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
     auto_fields = [
         'payment_term_mode',
         'payment_term_days',
@@ -733,13 +771,6 @@ class PaymentSettingsForm(SettingsForm):
         if self.cleaned_data.get('payment_term_mode') == 'minutes' and value is None:
             raise ValidationError(_("This field is required."))
         return value
-
-    def clean(self):
-        data = super().clean()
-        settings_dict = self.obj.settings.freeze()
-        settings_dict.update(data)
-        validate_event_settings(self.obj, settings_dict)
-        return data
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -788,7 +819,7 @@ class ProviderForm(SettingsForm):
         return cleaned_data
 
 
-class InvoiceSettingsForm(SettingsForm):
+class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
 
     auto_fields = [
         'invoice_address_asked',
@@ -825,6 +856,7 @@ class InvoiceSettingsForm(SettingsForm):
         'invoice_footer_text',
         'invoice_eu_currencies',
         'invoice_logo_image',
+        'invoice_renderer_highlight_order_code',
     ]
 
     invoice_generate_sales_channels = forms.MultipleChoiceField(
@@ -862,13 +894,6 @@ class InvoiceSettingsForm(SettingsForm):
             (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
         )
         self.fields['invoice_numbers_counter_length'].validators.append(MaxValueValidator(15))
-
-    def clean(self):
-        data = super().clean()
-        settings_dict = self.obj.settings.freeze()
-        settings_dict.update(data)
-        validate_event_settings(self.obj, settings_dict)
-        return data
 
 
 def contains_web_channel_validate(val):
@@ -1168,6 +1193,24 @@ class MailSettingsForm(SettingsForm):
         help_text=_("This will only be sent out for non-free orders. Free orders will receive the free order "
                     "template from below instead."),
     )
+    mail_send_order_approved_attendee = forms.BooleanField(
+        label=_("Send an email to attendees"),
+        help_text=_('If the order contains attendees with email addresses different from the person who orders the '
+                    'tickets, the following email will be sent out to the attendees.'),
+        required=False,
+    )
+    mail_subject_order_approved_attendee = I18nFormField(
+        label=_("Subject sent to attendees"),
+        required=False,
+        widget=I18nTextInput,
+    )
+    mail_text_order_approved_attendee = I18nFormField(
+        label=_("Text sent to attendees"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("This will only be sent out for non-free orders. Free orders will receive the free order "
+                    "template from below instead."),
+    )
     mail_subject_order_approved_free = I18nFormField(
         label=_("Subject for approved free order"),
         required=False,
@@ -1175,6 +1218,24 @@ class MailSettingsForm(SettingsForm):
     )
     mail_text_order_approved_free = I18nFormField(
         label=_("Text for approved free order"),
+        required=False,
+        widget=I18nTextarea,
+        help_text=_("This will only be sent out for free orders. Non-free orders will receive the non-free order "
+                    "template from above instead."),
+    )
+    mail_send_order_approved_free_attendee = forms.BooleanField(
+        label=_("Send an email to attendees"),
+        help_text=_('If the order contains attendees with email addresses different from the person who orders the '
+                    'tickets, the following email will be sent out to the attendees.'),
+        required=False,
+    )
+    mail_subject_order_approved_free_attendee = I18nFormField(
+        label=_("Subject sent to attendees"),
+        required=False,
+        widget=I18nTextInput,
+    )
+    mail_text_order_approved_free_attendee = I18nFormField(
+        label=_("Text sent to attendees"),
         required=False,
         widget=I18nTextarea,
         help_text=_("This will only be sent out for free orders. Non-free orders will receive the non-free order "
@@ -1411,6 +1472,7 @@ class TaxRuleForm(I18nModelForm):
 class WidgetCodeForm(forms.Form):
     subevent = forms.ModelChoiceField(
         label=pgettext_lazy('subevent', "Date"),
+        empty_label=pgettext_lazy('subevent', "All dates"),
         required=False,
         queryset=SubEvent.objects.none()
     )

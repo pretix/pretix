@@ -1,0 +1,48 @@
+include LICENSE
+include README.rst
+include src/Makefile
+include _build/backend.py
+global-include *.proto
+recursive-include src/pretix/static *
+recursive-include src/pretix/static.dist *
+recursive-include src/pretix/locale *
+recursive-include src/pretix/helpers/locale *
+recursive-include src/pretix/base/templates *
+recursive-include src/pretix/control/templates *
+recursive-include src/pretix/presale/templates *
+recursive-include src/pretix/plugins/banktransfer/templates *
+recursive-include src/pretix/plugins/banktransfer/static *
+recursive-include src/pretix/plugins/manualpayment/templates *
+recursive-include src/pretix/plugins/manualpayment/static *
+recursive-include src/pretix/plugins/paypal/templates *
+recursive-include src/pretix/plugins/paypal/static *
+recursive-include src/pretix/plugins/paypal2/templates *
+recursive-include src/pretix/plugins/paypal2/static *
+recursive-include src/pretix/plugins/src/pretixdroid/templates *
+recursive-include src/pretix/plugins/src/pretixdroid/static *
+recursive-include src/pretix/plugins/sendmail/templates *
+recursive-include src/pretix/plugins/statistics/templates *
+recursive-include src/pretix/plugins/statistics/static *
+recursive-include src/pretix/plugins/stripe/templates *
+recursive-include src/pretix/plugins/stripe/static *
+recursive-include src/pretix/plugins/ticketoutputpdf/templates *
+recursive-include src/pretix/plugins/ticketoutputpdf/static *
+recursive-include src/pretix/plugins/badges/templates *
+recursive-include src/pretix/plugins/badges/static *
+recursive-include src/pretix/plugins/returnurl/templates *
+recursive-include src/pretix/plugins/returnurl/static *
+recursive-include src/pretix/plugins/webcheckin/templates *
+recursive-include src/pretix/plugins/webcheckin/static *
+recursive-include src *.cfg
+recursive-include src *.csv
+recursive-include src *.gitkeep
+recursive-include src *.jpg
+recursive-include src *.json
+recursive-include src *.py
+recursive-include src *.svg
+recursive-include src *.txt
+recursive-include src Makefile
+
+recursive-exclude doc *
+recursive-exclude deployment *
+recursive-exclude res *

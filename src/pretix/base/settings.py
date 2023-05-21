@@ -594,6 +594,7 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Minimum length of invoice number after prefix"),
             help_text=_("The part of your invoice number after your prefix will be filled up with leading zeros up to this length, e.g. INV-001 or INV-00001."),
+            max_value=12,
             required=True,
         )
     },
@@ -631,6 +632,16 @@ DEFAULTS = {
             label=_("Invoice number prefix for cancellations"),
             help_text=_("This will be prepended to invoice numbers of cancellations. If you leave this field empty, "
                         "the same numbering scheme will be used that you configured for regular invoices."),
+        )
+    },
+    'invoice_renderer_highlight_order_code': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Highlight order code to make it stand out visibly"),
+            help_text=_("Only respected by some invoice renderers."),
         )
     },
     'invoice_renderer': {
@@ -1329,6 +1340,21 @@ DEFAULTS = {
             help_text=_("If you ask for a phone number, explain why you do so and what you will use the phone number for.")
         )
     },
+    'waiting_list_limit_per_user': {
+        'default': '1',
+        'type': int,
+        'serializer_class': serializers.IntegerField,
+        'form_class': forms.IntegerField,
+        'serializer_kwargs': dict(
+            min_value=1,
+        ),
+        'form_kwargs': dict(
+            label=_("Maximum number of entries per email address for the same product"),
+            min_value=1,
+            required=True,
+            widget=forms.NumberInput(),
+        )
+    },
     'show_checkin_number_user': {
         'default': 'False',
         'type': bool,
@@ -1371,9 +1397,10 @@ DEFAULTS = {
         'serializer_class': serializers.BooleanField,
         'form_class': forms.BooleanField,
         'form_kwargs': dict(
-            label=_("Generate tickets for add-on products"),
-            help_text=_('By default, tickets are only issued for products selected individually, not for add-on '
-                        'products. With this option, a separate ticket is issued for every add-on product as well.'),
+            label=_("Generate tickets for add-on products and bundled products"),
+            help_text=_('By default, tickets are only issued for products selected individually, not for add-on products '
+                        'or bundled products. With this option, a separate ticket is issued for every add-on product '
+                        'or bundled product as well.'),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_ticket_download',
                                               'data-checkbox-dependency-visual': 'on'}),
         )
@@ -2276,6 +2303,26 @@ You can select a payment method and perform the payment here:
 Best regards,
 Your {event} team"""))
     },
+    'mail_send_order_approved_attendee': {
+        'type': bool,
+        'default': 'False'
+    },
+    'mail_subject_order_approved_attendee': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your event registration: {code}")),
+    },
+    'mail_text_order_approved_attendee': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+we approved a ticket ordered for you for {event}.
+
+You can view the details and status of your ticket here:
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
     'mail_subject_order_approved_free': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("Order approved and confirmed: {code}")),
@@ -2288,6 +2335,26 @@ we approved your order for {event} and will be happy to welcome you
 at our event. As you only ordered free products, no payment is required.
 
 You can change your order details and view the status of your order at
+{url}
+
+Best regards,
+Your {event} team"""))
+    },
+    'mail_send_order_approved_free_attendee': {
+        'type': bool,
+        'default': 'False'
+    },
+    'mail_subject_order_approved_free_attendee': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Your event registration: {code}")),
+    },
+    'mail_text_order_approved_free_attendee': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+we approved a ticket ordered for you for {event}.
+
+You can view the details and status of your ticket here:
 {url}
 
 Best regards,
@@ -2549,6 +2616,15 @@ Your {organizer} team"""))
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_("Use round edges"),
+        )
+    },
+    'widget_use_native_spinners': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Use native spinners in the widget instead of custom ones for numeric inputs such as quantity."),
         )
     },
     'primary_font': {
@@ -3278,6 +3354,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('full_name', _('Full name'), 2),
         ),
         'concatenation': lambda d: str(d.get('full_name', '')),
+        'concatenation_all_components': lambda d: str(d.get('full_name', '')) + " (\"" + d.get('calling_name', '') + "\")",
         'sample': {
             'full_name': pgettext_lazy('person_name_sample', 'John Doe'),
             'calling_name': pgettext_lazy('person_name_sample', 'John'),
@@ -3290,6 +3367,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('latin_transcription', _('Latin transcription'), 2),
         ),
         'concatenation': lambda d: str(d.get('full_name', '')),
+        'concatenation_all_components': lambda d: str(d.get('full_name', '')) + " (" + d.get('latin_transcription', '') + ")",
         'sample': {
             'full_name': '庄司',
             'latin_transcription': 'Shōji',
@@ -3306,6 +3384,9 @@ PERSON_NAME_SCHEMES = OrderedDict([
             str(p) for p in (d.get(key, '') for key in ["given_name", "family_name"]) if p
         ),
         'concatenation_for_salutation': concatenation_for_salutation,
+        'concatenation_all_components': lambda d: ' '.join(
+            str(p) for p in (get_name_parts_localized(d, key) for key in ["salutation", "given_name", "family_name"]) if p
+        ),
         'sample': {
             'salutation': pgettext_lazy('person_name_sample', 'Mr'),
             'given_name': pgettext_lazy('person_name_sample', 'John'),
@@ -3324,6 +3405,9 @@ PERSON_NAME_SCHEMES = OrderedDict([
             str(p) for p in (d.get(key, '') for key in ["title", "given_name", "family_name"]) if p
         ),
         'concatenation_for_salutation': concatenation_for_salutation,
+        'concatenation_all_components': lambda d: ' '.join(
+            str(p) for p in (get_name_parts_localized(d, key) for key in ["salutation", "title", "given_name", "family_name"]) if p
+        ),
         'sample': {
             'salutation': pgettext_lazy('person_name_sample', 'Mr'),
             'title': pgettext_lazy('person_name_sample', 'Dr'),
@@ -3348,6 +3432,13 @@ PERSON_NAME_SCHEMES = OrderedDict([
             str(d.get('degree', ''))
         ),
         'concatenation_for_salutation': concatenation_for_salutation,
+        'concatenation_all_components': lambda d: (
+            ' '.join(
+                str(p) for p in (get_name_parts_localized(d, key) for key in ["salutation", "title", "given_name", "family_name"]) if p
+            ) +
+            str((', ' if d.get('degree') else '')) +
+            str(d.get('degree', ''))
+        ),
         'sample': {
             'salutation': pgettext_lazy('person_name_sample', 'Mr'),
             'title': pgettext_lazy('person_name_sample', 'Dr'),

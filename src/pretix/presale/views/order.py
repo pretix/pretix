@@ -57,7 +57,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
-from django.views.generic import TemplateView, View
+from django.views.generic import ListView, TemplateView, View
 
 from pretix.base.models import (
     CachedTicket, Checkin, GiftCard, Invoice, Order, OrderPosition, Quota,
@@ -241,7 +241,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        qs = self.order.positions.prefetch_related('issued_gift_cards').select_related('tax_rule')
+        qs = self.order.positions.prefetch_related('issued_gift_cards', 'owned_gift_cards').select_related('tax_rule')
         if self.request.event.settings.show_checkin_number_user:
             qs = qs.annotate(
                 checkin_count=Subquery(
@@ -456,7 +456,7 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
         self.request = request
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED or not self.order._can_be_paid():
+        if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED or self.order._can_be_paid() is not True:
             messages.error(request, _('The payment for this order cannot be continued.'))
             return redirect(self.get_order_url())
         if (not self.payment.payment_provider.payment_is_valid_session(request) or
@@ -526,7 +526,7 @@ class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
         self.request = request
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED or not self.order._can_be_paid():
+        if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED or self.order._can_be_paid() is not True:
             messages.error(request, _('The payment for this order cannot be continued.'))
             return redirect(self.get_order_url())
         if (not self.payment.payment_provider.payment_is_valid_session(request) or
@@ -571,7 +571,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
         self.request = request
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) or not self.order._can_be_paid():
+        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) or self.order._can_be_paid() is not True:
             messages.error(request, _('The payment method for this order cannot be changed.'))
             return redirect(self.get_order_url())
 
@@ -1129,6 +1129,53 @@ class OrderDownload(OrderDownloadMixin, EventViewMixin, OrderDetailMixin, AsyncA
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
+class OrderGiftCardDetails(EventViewMixin, OrderDetailMixin, ListView):
+    template_name = 'pretixpresale/event/order_giftcard.html'
+    context_object_name = 'transactions'
+    paginate_by = 50
+
+    @cached_property
+    def giftcard(self):
+        return GiftCard.objects.filter(
+            owner_ticket__order_id=self.order.pk
+        ).get(pk=self.kwargs['pk'])
+
+    def get_queryset(self):
+        return self.giftcard.transactions.order_by('-datetime', '-pk')
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            order=self.order,
+            giftcard=self.giftcard,
+            **kwargs,
+        )
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderPositionGiftCardDetails(EventViewMixin, OrderPositionDetailMixin, ListView):
+    template_name = 'pretixpresale/event/position_giftcard.html'
+    context_object_name = 'transactions'
+    paginate_by = 50
+
+    @cached_property
+    def giftcard(self):
+        return GiftCard.objects.filter(
+            Q(owner_ticket_id=self.position.pk) | Q(owner_ticket__addon_to_id=self.position.pk)
+        ).get(pk=self.kwargs['pk'])
+
+    def get_queryset(self):
+        return self.giftcard.transactions.order_by('-datetime', '-pk')
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            order=self.order,
+            position=self.position,
+            giftcard=self.giftcard,
+            **kwargs,
+        )
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
 class OrderPositionDownload(OrderDownloadMixin, EventViewMixin, OrderPositionDetailMixin, AsyncAction, View):
     task = generate
     known_errortypes = ['OrderError']
@@ -1370,12 +1417,18 @@ class OrderChangeMixin:
         for i in category['items']:
             if i.has_variations:
                 for v in i.available_variations:
-                    val = int(self.request.POST.get(f'cp_{form["pos"].pk}_variation_{i.pk}_{v.pk}') or '0')
+                    try:
+                        val = int(self.request.POST.get(f'cp_{form["pos"].pk}_variation_{i.pk}_{v.pk}') or '0')
+                    except ValueError:
+                        raise ValidationError(_('Please enter numbers only.'))
                     price = self.request.POST.get(f'cp_{form["pos"].pk}_variation_{i.pk}_{v.pk}_price') or '0'
                     if val:
                         selected[i, v] = val, price
             else:
-                val = int(self.request.POST.get(f'cp_{form["pos"].pk}_item_{i.pk}') or '0')
+                try:
+                    val = int(self.request.POST.get(f'cp_{form["pos"].pk}_item_{i.pk}') or '0')
+                except ValueError:
+                    raise ValidationError(_('Please enter numbers only.'))
                 price = self.request.POST.get(f'cp_{form["pos"].pk}_item_{i.pk}_price') or '0'
                 if val:
                     selected[i, None] = val, price

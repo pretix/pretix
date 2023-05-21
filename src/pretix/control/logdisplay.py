@@ -506,6 +506,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.taxrule.changed': _('The tax rule has been changed.'),
         'pretix.event.checkinlist.added': _('The check-in list has been added.'),
         'pretix.event.checkinlist.deleted': _('The check-in list has been deleted.'),
+        'pretix.event.checkinlists.deleted': _('The check-in list has been deleted.'),  # backwards compatibility
         'pretix.event.checkinlist.changed': _('The check-in list has been changed.'),
         'pretix.event.settings': _('The event settings have been changed.'),
         'pretix.event.tickets.settings': _('The ticket download settings have been changed.'),

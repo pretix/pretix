@@ -46,7 +46,6 @@ from django import forms
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import Count, Q, QuerySet
-from django.db.models.functions import Concat
 from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
@@ -247,16 +246,24 @@ class ActionView(View):
                     & Q(code__icontains=Order.normalize_code(u.split("-")[1])))
         else:
             code = Q(code__icontains=Order.normalize_code(u))
-        qs = self.order_qs().order_by('pk').annotate(inr=Concat('invoices__prefix', 'invoices__invoice_no')).filter(
+
+        invoice_nos = {u, u.upper()}
+        if u.isdigit():
+            if hasattr(request, 'event'):
+                invoice_nos.add(u.zfill(request.event.settings.invoice_numbers_counter_length))
+            else:
+                for i in range(2, 12):
+                    invoice_nos.add(u.zfill(i))
+
+        qs = self.order_qs().order_by('pk').filter(
             code
             | Q(email__icontains=u)
             | Q(all_positions__attendee_name_cached__icontains=u)
             | Q(all_positions__attendee_email__icontains=u)
             | Q(invoice_address__name_cached__icontains=u)
             | Q(invoice_address__company__icontains=u)
-            | Q(invoices__invoice_no=u)
-            | Q(invoices__invoice_no=u.zfill(5))
-            | Q(inr=u)
+            | Q(invoices__invoice_no__in=invoice_nos)
+            | Q(invoices__full_invoice_no=u)
         ).select_related('event').annotate(pcnt=Count('invoices')).distinct()
         # Yep, we wouldn't need to count the invoices here. However, having this Count() statement in there
         # tricks Django into generating a GROUP BY clause that it otherwise wouldn't and that is required to

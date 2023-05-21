@@ -13,7 +13,7 @@ Core
 .. automodule:: pretix.base.signals
    :members: periodic_task, event_live_issues, event_copy_data, email_filter, register_notification_types,
       item_copy_data, register_sales_channels, register_global_settings, quota_availability, global_email_filter,
-      register_ticket_secret_generators
+      register_ticket_secret_generators, gift_card_transaction_display
 
 Order events
 """"""""""""
@@ -21,7 +21,7 @@ Order events
 There are multiple signals that will be sent out in the ordering cycle:
 
 .. automodule:: pretix.base.signals
-   :members: validate_cart, validate_cart_addons, validate_order, order_fee_calculation, order_paid, order_placed, order_canceled, order_reactivated, order_expired, order_modified, order_changed, order_approved, order_denied, order_fee_type_name, allow_ticket_download, order_split, order_gracefully_delete, invoice_line_text
+   :members: validate_cart, validate_cart_addons, validate_order, order_valid_if_pending, order_fee_calculation, order_paid, order_placed, order_canceled, order_reactivated, order_expired, order_modified, order_changed, order_approved, order_denied, order_fee_type_name, allow_ticket_download, order_split, order_gracefully_delete, invoice_line_text
 
 Check-ins
 """""""""

@@ -24,9 +24,11 @@ import sys
 from enum import Enum
 from typing import List
 
+import importlib_metadata as metadata
 from django.apps import AppConfig, apps
 from django.conf import settings
 from django.core.exceptions import ImproperlyConfigured
+from packaging.requirements import Requirement
 
 
 class PluginType(Enum):
@@ -81,12 +83,11 @@ class PluginConfig(AppConfig, metaclass=PluginConfigMeta):
             raise ImproperlyConfigured("A pretix plugin config should have a PretixPluginMeta inner class.")
 
         if hasattr(self.PretixPluginMeta, 'compatibility') and not os.environ.get("PRETIX_IGNORE_CONFLICTS") == "True":
-            import pkg_resources
-            try:
-                pkg_resources.require(self.PretixPluginMeta.compatibility)
-            except pkg_resources.VersionConflict as e:
+            req = Requirement(self.PretixPluginMeta.compatibility)
+            requirement_version = metadata.version(req.name)
+            if not req.specifier.contains(requirement_version, prereleases=True):
                 print("Incompatible plugins found!")
                 print("Plugin {} requires you to have {}, but you installed {}.".format(
-                    self.name, e.req, e.dist
+                    self.name, req, requirement_version
                 ))
                 sys.exit(1)

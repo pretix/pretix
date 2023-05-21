@@ -1,0 +1,25 @@
+{% load i18n %}
+{% load money %}
+<table class="panel-body table">
+    <thead>
+    <tr>
+        <th>{% trans "Date" %}</th>
+        <th>{% trans "Information" %}</th>
+        <th class="text-right">{% trans "Value" %}</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for t in transactions %}
+        <tr>
+            <td>{{ t.datetime|date:"SHORT_DATETIME_FORMAT" }}</td>
+            <td>
+                {{ t.display_presale }}
+            </td>
+            <td class="text-right">
+                {{ t.value|money:giftcard.currency }}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% include "pretixcontrol/pagination.html" %}

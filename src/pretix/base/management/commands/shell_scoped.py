@@ -49,8 +49,9 @@ class Command(BaseCommand):
         except ImportError:
             cmd = 'shell'
             del options['skip_checks']
+            del options['print_sql']
 
-        if options['print_sql']:
+        if options.get('print_sql'):
             connection.force_debug_cursor = True
             logger = logging.getLogger("django.db.backends")
             logger.setLevel(logging.DEBUG)

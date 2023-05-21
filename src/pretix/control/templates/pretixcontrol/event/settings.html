@@ -15,6 +15,7 @@
     <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
+        {% bootstrap_form_errors sform %}
         <div class="tabbed-form">
             <fieldset>
                 <legend>{% trans "Basics" %}</legend>
@@ -360,6 +361,7 @@
                 {% bootstrap_field sform.waiting_list_names_asked_required layout="control" %}
                 {% bootstrap_field sform.waiting_list_phones_asked_required layout="control" %}
                 {% bootstrap_field sform.waiting_list_phones_explanation_text layout="control" %}
+                {% bootstrap_field sform.waiting_list_limit_per_user layout="control" %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Item metadata" %}</legend>

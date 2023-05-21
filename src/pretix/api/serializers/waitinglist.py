@@ -39,7 +39,7 @@ class WaitingListSerializer(I18nAwareModelSerializer):
         full_data = self.to_internal_value(self.to_representation(self.instance)) if self.instance else {}
         full_data.update(data)
 
-        WaitingListEntry.clean_duplicate(full_data.get('email'), full_data.get('item'), full_data.get('variation'),
+        WaitingListEntry.clean_duplicate(event, full_data.get('email'), full_data.get('item'), full_data.get('variation'),
                                          full_data.get('subevent'), self.instance.pk if self.instance else None)
         WaitingListEntry.clean_itemvar(event, full_data.get('item'), full_data.get('variation'))
         WaitingListEntry.clean_subevent(event, full_data.get('subevent'))

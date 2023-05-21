@@ -67,8 +67,8 @@ from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Checkin, Device, EventMetaValue,
     Invoice, InvoiceAddress, ItemMetaValue, ItemVariation,
     ItemVariationMetaValue, Order, OrderFee, OrderPayment, OrderPosition,
-    OrderRefund, Quota, SubEvent, SubEventMetaValue, TaxRule, TeamAPIToken,
-    generate_secret,
+    OrderRefund, Quota, ReusableMedium, SubEvent, SubEventMetaValue, TaxRule,
+    TeamAPIToken, generate_secret,
 )
 from pretix.base.models.orders import (
     BlockedTicketSecret, QuestionAnswer, RevokedTicketSecret,
@@ -148,9 +148,13 @@ with scopes_disabled():
             else:
                 code = Q(code__icontains=Order.normalize_code(u))
 
+            invoice_nos = {u, u.upper()}
+            if u.isdigit():
+                for i in range(2, 12):
+                    invoice_nos.add(u.zfill(i))
+
             matching_invoices = Invoice.objects.filter(
-                Q(invoice_no__iexact=u)
-                | Q(invoice_no__iexact=u.zfill(5))
+                Q(invoice_no__in=invoice_nos)
                 | Q(full_invoice_no__iexact=u)
             ).values_list('order_id', flat=True)
 
@@ -162,12 +166,15 @@ with scopes_disabled():
                 )
             ).values('id')
 
+            matching_media = ReusableMedium.objects.filter(identifier=u).values_list('linked_orderposition__order_id', flat=True)
+
             mainq = (
                 code
                 | Q(email__icontains=u)
                 | Q(invoice_address__name_cached__icontains=u)
                 | Q(invoice_address__company__icontains=u)
                 | Q(pk__in=matching_invoices)
+                | Q(pk__in=matching_media)
                 | Q(comment__icontains=u)
                 | Q(has_pos=True)
             )
@@ -314,7 +321,7 @@ class OrderViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['POST'])
     def mark_paid(self, request, **kwargs):
         order = self.get_object()
-        send_mail = request.data.get('send_email', True)
+        send_mail = request.data.get('send_email', True) if request.data else True
 
         if order.status in (Order.STATUS_PENDING, Order.STATUS_EXPIRED):
 
@@ -373,7 +380,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def mark_canceled(self, request, **kwargs):
-        send_mail = request.data.get('send_email', True)
+        send_mail = request.data.get('send_email', True) if request.data else True
         comment = request.data.get('comment', None)
         cancellation_fee = request.data.get('cancellation_fee', None)
         if cancellation_fee:
@@ -432,7 +439,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def approve(self, request, **kwargs):
-        send_mail = request.data.get('send_email', True)
+        send_mail = request.data.get('send_email', True) if request.data else True
 
         order = self.get_object()
         try:
@@ -450,7 +457,7 @@ class OrderViewSet(viewsets.ModelViewSet):
 
     @action(detail=True, methods=['POST'])
     def deny(self, request, **kwargs):
-        send_mail = request.data.get('send_email', True)
+        send_mail = request.data.get('send_email', True) if request.data else True
         comment = request.data.get('comment', '')
 
         order = self.get_object()
@@ -920,6 +927,7 @@ with scopes_disabled():
         search = django_filters.CharFilter(method='search_qs')
 
         def search_qs(self, queryset, name, value):
+            matching_media = ReusableMedium.objects.filter(identifier=value).values_list('linked_orderposition', flat=True)
             return queryset.filter(
                 Q(secret__istartswith=value)
                 | Q(attendee_name_cached__icontains=value)
@@ -929,6 +937,7 @@ with scopes_disabled():
                 | Q(order__code__istartswith=value)
                 | Q(order__invoice_address__name_cached__icontains=value)
                 | Q(order__email__icontains=value)
+                | Q(pk__in=matching_media)
             )
 
         def has_checkin_qs(self, queryset, name, value):
@@ -1444,7 +1453,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
         return order.payments.all()
 
     def create(self, request, *args, **kwargs):
-        send_mail = request.data.get('send_email', True)
+        send_mail = request.data.get('send_email', True) if request.data else True
         serializer = OrderPaymentCreateSerializer(data=request.data, context=self.get_serializer_context())
         serializer.is_valid(raise_exception=True)
         with transaction.atomic():
@@ -1489,7 +1498,7 @@ class PaymentViewSet(CreateModelMixin, viewsets.ReadOnlyModelViewSet):
     def confirm(self, request, **kwargs):
         payment = self.get_object()
         force = request.data.get('force', False)
-        send_mail = request.data.get('send_email', True)
+        send_mail = request.data.get('send_email', True) if request.data else True
 
         if payment.state not in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED):
             return Response({'detail': 'Invalid state of payment'}, status=status.HTTP_400_BAD_REQUEST)

@@ -259,6 +259,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
     category = pgettext_lazy('export_category', 'Check-in')
     description = gettext_lazy("Download a PDF version of a check-in list that can be used to check people in at the "
                                "event without digital methods.")
+    numbered_canvas = True
 
     @property
     def export_form_fields(self):

@@ -562,7 +562,9 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'list': MiniCheckinListSerializer(list_by_event[revoked_matches[0].event_id]).data,
                 }, status=400)
         else:
-            op_candidates = [media.linked_orderposition] + list(media.linked_orderposition.addons.all())
+            op_candidates = [media.linked_orderposition]
+            if list_by_event[media.linked_orderposition.order.event_id].addon_match:
+                op_candidates += list(media.linked_orderposition.addons.all())
 
     # 3. Handle the "multiple options found" case: Except for the unlikely case of a secret being also a valid primary
     #    key on the same list, we're probably dealing with the ``addon_match`` case here and need to figure out

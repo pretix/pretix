@@ -45,6 +45,14 @@
                     {% bootstrap_field filter_form.date_until layout='inline' %}
                 </div>
             </div>
+            <p class="text-danger">
+                {% blocktrans trimmed %}
+                    Filtering this report by date is not recommended as it might lead to misleading information since this
+                    report only sees the current state of any order, not any changes made to the order previously.
+                    This date filter might be removed in the future.
+                    Use the "Accounting report" in the export section instead.
+                {% endblocktrans %}
+            </p>
             <div class="text-right">
                 <button class="btn btn-primary btn-lg" type="submit">
                     <span class="fa fa-filter"></span>

@@ -454,12 +454,42 @@ def test_approve(event):
     assert o1.invoices.count() == 1
     assert len(djmail.outbox) == 1
     assert 'awaiting payment' in djmail.outbox[0].subject
+    assert djmail.outbox[0].to == ['dummy@dummy.test']
+
+
+@pytest.mark.django_db
+def test_approve_send_to_attendees(event):
+    djmail.outbox = []
+    event.settings.invoice_generate = True
+    event.settings.mail_send_order_approved_attendee = True
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=10, require_approval=True, locale='en'
+    )
+    ticket = Item.objects.create(event=event, name='Early-bird ticket',
+                                 default_price=Decimal('23.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None, price=Decimal("23.00"),
+        attendee_name_parts={'full_name': "Peter"}, attendee_email='attendee@dummy.test',
+        positionid=1
+    )
+    o1.create_transactions()
+    assert o1.transactions.count() == 0
+    approve_order(o1)
+    o1.refresh_from_db()
+    assert len(djmail.outbox) == 2
+    assert djmail.outbox[0].to == ['dummy@dummy.test']
+    assert djmail.outbox[1].to == ['attendee@dummy.test']
+    assert 'awaiting payment' in djmail.outbox[0].subject
+    assert 'awaiting payment' not in djmail.outbox[1].subject
 
 
 @pytest.mark.django_db
 def test_approve_free(event):
     djmail.outbox = []
-    event.settings.invoice_generate = 'True'
+    event.settings.invoice_generate = True
     o1 = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
@@ -474,6 +504,38 @@ def test_approve_free(event):
     assert o1.invoices.count() == 0
     assert len(djmail.outbox) == 1
     assert 'confirmed' in djmail.outbox[0].subject
+    assert djmail.outbox[0].to == ['dummy@dummy.test']
+
+
+@pytest.mark.django_db
+def test_approve_free_send_to_attendees(event):
+    djmail.outbox = []
+    event.settings.invoice_generate = True
+    event.settings.mail_send_order_approved_free_attendee = True
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=now(), expires=now() - timedelta(days=10),
+        total=0, require_approval=True
+    )
+    ticket = Item.objects.create(event=event, name='Free ticket',
+                                 default_price=Decimal('0.00'), admission=True)
+    OrderPosition.objects.create(
+        order=o1, item=ticket, variation=None, price=Decimal("0.00"),
+        attendee_name_parts={'full_name': "Peter"}, attendee_email='attendee@dummy.test',
+        positionid=1
+    )
+    approve_order(o1)
+    o1.refresh_from_db()
+    assert o1.expires > now()
+    assert o1.status == Order.STATUS_PAID
+    assert not o1.require_approval
+    assert o1.invoices.count() == 0
+    assert len(djmail.outbox) == 2
+    assert djmail.outbox[0].to == ['dummy@dummy.test']
+    assert djmail.outbox[1].to == ['attendee@dummy.test']
+    assert 'confirmed' in djmail.outbox[0].subject
+    assert 'registration' in djmail.outbox[1].subject
 
 
 @pytest.mark.django_db
@@ -903,7 +965,7 @@ class OrderCancelTests(TestCase):
     @classscope(attr='o')
     def test_auto_refund_possible_issued_giftcard(self):
         gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
-        gc.transactions.create(value=23)
+        gc.transactions.create(value=23, acceptor=self.o)
         self.order.payments.create(
             amount=Decimal('46.00'),
             state=OrderPayment.PAYMENT_STATE_CONFIRMED,
@@ -917,7 +979,7 @@ class OrderCancelTests(TestCase):
     @classscope(attr='o')
     def test_auto_refund_impossible_issued_giftcard_used(self):
         gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.o)
         self.order.payments.create(
             amount=Decimal('46.00'),
             state=OrderPayment.PAYMENT_STATE_CONFIRMED,
@@ -1335,7 +1397,7 @@ class OrderChangeManagerTests(TestCase):
     @classscope(attr='o')
     def test_cancel_issued_giftcard(self):
         gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
-        gc.transactions.create(value=23)
+        gc.transactions.create(value=23, acceptor=self.o)
         self.ocm.cancel(self.op1)
         self.ocm.commit()
         assert gc.value == Decimal('0.00')
@@ -1360,7 +1422,7 @@ class OrderChangeManagerTests(TestCase):
     @classscope(attr='o')
     def test_cancel_issued_giftcard_used(self):
         gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.o)
         self.ocm.cancel(self.op1)
         with self.assertRaises(OrderError):
             self.ocm.commit()
@@ -1368,7 +1430,7 @@ class OrderChangeManagerTests(TestCase):
     @classscope(attr='o')
     def test_change_price_issued_giftcard_used(self):
         gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.o)
         with self.assertRaises(OrderError):
             self.ocm.change_price(self.op1, 25)
 
@@ -1693,6 +1755,19 @@ class OrderChangeManagerTests(TestCase):
         nop = self.order.positions.last()
         assert nop.item == self.shirt
         assert nop.addon_to == self.op1
+
+    @classscope(attr='o')
+    def test_add_item_addon_is_bundle(self):
+        self.shirt.category = self.event.categories.create(name='Add-ons', is_addon=True)
+        self.ticket.bundles.create(bundled_item=self.shirt)
+        self.ocm.add_position(self.shirt, None, Decimal('13.00'), self.op1)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        assert self.order.positions.count() == 3
+        nop = self.order.positions.last()
+        assert nop.item == self.shirt
+        assert nop.addon_to == self.op1
+        assert nop.is_bundled
 
     @classscope(attr='o')
     def test_add_item_addon_invalid(self):
@@ -3106,9 +3181,9 @@ def test_giftcard_multiple(event):
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
     )
     gc1 = event.organizer.issued_gift_cards.create(currency="EUR")
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     gc2 = event.organizer.issued_gift_cards.create(currency="EUR")
-    gc2.transactions.create(value=12)
+    gc2.transactions.create(value=12, acceptor=event.organizer)
     order = _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3158,7 +3233,7 @@ def test_giftcard_partial(event):
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
     )
     gc1 = event.organizer.issued_gift_cards.create(currency="EUR")
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     order = _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3205,7 +3280,7 @@ def test_giftcard_payment_fee(event):
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
     )
     gc1 = event.organizer.issued_gift_cards.create(currency="EUR")
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     order = _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3251,7 +3326,7 @@ def test_giftcard_invalid_currency(event):
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
     )
     gc1 = event.organizer.issued_gift_cards.create(currency="USD")
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3293,7 +3368,7 @@ def test_giftcard_invalid_organizer(event):
     )
     o2 = Organizer.objects.create(slug="foo", name="bar")
     gc1 = o2.issued_gift_cards.create(currency="EUR")
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3334,7 +3409,7 @@ def test_giftcard_test_mode_invalid(event):
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
     )
     gc1 = event.organizer.issued_gift_cards.create(currency="EUR", testmode=True)
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3377,7 +3452,7 @@ def test_giftcard_test_mode_event(event):
     event.testmode = True
     event.save()
     gc1 = event.organizer.issued_gift_cards.create(currency="EUR", testmode=False)
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3418,7 +3493,7 @@ def test_giftcard_swap(event):
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
     )
     gc1 = event.organizer.issued_gift_cards.create(currency="EUR", testmode=False)
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),

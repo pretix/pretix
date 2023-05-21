@@ -256,9 +256,13 @@ class OrderFilterForm(FilterForm):
             else:
                 code = Q(code__icontains=Order.normalize_code(u))
 
+            invoice_nos = {u, u.upper()}
+            if u.isdigit():
+                for i in range(2, 12):
+                    invoice_nos.add(u.zfill(i))
+
             matching_invoices = Invoice.objects.filter(
-                Q(invoice_no__iexact=u)
-                | Q(invoice_no__iexact=u.zfill(5))
+                Q(invoice_no__in=invoice_nos)
                 | Q(full_invoice_no__iexact=u)
             ).values_list('order_id', flat=True)
             matching_positions = OrderPosition.objects.filter(
@@ -479,7 +483,7 @@ class EventOrderFilterForm(OrderFilterForm):
                     file__isnull=False
                 )
                 qs = qs.annotate(has_answer=Exists(answers)).filter(has_answer=True)
-            elif q.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+            elif q.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE) and fdata.get('answer'):
                 answers = QuestionAnswer.objects.filter(
                     question_id=q.pk,
                     orderposition__order_id=OuterRef('pk'),
@@ -568,6 +572,12 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
     sales_channel = forms.ChoiceField(
         label=_('Sales channel'),
         required=False,
+    )
+    checkin_attention = forms.NullBooleanField(
+        required=False,
+        widget=FilterNullBooleanSelect,
+        label=_('Requires special attention'),
+        help_text=_('Only matches orders with the attention checkbox set directly for the order, not based on the product.'),
     )
 
     def __init__(self, *args, **kwargs):
@@ -689,6 +699,8 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             qs = qs.filter(total=fdata.get('total'))
         if fdata.get('email_known_to_work') is not None:
             qs = qs.filter(email_known_to_work=fdata.get('email_known_to_work'))
+        if fdata.get('checkin_attention') is not None:
+            qs = qs.filter(checkin_attention=fdata.get('checkin_attention'))
         if fdata.get('locale'):
             qs = qs.filter(locale=fdata.get('locale'))
         if fdata.get('payment_sum_min') is not None:
@@ -996,9 +1008,13 @@ class OrderPaymentSearchFilterForm(forms.Form):
         if fdata.get('query'):
             u = fdata.get('query')
 
+            invoice_nos = {u, u.upper()}
+            if u.isdigit():
+                for i in range(2, 12):
+                    invoice_nos.add(u.zfill(i))
+
             matching_invoices = Invoice.objects.filter(
-                Q(invoice_no__iexact=u)
-                | Q(invoice_no__iexact=u.zfill(5))
+                Q(invoice_no__in=invoice_nos)
                 | Q(full_invoice_no__iexact=u)
             ).values_list('order_id', flat=True)
 
@@ -1322,6 +1338,7 @@ class GiftCardFilterForm(FilterForm):
                 Q(secret__icontains=query)
                 | Q(transactions__text__icontains=query)
                 | Q(transactions__order__code__icontains=query)
+                | Q(owner_ticket__order__code__icontains=query)
             )
         if fdata.get('testmode') == 'yes':
             qs = qs.filter(testmode=True)

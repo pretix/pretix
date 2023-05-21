@@ -166,7 +166,7 @@ var pretixstripe = {
         iframe.src = payment_intent_next_action_redirect_url;
         iframe.className = 'embed-responsive-item';
         $('#scacontainer').append(iframe);
-        $('#scacontainer iframe').load(function () {
+        $('#scacontainer iframe').on("load", function () {
             waitingDialog.hide();
         });
     }

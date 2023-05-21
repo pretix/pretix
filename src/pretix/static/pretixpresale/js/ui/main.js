@@ -117,6 +117,15 @@ var form_handlers = function (el) {
         $(this).datetimepicker(opts);
     });
 
+    el.find(".input-item-count-dec, .input-item-count-inc").on("click", function (e) {
+        e.preventDefault();
+        var step = parseFloat(this.getAttribute("data-step"));
+        var controls = document.getElementById(this.getAttribute("data-controls"));
+        var currentValue = parseFloat(controls.value);
+        controls.value = Math.max(controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (currentValue || 0) + step));
+        controls.dispatchEvent(new Event("change"));
+    });
+
     el.find("script[data-replace-with-qr]").each(function () {
         var $div = $("<div>");
         $div.insertBefore($(this));
@@ -288,6 +297,30 @@ $(function () {
 
     $("#ajaxerr").on("click", ".ajaxerr-close", ajaxErrDialog.hide);
 
+    $('details.sneak-peek:not([open])').each(function() {
+        this.open = true;
+        var $elements = $("> :not(summary)", this).show().filter(':not(.sneak-peek-trigger)').attr('aria-hidden', 'true');
+
+        var container = this;
+        var trigger = $('summary, .sneak-peek-trigger button', container);
+        function onclick(e) {
+            e.preventDefault();
+
+            container.addEventListener('transitionend', function() {
+                $(container).removeClass('sneak-peek');
+                container.style.removeProperty('height');
+            }, {once: true});
+            container.style.height = container.scrollHeight + 'px';
+            $('.sneak-peek-trigger', container).fadeOut(function() {
+                $(this).remove();
+            });
+            $elements.removeAttr('aria-hidden');
+
+            trigger.off('click', onclick);
+        }
+        trigger.on('click', onclick);
+    });
+
     // Copy answers
     $(".js-copy-answers").click(function (e) {
         e.preventDefault();
@@ -388,7 +421,7 @@ $(function () {
                 }
             });
         }
-        if (!is_enabled && !$(".has-seating").length) {
+        if (!is_enabled && (!$(".has-seating").length || $("#seating-dummy-item-count").length)) {
             $("#btn-add-to-cart").prop("disabled", !is_enabled).popover({
                 'content': function () { return gettext("Please enter a quantity for one of the ticket types.") },
                 'placement': 'top',

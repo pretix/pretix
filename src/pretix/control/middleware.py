@@ -80,7 +80,7 @@ class PermissionMiddleware:
         "user.settings.2fa.disable",
         "user.settings.2fa.regenemergency",
         "user.settings.2fa.confirm.totp",
-        "user.settings.2fa.confirm.u2f",
+        "user.settings.2fa.confirm.webauthn",
         "user.settings.2fa.delete",
         "auth.logout",
         "user.reauth"

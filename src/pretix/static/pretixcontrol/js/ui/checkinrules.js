@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
   var TYPEOPS = {
     // Every change to our supported JSON logic must be done
     // * in pretix.base.services.checkin

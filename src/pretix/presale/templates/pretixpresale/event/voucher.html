@@ -225,13 +225,17 @@
                                                     <small>{% trans "incl. taxes" %}</small>
                                                 {% endif %}
                                                 {% elif var.display_price.rate and var.display_price.gross and event.settings.display_net_prices %}
-                                                    <small>{% blocktrans trimmed with rate=var.display_price.rate|floatformat:-2 name=var.display_price.name %}
-                                                        <strong>plus</strong> {{ rate }}% {{ name }}
-                                                    {% endblocktrans %}</small>
+                                                    <small data-toggle="tooltip" title="{% blocktrans trimmed with value=var.display_price.gross|money:event.currency %}{{ value }} incl. taxes{% endblocktrans %}" data-placement="bottom">
+                                                        {% blocktrans trimmed with rate=var.display_price.rate|floatformat:-2 name=var.display_price.name %}
+                                                            <strong>plus</strong> {{ rate }}% {{ name }}
+                                                        {% endblocktrans %}
+                                                    </small>
                                                 {% elif var.display_price.rate and var.display_price.gross %}
-                                                    <small>{% blocktrans trimmed with rate=var.display_price.rate|floatformat:-2 name=var.display_price.name %}
-                                                        incl. {{ rate }}% {{ name }}
-                                                    {% endblocktrans %}</small>
+                                                    <small data-toggle="tooltip" title="{% blocktrans trimmed with value=var.display_price.net|money:event.currency %}{{ value }} without taxes{% endblocktrans %}" data-placement="bottom">
+                                                        {% blocktrans trimmed with rate=var.display_price.rate|floatformat:-2 name=var.display_price.name %}
+                                                            incl. {{ rate }}% {{ name }}
+                                                        {% endblocktrans %}
+                                                    </small>
                                                 {% endif %}
                                                 </p>
                                             </div>
@@ -250,12 +254,16 @@
                                                                 <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
                                                             </label>
                                                         {% else %}
-                                                            <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                                    max="{{ item.order_max }}"
+                                                            <div class="input-item-count-group">
+                                                                <button type="button" data-step="-1" data-controls="variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                                                <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                                    max="{{ var.order_max }}"
                                                                     id="variation_{{ item.id }}_{{ var.id }}"
                                                                     name="variation_{{ item.id }}_{{ var.id }}"
                                                                     {% if options == 1 %}value="1"{% endif %}
                                                                     aria-label="{% blocktrans with item=item.name var=var.name %}Quantity of {{ item }}, {{ var }} to order{% endblocktrans %}">
+                                                                <button type="button" data-step="1" data-controls="variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
+                                                            </div>
                                                         {% endif %}
                                                     {% else %}
                                                         <label>
@@ -359,13 +367,17 @@
                                             <small>{% trans "incl. taxes" %}</small>
                                         {% endif %}
                                     {% elif item.display_price.rate and item.display_price.gross and event.settings.display_net_prices %}
-                                        <small>{% blocktrans trimmed with rate=item.display_price.rate|floatformat:-2 name=item.display_price.name %}
-                                            <strong>plus</strong> {{ rate }}% {{ name }}
-                                        {% endblocktrans %}</small>
-                                    {% elif item.display_price.rate and item.display_price.gross%}
-                                        <small>{% blocktrans trimmed with rate=item.display_price.rate|floatformat:-2 name=item.display_price.name %}
-                                            incl. {{ rate }}% {{ name }}
-                                        {% endblocktrans %}</small>
+                                        <small data-toggle="tooltip" title="{% blocktrans trimmed with value=item.display_price.gross|money:event.currency %}{{ value }} incl. taxes{% endblocktrans %}" data-placement="bottom">
+                                            {% blocktrans trimmed with rate=item.display_price.rate|floatformat:-2 name=item.display_price.name %}
+                                                <strong>plus</strong> {{ rate }}% {{ name }}
+                                            {% endblocktrans %}
+                                        </small>
+                                    {% elif item.display_price.rate and item.display_price.gross %}
+                                        <small data-toggle="tooltip" title="{% blocktrans trimmed with value=item.display_price.net|money:event.currency %}{{ value }} without taxes{% endblocktrans %}" data-placement="bottom">
+                                            {% blocktrans trimmed with rate=item.display_price.rate|floatformat:-2 name=item.display_price.name %}
+                                                incl. {{ rate }}% {{ name }}
+                                            {% endblocktrans %}
+                                        </small>
                                     {% endif %}
                                     </p>
                                 </div>
@@ -384,7 +396,9 @@
                                                     <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
                                                 </label>
                                             {% else %}
-                                                <input type="number" class="form-control input-item-count"
+                                                <div class="input-item-count-group">
+                                                    <button type="button" data-step="-1" data-controls="item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                                    <input type="number" class="form-control input-item-count"
                                                        placeholder="0" min="0"
                                                        max="{{ item.order_max }}"
                                                        id="item_{{ item.id }}"
@@ -392,6 +406,8 @@
                                                        {% if options == 1 %}value="1"{% endif %}
                                                        aria-label="{% blocktrans with item=item.name %}Quantity of {{ item }} to order{% endblocktrans %}"
                                                        {% if item.description %} aria-describedby="item-{{ item.id }}-description"{% endif %}>
+                                                    <button type="button" data-step="1" data-controls="item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
+                                                </div>
                                             {% endif %}
                                         {% else %}
                                             <label>

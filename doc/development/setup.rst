@@ -58,11 +58,11 @@ If you do not have a recent installation of ``nodejs``, install it now::
 
 To make sure it is on your path variable, close and reopen your terminal. Now, install the Python-level dependencies of pretix::
 
-    cd src/
     pip3 install -e ".[dev]"
 
 Next, you need to copy the SCSS files from the source folder to the STATIC_ROOT directory::
 
+    cd src/
     python manage.py collectstatic --noinput
 
 Then, create the local database::
@@ -149,6 +149,13 @@ Add this to your ``src/pretix.cfg``::
     port = 1025
 
 Then execute ``python -m smtpd -n -c DebuggingServer localhost:1025``.
+
+Working with periodic tasks
+^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Periodic tasks (like sendmail rules) are run when an external scheduler (like cron)
+triggers the ``runperiodic`` command.
+
+To run periodic tasks, execute ``python manage.py runperiodic``.
 
 Working with translations
 ^^^^^^^^^^^^^^^^^^^^^^^^^

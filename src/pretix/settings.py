@@ -37,17 +37,18 @@ import configparser
 import logging
 import os
 import sys
-from urllib.parse import urlparse
 from json import loads
+from urllib.parse import urlparse
 
-import django.conf.locale
+import importlib_metadata as metadata
 from django.utils.crypto import get_random_string
 from kombu import Queue
-from pkg_resources import iter_entry_points
-from pycountry import currencies
 
 from . import __version__
 from .helpers.config import EnvOrParserConfig
+
+# Pull in all settings that we also need at wheel require time
+from ._base_settings import *  # NOQA
 
 
 from django.contrib.messages import constants as messages  # NOQA
@@ -62,7 +63,6 @@ else:
 config = EnvOrParserConfig(_config)
 
 CONFIG_FILE = config
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DATA_DIR = config.get('pretix', 'datadir', fallback=os.environ.get('DATA_DIR', 'data'))
 LOG_DIR = os.path.join(DATA_DIR, 'logs')
 MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
@@ -169,7 +169,6 @@ PRETIX_ADMIN_AUDIT_COMMENTS = config.getboolean('pretix', 'audit_comments', fall
 PRETIX_OBLIGATORY_2FA = config.getboolean('pretix', 'obligatory_2fa', fallback=False)
 PRETIX_SESSION_TIMEOUT_RELATIVE = 3600 * 3
 PRETIX_SESSION_TIMEOUT_ABSOLUTE = 3600 * 12
-PRETIX_PRIMARY_COLOR = '#8E44B3'
 
 SITE_URL = config.get('pretix', 'url', fallback='http://localhost:8000')
 if SITE_URL.endswith('/'):
@@ -194,25 +193,6 @@ PRETIX_PLUGINS_SHOW_META = config.getboolean('pretix', 'plugins_show_meta', fall
 FETCH_ECB_RATES = config.getboolean('pretix', 'ecb_rates', fallback=True)
 
 DEFAULT_CURRENCY = config.get('pretix', 'currency', fallback='EUR')
-CURRENCIES = list(currencies)
-CURRENCY_PLACES = {
-    # default is 2
-    'BIF': 0,
-    'CLP': 0,
-    'DJF': 0,
-    'GNF': 0,
-    'JPY': 0,
-    'KMF': 0,
-    'KRW': 0,
-    'MGA': 0,
-    'PYG': 0,
-    'RWF': 0,
-    'VND': 0,
-    'VUV': 0,
-    'XAF': 0,
-    'XOF': 0,
-    'XPF': 0,
-}
 
 ALLOWED_HOSTS = ['*']
 
@@ -247,11 +227,6 @@ CACHES = {
 }
 REAL_CACHE_USED = False
 SESSION_ENGINE = None
-
-# pretix includes caching options for some special situations where full HTML responses are cached. This might be
-# stressful for some cache setups so it is enabled by default and currently can't be enabled through pretix.cfg
-CACHE_LARGE_VALUES_ALLOWED = False
-CACHE_LARGE_VALUES_ALIAS = 'default'
 
 HAS_MEMCACHED = config.has_option('memcached', 'location')
 if HAS_MEMCACHED:
@@ -330,58 +305,26 @@ ENTROPY = {
     'giftcard_secret': config.getint('entropy', 'giftcard_secret', fallback=12),
 }
 
+HAS_GEOIP = False
+if config.has_option('geoip', 'path'):
+    HAS_GEOIP = True
+    GEOIP_PATH = config.get('geoip', 'path')
+    GEOIP_COUNTRY = config.get('geoip', 'filename_country', fallback='GeoLite2-Country.mmdb')
+
 # Internal settings
-PRETIX_EMAIL_NONE_VALUE = 'none@well-known.pretix.eu'
-
-STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static.dist')
-
 SESSION_COOKIE_NAME = 'pretix_session'
 LANGUAGE_COOKIE_NAME = 'pretix_language'
 CSRF_COOKIE_NAME = 'pretix_csrftoken'
 SESSION_COOKIE_HTTPONLY = True
 
-INSTALLED_APPS = [
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.humanize',
-    'pretix.base',
-    'pretix.control',
-    'pretix.presale',
-    'pretix.multidomain',
-    'pretix.api',
-    'pretix.helpers',
-    'rest_framework',
+INSTALLED_APPS += [ # noqa
     'django_filters',
-    'compressor',
-    'bootstrap3',
-    'djangoformsetjs',
-    'pretix.plugins.banktransfer',
-    'pretix.plugins.stripe',
-    'pretix.plugins.paypal',
-    'pretix.plugins.paypal2',
-    'pretix.plugins.ticketoutputpdf',
-    'pretix.plugins.sendmail',
-    'pretix.plugins.statistics',
-    'pretix.plugins.reports',
-    'pretix.plugins.checkinlists',
-    'pretix.plugins.pretixdroid',
-    'pretix.plugins.badges',
-    'pretix.plugins.manualpayment',
-    'pretix.plugins.returnurl',
-    'pretix.plugins.webcheckin',
     'django_markup',
     'django_otp',
     'django_otp.plugins.otp_totp',
     'django_otp.plugins.otp_static',
-    'statici18n',
-    'django_countries',
     'hijack',
-    'oauth2_provider',
     'localflavor',
-    'phonenumber_field'
 ]
 
 if db_backend == 'postgresql':
@@ -395,11 +338,11 @@ except ImportError:
     pass
 
 PLUGINS = []
-for entry_point in iter_entry_points(group='pretix.plugin', name=None):
-    if entry_point.module_name in PRETIX_PLUGINS_EXCLUDE:
+for entry_point in metadata.entry_points(group='pretix.plugin'):
+    if entry_point.module in PRETIX_PLUGINS_EXCLUDE:
         continue
-    PLUGINS.append(entry_point.module_name)
-    INSTALLED_APPS.append(entry_point.module_name)
+    PLUGINS.append(entry_point.module)
+    INSTALLED_APPS.append(entry_point.module)
 
 HIJACK_PERMISSION_CHECK = "hijack.permissions.superusers_and_staff"
 HIJACK_INSERT_BEFORE = None
@@ -498,100 +441,18 @@ ROOT_URLCONF = 'pretix.multidomain.maindomain_urlconf'
 
 WSGI_APPLICATION = 'pretix.wsgi.application'
 
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
-
-LOCALE_PATHS = [
-    os.path.join(os.path.dirname(__file__), 'locale'),
-]
 if config.has_option('languages', 'path'):
-    LOCALE_PATHS.insert(0, config.get('languages', 'path'))
+    LOCALE_PATHS.insert(0, config.get('languages', 'path')) # noqa
 
-FORMAT_MODULE_PATH = [
-    'pretix.helpers.formats',
-]
-
-ALL_LANGUAGES = [
-    ('en', _('English')),
-    ('de', _('German')),
-    ('de-informal', _('German (informal)')),
-    ('ar', _('Arabic')),
-    ('zh-hans', _('Chinese (simplified)')),
-    ('cs', _('Czech')),
-    ('da', _('Danish')),
-    ('nl', _('Dutch')),
-    ('nl-informal', _('Dutch (informal)')),
-    ('fr', _('French')),
-    ('fi', _('Finnish')),
-    ('gl', _('Galician')),
-    ('el', _('Greek')),
-    ('it', _('Italian')),
-    ('lv', _('Latvian')),
-    ('pl', _('Polish')),
-    ('pt-pt', _('Portuguese (Portugal)')),
-    ('pt-br', _('Portuguese (Brazil)')),
-    ('ro', _('Romanian')),
-    ('ru', _('Russian')),
-    ('es', _('Spanish')),
-    ('tr', _('Turkish')),
-    ('uk', _('Ukrainian')),
-]
-LANGUAGES_OFFICIAL = {
-    'en', 'de', 'de-informal'
-}
-LANGUAGES_INCUBATING = {
-    'pl', 'fi', 'pt-br', 'gl',
-} - set(config.get('languages', 'allow_incubating', fallback='').split(','))
-LANGUAGES_RTL = {
-    'ar', 'hw'
-}
+LANGUAGES_INCUBATING = LANGUAGES_INCUBATING - set(config.get('languages', 'allow_incubating', fallback='').split(',')) # noqa
 LANGUAGES = []
 LANGUAGES_ENABLED = [lang for lang in config.get("languages", "enabled", fallback='').split(',') if lang]
-for k, v in ALL_LANGUAGES:
+for k, v in ALL_LANGUAGES: # noqa
     if not DEBUG and k in LANGUAGES_INCUBATING:
         continue
     if LANGUAGES_ENABLED and k not in LANGUAGES_ENABLED:
         continue
     LANGUAGES.append((k, v))
-
-
-EXTRA_LANG_INFO = {
-    'de-informal': {
-        'bidi': False,
-        'code': 'de-informal',
-        'name': 'German (informal)',
-        'name_local': 'Deutsch',
-        'public_code': 'de',
-    },
-    'nl-informal': {
-        'bidi': False,
-        'code': 'nl-informal',
-        'name': 'Dutch (informal)',
-        'name_local': 'Nederlands',
-        'public_code': 'nl',
-    },
-    'fr': {
-        'bidi': False,
-        'code': 'fr',
-        'name': 'French',
-        'name_local': 'Français'
-    },
-    'lv': {
-        'bidi': False,
-        'code': 'lv',
-        'name': 'Latvian',
-        'name_local': 'Latviešu'
-    },
-    'pt-pt': {
-        'bidi': False,
-        'code': 'pt-pt',
-        'name': 'Portuguese',
-        'name_local': 'Português',
-    },
-}
-
-django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
 
 
 AUTH_USER_MODEL = 'pretixbase.User'
@@ -604,75 +465,10 @@ template_loaders = (
     'pretix.helpers.template_loaders.AppLoader',
 )
 if not DEBUG:
-    template_loaders = (
+    TEMPLATES[0]['OPTIONS']['loaders'] = ( # noqa
         ('django.template.loaders.cached.Loader', template_loaders),
     )
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(DATA_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'templates'),
-        ],
-        'OPTIONS': {
-            'context_processors': [
-                'django.contrib.auth.context_processors.auth',
-                'django.template.context_processors.debug',
-                'django.template.context_processors.i18n',
-                'django.template.context_processors.media',
-                "django.template.context_processors.request",
-                'django.template.context_processors.static',
-                'django.template.context_processors.tz',
-                'django.contrib.messages.context_processors.messages',
-                'pretix.base.context.contextprocessor',
-                'pretix.control.context.contextprocessor',
-                'pretix.presale.context.contextprocessor',
-            ],
-            'loaders': template_loaders
-        },
-    },
-]
-
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
-)
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'pretix/static')
-] if os.path.exists(os.path.join(BASE_DIR, 'pretix/static')) else []
-
-STATICI18N_ROOT = os.path.join(BASE_DIR, "pretix/static")
-
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-
-# if os.path.exists(os.path.join(DATA_DIR, 'static')):
-#     STATICFILES_DIRS.insert(0, os.path.join(DATA_DIR, 'static'))
-
-COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'django_libsass.SassCompiler'),
-    ('text/vue', 'pretix.helpers.compressor.VueCompiler'),
-)
-
-COMPRESS_OFFLINE_CONTEXT = {
-    'basetpl': 'empty.html',
-}
-
-COMPRESS_ENABLED = COMPRESS_OFFLINE = not debug_fallback
-
-COMPRESS_FILTERS = {
-    'css': (
-        # CssAbsoluteFilter is incredibly slow, especially when dealing with our _flags.scss
-        # However, we don't need it if we consequently use the static() function in Sass
-        # 'compressor.filters.css_default.CssAbsoluteFilter',
-        'compressor.filters.cssmin.rCSSMinFilter',
-    ),
-    'js': (
-        'compressor.filters.jsmin.JSMinFilter',
-    )
-}
+TEMPLATES[0]['DIRS'].insert(0, os.path.join(DATA_DIR, 'templates')) # noqa
 
 INTERNAL_IPS = ('127.0.0.1', '::1')
 
@@ -685,6 +481,8 @@ MESSAGE_TAGS = {
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 loglevel = 'DEBUG' if DEBUG else config.get('pretix', 'loglevel', fallback='INFO')
+
+COMPRESS_ENABLED = COMPRESS_OFFLINE = not debug_fallback
 
 LOGGING = {
     'version': 1,

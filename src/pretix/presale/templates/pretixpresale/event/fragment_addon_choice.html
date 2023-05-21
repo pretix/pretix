@@ -190,7 +190,9 @@
                                                 <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
                                             </label>
                                         {% else %}
-                                            <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                            <div class="input-item-count-group">
+                                                <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                                <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                     {% if var.initial %}value="{{ var.initial }}"{% endif %}
                                                     {% if item.free_price %}
                                                        data-checked-onchange="price-variation-{{form.pos.pk}}-{{ item.pk }}-{{ var.pk }}"
@@ -199,6 +201,8 @@
                                                     id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                     name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                     aria-label="{% blocktrans with item=item.name var=var %}Quantity of {{ item }}, {{ var }} to order{% endblocktrans %}">
+                                                <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
+                                            </div>
                                         {% endif %}
                                     </div>
                                 {% else %}
@@ -319,7 +323,9 @@
                                             <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
                                 </label>
                             {% else %}
-                                <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                <div class="input-item-count-group">
+                                    <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                    <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                         {% if item.free_price %}
                                            data-checked-onchange="price-item-{{ form.pos.pk }}-{{ item.pk }}"
                                         {% endif %}
@@ -329,6 +335,8 @@
                                         id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                         aria-label="{% blocktrans with item=item.name %}Quantity of {{ item }} to order{% endblocktrans %}"
                                         {% if item.description %} aria-describedby="cp-{{ form.pos.pk }}-item-{{ item.id }}-description"{% endif %}>
+                                    <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Increase quantity" %}">+</button>
+                                </div>
                             {% endif %}
                         </div>
                     {% else %}

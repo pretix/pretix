@@ -46,6 +46,7 @@ from django.db import models
 from django.db.models import DateTimeField, Max, OuterRef, Subquery, Sum
 from django.template.defaultfilters import floatformat
 from django.utils.formats import date_format, localize
+from django.utils.html import format_html
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import (
     gettext as _, gettext_lazy, pgettext, pgettext_lazy,
@@ -54,6 +55,7 @@ from django_countries.fields import Country
 from reportlab.lib import colors
 from reportlab.lib.enums import TA_CENTER
 from reportlab.lib.units import mm
+from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import PageBreak, Paragraph, Spacer, Table, TableStyle
 
 from pretix.base.decimal import round_decimal
@@ -69,8 +71,46 @@ from pretix.base.timeframes import (
 from pretix.control.forms.filter import OverviewFilterForm
 
 
+class NumberedCanvas(Canvas):
+    def __init__(self, *args, **kwargs):
+        self.font_regular = kwargs.pop('font_regular')
+        self.x = kwargs.pop('x', 15 * mm)
+        self.y = kwargs.pop('y', 10 * mm)
+        super().__init__(*args, **kwargs)
+        self._saved_page_states = []
+
+    def showPage(self):
+        self._saved_page_states.append(dict(self.__dict__))
+        self._startPage()
+
+    def save(self):
+        num_pages = len(self._saved_page_states)
+        for state in self._saved_page_states:
+            self.__dict__.update(state)
+            self.draw_page_number(num_pages)
+            Canvas.showPage(self)
+        Canvas.save(self)
+
+    def draw_page_number(self, page_count):
+        self.saveState()
+        self.setFont(self.font_regular, 8)
+        self.drawString(self.x, self.y, _("Page %d of %d") % (self._pageNumber, page_count,))
+        self.restoreState()
+
+
 class ReportlabExportMixin:
     multiBuild = False  # noqa
+    numbered_canvas = False
+
+    def canvas_class(self, doc):
+        if self.numbered_canvas:
+            def _cl(*args, **kwargs):
+                kwargs['font_regular'] = 'OpenSans'
+                kwargs['x'] = doc.leftMargin
+                kwargs['y'] = 10 * mm
+                return NumberedCanvas(*args, **kwargs)
+            return _cl
+        return Canvas
 
     @property
     def pagesize(self):
@@ -115,9 +155,9 @@ class ReportlabExportMixin:
                 PageTemplate(id='All', frames=self.get_frames(doc), onPage=self.on_page, pagesize=self.pagesize)
             ])
             if self.multiBuild:
-                doc.multiBuild(self.get_story(doc, form_data))
+                doc.multiBuild(self.get_story(doc, form_data), canvasmaker=self.canvas_class(doc))
             else:
-                doc.build(self.get_story(doc, form_data))
+                doc.build(self.get_story(doc, form_data), canvasmaker=self.canvas_class(doc))
             f.seek(0)
             return f.read()
 
@@ -156,9 +196,10 @@ class ReportlabExportMixin:
 
         tz = get_current_timezone()
         canvas.setFont('OpenSans', 8)
-        canvas.drawString(15 * mm, 10 * mm, _("Page %d") % (doc.page,))
-        canvas.drawRightString(self.pagesize[0] - 15 * mm, 10 * mm,
-                               _("Created: %s") % now().astimezone(tz).strftime("%d.%m.%Y %H:%M:%S"))
+        if not self.numbered_canvas:
+            canvas.drawString(doc.leftMargin, 10 * mm, _("Page %d") % (doc.page,))
+        canvas.drawRightString(self.pagesize[0] - doc.rightMargin, 10 * mm,
+                               _("Created: %s") % date_format(now().astimezone(tz), 'SHORT_DATETIME_FORMAT'))
 
     def get_right_header_string(self):
         return settings.PRETIX_INSTANCE_NAME
@@ -176,16 +217,17 @@ class ReportlabExportMixin:
         from reportlab.lib.units import mm
 
         canvas.setFont('OpenSans', 10)
-        canvas.drawString(15 * mm, self.pagesize[1] - 15 * mm, self.get_left_header_string())
-        canvas.drawRightString(self.pagesize[0] - 15 * mm, self.pagesize[1] - 15 * mm,
+        canvas.drawString(doc.leftMargin, self.pagesize[1] - 15 * mm, self.get_left_header_string())
+        canvas.drawRightString(self.pagesize[0] - doc.rightMargin, self.pagesize[1] - 15 * mm,
                                self.get_right_header_string())
         canvas.setStrokeColorRGB(0, 0, 0)
-        canvas.line(15 * mm, self.pagesize[1] - 17 * mm,
-                    self.pagesize[0] - 15 * mm, self.pagesize[1] - 17 * mm)
+        canvas.line(doc.leftMargin, self.pagesize[1] - 17 * mm,
+                    self.pagesize[0] - doc.rightMargin, self.pagesize[1] - 17 * mm)
 
 
 class Report(ReportlabExportMixin, BaseExporter):
     name = "report"
+    numbered_canvas = True
 
     def verbose_name(self) -> str:
         raise NotImplementedError()
@@ -203,7 +245,6 @@ class OverviewReport(Report):
     verbose_name = gettext_lazy('Order overview (PDF)')
     category = pgettext_lazy('export_category', 'Analysis')
     description = gettext_lazy('Download a PDF version of the key sales numbers per ticket type.')
-    featured = True
 
     @property
     def pagesize(self):
@@ -394,6 +435,12 @@ class OverviewReport(Report):
             label=_('Date range'),
             include_future_frames=False,
             required=False,
+            help_text=format_html('<strong class="text-danger">{}</strong>', _(
+                'Filtering this report by date is not recommended as it might lead to misleading information since '
+                'this report only sees the current state of any order, not any changes made to the order previously. '
+                'This date filter might be removed in the future. '
+                'Use the "Accounting report" in the export section instead.'
+            ))
         )
         return f.fields
 
