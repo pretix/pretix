@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-21 08:56+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"PO-Revision-Date: 2023-05-21 08:58+0000\n"
+"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6389,51 +6389,51 @@ msgstr "可重複使用媒體ID"
 
 #: pretix/base/pdf.py:464
 msgid "Seat: Full name"
-msgstr ""
+msgstr "座位：全名"
 
 #: pretix/base/pdf.py:465
 msgid "Ground floor, Row 3, Seat 4"
-msgstr ""
+msgstr "地面層，3排4座"
 
 #: pretix/base/pdf.py:467 pretix/base/pdf.py:473
 #: pretix/control/forms/orders.py:312
 msgid "General admission"
-msgstr ""
+msgstr "一般管理"
 
 #: pretix/base/pdf.py:470
 msgid "Seat: zone"
-msgstr ""
+msgstr "座位：區域"
 
 #: pretix/base/pdf.py:471
 msgid "Ground floor"
-msgstr ""
+msgstr "地面層"
 
 #: pretix/base/pdf.py:476
 msgid "Seat: row"
-msgstr ""
+msgstr "座位：排"
 
 #: pretix/base/pdf.py:481
 msgid "Seat: seat number"
-msgstr ""
+msgstr "座位：座位編號"
 
 #: pretix/base/pdf.py:486
 msgid "Date and time of first scan"
-msgstr ""
+msgstr "第一掃描的日期與時間"
 
 #: pretix/base/pdf.py:492
 msgid "Gift card: Issuance date"
-msgstr ""
+msgstr "禮物卡：發售日期"
 
 #: pretix/base/pdf.py:497
 msgid "Gift card: Expiration date"
-msgstr ""
+msgstr "禮物卡：失效日期"
 
 #: pretix/base/pdf.py:538 pretix/base/pdf.py:576 pretix/base/pdf.py:582
 #: pretix/plugins/badges/exporters.py:324
 #: pretix/plugins/ticketoutputpdf/exporters.py:101
 #, python-brace-format
 msgid "Question: {question}"
-msgstr ""
+msgstr "問題：{question}"
 
 #: pretix/base/pdf.py:577 pretix/base/pdf.py:583
 #, python-brace-format
