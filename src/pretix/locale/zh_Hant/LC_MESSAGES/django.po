@@ -6210,7 +6210,7 @@ msgstr "2017年5月31日-6月4日"
 
 #: pretix/base/pdf.py:239
 msgid "Event begin date and time"
-msgstr ""
+msgstr "活動開始的日期與時間"
 
 #: pretix/base/pdf.py:240
 msgid "2017-05-31 20:00"
