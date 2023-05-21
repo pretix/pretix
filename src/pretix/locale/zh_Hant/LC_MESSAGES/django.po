@@ -6442,7 +6442,7 @@ msgstr "<回答：{question}>"
 
 #: pretix/base/pdf.py:624
 msgid "Attendee name for salutation"
-msgstr "核對用途的參與者名稱"
+msgstr "核對用途的與會者名稱"
 
 #: pretix/base/pdf.py:631 pretix/base/pdf.py:638
 #: pretix/plugins/badges/exporters.py:321
@@ -6451,7 +6451,7 @@ msgstr "核對用途的參與者名稱"
 #: pretix/plugins/ticketoutputpdf/exporters.py:98
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr "參與者名稱：{part}"
+msgstr "與會者名稱：{part}"
 
 #: pretix/base/pdf.py:647
 msgid "Invoice address name for salutation"
