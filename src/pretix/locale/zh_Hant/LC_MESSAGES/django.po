@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-21 08:59+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"PO-Revision-Date: 2023-05-21 09:00+0000\n"
+"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6442,7 +6442,7 @@ msgstr "<回答：{question}>"
 
 #: pretix/base/pdf.py:624
 msgid "Attendee name for salutation"
-msgstr "核對用途的與會者名稱"
+msgstr "參與者的稱呼"
 
 #: pretix/base/pdf.py:631 pretix/base/pdf.py:638
 #: pretix/plugins/badges/exporters.py:321
@@ -6455,19 +6455,19 @@ msgstr "與會者名稱：{part}"
 
 #: pretix/base/pdf.py:647
 msgid "Invoice address name for salutation"
-msgstr ""
+msgstr "稱呼用的發票地址名稱"
 
 #: pretix/base/pdf.py:654
 #, python-brace-format
 msgid "Invoice address name: {part}"
-msgstr ""
+msgstr "發票地址名稱：{part}"
 
 #: pretix/base/pdf.py:1002 pretix/control/forms/organizer.py:683
 #: pretix/control/forms/organizer.py:719
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:113
 msgid "Ticket"
-msgstr ""
+msgstr "票券"
 
 #: pretix/base/pdf.py:1082
 msgid "Your layout file is not a valid layout. Error message: {}"
