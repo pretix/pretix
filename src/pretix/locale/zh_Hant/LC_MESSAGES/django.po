@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-21 08:55+0000\n"
+"PO-Revision-Date: 2023-05-21 08:56+0000\n"
 "Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -6377,11 +6377,11 @@ msgstr "有效結束日期"
 
 #: pretix/base/pdf.py:443
 msgid "Validity end date and time"
-msgstr ""
+msgstr "有效結束日期與時間"
 
 #: pretix/base/pdf.py:451
 msgid "Validity end time"
-msgstr ""
+msgstr "有效結束時間"
 
 #: pretix/base/pdf.py:459
 msgid "Reusable Medium ID"
