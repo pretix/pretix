@@ -6287,11 +6287,11 @@ msgstr "隨機城市"
 
 #: pretix/base/pdf.py:330
 msgid "Invoice address company"
-msgstr ""
+msgstr "公司發票的地址"
 
 #: pretix/base/pdf.py:336
 msgid "Sesame Street 42"
-msgstr ""
+msgstr "中正路42號"
 
 #: pretix/base/pdf.py:341
 msgid "12345"
