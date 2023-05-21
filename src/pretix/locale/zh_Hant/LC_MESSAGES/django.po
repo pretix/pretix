@@ -6365,11 +6365,11 @@ msgstr "有效開始日期"
 
 #: pretix/base/pdf.py:419
 msgid "Validity start date and time"
-msgstr ""
+msgstr "有效開始日期與時間"
 
 #: pretix/base/pdf.py:427
 msgid "Validity start time"
-msgstr ""
+msgstr "有效開始時間"
 
 #: pretix/base/pdf.py:435
 msgid "Validity end date"
