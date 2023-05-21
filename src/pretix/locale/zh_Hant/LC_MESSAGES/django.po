@@ -6295,7 +6295,7 @@ msgstr "中正路42號"
 
 #: pretix/base/pdf.py:341
 msgid "12345"
-msgstr ""
+msgstr "12345"
 
 #: pretix/base/pdf.py:346 pretix/base/services/invoices.py:469
 msgid "Sample city"
