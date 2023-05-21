@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-21 08:53+0000\n"
+"PO-Revision-Date: 2023-05-21 08:54+0000\n"
 "Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -6322,28 +6322,30 @@ msgid ""
 "Add-on 1\n"
 "Add-on 2"
 msgstr ""
+"外掛1\n"
+"外掛2"
 
 #: pretix/base/pdf.py:372 pretix/control/forms/filter.py:1264
 #: pretix/control/forms/filter.py:1266
 #: pretix/control/templates/pretixcontrol/organizers/index.html:42
 msgid "Organizer name"
-msgstr ""
+msgstr "主辦方名稱"
 
 #: pretix/base/pdf.py:373
 msgid "Event organizer company"
-msgstr ""
+msgstr "活動主辦方公司"
 
 #: pretix/base/pdf.py:377
 msgid "Organizer info text"
-msgstr ""
+msgstr "主辦方資訊文字"
 
 #: pretix/base/pdf.py:378
 msgid "Event organizer info text"
-msgstr ""
+msgstr "活動主辦方資訊文字"
 
 #: pretix/base/pdf.py:382 pretix/base/pdf.py:383
 msgid "Event info text"
-msgstr ""
+msgstr "活動資訊文字"
 
 #: pretix/base/pdf.py:387
 msgid "Printing date"
