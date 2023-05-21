@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-21 08:50+0000\n"
+"PO-Revision-Date: 2023-05-21 08:51+0000\n"
 "Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -6236,28 +6236,28 @@ msgstr "20:00"
 
 #: pretix/base/pdf.py:260
 msgid "Event begin weekday"
-msgstr ""
+msgstr "活動開始的星期幾"
 
 #: pretix/base/pdf.py:261 pretix/base/pdf.py:290
 #: pretix/base/services/checkin.py:263 pretix/control/forms/filter.py:1123
 msgid "Friday"
-msgstr ""
+msgstr "星期五"
 
 #: pretix/base/pdf.py:265
 msgid "Event end date and time"
-msgstr ""
+msgstr "活動結束日期與時間"
 
 #: pretix/base/pdf.py:266
 msgid "2017-05-31 22:00"
-msgstr ""
+msgstr "2017-05-31 22:00"
 
 #: pretix/base/pdf.py:282
 msgid "22:00"
-msgstr ""
+msgstr "22:00"
 
 #: pretix/base/pdf.py:289
 msgid "Event end weekday"
-msgstr ""
+msgstr "活動結束的星期幾"
 
 #: pretix/base/pdf.py:294
 msgid "Event admission date and time"
