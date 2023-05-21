@@ -6261,25 +6261,25 @@ msgstr "活動結束的星期幾"
 
 #: pretix/base/pdf.py:294
 msgid "Event admission date and time"
-msgstr ""
+msgstr "活動管理日期與時間"
 
 #: pretix/base/pdf.py:295 pretix/base/pdf.py:396 pretix/base/pdf.py:420
 #: pretix/base/pdf.py:444 pretix/base/pdf.py:487
 msgid "2017-05-31 19:00"
-msgstr ""
+msgstr "2017-05-31 19:00"
 
 #: pretix/base/pdf.py:302
 msgid "Event admission time"
-msgstr ""
+msgstr "活動管理時間"
 
 #: pretix/base/pdf.py:303 pretix/base/pdf.py:404 pretix/base/pdf.py:428
 #: pretix/base/pdf.py:452
 msgid "19:00"
-msgstr ""
+msgstr "19:00"
 
 #: pretix/base/pdf.py:310
 msgid "Event location"
-msgstr ""
+msgstr "活動地點"
 
 #: pretix/base/pdf.py:311 pretix/base/settings.py:1006
 msgid "Random City"
