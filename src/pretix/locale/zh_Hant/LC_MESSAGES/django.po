@@ -6214,17 +6214,17 @@ msgstr "活動開始的日期與時間"
 
 #: pretix/base/pdf.py:240
 msgid "2017-05-31 20:00"
-msgstr ""
+msgstr "2017-05-31 20:00"
 
 #: pretix/base/pdf.py:247
 msgid "Event begin date"
-msgstr ""
+msgstr "活動開始日期"
 
 #: pretix/base/pdf.py:248 pretix/base/pdf.py:274 pretix/base/pdf.py:388
 #: pretix/base/pdf.py:412 pretix/base/pdf.py:436 pretix/base/pdf.py:493
 #: pretix/base/pdf.py:498
 msgid "2017-05-31"
-msgstr ""
+msgstr "2017-05-31"
 
 #: pretix/base/pdf.py:255
 msgid "Event begin time"
