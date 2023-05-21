@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-20 07:00+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"PO-Revision-Date: 2023-05-21 08:45+0000\n"
+"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -947,12 +947,12 @@ msgstr ""
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
-msgstr "活動數據"
+msgstr "活動資料"
 
 #: pretix/base/exporters/events.py:48
 msgctxt "export_category"
 msgid "Event data"
-msgstr "活動數據"
+msgstr "活動資料"
 
 #: pretix/base/exporters/events.py:49
 msgid ""
@@ -1335,7 +1335,7 @@ msgstr "外幣匯率"
 
 #: pretix/base/exporters/invoices.py:223
 msgid "Total value (with taxes)"
-msgstr "總價值（含稅）"
+msgstr "總價（含稅）"
 
 #: pretix/base/exporters/invoices.py:224
 msgid "Total value (without taxes)"
@@ -5848,6 +5848,9 @@ msgid ""
 "rel=\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
+"如果你想要你的使用者付支付提供者的手續費，我們建議你啟用。<a href=\""
+"{docs_url}\" target=\"_blank\" rel=\"noopener\""
+">點這邊來取得所代表意義的詳細資訊。</a>請不要忘記在上面設定正確的手續費！"
 
 #: pretix/base/payment.py:378
 msgid "Text on invoices"
@@ -6054,11 +6057,11 @@ msgstr ""
 
 #: pretix/base/payment.py:1459
 msgid "This gift card is not accepted by this event organizer."
-msgstr ""
+msgstr "活動主辦方不接受此禮物卡。"
 
 #: pretix/base/payment.py:1461
 msgid "This gift card was used in the meantime. Please try again."
-msgstr ""
+msgstr "此禮物卡是在用餐時間使用，請再試一次。"
 
 #: pretix/base/pdf.py:94
 msgid "Ticket code (barcode content)"
