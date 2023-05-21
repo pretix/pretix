@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-21 08:51+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"PO-Revision-Date: 2023-05-21 08:52+0000\n"
+"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6283,7 +6283,7 @@ msgstr "活動地點"
 
 #: pretix/base/pdf.py:311 pretix/base/settings.py:1006
 msgid "Random City"
-msgstr ""
+msgstr "隨機城市"
 
 #: pretix/base/pdf.py:330
 msgid "Invoice address company"
