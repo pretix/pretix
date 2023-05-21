@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-21 09:14+0000\n"
-"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
+"PO-Revision-Date: 2023-05-22 08:00+0000\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6517,48 +6517,49 @@ msgstr "隨機 (預設，能在所有 pretix app 作用)"
 msgid ""
 "pretix signature scheme 1 (for very large events, changes semantics of "
 "offline scanning – please refer to documentation or support for details)"
-msgstr ""
+msgstr "Pretix 簽名方案 1（對於非常大的事件，更改離機掃描的語義 – "
+"有關詳細資訊，請參閱文檔或支援）"
 
 #: pretix/base/services/cancelevent.py:229
 #: pretix/base/services/cancelevent.py:287
 msgid "Event canceled"
-msgstr ""
+msgstr "活動取消"
 
 #: pretix/base/services/cart.py:98 pretix/base/services/orderimport.py:214
 #: pretix/base/services/orders.py:142
 msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
-msgstr ""
+msgstr "由於伺服器太忙，我們無法完全處理你的請求。請重試。"
 
 #: pretix/base/services/cart.py:101 pretix/presale/views/cart.py:242
 msgid "You did not select any products."
-msgstr ""
+msgstr "你沒有選擇任何產品。"
 
 #: pretix/base/services/cart.py:102
 msgid "Unknown cart position."
-msgstr ""
+msgstr "購物車位置未知。"
 
 #: pretix/base/services/cart.py:103
 msgctxt "subevent"
 msgid "No date was specified."
-msgstr ""
+msgstr "未指定日期。"
 
 #: pretix/base/services/cart.py:104 pretix/base/services/orders.py:179
 msgid "You selected a product which is not available for sale."
-msgstr ""
+msgstr "你選擇了無法銷售的商品。"
 
 #: pretix/base/services/cart.py:106
 msgid ""
 "Some of the products you selected are no longer available. Please see below "
 "for details."
-msgstr ""
+msgstr "你選擇的某些產品不再可用。詳情請見下文。"
 
 #: pretix/base/services/cart.py:110
 msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. Please see below for details."
-msgstr ""
+msgstr "你選擇的某些產品不再可用。詳情請見下文。"
 
 #: pretix/base/services/cart.py:114
 #, python-format
@@ -6598,41 +6599,41 @@ msgstr[0] ""
 #: pretix/presale/templates/pretixpresale/event/index.html:157
 #: pretix/presale/views/waiting.py:104 pretix/presale/views/widget.py:705
 msgid "The booking period for this event has not yet started."
-msgstr ""
+msgstr "此活動的預訂期已結束或尚未開始。"
 
 #: pretix/base/services/cart.py:133
 msgid "The booking period for this event has ended."
-msgstr ""
+msgstr "此活動的預訂期已結束。"
 
 #: pretix/base/services/cart.py:134
 msgid ""
 "All payments for this event need to be confirmed already, so no new orders "
 "can be created."
-msgstr ""
+msgstr "此事件的所有付款都需要已經確認，因此無法建立新訂單。"
 
 #: pretix/base/services/cart.py:136
 msgid ""
 "The booking period for this event has not yet started. The affected "
 "positions have been removed from your cart."
-msgstr ""
+msgstr "此活動的預訂期尚未開始。受影響的順位已從你的購物車中刪除。"
 
 #: pretix/base/services/cart.py:139 pretix/base/services/orders.py:173
 msgid ""
 "The booking period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
-msgstr ""
+msgstr "此活動的預訂期尚未開始。受影響的順位已從你的購物車中刪除。"
 
 #: pretix/base/services/cart.py:141
 msgid "The entered price is not a number."
-msgstr ""
+msgstr "輸入的價格不是數字。"
 
 #: pretix/base/services/cart.py:142
 msgid "The entered price is to high."
-msgstr ""
+msgstr "輸入的價格太高。"
 
 #: pretix/base/services/cart.py:143
 msgid "This voucher code is not known in our database."
-msgstr ""
+msgstr "在我們的資料庫中不知道此優惠券代碼。"
 
 #: pretix/base/services/cart.py:145 pretix/base/services/orders.py:148
 #, python-format
@@ -6661,7 +6662,7 @@ msgstr[1] ""
 #: pretix/base/services/cart.py:155
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
-msgstr ""
+msgstr "此優惠券代碼已被使用所允許的最大次數。"
 
 #: pretix/base/services/cart.py:157
 #, python-format
@@ -6678,31 +6679,31 @@ msgstr ""
 #: pretix/base/services/cart.py:162
 #, python-format
 msgid "This voucher code can only be redeemed %d more times."
-msgstr ""
+msgstr "此優惠券代碼只能兌換 %d 次。"
 
 #: pretix/base/services/cart.py:163
 msgid ""
 "Applying a voucher to the whole cart should not be combined with other "
 "operations."
-msgstr ""
+msgstr "將優惠券應用於整個購物車，這項操作不應與其他操作結合使用。"
 
 #: pretix/base/services/cart.py:165
 msgid ""
 "You already used this voucher code. Remove the associated line from your "
 "cart if you want to use it for a different product."
-msgstr ""
+msgstr "你已經使用此優惠券代碼。如果要將其用於其他產品，請從購物車中刪除關聯的行數。"
 
 #: pretix/base/services/cart.py:168
 msgid "This voucher is expired."
-msgstr ""
+msgstr "優惠券過期"
 
 #: pretix/base/services/cart.py:169
 msgid "This voucher is not valid for this product."
-msgstr ""
+msgstr "此優惠券不適用於此產品。"
 
 #: pretix/base/services/cart.py:170
 msgid "This voucher is not valid for this seat."
-msgstr ""
+msgstr "此優惠券不適用於此產品。"
 
 #: pretix/base/services/cart.py:172
 msgid ""
@@ -6715,21 +6716,21 @@ msgstr ""
 
 #: pretix/base/services/cart.py:177
 msgid "Your voucher is valid for a product that is currently not for sale."
-msgstr ""
+msgstr "你的優惠券對當前不出售的產品有效。"
 
 #: pretix/base/services/cart.py:178
 msgctxt "subevent"
 msgid "This voucher is not valid for this event date."
-msgstr ""
+msgstr "此優惠券不適用於此活動日期。"
 
 #: pretix/base/services/cart.py:179
 msgid "You need a valid voucher code to order this product."
-msgstr ""
+msgstr "你需要有效的優惠券代碼才能訂購此商品。"
 
 #: pretix/base/services/cart.py:180
 msgctxt "subevent"
 msgid "The selected event date is not active."
-msgstr ""
+msgstr "所選活動日期還未啟動。"
 
 #: pretix/base/services/cart.py:181 pretix/base/services/orders.py:180
 msgid "You can not select an add-on for the selected product."
@@ -6766,210 +6767,211 @@ msgstr[1] ""
 msgid ""
 "You can select every add-ons from the category %(cat)s for the product "
 "%(base)s at most once."
-msgstr ""
+msgstr "您最多只能從商品%(base)s 的類別 %(cat)s 中選擇每個附加部份一次。"
 
 #: pretix/base/services/cart.py:194
 msgid ""
 "One of the products you selected can only be bought as an add-on to another "
 "product."
-msgstr ""
+msgstr "你選擇的一種商品只能作為另一種商品的附加部分購買。"
 
 #: pretix/base/services/cart.py:195
 msgid "One of the products you selected can only be bought part of a bundle."
-msgstr ""
+msgstr "你選擇的商品之一隻能購買捆綁包的一部分。"
 
 #: pretix/base/services/cart.py:197
 msgid "Please select a valid seat."
-msgstr ""
+msgstr "請選擇有效座位。"
 
 #: pretix/base/services/cart.py:198
 msgid "You can not select a seat for this position."
-msgstr ""
+msgstr "你不能選擇座位為此位置。"
 
 #: pretix/base/services/cart.py:200
 msgid "You can not select the same seat multiple times."
-msgstr ""
+msgstr "你不能多次選擇同一座位。"
 
 #: pretix/base/services/cart.py:201
 msgid ""
 "You entered a gift card instead of a voucher. Gift cards can be entered "
 "later on when you're asked for your payment details."
-msgstr ""
+msgstr "你輸入的是禮物卡而不是優惠券。稍後，當系統要求你提供付款詳細資訊時，可以輸入"
+"禮物卡。"
 
 #: pretix/base/services/cart.py:203
 msgid ""
 "The configuration of this product requires mapping to a physical medium, "
 "which is currently not available online."
-msgstr ""
+msgstr "此產品的設定需要映射到物理媒介，而物理媒介目前無法在線上取得。"
 
 #: pretix/base/services/checkin.py:152
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:36
 msgid "Unknown reason"
-msgstr ""
+msgstr "不明原因"
 
 #: pretix/base/services/checkin.py:208
 #, python-brace-format
 msgid "Only allowed before {datetime}"
-msgstr ""
+msgstr "只允許在 {datetime} 之前"
 
 #: pretix/base/services/checkin.py:210
 #, python-brace-format
 msgid "Only allowed after {datetime}"
-msgstr ""
+msgstr "僅允許在 {datetime} 之後"
 
 #: pretix/base/services/checkin.py:213
 msgid "Ticket type not allowed"
-msgstr ""
+msgstr "不允許這門票類型"
 
 #: pretix/base/services/checkin.py:232
 msgid "time since last entry"
-msgstr ""
+msgstr "從上次條目之後的時間"
 
 #: pretix/base/services/checkin.py:233
 msgid "time since first entry"
-msgstr ""
+msgstr "自首次進入以來的時間"
 
 #: pretix/base/services/checkin.py:234
 msgid "number of days with an entry"
-msgstr ""
+msgstr "輸入的天數"
 
 #: pretix/base/services/checkin.py:235
 msgid "number of entries"
-msgstr ""
+msgstr "條目數"
 
 #: pretix/base/services/checkin.py:236
 msgid "number of entries today"
-msgstr ""
+msgstr "今日條目數數量"
 
 #: pretix/base/services/checkin.py:237
 msgid "week day"
-msgstr ""
+msgstr "工作日"
 
 #: pretix/base/services/checkin.py:259 pretix/control/forms/filter.py:1119
 msgid "Monday"
-msgstr ""
+msgstr "星期一"
 
 #: pretix/base/services/checkin.py:260 pretix/control/forms/filter.py:1120
 msgid "Tuesday"
-msgstr ""
+msgstr "星期二"
 
 #: pretix/base/services/checkin.py:261 pretix/control/forms/filter.py:1121
 msgid "Wednesday"
-msgstr ""
+msgstr "星期三"
 
 #: pretix/base/services/checkin.py:262 pretix/control/forms/filter.py:1122
 msgid "Thursday"
-msgstr ""
+msgstr "星期四"
 
 #: pretix/base/services/checkin.py:264 pretix/control/forms/filter.py:1124
 msgid "Saturday"
-msgstr ""
+msgstr "星期六"
 
 #: pretix/base/services/checkin.py:265 pretix/control/forms/filter.py:1125
 msgid "Sunday"
-msgstr ""
+msgstr "星期天"
 
 #: pretix/base/services/checkin.py:269
 #, python-brace-format
 msgid "{variable} is not {value}"
-msgstr ""
+msgstr "{variable} 不是 {value}"
 
 #: pretix/base/services/checkin.py:271
 #, python-brace-format
 msgid "Maximum {variable} exceeded"
-msgstr ""
+msgstr "超出最大值 {variable}"
 
 #: pretix/base/services/checkin.py:273
 #, python-brace-format
 msgid "Minimum {variable} exceeded"
-msgstr ""
+msgstr "超出最小值 {variable}"
 
 #: pretix/base/services/checkin.py:275
 #, python-brace-format
 msgid "{variable} is {value}"
-msgstr ""
+msgstr "{variable} 是 {value}"
 
 #: pretix/base/services/checkin.py:724
 msgid "This order position has been canceled."
-msgstr ""
+msgstr "此訂單順序已被取消。"
 
 #: pretix/base/services/checkin.py:733
 msgid "This ticket has been blocked."
-msgstr ""
+msgstr "票已被封鎖。"
 
 #: pretix/base/services/checkin.py:742 pretix/base/services/checkin.py:746
 #, python-brace-format
 msgid "This ticket is only valid after {datetime}."
-msgstr ""
+msgstr "票只在{datetime}後有效。"
 
 #: pretix/base/services/checkin.py:756 pretix/base/services/checkin.py:760
 #, python-brace-format
 msgid "This ticket was only valid before {datetime}."
-msgstr ""
+msgstr "票只在{datetime}前有效。"
 
 #: pretix/base/services/checkin.py:790
 msgid "This order position has an invalid product for this check-in list."
-msgstr ""
+msgstr "此訂單順序具有check-in清單的無效商品。"
 
 #: pretix/base/services/checkin.py:799
 msgid "This order position has an invalid date for this check-in list."
-msgstr ""
+msgstr "這項check-in清單訂單順序的日期無效，"
 
 #: pretix/base/services/checkin.py:808
 msgid "This order is not yet approved."
-msgstr ""
+msgstr "此訂單尚未獲得批准。"
 
 #: pretix/base/services/checkin.py:818
 msgid "This order is not marked as paid."
-msgstr ""
+msgstr "此訂單未標記為已付款。"
 
 #: pretix/base/services/checkin.py:831
 #, python-brace-format
 msgid "Entry not permitted: {explanation}."
-msgstr ""
+msgstr "不允許輸入： {explanation}."
 
 #: pretix/base/services/checkin.py:840
 msgid "You need to answer questions to complete this check-in."
-msgstr ""
+msgstr "你需要回答問題才能完成check-in。"
 
 #: pretix/base/services/checkin.py:888
 msgid "This ticket has already been redeemed."
-msgstr ""
+msgstr "這張票已被兌現。"
 
 #: pretix/base/services/currencies.py:38 pretix/base/services/currencies.py:39
 msgid "European Central Bank"
-msgstr ""
+msgstr "歐洲中央銀行"
 
 #: pretix/base/services/currencies.py:40
 msgid "Czech National Bank"
-msgstr ""
+msgstr "捷克國家銀行"
 
 #: pretix/base/services/export.py:86 pretix/base/services/export.py:154
 #: pretix/base/services/export.py:209
 msgid "Your export did not contain any data."
-msgstr ""
+msgstr "你的匯出不包含任何數據。"
 
 #: pretix/base/services/export.py:148
 msgid "You do not have sufficient permission to perform this export."
-msgstr ""
+msgstr "你沒有足夠的權限來執行此匯出。"
 
 #: pretix/base/services/export.py:183
 msgid "Export failed"
-msgstr ""
+msgstr "匯出失敗"
 
 #: pretix/base/services/export.py:200
 msgid "Permission denied."
-msgstr ""
+msgstr "權限被拒絕。"
 
 #: pretix/base/services/export.py:215
 msgid "Your exported data exceeded the size limit for scheduled exports."
-msgstr ""
+msgstr "你匯出的數據超出預計的大小限制。"
 
 #: pretix/base/services/invoices.py:103
 #, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
-msgstr ""
+msgstr "請在{expire_date}之前完成付款。"
 
 #: pretix/base/services/invoices.py:115
 #, python-brace-format
@@ -6986,43 +6988,43 @@ msgstr ""
 #, python-brace-format
 msgctxt "invoice"
 msgid "Event location: {location}"
-msgstr ""
+msgstr "活動地點：{location}"
 
 #: pretix/base/services/invoices.py:236
 #, python-brace-format
 msgctxt "invoice"
 msgid "Attendee: {name}"
-msgstr ""
+msgstr "與會者: {name}"
 
 #: pretix/base/services/invoices.py:254 pretix/plugins/reports/exporters.py:298
 msgctxt "subevent"
 msgid "Date: {}"
-msgstr ""
+msgstr "日期： {}"
 
 #: pretix/base/services/invoices.py:459
 msgid "A payment provider specific text might appear here."
-msgstr ""
+msgstr "此處可能會出現提供特定支付者的文件。"
 
 #: pretix/base/services/invoices.py:467
 msgid "214th Example Street"
-msgstr ""
+msgstr "第214條範例街道"
 
 #: pretix/base/services/invoices.py:468
 msgid "012345"
-msgstr ""
+msgstr "012345"
 
 #: pretix/base/services/invoices.py:485
 msgid "Sample product {}"
-msgstr ""
+msgstr "商品樣品 {}"
 
 #: pretix/base/services/invoices.py:492
 msgid "Sample product A"
-msgstr ""
+msgstr "商品樣品Ａ"
 
 #: pretix/base/services/invoices.py:519
 #, python-brace-format
 msgid "New invoice: {number}"
-msgstr ""
+msgstr "新發票：{number}"
 
 #: pretix/base/services/invoices.py:521
 #, python-brace-format
@@ -7040,7 +7042,7 @@ msgstr ""
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
-msgstr ""
+msgstr "你收到此電子郵件是因為有人為你下了 {event} 訂單。"
 
 #: pretix/base/services/mail.py:270 pretix/base/services/mail.py:286
 #, python-brace-format
@@ -7052,46 +7054,47 @@ msgstr ""
 #: pretix/base/services/mail.py:282
 #, python-brace-format
 msgid "You are receiving this email because you placed an order for {event}."
-msgstr ""
+msgstr "你收到此電子郵件是因為你下了 {event} 訂單。"
 
 #: pretix/base/services/mail.py:457
 msgctxt "attachment_filename"
 msgid "Calendar invite"
-msgstr ""
+msgstr "日曆邀請"
 
 #: pretix/base/services/memberships.py:105
 #, python-brace-format
 msgid ""
 "You selected a membership for the product \"{product}\" which does not "
 "require a membership."
-msgstr ""
+msgstr "你為產品“{product}”選擇了不需要會員資格的會員資格。"
 
 #: pretix/base/services/memberships.py:113
 #, python-brace-format
 msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
-msgstr ""
+msgstr "你選擇需要選擇有效會員資格的產品“ {product}”。"
 
 #: pretix/base/services/memberships.py:142
 msgid ""
 "You selected a membership that is connected to a different customer account."
-msgstr ""
+msgstr "你選擇了連接到其他客戶帳戶的會員資格。"
 
 #: pretix/base/services/memberships.py:147
 msgid "You selected membership that has been canceled."
-msgstr ""
+msgstr "你選擇已取消的會員資格。"
 
 #: pretix/base/services/memberships.py:152
 msgid "You can only use a test mode membership for test mode tickets."
-msgstr ""
+msgstr "你只能對測試模式的票使用測試模式的會員資格。"
 
 #: pretix/base/services/memberships.py:159
 #, python-brace-format
 msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "an event taking place at {date}."
-msgstr ""
+msgstr "你選擇了從 {start} 到 {end} 有效的會員資格，但是你卻選擇在 {date} "
+"發生的活動。"
 
 #: pretix/base/services/memberships.py:174
 #, python-brace-format
@@ -7503,7 +7506,8 @@ msgid ""
 "The re-usable media feature allows you to connect tickets and gift cards "
 "with physical media such as wristbands or chip cards that may be re-used for "
 "different tickets or gift cards later."
-msgstr ""
+msgstr "可重複使用的媒體功能允許你將門票和禮品卡與物理媒體（如腕帶或晶片卡）連接起來"
+"，這些媒體以後可能會重新用於不同的門票或禮物卡。"
 
 #: pretix/base/settings.py:205
 msgid "Length of barcodes"
