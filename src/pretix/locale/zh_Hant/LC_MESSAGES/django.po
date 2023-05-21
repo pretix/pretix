@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-21 08:58+0000\n"
+"PO-Revision-Date: 2023-05-21 08:59+0000\n"
 "Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -6438,11 +6438,11 @@ msgstr "問題：{question}"
 #: pretix/base/pdf.py:577 pretix/base/pdf.py:583
 #, python-brace-format
 msgid "<Answer: {question}>"
-msgstr ""
+msgstr "<回答：{question}>"
 
 #: pretix/base/pdf.py:624
 msgid "Attendee name for salutation"
-msgstr ""
+msgstr "核對用途的參與者名稱"
 
 #: pretix/base/pdf.py:631 pretix/base/pdf.py:638
 #: pretix/plugins/badges/exporters.py:321
@@ -6451,7 +6451,7 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/exporters.py:98
 #, python-brace-format
 msgid "Attendee name: {part}"
-msgstr ""
+msgstr "參與者名稱：{part}"
 
 #: pretix/base/pdf.py:647
 msgid "Invoice address name for salutation"
