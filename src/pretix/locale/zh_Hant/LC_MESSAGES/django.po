@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
 "PO-Revision-Date: 2023-05-21 08:54+0000\n"
-"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6311,11 +6311,11 @@ msgstr "範例的州"
 
 #: pretix/base/pdf.py:356
 msgid "Atlantis"
-msgstr "台北市"
+msgstr "亞特蘭大"
 
 #: pretix/base/pdf.py:360
 msgid "List of Add-Ons"
-msgstr "外掛清單"
+msgstr "附加組件清單"
 
 #: pretix/base/pdf.py:361
 msgid ""
