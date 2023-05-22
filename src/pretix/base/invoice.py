@@ -846,7 +846,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 ).format(rate=localize(self.invoice.foreign_currency_rate),
                          date=date_format(self.invoice.foreign_currency_rate_date, "SHORT_DATE_FORMAT"),
                          authority=SOURCE_NAMES.get(self.invoice.foreign_currency_source, "?"),
-                         total=fmt(foreign_total)))),
+                         total=fmt(foreign_total))),
                 self.stylesheet['Fineprint']
             )
 
