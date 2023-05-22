@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-22 08:00+0000\n"
+"PO-Revision-Date: 2023-05-22 08:53+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -6734,11 +6734,11 @@ msgstr "所選活動日期還未啟動。"
 
 #: pretix/base/services/cart.py:181 pretix/base/services/orders.py:180
 msgid "You can not select an add-on for the selected product."
-msgstr ""
+msgstr "你無法為所選取產品選擇附加配件。"
 
 #: pretix/base/services/cart.py:182 pretix/base/services/orders.py:181
 msgid "You can not select two variations of the same add-on product."
-msgstr ""
+msgstr "你不能選擇同一附加商品的兩種類型。"
 
 #: pretix/base/services/cart.py:184 pretix/base/services/orders.py:183
 #, python-format
@@ -7197,42 +7197,42 @@ msgstr ""
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
-msgstr ""
+msgstr "用於購物車中某件商品的優惠券代碼已過期。我們已從你的購物車中移除了此商品。"
 
 #: pretix/base/services/orders.py:165
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
-msgstr ""
+msgstr "用於購物車中某件商品的優惠券代碼已過期。我們已從你的購物車中移除了此商品。"
 
 #: pretix/base/services/orders.py:167
 msgid "You need a valid voucher code to order one of the products."
-msgstr ""
+msgstr "你需要有效的優惠券代碼才能訂購其中一種商品。"
 
 #: pretix/base/services/orders.py:169
 msgid ""
 "The booking period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
-msgstr ""
+msgstr "此活動的預訂期尚未開始。受影響的順位已從你的購物車中刪除。"
 
 #: pretix/base/services/orders.py:176
 msgid ""
 "One of the seats in your order was invalid, we removed the position from "
 "your cart."
-msgstr ""
+msgstr "你訂單中的座位無效，我們從你的購物車中刪除了該位置。"
 
 #: pretix/base/services/orders.py:177
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
-msgstr ""
+msgstr "你訂單中的一個座位已被佔用 。在此期間，我們從你的購物車中刪除了該位置。"
 
 #: pretix/base/services/orders.py:193
 #, python-format
 msgid ""
 "You cannot remove the position %(addon)s since it has already been checked "
 "in."
-msgstr ""
+msgstr "你無法刪除位置 %(addon)s s，因為該座位已被登記。"
 
 #: pretix/base/services/orders.py:209
 msgid "The order was not canceled."
@@ -27858,12 +27858,12 @@ msgstr "你可以使用以下按鈕取消此訂單。"
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:11
 #, python-format
 msgid "Request cancellation: %(code)s"
-msgstr ""
+msgstr "要求取消: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:15
 #, python-format
 msgid "Cancel order: %(code)s"
-msgstr ""
+msgstr "取消訂單: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:38
 msgid ""
@@ -27885,7 +27885,7 @@ msgstr "如果你取消此訂單，所有的票都將失效，你將無法再使
 msgid ""
 "If you want, you can request a refund for the full amount minus a "
 "cancellation fee of %(fee)s."
-msgstr ""
+msgstr "如果你願意，你可以申請全額退款減去 %(fee)s.的取消費用。"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:67
 msgid "If you want, you can request a full refund."
@@ -27903,7 +27903,7 @@ msgstr "退款金額:"
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:138
 #, python-format
 msgid "Your gift card will be valid until %(expiry_date)s."
-msgstr ""
+msgstr "你的禮品卡有效期至 %(expiry_date)s."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:126
 msgid "I want the refund as a gift card for later purchases"
@@ -27930,7 +27930,7 @@ msgstr "請確認你以下修改的訂單。"
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:10
 #, python-format
 msgid "Gift card: %(code)s"
-msgstr ""
+msgstr "禮品卡: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:5
 msgid "Modify order"
@@ -27939,7 +27939,7 @@ msgstr "修改訂單"
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:8
 #, python-format
 msgid "Modify order: %(code)s"
-msgstr ""
+msgstr "修改訂單： %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:18
 msgid ""
@@ -28151,7 +28151,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:16
 msgctxt "waitinglist"
 msgid "Yes, remove my ticket"
-msgstr ""
+msgstr "是的，移除我的票"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:5
 msgid "Calendar"
@@ -28167,7 +28167,7 @@ msgstr "（繼續）"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:46
 msgctxt "timerange"
 msgid "until"
-msgstr ""
+msgstr "直到"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:98
 #, python-format
@@ -28187,8 +28187,9 @@ msgid "Month"
 msgstr "月"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:27
+#, fuzzy
 msgid "iCal"
-msgstr ""
+msgstr "iCal"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:24
 msgctxt "day calendar"
