@@ -839,7 +839,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         elif self.invoice.foreign_currency_display and self.invoice.foreign_currency_rate:
             foreign_total = round_decimal(total * self.invoice.foreign_currency_rate)
             story.append(Spacer(1, 5 * mm))
-            story.append(self._normalize(Paragraph(
+            story.append(Paragraph(self._normalize(
                 pgettext(
                     'invoice', 'Using the conversion rate of 1:{rate} as published by the {authority} on '
                                '{date}, the invoice total corresponds to {total}.'
