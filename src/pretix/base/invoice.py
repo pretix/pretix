@@ -848,7 +848,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                          authority=SOURCE_NAMES.get(self.invoice.foreign_currency_source, "?"),
                          total=fmt(foreign_total))),
                 self.stylesheet['Fineprint']
-            )
+            ))
 
         return story
 
