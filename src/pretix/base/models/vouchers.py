@@ -296,6 +296,14 @@ class Voucher(LoggedModel):
         verbose_name=_("Shows hidden products that match this voucher"),
         default=True
     )
+    all_addons_included = models.BooleanField(
+        verbose_name=_("Offer all add-on products for free when redeeming this voucher"),
+        default=False
+    )
+    all_bundles_included = models.BooleanField(
+        verbose_name=_("Include all bundled products without a designated price when redeeming this voucher"),
+        default=False
+    )
 
     objects = ScopedManager(organizer='event__organizer')
 

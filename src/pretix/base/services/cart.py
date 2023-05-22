@@ -512,7 +512,10 @@ class CartManager:
             if cp.is_bundled:
                 bundle = cp.addon_to.item.bundles.filter(bundled_item=cp.item, bundled_variation=cp.variation).first()
                 if bundle:
-                    listed_price = bundle.designated_price or Decimal('0.00')
+                    if cp.addon_to.voucher_id and cp.addon_to.voucher.all_bundles_included:
+                        listed_price = Decimal('0.00')
+                    else:
+                        listed_price = bundle.designated_price
                 else:
                     listed_price = cp.price
                 price_after_voucher = listed_price
@@ -712,6 +715,11 @@ class CartManager:
                 else:
                     bundle_quotas = []
 
+                if voucher and voucher.all_bundles_included:
+                    bundled_price = Decimal('0.00')
+                else:
+                    bundled_price = bundle.designated_price
+
                 bop = self.AddOperation(
                     count=bundle.count,
                     item=bitem,
@@ -722,8 +730,8 @@ class CartManager:
                     subevent=subevent,
                     bundled=[],
                     seat=None,
-                    listed_price=bundle.designated_price,
-                    price_after_voucher=bundle.designated_price,
+                    listed_price=bundled_price,
+                    price_after_voucher=bundled_price,
                     custom_price_input=None,
                     custom_price_input_is_net=False,
                     voucher_ignored=False,
@@ -809,7 +817,6 @@ class CartManager:
         quota_diff = Counter()  # Quota -> Number of usages
         operations = []
         available_categories = defaultdict(set)  # CartPos -> Category IDs to choose from
-        price_included = defaultdict(dict)  # CartPos -> CategoryID -> bool(price is included)
         toplevel_cp = self.positions.filter(
             addon_to__isnull=True
         ).prefetch_related(
@@ -819,7 +826,6 @@ class CartManager:
         # Prefill some of the cache containers
         for cp in toplevel_cp:
             available_categories[cp.pk] = {iao.addon_category_id for iao in cp.item.addons.all()}
-            price_included[cp.pk] = {iao.addon_category_id: iao.price_included for iao in cp.item.addons.all()}
             cpcache[cp.pk] = cp
             for a in cp.addons.all():
                 if not a.is_bundled:

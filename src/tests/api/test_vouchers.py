@@ -79,6 +79,8 @@ TEST_VOUCHER_RES = {
     'tag': 'Foo',
     'comment': '',
     'show_hidden_items': True,
+    'all_addons_included': False,
+    'all_bundles_included': False,
     'subevent': None,
     'seat': None,
 }

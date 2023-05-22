@@ -1892,7 +1892,7 @@ class OrderChangeManager:
             input_addons[op.id][a['item'], a['variation']] = a.get('count', 1)
             selected_addons[op.id, item.category_id][a['item'], a['variation']] = a.get('count', 1)
 
-            if price_included[op.pk].get(item.category_id):
+            if price_included[op.pk].get(item.category_id) or (op.voucher_id and op.voucher.all_addons_included):
                 price = TAXED_ZERO
             else:
                 price = get_price(
