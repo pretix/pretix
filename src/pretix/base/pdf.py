@@ -48,6 +48,7 @@ from functools import partial
 from io import BytesIO
 
 import jsonschema
+from arabic_reshaper import ArabicReshaper
 from bidi.algorithm import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
@@ -56,6 +57,7 @@ from django.db.models import Max, Min
 from django.dispatch import receiver
 from django.utils.deconstruct import deconstructible
 from django.utils.formats import date_format
+from django.utils.functional import SimpleLazyObject
 from django.utils.html import conditional_escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
@@ -76,12 +78,12 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
 from pretix.base.i18n import language
+from pretix.base.invoice import ThumbnailingImageReader
 from pretix.base.models import Order, OrderPosition, Question
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import layout_image_variables, layout_text_variables
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
-from pretix.helpers.reportlab import ThumbnailingImageReader, reshaper
 from pretix.presale.style import get_fonts
 
 logger = logging.getLogger(__name__)
@@ -695,6 +697,12 @@ def get_seat(op: OrderPosition):
     if op.addon_to_id:
         return op.addon_to.seat
     return None
+
+
+reshaper = SimpleLazyObject(lambda: ArabicReshaper(configuration={
+    'delete_harakat': True,
+    'support_ligatures': False,
+}))
 
 
 class Renderer:

@@ -96,18 +96,6 @@ def primary_font_kwargs():
     }
 
 
-def invoice_font_kwargs():
-    from pretix.presale.style import get_fonts
-
-    choices = [('Open Sans', 'Open Sans')]
-    choices += sorted([
-        (a, a) for a, v in get_fonts().items()
-    ], key=lambda a: a[0])
-    return {
-        'choices': choices,
-    }
-
-
 def restricted_plugin_kwargs():
     from pretix.base.plugins import get_all_plugins
 
@@ -655,19 +643,6 @@ DEFAULTS = {
             label=_("Highlight order code to make it stand out visibly"),
             help_text=_("Only respected by some invoice renderers."),
         )
-    },
-    'invoice_renderer_font': {
-        'default': 'Open Sans',
-        'type': str,
-        'form_class': forms.ChoiceField,
-        'serializer_class': serializers.ChoiceField,
-        'serializer_kwargs': lambda: dict(**invoice_font_kwargs()),
-        'form_kwargs': lambda: dict(
-            label=_('Font'),
-            help_text=_("Only respected by some invoice renderers."),
-            required=True,
-            **invoice_font_kwargs()
-        ),
     },
     'invoice_renderer': {
         'default': 'classic',  # default for new events is 'modern1'
