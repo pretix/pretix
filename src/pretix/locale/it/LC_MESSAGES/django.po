@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-19 07:23+0000\n"
-"Last-Translator: M C <micasadmail@gmail.com>\n"
+"PO-Revision-Date: 2023-05-23 23:00+0000\n"
+"Last-Translator: Michele Pagnozzi <michele.pagnozzi@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -761,6 +761,7 @@ msgstr "Profili cliente"
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
 msgstr ""
+"Scarica un foglio di calcolo di tutti i conti clienti attualmente registrati."
 
 #: pretix/base/exporters/customers.py:64 pretix/base/models/customers.py:82
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:28
@@ -998,6 +999,8 @@ msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
 msgstr ""
+"Scarica un foglio di calcolo con le informazioni su tutti gli eventi di "
+"questo account organizzatore."
 
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/waitinglist.py:114
 #: pretix/base/models/event.py:522 pretix/base/pdf.py:219
@@ -1111,7 +1114,7 @@ msgstr "Tutte le fatture"
 
 #: pretix/base/exporters/invoices.py:124
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
-msgstr ""
+msgstr "Scarica tutte le fatture PDF create dal sistema come archivio ZIP."
 
 #: pretix/base/exporters/invoices.py:175
 msgid "Invoice data"
@@ -1123,6 +1126,9 @@ msgid ""
 "The spreadsheet includes two sheets, one with a line for every invoice, and "
 "one with a line for every position of every invoice."
 msgstr ""
+"Scarica un foglio di calcolo con i dati di tutte le fatture create dal "
+"sistema. Il foglio di calcolo comprende due fogli, uno con una riga per ogni "
+"fattura e uno con una riga per ogni posizione di ogni fattura."
 
 #: pretix/base/exporters/invoices.py:188 pretix/base/shredder.py:396
 #: pretix/control/templates/pretixcontrol/order/index.html:260
@@ -1465,6 +1471,8 @@ msgstr "Dati del prodotto"
 #: pretix/base/exporters/items.py:52
 msgid "Download a spreadsheet with details about all products and variations."
 msgstr ""
+"Scarica un foglio di calcolo con i dettagli di tutti i prodotti e le "
+"varianti."
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:838
 msgid "Product ID"
@@ -1658,6 +1666,8 @@ msgid ""
 "Download a structured JSON representation of all orders. This might be "
 "useful for the import in third-party systems."
 msgstr ""
+"Scarica uno schema JSON di tutti gli ordini. Questo potrebbe essere utile "
+"per l'importazione in sistemi di terze parti."
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
@@ -1668,6 +1678,8 @@ msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
 msgstr ""
+"Scarica un file di testo con tutti gli indirizzi e-mail raccolti dagli "
+"acquirenti o dai possessori di biglietti."
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:461
 #: pretix/plugins/reports/exporters.py:643
@@ -1727,13 +1739,13 @@ msgid "Event date"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:137
-#, fuzzy
 msgid ""
 "Only include orders including at least one ticket for a date in this range. "
 "Will also include other dates in case of mixed orders!"
 msgstr ""
-"Include solo gli ordini che includono almeno un biglietto per una data a "
-"partire da questa data. Includerà anche altre date in caso di ordini misti!"
+"Comprende solo gli ordini che includono almeno un biglietto per una data "
+"compresa in questo intervallo. Verranno incluse anche altre date in caso di "
+"ordini misti!"
 
 #: pretix/base/exporters/orderlist.py:256
 #: pretix/base/exporters/orderlist.py:428
