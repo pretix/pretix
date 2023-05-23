@@ -473,7 +473,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                         filename = pgettext('invoice', 'Invoice {num}').format(num=inv.number).replace(' ', '_') + '.pdf'
                         if not re.match("^[a-zA-Z0-9-_%./,&:# ]+$", filename):
                             filename = inv.number.replace(' ', '_') + '.pdf'
-                        filename = re.sub("[^a-zA-Z0-9-_.]", "_", filename)
+                        filename = re.sub("[^a-zA-Z0-9-_.]+", "_", filename)
                         with language(inv.order.locale):
                             email.attach(
                                 filename,
