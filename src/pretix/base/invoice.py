@@ -509,7 +509,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             canvas.saveState()
             canvas.setFont(self.font_bold, 30)
             canvas.setFillColorRGB(32, 0, 0)
-            canvas.drawRightString(self.pagesize[0] - 20 * mm, (297 - 100) * mm, gettext('TEST MODE'))
+            canvas.drawRightString(self.pagesize[0] - 20 * mm, (297 - 100) * mm, self._normalize(gettext('TEST MODE')))
             canvas.restoreState()
 
     def _on_first_page(self, canvas: Canvas, doc):
@@ -557,22 +557,22 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         if self.invoice.internal_reference:
             story.append(Paragraph(
-                pgettext('invoice', 'Customer reference: {reference}').format(
+                self._normalize(pgettext('invoice', 'Customer reference: {reference}').format(
                     reference=self._clean_text(self.invoice.internal_reference),
-                ),
+                )),
                 self.stylesheet['Normal']
             ))
 
         if self.invoice.invoice_to_vat_id:
             story.append(Paragraph(
-                pgettext('invoice', 'Customer VAT ID') + ': ' +
+                self._normalize(pgettext('invoice', 'Customer VAT ID')) + ': ' +
                 self._clean_text(self.invoice.invoice_to_vat_id),
                 self.stylesheet['Normal']
             ))
 
         if self.invoice.invoice_to_beneficiary:
             story.append(Paragraph(
-                pgettext('invoice', 'Beneficiary') + ':<br />' +
+                self._normalize(pgettext('invoice', 'Beneficiary')) + ':<br />' +
                 self._clean_text(self.invoice.invoice_to_beneficiary),
                 self.stylesheet['Normal']
             ))
@@ -815,7 +815,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     net = gross - tax
 
                     tdata.append([
-                        localize(rate) + " % " + name,
+                        Paragraph(self._normalize(localize(rate) + " % " + name), self.stylesheet['Fineprint']),
                         fmt(net), fmt(gross), fmt(tax), ''
                     ])
 
