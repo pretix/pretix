@@ -20,6 +20,8 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+import re
+import unicodedata
 from collections import defaultdict
 from decimal import Decimal
 from io import BytesIO
@@ -28,6 +30,7 @@ from typing import Tuple
 
 import bleach
 import vat_moss.exchange_rates
+from bidi.algorithm import get_display
 from django.contrib.staticfiles import finders
 from django.db.models import Sum
 from django.dispatch import receiver
@@ -53,7 +56,8 @@ from pretix.base.models import Event, Invoice, Order, OrderPayment
 from pretix.base.services.currencies import SOURCE_NAMES
 from pretix.base.signals import register_invoice_renderers
 from pretix.base.templatetags.money import money_filter
-from pretix.helpers.reportlab import ThumbnailingImageReader
+from pretix.helpers.reportlab import ThumbnailingImageReader, reshaper
+from pretix.presale.style import get_fonts
 
 logger = logging.getLogger(__name__)
 
@@ -79,7 +83,12 @@ class NumberedCanvas(Canvas):
     def draw_page_number(self, page_count):
         self.saveState()
         self.setFont(self.font_regular, 8)
-        self.drawRightString(self._pagesize[0] - 20 * mm, 10 * mm, pgettext("invoice", "Page %d of %d") % (self._pageNumber, page_count,))
+        text = pgettext("invoice", "Page %d of %d") % (self._pageNumber, page_count,)
+        try:
+            text = get_display(reshaper.reshape(text))
+        except:
+            logger.exception('Reshaping/Bidi fixes failed on string {}'.format(repr(text)))
+        self.drawRightString(self._pagesize[0] - 20 * mm, 10 * mm, text)
         self.restoreState()
 
 
@@ -139,8 +148,8 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         """
         Initialize the renderer. By default, this registers fonts and sets ``self.stylesheet``.
         """
-        self.stylesheet = self._get_stylesheet()
         self._register_fonts()
+        self.stylesheet = self._get_stylesheet()
 
     def _get_stylesheet(self):
         """
@@ -148,6 +157,10 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         """
         stylesheet = StyleSheet1()
         stylesheet.add(ParagraphStyle(name='Normal', fontName=self.font_regular, fontSize=10, leading=12))
+        stylesheet.add(ParagraphStyle(name='Bold', fontName=self.font_bold, fontSize=10, leading=12))
+        stylesheet.add(ParagraphStyle(name='BoldRight', fontName=self.font_bold, fontSize=10, leading=12, alignment=TA_RIGHT))
+        stylesheet.add(ParagraphStyle(name='BoldRightNoSplit', fontName=self.font_bold, fontSize=10, leading=12, alignment=TA_RIGHT,
+                                      splitLongWords=False))
         stylesheet.add(ParagraphStyle(name='NormalRight', fontName=self.font_regular, fontSize=10, leading=12, alignment=TA_RIGHT))
         stylesheet.add(ParagraphStyle(name='BoldInverseCenter', fontName=self.font_bold, fontSize=10, leading=12,
                                       textColor=colors.white, alignment=TA_CENTER))
@@ -155,6 +168,7 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         stylesheet.add(ParagraphStyle(name='Heading1', fontName=self.font_bold, fontSize=15, leading=15 * 1.2))
         stylesheet.add(ParagraphStyle(name='FineprintHeading', fontName=self.font_bold, fontSize=8, leading=12))
         stylesheet.add(ParagraphStyle(name='Fineprint', fontName=self.font_regular, fontSize=8, leading=10))
+        stylesheet.add(ParagraphStyle(name='FineprintRight', fontName=self.font_regular, fontSize=8, leading=10, alignment=TA_RIGHT))
         return stylesheet
 
     def _register_fonts(self):
@@ -167,6 +181,32 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         pdfmetrics.registerFont(TTFont('OpenSansBI', finders.find('fonts/OpenSans-BoldItalic.ttf')))
         pdfmetrics.registerFontFamily('OpenSans', normal='OpenSans', bold='OpenSansBd',
                                       italic='OpenSansIt', boldItalic='OpenSansBI')
+
+        for family, styles in get_fonts().items():
+            if family == self.event.settings.invoice_renderer_font:
+                pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
+                self.font_regular = family
+                if 'italic' in styles:
+                    pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
+                if 'bold' in styles:
+                    pdfmetrics.registerFont(TTFont(family + ' B', finders.find(styles['bold']['truetype'])))
+                    self.font_bold = family + ' B'
+                if 'bolditalic' in styles:
+                    pdfmetrics.registerFont(TTFont(family + ' B I', finders.find(styles['bolditalic']['truetype'])))
+
+    def _normalize(self, text):
+        # reportlab does not support unicode combination characters
+        # It's important we do this before we use ArabicReshaper
+        text = unicodedata.normalize("NFKC", text)
+
+        # reportlab does not support RTL, ligature-heavy scripts like Arabic. Therefore, we use ArabicReshaper
+        # to resolve all ligatures and python-bidi to switch RTL texts.
+        try:
+            text = "<br />".join(get_display(reshaper.reshape(l)) for l in re.split("<br ?/>", text))
+        except:
+            logger.exception('Reshaping/Bidi fixes failed on string {}'.format(repr(text)))
+
+        return text
 
     def _upper(self, val):
         # We uppercase labels, but not in every language
@@ -247,10 +287,10 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         return 'invoice.pdf', 'application/pdf', buffer.read()
 
     def _clean_text(self, text, tags=None):
-        return bleach.clean(
+        return self._normalize(bleach.clean(
             text,
             tags=tags or []
-        ).strip().replace('<br>', '<br />').replace('\n', '<br />\n')
+        ).strip().replace('<br>', '<br />').replace('\n', '<br />\n'))
 
 
 class PaidMarker(Flowable):
@@ -291,7 +331,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         canvas.setFont(self.font_regular, 8)
 
         for i, line in enumerate(self.invoice.footer_text.split('\n')[::-1]):
-            canvas.drawCentredString(self.pagesize[0] / 2, 25 + (3.5 * i) * mm, line.strip())
+            canvas.drawCentredString(self.pagesize[0] / 2, 25 + (3.5 * i) * mm, self._normalize(line.strip()))
 
         canvas.restoreState()
 
@@ -324,13 +364,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
     def _draw_invoice_from_label(self, canvas):
         textobject = canvas.beginText(25 * mm, (297 - 15) * mm)
         textobject.setFont(self.font_bold, 8)
-        textobject.textLine(self._upper(pgettext('invoice', 'Invoice from')))
+        textobject.textLine(self._normalize(self._upper(pgettext('invoice', 'Invoice from'))))
         canvas.drawText(textobject)
 
     def _draw_invoice_to_label(self, canvas):
         textobject = canvas.beginText(25 * mm, (297 - 50) * mm)
         textobject.setFont(self.font_bold, 8)
-        textobject.textLine(self._upper(pgettext('invoice', 'Invoice to')))
+        textobject.textLine(self._normalize(self._upper(pgettext('invoice', 'Invoice to'))))
         canvas.drawText(textobject)
 
     logo_width = 25 * mm
@@ -358,51 +398,51 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
     def _draw_metadata(self, canvas):
         textobject = canvas.beginText(125 * mm, (297 - 38) * mm)
         textobject.setFont(self.font_bold, 8)
-        textobject.textLine(self._upper(pgettext('invoice', 'Order code')))
+        textobject.textLine(self._normalize(self._upper(pgettext('invoice', 'Order code'))))
         textobject.moveCursor(0, 5)
         textobject.setFont(self.font_regular, 10)
-        textobject.textLine(self.invoice.order.full_code)
+        textobject.textLine(self._normalize(self.invoice.order.full_code))
         canvas.drawText(textobject)
 
         textobject = canvas.beginText(125 * mm, (297 - 50) * mm)
         textobject.setFont(self.font_bold, 8)
         if self.invoice.is_cancellation:
-            textobject.textLine(self._upper(pgettext('invoice', 'Cancellation number')))
+            textobject.textLine(self._normalize(self._upper(pgettext('invoice', 'Cancellation number'))))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_regular, 10)
-            textobject.textLine(self.invoice.number)
+            textobject.textLine(self._normalize(self.invoice.number))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_bold, 8)
-            textobject.textLine(self._upper(pgettext('invoice', 'Original invoice')))
+            textobject.textLine(self._normalize(self._upper(pgettext('invoice', 'Original invoice'))))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_regular, 10)
-            textobject.textLine(self.invoice.refers.number)
+            textobject.textLine(self._normalize(self.invoice.refers.number))
         else:
-            textobject.textLine(self._upper(pgettext('invoice', 'Invoice number')))
+            textobject.textLine(self._normalize(self._upper(pgettext('invoice', 'Invoice number'))))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_regular, 10)
-            textobject.textLine(self.invoice.number)
+            textobject.textLine(self._normalize(self.invoice.number))
         textobject.moveCursor(0, 5)
 
         if self.invoice.is_cancellation:
             textobject.setFont(self.font_bold, 8)
-            textobject.textLine(self._upper(pgettext('invoice', 'Cancellation date')))
+            textobject.textLine(self._normalize(self._upper(pgettext('invoice', 'Cancellation date'))))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_regular, 10)
-            textobject.textLine(date_format(self.invoice.date, "DATE_FORMAT"))
+            textobject.textLine(self._normalize(date_format(self.invoice.date, "DATE_FORMAT")))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_bold, 8)
-            textobject.textLine(self._upper(pgettext('invoice', 'Original invoice date')))
+            textobject.textLine(self._normalize(self._upper(pgettext('invoice', 'Original invoice date'))))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_regular, 10)
-            textobject.textLine(date_format(self.invoice.refers.date, "DATE_FORMAT"))
+            textobject.textLine(self._normalize(date_format(self.invoice.refers.date, "DATE_FORMAT")))
             textobject.moveCursor(0, 5)
         else:
             textobject.setFont(self.font_bold, 8)
-            textobject.textLine(self._upper(pgettext('invoice', 'Invoice date')))
+            textobject.textLine(self._normalize(self._upper(pgettext('invoice', 'Invoice date'))))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_regular, 10)
-            textobject.textLine(date_format(self.invoice.date, "DATE_FORMAT"))
+            textobject.textLine(self._normalize(date_format(self.invoice.date, "DATE_FORMAT")))
             textobject.moveCursor(0, 5)
 
         canvas.drawText(textobject)
@@ -415,19 +455,19 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
     def _draw_event_label(self, canvas):
         textobject = canvas.beginText(125 * mm, (297 - 15) * mm)
         textobject.setFont(self.font_bold, 8)
-        textobject.textLine(self._upper(pgettext('invoice', 'Event')))
+        textobject.textLine(self._normalize(self._upper(pgettext('invoice', 'Event'))))
         canvas.drawText(textobject)
 
     def _draw_event(self, canvas):
         def shorten(txt):
             txt = str(txt)
             txt = bleach.clean(txt, tags=[]).strip()
-            p = Paragraph(txt.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
+            p = Paragraph(self._normalize(txt.strip().replace('\n', '<br />\n')), style=self.stylesheet['Normal'])
             p_size = p.wrap(self.event_width, self.event_height)
 
             while p_size[1] > 2 * self.stylesheet['Normal'].leading:
                 txt = ' '.join(txt.replace('…', '').split()[:-1]) + '…'
-                p = Paragraph(txt.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
+                p = Paragraph(self._normalize(txt.strip().replace('\n', '<br />\n')), style=self.stylesheet['Normal'])
                 p_size = p.wrap(self.event_width, self.event_height)
             return txt
 
@@ -453,7 +493,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         else:
             p_str = shorten(self.invoice.event.name)
 
-        p = Paragraph(p_str.strip().replace('\n', '<br />\n'), style=self.stylesheet['Normal'])
+        p = Paragraph(self._normalize(p_str.strip().replace('\n', '<br />\n')), style=self.stylesheet['Normal'])
         p.wrapOn(canvas, self.event_width, self.event_height)
         p_size = p.wrap(self.event_width, self.event_height)
         p.drawOn(canvas, self.event_left, self.pagesize[1] - self.event_top - p_size[1])
@@ -462,14 +502,14 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
     def _draw_footer(self, canvas):
         canvas.setFont(self.font_regular, 8)
         for i, line in enumerate(self.invoice.footer_text.split('\n')[::-1]):
-            canvas.drawCentredString(self.pagesize[0] / 2, 25 + (3.5 * i) * mm, line.strip())
+            canvas.drawCentredString(self.pagesize[0] / 2, 25 + (3.5 * i) * mm, self._normalize(line.strip()))
 
     def _draw_testmode(self, canvas):
         if self.invoice.order.testmode:
             canvas.saveState()
-            canvas.setFont('OpenSansBd', 30)
+            canvas.setFont(self.font_bold, 30)
             canvas.setFillColorRGB(32, 0, 0)
-            canvas.drawRightString(self.pagesize[0] - 20 * mm, (297 - 100) * mm, gettext('TEST MODE'))
+            canvas.drawRightString(self.pagesize[0] - 20 * mm, (297 - 100) * mm, self._normalize(gettext('TEST MODE')))
             canvas.restoreState()
 
     def _on_first_page(self, canvas: Canvas, doc):
@@ -517,22 +557,22 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         if self.invoice.internal_reference:
             story.append(Paragraph(
-                pgettext('invoice', 'Customer reference: {reference}').format(
+                self._normalize(pgettext('invoice', 'Customer reference: {reference}').format(
                     reference=self._clean_text(self.invoice.internal_reference),
-                ),
+                )),
                 self.stylesheet['Normal']
             ))
 
         if self.invoice.invoice_to_vat_id:
             story.append(Paragraph(
-                pgettext('invoice', 'Customer VAT ID') + ': ' +
+                self._normalize(pgettext('invoice', 'Customer VAT ID')) + ': ' +
                 self._clean_text(self.invoice.invoice_to_vat_id),
                 self.stylesheet['Normal']
             ))
 
         if self.invoice.invoice_to_beneficiary:
             story.append(Paragraph(
-                pgettext('invoice', 'Beneficiary') + ':<br />' +
+                self._normalize(pgettext('invoice', 'Beneficiary')) + ':<br />' +
                 self._clean_text(self.invoice.invoice_to_beneficiary),
                 self.stylesheet['Normal']
             ))
@@ -552,10 +592,10 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         story = [
             NextPageTemplate('FirstPage'),
             Paragraph(
-                (
+                self._normalize(
                     pgettext('invoice', 'Tax Invoice') if str(self.invoice.invoice_from_country) == 'AU'
                     else pgettext('invoice', 'Invoice')
-                ) if not self.invoice.is_cancellation else pgettext('invoice', 'Cancellation'),
+                ) if not self.invoice.is_cancellation else self._normalize(pgettext('invoice', 'Cancellation')),
                 self.stylesheet['Heading1']
             ),
             Spacer(1, 5 * mm),
@@ -577,17 +617,17 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         ]
         if has_taxes:
             tdata = [(
-                pgettext('invoice', 'Description'),
-                pgettext('invoice', 'Qty'),
-                pgettext('invoice', 'Tax rate'),
-                pgettext('invoice', 'Net'),
-                pgettext('invoice', 'Gross'),
+                Paragraph(self._normalize(pgettext('invoice', 'Description')), self.stylesheet['Bold']),
+                Paragraph(self._normalize(pgettext('invoice', 'Qty')), self.stylesheet['BoldRightNoSplit']),
+                Paragraph(self._normalize(pgettext('invoice', 'Tax rate')), self.stylesheet['BoldRightNoSplit']),
+                Paragraph(self._normalize(pgettext('invoice', 'Net')), self.stylesheet['BoldRightNoSplit']),
+                Paragraph(self._normalize(pgettext('invoice', 'Gross')), self.stylesheet['BoldRightNoSplit']),
             )]
         else:
             tdata = [(
-                pgettext('invoice', 'Description'),
-                pgettext('invoice', 'Qty'),
-                pgettext('invoice', 'Amount'),
+                Paragraph(self._normalize(pgettext('invoice', 'Description')), self.stylesheet['BoldRight']),
+                Paragraph(self._normalize(pgettext('invoice', 'Qty')), self.stylesheet['BoldRightNoSplit']),
+                Paragraph(self._normalize(pgettext('invoice', 'Amount')), self.stylesheet['BoldRightNoSplit']),
             )]
 
         def _group_key(line):
@@ -634,13 +674,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         if has_taxes:
             tdata.append([
-                pgettext('invoice', 'Invoice total'), '', '', '',
+                Paragraph(self._normalize(pgettext('invoice', 'Invoice total')), self.stylesheet['Bold']), '', '', '',
                 money_filter(total, self.invoice.event.currency)
             ])
             colwidths = [a * doc.width for a in (.50, .05, .15, .15, .15)]
         else:
             tdata.append([
-                pgettext('invoice', 'Invoice total'), '',
+                Paragraph(self._normalize(pgettext('invoice', 'Invoice total')), self.stylesheet['Bold']), '',
                 money_filter(total, self.invoice.event.currency)
             ])
             colwidths = [a * doc.width for a in (.65, .20, .15)]
@@ -649,12 +689,16 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             if self.invoice.event.settings.invoice_show_payments and self.invoice.order.status == Order.STATUS_PENDING:
                 pending_sum = self.invoice.order.pending_sum
                 if pending_sum != total:
-                    tdata.append([pgettext('invoice', 'Received payments')] + (['', '', ''] if has_taxes else ['']) + [
-                        money_filter(pending_sum - total, self.invoice.event.currency)
-                    ])
-                    tdata.append([pgettext('invoice', 'Outstanding payments')] + (['', '', ''] if has_taxes else ['']) + [
-                        money_filter(pending_sum, self.invoice.event.currency)
-                    ])
+                    tdata.append(
+                        [Paragraph(self._normalize(pgettext('invoice', 'Received payments')), self.stylesheet['Normal'])] +
+                        (['', '', ''] if has_taxes else ['']) +
+                        [money_filter(pending_sum - total, self.invoice.event.currency)]
+                    )
+                    tdata.append(
+                        [Paragraph(self._normalize(pgettext('invoice', 'Outstanding payments')), self.stylesheet['Bold'])] +
+                        (['', '', ''] if has_taxes else ['']) +
+                        [money_filter(pending_sum, self.invoice.event.currency)]
+                    )
                     tstyledata += [
                         ('FONTNAME', (0, len(tdata) - 3), (-1, len(tdata) - 3), self.font_bold),
                     ]
@@ -667,19 +711,24 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 ).aggregate(
                     s=Sum('amount')
                 )['s'] or Decimal('0.00')
-                tdata.append([pgettext('invoice', 'Paid by gift card')] + (['', '', ''] if has_taxes else ['']) + [
-                    money_filter(giftcard_sum, self.invoice.event.currency)
-                ])
-                tdata.append([pgettext('invoice', 'Remaining amount')] + (['', '', ''] if has_taxes else ['']) + [
-                    money_filter(total - giftcard_sum, self.invoice.event.currency)
-                ])
+                tdata.append(
+                    [Paragraph(self._normalize(pgettext('invoice', 'Paid by gift card')), self.stylesheet['Normal'])] +
+                    (['', '', ''] if has_taxes else ['']) +
+                    [money_filter(giftcard_sum, self.invoice.event.currency)]
+                )
+                tdata.append(
+                    [Paragraph(self._normalize(pgettext('invoice', 'Remaining amount')), self.stylesheet['Bold'])] +
+                    (['', '', ''] if has_taxes else ['']) +
+                    [money_filter(total - giftcard_sum, self.invoice.event.currency)]
+                )
                 tstyledata += [
                     ('FONTNAME', (0, len(tdata) - 3), (-1, len(tdata) - 3), self.font_bold),
                 ]
             elif self.invoice.payment_provider_stamp:
                 pm = PaidMarker(
-                    text=self.invoice.payment_provider_stamp,
+                    text=self._normalize(self.invoice.payment_provider_stamp),
                     color=colors.HexColor(self.event.settings.theme_color_success),
+                    font=self.font_bold,
                     size=16
                 )
                 tdata[-1][-2] = pm
@@ -692,7 +741,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
 
         if self.invoice.payment_provider_text:
             story.append(Paragraph(
-                self.invoice.payment_provider_text,
+                self._normalize(self.invoice.payment_provider_text),
                 self.stylesheet['Normal']
             ))
 
@@ -716,10 +765,10 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             ('FONTNAME', (0, 0), (-1, -1), self.font_regular),
         ]
         thead = [
-            pgettext('invoice', 'Tax rate'),
-            pgettext('invoice', 'Net value'),
-            pgettext('invoice', 'Gross value'),
-            pgettext('invoice', 'Tax'),
+            Paragraph(self._normalize(pgettext('invoice', 'Tax rate')), self.stylesheet['Fineprint']),
+            Paragraph(self._normalize(pgettext('invoice', 'Net value')), self.stylesheet['FineprintRight']),
+            Paragraph(self._normalize(pgettext('invoice', 'Gross value')), self.stylesheet['FineprintRight']),
+            Paragraph(self._normalize(pgettext('invoice', 'Tax')), self.stylesheet['FineprintRight']),
             ''
         ]
         tdata = [thead]
@@ -730,7 +779,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 continue
             tax = taxvalue_map[idx]
             tdata.append([
-                localize(rate) + " % " + name,
+                Paragraph(self._normalize(localize(rate) + " % " + name), self.stylesheet['Fineprint']),
                 money_filter(gross - tax, self.invoice.event.currency),
                 money_filter(gross, self.invoice.event.currency),
                 money_filter(tax, self.invoice.event.currency),
@@ -749,7 +798,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             table.setStyle(TableStyle(tstyledata))
             story.append(Spacer(5 * mm, 5 * mm))
             story.append(KeepTogether([
-                Paragraph(pgettext('invoice', 'Included taxes'), self.stylesheet['FineprintHeading']),
+                Paragraph(self._normalize(pgettext('invoice', 'Included taxes')), self.stylesheet['FineprintHeading']),
                 table
             ]))
 
@@ -766,7 +815,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                     net = gross - tax
 
                     tdata.append([
-                        localize(rate) + " % " + name,
+                        Paragraph(self._normalize(localize(rate) + " % " + name), self.stylesheet['Fineprint']),
                         fmt(net), fmt(gross), fmt(tax), ''
                     ])
 
@@ -776,12 +825,12 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 story.append(KeepTogether([
                     Spacer(1, height=2 * mm),
                     Paragraph(
-                        pgettext(
+                        self._normalize(pgettext(
                             'invoice', 'Using the conversion rate of 1:{rate} as published by the {authority} on '
                                        '{date}, this corresponds to:'
                         ).format(rate=localize(self.invoice.foreign_currency_rate),
                                  authority=SOURCE_NAMES.get(self.invoice.foreign_currency_source, "?"),
-                                 date=date_format(self.invoice.foreign_currency_rate_date, "SHORT_DATE_FORMAT")),
+                                 date=date_format(self.invoice.foreign_currency_rate_date, "SHORT_DATE_FORMAT"))),
                         self.stylesheet['Fineprint']
                     ),
                     Spacer(1, height=3 * mm),
@@ -790,14 +839,14 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
         elif self.invoice.foreign_currency_display and self.invoice.foreign_currency_rate:
             foreign_total = round_decimal(total * self.invoice.foreign_currency_rate)
             story.append(Spacer(1, 5 * mm))
-            story.append(Paragraph(
+            story.append(Paragraph(self._normalize(
                 pgettext(
                     'invoice', 'Using the conversion rate of 1:{rate} as published by the {authority} on '
                                '{date}, the invoice total corresponds to {total}.'
                 ).format(rate=localize(self.invoice.foreign_currency_rate),
                          date=date_format(self.invoice.foreign_currency_rate_date, "SHORT_DATE_FORMAT"),
                          authority=SOURCE_NAMES.get(self.invoice.foreign_currency_source, "?"),
-                         total=fmt(foreign_total)),
+                         total=fmt(foreign_total))),
                 self.stylesheet['Fineprint']
             ))
 
@@ -843,7 +892,7 @@ class Modern1Renderer(ClassicInvoiceRenderer):
             self._clean_text(l)
             for l in self.invoice.address_invoice_from.strip().split('\n')
         ]
-        p = Paragraph(' · '.join(c), style=self.stylesheet['Sender'])
+        p = Paragraph(self._normalize(' · '.join(c)), style=self.stylesheet['Sender'])
         p.wrapOn(canvas, self.invoice_to_width, 15.7 * mm)
         p.drawOn(canvas, self.invoice_to_left, self.pagesize[1] - self.invoice_to_top + 2 * mm)
         super()._draw_invoice_from(canvas)
@@ -880,15 +929,15 @@ class Modern1Renderer(ClassicInvoiceRenderer):
                 return False
             textobject = canvas.beginText(x, self.pagesize[1] - begin_top)
             textobject.setFont(self.font_regular, 8)
-            textobject.textLine(label)
+            textobject.textLine(self._normalize(label))
             textobject.moveCursor(0, 5)
             textobject.setFont(self.font_bold if bold else self.font_regular, value_size)
-            textobject.textLine(value)
+            textobject.textLine(self._normalize(value))
 
             if sublabel:
                 textobject.moveCursor(0, 1)
                 textobject.setFont(self.font_regular, 8)
-                textobject.textLine(sublabel)
+                textobject.textLine(self._normalize(sublabel))
 
             return textobject
 
@@ -903,7 +952,7 @@ class Modern1Renderer(ClassicInvoiceRenderer):
             ]
 
             p = Paragraph(
-                date_format(self.invoice.date, "DATE_FORMAT"),
+                self._normalize(date_format(self.invoice.date, "DATE_FORMAT")),
                 style=ParagraphStyle(name=f'Normal{value_size}', fontName=self.font_regular, fontSize=value_size, leading=value_size * 1.2)
             )
             w = stringWidth(p.text, p.frags[0].fontName, p.frags[0].fontSize)
@@ -934,9 +983,9 @@ class Modern1Renderer(ClassicInvoiceRenderer):
         textobject = canvas.beginText(date_x, self.pagesize[1] - begin_top)
         textobject.setFont(self.font_regular, 8)
         if self.invoice.is_cancellation:
-            textobject.textLine(pgettext('invoice', 'Cancellation date'))
+            textobject.textLine(self._normalize(pgettext('invoice', 'Cancellation date')))
         else:
-            textobject.textLine(pgettext('invoice', 'Invoice date'))
+            textobject.textLine(self._normalize(pgettext('invoice', 'Invoice date')))
         canvas.drawText(textobject)
 
 
