@@ -633,6 +633,17 @@ DEFAULTS = {
                         "used at most once over all of your events. This setting only affects future invoices. You can "
                         "use %Y (with century) %y (without century) to insert the year of the invoice, or %m and %d for "
                         "the day of month."),
+            validators=[
+                RegexValidator(
+                    # We actually allow more characters than we name in the error message since some of these characters
+                    # are in active use at the time of the introduction of this validation, so we can't really forbid
+                    # them, but we don't think they belong in an invoice number and don't want to advertise them.
+                    regex="^[a-zA-Z0-9-_%./,&:# ]+$",
+                    message=lazy(lambda *args: _('Please only use the characters {allowed} in this field.').format(
+                        allowed='A-Z, a-z, 0-9, -./:#'
+                    ), str)()
+                )
+            ],
         )
     },
     'invoice_numbers_prefix_cancellations': {
@@ -644,6 +655,17 @@ DEFAULTS = {
             label=_("Invoice number prefix for cancellations"),
             help_text=_("This will be prepended to invoice numbers of cancellations. If you leave this field empty, "
                         "the same numbering scheme will be used that you configured for regular invoices."),
+            validators=[
+                RegexValidator(
+                    # We actually allow more characters than we name in the error message since some of these characters
+                    # are in active use at the time of the introduction of this validation, so we can't really forbid
+                    # them, but we don't think they belong in an invoice number and don't want to advertise them.
+                    regex="^[a-zA-Z0-9-_%./,&:# ]+$",
+                    message=lazy(lambda *args: _('Please only use the characters {allowed} in this field.').format(
+                        allowed='A-Z, a-z, 0-9, -./:#'
+                    ), str)()
+                )
+            ],
         )
     },
     'invoice_renderer_highlight_order_code': {

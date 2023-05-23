@@ -1235,7 +1235,7 @@ class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
         except FileNotFoundError:
             invoice_pdf_task.apply(args=(invoice.pk,))
             return self.get(request, *args, **kwargs)
-        resp['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(invoice.number)
+        resp['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(re.sub("[^a-zA-Z0-9-_.]+", "_", invoice.number))
         resp._csp_ignore = True  # Some browser's PDF readers do not work with CSP
         return resp
 
