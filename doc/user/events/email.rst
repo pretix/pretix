@@ -201,6 +201,10 @@ record for the subdomain ``pretix._domainkey`` with the following contents::
 
 Then, please contact support@pretix.eu and we will enable DKIM for your domain on our mail servers.
 
+.. note:: Many SMTP servers impose rate limits on the sent emails, such as a maximum number of emails sent per hour.
+          These SMTP servers are often not suitable for use with pretix, in case you want to send an email to many
+          hundreds or thousands of ticket buyers. Depending on how the rate limit is implemented, emails might be lost
+          in this case, as pretix only retries email delivery for a certain time period.
 
 .. _Sender Policy Framework: https://en.wikipedia.org/wiki/Sender_Policy_Framework
 .. _SPF specification: http://www.open-spf.org/SPF_Record_Syntax
