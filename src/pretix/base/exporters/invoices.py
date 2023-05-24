@@ -103,7 +103,9 @@ class InvoiceExporterMixin:
             qs = qs.annotate(
                 has_payment_with_provider=Exists(
                     OrderPayment.objects.filter(
-                        Q(order=OuterRef('order_id')) & Q(provider=form_data.get('payment_provider'))
+                        Q(order=OuterRef('order_id')) & Q(provider=form_data.get('payment_provider')),
+                        state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED,
+                                   OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED),
                     )
                 )
             )
