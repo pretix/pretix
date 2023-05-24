@@ -1449,7 +1449,6 @@ class AbstractPosition(models.Model):
         if self.attendee_name_parts is None:
             self.attendee_name_parts = {}
         super().save(*args, **kwargs)
-        print(self.pk, self.attendee_name_cached)
 
     @property
     def attendee_name(self):
