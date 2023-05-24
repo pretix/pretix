@@ -31,7 +31,9 @@
     }
     .item-checkbox-label {
         display: block;
-        margin-top: .4em;
+    }
+    .item-checkbox-label:has(input:checked) {
+        background-color: $gray-lighter;
     }
 
     .product-description.with-picture {

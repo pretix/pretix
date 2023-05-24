@@ -243,7 +243,7 @@
                                                 <div class="col-md-2 col-sm-3 col-xs-6 availability-box available radio-box">
                                                     {% if max_times > 1 %}
                                                         {% if var.order_max == 1 %}
-                                                            <label class="item-checkbox-label">
+                                                            <label class="item-checkbox-label btn btn-default">
                                                                 <input type="checkbox"
                                                                         value="1"
                                                                         id="variation_{{ item.id }}_{{ var.id }}"
@@ -251,7 +251,7 @@
                                                                         {% if options == 1 %}checked{% endif %}
                                                                         aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
                                                                         {% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
-                                                                <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
+                                                                {% trans "Select" %}
                                                             </label>
                                                         {% else %}
                                                             <div class="input-item-count-group">
@@ -385,7 +385,7 @@
                                     <div class="col-md-2 col-sm-3 col-xs-6 availability-box available radio-box">
                                         {% if max_times > 1 %}
                                             {% if item.order_max == 1 %}
-                                                <label class="item-checkbox-label">
+                                                <label class="item-checkbox-label btn btn-default">
                                                     <input type="checkbox"
                                                            value="1"
                                                            id="item_{{ item.id }}"
@@ -393,7 +393,7 @@
                                                            {% if options == 1 %}checked{% endif %}
                                                            aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
                                                            {% if item.description %} aria-describedby="item-{{ item.id }}-description"{% endif %}>
-                                                    <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
+                                                    {% trans "Select" %}
                                                 </label>
                                             {% else %}
                                                 <div class="input-item-count-group">
