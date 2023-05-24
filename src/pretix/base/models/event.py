@@ -290,19 +290,19 @@ class EventMixin:
         return safe_string(json.dumps(eventdict))
 
     @classmethod
-    def annotated(cls, qs, channel='web'):
+    def annotated(cls, qs, channel='web', voucher=None):
         from pretix.base.models import Item, ItemVariation, Quota
 
-        sq_active_item = Item.objects.using(settings.DATABASE_REPLICA).filter_available(channel=channel).filter(
+        sq_active_item = Item.objects.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher).filter(
             Q(variations__isnull=True)
             & Q(quotas__pk=OuterRef('pk'))
         ).order_by().values_list('quotas__pk').annotate(
             items=GroupConcat('pk', delimiter=',')
         ).values('items')
-        sq_active_variation = ItemVariation.objects.filter(
+
+        q_variation = (
             Q(active=True)
             & Q(sales_channels__contains=channel)
-            & Q(hide_without_voucher=False)
             & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
             & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
             & Q(item__active=True)
@@ -310,10 +310,23 @@ class EventMixin:
             & Q(Q(item__available_until__isnull=True) | Q(item__available_until__gte=now()))
             & Q(Q(item__category__isnull=True) | Q(item__category__is_addon=False))
             & Q(item__sales_channels__contains=channel)
-            & Q(item__hide_without_voucher=False)
             & Q(item__require_bundling=False)
             & Q(quotas__pk=OuterRef('pk'))
-        ).order_by().values_list('quotas__pk').annotate(
+        )
+
+        if voucher:
+            if voucher.variation_id:
+                q_variation &= Q(pk=voucher.variation_id)
+            elif voucher.item_id:
+                q_variation &= Q(item_id=voucher.item_id)
+            elif voucher.quota_id:
+                q_variation &= Q(quotas__in=[voucher.quota_id])
+
+        if not voucher or not voucher.show_hidden_items:
+            q_variation &= Q(hide_without_voucher=False)
+            q_variation &= Q(item__hide_without_voucher=False)
+
+        sq_active_variation = ItemVariation.objects.filter(q_variation).order_by().values_list('quotas__pk').annotate(
             items=GroupConcat('pk', delimiter=',')
         ).values('items')
         quota_base_qs = Quota.objects.using(settings.DATABASE_REPLICA).filter(
@@ -1133,8 +1146,8 @@ class Event(EventMixin, LoggedModel):
         irs = self.get_invoice_renderers()
         return irs[self.settings.invoice_renderer]
 
-    def subevents_annotated(self, channel):
-        return SubEvent.annotated(self.subevents, channel)
+    def subevents_annotated(self, channel, voucher=None):
+        return SubEvent.annotated(self.subevents, channel, voucher)
 
     def subevents_sorted(self, queryset):
         ordering = self.settings.get('frontpage_subevent_ordering', default='date_ascending', as_type=str)
@@ -1454,10 +1467,10 @@ class SubEvent(EventMixin, LoggedModel):
         return qs_annotated
 
     @classmethod
-    def annotated(cls, qs, channel='web'):
+    def annotated(cls, qs, channel='web', voucher=None):
         from .items import SubEventItem, SubEventItemVariation
 
-        qs = super().annotated(qs, channel)
+        qs = super().annotated(qs, channel, voucher=voucher)
         qs = qs.annotate(
             disabled_items=Coalesce(
                 Subquery(
