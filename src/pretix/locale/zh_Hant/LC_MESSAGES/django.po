@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:29+0000\n"
-"Last-Translator: Martin Gross <gross@rami.io>\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6614,8 +6614,7 @@ msgid ""
 msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
-msgstr[0] ""
-"優惠券代碼\"%(voucher)s\"只有在你選擇至少 %(number)s 符合商品時使用。"
+msgstr[0] "優惠券代碼\"%(voucher)s\"只有在你選擇至少 %(number)s 符合商品時使用。"
 
 #: pretix/base/services/cart.py:149
 #, python-format
