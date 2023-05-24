@@ -526,7 +526,6 @@ class ChangeInformationView(CustomerRequiredMixin, FormView):
         with transaction.atomic():
             form.save()
             d = dict(form.cleaned_data)
-            print(d)
             del d['email']
             self.request.customer.log_action('pretix.customer.changed', d)
 
