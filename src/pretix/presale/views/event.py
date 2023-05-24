@@ -597,7 +597,13 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
             ebd = defaultdict(list)
             add_subevents_for_days(
-                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
+                filter_qs_by_attr(
+                    self.request.event.subevents_annotated(
+                        self.request.sales_channel.identifier,
+                        voucher,
+                    ).using(settings.DATABASE_REPLICA),
+                    self.request
+                ),
                 limit_before, after, ebd, set(), self.request.event,
                 self.kwargs.get('cart_namespace'),
                 voucher,
@@ -649,7 +655,13 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
             ebd = defaultdict(list)
             add_subevents_for_days(
-                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
+                filter_qs_by_attr(
+                    self.request.event.subevents_annotated(
+                        self.request.sales_channel.identifier,
+                        voucher=voucher,
+                    ).using(settings.DATABASE_REPLICA),
+                    self.request
+                ),
                 limit_before, after, ebd, set(), self.request.event,
                 self.kwargs.get('cart_namespace'),
                 voucher,
@@ -692,7 +704,13 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             )
         else:
             context['subevent_list'] = self.request.event.subevents_sorted(
-                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request)
+                filter_qs_by_attr(
+                    self.request.event.subevents_annotated(
+                        self.request.sales_channel.identifier,
+                        voucher=voucher,
+                    ).using(settings.DATABASE_REPLICA),
+                    self.request
+                )
             )
             if self.request.event.settings.event_list_available_only and not voucher:
                 context['subevent_list'] = [

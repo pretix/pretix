@@ -2207,6 +2207,44 @@ class EventTest(TestCase):
         assert Event.annotated(Event.objects).first().active_quotas == []
 
     @classscope(attr='organizer')
+    def test_active_quotas_annotation_product_hidden_by_voucher(self):
+        event = Event.objects.create(
+            organizer=self.organizer, name='Download', slug='download',
+            date_from=now()
+        )
+        q = Quota.objects.create(event=event, name='Quota', size=2)
+        item = Item.objects.create(event=event, name='Early-bird ticket', default_price=0, hide_without_voucher=True)
+        q.items.add(item)
+
+        voucher = Voucher.objects.create(event=event, code='a', item=item, show_hidden_items=True)
+        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == [q]
+
+        voucher = Voucher.objects.create(event=event, code='b', item=item, show_hidden_items=False)
+        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == []
+
+        voucher = Voucher.objects.create(event=event, code='c', show_hidden_items=True)
+        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == [q]
+
+        voucher = Voucher.objects.create(event=event, code='d', quota=q, show_hidden_items=True)
+        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == [q]
+
+        item2 = Item.objects.create(event=event, name='Early-bird ticket', default_price=0)
+        var = item2.variations.create(item=item2, value='Test', hide_without_voucher=True)
+        var2 = item2.variations.create(item=item2, value='Other test', hide_without_voucher=True, active=False)
+        q.items.remove(item)
+        q.items.add(item2)
+        q.variations.add(var)
+
+        voucher = Voucher.objects.create(event=event, code='e', item=item2, variation=var, show_hidden_items=True)
+        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == [q]
+
+        voucher = Voucher.objects.create(event=event, code='f', item=item2, variation=var2, show_hidden_items=True)
+        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == []
+
+        voucher = Voucher.objects.create(event=event, code='g', quota=q, show_hidden_items=True)
+        assert Event.annotated(Event.objects, voucher=voucher).first().active_quotas == [q]
+
+    @classscope(attr='organizer')
     def test_active_quotas_annotation_product_addon(self):
         event = Event.objects.create(
             organizer=self.organizer, name='Download', slug='download',
