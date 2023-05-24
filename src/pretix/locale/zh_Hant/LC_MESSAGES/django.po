@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-24 08:33+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2023-05-25 04:00+0000\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -25549,7 +25549,7 @@ msgstr "EPS"
 
 #: pretix/plugins/stripe/payment.py:293 pretix/plugins/stripe/payment.py:1390
 msgid "Multibanco"
-msgstr ""
+msgstr "Multibanco"
 
 #: pretix/plugins/stripe/payment.py:300 pretix/plugins/stripe/payment.py:1437
 msgid "Przelewy24"
@@ -25561,7 +25561,7 @@ msgstr "微信支付"
 
 #: pretix/plugins/stripe/payment.py:316
 msgid "Destination"
-msgstr ""
+msgstr "終點"
 
 #: pretix/plugins/stripe/payment.py:342
 #, python-brace-format
@@ -25670,11 +25670,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1255
 msgid "Germany"
-msgstr ""
+msgstr "德國"
 
 #: pretix/plugins/stripe/payment.py:1256
 msgid "Austria"
-msgstr ""
+msgstr "奧地利"
 
 #: pretix/plugins/stripe/payment.py:1257
 msgid "Belgium"
@@ -25852,7 +25852,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:16
 msgid "Disconnect"
-msgstr ""
+msgstr "斷線"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:4
 msgid ""
@@ -26087,12 +26087,12 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:10
 msgid "Check-in"
-msgstr ""
+msgstr "Check-in"
 
 #: pretix/presale/checkoutflow.py:107
 msgctxt "checkoutflow"
 msgid "Step"
-msgstr ""
+msgstr "步驟"
 
 #: pretix/presale/checkoutflow.py:239
 msgctxt "checkoutflow"
@@ -26106,7 +26106,7 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:389
 msgctxt "checkoutflow"
 msgid "Membership"
-msgstr ""
+msgstr "會員資格"
 
 #: pretix/presale/checkoutflow.py:437 pretix/presale/checkoutflow.py:457
 msgid ""
@@ -26167,7 +26167,7 @@ msgstr ""
 #: pretix/presale/checkoutflow.py:1121
 msgctxt "checkoutflow"
 msgid "Payment"
-msgstr ""
+msgstr "支付"
 
 #: pretix/presale/checkoutflow.py:1228
 msgid ""
@@ -26334,7 +26334,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:14
 msgctxt "form"
 msgid "required"
-msgstr ""
+msgstr "必需的"
 
 #: pretix/presale/ical.py:81 pretix/presale/ical.py:137
 #, python-brace-format
@@ -26387,7 +26387,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:78
 #: pretix/presale/templates/pretixpresale/event/base.html:83
 msgid "Homepage"
-msgstr ""
+msgstr "主頁"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:114
 #: pretix/presale/templates/pretixpresale/event/base.html:120
@@ -26396,7 +26396,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:161
 msgctxt "alert-messages"
 msgid "Warning"
-msgstr ""
+msgstr "警告"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:115
 #: pretix/presale/templates/pretixpresale/event/base.html:156
@@ -26415,12 +26415,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:130
 msgctxt "alert-messages"
 msgid "Error"
-msgstr ""
+msgstr "錯誤"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:132
 msgctxt "alert-messages"
 msgid "Information"
-msgstr ""
+msgstr "資訊"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:170
 #: pretix/presale/templates/pretixpresale/organizers/base.html:88
@@ -26442,7 +26442,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:179
 #: pretix/presale/templates/pretixpresale/organizers/base.html:97
 msgid "Imprint"
-msgstr ""
+msgstr "版本說明"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:10
 msgid ""
@@ -26456,7 +26456,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:20
 msgid "Add-ons:"
-msgstr ""
+msgstr "附加部份"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:49
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:205
@@ -26478,7 +26478,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:53
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:54
 msgid "Checkout"
-msgstr ""
+msgstr "結帳"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:15
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:21
@@ -26529,7 +26529,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:80
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:129
 msgid "Modify"
-msgstr ""
+msgstr "修改"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:79
 msgid "Modify invoice information"
