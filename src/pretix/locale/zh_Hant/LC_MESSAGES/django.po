@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-23 23:00+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"PO-Revision-Date: 2023-05-24 08:33+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6643,9 +6643,7 @@ msgid ""
 msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
-msgstr[0] ""
-"優惠券代碼\"%(voucher)s\"只有在你選擇至少 %(number)s 符合商品時使用。\n"
-"優惠券代碼\"%(voucher)s\"只有在你選擇至少 %(number)s 符合商品時使用。"
+msgstr[0] "優惠券代碼\"%(voucher)s\"只有在你選擇至少 %(number)s 符合商品時使用。"
 
 #: pretix/base/services/cart.py:149
 #, python-format
@@ -7130,7 +7128,7 @@ msgstr "你正在嘗試對在 {date} 發生的事件使用類型為“{type}”�
 msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
-msgstr "在行 \"{line}\"中為列\"{column}\"匯入值 \"{value}\"時出錯：{消息}"
+msgstr "在行 \"{line}\"中為列\"{column}\"匯入值 \"{value}\"時出錯：{message}"
 
 #: pretix/base/services/orderimport.py:147
 #, python-brace-format
@@ -18581,8 +18579,6 @@ msgid ""
 "underpaid by <strong>%(pending)s</strong>. The order total is "
 "<strong>%(total)s</strong>."
 msgstr ""
-"我們收到通知， <strong>%(amount)s</strong> 退款。如果處理此退款，訂單將少付 "
-"<strong>%(method)s</strong>。</strong>訂單總數為 <strong>%(total)s</strong>"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
