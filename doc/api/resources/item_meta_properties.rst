@@ -4,6 +4,9 @@ Item Meta Properties
 Resource description
 --------------------
 
+An Item Meta Property is used to include (event internally relevant) meta information with every item (product). This
+could be internal categories like booking positions.
+
 The Item Meta Properties resource contains the following public fields:
 
 .. rst-class:: rest-resource-table
