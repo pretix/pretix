@@ -35,7 +35,7 @@ def vouchers_send(event: Event, vouchers: list, subject: str, message: str, reci
     for ir, r in enumerate(recipients):
         voucher_list = []
         for i in range(r['number']):
-            voucher_list.append(vouchers.pop())
+            voucher_list.append(vouchers.pop(0))
         with language(event.settings.locale):
             email_context = get_email_context(event=event, name=r.get('name') or '',
                                               voucher_list=[v.code for v in voucher_list])

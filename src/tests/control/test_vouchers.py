@@ -521,13 +521,11 @@ class VoucherFormTest(SoupTestMixin, TransactionTestCase):
             'send': 'on',
             'send_subject': 'Your voucher',
             'send_message': 'Voucher list: {voucher_list}',
-            'send_recipients': 'foo@example.com\nfoo@example.net'
+            'send_recipients': 'foo@example.com\nbar@example.net'
         })
         assert len(djmail.outbox) == 2
-        assert len([m for m in djmail.outbox if m.to == ['foo@example.com']]) == 1
-        assert len([m for m in djmail.outbox if m.to == ['foo@example.net']]) == 1
-        assert len([m for m in djmail.outbox if 'ABCDE' in m.body]) == 1
-        assert len([m for m in djmail.outbox if 'DEFGH' in m.body]) == 1
+        assert len([m for m in djmail.outbox if 'ABCDE' in m.body and m.to == ['foo@example.com']]) == 1
+        assert len([m for m in djmail.outbox if 'DEFGH' in m.body and m.to == ['bar@example.net']]) == 1
 
     def test_create_bulk_send_csv(self):
         self._create_bulk_vouchers({
