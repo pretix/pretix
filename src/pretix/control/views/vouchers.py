@@ -41,7 +41,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import ValidationError
 from django.db import connection, transaction
-from django.db.models import Sum
+from django.db.models import Exists, OuterRef, Sum
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, HttpResponseRedirect,
     JsonResponse,
@@ -56,9 +56,12 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import (
     CreateView, ListView, TemplateView, UpdateView, View,
 )
+from django_scopes import scopes_disabled
 
 from pretix.base.email import get_available_placeholders
-from pretix.base.models import CartPosition, LogEntry, Voucher
+from pretix.base.models import (
+    CartPosition, LogEntry, Voucher, WaitingListEntry,
+)
 from pretix.base.models.vouchers import generate_codes
 from pretix.base.services.locking import NoLockManager
 from pretix.base.services.vouchers import vouchers_send
@@ -80,16 +83,17 @@ class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
     template_name = 'pretixcontrol/vouchers/index.html'
     permission = 'can_view_vouchers'
 
+    @scopes_disabled()  # we have an event check here, and we can save some performance on subqueries
     def get_queryset(self):
-        qs = Voucher.annotate_budget_used_orders(self.request.event.vouchers.filter(
-            waitinglistentries__isnull=True
+        qs = Voucher.annotate_budget_used_orders(self.request.event.vouchers.exclude(
+            Exists(WaitingListEntry.objects.filter(voucher_id=OuterRef('pk')))
         ).select_related(
             'item', 'variation', 'seat'
         ))
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
 
-        return qs.distinct()
+        return qs
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
