@@ -573,6 +573,7 @@ class BaseQuestionsForm(forms.Form):
     the attendee name for admission tickets, if the corresponding setting is enabled,
     as well as additional questions defined by the organizer.
     """
+    address_validation = False
 
     def __init__(self, *args, **kwargs):
         """
@@ -920,7 +921,13 @@ class BaseQuestionsForm(forms.Form):
                 v.widget.attrs['autocomplete'] = 'section-{} '.format(self.prefix) + v.widget.attrs.get('autocomplete', '')
 
     def clean(self):
+        from pretix.base.addressvalidation import \
+            validate_address  # local import to prevent impact on startup time
+
         d = super().clean()
+
+        if self.address_validation:
+            self.cleaned_data = d = validate_address(d, True)
 
         if d.get('city') and d.get('country') and str(d['country']) in COUNTRIES_WITH_STATE_IN_ADDRESS:
             if not d.get('state'):
