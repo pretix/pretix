@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-19 11:33+0000\n"
-"PO-Revision-Date: 2023-05-25 04:00+0000\n"
+"PO-Revision-Date: 2023-05-25 20:00+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -6574,7 +6574,8 @@ msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
 msgstr[0] ""
-msgstr[1] ""
+"不能選擇產品 %(product)s. 的多個 %(max)s 專案。\n"
+"不能選擇產品 %(product)s. 的多個 %(max)s 專案。"
 
 #: pretix/base/services/cart.py:123 pretix/base/services/orders.py:1451
 #, python-format
@@ -7054,6 +7055,8 @@ msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
 msgstr ""
+"你可以透過以下網址檢視您的訂單詳細資訊：\n"
+"{orderurl}."
 
 #: pretix/base/services/mail.py:282
 #, python-brace-format
@@ -7105,7 +7108,7 @@ msgstr "你選擇了從 {start} 到 {end} 有效的會員資格，但是你卻�
 msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
 "product \"{product}\"."
-msgstr ""
+msgstr "你選擇類型為 \"{type}\"的會員資格，該產品\"{product}\".不允許這樣做。"
 
 #: pretix/base/services/memberships.py:183
 #, python-brace-format
@@ -7170,7 +7173,10 @@ msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr[0] ""
-msgstr[1] ""
+"不能選擇產品%(product)s. 的多項%(product)s."
+"專案。我們從您的購物車中刪除了多餘的商品。\n"
+"不能選擇產品 %(product)s. 的多項%(product)s. "
+"專案。我們從您的購物車中刪除了多餘的商品。"
 
 #: pretix/base/services/orders.py:146
 msgid "The booking period has ended."
@@ -7457,6 +7463,20 @@ msgid ""
 "\n"
 "your pretix developers"
 msgstr ""
+"你好！\n"
+"\n"
+"pretix 或你在 pretix "
+"安裝中安裝的外掛程式之一有可用的更新。請按下以下連結瞭解更多資訊：\n"
+"\n"
+"{url}\n"
+"\n"
+"你可以隨時在 pretix.eu 部落格上找到有關最新更新的資訊：\n"
+"\n"
+"https://pretix.eu/about/en/blog/\n"
+"\n"
+"最好\n"
+"\n"
+"您的 Pretix 開發人員"
 
 #: pretix/base/services/update_check.py:145
 #: pretix/base/services/update_check.py:147
@@ -7501,7 +7521,8 @@ msgstr "根據電子郵件位址媒合訂單"
 msgid ""
 "This will allow registered customers to access orders made with the same "
 "email address, even if the customer was not logged in during the purchase."
-msgstr ""
+msgstr "這將允許註冊客戶訪問使用相同的電子郵件地址進行的訂單，即使客戶在購買期間未登"
+"錄。"
 
 #: pretix/base/settings.py:178
 msgid "Activate re-usable media"
@@ -7530,27 +7551,27 @@ msgstr "禮品卡貨幣"
 
 #: pretix/base/settings.py:261
 msgid "Maximum number of items per order"
-msgstr ""
+msgstr "每項訂單的最大商品數量"
 
 #: pretix/base/settings.py:262
 msgid "Add-on products will not be counted."
-msgstr ""
+msgstr "附加產品將不計算在內。"
 
 #: pretix/base/settings.py:271
 msgid ""
 "Show net prices instead of gross prices in the product list (not "
 "recommended!)"
-msgstr ""
+msgstr "在產品列表中顯示淨值而不是總價（不推薦！）"
 
 #: pretix/base/settings.py:272
 msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
-msgstr ""
+msgstr "無論你的選擇如何，購物車將顯示總價格，因為這是需要已付款的價格。"
 
 #: pretix/base/settings.py:283
 msgid "Hide prices on attendee ticket page"
-msgstr ""
+msgstr "在與會者門票頁面上隱藏價格"
 
 #: pretix/base/settings.py:284
 msgid ""
@@ -7564,23 +7585,23 @@ msgstr ""
 
 #: pretix/base/settings.py:302
 msgid "Ask for attendee names"
-msgstr ""
+msgstr "詢問與會者姓名"
 
 #: pretix/base/settings.py:303
 msgid "Ask for a name for all personalized tickets."
-msgstr ""
+msgstr "詢問所有個人化門票的名稱。"
 
 #: pretix/base/settings.py:312
 msgid "Require attendee names"
-msgstr ""
+msgstr "需要與會者姓名"
 
 #: pretix/base/settings.py:313
 msgid "Require customers to fill in the names of all attendees."
-msgstr ""
+msgstr "要求客戶填寫所有出席者的姓名。"
 
 #: pretix/base/settings.py:323
 msgid "Ask for email addresses per ticket"
-msgstr ""
+msgstr "詢問每張票的電子郵件位址"
 
 #: pretix/base/settings.py:324
 msgid ""
@@ -7601,7 +7622,7 @@ msgstr ""
 
 #: pretix/base/settings.py:338
 msgid "Require email addresses per ticket"
-msgstr ""
+msgstr "每張票都需要電子郵件位址"
 
 #: pretix/base/settings.py:339
 msgid ""
@@ -7614,67 +7635,68 @@ msgstr ""
 
 #: pretix/base/settings.py:351
 msgid "Ask for company per ticket"
-msgstr ""
+msgstr "要求公司給每張票"
 
 #: pretix/base/settings.py:360
 msgid "Require company per ticket"
-msgstr ""
+msgstr "需要每張票的公司"
 
 #: pretix/base/settings.py:370
 msgid "Ask for postal addresses per ticket"
-msgstr ""
+msgstr "詢問每張票的郵政位址"
 
 #: pretix/base/settings.py:379
 msgid "Require postal addresses per ticket"
-msgstr ""
+msgstr "需要郵寄位址的每張票"
 
 #: pretix/base/settings.py:389
 msgid "Ask for the order email address twice"
-msgstr ""
+msgstr "詢問兩次訂單電子郵件位址"
 
 #: pretix/base/settings.py:390
 msgid ""
 "Require customers to fill in the primary email address twice to avoid errors."
-msgstr ""
+msgstr "要求客戶填寫兩次主電子郵件位址以避免錯誤。"
 
 #: pretix/base/settings.py:399
 msgid "Ask for a phone number per order"
-msgstr ""
+msgstr "要求每項訂單的電話號碼"
 
 #: pretix/base/settings.py:408
 msgid "Require a phone number per order"
-msgstr ""
+msgstr "需要電話號碼的每項訂單"
 
 #: pretix/base/settings.py:418
 msgid "Ask for invoice address"
-msgstr ""
+msgstr "詢問發票位址"
 
 #: pretix/base/settings.py:427
 msgid "Do not ask for invoice address if an order is free"
-msgstr ""
+msgstr "如果訂單是免費的，請不要詢問發票位址"
 
 #: pretix/base/settings.py:436
 msgid "Require customer name"
-msgstr ""
+msgstr "需要客戶名稱"
 
 #: pretix/base/settings.py:445
 msgid "Show attendee names on invoices"
-msgstr ""
+msgstr "在發票上顯示與會者姓名"
 
 #: pretix/base/settings.py:454
 msgid "Show event location on invoices"
-msgstr ""
+msgstr "在發票上顯示活動位置"
 
 #: pretix/base/settings.py:455
 msgid ""
 "The event location will be shown below the list of products if it is the "
 "same for all lines. It will be shown on every line if there are different "
 "locations."
-msgstr ""
+msgstr "如果所有行數都相同，則活動位置將顯示在商品列表下方。如果有不同的位置，商品將"
+"顯示在每行上。"
 
 #: pretix/base/settings.py:465
 msgid "Show exchange rates"
-msgstr ""
+msgstr "顯示匯率"
 
 #: pretix/base/settings.py:468 pretix/base/settings.py:476
 #: pretix/control/forms/item.py:532
@@ -7685,33 +7707,33 @@ msgstr "從不"
 msgid ""
 "Based on European Central Bank daily rates, whenever the invoice recipient "
 "is in an EU country that uses a different currency."
-msgstr ""
+msgstr "基於歐洲中央銀行的每日費率，只要發票收件者位於使用不同貨幣的歐盟國家/地區。"
 
 #: pretix/base/settings.py:471 pretix/base/settings.py:479
 msgid ""
 "Based on Czech National Bank daily rates, whenever the invoice amount is not "
 "in CZK."
-msgstr ""
+msgstr "基於捷克國家銀行的每日匯率，只要發票金額不是捷克克朗。"
 
 #: pretix/base/settings.py:489
 msgid "Require invoice address"
-msgstr ""
+msgstr "需要發票位址"
 
 #: pretix/base/settings.py:499
 msgid "Require a business addresses"
-msgstr ""
+msgstr "需要商業地址"
 
 #: pretix/base/settings.py:500
 msgid "This will require users to enter a company name."
-msgstr ""
+msgstr "這將要求使用者輸入公司名稱。"
 
 #: pretix/base/settings.py:510
 msgid "Ask for beneficiary"
-msgstr ""
+msgstr "查詢受益人"
 
 #: pretix/base/settings.py:520
 msgid "Custom recipient field"
-msgstr ""
+msgstr "自訂收件者欄位"
 
 #: pretix/base/settings.py:522
 msgid ""
@@ -7727,7 +7749,7 @@ msgstr ""
 
 #: pretix/base/settings.py:535
 msgid "Ask for VAT ID"
-msgstr ""
+msgstr "詢問增值稅號"
 
 #: pretix/base/settings.py:537
 #, python-brace-format
@@ -7735,35 +7757,36 @@ msgid ""
 "Only works if an invoice address is asked for. VAT ID is never required and "
 "only requested from business customers in the following countries: "
 "{countries}"
-msgstr ""
+msgstr "僅當要求提供發票位址時才有效。增值稅號從來都不是必需的，並且僅向以下國家/地區"
+"的企業客戶請求：{countries}"
 
 #: pretix/base/settings.py:550
 msgid "Invoice address explanation"
-msgstr ""
+msgstr "發票地址說明"
 
 #: pretix/base/settings.py:553
 msgid "This text will be shown above the invoice address form during checkout."
-msgstr ""
+msgstr "結帳時，此文件將顯示在發票位址表上方。"
 
 #: pretix/base/settings.py:562
 msgid "Show paid amount on partially paid invoices"
-msgstr ""
+msgstr "在部分付款的發票上顯示已付款金額"
 
 #: pretix/base/settings.py:563
 msgid ""
 "If an invoice has already been paid partially, this option will add the paid "
 "and pending amount to the invoice."
-msgstr ""
+msgstr "如果發票已部分支付，此選項會將已付款和待處理金額添加到發票中。"
 
 #: pretix/base/settings.py:573
 msgid "Show free products on invoices"
-msgstr ""
+msgstr "在發票上顯示免費產品"
 
 #: pretix/base/settings.py:574
 msgid ""
 "Note that invoices will never be generated for orders that contain only free "
 "products."
-msgstr ""
+msgstr "請注意，永遠不會為僅包含免費產品的訂單生成發票。"
 
 #: pretix/base/settings.py:584
 msgid "Show expiration date of order"
