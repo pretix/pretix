@@ -914,14 +914,14 @@ class MultiLineStringField(serializers.Field):
         return [v.strip() for v in value.splitlines()]
 
     def to_internal_value(self, data):
-        if isinstance(data, list):
+        if isinstance(data, list) and len(data) > 0:
             return "\n".join(data)
         else:
             raise ValidationError('Invalid data type.')
 
 
 class ItemMetaPropertiesSerializer(I18nAwareModelSerializer):
-    allowed_values = MultiLineStringField()
+    allowed_values = MultiLineStringField(allow_null=True)
 
     class Meta:
         model = ItemMetaProperty
