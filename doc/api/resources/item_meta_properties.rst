@@ -16,7 +16,8 @@ name                                  string                     Name of the pro
 default                               string                     Value of the default option
 required                              boolean                    If ``true``, this property will have to be assigned a
                                                                  value in all items of the related event
-allowed_values                        list                       Optional list of all permitted values for this property
+allowed_values                        list                       List of all permitted values for this property,
+                                                                 or ``null`` for no limitation
 ===================================== ========================== =======================================================
 
 Endpoints
@@ -57,9 +58,8 @@ Endpoints
         ]
       }
 
-   :param organizer: The ``slug`` field of the organizer to modify
-   :param event: The ``slug`` field of the event to modify
-   :param id: The ``id`` field of the item meta property to modify
+   :param organizer: The ``slug`` field of the organizer
+   :param event: The ``slug`` field of the event
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view this resource.
@@ -88,9 +88,9 @@ Endpoints
         "allowed_values": ["red", "green", "blue"]
       }
 
-   :param organizer: The ``slug`` field of the organizer to modify
-   :param event: The ``slug`` field of the event to modify
-   :param id: The ``id`` field of the item meta property to modify
+   :param organizer: The ``slug`` field of the organizer
+   :param event: The ``slug`` field of the event
+   :param id: The ``id`` field of the item meta property to retrieve
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view this resource.
@@ -112,7 +112,7 @@ Endpoints
         "name": "ref-code",
         "default": "abcde",
         "required": true,
-        "allowed_values": []
+        "allowed_values": null
       }
 
 
@@ -125,12 +125,11 @@ Endpoints
         "name": "ref-code",
         "default": "abcde",
         "required": true,
-        "allowed_values": []
+        "allowed_values": null
     }
 
-   :param organizer: The ``slug`` field of the organizer to modify
-   :param event: The ``slug`` field of the event to modify
-   :param id: The ``id`` field of the item meta property to modify
+   :param organizer: The ``slug`` field of the organizer
+   :param event: The ``slug`` field of the event
    :statuscode 201: no error
    :statuscode 400: The item meta property could not be created due to invalid submitted data.
    :statuscode 401: Authentication failure
@@ -174,8 +173,8 @@ Endpoints
         "allowed_values": []
       }
 
-   :param organizer: The ``slug`` field of the organizer to modify
-   :param event: The ``slug`` field of the event to modify
+   :param organizer: The ``slug`` field of the organizer
+   :param event: The ``slug`` field of the event
    :param id: The ``id`` field of the item meta property to modify
    :statuscode 200: no error
    :statuscode 400: The property could not be modified due to invalid submitted data
@@ -201,9 +200,9 @@ Endpoints
       HTTP/1.1 204 No Content
       Vary: Accept
 
-   :param organizer: The ``slug`` field of the organizer to modify
-   :param event: The ``slug`` field of the event to modify
-   :param id: The ``id`` field of the item meta property to modify
+   :param organizer: The ``slug`` field of the organizer
+   :param event: The ``slug`` field of the event
+   :param id: The ``id`` field of the item meta property to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
-   :statuscode 403: The requested organizer does not exist **or** you have no permission to delete this resource **or** the item meta property is currently in use.
+   :statuscode 403: The requested organizer does not exist **or** you have no permission to delete this resource.

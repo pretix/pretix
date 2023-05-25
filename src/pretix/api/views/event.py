@@ -527,6 +527,7 @@ class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):
 class ItemMetaPropertiesViewSet(viewsets.ModelViewSet):
     serializer_class = ItemMetaPropertiesSerializer
     queryset = ItemMetaProperty.objects.none()
+    write_permission = 'can_change_event_settings'
 
     def get_queryset(self):
         qs = self.request.event.item_meta_properties.all()
@@ -538,6 +539,7 @@ class ItemMetaPropertiesViewSet(viewsets.ModelViewSet):
         ctx['event'] = self.request.event
         return ctx
 
+    @transaction.atomic()
     def perform_destroy(self, instance):
         instance.log_action(
             'pretix.event.item_meta_property.deleted',
