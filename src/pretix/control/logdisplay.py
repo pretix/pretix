@@ -485,7 +485,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.item.bundles.added': _('A bundled item has been added to this product.'),
         'pretix.event.item.bundles.removed': _('A bundled item has been removed from this product.'),
         'pretix.event.item.bundles.changed': _('A bundled item has been changed on this product.'),
-        'pretix.event.item_meta_property.created': _('A meta property has been added to this product.'),
+        'pretix.event.item_meta_property.added': _('A meta property has been added to this product.'),
         'pretix.event.item_meta_property.deleted': _('A meta property has been removed from this product.'),
         'pretix.event.item_meta_property.changed': _('A meta property has been changed on this product.'),
         'pretix.event.quota.added': _('The quota has been added.'),

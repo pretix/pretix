@@ -283,7 +283,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
                 if not form.instance.pk:
                     continue
                 form.instance.log_action(
-                    'pretix.event.item_meta_property.removed',
+                    'pretix.event.item_meta_property.deleted',
                     user=self.request.user,
                     data=form.cleaned_data
                 )
@@ -305,7 +305,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
             form.instance.event = obj
             form.save()
             form.instance.log_action(
-                'pretix.event.item_meta_property.created',
+                'pretix.event.item_meta_property.added',
                 user=self.request.user,
                 data=form.cleaned_data
             )

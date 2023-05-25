@@ -553,7 +553,7 @@ class ItemMetaPropertiesViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         inst = serializer.save(event=self.request.event)
         serializer.instance.log_action(
-            'pretix.event.item_meta_property.created',
+            'pretix.event.item_meta_property.added',
             user=self.request.user,
             auth=self.request.auth,
             data=self.request.data,
