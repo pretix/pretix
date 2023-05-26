@@ -329,7 +329,7 @@ class BankTransfer(BasePaymentProvider):
         if self._invoice_email_asked:
             return {
                 'send_invoice': forms.BooleanField(
-                    label=_('Please send my invoice directly to our accounting department'),
+                    label=_('Please additionally send my invoice directly to our accounting department'),
                     required=False,
                 ),
                 'send_invoice_to': forms.EmailField(
