@@ -26,7 +26,7 @@ allowed_values                        list                       List of all per
 Endpoints
 ---------
 
-.. http:get:: /api/v1/event/(organizer)/events/(event)/item_meta_properties/
+.. http:get:: /api/v1/organizers/(organizer)/events/(event)/item_meta_properties/
 
    Returns a list of all Item Meta Properties within a given event.
 
@@ -34,7 +34,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/starevent/item_meta_properties/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/events/sampleconf/item_meta_properties/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -42,7 +42,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      HTTP/2 200 OK
+      HTTP/1.1 200 OK
       Vary: Accept
       Content-Type: application/json
 
@@ -75,7 +75,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      GET /api/v1/organizers/bigevents/events/starevent/item_meta_properties/1/ HTTP/1.1
+      GET /api/v1/organizers/bigevents/events/sampleconf/item_meta_properties/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -106,7 +106,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      POST /api/v1/organizers/bigevents/events/starevent/item_meta_properties/ HTTP/1.1
+      POST /api/v1/organizers/bigevents/events/sampleconf/item_meta_properties/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
@@ -150,7 +150,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      PATCH /api/v1/organizers/bigevents/events/starevent/item_meta_properties/2/ HTTP/1.1
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/item_meta_properties/2/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
@@ -192,7 +192,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      DELETE /api/v1/organizers/bigevents/events/starevent/item_meta_properties/1/ HTTP/1.1
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/item_meta_properties/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
