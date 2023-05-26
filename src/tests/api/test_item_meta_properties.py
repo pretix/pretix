@@ -97,11 +97,13 @@ def test_meta_property_patch(token_client, organizer, event, item_meta_property)
         format='json',
         data={
             "required": True,
+            "allowed_values": None,
         }
     )
     assert resp.status_code == 200
     item_meta_property.refresh_from_db()
     assert item_meta_property.required
+    assert item_meta_property.allowed_values is None
 
 
 @pytest.mark.django_db
