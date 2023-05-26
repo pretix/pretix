@@ -70,8 +70,12 @@ a.btn, button.btn {
   margin: 0;
 }
 .input-item-count-dec[disabled],
-.input-item-count-inc[disabled] {
+.input-item-count-inc[disabled],
+.input-item-count-dec[disabled]:hover,
+.input-item-count-inc[disabled]:hover {
   box-shadow: 0px 0px 0px 1px #cccccc inset;
+  background: #eee;
+  opacity: 1;
 }
 .input-item-count-dec {
   border-top-right-radius: 0;
