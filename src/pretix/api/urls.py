@@ -89,6 +89,7 @@ event_router.register(r'checkinlists', checkin.CheckinListViewSet)
 event_router.register(r'cartpositions', cart.CartPositionViewSet)
 event_router.register(r'exporters', exporters.EventExportersViewSet, basename='exporters')
 event_router.register(r'shredders', shredders.EventShreddersViewSet, basename='shredders')
+event_router.register(r'item_meta_properties', event.ItemMetaPropertiesViewSet)
 
 checkinlist_router = routers.DefaultRouter()
 checkinlist_router.register(r'positions', checkin.CheckinListPositionViewSet, basename='checkinlistpos')

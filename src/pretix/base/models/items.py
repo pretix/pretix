@@ -2001,6 +2001,15 @@ class ItemMetaProperty(LoggedModel):
         verbose_name=_("Name"),
     )
     default = models.TextField(blank=True)
+    required = models.BooleanField(
+        default=False, verbose_name=_("Required for products"),
+        help_text=_("If checked, this property must be set in each product. Does not apply if a default value is set.")
+    )
+    allowed_values = models.TextField(
+        null=True, blank=True,
+        verbose_name=_("Valid values"),
+        help_text=_("If you keep this empty, any value is allowed. Otherwise, enter one possible value per line.")
+    )
 
     class Meta:
         ordering = ("name",)

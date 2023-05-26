@@ -139,6 +139,26 @@
                 </div>
             </div>
 
+            {% if meta_forms %}
+                <div class="form-group metadata-group">
+                    <label class="col-md-3 control-label">{% trans "Meta data" %}</label>
+                    <div class="col-md-9">
+                        {% for form in meta_forms %}
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="{{ form.value.id_for_label }}">
+                                        {{ form.property.name }}
+                                    </label>
+                                </div>
+                                <div class="col-md-8">
+                                    {% bootstrap_form form layout="inline" error_types="all" %}
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            {% endif %}
+
         </fieldset>
         {% if form.quota_option %}
             <fieldset>
