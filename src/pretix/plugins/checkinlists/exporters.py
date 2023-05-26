@@ -62,6 +62,7 @@ from pretix.base.timeframes import (
     resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
 )
 from pretix.control.forms.widgets import Select2
+from pretix.helpers.filenames import safe_for_filename
 from pretix.helpers.templatetags.jsonfield import JSONExtract
 from pretix.plugins.reports.exporters import ReportlabExportMixin
 
@@ -435,7 +436,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
         return self._fields
 
     def iterate_list(self, form_data):
-        cl = self.event.checkin_lists.get(pk=form_data['list'])
+        self.cl = cl = self.event.checkin_lists.get(pk=form_data['list'])
 
         questions = list(Question.objects.filter(event=self.event, id__in=form_data['questions']))
 
@@ -612,7 +613,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             yield row
 
     def get_filename(self):
-        return '{}_checkin'.format(self.event.slug)
+        return '{}_checkin_{}'.format(self.event.slug, safe_for_filename(self.cl.name))
 
 
 class CheckinLogList(ListExporter):
