@@ -35,6 +35,7 @@
 from django.dispatch import receiver
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
+from django.utils.timezone import get_current_timezone
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from ...control.forms.filter import get_all_payment_providers
@@ -73,6 +74,7 @@ class EventDataExporter(ListExporter):
             header.append(p.name)
         yield header
 
+        tz = get_current_timezone()
         for e in self.events.all():
             m = e.meta_data
             yield [
@@ -80,11 +82,11 @@ class EventDataExporter(ListExporter):
                 e.slug,
                 _('Yes') if e.live else _('No'),
                 e.currency,
-                date_format(e.date_from, 'SHORT_DATETIME_FORMAT'),
-                date_format(e.date_to, 'SHORT_DATETIME_FORMAT') if e.date_to else '',
-                date_format(e.date_admission, 'SHORT_DATETIME_FORMAT') if e.date_admission else '',
-                date_format(e.presale_start, 'SHORT_DATETIME_FORMAT') if e.presale_start else '',
-                date_format(e.presale_end, 'SHORT_DATETIME_FORMAT') if e.presale_end else '',
+                date_format(e.date_from.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+                date_format(e.date_to.astimezone(tz), 'SHORT_DATETIME_FORMAT') if e.date_to else '',
+                date_format(e.date_admission.astimezone(tz), 'SHORT_DATETIME_FORMAT') if e.date_admission else '',
+                date_format(e.presale_start.astimezone(tz), 'SHORT_DATETIME_FORMAT') if e.presale_start else '',
+                date_format(e.presale_end.astimezone(tz), 'SHORT_DATETIME_FORMAT') if e.presale_end else '',
                 str(e.location),
                 e.geo_lat or '',
                 e.geo_lon or '',
