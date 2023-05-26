@@ -466,15 +466,18 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        context['ev'] = self.subevent or self.request.event
+        context['subevent'] = self.subevent
+
         # Show voucher option if an event is selected and vouchers exist
         vouchers_exist = self.request.event.cache.get('vouchers_exist')
         if vouchers_exist is None:
             vouchers_exist = self.request.event.vouchers.exists()
             self.request.event.cache.set('vouchers_exist', vouchers_exist)
-        context['show_vouchers'] = context['vouchers_exist'] = vouchers_exist
-
-        context['ev'] = self.subevent or self.request.event
-        context['subevent'] = self.subevent
+        context['show_vouchers'] = context['vouchers_exist'] = vouchers_exist and (
+            (self.request.event.has_subevents and not self.subevent) or
+            context['ev'].presale_is_running
+        )
 
         context['allow_waitinglist'] = self.request.event.settings.waiting_list_enabled and context['ev'].presale_is_running
 

@@ -690,7 +690,14 @@ class WidgetAPIProductList(EventListMixin, View):
         data['date_range'] = self._get_date_range(ev, request.event)
         fail = False
 
+        vouchers_exist = self.request.event.get_cache().get('vouchers_exist')
+        if vouchers_exist is None:
+            vouchers_exist = self.request.event.vouchers.exists()
+            self.request.event.get_cache().set('vouchers_exist', vouchers_exist)
+        data['vouchers_exist'] = vouchers_exist
+
         if not ev.presale_is_running:
+            data['vouchers_exist'] = False
             if ev.presale_has_ended:
                 if request.event.settings.presale_has_ended_text:
                     data['error'] = str(request.event.settings.presale_has_ended_text)
@@ -742,6 +749,7 @@ class WidgetAPIProductList(EventListMixin, View):
             data['items_by_category'] = []
             data['display_add_to_cart'] = False
             data['itemnum'] = 0
+            data['vouchers_exist'] = False
 
         data['has_seating_plan'] = ev.seating_plan is not None
         data['has_seating_plan_waitinglist'] = False
@@ -759,12 +767,6 @@ class WidgetAPIProductList(EventListMixin, View):
                     if i.cached_availability[0] != Quota.AVAILABILITY_OK:
                         data['has_seating_plan_waitinglist'] = True
                         break
-
-        vouchers_exist = self.request.event.get_cache().get('vouchers_exist')
-        if vouchers_exist is None:
-            vouchers_exist = self.request.event.vouchers.exists()
-            self.request.event.get_cache().set('vouchers_exist', vouchers_exist)
-        data['vouchers_exist'] = vouchers_exist
 
         if "cart_id" not in request.GET:
             cache.set(cache_key, data, 10)

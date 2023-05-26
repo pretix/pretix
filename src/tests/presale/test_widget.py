@@ -487,7 +487,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             "use_native_spinners": False,
             "has_seating_plan": False,
             "has_seating_plan_waitinglist": False,
-            "vouchers_exist": True,
+            "vouchers_exist": False,
             "waiting_list_enabled": False,
             "error": "This voucher is expired.",
             "items_by_category": [],
