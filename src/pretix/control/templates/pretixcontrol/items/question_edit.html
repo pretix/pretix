@@ -55,7 +55,7 @@
                     <noscript>
                         <p>{% trans "Only applicable if you choose 'Choose one/multiple from a list' above." %}</p>
                     </noscript>
-                    <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+                    <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}" data-formset-delete-confirm-text="{% trans "If you delete an answer option, you will no longer be able to see statistical data on customers who previously selected this option, and when such customers edit their answers, they need to select a different option." %}">
                         {{ formset.management_form }}
                         {% bootstrap_formset_errors formset %}
                         <div data-formset-body>
