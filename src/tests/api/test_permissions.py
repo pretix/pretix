@@ -187,7 +187,7 @@ event_permission_sub_urls = [
     ('get', 'can_view_orders', 'exporters/invoicedata/download/bc3f9884-26ee-425b-8636-80613f84b6fa/3cb49ae6-eda3'
                                '-4605-814e-099e23777b36/', 404),
     ('get', None, 'item_meta_properties/', 200),
-    ('get', None, 'item_meta_properties/1/', 200),
+    ('get', None, 'item_meta_properties/0/', 404),
     ('post', 'can_change_event_settings', 'item_meta_properties/', 400),
     ('patch', 'can_change_event_settings', 'item_meta_properties/0/', 404),
     ('delete', 'can_change_event_settings', 'item_meta_properties/0/', 404),
