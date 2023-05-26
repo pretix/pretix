@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-05-26 08:59+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2023-05-26 09:33+0000\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -8156,7 +8156,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1098
 msgid "Introductory text"
-msgstr ""
+msgstr "介紹文件"
 
 #: pretix/base/settings.py:1099
 msgid "Will be printed on every invoice above the invoice rows."
