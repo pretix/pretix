@@ -74,9 +74,9 @@ class EventDataExporter(ListExporter):
             header.append(p.name)
         yield header
 
-        tz = get_current_timezone()
         for e in self.events.all():
             m = e.meta_data
+            tz = e.timezone
             yield [
                 str(e.name),
                 e.slug,
