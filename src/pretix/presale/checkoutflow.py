@@ -514,7 +514,6 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 'variation': cartpos.variation,
                 'categories': []
             }
-            formset.append(formsetentry)
 
             current_addon_products = defaultdict(list)
             for a in cartpos.addons.all():
@@ -592,6 +591,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                         'iao': iao,
                         'items': items
                     })
+            if formsetentry['categories']:
+                formset.append(formsetentry)
         return formset
 
     def get_context_data(self, **kwargs):
