@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-05-24 15:52+0000\n"
+"PO-Revision-Date: 2023-05-26 09:33+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -5654,12 +5654,15 @@ msgstr "Zeigt versteckte Produkte an, die zu diesem Gutschein passen"
 #: pretix/base/models/vouchers.py:300
 msgid "Offer all add-on products for free when redeeming this voucher"
 msgstr ""
+"Alle Zusatzprodukte kostenlos anbieten, wenn dieser Gutschein eingelöst wird"
 
 #: pretix/base/models/vouchers.py:304
 msgid ""
 "Include all bundled products without a designated price when redeeming this "
 "voucher"
 msgstr ""
+"Alle enthaltenen Produkte ohne separaten Preisanteil ausweisen, wenn dieser "
+"Gutschein eingelöst wird"
 
 #: pretix/base/models/vouchers.py:312 pretix/control/navigation.py:265
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:6
@@ -8402,10 +8405,9 @@ msgstr ""
 "Rechnung einzusetzen, oder %m bzw. %d für den Tag oder Monat."
 
 #: pretix/base/settings.py:642 pretix/base/settings.py:664
-#, fuzzy, python-brace-format
-#| msgid "Please do not use special characters in names."
+#, python-brace-format
 msgid "Please only use the characters {allowed} in this field."
-msgstr "Bitte verwende keine Sonderzeichen in Namen."
+msgstr "Bitte verwende nur die Zeichen {allowed} in diesem Feld."
 
 #: pretix/base/settings.py:655
 msgid "Invoice number prefix for cancellations"
@@ -19230,6 +19232,10 @@ msgid ""
 "statistical data on customers who previously selected this option, and when "
 "such customers edit their answers, they need to select a different option."
 msgstr ""
+"Wenn du eine Antwortoption löschst, kannst du anschließend keine "
+"statistischen Daten mehr zur Verwendung dieser Option abrufen und wenn "
+"Kunden, die diese Option gewählt haben, ihre Daten bearbeiten möchten, muss "
+"eine andere Option gewählt werden."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:72
 #, python-format
@@ -25826,12 +25832,11 @@ msgid "Please enter your bank account details."
 msgstr "Bitte gib deine Bankdaten ein."
 
 #: pretix/plugins/banktransfer/payment.py:332
-#, fuzzy
-#| msgid "Please send my invoice directly to our accounting department"
 msgid ""
 "Please additionally send my invoice directly to our accounting department"
 msgstr ""
-"Ich möchte, dass die Rechnung direkt an unsere Buchhaltung geschickt wird"
+"Ich möchte, dass die Rechnung zusätzlich direkt an unsere Buchhaltung "
+"geschickt wird"
 
 #: pretix/plugins/banktransfer/payment.py:336
 msgid "Invoice recipient e-mail"
