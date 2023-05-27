@@ -1428,6 +1428,41 @@ Sending e-mails
    :statuscode 404: The requested order does not exist.
    :statuscode 503: The email could not be sent.
 
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/orders/(code)/send_email/
+
+   Sends an custom email to the buyer.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/orders/ABC12/send_email/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+      Content-Type: application/json
+
+      {
+        "subject": "The subject for the mail",
+        "message": "Some custom mail for {name}"
+      }
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``code`` field of the order to send an email for
+   :statuscode 204: Successful execution (email might not be sent yet, but queued to send)
+   :statuscode 400: The order does not have an email address associated **or** the submitted data is invalid
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested order does not exist.
+   :statuscode 503: The email could not be sent.
+
 List of all order positions
 ---------------------------
 

@@ -37,6 +37,7 @@ from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext as _
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
 from django_scopes import scopes_disabled
+from i18nfield.strings import LazyI18nString
 from PIL import Image
 from rest_framework import serializers, status, viewsets
 from rest_framework.decorators import action
@@ -49,11 +50,12 @@ from rest_framework.response import Response
 from pretix.api.models import OAuthAccessToken
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.order import (
-    BlockedTicketSecretSerializer, InvoiceSerializer, OrderCreateSerializer,
-    OrderPaymentCreateSerializer, OrderPaymentSerializer,
-    OrderPositionSerializer, OrderRefundCreateSerializer,
-    OrderRefundSerializer, OrderSerializer, PriceCalcSerializer,
-    RevokedTicketSecretSerializer, SimulatedOrderSerializer,
+    BlockedTicketSecretSerializer, EmailSerializer, InvoiceSerializer,
+    OrderCreateSerializer, OrderPaymentCreateSerializer,
+    OrderPaymentSerializer, OrderPositionSerializer,
+    OrderRefundCreateSerializer, OrderRefundSerializer, OrderSerializer,
+    PriceCalcSerializer, RevokedTicketSecretSerializer,
+    SimulatedOrderSerializer,
 )
 from pretix.api.serializers.orderchange import (
     BlockNameSerializer, OrderChangeOperationSerializer,
@@ -62,6 +64,7 @@ from pretix.api.serializers.orderchange import (
     OrderPositionInfoPatchSerializer,
 )
 from pretix.api.views import RichOrderingFilter
+from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Checkin, Device, EventMetaValue,
@@ -567,6 +570,35 @@ class OrderViewSet(viewsets.ModelViewSet):
             order.resend_link(user=self.request.user, auth=self.request.auth)
         except SendMailException:
             return Response({'detail': _('There was an error sending the mail. Please try again later.')}, status=status.HTTP_503_SERVICE_UNAVAILABLE)
+
+        return Response(
+            status=status.HTTP_204_NO_CONTENT
+        )
+
+    @action(detail=True, methods=['POST'])
+    def send_email(self, request, **kwargs):
+        order = self.get_object()
+        with language(order.locale, self.request.event.settings.region):
+            email_context = get_email_context(event=order.event, order=order)
+        serializer = EmailSerializer(
+            data=request.data,
+            context=self.get_serializer_context(),
+        )
+        serializer.is_valid(raise_exception=True)
+        email_subject = serializer.validated_data['subject']
+        email_template = LazyI18nString(serializer.validated_data['message'])
+        if not order.email:
+            return Response({'detail': 'There is no email address associated with this order.'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        try:
+            order.send_mail(
+                email_subject, email_template,
+                email_context, 'pretix.event.order.email.custom_sent',
+                self.request.user, auto_email=False,
+            )
+        except SendMailException:
+            return Response({'detail': _('There was an error sending the mail. Please try again later.')},
+                            status=status.HTTP_503_SERVICE_UNAVAILABLE)
 
         return Response(
             status=status.HTTP_204_NO_CONTENT

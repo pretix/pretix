@@ -622,6 +622,55 @@ def test_order_resend_link(token_client, organizer, event, order):
 
 
 @pytest.mark.django_db
+def test_order_send_mail(token_client, organizer, event, order):
+    djmail.outbox = []
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/send_email/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'subject': 'API custom Mail subject',
+            'message': 'Custom test API message'
+        }
+    )
+    assert resp.status_code == 204
+    assert len(djmail.outbox) == 1
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/send_email/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'subject': 'API custom Mail subject',
+        }
+    )
+    assert resp.status_code == 400
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/send_email/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={
+            'message': 'Custom test API message'
+        }
+    )
+    assert resp.status_code == 400
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/send_email/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={}
+    )
+    assert resp.status_code == 400
+
+    order.email = None
+    order.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/send_email/'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', data={}
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
 def test_orderposition_price_calculation(token_client, organizer, event, order, item):
     with scopes_disabled():
         op = order.positions.first()
