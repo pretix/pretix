@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2022-11-07 04:00+0000\n"
+"PO-Revision-Date: 2023-05-27 22:00+0000\n"
 "Last-Translator: Maciej Szymczak <maciej+github@szymczak.at>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -30,87 +30,87 @@ msgstr "Niemiecki"
 
 #: pretix/_base_settings.py:80
 msgid "German (informal)"
-msgstr ""
+msgstr "Niemiecki (nieformalny)"
 
 #: pretix/_base_settings.py:81
 msgid "Arabic"
-msgstr ""
+msgstr "Arabski"
 
 #: pretix/_base_settings.py:82
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Chiński (uproszczony)"
 
 #: pretix/_base_settings.py:83
 msgid "Czech"
-msgstr ""
+msgstr "Czeski"
 
 #: pretix/_base_settings.py:84
 msgid "Danish"
-msgstr ""
+msgstr "Duński"
 
 #: pretix/_base_settings.py:85
 msgid "Dutch"
-msgstr ""
+msgstr "Holenderski"
 
 #: pretix/_base_settings.py:86
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "Holenderski (nieformalny)"
 
 #: pretix/_base_settings.py:87
 msgid "French"
-msgstr ""
+msgstr "Francuski"
 
 #: pretix/_base_settings.py:88
 msgid "Finnish"
-msgstr ""
+msgstr "Fiński"
 
 #: pretix/_base_settings.py:89
 msgid "Galician"
-msgstr ""
+msgstr "Galicyjski"
 
 #: pretix/_base_settings.py:90
 msgid "Greek"
-msgstr ""
+msgstr "Grecki"
 
 #: pretix/_base_settings.py:91
 msgid "Italian"
-msgstr ""
+msgstr "Włoski"
 
 #: pretix/_base_settings.py:92
 msgid "Latvian"
-msgstr ""
+msgstr "Litewski"
 
 #: pretix/_base_settings.py:93
 msgid "Polish"
-msgstr ""
+msgstr "Polski"
 
 #: pretix/_base_settings.py:94
 msgid "Portuguese (Portugal)"
-msgstr ""
+msgstr "Portugalski (Portugalia)"
 
 #: pretix/_base_settings.py:95
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugalski (Brazylia)"
 
 #: pretix/_base_settings.py:96
 msgid "Romanian"
-msgstr ""
+msgstr "Rumuński"
 
 #: pretix/_base_settings.py:97
 msgid "Russian"
-msgstr ""
+msgstr "Rosyjski"
 
 #: pretix/_base_settings.py:98
 msgid "Spanish"
-msgstr ""
+msgstr "Hiszpański"
 
 #: pretix/_base_settings.py:99
 msgid "Turkish"
-msgstr ""
+msgstr "Turecki"
 
 #: pretix/_base_settings.py:100
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukraiński"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -235,8 +235,7 @@ msgstr "Nieznany plugin: '{name}'."
 
 #: pretix/api/serializers/item.py:74 pretix/api/serializers/item.py:123
 #: pretix/api/serializers/item.py:323
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
 msgstr "Klucz metadanych '{name}' nie istnieje."
 
@@ -244,11 +243,11 @@ msgstr "Klucz metadanych '{name}' nie istnieje."
 #, fuzzy
 #| msgid "The add-on's category must belong to the same event as the item."
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr "Kategoria dodatku musi należeć do tego samego wydarzenia co przedmiot."
+msgstr "Dodatek w pakiecie nie może być tym samym co bilet."
 
 #: pretix/api/serializers/item.py:185 pretix/control/forms/item.py:1084
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "Dodatek nie może mieć swoich dodatków."
 
 #: pretix/api/serializers/item.py:262
 msgid ""
@@ -260,23 +259,21 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:270
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "Tylko bilety typu \"wstęp\" mogą być personalizowane."
 
 #: pretix/api/serializers/item.py:281
-#, fuzzy
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
-"Karty podarunkowe nie powinny być kojarzone z niezerowymi stawkami podatku, "
-"ponieważ podatek obrotowy zostanie naliczony po wykorzystaniu karty "
+"Karty podarunkowe nie powinny być sprzedawane z niezerowymi stawkami "
+"podatku, ponieważ podatek obrotowy zostanie naliczony po wykorzystaniu karty "
 "podarunkowej."
 
 #: pretix/api/serializers/item.py:286 pretix/control/forms/item.py:614
-#, fuzzy
-#| msgid "You cannot select a quota and a specific product at the same time."
 msgid "Gift card products should not be admission products at the same time."
-msgstr "Wybrano pulę i konkretny produkt jednocześnie."
+msgstr ""
+"Karty podarunkowe nie powinny być jednocześnie produktami typu \"wstęp\"."
 
 #: pretix/api/serializers/item.py:462
 msgid ""
@@ -299,21 +296,17 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Pytania tego typu nie mogą być zadawane podczas meldowania się."
 
 #: pretix/api/serializers/media.py:106
-#, fuzzy
-#| msgid ""
-#| "A gift card with the same secret already exists in your or an affiliated "
-#| "organizer account."
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
-"Karta prezentowa o tym samym sekrecie już istnieje w Twoim lub powiązanym "
-"koncie organizatora."
+"Nośnik o tym samym identyfikatorze oraz typie istnieje już w Twoim lub "
+"powiązanym koncie organizatora."
 
 #: pretix/api/serializers/order.py:76
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr ""
+msgstr "\"{input}\" nie jest poprawnym wyborem."
 
 #: pretix/api/serializers/order.py:1191 pretix/api/views/cart.py:210
 #: pretix/base/services/orders.py:1453
@@ -409,8 +402,6 @@ msgid "Order canceled"
 msgstr "Zamówienie anulowane"
 
 #: pretix/api/webhooks.py:213 pretix/base/notifications.py:257
-#, fuzzy
-#| msgid "Order denied"
 msgid "Order reactivated"
 msgstr "Zamówienie reaktywowane"
 
@@ -461,10 +452,8 @@ msgid "Refund of payment failed"
 msgstr "Zwrot płatności nieudany"
 
 #: pretix/api/webhooks.py:261
-#, fuzzy
-#| msgid "Underpaid (but confirmed)"
 msgid "Payment confirmed"
-msgstr "Niedopłacone (ale potwierdzone)"
+msgstr "Płatność potwierdzona"
 
 #: pretix/api/webhooks.py:265
 msgid "Order approved"
@@ -514,6 +503,8 @@ msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
 msgstr ""
+"Produkt zmieniony (produkt dodany lub usunięty oraz w tym zmiany obiektów "
+"zagnieżdżonych, takich jak warianty lub pakiety)"
 
 #: pretix/api/webhooks.py:310
 msgid "Shop taken live"
@@ -687,7 +678,6 @@ msgid "Sample Admission Ticket"
 msgstr "Przykładowy bilet wstępu"
 
 #: pretix/base/email.py:633
-#, fuzzy
 msgid "An individual text with a reason can be inserted here."
 msgstr "Indywidualny powód może zostać zdefiniowany w tym miejscu."
 
@@ -730,10 +720,8 @@ msgid "Combined Excel (.xlsx)"
 msgstr "Połączone Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:52
-#, fuzzy
-#| msgid "Answers to file upload questions"
 msgid "Question answer file uploads"
-msgstr "Odpowiedzi na pytania dotyczące uploadowanych plików"
+msgstr "Przesyłanie plików z odpowiedziami na pytania"
 
 #: pretix/base/exporters/answers.py:53 pretix/base/exporters/json.py:52
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:86
@@ -753,6 +741,8 @@ msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
 msgstr ""
+"Pobierz plik ZIP zawierający wszystkie pliki przesłane przez klientów "
+"podczas tworzenia zamówienia."
 
 #: pretix/base/exporters/answers.py:64 pretix/base/models/items.py:1561
 #: pretix/control/navigation.py:182
@@ -763,10 +753,8 @@ msgstr "Pytania"
 
 #: pretix/base/exporters/customers.py:49 pretix/control/navigation.py:573
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:132
-#, fuzzy
-#| msgid "Cart positions"
 msgid "Customer accounts"
-msgstr "Rachunki klientów"
+msgstr "Konta klientów"
 
 #: pretix/base/exporters/customers.py:51
 #, fuzzy
@@ -778,6 +766,8 @@ msgstr "Rachunki klientów"
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
 msgstr ""
+"Pobierz arkusz kalkulacyjny wszystkich aktualnie zarejestrowanych kont "
+"klientów."
 
 #: pretix/base/exporters/customers.py:64 pretix/base/models/customers.py:82
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:28
@@ -969,6 +959,8 @@ msgid ""
 "Download invoices in a format that can be used by the dekodi NREI conversion "
 "software."
 msgstr ""
+"Pobierz faktury w formacie, który może być używany przez oprogramowanie do "
+"konwersji NREI."
 
 #: pretix/base/exporters/dekodi.py:105
 #, python-brace-format
@@ -985,30 +977,23 @@ msgstr "Bilet na wydarzenie {event}-{code}"
 #: pretix/plugins/reports/exporters.py:435
 #: pretix/plugins/reports/exporters.py:672
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date range"
-msgstr "Data i godzina"
+msgstr "Zakres dat"
 
 #: pretix/base/exporters/dekodi.py:223 pretix/base/exporters/invoices.py:77
-#, fuzzy
-#| msgid ""
-#| "Only include invoices issued on or after this date. Note that the invoice "
-#| "date does not always correspond to the order or payment date."
 msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
 msgstr ""
-"Tylko faktury wystawione podczas lub po tej dacie. Uwaga: data faktury "
-"niekoniecznie odpowiada dacie zamówienia lub płatności."
+"Uwzględnij tylko faktury wystawione w tym przedziale czasowym. Należy "
+"pamiętać, że data wystawienia faktury nie zawsze odpowiada dacie zamówienia "
+"lub płatności."
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
 msgstr "Dane dotyczące wydarzenia"
 
 #: pretix/base/exporters/events.py:48
-#, fuzzy
-#| msgid "Event data"
 msgctxt "export_category"
 msgid "Event data"
 msgstr "Dane dotyczące wydarzenia"
@@ -1018,6 +1003,8 @@ msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
 msgstr ""
+"Pobierz arkusz kalkulacyjny z informacjami o wszystkich wydarzeniach na tym "
+"koncie organizatora."
 
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/waitinglist.py:114
 #: pretix/base/models/event.py:535 pretix/base/pdf.py:217
@@ -1131,7 +1118,7 @@ msgstr "Wszystkie faktury"
 
 #: pretix/base/exporters/invoices.py:126
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
-msgstr ""
+msgstr "Pobierz wszystkie faktury utworzone przez system jako plik ZIP lub PDF."
 
 #: pretix/base/exporters/invoices.py:177
 msgid "Invoice data"
@@ -1143,6 +1130,9 @@ msgid ""
 "The spreadsheet includes two sheets, one with a line for every invoice, and "
 "one with a line for every position of every invoice."
 msgstr ""
+"Pobierz arkusz kalkulacyjny z danymi wszystkich faktur utworzonych przez "
+"system. Arkusz kalkulacyjny zawiera dwa arkusze, jeden z linią dla każdej "
+"faktury i drugi z linią dla każdej pozycji każdej faktury."
 
 #: pretix/base/exporters/invoices.py:190 pretix/base/shredder.py:396
 #: pretix/control/templates/pretixcontrol/order/index.html:260
@@ -1363,8 +1353,6 @@ msgstr "Adres"
 #: pretix/plugins/reports/exporters.py:817
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:99
 #: pretix/presale/templates/pretixpresale/event/order.html:322
-#, fuzzy
-#| msgid "Status"
 msgctxt "address"
 msgid "State"
 msgstr "Stan (dot. USA)"
@@ -1403,8 +1391,6 @@ msgid "Total value (without taxes)"
 msgstr "Wartość totalna (bez podatku)"
 
 #: pretix/base/exporters/invoices.py:227
-#, fuzzy
-#| msgid "Payment ID"
 msgid "Payment matching IDs"
 msgstr "ID płatności"
 
@@ -1481,8 +1467,6 @@ msgid "Product data"
 msgstr "Dane produktu"
 
 #: pretix/base/exporters/items.py:51 pretix/base/exporters/orderlist.py:1072
-#, fuzzy
-#| msgid "Product data"
 msgctxt "export_category"
 msgid "Product data"
 msgstr "Dane produktu"
@@ -1490,6 +1474,8 @@ msgstr "Dane produktu"
 #: pretix/base/exporters/items.py:52
 msgid "Download a spreadsheet with details about all products and variations."
 msgstr ""
+"Pobierz arkusz kalkulacyjny ze szczegółowymi informacjami o wszystkich "
+"produktach i odmianach."
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:838
 msgid "Product ID"
@@ -1562,10 +1548,8 @@ msgstr "Bilet wejśćiowy"
 #: pretix/base/exporters/items.py:78
 #: pretix/control/templates/pretixcontrol/item/create.html:74
 #: pretix/control/templates/pretixcontrol/item/index.html:87
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Personalized ticket"
-msgstr "Generowanie biletów"
+msgstr "Bilet spersonalizowany"
 
 #: pretix/base/exporters/items.py:79 pretix/base/models/items.py:454
 msgid "Generate tickets"
@@ -1658,8 +1642,6 @@ msgid "Original price"
 msgstr "Cena oryginalna"
 
 #: pretix/base/exporters/items.py:92 pretix/base/models/items.py:564
-#, fuzzy
-#| msgid "The product the user waits for."
 msgid "This product is a gift card"
 msgstr "To jest karta podarunkowa"
 
@@ -1686,6 +1668,8 @@ msgid ""
 "Download a structured JSON representation of all orders. This might be "
 "useful for the import in third-party systems."
 msgstr ""
+"Pobierz uporządkowaną reprezentację wszystkich zamówień w formacie JSON. "
+"Może to być przydatne w przypadku importu w systemach innych firm."
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
@@ -1696,6 +1680,8 @@ msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
 msgstr ""
+"Pobierz plik tekstowy ze wszystkimi adresami e-mail zebranymi od kupujących "
+"lub posiadaczy biletów."
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:461
 #: pretix/plugins/reports/exporters.py:643
@@ -1708,6 +1694,10 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
+"Pobierz arkusz kalkulacyjny wszystkich zamówień. Arkusz kalkulacyjny będzie "
+"zawierał trzy arkusze, jeden z wierszem dla każdego zamówienia, drugi z "
+"wierszem dla każdej pozycji zamówienia i trzeci z wierszem dla każdej "
+"dodatkowej opłaty pobieranej w zamówieniu."
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/models/orders.py:271
 #: pretix/control/navigation.py:253 pretix/control/navigation.py:360
@@ -1748,23 +1738,22 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:130
 #: pretix/plugins/reports/exporters.py:675
-#, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Only include orders created within this date range."
-msgstr ""
-"Uwzględniaj tylko wydarzenia utworzone w tym dniu lub w dniach następnych."
+msgstr "Uwzględnij tylko zamówienia utworzone w tym zakresie dat."
 
 #: pretix/base/exporters/orderlist.py:134 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:227 pretix/plugins/badges/exporters.py:319
 #: pretix/plugins/ticketoutputpdf/exporters.py:96
 msgid "Event date"
-msgstr ""
+msgstr "Data wydarzenia"
 
 #: pretix/base/exporters/orderlist.py:137
 msgid ""
 "Only include orders including at least one ticket for a date in this range. "
 "Will also include other dates in case of mixed orders!"
 msgstr ""
+"Uwzględnij tylko zamówienia zawierające co najmniej jeden bilet na datę z "
+"tego zakresu. Podam również inne terminy w przypadku zamówień mieszanych!"
 
 #: pretix/base/exporters/orderlist.py:256
 #: pretix/base/exporters/orderlist.py:428
@@ -1867,8 +1856,6 @@ msgid "Order time"
 msgstr "Data zamówienia"
 
 #: pretix/base/exporters/orderlist.py:265
-#, fuzzy
-#| msgid "E-mail address"
 msgid "Custom address field"
 msgstr "Niestandardowe pole adresu"
 
@@ -1924,7 +1911,6 @@ msgstr "Data kontynuacji"
 #: pretix/control/templates/pretixcontrol/orders/index.html:125
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:207
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:74
-#, fuzzy
 msgid "Positions"
 msgstr "Pozycje"
 
@@ -2126,15 +2112,11 @@ msgstr "ID pseudonimizacji"
 
 #: pretix/base/exporters/orderlist.py:573 pretix/control/forms/filter.py:662
 #: pretix/control/templates/pretixcontrol/order/change.html:258
-#, fuzzy
-#| msgid "Client secret"
 msgid "Ticket secret"
 msgstr "Sekret biletu"
 
 #: pretix/base/exporters/orderlist.py:574 pretix/base/orderimport.py:719
 #: pretix/plugins/checkinlists/exporters.py:485
-#, fuzzy
-#| msgid "Seat"
 msgid "Seat ID"
 msgstr "Miejsce (numer)"
 
@@ -2165,7 +2147,7 @@ msgstr "Numer miejsca"
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:108
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:110
 msgid "Blocked"
-msgstr ""
+msgstr "Zablokowany"
 
 #: pretix/base/exporters/orderlist.py:580 pretix/base/models/orders.py:2269
 #: pretix/base/orderimport.py:653
@@ -2173,10 +2155,8 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:491
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:22
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:131
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Valid from"
-msgstr "Zapłacone zamówienia"
+msgstr "Ważny od"
 
 #: pretix/base/exporters/orderlist.py:581 pretix/base/models/orders.py:2274
 #: pretix/base/models/vouchers.py:221 pretix/base/orderimport.py:676
@@ -2186,7 +2166,7 @@ msgstr "Zapłacone zamówienia"
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:24
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:132
 msgid "Valid until"
-msgstr ""
+msgstr "Ważny do"
 
 #: pretix/base/exporters/orderlist.py:582
 msgid "Order comment"
@@ -2214,10 +2194,8 @@ msgid "Invoice address state"
 msgstr "Adres do faktury (stan)"
 
 #: pretix/base/exporters/orderlist.py:770
-#, fuzzy
-#| msgid "Variations"
 msgid "Order transaction data"
-msgstr "Warianty"
+msgstr "Dane dotyczące zamówienia"
 
 #: pretix/base/exporters/orderlist.py:772
 msgid ""
@@ -2225,13 +2203,14 @@ msgid ""
 "changes to products, prices or tax rates. The information is only accurate "
 "for changes made with pretix versions released after October 2021."
 msgstr ""
+"Pobierz arkusz kalkulacyjny zawierający wszystkie istotne zmiany w "
+"zamówieniach, tj. wszystkie zmiany produktów, cen czy stawek podatkowych. "
+"Informacje dotyczą tylko zmian wprowadzonych w wersjach pretix wydanych po "
+"październiku 2021 r."
 
 #: pretix/base/exporters/orderlist.py:788
-#, fuzzy
-#| msgid "Only include orders created on or after this date."
 msgid "Only include transactions created within this date range."
-msgstr ""
-"Uwzględniaj tylko wydarzenia utworzone w tym dniu lub w dniach następnych."
+msgstr "Uwzględnij tylko transakcje utworzone w tym zakresie dat."
 
 #: pretix/base/exporters/orderlist.py:823 pretix/base/models/event.py:626
 #: pretix/base/models/items.py:390 pretix/base/models/items.py:1822
@@ -2263,92 +2242,78 @@ msgid "Currency"
 msgstr "Waluta"
 
 #: pretix/base/exporters/orderlist.py:831
-#, fuzzy
-#| msgid "Variations"
 msgid "Transaction date"
-msgstr "Warianty"
+msgstr "Data dokonania transakcji"
 
 #: pretix/base/exporters/orderlist.py:832
-#, fuzzy
-#| msgid "Variations"
 msgid "Transaction time"
-msgstr "Warianty"
+msgstr "Godzina dokonania transakcji"
 
 #: pretix/base/exporters/orderlist.py:833
-#, fuzzy
-#| msgid "Order data"
 msgid "Old data"
-msgstr "Dane zamówienia"
+msgstr "Stare dane"
 
 #: pretix/base/exporters/orderlist.py:836 pretix/base/models/items.py:1357
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
 msgid "Quantity"
-msgstr ""
+msgstr "Ilość"
 
 #: pretix/base/exporters/orderlist.py:843
-#, fuzzy
-#| msgid "Internal reference"
 msgid "Internal fee type"
-msgstr "Wewnętrzna adnotacja"
+msgstr "Typ opłaty wewnętrznej"
 
 #: pretix/base/exporters/orderlist.py:845
-#, fuzzy
-#| msgid "Date"
 msgctxt "subevent"
 msgid "Date ID"
-msgstr "Data"
+msgstr "Identyfikator daty"
 
 #: pretix/base/exporters/orderlist.py:850
-#, fuzzy
-#| msgid "Tax rule"
 msgid "Tax rule ID"
-msgstr "Zasada podatkowa"
+msgstr "Identyfikator zasady podatkowej"
 
 #: pretix/base/exporters/orderlist.py:862
 msgid ""
 "This value is supplied for informational purposes, it is not part of the "
 "original transaction data and might have changed since the transaction."
 msgstr ""
+"Ta wartość jest podawana w celach informacyjnych, nie jest częścią "
+"oryginalnych danych transakcji i mogła ulec zmianie od czasu transakcji."
 
 #: pretix/base/exporters/orderlist.py:885
 msgid "Converted from legacy version"
-msgstr ""
+msgstr "Konwertowane ze starszej wersji"
 
 #: pretix/base/exporters/orderlist.py:945
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Payments and refunds"
-msgstr "Płatności i zwroty zamówień"
+msgstr "Płatności i zwroty"
 
 #: pretix/base/exporters/orderlist.py:947
 msgid "Download a spreadsheet of all payments or refunds of every order."
 msgstr ""
+"Pobierz arkusz kalkulacyjny wszystkich płatności lub zwrotów dla każdego "
+"zamówienia."
 
 #: pretix/base/exporters/orderlist.py:956
-#, fuzzy
-#| msgid "Date of last payment"
 msgid "Date range (payment date)"
-msgstr "Data ostatniej płatności"
+msgstr "Zakres dat (data płatności)"
 
 #: pretix/base/exporters/orderlist.py:959
 msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
 msgstr ""
+"Pamiętaj, że użycie tej opcji spowoduje wykluczenie wszelkich "
+"niepotwierdzonych płatności lub niezrealizowanych zwrotów."
 
 #: pretix/base/exporters/orderlist.py:963
 msgid "Date range (start of transaction)"
-msgstr ""
+msgstr "Zakres dat (początek transakcji)"
 
 #: pretix/base/exporters/orderlist.py:969
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment states"
 msgstr "Stany płatności"
 
 #: pretix/base/exporters/orderlist.py:977
-#, fuzzy
-#| msgid "Question option"
 msgid "Refund states"
 msgstr "Stany zwrotów"
 
@@ -2417,17 +2382,13 @@ msgid "Payment method"
 msgstr "Metoda płatności"
 
 #: pretix/base/exporters/orderlist.py:1021
-#, fuzzy
-#| msgid "Payment ID"
 msgid "Matching ID"
 msgstr "ID płatności"
 
 #: pretix/base/exporters/orderlist.py:1021
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment details"
-msgstr "Prowizja płatności"
+msgstr "Szczegóły płatności"
 
 #: pretix/base/exporters/orderlist.py:1071
 msgid "Quota availabilities"
@@ -2437,6 +2398,8 @@ msgstr "Dostępność przydziałów"
 msgid ""
 "Download a spreadsheet of all quotas including their current availability."
 msgstr ""
+"Pobierz arkusz kalkulacyjny zawierający wszystkie limity wraz z ich aktualną "
+"dostępnością."
 
 #: pretix/base/exporters/orderlist.py:1078
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
@@ -2467,10 +2430,8 @@ msgid "Current user's carts"
 msgstr "Wózek obecnego użytkownika"
 
 #: pretix/base/exporters/orderlist.py:1079
-#, fuzzy
-#| msgid "Paid orders"
 msgid "Exited orders"
-msgstr "Zapłacone zamówienia"
+msgstr "Porzucone zamówienia"
 
 #: pretix/base/exporters/orderlist.py:1079
 msgid "Current availability"
@@ -2490,8 +2451,6 @@ msgstr "Transakcje z kart podarunkowych"
 
 #: pretix/base/exporters/orderlist.py:1127
 #: pretix/base/exporters/orderlist.py:1230
-#, fuzzy
-#| msgid "Gift cards"
 msgctxt "export_category"
 msgid "Gift cards"
 msgstr "Karty podarunkowe"
@@ -2499,6 +2458,8 @@ msgstr "Karty podarunkowe"
 #: pretix/base/exporters/orderlist.py:1128
 msgid "Download a spreadsheet of all gift card transactions."
 msgstr ""
+"Pobierz arkusz kalkulacyjny zawierający wszystkie transakcje kartą "
+"podarunkową."
 
 #: pretix/base/exporters/orderlist.py:1156
 #: pretix/base/exporters/orderlist.py:1201
@@ -2555,6 +2516,8 @@ msgstr "Realizacje z kart podarunkowych"
 msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
 msgstr ""
+"Pobierz arkusz kalkulacyjny wszystkich płatności lub zwrotów kosztów "
+"związanych z kartami podarunkowymi."
 
 #: pretix/base/exporters/orderlist.py:1201
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:10
