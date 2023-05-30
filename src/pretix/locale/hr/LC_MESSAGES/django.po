@@ -8,15 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-05-30 21:28+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
+"Language-Team: Croatian <https://translate.pretix.eu/projects/pretix/pretix/"
+"hr/>\n"
 "Language: hr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -16564,6 +16566,7 @@ msgid "That will cause %(count)s voucher to be unusable."
 msgid_plural "That will cause %(count)s voucher to be unusable."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:29
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:31
@@ -18609,6 +18612,7 @@ msgid "1 order"
 msgid_plural "%(s)s orders"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:209
 #: pretix/control/templates/pretixcontrol/orders/index.html:218
@@ -19472,6 +19476,7 @@ msgid "One webhook is scheduled to be retried."
 msgid_plural "%(count)s webhooks are scheduled to be retried."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:22
 msgid "Retry now"
@@ -21141,6 +21146,7 @@ msgid "{num} order"
 msgid_plural "{num} orders"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/control/views/discounts.py:68 pretix/control/views/discounts.py:110
 #: pretix/control/views/discounts.py:212
@@ -21619,6 +21625,7 @@ msgid "Your invoice"
 msgid_plural "Your invoices"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/control/views/orders.py:332
 #, python-brace-format
@@ -21636,6 +21643,7 @@ msgid_plural ""
 "Your {event} team"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/control/views/orders.py:468 pretix/presale/views/order.py:163
 #: pretix/presale/views/order.py:210 pretix/presale/views/order.py:330
@@ -23268,6 +23276,7 @@ msgid_plural ""
 "and a total of %(sum)s."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
@@ -24387,6 +24396,7 @@ msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/plugins/sendmail/models.py:283
 #, python-format
@@ -24394,6 +24404,7 @@ msgid "%(count)d day before event end at %(time)s"
 msgid_plural "%(count)d days before event end at %(time)s"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/plugins/sendmail/models.py:293
 #, python-format
@@ -24401,6 +24412,7 @@ msgid "%(count)d day after event start at %(time)s"
 msgid_plural "%(count)d days after event start at %(time)s"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/plugins/sendmail/models.py:302
 #, python-format
@@ -24408,6 +24420,7 @@ msgid "%(count)d day before event start at %(time)s"
 msgid_plural "%(count)d days before event start at %(time)s"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/plugins/sendmail/signals.py:99
 msgid "Automated emails"
@@ -24631,6 +24644,7 @@ msgid "%(number)s matching order"
 msgid_plural "%(number)s matching orders"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/plugins/sendmail/views.py:445
 msgid ""
@@ -26113,6 +26127,7 @@ msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:25
 #, python-format
@@ -26120,6 +26135,7 @@ msgid "You can choose %(max_count)s option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:33
 #, python-format
@@ -26360,6 +26376,7 @@ msgid "This ticket has been used once."
 msgid_plural "This ticket has been used %(count)s times."
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:170
 msgid "No attendee name provided"
@@ -26439,6 +26456,7 @@ msgid "One product"
 msgid_plural "%(num)s products"
 msgstr[0] ""
 msgstr[1] ""
+msgstr[2] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:465
 #, python-format
