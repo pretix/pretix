@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-04-20 20:00+0000\n"
-"Last-Translator: Yvan Cadoux <yvan@cadoux.ch>\n"
+"PO-Revision-Date: 2023-05-30 21:18+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -10113,8 +10113,8 @@ msgstr ""
 "\n"
 "nous avons reçu avec succès votre commande pour {event} avec une valeur "
 "totale.\n"
-"de {total_with_currency}. Veuillez compléter votre paiement avant le "
-"{date}.\n"
+"de {total_with_currency}. Veuillez compléter votre paiement avant le {date}."
+"\n"
 "\n"
 "{payment_info}\n"
 "\n"
@@ -10252,8 +10252,8 @@ msgstr ""
 "\n"
 "Vous avez acheté un billet pour {event}.\n"
 "\n"
-"Si vous ne l'avez pas encore fait, vous pouvez télécharger votre ticket "
-"ici:\n"
+"Si vous ne l'avez pas encore fait, vous pouvez télécharger votre ticket ici:"
+"\n"
 "{url}\n"
 "\n"
 "Sincères salutations,\n"
@@ -14295,8 +14295,8 @@ msgstr "La liste d'enregistrement a été supprimée."
 msgid ""
 "Position #{posid} has been checked out at {datetime} for list \"{list}\"."
 msgstr ""
-"Position #{posid} a été vérifiée de nouveau à {datetime} sur la liste "
-"\"{list}\"."
+"Position #{posid} a été vérifiée de nouveau à {datetime} sur la liste \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:295
 #, fuzzy, python-brace-format
@@ -14308,8 +14308,8 @@ msgstr "Position #{posid} a été scannée pour la liste \"{list}\"."
 msgid ""
 "Position #{posid} has been checked in at {datetime} for list \"{list}\"."
 msgstr ""
-"Position #{posid} a été vérifiée de nouveau à {datetime} sur la liste "
-"\"{list}\"."
+"Position #{posid} a été vérifiée de nouveau à {datetime} sur la liste \""
+"{list}\"."
 
 #: pretix/control/logdisplay.py:307
 #, fuzzy, python-brace-format
@@ -14932,8 +14932,7 @@ msgstr "Le bon a été créé et envoyé à une personne sur la liste d'attente.
 msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
-msgstr ""
-"Un bon de réduction a été envoyé à une personne sur la liste d'attente."
+msgstr "Un bon de réduction a été envoyé à une personne sur la liste d'attente."
 
 #: pretix/control/logdisplay.py:472
 msgid "The voucher has been changed."
@@ -24516,8 +24515,7 @@ msgstr "Code de commande inconnu ou non autorisé à accéder à cette commande.
 #: pretix/control/views/orders.py:470 pretix/presale/views/order.py:1040
 #, fuzzy
 msgid "Ticket download is not enabled for this product."
-msgstr ""
-"Le téléchargement des tickets n'est pas activé pour les produits addon."
+msgstr "Le téléchargement des tickets n'est pas activé pour les produits addon."
 
 #: pretix/control/views/orders.py:585
 #, fuzzy
@@ -24914,8 +24912,7 @@ msgstr ""
 #: pretix/control/views/orders.py:2616
 #, fuzzy
 msgid "Your input was not valid."
-msgstr ""
-"Le mot de passe que vous avez entré était invalide, veuillez réessayer."
+msgstr "Le mot de passe que vous avez entré était invalide, veuillez réessayer."
 
 #: pretix/control/views/organizer.py:154
 msgid "Token name"
@@ -25104,8 +25101,7 @@ msgstr "La question a été ajoutée."
 #: pretix/control/views/organizer.py:1447
 #, fuzzy
 msgid "Your input was invalid, please try again."
-msgstr ""
-"Le mot de passe que vous avez entré était invalide, veuillez réessayer."
+msgstr "Le mot de passe que vous avez entré était invalide, veuillez réessayer."
 
 #: pretix/control/views/organizer.py:1465
 #, fuzzy
@@ -25952,8 +25948,7 @@ msgstr "(optionnel)"
 #: pretix/plugins/banktransfer/payment.py:688
 #, fuzzy
 msgid "Your input was invalid, please see below for details."
-msgstr ""
-"Le mot de passe que vous avez entré était invalide, veuillez réessayer."
+msgstr "Le mot de passe que vous avez entré était invalide, veuillez réessayer."
 
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:10
