@@ -6,7 +6,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:18+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -5643,8 +5643,8 @@ msgid ""
 "have been redeemed etc."
 msgstr ""
 "Sie können dieses Feld benutzen, um mehrere Gutscheine zusammenzufassen. "
-"Wenn Sie bei verschiedenen Gutscheinen denselben Wert eingeben, können Sie z."
-"B. Statistiken erhalten, wie viele dieser Gutscheine bereits eingelöst "
+"Wenn Sie bei verschiedenen Gutscheinen denselben Wert eingeben, können Sie "
+"z.B. Statistiken erhalten, wie viele dieser Gutscheine bereits eingelöst "
 "wurden."
 
 #: pretix/base/models/vouchers.py:296
@@ -5678,8 +5678,7 @@ msgstr ""
 
 #: pretix/base/models/vouchers.py:340
 msgid "You cannot select a quota and a specific product at the same time."
-msgstr ""
-"Sie können nicht gleichzeitig ein Kontingent und ein Produkt auswählen."
+msgstr "Sie können nicht gleichzeitig ein Kontingent und ein Produkt auswählen."
 
 #: pretix/base/models/vouchers.py:343
 msgid ""
@@ -7441,8 +7440,7 @@ msgstr "Termin: {}"
 
 #: pretix/base/services/invoices.py:459
 msgid "A payment provider specific text might appear here."
-msgstr ""
-"Hier kann ein spezifischer Text über einen Zahlungsanbieter erscheinen."
+msgstr "Hier kann ein spezifischer Text über einen Zahlungsanbieter erscheinen."
 
 #: pretix/base/services/invoices.py:467
 msgid "214th Example Street"
@@ -8095,8 +8093,7 @@ msgstr "Zusatzprodukte werden nicht mitgezählt."
 msgid ""
 "Show net prices instead of gross prices in the product list (not "
 "recommended!)"
-msgstr ""
-"Zeige Netto- statt Bruttopreisen in den Produktlisten (nicht empfohlen)"
+msgstr "Zeige Netto- statt Bruttopreisen in den Produktlisten (nicht empfohlen)"
 
 #: pretix/base/settings.py:284
 msgid ""
@@ -14167,8 +14164,8 @@ msgid ""
 "Position #{posid}: Event date \"{old_event}\" ({old_price}) changed to "
 "\"{new_event}\" ({new_price})."
 msgstr ""
-"Position #{posid}: Termin \"{old_event}\" ({old_price}) geändert zu "
-"\"{new_event}\" ({new_price})."
+"Position #{posid}: Termin \"{old_event}\" ({old_price}) geändert zu \""
+"{new_event}\" ({new_price})."
 
 #: pretix/control/logdisplay.py:102
 #, python-brace-format
@@ -19221,8 +19218,8 @@ msgid ""
 "All answers to the question given by the buyers of the following products "
 "will be <strong>lost</strong>."
 msgstr ""
-"Alle Antworten auf diese Frage werden <strong>unwiderruflich gelöscht</"
-"strong>."
+"Alle Antworten auf diese Frage werden <strong>unwiderruflich "
+"gelöscht</strong>."
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:30
 msgid ""
@@ -19277,8 +19274,8 @@ msgid ""
 "dietary requirements."
 msgstr ""
 "Fragen erlauben Ihren Besuchern, zusätzliche Informationen zu ihrem Ticket "
-"auszufüllen. Wenn Ihre Veranstaltung Verpflegung beinhaltet, könnten Sie z."
-"B. nach Allergien Ihrer Teilnehmer fragen."
+"auszufüllen. Wenn Ihre Veranstaltung Verpflegung beinhaltet, könnten Sie "
+"z.B. nach Allergien Ihrer Teilnehmer fragen."
 
 #: pretix/control/templates/pretixcontrol/items/questions.html:14
 msgid "Create a new question"
@@ -19378,8 +19375,7 @@ msgstr "Kontingent löschen"
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:9
 #, python-format
 msgid "Are you sure you want to delete the quota <strong>%(quota)s</strong>?"
-msgstr ""
-"Möchten Sie das Kontingent <strong>%(quota)s</strong> wirklich löschen?"
+msgstr "Möchten Sie das Kontingent <strong>%(quota)s</strong> wirklich löschen?"
 
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:12
 msgid "The following products might be no longer available for sale:"
@@ -24044,8 +24040,8 @@ msgid ""
 "The event could not be deleted as some constraints (e.g. data created by "
 "plug-ins) do not allow it."
 msgstr ""
-"Diese Veranstaltung konnte nicht gelöscht werden, da einige Bedingungen (z."
-"B. von Plugins erstellte Daten) es nicht erlauben."
+"Diese Veranstaltung konnte nicht gelöscht werden, da einige Bedingungen ("
+"z.B. von Plugins erstellte Daten) es nicht erlauben."
 
 #: pretix/control/views/event.py:1052
 #, python-brace-format
@@ -24792,8 +24788,7 @@ msgstr "Diese Aktion ist nur für stornierte Bestellungen möglich."
 
 #: pretix/control/views/orders.py:1818 pretix/presale/views/order.py:1501
 msgid "An error occurred. Please see the details below."
-msgstr ""
-"Ein Fehler ist aufgetreten, bitte schauen Sie weiter unten für Details."
+msgstr "Ein Fehler ist aufgetreten, bitte schauen Sie weiter unten für Details."
 
 #: pretix/control/views/orders.py:1826
 msgid "The order has been changed and the user has been notified."
@@ -28000,8 +27995,8 @@ msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
 msgstr ""
-"Der eingegebene Schlüssel \"%(value)s\" sieht ungültig aus. Er sollte mit "
-"\"%(prefix)s\" beginnen."
+"Der eingegebene Schlüssel \"%(value)s\" sieht ungültig aus. Er sollte mit \""
+"%(prefix)s\" beginnen."
 
 #: pretix/plugins/stripe/forms.py:51 pretix/plugins/stripe/signals.py:152
 msgid "Stripe Connect: App fee (percent)"
@@ -29496,8 +29491,7 @@ msgstr ""
 msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
 msgstr[0] "Sie müssen genau eine Option aus dieser Kategorie auswählen."
-msgstr[1] ""
-"Sie müssen genau %(min_count)s Optionen aus dieser Kategorie auswählen."
+msgstr[1] "Sie müssen genau %(min_count)s Optionen aus dieser Kategorie auswählen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:25
 #, python-format
