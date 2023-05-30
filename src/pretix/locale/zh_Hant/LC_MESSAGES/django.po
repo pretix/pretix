@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 08:08+0000\n"
-"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
+"Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -1269,7 +1269,7 @@ msgstr "增值稅ID"
 #: pretix/base/exporters/invoices.py:344 pretix/base/exporters/invoices.py:345
 #: pretix/base/exporters/invoices.py:346 pretix/base/exporters/invoices.py:347
 msgid "Invoice recipient:"
-msgstr "發票收件人"
+msgstr "發票收件人:"
 
 #: pretix/base/exporters/invoices.py:212 pretix/base/exporters/invoices.py:338
 #: pretix/base/exporters/orderlist.py:257
@@ -4517,11 +4517,11 @@ msgstr "請選擇更早日期。"
 
 #: pretix/base/models/items.py:1667
 msgid "Invalid date input."
-msgstr "輸入無效日期"
+msgstr "輸入無效日期."
 
 #: pretix/base/models/items.py:1674
 msgid "Invalid time input."
-msgstr "輸入無效時間"
+msgstr "輸入無效時間."
 
 #: pretix/base/models/items.py:1683
 msgid "Invalid datetime input."
@@ -4529,7 +4529,7 @@ msgstr "輸入無效的日期時間。"
 
 #: pretix/base/models/items.py:1695
 msgid "Unknown country code."
-msgstr "未知國家代碼"
+msgstr "未知國家代碼."
 
 #: pretix/base/models/items.py:1725
 #: pretix/control/templates/pretixcontrol/items/question.html:69
@@ -5796,7 +5796,7 @@ msgstr "無法將 {value} 解析為日期和時間。"
 
 #: pretix/base/orderimport.py:710
 msgid "Please enter a valid sales channel."
-msgstr "請輸入有效的銷售管道"
+msgstr "請輸入有效的銷售管道."
 
 #: pretix/base/orderimport.py:734
 msgid "Multiple matching seats were found."
@@ -6948,7 +6948,7 @@ msgstr "此訂單順序具有check-in清單的無效商品。"
 
 #: pretix/base/services/checkin.py:799
 msgid "This order position has an invalid date for this check-in list."
-msgstr "這項check-in清單訂單順序的日期無效，"
+msgstr "這項check-in清單訂單順序的日期無效."
 
 #: pretix/base/services/checkin.py:808
 msgid "This order is not yet approved."
@@ -7197,7 +7197,7 @@ msgstr "發生內部錯誤，請重試。"
 
 #: pretix/base/services/orders.py:136
 msgid "Your cart is empty."
-msgstr "你的購物車是空的"
+msgstr "你的購物車是空的."
 
 #: pretix/base/services/orders.py:138
 #, python-format
@@ -10222,7 +10222,7 @@ msgstr "活動："
 #: pretix/base/templates/pretixbase/email/order_details.html:26
 #: pretix/base/templates/pretixbase/email/order_details.html:77
 msgid "Order code:"
-msgstr "訂單代碼"
+msgstr "訂單代碼:"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:31
 msgid "created by"
@@ -18746,6 +18746,8 @@ msgid ""
 "underpaid by <strong>%(pending)s</strong>. The order total is "
 "<strong>%(total)s</strong>."
 msgstr ""
+"我們收到通知， <strong>%(amount)s</strong> 退款。如果處理此退款，訂單將少付 "
+"<strong>%(method)s</strong>。</strong>訂單總數為 <strong>%(total)s</strong>"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
@@ -19530,7 +19532,7 @@ msgstr "系統URL :"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:25
 msgid "Token:"
-msgstr "代幣"
+msgstr "代幣:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:31
 msgid "Device overview"
@@ -25180,13 +25182,13 @@ msgstr[1] ""
 #, python-format
 msgid "%(count)d day before event end at %(time)s"
 msgid_plural "%(count)d days before event end at %(time)s"
-msgstr[0] "%(count)d事件在%(time)s結束前一天,%(count)d事件在%(time)s結束前一天"
+msgstr[0] "%(count)d事件在%(time)s結束前一天"
 
 #: pretix/plugins/sendmail/models.py:293
 #, python-format
 msgid "%(count)d day after event start at %(time)s"
 msgid_plural "%(count)d days after event start at %(time)s"
-msgstr[0] "%(count)d 事件在%(time)s開始後的一天,%%(count)d事件在%(time)s開始後的天數"
+msgstr[0] "%(count)d 事件在%(time)s開始後的一天"
 
 #: pretix/plugins/sendmail/models.py:302
 #, python-format
@@ -25419,7 +25421,7 @@ msgstr "向每位客戶發送電子郵件，或向已為其購買機票的每個
 #, python-format
 msgid "%(number)s matching order"
 msgid_plural "%(number)s matching orders"
-msgstr[0] "%(number)s符合順序, %(number)s符合順序"
+msgstr[0] "%(number)s符合順序"
 
 #: pretix/plugins/sendmail/views.py:445
 msgid ""
@@ -26638,7 +26640,7 @@ msgstr "我們現在正在嘗試為你預訂這些附加部份！"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:20
 msgid "Add-ons:"
-msgstr "附加部份"
+msgstr "附加部份:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:49
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:205
@@ -27269,9 +27271,7 @@ msgstr "當前數值："
 #, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] ""
-"一項產品\n"
-"%(num)s的產品"
+msgstr[0] "%(num)s的產品"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:465
 #, python-format
@@ -28516,7 +28516,7 @@ msgstr "如果你想購買門票，則需要點擊活動或召集人個人資料
 msgid ""
 "If you're looking to configure this installation, please <a %(a_attr)s>head "
 "over here</a>."
-msgstr "如果要設定此安裝，請在此處< %(a_attr)s。</a>"
+msgstr "如果要設定此安裝，請在此處< %(a_attr)s</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
