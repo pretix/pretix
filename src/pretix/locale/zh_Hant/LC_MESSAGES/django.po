@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-05-30 08:08+0000\n"
+"PO-Revision-Date: 2023-05-30 08:22+0000\n"
 "Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -6596,9 +6596,7 @@ msgstr "你選擇的某些產品不再可用。詳情請見下文。"
 #, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] ""
-"每項訂單不能選擇超過 %s 的產品。\n"
-"每項訂單不能選擇超過 %s 的產品。"
+msgstr[0] "每項訂單不能選擇超過 %s 的產品。"
 
 #: pretix/base/services/cart.py:118 pretix/base/services/orders.py:1462
 #, python-format
