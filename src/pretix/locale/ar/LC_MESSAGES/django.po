@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:19+0000\n"
-"Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
 "Language: ar\n"
@@ -3173,8 +3173,8 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
-"باستخدام معدل التحويل 1: {rate} كما نشره البنك المركزي الأوروبي بتاريخ "
-"{date} ، وهذا يعادل:"
+"باستخدام معدل التحويل 1: {rate} كما نشره البنك المركزي الأوروبي بتاريخ {date}"
+" ، وهذا يعادل:"
 
 #: pretix/base/invoice.py:844
 #, fuzzy, python-brace-format
@@ -3187,8 +3187,8 @@ msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, the invoice total corresponds to {total}."
 msgstr ""
-"باستخدام معدل التحويل 1: {rate} كما نشره البنك المركزي الأوروبي بتاريخ "
-"{date} ، إجمالي الفاتورة يعادل {total}."
+"باستخدام معدل التحويل 1: {rate} كما نشره البنك المركزي الأوروبي بتاريخ {date}"
+" ، إجمالي الفاتورة يعادل {total}."
 
 #: pretix/base/invoice.py:858
 msgid "Modern Invoice Renderer (pretix 2.7)"
@@ -23718,8 +23718,8 @@ msgid ""
 "Please select the date to which the following waiting list entry should be "
 "transferred: <strong>%(entry)s</strong>?"
 msgstr ""
-"هل أنت متأكد أنك تريد حذف ما يلي انتظار دخول قائمة على <strong>%(entry)s</"
-"strong>؟"
+"هل أنت متأكد أنك تريد حذف ما يلي انتظار دخول قائمة على "
+"<strong>%(entry)s</strong>؟"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/transfer.html:19
 #, fuzzy
