@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:22+0000\n"
-"Last-Translator: 徐志能 <770707469@qq.com>\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -1016,8 +1016,7 @@ msgstr "日期和时间"
 msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
-msgstr ""
-"只包括在此日期或之后开具的发票。请注意，发票日期并不总是与订单或付款日期相对"
+msgstr "只包括在此日期或之后开具的发票。请注意，发票日期并不总是与订单或付款日期相对"
 "应。"
 
 #: pretix/base/exporters/events.py:47
@@ -4279,8 +4278,7 @@ msgid ""
 "If this is checked, the usual cancellation and order change settings of this "
 "event apply. If this is unchecked, orders containing this product can not be "
 "canceled by users but only by you."
-msgstr ""
-"如果选中此项，则取消适用此活动的常规设置。如果未选中此项，则包含此产品的订单"
+msgstr "如果选中此项，则取消适用此活动的常规设置。如果未选中此项，则包含此产品的订单"
 "不能由用户取消，只能由您取消。"
 
 #: pretix/base/models/items.py:533
@@ -4538,8 +4536,7 @@ msgid ""
 "\"approval\" state and will need to be confirmed by you before it can be "
 "paid and completed. You can use this e.g. for discounted tickets that are "
 "only available to specific groups."
-msgstr ""
-"如果此产品是订单的一部分，订单将被置于“批准”状态，并且需要在您付款和完成之前"
+msgstr "如果此产品是订单的一部分，订单将被置于“批准”状态，并且需要在您付款和完成之前"
 "由您确认。您可以使用仅适用于特定群组的折扣门票。"
 
 #: pretix/base/models/items.py:1033 pretix/control/navigation.py:546
@@ -7110,8 +7107,7 @@ msgid ""
 msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
-msgstr[0] ""
-"我们从您的购物车中删除了%(product)s，因为您购买的物品不能少于%(min)s。"
+msgstr[0] "我们从您的购物车中删除了%(product)s，因为您购买的物品不能少于%(min)s。"
 
 #: pretix/base/services/cart.py:132 pretix/base/services/orders.py:146
 #: pretix/presale/templates/pretixpresale/event/index.html:157
@@ -7151,8 +7147,7 @@ msgstr "此活动的预售期尚未开始。受影响的位置已从您的购物
 msgid ""
 "The booking period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
-msgstr ""
-"您购物车中其中一个活动的预售期已结束。受影响的位置已从您的购物车中删除。"
+msgstr "您购物车中其中一个活动的预售期已结束。受影响的位置已从您的购物车中删除。"
 
 #: pretix/base/services/cart.py:141
 #, fuzzy
@@ -7283,8 +7278,7 @@ msgid ""
 msgid_plural ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
-msgstr[0] ""
-"您可以从产品 %(base)s 的类别 %(cat)s 中选择最多 %(max)s 个附加组件。"
+msgstr[0] "您可以从产品 %(base)s 的类别 %(cat)s 中选择最多 %(max)s 个附加组件。"
 
 #: pretix/base/services/cart.py:189 pretix/base/services/orders.py:189
 #, fuzzy, python-format
@@ -7763,8 +7757,7 @@ msgid ""
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
-msgstr[0] ""
-"您不能选择超过产品%(product)s的%(max)s项。我们从您的购物车中删除了剩余物品。"
+msgstr[0] "您不能选择超过产品%(product)s的%(max)s项。我们从您的购物车中删除了剩余物品。"
 
 #: pretix/base/services/orders.py:147
 #, fuzzy
@@ -7795,8 +7788,7 @@ msgstr "用于购物车中某件商品的优惠券号码已达到允许的最大
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
-msgstr ""
-"用于购物车中某件商品的优惠券号码已达到允许的最大次数。我们从您的购物车中删除"
+msgstr "用于购物车中某件商品的优惠券号码已达到允许的最大次数。我们从您的购物车中删除"
 "了该商品。"
 
 #: pretix/base/services/orders.py:163
@@ -7826,8 +7818,7 @@ msgstr "您需要有效的优惠券号码才能订购此产品。"
 msgid ""
 "The booking period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
-msgstr ""
-"您购物车中其中某个活动的预售期尚未开始。受影响的位置已从您的购物车中移除。"
+msgstr "您购物车中其中某个活动的预售期尚未开始。受影响的位置已从您的购物车中移除。"
 
 #: pretix/base/services/orders.py:177
 msgid ""
@@ -8283,8 +8274,7 @@ msgid ""
 "Require customers to fill in individual email addresses for all personalized "
 "tickets. See the above option for more details. One email address for the "
 "order confirmation will always be required regardless of this setting."
-msgstr ""
-"要求客户填写所有入场券的个人电子邮件地址。有关详细信息，请参阅上面的选项。无"
+msgstr "要求客户填写所有入场券的个人电子邮件地址。有关详细信息，请参阅上面的选项。无"
 "论此设置如何，始终需要一个用于订单确认的电子邮件地址。"
 
 #: pretix/base/settings.py:363
@@ -8642,8 +8632,7 @@ msgid ""
 "Sunday, it will be moved to the next Monday instead. This is required in "
 "some countries by civil law. This will not effect the last date of payments "
 "configured below."
-msgstr ""
-"如果激活此项，并且任何订单的付款期限在星期六或星期日结束，则将改为下星期一。"
+msgstr "如果激活此项，并且任何订单的付款期限在星期六或星期日结束，则将改为下星期一。"
 "一些国家的民法要求这样做。这不会影响上面配置的最后一次付款日期。"
 
 #: pretix/base/settings.py:854
@@ -8685,8 +8674,7 @@ msgid ""
 "The last date any payments are accepted. This has precedence over the terms "
 "configured above. If you use the event series feature and an order contains "
 "tickets for multiple dates, the earliest date will be used."
-msgstr ""
-"接受任何付款的最后日期。这优先于上面配置的天数。如果您使用项目序列功能并且订"
+msgstr "接受任何付款的最后日期。这优先于上面配置的天数。如果您使用项目序列功能并且订"
 "单包含多个日期的票证，则将使用最早的日期。"
 
 #: pretix/base/settings.py:890
@@ -10480,9 +10468,8 @@ msgid ""
 "1140x120 pixels. You can increase the size with the setting below. We "
 "recommend not using small details on the picture as it will be resized on "
 "smaller screens."
-msgstr ""
-"如果您提供标识图像，我们默认情况下不会在页眉中显示您的组织名称。 我们将以最大"
-"高度120像素显示您的标识。"
+msgstr "如果您提供标识图像，我们默认情况下不会在页眉中显示您的组织名称。 "
+"我们将以最大高度120像素显示您的标识。"
 
 #: pretix/base/settings.py:2787
 msgid "Use header image also for events without an individually uploaded logo"
@@ -11818,8 +11805,7 @@ msgid ""
 "This defines how pretix will ask for human names. Changing this after you "
 "already received orders might lead to unexpected behavior when sorting or "
 "changing names."
-msgstr ""
-"这定义了pretix如何要求人名。在收到订单后更改此项可能会导致在排序或更改名称时"
+msgstr "这定义了pretix如何要求人名。在收到订单后更改此项可能会导致在排序或更改名称时"
 "出现意外行为。"
 
 #: pretix/control/forms/event.py:514 pretix/control/forms/organizer.py:370
@@ -13858,9 +13844,8 @@ msgstr "网站图标"
 msgid ""
 "If you provide a favicon, we will show it instead of the default pretix "
 "icon. We recommend a size of at least 200x200px to accommodate most devices."
-msgstr ""
-"如果您提供favicon，我们将显示它而不是默认的pretix图标。 我们建议尺寸至少为"
-"200x200px，以适应大多数设备。"
+msgstr "如果您提供favicon，我们将显示它而不是默认的pretix图标。 "
+"我们建议尺寸至少为200x200px，以适应大多数设备。"
 
 #: pretix/control/forms/organizer.py:460
 #, fuzzy
@@ -14294,8 +14279,8 @@ msgstr "位置 #{posid}创建：{item}（{price}）。"
 #| "\"{new_event}\" ({new_price})."
 msgid "Position #{posid}: Seat \"{old_seat}\" changed to \"{new_seat}\"."
 msgstr ""
-"位置 #{posid}：活动日期“{old_event}”（{old_price}）更改"
-"为“{new_event}”（{new_price}）。"
+"位置 #{posid}：活动日期“{old_event}”（{old_price}）更改为“{new_event}”（{new_"
+"price}）。"
 
 #: pretix/control/logdisplay.py:94
 #, python-brace-format
@@ -14413,9 +14398,8 @@ msgstr "（未知）"
 msgid ""
 "Unknown scan of code \"{barcode}…\" at {datetime} for list \"{list}\", type "
 "\"{type}\"."
-msgstr ""
-"在{datetime}中为列表\"{list}\"扫描位置 #{posid}，即使已经扫描过，也已经上传了"
-"扫描。"
+msgstr "在{datetime}中为列表\"{list}\"扫描位置 "
+"#{posid}，即使已经扫描过，也已经上传了扫描。"
 
 #: pretix/control/logdisplay.py:236
 #, fuzzy, python-brace-format
@@ -14433,9 +14417,8 @@ msgstr "列表\"{list}\"上的位置 #{posid}的签入已恢复。"
 msgid ""
 "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", "
 "type \"{type}\", was uploaded."
-msgstr ""
-"在{datetime}中为列表\"{list}\"扫描位置 #{posid}，即使已经扫描过，也已经上传了"
-"扫描。"
+msgstr "在{datetime}中为列表\"{list}\"扫描位置 "
+"#{posid}，即使已经扫描过，也已经上传了扫描。"
 
 #: pretix/control/logdisplay.py:257
 #, fuzzy, python-brace-format
@@ -14454,9 +14437,8 @@ msgstr "列表\"{list}\"上的位置 #{posid}的签入已恢复。"
 msgid ""
 "Denied scan of position #{posid} at {datetime} for list \"{list}\", type "
 "\"{type}\", error code \"{errorcode}\"."
-msgstr ""
-"在{datetime}中为列表\"{list}\"扫描位置 #{posid}，即使已经扫描过，也已经上传了"
-"扫描。"
+msgstr "在{datetime}中为列表\"{list}\"扫描位置 "
+"#{posid}，即使已经扫描过，也已经上传了扫描。"
 
 #: pretix/control/logdisplay.py:279
 #, fuzzy, python-brace-format
@@ -15968,9 +15950,8 @@ msgstr "U2F失败。检查是否正确插入了正确的身份验证设备。"
 msgid ""
 "Alternatively, connect your WebAuthn device. If it has a button, touch it "
 "now. You might have to unplug the device and plug it back in again."
-msgstr ""
-"或者，链接U2F设备。如果有按钮，请立即触摸。您可能需要拔下设备的插头并重新插"
-"入。"
+msgstr "或者，链接U2F设备。如果有按钮，请立即触摸。您可能需要拔下设备的插头并重新插入"
+"。"
 
 #: pretix/control/templates/pretixcontrol/auth/login_2fa.html:27
 #: pretix/control/templates/pretixcontrol/email_setup.html:123
@@ -18122,8 +18103,8 @@ msgid ""
 "feature to publish your terms of service, you don't need this setting since "
 "you can configure it there."
 msgstr ""
-"此文本需要用户确认才能进行购买。例如，您可以在此处链接您的服务条款。 如果您使"
-"用“页面”功能发布服务条款，则不需要此设置，因为您可以在此处进行配置。"
+"此文本需要用户确认才能进行购买。例如，您可以在此处链接您的服务条款。 "
+"如果您使用“页面”功能发布服务条款，则不需要此设置，因为您可以在此处进行配置。"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:191
 #, fuzzy
@@ -18474,9 +18455,10 @@ msgid ""
 "less than 10 characters that can be easily remembered, but you can also "
 "choose to use a random value."
 msgstr ""
-"这是用户可以购买门票的地址。 应该简短，只包含小写字母和数字，并且在您的活动中"
-"必须是唯一的。 我们建议使用某种缩写或少于10个字符的日期，这些字符可以很容易记"
-"住，但您也可以选择使用随机值。"
+"这是用户可以购买门票的地址。 "
+"应该简短，只包含小写字母和数字，并且在您的活动中必须是唯一的。 我们建议使用某"
+"种缩写或少于10个字符的日期，这些字符可以很容易记住，但您也可以选择使用随机值"
+"。"
 
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:26
 msgid ""
@@ -19235,8 +19217,7 @@ msgstr "您确定要删除类别<strong>%(name)s</strong>?"
 msgid ""
 "You cannot delete the discount <strong>%(name)s</strong> because it already "
 "has been used as part of an order, but you can deactivate it."
-msgstr ""
-"您无法删除产品<strong>%(item)s</strong>，因为它被订购了，但您可以停用它。"
+msgstr "您无法删除产品<strong>%(item)s</strong>，因为它被订购了，但您可以停用它。"
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:3
 #: pretix/control/templates/pretixcontrol/items/discounts.html:5
@@ -20667,8 +20648,8 @@ msgid ""
 "<strong>%(total)s</strong>."
 msgstr ""
 "我们收到<strong>%(amount)s</strong>已通过<strong>%(method)s</strong>退款的通"
-"知。如果处理此退款，订单金额将低于<strong>%(pending)s</strong>。订单总数为"
-"<strong>%(total)s</strong>。"
+"知。如果处理此退款，订单金额将低于<strong>%(pending)s</strong>。订单总数为<st"
+"rong>%(total)s</strong>。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
@@ -21284,8 +21265,7 @@ msgctxt "subevent"
 msgid ""
 "If you select a single date, fees will not be listed here as it might not be "
 "clear which date they belong to."
-msgstr ""
-"如果您选择单个日期，付款方式费用将不会在此列出，因为可能不清楚它们属于哪个日"
+msgstr "如果您选择单个日期，付款方式费用将不会在此列出，因为可能不清楚它们属于哪个日"
 "期。"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:80
@@ -22692,9 +22672,8 @@ msgid ""
 "You are about to permanently delete data from the server, even though you "
 "might be required to keep some of this data on file. You can therefore "
 "download the following file and store it in a safe place:"
-msgstr ""
-"您将要永久删除服务器中的数据，即使可能需要将其中的一些数据保存在文件中。因"
-"此，您应该下载以下文件并将其存储在安全的地方："
+msgstr "您将要永久删除服务器中的数据，即使可能需要将其中的一些数据保存在文件中。因此"
+"，您应该下载以下文件并将其存储在安全的地方："
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:29
 msgid "Download data"
@@ -22718,8 +22697,8 @@ msgid ""
 "confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
-"请重新检查您是否完全确定要从活动<strong>%(event)s</strong>中删除所选数据类"
-"别。在这种情况下，请在此处输入您的用户密码："
+"请重新检查您是否完全确定要从活动<strong>%(event)s</strong>中删除所选数据类别"
+"。在这种情况下，请在此处输入您的用户密码："
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
 #, fuzzy
@@ -23099,8 +23078,7 @@ msgstr "以后登录需要第二个因素"
 msgid ""
 "Please connect your WebAuthn device. If it has a button, touch it now. You "
 "might have to unplug the device and plug it back in again."
-msgstr ""
-"请连接您的U2F设备。 如果有按钮，请立即触摸。 您可能必须拔下设备并重新插入。"
+msgstr "请连接您的U2F设备。 如果有按钮，请立即触摸。 您可能必须拔下设备并重新插入。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_webauthn.html:26
 msgid "Device registration failed."
@@ -23932,16 +23910,14 @@ msgid ""
 "If the address is registered to valid account, then we have sent you an e-"
 "mail containing further instructions. Please note that we will send at most "
 "one email every 24 hours."
-msgstr ""
-"如果该地址已注册到有效帐户，那么我们已经向您发送了一封包含进一步说明的电子邮"
+msgstr "如果该地址已注册到有效帐户，那么我们已经向您发送了一封包含进一步说明的电子邮"
 "件。请注意，我们最多每24小时发送一封电子邮件。"
 
 #: pretix/control/views/auth.py:298
 msgid ""
 "If the address is registered to valid account, then we have sent you an e-"
 "mail containing further instructions."
-msgstr ""
-"如果该地址已注册到有效帐户，那么我们已经向您发送了一封包含进一步说明的电子邮"
+msgstr "如果该地址已注册到有效帐户，那么我们已经向您发送了一封包含进一步说明的电子邮"
 "件。"
 
 #: pretix/control/views/auth.py:318
@@ -27095,8 +27071,8 @@ msgid ""
 "clicking on the following button, you can either create a new PayPal account "
 "or connect pretix to an existing one."
 msgstr ""
-"要通过PayPal接受付款，您需要在PayPal使用一个帐户。 通过单击以下按钮，您可以创"
-"建一个新的PayPal帐户，将pretix连接到现有帐户。"
+"要通过PayPal接受付款，您需要在PayPal使用一个帐户。 "
+"通过单击以下按钮，您可以创建一个新的PayPal帐户，将pretix连接到现有帐户。"
 
 #: pretix/plugins/paypal2/payment.py:247
 #, python-brace-format
@@ -27251,9 +27227,8 @@ msgid ""
 "After you clicked continue, we will be able to select how you want to pay "
 "and to fill in your payment details. You will then be redirected back here "
 "to review and confirm your order."
-msgstr ""
-"点击继续后，我们会将您重定向到PayPal以填写您的付款详细信息。 然后，您将被重定"
-"向到此处以查看并确认您的订单。"
+msgstr "点击继续后，我们会将您重定向到PayPal以填写您的付款详细信息。 "
+"然后，您将被重定向到此处以查看并确认您的订单。"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:16
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:19
@@ -29595,9 +29570,8 @@ msgstr "您的订单需要得到活动组织者的批准才能确认并形成有
 msgid ""
 "We will send you an email as soon as the event organizer approved or "
 "rejected your order."
-msgstr ""
-"我们会在活动组织者批准或拒绝您的订单后立即向您发送电子邮件。 如果您的订单获得"
-"批准，我们会向您发送一个可用于支付的链接。"
+msgstr "我们会在活动组织者批准或拒绝您的订单后立即向您发送电子邮件。 "
+"如果您的订单获得批准，我们会向您发送一个可用于支付的链接。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:195
 #, fuzzy
@@ -29607,9 +29581,8 @@ msgstr ""
 #| "that you can use to pay."
 msgid ""
 "If your order was approved, we will send you a link that you can use to pay."
-msgstr ""
-"我们会在活动组织者批准或拒绝您的订单后立即向您发送电子邮件。 如果您的订单获得"
-"批准，我们会向您发送一个可用于支付的链接。"
+msgstr "我们会在活动组织者批准或拒绝您的订单后立即向您发送电子邮件。 "
+"如果您的订单获得批准，我们会向您发送一个可用于支付的链接。"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:211
 msgid "Place binding order"
