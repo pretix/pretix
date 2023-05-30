@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-05-30 08:02+0000\n"
+"PO-Revision-Date: 2023-05-30 08:08+0000\n"
 "Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -6782,8 +6782,7 @@ msgid ""
 msgid_plural ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "你最多為了%(base)s產品在%(cat)s類別可以選擇%(max)s套件。"
 
 #: pretix/base/services/cart.py:189 pretix/base/services/orders.py:189
 #, python-format
@@ -6793,8 +6792,7 @@ msgid ""
 msgid_plural ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "你最少需要為了%(base)s產品在%(cat)s類別選擇%(min)s套件。"
 
 #: pretix/base/services/cart.py:193 pretix/base/services/orders.py:193
 #, python-format
