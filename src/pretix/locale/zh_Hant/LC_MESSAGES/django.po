@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-05-30 08:22+0000\n"
+"PO-Revision-Date: 2023-05-30 08:29+0000\n"
 "Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -18737,7 +18737,7 @@ msgid "Mark as done"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:22
-#, python-format
+#, fuzzy, python-format
 msgid ""
 "We received notice that <strong>%(amount)s</strong> have been refunded via "
 "<strong>%(method)s</strong>. If this refund is processed, the order will be "
@@ -18745,7 +18745,7 @@ msgid ""
 "<strong>%(total)s</strong>."
 msgstr ""
 "我們收到通知， <strong>%(amount)s</strong> 退款。如果處理此退款，訂單將少付 "
-"<strong>%(method)s</strong>。</strong>訂單總數為 <strong>%(total)s</strong>"
+"<strong>%(pending)s</strong>。訂單總數為 <strong>%(total)s</strong>"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
