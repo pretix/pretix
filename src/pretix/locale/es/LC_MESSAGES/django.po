@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:20+0000\n"
-"Last-Translator: oocf <oswaldocerna@gmail.com>\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -4004,8 +4004,7 @@ msgstr ""
 #, fuzzy
 #| msgid "You cannot select a quota that belongs to a different event."
 msgid "You cannot set a default value that is not a valid value."
-msgstr ""
-"No se puede seleccionar una cuota que pertenezca a un evento diferente."
+msgstr "No se puede seleccionar una cuota que pertenezca a un evento diferente."
 
 #: pretix/base/models/event.py:1732 pretix/base/models/organizer.py:485
 #, fuzzy
@@ -4091,8 +4090,7 @@ msgstr "Descargue sus entradas aquí:"
 #, fuzzy
 #| msgid "The slug may only contain letters, numbers, dots and dashes."
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
-msgstr ""
-"La URL semántica solo puede contener letras, números, puntos y guiones."
+msgstr "La URL semántica solo puede contener letras, números, puntos y guiones."
 
 #: pretix/base/models/giftcards.py:100
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
@@ -5925,8 +5923,7 @@ msgstr ""
 #, fuzzy
 #| msgid "You cannot select a quota that belongs to a different event."
 msgid "You cannot select a product that belongs to a different event."
-msgstr ""
-"No se puede seleccionar una cuota que pertenezca a un evento diferente."
+msgstr "No se puede seleccionar una cuota que pertenezca a un evento diferente."
 
 #: pretix/base/models/vouchers.py:349 pretix/base/models/vouchers.py:362
 msgid ""
@@ -7319,10 +7316,8 @@ msgstr[1] "No se pueden seleccionar más de %s posiciones por pedido."
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
-msgstr[0] ""
-"No puede seleccionar más de %(max)s elementos del producto %(product)s."
-msgstr[1] ""
-"No puede seleccionar más de %(max)s elementos del producto %(product)s."
+msgstr[0] "No puede seleccionar más de %(max)s elementos del producto %(product)s."
+msgstr[1] "No puede seleccionar más de %(max)s elementos del producto %(product)s."
 
 #: pretix/base/services/cart.py:123 pretix/base/services/orders.py:1467
 #, fuzzy, python-format
@@ -15117,8 +15112,8 @@ msgstr "El registro #{posid} en la lista \"{list}\" ha sido revertido."
 msgid ""
 "Position #{posid} has been checked out at {datetime} for list \"{list}\"."
 msgstr ""
-"La posición #{posid} ha sido registrada el {datetime} para la lista "
-"\"{list}\"."
+"La posición #{posid} ha sido registrada el {datetime} para la lista \"{list}"
+"\"."
 
 #: pretix/control/logdisplay.py:295
 #, fuzzy, python-brace-format
@@ -15491,8 +15486,8 @@ msgstr ""
 msgid ""
 "The phone number has been changed from \"{old_phone}\" to \"{new_phone}\"."
 msgstr ""
-"La dirección de correo electrónico se ha cambiado de \"{old_email}\" a "
-"\"{new_email}\"."
+"La dirección de correo electrónico se ha cambiado de \"{old_email}\" a \""
+"{new_email}\"."
 
 #: pretix/control/logdisplay.py:395
 msgid "The customer account has been changed."
@@ -21883,8 +21878,7 @@ msgstr "Eliminar seleccionado"
 msgid ""
 "Are you sure you want to delete the scheduled export <strong>%(export)s</"
 "strong>?"
-msgstr ""
-"¿Está seguro de que desea eliminar la cuota <strong>%(quota)s</strong>?"
+msgstr "¿Está seguro de que desea eliminar la cuota <strong>%(quota)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:26
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:27
