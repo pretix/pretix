@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2022-06-29 05:00+0000\n"
-"Last-Translator: Yang JianCheng <948862346@qq.com>\n"
+"PO-Revision-Date: 2023-05-30 08:02+0000\n"
+"Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hans/>\n"
 "Language: zh_Hans\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -7097,11 +7097,10 @@ msgid ""
 msgstr "您选择的某些产品已不再以您选择的数量提供。 请参阅下面的详细信息。"
 
 #: pretix/base/services/cart.py:114
-#, fuzzy, python-format
-#| msgid "You cannot select more than %s items per order."
+#, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] "您不能为每个订单选择超过%s项。"
+msgstr[0] "您不能为每个订单选择超过 %s 项。"
 
 #: pretix/base/services/cart.py:118 pretix/base/services/orders.py:1462
 #, fuzzy, python-format
