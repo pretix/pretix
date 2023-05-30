@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:25+0000\n"
-"Last-Translator: Miguel Magalhães <magamig@gmail.com>\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_PT/>\n"
 "Language: pt_PT\n"
@@ -5680,8 +5680,7 @@ msgstr ""
 #, fuzzy
 #| msgid "You cannot select a quota that belongs to a different event."
 msgid "You cannot select a product that belongs to a different event."
-msgstr ""
-"Não é possível selecionar uma quota que pertence a um evento diferente."
+msgstr "Não é possível selecionar uma quota que pertence a um evento diferente."
 
 #: pretix/base/models/vouchers.py:349 pretix/base/models/vouchers.py:362
 msgid ""
@@ -6946,10 +6945,8 @@ msgstr[1] "Não é possível selecionar mais de %s itens por encomenda."
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
-msgstr[0] ""
-"Não é possível selecionar mais de %(max)s itens do produto %(product)s."
-msgstr[1] ""
-"Não é possível selecionar mais de %(max)s itens do produto %(product)s."
+msgstr[0] "Não é possível selecionar mais de %(max)s itens do produto %(product)s."
+msgstr[1] "Não é possível selecionar mais de %(max)s itens do produto %(product)s."
 
 #: pretix/base/services/cart.py:123 pretix/base/services/orders.py:1467
 #, fuzzy, python-format
@@ -6973,11 +6970,11 @@ msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr[0] ""
-"Removemos %(product)s do seu carrinho porque não pode comprar menos de "
-"%(min)s itens do mesmo."
+"Removemos %(product)s do seu carrinho porque não pode comprar menos de %(min)"
+"s itens do mesmo."
 msgstr[1] ""
-"Removemos %(product)s do seu carrinho porque não pode comprar menos de "
-"%(min)s itens do mesmo."
+"Removemos %(product)s do seu carrinho porque não pode comprar menos de %(min)"
+"s itens do mesmo."
 
 #: pretix/base/services/cart.py:132 pretix/base/services/orders.py:146
 #: pretix/presale/templates/pretixpresale/event/index.html:157
