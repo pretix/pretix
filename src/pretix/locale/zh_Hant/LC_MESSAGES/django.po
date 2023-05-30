@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-05-30 21:00+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"PO-Revision-Date: 2023-05-30 21:29+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -17153,7 +17153,6 @@ msgstr ""
 msgid "That will cause %(count)s voucher to be unusable."
 msgid_plural "That will cause %(count)s voucher to be unusable."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:29
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:31
@@ -19258,7 +19257,6 @@ msgstr ""
 msgid "1 order"
 msgid_plural "%(s)s orders"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:209
 #: pretix/control/templates/pretixcontrol/orders/index.html:218
@@ -20148,7 +20146,6 @@ msgstr ""
 msgid "One webhook is scheduled to be retried."
 msgid_plural "%(count)s webhooks are scheduled to be retried."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:22
 msgid "Retry now"
@@ -21873,7 +21870,6 @@ msgstr "很快地"
 msgid "{num} order"
 msgid_plural "{num} orders"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/control/views/discounts.py:68 pretix/control/views/discounts.py:110
 #: pretix/control/views/discounts.py:212
@@ -22374,7 +22370,6 @@ msgstr ""
 msgid "Your invoice"
 msgid_plural "Your invoices"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/control/views/orders.py:332
 #, python-brace-format
@@ -22391,7 +22386,6 @@ msgid_plural ""
 "\n"
 "Your {event} team"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/control/views/orders.py:468 pretix/presale/views/order.py:163
 #: pretix/presale/views/order.py:210 pretix/presale/views/order.py:330
@@ -24037,7 +24031,6 @@ msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
@@ -25174,7 +25167,6 @@ msgstr "在{date}在{time}"
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/plugins/sendmail/models.py:283
 #, python-format
@@ -26945,7 +26937,6 @@ msgstr "你的瀏覽器不接受我們的 Cookie。但是，我們需要設定�
 msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:25
 #, python-format
