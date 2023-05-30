@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-05-30 07:23+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"PO-Revision-Date: 2023-05-30 07:55+0000\n"
+"Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6605,18 +6605,14 @@ msgstr[0] ""
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
-msgstr[0] ""
-"不能選擇商品 %（商品） 的多個 %(max)s 專案。\n"
-"不能選擇商品 %（商品） 的多個 %(max)s 專案。"
+msgstr[0] "不能選擇商品 %(product)s 的多個 %(max)s 專案。"
 
 #: pretix/base/services/cart.py:123 pretix/base/services/orders.py:1467
 #, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] ""
-"你需要選擇產品 %(product)s.的至少 %(min)s 項。\n"
-"你需要選擇產品 %(product)s.的至少 %(min)s 項。"
+msgstr[0] "你需要選擇產品 %(product)s.的至少 %(min)s 項。"
 
 #: pretix/base/services/cart.py:128
 #, python-format
@@ -7213,7 +7209,8 @@ msgid ""
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
-msgstr[0] ""
+msgstr[0] "不能選擇產品%(product)s. 的多項 %(max)s."
+"專案。我們從您的購物車中刪除了多餘的商品。"
 
 #: pretix/base/services/orders.py:147
 msgid "The booking period has ended."
