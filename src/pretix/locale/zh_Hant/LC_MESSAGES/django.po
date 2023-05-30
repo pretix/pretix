@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-05-30 08:29+0000\n"
-"Last-Translator: Martin Gross <gross@rami.io>\n"
+"PO-Revision-Date: 2023-05-30 21:00+0000\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -25167,7 +25167,7 @@ msgstr ""
 #: pretix/plugins/sendmail/models.py:268
 #, python-brace-format
 msgid "on {date} at {time}"
-msgstr ""
+msgstr "在{date}在{time}"
 
 #: pretix/plugins/sendmail/models.py:274
 #, python-format
