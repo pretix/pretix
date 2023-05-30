@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
 "PO-Revision-Date: 2023-05-30 21:24+0000\n"
-"Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ro/>\n"
 "Language: ro\n"
@@ -1760,8 +1760,7 @@ msgstr "Afișați răspunsurile cu alegere multiplă grupate într-o coloană"
 #, fuzzy
 #| msgid "Only include orders created on or after this date."
 msgid "Only include orders created within this date range."
-msgstr ""
-"Includeți numai comenzile create la această dată sau după această dată."
+msgstr "Includeți numai comenzile create la această dată sau după această dată."
 
 #: pretix/base/exporters/orderlist.py:134 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:227 pretix/plugins/badges/exporters.py:319
@@ -2239,8 +2238,7 @@ msgstr ""
 #, fuzzy
 #| msgid "Only include orders created on or after this date."
 msgid "Only include transactions created within this date range."
-msgstr ""
-"Includeți numai comenzile create la această dată sau după această dată."
+msgstr "Includeți numai comenzile create la această dată sau după această dată."
 
 #: pretix/base/exporters/orderlist.py:823 pretix/base/models/event.py:626
 #: pretix/base/models/items.py:390 pretix/base/models/items.py:1822
