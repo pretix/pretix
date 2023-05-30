@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-05-30 07:55+0000\n"
-"Last-Translator: Martin Gross <gross@rami.io>\n"
+"PO-Revision-Date: 2023-05-30 08:02+0000\n"
+"Last-Translator: Supaplextw <bejokeup@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -6729,7 +6729,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:168
 msgid "This voucher is expired."
-msgstr "優惠券過期"
+msgstr "優惠券過期。"
 
 #: pretix/base/services/cart.py:169
 msgid "This voucher is not valid for this product."
