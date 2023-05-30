@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-26 09:20+0000\n"
-"PO-Revision-Date: 2023-04-06 02:00+0000\n"
-"Last-Translator: 전윤수 <jeonyunsoo123@gmail.com>\n"
+"PO-Revision-Date: 2023-05-30 21:29+0000\n"
+"Last-Translator: anonymous <noreply@weblate.org>\n"
 "Language-Team: Korean <https://translate.pretix.eu/projects/pretix/pretix/ko/"
 ">\n"
 "Language: ko\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -6429,7 +6429,6 @@ msgstr ""
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/base/services/cart.py:118 pretix/base/services/orders.py:1462
 #, python-format
@@ -6437,7 +6436,6 @@ msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/base/services/cart.py:123 pretix/base/services/orders.py:1467
 #, python-format
@@ -6445,7 +6443,6 @@ msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/base/services/cart.py:128
 #, python-format
@@ -6456,7 +6453,6 @@ msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/base/services/cart.py:132 pretix/base/services/orders.py:146
 #: pretix/presale/templates/pretixpresale/event/index.html:157
@@ -6507,7 +6503,6 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/base/services/cart.py:149
 #, python-format
@@ -6520,7 +6515,6 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/base/services/cart.py:155
 msgid ""
@@ -6607,7 +6601,6 @@ msgid_plural ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/base/services/cart.py:189 pretix/base/services/orders.py:189
 #, python-format
@@ -6618,7 +6611,6 @@ msgid_plural ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/base/services/cart.py:193 pretix/base/services/orders.py:193
 #, python-format
@@ -7021,7 +7013,6 @@ msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/base/services/orders.py:147
 msgid "The booking period has ended."
@@ -16555,7 +16546,6 @@ msgstr ""
 msgid "That will cause %(count)s voucher to be unusable."
 msgid_plural "That will cause %(count)s voucher to be unusable."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/control/templates/pretixcontrol/item/delete.html:29
 #: pretix/control/templates/pretixcontrol/items/quota_delete.html:31
@@ -21130,7 +21120,6 @@ msgstr ""
 msgid "{num} order"
 msgid_plural "{num} orders"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/control/views/discounts.py:68 pretix/control/views/discounts.py:110
 #: pretix/control/views/discounts.py:212
@@ -21608,7 +21597,6 @@ msgstr ""
 msgid "Your invoice"
 msgid_plural "Your invoices"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/control/views/orders.py:332
 #, python-brace-format
@@ -21625,7 +21613,6 @@ msgid_plural ""
 "\n"
 "Your {event} team"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/control/views/orders.py:468 pretix/presale/views/order.py:163
 #: pretix/presale/views/order.py:210 pretix/presale/views/order.py:330
@@ -24377,28 +24364,24 @@ msgstr ""
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/plugins/sendmail/models.py:283
 #, python-format
 msgid "%(count)d day before event end at %(time)s"
 msgid_plural "%(count)d days before event end at %(time)s"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/plugins/sendmail/models.py:293
 #, python-format
 msgid "%(count)d day after event start at %(time)s"
 msgid_plural "%(count)d days after event start at %(time)s"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/plugins/sendmail/models.py:302
 #, python-format
 msgid "%(count)d day before event start at %(time)s"
 msgid_plural "%(count)d days before event start at %(time)s"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/plugins/sendmail/signals.py:99
 msgid "Automated emails"
@@ -24621,7 +24604,6 @@ msgstr ""
 msgid "%(number)s matching order"
 msgid_plural "%(number)s matching orders"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/plugins/sendmail/views.py:445
 msgid ""
@@ -24634,7 +24616,6 @@ msgstr ""
 msgid "%(number)s waiting list entry"
 msgid_plural "%(number)s waiting list entries"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/plugins/sendmail/views.py:610
 msgid "Your rule has been created."
@@ -26102,14 +26083,12 @@ msgstr ""
 msgid "You need to choose exactly one option from this category."
 msgid_plural "You need to choose %(min_count)s options from this category."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:25
 #, python-format
 msgid "You can choose %(max_count)s option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:33
 #, python-format
@@ -26427,7 +26406,6 @@ msgstr ""
 msgid "One product"
 msgid_plural "%(num)s products"
 msgstr[0] ""
-msgstr[1] ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:465
 #, python-format
