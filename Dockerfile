@@ -49,6 +49,7 @@ COPY deployment/docker/nginx.conf /etc/nginx/nginx.conf
 COPY deployment/docker/nginx-max-body-size.conf /etc/nginx/conf.d/nginx-max-body-size.conf
 COPY deployment/docker/production_settings.py /pretix/src/production_settings.py
 COPY pyproject.toml /pretix/pyproject.toml
+COPY _build /pretix/_build
 COPY src /pretix/src
 
 RUN pip3 install -U \
