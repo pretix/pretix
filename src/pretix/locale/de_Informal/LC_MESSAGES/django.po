@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-31 09:01+0000\n"
-"PO-Revision-Date: 2023-05-26 09:33+0000\n"
+"PO-Revision-Date: 2023-05-31 10:41+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -4914,16 +4914,16 @@ msgid "Subevent cannot be null for event series."
 msgstr "Der Termin kann nicht leer sein, da dies eine Veranstaltungsreihe ist."
 
 #: pretix/base/models/items.py:2005
-#, fuzzy
-#| msgid "Required for events"
 msgid "Required for products"
-msgstr "Pflichtfeld für Veranstaltungen"
+msgstr "Pflichtfeld für Produkte"
 
 #: pretix/base/models/items.py:2006
 msgid ""
 "If checked, this property must be set in each product. Does not apply if a "
 "default value is set."
 msgstr ""
+"Wenn diese Option gewählt ist, muss der Parameter in jedem Produkt gefüllt "
+"werden. Dies hat keine Auswirkungen, wenn ein Standardwert gesetzt ist."
 
 #: pretix/base/models/log.py:159
 #, python-brace-format
@@ -14999,23 +14999,16 @@ msgid "A bundled item has been changed on this product."
 msgstr "Ein enthaltenes Produkt wurde bearbeitet."
 
 #: pretix/control/logdisplay.py:488
-#, fuzzy
-#| msgid "A user has been added to the event team."
 msgid "A meta property has been added to this event."
-msgstr "Ein Benutzer wurde zum Team hinzugefügt."
+msgstr "Eine Meta-Eigenschaft wurde dieser Veranstaltung hinzugefügt."
 
 #: pretix/control/logdisplay.py:489
-#, fuzzy
-#| msgid "A user has been removed from the event team."
 msgid "A meta property has been removed from this event."
-msgstr "Ein Benutzer wurde aus dem Team entfernt."
+msgstr "Eine Meta-Eigenschaft wurde von dieser Veranstaltung entfernt."
 
 #: pretix/control/logdisplay.py:490
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "A quota has been changed on the event date."
 msgid "A meta property has been changed on this event."
-msgstr "Ein Kontingent des Termins wurde bearbeitet."
+msgstr "Eine Meta-Eigenschaft in dieser Veranstaltung wurde geändert."
 
 #: pretix/control/logdisplay.py:491
 msgid "The quota has been added."
