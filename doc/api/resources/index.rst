@@ -18,6 +18,7 @@ at :ref:`plugin-docs`.
    item_variations
    item_bundles
    item_add-ons
+   item_meta_properties
    questions
    question_options
    quotas
