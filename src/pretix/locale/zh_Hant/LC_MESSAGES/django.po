@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-31 09:01+0000\n"
-"PO-Revision-Date: 2023-05-30 21:00+0000\n"
+"PO-Revision-Date: 2023-06-02 04:00+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -40,7 +40,7 @@ msgstr "預售結束"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:108
 #: pretix/control/templates/pretixcontrol/subevents/index.html:159
 msgid "Presale not started"
-msgstr ""
+msgstr "預售尚未開始"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:969
 #: pretix/control/templates/pretixcontrol/events/index.html:146
@@ -4674,16 +4674,15 @@ msgid "Subevent cannot be null for event series."
 msgstr "對於事件系列，子事件不能為空白。"
 
 #: pretix/base/models/items.py:2005
-#, fuzzy
-#| msgid "Required for events"
 msgid "Required for products"
-msgstr "活動所需"
+msgstr "商品所需要"
 
 #: pretix/base/models/items.py:2006
 msgid ""
 "If checked, this property must be set in each product. Does not apply if a "
 "default value is set."
-msgstr ""
+msgstr "如果已選取，則必須在每個商品中設定該屬性。假如已設定該屬性為預設值，則不適用"
+"。"
 
 #: pretix/base/models/log.py:159
 #, python-brace-format
