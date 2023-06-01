@@ -126,6 +126,13 @@ var form_handlers = function (el) {
         controls.value = currentValue <= itemOrderMin && step < 0 ? 0 : Math.max(itemOrderMin || controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (currentValue || 0) + step));
         controls.dispatchEvent(new Event("change"));
     });
+    el.find("input[data-min]").on("blur", function(e) {
+        var quantity = parseFloat(this.value);
+        var itemOrderMin = parseFloat(this.getAttribute("data-min"));
+        if (quantity && quantity < itemOrderMin) {
+            this.value = itemOrderMin;
+        }
+    });
 
     el.find("script[data-replace-with-qr]").each(function () {
         var $div = $("<div>");
