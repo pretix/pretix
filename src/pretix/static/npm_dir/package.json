@@ -7,7 +7,7 @@
     "@babel/core": "^7.21.5",
     "@babel/preset-env": "^7.21.5",
     "@rollup/plugin-babel": "^6.0.3",
-    "@rollup/plugin-node-resolve": "^15.0.2",
+    "@rollup/plugin-node-resolve": "^15.1.0",
     "vue": "^2.7.14",
     "rollup": "^2.79.1",
     "rollup-plugin-vue": "^5.0.1",
