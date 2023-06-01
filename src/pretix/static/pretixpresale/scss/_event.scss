@@ -30,10 +30,18 @@
         }
     }
     .item-checkbox-label {
+        position: relative;
         display: block;
-    }
-    .item-checkbox-label:has(input:checked) {
-        background-color: $gray-lighter;
+        padding-left: 24px;
+        padding-right: 24px;
+
+        input {
+            position: absolute;
+            left: 10px;
+        }
+        &.item-checkbox-label-checked {
+            background-color: $gray-lighter;
+        }
     }
 
     .product-description.with-picture {

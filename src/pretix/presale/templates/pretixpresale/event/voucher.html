@@ -251,6 +251,7 @@
                                                                         {% if options == 1 %}checked{% endif %}
                                                                         aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
                                                                         {% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
+                                                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                                 {% trans "Select" %}
                                                             </label>
                                                         {% else %}
@@ -393,6 +394,7 @@
                                                            {% if options == 1 %}checked{% endif %}
                                                            aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
                                                            {% if item.description %} aria-describedby="item-{{ item.id }}-description"{% endif %}>
+                                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                     {% trans "Select" %}
                                                 </label>
                                             {% else %}

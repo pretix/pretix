@@ -187,6 +187,7 @@
                                                         name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                         data-exclusive-prefix="cp_{{ form.pos.pk }}_variation_{{ item.id }}_"
                                                         aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}">
+                                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                 {% trans "Select" %}
                                             </label>
                                         {% else %}
@@ -320,6 +321,7 @@
                                             id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                             aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
                                             {% if item.description %} aria-describedby="cp-{{ form.pos.pk }}-item-{{ item.id }}-description"{% endif %}>
+                                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                             {% trans "Select" %}
                                 </label>
                             {% else %}
