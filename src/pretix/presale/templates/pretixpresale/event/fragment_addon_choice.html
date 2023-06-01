@@ -335,7 +335,7 @@
                                         id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                         aria-label="{% blocktrans with item=item.name %}Quantity of {{ item }} to order{% endblocktrans %}"
                                         {% if item.description %} aria-describedby="cp-{{ form.pos.pk }}-item-{{ item.id }}-description"{% endif %}>
-                                    <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Increase quantity" %}">+</button>
+                                    <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
                                 </div>
                             {% endif %}
                         </div>
