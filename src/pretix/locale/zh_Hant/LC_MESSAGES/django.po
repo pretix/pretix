@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-31 09:01+0000\n"
-"PO-Revision-Date: 2023-06-02 04:00+0000\n"
+"PO-Revision-Date: 2023-06-02 13:44+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -7882,21 +7882,22 @@ msgstr ""
 
 #: pretix/base/settings.py:607
 msgid "Minimum length of invoice number after prefix"
-msgstr ""
+msgstr "發票前綴編號的最小長度"
 
 #: pretix/base/settings.py:608
 msgid ""
 "The part of your invoice number after your prefix will be filled up with "
 "leading zeros up to this length, e.g. INV-001 or INV-00001."
-msgstr ""
+msgstr "發票編號中前綴後面的部分將用前導零填充，直至此長度，例如 INV-001 或 "
+"INV-00001。"
 
 #: pretix/base/settings.py:619
 msgid "Generate invoices with consecutive numbers"
-msgstr ""
+msgstr "生成具有連續編號的發票"
 
 #: pretix/base/settings.py:620
 msgid "If deactivated, the order code will be used in the invoice number."
-msgstr ""
+msgstr "如果停用，訂單代碼將在發票編號中使用。"
 
 #: pretix/base/settings.py:629
 msgid "Invoice number prefix"
@@ -7918,21 +7919,21 @@ msgstr ""
 "（帶世紀）%y（不帶世紀）插入發票的年份，或使用 %m 和 %d 插入月份中的某一天。"
 
 #: pretix/base/settings.py:642 pretix/base/settings.py:664
-#, fuzzy, python-brace-format
-#| msgid "Please do not use special characters in names."
+#, python-brace-format
 msgid "Please only use the characters {allowed} in this field."
-msgstr "請不要在名稱中使用特殊字元。"
+msgstr "請僅在此欄位中使用字元{{allowed}}。"
 
 #: pretix/base/settings.py:655
 msgid "Invoice number prefix for cancellations"
-msgstr ""
+msgstr "取消的發票編號前綴"
 
 #: pretix/base/settings.py:656
 msgid ""
 "This will be prepended to invoice numbers of cancellations. If you leave "
 "this field empty, the same numbering scheme will be used that you configured "
 "for regular invoices."
-msgstr ""
+msgstr "這將附加到取消的發票編號前面。如果將此欄位留空，則將使用你為常規發票設定的相"
+"同編號方案。"
 
 #: pretix/base/settings.py:677
 msgid "Highlight order code to make it stand out visibly"
@@ -7949,7 +7950,7 @@ msgstr "字體"
 
 #: pretix/base/settings.py:714
 msgid "Length of ticket codes"
-msgstr ""
+msgstr "票證代碼的長度"
 
 #: pretix/base/settings.py:741
 msgid "Reservation period"
@@ -7958,16 +7959,16 @@ msgstr "保留期"
 #: pretix/base/settings.py:743
 msgid ""
 "The number of minutes the items in a user's cart are reserved for this user."
-msgstr ""
+msgstr "使用者購物車中的商品為該使用者保留的數分鐘。"
 
 #: pretix/base/settings.py:752
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
-msgstr ""
+msgstr "將商品添加到購物車後直接重定向至結帳。"
 
 #: pretix/base/settings.py:761
 msgid "End of presale text"
-msgstr ""
+msgstr "結束預售文件"
 
 #: pretix/base/settings.py:764
 msgid ""
@@ -7986,7 +7987,7 @@ msgstr "指導文件"
 msgid ""
 "This text will be shown above the payment options. You can explain the "
 "choices to the user here, if you want."
-msgstr ""
+msgstr "此文字將顯示在付款選項上方。如果需要，可以在此處向用戶解釋選擇。"
 
 #: pretix/base/settings.py:790 pretix/base/settings.py:799
 msgid "in days"
@@ -8004,11 +8005,12 @@ msgstr "設定付款期限"
 msgid ""
 "If using days, the order will expire at the end of the last day. Using "
 "minutes is more exact, but should only be used for real-time payment methods."
-msgstr ""
+msgstr "如果使用天數，訂單將在最後一天結束時過期。使用分鐘更準確，但這應用只用於即時"
+"付款方式。"
 
 #: pretix/base/settings.py:812
 msgid "Payment term in days"
-msgstr ""
+msgstr "付款期限（天）"
 
 #: pretix/base/settings.py:819
 msgid ""
@@ -8023,7 +8025,7 @@ msgstr ""
 
 #: pretix/base/settings.py:837
 msgid "Only end payment terms on weekdays"
-msgstr ""
+msgstr "只在工作日結束付款條件"
 
 #: pretix/base/settings.py:838
 msgid ""
@@ -8187,7 +8189,7 @@ msgstr "國內稅號ID"
 
 #: pretix/base/settings.py:1073
 msgid "e.g. tax number in Germany, ABN in Australia, …"
-msgstr ""
+msgstr "例如德國的稅號，澳大利亞的ABN,…"
 
 #: pretix/base/settings.py:1082
 msgid "EU VAT ID"
@@ -8195,7 +8197,7 @@ msgstr "歐盟增值稅ID"
 
 #: pretix/base/settings.py:1095
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
-msgstr ""
+msgstr "例如，透過此文件，我們向你發送機票訂單的發票。"
 
 #: pretix/base/settings.py:1098
 msgid "Introductory text"
@@ -8203,7 +8205,7 @@ msgstr "介紹文件"
 
 #: pretix/base/settings.py:1099
 msgid "Will be printed on every invoice above the invoice rows."
-msgstr ""
+msgstr "將列印在發票行上方的每張發票上。"
 
 #: pretix/base/settings.py:1112
 msgid ""
@@ -8217,13 +8219,13 @@ msgstr "額外文件"
 
 #: pretix/base/settings.py:1116
 msgid "Will be printed on every invoice below the invoice total."
-msgstr ""
+msgstr "將會列印在每張發票總額以下的發票上。"
 
 #: pretix/base/settings.py:1129
 msgid ""
 "e.g. your bank details, legal details like your VAT ID, registration "
 "numbers, etc."
-msgstr ""
+msgstr "例如，你的銀行詳細資訊、增值稅號等法律詳細資訊、註冊號等。"
 
 #: pretix/base/settings.py:1132
 msgid "Footer"
@@ -8233,11 +8235,11 @@ msgstr "腳註"
 msgid ""
 "Will be printed centered and in a smaller font at the end of every invoice "
 "page."
-msgstr ""
+msgstr "將在每張發票頁面的末尾以較小的字體居中列印。"
 
 #: pretix/base/settings.py:1146
 msgid "Attach invoices to emails"
-msgstr ""
+msgstr "將發票夾帶到電子郵件"
 
 #: pretix/base/settings.py:1147
 msgid ""
@@ -8252,7 +8254,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1159
 msgid "Email address to receive a copy of each invoice"
-msgstr ""
+msgstr "用於接收每張發票副本的電子郵件位址"
 
 #: pretix/base/settings.py:1160
 msgid ""
@@ -8265,12 +8267,12 @@ msgstr ""
 
 #: pretix/base/settings.py:1171
 msgid "Show items outside presale period"
-msgstr ""
+msgstr "顯示預售期以外的商品"
 
 #: pretix/base/settings.py:1172
 msgid ""
 "Show item details before presale has started and after presale has ended"
-msgstr ""
+msgstr "在預售開始前和預售結束後顯示商品詳細資訊"
 
 #: pretix/base/settings.py:1192
 msgid "Available languages"
@@ -8296,7 +8298,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1231
 msgid "Show event times and dates on the ticket shop"
-msgstr ""
+msgstr "在售票處顯示起始時間和日期"
 
 #: pretix/base/settings.py:1232
 msgid ""
@@ -8308,37 +8310,37 @@ msgstr ""
 
 #: pretix/base/settings.py:1242
 msgid "Show event end date"
-msgstr ""
+msgstr "顯示活動結束日期"
 
 #: pretix/base/settings.py:1243
 msgid "If disabled, only event's start date will be displayed to the public."
-msgstr ""
+msgstr "如果禁用，則只向公眾顯示活動的開始日期。"
 
 #: pretix/base/settings.py:1252
 msgid "Show dates with time"
-msgstr ""
+msgstr "顯示日期與時間"
 
 #: pretix/base/settings.py:1253
 msgid ""
 "If disabled, the event's start and end date will be displayed without the "
 "time of day."
-msgstr ""
+msgstr "如果禁用，將顯示事件的開始和結束日期，而不顯示一天中的時間。"
 
 #: pretix/base/settings.py:1262
 msgid "Hide all products that are sold out"
-msgstr ""
+msgstr "隱藏所有已售罄的產品"
 
 #: pretix/base/settings.py:1272 pretix/control/forms/event.py:1547
 msgid "Publicly show how many tickets of a certain type are still available."
-msgstr ""
+msgstr "公開顯示某種類型的票證數量仍然可用。"
 
 #: pretix/base/settings.py:1281
 msgid "Ask search engines not to index the ticket shop"
-msgstr ""
+msgstr "要求搜尋引擎不要索引售票處"
 
 #: pretix/base/settings.py:1290
 msgid "Show variations of a product expanded by default"
-msgstr ""
+msgstr "顯示預設展示的商品的類型"
 
 #: pretix/base/settings.py:1299
 msgid "Enable waiting list"
@@ -8357,7 +8359,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1311
 msgid "Automatic waiting list assignments"
-msgstr ""
+msgstr "自動候補名單分配"
 
 #: pretix/base/settings.py:1312
 msgid ""
@@ -8373,7 +8375,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1328
 msgid "Waiting list response time"
-msgstr ""
+msgstr "等待名單回應時間"
 
 #: pretix/base/settings.py:1331
 msgid ""
@@ -8386,11 +8388,11 @@ msgstr ""
 
 #: pretix/base/settings.py:1342
 msgid "Ask for a name"
-msgstr ""
+msgstr "查詢姓名"
 
 #: pretix/base/settings.py:1343
 msgid "Ask for a name when signing up to the waiting list."
-msgstr ""
+msgstr "註冊等候名單時查詢姓名。"
 
 #: pretix/base/settings.py:1352
 msgid "Require name"
@@ -8398,15 +8400,15 @@ msgstr "需要姓名"
 
 #: pretix/base/settings.py:1353
 msgid "Require a name when signing up to the waiting list.."
-msgstr ""
+msgstr "註冊等候名單時需要姓名。"
 
 #: pretix/base/settings.py:1363
 msgid "Ask for a phone number"
-msgstr ""
+msgstr "詢問電話號碼"
 
 #: pretix/base/settings.py:1364
 msgid "Ask for a phone number when signing up to the waiting list."
-msgstr ""
+msgstr "註冊等候名單時詢問電話號碼。"
 
 #: pretix/base/settings.py:1373
 msgid "Require phone number"
@@ -8414,25 +8416,25 @@ msgstr "需要電話號碼"
 
 #: pretix/base/settings.py:1374
 msgid "Require a phone number when signing up to the waiting list.."
-msgstr ""
+msgstr "註冊等候名單時需要電話號碼。"
 
 #: pretix/base/settings.py:1384
 msgid "Phone number explanation"
-msgstr ""
+msgstr "電話號碼說明"
 
 #: pretix/base/settings.py:1387
 msgid ""
 "If you ask for a phone number, explain why you do so and what you will use "
 "the phone number for."
-msgstr ""
+msgstr "如果你要求提供電話號碼，請解釋你這樣做的原因，以及你將使用該電話號碼的目的。"
 
 #: pretix/base/settings.py:1399
 msgid "Maximum number of entries per email address for the same product"
-msgstr ""
+msgstr "同一商品的每件電子郵件位址的最大條目數"
 
 #: pretix/base/settings.py:1411
 msgid "Show number of check-ins to customer"
-msgstr ""
+msgstr "對客戶顯示簽到次數"
 
 #: pretix/base/settings.py:1412
 msgid ""
@@ -8449,11 +8451,11 @@ msgstr ""
 
 #: pretix/base/settings.py:1425
 msgid "Allow users to download tickets"
-msgstr ""
+msgstr "允許用戶下載票證"
 
 #: pretix/base/settings.py:1426
 msgid "If this is off, nobody can download a ticket."
-msgstr ""
+msgstr "如果關閉此功能，則沒有人可以下載票證。"
 
 #: pretix/base/settings.py:1435
 msgid "Download date"
@@ -8470,7 +8472,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1447
 msgid "Generate tickets for add-on products and bundled products"
-msgstr ""
+msgstr "為附加商品和捆綁商品產生票證"
 
 #: pretix/base/settings.py:1448
 msgid ""
@@ -8483,28 +8485,29 @@ msgstr ""
 
 #: pretix/base/settings.py:1461
 msgid "Generate tickets for all products"
-msgstr ""
+msgstr "為所有商品產生門票"
 
 #: pretix/base/settings.py:1462
 msgid ""
 "If turned off, tickets are only issued for products that are marked as an "
 "\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
-msgstr ""
+msgstr "如果關閉，則只對在產品設定中，標記為「入場券」的產商品出產生票。你還可以單獨"
+"關閉為每項產品的產生票。"
 
 #: pretix/base/settings.py:1474
 msgid "Generate tickets for pending orders"
-msgstr ""
+msgstr "為訂單產生票"
 
 #: pretix/base/settings.py:1475
 msgid ""
 "If turned off, ticket downloads are only possible after an order has been "
 "marked as paid."
-msgstr ""
+msgstr "如果關閉，則只有在訂單標記為已付款後，才能下載門票。"
 
 #: pretix/base/settings.py:1486
 msgid "Do not issue ticket before email address is validated"
-msgstr ""
+msgstr "在驗證電子郵件位址前，不要產生票證"
 
 #: pretix/base/settings.py:1487
 msgid ""
@@ -8520,7 +8523,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1503
 msgid "Low availability threshold"
-msgstr ""
+msgstr "可用性門檻低"
 
 #: pretix/base/settings.py:1504
 msgid ""
@@ -8534,7 +8537,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1518
 msgid "Show availability in event overviews"
-msgstr ""
+msgstr "在活動概覽中顯示可用性"
 
 #: pretix/base/settings.py:1519
 msgid ""
@@ -8560,35 +8563,35 @@ msgstr "月日曆"
 
 #: pretix/base/settings.py:1538
 msgid "Default overview style"
-msgstr ""
+msgstr "預設值概覽樣式"
 
 #: pretix/base/settings.py:1544
 msgid ""
 "If your event series has more than 50 dates in the future, only the month or "
 "week calendar can be used."
-msgstr ""
+msgstr "如果你的事件系列在未來的日期超過 50則，那只能使用月曆或周曆。"
 
 #: pretix/base/settings.py:1553
 msgid "Hide all unavailable dates from calendar or list views"
-msgstr ""
+msgstr "從日曆或列表檢視中隱藏所有不可用的日期"
 
 #: pretix/base/settings.py:1554 pretix/base/settings.py:1565
 msgid ""
 "This option currently only affects the calendar of this event series, not "
 "the organizer-wide calendar."
-msgstr ""
+msgstr "此當前選項只影響此事件系列的日曆，而不會影響召集人範圍的日曆。"
 
 #: pretix/base/settings.py:1564
 msgid "Hide all past dates from calendar"
-msgstr ""
+msgstr "從日曆中隱藏所有過去的日期"
 
 #: pretix/base/settings.py:1575
 msgid "Allow customers to modify their information after they checked in."
-msgstr ""
+msgstr "允許客戶在辦理登機手續後修改其資訊。"
 
 #: pretix/base/settings.py:1584
 msgid "Last date of modifications"
-msgstr ""
+msgstr "最後修改日期"
 
 #: pretix/base/settings.py:1585
 msgid ""
@@ -8602,43 +8605,43 @@ msgstr ""
 
 #: pretix/base/settings.py:1596
 msgid "Customers can change the variation of the products they purchased"
-msgstr ""
+msgstr "客戶可以更改他們購買的產品的類別"
 
 #: pretix/base/settings.py:1605
 msgid "Customers can change their selected add-on products"
-msgstr ""
+msgstr "客戶可以更改其所選的附加產品"
 
 #: pretix/base/settings.py:1615 pretix/base/settings.py:1624
 msgid ""
 "Only allow changes if the resulting price is higher or equal than the "
 "previous price."
-msgstr ""
+msgstr "只當成最後價格高於或等於上一項價格時，才允許更改。"
 
 #: pretix/base/settings.py:1616 pretix/base/settings.py:1625
 msgid ""
 "Only allow changes if the resulting price is higher than the previous price."
-msgstr ""
+msgstr "僅當最後價格高於之前的價格時，才允許更改。"
 
 #: pretix/base/settings.py:1617 pretix/base/settings.py:1626
 msgid ""
 "Only allow changes if the resulting price is equal to the previous price."
-msgstr ""
+msgstr "只有當最後價格等於之前的價格時，才允許更改。"
 
 #: pretix/base/settings.py:1618 pretix/base/settings.py:1627
 msgid "Allow changes regardless of price, even if this results in a refund."
-msgstr ""
+msgstr "允許更改，無論價格如何，即使這會導致退款。"
 
 #: pretix/base/settings.py:1622
 msgid "Requirement for changed prices"
-msgstr ""
+msgstr "更改價格的要求"
 
 #: pretix/base/settings.py:1638
 msgid "Do not allow changes after"
-msgstr ""
+msgstr "不允許在事後進行更改"
 
 #: pretix/base/settings.py:1647
 msgid "Allow change even though the ticket has already been checked in"
-msgstr ""
+msgstr "即使機票已登記，也允許更改"
 
 #: pretix/base/settings.py:1648
 msgid ""
@@ -8654,7 +8657,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1660
 msgid "Allow individual attendees to change their ticket"
-msgstr ""
+msgstr "允許個人出席者更改其門票"
 
 #: pretix/base/settings.py:1661
 msgid ""
@@ -8670,11 +8673,11 @@ msgstr ""
 
 #: pretix/base/settings.py:1673
 msgid "Customers can cancel their unpaid orders"
-msgstr ""
+msgstr "客戶可以取消未付款的訂單"
 
 #: pretix/base/settings.py:1685
 msgid "Charge a fixed cancellation fee"
-msgstr ""
+msgstr "收取固定取消費用"
 
 #: pretix/base/settings.py:1686 pretix/base/settings.py:1697
 #: pretix/base/settings.py:1711
@@ -8688,41 +8691,42 @@ msgstr ""
 
 #: pretix/base/settings.py:1696
 msgid "Charge payment, shipping and service fees"
-msgstr ""
+msgstr "收取付款、運費和服務費"
 
 #: pretix/base/settings.py:1710
 msgid "Charge a percentual cancellation fee"
-msgstr ""
+msgstr "收取百分比取消費用"
 
 #: pretix/base/settings.py:1721 pretix/base/settings.py:1860
 msgid "Do not allow cancellations after"
-msgstr ""
+msgstr "不允許事後取消"
 
 #: pretix/base/settings.py:1730
 msgid "Customers can cancel their paid orders"
-msgstr ""
+msgstr "客戶可以取消已付的訂單"
 
 #: pretix/base/settings.py:1731
 msgid ""
 "Paid money will be automatically paid back if the payment method allows it. "
 "Otherwise, a manual refund will be created for you to process manually."
-msgstr ""
+msgstr "如果付款方式允許，已支付的款項將自動退還。否則，我們將建立手動退款，供你手動"
+"處理。"
 
 #: pretix/base/settings.py:1744 pretix/control/forms/orders.py:822
 msgid "Keep a fixed cancellation fee"
-msgstr ""
+msgstr "保留固定的取消費用"
 
 #: pretix/base/settings.py:1753
 msgid "Keep payment, shipping and service fees"
-msgstr ""
+msgstr "保留付款、運費和服務費"
 
 #: pretix/base/settings.py:1765 pretix/control/forms/orders.py:833
 msgid "Keep a percentual cancellation fee"
-msgstr ""
+msgstr "保留百分比取消費用"
 
 #: pretix/base/settings.py:1774
 msgid "Allow customers to voluntarily choose a lower refund"
-msgstr ""
+msgstr "允許客戶自願選擇較低的退款"
 
 #: pretix/base/settings.py:1775
 msgid ""
