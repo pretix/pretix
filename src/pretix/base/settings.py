@@ -1409,7 +1409,7 @@ DEFAULTS = {
         'form_class': forms.BooleanField,
         'form_kwargs': dict(
             label=_("Show number of check-ins to customer"),
-            help_text=_('With this option enabled, your customers will be able how many times they entered '
+            help_text=_('With this option enabled, your customers will be able to see how many times they entered '
                         'the event. This is usually not necessary, but might be useful in combination with tickets '
                         'that are usable a specific number of times, so customers can see how many times they have '
                         'already been used. Exits or failed scans will not be counted, and the user will not see '
