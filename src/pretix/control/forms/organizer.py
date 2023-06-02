@@ -273,7 +273,7 @@ class DeviceForm(forms.ModelForm):
 
     def clean(self):
         d = super().clean()
-        if not d['all_events'] and not d['limit_events']:
+        if not d['all_events'] and not d.get('limit_events'):
             raise ValidationError(_('Your device will not have access to anything, please select some events.'))
 
         return d
