@@ -121,17 +121,19 @@ var form_handlers = function (el) {
         e.preventDefault();
         var step = parseFloat(this.getAttribute("data-step"));
         var controls = document.getElementById(this.getAttribute("data-controls"));
-        var currentValue = parseFloat(controls.value);
-        var itemOrderMin = parseFloat(controls.getAttribute("data-min"))
-        controls.value = currentValue <= itemOrderMin && step < 0 ? 0 : Math.max(itemOrderMin || controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (currentValue || 0) + step));
+        var currentValue = parseFloat(controls.value) || 0;
+        controls.value = Math.max(controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (currentValue || 0) + step));
         controls.dispatchEvent(new Event("change"));
     });
-    el.find("input[data-min]").on("blur", function(e) {
-        var quantity = parseFloat(this.value);
-        var itemOrderMin = parseFloat(this.getAttribute("data-min"));
+    el.find("input[data-min]").each(function(i) {
+        this.previousValue = parseFloat(this.value) || 0;
+    }).on("change", function(e) {
+        var quantity = parseFloat(this.value) || 0;
+        var itemOrderMin = parseFloat(this.getAttribute("data-min")) || 0;
         if (quantity && quantity < itemOrderMin) {
-            this.value = itemOrderMin;
+            this.value = this.previousValue > quantity ? 0 : itemOrderMin;
         }
+        this.previousValue = quantity;
     });
 
     el.find("script[data-replace-with-qr]").each(function () {
