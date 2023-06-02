@@ -128,7 +128,7 @@ var form_handlers = function (el) {
     el.find("input[data-min]").each(function(i) {
         this.previousValue = parseFloat(this.value) || 0;
     }).on("change", function(e) {
-        var quantity = parseFloat(this.value) || 0;
+        var currentValue = parseFloat(this.value) || 0;
         var itemOrderMin = parseFloat(this.getAttribute("data-min")) || 0;
         if (itemOrderMin) {
             document.querySelectorAll(".cart-row[data-item='"+this.id.substring(5)+"']").forEach(function(row) {
@@ -136,10 +136,10 @@ var form_handlers = function (el) {
             });
             if (itemOrderMin < 0) itemOrderMin = 0;
         }
-        if (quantity && quantity < itemOrderMin) {
-            this.value = this.previousValue > quantity ? 0 : itemOrderMin;
+        if (currentValue && currentValue < itemOrderMin) {
+            this.value = this.previousValue > currentValue ? 0 : itemOrderMin;
         }
-        this.previousValue = quantity;
+        this.previousValue = currentValue;
     });
 
     el.find("script[data-replace-with-qr]").each(function () {
