@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-31 09:01+0000\n"
-"PO-Revision-Date: 2023-06-02 13:44+0000\n"
+"PO-Revision-Date: 2023-06-02 15:19+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -8732,17 +8732,17 @@ msgstr "允許客戶自願選擇較低的退款"
 msgid ""
 "With this option enabled, your customers can choose to get a smaller refund "
 "to support you."
-msgstr ""
+msgstr "啟用此選項後，你的客戶可以選擇，拿更少的退款來幫助你。"
 
 #: pretix/base/settings.py:1780
 msgid ""
 "However, if you want us to help keep the lights on here, please consider "
 "using the slider below to request a smaller refund. Thank you!"
-msgstr ""
+msgstr "但是，如果你希望我們繼續營運，請考慮使用下面的滑動條申請較少的退款。謝謝！"
 
 #: pretix/base/settings.py:1787
 msgid "Voluntary lower refund explanation"
-msgstr ""
+msgstr "自願退款說明"
 
 #: pretix/base/settings.py:1790
 msgid ""
@@ -8756,42 +8756,43 @@ msgstr ""
 
 #: pretix/base/settings.py:1805
 msgid "Step size for reduction amount"
-msgstr ""
+msgstr "減少步長"
 
 #: pretix/base/settings.py:1806
 msgid ""
 "By default, customers can choose an arbitrary amount for you to keep. If you "
 "set this to e.g. 10, they will only be able to choose values in increments "
 "of 10."
-msgstr ""
+msgstr "預設值情況下，客戶可以選擇任意金額讓你保留。如果你將其設定為例如 10，"
+"客戶只能以 10 為增量的選擇值。"
 
 #: pretix/base/settings.py:1816
 msgid ""
 "Customers can only request a cancellation that needs to be approved by the "
 "event organizer before the order is canceled and a refund is issued."
-msgstr ""
+msgstr "客戶只能在取消訂單及退款前，請求取消需要活動召集人批准。"
 
 #: pretix/base/settings.py:1826
 msgid ""
 "Do not show the cancellation fee to users when they request cancellation."
-msgstr ""
+msgstr "當使用者請求取消時，請勿向使用者顯示其取消費用。"
 
 #: pretix/base/settings.py:1835 pretix/base/settings.py:1845
 msgid "All refunds are issued to the original payment method"
-msgstr ""
+msgstr "所有退款均以原始付款方式退還"
 
 #: pretix/base/settings.py:1836 pretix/base/settings.py:1846
 msgid ""
 "Customers can choose between a gift card and a refund to their payment method"
-msgstr ""
+msgstr "客戶可以選擇禮品卡或退款為他們的支付方式"
 
 #: pretix/base/settings.py:1837 pretix/base/settings.py:1847
 msgid "All refunds are issued as gift cards"
-msgstr ""
+msgstr "所有退款均以禮品卡形式退還"
 
 #: pretix/base/settings.py:1838 pretix/base/settings.py:1848
 msgid "Do not handle refunds automatically at all"
-msgstr ""
+msgstr "全然不自動處理退款"
 
 #: pretix/base/settings.py:1843
 #: pretix/control/templates/pretixcontrol/order/index.html:141
@@ -8804,7 +8805,7 @@ msgstr "聯絡地址"
 
 #: pretix/base/settings.py:1870 pretix/control/forms/event.py:1577
 msgid "We'll show this publicly to allow attendees to contact you."
-msgstr ""
+msgstr "我們將公開顯示此資訊，以便出席者與你聯繫。"
 
 #: pretix/base/settings.py:1878 pretix/control/forms/event.py:1569
 msgid "Imprint URL"
@@ -8814,44 +8815,44 @@ msgstr "版本說明網址"
 msgid ""
 "This should point e.g. to a part of your website that has your contact "
 "details and legal information."
-msgstr ""
+msgstr "例如，這應該導向你網站上，包括你部分的聯絡方式及法律資訊的。"
 
 #: pretix/base/settings.py:1889
 msgid "Privacy Policy URL"
-msgstr ""
+msgstr "隱私政策網址"
 
 #: pretix/base/settings.py:1890
 msgid ""
 "This should point e.g. to a part of your website that explains how you use "
 "data gathered in your ticket shop."
-msgstr ""
+msgstr "例如，這應該導向你網站的一部分，該部分解釋了你如何使用在售票處收集的數據。"
 
 #: pretix/base/settings.py:1912
 msgid "Attach ticket files"
-msgstr ""
+msgstr "附加票證檔"
 
 #: pretix/base/settings.py:1914
 #, python-brace-format
 msgid ""
 "Tickets will never be attached if they're larger than {size} to avoid email "
 "delivery problems."
-msgstr ""
+msgstr "如果票證大於 {size}，則永遠不會附加票證，以避免電子郵件傳送問題。"
 
 #: pretix/base/settings.py:1925 pretix/plugins/sendmail/forms.py:222
 #: pretix/plugins/sendmail/models.py:215
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:66
 msgid "Attach calendar files"
-msgstr ""
+msgstr "附加日曆檔"
 
 #: pretix/base/settings.py:1926
 msgid ""
 "If enabled, we will attach an .ics calendar file to order confirmation "
 "emails."
-msgstr ""
+msgstr "如果啟用，我們將在訂單中確認電子郵件附加的一項.ics日曆檔。"
 
 #: pretix/base/settings.py:1935
 msgid "Attach calendar files only after order has been paid"
-msgstr ""
+msgstr "只有在訂單付款後附加日曆檔"
 
 #: pretix/base/settings.py:1936
 msgid ""
@@ -8886,7 +8887,8 @@ msgstr "主題前綴"
 msgid ""
 "This will be prepended to the subject of all outgoing emails, formatted as "
 "[prefix]. Choose, for example, a short form of your event name."
-msgstr ""
+msgstr "這將附加到所有傳出電子郵件的主題前面，格式為 "
+"[前綴]。例如，選擇事件名稱的縮寫形式。"
 
 #: pretix/base/settings.py:1976 pretix/control/forms/mailsetup.py:35
 #: pretix/control/forms/mailsetup.py:108
@@ -8898,7 +8900,7 @@ msgstr "寄件者位址"
 #: pretix/base/settings.py:1977 pretix/control/forms/mailsetup.py:36
 #: pretix/control/forms/mailsetup.py:109
 msgid "Sender address for outgoing emails"
-msgstr ""
+msgstr "傳出電子郵件的寄件者位址"
 
 #: pretix/base/settings.py:1986
 msgid "Sender name"
@@ -8908,20 +8910,20 @@ msgstr "寄件者姓名"
 msgid ""
 "Sender name used in conjunction with the sender address for outgoing emails. "
 "Defaults to your event name."
-msgstr ""
+msgstr "與傳出電子郵件的寄件者位址一起使用的寄件者姓名。預設值為事件名稱。"
 
 #: pretix/base/settings.py:2005 pretix/base/settings.py:2062
 #: pretix/base/settings.py:2079 pretix/base/settings.py:2097
 #, python-brace-format
 msgid "Your order: {code}"
-msgstr ""
+msgstr "你的訂單： {code}"
 
 #: pretix/base/settings.py:2009 pretix/base/settings.py:2042
 #: pretix/base/settings.py:2144 pretix/base/settings.py:2359
 #: pretix/base/settings.py:2396
 #, python-brace-format
 msgid "Your event registration: {code}"
-msgstr ""
+msgstr "你的活動註冊：{code}"
 
 #: pretix/base/settings.py:2013
 #, python-brace-format
