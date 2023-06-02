@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from bootstrap3.renderers import FieldRenderer, InlineFieldRenderer
 from bootstrap3.text import text_value
 from django.forms import CheckboxInput
 from django.forms.utils import flatatt
@@ -27,6 +26,8 @@ from django.utils.html import format_html
 from django.utils.safestring import mark_safe
 from django.utils.translation import pgettext
 from i18nfield.forms import I18nFormField
+
+from pretix.base.forms.renderers import FieldRenderer, InlineFieldRenderer
 
 
 def render_label(content, label_for=None, label_class=None, label_title='', optional=False):
