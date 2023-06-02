@@ -386,17 +386,18 @@ class VoucherBulkForm(VoucherForm):
     def clean(self):
         data = super().clean()
 
-        vouchers = self.instance.event.vouchers.annotate(
-            code_upper=Upper('code')
-        ).filter(code_upper__in=[c.upper() for c in data['codes']])
-        if vouchers.exists():
-            raise ValidationError(_('A voucher with one of these codes already exists.'))
+        if 'codes' in data:
+            vouchers = self.instance.event.vouchers.annotate(
+                code_upper=Upper('code')
+            ).filter(code_upper__in=[c.upper() for c in data['codes']])
+            if vouchers.exists():
+                raise ValidationError(_('A voucher with one of these codes already exists.'))
 
-        codes_seen = set()
-        for c in data['codes']:
-            if c in codes_seen:
-                raise ValidationError(_('The voucher code {code} appears in your list twice.').format(code=c))
-            codes_seen.add(c)
+            codes_seen = set()
+            for c in data['codes']:
+                if c in codes_seen:
+                    raise ValidationError(_('The voucher code {code} appears in your list twice.').format(code=c))
+                codes_seen.add(c)
 
         if data.get('send') and not all([data.get('send_subject'), data.get('send_message'), data.get('send_recipients')]):
             raise ValidationError(_('If vouchers should be sent by email, subject, message and recipients need to be specified.'))
