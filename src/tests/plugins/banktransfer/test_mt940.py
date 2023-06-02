@@ -215,13 +215,13 @@ EXPECTED = [
          'payer': 'MUELLER',
          'iban': '234567',
          'bic': '10020030',
-         'reference': 'NONREF//55555\nMiete November'},
+         'reference': 'NONREF\n55555\nMiete November'},
         {'amount': '3000.00',
          'date': '2002-11-02',
          'payer': 'MUELLER',
          'iban': '0847564700',
          'bic': '50060400',
-         'reference': 'NONREF//55555\nGehalt OktoberFirma Mustermann GmbH'},
+         'reference': 'NONREF\n55555\nGehalt OktoberFirma Mustermann GmbH'},
     ],
     [
         {'amount': '-400.62',
@@ -245,7 +245,7 @@ EXPECTED = [
          'payer': 'PETER PETERSEN',
          'iban': '5555555555',
          'bic': '50050050',
-         'reference': 'NONREF//00000000\nRECHNUNG 20120165PETER PETERSEN\n0001'}
+         'reference': 'NONREF\n000000000001\nRECHNUNG 20120165PETER PETERSEN'}
     ],
     [
         {'amount': '5000.00', 'date': '2002-03-17',
