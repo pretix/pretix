@@ -21,7 +21,7 @@
     </div>
     <div role="rowgroup" class="firstchild-in-panel">
     {% for line in cart.positions %}
-        <div role="row" class="row cart-row {% if hide_prices %}hide-prices{% endif %} {% if download %}has-downloads{% endif %}{% if editable %}editable{% endif %}">
+        <div role="row" class="row cart-row {% if hide_prices %}hide-prices{% endif %} {% if download %}has-downloads{% endif %}{% if editable %}editable{% endif %}" data-item="{{ line.item.id }}" data-count="{{ line.count }}">
             <div role="cell" class="product">
                 <p>
                 {% if line.addon_to %}

@@ -130,6 +130,12 @@ var form_handlers = function (el) {
     }).on("change", function(e) {
         var quantity = parseFloat(this.value) || 0;
         var itemOrderMin = parseFloat(this.getAttribute("data-min")) || 0;
+        if (itemOrderMin) {
+            document.querySelectorAll(".cart-row[data-item='"+this.id.substring(5)+"']").forEach(function(row) {
+                itemOrderMin -= (parseFloat(row.getAttribute("data-count")) || 1)
+            });
+            if (itemOrderMin < 0) itemOrderMin = 0;
+        }
         if (quantity && quantity < itemOrderMin) {
             this.value = this.previousValue > quantity ? 0 : itemOrderMin;
         }
