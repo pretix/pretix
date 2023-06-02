@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-31 09:01+0000\n"
-"PO-Revision-Date: 2023-06-02 16:52+0000\n"
+"PO-Revision-Date: 2023-06-02 17:12+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -7921,7 +7921,7 @@ msgstr ""
 #: pretix/base/settings.py:642 pretix/base/settings.py:664
 #, python-brace-format
 msgid "Please only use the characters {allowed} in this field."
-msgstr "請僅在此欄位中使用字元{{allowed}}。"
+msgstr "請僅在此欄位中使用字元{allowed}。"
 
 #: pretix/base/settings.py:655
 msgid "Invoice number prefix for cancellations"
