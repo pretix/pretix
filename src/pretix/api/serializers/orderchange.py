@@ -70,6 +70,8 @@ class OrderPositionCreateForExistingOrderSerializer(OrderPositionCreateSerialize
 
     def validate(self, data):
         data = super().validate(data)
+        if 'order' in self.context:
+            data['order'] = self.context['order']
         if data.get('addon_to'):
             try:
                 data['addon_to'] = data['order'].positions.get(positionid=data['addon_to'])

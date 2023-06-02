@@ -2002,3 +2002,32 @@ def test_order_change_invalid_input(token_client, organizer, event, order, quota
     )
     assert 'twice' in str(resp.data)
     assert resp.status_code == 400
+
+
+@pytest.mark.django_db
+def test_order_change_create_addon(token_client, organizer, event, order, quota, item):
+    with scopes_disabled():
+        cat = event.categories.create(name="Workshops")
+        item2 = event.items.create(name="WS1", default_price=23, category=cat)
+        quota.items.add(item2)
+        item.addons.create(addon_category=cat)
+        assert order.positions.count() == 1
+    payload = {
+        'create_positions': [
+            {
+                'item': item2.pk,
+                'addon_to': 1,
+            },
+        ],
+    }
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/change/'.format(
+            organizer.slug, event.slug, order.code,
+        ), format='json', data=payload
+    )
+    assert resp.status_code == 200
+    with scopes_disabled():
+        assert order.positions.count() == 2
+        op = order.positions.last()
+        assert op.positionid == 3
+        assert op.addon_to.positionid == 1
