@@ -571,6 +571,17 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         else:
             data['value'] = LazyI18nString(data['value'])
 
+    if logentry.action_type == "pretix.voucher.redeemed":
+        data = defaultdict(lambda: '?', data)
+        url = reverse('control:event.order', kwargs={
+            'event': logentry.event.slug,
+            'organizer': logentry.event.organizer.slug,
+            'code': data['order_code']
+        })
+        return mark_safe(plains[logentry.action_type].format(
+            order_code='<a href="{}">{}</a>'.format(url, data['order_code']),
+        ))
+
     if logentry.action_type in plains:
         data = defaultdict(lambda: '?', data)
         return plains[logentry.action_type].format_map(data)
