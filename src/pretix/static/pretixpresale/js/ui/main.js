@@ -139,7 +139,7 @@ var form_handlers = function (el) {
         if (currentValue && currentValue < itemOrderMin) {
             this.value = this.previousValue > currentValue ? 0 : itemOrderMin;
         }
-        this.previousValue = currentValue;
+        this.previousValue = this.value;
     });
 
     el.find("script[data-replace-with-qr]").each(function () {
