@@ -3256,7 +3256,7 @@ def concatenation_for_salutation(d):
 
 def get_name_parts_localized(name_parts, key):
     value = name_parts.get(key, "")
-    if key == "salutation":
+    if key == "salutation" and value:
         return pgettext_lazy("person_name_salutation", value)
     return value
 
