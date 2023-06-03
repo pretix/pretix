@@ -201,7 +201,6 @@
                                                 <button type="button" data-step="-1" data-controls="variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}"
                                                     {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                       {% if item.min_per_order and item.min_per_order > 1 %}data-min="{{ item.min_per_order }}"{% endif %}
                                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                                         {% if item.free_price %}
                                                            data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
