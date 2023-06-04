@@ -86,7 +86,7 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
             wle._quotas = quotas_by_item[wle.item_id, wle.variation_id, wle.subevent_id]
             quotas |= set(wle._quotas)
 
-        lock_objects(quotas)
+        lock_objects(quotas, shared_lock_objects=[event])
         for wle in qs:
             if (wle.item, wle.variation, wle.subevent) in gone:
                 continue

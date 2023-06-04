@@ -1094,7 +1094,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 lock_objects(
                     [q for q in reduce(operator.or_, [set(ql) for ql in quotas_by_item.values()], set()) if q.size is not None and not force] +
                     [getattr(o, 'voucher') for o in positions_data if getattr(o, 'voucher', False) and not force] +
-                    [getattr(o, 'seat') for o in positions_data if getattr(o, 'seat', False)]
+                    [getattr(o, 'seat') for o in positions_data if getattr(o, 'seat', False)],
+                    shared_lock_objects=[self.request.event]
                 )
 
         now_dt = now()

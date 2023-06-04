@@ -681,7 +681,8 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             lock_objects(
                 [q for q in reduce(operator.or_, (set(cp._cached_quotas) for cp in sorted_positions), set()) if q.size is not None] +
                 [op.voucher for op in sorted_positions if op.voucher] +
-                [op.seat for op in sorted_positions if op.seat]
+                [op.seat for op in sorted_positions if op.seat],
+                shared_lock_objects=[event]
             )
 
     # Check availability
@@ -2661,7 +2662,8 @@ class OrderChangeManager:
         else:
             lock_objects(
                 [q for q, d in self._quotadiff.items() if q.size is not None and d > 0] +
-                [s for s, d in self._seatdiff.items() if d > 0]
+                [s for s, d in self._seatdiff.items() if d > 0],
+                shared_lock_objects=[self.event]
             )
 
     def commit(self, check_quotas=True):

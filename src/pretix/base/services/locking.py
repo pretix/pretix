@@ -71,16 +71,22 @@ class LockTimeoutException(Exception):
     pass
 
 
-def lock_objects(objects):
-    if not objects or 'skip-locking' in debug_storage.debugflags:
+def lock_objects(objects, *, shared_lock_objects=None, replace_exclusive_with_shared_when_exclusive_are_more_than=20):
+    if (not objects and not shared_lock_objects) or 'skip-locking' in debug_storage.debugflags:
         return
     if not connection.in_atomic_block:
         raise RuntimeError(
             "You cannot create locks outside of an transaction"
         )
     if 'postgresql' in settings.DATABASES['default']['ENGINE']:
-        keys = sorted(list(set(pg_lock_key(obj) for obj in objects)))
-        calls = ", ".join([f"pg_advisory_xact_lock({k})" for k in keys])
+        shared_keys = set(pg_lock_key(obj) for obj in shared_lock_objects) if shared_lock_objects else set()
+        exclusive_keys = set(pg_lock_key(obj) for obj in objects)
+        if replace_exclusive_with_shared_when_exclusive_are_more_than and len(exclusive_keys) > replace_exclusive_with_shared_when_exclusive_are_more_than:
+            exclusive_keys = shared_keys
+        keys = sorted(list(shared_keys | exclusive_keys))
+        calls = ", ".join([
+            (f"pg_advisory_xact_lock({k})" if k in exclusive_keys else f"pg_advisory_xact_lock_shared({k})") for k in keys
+        ])
         try:
             with connection.cursor() as cursor:
                 cursor.execute(f"SET LOCAL lock_timeout = '{LOCK_ACQUISITION_TIMEOUT}s';")
@@ -102,4 +108,3 @@ class NoLockManager:
     def __exit__(self, exc_type, exc_val, exc_tb):
         if exc_type is not None:
             return False
-

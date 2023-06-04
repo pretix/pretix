@@ -1082,7 +1082,8 @@ class CartManager:
             lock_objects(
                 [q for q, d in self._quota_diff.items() if q.size is not None and d > 0] +
                 [v for v, d in self._voucher_use_diff.items() if d > 0] +
-                [getattr(o, 'seat', False) for o in self._operations if getattr(o, 'seat', False)]
+                [getattr(o, 'seat', False) for o in self._operations if getattr(o, 'seat', False)],
+                shared_lock_objects=[self.event]
             )
         vouchers_ok = self._get_voucher_availability()
         quotas_ok = _get_quota_availability(self._quota_diff, self.now_dt)

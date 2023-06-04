@@ -935,7 +935,7 @@ class Order(LockModel, LoggedModel):
         try:
             if check_memberships:
                 try:
-                    validate_memberships_in_order(self.customer, positions, self.event, lock=False, testmode=self.testmode)
+                    validate_memberships_in_order(self.customer, positions, self.event, lock=lock, testmode=self.testmode)
                 except ValidationError as e:
                     raise Quota.QuotaExceededException(e.message)
 
@@ -946,7 +946,8 @@ class Order(LockModel, LoggedModel):
                 lock_objects(
                     [q for q in reduce(operator.or_, (set(cp._cached_quotas) for cp in positions), set()) if q.size is not None] +
                     [op.voucher for op in positions if op.voucher and not force] +
-                    [op.seat for op in positions if op.seat]
+                    [op.seat for op in positions if op.seat],
+                    shared_lock_objects=[self.event]
                 )
 
             for i, op in enumerate(positions):
