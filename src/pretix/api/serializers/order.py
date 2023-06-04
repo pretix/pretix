@@ -21,11 +21,10 @@
 #
 import json
 import logging
-import operator
 import os
 from collections import Counter, defaultdict
+from datetime import timedelta
 from decimal import Decimal
-from functools import reduce
 
 import pycountry
 from django.conf import settings
@@ -60,10 +59,11 @@ from pretix.base.models.orders import (
 )
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
-from pretix.base.services.locking import lock_objects
+from pretix.base.services.locking import lock_objects, LOCK_TRUST_WINDOW
 from pretix.base.services.pricing import (
     apply_discounts, get_line_price, get_listed_price, is_included_for_free,
 )
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.base.signals import register_ticket_outputs
 from pretix.helpers.countries import CachedCountries
@@ -1076,6 +1076,17 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             ia = None
 
         quotas_by_item = {}
+        quota_diff_for_locking = Counter()
+        voucher_diff_for_locking = Counter()
+        seat_diff_for_locking = Counter()
+        quota_usage = Counter()
+        voucher_usage = Counter()
+        seat_usage = Counter()
+        v_budget = {}
+        now_dt = now()
+        delete_cps = []
+        consume_carts = validated_data.pop('consume_carts', [])
+
         for pos_data in positions_data:
             if (pos_data.get('item'), pos_data.get('variation'), pos_data.get('subevent')) not in quotas_by_item:
                 quotas_by_item[pos_data.get('item'), pos_data.get('variation'), pos_data.get('subevent')] = list(
@@ -1083,46 +1094,61 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     if pos_data.get('variation')
                     else pos_data.get('item').quotas.filter(subevent=pos_data.get('subevent'))
                 )
+            for q in quotas_by_item[pos_data.get('item'), pos_data.get('variation'), pos_data.get('subevent')]:
+                quota_diff_for_locking[q] += 1
+            if pos_data.get('voucher'):
+                voucher_diff_for_locking[pos_data['voucher']] += 1
+            if pos_data.get('seat'):
+                try:
+                    seat = self.context['event'].seats.get(seat_guid=pos_data['seat'], subevent=pos_data.get('subevent'))
+                except Seat.DoesNotExist:
+                    pos_data['seat'] = Seat.DoesNotExist
+                else:
+                    pos_data['seat'] = seat
+                seat_diff_for_locking[pos_data['seat']] += 1
+
+        if consume_carts:
+            offset = now() + timedelta(seconds=LOCK_TRUST_WINDOW)
+            for cp in CartPosition.objects.filter(
+                event=self.context['event'], cart_id__in=consume_carts, expires__gt=now_dt
+            ):
+                quotas = (cp.variation.quotas.filter(subevent=cp.subevent)
+                          if cp.variation else cp.item.quotas.filter(subevent=cp.subevent))
+                for quota in quotas:
+                    if cp.expires > offset:
+                        quota_diff_for_locking[quota] -= 1
+                    quota_usage[quota] -= 1
+                if cp.voucher:
+                    if cp.expires > offset:
+                        voucher_diff_for_locking[cp.voucher] -= 1
+                    voucher_usage[cp.voucher] -= 1
+                if cp.seat:
+                    if cp.expires > offset:
+                        seat_diff_for_locking[cp.seat] -= 1
+                    seat_usage[cp.seat] -= 1
+                delete_cps.append(cp)
 
         if not simulate:
-            full_lock_required = any(getattr(o, 'seat', False) for o in positions_data) and self.context['event'].settings.seating_minimal_distance > 0
+            full_lock_required = seat_diff_for_locking and self.context['event'].settings.seating_minimal_distance > 0
             if full_lock_required:
                 # We lock the entire event in this case since we don't want to deal with fine-granular locking
                 # in the case of seating distance enforcement
                 lock_objects([self.context['event']])
             else:
                 lock_objects(
-                    [q for q in reduce(operator.or_, [set(ql) for ql in quotas_by_item.values()], set()) if q.size is not None and not force] +
-                    [getattr(o, 'voucher') for o in positions_data if getattr(o, 'voucher', False) and not force] +
-                    [getattr(o, 'seat') for o in positions_data if getattr(o, 'seat', False)],
+                    [q for q, d in quota_diff_for_locking.items() if d > 0 and q.size is not None and not force] +
+                    [v for v, d in voucher_diff_for_locking.items() if d > 0 and not force] +
+                    [s for s, d in seat_diff_for_locking.items() if d > 0 and s != Seat.DoesNotExist],
                     shared_lock_objects=[self.context['event']]
                 )
 
-        now_dt = now()
-        free_seats = set()
-        seats_seen = set()
-        consume_carts = validated_data.pop('consume_carts', [])
-        delete_cps = []
-        quota_avail_cache = {}
-        v_budget = {}
-        voucher_usage = Counter()
-        if consume_carts:
-            for cp in CartPosition.objects.filter(
-                event=self.context['event'], cart_id__in=consume_carts, expires__gt=now()
-            ):
-                quotas = (cp.variation.quotas.filter(subevent=cp.subevent)
-                          if cp.variation else cp.item.quotas.filter(subevent=cp.subevent))
-                for quota in quotas:
-                    if quota not in quota_avail_cache:
-                        quota_avail_cache[quota] = list(quota.availability())
-                    if quota_avail_cache[quota][1] is not None:
-                        quota_avail_cache[quota][1] += 1
-                if cp.voucher:
-                    voucher_usage[cp.voucher] -= 1
-                if cp.expires > now_dt:
-                    if cp.seat:
-                        free_seats.add(cp.seat)
-                delete_cps.append(cp)
+        qa = QuotaAvailability()
+        qa.queue(*[q for q, d in quota_diff_for_locking.items() if d > 0])
+        qa.compute()
+
+        # These are not technically correct as diff use due to the time offset applied above, so let's prevent accidental
+        # use further down
+        del quota_diff_for_locking, voucher_diff_for_locking, seat_diff_for_locking
 
         errs = [{} for p in positions_data]
 
@@ -1191,15 +1217,13 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     continue
                 if not seated:
                     errs[i]['seat'] = ['The specified product does not allow to choose a seat.']
-                try:
-                    seat = self.context['event'].seats.get(seat_guid=pos_data['seat'], subevent=pos_data.get('subevent'))
-                except Seat.DoesNotExist:
+                seat = pos_data['seat']
+                if seat is Seat.DoesNotExist:
                     errs[i]['seat'] = ['The specified seat does not exist.']
                 else:
-                    pos_data['seat'] = seat
-                    if (seat not in free_seats and not seat.is_available(sales_channel=validated_data.get('sales_channel', 'web'))) or seat in seats_seen:
+                    seat_usage[seat] += 1
+                    if (seat_usage[seat] > 0 and not seat.is_available(sales_channel=validated_data.get('sales_channel', 'web'))) or seat_usage[seat] > 1:
                         errs[i]['seat'] = [gettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name)]
-                    seats_seen.add(seat)
             elif seated:
                 errs[i]['seat'] = ['The specified product requires to choose a seat.']
 
@@ -1243,12 +1267,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     )]
                 else:
                     for quota in new_quotas:
-                        if quota not in quota_avail_cache:
-                            quota_avail_cache[quota] = list(quota.availability())
-
-                        if quota_avail_cache[quota][1] is not None:
-                            quota_avail_cache[quota][1] -= 1
-                            if quota_avail_cache[quota][1] < 0:
+                        quota_usage[quota] += 1
+                        if quota_usage[quota] > 0 and qa.results[quota][1] is not None:
+                            if qa.results[quota][1] < quota_usage[quota]:
                                 errs[i]['item'] = [
                                     gettext_lazy('There is not enough quota available on quota "{}" to perform the operation.').format(
                                         quota.name
