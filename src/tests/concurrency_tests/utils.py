@@ -22,3 +22,8 @@
 async def post(session, url, data, **kwargs):
     async with session.post(url, data=data, **kwargs) as response:
         return await response.text()
+
+
+async def get(session, url, **kwargs):
+    async with session.get(url, **kwargs) as response:
+        return await response.text()

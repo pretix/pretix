@@ -43,6 +43,7 @@ from collections import Counter
 from datetime import datetime, time, timedelta
 from decimal import Decimal
 from functools import reduce
+from time import sleep
 from typing import Any, Dict, List, Union
 
 import dateutil
@@ -79,6 +80,7 @@ from pretix.base.models import Customer, User
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import order_gracefully_delete
+from pretix.testutils.middleware import storage as debug_storage
 
 from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
@@ -996,6 +998,9 @@ class Order(LockModel, LoggedModel):
                             ))
         except Quota.QuotaExceededException as e:
             return str(e)
+
+        if 'sleep-after-quota-check' in debug_storage.debugflags:
+            sleep(2)
         return True
 
     def send_mail(self, subject: Union[str, LazyI18nString], template: Union[str, LazyI18nString],
