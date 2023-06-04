@@ -95,7 +95,9 @@ def lock_objects(objects, *, shared_lock_objects=None, replace_exclusive_with_sh
             with connection.cursor() as cursor:
                 cursor.execute(f"SET LOCAL lock_timeout = '{LOCK_ACQUISITION_TIMEOUT}s';")
                 cursor.execute(f"SELECT {calls};")
-        except DatabaseError:
+                cursor.execute("SET LOCAL lock_timeout = '0';")  # back to default
+        except DatabaseError as e:
+            logger.warning(f"Waiting for locks timed out: {e} on SELECT {calls};")
             raise LockTimeoutException()
     else:
         for model, instances in groupby(objects, key=lambda o: type(o)):

@@ -1,9 +1,30 @@
+#
+# This file is part of pretix (Community Edition).
+#
+# Copyright (C) 2014-2020 Raphael Michel and contributors
+# Copyright (C) 2020-2021 rami.io GmbH and contributors
+#
+# This program is free software: you can redistribute it and/or modify it under the terms of the GNU Affero General
+# Public License as published by the Free Software Foundation in version 3 of the License.
+#
+# ADDITIONAL TERMS APPLY: Pursuant to Section 7 of the GNU Affero General Public License, additional terms are
+# applicable granting you additional permissions and placing additional restrictions on your usage of this software.
+# Please refer to the pretix LICENSE file to obtain the full terms applicable to this work. If you did not receive
+# this file, see <https://pretix.eu/about/en/license>.
+#
+# This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied
+# warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU Affero General Public License for more
+# details.
+#
+# You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
+# <https://www.gnu.org/licenses/>.
+#
 from datetime import datetime, timedelta
 
 import aiohttp
 import pytest
+import pytest_asyncio
 from django.utils.timezone import now
-from django_redis import get_redis_connection
 from django_scopes import scopes_disabled
 from pytz import UTC
 
@@ -12,20 +33,10 @@ from pretix.base.models import Event, Item, Organizer, Quota, SeatingPlan
 
 @pytest.fixture(autouse=True)
 def autoskip(request, settings):
-    if 'redis' not in settings.ORIGINAL_CACHES:
-        pytest.skip("can only be run with redis")
     if 'sqlite3' in settings.DATABASES['default']['ENGINE']:
         pytest.skip("cannot be run on sqlite")
     if not request.config.getvalue("reuse_db"):
         pytest.skip("only works with --reuse-db due to some weird connection handling bug")
-
-
-@pytest.fixture(autouse=True)
-def cleared_redis(settings):
-    settings.HAS_REDIS = True
-    settings.CACHES = settings.ORIGINAL_CACHES
-    redis = get_redis_connection("redis")
-    redis.flushall()
 
 
 @pytest.fixture
@@ -112,7 +123,7 @@ def seat(event, organizer, item):
     return event.seats.create(seat_number="A1", product=item, seat_guid="A1")
 
 
-@pytest.fixture
+@pytest_asyncio.fixture
 async def session(live_server, event):
     async with aiohttp.ClientSession() as session:
         yield session

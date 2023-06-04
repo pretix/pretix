@@ -85,7 +85,9 @@ from pretix.base.services import tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
 )
-from pretix.base.services.locking import LockTimeoutException, lock_objects, LOCK_TRUST_WINDOW
+from pretix.base.services.locking import (
+    LOCK_TRUST_WINDOW, LockTimeoutException, lock_objects,
+)
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.memberships import (
     create_membership, validate_memberships_in_order,
