@@ -20,18 +20,6 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-# This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
-# the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
-#
-# This file may have since been changed and any changes are released under the terms of AGPLv3 as described above. A
-# full history of changes and contributors is available at <https://github.com/pretix/pretix>.
-#
-# This file contains Apache-licensed contributions copyrighted by: Tobias Kunze
-#
-# Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
-# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations under the License.
-
 import logging
 from itertools import groupby
 
@@ -72,8 +60,23 @@ class LockTimeoutException(Exception):
 
 
 def lock_objects(objects, *, shared_lock_objects=None, replace_exclusive_with_shared_when_exclusive_are_more_than=20):
+    """
+    Create an exclusive lock on the objects passed in `objects`. This function MUST be called within an atomic
+    transaction and SHOULD be called only once per transaction to prevent deadlocks.
+
+    A shared lock will be created on objects passed in `shared_lock_objects`.
+
+    If `objects` contains more than `replace_exclusive_with_shared_when_exclusive_are_more_than` objects, `objects`
+    will be ignored and `shared_lock_objects` will be used in its place.
+
+    The idea behind it is this: Usually we create a lock on every quota, voucher, or seat contained in an order.
+    However, this has a large performance penalty in case we have hundreds of locks required. Therefore, we always
+    place a shared lock in the event, and if we have too many affected objects, we fall back to event-level locks.
+    """
     if (not objects and not shared_lock_objects) or 'skip-locking' in debug_storage.debugflags:
         return
+    if 'fail-locking' in debug_storage.debugflags:
+        raise LockTimeoutException()
     if not connection.in_atomic_block:
         raise RuntimeError(
             "You cannot create locks outside of an transaction"
@@ -95,7 +98,7 @@ def lock_objects(objects, *, shared_lock_objects=None, replace_exclusive_with_sh
             raise LockTimeoutException()
     else:
         for model, instances in groupby(objects, key=lambda o: type(o)):
-            model.objects.select_for_update().get(pk__in=[o.pk for o in instances])
+            model.objects.select_for_update().filter(pk__in=[o.pk for o in instances])
 
 
 class NoLockManager:

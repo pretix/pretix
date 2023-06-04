@@ -1130,6 +1130,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
     any_payment_failed = False
 
     now_dt = now()
+    err_out = None
     with transaction.atomic(durable=True):
         positions = list(
             positions.select_related('item', 'variation', 'subevent', 'seat', 'addon_to').prefetch_related('addons')
@@ -1139,23 +1140,28 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
-        _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel, customer=customer)
-
-        if 'sleep-after-quota-check' in debug_storage.debugflags:
-            sleep(2)
-
-        order, payment_objs = _create_order(event, email, positions, now_dt, payment_requests,
-                                            locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
-                                            shown_total=shown_total, customer=customer, valid_if_pending=valid_if_pending)
-
         try:
-            for p in payment_objs:
-                if p.provider == 'free':
-                    # Passing lock=False is safe here because it's absolutely impossible for the order to be expired
-                    # here before it is even committed.
-                    p.confirm(send_mail=False, lock=False, generate_invoice=False)
-        except Quota.QuotaExceededException:
-            pass
+            _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel, customer=customer)
+        except OrderError as e:
+            err_out = e  # Don't raise directly to make sure transaction is committed, as it might have deleted things
+        else:
+            if 'sleep-after-quota-check' in debug_storage.debugflags:
+                sleep(2)
+
+            order, payment_objs = _create_order(event, email, positions, now_dt, payment_requests,
+                                                locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
+                                                shown_total=shown_total, customer=customer, valid_if_pending=valid_if_pending)
+
+            try:
+                for p in payment_objs:
+                    if p.provider == 'free':
+                        # Passing lock=False is safe here because it's absolutely impossible for the order to be expired
+                        # here before it is even committed.
+                        p.confirm(send_mail=False, lock=False, generate_invoice=False)
+            except Quota.QuotaExceededException:
+                pass
+    if err_out:
+        raise err_out
 
     # We give special treatment to GiftCardPayment here because our invoice renderer expects gift cards to already be
     # processed, and because we historically treat gift card orders like free orders with regards to email texts.

@@ -1085,17 +1085,17 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 )
 
         if not simulate:
-            full_lock_required = any(getattr(o, 'seat', False) for o in positions_data) and self.request.event.settings.seating_minimal_distance > 0
+            full_lock_required = any(getattr(o, 'seat', False) for o in positions_data) and self.context['event'].settings.seating_minimal_distance > 0
             if full_lock_required:
                 # We lock the entire event in this case since we don't want to deal with fine-granular locking
                 # in the case of seating distance enforcement
-                lock_objects([self.request.event])
+                lock_objects([self.context['event']])
             else:
                 lock_objects(
                     [q for q in reduce(operator.or_, [set(ql) for ql in quotas_by_item.values()], set()) if q.size is not None and not force] +
                     [getattr(o, 'voucher') for o in positions_data if getattr(o, 'voucher', False) and not force] +
                     [getattr(o, 'seat') for o in positions_data if getattr(o, 'seat', False)],
-                    shared_lock_objects=[self.request.event]
+                    shared_lock_objects=[self.context['event']]
                 )
 
         now_dt = now()

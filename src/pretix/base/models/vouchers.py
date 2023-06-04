@@ -435,28 +435,37 @@ class Voucher(LoggedModel):
 
     @staticmethod
     def clean_quota_check(data, cnt, old_instance, event, quota, item, variation):
+        from ..services.locking import lock_objects
+        from ..services.quotas import QuotaAvailability
+
         old_quotas = Voucher.clean_quota_get_ignored(old_instance)
 
         if event.has_subevents and data.get('block_quota') and not data.get('subevent'):
             raise ValidationError(_('If you want this voucher to block quota, you need to select a specific date.'))
 
         if quota:
-            if quota in old_quotas:
-                return
-            else:
-                avail = quota.availability(count_waitinglist=False)
+            new_quotas = {quota}
         elif item and item.has_variations and not variation:
             raise ValidationError(_('You can only block quota if you specify a specific product variation. '
                                     'Otherwise it might be unclear which quotas to block.'))
         elif item and variation:
-            avail = variation.check_quotas(ignored_quotas=old_quotas, subevent=data.get('subevent'))
+            new_quotas = set(variation.quotas.filter(subevent=data.get('subevent')))
         elif item and not item.has_variations:
-            avail = item.check_quotas(ignored_quotas=old_quotas, subevent=data.get('subevent'))
+            new_quotas = set(item.quotas.filter(subevent=data.get('subevent')))
         else:
             raise ValidationError(_('You need to select a specific product or quota if this voucher should reserve '
                                     'tickets.'))
 
-        if avail[0] != Quota.AVAILABILITY_OK or (avail[1] is not None and avail[1] < cnt):
+        if not (new_quotas - old_quotas):
+            return
+
+        lock_objects([q for q in (new_quotas - old_quotas) if q.size is not None], shared_lock_objects=[event])
+
+        qa = QuotaAvailability(count_waitinglist=False)
+        qa.queue(*(new_quotas - old_quotas))
+        qa.compute()
+
+        if any(r[0] != Quota.AVAILABILITY_OK or (r[1] is not None and r[1] < cnt) for r in qa.results.values()):
             raise ValidationError(_('You cannot create a voucher that blocks quota as the selected product or '
                                     'quota is currently sold out or completely reserved.'))
 

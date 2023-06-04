@@ -169,15 +169,14 @@ def order(event):
 def test_allow_retry_409(token_client, organizer, event, order):
     order.status = Order.STATUS_EXPIRED
     order.save()
-    with event.lock():
-        resp = token_client.post(
-            '/api/v1/organizers/{}/events/{}/orders/{}/mark_paid/'.format(
-                organizer.slug, event.slug, order.code
-            ), format='json', HTTP_X_IDEMPOTENCY_KEY='foo'
-        )
-        assert resp.status_code == 409
-        order.refresh_from_db()
-        assert order.status == Order.STATUS_EXPIRED
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/mark_paid/?_debug_flag=fail-locking'.format(
+            organizer.slug, event.slug, order.code
+        ), format='json', HTTP_X_IDEMPOTENCY_KEY='foo'
+    )
+    assert resp.status_code == 409
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_EXPIRED
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/{}/mark_paid/'.format(
             organizer.slug, event.slug, order.code

@@ -29,6 +29,7 @@ from celery.result import AsyncResult
 from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
+from django.db import transaction
 from django.http import HttpResponse, JsonResponse, QueryDict
 from django.shortcuts import redirect, render
 from django.test import RequestFactory
@@ -216,6 +217,7 @@ class AsyncFormView(AsyncMixin, FormView):
     known_errortypes = ['ValidationError']
     expected_exceptions = (ValidationError,)
     task_base = ProfiledEventTask
+    atomic_execute = False
 
     def async_set_progress(self, percentage):
         if not self._task_self.request.called_directly:
@@ -261,6 +263,9 @@ class AsyncFormView(AsyncMixin, FormView):
                 form = form_class(**form_kwargs)
                 form.is_valid()
                 return view_instance.async_form_valid(self, form)
+
+        if cls.atomic_execute:
+            async_execute = transaction.atomic(async_execute)
 
         cls.async_execute = app.task(
             base=cls.task_base,

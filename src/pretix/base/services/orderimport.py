@@ -36,7 +36,7 @@ from pretix.base.models import (
 from pretix.base.models.orders import Transaction
 from pretix.base.orderimport import get_all_columns
 from pretix.base.services.invoices import generate_invoice, invoice_qualified
-from pretix.base.services.locking import NoLockManager
+from pretix.base.services.locking import lock_objects
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.signals import order_paid, order_placed
 from pretix.celery_app import app
@@ -88,7 +88,6 @@ def setif(record, obj, attr, setting):
 def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) -> None:
     cf = CachedFile.objects.get(id=fileid)
     user = User.objects.get(pk=user)
-    seats_used = False
     with language(locale, event.settings.region):
         cols = get_all_columns(event)
         parsed = parse_csv(cf.file)
@@ -118,6 +117,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
 
         # Prepare model objects. Yes, this might consume lots of RAM, but allows us to make the actual SQL transaction
         # shorter. We'll see what works better in reality…
+        lock_seats = []
         for i, record in enumerate(data):
             try:
                 if order is None or settings['orders'] == 'many':
@@ -135,7 +135,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
                 position.attendee_name_parts = {'_scheme': event.settings.name_scheme}
                 position.meta_info = {}
                 if position.seat is not None:
-                    seats_used = True
+                    lock_seats.append(position.seat)
                 order._positions.append(position)
                 position.assign_pseudonymization_id()
 
@@ -147,12 +147,15 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) 
                     _('Invalid data in row {row}: {message}').format(row=i, message=str(e))
                 )
 
-        # We don't support vouchers, quotas, or memberships here, so we only need to lock if seats
-        # are in use
-        lockfn = event.lock if seats_used else NoLockManager
-
         try:
-            with lockfn(), transaction.atomic():
+            with transaction.atomic():
+                # We don't support vouchers, quotas, or memberships here, so we only need to lock if seats are in use
+                if lock_seats:
+                    lock_objects(lock_seats, shared_lock_objects=[event])
+                    for s in lock_seats:
+                        if not s.is_available():
+                            raise ImportError(_('The seat you selected has already been taken. Please select a different seat.'))
+
                 save_transactions = []
                 for o in orders:
                     o.total = sum([c.price for c in o._positions])  # currently no support for fees

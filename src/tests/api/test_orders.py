@@ -1125,15 +1125,14 @@ def test_order_mark_paid_expired_quota_fill(token_client, organizer, event, orde
 def test_order_mark_paid_locked(token_client, organizer, event, order):
     order.status = Order.STATUS_EXPIRED
     order.save()
-    with event.lock():
-        resp = token_client.post(
-            '/api/v1/organizers/{}/events/{}/orders/{}/mark_paid/'.format(
-                organizer.slug, event.slug, order.code
-            )
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/{}/mark_paid/?_debug_flag=fail-locking'.format(
+            organizer.slug, event.slug, order.code
         )
-        assert resp.status_code == 409
-        order.refresh_from_db()
-        assert order.status == Order.STATUS_EXPIRED
+    )
+    assert resp.status_code == 409
+    order.refresh_from_db()
+    assert order.status == Order.STATUS_EXPIRED
 
 
 @pytest.mark.django_db

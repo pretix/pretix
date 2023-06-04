@@ -891,7 +891,7 @@ class Order(LockModel, LoggedModel):
             ), tz)
         return term_last
 
-    def _can_be_paid(self, count_waitinglist=True, ignore_date=False, force=False) -> Union[bool, str]:
+    def _can_be_paid(self, count_waitinglist=True, ignore_date=False, force=False, lock=False) -> Union[bool, str]:
         error_messages = {
             'late_lastdate': _("The payment can not be accepted as the last date of payments configured in the "
                                "payment settings is over."),
@@ -912,7 +912,7 @@ class Order(LockModel, LoggedModel):
         if not self.event.settings.get('payment_term_accept_late') and not ignore_date and not force:
             return error_messages['late']
 
-        return self._is_still_available(count_waitinglist=count_waitinglist, force=force)
+        return self._is_still_available(count_waitinglist=count_waitinglist, force=force, lock=lock)
 
     def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, lock=False, force=False,
                             check_voucher_usage=False, check_memberships=False) -> Union[bool, str]:
@@ -1619,9 +1619,10 @@ class OrderPayment(models.Model):
         return self.order.event.get_payment_providers(cached=True).get(self.provider)
 
     @transaction.atomic()
-    def _mark_paid_inner(self, force, count_waitinglist, user, auth, ignore_date=False, overpaid=False):
+    def _mark_paid_inner(self, force, count_waitinglist, user, auth, ignore_date=False, overpaid=False, lock=False):
         from pretix.base.signals import order_paid
-        can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist, ignore_date=ignore_date, force=force)
+        can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist, ignore_date=ignore_date, force=force,
+                                              lock=lock)
         if can_be_paid is not True:
             self.order.log_action('pretix.event.order.quotaexceeded', {
                 'message': can_be_paid
@@ -1740,8 +1741,9 @@ class OrderPayment(models.Model):
             ))
             return
 
-        self._mark_order_paid(count_waitinglist, send_mail, force, user, auth, mail_text, ignore_date, lock, payment_sum - refund_sum,
-                              generate_invoice)
+        with transaction.atomic():
+            self._mark_order_paid(count_waitinglist, send_mail, force, user, auth, mail_text, ignore_date, lock, payment_sum - refund_sum,
+                                  generate_invoice)
 
     def _mark_order_paid(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
                          ignore_date=False, lock=True, payment_refund_sum=0, allow_generate_invoice=True):
@@ -1749,17 +1751,13 @@ class OrderPayment(models.Model):
             generate_invoice, invoice_qualified,
         )
 
-        if (self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(seconds=60 * 2)) or not lock:
+        if lock and self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(seconds=60 * 2):
             # Performance optimization. In this case, there's really no reason to lock everything and an atomic
             # database transaction is more than enough.
-            from pretix.base.services.locking import NoLockManager
-            lockfn = NoLockManager
-        else:
-            lockfn = self.order.event.lock
+            lock = False
 
-        with lockfn():
-            self._mark_paid_inner(force, count_waitinglist, user, auth, overpaid=payment_refund_sum > self.order.total,
-                                  ignore_date=ignore_date)
+        self._mark_paid_inner(force, count_waitinglist, user, auth, overpaid=payment_refund_sum > self.order.total,
+                              ignore_date=ignore_date, lock=lock)
 
         invoice = None
         if invoice_qualified(self.order) and allow_generate_invoice:

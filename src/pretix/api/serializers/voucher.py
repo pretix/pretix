@@ -94,8 +94,13 @@ class VoucherSerializer(I18nAwareModelSerializer):
         )
         if check_quota:
             Voucher.clean_quota_check(
-                full_data, 1, self.instance, self.context.get('event'),
-                full_data.get('quota'), full_data.get('item'), full_data.get('variation')
+                full_data,
+                full_data.get('max_usages', 1) - (self.instance.redeemed if self.instance else 0),
+                self.instance,
+                self.context.get('event'),
+                full_data.get('quota'),
+                full_data.get('item'),
+                full_data.get('variation')
             )
         Voucher.clean_voucher_code(full_data, self.context.get('event'), self.instance.pk if self.instance else None)
 
