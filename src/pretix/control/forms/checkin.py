@@ -31,7 +31,8 @@ from django_scopes.forms import (
 )
 
 from pretix.base.channels import get_all_sales_channels
-from pretix.base.models.checkin import CheckinList
+from pretix.base.forms.widgets import SplitDateTimePickerWidget
+from pretix.base.models.checkin import CheckinList, Checkin
 from pretix.control.forms import ItemMultipleChoiceField
 from pretix.control.forms.widgets import Select2
 
@@ -177,3 +178,26 @@ class SimpleCheckinListForm(forms.ModelForm):
             'subevent': SafeModelChoiceField,
             'gates': SafeModelMultipleChoiceField,
         }
+
+
+class CheckinListSimulatorForm(forms.Form):
+    raw_barcode = forms.CharField(
+        label=_("Barcode"),
+    )
+    datetime = forms.SplitDateTimeField(
+        label=_("Check-in time"),
+        widget=SplitDateTimePickerWidget(),
+    )
+    checkin_type = forms.ChoiceField(
+        label=_("Check-in type"),
+        choices=Checkin.CHECKIN_TYPES,
+    )
+    ignore_unpaid = forms.BooleanField(
+        label=_("Allow check-in of unpaid order (if check-in list permits it)"),
+        required=False,
+    )
+    questions_supported = forms.BooleanField(
+        label=_("Support for check-in questions"),
+        initial=True,
+        required=False,
+    )

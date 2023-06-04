@@ -19,7 +19,19 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+# This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
+# the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
+#
+# This file may have since been changed and any changes are released under the terms of AGPLv3 as described above. A
+# full history of changes and contributors is available at <https://github.com/pretix/pretix>.
+#
+# This file contains Apache-licensed contributions copyrighted by: Jakob Schnell, jasonwaiting@live.hk, pajowu
+#
+# Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
+# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
+# License for the specific language governing permissions and limitations under the License.
 from datetime import timezone
+import secrets
 
 import dateutil.parser
 from django.contrib import messages
@@ -32,14 +44,17 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import is_aware, make_aware, now
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import ListView
+from django.views.generic import ListView, FormView
+from i18nfield.strings import LazyI18nString
 
+from pretix.api.views.checkin import _redeem_process
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import Checkin, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
+from pretix.base.services.checkin import LazyRuleVars, _logic_annotate_for_graphic_explain
 from pretix.base.signals import checkin_created
 from pretix.base.views.tasks import AsyncPostView
-from pretix.control.forms.checkin import CheckinListForm
+from pretix.control.forms.checkin import CheckinListForm, CheckinListSimulatorForm
 from pretix.control.forms.filter import (
     CheckinFilterForm, CheckinListAttendeeFilterForm,
 )
@@ -469,3 +484,63 @@ class CheckinListView(EventPermissionRequiredMixin, PaginationMixin, ListView):
         ctx = super().get_context_data()
         ctx['filter_form'] = self.filter_form
         return ctx
+
+
+class CheckInListSimulator(EventPermissionRequiredMixin, FormView):
+    template_name = 'pretixcontrol/checkin/simulator.html'
+    permission = 'can_view_orders'
+    form_class = CheckinListSimulatorForm
+
+    def dispatch(self, request, *args, **kwargs):
+        self.list = get_object_or_404(self.request.event.checkin_lists.all(), pk=kwargs.get("list"))
+        self.result = None
+        r = super().dispatch(request, *args, **kwargs)
+        r['Content-Security-Policy'] = 'script-src \'unsafe-eval\''
+        return r
+
+    def get_initial(self):
+        return {
+            'datetime': now()
+        }
+
+    def get_context_data(self, **kwargs):
+
+        return super().get_context_data(
+            **kwargs,
+            result=self.result,
+            reason_labels=dict(Checkin.REASONS),
+        )
+
+    def form_valid(self, form):
+        self.result = _redeem_process(
+            checkinlists=[self.list],
+            raw_barcode=form.cleaned_data["raw_barcode"],
+            answers_data={},
+            datetime=form.cleaned_data["datetime"],
+            force=False,
+            checkin_type=form.cleaned_data["checkin_type"],
+            ignore_unpaid=form.cleaned_data["ignore_unpaid"],
+            untrusted_input=True,
+            user=self.request.user,
+            auth=None,
+            expand=[],
+            nonce=secrets.token_hex(12),
+            pdf_data=False,
+            questions_supported=form.cleaned_data["questions_supported"],
+            canceled_supported=False,
+            request=self.request,  # this is not clean, but we need it in the serializers for URL generation
+            legacy_url_support=False,
+            simulate=True,
+        ).data
+
+        if form.cleaned_data["checkin_type"] == Checkin.TYPE_ENTRY and self.list.rules and self.result.get("position")\
+                and (self.result["status"] in ("ok", "incomplete") or self.result["reason"] == "rules"):
+            op = OrderPosition.objects.get(pk=self.result["position"]["id"])
+            rule_data = LazyRuleVars(op, self.list, form.cleaned_data["datetime"])
+            rule_graph = _logic_annotate_for_graphic_explain(self.list.rules, op.subevent or self.list.event, rule_data)
+            self.result["rule_graph"] = rule_graph
+
+        if self.result.get("questions"):
+            for q in self.result["questions"]:
+                q["question"] = LazyI18nString(q["question"])
+        return self.get(self.request, self.args, self.kwargs)
