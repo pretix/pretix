@@ -12,7 +12,15 @@
 {% endblock %}
 {% block inside %}
     {% if checkinlist %}
-        <h1>{% blocktrans with name=checkinlist.name %}Check-in list: {{ name }}{% endblocktrans %}</h1>
+        <h1>
+            {% blocktrans with name=checkinlist.name %}Check-in list: {{ name }}{% endblocktrans %}
+            <a href="{% url "control:event.orders.checkinlists.simulator" event=request.event.slug organizer=request.event.organizer.slug list=checkinlist.pk %}"
+               target="_blank"
+               class="btn btn-default">
+                <span class="fa fa-flask"></span>
+                {% trans "Check-in simulator" %}
+            </a>
+        </h1>
     {% else %}
         <h1>{% trans "Check-in list" %}</h1>
     {% endif %}

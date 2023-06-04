@@ -8,6 +8,13 @@
 {% block title %}{% trans "Check-in simulator" %}{% endblock %}
 {% block inside %}
     <h1>{% trans "Check-in simulator" %}</h1>
+    <p>
+        {% blocktrans trimmed %}
+            This tool allows you to validate your check-in configuration. You can enter a barcode plus some
+            optional parameters and we will show you the response of the check-in list. No actual check-in will
+            be performed and no modification to the system state is made.
+        {% endblocktrans %}
+    </p>
     <form action="" method="post" class="form-horizontal">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
