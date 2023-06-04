@@ -423,17 +423,6 @@
                         </div>
                     {% endif %}
 
-                    {% if "mysql" in settings.DATABASES.default.ENGINE and not request.organizer %}
-                        <div class="alert alert-warning">
-                            {% blocktrans trimmed %}
-                                You are using MySQL or MariaDB as your database backend for pretix.
-                                Starting in pretix 5.0, these will no longer be supported and you will need to migrate to PostgreSQL.
-                                Please see the pretix administrator documentation for a migration guide, and the pretix 4.16
-                                release notes for more information.
-                            {% endblocktrans %}
-                        </div>
-                    {% endif %}
-
                     {% if debug_warning %}
                         <div class="alert alert-danger">
                             {% trans "pretix is running in debug mode. For security reasons, please never run debug mode on a production instance." %}

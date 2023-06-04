@@ -3,11 +3,11 @@
 Migrating from MySQL/MariaDB to PostgreSQL
 ==========================================
 
-Our recommended database for all production installations is PostgreSQL. Support for MySQL/MariaDB will be removed in
-pretix 5.0.
+Our recommended database for all production installations is PostgreSQL. Support for MySQL/MariaDB has been removed
+in newer pretix releases.
 
 In order to follow this guide, your pretix installation needs to be a version that fully supports MySQL/MariaDB. If you
-already upgraded to pretix 5.0, downgrade back to the last 4.x release using ``pip``.
+already upgraded to pretix 5.0 or later, downgrade back to the last 4.x release using ``pip``.
 
 .. note:: We have tested this guide carefully, but we can't assume any liability for its correctness. The data loss
           risk should be low as long as pretix is not running while you do the migration. If you are a pretix Enterprise

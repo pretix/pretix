@@ -3,7 +3,6 @@ FROM python:3.11-bullseye
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
             build-essential \
-            libmariadb-dev \
             gettext \
             git \
             libffi-dev \
@@ -58,7 +57,7 @@ RUN pip3 install -U \
         wheel && \
     cd /pretix && \
     PRETIX_DOCKER_BUILD=TRUE pip3 install \
-        -e ".[memcached,mysql]" \
+        -e ".[memcached]" \
         gunicorn django-extensions ipython && \
     rm -rf ~/.cache/pip
 
