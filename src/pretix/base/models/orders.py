@@ -1750,8 +1750,9 @@ class OrderPayment(models.Model):
         from pretix.base.services.invoices import (
             generate_invoice, invoice_qualified,
         )
+        from pretix.base.services.locking import LOCK_TRUST_WINDOW
 
-        if lock and self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(seconds=60 * 2):
+        if lock and self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(seconds=LOCK_TRUST_WINDOW):
             # Performance optimization. In this case, there's really no reason to lock everything and an atomic
             # database transaction is more than enough.
             lock = False

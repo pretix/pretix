@@ -85,7 +85,7 @@ from pretix.base.services import tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
 )
-from pretix.base.services.locking import LockTimeoutException, lock_objects
+from pretix.base.services.locking import LockTimeoutException, lock_objects, LOCK_TRUST_WINDOW
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.memberships import (
     create_membership, validate_memberships_in_order,
@@ -668,7 +668,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         cp._cached_quotas = list(cp.quotas)
 
     # Create locks
-    if any(cp.expires < now() + timedelta(minutes=2) for cp in sorted_positions):
+    if any(cp.expires < now() + timedelta(seconds=LOCK_TRUST_WINDOW) for cp in sorted_positions):
         # No need to perform any locking if the cart positions still guarantee everything long enough.
         full_lock_required = any(
             getattr(o, 'seat', False) for o in sorted_positions

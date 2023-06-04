@@ -32,6 +32,7 @@ from pretix.testutils.middleware import storage as debug_storage
 
 logger = logging.getLogger('pretix.base.locking')
 LOCK_ACQUISITION_TIMEOUT = 3
+LOCK_TRUST_WINDOW = 120
 KEY_SPACES = {
     Event: 1,
     Quota: 2,
