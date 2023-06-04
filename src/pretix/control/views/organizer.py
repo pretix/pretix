@@ -1184,7 +1184,7 @@ class DeviceRevokeView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if not self.object.api_token:
+        if self.object.revoked:
             messages.success(request, _('This device currently does not have access.'))
             return redirect(reverse('control:organizer.devices', kwargs={
                 'organizer': self.request.organizer.slug,
