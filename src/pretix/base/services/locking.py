@@ -52,7 +52,9 @@ def pg_lock_key(obj):
     if not keyspace:
         raise ValueError(f"No key space defined for locking objects of type {type(obj)}")
     assert isinstance(objectid, int)
-    key = (objectid << 33) | (keyspace % (1 << 33))
+    # 64bit int: xxxxxxxx xxxxxxx xxxxxxx xxxxxxx xxxxxx xxxxxxx xxxxxxx xxxxxxx
+    #            |      objectid mod 2**32      | |  settings  | |  keyspace   |
+    key = ((objectid % 4294967296) << 32) | ((settings.DATABASE_ADVISORY_LOCK_INDEX % 65536) << 16) | (keyspace % 65536)
     return key
 
 

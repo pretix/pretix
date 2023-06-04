@@ -118,6 +118,8 @@ if DATABASE_IS_GALERA and 'mysql' in db_backend:
 else:
     db_options = {}
 
+DATABASE_ADVISORY_LOCK_INDEX = config.getint('database', 'advisory_lock_index', fallback=0)
+
 if 'mysql' in db_backend:
     db_options['charset'] = 'utf8mb4'
 

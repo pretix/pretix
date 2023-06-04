@@ -152,6 +152,7 @@ Example::
     password=abcd
     host=localhost
     port=3306
+    advisory_lock_index=1
 
 ``backend``
     One of ``mysql`` (deprecated), ``sqlite3`` and ``postgresql``.
@@ -166,6 +167,11 @@ Example::
 
 ``user``, ``password``, ``host``, ``port``
     Connection details for the database connection. Empty by default.
+
+``advisory_lock_index``
+    On PostgreSQL, pretix uses the "advisory lock" feature. However, advisory locks user a server-wide name space and
+    and are not scoped to a specific database. If you run multiple pretix applications with the same PostgreSQL server,
+    you should set separate values for this setting (integers up to 65535).
 
 ``galera``
     (Deprecated) Indicates if the database backend is a MySQL/MariaDB Galera cluster and
