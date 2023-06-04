@@ -32,7 +32,7 @@ from django_scopes.forms import (
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
-from pretix.base.models.checkin import CheckinList, Checkin
+from pretix.base.models.checkin import Checkin, CheckinList
 from pretix.control.forms import ItemMultipleChoiceField
 from pretix.control.forms.widgets import Select2
 

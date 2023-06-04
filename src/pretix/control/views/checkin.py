@@ -44,17 +44,21 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import is_aware, make_aware, now
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import ListView, FormView
+from django.views.generic import FormView, ListView
 from i18nfield.strings import LazyI18nString
 
 from pretix.api.views.checkin import _redeem_process
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import Checkin, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
-from pretix.base.services.checkin import LazyRuleVars, _logic_annotate_for_graphic_explain
+from pretix.base.services.checkin import (
+    LazyRuleVars, _logic_annotate_for_graphic_explain,
+)
 from pretix.base.signals import checkin_created
 from pretix.base.views.tasks import AsyncPostView
-from pretix.control.forms.checkin import CheckinListForm, CheckinListSimulatorForm
+from pretix.control.forms.checkin import (
+    CheckinListForm, CheckinListSimulatorForm,
+)
 from pretix.control.forms.filter import (
     CheckinFilterForm, CheckinListAttendeeFilterForm,
 )

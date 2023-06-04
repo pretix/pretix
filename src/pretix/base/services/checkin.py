@@ -53,7 +53,8 @@ from django.utils.translation import gettext as _
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.models import (
-    Checkin, CheckinList, Device, Order, OrderPosition, QuestionOption, ItemVariation, Event,
+    Checkin, CheckinList, Device, Event, ItemVariation, Order, OrderPosition,
+    QuestionOption,
 )
 from pretix.base.signals import checkin_created, order_placed, periodic_task
 from pretix.helpers import OF_SELF
