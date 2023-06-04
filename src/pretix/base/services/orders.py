@@ -946,22 +946,6 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
     payments = []
     sales_channel = get_all_sales_channels()[sales_channel]
 
-    checked_gift_cards = []
-    if gift_cards:
-        gc_qs = GiftCard.objects.select_for_update().filter(pk__in=gift_cards)
-        for gc in gc_qs:
-            if gc.currency != event.currency:
-                raise OrderError(_("This gift card does not support this currency."))
-            if gc.testmode and not event.testmode:
-                raise OrderError(_("This gift card can only be used in test mode."))
-            if not gc.testmode and event.testmode:
-                raise OrderError(_("Only test gift cards can be used in test mode."))
-            if not gc.accepted_by(event.organizer):
-                raise OrderError(_("This gift card is not accepted by this event organizer."))
-            checked_gift_cards.append(gc)
-    if checked_gift_cards and any(c.item.issue_giftcard for c in positions):
-        raise OrderError(_("You cannot pay with gift cards when buying a gift card."))
-
     try:
         validate_memberships_in_order(customer, positions, event, lock=True, testmode=event.testmode)
     except ValidationError as e:
@@ -1004,32 +988,6 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             fee.tax_rule = None  # TODO: deprecate
         fee.save()
 
-    for gc, val in gift_card_values.items():
-        p = order.payments.create(
-            state=OrderPayment.PAYMENT_STATE_CONFIRMED,
-            provider='giftcard',
-            amount=val,
-            fee=pf
-        )
-        trans = gc.transactions.create(
-            value=-1 * val,
-            order=order,
-            payment=p
-        )
-        p.info_data = {
-            'gift_card': gc.pk,
-            'transaction_id': trans.pk,
-        }
-        p.save()
-        pending_sum -= val
-
-    for fee in fees:
-        fee.order = order
-        fee._calculate_tax()
-        if fee.tax_rule and not fee.tax_rule.pk:
-            fee.tax_rule = None  # TODO: deprecate
-        fee.save()
-
     # Safety check: Is the amount we're now going to charge the same amount the user has been shown when they
     # pressed "Confirm purchase"? If not, we should better warn the user and show the confirmation page again.
     # We used to have a *known* case where this happened is if a gift card is used in two concurrent sessions,
@@ -1054,14 +1012,6 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
                     info=json.dumps(p['info_data']),
                     process_initiated=False,
                 ))
-
-    if payment_provider and not order.require_approval:
-        p = order.payments.create(
-            state=OrderPayment.PAYMENT_STATE_CREATED,
-            provider=payment_provider.identifier,
-            amount=pending_sum,
-            fee=pf
-        )
 
     orderpositions = OrderPosition.transform_cart_positions(positions, order)
     order.create_transactions(positions=orderpositions, fees=fees, is_new=True)
@@ -1193,14 +1143,16 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         if 'sleep-after-quota-check' in debug_storage.debugflags:
             sleep(2)
 
-        order, payment = _create_order(event, email, positions, now_dt, pprov,
-                                       locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
-                                       gift_cards=gift_cards, shown_total=shown_total, customer=customer)
+        order, payment_objs = _create_order(event, email, positions, now_dt, payment_requests,
+                                            locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
+                                            shown_total=shown_total, customer=customer, valid_if_pending=valid_if_pending)
 
         try:
             for p in payment_objs:
                 if p.provider == 'free':
-                    p.confirm(send_mail=False, lock=not locked, generate_invoice=False)
+                    # Passing lock=False is safe here because it's absolutely impossible for the order to be expired
+                    # here before it is even committed.
+                    p.confirm(send_mail=False, lock=False, generate_invoice=False)
         except Quota.QuotaExceededException:
             pass
 
