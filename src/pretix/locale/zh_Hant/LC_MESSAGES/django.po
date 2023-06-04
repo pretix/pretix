@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-31 09:01+0000\n"
-"PO-Revision-Date: 2023-06-03 05:00+0000\n"
+"PO-Revision-Date: 2023-06-04 16:06+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -10070,18 +10070,19 @@ msgstr ""
 
 #: pretix/base/shredder.py:426
 msgid "Cached ticket files"
-msgstr ""
+msgstr "票證的緩存檔"
 
 #: pretix/base/shredder.py:428
 msgid "This will remove all cached ticket files. No download will be offered."
-msgstr ""
+msgstr "這將刪除所有票證的緩存檔。不提供下載。"
 
 #: pretix/base/shredder.py:443
 msgid ""
 "This will remove payment-related information. Depending on the payment "
 "method, all data will be removed or personal data only. No download will be "
 "offered."
-msgstr ""
+msgstr "這將刪除與付款相關的資訊。根據付款方式的不同，所有數據或僅個人數據都將被刪除"
+"。不提供下載。"
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
 msgid "Bad Request"
