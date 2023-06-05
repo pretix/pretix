@@ -51,7 +51,7 @@ from django.db.models import Case, Exists, OuterRef, Q, Subquery, When
 from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
-from pypdf import PdfMerger, PdfReader, PdfWriter, Transformation
+from pypdf import PdfReader, PdfWriter, Transformation
 from pypdf.generic import RectangleObject
 from reportlab.lib import pagesizes
 from reportlab.lib.units import mm
@@ -196,7 +196,7 @@ def render_pdf(event, positions, opt):
         raise ExportError(_("None of the selected products is configured to print badges."))
 
     # render each badge on its own page first
-    merger = PdfMerger()
+    merger = PdfWriter()
     merger.add_metadata({
         '/Title': 'Badges',
         '/Creator': 'pretix',
