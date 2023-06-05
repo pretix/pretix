@@ -29,20 +29,6 @@
             color: $alert-warning-text;
         }
     }
-    .item-checkbox-label {
-        position: relative;
-        display: block;
-        padding-left: 24px;
-        padding-right: 24px;
-
-        input {
-            position: absolute;
-            left: 10px;
-        }
-        &.item-checkbox-label-checked {
-            background-color: $gray-lighter;
-        }
-    }
 
     .product-description.with-picture {
         margin-left: 70px;

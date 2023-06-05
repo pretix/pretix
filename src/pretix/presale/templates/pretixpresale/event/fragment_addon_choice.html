@@ -177,7 +177,7 @@
                                 {% if var.cached_availability.0 == 100 or var.initial %}
                                     <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
                                         {% if c.max_count == 1 or not c.multi_allowed %}
-                                            <label class="item-checkbox-label btn btn-default">
+                                            <label class="btn btn-default btn-checkbox">
                                                 <input type="checkbox" value="1"
                                                         {% if var.initial %}checked="checked"{% endif %}
                                                         {% if item.free_price %}
@@ -306,7 +306,7 @@
                     {% if item.cached_availability.0 == 100 or item.initial %}
                         <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
                             {% if c.max_count == 1 or not c.multi_allowed %}
-                                <label class="item-checkbox-label btn btn-default">
+                                <label class="btn btn-default btn-checkbox">
                                     <input type="checkbox" value="1"
                                             {% if item.free_price %}
                                                data-checked-onchange="price-item-{{ form.pos.pk }}-{{ item.pk }}"
