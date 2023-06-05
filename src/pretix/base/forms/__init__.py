@@ -167,7 +167,6 @@ class SettingsForm(i18nfield.forms.I18nFormMixin, HierarkeyForm):
 
 class PrefixForm(forms.Form):
     prefix = forms.CharField(widget=forms.HiddenInput)
-    template_name = 'django/forms/formsets/table.html'
 
 
 class SafeSessionWizardView(SessionWizardView):
