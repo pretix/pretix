@@ -93,7 +93,7 @@ class OrderSearch(PaginationMixin, ListView):
 
             if self.filter_form.use_query_hack():
                 """
-                We need to work around a bug in PostgreSQL's (and likely MySQL's) query plan optimizer here.
+                We need to work around a bug in PostgreSQL's query plan optimizer here.
                 The database lacks statistical data to predict how common our search filter is and therefore
                 assumes that it is cheaper to first ORDER *all* orders in the system (since we got an index on
                 datetime), then filter out with a full scan until OFFSET/LIMIT condition is fulfilled. If we
@@ -167,7 +167,7 @@ class PaymentSearch(PaginationMixin, ListView):
 
             if self.filter_form.cleaned_data.get('query'):
                 """
-                We need to work around a bug in PostgreSQL's (and likely MySQL's) query plan optimizer here.
+                We need to work around a bug in PostgreSQL's query plan optimizer here.
                 The database lacks statistical data to predict how common our search filter is and therefore
                 assumes that it is cheaper to first ORDER *all* orders in the system (since we got an index on
                 datetime), then filter out with a full scan until OFFSET/LIMIT condition is fulfilled. If we

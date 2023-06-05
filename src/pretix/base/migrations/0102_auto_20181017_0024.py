@@ -3,7 +3,6 @@
 
 from django.core.exceptions import ImproperlyConfigured
 from django.db import migrations, models
-from django_mysql.checks import mysql_connections
 
 
 def set_attendee_name_parts(apps, schema_editor):
@@ -24,40 +23,12 @@ def set_attendee_name_parts(apps, schema_editor):
         ia.save(update_fields=['name_parts'])
 
 
-def check_mysqlversion(apps, schema_editor):
-    errors = []
-    any_conn_works = False
-    conns = list(mysql_connections())
-    found = 'Unknown version'
-    for alias, conn in conns:
-        if hasattr(conn, 'mysql_is_mariadb') and conn.mysql_is_mariadb and hasattr(conn, 'mysql_version'):
-            if conn.mysql_version >= (10, 2, 7):
-                any_conn_works = True
-            else:
-                found = 'MariaDB ' + '.'.join(str(v) for v in conn.mysql_version)
-        elif hasattr(conn, 'mysql_version'):
-            if conn.mysql_version >= (5, 7):
-                any_conn_works = True
-            else:
-                found = 'MySQL ' + '.'.join(str(v) for v in conn.mysql_version)
-
-    if conns and not any_conn_works:
-        raise ImproperlyConfigured(
-            'As of pretix 2.2, you need MySQL 5.7+ or MariaDB 10.2.7+ to run pretix. However, we detected a '
-            'database connection to {}'.format(found)
-        )
-    return errors
-
-
 class Migration(migrations.Migration):
     dependencies = [
         ('pretixbase', '0101_auto_20181025_2255'),
     ]
 
     operations = [
-        migrations.RunPython(
-            check_mysqlversion, migrations.RunPython.noop
-        ),
         migrations.RenameField(
             model_name='cartposition',
             old_name='attendee_name',
