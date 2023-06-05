@@ -22,8 +22,7 @@
 import importlib.util
 
 from django.apps import apps
-from django.conf.urls import re_path
-from django.urls import include
+from django.urls import include, re_path
 
 from pretix.multidomain.plugin_handler import plugin_event_urls
 from pretix.presale.urls import event_patterns, locale_patterns

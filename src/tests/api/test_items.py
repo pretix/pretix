@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 import os
 import time
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from unittest import mock
 
@@ -42,7 +42,6 @@ from django.conf import settings
 from django.core.files.base import ContentFile
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
-from pytz import UTC
 from tests.const import SAMPLE_PNG
 
 from pretix.base.channels import get_all_sales_channels
@@ -73,15 +72,15 @@ def category3(event, item):
 
 @pytest.fixture
 def order(event, item, taxrule):
-    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=timezone.utc)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
-            datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
-            expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+            datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=timezone.utc),
+            expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=timezone.utc),
             total=23, locale='en'
         )
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
@@ -108,7 +107,7 @@ def order_position(item, order, taxrule, variations):
 
 @pytest.fixture
 def cart_position(event, item, variations):
-    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=timezone.utc)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
@@ -1786,7 +1785,7 @@ def test_quota_list(token_client, organizer, event, quota, item, subevent):
         '/api/v1/organizers/{}/events/{}/quotas/?subevent={}'.format(organizer.slug, event.slug, subevent.pk))
     assert [res] == resp.data['results']
     with scopes_disabled():
-        se2 = event.subevents.create(name="Foobar", date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2 = event.subevents.create(name="Foobar", date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=timezone.utc))
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/quotas/?subevent={}'.format(organizer.slug, event.slug, se2.pk))
     assert [] == resp.data['results']

@@ -251,14 +251,20 @@ class Invoice(models.Model):
             raise ValueError('Every invoice needs to be connected to an order')
         if not self.event:
             self.event = self.order.event
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'event'}.union(kwargs['update_fields'])
         if not self.organizer:
             self.organizer = self.order.event.organizer
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'organizer'}.union(kwargs['update_fields'])
         if not self.prefix:
             self.prefix = self.event.settings.invoice_numbers_prefix or (self.event.slug.upper() + '-')
             if self.is_cancellation:
                 self.prefix = self.event.settings.invoice_numbers_prefix_cancellations or self.prefix
             if '%' in self.prefix:
                 self.prefix = self.date.strftime(self.prefix)
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'prefix'}.union(kwargs['update_fields'])
 
         if not self.invoice_no:
             if self.order.testmode:
@@ -276,8 +282,13 @@ class Invoice(models.Model):
                     # Suppress duplicate key errors and try again
                     if i == 9:
                         raise
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'invoice_no'}.union(kwargs['update_fields'])
 
-        self.full_invoice_no = self.prefix + self.invoice_no
+        if self.full_invoice_no != self.prefix + self.invoice_no:
+            self.full_invoice_no = self.prefix + self.invoice_no
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'full_invoice_no'}.union(kwargs['update_fields'])
         return super().save(*args, **kwargs)
 
     def delete(self, *args, **kwargs):

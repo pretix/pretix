@@ -126,12 +126,19 @@ class WaitingListEntry(LoggedModel):
             raise ValidationError('Invalid input')
 
     def save(self, *args, **kwargs):
-        update_fields = kwargs.get('update_fields', [])
+        update_fields = kwargs.get('update_fields', set())
         if 'name_parts' in update_fields:
-            update_fields.append('name_cached')
-        self.name_cached = self.name
+            kwargs['update_fields'] = {'name_cached'}.union(kwargs['update_fields'])
+        name = self.name
+        if name != self.name_cached:
+            self.name_cached = name
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'name_cached'}.union(kwargs['update_fields'])
+
         if self.name_parts is None:
             self.name_parts = {}
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'name_parts'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
 
     @property

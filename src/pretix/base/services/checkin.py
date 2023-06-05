@@ -32,12 +32,12 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from functools import partial, reduce
 
 import dateutil
 import dateutil.parser
-import pytz
+from dateutil.tz import datetime_exists
 from django.core.files import File
 from django.db import IntegrityError, transaction
 from django.db.models import (
@@ -439,7 +439,7 @@ class SQLLogic:
 
         if operator == 'buildTime':
             if values[0] == "custom":
-                return Value(dateutil.parser.parse(values[1]).astimezone(pytz.UTC))
+                return Value(dateutil.parser.parse(values[1]).astimezone(timezone.utc))
             elif values[0] == "customtime":
                 parsed = dateutil.parser.parse(values[1])
                 return Value(now().astimezone(self.list.event.timezone).replace(
@@ -447,7 +447,7 @@ class SQLLogic:
                     minute=parsed.minute,
                     second=parsed.second,
                     microsecond=parsed.microsecond,
-                ).astimezone(pytz.UTC))
+                ).astimezone(timezone.utc))
             elif values[0] == 'date_from':
                 return Coalesce(
                     F('subevent__date_from'),
@@ -475,7 +475,7 @@ class SQLLogic:
             return int(values[1])
         elif operator == 'var':
             if values[0] == 'now':
-                return Value(now().astimezone(pytz.UTC))
+                return Value(now().astimezone(timezone.utc))
             elif values[0] == 'now_isoweekday':
                 return Value(now().astimezone(self.list.event.timezone).isoweekday())
             elif values[0] == 'product':
@@ -926,14 +926,11 @@ def process_exit_all(sender, **kwargs):
         if cl.event.settings.get(f'autocheckin_dst_hack_{cl.pk}'):  # move time back if yesterday was DST switch
             d -= timedelta(hours=1)
             cl.event.settings.delete(f'autocheckin_dst_hack_{cl.pk}')
-        try:
-            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time()), cl.event.timezone)
-        except pytz.exceptions.AmbiguousTimeError:
-            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time()), cl.event.timezone,
-                                        is_dst=False)
-        except pytz.exceptions.NonExistentTimeError:
+
+        cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time().replace(fold=1)), cl.event.timezone)
+        if not datetime_exists(cl.exit_all_at):
             cl.event.settings.set(f'autocheckin_dst_hack_{cl.pk}', True)
             d += timedelta(hours=1)
-            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time()), cl.event.timezone)
+            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time().replace(fold=1)), cl.event.timezone)
             # AmbiguousTimeError shouldn't be possible since d.time() includes fold=0
         cl.save(update_fields=['exit_all_at'])

@@ -31,7 +31,6 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
-from pytz import UTC
 from tests.const import SAMPLE_PNG
 
 from pretix.api.serializers.item import QuestionSerializer
@@ -57,15 +56,15 @@ def other_item(event):
 
 @pytest.fixture
 def order(event, item, other_item, taxrule):
-    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PAID, secret="k24fiuwvu8kxz3y1",
-            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
-            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
+            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
             total=46, locale='en'
         )
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
@@ -258,7 +257,7 @@ def test_list_list(token_client, organizer, event, clist, item, subevent, django
         '/api/v1/organizers/{}/events/{}/checkinlists/?subevent_match={}'.format(organizer.slug, event.slug, subevent.pk))
     assert [res] == resp.data['results']
     with scopes_disabled():
-        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=datetime.timezone.utc))
     resp = token_client.get(
         '/api/v1/organizers/{}/events/{}/checkinlists/?subevent={}'.format(organizer.slug, event.slug, se2.pk))
     assert [] == resp.data['results']
@@ -577,7 +576,7 @@ def test_list_all_items_positions(token_client, organizer, event, clist, clist_a
 @pytest.mark.django_db
 def test_list_all_items_positions_by_subevent(token_client, organizer, event, clist, clist_all, item, other_item, order, subevent):
     with scopes_disabled():
-        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=UTC))
+        se2 = event.subevents.create(name="Foobar", date_from=datetime.datetime(2017, 12, 27, 10, 0, 0, tzinfo=datetime.timezone.utc))
         pfirst = order.positions.get(positionid=1)
         pfirst.subevent = se2
         pfirst.save()

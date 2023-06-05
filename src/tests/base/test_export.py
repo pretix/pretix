@@ -19,10 +19,9 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from datetime import datetime, time, timedelta
+from datetime import datetime, time, timedelta, timezone
 
 import pytest
-import pytz
 from django.core import mail as djmail
 from django.utils.timezone import now
 from django_scopes import scope
@@ -39,7 +38,7 @@ def event():
     o = Organizer.objects.create(name='Dummy', slug='dummy')
     event = Event.objects.create(
         organizer=o, name='Dummy', slug='dummy',
-        date_from=datetime(2023, 1, 19, 2, 30, 0, tzinfo=pytz.UTC),
+        date_from=datetime(2023, 1, 19, 2, 30, 0, tzinfo=timezone.utc),
         plugins='pretix.plugins.banktransfer'
     )
     o.settings.timezone = "Europe/Berlin"
@@ -70,7 +69,7 @@ def test_event_run_sets_new_time(event, user):
 
     run_scheduled_exports(None)
     s.refresh_from_db()
-    assert s.schedule_next_run == event.timezone.localize(datetime(2023, 1, 19, 2, 30, 0))
+    assert s.schedule_next_run == datetime(2023, 1, 19, 2, 30, 0, tzinfo=event.timezone)
 
 
 @pytest.mark.django_db
@@ -79,13 +78,13 @@ def test_event_not_run_when_failed_5_times(event, user):
     s = ScheduledEventExport(event=event, owner=user)
     s.schedule_rrule = "DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO"
     s.schedule_rrule_time = time(2, 30, 0)
-    s.schedule_next_run = event.timezone.localize(datetime(2023, 1, 18, 2, 30, 0))
+    s.schedule_next_run = datetime(2023, 1, 18, 2, 30, 0, tzinfo=event.timezone)
     s.error_counter = 5
     s.save()
 
     run_scheduled_exports(None)
     s.refresh_from_db()
-    assert s.schedule_next_run == event.timezone.localize(datetime(2023, 1, 18, 2, 30, 0))
+    assert s.schedule_next_run == datetime(2023, 1, 18, 2, 30, 0, tzinfo=event.timezone)
 
 
 @pytest.mark.django_db
@@ -200,7 +199,7 @@ def test_organizer_run_sets_new_time(event, user):
 
     run_scheduled_exports(None)
     s.refresh_from_db()
-    assert s.schedule_next_run == event.timezone.localize(datetime(2023, 1, 19, 2, 30, 0))
+    assert s.schedule_next_run == datetime(2023, 1, 19, 2, 30, 0, tzinfo=event.timezone)
 
 
 @pytest.mark.django_db
@@ -209,13 +208,13 @@ def test_organizer_not_run_when_failed_5_times(event, user):
     s = ScheduledOrganizerExport(organizer=event.organizer, owner=user)
     s.schedule_rrule = "DTSTART:20230118T000000\nRRULE:FREQ=DAILY;INTERVAL=1;WKST=MO"
     s.schedule_rrule_time = time(2, 30, 0)
-    s.schedule_next_run = event.timezone.localize(datetime(2023, 1, 18, 2, 30, 0))
+    s.schedule_next_run = datetime(2023, 1, 18, 2, 30, 0, tzinfo=event.timezone)
     s.error_counter = 5
     s.save()
 
     run_scheduled_exports(None)
     s.refresh_from_db()
-    assert s.schedule_next_run == event.timezone.localize(datetime(2023, 1, 18, 2, 30, 0))
+    assert s.schedule_next_run == datetime(2023, 1, 18, 2, 30, 0, tzinfo=event.timezone)
 
 
 @pytest.mark.django_db
@@ -304,7 +303,7 @@ def test_organizer_limited_to_events(event, user, team):
 
     event2 = Event.objects.create(
         organizer=event.organizer, name='Dummy', slug='dummy2',
-        date_from=datetime(2023, 1, 19, 2, 30, 0, tzinfo=pytz.UTC),
+        date_from=datetime(2023, 1, 19, 2, 30, 0, tzinfo=timezone.utc),
         plugins='pretix.plugins.banktransfer'
     )
     team.all_events = False
@@ -344,7 +343,7 @@ def test_organizer_ok(event, user, team):
 
     Event.objects.create(
         organizer=event.organizer, name='Dummy', slug='dummy2',
-        date_from=datetime(2023, 1, 19, 2, 30, 0, tzinfo=pytz.UTC),
+        date_from=datetime(2023, 1, 19, 2, 30, 0, tzinfo=timezone.utc),
         plugins='pretix.plugins.banktransfer'
     )
 

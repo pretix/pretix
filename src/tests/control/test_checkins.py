@@ -499,7 +499,7 @@ class CheckinListFormTest(SoupTest):
                             form_data)
         assert doc.select(".alert-success")
         cl.refresh_from_db()
-        assert cl.exit_all_at == self.event1.timezone.localize(datetime(2020, 1, 2, 3, 0))
+        assert cl.exit_all_at == datetime(2020, 1, 2, 3, 0, tzinfo=self.event1.timezone)
 
     @freeze_time("2020-01-02 03:05:00+01:00")
     def test_update_exit_all_at_next_day(self):
@@ -512,7 +512,7 @@ class CheckinListFormTest(SoupTest):
                             form_data)
         assert doc.select(".alert-success")
         cl.refresh_from_db()
-        assert cl.exit_all_at == self.event1.timezone.localize(datetime(2020, 1, 3, 3, 0))
+        assert cl.exit_all_at == datetime(2020, 1, 3, 3, 0, tzinfo=self.event1.timezone)
 
     def test_delete(self):
         with scopes_disabled():

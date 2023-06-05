@@ -22,7 +22,6 @@
 import datetime
 
 import pytest
-from django.utils.timezone import utc
 from django_scopes import scopes_disabled
 
 from pretix.plugins.sendmail.models import Rule
@@ -31,7 +30,7 @@ from pretix.plugins.sendmail.models import Rule
 @pytest.fixture
 def rule(event):
     return event.sendmail_rules.create(subject='test', template='foo',
-                                       send_date=datetime.datetime(2021, 7, 8, tzinfo=utc))
+                                       send_date=datetime.datetime(2021, 7, 8, tzinfo=datetime.timezone.utc))
 
 
 TEST_RULE_RES = {
@@ -131,7 +130,7 @@ def test_sendmail_rule_create_minimal(token_client, organizer, event):
             'send_date': '2018-03-17T13:31Z',
         }
     )
-    assert r.send_date == datetime.datetime(2018, 3, 17, 13, 31, tzinfo=utc)
+    assert r.send_date == datetime.datetime(2018, 3, 17, 13, 31, tzinfo=datetime.timezone.utc)
 
 
 @scopes_disabled()

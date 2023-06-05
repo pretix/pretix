@@ -19,10 +19,11 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import zoneinfo
 from datetime import datetime, timedelta
 
-import pytz
 from dateutil.rrule import rrulestr
+from dateutil.tz import datetime_exists
 from django.conf import settings
 from django.core.serializers.json import DjangoJSONEncoder
 from django.db import models
@@ -108,12 +109,9 @@ class AbstractScheduledExport(LoggedModel):
             self.schedule_next_run = None
             return
 
-        try:
-            self.schedule_next_run = make_aware(datetime.combine(new_d.date(), self.schedule_rrule_time), tz)
-        except pytz.exceptions.AmbiguousTimeError:
-            self.schedule_next_run = make_aware(datetime.combine(new_d.date(), self.schedule_rrule_time), tz, is_dst=False)
-        except pytz.exceptions.NonExistentTimeError:
-            self.schedule_next_run = make_aware(datetime.combine(new_d.date(), self.schedule_rrule_time) + timedelta(hours=1), tz)
+        self.schedule_next_run = make_aware(datetime.combine(new_d.date(), self.schedule_rrule_time), tz)
+        if not datetime_exists(self.schedule_next_run):
+            self.schedule_next_run += timedelta(hours=1)
 
 
 class ScheduledEventExport(AbstractScheduledExport):
@@ -136,4 +134,4 @@ class ScheduledOrganizerExport(AbstractScheduledExport):
 
     @property
     def tz(self):
-        return pytz.timezone(self.timezone)
+        return zoneinfo.ZoneInfo(self.timezone)

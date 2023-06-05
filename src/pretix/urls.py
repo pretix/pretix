@@ -33,8 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from django.conf import settings
-from django.conf.urls import re_path
-from django.urls import include
+from django.urls import include, re_path
 from django.views.generic import RedirectView
 
 import pretix.control.urls

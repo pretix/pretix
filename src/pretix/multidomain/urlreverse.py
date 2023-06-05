@@ -45,6 +45,9 @@ from .models import KnownDomain
 
 def get_event_domain(event, fallback=False, return_info=False):
     assert isinstance(event, Event)
+    if not event.pk:
+        # Can happen on the "event deleted" response
+        return (None, None) if return_info else None
     suffix = ('_fallback' if fallback else '') + ('_info' if return_info else '')
     domain = getattr(event, '_cached_domain' + suffix, None) or event.cache.get('domain' + suffix)
     if domain is None:

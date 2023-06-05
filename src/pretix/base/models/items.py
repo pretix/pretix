@@ -40,9 +40,10 @@ from collections import Counter, OrderedDict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
 from typing import Optional, Tuple
+from zoneinfo import ZoneInfo
 
 import dateutil.parser
-import pytz
+from dateutil.tz import datetime_exists
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import (
@@ -927,28 +928,31 @@ class Item(LoggedModel):
                 )
                 if self.validity_dynamic_duration_days:
                     replace_date += timedelta(days=self.validity_dynamic_duration_days)
-                valid_until = tz.localize(valid_until.replace(
+                valid_until = valid_until.replace(
                     year=replace_date.year,
                     month=replace_date.month,
                     day=replace_date.day,
                     hour=23, minute=59, second=59, microsecond=0,
-                    tzinfo=None,
-                ))
+                    tzinfo=tz,
+                )
             elif self.validity_dynamic_duration_days:
                 replace_date = valid_until.date() + timedelta(days=self.validity_dynamic_duration_days - 1)
-                valid_until = tz.localize(valid_until.replace(
+                valid_until = valid_until.replace(
                     year=replace_date.year,
                     month=replace_date.month,
                     day=replace_date.day,
                     hour=23, minute=59, second=59, microsecond=0,
-                    tzinfo=None
-                ))
+                    tzinfo=tz
+                )
 
             if self.validity_dynamic_duration_hours:
                 valid_until += timedelta(hours=self.validity_dynamic_duration_hours)
 
             if self.validity_dynamic_duration_minutes:
                 valid_until += timedelta(minutes=self.validity_dynamic_duration_minutes)
+
+            if not datetime_exists(valid_until):
+                valid_until += timedelta(hours=1)
 
             return requested_start, valid_until
 
@@ -1589,6 +1593,8 @@ class Question(LoggedModel):
                 if not Question.objects.filter(event=self.event, identifier=code).exists():
                     self.identifier = code
                     break
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'identifier'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
         if self.event:
             self.event.cache.clear()
@@ -1678,7 +1684,7 @@ class Question(LoggedModel):
             try:
                 dt = dateutil.parser.parse(answer)
                 if is_naive(dt):
-                    dt = make_aware(dt, pytz.timezone(self.event.settings.timezone))
+                    dt = make_aware(dt, ZoneInfo(self.event.settings.timezone))
             except:
                 raise ValidationError(_('Invalid datetime input.'))
             else:
@@ -1736,6 +1742,8 @@ class QuestionOption(models.Model):
                 if not QuestionOption.objects.filter(question__event=self.question.event, identifier=code).exists():
                     self.identifier = code
                     break
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'identifier'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
 
     @staticmethod

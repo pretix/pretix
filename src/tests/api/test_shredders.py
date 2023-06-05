@@ -34,13 +34,12 @@
 
 import copy
 import uuid
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
 import pytest
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
-from pytz import UTC
 
 from pretix.base.models import Order, OrderPosition
 
@@ -56,8 +55,8 @@ def order(event, item):
     o = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
-        datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
-        expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+        datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=timezone.utc),
+        expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=timezone.utc),
         total=23, locale='en'
     )
     OrderPosition.objects.create(

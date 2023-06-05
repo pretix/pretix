@@ -210,7 +210,7 @@ class SubeventColumn(ImportColumn):
         for format in input_formats:
             try:
                 d = datetime.datetime.strptime(value, format)
-                d = self.event.timezone.localize(d)
+                d = d.replace(tzinfo=self.event.timezone)
                 try:
                     se = self.event.subevents.get(
                         active=True,
@@ -660,7 +660,7 @@ class ValidFrom(ImportColumn):
         for format in input_formats:
             try:
                 d = datetime.datetime.strptime(value, format)
-                d = self.event.timezone.localize(d)
+                d = d.replace(tzinfo=self.event.timezone)
                 return d
             except (ValueError, TypeError):
                 pass
@@ -683,7 +683,7 @@ class ValidUntil(ImportColumn):
         for format in input_formats:
             try:
                 d = datetime.datetime.strptime(value, format)
-                d = self.event.timezone.localize(d)
+                d = d.replace(tzinfo=self.event.timezone)
                 return d
             except (ValueError, TypeError):
                 pass

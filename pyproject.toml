@@ -22,7 +22,7 @@ classifiers = [
   "Programming Language :: Python :: 3.9",
   "Programming Language :: Python :: 3.10",
   "Programming Language :: Python :: 3.11",
-  "Framework :: Django :: 3.2",
+  "Framework :: Django :: 4.1",
 ]
 
 dependencies = [
@@ -36,7 +36,7 @@ dependencies = [
   "css-inline==0.8.*",
   "defusedcsv>=1.1.0",
   "dj-static",
-  "Django==3.2.*,>=3.2.18",
+  "Django==4.1.*",
   "django-bootstrap3==23.1.*",
   "django-compressor==4.3.*",
   "django-countries==7.5.*",
@@ -87,6 +87,7 @@ dependencies = [
   "python-dateutil==2.8.*",
   "python-u2flib-server==4.*",
   "pytz",
+  "pytz-deprecation-shim==0.1.*",
   "pyuca",
   "qrcode==7.4.*",
   "redis==4.5.*,>=4.5.4",

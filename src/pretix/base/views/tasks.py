@@ -21,9 +21,9 @@
 #
 import logging
 from importlib import import_module
+from zoneinfo import ZoneInfo
 
 import celery.exceptions
-import pytz
 from celery import states
 from celery.result import AsyncResult
 from django.conf import settings
@@ -252,7 +252,7 @@ class AsyncFormView(AsyncMixin, FormView):
             task_self = self
             view_instance._task_self = task_self
 
-            with translation.override(locale), timezone.override(pytz.timezone(tz)):
+            with translation.override(locale), timezone.override(ZoneInfo(tz)):
                 form_class = view_instance.get_form_class()
                 if form_kwargs.get('instance'):
                     form_kwargs['instance'] = cls.model.objects.get(pk=form_kwargs['instance'])
@@ -302,7 +302,7 @@ class AsyncFormView(AsyncMixin, FormView):
             'url_args': self.args,
             'url_kwargs': self.kwargs,
             'locale': get_language(),
-            'tz': get_current_timezone().zone,
+            'tz': str(get_current_timezone()),
         }
         if hasattr(self.request, 'organizer'):
             kwargs['organizer'] = self.request.organizer.pk
@@ -377,7 +377,7 @@ class AsyncPostView(AsyncMixin, View):
             task_self = self
             view_instance._task_self = task_self
 
-            with translation.override(locale), timezone.override(pytz.timezone(tz)):
+            with translation.override(locale), timezone.override(ZoneInfo(tz)):
                 return view_instance.async_post(view_instance.request, *url_args, **url_kwargs)
 
         cls.async_execute = app.task(
@@ -405,7 +405,7 @@ class AsyncPostView(AsyncMixin, View):
             'locale': get_language(),
             'url_args': args,
             'url_kwargs': kwargs,
-            'tz': get_current_timezone().zone,
+            'tz': str(get_current_timezone()),
         }
         if hasattr(self.request, 'organizer'):
             kwargs['organizer'] = self.request.organizer.pk
