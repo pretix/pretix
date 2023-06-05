@@ -358,11 +358,6 @@ body.loading .container {
     outline: 0;
     text-decoration: none;
 }
-.panel-title-parts {
-    display: flex;
-    flex-wrap: wrap;
-    gap: .5em;
-}
 
 .panel-default .panel-title a[data-toggle="collapse"]:hover {
     background-color: #eeeeee;
