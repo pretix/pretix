@@ -80,7 +80,7 @@ with scopes_disabled():
             expr = (
                 Q(has_subevents=False) &
                 Q(
-                    Q(Q(date_to__isnull=True) & Q(date_from__gte=value))
+                    Q(Q(date_to__isnull=True))
                     | Q(Q(date_to__isnull=False) & Q(date_to__gte=value))
                 )
             )

@@ -178,9 +178,16 @@ def test_event_list(token_client, organizer, event):
     assert resp.status_code == 200
     assert [TEST_EVENT_RES] == resp.data['results']
 
+    assert event.date_to is None
     resp = token_client.get('/api/v1/organizers/{}/events/?ends_after=2017-12-27T10:01:00Z'.format(organizer.slug))
     assert resp.status_code == 200
-    assert [] == resp.data['results']
+    assert [TEST_EVENT_RES] == resp.data['results']
+
+    assert event.date_to is None
+    resp = token_client.get('/api/v1/organizers/{}/events/?ends_after=2017-12-30T10:01:00Z'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [TEST_EVENT_RES] == resp.data['results']
+
     resp = token_client.get('/api/v1/organizers/{}/events/?ends_after=2017-12-27T09:59:59Z'.format(organizer.slug))
     assert resp.status_code == 200
     assert [TEST_EVENT_RES] == resp.data['results']
