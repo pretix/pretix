@@ -7,6 +7,22 @@ a.btn, button.btn {
   white-space: normal;
 }
 
+.btn-checkbox {
+    position: relative;
+    display: block;
+    padding-left: 24px;
+    padding-right: 24px;
+    white-space: normal;
+
+    input {
+        position: absolute;
+        left: 10px;
+    }
+    &.btn-checkbox-checked {
+        background-color: $gray-lighter;
+    }
+}
+
 .panel-title .radio {
   margin-left: 20px;
 }
