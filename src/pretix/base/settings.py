@@ -546,8 +546,8 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Ask for VAT ID"),
             help_text=format_lazy(
-                _("Only works if an invoice address is asked for. VAT ID is never required and only requested from "
-                  "business customers in the following countries: {countries}"),
+                "Only works if an invoice address is asked for. VAT ID is never required and only requested from "
+                "business customers in the following countries: {countries}",
                 countries=lazy(lambda *args: ', '.join(sorted(gettext(Country(cc).name) for cc in VAT_ID_COUNTRIES)), str)()
             ),
             widget=forms.CheckboxInput(attrs={'data-checkbox-dependency': '#id_invoice_address_asked'}),
@@ -1911,7 +1911,7 @@ DEFAULTS = {
         'form_kwargs': dict(
             label=_("Attach ticket files"),
             help_text=format_lazy(
-                _("Tickets will never be attached if they're larger than {size} to avoid email delivery problems."),
+                "Tickets will never be attached if they're larger than {size} to avoid email delivery problems.",
                 size='4 MB'
             ),
         )
@@ -2119,12 +2119,13 @@ Your {event} team"""))
             label=_('Attachment for new orders'),
             ext_whitelist=(".pdf",),
             max_size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT,
-            help_text=_('This file will be attached to the first email that we send for every new order. Therefore it will be '
-                        'combined with the "Placed order", "Free order", or "Received order" texts from above. It will be sent '
-                        'to both order contacts and attendees. You can use this e.g. to send your terms of service. Do not use '
-                        'it to send non-public information as this file might be sent before payment is confirmed or the order '
-                        'is approved. To avoid this vital email going to spam, you can only upload PDF files of up to {size} MB.').format(
-                size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT // (1024 * 1024),
+            help_text=format_lazy(
+                'This file will be attached to the first email that we send for every new order. Therefore it will be '
+                'combined with the "Placed order", "Free order", or "Received order" texts from above. It will be sent '
+                'to both order contacts and attendees. You can use this e.g. to send your terms of service. Do not use '
+                'it to send non-public information as this file might be sent before payment is confirmed or the order '
+                'is approved. To avoid this vital email going to spam, you can only upload PDF files of up to {size} MB.',
+                size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT // (1024 * 1024)
             )
         ),
         'serializer_class': UploadedFileField,
