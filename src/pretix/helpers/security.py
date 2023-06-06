@@ -25,6 +25,7 @@ import time
 from django.conf import settings
 from django.contrib.gis.geoip2 import GeoIP2
 from django.core.cache import cache
+from geoip2.errors import AddressNotFoundError
 
 from pretix.helpers.http import get_client_ip
 
@@ -50,7 +51,10 @@ def _get_country(request):
     if not _geoip:
         _geoip = GeoIP2()
 
-    res = _geoip.country(get_client_ip(request))
+    try:
+        res = _geoip.country(get_client_ip(request))
+    except AddressNotFoundError:
+        return None
     return res['country_code']
 
 
