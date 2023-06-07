@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-31 09:02+0000\n"
+"POT-Creation-Date: 2023-06-07 15:41+0000\n"
 "PO-Revision-Date: 2021-08-09 13:10+0000\n"
 "Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -682,40 +682,40 @@ msgstr[0] "Резервирование позиций в вашей корзи�
 msgstr[1] "Резервирование позиций в вашей корзине прекращено."
 msgstr[2] "Резервирование позиций в вашей корзине прекращено."
 
-#: pretix/static/pretixpresale/js/ui/main.js:161
+#: pretix/static/pretixpresale/js/ui/main.js:171
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "от %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:169
+#: pretix/static/pretixpresale/js/ui/main.js:179
 #, fuzzy
 #| msgctxt "widget"
 #| msgid "from %(currency)s %(price)s"
 msgid "You get %(currency)s %(amount)s back"
 msgstr "от %(currency)s %(price)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:185
+#: pretix/static/pretixpresale/js/ui/main.js:195
 msgid "Please enter the amount the organizer can keep."
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:426
+#: pretix/static/pretixpresale/js/ui/main.js:436
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Пожалуйста, введите количество для одного из типов билетов."
 
-#: pretix/static/pretixpresale/js/ui/main.js:462
+#: pretix/static/pretixpresale/js/ui/main.js:472
 #, fuzzy
 #| msgid "Cart expired"
 msgid "required"
 msgstr "Срок действия корзины истёк"
 
-#: pretix/static/pretixpresale/js/ui/main.js:565
-#: pretix/static/pretixpresale/js/ui/main.js:584
+#: pretix/static/pretixpresale/js/ui/main.js:575
+#: pretix/static/pretixpresale/js/ui/main.js:594
 msgid "Time zone:"
 msgstr ""
 
-#: pretix/static/pretixpresale/js/ui/main.js:575
+#: pretix/static/pretixpresale/js/ui/main.js:585
 msgid "Your local time:"
 msgstr ""
 
