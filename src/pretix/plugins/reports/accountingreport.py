@@ -27,6 +27,7 @@ from decimal import Decimal
 
 from django import forms
 from django.db.models import F, Sum
+from django.db.models.functions import Coalesce
 from django.utils.formats import date_format, localize
 from django.utils.html import escape
 from django.utils.timezone import now
@@ -83,8 +84,18 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                         initial=True,
                     ),
                 ),
+                (
+                    "split_subevents",
+                    forms.BooleanField(
+                        label=_("Split event series by date"),
+                        required=False,
+                        initial=False,
+                    ),
+                ),
             ]
         )
+        if not self.is_multievent and not self.event.has_subevents:
+            del ff["split_subevents"]
         return ff
 
     def describe_filters(self, form_data: dict):
@@ -232,9 +243,17 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             ]
         ]
 
+        subevent_values = {}
+        subevent_order_by = {}
+        if form_data.get("split_subevents"):
+            subevent_values = {"subevent_id", "subevent__name", "subevent__date_from"}
+            subevent_order_by = {Coalesce(F("subevent__date_from"), F("order__event__date_from")), Coalesce(F("subevent_id"), F("order__event_id"))}
+
         qs = (
             self._transaction_qs(form_data)
             .order_by(
+                *subevent_order_by,
+                "order__event__date_from",
                 "order__event__slug",
                 F("fee_type").asc(nulls_first=True),
                 F("internal_type").asc(nulls_first=True),
@@ -248,6 +267,8 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                 "tax_rate",
             )
             .values(
+                *subevent_values,
+                "order__event__date_from",
                 "order__event__slug",
                 "order__event__name",
                 "item_id",
@@ -273,15 +294,30 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
         sum_cnt_by_tax_rate = defaultdict(int)
         sum_price_by_tax_rate = defaultdict(Decimal)
         sum_tax_by_tax_rate = defaultdict(Decimal)
+        sum_price_by_event = Decimal("0.00")
+        sum_tax_by_event = Decimal("0.00")
         last_event_group = None
+        last_event_group_head_idx = 0
         for r in qs:
-            if r["order__event__slug"] != last_event_group:
+            if r.get("subevent_id"):
+                e = "{} - {} ({}) [{}]".format(
+                    r["order__event__name"],
+                    r["subevent__name"],
+                    date_format(r["subevent__date_from"]),
+                    r["order__event__slug"]
+                )
+            else:
+                e = "{} [{}]".format(r["order__event__name"], r["order__event__slug"])
+
+            if e != last_event_group:
+                if last_event_group_head_idx > 0 and (self.is_multievent or form_data.get("split_subevents")):
+                    tdata[last_event_group_head_idx][4] = Paragraph(money_filter(sum_price_by_event - sum_tax_by_event, "EUR"), tstyle_bold_right),
+                    tdata[last_event_group_head_idx][5] = Paragraph(money_filter(sum_tax_by_event, "EUR"), tstyle_bold_right),
+                    tdata[last_event_group_head_idx][6] = Paragraph(money_filter(sum_price_by_event, "EUR"), tstyle_bold_right),
                 tdata.append(
                     [
                         Paragraph(
-                            "{} [{}]".format(
-                                r["order__event__name"], r["order__event__slug"]
-                            ),
+                            e,
                             tstyle_bold,
                         ),
                         "",
@@ -293,9 +329,12 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                     ]
                 )
                 tstyledata.append(
-                    ("SPAN", (0, len(tdata) - 1), (-1, len(tdata) - 1)),
+                    ("SPAN", (0, len(tdata) - 1), (3, len(tdata) - 1)),
                 )
-                last_event_group = r["order__event__slug"]
+                last_event_group = e
+                last_event_group_head_idx = len(tdata) - 1
+                sum_price_by_event = Decimal("0.00")
+                sum_tax_by_event = Decimal("0.00")
 
             if r["item_id"]:
                 if r["variation_id"]:
@@ -331,6 +370,14 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             sum_cnt_by_tax_rate[r["tax_rate"]] += r["sum_cont"]
             sum_price_by_tax_rate[r["tax_rate"]] += r["sum_price"]
             sum_tax_by_tax_rate[r["tax_rate"]] += r["sum_tax"]
+            sum_price_by_event += r["sum_price"]
+            sum_tax_by_event += r["sum_tax"]
+
+        if last_event_group_head_idx > 0 and (self.is_multievent or form_data.get("split_subevents")):
+            tdata[last_event_group_head_idx][4] = Paragraph(money_filter(sum_price_by_event - sum_tax_by_event, "EUR"),
+                                                            tstyle_bold_right),
+            tdata[last_event_group_head_idx][5] = Paragraph(money_filter(sum_tax_by_event, "EUR"), tstyle_bold_right),
+            tdata[last_event_group_head_idx][6] = Paragraph(money_filter(sum_price_by_event, "EUR"), tstyle_bold_right),
 
         if len(sum_tax_by_tax_rate) > 1:
             for tax_rate in sorted(sum_tax_by_tax_rate.keys(), reverse=True):
