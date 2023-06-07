@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-05-31 09:01+0000\n"
-"PO-Revision-Date: 2023-06-02 13:44+0000\n"
-"Last-Translator: Hans Fraiponts <fraiponts@gmail.com>\n"
+"PO-Revision-Date: 2023-06-07 15:04+0000\n"
+"Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -478,10 +478,8 @@ msgid "Refund of payment failed"
 msgstr "Terugbetaling mislukt"
 
 #: pretix/api/webhooks.py:261
-#, fuzzy
-#| msgid "Payment confirmation date"
 msgid "Payment confirmed"
-msgstr "Bevestigingsdatum van betaling"
+msgstr "Betaling bevestigd"
 
 #: pretix/api/webhooks.py:265
 msgid "Order approved"
@@ -2213,10 +2211,8 @@ msgid "Invoice address state"
 msgstr "Factuuradres: staat"
 
 #: pretix/base/exporters/orderlist.py:770
-#, fuzzy
-#| msgid "Server Transaction Code"
 msgid "Order transaction data"
-msgstr "Server-transactiecode"
+msgstr "Bestellingsgegevens"
 
 #: pretix/base/exporters/orderlist.py:772
 msgid ""
@@ -2224,6 +2220,10 @@ msgid ""
 "changes to products, prices or tax rates. The information is only accurate "
 "for changes made with pretix versions released after October 2021."
 msgstr ""
+"Download een spreadsheet (Excel of CSV) met alle substantiële aanpassingen "
+"van bestellingen (bv. aanpassingen van producten, prijzen of BTW-tarieven). "
+"Deze informatie is enkel accuraat voor veranderingen doorgevoerd met pretix "
+"versies uitgebracht na oktober 2021."
 
 #: pretix/base/exporters/orderlist.py:788
 #, fuzzy
@@ -2261,22 +2261,16 @@ msgid "Currency"
 msgstr "Munteenheid"
 
 #: pretix/base/exporters/orderlist.py:831
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Transaction date"
-msgstr "Transactiecode"
+msgstr "Transactiedatum"
 
 #: pretix/base/exporters/orderlist.py:832
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Transaction time"
-msgstr "Transactiecode"
+msgstr "Transactietijdstip"
 
 #: pretix/base/exporters/orderlist.py:833
-#, fuzzy
-#| msgid "Order data"
 msgid "Old data"
-msgstr "Besteldatums"
+msgstr "Oude gegevens"
 
 #: pretix/base/exporters/orderlist.py:836 pretix/base/models/items.py:1357
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
@@ -2284,10 +2278,8 @@ msgid "Quantity"
 msgstr "Hoeveelheid"
 
 #: pretix/base/exporters/orderlist.py:843
-#, fuzzy
-#| msgid "Internal reference"
 msgid "Internal fee type"
-msgstr "Interne referentie"
+msgstr "Intern tarieftype"
 
 #: pretix/base/exporters/orderlist.py:845
 #, fuzzy
@@ -29641,10 +29633,8 @@ msgid "Cart expired"
 msgstr "Winkelwagen is verlopen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:37
-#, fuzzy
-#| msgid "Show full location"
 msgid "Show full cart"
-msgstr "Toon volledige locatie"
+msgstr "Toon volledig winkelmandje"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:49
 #: pretix/presale/templates/pretixpresale/event/index.html:78
