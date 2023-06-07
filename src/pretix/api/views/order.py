@@ -661,7 +661,16 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         with language(order.locale, self.request.event.settings.region):
             payment = order.payments.last()
-
+            # OrderCreateSerializer creates at most one payment
+            if payment and payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
+                order.log_action(
+                    'pretix.event.order.payment.confirmed', {
+                        'local_id': self.local_id,
+                        'provider': self.provider,
+                    },
+                    user=request.user if request.user.is_authenticated else None,
+                    auth=request.auth,
+                )
             order_placed.send(self.request.event, order=order)
             if order.status == Order.STATUS_PAID:
                 order_paid.send(self.request.event, order=order)
