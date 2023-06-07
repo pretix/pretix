@@ -130,7 +130,11 @@ var form_handlers = function (el) {
             .toggleClass("btn-checkbox-checked", this.checked)
             .find(".fa").toggleClass("fa-shopping-cart", !this.checked).toggleClass("fa-cart-arrow-down", this.checked);
     });
-    el.find(".btn-checkbox:has([checked]) .fa-shopping-cart").toggleClass("fa-shopping-cart fa-cart-arrow-down")
+    el.find(".btn-checkbox:has([checked])")
+        .addClass("btn-checkbox-checked")
+        .find(".fa-shopping-cart")
+        .removeClass("fa-shopping-cart")
+        .addClass("fa-cart-arrow-down");
 
     el.find("script[data-replace-with-qr]").each(function () {
         var $div = $("<div>");
