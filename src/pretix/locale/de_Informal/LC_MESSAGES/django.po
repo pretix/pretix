@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-07 15:40+0000\n"
-"PO-Revision-Date: 2023-06-05 16:00+0000\n"
+"PO-Revision-Date: 2023-06-07 15:50+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -72,7 +72,7 @@ msgstr "Chinesisch (vereinfacht)"
 
 #: pretix/_base_settings.py:83
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Chinesisch (traditionell)"
 
 #: pretix/_base_settings.py:84
 msgid "Czech"
@@ -7510,14 +7510,7 @@ msgid "New invoice: {number}"
 msgstr "Neue Rechnung: {number}"
 
 #: pretix/base/services/invoices.py:521
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "a new invoice for {event} has been created, see attached.\n"
-#| "\n"
-#| "We are sending this email because you configured us to do so in your "
-#| "event settings."
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -7528,7 +7521,8 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"eine neue Rechnung für {event} wurde erstellt, siehe Anhang.\n"
+"eine neue Rechnung für Bestellung {order} für {event} wurde erstellt, siehe "
+"Anhang.\n"
 "\n"
 "Du erhältst diese E-Mail, da du dies in deinen Veranstaltungs-Einstellungen "
 "angegeben hast."
@@ -9048,14 +9042,6 @@ msgid "Show number of check-ins to customer"
 msgstr "Zeige Anzahl der Check-ins für Kund*innen an"
 
 #: pretix/base/settings.py:1412
-#, fuzzy
-#| msgid ""
-#| "With this option enabled, your customers will be able how many times they "
-#| "entered the event. This is usually not necessary, but might be useful in "
-#| "combination with tickets that are usable a specific number of times, so "
-#| "customers can see how many times they have already been used. Exits or "
-#| "failed scans will not be counted, and the user will not see the different "
-#| "check-in lists."
 msgid ""
 "With this option enabled, your customers will be able to see how many times "
 "they entered the event. This is usually not necessary, but might be useful "
@@ -27018,32 +27004,24 @@ msgid "Payment pending."
 msgstr "Zahlung ausstehend."
 
 #: pretix/plugins/paypal2/signals.py:64
-#, fuzzy
-#| msgid "Order approved."
 msgctxt "paypal"
 msgid "Order approved."
 msgstr "Bestellung freigegeben."
 
 #: pretix/plugins/paypal2/signals.py:65
-#, fuzzy
-#| msgid "Order comment"
 msgctxt "paypal"
 msgid "Order completed."
-msgstr "Bestellkommentar"
+msgstr "Bestellung abgeschlossen."
 
 #: pretix/plugins/paypal2/signals.py:66
-#, fuzzy
-#| msgid "Payment completed."
 msgctxt "paypal"
 msgid "Capture completed."
-msgstr "Zahlung erfolgreich."
+msgstr "Einzug vollständig."
 
 #: pretix/plugins/paypal2/signals.py:67
-#, fuzzy
-#| msgid "Charge pending"
 msgctxt "paypal"
 msgid "Capture pending."
-msgstr "Zahlung ausstehend"
+msgstr "Einzug steht aus."
 
 #: pretix/plugins/paypal2/signals.py:76
 msgid "PayPal reported an event: {}"
@@ -27228,11 +27206,8 @@ msgid "Ignore test mode orders"
 msgstr "Testmodus-Bestellungen ignorieren"
 
 #: pretix/plugins/reports/accountingreport.py:90
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Event series date added"
 msgid "Split event series by date"
-msgstr "Veranstaltungsreihe: Termin erstellt"
+msgstr "Veranstaltungsreihen nach Termin aufteilen"
 
 #: pretix/plugins/reports/accountingreport.py:128
 msgid "End"
@@ -29676,12 +29651,9 @@ msgstr "Füge %(item)s, %(var)s zum Warenkorb hinzu"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:342
 #: pretix/presale/templates/pretixpresale/event/voucher.html:255
 #: pretix/presale/templates/pretixpresale/event/voucher.html:398
-#, fuzzy
-#| msgctxt "subevents"
-#| msgid "Select date"
 msgctxt "checkbox"
 msgid "Select"
-msgstr "Termin auswählen"
+msgstr "Auswählen"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:195
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:329
