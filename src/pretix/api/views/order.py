@@ -665,8 +665,8 @@ class OrderViewSet(viewsets.ModelViewSet):
             if payment and payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
                 order.log_action(
                     'pretix.event.order.payment.confirmed', {
-                        'local_id': self.local_id,
-                        'provider': self.provider,
+                        'local_id': payment.local_id,
+                        'provider': payment.provider,
                     },
                     user=request.user if request.user.is_authenticated else None,
                     auth=request.auth,
