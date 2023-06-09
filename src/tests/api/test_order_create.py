@@ -1807,7 +1807,7 @@ def test_order_create_free(token_client, organizer, event, item, quota, question
     assert p.provider == "free"
     assert p.amount == o.total
     assert p.state == "confirmed"
-    assert o.all_logentries().count() == 2
+    assert o.all_logentries().count() == 3
 
 
 @pytest.mark.django_db
