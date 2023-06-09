@@ -1396,7 +1396,7 @@ class CommentForm(I18nModelForm):
         fields = ['comment']
         widgets = {
             'comment': forms.Textarea(attrs={
-                'rows': 3,
+                'rows': 6,
                 'class': 'helper-width-100',
             }),
         }
