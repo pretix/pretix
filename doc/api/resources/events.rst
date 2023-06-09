@@ -70,6 +70,11 @@ Endpoints
 
     The ``public_url`` field has been added.
 
+.. versionchanged:: 5.0
+
+    The ``date_from_before``, ``date_from_after``, ``date_to_before``, and ``date_to_after`` query parameters have been
+    added.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/
 
    Returns a list of all events within a given organizer the authenticated user/token has access to.
@@ -141,6 +146,10 @@ Endpoints
    :query has_subevents: If set to ``true``/``false``, only events with a matching value of ``has_subevents`` are returned.
    :query is_future: If set to ``true`` (``false``), only events that happen currently or in the future are (not) returned. Event series are never (always) returned.
    :query is_past: If set to ``true`` (``false``), only events that are over are (not) returned. Event series are never (always) returned.
+   :query date_from_after: If set to a date and time, only events that start at or after the given time are returned.
+   :query date_from_before: If set to a date and time, only events that start at or before the given time are returned.
+   :query date_to_after: If set to a date and time, only events that have an end date and end at or after the given time are returned.
+   :query date_to_before: If set to a date and time, only events that have an end date and end at or before the given time are returned.
    :query ends_after: If set to a date and time, only events that happen during of after the given time are returned. Event series are never returned.
    :query string ordering: Manually set the ordering of results. Valid fields to be used are ``date_from`` and
                            ``slug``. Keep in mind that ``date_from`` of event series does not really tell you anything.

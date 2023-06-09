@@ -174,6 +174,38 @@ def test_subevent_list_filter(token_client, organizer, event, subevent):
     assert resp.status_code == 200
     assert resp.data['count'] == 0
 
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/subevents/?date_from_after=2017-12-27T10:00:00Z'.format(
+            organizer.slug, event.slug
+        )
+    )
+    assert resp.status_code == 200
+    assert resp.data['count'] == 1
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/subevents/?date_from_after=2017-12-27T10:00:01Z'.format(
+            organizer.slug, event.slug
+        )
+    )
+    assert resp.status_code == 200
+    assert resp.data['count'] == 0
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/subevents/?date_from_before=2017-12-27T10:00:00Z'.format(
+            organizer.slug, event.slug
+        )
+    )
+    assert resp.status_code == 200
+    assert resp.data['count'] == 1
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/subevents/?date_from_before=2017-12-27T09:59:00Z'.format(
+            organizer.slug, event.slug
+        )
+    )
+    assert resp.status_code == 200
+    assert resp.data['count'] == 0
+
 
 @pytest.mark.django_db
 def test_subevent_create(team, token_client, organizer, event, subevent, meta_prop, item):
