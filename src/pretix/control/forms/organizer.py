@@ -790,6 +790,7 @@ class ReusableMediumCreateForm(ReusableMediumUpdateForm):
 
 class CustomerUpdateForm(forms.ModelForm):
     error_messages = {
+        'duplicate_identifier': _("An account with this customer ID is already registered."),
         'duplicate': _("An account with this email address is already registered."),
     }
 
@@ -824,6 +825,7 @@ class CustomerUpdateForm(forms.ModelForm):
 
     def clean(self):
         email = self.cleaned_data.get('email')
+        identifier = self.cleaned_data.get('identifier')
 
         if email is not None:
             try:
@@ -834,6 +836,17 @@ class CustomerUpdateForm(forms.ModelForm):
                 raise forms.ValidationError(
                     self.error_messages['duplicate'],
                     code='duplicate',
+                )
+
+        if identifier is not None:
+            try:
+                self.instance.organizer.customers.exclude(pk=self.instance.pk).get(identifier=identifier)
+            except Customer.DoesNotExist:
+                pass
+            else:
+                raise forms.ValidationError(
+                    self.error_messages['duplicate_identifier'],
+                    code='duplicate_identifier',
                 )
 
         return self.cleaned_data
