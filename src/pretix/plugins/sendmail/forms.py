@@ -311,7 +311,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
 
         fields = ['subject', 'template', 'attach_ical',
                   'send_date', 'send_offset_days', 'send_offset_time',
-                  'include_pending', 'all_products', 'limit_products',
+                  'all_products', 'limit_products', 'restrict_to_status',
                   'send_to', 'enabled']
 
         field_classes = {
@@ -374,6 +374,24 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
 
         self._set_field_placeholders('subject', ['event', 'order'])
         self._set_field_placeholders('template', ['event', 'order'])
+
+        choices = [(e, l) for e, l in Order.STATUS_CHOICE if e != 'n']
+        choices.insert(0, ('valid_if_pending', _('payment pending but already confirmed')))
+        choices.insert(0, ('na', _('payment pending (except unapproved or already confirmed)')))
+        choices.insert(0, ('pa', _('approval pending')))
+        if not self.event.settings.get('payment_term_expire_automatically', as_type=bool):
+            choices.append(
+                ('overdue', _('pending with payment overdue'))
+            )
+        self.fields['restrict_to_status'] = forms.MultipleChoiceField(
+            label=pgettext_lazy('sendmail_from', 'Restrict to orders with status'),
+            widget=forms.CheckboxSelectMultiple(
+                attrs={'class': 'scrolling-multiple-choice no-search'}
+            ),
+            choices=choices
+        )
+        if not self.initial.get('restrict_to_status'):
+            self.initial['restrict_to_status'] = ['p', 'na', 'valid_if_pending']
 
     def clean(self):
         d = super().clean()

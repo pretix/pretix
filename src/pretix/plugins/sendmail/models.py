@@ -33,7 +33,7 @@ from i18nfield.fields import I18nCharField, I18nTextField
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Event, InvoiceAddress, Item, Order, OrderPosition, SubEvent,
+    Event, InvoiceAddress, Item, Order, OrderPosition, SubEvent, fields,
 )
 from pretix.base.models.base import LoggingMixin
 from pretix.base.services.mail import SendMailException
@@ -204,10 +204,9 @@ class Rule(models.Model, LoggingMixin):
     all_products = models.BooleanField(default=True, verbose_name=_('All products'))
     limit_products = models.ManyToManyField(Item, blank=True, verbose_name=_('Limit products'))
 
-    include_pending = models.BooleanField(
-        default=False,
-        verbose_name=_('Include pending orders'),
-        help_text=_('By default, only paid orders will receive the email')
+    restrict_to_status = fields.MultiStringField(
+        verbose_name=_("Restrict to orders with status"),
+        default=['p', 'na', 'valid_if_pending'],
     )
 
     attach_ical = models.BooleanField(
