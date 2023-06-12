@@ -45,7 +45,7 @@ def npm_install():
 
 class CustomBuild(build):
     def run(self):
-        if "pretix" not in os.listdir("."):
+        if "src" not in os.listdir(".") or "pretix" not in os.listdir("src"):
             # Only run this command on the pretix module, not on other modules even if it's registered globally
             # in some cases
             return build.run(self)
@@ -72,7 +72,7 @@ class CustomBuild(build):
 
 class CustomBuildExt(build_ext):
     def run(self):
-        if "pretix" not in os.listdir("."):
+        if "src" not in os.listdir(".") or "pretix" not in os.listdir("src"):
             # Only run this command on the pretix module, not on other modules even if it's registered globally
             # in some cases
             return build_ext.run(self)
