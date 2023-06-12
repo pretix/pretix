@@ -77,6 +77,7 @@ dependencies = [
   "PyJWT==2.6.*",
   "phonenumberslite==8.13.*",
   "Pillow==9.5.*",
+  "pretix-plugin-build",
   "protobuf==4.23.*",
   "psycopg2-binary",
   "pycountry",
