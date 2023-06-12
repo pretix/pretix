@@ -29,7 +29,6 @@ sys.path.append(str(Path.cwd() / 'src'))
 
 
 def _CustomBuild(*args, **kwargs):
-    print(sys.path)
     from pretix._build import CustomBuild
     return CustomBuild(*args, **kwargs)
 
