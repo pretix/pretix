@@ -48,6 +48,7 @@ class CustomBuild(build):
         if "pretix" not in os.listdir("."):
             # Only run this command on the pretix module, not on other modules even if it's registered globally
             # in some cases
+            print("pretix not in", os.listdir("."))
             return build.run(self)
         if "PRETIX_DOCKER_BUILD" in os.environ:
             return  # this is a hack to allow calling this file early in our docker build to make use of caching
@@ -75,6 +76,7 @@ class CustomBuildExt(build_ext):
         if "pretix" not in os.listdir("."):
             # Only run this command on the pretix module, not on other modules even if it's registered globally
             # in some cases
+            print("pretix not in", os.listdir("."))
             return build_ext.run(self)
         if "PRETIX_DOCKER_BUILD" in os.environ:
             return  # this is a hack to allow calling this file early in our docker build to make use of caching
