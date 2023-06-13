@@ -3586,8 +3586,10 @@ class SettingsSandbox:
     def __delattr__(self, key: str) -> None:
         del self._event.settings[self._convert_key(key)]
 
-    def get(self, key: str, default: Any = None, as_type: type = str):
-        return self._event.settings.get(self._convert_key(key), default=default, as_type=as_type)
+    def get(self, key: str, default: Any = None, as_type: type = str, binary_file: bool = False):
+        return self._event.settings.get(
+            self._convert_key(key), default=default, as_type=as_type, binary_file=binary_file
+        )
 
     def set(self, key: str, value: Any):
         self._event.settings.set(self._convert_key(key), value)
