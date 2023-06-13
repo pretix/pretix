@@ -30,8 +30,8 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-from datetime import timezone
 import secrets
+from datetime import timezone
 
 import dateutil.parser
 from django.contrib import messages
@@ -508,9 +508,9 @@ class CheckInListSimulator(EventPermissionRequiredMixin, FormView):
         }
 
     def get_context_data(self, **kwargs):
-
         return super().get_context_data(
             **kwargs,
+            checkinlist=self.list,
             result=self.result,
             reason_labels=dict(Checkin.REASONS),
         )

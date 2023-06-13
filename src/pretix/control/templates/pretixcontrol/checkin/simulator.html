@@ -7,7 +7,16 @@
 {% load compress %}
 {% block title %}{% trans "Check-in simulator" %}{% endblock %}
 {% block inside %}
-    <h1>{% blocktrans with name=checkinlist.name %}Check-in list: {{ name }}{% endblocktrans %}</h1>
+    <h1>
+        {% blocktrans with name=checkinlist.name %}Check-in list: {{ name }}{% endblocktrans %}
+        {% if 'can_change_event_settings' in request.eventpermset %}
+            <a href="{% url "control:event.orders.checkinlists.edit" event=request.event.slug organizer=request.event.organizer.slug list=checkinlist.pk %}"
+               class="btn btn-default">
+                <span class="fa fa-wrench"></span>
+                {% trans "Edit list configuration" %}
+            </a>
+        {% endif %}
+    </h1>
     <h2>{% trans "Check-in simulator" %}</h2>
     <p>
         {% blocktrans trimmed %}
