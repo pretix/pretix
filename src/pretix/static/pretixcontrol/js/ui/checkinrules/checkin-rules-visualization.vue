@@ -106,6 +106,9 @@ export default {
             let [new_children, new_tails] = _add_to_graph(operand)
             for (let new_child of new_tails) {
               graph.nodes_by_id[new_child].children.push(...children)
+              for (let c of children) {
+                graph.nodes_by_id[c].parent = graph.nodes_by_id[new_child]
+              }
             }
             if (tails === null) {
               tails = new_tails

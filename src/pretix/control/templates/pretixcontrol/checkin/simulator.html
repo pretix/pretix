@@ -1,0 +1,140 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load escapejson %}
+{% load getitem %}
+{% load static %}
+{% load compress %}
+{% block title %}{% trans "Check-in simulator" %}{% endblock %}
+{% block inside %}
+    <h1>
+        {% blocktrans with name=checkinlist.name %}Check-in list: {{ name }}{% endblocktrans %}
+        {% if 'can_change_event_settings' in request.eventpermset %}
+            <a href="{% url "control:event.orders.checkinlists.edit" event=request.event.slug organizer=request.event.organizer.slug list=checkinlist.pk %}"
+               class="btn btn-default">
+                <span class="fa fa-wrench"></span>
+                {% trans "Edit list configuration" %}
+            </a>
+        {% endif %}
+    </h1>
+    <h2>{% trans "Check-in simulator" %}</h2>
+    <p>
+        {% blocktrans trimmed %}
+            This tool allows you to validate your check-in configuration. You can enter a barcode plus some
+            optional parameters and we will show you the response of the check-in list. No actual check-in will
+            be performed and no modification to the system state is made.
+        {% endblocktrans %}
+    </p>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        {% bootstrap_form_errors form %}
+        {% bootstrap_field form.raw_barcode layout="control" %}
+        {% bootstrap_field form.datetime layout="control" %}
+        {% bootstrap_field form.checkin_type layout="control" %}
+        {% bootstrap_field form.ignore_unpaid layout="control" %}
+        {% bootstrap_field form.questions_supported layout="control" %}
+        <div class="row">
+            <div class="col-md-9 col-md-offset-3">
+                <button type="submit" class="btn btn-primary">
+                    {% trans "Simulate" %}
+                </button>
+            </div>
+        </div>
+    </form>
+    {% if result %}
+        <hr>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                <div class="panel-title">{% trans "Result" %}</div>
+            </div>
+            <div class="panel-body checkin-sim-result checkin-sim-result-status-{{ result.status }} checkin-sim-result-reason-{{ result.reason }}">
+                {% if result.status == "ok" %}
+                    <span class="fa fa-check-circle"></span>
+                {% elif result.status == "incomplete" %}
+                    <span class="fa fa-question-circle"></span>
+                {% elif result.status == "error" %}
+                    {% if result.reason == "already_redeemed" %}
+                        <span class="fa fa-warning"></span>
+                    {% else %}
+                        <span class="fa fa-exclamation-circle"></span>
+                    {% endif %}
+                {% endif %}
+            </div>
+            <div class="panel-body">
+                {% if result.status == "ok" %}
+                    <h3 class="nomargin-top">{% trans "Valid check-in" %}</h3>
+                {% elif result.status == "incomplete" %}
+                    <h3 class="nomargin-top">{% trans "Additional information required" %}</h3>
+                    <p>
+                        {% trans "The following questions must be answered before check-in can be completed:" %}
+                    </p>
+                    <ul>
+                        {% for q in result.questions %}
+                            <li>
+                                <a href="{% url "control:event.items.questions.show" organizer=request.event.organizer.slug event=request.event.slug question=q.id %}">
+                                    {{ q.question }}
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% elif result.status == "error" %}
+                    <h3 class="nomargin-top">{{ reason_labels|getitem:result.reason }}</h3>
+                    {% if result.reason_explanation %}
+                        <p>{{ result.reason_explanation }}</p>
+                    {% endif %}
+                {% endif %}
+                {% if result.position %}
+                    {% if result.position.require_attention %}
+                        <p>
+                            <span class="fa fa-info-circle fa-fw"></span> {% trans "Special attention required" %}
+                        </p>
+                    {% endif %}
+                    <p>
+                        <span class="fa fa-ticket fa-fw"></span>
+                        <a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=result.position.order %}">
+                            {{ result.position.order }}</a>-{{ result.position.positionid }}
+                    </p>
+                    {% if result.position.attendee_name %}
+                        <p>
+                            <span class="fa fa-user fa-fw"></span>
+                            {{ result.position.attendee_name }}
+                        </p>
+                    {% endif %}
+                {% endif %}
+                {% if result.rule_graph %}
+                    <div id="rules-editor" class="form-inline">
+                        <div role="tabpanel" class="tab-pane" id="rules-viz">
+                            <checkin-rules-visualization></checkin-rules-visualization>
+                        </div>
+                        <textarea id="id_rules" class="sr-only">{{ result.rule_graph|attr_escapejson_dumps }}</textarea>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+
+
+    {% if DEBUG %}
+        <script type="text/javascript" src="{% static "vuejs/vue.js" %}"></script>
+    {% else %}
+        <script type="text/javascript" src="{% static "vuejs/vue.min.js" %}"></script>
+    {% endif %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "d3/d3.v6.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-color.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-dispatch.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-ease.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-interpolate.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-selection.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-timer.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-transition.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-drag.v2.js" %}"></script>
+        <script type="text/javascript" src="{% static "d3/d3-zoom.v2.js" %}"></script>
+    {% endcompress %}
+    {% compress js %}
+        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/checkinrules/jsonlogic-boolalg.js" %}"></script>
+        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/viz-node.vue' %}"></script>
+        <script type="text/vue" src="{% static 'pretixcontrol/js/ui/checkinrules/checkin-rules-visualization.vue' %}"></script>
+        <script type="text/javascript" src="{% static "pretixcontrol/js/ui/checkinrules.js" %}"></script>
+    {% endcompress %}
+{% endblock %}
