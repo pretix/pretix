@@ -850,6 +850,8 @@ class TransactionListExporter(ListExporter):
             _('Tax rule ID'),
             _('Tax rule'),
             _('Tax value'),
+            _('Gross total'),
+            _('Tax total'),
         ]
 
         if form_data.get('_format') == 'xlsx':
@@ -901,6 +903,8 @@ class TransactionListExporter(ListExporter):
                 t.tax_rule_id or '',
                 str(t.tax_rule.internal_name or t.tax_rule.name) if t.tax_rule_id else '',
                 t.tax_value,
+                t.price * t.count,
+                t.tax_value * t.count,
             ]
 
             if form_data.get('_format') == 'xlsx':
