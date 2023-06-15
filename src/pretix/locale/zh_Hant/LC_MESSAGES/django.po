@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-07 15:40+0000\n"
-"PO-Revision-Date: 2023-06-15 08:57+0000\n"
+"PO-Revision-Date: 2023-06-15 11:21+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -15798,23 +15798,23 @@ msgstr "使用自訂 SMTP 伺服器"
 msgid ""
 "For full customization, you can configure your own SMTP server that will be "
 "used for email sending."
-msgstr ""
+msgstr "要完全自定，你可以設定自己的SMTP伺服器，該伺服器將用於電子郵件傳送。"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:110
 msgid "Reset to organizer settings"
-msgstr ""
+msgstr "重設為召集人設定"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:29
 msgid "This is the SPF record we found on your domain:"
-msgstr ""
+msgstr "這是我們在你的網域中找到的SPF記錄："
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:33
 msgid "To fix this, include the following part before the last word:"
-msgstr ""
+msgstr "要解決此問題，請在最後文字敘述前包含以下部分："
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:38
 msgid "Your new SPF record could look like this:"
-msgstr ""
+msgstr "你的新 SPF 記錄可能如下所示："
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:43
 msgid ""
