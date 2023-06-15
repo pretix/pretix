@@ -118,13 +118,13 @@ class ScheduledMail(models.Model):
                 Exists(OrderPosition.objects.filter(order=OuterRef('pk'), item_id__in=limit_products))
             )
 
-        if self.rule.include_pending:
-            status_q = Q(status__in=[Order.STATUS_PAID, Order.STATUS_PENDING])
-        else:
-            status_q = Q(
-                Q(status=Order.STATUS_PAID) |
-                Q(status=Order.STATUS_PENDING, valid_if_pending=True)
-            )
+        status_q = Q(status__in=self.rule.restrict_to_status)
+        if 'pa' in self.rule.restrict_to_status:
+            status_q |= Q(status=Order.STATUS_PENDING, require_approval=True)
+        if 'na' in self.rule.restrict_to_status:
+            status_q |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=False)
+        if 'valid_if_pending' in self.rule.restrict_to_status:
+            status_q |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=True)
 
         if self.last_successful_order_id:
             orders = orders.filter(
@@ -133,7 +133,6 @@ class ScheduledMail(models.Model):
 
         orders = orders.filter(
             status_q,
-            require_approval=False,
         ).order_by('pk').select_related('invoice_address').prefetch_related('positions')
 
         send_to_orders = self.rule.send_to in (Rule.CUSTOMERS, Rule.BOTH)
