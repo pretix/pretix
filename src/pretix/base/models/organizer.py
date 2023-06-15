@@ -35,7 +35,7 @@
 import string
 from datetime import date, datetime, time
 
-import pytz
+import pytz_deprecation_shim
 from django.conf import settings
 from django.core.mail import get_connection
 from django.core.validators import MinLengthValidator, RegexValidator
@@ -102,6 +102,7 @@ class Organizer(LoggedModel):
         is_new = not self.pk
         obj = super().save(*args, **kwargs)
         if is_new:
+            kwargs.pop('update_fields', None)  # does not make sense here
             self.set_defaults()
         else:
             self.get_cache().clear()
@@ -140,7 +141,7 @@ class Organizer(LoggedModel):
 
     @property
     def timezone(self):
-        return pytz.timezone(self.settings.timezone)
+        return pytz_deprecation_shim.timezone(self.settings.timezone)
 
     @cached_property
     def all_logentries_link(self):

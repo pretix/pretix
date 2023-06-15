@@ -60,8 +60,7 @@ from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views import View
 from django.views.generic import (
-    CreateView, DeleteView, DetailView, FormView, ListView, TemplateView,
-    UpdateView,
+    CreateView, DetailView, FormView, ListView, TemplateView, UpdateView,
 )
 
 from pretix.api.models import ApiCall, WebHook
@@ -1184,7 +1183,7 @@ class DeviceRevokeView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
 
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
-        if not self.object.api_token:
+        if self.object.revoked:
             messages.success(request, _('This device currently does not have access.'))
             return redirect(reverse('control:organizer.devices', kwargs={
                 'organizer': self.request.organizer.slug,
@@ -1775,7 +1774,7 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
         instance = self.scheduled or ScheduledOrganizerExport(
             organizer=self.request.organizer,
             owner=self.request.user,
-            timezone=get_current_timezone().zone,
+            timezone=str(get_current_timezone()),
         )
         if not self.scheduled:
             initial = {
@@ -1811,7 +1810,7 @@ class ExportView(OrganizerPermissionRequiredMixin, ExportMixin, ListView):
         return ctx
 
 
-class DeleteScheduledExportView(OrganizerPermissionRequiredMixin, ExportMixin, DeleteView):
+class DeleteScheduledExportView(OrganizerPermissionRequiredMixin, ExportMixin, CompatDeleteView):
     template_name = 'pretixcontrol/organizers/export_delete.html'
     context_object_name = 'export'
 

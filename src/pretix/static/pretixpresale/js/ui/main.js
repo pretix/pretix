@@ -125,6 +125,16 @@ var form_handlers = function (el) {
         controls.value = Math.max(controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (currentValue || 0) + step));
         controls.dispatchEvent(new Event("change"));
     });
+    el.find(".btn-checkbox input").on("change", function (e) {
+        $(this).closest(".btn-checkbox")
+            .toggleClass("btn-checkbox-checked", this.checked)
+            .find(".fa").toggleClass("fa-shopping-cart", !this.checked).toggleClass("fa-cart-arrow-down", this.checked);
+    });
+    el.find(".btn-checkbox:has([checked])")
+        .addClass("btn-checkbox-checked")
+        .find(".fa-shopping-cart")
+        .removeClass("fa-shopping-cart")
+        .addClass("fa-cart-arrow-down");
 
     el.find("script[data-replace-with-qr]").each(function () {
         var $div = $("<div>");

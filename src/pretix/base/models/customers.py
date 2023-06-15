@@ -121,14 +121,23 @@ class Customer(LoggedModel):
         if self.email:
             self.email = self.email.lower()
         if 'update_fields' in kwargs and 'last_modified' not in kwargs['update_fields']:
-            kwargs['update_fields'] = list(kwargs['update_fields']) + ['last_modified']
+            kwargs['update_fields'] = {'last_modified'}.union(kwargs['update_fields'])
         if not self.identifier:
             self.assign_identifier()
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'identifier'}.union(kwargs['update_fields'])
         if self.name_parts:
-            self.name_cached = self.name
+            name = self.name
+            if self.name_cached != name:
+                self.name_cached = name
+                if 'update_fields' in kwargs:
+                    kwargs['update_fields'] = {'name_cached'}.union(kwargs['update_fields'])
         else:
-            self.name_cached = ""
-            self.name_parts = {}
+            if self.name_cached != "" or self.name_parts != {}:
+                self.name_cached = ""
+                self.name_parts = {}
+                if 'update_fields' in kwargs:
+                    kwargs['update_fields'] = {'name_cached', 'name_parts'}.union(kwargs['update_fields'])
         super().save(**kwargs)
 
     def anonymize(self):

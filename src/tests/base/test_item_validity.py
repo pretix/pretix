@@ -20,17 +20,17 @@
 # <https://www.gnu.org/licenses/>.
 #
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 import pytest
-import pytz
 
 from pretix.base.models import Item
 
-tz = pytz.timezone("Europe/Berlin")
+tz = ZoneInfo("Europe/Berlin")
 
 
-def dt(*args, is_dst=None, **kwargs):
-    return tz.localize(datetime(*args, **kwargs), is_dst=is_dst)
+def dt(*args, **kwargs):
+    return datetime(*args, **kwargs, tzinfo=tz)
 
 
 @pytest.mark.parametrize("minutes,hours,days,months,start,expected_end", [
@@ -62,7 +62,7 @@ def dt(*args, is_dst=None, **kwargs):
     (30, 2, 1, 0, dt(2023, 3, 25, 10, 30, 0), dt(2023, 3, 26, 3, 29, 59)),
 
     # Day + hour with ambiguous end time during DST change
-    (30, 2, 1, 0, dt(2023, 10, 28, 10, 30, 0), dt(2023, 10, 29, 2, 29, 59, is_dst=True)),
+    (30, 2, 1, 0, dt(2023, 10, 28, 10, 30, 0), dt(2023, 10, 29, 2, 29, 59, fold=1)),
 
     # Month with short month following
     (0, 0, 0, 1, dt(2023, 1, 31, 10, 30, 0), dt(2023, 2, 28, 23, 59, 59)),

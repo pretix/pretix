@@ -722,6 +722,8 @@ def can_generate_invoice(event, order, ignore_payments=False):
             )
         ) and (
             invoice_qualified(order)
+        ) and (
+            order.status in (Order.STATUS_PENDING, Order.STATUS_PAID)
         )
     )
     if not ignore_payments:

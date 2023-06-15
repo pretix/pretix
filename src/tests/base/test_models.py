@@ -39,7 +39,6 @@ from datetime import date, timedelta
 from decimal import Decimal
 
 import pytest
-import pytz
 from dateutil.tz import tzoffset
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -1204,13 +1203,13 @@ class OrderTestCase(BaseQuotaTestCase):
     @classscope(attr='o')
     def test_payment_term_last_relative(self):
         self.event.settings.set('payment_term_last', date(2017, 5, 3))
-        assert self.order.payment_term_last == datetime.datetime(2017, 5, 3, 23, 59, 59, tzinfo=pytz.UTC)
-        self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=pytz.UTC)
+        assert self.order.payment_term_last == datetime.datetime(2017, 5, 3, 23, 59, 59, tzinfo=datetime.timezone.utc)
+        self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=datetime.timezone.utc)
         self.event.save()
         self.event.settings.set('payment_term_last', RelativeDateWrapper(
             RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
         ))
-        assert self.order.payment_term_last == datetime.datetime(2017, 5, 1, 23, 59, 59, tzinfo=pytz.UTC)
+        assert self.order.payment_term_last == datetime.datetime(2017, 5, 1, 23, 59, 59, tzinfo=datetime.timezone.utc)
 
     @classscope(attr='o')
     def test_payment_term_last_subevent(self):
@@ -1235,14 +1234,14 @@ class OrderTestCase(BaseQuotaTestCase):
 
     @classscope(attr='o')
     def test_ticket_download_date_relative(self):
-        self.event.settings.set('ticket_download_date', datetime.datetime(2017, 5, 3, 12, 59, 59, tzinfo=pytz.UTC))
-        assert self.order.ticket_download_date == datetime.datetime(2017, 5, 3, 12, 59, 59, tzinfo=pytz.UTC)
-        self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=pytz.UTC)
+        self.event.settings.set('ticket_download_date', datetime.datetime(2017, 5, 3, 12, 59, 59, tzinfo=datetime.timezone.utc))
+        assert self.order.ticket_download_date == datetime.datetime(2017, 5, 3, 12, 59, 59, tzinfo=datetime.timezone.utc)
+        self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=datetime.timezone.utc)
         self.event.save()
         self.event.settings.set('ticket_download_date', RelativeDateWrapper(
             RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
         ))
-        assert self.order.ticket_download_date == datetime.datetime(2017, 5, 1, 12, 0, 0, tzinfo=pytz.UTC)
+        assert self.order.ticket_download_date == datetime.datetime(2017, 5, 1, 12, 0, 0, tzinfo=datetime.timezone.utc)
 
     @classscope(attr='o')
     def test_ticket_download_date_subevent(self):
@@ -2150,7 +2149,7 @@ class EventTest(TestCase):
 
     @classscope(attr='organizer')
     def test_presale_has_ended(self):
-        event = Event(
+        event = Event.objects.create(
             organizer=self.organizer, name='Download', slug='download',
             date_from=now()
         )
@@ -2907,15 +2906,15 @@ class ScheduledExportTestCase(TestCase):
 
         with freeze_time("2023-01-18 15:08:00+01:00"):
             s.compute_next_run()
-            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 1, 19, 6, 30, 0))
+            assert s.schedule_next_run == datetime.datetime(2023, 1, 19, 6, 30, 0, tzinfo=self.event.timezone)
 
         with freeze_time("2023-01-19 06:28:00+01:00"):
             s.compute_next_run()
-            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 1, 19, 6, 30, 0))
+            assert s.schedule_next_run == datetime.datetime(2023, 1, 19, 6, 30, 0, tzinfo=self.event.timezone)
 
         with freeze_time("2023-01-19 06:30:00+01:00"):
             s.compute_next_run()
-            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 1, 24, 6, 30, 0))
+            assert s.schedule_next_run == datetime.datetime(2023, 1, 24, 6, 30, 0, tzinfo=self.event.timezone)
 
         with freeze_time("2024-01-18 15:08:00+01:00"):
             s.compute_next_run()
@@ -2928,10 +2927,10 @@ class ScheduledExportTestCase(TestCase):
         s.schedule_rrule_time = datetime.time(2, 30, 0)
         with freeze_time("2023-03-25 18:00:00+01:00"):
             s.compute_next_run()
-            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 3, 26, 3, 30, 0))
+            assert s.schedule_next_run == datetime.datetime(2023, 3, 26, 3, 30, 0, tzinfo=self.event.timezone)
         with freeze_time("2023-03-26 18:00:00+01:00"):
             s.compute_next_run()
-            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 3, 27, 2, 30, 0))
+            assert s.schedule_next_run == datetime.datetime(2023, 3, 27, 2, 30, 0, tzinfo=self.event.timezone)
         with freeze_time("2023-10-28 18:00:00+01:00"):
             s.compute_next_run()
-            assert s.schedule_next_run == self.event.timezone.localize(datetime.datetime(2023, 10, 29, 2, 30, 0, fold=0))
+            assert s.schedule_next_run == datetime.datetime(2023, 10, 29, 2, 30, 0, fold=0, tzinfo=self.event.timezone)

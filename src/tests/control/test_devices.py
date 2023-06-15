@@ -111,6 +111,17 @@ def test_revoke_device(event, admin_user, admin_team, device, client):
 
 
 @pytest.mark.django_db
+def test_revoke_device_before_initialization(event, admin_user, admin_team, device, client):
+    client.login(email='dummy@dummy.dummy', password='dummy')
+    device.save()
+
+    client.get('/control/organizer/dummy/device/{}/revoke'.format(device.pk))
+    client.post('/control/organizer/dummy/device/{}/revoke'.format(device.pk), {}, follow=True)
+    device.refresh_from_db()
+    assert device.revoked
+
+
+@pytest.mark.django_db
 def test_bulk_update_device(event, admin_user, admin_team, device, client):
     client.login(email='dummy@dummy.dummy', password='dummy')
     client.post('/control/organizer/dummy/device/bulk_edit', {

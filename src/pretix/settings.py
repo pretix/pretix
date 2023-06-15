@@ -110,18 +110,13 @@ PRETIX_AUTH_BACKENDS = config.get('pretix', 'auth_backends', fallback='pretix.ba
 db_backend = config.get('database', 'backend', fallback='sqlite3')
 if db_backend == 'postgresql_psycopg2':
     db_backend = 'postgresql'
-DATABASE_IS_GALERA = config.getboolean('database', 'galera', fallback=False)
-if DATABASE_IS_GALERA and 'mysql' in db_backend:
-    db_options = {
-        'init_command': 'SET SESSION wsrep_sync_wait = 1;'
-    }
-else:
-    db_options = {}
+elif 'mysql' in db_backend:
+    print("pretix does no longer support running on MySQL/MariaDB")
+    sys.exit(1)
 
 DATABASE_ADVISORY_LOCK_INDEX = config.getint('database', 'advisory_lock_index', fallback=0)
 
-if 'mysql' in db_backend:
-    db_options['charset'] = 'utf8mb4'
+db_options = {}
 
 DATABASES = {
     'default': {
@@ -134,10 +129,7 @@ DATABASES = {
         'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
         'CONN_HEALTH_CHECKS': db_backend != 'sqlite3',  # Will only be used from Django 4.1 onwards
         'OPTIONS': db_options,
-        'TEST': {
-            'CHARSET': 'utf8mb4',
-            'COLLATION': 'utf8mb4_unicode_ci',
-        } if 'mysql' in db_backend else {}
+        'TEST': {}
     }
 }
 DATABASE_REPLICA = 'default'
@@ -152,10 +144,7 @@ if config.has_section('replica'):
         'PORT': config.get('replica', 'port', fallback=DATABASES['default']['PORT']),
         'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
         'OPTIONS': db_options,
-        'TEST': {
-            'CHARSET': 'utf8mb4',
-            'COLLATION': 'utf8mb4_unicode_ci',
-        } if 'mysql' in db_backend else {}
+        'TEST': {}
     }
     DATABASE_ROUTERS = ['pretix.helpers.database.ReplicaRouter']
 
@@ -176,7 +165,7 @@ SITE_URL = config.get('pretix', 'url', fallback='http://localhost:8000')
 if SITE_URL.endswith('/'):
     SITE_URL = SITE_URL[:-1]
 
-CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).hostname]
+CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).scheme + '://' + urlparse(SITE_URL).hostname]
 
 TRUST_X_FORWARDED_FOR = config.get('pretix', 'trust_x_forwarded_for', fallback=False)
 USE_X_FORWARDED_HOST = config.get('pretix', 'trust_x_forwarded_host', fallback=False)
@@ -640,8 +629,8 @@ CELERY_TASK_ROUTES = ([
 BOOTSTRAP3 = {
     'success_css_class': '',
     'field_renderers': {
-        'default': 'bootstrap3.renderers.FieldRenderer',
-        'inline': 'bootstrap3.renderers.InlineFieldRenderer',
+        'default': 'pretix.base.forms.renderers.FieldRenderer',
+        'inline': 'pretix.base.forms.renderers.InlineFieldRenderer',
         'control': 'pretix.control.forms.renderers.ControlFieldRenderer',
         'bulkedit': 'pretix.control.forms.renderers.BulkEditFieldRenderer',
         'bulkedit_inline': 'pretix.control.forms.renderers.InlineBulkEditFieldRenderer',

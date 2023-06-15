@@ -24,7 +24,7 @@ Django, for theoretically very valid reasons, creates migrations for *every sing
 we change on a model. Even the `help_text`! This makes sense, as we don't know if any
 database backend unknown to us might actually use this information for its database schema.
 
-However, pretix only supports PostgreSQL, MySQL, MariaDB and SQLite and we can be pretty
+However, pretix only supports PostgreSQL and SQLite and we can be pretty
 certain that some changes to models will never require a change to the database. In this case,
 not creating a migration for certain changes will save us some performance while applying them
 *and* allow for a cleaner git history. Win-win!

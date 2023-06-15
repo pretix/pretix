@@ -716,6 +716,12 @@ table td > .checkbox input[type="checkbox"] {
         stroke: $brand-primary;
       }
     }
+    .node-false {
+      stroke: $brand-danger;
+    }
+    .node-true {
+      stroke: $brand-success;
+    }
     .edge {
       stroke: $gray-light;
       stroke-width: 2px;
@@ -723,6 +729,9 @@ table td > .checkbox input[type="checkbox"] {
     }
     .check {
       fill: $brand-success;
+    }
+    .error {
+      fill: $brand-danger;
     }
     .text {
       font-size: 12px;
@@ -739,6 +748,10 @@ table td > .checkbox input[type="checkbox"] {
     position: absolute;
     top: 10px;
     right: 10px;
+    opacity: 0;
+  }
+  &:hover .tools {
+    opacity: 1;
   }
 
   &.maximized {

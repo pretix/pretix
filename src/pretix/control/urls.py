@@ -33,8 +33,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from django.conf.urls import re_path
-from django.urls import include
+from django.urls import include, re_path
 from django.views.generic.base import RedirectView
 
 from pretix.control.views import (
@@ -430,6 +429,7 @@ urlpatterns = [
         re_path(r'^checkinlists/add$', checkin.CheckinListCreate.as_view(), name='event.orders.checkinlists.add'),
         re_path(r'^checkinlists/select2$', typeahead.checkinlist_select2, name='event.orders.checkinlists.select2'),
         re_path(r'^checkinlists/(?P<list>\d+)/$', checkin.CheckInListShow.as_view(), name='event.orders.checkinlists.show'),
+        re_path(r'^checkinlists/(?P<list>\d+)/simulator$', checkin.CheckInListSimulator.as_view(), name='event.orders.checkinlists.simulator'),
         re_path(r'^checkinlists/(?P<list>\d+)/bulk_action$', checkin.CheckInListBulkActionView.as_view(), name='event.orders.checkinlists.bulk_action'),
         re_path(r'^checkinlists/(?P<list>\d+)/change$', checkin.CheckinListUpdate.as_view(),
                 name='event.orders.checkinlists.edit'),

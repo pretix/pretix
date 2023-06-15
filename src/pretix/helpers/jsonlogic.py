@@ -213,7 +213,7 @@ class Logic():
 
         data = data or {}
 
-        operator = list(tests.keys())[0]
+        operator = [k for k in tests.keys() if not k.startswith("__")][0]
         values = tests[operator]
 
         # Easy syntax for unary operators, like {"var": "x"} instead of strict

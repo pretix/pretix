@@ -93,6 +93,9 @@ class InitializeView(APIView):
         if device.initialized:
             raise ValidationError({'token': ['This initialization token has already been used.']})
 
+        if device.revoked:
+            raise ValidationError({'token': ['This initialization token has been revoked.']})
+
         device.initialized = now()
         device.hardware_brand = serializer.validated_data.get('hardware_brand')
         device.hardware_model = serializer.validated_data.get('hardware_model')

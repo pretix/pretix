@@ -32,12 +32,12 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 import os
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from functools import partial, reduce
 
 import dateutil
 import dateutil.parser
-import pytz
+from dateutil.tz import datetime_exists
 from django.core.files import File
 from django.db import IntegrityError, transaction
 from django.db.models import (
@@ -53,7 +53,8 @@ from django.utils.translation import gettext as _
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.models import (
-    Checkin, CheckinList, Device, Order, OrderPosition, QuestionOption,
+    Checkin, CheckinList, Device, Event, ItemVariation, Order, OrderPosition,
+    QuestionOption,
 )
 from pretix.base.signals import checkin_created, order_placed, periodic_task
 from pretix.helpers import OF_SELF
@@ -65,12 +66,13 @@ from pretix.helpers.jsonlogic_query import (
 )
 
 
-def _build_time(t=None, value=None, ev=None):
+def _build_time(t=None, value=None, ev=None, now_dt=None):
+    now_dt = now_dt or now()
     if t == "custom":
         return dateutil.parser.parse(value)
     elif t == "customtime":
         parsed = dateutil.parser.parse(value)
-        return now().astimezone(ev.timezone).replace(
+        return now_dt.astimezone(ev.timezone).replace(
             hour=parsed.hour,
             minute=parsed.minute,
             second=parsed.second,
@@ -84,7 +86,42 @@ def _build_time(t=None, value=None, ev=None):
         return ev.date_admission or ev.date_from
 
 
-def _logic_explain(rules, ev, rule_data):
+def _logic_annotate_for_graphic_explain(rules, ev, rule_data):
+    logic_environment = _get_logic_environment(ev)
+    event = ev if isinstance(ev, Event) else ev.event
+
+    def _evaluate_inners(r):
+        if not isinstance(r, dict):
+            return r
+        operator = list(r.keys())[0]
+        values = r[operator]
+        if operator in ("and", "or"):
+            return {operator: [_evaluate_inners(v) for v in values]}
+        result = logic_environment.apply(r, rule_data)
+        return {**r, '__result': result}
+
+    def _add_var_values(r):
+        if not isinstance(r, dict):
+            return r
+        operator = [k for k in r.keys() if not k.startswith("__")][0]
+        values = r[operator]
+        if operator == "var":
+            var = values[0] if isinstance(values, list) else values
+            val = rule_data[var]
+            if var == "product":
+                val = str(event.items.get(pk=val))
+            elif var == "variation":
+                val = str(ItemVariation.objects.get(item__event=event, pk=val))
+            elif isinstance(val, datetime):
+                val = date_format(val.astimezone(ev.timezone), "SHORT_DATETIME_FORMAT")
+            return {"var": var, "__result": val}
+        else:
+            return {**r, operator: [_add_var_values(v) for v in values]}
+
+    return _add_var_values(_evaluate_inners(rules))
+
+
+def _logic_explain(rules, ev, rule_data, now_dt=None):
     """
     Explains when the logic denied the check-in. Only works for a denied check-in.
 
@@ -114,6 +151,7 @@ def _logic_explain(rules, ev, rule_data):
     Additionally, we favor a "close failure". Therefore, in the above example, we'd show "You can only
     get in before 17:00". In the middle of the night it would switch to "You can only get in after 09:00".
     """
+    now_dt = now_dt or now()
     logic_environment = _get_logic_environment(ev)
     _var_values = {'False': False, 'True': True}
     _var_explanations = {}
@@ -198,9 +236,9 @@ def _logic_explain(rules, ev, rule_data):
             else:
                 compare_to -= tolerance
 
-            var_weights[vname] = (200, abs(now() - compare_to).total_seconds())
+            var_weights[vname] = (200, abs(now_dt - compare_to).total_seconds())
 
-            if abs(now() - compare_to) < timedelta(hours=12):
+            if abs(now_dt - compare_to) < timedelta(hours=12):
                 compare_to_text = date_format(compare_to, 'TIME_FORMAT')
             else:
                 compare_to_text = date_format(compare_to, 'SHORT_DATETIME_FORMAT')
@@ -357,7 +395,7 @@ class LazyRuleVars:
     @cached_property
     def entries_today(self):
         tz = self._clist.event.timezone
-        midnight = now().astimezone(tz).replace(hour=0, minute=0, second=0, microsecond=0)
+        midnight = self._dt.astimezone(tz).replace(hour=0, minute=0, second=0, microsecond=0)
         return self._position.checkins.filter(type=Checkin.TYPE_ENTRY, list=self._clist, datetime__gte=midnight).count()
 
     @cached_property
@@ -378,7 +416,7 @@ class LazyRuleVars:
                 # between platforms (None<1 is true on some, but not all), we rather choose something that is at least
                 # consistent.
                 return -1
-            return (now() - last_entry.datetime).total_seconds() // 60
+            return (self._dt - last_entry.datetime).total_seconds() // 60
 
     @cached_property
     def minutes_since_first_entry(self):
@@ -390,7 +428,7 @@ class LazyRuleVars:
                 # between platforms (None<1 is true on some, but not all), we rather choose something that is at least
                 # consistent.
                 return -1
-            return (now() - last_entry.datetime).total_seconds() // 60
+            return (self._dt - last_entry.datetime).total_seconds() // 60
 
 
 class SQLLogic:
@@ -439,7 +477,7 @@ class SQLLogic:
 
         if operator == 'buildTime':
             if values[0] == "custom":
-                return Value(dateutil.parser.parse(values[1]).astimezone(pytz.UTC))
+                return Value(dateutil.parser.parse(values[1]).astimezone(timezone.utc))
             elif values[0] == "customtime":
                 parsed = dateutil.parser.parse(values[1])
                 return Value(now().astimezone(self.list.event.timezone).replace(
@@ -447,7 +485,7 @@ class SQLLogic:
                     minute=parsed.minute,
                     second=parsed.second,
                     microsecond=parsed.microsecond,
-                ).astimezone(pytz.UTC))
+                ).astimezone(timezone.utc))
             elif values[0] == 'date_from':
                 return Coalesce(
                     F('subevent__date_from'),
@@ -475,7 +513,7 @@ class SQLLogic:
             return int(values[1])
         elif operator == 'var':
             if values[0] == 'now':
-                return Value(now().astimezone(pytz.UTC))
+                return Value(now().astimezone(timezone.utc))
             elif values[0] == 'now_isoweekday':
                 return Value(now().astimezone(self.list.event.timezone).isoweekday())
             elif values[0] == 'product':
@@ -693,7 +731,7 @@ def _save_answers(op, answers, given_answers):
 def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
                     user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY,
-                    raw_barcode=None, raw_source_type=None, from_revoked_secret=False):
+                    raw_barcode=None, raw_source_type=None, from_revoked_secret=False, simulate=False):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -707,6 +745,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     :param questions_supported: When set to False, questions are ignored
     :param nonce: A random nonce to prevent race conditions.
     :param datetime: The datetime of the checkin, defaults to now.
+    :param simulate: If true, the check-in is not saved.
     """
 
     # !!!!!!!!!
@@ -734,7 +773,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'blocked'
             )
 
-    if type != Checkin.TYPE_EXIT and op.valid_from and op.valid_from > now():
+    if type != Checkin.TYPE_EXIT and op.valid_from and op.valid_from > dt:
         if force:
             force_used = True
         else:
@@ -748,7 +787,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 ),
             )
 
-    if type != Checkin.TYPE_EXIT and op.valid_until and op.valid_until < now():
+    if type != Checkin.TYPE_EXIT and op.valid_until and op.valid_until < dt:
         if force:
             force_used = True
         else:
@@ -773,7 +812,8 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             if q not in given_answers and q not in answers:
                 require_answers.append(q)
 
-        _save_answers(op, answers, given_answers)
+        if not simulate:
+            _save_answers(op, answers, given_answers)
 
     with transaction.atomic():
         # Lock order positions, if it is an entry. We don't need it for exits, as a race condition wouldn't be problematic
@@ -859,30 +899,33 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
             return
 
         if entry_allowed or force:
-            ci = Checkin.objects.create(
-                position=op,
-                type=type,
-                list=clist,
-                datetime=dt,
-                device=device,
-                gate=device.gate if device else None,
-                nonce=nonce,
-                forced=force and (not entry_allowed or from_revoked_secret or force_used),
-                force_sent=force,
-                raw_barcode=raw_barcode,
-                raw_source_type=raw_source_type,
-            )
-            op.order.log_action('pretix.event.checkin', data={
-                'position': op.id,
-                'positionid': op.positionid,
-                'first': True,
-                'forced': force or op.order.status != Order.STATUS_PAID,
-                'datetime': dt,
-                'type': type,
-                'answers': {k.pk: str(v) for k, v in given_answers.items()},
-                'list': clist.pk
-            }, user=user, auth=auth)
-            checkin_created.send(op.order.event, checkin=ci)
+            if simulate:
+                return True
+            else:
+                ci = Checkin.objects.create(
+                    position=op,
+                    type=type,
+                    list=clist,
+                    datetime=dt,
+                    device=device,
+                    gate=device.gate if device else None,
+                    nonce=nonce,
+                    forced=force and (not entry_allowed or from_revoked_secret or force_used),
+                    force_sent=force,
+                    raw_barcode=raw_barcode,
+                    raw_source_type=raw_source_type,
+                )
+                op.order.log_action('pretix.event.checkin', data={
+                    'position': op.id,
+                    'positionid': op.positionid,
+                    'first': True,
+                    'forced': force or op.order.status != Order.STATUS_PAID,
+                    'datetime': dt,
+                    'type': type,
+                    'answers': {k.pk: str(v) for k, v in given_answers.items()},
+                    'list': clist.pk
+                }, user=user, auth=auth)
+                checkin_created.send(op.order.event, checkin=ci)
         else:
             raise CheckInError(
                 _('This ticket has already been redeemed.'),
@@ -926,14 +969,11 @@ def process_exit_all(sender, **kwargs):
         if cl.event.settings.get(f'autocheckin_dst_hack_{cl.pk}'):  # move time back if yesterday was DST switch
             d -= timedelta(hours=1)
             cl.event.settings.delete(f'autocheckin_dst_hack_{cl.pk}')
-        try:
-            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time()), cl.event.timezone)
-        except pytz.exceptions.AmbiguousTimeError:
-            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time()), cl.event.timezone,
-                                        is_dst=False)
-        except pytz.exceptions.NonExistentTimeError:
+
+        cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time().replace(fold=1)), cl.event.timezone)
+        if not datetime_exists(cl.exit_all_at):
             cl.event.settings.set(f'autocheckin_dst_hack_{cl.pk}', True)
             d += timedelta(hours=1)
-            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time()), cl.event.timezone)
+            cl.exit_all_at = make_aware(datetime.combine(d.date() + timedelta(days=1), d.time().replace(fold=1)), cl.event.timezone)
             # AmbiguousTimeError shouldn't be possible since d.time() includes fold=0
         cl.save(update_fields=['exit_all_at'])

@@ -45,10 +45,10 @@ from decimal import Decimal
 from functools import reduce
 from time import sleep
 from typing import Any, Dict, List, Union
+from zoneinfo import ZoneInfo
 
 import dateutil
 import pycountry
-import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
@@ -464,14 +464,20 @@ class Order(LockModel, LoggedModel):
         return '{event}-{code}'.format(event=self.event.slug.upper(), code=self.code)
 
     def save(self, **kwargs):
-        if 'update_fields' in kwargs and 'last_modified' not in kwargs['update_fields']:
-            kwargs['update_fields'] = list(kwargs['update_fields']) + ['last_modified']
+        if 'update_fields' in kwargs:
+            kwargs['update_fields'] = {'last_modified'}.union(kwargs['update_fields'])
         if not self.code:
             self.assign_code()
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'code'}.union(kwargs['update_fields'])
         if not self.datetime:
             self.datetime = now()
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'datetime'}.union(kwargs['update_fields'])
         if not self.expires:
             self.set_expires()
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'expires'}.union(kwargs['update_fields'])
 
         is_new = not self.pk
         update_fields = kwargs.get('update_fields', [])
@@ -499,7 +505,7 @@ class Order(LockModel, LoggedModel):
 
     def set_expires(self, now_dt=None, subevents=None):
         now_dt = now_dt or now()
-        tz = pytz.timezone(self.event.settings.timezone)
+        tz = ZoneInfo(self.event.settings.timezone)
         mode = self.event.settings.get('payment_term_mode')
         if mode == 'days':
             exp_by_date = now_dt.astimezone(tz) + timedelta(days=self.event.settings.get('payment_term_days', as_type=int))
@@ -873,7 +879,7 @@ class Order(LockModel, LoggedModel):
 
     @property
     def payment_term_last(self):
-        tz = pytz.timezone(self.event.settings.timezone)
+        tz = ZoneInfo(self.event.settings.timezone)
         term_last = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
         if term_last:
             if self.event.has_subevents:
@@ -1248,7 +1254,7 @@ class QuestionAnswer(models.Model):
             try:
                 d = dateutil.parser.parse(self.answer)
                 if self.orderposition:
-                    tz = pytz.timezone(self.orderposition.order.event.settings.timezone)
+                    tz = ZoneInfo(self.orderposition.order.event.settings.timezone)
                     d = d.astimezone(tz)
                 return date_format(d, "SHORT_DATETIME_FORMAT")
             except ValueError:
@@ -1460,12 +1466,20 @@ class AbstractPosition(models.Model):
                 else self.variation.quotas.filter(subevent=self.subevent))
 
     def save(self, *args, **kwargs):
-        update_fields = kwargs.get('update_fields', [])
+        update_fields = kwargs.get('update_fields', set())
         if 'attendee_name_parts' in update_fields:
-            update_fields.append('attendee_name_cached')
-        self.attendee_name_cached = self.attendee_name
+            kwargs['update_fields'] = {'attendee_name_cached'}.union(kwargs['update_fields'])
+
+        name = self.attendee_name
+        if name != self.attendee_name_cached:
+            self.attendee_name_cached = name
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'attendee_name_cached'}.union(kwargs['update_fields'])
+
         if self.attendee_name_parts is None:
             self.attendee_name_parts = {}
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'attendee_name_parts'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
 
     @property
@@ -1845,6 +1859,8 @@ class OrderPayment(models.Model):
     def save(self, *args, **kwargs):
         if not self.local_id:
             self.local_id = (self.order.payments.aggregate(m=Max('local_id'))['m'] or 0) + 1
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'local_id'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
 
     def create_external_refund(self, amount=None, execution_date=None, info='{}'):
@@ -2043,6 +2059,8 @@ class OrderRefund(models.Model):
     def save(self, *args, **kwargs):
         if not self.local_id:
             self.local_id = (self.order.refunds.aggregate(m=Max('local_id'))['m'] or 0) + 1
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'local_id'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
 
 
@@ -2461,14 +2479,20 @@ class OrderPosition(AbstractPosition):
                 assign_ticket_secret(
                     event=self.order.event, position=self, force_invalidate=True, save=False
                 )
+                if 'update_fields' in kwargs:
+                    kwargs['update_fields'] = {'secret'}.union(kwargs['update_fields'])
 
-        if not self.blocked:
+        if not self.blocked and self.blocked is not None:
             self.blocked = None
-        elif not isinstance(self.blocked, list) or any(not isinstance(b, str) for b in self.blocked):
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'blocked'}.union(kwargs['update_fields'])
+        elif self.blocked and (not isinstance(self.blocked, list) or any(not isinstance(b, str) for b in self.blocked)):
             raise TypeError("blocked needs to be a list of strings")
 
         if not self.pseudonymization_id:
             self.assign_pseudonymization_id()
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'pseudonymization_id'}.union(kwargs['update_fields'])
 
         if not self.get_deferred_fields():
             if Transaction.key(self) != self.__initial_transaction_key or self.canceled != self.__initial_canceled or not self.pk:
@@ -2954,10 +2978,17 @@ class InvoiceAddress(models.Model):
             self.order.touch()
 
         if self.name_parts:
-            self.name_cached = self.name
+            name = self.name
+            if self.name_cached != name:
+                self.name_cached = self.name
+                if 'update_fields' in kwargs:
+                    kwargs['update_fields'] = {'name_cached'}.union(kwargs['update_fields'])
         else:
-            self.name_cached = ""
-            self.name_parts = {}
+            if self.name_cached != "" or self.name_parts != {}:
+                self.name_cached = ""
+                self.name_parts = {}
+                if 'update_fields' in kwargs:
+                    kwargs['update_fields'] = {'name_cached', 'name_parts'}.union(kwargs['update_fields'])
         super().save(**kwargs)
 
     def describe(self):
@@ -3103,11 +3134,7 @@ class BlockedTicketSecret(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        if 'mysql' not in settings.DATABASES['default']['ENGINE']:
-            # MySQL does not support indexes on TextField(). Django knows this and just ignores db_index, but it will
-            # not silently ignore the UNIQUE index, causing this table to fail. I'm so glad we're deprecating MySQL
-            # in a few months, so we'll just live without an unique index until then.
-            unique_together = (('event', 'secret'),)
+        unique_together = (('event', 'secret'),)
 
 
 @receiver(post_delete, sender=CachedTicket)

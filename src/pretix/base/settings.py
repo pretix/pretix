@@ -2119,11 +2119,14 @@ Your {event} team"""))
             label=_('Attachment for new orders'),
             ext_whitelist=(".pdf",),
             max_size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT,
-            help_text=_('This file will be attached to the first email that we send for every new order. Therefore it will be '
-                        'combined with the "Placed order", "Free order", or "Received order" texts from above. It will be sent '
-                        'to both order contacts and attendees. You can use this e.g. to send your terms of service. Do not use '
-                        'it to send non-public information as this file might be sent before payment is confirmed or the order '
-                        'is approved. To avoid this vital email going to spam, you can only upload PDF files of up to {size} MB.').format(
+            help_text=format_lazy(
+                _(
+                    'This file will be attached to the first email that we send for every new order. Therefore it will be '
+                    'combined with the "Placed order", "Free order", or "Received order" texts from above. It will be sent '
+                    'to both order contacts and attendees. You can use this e.g. to send your terms of service. Do not use '
+                    'it to send non-public information as this file might be sent before payment is confirmed or the order '
+                    'is approved. To avoid this vital email going to spam, you can only upload PDF files of up to {size} MB.'
+                ),
                 size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT // (1024 * 1024),
             )
         ),
@@ -3583,8 +3586,10 @@ class SettingsSandbox:
     def __delattr__(self, key: str) -> None:
         del self._event.settings[self._convert_key(key)]
 
-    def get(self, key: str, default: Any = None, as_type: type = str):
-        return self._event.settings.get(self._convert_key(key), default=default, as_type=as_type)
+    def get(self, key: str, default: Any = None, as_type: type = str, binary_file: bool = False):
+        return self._event.settings.get(
+            self._convert_key(key), default=default, as_type=as_type, binary_file=binary_file
+        )
 
     def set(self, key: str, value: Any):
         self._event.settings.set(self._convert_key(key), value)

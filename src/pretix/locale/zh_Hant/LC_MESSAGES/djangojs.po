@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-05-31 09:02+0000\n"
+"POT-Creation-Date: 2023-06-07 15:41+0000\n"
 "PO-Revision-Date: 2023-05-18 01:00+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
@@ -631,32 +631,32 @@ msgstr[0] ""
 "購物車中的商品將為你保留一.分鐘。\n"
 "購物車中的商品將為你保留{num}.分鐘。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:161
+#: pretix/static/pretixpresale/js/ui/main.js:171
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "召集人保留%(currency)s %(amount)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:169
+#: pretix/static/pretixpresale/js/ui/main.js:179
 msgid "You get %(currency)s %(amount)s back"
 msgstr "你拿回 %(currency)s %(amount)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:185
+#: pretix/static/pretixpresale/js/ui/main.js:195
 msgid "Please enter the amount the organizer can keep."
 msgstr "請輸入主辦方可以保留的金額。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:426
+#: pretix/static/pretixpresale/js/ui/main.js:436
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "請輸入其中一種門票類型的數量。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:462
+#: pretix/static/pretixpresale/js/ui/main.js:472
 msgid "required"
 msgstr "需要"
 
-#: pretix/static/pretixpresale/js/ui/main.js:565
-#: pretix/static/pretixpresale/js/ui/main.js:584
+#: pretix/static/pretixpresale/js/ui/main.js:575
+#: pretix/static/pretixpresale/js/ui/main.js:594
 msgid "Time zone:"
 msgstr "時區："
 
-#: pretix/static/pretixpresale/js/ui/main.js:575
+#: pretix/static/pretixpresale/js/ui/main.js:585
 msgid "Your local time:"
 msgstr "你的當地時間："
 

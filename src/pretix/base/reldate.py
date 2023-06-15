@@ -22,8 +22,8 @@
 import datetime
 from collections import namedtuple
 from typing import Union
+from zoneinfo import ZoneInfo
 
-import pytz
 from dateutil import parser
 from django import forms
 from django.core.exceptions import ValidationError
@@ -67,7 +67,7 @@ class RelativeDateWrapper:
             if self.data.minutes_before is not None:
                 raise ValueError('A minute-based relative datetime can not be used as a date')
 
-            tz = pytz.timezone(event.settings.timezone)
+            tz = ZoneInfo(event.settings.timezone)
             if isinstance(event, SubEvent):
                 base_date = (
                     getattr(event, self.data.base_date_name)
@@ -86,7 +86,7 @@ class RelativeDateWrapper:
         if isinstance(self.data, (datetime.datetime, datetime.date)):
             return self.data
         else:
-            tz = pytz.timezone(event.settings.timezone)
+            tz = ZoneInfo(event.settings.timezone)
             if isinstance(event, SubEvent):
                 base_date = (
                     getattr(event, self.data.base_date_name)
@@ -99,8 +99,7 @@ class RelativeDateWrapper:
             if self.data.minutes_before is not None:
                 return base_date.astimezone(tz) - datetime.timedelta(minutes=self.data.minutes_before)
             else:
-                oldoffset = base_date.astimezone(tz).utcoffset()
-                new_date = base_date.astimezone(tz) - datetime.timedelta(days=self.data.days_before)
+                new_date = (base_date.astimezone(tz) - datetime.timedelta(days=self.data.days_before)).astimezone(tz)
                 if self.data.time:
                     new_date = new_date.replace(
                         hour=self.data.time.hour,
@@ -108,8 +107,6 @@ class RelativeDateWrapper:
                         second=self.data.time.second
                     )
                 new_date = new_date.astimezone(tz)
-                new_offset = new_date.utcoffset()
-                new_date += oldoffset - new_offset
                 return new_date
 
     def to_string(self) -> str:

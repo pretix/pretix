@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from django.conf.urls import re_path
+from django.urls import re_path
 
 from pretix.api.urls import orga_router
 from pretix.plugins.banktransfer.api import BankImportJobViewSet

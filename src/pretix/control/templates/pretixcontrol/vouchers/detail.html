@@ -21,7 +21,7 @@
     {% if redeemed_in_carts %}
         <div class="alert alert-warning">
             {% blocktrans trimmed with number=redeemed_in_carts %}
-                This voucher is currently used in {{ number }} cart sessions and there might not be free to use until the cart sessions
+                This voucher is currently used in {{ number }} cart sessions and might not be free to use until the cart sessions
                 expire.
             {% endblocktrans %}
             <p class="text-right">

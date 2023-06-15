@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import copy
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 from unittest import mock
 
@@ -43,7 +43,6 @@ from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
-from pytz import UTC
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import (
@@ -63,15 +62,15 @@ def variations(item):
 
 @pytest.fixture
 def order(event, item, taxrule):
-    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+    testtime = datetime(2017, 12, 1, 10, 0, 0, tzinfo=timezone.utc)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
-            datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
-            expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+            datetime=datetime(2017, 12, 1, 10, 0, 0, tzinfo=timezone.utc),
+            expires=datetime(2017, 12, 10, 10, 0, 0, tzinfo=timezone.utc),
             total=23, locale='en'
         )
         o.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('19.00'),
@@ -198,6 +197,14 @@ def test_event_list_filter(token_client, organizer, event):
     assert resp.data['count'] == 1
 
     resp = token_client.get('/api/v1/organizers/{}/events/?attr[type]='.format(organizer.slug))
+    assert resp.status_code == 200
+    assert resp.data['count'] == 0
+
+    resp = token_client.get('/api/v1/organizers/{}/events/?date_from_after=2017-12-27T10:00:00Z'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert resp.data['count'] == 1
+
+    resp = token_client.get('/api/v1/organizers/{}/events/?date_from_after=2017-12-27T10:00:01Z'.format(organizer.slug))
     assert resp.status_code == 200
     assert resp.data['count'] == 0
 

@@ -38,10 +38,10 @@ import logging
 from datetime import timedelta
 from decimal import Decimal
 from io import BytesIO
+from zoneinfo import ZoneInfo
 
 import dateutil.parser
 import pycountry
-import pytz
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -61,6 +61,7 @@ from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries import countries
 from django_countries.fields import Country, CountryField
+from geoip2.errors import AddressNotFoundError
 from phonenumber_field.formfields import PhoneNumberField
 from phonenumber_field.phonenumber import PhoneNumber
 from phonenumber_field.widgets import PhoneNumberPrefixWidget
@@ -356,9 +357,12 @@ class WrappedPhoneNumberPrefixWidget(PhoneNumberPrefixWidget):
 def guess_country_from_request(request, event):
     if settings.HAS_GEOIP:
         g = GeoIP2()
-        res = g.country(get_client_ip(request))
-        if res['country_code'] and len(res['country_code']) == 2:
-            return Country(res['country_code'])
+        try:
+            res = g.country(get_client_ip(request))
+            if res['country_code'] and len(res['country_code']) == 2:
+                return Country(res['country_code'])
+        except AddressNotFoundError:
+            pass
     return guess_country(event)
 
 
@@ -733,7 +737,7 @@ class BaseQuestionsForm(forms.Form):
                 initial = answers[0]
             else:
                 initial = None
-            tz = pytz.timezone(event.settings.timezone)
+            tz = ZoneInfo(event.settings.timezone)
             help_text = rich_text(q.help_text)
             label = escape(q.question)  # django-bootstrap3 calls mark_safe
             required = q.required and not self.all_optional

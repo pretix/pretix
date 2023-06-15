@@ -28,7 +28,6 @@ import pytest
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
-from pytz import UTC
 from tests.const import SAMPLE_PNG
 
 from pretix.base.models import Question, SeatingPlan
@@ -95,15 +94,15 @@ TEST_CARTPOSITION_RES = {
 
 @pytest.mark.django_db
 def test_cp_list(token_client, organizer, event, item, taxrule, question):
-    testtime = datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
+    testtime = datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
         cr = CartPosition.objects.create(
             event=event, cart_id="aaa", item=item,
             price=23, attendee_name_parts={'full_name': 'Peter'},
-            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC),
-            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
+            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc),
+            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc)
         )
     res = dict(TEST_CARTPOSITION_RES)
     res["id"] = cr.pk
@@ -116,15 +115,15 @@ def test_cp_list(token_client, organizer, event, item, taxrule, question):
 
 @pytest.mark.django_db
 def test_cp_list_api(token_client, organizer, event, item, taxrule, question):
-    testtime = datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
+    testtime = datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
         cr = CartPosition.objects.create(
             event=event, cart_id="aaa@api", item=item,
             price=23, attendee_name_parts={'full_name': 'Peter'},
-            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC),
-            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
+            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc),
+            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc)
         )
     res = dict(TEST_CARTPOSITION_RES)
     res["id"] = cr.pk
@@ -137,15 +136,15 @@ def test_cp_list_api(token_client, organizer, event, item, taxrule, question):
 
 @pytest.mark.django_db
 def test_cp_detail(token_client, organizer, event, item, taxrule, question):
-    testtime = datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
+    testtime = datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
         cr = CartPosition.objects.create(
             event=event, cart_id="aaa@api", item=item,
             price=23, attendee_name_parts={'full_name': 'Peter'},
-            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC),
-            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
+            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc),
+            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc)
         )
     res = dict(TEST_CARTPOSITION_RES)
     res["id"] = cr.pk
@@ -158,21 +157,21 @@ def test_cp_detail(token_client, organizer, event, item, taxrule, question):
 
 @pytest.mark.django_db
 def test_cp_delete(token_client, organizer, event, item, taxrule, question):
-    testtime = datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
+    testtime = datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc)
 
     with mock.patch('django.utils.timezone.now') as mock_now:
         mock_now.return_value = testtime
         cr = CartPosition.objects.create(
             event=event, cart_id="aaa@api", item=item,
             price=23, attendee_name_parts={'full_name': 'Peter'},
-            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC),
-            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
+            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc),
+            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc)
         )
         CartPosition.objects.create(
             event=event, cart_id="aaa@api", item=item, addon_to=cr,
             price=23, attendee_name_parts={'full_name': 'Peter'},
-            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC),
-            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=UTC)
+            datetime=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc),
+            expires=datetime.datetime(2018, 6, 11, 10, 0, 0, 0, tzinfo=datetime.timezone.utc)
         )
     res = dict(TEST_CARTPOSITION_RES)
     res["id"] = cr.pk

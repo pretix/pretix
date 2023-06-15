@@ -155,12 +155,8 @@ Example::
     advisory_lock_index=1
 
 ``backend``
-    One of ``mysql`` (deprecated), ``sqlite3`` and ``postgresql``.
+    One of ``sqlite3`` and ``postgresql``.
     Default: ``sqlite3``.
-
-    If you use MySQL, be sure to create your database using
-    ``CREATE DATABASE <dbname> CHARACTER SET utf8;``. Otherwise, Unicode
-    support will not properly work.
 
 ``name``
     The database's name. Default: ``db.sqlite3``.
@@ -173,9 +169,6 @@ Example::
     and are not scoped to a specific database. If you run multiple pretix applications with the same PostgreSQL server,
     you should set separate values for this setting (integers up to 65535).
 
-``galera``
-    (Deprecated) Indicates if the database backend is a MySQL/MariaDB Galera cluster and
-    turns on some optimizations/special case handlers. Default: ``False``
 
 .. _`config-replica`:
 

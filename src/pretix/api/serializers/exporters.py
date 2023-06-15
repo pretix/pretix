@@ -93,7 +93,7 @@ class JobRunSerializer(serializers.Serializer):
         if events is not None and not isinstance(ex, OrganizerLevelExportMixin):
             self.fields["events"] = serializers.SlugRelatedField(
                 queryset=events,
-                required=True,
+                required=False,
                 allow_empty=False,
                 slug_field='slug',
                 many=True
@@ -156,8 +156,9 @@ class JobRunSerializer(serializers.Serializer):
     def to_internal_value(self, data):
         if isinstance(data, QueryDict):
             data = data.copy()
+
         for k, v in self.fields.items():
-            if isinstance(v, serializers.ManyRelatedField) and k not in data:
+            if isinstance(v, serializers.ManyRelatedField) and k not in data and k != "events":
                 data[k] = []
 
         for fk in self.fields.keys():

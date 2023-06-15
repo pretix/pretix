@@ -45,6 +45,10 @@ def npm_install():
 
 class CustomBuild(build):
     def run(self):
+        if "src" not in os.listdir(".") or "pretix" not in os.listdir("src"):
+            # Only run this command on the pretix module, not on other modules even if it's registered globally
+            # in some cases
+            return build.run(self)
         if "PRETIX_DOCKER_BUILD" in os.environ:
             return  # this is a hack to allow calling this file early in our docker build to make use of caching
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "pretix._build_settings")
@@ -68,6 +72,10 @@ class CustomBuild(build):
 
 class CustomBuildExt(build_ext):
     def run(self):
+        if "src" not in os.listdir(".") or "pretix" not in os.listdir("src"):
+            # Only run this command on the pretix module, not on other modules even if it's registered globally
+            # in some cases
+            return build_ext.run(self)
         if "PRETIX_DOCKER_BUILD" in os.environ:
             return  # this is a hack to allow calling this file early in our docker build to make use of caching
         npm_install()

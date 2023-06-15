@@ -23,9 +23,9 @@ import datetime
 import mimetypes
 import os
 from decimal import Decimal
+from zoneinfo import ZoneInfo
 
 import django_filters
-import pytz
 from django.db import transaction
 from django.db.models import (
     Exists, F, OuterRef, Prefetch, Q, Subquery, prefetch_related_objects,
@@ -612,7 +612,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        tz = pytz.timezone(self.request.event.settings.timezone)
+        tz = ZoneInfo(self.request.event.settings.timezone)
         new_date = make_aware(datetime.datetime.combine(
             new_date,
             datetime.time(hour=23, minute=59, second=59)
@@ -661,7 +661,16 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         with language(order.locale, self.request.event.settings.region):
             payment = order.payments.last()
-
+            # OrderCreateSerializer creates at most one payment
+            if payment and payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
+                order.log_action(
+                    'pretix.event.order.payment.confirmed', {
+                        'local_id': payment.local_id,
+                        'provider': payment.provider,
+                    },
+                    user=request.user if request.user.is_authenticated else None,
+                    auth=request.auth,
+                )
             order_placed.send(self.request.event, order=order)
             if order.status == Order.STATUS_PAID:
                 order_paid.send(self.request.event, order=order)

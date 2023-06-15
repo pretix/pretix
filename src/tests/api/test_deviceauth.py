@@ -73,6 +73,21 @@ def test_initialize_used_token(client, device: Device):
 
 
 @pytest.mark.django_db
+def test_initialize_revoked_token(client, new_device: Device):
+    new_device.revoked = True
+    new_device.save()
+    resp = client.post('/api/v1/device/initialize', {
+        'token': new_device.initialization_token,
+        'hardware_brand': 'Samsung',
+        'hardware_model': 'Galaxy S',
+        'software_brand': 'pretixdroid',
+        'software_version': '4.0.0'
+    })
+    assert resp.status_code == 400
+    assert resp.data == {'token': ['This initialization token has been revoked.']}
+
+
+@pytest.mark.django_db
 def test_initialize_valid_token(client, new_device: Device):
     resp = client.post('/api/v1/device/initialize', {
         'token': new_device.initialization_token,

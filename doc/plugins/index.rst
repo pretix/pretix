@@ -18,6 +18,7 @@ If you want to **create** a plugin, please go to the
    campaigns
    certificates
    digital
+   epaybl
    exhibitors
    shipping
    imported_secrets

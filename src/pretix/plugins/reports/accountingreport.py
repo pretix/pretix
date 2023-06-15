@@ -27,6 +27,7 @@ from decimal import Decimal
 
 from django import forms
 from django.db.models import F, Sum
+from django.db.models.functions import Coalesce
 from django.utils.formats import date_format, localize
 from django.utils.html import escape
 from django.utils.timezone import now
@@ -83,8 +84,18 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                         initial=True,
                     ),
                 ),
+                (
+                    "split_subevents",
+                    forms.BooleanField(
+                        label=_("Split event series by date"),
+                        required=False,
+                        initial=False,
+                    ),
+                ),
             ]
         )
+        if not self.is_multievent and not self.event.has_subevents:
+            del ff["split_subevents"]
         return ff
 
     def describe_filters(self, form_data: dict):
@@ -127,7 +138,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
         if not form_data["no_testmode"]:
             filters.append(_("Report includes test orders which may be deleted later!"))
 
-        if self._transaction_qs(form_data).filter(migrated=True).exists():
+        if self._transaction_qs(form_data, currency=None).filter(migrated=True).exists():
             filters.append(
                 _(
                     "The report time frame includes data generated with an old software version that did not yet "
@@ -138,9 +149,10 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
 
         return filters
 
-    def _giftcard_transaction_qs(self, form_data, ignore_dates=False):
+    def _giftcard_transaction_qs(self, form_data, currency, ignore_dates=False):
         qs = GiftCardTransaction.objects.filter(
             card__issuer=self.organizer,
+            card__currency=currency,
         )
         if form_data["date_range"] and not ignore_dates:
             df_start, df_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(
@@ -154,10 +166,14 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             qs = qs.filter(card__testmode=False)
         return qs
 
-    def _transaction_qs(self, form_data, ignore_dates=False):
+    def _transaction_qs(self, form_data, currency, ignore_dates=False):
         qs = Transaction.objects.filter(
             order__event__in=self.events,
         )
+        if currency is not None:
+            qs = qs.filter(
+                order__event__currency=currency,
+            )
         if form_data["date_range"] and not ignore_dates:
             df_start, df_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(
                 now(), form_data["date_range"], self.timezone
@@ -170,9 +186,10 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             qs = qs.filter(order__testmode=False)
         return qs
 
-    def _payment_qs(self, form_data, ignore_dates=False):
+    def _payment_qs(self, form_data, currency, ignore_dates=False):
         qs = OrderPayment.objects.filter(
             order__event__in=self.events,
+            order__event__currency=currency,
             state__in=(
                 OrderPayment.PAYMENT_STATE_CONFIRMED,
                 OrderPayment.PAYMENT_STATE_REFUNDED,
@@ -193,9 +210,11 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             qs = qs.filter(order__testmode=False)
         return qs
 
-    def _refund_qs(self, form_data, ignore_dates=False):
+    def _refund_qs(self, form_data, currency, ignore_dates=False):
         qs = OrderRefund.objects.filter(
-            order__event__in=self.events, state=OrderRefund.REFUND_STATE_DONE
+            order__event__in=self.events,
+            order__event__currency=currency,
+            state=OrderRefund.REFUND_STATE_DONE,
         )
         if form_data["date_range"] and not ignore_dates:
             df_start, df_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(
@@ -209,7 +228,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             qs = qs.filter(order__testmode=False)
         return qs
 
-    def _table_transactions(self, form_data):
+    def _table_transactions(self, form_data, currency):
         tstyle = copy.copy(self.get_style())
         tstyle.fontSize = 8
         tstyle.leading = 10
@@ -232,9 +251,17 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             ]
         ]
 
+        subevent_values = {}
+        subevent_order_by = {}
+        if form_data.get("split_subevents"):
+            subevent_values = {"subevent_id", "subevent__name", "subevent__date_from"}
+            subevent_order_by = {Coalesce(F("subevent__date_from"), F("order__event__date_from")), Coalesce(F("subevent_id"), F("order__event_id"))}
+
         qs = (
-            self._transaction_qs(form_data)
+            self._transaction_qs(form_data, currency)
             .order_by(
+                *subevent_order_by,
+                "order__event__date_from",
                 "order__event__slug",
                 F("fee_type").asc(nulls_first=True),
                 F("internal_type").asc(nulls_first=True),
@@ -248,6 +275,8 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                 "tax_rate",
             )
             .values(
+                *subevent_values,
+                "order__event__date_from",
                 "order__event__slug",
                 "order__event__name",
                 "item_id",
@@ -273,15 +302,30 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
         sum_cnt_by_tax_rate = defaultdict(int)
         sum_price_by_tax_rate = defaultdict(Decimal)
         sum_tax_by_tax_rate = defaultdict(Decimal)
+        sum_price_by_event = Decimal("0.00")
+        sum_tax_by_event = Decimal("0.00")
         last_event_group = None
+        last_event_group_head_idx = 0
         for r in qs:
-            if r["order__event__slug"] != last_event_group:
+            if r.get("subevent_id"):
+                e = "{} - {} ({}) [{}]".format(
+                    r["order__event__name"],
+                    r["subevent__name"],
+                    date_format(r["subevent__date_from"]),
+                    r["order__event__slug"]
+                )
+            else:
+                e = "{} [{}]".format(r["order__event__name"], r["order__event__slug"])
+
+            if e != last_event_group:
+                if last_event_group_head_idx > 0 and (self.is_multievent or form_data.get("split_subevents")):
+                    tdata[last_event_group_head_idx][4] = Paragraph(money_filter(sum_price_by_event - sum_tax_by_event, currency), tstyle_bold_right),
+                    tdata[last_event_group_head_idx][5] = Paragraph(money_filter(sum_tax_by_event, currency), tstyle_bold_right),
+                    tdata[last_event_group_head_idx][6] = Paragraph(money_filter(sum_price_by_event, currency), tstyle_bold_right),
                 tdata.append(
                     [
                         Paragraph(
-                            "{} [{}]".format(
-                                r["order__event__name"], r["order__event__slug"]
-                            ),
+                            e,
                             tstyle_bold,
                         ),
                         "",
@@ -293,9 +337,12 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                     ]
                 )
                 tstyledata.append(
-                    ("SPAN", (0, len(tdata) - 1), (-1, len(tdata) - 1)),
+                    ("SPAN", (0, len(tdata) - 1), (3, len(tdata) - 1)),
                 )
-                last_event_group = r["order__event__slug"]
+                last_event_group = e
+                last_event_group_head_idx = len(tdata) - 1
+                sum_price_by_event = Decimal("0.00")
+                sum_tax_by_event = Decimal("0.00")
 
             if r["item_id"]:
                 if r["variation_id"]:
@@ -314,7 +361,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                 [
                     Paragraph(text, tstyle),
                     Paragraph(
-                        money_filter(r["price"], "EUR")
+                        money_filter(r["price"], currency)
                         if r["price"] is not None
                         else "",
                         tstyle_right,
@@ -322,15 +369,23 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                     Paragraph(localize(r["tax_rate"].normalize()) + " %", tstyle_right),
                     Paragraph(str(r["sum_cont"]), tstyle_right),
                     Paragraph(
-                        money_filter(r["sum_price"] - r["sum_tax"], "EUR"), tstyle_right
+                        money_filter(r["sum_price"] - r["sum_tax"], currency), tstyle_right
                     ),
-                    Paragraph(money_filter(r["sum_tax"], "EUR"), tstyle_right),
-                    Paragraph(money_filter(r["sum_price"], "EUR"), tstyle_right),
+                    Paragraph(money_filter(r["sum_tax"], currency), tstyle_right),
+                    Paragraph(money_filter(r["sum_price"], currency), tstyle_right),
                 ]
             )
             sum_cnt_by_tax_rate[r["tax_rate"]] += r["sum_cont"]
             sum_price_by_tax_rate[r["tax_rate"]] += r["sum_price"]
             sum_tax_by_tax_rate[r["tax_rate"]] += r["sum_tax"]
+            sum_price_by_event += r["sum_price"]
+            sum_tax_by_event += r["sum_tax"]
+
+        if last_event_group_head_idx > 0 and (self.is_multievent or form_data.get("split_subevents")):
+            tdata[last_event_group_head_idx][4] = Paragraph(money_filter(sum_price_by_event - sum_tax_by_event, currency),
+                                                            tstyle_bold_right),
+            tdata[last_event_group_head_idx][5] = Paragraph(money_filter(sum_tax_by_event, currency), tstyle_bold_right),
+            tdata[last_event_group_head_idx][6] = Paragraph(money_filter(sum_price_by_event, currency), tstyle_bold_right),
 
         if len(sum_tax_by_tax_rate) > 1:
             for tax_rate in sorted(sum_tax_by_tax_rate.keys(), reverse=True):
@@ -344,15 +399,15 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                             money_filter(
                                 sum_price_by_tax_rate[tax_rate]
                                 - sum_tax_by_tax_rate[tax_rate],
-                                "EUR",
+                                currency,
                             ),
                             tstyle_right,
                         ),
                         Paragraph(
-                            money_filter(sum_tax_by_tax_rate[tax_rate], "EUR"), tstyle_right
+                            money_filter(sum_tax_by_tax_rate[tax_rate], currency), tstyle_right
                         ),
                         Paragraph(
-                            money_filter(sum_price_by_tax_rate[tax_rate], "EUR"),
+                            money_filter(sum_price_by_tax_rate[tax_rate], currency),
                             tstyle_right,
                         ),
                     ]
@@ -377,16 +432,16 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                     money_filter(
                         sum(sum_price_by_tax_rate.values())
                         - sum(sum_tax_by_tax_rate.values()),
-                        "EUR",
+                        currency,
                     ),
                     tstyle_bold_right,
                 ),
                 Paragraph(
-                    money_filter(sum(sum_tax_by_tax_rate.values()), "EUR"),
+                    money_filter(sum(sum_tax_by_tax_rate.values()), currency),
                     tstyle_bold_right,
                 ),
                 Paragraph(
-                    money_filter(sum(sum_price_by_tax_rate.values()), "EUR"),
+                    money_filter(sum(sum_price_by_tax_rate.values()), currency),
                     tstyle_bold_right,
                 ),
             ]
@@ -410,7 +465,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
         table.setStyle(TableStyle(tstyledata))
         return [table]
 
-    def _table_payments(self, form_data):
+    def _table_payments(self, form_data, currency):
         tstyle = copy.copy(self.get_style())
         tstyle.fontSize = 8
         tstyle.leading = 10
@@ -431,7 +486,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
         ]
 
         p_qs = (
-            self._payment_qs(form_data)
+            self._payment_qs(form_data, currency)
             .order_by(
                 "provider",
             )
@@ -443,7 +498,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             )
         )
         r_qs = (
-            self._refund_qs(form_data)
+            self._refund_qs(form_data, currency)
             .order_by(
                 "provider",
             )
@@ -469,13 +524,13 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                 [
                     Paragraph(provider_names.get(p, p), tstyle),
                     Paragraph(
-                        money_filter(payments_by_provider[p], "EUR")
+                        money_filter(payments_by_provider[p], currency)
                         if p in payments_by_provider
                         else "",
                         tstyle_right,
                     ),
                     Paragraph(
-                        money_filter(refunds_by_provider[p], "EUR")
+                        money_filter(refunds_by_provider[p], currency)
                         if p in refunds_by_provider
                         else "",
                         tstyle_right,
@@ -484,7 +539,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                         money_filter(
                             payments_by_provider.get(p, Decimal("0.00"))
                             - refunds_by_provider.get(p, Decimal("0.00")),
-                            "EUR",
+                            currency,
                         ),
                         tstyle_right,
                     ),
@@ -496,13 +551,13 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                 Paragraph(_("Sum"), tstyle_bold),
                 Paragraph(
                     money_filter(
-                        sum(payments_by_provider.values(), Decimal("0.00")), "EUR"
+                        sum(payments_by_provider.values(), Decimal("0.00")), currency
                     ),
                     tstyle_bold_right,
                 ),
                 Paragraph(
                     money_filter(
-                        sum(refunds_by_provider.values(), Decimal("0.00")), "EUR"
+                        sum(refunds_by_provider.values(), Decimal("0.00")), currency
                     ),
                     tstyle_bold_right,
                 ),
@@ -510,7 +565,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                     money_filter(
                         sum(payments_by_provider.values(), Decimal("0.00"))
                         - sum(refunds_by_provider.values(), Decimal("0.00")),
-                        "EUR",
+                        currency,
                     ),
                     tstyle_bold_right,
                 ),
@@ -532,7 +587,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
         table.setStyle(TableStyle(tstyledata))
         return [table]
 
-    def _table_open_items(self, form_data):
+    def _table_open_items(self, form_data, currency):
         tstyle = copy.copy(self.get_style())
         tstyle.fontSize = 8
         tstyle.leading = 10
@@ -559,13 +614,13 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
         tdata = []
 
         if df_start:
-            tx_before = self._transaction_qs(form_data, ignore_dates=True).filter(
+            tx_before = self._transaction_qs(form_data, currency, ignore_dates=True).filter(
                 datetime__lt=df_start
             ).aggregate(s=Sum(F("count") * F("price")))["s"] or Decimal("0.00")
-            p_before = self._payment_qs(form_data, ignore_dates=True).filter(
+            p_before = self._payment_qs(form_data, currency, ignore_dates=True).filter(
                 payment_date__lt=df_start
             ).aggregate(s=Sum("amount"))["s"] or Decimal("0.00")
-            r_before = self._refund_qs(form_data, ignore_dates=True).filter(
+            r_before = self._refund_qs(form_data, currency, ignore_dates=True).filter(
                 execution_date__lt=df_start
             ).aggregate(s=Sum("amount"))["s"] or Decimal("0.00")
             open_before = tx_before - p_before + r_before
@@ -581,40 +636,40 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                         tstyle,
                     ),
                     "",
-                    Paragraph(money_filter(open_before, "EUR"), tstyle_right),
+                    Paragraph(money_filter(open_before, currency), tstyle_right),
                 ]
             )
         else:
             open_before = Decimal("0.00")
 
-        tx_during = self._transaction_qs(form_data).aggregate(
+        tx_during = self._transaction_qs(form_data, currency).aggregate(
             s=Sum(F("count") * F("price"))
         )["s"] or Decimal("0.00")
-        p_during = self._payment_qs(form_data).aggregate(s=Sum("amount"))[
+        p_during = self._payment_qs(form_data, currency).aggregate(s=Sum("amount"))[
             "s"
         ] or Decimal("0.00")
-        r_during = self._refund_qs(form_data).aggregate(s=Sum("amount"))[
+        r_during = self._refund_qs(form_data, currency).aggregate(s=Sum("amount"))[
             "s"
         ] or Decimal("0.00")
         tdata.append(
             [
                 Paragraph(_("Orders"), tstyle),
                 Paragraph("+", tstyle_center),
-                Paragraph(money_filter(tx_during, "EUR"), tstyle_right),
+                Paragraph(money_filter(tx_during, currency), tstyle_right),
             ]
         )
         tdata.append(
             [
                 Paragraph(_("Payments"), tstyle),
                 Paragraph("-", tstyle_center),
-                Paragraph(money_filter(p_during, "EUR"), tstyle_right),
+                Paragraph(money_filter(p_during, currency), tstyle_right),
             ]
         )
         tdata.append(
             [
                 Paragraph(_("Refunds"), tstyle),
                 Paragraph("+", tstyle_center),
-                Paragraph(money_filter(r_during, "EUR"), tstyle_right),
+                Paragraph(money_filter(r_during, currency), tstyle_right),
             ]
         )
 
@@ -631,7 +686,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                     tstyle_bold,
                 ),
                 Paragraph("=", tstyle_center),
-                Paragraph(money_filter(open_after, "EUR"), tstyle_bold_right),
+                Paragraph(money_filter(open_after, currency), tstyle_bold_right),
             ]
         )
         tstyledata += [
@@ -649,7 +704,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
         table.setStyle(TableStyle(tstyledata))
         return [table]
 
-    def _table_gift_cards(self, form_data):
+    def _table_gift_cards(self, form_data, currency):
         tstyle = copy.copy(self.get_style())
         tstyle.fontSize = 8
         tstyle.leading = 10
@@ -672,7 +727,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
 
         if df_start:
             tx_before = self._giftcard_transaction_qs(
-                form_data, ignore_dates=True
+                form_data, currency, ignore_dates=True
             ).filter(datetime__lt=df_start).aggregate(s=Sum("value"))["s"] or Decimal(
                 "0.00"
             )
@@ -687,19 +742,19 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                         ),
                         tstyle,
                     ),
-                    Paragraph(money_filter(tx_before, "EUR"), tstyle_right),
+                    Paragraph(money_filter(tx_before, currency), tstyle_right),
                 ]
             )
         else:
             tx_before = Decimal("0.00")
 
-        tx_during = self._giftcard_transaction_qs(form_data).aggregate(s=Sum("value"))[
+        tx_during = self._giftcard_transaction_qs(form_data, currency).aggregate(s=Sum("value"))[
             "s"
         ] or Decimal("0.00")
         tdata.append(
             [
                 Paragraph(_("Gift card transactions"), tstyle),
-                Paragraph(money_filter(tx_during, "EUR"), tstyle_right),
+                Paragraph(money_filter(tx_during, currency), tstyle_right),
             ]
         )
 
@@ -715,7 +770,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                     ),
                     tstyle_bold,
                 ),
-                Paragraph(money_filter(open_after, "EUR"), tstyle_bold_right),
+                Paragraph(money_filter(open_after, currency), tstyle_bold_right),
             ]
         )
         tstyledata += [
@@ -772,37 +827,56 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                     "<br />".join(escape(f) for f in self.describe_filters(form_data)),
                     style_small,
                 ),
-                Spacer(0, 3 * mm),
-                Paragraph(_("Orders"), style_h2),
-                Spacer(0, 3 * mm),
-                *self._table_transactions(form_data),
-                Spacer(0, 8 * mm),
-                Paragraph(_("Payments"), style_h2),
-                Spacer(0, 3 * mm),
-                *self._table_payments(form_data),
-                Spacer(0, 8 * mm),
-                KeepTogether(
-                    [
-                        Paragraph(_("Open items"), style_h2),
-                        Spacer(0, 3 * mm),
-                        *self._table_open_items(form_data),
-                    ]
-                ),
             ]
-            if (
-                self.is_multievent
-                and self.events.count() == self.organizer.events.count()
-            ):
+
+            currencies = list(sorted(set(self.events.values_list('currency', flat=True).distinct())))
+
+            for c in currencies:
+                c_head = f" [{c}]" if len(currencies) > 1 else ""
+                story += [
+                    Spacer(0, 3 * mm),
+                    Paragraph(_("Orders") + c_head, style_h2),
+                    Spacer(0, 3 * mm),
+                    *self._table_transactions(form_data, c),
+                ]
+
+            for c in currencies:
+                c_head = f" [{c}]" if len(currencies) > 1 else ""
+                story += [
+                    Spacer(0, 8 * mm),
+                    Paragraph(_("Payments") + c_head, style_h2),
+                    Spacer(0, 3 * mm),
+                    *self._table_payments(form_data, c),
+                ]
+
+            for c in currencies:
+                c_head = f" [{c}]" if len(currencies) > 1 else ""
                 story += [
                     Spacer(0, 8 * mm),
                     KeepTogether(
                         [
-                            Paragraph(_("Gift cards"), style_h2),
+                            Paragraph(_("Open items") + c_head, style_h2),
                             Spacer(0, 3 * mm),
-                            *self._table_gift_cards(form_data),
+                            *self._table_open_items(form_data, c),
                         ]
                     ),
                 ]
+            if (
+                self.is_multievent
+                and self.events.count() == self.organizer.events.count()
+            ):
+                for c in currencies:
+                    c_head = f" [{c}]" if len(currencies) > 1 else ""
+                    story += [
+                        Spacer(0, 8 * mm),
+                        KeepTogether(
+                            [
+                                Paragraph(_("Gift cards") + c_head, style_h2),
+                                Spacer(0, 3 * mm),
+                                *self._table_gift_cards(form_data, c),
+                            ]
+                        ),
+                    ]
 
             doc.build(story, canvasmaker=self.canvas_class(doc))
             f.seek(0)

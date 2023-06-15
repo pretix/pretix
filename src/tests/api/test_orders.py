@@ -30,7 +30,6 @@ from django.core import mail as djmail
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
-from pytz import UTC
 from stripe.error import APIConnectionError
 from tests.plugins.stripe.test_provider import MockedCharge
 
@@ -77,7 +76,7 @@ def quota(event, item):
 
 @pytest.fixture
 def order(event, item, taxrule, question):
-    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC)
+    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc)
     event.plugins += ",pretix.plugins.stripe"
     event.save()
 
@@ -86,8 +85,8 @@ def order(event, item, taxrule, question):
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, secret="k24fiuwvu8kxz3y1",
-            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=UTC),
-            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=UTC),
+            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
+            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
             total=23, locale='en'
         )
         p1 = o.payments.create(
@@ -947,8 +946,8 @@ def test_orderposition_list(token_client, organizer, event, order, item, subeven
 
     with scopes_disabled():
         cl = event.checkin_lists.create(name="Default")
-        c = op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=UTC), list=cl)
-        op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=UTC), list=cl, successful=False)
+        c = op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=datetime.timezone.utc), list=cl)
+        op.checkins.create(datetime=datetime.datetime(2017, 12, 26, 10, 0, 0, tzinfo=datetime.timezone.utc), list=cl, successful=False)
     res['checkins'] = [{  # successful only
         'id': c.pk,
         'datetime': '2017-12-26T10:00:00Z',

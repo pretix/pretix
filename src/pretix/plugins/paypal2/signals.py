@@ -29,7 +29,7 @@ from django.http import HttpRequest, HttpResponse
 from django.template.loader import get_template
 from django.urls import resolve
 from django.utils.crypto import get_random_string
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.forms import SecretKeySettingsField
 from pretix.base.middleware import _merge_csp, _parse_csp, _render_csp
@@ -61,7 +61,10 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
         'PAYMENT.SALE.REFUNDED': _('Payment refunded.'),
         'PAYMENT.SALE.REVERSED': _('Payment reversed.'),
         'PAYMENT.SALE.PENDING': _('Payment pending.'),
-        'CHECKOUT.ORDER.APPROVED': _('Order approved.'),
+        'CHECKOUT.ORDER.APPROVED': pgettext_lazy('paypal', 'Order approved.'),
+        'CHECKOUT.ORDER.COMPLETED': pgettext_lazy('paypal', 'Order completed.'),
+        'PAYMENT.CAPTURE.COMPLETED': pgettext_lazy('paypal', 'Capture completed.'),
+        'PAYMENT.CAPTURE.PENDING': pgettext_lazy('paypal', 'Capture pending.'),
     }
 
     if event_type in plains:

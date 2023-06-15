@@ -35,13 +35,13 @@ automatically and should be provided by any plugin that provides any view.
 A very basic example that provides one view in the admin panel and one view in the frontend
 could look like this::
 
-    from django.conf.urls import url
+    from django.urls import re_path
 
     from . import views
 
     urlpatterns = [
-        url(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/mypluginname/',
-            views.AdminView.as_view(), name='backend'),
+        re_path(r'^control/event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/mypluginname/',
+                views.AdminView.as_view(), name='backend'),
     ]
 
     event_patterns = [

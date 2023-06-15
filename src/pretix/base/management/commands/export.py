@@ -22,7 +22,7 @@
 import json
 import sys
 
-import pytz
+import pytz_deprecation_shim
 from django.core.management.base import BaseCommand
 from django.utils.timezone import override
 from django_scopes import scope
@@ -60,7 +60,7 @@ class Command(BaseCommand):
             sys.exit(1)
 
         locale = options.get("locale", None)
-        timezone = pytz.timezone(options['timezone']) if options.get('timezone') else None
+        timezone = pytz_deprecation_shim.timezone(options['timezone']) if options.get('timezone') else None
 
         with scope(organizer=o):
             if options['event_slug']:

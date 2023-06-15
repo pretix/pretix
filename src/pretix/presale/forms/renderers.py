@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from bootstrap3.renderers import FieldRenderer
 from bootstrap3.text import text_value
 from bootstrap3.utils import add_css_class
 from django.forms import CheckboxInput, CheckboxSelectMultiple, RadioSelect
@@ -27,6 +26,8 @@ from django.forms.utils import flatatt
 from django.utils.html import escape, format_html, strip_tags
 from django.utils.safestring import mark_safe
 from django.utils.translation import pgettext
+
+from pretix.base.forms.renderers import FieldRenderer
 
 
 def render_label(content, label_for=None, label_class=None, label_title='', label_id='', optional=False, is_valid=None, attrs=None):

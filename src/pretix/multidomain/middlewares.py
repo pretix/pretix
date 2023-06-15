@@ -42,7 +42,9 @@ from django.contrib.sessions.middleware import (
 from django.core.cache import cache
 from django.core.exceptions import DisallowedHost
 from django.http.request import split_domain_port
-from django.middleware.csrf import CsrfViewMiddleware as BaseCsrfMiddleware
+from django.middleware.csrf import (
+    CSRF_SESSION_KEY, CsrfViewMiddleware as BaseCsrfMiddleware,
+)
 from django.shortcuts import render
 from django.urls import set_urlconf
 from django.utils.cache import patch_vary_headers
@@ -189,35 +191,25 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
     a custom domain.
     """
 
-    def process_response(self, request, response):
-        if getattr(response, 'csrf_processing_done', False):
-            return response
-
-        # If CSRF_COOKIE is unset, then CsrfViewMiddleware.process_view was
-        # never called, probably because a request middleware returned a response
-        # (for example, contrib.auth redirecting to a login page).
-        if request.META.get("CSRF_COOKIE") is None:
-            return response
-
-        if not request.META.get("CSRF_COOKIE_USED", False):
-            return response
-
-        # Set the CSRF cookie even if it's already set, so we renew
-        # the expiry timer.
-        set_cookie_without_samesite(
-            request, response,
-            settings.CSRF_COOKIE_NAME,
-            request.META["CSRF_COOKIE"],
-            max_age=settings.CSRF_COOKIE_AGE,
-            domain=get_cookie_domain(request),
-            path=settings.CSRF_COOKIE_PATH,
-            secure=request.scheme == 'https',
-            httponly=settings.CSRF_COOKIE_HTTPONLY
-        )
-        # Content varies with the CSRF cookie, so set the Vary header.
-        patch_vary_headers(response, ('Cookie',))
-        response.csrf_processing_done = True
-        return response
+    def _set_csrf_cookie(self, request, response):
+        if settings.CSRF_USE_SESSIONS:
+            if request.session.get(CSRF_SESSION_KEY) != request.META["CSRF_COOKIE"]:
+                request.session[CSRF_SESSION_KEY] = request.META["CSRF_COOKIE"]
+        else:
+            # Set the CSRF cookie even if it's already set, so we renew
+            # the expiry timer.
+            set_cookie_without_samesite(
+                request, response,
+                settings.CSRF_COOKIE_NAME,
+                request.META["CSRF_COOKIE"],
+                max_age=settings.CSRF_COOKIE_AGE,
+                domain=get_cookie_domain(request),
+                path=settings.CSRF_COOKIE_PATH,
+                secure=request.scheme == 'https',
+                httponly=settings.CSRF_COOKIE_HTTPONLY
+            )
+            # Content varies with the CSRF cookie, so set the Vary header.
+            patch_vary_headers(response, ('Cookie',))
 
 
 def get_cookie_domain(request):

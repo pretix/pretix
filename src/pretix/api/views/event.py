@@ -71,6 +71,8 @@ with scopes_disabled():
         ends_after = django_filters.rest_framework.IsoDateTimeFilter(method='ends_after_qs')
         sales_channel = django_filters.rest_framework.CharFilter(method='sales_channel_qs')
         search = django_filters.rest_framework.CharFilter(method='search_qs')
+        date_from = django_filters.rest_framework.IsoDateTimeFromToRangeFilter()
+        date_to = django_filters.rest_framework.IsoDateTimeFromToRangeFilter()
 
         class Meta:
             model = Event
@@ -336,6 +338,8 @@ with scopes_disabled():
         modified_since = django_filters.IsoDateTimeFilter(field_name='last_modified', lookup_expr='gte')
         sales_channel = django_filters.rest_framework.CharFilter(method='sales_channel_qs')
         search = django_filters.rest_framework.CharFilter(method='search_qs')
+        date_from = django_filters.rest_framework.IsoDateTimeFromToRangeFilter()
+        date_to = django_filters.rest_framework.IsoDateTimeFromToRangeFilter()
 
         class Meta:
             model = SubEvent
