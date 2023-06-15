@@ -32,6 +32,7 @@
                     <tr>
                         <th>{% trans "Organizer" %}</th>
                         <th>{% trans "Status" %}</th>
+                        <th>{% trans "Reusable media" %}</th>
                         <th></th>
                     </tr>
                     </thead>
@@ -46,6 +47,13 @@
                                     {% trans "active" %}
                                 {% else %}
                                     {% trans "invited" %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if gca.reusable_media %}
+                                    {% trans "active" %}
+                                {% else %}
+                                    {% trans "disabled" %}
                                 {% endif %}
                             </td>
                             <td class="text-right">
