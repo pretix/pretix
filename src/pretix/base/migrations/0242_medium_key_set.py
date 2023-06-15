@@ -7,7 +7,7 @@ import django.db.models.deletion
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0240_auto_20230512_1008'),
+        ('pretixbase', '0242_auto_20230512_1008'),
     ]
 
     operations = [
