@@ -59,7 +59,7 @@ from pretix.base.models.orders import (
 )
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
-from pretix.base.services.locking import lock_objects, LOCK_TRUST_WINDOW
+from pretix.base.services.locking import LOCK_TRUST_WINDOW, lock_objects
 from pretix.base.services.pricing import (
     apply_discounts, get_line_price, get_listed_price, is_included_for_free,
 )

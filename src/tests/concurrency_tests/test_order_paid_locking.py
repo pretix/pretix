@@ -20,8 +20,8 @@
 # <https://www.gnu.org/licenses/>.
 #
 import asyncio
-from decimal import Decimal
 from datetime import timedelta
+from decimal import Decimal
 from importlib import import_module
 
 import pytest
@@ -31,7 +31,7 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from tests.concurrency_tests.utils import get
 
-from pretix.base.models import OrderPosition, Order, OrderPayment
+from pretix.base.models import Order, OrderPayment, OrderPosition
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 

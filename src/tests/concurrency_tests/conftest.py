@@ -28,7 +28,9 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from pytz import UTC
 
-from pretix.base.models import Event, Item, Organizer, Quota, SeatingPlan, Device
+from pretix.base.models import (
+    Device, Event, Item, Organizer, Quota, SeatingPlan,
+)
 from pretix.base.models.devices import generate_api_token
 
 
