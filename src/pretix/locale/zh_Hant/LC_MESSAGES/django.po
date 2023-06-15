@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-07 15:40+0000\n"
-"PO-Revision-Date: 2023-06-14 00:00+0000\n"
+"PO-Revision-Date: 2023-06-15 08:57+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -15666,6 +15666,14 @@ msgid ""
 "Best regards,\n"
 "Your pretix team\n"
 msgstr ""
+"你好\n"
+"\n"
+"你要求新密碼。請前往以下頁面重設密碼：\n"
+"\n"
+"%(url)s\n"
+"\n"
+"此致敬意\n"
+"你的卓越團隊\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
 #, python-format
@@ -15747,13 +15755,13 @@ msgstr "發送電子郵件"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:21
 msgid "Use system default"
-msgstr ""
+msgstr "使用系統預設值"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:29
 msgid ""
 "E-mails will be sent through the system's default server. They will show the "
 "following sender information:"
-msgstr ""
+msgstr "電子郵件將透過系統的預設的伺服器傳送。郵件將顯示以下寄件者資訊："
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:35
 msgctxt "mail_header"
@@ -15768,7 +15776,7 @@ msgstr "回覆- 至"
 #: pretix/control/templates/pretixcontrol/email_setup.html:56
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:18
 msgid "Use system email server with a custom sender address"
-msgstr ""
+msgstr "使用具有自訂寄件者地址的系統電子郵件伺服器"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:64
 msgid ""
@@ -15784,7 +15792,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/email_setup.html:84
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:18
 msgid "Use a custom SMTP server"
-msgstr ""
+msgstr "使用自訂 SMTP 伺服器"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:92
 msgid ""
