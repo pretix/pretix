@@ -1,0 +1,19 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load urlreplace %}
+{% load bootstrap3 %}
+{% load money %}
+{% block inner %}
+    <h1>
+        {% trans "Invite organizer" %}
+    </h1>
+    <form class="form-horizontal" action="" method="post">
+        {% csrf_token %}
+        {% bootstrap_form form layout="control" %}
+        <div class="form-group submit-group">
+            <button type="submit" class="btn btn-primary btn-save">
+                {% trans "Save" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}

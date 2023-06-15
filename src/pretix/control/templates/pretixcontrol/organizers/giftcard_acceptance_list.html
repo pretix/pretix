@@ -1,0 +1,150 @@
+{% extends "pretixcontrol/organizers/base.html" %}
+{% load i18n %}
+{% load urlreplace %}
+{% load bootstrap3 %}
+{% load money %}
+{% block inner %}
+    <h1>
+        {% trans "Gift cards acceptance" %}
+    </h1>
+    <p>
+        {% blocktrans trimmed %}
+            This feature allows you to configure acceptance of gift cards across multiple organizer accounts.
+        {% endblocktrans %}
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <h2>
+            {% trans "Other organizers you accept gift cards from" %}
+        </h2>
+
+        {% if issuer_acceptance|length == 0 and not filter_form.filtered %}
+            <p>
+                {% blocktrans trimmed %}
+                    You are not accepting gift cards from other organizers yet. If you want to do so, the other
+                    organizer can add you to their list and afterwards, you can confirm this here.
+                {% endblocktrans %}
+            </p>
+        {% else %}
+            <div class="table-responsive">
+                <table class="table table-condensed table-hover">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Organizer" %}</th>
+                        <th>{% trans "Status" %}</th>
+                        <th>{% trans "Reusable media" %}</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for gca in issuer_acceptance %}
+                        <tr>
+                            <td>
+                                {{ gca.issuer.name }}<br><code>{{ gca.issuer.slug }}</code>
+                            </td>
+                            <td>
+                                {% if gca.active %}
+                                    {% trans "active" %}
+                                {% else %}
+                                    {% trans "invited" %}
+                                {% endif %}
+                            </td>
+                            <td>
+                                {% if gca.reusable_media %}
+                                    {% trans "active" %}
+                                {% else %}
+                                    {% trans "disabled" %}
+                                {% endif %}
+                            </td>
+                            <td class="text-right">
+                                {% if gca.active %}
+                                    <button class="btn btn-danger" name="delete_issuer" value="{{ gca.issuer.slug }}">
+                                        {% trans "Remove" %}
+                                    </button>
+                                {% else %}
+                                    <button class="btn btn-success" name="accept_issuer" value="{{ gca.issuer.slug }}">
+                                        {% trans "Accept" %}
+                                    </button>
+                                    <button class="btn btn-danger" name="delete_issuer" value="{{ gca.issuer.slug }}">
+                                        {% trans "Decline" %}
+                                    </button>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        {% endif %}
+
+    </form>
+    <form method="post">
+        {% csrf_token %}
+        <h2>
+            {% trans "Other organizers accepting gift cards from you" %}
+        </h2>
+        <p>
+            {% blocktrans trimmed %}
+                You can invite other organizers to accept your gift cards. After you have done so, they need to go
+                to the same page in their account and accept your invitation. Note that other organizers will be able
+                to add money to gift cards as well that you will need to collect form them. It is your responsibility
+                to handle the exchange of money to offset the transactions between the two organizers.
+            {% endblocktrans %}
+        </p>
+        <p>
+            {% blocktrans trimmed %}
+                You can optionally control whether they can access your reusable media. This is required if you want
+                them to participate in a shared system with e.g. NFC payment chips.
+            {% endblocktrans %}
+            {% blocktrans trimmed %}
+                You should only use this option for organizers you trust, since (depending on the activated medium types)
+                this will grant the other organizer access to cryptographic key material required to interact with
+                the media type.
+            {% endblocktrans %}
+        </p>
+        <a href="{% url "control:organizer.giftcards.acceptance.invite" organizer=request.organizer.slug %}" class="btn btn-default">
+            {% trans "Invite new organizer" %}
+        </a>
+        <div class="table-responsive">
+            <table class="table table-condensed table-hover">
+                <thead>
+                <tr>
+                    <th>{% trans "Organizer" %}</th>
+                    <th>{% trans "Status" %}</th>
+                    <th>{% trans "Reusable media" %}</th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for gca in acceptor_acceptance %}
+                    <tr>
+                        <td>
+                            {{ gca.acceptor.name }}<br><code>{{ gca.acceptor.slug }}</code>
+                        </td>
+                        <td>
+                            {% if gca.active %}
+                                {% trans "active" %}
+                            {% else %}
+                                {% trans "invited" %}
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if gca.reusable_media %}
+                                {% trans "active" %}
+                            {% else %}
+                                {% trans "disabled" %}
+                            {% endif %}
+                        </td>
+                        <td class="text-right">
+                            <button class="btn btn-danger" name="delete_acceptor" value="{{ gca.acceptor.slug }}">
+                                {% trans "Remove" %}
+                            </button>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </form>
+    {% include "pretixcontrol/pagination.html" %}
+{% endblock %}

@@ -6,6 +6,12 @@
         <a href="{% url "control:organizer.giftcard" organizer=gc.issuer.slug giftcard=gc.pk %}">
             {{ gc.secret }}
         </a>
+        {% if gc.issuer != request.organizer %}
+            <span class="text-muted">
+                <br>
+                <span class="fa fa-group"></span> {{ gc.issuer }}
+            </span>
+        {% endif %}
     </dd>
     <dt>{% trans "Issuer" %}</dt>
     <dd>{{ gc.issuer }}</dd>

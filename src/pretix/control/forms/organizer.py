@@ -65,8 +65,8 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
-    Customer, Device, EventMetaProperty, Gate, GiftCard, Membership,
-    MembershipType, OrderPosition, Organizer, ReusableMedium, Team,
+    Customer, Device, EventMetaProperty, Gate, GiftCard, GiftCardAcceptance,
+    Membership, MembershipType, OrderPosition, Organizer, ReusableMedium, Team,
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.organizer import OrganizerFooterLink
@@ -637,7 +637,11 @@ class GiftCardCreateForm(forms.ModelForm):
         if GiftCard.objects.filter(
                 secret__iexact=s
         ).filter(
-            Q(issuer=self.organizer) | Q(issuer__gift_card_collector_acceptance__collector=self.organizer)
+            Q(issuer=self.organizer) |
+            Q(issuer__in=GiftCardAcceptance.objects.filter(
+                acceptor=self.organizer,
+                active=True,
+            ).values_list('issuer', flat=True))
         ).exists():
             raise ValidationError(
                 _('A gift card with the same secret already exists in your or an affiliated organizer account.')
@@ -1026,3 +1030,32 @@ class SSOClientForm(I18nModelForm):
         else:
             del self.fields['client_id']
             del self.fields['regenerate_client_secret']
+
+
+class GiftCardAcceptanceInviteForm(forms.Form):
+    acceptor = forms.CharField(
+        label=_("Organizer short name"),
+        required=True,
+    )
+    reusable_media = forms.BooleanField(
+        label=_("Allow access to reusable media"),
+        help_text=_("This is required if you want the other organizer to participate in a shared system with e.g. "
+                    "NFC payment chips. You should only use this option for organizers you trust, since (depending "
+                    "on the activated medium types) this will grant the other organizer access to cryptographic key "
+                    "material required to interact with the media type."),
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.organizer = kwargs.pop('organizer')
+        super().__init__(*args, **kwargs)
+
+    def clean_acceptor(self):
+        val = self.cleaned_data['acceptor']
+        try:
+            acceptor = Organizer.objects.exclude(pk=self.organizer.pk).get(slug=val)
+        except Organizer.DoesNotExist:
+            raise ValidationError(_('The selected organizer does not exist or cannot be invited.'))
+        if self.organizer.gift_card_acceptor_acceptance.filter(acceptor=acceptor).exists():
+            raise ValidationError(_('The selected organizer has already been invited.'))
+        return acceptor
