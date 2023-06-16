@@ -18,8 +18,13 @@ subject                               multi-lingual string       The subject of 
 template                              multi-lingual string       The body of the email
 all_products                          boolean                    If ``true``, the email is sent to buyers of all products
 limit_products                        list of integers           List of product IDs, if ``all_products`` is not set
-include_pending                       boolean                    If ``true``, the email is sent to pending orders. If ``false``,
+[**DEPRECATED**] include_pending      boolean                    If ``true``, the email is sent to pending orders. If ``false``,
                                                                  only paid orders are considered.
+restrict_to_status                    list                       List of order states to restrict recipients to. Valid
+                                                                 entries are ``p, e, c, pa, na, valid_if_pending`` for
+                                                                 the order states paid, expired, canceled, approval pending,
+                                                                 payment pending, and payment pending but already confirmed.
+                                                                 The default is ``["p", "na", "valid_if_pending"]``.
 date_is_absolute                      boolean                    If ``true``, the email is set at a specific point in time.
 send_date                             datetime                   If ``date_is_absolute`` is set: Date and time to send the email.
 send_offset_days                      integer                    If ``date_is_absolute`` is not set, this is the number of days
@@ -74,7 +79,11 @@ Endpoints
             "template": {"en": "Don't forget your tickets, download them at {url}"},
             "all_products": true,
             "limit_products": [],
-            "include_pending": false,
+            "restrict_to_status": [
+                "p",
+                "na",
+                "valid_if_pending"
+            ],
             "send_date": null,
             "send_offset_days": 1,
             "send_offset_time": "18:00",
@@ -120,7 +129,11 @@ Endpoints
         "template": {"en": "Don't forget your tickets, download them at {url}"},
         "all_products": true,
         "limit_products": [],
-        "include_pending": false,
+        "restrict_to_status": [
+            "p",
+            "na",
+            "valid_if_pending"
+        ],
         "send_date": null,
         "send_offset_days": 1,
         "send_offset_time": "18:00",
@@ -157,7 +170,11 @@ Endpoints
         "template": {"en": "Don't forget your tickets, download them at {url}"},
         "all_products": true,
         "limit_products": [],
-        "include_pending": false,
+        "restrict_to_status": [
+            "p",
+            "na",
+            "valid_if_pending"
+        ],
         "send_date": null,
         "send_offset_days": 1,
         "send_offset_time": "18:00",
@@ -182,7 +199,11 @@ Endpoints
         "template": {"en": "Don't forget your tickets, download them at {url}"},
         "all_products": true,
         "limit_products": [],
-        "include_pending": false,
+        "restrict_to_status": [
+            "p",
+            "na",
+            "valid_if_pending"
+        ],
         "send_date": null,
         "send_offset_days": 1,
         "send_offset_time": "18:00",
@@ -235,7 +256,11 @@ Endpoints
         "template": {"en": "Don't forget your tickets, download them at {url}"},
         "all_products": true,
         "limit_products": [],
-        "include_pending": false,
+        "restrict_to_status": [
+            "p",
+            "na",
+            "valid_if_pending"
+        ],
         "send_date": null,
         "send_offset_days": 1,
         "send_offset_time": "18:00",
