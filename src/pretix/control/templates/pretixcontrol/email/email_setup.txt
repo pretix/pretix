@@ -8,7 +8,7 @@ If that was you, please enter the following confirmation code:
 
 If this was not requested by you, you can safely ignore this email.
 
-Best regards,
+Best regards,  
 
 Your {{ instance }} team
 {% endblocktrans %}

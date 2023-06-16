@@ -895,7 +895,7 @@ class EventCancelForm(forms.Form):
                 'Hello,\n\n'
                 'with this email, we regret to inform you that {event} has been canceled.\n\n'
                 'We will refund you {refund_amount} to your original payment method.\n\n'
-                'You can view the current state of your order here:\n\n{url}\n\nBest regards,\n\n'
+                'You can view the current state of your order here:\n\n{url}\n\nBest regards,  \n\n'
                 'Your {event} team'
             ))
         )
@@ -922,7 +922,7 @@ class EventCancelForm(forms.Form):
                 'Hello,\n\n'
                 'with this email, we regret to inform you that {event} has been canceled.\n\n'
                 'You will therefore not receive a ticket from the waiting list.\n\n'
-                'Best regards,\n\n'
+                'Best regards,  \n\n'
                 'Your {event} team'
             ))
         )

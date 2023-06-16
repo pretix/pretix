@@ -138,7 +138,7 @@ settings_hierarkey.add_default(
 
 you receive this message because an order for {event} was placed by {order_email} and we have been asked to forward the invoice to you.
 
-Best regards,
+Best regards,  
 
-Your {event} team"""))
+Your {event} team"""))  # noqa: W291
 )
