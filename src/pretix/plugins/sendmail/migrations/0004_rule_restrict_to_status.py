@@ -1,4 +1,5 @@
 from django.db import migrations
+
 import pretix.base.models.fields
 
 
