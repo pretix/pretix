@@ -32,7 +32,7 @@ from pretix.plugins.sendmail.models import Rule
 class RuleSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Rule
-        fields = ['id', 'subject', 'template', 'all_products', 'limit_products', 'include_pending',
+        fields = ['id', 'subject', 'template', 'all_products', 'limit_products', 'restrict_to_status',
                   'send_date', 'send_offset_days', 'send_offset_time', 'date_is_absolute',
                   'offset_to_event_end', 'offset_is_after', 'send_to', 'enabled']
         read_only_fields = ['id']
@@ -66,7 +66,7 @@ with scopes_disabled():
     class RuleFilter(FilterSet):
         class Meta:
             model = Rule
-            fields = ['id', 'all_products', 'include_pending', 'date_is_absolute',
+            fields = ['id', 'all_products', 'date_is_absolute', 'restrict_to_status',
                       'offset_to_event_end', 'offset_is_after', 'send_to', 'enabled']
 
 
