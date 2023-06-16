@@ -66,7 +66,7 @@ with scopes_disabled():
     class RuleFilter(FilterSet):
         class Meta:
             model = Rule
-            fields = ['id', 'all_products', 'date_is_absolute', 'restrict_to_status',
+            fields = ['id', 'all_products', 'date_is_absolute',
                       'offset_to_event_end', 'offset_is_after', 'send_to', 'enabled']
 
 
