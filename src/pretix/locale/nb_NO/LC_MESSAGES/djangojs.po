@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-07 15:41+0000\n"
+"POT-Creation-Date: 2023-06-16 14:35+0000\n"
 "PO-Revision-Date: 2022-06-20 02:00+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
@@ -447,47 +447,47 @@ msgstr "Minutter siden siste oppføring (-1 på første oppføring)"
 msgid "Minutes since first entry (-1 on first entry)"
 msgstr "Minutter siden første oppføring (-1 på første oppføring)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:112
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:118
 msgid "All of the conditions below (AND)"
 msgstr "Alle betingelsene nedenfor (AND)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:113
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "At least one of the conditions below (OR)"
 msgstr "Minst en av betingelsene nedenfor (OR)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:114
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:120
 msgid "Event start"
 msgstr "Event start"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
 msgid "Event end"
 msgstr "Event slutt"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:116
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:122
 msgid "Event admission"
 msgstr "Event inngang"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:117
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
 msgid "custom date and time"
 msgstr "egendefinert dato og klokkeslett"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:118
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:124
 msgid "custom time"
 msgstr "egendefinert tid"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:125
 msgid "Tolerance (minutes)"
 msgstr "Toleranse (minutter)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:120
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:126
 msgid "Add condition"
 msgstr "Legg til betingelse"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
 msgid "minutes"
 msgstr "minutter"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:122
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:128
 msgid "Duplicate"
 msgstr ""
 

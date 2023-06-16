@@ -290,6 +290,8 @@ def scheduled_organizer_export(self, organizer: Organizer, schedule: int) -> Non
     if isinstance(exporter, OrganizerLevelExportMixin):
         if not schedule.owner.has_organizer_permission(organizer, exporter.organizer_required_permission):
             has_permission = False
+    if exporter and not exporter.available_for_user(schedule.owner):
+        has_permission = False
 
     _run_scheduled_export(
         schedule,

@@ -148,10 +148,15 @@ class ShredDoView(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixi
         return _('The selected data was deleted successfully.')
 
     def get_error_url(self):
-        return reverse('control:event.shredder.download', kwargs={
+        if "file" in self.request.POST:
+            return reverse('control:event.shredder.download', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug,
+                'file': self.request.POST.get("file")
+            })
+        return reverse('control:event.shredder.start', kwargs={
             'event': self.request.event.slug,
-            'organizer': self.request.event.organizer.slug,
-            'file': self.request.POST.get("file")
+            'organizer': self.request.event.organizer.slug
         })
 
     def post(self, request, *args, **kwargs):

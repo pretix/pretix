@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-07 15:41+0000\n"
+"POT-Creation-Date: 2023-06-16 14:35+0000\n"
 "PO-Revision-Date: 2023-05-18 01:00+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
@@ -437,47 +437,47 @@ msgstr "自從最後入場之後的分鐘(-1是第一次入場)"
 msgid "Minutes since first entry (-1 on first entry)"
 msgstr "自從第一次入場的分鐘(-1是第一次入場)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:112
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:118
 msgid "All of the conditions below (AND)"
 msgstr "以下所有的條件 (和)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:113
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "At least one of the conditions below (OR)"
 msgstr "以下至少其中一個條件 (或)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:114
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:120
 msgid "Event start"
 msgstr "活動開始"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
 msgid "Event end"
 msgstr "活動結束"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:116
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:122
 msgid "Event admission"
 msgstr "活動管理"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:117
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
 msgid "custom date and time"
 msgstr "客製化日期與時間"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:118
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:124
 msgid "custom time"
 msgstr "客製化時間"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:125
 msgid "Tolerance (minutes)"
 msgstr "容忍度 (分鐘)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:120
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:126
 msgid "Add condition"
 msgstr "增加條件"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
 msgid "minutes"
 msgstr "分鐘"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:122
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:128
 msgid "Duplicate"
 msgstr "重覆"
 

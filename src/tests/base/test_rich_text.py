@@ -61,3 +61,21 @@ def test_linkify_abs(link):
     assert rich_text_snippet(input, safelinks=False) == output
     assert rich_text(input, safelinks=False) == f'<p>{output}</p>'
     assert markdown_compile_email(input) == f'<p>{output}</p>'
+
+
+@pytest.mark.parametrize("content,result", [
+    ('a\nb', '<p>a<br>\nb</p>'),
+    ('a  \nb', '<p>a<br>\nb</p>'),
+    ('a\n\nb', '<p>a</p>\n<p>b</p>'),
+])
+def test_newline_handling(content, result):
+    assert rich_text(content, safelinks=False) == result
+
+
+@pytest.mark.parametrize("content,result", [
+    ('a\nb', '<p>a\nb</p>'),
+    ('a  \nb', '<p>a<br>\nb</p>'),
+    ('a\n\nb', '<p>a</p>\n<p>b</p>'),
+])
+def test_newline_handling_email(content, result):
+    assert markdown_compile_email(content) == result

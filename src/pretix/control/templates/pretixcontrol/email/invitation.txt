@@ -11,7 +11,7 @@ If you want to join that team, just click on the following link:
 
 If you do not want to join, you can safely ignore or delete this email.
 
-Best regards,
+Best regards,  
 
 Your pretix team
 {% endblocktrans %}

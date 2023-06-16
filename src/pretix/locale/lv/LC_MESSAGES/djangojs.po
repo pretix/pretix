@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-07 15:41+0000\n"
+"POT-Creation-Date: 2023-06-16 14:35+0000\n"
 "PO-Revision-Date: 2022-04-06 03:00+0000\n"
 "Last-Translator: Liga V <lerning_by_dreaming@gmx.de>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -452,47 +452,47 @@ msgstr ""
 msgid "Minutes since first entry (-1 on first entry)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:112
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:118
 msgid "All of the conditions below (AND)"
 msgstr "Visi nosacījumi, kas zemāk (AND)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:113
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "At least one of the conditions below (OR)"
 msgstr "Vismaz viens nosacījums, kas zemāk (OR)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:114
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:120
 msgid "Event start"
 msgstr "Pasākums sākas"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
 msgid "Event end"
 msgstr "Pasākums beidzas"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:116
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:122
 msgid "Event admission"
 msgstr "Ieeja pasākumā"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:117
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
 msgid "custom date and time"
 msgstr "pielāgots datums un laiks"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:118
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:124
 msgid "custom time"
 msgstr "pielāgots laiks"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:125
 msgid "Tolerance (minutes)"
 msgstr "Pielaide (minūtes)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:120
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:126
 msgid "Add condition"
 msgstr "Pievienot nosacījumu"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
 msgid "minutes"
 msgstr "minūtes"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:122
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:128
 msgid "Duplicate"
 msgstr ""
 

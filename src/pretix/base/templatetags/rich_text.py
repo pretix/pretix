@@ -46,6 +46,8 @@ from django.urls import reverse
 from django.utils.functional import SimpleLazyObject
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
+from markdown import Extension
+from markdown.inlinepatterns import SubstituteTagInlineProcessor
 from tlds import tld_set
 
 register = template.Library()
@@ -168,6 +170,21 @@ def abslink_callback(attrs, new=False):
     return attrs
 
 
+class EmailNl2BrExtension(Extension):
+    """
+    In emails (mostly for backwards-compatibility), we do not follow GitHub Flavored Markdown in preserving newlines.
+    Instead, we follow the CommonMark specification:
+
+    "A line ending (not in a code span or HTML tag) that is preceded by two or more spaces and does not occur at the
+    end of a block is parsed as a hard line break (rendered in HTML as a <br /> tag)"
+    """
+    BR_RE = r'  \n'
+
+    def extendMarkdown(self, md):
+        br_tag = SubstituteTagInlineProcessor(self.BR_RE, 'br')
+        md.inlinePatterns.register(br_tag, 'nl', 5)
+
+
 def markdown_compile_email(source):
     linker = bleach.Linker(
         url_re=URL_RE,
@@ -180,7 +197,7 @@ def markdown_compile_email(source):
             source,
             extensions=[
                 'markdown.extensions.sane_lists',
-                #  'markdown.extensions.nl2br' # disabled for backwards-compatibility
+                EmailNl2BrExtension(),
             ]
         ),
         tags=ALLOWED_TAGS,

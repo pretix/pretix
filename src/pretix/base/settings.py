@@ -2018,8 +2018,8 @@ to your order for {event}.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_resend_all_links': {
         'type': LazyI18nString,
@@ -2034,8 +2034,8 @@ The list is as follows:
 
 {orders}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_free_attendee': {
         'type': LazyI18nString,
@@ -2050,8 +2050,8 @@ you have been registered for {event} successfully.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_free_attendee': {
         'type': bool,
@@ -2071,8 +2071,8 @@ no payment is required.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_placed_require_approval': {
         'type': LazyI18nString,
@@ -2089,8 +2089,8 @@ be patient and wait for our next email.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_placed': {
         'type': LazyI18nString,
@@ -2108,8 +2108,8 @@ of {total_with_currency}. Please complete your payment before {expire_date}.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_attachment_new_order': {
         'default': None,
@@ -2155,8 +2155,8 @@ a ticket for {event} has been ordered for you.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_changed': {
         'type': LazyI18nString,
@@ -2171,8 +2171,8 @@ your order for {event} has been changed.
 You can view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_paid': {
         'type': LazyI18nString,
@@ -2189,8 +2189,8 @@ we successfully received your payment for {event}. Thank you!
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_paid_attendee': {
         'type': bool,
@@ -2209,8 +2209,8 @@ a ticket for {event} that has been ordered for you is now paid.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_days_order_expire_warning': {
         'form_class': forms.IntegerField,
@@ -2242,8 +2242,8 @@ your payment before {expire_date}.
 You can view the payment information and the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_pending_warning': {
         'type': LazyI18nString,
@@ -2259,8 +2259,8 @@ Please keep in mind that you are required to pay before {expire_date}.
 You can view the payment information and the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_incomplete_payment': {
         'type': LazyI18nString,
@@ -2279,8 +2279,8 @@ missing additional payment of **{pending_sum}**.
 You can view the payment information and the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_waiting_list': {
         'type': LazyI18nString,
@@ -2312,8 +2312,8 @@ as possible to the next person on the waiting list:
 
 {url_remove}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_canceled': {
         'type': LazyI18nString,
@@ -2330,8 +2330,8 @@ your order {code} for {event} has been canceled.
 You can view the details of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_approved': {
         'type': LazyI18nString,
@@ -2350,8 +2350,8 @@ You can select a payment method and perform the payment here:
 
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_approved_attendee': {
         'type': bool,
@@ -2370,8 +2370,8 @@ we approved a ticket ordered for you for {event}.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_approved_free': {
         'type': LazyI18nString,
@@ -2387,8 +2387,8 @@ at our event. As you only ordered free products, no payment is required.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_approved_free_attendee': {
         'type': bool,
@@ -2407,8 +2407,8 @@ we approved a ticket ordered for you for {event}.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_denied': {
         'type': LazyI18nString,
@@ -2426,8 +2426,8 @@ You can view the details of your order here:
 
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_text_order_custom_mail': {
         'type': LazyI18nString,
@@ -2436,8 +2436,8 @@ Your {event} team"""))
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_days_download_reminder': {
         'type': int,
@@ -2455,13 +2455,13 @@ Your {event} team"""))
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello {attendee_name},
 
-    you are registered for {event}.
+you are registered for {event}.
 
-    If you did not do so already, you can download your ticket here:
-    {url}
+If you did not do so already, you can download your ticket here:
+{url}
 
-    Best regards,
-    Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_download_reminder': {
         'type': LazyI18nString,
@@ -2476,8 +2476,8 @@ you bought a ticket for {event}.
 If you did not do so already, you can download your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_customer_registration': {
         'type': LazyI18nString,
@@ -2497,9 +2497,9 @@ This link is valid for one day.
 
 If you did not sign up yourself, please ignore this email.
 
-Best regards,
+Best regards,  
 
-Your {organizer} team"""))
+Your {organizer} team"""))  # noqa: W291
     },
     'mail_subject_customer_email_change': {
         'type': LazyI18nString,
@@ -2519,9 +2519,9 @@ This link is valid for one day.
 
 If you did not request this, please ignore this email.
 
-Best regards,
+Best regards,  
 
-Your {organizer} team"""))
+Your {organizer} team"""))  # noqa: W291
     },
     'mail_subject_customer_reset': {
         'type': LazyI18nString,
@@ -2541,9 +2541,9 @@ This link is valid for one day.
 
 If you did not request a new password, please ignore this email.
 
-Best regards,
+Best regards,  
 
-Your {organizer} team"""))
+Your {organizer} team"""))  # noqa: W291
     },
     'smtp_use_custom': {
         'default': 'False',

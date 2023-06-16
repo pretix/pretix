@@ -1694,7 +1694,7 @@ class ExportMixin:
                 not isinstance(ex, OrganizerLevelExportMixin) or
                 self.request.user.has_organizer_permission(self.request.organizer, ex.organizer_required_permission,
                                                            self.request)
-            )
+            ) and ex.available_for_user(self.request.user if self.request.user and self.request.user.is_authenticated else None)
         ]
         return sorted(
             raw_exporters,

@@ -2261,8 +2261,13 @@ class ExportMixin:
     @cached_property
     def exporters(self):
         responses = register_data_exporters.send(self.request.event)
+        raw_exporters = [response(self.request.event, self.request.organizer) for r, response in responses if response]
+        raw_exporters = [
+            ex for ex in raw_exporters
+            if ex.available_for_user(self.request.user if self.request.user and self.request.user.is_authenticated else None)
+        ]
         return sorted(
-            [response(self.request.event, self.request.organizer) for r, response in responses if response],
+            raw_exporters,
             key=lambda ex: (0 if ex.category else 1, ex.category or "", 0 if ex.featured else 1, str(ex.verbose_name).lower())
         )
 

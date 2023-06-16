@@ -157,6 +157,13 @@ class BaseExporter:
         """
         raise NotImplementedError()  # NOQA
 
+    def available_for_user(self, user) -> bool:
+        """
+        Allows to do additional checks whether an exporter is available based on the user who calls it. Note that
+        ``user`` may be ``None`` e.g. during API usage.
+        """
+        return True
+
 
 class OrganizerLevelExportMixin:
     @property
