@@ -62,7 +62,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
 from django.views.generic import FormView, ListView
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
@@ -1511,12 +1511,12 @@ class QuickSetupView(FormView):
             event=self.request.event,
             initial=[
                 {
-                    'name': LazyI18nString.from_gettext(gettext('Regular ticket')),
+                    'name': LazyI18nString.from_gettext(gettext_noop('Regular ticket')),
                     'default_price': Decimal('35.00'),
                     'quota': 100,
                 },
                 {
-                    'name': LazyI18nString.from_gettext(gettext('Reduced ticket')),
+                    'name': LazyI18nString.from_gettext(gettext_noop('Reduced ticket')),
                     'default_price': Decimal('29.00'),
                     'quota': 50,
                 },
