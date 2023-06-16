@@ -281,7 +281,7 @@ def test_sendmail_rule_send_correct_products(event, order, item, item2):
 def test_sendmail_rule_send_order_pending(event, order):
     djmail.outbox = []
 
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=True,
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=['p', 'na', 'valid_if_pending'],
                                 subject='meow', template='meow meow meow')
 
     sendmail_run_rules(None)
@@ -294,7 +294,7 @@ def test_sendmail_rule_send_order_pending(event, order):
 def test_sendmail_rule_send_order_pending_excluded(event, order):
     djmail.outbox = []
 
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=False,
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=['p', 'valid_if_pending'],
                                 subject='meow', template='meow meow meow')
 
     sendmail_run_rules(None)
@@ -310,7 +310,7 @@ def test_sendmail_rule_send_order_valid_if_pending(event, order):
     order.save()
     djmail.outbox = []
 
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=False,
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=['p', 'valid_if_pending'],
                                 subject='meow', template='meow meow meow')
 
     sendmail_run_rules(None)
@@ -330,7 +330,7 @@ def test_sendmail_rule_send_order_status(status, event, order):
     order.status = status
     order.save()
 
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=True,
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=['p', 'na', 'valid_if_pending'],
                                 subject='meow', template='meow meow meow')
 
     sendmail_run_rules(None)
@@ -346,7 +346,7 @@ def test_sendmail_rule_send_order_approval(event, order):
     order.require_approval = True
     order.save()
 
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=True,
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=['p', 'na', 'valid_if_pending'],
                                 subject='meow', template='meow meow meow')
 
     sendmail_run_rules(None)
@@ -359,7 +359,7 @@ def test_sendmail_rule_send_order_approval(event, order):
 def test_sendmail_rule_only_send_once(event, order):
     djmail.outbox = []
 
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=True,
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=['p', 'na', 'valid_if_pending'],
                                 subject='meow', template='meow meow meow')
 
     sendmail_run_rules(None)
@@ -375,7 +375,7 @@ def test_sendmail_rule_only_live(event, order):
     event.live = False
     event.save()
 
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=True,
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=['p', 'na', 'valid_if_pending'],
                                 subject='meow', template='meow meow meow')
 
     sendmail_run_rules(None)
@@ -386,7 +386,7 @@ def test_sendmail_rule_only_live(event, order):
 @scopes_disabled()
 def test_sendmail_rule_disabled(event, order):
     djmail.outbox = []
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=True,
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=['p', 'na', 'valid_if_pending'],
                                 subject='meow', template='meow meow meow', enabled=False)
 
     sendmail_run_rules(None)
@@ -405,7 +405,7 @@ def test_sendmail_context_localization(event, order, pos):
     )
 
     djmail.outbox = []
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), include_pending=True,
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=['p', 'na', 'valid_if_pending'],
                                 subject='meow', template='Hallo {name_for_salutation}')
 
     sendmail_run_rules(None)
