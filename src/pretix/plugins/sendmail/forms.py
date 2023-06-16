@@ -167,7 +167,7 @@ class WaitinglistMailForm(BaseMailForm):
 
 class OrderMailForm(BaseMailForm):
     recipients = forms.ChoiceField(
-        label=pgettext_lazy('sendmail_from', 'Send to'),
+        label=pgettext_lazy('sendmail_form', 'Send to'),
         widget=forms.RadioSelect,
         initial='orders',
         choices=[]
@@ -186,7 +186,7 @@ class OrderMailForm(BaseMailForm):
         required=False
     )
     checkin_lists = SafeModelMultipleChoiceField(queryset=CheckinList.objects.none(), required=False)  # overridden later
-    not_checked_in = forms.BooleanField(label=pgettext_lazy('sendmail_from', 'Restrict to recipients without check-in'), required=False)
+    not_checked_in = forms.BooleanField(label=pgettext_lazy('sendmail_form', 'Restrict to recipients without check-in'), required=False)
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
         label=pgettext_lazy('sendmail_form', 'Restrict to a specific event date'),
@@ -255,7 +255,7 @@ class OrderMailForm(BaseMailForm):
                 ('overdue', _('pending with payment overdue'))
             )
         self.fields['sendto'] = forms.MultipleChoiceField(
-            label=pgettext_lazy('sendmail_from', 'Restrict to orders with status'),
+            label=pgettext_lazy('sendmail_form', 'Restrict to orders with status'),
             widget=forms.CheckboxSelectMultiple(
                 attrs={'class': 'scrolling-multiple-choice no-search'}
             ),
@@ -280,11 +280,11 @@ class OrderMailForm(BaseMailForm):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                 }),
-                'data-placeholder': pgettext_lazy('sendmail_from', 'Restrict to recipients with check-in on list')
+                'data-placeholder': pgettext_lazy('sendmail_form', 'Restrict to recipients with check-in on list')
             }
         )
         self.fields['checkin_lists'].widget.choices = self.fields['checkin_lists'].choices
-        self.fields['checkin_lists'].label = pgettext_lazy('sendmail_from', 'Restrict to recipients with check-in on list')
+        self.fields['checkin_lists'].label = pgettext_lazy('sendmail_form', 'Restrict to recipients with check-in on list')
 
         if event.has_subevents:
             self.fields['subevent'].queryset = event.subevents.all()
