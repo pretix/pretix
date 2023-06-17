@@ -145,7 +145,7 @@ to get a better plain text representation of your text. Note however, that for
 security reasons you can only use the following HTML elements::
 
     a, abbr, acronym, b, br, code, div, em, h1, h2,
-    h3, h4, h5, h6, hr, i, li, ol, p, pre, span, strong,
+    h3, h4, h5, h6, hr, i, img, li, ol, p, pre, span, strong,
     table, tbody, td, thead, tr, ul
 
 Additionally, only the following attributes are allowed on them::
@@ -156,6 +156,7 @@ Additionally, only the following attributes are allowed on them::
     <table width="…">
     <td width="…" align="…">
     <div class="…">
+    <img src="…" alt="…" width="…" height="…">
     <p class="…">
     <span class="…">
 

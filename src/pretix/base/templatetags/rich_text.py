@@ -85,6 +85,7 @@ ALLOWED_TAGS = ALLOWED_TAGS_SNIPPET + [
     'h4',
     'h5',
     'h6',
+    'img',
     'pre',
     # Update doc/user/markdown.rst if you change this!
 ]
@@ -96,6 +97,7 @@ ALLOWED_ATTRIBUTES = {
     'table': ['width'],
     'td': ['width', 'align'],
     'div': ['class'],
+    'img': ['src', 'alt', 'width', 'height'],
     'p': ['class'],
     'span': ['class', 'title'],
     'ol': ['start'],
