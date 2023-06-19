@@ -457,21 +457,20 @@ class BankTransfer(BasePaymentProvider):
         t = gettext("Please transfer the full amount to the following bank account:")
         t += "\n\n"
 
-        bankdetails = []
+        md_nl2br = "  \n"
         if self.settings.get('bank_details_type') == 'sepa':
-            bankdetails += [
-                "**", _("Reference"), ":** ", self._code(order), "  \n",
-                "**", _("Amount"), ":** ", money_filter(payment.amount, self.event.currency), "  \n",
-                "**", _("Account holder"), ":** ", self.settings.get('bank_details_sepa_name'), "  \n",
-                "**", _("IBAN"), ":** ", ibanformat(self.settings.get('bank_details_sepa_iban')), "  \n",
-                "**", _("BIC"), ":** ", self.settings.get('bank_details_sepa_bic'), "  \n",
-                "**", _("Bank"), ":** ", self.settings.get('bank_details_sepa_bank'),
-            ]
-        if bankdetails and self.settings.get('bank_details', as_type=LazyI18nString):
-            bankdetails.append("  \n")
-        bankdetails.append(self.settings.get('bank_details', as_type=LazyI18nString))
-
-        t += ''.join(str(i) for i in bankdetails)
+            bankdetails = (
+                (_("Reference"), self._code(order)),
+                (_("Amount"), money_filter(payment.amount, self.event.currency)),
+                (_("Account holder"), self.settings.get('bank_details_sepa_name')),
+                (_("IBAN"), ibanformat(self.settings.get('bank_details_sepa_iban'))),
+                (_("BIC"), self.settings.get('bank_details_sepa_bic')),
+                (_("Bank"), self.settings.get('bank_details_sepa_bank')),
+            )
+            t += md_nl2br.join([f"**{k}:** {v}" for k, v in bankdetails])
+            if self.settings.get('bank_details', as_type=LazyI18nString):
+                t += md_nl2br
+        t += str(self.settings.get('bank_details', as_type=LazyI18nString))
         return t
 
     def swiss_qrbill(self, payment):
