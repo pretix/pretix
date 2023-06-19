@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-15 11:21+0000\n"
+"PO-Revision-Date: 2023-06-19 09:31+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -9573,17 +9573,7 @@ msgid "Your ticket is ready for download: {code}"
 msgstr "你的門票已準備好下載：{code}"
 
 #: pretix/base/settings.py:2456
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {attendee_name},\n"
-#| "\n"
-#| "    you are registered for {event}.\n"
-#| "\n"
-#| "    If you did not do so already, you can download your ticket here:\n"
-#| "    {url}\n"
-#| "\n"
-#| "    Best regards,  \n"
-#| "    Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -10963,27 +10953,23 @@ msgstr ""
 #, fuzzy
 #| msgid "Barcode media"
 msgid "Barcode"
-msgstr "條碼媒體"
+msgstr "條碼"
 
 #: pretix/control/forms/checkin.py:188
-#, fuzzy
-#| msgid "Check-in list"
 msgid "Check-in time"
 msgstr "check-in列表"
 
 #: pretix/control/forms/checkin.py:192
-#, fuzzy
-#| msgid "Check-in list"
 msgid "Check-in type"
-msgstr "check-in列表"
+msgstr "check-in類型"
 
 #: pretix/control/forms/checkin.py:196
 msgid "Allow check-in of unpaid order (if check-in list permits it)"
-msgstr ""
+msgstr "允許check-in未付款訂單（如果check-in清單允許）"
 
 #: pretix/control/forms/checkin.py:200
 msgid "Support for check-in questions"
-msgstr ""
+msgstr "支持辦理check-in手續的問題"
 
 #: pretix/control/forms/event.py:85
 msgid "Use languages"
@@ -11679,7 +11665,7 @@ msgstr "付款和退款的最高金額"
 
 #: pretix/control/forms/filter.py:579
 msgid "At least one ticket with check-in"
-msgstr ""
+msgstr "至少一張辦理check-in手續的門票"
 
 #: pretix/control/forms/filter.py:585
 msgid ""
@@ -12965,10 +12951,8 @@ msgid "An medium with this type and identifier is already registered."
 msgstr "已註冊具有此類型和標識碼的媒體。"
 
 #: pretix/control/forms/organizer.py:797
-#, fuzzy
-#| msgid "An account with this email address is already registered."
 msgid "An account with this customer ID is already registered."
-msgstr "已註冊具有此電子郵件地址的帳戶。"
+msgstr "已註冊具有此客戶 ID 的帳戶。"
 
 #: pretix/control/forms/organizer.py:798 pretix/presale/forms/customer.py:439
 msgid "An account with this email address is already registered."
@@ -13049,16 +13033,12 @@ msgid "Invalidate old client secret and generate a new one"
 msgstr "使舊的客戶端密碼失效並產生新的客戶端密碼"
 
 #: pretix/control/forms/organizer.py:1037
-#, fuzzy
-#| msgid "Organizer name"
 msgid "Organizer short name"
-msgstr "主辦方名稱"
+msgstr "召集人簡稱"
 
 #: pretix/control/forms/organizer.py:1041
-#, fuzzy
-#| msgid "Activate re-usable media"
 msgid "Allow access to reusable media"
-msgstr "啟動可重複使用的媒體"
+msgstr "允許訪問可重複使用的媒體"
 
 #: pretix/control/forms/organizer.py:1042
 msgid ""
@@ -13068,18 +13048,17 @@ msgid ""
 "will grant the other organizer access to cryptographic key material required "
 "to interact with the media type."
 msgstr ""
+"如果你希望其他召集人參與具有NFC支付晶元等的共享系統，則需要這樣做。你只應將此"
+"選項用於你信任的召集人，因為（取決於啟動的媒體類型）這將授予其他召集人訪問與"
+"媒體類型交互所需的加密密鑰材料的訪問使用權。"
 
 #: pretix/control/forms/organizer.py:1058
-#, fuzzy
-#| msgid "The selected date does not exist in this event series."
 msgid "The selected organizer does not exist or cannot be invited."
-msgstr "該活動系列中不存在所選日期。"
+msgstr "所選召集人不存在或無法邀請。"
 
 #: pretix/control/forms/organizer.py:1060
-#, fuzzy
-#| msgid "The selected organizer was not found."
 msgid "The selected organizer has already been invited."
-msgstr "所選定的召集人找不到。"
+msgstr "選定的召集人已被邀請。"
 
 #: pretix/control/forms/renderers.py:55
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:138
@@ -13211,21 +13190,7 @@ msgid "Your voucher for {event}"
 msgstr "你的 {event} 優惠券"
 
 #: pretix/control/forms/vouchers.py:272
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "with this email, we're sending you one or more vouchers for {event}:\n"
-#| "\n"
-#| "{voucher_list}\n"
-#| "\n"
-#| "You can redeem them here in our ticket shop:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -13600,22 +13565,16 @@ msgid "Gift card acceptance for another organizer has been removed."
 msgstr "其他召集人的禮品卡的接受已被刪除。"
 
 #: pretix/control/logdisplay.py:343
-#, fuzzy
-#| msgid "The gift card has been created."
 msgid "A new gift card acceptor has been invited."
-msgstr "禮品卡已建立。"
+msgstr "已邀請新的禮品卡接受者。"
 
 #: pretix/control/logdisplay.py:344
-#, fuzzy
-#| msgid "The gift card has been created."
 msgid "A gift card issuer has been removed or declined."
-msgstr "禮品卡已建立。"
+msgstr "禮品卡發卡機構已被移除或拒絕。"
 
 #: pretix/control/logdisplay.py:345
-#, fuzzy
-#| msgid "The gift card has been created."
 msgid "A new gift card issuer has been accepted."
-msgstr "禮品卡已建立。"
+msgstr "已接受新的禮品卡發卡機構。"
 
 #: pretix/control/logdisplay.py:346
 msgid "The webhook has been created."
@@ -14084,51 +14043,51 @@ msgstr "優惠券已建立並發送給候補名單上的人。"
 msgid ""
 "The voucher has been set to expire because the recipient removed themselves "
 "from the waiting list."
-msgstr ""
+msgstr "優惠券已設定為過期，因為收件者將自己從候補名單中刪除。"
 
 #: pretix/control/logdisplay.py:474
 msgid "The voucher has been changed."
-msgstr ""
+msgstr "優惠券已更改。"
 
 #: pretix/control/logdisplay.py:475
 msgid "The voucher has been deleted."
-msgstr ""
+msgstr "優惠券已被刪除。"
 
 #: pretix/control/logdisplay.py:476
 #, python-brace-format
 msgid "The voucher has been redeemed in order {order_code}."
-msgstr ""
+msgstr "優惠券已按 {order_code} 順序兌換。"
 
 #: pretix/control/logdisplay.py:477
 msgid "The product has been created."
-msgstr ""
+msgstr "產品已建立。"
 
 #: pretix/control/logdisplay.py:478
 msgid "The product has been changed."
-msgstr ""
+msgstr "產品已更改。"
 
 #: pretix/control/logdisplay.py:479
 msgid "The product has been reordered."
-msgstr ""
+msgstr "商品已重新訂購。"
 
 #: pretix/control/logdisplay.py:480
 msgid "The product has been deleted."
-msgstr ""
+msgstr "該商品已被刪除。"
 
 #: pretix/control/logdisplay.py:481
 #, python-brace-format
 msgid "The variation \"{value}\" has been created."
-msgstr ""
+msgstr "類別{value}已建立。"
 
 #: pretix/control/logdisplay.py:482
 #, python-brace-format
 msgid "The variation \"{value}\" has been deleted."
-msgstr ""
+msgstr "類別{value}已被刪除。"
 
 #: pretix/control/logdisplay.py:483
 #, python-brace-format
 msgid "The variation \"{value}\" has been changed."
-msgstr ""
+msgstr "類別{value}已更改。"
 
 #: pretix/control/logdisplay.py:484
 msgid "An add-on has been added to this product."
@@ -14266,19 +14225,19 @@ msgstr "事件設定已更改。"
 
 #: pretix/control/logdisplay.py:517
 msgid "The ticket download settings have been changed."
-msgstr ""
+msgstr "門票下載設定已更改。"
 
 #: pretix/control/logdisplay.py:518
 msgid "A plugin has been enabled."
-msgstr ""
+msgstr "已啟用外掛程式。"
 
 #: pretix/control/logdisplay.py:519
 msgid "A plugin has been disabled."
-msgstr ""
+msgstr "外掛程式已被禁用。"
 
 #: pretix/control/logdisplay.py:520
 msgid "The shop has been taken live."
-msgstr ""
+msgstr "該商店已上線。"
 
 #: pretix/control/logdisplay.py:521
 msgid "The shop has been taken offline."
@@ -14766,10 +14725,8 @@ msgid "Webhooks"
 msgstr "使用者定義的HTTP回傳"
 
 #: pretix/control/navigation.py:534
-#, fuzzy
-#| msgid "Accept anyway"
 msgid "Acceptance"
-msgstr "全然接受"
+msgstr "接受"
 
 #: pretix/control/navigation.py:555
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
@@ -15137,7 +15094,7 @@ msgstr ""
 msgid ""
 "Click here to do a license compliance check to make sure your usage of "
 "pretix is in line with pretix' license."
-msgstr ""
+msgstr "按兩下此處進行許可執照規定檢查，以確保你對 pretix 的使用符合 pretix 的許可。"
 
 #: pretix/control/templates/pretixcontrol/base.html:428
 msgid ""
@@ -15783,21 +15740,19 @@ msgstr "額外資訊"
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:69
 msgid ""
 "The following questions must be answered before check-in can be completed:"
-msgstr ""
+msgstr "在辦理登記手續之前，必須回答以下問題："
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:89
-#, fuzzy
-#| msgid "Requires special attention"
 msgid "Special attention required"
-msgstr "需要特別關注"
+msgstr "需要特別注意"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:9
 msgid "Go to event"
-msgstr ""
+msgstr "轉到活動"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:15
 msgid "Your upcoming events"
-msgstr ""
+msgstr "你將到來的活動"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:20
 #: pretix/control/templates/pretixcontrol/events/create_base.html:4
@@ -15807,19 +15762,19 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:13
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:51
 msgid "Create a new event"
-msgstr ""
+msgstr "建立新活動"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:39
 msgid "View all upcoming events"
-msgstr ""
+msgstr "查看所有即將到來的活動"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:44
 msgid "Your most recent events"
-msgstr ""
+msgstr "你最近的活動"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:60
 msgid "View all recent events"
-msgstr ""
+msgstr "查看所有最近的活動"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:65
 msgid "Your event series"
@@ -15827,7 +15782,7 @@ msgstr "你的活動系列"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:81
 msgid "View all event series"
-msgstr ""
+msgstr "查看所有活動系列"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:86
 msgid "Other features"
@@ -16032,11 +15987,11 @@ msgstr "你的新 SPF 記錄可能如下所示："
 msgid ""
 "Please keep in mind that updates to DNS might require multiple hours to take "
 "effect."
-msgstr ""
+msgstr "請記住，DNS 更新可能需要數小時才能生效。"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:48
 msgid "We found an SPF record on your domain that includes this system. Great!"
-msgstr ""
+msgstr "我們在你的網域上發現了包含此系統的SPF記錄。太好了！"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:54
 msgid "Verification"
@@ -16047,7 +16002,8 @@ msgstr "驗證"
 msgid ""
 "We've sent an email to %(recp)s with a confirmation code to verify that this "
 "email address is owned by you. Please enter the verification code below:"
-msgstr ""
+msgstr "我們已向 %(recp)s 傳送一封包含確認代碼的電子郵件，以驗證此電子郵件位址是否歸"
+"你所有。請輸入以下驗證碼："
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:63
 msgid "Verification code"
@@ -16057,7 +16013,7 @@ msgstr "驗證碼"
 msgid ""
 "A test connection to your SMTP server was successful. You can now save your "
 "new settings to put them in use."
-msgstr ""
+msgstr "與 SMTP 伺服器的測試連接成功。你現在可以保存新設定，以將其設定投入使用。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:5
 msgid "Cancellation settings"
@@ -16065,7 +16021,7 @@ msgstr "取消設定"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:11
 msgid "Unpaid or free orders"
-msgstr ""
+msgstr "未付款或免費訂單"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:37
 msgid ""
@@ -16080,7 +16036,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/cancel.html:43
 #: pretix/control/templates/pretixcontrol/user/settings.html:29
 msgid "Change notification settings"
-msgstr ""
+msgstr "更改通知設定"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:49
 msgid "Order changes"
@@ -16091,51 +16047,54 @@ msgid ""
 "Allowing customers to change their own orders is a complex process due to "
 "the many different options pretix provides. Therefore, this feature "
 "currently has the following limitations:"
-msgstr ""
+msgstr "由於pretix提供許多不同的選項，因此允許客戶更改自己的訂單是一個複雜的過程。所"
+"以，此功能當前具有以下限制："
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:58
 msgid ""
 "It is possible to switch to a different variation of the same product, but "
 "not to an entirely different product (except for add-on products)."
-msgstr ""
+msgstr "可以切換到同一產品的不同類別，但不能切換到完全不同的產品（附加產品除外）。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:59
 msgid ""
 "Changing the seat or the event date in an event series will become available "
 "in the future, but is not possible now."
-msgstr ""
+msgstr "將來可以更改活動系列中的座位或活動日期，但現在無法更改。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:60
 msgid ""
 "If a change leads to a price change, there will not be a change to fees such "
 "as payment, service, or shipping fees, even though an additional payment "
 "might be required."
-msgstr ""
+msgstr "如果更改導致價格更改，則即使可能需要額外付款，付款、服務或運費等費用也不會發"
+"生變化。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:61
 msgid ""
 "If an add-on product is newly added, the system currently does not validate "
 "if there are required questions or fields that need to be filled out."
-msgstr ""
+msgstr "如果新增附加產品，系統當前不會驗證是否存在需要填寫的必填問題或字串。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:62
 msgid ""
 "Customers currently cannot switch to a product variation or add an add-on "
 "product that requires them to use a voucher or membership."
-msgstr ""
+msgstr "客戶目前無法切換到產品類別或添加他們需要使用優惠券或會員資格的附加產品。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:63
 msgid ""
 "Additional constraints and validation steps added by plugins are not "
 "enforced."
-msgstr ""
+msgstr "外掛程式添加的其他限制和驗證步驟不會強制執行。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:74
 msgid ""
 "If the change leads to a price reduction and automatic refunds are enabled "
 "for self-service cancellations, the system will try to refund the money "
 "automatically."
-msgstr ""
+msgstr "如果更改系統導致降價，並且為了取消自助服務而啟用自動退款，系統將嘗試自動退款"
+"。"
 
 #: pretix/control/templates/pretixcontrol/event/cancel.html:78
 msgid ""
