@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-19 19:00+0000\n"
+"PO-Revision-Date: 2023-06-20 20:00+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -20671,7 +20671,7 @@ msgstr "SSO提供者:"
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:15
 msgid "Create a new SSO provider"
-msgstr ""
+msgstr "建立新的 SSO 提供者"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:16
 msgctxt "sso"
@@ -20682,7 +20682,8 @@ msgstr "重定向URI"
 msgid ""
 "You can connect existing Single-Sign-On (SSO) providers to allow your "
 "customers to log in using your own account system."
-msgstr ""
+msgstr "你可以連接現有的單點登錄 （SSO） "
+"供應商，以允許你的客戶使用您自己的帳戶系統登錄。"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:5
 msgid "Delete team:"
@@ -20706,7 +20707,7 @@ msgstr "團隊："
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:30
 msgid "Create a new team"
-msgstr ""
+msgstr "建立新團隊"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:10
 msgid "You will be able to add team members in the next step."
