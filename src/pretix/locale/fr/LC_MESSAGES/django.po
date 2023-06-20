@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-20 05:26+0000\n"
+"PO-Revision-Date: 2023-06-20 06:55+0000\n"
 "Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -22729,7 +22729,7 @@ msgstr "Couleur du texte"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:313
 msgid "Flow multiple lines downward from specified position"
-msgstr ""
+msgstr "Déplacer plusieurs lignes vers le bas à partir de la position spécifiée"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:356
 msgid "Rotation (°)"
@@ -24648,17 +24648,14 @@ msgid "The order of items has been updated."
 msgstr "La liste des articles a été mise à jour."
 
 #: pretix/control/views/item.py:181
-#, fuzzy
 msgid "You cannot reorder items spanning different categories."
 msgstr ""
-"Vous ne pouvez pas sélectionner un article qui appartient à un événement "
-"différent."
+"Vous ne pouvez pas réorganiser des articles couvrant différentes catégories."
 
 #: pretix/control/views/item.py:186 pretix/control/views/item.py:392
 #: pretix/control/views/item.py:526
-#, fuzzy
 msgid "Not all objects have been selected."
-msgstr "La question a été supprimée."
+msgstr "Tous les objets n’ont pas été sélectionnés."
 
 #: pretix/control/views/item.py:214 pretix/control/views/item.py:249
 #: pretix/control/views/item.py:338
@@ -24678,9 +24675,8 @@ msgid "The order of categories has been updated."
 msgstr "Le classement des catégories a été mis à jour."
 
 #: pretix/control/views/item.py:465
-#, fuzzy
 msgid "Street"
-msgstr "rue"
+msgstr "Rue"
 
 #: pretix/control/views/item.py:567 pretix/control/views/item.py:732
 #: pretix/control/views/item.py:754
@@ -24704,9 +24700,8 @@ msgid "The new quota has been created."
 msgstr "Le nouveau quota a été créé."
 
 #: pretix/control/views/item.py:952
-#, fuzzy
 msgid "Exit scans"
-msgstr "Premier scanné: %(date)s"
+msgstr "Quitter les scans"
 
 #: pretix/control/views/item.py:959
 msgid "Vouchers and waiting list reservations"
@@ -24730,9 +24725,8 @@ msgid "The requested quota does not exist."
 msgstr "Le quota demandé n'existe pas."
 
 #: pretix/control/views/item.py:1062
-#, fuzzy
 msgid "The quota has been re-opened and will not close again."
-msgstr "La commande a été marquée comme non payée."
+msgstr "Le quota a été rouvert et ne sera plus fermé."
 
 #: pretix/control/views/item.py:1155
 msgid "The selected quota has been deleted."
@@ -24743,22 +24737,20 @@ msgid "The requested item does not exist."
 msgstr "L'élément demandé n'existe pas."
 
 #: pretix/control/views/item.py:1318
-#, fuzzy
 msgid ""
 "You cannot add add-ons to a product that is only available as an add-on "
 "itself."
 msgstr ""
-"Vous ne pouvez ajouter d'addons à un produit qui n'est disponible que comme "
-"un add-on lui-même."
+"Vous ne pouvez pas ajouter de modules complémentaires à un produit qui n’est "
+"disponible qu’en tant que module complémentaire."
 
 #: pretix/control/views/item.py:1328
-#, fuzzy
 msgid ""
 "You cannot add bundles to a product that is only available as an add-on "
 "itself."
 msgstr ""
-"Vous ne pouvez ajouter d'addons à un produit qui n'est disponible que comme "
-"un add-on lui-même."
+"Vous ne pouvez pas ajouter d’offres groupées à un produit qui n’est "
+"disponible qu’en tant que module complémentaire."
 
 #: pretix/control/views/item.py:1454
 msgid ""
@@ -24766,16 +24758,20 @@ msgid ""
 "participants won't be able to buy the bundle unless you remove this item "
 "from it."
 msgstr ""
+"Vous avez désactivé cet élément, mais il fait toujours partie d’un ensemble "
+"de produits. Vos participants ne pourront pas acheter le lot à moins que "
+"vous n’en supprimiez cet élément."
 
 #: pretix/control/views/item.py:1550
-#, fuzzy
 msgid ""
 "The product could not be deleted as some constraints (e.g. data created by "
 "plug-ins) did not allow it. Deleting it could break reporting or other "
 "functionality, so the product has been disabled instead."
 msgstr ""
-"L'événement n'a pas pu être supprimé car certaines contraintes (par exemple "
-"les données créées par les plug-ins) ne le permettent pas."
+"Le produit n’a pas pu être supprimé car certaines contraintes (par exemple "
+"les données créées par les plug-ins) ne le permettaient pas. Sa suppression "
+"pourrait interrompre les rapports ou d’autres fonctionnalités, de sorte que "
+"le produit a été désactivé à la place."
 
 #: pretix/control/views/item.py:1554
 msgid "The selected product has been deleted."
@@ -24793,6 +24789,12 @@ msgid ""
 "domain. You can do so through the DNS settings at the provider you "
 "registered your domain with."
 msgstr ""
+"Nous n’avons pas pu trouver de jeu d’enregistrements SPF pour le domaine que "
+"vous essayez d’utiliser. Vous pouvez toujours continuer, mais cela "
+"augmentera les chances que les e-mails soient envoyés au spam ou rejetés. "
+"Nous vous recommandons vivement de définir un enregistrement SPF sur le "
+"domaine. Vous pouvez le faire via les paramètres DNS du fournisseur auprès "
+"duquel vous avez enregistré votre domaine."
 
 #: pretix/control/views/mailsetup.py:202
 msgid ""
@@ -24810,14 +24812,12 @@ msgstr ""
 "enregistrement SPF."
 
 #: pretix/control/views/mailsetup.py:210
-#, fuzzy
 msgid "The verification code was incorrect, please try again."
-msgstr "L'inscription n' a pas pu être complétée. Veuillez réessayer."
+msgstr "Le code de vérification était incorrect, veuillez réessayer."
 
 #: pretix/control/views/mailsetup.py:215
-#, fuzzy
 msgid "Sender address verification"
-msgstr "Adresse de l'expéditeur"
+msgstr "Vérification de l’adresse de l’expéditeur"
 
 #: pretix/control/views/mailsetup.py:271
 #, python-format
@@ -24832,11 +24832,15 @@ msgid ""
 "all of your emails since they impose a maximum number of emails per time "
 "period."
 msgstr ""
+"Nous vous recommandons de ne pas utiliser Google Mail pour les e-mails "
+"transactionnels. Si vous essayez d’envoyer de nombreux e-mails en peu de "
+"temps, par exemple lors de l’envoi d’informations à tous vos acheteurs de "
+"billets, il y a de fortes chances que Google ne livre pas tous vos e-mails "
+"car ils imposent un nombre maximum d’e-mails par période."
 
 #: pretix/control/views/main.py:217
-#, fuzzy
 msgid "You do not have permission to clone this event."
-msgstr "Vous n'avez pas la permission de voir ce contenu."
+msgstr "Vous n’êtes pas autorisé à cloner cet événement."
 
 #: pretix/control/views/main.py:283
 #, python-brace-format
@@ -24864,41 +24868,39 @@ msgstr ""
 "enregistrer dès maintenant car il ne sera plus affiché: {secret}"
 
 #: pretix/control/views/oauth.py:169
-#, fuzzy
 msgid "Access for the selected application has been revoked."
-msgstr "La configuration sélectionnée a été supprimée."
+msgstr "L’accès à l’application sélectionnée a été révoqué."
 
 #: pretix/control/views/orderimport.py:67
-#, fuzzy
 msgid "Please only upload CSV files."
-msgstr "Veuillez uploader uniquement des fichiers PDF."
+msgstr "Veuillez ne télécharger que des fichiers CSV."
 
 #: pretix/control/views/orderimport.py:73
-#, fuzzy
 msgid "Please do not upload files larger than 10 MB."
-msgstr "Veuillez uploader uniquement des fichiers PDF."
+msgstr "Veuillez ne pas télécharger de fichiers de plus de 10 Mo."
 
 #: pretix/control/views/orderimport.py:128
 msgid ""
 "We could not identify the character encoding of the CSV file. Some "
 "characters were replaced with a placeholder."
 msgstr ""
+"Nous n’avons pas pu identifier l’encodage des caractères du fichier CSV. "
+"Certains caractères ont été remplacés par un espace réservé."
 
 #: pretix/control/views/orderimport.py:140
-#, fuzzy
 msgid "The import was successful."
-msgstr "Le dernier contrôle de mise à jour a échoué."
+msgstr "L’importation a réussi."
 
 #: pretix/control/views/orderimport.py:152
 msgid "We've been unable to parse the uploaded file as a CSV file."
 msgstr ""
+"Nous n’avons pas pu analyser le fichier téléchargé en tant que fichier CSV."
 
 #: pretix/control/views/orders.py:330
-#, fuzzy
 msgid "Your invoice"
 msgid_plural "Your invoices"
-msgstr[0] "Détails du bon"
-msgstr[1] "Détails du bon"
+msgstr[0] "Votre facture"
+msgstr[1] "Vos factures"
 
 #: pretix/control/views/orders.py:332
 #, python-brace-format
@@ -24915,7 +24917,17 @@ msgid_plural ""
 "\n"
 "Your {event} team"
 msgstr[0] ""
+"Bonjour\n"
+"\n"
+"Veuillez trouver votre facture jointe à cet e-mail.\n"
+"\n"
+"Votre {event} équipe"
 msgstr[1] ""
+"Bonjour\n"
+"\n"
+"Veuillez trouver vos factures jointes à cet e-mail.\n"
+"\n"
+"Votre {event} équipe"
 
 #: pretix/control/views/orders.py:468 pretix/presale/views/order.py:163
 #: pretix/presale/views/order.py:210 pretix/presale/views/order.py:330
@@ -24929,10 +24941,8 @@ msgid "Unknown order code or not authorized to access this order."
 msgstr "Code de commande inconnu ou non autorisé à accéder à cette commande."
 
 #: pretix/control/views/orders.py:470 pretix/presale/views/order.py:1042
-#, fuzzy
 msgid "Ticket download is not enabled for this product."
-msgstr ""
-"Le téléchargement des tickets n'est pas activé pour les produits addon."
+msgstr "Le téléchargement de tickets n’est pas activé pour ce produit."
 
 #: pretix/control/views/orders.py:585
 msgid "The order has been deleted."
@@ -25787,9 +25797,8 @@ msgid "The requested voucher does not exist."
 msgstr "Le bon demandé n'existe pas."
 
 #: pretix/control/views/vouchers.py:216
-#, fuzzy
 msgid "The selected cart positions have been removed."
-msgstr "La règle fiscale sélectionnée a été supprimée."
+msgstr "Les positions de panier sélectionnées ont été supprimées."
 
 #: pretix/control/views/vouchers.py:242 pretix/control/views/vouchers.py:252
 msgid "A voucher can not be deleted if it already has been redeemed."
@@ -25805,18 +25814,16 @@ msgid "The new voucher has been created: {code}"
 msgstr "Le nouveau bon a été créé : {code}"
 
 #: pretix/control/views/vouchers.py:383
-#, fuzzy
 msgid "There is no voucher with the given voucher code."
-msgstr "Il n' y a pas d'ordre avec le code de commande donné."
+msgstr "Il n'y a pas de bon de réduction avec le code du bon fourni."
 
 #: pretix/control/views/vouchers.py:501
 msgid "The new vouchers have been created."
 msgstr "Les nouveaux bons ont été créés."
 
 #: pretix/control/views/vouchers.py:618
-#, fuzzy
 msgid "The selected vouchers have been deleted or disabled."
-msgstr "La date sélectionnée a été supprimée."
+msgstr "Les bons sélectionnés ont été supprimés ou désactivés."
 
 #: pretix/control/views/waitinglist.py:70
 #, python-brace-format
@@ -25824,9 +25831,8 @@ msgid "{num} vouchers have been created and sent out via email."
 msgstr "{num} des bons ont été créés et envoyés par mail."
 
 #: pretix/control/views/waitinglist.py:165
-#, fuzzy
 msgid "The selected entries have been deleted."
-msgstr "L'entrée sélectionnée a été supprimée."
+msgstr "Les entrées sélectionnées ont été supprimées."
 
 #: pretix/control/views/waitinglist.py:178
 msgid ""
@@ -25841,17 +25847,14 @@ msgid "Waiting list entry not found."
 msgstr "Entrée de liste d'attente introuvable."
 
 #: pretix/control/views/waitinglist.py:192
-#, fuzzy
 msgid "The waiting list entry has been moved to the top."
-msgstr "Le nouveau membre a été invité dans l'équipe."
+msgstr "L’entrée de la liste d’attente a été déplacée vers le haut."
 
 #: pretix/control/views/waitinglist.py:205
-#, fuzzy
 msgid "The waiting list entry has been moved to the end of the list."
-msgstr "Une entrée a été retirée de la liste d'attente."
+msgstr "L’entrée de la liste d’attente a été déplacée à la fin de la liste."
 
 #: pretix/control/views/waitinglist.py:295
-#, fuzzy
 msgid "On list since"
 msgstr "Sur la liste depuis"
 
@@ -25872,9 +25875,8 @@ msgid "This is not an event series."
 msgstr "Il ne s’agit pas d’une série d’événements."
 
 #: pretix/control/views/waitinglist.py:391
-#, fuzzy
 msgid "The waitinglist entry has been transferred."
-msgstr "Le nouveau membre a été invité dans l'équipe."
+msgstr "L’entrée de la liste d’attente a été transférée."
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"
@@ -25917,23 +25919,23 @@ msgstr ""
 
 #: pretix/plugins/badges/exporters.py:84
 msgid "One badge per page"
-msgstr ""
+msgstr "Un badge par page"
 
 #: pretix/plugins/badges/exporters.py:92
 msgid "4 landscape A6 pages on one A4 page"
-msgstr ""
+msgstr "4 pages paysage A6 sur une page A4"
 
 #: pretix/plugins/badges/exporters.py:100
 msgid "4 portrait A6 pages on one A4 page"
-msgstr ""
+msgstr "4 pages portrait A6 sur une page A4"
 
 #: pretix/plugins/badges/exporters.py:108
 msgid "8 landscape A7 pages on one A4 page"
-msgstr ""
+msgstr "8 pages paysage A7 sur une page A4"
 
 #: pretix/plugins/badges/exporters.py:116
 msgid "8 portrait A7 pages on one A4 page"
-msgstr ""
+msgstr "8 pages portrait A7 sur une page A4"
 
 #: pretix/plugins/badges/exporters.py:196
 msgid "None of the selected products is configured to print badges."
@@ -25941,9 +25943,8 @@ msgstr "Le produit sélectionné n'est configuré pour imprimer des badges."
 
 #: pretix/plugins/badges/exporters.py:213
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_position_buttons.html:9
-#, fuzzy
 msgid "Badge"
-msgstr "Badges"
+msgstr "Badge"
 
 #: pretix/plugins/badges/exporters.py:257
 msgid "Attendee badges"
@@ -25962,14 +25963,12 @@ msgstr ""
 
 #: pretix/plugins/badges/exporters.py:280 pretix/plugins/sendmail/models.py:217
 #: pretix/plugins/ticketoutputpdf/exporters.py:80
-#, fuzzy
 msgid "Include pending orders"
-msgstr "Épuisé (commandes en cours)"
+msgstr "Inclure les commandes en attente"
 
 #: pretix/plugins/badges/exporters.py:285
-#, fuzzy
 msgid "Include add-on or bundled positions"
-msgstr "Inclure des questions"
+msgstr "Inclure des positions additionnelles ou groupées"
 
 #: pretix/plugins/badges/exporters.py:290
 msgid "Rendering option"
@@ -25989,11 +25988,11 @@ msgstr ""
 
 #: pretix/plugins/badges/exporters.py:304
 msgid "Only include tickets for dates on or after this date."
-msgstr ""
+msgstr "N’incluez que les billets pour les dates postérieures à cette date."
 
 #: pretix/plugins/badges/exporters.py:311
 msgid "Only include tickets for dates on or before this date."
-msgstr ""
+msgstr "N’incluez que les billets pour les dates à cette date ou avant."
 
 #: pretix/plugins/badges/exporters.py:315
 #: pretix/plugins/checkinlists/exporters.py:104
@@ -26061,19 +26060,17 @@ msgid "Badge layout: %(name)s"
 msgstr "Disposition de badge : %(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:23
-#, fuzzy
 msgid "Badge design"
-msgstr "Conception des billets"
+msgstr "Conception du badge"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:27
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:27
 msgid "You can modify the design after you saved this page."
-msgstr ""
+msgstr "Vous pouvez modifier la conception après avoir enregistré cette page."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
-#, fuzzy
 msgid "You haven't created any badge layouts yet."
-msgstr "Vous n'avez pas encore créé de produits."
+msgstr "Vous n’avez pas encore créé de mise en page de badge."
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:17
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:24
@@ -26082,9 +26079,8 @@ msgstr "Créer une nouvelle disposition de badge"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:63
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:60
-#, fuzzy
 msgid "Make default"
-msgstr "Défaut"
+msgstr "Utiliser par défaut"
 
 #: pretix/plugins/badges/views.py:79
 msgid "The new badge layout has been created."
@@ -31715,10 +31711,12 @@ msgid ""
 "If you're looking to configure this installation, please <a %(a_attr)s>head "
 "over here</a>."
 msgstr ""
+"Si vous souhaitez configurer cette installation, veuillez <a %(a_attr)s"
+">Rendez-vous ici</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
-msgstr ""
+msgstr "Profitez-en !"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:6
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:6
