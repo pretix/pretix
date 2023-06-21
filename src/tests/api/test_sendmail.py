@@ -40,7 +40,7 @@ TEST_RULE_RES = {
     'template': {'en': 'foo'},
     'all_products': True,
     'limit_products': [],
-    'include_pending': False,
+    "restrict_to_status": ['p', 'na', 'valid_if_pending'],
     'send_date': '2021-07-08T00:00:00Z',
     'send_offset_days': None,
     'send_offset_time': None,
@@ -64,11 +64,11 @@ def test_sendmail_rule_list(token_client, organizer, event, rule):
     assert res in results
     assert len(results) == 1
 
-    produces_result = [f'id={rule.id}', 'all_products=true', 'include_pending=false', 'date_is_absolute=true',
+    produces_result = [f'id={rule.id}', 'all_products=true', 'date_is_absolute=true',
                        'offset_to_event_end=false', 'offset_is_after=false', 'send_to=orders', 'enabled=true',
                        f'id={rule.id}&enabled=true']
 
-    no_produce_result = ['id=12345', 'all_products=false', 'include_pending=true', 'date_is_absolute=false',
+    no_produce_result = ['id=12345', 'all_products=false', 'date_is_absolute=false',
                          'offset_to_event_end=true', 'offset_is_after=true', 'send_to=both', 'send_to=attendees',
                          'enabled=false', f'id={rule.id}&enabled=false']
 
@@ -144,7 +144,7 @@ def test_sendmail_rule_create_full(token_client, organizer, event, item):
             'template': {'en': 'foobar'},
             'all_products': False,
             'limit_products': [event.items.first().pk],
-            'include_pending': True,
+            "restrict_to_status": ['p', 'na', 'valid_if_pending'],
             'send_offset_days': 3,
             'send_offset_time': '09:30',
             'date_is_absolute': False,
@@ -157,7 +157,7 @@ def test_sendmail_rule_create_full(token_client, organizer, event, item):
 
     assert r.all_products is False
     assert [i.pk for i in r.limit_products.all()] == [event.items.first().pk]
-    assert r.include_pending is True
+    assert r.restrict_to_status == ['p', 'na', 'valid_if_pending']
     assert r.send_offset_days == 3
     assert r.send_offset_time == datetime.time(9, 30)
     assert r.date_is_absolute is False
