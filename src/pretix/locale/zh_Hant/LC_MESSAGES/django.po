@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-21 12:03+0000\n"
+"PO-Revision-Date: 2023-06-21 13:25+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -14093,11 +14093,11 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:485
 msgid "An add-on has been removed from this product."
-msgstr ""
+msgstr "已從此商品中刪除附加元件。"
 
 #: pretix/control/logdisplay.py:486
 msgid "An add-on has been changed on this product."
-msgstr ""
+msgstr "此產品的附加元件已更改。"
 
 #: pretix/control/logdisplay.py:487
 msgid "A bundled item has been added to this product."
