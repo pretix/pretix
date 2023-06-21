@@ -670,7 +670,7 @@ class TeamDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
     def is_allowed(self) -> bool:
         return self.request.organizer.teams.exclude(pk=self.kwargs.get('team')).filter(
             can_change_teams=True, members__isnull=False
-        ).exists()
+        ).exists() or self.request.user.has_active_staff_session(self.request.session.session_key)
 
     @transaction.atomic
     def delete(self, request, *args, **kwargs):
@@ -754,7 +754,7 @@ class TeamMemberView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin,
             else:
                 other_admin_teams = self.request.organizer.teams.exclude(pk=self.object.pk).filter(
                     can_change_teams=True, members__isnull=False
-                ).exists()
+                ).exists() or self.request.user.has_active_staff_session(self.request.session.session_key)
                 if not other_admin_teams and self.object.can_change_teams and self.object.members.count() == 1:
                     messages.error(self.request, _('You cannot remove the last member from this team as no one would '
                                                    'be left with the permission to change teams.'))
