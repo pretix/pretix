@@ -401,7 +401,7 @@ class EntryTransfer(EventPermissionRequiredMixin, UpdateView):
         messages.success(self.request, _('The waitinglist entry has been transferred.'))
         if form.has_changed():
             self.object.log_action(
-                'pretix.event.order.waitinglist.transferred', user=self.request.user, data={
+                'pretix.event.orders.waitinglist.changed', user=self.request.user, data={
                     k: form.cleaned_data.get(k) for k in form.changed_data
                 }
             )

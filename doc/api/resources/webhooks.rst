@@ -53,6 +53,7 @@ The following values for ``action_types`` are valid with pretix core:
     * ``pretix.event.orders.waitinglist.added``
     * ``pretix.event.orders.waitinglist.changed``
     * ``pretix.event.orders.waitinglist.deleted``
+    * ``pretix.event.orders.waitinglist.voucher_assigned``
     * ``pretix.event.checkin``
     * ``pretix.event.checkin.reverted``
     * ``pretix.event.added``

@@ -346,6 +346,10 @@ def register_default_webhook_events(sender, **kwargs):
             'pretix.event.orders.waitinglist.deleted',
             _('Waiting list entry deleted'),
         ),
+        ParametrizedWaitingListEntryWebhookEvent(
+            'pretix.event.orders.waitinglist.voucher_assigned',
+            _('Waiting list entry received voucher'),
+        ),
     )
 
 
