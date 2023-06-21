@@ -189,6 +189,11 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
                 )
                 wle.priority = self.request.event.waitinglistentries.aggregate(m=Max('priority'))['m'] + 1
                 wle.save(update_fields=['priority'])
+                wle.log_action(
+                    'pretix.event.orders.waitinglist.changed',
+                    data={'priority': wle.priority},
+                    user=self.request.user,
+                )
                 messages.success(request, _('The waiting list entry has been moved to the top.'))
                 return self._redirect_back()
             except WaitingListEntry.DoesNotExist:
@@ -202,6 +207,11 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
                 )
                 wle.priority = self.request.event.waitinglistentries.aggregate(m=Min('priority'))['m'] - 1
                 wle.save(update_fields=['priority'])
+                wle.log_action(
+                    'pretix.event.orders.waitinglist.changed',
+                    data={'priority': wle.priority},
+                    user=self.request.user,
+                )
                 messages.success(request, _('The waiting list entry has been moved to the end of the list.'))
                 return self._redirect_back()
             except WaitingListEntry.DoesNotExist:
