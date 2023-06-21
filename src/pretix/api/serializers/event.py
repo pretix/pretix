@@ -719,6 +719,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'payment_term_minutes',
         'payment_term_last',
         'payment_term_expire_automatically',
+        'payment_term_expire_delay_days',
         'payment_term_accept_late',
         'payment_explanation',
         'payment_pending_hidden',

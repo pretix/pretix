@@ -1264,12 +1264,12 @@ def expire_orders(sender, **kwargs):
         Exists(
             OrderFee.objects.filter(order_id=OuterRef('pk'), fee_type=OrderFee.FEE_TYPE_CANCELLATION)
         )
-    ).select_related('event').order_by('event_id')
+    ).prefetch_related('event').order_by('event_id')
     for o in qs:
         if o.event_id != event_id:
             expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)
             event_id = o.event_id
-        if expire:
+        if expire and now() >= o.payment_term_expire_date:
             mark_order_expired(o)
 
 

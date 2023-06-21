@@ -20,7 +20,8 @@
 # <https://www.gnu.org/licenses/>.
 #
 import json
-from datetime import datetime, timedelta
+import zoneinfo
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 from zoneinfo import ZoneInfo
 
@@ -31,6 +32,7 @@ from django.test import TestCase
 from django.utils.timezone import make_aware, now
 from django_countries.fields import Country
 from django_scopes import scope
+from freezegun import freeze_time
 from tests.testdummy.signals import FoobazSalesChannel
 
 from pretix.base.decimal import round_decimal
@@ -404,6 +406,56 @@ def test_expiring_auto_disabled(event):
     assert o1.status == Order.STATUS_PENDING
     o2 = Order.objects.get(id=o2.id)
     assert o2.status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_expiring_auto_delayed(event):
+    event.settings.set('payment_term_expire_delay_days', 3)
+    event.settings.set('payment_term_last', date(2023, 7, 2))
+    event.settings.set('timezone', 'Europe/Berlin')
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=datetime(2023, 6, 22, 12, 13, 14, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        expires=datetime(2023, 6, 30, 23, 59, 59, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        total=0,
+    )
+    o2 = Order.objects.create(
+        code='FO2', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=datetime(2023, 6, 22, 12, 13, 14, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        expires=datetime(2023, 6, 28, 23, 59, 59, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        total=0,
+    )
+    assert o1.payment_term_expire_date == o1.expires + timedelta(days=2)  # limited by term_last
+    assert o2.payment_term_expire_date == o2.expires + timedelta(days=3)
+    with freeze_time("2023-06-29T00:01:00+02:00"):
+        expire_orders(None)
+        o1 = Order.objects.get(id=o1.id)
+        assert o1.status == Order.STATUS_PENDING
+        o2 = Order.objects.get(id=o2.id)
+        assert o2.status == Order.STATUS_PENDING
+
+    with freeze_time("2023-07-01T23:50:00+02:00"):
+        expire_orders(None)
+        o1 = Order.objects.get(id=o1.id)
+        assert o1.status == Order.STATUS_PENDING
+        o2 = Order.objects.get(id=o2.id)
+        assert o2.status == Order.STATUS_PENDING
+
+    with freeze_time("2023-07-02T00:01:00+02:00"):
+        expire_orders(None)
+        o1 = Order.objects.get(id=o1.id)
+        assert o1.status == Order.STATUS_PENDING
+        o2 = Order.objects.get(id=o2.id)
+        assert o2.status == Order.STATUS_EXPIRED
+
+    with freeze_time("2023-07-03T00:01:00+02:00"):
+        expire_orders(None)
+        o1 = Order.objects.get(id=o1.id)
+        assert o1.status == Order.STATUS_EXPIRED
+        o2 = Order.objects.get(id=o2.id)
+        assert o2.status == Order.STATUS_EXPIRED
 
 
 @pytest.mark.django_db
