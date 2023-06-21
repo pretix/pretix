@@ -467,9 +467,14 @@ class BankTransfer(BasePaymentProvider):
                 (_("BIC"), self.settings.get('bank_details_sepa_bic')),
                 (_("Bank"), self.settings.get('bank_details_sepa_bank')),
             )
-            t += md_nl2br.join([f"**{k}:** {v}" for k, v in bankdetails])
-            if self.settings.get('bank_details', as_type=LazyI18nString):
-                t += md_nl2br
+        else:
+            bankdetails = (
+                (_("Reference"), self._code(order)),
+                (_("Amount"), money_filter(payment.amount, self.event.currency)),
+            )
+        t += md_nl2br.join([f"**{k}:** {v}" for k, v in bankdetails])
+        if self.settings.get('bank_details', as_type=LazyI18nString):
+            t += md_nl2br
         t += str(self.settings.get('bank_details', as_type=LazyI18nString))
         return t
 
