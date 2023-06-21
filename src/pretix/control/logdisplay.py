@@ -531,9 +531,10 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.permissions.invited': _('A user has been invited to the event team.'),
         'pretix.event.permissions.changed': _('A user\'s permissions have been changed.'),
         'pretix.event.permissions.deleted': _('A user has been removed from the event team.'),
-        'pretix.waitinglist.voucher': _('A voucher has been sent to a person on the waiting list.'),
+        'pretix.waitinglist.voucher': _('A voucher has been sent to a person on the waiting list.'),  # legacy
+        'pretix.event.orders.waitinglist.voucher_assigned': _('A voucher has been sent to a person on the waiting list.'),
         'pretix.event.orders.waitinglist.deleted': _('An entry has been removed from the waiting list.'),
-        'pretix.event.orders.waitinglist.transferred': _('An entry has been transferred to another waiting list.'),
+        'pretix.event.order.waitinglist.transferred': _('An entry has been transferred to another waiting list.'),  # legacy
         'pretix.event.orders.waitinglist.changed': _('An entry has been changed on the waiting list.'),
         'pretix.event.orders.waitinglist.added': _('An entry has been added to the waiting list.'),
         'pretix.team.created': _('The team has been created.'),
