@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-20 20:00+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"PO-Revision-Date: 2023-06-21 07:53+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -17110,12 +17110,12 @@ msgstr "率"
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:41
 #, python-format
 msgid "incl. %(rate)s %%"
-msgstr "包括 %%稅"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:43
 #, python-format
 msgid "excl. %(rate)s %%"
-msgstr "不包括 %%稅"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:13
