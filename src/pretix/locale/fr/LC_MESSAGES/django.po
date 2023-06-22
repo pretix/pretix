@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-21 07:50+0000\n"
+"PO-Revision-Date: 2023-06-22 04:41+0000\n"
 "Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -28018,40 +28018,36 @@ msgstr "programmé"
 
 #: pretix/plugins/sendmail/models.py:51
 msgid "failed"
-msgstr ""
+msgstr "échoué"
 
 #: pretix/plugins/sendmail/models.py:52
-#, fuzzy
 msgid "completed"
-msgstr "Date de finalisation"
+msgstr "terminé"
 
 #: pretix/plugins/sendmail/models.py:53
 msgid "missed"
-msgstr ""
+msgstr "manqué"
 
 #: pretix/plugins/sendmail/models.py:201
 msgid "Everyone who created a ticket order"
-msgstr ""
+msgstr "Tous ceux qui ont créé une commande de billets"
 
 #: pretix/plugins/sendmail/models.py:213
-#, fuzzy
 msgid "Limit products"
-msgstr "Limiter aux produits"
+msgstr "Limiter les produits"
 
 #: pretix/plugins/sendmail/models.py:218
 msgid "By default, only paid orders will receive the email"
-msgstr ""
+msgstr "Par défaut, seules les commandes payées recevront l’e-mail"
 
 #: pretix/plugins/sendmail/models.py:227
-#, fuzzy
 msgid "Send date"
-msgstr "Date de fin"
+msgstr "Date d’envoi"
 
 #: pretix/plugins/sendmail/models.py:229
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:8
-#, fuzzy
 msgid "Time of day"
-msgstr "Nombre de jours"
+msgstr "Heure de la journée"
 
 #: pretix/plugins/sendmail/models.py:235
 msgid "Send email to"
@@ -28059,40 +28055,40 @@ msgstr "Envoyer un email à"
 
 #: pretix/plugins/sendmail/models.py:240
 msgid "Only enabled rules are actually sent"
-msgstr ""
+msgstr "Seules les règles activées sont réellement envoyées"
 
 #: pretix/plugins/sendmail/models.py:276
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "on {date} at {time}"
-msgstr "Afficher les dates avec l'heure"
+msgstr "le {date} à {time}"
 
 #: pretix/plugins/sendmail/models.py:282
 #, python-format
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d jour après la fin de l'événement à %(time)s"
+msgstr[1] "%(count)d jours après la fin de l'événement à %(time)s"
 
 #: pretix/plugins/sendmail/models.py:291
 #, python-format
 msgid "%(count)d day before event end at %(time)s"
 msgid_plural "%(count)d days before event end at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d jour avant la fin de l'événement à %(time)s"
+msgstr[1] "%(count)d jours avant la fin de l'événement à %(time)s"
 
 #: pretix/plugins/sendmail/models.py:301
 #, python-format
 msgid "%(count)d day after event start at %(time)s"
 msgid_plural "%(count)d days after event start at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d jour après le début de l'événement à %(time)s"
+msgstr[1] "%(count)d jours après le début de l'événement à %(time)s"
 
 #: pretix/plugins/sendmail/models.py:310
 #, python-format
 msgid "%(count)d day before event start at %(time)s"
 msgid_plural "%(count)d days before event start at %(time)s"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(count)d jour avant le début de l'événement à %(time)s"
+msgstr[1] "%(count)d jours avant le début de l'événement à %(time)s"
 
 #: pretix/plugins/sendmail/signals.py:99
 msgid "Automated emails"
@@ -28605,7 +28601,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:224
 msgid "Statement descriptor postfix"
-msgstr ""
+msgstr "Postfix du descripteur de la déclaration"
 
 #: pretix/plugins/stripe/payment.py:225
 #, python-brace-format
@@ -28683,9 +28679,8 @@ msgid "WeChat Pay"
 msgstr "WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:316
-#, fuzzy
 msgid "Destination"
-msgstr "Description"
+msgstr "Destination"
 
 #: pretix/plugins/stripe/payment.py:342
 #, python-brace-format
@@ -28694,6 +28689,9 @@ msgid ""
 ">many test cards</a> to perform a transaction. No money will actually be "
 "transferred."
 msgstr ""
+"Le plugin Stripe fonctionne en mode test. Vous pouvez utiliser une des <a "
+"{args}>nombreuses cartes de test</a> pour effectuer une transaction. Aucun "
+"argent ne sera réellement transféré."
 
 #: pretix/plugins/stripe/payment.py:485 pretix/plugins/stripe/payment.py:865
 #: pretix/plugins/stripe/payment.py:965
@@ -28737,9 +28735,8 @@ msgstr ""
 "contacter le support technique si le problème persiste."
 
 #: pretix/plugins/stripe/payment.py:640
-#, fuzzy
 msgid "Stripe returned an error"
-msgstr "Stripe a signalé une erreur: %s"
+msgstr "Stripe a renvoyé une erreur"
 
 #: pretix/plugins/stripe/payment.py:746
 msgid "Credit card via Stripe"
@@ -28754,9 +28751,8 @@ msgid "You may need to enable JavaScript for Stripe payments."
 msgstr "Vous devrez peut-être activer JavaScript pour les paiements Stripe."
 
 #: pretix/plugins/stripe/payment.py:925
-#, fuzzy
 msgid "Your payment failed. Please try again."
-msgstr "Votre saisie était invalide, veuillez réessayer."
+msgstr "Votre paiement a échoué. Veuillez réessayer."
 
 #: pretix/plugins/stripe/payment.py:998
 msgid "giropay via Stripe"
@@ -28770,9 +28766,9 @@ msgstr "nom inconnu"
 #: pretix/plugins/stripe/payment.py:1062 pretix/plugins/stripe/payment.py:1114
 #: pretix/plugins/stripe/payment.py:1229 pretix/plugins/stripe/payment.py:1381
 #: pretix/plugins/stripe/payment.py:1484
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Bank account at {bank}"
-msgstr "Coordonnées bancaires"
+msgstr "Compte bancaire à {bank}"
 
 #: pretix/plugins/stripe/payment.py:1070
 msgid "iDEAL via Stripe"
@@ -28791,9 +28787,8 @@ msgid "SOFORT via Stripe"
 msgstr "SOFORT via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1238
-#, fuzzy
 msgid "SOFORT (instant bank transfer)"
-msgstr "Paiement par virement bancaire"
+msgstr "SOFORT (virement bancaire instantané)"
 
 #: pretix/plugins/stripe/payment.py:1254
 msgid "Country of your bank"
@@ -28820,29 +28815,25 @@ msgid "Spain"
 msgstr "Espagne"
 
 #: pretix/plugins/stripe/payment.py:1306
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Bank account {iban} at {bank}"
-msgstr "Coordonnées bancaires"
+msgstr "Compte en banque {iban} à {bank}"
 
 #: pretix/plugins/stripe/payment.py:1317
-#, fuzzy
 msgid "EPS via Stripe"
-msgstr "iDEAL via Stripe"
+msgstr "EPS via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1389
-#, fuzzy
 msgid "Multibanco via Stripe"
-msgstr "Alipay via Stripe"
+msgstr "Multibanco via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1436
-#, fuzzy
 msgid "Przelewy24 via Stripe"
-msgstr "Alipay via Stripe"
+msgstr "Przelewy24 via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1492
-#, fuzzy
 msgid "WeChat Pay via Stripe"
-msgstr "Paiement par Stripe"
+msgstr "WeChat Pay via Stripe"
 
 #: pretix/plugins/stripe/signals.py:85
 msgid "Charge succeeded."
@@ -28918,7 +28909,7 @@ msgstr "Stripe Connect : clé publiable (test)"
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:6
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/organizer_stripe.html:9
 msgid "Stripe Connect"
-msgstr "Stripe Connect"
+msgstr "Connexion Stripe"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
@@ -28990,7 +28981,7 @@ msgstr "Nom du payeur"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:47
 msgid "MOTO"
-msgstr ""
+msgstr "MOTO"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:12
 msgid "Do you really want to disconnect your Stripe account?"
@@ -29013,6 +29004,8 @@ msgid ""
 "You need to confirm your payment. Please click the link below to do so or "
 "start a new payment."
 msgstr ""
+"Vous devez confirmer votre paiement. Veuillez cliquer sur le lien ci-dessous "
+"pour le faire ou commencer un nouveau paiement."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:15
 msgid "Confirm payment"
@@ -29023,6 +29016,9 @@ msgid ""
 "Please scan the barcode below to complete your WeChat payment. Once you have "
 "completed your payment, you can refresh this page."
 msgstr ""
+"Veuillez scanner le code-barres ci-dessous pour effectuer votre paiement "
+"WeChat. Une fois que vous avez effectué votre paiement, vous pouvez "
+"actualiser cette page."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:29
 msgid ""
@@ -29030,35 +29026,36 @@ msgid ""
 msgstr "La transaction n'a pas pu être exécutée pour la raison suivante:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:16
-#, fuzzy, python-format
+#, python-format
 msgid "Confirm payment: %(code)s"
-msgstr "Modifier le mode de paiement: %(code)s"
+msgstr "Confirmer le paiement : %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:18
 msgid "Confirming your payment…"
-msgstr ""
+msgstr "Confirmation de votre paiement…"
 
 #: pretix/plugins/stripe/views.py:104 pretix/plugins/stripe/views.py:110
 #: pretix/plugins/stripe/views.py:137 pretix/plugins/stripe/views.py:149
-#, fuzzy
 msgid "An error occurred during connecting with Stripe, please try again."
-msgstr "Une erreur interne s'est produite, veuillez réessayer."
+msgstr ""
+"Une erreur s’est produite lors de la connexion avec Stripe, veuillez "
+"réessayer."
 
 #: pretix/plugins/stripe/views.py:157 pretix/plugins/stripe/views.py:159
-#, fuzzy
 msgid "Stripe returned an error: {}"
-msgstr "Stripe a signalé une erreur: %s"
+msgstr "Stripe a renvoyé une erreur : {}"
 
 #: pretix/plugins/stripe/views.py:162
 msgid ""
 "Your Stripe account is now connected to pretix. You can change the settings "
 "in detail below."
 msgstr ""
+"Votre compte Stripe est maintenant connecté à pretix. Vous pouvez modifier "
+"les paramètres en détail ci-dessous."
 
 #: pretix/plugins/stripe/views.py:469
-#, fuzzy
 msgid "Your Stripe account has been disconnected."
-msgstr "Votre panier a été mis à jour."
+msgstr "Votre compte Stripe a été déconnecté."
 
 #: pretix/plugins/stripe/views.py:510 pretix/plugins/stripe/views.py:529
 #: pretix/plugins/stripe/views.py:534
@@ -29099,9 +29096,8 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:22
 #: pretix/plugins/ticketoutputpdf/migrations/0002_auto_20180605_2022.py:38
 #: pretix/plugins/ticketoutputpdf/views.py:227
-#, fuzzy
 msgid "Default layout"
-msgstr "Fuseau horaire par défaut"
+msgstr "Mise en page par défaut"
 
 #: pretix/plugins/ticketoutputpdf/exporters.py:70
 msgid ""
@@ -29117,7 +29113,7 @@ msgstr "Mise en page PDF du ticket pour {channel}"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:52
 msgid "(Same as above)"
-msgstr ""
+msgstr "(identique à ce qui précède)"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:54
 msgid "PDF ticket layout"
@@ -29136,9 +29132,9 @@ msgid "Ticket layout changed."
 msgstr "La disposition des billets a changé."
 
 #: pretix/plugins/ticketoutputpdf/signals.py:152
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Ticket layout {val}"
-msgstr "Billets en vente"
+msgstr "Disposition des billets {val}"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/control_order_position_buttons.html:7
 msgid "Alternative ticket"
@@ -31019,9 +31015,9 @@ msgid "The current value of your gift card is %(value)s."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:169
-#, fuzzy, python-format
+#, python-format
 msgid "This gift card is valid until %(expiry)s."
-msgstr "Cette fonction n'est pas activée."
+msgstr "Cette carte-cadeau est valide jusqu’au %(expiry)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:180
 #, python-format
@@ -31034,9 +31030,8 @@ msgstr ""
 "relevé."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
-#, fuzzy
 msgid "Change ordered items"
-msgstr "Annuler la commande"
+msgstr "Modifier les articles commandés"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/order.html:290
@@ -31047,6 +31042,8 @@ msgstr "Modifier les détails"
 msgid ""
 "You need to select a payment method above before you can request an invoice."
 msgstr ""
+"Vous devez sélectionner un mode de paiement ci-dessus avant de pouvoir "
+"demander une facture."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:267
 #: pretix/presale/templates/pretixpresale/event/order.html:274
@@ -31076,11 +31073,12 @@ msgid ""
 "If you want to make changes to the products you bought, you can click on the "
 "button to change your order."
 msgstr ""
+"Si vous souhaitez apporter des modifications aux produits que vous avez "
+"achetés, vous pouvez cliquer sur le bouton pour modifier votre commande."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:363
-#, fuzzy
 msgid "Change order"
-msgstr "Annuler la commande"
+msgstr "Changer l'ordre"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:373
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:27
@@ -31651,21 +31649,18 @@ msgid "Analytics"
 msgstr "Mesure d'audience"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:93
-#, fuzzy
 msgctxt "cookie_usage"
 msgid "Marketing"
-msgstr "Démarrer l'édition"
+msgstr "Marketing"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:95
-#, fuzzy
 msgctxt "cookie_usage"
 msgid "Social features"
-msgstr "Fonctionnalités"
+msgstr "Fonctionnalités sociales"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:114
-#, fuzzy
 msgid "Save selection"
-msgstr "aucune sélection"
+msgstr "Enregistrer la sélection"
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
 #, python-format
@@ -31728,50 +31723,43 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:7
-#, fuzzy
 msgid "Delete address"
-msgstr "rue"
+msgstr "Supprimer l’adresse"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:12
-#, fuzzy
 msgid "Do you really want to delete the following address from your account?"
-msgstr "Vous êtes sûr de vouloir supprimer l'équipe?"
+msgstr "Voulez-vous vraiment supprimer l’adresse suivante de votre compte?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:15
-#, fuzzy
 msgid "Account information"
-msgstr "Modification des informations du compte"
+msgstr "Informations sur le compte"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:11
-#, fuzzy
 msgid "Update your account information"
-msgstr "Modifier les informations relatives à la commande"
+msgstr "Mettre à jour les informations de votre compte"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:11
 #, python-format
 msgid "Sign in to your account at %(org)s"
-msgstr ""
+msgstr "Connectez-vous à votre compte à l’adresse %(org)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:38
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:20
-#, fuzzy
 msgid "Create account"
-msgstr "Créer un nouveau compte"
+msgstr "Créer un compte"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:10
-#, fuzzy
 msgid "Your membership"
-msgstr "Membres de l'équipe"
+msgstr "Votre adhésion"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:6
-#, fuzzy
 msgid "Password reset"
-msgstr "Récupération du mot de passe"
+msgstr "Réinitialisation du mot de passe"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:11
@@ -31780,47 +31768,40 @@ msgstr "Définir un nouveau mot de passe pour votre compte"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:10
-#, fuzzy
 msgid "Your account"
-msgstr "Stripe Checkout"
+msgstr "Votre compte"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:23
-#, fuzzy
 msgid "Login method"
-msgstr "Demande de remboursement"
+msgstr "Méthode de connexion"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:39
-#, fuzzy
 msgid "Change account information"
-msgstr "Modifier les coordonnées"
+msgstr "Modifier les informations de compte"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:44
-#, fuzzy
 msgid "Change password"
-msgstr "Modifier les réponses"
+msgstr "Modifier le mot de passe"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:59
-#, fuzzy
 msgid "Addresses"
-msgstr "Adresse"
+msgstr "Adresses"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:62
-#, fuzzy
 msgid "Attendee profiles"
-msgstr "Nom du participant"
+msgstr "Profils des participants"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:179
 msgid "No memberships are stored in your account."
-msgstr ""
+msgstr "Aucune adhésion n’est stockée dans votre compte."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:211
 msgid "No addresses are stored in your account."
 msgstr "Aucune adresse n’est stockée dans votre compte."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:222
-#, fuzzy
 msgid "Profile"
-msgstr "<file>"
+msgstr "Profil"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:244
 msgid "No attendee profiles are stored in your account."
@@ -31828,34 +31809,29 @@ msgstr "Aucun profil de participant n’est stocké dans votre compte."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:7
-#, fuzzy
 msgid "Delete profile"
-msgstr "Supprimer un produit"
+msgstr "Supprimer le profil"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:12
-#, fuzzy
 msgid "Do you really want to delete the following profile from your account?"
-msgstr "Vous êtes sûr de vouloir supprimer l'équipe?"
+msgstr "Voulez-vous vraiment supprimer le profil suivant de votre compte?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
-#, fuzzy
 msgid "Registration"
-msgstr "Valider"
+msgstr "Inscription"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:11
-#, fuzzy, python-format
+#, python-format
 msgid "Create a new account at %(org)s"
-msgstr "Créer un nouveau compte"
+msgstr "Créez un nouveau compte à l’adresse %(org)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:24
-#, fuzzy
 msgid "Log in to an existing account"
-msgstr "Ajouter un produit à un quota existant"
+msgstr "Se connecter à un compte existant"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:20
-#, fuzzy
 msgid "Request a new password"
-msgstr "Répéter le nouveau mot de passe"
+msgstr "Demander un nouveau mot de passe"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:8
 msgid "Event list"
@@ -31922,6 +31898,8 @@ msgid ""
 "Your selected payment method can only be used for a payment of at least "
 "{amount}."
 msgstr ""
+"Le mode de paiement que vous avez sélectionné ne peut être utilisé que pour "
+"un paiement d’au moins {amount}."
 
 #: pretix/presale/views/cart.py:183
 msgid "Please enter positive numbers only."
@@ -31930,6 +31908,7 @@ msgstr "Veuillez entrer les chiffres positifs uniquement."
 #: pretix/presale/views/cart.py:421
 msgid "We applied the voucher to as many products in your cart as we could."
 msgstr ""
+"Nous avons appliqué le bon à autant de produits de votre panier que possible."
 
 #: pretix/presale/views/cart.py:443
 msgid "Your cart has been updated."
@@ -31947,14 +31926,13 @@ msgstr "Les produits ont été ajoutés à votre panier."
 #: pretix/presale/views/widget.py:342
 msgid "Tickets for this event cannot be purchased on this sales channel."
 msgstr ""
+"Les billets pour cet événement ne peuvent pas être achetés sur ce canal de "
+"vente."
 
 #: pretix/presale/views/cart.py:650
-#, fuzzy
 msgctxt "subevent"
 msgid "We were unable to find the specified date."
-msgstr ""
-"Nous n'avons pas pu trouver l'utilisateur pour lequel vous avez demandé un "
-"nouveau mot de passe."
+msgstr "Nous n’avons pas pu trouver la date spécifiée."
 
 #: pretix/presale/views/checkout.py:55
 msgid "Your cart is empty"
@@ -31974,20 +31952,21 @@ msgstr ""
 
 #: pretix/presale/views/customer.py:264 pretix/presale/views/customer.py:267
 #: pretix/presale/views/customer.py:552 pretix/presale/views/customer.py:558
-#, fuzzy
 msgid "You clicked an invalid link."
-msgstr "Vous avez demandé un type d'édition de ticket non valide."
+msgstr "Vous avez cliqué sur un lien non valide."
 
 #: pretix/presale/views/customer.py:287
-#, fuzzy
 msgid "Your new password has been set! You can now use it to log in."
-msgstr "Votre mot de passe a été modifié."
+msgstr ""
+"Votre nouveau mot de passe a été défini ! Vous pouvez maintenant l’utiliser "
+"pour vous connecter."
 
 #: pretix/presale/views/customer.py:327
-#, fuzzy
 msgid ""
 "We've sent you an email with further instructions on resetting your password."
-msgstr "Nous avons envoyé un e-mail contenant d'autres instructions."
+msgstr ""
+"Nous vous avons envoyé un e-mail contenant des instructions supplémentaires "
+"sur la réinitialisation de votre mot de passe."
 
 #: pretix/presale/views/customer.py:520
 msgid ""
@@ -31995,11 +31974,13 @@ msgid ""
 "your email address. The email address of your account will be changed as "
 "soon as you click that link."
 msgstr ""
+"Vos modifications ont été enregistrées. Nous vous avons envoyé un e-mail "
+"avec un lien pour mettre à jour votre adresse e-mail. L’adresse e-mail de "
+"votre compte sera modifiée dès que vous cliquerez sur ce lien."
 
 #: pretix/presale/views/customer.py:568
-#, fuzzy
 msgid "Your email address has been updated."
-msgstr "Votre panier a été mis à jour."
+msgstr "Votre adresse e-mail a été mise à jour."
 
 #: pretix/presale/views/customer.py:769 pretix/presale/views/customer.py:780
 #, python-brace-format
@@ -32007,6 +31988,8 @@ msgid ""
 "We were unable to use your login since the email address {email} is already "
 "used for a different account in this system."
 msgstr ""
+"Nous n’avons pas pu utiliser votre identifiant car l’adresse e-mail {email} "
+"est déjà utilisé pour un autre compte dans ce système."
 
 #: pretix/presale/views/event.py:792
 msgid "Unknown event code or not authorized to access this event."
@@ -32038,18 +32021,16 @@ msgid "The payment is too late to be accepted."
 msgstr "Le paiement est trop tard pour être accepté."
 
 #: pretix/presale/views/order.py:483
-#, fuzzy
 msgid "An invoice has been generated."
-msgstr "La facture a été générée."
+msgstr "Une facture a été générée."
 
 #: pretix/presale/views/order.py:575
 msgid "The payment method for this order cannot be changed."
 msgstr "Le mode de paiement de cet ordre ne peut pas être modifié."
 
 #: pretix/presale/views/order.py:586
-#, fuzzy
 msgid "A payment is currently pending for this order."
-msgstr "Vous ne pouvez pas générer de facture pour cette commande."
+msgstr "Un paiement est actuellement en attente pour cette commande."
 
 #: pretix/presale/views/order.py:859
 msgid "You cannot modify this order"
@@ -32069,41 +32050,46 @@ msgid "The cancellation has been requested."
 msgstr "L’annulation a été demandée."
 
 #: pretix/presale/views/order.py:1040
-#, fuzzy
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr "Le téléchargement des billets n'est pas (encore) activé."
+msgstr ""
+"Le téléchargement des billets n’est pas (encore) activé pour cette commande."
 
 #: pretix/presale/views/order.py:1049
 msgid "Please click the link we sent you via email to download your tickets."
 msgstr ""
+"Veuillez cliquer sur le lien que nous vous avons envoyé par e-mail pour "
+"télécharger vos billets."
 
 #: pretix/presale/views/order.py:1530
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The order has been changed. You can now proceed by paying the open amount of "
 "{amount}."
 msgstr ""
-"La commande a été marquée comme étant remboursée. Veuillez transférer "
-"l'argent à l'acheteur manuellement."
+"L’ordre a été modifié. Vous pouvez maintenant procéder en payant le montant "
+"ouvert de {amount}."
 
 #: pretix/presale/views/order.py:1542
-#, fuzzy
 msgid "You did not make any changes."
-msgstr "Votre recherche ne correspond à aucuns bons."
+msgstr "Vous n’avez apporté aucun changement."
 
 #: pretix/presale/views/order.py:1566
 msgid "You may not change your order in a way that reduces the total price."
 msgstr ""
+"Vous ne pouvez pas modifier votre commande d’une manière qui réduit le prix "
+"total."
 
 #: pretix/presale/views/order.py:1568
 msgid "You may only change your order in a way that increases the total price."
 msgstr ""
+"Vous ne pouvez modifier votre commande que de manière à augmenter le prix "
+"total."
 
 #: pretix/presale/views/order.py:1570
-#, fuzzy
 msgid "You may not change your order in a way that changes the total price."
 msgstr ""
-"Vous devez saisir un prix si vous souhaitez modifier le prix du produit."
+"Vous ne pouvez pas modifier votre commande d'une manière qui modifie le prix "
+"total."
 
 #: pretix/presale/views/order.py:1578
 msgid ""
@@ -32114,9 +32100,8 @@ msgstr ""
 "prix total puisque les paiements ne sont plus acceptés pour cet événement."
 
 #: pretix/presale/views/order.py:1593 pretix/presale/views/order.py:1624
-#, fuzzy
 msgid "You cannot change this order."
-msgstr "Vous ne pouvez pas annuler cette commande."
+msgstr "Vous ne pouvez pas modifier cette commande."
 
 #: pretix/presale/views/user.py:61
 msgid "We had difficulties processing your input."
