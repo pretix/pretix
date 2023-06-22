@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import json
+
 from rest_framework import serializers
 
 
@@ -46,3 +48,16 @@ class AsymmetricField(serializers.Field):
 
     def run_validation(self, data=serializers.empty):
         return self.write.run_validation(data)
+
+
+class CompatibleJSONField(serializers.JSONField):
+    def to_internal_value(self, data):
+        try:
+            return json.dumps(data)
+        except (TypeError, ValueError):
+            self.fail('invalid')
+
+    def to_representation(self, value):
+        if value:
+            return json.loads(value)
+        return value

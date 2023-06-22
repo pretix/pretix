@@ -33,7 +33,8 @@ TEST_TAXRULE_RES = {
     'rate': '19.00',
     'price_includes_tax': True,
     'eu_reverse_charge': False,
-    'home_country': ''
+    'home_country': '',
+    'custom_rules': None,
 }
 
 
@@ -84,6 +85,10 @@ def test_rule_update(token_client, organizer, event, taxrule):
         '/api/v1/organizers/{}/events/{}/taxrules/{}/'.format(organizer.slug, event.slug, taxrule.pk),
         {
             "rate": "20.00",
+            "custom_rules": [
+                {"country": "AT", "address_type": "", "action": "vat", "rate": "19.00",
+                 "invoice_text": {"en": "Austrian VAT applies"}}
+            ]
         },
         format='json'
     )
@@ -111,3 +116,20 @@ def test_rule_delete_forbidden(token_client, organizer, event, taxrule):
     )
     assert resp.status_code == 403
     assert event.tax_rules.exists()
+
+
+@pytest.mark.django_db
+def test_rule_update_invalid_rules(token_client, organizer, event, taxrule):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/taxrules/{}/'.format(organizer.slug, event.slug, taxrule.pk),
+        {
+            "custom_rules": [
+                {"foo": "bar"}
+            ]
+        },
+        format='json'
+    )
+    assert resp.status_code == 400
+    assert resp.data["custom_rules"][0].startswith(
+        "Your set of rules is not valid. Error message: 'country' is a required property"
+    )

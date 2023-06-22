@@ -46,6 +46,7 @@ from rest_framework import serializers
 from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
+from pretix.api.serializers import CompatibleJSONField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.models import Device, Event, TaxRule, TeamAPIToken
@@ -53,6 +54,7 @@ from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
     ItemMetaProperty, SubEventItem, SubEventItemVariation,
 )
+from pretix.base.models.tax import CustomRulesValidator
 from pretix.base.services.seating import (
     SeatProtected, generate_seats, validate_plan_change,
 )
@@ -650,9 +652,16 @@ class SubEventSerializer(I18nAwareModelSerializer):
 
 
 class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
+    custom_rules = CompatibleJSONField(
+        validators=[CustomRulesValidator()],
+        required=False,
+        allow_null=True,
+    )
+
     class Meta:
         model = TaxRule
-        fields = ('id', 'name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country', 'internal_name', 'keep_gross_if_rate_changes')
+        fields = ('id', 'name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country', 'internal_name',
+                  'keep_gross_if_rate_changes', 'custom_rules')
 
 
 class EventSettingsSerializer(SettingsSerializer):
