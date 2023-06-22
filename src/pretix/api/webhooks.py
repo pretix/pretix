@@ -189,6 +189,19 @@ class ParametrizedOrderPositionWebhookEvent(ParametrizedOrderWebhookEvent):
         return d
 
 
+class ParametrizedWaitingListEntryWebhookEvent(ParametrizedWebhookEvent):
+
+    def build_payload(self, logentry: LogEntry):
+        # do not use content_object, this is also called in deletion
+        return {
+            'notification_id': logentry.pk,
+            'organizer': logentry.event.organizer.slug,
+            'event': logentry.event.slug,
+            'waitinglistentry': logentry.object_id,
+            'action': logentry.action_type,
+        }
+
+
 @receiver(register_webhook_events, dispatch_uid="base_register_default_webhook_events")
 def register_default_webhook_events(sender, **kwargs):
     return (
@@ -320,6 +333,22 @@ def register_default_webhook_events(sender, **kwargs):
         ParametrizedEventWebhookEvent(
             'pretix.event.testmode.deactivated',
             _('Test-Mode of shop has been deactivated'),
+        ),
+        ParametrizedWaitingListEntryWebhookEvent(
+            'pretix.event.orders.waitinglist.added',
+            _('Waiting list entry added'),
+        ),
+        ParametrizedWaitingListEntryWebhookEvent(
+            'pretix.event.orders.waitinglist.changed',
+            _('Waiting list entry changed'),
+        ),
+        ParametrizedWaitingListEntryWebhookEvent(
+            'pretix.event.orders.waitinglist.deleted',
+            _('Waiting list entry deleted'),
+        ),
+        ParametrizedWaitingListEntryWebhookEvent(
+            'pretix.event.orders.waitinglist.voucher_assigned',
+            _('Waiting list entry received voucher'),
         ),
     )
 

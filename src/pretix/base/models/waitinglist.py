@@ -218,7 +218,7 @@ class WaitingListEntry(LoggedModel):
                 'waitinglistentry': self.pk,
                 'subevent': self.subevent.pk if self.subevent else None,
             }, user=user, auth=auth)
-            self.log_action('pretix.waitinglist.voucher', user=user, auth=auth)
+            self.log_action('pretix.event.orders.waitinglist.voucher_assigned', user=user, auth=auth)
             self.voucher = v
             self.save()
 
