@@ -32,8 +32,10 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import copy
 import json
 import os
+import time
 from typing import List, Tuple
 
 from django.db import transaction
@@ -151,6 +153,7 @@ class BaseDataShredder:
 
 def shred_log_fields(logentry, banlist=None, whitelist=None):
     d = logentry.parsed_data
+    initial_data = copy.copy(d)
     shredded = False
     if whitelist:
         for k, v in d.items():
@@ -162,9 +165,49 @@ def shred_log_fields(logentry, banlist=None, whitelist=None):
             if f in d:
                 d[f] = '█'
                 shredded = True
-    logentry.data = json.dumps(d)
-    logentry.shredded = logentry.shredded or shredded
-    logentry.save(update_fields=['data', 'shredded'])
+    if d != initial_data:
+        logentry.data = json.dumps(d)
+        logentry.shredded = logentry.shredded or shredded
+        logentry.save(update_fields=['data', 'shredded'])
+
+
+def slow_update(qs, batch_size=1000, sleep_time=.5, **update):
+    """
+    Doing UPDATE queries on hundreds of thousands of rows can cause outages due to high write load on the database.
+    This provides a throttled way to update rows. The condition for this to work properly is that the queryset has a
+    filter condition that no longer applies after the update!
+    Otherwise, this will be an endless loop!
+    """
+    total_updated = 0
+    while True:
+        updated = qs.order_by().filter(
+            pk__in=qs.order_by().values_list('pk', flat=True)[:batch_size]
+        ).update(**update)
+        total_updated += updated
+        if not updated:
+            break
+        if total_updated >= 0.8 * batch_size:
+            time.sleep(sleep_time)
+
+    return total_updated
+
+
+def slow_delete(qs, batch_size=1000, sleep_time=.5):
+    """
+    Doing DELETE queries on hundreds of thousands of rows can cause outages due to high write load on the database.
+    This provides a throttled way to update rows.
+    """
+    total_deleted = 0
+    while True:
+        deleted = qs.order_by().filter(
+            pk__in=qs.order_by().values_list('pk', flat=True)[:batch_size]
+        ).delete()[0]
+        total_deleted += deleted
+        if not deleted:
+            break
+        if total_deleted >= 0.8 * batch_size:
+            time.sleep(sleep_time)
+    return total_deleted
 
 
 class PhoneNumberShredder(BaseDataShredder):
@@ -180,13 +223,16 @@ class PhoneNumberShredder(BaseDataShredder):
     @transaction.atomic
     def shred_data(self):
         for o in self.event.orders.all():
+            changed = bool(o.phone)
             o.phone = None
             d = o.meta_info_data
             if d:
                 if 'contact_form_data' in d and 'phone' in d['contact_form_data']:
+                    changed = True
                     del d['contact_form_data']['phone']
-                o.meta_info = json.dumps(d)
-            o.save(update_fields=['meta_info', 'phone'])
+                    o.meta_info = json.dumps(d)
+            if changed:
+                o.save(update_fields=['meta_info', 'phone'])
 
         for le in self.event.logentry_set.filter(action_type="pretix.event.order.phone.changed"):
             shred_log_fields(le, banlist=['old_phone', 'new_phone'])
@@ -209,17 +255,32 @@ class EmailAddressShredder(BaseDataShredder):
 
     @transaction.atomic
     def shred_data(self):
-        OrderPosition.all.filter(order__event=self.event, attendee_email__isnull=False).update(attendee_email=None)
+        slow_update(
+            OrderPosition.all.filter(order__event=self.event, attendee_email__isnull=False),
+            attendee_email=None,
+            # Updates to order position table are slow, since PostgreSQL needs to update many indexes, so let's
+            # take them really slowly to not overwhelm the database.
+            batch_size=100,
+            sleep_time=2,
+        )
 
         for o in self.event.orders.all():
+            changed = bool(o.email) or bool(o.customer)
             o.email = None
             o.customer = None
             d = o.meta_info_data
             if d:
                 if 'contact_form_data' in d and 'email' in d['contact_form_data']:
                     del d['contact_form_data']['email']
-                o.meta_info = json.dumps(d)
-            o.save(update_fields=['meta_info', 'email', 'customer'])
+                    changed = True
+                    o.meta_info = json.dumps(d)
+                if 'contact_form_data' in d and 'email_repeat' in d['contact_form_data']:
+                    del d['contact_form_data']['email_repeat']
+                    changed = True
+            if changed:
+                if d:
+                    o.meta_info = json.dumps(d)
+                o.save(update_fields=['meta_info', 'email', 'customer'])
 
         for le in self.event.logentry_set.filter(
             Q(action_type__contains="order.email") | Q(action_type__contains="position.email"),
@@ -253,7 +314,13 @@ class WaitingListShredder(BaseDataShredder):
 
     @transaction.atomic
     def shred_data(self):
-        self.event.waitinglistentries.update(name_cached=None, name_parts={'_shredded': True}, email='█', phone='█')
+        slow_update(
+            self.event.waitinglistentries.exclude(email='█'),
+            name_cached=None,
+            name_parts={'_shredded': True},
+            email='█',
+            phone='█',
+        )
 
         for wle in self.event.waitinglistentries.select_related('voucher').filter(voucher__isnull=False):
             if '@' in wle.voucher.comment:
@@ -300,13 +367,27 @@ class AttendeeInfoShredder(BaseDataShredder):
 
     @transaction.atomic
     def shred_data(self):
-        OrderPosition.all.filter(
-            order__event=self.event
-        ).filter(
-            Q(attendee_name_cached__isnull=False) | Q(attendee_name_parts__isnull=False) |
-            Q(company__isnull=False) | Q(street__isnull=False) | Q(zipcode__isnull=False) | Q(city__isnull=False)
-        ).update(attendee_name_cached=None, attendee_name_parts={'_shredded': True}, company=None, street=None,
-                 zipcode=None, city=None)
+        slow_update(
+            OrderPosition.all.filter(
+                order__event=self.event
+            ).filter(
+                Q(attendee_name_cached__isnull=False) |
+                Q(company__isnull=False) |
+                Q(street__isnull=False) |
+                Q(zipcode__isnull=False) |
+                Q(city__isnull=False)
+            ),
+            attendee_name_cached=None,
+            attendee_name_parts={'_shredded': True},
+            company=None,
+            street=None,
+            zipcode=None,
+            city=None,
+            # Updates to order position table are slow, since PostgreSQL needs to update many indexes, so let's
+            # take them really slowly to not overwhelm the database.
+            batch_size=100,
+            sleep_time=2,
+        )
 
         for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
             d = le.parsed_data
@@ -345,7 +426,9 @@ class InvoiceAddressShredder(BaseDataShredder):
 
     @transaction.atomic
     def shred_data(self):
-        InvoiceAddress.objects.filter(order__event=self.event).delete()
+        slow_delete(
+            InvoiceAddress.objects.filter(order__event=self.event),
+        )
 
         for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
             d = le.parsed_data
@@ -377,7 +460,9 @@ class QuestionAnswerShredder(BaseDataShredder):
 
     @transaction.atomic
     def shred_data(self):
-        QuestionAnswer.objects.filter(orderposition__order__event=self.event).delete()
+        slow_delete(
+            QuestionAnswer.objects.filter(orderposition__order__event=self.event),
+        )
 
         for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
             d = le.parsed_data
@@ -432,8 +517,12 @@ class CachedTicketShredder(BaseDataShredder):
 
     @transaction.atomic
     def shred_data(self):
-        CachedTicket.objects.filter(order_position__order__event=self.event).delete()
-        CachedCombinedTicket.objects.filter(order__event=self.event).delete()
+        slow_delete(
+            CachedTicket.objects.filter(order_position__order__event=self.event)
+        )
+        slow_delete(
+            CachedCombinedTicket.objects.filter(order__event=self.event)
+        )
 
 
 class PaymentInfoShredder(BaseDataShredder):

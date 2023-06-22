@@ -41,10 +41,13 @@ from zipfile import ZipFile
 from dateutil.parser import parse
 from django.conf import settings
 from django.utils.crypto import get_random_string
+from django.utils.formats import date_format
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.models import CachedFile, Event, cachedfile_name
+from pretix.base.i18n import language
+from pretix.base.models import CachedFile, Event, User, cachedfile_name
+from pretix.base.services.mail import SendMailException, mail
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.base.shredder import ShredError
 from pretix.celery_app import app
@@ -102,7 +105,7 @@ def export(event: Event, shredders: List[str], session_key=None, cfid=None) -> N
 
 
 @app.task(base=ProfiledEventTask, throws=(ShredError,))
-def shred(event: Event, fileid: str, confirm_code: str) -> None:
+def shred(event: Event, fileid: str, confirm_code: str, user: int=None) -> None:
     known_shredders = event.get_data_shredders()
     try:
         cf = CachedFile.objects.get(pk=fileid)
@@ -129,3 +132,25 @@ def shred(event: Event, fileid: str, confirm_code: str) -> None:
 
     cf.file.delete(save=False)
     cf.delete()
+
+    if user:
+        user = User.objects.get(pk=user)
+        with language(user.locale):
+            try:
+                mail(
+                    user.email,
+                    _('Data shredding completed'),
+                    'pretixbase/email/shred_completed.txt',
+                    {
+                        'user': user,
+                        'organizer': event.organizer.name,
+                        'event': str(event.name),
+                        'start_time': date_format(parse(indexdata['time']).astimezone(event.timezone), 'SHORT_DATETIME_FORMAT'),
+                        'shredders': ', '.join([str(s.verbose_name) for s in shredders])
+                    },
+                    event=None,
+                    user=user,
+                    locale=user.locale,
+                )
+            except SendMailException:
+                pass  # Already logged

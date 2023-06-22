@@ -167,4 +167,5 @@ class ShredDoView(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixi
         if request.event.slug != request.POST.get("slug"):
             return self.error(ShredError(_("The slug you entered was not correct.")))
 
-        return self.do(self.request.event.id, request.POST.get("file"), request.POST.get("confirm_code"))
+        return self.do(self.request.event.id, request.POST.get("file"), request.POST.get("confirm_code"),
+                       self.request.user.pk)
