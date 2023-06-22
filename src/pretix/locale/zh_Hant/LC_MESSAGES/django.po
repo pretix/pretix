@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-21 13:25+0000\n"
+"PO-Revision-Date: 2023-06-23 07:00+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -14089,7 +14089,7 @@ msgstr "類別{value}已更改。"
 
 #: pretix/control/logdisplay.py:484
 msgid "An add-on has been added to this product."
-msgstr ""
+msgstr "此商品中添加了一項附加元件。"
 
 #: pretix/control/logdisplay.py:485
 msgid "An add-on has been removed from this product."
@@ -14101,101 +14101,95 @@ msgstr "此產品的附加元件已更改。"
 
 #: pretix/control/logdisplay.py:487
 msgid "A bundled item has been added to this product."
-msgstr ""
+msgstr "捆綁商品已添加到此商品中。"
 
 #: pretix/control/logdisplay.py:488
 msgid "A bundled item has been removed from this product."
-msgstr ""
+msgstr "已從此商品中刪除捆綁商品。"
 
 #: pretix/control/logdisplay.py:489
 msgid "A bundled item has been changed on this product."
-msgstr ""
+msgstr "此商品上的捆綁商品已更改。"
 
 #: pretix/control/logdisplay.py:490
-#, fuzzy
-#| msgid "A voucher has already been sent to this person."
 msgid "A meta property has been added to this event."
-msgstr "優惠券已發送給此人。"
+msgstr "元屬性已添加到此事件。"
 
 #: pretix/control/logdisplay.py:491
-#, fuzzy
-#| msgid "This user already has been invited for this team."
 msgid "A meta property has been removed from this event."
-msgstr "該用戶已被邀請加入該團隊。"
+msgstr "元屬性已從此事件中刪除。"
 
 #: pretix/control/logdisplay.py:492
-#, fuzzy
-#| msgid "This user already has been invited for this team."
 msgid "A meta property has been changed on this event."
-msgstr "該用戶已被邀請加入該團隊。"
+msgstr "此事件的元屬性已更改。"
 
 #: pretix/control/logdisplay.py:493
 msgid "The quota has been added."
-msgstr ""
+msgstr "額度已添加。"
 
 #: pretix/control/logdisplay.py:494
 msgid "The quota has been deleted."
-msgstr ""
+msgstr "額度已刪除。"
 
 #: pretix/control/logdisplay.py:495
 msgid "The quota has been changed."
-msgstr ""
+msgstr "額度已更改。"
 
 #: pretix/control/logdisplay.py:496
 msgid "The quota has closed."
-msgstr ""
+msgstr "額度已關閉。"
 
 #: pretix/control/logdisplay.py:497 pretix/control/views/item.py:1051
 msgid "The quota has been re-opened."
-msgstr ""
+msgstr "額度已重新開放。"
 
 #: pretix/control/logdisplay.py:498
 msgid "The category has been added."
-msgstr ""
+msgstr "已添加該類別。"
 
 #: pretix/control/logdisplay.py:499
 msgid "The category has been deleted."
-msgstr ""
+msgstr "該類別已被刪除。"
 
 #: pretix/control/logdisplay.py:500
 msgid "The category has been changed."
-msgstr ""
+msgstr "類別已更改。"
 
 #: pretix/control/logdisplay.py:501
 msgid "The category has been reordered."
-msgstr ""
+msgstr "類別已重新排序。"
 
 #: pretix/control/logdisplay.py:502
 msgid "The question has been added."
-msgstr ""
+msgstr "該問題已添加。"
 
 #: pretix/control/logdisplay.py:503
 msgid "The question has been deleted."
-msgstr ""
+msgstr "該問題已被刪除。"
 
 #: pretix/control/logdisplay.py:504
 msgid "The question has been changed."
-msgstr ""
+msgstr "問題已更改。"
 
 #: pretix/control/logdisplay.py:505
 msgid "The question has been reordered."
-msgstr ""
+msgstr "該問題已重新排序。"
 
 #: pretix/control/logdisplay.py:506
 msgid "The discount has been added."
-msgstr ""
+msgstr "折扣已添加。"
 
 #: pretix/control/logdisplay.py:507
 msgid "The discount has been deleted."
-msgstr ""
+msgstr "折扣已被刪除。"
 
 #: pretix/control/logdisplay.py:508
 msgid "The discount has been changed."
-msgstr ""
+msgstr "折扣已更改。"
 
 #: pretix/control/logdisplay.py:509
 msgid "The tax rule has been added."
-msgstr ""
+msgstr "已添加稅務規則。"
 
 #: pretix/control/logdisplay.py:510
 msgid "The tax rule has been deleted."
@@ -14203,7 +14197,7 @@ msgstr "稅收規則已被刪除。"
 
 #: pretix/control/logdisplay.py:511
 msgid "The tax rule has been changed."
-msgstr ""
+msgstr "稅務規則已更改。"
 
 #: pretix/control/logdisplay.py:512
 msgid "The check-in list has been added."
@@ -15098,29 +15092,29 @@ msgstr "按兩下此處進行許可執照規定檢查，以確保你對 pretix �
 msgid ""
 "pretix is running in debug mode. For security reasons, please never run "
 "debug mode on a production instance."
-msgstr ""
+msgstr "Pretix 正在調試模式下運行。出於安全原因，請不要在生產模式上運行debug 模式。"
 
 #: pretix/control/templates/pretixcontrol/base.html:434
 msgid ""
 "For security reasons, please change your password before you continue. "
 "Afterwards you will be redirected to your original destination."
-msgstr ""
+msgstr "出於安全原因，請先更改密碼，然後再繼續。然後，你將被重導回到原始目的連結。"
 
 #: pretix/control/templates/pretixcontrol/base.html:446
 #, python-format
 msgid "Times displayed in %(tz)s"
-msgstr ""
+msgstr "以 %(tz)s 顯示的時間"
 
 #: pretix/control/templates/pretixcontrol/base.html:452
 msgid "running in development mode"
-msgstr ""
+msgstr "在開發者模式下運行"
 
 #: pretix/control/templates/pretixcontrol/base.html:468
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:42
 #: pretix/presale/templates/pretixpresale/postmessage.html:27
 #: pretix/presale/templates/pretixpresale/waiting.html:25
 msgid "If this takes longer than a few minutes, please contact us."
-msgstr ""
+msgstr "如果這需要超過幾分鐘的時間，請與我們聯繫。"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:4
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:71
@@ -15196,7 +15190,7 @@ msgstr "類型"
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:72
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:102
 msgid "Card Entry Mode"
-msgstr ""
+msgstr "卡片輸入模式"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:50
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:74
@@ -15210,11 +15204,11 @@ msgstr "卡號"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:57
 msgid "Client Transaction Code"
-msgstr ""
+msgstr "用戶端交易代碼"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:60
 msgid "Server Transaction Code"
-msgstr ""
+msgstr "伺服器交易代碼"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:67
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:83
@@ -15314,7 +15308,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:63
 msgid "Time of scan"
-msgstr ""
+msgstr "掃描時間"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:65
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:48
@@ -15363,7 +15357,7 @@ msgstr "被拒絕"
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:151
 #: pretix/control/templates/pretixcontrol/event/index.html:24
 msgid "Copy to clipboard"
-msgstr ""
+msgstr "複製到剪貼板"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:7
 #: pretix/control/templates/pretixcontrol/checkin/index.html:11
@@ -15372,22 +15366,20 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:11
 #, python-format
 msgid "Check-in list: %(name)s"
-msgstr ""
+msgstr "Check-in 列表: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:16
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:16
 msgid "Edit list configuration"
-msgstr ""
+msgstr "編輯列表設定"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:22
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:21
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:137
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:8
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:20
-#, fuzzy
-#| msgid "Check-in history"
 msgid "Check-in simulator"
-msgstr "check-in歷史"
+msgstr "check-in模擬器"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:27
 #: pretix/control/templates/pretixcontrol/orders/overview.html:20
@@ -15432,7 +15424,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:186
 msgid "Checked in automatically"
-msgstr ""
+msgstr "自動辦理登記"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:197
 #, python-format
@@ -15441,11 +15433,11 @@ msgstr "出口 %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:211
 msgid "Check-In selected attendees"
-msgstr ""
+msgstr "選定已簽到的出席者"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:215
 msgid "Check-Out selected attendees"
-msgstr ""
+msgstr "簽出已選定的出席者"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:221
 msgid "Delete all check-ins of selected attendees"
@@ -15454,7 +15446,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
 msgid "Delete check-in list"
-msgstr ""
+msgstr "刪除簽到清單"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:9
 #, python-format
@@ -15602,7 +15594,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:73
 msgid "Custom check-in rule"
-msgstr ""
+msgstr "自訂簽到規則"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:80
 #: pretix/control/templates/pretixcontrol/event/mail.html:33
@@ -15717,17 +15709,16 @@ msgid ""
 "a barcode plus some optional parameters and we will show you the response of "
 "the check-in list. No actual check-in will be performed and no modification "
 "to the system state is made."
-msgstr ""
+msgstr "此工具允許你驗證簽到設定。你可以輸入條碼和一些可選參數，我們將向你顯示簽到清"
+"單的回應。這不會執行實際上的簽到，也不會對系統狀態進行任何修改。"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:39
 msgid "Simulate"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:65
-#, fuzzy
-#| msgid "All check-ins"
 msgid "Valid check-in"
-msgstr "所有Check-in ( 簽到）"
+msgstr "有效簽到"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:67
 #, fuzzy
@@ -16137,7 +16128,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/delete.html:56
 #: pretix/control/templates/pretixcontrol/event/delete.html:70
 msgid "Delete personal data"
-msgstr ""
+msgstr "刪除個人數據"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:59
 msgid ""
@@ -16232,7 +16223,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:6
 msgid "Geo coordinates updated"
-msgstr ""
+msgstr "地理座標已更新"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:7
 msgid "Update map?"
@@ -16266,7 +16257,7 @@ msgstr "商店URL:"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:27
 msgid "Create QR code"
-msgstr ""
+msgstr "建立二維碼"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:33
 #: pretix/control/templates/pretixcontrol/event/index.html:38
@@ -16285,7 +16276,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/index.html:62
 msgid "Show overpaid orders"
-msgstr ""
+msgstr "顯示超付的訂單"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:67
 msgid ""
@@ -16295,7 +16286,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/index.html:71
 msgid "Show pending refunds"
-msgstr ""
+msgstr "顯示待處理的退款"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:76
 msgid ""
@@ -16329,7 +16320,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/index.html:100
 msgid "Show affected orders"
-msgstr ""
+msgstr "顯示受影響的訂單"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:163
 #: pretix/control/templates/pretixcontrol/order/index.html:1002
@@ -16344,7 +16335,7 @@ msgstr "活動日誌"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:183
 msgid "Show more logs"
-msgstr ""
+msgstr "顯示更多日誌"
 
 #: pretix/control/templates/pretixcontrol/event/invoicing.html:5
 msgid "Invoice settings"
@@ -16423,7 +16414,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/live.html:93
 msgid "Disable test mode"
-msgstr ""
+msgstr "禁用測試模式"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:99
 msgid "Your shop is currently in production mode."
@@ -16461,11 +16452,12 @@ msgid ""
 "It looks like you already have some real orders in your shop. We do not "
 "recommend enabling test mode if your customers already know your shop, as it "
 "will confuse them."
-msgstr ""
+msgstr "看起來你的商店中已經有一些真正的訂單。如果你的客戶已經知道你的商店，我們不建"
+"議你啟用測試模式，因為這會讓他們感到困惑。"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:119
 msgid "Enable test mode"
-msgstr ""
+msgstr "啟用測試模式"
 
 #: pretix/control/templates/pretixcontrol/event/logs.html:12
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:12
@@ -16526,7 +16518,7 @@ msgstr "發送方式"
 #: pretix/control/templates/pretixcontrol/event/mail.html:25
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:26
 msgid "Custom SMTP server"
-msgstr ""
+msgstr "自訂 SMTP 伺服器"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:27
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:28
@@ -17108,12 +17100,12 @@ msgstr "率"
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:41
 #, python-format
 msgid "incl. %(rate)s %%"
-msgstr ""
+msgstr "包括 %%稅"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:43
 #, python-format
 msgid "excl. %(rate)s %%"
-msgstr ""
+msgstr "不包括 %%稅"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:13
@@ -19024,7 +19016,7 @@ msgstr "不安全"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:399
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(taxname)s"
-msgstr ""
+msgstr "<strong>加上</strong>%(rate)s%% %(name)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:625
 #: pretix/control/templates/pretixcontrol/order/index.html:665
@@ -19032,7 +19024,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:409
 #, python-format
 msgid "incl. %(rate)s%% %(taxname)s"
-msgstr ""
+msgstr "包含. %(rate)s% %(taxname)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:686
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:437
@@ -19086,11 +19078,11 @@ msgstr "取消支付"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:771
 msgid "Confirm as paid"
-msgstr ""
+msgstr "確認已付款"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:814
 msgid "Create a refund"
-msgstr ""
+msgstr "建立退款"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:835
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:60
@@ -19104,7 +19096,7 @@ msgstr "取消轉入"
 #: pretix/control/templates/pretixcontrol/order/index.html:873
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:112
 msgid "Confirm as done"
-msgstr ""
+msgstr "確認完成"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:880
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:118
@@ -19179,7 +19171,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:25
 msgid "Yes, cancel payment"
-msgstr ""
+msgstr "是，取消支付"
 
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:5
 #: pretix/control/templates/pretixcontrol/order/pay_complete.html:9
@@ -19226,7 +19218,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:32
 msgid "Yes, cancel refund"
-msgstr ""
+msgstr "是，取消退款"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:6
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:10
@@ -19255,7 +19247,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:39
 msgid "Amount not refunded"
-msgstr ""
+msgstr "未退款金額"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:40
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:87
@@ -19276,7 +19268,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:86
 msgid "Recipient / options"
-msgstr ""
+msgstr "收件者/選項"
 
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:114
 msgid "Transfer to other order"
@@ -19318,7 +19310,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:29
 msgid "Mark as done"
-msgstr ""
+msgstr "標記為完成"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:22
 #, python-format
@@ -19398,7 +19390,7 @@ msgstr "單一價格"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:24
 msgid "Total tax value"
-msgstr ""
+msgstr "總稅額"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:25
 msgid "Total price"
@@ -19458,7 +19450,7 @@ msgstr "退款選項"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:5
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:8
 msgid "Send out emails"
-msgstr ""
+msgstr "傳送電子郵件"
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:54
 msgid ""
@@ -19487,7 +19479,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:83
 msgid "Cancel all orders"
-msgstr ""
+msgstr "取消所有訂單"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:5
 #: pretix/control/templates/pretixcontrol/orders/export.html:8
@@ -19518,7 +19510,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/export.html:37
 #: pretix/control/templates/pretixcontrol/organizers/export.html:37
 msgid "Exporter not found"
-msgstr ""
+msgstr "未找到匯出"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:42
 #: pretix/control/templates/pretixcontrol/organizers/export.html:42
@@ -19532,7 +19524,7 @@ msgstr "最近失敗"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:64
 msgid "Run export now"
-msgstr ""
+msgstr "現在執行匯出"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:69
 #: pretix/control/templates/pretixcontrol/organizers/export.html:69
@@ -19556,7 +19548,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:4
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:6
 msgid "Delete scheduled export"
-msgstr ""
+msgstr "刪除已排程匯出"
 
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:9
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:9
@@ -19632,7 +19624,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:237
 #, python-format
 msgid "Repeat until %(until)s"
-msgstr ""
+msgstr "重複直到 %(until)s"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:97
 msgid "Forever"
@@ -19696,7 +19688,7 @@ msgstr "等待（已確認）"
 #: pretix/control/templates/pretixcontrol/orders/fragment_order_status.html:25
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:20
 msgid "Canceled (paid fee)"
-msgstr ""
+msgstr "取消（已付費用）"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:6
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:8
@@ -19829,7 +19821,7 @@ msgstr "全額已付款"
 #: pretix/control/templates/pretixcontrol/orders/index.html:186
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:264
 msgid "INVOICE NOT CANCELED"
-msgstr ""
+msgstr "發票未取消"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:197
 msgid "Sum over all pages"
@@ -19981,7 +19973,7 @@ msgstr "客戶歷史記錄"
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:11
 #, python-format
 msgid "Anonymize customer #%(id)s"
-msgstr ""
+msgstr "匿名化客戶%(id)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:16
 msgid "Are you sure you want to anonymize this customer account?"
@@ -20061,7 +20053,7 @@ msgstr "召集人%(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:6
 msgid "Change multiple devices"
-msgstr ""
+msgstr "更改多項設備"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:8
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:13
@@ -20078,7 +20070,7 @@ msgstr "進階設定"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:6
 msgid "Connect to device:"
-msgstr ""
+msgstr "連線到裝置："
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:11
 msgid ""
@@ -20137,7 +20129,7 @@ msgstr "設備日誌"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:5
 msgid "Revoke device access:"
-msgstr ""
+msgstr "撤銷裝置訪問使用權："
 
 #: pretix/control/templates/pretixcontrol/organizers/device_revoke.html:9
 msgid "Are you sure you want remove access for this device?"
@@ -20183,7 +20175,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:24
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:56
 msgid "Connect a device"
-msgstr ""
+msgstr "連接一項設備"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:81
 msgid "Hardware model"
@@ -20197,7 +20189,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:139
 msgid "Not yet initialized"
-msgstr ""
+msgstr "尚未初始化"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:142
 msgid "Revoked"
@@ -20234,7 +20226,7 @@ msgid ""
 "These settings will be used for the organizer page as well as for the "
 "default settings for all events in this account that do not have their own "
 "design settings."
-msgstr ""
+msgstr "這些設定將用於召集人頁面以及此帳戶中沒有自己的設計設定的所有活動的預設設定。"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:161
 msgid "Privacy"
@@ -20349,7 +20341,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_edit.html:6
 #, python-format
 msgid "Gift card: %(card)s"
-msgstr ""
+msgstr "禮品卡：%(card)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:36
 msgid "Expire date"
@@ -20357,7 +20349,7 @@ msgstr "到期日"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:43
 msgid "Issued through sale"
-msgstr ""
+msgstr "透過銷售發行"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:63
 msgid "Transactions"
@@ -20380,13 +20372,11 @@ msgstr "還原"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:131
 msgid "Gift card history"
-msgstr ""
+msgstr "禮品卡歷史記錄"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_invite.html:8
-#, fuzzy
-#| msgid "Delete organizer"
 msgid "Invite organizer"
-msgstr "刪除召集人"
+msgstr "邀請召集人"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:8
 #, fuzzy
@@ -20409,7 +20399,8 @@ msgid ""
 "You are not accepting gift cards from other organizers yet. If you want to "
 "do so, the other organizer can add you to their list and afterwards, you can "
 "confirm this here."
-msgstr ""
+msgstr "你尚未接受其他召集人的禮物卡。如果你想這樣做，其他召集人可以將你添加到他們的"
+"清單中，之後，你可以在此處確認。"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:49
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:128
@@ -20427,16 +20418,12 @@ msgid "Remove"
 msgstr "移除"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:66
-#, fuzzy
-#| msgid "Accept anyway"
 msgid "Accept"
-msgstr "全然接受"
+msgstr "接受"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:69
-#, fuzzy
-#| msgid "Deadlines"
 msgid "Decline"
-msgstr "期限"
+msgstr "拒絕"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:84
 msgid "Other organizers accepting gift cards from you"
@@ -20451,6 +20438,9 @@ msgid ""
 "responsibility to handle the exchange of money to offset the transactions "
 "between the two organizers."
 msgstr ""
+"你可以邀請其他召集人接受你的禮物卡。完成此操作後，他們需要轉到其帳戶中的同一"
+"頁面，並接受你的邀請。請注意，其他召集人也可以向禮物卡充值，你需要從他們那邊"
+"收集禮品卡。你有責任處理貨幣兌換，以抵消兩個召集人之間的交易。"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:95
 msgid ""
@@ -20464,7 +20454,8 @@ msgid ""
 "You should only use this option for organizers you trust, since (depending "
 "on the activated medium types) this will grant the other organizer access to "
 "cryptographic key material required to interact with the media type."
-msgstr ""
+msgstr "你只應將此選項用於你信任的召集人，因為（取決於啟動的媒體類型）這將授予其他召"
+"集人訪問與媒體類型交互所需的加密密鑰材料的訪問使用權。"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:106
 #, fuzzy
@@ -20474,7 +20465,7 @@ msgstr "刪除召集人"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:8
 msgid "Issued gift cards"
-msgstr ""
+msgstr "已發行的禮品卡"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:13
 msgid ""
@@ -20502,7 +20493,7 @@ msgstr "召集人日誌"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:60
 msgid "Customer account registration"
-msgstr ""
+msgstr "客戶帳戶註冊"
 
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:63
 msgid "Customer account email change"
@@ -20514,7 +20505,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:5
 msgid "Delete membership type:"
-msgstr ""
+msgstr "刪除會員類型："
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:9
 msgid "Are you sure you want to delete this membership type?"
@@ -20624,7 +20615,7 @@ msgstr "新媒體"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:5
 msgid "Delete SSO client:"
-msgstr ""
+msgstr "刪除 SSO 用戶端："
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:9
 msgid "Are you sure you want to delete this SSO client?"
@@ -20648,11 +20639,12 @@ msgid ""
 "You can allow your customers to log into other systems using their customer "
 "account credentials by setting up your other systems as a Single-Sign-On "
 "(SSO) client based on OpenID Connect."
-msgstr ""
+msgstr "透過將其他系統設定為基於 OpenID Connect 的單點登錄 （SSO） "
+"用戶端，你可以允許你的客戶使用其客戶帳戶憑據，登錄其他系統。"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:5
 msgid "Delete SSO provider:"
-msgstr ""
+msgstr "刪除 SSO 提供者："
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:9
 msgid "Are you sure you want to delete this SSO provider?"
@@ -20725,15 +20717,15 @@ msgstr "會員"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:32
 msgid "Two-factor authentication enabled"
-msgstr ""
+msgstr "啟用兩步驟驗證"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:36
 msgid "Two-factor authentication disabled"
-msgstr ""
+msgstr "兩步驟驗證禁用"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:53
 msgid "invited, pending response"
-msgstr ""
+msgstr "已邀請，待處理回應"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:55
 msgid "resend invite"
@@ -20772,7 +20764,7 @@ msgstr "會員"
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:54
 #, python-format
 msgid "+ %(count)s invited"
-msgstr ""
+msgstr "+ 邀請的%(count)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html:6
 msgid "Modify webhook"
@@ -20827,7 +20819,7 @@ msgstr "要求URL"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:85
 msgid "Request POST body"
-msgstr ""
+msgstr "要求ＰＯＳＴ正文"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:87
 msgid "Response body"
@@ -20870,7 +20862,7 @@ msgstr "%(count)s元件"
 #: pretix/control/templates/pretixcontrol/pagination.html:40
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:38
 msgid "Show per page:"
-msgstr ""
+msgstr "每頁顯示："
 
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:14
 #, python-format
@@ -20999,11 +20991,11 @@ msgstr "背景PDF"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:200
 msgid "Create empty background"
-msgstr ""
+msgstr "創建空白背景"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:205
 msgid "Upload custom background"
-msgstr ""
+msgstr "上傳自訂背景"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:211
 msgid ""
@@ -21014,7 +21006,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:221
 msgid "Download current background"
-msgstr ""
+msgstr "下載當前背景"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:228
 msgid "Preferred language"
@@ -21034,7 +21026,7 @@ msgstr "尺寸(mm)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:274
 msgid "Render without whitespace"
-msgstr ""
+msgstr "渲染時沒有空白"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:276
 msgid ""
@@ -21044,7 +21036,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:282
 msgid "Font size (pt)"
-msgstr ""
+msgstr "字體尺寸(點)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:287
 msgid "Line height"
@@ -21105,7 +21097,7 @@ msgstr "其他…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:411
 msgid "Show available placeholders"
-msgstr ""
+msgstr "顯示可用的佔位元"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:419
 msgid "Add a new object"
@@ -21121,7 +21113,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:440
 msgid "Other QR code"
-msgstr ""
+msgstr "其他二維碼"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:446
 msgid "pretix Logo"
@@ -21225,10 +21217,12 @@ msgid ""
 "confirm you really want this, please type out the event's short name "
 "(\"%(slug)s\") here:"
 msgstr ""
+"請重新檢查你是否完全確定要從事件 <strong>%(event)s</strong> 中刪除所選類別的"
+"數據。要確認你確實想執行這項指令，請在此處輸入事件的短名稱%(slug)s:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:41
 msgid "Event short name"
-msgstr ""
+msgstr "活動簡稱"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:46
 msgid "Step 3: Confirm download"
@@ -21296,7 +21290,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:10
 msgctxt "subevent"
 msgid "Create multiple dates"
-msgstr ""
+msgstr "建立多項日期"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:35
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:146
@@ -21329,11 +21323,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:351
 msgid "Length of slots"
-msgstr ""
+msgstr "插槽長度"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:360
 msgid "Break between slots"
-msgstr ""
+msgstr "插槽間的空擋"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:370
 msgid "Create"
@@ -21393,7 +21387,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:11
 msgctxt "subevent"
 msgid "Change multiple dates"
-msgstr ""
+msgstr "更改多項日期"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:152
 msgid "Item prices"
@@ -21522,7 +21516,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:17
 msgid "Android (Google Play)"
-msgstr ""
+msgstr "安卓（Google Play）"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:23
 msgid "Android (F-Droid)"
@@ -21582,7 +21576,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_webauthn.html:26
 msgid "Device registration failed."
-msgstr ""
+msgstr "設備註冊失敗。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:6
@@ -21608,7 +21602,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:6
 msgid "Disable two-factor authentication"
-msgstr ""
+msgstr "禁用兩步驟驗證"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:10
 msgid "Do you really want to disable two-factor authentication?"
@@ -21621,7 +21615,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:6
 msgid "Enable two-factor authentication"
-msgstr ""
+msgstr "啟用兩步驟驗證"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:10
 msgid "Do you really want to enable two-factor authentication?"
@@ -21721,7 +21715,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:6
 msgid "Regenerate emergency codes"
-msgstr ""
+msgstr "重新產生緊急代碼"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:10
 msgid "Do you really want to regenerate your emergency codes?"
@@ -21750,7 +21744,7 @@ msgstr "選擇活動"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:37
 msgid "All my events"
-msgstr ""
+msgstr "我的所有活動"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:45
 msgid "Save your modifications before switching events."
@@ -21824,7 +21818,7 @@ msgstr "登錄設定"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:50
 msgid "Change two-factor settings"
-msgstr ""
+msgstr "更改兩步驟驗證設定"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:65
 msgid "Show applications"
@@ -21832,7 +21826,7 @@ msgstr "顯示應用程式"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:74
 msgid "Show account history"
-msgstr ""
+msgstr "顯示帳戶歷史記錄"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:4
 msgid "Staff session"
@@ -21856,7 +21850,7 @@ msgstr "URL"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:32
 msgid "On behalf of"
-msgstr ""
+msgstr "代表"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:8
 msgid ""
@@ -21930,7 +21924,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:7
 msgid "Create multiple vouchers"
-msgstr ""
+msgstr "創建多項優惠券"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:12
 msgid "Voucher codes"
@@ -21947,7 +21941,7 @@ msgstr "號碼"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:25
 msgid "Generate random codes"
-msgstr ""
+msgstr "產生隨機碼"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:29
 msgid "Copy codes"
@@ -22039,7 +22033,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:28
 msgid "Remove cart positions"
-msgstr ""
+msgstr "刪除購物車順位"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:43
 msgid "Voucher link"
@@ -22227,11 +22221,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:221
 msgid "Waiting, product unavailable"
-msgstr ""
+msgstr "等待，產品不可用"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:231
 msgid "Send a voucher"
-msgstr ""
+msgstr "發送優惠券"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:238
 msgid "Move to the top of the list"
@@ -22316,7 +22310,8 @@ msgid ""
 "You used an invalid link. Please copy the link from your email to the "
 "address bar and make sure it is correct and that the link has not been used "
 "before."
-msgstr ""
+msgstr "你使用無效的連結。請將連結從你的電子郵件複製到位址欄，並確保它是正確的，並且"
+"該連結以前從未使用過。"
 
 #: pretix/control/views/auth.py:193
 msgid ""
@@ -22337,7 +22332,8 @@ msgid ""
 "If the address is registered to valid account, then we have sent you an e-"
 "mail containing further instructions. Please note that we will send at most "
 "one email every 24 hours."
-msgstr ""
+msgstr "如果地址註冊到有效帳戶，那麼我們已經向你傳送一封包含進一步說明的電子郵件。請"
+"注意，我們每24小時最多發送一封電子郵件。"
 
 #: pretix/control/views/auth.py:298
 msgid ""
@@ -22364,7 +22360,7 @@ msgstr ""
 
 #: pretix/control/views/auth.py:401
 msgid "Please try again."
-msgstr ""
+msgstr "請重試。"
 
 #: pretix/control/views/auth.py:456
 msgid "Invalid code, please try again."
@@ -22427,7 +22423,7 @@ msgstr "出席者（已付款的）"
 #: pretix/control/views/dashboards.py:135
 #, python-brace-format
 msgid "Total revenue ({currency})"
-msgstr ""
+msgstr "總收入{currency}"
 
 #: pretix/control/views/dashboards.py:145
 msgid "Active products"
@@ -22464,7 +22460,7 @@ msgstr ""
 
 #: pretix/control/views/dashboards.py:272
 msgid "not yet public"
-msgstr ""
+msgstr "尚未公開"
 
 #: pretix/control/views/dashboards.py:273
 msgid "in private test mode"
@@ -24696,7 +24692,8 @@ msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
 msgstr[0] ""
-msgstr[1] ""
+"你正在嘗試從%(date)s 下載退款匯出，其中包含一個訂單和總計 %(sum)s）。 "
+"你正在嘗試從%(date)s 下載退款匯出，其中包含一個訂單和總計 %(sum)s）。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
@@ -25300,32 +25297,24 @@ msgid "Payment pending."
 msgstr "付款待處理。"
 
 #: pretix/plugins/paypal2/signals.py:64
-#, fuzzy
-#| msgid "Order approved."
 msgctxt "paypal"
 msgid "Order approved."
 msgstr "訂單已批准。"
 
 #: pretix/plugins/paypal2/signals.py:65
-#, fuzzy
-#| msgid "Order comment"
 msgctxt "paypal"
 msgid "Order completed."
-msgstr "訂單備註"
+msgstr "訂單已完成。"
 
 #: pretix/plugins/paypal2/signals.py:66
-#, fuzzy
-#| msgid "Payment completed."
 msgctxt "paypal"
 msgid "Capture completed."
-msgstr "付款完成。"
+msgstr "完成抓取。"
 
 #: pretix/plugins/paypal2/signals.py:67
-#, fuzzy
-#| msgid "Charge pending"
 msgctxt "paypal"
 msgid "Capture pending."
-msgstr "待處理費用"
+msgstr "抓取處理中"
 
 #: pretix/plugins/paypal2/signals.py:76
 msgid "PayPal reported an event: {}"
