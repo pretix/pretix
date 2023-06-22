@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-22 04:41+0000\n"
+"PO-Revision-Date: 2023-06-22 04:55+0000\n"
 "Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -30314,9 +30314,9 @@ msgstr ""
 "compléter votre achat."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:321
-#, fuzzy, python-format
+#, python-format
 msgid "Add one more %(item)s to your cart"
-msgstr "Nombre maximum d'articles par commande"
+msgstr "Ajouter un %(item)s de plus à votre panier"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:323
 #, python-format
@@ -30346,7 +30346,7 @@ msgid "incl. %(tax_sum)s taxes"
 msgstr "incl. %(tax_sum)s taxes"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:482
-#, fuzzy, python-format
+#, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr ""
 "Les articles de votre panier vous sont réservés pour %(minutes)s minutes."
@@ -30415,10 +30415,9 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:81
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:106
-#, fuzzy, python-format
-#| msgid "Add-On to position #%(posid)s"
+#, python-format
 msgid "Add-on product to position #%(positionid)s"
-msgstr "Add-On à la position #%(posid)s"
+msgstr "Produit complémentaire à la position #%(positionid)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:40
 #, python-format
@@ -30431,14 +30430,14 @@ msgid "Change price of position #%(positionid)s from %(old)s to %(new)s"
 msgstr "Changer le prix de la position #%(positionid)s de %(old)s à %(new)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:70
-#, fuzzy, python-format
+#, python-format
 msgid "Add position (%(item)s – %(variation)s)"
-msgstr "Add-On à la position #%(posid)s"
+msgstr "Ajouter une position (%(item)s – %(variation)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:74
-#, fuzzy, python-format
+#, python-format
 msgid "Add position (%(item)s)"
-msgstr "Add-On à la position #%(posid)s"
+msgstr "Ajouter une position (%(item)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:95
 #, python-format
@@ -30451,19 +30450,16 @@ msgid "Remove position #%(positionid)s (%(item)s)"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:121
-#, fuzzy
 msgid "Total price change"
-msgstr "Prix net"
+msgstr "Changement du prix total"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:130
-#, fuzzy
 msgid "New order total"
-msgstr "Total de la commande"
+msgstr "Total de la nouvelle commande"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:136
-#, fuzzy
 msgid "You already paid"
-msgstr "Commande déjà payée"
+msgstr "Vous avez déjà payé"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:144
 msgid "You will need to pay"
@@ -30561,11 +30557,12 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:26
-#, fuzzy
 msgid ""
 "If you click the link in our email, you will be able to download your "
 "tickets here."
-msgstr "Vous pourrez télécharger vos billets ici à partir de %(date)s."
+msgstr ""
+"Si vous cliquez sur le lien dans notre e-mail, vous pourrez télécharger vos "
+"billets ici."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:30
 msgid ""
@@ -30591,17 +30588,15 @@ msgid "You will be able to download your tickets here starting on %(date)s."
 msgstr "Vous pourrez télécharger vos billets ici à partir de %(date)s."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
-#, fuzzy
 msgctxt "order state"
 msgid "Confirmation pending"
-msgstr "Texte de confirmation"
+msgstr "Confirmation en attente"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:11
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:22
-#, fuzzy
 msgctxt "order state"
 msgid "Confirmed"
-msgstr "Commande validée"
+msgstr "Confirmé"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:13
 msgid "Payment pending"
@@ -30609,34 +30604,32 @@ msgstr "Paiement en attente"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:113
-#, fuzzy
 msgid "Uncategorized items"
-msgstr "Non catégorisé"
+msgstr "Éléments non classés"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:26
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:234
 #: pretix/presale/templates/pretixpresale/event/voucher.html:130
 #: pretix/presale/templates/pretixpresale/event/voucher.html:296
-#, fuzzy, python-format
+#, python-format
 msgid "Show full-size image of %(item)s"
-msgstr "Exemple de nom de l'événement"
+msgstr "Afficher l’image en pleine résolution de %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:166
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:311
 #: pretix/presale/templates/pretixpresale/event/voucher.html:228
 #: pretix/presale/templates/pretixpresale/event/voucher.html:371
-#, fuzzy, python-format
+#, python-format
 msgid "%(value)s incl. taxes"
-msgstr "Taxes incluses"
+msgstr "%(value)s TTC"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:172
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:317
 #: pretix/presale/templates/pretixpresale/event/voucher.html:234
 #: pretix/presale/templates/pretixpresale/event/voucher.html:377
-#, fuzzy, python-format
-#| msgid "Total value (without taxes)"
+#, python-format
 msgid "%(value)s without taxes"
-msgstr "Valeur totale (hors taxes)"
+msgstr "%(value)s hors taxes"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:182
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:327
@@ -30645,9 +30638,9 @@ msgstr "Entrez un code de réduction ci-dessous pour acheter ce billet."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:280
 #: pretix/presale/templates/pretixpresale/event/voucher.html:342
-#, fuzzy, python-format
+#, python-format
 msgid "Set price in %(currency)s for %(item)s"
-msgstr "Modifier l'ordre: %(code)s"
+msgstr "Définir le prix en %(currency)s pour %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
@@ -30656,9 +30649,8 @@ msgstr "%(num)s actuellement disponibles"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:4
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:4
-#, fuzzy
 msgid "calendar navigation"
-msgstr "Basculer la navigation"
+msgstr "Navigation dans le calendrier"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:9
 #, python-format
@@ -30704,9 +30696,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:57
 #: pretix/presale/templates/pretixpresale/organizers/index.html:85
 #: pretix/presale/views/widget.py:376
-#, fuzzy
 msgid "Few tickets left"
-msgstr "Sortie du ticket PDF"
+msgstr "Peu de billets restants"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:28
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:75
@@ -30738,9 +30729,8 @@ msgstr "Réserver maintenant"
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:73
 #: pretix/presale/templates/pretixpresale/organizers/index.html:101
 #: pretix/presale/views/widget.py:398
-#, fuzzy
 msgid "Fully booked"
-msgstr "Entièrement remboursé"
+msgstr "Complet"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:50
 #: pretix/presale/templates/pretixpresale/organizers/index.html:110
@@ -30779,9 +30769,8 @@ msgid "General information, add products to your cart"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:68
-#, fuzzy
 msgid "Please select a date to redeem your voucher."
-msgstr "Veuillez sélectionner une variante spécifique de ce produit."
+msgstr "Veuillez sélectionner une date pour utiliser votre bon."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:82
 msgid "View other date"
@@ -30860,13 +30849,11 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:266
-#, fuzzy
 msgid "Join waiting list"
-msgstr "Activer la liste d'attente"
+msgstr "S’inscrire sur la liste d’attente"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:282
 #: pretix/presale/templates/pretixpresale/event/voucher.html:450
-#, fuzzy
 msgctxt "free_tickets"
 msgid "Register"
 msgstr "Inscription"
@@ -30998,9 +30985,8 @@ msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:150
-#, fuzzy
 msgid "Print"
-msgstr "Mentions légales"
+msgstr "Imprimer"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:152
 #, python-format
@@ -32167,18 +32153,17 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/views/widget.py:337
-#, fuzzy
 msgid "This ticket shop is currently disabled."
-msgstr "La billetterie sélectionnée n'est actuellement pas disponible."
+msgstr "Cette billetterie est actuellement désactivée."
 
 #: pretix/presale/views/widget.py:351
 msgid "The selected date does not exist in this event series."
 msgstr "La date sélectionnée n’existe pas dans cette série d’événements."
 
 #: pretix/presale/views/widget.py:414
-#, fuzzy, python-format
+#, python-format
 msgid "from %(start_date)s"
-msgstr "Afficher la date de début"
+msgstr "à partir de %(start_date)s"
 
 #: pretix/settings.py:660
 msgid "User profile only"
