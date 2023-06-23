@@ -115,7 +115,8 @@ class AsyncMixin:
         elif state == 'PROGRESS':
             data.update({
                 'started': True,
-                'percentage': info.get('value', 0) if isinstance(info, dict) else 0
+                'percentage': info.get('value', 0) if isinstance(info, dict) else 0,
+                'steps': info.get('steps', []) if isinstance(info, dict) else None,
             })
         elif state == 'STARTED':
             data.update({
