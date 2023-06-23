@@ -60,7 +60,7 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms import PlaceholderValidator
 from pretix.base.models import (
     CartPosition, Event, GiftCard, InvoiceAddress, Order, OrderPayment,
-    OrderRefund, Quota,
+    OrderRefund, Quota, TaxRule,
 )
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
@@ -1015,7 +1015,11 @@ class FreeOrderProvider(BasePaymentProvider):
 
         cart = get_cart(request)
         total = get_cart_total(request)
-        total += sum([f.value for f in get_fees(self.event, request, total, None, None, cart)])
+        try:
+            total += sum([f.value for f in get_fees(self.event, request, total, None, None, cart)])
+        except TaxRule.SaleNotAllowed:
+            # ignore for now, will fail on order creation
+            pass
         return total == 0
 
     def order_change_allowed(self, order: Order) -> bool:
