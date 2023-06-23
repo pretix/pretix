@@ -5,7 +5,7 @@ we hereby confirm that the following data shredding job has been completed:
 
 Organizer: {{ organizer }}
 
-Event: {{ organizer }}
+Event: {{ event }}
 
 Data selection: {{ shredders }}
 
