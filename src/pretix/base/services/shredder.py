@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 
+
 # This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
 # the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
 #
@@ -31,7 +32,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import inspect
 import json
 from datetime import timedelta
 from tempfile import NamedTemporaryFile
@@ -104,8 +105,17 @@ def export(event: Event, shredders: List[str], session_key=None, cfid=None) -> N
     return cf.pk
 
 
-@app.task(base=ProfiledEventTask, throws=(ShredError,))
-def shred(event: Event, fileid: str, confirm_code: str, user: int=None) -> None:
+@app.task(base=ProfiledEventTask, throws=(ShredError,), bind=True)
+def shred(self, event: Event, fileid: str, confirm_code: str, user: int=None, locale: str='en') -> None:
+    steps = []
+
+    def set_progress(val):
+        if not self.request.called_directly:
+            self.update_state(
+                state='PROGRESS',
+                meta={'value': val, 'steps': steps}
+            )
+
     known_shredders = event.get_data_shredders()
     try:
         cf = CachedFile.objects.get(pk=fileid)
@@ -127,8 +137,19 @@ def shred(event: Event, fileid: str, confirm_code: str, user: int=None) -> None:
     if event.logentry_set.filter(datetime__gte=parse(indexdata['time'])):
         raise ShredError(_("Something happened in your event after the export, please try again."))
 
-    for shredder in shredders:
-        shredder.shred_data()
+    for i, shredder in enumerate(shredders):
+        with language(locale):
+            steps.append({'label': str(shredder.verbose_name), 'done': False})
+        set_progress(i * 100 / len(shredders))
+        if 'progress_callback' in inspect.signature(shredder.shred_data).parameters:
+            shredder.shred_data(
+                progress_callback=lambda y: set_progress(
+                    i * 100 / len(shredders) + min(max(y, 0), 100) / 100 * 100 / len(shredders)
+                )
+            )
+        else:
+            shredder.shred_data()
+        steps[-1]['done'] = True
 
     cf.file.delete(save=False)
     cf.delete()

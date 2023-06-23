@@ -37,10 +37,11 @@ import logging
 from collections import OrderedDict
 from zipfile import ZipFile
 
-from django.shortcuts import get_object_or_404
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.translation import gettext_lazy as _
+from django.utils.translation import get_language, gettext_lazy as _
 from django.views import View
 from django.views.generic import TemplateView
 
@@ -61,6 +62,16 @@ class ShredderMixin:
         return OrderedDict(
             sorted(self.request.event.get_data_shredders().items(), key=lambda s: s[1].verbose_name)
         )
+
+    def dispatch(self, request, *args, **kwargs):
+        try:
+            return super().dispatch(request, *args, **kwargs)
+        except ShredError as e:
+            messages.error(request, str(e))
+            return redirect(reverse('control:event.shredder.start', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug
+            }))
 
 
 class StartShredView(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixin, ShredderMixin, TemplateView):
@@ -168,4 +179,4 @@ class ShredDoView(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixi
             return self.error(ShredError(_("The slug you entered was not correct.")))
 
         return self.do(self.request.event.id, request.POST.get("file"), request.POST.get("confirm_code"),
-                       self.request.user.pk)
+                       self.request.user.pk, get_language())

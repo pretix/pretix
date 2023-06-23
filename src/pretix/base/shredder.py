@@ -38,7 +38,6 @@ import os
 import time
 from typing import List, Tuple
 
-from django.db import transaction
 from django.db.models import Max, Q
 from django.db.models.functions import Greatest
 from django.dispatch import receiver
@@ -101,10 +100,12 @@ class BaseDataShredder:
         """
         raise NotImplementedError()  # NOQA
 
-    def shred_data(self):
+    def shred_data(self, progress_callback=None):
         """
         This method is called to actually remove the data from the system. You should remove any database objects
         here.
+
+        You can call ``progress_callback`` with an integer value between 0 and 100 to communicate back your progress.
 
         You should never delete ``LogEntry`` objects, but you might modify them to remove personal data. In this
         case, set the ``LogEntry.shredded`` attribute to ``True`` to show that this is no longer original log data.
@@ -171,7 +172,7 @@ def shred_log_fields(logentry, banlist=None, whitelist=None):
         logentry.save(update_fields=['data', 'shredded'])
 
 
-def slow_update(qs, batch_size=1000, sleep_time=.5, **update):
+def slow_update(qs, batch_size=1000, sleep_time=.5, progress_callback=None, progress_offset=0, progress_total=None, **update):
     """
     Doing UPDATE queries on hundreds of thousands of rows can cause outages due to high write load on the database.
     This provides a throttled way to update rows. The condition for this to work properly is that the queryset has a
@@ -188,11 +189,13 @@ def slow_update(qs, batch_size=1000, sleep_time=.5, **update):
             break
         if total_updated >= 0.8 * batch_size:
             time.sleep(sleep_time)
+        if progress_callback and progress_total:
+            progress_callback((progress_offset + total_updated) / progress_total)
 
     return total_updated
 
 
-def slow_delete(qs, batch_size=1000, sleep_time=.5):
+def slow_delete(qs, batch_size=1000, sleep_time=.5, progress_callback=None, progress_offset=0, progress_total=None):
     """
     Doing DELETE queries on hundreds of thousands of rows can cause outages due to high write load on the database.
     This provides a throttled way to update rows.
@@ -210,6 +213,16 @@ def slow_delete(qs, batch_size=1000, sleep_time=.5):
     return total_deleted
 
 
+def _progress_helper(queryset, progress_callback, offset, total):
+    if not progress_callback:
+        yield from queryset
+    else:
+        for i, o in enumerate(queryset):
+            yield o
+            if i % 10 == 0:
+                progress_callback((i + offset) / total * 100)
+
+
 class PhoneNumberShredder(BaseDataShredder):
     verbose_name = _('Phone numbers')
     identifier = 'phone_numbers'
@@ -220,9 +233,14 @@ class PhoneNumberShredder(BaseDataShredder):
             o.code: o.phone for o in self.event.orders.filter(phone__isnull=False)
         }, cls=CustomJSONEncoder, indent=4)
 
-    @transaction.atomic
-    def shred_data(self):
-        for o in self.event.orders.all():
+    def shred_data(self, progress_callback=None):
+        qs_orders = self.event.orders.all()
+        qs_orders_cnt = qs_orders.count()
+        qs_le = self.event.logentry_set.filter(action_type="pretix.event.order.phone.changed")
+        qs_le_cnt = qs_le.count()
+        total = qs_le_cnt + qs_orders_cnt
+
+        for o in _progress_helper(qs_orders, progress_callback, 0, total):
             changed = bool(o.phone)
             o.phone = None
             d = o.meta_info_data
@@ -234,7 +252,7 @@ class PhoneNumberShredder(BaseDataShredder):
             if changed:
                 o.save(update_fields=['meta_info', 'phone'])
 
-        for le in self.event.logentry_set.filter(action_type="pretix.event.order.phone.changed"):
+        for le in _progress_helper(qs_le, progress_callback, qs_orders_cnt, total):
             shred_log_fields(le, banlist=['old_phone', 'new_phone'])
 
 
@@ -253,18 +271,35 @@ class EmailAddressShredder(BaseDataShredder):
             for op in OrderPosition.all.filter(order__event=self.event, attendee_email__isnull=False)
         }, indent=4)
 
-    @transaction.atomic
-    def shred_data(self):
+    def shred_data(self, progress_callback=None):
+        qs_op = OrderPosition.all.filter(order__event=self.event, attendee_email__isnull=False)
+        qs_op_cnt = qs_op.count()
+
+        qs_orders = self.event.orders.all()
+        qs_orders_cnt = qs_orders.count()
+
+        qs_le = self.event.logentry_set.filter(
+            Q(action_type__contains="order.email") | Q(action_type__contains="position.email") |
+            Q(action_type="pretix.event.order.contact.changed") |
+            Q(action_type="pretix.event.order.modified")
+        ).exclude(data="")
+        qs_le_cnt = qs_le.count()
+
+        total = qs_op_cnt + qs_orders_cnt + qs_le_cnt
+
         slow_update(
-            OrderPosition.all.filter(order__event=self.event, attendee_email__isnull=False),
+            qs_op,
             attendee_email=None,
+            progress_callback=progress_callback,
+            progress_offset=0,
+            progress_total=total,
             # Updates to order position table are slow, since PostgreSQL needs to update many indexes, so let's
             # take them really slowly to not overwhelm the database.
             batch_size=100,
             sleep_time=2,
         )
 
-        for o in self.event.orders.all():
+        for o in _progress_helper(qs_orders, progress_callback, qs_op_cnt, total):
             changed = bool(o.email) or bool(o.customer)
             o.email = None
             o.customer = None
@@ -282,23 +317,20 @@ class EmailAddressShredder(BaseDataShredder):
                     o.meta_info = json.dumps(d)
                 o.save(update_fields=['meta_info', 'email', 'customer'])
 
-        for le in self.event.logentry_set.filter(
-            Q(action_type__contains="order.email") | Q(action_type__contains="position.email"),
-        ):
-            shred_log_fields(le, banlist=['recipient', 'message', 'subject', 'full_mail'])
-
-        for le in self.event.logentry_set.filter(action_type="pretix.event.order.contact.changed"):
-            shred_log_fields(le, banlist=['old_email', 'new_email'])
-
-        for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
-            d = le.parsed_data
-            if 'data' in d:
-                for row in d['data']:
-                    if 'attendee_email' in row:
-                        row['attendee_email'] = '█'
-                le.data = json.dumps(d)
-                le.shredded = True
-                le.save(update_fields=['data', 'shredded'])
+        for le in _progress_helper(qs_le, progress_callback, qs_op_cnt + qs_orders_cnt, total):
+            if le.action_type == "pretix.event.order.modified":
+                d = le.parsed_data
+                if 'data' in d:
+                    for row in d['data']:
+                        if 'attendee_email' in row:
+                            row['attendee_email'] = '█'
+                    le.data = json.dumps(d)
+                    le.shredded = True
+                    le.save(update_fields=['data', 'shredded'])
+            else:
+                shred_log_fields(le, banlist=[
+                    'recipient', 'message', 'subject', 'full_mail', 'old_email', 'new_email'
+                ])
 
 
 class WaitingListShredder(BaseDataShredder):
@@ -312,22 +344,35 @@ class WaitingListShredder(BaseDataShredder):
             for wle in self.event.waitinglistentries.all()
         ], indent=4)
 
-    @transaction.atomic
-    def shred_data(self):
+    def shred_data(self, progress_callback=None):
+        qs_wle = self.event.waitinglistentries.exclude(email='█')
+        qs_wle_cnt = qs_wle.count()
+
+        qs_voucher = self.event.waitinglistentries.select_related('voucher').filter(voucher__isnull=False)
+        qs_voucher_cnt = qs_voucher.count()
+
+        qs_le = self.event.logentry_set.filter(action_type="pretix.voucher.added.waitinglist").exclude(data="")
+        qs_le_cnt = qs_le.count()
+
+        total = qs_voucher_cnt + qs_wle_cnt + qs_le_cnt
+
         slow_update(
-            self.event.waitinglistentries.exclude(email='█'),
+            qs_wle,
             name_cached=None,
             name_parts={'_shredded': True},
             email='█',
             phone='█',
+            progress_callback=progress_callback,
+            progress_offset=0,
+            progress_total=total,
         )
 
-        for wle in self.event.waitinglistentries.select_related('voucher').filter(voucher__isnull=False):
+        for wle in _progress_helper(qs_voucher, progress_callback, qs_wle_cnt, total):
             if '@' in wle.voucher.comment:
                 wle.voucher.comment = '█'
                 wle.voucher.save(update_fields=['comment'])
 
-        for le in self.event.logentry_set.filter(action_type="pretix.voucher.added.waitinglist").exclude(data=""):
+        for le in _progress_helper(qs_le, progress_callback, qs_wle_cnt + qs_voucher_cnt, total):
             d = le.parsed_data
             if 'name' in d:
                 d['name'] = '█'
@@ -365,31 +410,41 @@ class AttendeeInfoShredder(BaseDataShredder):
             )
         }, indent=4)
 
-    @transaction.atomic
-    def shred_data(self):
+    def shred_data(self, progress_callback=None):
+        qs_op = OrderPosition.all.filter(
+            order__event=self.event
+        ).filter(
+            Q(attendee_name_cached__isnull=False) |
+            Q(company__isnull=False) |
+            Q(street__isnull=False) |
+            Q(zipcode__isnull=False) |
+            Q(city__isnull=False)
+        )
+        qs_op_cnt = qs_op.count()
+
+        qs_le = self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data="")
+        qs_le_cnt = qs_le.count()
+
+        total = qs_op_cnt + qs_le_cnt
+
         slow_update(
-            OrderPosition.all.filter(
-                order__event=self.event
-            ).filter(
-                Q(attendee_name_cached__isnull=False) |
-                Q(company__isnull=False) |
-                Q(street__isnull=False) |
-                Q(zipcode__isnull=False) |
-                Q(city__isnull=False)
-            ),
+            qs_op,
             attendee_name_cached=None,
             attendee_name_parts={'_shredded': True},
             company=None,
             street=None,
             zipcode=None,
             city=None,
+            progress_callback=progress_callback,
+            progress_total=total,
+            progress_offset=0,
             # Updates to order position table are slow, since PostgreSQL needs to update many indexes, so let's
             # take them really slowly to not overwhelm the database.
             batch_size=100,
             sleep_time=2,
         )
 
-        for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
+        for le in _progress_helper(qs_le, progress_callback, qs_op_cnt, total):
             d = le.parsed_data
             if 'data' in d:
                 for i, row in enumerate(d['data']):
@@ -424,13 +479,18 @@ class InvoiceAddressShredder(BaseDataShredder):
             for ia in InvoiceAddress.objects.filter(order__event=self.event)
         }, indent=4)
 
-    @transaction.atomic
-    def shred_data(self):
-        slow_delete(
-            InvoiceAddress.objects.filter(order__event=self.event),
-        )
+    def shred_data(self, progress_callback=None):
+        qs_ia = InvoiceAddress.objects.filter(order__event=self.event)
+        qs_ia_cnt = qs_ia.count()
 
-        for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
+        qs_le = self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data="")
+        qs_le_cnt = qs_le.count()
+
+        total = qs_ia_cnt + qs_le_cnt
+
+        slow_delete(qs_ia, progress_callback=progress_callback, progress_total=total, progress_offset=0)
+
+        for le in _progress_helper(qs_le, progress_callback, qs_ia_cnt, total):
             d = le.parsed_data
             if 'invoice_data' in d and not isinstance(d['invoice_data'], bool):
                 for field in d['invoice_data']:
@@ -458,13 +518,18 @@ class QuestionAnswerShredder(BaseDataShredder):
             ).data
         yield 'question-answers.json', 'application/json', json.dumps(d, indent=4)
 
-    @transaction.atomic
-    def shred_data(self):
-        slow_delete(
-            QuestionAnswer.objects.filter(orderposition__order__event=self.event),
-        )
+    def shred_data(self, progress_callback=None):
+        qs_qa = QuestionAnswer.objects.filter(orderposition__order__event=self.event)
+        qs_qa_cnt = qs_qa.count()
 
-        for le in self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data=""):
+        qs_le = self.event.logentry_set.filter(action_type="pretix.event.order.modified").exclude(data="")
+        qs_le_cnt = qs_le.count()
+
+        total = qs_qa_cnt + qs_le_cnt
+
+        slow_delete(qs_qa, progress_callback=progress_callback, progress_total=total, progress_offset=0)
+
+        for le in _progress_helper(qs_le, progress_callback, qs_qa_cnt, total):
             d = le.parsed_data
             if 'data' in d:
                 for i, row in enumerate(d['data']):
@@ -493,9 +558,11 @@ class InvoiceShredder(BaseDataShredder):
             yield 'invoices/{}.pdf'.format(i.number), 'application/pdf', i.file.read()
             i.file.close()
 
-    @transaction.atomic
-    def shred_data(self):
-        for i in self.event.invoices.filter(shredded=False):
+    def shred_data(self, progress_callback=None):
+        qs_i = self.event.invoices.filter(shredded=False)
+        total = qs_i.count()
+
+        for i in _progress_helper(qs_i, progress_callback, 0, total):
             if i.file:
                 i.file.delete()
                 i.shredded = True
@@ -515,14 +582,17 @@ class CachedTicketShredder(BaseDataShredder):
     def generate_files(self) -> List[Tuple[str, str, str]]:
         pass
 
-    @transaction.atomic
-    def shred_data(self):
-        slow_delete(
-            CachedTicket.objects.filter(order_position__order__event=self.event)
-        )
-        slow_delete(
-            CachedCombinedTicket.objects.filter(order__event=self.event)
-        )
+    def shred_data(self, progress_callback=None):
+        qs_1 = CachedTicket.objects.filter(order_position__order__event=self.event)
+        qs_1_cnt = qs_1.count()
+
+        qs_2 = CachedCombinedTicket.objects.filter(order__event=self.event)
+        qs_2_cnt = qs_2.count()
+
+        total = qs_1_cnt + qs_2_cnt
+
+        slow_delete(qs_1, progress_callback=progress_callback, progress_total=total, progress_offset=0)
+        slow_delete(qs_2, progress_callback=progress_callback, progress_total=total, progress_offset=qs_1_cnt)
 
 
 class PaymentInfoShredder(BaseDataShredder):
@@ -535,14 +605,21 @@ class PaymentInfoShredder(BaseDataShredder):
     def generate_files(self) -> List[Tuple[str, str, str]]:
         pass
 
-    @transaction.atomic
-    def shred_data(self):
+    def shred_data(self, progress_callback=None):
+        qs_p = OrderPayment.objects.filter(order__event=self.event)
+        qs_p_count = qs_p.count()
+        qs_r = OrderRefund.objects.filter(order__event=self.event)
+        qs_r_count = qs_r.count()
+
+        total = qs_p_count + qs_r_count
+
         provs = self.event.get_payment_providers()
-        for obj in OrderPayment.objects.filter(order__event=self.event):
+        for obj in _progress_helper(qs_p, progress_callback, 0, total):
             pprov = provs.get(obj.provider)
             if pprov:
                 pprov.shred_payment_info(obj)
-        for obj in OrderRefund.objects.filter(order__event=self.event):
+
+        for obj in _progress_helper(qs_r, progress_callback, qs_p_count, total):
             pprov = provs.get(obj.provider)
             if pprov:
                 pprov.shred_payment_info(obj)
