@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-22 04:55+0000\n"
-"Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
+"PO-Revision-Date: 2023-06-25 04:00+0000\n"
+"Last-Translator: Jonathan Berger <drskullster@gmail.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -2142,7 +2142,7 @@ msgstr "Rangée de la place"
 #: pretix/base/exporters/orderlist.py:578
 #: pretix/plugins/checkinlists/exporters.py:489
 msgid "Seat number"
-msgstr "Numéro de place"
+msgstr "Nom du siège"
 
 #: pretix/base/exporters/orderlist.py:579
 #: pretix/control/templates/pretixcontrol/order/change.html:208
@@ -3050,7 +3050,7 @@ msgstr "Référence client : {reference}"
 #: pretix/base/invoice.py:568
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr "ID TVA du client"
+msgstr "Numéro de TVA du commerçant"
 
 #: pretix/base/invoice.py:575
 msgctxt "invoice"
@@ -3060,7 +3060,7 @@ msgstr "Bénéficiaire"
 #: pretix/base/invoice.py:596
 msgctxt "invoice"
 msgid "Tax Invoice"
-msgstr "Facture fiscale"
+msgstr "Facture TVA"
 
 #: pretix/base/invoice.py:597
 msgctxt "invoice"
