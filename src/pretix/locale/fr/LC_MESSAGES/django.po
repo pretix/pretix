@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
 "PO-Revision-Date: 2023-06-25 12:17+0000\n"
-"Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
+"Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -3630,8 +3630,8 @@ msgid ""
 "You cannot apply the discount only to some of the matched products if you "
 "are matching on a minimum value."
 msgstr ""
-"Vous ne pouvez pas appliquer la réduction seulement à certains produits "
-"correspondants si vous ciblez une valeur minimale."
+"Vous ne pouvez pas appliquer la réduction uniquement à certains des produits "
+"correspondants si vous utilisez une valeur minimale."
 
 #: pretix/base/models/discount.py:186
 msgid ""
@@ -28000,7 +28000,7 @@ msgstr "Relatif, après le début de l’événement"
 
 #: pretix/plugins/sendmail/forms.py:371
 msgid "Relative, after event end"
-msgstr "Relatif, après la fin de l’événement"
+msgstr "Relatif, après la fin de l'événement"
 
 #: pretix/plugins/sendmail/forms.py:384
 msgid "Please specify the send date"
