@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-25 12:17+0000\n"
-"Last-Translator: cpoisnel <chepoisnel@gmail.com>\n"
+"PO-Revision-Date: 2023-06-25 12:32+0000\n"
+"Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -30034,7 +30034,7 @@ msgstr "quantité minimum à commander : %(num)s"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:354
 msgctxt "price"
 msgid "free"
-msgstr ""
+msgstr "gratuit"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:77
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:51
@@ -30273,7 +30273,7 @@ msgstr "Le prix de ce produit a été réduit en raison d’une remise automatiq
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:272
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:339
 msgid "Discounted"
-msgstr ""
+msgstr "Remisé"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:281
 msgid "Okay, we're removing that…"
@@ -30412,6 +30412,7 @@ msgstr ""
 msgid ""
 "Change position #%(positionid)s from \"%(old_item)s\" to \"%(new_item)s\""
 msgstr ""
+"Changer la position #%(positionid)s de « %(old_item)s » à « %(new_item)s »"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:30
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:56
@@ -30425,6 +30426,7 @@ msgstr "Produit complémentaire à la position #%(positionid)s"
 #, python-format
 msgid "Change date of position #%(positionid)s from \"%(old)s\" to \"%(new)s\""
 msgstr ""
+"Changer la date de la position #%(positionid)s de « %(old)s » à « %(new)s »"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:50
 #, python-format
@@ -30444,12 +30446,12 @@ msgstr "Ajouter une position (%(item)s)"
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:95
 #, python-format
 msgid "Remove position #%(positionid)s (%(item)s – %(variation)s)"
-msgstr ""
+msgstr "Supprimer la position #%(positionid)s (%(item)s – %(variation)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:99
 #, python-format
 msgid "Remove position #%(positionid)s (%(item)s)"
-msgstr ""
+msgstr "Supprimer la position #%(positionid)s (%(item)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:121
 msgid "Total price change"
@@ -30496,6 +30498,8 @@ msgid ""
 "The refund will be issued in form of a gift card that you can use for "
 "further purchases."
 msgstr ""
+"Le remboursement sera émis sous la forme d’une carte-cadeau que vous pourrez "
+"utiliser pour d’autres achats."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:159
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:147
@@ -30557,6 +30561,9 @@ msgid ""
 "the order clicked the link in the email they received to confirm the email "
 "address is valid."
 msgstr ""
+"Vous pouvez télécharger vos billets ici dès que la personne qui a passé la "
+"commande a cliqué sur le lien dans l’e-mail qu’elle a reçu pour confirmer "
+"que l’adresse e-mail est valide."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:26
 msgid ""
@@ -30657,12 +30664,12 @@ msgstr "Navigation dans le calendrier"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:9
 #, python-format
 msgid "Show previous month, %(month)s"
-msgstr ""
+msgstr "Afficher le mois précédent, %(month)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:22
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:24
 msgid "Select month to show"
-msgstr ""
+msgstr "Sélectionnez le mois à afficher"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:32
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:36
@@ -30675,7 +30682,7 @@ msgstr "Go"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:39
 #, python-format
 msgid "Show next month, %(month)s"
-msgstr ""
+msgstr "Afficher le mois suivant, %(month)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:9
 #, python-format
@@ -30685,12 +30692,12 @@ msgstr "Afficher la semaine précédente, %(week)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:22
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:26
 msgid "Select week to show"
-msgstr ""
+msgstr "Sélectionnez la semaine à afficher"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:43
 #, python-format
 msgid "Show next week, %(week)s"
-msgstr ""
+msgstr "Afficher la semaine prochaine, %(week)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:25
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:72
@@ -30748,7 +30755,7 @@ msgstr "Pas encore en vente"
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:13
 msgctxt "form"
 msgid "has error"
-msgstr ""
+msgstr "a une erreur"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:14
 #: pretix/presale/templates/pretixpresale/event/index.html:18
@@ -30765,10 +30772,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:48
 msgid "Your cart, general information, add products to your cart"
 msgstr ""
+"Votre panier, informations générales, ajouter des produits à votre panier"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:48
 msgid "General information, add products to your cart"
-msgstr ""
+msgstr "Informations générales, ajouter des produits à votre panier"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:68
 msgid "Please select a date to redeem your voucher."
@@ -30849,6 +30857,10 @@ msgid ""
 "you want, you can add yourself to the waiting list. We will then notify if "
 "seats are available again."
 msgstr ""
+"Certaines des catégories du plan de salle ci-dessus sont actuellement "
+"épuisées. Si vous le souhaitez, vous pouvez vous ajouter à la liste d’"
+"attente. Nous vous informerons alors si des places sont à nouveau "
+"disponibles."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:266
 msgid "Join waiting list"
@@ -30985,6 +30997,8 @@ msgstr ""
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr ""
+"Un remboursement de %(amount)s vous sera envoyé prochainement, s’il vous "
+"plaît soyez patient."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:150
 msgid "Print"
@@ -30996,11 +31010,14 @@ msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
+"Nous avons émis votre remboursement de %(amount)s sous forme de carte "
+"cadeau. Lors de votre prochain achat chez nous, vous pouvez utiliser le code "
+"de carte-cadeau suivant lors du paiement :"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:162
 #, python-format
 msgid "The current value of your gift card is %(value)s."
-msgstr ""
+msgstr "La valeur actuelle de votre carte cadeau est %(value)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:169
 #, python-format
@@ -32103,6 +32120,10 @@ msgid ""
 "{number} hours. If the email did not arrive, please check your spam folder "
 "and also double check that you used the correct email address."
 msgstr ""
+"Si l’adresse e-mail que vous avez saisie est valide et associée à un billet, "
+"nous vous avons déjà envoyé un e-mail avec un lien vers votre billet au "
+"cours des {number} heures. Si l’e-mail n’est pas arrivé, veuillez vérifier "
+"votre dossier spam et vérifier que vous avez utilisé la bonne adresse e-mail."
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."
@@ -32147,12 +32168,16 @@ msgid ""
 "Your waiting list spot is no longer valid or already used. There's nothing "
 "more to do here."
 msgstr ""
+"Votre place sur la liste d’attente n’est plus valide ou déjà utilisée. Il n’"
+"y a plus rien à faire ici."
 
 #: pretix/presale/views/waiting.py:171
 msgid ""
 "Thank you very much! We will assign your spot on the waiting list to someone "
 "else."
 msgstr ""
+"Merci beaucoup ! Nous attribuerons votre place sur la liste d’attente à "
+"quelqu’un d’autre."
 
 #: pretix/presale/views/widget.py:337
 msgid "This ticket shop is currently disabled."
