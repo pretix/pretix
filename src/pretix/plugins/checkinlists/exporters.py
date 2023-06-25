@@ -104,11 +104,12 @@ class CheckInListMixin(BaseExporter):
                      label=_('Check-in status'),
                      choices=(
                          ('', _('All attendees')),
-                         ('3', pgettext_lazy('checkin state', 'Checked in but left')),
-                         ('2', pgettext_lazy('checkin state', 'Present')),
                          ('1', _('Checked in')),
+                         ('2', pgettext_lazy('checkin state', 'Present')),
+                         ('3', pgettext_lazy('checkin state', 'Checked in but left')),
                          ('0', _('Not checked in')),
                      ),
+                     required=False,
                  )),
                 ('sort',
                  forms.ChoiceField(
@@ -190,7 +191,7 @@ class CheckInListMixin(BaseExporter):
                 qs = qs.filter(pk__in=cl.positions_inside.values_list('pk'))
             elif s == '3':
                 qs = qs.filter(last_checked_in__isnull=False).filter(
-                    Q(last_checked_out__isnull=False) & Q(last_exit__gte=F('last_checked_in'))
+                    Q(last_checked_out__isnull=False) & Q(last_checked_out__gte=F('last_checked_in'))
                 )
             elif s == '0':
                 qs = qs.filter(last_checked_in__isnull=True)

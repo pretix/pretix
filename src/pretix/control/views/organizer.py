@@ -396,6 +396,7 @@ class OrganizerDelete(AdministratorPermissionRequiredMixin, FormView):
                 )
                 self.request.organizer.delete_sub_objects()
                 self.request.organizer.delete()
+                self.request.organizer = None
             messages.success(self.request, _('The organizer has been deleted.'))
             return redirect(self.get_success_url())
         except ProtectedError as e:

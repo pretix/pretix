@@ -1,0 +1,17 @@
+{% load i18n %}
+{% load i18n %}{% blocktrans with url=url|safe %}Hello,
+
+we hereby confirm that the following data shredding job has been completed:
+
+Organizer: {{ organizer }}
+
+Event: {{ event }}
+
+Data selection: {{ shredders }}
+
+Start time: {{ start_time }} (new data added after this time might not have been deleted)
+
+Best regards,
+
+Your pretix team
+{% endblocktrans %}

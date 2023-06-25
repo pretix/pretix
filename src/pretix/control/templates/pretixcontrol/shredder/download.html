@@ -8,7 +8,7 @@
         {% trans "Data shredder" %}
     </h1>
     <form action="{% url "control:event.shredder.shred" event=request.event.slug organizer=request.organizer.slug %}"
-          method="post" class="form-horizontal" data-asynctask>
+          method="post" class="form-horizontal" data-asynctask data-asynctask-long>
         {% csrf_token %}
         <fieldset>
             {% if download_on_shred %}
@@ -55,6 +55,12 @@
             </fieldset>
         {% endif %}
         <input type="hidden" name="file" value="{{ file.pk }}">
+        <div class="alert alert-info">
+            {% blocktrans trimmed %}
+                Depending on the amount of data in your event, the following step may take a while to complete.
+                We will inform you via email once it has been completed.
+            {% endblocktrans %}
+        </div>
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
                 {% trans "Continue" %}

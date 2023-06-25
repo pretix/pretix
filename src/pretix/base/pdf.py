@@ -860,22 +860,32 @@ class Renderer:
                 image_file = None
 
         if image_file:
-            ir = ThumbnailingImageReader(image_file)
             try:
+                ir = ThumbnailingImageReader(image_file)
                 ir.resize(float(o['width']) * mm, float(o['height']) * mm, 300)
+                canvas.drawImage(
+                    image=ir,
+                    x=float(o['left']) * mm,
+                    y=float(o['bottom']) * mm,
+                    width=float(o['width']) * mm,
+                    height=float(o['height']) * mm,
+                    preserveAspectRatio=True,
+                    anchor='c',  # centered in frame
+                    mask='auto'
+                )
             except:
-                logger.exception("Can not resize image")
-                pass
-            canvas.drawImage(
-                image=ir,
-                x=float(o['left']) * mm,
-                y=float(o['bottom']) * mm,
-                width=float(o['width']) * mm,
-                height=float(o['height']) * mm,
-                preserveAspectRatio=True,
-                anchor='c',  # centered in frame
-                mask='auto'
-            )
+                logger.exception("Can not load or resize image")
+                canvas.saveState()
+                canvas.setFillColorRGB(.8, .8, .8, alpha=1)
+                canvas.rect(
+                    x=float(o['left']) * mm,
+                    y=float(o['bottom']) * mm,
+                    width=float(o['width']) * mm,
+                    height=float(o['height']) * mm,
+                    stroke=0,
+                    fill=1,
+                )
+                canvas.restoreState()
         else:
             canvas.saveState()
             canvas.setFillColorRGB(.8, .8, .8, alpha=1)

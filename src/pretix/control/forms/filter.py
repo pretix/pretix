@@ -1754,9 +1754,9 @@ class CheckinListAttendeeFilterForm(FilterForm):
         label=_('Check-in status'),
         choices=(
             ('', _('All attendees')),
-            ('3', pgettext_lazy('checkin state', 'Checked in but left')),
-            ('2', pgettext_lazy('checkin state', 'Present')),
             ('1', _('Checked in')),
+            ('2', pgettext_lazy('checkin state', 'Present')),
+            ('3', pgettext_lazy('checkin state', 'Checked in but left')),
             ('0', _('Not checked in')),
         ),
         required=False,
