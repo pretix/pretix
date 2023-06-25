@@ -152,6 +152,10 @@ Example::
     password=abcd
     host=localhost
     port=3306
+    sslmode=require
+    sslrootcert=/etc/pretix/postgresql-ca.crt
+    sslcert=/etc/pretix/postgresql-client-crt.crt
+    sslkey=/etc/pretix/postgresql-client-key.key
 
 ``backend``
     One of ``sqlite3`` and ``postgresql``.
@@ -163,6 +167,11 @@ Example::
 ``user``, ``password``, ``host``, ``port``
     Connection details for the database connection. Empty by default.
 
+``sslmode``, ``sslrootcert``
+    Connection TLS details for the PostgreSQL database connection. Possible values of ``sslmode`` are [disable, allow, prefer, require, verify-ca, verify-full]. Possible value of the ``sslrootcert`` is the accessible path of the ca certificate. Both values are empty by default.
+
+``sslcert``, ``sslkey``
+    Connection mTLS details for the PostgreSQL database connection. It's also necessary to specify ``sslmode`` and ``sslrootcert`` parameters inside the mTLS section, please check the correct values from the TLS part. Possible value of the ``sslcert`` is the accessible path of the client certificate.  Possible value of the ``sslkey`` is the accessible path of the client key. All values are empty by default.
 .. _`config-replica`:
 
 Database replica settings
@@ -324,6 +333,10 @@ to speed up various operations::
             ["sentinel_host_3", 26379]
         ]
     password=password
+    ssl_cert_reqs=required
+    ssl_ca_certs=/etc/pretix/redis-ca.pem
+    ssl_keyfile=/etc/pretix/redis-client-crt.pem
+    ssl_certfile=/etc/pretix/redis-client-key.key
 
 ``location``
     The location of redis, as a URL of the form ``redis://[:password]@localhost:6379/0``
@@ -346,6 +359,22 @@ to speed up various operations::
 ``password``
     If your redis setup doesn't require a password or you already specified it in the location you can omit this option.
     If this is set it will be passed to redis as the connection option PASSWORD.
+
+``ssl_cert_reqs``
+    If your redis setup doesn't require TLS or mTLS you can omit this option.
+    If this is set it will be passed to redis as the connection option ``SSL_CERT_REQS``. Possible values are none, optional, required.
+
+``ssl_ca_certs``
+    If your redis setup doesn't require TLS you can omit this option.
+    If this is set it will be passed to redis as the connection option ``SSL_CA_CERTS``. Possible value is the ca path.
+
+``ssl_keyfile``
+    If your redis setup doesn't require mTLS you can omit this option.
+    If this is set it will be passed to redis as the connection option ``SSL_KEYFILE``. Possible value is the keyfile path.
+
+``ssl_certfile``
+    If your redis setup doesn't require mTLS you can omit this option.
+    If this is set it will be passed to redis as the connection option ``SSL_CERTFILE``. Possible value is the certfile path.
 
 If redis is not configured, pretix will store sessions and locks in the database. If memcached
 is configured, memcached will be used for caching instead of redis.
@@ -395,6 +424,8 @@ redis for convenience. See the `Celery documentation`_ for more details.
 The two ``transport_options`` entries can be omitted in most cases.
 If they are present they need to be a valid JSON dictionary.
 For possible entries in that dictionary see the `Celery documentation`_.
+
+It is possible the use Redis with TLS/ mTLS for the broker or the backend. If you want to setup it, it is necessary to specify the TLS identifier ``rediss``, the ssl mode ``ssl_cert_reqs`` and optionally specify the CA (TLS) ``ssl_ca_certs``, cert ``ssl_certfile`` and key ``ssl_keyfile`` (mTLS) path as encoded string. the following uri describes the format and possible parameters ``rediss://0.0.0.0:6379/1?ssl_cert_reqs=required&ssl_ca_certs=%2Fetc%2Fpretix%2Fredis-ca.pem&ssl_certfile=%2Fetc%2Fpretix%2Fredis-client-crt.pem&ssl_keyfile=%2Fetc%2Fpretix%2Fredis-client-key.key``
 
 To use redis with sentinels set the broker or backend to ``sentinel://sentinel_host_1:26379;sentinel_host_2:26379/0``
 and the respective transport_options to ``{"master_name":"mymaster"}``.
