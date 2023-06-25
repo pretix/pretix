@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-25 04:00+0000\n"
-"Last-Translator: Jonathan Berger <drskullster@gmail.com>\n"
+"PO-Revision-Date: 2023-06-25 12:17+0000\n"
+"Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -693,7 +693,7 @@ msgstr "Le montant dû a été débité de votre carte."
 
 #: pretix/base/email.py:641
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr "Veuillez virer de l'argent sur ce compte bancaire: 9999-9999-9999-9999"
+msgstr "Veuillez virer de l'argent sur ce compte bancaire : 9999-9999-9999-9999"
 
 #: pretix/base/email.py:667 pretix/base/email.py:672 pretix/base/pdf.py:622
 #: pretix/base/pdf.py:645 pretix/control/forms/organizer.py:563
@@ -2186,11 +2186,11 @@ msgstr "Adresse de facturation : code postal"
 
 #: pretix/base/exporters/orderlist.py:609 pretix/base/pdf.py:342
 msgid "Invoice address city"
-msgstr "Adresse de facturation: ville"
+msgstr "Adresse de facturation : ville"
 
 #: pretix/base/exporters/orderlist.py:610 pretix/base/pdf.py:352
 msgid "Invoice address country"
-msgstr "Adresse de facturation: pays"
+msgstr "Adresse de facturation : pays"
 
 #: pretix/base/exporters/orderlist.py:611
 msgctxt "address"
@@ -2954,7 +2954,7 @@ msgstr ""
 #: pretix/base/forms/validators.py:73
 #, python-format
 msgid "Invalid placeholder(s): %(value)s"
-msgstr "Caractère générique invalide: %(value)s"
+msgstr "Caractère générique invalide : %(value)s"
 
 #: pretix/base/forms/widgets.py:218 pretix/base/forms/widgets.py:223
 msgid "Business or institutional customer"
@@ -3974,7 +3974,7 @@ msgstr "ID TVA : %s"
 #, python-format
 msgctxt "invoice"
 msgid "VAT-ID: %s"
-msgstr "ID TVA: %s"
+msgstr "N° TVA : %s"
 
 #: pretix/base/models/items.py:92
 msgid "Category name"
@@ -5582,7 +5582,7 @@ msgid ""
 "Reverse Charge: According to Article 194, 196 of Council Directive 2006/112/"
 "EEC, VAT liability rests with the service recipient."
 msgstr ""
-"Frais inversés: Conformément à l'article 194,196 de la directive 2006/112/"
+"Frais inversés : Conformément à l'article 194,196 de la directive 2006/112/"
 "CEE du Conseil, l'assujettissement à la TVA incombe au destinataire du "
 "service."
 
@@ -5980,7 +5980,7 @@ msgstr "Voir les détails de la commande"
 #: pretix/base/notifications.py:234
 #, python-brace-format
 msgid "A new order has been placed: {order.code}"
-msgstr "Une nouvelle commande a été passée: {order.code}"
+msgstr "Une nouvelle commande a été passée : {order.code}"
 
 #: pretix/base/notifications.py:240
 #, python-brace-format
@@ -6943,11 +6943,11 @@ msgstr "Fin de la prévente"
 
 #: pretix/base/reldate.py:205 pretix/base/reldate.py:318
 msgid "Fixed date:"
-msgstr "Date fixe:"
+msgstr "Date fixe :"
 
 #: pretix/base/reldate.py:206 pretix/base/reldate.py:319
 msgid "Relative date:"
-msgstr "Date relative:"
+msgstr "Date relative :"
 
 #: pretix/base/reldate.py:207
 msgid "Relative time:"
@@ -7117,7 +7117,7 @@ msgid_plural ""
 "%(number)s matching products."
 msgstr[0] ""
 "Le code promo \"%(voucher)s\" ne peut être utilisé que si vous sélectionnez "
-"au moins %(number)s produits correspondants."
+"au moins %(number)s produit correspondant."
 msgstr[1] ""
 "Le code promo \"%(voucher)s\" ne peut être utilisé que si vous sélectionnez "
 "au moins %(number)s produits correspondants."
@@ -7134,9 +7134,8 @@ msgid_plural ""
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
 "Le code promo \"%(voucher)s\" ne peut être utilisé que si vous sélectionnez "
-"au moins %(number)s produits correspondants. Nous avons donc retiré "
-"certaines positions de votre panier qui ne peuvent plus être achetées de la "
-"sorte."
+"au moins %(number)s produit correspondant. Nous avons donc retiré certaines "
+"positions de votre panier qui ne peuvent plus être achetées de la sorte."
 msgstr[1] ""
 "Le code promo \"%(voucher)s\" ne peut être utilisé que si vous sélectionnez "
 "au moins %(number)s produits correspondants. Nous avons donc retiré "
@@ -7523,7 +7522,7 @@ msgstr "Lieu de l’événement : {location}"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Attendee: {name}"
-msgstr "Participants: {name}"
+msgstr "Participants : {name}"
 
 #: pretix/base/services/invoices.py:254 pretix/plugins/reports/exporters.py:297
 msgctxt "subevent"
@@ -7588,8 +7587,8 @@ msgid ""
 "You can view your order details at the following URL:\n"
 "{orderurl}."
 msgstr ""
-"Vous pouvez consulter les détails de votre commande à l'adresse URL "
-"suivante:\n"
+"Vous pouvez consulter les détails de votre commande à l'adresse URL suivante "
+":\n"
 "{orderurl}."
 
 #: pretix/base/services/mail.py:282
@@ -8074,18 +8073,20 @@ msgid ""
 "\n"
 "your pretix developers"
 msgstr ""
-"Salutations !\n"
+"Salutations !\n"
 "\n"
 "Une mise à jour est disponible pour pretix ou pour l'un des plugins que vous "
 "avez installé dans votre installation pretix. Veuillez cliquer sur le lien "
-"suivant pour plus d'informations:\n"
+"suivant pour plus d'informations :\n"
 "\n"
 " {url} \n"
 "\n"
 "Vous trouverez toujours des informations sur les dernières mises à jour sur "
-"le blog pretix.eu:\n"
+"le blog pretix.eu :\n"
 "\n"
-"https://pretix.eu/about/en/blog/\n"
+"https ://pretix.eu/about/en/blog/\n"
+"\n"
+"Cordialement,\n"
 "\n"
 "vos développeurs pretix"
 
@@ -9455,7 +9456,7 @@ msgid ""
 msgstr ""
 "Cependant, si vous souhaitez que nous vous aidions à garder les lumières "
 "allumées ici, veuillez envisager d’utiliser le curseur ci-dessous pour "
-"demander un remboursement plus petit. Merci!"
+"demander un remboursement plus petit. Merci !"
 
 #: pretix/base/settings.py:1787
 msgid "Voluntary lower refund explanation"
@@ -9667,7 +9668,7 @@ msgstr ""
 #: pretix/base/settings.py:2079 pretix/base/settings.py:2097
 #, python-brace-format
 msgid "Your order: {code}"
-msgstr "Votre commande: {code}"
+msgstr "Votre commande : {code}"
 
 #: pretix/base/settings.py:2009 pretix/base/settings.py:2042
 #: pretix/base/settings.py:2147 pretix/base/settings.py:2362
@@ -9724,7 +9725,7 @@ msgstr ""
 "Bonjour,\n"
 "\n"
 "quelqu'un a demandé une liste de vos commandes pour {event}.\n"
-"La liste est la suivante:\n"
+"La liste est la suivante :\n"
 "\n"
 "{orders}\n"
 "\n"
@@ -9896,7 +9897,7 @@ msgstr ""
 #: pretix/base/settings.py:2163
 #, python-brace-format
 msgid "Your order has been changed: {code}"
-msgstr "Votre commande a été modifiée: {code}"
+msgstr "Votre commande a été modifiée : {code}"
 
 #: pretix/base/settings.py:2167
 #, python-brace-format
@@ -9924,7 +9925,7 @@ msgstr ""
 #: pretix/base/settings.py:2179
 #, python-brace-format
 msgid "Payment received for your order: {code}"
-msgstr "Paiement reçu pour votre commande: {code}"
+msgstr "Paiement reçu pour votre commande : {code}"
 
 #: pretix/base/settings.py:2183
 #, python-brace-format
@@ -9998,7 +9999,7 @@ msgstr ""
 #: pretix/base/settings.py:2232
 #, python-brace-format
 msgid "Your order is about to expire: {code}"
-msgstr "Votre commande est sur le point d'expirer: {code}"
+msgstr "Votre commande est sur le point d'expirer : {code}"
 
 #: pretix/base/settings.py:2236
 #, python-brace-format
@@ -10033,7 +10034,7 @@ msgstr ""
 #: pretix/base/settings.py:2250
 #, python-brace-format
 msgid "Your order is pending payment: {code}"
-msgstr "Votre commande est en attente de paiement: {code}"
+msgstr "Votre commande est en attente de paiement : {code}"
 
 #: pretix/base/settings.py:2254
 #, python-brace-format
@@ -10140,19 +10141,19 @@ msgstr ""
 "vous vous êtes soumis à la liste d’attente pour {event},\n"
 "pour le produit {product}.\n"
 "\n"
-"Nous avons maintenant un billet prêt pour vous! Vous pouvez l’échanger dans "
+"Nous avons maintenant un billet prêt pour vous ! Vous pouvez l’échanger dans "
 "notre billetterie\n"
 "au cours de la prochaine {hours} heures en saisissant le code de bon d’achat "
-"suivant:\n"
+"suivant :\n"
 "\n"
 "{code}\n"
 "\n"
-"Alternativement, vous pouvez simplement cliquer sur le lien suivant:\n"
+"Alternativement, vous pouvez simplement cliquer sur le lien suivant :\n"
 "\n"
 "{url}\n"
 "\n"
 "Veuillez noter que ce lien n’est valable que dans la prochaine {hours} "
-"Heures!\n"
+"Heures !\n"
 "Nous réattribuerons le billet à la personne suivante sur la liste si vous ne "
 "le faites pas\n"
 "Utilisez le bon dans ce délai.\n"
@@ -10161,7 +10162,7 @@ msgstr ""
 "cliquer sur le bouton\n"
 "Lien suivant pour nous le faire savoir. De cette façon, nous pouvons envoyer "
 "le billet aussi rapidement\n"
-"Dans la mesure du possible, à la personne suivante sur la liste d’attente :\n"
+"Dans la mesure du possible, à la personne suivante sur la liste d’attente :\n"
 "\n"
 "{url_remove}\n"
 "\n"
@@ -10254,7 +10255,7 @@ msgstr ""
 "\n"
 "Nous avons approuvé un billet commandé pour vous pour {event}.\n"
 "\n"
-"Vous pouvez consulter les détails et le statut de votre billet ici:\n"
+"Vous pouvez consulter les détails et le statut de votre billet ici :\n"
 "{url}\n"
 "\n"
 "Sinceres salutations  \n"
@@ -10320,7 +10321,7 @@ msgstr ""
 "\n"
 "{comment}\n"
 "\n"
-"Vous pouvez consulter les détails de votre commande ici:\n"
+"Vous pouvez consulter les détails de votre commande ici :\n"
 "\n"
 "{url}\n"
 "\n"
@@ -10350,7 +10351,7 @@ msgstr ""
 #: pretix/base/settings.py:2452 pretix/base/settings.py:2468
 #, python-brace-format
 msgid "Your ticket is ready for download: {code}"
-msgstr "Votre ticket est prêt à être téléchargé: {code}"
+msgstr "Votre ticket est prêt à être téléchargé : {code}"
 
 #: pretix/base/settings.py:2456
 #, python-brace-format
@@ -10392,8 +10393,8 @@ msgstr ""
 "\n"
 "Vous avez acheté un billet pour {event}.\n"
 "\n"
-"Si vous ne l'avez pas encore fait, vous pouvez télécharger votre ticket "
-"ici:\n"
+"Si vous ne l'avez pas encore fait, vous pouvez télécharger votre ticket ici :"
+"\n"
 "{url}\n"
 "\n"
 "Sincères salutations,  \n"
@@ -11268,7 +11269,7 @@ msgstr "Si ce problème persiste, veuillez nous contacter."
 
 #: pretix/base/templates/500.html:13
 msgid "If you contact us, please send us the following code:"
-msgstr "Si vous nous contactez, veuillez nous envoyer le code suivant:"
+msgstr "Si vous nous contactez, veuillez nous envoyer le code suivant :"
 
 #: pretix/base/templates/csrffail.html:4 pretix/base/templates/csrffail.html:8
 msgid "Verification failed"
@@ -11340,11 +11341,11 @@ msgstr "Cliquez ici pour désactiver immédiatement toutes les notifications."
 
 #: pretix/base/templates/pretixbase/email/notification.txt:15
 msgid "Click here to view and change your notification settings:"
-msgstr "Cliquez ici pour voir et modifier vos paramètres de notification:"
+msgstr "Cliquez ici pour voir et modifier vos paramètres de notification :"
 
 #: pretix/base/templates/pretixbase/email/notification.txt:17
 msgid "Click here disable all notifications immediately:"
-msgstr "Cliquez ici pour désactiver immédiatement toutes les notifications:"
+msgstr "Cliquez ici pour désactiver immédiatement toutes les notifications :"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:7
 msgid ""
@@ -11357,12 +11358,12 @@ msgstr ""
 #: pretix/base/templates/pretixbase/email/order_details.html:12
 #: pretix/base/templates/pretixbase/email/order_details.html:62
 msgid "Event:"
-msgstr "Événement:"
+msgstr "Événement :"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:26
 #: pretix/base/templates/pretixbase/email/order_details.html:77
 msgid "Order code:"
-msgstr "Code de commande:"
+msgstr "Code de commande :"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:31
 msgid "created by"
@@ -11383,7 +11384,7 @@ msgid ""
 "event:"
 msgstr ""
 "Vous recevez cet email parce que vous avez passé une commande pour "
-"l'événement suivant:"
+"l'événement suivant :"
 
 #: pretix/base/templates/pretixbase/email/order_details.html:86
 msgid "Details:"
@@ -11554,7 +11555,7 @@ msgstr "Trimestre actuel"
 #: pretix/base/timeframes.py:206 pretix/base/timeframes.py:217
 msgctxt "reporting_timeframe"
 msgid "by quarter"
-msgstr "par trimestre"
+msgstr "par quadrimestre"
 
 #: pretix/base/timeframes.py:193
 msgctxt "reporting_timeframe"
@@ -11792,7 +11793,7 @@ msgstr "La tâche est terminée."
 #: pretix/control/forms/__init__.py:205 pretix/control/forms/item.py:652
 #, python-brace-format
 msgid "Please do not upload files larger than {size}!"
-msgstr "Veuillez ne pas télécharger de fichiers plus grands que {size}!"
+msgstr "Veuillez ne pas télécharger de fichiers plus grands que {size} !"
 
 #: pretix/control/forms/__init__.py:225
 msgid "Filetype not allowed!"
@@ -12094,7 +12095,7 @@ msgstr "Signature"
 #: pretix/control/forms/event.py:949
 #, python-brace-format
 msgid "This will be attached to every email. Available placeholders: {event}"
-msgstr "Ceci sera joint à chaque email. Nombre de places disponibles: {event}"
+msgstr "Ceci sera joint à chaque email. Nombre de places disponibles : {event}"
 
 #: pretix/control/forms/event.py:954 pretix/control/forms/organizer.py:500
 msgid "e.g. your contact details"
@@ -14234,11 +14235,11 @@ msgid ""
 msgstr ""
 "Bonjour\n"
 "\n"
-"Avec cet e-mail, nous vous envoyons un ou plusieurs bons pour {event}:\n"
+"Avec cet e-mail, nous vous envoyons un ou plusieurs bons pour {event} :\n"
 "\n"
 "{voucher_list}\n"
 "\n"
-"Vous pouvez les échanger ici dans notre billetterie:\n"
+"Vous pouvez les échanger ici dans notre billetterie :\n"
 "\n"
 "{url}\n"
 "\n"
@@ -14346,7 +14347,7 @@ msgstr "Vous devez spécifier autant de sièges que de codes promotionnels."
 
 #: pretix/control/logdisplay.py:65
 msgid "The order has been changed:"
-msgstr "La commande a été modifiée:"
+msgstr "La commande a été modifiée :"
 
 #: pretix/control/logdisplay.py:73
 #, python-brace-format
@@ -14365,7 +14366,7 @@ msgstr "Position #{posid} : L’appartenance utilisée a changé."
 #: pretix/control/logdisplay.py:85
 #, python-brace-format
 msgid "Position #{posid}: Seat \"{old_seat}\" changed to \"{new_seat}\"."
-msgstr "Position #{posid}: Siège \"{old_seat}\" changé à \"{new_seat}\"."
+msgstr "Position #{posid} : Siège \"{old_seat}\" changé à \"{new_seat}\"."
 
 #: pretix/control/logdisplay.py:93
 #, python-brace-format
@@ -15509,7 +15510,7 @@ msgstr "L'utilisateur a confirmé le message suivant : \"{}\""
 #: pretix/control/logdisplay.py:608
 #, python-brace-format
 msgid "The order has been canceled (comment: \"{comment}\")."
-msgstr "La commande a été annulée (commentaire: « {comment} »)."
+msgstr "La commande a été annulée (commentaire : « {comment} »)."
 
 #: pretix/control/logdisplay.py:610 pretix/control/views/orders.py:1306
 #: pretix/presale/views/order.py:988
@@ -16805,8 +16806,8 @@ msgstr ""
 "Vous pouvez créer plusieurs listes d'enregistrement pour séparer plusieurs "
 "parties de votre événement, par exemple si vous disposez d'entrées séparées "
 "pour plusieurs types de tickets. Les différentes listes d'enregistrement "
-"sont totalement indépendantes: si un ticket apparaît sur deux listes, il est "
-"valable une fois sur chaque liste. Cela peut s'avérer utile si vous "
+"sont totalement indépendantes : si un ticket apparaît sur deux listes, il "
+"est valable une fois sur chaque liste. Cela peut s'avérer utile si vous "
 "organisez un festival avec des laissez-passer qui vous permettent d'accéder "
 "à chaque représentation ou à plusieurs, ainsi que des billets valables "
 "uniquement pour une seule représentation."
@@ -16986,7 +16987,7 @@ msgstr ""
 "Bonjour,\n"
 "\n"
 "Vous avez demandé un nouveau mot de passe. Veuillez vous rendre à la page "
-"suivante pour le réinitialiser:\n"
+"suivante pour le réinitialiser :\n"
 "\n"
 "%(url)s\n"
 "\n"
@@ -17056,14 +17057,14 @@ msgstr ""
 "\n"
 "Ceci est pour vous informer que les informations de votre compte pretix ont "
 "été\n"
-"modifié. Les modifications suivantes ont été apportées:\n"
+"modifié. Les modifications suivantes ont été apportées :\n"
 "\n"
 "%(messages)s\n"
 "\n"
 "Si vous n'avez pas effectué ce changement, veuillez nous contacter "
 "immédiatement.\n"
 "\n"
-"Vous pouvez consulter et modifier les paramètres de votre compte ici:\n"
+"Vous pouvez consulter et modifier les paramètres de votre compte ici :\n"
 "\n"
 "%(url)s\n"
 "\n"
@@ -17457,7 +17458,7 @@ msgstr "Coordonnées géographiques mises à jour"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:7
 msgid "Update map?"
-msgstr "Mettre à jour la carte?"
+msgstr "Mettre à jour la carte ?"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:5
 #, python-format
@@ -17472,11 +17473,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:19
 msgid "This plugin cannot be enabled for the following reasons:"
-msgstr "Ce plugin ne peut pas être activé pour les raisons suivantes:"
+msgstr "Ce plugin ne peut pas être activé pour les raisons suivantes :"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:29
 msgid "This plugin reports the following problems:"
-msgstr "Ce plugin signale les problèmes suivants:"
+msgstr "Ce plugin signale les problèmes suivants :"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_timeline.html:5
 msgid "Your timeline"
@@ -17641,7 +17642,7 @@ msgid ""
 "To publish your ticket shop, you first need to resolve the following issues:"
 msgstr ""
 "Pour publier votre billetterie, vous devez d'abord résoudre les problèmes "
-"suivants:"
+"suivants :"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:51
 #: pretix/control/templates/pretixcontrol/event/live.html:65
@@ -17896,7 +17897,7 @@ msgstr "Fournisseur de paiement :"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:21
 msgid "Warning:"
-msgstr "Avertissement:"
+msgstr "Avertissement :"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:22
 msgid ""
@@ -18331,7 +18332,7 @@ msgid ""
 "Are you sure you want to delete the tax rule <strong>%(taxrule)s</strong>?"
 msgstr ""
 "Êtes-vous sûr de vouloir supprimer la règle d'imposition "
-"<strong>%(taxrule)s</strong>?"
+"<strong>%(taxrule)s</strong> ?"
 
 #: pretix/control/templates/pretixcontrol/event/tax_delete.html:12
 msgid ""
@@ -18345,7 +18346,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:14
 #, python-format
 msgid "Tax rule: %(name)s"
-msgstr "Règle fiscale: %(name)s"
+msgstr "Règle fiscale : %(name)s"
 
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:34
 #, python-format
@@ -18478,7 +18479,7 @@ msgid ""
 "<code>&lt;head&gt;</code> section of your website:"
 msgstr ""
 "Pour intégrer le widget sur votre site Web, il vous suffit de copier le code "
-"suivant dans la section <code>&lt;head&gt;</code> de votre site Web:"
+"suivant dans la section <code>&lt;head&gt;</code> de votre site Web :"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:25
 msgid ""
@@ -18486,7 +18487,7 @@ msgid ""
 "the widget to show up:"
 msgstr ""
 "Ensuite, copiez le code suivant à l'endroit de votre site où vous voulez que "
-"le widget apparaisse:"
+"le widget apparaisse :"
 
 #: pretix/control/templates/pretixcontrol/event/widget.html:39
 #: pretix/control/templates/pretixcontrol/event/widget.html:52
@@ -18876,7 +18877,7 @@ msgstr "Voir le journal complet"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:6
 msgid "Modify product:"
-msgstr "Modifier le produit:"
+msgstr "Modifier le produit :"
 
 #: pretix/control/templates/pretixcontrol/item/base.html:8
 msgid "Create product"
@@ -20219,7 +20220,7 @@ msgid ""
 "Do you really want to delete this order? <strong>You really cannot revert "
 "this action and we can't either.</strong>"
 msgstr ""
-"Voulez-vous vraiment supprimer cette commande? <strong>Vous ne pouvez "
+"Voulez-vous vraiment supprimer cette commande ? <strong>Vous ne pouvez "
 "vraiment pas annuler cette action et nous ne pouvons pas non plus.</strong>"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:25
@@ -20249,7 +20250,7 @@ msgstr "Prolonger le délai de paiement"
 #: pretix/control/templates/pretixcontrol/order/index.html:20
 #, python-format
 msgid "Order details: %(code)s"
-msgstr "Détails de la commande: %(code)s"
+msgstr "Détails de la commande : %(code)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:18
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:7
@@ -20446,7 +20447,7 @@ msgstr "Quitter le scan : %(date)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:393
 #, python-format
 msgid "Entry scan: %(date)s"
-msgstr "Scan d’entrée: %(date)s"
+msgstr "Scan d’entrée : %(date)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:415
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:54
@@ -20648,7 +20649,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:50
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:30
 msgid "Subject:"
-msgstr "Sujet:"
+msgstr "Sujet :"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:5
 #: pretix/control/templates/pretixcontrol/order/pay.html:9
@@ -20657,7 +20658,7 @@ msgstr "Marquer la commande comme payée"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:20
 msgid "Do you really want to create a manual payment for this order?"
-msgstr "Voulez-vous vraiment créer un paiement manuel pour cette commande?"
+msgstr "Voulez-vous vraiment créer un paiement manuel pour cette commande ?"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:37
 msgid "Create payment"
@@ -21557,7 +21558,7 @@ msgid ""
 "information!"
 msgstr ""
 "Les commandes elles-mêmes ne seront pas anonymisées et peuvent toujours "
-"contenir des informations personnelles!"
+"contenir des informations personnelles !"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:26
 msgid ""
@@ -22333,7 +22334,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:5
 msgid "Delete team:"
-msgstr "Supprimer l'équipe:"
+msgstr "Supprimer l'équipe :"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:7
 msgid ""
@@ -22345,12 +22346,12 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:17
 msgid "Are you sure you want to delete the team?"
-msgstr "Vous êtes sûr de vouloir supprimer l'équipe?"
+msgstr "Vous êtes sûr de vouloir supprimer l'équipe ?"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:6
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:6
 msgid "Team:"
-msgstr "Équipe:"
+msgstr "Équipe :"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:30
@@ -22530,7 +22531,7 @@ msgstr "%(count)s élements"
 #: pretix/control/templates/pretixcontrol/pagination.html:40
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:38
 msgid "Show per page:"
-msgstr "Afficher par page:"
+msgstr "Afficher par page :"
 
 #: pretix/control/templates/pretixcontrol/pagination_huge.html:14
 #, python-format
@@ -22761,7 +22762,7 @@ msgstr "Contenu"
 #: pretix/control/templates/pretixcontrol/pdf/index.html:392
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:50
 msgid "Event attribute:"
-msgstr "Attribut d'événement:"
+msgstr "Attribut d'événement :"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:397
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:59
@@ -22892,7 +22893,7 @@ msgid ""
 msgstr ""
 "Vous êtes sur le point de supprimer définitivement des données du serveur, "
 "même si vous devrez conserver certaines de ces données dans vos fichiers. "
-"Vous pouvez donc télécharger le fichier suivant et le stocker en lieu sûr:"
+"Vous pouvez donc télécharger le fichier suivant et le stocker en lieu sûr :"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:29
 msgid "Download data"
@@ -23140,7 +23141,7 @@ msgstr "Supprimer la date"
 #, python-format
 msgid "Are you sure you want to delete the date <strong>%(subevent)s</strong>?"
 msgstr ""
-"Êtes-vous sûr de vouloir supprimer la date <strong>%(subevent)s</strong>?"
+"Êtes-vous sûr de vouloir supprimer la date <strong>%(subevent)s</strong> ?"
 
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/subevents/delete_bulk.html:6
@@ -23235,11 +23236,11 @@ msgstr "Ajouter un dispositif d'authentification à deux facteurs"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:8
 msgid "To set up this device, please follow the following steps:"
-msgstr "Pour configurer cet appareil, veuillez suivre les étapes suivantes:"
+msgstr "Pour configurer cet appareil, veuillez suivre les étapes suivantes :"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:12
 msgid "Download the Google Authenticator application to your phone:"
-msgstr "Téléchargez l'application Google Authenticator sur votre téléphone:"
+msgstr "Téléchargez l'application Google Authenticator sur votre téléphone :"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:17
 msgid "Android (Google Play)"
@@ -23260,11 +23261,12 @@ msgstr "Blackberry (Lien via Google)"
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:39
 msgid "Add a new account to the app by scanning the following barcode:"
 msgstr ""
-"Ajoutez un nouveau compte à l'application en scannant le code-barres suivant:"
+"Ajoutez un nouveau compte à l'application en scannant le code-barres suivant "
+":"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:43
 msgid "Can't scan the barcode?"
-msgstr "Vous ne pouvez pas scanner le code-barres?"
+msgstr "Vous ne pouvez pas scanner le code-barres ?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:49
 msgid "Use the \"provide a key\" option of your authenticator app."
@@ -23278,7 +23280,7 @@ msgstr "Dans \"Nom du compte\", entrez votre nom d'utilisateur pour pretix."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:55
 msgid "In \"Secret\"/\"Account Key\", enter the following code:"
-msgstr "Dans\" Secret\"/\"Clé de compte\", entrez le code suivant:"
+msgstr "Dans «Secret»/«Clé de compte», entrez le code suivant :"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:60
 msgid "copy"
@@ -23293,7 +23295,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:74
 msgid "Enter the displayed code here:"
-msgstr "Entrez ici le code affiché:"
+msgstr "Entrez ici le code affiché :"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:83
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_webauthn.html:19
@@ -23323,7 +23325,7 @@ msgid ""
 "Are you sure you want to delete the authentication device \"%(device)s\"?"
 msgstr ""
 "Êtes-vous sûr de vouloir supprimer le dispositif d'authentification "
-"\"%(device)s\"?"
+"«%(device)s» ?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:12
 msgid "You will no longer be able to use this device to log in to pretix."
@@ -23457,7 +23459,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:106
 msgid "Unused tokens:"
-msgstr "Tokens inutilisés:"
+msgstr "Tokens inutilisés :"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:114
 msgid "Generate new emergency tokens"
@@ -23738,7 +23740,7 @@ msgid ""
 "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
 msgstr ""
 "Êtes-vous sûr de vouloir supprimer le coupon de réduction "
-"<strong>%(voucher)s</strong>?"
+"<strong>%(voucher)s</strong> ?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:6
@@ -23770,7 +23772,7 @@ msgid ""
 "<strong>%(voucher)s</strong>?"
 msgstr ""
 "Êtes-vous sûr de vouloir supprimer des positions de panier avec un bon d’"
-"achat <strong>%(voucher)s</strong>?"
+"achat <strong>%(voucher)s</strong> ?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:10
 msgid ""
@@ -23898,7 +23900,7 @@ msgid ""
 "<strong>%(entry)s</strong>?"
 msgstr ""
 "Êtes-vous sûr de vouloir supprimer l'entrée de liste d'attente "
-"<strong>%(entry)s</strong>?"
+"<strong>%(entry)s</strong> ?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:6
@@ -24456,7 +24458,7 @@ msgstr ""
 
 #: pretix/control/views/event.py:1008
 msgid "We've disabled test mode for you. Let's sell some real tickets!"
-msgstr "Nous avons désactivé le mode test pour vous. Vendons de vrais billets!"
+msgstr "Nous avons désactivé le mode test pour vous. Vendons de vrais billets !"
 
 #: pretix/control/views/event.py:1025
 msgid "This event can not be deleted."
@@ -24822,7 +24824,7 @@ msgstr "Vérification de l’adresse de l’expéditeur"
 #: pretix/control/views/mailsetup.py:271
 #, python-format
 msgid "An error occurred while contacting the SMTP server: %s"
-msgstr "Une erreur s'est produite lors du contact avec le serveur SMTP: %s"
+msgstr "Une erreur s'est produite lors du contact avec le serveur SMTP : %s"
 
 #: pretix/control/views/mailsetup.py:282
 msgid ""
@@ -24865,7 +24867,7 @@ msgid ""
 "it will not be shown again: {secret}"
 msgstr ""
 "Une nouvelle clé secrète client a été générée. Veuillez le copier et l’"
-"enregistrer dès maintenant car il ne sera plus affiché: {secret}"
+"enregistrer dès maintenant car il ne sera plus affiché : {secret}"
 
 #: pretix/control/views/oauth.py:169
 msgid "Access for the selected application has been revoked."
@@ -25254,7 +25256,7 @@ msgstr ""
 #: pretix/plugins/sendmail/views.py:680
 #, python-brace-format
 msgid "Subject: {subject}"
-msgstr "Sujet: {subject}"
+msgstr "Sujet : {subject}"
 
 #: pretix/control/views/orders.py:2075 pretix/control/views/orders.py:2141
 msgid "Your message has been queued and will be sent to {}."
@@ -25262,7 +25264,7 @@ msgstr "Votre message a été mis en file d'attente et sera envoyé à {}."
 
 #: pretix/control/views/orders.py:2079 pretix/control/views/orders.py:2144
 msgid "Failed to send mail to the following user: {}"
-msgstr "Echec de l'envoi de mail à l'utilisateur suivant: {}"
+msgstr "Echec de l'envoi de mail à l'utilisateur suivant : {}"
 
 #: pretix/control/views/orders.py:2180 pretix/presale/views/order.py:1001
 msgid ""
@@ -25665,7 +25667,7 @@ msgstr "{} de nouvelles dates ont été créées."
 
 #: pretix/control/views/typeahead.py:92
 msgid "Series:"
-msgstr "Séries:"
+msgstr "Séries :"
 
 #: pretix/control/views/typeahead.py:115
 msgid "Order {}"
@@ -26447,13 +26449,13 @@ msgid ""
 "following bank account, using a personal reference code:"
 msgstr ""
 "Après avoir effectué votre achat, nous vous demanderons de virer l'argent "
-"sur le compte bancaire suivant, en utilisant un code de référence personnel:"
+"sur le compte bancaire suivant, en utilisant un code de référence personnel :"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:24
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:24
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:38
 msgid "Reference code (important):"
-msgstr "Code de référence (important):"
+msgstr "Code de référence (important) :"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:29
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:29
@@ -26657,7 +26659,7 @@ msgstr "Veuillez virer le montant total sur le compte bancaire suivant :"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:37
 msgid "Amount:"
-msgstr "Montant:"
+msgstr "Montant :"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:41
 msgid ""
@@ -27494,7 +27496,7 @@ msgstr "Capture en attente."
 
 #: pretix/plugins/paypal2/signals.py:76
 msgid "PayPal reported an event: {}"
-msgstr "PayPal a signalé un événement: {}"
+msgstr "PayPal a signalé un événement : {}"
 
 #: pretix/plugins/paypal2/signals.py:83
 msgid "PayPal ISU/Connect: Client ID"
@@ -27591,7 +27593,7 @@ msgstr "Ordre de paiement"
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:8
 #, python-format
 msgid "Pay order: %(code)s"
-msgstr "Ordre de paiement: %(code)s"
+msgstr "Ordre de paiement : %(code)s"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:26
 msgid "Please turn on JavaScript."
@@ -27623,7 +27625,7 @@ msgid ""
 "An error occurred returning from PayPal: session parameter not matching. "
 "Please try again."
 msgstr ""
-"Une erreur s’est produite lors du retour de PayPal: paramètre de session ne "
+"Une erreur s’est produite lors du retour de PayPal : paramètre de session ne "
 "correspondant pas. Veuillez réessayer."
 
 #: pretix/plugins/paypal2/views.py:261
@@ -27687,7 +27689,7 @@ msgstr "Fin"
 msgid "Report includes test orders which may be deleted later!"
 msgstr ""
 "Le rapport comprend des commandes de test qui peuvent être supprimées "
-"ultérieurement!"
+"ultérieurement !"
 
 #: pretix/plugins/reports/accountingreport.py:144
 msgid ""
@@ -28145,7 +28147,7 @@ msgstr "Envoyer un nouvel email basé sur"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:2
 msgid "Sent to orders:"
-msgstr "Envoyé aux ordres:"
+msgstr "Envoyé aux ordres :"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history_fragment_orders.html:11
 msgid "All customers not checked in"
@@ -28697,7 +28699,7 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py:965
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr "Stripe a signalé une erreur avec votre carte: %s"
+msgstr "Stripe a signalé une erreur avec votre carte : %s"
 
 #: pretix/plugins/stripe/payment.py:510 pretix/plugins/stripe/payment.py:671
 #: pretix/plugins/stripe/payment.py:883 pretix/plugins/stripe/payment.py:977
@@ -28720,7 +28722,7 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py:537 pretix/plugins/stripe/payment.py:931
 #, python-format
 msgid "Stripe reported an error: %s"
-msgstr "Stripe a signalé une erreur: %s"
+msgstr "Stripe a signalé une erreur : %s"
 
 #: pretix/plugins/stripe/payment.py:601
 msgid "No payment information found."
@@ -28865,23 +28867,23 @@ msgstr "L'autorisation de paiement a échoué."
 
 #: pretix/plugins/stripe/signals.py:97
 msgid "Charge failed. Reason: {}"
-msgstr "Paiement échoué. Raison: {}"
+msgstr "Paiement échoué. Raison : {}"
 
 #: pretix/plugins/stripe/signals.py:99
 msgid "Dispute created. Reason: {}"
-msgstr "Litige créé. Raison: {}"
+msgstr "Litige créé. Raison : {}"
 
 #: pretix/plugins/stripe/signals.py:101
 msgid "Dispute updated. Reason: {}"
-msgstr "Litige mis à jour. Raison: {}"
+msgstr "Litige mis à jour. Raison : {}"
 
 #: pretix/plugins/stripe/signals.py:103
 msgid "Dispute closed. Status: {}"
-msgstr "Litige clos. Statut: {}"
+msgstr "Litige clos. Statut : {}"
 
 #: pretix/plugins/stripe/signals.py:106
 msgid "Stripe reported an event: {}"
-msgstr "Stripe a signalé un événement: {}"
+msgstr "Stripe a signalé un événement : {}"
 
 #: pretix/plugins/stripe/signals.py:117
 msgid "Stripe Connect: Client ID"
@@ -29023,7 +29025,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:29
 msgid ""
 "The payment transaction could not be completed for the following reason:"
-msgstr "La transaction n'a pas pu être exécutée pour la raison suivante:"
+msgstr "La transaction n'a pas pu être exécutée pour la raison suivante :"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:16
 #, python-format
@@ -29151,7 +29153,7 @@ msgstr "Mise en page des tickets"
 #, python-format
 msgid "Are you sure you want to delete the layout <strong>%(layout)s</strong>?"
 msgstr ""
-"Voulez-vous vraiment supprimer la mise en page <strong>%(layout)s</strong>?"
+"Voulez-vous vraiment supprimer la mise en page <strong>%(layout)s</strong> ?"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:6
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:13
@@ -29463,7 +29465,7 @@ msgstr ""
 #: pretix/presale/forms/customer.py:189
 #, python-brace-format
 msgid "What is the result of {num1} + {num2}?"
-msgstr "Quel est le résultat de {num1} + {num2}?"
+msgstr "Quel est le résultat de {num1} + {num2} ?"
 
 #: pretix/presale/forms/customer.py:235
 msgid "Please enter the correct result."
@@ -29607,7 +29609,7 @@ msgid ""
 "ticket shop is in test mode!"
 msgstr ""
 "Les commandes passées via ce canal de vente ne peuvent pas être supprimées - "
-"même si la billetterie est en mode test!"
+"même si la billetterie est en mode test !"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:130
 msgctxt "alert-messages"
@@ -29651,7 +29653,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:13
 msgid "We're now trying to book these add-ons for you!"
-msgstr "Nous essayons maintenant de réserver ces add-ons pour vous!"
+msgstr "Nous essayons maintenant de réserver ces add-ons pour vous !"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:20
 msgid "Add-ons:"
@@ -29892,7 +29894,7 @@ msgstr "Ce canal de vente ne prend pas en charge le mode test."
 msgid "If you continue, you might pay an actual order with non-existing money!"
 msgstr ""
 "Si vous continuez, vous pourriez payer une commande réelle avec de l’argent "
-"inexistant!"
+"inexistant !"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:100
 msgid "This payment provider does not provide support for test mode."
@@ -29966,7 +29968,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:17
 msgid "We apologize for the inconvenience!"
-msgstr "Nous nous excusons pour la gêne occasionnée!"
+msgstr "Nous nous excusons pour la gêne occasionnée !"
 
 #: pretix/presale/templates/pretixpresale/event/cookies.html:24
 msgid "Continue in new tab"
@@ -30299,7 +30301,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:301
 msgid "We're trying to reserve another one for you!"
-msgstr "Nous essayons d’en réserver un autre pour vous!"
+msgstr "Nous essayons d’en réserver un autre pour vous !"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:302
 #: pretix/presale/templates/pretixpresale/event/index.html:238
@@ -30810,13 +30812,13 @@ msgstr "Quand l’événement a-t-il lieu ?"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:33
 #, python-format
 msgid "Begin: %(time)s"
-msgstr "Début: %(time)s"
+msgstr "Début : %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:191
 #: pretix/presale/templates/pretixpresale/event/voucher.html:40
 #, python-format
 msgid "End: %(time)s"
-msgstr "Fin: %(time)s"
+msgstr "Fin : %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:203
 #: pretix/presale/templates/pretixpresale/event/voucher.html:50
@@ -30876,7 +30878,7 @@ msgid ""
 msgstr ""
 "Si vous souhaitez voir ou modifier le statut et les détails de votre "
 "commande, cliquez sur le lien dans l'un des emails que nous vous avons "
-"envoyés. Si vous ne trouvez pas le lien, cliquez sur le bouton ci-contre \n"
+"envoyés. Si vous ne trouvez pas le lien, cliquez sur le bouton ci-contre "
 "pour demander que le lien de votre commande vous soit à nouveau envoyé."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:321
@@ -30899,8 +30901,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 msgid "Your order has been processed successfully! See below for details."
 msgstr ""
-"Votre commande a été traitée avec succès! Les détails de votre commande sont "
-"repris ci-dessous."
+"Votre commande a été traitée avec succès ! Les détails de votre commande "
+"sont repris ci-dessous."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:50
@@ -31177,7 +31179,7 @@ msgstr "Demande d’annulation : %(code)s"
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:15
 #, python-format
 msgid "Cancel order: %(code)s"
-msgstr "Annuler la commande: %(code)s"
+msgstr "Annuler la commande : %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:38
 msgid ""
@@ -31265,7 +31267,7 @@ msgstr "Modifier l'ordre"
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:8
 #, python-format
 msgid "Modify order: %(code)s"
-msgstr "Modifier l'ordre: %(code)s"
+msgstr "Modifier l'ordre : %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:18
 msgid ""
@@ -31294,7 +31296,7 @@ msgid ""
 "Please note: If you change your payment method, your order total will change "
 "by the amount displayed to the right of each method."
 msgstr ""
-"Remarque: Si vous changez de mode de paiement, le montant total de votre "
+"Remarque : Si vous changez de mode de paiement, le montant total de votre "
 "commande changera en fonction du montant affiché à droite de chaque mode de "
 "paiement."
 
@@ -31311,7 +31313,7 @@ msgstr "Veuillez confirmer les détails de paiement suivants."
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:22
 #, python-format
 msgid "Total: %(total)s"
-msgstr "Total: %(total)s"
+msgstr "Total : %(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:7
 msgid "Registration details"
@@ -31438,7 +31440,7 @@ msgid ""
 "products at the specified price:"
 msgstr ""
 "Vous avez saisi un code promotionnel qui vous permet d'acheter l'un des "
-"produits suivants au prix indiqué:"
+"produits suivants au prix indiqué :"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:148
 #, python-format
@@ -31506,7 +31508,7 @@ msgstr ""
 "Vous avez été sélectionné sur notre liste d’attente pour acheter un billet. "
 "Si vous n’avez plus besoin du billet, soyez gentil et retirez votre billet "
 "de la liste afin que nous puissions le transmettre à la prochaine personne "
-"qui attend le plus rapidement possible!"
+"qui attend le plus rapidement possible !"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:16
 msgctxt "waitinglist"
@@ -31714,7 +31716,7 @@ msgstr "Supprimer l’adresse"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:12
 msgid "Do you really want to delete the following address from your account?"
-msgstr "Voulez-vous vraiment supprimer l’adresse suivante de votre compte?"
+msgstr "Voulez-vous vraiment supprimer l’adresse suivante de votre compte ?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:15
@@ -31800,7 +31802,7 @@ msgstr "Supprimer le profil"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:12
 msgid "Do you really want to delete the following profile from your account?"
-msgstr "Voulez-vous vraiment supprimer le profil suivant de votre compte?"
+msgstr "Voulez-vous vraiment supprimer le profil suivant de votre compte ?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
 msgid "Registration"
