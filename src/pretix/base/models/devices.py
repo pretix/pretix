@@ -143,6 +143,14 @@ class Device(LoggedModel):
         max_length=190,
         null=True, blank=True
     )
+    os_name = models.CharField(
+        max_length=190,
+        null=True, blank=True
+    )
+    os_version = models.CharField(
+        max_length=190,
+        null=True, blank=True
+    )
     software_brand = models.CharField(
         max_length=190,
         null=True, blank=True

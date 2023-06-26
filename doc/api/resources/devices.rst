@@ -24,6 +24,8 @@ all_events                            boolean                    Whether this de
 limit_events                          list                       List of event slugs this device has access to
 hardware_brand                        string                     Device hardware manufacturer (read-only)
 hardware_model                        string                     Device hardware model (read-only)
+os_name                               string                     Device operating system name (read-only)
+os_version                            string                     Device operating system version (read-only)
 software_brand                        string                     Device software product (read-only)
 software_version                      string                     Device software version (read-only)
 created                               datetime                   Creation time
@@ -76,6 +78,8 @@ Device endpoints
             "security_profile": "full",
             "hardware_brand": "Zebra",
             "hardware_model": "TC25",
+            "os_name": "Android",
+            "os_version": "8.1.0",
             "software_brand": "pretixSCAN",
             "software_version": "1.5.1"
           }
@@ -123,6 +127,8 @@ Device endpoints
         "security_profile": "full",
         "hardware_brand": "Zebra",
         "hardware_model": "TC25",
+        "os_name": "Android",
+         "os_version": "8.1.0",
         "software_brand": "pretixSCAN",
         "software_version": "1.5.1"
       }
@@ -173,6 +179,8 @@ Device endpoints
         "initialized": null
         "hardware_brand": null,
         "hardware_model": null,
+        "os_name": null,
+        "os_version": null,
         "software_brand": null,
         "software_version": null
       }

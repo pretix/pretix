@@ -35,6 +35,8 @@ def device(organizer, event):
         unique_serial="UOS3GNZ27O39V3QS",
         initialization_token="frkso3m2w58zuw70",
         hardware_model="TC25",
+        os_name="Android",
+        os_version="8.1.0",
         software_brand="pretixSCAN",
         software_version="1.5.1",
         initialized=now(),
@@ -58,6 +60,8 @@ TEST_DEV_RES = {
     "initialized": "2020-09-18T14:17:44.190021Z",
     "hardware_brand": "Zebra",
     "hardware_model": "TC25",
+    "os_name": "Android",
+    "os_version": "8.1.0",
     "software_brand": "pretixSCAN",
     "software_version": "1.5.1",
     "security_profile": "full"

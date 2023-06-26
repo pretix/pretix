@@ -142,6 +142,8 @@ def test_update_valid_fields(device_client, device: Device):
     resp = device_client.post('/api/v1/device/update', {
         'hardware_brand': 'Samsung',
         'hardware_model': 'Galaxy S',
+        'os_name': 'Android',
+        'os_version': '2.3.3',
         'software_brand': 'pretixdroid',
         'software_version': '5.0.0',
         'info': {
@@ -151,6 +153,7 @@ def test_update_valid_fields(device_client, device: Device):
     assert resp.status_code == 200
     device.refresh_from_db()
     assert device.software_version == '5.0.0'
+    assert device.os_version == '2.3.3'
     assert device.info == {'foo': 'bar'}
 
 
