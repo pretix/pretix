@@ -205,7 +205,7 @@ class Rule(models.Model, LoggingMixin):
 
     restrict_to_status = fields.MultiStringField(
         verbose_name=_("Restrict to orders with status"),
-        default=['p', 'na', 'valid_if_pending'],
+        default=['p', 'valid_if_pending'],
     )
 
     attach_ical = models.BooleanField(

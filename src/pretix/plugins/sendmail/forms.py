@@ -262,7 +262,7 @@ class OrderMailForm(BaseMailForm):
             choices=choices
         )
         if not self.initial.get('sendto'):
-            self.initial['sendto'] = ['p', 'na', 'valid_if_pending']
+            self.initial['sendto'] = ['p', 'valid_if_pending']
         elif 'n' in self.initial['sendto']:
             self.initial['sendto'].append('pa')
             self.initial['sendto'].append('na')
@@ -391,7 +391,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
             choices=choices
         )
         if not self.initial.get('restrict_to_status'):
-            self.initial['restrict_to_status'] = ['p', 'na', 'valid_if_pending']
+            self.initial['restrict_to_status'] = ['p', 'valid_if_pending']
 
     def clean(self):
         d = super().clean()
