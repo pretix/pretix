@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-05-23 23:00+0000\n"
-"Last-Translator: Michele Pagnozzi <michele.pagnozzi@gmail.com>\n"
+"PO-Revision-Date: 2023-06-26 23:00+0000\n"
+"Last-Translator: M C <micasadmail@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -41,7 +41,7 @@ msgstr "Cinese (semplificato)"
 
 #: pretix/_base_settings.py:83
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Cinese (tradizionale)"
 
 #: pretix/_base_settings.py:84
 msgid "Czech"
@@ -3428,7 +3428,7 @@ msgstr "Ragione sociale"
 #: pretix/base/models/orders.py:2939 pretix/base/settings.py:81
 #: pretix/plugins/stripe/payment.py:191
 msgid "Select country"
-msgstr ""
+msgstr "Seleziona paese"
 
 #: pretix/base/models/customers.py:370
 msgctxt "openidconnect"
@@ -11350,7 +11350,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1647
 msgid "Free"
-msgstr ""
+msgstr "Gratuito"
 
 #: pretix/control/forms/event.py:1652
 msgid "Quantity available"
@@ -27242,9 +27242,8 @@ msgid "Cart expired"
 msgstr "Carrello scaduto"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:37
-#, fuzzy
 msgid "Show full cart"
-msgstr "Mostra il valore a"
+msgstr "Mostra il carrello"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:49
 #: pretix/presale/templates/pretixpresale/event/index.html:78
@@ -27552,7 +27551,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:354
 msgctxt "price"
 msgid "free"
-msgstr ""
+msgstr "gratuito"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:77
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:51
@@ -27657,10 +27656,9 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:342
 #: pretix/presale/templates/pretixpresale/event/voucher.html:255
 #: pretix/presale/templates/pretixpresale/event/voucher.html:398
-#, fuzzy
 msgctxt "checkbox"
 msgid "Select"
-msgstr "Prevendita non ancora attiva"
+msgstr "Seleziona"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:195
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:329
@@ -28354,7 +28352,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/index.html:224
 #: pretix/presale/templates/pretixpresale/event/voucher.html:68
 msgid "Add to Calendar"
-msgstr ""
+msgstr "Aggiungi al calendario"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:237
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
