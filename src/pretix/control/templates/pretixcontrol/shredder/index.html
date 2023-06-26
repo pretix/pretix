@@ -42,7 +42,7 @@
         </div>
     {% else %}
         <form action="{% url "control:event.shredder.export" event=request.event.slug organizer=request.organizer.slug %}"
-                method="post" class="form-horizontal" data-asynctask>
+                method="post" class="form-horizontal" data-asynctask data-asynctask-long>
             <legend>{% trans "Data selection" %}</legend>
             {% csrf_token %}
             <div class="panel-group" id="payment_accordion">
