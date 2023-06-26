@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-26 10:47+0000\n"
+"PO-Revision-Date: 2023-06-26 11:23+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -15452,7 +15452,7 @@ msgstr "刪除簽到清單"
 #, python-format
 msgid ""
 "Are you sure you want to delete the check-in list <strong>%(name)s</strong>?"
-msgstr ""
+msgstr "是否確實要刪除簽到清單 <strong>%(name)s</strong>？"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:11
 #, python-format
@@ -16174,7 +16174,7 @@ msgstr "要確認你確實想要這項，請在此處輸入事件的短名稱%(s
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:36
 msgid "Your event can not be deleted as it already contains orders."
-msgstr ""
+msgstr "你的事件無法刪除，因為它已包含訂單。"
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:39
 #: pretix/control/templates/pretixcontrol/organizers/delete.html:39
@@ -16287,7 +16287,7 @@ msgstr "顯示超付的訂單"
 msgid ""
 "This event contains <strong>pending refunds</strong> that you should take "
 "care of."
-msgstr ""
+msgstr "此事件包含你應處理的<strong>待處理退款</strong>。"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:71
 msgid "Show pending refunds"
@@ -19164,7 +19164,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:20
 msgid "Do you really want to create a manual payment for this order?"
-msgstr ""
+msgstr "你真的要為此訂單建立人工付款嗎？"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:37
 msgid "Create payment"
@@ -19332,7 +19332,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:30
 msgid "Since the order is already canceled, this will not affect its state."
-msgstr ""
+msgstr "由於訂單已經取消，這不會影響其狀態。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:36
 msgid "What should happen to the ticket order?"
@@ -19677,7 +19677,7 @@ msgstr "將使用所有者的訪問使用權執行匯出，即如果擁有者失
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:129
 msgid "The owner will receive the result as well as any error messages."
-msgstr ""
+msgstr "擁有者將收到結果以及任何錯誤消息。"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:130
 msgid ""
@@ -19948,7 +19948,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:78
 msgid "This includes all paid orders by this customer across all your events."
-msgstr ""
+msgstr "這包括此客戶在你的所有活動中的所有付費訂單。"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:79
 msgid "Lifetime spending"
@@ -20502,7 +20502,7 @@ msgstr ""
 msgid ""
 "The list below shows all organizer accounts you have administrative access "
 "to."
-msgstr ""
+msgstr "下面的清單顯示了你具有管理訪問使用權的所有召集人帳戶。"
 
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:4
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:6
@@ -20531,7 +20531,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:11
 msgid "This membership type cannot be deleted since it has already been used."
-msgstr ""
+msgstr "無法刪除此成員身份類型，因為它已被使用。"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:6
 msgid "Membership type:"
@@ -20641,7 +20641,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:11
 msgid "This SSO client cannot be deleted since it has already been used."
-msgstr ""
+msgstr "無法刪除此 SSO 用戶端，因為它已被使用。"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:6
 msgid "SSO client:"
@@ -20670,7 +20670,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:11
 msgid "This SSO provider cannot be deleted since it has already been used."
-msgstr ""
+msgstr "無法刪除此 SSO 提供程式，因為它已被使用。"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:6
 msgid "SSO provider:"
@@ -20719,7 +20719,7 @@ msgstr "建立新團隊"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:10
 msgid "You will be able to add team members in the next step."
-msgstr ""
+msgstr "你將能夠在下一步中添加團隊成員。"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:23
 msgid "Organizer permissions"
@@ -20847,7 +20847,7 @@ msgstr "回應正文"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:93
 msgid "This webhook did not receive any events in the last 30 days."
-msgstr ""
+msgstr "此 Webhook 在過去 30 天內未收到任何事件。"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:9
 msgid ""
@@ -21554,7 +21554,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:39
 msgid "Add a new account to the app by scanning the following barcode:"
-msgstr ""
+msgstr "透過掃描以下條碼向應用程式添加新帳戶："
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:43
 msgid "Can't scan the barcode?"
@@ -21704,7 +21704,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:63
 msgid "To enable it, you need to configure at least one device below."
-msgstr ""
+msgstr "要啟用它，你需要在下面配置至少一項設備。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:70
 msgid "Registered devices"
@@ -22604,7 +22604,7 @@ msgstr "其他"
 #: pretix/control/views/event.py:476
 msgid ""
 "This payment provider does not exist or the respective plugin is disabled."
-msgstr ""
+msgstr "此支付供應商不存在或相應的外掛程式被禁用。"
 
 #: pretix/control/views/event.py:735 pretix/control/views/event.py:740
 #: pretix/control/views/organizer.py:327 pretix/control/views/vouchers.py:538
@@ -22638,7 +22638,7 @@ msgstr ""
 
 #: pretix/control/views/event.py:977
 msgid "We've taken your shop down. You can re-enable it whenever you want!"
-msgstr ""
+msgstr "我們已經撤下了你的商店。你可以隨時重新啟用它！"
 
 #: pretix/control/views/event.py:985
 msgid "Your shop is now in test mode!"
@@ -22673,7 +22673,7 @@ msgstr "無法刪除該事件，因為某些限制（例如外掛程式建立的
 msgid ""
 "Specifically, the following plugins still contain data depends on this "
 "event: {plugin_names}"
-msgstr ""
+msgstr "具體來說，以下外掛程式仍然包含依賴於此事件的數據：{plugin_names}"
 
 #: pretix/control/views/event.py:1147 pretix/control/views/orders.py:549
 msgid "The comment has been updated."
@@ -22705,7 +22705,7 @@ msgstr ""
 
 #: pretix/control/views/event.py:1360
 msgid "Your event is not empty, you need to set it up manually."
-msgstr ""
+msgstr "你的事件不是空的，你需要手動設定它。"
 
 #: pretix/control/views/event.py:1495
 msgid ""
@@ -23041,7 +23041,7 @@ msgstr ""
 
 #: pretix/control/views/orderimport.py:152
 msgid "We've been unable to parse the uploaded file as a CSV file."
-msgstr ""
+msgstr "我們無法將上傳的檔解析為 CSV 檔。"
 
 #: pretix/control/views/orders.py:330
 msgid "Your invoice"
@@ -23234,7 +23234,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:1117
 msgid "The refunds you selected do not match the selected total refund amount."
-msgstr ""
+msgstr "你選擇的退款與所選的總退款金額不符合。"
 
 #: pretix/control/views/orders.py:1276
 msgid ""
@@ -23262,7 +23262,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:1374
 msgid "VAT ID could not be checked since this country is not supported."
-msgstr ""
+msgstr "無法檢查增值稅號，因為不支援此國家/地區。"
 
 #: pretix/control/views/orders.py:1385
 msgid ""
@@ -23392,7 +23392,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:2366 pretix/control/views/organizer.py:1760
 msgid "There was a problem processing your input. See below for error details."
-msgstr ""
+msgstr "處理你的輸入時出現問題。有關錯誤詳細資訊，請參閱下文。"
 
 #: pretix/control/views/orders.py:2401 pretix/control/views/organizer.py:1803
 #, python-brace-format
@@ -23403,7 +23403,7 @@ msgstr "你的匯出計劃已儲存。下一次匯出將在{datetime}左右開�
 
 #: pretix/control/views/orders.py:2406 pretix/control/views/organizer.py:1808
 msgid "Your export schedule has been saved, but no next export is planned."
-msgstr ""
+msgstr "你的匯出計劃已保存，但沒有計劃下一次匯出。"
 
 #: pretix/control/views/orders.py:2445 pretix/control/views/organizer.py:1848
 #, python-brace-format
@@ -23478,7 +23478,7 @@ msgstr "系統管理員"
 
 #: pretix/control/views/organizer.py:601
 msgid "The team has been created. You can now add members to the team."
-msgstr ""
+msgstr "團隊已建立。你現在可以向團隊添加成員。"
 
 #: pretix/control/views/organizer.py:612 pretix/control/views/organizer.py:647
 #: pretix/control/views/organizer.py:872 pretix/control/views/organizer.py:956
@@ -23544,7 +23544,7 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:831
 msgid "Users need to have a pretix account before they can be invited."
-msgstr ""
+msgstr "使用者需要有一個pretix帳戶才能被邀請。"
 
 #: pretix/control/views/organizer.py:841
 msgid "The new member has been invited to the team."
@@ -23672,7 +23672,7 @@ msgstr "你的更改已保存。請注意以下用戶端密鑰，它永遠不會
 msgid ""
 "We've sent the customer an email with further instructions on resetting your "
 "password."
-msgstr ""
+msgstr "我們已向客戶發送了一封電子郵件，其中包含有關重設密碼的進一步說明。"
 
 #: pretix/control/views/organizer.py:2816
 msgid "The customer account has been anonymized."
@@ -23707,7 +23707,7 @@ msgstr ""
 #: pretix/control/views/subevents.py:169 pretix/control/views/subevents.py:180
 msgctxt "subevent"
 msgid "A date can not be deleted if orders already have been placed."
-msgstr ""
+msgstr "如果已經下了訂單，則無法刪除日期。"
 
 #: pretix/control/views/subevents.py:188
 msgctxt "subevent"
@@ -23864,7 +23864,7 @@ msgstr ""
 
 #: pretix/control/views/vouchers.py:242 pretix/control/views/vouchers.py:252
 msgid "A voucher can not be deleted if it already has been redeemed."
-msgstr ""
+msgstr "如果優惠券已兌換，則無法刪除。"
 
 #: pretix/control/views/vouchers.py:258
 msgid "The selected voucher has been deleted."
@@ -23899,7 +23899,7 @@ msgstr ""
 #: pretix/control/views/waitinglist.py:178
 msgid ""
 "An email containing a voucher code has been sent to the specified address."
-msgstr ""
+msgstr "包含優惠券代碼的電子郵件已發送到指定位址。"
 
 #: pretix/control/views/waitinglist.py:182
 #: pretix/control/views/waitinglist.py:195
@@ -23913,7 +23913,7 @@ msgstr ""
 
 #: pretix/control/views/waitinglist.py:205
 msgid "The waiting list entry has been moved to the end of the list."
-msgstr ""
+msgstr "候補名單條目已移至清單末尾。"
 
 #: pretix/control/views/waitinglist.py:295
 msgid "On list since"
@@ -24546,19 +24546,19 @@ msgstr "在活動的付款設定中，你可以將 %(date)s "
 msgid ""
 "This page allows you to upload bank statement files to process incoming "
 "payments."
-msgstr ""
+msgstr "此頁面允許你上傳銀行對帳單檔，以處理收款。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:22
 msgid ""
 "Currently, this feature supports <code>.csv</code> files and files in the "
 "MT940 format."
-msgstr ""
+msgstr "目前，此功能支援<code>.csv</code>檔和 MT940 格式的檔。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:29
 #: pretix/plugins/banktransfer/views.py:555
 msgid ""
 "An import is currently being processed, please try again in a few minutes."
-msgstr ""
+msgstr "當前正在處理導入，請在幾分鐘後重試。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:51
 msgid "Start upload"
@@ -24621,7 +24621,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:23
 msgid ""
 "Your import did not contain any transactions that you did not import before."
-msgstr ""
+msgstr "你的導入不包含你之前未匯入的任何交易記錄。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/job_detail.html:30
 msgid "Orders marked as paid"
@@ -24666,7 +24666,7 @@ msgstr ""
 msgid ""
 "Scan this image with your banking app’s QR-Reader to start the payment "
 "process."
-msgstr ""
+msgstr "使用銀行應用程式的QR閱讀器掃描此圖像以開始付款流程。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:93
 msgid "Open BezahlCode in your banking app to start the payment process."
@@ -24768,7 +24768,7 @@ msgstr[0] ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
 "Please state from which bank account the refunds should be transferred from."
-msgstr ""
+msgstr "請說明退款應從哪個銀行賬戶轉帳。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:34
 msgid "Download"
@@ -24824,7 +24824,7 @@ msgstr "丟棄"
 msgid ""
 "Negative amount but refund can't be logged, please create manual refund "
 "first."
-msgstr ""
+msgstr "負金額但無法記錄退款，請先建立手動退款。"
 
 #: pretix/plugins/banktransfer/views.py:166
 msgid "Problem sending email."
@@ -24956,7 +24956,7 @@ msgstr "已付款"
 msgid ""
 "Download a spreadsheet with all attendees that are included in a check-in "
 "list."
-msgstr ""
+msgstr "下載包含簽到清單中包含的所有出席者的電子活頁表格。"
 
 #: pretix/plugins/checkinlists/exporters.py:454
 msgid "Checked out"
@@ -25053,7 +25053,7 @@ msgstr ""
 #: pretix/plugins/paypal/payment.py:117 pretix/plugins/paypal2/payment.py:110
 #: pretix/plugins/stripe/payment.py:198
 msgid "Click here for a tutorial on how to obtain the required keys"
-msgstr ""
+msgstr "按兩下此處獲取有關如何獲取所需金鑰的教程"
 
 #: pretix/plugins/paypal/payment.py:129 pretix/plugins/paypal2/payment.py:122
 #: pretix/plugins/stripe/payment.py:177
@@ -25192,7 +25192,7 @@ msgstr ""
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
-msgstr ""
+msgstr "輸入付款數據的視窗未打開或已關閉？"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:25
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25
@@ -25312,7 +25312,7 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:273
 msgid ""
 "Please check this PayPal page for a complete list of supported currencies."
-msgstr ""
+msgstr "請查看此PayPal頁面，瞭解支持的貨幣的完整清單。"
 
 #: pretix/plugins/paypal2/payment.py:278
 msgid ""
@@ -25419,7 +25419,7 @@ msgstr ""
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:12
 msgid "Please click on the \"Pay now\" button below to confirm your payment."
-msgstr ""
+msgstr "請點擊下面的「立即付款」按鈕以確認你的付款。"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:15
 msgid "We will then charge your PayPal account and finalize the order."
@@ -25434,7 +25434,7 @@ msgstr "下訂單後，你將能夠選擇所需的付款方式，包括PayPal。
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:5
 msgid ""
 "Please click the \"Pay with PayPal\" button below to start your payment."
-msgstr ""
+msgstr "請點擊下面的“PayPal付款”按鈕開始付款。"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:9
 msgid ""
@@ -25489,19 +25489,19 @@ msgstr ""
 msgid ""
 "An error occurred returning from PayPal: request parameters missing. Please "
 "try again."
-msgstr ""
+msgstr "從 PayPal 傳回時出錯：缺少請求參數。請重試。"
 
 #: pretix/plugins/paypal2/views.py:251
 msgid ""
 "An error occurred returning from PayPal: result parameters missing. Please "
 "try again."
-msgstr ""
+msgstr "從PayPal返回時出錯：缺少結果參數。請重試。"
 
 #: pretix/plugins/paypal2/views.py:256
 msgid ""
 "An error occurred returning from PayPal: session parameter not matching. "
 "Please try again."
-msgstr ""
+msgstr "從 PayPal 返回時出錯：會話參數不符合。請重試。"
 
 #: pretix/plugins/paypal2/views.py:261
 msgid ""
@@ -25617,7 +25617,7 @@ msgstr ""
 
 #: pretix/plugins/reports/exporters.py:246
 msgid "Download a PDF version of the key sales numbers per ticket type."
-msgstr ""
+msgstr "下載每種票證類型的主要銷售數位的 PDF 版本。"
 
 #: pretix/plugins/reports/exporters.py:274
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:58
@@ -25652,7 +25652,7 @@ msgstr ""
 
 #: pretix/plugins/reports/exporters.py:452
 msgid "Download a PDF list with the tax amounts included in each order."
-msgstr ""
+msgstr "下載包含每項訂單中包含的稅額的 PDF 清單。"
 
 #: pretix/plugins/reports/exporters.py:529
 #, python-brace-format
@@ -25722,11 +25722,11 @@ msgstr ""
 
 #: pretix/plugins/returnurl/views.py:36
 msgid "Redirection will only be allowed to URLs that start with this prefix."
-msgstr ""
+msgstr "僅允許重定向到以此前綴開頭的URL。"
 
 #: pretix/plugins/sendmail/apps.py:38
 msgid "Send out emails to all your customers or specific groups of customers."
-msgstr ""
+msgstr "向所有客戶或特定客戶組發送電子郵件。"
 
 #: pretix/plugins/sendmail/forms.py:77
 msgid "Attachment"
