@@ -21,10 +21,11 @@ limit_products                        list of integers           List of product
 [**DEPRECATED**] include_pending      boolean                    If ``true``, the email is sent to pending orders. If ``false``,
                                                                  only paid orders are considered.
 restrict_to_status                    list                       List of order states to restrict recipients to. Valid
-                                                                 entries are ``p, e, c, pa, na, valid_if_pending`` for
-                                                                 the order states paid, expired, canceled, approval pending,
-                                                                 payment pending, and payment pending but already confirmed.
-                                                                 The default is ``["p", "na", "valid_if_pending"]``.
+                                                                 entries are ``p`` for paid, ``e`` for expired, ``c`` for canceled,
+                                                                 ``pa`` for pending approval, ``na`` for payment pending,
+                                                                 ``valid_if_pending`` for payment pending but already confirmed,
+                                                                 and ``overdue`` for pending with payment overdue.
+                                                                 The default is ``["p", "valid_if_pending"]``.
 date_is_absolute                      boolean                    If ``true``, the email is set at a specific point in time.
 send_date                             datetime                   If ``date_is_absolute`` is set: Date and time to send the email.
 send_offset_days                      integer                    If ``date_is_absolute`` is not set, this is the number of days
@@ -42,7 +43,10 @@ send_to                               string                     Can be ``"order
                                                                  or ``"both"``.
                                                                  date. Otherwise it is relative to the event start date.
 ===================================== ========================== =======================================================
+.. versionchanged:: 5.0
 
+    The ``include_pending`` field has been  deprecated.
+    The ``restrict_to_status`` field has been added.
 
 Endpoints
 ---------
