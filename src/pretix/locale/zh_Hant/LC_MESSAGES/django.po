@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-26 10:38+0000\n"
+"PO-Revision-Date: 2023-06-26 10:47+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -16241,7 +16241,7 @@ msgstr "按 <em>%(a)s</em>"
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:14
 msgid ""
 "This plugin needs to be enabled by a system administrator for your account."
-msgstr ""
+msgstr "此外掛程式需要由系統管理員為你的帳戶啟用。"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_plugin_description.html:19
 msgid "This plugin cannot be enabled for the following reasons:"
@@ -16396,7 +16396,7 @@ msgstr "你的售票處目前尚未上線。因此，售票處只對你和你的
 #: pretix/control/templates/pretixcontrol/event/live.html:41
 msgid ""
 "To publish your ticket shop, you first need to resolve the following issues:"
-msgstr ""
+msgstr "要發佈你的售票商店，你首先需要解決以下問題："
 
 #: pretix/control/templates/pretixcontrol/event/live.html:51
 #: pretix/control/templates/pretixcontrol/event/live.html:65
@@ -19173,7 +19173,7 @@ msgstr "建立支付"
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:10
 msgid ""
 "Do you really want to cancel this payment? You cannot revert this action."
-msgstr ""
+msgstr "你真的要取消此付款嗎？你無法還原此操作。"
 
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:25
 msgid "Yes, cancel payment"
@@ -19211,7 +19211,7 @@ msgstr "取消退款"
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:10
 msgid ""
 "Do you really want to cancel this refund? You cannot revert this action."
-msgstr ""
+msgstr "你真的要取消此退款嗎？你無法還原此操作。"
 
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:14
 msgid ""
@@ -19643,7 +19643,7 @@ msgstr "永遠"
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:110
 msgid ""
 "Every time your schedule is executed, the report will be sent via email."
-msgstr ""
+msgstr "每次執行你的計劃時，報告都會通過電子郵件發送。"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:111
 msgid "Please note the following limitations:"
@@ -19999,7 +19999,7 @@ msgstr ""
 msgid ""
 "The orders themselves will not be anonymized and can still contain personal "
 "information!"
-msgstr ""
+msgstr "訂單本身不會匿名，仍然可以包含個人資訊！"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:26
 msgid ""
@@ -20309,7 +20309,7 @@ msgstr ""
 msgid ""
 "This subsequent reuse of the barcode is currently only supported during POS "
 "sales."
-msgstr ""
+msgstr "條碼的後續重用目前僅在 POS 銷售期間受支援。"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:241
 msgid ""
@@ -20353,7 +20353,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:7
 msgid "The list below shows gates that you can use to group check-in devices."
-msgstr ""
+msgstr "下面的清單顯示了可用於對簽入設備進行分組的入口。"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:7
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_edit.html:6
@@ -20406,7 +20406,7 @@ msgstr "禮品卡貨幣"
 msgid ""
 "This feature allows you to configure acceptance of gift cards across "
 "multiple organizer accounts."
-msgstr ""
+msgstr "此功能允許你設定跨多個召集人帳戶接受禮品卡。"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:18
 msgid "Other organizers you accept gift cards from"
@@ -20799,14 +20799,15 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:7
 msgid "This page shows all calls to your webhook in the past 30 days."
-msgstr ""
+msgstr "此頁面顯示過去 30 天內對 Webhook 的所有調用。"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:14
 #, python-format
 msgid "One webhook is scheduled to be retried."
 msgid_plural "%(count)s webhooks are scheduled to be retried."
 msgstr[0] ""
-msgstr[1] ""
+"計劃重試一項網路鉤子。\n"
+"%(count)s網路鉤子計劃重試。"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:22
 msgid "Retry now"
@@ -20852,7 +20853,7 @@ msgstr ""
 msgid ""
 "This menu allows you to create webhooks to connect pretix to other online "
 "services."
-msgstr ""
+msgstr "此功能表允許你建立網路鉤子以將pretix連接到其他在線服務。"
 
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:13
 msgid "Read documentation"
@@ -20970,7 +20971,7 @@ msgstr ""
 msgid ""
 "The editor requires JavaScript to work. Please enable JavaScript in your "
 "browser to continue."
-msgstr ""
+msgstr "編輯器需要 JavaScript 才能工作。請在瀏覽器中啟用 JavaScript 以繼續。"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:141
 #: pretix/control/templates/pretixcontrol/pdf/index.html:173
@@ -21632,7 +21633,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:13
 msgid "You will no longer require a second device to log in to your account."
-msgstr ""
+msgstr "你將不再需要第二台設備登錄你的帳戶。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:6
@@ -21813,7 +21814,7 @@ msgstr "禁止通知"
 msgid ""
 "We just want to make sure it's really you. Please re-authenticate with "
 "'%(login_provider)s'."
-msgstr ""
+msgstr "我們只是想確保它真的是你。請使用%(login_provider)s重新進行身份驗證。"
 
 #: pretix/control/templates/pretixcontrol/user/reauth.html:14
 msgid ""
@@ -22026,7 +22027,7 @@ msgstr "刪除購物車"
 msgid ""
 "Are you sure you want to delete any cart positions with voucher "
 "<strong>%(voucher)s</strong>?"
-msgstr ""
+msgstr "是否確實要刪除憑證 <strong>%(voucher)s的任何</strong>購物車位置？"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:10
 msgid ""
@@ -22039,7 +22040,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:11
 msgid "This voucher already has been used. It is not recommended to modify it."
-msgstr ""
+msgstr "此優惠券已被使用。不建議修改它。"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:15
 #, python-format
@@ -22146,7 +22147,7 @@ msgstr "刪除條目"
 msgid ""
 "Are you sure you want to delete the following waiting list entry "
 "<strong>%(entry)s</strong>?"
-msgstr ""
+msgstr "是否確實要刪除以下候補名單條目 <strong>%(entry)s</strong>？"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:6
@@ -22161,7 +22162,7 @@ msgstr ""
 msgid ""
 "The following entries can't be deleted as they already have a voucher "
 "attached."
-msgstr ""
+msgstr "以下條目無法刪除，因為它們已附加憑證。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:11
 msgid ""
@@ -22376,7 +22377,7 @@ msgstr ""
 
 #: pretix/control/views/auth.py:321
 msgid "We were unable to find the user you requested a new password for."
-msgstr ""
+msgstr "我們無法找到你為其請求新密碼的使用者。"
 
 #: pretix/control/views/auth.py:354
 msgid "You can now login using your new password."
@@ -22756,7 +22757,7 @@ msgstr "如果你在 AGPL 許可下使用 pretix，則需要提供有關如何�
 msgid ""
 "You must not use pretix under AGPL terms if you use pretix Enterprise "
 "plugins."
-msgstr ""
+msgstr "如果你使用 pretix 企業外掛程式，則不得在 AGPL 條款下使用 pretix。"
 
 #: pretix/control/views/global_settings.py:220
 msgid ""
@@ -23138,7 +23139,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:772
 msgid "The request has been removed. If you want, you can now inform the user."
-msgstr ""
+msgstr "該請求已被刪除。如果需要，現在可以通知使用者。"
 
 #: pretix/control/views/orders.py:779
 msgid "Your cancellation request"
@@ -23184,7 +23185,7 @@ msgstr "你不能退還超過尚未退還的付款金額。"
 msgid ""
 "You selected a partial refund for a payment method that only supports full "
 "refunds."
-msgstr ""
+msgstr "你為僅支援全額退款的付款方式選擇了部分退款。"
 
 #: pretix/control/views/orders.py:1057
 msgid ""
@@ -23398,7 +23399,7 @@ msgstr ""
 msgid ""
 "Your export schedule has been saved. The next export will start around "
 "{datetime}."
-msgstr ""
+msgstr "你的匯出計劃已儲存。下一次匯出將在{datetime}左右開始。"
 
 #: pretix/control/views/orders.py:2406 pretix/control/views/organizer.py:1808
 msgid "Your export schedule has been saved, but no next export is planned."
@@ -23416,6 +23417,9 @@ msgid ""
 "\n"
 "attached to this email, you can find a new scheduled report for {name}."
 msgstr ""
+"你好\n"
+"\n"
+"附加到此電子郵件後，你可以找到 {name} 的新計劃報告。"
 
 #: pretix/control/views/orders.py:2514 pretix/control/views/organizer.py:1918
 msgid ""
@@ -23462,7 +23466,7 @@ msgstr "無法刪除管理器，因為某些限制（例如外掛程式建立的
 msgid ""
 "The following database models still contain data that cannot be deleted "
 "automatically: {affected_models}"
-msgstr ""
+msgstr "以下資料庫模型仍包含無法自動刪除的數據：{affected_models}"
 
 #: pretix/control/views/organizer.py:536
 msgid "The new organizer has been created."
@@ -24517,7 +24521,7 @@ msgstr "我們無法自動確定檔中各列的對齊方式。請幫助我們選
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:95
 msgid ""
 "More data was uploaded but is not shown here. It will still be processed"
-msgstr ""
+msgstr "更多數據已上傳，但此處未顯示。它仍將被處理"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:9
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:9
@@ -24689,7 +24693,7 @@ msgstr ""
 msgid ""
 "If you want, you can now also create these exports for multiple events "
 "combined."
-msgstr ""
+msgstr "如果需要，你現在還可以為多項事件的組合建立這些導出。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:22
 msgid "Go to organizer-level exports"
@@ -24875,7 +24879,7 @@ msgstr "很抱歉，我們無法匯入此 CSV 檔。請聯繫客服人員尋求�
 msgid ""
 "I'm sorry, but we detected this file as empty. Please contact support for "
 "help."
-msgstr ""
+msgstr "很抱歉，我們檢測到此檔為空。請聯絡客服人員尋求説明。"
 
 #: pretix/plugins/banktransfer/views.py:479
 msgid "Invalid input data."
@@ -25520,7 +25524,7 @@ msgstr ""
 msgid ""
 "This plugin allows you to use the pretixdroid and pretixdesk apps for your "
 "event."
-msgstr ""
+msgstr "此外掛程式允許你在活動中使用 pretixdroid 和 pretixdesk 應用程式。"
 
 #: pretix/plugins/reports/accountingreport.py:58
 msgid "Accounting report"
@@ -25916,7 +25920,8 @@ msgstr "在{date}在{time}"
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
 msgstr[0] ""
-msgstr[1] ""
+"%(count)d事件在 %(time)s結束後的一天\n"
+"%(count)d 天後事件在 %(time)s結束"
 
 #: pretix/plugins/sendmail/models.py:291
 #, python-format
