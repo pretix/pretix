@@ -372,6 +372,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.comment': _('The event\'s internal comment has been updated.'),
         'pretix.event.canceled': _('The event has been canceled.'),
         'pretix.event.deleted': _('An event has been deleted.'),
+        'pretix.event.shredder.started': _('A removal process for personal data has been started.'),
+        'pretix.event.shredder.completed': _('A removal process for personal data has been completed.'),
         'pretix.event.order.modified': _('The order details have been changed.'),
         'pretix.event.order.unpaid': _('The order has been marked as unpaid.'),
         'pretix.event.order.secret.changed': _('The order\'s secret has been changed.'),
