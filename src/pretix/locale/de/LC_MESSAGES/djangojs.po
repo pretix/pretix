@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-02-09 13:56+0000\n"
+"PO-Revision-Date: 2023-06-27 13:57+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -490,7 +490,7 @@ msgstr "Minuten"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:128
 msgid "Duplicate"
-msgstr ""
+msgstr "Duplizieren"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:72
 msgid "Check-in QR"
@@ -683,37 +683,34 @@ msgstr "Deine lokale Zeit:"
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Quantity"
-msgstr ""
+msgstr "Menge"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Decrease quantity"
-msgstr ""
+msgstr "Menge reduzieren"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Increase quantity"
-msgstr ""
+msgstr "Menge erhöhen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
 msgctxt "widget"
 msgid "Price"
-msgstr ""
+msgstr "Preis"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
-#, fuzzy, javascript-format
-#| msgid "Selected only"
+#, javascript-format
 msgctxt "widget"
 msgid "Select %s"
-msgstr "Nur ausgewählte"
+msgstr "%s auswählen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
-#, fuzzy, javascript-format
-#| msgctxt "widget"
-#| msgid "See variations"
+#, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
-msgstr "Varianten zeigen"
+msgstr "Variante %s auswählen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
@@ -917,6 +914,9 @@ msgid ""
 "add yourself to the waiting list. We will then notify if seats are available "
 "again."
 msgstr ""
+"Manche oder alle Ticketkategorien sind derzeit ausverkauft. Wenn Sie "
+"möchten, können Sie sich in die Warteliste eintragen. Wir benachrichtigen "
+"Sie dann, wenn die gewünschten Plätze wieder verfügbar sind."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:63
 msgctxt "widget"
