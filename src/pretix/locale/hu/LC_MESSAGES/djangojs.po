@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-16 14:35+0000\n"
+"POT-Creation-Date: 2023-06-27 12:51+0000\n"
 "PO-Revision-Date: 2020-01-24 08:00+0000\n"
 "Last-Translator: Prokaj Miklós <mixolid0@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -334,8 +334,8 @@ msgstr ""
 msgid "close"
 msgstr "Bezárás"
 
-#: pretix/static/pretixbase/js/asynctask.js:43
-#: pretix/static/pretixbase/js/asynctask.js:120
+#: pretix/static/pretixbase/js/asynctask.js:58
+#: pretix/static/pretixbase/js/asynctask.js:135
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. "
@@ -347,8 +347,8 @@ msgstr ""
 "A kérés várólistára került a kiszolgálón, és hamarosan feldolgozásra kerül. "
 "Az esemény méretétől függően ez akár néhány percet is igénybe vehet."
 
-#: pretix/static/pretixbase/js/asynctask.js:48
-#: pretix/static/pretixbase/js/asynctask.js:125
+#: pretix/static/pretixbase/js/asynctask.js:63
+#: pretix/static/pretixbase/js/asynctask.js:140
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. "
@@ -358,8 +358,8 @@ msgstr ""
 "A kérés várólistára került a kiszolgálón, és hamarosan feldolgozásra kerül. "
 "Az esemény méretétől függően ez akár néhány percet is igénybe vehet."
 
-#: pretix/static/pretixbase/js/asynctask.js:54
-#: pretix/static/pretixbase/js/asynctask.js:131
+#: pretix/static/pretixbase/js/asynctask.js:69
+#: pretix/static/pretixbase/js/asynctask.js:146
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -369,14 +369,14 @@ msgstr ""
 "folyamat két percnél hosszabb ideg tart, kérjük vegye fel velünk a "
 "kapcsolatot, vagy lépjen vissza a böngészőjében és próbálja újra."
 
-#: pretix/static/pretixbase/js/asynctask.js:90
-#: pretix/static/pretixbase/js/asynctask.js:178
-#: pretix/static/pretixbase/js/asynctask.js:183
+#: pretix/static/pretixbase/js/asynctask.js:105
+#: pretix/static/pretixbase/js/asynctask.js:193
+#: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "{code} típusú hiba jelentkezett."
 
-#: pretix/static/pretixbase/js/asynctask.js:93
+#: pretix/static/pretixbase/js/asynctask.js:108
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -384,23 +384,23 @@ msgstr ""
 "Jelen pillanatban a kiszolgáló nem elérhető, de továbbra is próbálkozunk. "
 "Utolsó hibakód: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:145
+#: pretix/static/pretixbase/js/asynctask.js:160
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
 msgstr "A kérés időtúllépés miatt leállt. Kérjük próbálja újra."
 
-#: pretix/static/pretixbase/js/asynctask.js:186
+#: pretix/static/pretixbase/js/asynctask.js:201
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "Jelen pillanatban a kiszolgáló nem elérhető. Próbálja újra. Hibakód: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:215
+#: pretix/static/pretixbase/js/asynctask.js:230
 msgid "We are processing your request …"
 msgstr "A kérés feldolgozása folyamatban…"
 
-#: pretix/static/pretixbase/js/asynctask.js:223
+#: pretix/static/pretixbase/js/asynctask.js:238
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -410,7 +410,7 @@ msgstr ""
 "hosszabb időt vesz igénybe, kérjük ellenőrizze az internetkapcsolatát, "
 "frissítse az oldalt és próbálkozzon újra."
 
-#: pretix/static/pretixbase/js/asynctask.js:285
+#: pretix/static/pretixbase/js/asynctask.js:301
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Üzenet bezárása"
