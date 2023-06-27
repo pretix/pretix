@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-27 07:11+0000\n"
+"PO-Revision-Date: 2023-06-27 07:40+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
@@ -22103,7 +22103,7 @@ msgstr "過期"
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:170
 #, python-format
 msgid "Any product in quota \"%(quota)s\""
-msgstr "額度“%（%(quota)s）s”中的任何產品"
+msgstr "額度“%(quota)s”中的任何產品"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:186
 msgid "Use as a template for new vouchers"
