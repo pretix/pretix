@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-26 23:00+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"PO-Revision-Date: 2023-06-27 07:11+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -15327,7 +15327,7 @@ msgstr "自動標記為不存在：%(date)s"
 #: pretix/control/templates/pretixcontrol/order/index.html:389
 #, python-format
 msgid "Additional entry scan: %(date)s"
-msgstr "其他條目掃描： %（日期）s"
+msgstr "其他條目掃描： %(date)s"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:85
 #, python-format
@@ -17104,12 +17104,12 @@ msgstr "率"
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:41
 #, python-format
 msgid "incl. %(rate)s %%"
-msgstr "包括 %%稅"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:43
 #, python-format
 msgid "excl. %(rate)s %%"
-msgstr "不包括 %%稅"
+msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:13
@@ -21317,7 +21317,7 @@ msgstr "重複規則"
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:192
 #, python-format
 msgid "Repeat every %(interval)s %(freq)s, starting at %(start)s."
-msgstr "重複每個 %(interval)s%%(freq)s從 %(start)s開始。"
+msgstr "重複每個 %(interval)s %(freq)s從 %(start)s開始。"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:258
 msgctxt "subevent"
@@ -24690,7 +24690,7 @@ msgstr "出口銀行轉帳退款"
 msgid ""
 "<strong>%(num_new)s</strong> Bank transfer refunds have been placed and are "
 "not yet part of an export."
-msgstr "<strong%(num_new)s</strong>銀行轉帳退款已下達，但尚未成為匯出的一部分。"
+msgstr "<strong>%(num_new)s</strong>銀行轉帳退款已下達，但尚未成為匯出的一部分。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:15
 msgid "In test mode, your exports will only contain test mode orders."
@@ -24770,9 +24770,7 @@ msgid ""
 msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
-msgstr[0] ""
-"你正在嘗試從%(date)s 下載退款匯出，其中包含一個訂單和總計%(sum)s。\n"
-"你正在嘗試從%(date)s 下載退款匯出，其中包含%(cnt)s的訂單和總計%(sum)s"
+msgstr[0] "你正在嘗試從%(date)s 下載退款匯出，其中包含%(cnt)s的訂單和總計%(sum)s"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
