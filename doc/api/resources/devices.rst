@@ -128,7 +128,7 @@ Device endpoints
         "hardware_brand": "Zebra",
         "hardware_model": "TC25",
         "os_name": "Android",
-         "os_version": "8.1.0",
+        "os_version": "8.1.0",
         "software_brand": "pretixSCAN",
         "software_version": "1.5.1"
       }
