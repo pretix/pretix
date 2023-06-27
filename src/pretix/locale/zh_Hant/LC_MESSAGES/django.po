@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-06-27 07:40+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2023-06-28 06:00+0000\n"
+"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -522,24 +522,20 @@ msgid "Test-Mode of shop has been deactivated"
 msgstr "商店的測試模式已啟動"
 
 #: pretix/api/webhooks.py:339
-#, fuzzy
 msgid "Waiting list entry added"
-msgstr "候補名單條目"
+msgstr "候補名單條目已添加"
 
 #: pretix/api/webhooks.py:343
-#, fuzzy
 msgid "Waiting list entry changed"
-msgstr "候補名單條目"
+msgstr "候補名單條目已更改"
 
 #: pretix/api/webhooks.py:347
-#, fuzzy
 msgid "Waiting list entry deleted"
-msgstr "候補名單條目"
+msgstr "候補名單條目已刪除"
 
 #: pretix/api/webhooks.py:351
-#, fuzzy
 msgid "Waiting list entry received voucher"
-msgstr "候補名單條目"
+msgstr "候補名單條目收到憑證"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:938
@@ -5347,9 +5343,8 @@ msgid "Seat {number}"
 msgstr "座位 {number}"
 
 #: pretix/base/models/tax.py:157
-#, fuzzy
 msgid "Your set of rules is not valid. Error message: {}"
-msgstr "你的樣式檔案並非有效樣式。錯誤訊息：{}"
+msgstr "你的條例規則並非有效。錯誤訊息：{}"
 
 #: pretix/base/models/tax.py:168 pretix/base/models/tax.py:146
 msgid "Official name"
@@ -7642,9 +7637,8 @@ msgid "Something happened in your event after the export, please try again."
 msgstr "匯出後你的活動中發生一些事情，請重試。"
 
 #: pretix/base/services/shredder.py:177
-#, fuzzy
 msgid "Data shredding completed"
-msgstr "完成抓取。"
+msgstr "數據粉碎完成"
 
 #: pretix/base/services/stats.py:210
 msgid "Uncategorized"
@@ -10720,6 +10714,20 @@ msgid ""
 "\n"
 "Your pretix team\n"
 msgstr ""
+"你好\n"
+"\n"
+"我們特此確認以下數據粉碎工作已完成：\n"
+"\n"
+"召集人：%(organizer)s\n"
+"\n"
+"事件： %(event)s\n"
+"\n"
+"數據選擇： %(shredders)s\n"
+"開始時間：%(start_time)s（在此時間之後添加的新資料可能尚未刪除）\n"
+"\n"
+"敬上\n"
+"\n"
+"你的卓越團隊\n"
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html:10
 msgid "Upload photo"
@@ -13913,11 +13921,11 @@ msgstr "活動已被刪除。"
 
 #: pretix/control/logdisplay.py:375
 msgid "A removal process for personal data has been started."
-msgstr ""
+msgstr "個人數據的刪除過程已啟動。"
 
 #: pretix/control/logdisplay.py:376
 msgid "A removal process for personal data has been completed."
-msgstr ""
+msgstr "個人數據的刪除過程已完成。"
 
 #: pretix/control/logdisplay.py:377 pretix/control/logdisplay.py:375
 msgid "The order details have been changed."
@@ -21588,7 +21596,8 @@ msgstr "確認碼"
 msgid ""
 "Depending on the amount of data in your event, the following step may take a "
 "while to complete. We will inform you via email once it has been completed."
-msgstr ""
+msgstr "根據事件中的數據量，以下步驟可能需要一段時間才能完成。完成後，我們將通過電子"
+"郵件通知你。"
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:11
 msgid ""
