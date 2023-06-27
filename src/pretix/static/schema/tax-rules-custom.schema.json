@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tax rules",
+  "description": "Dynamic taxation rules",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "List of rules, executed in order until one matches",
+    "properties": {
+      "country": {
+        "description": "Country code to match. ZZ = any country, EU = any EU country.",
+        "enum": ["AD", "AE", "AF", "AG", "AI", "AL", "AM", "AO", "AQ", "AR", "AS", "AT", "AU", "AW", "AX", "AZ", "BA", "BB", "BD", "BE", "BF", "BG", "BH", "BI", "BJ", "BL", "BM", "BN", "BO", "BQ", "BR", "BS", "BT", "BV", "BW", "BY", "BZ", "CA", "CC", "CD", "CF", "CG", "CH", "CI", "CK", "CL", "CM", "CN", "CO", "CR", "CU", "CV", "CW", "CX", "CY", "CZ", "DE", "DJ", "DK", "DM", "DO", "DZ", "EC", "EE", "EG", "EH", "ER", "ES", "ET", "EU", "FI", "FJ", "FK", "FM", "FO", "FR", "GA", "GB", "GD", "GE", "GF", "GG", "GH", "GI", "GL", "GM", "GN", "GP", "GQ", "GR", "GS", "GT", "GU", "GW", "GY", "HK", "HM", "HN", "HR", "HT", "HU", "ID", "IE", "IL", "IM", "IN", "IO", "IQ", "IR", "IS", "IT", "JE", "JM", "JO", "JP", "KE", "KG", "KH", "KI", "KM", "KN", "KP", "KR", "KW", "KY", "KZ", "LA", "LB", "LC", "LI", "LK", "LR", "LS", "LT", "LU", "LV", "LY", "MA", "MC", "MD", "ME", "MF", "MG", "MH", "MK", "ML", "MM", "MN", "MO", "MP", "MQ", "MR", "MS", "MT", "MU", "MV", "MW", "MX", "MY", "MZ", "NA", "NC", "NE", "NF", "NG", "NI", "NL", "NO", "NP", "NR", "NU", "NZ", "OM", "PA", "PE", "PF", "PG", "PH", "PK", "PL", "PM", "PN", "PR", "PS", "PT", "PW", "PY", "QA", "RE", "RO", "RS", "RU", "RW", "SA", "SB", "SC", "SD", "SE", "SG", "SH", "SI", "SJ", "SK", "SL", "SM", "SN", "SO", "SR", "SS", "ST", "SV", "SX", "SY", "SZ", "TC", "TD", "TF", "TG", "TH", "TJ", "TK", "TL", "TM", "TN", "TO", "TR", "TT", "TV", "TW", "TZ", "UA", "UG", "UM", "US", "UY", "UZ", "VA", "VC", "VE", "VG", "VI", "VN", "VU", "WF", "WS", "YE", "YT", "ZA", "ZM", "ZW", "ZZ"]
+      },
+      "address_type": {
+        "description": "Type of customer, emtpy = any.",
+        "enum": ["", "individual", "business", "business_vat_id"]
+      },
+      "action": {
+        "description": "Action to take.",
+        "enum": ["vat", "reverse", "no", "block", "require_approval"]
+      },
+      "rate": {
+        "description": "Tax rate in case of action=vat or action=require_approval (or null for default)",
+        "type": ["string", "null"],
+        "pattern": "^[0-9]+(\\.[0-9]+)?$"
+      },
+      "invoice_text": {
+        "description": "Text on invoice (localized)",
+        "type": ["object", "null"],
+        "patternProperties": {
+          "[a-zA-Z-]+": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ORDER": {
+        "description": "Internal, for backwards-compatibility, will be ignored.",
+        "type": "number"
+      },
+      "DELETE": {
+        "description": "Internal, for backwards-compatibility, will be ignored.",
+        "type": "boolean"
+      }
+    },
+    "required": ["country", "address_type", "action"],
+    "additionalProperties": false
+  }
+}
