@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-06-07 15:50+0000\n"
+"PO-Revision-Date: 2023-06-27 14:35+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -527,28 +527,20 @@ msgid "Test-Mode of shop has been deactivated"
 msgstr "Testmodus des Ticketshops wurde deaktiviert"
 
 #: pretix/api/webhooks.py:339
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry added"
-msgstr "Wartelisten-Eintrag"
+msgstr "Wartelisten-Eintrag hinzugefügt"
 
 #: pretix/api/webhooks.py:343
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry changed"
-msgstr "Wartelisten-Eintrag"
+msgstr "Wartelisten-Eintrag geändert"
 
 #: pretix/api/webhooks.py:347
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry deleted"
-msgstr "Wartelisten-Eintrag"
+msgstr "Wartelisten-Eintrag gelöscht"
 
 #: pretix/api/webhooks.py:351
-#, fuzzy
-#| msgid "Waiting list entries"
 msgid "Waiting list entry received voucher"
-msgstr "Wartelisten-Einträge"
+msgstr "Wartelisten-Eintrag hat Gutschein erhalten"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:938
@@ -5493,10 +5485,8 @@ msgid "Seat {number}"
 msgstr "Platz {number}"
 
 #: pretix/base/models/tax.py:157
-#, fuzzy
-#| msgid "Your layout file is not a valid layout. Error message: {}"
 msgid "Your set of rules is not valid. Error message: {}"
-msgstr "Die Layout-Datei enthält kein gültiges Layout. Fehlermeldung: {}"
+msgstr "Die Regelsätze sind nicht gültig. Fehlermeldung: {}"
 
 #: pretix/base/models/tax.py:168
 msgid "Official name"
@@ -7987,11 +7977,8 @@ msgstr ""
 "bitte erneut versuchen."
 
 #: pretix/base/services/shredder.py:177
-#, fuzzy
-#| msgctxt "paypal"
-#| msgid "Capture completed."
 msgid "Data shredding completed"
-msgstr "Einzug vollständig."
+msgstr "Löschen personenbezogener Daten abgeschlossen"
 
 #: pretix/base/services/stats.py:210
 msgid "Uncategorized"
@@ -10297,17 +10284,7 @@ msgid "Your ticket is ready for download: {code}"
 msgstr "Dein Ticket ist zum Download verfügbar: {code}"
 
 #: pretix/base/settings.py:2456
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {attendee_name},\n"
-#| "\n"
-#| "    you are registered for {event}.\n"
-#| "\n"
-#| "    If you did not do so already, you can download your ticket here:\n"
-#| "    {url}\n"
-#| "\n"
-#| "    Best regards,  \n"
-#| "    Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -11353,6 +11330,23 @@ msgid ""
 "\n"
 "Your pretix team\n"
 msgstr ""
+"Hallo,\n"
+"\n"
+"wir bestätigen hiermit, dass der folgende Lösch-Auftrag abgeschlossen wurde:"
+"\n"
+"\n"
+"Veranstalter: %(organizer)s\n"
+"\n"
+"Veranstaltung: %(event)s\n"
+"\n"
+"Datenauswahl: %(shredders)s\n"
+"\n"
+"Startzeit: %(start_time)s (Daten, die nach diesem Zeitpunkt entstanden sind, "
+"sind ggf. nicht gelöscht)\n"
+"\n"
+"Freundliche Grüße\n"
+"\n"
+"Das pretix-Team\n"
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html:10
 msgid "Upload photo"
@@ -11787,32 +11781,26 @@ msgstr ""
 "Zusatzprodukte enthält."
 
 #: pretix/control/forms/checkin.py:185
-#, fuzzy
-#| msgid "Barcode media"
 msgid "Barcode"
-msgstr "Barcode-Medien"
+msgstr "Barcode"
 
 #: pretix/control/forms/checkin.py:188
-#, fuzzy
-#| msgid "Check-in list"
 msgid "Check-in time"
-msgstr "Check-in-Liste"
+msgstr "Check-in-Zeitpunkt"
 
 #: pretix/control/forms/checkin.py:192
-#, fuzzy
-#| msgid "Check-in list"
 msgid "Check-in type"
-msgstr "Check-in-Liste"
+msgstr "Check-in-Typ"
 
 #: pretix/control/forms/checkin.py:196
 msgid "Allow check-in of unpaid order (if check-in list permits it)"
 msgstr ""
+"Erlaube Check-in einer unbezahlten Bestellung (wenn die Check-in-Liste es "
+"erlaubt)"
 
 #: pretix/control/forms/checkin.py:200
-#, fuzzy
-#| msgid "Custom check-in rule"
 msgid "Support for check-in questions"
-msgstr "Eigene Check-In-Regeln"
+msgstr "Unterstützung für Fragen beim Check-in"
 
 #: pretix/control/forms/event.py:85
 msgid "Use languages"
@@ -12546,11 +12534,8 @@ msgid "Maximal sum of payments and refunds"
 msgstr "Maximale Summe von Zahlungen und Erstattungen"
 
 #: pretix/control/forms/filter.py:579
-#, fuzzy
-#| msgctxt "sendmail_from"
-#| msgid "Restrict to recipients without check-in"
 msgid "At least one ticket with check-in"
-msgstr "Auf Empfänger ohne Check-in einschränken"
+msgstr "Mindestens ein Ticket mit Check-in"
 
 #: pretix/control/forms/filter.py:585
 msgid ""
@@ -13930,10 +13915,8 @@ msgid "An medium with this type and identifier is already registered."
 msgstr "Ein Medium mit diesem Typ und dieser Nummer ist bereits erstellt."
 
 #: pretix/control/forms/organizer.py:797
-#, fuzzy
-#| msgid "An account with this email address is already registered."
 msgid "An account with this customer ID is already registered."
-msgstr "Ein Kundenkonto mit dieser E-Mail-Adresse ist bereits registriert."
+msgstr "Ein Konto mit dieser Kundennummer existiert bereits."
 
 #: pretix/control/forms/organizer.py:798 pretix/presale/forms/customer.py:439
 msgid "An account with this email address is already registered."
@@ -14018,16 +14001,12 @@ msgstr ""
 "Bestehendes Client-Secret invalidieren und neues Client-Secret erzeugen"
 
 #: pretix/control/forms/organizer.py:1037
-#, fuzzy
-#| msgid "Organizer name"
 msgid "Organizer short name"
-msgstr "Veranstaltername"
+msgstr "Veranstalter-Kurzname"
 
 #: pretix/control/forms/organizer.py:1041
-#, fuzzy
-#| msgid "Activate re-usable media"
 msgid "Allow access to reusable media"
-msgstr "Wiederverwendbare Medien aktivieren"
+msgstr "Zugriff auf wiederverwendbare Medien"
 
 #: pretix/control/forms/organizer.py:1042
 msgid ""
@@ -14037,18 +14016,22 @@ msgid ""
 "will grant the other organizer access to cryptographic key material required "
 "to interact with the media type."
 msgstr ""
+"Dies ist erforderlich wenn der andere Veranstalter an einem gemeinsamen "
+"System z.B. mit NFC-Zahlungsmitteln teilnehmen soll. Du solltest diese "
+"Option nur nutzen, wenn du dem anderen Veranstalter vertraust, da dies ("
+"abhängig von den aktivierten Medientypen) dem anderen Veranstalter Zugriff "
+"auf kryptografische Schlüssel gibt, die notwendig sind um mit den Medien zu "
+"interagieren."
 
 #: pretix/control/forms/organizer.py:1058
-#, fuzzy
-#| msgid "The selected date does not exist in this event series."
 msgid "The selected organizer does not exist or cannot be invited."
-msgstr "Der ausgewählte Termin gehört nicht zu dieser Veranstaltungsreihe."
+msgstr ""
+"Der ausgewählte Veranstalter existiert nicht oder kann nicht eingeladen "
+"werden."
 
 #: pretix/control/forms/organizer.py:1060
-#, fuzzy
-#| msgid "The selected organizer was not found."
 msgid "The selected organizer has already been invited."
-msgstr "Der ausgewählte Veranstalter wurde nicht gefunden."
+msgstr "Der ausgewählte Veranstalter wurde bereits eingeladen."
 
 #: pretix/control/forms/renderers.py:55
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:138
@@ -14185,21 +14168,7 @@ msgid "Your voucher for {event}"
 msgstr "Dein Gutschein für {event}"
 
 #: pretix/control/forms/vouchers.py:272
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "with this email, we're sending you one or more vouchers for {event}:\n"
-#| "\n"
-#| "{voucher_list}\n"
-#| "\n"
-#| "You can redeem them here in our ticket shop:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -14225,7 +14194,6 @@ msgstr ""
 "{url}\n"
 "\n"
 "Viele Grüße,  \n"
-"\n"
 "Das {event} Team"
 
 #: pretix/control/forms/vouchers.py:278
@@ -14601,22 +14569,18 @@ msgid "Gift card acceptance for another organizer has been removed."
 msgstr "Wertgutschein-Akzeptanz für einen anderen Veranstalter wurde entfernt."
 
 #: pretix/control/logdisplay.py:343
-#, fuzzy
-#| msgid "The gift card has been created."
 msgid "A new gift card acceptor has been invited."
-msgstr "Der Wertgutschein wurde erstellt."
+msgstr ""
+"Ein neuer Veranstalter wurde als Wertgutschein-Akzeptanzstelle eingeladen."
 
 #: pretix/control/logdisplay.py:344
-#, fuzzy
-#| msgid "The selected gift card issuer has been removed."
 msgid "A gift card issuer has been removed or declined."
-msgstr "Der ausgewählte Gutscheinaussteller wurde gelöscht."
+msgstr ""
+"Ein Veranstalter wurde als Wertgutschein-Aussteller entfernt oder abgelehnt."
 
 #: pretix/control/logdisplay.py:345
-#, fuzzy
-#| msgid "The selected gift card issuer has been added."
 msgid "A new gift card issuer has been accepted."
-msgstr "Der ausgewählte Gutscheinaussteller wurde hinzugefügt."
+msgstr "Ein neuer Wertgutschein-Aussteller wurde akzeptiert."
 
 #: pretix/control/logdisplay.py:346
 msgid "The webhook has been created."
@@ -14736,11 +14700,11 @@ msgstr "Eine Veranstaltung wurde gelöscht."
 
 #: pretix/control/logdisplay.py:375
 msgid "A removal process for personal data has been started."
-msgstr ""
+msgstr "Ein Löschprozess für personenbezogene Daten wurde gestartet."
 
 #: pretix/control/logdisplay.py:376
 msgid "A removal process for personal data has been completed."
-msgstr ""
+msgstr "Ein Löschprozess für personenbezogene Daten wurde abgeschlossen."
 
 #: pretix/control/logdisplay.py:377
 msgid "The order details have been changed."
@@ -15813,10 +15777,8 @@ msgid "Webhooks"
 msgstr "Webhooks"
 
 #: pretix/control/navigation.py:534
-#, fuzzy
-#| msgid "Accept anyway"
 msgid "Acceptance"
-msgstr "Trotzdem akzeptieren"
+msgstr "Akzeptanz"
 
 #: pretix/control/navigation.py:555
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
@@ -16501,10 +16463,8 @@ msgstr "Liste konfigurieren"
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:137
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:8
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:20
-#, fuzzy
-#| msgid "Check-in history"
 msgid "Check-in simulator"
-msgstr "Check-in-Protokoll"
+msgstr "Check-in-Simulator"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:27
 #: pretix/control/templates/pretixcontrol/orders/overview.html:20
@@ -16850,33 +16810,33 @@ msgid ""
 "the check-in list. No actual check-in will be performed and no modification "
 "to the system state is made."
 msgstr ""
+"Dieses Werkzeug erlaubt die Überprüfung der Check-in-Konfiguration. Du "
+"kannst einen Barcode sowie einige zusätzliche Parameter angeben und wir "
+"zeigen Ihnen die Antwort der Check-in-Liste an. Dabei wird kein echter Check-"
+"in durchgeführt und der Systemzustand ändert sich nicht."
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:39
 msgid "Simulate"
-msgstr ""
+msgstr "Simulieren"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:65
-#, fuzzy
-#| msgid "All check-ins"
 msgid "Valid check-in"
-msgstr "Alle Check-Ins"
+msgstr "Gültiger Check-In"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:67
-#, fuzzy
-#| msgid "Additional information"
 msgid "Additional information required"
-msgstr "Zusätzliche Informationen"
+msgstr "Zusätzliche Informationen benötigt"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:69
 msgid ""
 "The following questions must be answered before check-in can be completed:"
 msgstr ""
+"Die folgenden Fragen müssen beantwortet werden, bevor der Check-in "
+"durchgeführt werden kann:"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:89
-#, fuzzy
-#| msgid "Requires special attention"
 msgid "Special attention required"
-msgstr "Benötigt besondere Behandlung"
+msgstr "Besondere Behandlung benötigt"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:9
 msgid "Go to event"
@@ -21935,26 +21895,24 @@ msgid "Gift card history"
 msgstr "Wertgutschein-Verlauf"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_invite.html:8
-#, fuzzy
-#| msgid "Delete organizer"
 msgid "Invite organizer"
-msgstr "Veranstalter löschen"
+msgstr "Veranstalter einladen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:8
-#, fuzzy
-#| msgid "Gift card currency"
 msgid "Gift cards acceptance"
-msgstr "Wertgutschein-Währung"
+msgstr "Wertgutschein-Akzeptanz"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:11
 msgid ""
 "This feature allows you to configure acceptance of gift cards across "
 "multiple organizer accounts."
 msgstr ""
+"Diese Funktion erlaubt dir, die Akzeptanz von Wertgutscheinen über mehrere "
+"Veranstalterkonten hinweg zu konfigurieren."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:18
 msgid "Other organizers you accept gift cards from"
-msgstr ""
+msgstr "Andere Veranstalter, von denen du Wertgutscheine akzeptierst"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:23
 msgid ""
@@ -21962,13 +21920,14 @@ msgid ""
 "do so, the other organizer can add you to their list and afterwards, you can "
 "confirm this here."
 msgstr ""
+"Du akzeptierst bisher keine Wertgutscheine von anderen Veranstaltern. Wenn "
+"du dies tun möchtest, kann der andere Veranstalter dich zu seiner Liste "
+"hinzufügen und danach kannst du dies hier bestätigen."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:49
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:128
-#, fuzzy
-#| msgid "Unlimited"
 msgid "invited"
-msgstr "Unbegrenzt"
+msgstr "eingeladen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:62
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:140
@@ -21979,20 +21938,16 @@ msgid "Remove"
 msgstr "Entfernen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:66
-#, fuzzy
-#| msgid "Accept anyway"
 msgid "Accept"
-msgstr "Trotzdem akzeptieren"
+msgstr "Akzeptieren"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:69
-#, fuzzy
-#| msgid "Deadlines"
 msgid "Decline"
-msgstr "Fristen"
+msgstr "Ablehnen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:84
 msgid "Other organizers accepting gift cards from you"
-msgstr ""
+msgstr "Andere Veranstalter, die deine Wertgutscheine akzeptieren"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:87
 msgid ""
@@ -22003,6 +21958,13 @@ msgid ""
 "responsibility to handle the exchange of money to offset the transactions "
 "between the two organizers."
 msgstr ""
+"Du kannst andere Veranstalter einladen, deine Wertgutscheine zu akzeptieren. "
+"Nachdem du dies getan hast, müssen diese zur selben Seite in ihrem "
+"Veranstalterkonto gehen und deine Einladung annehmen. Beachte, dass andere "
+"Veranstalter in der Lage sein werden, Geld auf Wertgutscheine aufzubuchen, "
+"das du dann von ihnen eintreiben musst. Es ist deine Verantwortung, den "
+"Austausch des Geldes zum Ausgleich der Transaktionen zwischen den "
+"Veranstaltern zu organisieren."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:95
 msgid ""
@@ -22010,6 +21972,10 @@ msgid ""
 "is required if you want them to participate in a shared system with e.g. NFC "
 "payment chips."
 msgstr ""
+"Du kannst optional einstellen, ob der andere Veranstalter auf deine "
+"wiederverwendbaren Medien zugreifen darf. Dies ist erforderlich, wenn du "
+"möchtest, dass diese in einem gemeinsamen System mit z.B. NFC-"
+"Zahlungsmitteln teilnehmen."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:99
 msgid ""
@@ -22017,12 +21983,14 @@ msgid ""
 "on the activated medium types) this will grant the other organizer access to "
 "cryptographic key material required to interact with the media type."
 msgstr ""
+"Du solltest diese Option nur für Veranstalter verwenden, denen du vertraust, "
+"da dies (abhängig vom Medientyp), dem anderen Veranstalter Zugriff auf "
+"kryptografische Schlüssel gibt, die notwendig sind um mit den Medien zu "
+"interagieren."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:106
-#, fuzzy
-#| msgid "Create a new organizer"
 msgid "Invite new organizer"
-msgstr "Neuen Veranstalter anlegen"
+msgstr "Neuen Veranstalter einladen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:8
 msgid "Issued gift cards"
@@ -22860,6 +22828,9 @@ msgid ""
 "Depending on the amount of data in your event, the following step may take a "
 "while to complete. We will inform you via email once it has been completed."
 msgstr ""
+"Abhängig von der Datenmenge in der Veranstaltung kann der folgende Schritt "
+"eine Weile dauern. Wir informieren dich per E-Mail, sobald er abgeschlossen "
+"ist."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:11
 msgid ""
@@ -25412,23 +25383,17 @@ msgid "All unprocessed webhooks have been stopped from retrying."
 msgstr "Alle unverarbeiteten Webhooks werden nicht weiter ausgeführt."
 
 #: pretix/control/views/organizer.py:1362
-#, fuzzy
-#| msgid "The selected organizer was not found."
 msgid "The selected organizer has been invited."
-msgstr "Der ausgewählte Veranstalter wurde nicht gefunden."
+msgstr "Der ausgewählte Veranstalter wurde eingeladen."
 
 #: pretix/control/views/organizer.py:1399
 #: pretix/control/views/organizer.py:1410
-#, fuzzy
-#| msgid "The selected cart positions have been removed."
 msgid "The selected connection has been removed."
-msgstr "Der ausgewählten Warenkorb-Positionen wurden gelöscht."
+msgstr "Die ausgewählte Verbindung wurde gelöscht."
 
 #: pretix/control/views/organizer.py:1421
-#, fuzzy
-#| msgid "The selected question has been deleted."
 msgid "The selected connection has been accepted."
-msgstr "Die ausgewählte Frage wurde gelöscht."
+msgstr "Die ausgewählte Verbindung wurde akzeptiert."
 
 #: pretix/control/views/organizer.py:1475
 #: pretix/control/views/organizer.py:1512
