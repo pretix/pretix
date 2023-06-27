@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-16 14:35+0000\n"
-"PO-Revision-Date: 2023-06-25 12:32+0000\n"
-"Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
+"PO-Revision-Date: 2023-06-27 07:11+0000\n"
+"Last-Translator: Jonathan Berger <drskullster@gmail.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -3323,7 +3323,7 @@ msgstr ""
 
 #: pretix/base/models/checkin.py:81
 msgid "Allow re-entering after an exit scan"
-msgstr "Autoriser une nouvelle entrée après un scan de sortie"
+msgstr "Autoriser de nouveau l'entrée après un scan de sortie"
 
 #: pretix/base/models/checkin.py:85
 msgid "Allow multiple entries per ticket"
@@ -3333,8 +3333,8 @@ msgstr "Autoriser plusieurs entrées par ticket"
 msgid ""
 "Use this option to turn off warnings if a ticket is scanned a second time."
 msgstr ""
-"Utiliser cette option pour ne pas afficher les avertissements si un ticket "
-"est scanné une seconde fois."
+"Utiliser cette option pour supprimer les avertissements si le ticket est "
+"scanné une seconde fois."
 
 #: pretix/base/models/checkin.py:90
 msgid "Automatically check out everyone at"
