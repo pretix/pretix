@@ -94,6 +94,8 @@ def test_initialize_valid_token(client, new_device: Device):
         'hardware_brand': 'Samsung',
         'hardware_model': 'Galaxy S',
         'software_brand': 'pretixdroid',
+        'os_name': 'Android',
+        'os_version': '2.3.3',
         'software_version': '4.0.0'
     })
     assert resp.status_code == 200
@@ -105,6 +107,7 @@ def test_initialize_valid_token(client, new_device: Device):
     new_device.refresh_from_db()
     assert new_device.api_token
     assert new_device.initialized
+    assert new_device.os_version == "2.3.3"
 
 
 @pytest.mark.django_db
@@ -155,6 +158,19 @@ def test_update_valid_fields(device_client, device: Device):
     assert device.software_version == '5.0.0'
     assert device.os_version == '2.3.3'
     assert device.info == {'foo': 'bar'}
+
+
+@pytest.mark.django_db
+def test_update_valid_without_optional_fields(device_client, device: Device):
+    resp = device_client.post('/api/v1/device/update', {
+        'hardware_brand': 'Samsung',
+        'hardware_model': 'Galaxy S',
+        'software_brand': 'pretixdroid',
+        'software_version': '5.0.0',
+    }, format='json')
+    assert resp.status_code == 200
+    device.refresh_from_db()
+    assert device.software_version == '5.0.0'
 
 
 @pytest.mark.django_db
