@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-06-28 06:00+0000\n"
+"PO-Revision-Date: 2023-06-29 05:00+0000\n"
 "Last-Translator: Moritz Lerch <dev@moritz-lerch.de>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -16352,7 +16352,7 @@ msgstr "Terminal-ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:96
 msgid "Card holder"
-msgstr "Karteninhaber"
+msgstr "Karteninhaber*in"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:100
 msgid "Card expiration"
