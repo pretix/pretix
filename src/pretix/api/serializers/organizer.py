@@ -251,6 +251,8 @@ class DeviceSerializer(serializers.ModelSerializer):
     unique_serial = serializers.CharField(read_only=True)
     hardware_brand = serializers.CharField(read_only=True)
     hardware_model = serializers.CharField(read_only=True)
+    os_name = serializers.CharField(read_only=True)
+    os_version = serializers.CharField(read_only=True)
     software_brand = serializers.CharField(read_only=True)
     software_version = serializers.CharField(read_only=True)
     created = serializers.DateTimeField(read_only=True)
@@ -263,7 +265,7 @@ class DeviceSerializer(serializers.ModelSerializer):
         fields = (
             'device_id', 'unique_serial', 'initialization_token', 'all_events', 'limit_events',
             'revoked', 'name', 'created', 'initialized', 'hardware_brand', 'hardware_model',
-            'software_brand', 'software_version', 'security_profile'
+            'os_name', 'os_version', 'software_brand', 'software_version', 'security_profile'
         )
 
 
