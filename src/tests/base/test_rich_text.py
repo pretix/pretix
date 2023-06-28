@@ -30,6 +30,8 @@ from pretix.base.templatetags.rich_text import (
     # Test link detection
     ("google.com",
      '<a href="http://google.com" rel="noopener" target="_blank">google.com</a>'),
+    # Test link escaping
+    ("google\\.com", 'google.com'),
     # Test abslink_callback
     ("[Call](tel:+12345)",
      '<a href="tel:+12345" rel="nofollow">Call</a>'),
@@ -78,4 +80,21 @@ def test_newline_handling(content, result):
     ('a\n\nb', '<p>a</p>\n<p>b</p>'),
 ])
 def test_newline_handling_email(content, result):
+    assert markdown_compile_email(content) == result
+
+
+@pytest.mark.parametrize("content,result,result_snippet", [
+    # attributes
+    ('<a onclick="javascript:foo()">foo</a>', '<p><a>foo</a></p>', '<a>foo</a>'),
+    ('<strong color="red">foo</strong>',
+     '<p><strong>foo</strong></p>',
+     '<strong>foo</strong>'),
+    # protocols
+    ('<a href="javascript:foo()">foo</a>', '<p><a>foo</a></p>', '<a>foo</a>'),
+    # tags
+    ('<script>foo</script>', '&lt;script&gt;foo&lt;/script&gt;', 'foo'),
+])
+def test_cleanup(content, result, result_snippet):
+    assert rich_text(content) == result
+    assert rich_text_snippet(content) == result_snippet
     assert markdown_compile_email(content) == result
