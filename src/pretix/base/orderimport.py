@@ -836,7 +836,7 @@ class CustomerColumn(ImportColumn):
         if value:
             try:
                 value = self.event.organizer.customers.get(
-                    Q(identifier=value) | Q(email=value) | Q(external_identifier=value)
+                    Q(identifier=value) | Q(email__iexact=value) | Q(external_identifier=value)
                 )
             except Customer.MultipleObjectsReturned:
                 value = self.event.organizer.customers.get(
