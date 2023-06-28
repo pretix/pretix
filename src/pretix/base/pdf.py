@@ -939,7 +939,7 @@ class Renderer:
 
         # reportlab does not support unicode combination characters
         # It's important we do this before we use ArabicReshaper
-        text = unicodedata.normalize("NFKC", text)
+        text = unicodedata.normalize("NFC", text)
 
         # reportlab does not support RTL, ligature-heavy scripts like Arabic. Therefore, we use ArabicReshaper
         # to resolve all ligatures and python-bidi to switch RTL texts.
