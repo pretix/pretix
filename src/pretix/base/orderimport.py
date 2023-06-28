@@ -830,7 +830,6 @@ class QuestionColumn(ImportColumn):
 class CustomerColumn(ImportColumn):
     identifier = 'customer'
     verbose_name = gettext_lazy('Customer')
-    default_value = None
 
     def clean(self, value, previous_values):
         if value:
