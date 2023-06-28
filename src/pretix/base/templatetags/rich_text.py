@@ -230,8 +230,6 @@ class CustomUnescapePostprocessor(Postprocessor):
     Restore escaped .
     """
 
-    RE = re.compile(r'&#46;')
-
     def run(self, text):
         return text.replace("|escaped-dot-sGnY9LMK|", ".")
 
