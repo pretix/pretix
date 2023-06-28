@@ -893,6 +893,28 @@ DEFAULTS = {
                         "the pool and can be ordered by other people."),
         )
     },
+    'payment_term_expire_delay_days': {
+        'default': '0',
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'form_kwargs': dict(
+            label=_('Expiration delay'),
+            help_text=_("The order will only actually expire this many days after the expiration date communicated "
+                        "to the customer. However, this will not delay beyond the \"last date of payments\" "
+                        "configured above, which is always enforced. The delay may also end on a weekend regardless "
+                        "of the other settings above."),
+            # Every order in between the official expiry date and the delayed expiry date has a performance penalty
+            # for the cron job, so we limit this feature to 30 days to prevent arbitrary numbers of orders needing
+            # to be checked.
+            min_value=0,
+            max_value=30,
+        ),
+        'serializer_kwargs': dict(
+            min_value=0,
+            max_value=30,
+        ),
+    },
     'payment_pending_hidden': {
         'default': 'False',
         'type': bool,

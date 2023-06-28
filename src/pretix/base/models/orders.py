@@ -896,6 +896,28 @@ class Order(LockModel, LoggedModel):
             ), tz)
         return term_last
 
+    @property
+    def payment_term_expire_date(self):
+        delay = self.event.settings.get('payment_term_expire_delay_days', as_type=int)
+        if not delay:  # performance saver + backwards compatibility
+            return self.expires
+
+        term_last = self.payment_term_last
+        if term_last and self.expires > term_last:  # backwards compatibility
+            return self.expires
+
+        expires = self.expires.date() + timedelta(days=delay)
+
+        tz = ZoneInfo(self.event.settings.timezone)
+        expires = make_aware(datetime.combine(
+            expires,
+            time(hour=23, minute=59, second=59)
+        ), tz)
+        if term_last:
+            return min(expires, term_last)
+        else:
+            return expires
+
     def _can_be_paid(self, count_waitinglist=True, ignore_date=False, force=False) -> Union[bool, str]:
         error_messages = {
             'late_lastdate': _("The payment can not be accepted as the last date of payments configured in the "
