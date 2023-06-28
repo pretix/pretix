@@ -110,6 +110,8 @@ URL_RE = SimpleLazyObject(lambda: build_url_re(tlds=sorted(tld_set, key=len, rev
 
 EMAIL_RE = SimpleLazyObject(lambda: build_email_re(tlds=sorted(tld_set, key=len, reverse=True)))
 
+DOT_ESCAPE = "|escaped-dot-sGnY9LMK|"
+
 
 def safelink_callback(attrs, new=False):
     """
@@ -220,8 +222,8 @@ class CustomUnescapeTreeprocessor(UnescapeTreeprocessor):
     """
 
     def _unescape(self, m):
-        if m.group(1) == "46":
-            return "|escaped-dot-sGnY9LMK|"
+        if m.group(1) == "46":  # 46 is the ASCII position of .
+            return DOT_ESCAPE
         return chr(int(m.group(1)))
 
 
@@ -231,7 +233,7 @@ class CustomUnescapePostprocessor(Postprocessor):
     """
 
     def run(self, text):
-        return text.replace("|escaped-dot-sGnY9LMK|", ".")
+        return text.replace(DOT_ESCAPE, ".")
 
 
 class LinkifyAndCleanExtension(Extension):
