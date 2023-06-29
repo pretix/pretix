@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-06-27 07:11+0000\n"
-"Last-Translator: Jonathan Berger <drskullster@gmail.com>\n"
+"PO-Revision-Date: 2023-06-29 21:00+0000\n"
+"Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -3406,7 +3406,7 @@ msgstr "Interdit par une règle personnalisée"
 
 #: pretix/base/models/checkin.py:347
 msgid "Ticket code revoked/changed"
-msgstr "Code du billet révoqué/changé"
+msgstr "Code du billet révoqué/modifé"
 
 #: pretix/base/models/checkin.py:348
 msgid "Information required"
@@ -11459,6 +11459,23 @@ msgid ""
 "\n"
 "Your pretix team\n"
 msgstr ""
+"Bonjour\n"
+"\n"
+"Nous confirmons par la présente que le travail de déchiquetage de données "
+"suivant a été effectué :\n"
+"\n"
+"Organisateur : %(organizer)s\n"
+"\n"
+"Evénement : %(event)s\n"
+"\n"
+"Sélection des données : %(shredders)s\n"
+"\n"
+"Heure de début : %(start_time)s (les nouvelles données ajoutées après cette "
+"heure n’ont peut-être pas été supprimées)\n"
+"\n"
+"Sinceres salutations\n"
+"\n"
+"Votre équipe pretix\n"
 
 #: pretix/base/templates/pretixbase/forms/widgets/portrait_image.html:10
 msgid "Upload photo"
@@ -14829,11 +14846,11 @@ msgstr "Un événement a été supprimé."
 
 #: pretix/control/logdisplay.py:375
 msgid "A removal process for personal data has been started."
-msgstr ""
+msgstr "Un processus de suppression des données personnelles a été lancé."
 
 #: pretix/control/logdisplay.py:376
 msgid "A removal process for personal data has been completed."
-msgstr ""
+msgstr "Un processus de suppression des données personnelles a été achevé."
 
 #: pretix/control/logdisplay.py:377
 msgid "The order details have been changed."
@@ -23036,6 +23053,9 @@ msgid ""
 "Depending on the amount of data in your event, the following step may take a "
 "while to complete. We will inform you via email once it has been completed."
 msgstr ""
+"Selon la quantité de données de votre événement, l’étape suivante peut "
+"prendre un certain temps. Nous vous informerons par e-mail une fois qu’il "
+"aura été complété."
 
 #: pretix/control/templates/pretixcontrol/shredder/index.html:11
 msgid ""
