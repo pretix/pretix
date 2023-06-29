@@ -5,7 +5,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
 "PO-Revision-Date: 2023-06-29 21:00+0000\n"
-"Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
+"Last-Translator: Mossroy <mossroy@mossroy.fr>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -3426,7 +3426,7 @@ msgstr "Le code du billet est ambigu dans la liste"
 
 #: pretix/base/models/checkin.py:352
 msgid "Server error"
-msgstr "Erreur du serveur"
+msgstr "Erreur côté serveur"
 
 #: pretix/base/models/checkin.py:353
 msgid "Ticket blocked"
