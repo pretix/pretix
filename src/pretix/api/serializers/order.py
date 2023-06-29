@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import json
 import logging
 import os
 from collections import Counter, defaultdict
@@ -39,6 +38,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 
+from pretix.api.serializers import CompatibleJSONField
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
@@ -894,19 +894,6 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 )
 
         return data
-
-
-class CompatibleJSONField(serializers.JSONField):
-    def to_internal_value(self, data):
-        try:
-            return json.dumps(data)
-        except (TypeError, ValueError):
-            self.fail('invalid')
-
-    def to_representation(self, value):
-        if value:
-            return json.loads(value)
-        return value
 
 
 class WrappedList:

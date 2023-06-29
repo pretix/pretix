@@ -59,7 +59,7 @@ class IdempotencyMiddleware:
         auth_hash = sha1(auth_hash_parts.encode()).hexdigest()
         idempotency_key = request.headers.get('X-Idempotency-Key', '')
 
-        with transaction.atomic():
+        with transaction.atomic(durable=True):
             call, created = ApiCall.objects.select_for_update(of=OF_SELF).get_or_create(
                 auth_hash=auth_hash,
                 idempotency_key=idempotency_key,
@@ -75,7 +75,7 @@ class IdempotencyMiddleware:
 
         if created:
             resp = self.get_response(request)
-            with transaction.atomic():
+            with transaction.atomic(durable=True):
                 if resp.status_code in (409, 429, 500, 503):
                     # This is the exception: These calls are *meant* to be retried!
                     call.delete()

@@ -317,6 +317,9 @@ class CartManager:
     def _delete_out_of_timeframe(self):
         err = None
         for cp in self.positions:
+            if not cp.pk:
+                continue
+
             if cp.subevent and cp.subevent.presale_start and self.now_dt < cp.subevent.presale_start:
                 err = error_messages['some_subevent_not_started']
                 cp.addons.all().delete()

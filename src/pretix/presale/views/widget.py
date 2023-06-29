@@ -212,11 +212,14 @@ def price_dict(item, price):
     }
 
 
-def get_picture(event, picture):
-    try:
-        thumb = get_thumbnail(picture.name, '60x60^').thumb.url
-    except:
-        logger.exception(f'Failed to create thumbnail of {picture.name}')
+def get_picture(event, picture, size=None):
+    thumb = None
+    if size:
+        try:
+            thumb = get_thumbnail(picture.name, size).thumb.url
+        except:
+            logger.exception(f'Failed to create thumbnail of {picture.name}')
+    if not thumb:
         thumb = default_storage.url(picture.name)
     return urljoin(build_absolute_uri(event, 'presale:event.index'), thumb)
 
@@ -264,7 +267,8 @@ class WidgetAPIProductList(EventListMixin, View):
                     {
                         'id': item.pk,
                         'name': str(item.name),
-                        'picture': get_picture(self.request.event, item.picture) if item.picture else None,
+                        'picture': get_picture(self.request.event, item.picture, '60x60^') if item.picture else None,
+                        'picture_fullsize': get_picture(self.request.event, item.picture) if item.picture else None,
                         'description': str(rich_text(item.description, safelinks=False)) if item.description else None,
                         'has_variations': item.has_variations,
                         'require_voucher': item.require_voucher,

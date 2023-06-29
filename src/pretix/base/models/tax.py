@@ -22,9 +22,12 @@
 import json
 from decimal import Decimal
 
+import jsonschema
+from django.contrib.staticfiles import finders
 from django.core.exceptions import ValidationError
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.utils.deconstruct import deconstructible
 from django.utils.formats import localize
 from django.utils.translation import gettext_lazy as _, pgettext
 from i18nfield.fields import I18nCharField
@@ -133,6 +136,25 @@ def cc_to_vat_prefix(country_code):
     if country_code == 'GR':
         return 'EL'
     return country_code
+
+
+@deconstructible
+class CustomRulesValidator:
+    def __call__(self, value):
+        if not isinstance(value, dict):
+            try:
+                val = json.loads(value)
+            except ValueError:
+                raise ValidationError(_('Your layout file is not a valid JSON file.'))
+        else:
+            val = value
+        with open(finders.find('schema/tax-rules-custom.schema.json'), 'r') as f:
+            schema = json.loads(f.read())
+        try:
+            jsonschema.validate(val, schema)
+        except jsonschema.ValidationError as e:
+            e = str(e).replace('%', '%%')
+            raise ValidationError(_('Your set of rules is not valid. Error message: {}').format(e))
 
 
 class TaxRule(LoggedModel):

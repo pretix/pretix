@@ -14,6 +14,7 @@ Apps
 APM
 as
 Aufteilungsliste
+aufzubuchen
 auschecken
 Ausgangsscan
 Ausgangsscans
@@ -166,6 +167,7 @@ landesspezifische
 Lead
 Leaflet
 Linktext
+Lösch
 loszulegen
 Ltd
 max

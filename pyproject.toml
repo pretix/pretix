@@ -30,7 +30,7 @@ dependencies = [
   "babel",
   "BeautifulSoup4==4.12.*",
   "bleach==5.0.*",
-  "celery==5.2.*",
+  "celery==5.3.*",
   "chardet==5.1.*",
   "cryptography>=3.4.2",
   "css-inline==0.8.*",
@@ -59,10 +59,10 @@ dependencies = [
   "dnspython==2.3.*",
   "drf_ujson2==1.7.*",
   "geoip2==4.*",
-  "importlib_metadata==6.6.*",  # Polyfill, we can probably drop this once we require Python 3.10+
+  "importlib_metadata==6.*",  # Polyfill, we can probably drop this once we require Python 3.10+
   "isoweek",
   "jsonschema",
-  "kombu==5.2.*",
+  "kombu==5.3.*",
   "libsass==0.22.*",
   "lxml",
   "markdown==3.4.3",  # 3.3.5 requires importlib-metadata>=4.4, but django-bootstrap3 requires importlib-metadata<3.

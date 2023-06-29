@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-16 14:35+0000\n"
+"POT-Creation-Date: 2023-06-27 12:51+0000\n"
 "PO-Revision-Date: 2023-05-18 01:00+0000\n"
 "Last-Translator: M C <micasadmail@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -47,7 +47,6 @@ msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:38
 #, fuzzy
-#| msgid "PayPal"
 msgid "PayPal Credit"
 msgstr "PayPal"
 
@@ -81,7 +80,6 @@ msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:46
 #, fuzzy
-#| msgid "Yes"
 msgid "eps"
 msgstr "Si"
 
@@ -254,7 +252,7 @@ msgstr "Questo biglietto non è ancora stato pagato. Vuoi continuare comunque?"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:51
 msgid "Additional information required"
-msgstr "Informazioni aggiuntive richieste"
+msgstr "Informazione aggiuntiva richiesta"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:52
 msgid "Valid ticket"
@@ -290,7 +288,6 @@ msgstr "Codice biglietto annullato/modificato"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 #, fuzzy
-#| msgid "Ticket not paid"
 msgid "Ticket blocked"
 msgstr "Biglietto non pagato"
 
@@ -322,6 +319,8 @@ msgstr "Attualmente all'interno"
 msgid "close"
 msgstr "Chiudi"
 
+#: pretix/static/pretixbase/js/asynctask.js:58
+#: pretix/static/pretixbase/js/asynctask.js:135
 #: pretix/static/pretixbase/js/asynctask.js:43
 #: pretix/static/pretixbase/js/asynctask.js:120
 msgid ""
@@ -331,11 +330,15 @@ msgstr ""
 "La tua richiesta è in fase di elaborazione. A seconda della dimensione del "
 "tuo evento, questo passaggio può durare fino ad alcuni minuti."
 
+#: pretix/static/pretixbase/js/asynctask.js:63
+#: pretix/static/pretixbase/js/asynctask.js:140
 #: pretix/static/pretixbase/js/asynctask.js:48
 #: pretix/static/pretixbase/js/asynctask.js:125
 msgid "Your request has been queued on the server and will soon be processed."
 msgstr "La tua richiesta è stata inviata al server e verrà presto elaborata."
 
+#: pretix/static/pretixbase/js/asynctask.js:69
+#: pretix/static/pretixbase/js/asynctask.js:146
 #: pretix/static/pretixbase/js/asynctask.js:54
 #: pretix/static/pretixbase/js/asynctask.js:131
 msgid ""
@@ -347,13 +350,17 @@ msgstr ""
 "elaborazione. Se l'attesa dura più a lungo di due minuti di ti invitiamo a "
 "contattarci o di tornare al browser e riprovare."
 
+#: pretix/static/pretixbase/js/asynctask.js:105
+#: pretix/static/pretixbase/js/asynctask.js:193
+#: pretix/static/pretixbase/js/asynctask.js:198
+#: pretix/static/pretixcontrol/js/ui/mail.js:24
 #: pretix/static/pretixbase/js/asynctask.js:90
 #: pretix/static/pretixbase/js/asynctask.js:178
 #: pretix/static/pretixbase/js/asynctask.js:183
-#: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Si è verificato un errore {code}."
 
+#: pretix/static/pretixbase/js/asynctask.js:108
 #: pretix/static/pretixbase/js/asynctask.js:93
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
@@ -362,23 +369,27 @@ msgstr ""
 "Al momento il server non è raggiungibile, ma continueremo a provare. Codice "
 "dell'ultimo errore: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:145
+#: pretix/static/pretixbase/js/asynctask.js:160
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
+#: pretix/static/pretixbase/js/asynctask.js:145
 msgid "The request took too long. Please try again."
 msgstr "La richiesta ha impiegato troppo tempo. Si prega di riprovare."
 
-#: pretix/static/pretixbase/js/asynctask.js:186
+#: pretix/static/pretixbase/js/asynctask.js:201
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
+#: pretix/static/pretixbase/js/asynctask.js:186
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr ""
 "Al momento il server non è raggiungibile. Si prega di riprovare. Codice "
 "dell'errore: {code}"
 
+#: pretix/static/pretixbase/js/asynctask.js:230
 #: pretix/static/pretixbase/js/asynctask.js:215
 msgid "We are processing your request …"
 msgstr "Stiamo elaborando la tua richiesta …"
 
+#: pretix/static/pretixbase/js/asynctask.js:238
 #: pretix/static/pretixbase/js/asynctask.js:223
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
@@ -389,8 +400,9 @@ msgstr ""
 "più di un minuto si prega di verificare la connessione internet e ricaricare "
 "la pagina per riprovare l'invio."
 
-#: pretix/static/pretixbase/js/asynctask.js:285
+#: pretix/static/pretixbase/js/asynctask.js:301
 #: pretix/static/pretixcontrol/js/ui/main.js:71
+#: pretix/static/pretixbase/js/asynctask.js:285
 msgid "Close message"
 msgstr "Messaggio di chiusura"
 
@@ -665,7 +677,7 @@ msgstr "Inserisci la quantità per una tipologia di biglietto."
 
 #: pretix/static/pretixpresale/js/ui/main.js:472
 msgid "required"
-msgstr "richiesto"
+msgstr "richiesta"
 
 #: pretix/static/pretixpresale/js/ui/main.js:575
 #: pretix/static/pretixpresale/js/ui/main.js:594
@@ -697,19 +709,16 @@ msgid "Price"
 msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
-#, fuzzy, javascript-format
-#| msgid "Selected only"
+#, javascript-format
 msgctxt "widget"
 msgid "Select %s"
-msgstr "Solo i selezionati"
+msgstr "Seleziona %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
-#, fuzzy, javascript-format
-#| msgctxt "widget"
-#| msgid "See variations"
+#, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
-msgstr "Mostra varianti"
+msgstr "Seleziona variante %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
@@ -999,39 +1008,29 @@ msgstr "Dicembre"
 #~ msgstr "Scansiona QR del lead"
 
 #, fuzzy
-#~| msgid "Check-in QR"
 #~ msgid "Check-in result"
 #~ msgstr "Check-in con QR"
 
 #, fuzzy
-#~| msgid "May"
 #~ msgid "day"
 #~ msgstr "Maggio"
 
 #, fuzzy
-#~| msgctxt "widget"
-#~| msgid "Next week"
 #~ msgid "week"
 #~ msgstr "Settimana successiva"
 
 #, fuzzy
-#~| msgid "None"
 #~ msgid "on"
 #~ msgstr "Nessuno"
 
 #, fuzzy
-#~| msgctxt "widget"
-#~| msgid "Next month"
 #~ msgid "months"
 #~ msgstr "Mese successivo"
 
 #, fuzzy
-#~| msgctxt "widget"
-#~| msgid "Next month"
 #~ msgid "month"
 #~ msgstr "Mese successivo"
 
 #, fuzzy
-#~| msgid "Others"
 #~ msgid "the"
 #~ msgstr "Altri"

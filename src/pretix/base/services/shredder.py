@@ -109,6 +109,9 @@ def export(event: Event, shredders: List[str], session_key=None, cfid=None) -> N
 def shred(self, event: Event, fileid: str, confirm_code: str, user: int=None, locale: str='en') -> None:
     steps = []
 
+    if user:
+        user = User.objects.get(pk=user)
+
     def set_progress(val):
         if not self.request.called_directly:
             self.update_state(
@@ -137,6 +140,12 @@ def shred(self, event: Event, fileid: str, confirm_code: str, user: int=None, lo
     if event.logentry_set.filter(datetime__gte=parse(indexdata['time'])):
         raise ShredError(_("Something happened in your event after the export, please try again."))
 
+    event.log_action(
+        'pretix.event.shredder.started', user=user, data={
+            'indexdata': indexdata
+        }
+    )
+
     for i, shredder in enumerate(shredders):
         with language(locale):
             steps.append({'label': str(shredder.verbose_name), 'done': False})
@@ -154,8 +163,13 @@ def shred(self, event: Event, fileid: str, confirm_code: str, user: int=None, lo
     cf.file.delete(save=False)
     cf.delete()
 
+    event.log_action(
+        'pretix.event.shredder.completed', user=user, data={
+            'indexdata': indexdata
+        }
+    )
+
     if user:
-        user = User.objects.get(pk=user)
         with language(user.locale):
             try:
                 mail(

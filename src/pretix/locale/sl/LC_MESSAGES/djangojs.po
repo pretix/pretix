@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-16 14:35+0000\n"
+"POT-Creation-Date: 2023-06-27 12:51+0000\n"
 "PO-Revision-Date: 2019-08-27 08:00+0000\n"
 "Last-Translator: Bostjan Marusic <bostjan@brokenbones.si>\n"
 "Language-Team: Slovenian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -335,8 +335,8 @@ msgstr ""
 msgid "close"
 msgstr "Zapri"
 
-#: pretix/static/pretixbase/js/asynctask.js:43
-#: pretix/static/pretixbase/js/asynctask.js:120
+#: pretix/static/pretixbase/js/asynctask.js:58
+#: pretix/static/pretixbase/js/asynctask.js:135
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. "
@@ -348,8 +348,8 @@ msgstr ""
 "Vaša zahteva je bila uvršena v vrsto na strežniku in bo sedaj obdelana. To "
 "lahko traja do nekaj minut, kar je odvisno od velikosti vašega dogodka."
 
-#: pretix/static/pretixbase/js/asynctask.js:48
-#: pretix/static/pretixbase/js/asynctask.js:125
+#: pretix/static/pretixbase/js/asynctask.js:63
+#: pretix/static/pretixbase/js/asynctask.js:140
 #, fuzzy
 #| msgid ""
 #| "Your request has been queued on the server and will now be processed. "
@@ -359,8 +359,8 @@ msgstr ""
 "Vaša zahteva je bila uvršena v vrsto na strežniku in bo sedaj obdelana. To "
 "lahko traja do nekaj minut, kar je odvisno od velikosti vašega dogodka."
 
-#: pretix/static/pretixbase/js/asynctask.js:54
-#: pretix/static/pretixbase/js/asynctask.js:131
+#: pretix/static/pretixbase/js/asynctask.js:69
+#: pretix/static/pretixbase/js/asynctask.js:146
 msgid ""
 "Your request arrived on the server but we still wait for it to be processed. "
 "If this takes longer than two minutes, please contact us or go back in your "
@@ -370,14 +370,14 @@ msgstr ""
 "traja že več kot nekaj minut, nas prosimo kontaktirajte ali pojdite z "
 "brskalnikom nazaj in poskusite ponovno."
 
-#: pretix/static/pretixbase/js/asynctask.js:90
-#: pretix/static/pretixbase/js/asynctask.js:178
-#: pretix/static/pretixbase/js/asynctask.js:183
+#: pretix/static/pretixbase/js/asynctask.js:105
+#: pretix/static/pretixbase/js/asynctask.js:193
+#: pretix/static/pretixbase/js/asynctask.js:198
 #: pretix/static/pretixcontrol/js/ui/mail.js:24
 msgid "An error of type {code} occurred."
 msgstr "Prišlo je do napake tipa {code}."
 
-#: pretix/static/pretixbase/js/asynctask.js:93
+#: pretix/static/pretixbase/js/asynctask.js:108
 msgid ""
 "We currently cannot reach the server, but we keep trying. Last error code: "
 "{code}"
@@ -385,24 +385,24 @@ msgstr ""
 "Strežnik trenutno ni dosegljiv, bomo pa še poskušali. Zadnja koda napake: "
 "{code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:145
+#: pretix/static/pretixbase/js/asynctask.js:160
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 #, fuzzy
 #| msgid "The request took to long. Please try again."
 msgid "The request took too long. Please try again."
 msgstr "Zahteva traja predolgo. Poskusite ponovno."
 
-#: pretix/static/pretixbase/js/asynctask.js:186
+#: pretix/static/pretixbase/js/asynctask.js:201
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
 msgid ""
 "We currently cannot reach the server. Please try again. Error code: {code}"
 msgstr "Strežnik trenutno ni dosegljiv. Poskusite ponovno. Koda napake: {code}"
 
-#: pretix/static/pretixbase/js/asynctask.js:215
+#: pretix/static/pretixbase/js/asynctask.js:230
 msgid "We are processing your request …"
 msgstr "Obdelujemo vašo zahtevo …"
 
-#: pretix/static/pretixbase/js/asynctask.js:223
+#: pretix/static/pretixbase/js/asynctask.js:238
 msgid ""
 "We are currently sending your request to the server. If this takes longer "
 "than one minute, please check your internet connection and then reload this "
@@ -412,7 +412,7 @@ msgstr ""
 "preverite vašo internetno povezavo in nato ponovno naložite spletno stran in "
 "poskusite znova."
 
-#: pretix/static/pretixbase/js/asynctask.js:285
+#: pretix/static/pretixbase/js/asynctask.js:301
 #: pretix/static/pretixcontrol/js/ui/main.js:71
 msgid "Close message"
 msgstr "Zapri obvestilo"

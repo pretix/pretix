@@ -65,6 +65,8 @@
                 {% bootstrap_field form.payment_term_minutes layout="control" %}
                 {% bootstrap_field form.payment_term_last layout="control" %}
                 {% bootstrap_field form.payment_term_expire_automatically layout="control" %}
+                {% trans "days" context "unit" as days %}
+                {% bootstrap_field form.payment_term_expire_delay_days layout="control" addon_after=days %}
                 {% bootstrap_field form.payment_term_accept_late layout="control" %}
                 {% bootstrap_field form.payment_pending_hidden layout="control" %}
             </fieldset>

@@ -33,8 +33,7 @@ RUN apt-get update && \
     mkdir /static && \
     mkdir /etc/supervisord && \
 	curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - && \
-    apt-get install -y nodejs && \
-    curl -qL https://www.npmjs.com/install.sh | sh
+    apt-get install -y nodejs
 
 
 ENV LC_ALL=C.UTF-8 \

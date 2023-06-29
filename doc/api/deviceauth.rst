@@ -32,6 +32,8 @@ as well as the type of underlying hardware. Example:
        "token": "kpp4jn8g2ynzonp6",
        "hardware_brand": "Samsung",
        "hardware_model": "Galaxy S",
+       "os_name": "Android",
+       "os_version": "2.3.6",
        "software_brand": "pretixdroid",
        "software_version": "4.0.0"
    }
@@ -98,6 +100,8 @@ following endpoint:
    {
        "hardware_brand": "Samsung",
        "hardware_model": "Galaxy S",
+       "os_name": "Android",
+       "os_version": "2.3.6",
        "software_brand": "pretixdroid",
        "software_version": "4.1.0",
        "info": {"arbitrary": "data"}
