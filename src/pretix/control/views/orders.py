@@ -1918,7 +1918,7 @@ class OrderContactChange(OrderView):
                     'pretix.event.order.contact.changed',
                     data={
                         'old_email': old_email,
-                        'new_email': self.form.cleaned_data['email'],
+                        'new_email': self.form.cleaned_data.get('email'),
                     },
                     user=self.request.user,
                 )
@@ -1930,7 +1930,7 @@ class OrderContactChange(OrderView):
                     'pretix.event.order.phone.changed',
                     data={
                         'old_phone': old_phone,
-                        'new_phone': self.form.cleaned_data['phone'],
+                        'new_phone': self.form.cleaned_data.get('phone'),
                     },
                     user=self.request.user,
                 )
