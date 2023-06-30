@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-06-29 21:00+0000\n"
-"Last-Translator: Mossroy <mossroy@mossroy.fr>\n"
+"PO-Revision-Date: 2023-07-01 01:00+0000\n"
+"Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -528,22 +528,16 @@ msgid "Test-Mode of shop has been deactivated"
 msgstr "Le mode de test de la boutique a été désactivé"
 
 #: pretix/api/webhooks.py:339
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry added"
-msgstr "Saisie de la liste d'attente"
+msgstr "Ajout d'une inscription sur la liste d'attente"
 
 #: pretix/api/webhooks.py:343
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry changed"
-msgstr "Saisie de la liste d'attente"
+msgstr "Changement d'une inscription sur la liste d'attente"
 
 #: pretix/api/webhooks.py:347
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry deleted"
-msgstr "Saisie de la liste d'attente"
+msgstr "Suppression d'une inscription de la liste d'attente"
 
 #: pretix/api/webhooks.py:351
 #, fuzzy
@@ -3932,11 +3926,11 @@ msgstr ""
 
 #: pretix/base/models/exports.py:64
 msgid "Additional recipients (Cc)"
-msgstr "Destinataires supplémentaires (Cc)"
+msgstr "Destinataires supplémentaires (copie)"
 
 #: pretix/base/models/exports.py:69
 msgid "Additional recipients (Bcc)"
-msgstr "Destinataires supplémentaires (Bcc)"
+msgstr "Destinataires supplémentaires (copie cachée)"
 
 #: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1045
 #: pretix/control/forms/event.py:1107 pretix/control/forms/event.py:1119
@@ -4224,9 +4218,9 @@ msgid ""
 "product as an add-on product, but only for fixed bundles!"
 msgstr ""
 "Si cette option est définie, le produit ne sera vendu que dans le cadre de "
-"produits groupés. <strong>Cochez</strong> cette option si vous souhaitez "
-"utiliser ce produit pour des offres groupées, pas en tant que produit "
-"complémentaire."
+"produits groupés. <strong>Ne cochez pas</strong> cette option si vous "
+"souhaitez utiliser ce produit pour des offres groupées, pas en tant que "
+"produit complémentaire."
 
 #: pretix/base/models/items.py:527
 msgid ""
@@ -5530,12 +5524,8 @@ msgid "Seat {number}"
 msgstr "Siège {number}"
 
 #: pretix/base/models/tax.py:157
-#, fuzzy
-#| msgid "Your layout file is not a valid layout. Error message: {}"
 msgid "Your set of rules is not valid. Error message: {}"
-msgstr ""
-"Votre fichier de mise en page n’est pas une mise en page valide. Message "
-"d’erreur : {}"
+msgstr "Votre ensemble de règles n'est pas valide. Message d'erreur : {}"
 
 #: pretix/base/models/tax.py:168
 msgid "Official name"
@@ -6673,9 +6663,8 @@ msgid "Attendee country"
 msgstr "Pays du participant"
 
 #: pretix/base/pdf.py:211
-#, fuzzy
 msgid "Pseudonymization ID (lead scanning)"
-msgstr "ID pseudonyme"
+msgstr "ID de pseudonymisation (balayage principal)"
 
 #: pretix/base/pdf.py:217 pretix/base/pdf.py:222
 msgid "Sample event name"
@@ -8048,11 +8037,8 @@ msgstr ""
 "réessayer."
 
 #: pretix/base/services/shredder.py:177
-#, fuzzy
-#| msgctxt "paypal"
-#| msgid "Capture completed."
 msgid "Data shredding completed"
-msgstr "Capture terminée."
+msgstr "Déchiquetage de données terminé"
 
 #: pretix/base/services/stats.py:210
 msgid "Uncategorized"
@@ -8762,7 +8748,7 @@ msgstr ""
 
 #: pretix/base/settings.py:934
 msgid "Accept late payments"
-msgstr "Accepter les paiements en retard"
+msgstr "Accepter les retards de paiement"
 
 #: pretix/base/settings.py:935
 msgid ""
@@ -12086,16 +12072,16 @@ msgstr "Saisie de texte libre"
 
 #: pretix/control/forms/event.py:666
 msgid "Do not ask"
-msgstr "Ne pas demandez"
+msgstr "Ne pas demander"
 
 #: pretix/control/forms/event.py:667
 msgid "Ask, but do not require input"
-msgstr "Demandez, mais n’avez pas besoin d’entrée"
+msgstr "Demander, mais ne pas exiger de saisie"
 
 #: pretix/control/forms/event.py:668
 #: pretix/control/templates/pretixcontrol/event/settings.html:74
 msgid "Ask and require input"
-msgstr "Demandez et requérez la saise"
+msgstr "Demander et exiger la saisie"
 
 #: pretix/control/forms/event.py:740
 msgid ""
@@ -13032,7 +13018,7 @@ msgstr "Appareils révoqués"
 
 #: pretix/control/forms/global_settings.py:59
 msgid "Additional footer text"
-msgstr "Texte de pied de page supplémentaire"
+msgstr "Texte supplémentaire en bas de page"
 
 #: pretix/control/forms/global_settings.py:60
 msgid "Will be included as additional text in the footer, site-wide."
@@ -15906,7 +15892,7 @@ msgstr "Tous les utilisateurs"
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:5
 #: pretix/control/templates/pretixcontrol/user/staff_session_list.html:7
 msgid "Admin sessions"
-msgstr "Sessions d'administration"
+msgstr "Sessions Admin"
 
 #: pretix/control/navigation.py:427
 #: pretix/control/templates/pretixcontrol/global_settings_base.html:5
@@ -18397,7 +18383,7 @@ msgstr ""
 "Vous pouvez ici définir un ensemble de propriétés de métadonnées (c’est-à-"
 "dire des variables) que vous pouvez définir ultérieurement pour vos articles "
 "et réutiliser dans des endroits tels que les mises en page de tickets. C’est "
-"un gain de temps utile si vous créez beaucoup, beaucoup d’éléments."
+"un gain de temps précieux si vous créez beaucoup d'articles."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:389
 #: pretix/control/templates/pretixcontrol/event/settings.html:417
@@ -19029,7 +19015,7 @@ msgstr "Type de produit"
 #: pretix/control/templates/pretixcontrol/item/create.html:25
 #: pretix/control/templates/pretixcontrol/item/index.html:33
 msgid "Admission product"
-msgstr "Produit d’admission"
+msgstr "Produit d'admission"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:27
 #: pretix/control/templates/pretixcontrol/item/index.html:35
@@ -19292,7 +19278,7 @@ msgstr "Nouvelle variante"
 
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:215
 msgid "Add a new variation"
-msgstr "Ajouter une nouvelle variante"
+msgstr "Ajouter une nouvelle variation"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:153
 msgid "Availability"
@@ -19582,7 +19568,7 @@ msgstr "Billet d’entrée personnalisé"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:87
 msgid "Admission ticket without personalization"
-msgstr "Billet d’entrée sans personnalisation"
+msgstr "Billet d'entrée sans personnalisation"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:95
 msgid "Product with variations"
@@ -21615,9 +21601,8 @@ msgstr ""
 "événements."
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:79
-#, fuzzy
 msgid "Lifetime spending"
-msgstr "Paiement en attente"
+msgstr "Dépenses à vie"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:101
 #: pretix/control/templates/pretixcontrol/organizers/customer_anonymize.html:39
@@ -23648,7 +23633,7 @@ msgstr "On"
 #: pretix/control/templates/pretixcontrol/user/notifications.html:71
 #: pretix/control/templates/pretixcontrol/user/settings.html:24
 msgid "Off"
-msgstr "Off"
+msgstr "Désactivé"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:75
 msgid "You have no permission to receive this notification"
@@ -27116,9 +27101,8 @@ msgstr ""
 "liste d’enregistrement."
 
 #: pretix/plugins/checkinlists/exporters.py:479
-#, fuzzy
 msgid "Checked out"
-msgstr "Paiement"
+msgstr "Passé en caisse"
 
 #: pretix/plugins/checkinlists/exporters.py:479
 #: pretix/plugins/checkinlists/exporters.py:670
@@ -27405,11 +27389,11 @@ msgid ""
 "payment methods world-wide."
 msgstr ""
 "Acceptez les paiements avec votre compte PayPal. En plus des paiements "
-"PayPal réguliers, vous pouvez désormais également proposer des paiements "
-"dans une variété de méthodes de paiement locales telles que giropay, SOFORT, "
-"iDEAL et bien d’autres à vos clients - ils n’ont même pas besoin d’un compte "
-"PayPal. PayPal est l’une des méthodes de paiement les plus populaires au "
-"monde."
+"PayPal standards, vous pouvez désormais également proposer des paiements "
+"dans une variété de méthodes de paiement locales à vos clients telles que "
+"giropay, SOFORT, iDEAL et bien d’autres - ils n’ont même pas besoin d’un "
+"compte PayPal. PayPal est l’une des méthodes de paiement les plus populaires "
+"au monde."
 
 #: pretix/plugins/paypal2/payment.py:95
 msgid "PayPal Merchant ID"
@@ -28349,10 +28333,9 @@ msgid "Create a new rule"
 msgstr "Créer une nouvelle règle"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:33
-#, fuzzy
 msgctxt "subevent"
 msgid "Sent / Total dates"
-msgstr "date de début d'événement"
+msgstr "Envoyés / Dates total"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:52
 msgid "Next execution:"
