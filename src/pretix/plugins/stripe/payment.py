@@ -59,7 +59,9 @@ from pretix import __version__
 from pretix.base.decimal import round_decimal
 from pretix.base.forms import SecretKeySettingsField
 from pretix.base.models import Event, OrderPayment, OrderRefund, Quota
-from pretix.base.payment import BasePaymentProvider, PaymentException, WalletQueries
+from pretix.base.payment import (
+    BasePaymentProvider, PaymentException, WalletQueries,
+)
 from pretix.base.plugins import get_all_plugins
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
@@ -750,6 +752,8 @@ class StripeCC(StripeMethod):
     @property
     def walletqueries(self):
         # ToDo: Check against Stripe API, if ApplePay and GooglePay are even activated/available
+        # This is probably only really feasable once the Payment Methods Configuration API is out of beta
+        # https://stripe.com/docs/connect/payment-method-configurations
         return [WalletQueries.APPLEPAY, WalletQueries.GOOGLEPAY]
 
     def payment_form_render(self, request, total) -> str:
