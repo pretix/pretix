@@ -78,6 +78,16 @@ from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 logger = logging.getLogger(__name__)
 
 
+class WalletQueries:
+    APPLEPAY = 'applepay'
+    GOOGLEPAY = 'googlepay'
+
+    WALLETS = (
+        (APPLEPAY, pgettext_lazy('payment', 'Apple Pay')),
+        (GOOGLEPAY, pgettext_lazy('payment', 'Google Pay')),
+    )
+
+
 class PaymentProviderForm(Form):
     def clean(self):
         cleaned_data = super().clean()
@@ -435,6 +445,16 @@ class BasePaymentProvider:
         d['_restricted_countries']._as_type = list
         d['_restrict_to_sales_channels']._as_type = list
         return d
+
+    @property
+    def walletqueries(self):
+        """
+        A list of wallet payment methods that should be dynamically joined to the public name of the payment method,
+        if they are available to the user.
+        The detection is made on a best effort basis with no guarantees of correctness and actual availability.
+        Wallets that pretix can check for are exposed through pretix.base.payment.WalletQueries.
+        """
+        return []
 
     def settings_form_clean(self, cleaned_data):
         """

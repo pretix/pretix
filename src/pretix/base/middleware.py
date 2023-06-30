@@ -249,7 +249,7 @@ class SecurityMiddleware(MiddlewareMixin):
 
         h = {
             'default-src': ["{static}"],
-            'script-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
+            'script-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com', 'https://pay.google.com'],
             'object-src': ["'none'"],
             'frame-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
             'style-src': ["{static}", "{media}"],

@@ -59,7 +59,7 @@ from pretix import __version__
 from pretix.base.decimal import round_decimal
 from pretix.base.forms import SecretKeySettingsField
 from pretix.base.models import Event, OrderPayment, OrderRefund, Quota
-from pretix.base.payment import BasePaymentProvider, PaymentException
+from pretix.base.payment import BasePaymentProvider, PaymentException, WalletQueries
 from pretix.base.plugins import get_all_plugins
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
@@ -746,6 +746,11 @@ class StripeCC(StripeMethod):
     verbose_name = _('Credit card via Stripe')
     public_name = _('Credit card')
     method = 'cc'
+
+    @property
+    def walletqueries(self):
+        # ToDo: Check against Stripe API, if ApplePay and GooglePay are even activated/available
+        return [WalletQueries.APPLEPAY, WalletQueries.GOOGLEPAY]
 
     def payment_form_render(self, request, total) -> str:
         account = get_stripe_account_key(self)
