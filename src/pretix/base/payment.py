@@ -449,10 +449,13 @@ class BasePaymentProvider:
     @property
     def walletqueries(self):
         """
+        .. warning:: This property is considered **experimental**. It might change or get removed at any time without
+                     prior notice.
+
         A list of wallet payment methods that should be dynamically joined to the public name of the payment method,
         if they are available to the user.
         The detection is made on a best effort basis with no guarantees of correctness and actual availability.
-        Wallets that pretix can check for are exposed through pretix.base.payment.WalletQueries.
+        Wallets that pretix can check for are exposed through ``pretix.base.payment.WalletQueries``.
         """
         return []
 
