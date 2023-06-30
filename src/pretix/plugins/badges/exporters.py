@@ -35,7 +35,7 @@
 import json
 import logging
 from collections import OrderedDict
-from datetime import datetime, time, timedelta
+from datetime import datetime, time, timedelta, date
 from decimal import Decimal
 from io import BytesIO
 from typing import Tuple
@@ -351,15 +351,19 @@ class BadgeExporter(BaseExporter):
             qs = qs.filter(Q(order__status=Order.STATUS_PAID) | Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True))
 
         if form_data.get('date_from'):
-            dt = make_aware(datetime.combine(
-                dateutil.parser.parse(form_data['date_from']).date(),
+            if not isinstance(form_data.get('date_from'), date):
+                form_data['date_from'] = dateutil.parser.parse(form_data['date_from']).date()
+            df = make_aware(datetime.combine(
+                form_data['date_from'],
                 time(hour=0, minute=0, second=0)
             ), self.event.timezone)
-            qs = qs.filter(Q(subevent__date_from__gte=dt) | Q(subevent__isnull=True, order__event__date_from__gte=dt))
+            qs = qs.filter(Q(subevent__date_from__gte=df) | Q(subevent__isnull=True, order__event__date_from__gte=df))
 
         if form_data.get('date_to'):
+            if not isinstance(form_data.get('date_to'), date):
+                form_data['date_to'] = dateutil.parser.parse(form_data['date_to']).date()
             dt = make_aware(datetime.combine(
-                dateutil.parser.parse(form_data['date_to']).date() + timedelta(days=1),
+                form_data['date_to'] + timedelta(days=1),
                 time(hour=0, minute=0, second=0)
             ), self.event.timezone)
             qs = qs.filter(Q(subevent__date_from__lt=dt) | Q(subevent__isnull=True, order__event__date_from__lt=dt))
