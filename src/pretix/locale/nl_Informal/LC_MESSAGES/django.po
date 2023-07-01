@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-02-23 23:00+0000\n"
-"Last-Translator: Toon Toetenel <toon@toetenel.com>\n"
+"PO-Revision-Date: 2023-07-02 06:00+0000\n"
+"Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
 "Language: nl_Informal\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -762,17 +762,17 @@ msgstr "Antwoorden op vragen"
 #: pretix/base/exporters/orderlist.py:1189
 #: pretix/plugins/reports/exporters.py:451
 #: pretix/plugins/reports/exporters.py:624
-#, fuzzy
-#| msgid "Order data"
 msgctxt "export_category"
 msgid "Order data"
-msgstr "Besteldatums"
+msgstr "Bestelgegevens"
 
 #: pretix/base/exporters/answers.py:54
 msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
 msgstr ""
+"Download een ZIP-bestand dat alle bestanden bevat die bij bestellingen als "
+"antwoord op een vraag geüpload werden."
 
 #: pretix/base/exporters/answers.py:64 pretix/base/models/items.py:1565
 #: pretix/control/navigation.py:182
@@ -1709,7 +1709,7 @@ msgstr "Verberg zonder geldig lidmaatschap"
 
 #: pretix/base/exporters/json.py:51 pretix/base/exporters/orderlist.py:85
 msgid "Order data"
-msgstr "Besteldatums"
+msgstr "Bestelgegevens"
 
 #: pretix/base/exporters/json.py:53
 msgid ""
@@ -2305,10 +2305,8 @@ msgid "Transaction time"
 msgstr "Transactiecode"
 
 #: pretix/base/exporters/orderlist.py:833
-#, fuzzy
-#| msgid "Order data"
 msgid "Old data"
-msgstr "Besteldatums"
+msgstr "Oude gegevens"
 
 #: pretix/base/exporters/orderlist.py:836 pretix/base/models/items.py:1361
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
@@ -3249,11 +3247,9 @@ msgid "Modern Invoice Renderer (pretix 2.7)"
 msgstr "Moderne factuurrenderer (pretix 2.7)"
 
 #: pretix/base/invoice.py:947
-#, fuzzy
-#| msgid "Please enter a valid state."
 msgctxt "invoice"
 msgid "(Please quote at all times.)"
-msgstr "Kies een geldige staat."
+msgstr "(Gelieve steeds te vermelden.)"
 
 #: pretix/base/media.py:58
 msgid "Barcode / QR-Code"
@@ -15231,10 +15227,8 @@ msgid "The order's internal comment has been updated."
 msgstr "Het interne commentaar van de bestelling is bijgewerkt."
 
 #: pretix/control/logdisplay.py:405
-#, fuzzy
-#| msgid "The order of items has been updated."
 msgid "The order's follow-up date has been updated."
-msgstr "De volgorde van items is bijgewerkt."
+msgstr "De opvolgdatum van de bestelling werd bijgewerkt."
 
 #: pretix/control/logdisplay.py:406
 msgid "The order's flag to require attention at check-in has been toggled."
