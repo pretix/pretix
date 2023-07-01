@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-06-07 15:04+0000\n"
+"PO-Revision-Date: 2023-07-02 06:00+0000\n"
 "Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -1679,7 +1679,7 @@ msgstr "Toon alleen met geldig lidmaatschap"
 
 #: pretix/base/exporters/json.py:51 pretix/base/exporters/orderlist.py:85
 msgid "Order data"
-msgstr "Besteldatums"
+msgstr "Bestelgegevens"
 
 #: pretix/base/exporters/json.py:53
 msgid ""
@@ -3199,11 +3199,9 @@ msgid "Modern Invoice Renderer (pretix 2.7)"
 msgstr "Moderne factuurrenderer (pretix 2.7)"
 
 #: pretix/base/invoice.py:947
-#, fuzzy
-#| msgid "Please enter a valid state."
 msgctxt "invoice"
 msgid "(Please quote at all times.)"
-msgstr "Kies een geldige staat."
+msgstr "(Gelieve steeds te vermelden.)"
 
 #: pretix/base/media.py:58
 msgid "Barcode / QR-Code"
