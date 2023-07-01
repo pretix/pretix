@@ -8,14 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: Automatically generated\n"
-"Language-Team: none\n"
+"PO-Revision-Date: 2023-07-02 06:00+0000\n"
+"Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
+"Language-Team: Dutch (Belgium) <https://translate.pretix.eu/projects/pretix/"
+"pretix/nl_BE/>\n"
 "Language: nl_BE\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -3078,7 +3080,7 @@ msgstr ""
 #: pretix/base/invoice.py:947
 msgctxt "invoice"
 msgid "(Please quote at all times.)"
-msgstr ""
+msgstr "(Gelieve steeds te vermelden.)"
 
 #: pretix/base/media.py:58
 msgid "Barcode / QR-Code"
