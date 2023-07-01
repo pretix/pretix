@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-07-01 01:00+0000\n"
-"Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
+"PO-Revision-Date: 2023-07-02 06:00+0000\n"
+"Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -540,10 +540,8 @@ msgid "Waiting list entry deleted"
 msgstr "Suppression d'une inscription de la liste d'attente"
 
 #: pretix/api/webhooks.py:351
-#, fuzzy
-#| msgid "Waiting list entries"
 msgid "Waiting list entry received voucher"
-msgstr "Entrées de liste d'attente"
+msgstr "Bon d’inscription sur la liste d’attente reçu"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:938
