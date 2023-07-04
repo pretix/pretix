@@ -992,7 +992,10 @@ class Renderer:
                 elif o['type'] == "poweredby":
                     self._draw_poweredby(canvas, op, o)
                 if self.bg_pdf:
-                    page_size = (self.bg_pdf.pages[0].mediabox[2], self.bg_pdf.pages[0].mediabox[3])
+                    page_size = (
+                        self.bg_pdf.pages[0].mediabox[2] - self.bg_pdf.pages[0].mediabox[0],
+                        self.bg_pdf.pages[0].mediabox[3] - self.bg_pdf.pages[0].mediabox[1]
+                    )
                     if self.bg_pdf.pages[0].get('/Rotate') in (90, 270):
                         # swap dimensions due to pdf being rotated
                         page_size = page_size[::-1]
