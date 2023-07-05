@@ -479,7 +479,7 @@ class BankTransfer(BasePaymentProvider):
         return t
 
     def swiss_qrbill(self, payment):
-        if not self.settings.get('bank_details_sepa_iban') or not self.settings.get('bank_details_sepa_iban')[:2] in ('CH', 'LI'):
+        if not self.settings.get('bank_details_sepa_iban'):
             return
         if self.event.currency not in ('EUR', 'CHF'):
             return
