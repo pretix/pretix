@@ -40,7 +40,7 @@ TEST_RULE_RES = {
     'template': {'en': 'foo'},
     'all_products': True,
     'limit_products': [],
-    "restrict_to_status": ['p', 'na', 'valid_if_pending'],
+    "restrict_to_status": ['p', 'valid_if_pending'],
     'send_date': '2021-07-08T00:00:00Z',
     'send_offset_days': None,
     'send_offset_time': None,
@@ -129,6 +129,9 @@ def test_sendmail_rule_create_minimal(token_client, organizer, event):
             'subject': {'en': 'meow'},
             'template': {'en': 'creative text here'},
             'send_date': '2018-03-17T13:31Z',
+            "restrict_to_status": ['p', 'valid_if_pending'],
+            # maybe this (the default) should be set when not giving any options?
+            # but then it's not entirely clear elsewhere…
         }
     )
     assert r.send_date == datetime.datetime(2018, 3, 17, 13, 31, tzinfo=utc)
