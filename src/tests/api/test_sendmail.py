@@ -258,6 +258,59 @@ def test_sendmail_rule_create_invalid(token_client, organizer, event):
 
 @scopes_disabled()
 @pytest.mark.django_db
+def test_sendmail_rule_restrict_recipients(token_client, organizer, event, rule):
+    restrictions = ['p', 'e', 'c', 'na', 'pa', 'valid_if_pending', 'overdue']
+    for r in restrictions:
+        result = create_rule(
+            token_client, organizer, event,
+            data={
+                'subject': {'en': 'meow'},
+                'template': {'en': 'creative text here'},
+                'send_date': '2018-03-17T13:31Z',
+                "restrict_to_status": [r],
+            },
+            expected_failure=False
+        )
+        assert result.restrict_to_status == [r]
+
+    create_rule(
+        token_client, organizer, event,
+        data={
+            'subject': {'en': 'meow'},
+            'template': {'en': 'creative text here'},
+            'send_date': '2018-03-17T13:31Z',
+            "restrict_to_status": ["foo"],
+        },
+        expected_failure=True,
+        expected_failure_text="restrict_to_status may only include valid states"
+    )
+
+    create_rule(
+        token_client, organizer, event,
+        data={
+            'subject': {'en': 'meow'},
+            'template': {'en': 'creative text here'},
+            'send_date': '2018-03-17T13:31Z',
+            "restrict_to_status": [],
+        },
+        expected_failure=True,
+        expected_failure_text="restrict_to_status needs at least one value"
+    )
+
+    create_rule(
+        token_client, organizer, event,
+        data={
+            'subject': {'en': 'meow'},
+            'template': {'en': 'creative text here'},
+            'send_date': '2018-03-17T13:31Z',
+        },
+        expected_failure=True,
+        expected_failure_text="restrict_to_status needs at least one value"
+    )
+
+
+@scopes_disabled()
+@pytest.mark.django_db
 def test_sendmail_rule_change(token_client, organizer, event, rule):
     token_client.patch(
         f'/api/v1/organizers/{organizer.slug}/events/{event.slug}/sendmail_rules/{rule.pk}/',

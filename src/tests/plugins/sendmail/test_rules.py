@@ -278,10 +278,118 @@ def test_sendmail_rule_send_correct_products(event, order, item, item2):
 
 @pytest.mark.django_db
 @scopes_disabled()
+def run_restriction_test(event, order, restrictions_pass=[], restrictions_fail=[]):
+    for r in restrictions_pass:
+        djmail.outbox = []
+        event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=[r],
+                                    subject='meow', template='meow meow meow')
+        sendmail_run_rules(None)
+
+        assert len(djmail.outbox) == 1
+
+    for r in restrictions_fail:
+        djmail.outbox = []
+        event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=[r],
+                                    subject='meow', template='meow meow meow')
+        sendmail_run_rules(None)
+
+        assert len(djmail.outbox) == 0
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_restrictions_status_paid(event, order):
+    order.status = Order.STATUS_PAID
+    order.save()
+    order.valid_if_pending = False
+    restrictions_pass = ['p']
+    restrictions_fail = ['e', 'c', 'na', 'pa', 'valid_if_pending', 'overdue']
+
+    run_restriction_test(event, order, restrictions_pass, restrictions_fail)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_restrictions_status_pending(event, order):
+    order.status = Order.STATUS_PENDING
+    order.require_approval = False
+    order.valid_if_pending = False
+    order.save()
+    restrictions_pass = ['na']
+    restrictions_fail = ['p', 'e', 'c', 'pa', 'valid_if_pending', 'overdue']
+
+    run_restriction_test(event, order, restrictions_pass, restrictions_fail)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_restrictions_status_valid_pending(event, order):
+    order.status = Order.STATUS_PENDING
+    order.require_approval = False
+    order.valid_if_pending = True
+    order.save()
+    restrictions_pass = ['valid_if_pending']
+    restrictions_fail = ['p', 'e', 'c', 'na', 'pa', 'overdue']
+
+    run_restriction_test(event, order, restrictions_pass, restrictions_fail)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_restrictions_status_approval_pending(event, order):
+    order.status = Order.STATUS_PENDING
+    order.require_approval = True
+    order.valid_if_pending = False
+    order.save()
+    restrictions_pass = ['pa']
+    restrictions_fail = ['p', 'e', 'c', 'na', 'valid_if_pending', 'overdue']
+
+    run_restriction_test(event, order, restrictions_pass, restrictions_fail)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_restrictions_status_overdue_pending(event, order):
+    order.status = Order.STATUS_PENDING
+    order.require_approval = True
+    order.valid_if_pending = False
+    order.expires = order.datetime - datetime.timedelta(hours=1)  # TODO: make this test-order actually overdue
+    order.save()
+    # restrictions_pass = ['overdue']
+    # restrictions_fail = ['p', 'e', 'c', 'pa', 'na', 'valid_if_pending']
+
+    run_restriction_test(event, order)  # TODO: add the restriction lists after todo above
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_restrictions_status_expired(event, order):
+    order.status = Order.STATUS_EXPIRED
+    order.save()
+    restrictions_pass = ['e']
+    restrictions_fail = ['p', 'c', 'na', 'pa', 'valid_if_pending', 'overdue']
+
+    run_restriction_test(event, order, restrictions_pass, restrictions_fail)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_restrictions_status_canceled(event, order):
+    order.status = Order.STATUS_CANCELED
+    order.save()
+    restrictions_pass = ['c']
+    restrictions_fail = ['p', 'e', 'na', 'pa', 'valid_if_pending', 'overdue']
+
+    run_restriction_test(event, order, restrictions_pass, restrictions_fail)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
 def test_sendmail_rule_send_order_pending(event, order):
     djmail.outbox = []
 
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=['p', 'na', 'valid_if_pending'],
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1),
+                                restrict_to_status=['p', 'na', 'valid_if_pending'],
                                 subject='meow', template='meow meow meow')
 
     sendmail_run_rules(None)
@@ -294,7 +402,8 @@ def test_sendmail_rule_send_order_pending(event, order):
 def test_sendmail_rule_send_order_pending_excluded(event, order):
     djmail.outbox = []
 
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=['p', 'valid_if_pending'],
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1),
+                                restrict_to_status=['p', 'valid_if_pending'],
                                 subject='meow', template='meow meow meow')
 
     sendmail_run_rules(None)
@@ -310,7 +419,8 @@ def test_sendmail_rule_send_order_valid_if_pending(event, order):
     order.save()
     djmail.outbox = []
 
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=['p', 'valid_if_pending'],
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1),
+                                restrict_to_status=['p', 'valid_if_pending'],
                                 subject='meow', template='meow meow meow')
 
     sendmail_run_rules(None)
@@ -330,7 +440,8 @@ def test_sendmail_rule_send_order_status(status, event, order):
     order.status = status
     order.save()
 
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), restrict_to_status=['p', 'na', 'valid_if_pending'],
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1),
+                                restrict_to_status=['p', 'valid_if_pending'],
                                 subject='meow', template='meow meow meow')
 
     sendmail_run_rules(None)
