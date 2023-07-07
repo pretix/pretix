@@ -26,6 +26,7 @@ from rest_framework import viewsets
 
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
+from pretix.base.models import Order
 from pretix.plugins.sendmail.models import Rule
 
 
@@ -55,6 +56,22 @@ class RuleSerializer(I18nAwareModelSerializer):
         if full_data.get('all_products') is False:
             if not full_data.get('limit_products'):
                 raise ValidationError('limit_products is required when all_products=False')
+
+        rts = full_data.get('restrict_to_status')
+        if not rts or rts == []:
+            raise ValidationError('restrict_to_status needs at least one value')
+        elif rts:
+            for s in rts:
+                if s not in [
+                    Order.STATUS_PAID,
+                    Order.STATUS_EXPIRED,
+                    Order.STATUS_CANCELED,
+                    'valid_if_pending',
+                    'overdue',
+                    'pa',
+                    'na',
+                ]:
+                    raise ValidationError(f'status {s} not allowed: restrict_to_status may only include valid states')
 
         return full_data
 
