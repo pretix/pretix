@@ -123,6 +123,8 @@ var form_handlers = function (el) {
 
     // Vouchers
     el.find("#voucher-bulk-codes-generate").click(function () {
+        if (!$("#voucher-bulk-codes-num").get(0).reportValidity())
+            return;
         var num = $("#voucher-bulk-codes-num").val();
         var prefix = $('#voucher-bulk-codes-prefix').val();
         if (num != "") {

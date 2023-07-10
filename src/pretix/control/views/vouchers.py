@@ -569,6 +569,8 @@ class VoucherRNG(EventPermissionRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         try:
             num = int(request.GET.get('num', '5'))
+            if num > 100_000:
+                return HttpResponseBadRequest()
         except ValueError:  # NOQA
             return HttpResponseBadRequest()
 
