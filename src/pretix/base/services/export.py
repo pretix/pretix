@@ -88,7 +88,7 @@ def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, 
                 file.filename, file.type, data = d
                 f = ContentFile(data)
                 file.file.save(cachedfile_name(file, file.filename), f)
-    return file.pk
+    return str(file.pk)
 
 
 @app.task(base=ProfiledOrganizerUserTask, throws=(ExportError,), bind=True)
@@ -156,7 +156,7 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
                 file.filename, file.type, data = d
                 f = ContentFile(data)
                 file.file.save(cachedfile_name(file, file.filename), f)
-    return file.pk
+    return str(file.pk)
 
 
 def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, config_url, retry_func, has_permission):
