@@ -26,7 +26,7 @@ from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 from django.conf import settings
 from django.http import Http404, HttpRequest, HttpResponse
 from django.middleware.common import CommonMiddleware
-from django.urls import get_script_prefix
+from django.urls import get_script_prefix, resolve
 from django.utils import timezone, translation
 from django.utils.cache import patch_vary_headers
 from django.utils.deprecation import MiddlewareMixin
@@ -230,6 +230,8 @@ class SecurityMiddleware(MiddlewareMixin):
     )
 
     def process_response(self, request, resp):
+        url = resolve(request.path_info)
+
         if settings.DEBUG and resp.status_code >= 400:
             # Don't use CSP on debug error page as it breaks of Django's fancy error
             # pages
@@ -249,20 +251,26 @@ class SecurityMiddleware(MiddlewareMixin):
 
         h = {
             'default-src': ["{static}"],
-            'script-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com', 'https://pay.google.com'],
+            'script-src': ['{static}'],
             'object-src': ["'none'"],
-            'frame-src': ['{static}', 'https://checkout.stripe.com', 'https://js.stripe.com'],
+            'frame-src': ['{static}'],
             'style-src': ["{static}", "{media}"],
-            'connect-src': ["{dynamic}", "{media}", "https://checkout.stripe.com"],
-            'img-src': ["{static}", "{media}", "data:", "https://*.stripe.com"] + img_src,
+            'connect-src': ["{dynamic}", "{media}"],
+            'img-src': ["{static}", "{media}", "data:"] + img_src,
             'font-src': ["{static}"],
             'media-src': ["{static}", "data:"],
             # form-action is not only used to match on form actions, but also on URLs
             # form-actions redirect to. In the context of e.g. payment providers or
-            # single-sign-on this can be nearly anything so we cannot really restrict
+            # single-sign-on this can be nearly anything, so we cannot really restrict
             # this. However, we'll restrict it to HTTPS.
             'form-action': ["{dynamic}", "https:"] + (['http:'] if settings.SITE_URL.startswith('http://') else []),
         }
+        # Only include pay.google.com for wallet detection purposes on the Payment selection page
+        if (
+                url.url_name == "event.order.pay.change" or
+                (url.url_name == "event.checkout" and url.kwargs['step'] == "payment")
+        ):
+            h['script-src'].append('https://pay.google.com')
         if settings.LOG_CSP:
             h['report-uri'] = ["/csp_report/"]
         if 'Content-Security-Policy' in resp:
