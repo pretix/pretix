@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-07-11 09:51+0000\n"
-"Last-Translator: alemao8 <alevizosfotis@gmail.com>\n"
+"PO-Revision-Date: 2023-07-11 11:38+0000\n"
+"Last-Translator: hara metaxa <metaxahara@gmail.com>\n"
 "Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
 "\n"
 "Language: el\n"
@@ -31449,10 +31449,8 @@ msgstr "Εμφάνιση καλαθιού"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:49
 #: pretix/presale/templates/pretixpresale/event/index.html:78
-#, fuzzy
-#| msgid "This file is from a different event."
 msgid "Add tickets for a different date"
-msgstr "Αυτό το αρχείο προέρχεται από διαφορετική εκδήλωση."
+msgstr "Προσθέστε εισιτήρια για διαφορετική ημερομηνία"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:7
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:9
