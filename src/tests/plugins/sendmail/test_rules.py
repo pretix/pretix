@@ -350,10 +350,12 @@ def test_sendmail_rule_restrictions_status_approval_pending(event, order):
 @pytest.mark.django_db
 @scopes_disabled()
 def test_sendmail_rule_restrictions_status_overdue_pending(event, order):
+    event.settings.payment_term_expire_automatically = False
+    event.save()
     order.status = Order.STATUS_PENDING
     order.require_approval = True
     order.valid_if_pending = False
-    order.expires = order.datetime - datetime.timedelta(hours=1)  # TODO: make this test-order actually overdue
+    order.expires = order.expires - datetime.timedelta(days=15)  # TODO: make this test-order actually overdue
     order.save()
     # restrictions_pass = ['overdue']
     # restrictions_fail = ['p', 'e', 'c', 'pa', 'na', 'valid_if_pending']
