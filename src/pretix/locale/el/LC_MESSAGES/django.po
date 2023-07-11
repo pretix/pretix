@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-03-07 03:00+0000\n"
+"PO-Revision-Date: 2023-07-11 09:51+0000\n"
 "Last-Translator: alemao8 <alevizosfotis@gmail.com>\n"
-"Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/"
-">\n"
+"Language-Team: Greek <https://translate.pretix.eu/projects/pretix/pretix/el/>"
+"\n"
 "Language: el\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.17\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -31444,10 +31444,8 @@ msgid "Cart expired"
 msgstr "Το καλάθι έληξε"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:37
-#, fuzzy
-#| msgid "Show information"
 msgid "Show full cart"
-msgstr "Εμφάνιση πληροφοριών"
+msgstr "Εμφάνιση καλαθιού"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:49
 #: pretix/presale/templates/pretixpresale/event/index.html:78
@@ -31849,10 +31847,8 @@ msgstr "από %(minprice)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:97
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:89
-#, fuzzy
-#| msgid "Show variants"
 msgid "Hide variants"
-msgstr "Εμφάνιση παραλλαγών"
+msgstr "Απόκρυψη παραλλαγών"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:99
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:91
@@ -32197,12 +32193,12 @@ msgstr ""
 "Τα στοιχεία του καλαθιού σας είναι στη διάθεσή σας για %(minutes)s λεπτά."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:486
-#, fuzzy
-#| msgid "The items in your cart are no longer reserved for you."
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
-msgstr "Τα αντικείμενα στο καλάθι σας δεν είναι πλέον αποκλειστικά για εσάς."
+msgstr ""
+"Τα αντικείμενα στο καλάθι σας δεν είναι πλέον διαθέσιμα. Μπορείτε να "
+"επαναλάβετε την διαδικασία εφόσον είναι διαθέσιμα."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:490
 msgid "Overview of your ordered products."
