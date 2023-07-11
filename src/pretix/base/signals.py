@@ -787,3 +787,19 @@ return a dictionary mapping names of attributes in the settings store to DRF ser
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
+
+customer_created = GlobalSignal()
+"""
+Arguments: ``customer``
+
+This signal is sent out every time a customer account is created. The ``customer``
+object is given as the first argument.
+"""
+
+customer_signed_in = GlobalSignal()
+"""
+Arguments: ``customer``
+
+This signal is sent out every time a customer signs in. The ``customer`` object
+is given as the first argument.
+"""

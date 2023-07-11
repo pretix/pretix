@@ -95,8 +95,12 @@ def test_native_disabled(env, client):
 
 
 @pytest.mark.django_db
-def test_org_register(env, client):
+def test_org_register(env, client, mocker):
+    from pretix.base.signals import customer_created
+    mocker.patch('pretix.base.signals.customer_created.send')
+
     signer = signing.TimestampSigner(salt='customer-registration-captcha-127.0.0.1')
+
     r = client.post('/bigevents/account/register', {
         'email': 'john@example.org',
         'name_parts_0': 'John Doe',
@@ -109,6 +113,7 @@ def test_org_register(env, client):
         customer = env[0].customers.get(email='john@example.org')
         assert not customer.is_verified
         assert customer.is_active
+        customer_created.send.assert_called_once_with(mocker.ANY, customer=customer)
 
     r = client.post(
         f'/bigevents/account/activate?id={customer.identifier}&token={TokenGenerator().make_token(customer)}', {
@@ -123,7 +128,10 @@ def test_org_register(env, client):
 
 
 @pytest.mark.django_db
-def test_org_register_duplicate_email(env, client):
+def test_org_register_duplicate_email(env, client, mocker):
+    from pretix.base.signals import customer_created
+    mocker.patch('pretix.base.signals.customer_created.send')
+
     with scopes_disabled():
         env[0].customers.create(email='john@example.org')
     r = client.post('/bigevents/account/register', {
@@ -132,6 +140,7 @@ def test_org_register_duplicate_email(env, client):
     })
     assert b'already registered' in r.content
     assert r.status_code == 200
+    customer_created.send.assert_not_called()
 
 
 @pytest.mark.django_db
@@ -167,7 +176,11 @@ def test_org_activate_invalid_token(env, client):
 
 
 @pytest.mark.django_db
-def test_org_login_logout(env, client):
+def test_org_login_logout(env, client, mocker):
+    from pretix.base.signals import customer_signed_in
+    mocker.patch('pretix.base.signals.customer_signed_in.send')
+
+    customer = None
     with scopes_disabled():
         customer = env[0].customers.create(email='john@example.org', is_verified=True)
         customer.set_password('foo')
@@ -178,6 +191,8 @@ def test_org_login_logout(env, client):
         'password': 'foo',
     })
     assert r.status_code == 302
+
+    customer_signed_in.send.assert_called_once_with(mocker.ANY, customer=customer)
 
     r = client.get('/bigevents/account/')
     assert r.status_code == 200
@@ -190,7 +205,10 @@ def test_org_login_logout(env, client):
 
 
 @pytest.mark.django_db
-def test_org_login_invalid_password(env, client):
+def test_org_login_invalid_password(env, client, mocker):
+    from pretix.base.signals import customer_signed_in
+    mocker.patch('pretix.base.signals.customer_signed_in.send')
+
     with scopes_disabled():
         customer = env[0].customers.create(email='john@example.org', is_verified=True)
         customer.set_password('foo')
@@ -202,10 +220,15 @@ def test_org_login_invalid_password(env, client):
     })
     assert r.status_code == 200
     assert b'alert-danger' in r.content
+    customer_signed_in.send.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_org_login_not_verified(env, client):
+def test_org_login_not_verified(env, client, mocker):
+    from pretix.base.signals import customer_signed_in
+    mocker.patch('pretix.base.signals.customer_signed_in.send')
+
+    customer = None
     with scopes_disabled():
         customer = env[0].customers.create(email='john@example.org', is_verified=False)
         customer.set_password('foo')
@@ -217,10 +240,14 @@ def test_org_login_not_verified(env, client):
     })
     assert r.status_code == 200
     assert b'alert-danger' in r.content
+    customer_signed_in.send.assert_not_called()
 
 
 @pytest.mark.django_db
-def test_org_login_not_active(env, client):
+def test_org_login_not_active(env, client, mocker):
+    from pretix.base.signals import customer_signed_in
+    mocker.patch('pretix.base.signals.customer_signed_in.send')
+
     with scopes_disabled():
         customer = env[0].customers.create(email='john@example.org', is_verified=True, is_active=False)
         customer.set_password('foo')
@@ -232,6 +259,7 @@ def test_org_login_not_active(env, client):
     })
     assert r.status_code == 200
     assert b'alert-danger' in r.content
+    customer_signed_in.send.assert_not_called()
 
 
 @pytest.fixture
@@ -309,12 +337,18 @@ def _sso_login(client, provider, email='test@example.org', popup_origin=None, ex
 
 
 @pytest.mark.django_db
-def test_org_sso_login_new_customer(env, client, provider):
+def test_org_sso_login_new_customer(env, client, provider, mocker):
+    from pretix.base.signals import customer_created, customer_signed_in
+    mocker.patch('pretix.base.signals.customer_created.send')
+    mocker.patch('pretix.base.signals.customer_signed_in.send')
+
     _sso_login(client, provider)
 
     with scopes_disabled():
         c = Customer.objects.get(provider=provider)
         assert c.external_identifier == "abcdf"
+        customer_created.send.assert_called_once_with(mocker.ANY, customer=c)
+        customer_signed_in.send.assert_called_once_with(mocker.ANY, customer=c)
 
     r = client.get('/bigevents/account/')
     assert r.status_code == 200
@@ -352,10 +386,15 @@ def test_org_sso_login_new_customer_popup_invalid_origin(env, client, provider):
 
 
 @pytest.mark.django_db
-def test_org_sso_login_returning_customer_new_email(env, client, provider):
+def test_org_sso_login_returning_customer_new_email(env, client, provider, mocker):
+    from pretix.base.signals import customer_signed_in
+    mocker.patch('pretix.base.signals.customer_signed_in.send')
+
     _sso_login(client, provider)
     with scopes_disabled():
         c = Customer.objects.get(provider=provider)
+        customer_signed_in.send.assert_called_once_with(mocker.ANY, customer=c)
+        customer_signed_in.send.reset_mock()
 
     r = client.get('/bigevents/account/logout')
     assert r.status_code == 302
@@ -363,6 +402,7 @@ def test_org_sso_login_returning_customer_new_email(env, client, provider):
     _sso_login(client, provider, 'new@example.net')
     c.refresh_from_db()
     assert c.email == "new@example.net"
+    customer_signed_in.send.assert_called_once_with(mocker.ANY, customer=c)
 
 
 @pytest.mark.django_db(transaction=True)
