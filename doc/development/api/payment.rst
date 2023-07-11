@@ -70,6 +70,8 @@ The provider class
 
    .. autoattribute:: settings_form_fields
 
+   .. autoattribute:: walletqueries
+
    .. automethod:: settings_form_clean
 
    .. automethod:: settings_content_render
