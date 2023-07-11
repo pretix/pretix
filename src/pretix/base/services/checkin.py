@@ -86,8 +86,8 @@ def _build_time(t=None, value=None, ev=None, now_dt=None):
         return ev.date_admission or ev.date_from
 
 
-def _logic_annotate_for_graphic_explain(rules, ev, rule_data):
-    logic_environment = _get_logic_environment(ev)
+def _logic_annotate_for_graphic_explain(rules, ev, rule_data, now_dt):
+    logic_environment = _get_logic_environment(ev, now_dt)
     event = ev if isinstance(ev, Event) else ev.event
 
     def _evaluate_inners(r):
@@ -152,7 +152,7 @@ def _logic_explain(rules, ev, rule_data, now_dt=None):
     get in before 17:00". In the middle of the night it would switch to "You can only get in after 09:00".
     """
     now_dt = now_dt or now()
-    logic_environment = _get_logic_environment(ev)
+    logic_environment = _get_logic_environment(ev, now_dt)
     _var_values = {'False': False, 'True': True}
     _var_explanations = {}
 
@@ -229,7 +229,7 @@ def _logic_explain(rules, ev, rule_data, now_dt=None):
     for vname, data in _var_explanations.items():
         var, operator, rhs = data['var'], data['operator'], data['rhs']
         if var == 'now':
-            compare_to = _build_time(*rhs[0]['buildTime'], ev=ev).astimezone(ev.timezone)
+            compare_to = _build_time(*rhs[0]['buildTime'], ev=ev, now_dt=now_dt).astimezone(ev.timezone)
             tolerance = timedelta(minutes=float(rhs[1])) if len(rhs) > 1 and rhs[1] else timedelta(seconds=0)
             if operator == 'isBefore':
                 compare_to += tolerance
@@ -337,7 +337,7 @@ def _logic_explain(rules, ev, rule_data, now_dt=None):
     return ', '.join(var_texts[v] for v in paths_with_min_weight[0] if not _var_values[v])
 
 
-def _get_logic_environment(ev):
+def _get_logic_environment(ev, now_dt):
     # Every change to our supported JSON logic must be done
     # * in pretix.base.services.checkin
     # * in pretix.base.models.checkin
@@ -354,7 +354,7 @@ def _get_logic_environment(ev):
     logic.add_operation('objectList', lambda *objs: list(objs))
     logic.add_operation('lookup', lambda model, pk, str: int(pk))
     logic.add_operation('inList', lambda a, b: a in b)
-    logic.add_operation('buildTime', partial(_build_time, ev=ev))
+    logic.add_operation('buildTime', partial(_build_time, ev=ev, now_dt=now_dt))
     logic.add_operation('isBefore', is_before)
     logic.add_operation('isAfter', lambda t1, t2, tol=None: is_before(t2, t1, tol))
     return logic
@@ -861,7 +861,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
 
         if type == Checkin.TYPE_ENTRY and clist.rules:
             rule_data = LazyRuleVars(op, clist, dt)
-            logic = _get_logic_environment(op.subevent or clist.event)
+            logic = _get_logic_environment(op.subevent or clist.event, now_dt=dt)
             if not logic.apply(clist.rules, rule_data):
                 if force:
                     force_used = True
