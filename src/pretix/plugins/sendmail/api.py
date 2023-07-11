@@ -38,6 +38,17 @@ class RuleSerializer(I18nAwareModelSerializer):
                   'offset_to_event_end', 'offset_is_after', 'send_to', 'enabled']
         read_only_fields = ['id']
 
+    def to_internal_value(self, data):
+        if "restrict_to_status" not in data:
+            if "include_pending" in data:
+                if data["include_pending"]:
+                    data['restrict_to_status'] = [Order.STATUS_PAID, 'na', 'valid_if_pending']
+                else:
+                    data['restrict_to_status'] = [Order.STATUS_PAID, 'valid_if_pending']
+            else:
+                data['restrict_to_status'] = [Order.STATUS_PAID, 'valid_if_pending']
+        return super().to_internal_value(data)
+
     def validate(self, data):
         data = super().validate(data)
 

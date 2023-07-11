@@ -128,10 +128,7 @@ def test_sendmail_rule_create_minimal(token_client, organizer, event):
         data={
             'subject': {'en': 'meow'},
             'template': {'en': 'creative text here'},
-            'send_date': '2018-03-17T13:31Z',
-            "restrict_to_status": ['p', 'valid_if_pending'],
-            # maybe this (the default) should be set when not giving any options?
-            # but then it's not entirely clear elsewhere…
+            'send_date': '2018-03-17T13:31Z'
         }
     )
     assert r.send_date == datetime.datetime(2018, 3, 17, 13, 31, tzinfo=utc)
@@ -304,8 +301,7 @@ def test_sendmail_rule_restrict_recipients(token_client, organizer, event, rule)
             'template': {'en': 'creative text here'},
             'send_date': '2018-03-17T13:31Z',
         },
-        expected_failure=True,
-        expected_failure_text="restrict_to_status needs at least one value"
+        expected_failure=False
     )
 
 
