@@ -20,7 +20,7 @@
             </div>
             <div class="panel-body form-horizontal">
                 {% if spf_warning %}
-                    <div class="alert alert-warning">
+                    <div class="alert alert-danger">
                         <p>
                             {{ spf_warning }}
                         </p>
@@ -70,10 +70,12 @@
             </div>
         </div>
 
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
-        </div>
+        {% if not spf_warning %}
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-primary btn-save">
+                    {% trans "Save" %}
+                </button>
+            </div>
+        {% endif %}
     </form>
 {% endblock %}
