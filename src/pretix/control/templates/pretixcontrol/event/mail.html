@@ -105,6 +105,9 @@
                     {% blocktrans asvar title_payment_reminder %}Payment reminder{% endblocktrans %}
                     {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="order_expirew" title=title_payment_reminder items="mail_days_order_expire_warning,mail_subject_order_expire_warning,mail_text_order_expire_warning,mail_subject_order_pending_warning,mail_text_order_pending_warning,mail_subject_order_incomplete_payment,mail_text_order_incomplete_payment" exclude="mail_days_order_expire_warning" %}
 
+                    {% blocktrans asvar title_payment_failed %}Payment failed{% endblocktrans %}
+                    {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="payment_failed" title=title_payment_failed items="mail_subject_order_payment_failed,mail_text_order_payment_failed" %}
+
                     {% blocktrans asvar title_waiting_list_notification %}Waiting list notification{% endblocktrans %}
                     {% include "pretixcontrol/event/mail_settings_fragment.html" with pid="waiting_list" title=title_waiting_list_notification items="mail_subject_waiting_list,mail_text_waiting_list" %}
 

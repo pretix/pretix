@@ -1116,6 +1116,16 @@ class MailSettingsForm(SettingsForm):
         help_text=_("This email only applies to payment methods that can receive incomplete payments, "
                     "such as bank transfer."),
     )
+    mail_subject_order_payment_failed = I18nFormField(
+        label=_("Subject"),
+        required=False,
+        widget=I18nTextInput,
+    )
+    mail_text_order_payment_failed = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+    )
     mail_subject_waiting_list = I18nFormField(
         label=_("Subject"),
         required=False,
@@ -1289,6 +1299,8 @@ class MailSettingsForm(SettingsForm):
         'mail_subject_order_pending_warning': ['event', 'order'],
         'mail_text_order_incomplete_payment': ['event', 'order', 'pending_sum'],
         'mail_subject_order_incomplete_payment': ['event', 'order'],
+        'mail_text_order_payment_failed': ['event', 'order'],
+        'mail_subject_order_payment_failed': ['event', 'order'],
         'mail_text_order_custom_mail': ['event', 'order'],
         'mail_text_download_reminder': ['event', 'order'],
         'mail_subject_download_reminder': ['event', 'order'],

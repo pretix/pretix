@@ -1697,6 +1697,14 @@ class OrderPayment(models.Model):
             'info': info,
             'data': log_data,
         }, user=user, auth=auth)
+        with language(self.order.locale, self.order.event.settings.region):
+            email_subject = self.order.event.settings.mail_subject_order_payment_failed
+            email_template = self.order.event.settings.mail_text_order_payment_failed
+            email_context = get_email_context(event=self.order.event, order=self.order)
+            self.order.send_mail(
+                email_subject, email_template, email_context,
+                'pretix.event.order.email.payment_failed', user=user, auth=auth,
+            )
         return True
 
     def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
