@@ -70,7 +70,13 @@
             </div>
         </div>
 
-        {% if not spf_warning %}
+        {% if spf_warning %}
+            <div class="form-group submit-group">
+                <a href="" class="btn btn-default btn-save">
+                    {% trans "Cancel" %}
+                </a>
+            </div>
+        {% else %}
             <div class="form-group submit-group">
                 <button type="submit" class="btn btn-primary btn-save">
                     {% trans "Save" %}

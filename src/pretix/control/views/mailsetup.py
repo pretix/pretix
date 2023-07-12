@@ -205,7 +205,8 @@ class MailSettingsSetupView(TemplateView):
                         'this system in the SPF record.'
                     )
 
-            elif settings.MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED:
+            verification = settings.MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED and not spf_warning
+            if verification:
                 if 'verification' in self.request.POST:
                     messages.error(request, _('The verification code was incorrect, please try again.'))
                 else:
@@ -230,7 +231,7 @@ class MailSettingsSetupView(TemplateView):
                 context={
                     'basetpl': self.basetpl,
                     'object': self.object,
-                    'verification': settings.MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED and not spf_warning,
+                    'verification': verification,
                     'spf_warning': spf_warning,
                     'spf_record': spf_record,
                     'spf_key': settings.MAIL_CUSTOM_SENDER_SPF_STRING,
