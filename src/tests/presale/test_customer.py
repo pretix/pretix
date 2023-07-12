@@ -113,7 +113,7 @@ def test_org_register(env, client, mocker):
         customer = env[0].customers.get(email='john@example.org')
         assert not customer.is_verified
         assert customer.is_active
-        customer_created.send.assert_called_once_with(mocker.ANY, customer=customer)
+        customer_created.send.assert_called_once_with(customer.organizer, customer=customer)
 
     r = client.post(
         f'/bigevents/account/activate?id={customer.identifier}&token={TokenGenerator().make_token(customer)}', {
@@ -192,7 +192,7 @@ def test_org_login_logout(env, client, mocker):
     })
     assert r.status_code == 302
 
-    customer_signed_in.send.assert_called_once_with(mocker.ANY, customer=customer)
+    customer_signed_in.send.assert_called_once_with(customer.organizer, customer=customer)
 
     r = client.get('/bigevents/account/')
     assert r.status_code == 200
@@ -347,8 +347,8 @@ def test_org_sso_login_new_customer(env, client, provider, mocker):
     with scopes_disabled():
         c = Customer.objects.get(provider=provider)
         assert c.external_identifier == "abcdf"
-        customer_created.send.assert_called_once_with(mocker.ANY, customer=c)
-        customer_signed_in.send.assert_called_once_with(mocker.ANY, customer=c)
+        customer_created.send.assert_called_once_with(c.organizer, customer=c)
+        customer_signed_in.send.assert_called_once_with(c.organizer, customer=c)
 
     r = client.get('/bigevents/account/')
     assert r.status_code == 200
@@ -393,7 +393,7 @@ def test_org_sso_login_returning_customer_new_email(env, client, provider, mocke
     _sso_login(client, provider)
     with scopes_disabled():
         c = Customer.objects.get(provider=provider)
-        customer_signed_in.send.assert_called_once_with(mocker.ANY, customer=c)
+        customer_signed_in.send.assert_called_once_with(c.organizer, customer=c)
         customer_signed_in.send.reset_mock()
 
     r = client.get('/bigevents/account/logout')
@@ -402,7 +402,7 @@ def test_org_sso_login_returning_customer_new_email(env, client, provider, mocke
     _sso_login(client, provider, 'new@example.net')
     c.refresh_from_db()
     assert c.email == "new@example.net"
-    customer_signed_in.send.assert_called_once_with(mocker.ANY, customer=c)
+    customer_signed_in.send.assert_called_once_with(c.organizer, customer=c)
 
 
 @pytest.mark.django_db(transaction=True)

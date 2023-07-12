@@ -154,7 +154,7 @@ class LoginView(RedirectBackMixin, FormView):
         """Security check complete. Log the user in."""
         customer = form.get_customer()
         customer_login(self.request, customer)
-        customer_signed_in.send(self.__class__, customer=customer)
+        customer_signed_in.send(customer.organizer, customer=customer)
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -241,7 +241,7 @@ class RegistrationView(RedirectBackMixin, FormView):
     def form_valid(self, form):
         with transaction.atomic():
             customer = form.create()
-            customer_created.send(self.__class__, customer=customer)
+            customer_created.send(customer.organizer, customer=customer)
         messages.success(
             self.request,
             _('Your account has been created. Please follow the link in the email we sent you to activate your '
@@ -760,7 +760,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
             )
             try:
                 customer.save(force_insert=True)
-                customer_created.send(self.__class__, customer=customer)
+                customer_created.send(customer.organizer, customer=customer)
             except IntegrityError:
                 # This might either be a race condition or the email address is taken
                 # by a different customer account
@@ -824,7 +824,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
             })
         else:
             customer_login(self.request, customer)
-            customer_signed_in.send(self.__class__, customer=customer)
+            customer_signed_in.send(customer.organizer, customer=customer)
             return redirect_to_url(self.get_success_url(redirect_to))
 
     def _fail(self, message, popup_origin):
