@@ -25,7 +25,7 @@ from django.db import models
 from django.db.models import Exists, OuterRef, Q
 from django.utils import timezone
 from django.utils.formats import date_format
-from django.utils.timezone import make_aware
+from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext_lazy as _, ngettext
 from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
@@ -125,6 +125,9 @@ class ScheduledMail(models.Model):
             status_q |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=False)
         if 'valid_if_pending' in self.rule.restrict_to_status:
             status_q |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=True)
+        if 'overdue' in self.rule.restrict_to_status:
+            status_q |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=False,
+                          expires__lt=now())
 
         if self.last_successful_order_id:
             orders = orders.filter(

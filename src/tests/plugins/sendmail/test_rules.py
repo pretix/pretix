@@ -285,7 +285,7 @@ def run_restriction_test(event, order, restrictions_pass=[], restrictions_fail=[
                                     subject='meow', template='meow meow meow')
         sendmail_run_rules(None)
 
-        assert len(djmail.outbox) == 1
+        assert len(djmail.outbox) == 1, f"email not sent for {r}"
 
     for r in restrictions_fail:
         djmail.outbox = []
@@ -293,7 +293,7 @@ def run_restriction_test(event, order, restrictions_pass=[], restrictions_fail=[
                                     subject='meow', template='meow meow meow')
         sendmail_run_rules(None)
 
-        assert len(djmail.outbox) == 0
+        assert len(djmail.outbox) == 0, f"email sent for {r} unexpectedly"
 
 
 @pytest.mark.django_db
@@ -351,16 +351,15 @@ def test_sendmail_rule_restrictions_status_approval_pending(event, order):
 @scopes_disabled()
 def test_sendmail_rule_restrictions_status_overdue_pending(event, order):
     event.settings.payment_term_expire_automatically = False
-    event.save()
     order.status = Order.STATUS_PENDING
-    order.require_approval = True
+    order.require_approval = False
     order.valid_if_pending = False
-    order.expires = order.expires - datetime.timedelta(days=15)  # TODO: make this test-order actually overdue
+    order.expires = order.expires - datetime.timedelta(days=15)
     order.save()
-    # restrictions_pass = ['overdue']
-    # restrictions_fail = ['p', 'e', 'c', 'pa', 'na', 'valid_if_pending']
+    restrictions_pass = ['overdue', 'na']
+    restrictions_fail = ['p', 'e', 'c', 'pa', 'valid_if_pending']
 
-    run_restriction_test(event, order)  # TODO: add the restriction lists after todo above
+    run_restriction_test(event, order, restrictions_pass, restrictions_fail)
 
 
 @pytest.mark.django_db
