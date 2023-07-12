@@ -221,7 +221,7 @@ class OrganizerTest(SoupTest):
             },
             follow=True
         )
-        assert doc.select('.alert-warning')
+        assert doc.select('.alert-danger')
         self.orga1.settings.flush()
         # not yet saved
         assert "mail_from" not in self.orga1.settings._cache()
