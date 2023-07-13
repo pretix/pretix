@@ -1079,15 +1079,17 @@ def merge_background(fg_pdf, bg_pdf, compress):
             bg_filename = os.path.join(d, 'bg.pdf')
             fg_pdf.write(fg_filename)
             bg_pdf.write(bg_filename)
-            p = subprocess.run([
+            pdftk_cmd = [
                 settings.PDFTK,
                 fg_filename,
                 'multibackground',
                 bg_filename,
                 'output',
-                '-',
-                'compress' if compress else ''
-            ], check=True, capture_output=True)
+                '-'
+            ]
+            if compress:
+                pdftk_cmd.append('compress')
+            p = subprocess.run(pdftk_cmd, check=True, capture_output=True)
             return BytesIO(p.stdout)
     else:
         output = PdfWriter()
