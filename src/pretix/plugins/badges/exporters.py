@@ -213,7 +213,7 @@ def render_pdf(event, positions, opt):
             page.setPageSize(opt['pagesize'])
         page.save()
         buffer = renderer.render_background(buffer, _('Badge'))
-        merger.append(ContentFile(buffer.read()))
+        merger.append(buffer)
 
     outbuffer = BytesIO()
     merger.write(outbuffer)
