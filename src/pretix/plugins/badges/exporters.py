@@ -35,6 +35,7 @@
 import json
 import logging
 import os
+import subprocess
 import tempfile
 from collections import OrderedDict
 from datetime import date, datetime, time, timedelta
@@ -44,9 +45,9 @@ from typing import Tuple
 
 import dateutil.parser
 from django import forms
+from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.files import File
-from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.db import DataError, models
 from django.db.models import Case, Exists, OuterRef, Q, Subquery, When
@@ -286,15 +287,17 @@ def render_pdf(event, positions, opt):
     nup_pdf_files.append(file_path)
 
     if settings.PDFTK:
+        file_paths = [os.path.join(temp_dir.name, fp) for fp in nup_pdf_files]
+        file_path_out = os.path.join(temp_dir.name, 'out.pdf')
         subprocess.run([
             settings.PDFTK,
-            os.path.join(temp_dir.name, 'badges-*.pdf'),
+            *file_paths,
             'cat',
             'output',
-            os.path.join(d, 'out.pdf'),
+            file_path_out,
             'compress'
         ], check=True)
-        with open(os.path.join(d, 'out.pdf'), 'rb') as f:
+        with open(file_path_out, 'rb') as f:
             outbuffer = BytesIO(f.read())
     else:
         merger = PdfWriter()
