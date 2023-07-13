@@ -232,7 +232,7 @@ def render_pdf(event, positions, opt):
         '/Creator': 'pretix',
     })
     nup_page = None
-    max_nup_pages = 100
+    max_nup_pages = 20
     nup_pdf_files = []
     temp_dir = None
     merger = None
