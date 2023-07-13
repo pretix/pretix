@@ -2306,7 +2306,7 @@ Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_payment_failed': {
         'type': LazyI18nString,
-        'default': LazyI18nString.from_gettext(gettext_noop("Payment failed: {code}")),
+        'default': LazyI18nString.from_gettext(gettext_noop("Payment failed for your order: {code}")),
     },
     'mail_text_order_payment_failed': {
         'type': LazyI18nString,
