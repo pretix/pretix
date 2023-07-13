@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-07-13 00:22+0000\n"
+"PO-Revision-Date: 2023-07-13 01:06+0000\n"
 "Last-Translator: Iria Costas <i.costas@conterra.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -3210,7 +3210,7 @@ msgstr "Cant."
 #: pretix/base/invoice.py:622 pretix/base/invoice.py:768
 msgctxt "invoice"
 msgid "Tax rate"
-msgstr "Tasas de impuesto"
+msgstr "Tasas"
 
 #: pretix/base/invoice.py:623
 msgctxt "invoice"
