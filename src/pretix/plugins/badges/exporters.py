@@ -63,7 +63,7 @@ from reportlab.pdfgen import canvas
 from pretix.base.exporter import BaseExporter
 from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition, Question, QuestionAnswer
-from pretix.base.pdf import merge_background, Renderer
+from pretix.base.pdf import Renderer, merge_background
 from pretix.base.services.export import ExportError
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.helpers.templatetags.jsonfield import JSONExtract
@@ -223,7 +223,7 @@ def render_pdf(event, positions, opt):
             bg_pdf.add_page(renderer.bg_pdf.pages[i])
         num_pages = new_num_pages
 
-    outbuffer = merge_background(fg_pdf, bg_pdf, compress=badges_per_page==1)
+    outbuffer = merge_background(fg_pdf, bg_pdf, compress=badges_per_page == 1)
 
     if badges_per_page == 1:
         # no need to place multiple badges on one page
