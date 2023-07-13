@@ -1070,6 +1070,58 @@ class Renderer:
             outbuffer.seek(0)
             return outbuffer
 
+def merge_background(fg_pdf, bg_pdf, compress):
+    if settings.PDFTK:
+        with tempfile.TemporaryDirectory() as d:
+            fg_filename = os.path.join(d, 'fg.pdf')
+            bg_filename = os.path.join(d, 'bg.pdf')
+            fg_pdf.write(fg_filename)
+            bg_pdf.write(bg_filename)
+            p = subprocess.run([
+                settings.PDFTK,
+                fg_filename,
+                'multibackground',
+                bg_filename,
+                'output',
+                '-',
+                'compress' if compress else ''
+            ], check=True, capture_output=True)
+            return BytesIO(p.stdout)
+    else:
+        output = PdfWriter()
+        for i, page in enumerate(fg_pdf.pages):
+            bg_page = bg_pdf.pages[i]
+            bg_rotation = bg_page.get('/Rotate')
+            if bg_rotation:
+                # as we change that page, better copy the page to not mess up the original?
+                #bg_page = copy.copy(bg_page)
+                # /Rotate is clockwise, transformation.rotate is counter-clockwise
+                t = Transformation().rotate(bg_rotation)
+                w = float(page.mediabox.getWidth())
+                h = float(page.mediabox.getHeight())
+                if bg_rotation in (90, 270):
+                    # offset due to rotation base
+                    if bg_rotation == 90:
+                        t = t.translate(h, 0)
+                    else:
+                        t = t.translate(0, w)
+                    # rotate mediabox as well
+                    page.mediabox = RectangleObject((
+                        page.mediabox.left.as_numeric(),
+                        page.mediabox.bottom.as_numeric(),
+                        page.mediabox.top.as_numeric(),
+                        page.mediabox.right.as_numeric(),
+                    ))
+                    page.trimbox = page.mediabox
+                elif bg_rotation == 180:
+                    t = t.translate(w, h)
+                page.add_transformation(t)
+            bg_page.merge_page(page)
+            output.add_page(bg_page)
+        outbuffer = BytesIO()
+        output.write(outbuffer)
+        outbuffer.seek(0)
+        return outbuffer
 
 @deconstructible
 class PdfLayoutValidator:

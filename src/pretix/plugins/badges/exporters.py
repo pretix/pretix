@@ -63,7 +63,7 @@ from reportlab.pdfgen import canvas
 from pretix.base.exporter import BaseExporter
 from pretix.base.i18n import language
 from pretix.base.models import Order, OrderPosition, Question, QuestionAnswer
-from pretix.base.pdf import Renderer
+from pretix.base.pdf import merge_background, Renderer
 from pretix.base.services.export import ExportError
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.helpers.templatetags.jsonfield import JSONExtract
@@ -199,11 +199,14 @@ def render_pdf(event, positions, opt):
         raise ExportError(_("None of the selected products is configured to print badges."))
 
     # render each badge on its own page first
-    merger = PdfWriter()
-    merger.add_metadata({
+    badges_per_page = opt['cols'] * opt['rows']
+    fg_pdf = PdfWriter()
+    fg_pdf.add_metadata({
         '/Title': 'Badges',
         '/Creator': 'pretix',
     })
+    bg_pdf = PdfWriter()
+    num_pages = 0
     for op, renderer in op_renderers:
         buffer = BytesIO()
         page = canvas.Canvas(buffer, pagesize=pagesizes.A4)
@@ -213,14 +216,15 @@ def render_pdf(event, positions, opt):
         if opt['pagesize']:
             page.setPageSize(opt['pagesize'])
         page.save()
-        buffer = renderer.render_background(buffer, _('Badge'))
-        merger.append(buffer)
+        # to reduce disk-IO render backgrounds in own PDF and merge later
+        fg_pdf.append(buffer)
+        new_num_pages = len(fg_pdf.pages)
+        for i in range(new_num_pages - num_pages):
+            bg_pdf.add_page(renderer.bg_pdf.pages[i])
+        num_pages = new_num_pages
 
-    outbuffer = BytesIO()
-    merger.write(outbuffer)
-    outbuffer.seek(0)
+    outbuffer = merge_background(fg_pdf, bg_pdf, compress=badges_per_page==1)
 
-    badges_per_page = opt['cols'] * opt['rows']
     if badges_per_page == 1:
         # no need to place multiple badges on one page
         return outbuffer
