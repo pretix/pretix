@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-07-13 01:06+0000\n"
+"PO-Revision-Date: 2023-07-13 07:22+0000\n"
 "Last-Translator: Felipe <fe.tapia.vera@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -64,8 +64,6 @@ msgid "French"
 msgstr "Francés"
 
 #: pretix/_base_settings.py:89
-#, fuzzy
-#| msgid "Danish"
 msgid "Finnish"
 msgstr "Danés"
 
@@ -239,8 +237,7 @@ msgstr "Plugin desconocido: '{name}'."
 
 #: pretix/api/serializers/item.py:74 pretix/api/serializers/item.py:123
 #: pretix/api/serializers/item.py:323
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
 msgstr "La meta propiedad '{name}' no existe."
 
@@ -415,10 +412,8 @@ msgid "Order expired"
 msgstr "Orden expirada"
 
 #: pretix/api/webhooks.py:234
-#, fuzzy
-#| msgid "The order's expiry date has been changed."
 msgid "Order expiry date changed"
-msgstr "Se ha modificado la fecha de caducidad del pedido."
+msgstr "Se ha modificado la fecha de caducidad del pedido"
 
 #: pretix/api/webhooks.py:238 pretix/base/notifications.py:269
 msgid "Order information changed"
@@ -533,8 +528,6 @@ msgid "Waiting list entry added"
 msgstr "Agregado a la lista de espera"
 
 #: pretix/api/webhooks.py:343
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry changed"
 msgstr "Entrada a la lista de espera"
 
@@ -543,8 +536,6 @@ msgid "Waiting list entry deleted"
 msgstr "Entrada a la lista de espera eliminada"
 
 #: pretix/api/webhooks.py:351
-#, fuzzy
-#| msgid "Waiting list entries"
 msgid "Waiting list entry received voucher"
 msgstr "Entradas a la lista de espera"
 
@@ -607,10 +598,9 @@ msgid "powered by {name} based on <a {a_attr}>pretix</a>"
 msgstr "hecho posible por {name} basado en <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
-#, fuzzy, python-format
-#| msgid "<a %(a_attr)s>event ticketing powered by pretix</a>"
+#, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr "<a %(a_attr)s>ticketing de eventos impulsado por pretix </a>"
+msgstr "<a %(a_attr)s>venta de entradas impulsada por pretix</a>"
 
 #: pretix/base/context.py:61
 msgid "source code"
@@ -637,10 +627,9 @@ msgid "Incompatible SSO provider: \"{error}\"."
 msgstr "Proveedor SSO incompatible: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:109
-#, fuzzy, python-brace-format
-#| msgid "Your order: %(code)s"
+#, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "Su pedido: {code}"
+msgstr "No esta solicitando \"{scope}\"."
 
 #: pretix/base/customersso/oidc.py:115
 #, python-brace-format
@@ -749,10 +738,8 @@ msgid "Combined Excel (.xlsx)"
 msgstr "Excel combinado (.xlsx)"
 
 #: pretix/base/exporters/answers.py:52
-#, fuzzy
-#| msgid "Question answers"
 msgid "Question answer file uploads"
-msgstr "Respuestas a las preguntas"
+msgstr "Cargas de archivos de respuestas a preguntas"
 
 #: pretix/base/exporters/answers.py:53 pretix/base/exporters/json.py:52
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:86
@@ -761,8 +748,6 @@ msgstr "Respuestas a las preguntas"
 #: pretix/base/exporters/orderlist.py:1189
 #: pretix/plugins/reports/exporters.py:451
 #: pretix/plugins/reports/exporters.py:624
-#, fuzzy
-#| msgid "Order data"
 msgctxt "export_category"
 msgid "Order data"
 msgstr "Datos de la orden"
@@ -788,8 +773,6 @@ msgid "Customer accounts"
 msgstr "Cuenta de cliente"
 
 #: pretix/base/exporters/customers.py:51
-#, fuzzy
-#| msgid "Customer accounts"
 msgctxt "export_category"
 msgid "Customer accounts"
 msgstr "Cuenta de cliente"
@@ -805,27 +788,20 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:54
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:40
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:20
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Customer VAT ID"
 msgid "Customer ID"
-msgstr "Cliente VAT ID"
+msgstr "ID Cliente"
 
 #: pretix/base/exporters/customers.py:65
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:31
-#, fuzzy
-#| msgid "Payment provider"
 msgid "SSO provider"
-msgstr "Proveedor de pagos"
+msgstr "Proveedor SSO"
 
 #: pretix/base/exporters/customers.py:66 pretix/base/models/customers.py:108
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:35
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:65
 #: pretix/control/templates/pretixcontrol/users/form.html:43
-#, fuzzy
-#| msgid "Internal identifier"
 msgid "External identifier"
-msgstr "Identificador interno"
+msgstr "Identificador externo"
 
 #: pretix/base/exporters/customers.py:68 pretix/base/exporters/orderlist.py:256
 #: pretix/base/exporters/orderlist.py:432
@@ -841,10 +817,8 @@ msgstr "Identificador interno"
 #: pretix/presale/checkoutflow.py:1406 pretix/presale/forms/checkout.py:84
 #: pretix/presale/forms/waitinglist.py:103
 #: pretix/presale/templates/pretixpresale/event/order.html:303
-#, fuzzy
-#| msgid "Line number"
 msgid "Phone number"
-msgstr "Número de línea"
+msgstr "Número de teléfono"
 
 #: pretix/base/exporters/customers.py:69 pretix/base/models/auth.py:248
 #: pretix/base/models/customers.py:97 pretix/base/models/orders.py:2933
@@ -898,30 +872,22 @@ msgid "Name"
 msgstr "Nombre"
 
 #: pretix/base/exporters/customers.py:77 pretix/base/models/customers.py:99
-#, fuzzy
-#| msgid "This account is inactive."
 msgid "Account active"
-msgstr "Esta cuenta está inactiva."
+msgstr "Cuenta activa"
 
 #: pretix/base/exporters/customers.py:78 pretix/base/models/customers.py:100
-#, fuzzy
-#| msgid "Attendee email"
 msgid "Verified email address"
-msgstr "Correo electrónico del participante"
+msgstr "Correo electrónico verificado"
 
 #: pretix/base/exporters/customers.py:79 pretix/base/models/customers.py:101
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:67
-#, fuzzy
-#| msgid "Login"
 msgid "Last login"
-msgstr "Iniciar sesión"
+msgstr "Último acceso"
 
 #: pretix/base/exporters/customers.py:80 pretix/base/models/customers.py:102
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:65
-#, fuzzy
-#| msgid "Device registration failed."
 msgid "Registration date"
-msgstr "Fallo en el registro del dispositivo."
+msgstr "Fecha de registro"
 
 #: pretix/base/exporters/customers.py:81 pretix/base/exporters/invoices.py:204
 #: pretix/base/exporters/waitinglist.py:118 pretix/base/models/auth.py:260
@@ -996,8 +962,6 @@ msgid "No"
 msgstr "No"
 
 #: pretix/base/exporters/dekodi.py:42 pretix/base/exporters/invoices.py:66
-#, fuzzy
-#| msgid "Invoices"
 msgctxt "export_category"
 msgid "Invoices"
 msgstr "Facturas"
@@ -1025,35 +989,26 @@ msgstr "Ticket para evento {event}-{code}"
 #: pretix/plugins/reports/exporters.py:434
 #: pretix/plugins/reports/exporters.py:671
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date range"
-msgstr "Fecha y hora"
+msgstr "Rango de fecha"
 
 #: pretix/base/exporters/dekodi.py:223 pretix/base/exporters/invoices.py:77
-#, fuzzy
-#| msgid ""
-#| "Only include invoices issued on or after this date. Note that the invoice "
-#| "date does not always correspond to the order or payment date."
 msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
 msgstr ""
-"Solo se incluyen las facturas emitidas en o antes de esta fecha. Note que la "
-"fecha de la factura no siempre corresponde a la fecha del pedido o del pago."
+"Incluya únicamente las facturas emitidas en este período de tiempo. Tenga en "
+"cuenta que la fecha de la factura no siempre se corresponde con la fecha del "
+"pedido o del pago."
 
 #: pretix/base/exporters/events.py:47
-#, fuzzy
-#| msgid "Event date"
 msgid "Event data"
-msgstr "Fecha del evento"
+msgstr "Datos del evento"
 
 #: pretix/base/exporters/events.py:48
-#, fuzzy
-#| msgid "Event date"
 msgctxt "export_category"
 msgid "Event data"
-msgstr "Fecha del evento"
+msgstr "Datos del evento"
 
 #: pretix/base/exporters/events.py:49
 msgid ""
@@ -1455,10 +1410,8 @@ msgid "Total value (without taxes)"
 msgstr "Valor total (sin impuestos)"
 
 #: pretix/base/exporters/invoices.py:227
-#, fuzzy
-#| msgid "Payment settings"
 msgid "Payment matching IDs"
-msgstr "Configuración de pagos"
+msgstr "IDs de pagos coincidentes"
 
 #: pretix/base/exporters/invoices.py:228 pretix/base/exporters/invoices.py:348
 #: pretix/base/exporters/orderlist.py:283
@@ -1529,17 +1482,13 @@ msgid "Event end date"
 msgstr "Fecha de finalización del evento"
 
 #: pretix/base/exporters/items.py:50
-#, fuzzy
-#| msgid "Product name"
 msgid "Product data"
-msgstr "Nombre del producto"
+msgstr "Datos del producto"
 
 #: pretix/base/exporters/items.py:51 pretix/base/exporters/orderlist.py:1076
-#, fuzzy
-#| msgid "Product name"
 msgctxt "export_category"
 msgid "Product data"
-msgstr "Nombre del producto"
+msgstr "Datos del producto"
 
 #: pretix/base/exporters/items.py:52
 msgid "Download a spreadsheet with details about all products and variations."
@@ -1548,16 +1497,12 @@ msgstr ""
 "variaciones."
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:838
-#, fuzzy
-#| msgid "Product"
 msgid "Product ID"
-msgstr "Producto"
+msgstr "ID Producto"
 
 #: pretix/base/exporters/items.py:59 pretix/base/exporters/orderlist.py:840
-#, fuzzy
-#| msgid "Variation"
 msgid "Variation ID"
-msgstr "Variacion"
+msgstr "ID Variación"
 
 #: pretix/base/exporters/items.py:60 pretix/base/models/items.py:114
 #: pretix/base/pdf.py:143
@@ -1622,10 +1567,8 @@ msgstr "Es un ticket de admision"
 #: pretix/base/exporters/items.py:78
 #: pretix/control/templates/pretixcontrol/item/create.html:74
 #: pretix/control/templates/pretixcontrol/item/index.html:87
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Personalized ticket"
-msgstr "Generar tickets"
+msgstr "Entrada personalizada"
 
 #: pretix/base/exporters/items.py:79 pretix/base/models/items.py:455
 msgid "Generate tickets"
@@ -1696,10 +1639,8 @@ msgid "Only sell this product as part of a bundle"
 msgstr "Solo vender este producto como parte de un paquete"
 
 #: pretix/base/exporters/items.py:87 pretix/base/models/items.py:525
-#, fuzzy
-#| msgid "Allow product to be canceled"
 msgid "Allow product to be canceled or changed"
-msgstr "Permitir que todos los productos puedan ser cancelados"
+msgstr "Permitir que el producto sea cancelados o cambiados"
 
 #: pretix/base/exporters/items.py:88 pretix/base/models/items.py:531
 msgid "Minimum amount per order"
@@ -1729,17 +1670,13 @@ msgstr "Este producto es una tarjeta regalo"
 #: pretix/base/models/items.py:1032
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:41
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:148
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Require a valid membership"
-msgstr "Membresía del equipo"
+msgstr "Requiere una membresía valida"
 
 #: pretix/base/exporters/items.py:94 pretix/base/models/items.py:580
 #: pretix/base/models/items.py:1041
-#, fuzzy
-#| msgid "Team memberships"
 msgid "Hide without a valid membership"
-msgstr "Membresía del equipo"
+msgstr "Ocultar sin una membresía valida"
 
 #: pretix/base/exporters/json.py:51 pretix/base/exporters/orderlist.py:85
 msgid "Order data"
@@ -1776,6 +1713,10 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
+"Descargar una hoja de cálculo de todos los pedidos. La hoja de cálculo "
+"incluirá tres hojas, una con una línea para cada orden, otra con una línea "
+"para cada posición de la orden y otra con una línea para cada tarifa "
+"adicional cobrada en una orden."
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/models/orders.py:271
 #: pretix/control/navigation.py:253 pretix/control/navigation.py:360
@@ -1812,10 +1753,8 @@ msgstr "Mostrar respuestas de múltiples opciones en una columna"
 
 #: pretix/base/exporters/orderlist.py:130
 #: pretix/plugins/reports/exporters.py:674
-#, fuzzy
-#| msgid "Only orders created in test mode can be deleted."
 msgid "Only include orders created within this date range."
-msgstr "Solamente ordenes creadas en modo de prueba pueden ser eliminadas."
+msgstr "Incluya solo los pedidos creados dentro de este intervalo de fechas."
 
 #: pretix/base/exporters/orderlist.py:134 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:226 pretix/plugins/badges/exporters.py:319
@@ -1824,16 +1763,12 @@ msgid "Event date"
 msgstr "Fecha del evento"
 
 #: pretix/base/exporters/orderlist.py:137
-#, fuzzy
-#| msgid ""
-#| "Only include orders including at least one ticket for a date on or after "
-#| "this date. Will also include other dates in case of mixed orders!"
 msgid ""
 "Only include orders including at least one ticket for a date in this range. "
 "Will also include other dates in case of mixed orders!"
 msgstr ""
-"Incluir solo pedidos con almenos una entrada para la fecha o despues de "
-"esta. También incluir otras fechas en caso de pedidos mixtos!"
+"Solo incluye pedidos que incluyan al menos una entrada para una fecha en "
+"este rango. ¡También incluirá otras fechas en caso de pedidos mixtos!"
 
 #: pretix/base/exporters/orderlist.py:256
 #: pretix/base/exporters/orderlist.py:428
@@ -1934,16 +1869,12 @@ msgstr "Fecha de la orden"
 #: pretix/base/exporters/orderlist.py:544
 #: pretix/base/exporters/orderlist.py:829
 #: pretix/plugins/checkinlists/exporters.py:507
-#, fuzzy
-#| msgid "Order date"
 msgid "Order time"
-msgstr "Fecha de la orden"
+msgstr "Hora de la orden"
 
 #: pretix/base/exporters/orderlist.py:265
-#, fuzzy
-#| msgid "E-mail address verified"
 msgid "Custom address field"
-msgstr "Correo electrónico verificado"
+msgstr "Campo de dirección personalizado"
 
 #: pretix/base/exporters/orderlist.py:265
 msgid "Date of last payment"
@@ -1989,11 +1920,8 @@ msgstr "Canal de ventas"
 #: pretix/base/exporters/orderlist.py:279
 #: pretix/base/exporters/orderlist.py:583 pretix/base/models/orders.py:233
 #: pretix/control/forms/filter.py:238
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "All dates"
 msgid "Follow-up date"
-msgstr "Todas las fechas"
+msgstr "Fecha de seguimiento"
 
 #: pretix/base/exporters/orderlist.py:280
 #: pretix/control/templates/pretixcontrol/orders/index.html:125
@@ -2011,11 +1939,8 @@ msgstr "Correo electrónico verificado"
 #: pretix/base/exporters/orderlist.py:282
 #: pretix/base/exporters/orderlist.py:452
 #: pretix/base/exporters/orderlist.py:617
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Customer VAT ID"
 msgid "External customer ID"
-msgstr "Cliente VAT ID"
+msgstr "ID Cliente externo"
 
 #: pretix/base/exporters/orderlist.py:287
 #, python-brace-format
@@ -2203,45 +2128,33 @@ msgstr "ID Seudónimo"
 
 #: pretix/base/exporters/orderlist.py:573 pretix/control/forms/filter.py:667
 #: pretix/control/templates/pretixcontrol/order/change.html:258
-#, fuzzy
-#| msgid "Ticket secret:"
 msgid "Ticket secret"
-msgstr "ticket secreto:"
+msgstr "Secreto del ticket"
 
 #: pretix/base/exporters/orderlist.py:574 pretix/base/orderimport.py:719
 #: pretix/plugins/checkinlists/exporters.py:510
-#, fuzzy
-#| msgid "Seat"
 msgid "Seat ID"
-msgstr "Asiento"
+msgstr "ID Asiento"
 
 #: pretix/base/exporters/orderlist.py:575
 #: pretix/plugins/checkinlists/exporters.py:511
-#, fuzzy
-#| msgid "Team name"
 msgid "Seat name"
-msgstr "Nombre del equipo"
+msgstr "Nombre del asiento"
 
 #: pretix/base/exporters/orderlist.py:576
 #: pretix/plugins/checkinlists/exporters.py:512
-#, fuzzy
-#| msgid "Team name"
 msgid "Seat zone"
-msgstr "Nombre del equipo"
+msgstr "Zona del asiento"
 
 #: pretix/base/exporters/orderlist.py:577
 #: pretix/plugins/checkinlists/exporters.py:513
-#, fuzzy
-#| msgid "Seat: row"
 msgid "Seat row"
-msgstr "Asiento: fila"
+msgstr "Fila del asiento"
 
 #: pretix/base/exporters/orderlist.py:578
 #: pretix/plugins/checkinlists/exporters.py:514
-#, fuzzy
-#| msgid "Seat {number}"
 msgid "Seat number"
-msgstr "Asiento {number}"
+msgstr "Número del asiento"
 
 #: pretix/base/exporters/orderlist.py:579
 #: pretix/control/templates/pretixcontrol/order/change.html:208
@@ -2250,7 +2163,7 @@ msgstr "Asiento {number}"
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:108
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:110
 msgid "Blocked"
-msgstr ""
+msgstr "Bloqueado"
 
 #: pretix/base/exporters/orderlist.py:580 pretix/base/models/orders.py:2287
 #: pretix/base/orderimport.py:653
@@ -2258,10 +2171,8 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:516
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:22
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:131
-#, fuzzy
-#| msgid "Valid"
 msgid "Valid from"
-msgstr "Válido"
+msgstr "Válido desde"
 
 #: pretix/base/exporters/orderlist.py:581 pretix/base/models/orders.py:2292
 #: pretix/base/models/vouchers.py:221 pretix/base/orderimport.py:676
@@ -2274,47 +2185,33 @@ msgid "Valid until"
 msgstr "Válido hasta"
 
 #: pretix/base/exporters/orderlist.py:582
-#, fuzzy
-#| msgid "Order code"
 msgid "Order comment"
-msgstr "Código de la orden"
+msgstr "Comentario de la orden"
 
 #: pretix/base/exporters/orderlist.py:609 pretix/base/pdf.py:332
-#, fuzzy
-#| msgid "Invoice addresses"
 msgid "Invoice address street"
-msgstr "Direcciones de facturación"
+msgstr "Calle de la dirección de facturación"
 
 #: pretix/base/exporters/orderlist.py:609 pretix/base/pdf.py:337
-#, fuzzy
-#| msgid "Invoice addresses"
 msgid "Invoice address ZIP code"
-msgstr "Direcciones de facturación"
+msgstr "Dirección de facturación Códigos postales"
 
 #: pretix/base/exporters/orderlist.py:609 pretix/base/pdf.py:342
-#, fuzzy
-#| msgid "Invoice address company"
 msgid "Invoice address city"
-msgstr "Dirección de facturación empresa"
+msgstr "Ciudad de Facturación"
 
 #: pretix/base/exporters/orderlist.py:610 pretix/base/pdf.py:352
-#, fuzzy
-#| msgid "Invoice address company"
 msgid "Invoice address country"
-msgstr "Dirección de facturación empresa"
+msgstr "Pais"
 
 #: pretix/base/exporters/orderlist.py:611
-#, fuzzy
-#| msgid "Invoice address name"
 msgctxt "address"
 msgid "Invoice address state"
-msgstr "Dirección de facturación"
+msgstr "Estado"
 
 #: pretix/base/exporters/orderlist.py:770
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Order transaction data"
-msgstr "Código de transacción"
+msgstr "Datos de la transacción"
 
 #: pretix/base/exporters/orderlist.py:772
 msgid ""
@@ -2322,12 +2219,14 @@ msgid ""
 "changes to products, prices or tax rates. The information is only accurate "
 "for changes made with pretix versions released after October 2021."
 msgstr ""
+"Descargue una hoja de cálculo de todos los cambios sustanciales en los "
+"pedidos, es decir, todos los cambios en productos, precios o tasas "
+"impositivas. La información solo es precisa para los cambios realizados con "
+"las versiones de pretix lanzadas después de octubre de 2021."
 
 #: pretix/base/exporters/orderlist.py:788
-#, fuzzy
-#| msgid "Only orders created in test mode can be deleted."
 msgid "Only include transactions created within this date range."
-msgstr "Solamente ordenes creadas en modo de prueba pueden ser eliminadas."
+msgstr "Solo incluye transacciones creadas dentro de este rango de fechas."
 
 #: pretix/base/exporters/orderlist.py:823 pretix/base/models/event.py:627
 #: pretix/base/models/items.py:391 pretix/base/models/items.py:1830
@@ -2359,99 +2258,82 @@ msgid "Currency"
 msgstr "Moneda"
 
 #: pretix/base/exporters/orderlist.py:831
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Transaction date"
-msgstr "Código de transacción"
+msgstr "Fecha de transacción"
 
 #: pretix/base/exporters/orderlist.py:832
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Transaction time"
-msgstr "Código de transacción"
+msgstr "Hora de transacción"
 
 #: pretix/base/exporters/orderlist.py:833
-#, fuzzy
-#| msgid "Order data"
 msgid "Old data"
-msgstr "Datos de la orden"
+msgstr "Datos antiguos"
 
 #: pretix/base/exporters/orderlist.py:836 pretix/base/models/items.py:1361
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
-#, fuzzy
-#| msgid "Quantity available"
 msgid "Quantity"
-msgstr "Cantidad disponible"
+msgstr "Cantidad"
 
 #: pretix/base/exporters/orderlist.py:843
-#, fuzzy
-#| msgid "Internal reference"
 msgid "Internal fee type"
-msgstr "Referencia interna"
+msgstr "Tipo de recargo interno"
 
 #: pretix/base/exporters/orderlist.py:845
-#, fuzzy
-#| msgid "Date"
 msgctxt "subevent"
 msgid "Date ID"
-msgstr "Fecha"
+msgstr "ID de fecha"
 
 #: pretix/base/exporters/orderlist.py:850
-#, fuzzy
-#| msgid "Tax rule"
 msgid "Tax rule ID"
-msgstr "Norma fiscal"
+msgstr "ID de regla fiscal"
 
 #: pretix/base/exporters/orderlist.py:853
 #: pretix/plugins/reports/accountingreport.py:250
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Gross value"
 msgid "Gross total"
 msgstr "Valor bruto"
 
 #: pretix/base/exporters/orderlist.py:854
 #: pretix/plugins/reports/accountingreport.py:249
-#, fuzzy
-#| msgid "Total"
 msgid "Tax total"
-msgstr "Total"
+msgstr "Total impuesto"
 
 #: pretix/base/exporters/orderlist.py:864
 msgid ""
 "This value is supplied for informational purposes, it is not part of the "
 "original transaction data and might have changed since the transaction."
 msgstr ""
+"Este valor se proporciona con fines informativos, no forma parte de los "
+"datos de la transacción original y puede haber cambiado desde la transacción."
 
 #: pretix/base/exporters/orderlist.py:887
 msgid "Converted from legacy version"
-msgstr ""
+msgstr "Convertido de la versión heredada"
 
 #: pretix/base/exporters/orderlist.py:949
-#, fuzzy
-#| msgid "Order payments and refunds"
 msgid "Payments and refunds"
-msgstr "Pagos y reintegros de la orden"
+msgstr "Pagos y reembolsos"
 
 #: pretix/base/exporters/orderlist.py:951
 msgid "Download a spreadsheet of all payments or refunds of every order."
 msgstr ""
+"Descarga una hoja de cálculo de todos los pagos o devoluciones de cada "
+"pedido."
 
 #: pretix/base/exporters/orderlist.py:960
-#, fuzzy
-#| msgid "Extend payment term"
 msgid "Date range (payment date)"
-msgstr "Ampliar la condición de pago"
+msgstr "Rango de fechas (fecha de pago)"
 
 #: pretix/base/exporters/orderlist.py:963
 msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
 msgstr ""
+"Tenga en cuenta que al usar esto se excluirán los pagos no confirmados o los "
+"reembolsos no completados."
 
 #: pretix/base/exporters/orderlist.py:967
 msgid "Date range (start of transaction)"
-msgstr ""
+msgstr "Intervalo de fechas (inicio de la transacción)"
 
 #: pretix/base/exporters/orderlist.py:973
 #, fuzzy
@@ -2681,10 +2563,8 @@ msgid "TEST MODE"
 msgstr "MODO DE PRUEBA"
 
 #: pretix/base/exporters/orderlist.py:1188
-#, fuzzy
-#| msgid "Redemptions"
 msgid "Gift card redemptions"
-msgstr "Amortizaciones de tarjetas de regalo"
+msgstr "Redenciones de tarjetas de regalo"
 
 #: pretix/base/exporters/orderlist.py:1190
 msgid ""
@@ -3505,9 +3385,8 @@ msgid "Automatically check out everyone at"
 msgstr "Reembolso automático"
 
 #: pretix/base/models/checkin.py:96
-#, fuzzy
 msgid "Sales channels to automatically check in"
-msgstr "Canales de venta a los que registrarse automáticamente"
+msgstr "Canales de venta para registrarse automáticamente"
 
 #: pretix/base/models/checkin.py:97
 msgid ""
@@ -5712,11 +5591,9 @@ msgid "Your layout file is not a valid JSON file."
 msgstr "Tu archivo de layout no es un archivo valido JSON."
 
 #: pretix/base/models/seating.py:54
-#, fuzzy
 msgid "Your layout file is not a valid seating plan. Error message: {}"
 msgstr ""
-"El archivo de layout no define una planificación de asientos válida. Error: "
-"{}"
+"Su archivo de diseño no es un plano de asientos válido. Mensaje de error: {}"
 
 #: pretix/base/models/seating.py:175
 #, python-brace-format
@@ -11195,7 +11072,7 @@ msgstr ""
 
 #: pretix/base/settings.py:3137
 msgid "Secondary dialog text"
-msgstr ""
+msgstr "Dialogo de texto secundario"
 
 #: pretix/base/settings.py:3143
 #, fuzzy
@@ -13471,10 +13348,8 @@ msgid "Date filter"
 msgstr "Historial de fechas"
 
 #: pretix/control/forms/filter.py:2199 pretix/plugins/reports/exporters.py:663
-#, fuzzy
-#| msgid "Filter by tag"
 msgid "Filter by…"
-msgstr "Filtrar por etiqueta"
+msgstr "Filtrar por etiqueta…"
 
 #: pretix/control/forms/filter.py:2201 pretix/plugins/reports/exporters.py:665
 #, fuzzy
@@ -18364,11 +18239,8 @@ msgid "Failed to retrieve geo coordinates"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:5
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "No dates"
 msgid "Retrieving geo coordinates …"
-msgstr "Sin fechas"
+msgstr "Recuperando coordenadas geográficas…"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:6
 #, fuzzy
@@ -31296,10 +31168,8 @@ msgstr ""
 "correo electrónico."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:122
-#, fuzzy
-#| msgid "Continue in new tab"
 msgid "Continue as a guest"
-msgstr "Continuar en la nueva pestaña"
+msgstr "Continuar como invitado"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:130
 msgid ""
