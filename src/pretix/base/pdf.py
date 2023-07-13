@@ -1033,11 +1033,9 @@ class Renderer:
             output = PdfWriter()
 
             for i, page in enumerate(new_pdf.pages):
-                bg_page = self.bg_pdf.pages[i]
+                bg_page = copy.deepcopy(self.bg_pdf.pages[i])
                 bg_rotation = bg_page.get('/Rotate')
                 if bg_rotation:
-                    # as we mess with the page, copy it first
-                    bg_page = copy.copy(bg_page)
                     # /Rotate is clockwise, transformation.rotate is counter-clockwise
                     t = Transformation().rotate(bg_rotation)
                     w = float(page.mediabox.getWidth())
@@ -1094,11 +1092,9 @@ def merge_background(fg_pdf, bg_pdf, compress):
     else:
         output = PdfWriter()
         for i, page in enumerate(fg_pdf.pages):
-            bg_page = bg_pdf.pages[i]
+            bg_page = copy.deepcopy(bg_pdf.pages[i])
             bg_rotation = bg_page.get('/Rotate')
             if bg_rotation:
-                # as we change that page, better copy the page to not mess up the original?
-                # bg_page = copy.copy(bg_page)
                 # /Rotate is clockwise, transformation.rotate is counter-clockwise
                 t = Transformation().rotate(bg_rotation)
                 w = float(page.mediabox.getWidth())
