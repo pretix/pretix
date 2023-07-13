@@ -245,11 +245,6 @@ def render_pdf(event, positions, opt):
             temp_dir = tempfile.TemporaryDirectory()
         except IOError:
             pass
-        merger = PdfWriter()
-        merger.add_metadata({
-            '/Title': 'Badges',
-            '/Creator': 'pretix',
-        })
 
     for i, page in enumerate(badges_pdf.pages):
         di = i % badges_per_page
@@ -258,8 +253,7 @@ def render_pdf(event, positions, opt):
                 try:
                     # to save memory output temporay PDF, which gets joined later
                     file_path = os.path.join(temp_dir.name, 'badges-%d.pdf' % i)
-                    with open(file_path, 'wb') as f:
-                        nup_pdf.write(f)
+                    nup_pdf.write(file_path)
                     nup_pdf_files.append(file_path)
                     nup_pdf = PdfWriter()
                 except IOError:
@@ -280,27 +274,47 @@ def render_pdf(event, positions, opt):
         page.trimbox = page.mediabox
         nup_page.merge_page(page)
 
-    # write last nup_pdf to outbuffer
-    outbuffer = BytesIO()
-    nup_pdf.write(outbuffer)
-    outbuffer.seek(0)
+    if not nup_pdf_files:
+        # everything fitted into one nup_pdf
+        outbuffer = BytesIO()
+        nup_pdf.write(outbuffer)
+        outbuffer.seek(0)
+        return outbuffer
 
-    if len(nup_pdf_files):
+    file_path = os.path.join(temp_dir.name, 'badges-last.pdf')
+    nup_pdf.write(file_path)
+    nup_pdf_files.append(file_path)
+
+    if settings.PDFTK:
+        subprocess.run([
+            settings.PDFTK,
+            os.path.join(temp_dir.name, 'badges-*.pdf'),
+            'cat',
+            'output',
+            os.path.join(d, 'out.pdf'),
+            'compress'
+        ], check=True)
+        with open(os.path.join(d, 'out.pdf'), 'rb') as f:
+            outbuffer = BytesIO(f.read())
+    else:
+        merger = PdfWriter()
+        merger.add_metadata({
+            '/Title': 'Badges',
+            '/Creator': 'pretix',
+        })
         # append all temp-PDFs
         for pdf in nup_pdf_files:
             merger.append(pdf)
-        # append last nup-outbuffer
-        merger.append(outbuffer)
 
         # write merged PDFs to buffer
         outbuffer = BytesIO()
         merger.write(outbuffer)
         outbuffer.seek(0)
 
-        try:
-            temp_dir.cleanup()
-        except IOError:
-            pass
+    try:
+        temp_dir.cleanup()
+    except IOError:
+        pass
 
     return outbuffer
 
