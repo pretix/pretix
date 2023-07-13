@@ -61,7 +61,8 @@ from django.utils.html import conditional_escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from i18nfield.strings import LazyI18nString
-from pypdf import PdfReader
+from pypdf import PdfReader, PdfWriter, Transformation
+from pypdf.generic import RectangleObject
 from reportlab.graphics import renderPDF
 from reportlab.graphics.barcode.qr import QrCodeWidget
 from reportlab.graphics.shapes import Drawing
@@ -1027,8 +1028,6 @@ class Renderer:
                 with open(os.path.join(d, 'out.pdf'), 'rb') as f:
                     return BytesIO(f.read())
         else:
-            from pypdf import PdfReader, PdfWriter, Transformation
-            from pypdf.generic import RectangleObject
             buffer.seek(0)
             new_pdf = PdfReader(buffer)
             output = PdfWriter()
@@ -1072,6 +1071,7 @@ class Renderer:
             outbuffer.seek(0)
             return outbuffer
 
+
 def merge_background(fg_pdf, bg_pdf, compress):
     if settings.PDFTK:
         with tempfile.TemporaryDirectory() as d:
@@ -1092,14 +1092,13 @@ def merge_background(fg_pdf, bg_pdf, compress):
             p = subprocess.run(pdftk_cmd, check=True, capture_output=True)
             return BytesIO(p.stdout)
     else:
-        from pypdf import PdfWriter
         output = PdfWriter()
         for i, page in enumerate(fg_pdf.pages):
             bg_page = bg_pdf.pages[i]
             bg_rotation = bg_page.get('/Rotate')
             if bg_rotation:
                 # as we change that page, better copy the page to not mess up the original?
-                #bg_page = copy.copy(bg_page)
+                # bg_page = copy.copy(bg_page)
                 # /Rotate is clockwise, transformation.rotate is counter-clockwise
                 t = Transformation().rotate(bg_rotation)
                 w = float(page.mediabox.getWidth())
@@ -1127,6 +1126,7 @@ def merge_background(fg_pdf, bg_pdf, compress):
         output.write(outbuffer)
         outbuffer.seek(0)
         return outbuffer
+
 
 @deconstructible
 class PdfLayoutValidator:
