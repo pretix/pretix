@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
 "PO-Revision-Date: 2023-07-13 00:22+0000\n"
-"Last-Translator: Felipe <fe.tapia.vera@gmail.com>\n"
+"Last-Translator: Iria Costas <i.costas@conterra.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -31139,7 +31139,7 @@ msgstr "Add-ons"
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:21
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:21
 msgid "Go back"
-msgstr "Regresar"
+msgstr "Atrás"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:7
 #, python-format
