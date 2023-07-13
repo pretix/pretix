@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-06-14 00:00+0000\n"
-"Last-Translator: hmontheline <Helias.mackay@goetheanum.ch>\n"
+"PO-Revision-Date: 2023-07-13 00:22+0000\n"
+"Last-Translator: Felipe <fe.tapia.vera@gmail.com>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -33,7 +33,7 @@ msgstr "Alemán (informal)"
 
 #: pretix/_base_settings.py:81
 msgid "Arabic"
-msgstr ""
+msgstr "Árabe"
 
 #: pretix/_base_settings.py:82
 msgid "Chinese (simplified)"
@@ -41,11 +41,11 @@ msgstr "Chino (simplificado)"
 
 #: pretix/_base_settings.py:83
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Chino (tradicional)"
 
 #: pretix/_base_settings.py:84
 msgid "Czech"
-msgstr ""
+msgstr "Checo"
 
 #: pretix/_base_settings.py:85
 msgid "Danish"
@@ -71,7 +71,7 @@ msgstr "Danés"
 
 #: pretix/_base_settings.py:90
 msgid "Galician"
-msgstr ""
+msgstr "Gallego"
 
 #: pretix/_base_settings.py:91
 msgid "Greek"
@@ -86,16 +86,12 @@ msgid "Latvian"
 msgstr "Letón"
 
 #: pretix/_base_settings.py:94
-#, fuzzy
-#| msgid "English"
 msgid "Polish"
-msgstr "Inglés"
+msgstr "Polaco"
 
 #: pretix/_base_settings.py:95
-#, fuzzy
-#| msgid "Portuguese (Brazil)"
 msgid "Portuguese (Portugal)"
-msgstr "Portugués (Brasil)"
+msgstr "Portugués (Portugal)"
 
 #: pretix/_base_settings.py:96
 msgid "Portuguese (Brazil)"
@@ -103,7 +99,7 @@ msgstr "Portugués (Brasil)"
 
 #: pretix/_base_settings.py:97
 msgid "Romanian"
-msgstr ""
+msgstr "Rumano"
 
 #: pretix/_base_settings.py:98
 msgid "Russian"
@@ -119,7 +115,7 @@ msgstr "Turko"
 
 #: pretix/_base_settings.py:101
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ucraniano"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -266,7 +262,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:270
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "Solo las entradas pueden ser actualmente personalizadas."
 
 #: pretix/api/serializers/item.py:281
 msgid ""
@@ -301,22 +297,17 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Este tipo de pregunta no se puede hacer durante el registro."
 
 #: pretix/api/serializers/media.py:108
-#, fuzzy
-#| msgid ""
-#| "A gift card with the same secret already exists in your or an affiliated "
-#| "organizer account."
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
-"Ya existe una tarjeta regalo con el mismo secreto en tu cuenta de "
-"organizador o en otra afiliada."
+"Ya existe un medio con el mismo identificador en tu cuenta de organizador o "
+"en otra afiliada."
 
 #: pretix/api/serializers/order.py:76
-#, fuzzy, python-brace-format
-#| msgid "Please enter a valid email address."
+#, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr "Por favor, introduzca una dirección de correo electrónico válida."
+msgstr "\"{input}\" no es una entrada valida."
 
 #: pretix/api/serializers/order.py:1179 pretix/api/views/cart.py:210
 #: pretix/base/services/orders.py:1459
@@ -360,15 +351,10 @@ msgid "This user already has permissions for this team."
 msgstr "Este usuario ya tiene permisos para este equipo."
 
 #: pretix/api/views/cart.py:199
-#, fuzzy
-#| msgid ""
-#| "This voucher code has already been used the maximum number of times "
-#| "allowed."
 msgid ""
 "The specified voucher has already been used the maximum number of times."
 msgstr ""
-"Este código de recibo ya ha sido utilizado el máximo número de veces "
-"permitido."
+"El código de recibo ya ha sido utilizado el máximo número de veces permitido."
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:465
 #, python-brace-format
@@ -448,44 +434,32 @@ msgid "Order changed"
 msgstr "Orden cambiada"
 
 #: pretix/api/webhooks.py:250
-#, fuzzy
-#| msgid "Enable payment method"
 msgid "Refund of payment created"
-msgstr "Habilitar método de pago"
+msgstr "Reembolso del pago creado"
 
 #: pretix/api/webhooks.py:254 pretix/base/notifications.py:293
 msgid "External refund of payment"
 msgstr "Reembolso externo del pago"
 
 #: pretix/api/webhooks.py:258
-#, fuzzy
-#| msgid "Text (requested by user)"
 msgid "Refund of payment requested by customer"
-msgstr "Texto (solicitado por el usuario)"
+msgstr "Reembolso del pago solicitado por el cliente"
 
 #: pretix/api/webhooks.py:262
-#, fuzzy
-#| msgid "Payment completed."
 msgid "Refund of payment completed"
-msgstr "Pago completado."
+msgstr "Reembolso del pago completado"
 
 #: pretix/api/webhooks.py:266
-#, fuzzy
-#| msgid "Refund {local_id} has been canceled."
 msgid "Refund of payment canceled"
-msgstr "Se ha cancelado el reembolso {local_id}."
+msgstr "Reembolso del pago anulado."
 
 #: pretix/api/webhooks.py:270
-#, fuzzy
-#| msgid "Refund order"
 msgid "Refund of payment failed"
-msgstr "Orden de reembolso"
+msgstr "Reembolso del pago fallido"
 
 #: pretix/api/webhooks.py:274
-#, fuzzy
-#| msgid "Payment confirmation date"
 msgid "Payment confirmed"
-msgstr "Confirmación de fecha de pago"
+msgstr "Pago confimado"
 
 #: pretix/api/webhooks.py:278
 msgid "Order approved"
@@ -535,36 +509,28 @@ msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
 msgstr ""
+"Producto cambiado (incluyendo producto agregado o eliminado e incluye "
+"cambios a los objetos anidados como variaciones o paquetes)"
 
 #: pretix/api/webhooks.py:323
-#, fuzzy
-#| msgid "Shop not live"
 msgid "Shop taken live"
-msgstr "Tienda no en vivo"
+msgstr "Tienda ahora en vivo"
 
 #: pretix/api/webhooks.py:327
-#, fuzzy
-#| msgid "The shop has been taken offline."
 msgid "Shop taken offline"
-msgstr "La tienda ha sido desconectada."
+msgstr "La tienda ha sido desconectada"
 
 #: pretix/api/webhooks.py:331
-#, fuzzy
-#| msgid "The order has been created."
 msgid "Test-Mode of shop has been activated"
-msgstr "Se ha creado la orden."
+msgstr "Modo de pruebas de la tienda ha sido activado."
 
 #: pretix/api/webhooks.py:335
-#, fuzzy
-#| msgid "The order has been created."
 msgid "Test-Mode of shop has been deactivated"
-msgstr "Se ha creado la orden."
+msgstr "Modo de pruebas de la tienda ha sido desactivado"
 
 #: pretix/api/webhooks.py:339
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry added"
-msgstr "Entrada a la lista de espera"
+msgstr "Agregado a la lista de espera"
 
 #: pretix/api/webhooks.py:343
 #, fuzzy
@@ -573,10 +539,8 @@ msgid "Waiting list entry changed"
 msgstr "Entrada a la lista de espera"
 
 #: pretix/api/webhooks.py:347
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry deleted"
-msgstr "Entrada a la lista de espera"
+msgstr "Entrada a la lista de espera eliminada"
 
 #: pretix/api/webhooks.py:351
 #, fuzzy
@@ -598,11 +562,11 @@ msgstr "Este campo es obligatorio."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr ""
+msgstr "Ingresa el código postal en el formato XXX."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr ""
+msgstr "Ingresa un código postal en el formato XXX."
 
 #: pretix/base/auth.py:143
 #, python-brace-format
@@ -655,7 +619,7 @@ msgstr "Código fuente"
 #: pretix/base/customersso/oidc.py:59
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr ""
+msgstr "La opción de configuración \"{name]\" no existe."
 
 #: pretix/base/customersso/oidc.py:67 pretix/base/customersso/oidc.py:72
 #, python-brace-format
@@ -3246,7 +3210,7 @@ msgstr "Cant."
 #: pretix/base/invoice.py:622 pretix/base/invoice.py:768
 msgctxt "invoice"
 msgid "Tax rate"
-msgstr "Tasa de impuestos"
+msgstr "Tasas de impuesto"
 
 #: pretix/base/invoice.py:623
 msgctxt "invoice"
@@ -6218,7 +6182,7 @@ msgstr "Cambiar productos"
 #: pretix/base/notifications.py:223
 #: pretix/base/templates/pretixbase/email/order_details.html:147
 msgid "View order details"
-msgstr "Ver detalles de la orden"
+msgstr "Ver detalles del pedido"
 
 #: pretix/base/notifications.py:234
 #, python-brace-format
@@ -7906,7 +7870,7 @@ msgstr ""
 #, python-brace-format
 msgctxt "invoice"
 msgid "Event location: {location}"
-msgstr ""
+msgstr "Localización del evento: {location}"
 
 #: pretix/base/services/invoices.py:236
 #, python-brace-format
