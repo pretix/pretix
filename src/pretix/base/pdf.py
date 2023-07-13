@@ -1092,6 +1092,7 @@ def merge_background(fg_pdf, bg_pdf, compress):
             p = subprocess.run(pdftk_cmd, check=True, capture_output=True)
             return BytesIO(p.stdout)
     else:
+        from pypdf import PdfWriter
         output = PdfWriter()
         for i, page in enumerate(fg_pdf.pages):
             bg_page = bg_pdf.pages[i]
