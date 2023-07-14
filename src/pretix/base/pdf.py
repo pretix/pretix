@@ -48,6 +48,7 @@ from functools import partial
 from io import BytesIO
 
 import jsonschema
+import reportlab.rl_config
 from bidi.algorithm import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
@@ -84,6 +85,9 @@ from pretix.helpers.reportlab import ThumbnailingImageReader, reshaper
 from pretix.presale.style import get_fonts
 
 logger = logging.getLogger(__name__)
+
+if not settings.DEBUG:
+    reportlab.rl_config.shapeChecking = 0
 
 
 DEFAULT_VARIABLES = OrderedDict((
