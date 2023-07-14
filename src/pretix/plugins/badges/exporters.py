@@ -41,7 +41,7 @@ from collections import OrderedDict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal
 from io import BytesIO
-from typing import Optional, Tuple
+from typing import BinaryIO, List, Optional, Tuple
 
 import dateutil.parser
 from django import forms
@@ -54,7 +54,7 @@ from django.db.models import Case, Exists, OuterRef, Q, Subquery, When
 from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
-from pypdf import PdfReader, PdfWriter, Transformation
+from pypdf import PageObject, PdfReader, PdfWriter, Transformation
 from pypdf.generic import RectangleObject
 from reportlab.lib import pagesizes
 from reportlab.lib.units import mm
@@ -62,7 +62,9 @@ from reportlab.pdfgen import canvas
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.i18n import language
-from pretix.base.models import Order, OrderPosition, Question, QuestionAnswer
+from pretix.base.models import (
+    Event, Order, OrderPosition, Question, QuestionAnswer,
+)
 from pretix.base.pdf import Renderer, merge_background
 from pretix.base.services.export import ExportError
 from pretix.base.settings import PERSON_NAME_SCHEMES
@@ -183,12 +185,18 @@ OPTIONS = OrderedDict([
 
 
 def _chunks(lst, n):
-    """Yield successive n-sized chunks from lst."""
+    """
+    Yield successive n-sized chunks from lst.
+    """
     for i in range(0, len(lst), n):
         yield lst[i:i + n]
 
 
-def _render_nup_page(nup_pdf, input_pages, opt):
+def _render_nup_page(nup_pdf: PdfWriter, input_pages: PageObject, opt: dict) -> PageObject:
+    """
+    Render the `Page` objects in `input_pages` onto one page of `nup_pdf` using the options given in `opt` and
+    return the newly created page.
+    """
     badges_per_page = opt['cols'] * opt['rows']
     nup_page = nup_pdf.add_blank_page(
         width=Decimal('%.5f' % (opt['pagesize'][0])),
@@ -210,9 +218,40 @@ def _render_nup_page(nup_pdf, input_pages, opt):
     return nup_page
 
 
-def _render_nup(input_file, num_pages, output_file, opt):
+def _merge_pages(file_paths: List[str], output_file: BinaryIO):
+    """
+    Merge all pages from the PDF files named `file_paths` into the `output_file`.
+    """
+    if settings.PDFTK:
+        subprocess.run([
+            settings.PDFTK,
+            *file_paths,
+            'cat',
+            'output',
+            '-',
+            'compress'
+        ], check=True, stdout=output_file)
+    else:
+        merger = PdfWriter()
+        merger.add_metadata({
+            '/Title': 'Badges',
+            '/Creator': 'pretix',
+        })
+        # append all temp-PDFs
+        for pdf in file_paths:
+            merger.append(pdf)
+
+        # write merged PDFs to buffer
+        merger.write(output_file)
+
+
+def _render_nup(input_files: List[str], num_pages: int, output_file: BytesIO, opt: dict):
+    """
+    Render the pages from the PDF files listed in `input_files` (file names) with a total number of `num_pages` pages
+    into one file written to `output_file` using the -nup options given in `opt`.
+    """
     badges_per_page = opt['cols'] * opt['rows']
-    max_nup_pages = 20
+    max_nup_pages = 20  # chunk size to prevent working with huge files
     nup_pdf_files = []
     temp_dir = None
     if num_pages > badges_per_page * max_nup_pages:
@@ -226,14 +265,21 @@ def _render_nup(input_file, num_pages, output_file, opt):
             pass
 
     try:
-        badges_pdf = PdfReader(input_file)
-        for i, chunk in enumerate(_chunks(range(num_pages), badges_per_page * max_nup_pages)):
-            chunk = [badges_pdf.pages[j] for j in chunk]
+        badges_pdf = PdfReader(input_files.pop())
+        offset = 0
+        for i, chunk_indices in enumerate(_chunks(range(num_pages), badges_per_page * max_nup_pages)):
+            chunk = []
+            for j in chunk_indices:
+                # We need to dynamically switch to the next input file as we don't know how many pages each input
+                # file has beforehand
+                if j - offset >= len(badges_pdf.pages):
+                    offset += len(badges_pdf.pages)
+                    badges_pdf = PdfReader(input_files.pop())
+                chunk.append(badges_pdf.pages[j - offset])
             # Reset some internal state from pypdf. This will make it a little slower, but will prevent us from
             # running out of memory if we process a really large file.
             badges_pdf.flattened_pages = None
 
-            file_path = os.path.join(temp_dir.name, 'badges-%d.pdf' % i)
             nup_pdf = PdfWriter()
             nup_pdf.add_metadata({
                 '/Title': 'Badges',
@@ -243,37 +289,19 @@ def _render_nup(input_file, num_pages, output_file, opt):
             for page_chunk in _chunks(chunk, badges_per_page):
                 _render_nup_page(nup_pdf, page_chunk, opt)
 
-            nup_pdf.write(file_path)
-            nup_pdf_files.append(file_path)
+            if temp_dir:
+                file_path = os.path.join(temp_dir.name, 'badges-%d.pdf' % i)
+                nup_pdf.write(file_path)
+                nup_pdf_files.append(file_path)
+            else:
+                # everything fitted into one nup_pdf -- we can save some work
+                nup_pdf.write(output_file)
+                return
 
         del badges_pdf  # free up memory
 
-        if len(nup_pdf_files) == 1:
-            # everything fitted into one nup_pdf
-            return open(nup_pdf_files[0], "r")
-
-        if settings.PDFTK:
-            file_paths = [os.path.join(temp_dir.name, fp) for fp in nup_pdf_files]
-            subprocess.run([
-                settings.PDFTK,
-                *file_paths,
-                'cat',
-                'output',
-                '-',
-                'compress'
-            ], check=True, stdout=output_file)
-        else:
-            merger = PdfWriter()
-            merger.add_metadata({
-                '/Title': 'Badges',
-                '/Creator': 'pretix',
-            })
-            # append all temp-PDFs
-            for pdf in nup_pdf_files:
-                merger.append(pdf)
-
-            # write merged PDFs to buffer
-            merger.write(output_file)
+        file_paths = [os.path.join(temp_dir.name, fp) for fp in nup_pdf_files]
+        _merge_pages(file_paths, output_file)
     finally:
         if temp_dir:
             try:
@@ -282,9 +310,11 @@ def _render_nup(input_file, num_pages, output_file, opt):
                 pass
 
 
-def render_pdf(event, positions, opt, output_file):
-    Renderer._register_fonts()
-
+def _render_badges(event: Event, positions: List[OrderPosition], opt: dict) -> Tuple[PdfWriter, PdfWriter, int]:
+    """
+    Render the badges for the given order positions into two different files, one with the foregrounds and one with
+    the backgrounds.
+    """
     renderermap = {
         bi.item_id: _renderer(event, bi.layout)
         for bi in BadgeItem.objects.select_related('layout').filter(item__event=event)
@@ -298,9 +328,6 @@ def render_pdf(event, positions, opt, output_file):
     if not len(op_renderers):
         raise ExportError(_("None of the selected products is configured to print badges."))
 
-    badges_per_page = opt['cols'] * opt['rows']
-
-    # render each badge on its own page first
     fg_pdf = PdfWriter()
     fg_pdf.add_metadata({
         '/Title': 'Badges',
@@ -324,7 +351,15 @@ def render_pdf(event, positions, opt, output_file):
             bg_pdf.add_page(renderer.bg_pdf.pages[i])
         num_pages = new_num_pages
 
+    return fg_pdf, bg_pdf, num_pages
+
+
+def render_pdf(event, positions, opt, output_file):
+    Renderer._register_fonts()
+    badges_per_page = opt['cols'] * opt['rows']
+
     if badges_per_page == 1:
+        fg_pdf, bg_pdf, _ = _render_badges(event, positions, opt)
         merge_background(
             fg_pdf,
             bg_pdf,
@@ -333,16 +368,28 @@ def render_pdf(event, positions, opt, output_file):
         )
     else:
         # place n-up badges/pages per page
-        with tempfile.NamedTemporaryFile(delete=True) as tmp_file:
-            merge_background(
-                fg_pdf,
-                bg_pdf,
-                tmp_file,
-                compress=False,
-            )
-            del fg_pdf  # free up memory
-            del bg_pdf  # free up memory
-            return _render_nup(tmp_file, num_pages, output_file, opt)
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            page_pdfs = []
+            total_num_pages = 0
+            for position_chunk in _chunks(positions, 200):
+                # We first render the foreground and background of every individual badge and merge them, but we do
+                # so in chunks, since the n-up code is slower if it has to deal with huge PDFs. It doesn't matter
+                # that not every position has the same number of pages, as the n-up code can deal with that
+                fg_pdf, bg_pdf, num_pages = _render_badges(event, position_chunk, opt)
+                out_pdf_name = os.path.join(tmp_dir, f'chunk-{len(page_pdfs)}.pdf')
+                with open(out_pdf_name, 'w') as out_pdf:
+                    merge_background(
+                        fg_pdf,
+                        bg_pdf,
+                        out_pdf,
+                        compress=False,
+                    )
+                page_pdfs.append(out_pdf_name)
+                total_num_pages += num_pages
+                del fg_pdf, bg_pdf  # free up memory
+
+            # Actually render a n-up file
+            return _render_nup(page_pdfs, total_num_pages, output_file, opt)
 
 
 class BadgeExporter(BaseExporter):
