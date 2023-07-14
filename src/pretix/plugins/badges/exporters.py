@@ -41,7 +41,7 @@ from collections import OrderedDict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal
 from io import BytesIO
-from typing import Tuple
+from typing import Optional, Tuple
 
 import dateutil.parser
 from django import forms
@@ -182,7 +182,107 @@ OPTIONS = OrderedDict([
 ])
 
 
-def render_pdf(event, positions, opt):
+def _chunks(lst, n):
+    """Yield successive n-sized chunks from lst."""
+    for i in range(0, len(lst), n):
+        yield lst[i:i + n]
+
+
+def _render_nup_page(nup_pdf, input_pages, opt):
+    badges_per_page = opt['cols'] * opt['rows']
+    nup_page = nup_pdf.add_blank_page(
+        width=Decimal('%.5f' % (opt['pagesize'][0])),
+        height=Decimal('%.5f' % (opt['pagesize'][1])),
+    )
+    for i, page in enumerate(input_pages):
+        di = i % badges_per_page
+        tx = opt['margins'][3] + (di % opt['cols']) * opt['offsets'][0]
+        ty = opt['margins'][2] + (opt['rows'] - 1 - (di // opt['cols'])) * opt['offsets'][1]
+        page.add_transformation(Transformation().translate(tx, ty))
+        page.mediabox = RectangleObject((
+            Decimal('%.5f' % (page.mediabox.left.as_numeric() + tx)),
+            Decimal('%.5f' % (page.mediabox.bottom.as_numeric() + ty)),
+            Decimal('%.5f' % (page.mediabox.right.as_numeric() + tx)),
+            Decimal('%.5f' % (page.mediabox.top.as_numeric() + ty))
+        ))
+        page.trimbox = page.mediabox
+        nup_page.merge_page(page)
+    return nup_page
+
+
+def _render_nup(input_file, num_pages, output_file, opt):
+    badges_per_page = opt['cols'] * opt['rows']
+    max_nup_pages = 20
+    nup_pdf_files = []
+    temp_dir = None
+    if num_pages > badges_per_page * max_nup_pages:
+        # to reduce memory consumption with lots of badges
+        # we try to use temporary PDF-files with up to
+        # max_nup_pages pages
+        # If temp-files fail, we try to merge in-memory anyways
+        try:
+            temp_dir = tempfile.TemporaryDirectory()
+        except IOError:
+            pass
+
+    try:
+        badges_pdf = PdfReader(input_file)
+        for i, chunk in enumerate(_chunks(range(num_pages), badges_per_page * max_nup_pages)):
+            chunk = [badges_pdf.pages[j] for j in chunk]
+            # Reset some internal state from pypdf. This will make it a little slower, but will prevent us from
+            # running out of memory if we process a really large file.
+            badges_pdf.flattened_pages = None
+
+            file_path = os.path.join(temp_dir.name, 'badges-%d.pdf' % i)
+            nup_pdf = PdfWriter()
+            nup_pdf.add_metadata({
+                '/Title': 'Badges',
+                '/Creator': 'pretix',
+            })
+
+            for page_chunk in _chunks(chunk, badges_per_page):
+                _render_nup_page(nup_pdf, page_chunk, opt)
+
+            nup_pdf.write(file_path)
+            nup_pdf_files.append(file_path)
+
+        del badges_pdf  # free up memory
+
+        if len(nup_pdf_files) == 1:
+            # everything fitted into one nup_pdf
+            return open(nup_pdf_files[0], "r")
+
+        if settings.PDFTK:
+            file_paths = [os.path.join(temp_dir.name, fp) for fp in nup_pdf_files]
+            subprocess.run([
+                settings.PDFTK,
+                *file_paths,
+                'cat',
+                'output',
+                '-',
+                'compress'
+            ], check=True, stdout=output_file)
+        else:
+            merger = PdfWriter()
+            merger.add_metadata({
+                '/Title': 'Badges',
+                '/Creator': 'pretix',
+            })
+            # append all temp-PDFs
+            for pdf in nup_pdf_files:
+                merger.append(pdf)
+
+            # write merged PDFs to buffer
+            merger.write(output_file)
+    finally:
+        if temp_dir:
+            try:
+                temp_dir.cleanup()
+            except IOError:
+                pass
+
+
+def render_pdf(event, positions, opt, output_file):
     Renderer._register_fonts()
 
     renderermap = {
@@ -198,8 +298,9 @@ def render_pdf(event, positions, opt):
     if not len(op_renderers):
         raise ExportError(_("None of the selected products is configured to print badges."))
 
-    # render each badge on its own page first
     badges_per_page = opt['cols'] * opt['rows']
+
+    # render each badge on its own page first
     fg_pdf = PdfWriter()
     fg_pdf.add_metadata({
         '/Title': 'Badges',
@@ -223,107 +324,25 @@ def render_pdf(event, positions, opt):
             bg_pdf.add_page(renderer.bg_pdf.pages[i])
         num_pages = new_num_pages
 
-    outbuffer = merge_background(fg_pdf, bg_pdf, compress=badges_per_page == 1)
-
     if badges_per_page == 1:
-        # no need to place multiple badges on one page
-        return outbuffer
-
-    # place n-up badges/pages per page
-    badges_pdf = PdfReader(outbuffer)
-    nup_pdf = PdfWriter()
-    nup_pdf.add_metadata({
-        '/Title': 'Badges',
-        '/Creator': 'pretix',
-    })
-    nup_page = None
-    max_nup_pages = 20
-    nup_pdf_files = []
-    temp_dir = None
-    merger = None
-    if len(badges_pdf.pages) > badges_per_page * max_nup_pages:
-        # to reduce memory consumption with lots of badges
-        # we try to use temporary PDF-files with up to
-        # max_nup_pages pages
-        # If temp-files fail, we try to merge in-memory anyways
-        try:
-            temp_dir = tempfile.TemporaryDirectory()
-        except IOError:
-            pass
-
-    for i, page in enumerate(badges_pdf.pages):
-        di = i % badges_per_page
-        if di == 0:
-            if len(nup_pdf.pages) == max_nup_pages:
-                try:
-                    # to save memory output temporay PDF, which gets joined later
-                    file_path = os.path.join(temp_dir.name, 'badges-%d.pdf' % i)
-                    nup_pdf.write(file_path)
-                    nup_pdf_files.append(file_path)
-                    nup_pdf = PdfWriter()
-                except IOError:
-                    pass
-            nup_page = nup_pdf.add_blank_page(
-                width=Decimal('%.5f' % (opt['pagesize'][0])),
-                height=Decimal('%.5f' % (opt['pagesize'][1])),
-            )
-        tx = opt['margins'][3] + (di % opt['cols']) * opt['offsets'][0]
-        ty = opt['margins'][2] + (opt['rows'] - 1 - (di // opt['cols'])) * opt['offsets'][1]
-        page.add_transformation(Transformation().translate(tx, ty))
-        page.mediabox = RectangleObject((
-            Decimal('%.5f' % (page.mediabox.left.as_numeric() + tx)),
-            Decimal('%.5f' % (page.mediabox.bottom.as_numeric() + ty)),
-            Decimal('%.5f' % (page.mediabox.right.as_numeric() + tx)),
-            Decimal('%.5f' % (page.mediabox.top.as_numeric() + ty))
-        ))
-        page.trimbox = page.mediabox
-        nup_page.merge_page(page)
-
-    if not nup_pdf_files:
-        # everything fitted into one nup_pdf
-        outbuffer = BytesIO()
-        nup_pdf.write(outbuffer)
-        outbuffer.seek(0)
-        return outbuffer
-
-    file_path = os.path.join(temp_dir.name, 'badges-last.pdf')
-    nup_pdf.write(file_path)
-    nup_pdf_files.append(file_path)
-
-    if settings.PDFTK:
-        file_paths = [os.path.join(temp_dir.name, fp) for fp in nup_pdf_files]
-        file_path_out = os.path.join(temp_dir.name, 'out.pdf')
-        subprocess.run([
-            settings.PDFTK,
-            *file_paths,
-            'cat',
-            'output',
-            file_path_out,
-            'compress'
-        ], check=True)
-        with open(file_path_out, 'rb') as f:
-            outbuffer = BytesIO(f.read())
+        merge_background(
+            fg_pdf,
+            bg_pdf,
+            output_file,
+            compress=True,
+        )
     else:
-        merger = PdfWriter()
-        merger.add_metadata({
-            '/Title': 'Badges',
-            '/Creator': 'pretix',
-        })
-        # append all temp-PDFs
-        for pdf in nup_pdf_files:
-            merger.append(pdf)
-
-        # write merged PDFs to buffer
-        outbuffer = BytesIO()
-        merger.write(outbuffer)
-        outbuffer.seek(0)
-
-    try:
-        temp_dir.cleanup()
-    except IOError:
-        pass
-
-    return outbuffer
+        # place n-up badges/pages per page
+        with tempfile.NamedTemporaryFile(delete=True) as tmp_file:
+            merge_background(
+                fg_pdf,
+                bg_pdf,
+                tmp_file,
+                compress=False,
+            )
+            del fg_pdf  # free up memory
+            del bg_pdf  # free up memory
+            return _render_nup(tmp_file, num_pages, output_file, opt)
 
 
 class BadgeExporter(BaseExporter):
@@ -409,7 +428,7 @@ class BadgeExporter(BaseExporter):
         )
         return d
 
-    def render(self, form_data: dict) -> Tuple[str, str, str]:
+    def render(self, form_data: dict, output_file=None) -> Tuple[str, str, Optional[bytes]]:
         qs = OrderPosition.objects.filter(
             order__event=self.event, item_id__in=form_data['items']
         ).prefetch_related(
@@ -505,11 +524,17 @@ class BadgeExporter(BaseExporter):
             )
 
         try:
-            outbuffer = render_pdf(self.event, qs, OPTIONS[form_data.get('rendering', 'one')])
+            if output_file:
+                render_pdf(self.event, qs, OPTIONS[form_data.get('rendering', 'one')], output_file=output_file)
+                return 'badges.pdf', 'application/pdf', None
+            else:
+                with tempfile.NamedTemporaryFile(delete=True) as tmpfile:
+                    render_pdf(self.event, qs, OPTIONS[form_data.get('rendering', 'one')], output_file=tmpfile)
+                    tmpfile.seek(0)
+                    return 'badges.pdf', 'application/pdf', tmpfile.read()
         except DataError:
             logging.exception('DataError during export')
             raise ExportError(
                 _('Your data could not be converted as requested. This could be caused by invalid values in your '
                   'databases, such as answers to number questions which are not a number.')
             )
-        return 'badges.pdf', 'application/pdf', outbuffer.read()

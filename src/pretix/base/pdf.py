@@ -1070,7 +1070,7 @@ class Renderer:
             return outbuffer
 
 
-def merge_background(fg_pdf, bg_pdf, compress):
+def merge_background(fg_pdf, bg_pdf, out_file, compress):
     if settings.PDFTK:
         with tempfile.TemporaryDirectory() as d:
             fg_filename = os.path.join(d, 'fg.pdf')
@@ -1083,12 +1083,11 @@ def merge_background(fg_pdf, bg_pdf, compress):
                 'multibackground',
                 bg_filename,
                 'output',
-                '-'
+                '-',
             ]
             if compress:
                 pdftk_cmd.append('compress')
-            p = subprocess.run(pdftk_cmd, check=True, capture_output=True)
-            return BytesIO(p.stdout)
+            subprocess.run(pdftk_cmd, check=True, stdout=out_file)
     else:
         output = PdfWriter()
         for i, page in enumerate(fg_pdf.pages):
@@ -1118,10 +1117,7 @@ def merge_background(fg_pdf, bg_pdf, compress):
                 page.add_transformation(t)
             bg_page.merge_page(page)
             output.add_page(bg_page)
-        outbuffer = BytesIO()
-        output.write(outbuffer)
-        outbuffer.seek(0)
-        return outbuffer
+        output.write(out_file)
 
 
 @deconstructible
