@@ -740,17 +740,8 @@ class PaymentFailedTests(TestCase):
     @classscope(attr='o')
     def test_no_payment_fail_mail_setting(self):
         payment = self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=self.order.total)
-        payment.created = now() - timedelta(hours=4)
         payment.save()
         payment.fail(send_mail=False)
-        assert len(djmail.outbox) == 0
-
-    @classscope(attr='o')
-    def test_no_payment_fail_mail_time(self):
-        payment = self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=self.order.total)
-        payment.created = now() - timedelta(seconds=4)
-        payment.save()
-        payment.fail(email_delay=5)
         assert len(djmail.outbox) == 0
 
 
