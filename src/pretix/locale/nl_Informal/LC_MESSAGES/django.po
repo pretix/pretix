@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-07-02 06:00+0000\n"
-"Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
+"PO-Revision-Date: 2023-07-16 22:00+0000\n"
+"Last-Translator: Freek Engelbarts <freekengelbarts@gmail.com>\n"
 "Language-Team: Dutch (informal) <https://translate.pretix.eu/projects/pretix/"
 "pretix/nl_Informal/>\n"
 "Language: nl_Informal\n"
@@ -41,11 +41,11 @@ msgstr "Chinees (versimpeld)"
 
 #: pretix/_base_settings.py:83
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Chinees (traditioneel)"
 
 #: pretix/_base_settings.py:84
 msgid "Czech"
-msgstr ""
+msgstr "Tsjechisch"
 
 #: pretix/_base_settings.py:85
 msgid "Danish"
@@ -69,7 +69,7 @@ msgstr "Fins"
 
 #: pretix/_base_settings.py:90
 msgid "Galician"
-msgstr ""
+msgstr "Galicisch"
 
 #: pretix/_base_settings.py:91
 msgid "Greek"
@@ -97,7 +97,7 @@ msgstr "Portugees (Brazilië)"
 
 #: pretix/_base_settings.py:97
 msgid "Romanian"
-msgstr ""
+msgstr "Roemeens"
 
 #: pretix/_base_settings.py:98
 msgid "Russian"
@@ -113,7 +113,7 @@ msgstr "Turks"
 
 #: pretix/_base_settings.py:101
 msgid "Ukrainian"
-msgstr ""
+msgstr "Oekraïens"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
