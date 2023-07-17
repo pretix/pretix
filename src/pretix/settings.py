@@ -118,11 +118,11 @@ db_options = {}
 
 postgresql_sslmode = config.get('database', 'sslmode', fallback='disable')
 USE_DATABASE_TLS = postgresql_sslmode != 'disable'
-USE_DATABASE_MTLS = config.has_option('database', 'sslcert')
+USE_DATABASE_MTLS = USE_DATABASE_TLS and config.has_option('database', 'sslcert')
 
 if USE_DATABASE_TLS or USE_DATABASE_MTLS:
     tls_config = {}
-    if USE_DATABASE_TLS:
+    if not USE_DATABASE_MTLS:
         if 'postgresql' in db_backend:
             tls_config = {
                 'sslmode': config.get('database', 'sslmode'),
@@ -252,7 +252,7 @@ HAS_REDIS = config.has_option('redis', 'location')
 USE_REDIS_SENTINEL = config.has_option('redis', 'sentinels')
 redis_ssl_cert_reqs = config.get('redis', 'ssl_cert_reqs', fallback='none')
 USE_REDIS_TLS = redis_ssl_cert_reqs != 'none'
-USE_REDIS_MTLS = config.has_option('redis', 'ssl_certfile')
+USE_REDIS_MTLS = USE_REDIS_TLS and config.has_option('redis', 'ssl_certfile')
 HAS_REDIS_PASSWORD = config.has_option('redis', 'password')
 if HAS_REDIS:
     OPTIONS = {
@@ -270,7 +270,7 @@ if HAS_REDIS:
 
     if USE_REDIS_TLS or USE_REDIS_MTLS:
         tls_config = {}
-        if USE_REDIS_TLS and USE_REDIS_MTLS is False:
+        if not USE_REDIS_MTLS:
             tls_config = {
                 'ssl_cert_reqs': config.get('redis', 'ssl_cert_reqs'),
                 'ssl_ca_certs': config.get('redis', 'ssl_ca_certs'),
