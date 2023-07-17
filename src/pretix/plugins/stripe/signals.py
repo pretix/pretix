@@ -24,18 +24,22 @@ from collections import OrderedDict
 
 from django import forms
 from django.dispatch import receiver
+from django.http import HttpRequest
 from django.template.loader import get_template
 from django.urls import resolve, reverse
 from django.utils.translation import gettext_lazy as _
+from paypalhttp import HttpResponse
 
 from pretix.base.forms import SecretKeySettingsField
+from pretix.base.middleware import _merge_csp, _parse_csp, _render_csp
 from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
     logentry_display, register_global_settings, register_payment_providers,
 )
 from pretix.control.signals import nav_organizer
 from pretix.plugins.stripe.forms import StripeKeyValidator
-from pretix.presale.signals import html_head
+from pretix.plugins.stripe.payment import StripeMethod
+from pretix.presale.signals import html_head, process_response
 
 
 @receiver(register_payment_providers, dispatch_uid="payment_stripe")
@@ -178,3 +182,34 @@ def nav_o(sender, request, organizer, **kwargs):
             'active': 'settings.connect' in url.url_name,
         }]
     return []
+
+
+@receiver(signal=process_response, dispatch_uid="stripe_middleware_resp")
+def signal_process_response(sender, request: HttpRequest, response: HttpResponse, **kwargs):
+    provider = StripeMethod(sender)
+    url = resolve(request.path_info)
+
+    if provider.settings.get('_enabled', as_type=bool) and (
+            url.url_name == "event.order.pay.change" or
+            url.url_name == "event.order.pay" or
+            (url.url_name == "event.checkout" and url.kwargs['step'] == "payment") or
+            (url.namespace == "plugins:stripe" and url.url_name in ["sca", "sca.return"])
+    ):
+        if 'Content-Security-Policy' in response:
+            h = _parse_csp(response['Content-Security-Policy'])
+        else:
+            h = {}
+
+        # https://stripe.com/docs/security/guide#content-security-policy
+        csps = {
+            'connect-src': ['https://api.stripe.com'],
+            'frame-src': ['https://js.stripe.com', 'https://hooks.stripe.com'],
+            'script-src': ['https://js.stripe.com'],
+        }
+
+        _merge_csp(h, csps)
+
+        if h:
+            response['Content-Security-Policy'] = _render_csp(h)
+
+    return response
