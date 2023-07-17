@@ -205,6 +205,12 @@ class Rule(models.Model, LoggingMixin):
         (BOTH, _('Both (all order contact addresses and all attendee email addresses)'))
     ]
 
+    CHECK_IN = [
+        ("all", _("No restriction")),
+        ("checked_in", _("Everyone who is or was checked in")),
+        ("no_checkin", _("Never checked in"))
+    ]
+
     id = models.BigAutoField(primary_key=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='sendmail_rules')
 
@@ -217,6 +223,13 @@ class Rule(models.Model, LoggingMixin):
     restrict_to_status = fields.MultiStringField(
         verbose_name=_("Restrict to orders with status"),
         default=['p', 'n__valid_if_pending'],
+    )
+
+    checked_in_status = models.CharField(
+        verbose_name=_("Restrict to check-in status"),
+        default=False,
+        choices=CHECK_IN,
+        max_length=10,
     )
 
     attach_ical = models.BooleanField(
