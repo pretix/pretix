@@ -377,7 +377,7 @@ def render_pdf(event, positions, opt, output_file):
                 # that not every position has the same number of pages, as the n-up code can deal with that
                 fg_pdf, bg_pdf, num_pages = _render_badges(event, position_chunk, opt)
                 out_pdf_name = os.path.join(tmp_dir, f'chunk-{len(page_pdfs)}.pdf')
-                with open(out_pdf_name, 'w') as out_pdf:
+                with open(out_pdf_name, 'wb') as out_pdf:
                     merge_background(
                         fg_pdf,
                         bg_pdf,
