@@ -140,7 +140,7 @@ class BaseExporter:
         """
         return {}
 
-    def render(self, form_data: dict) -> Tuple[str, str, bytes]:
+    def render(self, form_data: dict) -> Tuple[str, str, Optional[bytes]]:
         """
         Render the exported file and return a tuple consisting of a filename, a file type
         and file content.
