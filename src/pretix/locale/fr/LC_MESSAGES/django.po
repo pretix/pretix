@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-07-08 05:00+0000\n"
+"PO-Revision-Date: 2023-07-19 17:00+0000\n"
 "Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -3398,7 +3398,7 @@ msgstr "Interdit par une règle personnalisée"
 
 #: pretix/base/models/checkin.py:347
 msgid "Ticket code revoked/changed"
-msgstr "Code du billet révoqué/modifé"
+msgstr "Code du billet révoqué/modifié"
 
 #: pretix/base/models/checkin.py:348
 msgid "Information required"
