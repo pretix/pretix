@@ -221,7 +221,9 @@ def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, 
                     gettext('Your exported data exceeded the size limit for scheduled exports.')
                 )
 
-            close_old_connections()  # This task can run very long, we might need a new DB connection
+            conn = transaction.get_connection()
+            if not conn.in_atomic_block:  # atomic execution only happens during tests or with celery always_eager on
+                close_old_connections()  # This task can run very long, we might need a new DB connection
 
             f = ContentFile(data)
             file.file.save(cachedfile_name(file, file.filename), f)
