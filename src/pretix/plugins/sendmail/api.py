@@ -49,7 +49,7 @@ class RuleSerializer(I18nAwareModelSerializer):
             if not full_data.get('send_date'):
                 raise ValidationError('send_date is required for date_is_absolute=True')
         else:
-            if not all([full_data.get(k) for k in ['send_offset_days', 'send_offset_time']]):
+            if not all([full_data.get(k) is not None for k in ['send_offset_days', 'send_offset_time']]):
                 raise ValidationError('send_offset_days and send_offset_time are required for date_is_absolute=False')
 
         if full_data.get('all_products') is False:

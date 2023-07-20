@@ -121,6 +121,23 @@ def test_sendmail_rule_create_min_fail(token_client, organizer, event):
 
 @scopes_disabled()
 @pytest.mark.django_db
+def test_sendmail_rule_offset_zero(token_client, organizer, event):
+    create_rule(
+        token_client, organizer, event,
+        data={
+            'subject': {'en': 'meow'},
+            'template': {'en': 'creative text here'},
+            'send_date': '2018-03-17T13:31Z',
+            'send_offset_days': '0',
+            'send_offset_time': '08:40',
+            'date_is_absolute': False,
+        },
+        expected_failure=False,
+    )
+
+
+@scopes_disabled()
+@pytest.mark.django_db
 def test_sendmail_rule_create_minimal(token_client, organizer, event):
     r = create_rule(
         token_client, organizer, event,
