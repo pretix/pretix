@@ -2312,7 +2312,9 @@ Your {event} team"""))  # noqa: W291
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
 
-the initiated payment for your order for {event} failed.
+your payment attempt for your order for {event} has failed.
+
+Your order is still valid and you can try to pay again using the same or a different payment method. Please complete your payment before {expire_date}.
 
 You can retry the payment and view the status of your order at
 {url}
