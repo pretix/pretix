@@ -28,7 +28,7 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    CartPosition, Event, Item, OrderPosition, Organizer, Quota,
+    CartPosition, Event, Item, OrderPosition, Organizer, Quota, Voucher,
 )
 from pretix.base.services.orders import _perform_order
 from pretix.testutils.sessions import get_cart_session_key
@@ -113,6 +113,47 @@ class BundlePricesTest(TestCase):
         assert op1.item == self.ticket
         assert op1.tax_rate == Decimal('19.00')
         assert op2.price == Decimal('10.00')
+        assert op2.item == self.food
+        assert op2.tax_rate == Decimal('7.00')
+
+    def test_voucher_includes_bundles(self):
+        with scopes_disabled():
+            v = Voucher.objects.create(item=self.ticket, value=Decimal('0.00'), event=self.event, price_mode='set',
+                                       all_bundles_included=True)
+
+        # Verify correct price displayed on event page
+        response = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))
+        self.assertContains(response, '23.00')
+
+        # Verify correct price being added to cart
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+            '_voucher_code': v.code
+        }, follow=True)
+        with scopes_disabled():
+            cp1 = CartPosition.objects.get(is_bundled=False)
+            cp2 = CartPosition.objects.get(is_bundled=True)
+
+        assert cp1.price == Decimal('0.00')
+        assert cp1.item == self.ticket
+        assert cp2.price == Decimal('0.00')
+        assert cp2.item == self.food
+
+        # Make sure cart expires
+        cp1.expires = now() - datetime.timedelta(minutes=120)
+        cp1.save()
+        cp2.expires = now() - datetime.timedelta(minutes=120)
+        cp2.save()
+
+        # Verify price is kept if cart expires and order is sent
+        with scopes_disabled():
+            _perform_order(self.event, self._manual_payment(), [cp1.pk, cp2.pk], 'admin@example.org', 'en', None, {}, 'web')
+            op1 = OrderPosition.objects.get(is_bundled=False)
+            op2 = OrderPosition.objects.get(is_bundled=True)
+        assert op1.price == Decimal('0.00')
+        assert op1.item == self.ticket
+        assert op1.tax_rate == Decimal('19.00')
+        assert op2.price == Decimal('0.00')
         assert op2.item == self.food
         assert op2.tax_rate == Decimal('7.00')
 

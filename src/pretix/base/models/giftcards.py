@@ -25,7 +25,9 @@ from django.conf import settings
 from django.core.validators import RegexValidator
 from django.db import models
 from django.db.models import Sum
+from django.urls import reverse
 from django.utils.crypto import get_random_string
+from django.utils.html import format_html
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
@@ -44,14 +46,19 @@ def gen_giftcard_secret(length=8):
 class GiftCardAcceptance(models.Model):
     issuer = models.ForeignKey(
         'Organizer',
-        related_name='gift_card_collector_acceptance',
+        related_name='gift_card_acceptor_acceptance',
         on_delete=models.CASCADE
     )
-    collector = models.ForeignKey(
+    acceptor = models.ForeignKey(
         'Organizer',
         related_name='gift_card_issuer_acceptance',
         on_delete=models.CASCADE
     )
+    active = models.BooleanField(default=True)
+    reusable_media = models.BooleanField(default=False)
+
+    class Meta:
+        unique_together = (('issuer', 'acceptor'),)
 
 
 class GiftCard(LoggedModel):
@@ -65,6 +72,13 @@ class GiftCard(LoggedModel):
         related_name='issued_gift_cards',
         on_delete=models.PROTECT,
         null=True, blank=True
+    )
+    owner_ticket = models.ForeignKey(
+        'OrderPosition',
+        related_name='owned_gift_cards',
+        on_delete=models.PROTECT,
+        null=True, blank=True,
+        verbose_name=_('Owned by ticket holder')
     )
     issuance = models.DateTimeField(
         auto_now_add=True,
@@ -105,7 +119,7 @@ class GiftCard(LoggedModel):
         return self.transactions.aggregate(s=Sum('value'))['s'] or Decimal('0.00')
 
     def accepted_by(self, organizer):
-        return self.issuer == organizer or GiftCardAcceptance.objects.filter(issuer=self.issuer, collector=organizer).exists()
+        return self.issuer == organizer or GiftCardAcceptance.objects.filter(issuer=self.issuer, acceptor=organizer, active=True).exists()
 
     def save(self, *args, **kwargs):
         if not self.secret:
@@ -153,6 +167,61 @@ class GiftCardTransaction(models.Model):
         on_delete=models.PROTECT
     )
     text = models.TextField(blank=True, null=True)
+    info = models.JSONField(
+        null=True, blank=True,
+    )
+    acceptor = models.ForeignKey(
+        'Organizer',
+        related_name='gift_card_transactions',
+        on_delete=models.PROTECT,
+        null=True, blank=True
+    )
 
     class Meta:
         ordering = ("datetime",)
+
+    def save(self, *args, **kwargs):
+        if not self.pk and not self.acceptor:
+            raise ValueError("`acceptor` should be set on all new gift card transactions.")
+        super().save(*args, **kwargs)
+
+    def display(self, customer_facing=True):
+        from ..signals import gift_card_transaction_display
+
+        for receiver, response in gift_card_transaction_display.send(self, transaction=self, customer_facing=customer_facing):
+            if response:
+                return response
+
+        if self.order_id:
+            if not self.text:
+                if not customer_facing:
+                    return format_html(
+                        '<a href="{}">{}</a>',
+                        reverse(
+                            "control:event.order",
+                            kwargs={
+                                "event": self.order.event.slug,
+                                "organizer": self.order.event.organizer.slug,
+                                "code": self.order.code,
+                            }
+                        ),
+                        self.order.full_code
+                    )
+                return self.order.full_code
+            else:
+                return self.text
+        else:
+            if self.text:
+                return format_html(
+                    '<em>{}:</em> {}',
+                    _('Manual transaction'),
+                    self.text,
+                )
+            else:
+                return _('Manual transaction')
+
+    def display_backend(self):
+        return self.display(customer_facing=False)
+
+    def display_presale(self):
+        return self.display(customer_facing=True)

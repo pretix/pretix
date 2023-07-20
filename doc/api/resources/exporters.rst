@@ -111,7 +111,7 @@ Listing available exporters
             "input_parameters": [
               {
                 "name": "events",
-                "required": true
+                "required": false
               },
               {
                 "name": "_format",

@@ -21,7 +21,7 @@
     {% if redeemed_in_carts %}
         <div class="alert alert-warning">
             {% blocktrans trimmed with number=redeemed_in_carts %}
-                This voucher is currently used in {{ number }} cart sessions and there might not be free to use until the cart sessions
+                This voucher is currently used in {{ number }} cart sessions and might not be free to use until the cart sessions
                 expire.
             {% endblocktrans %}
             <p class="text-right">
@@ -90,6 +90,8 @@
                     {% bootstrap_field form.tag layout="control" %}
                     {% bootstrap_field form.comment layout="control" %}
                     {% bootstrap_field form.show_hidden_items layout="control" %}
+                    {% bootstrap_field form.all_addons_included layout="control" %}
+                    {% bootstrap_field form.all_bundles_included layout="control" %}
                 </fieldset>
                 {% eventsignal request.event "pretix.control.signals.voucher_form_html" form=form %}
             </div>

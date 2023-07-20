@@ -35,8 +35,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install Dependencies
-        run: pip3 install -e ".[dev]" mysqlclient psycopg2-binary
-        working-directory: ./src
+        run: pip3 install -e ".[dev]" psycopg2-binary
       - name: Run isort
         run: isort -c .
         working-directory: ./src
@@ -56,8 +55,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-pip-
       - name: Install Dependencies
-        run: pip3 install -e ".[dev]" mysqlclient psycopg2-binary
-        working-directory: ./src
+        run: pip3 install -e ".[dev]" psycopg2-binary
       - name: Run flake8
         run: flake8 .
         working-directory: ./src

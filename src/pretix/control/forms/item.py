@@ -747,7 +747,7 @@ class ItemVariationsFormSet(I18nFormSet):
 
     def _should_delete_form(self, form):
         should_delete = super()._should_delete_form(form)
-        if should_delete and (form.instance.orderposition_set.exists() or form.instance.cartposition_set.exists()):
+        if should_delete and form.instance.pk and (form.instance.orderposition_set.exists() or form.instance.cartposition_set.exists()):
             form._delete_fail = True
             return False
         return form.cleaned_data.get(DELETION_FIELD_NAME, False)
@@ -1102,16 +1102,26 @@ class ItemMetaValueForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         self.property = kwargs.pop('property')
         super().__init__(*args, **kwargs)
-        self.fields['value'].required = False
-        self.fields['value'].widget.attrs['placeholder'] = self.property.default
-        self.fields['value'].widget.attrs['data-typeahead-url'] = (
-            reverse('control:event.items.meta.typeahead', kwargs={
-                'organizer': self.property.event.organizer.slug,
-                'event': self.property.event.slug
-            }) + '?' + urlencode({
-                'property': self.property.name,
-            })
-        )
+        if self.property.allowed_values:
+            self.fields['value'] = forms.ChoiceField(
+                label=self.property.name,
+                choices=[(
+                    "", _("Default ({value})").format(value=self.property.default)
+                    if self.property.default else ""
+                )] + [(a.strip(), a.strip()) for a in self.property.allowed_values.splitlines()]
+            )
+        else:
+            self.fields['value'].label = self.property.name
+            self.fields['value'].widget.attrs['placeholder'] = self.property.default
+            self.fields['value'].widget.attrs['data-typeahead-url'] = (
+                reverse('control:event.items.meta.typeahead', kwargs={
+                    'organizer': self.property.event.organizer.slug,
+                    'event': self.property.event.slug
+                }) + '?' + urlencode({
+                    'property': self.property.name,
+                })
+            )
+        self.fields['value'].required = self.property.required and not self.property.default
 
     class Meta:
         model = ItemMetaValue

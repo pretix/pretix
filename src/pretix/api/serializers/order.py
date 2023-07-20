@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import json
 import logging
 import os
 from collections import Counter, defaultdict
@@ -39,6 +38,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 
+from pretix.api.serializers import CompatibleJSONField
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
@@ -535,8 +535,9 @@ class OrderPaymentTypeField(serializers.Field):
     # TODO: Remove after pretix 2.2
     def to_representation(self, instance: Order):
         t = None
-        for p in instance.payments.all():
-            t = p.provider
+        if instance.pk:
+            for p in instance.payments.all():
+                t = p.provider
         return t
 
 
@@ -544,10 +545,10 @@ class OrderPaymentDateField(serializers.DateField):
     # TODO: Remove after pretix 2.2
     def to_representation(self, instance: Order):
         t = None
-        for p in instance.payments.all():
-            t = p.payment_date or t
+        if instance.pk:
+            for p in instance.payments.all():
+                t = p.payment_date or t
         if t:
-
             return super().to_representation(t.date())
 
 
@@ -893,19 +894,6 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 )
 
         return data
-
-
-class CompatibleJSONField(serializers.JSONField):
-    def to_internal_value(self, data):
-        try:
-            return json.dumps(data)
-        except (TypeError, ValueError):
-            self.fail('invalid')
-
-    def to_representation(self, value):
-        if value:
-            return json.loads(value)
-        return value
 
 
 class WrappedList:
@@ -1363,6 +1351,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                         answers.append(answ)
                     pos.answers = answers
                     pos.pseudonymization_id = "PREVIEW"
+                    pos.checkins = []
                     pos_map[pos.positionid] = pos
                 else:
                     if pos.voucher:
@@ -1459,6 +1448,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         if simulate:
             order.fees = fees
             order.positions = pos_map.values()
+            order.payments = []
+            order.refunds = []
             return order  # ignore payments
         else:
             order.save(update_fields=['total'])

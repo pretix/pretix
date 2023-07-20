@@ -511,7 +511,7 @@
                                     <dl>
                                         {% if line.item.ask_attendee_data and event.settings.attendee_names_asked %}
                                             <dt>{% trans "Attendee name" %}</dt>
-                                            <dd>{% if line.attendee_name %}{{ line.attendee_name }}{% else %}
+                                            <dd>{% if line.attendee_name %}{{ line.attendee_name_all_components }}{% else %}
                                                 <em>{% trans "not answered" %}</em>{% endif %}</dd>
                                         {% endif %}
                                         {% if line.item.ask_attendee_data and event.settings.attendee_emails_asked %}
@@ -631,6 +631,12 @@
                             </div>
                             <div class="clearfix"></div>
                         </div>
+                        {% for gc in line.owned_gift_cards.all %}
+                            <div class="product-row-giftcard">
+                                <span class="fa fa-credit-card" aria-hidden="true"></span>
+                                <a href="{% url "control:organizer.giftcard" organizer=gc.issuer.slug giftcard=gc.pk %}">{{ gc.secret }}</a>
+                            </div>
+                        {% endfor %}
                     {% endfor %}
                     {% for fee in items.fees %}
                         <div class="row-fluid product-row {% if fee.canceled %}pos-canceled{% endif %}">

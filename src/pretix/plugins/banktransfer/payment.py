@@ -33,7 +33,6 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import json
-import textwrap
 from collections import OrderedDict
 from decimal import Decimal
 
@@ -53,11 +52,13 @@ from text_unidecode import unidecode
 from pretix.base.email import get_available_placeholders, get_email_context
 from pretix.base.forms import PlaceholderValidator
 from pretix.base.i18n import language
-from pretix.base.models import Order, OrderPayment, OrderRefund
+from pretix.base.models import InvoiceAddress, Order, OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.mail import SendMailException, mail, render_mail
+from pretix.base.templatetags.money import money_filter
 from pretix.helpers.format import format_map
 from pretix.plugins.banktransfer.templatetags.ibanformat import ibanformat
+from pretix.presale.views.cart import cart_session
 
 
 class BankTransfer(BasePaymentProvider):
@@ -249,8 +250,22 @@ class BankTransfer(BasePaymentProvider):
                  required=False
              )),
         ])
+        more_fields_first = OrderedDict([
+            ('_restricted_business',
+             forms.BooleanField(
+                 label=_('Restrict to business customers'),
+                 help_text=_('Only allow choosing this payment provider for customers who enter an invoice address '
+                             'and select "Business or institutional customer".'),
+                 required=False,
+             )),
+        ])
 
-        d = OrderedDict(list(super().settings_form_fields.items()) + list(BankTransfer.form_fields().items()) + list(more_fields.items()))
+        d = OrderedDict(
+            list(super().settings_form_fields.items()) +
+            list(more_fields_first.items()) +
+            list(BankTransfer.form_fields().items()) +
+            list(more_fields.items())
+        )
         d.move_to_end('invoice_immediately', last=False)
         d.move_to_end('bank_details', last=False)
         d.move_to_end('bank_details_sepa_bank', last=False)
@@ -287,12 +302,34 @@ class BankTransfer(BasePaymentProvider):
             ))
         )
 
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        def get_invoice_address():
+            if not hasattr(request, '_checkout_flow_invoice_address'):
+                cs = cart_session(request)
+                iapk = cs.get('invoice_address')
+                if not iapk:
+                    request._checkout_flow_invoice_address = InvoiceAddress()
+                else:
+                    try:
+                        request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                    except InvoiceAddress.DoesNotExist:
+                        request._checkout_flow_invoice_address = InvoiceAddress()
+            return request._checkout_flow_invoice_address
+
+        restricted_business = self.settings.get('_restricted_business', as_type=bool)
+        if restricted_business:
+            ia = get_invoice_address()
+            if not ia.is_business:
+                return False
+
+        return super().is_allowed(request, total)
+
     @property
     def payment_form_fields(self) -> dict:
         if self._invoice_email_asked:
             return {
                 'send_invoice': forms.BooleanField(
-                    label=_('Please send my invoice directly to our accounting department'),
+                    label=_('Please additionally send my invoice directly to our accounting department'),
                     required=False,
                 ),
                 'send_invoice_to': forms.EmailField(
@@ -417,26 +454,29 @@ class BankTransfer(BasePaymentProvider):
         return template.render(ctx)
 
     def order_pending_mail_render(self, order, payment) -> str:
-        template = get_template('pretixplugins/banktransfer/email/order_pending.txt')
-        bankdetails = []
+        t = gettext("Please transfer the full amount to the following bank account:")
+        t += "\n\n"
+
+        md_nl2br = "  \n"
         if self.settings.get('bank_details_type') == 'sepa':
-            bankdetails += [
-                _("Account holder"), ": ", self.settings.get('bank_details_sepa_name'), "\n",
-                _("IBAN"), ": ", ibanformat(self.settings.get('bank_details_sepa_iban')), "\n",
-                _("BIC"), ": ", self.settings.get('bank_details_sepa_bic'), "\n",
-                _("Bank"), ": ", self.settings.get('bank_details_sepa_bank'),
-            ]
-        if bankdetails and self.settings.get('bank_details', as_type=LazyI18nString):
-            bankdetails.append("\n")
-        bankdetails.append(self.settings.get('bank_details', as_type=LazyI18nString))
-        ctx = {
-            'event': self.event,
-            'order': order,
-            'code': self._code(order),
-            'amount': payment.amount,
-            'details': textwrap.indent(''.join(str(i) for i in bankdetails), '    '),
-        }
-        return template.render(ctx)
+            bankdetails = (
+                (_("Reference"), self._code(order)),
+                (_("Amount"), money_filter(payment.amount, self.event.currency)),
+                (_("Account holder"), self.settings.get('bank_details_sepa_name')),
+                (_("IBAN"), ibanformat(self.settings.get('bank_details_sepa_iban'))),
+                (_("BIC"), self.settings.get('bank_details_sepa_bic')),
+                (_("Bank"), self.settings.get('bank_details_sepa_bank')),
+            )
+        else:
+            bankdetails = (
+                (_("Reference"), self._code(order)),
+                (_("Amount"), money_filter(payment.amount, self.event.currency)),
+            )
+        t += md_nl2br.join([f"**{k}:** {v}" for k, v in bankdetails])
+        if self.settings.get('bank_details', as_type=LazyI18nString):
+            t += md_nl2br
+        t += str(self.settings.get('bank_details', as_type=LazyI18nString))
+        return t
 
     def swiss_qrbill(self, payment):
         if not self.settings.get('bank_details_sepa_iban') or not self.settings.get('bank_details_sepa_iban')[:2] in ('CH', 'LI'):

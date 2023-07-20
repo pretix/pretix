@@ -38,7 +38,6 @@ jobs:
         run: sudo apt update && sudo apt install gettext
       - name: Install Dependencies
         run: pip3 install -e ".[dev]"
-        working-directory: ./src
       - name: Compile messages
         run: python manage.py compilemessages
         working-directory: ./src
@@ -64,7 +63,6 @@ jobs:
         run: sudo apt update && sudo apt install enchant-2 hunspell hunspell-de-de aspell-en aspell-de
       - name: Install Dependencies
         run: pip3 install -e ".[dev]"
-        working-directory: ./src
       - name: Spellcheck translations
         run: potypo
         working-directory: ./src

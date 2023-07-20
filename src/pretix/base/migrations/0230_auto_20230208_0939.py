@@ -50,6 +50,6 @@ class Migration(migrations.Migration):
             ],
             options={
                 'unique_together': {('event', 'secret')},
-            } if 'mysql' not in settings.DATABASES['default']['ENGINE'] else {}
+            }
         ),
     ]

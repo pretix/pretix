@@ -16,12 +16,17 @@
                 {% trans "Edit list configuration" %}
             </a>
         {% endif %}
-        <a href="{% url "control:event.orders.export" event=request.event.slug organizer=request.event.organizer.slug %}?identifier=checkinlistpdf&checkinlistpdf-list={{ checkinlist.pk }}"
+        <a href="{% url "control:event.orders.checkinlists.simulator" event=request.event.slug organizer=request.event.organizer.slug list=checkinlist.pk %}"
+           class="btn btn-default">
+            <span class="fa fa-flask"></span>
+            {% trans "Check-in simulator" %}
+        </a>
+        <a href="{% url "control:event.orders.export" event=request.event.slug organizer=request.event.organizer.slug %}?identifier=checkinlistpdf&checkinlistpdf-list={{ checkinlist.pk }}{% if "status" in request.GET %}&checkinlistpdf-status={{ request.GET.status|urlencode }}{% endif %}"
                 class="btn btn-default" target="_blank">
             <span class="fa fa-download"></span>
             {% trans "PDF" %}
         </a>
-        <a href="{% url "control:event.orders.export" event=request.event.slug organizer=request.event.organizer.slug %}?identifier=checkinlist&checkinlist-list={{ checkinlist.pk }}"
+        <a href="{% url "control:event.orders.export" event=request.event.slug organizer=request.event.organizer.slug %}?identifier=checkinlist&checkinlist-list={{ checkinlist.pk }}{% if "status" in request.GET %}&checkinlist-status={{ request.GET.status|urlencode }}{% endif %}"
                 class="btn btn-default" target="_blank">
             <span class="fa fa-download"></span>
             {% trans "CSV" %}

@@ -1,12 +1,41 @@
 /*global $ */
 
 setup_collapsible_details = function (el) {
+
+    el.find('details.sneak-peek:not([open])').each(function() {
+        this.open = true;
+        var $elements = $("> :not(summary)", this).show().filter(':not(.sneak-peek-trigger)').attr('aria-hidden', 'true');
+
+        var container = this;
+        var trigger = $('summary, .sneak-peek-trigger button', container);
+        function onclick(e) {
+            e.preventDefault();
+
+            container.addEventListener('transitionend', function() {
+                $(container).removeClass('sneak-peek');
+                container.style.removeProperty('height');
+            }, {once: true});
+            container.style.height = container.scrollHeight + 'px';
+            $('.sneak-peek-trigger', container).fadeOut(function() {
+                $(this).remove();
+            });
+            $elements.removeAttr('aria-hidden');
+
+            trigger.off('click', onclick);
+        }
+        trigger.on('click', onclick);
+    });
+
     var isOpera = Object.prototype.toString.call(window.opera) == '[object Opera]';
     el.find("details summary").click(function (e) {
         if (this.tagName !== "A" && $(e.target).closest("a").length > 0) {
             return true;
         }
         var $details = $(this).closest("details");
+        if ($details.hasClass('sneak-peek')) {
+            // if sneak-peek is active, needs to be handled differently
+            return true;
+        }
         var isOpen = $details.prop("open");
         var $detailsNotSummary = $details.children(':not(summary)');
         if ($detailsNotSummary.is(':animated')) {
@@ -27,6 +56,10 @@ setup_collapsible_details = function (el) {
         e.preventDefault();
         return false;
     }).keyup(function (event) {
+        if ($details.hasClass('sneak-peek')) {
+            // if sneak-peek is active, needs to be handled differently
+            return true;
+        }
         if (32 == event.keyCode || (13 == event.keyCode && !isOpera)) {
             // Space or Enter is pressed — trigger the `click` event on the `summary` element
             // Opera already seems to trigger the `click` event when Enter is pressed

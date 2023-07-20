@@ -86,6 +86,11 @@
             hyphens: auto;
         }
 
+        p a {
+            word-wrap: anywhere;
+            word-break: break-all;
+        }
+
         .footer {
             padding: 10px;
             text-align: center;
@@ -168,6 +173,10 @@
         }
         .order-details td {
             font-size: 12px;
+        }
+
+        pre, pre code {
+            white-space: pre-line;
         }
 
         {% if rtl %}

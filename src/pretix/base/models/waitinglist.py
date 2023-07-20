@@ -35,9 +35,9 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import User, Voucher
 from pretix.base.services.mail import SendMailException, mail, render_mail
-from pretix.base.settings import PERSON_NAME_SCHEMES
 
 from ...helpers.format import format_map
+from ...helpers.names import build_name
 from .base import LoggedModel
 from .event import Event, SubEvent
 from .items import Item, ItemVariation
@@ -119,32 +119,35 @@ class WaitingListEntry(LoggedModel):
 
     def clean(self):
         try:
-            WaitingListEntry.clean_duplicate(self.email, self.item, self.variation, self.subevent, self.pk)
+            WaitingListEntry.clean_duplicate(self.event, self.email, self.item, self.variation, self.subevent, self.pk)
             WaitingListEntry.clean_itemvar(self.event, self.item, self.variation)
             WaitingListEntry.clean_subevent(self.event, self.subevent)
         except ObjectDoesNotExist:
             raise ValidationError('Invalid input')
 
     def save(self, *args, **kwargs):
-        update_fields = kwargs.get('update_fields', [])
+        update_fields = kwargs.get('update_fields', set())
         if 'name_parts' in update_fields:
-            update_fields.append('name_cached')
-        self.name_cached = self.name
+            kwargs['update_fields'] = {'name_cached'}.union(kwargs['update_fields'])
+        name = self.name
+        if name != self.name_cached:
+            self.name_cached = name
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'name_cached'}.union(kwargs['update_fields'])
+
         if self.name_parts is None:
             self.name_parts = {}
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'name_parts'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
 
     @property
     def name(self):
-        if not self.name_parts:
-            return None
-        if '_legacy' in self.name_parts:
-            return self.name_parts['_legacy']
-        if '_scheme' in self.name_parts:
-            scheme = PERSON_NAME_SCHEMES[self.name_parts['_scheme']]
-        else:
-            scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
-        return scheme['concatenation'](self.name_parts).strip()
+        return build_name(self.name_parts, fallback_scheme=lambda: self.event.settings.name_scheme)
+
+    @property
+    def name_all_components(self):
+        return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=lambda: self.event.settings.name_scheme)
 
     def send_voucher(self, quota_cache=None, user=None, auth=None):
         availability = (
@@ -215,7 +218,7 @@ class WaitingListEntry(LoggedModel):
                 'waitinglistentry': self.pk,
                 'subevent': self.subevent.pk if self.subevent else None,
             }, user=user, auth=auth)
-            self.log_action('pretix.waitinglist.voucher', user=user, auth=auth)
+            self.log_action('pretix.event.orders.waitinglist.voucher_assigned', user=user, auth=auth)
             self.voucher = v
             self.save()
 
@@ -308,9 +311,9 @@ class WaitingListEntry(LoggedModel):
                 raise ValidationError(_('The subevent does not belong to this event.'))
 
     @staticmethod
-    def clean_duplicate(email, item, variation, subevent, pk):
+    def clean_duplicate(event, email, item, variation, subevent, pk):
         if WaitingListEntry.objects.filter(
                 item=item, variation=variation, email__iexact=email, voucher__isnull=True, subevent=subevent
-        ).exclude(pk=pk).exists():
+        ).exclude(pk=pk).count() >= event.settings.waiting_list_limit_per_user:
             raise ValidationError(_('You are already on this waiting list! We will notify '
                                     'you as soon as we have a ticket available for you.'))

@@ -102,7 +102,7 @@ def test_org_list(token_client, organizer, event):
     c = copy.deepcopy(SAMPLE_EXPORTER_CONFIG)
     c['input_parameters'].insert(0, {
         "name": "events",
-        "required": True
+        "required": False
     })
     resp = token_client.get('/api/v1/organizers/{}/exporters/'.format(organizer.slug))
     assert resp.status_code == 200
@@ -126,10 +126,16 @@ def test_event_validate(token_client, organizer, team, event):
     assert resp.data == {"_format": ["\"FOOBAR\" is not a valid choice."]}
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_org_validate_events(token_client, organizer, team, event):
     resp = token_client.post('/api/v1/organizers/{}/exporters/orderlist/run/'.format(organizer.slug), data={
         '_format': 'xlsx',
+    }, format='json')
+    assert resp.status_code == 202
+
+    resp = token_client.post('/api/v1/organizers/{}/exporters/orderlist/run/'.format(organizer.slug), data={
+        '_format': 'xlsx',
+        'events': []
     }, format='json')
     assert resp.status_code == 400
     assert resp.data == {"events": ["This list may not be empty."]}
@@ -158,7 +164,42 @@ def test_org_validate_events(token_client, organizer, team, event):
     assert resp.data == {"events": [f"Object with slug={event.slug} does not exist."]}
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
+def test_org_run_limit_events(token_client, organizer, team, event, event2):
+    resp = token_client.post('/api/v1/organizers/{}/exporters/eventdata/run/'.format(organizer.slug), data={
+        '_format': 'default',
+    }, format='json')
+    assert resp.status_code == 202
+    assert "download" in resp.data
+    resp = token_client.get("/" + resp.data["download"].split("/", 3)[3])
+    assert resp.status_code == 200
+    assert resp.getvalue().strip().count(b"\n") == 2
+
+    resp = token_client.post('/api/v1/organizers/{}/exporters/eventdata/run/'.format(organizer.slug), data={
+        '_format': 'default',
+        'events': [event.slug],
+    }, format='json')
+    assert resp.status_code == 202
+    assert "download" in resp.data
+    resp = token_client.get("/" + resp.data["download"].split("/", 3)[3])
+    assert resp.status_code == 200
+    assert resp.getvalue().strip().count(b"\n") == 1
+
+    team.all_events = False
+    team.limit_events.add(event)
+    team.save()
+
+    resp = token_client.post('/api/v1/organizers/{}/exporters/eventdata/run/'.format(organizer.slug), data={
+        '_format': 'default',
+    }, format='json')
+    assert resp.status_code == 202
+    assert "download" in resp.data
+    resp = token_client.get("/" + resp.data["download"].split("/", 3)[3])
+    assert resp.status_code == 200
+    assert resp.getvalue().strip().count(b"\n") == 1
+
+
+@pytest.mark.django_db(transaction=True)
 def test_run_success(token_client, organizer, team, event):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/exporters/orderlist/run/'.format(organizer.slug, event.slug), data={
         '_format': 'xlsx',
@@ -171,7 +212,7 @@ def test_run_success(token_client, organizer, team, event):
     assert resp["Content-Type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_run_success_old_date_frame(token_client, organizer, team, event):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/exporters/orderlist/run/'.format(organizer.slug, event.slug), data={
         '_format': 'xlsx',
@@ -220,7 +261,7 @@ def test_gone_without_celery(token_client, organizer, team, event):
     assert resp.status_code == 410
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_org_level_export(token_client, organizer, team, event):
     resp = token_client.post('/api/v1/organizers/{}/exporters/giftcardlist/run/'.format(organizer.slug), data={
         'date': '2022-10-05T00:00:00Z',

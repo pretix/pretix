@@ -46,11 +46,15 @@ from rest_framework import serializers
 from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
+from pretix.api.serializers import CompatibleJSONField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.models import Device, Event, TaxRule, TeamAPIToken
 from pretix.base.models.event import SubEvent
-from pretix.base.models.items import SubEventItem, SubEventItemVariation
+from pretix.base.models.items import (
+    ItemMetaProperty, SubEventItem, SubEventItemVariation,
+)
+from pretix.base.models.tax import CustomRulesValidator
 from pretix.base.services.seating import (
     SeatProtected, generate_seats, validate_plan_change,
 )
@@ -648,9 +652,16 @@ class SubEventSerializer(I18nAwareModelSerializer):
 
 
 class TaxRuleSerializer(CountryFieldMixin, I18nAwareModelSerializer):
+    custom_rules = CompatibleJSONField(
+        validators=[CustomRulesValidator()],
+        required=False,
+        allow_null=True,
+    )
+
     class Meta:
         model = TaxRule
-        fields = ('id', 'name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country', 'internal_name', 'keep_gross_if_rate_changes')
+        fields = ('id', 'name', 'rate', 'price_includes_tax', 'eu_reverse_charge', 'home_country', 'internal_name',
+                  'keep_gross_if_rate_changes', 'custom_rules')
 
 
 class EventSettingsSerializer(SettingsSerializer):
@@ -683,6 +694,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'waiting_list_phones_asked',
         'waiting_list_phones_required',
         'waiting_list_phones_explanation_text',
+        'waiting_list_limit_per_user',
         'max_items_per_order',
         'reservation_time',
         'contact_mail',
@@ -716,6 +728,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'payment_term_minutes',
         'payment_term_last',
         'payment_term_expire_automatically',
+        'payment_term_expire_delay_days',
         'payment_term_accept_late',
         'payment_explanation',
         'payment_pending_hidden',
@@ -765,6 +778,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'invoice_footer_text',
         'invoice_eu_currencies',
         'invoice_logo_image',
+        'invoice_renderer_highlight_order_code',
         'cancel_allow_user',
         'cancel_allow_user_until',
         'cancel_allow_user_unpaid_keep',
@@ -902,3 +916,23 @@ class DeviceEventSettingsSerializer(EventSettingsSerializer):
                 else []
             )
         )
+
+
+class MultiLineStringField(serializers.Field):
+
+    def to_representation(self, value):
+        return [v.strip() for v in value.splitlines()]
+
+    def to_internal_value(self, data):
+        if isinstance(data, list) and len(data) > 0:
+            return "\n".join(data)
+        else:
+            raise ValidationError('Invalid data type.')
+
+
+class ItemMetaPropertiesSerializer(I18nAwareModelSerializer):
+    allowed_values = MultiLineStringField(allow_null=True)
+
+    class Meta:
+        model = ItemMetaProperty
+        fields = ('id', 'name', 'default', 'required', 'allowed_values')

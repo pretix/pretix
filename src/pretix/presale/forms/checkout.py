@@ -148,6 +148,7 @@ class QuestionsForm(BaseQuestionsForm):
     as well as additional questions defined by the organizer.
     """
     required_css_class = 'required'
+    address_validation = True
 
     def __init__(self, *args, **kwargs):
         allow_save = kwargs.pop('allow_save', False)

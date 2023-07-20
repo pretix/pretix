@@ -178,7 +178,7 @@
                             {% endif %}
                         </td>
                         {% if request.event.settings.waiting_list_names_asked %}
-                        <td>{{ e.name|default:"" }}</td>
+                        <td>{{ e.name_all_components|default:"" }}</td>
                         {% endif %}
                         <td>{{ e.email }}</td>
                         {% if request.event.settings.waiting_list_phones_asked %}
@@ -212,11 +212,21 @@
                                     <span class="label label-warning">{% trans "Voucher assigned" %}</span>
                                 {% endif %}
                             {% elif e.availability.0 == 100 %}
-                                <span class="label label-warning">
-                                {% blocktrans with num=e.availability.1 %}
-                                    Waiting, product {{ num }}x available
-                                {% endblocktrans %}
-                            </span>
+                                {% if e.availability.1|default_if_none:"none" == "none" %}
+                                    <span class="label label-danger" data-toggle="tooltip"
+                                        title="{% trans "For safety reasons, the waiting list does not run if the quota is set to unlimited."  %}">
+                                        <span class="fa fa-ban" aria-hidden="true"></span>
+                                        {% blocktrans trimmed %}
+                                            Quota unlimited
+                                        {% endblocktrans %}
+                                    </span>
+                                {% else %}
+                                    <span class="label label-warning">
+                                        {% blocktrans with num=e.availability.1 %}
+                                            Waiting, product {{ num }}x available
+                                        {% endblocktrans %}
+                                    </span>
+                                {% endif %}
                             {% else %}
                                 <span class="label label-danger">{% trans "Waiting, product unavailable" %}</span>
                             {% endif %}
@@ -226,7 +236,7 @@
                                 <a href="{% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=e.voucher.pk %}">
                                     {{ e.voucher }}
                                 </a>
-                            {% elif not e.voucher and e.availability.0 == 100 %}
+                            {% elif not e.voucher and e.availability.0 == 100 and e.availability.1|default_if_none:"none" != "none" %}
                                 <button name="assign" value="{{ e.pk }}" class="btn btn-default btn-xs">
                                     {% trans "Send a voucher" %}
                                 </button>

@@ -650,6 +650,43 @@ class OrderChangeAddonsTest(BaseOrdersTest):
             self.order.refresh_from_db()
             assert self.order.total == Decimal('35.00')
 
+    def test_add_addon_included_in_voucher(self):
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        assert 'Workshop 1' in response.content.decode()
+
+        with scopes_disabled():
+            v = self.event.vouchers.create(item=self.ticket, all_addons_included=True)
+            self.ticket_pos.voucher = v
+            self.ticket_pos.save()
+
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        assert doc.select(f'input[name=cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}]')
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_item_{self.workshop1.pk}': '1'
+            },
+            follow=True
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        assert 'alert-success' in response.content.decode()
+
+        with scopes_disabled():
+            new_pos = self.ticket_pos.addons.get()
+            assert new_pos.item == self.workshop1
+            assert new_pos.price == Decimal('0.00')
+            self.order.refresh_from_db()
+            assert self.order.total == Decimal('23.00')
+
     def test_add_addon_free_price(self):
         self.workshop1.free_price = True
         self.workshop1.save()
@@ -1288,6 +1325,75 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         response = self.client.post(
             '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
+    def test_max_per_order_enforced(self):
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '2'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
+        self.workshop2.max_per_order = 2
+        self.workshop2.save()
+        self.iao.multi_allowed = True
+        self.iao.max_count = 10
+        self.iao.save()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '2'
+            },
+            follow=True
+        )
+        assert 'alert-danger' not in response.content.decode()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '3'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
+    def test_min_per_order_enforced(self):
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '2'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+
+        self.workshop2.min_per_order = 2
+        self.workshop2.save()
+        self.iao.multi_allowed = True
+        self.iao.max_count = 10
+        self.iao.save()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '2'
+            },
+            follow=True
+        )
+        print(response.content.decode())
+        assert 'alert-danger' not in response.content.decode()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                f'cp_{self.ticket_pos.pk}_variation_{self.workshop2.pk}_{self.workshop2a.pk}': '1'
             },
             follow=True
         )

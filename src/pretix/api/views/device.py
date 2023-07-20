@@ -42,6 +42,8 @@ class InitializationRequestSerializer(serializers.Serializer):
     token = serializers.CharField(max_length=190)
     hardware_brand = serializers.CharField(max_length=190)
     hardware_model = serializers.CharField(max_length=190)
+    os_name = serializers.CharField(max_length=190, required=False, allow_null=True)
+    os_version = serializers.CharField(max_length=190, required=False, allow_null=True)
     software_brand = serializers.CharField(max_length=190)
     software_version = serializers.CharField(max_length=190)
     info = serializers.JSONField(required=False, allow_null=True)
@@ -50,6 +52,8 @@ class InitializationRequestSerializer(serializers.Serializer):
 class UpdateRequestSerializer(serializers.Serializer):
     hardware_brand = serializers.CharField(max_length=190)
     hardware_model = serializers.CharField(max_length=190)
+    os_name = serializers.CharField(max_length=190, required=False, allow_null=True)
+    os_version = serializers.CharField(max_length=190, required=False, allow_null=True)
     software_brand = serializers.CharField(max_length=190)
     software_version = serializers.CharField(max_length=190)
     info = serializers.JSONField(required=False, allow_null=True)
@@ -93,9 +97,14 @@ class InitializeView(APIView):
         if device.initialized:
             raise ValidationError({'token': ['This initialization token has already been used.']})
 
+        if device.revoked:
+            raise ValidationError({'token': ['This initialization token has been revoked.']})
+
         device.initialized = now()
         device.hardware_brand = serializer.validated_data.get('hardware_brand')
         device.hardware_model = serializer.validated_data.get('hardware_model')
+        device.os_name = serializer.validated_data.get('os_name')
+        device.os_version = serializer.validated_data.get('os_version')
         device.software_brand = serializer.validated_data.get('software_brand')
         device.software_version = serializer.validated_data.get('software_version')
         device.info = serializer.validated_data.get('info')
@@ -117,6 +126,8 @@ class UpdateView(APIView):
         device = request.auth
         device.hardware_brand = serializer.validated_data.get('hardware_brand')
         device.hardware_model = serializer.validated_data.get('hardware_model')
+        device.os_name = serializer.validated_data.get('os_name')
+        device.os_version = serializer.validated_data.get('os_version')
         device.software_brand = serializer.validated_data.get('software_brand')
         device.software_version = serializer.validated_data.get('software_version')
         device.info = serializer.validated_data.get('info')

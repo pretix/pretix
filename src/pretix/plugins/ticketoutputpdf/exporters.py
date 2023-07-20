@@ -43,7 +43,7 @@ from django.db.models import Case, OuterRef, Q, Subquery, When
 from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import now
 from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
-from pypdf import PdfMerger
+from pypdf import PdfWriter
 
 from pretix.base.exporter import BaseExporter
 from pretix.base.i18n import language
@@ -117,7 +117,7 @@ class AllTicketsPDF(BaseExporter):
         return d
 
     def render(self, form_data):
-        merger = PdfMerger()
+        merger = PdfWriter()
         qs = OrderPosition.objects.filter(
             order__event__in=self.events
         ).prefetch_related(

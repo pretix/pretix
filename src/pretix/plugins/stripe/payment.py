@@ -62,7 +62,9 @@ from pretix.base.forms.questions import guess_country
 from pretix.base.models import (
     Event, InvoiceAddress, Order, OrderPayment, OrderRefund, Quota,
 )
-from pretix.base.payment import BasePaymentProvider, PaymentException
+from pretix.base.payment import (
+    BasePaymentProvider, PaymentException, WalletQueries,
+)
 from pretix.base.plugins import get_all_plugins
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
@@ -185,7 +187,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                 )
             else:
                 return (
-                    "<button formaction='{}' class='btn btn-danger'>{}</button>"
+                    "<a href='{}' class='btn btn-danger'>{}</a>"
                 ).format(
                     reverse('plugins:stripe:oauth.disconnect', kwargs={
                         'organizer': self.event.organizer.slug,
@@ -288,6 +290,20 @@ class StripeSettingsHolder(BasePaymentProvider):
             ]
 
         extra_fields = [
+            ('walletdetection',
+             forms.BooleanField(
+                 label=mark_safe(
+                     _('Check for Apple Pay/Google Pay') +
+                     ' ' +
+                     '<span class="label label-info">{}</span>'.format(_('experimental'))
+                 ),
+                 help_text=_("pretix will attempt to check if the customer's webbrowser supports wallet-based payment "
+                             "methods like Apple Pay or Google Pay and display them prominently with the credit card"
+                             "payment method. This detection does not take into consideration if Google Pay/Apple Pay "
+                             "has been disabled in the Stripe Dashboard."),
+                 initial=True,
+                 required=False,
+             )),
             ('postfix',
              forms.CharField(
                  label=_('Statement descriptor postfix'),
@@ -1055,6 +1071,15 @@ class StripeCC(StripePaymentIntentMethod):
     public_name = _('Credit card')
     method = 'card'
 
+    @property
+    def walletqueries(self):
+        # ToDo: Check against Stripe API, if ApplePay and GooglePay are even activated/available
+        # This is probably only really feasable once the Payment Methods Configuration API is out of beta
+        # https://stripe.com/docs/connect/payment-method-configurations
+        if self.settings.get("walletdetection", True, as_type=bool):
+            return [WalletQueries.APPLEPAY, WalletQueries.GOOGLEPAY]
+        return []
+ 
     def payment_form_render(self, request, total) -> str:
         account = get_stripe_account_key(self)
         if not RegisteredApplePayDomain.objects.filter(account=account, domain=request.host).exists():

@@ -48,7 +48,7 @@ from functools import partial
 from io import BytesIO
 
 import jsonschema
-from arabic_reshaper import ArabicReshaper
+import reportlab.rl_config
 from bidi.algorithm import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
@@ -57,13 +57,12 @@ from django.db.models import Max, Min
 from django.dispatch import receiver
 from django.utils.deconstruct import deconstructible
 from django.utils.formats import date_format
-from django.utils.functional import SimpleLazyObject
 from django.utils.html import conditional_escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from i18nfield.strings import LazyI18nString
-from pypdf import PdfReader
-from pytz import timezone
+from pypdf import PdfReader, PdfWriter, Transformation
+from pypdf.generic import RectangleObject
 from reportlab.graphics import renderPDF
 from reportlab.graphics.barcode.qr import QrCodeWidget
 from reportlab.graphics.shapes import Drawing
@@ -78,15 +77,18 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
 from pretix.base.i18n import language
-from pretix.base.invoice import ThumbnailingImageReader
 from pretix.base.models import Order, OrderPosition, Question
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import layout_image_variables, layout_text_variables
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
+from pretix.helpers.reportlab import ThumbnailingImageReader, reshaper
 from pretix.presale.style import get_fonts
 
 logger = logging.getLogger(__name__)
+
+if not settings.DEBUG:
+    reportlab.rl_config.shapeChecking = 0
 
 
 DEFAULT_VARIABLES = OrderedDict((
@@ -239,7 +241,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Event begin date and time"),
         "editor_sample": _("2017-05-31 20:00"),
         "evaluate": lambda op, order, ev: date_format(
-            ev.date_from.astimezone(timezone(ev.settings.timezone)),
+            ev.date_from.astimezone(ev.timezone),
             "SHORT_DATETIME_FORMAT"
         ) if ev.date_from else ""
     }),
@@ -247,7 +249,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Event begin date"),
         "editor_sample": _("2017-05-31"),
         "evaluate": lambda op, order, ev: date_format(
-            ev.date_from.astimezone(timezone(ev.settings.timezone)),
+            ev.date_from.astimezone(ev.timezone),
             "SHORT_DATE_FORMAT"
         ) if ev.date_from else ""
     }),
@@ -265,7 +267,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Event end date and time"),
         "editor_sample": _("2017-05-31 22:00"),
         "evaluate": lambda op, order, ev: date_format(
-            ev.date_to.astimezone(timezone(ev.settings.timezone)),
+            ev.date_to.astimezone(ev.timezone),
             "SHORT_DATETIME_FORMAT"
         ) if ev.date_to else ""
     }),
@@ -273,7 +275,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Event end date"),
         "editor_sample": _("2017-05-31"),
         "evaluate": lambda op, order, ev: date_format(
-            ev.date_to.astimezone(timezone(ev.settings.timezone)),
+            ev.date_to.astimezone(ev.timezone),
             "SHORT_DATE_FORMAT"
         ) if ev.date_to else ""
     }),
@@ -281,7 +283,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Event end time"),
         "editor_sample": _("22:00"),
         "evaluate": lambda op, order, ev: date_format(
-            ev.date_to.astimezone(timezone(ev.settings.timezone)),
+            ev.date_to.astimezone(ev.timezone),
             "TIME_FORMAT"
         ) if ev.date_to else ""
     }),
@@ -294,7 +296,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Event admission date and time"),
         "editor_sample": _("2017-05-31 19:00"),
         "evaluate": lambda op, order, ev: date_format(
-            ev.date_admission.astimezone(timezone(ev.settings.timezone)),
+            ev.date_admission.astimezone(ev.timezone),
             "SHORT_DATETIME_FORMAT"
         ) if ev.date_admission else ""
     }),
@@ -302,7 +304,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Event admission time"),
         "editor_sample": _("19:00"),
         "evaluate": lambda op, order, ev: date_format(
-            ev.date_admission.astimezone(timezone(ev.settings.timezone)),
+            ev.date_admission.astimezone(ev.timezone),
             "TIME_FORMAT"
         ) if ev.date_admission else ""
     }),
@@ -387,7 +389,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Printing date"),
         "editor_sample": _("2017-05-31"),
         "evaluate": lambda op, order, ev: date_format(
-            now().astimezone(timezone(ev.settings.timezone)),
+            now().astimezone(ev.timezone),
             "SHORT_DATE_FORMAT"
         )
     }),
@@ -395,7 +397,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Printing date and time"),
         "editor_sample": _("2017-05-31 19:00"),
         "evaluate": lambda op, order, ev: date_format(
-            now().astimezone(timezone(ev.settings.timezone)),
+            now().astimezone(ev.timezone),
             "SHORT_DATETIME_FORMAT"
         )
     }),
@@ -403,7 +405,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Printing time"),
         "editor_sample": _("19:00"),
         "evaluate": lambda op, order, ev: date_format(
-            now().astimezone(timezone(ev.settings.timezone)),
+            now().astimezone(ev.timezone),
             "TIME_FORMAT"
         )
     }),
@@ -411,7 +413,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Validity start date"),
         "editor_sample": _("2017-05-31"),
         "evaluate": lambda op, order, ev: date_format(
-            op.valid_from.astimezone(timezone(ev.settings.timezone)),
+            op.valid_from.astimezone(ev.timezone),
             "SHORT_DATE_FORMAT"
         ) if op.valid_from else ""
     }),
@@ -419,7 +421,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Validity start date and time"),
         "editor_sample": _("2017-05-31 19:00"),
         "evaluate": lambda op, order, ev: date_format(
-            op.valid_from.astimezone(timezone(ev.settings.timezone)),
+            op.valid_from.astimezone(ev.timezone),
             "SHORT_DATETIME_FORMAT"
         ) if op.valid_from else ""
     }),
@@ -427,7 +429,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Validity start time"),
         "editor_sample": _("19:00"),
         "evaluate": lambda op, order, ev: date_format(
-            op.valid_from.astimezone(timezone(ev.settings.timezone)),
+            op.valid_from.astimezone(ev.timezone),
             "TIME_FORMAT"
         ) if op.valid_from else ""
     }),
@@ -435,7 +437,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Validity end date"),
         "editor_sample": _("2017-05-31"),
         "evaluate": lambda op, order, ev: date_format(
-            op.valid_until.astimezone(timezone(ev.settings.timezone)),
+            op.valid_until.astimezone(ev.timezone),
             "SHORT_DATE_FORMAT"
         ) if op.valid_until else ""
     }),
@@ -443,7 +445,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Validity end date and time"),
         "editor_sample": _("2017-05-31 19:00"),
         "evaluate": lambda op, order, ev: date_format(
-            op.valid_until.astimezone(timezone(ev.settings.timezone)),
+            op.valid_until.astimezone(ev.timezone),
             "SHORT_DATETIME_FORMAT"
         ) if op.valid_until else ""
     }),
@@ -451,7 +453,7 @@ DEFAULT_VARIABLES = OrderedDict((
         "label": _("Validity end time"),
         "editor_sample": _("19:00"),
         "evaluate": lambda op, order, ev: date_format(
-            op.valid_until.astimezone(timezone(ev.settings.timezone)),
+            op.valid_until.astimezone(ev.timezone),
             "TIME_FORMAT"
         ) if op.valid_until else ""
     }),
@@ -699,12 +701,6 @@ def get_seat(op: OrderPosition):
     return None
 
 
-reshaper = SimpleLazyObject(lambda: ArabicReshaper(configuration={
-    'delete_harakat': True,
-    'support_ligatures': False,
-}))
-
-
 class Renderer:
 
     def __init__(self, event, layout, background_file):
@@ -869,22 +865,32 @@ class Renderer:
                 image_file = None
 
         if image_file:
-            ir = ThumbnailingImageReader(image_file)
             try:
+                ir = ThumbnailingImageReader(image_file)
                 ir.resize(float(o['width']) * mm, float(o['height']) * mm, 300)
+                canvas.drawImage(
+                    image=ir,
+                    x=float(o['left']) * mm,
+                    y=float(o['bottom']) * mm,
+                    width=float(o['width']) * mm,
+                    height=float(o['height']) * mm,
+                    preserveAspectRatio=True,
+                    anchor='c',  # centered in frame
+                    mask='auto'
+                )
             except:
-                logger.exception("Can not resize image")
-                pass
-            canvas.drawImage(
-                image=ir,
-                x=float(o['left']) * mm,
-                y=float(o['bottom']) * mm,
-                width=float(o['width']) * mm,
-                height=float(o['height']) * mm,
-                preserveAspectRatio=True,
-                anchor='c',  # centered in frame
-                mask='auto'
-            )
+                logger.exception("Can not load or resize image")
+                canvas.saveState()
+                canvas.setFillColorRGB(.8, .8, .8, alpha=1)
+                canvas.rect(
+                    x=float(o['left']) * mm,
+                    y=float(o['bottom']) * mm,
+                    width=float(o['width']) * mm,
+                    height=float(o['height']) * mm,
+                    stroke=0,
+                    fill=1,
+                )
+                canvas.restoreState()
         else:
             canvas.saveState()
             canvas.setFillColorRGB(.8, .8, .8, alpha=1)
@@ -938,7 +944,7 @@ class Renderer:
 
         # reportlab does not support unicode combination characters
         # It's important we do this before we use ArabicReshaper
-        text = unicodedata.normalize("NFKC", text)
+        text = unicodedata.normalize("NFC", text)
 
         # reportlab does not support RTL, ligature-heavy scripts like Arabic. Therefore, we use ArabicReshaper
         # to resolve all ligatures and python-bidi to switch RTL texts.
@@ -991,7 +997,10 @@ class Renderer:
                 elif o['type'] == "poweredby":
                     self._draw_poweredby(canvas, op, o)
                 if self.bg_pdf:
-                    page_size = (self.bg_pdf.pages[0].mediabox[2], self.bg_pdf.pages[0].mediabox[3])
+                    page_size = (
+                        self.bg_pdf.pages[0].mediabox[2] - self.bg_pdf.pages[0].mediabox[0],
+                        self.bg_pdf.pages[0].mediabox[3] - self.bg_pdf.pages[0].mediabox[1]
+                    )
                     if self.bg_pdf.pages[0].get('/Rotate') in (90, 270):
                         # swap dimensions due to pdf being rotated
                         page_size = page_size[::-1]
@@ -1019,14 +1028,12 @@ class Renderer:
                 with open(os.path.join(d, 'out.pdf'), 'rb') as f:
                     return BytesIO(f.read())
         else:
-            from pypdf import PdfReader, PdfWriter, Transformation
-            from pypdf.generic import RectangleObject
             buffer.seek(0)
             new_pdf = PdfReader(buffer)
             output = PdfWriter()
 
             for i, page in enumerate(new_pdf.pages):
-                bg_page = copy.copy(self.bg_pdf.pages[i])
+                bg_page = copy.deepcopy(self.bg_pdf.pages[i])
                 bg_rotation = bg_page.get('/Rotate')
                 if bg_rotation:
                     # /Rotate is clockwise, transformation.rotate is counter-clockwise
@@ -1061,6 +1068,56 @@ class Renderer:
             output.write(outbuffer)
             outbuffer.seek(0)
             return outbuffer
+
+
+def merge_background(fg_pdf, bg_pdf, out_file, compress):
+    if settings.PDFTK:
+        with tempfile.TemporaryDirectory() as d:
+            fg_filename = os.path.join(d, 'fg.pdf')
+            bg_filename = os.path.join(d, 'bg.pdf')
+            fg_pdf.write(fg_filename)
+            bg_pdf.write(bg_filename)
+            pdftk_cmd = [
+                settings.PDFTK,
+                fg_filename,
+                'multibackground',
+                bg_filename,
+                'output',
+                '-',
+            ]
+            if compress:
+                pdftk_cmd.append('compress')
+            subprocess.run(pdftk_cmd, check=True, stdout=out_file)
+    else:
+        output = PdfWriter()
+        for i, page in enumerate(fg_pdf.pages):
+            bg_page = copy.deepcopy(bg_pdf.pages[i])
+            bg_rotation = bg_page.get('/Rotate')
+            if bg_rotation:
+                # /Rotate is clockwise, transformation.rotate is counter-clockwise
+                t = Transformation().rotate(bg_rotation)
+                w = float(page.mediabox.getWidth())
+                h = float(page.mediabox.getHeight())
+                if bg_rotation in (90, 270):
+                    # offset due to rotation base
+                    if bg_rotation == 90:
+                        t = t.translate(h, 0)
+                    else:
+                        t = t.translate(0, w)
+                    # rotate mediabox as well
+                    page.mediabox = RectangleObject((
+                        page.mediabox.left.as_numeric(),
+                        page.mediabox.bottom.as_numeric(),
+                        page.mediabox.top.as_numeric(),
+                        page.mediabox.right.as_numeric(),
+                    ))
+                    page.trimbox = page.mediabox
+                elif bg_rotation == 180:
+                    t = t.translate(w, h)
+                page.add_transformation(t)
+            bg_page.merge_page(page)
+            output.add_page(bg_page)
+        output.write(out_file)
 
 
 @deconstructible

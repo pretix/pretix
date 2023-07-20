@@ -1,4 +1,6 @@
 env/
+build/
+dist/
 .coverage
 htmlcov/
 .ropeproject

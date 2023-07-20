@@ -177,7 +177,7 @@
                                 {% if var.cached_availability.0 == 100 or var.initial %}
                                     <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
                                         {% if c.max_count == 1 or not c.multi_allowed %}
-                                            <label class="item-checkbox-label">
+                                            <label class="btn btn-default btn-checkbox">
                                                 <input type="checkbox" value="1"
                                                         {% if var.initial %}checked="checked"{% endif %}
                                                         {% if item.free_price %}
@@ -187,10 +187,13 @@
                                                         name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                         data-exclusive-prefix="cp_{{ form.pos.pk }}_variation_{{ item.id }}_"
                                                         aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}">
-                                                <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
+                                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                                {% trans "Select" context "checkbox" %}
                                             </label>
                                         {% else %}
-                                            <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                            <div class="input-item-count-group">
+                                                <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                                <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                     {% if var.initial %}value="{{ var.initial }}"{% endif %}
                                                     {% if item.free_price %}
                                                        data-checked-onchange="price-variation-{{form.pos.pk}}-{{ item.pk }}-{{ var.pk }}"
@@ -199,6 +202,8 @@
                                                     id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                     name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                     aria-label="{% blocktrans with item=item.name var=var %}Quantity of {{ item }}, {{ var }} to order{% endblocktrans %}">
+                                                <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
+                                            </div>
                                         {% endif %}
                                     </div>
                                 {% else %}
@@ -301,7 +306,7 @@
                     {% if item.cached_availability.0 == 100 or item.initial %}
                         <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
                             {% if c.max_count == 1 or not c.multi_allowed %}
-                                <label class="item-checkbox-label">
+                                <label class="btn btn-default btn-checkbox">
                                     <input type="checkbox" value="1"
                                             {% if item.free_price %}
                                                data-checked-onchange="price-item-{{ form.pos.pk }}-{{ item.pk }}"
@@ -316,10 +321,13 @@
                                             id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                             aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
                                             {% if item.description %} aria-describedby="cp-{{ form.pos.pk }}-item-{{ item.id }}-description"{% endif %}>
-                                            <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
+                                            <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                            {% trans "Select" context "checkbox" %}
                                 </label>
                             {% else %}
-                                <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                <div class="input-item-count-group">
+                                    <button type="button" data-step="-1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                    <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                         {% if item.free_price %}
                                            data-checked-onchange="price-item-{{ form.pos.pk }}-{{ item.pk }}"
                                         {% endif %}
@@ -329,6 +337,8 @@
                                         id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                         aria-label="{% blocktrans with item=item.name %}Quantity of {{ item }} to order{% endblocktrans %}"
                                         {% if item.description %} aria-describedby="cp-{{ form.pos.pk }}-item-{{ item.id }}-description"{% endif %}>
+                                    <button type="button" data-step="1" data-controls="cp_{{ form.pos.pk }}_item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
+                                </div>
                             {% endif %}
                         </div>
                     {% else %}

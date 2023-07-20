@@ -52,6 +52,7 @@ from pretix.base.customersso.oidc import (
 from pretix.base.models import Customer, InvoiceAddress, Order, OrderPosition
 from pretix.base.services.mail import mail
 from pretix.base.settings import PERSON_NAME_SCHEMES
+from pretix.base.signals import customer_created, customer_signed_in
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.models import KnownDomain
@@ -151,7 +152,9 @@ class LoginView(RedirectBackMixin, FormView):
 
     def form_valid(self, form):
         """Security check complete. Log the user in."""
-        customer_login(self.request, form.get_customer())
+        customer = form.get_customer()
+        customer_login(self.request, customer)
+        customer_signed_in.send(customer.organizer, customer=customer)
         return HttpResponseRedirect(self.get_success_url())
 
 
@@ -237,7 +240,8 @@ class RegistrationView(RedirectBackMixin, FormView):
 
     def form_valid(self, form):
         with transaction.atomic():
-            form.create()
+            customer = form.create()
+            customer_created.send(customer.organizer, customer=customer)
         messages.success(
             self.request,
             _('Your account has been created. Please follow the link in the email we sent you to activate your '
@@ -526,7 +530,6 @@ class ChangeInformationView(CustomerRequiredMixin, FormView):
         with transaction.atomic():
             form.save()
             d = dict(form.cleaned_data)
-            print(d)
             del d['email']
             self.request.customer.log_action('pretix.customer.changed', d)
 
@@ -626,7 +629,7 @@ class SSOLoginView(RedirectBackMixin, View):
         })
 
         if self.provider.method == "oidc":
-            return redirect_to_url(oidc_authorize_url(self.provider, f'{nonce}§{next_url}', redirect_uri))
+            return redirect_to_url(oidc_authorize_url(self.provider, f'{nonce}%{next_url}', redirect_uri))
         else:
             raise Http404("Unknown SSO method.")
 
@@ -685,7 +688,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                     popup_origin,
                 )
 
-            nonce, redirect_to = re.split("[#§]", request.GET['state'])  # Allow # for backwards-compatibility for a while
+            nonce, redirect_to = re.split("[%#§]", request.GET['state'], 1)  # Allow § and # for backwards-compatibility for a while
 
             if nonce != request.session.get(f'pretix_customerauth_{self.provider.pk}_nonce'):
                 return self._fail(
@@ -757,6 +760,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
             )
             try:
                 customer.save(force_insert=True)
+                customer_created.send(customer.organizer, customer=customer)
             except IntegrityError:
                 # This might either be a race condition or the email address is taken
                 # by a different customer account
@@ -820,6 +824,7 @@ class SSOLoginReturnView(RedirectBackMixin, View):
             })
         else:
             customer_login(self.request, customer)
+            customer_signed_in.send(customer.organizer, customer=customer)
             return redirect_to_url(self.get_success_url(redirect_to))
 
     def _fail(self, message, popup_origin):

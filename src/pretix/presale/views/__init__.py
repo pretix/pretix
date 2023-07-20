@@ -49,7 +49,7 @@ from django_scopes import scopes_disabled
 from pretix.base.i18n import language
 from pretix.base.models import (
     CartPosition, Customer, InvoiceAddress, ItemAddOn, Question,
-    QuestionAnswer, QuestionOption,
+    QuestionAnswer, QuestionOption, TaxRule,
 )
 from pretix.base.services.cart import get_fees
 from pretix.base.templatetags.money import money_filter
@@ -198,11 +198,15 @@ class CartMixin:
         if order:
             fees = order.fees.all()
         elif positions:
-            fees = get_fees(
-                self.request.event, self.request, total, self.invoice_address,
-                payments if payments is not None else self.cart_session.get('payments', []),
-                cartpos
-            )
+            try:
+                fees = get_fees(
+                    self.request.event, self.request, total, self.invoice_address,
+                    payments if payments is not None else self.cart_session.get('payments', []),
+                    cartpos
+                )
+            except TaxRule.SaleNotAllowed:
+                # ignore for now, will fail on order creation
+                fees = []
         else:
             fees = []
 
@@ -389,7 +393,11 @@ def get_cart_is_free(request):
         pos = get_cart(request)
         ia = get_cart_invoice_address(request)
         total = get_cart_total(request)
-        fees = get_fees(request.event, request, total, ia, cs.get('payments', []), pos)
+        try:
+            fees = get_fees(request.event, request, total, ia, cs.get('payments', []), pos)
+        except TaxRule.SaleNotAllowed:
+            # ignore for now, will fail on order creation
+            fees = []
         request._cart_free_cache = total + sum(f.value for f in fees) == Decimal('0.00')
     return request._cart_free_cache
 

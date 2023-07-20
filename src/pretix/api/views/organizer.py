@@ -155,7 +155,9 @@ class GiftCardViewSet(viewsets.ModelViewSet):
             qs = self.request.organizer.accepted_gift_cards
         else:
             qs = self.request.organizer.issued_gift_cards.all()
-        return qs
+        return qs.prefetch_related(
+            'issuer'
+        )
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
@@ -166,7 +168,7 @@ class GiftCardViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         value = serializer.validated_data.pop('value')
         inst = serializer.save(issuer=self.request.organizer)
-        inst.transactions.create(value=value)
+        inst.transactions.create(value=value, acceptor=self.request.organizer)
         inst.log_action(
             'pretix.giftcards.transaction.manual',
             user=self.request.user,
@@ -179,18 +181,32 @@ class GiftCardViewSet(viewsets.ModelViewSet):
         if 'include_accepted' in self.request.GET:
             raise PermissionDenied("Accepted gift cards cannot be updated, use transact instead.")
         GiftCard.objects.select_for_update(of=OF_SELF).get(pk=self.get_object().pk)
-        old_value = serializer.instance.value
-        value = serializer.validated_data.pop('value')
-        inst = serializer.save(secret=serializer.instance.secret, currency=serializer.instance.currency,
-                               testmode=serializer.instance.testmode)
-        diff = value - old_value
-        inst.transactions.create(value=diff)
-        inst.log_action(
-            'pretix.giftcards.transaction.manual',
-            user=self.request.user,
-            auth=self.request.auth,
-            data={'value': diff}
-        )
+
+        value = serializer.validated_data.pop('value', None)
+
+        if any(k != 'value' for k in self.request.data):
+            inst = serializer.save(secret=serializer.instance.secret, currency=serializer.instance.currency,
+                                   testmode=serializer.instance.testmode)
+            inst.log_action(
+                'pretix.giftcards.modified',
+                user=self.request.user,
+                auth=self.request.auth,
+                data=self.request.data,
+            )
+        else:
+            inst = serializer.instance
+
+        if 'value' in self.request.data and value is not None:
+            old_value = serializer.instance.value
+            diff = value - old_value
+            inst.transactions.create(value=diff, acceptor=self.request.organizer)
+            inst.log_action(
+                'pretix.giftcards.transaction.manual',
+                user=self.request.user,
+                auth=self.request.auth,
+                data={'value': diff}
+            )
+
         return inst
 
     @action(detail=True, methods=["POST"])
@@ -203,18 +219,21 @@ class GiftCardViewSet(viewsets.ModelViewSet):
         text = serializers.CharField(allow_blank=True, allow_null=True).to_internal_value(
             request.data.get('text', '')
         )
+        info = serializers.JSONField(required=False, allow_null=True).to_internal_value(
+            request.data.get('info', {})
+        )
         if gc.value + value < Decimal('0.00'):
             return Response({
                 'value': ['The gift card does not have sufficient credit for this operation.']
             }, status=status.HTTP_409_CONFLICT)
-        gc.transactions.create(value=value, text=text)
+        gc.transactions.create(value=value, text=text, info=info, acceptor=self.request.organizer)
         gc.log_action(
             'pretix.giftcards.transaction.manual',
             user=self.request.user,
             auth=self.request.auth,
             data={'value': value, 'text': text}
         )
-        return Response(GiftCardSerializer(gc).data, status=status.HTTP_200_OK)
+        return Response(GiftCardSerializer(gc, context=self.get_serializer_context()).data, status=status.HTTP_200_OK)
 
     def perform_destroy(self, instance):
         raise MethodNotAllowed("Gift cards cannot be deleted.")
@@ -235,7 +254,7 @@ class GiftCardTransactionViewSet(viewsets.ReadOnlyModelViewSet):
         return get_object_or_404(qs, pk=self.kwargs.get('giftcard'))
 
     def get_queryset(self):
-        return self.giftcard.transactions.select_related('order', 'order__event')
+        return self.giftcard.transactions.select_related('order', 'order__event').prefetch_related('acceptor')
 
 
 class TeamViewSet(viewsets.ModelViewSet):

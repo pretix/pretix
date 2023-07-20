@@ -19,6 +19,7 @@ Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the medium
 type                                  string                     Type of medium, e.g. ``"barcode"`` or ``"nfc_uid"``.
+organizer                             string                     Organizer slug of the organizer who "owns" this medium.
 identifier                            string                     Unique identifier of the medium. The format depends on the ``type``.
 active                                boolean                    Whether this medium may be used.
 created                               datetime                   Date of creation
@@ -67,6 +68,7 @@ Endpoints
         "results": [
           {
             "id": 1,
+            "organizer": "bigevents",
             "identifier": "ABCDEFGH",
             "created": "2021-04-06T13:44:22.809377Z",
             "updated": "2021-04-06T13:44:22.809377Z",
@@ -91,11 +93,11 @@ Endpoints
    :query string updated_since: Only show media updated since a given date.
    :query integer linked_orderposition: Only show media linked to the given ticket.
    :query integer linked_giftcard: Only show media linked to the given gift card.
-   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_orderposition"``, oder ``"customer"``, the respective
-                         field will be shown as a nested value instead of just an ID. The nested objects are identical to
-                         the respective resources, except that the ``linked_orderposition`` will have an attribute of the
-                         format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make matching easier. The parameter
-                         can be given multiple times.
+   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_giftcard.owner_ticket"``, ``"linked_orderposition"``,
+                         or ``"customer"``, the respective field will be shown as a nested value instead of just an ID.
+                         The nested objects are identical to the respective resources, except that order positions
+                         will have an attribute of the format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make
+                         matching easier. The parameter can be given multiple times.
    :param organizer: The ``slug`` field of the organizer to fetch
    :statuscode 200: no error
    :statuscode 401: Authentication failure
@@ -123,6 +125,7 @@ Endpoints
 
       {
         "id": 1,
+        "organizer": "bigevents",
         "identifier": "ABCDEFGH",
         "created": "2021-04-06T13:44:22.809377Z",
         "updated": "2021-04-06T13:44:22.809377Z",
@@ -138,11 +141,11 @@ Endpoints
 
    :param organizer: The ``slug`` field of the organizer to fetch
    :param id: The ``id`` field of the medium to fetch
-   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_orderposition"``, oder ``"customer"``, the respective
-                         field will be shown as a nested value instead of just an ID. The nested objects are identical to
-                         the respective resources, except that the ``linked_orderposition`` will have an attribute of the
-                         format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make matching easier. The parameter
-                         can be given multiple times.
+   :query string expand: If you pass ``"linked_giftcard"``, ``"linked_giftcard.owner_ticket"``, ``"linked_orderposition"``,
+                         or ``"customer"``, the respective field will be shown as a nested value instead of just an ID.
+                         The nested objects are identical to the respective resources, except that order positions
+                         will have an attribute of the format ``"order": {"code": "ABCDE", "event": "eventslug"}`` to make
+                         matching easier. The parameter can be given multiple times.
    :statuscode 200: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer does not exist **or** you have no permission to view this resource.
@@ -151,6 +154,9 @@ Endpoints
 
    Look up a new reusable medium by its identifier. In some cases, this might lead to the automatic creation of a new
    medium behind the scenes.
+
+   This endpoint, and this endpoint only, might return media from a different organizer if there is a cross-acceptance
+   agreement. In this case, only linked gift cards will be returned, no order position or customer records,
 
    **Example request**:
 
@@ -176,6 +182,7 @@ Endpoints
 
       {
         "id": 1,
+        "organizer": "bigevents",
         "identifier": "ABCDEFGH",
         "created": "2021-04-06T13:44:22.809377Z",
         "updated": "2021-04-06T13:44:22.809377Z",
@@ -235,6 +242,7 @@ Endpoints
 
       {
         "id": 1,
+        "organizer": "bigevents",
         "identifier": "ABCDEFGH",
         "created": "2021-04-06T13:44:22.809377Z",
         "updated": "2021-04-06T13:44:22.809377Z",
@@ -291,6 +299,7 @@ Endpoints
 
       {
         "id": 1,
+        "organizer": "bigevents",
         "identifier": "ABCDEFGH",
         "created": "2021-04-06T13:44:22.809377Z",
         "updated": "2021-04-06T13:44:22.809377Z",

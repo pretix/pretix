@@ -149,7 +149,7 @@
                                                 from {{ minprice }}
                                             {% endblocktrans %}
                                         {% elif not item.min_price and not item.max_price %}
-                                            {% if not item.mandatory_priced_addons %}
+                                            {% if not item.mandatory_priced_addons or voucher.all_addons_included %}
                                                 <span class="text-uppercase">{% trans "free" context "price" %}</span>
                                             {% endif %}
                                         {% else %}
@@ -207,7 +207,7 @@
                                                     </div>
                                                     <p>
                                                 {% elif not var.display_price.gross %}
-                                                    {% if not item.mandatory_priced_addons or var.original_price %}
+                                                    {% if not item.mandatory_priced_addons or var.original_price or voucher.all_addons_included %}
                                                         <span class="text-uppercase">{% trans "free" context "price" %}</span>
                                                     {% endif %}
                                                 {% elif event.settings.display_net_prices %}
@@ -243,7 +243,7 @@
                                                 <div class="col-md-2 col-sm-3 col-xs-6 availability-box available radio-box">
                                                     {% if max_times > 1 %}
                                                         {% if var.order_max == 1 %}
-                                                            <label class="item-checkbox-label">
+                                                            <label class="btn btn-default btn-checkbox">
                                                                 <input type="checkbox"
                                                                         value="1"
                                                                         id="variation_{{ item.id }}_{{ var.id }}"
@@ -251,15 +251,20 @@
                                                                         {% if options == 1 %}checked{% endif %}
                                                                         aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
                                                                         {% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
-                                                                <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
+                                                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                                                {% trans "Select" context "checkbox" %}
                                                             </label>
                                                         {% else %}
-                                                            <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                                    max="{{ item.order_max }}"
+                                                            <div class="input-item-count-group">
+                                                                <button type="button" data-step="-1" data-controls="variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                                                <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                                    max="{{ var.order_max }}"
                                                                     id="variation_{{ item.id }}_{{ var.id }}"
                                                                     name="variation_{{ item.id }}_{{ var.id }}"
                                                                     {% if options == 1 %}value="1"{% endif %}
                                                                     aria-label="{% blocktrans with item=item.name var=var.name %}Quantity of {{ item }}, {{ var }} to order{% endblocktrans %}">
+                                                                <button type="button" data-step="1" data-controls="variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
+                                                            </div>
                                                         {% endif %}
                                                     {% else %}
                                                         <label>
@@ -345,7 +350,7 @@
                                     </div>
                                     <p>
                                     {% elif not item.display_price.gross %}
-                                        {% if not item.mandatory_priced_addons or item.original_price %}
+                                        {% if not item.mandatory_priced_addons or item.original_price or voucher.all_addons_included %}
                                             <span class="text-uppercase">{% trans "free" context "price" %}</span>
                                         {% endif %}
                                     {% elif event.settings.display_net_prices %}
@@ -381,7 +386,7 @@
                                     <div class="col-md-2 col-sm-3 col-xs-6 availability-box available radio-box">
                                         {% if max_times > 1 %}
                                             {% if item.order_max == 1 %}
-                                                <label class="item-checkbox-label">
+                                                <label class="btn btn-default btn-checkbox">
                                                     <input type="checkbox"
                                                            value="1"
                                                            id="item_{{ item.id }}"
@@ -389,10 +394,13 @@
                                                            {% if options == 1 %}checked{% endif %}
                                                            aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
                                                            {% if item.description %} aria-describedby="item-{{ item.id }}-description"{% endif %}>
-                                                    <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
+                                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                                    {% trans "Select" context "checkbox" %}
                                                 </label>
                                             {% else %}
-                                                <input type="number" class="form-control input-item-count"
+                                                <div class="input-item-count-group">
+                                                    <button type="button" data-step="-1" data-controls="item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}">-</button>
+                                                    <input type="number" class="form-control input-item-count"
                                                        placeholder="0" min="0"
                                                        max="{{ item.order_max }}"
                                                        id="item_{{ item.id }}"
@@ -400,6 +408,8 @@
                                                        {% if options == 1 %}value="1"{% endif %}
                                                        aria-label="{% blocktrans with item=item.name %}Quantity of {{ item }} to order{% endblocktrans %}"
                                                        {% if item.description %} aria-describedby="item-{{ item.id }}-description"{% endif %}>
+                                                    <button type="button" data-step="1" data-controls="item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}">+</button>
+                                                </div>
                                             {% endif %}
                                         {% else %}
                                             <label>

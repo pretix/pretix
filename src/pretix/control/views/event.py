@@ -41,6 +41,7 @@ from decimal import Decimal
 from io import BytesIO
 from itertools import groupby
 from urllib.parse import urlsplit
+from zoneinfo import ZoneInfo
 
 import bleach
 import qrcode
@@ -61,13 +62,12 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
-from django.utils.translation import gettext, gettext_lazy as _
+from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
 from django.views.generic import FormView, ListView
 from django.views.generic.base import TemplateView, View
 from django.views.generic.detail import SingleObjectMixin
 from i18nfield.strings import LazyI18nString
 from i18nfield.utils import I18nJSONEncoder
-from pytz import timezone
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_available_placeholders
@@ -253,7 +253,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
                 self.item_meta_property_formset.is_valid() and self.confirm_texts_formset.is_valid() and \
                 self.footer_links_formset.is_valid():
             # reset timezone
-            zone = timezone(self.sform.cleaned_data['timezone'])
+            zone = ZoneInfo(self.sform.cleaned_data['timezone'])
             event = form.instance
             event.date_from = self.reset_timezone(zone, event.date_from)
             event.date_to = self.reset_timezone(zone, event.date_to)
@@ -266,7 +266,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
 
     @staticmethod
     def reset_timezone(tz, dt):
-        return tz.localize(dt.replace(tzinfo=None)) if dt is not None else None
+        return dt.replace(tzinfo=tz) if dt is not None else None
 
     @cached_property
     def item_meta_property_formset(self):
@@ -282,9 +282,19 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
             if form in self.item_meta_property_formset.deleted_forms:
                 if not form.instance.pk:
                     continue
+                form.instance.log_action(
+                    'pretix.event.item_meta_property.deleted',
+                    user=self.request.user,
+                    data=form.cleaned_data
+                )
                 form.instance.delete()
                 form.instance.pk = None
             elif form.has_changed():
+                form.instance.log_action(
+                    'pretix.event.item_meta_property.changed',
+                    user=self.request.user,
+                    data=form.cleaned_data
+                )
                 form.save()
 
         for form in self.item_meta_property_formset.extra_forms:
@@ -294,6 +304,11 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
                 continue
             form.instance.event = obj
             form.save()
+            form.instance.log_action(
+                'pretix.event.item_meta_property.added',
+                user=self.request.user,
+                data=form.cleaned_data
+            )
 
     @cached_property
     def confirm_texts_formset(self):
@@ -1496,12 +1511,12 @@ class QuickSetupView(FormView):
             event=self.request.event,
             initial=[
                 {
-                    'name': LazyI18nString.from_gettext(gettext('Regular ticket')),
+                    'name': LazyI18nString.from_gettext(gettext_noop('Regular ticket')),
                     'default_price': Decimal('35.00'),
                     'quota': 100,
                 },
                 {
-                    'name': LazyI18nString.from_gettext(gettext('Reduced ticket')),
+                    'name': LazyI18nString.from_gettext(gettext_noop('Reduced ticket')),
                     'default_price': Decimal('29.00'),
                     'quota': 50,
                 },

@@ -3,6 +3,7 @@ ABN
 AGPL
 Alipay
 APM
+acceptor
 analytics
 anonymize
 anonymized
@@ -26,6 +27,7 @@ chargebacks
 checkboxes
 CONFIRM
 cronjob
+cryptographic
 CSRF
 csv
 CSV
@@ -110,6 +112,7 @@ Reddit
 redemptions
 Referer
 renderer
+renderers
 Sa
 Samplecity
 SAQ

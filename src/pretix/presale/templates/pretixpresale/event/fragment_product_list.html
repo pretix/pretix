@@ -184,7 +184,7 @@
                                 {% elif var.cached_availability.0 == 100 %}
                                     <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
 										{% if var.order_max == 1 %}
-                                            <label class="item-checkbox-label">
+                                            <label class="btn btn-default btn-checkbox">
                                                 <input type="checkbox" value="1"
                                                     {% if item.free_price %}
                                                        data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
@@ -194,18 +194,25 @@
                                                        name="variation_{{ item.id }}_{{ var.id }}"
                                                        aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
                                                        {% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
-                                               <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
+                                                <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                                {% trans "Select" context "checkbox" %}
                                             </label>
                                         {% else %}
-                                            <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                                   {% if not ev.presale_is_running %}disabled{% endif %}
-                                                    {% if item.free_price %}
-                                                       data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
-                                                    {% endif %}
-                                                   max="{{ var.order_max }}"
-                                                   id="variation_{{ item.id }}_{{ var.id }}"
-                                                   name="variation_{{ item.id }}_{{ var.id }}"
-                                                   aria-label="{% blocktrans with item=item.name var=var.name %}Quantity of {{ item }}, {{ var }} to order{% endblocktrans %}">
+                                            <div class="input-item-count-group">
+                                                <button type="button" data-step="-1" data-controls="variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}"
+                                                    {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
+                                                <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                                       {% if not ev.presale_is_running %}disabled{% endif %}
+                                                        {% if item.free_price %}
+                                                           data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
+                                                        {% endif %}
+                                                       max="{{ var.order_max }}"
+                                                       id="variation_{{ item.id }}_{{ var.id }}"
+                                                       name="variation_{{ item.id }}_{{ var.id }}"
+                                                       aria-label="{% blocktrans with item=item.name var=var.name %}Quantity of {{ item }}, {{ var }} to order{% endblocktrans %}">
+                                                <button type="button" data-step="1" data-controls="variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}"
+                                                    {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
+                                            </div>
                                         {% endif %}
                                     </div>
                                 {% else %}
@@ -322,7 +329,7 @@
                     {% elif item.cached_availability.0 == 100 %}
                         <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
 							{% if item.order_max == 1 %}
-                                <label class="item-checkbox-label">
+                                <label class="btn btn-default btn-checkbox">
                                     <input type="checkbox" value="1" {% if itemnum == 1 %}checked{% endif %}
                                         {% if item.free_price %}
                                            data-checked-onchange="price-item-{{ item.pk }}"
@@ -331,20 +338,27 @@
                                            name="item_{{ item.id }}" id="item_{{ item.id }}"
                                            aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
                                            {% if item.description %} aria-describedby="item-{{ item.id }}-description"{% endif %}>
-                                           <i class="fa fa-cart-plus fa-lg" aria-hidden="true"></i>
+                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
+                                        {% trans "Select" context "checkbox" %}
                                 </label>
                             {% else %}
-                                <input type="number" class="form-control input-item-count" placeholder="0" min="0"
-                                       {% if not ev.presale_is_running %}disabled{% endif %}
-                                       {% if itemnum == 1 %}value="1"{% endif %}
-                                        {% if item.free_price %}
-                                           data-checked-onchange="price-item-{{ item.pk }}"
-                                        {% endif %}
-                                       max="{{ item.order_max }}"
-                                       name="item_{{ item.id }}"
-                                       id="item_{{ item.id }}"
-                                       aria-label="{% blocktrans with item=item.name %}Quantity of {{ item }} to order{% endblocktrans %}"
-                                       {% if item.description %} aria-describedby="item-{{ item.id }}-description"{% endif %}>
+                                <div class="input-item-count-group">
+                                    <button type="button" data-step="-1" data-controls="item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}"
+                                        {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
+                                    <input type="number" class="form-control input-item-count" placeholder="0" min="0"
+                                           {% if not ev.presale_is_running %}disabled{% endif %}
+                                           {% if itemnum == 1 %}value="1"{% endif %}
+                                            {% if item.free_price %}
+                                               data-checked-onchange="price-item-{{ item.pk }}"
+                                            {% endif %}
+                                           max="{{ item.order_max }}"
+                                           name="item_{{ item.id }}"
+                                           id="item_{{ item.id }}"
+                                           aria-label="{% blocktrans with item=item.name %}Quantity of {{ item }} to order{% endblocktrans %}"
+                                           {% if item.description %} aria-describedby="item-{{ item.id }}-description"{% endif %}>
+                                    <button type="button" data-step="1" data-controls="item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}"
+                                        {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
+                                </div>
                             {% endif %}
                         </div>
                     {% else %}

@@ -20,17 +20,26 @@ internal_name                         string                     An optional nam
 rate                                  decimal (string)           Tax rate in percent
 price_includes_tax                    boolean                    If ``true`` (default), tax is assumed to be included in
                                                                  the specified product price
-eu_reverse_charge                     boolean                    If ``true``, EU reverse charge rules are applied
+eu_reverse_charge                     boolean                    If ``true``, EU reverse charge rules are applied. Will
+                                                                 be ignored if custom rules are set.
 home_country                          string                     Merchant country (required for reverse charge), can be
                                                                  ``null`` or empty string
 keep_gross_if_rate_changes            boolean                    If ``true``, changes of the tax rate based on custom
                                                                  rules keep the gross price constant (default is ``false``)
+custom_rules                          object                     Dynamic rules specification. Each list element
+                                                                 corresponds to one rule that will be processed in order.
+                                                                 The current version of the schema in use can be found
+                                                                 `here`_.
 ===================================== ========================== =======================================================
 
 
 .. versionchanged:: 4.6
 
     The ``internal_name`` and ``keep_gross_if_rate_changes`` attributes have been added.
+
+.. versionchanged:: 2023.6
+
+    The ``custom_rules`` attribute has been added.
 
 Endpoints
 ---------
@@ -68,6 +77,7 @@ Endpoints
             "price_includes_tax": true,
             "eu_reverse_charge": false,
             "keep_gross_if_rate_changes": false,
+            "custom_rules": null,
             "home_country": "DE"
           }
         ]
@@ -108,6 +118,7 @@ Endpoints
         "price_includes_tax": true,
         "eu_reverse_charge": false,
         "keep_gross_if_rate_changes": false,
+        "custom_rules": null,
         "home_country": "DE"
       }
 
@@ -156,6 +167,7 @@ Endpoints
         "price_includes_tax": true,
         "eu_reverse_charge": false,
         "keep_gross_if_rate_changes": false,
+        "custom_rules": null,
         "home_country": "DE"
       }
 
@@ -203,6 +215,7 @@ Endpoints
         "price_includes_tax": true,
         "eu_reverse_charge": false,
         "keep_gross_if_rate_changes": false,
+        "custom_rules": null,
         "home_country": "DE"
       }
 
@@ -242,3 +255,5 @@ Endpoints
    :statuscode 204: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event/rule does not exist **or** you have no permission to change it **or** this tax rule cannot be deleted since it is currently in use.
+
+.. _here: https://github.com/pretix/pretix/blob/master/src/pretix/static/schema/tax-rules-custom.schema.json

@@ -361,7 +361,7 @@ class OrderSendView(BaseSenderView):
                     item_id__in=[i.pk for i in form.cleaned_data.get('items')]
                 )
             )),
-            order=OuterRef('pk'),
+            order__event=self.request.event,
             canceled=False,
         )
 
@@ -407,7 +407,9 @@ class OrderSendView(BaseSenderView):
         if form.cleaned_data.get('created_to'):
             opq = opq.filter(order__datetime__lt=form.cleaned_data.get('created_to'))
 
-        return orders.annotate(match_pos=Exists(opq)).filter(match_pos=True).distinct()
+        # pk__in turns out to be faster than Exists(subquery) in many cases since we often filter on a large subset
+        # of orderpositions
+        return orders.filter(pk__in=opq.values_list('order_id'))
 
     def describe_match_size(self, cnt):
         return ngettext(

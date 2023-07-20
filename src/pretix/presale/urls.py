@@ -32,8 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from django.conf.urls import re_path
-from django.urls import include
+from django.urls import include, re_path
 from django.views.decorators.csrf import csrf_exempt
 
 import pretix.presale.views.cart
@@ -140,6 +139,9 @@ event_patterns = [
     re_path(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<position>[0-9]+)/(?P<output>[^/]+)$',
             pretix.presale.views.order.OrderDownload.as_view(),
             name='event.order.download'),
+    re_path(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/giftcard/(?P<pk>[0-9]+)/$',
+            pretix.presale.views.order.OrderGiftCardDetails.as_view(),
+            name='event.order.giftcard'),
     re_path(r'^order/(?P<order>[^/]+)/(?P<secret>[A-Za-z0-9]+)/invoice/(?P<invoice>[0-9]+)$',
             pretix.presale.views.order.InvoiceDownload.as_view(),
             name='event.invoice.download'),
@@ -150,6 +152,9 @@ event_patterns = [
     re_path(r'^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/download/(?P<pid>[0-9]+)/(?P<output>[^/]+)$',
             pretix.presale.views.order.OrderPositionDownload.as_view(),
             name='event.order.position.download'),
+    re_path(r'^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/giftcard/(?P<pk>[0-9]+)/$',
+            pretix.presale.views.order.OrderPositionGiftCardDetails.as_view(),
+            name='event.order.position.giftcard'),
     re_path(r'^ticket/(?P<order>[^/]+)/(?P<position>\d+)/(?P<secret>[A-Za-z0-9]+)/change$',
             pretix.presale.views.order.OrderPositionChange.as_view(),
             name='event.order.position.change'),

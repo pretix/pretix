@@ -44,14 +44,15 @@ def organizer2():
 @pytest.fixture
 def gift_card(organizer):
     gc = organizer.issued_gift_cards.create(currency="EUR")
-    gc.transactions.create(value=42)
+    gc.transactions.create(value=42, acceptor=organizer)
     return gc
 
 
 @pytest.fixture
 def admin_user(organizer):
     u = User.objects.create_user('dummy@dummy.dummy', 'dummy')
-    admin_team = Team.objects.create(organizer=organizer, can_manage_gift_cards=True, name='Admin team')
+    admin_team = Team.objects.create(organizer=organizer, can_manage_gift_cards=True, name='Admin team',
+                                     can_change_organizer_settings=True)
     admin_team.members.add(u)
     return u
 
@@ -140,7 +141,7 @@ def test_card_detail_view_transact_revert_refund(organizer, admin_user, gift_car
         r = o.refunds.create(
             amount=o.total, provider='giftcard', state=OrderRefund.REFUND_STATE_DONE
         )
-        t = gift_card.transactions.create(value=14, order=o, refund=r)
+        t = gift_card.transactions.create(value=14, order=o, refund=r, acceptor=organizer)
 
     client.login(email='dummy@dummy.dummy', password='dummy')
     r = client.post('/control/organizer/dummy/giftcard/{}/'.format(gift_card.pk), {
@@ -174,24 +175,29 @@ def test_card_detail_view_transact_invalid_value(organizer, admin_user, gift_car
 
 @pytest.mark.django_db
 def test_manage_acceptance(organizer, organizer2, admin_user, gift_card, client, team2):
+    gca = organizer.gift_card_issuer_acceptance.create(issuer=organizer2, active=False)
+
     client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/organizer/dummy/giftcards', {
-        'add': organizer2.slug
+    client.post('/control/organizer/dummy/giftcards/acceptance', {
+        'accept_issuer': organizer2.slug
     })
-    assert organizer.gift_card_issuer_acceptance.filter(issuer=organizer2).exists()
-    client.post('/control/organizer/dummy/giftcards', {
-        'del': organizer2.slug
+
+    gca.refresh_from_db()
+    assert gca.active
+
+    client.post('/control/organizer/dummy/giftcards/acceptance', {
+        'delete_issuer': organizer2.slug
     })
     assert not organizer.gift_card_issuer_acceptance.filter(issuer=organizer2).exists()
 
-
-@pytest.mark.django_db
-def test_manage_acceptance_permission_required(organizer, organizer2, admin_user, gift_card, client):
-    client.login(email='dummy@dummy.dummy', password='dummy')
-    client.post('/control/organizer/dummy/giftcards', {
-        'add': organizer2.slug
+    client.post('/control/organizer/dummy/giftcards/acceptance/invite', {
+        'acceptor': organizer2.slug
     })
-    assert not organizer.gift_card_issuer_acceptance.filter(issuer=organizer2).exists()
+    assert organizer.gift_card_acceptor_acceptance.filter(acceptor=organizer2).exists()
+    client.post('/control/organizer/dummy/giftcards/acceptance', {
+        'delete_acceptor': organizer2.slug
+    })
+    assert not organizer.gift_card_acceptor_acceptance.filter(acceptor=organizer2).exists()
 
 
 @pytest.mark.django_db

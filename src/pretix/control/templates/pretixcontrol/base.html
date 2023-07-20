@@ -19,7 +19,7 @@
             <script src="{% statici18n request.LANGUAGE_CODE %}"></script>
         {% endif %}
 		{% compress js %}
-            <script type="text/javascript" src="{% static "jquery/js/jquery-2.1.1.min.js" %}"></script>
+            <script type="text/javascript" src="{% static "jquery/js/jquery-3.6.4.min.js" %}"></script>
             <script type="text/javascript" src="{% static "js/jquery.formset.js" %}"></script>
             <script type="text/javascript" src="{% static "typeahead/typeahead.bundle.js" %}"></script>
             <script type="text/javascript" src="{% static "bootstrap/js/bootstrap.js" %}"></script>
@@ -423,17 +423,6 @@
                         </div>
                     {% endif %}
 
-                    {% if "mysql" in settings.DATABASES.default.ENGINE and not request.organizer %}
-                        <div class="alert alert-warning">
-                            {% blocktrans trimmed %}
-                                You are using MySQL or MariaDB as your database backend for pretix.
-                                Starting in pretix 5.0, these will no longer be supported and you will need to migrate to PostgreSQL.
-                                Please see the pretix administrator documentation for a migration guide, and the pretix 4.16
-                                release notes for more information.
-                            {% endblocktrans %}
-                        </div>
-                    {% endif %}
-
                     {% if debug_warning %}
                         <div class="alert alert-danger">
                             {% trans "pretix is running in debug mode. For security reasons, please never run debug mode on a production instance." %}
@@ -480,6 +469,8 @@
                     <div class="progress">
                         <div class="progress-bar progress-bar-success">
                         </div>
+                    </div>
+                    <div class="steps">
                     </div>
                 </div>
             </div>

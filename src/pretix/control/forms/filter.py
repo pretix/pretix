@@ -483,7 +483,7 @@ class EventOrderFilterForm(OrderFilterForm):
                     file__isnull=False
                 )
                 qs = qs.annotate(has_answer=Exists(answers)).filter(has_answer=True)
-            elif q.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE):
+            elif q.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE) and fdata.get('answer'):
                 answers = QuestionAnswer.objects.filter(
                     question_id=q.pk,
                     orderposition__order_id=OuterRef('pk'),
@@ -572,6 +572,11 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
     sales_channel = forms.ChoiceField(
         label=_('Sales channel'),
         required=False,
+    )
+    has_checkin = forms.NullBooleanField(
+        required=False,
+        widget=FilterNullBooleanSelect,
+        label=_('At least one ticket with check-in'),
     )
     checkin_attention = forms.NullBooleanField(
         required=False,
@@ -745,6 +750,12 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             qs = qs.filter(
                 all_positions__country=fdata.get('attendee_address_country')
             ).distinct()
+        if fdata.get('has_checkin') is not None:
+            qs = qs.annotate(
+                has_checkin=Exists(
+                    Checkin.all.filter(position__order_id=OuterRef('pk'))
+                )
+            ).filter(has_checkin=fdata['has_checkin'])
         if fdata.get('ticket_secret'):
             qs = qs.filter(
                 all_positions__secret__icontains=fdata.get('ticket_secret')
@@ -1338,6 +1349,7 @@ class GiftCardFilterForm(FilterForm):
                 Q(secret__icontains=query)
                 | Q(transactions__text__icontains=query)
                 | Q(transactions__order__code__icontains=query)
+                | Q(owner_ticket__order__code__icontains=query)
             )
         if fdata.get('testmode') == 'yes':
             qs = qs.filter(testmode=True)
@@ -1742,9 +1754,9 @@ class CheckinListAttendeeFilterForm(FilterForm):
         label=_('Check-in status'),
         choices=(
             ('', _('All attendees')),
-            ('3', pgettext_lazy('checkin state', 'Checked in but left')),
-            ('2', pgettext_lazy('checkin state', 'Present')),
             ('1', _('Checked in')),
+            ('2', pgettext_lazy('checkin state', 'Present')),
+            ('3', pgettext_lazy('checkin state', 'Checked in but left')),
             ('0', _('Not checked in')),
         ),
         required=False,

@@ -178,7 +178,7 @@ class LoggedModel(models.Model, LoggingMixin):
 
         return LogEntry.objects.filter(
             content_type=self.logs_content_type, object_id=self.pk
-        ).select_related('user', 'event', 'oauth_application', 'api_token', 'device')
+        ).select_related('user', 'event', 'event__organizer', 'oauth_application', 'api_token', 'device')
 
 
 class LockModel:

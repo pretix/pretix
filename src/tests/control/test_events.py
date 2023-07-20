@@ -37,14 +37,13 @@ import datetime
 import time
 from decimal import Decimal
 from smtplib import SMTPResponseException
+from zoneinfo import ZoneInfo
 
 import pytest
-import pytz
 from django.test.utils import override_settings
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
-from pytz import timezone
 from tests.base import SoupTest, extract_form_fields
 
 from pretix.base.models import Event, LogEntry, Order, Organizer, Team, User
@@ -634,7 +633,7 @@ class EventsTest(SoupTest):
             },
             follow=True
         )
-        assert doc.select('.alert-warning')
+        assert doc.select('.alert-danger')
         self.event1.settings.flush()
         # not yet saved
         assert "mail_from" not in self.event1.settings._cache()
@@ -835,11 +834,11 @@ class EventsTest(SoupTest):
             assert ev.location == LazyI18nString({'de': 'Hamburg', 'en': 'Hamburg'})
             assert Team.objects.filter(limit_events=ev, members=self.user).exists()
 
-            berlin_tz = timezone('Europe/Berlin')
-            assert ev.date_from == berlin_tz.localize(datetime.datetime(2016, 12, 27, 10, 0, 0)).astimezone(pytz.utc)
-            assert ev.date_to == berlin_tz.localize(datetime.datetime(2016, 12, 30, 19, 0, 0)).astimezone(pytz.utc)
-            assert ev.presale_start == berlin_tz.localize(datetime.datetime(2016, 11, 1, 10, 0, 0)).astimezone(pytz.utc)
-            assert ev.presale_end == berlin_tz.localize(datetime.datetime(2016, 11, 30, 18, 0, 0)).astimezone(pytz.utc)
+            berlin_tz = ZoneInfo('Europe/Berlin')
+            assert ev.date_from == datetime.datetime(2016, 12, 27, 10, 0, 0, tzinfo=berlin_tz).astimezone(datetime.timezone.utc)
+            assert ev.date_to == datetime.datetime(2016, 12, 30, 19, 0, 0, tzinfo=berlin_tz).astimezone(datetime.timezone.utc)
+            assert ev.presale_start == datetime.datetime(2016, 11, 1, 10, 0, 0, tzinfo=berlin_tz).astimezone(datetime.timezone.utc)
+            assert ev.presale_end == datetime.datetime(2016, 11, 30, 18, 0, 0, tzinfo=berlin_tz).astimezone(datetime.timezone.utc)
 
             assert ev.tax_rules.filter(rate=Decimal('19.00')).exists()
 
@@ -954,11 +953,11 @@ class EventsTest(SoupTest):
             assert Team.objects.filter(limit_events=ev, members=self.user).exists()
             assert ev.items.count() == 1
 
-            berlin_tz = timezone('Europe/Berlin')
-            assert ev.date_from == berlin_tz.localize(datetime.datetime(2016, 12, 27, 10, 0, 0)).astimezone(pytz.utc)
-            assert ev.date_to == berlin_tz.localize(datetime.datetime(2016, 12, 30, 19, 0, 0)).astimezone(pytz.utc)
-            assert ev.presale_start == berlin_tz.localize(datetime.datetime(2016, 11, 1, 10, 0, 0)).astimezone(pytz.utc)
-            assert ev.presale_end == berlin_tz.localize(datetime.datetime(2016, 11, 30, 18, 0, 0)).astimezone(pytz.utc)
+            berlin_tz = ZoneInfo('Europe/Berlin')
+            assert ev.date_from == datetime.datetime(2016, 12, 27, 10, 0, 0, tzinfo=berlin_tz).astimezone(datetime.timezone.utc)
+            assert ev.date_to == datetime.datetime(2016, 12, 30, 19, 0, 0, tzinfo=berlin_tz).astimezone(datetime.timezone.utc)
+            assert ev.presale_start == datetime.datetime(2016, 11, 1, 10, 0, 0, tzinfo=berlin_tz).astimezone(datetime.timezone.utc)
+            assert ev.presale_end == datetime.datetime(2016, 11, 30, 18, 0, 0, tzinfo=berlin_tz).astimezone(datetime.timezone.utc)
 
             assert ev.tax_rules.filter(rate=Decimal('19.00')).count() == 1
             i = ev.items.get()
@@ -1027,11 +1026,11 @@ class EventsTest(SoupTest):
             assert Team.objects.filter(limit_events=ev, members=self.user).exists()
             assert ev.items.count() == 1
 
-            berlin_tz = timezone('Europe/Berlin')
-            assert ev.date_from == berlin_tz.localize(datetime.datetime(2016, 12, 27, 10, 0, 0)).astimezone(pytz.utc)
-            assert ev.date_to == berlin_tz.localize(datetime.datetime(2016, 12, 30, 19, 0, 0)).astimezone(pytz.utc)
-            assert ev.presale_start == berlin_tz.localize(datetime.datetime(2016, 11, 1, 10, 0, 0)).astimezone(pytz.utc)
-            assert ev.presale_end == berlin_tz.localize(datetime.datetime(2016, 11, 30, 18, 0, 0)).astimezone(pytz.utc)
+            berlin_tz = ZoneInfo('Europe/Berlin')
+            assert ev.date_from == datetime.datetime(2016, 12, 27, 10, 0, 0, tzinfo=berlin_tz).astimezone(datetime.timezone.utc)
+            assert ev.date_to == datetime.datetime(2016, 12, 30, 19, 0, 0, tzinfo=berlin_tz).astimezone(datetime.timezone.utc)
+            assert ev.presale_start == datetime.datetime(2016, 11, 1, 10, 0, 0, tzinfo=berlin_tz).astimezone(datetime.timezone.utc)
+            assert ev.presale_end == datetime.datetime(2016, 11, 30, 18, 0, 0, tzinfo=berlin_tz).astimezone(datetime.timezone.utc)
 
             assert ev.tax_rules.filter(rate=Decimal('19.00')).count() == 1
 
@@ -1079,7 +1078,7 @@ class EventsTest(SoupTest):
             assert ev.organizer == self.orga1
             assert ev.location == LazyI18nString({'en': 'Hamburg'})
             assert Team.objects.filter(limit_events=ev, members=self.user).exists()
-            assert ev.date_from == datetime.datetime(2016, 12, 27, 10, 0, 0, tzinfo=pytz.utc)
+            assert ev.date_from == datetime.datetime(2016, 12, 27, 10, 0, 0, tzinfo=datetime.timezone.utc)
             assert ev.date_to is None
             assert ev.presale_start is None
             assert ev.presale_end is None
@@ -1128,7 +1127,7 @@ class EventsTest(SoupTest):
             assert ev.location == LazyI18nString({'en': 'Hamburg'})
             team = Team.objects.filter(limit_events=ev, members=self.user).first()
             assert team == self.team2
-            assert ev.date_from == datetime.datetime(2016, 12, 27, 10, 0, 0, tzinfo=pytz.utc)
+            assert ev.date_from == datetime.datetime(2016, 12, 27, 10, 0, 0, tzinfo=datetime.timezone.utc)
             assert ev.date_to is None
             assert ev.presale_start is None
             assert ev.presale_end is None

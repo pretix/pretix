@@ -514,7 +514,6 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 'variation': cartpos.variation,
                 'categories': []
             }
-            formset.append(formsetentry)
 
             current_addon_products = defaultdict(list)
             for a in cartpos.addons.all():
@@ -585,13 +584,15 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 if items:
                     formsetentry['categories'].append({
                         'category': iao.addon_category,
-                        'price_included': iao.price_included,
+                        'price_included': iao.price_included or (cartpos.voucher_id and cartpos.voucher.all_addons_included),
                         'multi_allowed': iao.multi_allowed,
                         'min_count': iao.min_count,
                         'max_count': iao.max_count,
                         'iao': iao,
                         'items': items
                     })
+            if formsetentry['categories']:
+                formset.append(formsetentry)
         return formset
 
     def get_context_data(self, **kwargs):
@@ -1125,13 +1126,17 @@ class PaymentStep(CartMixin, TemplateFlowStep):
     def _total_order_value(self):
         cart = get_cart(self.request)
         total = get_cart_total(self.request)
-        total += sum([
-            f.value for f in get_fees(
-                self.request.event, self.request, total, self.invoice_address,
-                [p for p in self.cart_session.get('payments', []) if p.get('multi_use_supported')],
-                cart,
-            )
-        ])
+        try:
+            total += sum([
+                f.value for f in get_fees(
+                    self.request.event, self.request, total, self.invoice_address,
+                    [p for p in self.cart_session.get('payments', []) if p.get('multi_use_supported')],
+                    cart,
+                )
+            ])
+        except TaxRule.SaleNotAllowed:
+            # ignore for now, will fail on order creation
+            pass
         return Decimal(total)
 
     @cached_property
@@ -1200,6 +1205,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                     cart = self.get_cart(payments=simulated_payments)
                 else:
                     cart = self.get_cart()
+
                 resp = pprov.checkout_prepare(
                     request,
                     cart,
@@ -1282,8 +1288,12 @@ class PaymentStep(CartMixin, TemplateFlowStep):
 
         cart = get_cart(self.request)
         total = get_cart_total(self.request)
-        total += sum([f.value for f in get_fees(self.request.event, self.request, total, self.invoice_address,
-                                                self.cart_session.get('payments', []), cart)])
+        try:
+            total += sum([f.value for f in get_fees(self.request.event, self.request, total, self.invoice_address,
+                                                    self.cart_session.get('payments', []), cart)])
+        except TaxRule.SaleNotAllowed:
+            # ignore for now, will fail on order creation
+            pass
         selected = self.current_selected_payments(total, warn=warn, total_includes_payment_fees=True)
         if sum(p['payment_amount'] for p in selected) != total:
             if warn:

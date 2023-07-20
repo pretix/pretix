@@ -96,6 +96,18 @@ def primary_font_kwargs():
     }
 
 
+def invoice_font_kwargs():
+    from pretix.presale.style import get_fonts
+
+    choices = [('Open Sans', 'Open Sans')]
+    choices += sorted([
+        (a, a) for a, v in get_fonts().items()
+    ], key=lambda a: a[0])
+    return {
+        'choices': choices,
+    }
+
+
 def restricted_plugin_kwargs():
     from pretix.base.plugins import get_all_plugins
 
@@ -621,6 +633,17 @@ DEFAULTS = {
                         "used at most once over all of your events. This setting only affects future invoices. You can "
                         "use %Y (with century) %y (without century) to insert the year of the invoice, or %m and %d for "
                         "the day of month."),
+            validators=[
+                RegexValidator(
+                    # We actually allow more characters than we name in the error message since some of these characters
+                    # are in active use at the time of the introduction of this validation, so we can't really forbid
+                    # them, but we don't think they belong in an invoice number and don't want to advertise them.
+                    regex="^[a-zA-Z0-9-_%./,&:# ]+$",
+                    message=lazy(lambda *args: _('Please only use the characters {allowed} in this field.').format(
+                        allowed='A-Z, a-z, 0-9, -./:#'
+                    ), str)()
+                )
+            ],
         )
     },
     'invoice_numbers_prefix_cancellations': {
@@ -632,7 +655,41 @@ DEFAULTS = {
             label=_("Invoice number prefix for cancellations"),
             help_text=_("This will be prepended to invoice numbers of cancellations. If you leave this field empty, "
                         "the same numbering scheme will be used that you configured for regular invoices."),
+            validators=[
+                RegexValidator(
+                    # We actually allow more characters than we name in the error message since some of these characters
+                    # are in active use at the time of the introduction of this validation, so we can't really forbid
+                    # them, but we don't think they belong in an invoice number and don't want to advertise them.
+                    regex="^[a-zA-Z0-9-_%./,&:# ]+$",
+                    message=lazy(lambda *args: _('Please only use the characters {allowed} in this field.').format(
+                        allowed='A-Z, a-z, 0-9, -./:#'
+                    ), str)()
+                )
+            ],
         )
+    },
+    'invoice_renderer_highlight_order_code': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Highlight order code to make it stand out visibly"),
+            help_text=_("Only respected by some invoice renderers."),
+        )
+    },
+    'invoice_renderer_font': {
+        'default': 'Open Sans',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': lambda: dict(**invoice_font_kwargs()),
+        'form_kwargs': lambda: dict(
+            label=_('Font'),
+            help_text=_("Only respected by some invoice renderers."),
+            required=True,
+            **invoice_font_kwargs()
+        ),
     },
     'invoice_renderer': {
         'default': 'classic',  # default for new events is 'modern1'
@@ -835,6 +892,28 @@ DEFAULTS = {
                         "after the end of their payment deadline. This means that those tickets go back to "
                         "the pool and can be ordered by other people."),
         )
+    },
+    'payment_term_expire_delay_days': {
+        'default': '0',
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'form_kwargs': dict(
+            label=_('Expiration delay'),
+            help_text=_("The order will only actually expire this many days after the expiration date communicated "
+                        "to the customer. However, this will not delay beyond the \"last date of payments\" "
+                        "configured above, which is always enforced. The delay may also end on a weekend regardless "
+                        "of the other settings above."),
+            # Every order in between the official expiry date and the delayed expiry date has a performance penalty
+            # for the cron job, so we limit this feature to 30 days to prevent arbitrary numbers of orders needing
+            # to be checked.
+            min_value=0,
+            max_value=30,
+        ),
+        'serializer_kwargs': dict(
+            min_value=0,
+            max_value=30,
+        ),
     },
     'payment_pending_hidden': {
         'default': 'False',
@@ -1330,6 +1409,21 @@ DEFAULTS = {
             help_text=_("If you ask for a phone number, explain why you do so and what you will use the phone number for.")
         )
     },
+    'waiting_list_limit_per_user': {
+        'default': '1',
+        'type': int,
+        'serializer_class': serializers.IntegerField,
+        'form_class': forms.IntegerField,
+        'serializer_kwargs': dict(
+            min_value=1,
+        ),
+        'form_kwargs': dict(
+            label=_("Maximum number of entries per email address for the same product"),
+            min_value=1,
+            required=True,
+            widget=forms.NumberInput(),
+        )
+    },
     'show_checkin_number_user': {
         'default': 'False',
         'type': bool,
@@ -1337,7 +1431,7 @@ DEFAULTS = {
         'form_class': forms.BooleanField,
         'form_kwargs': dict(
             label=_("Show number of check-ins to customer"),
-            help_text=_('With this option enabled, your customers will be able how many times they entered '
+            help_text=_('With this option enabled, your customers will be able to see how many times they entered '
                         'the event. This is usually not necessary, but might be useful in combination with tickets '
                         'that are usable a specific number of times, so customers can see how many times they have '
                         'already been used. Exits or failed scans will not be counted, and the user will not see '
@@ -1946,8 +2040,8 @@ to your order for {event}.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_resend_all_links': {
         'type': LazyI18nString,
@@ -1962,8 +2056,8 @@ The list is as follows:
 
 {orders}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_free_attendee': {
         'type': LazyI18nString,
@@ -1978,8 +2072,8 @@ you have been registered for {event} successfully.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_free_attendee': {
         'type': bool,
@@ -1999,8 +2093,8 @@ no payment is required.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_placed_require_approval': {
         'type': LazyI18nString,
@@ -2017,8 +2111,8 @@ be patient and wait for our next email.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_placed': {
         'type': LazyI18nString,
@@ -2036,8 +2130,8 @@ of {total_with_currency}. Please complete your payment before {expire_date}.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_attachment_new_order': {
         'default': None,
@@ -2047,11 +2141,14 @@ Your {event} team"""))
             label=_('Attachment for new orders'),
             ext_whitelist=(".pdf",),
             max_size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT,
-            help_text=_('This file will be attached to the first email that we send for every new order. Therefore it will be '
-                        'combined with the "Placed order", "Free order", or "Received order" texts from above. It will be sent '
-                        'to both order contacts and attendees. You can use this e.g. to send your terms of service. Do not use '
-                        'it to send non-public information as this file might be sent before payment is confirmed or the order '
-                        'is approved. To avoid this vital email going to spam, you can only upload PDF files of up to {size} MB.').format(
+            help_text=format_lazy(
+                _(
+                    'This file will be attached to the first email that we send for every new order. Therefore it will be '
+                    'combined with the "Placed order", "Free order", or "Received order" texts from above. It will be sent '
+                    'to both order contacts and attendees. You can use this e.g. to send your terms of service. Do not use '
+                    'it to send non-public information as this file might be sent before payment is confirmed or the order '
+                    'is approved. To avoid this vital email going to spam, you can only upload PDF files of up to {size} MB.'
+                ),
                 size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT // (1024 * 1024),
             )
         ),
@@ -2080,8 +2177,8 @@ a ticket for {event} has been ordered for you.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_changed': {
         'type': LazyI18nString,
@@ -2096,8 +2193,8 @@ your order for {event} has been changed.
 You can view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_paid': {
         'type': LazyI18nString,
@@ -2114,8 +2211,8 @@ we successfully received your payment for {event}. Thank you!
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_paid_attendee': {
         'type': bool,
@@ -2134,8 +2231,8 @@ a ticket for {event} that has been ordered for you is now paid.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_days_order_expire_warning': {
         'form_class': forms.IntegerField,
@@ -2167,8 +2264,8 @@ your payment before {expire_date}.
 You can view the payment information and the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_pending_warning': {
         'type': LazyI18nString,
@@ -2184,8 +2281,8 @@ Please keep in mind that you are required to pay before {expire_date}.
 You can view the payment information and the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_incomplete_payment': {
         'type': LazyI18nString,
@@ -2204,8 +2301,8 @@ missing additional payment of **{pending_sum}**.
 You can view the payment information and the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_waiting_list': {
         'type': LazyI18nString,
@@ -2237,8 +2334,8 @@ as possible to the next person on the waiting list:
 
 {url_remove}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_canceled': {
         'type': LazyI18nString,
@@ -2255,8 +2352,8 @@ your order {code} for {event} has been canceled.
 You can view the details of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_approved': {
         'type': LazyI18nString,
@@ -2275,8 +2372,8 @@ You can select a payment method and perform the payment here:
 
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_approved_attendee': {
         'type': bool,
@@ -2295,8 +2392,8 @@ we approved a ticket ordered for you for {event}.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_approved_free': {
         'type': LazyI18nString,
@@ -2312,8 +2409,8 @@ at our event. As you only ordered free products, no payment is required.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_approved_free_attendee': {
         'type': bool,
@@ -2332,8 +2429,8 @@ we approved a ticket ordered for you for {event}.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_denied': {
         'type': LazyI18nString,
@@ -2351,8 +2448,8 @@ You can view the details of your order here:
 
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_text_order_custom_mail': {
         'type': LazyI18nString,
@@ -2361,8 +2458,8 @@ Your {event} team"""))
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_days_download_reminder': {
         'type': int,
@@ -2380,13 +2477,13 @@ Your {event} team"""))
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello {attendee_name},
 
-    you are registered for {event}.
+you are registered for {event}.
 
-    If you did not do so already, you can download your ticket here:
-    {url}
+If you did not do so already, you can download your ticket here:
+{url}
 
-    Best regards,
-    Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_download_reminder': {
         'type': LazyI18nString,
@@ -2401,8 +2498,8 @@ you bought a ticket for {event}.
 If you did not do so already, you can download your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_customer_registration': {
         'type': LazyI18nString,
@@ -2422,9 +2519,9 @@ This link is valid for one day.
 
 If you did not sign up yourself, please ignore this email.
 
-Best regards,
+Best regards,  
 
-Your {organizer} team"""))
+Your {organizer} team"""))  # noqa: W291
     },
     'mail_subject_customer_email_change': {
         'type': LazyI18nString,
@@ -2444,9 +2541,9 @@ This link is valid for one day.
 
 If you did not request this, please ignore this email.
 
-Best regards,
+Best regards,  
 
-Your {organizer} team"""))
+Your {organizer} team"""))  # noqa: W291
     },
     'mail_subject_customer_reset': {
         'type': LazyI18nString,
@@ -2466,9 +2563,9 @@ This link is valid for one day.
 
 If you did not request a new password, please ignore this email.
 
-Best regards,
+Best regards,  
 
-Your {organizer} team"""))
+Your {organizer} team"""))  # noqa: W291
     },
     'smtp_use_custom': {
         'default': 'False',
@@ -2591,6 +2688,15 @@ Your {organizer} team"""))
         'serializer_class': serializers.BooleanField,
         'form_kwargs': dict(
             label=_("Use round edges"),
+        )
+    },
+    'widget_use_native_spinners': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Use native spinners in the widget instead of custom ones for numeric inputs such as quantity."),
         )
     },
     'primary_font': {
@@ -3175,7 +3281,7 @@ def concatenation_for_salutation(d):
 
 def get_name_parts_localized(name_parts, key):
     value = name_parts.get(key, "")
-    if key == "salutation":
+    if key == "salutation" and value:
         return pgettext_lazy("person_name_salutation", value)
     return value
 
@@ -3320,6 +3426,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('full_name', _('Full name'), 2),
         ),
         'concatenation': lambda d: str(d.get('full_name', '')),
+        'concatenation_all_components': lambda d: str(d.get('full_name', '')) + " (\"" + d.get('calling_name', '') + "\")",
         'sample': {
             'full_name': pgettext_lazy('person_name_sample', 'John Doe'),
             'calling_name': pgettext_lazy('person_name_sample', 'John'),
@@ -3332,6 +3439,7 @@ PERSON_NAME_SCHEMES = OrderedDict([
             ('latin_transcription', _('Latin transcription'), 2),
         ),
         'concatenation': lambda d: str(d.get('full_name', '')),
+        'concatenation_all_components': lambda d: str(d.get('full_name', '')) + " (" + d.get('latin_transcription', '') + ")",
         'sample': {
             'full_name': '庄司',
             'latin_transcription': 'Shōji',
@@ -3348,6 +3456,9 @@ PERSON_NAME_SCHEMES = OrderedDict([
             str(p) for p in (d.get(key, '') for key in ["given_name", "family_name"]) if p
         ),
         'concatenation_for_salutation': concatenation_for_salutation,
+        'concatenation_all_components': lambda d: ' '.join(
+            str(p) for p in (get_name_parts_localized(d, key) for key in ["salutation", "given_name", "family_name"]) if p
+        ),
         'sample': {
             'salutation': pgettext_lazy('person_name_sample', 'Mr'),
             'given_name': pgettext_lazy('person_name_sample', 'John'),
@@ -3366,6 +3477,9 @@ PERSON_NAME_SCHEMES = OrderedDict([
             str(p) for p in (d.get(key, '') for key in ["title", "given_name", "family_name"]) if p
         ),
         'concatenation_for_salutation': concatenation_for_salutation,
+        'concatenation_all_components': lambda d: ' '.join(
+            str(p) for p in (get_name_parts_localized(d, key) for key in ["salutation", "title", "given_name", "family_name"]) if p
+        ),
         'sample': {
             'salutation': pgettext_lazy('person_name_sample', 'Mr'),
             'title': pgettext_lazy('person_name_sample', 'Dr'),
@@ -3390,6 +3504,13 @@ PERSON_NAME_SCHEMES = OrderedDict([
             str(d.get('degree', ''))
         ),
         'concatenation_for_salutation': concatenation_for_salutation,
+        'concatenation_all_components': lambda d: (
+            ' '.join(
+                str(p) for p in (get_name_parts_localized(d, key) for key in ["salutation", "title", "given_name", "family_name"]) if p
+            ) +
+            str((', ' if d.get('degree') else '')) +
+            str(d.get('degree', ''))
+        ),
         'sample': {
             'salutation': pgettext_lazy('person_name_sample', 'Mr'),
             'title': pgettext_lazy('person_name_sample', 'Dr'),
@@ -3487,8 +3608,10 @@ class SettingsSandbox:
     def __delattr__(self, key: str) -> None:
         del self._event.settings[self._convert_key(key)]
 
-    def get(self, key: str, default: Any = None, as_type: type = str):
-        return self._event.settings.get(self._convert_key(key), default=default, as_type=as_type)
+    def get(self, key: str, default: Any = None, as_type: type = str, binary_file: bool = False):
+        return self._event.settings.get(
+            self._convert_key(key), default=default, as_type=as_type, binary_file=binary_file
+        )
 
     def set(self, key: str, value: Any):
         self._event.settings.set(self._convert_key(key), value)

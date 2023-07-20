@@ -16,13 +16,10 @@ To use pretix, you will need the following things:
 * A periodic task runner, e.g. ``cron``
 
 * **A database**. This needs to be a SQL-based that is supported by Django. We highly recommend to either
-  go for **PostgreSQL** or **MySQL/MariaDB**. If you do not provide one, pretix will run on SQLite, which is useful
+  go for **PostgreSQL**. If you do not provide one, pretix will run on SQLite, which is useful
   for evaluation and development purposes.
 
   .. warning:: Do not ever use SQLite in production. It will break.
-
-  .. warning:: We recommend **PostgreSQL**. If you go for MySQL, make sure you run **MySQL 5.7 or newer** or
-               **MariaDB 10.2.7 or newer**.
 
 * A **reverse proxy**. pretix needs to deliver some static content to your users (e.g. CSS, images, ...). While pretix
   is capable of doing this, having this handled by a proper web server like **nginx** or **Apache** will be much

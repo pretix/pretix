@@ -296,6 +296,14 @@ class Voucher(LoggedModel):
         verbose_name=_("Shows hidden products that match this voucher"),
         default=True
     )
+    all_addons_included = models.BooleanField(
+        verbose_name=_("Offer all add-on products for free when redeeming this voucher"),
+        default=False
+    )
+    all_bundles_included = models.BooleanField(
+        verbose_name=_("Include all bundled products without a designated price when redeeming this voucher"),
+        default=False
+    )
 
     objects = ScopedManager(organizer='event__organizer')
 
@@ -494,7 +502,10 @@ class Voucher(LoggedModel):
         return seat
 
     def save(self, *args, **kwargs):
-        self.code = self.code.upper()
+        if self.code != self.code.upper():
+            self.code = self.code.upper()
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'code'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
         self.event.cache.set('vouchers_exist', True)
 

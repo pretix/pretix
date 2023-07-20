@@ -57,7 +57,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views.decorators.clickjacking import xframe_options_exempt
-from django.views.generic import TemplateView, View
+from django.views.generic import ListView, TemplateView, View
 
 from pretix.base.models import (
     CachedTicket, Checkin, GiftCard, Invoice, Order, OrderPosition, Quota,
@@ -241,7 +241,7 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        qs = self.order.positions.prefetch_related('issued_gift_cards').select_related('tax_rule')
+        qs = self.order.positions.prefetch_related('issued_gift_cards', 'owned_gift_cards').select_related('tax_rule')
         if self.request.event.settings.show_checkin_number_user:
             qs = qs.annotate(
                 checkin_count=Subquery(
@@ -456,7 +456,7 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
         self.request = request
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED or not self.order._can_be_paid():
+        if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED or self.order._can_be_paid() is not True:
             messages.error(request, _('The payment for this order cannot be continued.'))
             return redirect(self.get_order_url())
         if (not self.payment.payment_provider.payment_is_valid_session(request) or
@@ -526,7 +526,7 @@ class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
         self.request = request
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED or not self.order._can_be_paid():
+        if self.payment.state != OrderPayment.PAYMENT_STATE_CREATED or self.order._can_be_paid() is not True:
             messages.error(request, _('The payment for this order cannot be continued.'))
             return redirect(self.get_order_url())
         if (not self.payment.payment_provider.payment_is_valid_session(request) or
@@ -571,7 +571,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
         self.request = request
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) or not self.order._can_be_paid():
+        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_EXPIRED) or self.order._can_be_paid() is not True:
             messages.error(request, _('The payment method for this order cannot be changed.'))
             return redirect(self.get_order_url())
 
@@ -722,6 +722,8 @@ def can_generate_invoice(event, order, ignore_payments=False):
             )
         ) and (
             invoice_qualified(order)
+        ) and (
+            order.status in (Order.STATUS_PENDING, Order.STATUS_PAID)
         )
     )
     if not ignore_payments:
@@ -1129,6 +1131,53 @@ class OrderDownload(OrderDownloadMixin, EventViewMixin, OrderDetailMixin, AsyncA
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
+class OrderGiftCardDetails(EventViewMixin, OrderDetailMixin, ListView):
+    template_name = 'pretixpresale/event/order_giftcard.html'
+    context_object_name = 'transactions'
+    paginate_by = 50
+
+    @cached_property
+    def giftcard(self):
+        return GiftCard.objects.filter(
+            owner_ticket__order_id=self.order.pk
+        ).get(pk=self.kwargs['pk'])
+
+    def get_queryset(self):
+        return self.giftcard.transactions.order_by('-datetime', '-pk')
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            order=self.order,
+            giftcard=self.giftcard,
+            **kwargs,
+        )
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderPositionGiftCardDetails(EventViewMixin, OrderPositionDetailMixin, ListView):
+    template_name = 'pretixpresale/event/position_giftcard.html'
+    context_object_name = 'transactions'
+    paginate_by = 50
+
+    @cached_property
+    def giftcard(self):
+        return GiftCard.objects.filter(
+            Q(owner_ticket_id=self.position.pk) | Q(owner_ticket__addon_to_id=self.position.pk)
+        ).get(pk=self.kwargs['pk'])
+
+    def get_queryset(self):
+        return self.giftcard.transactions.order_by('-datetime', '-pk')
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            order=self.order,
+            position=self.position,
+            giftcard=self.giftcard,
+            **kwargs,
+        )
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
 class OrderPositionDownload(OrderDownloadMixin, EventViewMixin, OrderPositionDetailMixin, AsyncAction, View):
     task = generate
     known_errortypes = ['OrderError']
@@ -1188,7 +1237,7 @@ class InvoiceDownload(EventViewMixin, OrderDetailMixin, View):
         except FileNotFoundError:
             invoice_pdf_task.apply(args=(invoice.pk,))
             return self.get(request, *args, **kwargs)
-        resp['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(invoice.number)
+        resp['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(re.sub("[^a-zA-Z0-9-_.]+", "_", invoice.number))
         resp._csp_ignore = True  # Some browser's PDF readers do not work with CSP
         return resp
 
@@ -1314,7 +1363,7 @@ class OrderChangeMixin:
                     if items:
                         p.addon_form['categories'].append({
                             'category': iao.addon_category,
-                            'price_included': iao.price_included,
+                            'price_included': iao.price_included or (p.voucher_id and p.voucher.all_addons_included),
                             'multi_allowed': iao.multi_allowed,
                             'min_count': iao.min_count,
                             'max_count': iao.max_count,

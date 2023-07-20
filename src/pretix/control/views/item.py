@@ -1213,7 +1213,7 @@ class MetaDataEditorMixin:
                 f.instance.delete()
 
 
-class ItemCreate(EventPermissionRequiredMixin, CreateView):
+class ItemCreate(EventPermissionRequiredMixin, MetaDataEditorMixin, CreateView):
     form_class = ItemCreateForm
     template_name = 'pretixcontrol/item/create.html'
     permission = 'can_change_items'
@@ -1273,6 +1273,11 @@ class ItemCreate(EventPermissionRequiredMixin, CreateView):
     def form_invalid(self, form):
         messages.error(self.request, _('We could not save your changes. See below for details.'))
         return super().form_invalid(form)
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['meta_forms'] = self.meta_forms
+        return ctx
 
 
 class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataEditorMixin, UpdateView):

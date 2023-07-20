@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from arabic_reshaper import ArabicReshaper
+from django.utils.functional import SimpleLazyObject
 from PIL.Image import Resampling
 from reportlab.lib.utils import ImageReader
 
@@ -41,3 +43,9 @@ class ThumbnailingImageReader(ImageReader):
         # file handle if the file is a JPEG, and therefore does not respect the
         # (smaller) size of the modified image.
         return None
+
+
+reshaper = SimpleLazyObject(lambda: ArabicReshaper(configuration={
+    'delete_harakat': True,
+    'support_ligatures': False,
+}))

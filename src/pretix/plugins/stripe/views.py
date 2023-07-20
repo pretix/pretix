@@ -456,8 +456,10 @@ def paymentintent_webhook(event, event_json, paymentintent_id, rso):
 
 
 @event_permission_required('can_change_event_settings')
-@require_POST
 def oauth_disconnect(request, **kwargs):
+    if request.method != "POST":
+        return render(request, 'pretixplugins/stripe/oauth_disconnect.html', {})
+
     del request.event.settings.payment_stripe_publishable_key
     del request.event.settings.payment_stripe_publishable_test_key
     del request.event.settings.payment_stripe_connect_access_token

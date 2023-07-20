@@ -42,10 +42,10 @@ from collections import Counter
 from datetime import datetime, time, timedelta
 from decimal import Decimal
 from typing import Any, Dict, List, Union
+from zoneinfo import ZoneInfo
 
 import dateutil
 import pycountry
-import pytz
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models, transaction
@@ -82,6 +82,7 @@ from pretix.base.signals import order_gracefully_delete
 from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
 from ...helpers.format import format_map
+from ...helpers.names import build_name
 from ._transactions import (
     _fail, _transactions_mark_order_clean, _transactions_mark_order_dirty,
 )
@@ -460,14 +461,20 @@ class Order(LockModel, LoggedModel):
         return '{event}-{code}'.format(event=self.event.slug.upper(), code=self.code)
 
     def save(self, **kwargs):
-        if 'update_fields' in kwargs and 'last_modified' not in kwargs['update_fields']:
-            kwargs['update_fields'] = list(kwargs['update_fields']) + ['last_modified']
+        if 'update_fields' in kwargs:
+            kwargs['update_fields'] = {'last_modified'}.union(kwargs['update_fields'])
         if not self.code:
             self.assign_code()
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'code'}.union(kwargs['update_fields'])
         if not self.datetime:
             self.datetime = now()
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'datetime'}.union(kwargs['update_fields'])
         if not self.expires:
             self.set_expires()
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'expires'}.union(kwargs['update_fields'])
 
         is_new = not self.pk
         update_fields = kwargs.get('update_fields', [])
@@ -495,7 +502,7 @@ class Order(LockModel, LoggedModel):
 
     def set_expires(self, now_dt=None, subevents=None):
         now_dt = now_dt or now()
-        tz = pytz.timezone(self.event.settings.timezone)
+        tz = ZoneInfo(self.event.settings.timezone)
         mode = self.event.settings.get('payment_term_mode')
         if mode == 'days':
             exp_by_date = now_dt.astimezone(tz) + timedelta(days=self.event.settings.get('payment_term_days', as_type=int))
@@ -830,7 +837,7 @@ class Order(LockModel, LoggedModel):
     @property
     def is_expired_by_time(self):
         return (
-            self.status == Order.STATUS_PENDING and self.expires < now()
+            self.status == Order.STATUS_PENDING and not self.require_approval and self.expires < now()
             and not self.event.settings.get('payment_term_expire_automatically')
         )
 
@@ -869,7 +876,7 @@ class Order(LockModel, LoggedModel):
 
     @property
     def payment_term_last(self):
-        tz = pytz.timezone(self.event.settings.timezone)
+        tz = ZoneInfo(self.event.settings.timezone)
         term_last = self.event.settings.get('payment_term_last', as_type=RelativeDateWrapper)
         if term_last:
             if self.event.has_subevents:
@@ -888,6 +895,28 @@ class Order(LockModel, LoggedModel):
                 time(hour=23, minute=59, second=59)
             ), tz)
         return term_last
+
+    @property
+    def payment_term_expire_date(self):
+        delay = self.event.settings.get('payment_term_expire_delay_days', as_type=int)
+        if not delay:  # performance saver + backwards compatibility
+            return self.expires
+
+        term_last = self.payment_term_last
+        if term_last and self.expires > term_last:  # backwards compatibility
+            return self.expires
+
+        expires = self.expires.date() + timedelta(days=delay)
+
+        tz = ZoneInfo(self.event.settings.timezone)
+        expires = make_aware(datetime.combine(
+            expires,
+            time(hour=23, minute=59, second=59)
+        ), tz)
+        if term_last:
+            return min(expires, term_last)
+        else:
+            return expires
 
     def _can_be_paid(self, count_waitinglist=True, ignore_date=False, force=False) -> Union[bool, str]:
         error_messages = {
@@ -1229,7 +1258,7 @@ class QuestionAnswer(models.Model):
             try:
                 d = dateutil.parser.parse(self.answer)
                 if self.orderposition:
-                    tz = pytz.timezone(self.orderposition.order.event.settings.timezone)
+                    tz = ZoneInfo(self.orderposition.order.event.settings.timezone)
                     d = d.astimezone(tz)
                 return date_format(d, "SHORT_DATETIME_FORMAT")
             except ValueError:
@@ -1441,25 +1470,29 @@ class AbstractPosition(models.Model):
                 else self.variation.quotas.filter(subevent=self.subevent))
 
     def save(self, *args, **kwargs):
-        update_fields = kwargs.get('update_fields', [])
+        update_fields = kwargs.get('update_fields', set())
         if 'attendee_name_parts' in update_fields:
-            update_fields.append('attendee_name_cached')
-        self.attendee_name_cached = self.attendee_name
+            kwargs['update_fields'] = {'attendee_name_cached'}.union(kwargs['update_fields'])
+
+        name = self.attendee_name
+        if name != self.attendee_name_cached:
+            self.attendee_name_cached = name
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'attendee_name_cached'}.union(kwargs['update_fields'])
+
         if self.attendee_name_parts is None:
             self.attendee_name_parts = {}
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'attendee_name_parts'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
 
     @property
     def attendee_name(self):
-        if not self.attendee_name_parts:
-            return None
-        if '_legacy' in self.attendee_name_parts:
-            return self.attendee_name_parts['_legacy']
-        if '_scheme' in self.attendee_name_parts:
-            scheme = PERSON_NAME_SCHEMES[self.attendee_name_parts['_scheme']]
-        else:
-            scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme]
-        return scheme['concatenation'](self.attendee_name_parts).strip()
+        return build_name(self.attendee_name_parts, fallback_scheme=lambda: self.event.settings.name_scheme)
+
+    @property
+    def attendee_name_all_components(self):
+        return build_name(self.attendee_name_parts, "concatenation_all_components", fallback_scheme=lambda: self.event.settings.name_scheme)
 
     @property
     def state_name(self):
@@ -1830,6 +1863,8 @@ class OrderPayment(models.Model):
     def save(self, *args, **kwargs):
         if not self.local_id:
             self.local_id = (self.order.payments.aggregate(m=Max('local_id'))['m'] or 0) + 1
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'local_id'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
 
     def create_external_refund(self, amount=None, execution_date=None, info='{}'):
@@ -2028,6 +2063,8 @@ class OrderRefund(models.Model):
     def save(self, *args, **kwargs):
         if not self.local_id:
             self.local_id = (self.order.refunds.aggregate(m=Max('local_id'))['m'] or 0) + 1
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'local_id'}.union(kwargs['update_fields'])
         super().save(*args, **kwargs)
 
 
@@ -2446,14 +2483,20 @@ class OrderPosition(AbstractPosition):
                 assign_ticket_secret(
                     event=self.order.event, position=self, force_invalidate=True, save=False
                 )
+                if 'update_fields' in kwargs:
+                    kwargs['update_fields'] = {'secret'}.union(kwargs['update_fields'])
 
-        if not self.blocked:
+        if not self.blocked and self.blocked is not None:
             self.blocked = None
-        elif not isinstance(self.blocked, list) or any(not isinstance(b, str) for b in self.blocked):
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'blocked'}.union(kwargs['update_fields'])
+        elif self.blocked and (not isinstance(self.blocked, list) or any(not isinstance(b, str) for b in self.blocked)):
             raise TypeError("blocked needs to be a list of strings")
 
         if not self.pseudonymization_id:
             self.assign_pseudonymization_id()
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'pseudonymization_id'}.union(kwargs['update_fields'])
 
         if not self.get_deferred_fields():
             if Transaction.key(self) != self.__initial_transaction_key or self.canceled != self.__initial_canceled or not self.pk:
@@ -2834,8 +2877,12 @@ class CartPosition(AbstractPosition):
         if self.is_bundled:
             bundle = self.addon_to.item.bundles.filter(bundled_item=self.item, bundled_variation=self.variation).first()
             if bundle:
-                listed_price = bundle.designated_price
-                price_after_voucher = bundle.designated_price
+                if self.addon_to.voucher_id and self.addon_to.voucher.all_bundles_included:
+                    listed_price = Decimal('0.00')
+                    price_after_voucher = Decimal('0.00')
+                else:
+                    listed_price = bundle.designated_price
+                    price_after_voucher = bundle.designated_price
 
         if listed_price != self.listed_price or price_after_voucher != self.price_after_voucher:
             self.listed_price = listed_price
@@ -2935,10 +2982,17 @@ class InvoiceAddress(models.Model):
             self.order.touch()
 
         if self.name_parts:
-            self.name_cached = self.name
+            name = self.name
+            if self.name_cached != name:
+                self.name_cached = self.name
+                if 'update_fields' in kwargs:
+                    kwargs['update_fields'] = {'name_cached'}.union(kwargs['update_fields'])
         else:
-            self.name_cached = ""
-            self.name_parts = {}
+            if self.name_cached != "" or self.name_parts != {}:
+                self.name_cached = ""
+                self.name_parts = {}
+                if 'update_fields' in kwargs:
+                    kwargs['update_fields'] = {'name_cached', 'name_parts'}.union(kwargs['update_fields'])
         super().save(**kwargs)
 
     def describe(self):
@@ -2980,15 +3034,11 @@ class InvoiceAddress(models.Model):
 
     @property
     def name(self):
-        if not self.name_parts:
-            return ""
-        if '_legacy' in self.name_parts:
-            return self.name_parts['_legacy']
-        if '_scheme' in self.name_parts:
-            scheme = PERSON_NAME_SCHEMES[self.name_parts['_scheme']]
-        else:
-            raise TypeError("Invalid name given.")
-        return scheme['concatenation'](self.name_parts).strip()
+        return build_name(self.name_parts, fallback_scheme=lambda: self.order.event.settings.name_scheme) or ""
+
+    @property
+    def name_all_components(self):
+        return build_name(self.name_parts, "concatenation_all_components", fallback_scheme=lambda: self.order.event.settings.name_scheme) or ""
 
     def for_js(self):
         d = {}
@@ -3088,11 +3138,7 @@ class BlockedTicketSecret(models.Model):
     updated = models.DateTimeField(auto_now=True)
 
     class Meta:
-        if 'mysql' not in settings.DATABASES['default']['ENGINE']:
-            # MySQL does not support indexes on TextField(). Django knows this and just ignores db_index, but it will
-            # not silently ignore the UNIQUE index, causing this table to fail. I'm so glad we're deprecating MySQL
-            # in a few months, so we'll just live without an unique index until then.
-            unique_together = (('event', 'secret'),)
+        unique_together = (('event', 'secret'),)
 
 
 @receiver(post_delete, sender=CachedTicket)

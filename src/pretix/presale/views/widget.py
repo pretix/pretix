@@ -26,9 +26,9 @@ import logging
 from collections import defaultdict
 from datetime import date, datetime, timedelta
 from urllib.parse import urljoin
+from zoneinfo import ZoneInfo
 
 import isoweek
-import pytz
 from compressor.filters.jsmin import rJSMinFilter
 from django.conf import settings
 from django.contrib.staticfiles import finders
@@ -212,11 +212,14 @@ def price_dict(item, price):
     }
 
 
-def get_picture(event, picture):
-    try:
-        thumb = get_thumbnail(picture.name, '60x60^').thumb.url
-    except:
-        logger.exception(f'Failed to create thumbnail of {picture.name}')
+def get_picture(event, picture, size=None):
+    thumb = None
+    if size:
+        try:
+            thumb = get_thumbnail(picture.name, size).thumb.url
+        except:
+            logger.exception(f'Failed to create thumbnail of {picture.name}')
+    if not thumb:
         thumb = default_storage.url(picture.name)
     return urljoin(build_absolute_uri(event, 'presale:event.index'), thumb)
 
@@ -264,7 +267,8 @@ class WidgetAPIProductList(EventListMixin, View):
                     {
                         'id': item.pk,
                         'name': str(item.name),
-                        'picture': get_picture(self.request.event, item.picture) if item.picture else None,
+                        'picture': get_picture(self.request.event, item.picture, '60x60^') if item.picture else None,
+                        'picture_fullsize': get_picture(self.request.event, item.picture) if item.picture else None,
                         'description': str(rich_text(item.description, safelinks=False)) if item.description else None,
                         'has_variations': item.has_variations,
                         'require_voucher': item.require_voucher,
@@ -438,7 +442,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 event = ev.event
             else:
                 event = ev
-            tz = pytz.timezone(e['timezone'])
+            tz = ZoneInfo(e['timezone'])
             time = date_format(ev.date_from.astimezone(tz), 'TIME_FORMAT') if e.get('time') and event.settings.show_times else None
             if time and ev.date_to and ev.date_from.astimezone(tz).date() == ev.date_to.astimezone(tz).date() and event.settings.show_date_to:
                 time += ' – ' + date_format(ev.date_to.astimezone(tz), 'TIME_FORMAT')
@@ -626,7 +630,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 data['events'] = []
                 qs = self._get_event_queryset()
                 for event in qs:
-                    tz = pytz.timezone(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
+                    tz = ZoneInfo(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
                     if event.has_subevents:
                         dr = daterange(
                             event.min_from.astimezone(tz),
@@ -668,6 +672,7 @@ class WidgetAPIProductList(EventListMixin, View):
         data = {
             'currency': request.event.currency,
             'display_net_prices': request.event.settings.display_net_prices,
+            'use_native_spinners': request.event.settings.widget_use_native_spinners,
             'show_variations_expanded': request.event.settings.show_variations_expanded,
             'waiting_list_enabled': request.event.settings.waiting_list_enabled,
             'voucher_explanation_text': str(rich_text(request.event.settings.voucher_explanation_text, safelinks=False)),
@@ -689,7 +694,14 @@ class WidgetAPIProductList(EventListMixin, View):
         data['date_range'] = self._get_date_range(ev, request.event)
         fail = False
 
+        vouchers_exist = self.request.event.get_cache().get('vouchers_exist')
+        if vouchers_exist is None:
+            vouchers_exist = self.request.event.vouchers.exists()
+            self.request.event.get_cache().set('vouchers_exist', vouchers_exist)
+        data['vouchers_exist'] = vouchers_exist
+
         if not ev.presale_is_running:
+            data['vouchers_exist'] = False
             if ev.presale_has_ended:
                 if request.event.settings.presale_has_ended_text:
                     data['error'] = str(request.event.settings.presale_has_ended_text)
@@ -741,6 +753,7 @@ class WidgetAPIProductList(EventListMixin, View):
             data['items_by_category'] = []
             data['display_add_to_cart'] = False
             data['itemnum'] = 0
+            data['vouchers_exist'] = False
 
         data['has_seating_plan'] = ev.seating_plan is not None
         data['has_seating_plan_waitinglist'] = False
@@ -758,12 +771,6 @@ class WidgetAPIProductList(EventListMixin, View):
                     if i.cached_availability[0] != Quota.AVAILABILITY_OK:
                         data['has_seating_plan_waitinglist'] = True
                         break
-
-        vouchers_exist = self.request.event.get_cache().get('vouchers_exist')
-        if vouchers_exist is None:
-            vouchers_exist = self.request.event.vouchers.exists()
-            self.request.event.get_cache().set('vouchers_exist', vouchers_exist)
-        data['vouchers_exist'] = vouchers_exist
 
         if "cart_id" not in request.GET:
             cache.set(cache_key, data, 10)

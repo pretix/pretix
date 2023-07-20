@@ -304,8 +304,7 @@ multiple events. Receivers should return a subclass of pretix.base.exporter.Base
 The ``sender`` keyword argument will contain an organizer.
 """
 
-validate_order = EventPluginSignal(
-)
+validate_order = EventPluginSignal()
 """
 Arguments: ``payments``, ``positions``, ``email``, ``locale``, ``invoice_address``,
 ``meta_info``, ``customer``
@@ -319,6 +318,18 @@ As with all event-plugin signals, the ``sender`` keyword argument will contain t
 
 **DEPRECTATION:** Stop listening to the ``payment_provider`` attribute, it will be removed
 in the future, as the ``payments`` attribute gives more information.
+"""
+
+order_valid_if_pending = EventPluginSignal()
+"""
+Arguments: ``payments``, ``positions``, ``email``, ``locale``, ``invoice_address``,
+``meta_info``, ``customer``
+
+This signal is sent out when the user tries to confirm the order, before we actually create
+the order. It allows you to set the ``valid_if_pending`` of the order even before it is
+created. Whenever any plugin returns ``True``, the order will be valid if pending.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
 validate_cart = EventPluginSignal()
@@ -578,6 +589,20 @@ All plugins that are installed may send fields for the global settings form, as
 an OrderedDict of (setting name, form field).
 """
 
+gift_card_transaction_display = django.dispatch.Signal()
+"""
+Arguments: ``transaction``, ``customer_facing``
+
+To display an instance of the ``GiftCardTransaction`` model to a human user,
+``pretix.base.signals.gift_card_transaction_display`` will be sent out with a ``transaction`` argument.
+The ``customer_facing`` argument specifies whether the HTML will be shown to an end-user or if it is being
+used in the backend.
+
+The first received response that is not ``None`` will be used to display the log entry
+to the user. The receivers are expected to return a string (that might be marked with ``mark_safe`` from Django if
+it contains HTML).
+"""
+
 order_fee_calculation = EventPluginSignal()
 """
 Arguments: ``positions``, ``invoice_address``, ``meta_info``, ``total``, ``gift_cards``, ``payment_requests``
@@ -761,4 +786,24 @@ This signal is sent out to collect serializable settings fields for the API. You
 return a dictionary mapping names of attributes in the settings store to DRF serializer field instances.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+customer_created = GlobalSignal()
+"""
+Arguments: ``customer``
+
+This signal is sent out every time a customer account is created. The ``customer``
+object is given as the first argument.
+
+The ``sender`` keyword argument will contain the organizer.
+"""
+
+customer_signed_in = GlobalSignal()
+"""
+Arguments: ``customer``
+
+This signal is sent out every time a customer signs in. The ``customer`` object
+is given as the first argument.
+
+The ``sender`` keyword argument will contain the organizer.
 """

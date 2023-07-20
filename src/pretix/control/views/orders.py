@@ -367,7 +367,7 @@ class OrderDetail(OrderView):
             'item', 'variation', 'addon_to', 'tax_rule', 'used_membership', 'used_membership__membership_type',
             'discount',
         ).prefetch_related(
-            'item__questions', 'issued_gift_cards', 'linked_media',
+            'item__questions', 'issued_gift_cards', 'owned_gift_cards', 'linked_media',
             Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options').select_related('question')),
             Prefetch('all_checkins', queryset=Checkin.all.select_related('list').order_by('datetime')),
         ).order_by('positionid')
@@ -1512,7 +1512,7 @@ class InvoiceDownload(EventPermissionRequiredMixin, View):
             invoice_pdf_task.apply(args=(self.invoice.pk,))
             return self.get(request, *args, **kwargs)
 
-        resp['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(self.invoice.number)
+        resp['Content-Disposition'] = 'inline; filename="{}.pdf"'.format(re.sub("[^a-zA-Z0-9-_.]+", "_", self.invoice.number))
         resp._csp_ignore = True  # Some browser's PDF readers do not work with CSP
         return resp
 
@@ -1918,7 +1918,7 @@ class OrderContactChange(OrderView):
                     'pretix.event.order.contact.changed',
                     data={
                         'old_email': old_email,
-                        'new_email': self.form.cleaned_data['email'],
+                        'new_email': self.form.cleaned_data.get('email'),
                     },
                     user=self.request.user,
                 )
@@ -1930,7 +1930,7 @@ class OrderContactChange(OrderView):
                     'pretix.event.order.phone.changed',
                     data={
                         'old_phone': old_phone,
-                        'new_phone': self.form.cleaned_data['phone'],
+                        'new_phone': self.form.cleaned_data.get('phone'),
                     },
                     user=self.request.user,
                 )
@@ -2261,8 +2261,13 @@ class ExportMixin:
     @cached_property
     def exporters(self):
         responses = register_data_exporters.send(self.request.event)
+        raw_exporters = [response(self.request.event, self.request.organizer) for r, response in responses if response]
+        raw_exporters = [
+            ex for ex in raw_exporters
+            if ex.available_for_user(self.request.user if self.request.user and self.request.user.is_authenticated else None)
+        ]
         return sorted(
-            [response(self.request.event, self.request.organizer) for r, response in responses if response],
+            raw_exporters,
             key=lambda ex: (0 if ex.category else 1, ex.category or "", 0 if ex.featured else 1, str(ex.verbose_name).lower())
         )
 

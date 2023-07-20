@@ -46,6 +46,10 @@ from django.urls import reverse
 from django.utils.functional import SimpleLazyObject
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.safestring import mark_safe
+from markdown import Extension
+from markdown.inlinepatterns import SubstituteTagInlineProcessor
+from markdown.postprocessors import Postprocessor
+from markdown.treeprocessors import UnescapeTreeprocessor
 from tlds import tld_set
 
 register = template.Library()
@@ -105,6 +109,8 @@ ALLOWED_PROTOCOLS = ['http', 'https', 'mailto', 'tel']
 URL_RE = SimpleLazyObject(lambda: build_url_re(tlds=sorted(tld_set, key=len, reverse=True)))
 
 EMAIL_RE = SimpleLazyObject(lambda: build_email_re(tlds=sorted(tld_set, key=len, reverse=True)))
+
+DOT_ESCAPE = "|escaped-dot-sGnY9LMK|"
 
 
 def safelink_callback(attrs, new=False):
@@ -168,6 +174,124 @@ def abslink_callback(attrs, new=False):
     return attrs
 
 
+class EmailNl2BrExtension(Extension):
+    """
+    In emails (mostly for backwards-compatibility), we do not follow GitHub Flavored Markdown in preserving newlines.
+    Instead, we follow the CommonMark specification:
+
+    "A line ending (not in a code span or HTML tag) that is preceded by two or more spaces and does not occur at the
+    end of a block is parsed as a hard line break (rendered in HTML as a <br /> tag)"
+    """
+    BR_RE = r'  \n'
+
+    def extendMarkdown(self, md):
+        br_tag = SubstituteTagInlineProcessor(self.BR_RE, 'br')
+        md.inlinePatterns.register(br_tag, 'nl', 5)
+
+
+class LinkifyPostprocessor(Postprocessor):
+    def __init__(self, linker):
+        self.linker = linker
+        super().__init__()
+
+    def run(self, text):
+        return self.linker.linkify(text)
+
+
+class CleanPostprocessor(Postprocessor):
+    def __init__(self, tags, attributes, protocols, strip):
+        self.tags = tags
+        self.attributes = attributes
+        self.protocols = protocols
+        self.strip = strip
+        super().__init__()
+
+    def run(self, text):
+        return bleach.clean(
+            text,
+            tags=self.tags,
+            attributes=self.attributes,
+            protocols=self.protocols,
+            strip=self.strip
+        )
+
+
+class CustomUnescapeTreeprocessor(UnescapeTreeprocessor):
+    """
+    This un-escapes everything except \\.
+    """
+
+    def _unescape(self, m):
+        if m.group(1) == "46":  # 46 is the ASCII position of .
+            return DOT_ESCAPE
+        return chr(int(m.group(1)))
+
+
+class CustomUnescapePostprocessor(Postprocessor):
+    """
+    Restore escaped .
+    """
+
+    def run(self, text):
+        return text.replace(DOT_ESCAPE, ".")
+
+
+class LinkifyAndCleanExtension(Extension):
+    r"""
+    We want to do:
+
+    input --> markdown --> bleach clean --> linkify --> output
+
+    Internally, the markdown library does:
+
+    source --> parse --> (tree|inline)processors --> serializing --> postprocessors
+
+    All escaped characters such as \. will be turned to something like <STX>46<ETX> in the processors
+    step and then will be converted to . back again in the last tree processor, before serialization.
+    Therefore, linkify does not see the escaped character anymore. This is annoying for the one case
+    where you want to type "rich_text.py" and *not* have it turned into a link, since you can't type
+    "rich_text\.py" either.
+
+    A simple solution would be to run linkify before markdown, but that may cause other issues when
+    linkify messes with the markdown syntax and it makes handling our attributes etc. harder.
+
+    So we do a weird hack where we modify the unescape processor to unescape everything EXCEPT for the
+    dot and then unescape that one manually after linkify. However, to make things even harder, the bleach
+    clean step removes any invisible characters, so we need to cheat a bit more.
+    """
+
+    def __init__(self, linker, tags, attributes, protocols, strip):
+        self.linker = linker
+        self.tags = tags
+        self.attributes = attributes
+        self.protocols = protocols
+        self.strip = strip
+        super().__init__()
+
+    def extendMarkdown(self, md):
+        md.treeprocessors.deregister('unescape')
+        md.treeprocessors.register(
+            CustomUnescapeTreeprocessor(md),
+            'unescape',
+            0
+        )
+        md.postprocessors.register(
+            CleanPostprocessor(self.tags, self.attributes, self.protocols, self.strip),
+            'clean',
+            2
+        )
+        md.postprocessors.register(
+            LinkifyPostprocessor(self.linker),
+            'linkify',
+            1
+        )
+        md.postprocessors.register(
+            CustomUnescapePostprocessor(self.linker),
+            'unescape_dot',
+            0
+        )
+
+
 def markdown_compile_email(source):
     linker = bleach.Linker(
         url_re=URL_RE,
@@ -175,18 +299,20 @@ def markdown_compile_email(source):
         callbacks=DEFAULT_CALLBACKS + [truelink_callback, abslink_callback],
         parse_email=True
     )
-    return linker.linkify(bleach.clean(
-        markdown.markdown(
-            source,
-            extensions=[
-                'markdown.extensions.sane_lists',
-                #  'markdown.extensions.nl2br' # disabled for backwards-compatibility
-            ]
-        ),
-        tags=ALLOWED_TAGS,
-        attributes=ALLOWED_ATTRIBUTES,
-        protocols=ALLOWED_PROTOCOLS,
-    ))
+    return markdown.markdown(
+        source,
+        extensions=[
+            'markdown.extensions.sane_lists',
+            EmailNl2BrExtension(),
+            LinkifyAndCleanExtension(
+                linker,
+                tags=ALLOWED_TAGS,
+                attributes=ALLOWED_ATTRIBUTES,
+                protocols=ALLOWED_PROTOCOLS,
+                strip=False,
+            )
+        ]
+    )
 
 
 class SnippetExtension(markdown.extensions.Extension):
@@ -196,23 +322,24 @@ class SnippetExtension(markdown.extensions.Extension):
         md.parser.blockprocessors.deregister('quote')
 
 
-def markdown_compile(source, snippet=False):
+def markdown_compile(source, linker, snippet=False):
     tags = ALLOWED_TAGS_SNIPPET if snippet else ALLOWED_TAGS
     exts = [
         'markdown.extensions.sane_lists',
-        'markdown.extensions.nl2br'
+        'markdown.extensions.nl2br',
+        LinkifyAndCleanExtension(
+            linker,
+            tags=tags,
+            attributes=ALLOWED_ATTRIBUTES,
+            protocols=ALLOWED_PROTOCOLS,
+            strip=snippet,
+        )
     ]
     if snippet:
         exts.append(SnippetExtension())
-    return bleach.clean(
-        markdown.markdown(
-            source,
-            extensions=exts
-        ),
-        strip=snippet,
-        tags=tags,
-        attributes=ALLOWED_ATTRIBUTES,
-        protocols=ALLOWED_PROTOCOLS,
+    return markdown.markdown(
+        source,
+        extensions=exts
     )
 
 
@@ -228,7 +355,7 @@ def rich_text(text: str, **kwargs):
         callbacks=DEFAULT_CALLBACKS + ([truelink_callback, safelink_callback] if kwargs.get('safelinks', True) else [truelink_callback, abslink_callback]),
         parse_email=True
     )
-    body_md = linker.linkify(markdown_compile(text))
+    body_md = markdown_compile(text, linker)
     return mark_safe(body_md)
 
 
@@ -244,5 +371,5 @@ def rich_text_snippet(text: str, **kwargs):
         callbacks=DEFAULT_CALLBACKS + ([truelink_callback, safelink_callback] if kwargs.get('safelinks', True) else [truelink_callback, abslink_callback]),
         parse_email=True
     )
-    body_md = linker.linkify(markdown_compile(text, snippet=True))
+    body_md = markdown_compile(text, linker, snippet=True)
     return mark_safe(body_md)

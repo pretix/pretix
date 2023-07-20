@@ -38,10 +38,10 @@ from collections import defaultdict
 from datetime import date, datetime, time, timedelta
 from functools import reduce
 from urllib.parse import quote, urlencode
+from zoneinfo import ZoneInfo
 
 import dateutil
 import isoweek
-import pytz
 from django.conf import settings
 from django.core.cache import caches
 from django.db.models import Exists, Max, Min, OuterRef, Prefetch, Q
@@ -392,7 +392,7 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         for event in ctx['events']:
-            event.tzname = pytz.timezone(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
+            event.tzname = ZoneInfo(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
             if event.has_subevents:
                 event.daterange = daterange(
                     event.min_from.astimezone(event.tzname),
@@ -506,7 +506,7 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
                 continue
 
         timezones.add(s.timezone)
-        tz = pytz.timezone(s.timezone)
+        tz = ZoneInfo(s.timezone)
         datetime_from = se.date_from.astimezone(tz)
         date_from = datetime_from.date()
         if s.show_date_to and se.date_to:
@@ -623,8 +623,8 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
             raise Http404()
 
         tz = get_current_timezone()
-        before = tz.localize(datetime(self.year, self.month, 1, 0, 0, 0)) - timedelta(days=1)
-        after = tz.localize(datetime(self.year, self.month, ndays, 0, 0, 0)) + timedelta(days=1)
+        before = datetime(self.year, self.month, 1, 0, 0, 0, tzinfo=tz) - timedelta(days=1)
+        after = datetime(self.year, self.month, ndays, 0, 0, 0, tzinfo=tz) + timedelta(days=1)
 
         ctx['date'] = date(self.year, self.month, 1)
         ctx['before'] = before
@@ -700,12 +700,12 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
         tz = get_current_timezone()
         week = isoweek.Week(self.year, self.week)
-        before = tz.localize(datetime(
-            week.monday().year, week.monday().month, week.monday().day, 0, 0, 0,
-        )) - timedelta(days=1)
-        after = tz.localize(datetime(
-            week.sunday().year, week.sunday().month, week.sunday().day, 0, 0, 0,
-        )) + timedelta(days=1)
+        before = datetime(
+            week.monday().year, week.monday().month, week.monday().day, 0, 0, 0, tzinfo=tz,
+        ) - timedelta(days=1)
+        after = datetime(
+            week.sunday().year, week.sunday().month, week.sunday().day, 0, 0, 0, tzinfo=tz,
+        ) + timedelta(days=1)
 
         ctx['date'] = week.monday()
         ctx['before'] = before
@@ -827,12 +827,12 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         ctx = super().get_context_data()
 
         tz = get_current_timezone()
-        before = tz.localize(datetime(
-            self.date.year, self.date.month, self.date.day, 0, 0, 0,
-        )) - timedelta(days=1)
-        after = tz.localize(datetime(
-            self.date.year, self.date.month, self.date.day, 0, 0, 0,
-        )) + timedelta(days=1)
+        before = datetime(
+            self.date.year, self.date.month, self.date.day, 0, 0, 0, tzinfo=tz,
+        ) - timedelta(days=1)
+        after = datetime(
+            self.date.year, self.date.month, self.date.day, 0, 0, 0, tzinfo=tz,
+        ) + timedelta(days=1)
 
         ctx['date'] = self.date
         ctx['cal_tz'] = self.tz

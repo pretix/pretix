@@ -33,7 +33,7 @@ from django.views.generic import FormView, TemplateView
 from pretix.base.models import Quota, SubEvent
 from pretix.base.templatetags.urlreplace import url_replace
 from pretix.multidomain.urlreverse import eventreverse
-from pretix.presale.views import EventViewMixin
+from pretix.presale.views import EventViewMixin, iframe_entry_view_wrapper
 
 from ...base.i18n import get_language_without_region
 from ...base.models import Voucher, WaitingListEntry
@@ -42,6 +42,7 @@ from . import allow_frame_if_namespaced
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
+@method_decorator(iframe_entry_view_wrapper, 'dispatch')
 class WaitingView(EventViewMixin, FormView):
     template_name = 'pretixpresale/event/waitinglist.html'
     form_class = WaitingListForm
@@ -126,6 +127,7 @@ class WaitingView(EventViewMixin, FormView):
             return redirect(self.get_index_url())
 
         form.save()
+        form.instance.log_action("pretix.event.orders.waitinglist.added")
         messages.success(self.request, _("We've added you to the waiting list. You will receive "
                                          "an email as soon as this product gets available again."))
         return super().form_valid(form)

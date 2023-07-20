@@ -56,7 +56,9 @@ from django.views.generic import TemplateView
 from django_scopes import scopes_disabled
 from paypalcheckoutsdk import orders as pp_orders, payments as pp_payments
 
-from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
+from pretix.base.models import (
+    Event, Order, OrderPayment, OrderRefund, Quota, TaxRule,
+)
 from pretix.base.payment import PaymentException
 from pretix.base.services.cart import add_payment_to_cart, get_fees
 from pretix.base.settings import GlobalSettingsObject
@@ -158,8 +160,12 @@ class XHRView(View):
                 'info_data': {},
             }]
 
-            for fee in get_fees(request.event, request, cart_total, None, simulated_payments, get_cart(request)):
-                cart_total += fee.value
+            try:
+                for fee in get_fees(request.event, request, cart_total, None, simulated_payments, get_cart(request)):
+                    cart_total += fee.value
+            except TaxRule.SaleNotAllowed:
+                # ignore for now, will fail on order creation
+                pass
 
             total_remaining = cart_total
             for p in multi_use_cart_payments:

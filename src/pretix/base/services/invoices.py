@@ -348,7 +348,7 @@ def generate_cancellation(invoice: Invoice, trigger_pdf=True):
     cancellation.prefix = None
     cancellation.refers = invoice
     cancellation.is_cancellation = True
-    cancellation.date = timezone.now().date()
+    cancellation.date = timezone.now().astimezone(invoice.event.timezone).date()
     cancellation.payment_provider_text = ''
     cancellation.payment_provider_stamp = ''
     cancellation.file = None
@@ -510,7 +510,7 @@ def send_invoices_to_organizer(sender, **kwargs):
         with transaction.atomic():
             qs = Invoice.objects.filter(
                 sent_to_organizer__isnull=True
-            ).prefetch_related('event').select_for_update(of=OF_SELF, skip_locked=connection.features.has_select_for_update_skip_locked)
+            ).prefetch_related('event', 'order').select_for_update(of=OF_SELF, skip_locked=connection.features.has_select_for_update_skip_locked)
             for i in qs[:batch_size]:
                 if i.event.settings.invoice_email_organizer:
                     with language(i.event.settings.locale):
@@ -519,11 +519,12 @@ def send_invoices_to_organizer(sender, **kwargs):
                             subject=_('New invoice: {number}').format(number=i.number),
                             template=LazyI18nString.from_gettext(_(
                                 'Hello,\n\n'
-                                'a new invoice for {event} has been created, see attached.\n\n'
+                                'a new invoice for order {order} at {event} has been created, see attached.\n\n'
                                 'We are sending this email because you configured us to do so in your event settings.'
                             )),
                             context={
                                 'event': str(i.event),
+                                'order': str(i.order),
                             },
                             locale=i.event.settings.locale,
                             event=i.event,

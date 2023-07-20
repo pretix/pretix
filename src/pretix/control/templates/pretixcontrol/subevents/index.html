@@ -130,7 +130,10 @@
                             </td>
                             <td>
                                 <strong><a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}?returnto={{ request.GET.urlencode|urlencode }}">
-                                    {{ s.name }}</a></strong>
+                                    {{ s.name }}</a></strong><br>
+                                <small class="text-muted">
+                                    #{{ s.pk }}
+                                </small>
                             </td>
                             <td>
                                 {{ s.get_date_from_display }}<br>

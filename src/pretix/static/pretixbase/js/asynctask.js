@@ -20,7 +20,7 @@ function async_task_check() {
     );
 }
 
-function async_task_check_callback(data, jqXHR, status) {
+function async_task_check_callback(data, textStatus, jqXHR) {
     "use strict";
     if (data.ready && data.redirect) {
         if (async_task_is_download && data.success) {
@@ -34,6 +34,21 @@ function async_task_check_callback(data, jqXHR, status) {
     } else if (typeof data.percentage === "number") {
         $("#loadingmodal .progress").show();
         $("#loadingmodal .progress .progress-bar").css("width", data.percentage + "%");
+        if (typeof data.steps === "object" && Array.isArray(data.steps)) {
+            var $steps = $("#loadingmodal .steps");
+            $steps.html("").show()
+            for (var step of data.steps) {
+                $steps.append(
+                    $("<span>").addClass("fa fa-fw")
+                        .toggleClass("fa-check text-success", step.done)
+                        .toggleClass("fa-cog fa-spin text-muted", !step.done)
+                ).append(
+                    $("<span>").text(step.label)
+                ).append(
+                    $("<br>")
+                )
+            }
+        }
     }
     async_task_timeout = window.setTimeout(async_task_check, 250);
 
@@ -267,6 +282,7 @@ var waitingDialog = {
         "use strict";
         $("#loadingmodal h3").html(message);
         $("#loadingmodal .progress").hide();
+        $("#loadingmodal .steps").hide();
         $("body").addClass("loading");
         $("#loadingmodal").removeAttr("hidden");
     },

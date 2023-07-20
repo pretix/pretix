@@ -19,20 +19,22 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from datetime import timedelta
+from datetime import datetime, timedelta, timezone
 from decimal import Decimal
 
 import pytest
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
-from pretix.base.models import Order, Organizer, ReusableMedium
+from pretix.base.models import (
+    Event, GiftCardAcceptance, Order, Organizer, ReusableMedium,
+)
 
 
 @pytest.fixture
 def giftcard(organizer):
     gc = organizer.issued_gift_cards.create(secret="ABCDEF", currency="EUR")
-    gc.transactions.create(value=Decimal('23.00'))
+    gc.transactions.create(value=Decimal('23.00'), acceptor=organizer)
     return gc
 
 
@@ -49,9 +51,26 @@ def organizer2():
 
 @pytest.fixture
 def giftcard2(organizer2):
-    gc = organizer2.issued_gift_cards.create(secret="ABCDEF", currency="EUR")
-    gc.transactions.create(value=Decimal('23.00'))
+    gc = organizer2.issued_gift_cards.create(secret="IJKLMNOP", currency="EUR")
+    gc.transactions.create(value=Decimal('23.00'), acceptor=organizer2)
     return gc
+
+
+@pytest.fixture
+def medium2(organizer2):
+    m = organizer2.reusable_media.create(identifier="ABCDEFGH", type="barcode", active=True)
+    return m
+
+
+@pytest.fixture
+@scopes_disabled()
+def org2_event(organizer2):
+    e = Event.objects.create(
+        organizer=organizer2, name='Dummy2', slug='dummy2',
+        date_from=datetime(2017, 12, 27, 10, 0, 0, tzinfo=timezone.utc),
+        plugins='pretix.plugins.banktransfer,pretix.plugins.ticketoutputpdf'
+    )
+    return e
 
 
 @pytest.fixture
@@ -67,6 +86,7 @@ def customer(organizer, event):
 
 TEST_MEDIUM_RES = {
     "id": 1,
+    "organizer": "dummy",
     "identifier": "ABCDEFGH",
     "type": "barcode",
     "active": True,
@@ -121,9 +141,14 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
         medium.linked_giftcard = giftcard
         medium.customer = customer
         medium.save()
+        giftcard.owner_ticket = op
+        giftcard.save()
         resp = token_client.get(
-            '/api/v1/organizers/{}/reusablemedia/{}/?expand=linked_giftcard&expand=linked_orderposition&expand=customer'.format(
-                organizer.slug, medium.pk))
+            '/api/v1/organizers/{}/reusablemedia/{}/?expand=linked_giftcard&expand='
+            'linked_giftcard.owner_ticket&expand=linked_orderposition&expand=customer'.format(
+                organizer.slug, medium.pk
+            )
+        )
         assert resp.status_code == 200
 
         assert resp.data["customer"] == {
@@ -183,7 +208,9 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
             "currency": "EUR",
             "testmode": False,
             "expires": None,
-            "conditions": None
+            "conditions": None,
+            "owner_ticket": resp.data["linked_orderposition"],
+            "issuer": "dummy",
         }
 
 
@@ -350,3 +377,64 @@ def test_medium_autocreate(token_client, organizer):
     )
     assert resp.status_code == 200
     assert resp.data["result"] is None
+
+
+@pytest.mark.django_db
+def test_medium_lookup_cross_organizer(token_client, organizer, organizer2, org2_event, medium2, giftcard2):
+    with scopes_disabled():
+        o = Order.objects.create(
+            code='FOO', event=org2_event, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, datetime=now(), expires=now() + timedelta(days=10),
+            total=14, locale='en'
+        )
+        ticket = org2_event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
+                                         personalized=True)
+        op = o.positions.create(item=ticket, price=Decimal("14"))
+        medium2.linked_orderposition = op
+        medium2.linked_giftcard = giftcard2
+        medium2.save()
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/reusablemedia/lookup/'.format(organizer.slug),
+        {
+            "type": medium2.type,
+            "identifier": medium2.identifier,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data["result"] is None
+
+    gca = GiftCardAcceptance.objects.create(
+        issuer=organizer2,
+        acceptor=organizer,
+        active=True,
+        reusable_media=False
+    )
+
+    resp = token_client.post(
+        '/api/v1/organizers/{}/reusablemedia/lookup/'.format(organizer.slug),
+        {
+            "type": medium2.type,
+            "identifier": medium2.identifier,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data["result"] is None
+
+    gca.reusable_media = True
+    gca.save()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/reusablemedia/lookup/'.format(organizer.slug),
+        {
+            "type": medium2.type,
+            "identifier": medium2.identifier,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data["result"] is not None
+    assert resp.data["result"]["organizer"] == "partner"
+    assert resp.data["result"]["linked_giftcard"] is not None
+    assert resp.data["result"]["linked_orderposition"] is None

@@ -17,7 +17,7 @@
                            placeholder="{% trans "Prefix (optional)" %}">
                     <div class="input-group">
                         <input type="number" class="form-control input-xs"
-                               id="voucher-bulk-codes-num"
+                               id="voucher-bulk-codes-num" max="100000"
                                placeholder="{% trans "Number" context "number_of_things" %}">
                         <div class="input-group-btn">
                             <button class="btn btn-default" type="button" id="voucher-bulk-codes-generate"
@@ -78,6 +78,8 @@
             {% bootstrap_field form.tag layout="control" %}
             {% bootstrap_field form.comment layout="control" %}
             {% bootstrap_field form.show_hidden_items layout="control" %}
+            {% bootstrap_field form.all_addons_included layout="control" %}
+            {% bootstrap_field form.all_bundles_included layout="control" %}
         </fieldset>
         <fieldset>
             <legend>{% trans "Send out emails" %}</legend>

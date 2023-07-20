@@ -39,7 +39,8 @@ from pretix.api.serializers.media import (
 )
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
-    Checkin, GiftCard, GiftCardTransaction, OrderPosition, ReusableMedium,
+    Checkin, GiftCard, GiftCardAcceptance, GiftCardTransaction, OrderPosition,
+    ReusableMedium,
 )
 from pretix.helpers import OF_SELF
 from pretix.helpers.dicts import merge_dicts
@@ -135,12 +136,28 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
             s = self.get_serializer(m)
             return Response({"result": s.data})
         except ReusableMedium.DoesNotExist:
-            mt = MEDIA_TYPES.get(s.validated_data["type"])
-            if mt:
-                m = mt.handle_unknown(request.organizer, s.validated_data["identifier"], request.user, request.auth)
-                if m:
-                    s = self.get_serializer(m)
-                    return Response({"result": s.data})
+            try:
+                with scopes_disabled():
+                    m = ReusableMedium.objects.get(
+                        organizer__in=GiftCardAcceptance.objects.filter(
+                            acceptor=request.organizer,
+                            active=True,
+                            reusable_media=True,
+                        ).values_list('issuer', flat=True),
+                        type=s.validated_data["type"],
+                        identifier=s.validated_data["identifier"],
+                    )
+                m.linked_orderposition = None  # not relevant for cross-organizer
+                m.customer = None  # not relevant for cross-organizer
+                s = self.get_serializer(m)
+                return Response({"result": s.data})
+            except ReusableMedium.DoesNotExist:
+                mt = MEDIA_TYPES.get(s.validated_data["type"])
+                if mt:
+                    m = mt.handle_unknown(request.organizer, s.validated_data["identifier"], request.user, request.auth)
+                    if m:
+                        s = self.get_serializer(m)
+                        return Response({"result": s.data})
 
             return Response({"result": None})
 

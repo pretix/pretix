@@ -65,8 +65,8 @@ from pretix.base.forms.questions import (
 )
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
-    Customer, Device, EventMetaProperty, Gate, GiftCard, Membership,
-    MembershipType, OrderPosition, Organizer, ReusableMedium, Team,
+    Customer, Device, EventMetaProperty, Gate, GiftCard, GiftCardAcceptance,
+    Membership, MembershipType, OrderPosition, Organizer, ReusableMedium, Team,
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.organizer import OrganizerFooterLink
@@ -186,6 +186,15 @@ class OrganizerUpdateForm(OrganizerForm):
         return instance
 
 
+class SafeOrderPositionChoiceField(forms.ModelChoiceField):
+    def __init__(self, queryset, **kwargs):
+        queryset = queryset.model.all.none()
+        super().__init__(queryset, **kwargs)
+
+    def label_from_instance(self, op):
+        return f'{op.order.code}-{op.positionid} ({str(op.item) + ((" - " + str(op.variation)) if op.variation else "")})'
+
+
 class EventMetaPropertyForm(forms.ModelForm):
     class Meta:
         model = EventMetaProperty
@@ -264,7 +273,7 @@ class DeviceForm(forms.ModelForm):
 
     def clean(self):
         d = super().clean()
-        if not d['all_events'] and not d['limit_events']:
+        if not d['all_events'] and not d.get('limit_events'):
             raise ValidationError(_('Your device will not have access to anything, please select some events.'))
 
         return d
@@ -593,7 +602,7 @@ class WebHookForm(forms.ModelForm):
                 mark_safe('{} – <code>{}</code>'.format(a.verbose_name, a.action_type))
             ) for a in get_all_webhook_events().values()
         ]
-        if self.instance:
+        if self.instance and self.instance.pk:
             self.fields['events'].initial = list(self.instance.listeners.values_list('action_type', flat=True))
 
     class Meta:
@@ -628,7 +637,11 @@ class GiftCardCreateForm(forms.ModelForm):
         if GiftCard.objects.filter(
                 secret__iexact=s
         ).filter(
-            Q(issuer=self.organizer) | Q(issuer__gift_card_collector_acceptance__collector=self.organizer)
+            Q(issuer=self.organizer) |
+            Q(issuer__in=GiftCardAcceptance.objects.filter(
+                acceptor=self.organizer,
+                active=True,
+            ).values_list('issuer', flat=True))
         ).exists():
             raise ValidationError(
                 _('A gift card with the same secret already exists in your or an affiliated organizer account.')
@@ -650,23 +663,32 @@ class GiftCardCreateForm(forms.ModelForm):
 class GiftCardUpdateForm(forms.ModelForm):
     class Meta:
         model = GiftCard
-        fields = ['expires', 'conditions']
+        fields = ['expires', 'conditions', 'owner_ticket']
         field_classes = {
-            'expires': SplitDateTimeField
+            'expires': SplitDateTimeField,
+            'owner_ticket': SafeOrderPositionChoiceField,
         }
         widgets = {
             'expires': SplitDateTimePickerWidget,
             'conditions': forms.Textarea(attrs={"rows": 2})
         }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        organizer = self.instance.issuer
 
-class SafeOrderPositionChoiceField(forms.ModelChoiceField):
-    def __init__(self, queryset, **kwargs):
-        queryset = queryset.model.all.none()
-        super().__init__(queryset, **kwargs)
-
-    def label_from_instance(self, op):
-        return f'{op.order.code}-{op.positionid} ({str(op.item) + ((" - " + str(op.variation)) if op.variation else "")})'
+        self.fields['owner_ticket'].queryset = OrderPosition.all.filter(order__event__organizer=organizer).all()
+        self.fields['owner_ticket'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:organizer.ticket_select2', kwargs={
+                    'organizer': organizer.slug,
+                }),
+                'data-placeholder': _('Ticket')
+            }
+        )
+        self.fields['owner_ticket'].widget.choices = self.fields['owner_ticket'].choices
+        self.fields['owner_ticket'].required = False
 
 
 class ReusableMediumUpdateForm(forms.ModelForm):
@@ -772,6 +794,7 @@ class ReusableMediumCreateForm(ReusableMediumUpdateForm):
 
 class CustomerUpdateForm(forms.ModelForm):
     error_messages = {
+        'duplicate_identifier': _("An account with this customer ID is already registered."),
         'duplicate': _("An account with this email address is already registered."),
     }
 
@@ -806,6 +829,7 @@ class CustomerUpdateForm(forms.ModelForm):
 
     def clean(self):
         email = self.cleaned_data.get('email')
+        identifier = self.cleaned_data.get('identifier')
 
         if email is not None:
             try:
@@ -816,6 +840,17 @@ class CustomerUpdateForm(forms.ModelForm):
                 raise forms.ValidationError(
                     self.error_messages['duplicate'],
                     code='duplicate',
+                )
+
+        if identifier is not None:
+            try:
+                self.instance.organizer.customers.exclude(pk=self.instance.pk).get(identifier=identifier)
+            except Customer.DoesNotExist:
+                pass
+            else:
+                raise forms.ValidationError(
+                    self.error_messages['duplicate_identifier'],
+                    code='duplicate_identifier',
                 )
 
         return self.cleaned_data
@@ -995,3 +1030,32 @@ class SSOClientForm(I18nModelForm):
         else:
             del self.fields['client_id']
             del self.fields['regenerate_client_secret']
+
+
+class GiftCardAcceptanceInviteForm(forms.Form):
+    acceptor = forms.CharField(
+        label=_("Organizer short name"),
+        required=True,
+    )
+    reusable_media = forms.BooleanField(
+        label=_("Allow access to reusable media"),
+        help_text=_("This is required if you want the other organizer to participate in a shared system with e.g. "
+                    "NFC payment chips. You should only use this option for organizers you trust, since (depending "
+                    "on the activated medium types) this will grant the other organizer access to cryptographic key "
+                    "material required to interact with the media type."),
+        required=False,
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.organizer = kwargs.pop('organizer')
+        super().__init__(*args, **kwargs)
+
+    def clean_acceptor(self):
+        val = self.cleaned_data['acceptor']
+        try:
+            acceptor = Organizer.objects.exclude(pk=self.organizer.pk).get(slug=val)
+        except Organizer.DoesNotExist:
+            raise ValidationError(_('The selected organizer does not exist or cannot be invited.'))
+        if self.organizer.gift_card_acceptor_acceptance.filter(acceptor=acceptor).exists():
+            raise ValidationError(_('The selected organizer has already been invited.'))
+        return acceptor

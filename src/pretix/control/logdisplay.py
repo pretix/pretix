@@ -39,7 +39,6 @@ from decimal import Decimal
 
 import bleach
 import dateutil.parser
-import pytz
 from django.dispatch import receiver
 from django.urls import reverse
 from django.utils.formats import date_format
@@ -209,7 +208,7 @@ def _display_checkin(event, logentry):
     if 'datetime' in data:
         dt = dateutil.parser.parse(data.get('datetime'))
         show_dt = abs((logentry.datetime - dt).total_seconds()) > 5 or 'forced' in data
-        tz = pytz.timezone(event.settings.timezone)
+        tz = event.timezone
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
 
     if 'list' in data:
@@ -341,6 +340,9 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.organizer.export.schedule.failed': _('A scheduled export has failed: {reason}.'),
         'pretix.giftcards.acceptance.added': _('Gift card acceptance for another organizer has been added.'),
         'pretix.giftcards.acceptance.removed': _('Gift card acceptance for another organizer has been removed.'),
+        'pretix.giftcards.acceptance.acceptor.invited': _('A new gift card acceptor has been invited.'),
+        'pretix.giftcards.acceptance.issuer.removed': _('A gift card issuer has been removed or declined.'),
+        'pretix.giftcards.acceptance.issuer.accepted': _('A new gift card issuer has been accepted.'),
         'pretix.webhook.created': _('The webhook has been created.'),
         'pretix.webhook.changed': _('The webhook has been changed.'),
         'pretix.webhook.retries.expedited': _('The webhook call retry jobs have been manually expedited.'),
@@ -370,6 +372,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.comment': _('The event\'s internal comment has been updated.'),
         'pretix.event.canceled': _('The event has been canceled.'),
         'pretix.event.deleted': _('An event has been deleted.'),
+        'pretix.event.shredder.started': _('A removal process for personal data has been started.'),
+        'pretix.event.shredder.completed': _('A removal process for personal data has been completed.'),
         'pretix.event.order.modified': _('The order details have been changed.'),
         'pretix.event.order.unpaid': _('The order has been marked as unpaid.'),
         'pretix.event.order.secret.changed': _('The order\'s secret has been changed.'),
@@ -485,6 +489,9 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.item.bundles.added': _('A bundled item has been added to this product.'),
         'pretix.event.item.bundles.removed': _('A bundled item has been removed from this product.'),
         'pretix.event.item.bundles.changed': _('A bundled item has been changed on this product.'),
+        'pretix.event.item_meta_property.added': _('A meta property has been added to this event.'),
+        'pretix.event.item_meta_property.deleted': _('A meta property has been removed from this event.'),
+        'pretix.event.item_meta_property.changed': _('A meta property has been changed on this event.'),
         'pretix.event.quota.added': _('The quota has been added.'),
         'pretix.event.quota.deleted': _('The quota has been deleted.'),
         'pretix.event.quota.changed': _('The quota has been changed.'),
@@ -506,6 +513,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.taxrule.changed': _('The tax rule has been changed.'),
         'pretix.event.checkinlist.added': _('The check-in list has been added.'),
         'pretix.event.checkinlist.deleted': _('The check-in list has been deleted.'),
+        'pretix.event.checkinlists.deleted': _('The check-in list has been deleted.'),  # backwards compatibility
         'pretix.event.checkinlist.changed': _('The check-in list has been changed.'),
         'pretix.event.settings': _('The event settings have been changed.'),
         'pretix.event.tickets.settings': _('The ticket download settings have been changed.'),
@@ -525,9 +533,10 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.permissions.invited': _('A user has been invited to the event team.'),
         'pretix.event.permissions.changed': _('A user\'s permissions have been changed.'),
         'pretix.event.permissions.deleted': _('A user has been removed from the event team.'),
-        'pretix.waitinglist.voucher': _('A voucher has been sent to a person on the waiting list.'),
+        'pretix.waitinglist.voucher': _('A voucher has been sent to a person on the waiting list.'),  # legacy
+        'pretix.event.orders.waitinglist.voucher_assigned': _('A voucher has been sent to a person on the waiting list.'),
         'pretix.event.orders.waitinglist.deleted': _('An entry has been removed from the waiting list.'),
-        'pretix.event.orders.waitinglist.transferred': _('An entry has been transferred to another waiting list.'),
+        'pretix.event.order.waitinglist.transferred': _('An entry has been transferred to another waiting list.'),  # legacy
         'pretix.event.orders.waitinglist.changed': _('An entry has been changed on the waiting list.'),
         'pretix.event.orders.waitinglist.added': _('An entry has been added to the waiting list.'),
         'pretix.team.created': _('The team has been created.'),
@@ -566,6 +575,17 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
                 data['value'] = '?'
         else:
             data['value'] = LazyI18nString(data['value'])
+
+    if logentry.action_type == "pretix.voucher.redeemed":
+        data = defaultdict(lambda: '?', data)
+        url = reverse('control:event.order', kwargs={
+            'event': logentry.event.slug,
+            'organizer': logentry.event.organizer.slug,
+            'code': data['order_code']
+        })
+        return mark_safe(plains[logentry.action_type].format(
+            order_code='<a href="{}">{}</a>'.format(url, data['order_code']),
+        ))
 
     if logentry.action_type in plains:
         data = defaultdict(lambda: '?', data)
@@ -612,7 +632,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
     if logentry.action_type == 'pretix.control.views.checkin':
         # deprecated
         dt = dateutil.parser.parse(data.get('datetime'))
-        tz = pytz.timezone(sender.settings.timezone)
+        tz = sender.timezone
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
         if 'list' in data:
             try:

@@ -396,7 +396,7 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 
 def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force, checkin_type, ignore_unpaid, nonce,
                     untrusted_input, user, auth, expand, pdf_data, request, questions_supported, canceled_supported,
-                    source_type='barcode', legacy_url_support=False):
+                    source_type='barcode', legacy_url_support=False, simulate=False):
     if not checkinlists:
         raise ValidationError('No check-in list passed.')
 
@@ -433,6 +433,8 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     )
     raw_barcode_for_checkin = None
     from_revoked_secret = False
+    if simulate:
+        common_checkin_args['__fake_arg_to_prevent_this_from_being_saved'] = True
 
     # 1. Gather a list of positions that could be the one we looking for, either from their ID, secret or
     #    parent secret
@@ -472,13 +474,14 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             revoked_matches = list(
                 RevokedTicketSecret.objects.filter(event_id__in=list_by_event.keys(), secret=raw_barcode))
             if len(revoked_matches) == 0:
-                checkinlists[0].event.log_action('pretix.event.checkin.unknown', data={
-                    'datetime': datetime,
-                    'type': checkin_type,
-                    'list': checkinlists[0].pk,
-                    'barcode': raw_barcode,
-                    'searched_lists': [cl.pk for cl in checkinlists]
-                }, user=user, auth=auth)
+                if not simulate:
+                    checkinlists[0].event.log_action('pretix.event.checkin.unknown', data={
+                        'datetime': datetime,
+                        'type': checkin_type,
+                        'list': checkinlists[0].pk,
+                        'barcode': raw_barcode,
+                        'searched_lists': [cl.pk for cl in checkinlists]
+                    }, user=user, auth=auth)
 
                 for cl in checkinlists:
                     for k, s in cl.event.ticket_secret_generators.items():
@@ -492,12 +495,13 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                         except:
                             pass
 
-                Checkin.objects.create(
-                    position=None,
-                    successful=False,
-                    error_reason=Checkin.REASON_INVALID,
-                    **common_checkin_args,
-                )
+                if not simulate:
+                    Checkin.objects.create(
+                        position=None,
+                        successful=False,
+                        error_reason=Checkin.REASON_INVALID,
+                        **common_checkin_args,
+                    )
 
                 if force and legacy_url_support and isinstance(auth, Device):
                     # There was a bug in libpretixsync: If you scanned a ticket in offline mode that was
@@ -539,19 +543,20 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 from_revoked_secret = True
             else:
                 op = revoked_matches[0].position
-                op.order.log_action('pretix.event.checkin.revoked', data={
-                    'datetime': datetime,
-                    'type': checkin_type,
-                    'list': list_by_event[revoked_matches[0].event_id].pk,
-                    'barcode': raw_barcode
-                }, user=user, auth=auth)
-                common_checkin_args['list'] = list_by_event[revoked_matches[0].event_id]
-                Checkin.objects.create(
-                    position=op,
-                    successful=False,
-                    error_reason=Checkin.REASON_REVOKED,
-                    **common_checkin_args
-                )
+                if not simulate:
+                    op.order.log_action('pretix.event.checkin.revoked', data={
+                        'datetime': datetime,
+                        'type': checkin_type,
+                        'list': list_by_event[revoked_matches[0].event_id].pk,
+                        'barcode': raw_barcode
+                    }, user=user, auth=auth)
+                    common_checkin_args['list'] = list_by_event[revoked_matches[0].event_id]
+                    Checkin.objects.create(
+                        position=op,
+                        successful=False,
+                        error_reason=Checkin.REASON_REVOKED,
+                        **common_checkin_args
+                    )
                 return Response({
                     'status': 'error',
                     'reason': Checkin.REASON_REVOKED,
@@ -562,7 +567,9 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'list': MiniCheckinListSerializer(list_by_event[revoked_matches[0].event_id]).data,
                 }, status=400)
         else:
-            op_candidates = [media.linked_orderposition] + list(media.linked_orderposition.addons.all())
+            op_candidates = [media.linked_orderposition]
+            if list_by_event[media.linked_orderposition.order.event_id].addon_match:
+                op_candidates += list(media.linked_orderposition.addons.all())
 
     # 3. Handle the "multiple options found" case: Except for the unlikely case of a secret being also a valid primary
     #    key on the same list, we're probably dealing with the ``addon_match`` case here and need to figure out
@@ -586,24 +593,25 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             # We choose the first match (regardless of product) for the logging since it's most likely to be the
             # base product according to our order_by above.
             op = op_candidates[0]
-            op.order.log_action('pretix.event.checkin.denied', data={
-                'position': op.id,
-                'positionid': op.positionid,
-                'errorcode': Checkin.REASON_AMBIGUOUS,
-                'reason_explanation': None,
-                'force': force,
-                'datetime': datetime,
-                'type': checkin_type,
-                'list': list_by_event[op.order.event_id].pk,
-            }, user=user, auth=auth)
-            common_checkin_args['list'] = list_by_event[op.order.event_id]
-            Checkin.objects.create(
-                position=op,
-                successful=False,
-                error_reason=Checkin.REASON_AMBIGUOUS,
-                error_explanation=None,
-                **common_checkin_args,
-            )
+            if not simulate:
+                op.order.log_action('pretix.event.checkin.denied', data={
+                    'position': op.id,
+                    'positionid': op.positionid,
+                    'errorcode': Checkin.REASON_AMBIGUOUS,
+                    'reason_explanation': None,
+                    'force': force,
+                    'datetime': datetime,
+                    'type': checkin_type,
+                    'list': list_by_event[op.order.event_id].pk,
+                }, user=user, auth=auth)
+                common_checkin_args['list'] = list_by_event[op.order.event_id]
+                Checkin.objects.create(
+                    position=op,
+                    successful=False,
+                    error_reason=Checkin.REASON_AMBIGUOUS,
+                    error_explanation=None,
+                    **common_checkin_args,
+                )
             return Response({
                 'status': 'error',
                 'reason': Checkin.REASON_AMBIGUOUS,
@@ -650,6 +658,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 raw_barcode=raw_barcode_for_checkin,
                 raw_source_type=source_type,
                 from_revoked_secret=from_revoked_secret,
+                simulate=simulate,
             )
         except RequiredQuestionsError as e:
             return Response({
@@ -662,23 +671,24 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
         except CheckInError as e:
-            op.order.log_action('pretix.event.checkin.denied', data={
-                'position': op.id,
-                'positionid': op.positionid,
-                'errorcode': e.code,
-                'reason_explanation': e.reason,
-                'force': force,
-                'datetime': datetime,
-                'type': checkin_type,
-                'list': list_by_event[op.order.event_id].pk,
-            }, user=user, auth=auth)
-            Checkin.objects.create(
-                position=op,
-                successful=False,
-                error_reason=e.code,
-                error_explanation=e.reason,
-                **common_checkin_args,
-            )
+            if not simulate:
+                op.order.log_action('pretix.event.checkin.denied', data={
+                    'position': op.id,
+                    'positionid': op.positionid,
+                    'errorcode': e.code,
+                    'reason_explanation': e.reason,
+                    'force': force,
+                    'datetime': datetime,
+                    'type': checkin_type,
+                    'list': list_by_event[op.order.event_id].pk,
+                }, user=user, auth=auth)
+                Checkin.objects.create(
+                    position=op,
+                    successful=False,
+                    error_reason=e.code,
+                    error_explanation=e.reason,
+                    **common_checkin_args,
+                )
             return Response({
                 'status': 'error',
                 'reason': e.code,

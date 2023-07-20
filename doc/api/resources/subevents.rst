@@ -63,6 +63,11 @@ last_modified                         datetime                   Last modificati
 
     The ``search`` query parameter has been added to filter sub-events by their name or location in any language.
 
+.. versionchanged:: 5.0
+
+    The ``date_from_before``, ``date_from_after``, ``date_to_before``, and ``date_to_after`` query parameters have been
+    added.
+
 Endpoints
 ---------
 
@@ -130,6 +135,10 @@ Endpoints
    :query active: If set to ``true``/``false``, only events with a matching value of ``active`` are returned.
    :query is_future: If set to ``true`` (``false``), only events that happen currently or in the future are (not) returned.
    :query is_past: If set to ``true`` (``false``), only events that are over are (not) returned.
+   :query date_from_after: If set to a date and time, only events that start at or after the given time are returned.
+   :query date_from_before: If set to a date and time, only events that start at or before the given time are returned.
+   :query date_to_after: If set to a date and time, only events that have an end date and end at or after the given time are returned.
+   :query date_to_before: If set to a date and time, only events that have an end date and end at or before the given time are returned.
    :query ends_after: If set to a date and time, only events that happen during of after the given time are returned.
    :query search: Only return events matching a given search query.
    :param organizer: The ``slug`` field of a valid organizer
@@ -458,6 +467,10 @@ Endpoints
    :query event__live: If set to ``true``/``false``, only events with a matching value of ``live`` on the parent event are returned.
    :query is_future: If set to ``true`` (``false``), only events that happen currently or in the future are (not) returned.
    :query is_past: If set to ``true`` (``false``), only events that are over are (not) returned.
+   :query date_from_after: If set to a date and time, only events that start at or after the given time are returned.
+   :query date_from_before: If set to a date and time, only events that start at or before the given time are returned.
+   :query date_to_after: If set to a date and time, only events that have an end date and end at or after the given time are returned.
+   :query date_to_before: If set to a date and time, only events that have an end date and end at or before the given time are returned.
    :query ends_after: If set to a date and time, only events that happen during of after the given time are returned.
    :query sales_channel: If set to a sales channel identifier, the response will only contain subevents from events available on this sales channel.
    :param organizer: The ``slug`` field of a valid organizer

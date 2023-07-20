@@ -15,6 +15,8 @@ Vue.component('resize-observer', VueResize.ResizeObserver)
 
 var strings = {
     'quantity': django.pgettext('widget', 'Quantity'),
+    'quantity_dec': django.pgettext('widget', 'Decrease quantity'),
+    'quantity_inc': django.pgettext('widget', 'Increase quantity'),
     'price': django.pgettext('widget', 'Price'),
     'select_item': django.pgettext('widget', 'Select %s'),
     'select_variant': django.pgettext('widget', 'Select variant %s'),
@@ -218,10 +220,14 @@ Vue.component('availbox', {
         + '       v-bind:aria-label="label_select_item"'
         + '>'
         + '</label>'
-        + '<input type="number" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
-        + '       v-model="amount_selected" :max="order_max" :name="input_name"'
-        + '       aria-label="' + strings.quantity + '"'
-        + '       v-if="order_max !== 1">'
+        + '<div :class="count_group_classes" v-else>'
+        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="-1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-dec" aria-label="' + strings.quantity_dec + '"><span>-</span></button>'
+        + '<input type="number" inputmode="numeric" pattern="\d*" class="pretix-widget-item-count-multiple" placeholder="0" min="0"'
+        + '       v-model="amount_selected" :max="order_max" :name="input_name" :id="\'input_\' + input_name"'
+        + '       aria-label="' + strings.quantity + '" ref="quantity"'
+        + '       >'
+        + '<button v-if="!$root.use_native_spinners" type="button" @click.prevent.stop="on_step" data-step="1" v-bind:data-controls="\'input_\' + input_name" class="pretix-widget-btn-default pretix-widget-item-count-inc" aria-label="' + strings.quantity_inc + '"><span>+</span></button>'
+        + '</div>'
         + '</div>'
         + '</div>'),
     props: {
@@ -238,10 +244,16 @@ Vue.component('availbox', {
         this.$root.$emit('amounts_changed')
     },
     computed: {
+        count_group_classes: function () {
+            return {
+                'pretix-widget-item-count-group': !this.$root.use_native_spinners
+            }
+        },
         require_voucher: function () {
             return this.item.require_voucher && !this.$root.voucher_code
         },
         amount_selected: {
+            cache: false,
             get: function () {
                 var selected = this.item.has_variations ? this.variation.amount_selected : this.item.amount_selected
                 if (selected === 0) return undefined;
@@ -255,6 +267,10 @@ Vue.component('availbox', {
                     this.variation.amount_selected = value;
                 } else {
                     this.item.amount_selected = value;
+                }
+                if (this.$refs.quantity) {
+                    // manually set value on quantity as on reload somehow v-model binding breaks
+                    this.$refs.quantity.value = value;
                 }
                 this.$root.$emit("amounts_changed")
             }
@@ -296,6 +312,12 @@ Vue.component('availbox', {
     methods: {
         focus_voucher_field: function () {
             this.$root.$emit('focus_voucher_field')
+        },
+        on_step: function (e) {
+            var t = e.target.tagName == 'BUTTON' ? e.target : e.target.closest('button');
+            var step = parseFloat(t.getAttribute("data-step"));
+            var controls = document.getElementById(t.getAttribute("data-controls"));
+            this.amount_selected = Math.max(controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (this.amount_selected || 0) + step));
         }
     }
 });
@@ -428,7 +450,7 @@ Vue.component('item', {
 
         // Product description
         + '<div class="pretix-widget-item-info-col">'
-        + '<img :src="item.picture" v-if="item.picture" class="pretix-widget-item-picture">'
+        + '<a :href="item.picture_fullsize" v-if="item.picture" class="pretix-widget-item-picture-link" @click.prevent.stop="lightbox"><img :src="item.picture" class="pretix-widget-item-picture"></a>'
         + '<div class="pretix-widget-item-title-and-description">'
         + '<a v-if="item.has_variations && show_toggle" class="pretix-widget-item-title" :href="\'#\' + item.id + \'-variants\'"'
         + '   @click.prevent.stop="expand" role="button" tabindex="0"'
@@ -508,6 +530,12 @@ Vue.component('item', {
     methods: {
         expand: function () {
             this.expanded = !this.expanded;
+        },
+        lightbox: function () {
+            this.$root.overlay.lightbox = {
+                image: this.item.picture_fullsize,
+                description: this.item.name,
+            }
         }
     },
     computed: {
@@ -762,12 +790,44 @@ var shared_alert_fragment = (
     + '</div>'
 );
 
+var shared_lightbox_fragment = (
+    '<div :class="lightboxClasses" role="dialog" aria-modal="true" v-if="$root.lightbox" @click="lightboxClose">'
+        + '<div class="pretix-widget-lightbox-loading" v-if="$root.lightbox?.loading">'
+            + '<svg width="256" height="256" viewBox="0 0 1792 1792" xmlns="http://www.w3.org/2000/svg"><path class="pretix-widget-primary-color" d="M1152 896q0-106-75-181t-181-75-181 75-75 181 75 181 181 75 181-75 75-181zm512-109v222q0 12-8 23t-20 13l-185 28q-19 54-39 91 35 50 107 138 10 12 10 25t-9 23q-27 37-99 108t-94 71q-12 0-26-9l-138-108q-44 23-91 38-16 136-29 186-7 28-36 28h-222q-14 0-24.5-8.5t-11.5-21.5l-28-184q-49-16-90-37l-141 107q-10 9-25 9-14 0-25-11-126-114-165-168-7-10-7-23 0-12 8-23 15-21 51-66.5t54-70.5q-27-50-41-99l-183-27q-13-2-21-12.5t-8-23.5v-222q0-12 8-23t19-13l186-28q14-46 39-92-40-57-107-138-10-12-10-24 0-10 9-23 26-36 98.5-107.5t94.5-71.5q13 0 26 10l138 107q44-23 91-38 16-136 29-186 7-28 36-28h222q14 0 24.5 8.5t11.5 21.5l28 184q49 16 90 37l142-107q9-9 24-9 13 0 25 10 129 119 165 170 7 8 7 22 0 12-8 23-15 21-51 66.5t-54 70.5q26 50 41 98l183 28q13 2 21 12.5t8 23.5z"/></svg>'
+        + '</div>'
+        + '<div class="pretix-widget-lightbox-inner" @click.stop="">'
+            + '<figure class="pretix-widget-lightbox-image">'
+                + '<img :src="$root.lightbox.image" :alt="$root.lightbox.description" @load="lightboxLoaded" ref="lightboxImage">'
+                + '<figcaption v-if="$root.lightbox.description">{{$root.lightbox.description}}</figcaption>'
+            + '</figure>'
+            + '<button type="button" class="pretix-widget-lightbox-close" @click="lightboxClose" aria-label="'+strings.close+'">'
+                + '<svg height="16" viewBox="0 0 512 512" width="16" xmlns="http://www.w3.org/2000/svg"><path fill="#fff" d="M437.5,386.6L306.9,256l130.6-130.6c14.1-14.1,14.1-36.8,0-50.9c-14.1-14.1-36.8-14.1-50.9,0L256,205.1L125.4,74.5  c-14.1-14.1-36.8-14.1-50.9,0c-14.1,14.1-14.1,36.8,0,50.9L205.1,256L74.5,386.6c-14.1,14.1-14.1,36.8,0,50.9  c14.1,14.1,36.8,14.1,50.9,0L256,306.9l130.6,130.6c14.1,14.1,36.8,14.1,50.9,0C451.5,423.4,451.5,400.6,437.5,386.6z"/></svg>'
+            + '</button>'
+        + '</div>'
+    + '</div>'
+);
+
 Vue.component('pretix-overlay', {
     template: ('<div class="pretix-widget-overlay">'
         + shared_iframe_fragment
         + shared_alert_fragment
+        + shared_lightbox_fragment
         + '</div>'
     ),
+    watch: {
+        '$root.lightbox': function (newValue, oldValue) {
+            if (newValue) {
+                if (newValue.image != oldValue?.image) {
+                    this.$set(newValue, "loading", true);
+                }
+                if (!oldValue) {
+                    window.addEventListener('keyup', this.lightboxCloseOnKeyup);
+                }
+            } else {
+                window.removeEventListener('keyup', this.lightboxCloseOnKeyup);
+            }
+        }
+    },
     computed: {
         frameClasses: function () {
             return {
@@ -781,8 +841,27 @@ Vue.component('pretix-overlay', {
                 'pretix-widget-alert-shown': this.$root.error_message,
             };
         },
+        lightboxClasses: function () {
+            return {
+                'pretix-widget-lightbox-holder': true,
+                'pretix-widget-lightbox-shown': this.$root.lightbox,
+                'pretix-widget-lightbox-isloading': this.$root.lightbox?.loading,
+            };
+        },
     },
     methods: {
+        lightboxCloseOnKeyup: function (event) {
+            if (event.keyCode === 27) {
+                // abort on ESC-key
+                this.lightboxClose();
+            }
+        },
+        lightboxClose: function () {
+            this.$root.lightbox = null;
+        },
+        lightboxLoaded: function () {
+            this.$root.lightbox.loading = false;
+        },
         errorClose: function () {
             this.$root.error_message = null;
             this.$root.error_url_after = null;
@@ -872,7 +951,7 @@ Vue.component('pretix-widget-event-form', {
         + strings['seating_plan_waiting_list']
         + '</div>'
         + '<div class="pretix-widget-seating-waitinglist-button-wrap">'
-        + '<button class="pretix-widget-seating-waitinglist-button" @click.prevent.stop="$root.startseating">'
+        + '<button class="pretix-widget-seating-waitinglist-button" @click.prevent.stop="$root.startwaiting">'
         + strings['waiting_list']
         + '</button>'
         + '</div>'
@@ -1438,11 +1517,11 @@ Vue.component('pretix-widget', {
     },
     computed: {
         classObject: function () {
-            var o = {'pretix-widget': true};
-            if (this.mobile) {
-                o['pretix-widget-mobile'] = true;
-            }
-            return o;
+            return {
+                'pretix-widget': true,
+                'pretix-widget-mobile': this.mobile,
+                'pretix-widget-use-custom-spinners': !this.$root.use_native_spinners
+            };
         }
     }
 });
@@ -1588,6 +1667,7 @@ var shared_root_methods = {
                 root.categories = data.items_by_category;
                 root.currency = data.currency;
                 root.display_net_prices = data.display_net_prices;
+                root.use_native_spinners = data.use_native_spinners;
                 root.voucher_explanation_text = data.voucher_explanation_text;
                 root.error = data.error;
                 root.display_add_to_cart = data.display_add_to_cart;
@@ -1625,6 +1705,20 @@ var shared_root_methods = {
                 root.trigger_load_callback();
             }
         });
+    },
+    startwaiting: function () {
+        var redirect_url = this.$root.target_url + 'w/' + widget_id;
+        if (this.$root.subevent){
+            redirect_url += '/' + this.$root.subevent;
+        }
+        redirect_url += '/waitinglist/?iframe=1&locale=' + lang;
+        if (this.$root.useIframe) {
+            var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
+            this.$root.overlay.frame_loading = true;
+            iframe.src = redirect_url;
+        } else {
+            window.open(redirect_url);
+        }
     },
     startseating: function () {
         var redirect_url = this.$root.target_url + 'w/' + widget_id;
@@ -1758,6 +1852,7 @@ var create_overlay = function (app) {
                 error_url_after: null,
                 error_url_after_new_tab: true,
                 error_message: null,
+                lightbox: null,
             }
         },
         methods: {
@@ -1833,6 +1928,7 @@ var create_widget = function (element) {
                 variation_filter: variations,
                 voucher_code: voucher,
                 display_net_prices: false,
+                use_native_spinners: false,
                 voucher_explanation_text: null,
                 show_variations_expanded: !!variations,
                 skip_ssl: skip_ssl,

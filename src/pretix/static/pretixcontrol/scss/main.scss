@@ -101,6 +101,16 @@ nav.navbar .danger, nav.navbar .danger:hover, nav.navbar .danger:active {
     }
 }
 
+.product-row-giftcard {
+    border-radius: $border-radius-base;
+    padding: 10px 1.4em;
+    margin: 0 0 5px 1.4em;
+    background: $panel-footer-bg;
+    code {
+        color: $text-color;
+    }
+}
+
 h1 .btn-sm {
     margin-top: -5px;
 }
@@ -820,6 +830,30 @@ tbody th {
     }
 }
 
+.nomargin-top {
+    margin-top: 0;
+}
+
+.checkin-sim-result {
+    text-align: center;
+    padding: 20px;
+    .fa {
+        color: white;
+        font-size: 50px;
+    }
+}
+.checkin-sim-result-status-ok {
+    background: $brand-success;
+}
+.checkin-sim-result-status-incomplete {
+    background: $brand-primary;
+}
+.checkin-sim-result-status-error {
+    background: $brand-danger;
+}
+.checkin-sim-result-status-error.checkin-sim-result-reason-already_redeemed {
+    background: $brand-warning;
+}
 
 .withoutjs {
     display: none !important;

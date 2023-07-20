@@ -135,7 +135,7 @@ def test_checkin_blocked_position(position, clist):
 
 @pytest.mark.django_db
 def test_checkin_valid_from(event, position, clist):
-    position.valid_from = event.timezone.localize(datetime(2020, 1, 1, 12, 0, 0))
+    position.valid_from = datetime(2020, 1, 1, 12, 0, 0, tzinfo=event.timezone)
     position.save()
     with freeze_time("2020-01-01 10:45:00"):
         with pytest.raises(CheckInError) as excinfo:
@@ -153,7 +153,7 @@ def test_checkin_valid_from(event, position, clist):
 
 @pytest.mark.django_db
 def test_checkin_valid_until(event, position, clist):
-    position.valid_until = event.timezone.localize(datetime(2020, 1, 1, 9, 0, 0))
+    position.valid_until = datetime(2020, 1, 1, 9, 0, 0, tzinfo=event.timezone)
     position.save()
     with freeze_time("2020-01-01 10:45:00"):
         with pytest.raises(CheckInError) as excinfo:
@@ -712,7 +712,7 @@ def test_rules_scan_days(event, position, clist):
 def test_rules_time_isafter_tolerance(event, position, clist):
     # Ticket is valid starting 10 minutes before admission time
     event.settings.timezone = 'Europe/Berlin'
-    event.date_admission = event.timezone.localize(datetime(2020, 1, 1, 12, 0, 0))
+    event.date_admission = datetime(2020, 1, 1, 12, 0, 0, tzinfo=event.timezone)
     event.save()
     clist.rules = {"isAfter": [{"var": "now"}, {"buildTime": ["date_admission"]}, 10]}
     clist.save()
@@ -732,7 +732,7 @@ def test_rules_time_isafter_tolerance(event, position, clist):
 def test_rules_time_isafter_no_tolerance(event, position, clist):
     # Ticket is valid only after admission time
     event.settings.timezone = 'Europe/Berlin'
-    event.date_from = event.timezone.localize(datetime(2020, 1, 1, 12, 0, 0))
+    event.date_from = datetime(2020, 1, 1, 12, 0, 0, tzinfo=event.timezone)
     # also tests that date_admission falls back to date_from
     event.save()
     clist.rules = {"isAfter": [{"var": "now"}, {"buildTime": ["date_admission"]}]}
@@ -753,7 +753,7 @@ def test_rules_time_isafter_no_tolerance(event, position, clist):
 def test_rules_time_isbefore_with_tolerance(event, position, clist):
     # Ticket is valid until 10 minutes after end time
     event.settings.timezone = 'Europe/Berlin'
-    event.date_to = event.timezone.localize(datetime(2020, 1, 1, 12, 0, 0))
+    event.date_to = datetime(2020, 1, 1, 12, 0, 0, tzinfo=event.timezone)
     event.save()
     clist.rules = {"isBefore": [{"var": "now"}, {"buildTime": ["date_to"]}, 10]}
     clist.save()
@@ -809,7 +809,7 @@ def test_rules_isafter_subevent(position, clist, event):
     event.has_subevents = True
     event.save()
     event.settings.timezone = 'Europe/Berlin'
-    se1 = event.subevents.create(name="Foo", date_from=event.timezone.localize(datetime(2020, 2, 1, 12, 0, 0)))
+    se1 = event.subevents.create(name="Foo", date_from=datetime(2020, 2, 1, 12, 0, 0, tzinfo=event.timezone))
     position.subevent = se1
     position.save()
     clist.rules = {"isAfter": [{"var": "now"}, {"buildTime": ["date_admission"]}]}
@@ -949,7 +949,7 @@ def test_position_queries(django_assert_num_queries, position, clist):
 
 @pytest.mark.django_db(transaction=True)
 def test_auto_checkout_at_correct_time(event, position, clist):
-    clist.exit_all_at = event.timezone.localize(datetime(2020, 1, 2, 3, 0))
+    clist.exit_all_at = datetime(2020, 1, 2, 3, 0, tzinfo=event.timezone)
     clist.save()
     with freeze_time("2020-01-01 10:00:00+01:00"):
         perform_checkin(position, clist, {})
@@ -962,12 +962,12 @@ def test_auto_checkout_at_correct_time(event, position, clist):
     assert position.checkins.count() == 2
     assert position.checkins.first().type == Checkin.TYPE_EXIT
     clist.refresh_from_db()
-    assert clist.exit_all_at == event.timezone.localize(datetime(2020, 1, 3, 3, 0))
+    assert clist.exit_all_at == datetime(2020, 1, 3, 3, 0, tzinfo=event.timezone)
 
 
 @pytest.mark.django_db(transaction=True)
 def test_auto_check_out_only_if_checked_in(event, position, clist):
-    clist.exit_all_at = event.timezone.localize(datetime(2020, 1, 2, 3, 0))
+    clist.exit_all_at = datetime(2020, 1, 2, 3, 0, tzinfo=event.timezone)
     clist.save()
     with freeze_time("2020-01-02 03:05:00+01:00"):
         process_exit_all(sender=None)
@@ -985,7 +985,7 @@ def test_auto_check_out_only_if_checked_in(event, position, clist):
 
 @pytest.mark.django_db(transaction=True)
 def test_auto_check_out_only_if_checked_in_before_exit_all_at(event, position, clist):
-    clist.exit_all_at = event.timezone.localize(datetime(2020, 1, 2, 3, 0))
+    clist.exit_all_at = datetime(2020, 1, 2, 3, 0, tzinfo=event.timezone)
     clist.save()
     with freeze_time("2020-01-02 04:05:00+01:00"):
         perform_checkin(position, clist, {})
@@ -999,37 +999,37 @@ def test_auto_check_out_dst(event, position, clist):
     event.settings.timezone = 'Europe/Berlin'
 
     # Survive across a shift that doesn't affect the time in question
-    clist.exit_all_at = event.timezone.localize(datetime(2021, 3, 28, 1, 0))
+    clist.exit_all_at = datetime(2021, 3, 28, 1, 0, tzinfo=event.timezone)
     clist.save()
     with freeze_time(clist.exit_all_at + timedelta(minutes=5)):
         process_exit_all(sender=None)
     clist.refresh_from_db()
-    assert clist.exit_all_at.astimezone(event.timezone) == event.timezone.localize(datetime(2021, 3, 29, 1, 0))
+    assert clist.exit_all_at.astimezone(event.timezone) == datetime(2021, 3, 29, 1, 0, tzinfo=event.timezone)
 
     # Survive across a shift that makes the time in question ambigous
-    clist.exit_all_at = event.timezone.localize(datetime(2021, 10, 30, 2, 30))
+    clist.exit_all_at = datetime(2021, 10, 30, 2, 30, tzinfo=event.timezone)
     clist.save()
     with freeze_time(clist.exit_all_at + timedelta(minutes=5)):
         process_exit_all(sender=None)
     clist.refresh_from_db()
-    assert clist.exit_all_at.astimezone(event.timezone) == event.timezone.localize(datetime(2021, 10, 31, 2, 30))
+    assert clist.exit_all_at.astimezone(event.timezone) == datetime(2021, 10, 31, 2, 30, tzinfo=event.timezone)
     with freeze_time(clist.exit_all_at + timedelta(minutes=5)):
         process_exit_all(sender=None)
     clist.refresh_from_db()
-    assert clist.exit_all_at.astimezone(event.timezone) == event.timezone.localize(datetime(2021, 11, 1, 2, 30))
+    assert clist.exit_all_at.astimezone(event.timezone) == datetime(2021, 11, 1, 2, 30, tzinfo=event.timezone)
 
-    # Doesn't survive across a shift that makes the time in question non-existant
-    clist.exit_all_at = event.timezone.localize(datetime(2021, 3, 27, 2, 30))
+    # Moves back after a shift that makes the time in question non-existant
+    clist.exit_all_at = datetime(2021, 3, 27, 2, 30, tzinfo=event.timezone)
     clist.save()
     with freeze_time(clist.exit_all_at + timedelta(minutes=5)):
         process_exit_all(sender=None)
     clist.refresh_from_db()
-    assert clist.exit_all_at.astimezone(event.timezone) == event.timezone.localize(datetime(2021, 3, 28, 2, 30))
+    assert clist.exit_all_at.astimezone(event.timezone) == datetime(2021, 3, 28, 3, 30, tzinfo=event.timezone)
     with freeze_time(clist.exit_all_at + timedelta(minutes=5)):
         process_exit_all(sender=None)
     clist.refresh_from_db()
-    assert clist.exit_all_at.astimezone(event.timezone) == event.timezone.localize(datetime(2021, 3, 29, 2, 30))
+    assert clist.exit_all_at.astimezone(event.timezone) == datetime(2021, 3, 29, 2, 30, tzinfo=event.timezone)
     with freeze_time(clist.exit_all_at + timedelta(minutes=5)):
         process_exit_all(sender=None)
     clist.refresh_from_db()
-    assert clist.exit_all_at.astimezone(event.timezone) == event.timezone.localize(datetime(2021, 3, 30, 2, 30))
+    assert clist.exit_all_at.astimezone(event.timezone) == datetime(2021, 3, 30, 2, 30, tzinfo=event.timezone)

@@ -63,7 +63,8 @@ class VoucherSerializer(I18nAwareModelSerializer):
         model = Voucher
         fields = ('id', 'code', 'max_usages', 'redeemed', 'min_usages', 'valid_until', 'block_quota',
                   'allow_ignore_quota', 'price_mode', 'value', 'item', 'variation', 'quota',
-                  'tag', 'comment', 'subevent', 'show_hidden_items', 'seat')
+                  'tag', 'comment', 'subevent', 'show_hidden_items', 'seat', 'all_addons_included',
+                  'all_bundles_included')
         read_only_fields = ('id', 'redeemed')
         list_serializer_class = VoucherListSerializer
 

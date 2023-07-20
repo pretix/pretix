@@ -123,6 +123,8 @@ var form_handlers = function (el) {
 
     // Vouchers
     el.find("#voucher-bulk-codes-generate").click(function () {
+        if (!$("#voucher-bulk-codes-num").get(0).reportValidity())
+            return;
         var num = $("#voucher-bulk-codes-num").val();
         var prefix = $('#voucher-bulk-codes-prefix').val();
         if (num != "") {
@@ -1001,7 +1003,7 @@ function add_log_expand_handlers(el) {
 
 }
 
-$(document).ready(function () {
+$(function () {
    $('form[method=post]').filter(function () {
        return $(this).find("button:not([type=button]), input[type=submit]").length > 0;
    }).areYouSure( {'message': gettext('You have unsaved changes!')});

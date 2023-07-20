@@ -23,9 +23,9 @@ import datetime
 import mimetypes
 import os
 from decimal import Decimal
+from zoneinfo import ZoneInfo
 
 import django_filters
-import pytz
 from django.db import transaction
 from django.db.models import (
     Exists, F, OuterRef, Prefetch, Q, Subquery, prefetch_related_objects,
@@ -67,8 +67,8 @@ from pretix.base.models import (
     CachedCombinedTicket, CachedTicket, Checkin, Device, EventMetaValue,
     Invoice, InvoiceAddress, ItemMetaValue, ItemVariation,
     ItemVariationMetaValue, Order, OrderFee, OrderPayment, OrderPosition,
-    OrderRefund, Quota, SubEvent, SubEventMetaValue, TaxRule, TeamAPIToken,
-    generate_secret,
+    OrderRefund, Quota, ReusableMedium, SubEvent, SubEventMetaValue, TaxRule,
+    TeamAPIToken, generate_secret,
 )
 from pretix.base.models.orders import (
     BlockedTicketSecret, QuestionAnswer, RevokedTicketSecret,
@@ -166,12 +166,15 @@ with scopes_disabled():
                 )
             ).values('id')
 
+            matching_media = ReusableMedium.objects.filter(identifier=u).values_list('linked_orderposition__order_id', flat=True)
+
             mainq = (
                 code
                 | Q(email__icontains=u)
                 | Q(invoice_address__name_cached__icontains=u)
                 | Q(invoice_address__company__icontains=u)
                 | Q(pk__in=matching_invoices)
+                | Q(pk__in=matching_media)
                 | Q(comment__icontains=u)
                 | Q(has_pos=True)
             )
@@ -609,7 +612,7 @@ class OrderViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST
             )
 
-        tz = pytz.timezone(self.request.event.settings.timezone)
+        tz = ZoneInfo(self.request.event.settings.timezone)
         new_date = make_aware(datetime.datetime.combine(
             new_date,
             datetime.time(hour=23, minute=59, second=59)
@@ -658,7 +661,16 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         with language(order.locale, self.request.event.settings.region):
             payment = order.payments.last()
-
+            # OrderCreateSerializer creates at most one payment
+            if payment and payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
+                order.log_action(
+                    'pretix.event.order.payment.confirmed', {
+                        'local_id': payment.local_id,
+                        'provider': payment.provider,
+                    },
+                    user=request.user if request.user.is_authenticated else None,
+                    auth=request.auth,
+                )
             order_placed.send(self.request.event, order=order)
             if order.status == Order.STATUS_PAID:
                 order_paid.send(self.request.event, order=order)
@@ -924,6 +936,7 @@ with scopes_disabled():
         search = django_filters.CharFilter(method='search_qs')
 
         def search_qs(self, queryset, name, value):
+            matching_media = ReusableMedium.objects.filter(identifier=value).values_list('linked_orderposition', flat=True)
             return queryset.filter(
                 Q(secret__istartswith=value)
                 | Q(attendee_name_cached__icontains=value)
@@ -932,7 +945,9 @@ with scopes_disabled():
                 | Q(addon_to__attendee_email__icontains=value)
                 | Q(order__code__istartswith=value)
                 | Q(order__invoice_address__name_cached__icontains=value)
+                | Q(order__invoice_address__company__icontains=value)
                 | Q(order__email__icontains=value)
+                | Q(pk__in=matching_media)
             )
 
         def has_checkin_qs(self, queryset, name, value):

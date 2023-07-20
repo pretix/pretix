@@ -1,4 +1,4 @@
-$(document).ready(function () {
+$(function () {
   var TYPEOPS = {
     // Every change to our supported JSON logic must be done
     // * in pretix.base.services.checkin
@@ -93,13 +93,19 @@ $(document).ready(function () {
     },
   };
 
-  Vue.component('checkin-rule', CheckinRule.default);
-  var app = new Vue({
-    el: '#rules-editor',
-    components: {
+  var components = {
+    CheckinRulesVisualization: CheckinRulesVisualization.default,
+  }
+  if (typeof CheckinRule !== "undefined") {
+    Vue.component('checkin-rule', CheckinRule.default);
+    components = {
       CheckinRulesEditor: CheckinRulesEditor.default,
       CheckinRulesVisualization: CheckinRulesVisualization.default,
-    },
+    }
+  }
+  var app = new Vue({
+    el: '#rules-editor',
+    components: components,
     data: function () {
       return {
         rules: {},
@@ -187,17 +193,23 @@ $(document).ready(function () {
     },
     created: function () {
       this.rules = JSON.parse($("#id_rules").val());
-      this.items = JSON.parse($("#items").html());
+      if ($("#items").length) {
+        this.items = JSON.parse($("#items").html());
 
-      var root = this.$root
-      function _update() {
-        root.all_products = $("#id_all_products").prop("checked")
-        root.limit_products = $("input[name=limit_products]:checked").map(function () { return parseInt($(this).val()) }).toArray()
+        var root = this.$root
+
+        function _update() {
+          root.all_products = $("#id_all_products").prop("checked")
+          root.limit_products = $("input[name=limit_products]:checked").map(function () {
+            return parseInt($(this).val())
+          }).toArray()
+        }
+
+        $("#id_all_products, input[name=limit_products]").on("change", function () {
+          _update();
+        })
+        _update()
       }
-      $("#id_all_products, input[name=limit_products]").on("change", function () {
-        _update();
-      })
-      _update()
     },
     watch: {
       rules: {

@@ -37,17 +37,18 @@ import configparser
 import logging
 import os
 import sys
-from urllib.parse import urlparse
 from json import loads
+from urllib.parse import urlparse
 
-import django.conf.locale
 import importlib_metadata as metadata
 from django.utils.crypto import get_random_string
 from kombu import Queue
-from pycountry import currencies
 
 from . import __version__
 from .helpers.config import EnvOrParserConfig
+
+# Pull in all settings that we also need at wheel require time
+from ._base_settings import *  # NOQA
 
 
 from django.contrib.messages import constants as messages  # NOQA
@@ -62,7 +63,6 @@ else:
 config = EnvOrParserConfig(_config)
 
 CONFIG_FILE = config
-BASE_DIR = os.path.dirname(os.path.dirname(__file__))
 DATA_DIR = config.get('pretix', 'datadir', fallback=os.environ.get('DATA_DIR', 'data'))
 LOG_DIR = os.path.join(DATA_DIR, 'logs')
 MEDIA_ROOT = os.path.join(DATA_DIR, 'media')
@@ -110,16 +110,34 @@ PRETIX_AUTH_BACKENDS = config.get('pretix', 'auth_backends', fallback='pretix.ba
 db_backend = config.get('database', 'backend', fallback='sqlite3')
 if db_backend == 'postgresql_psycopg2':
     db_backend = 'postgresql'
-DATABASE_IS_GALERA = config.getboolean('database', 'galera', fallback=False)
-if DATABASE_IS_GALERA and 'mysql' in db_backend:
-    db_options = {
-        'init_command': 'SET SESSION wsrep_sync_wait = 1;'
-    }
-else:
-    db_options = {}
+elif 'mysql' in db_backend:
+    print("pretix does no longer support running on MySQL/MariaDB")
+    sys.exit(1)
 
-if 'mysql' in db_backend:
-    db_options['charset'] = 'utf8mb4'
+db_options = {}
+
+postgresql_sslmode = config.get('database', 'sslmode', fallback='disable')
+USE_DATABASE_TLS = postgresql_sslmode != 'disable'
+USE_DATABASE_MTLS = USE_DATABASE_TLS and config.has_option('database', 'sslcert')
+
+if USE_DATABASE_TLS or USE_DATABASE_MTLS:
+    tls_config = {}
+    if not USE_DATABASE_MTLS:
+        if 'postgresql' in db_backend:
+            tls_config = {
+                'sslmode': config.get('database', 'sslmode'),
+                'sslrootcert': config.get('database', 'sslrootcert'),
+            }
+    else:
+        if 'postgresql' in db_backend:
+            tls_config = {
+                'sslmode': config.get('database', 'sslmode'),
+                'sslrootcert': config.get('database', 'sslrootcert'),
+                'sslcert': config.get('database', 'sslcert'),
+                'sslkey': config.get('database', 'sslkey'),
+            }
+
+    db_options.update(tls_config)
 
 DATABASES = {
     'default': {
@@ -132,10 +150,7 @@ DATABASES = {
         'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
         'CONN_HEALTH_CHECKS': db_backend != 'sqlite3',  # Will only be used from Django 4.1 onwards
         'OPTIONS': db_options,
-        'TEST': {
-            'CHARSET': 'utf8mb4',
-            'COLLATION': 'utf8mb4_unicode_ci',
-        } if 'mysql' in db_backend else {}
+        'TEST': {}
     }
 }
 DATABASE_REPLICA = 'default'
@@ -150,10 +165,7 @@ if config.has_section('replica'):
         'PORT': config.get('replica', 'port', fallback=DATABASES['default']['PORT']),
         'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
         'OPTIONS': db_options,
-        'TEST': {
-            'CHARSET': 'utf8mb4',
-            'COLLATION': 'utf8mb4_unicode_ci',
-        } if 'mysql' in db_backend else {}
+        'TEST': {}
     }
     DATABASE_ROUTERS = ['pretix.helpers.database.ReplicaRouter']
 
@@ -169,13 +181,12 @@ PRETIX_ADMIN_AUDIT_COMMENTS = config.getboolean('pretix', 'audit_comments', fall
 PRETIX_OBLIGATORY_2FA = config.getboolean('pretix', 'obligatory_2fa', fallback=False)
 PRETIX_SESSION_TIMEOUT_RELATIVE = 3600 * 3
 PRETIX_SESSION_TIMEOUT_ABSOLUTE = 3600 * 12
-PRETIX_PRIMARY_COLOR = '#8E44B3'
 
 SITE_URL = config.get('pretix', 'url', fallback='http://localhost:8000')
 if SITE_URL.endswith('/'):
     SITE_URL = SITE_URL[:-1]
 
-CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).hostname]
+CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).scheme + '://' + urlparse(SITE_URL).hostname]
 
 TRUST_X_FORWARDED_FOR = config.get('pretix', 'trust_x_forwarded_for', fallback=False)
 USE_X_FORWARDED_HOST = config.get('pretix', 'trust_x_forwarded_host', fallback=False)
@@ -194,25 +205,6 @@ PRETIX_PLUGINS_SHOW_META = config.getboolean('pretix', 'plugins_show_meta', fall
 FETCH_ECB_RATES = config.getboolean('pretix', 'ecb_rates', fallback=True)
 
 DEFAULT_CURRENCY = config.get('pretix', 'currency', fallback='EUR')
-CURRENCIES = list(currencies)
-CURRENCY_PLACES = {
-    # default is 2
-    'BIF': 0,
-    'CLP': 0,
-    'DJF': 0,
-    'GNF': 0,
-    'JPY': 0,
-    'KMF': 0,
-    'KRW': 0,
-    'MGA': 0,
-    'PYG': 0,
-    'RWF': 0,
-    'VND': 0,
-    'VUV': 0,
-    'XAF': 0,
-    'XOF': 0,
-    'XPF': 0,
-}
 
 ALLOWED_HOSTS = ['*']
 
@@ -233,6 +225,7 @@ EMAIL_USE_TLS = config.getboolean('mail', 'tls', fallback=False)
 EMAIL_USE_SSL = config.getboolean('mail', 'ssl', fallback=False)
 EMAIL_SUBJECT_PREFIX = '[pretix] '
 EMAIL_BACKEND = EMAIL_CUSTOM_SMTP_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_TIMEOUT = 60
 
 ADMINS = [('Admin', n) for n in config.get('mail', 'admins', fallback='').split(",") if n]
 
@@ -248,11 +241,6 @@ CACHES = {
 REAL_CACHE_USED = False
 SESSION_ENGINE = None
 
-# pretix includes caching options for some special situations where full HTML responses are cached. This might be
-# stressful for some cache setups so it is enabled by default and currently can't be enabled through pretix.cfg
-CACHE_LARGE_VALUES_ALLOWED = False
-CACHE_LARGE_VALUES_ALIAS = 'default'
-
 HAS_MEMCACHED = config.has_option('memcached', 'location')
 if HAS_MEMCACHED:
     REAL_CACHE_USED = True
@@ -263,6 +251,9 @@ if HAS_MEMCACHED:
 
 HAS_REDIS = config.has_option('redis', 'location')
 USE_REDIS_SENTINEL = config.has_option('redis', 'sentinels')
+redis_ssl_cert_reqs = config.get('redis', 'ssl_cert_reqs', fallback='none')
+USE_REDIS_TLS = redis_ssl_cert_reqs != 'none'
+USE_REDIS_MTLS = USE_REDIS_TLS and config.has_option('redis', 'ssl_certfile')
 HAS_REDIS_PASSWORD = config.has_option('redis', 'password')
 if HAS_REDIS:
     OPTIONS = {
@@ -277,6 +268,29 @@ if HAS_REDIS:
         # See https://github.com/jazzband/django-redis/issues/540
         OPTIONS["SENTINEL_KWARGS"] = {"socket_timeout": 1}
         OPTIONS["SENTINELS"] = [tuple(sentinel) for sentinel in loads(config.get('redis', 'sentinels'))]
+
+    if USE_REDIS_TLS or USE_REDIS_MTLS:
+        tls_config = {}
+        if not USE_REDIS_MTLS:
+            tls_config = {
+                'ssl_cert_reqs': config.get('redis', 'ssl_cert_reqs'),
+                'ssl_ca_certs': config.get('redis', 'ssl_ca_certs'),
+            }
+        else:
+            tls_config = {
+                'ssl_cert_reqs': config.get('redis', 'ssl_cert_reqs'),
+                'ssl_ca_certs': config.get('redis', 'ssl_ca_certs'),
+                'ssl_keyfile': config.get('redis', 'ssl_keyfile'),
+                'ssl_certfile': config.get('redis', 'ssl_certfile'),
+            }
+
+        if USE_REDIS_SENTINEL is False:
+            # The CONNECTION_POOL_KWARGS option is necessary for self-signed certs. For further details, please check
+            # https://github.com/jazzband/django-redis/issues/554#issuecomment-949498321
+            OPTIONS["CONNECTION_POOL_KWARGS"] = tls_config
+            OPTIONS["REDIS_CLIENT_KWARGS"].update(tls_config)
+        else:
+            OPTIONS["SENTINEL_KWARGS"].update(tls_config)
 
     if HAS_REDIS_PASSWORD:
         OPTIONS["PASSWORD"] = config.get('redis', 'password')
@@ -337,57 +351,19 @@ if config.has_option('geoip', 'path'):
     GEOIP_COUNTRY = config.get('geoip', 'filename_country', fallback='GeoLite2-Country.mmdb')
 
 # Internal settings
-PRETIX_EMAIL_NONE_VALUE = 'none@well-known.pretix.eu'
-
-STATIC_ROOT = os.path.join(os.path.dirname(__file__), 'static.dist')
-
 SESSION_COOKIE_NAME = 'pretix_session'
 LANGUAGE_COOKIE_NAME = 'pretix_language'
 CSRF_COOKIE_NAME = 'pretix_csrftoken'
 SESSION_COOKIE_HTTPONLY = True
 
-INSTALLED_APPS = [
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.humanize',
-    'pretix.base',
-    'pretix.control',
-    'pretix.presale',
-    'pretix.multidomain',
-    'pretix.api',
-    'pretix.helpers',
-    'rest_framework',
+INSTALLED_APPS += [ # noqa
     'django_filters',
-    'compressor',
-    'bootstrap3',
-    'djangoformsetjs',
-    'pretix.plugins.banktransfer',
-    'pretix.plugins.stripe',
-    'pretix.plugins.paypal',
-    'pretix.plugins.paypal2',
-    'pretix.plugins.ticketoutputpdf',
-    'pretix.plugins.sendmail',
-    'pretix.plugins.statistics',
-    'pretix.plugins.reports',
-    'pretix.plugins.checkinlists',
-    'pretix.plugins.pretixdroid',
-    'pretix.plugins.badges',
-    'pretix.plugins.manualpayment',
-    'pretix.plugins.returnurl',
-    'pretix.plugins.webcheckin',
     'django_markup',
     'django_otp',
     'django_otp.plugins.otp_totp',
     'django_otp.plugins.otp_static',
-    'statici18n',
-    'django_countries',
     'hijack',
-    'oauth2_provider',
     'localflavor',
-    'phonenumber_field'
 ]
 
 if db_backend == 'postgresql':
@@ -504,100 +480,18 @@ ROOT_URLCONF = 'pretix.multidomain.maindomain_urlconf'
 
 WSGI_APPLICATION = 'pretix.wsgi.application'
 
-USE_I18N = True
-USE_L10N = True
-USE_TZ = True
-
-LOCALE_PATHS = [
-    os.path.join(os.path.dirname(__file__), 'locale'),
-]
 if config.has_option('languages', 'path'):
-    LOCALE_PATHS.insert(0, config.get('languages', 'path'))
+    LOCALE_PATHS.insert(0, config.get('languages', 'path')) # noqa
 
-FORMAT_MODULE_PATH = [
-    'pretix.helpers.formats',
-]
-
-ALL_LANGUAGES = [
-    ('en', _('English')),
-    ('de', _('German')),
-    ('de-informal', _('German (informal)')),
-    ('ar', _('Arabic')),
-    ('zh-hans', _('Chinese (simplified)')),
-    ('cs', _('Czech')),
-    ('da', _('Danish')),
-    ('nl', _('Dutch')),
-    ('nl-informal', _('Dutch (informal)')),
-    ('fr', _('French')),
-    ('fi', _('Finnish')),
-    ('gl', _('Galician')),
-    ('el', _('Greek')),
-    ('it', _('Italian')),
-    ('lv', _('Latvian')),
-    ('pl', _('Polish')),
-    ('pt-pt', _('Portuguese (Portugal)')),
-    ('pt-br', _('Portuguese (Brazil)')),
-    ('ro', _('Romanian')),
-    ('ru', _('Russian')),
-    ('es', _('Spanish')),
-    ('tr', _('Turkish')),
-    ('uk', _('Ukrainian')),
-]
-LANGUAGES_OFFICIAL = {
-    'en', 'de', 'de-informal'
-}
-LANGUAGES_INCUBATING = {
-    'pl', 'fi', 'pt-br', 'gl',
-} - set(config.get('languages', 'allow_incubating', fallback='').split(','))
-LANGUAGES_RTL = {
-    'ar', 'hw'
-}
+LANGUAGES_INCUBATING = LANGUAGES_INCUBATING - set(config.get('languages', 'allow_incubating', fallback='').split(',')) # noqa
 LANGUAGES = []
 LANGUAGES_ENABLED = [lang for lang in config.get("languages", "enabled", fallback='').split(',') if lang]
-for k, v in ALL_LANGUAGES:
+for k, v in ALL_LANGUAGES: # noqa
     if not DEBUG and k in LANGUAGES_INCUBATING:
         continue
     if LANGUAGES_ENABLED and k not in LANGUAGES_ENABLED:
         continue
     LANGUAGES.append((k, v))
-
-
-EXTRA_LANG_INFO = {
-    'de-informal': {
-        'bidi': False,
-        'code': 'de-informal',
-        'name': 'German (informal)',
-        'name_local': 'Deutsch',
-        'public_code': 'de',
-    },
-    'nl-informal': {
-        'bidi': False,
-        'code': 'nl-informal',
-        'name': 'Dutch (informal)',
-        'name_local': 'Nederlands',
-        'public_code': 'nl',
-    },
-    'fr': {
-        'bidi': False,
-        'code': 'fr',
-        'name': 'French',
-        'name_local': 'Français'
-    },
-    'lv': {
-        'bidi': False,
-        'code': 'lv',
-        'name': 'Latvian',
-        'name_local': 'Latviešu'
-    },
-    'pt-pt': {
-        'bidi': False,
-        'code': 'pt-pt',
-        'name': 'Portuguese',
-        'name_local': 'Português',
-    },
-}
-
-django.conf.locale.LANG_INFO.update(EXTRA_LANG_INFO)
 
 
 AUTH_USER_MODEL = 'pretixbase.User'
@@ -610,75 +504,10 @@ template_loaders = (
     'pretix.helpers.template_loaders.AppLoader',
 )
 if not DEBUG:
-    template_loaders = (
+    TEMPLATES[0]['OPTIONS']['loaders'] = ( # noqa
         ('django.template.loaders.cached.Loader', template_loaders),
     )
-
-TEMPLATES = [
-    {
-        'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [
-            os.path.join(DATA_DIR, 'templates'),
-            os.path.join(BASE_DIR, 'templates'),
-        ],
-        'OPTIONS': {
-            'context_processors': [
-                'django.contrib.auth.context_processors.auth',
-                'django.template.context_processors.debug',
-                'django.template.context_processors.i18n',
-                'django.template.context_processors.media',
-                "django.template.context_processors.request",
-                'django.template.context_processors.static',
-                'django.template.context_processors.tz',
-                'django.contrib.messages.context_processors.messages',
-                'pretix.base.context.contextprocessor',
-                'pretix.control.context.contextprocessor',
-                'pretix.presale.context.contextprocessor',
-            ],
-            'loaders': template_loaders
-        },
-    },
-]
-
-STATICFILES_FINDERS = (
-    'django.contrib.staticfiles.finders.FileSystemFinder',
-    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
-    'compressor.finders.CompressorFinder',
-)
-
-STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, 'pretix/static')
-] if os.path.exists(os.path.join(BASE_DIR, 'pretix/static')) else []
-
-STATICI18N_ROOT = os.path.join(BASE_DIR, "pretix/static")
-
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-
-# if os.path.exists(os.path.join(DATA_DIR, 'static')):
-#     STATICFILES_DIRS.insert(0, os.path.join(DATA_DIR, 'static'))
-
-COMPRESS_PRECOMPILERS = (
-    ('text/x-scss', 'django_libsass.SassCompiler'),
-    ('text/vue', 'pretix.helpers.compressor.VueCompiler'),
-)
-
-COMPRESS_OFFLINE_CONTEXT = {
-    'basetpl': 'empty.html',
-}
-
-COMPRESS_ENABLED = COMPRESS_OFFLINE = not debug_fallback
-
-COMPRESS_FILTERS = {
-    'css': (
-        # CssAbsoluteFilter is incredibly slow, especially when dealing with our _flags.scss
-        # However, we don't need it if we consequently use the static() function in Sass
-        # 'compressor.filters.css_default.CssAbsoluteFilter',
-        'compressor.filters.cssmin.rCSSMinFilter',
-    ),
-    'js': (
-        'compressor.filters.jsmin.JSMinFilter',
-    )
-}
+TEMPLATES[0]['DIRS'].insert(0, os.path.join(DATA_DIR, 'templates')) # noqa
 
 INTERNAL_IPS = ('127.0.0.1', '::1')
 
@@ -691,6 +520,8 @@ MESSAGE_TAGS = {
 MESSAGE_STORAGE = 'django.contrib.messages.storage.session.SessionStorage'
 
 loglevel = 'DEBUG' if DEBUG else config.get('pretix', 'loglevel', fallback='INFO')
+
+COMPRESS_ENABLED = COMPRESS_OFFLINE = not debug_fallback
 
 LOGGING = {
     'version': 1,
@@ -846,8 +677,8 @@ CELERY_TASK_ROUTES = ([
 BOOTSTRAP3 = {
     'success_css_class': '',
     'field_renderers': {
-        'default': 'bootstrap3.renderers.FieldRenderer',
-        'inline': 'bootstrap3.renderers.InlineFieldRenderer',
+        'default': 'pretix.base.forms.renderers.FieldRenderer',
+        'inline': 'pretix.base.forms.renderers.InlineFieldRenderer',
         'control': 'pretix.control.forms.renderers.ControlFieldRenderer',
         'bulkedit': 'pretix.control.forms.renderers.BulkEditFieldRenderer',
         'bulkedit_inline': 'pretix.control.forms.renderers.InlineBulkEditFieldRenderer',

@@ -35,8 +35,7 @@
 import importlib
 
 from django.apps import apps
-from django.conf.urls import re_path
-from django.urls import include
+from django.urls import include, re_path
 from rest_framework import routers
 
 from pretix.api.views import cart
@@ -89,6 +88,7 @@ event_router.register(r'checkinlists', checkin.CheckinListViewSet)
 event_router.register(r'cartpositions', cart.CartPositionViewSet)
 event_router.register(r'exporters', exporters.EventExportersViewSet, basename='exporters')
 event_router.register(r'shredders', shredders.EventShreddersViewSet, basename='shredders')
+event_router.register(r'item_meta_properties', event.ItemMetaPropertiesViewSet)
 
 checkinlist_router = routers.DefaultRouter()
 checkinlist_router.register(r'positions', checkin.CheckinListPositionViewSet, basename='checkinlistpos')

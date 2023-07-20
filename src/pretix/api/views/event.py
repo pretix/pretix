@@ -47,11 +47,13 @@ from pretix.api.auth.permission import EventCRUDPermission
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.event import (
     CloneEventSerializer, DeviceEventSettingsSerializer, EventSerializer,
-    EventSettingsSerializer, SubEventSerializer, TaxRuleSerializer,
+    EventSettingsSerializer, ItemMetaPropertiesSerializer, SubEventSerializer,
+    TaxRuleSerializer,
 )
 from pretix.api.views import ConditionalListView
 from pretix.base.models import (
-    CartPosition, Device, Event, SeatCategoryMapping, TaxRule, TeamAPIToken,
+    CartPosition, Device, Event, ItemMetaProperty, SeatCategoryMapping,
+    TaxRule, TeamAPIToken,
 )
 from pretix.base.models.event import SubEvent
 from pretix.base.services.quotas import QuotaAvailability
@@ -69,6 +71,8 @@ with scopes_disabled():
         ends_after = django_filters.rest_framework.IsoDateTimeFilter(method='ends_after_qs')
         sales_channel = django_filters.rest_framework.CharFilter(method='sales_channel_qs')
         search = django_filters.rest_framework.CharFilter(method='search_qs')
+        date_from = django_filters.rest_framework.IsoDateTimeFromToRangeFilter()
+        date_to = django_filters.rest_framework.IsoDateTimeFromToRangeFilter()
 
         class Meta:
             model = Event
@@ -334,6 +338,8 @@ with scopes_disabled():
         modified_since = django_filters.IsoDateTimeFilter(field_name='last_modified', lookup_expr='gte')
         sales_channel = django_filters.rest_framework.CharFilter(method='sales_channel_qs')
         search = django_filters.rest_framework.CharFilter(method='search_qs')
+        date_from = django_filters.rest_framework.IsoDateTimeFromToRangeFilter()
+        date_to = django_filters.rest_framework.IsoDateTimeFromToRangeFilter()
 
         class Meta:
             model = SubEvent
@@ -520,6 +526,54 @@ class TaxRuleViewSet(ConditionalListView, viewsets.ModelViewSet):
             auth=self.request.auth,
         )
         super().perform_destroy(instance)
+
+
+class ItemMetaPropertiesViewSet(viewsets.ModelViewSet):
+    serializer_class = ItemMetaPropertiesSerializer
+    queryset = ItemMetaProperty.objects.none()
+    write_permission = 'can_change_event_settings'
+
+    def get_queryset(self):
+        qs = self.request.event.item_meta_properties.all()
+        return qs
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        ctx['event'] = self.request.event
+        return ctx
+
+    @transaction.atomic()
+    def perform_destroy(self, instance):
+        instance.log_action(
+            'pretix.event.item_meta_property.deleted',
+            user=self.request.user,
+            auth=self.request.auth,
+            data={'id': instance.pk}
+        )
+        instance.delete()
+
+    @transaction.atomic()
+    def perform_create(self, serializer):
+        inst = serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.item_meta_property.added',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+        return inst
+
+    @transaction.atomic()
+    def perform_update(self, serializer):
+        inst = serializer.save(event=self.request.event)
+        serializer.instance.log_action(
+            'pretix.event.item_meta_property.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data,
+        )
+        return inst
 
 
 class EventSettingsView(views.APIView):

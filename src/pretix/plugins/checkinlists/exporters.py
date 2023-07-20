@@ -33,12 +33,13 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from collections import OrderedDict
+from datetime import timezone
 
 import bleach
 import dateutil.parser
 from django import forms
 from django.db.models import (
-    Case, Exists, Max, OuterRef, Q, Subquery, Value, When,
+    Case, Exists, F, Max, OuterRef, Q, Subquery, Value, When,
 )
 from django.db.models.functions import Coalesce, NullIf
 from django.urls import reverse
@@ -47,7 +48,6 @@ from django.utils.timezone import is_aware, make_aware, now
 from django.utils.translation import (
     gettext as _, gettext_lazy, pgettext, pgettext_lazy,
 )
-from pytz import UTC
 from reportlab.lib.units import mm
 from reportlab.platypus import Flowable, Paragraph, Spacer, Table, TableStyle
 
@@ -62,6 +62,7 @@ from pretix.base.timeframes import (
     resolve_timeframe_to_datetime_start_inclusive_end_exclusive,
 )
 from pretix.control.forms.widgets import Select2
+from pretix.helpers.filenames import safe_for_filename
 from pretix.helpers.templatetags.jsonfield import JSONExtract
 from pretix.plugins.reports.exporters import ReportlabExportMixin
 
@@ -97,6 +98,18 @@ class CheckInListMixin(BaseExporter):
                  forms.BooleanField(
                      label=_('Only tickets requiring special attention'),
                      required=False
+                 )),
+                ('status',
+                 forms.ChoiceField(
+                     label=_('Check-in status'),
+                     choices=(
+                         ('', _('All attendees')),
+                         ('1', _('Checked in')),
+                         ('2', pgettext_lazy('checkin state', 'Present')),
+                         ('3', pgettext_lazy('checkin state', 'Checked in but left')),
+                         ('0', _('Not checked in')),
+                     ),
+                     required=False,
                  )),
                 ('sort',
                  forms.ChoiceField(
@@ -169,6 +182,19 @@ class CheckInListMixin(BaseExporter):
         ).prefetch_related(
             'answers', 'answers__question', 'addon_to__answers', 'addon_to__answers__question'
         ).select_related('order', 'item', 'variation', 'addon_to', 'order__invoice_address', 'voucher', 'seat')
+
+        if form_data.get('status'):
+            s = form_data.get('status')
+            if s == '1':
+                qs = qs.filter(last_checked_in__isnull=False)
+            elif s == '2':
+                qs = qs.filter(pk__in=cl.positions_inside.values_list('pk'))
+            elif s == '3':
+                qs = qs.filter(last_checked_in__isnull=False).filter(
+                    Q(last_checked_out__isnull=False) & Q(last_checked_out__gte=F('last_checked_in'))
+                )
+            elif s == '0':
+                qs = qs.filter(last_checked_in__isnull=True)
 
         if not cl.all_products:
             qs = qs.filter(item__in=cl.limit_products.values_list('id', flat=True))
@@ -259,6 +285,7 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
     category = pgettext_lazy('export_category', 'Check-in')
     description = gettext_lazy("Download a PDF version of a check-in list that can be used to check people in at the "
                                "event without digital methods.")
+    numbered_canvas = True
 
     @property
     def export_form_fields(self):
@@ -434,7 +461,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
         return self._fields
 
     def iterate_list(self, form_data):
-        cl = self.event.checkin_lists.get(pk=form_data['list'])
+        self.cl = cl = self.event.checkin_lists.get(pk=form_data['list'])
 
         questions = list(Question.objects.filter(event=self.event, id__in=form_data['questions']))
 
@@ -511,7 +538,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             elif op.last_checked_in:
                 last_checked_in = op.last_checked_in
             if last_checked_in and not is_aware(last_checked_in):
-                last_checked_in = make_aware(last_checked_in, UTC)
+                last_checked_in = make_aware(last_checked_in, timezone.utc)
 
             last_checked_out = None
             if isinstance(op.last_checked_out, str):  # SQLite
@@ -519,7 +546,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             elif op.last_checked_out:
                 last_checked_out = op.last_checked_out
             if last_checked_out and not is_aware(last_checked_out):
-                last_checked_out = make_aware(last_checked_out, UTC)
+                last_checked_out = make_aware(last_checked_out, timezone.utc)
 
             row = [
                 op.order.code,
@@ -611,7 +638,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
             yield row
 
     def get_filename(self):
-        return '{}_checkin'.format(self.event.slug)
+        return '{}_checkin_{}'.format(self.event.slug, safe_for_filename(self.cl.name))
 
 
 class CheckinLogList(ListExporter):

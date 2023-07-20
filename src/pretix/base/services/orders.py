@@ -95,7 +95,8 @@ from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
 from pretix.base.signals import (
     allow_ticket_download, order_approved, order_canceled, order_changed,
     order_denied, order_expired, order_fee_calculation, order_paid,
-    order_placed, order_split, periodic_task, validate_order,
+    order_placed, order_split, order_valid_if_pending, periodic_task,
+    validate_order,
 )
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
@@ -235,7 +236,7 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
 
                     for gc in position.issued_gift_cards.all():
                         gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
-                        gc.transactions.create(value=position.price, order=order)
+                        gc.transactions.create(value=position.price, order=order, acceptor=order.event.organizer)
                         break
 
                     for m in position.granted_memberships.all():
@@ -513,7 +514,7 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                         )
                     )
                 else:
-                    gc.transactions.create(value=-position.price, order=order)
+                    gc.transactions.create(value=-position.price, order=order, acceptor=order.event.organizer)
 
             for m in position.granted_memberships.all():
                 m.canceled = True
@@ -922,7 +923,7 @@ def _get_fees(positions: List[CartPosition], payment_requests: List[dict], addre
 def _create_order(event: Event, email: str, positions: List[CartPosition], now_dt: datetime,
                   payment_requests: List[dict], locale: str=None, address: InvoiceAddress=None,
                   meta_info: dict=None, sales_channel: str='web', shown_total=None,
-                  customer=None):
+                  customer=None, valid_if_pending=False):
     payments = []
     sales_channel = get_all_sales_channels()[sales_channel]
 
@@ -934,7 +935,10 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             raise OrderError(e.message)
 
         require_approval = any(p.requires_approval(invoice_address=address) for p in positions)
-        fees = _get_fees(positions, payment_requests, address, meta_info, event, require_approval=require_approval)
+        try:
+            fees = _get_fees(positions, payment_requests, address, meta_info, event, require_approval=require_approval)
+        except TaxRule.SaleNotAllowed:
+            raise OrderError(error_messages['country_blocked'])
         total = pending_sum = sum([c.price for c in positions]) + sum([c.value for c in fees])
 
         order = Order(
@@ -950,6 +954,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
             require_approval=require_approval,
             sales_channel=sales_channel.identifier,
             customer=customer,
+            valid_if_pending=valid_if_pending,
         )
         if customer:
             order.email_known_to_work = customer.is_verified
@@ -966,7 +971,10 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 
         for fee in fees:
             fee.order = order
-            fee._calculate_tax()
+            try:
+                fee._calculate_tax()
+            except TaxRule.SaleNotAllowed:
+                raise OrderError(error_messages['country_blocked'])
             if fee.tax_rule and not fee.tax_rule.pk:
                 fee.tax_rule = None  # TODO: deprecate
             fee.save()
@@ -1094,6 +1102,20 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         customer=customer,
     )
 
+    valid_if_pending = False
+    for recv, result in order_valid_if_pending.send(
+            event,
+            payments=payment_requests,
+            email=email,
+            positions=positions,
+            locale=locale,
+            invoice_address=addr,
+            meta_info=meta_info,
+            customer=customer,
+    ):
+        if result:
+            valid_if_pending = True
+
     lockfn = NoLockManager
     locked = False
     if positions.filter(Q(voucher__isnull=False) | Q(expires__lt=now() + timedelta(minutes=2)) | Q(seat__isnull=False)).exists():
@@ -1117,7 +1139,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel, customer=customer)
         order, payment_objs = _create_order(event, email, positions, now_dt, payment_requests,
                                             locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
-                                            shown_total=shown_total, customer=customer)
+                                            shown_total=shown_total, customer=customer, valid_if_pending=valid_if_pending)
         try:
             for p in payment_objs:
                 if p.provider == 'free':
@@ -1248,12 +1270,12 @@ def expire_orders(sender, **kwargs):
         Exists(
             OrderFee.objects.filter(order_id=OuterRef('pk'), fee_type=OrderFee.FEE_TYPE_CANCELLATION)
         )
-    ).select_related('event').order_by('event_id')
+    ).prefetch_related('event').order_by('event_id')
     for o in qs:
         if o.event_id != event_id:
             expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)
             event_id = o.event_id
-        if expire:
+        if expire and now() >= o.payment_term_expire_date:
             mark_order_expired(o)
 
 
@@ -1442,6 +1464,16 @@ class OrderChangeManager:
         'seat_forbidden': gettext_lazy('The selected product does not allow to select a seat.'),
         'tax_rule_country_blocked': gettext_lazy('The selected country is blocked by your tax rule.'),
         'gift_card_change': gettext_lazy('You cannot change the price of a position that has been used to issue a gift card.'),
+        'max_items_per_product': ngettext_lazy(
+            "You cannot select more than %(max)s item of the product %(product)s.",
+            "You cannot select more than %(max)s items of the product %(product)s.",
+            "max"
+        ),
+        'min_items_per_product': ngettext_lazy(
+            "You need to select at least %(min)s item of the product %(product)s.",
+            "You need to select at least %(min)s items of the product %(product)s.",
+            "min"
+        ),
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation'))
     SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent'))
@@ -1744,6 +1776,11 @@ class OrderChangeManager:
         if self._operations:
             raise ValueError("Setting addons should be the first/only operation")
 
+        # Prepare containers for min/max check of products
+        item_counts = Counter()
+        for p in self.order.positions.all():
+            item_counts[p.item] += 1
+
         # Prepare various containers to hold data later
         current_addons = defaultdict(lambda: defaultdict(list))  # OrderPos -> currently attached add-ons
         input_addons = defaultdict(Counter)  # OrderPos -> final desired set of add-ons
@@ -1861,7 +1898,7 @@ class OrderChangeManager:
             input_addons[op.id][a['item'], a['variation']] = a.get('count', 1)
             selected_addons[op.id, item.category_id][a['item'], a['variation']] = a.get('count', 1)
 
-            if price_included[op.pk].get(item.category_id):
+            if price_included[op.pk].get(item.category_id) or (op.voucher_id and op.voucher.all_addons_included):
                 price = TAXED_ZERO
             else:
                 price = get_price(
@@ -1880,6 +1917,7 @@ class OrderChangeManager:
                         item=item, variation=variation, price=price,
                         addon_to=op, subevent=op.subevent, seat=None,
                     )
+                    item_counts[item] += 1
 
         # Check constraints on the add-on combinations
         for op in toplevel_op:
@@ -1929,6 +1967,27 @@ class OrderChangeManager:
                                 }
                             )
                         self.cancel(a)
+                        item_counts[a.item] -= 1
+
+        for item, count in item_counts.items():
+            if count == 0:
+                continue
+
+            if item.max_per_order and count > item.max_per_order:
+                raise OrderError(
+                    self.error_messages['max_items_per_product'] % {
+                        'max': item.max_per_order,
+                        'product': item.name
+                    }
+                )
+
+            if item.min_per_order and count < item.min_per_order:
+                raise OrderError(
+                    self.error_messages['min_items_per_product'] % {
+                        'min': item.min_per_order,
+                        'product': item.name
+                    }
+                )
 
     def _check_seats(self):
         for seat, diff in self._seatdiff.items():
@@ -2186,7 +2245,7 @@ class OrderChangeManager:
                             card=gc.secret
                         ))
                     else:
-                        gc.transactions.create(value=-op.position.price, order=self.order)
+                        gc.transactions.create(value=-op.position.price, order=self.order, acceptor=self.order.event.organizer)
 
                 for m in op.position.granted_memberships.with_usages().all():
                     m.canceled = True
@@ -2202,7 +2261,7 @@ class OrderChangeManager:
                                 card=gc.secret
                             ))
                         else:
-                            gc.transactions.create(value=-opa.position.price, order=self.order)
+                            gc.transactions.create(value=-opa.position.price, order=self.order, acceptor=self.order.event.organizer)
 
                     for m in opa.granted_memberships.with_usages().all():
                         m.canceled = True
@@ -2918,7 +2977,7 @@ def signal_listener_issue_giftcards(sender: Event, order: Order, **kwargs):
                     currency=sender.currency, issued_in=p, testmode=order.testmode,
                     expires=sender.organizer.default_gift_card_expiry,
                 )
-                gc.transactions.create(value=p.price - issued, order=order)
+                gc.transactions.create(value=p.price - issued, order=order, acceptor=sender.organizer)
                 any_giftcards = True
                 p.secret = gc.secret
                 p.save(update_fields=['secret'])

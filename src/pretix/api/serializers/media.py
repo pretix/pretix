@@ -60,11 +60,15 @@ class NestedGiftCardSerializer(GiftCardSerializer):
 
 
 class ReusableMediaSerializer(I18nAwareModelSerializer):
+    organizer = serializers.SlugRelatedField(slug_field='slug', read_only=True)
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
         if 'linked_giftcard' in self.context['request'].query_params.getlist('expand'):
-            self.fields['linked_giftcard'] = NestedGiftCardSerializer(read_only=True)
+            self.fields['linked_giftcard'] = NestedGiftCardSerializer(read_only=True, context=self.context)
+            if 'linked_giftcard.owner_ticket' in self.context['request'].query_params.getlist('expand'):
+                self.fields['linked_giftcard'].fields['owner_ticket'] = NestedOrderPositionSerializer(read_only=True, context=self.context)
         else:
             self.fields['linked_giftcard'] = serializers.PrimaryKeyRelatedField(
                 required=False,
@@ -109,6 +113,7 @@ class ReusableMediaSerializer(I18nAwareModelSerializer):
         model = ReusableMedium
         fields = (
             'id',
+            'organizer',
             'created',
             'updated',
             'type',

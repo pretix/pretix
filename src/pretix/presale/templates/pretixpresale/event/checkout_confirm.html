@@ -184,12 +184,12 @@
             </div>
         {% endif %}
         {% if require_approval %}
-            <div class="alert alert-warning alert-primary">
+            <div class="alert alert-warning">
                 <strong>
-                    {% trans "Your order requires approval by the event organizer before it can be confirmed and forms a valid contract." %}
+                    {% trans "After you submitted your order using the button below, it will require approval by the event organizer before it can be confirmed and forms a valid contract." %}
                 </strong>
                 {% blocktrans trimmed %}
-                    We will sent you an email as soon as the event organizer approved or rejected your order.
+                    We will send you an email as soon as the event organizer approved or rejected your order.
                 {% endblocktrans %}
                 {% if cart.total > 0 %}
                     {% blocktrans trimmed %}

@@ -36,6 +36,7 @@
 
 from decimal import Decimal
 from urllib.parse import urlencode, urlparse
+from zoneinfo import ZoneInfo
 
 from django import forms
 from django.conf import settings
@@ -55,7 +56,7 @@ from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import (
     I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
 )
-from pytz import common_timezones, timezone
+from pytz import common_timezones
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_available_placeholders
@@ -221,7 +222,7 @@ class EventWizardBasicsForm(I18nModelForm):
             })
 
         # change timezone
-        zone = timezone(data.get('timezone'))
+        zone = ZoneInfo(data.get('timezone'))
         data['date_from'] = self.reset_timezone(zone, data.get('date_from'))
         data['date_to'] = self.reset_timezone(zone, data.get('date_to'))
         data['presale_start'] = self.reset_timezone(zone, data.get('presale_start'))
@@ -230,7 +231,7 @@ class EventWizardBasicsForm(I18nModelForm):
 
     @staticmethod
     def reset_timezone(tz, dt):
-        return tz.localize(dt.replace(tzinfo=None)) if dt is not None else None
+        return dt.replace(tzinfo=tz) if dt is not None else None
 
     def clean_slug(self):
         slug = self.cleaned_data['slug']
@@ -542,6 +543,7 @@ class EventSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'waiting_list_phones_asked',
         'waiting_list_phones_required',
         'waiting_list_phones_explanation_text',
+        'waiting_list_limit_per_user',
         'max_items_per_order',
         'reservation_time',
         'contact_mail',
@@ -747,6 +749,7 @@ class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'payment_term_minutes',
         'payment_term_last',
         'payment_term_expire_automatically',
+        'payment_term_expire_delay_days',
         'payment_term_accept_late',
         'payment_pending_hidden',
         'payment_explanation',
@@ -855,6 +858,8 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'invoice_footer_text',
         'invoice_eu_currencies',
         'invoice_logo_image',
+        'invoice_renderer_highlight_order_code',
+        'invoice_renderer_font',
     ]
 
     invoice_generate_sales_channels = forms.MultipleChoiceField(
@@ -1258,8 +1263,12 @@ class MailSettingsForm(SettingsForm):
         'mail_subject_order_placed_require_approval': ['event', 'order'],
         'mail_text_order_approved': ['event', 'order'],
         'mail_subject_order_approved': ['event', 'order'],
+        'mail_text_order_approved_attendee': ['event', 'order'],
+        'mail_subject_order_approved_attendee': ['event', 'order'],
         'mail_text_order_approved_free': ['event', 'order'],
         'mail_subject_order_approved_free': ['event', 'order'],
+        'mail_text_order_approved_free_attendee': ['event', 'order'],
+        'mail_subject_order_approved_free_attendee': ['event', 'order'],
         'mail_text_order_denied': ['event', 'order', 'comment'],
         'mail_subject_order_denied': ['event', 'order', 'comment'],
         'mail_text_order_paid': ['event', 'order', 'payment_info'],
@@ -1392,7 +1401,7 @@ class CommentForm(I18nModelForm):
         fields = ['comment']
         widgets = {
             'comment': forms.Textarea(attrs={
-                'rows': 3,
+                'rows': 6,
                 'class': 'helper-width-100',
             }),
         }
@@ -1470,6 +1479,7 @@ class TaxRuleForm(I18nModelForm):
 class WidgetCodeForm(forms.Form):
     subevent = forms.ModelChoiceField(
         label=pgettext_lazy('subevent', "Date"),
+        empty_label=pgettext_lazy('subevent', "All dates"),
         required=False,
         queryset=SubEvent.objects.none()
     )
@@ -1670,7 +1680,7 @@ QuickSetupProductFormSet = formset_factory(
 
 class ItemMetaPropertyForm(forms.ModelForm):
     class Meta:
-        fields = ['name', 'default']
+        fields = ['name', 'default', 'required', 'allowed_values']
         widgets = {
             'default': forms.TextInput()
         }

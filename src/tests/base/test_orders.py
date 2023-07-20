@@ -20,17 +20,19 @@
 # <https://www.gnu.org/licenses/>.
 #
 import json
-from datetime import datetime, timedelta
+import zoneinfo
+from datetime import date, datetime, timedelta
 from decimal import Decimal
+from zoneinfo import ZoneInfo
 
 import pytest
-import pytz
 from django.core import mail as djmail
 from django.db.models import F, Sum
 from django.test import TestCase
 from django.utils.timezone import make_aware, now
 from django_countries.fields import Country
 from django_scopes import scope
+from freezegun import freeze_time
 from tests.testdummy.signals import FoobazSalesChannel
 
 from pretix.base.decimal import round_decimal
@@ -256,9 +258,9 @@ def test_expiry_last_relative_subevents(event):
 @pytest.mark.django_db
 def test_expiry_dst(event):
     event.settings.set('timezone', 'Europe/Berlin')
-    tz = pytz.timezone('Europe/Berlin')
-    utc = pytz.timezone('UTC')
-    today = tz.localize(datetime(2016, 10, 29, 12, 0, 0)).astimezone(utc)
+    tz = ZoneInfo('Europe/Berlin')
+    utc = ZoneInfo('UTC')
+    today = datetime(2016, 10, 29, 12, 0, 0, tzinfo=tz).astimezone(utc)
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today,
                           payment_requests=[{
@@ -404,6 +406,56 @@ def test_expiring_auto_disabled(event):
     assert o1.status == Order.STATUS_PENDING
     o2 = Order.objects.get(id=o2.id)
     assert o2.status == Order.STATUS_PENDING
+
+
+@pytest.mark.django_db
+def test_expiring_auto_delayed(event):
+    event.settings.set('payment_term_expire_delay_days', 3)
+    event.settings.set('payment_term_last', date(2023, 7, 2))
+    event.settings.set('timezone', 'Europe/Berlin')
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=datetime(2023, 6, 22, 12, 13, 14, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        expires=datetime(2023, 6, 30, 23, 59, 59, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        total=0,
+    )
+    o2 = Order.objects.create(
+        code='FO2', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=datetime(2023, 6, 22, 12, 13, 14, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        expires=datetime(2023, 6, 28, 23, 59, 59, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        total=0,
+    )
+    assert o1.payment_term_expire_date == o1.expires + timedelta(days=2)  # limited by term_last
+    assert o2.payment_term_expire_date == o2.expires + timedelta(days=3)
+    with freeze_time("2023-06-29T00:01:00+02:00"):
+        expire_orders(None)
+        o1 = Order.objects.get(id=o1.id)
+        assert o1.status == Order.STATUS_PENDING
+        o2 = Order.objects.get(id=o2.id)
+        assert o2.status == Order.STATUS_PENDING
+
+    with freeze_time("2023-07-01T23:50:00+02:00"):
+        expire_orders(None)
+        o1 = Order.objects.get(id=o1.id)
+        assert o1.status == Order.STATUS_PENDING
+        o2 = Order.objects.get(id=o2.id)
+        assert o2.status == Order.STATUS_PENDING
+
+    with freeze_time("2023-07-02T00:01:00+02:00"):
+        expire_orders(None)
+        o1 = Order.objects.get(id=o1.id)
+        assert o1.status == Order.STATUS_PENDING
+        o2 = Order.objects.get(id=o2.id)
+        assert o2.status == Order.STATUS_EXPIRED
+
+    with freeze_time("2023-07-03T00:01:00+02:00"):
+        expire_orders(None)
+        o1 = Order.objects.get(id=o1.id)
+        assert o1.status == Order.STATUS_EXPIRED
+        o2 = Order.objects.get(id=o2.id)
+        assert o2.status == Order.STATUS_EXPIRED
 
 
 @pytest.mark.django_db
@@ -965,7 +1017,7 @@ class OrderCancelTests(TestCase):
     @classscope(attr='o')
     def test_auto_refund_possible_issued_giftcard(self):
         gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
-        gc.transactions.create(value=23)
+        gc.transactions.create(value=23, acceptor=self.o)
         self.order.payments.create(
             amount=Decimal('46.00'),
             state=OrderPayment.PAYMENT_STATE_CONFIRMED,
@@ -979,7 +1031,7 @@ class OrderCancelTests(TestCase):
     @classscope(attr='o')
     def test_auto_refund_impossible_issued_giftcard_used(self):
         gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.o)
         self.order.payments.create(
             amount=Decimal('46.00'),
             state=OrderPayment.PAYMENT_STATE_CONFIRMED,
@@ -1397,7 +1449,7 @@ class OrderChangeManagerTests(TestCase):
     @classscope(attr='o')
     def test_cancel_issued_giftcard(self):
         gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
-        gc.transactions.create(value=23)
+        gc.transactions.create(value=23, acceptor=self.o)
         self.ocm.cancel(self.op1)
         self.ocm.commit()
         assert gc.value == Decimal('0.00')
@@ -1422,7 +1474,7 @@ class OrderChangeManagerTests(TestCase):
     @classscope(attr='o')
     def test_cancel_issued_giftcard_used(self):
         gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.o)
         self.ocm.cancel(self.op1)
         with self.assertRaises(OrderError):
             self.ocm.commit()
@@ -1430,7 +1482,7 @@ class OrderChangeManagerTests(TestCase):
     @classscope(attr='o')
     def test_change_price_issued_giftcard_used(self):
         gc = self.o.issued_gift_cards.create(currency="EUR", issued_in=self.op1)
-        gc.transactions.create(value=20)
+        gc.transactions.create(value=20, acceptor=self.o)
         with self.assertRaises(OrderError):
             self.ocm.change_price(self.op1, 25)
 
@@ -3089,6 +3141,9 @@ def test_autocheckin(clist_autocheckin, event):
     clist_autocheckin.auto_checkin_sales_channels = []
     clist_autocheckin.save()
 
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=today,
                           payment_requests=[{
@@ -3129,6 +3184,9 @@ def test_saleschannel_testmode_restriction(event):
                           locale='de', sales_channel='web')[0]
     assert not order.testmode
 
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=today,
                           payment_requests=[{
@@ -3143,6 +3201,9 @@ def test_saleschannel_testmode_restriction(event):
                           locale='de', sales_channel=FoobazSalesChannel.identifier)[0]
     assert not order.testmode
 
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
     event.testmode = True
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=today,
@@ -3158,6 +3219,9 @@ def test_saleschannel_testmode_restriction(event):
                           locale='de', sales_channel='web')[0]
     assert order.testmode
 
+    cp1 = CartPosition.objects.create(
+        item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
+    )
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=today,
                           payment_requests=[{
@@ -3181,9 +3245,9 @@ def test_giftcard_multiple(event):
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
     )
     gc1 = event.organizer.issued_gift_cards.create(currency="EUR")
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     gc2 = event.organizer.issued_gift_cards.create(currency="EUR")
-    gc2.transactions.create(value=12)
+    gc2.transactions.create(value=12, acceptor=event.organizer)
     order = _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3233,7 +3297,7 @@ def test_giftcard_partial(event):
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
     )
     gc1 = event.organizer.issued_gift_cards.create(currency="EUR")
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     order = _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3280,7 +3344,7 @@ def test_giftcard_payment_fee(event):
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
     )
     gc1 = event.organizer.issued_gift_cards.create(currency="EUR")
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     order = _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3326,7 +3390,7 @@ def test_giftcard_invalid_currency(event):
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
     )
     gc1 = event.organizer.issued_gift_cards.create(currency="USD")
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3368,7 +3432,7 @@ def test_giftcard_invalid_organizer(event):
     )
     o2 = Organizer.objects.create(slug="foo", name="bar")
     gc1 = o2.issued_gift_cards.create(currency="EUR")
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3409,7 +3473,7 @@ def test_giftcard_test_mode_invalid(event):
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
     )
     gc1 = event.organizer.issued_gift_cards.create(currency="EUR", testmode=True)
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3452,7 +3516,7 @@ def test_giftcard_test_mode_event(event):
     event.testmode = True
     event.save()
     gc1 = event.organizer.issued_gift_cards.create(currency="EUR", testmode=False)
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),
@@ -3493,7 +3557,7 @@ def test_giftcard_swap(event):
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
     )
     gc1 = event.organizer.issued_gift_cards.create(currency="EUR", testmode=False)
-    gc1.transactions.create(value=12)
+    gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
         now_dt=now(),

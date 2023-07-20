@@ -310,6 +310,25 @@ def test_import_attendee_email(user, event, item):
 
 @pytest.mark.django_db
 @scopes_disabled()
+def test_import_customer(user, event, item):
+    event.organizer.settings.customer_accounts = True
+    settings = dict(DEFAULT_SETTINGS)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['customer'] = 'csv:C'
+    c = event.organizer.customers.create(
+        email="daniel@example.org",
+    )
+    event.organizer.customers.create(
+        email="schneider@example.org",
+    )
+    import_orders.apply(
+        args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+    )
+    assert c.orders.count() == 1
+
+
+@pytest.mark.django_db
+@scopes_disabled()
 def test_import_attendee_email_invalid(user, event, item):
     settings = dict(DEFAULT_SETTINGS)
     settings['item'] = 'static:{}'.format(item.pk)
@@ -747,7 +766,7 @@ def test_import_subevent_by_date(user, event, item):
     event.has_subevents = True
     event.save()
     event.settings.timezone = 'Europe/Berlin'
-    s = event.subevents.create(name='Test', date_from=event.timezone.localize(datetime.datetime(2021, 6, 28, 11, 0, 0, 0)), active=True)
+    s = event.subevents.create(name='Test', date_from=datetime.datetime(2021, 6, 28, 11, 0, 0, 0, tzinfo=event.timezone), active=True)
     settings['item'] = 'static:{}'.format(item.pk)
     settings['subevent'] = 'csv:J'
 

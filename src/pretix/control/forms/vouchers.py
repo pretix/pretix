@@ -72,7 +72,8 @@ class VoucherForm(I18nModelForm):
         localized_fields = '__all__'
         fields = [
             'code', 'valid_until', 'block_quota', 'allow_ignore_quota', 'value', 'tag',
-            'comment', 'max_usages', 'min_usages', 'price_mode', 'subevent', 'show_hidden_items', 'budget'
+            'comment', 'max_usages', 'min_usages', 'price_mode', 'subevent', 'show_hidden_items', 'all_addons_included',
+            'all_bundles_included', 'budget'
         ]
         field_classes = {
             'valid_until': SplitDateTimeField,
@@ -270,7 +271,7 @@ class VoucherBulkForm(VoucherForm):
         required=False,
         initial=_('Hello,\n\n'
                   'with this email, we\'re sending you one or more vouchers for {event}:\n\n{voucher_list}\n\n'
-                  'You can redeem them here in our ticket shop:\n\n{url}\n\nBest regards,\n\n'
+                  'You can redeem them here in our ticket shop:\n\n{url}\n\nBest regards,  \n'
                   'Your {event} team')
     )
     send_recipients = forms.CharField(
@@ -308,7 +309,8 @@ class VoucherBulkForm(VoucherForm):
         localized_fields = '__all__'
         fields = [
             'valid_until', 'block_quota', 'allow_ignore_quota', 'value', 'tag', 'comment',
-            'max_usages', 'min_usages', 'price_mode', 'subevent', 'show_hidden_items', 'budget'
+            'max_usages', 'min_usages', 'price_mode', 'subevent', 'show_hidden_items', 'all_addons_included',
+            'all_bundles_included', 'budget'
         ]
         field_classes = {
             'valid_until': SplitDateTimeField,
@@ -384,17 +386,18 @@ class VoucherBulkForm(VoucherForm):
     def clean(self):
         data = super().clean()
 
-        vouchers = self.instance.event.vouchers.annotate(
-            code_upper=Upper('code')
-        ).filter(code_upper__in=[c.upper() for c in data['codes']])
-        if vouchers.exists():
-            raise ValidationError(_('A voucher with one of these codes already exists.'))
+        if 'codes' in data:
+            vouchers = self.instance.event.vouchers.annotate(
+                code_upper=Upper('code')
+            ).filter(code_upper__in=[c.upper() for c in data['codes']])
+            if vouchers.exists():
+                raise ValidationError(_('A voucher with one of these codes already exists.'))
 
-        codes_seen = set()
-        for c in data['codes']:
-            if c in codes_seen:
-                raise ValidationError(_('The voucher code {code} appears in your list twice.').format(code=c))
-            codes_seen.add(c)
+            codes_seen = set()
+            for c in data['codes']:
+                if c in codes_seen:
+                    raise ValidationError(_('The voucher code {code} appears in your list twice.').format(code=c))
+                codes_seen.add(c)
 
         if data.get('send') and not all([data.get('send_subject'), data.get('send_message'), data.get('send_recipients')]):
             raise ValidationError(_('If vouchers should be sent by email, subject, message and recipients need to be specified.'))

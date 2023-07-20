@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import gzip
 import hashlib
 import logging
 import os
@@ -107,7 +108,10 @@ def compile_scss(object, file="main.scss", fonts=True):
 
     cp = cache.get_or_set('sass_compile_prefix', now().isoformat())
     css = cache.get('sass_compile_{}_{}'.format(cp, srcchecksum))
-    if not css:
+    if css:
+        if isinstance(css, bytes) and css[0:2] == b'\x1f\x8b':
+            css = gzip.decompress(css).decode()
+    else:
         cf = dict(django_libsass.CUSTOM_FUNCTIONS)
         cf['static'] = static
         css = sass.compile(
@@ -117,7 +121,7 @@ def compile_scss(object, file="main.scss", fonts=True):
         )
         cssf = CSSMinFilter(css)
         css = cssf.output()
-        cache.set('sass_compile_{}_{}'.format(cp, srcchecksum), css, 600)
+        cache.set('sass_compile_{}_{}'.format(cp, srcchecksum), gzip.compress(css.encode()), 600)
 
     checksum = hashlib.sha1(css.encode('utf-8')).hexdigest()
     return css, checksum

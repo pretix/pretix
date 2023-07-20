@@ -24,9 +24,15 @@
                         {% endblocktrans %}
                     </p>
                     <p class="help-block">
-                        {% blocktrans trimmed with hours=event.settings.waiting_list_hours %}
-                            Note that you will only receive one ticket. If you need multiple tickets, you need to add yourself to the waiting list multiple times with different email addresses. There is no guarantee that you will receive a certain number of tickets.
-                        {% endblocktrans %}
+                        {% if event.settings.waiting_list_limit_per_user > 1 %}
+                            {% blocktrans trimmed %}
+                                Note that you will only receive one ticket. If you need multiple tickets, you need to add yourself to the waiting list multiple times. There is no guarantee that you will receive a certain number of tickets.
+                            {% endblocktrans %}
+                        {% else %}
+                            {% blocktrans trimmed %}
+                                Note that you will only receive one ticket. If you need multiple tickets, you need to add yourself to the waiting list multiple times with different email addresses. There is no guarantee that you will receive a certain number of tickets.
+                            {% endblocktrans %}
+                        {% endif %}
                     </p>
                     <p>
                         <button type="submit" class="btn btn-primary">

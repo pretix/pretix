@@ -466,15 +466,18 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        context['ev'] = self.subevent or self.request.event
+        context['subevent'] = self.subevent
+
         # Show voucher option if an event is selected and vouchers exist
         vouchers_exist = self.request.event.cache.get('vouchers_exist')
         if vouchers_exist is None:
             vouchers_exist = self.request.event.vouchers.exists()
             self.request.event.cache.set('vouchers_exist', vouchers_exist)
-        context['show_vouchers'] = context['vouchers_exist'] = vouchers_exist
-
-        context['ev'] = self.subevent or self.request.event
-        context['subevent'] = self.subevent
+        context['show_vouchers'] = context['vouchers_exist'] = vouchers_exist and (
+            (self.request.event.has_subevents and not self.subevent) or
+            context['ev'].presale_is_running
+        )
 
         context['allow_waitinglist'] = self.request.event.settings.waiting_list_enabled and context['ev'].presale_is_running
 
@@ -597,7 +600,13 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
             ebd = defaultdict(list)
             add_subevents_for_days(
-                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
+                filter_qs_by_attr(
+                    self.request.event.subevents_annotated(
+                        self.request.sales_channel.identifier,
+                        voucher,
+                    ).using(settings.DATABASE_REPLICA),
+                    self.request
+                ),
                 limit_before, after, ebd, set(), self.request.event,
                 self.kwargs.get('cart_namespace'),
                 voucher,
@@ -649,7 +658,13 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
             ebd = defaultdict(list)
             add_subevents_for_days(
-                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request),
+                filter_qs_by_attr(
+                    self.request.event.subevents_annotated(
+                        self.request.sales_channel.identifier,
+                        voucher=voucher,
+                    ).using(settings.DATABASE_REPLICA),
+                    self.request
+                ),
                 limit_before, after, ebd, set(), self.request.event,
                 self.kwargs.get('cart_namespace'),
                 voucher,
@@ -692,7 +707,13 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             )
         else:
             context['subevent_list'] = self.request.event.subevents_sorted(
-                filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier).using(settings.DATABASE_REPLICA), self.request)
+                filter_qs_by_attr(
+                    self.request.event.subevents_annotated(
+                        self.request.sales_channel.identifier,
+                        voucher=voucher,
+                    ).using(settings.DATABASE_REPLICA),
+                    self.request
+                )
             )
             if self.request.event.settings.event_list_available_only and not voucher:
                 context['subevent_list'] = [

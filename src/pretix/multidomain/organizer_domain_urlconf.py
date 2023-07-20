@@ -22,8 +22,7 @@
 import importlib.util
 
 from django.apps import apps
-from django.conf.urls import re_path
-from django.urls import include
+from django.urls import include, re_path
 
 from pretix.multidomain.plugin_handler import plugin_event_urls
 from pretix.presale.urls import (
@@ -49,7 +48,7 @@ for app in apps.get_app_configs():
                     re_path(r'^(?P<event>[^/]+)/', include((patterns, app.label)))
                 )
             if hasattr(urlmod, 'organizer_patterns'):
-                patterns = urlmod.organizer_patterns
+                patterns = plugin_event_urls(urlmod.organizer_patterns, plugin=app.name)
                 raw_plugin_patterns.append(
                     re_path(r'', include((patterns, app.label)))
                 )

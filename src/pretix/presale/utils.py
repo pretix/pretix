@@ -350,7 +350,9 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 )
                 pathparts = request.get_full_path().split('/')
                 pathparts[1] = event.slug
-                return redirect('/'.join(pathparts))
+                r = redirect('/'.join(pathparts))
+                r['Access-Control-Allow-Origin'] = '*'
+                return r
             else:
                 if 'event' in url.kwargs and 'organizer' in url.kwargs:
                     event = Event.objects.select_related('organizer').get(
@@ -360,7 +362,9 @@ def _detect_event(request, require_live=True, require_plugin=None):
                     pathparts = request.get_full_path().split('/')
                     pathparts[1] = event.organizer.slug
                     pathparts[2] = event.slug
-                    return redirect('/'.join(pathparts))
+                    r = redirect('/'.join(pathparts))
+                    r['Access-Control-Allow-Origin'] = '*'
+                    return r
         except Event.DoesNotExist:
             raise Http404(_('The selected event was not found.'))
         raise Http404(_('The selected event was not found.'))
@@ -374,7 +378,9 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 raise Http404(_('The selected organizer was not found.'))
             pathparts = request.get_full_path().split('/')
             pathparts[1] = organizer.slug
-            return redirect('/'.join(pathparts))
+            r = redirect('/'.join(pathparts))
+            r['Access-Control-Allow-Origin'] = '*'
+            return r
         raise Http404(_('The selected organizer was not found.'))
 
     request._event_detected = True
@@ -389,8 +395,9 @@ def _event_view(function=None, require_live=True, require_plugin=None):
             else:
                 with scope(organizer=getattr(request, 'organizer', None)):
                     response = func(request=request, *args, **kwargs)
-                    for receiver, r in process_response.send(request.event, request=request, response=response):
-                        response = r
+                    if getattr(request, 'event', None):
+                        for receiver, r in process_response.send(request.event, request=request, response=response):
+                            response = r
 
                     if isinstance(response, TemplateResponse):
                         response = response.render()

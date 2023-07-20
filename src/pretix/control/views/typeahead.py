@@ -33,8 +33,8 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from datetime import datetime, time
+from zoneinfo import ZoneInfo
 
-import pytz
 from dateutil.parser import parse
 from django.core.exceptions import PermissionDenied
 from django.db.models import F, Max, Min, Q
@@ -88,7 +88,7 @@ def serialize_event(e):
         if e.min_from is None:
             dr = pgettext('subevent', 'No dates')
         else:
-            tz = pytz.timezone(e.settings.timezone)
+            tz = ZoneInfo(e.settings.timezone)
             dr = _('Series:') + ' ' + daterange(
                 e.min_from.astimezone(tz),
                 (e.max_fromto or e.max_to or e.max_from).astimezone(tz)
@@ -210,7 +210,7 @@ def giftcard_select2(request, **kwargs):
     return JsonResponse(doc)
 
 
-@organizer_permission_required(("can_manage_reusable_media"))
+@organizer_permission_required(("can_manage_reusable_media", "can_manage_gift_cards"))
 def ticket_select2(request, **kwargs):
     query = request.GET.get('query', '')
     try:
