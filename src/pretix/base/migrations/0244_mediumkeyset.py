@@ -20,7 +20,7 @@ class Migration(migrations.Migration):
             name='MediumKeySet',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False)),
-                ('public_id', models.IntegerField(unique=True)),
+                ('public_id', models.BigIntegerField(unique=True)),
                 ('media_type', models.CharField(max_length=100)),
                 ('active', models.BooleanField(default=True)),
                 ('uid_key', models.BinaryField()),

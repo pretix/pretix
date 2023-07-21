@@ -127,7 +127,7 @@ class ReusableMedium(LoggedModel):
 
 class MediumKeySet(models.Model):
     organizer = models.ForeignKey('Organizer', on_delete=models.CASCADE, related_name='medium_key_sets')
-    public_id = models.IntegerField(
+    public_id = models.BigIntegerField(
         unique=True,
     )
     media_type = models.CharField(max_length=100)

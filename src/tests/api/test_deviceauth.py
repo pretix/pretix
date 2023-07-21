@@ -378,11 +378,11 @@ def test_device_info_key_sets(device_client, device: Device):
         b'-----END RSA PRIVATE KEY-----',
         None
     )
-    assert keyset.uid_key == private_key.decrypt(
+    assert bytes(keyset.uid_key) == private_key.decrypt(
         base64.b64decode(ks['uid_key']),
         padding.PKCS1v15()
     )
-    assert keyset.diversification_key == private_key.decrypt(
+    assert bytes(keyset.diversification_key) == private_key.decrypt(
         base64.b64decode(ks['diversification_key']),
         padding.PKCS1v15()
     )
