@@ -866,7 +866,7 @@ class Renderer:
 
         if image_file:
             try:
-                ir = ThumbnailingImageReader(image_file)
+                ir = ThumbnailingImageReader(image_file.path)
                 ir.resize(float(o['width']) * mm, float(o['height']) * mm, 300)
                 canvas.drawImage(
                     image=ir,
