@@ -297,8 +297,8 @@ class StripeSettingsHolder(BasePaymentProvider):
                      ' ' +
                      '<span class="label label-info">{}</span>'.format(_('experimental'))
                  ),
-                 help_text=_("pretix will attempt to check if the customer's webbrowser supports wallet-based payment "
-                             "methods like Apple Pay or Google Pay and display them prominently with the credit card"
+                 help_text=_("pretix will attempt to check if the customer's web browser supports wallet-based payment "
+                             "methods like Apple Pay or Google Pay and display them prominently with the credit card "
                              "payment method. This detection does not take into consideration if Google Pay/Apple Pay "
                              "has been disabled in the Stripe Dashboard."),
                  initial=True,

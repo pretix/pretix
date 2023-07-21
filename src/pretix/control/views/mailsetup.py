@@ -193,7 +193,7 @@ class MailSettingsSetupView(TemplateView):
                 if not spf_record:
                     spf_warning = _(
                         'We could not find an SPF record set for the domain you are trying to use. This means that '
-                        'there is a very high change most of the emails will be rejected or markes as spam. We '
+                        'there is a very high change most of the emails will be rejected or marked as spam. We '
                         'strongly recommend setting an SPF record on the domain. You can do so through the DNS '
                         'settings at the provider you registered your domain with.'
                     )
