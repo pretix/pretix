@@ -54,6 +54,7 @@ from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.exceptions import ValidationError
 from django.db.models import Max, Min
+from django.db.models.fields.files import FieldFile
 from django.dispatch import receiver
 from django.utils.deconstruct import deconstructible
 from django.utils.formats import date_format
@@ -878,6 +879,11 @@ class Renderer:
                     anchor='c',  # centered in frame
                     mask='auto'
                 )
+                if isinstance(image_file, FieldFile):
+                    # ThumbnailingImageReader "closes" the file, so it's no use to use the same file pointer
+                    # in case we need it again. For FieldFile, fortunately, there is an easy way to make the file
+                    # refresh itself when it is used next.
+                    del image_file.file
             except:
                 logger.exception("Can not load or resize image")
                 canvas.saveState()
