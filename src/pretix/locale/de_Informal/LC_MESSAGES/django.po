@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-21 12:19+0000\n"
-"PO-Revision-Date: 2023-06-29 05:00+0000\n"
-"Last-Translator: Moritz Lerch <dev@moritz-lerch.de>\n"
+"PO-Revision-Date: 2023-07-21 12:47+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -6181,24 +6181,18 @@ msgid "Ambiguous option selected."
 msgstr "Mehrdeutige Option ausgewählt."
 
 #: pretix/base/orderimport.py:845
-#, fuzzy
-#| msgid "No matching seat was found."
 msgid "No matching customer was found."
-msgstr "Kein passender Sitzplatz gefunden."
+msgstr "Kein passender Kunde wurde gefunden."
 
 #: pretix/base/payment.py:86
-#, fuzzy
-#| msgid "Apply"
 msgctxt "payment"
 msgid "Apple Pay"
-msgstr "Anwenden"
+msgstr "Apple Pay"
 
 #: pretix/base/payment.py:87
-#, fuzzy
-#| msgid "Android (Google Play)"
 msgctxt "payment"
 msgid "Google Pay"
-msgstr "Android (Google Play)"
+msgstr "Google Pay"
 
 #: pretix/base/payment.py:256
 #: pretix/presale/templates/pretixpresale/event/order.html:115
@@ -8162,17 +8156,13 @@ msgid "Gift card currency"
 msgstr "Wertgutschein-Währung"
 
 #: pretix/base/settings.py:277
-#, fuzzy
-#| msgid ""
-#| "Automatically create a new gift card if a previously unknown chip is seen"
 msgid "Automatically create a new gift card if a new chip is encoded"
 msgstr ""
-"Automatisch neuen Wertgutschein erstellen, wenn ein neuer Chip detektiert "
-"wird"
+"Automatisch neuen Wertgutschein erstellen, wenn ein neuer Chip kodiert wird"
 
 #: pretix/base/settings.py:299
 msgid "Use UID protection feature of NFC chip"
-msgstr ""
+msgstr "UID-Schutzfunktion der NFC-Chips nutzen"
 
 #: pretix/base/settings.py:313
 msgid "Maximum number of items per order"
@@ -8682,10 +8672,8 @@ msgstr ""
 "frei wird."
 
 #: pretix/base/settings.py:942
-#, fuzzy
-#| msgid "Expiration date"
 msgid "Expiration delay"
-msgstr "Ablaufdatum"
+msgstr "Verzögerung des Ablaufdatums"
 
 #: pretix/base/settings.py:943
 msgid ""
@@ -8694,6 +8682,11 @@ msgid ""
 "date of payments\" configured above, which is always enforced. The delay may "
 "also end on a weekend regardless of the other settings above."
 msgstr ""
+"Die Bestellung wird erst so viele Tage nach dem kommunizierten Ablaufdatum "
+"tatsächlich ablaufen. Dies wird das Ablaufdatum jedoch nicht über das "
+"\"Letzte Zahlungsdatum\", das weiter oben konfiguriert wird, hinaus "
+"verschieben. Das verzögerte Ablaufdatum kann auch an einem Wochenende "
+"liegen, selbst wenn das kommunizierte Ablaufdatum das nie tut."
 
 #: pretix/base/settings.py:964
 msgid "Hide \"payment pending\" state on customer-facing pages"
@@ -10083,25 +10076,12 @@ msgstr ""
 "Das {event} Team"
 
 #: pretix/base/settings.py:2349
-#, fuzzy, python-brace-format
-#| msgid "Payment received for your order: {code}"
+#, python-brace-format
 msgid "Payment failed for your order: {code}"
-msgstr "Zahlung erhalten für die Bestellung: {code}"
+msgstr "Zahlung fehlgeschlagen für deine Bestellung: {code}"
 
 #: pretix/base/settings.py:2353
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we did not yet receive a full payment for your order for {event}.\n"
-#| "Please keep in mind that we only guarantee your order if we receive\n"
-#| "your payment before {expire_date}.\n"
-#| "\n"
-#| "You can view the payment information and the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10119,13 +10099,14 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"wir haben für deine Bestellung für {event} noch keine vollständige Zahlung "
-"erhalten.\n"
-"Bitte beachte, dass wir deine Bestellung nur garantieren können, wenn wir "
-"das\n"
-"Geld bis zum {expire_date} erhalten.\n"
+"der Zahlungsversuch für deine Bestellung für {event} ist fehlgeschlagen.\n"
 "\n"
-"Du kannst deine Bestellung unter folgender Adresse einsehen und ändern:\n"
+"Die Bestellung ist nach wie vor gültig und du kannst versuchen, mit der "
+"gleichen oder einer anderen Zahlungsmethode erneut zu bezahlen. Bitte "
+"schließe die Zahlung bis zum {expire_date} ab.\n"
+"\n"
+"Du kannst die Zahlung erneut versuchen und den Status der Bestellung "
+"einsehen, inde du auf folgenden Link klickst:\n"
 "{url}\n"
 "\n"
 "Viele Grüße,  \n"
@@ -11080,6 +11061,7 @@ msgstr ""
 #: pretix/base/settings.py:3720
 msgid "This needs to be disabled if other NFC-based types are active."
 msgstr ""
+"Dies muss deaktiviert sein, wenn andere NFC-basierte Typen aktiviert sind."
 
 #: pretix/base/shredder.py:74 pretix/base/shredder.py:77
 msgid "Your event needs to be over to use this feature."
@@ -14785,10 +14767,8 @@ msgid "The medium has been connected to a new ticket."
 msgstr "Das Medium wurde mit einem neuen Ticket verknüpft."
 
 #: pretix/control/logdisplay.py:371
-#, fuzzy
-#| msgid "The medium has been connected to a new ticket."
 msgid "The medium has been connected to a new gift card."
-msgstr "Das Medium wurde mit einem neuen Ticket verknüpft."
+msgstr "Das Medium wurde mit einem neuen Wertgutschein verknüpft."
 
 #: pretix/control/logdisplay.py:372 pretix/control/logdisplay.py:413
 msgid "Sending of an email has failed."
@@ -15053,13 +15033,10 @@ msgstr ""
 "Eine E-Mail mit dem Link zur Bestellseite wurde an den Benutzer verschickt."
 
 #: pretix/control/logdisplay.py:436
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that payment has been received."
 msgid "An email has been sent to notify the user that the payment failed."
 msgstr ""
-"Eine E-Mail wurde verschickt, die den Benutzer auf den Eingang der Bezahlung "
-"hinweist."
+"Eine E-Mail wurde verschickt, die den Benutzer auf die fehlgeschlagene "
+"Zahlung hinweist."
 
 #: pretix/control/logdisplay.py:437
 #, python-brace-format
@@ -17887,10 +17864,8 @@ msgid "Payment reminder"
 msgstr "Zahlungserinnerung"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:108
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment failed"
-msgstr "Zahlungsgebühr"
+msgstr "Zahlung fehlgeschlagen"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:111
 msgid "Waiting list notification"
@@ -17945,8 +17920,6 @@ msgid "Deadlines"
 msgstr "Fristen"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:68
-#, fuzzy
-#| msgid "days"
 msgctxt "unit"
 msgid "days"
 msgstr "Tage"
@@ -21966,6 +21939,10 @@ msgid ""
 "made by NXP. This provides a higher level of security than other approaches, "
 "but requires all chips to be encoded prior to use."
 msgstr ""
+"Dieser Medientyp funktioniert nur mit NFC-Chips des Typs Mifare Ultralight "
+"AES, hergestellt von NXP. Dies bietet ein höheres Sicherheitsniveau als "
+"andere Verfahren, aber erfordert, dass alle Chips vor der ersten Verwendung "
+"kodiert werden."
 
 #: pretix/control/templates/pretixcontrol/organizers/export.html:64
 msgid "Run export now and download result"
@@ -23821,10 +23798,7 @@ msgid "Order %(code)s"
 msgstr "Bestellung %(code)s"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:23
-#, fuzzy, python-format
-#| msgid ""
-#| "This voucher is currently used in %(number)s cart sessions and there "
-#| "might not be free to use until the cart sessions expire."
+#, python-format
 msgid ""
 "This voucher is currently used in %(number)s cart sessions and might not be "
 "free to use until the cart sessions expire."
@@ -24038,19 +24012,15 @@ msgid ""
 "For safety reasons, the waiting list does not run if the quota is set to "
 "unlimited."
 msgstr ""
+"Aus Sicherheitsgründen wird die Warteliste nicht ausgeführt, wenn das "
+"Kontingent unbegrenzt groß ist."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:219
-#, fuzzy
-#| msgid "Quota name"
 msgid "Quota unlimited"
-msgstr "Bezeichnung"
+msgstr "Kontingent unbegrenzt"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:225
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "                                    Waiting, product %(num)sx available\n"
-#| "                                "
+#, python-format
 msgid ""
 "\n"
 "                                            Waiting, product %(num)sx "
@@ -24058,8 +24028,9 @@ msgid ""
 "                                        "
 msgstr ""
 "\n"
-"                                    Wartet, Produkt %(num)sx verfügbar\n"
-"                                "
+"                                            Wartet, Produkt %(num)sx "
+"verfügbar\n"
+"                                        "
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:231
 msgid "Waiting, product unavailable"
@@ -24824,13 +24795,6 @@ msgid "The selected product has been deactivated."
 msgstr "Das ausgewählte Produkt wurde deaktiviert."
 
 #: pretix/control/views/mailsetup.py:195
-#, fuzzy
-#| msgid ""
-#| "We could not find an SPF record set for the domain you are trying to use. "
-#| "You can still proceed, but it will increase the chance of emails going to "
-#| "spam or being rejected. We strongly recommend setting an SPF record on "
-#| "the domain. You can do so through the DNS settings at the provider you "
-#| "registered your domain with."
 msgid ""
 "We could not find an SPF record set for the domain you are trying to use. "
 "This means that there is a very high change most of the emails will be "
@@ -24838,12 +24802,11 @@ msgid ""
 "the domain. You can do so through the DNS settings at the provider you "
 "registered your domain with."
 msgstr ""
-"Wir konnten keinen SPF-Eintrag für die verwendete Domain finden. Du kannst "
-"trotzdem fortfahren, aber es gibt eine große Chance, dass die E-Mails beim "
-"Empfänger in den Spam-Ordner sortiert werden oder nicht ankommen. Wir "
-"empfehlen daher dringend einen SPF-Eintrag zu setzen. Dies kannst du in den "
-"DNS-Einstellungen des Providers vornehmen, bei dem die Domain registriert "
-"wurde."
+"Wir konnten keinen SPF-Eintrag für die verwendete Domain finden. Daher gibt "
+"es eine große Chance, dass die E-Mails beim Empfänger in den Spam-Ordner "
+"sortiert werden oder nicht ankommen. Wir empfehlen daher dringend einen SPF-"
+"Eintrag zu setzen. Dies kannst du in den DNS-Einstellungen des Providers "
+"vornehmen, bei dem die Domain registriert wurde."
 
 #: pretix/control/views/mailsetup.py:202
 msgid ""
@@ -28587,7 +28550,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:296
 msgid "Check for Apple Pay/Google Pay"
-msgstr ""
+msgstr "Auf Unterstützung für Apple Pay/Google Pay prüfen"
 
 #: pretix/plugins/stripe/payment.py:300
 msgid ""
@@ -28597,6 +28560,11 @@ msgid ""
 "into consideration if Google Pay/Apple Pay has been disabled in the Stripe "
 "Dashboard."
 msgstr ""
+"pretix wird versuchen zu prüfen, ob der Browser des Kunden Zahlungsarten wie "
+"Apple Pay oder Google Pay unterstützt und diese dann prominent in die "
+"Beschriftung der Kreditkarten-Zahlmethode aufnehmen. Diese Prüfung zieht "
+"nicht in Betracht, ob Google Pay oder Apple Pay ggf. im Stripe-Dashboard "
+"deaktiviert wurden."
 
 #: pretix/plugins/stripe/payment.py:309
 msgid "Statement descriptor postfix"
@@ -28646,39 +28614,33 @@ msgid "Bancontact"
 msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:357
-#, fuzzy
-#| msgid "Disable SEPA Direct Debit"
 msgid "SEPA Direct Debit"
-msgstr "SEPA-Bankeinzug deaktivieren"
+msgstr "SEPA-Lastschrift"
 
 #: pretix/plugins/stripe/payment.py:362
-#, fuzzy
-#| msgid ""
-#| "Despite the name, Sofort payments via Stripe are <strong>not</strong> "
-#| "processed instantly but might take up to <strong>14 days</strong> to be "
-#| "confirmed in some cases. Please only activate this payment method if your "
-#| "payment term allows for this lag."
 msgid ""
 "SEPA Direct Debit payments via Stripe are <strong>not</strong> processed "
 "instantly but might take up to <strong>14 days</strong> to be confirmed in "
 "some cases. Please only activate this payment method if your payment term "
 "allows for this lag."
 msgstr ""
-"Trotz des Namens werden Sofortüberweisungen von Stripe <strong>nicht</"
-"strong> sofort verarbeitet, sondern können in einigen Fällen <strong>bis zu "
-"14 Tage</strong> zur Verarbeitung in Anspruch nehmen. Bitte aktiviere diese "
+"SEPA-Lastschriften werden von Stripe <strong>nicht</strong> sofort "
+"verarbeitet, sondern können in einigen Fällen <strong>bis zu 14 Tage</"
+"strong> zur Verarbeitung in Anspruch nehmen. Bitte aktiviere diese "
 "Zahlungsmethode nur, wenn die gesetzte Zahlungsfrist für so eine Verzögerung "
 "ausreichend ist."
 
 #: pretix/plugins/stripe/payment.py:370
 msgid "SEPA Creditor Mandate Name"
-msgstr ""
+msgstr "Name des Gläubigers für SEPA-Mandat"
 
 #: pretix/plugins/stripe/payment.py:372
 msgid ""
 "Please provide your SEPA Creditor Mandate Name, that will be displayed to "
 "the user."
 msgstr ""
+"Bitte gib deinen Namen / den Namen des Unternehmens für das SEPA-Mandat an, "
+"das dem Nutzer angezeigt wird."
 
 #: pretix/plugins/stripe/payment.py:383
 msgid "SOFORT"
@@ -28791,44 +28753,32 @@ msgid "Credit card"
 msgstr "Kreditkarte"
 
 #: pretix/plugins/stripe/payment.py:1157
-#, fuzzy
-#| msgid "EPS via Stripe"
 msgid "SEPA Debit via Stripe"
-msgstr "EPS über Stripe"
+msgstr "SEPA-Lastschrift über Stripe"
 
 #: pretix/plugins/stripe/payment.py:1158
 msgid "SEPA Debit"
-msgstr ""
+msgstr "SEPA-Lastschrift"
 
 #: pretix/plugins/stripe/payment.py:1197
-#, fuzzy
-#| msgid "Account holder"
 msgid "Account Holder Name"
 msgstr "Kontoinhaber*in"
 
 #: pretix/plugins/stripe/payment.py:1202
-#, fuzzy
-#| msgid "Account holder"
 msgid "Account Holder Street"
-msgstr "Kontoinhaber*in"
+msgstr "Straße (Kontoinhaber*in)"
 
 #: pretix/plugins/stripe/payment.py:1214
-#, fuzzy
-#| msgid "Account holder"
 msgid "Account Holder Postal Code"
-msgstr "Kontoinhaber*in"
+msgstr "PLZ (Kontoinhaber*in)"
 
 #: pretix/plugins/stripe/payment.py:1226
-#, fuzzy
-#| msgid "Account holder"
 msgid "Account Holder City"
-msgstr "Kontoinhaber*in"
+msgstr "Stadt (Kontoinhaber*in)"
 
 #: pretix/plugins/stripe/payment.py:1238
-#, fuzzy
-#| msgid "Account holder"
 msgid "Account Holder Country"
-msgstr "Kontoinhaber*in"
+msgstr "Land (Kontoinhaber*in)"
 
 #: pretix/plugins/stripe/payment.py:1282
 msgid "giropay via Stripe"
@@ -28999,22 +28949,18 @@ msgid "Card type"
 msgstr "Kartentyp"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
-#, fuzzy
-#| msgid "The total amount will be withdrawn from your credit card."
 msgid "The total amount will be withdrawn from your bank account."
-msgstr "Der Gesamtbetrag wird von deiner Kreditkarte eingezogen."
+msgstr "Der Gesamtbetrag wird von deinem Bankkonto eingezogen."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:18
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:20
 msgid "Banking Institution"
-msgstr ""
+msgstr "Bank"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:22
-#, fuzzy
-#| msgid "Account holder"
 msgid "Account number"
-msgstr "Kontoinhaber*in"
+msgstr "Kontonummer"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:24
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple.html:4
@@ -29062,28 +29008,22 @@ msgstr ""
 "Servern."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:10
-#, fuzzy
-#| msgid "For a credit card payment, please turn on JavaScript."
 msgid "For a SEPA Debit payment, please turn on JavaScript."
-msgstr "Bitte aktiviere JavaScript um mit Kreditkarte zahlen zu können."
+msgstr ""
+"Bitte aktiviere JavaScript in deinem Browser, um mit SEPA-Lastschrift "
+"bezahlen zu können."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:16
-#, fuzzy
-#| msgid ""
-#| "You already entered a card number that we will use to charge the payment "
-#| "amount."
 msgid ""
 "You already entered a bank account that we will use to charge the payment "
 "amount."
 msgstr ""
-"Du hast bereits eine Kartennummer eingegeben, die wir für die Zahlung "
-"benutzen werden."
+"Du hast bereits ein Bankkonto eingegeben, das wir für die Zahlung benutzen "
+"werden."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:27
-#, fuzzy
-#| msgid "Use a different card"
 msgid "Use a different account"
-msgstr "Andere Kreditkarte verwenden"
+msgstr "Anderes Konto verwenden"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:51
 #, python-format
@@ -29099,6 +29039,16 @@ msgid ""
 "statement that you can obtain from your bank. You agree to receive "
 "notifications for future debits up to 2 days before they occur."
 msgstr ""
+"Ich ermächtige/Wir ermächtigen (A) %(sepa_creditor_name)s sowie den "
+"Zahlungsdienstleister Stripe und/oder PPRO, den lokalen Servicedienstleister "
+"von Stripe, Zahlungen von meinem/unserem Konto mittels Lastschrift "
+"einzuziehen. Zugleich (B) weise ich mein/weisen wir unser Kreditinstitut an, "
+"die so auf mein/unser Konto gezogenen Lastschriften einzulösen. Hinweis: Ich "
+"kann/Wir können innerhalb von acht Wochen, beginnend mit dem "
+"Belastungsdatum, die Erstattung des belasteten Betrages verlangen. Es gelten "
+"dabei die mit meinem/unserem Kreditinstitut vereinbarten Bedingungen. Ich "
+"stimme zu, dass ich Benachrichtigungen über zukünftige Einzüge bis zu 2 Tage "
+"vor deren Einzug erhalte."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:6
 msgid "Charge ID"
