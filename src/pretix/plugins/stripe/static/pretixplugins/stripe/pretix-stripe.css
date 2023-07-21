@@ -39,39 +39,39 @@
   .sepText {
     left: 50%;
   }
-  #stripe-elements > div.hidden {
+  #stripe-card-elements > div.hidden {
     height: 0;
     padding-top: 0;
     padding-bottom: 0;
     overflow: hidden;
     display: block !important;
   }
-  #stripe-elements .stripe-or {
+  #stripe-card-elements .stripe-or {
     height: 16px;
   }
-  #stripe-elements .stripe-payment-request-button {
+  #stripe-card-elements .stripe-payment-request-button {
     height: 40px;
   }
-  #stripe-elements > div {
+  #stripe-card-elements > div {
     transition: height 0.3s ease-out, padding-top 0.3s ease-out, padding-bottom 0.3s ease-out;
   }
 }
 
 @media only screen and (min-width: 999px) {
-  #stripe-elements {
+  #stripe-card-elements {
     display: flex;
     flex-wrap: wrap;
   }
   .stripe-card-holder {
     flex-grow: 1;
   }
-  #stripe-elements > div.hidden {
+  #stripe-card-elements > div.hidden {
     width: 0;
     padding: 0;
     overflow: hidden;
     display: block !important;
   }
-  #stripe-elements > div {
+  #stripe-card-elements > div {
     transition: width 0.3s ease-out, padding-left 0.3s ease-out, padding-right 0.3s ease-out;
   }
 }

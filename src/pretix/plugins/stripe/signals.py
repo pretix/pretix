@@ -46,13 +46,14 @@ from pretix.presale.signals import html_head, process_response
 def register_payment_provider(sender, **kwargs):
     from .payment import (
         StripeAlipay, StripeBancontact, StripeCC, StripeEPS, StripeGiropay,
-        StripeIdeal, StripeMultibanco, StripePrzelewy24, StripeSettingsHolder,
-        StripeSofort, StripeWeChatPay,
+        StripeIdeal, StripeMultibanco, StripePrzelewy24, StripeSEPADirectDebit,
+        StripeSettingsHolder, StripeSofort, StripeWeChatPay,
     )
 
     return [
         StripeSettingsHolder, StripeCC, StripeGiropay, StripeIdeal, StripeAlipay, StripeBancontact,
-        StripeSofort, StripeEPS, StripeMultibanco, StripePrzelewy24, StripeWeChatPay
+        StripeSofort, StripeEPS, StripeMultibanco, StripePrzelewy24, StripeWeChatPay,
+        StripeSEPADirectDebit,
     ]
 
 
@@ -110,7 +111,7 @@ def pretixcontrol_logentry_display(sender, logentry, **kwargs):
         return _('Stripe reported an event: {}').format(text)
 
 
-settings_hierarkey.add_default('payment_stripe_method_cc', True, bool)
+settings_hierarkey.add_default('payment_stripe_method_card', True, bool)
 settings_hierarkey.add_default('payment_stripe_reseller_moto', False, bool)
 
 
