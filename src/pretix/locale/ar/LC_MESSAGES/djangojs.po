@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-27 12:51+0000\n"
+"POT-Creation-Date: 2023-07-21 11:46+0000\n"
 "PO-Revision-Date: 2021-09-15 11:22+0000\n"
 "Last-Translator: Mohamed Tawfiq <mtawfiq@wafyapp.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -39,6 +39,7 @@ msgid "Venmo"
 msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:36
+#: pretix/static/pretixpresale/js/walletdetection.js:38
 msgid "Apple Pay"
 msgstr ""
 
@@ -138,8 +139,8 @@ msgid "Continue"
 msgstr "المتابعة"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:222
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:157
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:188
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:204
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:235
 msgid "Confirming your payment …"
 msgstr "جاري تأكيد الدفع الخاص بك …"
 
@@ -161,15 +162,15 @@ msgstr "الطلبات المدفوعة"
 msgid "Total revenue"
 msgstr "إجمالي الإيرادات"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:12
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:13
 msgid "Contacting Stripe …"
 msgstr "جاري الاتصال بStripe …"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:65
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:70
 msgid "Total"
 msgstr "المجموع"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:164
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:211
 msgid "Contacting your bank …"
 msgstr "جاري الاتصال بالبنك الذي تتعامل معه …"
 
@@ -559,46 +560,46 @@ msgstr "توليد الرسائل …"
 msgid "Unknown error."
 msgstr "خطأ غير معروف."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:309
+#: pretix/static/pretixcontrol/js/ui/main.js:311
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "اللون يتمتع بتباين كبير وتسهل قراءته!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:313
+#: pretix/static/pretixcontrol/js/ui/main.js:315
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr "اللون يحظى بتباين معقول ويمكن أن يكون مناسب للقراءة!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:317
+#: pretix/static/pretixcontrol/js/ui/main.js:319
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr "تباين اللون سيئ للخلفية البيضاء، الرجاء اختيار لون غامق."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:466
-#: pretix/static/pretixcontrol/js/ui/main.js:486
+#: pretix/static/pretixcontrol/js/ui/main.js:468
+#: pretix/static/pretixcontrol/js/ui/main.js:488
 msgid "Search query"
 msgstr "البحث في الاستفسارات"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:484
+#: pretix/static/pretixcontrol/js/ui/main.js:486
 msgid "All"
 msgstr "الكل"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:485
+#: pretix/static/pretixcontrol/js/ui/main.js:487
 msgid "None"
 msgstr "لا شيء"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:489
+#: pretix/static/pretixcontrol/js/ui/main.js:491
 msgid "Selected only"
 msgstr "المختارة فقط"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:892
+#: pretix/static/pretixcontrol/js/ui/main.js:894
 msgid "Use a different name internally"
 msgstr "قم باستخدم اسم مختلف داخليا"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:932
+#: pretix/static/pretixcontrol/js/ui/main.js:934
 msgid "Click to close"
 msgstr "اضغط لاغلاق الصفحة"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1007
+#: pretix/static/pretixcontrol/js/ui/main.js:1009
 msgid "You have unsaved changes!"
 msgstr "لم تقم بحفظ التعديلات!"
 
@@ -672,22 +673,26 @@ msgstr "ستسترد %(currency)%(amount)"
 msgid "Please enter the amount the organizer can keep."
 msgstr "الرجاء إدخال المبلغ الذي يمكن للمنظم الاحتفاظ به."
 
-#: pretix/static/pretixpresale/js/ui/main.js:436
+#: pretix/static/pretixpresale/js/ui/main.js:412
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "الرجاء إدخال عدد لأحد أنواع التذاكر."
 
-#: pretix/static/pretixpresale/js/ui/main.js:472
+#: pretix/static/pretixpresale/js/ui/main.js:448
 msgid "required"
 msgstr "مطلوب"
 
-#: pretix/static/pretixpresale/js/ui/main.js:575
-#: pretix/static/pretixpresale/js/ui/main.js:594
+#: pretix/static/pretixpresale/js/ui/main.js:551
+#: pretix/static/pretixpresale/js/ui/main.js:570
 msgid "Time zone:"
 msgstr "المنطقة الزمنية:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:585
+#: pretix/static/pretixpresale/js/ui/main.js:561
 msgid "Your local time:"
 msgstr "التوقيت المحلي:"
+
+#: pretix/static/pretixpresale/js/walletdetection.js:39
+msgid "Google Pay"
+msgstr ""
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
