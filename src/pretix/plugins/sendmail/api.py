@@ -42,9 +42,11 @@ class RuleSerializer(I18nAwareModelSerializer):
         if "restrict_to_status" not in data:
             if "include_pending" in data:
                 if data["include_pending"]:
-                    data['restrict_to_status'] = [Order.STATUS_PAID,
-                                                  'n__not_pending_approval_and_not_valid_if_pending',
-                                                  'n__valid_if_pending']
+                    data['restrict_to_status'] = [
+                        Order.STATUS_PAID,
+                        'n__not_pending_approval_and_not_valid_if_pending',
+                        'n__valid_if_pending'
+                    ]
                 else:
                     data['restrict_to_status'] = [Order.STATUS_PAID, 'n__valid_if_pending']
             else:
