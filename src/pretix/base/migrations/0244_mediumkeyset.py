@@ -7,7 +7,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('pretixbase', '0243_device_os_name_and_os_version,'),
+        ('pretixbase', '0243_device_os_name_and_os_version'),
     ]
 
     operations = [
