@@ -255,6 +255,32 @@ def test_sendmail_rule_create_invalid(token_client, organizer, event):
 
 @scopes_disabled()
 @pytest.mark.django_db
+def test_sendmail_rule_legacy_field(token_client, organizer, event, rule):
+    r = create_rule(
+        token_client, organizer, event,
+        data={
+            'subject': {'en': 'meow'},
+            'template': {'en': 'creative text here'},
+            'send_date': '2018-03-17T13:31Z',
+            'include_pending': True
+        }
+    )
+    assert r.restrict_to_status == ['p', 'n__not_pending_approval_and_not_valid_if_pending', 'n__valid_if_pending']
+
+    r = create_rule(
+        token_client, organizer, event,
+        data={
+            'subject': {'en': 'meow'},
+            'template': {'en': 'creative text here'},
+            'send_date': '2018-03-17T13:31Z',
+            'include_pending': False
+        }
+    )
+    assert r.restrict_to_status == ['p', 'n__valid_if_pending']
+
+
+@scopes_disabled()
+@pytest.mark.django_db
 def test_sendmail_rule_restrict_recipients(token_client, organizer, event, rule):
     restrictions = ['p', 'e', 'c', 'n__not_pending_approval_and_not_valid_if_pending',
                     'n__pending_approval', 'n__valid_if_pending', 'n__pending_overdue']
