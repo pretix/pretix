@@ -334,7 +334,7 @@ def test_medium_lookup_not_found(token_client, organizer, organizer2, medium):
 
 
 @pytest.mark.django_db
-def test_medium_autocreate(token_client, organizer):
+def test_medium_lookup_autocreate(token_client, organizer):
     # Disabled
     resp = token_client.post(
         '/api/v1/organizers/{}/reusablemedia/lookup/'.format(organizer.slug),
@@ -377,6 +377,28 @@ def test_medium_autocreate(token_client, organizer):
     )
     assert resp.status_code == 200
     assert resp.data["result"] is None
+
+
+@pytest.mark.django_db
+def test_medium_autocreate_giftcard(token_client, organizer):
+    organizer.settings.reusable_media_type_nfc_mf0aes_autocreate_giftcard = True
+    organizer.settings.reusable_media_type_nfc_mf0aes_autocreate_giftcard_currency = 'USD'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/reusablemedia/?expand=linked_giftcard'.format(organizer.slug),
+        {
+            "type": "nfc_mf0aes",
+            "identifier": "AABBCCDD",
+        },
+        format='json'
+    )
+    assert resp.status_code == 201
+    res = resp.data
+    with scopes_disabled():
+        m = ReusableMedium.objects.get(pk=res["id"])
+    assert res["identifier"] == "AABBCCDD" == m.identifier
+    assert res["type"] == "nfc_mf0aes" == m.type
+    assert res["linked_giftcard"]["value"] == "0.00"
+    assert res["linked_giftcard"]["currency"] == "USD"
 
 
 @pytest.mark.django_db

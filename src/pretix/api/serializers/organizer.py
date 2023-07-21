@@ -392,6 +392,9 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'reusable_media_type_nfc_uid',
         'reusable_media_type_nfc_uid_autocreate_giftcard',
         'reusable_media_type_nfc_uid_autocreate_giftcard_currency',
+        'reusable_media_type_nfc_mf0aes',
+        'reusable_media_type_nfc_mf0aes_autocreate_giftcard',
+        'reusable_media_type_nfc_mf0aes_autocreate_giftcard_currency',
     ]
 
     def __init__(self, *args, **kwargs):

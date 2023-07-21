@@ -18,7 +18,7 @@ The reusable medium resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the medium
-type                                  string                     Type of medium, e.g. ``"barcode"`` or ``"nfc_uid"``.
+type                                  string                     Type of medium, e.g. ``"barcode"``, ``"nfc_uid"`` or ``"nfc_mf0aes"``.
 organizer                             string                     Organizer slug of the organizer who "owns" this medium.
 identifier                            string                     Unique identifier of the medium. The format depends on the ``type``.
 active                                boolean                    Whether this medium may be used.
@@ -37,6 +37,7 @@ Existing media types are:
 
 - ``barcode``
 - ``nfc_uid``
+- ``nfc_mf0aes``
 
 Endpoints
 ---------
