@@ -44,7 +44,7 @@ send_to                               string                     Can be ``"order
                                                                  or ``"both"``.
                                                                  date. Otherwise it is relative to the event start date.
 ===================================== ========================== =======================================================
-.. versionchanged:: 5.0
+.. versionchanged:: 2023.7
 
     The ``include_pending`` field has been  deprecated.
     The ``restrict_to_status`` field has been added.
