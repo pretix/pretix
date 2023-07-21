@@ -42,11 +42,13 @@ class RuleSerializer(I18nAwareModelSerializer):
         if "restrict_to_status" not in data:
             if "include_pending" in data:
                 if data["include_pending"]:
-                    data['restrict_to_status'] = [Order.STATUS_PAID, 'na', 'valid_if_pending']
+                    data['restrict_to_status'] = [Order.STATUS_PAID,
+                                                  'n__not_pending_approval_and_not_valid_if_pending',
+                                                  'n__valid_if_pending']
                 else:
-                    data['restrict_to_status'] = [Order.STATUS_PAID, 'valid_if_pending']
+                    data['restrict_to_status'] = [Order.STATUS_PAID, 'n__valid_if_pending']
             else:
-                data['restrict_to_status'] = [Order.STATUS_PAID, 'valid_if_pending']
+                data['restrict_to_status'] = [Order.STATUS_PAID, 'n__valid_if_pending']
         return super().to_internal_value(data)
 
     def validate(self, data):
@@ -77,10 +79,10 @@ class RuleSerializer(I18nAwareModelSerializer):
                     Order.STATUS_PAID,
                     Order.STATUS_EXPIRED,
                     Order.STATUS_CANCELED,
-                    'valid_if_pending',
-                    'overdue',
-                    'pa',
-                    'na',
+                    'n__valid_if_pending',
+                    'n__pending_overdue',
+                    'n__pending_approval',
+                    'n__not_pending_approval_and_not_valid_if_pending',
                 ]:
                     raise ValidationError(f'status {s} not allowed: restrict_to_status may only include valid states')
 

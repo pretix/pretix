@@ -22,10 +22,11 @@ limit_products                        list of integers           List of product
                                                                  only paid orders are considered.
 restrict_to_status                    list                       List of order states to restrict recipients to. Valid
                                                                  entries are ``p`` for paid, ``e`` for expired, ``c`` for canceled,
-                                                                 ``pa`` for pending approval, ``na`` for payment pending,
-                                                                 ``valid_if_pending`` for payment pending but already confirmed,
-                                                                 and ``overdue`` for pending with payment overdue.
-                                                                 The default is ``["p", "valid_if_pending"]``.
+                                                                 ``n__pending_approval`` for pending approval,
+                                                                 ``n__not_pending_approval_and_not_valid_if_pending`` for payment pending,
+                                                                 ``n__valid_if_pending`` for payment pending but already confirmed,
+                                                                 and ``n__pending_overdue`` for pending with payment overdue.
+                                                                 The default is ``["p", "n__valid_if_pending"]``.
 date_is_absolute                      boolean                    If ``true``, the email is set at a specific point in time.
 send_date                             datetime                   If ``date_is_absolute`` is set: Date and time to send the email.
 send_offset_days                      integer                    If ``date_is_absolute`` is not set, this is the number of days
@@ -85,8 +86,8 @@ Endpoints
             "limit_products": [],
             "restrict_to_status": [
                 "p",
-                "na",
-                "valid_if_pending"
+                "n__not_pending_approval_and_not_valid_if_pending",
+                "n__valid_if_pending"
             ],
             "send_date": null,
             "send_offset_days": 1,
@@ -135,8 +136,8 @@ Endpoints
         "limit_products": [],
         "restrict_to_status": [
             "p",
-            "na",
-            "valid_if_pending"
+            "n__not_pending_approval_and_not_valid_if_pending",
+            "n__valid_if_pending"
         ],
         "send_date": null,
         "send_offset_days": 1,
@@ -176,8 +177,8 @@ Endpoints
         "limit_products": [],
         "restrict_to_status": [
             "p",
-            "na",
-            "valid_if_pending"
+            "n__not_pending_approval_and_not_valid_if_pending",
+            "n__valid_if_pending"
         ],
         "send_date": null,
         "send_offset_days": 1,
@@ -205,8 +206,8 @@ Endpoints
         "limit_products": [],
         "restrict_to_status": [
             "p",
-            "na",
-            "valid_if_pending"
+            "n__not_pending_approval_and_not_valid_if_pending",
+            "n__valid_if_pending"
         ],
         "send_date": null,
         "send_offset_days": 1,
@@ -262,8 +263,8 @@ Endpoints
         "limit_products": [],
         "restrict_to_status": [
             "p",
-            "na",
-            "valid_if_pending"
+            "n__not_pending_approval_and_not_valid_if_pending",
+            "n__valid_if_pending"
         ],
         "send_date": null,
         "send_offset_days": 1,

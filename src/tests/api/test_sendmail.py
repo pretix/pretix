@@ -40,7 +40,7 @@ TEST_RULE_RES = {
     'template': {'en': 'foo'},
     'all_products': True,
     'limit_products': [],
-    "restrict_to_status": ['p', 'valid_if_pending'],
+    "restrict_to_status": ['p', 'n__valid_if_pending'],
     'send_date': '2021-07-08T00:00:00Z',
     'send_offset_days': None,
     'send_offset_time': None,
@@ -144,7 +144,7 @@ def test_sendmail_rule_create_full(token_client, organizer, event, item):
             'template': {'en': 'foobar'},
             'all_products': False,
             'limit_products': [event.items.first().pk],
-            "restrict_to_status": ['p', 'na', 'valid_if_pending'],
+            "restrict_to_status": ['p', 'n__not_pending_approval_and_not_valid_if_pending', 'n__valid_if_pending'],
             'send_offset_days': 3,
             'send_offset_time': '09:30',
             'date_is_absolute': False,
@@ -157,7 +157,7 @@ def test_sendmail_rule_create_full(token_client, organizer, event, item):
 
     assert r.all_products is False
     assert [i.pk for i in r.limit_products.all()] == [event.items.first().pk]
-    assert r.restrict_to_status == ['p', 'na', 'valid_if_pending']
+    assert r.restrict_to_status == ['p', 'n__not_pending_approval_and_not_valid_if_pending', 'n__valid_if_pending']
     assert r.send_offset_days == 3
     assert r.send_offset_time == datetime.time(9, 30)
     assert r.date_is_absolute is False
@@ -256,7 +256,8 @@ def test_sendmail_rule_create_invalid(token_client, organizer, event):
 @scopes_disabled()
 @pytest.mark.django_db
 def test_sendmail_rule_restrict_recipients(token_client, organizer, event, rule):
-    restrictions = ['p', 'e', 'c', 'na', 'pa', 'valid_if_pending', 'overdue']
+    restrictions = ['p', 'e', 'c', 'n__not_pending_approval_and_not_valid_if_pending',
+                    'n__pending_approval', 'n__valid_if_pending', 'n__pending_overdue']
     for r in restrictions:
         result = create_rule(
             token_client, organizer, event,

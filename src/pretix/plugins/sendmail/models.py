@@ -119,13 +119,13 @@ class ScheduledMail(models.Model):
             )
 
         status_q = Q(status__in=self.rule.restrict_to_status)
-        if 'pa' in self.rule.restrict_to_status:
+        if 'n__pending_approval' in self.rule.restrict_to_status:
             status_q |= Q(status=Order.STATUS_PENDING, require_approval=True)
-        if 'na' in self.rule.restrict_to_status:
+        if 'n__not_pending_approval_and_not_valid_if_pending' in self.rule.restrict_to_status:
             status_q |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=False)
-        if 'valid_if_pending' in self.rule.restrict_to_status:
+        if 'n__valid_if_pending' in self.rule.restrict_to_status:
             status_q |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=True)
-        if 'overdue' in self.rule.restrict_to_status:
+        if 'n__pending_overdue' in self.rule.restrict_to_status:
             status_q |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=False,
                           expires__lt=now())
 
@@ -208,7 +208,7 @@ class Rule(models.Model, LoggingMixin):
 
     restrict_to_status = fields.MultiStringField(
         verbose_name=_("Restrict to orders with status"),
-        default=['p', 'valid_if_pending'],
+        default=['p', 'n__valid_if_pending'],
     )
 
     attach_ical = models.BooleanField(
