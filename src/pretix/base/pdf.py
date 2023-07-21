@@ -43,7 +43,7 @@ import subprocess
 import tempfile
 import unicodedata
 import uuid
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from functools import partial
 from io import BytesIO
 
@@ -361,14 +361,9 @@ DEFAULT_VARIABLES = OrderedDict((
     }),
     ("addons", {
         "label": _("List of Add-Ons"),
-        "editor_sample": _("Add-on 1\nAdd-on 2"),
+        "editor_sample": _("Add-on 1\n2x Add-on 2"),
         "evaluate": lambda op, order, ev: "\n".join([
-            '{} - {}'.format(p.item.name, p.variation.value) if p.variation else str(p.item.name)
-            for p in (
-                op.addons.all() if 'addons' in getattr(op, '_prefetched_objects_cache', {})
-                else op.addons.select_related('item', 'variation')
-            )
-            if not p.canceled
+            str(p) for p in generate_compressed_addon_list(op, order, ev)
         ])
     }),
     ("organizer", {
@@ -700,6 +695,30 @@ def get_seat(op: OrderPosition):
     if op.addon_to_id:
         return op.addon_to.seat
     return None
+
+
+def generate_compressed_addon_list(op, order, event):
+    itemcount = defaultdict(int)
+    addons = (
+        op.addons.all() if 'addons' in getattr(op, '_prefetched_objects_cache', {})
+        else op.addons.select_related('item', 'variation')
+    )
+    for pos in addons:
+        itemcount[pos.item, pos.variation] += 1
+
+    addonlist = []
+    for (item, variation), count in itemcount.items():
+        if variation:
+            if count > 1:
+                addonlist.append('{}x {} - {}'.format(count, item.name, variation.value))
+            else:
+                addonlist.append('{} - {}'.format(item.name, variation.value))
+        else:
+            if count > 1:
+                addonlist.append('{}x {}'.format(count, item.name))
+            else:
+                addonlist.append(item.name)
+    return addonlist
 
 
 class Renderer:
