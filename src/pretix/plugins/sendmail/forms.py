@@ -167,7 +167,7 @@ class WaitinglistMailForm(BaseMailForm):
 
 class OrderMailForm(BaseMailForm):
     recipients = forms.ChoiceField(
-        label=pgettext_lazy('sendmail_from', 'Send to'),
+        label=pgettext_lazy('sendmail_form', 'Send to'),
         widget=forms.RadioSelect,
         initial='orders',
         choices=[]
@@ -186,7 +186,7 @@ class OrderMailForm(BaseMailForm):
         required=False
     )
     checkin_lists = SafeModelMultipleChoiceField(queryset=CheckinList.objects.none(), required=False)  # overridden later
-    not_checked_in = forms.BooleanField(label=pgettext_lazy('sendmail_from', 'Restrict to recipients without check-in'), required=False)
+    not_checked_in = forms.BooleanField(label=pgettext_lazy('sendmail_form', 'Restrict to recipients without check-in'), required=False)
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
         label=pgettext_lazy('sendmail_form', 'Restrict to a specific event date'),
@@ -255,14 +255,14 @@ class OrderMailForm(BaseMailForm):
                 ('overdue', _('pending with payment overdue'))
             )
         self.fields['sendto'] = forms.MultipleChoiceField(
-            label=pgettext_lazy('sendmail_from', 'Restrict to orders with status'),
+            label=pgettext_lazy('sendmail_form', 'Restrict to orders with status'),
             widget=forms.CheckboxSelectMultiple(
                 attrs={'class': 'scrolling-multiple-choice no-search'}
             ),
             choices=choices
         )
         if not self.initial.get('sendto'):
-            self.initial['sendto'] = ['p', 'na', 'valid_if_pending']
+            self.initial['sendto'] = ['p', 'valid_if_pending']
         elif 'n' in self.initial['sendto']:
             self.initial['sendto'].append('pa')
             self.initial['sendto'].append('na')
@@ -280,11 +280,11 @@ class OrderMailForm(BaseMailForm):
                     'event': event.slug,
                     'organizer': event.organizer.slug,
                 }),
-                'data-placeholder': pgettext_lazy('sendmail_from', 'Restrict to recipients with check-in on list')
+                'data-placeholder': pgettext_lazy('sendmail_form', 'Restrict to recipients with check-in on list')
             }
         )
         self.fields['checkin_lists'].widget.choices = self.fields['checkin_lists'].choices
-        self.fields['checkin_lists'].label = pgettext_lazy('sendmail_from', 'Restrict to recipients with check-in on list')
+        self.fields['checkin_lists'].label = pgettext_lazy('sendmail_form', 'Restrict to recipients with check-in on list')
 
         if event.has_subevents:
             self.fields['subevent'].queryset = event.subevents.all()
@@ -311,7 +311,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
 
         fields = ['subject', 'template', 'attach_ical',
                   'send_date', 'send_offset_days', 'send_offset_time',
-                  'include_pending', 'all_products', 'limit_products',
+                  'all_products', 'limit_products', 'restrict_to_status',
                   'send_to', 'enabled']
 
         field_classes = {
@@ -374,6 +374,25 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
 
         self._set_field_placeholders('subject', ['event', 'order'])
         self._set_field_placeholders('template', ['event', 'order'])
+
+        choices = [(e, l) for e, l in Order.STATUS_CHOICE if e != 'n']
+        choices.insert(0, ('n__valid_if_pending', _('payment pending but already confirmed')))
+        choices.insert(0, ('n__not_pending_approval_and_not_valid_if_pending',
+                           _('payment pending (except unapproved or already confirmed)')))
+        choices.insert(0, ('n__pending_approval', _('approval pending')))
+        if not self.event.settings.get('payment_term_expire_automatically', as_type=bool):
+            choices.append(
+                ('p__overdue', _('pending with payment overdue'))
+            )
+        self.fields['restrict_to_status'] = forms.MultipleChoiceField(
+            label=pgettext_lazy('sendmail_from', 'Restrict to orders with status'),
+            widget=forms.CheckboxSelectMultiple(
+                attrs={'class': 'scrolling-multiple-choice no-search'}
+            ),
+            choices=choices
+        )
+        if not self.initial.get('restrict_to_status'):
+            self.initial['restrict_to_status'] = ['p', 'n__valid_if_pending']
 
     def clean(self):
         d = super().clean()

@@ -345,7 +345,7 @@ class OrderSendView(BaseSenderView):
         qs = Order.objects.filter(event=self.request.event)
         statusq = Q(status__in=form.cleaned_data['sendto'])
         if 'overdue' in form.cleaned_data['sendto']:
-            statusq |= Q(status=Order.STATUS_PENDING, expires__lt=now())
+            statusq |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=False, expires__lt=now())
         if 'pa' in form.cleaned_data['sendto']:
             statusq |= Q(status=Order.STATUS_PENDING, require_approval=True)
         if 'na' in form.cleaned_data['sendto']:

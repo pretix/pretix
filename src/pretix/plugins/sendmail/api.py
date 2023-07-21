@@ -26,16 +26,32 @@ from rest_framework import viewsets
 
 from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
+from pretix.base.models import Order
 from pretix.plugins.sendmail.models import Rule
 
 
 class RuleSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Rule
-        fields = ['id', 'subject', 'template', 'all_products', 'limit_products', 'include_pending',
+        fields = ['id', 'subject', 'template', 'all_products', 'limit_products', 'restrict_to_status',
                   'send_date', 'send_offset_days', 'send_offset_time', 'date_is_absolute',
                   'offset_to_event_end', 'offset_is_after', 'send_to', 'enabled']
         read_only_fields = ['id']
+
+    def to_internal_value(self, data):
+        if "restrict_to_status" not in data:
+            if "include_pending" in data:
+                if data["include_pending"]:
+                    data['restrict_to_status'] = [
+                        Order.STATUS_PAID,
+                        'n__not_pending_approval_and_not_valid_if_pending',
+                        'n__valid_if_pending'
+                    ]
+                else:
+                    data['restrict_to_status'] = [Order.STATUS_PAID, 'n__valid_if_pending']
+            else:
+                data['restrict_to_status'] = [Order.STATUS_PAID, 'n__valid_if_pending']
+        return super().to_internal_value(data)
 
     def validate(self, data):
         data = super().validate(data)
@@ -56,6 +72,22 @@ class RuleSerializer(I18nAwareModelSerializer):
             if not full_data.get('limit_products'):
                 raise ValidationError('limit_products is required when all_products=False')
 
+        rts = full_data.get('restrict_to_status')
+        if not rts or rts == []:
+            raise ValidationError('restrict_to_status needs at least one value')
+        elif rts:
+            for s in rts:
+                if s not in [
+                    Order.STATUS_PAID,
+                    Order.STATUS_EXPIRED,
+                    Order.STATUS_CANCELED,
+                    'n__valid_if_pending',
+                    'n__pending_overdue',
+                    'n__pending_approval',
+                    'n__not_pending_approval_and_not_valid_if_pending',
+                ]:
+                    raise ValidationError(f'status {s} not allowed: restrict_to_status may only include valid states')
+
         return full_data
 
     def save(self, **kwargs):
@@ -66,7 +98,7 @@ with scopes_disabled():
     class RuleFilter(FilterSet):
         class Meta:
             model = Rule
-            fields = ['id', 'all_products', 'include_pending', 'date_is_absolute',
+            fields = ['id', 'all_products', 'date_is_absolute',
                       'offset_to_event_end', 'offset_is_after', 'send_to', 'enabled']
 
 

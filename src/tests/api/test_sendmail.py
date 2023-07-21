@@ -39,7 +39,7 @@ TEST_RULE_RES = {
     'template': {'en': 'foo'},
     'all_products': True,
     'limit_products': [],
-    'include_pending': False,
+    "restrict_to_status": ['p', 'n__valid_if_pending'],
     'send_date': '2021-07-08T00:00:00Z',
     'send_offset_days': None,
     'send_offset_time': None,
@@ -63,11 +63,11 @@ def test_sendmail_rule_list(token_client, organizer, event, rule):
     assert res in results
     assert len(results) == 1
 
-    produces_result = [f'id={rule.id}', 'all_products=true', 'include_pending=false', 'date_is_absolute=true',
+    produces_result = [f'id={rule.id}', 'all_products=true', 'date_is_absolute=true',
                        'offset_to_event_end=false', 'offset_is_after=false', 'send_to=orders', 'enabled=true',
                        f'id={rule.id}&enabled=true']
 
-    no_produce_result = ['id=12345', 'all_products=false', 'include_pending=true', 'date_is_absolute=false',
+    no_produce_result = ['id=12345', 'all_products=false', 'date_is_absolute=false',
                          'offset_to_event_end=true', 'offset_is_after=true', 'send_to=both', 'send_to=attendees',
                          'enabled=false', f'id={rule.id}&enabled=false']
 
@@ -144,7 +144,7 @@ def test_sendmail_rule_create_minimal(token_client, organizer, event):
         data={
             'subject': {'en': 'meow'},
             'template': {'en': 'creative text here'},
-            'send_date': '2018-03-17T13:31Z',
+            'send_date': '2018-03-17T13:31Z'
         }
     )
     assert r.send_date == datetime.datetime(2018, 3, 17, 13, 31, tzinfo=datetime.timezone.utc)
@@ -160,7 +160,7 @@ def test_sendmail_rule_create_full(token_client, organizer, event, item):
             'template': {'en': 'foobar'},
             'all_products': False,
             'limit_products': [event.items.first().pk],
-            'include_pending': True,
+            "restrict_to_status": ['p', 'n__not_pending_approval_and_not_valid_if_pending', 'n__valid_if_pending'],
             'send_offset_days': 3,
             'send_offset_time': '09:30',
             'date_is_absolute': False,
@@ -173,7 +173,7 @@ def test_sendmail_rule_create_full(token_client, organizer, event, item):
 
     assert r.all_products is False
     assert [i.pk for i in r.limit_products.all()] == [event.items.first().pk]
-    assert r.include_pending is True
+    assert r.restrict_to_status == ['p', 'n__not_pending_approval_and_not_valid_if_pending', 'n__valid_if_pending']
     assert r.send_offset_days == 3
     assert r.send_offset_time == datetime.time(9, 30)
     assert r.date_is_absolute is False
@@ -267,6 +267,85 @@ def test_sendmail_rule_create_invalid(token_client, organizer, event):
 
     for data, failure in invalid_examples:
         create_rule(token_client, organizer, event, data, expected_failure=True, expected_failure_text=failure)
+
+
+@scopes_disabled()
+@pytest.mark.django_db
+def test_sendmail_rule_legacy_field(token_client, organizer, event, rule):
+    r = create_rule(
+        token_client, organizer, event,
+        data={
+            'subject': {'en': 'meow'},
+            'template': {'en': 'creative text here'},
+            'send_date': '2018-03-17T13:31Z',
+            'include_pending': True
+        }
+    )
+    assert r.restrict_to_status == ['p', 'n__not_pending_approval_and_not_valid_if_pending', 'n__valid_if_pending']
+
+    r = create_rule(
+        token_client, organizer, event,
+        data={
+            'subject': {'en': 'meow'},
+            'template': {'en': 'creative text here'},
+            'send_date': '2018-03-17T13:31Z',
+            'include_pending': False
+        }
+    )
+    assert r.restrict_to_status == ['p', 'n__valid_if_pending']
+
+
+@scopes_disabled()
+@pytest.mark.django_db
+def test_sendmail_rule_restrict_recipients(token_client, organizer, event, rule):
+    restrictions = ['p', 'e', 'c', 'n__not_pending_approval_and_not_valid_if_pending',
+                    'n__pending_approval', 'n__valid_if_pending', 'n__pending_overdue']
+    for r in restrictions:
+        result = create_rule(
+            token_client, organizer, event,
+            data={
+                'subject': {'en': 'meow'},
+                'template': {'en': 'creative text here'},
+                'send_date': '2018-03-17T13:31Z',
+                "restrict_to_status": [r],
+            },
+            expected_failure=False
+        )
+        assert result.restrict_to_status == [r]
+
+    create_rule(
+        token_client, organizer, event,
+        data={
+            'subject': {'en': 'meow'},
+            'template': {'en': 'creative text here'},
+            'send_date': '2018-03-17T13:31Z',
+            "restrict_to_status": ["foo"],
+        },
+        expected_failure=True,
+        expected_failure_text="restrict_to_status may only include valid states"
+    )
+
+    create_rule(
+        token_client, organizer, event,
+        data={
+            'subject': {'en': 'meow'},
+            'template': {'en': 'creative text here'},
+            'send_date': '2018-03-17T13:31Z',
+            "restrict_to_status": [],
+        },
+        expected_failure=True,
+        expected_failure_text="restrict_to_status needs at least one value"
+    )
+
+    create_rule(
+        token_client, organizer, event,
+        data={
+            'subject': {'en': 'meow'},
+            'template': {'en': 'creative text here'},
+            'send_date': '2018-03-17T13:31Z',
+        },
+        expected_failure=False
+    )
 
 
 @scopes_disabled()
