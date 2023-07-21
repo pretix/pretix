@@ -704,6 +704,47 @@ class PaymentReminderTests(TestCase):
         assert len(djmail.outbox) == 0
 
 
+class PaymentFailedTests(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.o = Organizer.objects.create(name='Dummy', slug='dummy')
+        with scope(organizer=self.o):
+            self.event = Event.objects.create(
+                organizer=self.o, name='Dummy', slug='dummy',
+                date_from=now() + timedelta(days=2),
+                plugins='pretix.plugins.banktransfer'
+            )
+            self.order = Order.objects.create(
+                code='FOO', event=self.event, email='dummy@dummy.test',
+                status=Order.STATUS_PENDING, locale='en',
+                datetime=now() - timedelta(hours=4),
+                expires=now() - timedelta(hours=4) + timedelta(days=10),
+                total=Decimal('46.00'),
+            )
+            self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
+                                              default_price=Decimal('23.00'), admission=True)
+            self.op1 = OrderPosition.objects.create(
+                order=self.order, item=self.ticket, variation=None,
+                price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
+            )
+            djmail.outbox = []
+
+    @classscope(attr='o')
+    def test_send_payment_fail_mail(self):
+        payment = self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=self.order.total)
+        payment.save()
+        payment.fail()
+        assert len(djmail.outbox) == 1
+        assert "fail" in djmail.outbox[0].subject
+
+    @classscope(attr='o')
+    def test_no_payment_fail_mail_setting(self):
+        payment = self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=self.order.total)
+        payment.save()
+        payment.fail(send_mail=False)
+        assert len(djmail.outbox) == 0
+
+
 class DownloadReminderTests(TestCase):
     def setUp(self):
         super().setUp()

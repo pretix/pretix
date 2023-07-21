@@ -2344,6 +2344,24 @@ You can view the payment information and the status of your order at
 Best regards,  
 Your {event} team"""))  # noqa: W291
     },
+    'mail_subject_order_payment_failed': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Payment failed for your order: {code}")),
+    },
+    'mail_text_order_payment_failed': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+your payment attempt for your order for {event} has failed.
+
+Your order is still valid and you can try to pay again using the same or a different payment method. Please complete your payment before {expire_date}.
+
+You can retry the payment and view the status of your order at
+{url}
+
+Best regards,  
+Your {event} team"""))  # noqa: W291
+    },
     'mail_subject_waiting_list': {
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("You have been selected from the waitinglist for {event}")),
