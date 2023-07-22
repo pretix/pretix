@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-21 13:02+0000\n"
-"PO-Revision-Date: 2023-07-19 17:00+0000\n"
+"PO-Revision-Date: 2023-07-22 21:00+0000\n"
 "Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -6891,7 +6891,7 @@ msgstr "Rez-de-chaussée, rangée 3, siège 4"
 #: pretix/base/pdf.py:470 pretix/base/pdf.py:476
 #: pretix/control/forms/orders.py:312
 msgid "General admission"
-msgstr "Entrée générale"
+msgstr "Admission générale"
 
 #: pretix/base/pdf.py:473
 msgid "Seat: zone"
@@ -27970,7 +27970,7 @@ msgstr "Éléments ouverts"
 
 #: pretix/plugins/reports/apps.py:44 pretix/plugins/reports/apps.py:47
 msgid "Report exporter"
-msgstr "Rapport d'exportateur"
+msgstr "Générateur de rapport"
 
 #: pretix/plugins/reports/apps.py:51
 msgid "Generate printable reports about your sales."
