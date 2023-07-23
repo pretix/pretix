@@ -186,7 +186,7 @@
                             {% bootstrap_field form.media_type layout="control" %}
                         {% endif %}
                         {% for f in plugin_forms %}
-                            {% if f.is_layouts %}
+                            {% if f.is_layouts and not f.title %}
                                 {% bootstrap_form f layout="control" %}
                             {% endif %}
                         {% endfor %}
@@ -256,11 +256,23 @@
                         {% endif %}
                         {% bootstrap_field form.show_quota_left layout="control" %}
                         {% for f in plugin_forms %}
-                            {% if not f.is_layouts %}
+                            {% if not f.is_layouts and not f.title %}
                                 {% bootstrap_form f layout="control" %}
                             {% endif %}
                         {% endfor %}
                     </fieldset>
+                    {% for f in plugin_forms %}
+                        {% if not f.is_layouts and f.title %}
+                            <fieldset>
+                                <legend>{{ f.title }}</legend>
+                                {% if f.template %}
+                                    {% include f.template with form=f %}
+                                {% else %}
+                                    {% bootstrap_form f layout="control" %}
+                                {% endif %}
+                            </fieldset>
+                        {% endif %}
+                    {% endfor %}
                 </div>
                 <div class="form-group submit-group">
                     <button type="submit" class="btn btn-primary btn-save">
