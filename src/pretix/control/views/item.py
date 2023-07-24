@@ -88,6 +88,10 @@ from ...helpers.compat import CompatDeleteView
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
 
+def has_truthy_attr(cls, attr):
+    return hasattr(cls, attr) and getattr(cls, attr)
+
+
 class ItemList(ListView):
     model = Item
     context_object_name = 'items'
@@ -1293,6 +1297,11 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                 forms.extend(resp)
             else:
                 forms.append(resp)
+
+        for form in forms:
+            if has_truthy_attr(form, "title") and has_truthy_attr(form, "is_layout"):
+                raise ValueError("`title` and `is_layout` must not both be truthy values")
+
         return forms
 
     def get_success_url(self) -> str:
