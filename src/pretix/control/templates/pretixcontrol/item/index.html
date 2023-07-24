@@ -187,7 +187,11 @@
                         {% endif %}
                         {% for f in plugin_forms %}
                             {% if f.is_layouts and not f.title %}
-                                {% bootstrap_form f layout="control" %}
+                                {% if f.template %}
+                                    {% include f.template with form=f %}
+                                {% else %}
+                                    {% bootstrap_form f layout="control" %}
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                     </fieldset>
@@ -257,7 +261,11 @@
                         {% bootstrap_field form.show_quota_left layout="control" %}
                         {% for f in plugin_forms %}
                             {% if not f.is_layouts and not f.title %}
-                                {% bootstrap_form f layout="control" %}
+                                {% if f.template %}
+                                    {% include f.template with form=f %}
+                                {% else %}
+                                    {% bootstrap_form f layout="control" %}
+                                {% endif %}
                             {% endif %}
                         {% endfor %}
                     </fieldset>

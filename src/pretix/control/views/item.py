@@ -1302,9 +1302,6 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
             if has_truthy_attr(form, "title") and has_truthy_attr(form, "is_layout"):
                 raise ValueError("`title` and `is_layout` must not both be truthy values")
 
-            if has_truthy_attr(form, "template") and not has_truthy_attr(form, "title"):
-                raise Exception("If `template` is set, so must `title`")
-
         return forms
 
     def get_success_url(self) -> str:
