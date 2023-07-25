@@ -735,5 +735,4 @@ FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT = 1024 * 1024 * config.getint("pretix_file
 FILE_UPLOAD_MAX_SIZE_EMAIL_AUTO_ATTACHMENT = 1024 * 1024 * config.getint("pretix_file_upload", "max_size_email_auto_attachment", fallback=1)
 FILE_UPLOAD_MAX_SIZE_OTHER = 1024 * 1024 * config.getint("pretix_file_upload", "max_size_other", fallback=10)
 
-
-DEFAULT_AUTO_FIELD = 'django.db.models.AutoField'  # sadly. we would prefer BigInt, and should use it for all new models but the migration will be hard
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
