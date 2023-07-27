@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 13:02+0000\n"
+"POT-Creation-Date: 2023-07-27 08:38+0000\n"
 "PO-Revision-Date: 2023-06-28 06:00+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
@@ -679,8 +679,8 @@ msgstr "該金額已從你的卡中扣除。"
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr "請將錢轉入此銀行帳戶：9999-9999-9999-9999"
 
-#: pretix/base/email.py:667 pretix/base/email.py:672 pretix/base/pdf.py:628
-#: pretix/base/pdf.py:651 pretix/control/forms/organizer.py:567
+#: pretix/base/email.py:667 pretix/base/email.py:672 pretix/base/pdf.py:623
+#: pretix/base/pdf.py:646 pretix/control/forms/organizer.py:567
 msgid "Mr Doe"
 msgstr "無名氏"
 
@@ -896,7 +896,7 @@ msgstr "留意"
 #: pretix/base/exporters/orderlist.py:1329 pretix/base/models/orders.py:1252
 #: pretix/control/forms/filter.py:170 pretix/control/forms/filter.py:508
 #: pretix/control/forms/item.py:521 pretix/control/forms/subevents.py:118
-#: pretix/control/views/item.py:706 pretix/control/views/vouchers.py:137
+#: pretix/control/views/item.py:710 pretix/control/views/vouchers.py:137
 #: pretix/control/views/vouchers.py:138
 #: pretix/plugins/checkinlists/exporters.py:573
 #: pretix/plugins/checkinlists/exporters.py:576
@@ -917,7 +917,7 @@ msgstr "是"
 #: pretix/base/exporters/orderlist.py:1329 pretix/base/models/orders.py:1254
 #: pretix/control/forms/filter.py:170 pretix/control/forms/filter.py:509
 #: pretix/control/forms/item.py:522 pretix/control/forms/subevents.py:119
-#: pretix/control/views/item.py:706 pretix/control/views/vouchers.py:137
+#: pretix/control/views/item.py:710 pretix/control/views/vouchers.py:137
 #: pretix/control/views/vouchers.py:138
 #: pretix/plugins/checkinlists/exporters.py:573
 #: pretix/plugins/checkinlists/exporters.py:576
@@ -1223,7 +1223,7 @@ msgstr "地址"
 #: pretix/base/models/orders.py:2970 pretix/base/orderimport.py:363
 #: pretix/base/orderimport.py:509 pretix/base/settings.py:1105
 #: pretix/control/forms/filter.py:622 pretix/control/forms/filter.py:653
-#: pretix/control/views/item.py:475
+#: pretix/control/views/item.py:479
 #: pretix/plugins/checkinlists/exporters.py:520
 #: pretix/plugins/reports/exporters.py:814
 msgid "ZIP code"
@@ -1238,7 +1238,7 @@ msgstr "郵遞區號"
 #: pretix/base/models/orders.py:2971 pretix/base/orderimport.py:374
 #: pretix/base/orderimport.py:520 pretix/base/settings.py:1117
 #: pretix/control/forms/filter.py:627 pretix/control/forms/filter.py:658
-#: pretix/control/views/item.py:485
+#: pretix/control/views/item.py:489
 #: pretix/plugins/checkinlists/exporters.py:521
 #: pretix/plugins/reports/exporters.py:815
 msgid "City"
@@ -1255,7 +1255,7 @@ msgstr "城市"
 #: pretix/base/settings.py:1126 pretix/control/forms/filter.py:632
 #: pretix/control/forms/filter.py:663
 #: pretix/control/templates/pretixcontrol/order/index.html:952
-#: pretix/control/views/item.py:495
+#: pretix/control/views/item.py:499
 #: pretix/plugins/checkinlists/exporters.py:522
 #: pretix/plugins/reports/exporters.py:765
 #: pretix/plugins/reports/exporters.py:810
@@ -1304,7 +1304,7 @@ msgstr "發票收件人:"
 #: pretix/base/orderimport.py:322 pretix/base/orderimport.py:487
 #: pretix/control/forms/filter.py:610 pretix/control/forms/filter.py:645
 #: pretix/control/templates/pretixcontrol/order/index.html:944
-#: pretix/control/views/item.py:453
+#: pretix/control/views/item.py:457
 #: pretix/plugins/checkinlists/exporters.py:504
 #: pretix/plugins/reports/exporters.py:812
 #: pretix/plugins/reports/exporters.py:858
@@ -1420,7 +1420,7 @@ msgstr "稅值"
 #: pretix/base/models/orders.py:2296 pretix/base/models/orders.py:2736
 #: pretix/base/models/orders.py:2819 pretix/base/models/tax.py:183
 #: pretix/control/templates/pretixcontrol/order/transactions.html:21
-#: pretix/plugins/reports/accountingreport.py:246
+#: pretix/plugins/reports/accountingreport.py:315
 #: pretix/plugins/reports/exporters.py:766
 #: pretix/plugins/reports/exporters.py:811
 msgid "Tax rate"
@@ -1671,8 +1671,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/index.html:7
 #: pretix/control/templates/pretixcontrol/orders/index.html:9
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:197
-#: pretix/plugins/reports/accountingreport.py:656
-#: pretix/plugins/reports/accountingreport.py:838
+#: pretix/plugins/reports/accountingreport.py:670
+#: pretix/plugins/reports/accountingreport.py:852
 #: pretix/plugins/reports/exporters.py:630
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:53
 msgid "Orders"
@@ -1912,7 +1912,7 @@ msgstr "費用類型"
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:138
 #: pretix/plugins/checkinlists/exporters.py:357
 #: pretix/plugins/checkinlists/exporters.py:479
-#: pretix/plugins/reports/accountingreport.py:245
+#: pretix/plugins/reports/accountingreport.py:314
 msgid "Price"
 msgstr "價格"
 
@@ -2023,7 +2023,7 @@ msgstr "終止日期"
 #: pretix/plugins/checkinlists/exporters.py:357
 #: pretix/plugins/checkinlists/exporters.py:479
 #: pretix/plugins/checkinlists/exporters.py:665
-#: pretix/plugins/reports/accountingreport.py:244
+#: pretix/plugins/reports/accountingreport.py:270
 #: pretix/plugins/reports/exporters.py:357
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:100
 #: pretix/presale/forms/order.py:36 pretix/presale/forms/waitinglist.py:79
@@ -2039,7 +2039,7 @@ msgstr "產品"
 #: pretix/control/forms/filter.py:637 pretix/control/forms/organizer.py:896
 #: pretix/control/templates/pretixcontrol/order/index.html:513
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:119
-#: pretix/control/views/item.py:429 pretix/plugins/badges/exporters.py:457
+#: pretix/control/views/item.py:433 pretix/plugins/badges/exporters.py:457
 #: pretix/plugins/checkinlists/exporters.py:119
 #: pretix/plugins/checkinlists/exporters.py:473
 #: pretix/plugins/ticketoutputpdf/exporters.py:94
@@ -2055,7 +2055,7 @@ msgstr "與會者名字"
 #: pretix/base/models/customers.py:296 pretix/base/models/orders.py:1361
 #: pretix/base/pdf.py:212
 #: pretix/control/templates/pretixcontrol/order/index.html:518
-#: pretix/control/views/item.py:441
+#: pretix/control/views/item.py:445
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:176
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:179
 msgid "Attendee email"
@@ -2181,7 +2181,7 @@ msgstr "僅包含在此日期範圍內創建的交易。"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:204
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:42
 #: pretix/control/templates/pretixcontrol/search/orders.html:51
-#: pretix/plugins/reports/accountingreport.py:244
+#: pretix/plugins/reports/accountingreport.py:270
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:71
@@ -2233,12 +2233,12 @@ msgid "Tax rule ID"
 msgstr "稅務規則ID"
 
 #: pretix/base/exporters/orderlist.py:853
-#: pretix/plugins/reports/accountingreport.py:250
+#: pretix/plugins/reports/accountingreport.py:319
 msgid "Gross total"
 msgstr "總價值（毛利）"
 
 #: pretix/base/exporters/orderlist.py:854
-#: pretix/plugins/reports/accountingreport.py:249
+#: pretix/plugins/reports/accountingreport.py:318
 msgid "Tax total"
 msgstr "稅金總額"
 
@@ -2343,7 +2343,7 @@ msgstr "總額"
 #: pretix/control/templates/pretixcontrol/order/index.html:741
 #: pretix/control/templates/pretixcontrol/order/index.html:836
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:85
-#: pretix/plugins/reports/accountingreport.py:481
+#: pretix/plugins/reports/accountingreport.py:495
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:29
 msgid "Payment method"
 msgstr "支付方式"
@@ -2378,11 +2378,11 @@ msgstr "總額度"
 
 #: pretix/base/exporters/orderlist.py:1082
 #: pretix/control/templates/pretixcontrol/event/cancel.html:19
-#: pretix/control/views/item.py:940
+#: pretix/control/views/item.py:944
 msgid "Paid orders"
 msgstr "已付款訂單"
 
-#: pretix/base/exporters/orderlist.py:1082 pretix/control/views/item.py:945
+#: pretix/base/exporters/orderlist.py:1082 pretix/control/views/item.py:949
 msgid "Pending orders"
 msgstr "待處理的訂單"
 
@@ -2390,7 +2390,7 @@ msgstr "待處理的訂單"
 msgid "Blocking vouchers"
 msgstr "凍結的優惠券"
 
-#: pretix/base/exporters/orderlist.py:1083 pretix/control/views/item.py:964
+#: pretix/base/exporters/orderlist.py:1083 pretix/control/views/item.py:968
 msgid "Current user's carts"
 msgstr "用戶的購物車現況"
 
@@ -2405,12 +2405,12 @@ msgstr "目前的可用性"
 #: pretix/base/exporters/orderlist.py:1100
 #: pretix/base/exporters/orderlist.py:1107
 #: pretix/control/templates/pretixcontrol/items/quota.html:58
-#: pretix/control/views/item.py:971
+#: pretix/control/views/item.py:975
 msgid "Infinite"
 msgstr "無限"
 
 #: pretix/base/exporters/orderlist.py:1129
-#: pretix/plugins/reports/accountingreport.py:756
+#: pretix/plugins/reports/accountingreport.py:770
 msgid "Gift card transactions"
 msgstr "禮品卡交易"
 
@@ -2504,7 +2504,7 @@ msgstr "發行人"
 #: pretix/base/exporters/orderlist.py:1234 pretix/control/navigation.py:524
 #: pretix/control/navigation.py:542
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:156
-#: pretix/plugins/reports/accountingreport.py:874
+#: pretix/plugins/reports/accountingreport.py:888
 msgid "Gift cards"
 msgstr "禮物卡"
 
@@ -3776,7 +3776,7 @@ msgstr "其他收件者（密件副本）"
 #: pretix/control/forms/orders.py:908 pretix/control/forms/organizer.py:510
 #: pretix/control/forms/organizer.py:520 pretix/control/forms/organizer.py:530
 #: pretix/control/forms/vouchers.py:263 pretix/plugins/sendmail/forms.py:74
-#: pretix/plugins/sendmail/forms.py:94 pretix/plugins/sendmail/models.py:209
+#: pretix/plugins/sendmail/forms.py:94 pretix/plugins/sendmail/models.py:211
 msgid "Subject"
 msgstr "主題"
 
@@ -3784,7 +3784,7 @@ msgstr "主題"
 #: pretix/control/forms/orders.py:706 pretix/control/forms/orders.py:889
 #: pretix/control/forms/orders.py:916 pretix/control/forms/vouchers.py:269
 #: pretix/plugins/sendmail/forms.py:75 pretix/plugins/sendmail/forms.py:99
-#: pretix/plugins/sendmail/models.py:210
+#: pretix/plugins/sendmail/models.py:212
 msgid "Message"
 msgstr "消息"
 
@@ -5210,7 +5210,7 @@ msgid "Invite to team '{team}' for '{email}'"
 msgstr "邀請加入團隊'{team}' 的'{email}'"
 
 #: pretix/base/models/seating.py:45 pretix/base/models/tax.py:148
-#: pretix/base/pdf.py:1136
+#: pretix/base/pdf.py:1155
 msgid "Your layout file is not a valid JSON file."
 msgstr "排版檔不是有效的 JSON 檔。"
 
@@ -5635,7 +5635,7 @@ msgstr "日期"
 
 #: pretix/base/notifications.py:200
 #: pretix/control/templates/pretixcontrol/order/index.html:677
-#: pretix/plugins/reports/accountingreport.py:248
+#: pretix/plugins/reports/accountingreport.py:317
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:426
 msgid "Net total"
 msgstr "淨總額"
@@ -6326,9 +6326,9 @@ msgstr "2017-05-31 20:00"
 msgid "Event begin date"
 msgstr "活動開始日期"
 
-#: pretix/base/pdf.py:251 pretix/base/pdf.py:277 pretix/base/pdf.py:391
-#: pretix/base/pdf.py:415 pretix/base/pdf.py:439 pretix/base/pdf.py:496
-#: pretix/base/pdf.py:501
+#: pretix/base/pdf.py:251 pretix/base/pdf.py:277 pretix/base/pdf.py:386
+#: pretix/base/pdf.py:410 pretix/base/pdf.py:434 pretix/base/pdf.py:491
+#: pretix/base/pdf.py:496
 msgid "2017-05-31"
 msgstr "2017-05-31"
 
@@ -6369,8 +6369,8 @@ msgstr "活動在工作日結束"
 msgid "Event admission date and time"
 msgstr "活動管理日期與時間"
 
-#: pretix/base/pdf.py:298 pretix/base/pdf.py:399 pretix/base/pdf.py:423
-#: pretix/base/pdf.py:447 pretix/base/pdf.py:490
+#: pretix/base/pdf.py:298 pretix/base/pdf.py:394 pretix/base/pdf.py:418
+#: pretix/base/pdf.py:442 pretix/base/pdf.py:485
 msgid "2017-05-31 19:00"
 msgstr "2017-05-31 19:00"
 
@@ -6378,8 +6378,8 @@ msgstr "2017-05-31 19:00"
 msgid "Event admission time"
 msgstr "活動管理時間"
 
-#: pretix/base/pdf.py:306 pretix/base/pdf.py:407 pretix/base/pdf.py:431
-#: pretix/base/pdf.py:455
+#: pretix/base/pdf.py:306 pretix/base/pdf.py:402 pretix/base/pdf.py:426
+#: pretix/base/pdf.py:450
 msgid "19:00"
 msgstr "19:00"
 
@@ -6424,133 +6424,137 @@ msgid "List of Add-Ons"
 msgstr "附加組件清單"
 
 #: pretix/base/pdf.py:364
+#, fuzzy
+#| msgid ""
+#| "Add-on 1\n"
+#| "Add-on 2"
 msgid ""
 "Add-on 1\n"
-"Add-on 2"
+"2x Add-on 2"
 msgstr ""
 "附加1\n"
 "附加2"
 
-#: pretix/base/pdf.py:375 pretix/control/forms/filter.py:1275
+#: pretix/base/pdf.py:370 pretix/control/forms/filter.py:1275
 #: pretix/control/forms/filter.py:1277
 #: pretix/control/templates/pretixcontrol/organizers/index.html:42
 msgid "Organizer name"
 msgstr "主辦方名稱"
 
-#: pretix/base/pdf.py:376
+#: pretix/base/pdf.py:371
 msgid "Event organizer company"
 msgstr "活動主辦方公司"
 
-#: pretix/base/pdf.py:380
+#: pretix/base/pdf.py:375
 msgid "Organizer info text"
 msgstr "主辦方資訊文字"
 
-#: pretix/base/pdf.py:381
+#: pretix/base/pdf.py:376
 msgid "Event organizer info text"
 msgstr "活動主辦方資訊文字"
 
-#: pretix/base/pdf.py:385 pretix/base/pdf.py:386
+#: pretix/base/pdf.py:380 pretix/base/pdf.py:381
 msgid "Event info text"
 msgstr "活動資訊文字"
 
-#: pretix/base/pdf.py:390
+#: pretix/base/pdf.py:385
 msgid "Printing date"
 msgstr "印刷日期"
 
-#: pretix/base/pdf.py:398
+#: pretix/base/pdf.py:393
 msgid "Printing date and time"
 msgstr "印刷日期與時間"
 
-#: pretix/base/pdf.py:406
+#: pretix/base/pdf.py:401
 msgid "Printing time"
 msgstr "印刷時間"
 
-#: pretix/base/pdf.py:414
+#: pretix/base/pdf.py:409
 msgid "Validity start date"
 msgstr "有效開始日期"
 
-#: pretix/base/pdf.py:422
+#: pretix/base/pdf.py:417
 msgid "Validity start date and time"
 msgstr "有效開始日期與時間"
 
-#: pretix/base/pdf.py:430
+#: pretix/base/pdf.py:425
 msgid "Validity start time"
 msgstr "有效開始時間"
 
-#: pretix/base/pdf.py:438
+#: pretix/base/pdf.py:433
 msgid "Validity end date"
 msgstr "有效結束日期"
 
-#: pretix/base/pdf.py:446
+#: pretix/base/pdf.py:441
 msgid "Validity end date and time"
 msgstr "有效結束日期與時間"
 
-#: pretix/base/pdf.py:454
+#: pretix/base/pdf.py:449
 msgid "Validity end time"
 msgstr "有效結束時間"
 
-#: pretix/base/pdf.py:462
+#: pretix/base/pdf.py:457
 msgid "Reusable Medium ID"
 msgstr "可重複使用媒體ID"
 
-#: pretix/base/pdf.py:467
+#: pretix/base/pdf.py:462
 msgid "Seat: Full name"
 msgstr "座位：全名"
 
-#: pretix/base/pdf.py:468
+#: pretix/base/pdf.py:463
 msgid "Ground floor, Row 3, Seat 4"
 msgstr "地面層，3排4座"
 
-#: pretix/base/pdf.py:470 pretix/base/pdf.py:476
+#: pretix/base/pdf.py:465 pretix/base/pdf.py:471
 #: pretix/control/forms/orders.py:312
 msgid "General admission"
 msgstr "一般管理"
 
-#: pretix/base/pdf.py:473
+#: pretix/base/pdf.py:468
 msgid "Seat: zone"
 msgstr "座位：區域"
 
-#: pretix/base/pdf.py:474
+#: pretix/base/pdf.py:469
 msgid "Ground floor"
 msgstr "地面層"
 
-#: pretix/base/pdf.py:479
+#: pretix/base/pdf.py:474
 msgid "Seat: row"
 msgstr "座位：排"
 
-#: pretix/base/pdf.py:484
+#: pretix/base/pdf.py:479
 msgid "Seat: seat number"
 msgstr "座位：座位編號"
 
-#: pretix/base/pdf.py:489
+#: pretix/base/pdf.py:484
 msgid "Date and time of first scan"
 msgstr "第一掃描的日期與時間"
 
-#: pretix/base/pdf.py:495
+#: pretix/base/pdf.py:490
 msgid "Gift card: Issuance date"
 msgstr "禮品卡：發售日期"
 
-#: pretix/base/pdf.py:500
+#: pretix/base/pdf.py:495
 msgid "Gift card: Expiration date"
 msgstr "禮品卡：失效日期"
 
-#: pretix/base/pdf.py:541 pretix/base/pdf.py:579 pretix/base/pdf.py:585
+#: pretix/base/pdf.py:536 pretix/base/pdf.py:574 pretix/base/pdf.py:580
 #: pretix/plugins/badges/exporters.py:464
 #: pretix/plugins/ticketoutputpdf/exporters.py:101
 #, python-brace-format
 msgid "Question: {question}"
 msgstr "問題：{question}"
 
-#: pretix/base/pdf.py:580 pretix/base/pdf.py:586
+#: pretix/base/pdf.py:575 pretix/base/pdf.py:581
 #, python-brace-format
 msgid "<Answer: {question}>"
 msgstr "<回答：{question}>"
 
-#: pretix/base/pdf.py:627
+#: pretix/base/pdf.py:622
 msgid "Attendee name for salutation"
 msgstr "參與者的稱呼"
 
-#: pretix/base/pdf.py:634 pretix/base/pdf.py:641
+#: pretix/base/pdf.py:629 pretix/base/pdf.py:636
 #: pretix/plugins/badges/exporters.py:461
 #: pretix/plugins/checkinlists/exporters.py:122
 #: pretix/plugins/checkinlists/exporters.py:477
@@ -6559,23 +6563,23 @@ msgstr "參與者的稱呼"
 msgid "Attendee name: {part}"
 msgstr "與會者名稱：{part}"
 
-#: pretix/base/pdf.py:650
+#: pretix/base/pdf.py:645
 msgid "Invoice address name for salutation"
 msgstr "發票的地址與發票名稱抬頭"
 
-#: pretix/base/pdf.py:657
+#: pretix/base/pdf.py:652
 #, python-brace-format
 msgid "Invoice address name: {part}"
 msgstr "發票地址名稱：{part}"
 
-#: pretix/base/pdf.py:1017 pretix/control/forms/organizer.py:691
+#: pretix/base/pdf.py:1036 pretix/control/forms/organizer.py:691
 #: pretix/control/forms/organizer.py:727
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:113
 msgid "Ticket"
 msgstr "票"
 
-#: pretix/base/pdf.py:1145
+#: pretix/base/pdf.py:1164
 msgid "Your layout file is not a valid layout. Error message: {}"
 msgstr "你的樣式檔案並非有效樣式。錯誤訊息：{}"
 
@@ -8918,7 +8922,7 @@ msgid ""
 msgstr "如果票證大於 {size}，則永遠不會附加票證，以避免電子郵件傳送問題。"
 
 #: pretix/base/settings.py:1987 pretix/plugins/sendmail/forms.py:222
-#: pretix/plugins/sendmail/models.py:223
+#: pretix/plugins/sendmail/models.py:224
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:66
 msgid "Attach calendar files"
 msgstr "附加日曆檔"
@@ -9296,7 +9300,7 @@ msgstr ""
 "你的 {event} 團隊"
 
 #: pretix/base/settings.py:2284 pretix/control/forms/event.py:1081
-#: pretix/control/forms/event.py:1181 pretix/plugins/sendmail/models.py:228
+#: pretix/control/forms/event.py:1181 pretix/plugins/sendmail/models.py:229
 msgid "Number of days"
 msgstr "天數"
 
@@ -11784,7 +11788,7 @@ msgstr "後續工作到期"
 #: pretix/control/forms/filter.py:2347 pretix/control/forms/vouchers.py:147
 #: pretix/control/templates/pretixcontrol/items/question.html:30
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:104
-#: pretix/plugins/sendmail/models.py:212
+#: pretix/plugins/sendmail/models.py:214
 msgid "All products"
 msgstr "所有商品"
 
@@ -14326,7 +14330,7 @@ msgstr "額度已更改。"
 msgid "The quota has closed."
 msgstr "額度已關閉。"
 
-#: pretix/control/logdisplay.py:501 pretix/control/views/item.py:1051
+#: pretix/control/logdisplay.py:501 pretix/control/views/item.py:1055
 msgid "The quota has been re-opened."
 msgstr "額度已重新開放。"
 
@@ -14791,8 +14795,8 @@ msgstr "概述"
 #: pretix/control/templates/pretixcontrol/order/index.html:824
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:7
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:9
-#: pretix/plugins/reports/accountingreport.py:483
-#: pretix/plugins/reports/accountingreport.py:670
+#: pretix/plugins/reports/accountingreport.py:497
+#: pretix/plugins/reports/accountingreport.py:684
 #: pretix/presale/templates/pretixpresale/event/order.html:136
 msgid "Refunds"
 msgstr "退款"
@@ -14838,9 +14842,9 @@ msgstr "搜尋"
 
 #: pretix/control/navigation.py:366
 #: pretix/control/templates/pretixcontrol/order/index.html:730
-#: pretix/plugins/reports/accountingreport.py:482
-#: pretix/plugins/reports/accountingreport.py:663
-#: pretix/plugins/reports/accountingreport.py:847
+#: pretix/plugins/reports/accountingreport.py:496
+#: pretix/plugins/reports/accountingreport.py:677
+#: pretix/plugins/reports/accountingreport.py:861
 msgid "Payments"
 msgstr "付款"
 
@@ -15109,7 +15113,7 @@ msgstr "設定新密碼"
 #: pretix/control/templates/pretixcontrol/event/tickets.html:73
 #: pretix/control/templates/pretixcontrol/global_settings.html:12
 #: pretix/control/templates/pretixcontrol/global_update.html:86
-#: pretix/control/templates/pretixcontrol/item/index.html:267
+#: pretix/control/templates/pretixcontrol/item/index.html:287
 #: pretix/control/templates/pretixcontrol/items/category.html:37
 #: pretix/control/templates/pretixcontrol/items/discount.html:70
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:152
@@ -16815,7 +16819,7 @@ msgstr "付款設定"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:22
 #: pretix/control/templates/pretixcontrol/user/settings.html:48
-#: pretix/plugins/sendmail/models.py:239
+#: pretix/plugins/sendmail/models.py:240
 msgid "Enabled"
 msgstr "啟用"
 
@@ -16900,9 +16904,9 @@ msgstr ""
 #: pretix/control/views/event.py:688 pretix/control/views/event.py:908
 #: pretix/control/views/event.py:1264
 #: pretix/control/views/global_settings.py:60
-#: pretix/control/views/global_settings.py:83 pretix/control/views/item.py:253
-#: pretix/control/views/item.py:768 pretix/control/views/item.py:1091
-#: pretix/control/views/item.py:1253 pretix/control/views/item.py:1387
+#: pretix/control/views/global_settings.py:83 pretix/control/views/item.py:257
+#: pretix/control/views/item.py:772 pretix/control/views/item.py:1095
+#: pretix/control/views/item.py:1257 pretix/control/views/item.py:1396
 #: pretix/control/views/mailsetup.py:146 pretix/control/views/mailsetup.py:158
 #: pretix/control/views/mailsetup.py:185 pretix/control/views/mailsetup.py:253
 #: pretix/control/views/organizer.py:251 pretix/control/views/organizer.py:279
@@ -18038,40 +18042,40 @@ msgstr "可用性"
 msgid "Tickets & Badges"
 msgstr "門票和徽章標誌圖片"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:195
+#: pretix/control/templates/pretixcontrol/item/index.html:199
 msgid "Check-in & Validity"
 msgstr "辦理check-in和有效期"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:204
+#: pretix/control/templates/pretixcontrol/item/index.html:208
 msgid "Duration"
 msgstr "期間"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:206
+#: pretix/control/templates/pretixcontrol/item/index.html:210
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
 msgid "minutes"
 msgstr "分鐘"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:207
+#: pretix/control/templates/pretixcontrol/item/index.html:211
 msgid "hours"
 msgstr "小時"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:208
-#: pretix/control/templates/pretixcontrol/item/index.html:227
-#: pretix/control/templates/pretixcontrol/item/index.html:240
+#: pretix/control/templates/pretixcontrol/item/index.html:212
+#: pretix/control/templates/pretixcontrol/item/index.html:231
+#: pretix/control/templates/pretixcontrol/item/index.html:244
 msgid "days"
 msgstr "日"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:209
-#: pretix/control/templates/pretixcontrol/item/index.html:241
+#: pretix/control/templates/pretixcontrol/item/index.html:213
+#: pretix/control/templates/pretixcontrol/item/index.html:245
 msgid "months"
 msgstr "月"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:210
+#: pretix/control/templates/pretixcontrol/item/index.html:214
 msgid "years"
 msgstr "年"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:216
+#: pretix/control/templates/pretixcontrol/item/index.html:220
 msgid ""
 "If you select a duration given in days, months or years, the validity will "
 "always end at the end of a full day (midnight), plus the number of minutes "
@@ -18083,17 +18087,17 @@ msgstr ""
 "結束，加上上面選擇的分鐘數和小時數。開始日期包含在計算中，因此如果你輸入“1"
 "天”，則票證將有效到開始的那一天結束。"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:233
+#: pretix/control/templates/pretixcontrol/item/index.html:237
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:603
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:245
 msgid "Additional settings"
 msgstr "額外設定"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:243
+#: pretix/control/templates/pretixcontrol/item/index.html:247
 msgid "Membership duration after purchase"
 msgstr "購買後的會員資格有效期"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:275
+#: pretix/control/templates/pretixcontrol/item/index.html:295
 msgid "Product history"
 msgstr "商品歷史"
 
@@ -19285,7 +19289,7 @@ msgstr "稅"
 #: pretix/control/templates/pretixcontrol/order/index.html:695
 #: pretix/control/templates/pretixcontrol/orders/overview.html:89
 #: pretix/control/templates/pretixcontrol/orders/overview.html:177
-#: pretix/plugins/reports/accountingreport.py:484
+#: pretix/plugins/reports/accountingreport.py:498
 #: pretix/plugins/reports/exporters.py:368
 #: pretix/plugins/reports/exporters.py:417
 #: pretix/plugins/reports/exporters.py:600
@@ -19657,9 +19661,9 @@ msgid ""
 msgstr "此訂單是在引入此表之前建立的，因此此數據可能不準確。"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:65
-#: pretix/plugins/reports/accountingreport.py:394
-#: pretix/plugins/reports/accountingreport.py:427
-#: pretix/plugins/reports/accountingreport.py:551
+#: pretix/plugins/reports/accountingreport.py:408
+#: pretix/plugins/reports/accountingreport.py:441
+#: pretix/plugins/reports/accountingreport.py:565
 msgid "Sum"
 msgstr "總和"
 
@@ -22720,10 +22724,10 @@ msgstr "新的簽入清單已建立。"
 #: pretix/control/views/event.py:544 pretix/control/views/event.py:691
 #: pretix/control/views/event.py:877 pretix/control/views/event.py:1222
 #: pretix/control/views/event.py:1283 pretix/control/views/event.py:1390
-#: pretix/control/views/item.py:269 pretix/control/views/item.py:314
-#: pretix/control/views/item.py:778 pretix/control/views/item.py:804
-#: pretix/control/views/item.py:921 pretix/control/views/item.py:1125
-#: pretix/control/views/item.py:1274 pretix/control/views/item.py:1444
+#: pretix/control/views/item.py:273 pretix/control/views/item.py:318
+#: pretix/control/views/item.py:782 pretix/control/views/item.py:808
+#: pretix/control/views/item.py:925 pretix/control/views/item.py:1129
+#: pretix/control/views/item.py:1278 pretix/control/views/item.py:1453
 #: pretix/control/views/organizer.py:254 pretix/control/views/organizer.py:282
 #: pretix/control/views/organizer.py:1146 pretix/control/views/subevents.py:464
 #: pretix/control/views/subevents.py:590 pretix/control/views/subevents.py:1003
@@ -22875,8 +22879,8 @@ msgstr "新的折扣已建立。"
 msgid "The order of discounts has been updated."
 msgstr "折扣順序已更新。"
 
-#: pretix/control/views/discounts.py:258 pretix/control/views/item.py:177
-#: pretix/control/views/item.py:389 pretix/control/views/item.py:523
+#: pretix/control/views/discounts.py:258 pretix/control/views/item.py:181
+#: pretix/control/views/item.py:393 pretix/control/views/item.py:527
 msgid "Some of the provided object ids are invalid."
 msgstr "提供的某些物件ID無效。"
 
@@ -23126,115 +23130,115 @@ msgstr ""
 "你選擇沒有安裝免費外掛程式，但我們找到了許可證為“{license}”的外掛程"
 "式“{plugin}”。"
 
-#: pretix/control/views/item.py:126 pretix/control/views/item.py:1530
+#: pretix/control/views/item.py:130 pretix/control/views/item.py:1539
 msgid "The requested product does not exist."
 msgstr "請求的產品不存在。"
 
-#: pretix/control/views/item.py:144
+#: pretix/control/views/item.py:148
 msgid "The order of items has been updated."
 msgstr "項目的順序已更新。"
 
-#: pretix/control/views/item.py:181
+#: pretix/control/views/item.py:185
 msgid "You cannot reorder items spanning different categories."
 msgstr "不能對跨不同類別的專案重新排序。"
 
-#: pretix/control/views/item.py:186 pretix/control/views/item.py:392
-#: pretix/control/views/item.py:526
+#: pretix/control/views/item.py:190 pretix/control/views/item.py:396
+#: pretix/control/views/item.py:530
 msgid "Not all objects have been selected."
 msgstr "並非所有物件都已選中。"
 
-#: pretix/control/views/item.py:214 pretix/control/views/item.py:249
-#: pretix/control/views/item.py:338
+#: pretix/control/views/item.py:218 pretix/control/views/item.py:253
+#: pretix/control/views/item.py:342
 msgid "The requested product category does not exist."
 msgstr "請求的商品類別不存在。"
 
-#: pretix/control/views/item.py:225
+#: pretix/control/views/item.py:229
 msgid "The selected category has been deleted."
 msgstr "選取類別已刪除。"
 
-#: pretix/control/views/item.py:308
+#: pretix/control/views/item.py:312
 msgid "The new category has been created."
 msgstr "新類別已建立。"
 
-#: pretix/control/views/item.py:356
+#: pretix/control/views/item.py:360
 msgid "The order of categories has been updated."
 msgstr "類別的順序已更新。"
 
-#: pretix/control/views/item.py:465
+#: pretix/control/views/item.py:469
 msgid "Street"
 msgstr "街道"
 
-#: pretix/control/views/item.py:567 pretix/control/views/item.py:732
-#: pretix/control/views/item.py:754
+#: pretix/control/views/item.py:571 pretix/control/views/item.py:736
+#: pretix/control/views/item.py:758
 msgid "The requested question does not exist."
 msgstr "請求的問題不存在。"
 
-#: pretix/control/views/item.py:580
+#: pretix/control/views/item.py:584
 msgid "The selected question has been deleted."
 msgstr "選取問題已刪除。"
 
-#: pretix/control/views/item.py:681
+#: pretix/control/views/item.py:685
 msgid "File uploaded"
 msgstr "上傳檔案"
 
-#: pretix/control/views/item.py:813
+#: pretix/control/views/item.py:817
 msgid "The new question has been created."
 msgstr "新問題已建立。"
 
-#: pretix/control/views/item.py:892
+#: pretix/control/views/item.py:896
 msgid "The new quota has been created."
 msgstr "新額度已建立。"
 
-#: pretix/control/views/item.py:952
+#: pretix/control/views/item.py:956
 msgid "Exit scans"
 msgstr "離開掃描"
 
-#: pretix/control/views/item.py:959
+#: pretix/control/views/item.py:963
 msgid "Vouchers and waiting list reservations"
 msgstr "保留優惠券和候補名單"
 
-#: pretix/control/views/item.py:974
+#: pretix/control/views/item.py:978
 msgid "Available quota"
 msgstr "可用額度"
 
-#: pretix/control/views/item.py:980
+#: pretix/control/views/item.py:984
 msgid "Waiting list (pending)"
 msgstr "候補名單（待定）"
 
-#: pretix/control/views/item.py:987
+#: pretix/control/views/item.py:991
 msgid "Currently for sale"
 msgstr "目前在售"
 
-#: pretix/control/views/item.py:1041 pretix/control/views/item.py:1087
-#: pretix/control/views/item.py:1141
+#: pretix/control/views/item.py:1045 pretix/control/views/item.py:1091
+#: pretix/control/views/item.py:1145
 msgid "The requested quota does not exist."
 msgstr "請求的額度不存在。"
 
-#: pretix/control/views/item.py:1062
+#: pretix/control/views/item.py:1066
 msgid "The quota has been re-opened and will not close again."
 msgstr "額度已重新開放，不會再次關閉。"
 
-#: pretix/control/views/item.py:1155
+#: pretix/control/views/item.py:1159
 msgid "The selected quota has been deleted."
 msgstr "選取配額已刪除。"
 
-#: pretix/control/views/item.py:1178
+#: pretix/control/views/item.py:1182
 msgid "The requested item does not exist."
 msgstr "請求的專案不存在。"
 
-#: pretix/control/views/item.py:1318
+#: pretix/control/views/item.py:1327
 msgid ""
 "You cannot add add-ons to a product that is only available as an add-on "
 "itself."
 msgstr "你不能將載入項添加到僅作為載入項本身提供的產品。"
 
-#: pretix/control/views/item.py:1328
+#: pretix/control/views/item.py:1337
 msgid ""
 "You cannot add bundles to a product that is only available as an add-on "
 "itself."
 msgstr "你不能將捆綁包添加到僅作為附加元件本身提供的產品。"
 
-#: pretix/control/views/item.py:1454
+#: pretix/control/views/item.py:1463
 msgid ""
 "You disabled this item, but it is still part of a product bundle. Your "
 "participants won't be able to buy the bundle unless you remove this item "
@@ -23243,7 +23247,7 @@ msgstr ""
 "你禁用了此商品，但商品仍然是捆綁商品的一部分。除非你從捆綁包中刪除此項目，否"
 "則你的參與者將無法購買捆綁包。"
 
-#: pretix/control/views/item.py:1550
+#: pretix/control/views/item.py:1559
 msgid ""
 "The product could not be deleted as some constraints (e.g. data created by "
 "plug-ins) did not allow it. Deleting it could break reporting or other "
@@ -23252,11 +23256,11 @@ msgstr ""
 "由於某些限制（例如外掛程式建立的數據）不允許刪除該產品，因此無法刪除該產品。"
 "刪除它可能會破壞報告或其他功能，因此該產品已被禁用。"
 
-#: pretix/control/views/item.py:1554
+#: pretix/control/views/item.py:1563
 msgid "The selected product has been deleted."
 msgstr "選取產品已刪除。"
 
-#: pretix/control/views/item.py:1563
+#: pretix/control/views/item.py:1572
 msgid "The selected product has been deactivated."
 msgstr "所選產品已停用。"
 
@@ -24344,7 +24348,7 @@ msgstr "PDF集合"
 msgid "Download all attendee badges as one large PDF for printing."
 msgstr "將所有出席者徽章標誌圖片下載為一項大的 PDF 進行列印。"
 
-#: pretix/plugins/badges/exporters.py:420 pretix/plugins/sendmail/models.py:217
+#: pretix/plugins/badges/exporters.py:420
 #: pretix/plugins/ticketoutputpdf/exporters.py:80
 msgid "Include pending orders"
 msgstr "包括待處理的訂單"
@@ -25910,19 +25914,19 @@ msgstr ""
 "報告時間範圍包括使用舊軟體版本產成的數據，該版本尚未儲存建立此報告所需的所有"
 "數據。因此，對於在時間範圍內更改的訂單，報告可能不準確。"
 
-#: pretix/plugins/reports/accountingreport.py:630
-#: pretix/plugins/reports/accountingreport.py:680
+#: pretix/plugins/reports/accountingreport.py:644
+#: pretix/plugins/reports/accountingreport.py:694
 #, python-brace-format
 msgid "Pending payments at {datetime}"
 msgstr "{datetime}的待處理付款"
 
-#: pretix/plugins/reports/accountingreport.py:737
-#: pretix/plugins/reports/accountingreport.py:765
+#: pretix/plugins/reports/accountingreport.py:751
+#: pretix/plugins/reports/accountingreport.py:779
 #, python-brace-format
 msgid "Total gift card value at {datetime}"
 msgstr "{datetime} 禮品卡的總價值"
 
-#: pretix/plugins/reports/accountingreport.py:858
+#: pretix/plugins/reports/accountingreport.py:872
 msgid "Open items"
 msgstr "開啟物品"
 
@@ -26102,7 +26106,10 @@ msgid "Restrict to event dates starting before"
 msgstr "限制為早於之前開始的活動日期"
 
 #: pretix/plugins/sendmail/forms.py:170
-msgctxt "sendmail_from"
+#, fuzzy
+#| msgctxt "sendmail_from"
+#| msgid "Send to"
+msgctxt "sendmail_form"
 msgid "Send to"
 msgstr "傳送到"
 
@@ -26116,7 +26123,10 @@ msgid "Filter check-in status"
 msgstr "篩選簽到狀態"
 
 #: pretix/plugins/sendmail/forms.py:189
-msgctxt "sendmail_from"
+#, fuzzy
+#| msgctxt "sendmail_from"
+#| msgid "Restrict to recipients without check-in"
+msgctxt "sendmail_form"
 msgid "Restrict to recipients without check-in"
 msgstr "僅限未簽到的收件者"
 
@@ -26134,39 +26144,49 @@ msgstr "只限之前建立的訂單"
 msgid "Everyone who placed an order"
 msgstr "所有下訂單的人"
 
-#: pretix/plugins/sendmail/forms.py:243 pretix/plugins/sendmail/models.py:202
+#: pretix/plugins/sendmail/forms.py:243 pretix/plugins/sendmail/models.py:204
 msgid ""
 "Every attendee (falling back to the order contact when no attendee email "
 "address is given)"
 msgstr "每個出席者（未提供出席者電子郵件地址時回退到訂單聯絡人）"
 
-#: pretix/plugins/sendmail/forms.py:245 pretix/plugins/sendmail/models.py:203
+#: pretix/plugins/sendmail/forms.py:245 pretix/plugins/sendmail/models.py:205
 msgid "Both (all order contact addresses and all attendee email addresses)"
 msgstr "兩者（所有訂單聯絡位址和所有出席者電子郵件位址）"
 
-#: pretix/plugins/sendmail/forms.py:250 pretix/plugins/sendmail/views.py:267
+#: pretix/plugins/sendmail/forms.py:250 pretix/plugins/sendmail/forms.py:379
+#: pretix/plugins/sendmail/views.py:267
 msgid "payment pending but already confirmed"
 msgstr "付款待處理但已確認"
 
-#: pretix/plugins/sendmail/forms.py:251 pretix/plugins/sendmail/views.py:268
+#: pretix/plugins/sendmail/forms.py:251 pretix/plugins/sendmail/forms.py:381
+#: pretix/plugins/sendmail/views.py:268
 msgid "payment pending (except unapproved or already confirmed)"
 msgstr "待付款（未經批准或已確認的除外）"
 
-#: pretix/plugins/sendmail/forms.py:252 pretix/plugins/sendmail/views.py:269
+#: pretix/plugins/sendmail/forms.py:252 pretix/plugins/sendmail/forms.py:382
+#: pretix/plugins/sendmail/views.py:269
 msgid "approval pending"
 msgstr "等待批准"
 
-#: pretix/plugins/sendmail/forms.py:255 pretix/plugins/sendmail/views.py:266
+#: pretix/plugins/sendmail/forms.py:255 pretix/plugins/sendmail/forms.py:385
+#: pretix/plugins/sendmail/views.py:266
 msgid "pending with payment overdue"
 msgstr "待處理，付款逾期"
 
 #: pretix/plugins/sendmail/forms.py:258
-msgctxt "sendmail_from"
+#, fuzzy
+#| msgctxt "sendmail_from"
+#| msgid "Restrict to orders with status"
+msgctxt "sendmail_form"
 msgid "Restrict to orders with status"
 msgstr "限制為具有狀態的訂單"
 
 #: pretix/plugins/sendmail/forms.py:283 pretix/plugins/sendmail/forms.py:287
-msgctxt "sendmail_from"
+#, fuzzy
+#| msgctxt "sendmail_from"
+#| msgid "Restrict to recipients with check-in on list"
+msgctxt "sendmail_form"
 msgid "Restrict to recipients with check-in on list"
 msgstr "僅限在清單中簽到的收件者"
 
@@ -26194,15 +26214,20 @@ msgstr "相對，事件開始後"
 msgid "Relative, after event end"
 msgstr "相對，事件結束後"
 
-#: pretix/plugins/sendmail/forms.py:384
+#: pretix/plugins/sendmail/forms.py:388
+msgctxt "sendmail_from"
+msgid "Restrict to orders with status"
+msgstr "限制為具有狀態的訂單"
+
+#: pretix/plugins/sendmail/forms.py:403
 msgid "Please specify the send date"
 msgstr "請註明發送日期"
 
-#: pretix/plugins/sendmail/forms.py:389
+#: pretix/plugins/sendmail/forms.py:408
 msgid "Please specify the offset days and time"
 msgstr "請指定偏移日期和時間"
 
-#: pretix/plugins/sendmail/forms.py:400
+#: pretix/plugins/sendmail/forms.py:419
 msgid "Please specify a product"
 msgstr "請指定商品"
 
@@ -26222,41 +26247,44 @@ msgstr "退款已完成"
 msgid "missed"
 msgstr "錯過"
 
-#: pretix/plugins/sendmail/models.py:201
+#: pretix/plugins/sendmail/models.py:203
 msgid "Everyone who created a ticket order"
 msgstr "建立工單的所有人"
 
-#: pretix/plugins/sendmail/models.py:213
+#: pretix/plugins/sendmail/models.py:215
 msgid "Limit products"
 msgstr "限制商品"
 
 #: pretix/plugins/sendmail/models.py:218
-msgid "By default, only paid orders will receive the email"
-msgstr "預設值情況下，只有已付款的訂單才會收到電子郵件"
+#, fuzzy
+#| msgctxt "sendmail_from"
+#| msgid "Restrict to orders with status"
+msgid "Restrict to orders with status"
+msgstr "限制為具有狀態的訂單"
 
-#: pretix/plugins/sendmail/models.py:227
+#: pretix/plugins/sendmail/models.py:228
 msgid "Send date"
 msgstr "發送日期"
 
-#: pretix/plugins/sendmail/models.py:229
+#: pretix/plugins/sendmail/models.py:230
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:8
 msgid "Time of day"
 msgstr "一天中的時間"
 
-#: pretix/plugins/sendmail/models.py:235
+#: pretix/plugins/sendmail/models.py:236
 msgid "Send email to"
 msgstr "發送電子郵件至"
 
-#: pretix/plugins/sendmail/models.py:240
+#: pretix/plugins/sendmail/models.py:241
 msgid "Only enabled rules are actually sent"
 msgstr "實際上僅發送已啟用的規則"
 
-#: pretix/plugins/sendmail/models.py:276
+#: pretix/plugins/sendmail/models.py:277
 #, python-brace-format
 msgid "on {date} at {time}"
 msgstr "在{date}在{time}"
 
-#: pretix/plugins/sendmail/models.py:282
+#: pretix/plugins/sendmail/models.py:283
 #, python-format
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
@@ -26264,19 +26292,19 @@ msgstr[0] ""
 "%(count)d事件在 %(time)s結束後的一天\n"
 "%(count)d 天後事件在 %(time)s結束"
 
-#: pretix/plugins/sendmail/models.py:291
+#: pretix/plugins/sendmail/models.py:292
 #, python-format
 msgid "%(count)d day before event end at %(time)s"
 msgid_plural "%(count)d days before event end at %(time)s"
 msgstr[0] "%(count)d事件在%(time)s結束前一天"
 
-#: pretix/plugins/sendmail/models.py:301
+#: pretix/plugins/sendmail/models.py:302
 #, python-format
 msgid "%(count)d day after event start at %(time)s"
 msgid_plural "%(count)d days after event start at %(time)s"
 msgstr[0] "%(count)d 事件在%(time)s開始後的一天"
 
-#: pretix/plugins/sendmail/models.py:310
+#: pretix/plugins/sendmail/models.py:311
 #, python-format
 msgid "%(count)d day before event start at %(time)s"
 msgid_plural "%(count)d days before event start at %(time)s"
@@ -30237,6 +30265,9 @@ msgstr "寫入權限"
 #: pretix/settings.py:723
 msgid "Kosovo"
 msgstr "柯索沃"
+
+#~ msgid "By default, only paid orders will receive the email"
+#~ msgstr "預設值情況下，只有已付款的訂單才會收到電子郵件"
 
 #, python-format
 #~ msgid ""

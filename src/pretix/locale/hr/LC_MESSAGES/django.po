@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-07-21 13:02+0000\n"
+"POT-Creation-Date: 2023-07-27 08:38+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -674,8 +674,8 @@ msgstr ""
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
 msgstr ""
 
-#: pretix/base/email.py:667 pretix/base/email.py:672 pretix/base/pdf.py:628
-#: pretix/base/pdf.py:651 pretix/control/forms/organizer.py:567
+#: pretix/base/email.py:667 pretix/base/email.py:672 pretix/base/pdf.py:623
+#: pretix/base/pdf.py:646 pretix/control/forms/organizer.py:567
 msgid "Mr Doe"
 msgstr ""
 
@@ -891,7 +891,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:1329 pretix/base/models/orders.py:1252
 #: pretix/control/forms/filter.py:170 pretix/control/forms/filter.py:508
 #: pretix/control/forms/item.py:521 pretix/control/forms/subevents.py:118
-#: pretix/control/views/item.py:706 pretix/control/views/vouchers.py:137
+#: pretix/control/views/item.py:710 pretix/control/views/vouchers.py:137
 #: pretix/control/views/vouchers.py:138
 #: pretix/plugins/checkinlists/exporters.py:573
 #: pretix/plugins/checkinlists/exporters.py:576
@@ -912,7 +912,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:1329 pretix/base/models/orders.py:1254
 #: pretix/control/forms/filter.py:170 pretix/control/forms/filter.py:509
 #: pretix/control/forms/item.py:522 pretix/control/forms/subevents.py:119
-#: pretix/control/views/item.py:706 pretix/control/views/vouchers.py:137
+#: pretix/control/views/item.py:710 pretix/control/views/vouchers.py:137
 #: pretix/control/views/vouchers.py:138
 #: pretix/plugins/checkinlists/exporters.py:573
 #: pretix/plugins/checkinlists/exporters.py:576
@@ -1212,7 +1212,7 @@ msgstr ""
 #: pretix/base/models/orders.py:2970 pretix/base/orderimport.py:363
 #: pretix/base/orderimport.py:509 pretix/base/settings.py:1105
 #: pretix/control/forms/filter.py:622 pretix/control/forms/filter.py:653
-#: pretix/control/views/item.py:475
+#: pretix/control/views/item.py:479
 #: pretix/plugins/checkinlists/exporters.py:520
 #: pretix/plugins/reports/exporters.py:814
 msgid "ZIP code"
@@ -1227,7 +1227,7 @@ msgstr ""
 #: pretix/base/models/orders.py:2971 pretix/base/orderimport.py:374
 #: pretix/base/orderimport.py:520 pretix/base/settings.py:1117
 #: pretix/control/forms/filter.py:627 pretix/control/forms/filter.py:658
-#: pretix/control/views/item.py:485
+#: pretix/control/views/item.py:489
 #: pretix/plugins/checkinlists/exporters.py:521
 #: pretix/plugins/reports/exporters.py:815
 msgid "City"
@@ -1244,7 +1244,7 @@ msgstr ""
 #: pretix/base/settings.py:1126 pretix/control/forms/filter.py:632
 #: pretix/control/forms/filter.py:663
 #: pretix/control/templates/pretixcontrol/order/index.html:952
-#: pretix/control/views/item.py:495
+#: pretix/control/views/item.py:499
 #: pretix/plugins/checkinlists/exporters.py:522
 #: pretix/plugins/reports/exporters.py:765
 #: pretix/plugins/reports/exporters.py:810
@@ -1293,7 +1293,7 @@ msgstr ""
 #: pretix/base/orderimport.py:322 pretix/base/orderimport.py:487
 #: pretix/control/forms/filter.py:610 pretix/control/forms/filter.py:645
 #: pretix/control/templates/pretixcontrol/order/index.html:944
-#: pretix/control/views/item.py:453
+#: pretix/control/views/item.py:457
 #: pretix/plugins/checkinlists/exporters.py:504
 #: pretix/plugins/reports/exporters.py:812
 #: pretix/plugins/reports/exporters.py:858
@@ -1409,7 +1409,7 @@ msgstr ""
 #: pretix/base/models/orders.py:2296 pretix/base/models/orders.py:2736
 #: pretix/base/models/orders.py:2819 pretix/base/models/tax.py:183
 #: pretix/control/templates/pretixcontrol/order/transactions.html:21
-#: pretix/plugins/reports/accountingreport.py:246
+#: pretix/plugins/reports/accountingreport.py:315
 #: pretix/plugins/reports/exporters.py:766
 #: pretix/plugins/reports/exporters.py:811
 msgid "Tax rate"
@@ -1658,8 +1658,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/index.html:7
 #: pretix/control/templates/pretixcontrol/orders/index.html:9
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:197
-#: pretix/plugins/reports/accountingreport.py:656
-#: pretix/plugins/reports/accountingreport.py:838
+#: pretix/plugins/reports/accountingreport.py:670
+#: pretix/plugins/reports/accountingreport.py:852
 #: pretix/plugins/reports/exporters.py:630
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:53
 msgid "Orders"
@@ -1898,7 +1898,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:138
 #: pretix/plugins/checkinlists/exporters.py:357
 #: pretix/plugins/checkinlists/exporters.py:479
-#: pretix/plugins/reports/accountingreport.py:245
+#: pretix/plugins/reports/accountingreport.py:314
 msgid "Price"
 msgstr ""
 
@@ -2009,7 +2009,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:357
 #: pretix/plugins/checkinlists/exporters.py:479
 #: pretix/plugins/checkinlists/exporters.py:665
-#: pretix/plugins/reports/accountingreport.py:244
+#: pretix/plugins/reports/accountingreport.py:270
 #: pretix/plugins/reports/exporters.py:357
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:100
 #: pretix/presale/forms/order.py:36 pretix/presale/forms/waitinglist.py:79
@@ -2025,7 +2025,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:637 pretix/control/forms/organizer.py:896
 #: pretix/control/templates/pretixcontrol/order/index.html:513
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:119
-#: pretix/control/views/item.py:429 pretix/plugins/badges/exporters.py:457
+#: pretix/control/views/item.py:433 pretix/plugins/badges/exporters.py:457
 #: pretix/plugins/checkinlists/exporters.py:119
 #: pretix/plugins/checkinlists/exporters.py:473
 #: pretix/plugins/ticketoutputpdf/exporters.py:94
@@ -2041,7 +2041,7 @@ msgstr ""
 #: pretix/base/models/customers.py:296 pretix/base/models/orders.py:1361
 #: pretix/base/pdf.py:212
 #: pretix/control/templates/pretixcontrol/order/index.html:518
-#: pretix/control/views/item.py:441
+#: pretix/control/views/item.py:445
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:176
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:179
 msgid "Attendee email"
@@ -2165,7 +2165,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:204
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:42
 #: pretix/control/templates/pretixcontrol/search/orders.html:51
-#: pretix/plugins/reports/accountingreport.py:244
+#: pretix/plugins/reports/accountingreport.py:270
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:71
@@ -2217,12 +2217,12 @@ msgid "Tax rule ID"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:853
-#: pretix/plugins/reports/accountingreport.py:250
+#: pretix/plugins/reports/accountingreport.py:319
 msgid "Gross total"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:854
-#: pretix/plugins/reports/accountingreport.py:249
+#: pretix/plugins/reports/accountingreport.py:318
 msgid "Tax total"
 msgstr ""
 
@@ -2327,7 +2327,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:741
 #: pretix/control/templates/pretixcontrol/order/index.html:836
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:85
-#: pretix/plugins/reports/accountingreport.py:481
+#: pretix/plugins/reports/accountingreport.py:495
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:29
 msgid "Payment method"
 msgstr ""
@@ -2362,11 +2362,11 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:1082
 #: pretix/control/templates/pretixcontrol/event/cancel.html:19
-#: pretix/control/views/item.py:940
+#: pretix/control/views/item.py:944
 msgid "Paid orders"
 msgstr ""
 
-#: pretix/base/exporters/orderlist.py:1082 pretix/control/views/item.py:945
+#: pretix/base/exporters/orderlist.py:1082 pretix/control/views/item.py:949
 msgid "Pending orders"
 msgstr ""
 
@@ -2374,7 +2374,7 @@ msgstr ""
 msgid "Blocking vouchers"
 msgstr ""
 
-#: pretix/base/exporters/orderlist.py:1083 pretix/control/views/item.py:964
+#: pretix/base/exporters/orderlist.py:1083 pretix/control/views/item.py:968
 msgid "Current user's carts"
 msgstr ""
 
@@ -2389,12 +2389,12 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:1100
 #: pretix/base/exporters/orderlist.py:1107
 #: pretix/control/templates/pretixcontrol/items/quota.html:58
-#: pretix/control/views/item.py:971
+#: pretix/control/views/item.py:975
 msgid "Infinite"
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:1129
-#: pretix/plugins/reports/accountingreport.py:756
+#: pretix/plugins/reports/accountingreport.py:770
 msgid "Gift card transactions"
 msgstr ""
 
@@ -2488,7 +2488,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:1234 pretix/control/navigation.py:524
 #: pretix/control/navigation.py:542
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:156
-#: pretix/plugins/reports/accountingreport.py:874
+#: pretix/plugins/reports/accountingreport.py:888
 msgid "Gift cards"
 msgstr ""
 
@@ -3725,7 +3725,7 @@ msgstr ""
 #: pretix/control/forms/orders.py:908 pretix/control/forms/organizer.py:510
 #: pretix/control/forms/organizer.py:520 pretix/control/forms/organizer.py:530
 #: pretix/control/forms/vouchers.py:263 pretix/plugins/sendmail/forms.py:74
-#: pretix/plugins/sendmail/forms.py:94 pretix/plugins/sendmail/models.py:209
+#: pretix/plugins/sendmail/forms.py:94 pretix/plugins/sendmail/models.py:211
 msgid "Subject"
 msgstr ""
 
@@ -3733,7 +3733,7 @@ msgstr ""
 #: pretix/control/forms/orders.py:706 pretix/control/forms/orders.py:889
 #: pretix/control/forms/orders.py:916 pretix/control/forms/vouchers.py:269
 #: pretix/plugins/sendmail/forms.py:75 pretix/plugins/sendmail/forms.py:99
-#: pretix/plugins/sendmail/models.py:210
+#: pretix/plugins/sendmail/models.py:212
 msgid "Message"
 msgstr ""
 
@@ -5090,7 +5090,7 @@ msgid "Invite to team '{team}' for '{email}'"
 msgstr ""
 
 #: pretix/base/models/seating.py:45 pretix/base/models/tax.py:148
-#: pretix/base/pdf.py:1136
+#: pretix/base/pdf.py:1155
 msgid "Your layout file is not a valid JSON file."
 msgstr ""
 
@@ -5494,7 +5494,7 @@ msgstr ""
 
 #: pretix/base/notifications.py:200
 #: pretix/control/templates/pretixcontrol/order/index.html:677
-#: pretix/plugins/reports/accountingreport.py:248
+#: pretix/plugins/reports/accountingreport.py:317
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:426
 msgid "Net total"
 msgstr ""
@@ -6153,9 +6153,9 @@ msgstr ""
 msgid "Event begin date"
 msgstr ""
 
-#: pretix/base/pdf.py:251 pretix/base/pdf.py:277 pretix/base/pdf.py:391
-#: pretix/base/pdf.py:415 pretix/base/pdf.py:439 pretix/base/pdf.py:496
-#: pretix/base/pdf.py:501
+#: pretix/base/pdf.py:251 pretix/base/pdf.py:277 pretix/base/pdf.py:386
+#: pretix/base/pdf.py:410 pretix/base/pdf.py:434 pretix/base/pdf.py:491
+#: pretix/base/pdf.py:496
 msgid "2017-05-31"
 msgstr ""
 
@@ -6196,8 +6196,8 @@ msgstr ""
 msgid "Event admission date and time"
 msgstr ""
 
-#: pretix/base/pdf.py:298 pretix/base/pdf.py:399 pretix/base/pdf.py:423
-#: pretix/base/pdf.py:447 pretix/base/pdf.py:490
+#: pretix/base/pdf.py:298 pretix/base/pdf.py:394 pretix/base/pdf.py:418
+#: pretix/base/pdf.py:442 pretix/base/pdf.py:485
 msgid "2017-05-31 19:00"
 msgstr ""
 
@@ -6205,8 +6205,8 @@ msgstr ""
 msgid "Event admission time"
 msgstr ""
 
-#: pretix/base/pdf.py:306 pretix/base/pdf.py:407 pretix/base/pdf.py:431
-#: pretix/base/pdf.py:455
+#: pretix/base/pdf.py:306 pretix/base/pdf.py:402 pretix/base/pdf.py:426
+#: pretix/base/pdf.py:450
 msgid "19:00"
 msgstr ""
 
@@ -6253,129 +6253,129 @@ msgstr ""
 #: pretix/base/pdf.py:364
 msgid ""
 "Add-on 1\n"
-"Add-on 2"
+"2x Add-on 2"
 msgstr ""
 
-#: pretix/base/pdf.py:375 pretix/control/forms/filter.py:1275
+#: pretix/base/pdf.py:370 pretix/control/forms/filter.py:1275
 #: pretix/control/forms/filter.py:1277
 #: pretix/control/templates/pretixcontrol/organizers/index.html:42
 msgid "Organizer name"
 msgstr ""
 
-#: pretix/base/pdf.py:376
+#: pretix/base/pdf.py:371
 msgid "Event organizer company"
 msgstr ""
 
-#: pretix/base/pdf.py:380
+#: pretix/base/pdf.py:375
 msgid "Organizer info text"
 msgstr ""
 
-#: pretix/base/pdf.py:381
+#: pretix/base/pdf.py:376
 msgid "Event organizer info text"
 msgstr ""
 
-#: pretix/base/pdf.py:385 pretix/base/pdf.py:386
+#: pretix/base/pdf.py:380 pretix/base/pdf.py:381
 msgid "Event info text"
 msgstr ""
 
-#: pretix/base/pdf.py:390
+#: pretix/base/pdf.py:385
 msgid "Printing date"
 msgstr ""
 
-#: pretix/base/pdf.py:398
+#: pretix/base/pdf.py:393
 msgid "Printing date and time"
 msgstr ""
 
-#: pretix/base/pdf.py:406
+#: pretix/base/pdf.py:401
 msgid "Printing time"
 msgstr ""
 
-#: pretix/base/pdf.py:414
+#: pretix/base/pdf.py:409
 msgid "Validity start date"
 msgstr ""
 
-#: pretix/base/pdf.py:422
+#: pretix/base/pdf.py:417
 msgid "Validity start date and time"
 msgstr ""
 
-#: pretix/base/pdf.py:430
+#: pretix/base/pdf.py:425
 msgid "Validity start time"
 msgstr ""
 
-#: pretix/base/pdf.py:438
+#: pretix/base/pdf.py:433
 msgid "Validity end date"
 msgstr ""
 
-#: pretix/base/pdf.py:446
+#: pretix/base/pdf.py:441
 msgid "Validity end date and time"
 msgstr ""
 
-#: pretix/base/pdf.py:454
+#: pretix/base/pdf.py:449
 msgid "Validity end time"
 msgstr ""
 
-#: pretix/base/pdf.py:462
+#: pretix/base/pdf.py:457
 msgid "Reusable Medium ID"
 msgstr ""
 
-#: pretix/base/pdf.py:467
+#: pretix/base/pdf.py:462
 msgid "Seat: Full name"
 msgstr ""
 
-#: pretix/base/pdf.py:468
+#: pretix/base/pdf.py:463
 msgid "Ground floor, Row 3, Seat 4"
 msgstr ""
 
-#: pretix/base/pdf.py:470 pretix/base/pdf.py:476
+#: pretix/base/pdf.py:465 pretix/base/pdf.py:471
 #: pretix/control/forms/orders.py:312
 msgid "General admission"
 msgstr ""
 
-#: pretix/base/pdf.py:473
+#: pretix/base/pdf.py:468
 msgid "Seat: zone"
 msgstr ""
 
-#: pretix/base/pdf.py:474
+#: pretix/base/pdf.py:469
 msgid "Ground floor"
 msgstr ""
 
-#: pretix/base/pdf.py:479
+#: pretix/base/pdf.py:474
 msgid "Seat: row"
 msgstr ""
 
-#: pretix/base/pdf.py:484
+#: pretix/base/pdf.py:479
 msgid "Seat: seat number"
 msgstr ""
 
-#: pretix/base/pdf.py:489
+#: pretix/base/pdf.py:484
 msgid "Date and time of first scan"
 msgstr ""
 
-#: pretix/base/pdf.py:495
+#: pretix/base/pdf.py:490
 msgid "Gift card: Issuance date"
 msgstr ""
 
-#: pretix/base/pdf.py:500
+#: pretix/base/pdf.py:495
 msgid "Gift card: Expiration date"
 msgstr ""
 
-#: pretix/base/pdf.py:541 pretix/base/pdf.py:579 pretix/base/pdf.py:585
+#: pretix/base/pdf.py:536 pretix/base/pdf.py:574 pretix/base/pdf.py:580
 #: pretix/plugins/badges/exporters.py:464
 #: pretix/plugins/ticketoutputpdf/exporters.py:101
 #, python-brace-format
 msgid "Question: {question}"
 msgstr ""
 
-#: pretix/base/pdf.py:580 pretix/base/pdf.py:586
+#: pretix/base/pdf.py:575 pretix/base/pdf.py:581
 #, python-brace-format
 msgid "<Answer: {question}>"
 msgstr ""
 
-#: pretix/base/pdf.py:627
+#: pretix/base/pdf.py:622
 msgid "Attendee name for salutation"
 msgstr ""
 
-#: pretix/base/pdf.py:634 pretix/base/pdf.py:641
+#: pretix/base/pdf.py:629 pretix/base/pdf.py:636
 #: pretix/plugins/badges/exporters.py:461
 #: pretix/plugins/checkinlists/exporters.py:122
 #: pretix/plugins/checkinlists/exporters.py:477
@@ -6384,23 +6384,23 @@ msgstr ""
 msgid "Attendee name: {part}"
 msgstr ""
 
-#: pretix/base/pdf.py:650
+#: pretix/base/pdf.py:645
 msgid "Invoice address name for salutation"
 msgstr ""
 
-#: pretix/base/pdf.py:657
+#: pretix/base/pdf.py:652
 #, python-brace-format
 msgid "Invoice address name: {part}"
 msgstr ""
 
-#: pretix/base/pdf.py:1017 pretix/control/forms/organizer.py:691
+#: pretix/base/pdf.py:1036 pretix/control/forms/organizer.py:691
 #: pretix/control/forms/organizer.py:727
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:113
 msgid "Ticket"
 msgstr ""
 
-#: pretix/base/pdf.py:1145
+#: pretix/base/pdf.py:1164
 msgid "Your layout file is not a valid layout. Error message: {}"
 msgstr ""
 
@@ -8586,7 +8586,7 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:1987 pretix/plugins/sendmail/forms.py:222
-#: pretix/plugins/sendmail/models.py:223
+#: pretix/plugins/sendmail/models.py:224
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:66
 msgid "Attach calendar files"
 msgstr ""
@@ -8853,7 +8853,7 @@ msgid ""
 msgstr ""
 
 #: pretix/base/settings.py:2284 pretix/control/forms/event.py:1081
-#: pretix/control/forms/event.py:1181 pretix/plugins/sendmail/models.py:228
+#: pretix/control/forms/event.py:1181 pretix/plugins/sendmail/models.py:229
 msgid "Number of days"
 msgstr ""
 
@@ -11039,7 +11039,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:2347 pretix/control/forms/vouchers.py:147
 #: pretix/control/templates/pretixcontrol/items/question.html:30
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:104
-#: pretix/plugins/sendmail/models.py:212
+#: pretix/plugins/sendmail/models.py:214
 msgid "All products"
 msgstr ""
 
@@ -13467,7 +13467,7 @@ msgstr ""
 msgid "The quota has closed."
 msgstr ""
 
-#: pretix/control/logdisplay.py:501 pretix/control/views/item.py:1051
+#: pretix/control/logdisplay.py:501 pretix/control/views/item.py:1055
 msgid "The quota has been re-opened."
 msgstr ""
 
@@ -13932,8 +13932,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:824
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:7
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:9
-#: pretix/plugins/reports/accountingreport.py:483
-#: pretix/plugins/reports/accountingreport.py:670
+#: pretix/plugins/reports/accountingreport.py:497
+#: pretix/plugins/reports/accountingreport.py:684
 #: pretix/presale/templates/pretixpresale/event/order.html:136
 msgid "Refunds"
 msgstr ""
@@ -13979,9 +13979,9 @@ msgstr ""
 
 #: pretix/control/navigation.py:366
 #: pretix/control/templates/pretixcontrol/order/index.html:730
-#: pretix/plugins/reports/accountingreport.py:482
-#: pretix/plugins/reports/accountingreport.py:663
-#: pretix/plugins/reports/accountingreport.py:847
+#: pretix/plugins/reports/accountingreport.py:496
+#: pretix/plugins/reports/accountingreport.py:677
+#: pretix/plugins/reports/accountingreport.py:861
 msgid "Payments"
 msgstr ""
 
@@ -14240,7 +14240,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/tickets.html:73
 #: pretix/control/templates/pretixcontrol/global_settings.html:12
 #: pretix/control/templates/pretixcontrol/global_update.html:86
-#: pretix/control/templates/pretixcontrol/item/index.html:267
+#: pretix/control/templates/pretixcontrol/item/index.html:287
 #: pretix/control/templates/pretixcontrol/items/category.html:37
 #: pretix/control/templates/pretixcontrol/items/discount.html:70
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:152
@@ -15823,7 +15823,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:22
 #: pretix/control/templates/pretixcontrol/user/settings.html:48
-#: pretix/plugins/sendmail/models.py:239
+#: pretix/plugins/sendmail/models.py:240
 msgid "Enabled"
 msgstr ""
 
@@ -15898,9 +15898,9 @@ msgstr ""
 #: pretix/control/views/event.py:688 pretix/control/views/event.py:908
 #: pretix/control/views/event.py:1264
 #: pretix/control/views/global_settings.py:60
-#: pretix/control/views/global_settings.py:83 pretix/control/views/item.py:253
-#: pretix/control/views/item.py:768 pretix/control/views/item.py:1091
-#: pretix/control/views/item.py:1253 pretix/control/views/item.py:1387
+#: pretix/control/views/global_settings.py:83 pretix/control/views/item.py:257
+#: pretix/control/views/item.py:772 pretix/control/views/item.py:1095
+#: pretix/control/views/item.py:1257 pretix/control/views/item.py:1396
 #: pretix/control/views/mailsetup.py:146 pretix/control/views/mailsetup.py:158
 #: pretix/control/views/mailsetup.py:185 pretix/control/views/mailsetup.py:253
 #: pretix/control/views/organizer.py:251 pretix/control/views/organizer.py:279
@@ -16952,40 +16952,40 @@ msgstr ""
 msgid "Tickets & Badges"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/item/index.html:195
+#: pretix/control/templates/pretixcontrol/item/index.html:199
 msgid "Check-in & Validity"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/item/index.html:204
+#: pretix/control/templates/pretixcontrol/item/index.html:208
 msgid "Duration"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/item/index.html:206
+#: pretix/control/templates/pretixcontrol/item/index.html:210
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
 msgid "minutes"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/item/index.html:207
+#: pretix/control/templates/pretixcontrol/item/index.html:211
 msgid "hours"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/item/index.html:208
-#: pretix/control/templates/pretixcontrol/item/index.html:227
-#: pretix/control/templates/pretixcontrol/item/index.html:240
+#: pretix/control/templates/pretixcontrol/item/index.html:212
+#: pretix/control/templates/pretixcontrol/item/index.html:231
+#: pretix/control/templates/pretixcontrol/item/index.html:244
 msgid "days"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/item/index.html:209
-#: pretix/control/templates/pretixcontrol/item/index.html:241
+#: pretix/control/templates/pretixcontrol/item/index.html:213
+#: pretix/control/templates/pretixcontrol/item/index.html:245
 msgid "months"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/item/index.html:210
+#: pretix/control/templates/pretixcontrol/item/index.html:214
 msgid "years"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/item/index.html:216
+#: pretix/control/templates/pretixcontrol/item/index.html:220
 msgid ""
 "If you select a duration given in days, months or years, the validity will "
 "always end at the end of a full day (midnight), plus the number of minutes "
@@ -16994,17 +16994,17 @@ msgid ""
 "starts on."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/item/index.html:233
+#: pretix/control/templates/pretixcontrol/item/index.html:237
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:603
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:245
 msgid "Additional settings"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/item/index.html:243
+#: pretix/control/templates/pretixcontrol/item/index.html:247
 msgid "Membership duration after purchase"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/item/index.html:275
+#: pretix/control/templates/pretixcontrol/item/index.html:295
 msgid "Product history"
 msgstr ""
 
@@ -18132,7 +18132,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:695
 #: pretix/control/templates/pretixcontrol/orders/overview.html:89
 #: pretix/control/templates/pretixcontrol/orders/overview.html:177
-#: pretix/plugins/reports/accountingreport.py:484
+#: pretix/plugins/reports/accountingreport.py:498
 #: pretix/plugins/reports/exporters.py:368
 #: pretix/plugins/reports/exporters.py:417
 #: pretix/plugins/reports/exporters.py:600
@@ -18494,9 +18494,9 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:65
-#: pretix/plugins/reports/accountingreport.py:394
-#: pretix/plugins/reports/accountingreport.py:427
-#: pretix/plugins/reports/accountingreport.py:551
+#: pretix/plugins/reports/accountingreport.py:408
+#: pretix/plugins/reports/accountingreport.py:441
+#: pretix/plugins/reports/accountingreport.py:565
 msgid "Sum"
 msgstr ""
 
@@ -21393,10 +21393,10 @@ msgstr ""
 #: pretix/control/views/event.py:544 pretix/control/views/event.py:691
 #: pretix/control/views/event.py:877 pretix/control/views/event.py:1222
 #: pretix/control/views/event.py:1283 pretix/control/views/event.py:1390
-#: pretix/control/views/item.py:269 pretix/control/views/item.py:314
-#: pretix/control/views/item.py:778 pretix/control/views/item.py:804
-#: pretix/control/views/item.py:921 pretix/control/views/item.py:1125
-#: pretix/control/views/item.py:1274 pretix/control/views/item.py:1444
+#: pretix/control/views/item.py:273 pretix/control/views/item.py:318
+#: pretix/control/views/item.py:782 pretix/control/views/item.py:808
+#: pretix/control/views/item.py:925 pretix/control/views/item.py:1129
+#: pretix/control/views/item.py:1278 pretix/control/views/item.py:1453
 #: pretix/control/views/organizer.py:254 pretix/control/views/organizer.py:282
 #: pretix/control/views/organizer.py:1146 pretix/control/views/subevents.py:464
 #: pretix/control/views/subevents.py:590 pretix/control/views/subevents.py:1003
@@ -21545,8 +21545,8 @@ msgstr ""
 msgid "The order of discounts has been updated."
 msgstr ""
 
-#: pretix/control/views/discounts.py:258 pretix/control/views/item.py:177
-#: pretix/control/views/item.py:389 pretix/control/views/item.py:523
+#: pretix/control/views/discounts.py:258 pretix/control/views/item.py:181
+#: pretix/control/views/item.py:393 pretix/control/views/item.py:527
 msgid "Some of the provided object ids are invalid."
 msgstr ""
 
@@ -21776,133 +21776,133 @@ msgid ""
 "plugin \"{plugin}\" with license \"{license}\"."
 msgstr ""
 
-#: pretix/control/views/item.py:126 pretix/control/views/item.py:1530
+#: pretix/control/views/item.py:130 pretix/control/views/item.py:1539
 msgid "The requested product does not exist."
 msgstr ""
 
-#: pretix/control/views/item.py:144
+#: pretix/control/views/item.py:148
 msgid "The order of items has been updated."
 msgstr ""
 
-#: pretix/control/views/item.py:181
+#: pretix/control/views/item.py:185
 msgid "You cannot reorder items spanning different categories."
 msgstr ""
 
-#: pretix/control/views/item.py:186 pretix/control/views/item.py:392
-#: pretix/control/views/item.py:526
+#: pretix/control/views/item.py:190 pretix/control/views/item.py:396
+#: pretix/control/views/item.py:530
 msgid "Not all objects have been selected."
 msgstr ""
 
-#: pretix/control/views/item.py:214 pretix/control/views/item.py:249
-#: pretix/control/views/item.py:338
+#: pretix/control/views/item.py:218 pretix/control/views/item.py:253
+#: pretix/control/views/item.py:342
 msgid "The requested product category does not exist."
 msgstr ""
 
-#: pretix/control/views/item.py:225
+#: pretix/control/views/item.py:229
 msgid "The selected category has been deleted."
 msgstr ""
 
-#: pretix/control/views/item.py:308
+#: pretix/control/views/item.py:312
 msgid "The new category has been created."
 msgstr ""
 
-#: pretix/control/views/item.py:356
+#: pretix/control/views/item.py:360
 msgid "The order of categories has been updated."
 msgstr ""
 
-#: pretix/control/views/item.py:465
+#: pretix/control/views/item.py:469
 msgid "Street"
 msgstr ""
 
-#: pretix/control/views/item.py:567 pretix/control/views/item.py:732
-#: pretix/control/views/item.py:754
+#: pretix/control/views/item.py:571 pretix/control/views/item.py:736
+#: pretix/control/views/item.py:758
 msgid "The requested question does not exist."
 msgstr ""
 
-#: pretix/control/views/item.py:580
+#: pretix/control/views/item.py:584
 msgid "The selected question has been deleted."
 msgstr ""
 
-#: pretix/control/views/item.py:681
+#: pretix/control/views/item.py:685
 msgid "File uploaded"
 msgstr ""
 
-#: pretix/control/views/item.py:813
+#: pretix/control/views/item.py:817
 msgid "The new question has been created."
 msgstr ""
 
-#: pretix/control/views/item.py:892
+#: pretix/control/views/item.py:896
 msgid "The new quota has been created."
 msgstr ""
 
-#: pretix/control/views/item.py:952
+#: pretix/control/views/item.py:956
 msgid "Exit scans"
 msgstr ""
 
-#: pretix/control/views/item.py:959
+#: pretix/control/views/item.py:963
 msgid "Vouchers and waiting list reservations"
 msgstr ""
 
-#: pretix/control/views/item.py:974
+#: pretix/control/views/item.py:978
 msgid "Available quota"
 msgstr ""
 
-#: pretix/control/views/item.py:980
+#: pretix/control/views/item.py:984
 msgid "Waiting list (pending)"
 msgstr ""
 
-#: pretix/control/views/item.py:987
+#: pretix/control/views/item.py:991
 msgid "Currently for sale"
 msgstr ""
 
-#: pretix/control/views/item.py:1041 pretix/control/views/item.py:1087
-#: pretix/control/views/item.py:1141
+#: pretix/control/views/item.py:1045 pretix/control/views/item.py:1091
+#: pretix/control/views/item.py:1145
 msgid "The requested quota does not exist."
 msgstr ""
 
-#: pretix/control/views/item.py:1062
+#: pretix/control/views/item.py:1066
 msgid "The quota has been re-opened and will not close again."
 msgstr ""
 
-#: pretix/control/views/item.py:1155
+#: pretix/control/views/item.py:1159
 msgid "The selected quota has been deleted."
 msgstr ""
 
-#: pretix/control/views/item.py:1178
+#: pretix/control/views/item.py:1182
 msgid "The requested item does not exist."
 msgstr ""
 
-#: pretix/control/views/item.py:1318
+#: pretix/control/views/item.py:1327
 msgid ""
 "You cannot add add-ons to a product that is only available as an add-on "
 "itself."
 msgstr ""
 
-#: pretix/control/views/item.py:1328
+#: pretix/control/views/item.py:1337
 msgid ""
 "You cannot add bundles to a product that is only available as an add-on "
 "itself."
 msgstr ""
 
-#: pretix/control/views/item.py:1454
+#: pretix/control/views/item.py:1463
 msgid ""
 "You disabled this item, but it is still part of a product bundle. Your "
 "participants won't be able to buy the bundle unless you remove this item "
 "from it."
 msgstr ""
 
-#: pretix/control/views/item.py:1550
+#: pretix/control/views/item.py:1559
 msgid ""
 "The product could not be deleted as some constraints (e.g. data created by "
 "plug-ins) did not allow it. Deleting it could break reporting or other "
 "functionality, so the product has been disabled instead."
 msgstr ""
 
-#: pretix/control/views/item.py:1554
+#: pretix/control/views/item.py:1563
 msgid "The selected product has been deleted."
 msgstr ""
 
-#: pretix/control/views/item.py:1563
+#: pretix/control/views/item.py:1572
 msgid "The selected product has been deactivated."
 msgstr ""
 
@@ -22934,7 +22934,7 @@ msgstr ""
 msgid "Download all attendee badges as one large PDF for printing."
 msgstr ""
 
-#: pretix/plugins/badges/exporters.py:420 pretix/plugins/sendmail/models.py:217
+#: pretix/plugins/badges/exporters.py:420
 #: pretix/plugins/ticketoutputpdf/exporters.py:80
 msgid "Include pending orders"
 msgstr ""
@@ -24429,19 +24429,19 @@ msgid ""
 "the time frame."
 msgstr ""
 
-#: pretix/plugins/reports/accountingreport.py:630
-#: pretix/plugins/reports/accountingreport.py:680
+#: pretix/plugins/reports/accountingreport.py:644
+#: pretix/plugins/reports/accountingreport.py:694
 #, python-brace-format
 msgid "Pending payments at {datetime}"
 msgstr ""
 
-#: pretix/plugins/reports/accountingreport.py:737
-#: pretix/plugins/reports/accountingreport.py:765
+#: pretix/plugins/reports/accountingreport.py:751
+#: pretix/plugins/reports/accountingreport.py:779
 #, python-brace-format
 msgid "Total gift card value at {datetime}"
 msgstr ""
 
-#: pretix/plugins/reports/accountingreport.py:858
+#: pretix/plugins/reports/accountingreport.py:872
 msgid "Open items"
 msgstr ""
 
@@ -24616,7 +24616,7 @@ msgid "Restrict to event dates starting before"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:170
-msgctxt "sendmail_from"
+msgctxt "sendmail_form"
 msgid "Send to"
 msgstr ""
 
@@ -24630,7 +24630,7 @@ msgid "Filter check-in status"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:189
-msgctxt "sendmail_from"
+msgctxt "sendmail_form"
 msgid "Restrict to recipients without check-in"
 msgstr ""
 
@@ -24648,39 +24648,43 @@ msgstr ""
 msgid "Everyone who placed an order"
 msgstr ""
 
-#: pretix/plugins/sendmail/forms.py:243 pretix/plugins/sendmail/models.py:202
+#: pretix/plugins/sendmail/forms.py:243 pretix/plugins/sendmail/models.py:204
 msgid ""
 "Every attendee (falling back to the order contact when no attendee email "
 "address is given)"
 msgstr ""
 
-#: pretix/plugins/sendmail/forms.py:245 pretix/plugins/sendmail/models.py:203
+#: pretix/plugins/sendmail/forms.py:245 pretix/plugins/sendmail/models.py:205
 msgid "Both (all order contact addresses and all attendee email addresses)"
 msgstr ""
 
-#: pretix/plugins/sendmail/forms.py:250 pretix/plugins/sendmail/views.py:267
+#: pretix/plugins/sendmail/forms.py:250 pretix/plugins/sendmail/forms.py:379
+#: pretix/plugins/sendmail/views.py:267
 msgid "payment pending but already confirmed"
 msgstr ""
 
-#: pretix/plugins/sendmail/forms.py:251 pretix/plugins/sendmail/views.py:268
+#: pretix/plugins/sendmail/forms.py:251 pretix/plugins/sendmail/forms.py:381
+#: pretix/plugins/sendmail/views.py:268
 msgid "payment pending (except unapproved or already confirmed)"
 msgstr ""
 
-#: pretix/plugins/sendmail/forms.py:252 pretix/plugins/sendmail/views.py:269
+#: pretix/plugins/sendmail/forms.py:252 pretix/plugins/sendmail/forms.py:382
+#: pretix/plugins/sendmail/views.py:269
 msgid "approval pending"
 msgstr ""
 
-#: pretix/plugins/sendmail/forms.py:255 pretix/plugins/sendmail/views.py:266
+#: pretix/plugins/sendmail/forms.py:255 pretix/plugins/sendmail/forms.py:385
+#: pretix/plugins/sendmail/views.py:266
 msgid "pending with payment overdue"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:258
-msgctxt "sendmail_from"
+msgctxt "sendmail_form"
 msgid "Restrict to orders with status"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:283 pretix/plugins/sendmail/forms.py:287
-msgctxt "sendmail_from"
+msgctxt "sendmail_form"
 msgid "Restrict to recipients with check-in on list"
 msgstr ""
 
@@ -24708,15 +24712,20 @@ msgstr ""
 msgid "Relative, after event end"
 msgstr ""
 
-#: pretix/plugins/sendmail/forms.py:384
+#: pretix/plugins/sendmail/forms.py:388
+msgctxt "sendmail_from"
+msgid "Restrict to orders with status"
+msgstr ""
+
+#: pretix/plugins/sendmail/forms.py:403
 msgid "Please specify the send date"
 msgstr ""
 
-#: pretix/plugins/sendmail/forms.py:389
+#: pretix/plugins/sendmail/forms.py:408
 msgid "Please specify the offset days and time"
 msgstr ""
 
-#: pretix/plugins/sendmail/forms.py:400
+#: pretix/plugins/sendmail/forms.py:419
 msgid "Please specify a product"
 msgstr ""
 
@@ -24736,62 +24745,62 @@ msgstr ""
 msgid "missed"
 msgstr ""
 
-#: pretix/plugins/sendmail/models.py:201
+#: pretix/plugins/sendmail/models.py:203
 msgid "Everyone who created a ticket order"
 msgstr ""
 
-#: pretix/plugins/sendmail/models.py:213
+#: pretix/plugins/sendmail/models.py:215
 msgid "Limit products"
 msgstr ""
 
 #: pretix/plugins/sendmail/models.py:218
-msgid "By default, only paid orders will receive the email"
+msgid "Restrict to orders with status"
 msgstr ""
 
-#: pretix/plugins/sendmail/models.py:227
+#: pretix/plugins/sendmail/models.py:228
 msgid "Send date"
 msgstr ""
 
-#: pretix/plugins/sendmail/models.py:229
+#: pretix/plugins/sendmail/models.py:230
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:8
 msgid "Time of day"
 msgstr ""
 
-#: pretix/plugins/sendmail/models.py:235
+#: pretix/plugins/sendmail/models.py:236
 msgid "Send email to"
 msgstr ""
 
-#: pretix/plugins/sendmail/models.py:240
+#: pretix/plugins/sendmail/models.py:241
 msgid "Only enabled rules are actually sent"
 msgstr ""
 
-#: pretix/plugins/sendmail/models.py:276
+#: pretix/plugins/sendmail/models.py:277
 #, python-brace-format
 msgid "on {date} at {time}"
 msgstr ""
 
-#: pretix/plugins/sendmail/models.py:282
+#: pretix/plugins/sendmail/models.py:283
 #, python-format
 msgid "%(count)d day after event end at %(time)s"
 msgid_plural "%(count)d days after event end at %(time)s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: pretix/plugins/sendmail/models.py:291
+#: pretix/plugins/sendmail/models.py:292
 #, python-format
 msgid "%(count)d day before event end at %(time)s"
 msgid_plural "%(count)d days before event end at %(time)s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: pretix/plugins/sendmail/models.py:301
+#: pretix/plugins/sendmail/models.py:302
 #, python-format
 msgid "%(count)d day after event start at %(time)s"
 msgid_plural "%(count)d days after event start at %(time)s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: pretix/plugins/sendmail/models.py:310
+#: pretix/plugins/sendmail/models.py:311
 #, python-format
 msgid "%(count)d day before event start at %(time)s"
 msgid_plural "%(count)d days before event start at %(time)s"
