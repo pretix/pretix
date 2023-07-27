@@ -412,6 +412,7 @@ def test_expiring_auto_disabled(event):
 def test_expiring_auto_delayed(event):
     event.settings.set('payment_term_expire_delay_days', 3)
     event.settings.set('payment_term_last', date(2023, 7, 2))
+    event.settings.set('payment_term_weekdays', False)
     event.settings.set('timezone', 'Europe/Berlin')
     o1 = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
@@ -456,6 +457,21 @@ def test_expiring_auto_delayed(event):
         assert o1.status == Order.STATUS_EXPIRED
         o2 = Order.objects.get(id=o2.id)
         assert o2.status == Order.STATUS_EXPIRED
+
+
+@pytest.mark.django_db
+def test_expiring_auto_delayed_weekdays(event):
+    event.settings.set('payment_term_expire_delay_days', 2)
+    event.settings.set('payment_term_weekdays', True)
+    event.settings.set('timezone', 'Europe/Berlin')
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=datetime(2023, 6, 22, 12, 13, 14, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        expires=datetime(2023, 6, 30, 23, 59, 59, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        total=0,
+    )
+    assert o1.payment_term_expire_date == o1.expires + timedelta(days=3)
 
 
 @pytest.mark.django_db

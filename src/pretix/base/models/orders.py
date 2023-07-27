@@ -907,6 +907,11 @@ class Order(LockModel, LoggedModel):
             return self.expires
 
         expires = self.expires.date() + timedelta(days=delay)
+        if self.event.settings.get('payment_term_weekdays'):
+            if expires.weekday() == 5:
+                expires += timedelta(days=2)
+            elif expires.weekday() == 6:
+                expires += timedelta(days=1)
 
         tz = ZoneInfo(self.event.settings.timezone)
         expires = make_aware(datetime.combine(
