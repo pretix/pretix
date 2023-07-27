@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 11:49+0000\n"
-"PO-Revision-Date: 2023-07-21 13:08+0000\n"
+"PO-Revision-Date: 2023-07-27 11:58+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 4.18.2\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/_base_settings.py:78
@@ -6763,16 +6763,12 @@ msgid "List of Add-Ons"
 msgstr "Liste der Zusatz-Produkte"
 
 #: pretix/base/pdf.py:364
-#, fuzzy
-#| msgid ""
-#| "Add-on 1\n"
-#| "Add-on 2"
 msgid ""
 "Add-on 1\n"
 "2x Add-on 2"
 msgstr ""
 "Workshop 1\n"
-"Workshop 2"
+"2x Workshop 2"
 
 #: pretix/base/pdf.py:370 pretix/control/forms/filter.py:1275
 #: pretix/control/forms/filter.py:1277
@@ -8693,13 +8689,6 @@ msgid "Expiration delay"
 msgstr "Verzögerung des Ablaufdatums"
 
 #: pretix/base/settings.py:943
-#, fuzzy
-#| msgid ""
-#| "The order will only actually expire this many days after the expiration "
-#| "date communicated to the customer. However, this will not delay beyond "
-#| "the \"last date of payments\" configured above, which is always enforced. "
-#| "The delay may also end on a weekend regardless of the other settings "
-#| "above."
 msgid ""
 "The order will only actually expire this many days after the expiration date "
 "communicated to the customer. If you select \"Only end payment terms on "
@@ -8708,10 +8697,10 @@ msgid ""
 "enforced."
 msgstr ""
 "Die Bestellung wird erst so viele Tage nach dem kommunizierten Ablaufdatum "
-"tatsächlich ablaufen. Dies wird das Ablaufdatum jedoch nicht über das "
-"\"Letzte Zahlungsdatum\", das weiter oben konfiguriert wird, hinaus "
-"verschieben. Das verzögerte Ablaufdatum kann auch an einem Wochenende "
-"liegen, selbst wenn das kommunizierte Ablaufdatum das nie tut."
+"tatsächlich ablaufen. Wenn oben eingestellt ist, dass Zahlungsfristen immer "
+"nur an Werktagen ablaufen, wird dies auch hier berücksichtigt. Das "
+"Ablaufdatum wird jedoch nie über das \"Letzte Zahlungsdatum\", das weiter "
+"oben konfiguriert wird, hinaus verschieben."
 
 #: pretix/base/settings.py:964
 msgid "Hide \"payment pending\" state on customer-facing pages"
@@ -27918,9 +27907,6 @@ msgid "Restrict to event dates starting before"
 msgstr "Auf Termine beginnend vor einschränken"
 
 #: pretix/plugins/sendmail/forms.py:170
-#, fuzzy
-#| msgctxt "sendmail_from"
-#| msgid "Send to"
 msgctxt "sendmail_form"
 msgid "Send to"
 msgstr "Sende an"
@@ -27935,9 +27921,6 @@ msgid "Filter check-in status"
 msgstr "Nach Check-in-Status filtern"
 
 #: pretix/plugins/sendmail/forms.py:189
-#, fuzzy
-#| msgctxt "sendmail_from"
-#| msgid "Restrict to recipients without check-in"
 msgctxt "sendmail_form"
 msgid "Restrict to recipients without check-in"
 msgstr "Auf Empfänger ohne Check-in einschränken"
@@ -27990,17 +27973,11 @@ msgid "pending with payment overdue"
 msgstr "Zahlung ausstehend aber überfällig"
 
 #: pretix/plugins/sendmail/forms.py:258
-#, fuzzy
-#| msgctxt "sendmail_from"
-#| msgid "Restrict to orders with status"
 msgctxt "sendmail_form"
 msgid "Restrict to orders with status"
 msgstr "Auf Bestellungen mit Status einschränken"
 
 #: pretix/plugins/sendmail/forms.py:283 pretix/plugins/sendmail/forms.py:287
-#, fuzzy
-#| msgctxt "sendmail_from"
-#| msgid "Restrict to recipients with check-in on list"
 msgctxt "sendmail_form"
 msgid "Restrict to recipients with check-in on list"
 msgstr "Auf Empfänger mit Check-in auf dieser Liste einschränken"
@@ -28072,9 +28049,6 @@ msgid "Limit products"
 msgstr "Auf Produkte beschränken"
 
 #: pretix/plugins/sendmail/models.py:218
-#, fuzzy
-#| msgctxt "sendmail_from"
-#| msgid "Restrict to orders with status"
 msgid "Restrict to orders with status"
 msgstr "Auf Bestellungen mit Status einschränken"
 
