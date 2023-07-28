@@ -196,7 +196,14 @@ STATICFILES_DIRS = [
 
 STATICI18N_ROOT = os.path.join(BASE_DIR, "pretix/static")
 
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+    },
+}
 
 # if os.path.exists(os.path.join(DATA_DIR, 'static')):
 #     STATICFILES_DIRS.insert(0, os.path.join(DATA_DIR, 'static'))

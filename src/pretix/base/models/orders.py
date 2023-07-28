@@ -270,9 +270,9 @@ class Order(LockModel, LoggedModel):
         verbose_name = _("Order")
         verbose_name_plural = _("Orders")
         ordering = ("-datetime", "-pk")
-        index_together = [
-            ["datetime", "id"],
-            ["last_modified", "id"],
+        indexes = [
+            models.Index(fields=["datetime", "id"]),
+            models.Index(fields=["last_modified", "id"]),
         ]
 
     def __str__(self):
@@ -2756,8 +2756,8 @@ class Transaction(models.Model):
 
     class Meta:
         ordering = 'datetime', 'pk'
-        index_together = [
-            ['datetime', 'id']
+        indexes = [
+            models.Index(fields=['datetime', 'id'])
         ]
 
     def save(self, *args, **kwargs):
