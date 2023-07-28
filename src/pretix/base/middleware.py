@@ -271,6 +271,8 @@ class SecurityMiddleware(MiddlewareMixin):
                 (url.url_name == "event.checkout" and url.kwargs['step'] == "payment")
         ):
             h['script-src'].append('https://pay.google.com')
+            h['frame-src'].append('https://pay.google.com')
+            h['connect-src'].append('https://google.com/pay')
         if settings.LOG_CSP:
             h['report-uri'] = ["/csp_report/"]
         if 'Content-Security-Policy' in resp:
