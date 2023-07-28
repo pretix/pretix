@@ -54,10 +54,10 @@ $(function () {
 
     wallets.forEach(function(wallet) {
         const labels = $('[data-wallets*='+wallet+'] + label strong, [data-wallets*='+wallet+'] + strong')
-            .append('<span class="wallet wallet-loading"> <i aria-hidden="true" class="fa fa-cog fa-spin"></i></span>')
+            .append('<span class="wallet wallet-loading" data-wallet="'+wallet+'"> <i aria-hidden="true" class="fa fa-cog fa-spin"></i></span>')
         walletdetection[wallet]()
             .then(function(result) {
-                const spans = labels.find(".wallet-loading:nth-of-type(1)");
+                const spans = labels.find(".wallet-loading[data-wallet=" + wallet + "]");
                 if (result) {
                     spans.removeClass('wallet-loading').hide().text(', ' + walletdetection.name_map[wallet]).fadeIn(300);
                 } else {
@@ -65,7 +65,7 @@ $(function () {
                 }
             })
             .catch(function(result) {
-                labels.find(".wallet-loading:nth-of-type(1)").remove();
+                labels.find(".wallet-loading[data-wallet=" + wallet + "]").remove();
             })
     });
 });
