@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 11:49+0000\n"
-"PO-Revision-Date: 2023-07-27 11:58+0000\n"
+"PO-Revision-Date: 2023-07-28 09:11+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -16172,7 +16172,7 @@ msgstr "Kontoeinstellungen"
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:13
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:14
 msgid "Log out"
-msgstr "Anmelden"
+msgstr "Abmelden"
 
 #: pretix/control/templates/pretixcontrol/base.html:245
 msgid "Organizer account"
