@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 11:49+0000\n"
-"PO-Revision-Date: 2023-07-22 21:00+0000\n"
+"PO-Revision-Date: 2023-07-30 03:00+0000\n"
 "Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -8238,7 +8238,7 @@ msgstr ""
 
 #: pretix/base/settings.py:299
 msgid "Use UID protection feature of NFC chip"
-msgstr ""
+msgstr "Utiliser la fonction de protection UID de la puce NFC"
 
 #: pretix/base/settings.py:313
 msgid "Maximum number of items per order"
@@ -8766,6 +8766,11 @@ msgid ""
 "beyond the \"last date of payments\" configured above, which is always "
 "enforced."
 msgstr ""
+"La commande n’expirera réellement que ce nombre de jours après la date d’"
+"expiration communiquée au client. Si vous sélectionnez « Ne terminez les "
+"conditions de paiement que les jours de semaine » ci-dessus, cela sera "
+"également respecté. Cependant, cela ne retardera pas au-delà de la « "
+"dernière date de paiement » configurée ci-dessus, qui est toujours appliquée."
 
 #: pretix/base/settings.py:964
 msgid "Hide \"payment pending\" state on customer-facing pages"
@@ -11195,7 +11200,7 @@ msgstr ""
 
 #: pretix/base/settings.py:3720
 msgid "This needs to be disabled if other NFC-based types are active."
-msgstr ""
+msgstr "Cela doit être désactivé si d’autres types NFC sont actifs."
 
 #: pretix/base/shredder.py:74 pretix/base/shredder.py:77
 msgid "Your event needs to be over to use this feature."
@@ -22176,6 +22181,10 @@ msgid ""
 "made by NXP. This provides a higher level of security than other approaches, "
 "but requires all chips to be encoded prior to use."
 msgstr ""
+"Ce type de support ne fonctionne qu’avec des puces NFC du type Mifare "
+"Ultralight AES fabriquées par NXP. Cela fournit un niveau de sécurité plus "
+"élevé que les autres approches, mais nécessite que toutes les puces soient "
+"encodées avant utilisation."
 
 #: pretix/control/templates/pretixcontrol/organizers/export.html:64
 msgid "Run export now and download result"
@@ -24255,6 +24264,8 @@ msgid ""
 "For safety reasons, the waiting list does not run if the quota is set to "
 "unlimited."
 msgstr ""
+"Pour des raisons de sécurité, la liste d’attente ne fonctionne pas si le "
+"quota est fixé sur illimité."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:219
 #, fuzzy
@@ -28880,7 +28891,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:296
 msgid "Check for Apple Pay/Google Pay"
-msgstr ""
+msgstr "Vérifier Apple Pay/Google Pay"
 
 #: pretix/plugins/stripe/payment.py:300
 msgid ""
@@ -28890,6 +28901,11 @@ msgid ""
 "take into consideration if Google Pay/Apple Pay has been disabled in the "
 "Stripe Dashboard."
 msgstr ""
+"pretix tentera de vérifier si le navigateur Web du client prend en charge "
+"les méthodes de paiement basées sur le portefeuille comme Apple Pay ou "
+"Google Pay et les affichera bien en évidence avec le mode de paiement par "
+"carte de crédit. Cette détection ne prend pas en compte si Google Pay/Apple "
+"Pay a été désactivé dans le tableau de bord Stripe."
 
 #: pretix/plugins/stripe/payment.py:309
 msgid "Statement descriptor postfix"
@@ -28964,13 +28980,15 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:370
 msgid "SEPA Creditor Mandate Name"
-msgstr ""
+msgstr "Nom du mandat du créancier SEPA"
 
 #: pretix/plugins/stripe/payment.py:372
 msgid ""
 "Please provide your SEPA Creditor Mandate Name, that will be displayed to "
 "the user."
 msgstr ""
+"Veuillez fournir votre nom de mandat de créancier SEPA, qui sera affiché à "
+"l’utilisateur."
 
 #: pretix/plugins/stripe/payment.py:383
 msgid "SOFORT"
@@ -29088,7 +29106,7 @@ msgstr "EPS via Stripe"
 
 #: pretix/plugins/stripe/payment.py:1158
 msgid "SEPA Debit"
-msgstr ""
+msgstr "Débit SEPA"
 
 #: pretix/plugins/stripe/payment.py:1197
 #, fuzzy
@@ -29297,7 +29315,7 @@ msgstr "Le montant total sera prélevé sur votre carte de crédit."
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:18
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:20
 msgid "Banking Institution"
-msgstr ""
+msgstr "Établissement bancaire"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:22
@@ -29390,6 +29408,18 @@ msgid ""
 "statement that you can obtain from your bank. You agree to receive "
 "notifications for future debits up to 2 days before they occur."
 msgstr ""
+"En fournissant vos informations de paiement et en confirmant ce paiement, "
+"vous autorisez (A) %(sepa_creditor_name)s et Stripe, notre prestataire de "
+"services de paiement et/ou PPRO, son prestataire de services local, à "
+"envoyer des instructions à votre banque pour débiter votre compte et (B) "
+"votre banque à débiter votre compte conformément à ces instructions. Dans le "
+"cadre de vos droits, vous avez droit à un remboursement de votre banque "
+"selon les termes et conditions de votre accord avec votre banque. Un "
+"remboursement doit être demandé dans un délai de 8 semaines à compter de la "
+"date à laquelle votre compte a été débité. Vos droits sont expliqués dans "
+"une déclaration que vous pouvez obtenir auprès de votre banque. Vous "
+"acceptez de recevoir des notifications pour les débits futurs jusqu’à 2 "
+"jours avant qu’ils ne se produisent."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:6
 msgid "Charge ID"
