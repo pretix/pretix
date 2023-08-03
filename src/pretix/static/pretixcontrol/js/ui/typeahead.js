@@ -1,7 +1,7 @@
 /*global $,u2f */
 $(function () {
     $('.sidebar .dropdown, ul.navbar-nav .dropdown, .navbar-events-collapse').on('shown.bs.collapse shown.bs.dropdown', function () {
-        $(this).parent().find("input").val("").change().focus();
+        $(this).parent().find("input").val("").trigger('forceRunQuery').focus();
     });
     $('.dropdown-menu .form-box input').click(function (e) {
         e.stopPropagation();
@@ -115,6 +115,9 @@ $(function () {
                 }
             );
         }
+        $query.on("forceRunQuery", function () {
+            runQuery();
+        });
         $query.on("change", function () {
             if ($container.attr("data-typeahead-field") && $query.val() === "") {
                 $container.removeClass('focused');
