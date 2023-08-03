@@ -206,9 +206,9 @@ class Rule(models.Model, LoggingMixin):
     ]
 
     CHECK_IN = [
-        ("all", _("No restriction")),
-        ("checked_in", _("Everyone who is or was checked in")),
-        ("no_checkin", _("Never checked in"))
+        ("all", _("Everyone")),
+        ("checked_in", _("Anyone who is or was checked in")),
+        ("no_checkin", _("Anyone who never checked in before"))
     ]
 
     id = models.BigAutoField(primary_key=True)
