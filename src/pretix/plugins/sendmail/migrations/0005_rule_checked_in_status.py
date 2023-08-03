@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('sendmail', '0003_rule_attach_ical'),  # todo: fix dependency after rebase
+        ('sendmail', '0004_rule_restrict_to_status'),
     ]
 
     operations = [
