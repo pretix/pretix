@@ -156,7 +156,7 @@ def test_event_fail_user_no_permission(event, user, team):
     assert djmail.outbox[0].to == [user.email]
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 @freeze_time("2023-01-18 03:00:00+01:00")
 def test_event_ok(event, user, team):
     djmail.outbox = []
@@ -286,7 +286,7 @@ def test_organizer_fail_user_does_not_have_specific_permission(event, user, team
     assert djmail.outbox[0].to == [user.email]
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 @freeze_time("2023-01-18 03:00:00+01:00")
 def test_organizer_limited_to_events(event, user, team):
     djmail.outbox = []
@@ -323,7 +323,7 @@ def test_organizer_limited_to_events(event, user, team):
     assert len(djmail.outbox[0].attachments[0][1].splitlines()) == 2
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 @freeze_time("2023-01-18 03:00:00+01:00")
 def test_organizer_ok(event, user, team):
     djmail.outbox = []

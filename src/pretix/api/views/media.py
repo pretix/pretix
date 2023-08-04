@@ -104,6 +104,12 @@ class ReusableMediaViewSet(viewsets.ModelViewSet):
             auth=self.request.auth,
             data=merge_dicts(self.request.data, {'id': inst.pk})
         )
+        mt = MEDIA_TYPES.get(serializer.validated_data["type"])
+        if mt:
+            m = mt.handle_new(self.request.organizer, inst, self.request.user, self.request.auth)
+            if m:
+                s = self.get_serializer(m)
+                return Response({"result": s.data})
 
     @transaction.atomic()
     def perform_update(self, serializer):

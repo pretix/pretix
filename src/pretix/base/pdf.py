@@ -43,16 +43,18 @@ import subprocess
 import tempfile
 import unicodedata
 import uuid
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from functools import partial
 from io import BytesIO
 
 import jsonschema
+import reportlab.rl_config
 from bidi.algorithm import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
 from django.core.exceptions import ValidationError
 from django.db.models import Max, Min
+from django.db.models.fields.files import FieldFile
 from django.dispatch import receiver
 from django.utils.deconstruct import deconstructible
 from django.utils.formats import date_format
@@ -60,7 +62,8 @@ from django.utils.html import conditional_escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from i18nfield.strings import LazyI18nString
-from pypdf import PdfReader
+from pypdf import PdfReader, PdfWriter, Transformation
+from pypdf.generic import RectangleObject
 from reportlab.graphics import renderPDF
 from reportlab.graphics.barcode.qr import QrCodeWidget
 from reportlab.graphics.shapes import Drawing
@@ -84,6 +87,9 @@ from pretix.helpers.reportlab import ThumbnailingImageReader, reshaper
 from pretix.presale.style import get_fonts
 
 logger = logging.getLogger(__name__)
+
+if not settings.DEBUG:
+    reportlab.rl_config.shapeChecking = 0
 
 
 DEFAULT_VARIABLES = OrderedDict((
@@ -355,14 +361,9 @@ DEFAULT_VARIABLES = OrderedDict((
     }),
     ("addons", {
         "label": _("List of Add-Ons"),
-        "editor_sample": _("Add-on 1\nAdd-on 2"),
+        "editor_sample": _("Add-on 1\n2x Add-on 2"),
         "evaluate": lambda op, order, ev: "\n".join([
-            '{} - {}'.format(p.item.name, p.variation.value) if p.variation else str(p.item.name)
-            for p in (
-                op.addons.all() if 'addons' in getattr(op, '_prefetched_objects_cache', {})
-                else op.addons.select_related('item', 'variation')
-            )
-            if not p.canceled
+            str(p) for p in generate_compressed_addon_list(op, order, ev)
         ])
     }),
     ("organizer", {
@@ -696,6 +697,30 @@ def get_seat(op: OrderPosition):
     return None
 
 
+def generate_compressed_addon_list(op, order, event):
+    itemcount = defaultdict(int)
+    addons = (
+        op.addons.all() if 'addons' in getattr(op, '_prefetched_objects_cache', {})
+        else op.addons.select_related('item', 'variation')
+    )
+    for pos in addons:
+        itemcount[pos.item, pos.variation] += 1
+
+    addonlist = []
+    for (item, variation), count in itemcount.items():
+        if variation:
+            if count > 1:
+                addonlist.append('{}x {} - {}'.format(count, item.name, variation.value))
+            else:
+                addonlist.append('{} - {}'.format(item.name, variation.value))
+        else:
+            if count > 1:
+                addonlist.append('{}x {}'.format(count, item.name))
+            else:
+                addonlist.append(item.name)
+    return addonlist
+
+
 class Renderer:
 
     def __init__(self, event, layout, background_file):
@@ -873,6 +898,11 @@ class Renderer:
                     anchor='c',  # centered in frame
                     mask='auto'
                 )
+                if isinstance(image_file, FieldFile):
+                    # ThumbnailingImageReader "closes" the file, so it's no use to use the same file pointer
+                    # in case we need it again. For FieldFile, fortunately, there is an easy way to make the file
+                    # refresh itself when it is used next.
+                    del image_file.file
             except:
                 logger.exception("Can not load or resize image")
                 canvas.saveState()
@@ -992,7 +1022,10 @@ class Renderer:
                 elif o['type'] == "poweredby":
                     self._draw_poweredby(canvas, op, o)
                 if self.bg_pdf:
-                    page_size = (self.bg_pdf.pages[0].mediabox[2], self.bg_pdf.pages[0].mediabox[3])
+                    page_size = (
+                        self.bg_pdf.pages[0].mediabox[2] - self.bg_pdf.pages[0].mediabox[0],
+                        self.bg_pdf.pages[0].mediabox[3] - self.bg_pdf.pages[0].mediabox[1]
+                    )
                     if self.bg_pdf.pages[0].get('/Rotate') in (90, 270):
                         # swap dimensions due to pdf being rotated
                         page_size = page_size[::-1]
@@ -1020,14 +1053,12 @@ class Renderer:
                 with open(os.path.join(d, 'out.pdf'), 'rb') as f:
                     return BytesIO(f.read())
         else:
-            from pypdf import PdfReader, PdfWriter, Transformation
-            from pypdf.generic import RectangleObject
             buffer.seek(0)
             new_pdf = PdfReader(buffer)
             output = PdfWriter()
 
             for i, page in enumerate(new_pdf.pages):
-                bg_page = copy.copy(self.bg_pdf.pages[i])
+                bg_page = copy.deepcopy(self.bg_pdf.pages[i])
                 bg_rotation = bg_page.get('/Rotate')
                 if bg_rotation:
                     # /Rotate is clockwise, transformation.rotate is counter-clockwise
@@ -1062,6 +1093,56 @@ class Renderer:
             output.write(outbuffer)
             outbuffer.seek(0)
             return outbuffer
+
+
+def merge_background(fg_pdf, bg_pdf, out_file, compress):
+    if settings.PDFTK:
+        with tempfile.TemporaryDirectory() as d:
+            fg_filename = os.path.join(d, 'fg.pdf')
+            bg_filename = os.path.join(d, 'bg.pdf')
+            fg_pdf.write(fg_filename)
+            bg_pdf.write(bg_filename)
+            pdftk_cmd = [
+                settings.PDFTK,
+                fg_filename,
+                'multibackground',
+                bg_filename,
+                'output',
+                '-',
+            ]
+            if compress:
+                pdftk_cmd.append('compress')
+            subprocess.run(pdftk_cmd, check=True, stdout=out_file)
+    else:
+        output = PdfWriter()
+        for i, page in enumerate(fg_pdf.pages):
+            bg_page = copy.deepcopy(bg_pdf.pages[i])
+            bg_rotation = bg_page.get('/Rotate')
+            if bg_rotation:
+                # /Rotate is clockwise, transformation.rotate is counter-clockwise
+                t = Transformation().rotate(bg_rotation)
+                w = float(page.mediabox.getWidth())
+                h = float(page.mediabox.getHeight())
+                if bg_rotation in (90, 270):
+                    # offset due to rotation base
+                    if bg_rotation == 90:
+                        t = t.translate(h, 0)
+                    else:
+                        t = t.translate(0, w)
+                    # rotate mediabox as well
+                    page.mediabox = RectangleObject((
+                        page.mediabox.left.as_numeric(),
+                        page.mediabox.bottom.as_numeric(),
+                        page.mediabox.top.as_numeric(),
+                        page.mediabox.right.as_numeric(),
+                    ))
+                    page.trimbox = page.mediabox
+                elif bg_rotation == 180:
+                    t = t.translate(w, h)
+                page.add_transformation(t)
+            bg_page.merge_page(page)
+            output.add_page(bg_page)
+        output.write(out_file)
 
 
 @deconstructible

@@ -12,3 +12,4 @@ Developer documentation
    api/index
    structure
    translation/index
+   nfc/index

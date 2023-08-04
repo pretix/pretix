@@ -304,6 +304,10 @@ an instance of a form class that you bind yourself when appropriate. Your form w
 as part of the standard validation and rendering cycle and rendered using default bootstrap
 styles. It is advisable to set a prefix for your form to avoid clashes with other plugins.
 
+Your forms may also have two special properties: ``template`` with a template that will be
+included to render the form, and ``title``, which will be used as a headline. Your template
+will be passed a ``form`` variable with your form.
+
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 

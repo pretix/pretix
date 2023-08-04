@@ -192,8 +192,8 @@ class MailSettingsSetupView(TemplateView):
                 spf_record = get_spf_record(hostname)
                 if not spf_record:
                     spf_warning = _(
-                        'We could not find an SPF record set for the domain you are trying to use. You can still '
-                        'proceed, but it will increase the chance of emails going to spam or being rejected. We '
+                        'We could not find an SPF record set for the domain you are trying to use. This means that '
+                        'there is a very high change most of the emails will be rejected or marked as spam. We '
                         'strongly recommend setting an SPF record on the domain. You can do so through the DNS '
                         'settings at the provider you registered your domain with.'
                     )
@@ -205,7 +205,8 @@ class MailSettingsSetupView(TemplateView):
                         'this system in the SPF record.'
                     )
 
-            if settings.MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED:
+            verification = settings.MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED and not spf_warning
+            if verification:
                 if 'verification' in self.request.POST:
                     messages.error(request, _('The verification code was incorrect, please try again.'))
                 else:
@@ -230,7 +231,7 @@ class MailSettingsSetupView(TemplateView):
                 context={
                     'basetpl': self.basetpl,
                     'object': self.object,
-                    'verification': settings.MAIL_CUSTOM_SENDER_VERIFICATION_REQUIRED,
+                    'verification': verification,
                     'spf_warning': spf_warning,
                     'spf_record': spf_record,
                     'spf_key': settings.MAIL_CUSTOM_SENDER_SPF_STRING,

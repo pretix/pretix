@@ -228,6 +228,75 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             qs = qs.filter(order__testmode=False)
         return qs
 
+    def _transaction_qs_group(self, qs, form_data):
+        subevent_values = {}
+        subevent_order_by = {}
+        if form_data.get("split_subevents"):
+            subevent_values = {"subevent_id", "subevent__name", "subevent__date_from"}
+            subevent_order_by = {Coalesce(F("subevent__date_from"), F("order__event__date_from")), Coalesce(F("subevent_id"), F("order__event_id"))}
+
+        qs = qs.order_by(
+            *subevent_order_by,
+            "order__event__date_from",
+            "order__event__slug",
+            F("fee_type").asc(nulls_first=True),
+            F("internal_type").asc(nulls_first=True),
+            F("item__category__position").asc(nulls_first=True),
+            F("item__category_id").asc(nulls_first=True),
+            F("item__position").asc(nulls_last=True),
+            "item_id",
+            "variation__position",
+            "variation_id",
+            "price",
+            "tax_rate",
+        ).values(
+            *subevent_values,
+            "order__event__date_from",
+            "order__event__slug",
+            "order__event__name",
+            "item_id",
+            "item__internal_name",
+            "item__name",
+            "variation__value",
+            "variation_id",
+            "fee_type",
+            "internal_type",
+            "price",
+            "tax_rate",
+        )
+        return qs
+
+    def _transaction_group_header_label(self):
+        return _("Event") + " / " + _("Product")
+
+    def _transaction_group_label(self, form_data, r):
+        if not self.is_multievent and not form_data.get("split_subevents"):
+            return None
+        if r.get("subevent_id"):
+            return "{} - {} ({}) [{}]".format(
+                r["order__event__name"],
+                r["subevent__name"],
+                date_format(r["subevent__date_from"]),
+                r["order__event__slug"]
+            )
+        else:
+            return "{} [{}]".format(r["order__event__name"], r["order__event__slug"])
+
+    def _transaction_row_label(self, r):
+        if r["item_id"]:
+            if r["variation_id"]:
+                return f'{r["item__internal_name"] or r["item__name"]} - {r["variation__value"]}'
+            else:
+                return str(r["item__internal_name"] or r["item__name"])
+        elif r["fee_type"]:
+            fee_types = dict(OrderFee.FEE_TYPES)
+            if r["internal_type"]:
+                return f'{fee_types.get(r["fee_type"], r["fee_type"])} - {r["internal_type"]}'
+            else:
+                return fee_types.get(r["fee_type"], r["fee_type"])
+        else:
+            return "?"
+
     def _table_transactions(self, form_data, currency):
         tstyle = copy.copy(self.get_style())
         tstyle.fontSize = 8
@@ -241,7 +310,7 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
 
         tdata = [
             [
-                Paragraph(_("Event") + " / " + _("Product"), tstyle_bold),
+                Paragraph(self._transaction_group_header_label(), tstyle_bold),
                 Paragraph(_("Price"), tstyle_bold_right),
                 Paragraph(_("Tax rate"), tstyle_bold_right),
                 Paragraph("#", tstyle_bold_right),
@@ -251,43 +320,10 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             ]
         ]
 
-        subevent_values = {}
-        subevent_order_by = {}
-        if form_data.get("split_subevents"):
-            subevent_values = {"subevent_id", "subevent__name", "subevent__date_from"}
-            subevent_order_by = {Coalesce(F("subevent__date_from"), F("order__event__date_from")), Coalesce(F("subevent_id"), F("order__event_id"))}
-
         qs = (
-            self._transaction_qs(form_data, currency)
-            .order_by(
-                *subevent_order_by,
-                "order__event__date_from",
-                "order__event__slug",
-                F("fee_type").asc(nulls_first=True),
-                F("internal_type").asc(nulls_first=True),
-                F("item__category__position").asc(nulls_first=True),
-                F("item__category_id").asc(nulls_first=True),
-                F("item__position").asc(nulls_last=True),
-                "item_id",
-                "variation__position",
-                "variation_id",
-                "price",
-                "tax_rate",
-            )
-            .values(
-                *subevent_values,
-                "order__event__date_from",
-                "order__event__slug",
-                "order__event__name",
-                "item_id",
-                "item__internal_name",
-                "item__name",
-                "variation__value",
-                "variation_id",
-                "fee_type",
-                "internal_type",
-                "price",
-                "tax_rate",
+            self._transaction_qs_group(
+                self._transaction_qs(form_data, currency),
+                form_data
             )
             .annotate(
                 sum_cont=Sum("count"),
@@ -297,31 +333,22 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
         )
 
         tstyledata = []
-        fee_types = dict(OrderFee.FEE_TYPES)
 
         sum_cnt_by_tax_rate = defaultdict(int)
         sum_price_by_tax_rate = defaultdict(Decimal)
         sum_tax_by_tax_rate = defaultdict(Decimal)
-        sum_price_by_event = Decimal("0.00")
-        sum_tax_by_event = Decimal("0.00")
-        last_event_group = None
-        last_event_group_head_idx = 0
+        sum_price_by_group = Decimal("0.00")
+        sum_tax_by_group = Decimal("0.00")
+        last_group = None
+        last_group_head_idx = 0
         for r in qs:
-            if r.get("subevent_id"):
-                e = "{} - {} ({}) [{}]".format(
-                    r["order__event__name"],
-                    r["subevent__name"],
-                    date_format(r["subevent__date_from"]),
-                    r["order__event__slug"]
-                )
-            else:
-                e = "{} [{}]".format(r["order__event__name"], r["order__event__slug"])
+            e = self._transaction_group_label(form_data, r)
 
-            if e != last_event_group:
-                if last_event_group_head_idx > 0 and (self.is_multievent or form_data.get("split_subevents")):
-                    tdata[last_event_group_head_idx][4] = Paragraph(money_filter(sum_price_by_event - sum_tax_by_event, currency), tstyle_bold_right),
-                    tdata[last_event_group_head_idx][5] = Paragraph(money_filter(sum_tax_by_event, currency), tstyle_bold_right),
-                    tdata[last_event_group_head_idx][6] = Paragraph(money_filter(sum_price_by_event, currency), tstyle_bold_right),
+            if e != last_group:
+                if last_group_head_idx > 0 and e is not None:
+                    tdata[last_group_head_idx][4] = Paragraph(money_filter(sum_price_by_group - sum_tax_by_group, currency), tstyle_bold_right),
+                    tdata[last_group_head_idx][5] = Paragraph(money_filter(sum_tax_by_group, currency), tstyle_bold_right),
+                    tdata[last_group_head_idx][6] = Paragraph(money_filter(sum_price_by_group, currency), tstyle_bold_right),
                 tdata.append(
                     [
                         Paragraph(
@@ -339,30 +366,18 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
                 tstyledata.append(
                     ("SPAN", (0, len(tdata) - 1), (3, len(tdata) - 1)),
                 )
-                last_event_group = e
-                last_event_group_head_idx = len(tdata) - 1
-                sum_price_by_event = Decimal("0.00")
-                sum_tax_by_event = Decimal("0.00")
+                last_group = e
+                last_group_head_idx = len(tdata) - 1
+                sum_price_by_group = Decimal("0.00")
+                sum_tax_by_group = Decimal("0.00")
 
-            if r["item_id"]:
-                if r["variation_id"]:
-                    text = f'{r["item__internal_name"] or r["item__name"]} - {r["variation__value"]}'
-                else:
-                    text = str(r["item__internal_name"] or r["item__name"])
-            elif r["fee_type"]:
-                if r["internal_type"]:
-                    text = f'{fee_types.get(r["fee_type"], r["fee_type"])} - {r["internal_type"]}'
-                else:
-                    text = fee_types.get(r["fee_type"], r["fee_type"])
-            else:
-                text = "?"
-
+            text = self._transaction_row_label(r)
             tdata.append(
                 [
                     Paragraph(text, tstyle),
                     Paragraph(
                         money_filter(r["price"], currency)
-                        if r["price"] is not None
+                        if "price" in r and r["price"] is not None
                         else "",
                         tstyle_right,
                     ),
@@ -378,14 +393,13 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
             sum_cnt_by_tax_rate[r["tax_rate"]] += r["sum_cont"]
             sum_price_by_tax_rate[r["tax_rate"]] += r["sum_price"]
             sum_tax_by_tax_rate[r["tax_rate"]] += r["sum_tax"]
-            sum_price_by_event += r["sum_price"]
-            sum_tax_by_event += r["sum_tax"]
+            sum_price_by_group += r["sum_price"]
+            sum_tax_by_group += r["sum_tax"]
 
-        if last_event_group_head_idx > 0 and (self.is_multievent or form_data.get("split_subevents")):
-            tdata[last_event_group_head_idx][4] = Paragraph(money_filter(sum_price_by_event - sum_tax_by_event, currency),
-                                                            tstyle_bold_right),
-            tdata[last_event_group_head_idx][5] = Paragraph(money_filter(sum_tax_by_event, currency), tstyle_bold_right),
-            tdata[last_event_group_head_idx][6] = Paragraph(money_filter(sum_price_by_event, currency), tstyle_bold_right),
+        if last_group_head_idx > 0 and last_group is not None:
+            tdata[last_group_head_idx][4] = Paragraph(money_filter(sum_price_by_group - sum_tax_by_group, currency), tstyle_bold_right),
+            tdata[last_group_head_idx][5] = Paragraph(money_filter(sum_tax_by_group, currency), tstyle_bold_right),
+            tdata[last_group_head_idx][6] = Paragraph(money_filter(sum_price_by_group, currency), tstyle_bold_right),
 
         if len(sum_tax_by_tax_rate) > 1:
             for tax_rate in sorted(sum_tax_by_tax_rate.keys(), reverse=True):

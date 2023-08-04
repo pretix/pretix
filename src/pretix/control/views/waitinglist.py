@@ -91,7 +91,7 @@ class WaitingListQuerySetMixin:
             return self.request.POST
         return self.request.GET
 
-    def get_queryset(self):
+    def get_queryset(self, force_filtered=False):
         qs = WaitingListEntry.objects.filter(
             event=self.request.event
         ).select_related('item', 'variation', 'voucher').prefetch_related(
@@ -135,6 +135,8 @@ class WaitingListQuerySetMixin:
             qs = qs.filter(
                 id__in=self.request_data.getlist('entry')
             )
+        elif force_filtered and '__ALL' not in self.request_data:
+            qs = qs.none()
 
         return qs
 
@@ -158,7 +160,7 @@ class WaitingListActionView(EventPermissionRequiredMixin, WaitingListQuerySetMix
                 'forbidden': self.get_queryset().filter(voucher__isnull=False),
             })
         elif request.POST.get('action') == 'delete_confirm':
-            for obj in self.get_queryset():
+            for obj in self.get_queryset(force_filtered=True):
                 if not obj.voucher_id:
                     obj.log_action('pretix.event.orders.waitinglist.deleted', user=self.request.user)
                     obj.delete()

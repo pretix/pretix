@@ -633,7 +633,7 @@ class EventsTest(SoupTest):
             },
             follow=True
         )
-        assert doc.select('.alert-warning')
+        assert doc.select('.alert-danger')
         self.event1.settings.flush()
         # not yet saved
         assert "mail_from" not in self.event1.settings._cache()

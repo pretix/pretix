@@ -1,14 +1,24 @@
 {% load i18n %}
 
-{% if provider.method == "cc" %}
+{% if provider.method == "card" %}
     <p>{% blocktrans trimmed %}
         The total amount will be withdrawn from your credit card.
     {% endblocktrans %}</p>
     <dl class="dl-horizontal">
         <dt>{% trans "Card type" %}</dt>
-        <dd>{{ request.session.payment_stripe_brand }}</dd>
+        <dd>{{ request.session.payment_stripe_card_brand }}</dd>
         <dt>{% trans "Card number" %}</dt>
-        <dd>**** **** **** {{ request.session.payment_stripe_last4 }}</dd>
+        <dd>**** **** **** {{ request.session.payment_stripe_card_last4 }}</dd>
+    </dl>
+{% elif provider.method == "sepa_debit" %}
+    <p>{% blocktrans trimmed %}
+        The total amount will be withdrawn from your bank account.
+    {% endblocktrans %}</p>
+    <dl class="dl-horizontal">
+        <dt>{% trans "Banking Institution" %}</dt>
+        <dd>{{ request.session.payment_stripe_sepa_debit_bank }}</dd>
+        <dt>{% trans "Account number" %}</dt>
+        <dd>**** **** **** {{ request.session.payment_stripe_sepa_debit_last4 }}</dd>
     </dl>
 {% else %}
     <p>{% blocktrans trimmed %}

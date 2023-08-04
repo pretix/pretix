@@ -166,6 +166,10 @@ class Device(LoggedModel):
         null=True,
         blank=False
     )
+    rsa_pubkey = models.TextField(
+        null=True,
+        blank=True,
+    )
     info = models.JSONField(
         null=True, blank=True,
     )

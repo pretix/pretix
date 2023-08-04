@@ -179,3 +179,7 @@
     flex: 1;
   }
 }
+
+.wallet-loading + .wallet-loading {
+  display: none;
+}

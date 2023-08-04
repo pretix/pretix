@@ -3,6 +3,10 @@
 {% load eventurl %}
 {% load money %}
 {% block title %}{% trans "Change payment method" %}{% endblock %}
+{% block custom_header %}
+    {{ block.super }}
+    {% include "pretixpresale/event/fragment_walletdetection_head.html" %}
+{% endblock %}
 {% block content %}
     <h2>
         {% blocktrans trimmed with code=order.code %}
@@ -29,7 +33,8 @@
                                 <input type="radio" name="payment" value="{{ p.provider.identifier }}"
                                         data-parent="#payment_accordion"
                                         {% if selected == p.provider.identifier %}checked="checked"{% endif %}
-                                        data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}" />
+                                        data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}"
+                                        data-wallets="{{ p.provider.walletqueries|join:"|" }}"/>
                                 <strong>{{ p.provider.public_name }}</strong>
                             </label>
                         </h4>

@@ -907,6 +907,11 @@ class Order(LockModel, LoggedModel):
             return self.expires
 
         expires = self.expires.date() + timedelta(days=delay)
+        if self.event.settings.get('payment_term_weekdays'):
+            if expires.weekday() == 5:
+                expires += timedelta(days=2)
+            elif expires.weekday() == 6:
+                expires += timedelta(days=1)
 
         tz = ZoneInfo(self.event.settings.timezone)
         expires = make_aware(datetime.combine(
@@ -1667,12 +1672,13 @@ class OrderPayment(models.Model):
         if status_change:
             self.order.create_transactions()
 
-    def fail(self, info=None, user=None, auth=None, log_data=None):
+    def fail(self, info=None, user=None, auth=None, log_data=None, send_mail=True):
         """
         Marks the order as failed and sets info to ``info``, but only if the order is in ``created`` or ``pending``
         state. This is equivalent to setting ``state`` to ``OrderPayment.PAYMENT_STATE_FAILED`` and logging a failure,
         but it adds strong database logging since we do not want to report a failure for an order that has just
         been marked as paid.
+        :param send_mail: Whether an email should be sent to the user about this event (default: ``True``).
         """
         with transaction.atomic():
             locked_instance = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=self.pk)
@@ -1697,6 +1703,17 @@ class OrderPayment(models.Model):
             'info': info,
             'data': log_data,
         }, user=user, auth=auth)
+
+        if send_mail:
+            with language(self.order.locale, self.order.event.settings.region):
+                email_subject = self.order.event.settings.mail_subject_order_payment_failed
+                email_template = self.order.event.settings.mail_text_order_payment_failed
+                email_context = get_email_context(event=self.order.event, order=self.order)
+                self.order.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.payment_failed', user=user, auth=auth,
+                )
+
         return True
 
     def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',

@@ -412,6 +412,7 @@ def test_expiring_auto_disabled(event):
 def test_expiring_auto_delayed(event):
     event.settings.set('payment_term_expire_delay_days', 3)
     event.settings.set('payment_term_last', date(2023, 7, 2))
+    event.settings.set('payment_term_weekdays', False)
     event.settings.set('timezone', 'Europe/Berlin')
     o1 = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
@@ -456,6 +457,21 @@ def test_expiring_auto_delayed(event):
         assert o1.status == Order.STATUS_EXPIRED
         o2 = Order.objects.get(id=o2.id)
         assert o2.status == Order.STATUS_EXPIRED
+
+
+@pytest.mark.django_db
+def test_expiring_auto_delayed_weekdays(event):
+    event.settings.set('payment_term_expire_delay_days', 2)
+    event.settings.set('payment_term_weekdays', True)
+    event.settings.set('timezone', 'Europe/Berlin')
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=datetime(2023, 6, 22, 12, 13, 14, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        expires=datetime(2023, 6, 30, 23, 59, 59, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        total=0,
+    )
+    assert o1.payment_term_expire_date == o1.expires + timedelta(days=3)
 
 
 @pytest.mark.django_db
@@ -701,6 +717,47 @@ class PaymentReminderTests(TestCase):
         self.order.save()
         self.event.settings.mail_days_order_expire_warning = 2
         send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 0
+
+
+class PaymentFailedTests(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.o = Organizer.objects.create(name='Dummy', slug='dummy')
+        with scope(organizer=self.o):
+            self.event = Event.objects.create(
+                organizer=self.o, name='Dummy', slug='dummy',
+                date_from=now() + timedelta(days=2),
+                plugins='pretix.plugins.banktransfer'
+            )
+            self.order = Order.objects.create(
+                code='FOO', event=self.event, email='dummy@dummy.test',
+                status=Order.STATUS_PENDING, locale='en',
+                datetime=now() - timedelta(hours=4),
+                expires=now() - timedelta(hours=4) + timedelta(days=10),
+                total=Decimal('46.00'),
+            )
+            self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
+                                              default_price=Decimal('23.00'), admission=True)
+            self.op1 = OrderPosition.objects.create(
+                order=self.order, item=self.ticket, variation=None,
+                price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
+            )
+            djmail.outbox = []
+
+    @classscope(attr='o')
+    def test_send_payment_fail_mail(self):
+        payment = self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=self.order.total)
+        payment.save()
+        payment.fail()
+        assert len(djmail.outbox) == 1
+        assert "fail" in djmail.outbox[0].subject
+
+    @classscope(attr='o')
+    def test_no_payment_fail_mail_setting(self):
+        payment = self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=self.order.total)
+        payment.save()
+        payment.fail(send_mail=False)
         assert len(djmail.outbox) == 0
 
 

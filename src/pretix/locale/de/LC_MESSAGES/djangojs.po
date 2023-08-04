@@ -7,8 +7,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-27 12:51+0000\n"
-"PO-Revision-Date: 2023-06-27 14:53+0000\n"
+"POT-Creation-Date: 2023-07-21 11:46+0000\n"
+"PO-Revision-Date: 2023-07-21 12:47+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
@@ -38,6 +38,7 @@ msgid "Venmo"
 msgstr "Venmo"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:36
+#: pretix/static/pretixpresale/js/walletdetection.js:38
 msgid "Apple Pay"
 msgstr "Apple Pay"
 
@@ -135,8 +136,8 @@ msgid "Continue"
 msgstr "Fortfahren"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:222
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:157
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:188
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:204
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:235
 msgid "Confirming your payment …"
 msgstr "Zahlung wird bestätigt …"
 
@@ -158,15 +159,15 @@ msgstr "Bezahlte Bestellungen"
 msgid "Total revenue"
 msgstr "Gesamtumsatz"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:12
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:13
 msgid "Contacting Stripe …"
 msgstr "Kontaktiere Stripe …"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:65
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:70
 msgid "Total"
 msgstr "Gesamt"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:164
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:211
 msgid "Contacting your bank …"
 msgstr "Kontaktiere Ihre Bank …"
 
@@ -555,17 +556,17 @@ msgstr "Generiere Nachrichten…"
 msgid "Unknown error."
 msgstr "Unbekannter Fehler."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:309
+#: pretix/static/pretixcontrol/js/ui/main.js:311
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Diese Farbe hat einen sehr guten Kontrast und ist sehr gut zu lesen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:313
+#: pretix/static/pretixcontrol/js/ui/main.js:315
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Diese Farbe hat einen ausreichenden Kontrast und ist wahrscheinlich gut zu "
 "lesen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:317
+#: pretix/static/pretixcontrol/js/ui/main.js:319
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -573,32 +574,32 @@ msgstr ""
 "Diese Farbe hat einen schlechten Kontrast für Text auf einem weißen "
 "Hintergrund. Bitte wählen Sie eine dunklere Farbe."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:466
-#: pretix/static/pretixcontrol/js/ui/main.js:486
+#: pretix/static/pretixcontrol/js/ui/main.js:468
+#: pretix/static/pretixcontrol/js/ui/main.js:488
 msgid "Search query"
 msgstr "Suchbegriff"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:484
+#: pretix/static/pretixcontrol/js/ui/main.js:486
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:485
+#: pretix/static/pretixcontrol/js/ui/main.js:487
 msgid "None"
 msgstr "Keine"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:489
+#: pretix/static/pretixcontrol/js/ui/main.js:491
 msgid "Selected only"
 msgstr "Nur ausgewählte"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:892
+#: pretix/static/pretixcontrol/js/ui/main.js:894
 msgid "Use a different name internally"
 msgstr "Intern einen anderen Namen verwenden"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:932
+#: pretix/static/pretixcontrol/js/ui/main.js:934
 msgid "Click to close"
 msgstr "Klicken zum Schließen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1007
+#: pretix/static/pretixcontrol/js/ui/main.js:1009
 msgid "You have unsaved changes!"
 msgstr "Sie haben ungespeicherte Änderungen!"
 
@@ -663,22 +664,28 @@ msgstr "Sie erhalten %(currency)s %(amount)s zurück"
 msgid "Please enter the amount the organizer can keep."
 msgstr "Bitte geben Sie den Betrag ein, den der Veranstalter einbehalten darf."
 
-#: pretix/static/pretixpresale/js/ui/main.js:436
+#: pretix/static/pretixpresale/js/ui/main.js:412
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Bitte tragen Sie eine Menge für eines der Produkte ein."
 
-#: pretix/static/pretixpresale/js/ui/main.js:472
+#: pretix/static/pretixpresale/js/ui/main.js:448
 msgid "required"
 msgstr "verpflichtend"
 
-#: pretix/static/pretixpresale/js/ui/main.js:575
-#: pretix/static/pretixpresale/js/ui/main.js:594
+#: pretix/static/pretixpresale/js/ui/main.js:551
+#: pretix/static/pretixpresale/js/ui/main.js:570
 msgid "Time zone:"
 msgstr "Zeitzone:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:585
+#: pretix/static/pretixpresale/js/ui/main.js:561
 msgid "Your local time:"
 msgstr "Deine lokale Zeit:"
+
+#: pretix/static/pretixpresale/js/walletdetection.js:39
+#, fuzzy
+#| msgid "Apple Pay"
+msgid "Google Pay"
+msgstr "Apple Pay"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"

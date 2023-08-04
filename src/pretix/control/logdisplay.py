@@ -368,6 +368,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.reusable_medium.created.auto': _('The reusable medium has been created automatically.'),
         'pretix.reusable_medium.changed': _('The reusable medium has been changed.'),
         'pretix.reusable_medium.linked_orderposition.changed': _('The medium has been connected to a new ticket.'),
+        'pretix.reusable_medium.linked_giftcard.changed': _('The medium has been connected to a new gift card.'),
         'pretix.email.error': _('Sending of an email has failed.'),
         'pretix.event.comment': _('The event\'s internal comment has been updated.'),
         'pretix.event.canceled': _('The event has been canceled.'),
@@ -432,6 +433,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
                                                                     'the order has been received and requires '
                                                                     'approval.'),
         'pretix.event.order.email.resend': _('An email with a link to the order detail page has been resent to the user.'),
+        'pretix.event.order.email.payment_failed': _('An email has been sent to notify the user that the payment failed.'),
         'pretix.event.order.payment.confirmed': _('Payment {local_id} has been confirmed.'),
         'pretix.event.order.payment.canceled': _('Payment {local_id} has been canceled.'),
         'pretix.event.order.payment.canceled.failed': _('Canceling payment {local_id} has failed.'),

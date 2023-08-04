@@ -126,7 +126,7 @@ def test_event_validate(token_client, organizer, team, event):
     assert resp.data == {"_format": ["\"FOOBAR\" is not a valid choice."]}
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_org_validate_events(token_client, organizer, team, event):
     resp = token_client.post('/api/v1/organizers/{}/exporters/orderlist/run/'.format(organizer.slug), data={
         '_format': 'xlsx',
@@ -164,7 +164,7 @@ def test_org_validate_events(token_client, organizer, team, event):
     assert resp.data == {"events": [f"Object with slug={event.slug} does not exist."]}
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_org_run_limit_events(token_client, organizer, team, event, event2):
     resp = token_client.post('/api/v1/organizers/{}/exporters/eventdata/run/'.format(organizer.slug), data={
         '_format': 'default',
@@ -199,7 +199,7 @@ def test_org_run_limit_events(token_client, organizer, team, event, event2):
     assert resp.getvalue().strip().count(b"\n") == 1
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_run_success(token_client, organizer, team, event):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/exporters/orderlist/run/'.format(organizer.slug, event.slug), data={
         '_format': 'xlsx',
@@ -212,7 +212,7 @@ def test_run_success(token_client, organizer, team, event):
     assert resp["Content-Type"] == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_run_success_old_date_frame(token_client, organizer, team, event):
     resp = token_client.post('/api/v1/organizers/{}/events/{}/exporters/orderlist/run/'.format(organizer.slug, event.slug), data={
         '_format': 'xlsx',
@@ -261,7 +261,7 @@ def test_gone_without_celery(token_client, organizer, team, event):
     assert resp.status_code == 410
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_org_level_export(token_client, organizer, team, event):
     resp = token_client.post('/api/v1/organizers/{}/exporters/giftcardlist/run/'.format(organizer.slug), data={
         'date': '2022-10-05T00:00:00Z',

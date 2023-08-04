@@ -945,6 +945,7 @@ with scopes_disabled():
                 | Q(addon_to__attendee_email__icontains=value)
                 | Q(order__code__istartswith=value)
                 | Q(order__invoice_address__name_cached__icontains=value)
+                | Q(order__invoice_address__company__icontains=value)
                 | Q(order__email__icontains=value)
                 | Q(pk__in=matching_media)
             )

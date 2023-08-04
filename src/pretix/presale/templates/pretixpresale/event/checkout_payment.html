@@ -3,6 +3,10 @@
 {% load money %}
 {% load bootstrap3 %}
 {% load rich_text %}
+{% block custom_header %}
+    {{ block.super }}
+    {% include "pretixpresale/event/fragment_walletdetection_head.html" %}
+{% endblock %}
 {% block inner %}
     {% if current_payments %}
         <p>{% trans "You already selected the following payment methods:" %}</p>
@@ -71,7 +75,8 @@
                                            {% if selected == p.provider.identifier %}checked="checked"{% endif %}
                                            id="input_payment_{{ p.provider.identifier }}"
                                            aria-describedby="payment_{{ p.provider.identifier }}"
-                                           data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}"/>
+                                           data-toggle="radiocollapse" data-target="#payment_{{ p.provider.identifier }}"
+                                           data-wallets="{{ p.provider.walletqueries|join:"|" }}" />
                                     <label for="input_payment_{{ p.provider.identifier }}"><strong>{{ p.provider.public_name }}</strong></label>
                                 </p>
                             </div>

@@ -52,7 +52,7 @@ def env():
     return event, user, t
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_event_export(client, env):
     client.login(email="dummy@dummy.dummy", password="dummy")
     response = client.get("/control/event/dummy/dummy/orders/export/?identifier=itemdata")
@@ -69,7 +69,7 @@ def test_event_export(client, env):
     assert len(b"".join(response.streaming_content).split(b"\n")) == 3
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_event_export_schedule(client, env):
     client.login(email="dummy@dummy.dummy", password="dummy")
     response = client.get("/control/event/dummy/dummy/orders/export/?identifier=itemdata")
@@ -161,7 +161,7 @@ def test_event_export_schedule(client, env):
     assert env[0].scheduled_exports.count() == 0
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_event_limited_permission(client, env):
     env[2].can_change_event_settings = False
     env[2].save()
@@ -212,7 +212,7 @@ def test_event_limited_permission(client, env):
     assert response.status_code == 302
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_organizer_export(client, env):
     client.login(email="dummy@dummy.dummy", password="dummy")
     response = client.get("/control/organizer/dummy/export/?identifier=eventdata")
@@ -230,7 +230,7 @@ def test_organizer_export(client, env):
     assert len(b"".join(response.streaming_content).split(b"\n")) == 3
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_organizer_export_schedule(client, env):
     client.login(email="dummy@dummy.dummy", password="dummy")
     response = client.get("/control/organizer/dummy/export/?identifier=eventdata")
@@ -312,7 +312,6 @@ def test_organizer_export_schedule(client, env):
         "schedule-mail_subject": "Product data, my friend!",
         "schedule-mail_template": "Mail body"
     }, follow=True)
-    print(response.content)
     assert b"Your export schedule has been saved, but no next export is planned" in response.content
     s.refresh_from_db()
     assert s.schedule_next_run is None
@@ -329,7 +328,7 @@ def test_organizer_export_schedule(client, env):
     assert env[0].organizer.scheduled_exports.count() == 0
 
 
-@pytest.mark.django_db
+@pytest.mark.django_db(transaction=True)
 def test_organizer_limited_permission(client, env):
     env[2].can_change_organizer_settings = False
     env[2].save()

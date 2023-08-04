@@ -530,7 +530,8 @@ class CheckInListSimulator(EventPermissionRequiredMixin, FormView):
                 and (self.result["status"] in ("ok", "incomplete") or self.result["reason"] == "rules"):
             op = OrderPosition.objects.get(pk=self.result["position"]["id"])
             rule_data = LazyRuleVars(op, self.list, form.cleaned_data["datetime"])
-            rule_graph = _logic_annotate_for_graphic_explain(self.list.rules, op.subevent or self.list.event, rule_data)
+            rule_graph = _logic_annotate_for_graphic_explain(self.list.rules, op.subevent or self.list.event, rule_data,
+                                                             form.cleaned_data["datetime"])
             self.result["rule_graph"] = rule_graph
 
         if self.result.get("questions"):

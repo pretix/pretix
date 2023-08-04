@@ -1,5 +1,6 @@
 2FA
 ABN
+AES
 Absenderadresse
 Absenderinformation
 Absendername
@@ -74,6 +75,7 @@ Cronjob
 csv
 Customer
 CZK
+Dashboard
 Debug
 dekodi
 deliverability
@@ -178,6 +180,7 @@ Merchandise
 Meta
 Metadaten
 Mi
+Mifare
 Mitgliedschafts
 Mitgliedschaftsdauer
 min
@@ -191,6 +194,7 @@ NFC
 Nr
 NREI
 number
+NXP
 OK
 On
 Open
@@ -215,6 +219,7 @@ Plugins
 POS
 Postfix
 PostgreSQL
+PPRO
 prefix
 pretix
 pretixdesk
@@ -313,6 +318,7 @@ txt
 überzahlte
 uhrzeit
 UID
+Ultralight
 ungespeicherte
 unkategorisiert
 Unkategorisierte

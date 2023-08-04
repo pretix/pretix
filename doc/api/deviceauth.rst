@@ -35,8 +35,12 @@ as well as the type of underlying hardware. Example:
        "os_name": "Android",
        "os_version": "2.3.6",
        "software_brand": "pretixdroid",
-       "software_version": "4.0.0"
+       "software_version": "4.0.0",
+       "rsa_pubkey": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqh…nswIDAQAB\n-----END PUBLIC KEY-----\n"
    }
+
+The ``rsa_pubkey`` is optional any only required for certain fatures such as working with reusable
+media and NFC cryptography.
 
 Every initialization token can only be used once. On success, you will receive a response containing
 information on your device as well as your API token:
@@ -137,8 +141,28 @@ The response will look like this:
          "id": 3,
          "name": "South entrance"
        }
-     }
+     },
+     "server": {
+       "version": {
+         "pretix": "3.6.0.dev0",
+         "pretix_numeric": 30060001000
+       }
+     },
+     "medium_key_sets": [
+       {
+         "public_id": 3456349,
+         "organizer": "foo",
+         "active": true,
+         "media_type": "nfc_mf0aes",
+         "uid_key": "base64-encoded-encrypted-key",
+         "diversification_key": "base64-encoded-encrypted-key",
+       }
+     ]
    }
+
+``"medium_key_sets`` will always be empty if you did not set an ``rsa_pubkey``.
+The individual keys in the key sets are encrypted with the device's ``rsa_pubkey``
+using ``RSA/ECB/PKCS1Padding``.
 
 Creating a new API key
 ----------------------

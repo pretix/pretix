@@ -26,7 +26,7 @@ from django.db import models
 from django.db.models import Exists, OuterRef, Q
 from django.utils import timezone
 from django.utils.formats import date_format
-from django.utils.timezone import make_aware
+from django.utils.timezone import make_aware, now
 from django.utils.translation import gettext_lazy as _, ngettext
 from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
@@ -34,7 +34,7 @@ from i18nfield.fields import I18nCharField, I18nTextField
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Event, InvoiceAddress, Item, Order, OrderPosition, SubEvent,
+    Event, InvoiceAddress, Item, Order, OrderPosition, SubEvent, fields,
 )
 from pretix.base.models.base import LoggingMixin
 from pretix.base.services.mail import SendMailException
@@ -126,13 +126,16 @@ class ScheduledMail(models.Model):
                 Exists(OrderPosition.objects.filter(order=OuterRef('pk'), item_id__in=limit_products))
             )
 
-        if self.rule.include_pending:
-            status_q = Q(status__in=[Order.STATUS_PAID, Order.STATUS_PENDING])
-        else:
-            status_q = Q(
-                Q(status=Order.STATUS_PAID) |
-                Q(status=Order.STATUS_PENDING, valid_if_pending=True)
-            )
+        status_q = Q(status__in=self.rule.restrict_to_status)
+        if 'n__pending_approval' in self.rule.restrict_to_status:
+            status_q |= Q(status=Order.STATUS_PENDING, require_approval=True)
+        if 'n__not_pending_approval_and_not_valid_if_pending' in self.rule.restrict_to_status:
+            status_q |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=False)
+        if 'n__valid_if_pending' in self.rule.restrict_to_status:
+            status_q |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=True)
+        if 'n__pending_overdue' in self.rule.restrict_to_status:
+            status_q |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=False,
+                          expires__lt=now())
 
         if self.last_successful_order_id:
             orders = orders.filter(
@@ -141,7 +144,6 @@ class ScheduledMail(models.Model):
 
         orders = orders.filter(
             status_q,
-            require_approval=False,
         ).order_by('pk').select_related('invoice_address').prefetch_related('positions')
 
         send_to_orders = self.rule.send_to in (Rule.CUSTOMERS, Rule.BOTH)
@@ -212,10 +214,9 @@ class Rule(models.Model, LoggingMixin):
     all_products = models.BooleanField(default=True, verbose_name=_('All products'))
     limit_products = models.ManyToManyField(Item, blank=True, verbose_name=_('Limit products'))
 
-    include_pending = models.BooleanField(
-        default=False,
-        verbose_name=_('Include pending orders'),
-        help_text=_('By default, only paid orders will receive the email')
+    restrict_to_status = fields.MultiStringField(
+        verbose_name=_("Restrict to orders with status"),
+        default=['p', 'n__valid_if_pending'],
     )
 
     attach_ical = models.BooleanField(

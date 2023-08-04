@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-06-27 12:51+0000\n"
+"POT-Creation-Date: 2023-07-21 11:46+0000\n"
 "PO-Revision-Date: 2023-06-26 23:00+0000\n"
 "Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
@@ -38,6 +38,7 @@ msgid "Venmo"
 msgstr "Venmo"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:36
+#: pretix/static/pretixpresale/js/walletdetection.js:38
 msgid "Apple Pay"
 msgstr "Apple Pay"
 
@@ -135,8 +136,8 @@ msgid "Continue"
 msgstr "繼續"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:222
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:157
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:188
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:204
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:235
 msgid "Confirming your payment …"
 msgstr "確認你的付款資訊...…"
 
@@ -158,15 +159,15 @@ msgstr "已付款訂單"
 msgid "Total revenue"
 msgstr "全部收入"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:12
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:13
 msgid "Contacting Stripe …"
 msgstr "聯繫 Stripe 當中…"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:65
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:70
 msgid "Total"
 msgstr "全部"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:164
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:211
 msgid "Contacting your bank …"
 msgstr "聯繫你的銀行當中…"
 
@@ -542,46 +543,46 @@ msgstr "產生訊息…"
 msgid "Unknown error."
 msgstr "不知名錯誤。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:309
+#: pretix/static/pretixcontrol/js/ui/main.js:311
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "你的顏色對比度很高，非常易於閱讀！"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:313
+#: pretix/static/pretixcontrol/js/ui/main.js:315
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr "你的色彩有不錯的對比度，大慨好閱讀！"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:317
+#: pretix/static/pretixcontrol/js/ui/main.js:319
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
 msgstr "你的色彩與白色背景上的文字對比度差，請選擇較深的色調。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:466
-#: pretix/static/pretixcontrol/js/ui/main.js:486
+#: pretix/static/pretixcontrol/js/ui/main.js:468
+#: pretix/static/pretixcontrol/js/ui/main.js:488
 msgid "Search query"
 msgstr "搜索查詢"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:484
+#: pretix/static/pretixcontrol/js/ui/main.js:486
 msgid "All"
 msgstr "所有"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:485
+#: pretix/static/pretixcontrol/js/ui/main.js:487
 msgid "None"
 msgstr "無"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:489
+#: pretix/static/pretixcontrol/js/ui/main.js:491
 msgid "Selected only"
 msgstr "只選定"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:892
+#: pretix/static/pretixcontrol/js/ui/main.js:894
 msgid "Use a different name internally"
 msgstr "在內部使用其他名稱"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:932
+#: pretix/static/pretixcontrol/js/ui/main.js:934
 msgid "Click to close"
 msgstr "點擊關閉"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1007
+#: pretix/static/pretixcontrol/js/ui/main.js:1009
 msgid "You have unsaved changes!"
 msgstr "你有未儲存的變更！"
 
@@ -643,22 +644,28 @@ msgstr "你拿回 %(currency)s %(amount)s"
 msgid "Please enter the amount the organizer can keep."
 msgstr "請輸入主辦方可以保留的金額。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:436
+#: pretix/static/pretixpresale/js/ui/main.js:412
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "請輸入其中一種門票類型的數量。"
 
-#: pretix/static/pretixpresale/js/ui/main.js:472
+#: pretix/static/pretixpresale/js/ui/main.js:448
 msgid "required"
 msgstr "需要"
 
-#: pretix/static/pretixpresale/js/ui/main.js:575
-#: pretix/static/pretixpresale/js/ui/main.js:594
+#: pretix/static/pretixpresale/js/ui/main.js:551
+#: pretix/static/pretixpresale/js/ui/main.js:570
 msgid "Time zone:"
 msgstr "時區："
 
-#: pretix/static/pretixpresale/js/ui/main.js:585
+#: pretix/static/pretixpresale/js/ui/main.js:561
 msgid "Your local time:"
 msgstr "你的當地時間："
+
+#: pretix/static/pretixpresale/js/walletdetection.js:39
+#, fuzzy
+#| msgid "Apple Pay"
+msgid "Google Pay"
+msgstr "Apple Pay"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
