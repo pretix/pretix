@@ -2876,7 +2876,7 @@ Your {organizer} team"""))  # noqa: W291
         'form_class': ExtFileField,
         'form_kwargs': dict(
             label=_('Social media image'),
-            ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
+            ext_whitelist=(".png", ".jpg", ".gif", ".jpeg", ".svg"),
             max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
             help_text=_('This picture will be used as a preview if you post links to your ticket shop on social media. '
                         'Facebook advises to use a picture size of 1200 x 630 pixels, however some platforms like '
@@ -2886,7 +2886,7 @@ Your {organizer} team"""))  # noqa: W291
         'serializer_class': UploadedFileField,
         'serializer_kwargs': dict(
             allowed_types=[
-                'image/png', 'image/jpeg', 'image/gif'
+                'image/png', 'image/jpeg', 'image/gif', 'image/svg+xml'
             ],
             max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
         )
@@ -2897,7 +2897,7 @@ Your {organizer} team"""))  # noqa: W291
         'form_class': ExtFileField,
         'form_kwargs': dict(
             label=_('Logo image'),
-            ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
+            ext_whitelist=(".png", ".jpg", ".gif", ".jpeg", ".svg"),
             required=False,
             max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
             help_text=_('We will show your logo with a maximal height and width of 2.5 cm.')
@@ -2905,7 +2905,7 @@ Your {organizer} team"""))  # noqa: W291
         'serializer_class': UploadedFileField,
         'serializer_kwargs': dict(
             allowed_types=[
-                'image/png', 'image/jpeg', 'image/gif'
+                'image/png', 'image/jpeg', 'image/gif', 'image/svg+xml'
             ],
             max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
         )
