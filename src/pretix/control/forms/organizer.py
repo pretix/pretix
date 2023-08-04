@@ -420,7 +420,7 @@ class OrganizerSettingsForm(SettingsForm):
 
     organizer_logo_image = ExtFileField(
         label=_('Header image'),
-        ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
+        ext_whitelist=(".png", ".jpg", ".gif", ".jpeg", ".svg"),
         max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
         required=False,
         help_text=_('If you provide a logo image, we will by default not show your organization name '
@@ -430,7 +430,7 @@ class OrganizerSettingsForm(SettingsForm):
     )
     favicon = ExtFileField(
         label=_('Favicon'),
-        ext_whitelist=(".ico", ".png", ".jpg", ".gif", ".jpeg"),
+        ext_whitelist=(".ico", ".png", ".jpg", ".gif", ".jpeg", ".svg"),
         required=False,
         max_size=settings.FILE_UPLOAD_MAX_SIZE_FAVICON,
         help_text=_('If you provide a favicon, we will show it instead of the default pretix icon. '
