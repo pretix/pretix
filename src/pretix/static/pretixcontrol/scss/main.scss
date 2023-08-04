@@ -412,6 +412,11 @@ body.loading #wrapper {
         white-space: nowrap;
         overflow: hidden;
     }
+    .loading {
+        padding: 10px;
+        text-align: center;
+        color: lightgrey;
+    }
 }
 
 .sidebar-content {

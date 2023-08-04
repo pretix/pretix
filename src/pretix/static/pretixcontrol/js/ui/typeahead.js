@@ -11,11 +11,21 @@ $(function () {
         var $container = $(this);
         var $query = $(this).find('[data-typeahead-query]').length ? $(this).find('[data-typeahead-query]') : $($(this).attr("data-typeahead-field"));
         $container.find("li:not(.query-holder)").remove();
-        var lastQuery = "";
+        var lastQuery = null;
         var runQueryTimeout = null;
+        var loadIndicatorTimeout = null;
+        function showLoadIndicator() {
+            $container.find("li:not(.query-holder)").remove();
+            $container.append("<li class='loading'><span class='fa fa-4x fa-cog fa-spin'></span></li>");
+        }
         function runQuery() {
-            lastQuery = $query.val();
             var thisQuery = $query.val();
+            if (thisQuery === lastQuery) return;
+            lastQuery = $query.val();
+
+            window.clearTimeout(loadIndicatorTimeout)
+            loadIndicatorTimeout = window.setTimeout(showLoadIndicator, 80)
+
             $.getJSON(
                 $container.attr("data-source") + "?query=" + encodeURIComponent($query.val()) + (typeof $container.attr("data-organizer") !== "undefined" ? "&organizer=" + $container.attr("data-organizer") : ""),
                 function (data) {
@@ -23,6 +33,7 @@ $(function () {
                         // Lost race condition
                         return;
                     }
+                    window.clearTimeout(loadIndicatorTimeout);
                     $container.find("li:not(.query-holder)").remove();
                     $.each(data.results, function (i, res) {
                         let $linkContent = $("<div>");
