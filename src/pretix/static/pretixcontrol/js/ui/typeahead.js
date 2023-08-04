@@ -17,6 +17,7 @@ $(function () {
         function showLoadIndicator() {
             $container.find("li:not(.query-holder)").remove();
             $container.append("<li class='loading'><span class='fa fa-4x fa-cog fa-spin'></span></li>");
+            $container.toggleClass('focused', $query.is(":focus") && $container.children().length > 0);
         }
         function runQuery() {
             var thisQuery = $query.val();
@@ -93,15 +94,14 @@ $(function () {
         $query.on("forceRunQuery", function () {
             runQuery();
         });
-        $query.on("change", function () {
+        $query.on("input", function () {
             if ($container.attr("data-typeahead-field") && $query.val() === "") {
                 $container.removeClass('focused');
                 $container.find("li:not(.query-holder)").remove();
+                lastQuery = null;
                 return;
             }
-            if (runQueryTimeout != null) {
-                window.clearTimeout(runQueryTimeout)
-            }
+            window.clearTimeout(runQueryTimeout)
             runQueryTimeout = window.setTimeout(runQuery, 250)
         });
         $query.on("keydown", function (event) {
@@ -155,8 +155,6 @@ $(function () {
                 event.preventDefault();
                 event.stopPropagation();
                 return true;
-            } else {
-                $(this).change();
             }
         });
     });
