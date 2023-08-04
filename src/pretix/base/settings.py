@@ -2793,7 +2793,7 @@ Your {organizer} team"""))  # noqa: W291
         'form_class': ExtFileField,
         'form_kwargs': dict(
             label=_('Header image'),
-            ext_whitelist=(".png", ".jpg", ".gif", ".jpeg"),
+            ext_whitelist=(".png", ".jpg", ".gif", ".jpeg",".svg"),
             max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
             help_text=_('If you provide a logo image, we will by default not show your event name and date '
                         'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
@@ -2803,7 +2803,7 @@ Your {organizer} team"""))  # noqa: W291
         'serializer_class': UploadedFileField,
         'serializer_kwargs': dict(
             allowed_types=[
-                'image/png', 'image/jpeg', 'image/gif'
+                'image/png', 'image/jpeg', 'image/gif', 'image/svg+xml'
             ],
             max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE,
         )
