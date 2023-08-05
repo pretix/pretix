@@ -41,12 +41,12 @@
         <div class="{% if not organizer_logo or not organizer.settings.organizer_logo_image_large %}pull-left flip{% endif %}">
             {% if organizer_logo and organizer.settings.organizer_logo_image_large %}
                 <a href="{% eventurl organizer "presale:organizer.index" %}" title="{{ organizer.name }}">
-                    <img src="{{ organizer_logo|thumb:'1170x5000' }}" alt="{{ organizer.name }}"
+                    <img src="{{ organizer_logo|thumbnotsvg:'1170x5000' }}" alt="{{ organizer.name }}"
                          class="organizer-logo" />
                 </a>
             {% elif organizer_logo %}
                 <a href="{% eventurl organizer "presale:organizer.index" %}" title="{{ organizer.name }}">
-                    <img src="{{ organizer_logo|thumb:'5000x120' }}" alt="{{ organizer.name }}"
+                    <img src="{{ organizer_logo|thumbnotsvg:'5000x120' }}" alt="{{ organizer.name }}"
                             class="organizer-logo" />
                 </a>
             {% else %}

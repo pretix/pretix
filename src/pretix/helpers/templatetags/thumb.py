@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+import os
 
 from django import template
 from django.core.files import File
@@ -40,3 +41,15 @@ def thumb(source, arg):
     except:
         logger.exception(f'Failed to create thumbnail of {source}')
         return default_storage.url(source)
+
+@register.filter
+def thumbnotsvg(source, arg):
+    if isinstance(source, File):
+        _source = source.name
+    else:
+        _source = source
+    filesextension = str(os.path.splitext(_source)[1]).lower()
+    if filesextension == ".svg":
+        return default_storage.url(_source)
+    else:
+        return thumb(source, arg)

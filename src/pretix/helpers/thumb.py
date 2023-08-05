@@ -21,8 +21,10 @@
 #
 import hashlib
 import math
-from io import BytesIO
+import os
 
+from io import BytesIO
+from cairosvg import svg2png
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from PIL import Image, ImageOps, ImageSequence
@@ -83,7 +85,7 @@ def get_minsize(size):
     min_width = 0
     min_height = 0
     if "x" in size:
-        sizes = size.split('x')
+        sizes = size.split("x")
         if sizes[0].endswith("_"):
             min_width = int(sizes[0][:-1])
         if sizes[1].endswith("_"):
@@ -96,17 +98,19 @@ def get_minsize(size):
 
 def get_sizes(size, imgsize):
     crop = False
-    if size.endswith('^'):
+    if size.endswith("^"):
         crop = True
         size = size[:-1]
 
     if crop and "_" in size:
-        raise ThumbnailError('Size %s has errors: crop and minsize cannot be combined.' % size)
+        raise ThumbnailError(
+            "Size %s has errors: crop and minsize cannot be combined." % size
+        )
 
     size = size.replace("_", "")
 
-    if 'x' in size:
-        size = [int(p) for p in size.split('x')]
+    if "x" in size:
+        size = [int(p) for p in size.split("x")]
     else:
         size = [int(size), int(size)]
 
@@ -115,15 +119,26 @@ def get_sizes(size, imgsize):
         wfactor = min(1, size[0] / imgsize[0])
         hfactor = min(1, size[1] / imgsize[1])
         if wfactor == hfactor:
-            return (int(imgsize[0] * wfactor), int(imgsize[1] * hfactor)), \
-                   (0, int((imgsize[1] * wfactor - imgsize[1] * hfactor) / 2),
-                    imgsize[0] * hfactor, int((imgsize[1] * wfactor + imgsize[1] * wfactor) / 2))
+            return (int(imgsize[0] * wfactor), int(imgsize[1] * hfactor)), (
+                0,
+                int((imgsize[1] * wfactor - imgsize[1] * hfactor) / 2),
+                imgsize[0] * hfactor,
+                int((imgsize[1] * wfactor + imgsize[1] * wfactor) / 2),
+            )
         elif wfactor > hfactor:
-            return (int(size[0]), int(imgsize[1] * wfactor)), \
-                   (0, int((imgsize[1] * wfactor - size[1]) / 2), size[0], int((imgsize[1] * wfactor + size[1]) / 2))
+            return (int(size[0]), int(imgsize[1] * wfactor)), (
+                0,
+                int((imgsize[1] * wfactor - size[1]) / 2),
+                size[0],
+                int((imgsize[1] * wfactor + size[1]) / 2),
+            )
         else:
-            return (int(imgsize[0] * hfactor), int(size[1])), \
-                   (int((imgsize[0] * hfactor - size[0]) / 2), 0, int((imgsize[0] * hfactor + size[0]) / 2), size[1])
+            return (int(imgsize[0] * hfactor), int(size[1])), (
+                int((imgsize[0] * hfactor - size[0]) / 2),
+                0,
+                int((imgsize[0] * hfactor + size[0]) / 2),
+                size[1],
+            )
     else:
         wfactor = min(1, size[0] / imgsize[0])
         hfactor = min(1, size[1] / imgsize[1])
@@ -150,7 +165,7 @@ def resize_image(image, size):
     if min_width > new_size[0] or min_height > new_size[1]:
         padding = math.ceil(max(min_width - new_size[0], min_height - new_size[1]) / 2)
         if image.mode not in ("RGB", "RGBA"):
-            image = image.convert('RGB')
+            image = image.convert("RGB")
         image = ImageOps.expand(image, border=padding, fill="white")
 
         new_width = max(min_width, new_size[0])
@@ -165,40 +180,45 @@ def resize_image(image, size):
 
 def create_thumbnail(sourcename, size):
     source = default_storage.open(sourcename)
-    image = Image.open(BytesIO(source.read()))
+    file_name, file_extension = os.path.splitext(sourcename)
+    if str(file_extension).lower() == ".svg":
+        image = Image.open(
+            BytesIO(svg2png(file_obj=default_storage.open(sourcename))))
+    else:
+        image = Image.open(BytesIO(source.read()))
     try:
         image.load()
     except:
-        raise ThumbnailError('Could not load image')
+        raise ThumbnailError("Could not load image")
 
     frames = [resize_image(frame, size) for frame in ImageSequence.Iterator(image)]
     image_out = frames[0]
     save_kwargs = {}
 
-    if source.name.lower().endswith('.jpg') or source.name.lower().endswith('.jpeg'):
+    if source.name.lower().endswith(".jpg") or source.name.lower().endswith(".jpeg"):
         # Yields better file sizes for photos
-        target_ext = 'jpeg'
+        target_ext = "jpeg"
         quality = 95
-    elif source.name.lower().endswith('.gif') or source.name.lower().endswith('.png'):
+    elif source.name.lower().endswith(".gif") or source.name.lower().endswith(".png"):
         target_ext = source.name.lower()[-3:]
         quality = None
         image_out.info = image.info
         save_kwargs = {
-            'append_images': frames[1:],
-            'loop': image.info.get('loop', 0),
-            'save_all': True,
+            "append_images": frames[1:],
+            "loop": image.info.get("loop", 0),
+            "save_all": True,
         }
     else:
-        target_ext = 'png'
+        target_ext = "png"
         quality = None
 
     checksum = hashlib.md5(image.tobytes()).hexdigest()
-    name = checksum + '.' + size.replace('^', 'c') + '.' + target_ext
+    name = checksum + "." + size.replace("^", "c") + "." + target_ext
     buffer = BytesIO()
-    if image_out.mode == "P" and source.name.lower().endswith('.png'):
-        image_out = image_out.convert('RGBA')
+    if image_out.mode == "P" and source.name.lower().endswith(".png"):
+        image_out = image_out.convert("RGBA")
     if image_out.mode not in ("1", "L", "RGB", "RGBA"):
-        image_out = image_out.convert('RGB')
+        image_out = image_out.convert("RGB")
     image_out.save(fp=buffer, format=target_ext.upper(), quality=quality, **save_kwargs)
     imgfile = ContentFile(buffer.getvalue())
 
