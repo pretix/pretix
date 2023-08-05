@@ -42,6 +42,7 @@ def thumb(source, arg):
         logger.exception(f'Failed to create thumbnail of {source}')
         return default_storage.url(source)
 
+
 @register.filter
 def thumbnotsvg(source, arg):
     if isinstance(source, File):
