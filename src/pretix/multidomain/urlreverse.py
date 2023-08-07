@@ -128,7 +128,7 @@ def eventreverse(obj, name, kwargs=None):
     :param kwargs: A dictionary of additional keyword arguments that should be used. You do not
         need to provide the organizer or event slug here, it will be added automatically as
         needed.
-    :returns: An absolute URL (including scheme and host) as a string
+    :returns: An absolute or relative URL as a string
     """
     from pretix.multidomain import (
         event_domain_urlconf, maindomain_urlconf, organizer_domain_urlconf,
@@ -177,6 +177,17 @@ def eventreverse(obj, name, kwargs=None):
 
 
 def build_absolute_uri(obj, urlname, kwargs=None):
+    """
+    Works similar to ``eventreverse`` but always returns an absolute URL.
+
+    :param obj: An ``Event`` or ``Organizer`` object
+    :param name: The name of the URL route
+    :type name: str
+    :param kwargs: A dictionary of additional keyword arguments that should be used. You do not
+        need to provide the organizer or event slug here, it will be added automatically as
+        needed.
+    :returns: An absolute URL (including scheme and host) as a string
+    """
     reversedurl = eventreverse(obj, urlname, kwargs)
     if '://' in reversedurl:
         return reversedurl
