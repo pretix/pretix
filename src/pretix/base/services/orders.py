@@ -2476,6 +2476,11 @@ class OrderChangeManager:
             split_order.status = Order.STATUS_PAID
         else:
             split_order.status = Order.STATUS_PENDING
+            if self.order.status == Order.STATUS_PAID:
+                split_order.set_expires(
+                    now(),
+                    list(set(p.subevent_id for p in split_positions))
+                )
         split_order.save()
 
         if offset_amount > Decimal('0.00'):

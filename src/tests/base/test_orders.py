@@ -2228,6 +2228,7 @@ class OrderChangeManagerTests(TestCase):
     @classscope(attr='o')
     def test_split_and_change_higher(self):
         self.order.status = Order.STATUS_PAID
+        self.order.expires = now() - timedelta(days=1)
         self.order.save()
         self.order.payments.create(
             provider='manual',
@@ -2247,6 +2248,7 @@ class OrderChangeManagerTests(TestCase):
         assert not self.order.fees.exists()
         assert self.order.status == Order.STATUS_PAID
         assert self.order.pending_sum == Decimal('0.00')
+        assert self.order.expires < now()
         r = self.order.refunds.last()
         assert r.provider == 'offsetting'
         assert r.amount == Decimal('23.00')
@@ -2255,6 +2257,7 @@ class OrderChangeManagerTests(TestCase):
         # New order
         assert self.op2.order != self.order
         o2 = self.op2.order
+        assert o2.expires > now()
         assert o2.total == Decimal('42.00')
         assert o2.status == Order.STATUS_PENDING
         assert o2.positions.count() == 1
