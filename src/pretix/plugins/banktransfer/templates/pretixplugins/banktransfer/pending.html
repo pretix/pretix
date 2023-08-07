@@ -105,13 +105,19 @@ SCT
 <link rel="stylesheet" href="{% static "pretixplugins/banktransfer/swisscross.css" %}">
 {% endif %}
 
-<hr>
-<form class="form-inline helper-display-inline" method="post"
-        action="{% eventurl event "plugins:banktransfer:mail_invoice" order=order.code secret=order.secret %}">
-    {% csrf_token %}
-    <input type="email" name="email" class="form-control" value=""/>
-    <button class="btn btn-default">
-        {% trans "Send invoice via email" %}
-    </button>
-</form>
-<hr>
+{% if has_invoices %}
+    <hr>
+    <form class="form-inline helper-display-inline" method="post"
+            action="{% eventurl event "plugins:banktransfer:mail_invoice" order=order.code secret=order.secret %}">
+        {% csrf_token %}
+        <p>
+            {% blocktrans trimmed %}
+                To send the invoice directly to your accounting department, please enter the email address:
+            {% endblocktrans %}
+        </p>
+        <label for="mail_invoice_email" class="sr-only">{% trans "Invoice recipient email" %}:</label>
+        <input type="email" name="email" id="mail_invoice_email" class="form-control" value="" required />
+        <button class="btn btn-default">{% trans "Send invoice via email" %}</button>
+    </form>
+    <hr>
+{% endif %}
