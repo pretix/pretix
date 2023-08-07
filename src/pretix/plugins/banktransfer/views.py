@@ -899,16 +899,21 @@ class SendInvoiceMailView(EventViewMixin, OrderDetailMixin, View):
     def post(self, request, *args, **kwargs):
         if not self.order:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
+        try:
+            validate_email(request.POST['email'])
+        except ValidationError:
+            messages.error(request, _('Please enter a valid email address.'))
+            return redirect(self.get_order_url())
 
         last_payment = self.order.payments.last()
         last_invoice = self.order.invoices.last()
         if not last_payment or not last_invoice:
             messages.error(request, _('No payment or invoice found, please request an invoice first.'))
             return redirect(self.get_order_url())
+
         provider = last_payment.payment_provider
         provider.send_invoice_to_alternate_email(self.order, last_invoice, request.POST['email'])
 
         messages.success(request, _('Sending the latest invoice via e-mail to {email}.').format(email=request.POST['email']))
-
         return redirect(self.get_order_url())
 
