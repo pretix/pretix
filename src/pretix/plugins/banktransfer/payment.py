@@ -537,7 +537,7 @@ class BankTransfer(BasePaymentProvider):
             'details': self.settings.get('bank_details', as_type=LazyI18nString),
         }
         ctx['any_barcodes'] = ctx['swiss_qrbill'] or ctx['eu_barcodes']
-        return template.render(ctx)
+        return template.render(ctx, request=request)
 
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
         warning = None

@@ -42,16 +42,19 @@ from datetime import timedelta
 from decimal import Decimal
 from typing import Set
 
+from django.utils.decorators import method_decorator
 from django import forms
 from django.contrib import messages
 from django.db import transaction
 from django.db.models import Count, Q, QuerySet
-from django.http import FileResponse, JsonResponse
+from django.http import FileResponse, JsonResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
+from django.views.decorators.clickjacking import xframe_options_exempt
+from django.views.decorators.csrf import csrf_protect
 from django.views.generic import DetailView, FormView, ListView, View
 from django.views.generic.detail import SingleObjectMixin
 from localflavor.generic.forms import BICFormField, IBANFormField
@@ -75,6 +78,8 @@ from pretix.plugins.banktransfer.refund_export import (
     build_sepa_xml, get_refund_export_csv,
 )
 from pretix.plugins.banktransfer.tasks import process_banktransfers
+from pretix.presale.views import EventViewMixin
+from pretix.presale.views.order import OrderDetailMixin
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
 
@@ -886,3 +891,23 @@ class OrganizerSepaXMLExportView(OrganizerPermissionRequiredMixin, OrganizerDeta
             organizer=self.request.organizer,
             pk=self.kwargs.get('id')
         )
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class SendInvoiceMailView(EventViewMixin, OrderDetailMixin, View):
+    def post(self, request, *args, **kwargs):
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+
+        last_payment = self.order.payments.last()
+        last_invoice = self.order.invoices.last()
+        if not last_payment or not last_invoice:
+            messages.error(request, _('No payment or invoice found, please request an invoice first.'))
+            return redirect(self.get_order_url())
+        provider = last_payment.payment_provider
+        provider.send_invoice_to_alternate_email(self.order, last_invoice, request.POST['email'])
+
+        messages.success(request, _('Sending the latest invoice via e-mail to {email}.').format(email=request.POST['email']))
+
+        return redirect(self.get_order_url())
+

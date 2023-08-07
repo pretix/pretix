@@ -7,6 +7,7 @@
 {% load money %}
 {% load unidecode %}
 {% load rich_text %}
+{% load eventurl %}
 
 {% if pending_description %}
     {{ pending_description|rich_text }}
@@ -103,3 +104,14 @@ SCT
 {% if swiss_qrbill %}
 <link rel="stylesheet" href="{% static "pretixplugins/banktransfer/swisscross.css" %}">
 {% endif %}
+
+<hr>
+<form class="form-inline helper-display-inline" method="post"
+        action="{% eventurl event "plugins:banktransfer:mail_invoice" order=order.code secret=order.secret %}">
+    {% csrf_token %}
+    <input type="email" name="email" class="form-control" value=""/>
+    <button class="btn btn-default">
+        {% trans "Send invoice via E-Mail" %}
+    </button>
+</form>
+<hr>
