@@ -45,7 +45,7 @@ from typing import Set
 from django import forms
 from django.contrib import messages
 from django.core.exceptions import ValidationError
-from django.core.validators import EmailValidator, validate_email
+from django.core.validators import validate_email
 from django.db import transaction
 from django.db.models import Count, Q, QuerySet
 from django.http import FileResponse, JsonResponse, Http404
