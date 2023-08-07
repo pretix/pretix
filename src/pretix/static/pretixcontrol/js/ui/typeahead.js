@@ -11,11 +11,22 @@ $(function () {
         var $container = $(this);
         var $query = $(this).find('[data-typeahead-query]').length ? $(this).find('[data-typeahead-query]') : $($(this).attr("data-typeahead-field"));
         $container.find("li:not(.query-holder)").remove();
-        var lastQuery = "";
+        var lastQuery = null;
         var runQueryTimeout = null;
+        var loadIndicatorTimeout = null;
+        function showLoadIndicator() {
+            $container.find("li:not(.query-holder)").remove();
+            $container.append("<li class='loading'><span class='fa fa-4x fa-cog fa-spin'></span></li>");
+            $container.toggleClass('focused', $query.is(":focus") && $container.children().length > 0);
+        }
         function runQuery() {
-            lastQuery = $query.val();
             var thisQuery = $query.val();
+            if (thisQuery === lastQuery) return;
+            lastQuery = $query.val();
+
+            window.clearTimeout(loadIndicatorTimeout)
+            loadIndicatorTimeout = window.setTimeout(showLoadIndicator, 80)
+
             $.getJSON(
                 $container.attr("data-source") + "?query=" + encodeURIComponent($query.val()) + (typeof $container.attr("data-organizer") !== "undefined" ? "&organizer=" + $container.attr("data-organizer") : ""),
                 function (data) {
@@ -23,93 +34,58 @@ $(function () {
                         // Lost race condition
                         return;
                     }
+                    window.clearTimeout(loadIndicatorTimeout);
                     $container.find("li:not(.query-holder)").remove();
                     $.each(data.results, function (i, res) {
+                        let $linkContent = $("<div>");
                         if (res.type === "organizer") {
-                            $container.append(
-                                $("<li>").append(
-                                    $("<a>").attr("href", res.url).append(
-                                        $("<div>").append(
-                                            $("<span>").addClass("event-name-full").append(
-                                                $("<span>").addClass("fa fa-users fa-fw")
-                                            ).append(" ").append($("<div>").text(res.name).html())
-                                        )
-                                    ).on("mousedown", function (event) {
-                                        if ($(this).length) {
-                                            location.href = $(this).attr("href");
-                                        }
-                                        $(this).parent().addClass("active");
-                                        event.preventDefault();
-                                        event.stopPropagation();
-                                    })
-                                )
-                            );
+                            $linkContent.append(
+                                $("<span>").addClass("event-name-full").append(
+                                    $("<span>").addClass("fa fa-users fa-fw")
+                                ).append(" ").append($("<div>").text(res.name).html())
+                            )
                         } else if (res.type === "order" || res.type === "voucher") {
-                            $container.append(
-                                $("<li>").append(
-                                    $("<a>").attr("href", res.url).append(
-                                        $("<div>").append(
-                                            $("<span>").addClass("event-name-full").append($("<div>").text(res.title).html())
-                                        ).append(
-                                            $("<span>").addClass("event-organizer").append(
-                                                $("<span>").addClass("fa fa-calendar fa-fw")
-                                            ).append(" ").append($("<div>").text(res.event).html())
-                                        )
-                                    ).on("mousedown", function (event) {
-                                        if ($(this).length) {
-                                            location.href = $(this).attr("href");
-                                        }
-                                        $(this).parent().addClass("active");
-                                        event.preventDefault();
-                                        event.stopPropagation();
-                                    })
-                                )
-                            );
+                            $linkContent.append(
+                                $("<span>").addClass("event-name-full").append($("<div>").text(res.title).html())
+                            ).append(
+                                $("<span>").addClass("event-organizer").append(
+                                    $("<span>").addClass("fa fa-calendar fa-fw")
+                                ).append(" ").append($("<div>").text(res.event).html())
+                            )
                         } else if (res.type === "user") {
-                            $container.append(
-                                $("<li>").append(
-                                    $("<a>").attr("href", res.url).append(
-                                        $("<div>").append(
-                                            $("<span>").addClass("event-name-full").append(
-                                                $("<span>").addClass("fa fa-user fa-fw")
-                                            ).append(" ").append($("<div>").text(res.name).html())
-                                        )
-                                    ).on("mousedown", function (event) {
-                                        if ($(this).length) {
-                                            location.href = $(this).attr("href");
-                                        }
-                                        $(this).parent().addClass("active");
-                                        event.preventDefault();
-                                        event.stopPropagation();
-                                    })
-                                )
-                            );
+                            $linkContent.append(
+                                $("<span>").addClass("event-name-full").append(
+                                    $("<span>").addClass("fa fa-user fa-fw")
+                                ).append(" ").append($("<div>").text(res.name).html())
+                            )
                         } else {
-                            $container.append(
-                                $("<li>").append(
-                                    $("<a>").attr("href", res.url).append(
-                                        $("<div>").append(
-                                            $("<span>").addClass("event-name-full").append($("<div>").text(res.name).html())
-                                        ).append(
-                                            $("<span>").addClass("event-organizer").append(
-                                                $("<span>").addClass("fa fa-users fa-fw")
-                                            ).append(" ").append($("<div>").text(res.organizer).html())
-                                        ).append(
-                                            $("<span>").addClass("event-daterange").append(
-                                                $("<span>").addClass("fa fa-calendar fa-fw")
-                                            ).append(" ").append(res.date_range)
-                                        )
-                                    ).on("mousedown", function (event) {
-                                        if ($(this).length) {
-                                            location.href = $(this).attr("href");
-                                        }
-                                        $(this).parent().addClass("active");
-                                        event.preventDefault();
-                                        event.stopPropagation();
-                                    })
-                                )
-                            );
+                            $linkContent.append(
+                                $("<span>").addClass("event-name-full").append($("<div>").text(res.name).html())
+                            ).append(
+                                $("<span>").addClass("event-organizer").append(
+                                    $("<span>").addClass("fa fa-users fa-fw")
+                                ).append(" ").append($("<div>").text(res.organizer).html())
+                            ).append(
+                                $("<span>").addClass("event-daterange").append(
+                                    $("<span>").addClass("fa fa-calendar fa-fw")
+                                ).append(" ").append(res.date_range)
+                            )
                         }
+
+                        $container.append(
+                            $("<li>").append(
+                                $("<a>").attr("href", res.url).append(
+                                    $linkContent
+                                ).on("mousedown", function (event) {
+                                    if ($(this).length) {
+                                        location.href = $(this).attr("href");
+                                    }
+                                    $(this).parent().addClass("active");
+                                    event.preventDefault();
+                                    event.stopPropagation();
+                                })
+                            )
+                        );
                     });
                     $container.toggleClass('focused', $query.is(":focus") && $container.children().length > 0);
                 }
@@ -118,15 +94,14 @@ $(function () {
         $query.on("forceRunQuery", function () {
             runQuery();
         });
-        $query.on("change", function () {
+        $query.on("input", function () {
             if ($container.attr("data-typeahead-field") && $query.val() === "") {
                 $container.removeClass('focused');
                 $container.find("li:not(.query-holder)").remove();
+                lastQuery = null;
                 return;
             }
-            if (runQueryTimeout != null) {
-                window.clearTimeout(runQueryTimeout)
-            }
+            window.clearTimeout(runQueryTimeout)
             runQueryTimeout = window.setTimeout(runQuery, 250)
         });
         $query.on("keydown", function (event) {
@@ -180,8 +155,6 @@ $(function () {
                 event.preventDefault();
                 event.stopPropagation();
                 return true;
-            } else {
-                $(this).change();
             }
         });
     });
