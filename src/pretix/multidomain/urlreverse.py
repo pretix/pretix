@@ -77,6 +77,8 @@ def get_event_domain(event, fallback=False, return_info=False):
 
 def get_organizer_domain(organizer):
     assert isinstance(organizer, Organizer)
+    if not organizer.pk:
+        return None
     domain = getattr(organizer, '_cached_domain', None) or organizer.cache.get('domain')
     if domain is None:
         domains = organizer.domains.filter(event__isnull=True)
