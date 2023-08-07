@@ -42,19 +42,20 @@ from datetime import timedelta
 from decimal import Decimal
 from typing import Set
 
-from django.utils.decorators import method_decorator
 from django import forms
 from django.contrib import messages
+from django.core.exceptions import ValidationError
+from django.core.validators import EmailValidator, validate_email
 from django.db import transaction
 from django.db.models import Count, Q, QuerySet
 from django.http import FileResponse, JsonResponse, Http404
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from django.views.decorators.clickjacking import xframe_options_exempt
-from django.views.decorators.csrf import csrf_protect
 from django.views.generic import DetailView, FormView, ListView, View
 from django.views.generic.detail import SingleObjectMixin
 from localflavor.generic.forms import BICFormField, IBANFormField
