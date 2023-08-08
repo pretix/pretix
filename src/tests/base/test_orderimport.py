@@ -71,6 +71,7 @@ def inputfile_factory():
             'I': 'Foo',
             'J': '2021-06-28 11:00:00',
             'K': '06221/32177-50',
+            'L': 'True'
         },
         {
             'A': 'Daniel',
@@ -84,6 +85,7 @@ def inputfile_factory():
             'I': 'Bar',
             'J': '2021-06-28 11:00:00',
             'K': '+4962213217750',
+            'L': 'False',
         },
         {},
         {
@@ -98,10 +100,11 @@ def inputfile_factory():
             'I': 'Foo,Bar',
             'J': '2021-06-28 11:00:00',
             'K': '',
+            'L': '',
         },
     ]
     f = StringIO()
-    w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K'], dialect=csv.excel)
+    w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'], dialect=csv.excel)
     w.writeheader()
     w.writerows(d)
     f.seek(0)
@@ -795,22 +798,37 @@ def test_import_question_validate(user, event, item):
 @scopes_disabled()
 def test_import_question_valid(user, event, item):
     settings = dict(DEFAULT_SETTINGS)
-    q = event.questions.create(question='Foo', type=Question.TYPE_CHOICE_MULTIPLE)
-    o1 = q.options.create(answer='Foo', identifier='Foo')
-    o2 = q.options.create(answer='Bar', identifier='Bar')
+    q1 = event.questions.create(question='Foo', type=Question.TYPE_CHOICE_MULTIPLE)
+    o1 = q1.options.create(answer='Foo', identifier='Foo')
+    o2 = q1.options.create(answer='Bar', identifier='Bar')
+    q2 = event.questions.create(question='Boolean', type=Question.TYPE_BOOLEAN)
     settings['item'] = 'static:{}'.format(item.pk)
     settings['attendee_email'] = 'csv:C'
-    settings['question_{}'.format(q.pk)] = 'csv:I'
+    settings['question_{}'.format(q1.pk)] = 'csv:I'
+    settings['question_{}'.format(q2.pk)] = 'csv:L'
 
     import_orders.apply(
         args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
     ).get()
-    assert QuestionAnswer.objects.filter(question=q).count() == 3
+    assert QuestionAnswer.objects.filter(question=q1).count() == 3
     a1 = OrderPosition.objects.get(attendee_email='schneider@example.org').answers.first()
-    assert a1.question == q
+    assert a1.question == q1
     assert list(a1.options.all()) == [o1]
     a3 = OrderPosition.objects.get(attendee_email__isnull=True).answers.first()
-    assert a3.question == q
+    assert a3.question == q1
     assert set(a3.options.all()) == {o1, o2}
+
+    # Boolean question: One True, One False, one empty == 2 Question answers
+    assert QuestionAnswer.objects.filter(question=q2).count() == 2
+    a4 = OrderPosition.objects.get(attendee_email='schneider@example.org').answers.last()
+    assert a4.question == q2
+    assert a4.answer == 'True'
+    a5 = OrderPosition.objects.get(attendee_email='daniel@example.org').answers.last()
+    assert a5.question == q2
+    assert a5.answer == 'False'
+    a6 = OrderPosition.objects.get(attendee_email__isnull=True).answers
+    assert a6.count() == 1
+    assert a6.first().question == q1
+    assert a6.last().question == q1
 
 # TODO: validate question
