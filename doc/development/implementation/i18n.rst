@@ -37,7 +37,7 @@ you to execute a piece of code with a different locale:
 This is very useful e.g. when sending an email to a user that has a different language than the user performing the
 action that causes the mail to be sent.
 
-.. _translation features: https://docs.djangoproject.com/en/1.9/topics/i18n/translation/
+.. _translation features: https://docs.djangoproject.com/en/4.2/topics/i18n/translation/
 .. _GNU gettext: https://www.gnu.org/software/gettext/
 .. _strings: https://django-i18nfield.readthedocs.io/en/latest/strings.html
 .. _database fields: https://django-i18nfield.readthedocs.io/en/latest/quickstart.html
