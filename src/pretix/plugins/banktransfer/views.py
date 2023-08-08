@@ -916,4 +916,3 @@ class SendInvoiceMailView(EventViewMixin, OrderDetailMixin, View):
 
         messages.success(request, _('Sending the latest invoice via e-mail to {email}.').format(email=request.POST['email']))
         return redirect(self.get_order_url())
-
