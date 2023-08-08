@@ -34,7 +34,7 @@ from i18nfield.fields import I18nCharField, I18nTextField
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Event, InvoiceAddress, Item, Order, OrderPosition, SubEvent, fields,
+    Event, InvoiceAddress, Item, Order, OrderPosition, SubEvent, fields, Checkin,
 )
 from pretix.base.models.base import LoggingMixin
 from pretix.base.services.mail import SendMailException
@@ -137,6 +137,12 @@ class ScheduledMail(models.Model):
             status_q |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=False,
                           expires__lt=now())
 
+        checkin_q = Q()
+        if self.rule.checked_in_status == "checked_in":
+            checkin_q = Q(Exists(Checkin.objects.filter(position=OuterRef('pk'))))
+        elif self.rule.checked_in_status == "no_checkin":
+            checkin_q = Q(~Exists(Checkin.objects.filter(position=OuterRef('pk'))))
+
         if self.last_successful_order_id:
             orders = orders.filter(
                 pk__gt=self.last_successful_order_id
@@ -144,6 +150,7 @@ class ScheduledMail(models.Model):
 
         orders = orders.filter(
             status_q,
+            checkin_q,
         ).order_by('pk').select_related('invoice_address').prefetch_related('positions')
 
         send_to_orders = self.rule.send_to in (Rule.CUSTOMERS, Rule.BOTH)
