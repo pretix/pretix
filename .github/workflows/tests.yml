@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: harmon758/postgresql-action@v1
         with:
-          postgresql version: '11'
+          postgresql version: '15'
           postgresql db: 'pretix'
           postgresql user: 'postgres'
           postgresql password: 'postgres'
