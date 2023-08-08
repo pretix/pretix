@@ -234,7 +234,7 @@ class Rule(models.Model, LoggingMixin):
 
     checked_in_status = models.CharField(
         verbose_name=_("Restrict to check-in status"),
-        default=False,
+        default="all",
         choices=CHECK_IN,
         max_length=10,
     )
