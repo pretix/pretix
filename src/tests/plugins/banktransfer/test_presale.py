@@ -64,15 +64,15 @@ class BanktransferOrdersTest(BaseOrdersTest):
         from django.contrib.messages import get_messages
         messages = list(get_messages(response.wsgi_request))
         assert len(messages) == 1
-        assert str(messages[0]) == 'No payment or invoice found, please request an invoice first.'
+        assert str(messages[0]) == 'No pending bank transfer payment found. Maybe the order has been paid already?'
         assert len(djmail.outbox) == 0
 
     def test_valid_order(self):
         with scopes_disabled():
-            self.order.payments.create(provider='banktransfer', state=OrderPayment.PAYMENT_STATE_PENDING,
+            self.event.settings.set('payment_banktransfer_invoice_email', True)
+            self.order.payments.create(provider='banktransfer', state=OrderPayment.PAYMENT_STATE_CREATED,
                                        amount=self.order.total)
-            InvoiceAddress.objects.create(order=self.order, company="Sample company", country=Country('NZ'),
-                                          vat_id="DE123", vat_id_validated=True)
+            InvoiceAddress.objects.create(order=self.order, company="Sample company", country=Country('NZ'))
             generate_invoice(self.order)
 
         djmail.outbox = []
