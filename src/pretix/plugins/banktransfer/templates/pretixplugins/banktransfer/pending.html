@@ -107,17 +107,26 @@ SCT
 
 {% if has_invoices %}
     <hr>
-    <form class="form-inline helper-display-inline" method="post"
-            action="{% eventurl event "plugins:banktransfer:mail_invoice" order=order.code secret=order.secret %}">
+    <form method="post" action="{% eventurl event "plugins:banktransfer:mail_invoice" order=order.code secret=order.secret %}">
         {% csrf_token %}
         <p>
             {% blocktrans trimmed %}
                 To send the invoice directly to your accounting department, please enter their email address:
             {% endblocktrans %}
         </p>
-        <label for="mail_invoice_email" class="sr-only">{% trans "Invoice recipient email" %}:</label>
-        <input type="email" name="email" id="mail_invoice_email" class="form-control" value="" required />
-        <button class="btn btn-default">{% trans "Send invoice via email" %}</button>
+        <div class="row">
+            <div class="col-md-9 col-xs-12">
+                <label for="mail_invoice_email" class="sr-only">{% trans "Invoice recipient email" %}:</label>
+                <input type="email" name="email" id="mail_invoice_email" class="form-control" value="" required
+                    placeholder="{% trans "Email address" %}" />
+            </div>
+            <div class="col-md-3 col-xs-12">
+                <button class="btn btn-default btn-block">
+                    <span class="fa fa-envelope-o" aria-hidden="true"></span>
+                    {% trans "Send invoice via email" %}
+                </button>
+            </div>
+        </div>
     </form>
     <hr>
 {% endif %}
