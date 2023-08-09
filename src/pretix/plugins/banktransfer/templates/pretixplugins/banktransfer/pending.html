@@ -106,7 +106,6 @@ SCT
 {% endif %}
 
 {% if has_invoices %}
-    <hr>
     <form method="post" action="{% eventurl event "plugins:banktransfer:mail_invoice" order=order.code secret=order.secret %}">
         {% csrf_token %}
         <p>
