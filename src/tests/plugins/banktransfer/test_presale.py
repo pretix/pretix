@@ -35,10 +35,10 @@
 from django.core import mail as djmail
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
+from tests.presale.test_orders import BaseOrdersTest
 
 from pretix.base.models import InvoiceAddress, OrderPayment
 from pretix.base.services.invoices import generate_invoice
-from tests.presale.test_orders import BaseOrdersTest
 
 
 class BanktransferOrdersTest(BaseOrdersTest):
