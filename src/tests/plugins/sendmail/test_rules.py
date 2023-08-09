@@ -279,7 +279,7 @@ def test_sendmail_rule_send_correct_products(event, order, item, item2):
 
 @pytest.mark.django_db
 @scopes_disabled()
-def test_sendmail_rule_checkin_all(event, order, item):
+def test_sendmail_rule_not_checked_in_all_get_mail(event, order, item):
     order.status = Order.STATUS_PAID
     order.save()
     event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="all",
@@ -289,6 +289,12 @@ def test_sendmail_rule_checkin_all(event, order, item):
     sendmail_run_rules(None)
     assert len(djmail.outbox) == 1, "email not sent"
 
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_checked_in_all_get_mail(event, order, item):
+    order.status = Order.STATUS_PAID
+    order.save()
     p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
     clist = event.checkin_lists.create(name="Default", all_products=True)
     perform_checkin(p1, clist, {})
@@ -302,36 +308,23 @@ def test_sendmail_rule_checkin_all(event, order, item):
 
 @pytest.mark.django_db
 @scopes_disabled()
-def test_sendmail_rule_checkin_checked_in(event, order, item):
+def test_sendmail_rule_not_checked_in_no_mail(event, order, item):
     order.status = Order.STATUS_PAID
     order.save()
-    djmail.outbox = []
-    p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
-    clist = event.checkin_lists.create(name="Default", all_products=True)
     event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="checked_in",
                                 subject='meow', template='meow meow meow')
 
-    # receives no mail when checked in
+    # receives no mail when not checked in
     djmail.outbox = []
     sendmail_run_rules(None)
     assert len(djmail.outbox) == 0, "email sent unexpectedly"
 
-    # receives mail when checked in
-    djmail.outbox = []
-    perform_checkin(p1, clist, {})
-    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="checked_in",
-                                subject='meow', template='meow meow meow')
-    sendmail_run_rules(None)
-    assert len(djmail.outbox) == 1, "email not sent"
-
 
 @pytest.mark.django_db
 @scopes_disabled()
-def test_sendmail_rule_checkin_not_checked_in(event, order, item):
+def test_sendmail_rule_not_checked_in_get_mail(event, order, item):
     order.status = Order.STATUS_PAID
     order.save()
-    p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
-    clist = event.checkin_lists.create(name="Default", all_products=True)
     event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="no_checkin",
                                 subject='meow', template='meow meow meow')
 
@@ -340,6 +333,15 @@ def test_sendmail_rule_checkin_not_checked_in(event, order, item):
     sendmail_run_rules(None)
     assert len(djmail.outbox) == 1, "email not sent"
 
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_checked_in_no_mail(event, order, item):
+    order.status = Order.STATUS_PAID
+    order.save()
+    p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
+    clist = event.checkin_lists.create(name="Default", all_products=True)
+
     # receives no mail when checked in
     djmail.outbox = []
     perform_checkin(p1, clist, {})
@@ -347,6 +349,23 @@ def test_sendmail_rule_checkin_not_checked_in(event, order, item):
                                 subject='meow', template='meow meow meow')
     sendmail_run_rules(None)
     assert len(djmail.outbox) == 0, "email sent unexpectedly"
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_sendmail_rule_checked_in_get_mail(event, order, item):
+    order.status = Order.STATUS_PAID
+    order.save()
+    p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
+    clist = event.checkin_lists.create(name="Default", all_products=True)
+
+    # receives mail when checked in
+    djmail.outbox = []
+    perform_checkin(p1, clist, {})
+    event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="checked_in",
+                                subject='meow', template='meow meow meow')
+    sendmail_run_rules(None)
+    assert len(djmail.outbox) == 1, "email not sent"
 
 
 @pytest.mark.django_db
