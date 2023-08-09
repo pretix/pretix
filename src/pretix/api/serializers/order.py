@@ -27,6 +27,7 @@ from decimal import Decimal
 import pycountry
 from django.conf import settings
 from django.core.files import File
+from django.db import models
 from django.db.models import F, Q
 from django.utils.encoding import force_str
 from django.utils.timezone import now
@@ -372,11 +373,15 @@ class PdfDataSerializer(serializers.Field):
                 self.context['vars_images'] = get_images(self.context['event'])
 
             for k, f in self.context['vars'].items():
-                try:
-                    res[k] = f['evaluate'](instance, instance.order, ev)
-                except:
-                    logger.exception('Evaluating PDF variable failed')
-                    res[k] = '(error)'
+                if 'evaluate_bulk' in f:
+                    # Will be evaluated later by our list serializers
+                    res[k] = (f['evaluate_bulk'], instance)
+                else:
+                    try:
+                        res[k] = f['evaluate'](instance, instance.order, ev)
+                    except:
+                        logger.exception('Evaluating PDF variable failed')
+                        res[k] = '(error)'
 
             if not hasattr(ev, '_cached_meta_data'):
                 ev._cached_meta_data = ev.meta_data
@@ -429,6 +434,38 @@ class PdfDataSerializer(serializers.Field):
             return res
 
 
+class OrderPositionListSerializer(serializers.ListSerializer):
+
+    def to_representation(self, data):
+        # We have a custom implementation of this method because PdfDataSerializer() might keep some elements unevaluated
+        # with a (callable, input) tuple. We'll loop over these entries and evaluate them bulk-wise to save on SQL queries.
+
+        if isinstance(self.parent, OrderSerializer) and isinstance(self.parent.parent, OrderListSerializer):
+            # Do not execute our custom code because it will be executed by OrderListSerializer later for the
+            # full result set.
+            return super().to_representation(data)
+
+        iterable = data.all() if isinstance(data, models.Manager) else data
+
+        data = []
+        evaluate_queue = defaultdict(list)
+
+        for item in iterable:
+            entry = self.child.to_representation(item)
+            if "pdf_data" in entry:
+                for k, v in entry["pdf_data"].items():
+                    if isinstance(v, tuple) and callable(v[0]):
+                        evaluate_queue[v[0]].append((v[1], entry, k))
+            data.append(entry)
+
+        for func, entries in evaluate_queue.items():
+            results = func([item for (item, entry, k) in entries])
+            for (item, entry, k), result in zip(entries, results):
+                entry["pdf_data"][k] = result
+
+        return data
+
+
 class OrderPositionSerializer(I18nAwareModelSerializer):
     checkins = CheckinSerializer(many=True, read_only=True)
     answers = AnswerSerializer(many=True)
@@ -440,6 +477,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     attendee_name = serializers.CharField(required=False)
 
     class Meta:
+        list_serializer_class = OrderPositionListSerializer
         model = OrderPosition
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'discount',
@@ -613,6 +651,34 @@ class OrderURLField(serializers.URLField):
         })
 
 
+class OrderListSerializer(serializers.ListSerializer):
+
+    def to_representation(self, data):
+        # We have a custom implementation of this method because PdfDataSerializer() might keep some elements
+        # unevaluated with a (callable, input) tuple. We'll loop over these entries and evaluate them bulk-wise to
+        # save on SQL queries.
+        iterable = data.all() if isinstance(data, models.Manager) else data
+
+        data = []
+        evaluate_queue = defaultdict(list)
+
+        for item in iterable:
+            entry = self.child.to_representation(item)
+            for p in entry.get("positions", []):
+                if "pdf_data" in p:
+                    for k, v in p["pdf_data"].items():
+                        if isinstance(v, tuple) and callable(v[0]):
+                            evaluate_queue[v[0]].append((v[1], p, k))
+            data.append(entry)
+
+        for func, entries in evaluate_queue.items():
+            results = func([item for (item, entry, k) in entries])
+            for (item, entry, k), result in zip(entries, results):
+                entry["pdf_data"][k] = result
+
+        return data
+
+
 class OrderSerializer(I18nAwareModelSerializer):
     invoice_address = InvoiceAddressSerializer(allow_null=True)
     positions = OrderPositionSerializer(many=True, read_only=True)
@@ -627,6 +693,7 @@ class OrderSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Order
+        list_serializer_class = OrderListSerializer
         fields = (
             'code', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
             'payment_provider', 'fees', 'total', 'comment', 'custom_followup_at', 'invoice_address', 'positions', 'downloads',
