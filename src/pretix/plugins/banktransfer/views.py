@@ -908,8 +908,9 @@ class SendInvoiceMailView(EventViewMixin, OrderDetailMixin, View):
         last_payment = self.order.payments.last()
         if (not last_payment
                 or last_payment.provider != BankTransfer.identifier
-                or last_payment.state != OrderPayment.PAYMENT_STATE_PENDING):
+                or last_payment.state != OrderPayment.PAYMENT_STATE_CREATED):
             messages.error(request, _('No pending bank transfer payment found. Maybe the order has been paid already?'))
+            print(last_payment, last_payment.provider, last_payment.state)
             return redirect(self.get_order_url())
         if not last_payment.payment_provider.settings.get('invoice_email', as_type=bool):
             messages.error(request, _('Sending invoices via email is disabled by the event organizer.'))
