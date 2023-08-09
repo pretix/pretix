@@ -283,11 +283,12 @@ class FailedCheckinSerializer(I18nAwareModelSerializer):
     raw_item = serializers.PrimaryKeyRelatedField(queryset=Item.objects.none(), required=False, allow_null=True)
     raw_variation = serializers.PrimaryKeyRelatedField(queryset=ItemVariation.objects.none(), required=False, allow_null=True)
     raw_subevent = serializers.PrimaryKeyRelatedField(queryset=SubEvent.objects.none(), required=False, allow_null=True)
+    nonce = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = Checkin
         fields = ('error_reason', 'error_explanation', 'raw_barcode', 'raw_item', 'raw_variation',
-                  'raw_subevent', 'datetime', 'type', 'position')
+                  'raw_subevent', 'nonce', 'datetime', 'type', 'position')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
