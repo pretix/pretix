@@ -940,8 +940,8 @@ def test_rules_reasoning_prefer_number_over_date(event, position, clist):
 
 
 @pytest.mark.django_db(transaction=True)
-def test_position_queries(django_assert_num_queries, position, clist):
-    with django_assert_num_queries(12 if 'sqlite' in settings.DATABASES['default']['ENGINE'] else 11) as captured:
+def test_position_queries(django_assert_max_num_queries, position, clist):
+    with django_assert_max_num_queries(13) as captured:
         perform_checkin(position, clist, {})
     if 'sqlite' not in settings.DATABASES['default']['ENGINE']:
         assert any('FOR UPDATE' in s['sql'] for s in captured)

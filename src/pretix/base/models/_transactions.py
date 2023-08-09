@@ -97,7 +97,7 @@ def _transactions_mark_order_dirty(order_id, using=None):
     if getattr(dirty_transactions, 'order_ids', None) is None:
         dirty_transactions.order_ids = set()
 
-    if _check_for_dirty_orders not in [func for savepoint_id, func in conn.run_on_commit]:
+    if _check_for_dirty_orders not in [func for (savepoint_id, func, *__) in conn.run_on_commit]:
         transaction.on_commit(_check_for_dirty_orders, using)
         dirty_transactions.order_ids.clear()  # This is necessary to clean up after old threads with rollbacked transactions
 
