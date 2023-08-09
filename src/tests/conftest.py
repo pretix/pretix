@@ -22,6 +22,7 @@
 import inspect
 
 import pytest
+from django.utils import translation
 from django_scopes import scopes_disabled
 from xdist.dsession import DSession
 
@@ -68,3 +69,8 @@ def pytest_fixture_setup(fixturedef, request):
     else:
         with scopes_disabled():
             yield
+
+
+@pytest.fixture(autouse=True)
+def reset_locale():
+    translation.activate("en")
