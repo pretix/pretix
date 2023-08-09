@@ -27,6 +27,10 @@ restrict_to_status                    list                       List of order s
                                                                  ``n__valid_if_pending`` for payment pending but already confirmed,
                                                                  and ``n__pending_overdue`` for pending with payment overdue.
                                                                  The default is ``["p", "n__valid_if_pending"]``.
+checked_in_status                     string                     Checked in states that can be used to filter recipients. Valid strings
+                                                                 are: ``all`` (no filtering, default), ``checked_in`` for
+                                                                 sending mails to checked in customers, and ``no_checkin`` to send mails
+                                                                 to all customers who have not checked in.
 date_is_absolute                      boolean                    If ``true``, the email is set at a specific point in time.
 send_date                             datetime                   If ``date_is_absolute`` is set: Date and time to send the email.
 send_offset_days                      integer                    If ``date_is_absolute`` is not set, this is the number of days
@@ -89,6 +93,7 @@ Endpoints
                 "n__not_pending_approval_and_not_valid_if_pending",
                 "n__valid_if_pending"
             ],
+            "checked_in_status": "all",
             "send_date": null,
             "send_offset_days": 1,
             "send_offset_time": "18:00",
@@ -139,6 +144,7 @@ Endpoints
             "n__not_pending_approval_and_not_valid_if_pending",
             "n__valid_if_pending"
         ],
+        "checked_in_status": "all",
         "send_date": null,
         "send_offset_days": 1,
         "send_offset_time": "18:00",
@@ -180,6 +186,7 @@ Endpoints
             "n__not_pending_approval_and_not_valid_if_pending",
             "n__valid_if_pending"
         ],
+        "checked_in_status": "checked_in",
         "send_date": null,
         "send_offset_days": 1,
         "send_offset_time": "18:00",
@@ -209,6 +216,7 @@ Endpoints
             "n__not_pending_approval_and_not_valid_if_pending",
             "n__valid_if_pending"
         ],
+        "checked_in_status": "checked_in",
         "send_date": null,
         "send_offset_days": 1,
         "send_offset_time": "18:00",
@@ -266,6 +274,7 @@ Endpoints
             "n__not_pending_approval_and_not_valid_if_pending",
             "n__valid_if_pending"
         ],
+        "checked_in_status": "checked_in",
         "send_date": null,
         "send_offset_days": 1,
         "send_offset_time": "18:00",
