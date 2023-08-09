@@ -166,7 +166,6 @@ class InitializeView(APIView):
         device.software_brand = serializer.validated_data.get('software_brand')
         device.software_version = serializer.validated_data.get('software_version')
         device.info = serializer.validated_data.get('info')
-        print(serializer.validated_data, request.data)
         device.rsa_pubkey = serializer.validated_data.get('rsa_pubkey')
         device.api_token = generate_api_token()
         device.save()
