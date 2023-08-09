@@ -55,8 +55,9 @@ class BanktransferOrdersTest(BaseOrdersTest):
     def test_order_with_no_invoice(self):
         djmail.outbox = []
         response = self.client.post(
-            '/%s/%s/banktransfer/%s/%s/mail-invoice/' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
-            { 'email': 'test@example.org' }
+            '/%s/%s/banktransfer/%s/%s/mail-invoice/' % (
+                self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {'email': 'test@example.org'}
         )
         assert response.status_code == 302
 
@@ -77,7 +78,7 @@ class BanktransferOrdersTest(BaseOrdersTest):
         djmail.outbox = []
         response = self.client.post(
             '/%s/%s/banktransfer/%s/%s/mail-invoice/' % (
-            self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+                self.orga.slug, self.event.slug, self.order.code, self.order.secret),
             {'email': 'test@example.org'}
         )
         assert response.status_code == 302
@@ -88,4 +89,3 @@ class BanktransferOrdersTest(BaseOrdersTest):
         assert str(messages[0]) == 'Sending the latest invoice via e-mail to test@example.org.'
 
         assert len(djmail.outbox) == 1
-
