@@ -4,9 +4,18 @@ setup_collapsible_details = function (el) {
 
     el.find('details.sneak-peek:not([open])').each(function() {
         this.open = true;
-        var $elements = $("> :not(summary)", this).show().filter(':not(.sneak-peek-trigger)').attr('aria-hidden', 'true');
-
+        var $elements = $("> :not(summary)", this).show().filter(':not(.sneak-peek-trigger)');
         var container = this;
+
+        if ($("> :not(summary)", this).show().filter(':not(.sneak-peek-trigger)').height() < 200) {
+            $(".sneak-peek-trigger", this).remove();
+            $(container).removeClass('sneak-peek');
+            container.style.removeProperty('height');
+            return;
+        }
+
+        $elements.attr('aria-hidden', 'true');
+
         var trigger = $('summary, .sneak-peek-trigger button', container);
         function onclick(e) {
             e.preventDefault();
