@@ -418,7 +418,7 @@ class OrderTransactions(OrderView):
             'item', 'variation', 'subevent'
         ).order_by('datetime')
         ctx['sums'] = self.order.transactions.aggregate(
-            count=Sum('count'),
+            sum_count=Sum('count'),
             full_price=Sum(F('count') * F('price')),
             full_tax_value=Sum(F('count') * F('tax_value')),
         )
