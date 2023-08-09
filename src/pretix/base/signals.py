@@ -691,7 +691,8 @@ dictionaries as values that contain keys like in the following example::
 The ``evaluate`` member will be called with the order position, order and event as arguments. The event might
 also be a subevent, if applicable.
 
-The ``evaluate_bulk`` member is optional but can significantly improve performance in some situations.
+The ``evaluate_bulk`` member is optional but can significantly improve performance in some situations because you
+can perform database fetches in bulk instead of single queries for every position.
 """
 
 

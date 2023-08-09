@@ -374,6 +374,7 @@ class PdfDataSerializer(serializers.Field):
 
             for k, f in self.context['vars'].items():
                 if 'evaluate_bulk' in f:
+                    # Will be evaluated later by our list serializers
                     res[k] = (f['evaluate_bulk'], instance)
                 else:
                     try:
@@ -436,8 +437,14 @@ class PdfDataSerializer(serializers.Field):
 class OrderPositionListSerializer(serializers.ListSerializer):
 
     def to_representation(self, data):
-        if self.parent:
+        # We have a custom implementation of this method because PdfDataSerializer() might keep some elements unevaluated
+        # with a (callable, input) tuple. We'll loop over these entries and evaluate them bulk-wise to save on SQL queries.
+
+        if isinstance(self.parent, OrderSerializer) and isinstance(self.parent.parent, OrderListSerializer):
+            # Do not execute our custom code because it will be executed by OrderListSerializer later for the
+            # full result set.
             return super().to_representation(data)
+
         iterable = data.all() if isinstance(data, models.Manager) else data
 
         data = []
@@ -647,6 +654,9 @@ class OrderURLField(serializers.URLField):
 class OrderListSerializer(serializers.ListSerializer):
 
     def to_representation(self, data):
+        # We have a custom implementation of this method because PdfDataSerializer() might keep some elements
+        # unevaluated with a (callable, input) tuple. We'll loop over these entries and evaluate them bulk-wise to
+        # save on SQL queries.
         iterable = data.all() if isinstance(data, models.Manager) else data
 
         data = []
