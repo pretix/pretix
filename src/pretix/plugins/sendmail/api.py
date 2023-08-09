@@ -51,6 +51,8 @@ class RuleSerializer(I18nAwareModelSerializer):
                     data['restrict_to_status'] = [Order.STATUS_PAID, 'n__valid_if_pending']
             else:
                 data['restrict_to_status'] = [Order.STATUS_PAID, 'n__valid_if_pending']
+        if "checked_in_status" not in data:
+            data["checked_in_status"] = "all"
         return super().to_internal_value(data)
 
     def validate(self, data):
