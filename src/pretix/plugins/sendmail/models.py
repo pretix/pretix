@@ -34,7 +34,8 @@ from i18nfield.fields import I18nCharField, I18nTextField
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Event, InvoiceAddress, Item, Order, OrderPosition, SubEvent, fields, Checkin,
+    Checkin, Event, InvoiceAddress, Item, Order, OrderPosition, SubEvent,
+    fields,
 )
 from pretix.base.models.base import LoggingMixin
 from pretix.base.services.mail import SendMailException
