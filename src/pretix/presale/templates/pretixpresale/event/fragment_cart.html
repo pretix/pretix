@@ -83,9 +83,9 @@
                         <dt class="sr-only">{% trans "Location:" %}</dt>
                         <dd>
                             <div class="collapse-lines" data-expand-text="{% trans "Show full location" %}" aria-hidden="true">
-                                <span class="content text-muted" id="full-location-{{ line.pk }}">{{ line.subevent.location|linebreaksbr }}</span>
+                                <span class="content text-muted" id="full-location-{{ line.pk }}">{{ line.subevent.location|urlize|linebreaksbr }}</span>
                             </div>
-                            <div class="sr-only">{{ line.subevent.location|linebreaksbr }}</div>
+                            <div class="sr-only">{{ line.subevent.location|urlize|linebreaksbr }}</div>
                         </dd>
                     </div>
                     {% endif %}
