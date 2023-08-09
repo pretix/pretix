@@ -88,13 +88,10 @@ class RuleSerializer(I18nAwareModelSerializer):
                 ]:
                     raise ValidationError(f'status {s} not allowed: restrict_to_status may only include valid states')
 
-        checked_in = full_data.get('checked_in_status')
-        if not checked_in:
-            raise ValidationError('checked_in_status needs at least one value, but this should be set by the default')
-        elif checked_in:
-            for s in checked_in:
-                if s not in Rule.CHECK_IN:
-                    raise ValidationError(f'status {s} not allowed: checked_in_status may only include valid states')
+        checked_in_status = full_data.get('checked_in_status')
+        if checked_in_status not in [state[0] for state in Rule.CHECK_IN]:
+            raise ValidationError(
+                f'status {checked_in_status} not allowed: checked_in_status may only include valid states')
 
         return full_data
 
