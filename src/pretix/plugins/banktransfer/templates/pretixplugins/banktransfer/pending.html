@@ -105,7 +105,7 @@ SCT
 <link rel="stylesheet" href="{% static "pretixplugins/banktransfer/swisscross.css" %}">
 {% endif %}
 
-{% if has_invoices %}
+{% if invoice_email_enabled and has_invoices %}
     <form method="post" action="{% eventurl event "plugins:banktransfer:mail_invoice" order=order.code secret=order.secret %}">
         {% csrf_token %}
         <p>
