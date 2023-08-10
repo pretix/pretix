@@ -582,7 +582,6 @@ class WidgetCartTest(CartTestMixin, TestCase):
 
             response = self.client.get('/%s/%s/widget/product_list' % (self.orga.slug, self.event.slug))
             data = json.loads(response.content.decode())
-            settings.SITE_URL = 'http://example.com'
             assert data == {
                 'list_type': 'list',
                 'name': '30C3',
@@ -610,7 +609,6 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
 
             response = self.client.get('/%s/%s/widget/product_list?style=calendar' % (self.orga.slug, self.event.slug))
-            settings.SITE_URL = 'http://example.com'
             data = json.loads(response.content.decode())
             assert data == {
                 'list_type': 'calendar',
@@ -686,7 +684,6 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
 
             response = self.client.get('/%s/%s/widget/product_list?style=week' % (self.orga.slug, self.event.slug))
-            settings.SITE_URL = 'http://example.com'
             data = json.loads(response.content.decode())
             assert data == {
                 'list_type': 'week',
@@ -730,7 +727,6 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 self.event.subevents.create(name="Disabled", active=False, date_from=now() + datetime.timedelta(days=3))
                 self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
 
-            settings.SITE_URL = 'http://example.com'
             response = self.client.get('/%s/widget/product_list' % (self.orga.slug,))
             data = json.loads(response.content.decode())
             assert data == {
@@ -773,7 +769,6 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 self.event.subevents.create(name="Hidden", active=True, is_public=False, date_from=now() + datetime.timedelta(days=3))
 
             response = self.client.get('/%s/widget/product_list?style=calendar' % (self.orga.slug,))
-            settings.SITE_URL = 'http://example.com'
             data = json.loads(response.content.decode())
             assert data == {
                 'date': '2019-01-01',

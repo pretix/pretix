@@ -20,7 +20,6 @@
 # <https://www.gnu.org/licenses/>.
 #
 import pytest
-from django.conf import settings
 from django.test import override_settings
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
@@ -38,7 +37,6 @@ def env():
         organizer=o, name='MRMCD2015', slug='2015',
         date_from=now()
     )
-    settings.SITE_URL = 'http://example.com'
     event.get_cache().clear()
     return o, event
 
@@ -99,7 +97,6 @@ def test_event_org_domain_keep_port(env):
 @pytest.mark.django_db
 def test_event_org_domain_keep_scheme(env):
     with override_settings(SITE_URL='https://example.com'):
-        settings.SITE_URL = 'https://example.com'
         KnownDomain.objects.create(domainname='foobar', organizer=env[0])
         assert eventreverse(env[1], 'presale:event.index') == 'https://foobar/2015/'
 
