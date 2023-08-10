@@ -1940,7 +1940,7 @@ class VoucherFilterForm(FilterForm):
             'item__category__position',
             'item__category',
             'item__position',
-            'item__variation__position',
+            'variation__position',
             'quota__name',
         ),
         'subevent': 'subevent__date_from',
@@ -1950,7 +1950,7 @@ class VoucherFilterForm(FilterForm):
             '-item__category__position',
             '-item__category',
             '-item__position',
-            '-item__variation__position',
+            '-variation__position',
             '-quota__name',
         )
     }
