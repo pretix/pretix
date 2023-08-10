@@ -40,7 +40,7 @@ from collections import OrderedDict
 from decimal import Decimal
 from io import BytesIO
 from itertools import groupby
-from urllib.parse import urlsplit
+from urllib.parse import urlsplit, urlparse
 from zoneinfo import ZoneInfo
 
 import bleach
@@ -50,6 +50,7 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
 from django.db.models import ProtectedError
@@ -61,6 +62,7 @@ from django.http import (
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
 from django.views.generic import FormView, ListView
@@ -1529,6 +1531,12 @@ class EventQRCode(EventPermissionRequiredMixin, View):
 
     def get(self, request, *args, filetype, **kwargs):
         url = build_absolute_uri(request.event, 'presale:event.index')
+
+        if "url" in request.GET:
+            if url_has_allowed_host_and_scheme(request.GET["url"], allowed_hosts=[urlparse(url).hostname]):
+                url = request.GET["url"]
+            else:
+                raise PermissionDenied("Untrusted URL")
 
         qr = qrcode.QRCode(
             version=1,
