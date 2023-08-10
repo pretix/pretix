@@ -390,7 +390,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
                 ir = ThumbnailingImageReader(thumbnail.thumb)
             else:
                 ir = ThumbnailingImageReader(logo_file)
-            
+
             try:
                 ir.resize(self.logo_width, self.logo_height, 300)
             except:
