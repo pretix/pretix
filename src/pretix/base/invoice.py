@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+import os
 import re
 import unicodedata
 from collections import defaultdict
@@ -57,6 +58,7 @@ from pretix.base.services.currencies import SOURCE_NAMES
 from pretix.base.signals import register_invoice_renderers
 from pretix.base.templatetags.money import money_filter
 from pretix.helpers.reportlab import ThumbnailingImageReader, reshaper
+from pretix.helpers.thumb import get_thumbnail
 from pretix.presale.style import get_fonts
 
 logger = logging.getLogger(__name__)
@@ -382,7 +384,13 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
     def _draw_logo(self, canvas):
         if self.invoice.event.settings.invoice_logo_image:
             logo_file = self.invoice.event.settings.get('invoice_logo_image', binary_file=True)
-            ir = ThumbnailingImageReader(logo_file)
+            filesextension = str(os.path.splitext(self.invoice.event.settings.invoice_logo_image.file.name)[1]).lower()
+            if filesextension == ".svg":
+                thumbnail = get_thumbnail(self.invoice.event.settings.invoice_logo_image.file.name,"1000x1000")
+                ir = ThumbnailingImageReader(thumbnail.thumb)
+            else:
+                ir = ThumbnailingImageReader(logo_file)
+            
             try:
                 ir.resize(self.logo_width, self.logo_height, 300)
             except:
