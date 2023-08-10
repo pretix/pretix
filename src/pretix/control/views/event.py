@@ -40,7 +40,7 @@ from collections import OrderedDict
 from decimal import Decimal
 from io import BytesIO
 from itertools import groupby
-from urllib.parse import urlsplit, urlparse
+from urllib.parse import urlparse, urlsplit
 from zoneinfo import ZoneInfo
 
 import bleach

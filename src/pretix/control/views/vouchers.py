@@ -34,6 +34,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import io
+from urllib.parse import urlencode
 
 import bleach
 from defusedcsv import csv
@@ -75,6 +76,7 @@ from pretix.control.views import PaginationMixin
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.format import format_map
 from pretix.helpers.models import modelcopy
+from pretix.multidomain.urlreverse import build_absolute_uri
 
 
 class VoucherList(PaginationMixin, EventPermissionRequiredMixin, ListView):
@@ -315,6 +317,13 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
             expires__gte=now()
         ).count()
         ctx['redeemed_in_carts'] = redeemed_in_carts
+
+        url_params = {
+            'voucher': self.object.code
+        }
+        if self.object.subevent_id:
+            url_params['subevent'] = self.object.subevent_id
+        ctx['url'] = build_absolute_uri(self.request.event, "presale:event.redeem") + "?" + urlencode(url_params)
         return ctx
 
 
