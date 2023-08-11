@@ -1434,12 +1434,14 @@ class CountriesAndEUAndStates(CountriesAndEU):
 
     def __iter__(self):
         for ccode, cname in super().__iter__():
-            yield (ccode, cname)
             if ccode in COUNTRIES_WITH_STATE_IN_ADDRESS:
-                details = COUNTRIES_WITH_STATE_IN_ADDRESS[ccode]
-                subdivs = pycountry.subdivisions.get(country_code=ccode)
-                for subdiv in subdivs:
-                    yield (subdiv.code, "|-  " + subdiv.name)
+                types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[ccode]
+                yield (ccode, cname + " (Any " + " or ".join(types) + ")")
+                statelist = [s for s in pycountry.subdivisions.get(country_code=ccode) if s.type in types]
+                print (statelist)
+                yield from sorted([(s.code, "|- " + s.name) for s in statelist], key=lambda s: s[1])
+            else:
+                yield (ccode, cname)
 
 
 class TaxRuleLineForm(I18nForm):
