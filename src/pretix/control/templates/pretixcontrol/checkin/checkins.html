@@ -95,6 +95,7 @@
                         <td>
                             {% if c.type == "exit" %}<span class="fa fa-fw fa-sign-out"></span>{% endif %}
                             {% if c.type == "entry" %}<span class="fa fa-fw fa-sign-in"></span>{% endif %}
+                            {% if c.type == "print" %}<span class="fa fa-fw fa-print"></span>{% endif %}
                             {{ c.get_type_display }}
                             <br>
                             <small>

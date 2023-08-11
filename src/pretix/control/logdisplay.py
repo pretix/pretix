@@ -295,6 +295,20 @@ def _display_checkin(event, logentry):
                 posid=data.get('positionid'),
                 list=checkin_list
             )
+
+    if data.get('type') == Checkin.TYPE_PRINT:
+        if show_dt:
+            return _('Position #{posid} has been printed out at {datetime} for list "{list}".').format(
+                posid=data.get('positionid'),
+                datetime=dt_formatted,
+                list=checkin_list
+            )
+        else:
+            return _('Position #{posid} has been printed out for list "{list}".').format(
+                posid=data.get('positionid'),
+                list=checkin_list
+            )
+
     if data.get('first'):
         if show_dt:
             return _('Position #{posid} has been checked in at {datetime} for list "{list}".').format(

@@ -631,7 +631,7 @@ Order position endpoints
    :<json boolean force: Specifies that the check-in should succeed regardless of revoked barcode, previous check-ins or required
                          questions that have not been filled. This is usually used to upload offline scans that already happened,
                          because there's no point in validating them since they happened whether they are valid or not. Defaults to ``false``.
-   :<json string type: Send ``"exit"`` for an exit and ``"entry"`` (default) for an entry.
+   :<json string type: Send ``"exit"`` for an exit and ``"entry"`` (default) for an entry, ``"print"`` for a badge print scan.
    :<json boolean ignore_unpaid: Specifies that the check-in should succeed even if the order is in pending state.
                                  Defaults to ``false`` and only works when ``include_pending`` is set on the check-in
                                  list.

@@ -773,7 +773,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'blocked'
             )
 
-    if type != Checkin.TYPE_EXIT and op.valid_from and op.valid_from > dt:
+    if type not in (Checkin.TYPE_PRINT, Checkin.TYPE_EXIT) and op.valid_from and op.valid_from > dt:
         if force:
             force_used = True
         else:
@@ -787,7 +787,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 ),
             )
 
-    if type != Checkin.TYPE_EXIT and op.valid_until and op.valid_until < dt:
+    if type not in (Checkin.TYPE_PRINT, Checkin.TYPE_EXIT) and op.valid_until and op.valid_until < dt:
         if force:
             force_used = True
         else:
@@ -886,9 +886,9 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         if isinstance(auth, Device):
             device = auth
 
-        last_cis = list(op.checkins.order_by('-datetime').filter(list=clist).only('type', 'nonce'))
+        last_cis = list(op.checkins.order_by('-datetime').filter(list=clist, type__in=(Checkin.TYPE_ENTRY, Checkin.TYPE_EXIT)).only('type', 'nonce'))
         entry_allowed = (
-            type == Checkin.TYPE_EXIT or
+            type in (Checkin.TYPE_EXIT, Checkin.TYPE_PRINT) or
             clist.allow_multiple_entries or
             not last_cis or
             all(c.type == Checkin.TYPE_EXIT for c in last_cis) or

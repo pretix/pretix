@@ -179,7 +179,7 @@ class CheckinList(LoggedModel):
         # dedupliate by position and count it up.
         cl = self
         base_q, base_params = (
-            Checkin.all.filter(*c_q, successful=True, list=cl)
+            Checkin.all.filter(*c_q, successful=True, list=cl, type__in=[Checkin.TYPE_ENTRY, Checkin.TYPE_EXIT])
             .annotate(
                 cnt_exists_after=Window(
                     expression=Count("position_id", filter=Q(type=Value("exit"))),
@@ -322,9 +322,11 @@ class Checkin(models.Model):
     """
     TYPE_ENTRY = 'entry'
     TYPE_EXIT = 'exit'
+    TYPE_PRINT = 'print'
     CHECKIN_TYPES = (
         (TYPE_ENTRY, _('Entry')),
         (TYPE_EXIT, _('Exit')),
+        (TYPE_PRINT, _('Print')),
     )
 
     REASON_CANCELED = 'canceled'

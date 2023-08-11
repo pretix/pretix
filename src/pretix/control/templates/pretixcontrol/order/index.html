@@ -385,6 +385,8 @@
                                             {% else %}
                                                 <span class="fa fa-fw text-success fa-sign-out" data-toggle="tooltip_html" title="{{ c.list.name|force_escape|force_escape }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Exit scan: {{ date }}{% endblocktrans %}{% if c.gate %}<br>{{ c.gate }}{% endif %}"></span>
                                             {% endif %}
+                                        {% elif c.type == "print" %}
+                                            <span class="fa fa-fw text-success fa-print" data-toggle="tooltip_html" title="{{ c.list.name|force_escape|force_escape }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Print scan: {{ date }}{% endblocktrans %}{% if c.gate %}<br>{{ c.gate }}{% endif %}"></span>
                                         {% elif c.forced %}
                                             <span class="fa fa-fw fa-warning text-warning" data-toggle="tooltip_html" title="{{ c.list.name|force_escape|force_escape }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Additional entry scan: {{ date }}{% endblocktrans %}{% if c.gate %}<br>{{ c.gate }}{% endif %}"></span>
                                         {% elif c.auto_checked_in %}

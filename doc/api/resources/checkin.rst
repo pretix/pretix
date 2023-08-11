@@ -34,7 +34,7 @@ Checking a ticket in
    :<json string secret: Scanned QR code corresponding to the ``secret`` attribute of a ticket.
    :<json string source_type: Type of source the ``secret`` was obtained form. Defaults to ``"barcode"``.
    :<json array lists: List of check-in list IDs to search on. No two check-in lists may be from the same event.
-   :<json string type: Send ``"exit"`` for an exit and ``"entry"`` (default) for an entry.
+   :<json string type: Send ``"exit"`` for an exit and ``"entry"`` (default) for an entry, ``"print"`` for a badge print scan.
    :<json datetime datetime: Specifies the datetime of the check-in. If not supplied, the current time will be used.
    :<json boolean force: Specifies that the check-in should succeed regardless of revoked barcode, previous check-ins or required
                          questions that have not been filled. This is usually used to upload offline scans that already happened,
