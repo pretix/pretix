@@ -1439,7 +1439,9 @@ class CountriesAndEUAndStates(CountriesAndEU):
                 yield (ccode, cname + " (Any " + " or ".join(types) + ")")
                 statelist = [s for s in pycountry.subdivisions.get(country_code=ccode) if s.type in types]
                 print (statelist)
-                yield from sorted([(s.code, "|- " + s.name) for s in statelist], key=lambda s: s[1])
+                statelist = sorted([(s.code, "├ " + s.name) for s in statelist], key=lambda s: s[1])
+                statelist[-1] = (statelist[-1][0], "└" + statelist[-1][1][1:])
+                yield from statelist
             else:
                 yield (ccode, cname)
 
