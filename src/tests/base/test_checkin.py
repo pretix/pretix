@@ -563,6 +563,44 @@ def test_rules_variation(item, position, clist):
 
 
 @pytest.mark.django_db
+def test_rules_gate(event, item, position, clist):
+    g1 = event.organizer.gates.create(name="Gate 1")
+    g2 = event.organizer.gates.create(name="Gate 2")
+    clist.rules = {
+        "inList": [
+            {"var": "gate"}, {
+                "objectList": [
+                    {"lookup": ["gate", str(g1.pk), "Gate 1"]},
+                ]
+            }
+        ]
+    }
+    clist.save()
+    with pytest.raises(CheckInError):
+        perform_checkin(position, clist, {}, gate=None)
+    with pytest.raises(CheckInError) as excinfo:
+        perform_checkin(position, clist, {}, gate=g2)
+    assert not OrderPosition.objects.filter(SQLLogic(clist, gate=g2).apply(clist.rules), pk=position.pk).exists()
+    assert not OrderPosition.objects.filter(SQLLogic(clist, gate=None).apply(clist.rules), pk=position.pk).exists()
+    assert excinfo.value.code == 'rules'
+    assert 'Wrong entrance gate' in str(excinfo.value)
+
+    clist.rules = {
+        "inList": [
+            {"var": "gate"}, {
+                "objectList": [
+                    {"lookup": ["gate", str(g1.pk), "Gate 1"]},
+                    {"lookup": ["gate", str(g2.pk), "Gate 2"]},
+                ]
+            }
+        ]
+    }
+    clist.save()
+    assert OrderPosition.objects.filter(SQLLogic(clist, gate=g2).apply(clist.rules), pk=position.pk).exists()
+    perform_checkin(position, clist, {}, gate=g2)
+
+
+@pytest.mark.django_db
 def test_rules_scan_number(position, clist):
     # Ticket is valid three times
     clist.allow_multiple_entries = True

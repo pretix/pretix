@@ -3,8 +3,10 @@ $(function () {
     // Every change to our supported JSON logic must be done
     // * in pretix.base.services.checkin
     // * in pretix.base.models.checkin
+    // * in pretix.helpers.jsonlogic_boolalg
     // * in checkinrules.js
     // * in libpretixsync
+    // * in pretixscan-ios
     'product': {
       'inList': {
         'label': gettext('is one of'),
@@ -12,6 +14,12 @@ $(function () {
       }
     },
     'variation': {
+      'inList': {
+        'label': gettext('is one of'),
+        'cardinality': 2,
+      }
+    },
+    'gate': {
       'inList': {
         'label': gettext('is one of'),
         'cardinality': 2,
@@ -62,6 +70,10 @@ $(function () {
     'variation': {
       'label': gettext('Product variation'),
       'type': 'variation',
+    },
+    'gate': {
+      'label': gettext('Gate'),
+      'type': 'gate',
     },
     'now': {
       'label': gettext('Current date and time'),

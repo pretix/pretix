@@ -112,6 +112,8 @@ def _logic_annotate_for_graphic_explain(rules, ev, rule_data, now_dt):
                 val = str(event.items.get(pk=val))
             elif var == "variation":
                 val = str(ItemVariation.objects.get(item__event=event, pk=val))
+            elif var == "gate":
+                val = str(event.organizer.gates.get(pk=val))
             elif isinstance(val, datetime):
                 val = date_format(val.astimezone(ev.timezone), "SHORT_DATETIME_FORMAT")
             return {"var": var, "__result": val}
@@ -249,6 +251,9 @@ def _logic_explain(rules, ev, rule_data, now_dt=None):
         elif var == 'product' or var == 'variation':
             var_weights[vname] = (1000, 0)
             var_texts[vname] = _('Ticket type not allowed')
+        elif var == 'gate':
+            var_weights[vname] = (10, 0)
+            var_texts[vname] = _('Wrong entrance gate')
         elif var in ('entries_number', 'entries_today', 'entries_days', 'minutes_since_last_entry', 'minutes_since_first_entry', 'now_isoweekday'):
             w = {
                 'minutes_since_first_entry': 80,
@@ -341,8 +346,10 @@ def _get_logic_environment(ev, now_dt):
     # Every change to our supported JSON logic must be done
     # * in pretix.base.services.checkin
     # * in pretix.base.models.checkin
+    # * in pretix.helpers.jsonlogic_boolalg
     # * in checkinrules.js
     # * in libpretixsync
+    # * in pretixscan-ios
 
     def is_before(t1, t2, tolerance=None):
         if tolerance:
@@ -361,10 +368,11 @@ def _get_logic_environment(ev, now_dt):
 
 
 class LazyRuleVars:
-    def __init__(self, position, clist, dt):
+    def __init__(self, position, clist, dt, gate):
         self._position = position
         self._clist = clist
         self._dt = dt
+        self._gate = gate
 
     def __getitem__(self, item):
         if item[0] != '_' and hasattr(self, item):
@@ -379,6 +387,10 @@ class LazyRuleVars:
     def now_isoweekday(self):
         tz = self._clist.event.timezone
         return self._dt.astimezone(tz).isoweekday()
+
+    @property
+    def gate(self):
+        return self._gate.pk if self._gate else None
 
     @property
     def product(self):
@@ -446,8 +458,9 @@ class SQLLogic:
     * Comparison operators (==, !=, …) never contain boolean operators (and, or) further down in the stack
     """
 
-    def __init__(self, list):
+    def __init__(self, list, gate=None):
         self.list = list
+        self.gate = gate
         self.bool_ops = {
             "and": lambda *args: reduce(lambda total, arg: total & arg, args) if args else Q(),
             "or": lambda *args: reduce(lambda total, arg: total | arg, args) if args else Q(),
@@ -520,6 +533,8 @@ class SQLLogic:
                 return F('item_id')
             elif values[0] == 'variation':
                 return F('variation_id')
+            elif values[0] == 'gate':
+                return Value(self.gate.pk if self.gate else None)
             elif values[0] == 'entries_number':
                 return Coalesce(
                     Subquery(
@@ -731,7 +746,8 @@ def _save_answers(op, answers, given_answers):
 def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
                     user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY,
-                    raw_barcode=None, raw_source_type=None, from_revoked_secret=False, simulate=False):
+                    raw_barcode=None, raw_source_type=None, from_revoked_secret=False, simulate=False,
+                    gate=None):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -746,6 +762,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     :param nonce: A random nonce to prevent race conditions.
     :param datetime: The datetime of the checkin, defaults to now.
     :param simulate: If true, the check-in is not saved.
+    :param gate: The gate the check-in was performed at.
     """
 
     # !!!!!!!!!
@@ -860,7 +877,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 )
 
         if type == Checkin.TYPE_ENTRY and clist.rules:
-            rule_data = LazyRuleVars(op, clist, dt)
+            rule_data = LazyRuleVars(op, clist, dt, gate=gate)
             logic = _get_logic_environment(op.subevent or clist.event, now_dt=dt)
             if not logic.apply(clist.rules, rule_data):
                 if force:
@@ -885,6 +902,8 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         device = None
         if isinstance(auth, Device):
             device = auth
+            if not gate:
+                gate = device.gate
 
         last_cis = list(op.checkins.order_by('-datetime').filter(list=clist).only('type', 'nonce'))
         entry_allowed = (
@@ -908,7 +927,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                     list=clist,
                     datetime=dt,
                     device=device,
-                    gate=device.gate if device else None,
+                    gate=gate,
                     nonce=nonce,
                     forced=force and (not entry_allowed or from_revoked_secret or force_used),
                     force_sent=force,

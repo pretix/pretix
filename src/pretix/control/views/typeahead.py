@@ -1010,7 +1010,7 @@ def devices_select2(request, **kwargs):
     return JsonResponse(doc)
 
 
-@organizer_permission_required(("can_view_orders", "can_change_organizer_settings"))
+@organizer_permission_required(("can_view_orders", "can_change_event_settings", "can_change_organizer_settings"))
 # This decorator is a bit of a hack since this is not technically an organizer permission, but it does the job here --
 # anyone who can see orders for any event can see the check-in log view where this is used as a filter
 def gate_select2(request, **kwargs):

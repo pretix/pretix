@@ -48,6 +48,9 @@
         <lookup-select2 required v-if="vartype == 'variation' && operator == 'inList'" :multiple="true"
                         :value="rightoperand" v-on:input="setRightOperandVariationList"
                         :url="variationSelectURL"></lookup-select2>
+        <lookup-select2 required v-if="vartype == 'gate' && operator == 'inList'" :multiple="true"
+                        :value="rightoperand" v-on:input="setRightOperandGateList"
+                        :url="gateSelectURL"></lookup-select2>
         <div class="checkin-rule-childrules" v-if="operator === 'or' || operator === 'and'">
             <div v-for="(op, opi) in operands">
                 <checkin-rule :rule="op" :index="opi" :level="level + 1" v-if="typeof op === 'object'"></checkin-rule>
@@ -144,6 +147,9 @@
       variationSelectURL: function () {
         return $("#variations-select2").text();
       },
+      gateSelectURL: function () {
+        return $("#gates-select2").text();
+      },
       vars: function () {
         return this.$root.VARS;
       },
@@ -231,6 +237,25 @@
           products["objectList"].push({
             "lookup": [
               "variation",
+              val[i].id,
+              val[i].text
+            ]
+          });
+        }
+        if (this.rule[this.operator].length === 1) {
+          this.rule[this.operator].push(products);
+        } else {
+          this.$set(this.rule[this.operator], 1, products);
+        }
+      },
+      setRightOperandGateList: function (val) {
+        var products = {
+          "objectList": []
+        };
+        for (var i = 0; i < val.length; i++) {
+          products["objectList"].push({
+            "lookup": [
+              "gate",
               val[i].id,
               val[i].text
             ]

@@ -29,6 +29,8 @@
                 id="product-select2">{% url "control:event.items.select2" event=request.event.slug organizer=request.organizer.slug %}</script>
         <script type="text/plain"
                 id="variations-select2">{% url "control:event.items.variations.select2" event=request.event.slug organizer=request.organizer.slug %}</script>
+        <script type="text/plain"
+                id="gates-select2">{% url "control:organizer.gates.select2" organizer=request.organizer.slug %}</script>
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         <div class="tabbed-form">

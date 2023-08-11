@@ -265,6 +265,7 @@ with scopes_disabled():
 
         def __init__(self, *args, **kwargs):
             self.checkinlist = kwargs.pop('checkinlist')
+            self.gate = kwargs.pop('gate')
             super().__init__(*args, **kwargs)
 
         def has_checkin_qs(self, queryset, name, value):
@@ -274,7 +275,7 @@ with scopes_disabled():
             if not self.checkinlist.rules:
                 return queryset
             return queryset.filter(
-                SQLLogic(self.checkinlist).apply(self.checkinlist.rules)
+                SQLLogic(self.checkinlist, self.gate).apply(self.checkinlist.rules)
             ).filter(
                 Q(valid_from__isnull=True) | Q(valid_from__lte=now()),
                 Q(valid_until__isnull=True) | Q(valid_until__gte=now()),
@@ -396,7 +397,7 @@ def _checkin_list_position_queryset(checkinlists, ignore_status=False, ignore_pr
 
 def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force, checkin_type, ignore_unpaid, nonce,
                     untrusted_input, user, auth, expand, pdf_data, request, questions_supported, canceled_supported,
-                    source_type='barcode', legacy_url_support=False, simulate=False):
+                    source_type='barcode', legacy_url_support=False, simulate=False, gate=None):
     if not checkinlists:
         raise ValidationError('No check-in list passed.')
 
@@ -404,7 +405,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
     prefetch_related_objects([cl for cl in checkinlists if not cl.all_products], 'limit_products')
 
     device = auth if isinstance(auth, Device) else None
-    gate = auth.gate if isinstance(auth, Device) else None
+    gate = gate or (auth.gate if isinstance(auth, Device) else None)
 
     context = {
         'request': request,
@@ -659,6 +660,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 raw_source_type=source_type,
                 from_revoked_secret=from_revoked_secret,
                 simulate=simulate,
+                gate=gate,
             )
         except RequiredQuestionsError as e:
             return Response({
@@ -757,6 +759,7 @@ class CheckinListPositionViewSet(viewsets.ReadOnlyModelViewSet):
     def get_filterset_kwargs(self):
         return {
             'checkinlist': self.checkinlist,
+            'gate': self.request.auth.gate if isinstance(self.request.auth, Device) else None,
         }
 
     @cached_property

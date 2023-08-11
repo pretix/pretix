@@ -44,7 +44,9 @@
                     </strong>
                 </span>
                 <span v-else-if="vardata && operator === 'inList'">
-                    <span class="fa fa-ticket"></span> {{ vardata.label }}
+                    <span class="fa fa-sign-in" v-if="variable === 'gate'"></span>
+                    <span class="fa fa-ticket" v-else></span>
+                    {{ vardata.label }}
                     <span v-if="varresult !== null">
                       ({{varresult}})
                     </span>
@@ -149,6 +151,8 @@
       varresult () {
         const op = this.operator;
         if (this.node.rule[op] && this.node.rule[op][0]) {
+          if (typeof this.node.rule[op][0]["__result"] === "undefined")
+            return null;
           return this.node.rule[op][0]["__result"];
         } else {
           return "";
