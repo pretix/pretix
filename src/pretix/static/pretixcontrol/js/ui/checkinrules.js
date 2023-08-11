@@ -35,6 +35,32 @@ $(function () {
         'cardinality': 2,
       },
     },
+    'int_by_datetime': {
+      '<': {
+        'label': '<',
+        'cardinality': 2,
+      },
+      '<=': {
+        'label': '≤',
+        'cardinality': 2,
+      },
+      '>': {
+        'label': '>',
+        'cardinality': 2,
+      },
+      '>=': {
+        'label': '≥',
+        'cardinality': 2,
+      },
+      '==': {
+        'label': '=',
+        'cardinality': 2,
+      },
+      '!=': {
+        'label': '≠',
+        'cardinality': 2,
+      },
+    },
     'int': {
       '<': {
         'label': '<',
@@ -90,6 +116,14 @@ $(function () {
     'entries_today': {
       'label': gettext('Number of previous entries since midnight'),
       'type': 'int',
+    },
+    'entries_since': {
+      'label': gettext('Number of previous entries since'),
+      'type': 'int_by_datetime',
+    },
+    'entries_before': {
+      'label': gettext('Number of previous entries before'),
+      'type': 'int_by_datetime',
     },
     'entries_days': {
       'label': gettext('Number of days with a previous entry'),
