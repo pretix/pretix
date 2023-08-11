@@ -38,6 +38,7 @@ from decimal import Decimal
 from urllib.parse import urlencode, urlparse
 from zoneinfo import ZoneInfo
 
+import pycountry
 from django import forms
 from django.conf import settings
 from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
@@ -65,7 +66,7 @@ from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.settings import (
-    PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_event_settings,
+    COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_event_settings,
 )
 from pretix.base.validators import multimail_validate
 from pretix.control.forms import (
@@ -1428,9 +1429,22 @@ class CountriesAndEU(CachedCountries):
     cache_subkey = 'with_any_or_eu'
 
 
+class CountriesAndEUAndStates(CountriesAndEU):
+    cache_subkey = 'with_any_or_eu_or_states'
+
+    def __iter__(self):
+        for ccode, cname in super().__iter__():
+            yield (ccode, cname)
+            if ccode in COUNTRIES_WITH_STATE_IN_ADDRESS:
+                details = COUNTRIES_WITH_STATE_IN_ADDRESS[ccode]
+                subdivs = pycountry.subdivisions.get(country_code=ccode)
+                for subdiv in subdivs:
+                    yield (subdiv.code, "|-  " + subdiv.name)
+
+
 class TaxRuleLineForm(I18nForm):
     country = LazyTypedChoiceField(
-        choices=CountriesAndEU(),
+        choices=CountriesAndEUAndStates(),
         required=False
     )
     address_type = forms.ChoiceField(
