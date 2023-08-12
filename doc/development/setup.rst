@@ -96,6 +96,13 @@ http://localhost:8000/control/ for the admin view.
           port (for example because you develop on `pretixdroid`_), you can check
           `Django's documentation`_ for more options.
 
+When running the local development webserver, ensure Celery is not configured
+in ``pretix.cfg``. i.e., you should remove anything such as::
+
+    [celery]
+    backend=redis://redis:6379/2
+    broker=redis://redis:6379/2
+
 .. _`checksandtests`:
 
 Code checks and unit tests
