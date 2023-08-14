@@ -52,7 +52,9 @@ from django.utils.functional import cached_property
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
-from django.utils.translation import gettext, gettext_lazy as _, pgettext, pgettext_lazy
+from django.utils.translation import (
+    gettext, gettext_lazy as _, pgettext, pgettext_lazy,
+)
 from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import (
     I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
@@ -66,7 +68,8 @@ from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.settings import (
-    COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_event_settings,
+    COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SCHEMES,
+    PERSON_NAME_TITLE_GROUPS, validate_event_settings,
 )
 from pretix.base.validators import multimail_validate
 from pretix.control.forms import (

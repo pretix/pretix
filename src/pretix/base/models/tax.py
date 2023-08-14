@@ -345,10 +345,10 @@ class TaxRule(LoggedModel):
                 elif r['country'] == 'EU':  # Rule: Any EU country
                     if not is_eu_country(invoice_address.country):
                         continue
-                elif '-' in r['country']:   # Rule: Specified country and state
+                elif '-' in r['country']:   # Rule: Specific country and state
                     if r['country'] != str(invoice_address.country) + '-' + str(invoice_address.state):
                         continue
-                else:                       # Rule: Specified country
+                else:                       # Rule: Specific country
                     if r['country'] != str(invoice_address.country):
                         continue
                 if r['address_type'] == 'individual' and invoice_address.is_business:
