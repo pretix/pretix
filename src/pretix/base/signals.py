@@ -683,16 +683,12 @@ dictionaries as values that contain keys like in the following example::
         "product": {
             "label": _("Product name"),
             "editor_sample": _("Sample product"),
-            "evaluate": lambda orderposition, order, event: str(orderposition.item),
-            "evaluate_bulk": lambda orderpositions: [str(op.item) for op in orderpositions],
+            "evaluate": lambda orderposition, order, event: str(orderposition.item)
         }
     }
 
 The ``evaluate`` member will be called with the order position, order and event as arguments. The event might
 also be a subevent, if applicable.
-
-The ``evaluate_bulk`` member is optional but can significantly improve performance in some situations because you
-can perform database fetches in bulk instead of single queries for every position.
 """
 
 
