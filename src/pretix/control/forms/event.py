@@ -52,9 +52,7 @@ from django.utils.functional import cached_property
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
-from django.utils.translation import (
-    gettext, gettext_lazy as _, pgettext, pgettext_lazy,
-)
+from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
 from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import (
     I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
@@ -1436,16 +1434,13 @@ class CountriesAndEUAndStates(CountriesAndEU):
     cache_subkey = 'with_any_or_eu_or_states'
 
     def __iter__(self):
-        for ccode, cname in super().__iter__():
-            if ccode in COUNTRIES_WITH_STATE_IN_ADDRESS:
-                types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[ccode]
-                yield (ccode, cname + " (" + pgettext("tax_rule", "Any state") + ")")
-                statelist = [(s.code, "├ " + s.name) for s in pycountry.subdivisions.get(country_code=ccode) if s.type in types]
-                statelist = sorted(statelist, key=lambda s: s[1])
-                statelist[-1] = (statelist[-1][0], "└" + statelist[-1][1][1:])
-                yield from statelist
-            else:
-                yield (ccode, cname)
+        for country_code, country_name in super().__iter__():
+            yield country_code, country_name
+            if country_code in COUNTRIES_WITH_STATE_IN_ADDRESS:
+                types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[country_code]
+                yield from sorted(((state.code, country_name + " - " + state.name)
+                                   for state in pycountry.subdivisions.get(country_code=country_code)
+                                   if state.type in types), key=lambda s: s[1])
 
 
 class TaxRuleLineForm(I18nForm):
