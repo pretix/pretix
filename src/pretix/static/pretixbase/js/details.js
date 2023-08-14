@@ -7,7 +7,9 @@ setup_collapsible_details = function (el) {
         var $elements = $("> :not(summary)", this).show().filter(':not(.sneak-peek-trigger)');
         var container = this;
 
-        if ($("> :not(summary)", this).show().filter(':not(.sneak-peek-trigger)').height() < 200) {
+        if (Array.prototype.reduce.call($elements, function (h, e) {
+            return h + $(e).outerHeight();
+        }, 0) < 200) {
             $(".sneak-peek-trigger", this).remove();
             $(container).removeClass('sneak-peek');
             container.style.removeProperty('height');
