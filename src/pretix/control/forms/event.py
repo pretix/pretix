@@ -1431,8 +1431,6 @@ class CountriesAndEU(CachedCountries):
 
 
 class CountriesAndEUAndStates(CountriesAndEU):
-    cache_subkey = 'with_any_or_eu_or_states'
-
     def __iter__(self):
         for country_code, country_name in super().__iter__():
             yield country_code, country_name
