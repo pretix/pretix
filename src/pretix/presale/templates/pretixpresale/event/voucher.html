@@ -21,7 +21,7 @@
             </div>
         {% endif %}
         <h3>{{ subevent.name }}</h3>
-            {% include "pretixpresale/event/fragment_event_info.html" with event=request.event subevent=subevent ev=subevent show_location=True %}
+        {% include "pretixpresale/event/fragment_event_info.html" with event=request.event subevent=subevent ev=subevent show_location=True %}
     {% else %}
         {% if event_logo and event_logo_show_title %}
             <h2 class="content-header">
