@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 11:49+0000\n"
-"PO-Revision-Date: 2023-08-09 03:00+0000\n"
-"Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
+"PO-Revision-Date: 2023-08-16 22:00+0000\n"
+"Last-Translator: Maurice Kaag <maurice@kaag.me>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -247,9 +247,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:185 pretix/control/forms/item.py:1084
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
-"Un forfait ne doit pas contenir des produits, qui sont eux-mêmes des "
-"forfaits."
+msgstr "Un produit groupé ne doit pas contenir des produits groupés."
 
 #: pretix/api/serializers/item.py:262
 msgid ""
@@ -3097,7 +3095,7 @@ msgstr "Annulation"
 #: pretix/base/invoice.py:620 pretix/base/invoice.py:628
 msgctxt "invoice"
 msgid "Description"
-msgstr "Déscription"
+msgstr "Description"
 
 #: pretix/base/invoice.py:621 pretix/base/invoice.py:629
 msgctxt "invoice"
@@ -6805,16 +6803,12 @@ msgid "List of Add-Ons"
 msgstr "Liste des Addons"
 
 #: pretix/base/pdf.py:364
-#, fuzzy
-#| msgid ""
-#| "Add-on 1\n"
-#| "Add-on 2"
 msgid ""
 "Add-on 1\n"
 "2x Add-on 2"
 msgstr ""
 "Add-on 1\n"
-"Add-on 2"
+"2x Add-on 2"
 
 #: pretix/base/pdf.py:370 pretix/control/forms/filter.py:1275
 #: pretix/control/forms/filter.py:1277
@@ -11136,7 +11130,7 @@ msgstr "Degré (après le nom)"
 #: pretix/base/settings.py:3577
 msgctxt "person_name_sample"
 msgid "MA"
-msgstr ""
+msgstr "MA"
 
 #: pretix/base/settings.py:3684 pretix/control/forms/event.py:217
 msgid ""
