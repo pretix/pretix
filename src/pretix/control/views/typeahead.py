@@ -546,7 +546,7 @@ def variations_select2(request, **kwargs):
         F('item__category__position').asc(nulls_first=True),
         'item__category_id',
         'item__position',
-        'item__pk'
+        'item__pk',
         'position',
         'value'
     ).select_related('item')
