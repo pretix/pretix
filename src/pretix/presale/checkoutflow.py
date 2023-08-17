@@ -703,11 +703,16 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
 
 def business_heuristic(organizer):
-    print(repr(organizer))
-    result = InvoiceAddress.objects.filter(order__event__organizer=organizer).aggregate(
-        total=Count('*'), business=Sum(Cast('is_business', output_field=models.IntegerField())))
-    print("business_heuristic", organizer.slug, result)
-    return result['business'] / result['total'] >= 0.6
+    cached_result = organizer.cache.get('checkout_heuristic_is_business')
+    if cached_result is None:
+        result = InvoiceAddress.objects.filter(order__event__organizer=organizer).aggregate(
+            total=Count('*'), business=Sum(Cast('is_business', output_field=models.IntegerField())))
+        print("business_heuristic", organizer.slug, result)
+        is_business = result['business'] / result['total'] >= 0.6
+        organizer.cache.set('checkout_heuristic_is_business', str(is_business), timeout=15)
+        return is_business
+    else:
+        return cached_result == 'True'
 
 
 class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
