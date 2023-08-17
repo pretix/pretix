@@ -802,7 +802,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     @cached_property
     def invoice_form(self):
         wd = self.cart_session.get('widget_data', {})
-        if not self.invoice_address.pk:
+        if self.invoice_address.pk:
+            wd_initial = {}
+        elif wd:
             wd_initial = {
                 'name_parts': {
                     k[21:].replace('-', '_'): v
@@ -817,7 +819,12 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 'country': wd.get('invoice-address-country', ''),
             }
         else:
-            wd_initial = {}
+            wd_initial = {
+                'is_business': None,
+            }
+        print("wd", wd)
+        print("wd_initial", wd_initial)
+        print("invoice_address", self.invoice_address)
         initial = dict(wd_initial)
 
         if self.cart_customer:

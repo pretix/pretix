@@ -225,15 +225,17 @@ class BusinessBooleanRadio(forms.RadioSelect):
         super().__init__(attrs, choices)
 
     def format_value(self, value):
+        print("format_value", value)
         if self.require_business:
             return 'business'
         try:
             return {True: 'business', False: 'individual'}[value]
         except KeyError:
-            return 'individual'
+            return ''
 
     def value_from_datadict(self, data, files, name):
         value = data.get(name)
+        print("value_from_datadict", data,name,value)
         if self.require_business:
             return True
         return {
@@ -243,4 +245,5 @@ class BusinessBooleanRadio(forms.RadioSelect):
             'individual': False,
             'False': False,
             False: False,
+            '': None,
         }.get(value)
