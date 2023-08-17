@@ -42,7 +42,9 @@ from django.contrib import messages
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.signing import BadSignature, loads
 from django.core.validators import EmailValidator
-from django.db.models import F, Q
+from django.db import models
+from django.db.models import Count, F, Q, Sum
+from django.db.models.functions import Cast
 from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.utils import translation
@@ -700,6 +702,14 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                        sales_channel=request.sales_channel.identifier)
 
 
+def business_heuristic(organizer):
+    print(repr(organizer))
+    result = InvoiceAddress.objects.filter(order__event__organizer=organizer).aggregate(
+        total=Count('*'), business=Sum(Cast('is_business', output_field=models.IntegerField())))
+    print("business_heuristic", organizer.slug, result)
+    return result['business'] / result['total'] >= 0.6
+
+
 class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     priority = 50
     identifier = "questions"
@@ -802,7 +812,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     @cached_property
     def invoice_form(self):
         wd = self.cart_session.get('widget_data', {})
-        if not self.invoice_address.pk:
+        if self.invoice_address.pk:
+            wd_initial = {}
+        elif wd:
             wd_initial = {
                 'name_parts': {
                     k[21:].replace('-', '_'): v
@@ -817,7 +829,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 'country': wd.get('invoice-address-country', ''),
             }
         else:
-            wd_initial = {}
+            wd_initial = {
+                'is_business': business_heuristic(self.request.organizer),
+            }
         initial = dict(wd_initial)
 
         if self.cart_customer:
