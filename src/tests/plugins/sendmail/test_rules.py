@@ -345,6 +345,7 @@ def test_sendmail_rule_checked_in_no_mail(event, order, item):
     # receives no mail when checked in
     djmail.outbox = []
     perform_checkin(p1, clist, {})
+    assert clist.checkin_count == 1
     event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="no_checkin",
                                 subject='meow', template='meow meow meow')
     sendmail_run_rules(None)
@@ -362,6 +363,7 @@ def test_sendmail_rule_checked_in_get_mail(event, order, item):
     # receives mail when checked in
     djmail.outbox = []
     perform_checkin(p1, clist, {})
+    assert clist.checkin_count == 1
     event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="checked_in",
                                 subject='meow', template='meow meow meow')
     sendmail_run_rules(None)

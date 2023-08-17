@@ -98,13 +98,32 @@ class ScheduledMail(models.Model):
             )
             if not datetime_exists(self.computed_datetime):
                 self.computed_datetime = make_aware(
-                    datetime.combine(d, time(hour=st.hour, minute=st.minute, second=st.second, microsecond=0)) + timedelta(hours=1),
+                    datetime.combine(d,
+                                     time(hour=st.hour, minute=st.minute, second=st.second, microsecond=0)) + timedelta(
+                        hours=1),
                     self.event.timezone,
                 )
 
         if self.computed_datetime > timezone.now() and self.state == self.STATE_MISSED:
             self.state = self.STATE_SCHEDULED
         self.last_computed = timezone.now()
+
+    def filter_checkins(self, limit_products):
+        filter_positions = Q()
+        if self.subevent:
+            filter_positions |= Exists(OrderPosition.objects.filter(order=OuterRef('pk'), subevent=self.subevent))
+        if not self.rule.all_products:
+            filter_positions |= Exists(OrderPosition.objects.filter(order=OuterRef('pk'), item_id__in=limit_products))
+
+        checkin_q = Q()
+        if self.rule.checked_in_status == "no_checkin":
+            checkin_q = ~Exists(
+                Checkin.objects.filter(position__order_id=OuterRef('pk'),
+                                       position_id__in=OrderPosition.objects.filter(filter_positions)))
+        if self.rule.checked_in_status == "checked_in":
+            checkin_q = Exists(Checkin.all.filter(position__order_id=OuterRef('pk'),
+                                                  position_id__in=OrderPosition.objects.filter(filter_positions)))
+        return checkin_q
 
     def send(self):
         if self.state not in (ScheduledMail.STATE_SCHEDULED, ScheduledMail.STATE_FAILED):
@@ -138,11 +157,7 @@ class ScheduledMail(models.Model):
             status_q |= Q(status=Order.STATUS_PENDING, require_approval=False, valid_if_pending=False,
                           expires__lt=now())
 
-        checkin_q = Q()
-        if self.rule.checked_in_status == "checked_in":
-            checkin_q = Q(Exists(Checkin.objects.filter(position=OuterRef('pk'))))
-        elif self.rule.checked_in_status == "no_checkin":
-            checkin_q = Q(~Exists(Checkin.objects.filter(position=OuterRef('pk'))))
+        orders = orders.filter(self.filter_checkins(limit_products))
 
         if self.last_successful_order_id:
             orders = orders.filter(
@@ -150,8 +165,7 @@ class ScheduledMail(models.Model):
             )
 
         orders = orders.filter(
-            status_q,
-            checkin_q,
+            status_q
         ).order_by('pk').select_related('invoice_address').prefetch_related('positions')
 
         send_to_orders = self.rule.send_to in (Rule.CUSTOMERS, Rule.BOTH)
