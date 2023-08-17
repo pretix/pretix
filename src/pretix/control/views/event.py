@@ -1533,7 +1533,7 @@ class EventQRCode(EventPermissionRequiredMixin, View):
         url = build_absolute_uri(request.event, 'presale:event.index')
 
         if "url" in request.GET:
-            if url_has_allowed_host_and_scheme(request.GET["url"], allowed_hosts=[urlparse(url).hostname]):
+            if url_has_allowed_host_and_scheme(request.GET["url"], allowed_hosts=[urlparse(url).netloc]):
                 url = request.GET["url"]
             else:
                 raise PermissionDenied("Untrusted URL")
