@@ -98,9 +98,7 @@ class ScheduledMail(models.Model):
             )
             if not datetime_exists(self.computed_datetime):
                 self.computed_datetime = make_aware(
-                    datetime.combine(d,
-                                     time(hour=st.hour, minute=st.minute, second=st.second, microsecond=0)) + timedelta(
-                        hours=1),
+                    datetime.combine(d, time(hour=st.hour, minute=st.minute, second=st.second, microsecond=0)) + timedelta(hours=1),
                     self.event.timezone,
                 )
 
@@ -227,7 +225,7 @@ class Rule(models.Model, LoggingMixin):
         (BOTH, _('Both (all order contact addresses and all attendee email addresses)'))
     ]
 
-    CHECK_IN = [
+    CHECK_IN_STATUS_CHOICES = [
         ("all", _("Everyone")),
         ("checked_in", _("Anyone who is or was checked in")),
         ("no_checkin", _("Anyone who never checked in before"))
@@ -250,7 +248,7 @@ class Rule(models.Model, LoggingMixin):
     checked_in_status = models.CharField(
         verbose_name=_("Restrict to check-in status"),
         default="all",
-        choices=CHECK_IN,
+        choices=CHECK_IN_STATUS_CHOICES,
         max_length=10,
     )
 
