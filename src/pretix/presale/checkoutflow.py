@@ -708,7 +708,7 @@ def business_heuristic(organizer):
         result = InvoiceAddress.objects.filter(order__event__organizer=organizer).aggregate(
             total=Count('*'), business=Sum(Cast('is_business', output_field=models.IntegerField())))
         is_business = result['business'] / result['total'] >= 0.6
-        organizer.cache.set('checkout_heuristic_is_business', str(is_business), timeout=15)
+        organizer.cache.set('checkout_heuristic_is_business', str(is_business), timeout=3600)
         return is_business
     else:
         return cached_result == 'True'
