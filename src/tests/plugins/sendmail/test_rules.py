@@ -325,7 +325,7 @@ def test_sendmail_rule_not_checked_in_no_mail(event, order, item):
 def test_sendmail_rule_not_checked_in_get_mail(event, order, item):
     order.status = Order.STATUS_PAID
     order.save()
-    p1 = order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
+    order.all_positions.create(item=item, price=13, attendee_email='item1@dummy.test')
     event.sendmail_rules.create(send_date=dt_now - datetime.timedelta(hours=1), checked_in_status="no_checkin",
                                 subject='meow', template='meow meow meow')
 
