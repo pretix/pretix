@@ -1794,6 +1794,8 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
     ))
     assert resp.status_code == 200
     assert resp.data['positions'][0].get('pdf_data')
+    assert resp.data['positions'][0]['pdf_data']['positionid'] == '1'
+    assert resp.data['positions'][0]['pdf_data']['order'] == order.code
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/'.format(
         organizer.slug, event.slug, order.code
     ))
@@ -1807,6 +1809,8 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
         ))
     assert resp.status_code == 200
     assert resp.data['results'][0]['positions'][0].get('pdf_data')
+    assert resp.data['results'][0]['positions'][0]['pdf_data']['positionid'] == '1'
+    assert resp.data['results'][0]['positions'][0]['pdf_data']['order'] == order.code
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/'.format(
         organizer.slug, event.slug
     ))
@@ -1820,6 +1824,8 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
         ))
     assert resp.status_code == 200
     assert resp.data['results'][0].get('pdf_data')
+    assert resp.data['results'][0]['pdf_data']['positionid'] == '1'
+    assert resp.data['results'][0]['pdf_data']['order'] == order.code
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/'.format(
         organizer.slug, event.slug
     ))
@@ -1834,6 +1840,8 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
     ))
     assert resp.status_code == 200
     assert resp.data.get('pdf_data')
+    assert resp.data['pdf_data']['positionid'] == '1'
+    assert resp.data['pdf_data']['order'] == order.code
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
         organizer.slug, event.slug, posid
     ))
