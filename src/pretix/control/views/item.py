@@ -1188,7 +1188,7 @@ class MetaDataEditorMixin:
 
     @cached_property
     def meta_forms(self):
-        if hasattr(self, 'object') and self.object:
+        if getattr(self, 'object', None):
             val_instances = {
                 v.property_id: v for v in self.object.meta_values.all()
             }
@@ -1205,13 +1205,18 @@ class MetaDataEditorMixin:
         return self.meta_form(
             prefix='prop-{}'.format(p.pk),
             property=p,
-            instance=val_instances.get(p.pk, self.meta_model(property=p, item=self.object)),
+            instance=val_instances.get(
+                p.pk,
+                self.meta_model(property=p, item=self.object if getattr(self, 'object', None) else None)
+            ),
             data=(self.request.POST if self.request.method == "POST" else None)
         )
 
     def save_meta(self):
         for f in self.meta_forms:
             if f.cleaned_data.get('value'):
+                if not f.instance.item_id:
+                    f.instance.item = self.object
                 f.save()
             elif f.instance and f.instance.pk:
                 f.instance.delete()
@@ -1257,6 +1262,7 @@ class ItemCreate(EventPermissionRequiredMixin, MetaDataEditorMixin, CreateView):
         messages.success(self.request, _('Your changes have been saved.'))
 
         ret = super().form_valid(form)
+        self.save_meta()
         form.instance.log_action('pretix.event.item.added', user=self.request.user, data={
             k: (form.cleaned_data.get(k).name
                 if isinstance(form.cleaned_data.get(k), File)
@@ -1282,6 +1288,13 @@ class ItemCreate(EventPermissionRequiredMixin, MetaDataEditorMixin, CreateView):
         ctx = super().get_context_data()
         ctx['meta_forms'] = self.meta_forms
         return ctx
+
+    def post(self, request, *args, **kwargs):
+        form = self.get_form()
+        if form.is_valid() and all([f.is_valid() for f in self.meta_forms]):
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
 
 
 class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataEditorMixin, UpdateView):
