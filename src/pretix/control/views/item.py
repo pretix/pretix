@@ -1195,19 +1195,30 @@ class MetaDataEditorMixin:
         else:
             val_instances = {}
 
+        if getattr(self, 'copy_from', None):
+            defaults = {
+                v.property_id: v.value for v in self.copy_from.meta_values.all()
+            }
+        else:
+            defaults = {}
+
         formlist = []
 
         for p in self.request.event.item_meta_properties.all():
-            formlist.append(self._make_meta_form(p, val_instances))
+            formlist.append(self._make_meta_form(p, val_instances, defaults))
         return formlist
 
-    def _make_meta_form(self, p, val_instances):
+    def _make_meta_form(self, p, val_instances, defaults):
         return self.meta_form(
             prefix='prop-{}'.format(p.pk),
             property=p,
             instance=val_instances.get(
                 p.pk,
-                self.meta_model(property=p, item=self.object if getattr(self, 'object', None) else None)
+                self.meta_model(
+                    property=p,
+                    item=self.object if getattr(self, 'object', None) else None,
+                    value=defaults.get(p.pk, None)
+                )
             ),
             data=(self.request.POST if self.request.method == "POST" else None)
         )

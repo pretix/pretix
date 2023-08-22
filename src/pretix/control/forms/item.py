@@ -461,11 +461,6 @@ class ItemCreateForm(I18nModelForm):
                 )
 
         if self.cleaned_data.get('copy_from'):
-            for mv in self.cleaned_data['copy_from'].meta_values.all():
-                mv.pk = None
-                mv.item = instance
-                mv.save(force_insert=True)
-
             for question in self.cleaned_data['copy_from'].questions.all():
                 question.items.add(instance)
                 question.log_action('pretix.event.question.changed', user=self.user, data={
