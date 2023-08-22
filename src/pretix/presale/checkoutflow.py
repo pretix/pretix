@@ -714,7 +714,7 @@ def business_heuristic(event):
             is_business = result['business'] / result['total'] >= 0.6
         else:
             is_business = False
-        event.cache.set('checkout_heuristic_is_business', is_business, timeout=12 * 3600) # 12 hours
+        event.cache.set('checkout_heuristic_is_business', is_business, timeout=12 * 3600)  # 12 hours
         return is_business
     else:
         return cached_result
