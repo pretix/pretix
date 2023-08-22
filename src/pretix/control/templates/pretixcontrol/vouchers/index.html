@@ -96,7 +96,9 @@
                     <tr>
                         <th>
                             {% if "can_change_vouchers" in request.eventpermset %}
-                                <input type="checkbox" data-toggle-table />
+                                <label aria-label="{% trans "select all rows for batch-operation" %}" class="batch-select-label">
+                                    <input type="checkbox" data-toggle-table />
+                                </label>
                             {% endif %}
                         </th>
                         <th>
@@ -139,7 +141,9 @@
                         <tr>
                             <td>
                                 {% if "can_change_vouchers" in request.eventpermset %}
-                                    <input type="checkbox" name="voucher" class="" value="{{ v.pk }}"/>
+                                    <label aria-label="{% trans "select row for batch-operation" %}" class="batch-select-label">
+                                        <input type="checkbox" name="voucher" class="batch-select-checkbox" value="{{ v.pk }}"/>
+                                    </label>
                                 {% endif %}
                             </td>
                             <td>
@@ -194,9 +198,12 @@
                 </table>
             </div>
             {% if "can_change_vouchers" in request.eventpermset %}
-                <button type="submit" class="btn btn-default btn-save" name="action" value="delete">
-                    {% trans "Delete selected" %}
-                </button>
+                <div class="batch-select-actions">
+                    <button type="submit" class="btn btn-danger" name="action" value="delete">
+                        <i class="fa fa-trash" aria-hidden="true"></i>
+                        {% trans "Delete selected" %}
+                    </button>
+                </div>
             {% endif %}
         </form>
         {% include "pretixcontrol/pagination.html" %}
