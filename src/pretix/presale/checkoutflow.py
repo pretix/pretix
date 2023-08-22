@@ -702,19 +702,22 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                        sales_channel=request.sales_channel.identifier)
 
 
-def business_heuristic(organizer):
-    cached_result = organizer.cache.get('checkout_heuristic_is_business')
+def business_heuristic(event):
+    cached_result = event.cache.get('checkout_heuristic_is_business')
     if cached_result is None:
-        result = InvoiceAddress.objects.filter(order__event__organizer=organizer).aggregate(
+        result = InvoiceAddress.objects.filter(order__event=event).aggregate(
             total=Count('*'), business=Sum(Cast('is_business', output_field=models.IntegerField())))
+        if result['total'] < 100:
+            result = InvoiceAddress.objects.filter(order__event__organizer=event.organizer).aggregate(
+                total=Count('*'), business=Sum(Cast('is_business', output_field=models.IntegerField())))
         if result['business'] and result['total']:
             is_business = result['business'] / result['total'] >= 0.6
         else:
             is_business = False
-        organizer.cache.set('checkout_heuristic_is_business', str(is_business), timeout=3600)
+        event.cache.set('checkout_heuristic_is_business', is_business, timeout=12 * 3600) # 12 hours
         return is_business
     else:
-        return cached_result == 'True'
+        return cached_result
 
 
 class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
@@ -837,7 +840,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             }
         else:
             wd_initial = {
-                'is_business': business_heuristic(self.request.organizer),
+                'is_business': business_heuristic(self.request.event),
             }
         initial = dict(wd_initial)
 
