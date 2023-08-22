@@ -1290,6 +1290,7 @@ class ItemCreate(EventPermissionRequiredMixin, MetaDataEditorMixin, CreateView):
         return ctx
 
     def post(self, request, *args, **kwargs):
+        self.object = None
         form = self.get_form()
         if form.is_valid() and all([f.is_valid() for f in self.meta_forms]):
             return self.form_valid(form)
