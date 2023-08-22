@@ -702,10 +702,10 @@ def get_seat(op: OrderPosition):
 
 def generate_compressed_addon_list(op, order, event):
     itemcount = defaultdict(int)
-    addons = (
+    addons = [p for p in (
         op.addons.all() if 'addons' in getattr(op, '_prefetched_objects_cache', {})
         else op.addons.select_related('item', 'variation')
-    )
+    ) if not p.canceled]
     for pos in addons:
         itemcount[pos.item, pos.variation] += 1
 
