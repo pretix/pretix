@@ -90,11 +90,6 @@ class RuleSerializer(I18nAwareModelSerializer):
                 ]:
                     raise ValidationError(f'status {s} not allowed: restrict_to_status may only include valid states')
 
-        checked_in_status = full_data.get('checked_in_status')
-        if checked_in_status not in [state[0] for state in Rule.CHECK_IN_STATUS_CHOICES]:
-            raise ValidationError(
-                f'status {checked_in_status} not allowed: checked_in_status may only include valid states')
-
         return full_data
 
     def save(self, **kwargs):
