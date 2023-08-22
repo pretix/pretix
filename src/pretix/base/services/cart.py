@@ -1078,6 +1078,7 @@ class CartManager:
         quotas_ok = _get_quota_availability(self._quota_diff, self.now_dt)
         err = None
         new_cart_positions = []
+        deleted_positions = set()
 
         err = err or self._check_min_max_per_product()
 
@@ -1089,7 +1090,10 @@ class CartManager:
                 if op.position.expires > self.now_dt:
                     for q in op.position.quotas:
                         quotas_ok[q] += 1
-                op.position.addons.all().delete()
+                addons = op.position.addons.all()
+                deleted_positions |= {a.pk for a in addons}
+                addons.delete()
+                deleted_positions.add(op.position.pk)
                 op.position.delete()
 
             elif isinstance(op, (self.AddOperation, self.ExtendOperation)):
@@ -1239,20 +1243,28 @@ class CartManager:
                     if op.seat and not op.seat.is_available(ignore_cart=op.position, sales_channel=self._sales_channel,
                                                             ignore_voucher_id=op.position.voucher_id):
                         err = err or error_messages['seat_unavailable']
-                        op.position.addons.all().delete()
+
+                        addons = op.position.addons.all()
+                        deleted_positions |= {a.pk for a in addons}
+                        deleted_positions.add(op.position.pk)
+                        addons.delete()
                         op.position.delete()
                     elif available_count == 1:
                         op.position.expires = self._expiry
                         op.position.listed_price = op.listed_price
                         op.position.price_after_voucher = op.price_after_voucher
                         # op.position.price will be updated by recompute_final_prices_and_taxes()
-                        try:
-                            op.position.save(force_update=True, update_fields=['expires', 'listed_price', 'price_after_voucher'])
-                        except DatabaseError:
-                            # Best effort... The position might have been deleted in the meantime!
-                            pass
+                        if op.position.pk not in deleted_positions:
+                            try:
+                                op.position.save(force_update=True, update_fields=['expires', 'listed_price', 'price_after_voucher'])
+                            except DatabaseError:
+                                # Best effort... The position might have been deleted in the meantime!
+                                pass
                     elif available_count == 0:
-                        op.position.addons.all().delete()
+                        addons = op.position.addons.all()
+                        deleted_positions |= {a.pk for a in addons}
+                        deleted_positions.add(op.position.pk)
+                        addons.delete()
                         op.position.delete()
                     else:
                         raise AssertionError("ExtendOperation cannot affect more than one item")
