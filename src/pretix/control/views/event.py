@@ -785,8 +785,8 @@ class MailSettingsRendererPreview(MailSettingsPreview):
         return ctx
 
     def get(self, request, *args, **kwargs):
-        v = str(request.event.settings.mail_text_order_payment_failed)
-        v = format_map(v, self.placeholders('mail_text_order_payment_failed'))
+        v = str(request.event.settings.mail_text_order_placed)
+        v = format_map(v, self.placeholders('mail_text_order_placed'))
         renderers = request.event.get_html_mail_renderers()
         if request.GET.get('renderer') in renderers:
             with rolledback_transaction():
