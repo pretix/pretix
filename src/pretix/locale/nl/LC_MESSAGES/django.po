@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 11:49+0000\n"
-"PO-Revision-Date: 2023-07-16 22:00+0000\n"
-"Last-Translator: Freek Engelbarts <freekengelbarts@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2023-08-24 04:00+0000\n"
+"Last-Translator: Alain <alain@waag.org>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -534,10 +534,8 @@ msgid "Waiting list entry deleted"
 msgstr "Wachtlijstitem verwijderd"
 
 #: pretix/api/webhooks.py:351
-#, fuzzy
-#| msgid "Waiting list entries"
 msgid "Waiting list entry received voucher"
-msgstr "Wachtlijstitems"
+msgstr "Wachtlijstitem heeft voucher ontvangen"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:938
@@ -553,11 +551,11 @@ msgstr "Dit veld is verplicht."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr "Voer een postcode in in het formaat XXX."
+msgstr "Postcode in het formaat XXX invoeren."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr "Voer een postcode in in het format XXXX."
+msgstr "Postcode in het format XXXX invoeren."
 
 #: pretix/base/auth.py:143
 #, python-brace-format
@@ -2311,7 +2309,7 @@ msgstr ""
 
 #: pretix/base/exporters/orderlist.py:887
 msgid "Converted from legacy version"
-msgstr ""
+msgstr "Vanuit oudere versie geconverteerd"
 
 #: pretix/base/exporters/orderlist.py:949
 msgid "Payments and refunds"
@@ -4380,7 +4378,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:662
 msgid "Reusable media type"
-msgstr ""
+msgstr "Mediatype"
 
 #: pretix/base/models/items.py:664
 msgid ""
@@ -6146,7 +6144,7 @@ msgstr "Vul een geldige taalcode in."
 #: pretix/base/orderimport.py:669 pretix/base/orderimport.py:692
 #, python-brace-format
 msgid "Could not parse {value} as a date and time."
-msgstr ""
+msgstr "Kon {value} niet als datum en tijd herkennen."
 
 #: pretix/base/orderimport.py:711
 msgid "Please enter a valid sales channel."
@@ -6847,7 +6845,7 @@ msgstr "Geldig tot"
 
 #: pretix/base/pdf.py:457
 msgid "Reusable Medium ID"
-msgstr ""
+msgstr "Media-ID"
 
 #: pretix/base/pdf.py:462
 msgid "Seat: Full name"
@@ -7524,6 +7522,8 @@ msgstr "Geen toestemming"
 #: pretix/base/services/export.py:221
 msgid "Your exported data exceeded the size limit for scheduled exports."
 msgstr ""
+"De door u geëxporteerde data overschrijdt de grootte-limiet voor geplande "
+"exports."
 
 #: pretix/base/services/invoices.py:103
 #, python-brace-format
@@ -7766,10 +7766,7 @@ msgid "Your cart is empty."
 msgstr "Uw winkelwagen is leeg."
 
 #: pretix/base/services/orders.py:138
-#, fuzzy, python-format
-#| msgid ""
-#| "You cannot select more than %(max)s items of the product %(product)s. We "
-#| "removed the surplus items from your cart."
+#, python-format
 msgid ""
 "You cannot select more than %(max)s item of the product %(product)s. We "
 "removed the surplus items from your cart."
@@ -7777,11 +7774,11 @@ msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr[0] ""
-"U kunt niet meer dan %(max)s kopieën van het product %(product)s kiezen. We "
-"hebben het overschot uit uw winkelwagen verwijderd."
+"U kunt van het product %(product)s niet meer dan %(max)s per bestelling "
+"kiezen. We hebben de overtallige producten uit uw winkelwagen verwijderd."
 msgstr[1] ""
-"U kunt niet meer dan %(max)s kopieën van het product %(product)s kiezen. We "
-"hebben het overschot uit uw winkelwagen verwijderd."
+"U kunt van het product %(product)s niet meer dan %(max)s per bestelling "
+"kiezen. We hebben de overtallige producten uit uw winkelwagen verwijderd."
 
 #: pretix/base/services/orders.py:147
 msgid "The booking period has ended."
@@ -7831,10 +7828,9 @@ msgstr ""
 "niet geldig voor dit item. We hebben dit item uit uw winkelwagen verwijderd."
 
 #: pretix/base/services/orders.py:168
-#, fuzzy
-#| msgid "You need a valid voucher code to order this product."
 msgid "You need a valid voucher code to order one of the products."
-msgstr "U heeft een geldige vouchercode nodig om dit product te bestellen."
+msgstr ""
+"U heeft een geldige vouchercode nodig om een van de producten te bestellen."
 
 #: pretix/base/services/orders.py:170
 msgid ""
@@ -7873,10 +7869,8 @@ msgstr ""
 "is besteld."
 
 #: pretix/base/services/orders.py:210
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "The order was not canceled."
-msgstr "De bestelling is geannuleerd."
+msgstr "De bestelling is niet geannuleerd."
 
 #: pretix/base/services/orders.py:265 pretix/control/forms/orders.py:120
 msgid "The new expiry date needs to be in the future."
@@ -7912,10 +7906,8 @@ msgstr ""
 "bestelling is betaald."
 
 #: pretix/base/services/orders.py:918
-#, fuzzy
-#| msgid "This payment method does not support automatic refunds."
 msgid "The selected payment methods do not cover the total balance."
-msgstr "Deze betalingsmethode ondersteunt geen automatische terugbetalingen."
+msgstr "Deze betalingsmethode dekt het volledige bedrag niet."
 
 #: pretix/base/services/orders.py:990
 msgid ""
@@ -8070,10 +8062,8 @@ msgid "Something happened in your event after the export, please try again."
 msgstr "Er is iets gebeurd in uw evenement na de export, probeer het opnieuw."
 
 #: pretix/base/services/shredder.py:177
-#, fuzzy
-#| msgid "Payment completed."
 msgid "Data shredding completed"
-msgstr "Betaling voltooid."
+msgstr "Verwijderen van data voltooid."
 
 #: pretix/base/services/stats.py:210
 msgid "Uncategorized"
@@ -10100,19 +10090,7 @@ msgid "Your order is pending payment: {code}"
 msgstr "Uw bestelling wacht op betaling: {code}"
 
 #: pretix/base/settings.py:2316
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we did not yet receive a full payment for your order for {event}.\n"
-#| "Please keep in mind that we only guarantee your order if we receive\n"
-#| "your payment before {expire_date}.\n"
-#| "\n"
-#| "You can view the payment information and the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10135,7 +10113,7 @@ msgstr ""
 "U kunt de betalingsinformatie en de status van uw bestelling inzien op\n"
 "{url}.\n"
 "\n"
-"Met vriendelijke groet,\n"
+"Met vriendelijke groet,  \n"
 "De organisatoren van {event}"
 
 #: pretix/base/settings.py:2329
@@ -10145,19 +10123,7 @@ msgid "Incomplete payment received: {code}"
 msgstr "Betaling ontvangen voor uw bestelling: {code}"
 
 #: pretix/base/settings.py:2333
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we did not yet receive a full payment for your order for {event}.\n"
-#| "Please keep in mind that we only guarantee your order if we receive\n"
-#| "your payment before {expire_date}.\n"
-#| "\n"
-#| "You can view the payment information and the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10175,10 +10141,11 @@ msgid ""
 msgstr ""
 "Hallo,\n"
 "\n"
-"We hebben nog geen volledige betaling ontvangen voor uw bestelling voor "
-"{event}.\n"
-"We kunnen uw bestelling alleen garanderen als we uw betaling ontvangen\n"
-"voor {expire_date}.\n"
+"We hebben een betaling ontvangen voor {event}\n"
+"\n"
+"Helaas is het ontvangen bedrag minder dan het volledige verschuldigde "
+"bedrag. Graag nog het bedrag van **{pending_sum}** voldoen om de bestelling "
+"te voltooien.\n"
 "\n"
 "U kunt de betalingsinformatie en de status van uw bestelling inzien op\n"
 "{url}.\n"
@@ -10367,17 +10334,7 @@ msgstr ""
 "Organisatie van {event}"
 
 #: pretix/base/settings.py:2446 pretix/base/settings.py:2483
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {attendee_name},\n"
-#| "\n"
-#| "a ticket for {event} has been ordered for you.\n"
-#| "\n"
-#| "You can view the details and status of your ticket here:\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10389,9 +10346,9 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Beste {attendee_name},\n"
+"Beste,\n"
 "\n"
-"Er is een ticket voor {event} voor u besteld.\n"
+"Uw ticket voor {event} is geaccordeerd.\n"
 "\n"
 "U kunt de details en status van uw ticket hier bekijken:\n"
 "{url}\n"
@@ -17295,10 +17252,8 @@ msgid "Valid check-in"
 msgstr "Alle check-ins"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:67
-#, fuzzy
-#| msgid "Additional information"
 msgid "Additional information required"
-msgstr "Extra informatie"
+msgstr "Extra informatie vereist"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:69
 msgid ""
