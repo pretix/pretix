@@ -34,7 +34,8 @@ from i18nfield.fields import I18nCharField, I18nTextField
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Event, InvoiceAddress, Item, Order, OrderPosition, SubEvent, fields,
+    Checkin, Event, InvoiceAddress, Item, Order, OrderPosition, SubEvent,
+    fields,
 )
 from pretix.base.models.base import LoggingMixin
 from pretix.base.services.mail import SendMailException
@@ -112,19 +113,30 @@ class ScheduledMail(models.Model):
         e = self.event
 
         orders = e.orders.all()
-        limit_products = self.rule.limit_products.values_list('pk', flat=True) if not self.rule.all_products else None
+
+        filter_orders_by_op = False
+        op_qs = OrderPosition.objects.filter(
+            order__event=self.event,
+            canceled=False,
+        )
 
         if self.subevent:
-            orders = orders.filter(
-                Exists(OrderPosition.objects.filter(order=OuterRef('pk'), subevent=self.subevent))
-            )
+            filter_orders_by_op = True
+            op_qs = op_qs.filter(subevent=self.subevent)
         elif e.has_subevents:
             return  # This rule should not even exist
 
         if not self.rule.all_products:
-            orders = orders.filter(
-                Exists(OrderPosition.objects.filter(order=OuterRef('pk'), item_id__in=limit_products))
-            )
+            filter_orders_by_op = True
+            limit_products = self.rule.limit_products.values_list('pk', flat=True)
+            op_qs = op_qs.filter(item_id__in=limit_products)
+
+        if self.rule.checked_in_status == "no_checkin":
+            filter_orders_by_op = True
+            op_qs = op_qs.filter(~Exists(Checkin.objects.filter(position_id=OuterRef('pk'))))
+        elif self.rule.checked_in_status == "checked_in":
+            filter_orders_by_op = True
+            op_qs = op_qs.filter(Exists(Checkin.objects.filter(position_id=OuterRef('pk'))))
 
         status_q = Q(status__in=self.rule.restrict_to_status)
         if 'n__pending_approval' in self.rule.restrict_to_status:
@@ -142,6 +154,8 @@ class ScheduledMail(models.Model):
                 pk__gt=self.last_successful_order_id
             )
 
+        if filter_orders_by_op:
+            orders = orders.filter(pk__in=op_qs.values_list('order_id', flat=True))
         orders = orders.filter(
             status_q,
         ).order_by('pk').select_related('invoice_address').prefetch_related('positions')
@@ -205,6 +219,12 @@ class Rule(models.Model, LoggingMixin):
         (BOTH, _('Both (all order contact addresses and all attendee email addresses)'))
     ]
 
+    CHECK_IN_STATUS_CHOICES = [
+        (None, _("Everyone")),
+        ("checked_in", _("Anyone who is or was checked in")),
+        ("no_checkin", _("Anyone who never checked in before"))
+    ]
+
     id = models.BigAutoField(primary_key=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='sendmail_rules')
 
@@ -217,6 +237,15 @@ class Rule(models.Model, LoggingMixin):
     restrict_to_status = fields.MultiStringField(
         verbose_name=_("Restrict to orders with status"),
         default=['p', 'n__valid_if_pending'],
+    )
+
+    checked_in_status = models.CharField(
+        verbose_name=_("Restrict to check-in status"),
+        default=None,
+        choices=CHECK_IN_STATUS_CHOICES,
+        max_length=10,
+        null=True,
+        blank=True,
     )
 
     attach_ical = models.BooleanField(

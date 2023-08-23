@@ -312,7 +312,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
         fields = ['subject', 'template', 'attach_ical',
                   'send_date', 'send_offset_days', 'send_offset_time',
                   'all_products', 'limit_products', 'restrict_to_status',
-                  'send_to', 'enabled']
+                  'checked_in_status', 'send_to', 'enabled']
 
         field_classes = {
             'subevent': SafeModelMultipleChoiceField,
@@ -337,6 +337,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
                        'data-inverse-dependency': '#id_all_products'},
             ),
             'send_to': forms.RadioSelect,
+            'checked_in_status': forms.RadioSelect,
         }
 
     def __init__(self, *args, **kwargs):
