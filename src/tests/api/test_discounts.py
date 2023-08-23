@@ -52,7 +52,9 @@ TEST_DISCOUNT_RES = {
     "condition_min_count": 3,
     "condition_min_value": "0.00",
     "benefit_discount_matching_percent": "100.00",
-    "benefit_only_apply_to_cheapest_n_matches": 1
+    "benefit_only_apply_to_cheapest_n_matches": 1,
+    "benefit_same_products": True,
+    "benefit_limit_products": [],
 }
 
 

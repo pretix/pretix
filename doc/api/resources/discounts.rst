@@ -31,9 +31,9 @@ subevent_mode                            strings                    Determines h
                                                                     ``"same"`` (discount is only applied for groups within
                                                                     the same date), or ``"distinct"`` (discount is only applied
                                                                     for groups with no two same dates).
-condition_all_products                   boolean                    If ``true``, the discount applies to all items.
+condition_all_products                   boolean                    If ``true``, the discount condition applies to all items.
 condition_limit_products                 list of integers           If ``condition_all_products`` is not set, this is a list
-                                                                    of internal item IDs that the discount applies to.
+                                                                    of internal item IDs that the discount condition applies to.
 condition_apply_to_addons                boolean                    If ``true``, the discount applies to add-on products as well,
                                                                     otherwise it only applies to top-level items. The discount never
                                                                     applies to bundled products.
@@ -48,6 +48,10 @@ benefit_discount_matching_percent        decimal (string)           The percenta
 benefit_only_apply_to_cheapest_n_matches integer                    If set higher than 0, the discount will only be applied to
                                                                     the cheapest matches. Useful for a "3 for 2"-style discount.
                                                                     Cannot be combined with ``condition_min_value``.
+benefit_same_products                   boolean                     If ``true``, the discount benefit applies to the same set of items
+                                                                    as the condition (see above).
+benefit_limit_products                 list of integers             If ``benefit_same_products`` is not set, this is a list
+                                                                    of internal item IDs that the discount benefit applies to.
 ======================================== ========================== =======================================================
 
 
@@ -94,6 +98,8 @@ Endpoints
             "condition_ignore_voucher_discounted": false,
             "condition_min_count": 3,
             "condition_min_value": "0.00",
+            "benefit_same_products": true,
+            "benefit_limit_products": [],
             "benefit_discount_matching_percent": "100.00",
             "benefit_only_apply_to_cheapest_n_matches": 1
           }
@@ -146,6 +152,8 @@ Endpoints
         "condition_ignore_voucher_discounted": false,
         "condition_min_count": 3,
         "condition_min_value": "0.00",
+        "benefit_same_products": true,
+        "benefit_limit_products": [],
         "benefit_discount_matching_percent": "100.00",
         "benefit_only_apply_to_cheapest_n_matches": 1
       }
@@ -184,6 +192,8 @@ Endpoints
         "condition_ignore_voucher_discounted": false,
         "condition_min_count": 3,
         "condition_min_value": "0.00",
+        "benefit_same_products": true,
+        "benefit_limit_products": [],
         "benefit_discount_matching_percent": "100.00",
         "benefit_only_apply_to_cheapest_n_matches": 1
       }
@@ -211,6 +221,8 @@ Endpoints
         "condition_ignore_voucher_discounted": false,
         "condition_min_count": 3,
         "condition_min_value": "0.00",
+        "benefit_same_products": true,
+        "benefit_limit_products": [],
         "benefit_discount_matching_percent": "100.00",
         "benefit_only_apply_to_cheapest_n_matches": 1
       }
@@ -267,6 +279,8 @@ Endpoints
         "condition_ignore_voucher_discounted": false,
         "condition_min_count": 3,
         "condition_min_value": "0.00",
+        "benefit_same_products": true,
+        "benefit_limit_products": [],
         "benefit_discount_matching_percent": "100.00",
         "benefit_only_apply_to_cheapest_n_matches": 1
       }

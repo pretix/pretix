@@ -120,6 +120,16 @@ class Discount(LoggedModel):
         default=Decimal('0.00'),
     )
 
+    benefit_same_products = models.BooleanField(
+        default=True,
+        verbose_name=_("Apply discount to same set of products")
+    )
+    benefit_limit_products = models.ManyToManyField(
+        'Item',
+        verbose_name=_("Apply discount to specific products"),
+        related_name='benefit_discounts',
+        blank=True
+    )
     benefit_discount_matching_percent = models.DecimalField(
         verbose_name=_('Percentual discount on matching products'),
         decimal_places=2,
@@ -187,6 +197,12 @@ class Discount(LoggedModel):
                   'on a minimum value.')
             )
 
+        if data.get('subevent_mode') == cls.SUBEVENT_MODE_DISTINCT and not data.get('benefit_same_products'):
+            raise ValidationError(
+                _('You cannot apply the discount only to bookings of different dates if you are applying the discount '
+                  'to a different set of products than the condition.')
+            )
+
     def allow_delete(self):
         return not self.orderposition_set.exists()
 
@@ -197,6 +213,7 @@ class Discount(LoggedModel):
             'condition_min_value': self.condition_min_value,
             'benefit_only_apply_to_cheapest_n_matches': self.benefit_only_apply_to_cheapest_n_matches,
             'subevent_mode': self.subevent_mode,
+            'benefit_same_products': self.benefit_same_products,
         })
 
     def is_available_by_time(self, now_dt=None) -> bool:
@@ -207,14 +224,14 @@ class Discount(LoggedModel):
             return False
         return True
 
-    def _apply_min_value(self, positions, idx_group, result):
-        if self.condition_min_value and sum(positions[idx][2] for idx in idx_group) < self.condition_min_value:
+    def _apply_min_value(self, positions, condition_idx_group, benefit_idx_group, result):
+        if self.condition_min_value and sum(positions[idx][2] for idx in condition_idx_group) < self.condition_min_value:
             return
 
         if self.condition_min_count or self.benefit_only_apply_to_cheapest_n_matches:
             raise ValueError('Validation invariant violated.')
 
-        for idx in idx_group:
+        for idx in benefit_idx_group:
             previous_price = positions[idx][2]
             new_price = round_decimal(
                 previous_price * (Decimal('100.00') - self.benefit_discount_matching_percent) / Decimal('100.00'),
@@ -222,8 +239,8 @@ class Discount(LoggedModel):
             )
             result[idx] = new_price
 
-    def _apply_min_count(self, positions, idx_group, result):
-        if len(idx_group) < self.condition_min_count:
+    def _apply_min_count(self, positions, condition_idx_group, benefit_idx_group, result):
+        if len(condition_idx_group) < self.condition_min_count:
             return
 
         if not self.condition_min_count or self.condition_min_value:
@@ -233,15 +250,17 @@ class Discount(LoggedModel):
             if not self.condition_min_count:
                 raise ValueError('Validation invariant violated.')
 
-            idx_group = sorted(idx_group, key=lambda idx: (positions[idx][2], -idx))  # sort by line_price
+            condition_idx_group = sorted(condition_idx_group, key=lambda idx: (positions[idx][2], -idx))  # sort by line_price
+            benefit_idx_group = sorted(benefit_idx_group, key=lambda idx: (positions[idx][2], -idx))  # sort by line_price
 
             # Prevent over-consuming of items, i.e. if our discount is "buy 2, get 1 free", we only
             # want to match multiples of 3
-            consume_idx = idx_group[:len(idx_group) // self.condition_min_count * self.condition_min_count]
-            benefit_idx = idx_group[:len(idx_group) // self.condition_min_count * self.benefit_only_apply_to_cheapest_n_matches]
+            n_groups = min(len(condition_idx_group) // self.condition_min_count, len(benefit_idx_group))
+            consume_idx = condition_idx_group[:n_groups * self.condition_min_count]
+            benefit_idx = benefit_idx_group[:n_groups * self.benefit_only_apply_to_cheapest_n_matches]
         else:
-            consume_idx = idx_group
-            benefit_idx = idx_group
+            consume_idx = condition_idx_group
+            benefit_idx = benefit_idx_group
 
         for idx in benefit_idx:
             previous_price = positions[idx][2]
@@ -276,7 +295,7 @@ class Discount(LoggedModel):
             limit_products = {p.pk for p in self.condition_limit_products.all()}
 
         # First, filter out everything not even covered by our product scope
-        initial_candidates = [
+        condition_candidates = [
             idx
             for idx, (item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount) in positions.items()
             if (
@@ -286,11 +305,25 @@ class Discount(LoggedModel):
             )
         ]
 
+        if self.benefit_same_products:
+            benefit_candidates = list(condition_candidates)
+        else:
+            benefit_products = {p.pk for p in self.benefit_limit_products.all()}
+            benefit_candidates = [
+                idx
+                for idx, (item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount) in positions.items()
+                if (
+                    item_id in benefit_products and
+                    (self.condition_apply_to_addons or not is_addon_to) and
+                    (not self.condition_ignore_voucher_discounted or voucher_discount is None or voucher_discount == Decimal('0.00'))
+                )
+            ]
+
         if self.subevent_mode == self.SUBEVENT_MODE_MIXED:  # also applies to non-series events
             if self.condition_min_count:
-                self._apply_min_count(positions, initial_candidates, result)
+                self._apply_min_count(positions, condition_candidates, benefit_candidates, result)
             else:
-                self._apply_min_value(positions, initial_candidates, result)
+                self._apply_min_value(positions, condition_candidates, benefit_candidates, result)
 
         elif self.subevent_mode == self.SUBEVENT_MODE_SAME:
             def key(idx):
@@ -299,17 +332,18 @@ class Discount(LoggedModel):
             # Build groups of candidates with the same subevent, then apply our regular algorithm
             # to each group
 
-            _groups = groupby(sorted(initial_candidates, key=key), key=key)
-            candidate_groups = [list(g) for k, g in _groups]
+            _groups = groupby(sorted(condition_candidates, key=key), key=key)
+            candidate_groups = [(k, list(g)) for k, g in _groups]
 
-            for g in candidate_groups:
+            for subevent_id, g in candidate_groups:
+                benefit_g = [idx for idx in benefit_candidates if positions[idx][1] == subevent_id]
                 if self.condition_min_count:
-                    self._apply_min_count(positions, g, result)
+                    self._apply_min_count(positions, g, benefit_g, result)
                 else:
-                    self._apply_min_value(positions, g, result)
+                    self._apply_min_value(positions, g, benefit_g, result)
 
         elif self.subevent_mode == self.SUBEVENT_MODE_DISTINCT:
-            if self.condition_min_value:
+            if self.condition_min_value or not self.benefit_same_products:
                 raise ValueError('Validation invariant violated.')
 
             # Build optimal groups of candidates with distinct subevents, then apply our regular algorithm
@@ -336,7 +370,7 @@ class Discount(LoggedModel):
                 candidates = []
                 cardinality = None
                 for se, l in subevent_to_idx.items():
-                    l = [ll for ll in l if ll in initial_candidates and ll not in current_group]
+                    l = [ll for ll in l if ll in condition_candidates and ll not in current_group]
                     if cardinality and len(l) != cardinality:
                         continue
                     if se not in {positions[idx][1] for idx in current_group}:
@@ -373,5 +407,5 @@ class Discount(LoggedModel):
                                 break
 
             for g in candidate_groups:
-                self._apply_min_count(positions, g, result)
+                self._apply_min_count(positions, g, g, result)
         return result
