@@ -27,10 +27,10 @@ restrict_to_status                    list                       List of order s
                                                                  pending, ``n__valid_if_pending`` for payment pending but already confirmed,
                                                                  and ``n__pending_overdue`` for pending with payment overdue.
                                                                  The default is ``["p", "n__valid_if_pending"]``.
-checked_in_status                     string                     Checked in status to restrict recipients to. Valid strings are:
+checked_in_status                     string                     Check-in status to restrict recipients to. Valid strings are:
                                                                  ``null`` or ``""`` for no filtering (default), ``checked_in`` for
-                                                                 limiting to attendees that are or have been checked-in, and
-                                                                 ``no_checkin`` for limiting to attendees who have not checked-in.
+                                                                 limiting to attendees that are or have been checked in, and
+                                                                 ``no_checkin`` for limiting to attendees who have not checked in.
 date_is_absolute                      boolean                    If ``true``, the email is set at a specific point in time.
 send_date                             datetime                   If ``date_is_absolute`` is set: Date and time to send the email.
 send_offset_days                      integer                    If ``date_is_absolute`` is not set, this is the number of days
