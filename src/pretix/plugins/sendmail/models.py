@@ -220,7 +220,7 @@ class Rule(models.Model, LoggingMixin):
     ]
 
     CHECK_IN_STATUS_CHOICES = [
-        ("", _("Everyone")),
+        (None, _("Everyone")),
         ("checked_in", _("Anyone who is or was checked in")),
         ("no_checkin", _("Anyone who never checked in before"))
     ]
