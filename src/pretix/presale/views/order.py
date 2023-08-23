@@ -496,7 +496,12 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
         ctx['order'] = self.order
         ctx['payment'] = self.payment
         if 'order' in inspect.signature(self.payment.payment_provider.checkout_confirm_render).parameters:
-            ctx['payment_info'] = self.payment.payment_provider.checkout_confirm_render(self.request, order=self.order)
+            if 'info_data' in inspect.signature(self.payment.payment_provider.checkout_confirm_render).parameters:
+                ctx['payment_info'] = self.payment.payment_provider.checkout_confirm_render(
+                    self.request, order=self.order, info_data=self.payment.info_data
+                )
+            else:
+                ctx['payment_info'] = self.payment.payment_provider.checkout_confirm_render(self.request, order=self.order)
         else:
             ctx['payment_info'] = self.payment.payment_provider.checkout_confirm_render(self.request)
         ctx['payment_provider'] = self.payment.payment_provider
