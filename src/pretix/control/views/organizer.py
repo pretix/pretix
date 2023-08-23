@@ -1054,8 +1054,8 @@ class DeviceBulkUpdateView(DeviceQueryMixin, OrganizerDetailViewMixin, Organizer
             limit_events_list=Subquery(
                 Device.limit_events.through.objects.filter(
                     device_id=OuterRef('pk')
-                ).order_by('device_id', 'event_id').values('device_id').annotate(
-                    g=GroupConcat('event_id', separator=',')
+                ).order_by().values('device_id').annotate(
+                    g=GroupConcat('event_id', separator=',', ordered=True)
                 ).values('g')
             )
         )
