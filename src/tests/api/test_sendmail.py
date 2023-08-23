@@ -40,7 +40,7 @@ TEST_RULE_RES = {
     'all_products': True,
     'limit_products': [],
     'restrict_to_status': ['p', 'n__valid_if_pending'],
-    'checked_in_status': '',
+    'checked_in_status': None,
     'send_date': '2021-07-08T00:00:00Z',
     'send_offset_days': None,
     'send_offset_time': None,
@@ -176,7 +176,7 @@ def test_sendmail_rule_create_full(token_client, organizer, event, item):
     assert r.all_products is False
     assert [i.pk for i in r.limit_products.all()] == [event.items.first().pk]
     assert r.restrict_to_status == ['p', 'n__not_pending_approval_and_not_valid_if_pending', 'n__valid_if_pending']
-    assert r.checked_in_status is None or r.checked_in_status == ''
+    assert r.checked_in_status is None
     assert r.send_offset_days == 3
     assert r.send_offset_time == datetime.time(9, 30)
     assert r.date_is_absolute is False
@@ -354,8 +354,8 @@ def test_sendmail_rule_restrict_recipients(token_client, organizer, event, rule)
 @scopes_disabled()
 @pytest.mark.django_db
 def test_sendmail_rule_checkin(token_client, organizer, event, rule):
-    valid_states = [None, '', 'checked_in', 'no_checkin', ]  # CharField makes None and '' the same
-    invalid_states = ['all', 'foo']
+    valid_states = [None, 'checked_in', 'no_checkin', ]
+    invalid_states = ['', 'foo']
 
     for s in valid_states:
         result = create_rule(
@@ -391,7 +391,7 @@ def test_sendmail_rule_checkin(token_client, organizer, event, rule):
         },
         expected_failure=False
     )
-    assert result.checked_in_status == '' or result.checked_in_status is None
+    assert result.checked_in_status is None
 
 
 @scopes_disabled()

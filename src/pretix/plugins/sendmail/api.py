@@ -51,8 +51,6 @@ class RuleSerializer(I18nAwareModelSerializer):
                     data['restrict_to_status'] = [Order.STATUS_PAID, 'n__valid_if_pending']
             else:
                 data['restrict_to_status'] = [Order.STATUS_PAID, 'n__valid_if_pending']
-        if "checked_in_status" not in data:
-            data["checked_in_status"] = ""
         return super().to_internal_value(data)
 
     def validate(self, data):
@@ -89,6 +87,10 @@ class RuleSerializer(I18nAwareModelSerializer):
                     'n__not_pending_approval_and_not_valid_if_pending',
                 ]:
                     raise ValidationError(f'status {s} not allowed: restrict_to_status may only include valid states')
+
+        if full_data.get('checked_in_status') == "":
+            # even though "blank" is not allowed on this field, "" gets accepted without this check
+            raise ValidationError('empty string not allowed: use null to disable check-in based filtering')
 
         return full_data
 

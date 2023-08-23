@@ -28,7 +28,7 @@ restrict_to_status                    list                       List of order s
                                                                  and ``n__pending_overdue`` for pending with payment overdue.
                                                                  The default is ``["p", "n__valid_if_pending"]``.
 checked_in_status                     string                     Check-in status to restrict recipients to. Valid strings are:
-                                                                 ``null`` or ``""`` for no filtering (default), ``checked_in`` for
+                                                                 ``null`` for no filtering (default), ``checked_in`` for
                                                                  limiting to attendees that are or have been checked in, and
                                                                  ``no_checkin`` for limiting to attendees who have not checked in.
 date_is_absolute                      boolean                    If ``true``, the email is set at a specific point in time.
@@ -93,7 +93,7 @@ Endpoints
                 "n__not_pending_approval_and_not_valid_if_pending",
                 "n__valid_if_pending"
             ],
-            "checked_in_status": "",
+            "checked_in_status": null,
             "send_date": null,
             "send_offset_days": 1,
             "send_offset_time": "18:00",
@@ -144,7 +144,7 @@ Endpoints
             "n__not_pending_approval_and_not_valid_if_pending",
             "n__valid_if_pending"
         ],
-        "checked_in_status": "",
+        "checked_in_status": null,
         "send_date": null,
         "send_offset_days": 1,
         "send_offset_time": "18:00",
