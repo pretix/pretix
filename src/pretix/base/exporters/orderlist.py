@@ -549,7 +549,9 @@ class OrderListExporter(MultiSheetListExporter):
             headers.append(_('End date'))
         headers += [
             _('Product'),
+            _('Product ID'),
             _('Variation'),
+            _('Variation ID'),
             _('Price'),
             _('Tax rate'),
             _('Tax rule'),
@@ -656,7 +658,9 @@ class OrderListExporter(MultiSheetListExporter):
                         row.append('')
                 row += [
                     str(op.item),
+                    str(op.item_id),
                     str(op.variation) if op.variation else '',
+                    str(op.variation_id) if op.variation_id else '',
                     op.price,
                     op.tax_rate,
                     str(op.tax_rule) if op.tax_rule else '',
