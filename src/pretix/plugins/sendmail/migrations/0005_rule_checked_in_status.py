@@ -13,6 +13,6 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='rule',
             name='checked_in_status',
-            field=models.CharField(default='all', max_length=10, null=True),
+            field=models.CharField(max_length=10, null=True),
         ),
     ]
