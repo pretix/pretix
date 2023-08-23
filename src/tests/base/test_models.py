@@ -98,6 +98,7 @@ class BaseQuotaTestCase(TestCase):
         self.var3 = ItemVariation.objects.create(item=self.item3, value='Fancy')
 
 
+@pytest.mark.usefixtures("fakeredis_client")
 class QuotaTestCase(BaseQuotaTestCase):
     @classscope(attr='o')
     def test_available(self):
@@ -433,6 +434,62 @@ class QuotaTestCase(BaseQuotaTestCase):
         )
         self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
         self.assertEqual(self.var1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+    @classscope(attr='o')
+    def test_waitinglist_cache_separation(self):
+        self.quota.items.add(self.item1)
+        self.quota.size = 1
+        self.quota.save()
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='foo@bar.com'
+        )
+
+        # Check that there is no "cache mixup" even across multiple runs
+        qa = QuotaAvailability(count_waitinglist=False)
+        qa.queue(self.quota)
+        qa.compute()
+        assert qa.results[self.quota] == (Quota.AVAILABILITY_OK, 1)
+
+        qa = QuotaAvailability(count_waitinglist=True)
+        qa.queue(self.quota)
+        qa.compute(allow_cache=True)
+        assert qa.results[self.quota] == (Quota.AVAILABILITY_ORDERED, 0)
+
+        qa = QuotaAvailability(count_waitinglist=True)
+        qa.queue(self.quota)
+        qa.compute(allow_cache=True)
+        assert qa.results[self.quota] == (Quota.AVAILABILITY_ORDERED, 0)
+
+        qa = QuotaAvailability(count_waitinglist=False)
+        qa.queue(self.quota)
+        qa.compute()
+        assert qa.results[self.quota] == (Quota.AVAILABILITY_OK, 1)
+
+        # Rebuild cache required
+        self.quota.size = 5
+        self.quota.save()
+
+        qa = QuotaAvailability(count_waitinglist=True)
+        qa.queue(self.quota)
+        qa.compute(allow_cache=True)
+        assert qa.results[self.quota] == (Quota.AVAILABILITY_ORDERED, 0)
+
+        qa = QuotaAvailability(count_waitinglist=False)
+        qa.queue(self.quota)
+        qa.compute(allow_cache=True)
+        assert qa.results[self.quota] == (Quota.AVAILABILITY_OK, 1)
+
+        self.quota.rebuild_cache()
+
+        qa = QuotaAvailability(count_waitinglist=True)
+        qa.queue(self.quota)
+        qa.compute(allow_cache=True)
+        assert qa.results[self.quota] == (Quota.AVAILABILITY_OK, 4)
+
+        qa = QuotaAvailability(count_waitinglist=False)
+        qa.queue(self.quota)
+        qa.compute(allow_cache=True)
+        assert qa.results[self.quota] == (Quota.AVAILABILITY_OK, 5)
 
     @classscope(attr='o')
     def test_waitinglist_variation_fulfilled(self):

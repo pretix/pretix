@@ -22,9 +22,13 @@
 import inspect
 
 import pytest
+from django.test import override_settings
 from django.utils import translation
 from django_scopes import scopes_disabled
+from fakeredis import FakeConnection
 from xdist.dsession import DSession
+
+from pretix.testutils.mock import get_redis_connection
 
 CRASHED_ITEMS = set()
 
@@ -74,3 +78,38 @@ def pytest_fixture_setup(fixturedef, request):
 @pytest.fixture(autouse=True)
 def reset_locale():
     translation.activate("en")
+
+
+@pytest.fixture
+def fakeredis_client(monkeypatch):
+    with override_settings(
+        HAS_REDIS=True,
+        REAL_CACHE_USED=True,
+        CACHES={
+            'redis': {
+                'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+                'LOCATION': 'redis://127.0.0.1',
+                'OPTIONS': {
+                    'connection_class': FakeConnection
+                }
+            },
+            'redis_session': {
+                'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+                'LOCATION': 'redis://127.0.0.1',
+                'OPTIONS': {
+                    'connection_class': FakeConnection
+                }
+            },
+            'default': {
+                'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+                'LOCATION': 'redis://127.0.0.1',
+                'OPTIONS': {
+                    'connection_class': FakeConnection
+                }
+            },
+        }
+    ):
+        redis = get_redis_connection("default", True)
+        redis.flushall()
+        monkeypatch.setattr('django_redis.get_redis_connection', get_redis_connection, raising=False)
+        yield redis

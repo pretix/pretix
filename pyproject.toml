@@ -112,6 +112,7 @@ memcached = ["pylibmc"]
 dev = [
   "coverage",
   "coveralls",
+  "fakeredis==2.18.*",
   "flake8==6.0.*",
   "freezegun",
   "isort==5.12.*",

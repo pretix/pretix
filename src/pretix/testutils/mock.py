@@ -21,6 +21,7 @@
 #
 from contextlib import contextmanager
 
+import fakeredis
 from pytest_mock import MockFixture
 
 
@@ -34,3 +35,7 @@ def mocker_context():
     result = MockFixture(FakePytestConfig())
     yield result
     result.stopall()
+
+
+def get_redis_connection(alias="default", write=True):
+    return fakeredis.FakeStrictRedis(server=fakeredis.FakeServer.get_server("127.0.0.1:None:v(7, 0)", (7, 0)))
