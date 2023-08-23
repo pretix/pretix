@@ -135,6 +135,7 @@ class QuotaAvailability:
 
                 for eventid, evquotas in quotas_by_event.items():
                     d = rc.hmget(f'quotas:{eventid}:availabilitycache{self._cache_key_suffix}', [str(q.pk) for q in evquotas])
+                    print(f'quotas:{eventid}:availabilitycache{self._cache_key_suffix}', [str(q.pk) for q in evquotas], d)
                     for redisval, q in zip(d, evquotas):
                         if redisval is not None:
                             data = [rv for rv in redisval.decode().split(',')]

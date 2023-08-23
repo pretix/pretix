@@ -465,6 +465,32 @@ class QuotaTestCase(BaseQuotaTestCase):
         qa.compute()
         assert qa.results[self.quota] == (Quota.AVAILABILITY_OK, 1)
 
+        # Rebuild cache required
+        self.quota.size = 5
+        self.quota.save()
+
+        qa = QuotaAvailability(count_waitinglist=True)
+        qa.queue(self.quota)
+        qa.compute(allow_cache=True)
+        assert qa.results[self.quota] == (Quota.AVAILABILITY_ORDERED, 0)
+
+        qa = QuotaAvailability(count_waitinglist=False)
+        qa.queue(self.quota)
+        qa.compute(allow_cache=True)
+        assert qa.results[self.quota] == (Quota.AVAILABILITY_OK, 1)
+
+        self.quota.rebuild_cache()
+
+        qa = QuotaAvailability(count_waitinglist=True)
+        qa.queue(self.quota)
+        qa.compute(allow_cache=True)
+        assert qa.results[self.quota] == (Quota.AVAILABILITY_OK, 4)
+
+        qa = QuotaAvailability(count_waitinglist=False)
+        qa.queue(self.quota)
+        qa.compute(allow_cache=True)
+        assert qa.results[self.quota] == (Quota.AVAILABILITY_OK, 5)
+
     @classscope(attr='o')
     def test_waitinglist_variation_fulfilled(self):
         self.quota.variations.add(self.var1)
