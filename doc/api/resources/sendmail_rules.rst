@@ -23,14 +23,14 @@ limit_products                        list of integers           List of product
 restrict_to_status                    list                       List of order states to restrict recipients to. Valid
                                                                  entries are ``p`` for paid, ``e`` for expired, ``c`` for canceled,
                                                                  ``n__pending_approval`` for pending approval,
-                                                                 ``n__not_pending_approval_and_not_valid_if_pending`` for payment pending,
-                                                                 ``n__valid_if_pending`` for payment pending but already confirmed,
+                                                                 ``n__not_pending_approval_and_not_valid_if_pending`` for payment
+                                                                 pending, ``n__valid_if_pending`` for payment pending but already confirmed,
                                                                  and ``n__pending_overdue`` for pending with payment overdue.
                                                                  The default is ``["p", "n__valid_if_pending"]``.
-checked_in_status                     string                     Checked in status to restrict recipients to. Valid strings
-                                                                 are: ``all`` for no filtering (default), ``checked_in`` for limiting to
-                                                                 attendees that are or have been checked-in, and ``no_checkin`` for
-                                                                 limiting to attendees who have not checked-in.
+checked_in_status                     string                     Checked in status to restrict recipients to. Valid strings are:
+                                                                 ``null`` or ``""`` for no filtering (default), ``checked_in`` for
+                                                                 limiting to attendees that are or have been checked-in, and
+                                                                 ``no_checkin`` for limiting to attendees who have not checked-in.
 date_is_absolute                      boolean                    If ``true``, the email is set at a specific point in time.
 send_date                             datetime                   If ``date_is_absolute`` is set: Date and time to send the email.
 send_offset_days                      integer                    If ``date_is_absolute`` is not set, this is the number of days
@@ -93,7 +93,7 @@ Endpoints
                 "n__not_pending_approval_and_not_valid_if_pending",
                 "n__valid_if_pending"
             ],
-            "checked_in_status": "all",
+            "checked_in_status": "",
             "send_date": null,
             "send_offset_days": 1,
             "send_offset_time": "18:00",
@@ -144,7 +144,7 @@ Endpoints
             "n__not_pending_approval_and_not_valid_if_pending",
             "n__valid_if_pending"
         ],
-        "checked_in_status": "all",
+        "checked_in_status": "",
         "send_date": null,
         "send_offset_days": 1,
         "send_offset_time": "18:00",
