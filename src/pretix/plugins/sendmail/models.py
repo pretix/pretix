@@ -245,6 +245,7 @@ class Rule(models.Model, LoggingMixin):
         choices=CHECK_IN_STATUS_CHOICES,
         max_length=10,
         null=True,
+        blank=True,
     )
 
     attach_ical = models.BooleanField(
