@@ -66,18 +66,26 @@ class GroupConcat(Aggregate):
     function = 'group_concat'
     template = '%(function)s(%(field)s, "%(separator)s")'
 
-    def __init__(self, *expressions, **extra):
+    def __init__(self, *expressions, ordered=False, **extra):
+        self.ordered = ordered
         if 'separator' not in extra:
             # For PostgreSQL separator is an obligatory
             extra.update({'separator': ','})
         super().__init__(*expressions, **extra)
 
     def as_postgresql(self, compiler, connection):
-        return super().as_sql(
-            compiler, connection,
-            function='string_agg',
-            template="%(function)s(%(field)s::text, '%(separator)s')",
-        )
+        if self.ordered:
+            return super().as_sql(
+                compiler, connection,
+                function='string_agg',
+                template="%(function)s(%(field)s::text, '%(separator)s' ORDER BY %(field)s ASC)",
+            )
+        else:
+            return super().as_sql(
+                compiler, connection,
+                function='string_agg',
+                template="%(function)s(%(field)s::text, '%(separator)s')",
+            )
 
 
 class ReplicaRouter:
