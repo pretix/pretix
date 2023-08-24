@@ -39,6 +39,7 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.contrib import messages
+from django.core.cache import caches
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.signing import BadSignature, loads
 from django.core.validators import EmailValidator
@@ -64,12 +65,14 @@ from pretix.base.services.cart import (
 )
 from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
+from pretix.base.services.tasks import EventTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import validate_cart_addons
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.base.templatetags.rich_text import rich_text_snippet
 from pretix.base.views.tasks import AsyncAction
+from pretix.celery_app import app
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
     ContactForm, InvoiceAddressForm, InvoiceNameForm, MembershipForm,
@@ -702,24 +705,6 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                        sales_channel=request.sales_channel.identifier)
 
 
-def business_heuristic(event):
-    cached_result = event.cache.get('checkout_heuristic_is_business')
-    if cached_result is None:
-        result = InvoiceAddress.objects.filter(order__event=event).aggregate(
-            total=Count('*'), business=Sum(Cast('is_business', output_field=models.IntegerField())))
-        if result['total'] < 100:
-            result = InvoiceAddress.objects.filter(order__event__organizer=event.organizer).aggregate(
-                total=Count('*'), business=Sum(Cast('is_business', output_field=models.IntegerField())))
-        if result['business'] and result['total']:
-            is_business = result['business'] / result['total'] >= 0.6
-        else:
-            is_business = False
-        event.cache.set('checkout_heuristic_is_business', is_business, timeout=12 * 3600)  # 12 hours
-        return is_business
-    else:
-        return cached_result
-
-
 class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     priority = 50
     identifier = "questions"
@@ -840,7 +825,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
             }
         else:
             wd_initial = {
-                'is_business': business_heuristic(self.request.event),
+                'is_business': self._get_is_business_heuristic(),
             }
         initial = dict(wd_initial)
 
@@ -1137,6 +1122,31 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 profiles_list.append(data)
             ctx['profiles_data'] = profiles_list
         return ctx
+
+    def _get_is_business_heuristic(self):
+        key = 'checkout_heuristic_is_business:' + str(self.event.pk)
+        cached_result = caches['default'].get(key)
+        if cached_result is None:
+            if caches['default'].add(key, False, timeout=10):  # return False while query is running
+                QuestionsStep._update_is_business_heuristic.apply_async(args=(self.event.pk,))
+            return False
+        else:
+            return cached_result
+
+    @staticmethod
+    @app.task(base=EventTask)
+    def _update_is_business_heuristic(event):
+        result = InvoiceAddress.objects.filter(order__event=event).aggregate(
+            total=Count('*'), business=Sum(Cast('is_business', output_field=models.IntegerField())))
+        if result['total'] < 100:
+            result = InvoiceAddress.objects.filter(order__event__organizer=event.organizer).aggregate(
+                total=Count('*'), business=Sum(Cast('is_business', output_field=models.IntegerField())))
+        if result['business'] and result['total']:
+            is_business = result['business'] / result['total'] >= 0.6
+        else:
+            is_business = False
+        key = 'checkout_heuristic_is_business:' + str(event.pk)
+        caches['default'].set(key, is_business, timeout=12 * 3600)  # 12 hours
 
 
 class PaymentStep(CartMixin, TemplateFlowStep):
