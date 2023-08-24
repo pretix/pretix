@@ -1025,6 +1025,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['cart'] = self.get_cart()
         ctx['cart_session'] = self.cart_session
         ctx['invoice_address_asked'] = self.address_asked
+
         def reduce_initial(v):
             try:
                 # try to flatten objects such as name_parts to a single string to determine whether they have any value set
