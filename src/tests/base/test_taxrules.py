@@ -478,6 +478,81 @@ def test_custom_rules_specific_country(event):
 
 
 @pytest.mark.django_db
+def test_custom_rules_specific_state(event):
+    tr = TaxRule(
+        event=event,
+        rate=Decimal('10.00'), price_includes_tax=False,
+        custom_rules=json.dumps([
+            {'country': 'US-NY', 'address_type': '', 'action': 'vat', 'rate': '20.00'},
+            {'country': 'US-DE', 'address_type': '', 'action': 'no'},
+            {'country': 'US', 'address_type': '', 'action': 'vat', 'rate': '30.00'},
+        ])
+    )
+    ia = InvoiceAddress(
+        is_business=True,
+        country=Country('DE')
+    )
+    assert not tr.is_reverse_charge(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('10.00')
+    assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
+        gross=Decimal('110.00'),
+        net=Decimal('100.00'),
+        tax=Decimal('10.00'),
+        rate=Decimal('10.00'),
+        name='',
+    )
+
+    ia = InvoiceAddress(
+        is_business=True,
+        country=Country('US'),
+        state='NC'
+    )
+    assert not tr.is_reverse_charge(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('30.00')
+    assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
+        gross=Decimal('130.00'),
+        net=Decimal('100.00'),
+        tax=Decimal('30.00'),
+        rate=Decimal('30.00'),
+        name='',
+    )
+
+    ia = InvoiceAddress(
+        is_business=True,
+        country=Country('US'),
+        state='NY'
+    )
+    assert not tr.is_reverse_charge(ia)
+    assert tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('20.00')
+    assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
+        gross=Decimal('120.00'),
+        net=Decimal('100.00'),
+        tax=Decimal('20.00'),
+        rate=Decimal('20.00'),
+        name='',
+    )
+
+    ia = InvoiceAddress(
+        is_business=True,
+        country=Country('US'),
+        state='DE'
+    )
+    assert not tr.is_reverse_charge(ia)
+    assert not tr._tax_applicable(ia)
+    assert tr.tax_rate_for(ia) == Decimal('0.00')
+    assert tr.tax(Decimal('100.00'), invoice_address=ia) == TaxedPrice(
+        gross=Decimal('100.00'),
+        net=Decimal('100.00'),
+        tax=Decimal('0.00'),
+        rate=Decimal('0.00'),
+        name='',
+    )
+
+
+@pytest.mark.django_db
 def test_custom_rules_individual(event):
     tr = TaxRule(
         event=event,
