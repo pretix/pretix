@@ -1025,6 +1025,20 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['cart'] = self.get_cart()
         ctx['cart_session'] = self.cart_session
         ctx['invoice_address_asked'] = self.address_asked
+        def reduce_initial(v):
+            try:
+                # try to flatten objects such as name_parts to a single string to determine whether they have any value set
+                return ''.join([v for k, v in v.items() if not k.startswith('_')])
+            except AttributeError:
+                return v
+        ctx['invoice_address_open'] = (
+            self.request.event.settings.invoice_address_required or
+            self.request.event.settings.invoice_name_required or
+            'invoice' in self.request.GET or
+            # Checking for self.invoice_address.pk is not enough as when an invoice_address has been added and later edited to be empty, it’s not None.
+            # So check initial values as invoice_form can receive pre-filled values from invoice_address, widget-data or overwrites from plug-ins.
+            any([reduce_initial(v) for k, v in self.invoice_form.initial.items() if k not in ('is_business', 'country')])
+        )
 
         if self.cart_customer:
             if self.address_asked:
