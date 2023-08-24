@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 11:49+0000\n"
-"PO-Revision-Date: 2023-08-24 04:00+0000\n"
+"PO-Revision-Date: 2023-08-25 04:00+0000\n"
 "Last-Translator: Alain <alain@waag.org>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
@@ -411,7 +411,7 @@ msgstr "Bestelling is verlopen"
 
 #: pretix/api/webhooks.py:234
 msgid "Order expiry date changed"
-msgstr "Verloopdatum aangepast."
+msgstr "Verloopdatum aangepast"
 
 #: pretix/api/webhooks.py:238 pretix/base/notifications.py:269
 msgid "Order information changed"
@@ -7045,38 +7045,30 @@ msgstr ""
 "door u gekozen hoeveelheid. Zie hieronder voor de details."
 
 #: pretix/base/services/cart.py:114
-#, fuzzy, python-format
-#| msgid "You cannot select more than %s items per order."
+#, python-format
 msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
-msgstr[0] "U kunt niet meer dan %s items per bestelling kiezen."
+msgstr[0] "U kunt niet meer dan %s item per bestelling kiezen."
 msgstr[1] "U kunt niet meer dan %s items per bestelling kiezen."
 
 #: pretix/base/services/cart.py:118 pretix/base/services/orders.py:1468
-#, fuzzy, python-format
-#| msgid ""
-#| "You cannot select more than %(max)s items of the product %(product)s."
+#, python-format
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
-msgstr[0] "U kunt niet meer dan %(max)s items van product %(product)s kiezen."
+msgstr[0] "U kunt niet meer dan %(max)s item van product %(product)s kiezen."
 msgstr[1] "U kunt niet meer dan %(max)s items van product %(product)s kiezen."
 
 #: pretix/base/services/cart.py:123 pretix/base/services/orders.py:1473
-#, fuzzy, python-format
-#| msgid ""
-#| "You need to select at least %(min)s items of the product %(product)s."
+#, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
 "You need to select at least %(min)s items of the product %(product)s."
-msgstr[0] "U moet ten minste %(min)s items van product %(product)s kiezen."
+msgstr[0] "U moet ten minste %(min)s item van product %(product)s kiezen."
 msgstr[1] "U moet ten minste %(min)s items van product %(product)s kiezen."
 
 #: pretix/base/services/cart.py:128
-#, fuzzy, python-format
-#| msgid ""
-#| "We removed %(product)s from your cart as you can not buy less than "
-#| "%(min)s items of it."
+#, python-format
 msgid ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "item of it."
@@ -7085,10 +7077,10 @@ msgid_plural ""
 "items of it."
 msgstr[0] ""
 "We hebben %(product)s uit uw winkelwagen verwijderd, omdat u niet minder dan "
-"%(min)s ervan kunt kopen."
+"%(min)s item ervan kunt kopen."
 msgstr[1] ""
 "We hebben %(product)s uit uw winkelwagen verwijderd, omdat u niet minder dan "
-"%(min)s ervan kunt kopen."
+"%(min)s items ervan kunt kopen."
 
 #: pretix/base/services/cart.py:132 pretix/base/services/orders.py:146
 #: pretix/presale/templates/pretixpresale/event/index.html:157
@@ -7250,10 +7242,7 @@ msgid "You can not select two variations of the same add-on product."
 msgstr "U kunt niet twee varianten van hetzelfde add-on-product selecteren."
 
 #: pretix/base/services/cart.py:185 pretix/base/services/orders.py:184
-#, fuzzy, python-format
-#| msgid ""
-#| "You can select at most %(max)s add-ons from the category %(cat)s for the "
-#| "product %(base)s."
+#, python-format
 msgid ""
 "You can select at most %(max)s add-on from the category %(cat)s for the "
 "product %(base)s."
@@ -7261,17 +7250,14 @@ msgid_plural ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr[0] ""
-"U kunt maximaal %(max)s add-ons van de categorie %(cat)s selecteren voor het "
+"U kunt maximaal %(max)s add-on van de categorie %(cat)s selecteren voor het "
 "product %(base)s."
 msgstr[1] ""
 "U kunt maximaal %(max)s add-ons van de categorie %(cat)s selecteren voor het "
 "product %(base)s."
 
 #: pretix/base/services/cart.py:190 pretix/base/services/orders.py:189
-#, fuzzy, python-format
-#| msgid ""
-#| "You need to select at least %(min)s add-ons from the category %(cat)s for "
-#| "the product %(base)s."
+#, python-format
 msgid ""
 "You need to select at least %(min)s add-on from the category %(cat)s for the "
 "product %(base)s."
@@ -7279,7 +7265,7 @@ msgid_plural ""
 "You need to select at least %(min)s add-ons from the category %(cat)s for "
 "the product %(base)s."
 msgstr[0] ""
-"U moet minimaal %(min)s add-ons van de categorie %(cat)s selecteren voor het "
+"U moet minimaal %(min)s add-on van de categorie %(cat)s selecteren voor het "
 "product %(base)s."
 msgstr[1] ""
 "U moet minimaal %(min)s add-ons van de categorie %(cat)s selecteren voor het "
@@ -7444,16 +7430,14 @@ msgid "This ticket has been blocked."
 msgstr "Dit ticket werd reeds eenmaal gebruikt."
 
 #: pretix/base/services/checkin.py:781 pretix/base/services/checkin.py:785
-#, fuzzy, python-brace-format
-#| msgid "Only allowed after {datetime}"
+#, python-brace-format
 msgid "This ticket is only valid after {datetime}."
-msgstr "Alleen toegestaan vanaf {datetime}"
+msgstr "Dit ticket is geldig vanaf {datetime}."
 
 #: pretix/base/services/checkin.py:795 pretix/base/services/checkin.py:799
-#, fuzzy, python-brace-format
-#| msgid "This ticket has already been redeemed."
+#, python-brace-format
 msgid "This ticket was only valid before {datetime}."
-msgstr "Dit ticket is al gebruikt."
+msgstr "Dit ticket was geldig vòòr {datetime}."
 
 #: pretix/base/services/checkin.py:830
 msgid "This order position has an invalid product for this check-in list."
@@ -7514,10 +7498,8 @@ msgid "Export failed"
 msgstr "Geëxporteerde bestanden"
 
 #: pretix/base/services/export.py:206
-#, fuzzy
-#| msgid "Permission denied"
 msgid "Permission denied."
-msgstr "Geen toestemming"
+msgstr "Geen toestemming."
 
 #: pretix/base/services/export.py:221
 msgid "Your exported data exceeded the size limit for scheduled exports."
@@ -7548,11 +7530,10 @@ msgstr ""
 "{country}"
 
 #: pretix/base/services/invoices.py:220 pretix/base/services/invoices.py:257
-#, fuzzy, python-brace-format
-#| msgid "Event location"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Event location: {location}"
-msgstr "Evenementlocatie"
+msgstr "Evenementlocatie: {location}"
 
 #: pretix/base/services/invoices.py:236
 #, python-brace-format
