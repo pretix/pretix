@@ -1027,10 +1027,10 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['invoice_address_asked'] = self.address_asked
 
         def reduce_initial(v):
-            try:
+            if isinstance(v, dict):
                 # try to flatten objects such as name_parts to a single string to determine whether they have any value set
                 return ''.join([v for k, v in v.items() if not k.startswith('_')])
-            except AttributeError:
+            else:
                 return v
 
         def is_form_filled(form, ignore_keys=()):
