@@ -34,7 +34,7 @@
                 </div>
             </details>
             {% if invoice_address_asked %}
-                <details class="panel panel-default" {% if event.settings.invoice_address_required or event.settings.invoice_name_required %}open{% endif %}>
+                <details class="panel panel-default" {% if invoice_address_open %}open{% endif %} id="invoice-details">
                     <summary class="panel-heading">
                         <h3 class="panel-title">
                             <strong>{% trans "Invoice information" %}{% if not event.settings.invoice_address_required and not event.settings.invoice_name_required %}
