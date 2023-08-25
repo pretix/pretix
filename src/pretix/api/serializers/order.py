@@ -614,7 +614,7 @@ class PaymentURLField(serializers.URLField):
     def to_representation(self, instance: OrderPayment):
         if instance.state != OrderPayment.PAYMENT_STATE_CREATED:
             return None
-        return build_absolute_uri(self.context['event'], 'presale:event.order.pay', kwargs={
+        return build_absolute_uri(instance.order.event, 'presale:event.order.pay', kwargs={
             'order': instance.order.code,
             'secret': instance.order.secret,
             'payment': instance.pk,
