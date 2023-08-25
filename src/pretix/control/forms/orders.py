@@ -159,7 +159,7 @@ class ReactivateOrderForm(ForceQuotaConfirmationForm):
     pass
 
 
-class CancelForm(ForceQuotaConfirmationForm):
+class CancelForm(forms.Form):
     send_email = forms.BooleanField(
         required=False,
         label=_('Notify customer by email'),
@@ -203,6 +203,20 @@ class CancelForm(ForceQuotaConfirmationForm):
         if val > self.instance.total:
             raise ValidationError(_('The cancellation fee cannot be higher than the total amount of this order.'))
         return val
+
+
+class DenyForm(forms.Form):
+    send_email = forms.BooleanField(
+        required=False,
+        label=_('Notify customer by email'),
+        initial=True
+    )
+    comment = forms.CharField(
+        label=_('Comment (will be sent to the user)'),
+        help_text=_('Will be included in the notification email when the respective placeholder is present in the '
+                    'configured email text.'),
+        required=False,
+    )
 
 
 class MarkPaidForm(ConfirmPaymentForm):
