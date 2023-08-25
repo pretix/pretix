@@ -659,7 +659,7 @@ class OrderRefundSerializer(I18nAwareModelSerializer):
 
 class OrderURLField(serializers.URLField):
     def to_representation(self, instance: Order):
-        return build_absolute_uri(self.context['event'], 'presale:event.order', kwargs={
+        return build_absolute_uri(instance.event, 'presale:event.order', kwargs={
             'order': instance.code,
             'secret': instance.secret,
         })
@@ -694,6 +694,7 @@ class OrderListSerializer(serializers.ListSerializer):
 
 
 class OrderSerializer(I18nAwareModelSerializer):
+    event = SlugRelatedField(slug_field='slug', read_only=True)
     invoice_address = InvoiceAddressSerializer(allow_null=True)
     positions = OrderPositionSerializer(many=True, read_only=True)
     fees = OrderFeeSerializer(many=True, read_only=True)
@@ -709,7 +710,7 @@ class OrderSerializer(I18nAwareModelSerializer):
         model = Order
         list_serializer_class = OrderListSerializer
         fields = (
-            'code', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
+            'code', 'event', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
             'payment_provider', 'fees', 'total', 'comment', 'custom_followup_at', 'invoice_address', 'positions', 'downloads',
             'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
             'url', 'customer', 'valid_if_pending'
@@ -1593,6 +1594,7 @@ class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
 
 
 class InvoiceSerializer(I18nAwareModelSerializer):
+    event = SlugRelatedField(slug_field='slug', read_only=True)
     order = serializers.SlugRelatedField(slug_field='code', read_only=True)
     refers = serializers.SlugRelatedField(slug_field='full_invoice_no', read_only=True)
     lines = InlineInvoiceLineSerializer(many=True)
@@ -1601,7 +1603,7 @@ class InvoiceSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Invoice
-        fields = ('order', 'number', 'is_cancellation', 'invoice_from', 'invoice_from_name', 'invoice_from_zipcode',
+        fields = ('event', 'order', 'number', 'is_cancellation', 'invoice_from', 'invoice_from_name', 'invoice_from_zipcode',
                   'invoice_from_city', 'invoice_from_country', 'invoice_from_tax_id', 'invoice_from_vat_id',
                   'invoice_to', 'invoice_to_company', 'invoice_to_name', 'invoice_to_street', 'invoice_to_zipcode',
                   'invoice_to_city', 'invoice_to_state', 'invoice_to_country', 'invoice_to_vat_id', 'invoice_to_beneficiary',

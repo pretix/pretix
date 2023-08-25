@@ -12,6 +12,7 @@ The invoice resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 number                                string                     Invoice number (with prefix)
+event                                 string                     The slug of the parent event
 order                                 string                     Order code of the order this invoice belongs to
 is_cancellation                       boolean                    ``true``, if this invoice is the cancellation of a
                                                                  different invoice.
@@ -121,9 +122,13 @@ internal_reference                    string                     Customer's refe
 
    The attribute ``lines.subevent`` has been added.
 
+.. versionchanged:: 2023.8
 
-Endpoints
----------
+   The ``event`` attribute has been added. The organizer-level endpoint has been added.
+
+
+List of all invoices
+--------------------
 
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/invoices/
 
@@ -152,6 +157,7 @@ Endpoints
         "results": [
           {
             "number": "SAMPLECONF-00001",
+            "event": "sampleconf",
             "order": "ABC12",
             "is_cancellation": false,
             "invoice_from_name": "Big Events LLC",
@@ -221,6 +227,50 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
+.. http:get:: /api/v1/organizers/(organizer)/invoices/
+
+   Returns a list of all invoices within all events of a given organizer (with sufficient access permissions).
+
+   Supported query parameters and output format of this endpoint are identical to the list endpoint within an event.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/events/sampleconf/invoices/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "number": "SAMPLECONF-00001",
+            "event": "sampleconf",
+            "order": "ABC12",
+            ...
+        ]
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
+
+Fetching individual invoices
+----------------------------
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/invoices/(number)/
 
    Returns information on one invoice, identified by its invoice number.
@@ -243,6 +293,7 @@ Endpoints
 
       {
         "number": "SAMPLECONF-00001",
+        "event": "sampleconf",
         "order": "ABC12",
         "is_cancellation": false,
         "invoice_from_name": "Big Events LLC",
@@ -336,6 +387,12 @@ Endpoints
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
    :statuscode 409: The file is not yet ready and will now be prepared. Retry the request after waiting for a few
                     seconds.
+
+
+Modifying invoices
+------------------
+
+Invoices cannot be edited directly, but the following actions can be triggered:
 
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/invoices/(invoice_no)/reissue/
 

@@ -44,6 +44,7 @@ from rest_framework.exceptions import (
     APIException, NotFound, PermissionDenied, ValidationError,
 )
 from rest_framework.mixins import CreateModelMixin
+from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
 from pretix.api.models import OAuthAccessToken
@@ -185,7 +186,7 @@ with scopes_disabled():
             )
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSetMixin:
     serializer_class = OrderSerializer
     queryset = Order.objects.none()
     filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
@@ -193,19 +194,12 @@ class OrderViewSet(viewsets.ModelViewSet):
     ordering_fields = ('datetime', 'code', 'status', 'last_modified')
     filterset_class = OrderFilter
     lookup_field = 'code'
-    permission = 'can_view_orders'
-    write_permission = 'can_change_orders'
 
-    def get_serializer_context(self):
-        ctx = super().get_serializer_context()
-        ctx['event'] = self.request.event
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
-        ctx['exclude'] = self.request.query_params.getlist('exclude')
-        ctx['include'] = self.request.query_params.getlist('include')
-        return ctx
+    def get_base_queryset(self):
+        raise NotImplementedError()
 
     def get_queryset(self):
-        qs = self.request.event.orders
+        qs = self.get_base_queryset()
         if 'fees' not in self.request.GET.getlist('exclude'):
             if self.request.query_params.get('include_canceled_fees', 'false') == 'true':
                 fqs = OrderFee.all
@@ -219,27 +213,32 @@ class OrderViewSet(viewsets.ModelViewSet):
         if 'invoice_address' not in self.request.GET.getlist('exclude'):
             qs = qs.select_related('invoice_address')
 
-        qs = qs.prefetch_related(self._positions_prefetch(self.request))
+        qs = qs.prefetch_related(*self._positions_prefetch(self.request))
         return qs
 
     def _positions_prefetch(self, request):
+        prefetches = []
         if request.query_params.get('include_canceled_positions', 'false') == 'true':
             opq = OrderPosition.all
         else:
             opq = OrderPosition.objects
-        if request.query_params.get('pdf_data', 'false') == 'true':
+        if request.query_params.get('pdf_data', 'false') == 'true' and getattr(request, 'event', None):
             prefetch_related_objects([request.organizer], 'meta_properties')
             prefetch_related_objects(
                 [request.event],
-                Prefetch('meta_values', queryset=EventMetaValue.objects.select_related('property'), to_attr='meta_values_cached'),
+                Prefetch('meta_values', queryset=EventMetaValue.objects.select_related('property'),
+                         to_attr='meta_values_cached'),
                 'questions',
                 'item_meta_properties',
             )
-            return Prefetch(
+            items_base = self.request.event.items
+            subevents_base = self.request.event.subevents
+
+            prefetches.append(Prefetch(
                 'positions',
                 opq.all().prefetch_related(
                     Prefetch('checkins', queryset=Checkin.objects.all()),
-                    Prefetch('item', queryset=self.request.event.items.prefetch_related(
+                    Prefetch('item', queryset=items_base.prefetch_related(
                         Prefetch('meta_values', ItemMetaValue.objects.select_related('property'), to_attr='meta_values_cached')
                     )),
                     Prefetch('variation', queryset=ItemVariation.objects.prefetch_related(
@@ -248,15 +247,15 @@ class OrderViewSet(viewsets.ModelViewSet):
                     'answers', 'answers__options', 'answers__question',
                     'item__category',
                     'addon_to__answers', 'addon_to__answers__options', 'addon_to__answers__question',
-                    Prefetch('subevent', queryset=self.request.event.subevents.prefetch_related(
+                    Prefetch('subevent', queryset=subevents_base.prefetch_related(
                         Prefetch('meta_values', to_attr='meta_values_cached', queryset=SubEventMetaValue.objects.select_related('property'))
                     )),
                     Prefetch('addons', opq.select_related('item', 'variation', 'seat')),
                     'linked_media',
                 ).select_related('seat', 'addon_to', 'addon_to__seat')
-            )
+            ))
         else:
-            return Prefetch(
+            prefetches.append(Prefetch(
                 'positions',
                 opq.all().prefetch_related(
                     Prefetch('checkins', queryset=Checkin.objects.all()),
@@ -264,15 +263,15 @@ class OrderViewSet(viewsets.ModelViewSet):
                     Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options', 'question').order_by('question__position')),
                     'seat',
                 )
-            )
+            ))
+        return prefetches
 
-    def _get_output_provider(self, identifier):
-        responses = register_ticket_outputs.send(self.request.event)
-        for receiver, response in responses:
-            prov = response(self.request.event)
-            if prov.identifier == identifier:
-                return prov
-        raise NotFound('Unknown output provider.')
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['exclude'] = self.request.query_params.getlist('exclude')
+        ctx['include'] = self.request.query_params.getlist('include')
+        ctx['pdf_data'] = False
+        return ctx
 
     @scopes_disabled()  # we are sure enough that get_queryset() is correct, so we save some perforamnce
     def list(self, request, **kwargs):
@@ -288,6 +287,45 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, headers={'X-Page-Generated': date})
+
+
+class OrganizerOrderViewSet(OrderViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    def get_base_queryset(self):
+        perm = "can_view_orders" if self.request.method in SAFE_METHODS else "can_change_orders"
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            return Order.objects.filter(
+                event__organizer=self.request.organizer,
+                event__in=self.request.auth.get_events_with_permission(perm)
+            )
+        elif self.request.user.is_authenticated:
+            return Order.objects.filter(
+                event__organizer=self.request.organizer,
+                event__in=self.request.user.get_events_with_permission(perm)
+            )
+        else:
+            raise PermissionDenied()
+
+
+class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
+    permission = 'can_view_orders'
+    write_permission = 'can_change_orders'
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        return ctx
+
+    def get_base_queryset(self):
+        return self.request.event.orders
+
+    def _get_output_provider(self, identifier):
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            prov = response(self.request.event)
+            if prov.identifier == identifier:
+                return prov
+        raise NotFound('Unknown output provider.')
 
     @action(detail=True, url_name='download', url_path='download/(?P<output>[^/]+)')
     def download(self, request, output, **kwargs):
@@ -1782,11 +1820,24 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     write_permission = 'can_change_orders'
 
     def get_queryset(self):
-        return self.request.event.invoices.prefetch_related('lines').select_related('order', 'refers').annotate(
+        perm = "can_view_orders" if self.request.method in SAFE_METHODS else "can_change_orders"
+        if getattr(self.request, 'event', None):
+            qs = self.request.event.invoices
+        elif isinstance(self.request.auth, (TeamAPIToken, Device)):
+            qs = Invoice.objects.filter(
+                event__organizer=self.request.organizer,
+                event__in=self.request.auth.get_events_with_permission(perm)
+            )
+        elif self.request.user.is_authenticated:
+            qs = Invoice.objects.filter(
+                event__organizer=self.request.organizer,
+                event__in=self.request.user.get_events_with_permission(perm)
+            )
+        return qs.prefetch_related('lines').select_related('order', 'refers').annotate(
             nr=Concat('prefix', 'invoice_no')
         )
 
-    @action(detail=True, )
+    @action(detail=True)
     def download(self, request, **kwargs):
         invoice = self.get_object()
 
@@ -1805,7 +1856,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         return resp
 
     @action(detail=True, methods=['POST'])
-    def regenerate(self, request, **kwarts):
+    def regenerate(self, request, **kwargs):
         inv = self.get_object()
         if inv.canceled:
             raise ValidationError('The invoice has already been canceled.')
@@ -1815,7 +1866,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             raise PermissionDenied('The invoice file is no longer stored on the server.')
         elif inv.sent_to_organizer:
             raise PermissionDenied('The invoice file has already been exported.')
-        elif now().astimezone(self.request.event.timezone).date() - inv.date > datetime.timedelta(days=1):
+        elif now().astimezone(inv.event.timezone).date() - inv.date > datetime.timedelta(days=1):
             raise PermissionDenied('The invoice file is too old to be regenerated.')
         else:
             inv = regenerate_invoice(inv)
@@ -1830,7 +1881,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             return Response(status=204)
 
     @action(detail=True, methods=['POST'])
-    def reissue(self, request, **kwarts):
+    def reissue(self, request, **kwargs):
         inv = self.get_object()
         if inv.canceled:
             raise ValidationError('The invoice has already been canceled.')
