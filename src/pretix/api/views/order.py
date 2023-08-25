@@ -733,7 +733,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                 invoice = generate_invoice(order, trigger_pdf=True)
 
             # Refresh serializer only after running signals
-            prefetch_related_objects([order], self._positions_prefetch(request))
+            prefetch_related_objects([order], *self._positions_prefetch(request))
             serializer = OrderSerializer(order, context=serializer.context)
 
             if send_mail:

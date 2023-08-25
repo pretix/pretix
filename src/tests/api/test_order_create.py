@@ -309,6 +309,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
     del d['positions'][0]['secret']
     assert d == {
         'code': 'PREVIEW',
+        'event': 'dummy',
         'status': 'n',
         'testmode': False,
         'email': 'dummy@dummy.test',
