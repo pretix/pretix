@@ -1072,13 +1072,13 @@ def test_discount_other_products_min_count(event, item, item2):
 @pytest.mark.django_db
 @scopes_disabled()
 def test_discount_subgroup_cheapest_n_min_count(event, item, item2):
-    # "For every 4 products, you get two free, but only of type item"
+    # "For every 4 products, you get one free, but only of type item"
     d1 = Discount(
         event=event,
         condition_min_count=4,
         condition_all_products=False,
         benefit_discount_matching_percent=100,
-        benefit_only_apply_to_cheapest_n_matches=2,
+        benefit_only_apply_to_cheapest_n_matches=1,
         benefit_same_products=False,
     )
     d1.save()
@@ -1087,6 +1087,7 @@ def test_discount_subgroup_cheapest_n_min_count(event, item, item2):
     d1.benefit_limit_products.add(item)
 
     positions = (
+        # 11 items of item2, which contribute to the total count of 15, but do not get reduced
         (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
         (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
         (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
@@ -1097,10 +1098,9 @@ def test_discount_subgroup_cheapest_n_min_count(event, item, item2):
         (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
         (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
         (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
-        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
-        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
-        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
-        (item.pk, None, Decimal('90.00'), False, False, Decimal('0.00')),
+        # 4 items of item, of which 3 of the cheapest will be reduced
+        (item.pk, None, Decimal('110.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('110.00'), False, False, Decimal('0.00')),
         (item.pk, None, Decimal('90.00'), False, False, Decimal('0.00')),
         (item.pk, None, Decimal('90.00'), False, False, Decimal('0.00')),
     )
@@ -1115,9 +1115,7 @@ def test_discount_subgroup_cheapest_n_min_count(event, item, item2):
         Decimal('100.00'),
         Decimal('100.00'),
         Decimal('100.00'),
-        Decimal('100.00'),
-        Decimal('100.00'),
-        Decimal('100.00'),
+        Decimal('110.00'),
         Decimal('0.00'),
         Decimal('0.00'),
         Decimal('0.00'),
