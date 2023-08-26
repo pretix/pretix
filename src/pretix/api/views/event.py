@@ -415,6 +415,7 @@ class SubEventViewSet(ConditionalListView, viewsets.ModelViewSet):
             'subeventitem_set',
             'subeventitemvariation_set',
             'meta_values',
+            'meta_values__property',
             Prefetch(
                 'seat_category_mappings',
                 to_attr='_seat_category_mappings',

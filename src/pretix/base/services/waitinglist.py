@@ -22,13 +22,15 @@
 import sys
 from datetime import timedelta
 
-from django.db.models import Exists, F, OuterRef, Q, Sum
+from django.db.models import (
+    Exists, F, OuterRef, Prefetch, Q, Sum, prefetch_related_objects,
+)
 from django.dispatch import receiver
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    Event, SeatCategoryMapping, User, WaitingListEntry,
+    Event, EventMetaValue, SeatCategoryMapping, User, WaitingListEntry,
 )
 from pretix.base.models.waitinglist import WaitingListException
 from pretix.base.services.tasks import EventTask
@@ -59,8 +61,21 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
         ).aggregate(free=Sum(F('max_usages') - F('redeemed')))['free'] or 0
         seats_available[(m.product_id, m.subevent_id)] = num_free_seets_for_product - num_valid_vouchers_for_product
 
-    qs = WaitingListEntry.objects.filter(
-        event=event, voucher__isnull=True
+    prefetch_related_objects(
+        [event.organizer],
+        'meta_properties'
+    )
+    prefetch_related_objects(
+        [event],
+        Prefetch(
+            'meta_values',
+            EventMetaValue.objects.select_related('property'),
+            to_attr='meta_values_cached'
+        )
+    )
+
+    qs = event.waitinglistentries.filter(
+        voucher__isnull=True
     ).select_related('item', 'variation', 'subevent').prefetch_related(
         'item__quotas', 'variation__quotas'
     ).order_by('-priority', 'created')
