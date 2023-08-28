@@ -1038,7 +1038,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         def reduce_initial(v):
             if isinstance(v, dict):
                 # try to flatten objects such as name_parts to a single string to determine whether they have any value set
-                return ''.join([v for k, v in v.items() if not k.startswith('_')])
+                return ''.join([v for k, v in v.items() if not k.startswith('_') and v])
             else:
                 return v
 
