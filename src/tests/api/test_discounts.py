@@ -55,6 +55,8 @@ TEST_DISCOUNT_RES = {
     "benefit_only_apply_to_cheapest_n_matches": 1,
     "benefit_same_products": True,
     "benefit_limit_products": [],
+    "benefit_apply_to_addons": True,
+    "benefit_ignore_voucher_discounted": False,
 }
 
 

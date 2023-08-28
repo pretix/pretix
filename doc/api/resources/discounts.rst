@@ -48,10 +48,17 @@ benefit_discount_matching_percent        decimal (string)           The percenta
 benefit_only_apply_to_cheapest_n_matches integer                    If set higher than 0, the discount will only be applied to
                                                                     the cheapest matches. Useful for a "3 for 2"-style discount.
                                                                     Cannot be combined with ``condition_min_value``.
-benefit_same_products                   boolean                     If ``true``, the discount benefit applies to the same set of items
+benefit_same_products                    boolean                    If ``true``, the discount benefit applies to the same set of items
                                                                     as the condition (see above).
-benefit_limit_products                 list of integers             If ``benefit_same_products`` is not set, this is a list
+benefit_limit_products                   list of integers           If ``benefit_same_products`` is not set, this is a list
                                                                     of internal item IDs that the discount benefit applies to.
+benefit_apply_to_addons                  boolean                    (Only used if ``benefit_same_products`` is ``false``.)
+                                                                    If ``true``, the discount applies to add-on products as well,
+                                                                    otherwise it only applies to top-level items. The discount never
+                                                                    applies to bundled products.
+benefit_ignore_voucher_discounted        boolean                    (Only used if ``benefit_same_products`` is ``false``.)
+                                                                    If ``true``, the discount does not apply to products which have
+                                                                    been discounted by a voucher.
 ======================================== ========================== =======================================================
 
 
@@ -100,6 +107,8 @@ Endpoints
             "condition_min_value": "0.00",
             "benefit_same_products": true,
             "benefit_limit_products": [],
+            "benefit_apply_to_addons": true,
+            "benefit_ignore_voucher_discounted": false,
             "benefit_discount_matching_percent": "100.00",
             "benefit_only_apply_to_cheapest_n_matches": 1
           }
@@ -154,6 +163,8 @@ Endpoints
         "condition_min_value": "0.00",
         "benefit_same_products": true,
         "benefit_limit_products": [],
+        "benefit_apply_to_addons": true,
+        "benefit_ignore_voucher_discounted": false,
         "benefit_discount_matching_percent": "100.00",
         "benefit_only_apply_to_cheapest_n_matches": 1
       }
@@ -194,6 +205,8 @@ Endpoints
         "condition_min_value": "0.00",
         "benefit_same_products": true,
         "benefit_limit_products": [],
+        "benefit_apply_to_addons": true,
+        "benefit_ignore_voucher_discounted": false,
         "benefit_discount_matching_percent": "100.00",
         "benefit_only_apply_to_cheapest_n_matches": 1
       }
@@ -223,6 +236,8 @@ Endpoints
         "condition_min_value": "0.00",
         "benefit_same_products": true,
         "benefit_limit_products": [],
+        "benefit_apply_to_addons": true,
+        "benefit_ignore_voucher_discounted": false,
         "benefit_discount_matching_percent": "100.00",
         "benefit_only_apply_to_cheapest_n_matches": 1
       }
@@ -281,6 +296,8 @@ Endpoints
         "condition_min_value": "0.00",
         "benefit_same_products": true,
         "benefit_limit_products": [],
+        "benefit_apply_to_addons": true,
+        "benefit_ignore_voucher_discounted": false,
         "benefit_discount_matching_percent": "100.00",
         "benefit_only_apply_to_cheapest_n_matches": 1
       }

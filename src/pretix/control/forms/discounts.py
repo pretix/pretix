@@ -52,6 +52,8 @@ class DiscountForm(I18nModelForm):
             'benefit_only_apply_to_cheapest_n_matches',
             'benefit_same_products',
             'benefit_limit_products',
+            'benefit_apply_to_addons',
+            'benefit_ignore_voucher_discounted',
         ]
         field_classes = {
             'available_from': SplitDateTimeField,
@@ -68,14 +70,13 @@ class DiscountForm(I18nModelForm):
                 'class': 'scrolling-multiple-choice',
             }),
             'benefit_limit_products': forms.CheckboxSelectMultiple(attrs={
-                'data-inverse-dependency': '<[name$=same_products]',
                 'class': 'scrolling-multiple-choice',
             }),
             'benefit_only_apply_to_cheapest_n_matches': forms.NumberInput(
                 attrs={
                     'data-display-dependency': '#id_condition_min_count',
                 }
-            )
+            ),
         }
 
     def __init__(self, *args, **kwargs):

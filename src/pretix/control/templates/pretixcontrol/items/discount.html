@@ -48,10 +48,14 @@
                 </fieldset>
                 <fieldset>
                     <legend>{% trans "Benefit" context "discount" %}</legend>
+                    {% bootstrap_field form.benefit_same_products layout="control" %}
+                    <div data-display-dependency="#id_benefit_same_products" data-inverse>
+                        {% bootstrap_field form.benefit_limit_products layout="control" %}
+                        {% bootstrap_field form.benefit_apply_to_addons layout="control" %}
+                        {% bootstrap_field form.benefit_ignore_voucher_discounted layout="control" %}
+                    </div>
                     {% bootstrap_field form.benefit_discount_matching_percent layout="control" addon_after="%" %}
                     {% bootstrap_field form.benefit_only_apply_to_cheapest_n_matches layout="control" %}
-                    {% bootstrap_field form.benefit_same_products layout="control" %}
-                    {% bootstrap_field form.benefit_limit_products layout="control" %}
                 </fieldset>
             </div>
             {% if discount %}
