@@ -199,8 +199,10 @@ class Discount(LoggedModel):
 
         if data.get('subevent_mode') == cls.SUBEVENT_MODE_DISTINCT and not data.get('benefit_same_products'):
             raise ValidationError(
-                _('You cannot apply the discount only to bookings of different dates if you are applying the discount '
-                  'to a different set of products than the condition.')
+                {'benefit_same_products': [
+                    _('You cannot apply the discount to a different set of products if the discount is only valid '
+                      'for bookings of different dates.')
+                ]}
             )
 
     def allow_delete(self):
