@@ -171,7 +171,7 @@ def apply_discounts(event: Event, sales_channel: str,
         Q(available_until__isnull=True) | Q(available_until__gte=now()),
         sales_channels__contains=sales_channel,
         active=True,
-    ).prefetch_related('condition_limit_products').order_by('position', 'pk')
+    ).prefetch_related('condition_limit_products', 'benefit_limit_products').order_by('position', 'pk')
     for discount in discount_qs:
         result = discount.apply({
             idx: (item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount)

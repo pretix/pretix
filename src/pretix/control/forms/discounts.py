@@ -50,11 +50,16 @@ class DiscountForm(I18nModelForm):
             'condition_ignore_voucher_discounted',
             'benefit_discount_matching_percent',
             'benefit_only_apply_to_cheapest_n_matches',
+            'benefit_same_products',
+            'benefit_limit_products',
+            'benefit_apply_to_addons',
+            'benefit_ignore_voucher_discounted',
         ]
         field_classes = {
             'available_from': SplitDateTimeField,
             'available_until': SplitDateTimeField,
             'condition_limit_products': ItemMultipleChoiceField,
+            'benefit_limit_products': ItemMultipleChoiceField,
         }
         widgets = {
             'subevent_mode': forms.RadioSelect,
@@ -64,11 +69,14 @@ class DiscountForm(I18nModelForm):
                 'data-inverse-dependency': '<[name$=all_products]',
                 'class': 'scrolling-multiple-choice',
             }),
+            'benefit_limit_products': forms.CheckboxSelectMultiple(attrs={
+                'class': 'scrolling-multiple-choice',
+            }),
             'benefit_only_apply_to_cheapest_n_matches': forms.NumberInput(
                 attrs={
                     'data-display-dependency': '#id_condition_min_count',
                 }
-            )
+            ),
         }
 
     def __init__(self, *args, **kwargs):
@@ -85,6 +93,7 @@ class DiscountForm(I18nModelForm):
             widget=forms.CheckboxSelectMultiple,
         )
         self.fields['condition_limit_products'].queryset = self.event.items.all()
+        self.fields['benefit_limit_products'].queryset = self.event.items.all()
         self.fields['condition_min_count'].required = False
         self.fields['condition_min_count'].widget.is_required = False
         self.fields['condition_min_value'].required = False

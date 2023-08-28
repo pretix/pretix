@@ -907,14 +907,18 @@ class Event(EventMixin, LoggedModel):
             self.items.filter(hidden_if_available_id=oldid).update(hidden_if_available=q)
 
         for d in Discount.objects.filter(event=other).prefetch_related('condition_limit_products'):
-            items = list(d.condition_limit_products.all())
+            c_items = list(d.condition_limit_products.all())
+            b_items = list(d.benefit_limit_products.all())
             d.pk = None
             d.event = self
             d.save(force_insert=True)
             d.log_action('pretix.object.cloned')
-            for i in items:
+            for i in c_items:
                 if i.pk in item_map:
                     d.condition_limit_products.add(item_map[i.pk])
+            for i in b_items:
+                if i.pk in item_map:
+                    d.benefit_limit_products.add(item_map[i.pk])
 
         question_map = {}
         for q in Question.objects.filter(event=other).prefetch_related('items', 'options'):
