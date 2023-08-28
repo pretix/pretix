@@ -213,11 +213,10 @@ class OrderViewSetMixin:
         if 'invoice_address' not in self.request.GET.getlist('exclude'):
             qs = qs.select_related('invoice_address')
 
-        qs = qs.prefetch_related(*self._positions_prefetch(self.request))
+        qs = qs.prefetch_related(self._positions_prefetch(self.request))
         return qs
 
     def _positions_prefetch(self, request):
-        prefetches = []
         if request.query_params.get('include_canceled_positions', 'false') == 'true':
             opq = OrderPosition.all
         else:
@@ -231,14 +230,11 @@ class OrderViewSetMixin:
                 'questions',
                 'item_meta_properties',
             )
-            items_base = self.request.event.items
-            subevents_base = self.request.event.subevents
-
-            prefetches.append(Prefetch(
+            return Prefetch(
                 'positions',
                 opq.all().prefetch_related(
                     Prefetch('checkins', queryset=Checkin.objects.all()),
-                    Prefetch('item', queryset=items_base.prefetch_related(
+                    Prefetch('item', queryset=self.request.event.items.prefetch_related(
                         Prefetch('meta_values', ItemMetaValue.objects.select_related('property'), to_attr='meta_values_cached')
                     )),
                     Prefetch('variation', queryset=ItemVariation.objects.prefetch_related(
@@ -247,15 +243,15 @@ class OrderViewSetMixin:
                     'answers', 'answers__options', 'answers__question',
                     'item__category',
                     'addon_to__answers', 'addon_to__answers__options', 'addon_to__answers__question',
-                    Prefetch('subevent', queryset=subevents_base.prefetch_related(
+                    Prefetch('subevent', queryset=self.request.event.subevents.prefetch_related(
                         Prefetch('meta_values', to_attr='meta_values_cached', queryset=SubEventMetaValue.objects.select_related('property'))
                     )),
                     Prefetch('addons', opq.select_related('item', 'variation', 'seat')),
                     'linked_media',
                 ).select_related('seat', 'addon_to', 'addon_to__seat')
-            ))
+            )
         else:
-            prefetches.append(Prefetch(
+            return Prefetch(
                 'positions',
                 opq.all().prefetch_related(
                     Prefetch('checkins', queryset=Checkin.objects.all()),
@@ -263,8 +259,7 @@ class OrderViewSetMixin:
                     Prefetch('answers', queryset=QuestionAnswer.objects.prefetch_related('options', 'question').order_by('question__position')),
                     'seat',
                 )
-            ))
-        return prefetches
+            )
 
     def get_serializer_context(self):
         ctx = super().get_serializer_context()
@@ -733,7 +728,7 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                 invoice = generate_invoice(order, trigger_pdf=True)
 
             # Refresh serializer only after running signals
-            prefetch_related_objects([order], *self._positions_prefetch(request))
+            prefetch_related_objects([order], self._positions_prefetch(request))
             serializer = OrderSerializer(order, context=serializer.context)
 
             if send_mail:
