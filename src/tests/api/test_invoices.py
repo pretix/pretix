@@ -138,6 +138,37 @@ def order(event, item, taxrule, question):
 
 
 @pytest.fixture
+def order2(event2, item2):
+    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        o = Order.objects.create(
+            code='BAR', event=event2, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, secret="asd436cvbfd1",
+            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
+            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
+            total=23, locale='en'
+        )
+        o.payments.create(
+            provider='banktransfer',
+            state='pending',
+            amount=Decimal('23.00'),
+        )
+        OrderPosition.objects.create(
+            order=o,
+            item=item2,
+            variation=None,
+            price=Decimal("23"),
+            attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
+            secret="asdlfksdgdfgxcbfgdhfg",
+            pseudonymization_id="AC892345",
+            positionid=1,
+        )
+        return o
+
+
+@pytest.fixture
 def invoice(order):
     testtime = datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc)
 
@@ -146,8 +177,18 @@ def invoice(order):
         return generate_invoice(order)
 
 
+@pytest.fixture
+def invoice2(order2):
+    testtime = datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        return generate_invoice(order2)
+
+
 TEST_INVOICE_RES = {
     "order": "FOO",
+    "event": "dummy",
     "number": "DUMMY-00001",
     "is_cancellation": False,
     "invoice_from_name": "",
@@ -266,6 +307,34 @@ def test_invoice_list(token_client, organizer, event, order, item, invoice):
     resp = token_client.get('/api/v1/organizers/{}/events/{}/invoices/?refers={}'.format(
         organizer.slug, event.slug, ic.number))
     assert [] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_organizer_level(token_client, organizer, team, event, event2, invoice, invoice2):
+    resp = token_client.get('/api/v1/organizers/{}/invoices/'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert len(resp.data['results']) == 2
+
+    resp = token_client.get('/api/v1/organizers/{}/invoices/{}/'.format(organizer.slug, invoice.number))
+    assert resp.status_code == 200
+
+    resp = token_client.get('/api/v1/organizers/{}/invoices/{}/'.format(organizer.slug, invoice2.number))
+    assert resp.status_code == 200
+
+    with scopes_disabled():
+        team.all_events = False
+        team.save()
+        team.limit_events.set([event2])
+
+    resp = token_client.get('/api/v1/organizers/{}/invoices/'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert len(resp.data['results']) == 1
+
+    resp = token_client.get('/api/v1/organizers/{}/invoices/{}/'.format(organizer.slug, invoice.number))
+    assert resp.status_code == 404
+
+    resp = token_client.get('/api/v1/organizers/{}/invoices/{}/'.format(organizer.slug, invoice2.number))
+    assert resp.status_code == 200
 
 
 @pytest.mark.django_db
