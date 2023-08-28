@@ -886,7 +886,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         if isinstance(auth, Device):
             device = auth
 
-        last_cis = list(op.checkins.order_by('-datetime').filter(list=clist).only('type', 'nonce'))
+        last_cis = list(op.checkins.order_by('-datetime').filter(list=clist).only('type', 'nonce', 'position_id'))
         entry_allowed = (
             type == Checkin.TYPE_EXIT or
             clist.allow_multiple_entries or
