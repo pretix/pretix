@@ -615,7 +615,7 @@ class PaypalMethod(BasePaymentProvider):
                 ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=pp_captured_order.id)
             except ReferencedPayPalObject.MultipleObjectsReturned:
                 pass
-            if str(pp_captured_order.purchase_units[0].amount.value) != str(payment.amount) or \
+            if Decimal(pp_captured_order.purchase_units[0].amount.value) != payment.amount or \
                     pp_captured_order.purchase_units[0].amount.currency_code != self.event.currency:
                 logger.error('Value mismatch: Payment %s vs paypal trans %s' % (payment.id, str(pp_captured_order.dict())))
                 raise PaymentException(_('We were unable to process your payment. See below for details on how to '
