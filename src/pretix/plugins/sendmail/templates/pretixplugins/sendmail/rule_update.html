@@ -41,9 +41,12 @@
             <fieldset>
                 <legend>{% trans "Recipients" %}</legend>
                 {% bootstrap_field form.send_to layout='control' %}
+                {% if form.subevent %}
+                    {% bootstrap_field form.subevent layout='control' %}
+                {% endif %}
                 {% bootstrap_field form.restrict_to_status layout='control' %}
                 {% bootstrap_field form.checked_in_status layout='control' %}
-            <hr>
+                <hr>
                 {% bootstrap_field form.all_products layout='control' %}
                 {% bootstrap_field form.limit_products layout='horizontal' %}
             </fieldset>

@@ -227,6 +227,7 @@ class Rule(models.Model, LoggingMixin):
 
     id = models.BigAutoField(primary_key=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='sendmail_rules')
+    subevent = models.ForeignKey(SubEvent, null=True, on_delete=models.CASCADE)
 
     subject = I18nCharField(max_length=255, verbose_name=_('Subject'))
     template = I18nTextField(verbose_name=_('Message'))
@@ -280,9 +281,10 @@ class Rule(models.Model, LoggingMixin):
         if self.event.has_subevents:
             for se in self.event.subevents.annotate(has_sm=Exists(ScheduledMail.objects.filter(
                     subevent=OuterRef('pk'), rule=self))).filter(has_sm=False):
-                sm = ScheduledMail(rule=self, subevent=se, event=self.event)
-                sm.recompute()
-                create_sms.append(sm)
+                if not self.subevent or self.subevent == se:
+                    sm = ScheduledMail(rule=self, subevent=se, event=self.event)
+                    sm.recompute()
+                    create_sms.append(sm)
             ScheduledMail.objects.bulk_create(create_sms)
         else:
             ScheduledMail.objects.get_or_create(rule=self, event=self.event)

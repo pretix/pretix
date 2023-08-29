@@ -309,8 +309,8 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
     class Meta:
         model = Rule
 
-        fields = ['subject', 'template', 'attach_ical',
-                  'send_date', 'send_offset_days', 'send_offset_time',
+        fields = ['subject', 'template', 'attach_ical', 'send_date',
+                  'send_offset_days', 'send_offset_time', 'subevent',
                   'all_products', 'limit_products', 'restrict_to_status',
                   'checked_in_status', 'send_to', 'enabled']
 
