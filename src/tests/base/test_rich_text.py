@@ -22,7 +22,7 @@
 import pytest
 
 from pretix.base.templatetags.rich_text import (
-    markdown_compile_email, rich_text, rich_text_snippet,
+    ALLOWED_ATTRIBUTES, ALLOWED_TAGS, markdown_compile_email, rich_text, rich_text_snippet,
 )
 
 
@@ -98,3 +98,13 @@ def test_cleanup(content, result, result_snippet):
     assert rich_text(content) == result
     assert rich_text_snippet(content) == result_snippet
     assert markdown_compile_email(content) == result
+
+
+def test_markdown_email_custom_allowlist():
+    source = "![my image](https://example.org/my-image.jpg)"
+    html = markdown_compile_email(
+            source,
+            allowed_tags=ALLOWED_TAGS + ["img"],
+            allowed_attributes=dict(ALLOWED_ATTRIBUTES, img=["src", "alt", "title"]),
+        )
+    assert html == '<p><img alt="my image" src="https://example.org/my-image.jpg"></p>'
