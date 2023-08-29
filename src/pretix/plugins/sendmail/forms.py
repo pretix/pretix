@@ -359,6 +359,29 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
 
         super().__init__(*args, **kwargs)
 
+        self.fields['subevent'] = forms.ModelChoiceField(
+            SubEvent.objects.none(),
+            label=pgettext_lazy('sendmail_form', 'Restrict to a specific event date'),
+            required=False,
+            empty_label=pgettext_lazy('subevent', 'All dates')
+        )
+
+        if self.event.has_subevents:
+            self.fields['subevent'].queryset = self.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'Date')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+        else:
+            del self.fields['subevent']
+
         self.fields['limit_products'].queryset = Item.objects.filter(event=self.event)
 
         self.fields['schedule_type'] = forms.ChoiceField(
