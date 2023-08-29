@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 11:49+0000\n"
-"PO-Revision-Date: 2023-06-28 06:00+0000\n"
-"Last-Translator: Yucheng Lin <yuchenglinedu@gmail.com>\n"
+"PO-Revision-Date: 2023-08-30 07:00+0000\n"
+"Last-Translator: Ash So <ashs@vankaifong.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -5876,24 +5876,18 @@ msgid "Ambiguous option selected."
 msgstr "選擇不明確的選項。"
 
 #: pretix/base/orderimport.py:845
-#, fuzzy
-#| msgid "No matching seat was found."
 msgid "No matching customer was found."
-msgstr "未找到符合的座位。"
+msgstr "未找到符合的客戶。"
 
 #: pretix/base/payment.py:86
-#, fuzzy
-#| msgid "Apply"
 msgctxt "payment"
 msgid "Apple Pay"
-msgstr "應用"
+msgstr "Apple Pay"
 
 #: pretix/base/payment.py:87
-#, fuzzy
-#| msgid "Android (Google Play)"
 msgctxt "payment"
 msgid "Google Pay"
-msgstr "安卓（Google Play）"
+msgstr "安卓（Google Pay）"
 
 #: pretix/base/payment.py:256
 #: pretix/presale/templates/pretixpresale/event/order.html:115
@@ -6424,16 +6418,12 @@ msgid "List of Add-Ons"
 msgstr "附加組件清單"
 
 #: pretix/base/pdf.py:364
-#, fuzzy
-#| msgid ""
-#| "Add-on 1\n"
-#| "Add-on 2"
 msgid ""
 "Add-on 1\n"
 "2x Add-on 2"
 msgstr ""
 "附加1\n"
-"附加2"
+"2x附加2"
 
 #: pretix/base/pdf.py:370 pretix/control/forms/filter.py:1275
 #: pretix/control/forms/filter.py:1277
@@ -9410,25 +9400,12 @@ msgstr ""
 "你的{event} 團隊"
 
 #: pretix/base/settings.py:2349
-#, fuzzy, python-brace-format
-#| msgid "Payment received for your order: {code}"
+#, python-brace-format
 msgid "Payment failed for your order: {code}"
-msgstr "收到的訂單付款：{code}"
+msgstr "訂單付款失敗：{code}"
 
 #: pretix/base/settings.py:2353
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we did not yet receive a full payment for your order for {event}.\n"
-#| "Please keep in mind that we only guarantee your order if we receive\n"
-#| "your payment before {expire_date}.\n"
-#| "\n"
-#| "You can view the payment information and the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -9446,11 +9423,12 @@ msgid ""
 msgstr ""
 "你好\n"
 "\n"
-"我們尚未收到你的 {event} 訂單的全額付款。\n"
-"請記住，我們僅在收到時保證你的訂單\n"
-"你在 {expire_date} 之前的付款。\n"
+"你在 {event} 的訂單付款未能成功。\n"
 "\n"
-"你可以在以下位置查看付款資訊與訂單狀態：\n"
+"您的訂單仍然有效，您可以嘗試使用相同或不同的付款方式再次進行支付，唯請在 "
+"{expire_date} 前完成付款程序。\n"
+"\n"
+"您可以重新嘗試付款，並在以下網址檢視您的訂單狀態：\n"
 "{url}\n"
 "\n"
 "敬此\n"
@@ -13568,7 +13546,7 @@ msgstr "已為位置 #{posid} 生成一個新密鑰。"
 #, python-brace-format
 msgid ""
 "The validity start date for position #{posid} has been changed to {value}."
-msgstr "位置 #{posid} 的有效開始日期已更改為{value}"
+msgstr "位置 #{posid} 的有效開始日期已更改為{value}。"
 
 #: pretix/control/logdisplay.py:171
 #, python-brace-format
@@ -13846,10 +13824,8 @@ msgid "The medium has been connected to a new ticket."
 msgstr "媒體已連接到新票證。"
 
 #: pretix/control/logdisplay.py:371
-#, fuzzy
-#| msgid "The medium has been connected to a new ticket."
 msgid "The medium has been connected to a new gift card."
-msgstr "媒體已連接到新票證。"
+msgstr "媒體已連接到新的禮品卡。"
 
 #: pretix/control/logdisplay.py:372 pretix/control/logdisplay.py:413
 msgid "Sending of an email has failed."
@@ -14085,11 +14061,8 @@ msgid ""
 msgstr "包含訂單詳細資訊頁面連結的電子郵件已重新發送給使用者。"
 
 #: pretix/control/logdisplay.py:436
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that payment has been received."
 msgid "An email has been sent to notify the user that the payment failed."
-msgstr "已發送一封電子郵件，通知使用者已收到付款。"
+msgstr "已發送一封電子郵件通知使用者未能成功付款。"
 
 #: pretix/control/logdisplay.py:437
 #, python-brace-format
@@ -16788,10 +16761,8 @@ msgid "Payment reminder"
 msgstr "付款提醒"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:108
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment failed"
-msgstr "支付費用"
+msgstr "支付失敗"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:111
 msgid "Waiting list notification"
@@ -16845,8 +16816,6 @@ msgid "Deadlines"
 msgstr "期限"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:68
-#, fuzzy
-#| msgid "days"
 msgctxt "unit"
 msgid "days"
 msgstr "日"
@@ -21981,11 +21950,11 @@ msgstr "兩步驟狀態"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:44
 msgid "Two-factor authentication is currently enabled."
-msgstr "兩步驟驗證目前啟用"
+msgstr "兩步驟驗證目前啟用。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:60
 msgid "Two-factor authentication is currently disabled."
-msgstr "兩步驟驗證目前停用"
+msgstr "兩步驟驗證目前停用。"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:63
 msgid "To enable it, you need to configure at least one device below."
@@ -22529,20 +22498,14 @@ msgstr "此條目的優先順序已修改。此數字越高，此人將越早獲
 msgid ""
 "For safety reasons, the waiting list does not run if the quota is set to "
 "unlimited."
-msgstr ""
+msgstr "出於安全考慮，如果額度設定為無限制，將不設等候名單。"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:219
-#, fuzzy
-#| msgid "Quota name"
 msgid "Quota unlimited"
-msgstr "額度名稱"
+msgstr "無限額度"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:225
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "                                    Waiting, product %(num)sx available\n"
-#| "                                "
+#, python-format
 msgid ""
 "\n"
 "                                            Waiting, product %(num)sx "
@@ -22550,8 +22513,8 @@ msgid ""
 "                                        "
 msgstr ""
 "\n"
-"                                    等待中，產品 %(num)s可用\n"
-"                                "
+"                                            等待中，產品 %(num)s可用\n"
+"                                        "
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:231
 msgid "Waiting, product unavailable"
@@ -23678,7 +23641,7 @@ msgstr "訂單已更改，使用者已收到通知。"
 #: pretix/control/views/orders.py:1828 pretix/control/views/orders.py:1962
 #: pretix/control/views/orders.py:1999 pretix/presale/views/order.py:1538
 msgid "The order has been changed."
-msgstr "訂單順序已更改"
+msgstr "訂單順序已更改。"
 
 #: pretix/control/views/orders.py:1855 pretix/presale/checkoutflow.py:881
 #: pretix/presale/views/order.py:799
@@ -25274,7 +25237,7 @@ msgstr "值機清單 （PDF）"
 #: pretix/plugins/checkinlists/exporters.py:648
 msgctxt "export_category"
 msgid "Check-in"
-msgstr "Check-in"
+msgstr "簽到"
 
 #: pretix/plugins/checkinlists/exporters.py:286
 msgid ""
@@ -26107,9 +26070,6 @@ msgid "Restrict to event dates starting before"
 msgstr "限制為早於之前開始的活動日期"
 
 #: pretix/plugins/sendmail/forms.py:170
-#, fuzzy
-#| msgctxt "sendmail_from"
-#| msgid "Send to"
 msgctxt "sendmail_form"
 msgid "Send to"
 msgstr "傳送到"
@@ -26124,9 +26084,6 @@ msgid "Filter check-in status"
 msgstr "篩選簽到狀態"
 
 #: pretix/plugins/sendmail/forms.py:189
-#, fuzzy
-#| msgctxt "sendmail_from"
-#| msgid "Restrict to recipients without check-in"
 msgctxt "sendmail_form"
 msgid "Restrict to recipients without check-in"
 msgstr "僅限未簽到的收件者"
@@ -26176,17 +26133,11 @@ msgid "pending with payment overdue"
 msgstr "待處理，付款逾期"
 
 #: pretix/plugins/sendmail/forms.py:258
-#, fuzzy
-#| msgctxt "sendmail_from"
-#| msgid "Restrict to orders with status"
 msgctxt "sendmail_form"
 msgid "Restrict to orders with status"
-msgstr "限制為具有狀態的訂單"
+msgstr "僅限具有狀態的訂單"
 
 #: pretix/plugins/sendmail/forms.py:283 pretix/plugins/sendmail/forms.py:287
-#, fuzzy
-#| msgctxt "sendmail_from"
-#| msgid "Restrict to recipients with check-in on list"
 msgctxt "sendmail_form"
 msgid "Restrict to recipients with check-in on list"
 msgstr "僅限在清單中簽到的收件者"
@@ -26257,11 +26208,8 @@ msgid "Limit products"
 msgstr "限制商品"
 
 #: pretix/plugins/sendmail/models.py:218
-#, fuzzy
-#| msgctxt "sendmail_from"
-#| msgid "Restrict to orders with status"
 msgid "Restrict to orders with status"
-msgstr "限制為具有狀態的訂單"
+msgstr "僅限具有狀態的訂單"
 
 #: pretix/plugins/sendmail/models.py:228
 msgid "Send date"
@@ -26840,10 +26788,8 @@ msgid "Bancontact"
 msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:357
-#, fuzzy
-#| msgid "Disable SEPA Direct Debit"
 msgid "SEPA Direct Debit"
-msgstr "禁用 SEPA 直接扣款"
+msgstr "SEPA 直接扣款"
 
 #: pretix/plugins/stripe/payment.py:362
 #, fuzzy
@@ -26975,26 +26921,20 @@ msgid "Credit card"
 msgstr "信用卡"
 
 #: pretix/plugins/stripe/payment.py:1157
-#, fuzzy
-#| msgid "EPS via Stripe"
 msgid "SEPA Debit via Stripe"
-msgstr "EPS透過Stripe"
+msgstr "透過Stripe進行SEPA直接扣款"
 
 #: pretix/plugins/stripe/payment.py:1158
 msgid "SEPA Debit"
-msgstr ""
+msgstr "SEPA扣款"
 
 #: pretix/plugins/stripe/payment.py:1197
-#, fuzzy
-#| msgid "Account holder"
 msgid "Account Holder Name"
-msgstr "帳戶持有人"
+msgstr "帳戶持有人名稱"
 
 #: pretix/plugins/stripe/payment.py:1202
-#, fuzzy
-#| msgid "Account holder"
 msgid "Account Holder Street"
-msgstr "帳戶持有人"
+msgstr "帳戶持有人街道"
 
 #: pretix/plugins/stripe/payment.py:1214
 #, fuzzy
@@ -27003,16 +26943,12 @@ msgid "Account Holder Postal Code"
 msgstr "帳戶持有人"
 
 #: pretix/plugins/stripe/payment.py:1226
-#, fuzzy
-#| msgid "Account holder"
 msgid "Account Holder City"
-msgstr "帳戶持有人"
+msgstr "帳戶持有人城市"
 
 #: pretix/plugins/stripe/payment.py:1238
-#, fuzzy
-#| msgid "Account holder"
 msgid "Account Holder Country"
-msgstr "帳戶持有人"
+msgstr "帳戶持有人國家"
 
 #: pretix/plugins/stripe/payment.py:1282
 msgid "giropay via Stripe"
@@ -27183,10 +27119,8 @@ msgid "Card type"
 msgstr "卡片類型"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
-#, fuzzy
-#| msgid "The total amount will be withdrawn from your credit card."
 msgid "The total amount will be withdrawn from your bank account."
-msgstr "總金額將從你的信用卡中提取。"
+msgstr "總金額將從你的銀行戶口中提取。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:18
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:20
@@ -27195,10 +27129,8 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:22
-#, fuzzy
-#| msgid "Account holder"
 msgid "Account number"
-msgstr "帳戶持有人"
+msgstr "帳戶號碼"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:24
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple.html:4
@@ -27246,20 +27178,14 @@ msgid "For a SEPA Debit payment, please turn on JavaScript."
 msgstr "對於信用卡付款，請打開JavaScript。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:16
-#, fuzzy
-#| msgid ""
-#| "You already entered a card number that we will use to charge the payment "
-#| "amount."
 msgid ""
 "You already entered a bank account that we will use to charge the payment "
 "amount."
-msgstr "你已經輸入了一個卡號，我們將使用該卡號來收取付款金額。"
+msgstr "您已經輸入了一個我們將用來扣除支付金額的銀行帳戶。"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:27
-#, fuzzy
-#| msgid "Use a different card"
 msgid "Use a different account"
-msgstr "使用不同卡片"
+msgstr "使用不同帳戶"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:51
 #, python-format
@@ -27539,7 +27465,7 @@ msgstr "網上check-in"
 
 #: pretix/plugins/webcheckin/templates/pretixplugins/webcheckin/index.html:10
 msgid "Check-in"
-msgstr "Check-in"
+msgstr "簽到"
 
 #: pretix/presale/checkoutflow.py:107
 msgctxt "checkoutflow"
