@@ -147,18 +147,21 @@ var api = {
     },
 
     '_postFormJSON': function (endpoint, form, callback, err_callback) {
-        var params = [].filter.call(form.elements, function (el) {
-            return (el.type !== 'checkbox' && el.type !== 'radio') || el.checked;
-        })
-            .filter(function (el) {
-                return !!el.name && !!el.value;
-            })
-            .filter(function (el) {
+        var params;
+        if (Array.isArray(form)) {
+            params = form
+        } else {
+            params = [].filter.call(form.elements, function (el) {
+                return (el.type !== 'checkbox' && el.type !== 'radio') || el.checked;
+            }).filter(function (el) {
+                    return !!el.name && !!el.value;
+            }).filter(function (el) {
                 return !el.disabled;
             })
-            .map(function (el) {
-                return encodeURIComponent(el.name) + '=' + encodeURIComponent(el.value);
-            }).join('&');
+        }
+        params = params.map(function (el) {
+            return encodeURIComponent(el.name) + '=' + encodeURIComponent(el.value);
+        }).join('&');
 
         var xhr = api._getXHR();
         xhr.open("POST", endpoint, true);
@@ -596,7 +599,7 @@ Vue.component('category', {
 });
 
 var shared_methods = {
-    buy: function (event) {
+    buy: function (event, data) {
         if (this.$root.useIframe) {
             if (event) {
                 event.preventDefault();
@@ -615,7 +618,7 @@ var shared_methods = {
             this.$root.overlay.frame_loading = true;
 
             this.async_task_interval = 100;
-            var form = this.$refs.form;
+            var form = data === undefined ? this.$refs.form : data;
             if (form === undefined) {
                 form = this.$refs.formcomp.$refs.form;
             }
@@ -737,7 +740,7 @@ var shared_methods = {
         }
     },
     handleResize: function () {
-        this.mobile = this.$refs.wrapper.clientWidth <= 800;
+        this.clientWidth = this.$refs.wrapper.clientWidth;
     }
 };
 
@@ -748,7 +751,7 @@ var shared_widget_data = function () {
         async_task_timeout: null,
         async_task_interval: 100,
         voucher: null,
-        mobile: false,
+        clientWidth: 1000,
     }
 };
 
@@ -939,10 +942,15 @@ Vue.component('pretix-widget-event-form', {
         + '</div>'
 
         // Seating plan
-        + '<div class="pretix-widget-seating-link-wrapper" v-if="this.$root.has_seating_plan">'
+        + '<div class="pretix-widget-seating-link-wrapper" v-if="$root.has_seating_plan && !show_seating_plan_inline">'
         + '<button class="pretix-widget-seating-link" @click.prevent.stop="$root.startseating">'
         + strings['show_seating']
         + '</button>'
+        + '</div>'
+        + '<div class="pretix-widget-seating-embed" v-else-if="$root.has_seating_plan && show_seating_plan_inline">'
+        + '<iframe :key="\'seatingframe\' + $root.loadid" class="pretix-widget-seating-embed-iframe" ref="seatingframe"'
+        + '    :src="seatingframe" frameborder="0" referrerpolicy="origin" allowtransparency="true">'
+        + '</iframe>'
         + '</div>'
 
         // Waiting list for seating plan
@@ -998,10 +1006,14 @@ Vue.component('pretix-widget-event-form', {
         this.$root.$on('amounts_changed', this.calculate_buy_disabled)
         this.$root.$on('focus_voucher_field', this.focus_voucher_field)
         this.calculate_buy_disabled()
+
+        window.addEventListener('message', this.on_seat_select);
     },
     beforeDestroy: function() {
         this.$root.$off('amounts_changed', this.calculate_buy_disabled)
         this.$root.$off('focus_voucher_field', this.focus_voucher_field)
+
+        window.addEventListener('message', this.on_seat_select);
     },
     computed: {
         buy_label: function () {
@@ -1031,9 +1043,26 @@ Vue.component('pretix-widget-event-form', {
             } else {
                 return strings.buy;
             }
-        }
+        },
+        show_seating_plan_inline: function () {
+            return this.$root.seating_embedded && this.$parent.clientWidth > 992;
+        },
+        seatingframe: function () {
+            var seatingframe_url = this.$root.target_url;
+            if (this.$root.subevent){
+                seatingframe_url += '/' + this.$root.subevent;
+            }
+            seatingframe_url += '/seatingframe/?inline=1&locale=' + lang + '&widget_id=' + this.$root.widgetindex;
+            return seatingframe_url;
+        },
     },
     methods: {
+        on_seat_select: function (ev) {
+            if (ev.data.source !== "pretix_widget_seating") return;
+            if (parseInt(ev.data.widget_id) !== this.$root.widgetindex) return;  // In case multiple widgets are on this page
+            if (ev.data.action !== "buy") return;
+            this.$parent.buy(null, ev.data.data);
+        },
         focus_voucher_field: function() {
             this.$refs.voucherinput.scrollIntoView(false)
             this.$refs.voucherinput.focus()
@@ -1513,9 +1542,12 @@ Vue.component('pretix-widget', {
     data: shared_widget_data,
     methods: shared_methods,
     mounted: function () {
-        this.mobile = this.$refs.wrapper.clientWidth <= 600;
+        this.clientWidth = this.$refs.wrapper.clientWidth;
     },
     computed: {
+        mobile: function () {
+            return this.clientWidth <= 600;
+        },
         classObject: function () {
             return {
                 'pretix-widget': true,
@@ -1680,6 +1712,7 @@ var shared_root_methods = {
                 root.has_seating_plan_waitinglist = data.has_seating_plan_waitinglist;
                 root.itemnum = data.itemnum;
             }
+            root.loadid++;  // force-reload iframes
             root.poweredby = data.poweredby;
             if (root.loading > 0) {
                 root.loading--;
@@ -1835,7 +1868,7 @@ var shared_root_computed = {
     },
     widget_data_json: function () {
         return JSON.stringify(this.widget_data);
-    }
+    },
 };
 
 var create_overlay = function (app) {
@@ -1878,7 +1911,7 @@ function get_ga_client_id(tracking_id) {
     return null;
 }
 
-var create_widget = function (element) {
+var create_widget = function (element, widgetindex) {
     var target_url = element.attributes.event.value;
     if (!target_url.match(/\/$/)) {
         target_url += "/";
@@ -1887,6 +1920,7 @@ var create_widget = function (element) {
     var subevent = element.attributes.subevent ? element.attributes.subevent.value : null;
     var style = element.attributes["list-type"] ? element.attributes["list-type"].value : (element.attributes.style ? element.attributes.style.value : null);
     var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
+    var seating_embedded = element.attributes["seating-embedded"] ? true : false;
     var disable_iframe = element.attributes["disable-iframe"] ? true : false;
     var disable_vouchers = element.attributes["disable-vouchers"] ? true : false;
     var widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
@@ -1909,6 +1943,7 @@ var create_widget = function (element) {
         el: element,
         data: function () {
             return {
+                widgetindex: widgetindex,
                 target_url: target_url,
                 parent_stack: [],
                 subevent: subevent,
@@ -1932,6 +1967,7 @@ var create_widget = function (element) {
                 voucher_explanation_text: null,
                 show_variations_expanded: !!variations,
                 skip_ssl: skip_ssl,
+                seating_embedded: seating_embedded,
                 disable_iframe: disable_iframe,
                 style: style,
                 connection_error: false,
@@ -1946,6 +1982,7 @@ var create_widget = function (element) {
                 display_add_to_cart: false,
                 widget_data: widget_data,
                 loading: 1,
+                loadid: 1,
                 widget_id: 'pretix-widget-' + widget_id,
                 vouchers_exist: false,
                 disable_vouchers: disable_vouchers,
@@ -2046,7 +2083,7 @@ window.PretixWidget.buildWidgets = function () {
         var wlength = widgets.length;
         for (var i = 0; i < wlength; i++) {
             var widget = widgets[i];
-            widgetlist.push(create_widget(widget));
+            widgetlist.push(create_widget(widget, i + 1));
         }
 
         var buttons = document.querySelectorAll("pretix-button, div.pretix-button-compat");

@@ -371,6 +371,15 @@
     width: 100%;
   }
 
+  .pretix-widget-seating-embed {
+    margin: 0 -10px;
+  }
+  .pretix-widget-seating-embed-iframe {
+    width: 100%;
+    aspect-ratio: 2/1;
+    max-height: 60vh;
+  }
+
   .pretix-widget-seating-waitinglist {
     margin: 15px 0;
   }

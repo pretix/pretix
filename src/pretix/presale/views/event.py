@@ -723,10 +723,14 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         return context
 
 
-@method_decorator(allow_frame_if_namespaced, 'dispatch')
 @method_decorator(iframe_entry_view_wrapper, 'dispatch')
 class SeatingPlanView(EventViewMixin, TemplateView):
     template_name = "pretixpresale/event/seatingplan.html"
+
+    def dispatch(self, request, *args, **kwargs):
+        r = super().dispatch(request, *args, **kwargs)
+        r.xframe_options_exempt = True
+        return r
 
     def get(self, request, *args, **kwargs):
         from pretix.presale.views.cart import get_or_create_cart_id
