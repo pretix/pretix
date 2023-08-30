@@ -794,6 +794,26 @@ def test_reupload_same_nonce(token_client, organizer, clist, event, order):
     resp = _redeem(token_client, organizer, clist, p.pk, {'nonce': 'foobar'})
     assert resp.status_code == 201
     assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert p.all_checkins.count() == 1
+
+
+@pytest.mark.django_db
+def test_reupload_same_nonce_not_ignored_after_failed(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+        p.all_checkins.create(
+            type=Checkin.TYPE_ENTRY,
+            nonce='foobar',
+            successful=False,
+            list=clist,
+        )
+
+    resp = _redeem(token_client, organizer, clist, p.pk, {'nonce': 'foobar'})
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    with scopes_disabled():
+        assert p.all_checkins.count() == 2
 
 
 @pytest.mark.django_db
@@ -1105,6 +1125,7 @@ def test_store_failed(token_client, organizer, clist, event, order):
         organizer.slug, event.slug, clist.pk,
     ), {
         'raw_barcode': '123456',
+        'nonce': '4321',
         'error_reason': 'invalid'
     }, format='json')
     assert resp.status_code == 201
@@ -1115,12 +1136,35 @@ def test_store_failed(token_client, organizer, clist, event, order):
         organizer.slug, event.slug, clist.pk,
     ), {
         'raw_barcode': '123456',
+        'nonce': '1234',
         'position': p.pk,
         'error_reason': 'unpaid'
     }, format='json')
     assert resp.status_code == 201
     with scopes_disabled():
         assert p.all_checkins.filter(successful=False).count() == 1
+
+    # Ignore sending the same nonces again
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/failed_checkins/'.format(
+        organizer.slug, event.slug, clist.pk,
+    ), {
+        'raw_barcode': '123456',
+        'nonce': '4321',
+        'error_reason': 'invalid'
+    }, format='json')
+    assert resp.status_code == 201
+
+    resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/failed_checkins/'.format(
+        organizer.slug, event.slug, clist.pk,
+    ), {
+        'raw_barcode': '123456',
+        'nonce': '1234',
+        'position': p.pk,
+        'error_reason': 'unpaid'
+    }, format='json')
+    assert resp.status_code == 201
+    with scopes_disabled():
+        assert Checkin.all.filter(successful=False).count() == 2
 
     resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/failed_checkins/'.format(
         organizer.slug, event.slug, clist.pk,

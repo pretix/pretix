@@ -164,8 +164,21 @@ class CheckinListViewSet(viewsets.ModelViewSet):
                 secret=serializer.validated_data['raw_barcode']
             ).first()
 
+        clist = self.get_object()
+        if serializer.validated_data.get('nonce'):
+            if kwargs.get('position'):
+                prev = kwargs['position'].all_checkins.filter(nonce=serializer.validated_data['nonce']).first()
+            else:
+                prev = clist.checkins.filter(
+                    nonce=serializer.validated_data['nonce'],
+                    raw_barcode=serializer.validated_data['raw_barcode'],
+                ).first()
+            if prev:
+                # Ignore because nonce is already handled
+                return Response(serializer.data, status=201)
+
         c = serializer.save(
-            list=self.get_object(),
+            list=clist,
             successful=False,
             forced=True,
             force_sent=True,
