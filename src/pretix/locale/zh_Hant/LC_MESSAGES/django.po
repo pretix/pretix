@@ -4004,10 +4004,10 @@ msgstr "要此產品，使用者需要直接或透過額度，購買適用於此
 
 #: pretix/base/models/items.py:507
 msgid ""
-"If this product is part of an order, the order will be put into an "
-"\"approval\" state and will need to be confirmed by you before it can be "
-"paid and completed. You can use this e.g. for discounted tickets that are "
-"only available to specific groups."
+"If this product is part of an order, the order will be put into an \"approval"
+"\" state and will need to be confirmed by you before it can be paid and "
+"completed. You can use this e.g. for discounted tickets that are only "
+"available to specific groups."
 msgstr ""
 "如果此產品是訂單的一部分，則該訂單將進入“批准”狀態，需要你確認才能付款和完"
 "成。例如，你可以將其用於僅適用於特定團體的折扣門票。"
@@ -5949,13 +5949,13 @@ msgstr "根據包括費用在內的總價值計算費用。"
 #, python-brace-format
 msgid ""
 "We recommend to enable this if you want your users to pay the payment fees "
-"of your payment provider. <a href=\"{docs_url}\" target=\"_blank\" "
-"rel=\"noopener\">Click here for detailed information on what this does.</a> "
+"of your payment provider. <a href=\"{docs_url}\" target=\"_blank\" rel="
+"\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
-"如果你想要你的使用者付支付提供者的手續費，我們建議你啟用。<a "
-"href=\"{docs_url}\" target=\"_blank\" rel=\"noopener\">點這邊來取得所代表意義"
-"的詳細資訊。</a>請不要忘記在上面設定正確的手續費！"
+"如果你想要你的使用者付支付提供者的手續費，我們建議你啟用。<a href="
+"\"{docs_url}\" target=\"_blank\" rel=\"noopener\">點這邊來取得所代表意義的詳"
+"細資訊。</a>請不要忘記在上面設定正確的手續費！"
 
 #: pretix/base/payment.py:388
 msgid "Text on invoices"
@@ -7667,8 +7667,6 @@ msgstr "禮品卡貨幣"
 
 #: pretix/base/settings.py:277
 #, fuzzy
-#| msgid ""
-#| "Automatically create a new gift card if a previously unknown chip is seen"
 msgid "Automatically create a new gift card if a new chip is encoded"
 msgstr "如果看到以前未知的晶片，則自動建立新的禮品卡"
 
@@ -7965,8 +7963,8 @@ msgstr ""
 "這將附加到發票編號的前面。如果將此欄位留空，則將使用該活動 Slug值和破折號。注"
 "意：如果同一組織內的多個活動在此欄位中使用相同的值，它們將共用其編號範圍，即"
 "每個完整數位最多在您的所有活動中使用一次。此設置僅影響將來的帳單。可以使用 "
-"%Y（帶世紀）%y（不帶世紀）插入發票的年份，或使用 %m 和 %d "
-"插入月份中的某一天。"
+"%Y（帶世紀）%y（不帶世紀）插入發票的年份，或使用 %m 和 %d 插入月份中的某一"
+"天。"
 
 #: pretix/base/settings.py:682 pretix/base/settings.py:704
 #, python-brace-format
@@ -8132,7 +8130,6 @@ msgstr ""
 
 #: pretix/base/settings.py:942
 #, fuzzy
-#| msgid "Expiration date"
 msgid "Expiration delay"
 msgstr "過期日期"
 
@@ -9167,12 +9164,12 @@ msgstr "新訂單附件"
 #, python-brace-format
 msgid ""
 "This file will be attached to the first email that we send for every new "
-"order. Therefore it will be combined with the \"Placed order\", \"Free "
-"order\", or \"Received order\" texts from above. It will be sent to both "
-"order contacts and attendees. You can use this e.g. to send your terms of "
-"service. Do not use it to send non-public information as this file might be "
-"sent before payment is confirmed or the order is approved. To avoid this "
-"vital email going to spam, you can only upload PDF files of up to {size} MB."
+"order. Therefore it will be combined with the \"Placed order\", \"Free order"
+"\", or \"Received order\" texts from above. It will be sent to both order "
+"contacts and attendees. You can use this e.g. to send your terms of service. "
+"Do not use it to send non-public information as this file might be sent "
+"before payment is confirmed or the order is approved. To avoid this vital "
+"email going to spam, you can only upload PDF files of up to {size} MB."
 msgstr ""
 "此檔將附加到我們為每個新訂單發送的第一封電子郵件中。因此，該檔案將與上面的"
 "「已下訂單」、「免費訂單」或「已收到訂單」文本相結合。檔案將同時發送給訂單聯"
@@ -17014,9 +17011,9 @@ msgid ""
 "the payment methods that fit your workflow best. Here are just two of them "
 "as examples, you can add more in the \"Settings\" part of your event."
 msgstr ""
-"Pretix 支援<a href=\"https://pretix.eu/about/en/features/payment\" "
-"target=\"_blank\">>廣泛的支付提供者</a>，允許你選擇最適合你工作流程的支付方"
-"式。這裡只是其中兩個作為範例，你可以在活動的“設定”部分添加更多內容。"
+"Pretix 支援<a href=\"https://pretix.eu/about/en/features/payment\" target="
+"\"_blank\">>廣泛的支付提供者</a>，允許你選擇最適合你工作流程的支付方式。這裡"
+"只是其中兩個作為範例，你可以在活動的“設定”部分添加更多內容。"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:173
 msgid ""
@@ -17252,10 +17249,10 @@ msgstr "稅務規則%(name)s"
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:34
 #, python-format
 msgid ""
-"These settings are intended for advanced users. See the <a "
-"href=\"%(docs)s\">documentation</a> for more information. Note that we are "
-"not responsible for the correct handling of taxes in your ticket shop. If in "
-"doubt, please contact a lawyer or tax consultant."
+"These settings are intended for advanced users. See the <a href=\"%(docs)s"
+"\">documentation</a> for more information. Note that we are not responsible "
+"for the correct handling of taxes in your ticket shop. If in doubt, please "
+"contact a lawyer or tax consultant."
 msgstr ""
 "這些設定適用於進階使用者。有關詳細資訊，請參閱 <a href=\"%(docs)s\">文檔</"
 "a>。請注意，我們不負責在你的售票處正確處理稅款。如有疑問，請聯繫律師或稅務顧"
@@ -17536,7 +17533,8 @@ msgstr "請注意，在建立第一項訂單之前，你只能刪除你的活動
 msgid ""
 "The list below shows all events you have administrative access to. Click on "
 "the event name to access event details."
-msgstr "下面的清單顯示你具有管理訪問許可權的所有活動。按兩下活動名稱，以訪問活動詳細"
+msgstr ""
+"下面的清單顯示你具有管理訪問許可權的所有活動。按兩下活動名稱，以訪問活動詳細"
 "資訊。"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:12
@@ -17878,9 +17876,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/item/create.html:132
 msgid ""
-"Examples: Ticket category with variations for \"full price\" and "
-"\"reduced\", merchandise with variations for different sizes, workshop add-"
-"on with variations for simultaneous workshops."
+"Examples: Ticket category with variations for \"full price\" and \"reduced"
+"\", merchandise with variations for different sizes, workshop add-on with "
+"variations for simultaneous workshops."
 msgstr ""
 "範例：包含「全價」和「折扣價」類型的門票類別、具有不同尺寸類型的商品、包含同"
 "時研討會類型的維修中心附加元件。"
@@ -18167,8 +18165,8 @@ msgstr "自動折扣"
 msgid ""
 "With automatic discounts, you can automatically apply a discount to "
 "purchases from your customers based on certain conditions. For example, you "
-"can create group discounts like \"get 20%% off if you buy 3 or more "
-"tickets\" or \"buy 2 tickets, get 1 free\"."
+"can create group discounts like \"get 20%% off if you buy 3 or more tickets"
+"\" or \"buy 2 tickets, get 1 free\"."
 msgstr ""
 "使用自動折扣，你可以根據特定條件自動將折扣應用於客戶的購買。例如，你可以創建"
 "團體折扣，例如“如果你購買 3 張或更多門票，可享受 20%%的折扣”或“買 2 張門票，"
@@ -18179,8 +18177,8 @@ msgid ""
 "Automatic discounts are available to all customers as long as they are "
 "active. If you want to offer special prices only to specific customers, you "
 "can use vouchers instead. If you want to offer discounts across multiple "
-"purchases (\"buy a package of 10 you can turn into individual tickets "
-"later\"), you can use customer accounts and memberships instead."
+"purchases (\"buy a package of 10 you can turn into individual tickets later"
+"\"), you can use customer accounts and memberships instead."
 msgstr ""
 "只要所有客戶處於活動狀態，就可以享受自動折扣。如果你只想向特定客戶提供特價，"
 "則可以改用優惠券。如果你想為多次購買提供折扣（“購買 10 張套餐，以後可以變成個"
@@ -19542,8 +19540,8 @@ msgstr "標記為完成"
 msgid ""
 "We received notice that <strong>%(amount)s</strong> have been refunded via "
 "<strong>%(method)s</strong>. If this refund is processed, the order will be "
-"underpaid by <strong>%(pending)s</strong>. The order total is "
-"<strong>%(total)s</strong>."
+"underpaid by <strong>%(pending)s</strong>. The order total is <strong>"
+"%(total)s</strong>."
 msgstr ""
 "我們收到通知，(<strong>%(amount)s）已</strong>透過<strong>%(method)s</strong>"
 "退款。如果處理此退款，訂單將少付<strong>%(pending)s。</strong>訂單總數為 "
@@ -22279,8 +22277,8 @@ msgstr "刪除購物車"
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:9
 #, python-format
 msgid ""
-"Are you sure you want to delete any cart positions with voucher "
-"<strong>%(voucher)s</strong>?"
+"Are you sure you want to delete any cart positions with voucher <strong>"
+"%(voucher)s</strong>?"
 msgstr "是否確實要刪除憑證 <strong>%(voucher)s的任何</strong>購物車位置？"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:10
@@ -22401,8 +22399,8 @@ msgstr "刪除條目"
 #: pretix/control/templates/pretixcontrol/waitinglist/delete.html:9
 #, python-format
 msgid ""
-"Are you sure you want to delete the following waiting list entry "
-"<strong>%(entry)s</strong>?"
+"Are you sure you want to delete the following waiting list entry <strong>"
+"%(entry)s</strong>?"
 msgstr "是否確實要刪除以下候補名單條目 <strong>%(entry)s</strong>？"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:4
@@ -22474,8 +22472,8 @@ msgstr "銷售估計"
 #, python-format
 msgid ""
 "If you can make enough room at your event to fit all the persons on the "
-"waiting list in, you could sell tickets worth an additional "
-"<strong>%(amount)s</strong>."
+"waiting list in, you could sell tickets worth an additional <strong>"
+"%(amount)s</strong>."
 msgstr ""
 "如果你能在活動中騰出足夠的空間來容納等候名單上的所有人，你可以出售價值額外"
 "<strong>%(amount)s</strong>的票."
@@ -23230,12 +23228,6 @@ msgstr "所選產品已停用。"
 
 #: pretix/control/views/mailsetup.py:195
 #, fuzzy
-#| msgid ""
-#| "We could not find an SPF record set for the domain you are trying to use. "
-#| "You can still proceed, but it will increase the chance of emails going to "
-#| "spam or being rejected. We strongly recommend setting an SPF record on "
-#| "the domain. You can do so through the DNS settings at the provider you "
-#| "registered your domain with."
 msgid ""
 "We could not find an SPF record set for the domain you are trying to use. "
 "This means that there is a very high change most of the emails will be "
@@ -25059,7 +25051,8 @@ msgid ""
 msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
-msgstr[0] "你正在嘗試從%(date)s 下載退款匯出，其中包含%(cnt)s的訂單和總計%(sum)s。"
+msgstr[0] ""
+"你正在嘗試從%(date)s 下載退款匯出，其中包含%(cnt)s的訂單和總計%(sum)s。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
@@ -26655,10 +26648,10 @@ msgstr "從Stripe斷線"
 
 #: pretix/plugins/stripe/payment.py:200
 msgid ""
-"Please configure a <a href=\"https://dashboard.stripe.com/account/"
-"webhooks\">Stripe Webhook</a> to the following endpoint in order to "
-"automatically cancel orders when charges are refunded externally and to "
-"process asynchronous payment methods like SOFORT."
+"Please configure a <a href=\"https://dashboard.stripe.com/account/webhooks"
+"\">Stripe Webhook</a> to the following endpoint in order to automatically "
+"cancel orders when charges are refunded externally and to process "
+"asynchronous payment methods like SOFORT."
 msgstr ""
 "請將<a href=\"https://dashboard.stripe.com/account/webhooks\">Stripe Webhook "
 "配置到</a>以下節點，以便在外部退款時，自動取消訂單，並處理非同步支付方式，如 "
@@ -26795,9 +26788,9 @@ msgid ""
 "some cases. Please only activate this payment method if your payment term "
 "allows for this lag."
 msgstr ""
-"通過 Stripe 進行的 SEPA 直接轉帳<strong>不會</strong>立即處理，"
-"但在某些情況下可能需要長達 <strong>14 天</strong>才能確認。請只有在您的付款期"
-"限允許此延遲的情況下，才啟用此付款方式。"
+"通過 Stripe 進行的 SEPA 直接轉帳<strong>不會</strong>立即處理，但在某些情況下"
+"可能需要長達 <strong>14 天</strong>才能確認。請只有在您的付款期限允許此延遲的"
+"情況下，才啟用此付款方式。"
 
 #: pretix/plugins/stripe/payment.py:370
 msgid "SEPA Creditor Mandate Name"
@@ -26929,7 +26922,6 @@ msgstr "帳戶持有人街道"
 
 #: pretix/plugins/stripe/payment.py:1214
 #, fuzzy
-#| msgid "Account holder"
 msgid "Account Holder Postal Code"
 msgstr "帳戶持有人"
 
@@ -27164,7 +27156,6 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_sepadirectdebit.html:10
 #, fuzzy
-#| msgid "For a credit card payment, please turn on JavaScript."
 msgid "For a SEPA Debit payment, please turn on JavaScript."
 msgstr "對於信用卡付款，請打開JavaScript。"
 
@@ -29227,9 +29218,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:412
 #, python-format
 msgid ""
-"You can cancel this order. In this case, a cancellation fee of "
-"<strong>%(fee)s</strong> will be kept and you will receive a refund of the "
-"remainder."
+"You can cancel this order. In this case, a cancellation fee of <strong>"
+"%(fee)s</strong> will be kept and you will receive a refund of the remainder."
 msgstr ""
 "你可以取消此訂單。在這種情況下，將保留 <strong>%(fee)s</strong> 的取消費用，"
 "你將收到剩餘部分的退款。"
@@ -29251,8 +29241,8 @@ msgid ""
 "You can cancel this order. As per our cancellation policy, you will still be "
 "required to pay a cancellation fee of <strong>%(fee)s</strong>."
 msgstr ""
-"你可以取消此訂單。根據我們的取消政策，你仍然需要支付以下取消費用： "
-"<strong>%(fee)s</strong>."
+"你可以取消此訂單。根據我們的取消政策，你仍然需要支付以下取消費用： <strong>"
+"%(fee)s</strong>."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:463
 msgid "You can cancel this order using the following button."
