@@ -134,8 +134,11 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
     def template_name(self):
         raise NotImplementedError()
 
+    def compile_markdown(self, plaintext):
+        return markdown_compile_email(plaintext)
+
     def render(self, plain_body: str, plain_signature: str, subject: str, order, position) -> str:
-        body_md = markdown_compile_email(plain_body)
+        body_md = self.compile_markdown(plain_body)
         htmlctx = {
             'site': settings.PRETIX_INSTANCE_NAME,
             'site_url': settings.SITE_URL,
@@ -153,7 +156,7 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
 
         if plain_signature:
             signature_md = plain_signature.replace('\n', '<br>\n')
-            signature_md = markdown_compile_email(signature_md)
+            signature_md = self.compile_markdown(signature_md)
             htmlctx['signature'] = signature_md
 
         if order:
