@@ -28783,7 +28783,7 @@ msgstr[1] ""
 #: pretix/plugins/sendmail/signals.py:99
 #, fuzzy
 #| msgid "Attendee email"
-msgid "Automated emails"
+msgid "Scheduled emails"
 msgstr "E-mailadres van gast"
 
 #: pretix/plugins/sendmail/signals.py:122
@@ -28877,7 +28877,7 @@ msgstr "Maak een nieuwe gebruiker aan"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:14
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:15
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:10
-msgid "Automated emails are not sent as long as your ticket shop is offline."
+msgid "Scheduled emails are not sent as long as your ticket shop is offline."
 msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:44
@@ -28941,7 +28941,7 @@ msgstr "Datakeuze"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
 #, fuzzy
 #| msgid "Attendee e-mail address"
-msgid "Automated email rules"
+msgid "Scheduled email rules"
 msgstr "E-mailadres van gast"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8

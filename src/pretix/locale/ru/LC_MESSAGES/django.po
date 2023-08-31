@@ -27155,7 +27155,7 @@ msgstr[2] ""
 #: pretix/plugins/sendmail/signals.py:99
 #, fuzzy
 #| msgid "Attendee email"
-msgid "Automated emails"
+msgid "Scheduled emails"
 msgstr "Адрес электронной почты посетителя"
 
 #: pretix/plugins/sendmail/signals.py:122
@@ -27241,7 +27241,7 @@ msgstr "Дата и время"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:14
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:15
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:10
-msgid "Automated emails are not sent as long as your ticket shop is offline."
+msgid "Scheduled emails are not sent as long as your ticket shop is offline."
 msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:44
@@ -27297,7 +27297,7 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
 #, fuzzy
 #| msgid "Attendee email"
-msgid "Automated email rules"
+msgid "Scheduled email rules"
 msgstr "Адрес электронной почты посетителя"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8

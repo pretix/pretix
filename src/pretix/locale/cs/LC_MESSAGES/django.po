@@ -27060,7 +27060,7 @@ msgstr[1] ""
 msgstr[2] ""
 
 #: pretix/plugins/sendmail/signals.py:99
-msgid "Automated emails"
+msgid "Scheduled emails"
 msgstr ""
 
 #: pretix/plugins/sendmail/signals.py:122
@@ -27138,7 +27138,7 @@ msgstr "Vytvořit e-mailové pravidlo"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:14
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:15
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:10
-msgid "Automated emails are not sent as long as your ticket shop is offline."
+msgid "Scheduled emails are not sent as long as your ticket shop is offline."
 msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:44
@@ -27185,7 +27185,7 @@ msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
-msgid "Automated email rules"
+msgid "Scheduled email rules"
 msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8
