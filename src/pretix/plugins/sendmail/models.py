@@ -292,13 +292,11 @@ class Rule(models.Model, LoggingMixin):
             ScheduledMail.objects.get_or_create(rule=self, event=self.event)
 
         if not is_creation:
+            if self.subevent:
+                ScheduledMail.objects.filter(rule=self).exclude(subevent=self.subevent).delete()
+
             update_sms = []
             for sm in self.scheduledmail_set.prefetch_related('event').select_related('subevent'):
-
-                if self.subevent and self.subevent != sm.subevent:
-                    sm.delete()
-                    continue
-
                 if sm in create_sms:
                     continue
                 previous = sm.computed_datetime
