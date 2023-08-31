@@ -1,10 +1,10 @@
-Automated email rules
+Scheduled email rules
 =====================
 
 Resource description
 --------------------
 
-Automated email rules that specify emails that the system will send automatically at a specific point in time, e.g.
+Scheduled email rules that specify emails that the system will send automatically at a specific point in time, e.g.
 the day of the event.
 
 .. rst-class:: rest-resource-table

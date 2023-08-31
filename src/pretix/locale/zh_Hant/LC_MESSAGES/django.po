@@ -26258,7 +26258,7 @@ msgstr[0] ""
 "%(count)d 事件在%(time)s開始的前一天 , 事件在%(time)s開始前的%(count)d天"
 
 #: pretix/plugins/sendmail/signals.py:99
-msgid "Automated emails"
+msgid "Scheduled emails"
 msgstr "自動電子郵件"
 
 #: pretix/plugins/sendmail/signals.py:122
@@ -26336,7 +26336,7 @@ msgstr "建立電子郵件規則"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:14
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:15
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:10
-msgid "Automated emails are not sent as long as your ticket shop is offline."
+msgid "Scheduled emails are not sent as long as your ticket shop is offline."
 msgstr "只要你的售票店處於離線狀態，就不會發送自動電子郵件。"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:44
@@ -26385,7 +26385,7 @@ msgstr "最後排程計算"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
-msgid "Automated email rules"
+msgid "Scheduled email rules"
 msgstr "自動電子郵件規則"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8

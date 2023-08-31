@@ -6,7 +6,7 @@
     <h1>{% trans "Create Email Rule" %}</h1>
     {% if not request.event.live %}
         <div class="alert alert-warning">
-            {% trans "Automated emails are not sent as long as your ticket shop is offline." %}
+            {% trans "Scheduled emails are not sent as long as your ticket shop is offline." %}
         </div>
     {% endif %}
     {% block inner %}

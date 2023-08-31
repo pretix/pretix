@@ -28317,7 +28317,7 @@ msgstr[0] "%(count)d jour avant le début de l'événement à %(time)s"
 msgstr[1] "%(count)d jours avant le début de l'événement à %(time)s"
 
 #: pretix/plugins/sendmail/signals.py:99
-msgid "Automated emails"
+msgid "Scheduled emails"
 msgstr "E-mails automatisés"
 
 #: pretix/plugins/sendmail/signals.py:122
@@ -28398,7 +28398,7 @@ msgstr "Créer une règle d’e-mail"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:14
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:15
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:10
-msgid "Automated emails are not sent as long as your ticket shop is offline."
+msgid "Scheduled emails are not sent as long as your ticket shop is offline."
 msgstr ""
 "Les e-mails automatisés ne sont pas envoyés tant que votre billetterie est "
 "hors ligne."
@@ -28451,7 +28451,7 @@ msgstr "Calcul du dernier planning"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
-msgid "Automated email rules"
+msgid "Scheduled email rules"
 msgstr "Règles d’e-mails automatiques"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8
