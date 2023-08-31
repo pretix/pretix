@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 11:49+0000\n"
-"PO-Revision-Date: 2023-08-31 07:00+0000\n"
-"Last-Translator: Ash So <ashs@vankaifong.com>\n"
+"PO-Revision-Date: 2023-08-31 07:34+0000\n"
+"Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -10555,7 +10555,7 @@ msgstr "如果這需要超過幾分鐘的時間，請刷新此頁面或與我們
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr "由%(a_attr)spretix 提供支援</a>"
+msgstr "由 <%(a_attr)s>pretix 提供支援</a>"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:2
 msgid "Your export failed."
