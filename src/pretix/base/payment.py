@@ -742,7 +742,7 @@ class BasePaymentProvider:
         the amount of money that should be paid.
 
         If you need any special behavior, you can return a string containing the URL the user will be redirected to.
-        If you are done with your process you should return the user to the order's detail page. Redirection is not
+        If you are done with your process you should return the user to the order's detail page. Redirection is only
         allowed if you set ``execute_payment_needs_user`` to ``True``.
 
         If the payment is completed, you should call ``payment.confirm()``. Please note that this might
