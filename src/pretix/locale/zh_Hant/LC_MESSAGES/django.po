@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 11:49+0000\n"
-"PO-Revision-Date: 2023-08-30 07:00+0000\n"
-"Last-Translator: Ash So <ashs@vankaifong.com>\n"
+"PO-Revision-Date: 2023-08-31 07:34+0000\n"
+"Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -170,7 +170,7 @@ msgstr "目標URL"
 #: pretix/api/models.py:113 pretix/base/models/devices.py:123
 #: pretix/base/models/organizer.py:264
 msgid "All events (including newly created ones)"
-msgstr "所有事件（包括新建立的事件）"
+msgstr "所有活動（包括新建立的活動）"
 
 #: pretix/api/models.py:114 pretix/base/models/devices.py:124
 #: pretix/base/models/organizer.py:265
@@ -7964,8 +7964,9 @@ msgid ""
 msgstr ""
 "這將附加到發票編號的前面。如果將此欄位留空，則將使用該活動 Slug值和破折號。注"
 "意：如果同一組織內的多個活動在此欄位中使用相同的值，它們將共用其編號範圍，即"
-"每個完整數位最多在您的所有事件中使用一次。此設置僅影響將來的帳單。可以使用 %Y"
-"（帶世紀）%y（不帶世紀）插入發票的年份，或使用 %m 和 %d 插入月份中的某一天。"
+"每個完整數位最多在您的所有活動中使用一次。此設置僅影響將來的帳單。可以使用 "
+"%Y（帶世紀）%y（不帶世紀）插入發票的年份，或使用 %m 和 %d "
+"插入月份中的某一天。"
 
 #: pretix/base/settings.py:682 pretix/base/settings.py:704
 #, python-brace-format
@@ -9764,7 +9765,7 @@ msgstr ""
 #: pretix/base/settings.py:2586
 #, python-brace-format
 msgid "Confirm email address for your account at {organizer}"
-msgstr "在{organizer}}確認你帳戶的電子郵件位址"
+msgstr "在{organizer}確認你帳戶的電子郵件位址"
 
 #: pretix/base/settings.py:2590
 #, python-brace-format
@@ -10554,7 +10555,7 @@ msgstr "如果這需要超過幾分鐘的時間，請刷新此頁面或與我們
 #: pretix/base/templates/pretixbase/email/email_footer.html:3
 #, python-format
 msgid "powered by <a %(a_attr)s>pretix</a>"
-msgstr "由%(a_attr)spretix 提供支援</a>"
+msgstr "由 <%(a_attr)s>pretix 提供支援</a>"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:2
 msgid "Your export failed."
@@ -17535,8 +17536,7 @@ msgstr "請注意，在建立第一項訂單之前，你只能刪除你的活動
 msgid ""
 "The list below shows all events you have administrative access to. Click on "
 "the event name to access event details."
-msgstr ""
-"下面的清單顯示你具有管理訪問許可權的所有事件。按兩下事件名稱，以訪問事件詳細"
+msgstr "下面的清單顯示你具有管理訪問許可權的所有活動。按兩下活動名稱，以訪問活動詳細"
 "資訊。"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:12
@@ -20457,7 +20457,7 @@ msgstr "召集人頁面"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:68
 msgid "The links you configure here will also be shown on all of your events."
-msgstr "你在此處設定的連結也將顯示在你的所有事件中。"
+msgstr "你在此處設定的連結也將顯示在你的所有活動中。"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:142
 msgid ""
@@ -22254,7 +22254,7 @@ msgstr "刪除優惠券"
 #, python-format
 msgid ""
 "Are you sure you want to delete the voucher <strong>%(voucher)s</strong>?"
-msgstr "是否確實要刪除憑證 <strong>%(voucher)s</strong>"
+msgstr "是否確實要刪除憑證 <strong>%(voucher)s</strong>？"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:6
@@ -23340,9 +23340,7 @@ msgstr "我們無法將上傳的檔解析為 CSV 檔。"
 #: pretix/control/views/orders.py:330
 msgid "Your invoice"
 msgid_plural "Your invoices"
-msgstr[0] ""
-"你的發票,\n"
-"你的發票"
+msgstr[0] "你的發票"
 
 #: pretix/control/views/orders.py:332
 #, python-brace-format
@@ -23923,7 +23921,7 @@ msgstr "禮品卡已建立，現在可以使用了。"
 
 #: pretix/control/views/organizer.py:1659
 msgid "All events (that I have access to)"
-msgstr "所有事件（我有權存取）"
+msgstr "所有活動（我有權存取）"
 
 #: pretix/control/views/organizer.py:2024
 msgid "The selected gate has been deleted."
@@ -25061,8 +25059,7 @@ msgid ""
 msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
-msgstr[0] ""
-"你正在嘗試從%(date)s 下載退款匯出，其中包含%(cnt)s的訂單和總計%(sum)s"
+msgstr[0] "你正在嘗試從%(date)s 下載退款匯出，其中包含%(cnt)s的訂單和總計%(sum)s。"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
@@ -25694,7 +25691,7 @@ msgstr "完成抓取。"
 #: pretix/plugins/paypal2/signals.py:67
 msgctxt "paypal"
 msgid "Capture pending."
-msgstr "抓取處理中"
+msgstr "抓取處理中。"
 
 #: pretix/plugins/paypal2/signals.py:76
 msgid "PayPal reported an event: {}"
@@ -26789,24 +26786,18 @@ msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:357
 msgid "SEPA Direct Debit"
-msgstr "SEPA 直接扣款"
+msgstr "SEPA 直接轉帳"
 
 #: pretix/plugins/stripe/payment.py:362
-#, fuzzy
-#| msgid ""
-#| "Despite the name, Sofort payments via Stripe are <strong>not</strong> "
-#| "processed instantly but might take up to <strong>14 days</strong> to be "
-#| "confirmed in some cases. Please only activate this payment method if your "
-#| "payment term allows for this lag."
 msgid ""
 "SEPA Direct Debit payments via Stripe are <strong>not</strong> processed "
 "instantly but might take up to <strong>14 days</strong> to be confirmed in "
 "some cases. Please only activate this payment method if your payment term "
 "allows for this lag."
 msgstr ""
-"儘管有這個名字，但通過 Stripe 進行的 Sofort 付款<strong>不會</strong>立即處"
-"理，但在某些情況下可能需要長達 <strong>14 天</strong>才能確認。請僅在你的付款"
-"期限，允許此延遲時啟動此付款方式。"
+"通過 Stripe 進行的 SEPA 直接轉帳<strong>不會</strong>立即處理，"
+"但在某些情況下可能需要長達 <strong>14 天</strong>才能確認。請只有在您的付款期"
+"限允許此延遲的情況下，才啟用此付款方式。"
 
 #: pretix/plugins/stripe/payment.py:370
 msgid "SEPA Creditor Mandate Name"
@@ -27763,7 +27754,7 @@ msgstr "網站以%(language)s"
 #: pretix/presale/templates/pretixpresale/event/base.html:59
 #, python-format
 msgid "Show all events of %(name)s"
-msgstr "顯示%(name)s的所有事件"
+msgstr "顯示%(name)s的所有活動"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:73
 #: pretix/presale/templates/pretixpresale/event/base.html:78
@@ -29019,7 +29010,7 @@ msgstr "重新傳送訂單連結"
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
 msgid "Thank you!"
-msgstr "感謝你"
+msgstr "感謝你！"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:14
 #: pretix/presale/templates/pretixpresale/event/order.html:32
