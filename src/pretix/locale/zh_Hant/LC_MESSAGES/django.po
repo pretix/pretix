@@ -2779,7 +2779,8 @@ msgstr "選擇州"
 msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
-msgstr "選擇性的，但根據您居住的國家/地區，如果您不輸入，我們可能需要向你收取額外的稅"
+msgstr ""
+"選擇性的，但根據您居住的國家/地區，如果您不輸入，我們可能需要向你收取額外的稅"
 "費。"
 
 #: pretix/base/forms/questions.py:1033 pretix/base/forms/questions.py:1039
@@ -2790,8 +2791,9 @@ msgstr "如果你在瑞士註冊，則可以輸入您的UID。"
 msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
-msgstr "選擇性的，但你可能需要在發票上申請稅收優惠，具體取決於你和賣家的居住國家/地區"
-"。"
+msgstr ""
+"選擇性的，但你可能需要在發票上申請稅收優惠，具體取決於你和賣家的居住國家/地"
+"區。"
 
 #: pretix/base/forms/questions.py:1129
 msgid "You need to provide a company name."
@@ -6163,7 +6165,8 @@ msgstr "這張禮物卡是未知的。"
 msgid ""
 "This gift card can not be redeemed since its code is not unique. Please "
 "contact the organizer of this event."
-msgstr "此禮物卡不能兌換，因為該禮物卡的代碼不是唯一的。請聯絡本次活動的組織者。"
+msgstr ""
+"此禮物卡不能兌換，因為該禮物卡的代碼不是唯一的。請聯絡本次活動的組織者。"
 
 #: pretix/base/payment.py:1486
 msgid "This gift card is not accepted by this event organizer."
