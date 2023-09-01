@@ -45,7 +45,7 @@
                     {% if request.event.has_subevents %}
                         <td>
                             <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=sm.subevent.id %}?returnto={{ request.GET.urlencode|urlencode }}">
-                                {{ sm.subevent.name }}
+                                {{ sm.subevent.name }} - {{ sm.subevent.date_from }}
                             </a><br>
                             {{ sm.get_date_range_display }}
                         </td>
