@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 11:49+0000\n"
-"PO-Revision-Date: 2023-08-31 07:34+0000\n"
-"Last-Translator: Martin Gross <gross@rami.io>\n"
+"PO-Revision-Date: 2023-09-01 17:00+0000\n"
+"Last-Translator: Ash So <ashs@vankaifong.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -2779,8 +2779,7 @@ msgstr "選擇州"
 msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
-msgstr ""
-"可選擇的，但根據您居住的國家/地區，如果您不輸入，我們可能需要向你收取額外的稅"
+msgstr "選擇性的，但根據您居住的國家/地區，如果您不輸入，我們可能需要向你收取額外的稅"
 "費。"
 
 #: pretix/base/forms/questions.py:1033 pretix/base/forms/questions.py:1039
@@ -2791,9 +2790,8 @@ msgstr "如果你在瑞士註冊，則可以輸入您的UID。"
 msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
-msgstr ""
-"可選擇的，但你可能需要在發票上申請稅收優惠，具體取決於你和賣家的居住國家/地"
-"區。"
+msgstr "選擇性的，但你可能需要在發票上申請稅收優惠，具體取決於你和賣家的居住國家/地區"
+"。"
 
 #: pretix/base/forms/questions.py:1129
 msgid "You need to provide a company name."
@@ -16963,7 +16961,7 @@ msgstr "票名"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:48
 msgid "Capacity (optional)"
-msgstr "容量（選擇）"
+msgstr "容量（可選擇的）"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:101
 msgid "Add a new ticket type"
@@ -18951,7 +18949,7 @@ msgstr "發票資訊"
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:41
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:30
 msgid "(optional)"
-msgstr "可選擇的"
+msgstr "(可選擇的)"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:4
 #: pretix/control/templates/pretixcontrol/order/delete.html:8
@@ -21452,7 +21450,7 @@ msgstr "第 1 步：下載數據"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:17
 msgid "(Optional) Step 1: Download data"
-msgstr "（選擇）第 1 步：下載數據"
+msgstr "（可選擇的）第 1 步：下載數據"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:20
 msgid ""
@@ -22207,7 +22205,7 @@ msgstr "優惠券代碼"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:17
 msgid "Prefix (optional)"
-msgstr "前置文字（可自選）"
+msgstr "前置文字（可選擇的）"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
 msgctxt "number_of_things"
@@ -24685,7 +24683,7 @@ msgstr "只能從現有付款中建立銀行轉帳退款。"
 
 #: pretix/plugins/banktransfer/payment.py:652
 msgid "BIC (optional)"
-msgstr "BIC( 可自選)"
+msgstr "BIC( 可選擇的)"
 
 #: pretix/plugins/banktransfer/payment.py:691
 msgid "Your input was invalid, please see below for details."
