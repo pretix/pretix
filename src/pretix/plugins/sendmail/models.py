@@ -296,8 +296,7 @@ class Rule(models.Model, LoggingMixin):
                 keep_states = [ScheduledMail.STATE_COMPLETED,
                                ScheduledMail.STATE_FAILED]  # we keep rules that have already been sent at least partially
                 ScheduledMail.objects.filter(rule=self).exclude(
-                    subevent=self.subevent,
-                    state__in=keep_states
+                    Q(subevent=self.subevent) | Q(state__in=keep_states)
                 ).delete()
 
             update_sms = []
