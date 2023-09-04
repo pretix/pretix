@@ -784,7 +784,7 @@ function setup_basics(el) {
     el.find("input[data-toggle-table]").each(function (ev) {
         var $toggle = $(this);
         var $actionButtons = $(".batch-select-actions button", this.form);
-        var countLabels = $("<span></span>").appendTo($actionButtons);
+        var countLabels = $("<span></span>").appendTo($actionButtons.filter(function () { return !$(this).closest(".dropdown-menu").length }));
         var $table = $toggle.closest("table");
         var $selectAll = $table.find(".table-select-all");
         var $rows = $table.find("tbody tr");
