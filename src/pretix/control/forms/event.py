@@ -49,7 +49,7 @@ from django.forms import (
 )
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.html import escape
+from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
@@ -66,7 +66,7 @@ from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.settings import (
-    COUNTRIES_WITH_STATE_IN_ADDRESS, PERSON_NAME_SCHEMES,
+    COUNTRIES_WITH_STATE_IN_ADDRESS, DEFAULTS, PERSON_NAME_SCHEMES,
     PERSON_NAME_TITLE_GROUPS, validate_event_settings,
 )
 from pretix.base.validators import multimail_validate
@@ -899,6 +899,27 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
             (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
         )
         self.fields['invoice_numbers_counter_length'].validators.append(MaxValueValidator(15))
+
+        pps = [str(pp.verbose_name) for pp in event.get_payment_providers().values() if pp.requires_invoice_immediately]
+        if pps:
+            generate_paid_help_text = _('An invoice will be issued before payment if the customer selects one of the following payment methods: {list}').format(
+                list=', '.join(pps)
+            )
+        else:
+            generate_paid_help_text = _('None of the currently configured payment methods will cause an invoice to be issued before payment.')
+
+        generate_choices = list(DEFAULTS['invoice_generate']['form_kwargs']['choices'])
+        idx = [i for i, t in enumerate(generate_choices) if t[0] == 'paid'][0]
+        generate_choices[idx] = (
+            'paid',
+            format_html(
+                '{} <span class="label label-success">{}</span><br><span class="text-muted">{}</span>',
+                generate_choices[idx][1],
+                _('Recommended'),
+                generate_paid_help_text
+            )
+        )
+        self.fields['invoice_generate'].choices = generate_choices
 
 
 def contains_web_channel_validate(val):
