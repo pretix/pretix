@@ -378,6 +378,7 @@ with scopes_disabled():
         def search_qs(self, queryset, name, value):
             return queryset.filter(
                 Q(name__icontains=i18ncomp(value))
+                | Q(event__slug__icontains=value)
                 | Q(location__icontains=i18ncomp(value))
             )
 

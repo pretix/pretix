@@ -68,6 +68,10 @@ last_modified                         datetime                   Last modificati
     The ``date_from_before``, ``date_from_after``, ``date_to_before``, and ``date_to_after`` query parameters have been
     added.
 
+.. versionchanged:: 2023.8.0
+
+    The ``search`` query parameter has been modified to filter sub-events by their parent events slug too.
+
 Endpoints
 ---------
 
@@ -472,6 +476,7 @@ Endpoints
    :query date_to_after: If set to a date and time, only events that have an end date and end at or after the given time are returned.
    :query date_to_before: If set to a date and time, only events that have an end date and end at or before the given time are returned.
    :query ends_after: If set to a date and time, only events that happen during of after the given time are returned.
+   :query search: Only return events matching a given search query.
    :query sales_channel: If set to a sales channel identifier, the response will only contain subevents from events available on this sales channel.
    :param organizer: The ``slug`` field of a valid organizer
    :param event: The ``slug`` field of the event to fetch
