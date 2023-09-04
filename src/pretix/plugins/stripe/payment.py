@@ -554,9 +554,6 @@ class StripeMethod(BasePaymentProvider):
         ctx = {'request': request, 'event': self.event, 'settings': self.settings, 'provider': self}
         return template.render(ctx)
 
-    def payment_can_retry(self, payment):
-        return self._is_still_available(order=payment.order)
-
     def _charge_source(self, request, source, payment):
         try:
             params = {}
@@ -1580,9 +1577,6 @@ class StripeSofort(StripeMethod):
             request.session['payment_stripe_sofort_bank_country'] = form.cleaned_data['bank_country']
             return True
         return False
-
-    def payment_can_retry(self, payment):
-        return payment.state != OrderPayment.PAYMENT_STATE_PENDING and self._is_still_available(order=payment.order)
 
     def payment_presale_render(self, payment: OrderPayment) -> str:
         pi = payment.info_data or {}

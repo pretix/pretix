@@ -336,6 +336,12 @@ class BasePaymentProvider:
                  help_text=_('Users will not be able to choose this payment provider after the given date.'),
                  required=False,
              )),
+            ('_availability_start',
+             RelativeDateField(
+                 label=_('Available from'),
+                 help_text=_('Users will not be able to choose this payment provider before the given date.'),
+                 required=False,
+             )),
             ('_total_min',
              forms.DecimalField(
                  label=_('Minimum order total'),
@@ -539,38 +545,72 @@ class BasePaymentProvider:
 
         return form
 
-    def _is_still_available(self, now_dt=None, cart_id=None, order=None):
+    def _is_available_by_time(self, now_dt=None, cart_id=None, order=None):
         now_dt = now_dt or now()
         tz = ZoneInfo(self.event.settings.timezone)
 
-        availability_date = self.settings.get('_availability_date', as_type=RelativeDateWrapper)
-        if availability_date:
+        availability_start = self.settings.get('_availability_start', as_type=RelativeDateWrapper)
+        if availability_start:
+            # In an event series, we use min() here, which makes it less restrictive than max() and thus makes
+            # it harder to put one self into a situation where no payment provider is available.
             if self.event.has_subevents and cart_id:
                 dates = [
-                    availability_date.datetime(se).date()
+                    availability_start.datetime(se).date()
                     for se in self.event.subevents.filter(
                         id__in=CartPosition.objects.filter(
                             cart_id=cart_id, event=self.event
                         ).values_list('subevent', flat=True)
                     )
                 ]
-                availability_date = min(dates) if dates else None
+                availability_start = min(dates) if dates else None
             elif self.event.has_subevents and order:
                 dates = [
-                    availability_date.datetime(se).date()
+                    availability_start.datetime(se).date()
                     for se in self.event.subevents.filter(
                         id__in=order.positions.values_list('subevent', flat=True)
                     )
                 ]
-                availability_date = min(dates) if dates else None
+                availability_start = min(dates) if dates else None
             elif self.event.has_subevents:
                 logger.error('Payment provider is not subevent-ready.')
                 return False
             else:
-                availability_date = availability_date.datetime(self.event).date()
+                availability_start = availability_start.datetime(self.event).date()
+            print(availability_start, now_dt)
 
-            if availability_date:
-                return availability_date >= now_dt.astimezone(tz).date()
+            if availability_start:
+                if availability_start > now_dt.astimezone(tz).date():
+                    return False
+
+        availability_end = self.settings.get('_availability_date', as_type=RelativeDateWrapper)
+        if availability_end:
+            if self.event.has_subevents and cart_id:
+                dates = [
+                    availability_end.datetime(se).date()
+                    for se in self.event.subevents.filter(
+                        id__in=CartPosition.objects.filter(
+                            cart_id=cart_id, event=self.event
+                        ).values_list('subevent', flat=True)
+                    )
+                ]
+                availability_end = min(dates) if dates else None
+            elif self.event.has_subevents and order:
+                dates = [
+                    availability_end.datetime(se).date()
+                    for se in self.event.subevents.filter(
+                        id__in=order.positions.values_list('subevent', flat=True)
+                    )
+                ]
+                availability_end = min(dates) if dates else None
+            elif self.event.has_subevents:
+                logger.error('Payment provider is not subevent-ready.')
+                return False
+            else:
+                availability_end = availability_end.datetime(self.event).date()
+
+            if availability_end:
+                if availability_end < now_dt.astimezone(tz).date():
+                    return False
 
         return True
 
@@ -581,9 +621,9 @@ class BasePaymentProvider:
         user will not be able to select this payment method. This will only be called
         during checkout, not on retrying.
 
-        The default implementation checks for the _availability_date setting to be either unset or in the future
-        and for the _total_max and _total_min requirements to be met. It also checks the ``_restrict_countries``
-        and ``_restrict_to_sales_channels`` setting.
+        The default implementation checks for the ``_availability_date`` setting to be either unset or in the future
+        and for the ``_availability_from``, ``_total_max``, and ``_total_min`` requirements to be met. It also checks
+        the ``_restrict_countries`` and ``_restrict_to_sales_channels`` setting.
 
         :param total: The total value without the payment method fee, after taxes.
 
@@ -592,7 +632,7 @@ class BasePaymentProvider:
            The ``total`` parameter has been added. For backwards compatibility, this method is called again
            without this parameter if it raises a ``TypeError`` on first try.
         """
-        timing = self._is_still_available(cart_id=get_or_create_cart_id(request))
+        timing = self._is_available_by_time(cart_id=get_or_create_cart_id(request))
         pricing = True
 
         if (self.settings._total_max is not None or self.settings._total_min is not None) and total is None:
@@ -776,8 +816,8 @@ class BasePaymentProvider:
         Will be called to check whether it is allowed to change the payment method of
         an order to this one.
 
-        The default implementation checks for the _availability_date setting to be either unset or in the future,
-        as well as for the _total_max, _total_min and _restricted_countries settings.
+        The default implementation checks for the ``_availability_date`` setting to be either unset or in the future,
+        as well as for the ``_availabilty_from``, ``_total_max``, ``_total_min``, and ``_restricted_countries`` settings.
 
         :param order: The order object
         """
@@ -804,7 +844,7 @@ class BasePaymentProvider:
         if order.sales_channel not in self.settings.get('_restrict_to_sales_channels', as_type=list, default=['web']):
             return False
 
-        return self._is_still_available(order=order)
+        return self._is_available_by_time(order=order)
 
     def payment_prepare(self, request: HttpRequest, payment: OrderPayment) -> Union[bool, str]:
         """
