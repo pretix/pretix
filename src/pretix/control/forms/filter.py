@@ -2397,6 +2397,61 @@ class CheckinFilterForm(FilterForm):
         return qs
 
 
+class CheckinListFilterForm(FilterForm):
+    orders = {
+        "name": ("name", "subevent__date_from", "pk"),
+        "-name": ("-name", "-subevent__date_from", "-pk"),
+        "subevent": ("subevent__date_from", "name", "pk"),
+        "-subevent": ("-subevent__date_from", "-name", "-pk"),
+    }
+    subevent = forms.ModelChoiceField(
+        label=pgettext_lazy('subevent', 'Date'),
+        queryset=SubEvent.objects.none(),
+        required=False,
+        empty_label=pgettext_lazy('subevent', 'All dates')
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop("event")
+        super().__init__(*args, **kwargs)
+        if self.event.has_subevents:
+            self.fields['subevent'].queryset = self.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'All dates')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+        elif 'subevent':
+            del self.fields['subevent']
+
+    def filter_qs(self, qs):
+        fdata = self.cleaned_data
+
+        if fdata.get('subevent'):
+            qs = qs.filter(subevent=fdata.get('subevent'))
+
+        if fdata.get("ordering"):
+            ob = self.orders[fdata.get('ordering')]
+            if isinstance(ob, dict):
+                ob = dict(ob)
+                o = ob.pop('_order')
+                qs = qs.annotate(**ob).order_by(*get_deterministic_ordering(OrderPosition, [o]))
+            elif isinstance(ob, (list, tuple)):
+                qs = qs.order_by(*get_deterministic_ordering(OrderPosition, ob))
+            else:
+                qs = qs.order_by(*get_deterministic_ordering(OrderPosition, [ob]))
+        else:
+            qs = qs.order_by("subevent__date_from", "name", "pk")
+
+        return qs.distinct()
+
+
 class DeviceFilterForm(FilterForm):
     orders = {
         'name': Upper('name'),

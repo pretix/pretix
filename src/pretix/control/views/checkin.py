@@ -61,7 +61,7 @@ from pretix.control.forms.checkin import (
     CheckinListForm, CheckinListSimulatorForm,
 )
 from pretix.control.forms.filter import (
-    CheckinFilterForm, CheckinListAttendeeFilterForm,
+    CheckinFilterForm, CheckinListAttendeeFilterForm, CheckinListFilterForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import CreateView, PaginationMixin, UpdateView
@@ -279,13 +279,13 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     context_object_name = 'checkinlists'
     permission = 'can_view_orders'
     template_name = 'pretixcontrol/checkin/lists.html'
+    ordering = ('subevent__date_from', 'name', 'pk')
 
     def get_queryset(self):
         qs = self.request.event.checkin_lists.select_related('subevent').prefetch_related("limit_products")
 
-        if self.request.GET.get("subevent", "") != "":
-            s = self.request.GET.get("subevent", "")
-            qs = qs.filter(subevent_id=s)
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
         return qs
 
     def get_context_data(self, **kwargs):
@@ -304,8 +304,13 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
             'can_change_organizer_settings',
             self.request
         )
+        ctx['filter_form'] = self.filter_form
 
         return ctx
+
+    @cached_property
+    def filter_form(self):
+        return CheckinListFilterForm(data=self.request.GET, event=self.request.event)
 
 
 class CheckinListCreate(EventPermissionRequiredMixin, CreateView):
