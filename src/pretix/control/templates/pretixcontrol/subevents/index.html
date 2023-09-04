@@ -165,6 +165,8 @@
                                 {% endif %}
                             </td>
                             <td class="text-right flip">
+                                <a href="{% url "control:event.orders" organizer=request.event.organizer.slug event=request.event.slug %}?subevent={{ s.id }}" class="btn btn-default btn-sm" title="{% trans "Show orders" %}"><i class="fa fa-shopping-cart" aria-hidden="true"></i></a>
+
                                 <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}?returnto={{ request.GET.urlencode|urlencode }}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                 <div class="btn-group {% if forloop.revcounter0 < 2 %}dropup{% endif %}">
                                     <button type="button" class="btn btn-default btn-sm dropdown-toggle"
