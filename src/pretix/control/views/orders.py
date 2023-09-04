@@ -197,7 +197,7 @@ class BaseOrderBulkActionView(OrderSearchMixin, EventPermissionRequiredMixin, As
 
     @cached_property
     def filter_form(self):
-        return EventOrderFilterForm(data=self.request.GET, event=self.request.event)
+        return EventOrderFilterForm(data=self.request.POST, event=self.request.event)
 
     @property
     def label(self) -> str:
