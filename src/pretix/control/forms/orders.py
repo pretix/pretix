@@ -188,6 +188,7 @@ class CancelForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
+        self.instance = kwargs.pop("instance")
         super().__init__(*args, **kwargs)
         change_decimal_field(self.fields['cancellation_fee'], self.instance.event.currency)
         self.fields['cancellation_fee'].widget.attrs['placeholder'] = floatformat(
