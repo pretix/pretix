@@ -67,6 +67,9 @@ The following values for ``action_types`` are valid with pretix core:
     * ``pretix.event.live.deactivated``
     * ``pretix.event.testmode.activated``
     * ``pretix.event.testmode.deactivated``
+    * ``pretix.customer.created``
+    * ``pretix.customer.changed``
+    * ``pretix.customer.anonymized``
 
 Installed plugins might register more valid values.
 
