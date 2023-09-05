@@ -1033,10 +1033,10 @@ DEFAULTS = {
             widget=forms.RadioSelect,
             choices=(
                 ('False', _('Do not generate invoices')),
-                ('admin', _('Only manually in admin panel')),
+                ('paid', _('Automatically after payment or when required by payment method')),
+                ('True', _('Automatically before payment for all created orders')),
                 ('user', _('Automatically on user request')),
-                ('True', _('Automatically for all created orders')),
-                ('paid', _('Automatically on payment or when required by payment method')),
+                ('admin', _('Only manually in admin panel')),
             ),
             help_text=_("Invoices will never be automatically generated for free orders.")
         )
