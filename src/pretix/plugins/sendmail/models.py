@@ -293,8 +293,7 @@ class Rule(models.Model, LoggingMixin):
 
         if not is_creation:
             if self.subevent:
-                keep_states = [ScheduledMail.STATE_COMPLETED,
-                               ScheduledMail.STATE_FAILED]  # we keep rules that have already been sent at least partially
+                keep_states = [ScheduledMail.STATE_COMPLETED]  # we keep rules where mails have already been sent
                 ScheduledMail.objects.filter(rule=self).exclude(
                     Q(subevent=self.subevent) | Q(state__in=keep_states)
                 ).delete()
