@@ -684,6 +684,20 @@ class PaymentReminderTests(TestCase):
         assert len(djmail.outbox) == 1
 
     @classscope(attr='o')
+    def test_prevent_reminder_mail(self):
+        self.event.settings.mail_days_order_expire_warning = 12
+        pprov = list(self.event.get_payment_providers().keys())[0]
+        payment = self.order.payments.create(
+            state=OrderPayment.PAYMENT_STATE_PENDING,
+            amount=self.order.total,
+            provider=pprov
+        )
+        payment.payment_provider.settings.set('_prevent_reminder_mail', True)
+        payment.save()
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 0
+
+    @classscope(attr='o')
     def test_paid(self):
         self.order.status = Order.STATUS_PAID
         self.order.save()

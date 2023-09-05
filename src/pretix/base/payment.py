@@ -441,6 +441,13 @@ class BasePaymentProvider:
                      'Share this link with customers who should use this payment method.'
                  ),
              )),
+            ('_prevent_reminder_mail',
+             forms.BooleanField(
+                 label=_('Do not send a payment reminder mail'),
+                 help_text=_('Users will not receive a reminder mail to pay for their order before it expires if '
+                             'they have chosen this payment method.'),
+                 required=False,
+             )),
         ])
         d['_restricted_countries']._as_type = list
         d['_restrict_to_sales_channels']._as_type = list
@@ -496,6 +503,14 @@ class BasePaymentProvider:
         """
         if order.status == Order.STATUS_PAID:
             return _('paid')
+
+    def prevent_reminder_mail(self, order: Order, payment: OrderPayment) -> bool:
+        """
+        This is called when a periodic task runs and sends out reminder mails to orders that have not been paid yet
+        and are soon expiring.
+        The default implementation returns the content of the _prevent_reminder_mail configuration variable (a boolean value).
+        """
+        return self.settings.get('_prevent_reminder_mail', as_type=bool, default=False)
 
     @property
     def payment_form_fields(self) -> dict:
