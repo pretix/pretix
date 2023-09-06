@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-27 11:49+0000\n"
-"PO-Revision-Date: 2023-08-31 07:34+0000\n"
-"Last-Translator: Martin Gross <gross@rami.io>\n"
+"PO-Revision-Date: 2023-09-02 14:00+0000\n"
+"Last-Translator: Ash So <ashs@vankaifong.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -978,7 +978,7 @@ msgstr "活動資料"
 msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
-msgstr "下載包含其中有關此召集人帳戶中所有活動的資訊的活頁表格。"
+msgstr "下載包含其中有關此組織帳戶中所有活動的資訊的活頁表格。"
 
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/waitinglist.py:114
 #: pretix/base/models/event.py:536 pretix/base/pdf.py:222
@@ -2459,7 +2459,7 @@ msgstr "測試模式"
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:112
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:9
 msgid "Organizer"
-msgstr "召集人"
+msgstr "組織者"
 
 #: pretix/base/exporters/orderlist.py:1173 pretix/base/invoice.py:512
 #: pretix/control/templates/pretixcontrol/base.html:279
@@ -2779,8 +2779,7 @@ msgstr "選擇州"
 msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
-msgstr ""
-"可選擇的，但根據您居住的國家/地區，如果您不輸入，我們可能需要向你收取額外的稅"
+msgstr "選擇性的，但根據您居住的國家/地區，如果您不輸入，我們可能需要向你收取額外的稅"
 "費。"
 
 #: pretix/base/forms/questions.py:1033 pretix/base/forms/questions.py:1039
@@ -2791,9 +2790,8 @@ msgstr "如果你在瑞士註冊，則可以輸入您的UID。"
 msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
-msgstr ""
-"可選擇的，但你可能需要在發票上申請稅收優惠，具體取決於你和賣家的居住國家/地"
-"區。"
+msgstr "選擇性的，但你可能需要在發票上申請稅收優惠，具體取決於你和賣家的居住國家/地區"
+"。"
 
 #: pretix/base/forms/questions.py:1129
 msgid "You need to provide a company name."
@@ -4904,7 +4902,7 @@ msgstr ""
 
 #: pretix/base/models/orders.py:932
 msgid "This order is not yet approved by the event organizer."
-msgstr "此訂單尚未得到活動召集人的批准。"
+msgstr "此訂單尚未得到活動組織者的批准。"
 
 #: pretix/base/models/orders.py:956
 #, python-brace-format
@@ -5002,7 +5000,7 @@ msgstr "取消"
 #: pretix/base/models/orders.py:1974
 msgctxt "refund_source"
 msgid "Organizer"
-msgstr "召集人"
+msgstr "組織者"
 
 #: pretix/base/models/orders.py:1975
 msgctxt "refund_source"
@@ -5108,7 +5106,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/index.html:6
 #: pretix/control/templates/pretixcontrol/organizers/index.html:8
 msgid "Organizers"
-msgstr "召集人"
+msgstr "組織者"
 
 #: pretix/base/models/organizer.py:262
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:35
@@ -5130,7 +5128,7 @@ msgstr "可以更改團隊和權限"
 
 #: pretix/base/models/organizer.py:277
 msgid "Can change organizer settings"
-msgstr "可以更改召集人設定"
+msgstr "可以更改組織者設定"
 
 #: pretix/base/models/organizer.py:278
 msgid ""
@@ -6165,8 +6163,7 @@ msgstr "這張禮物卡是未知的。"
 msgid ""
 "This gift card can not be redeemed since its code is not unique. Please "
 "contact the organizer of this event."
-msgstr ""
-"此禮物卡不能兌換，因為該禮物卡的代碼不是唯一的。請聯絡本次活動的召集人。"
+msgstr "此禮物卡不能兌換，因為該禮物卡的代碼不是唯一的。請聯絡本次活動的組織者。"
 
 #: pretix/base/payment.py:1486
 msgid "This gift card is not accepted by this event organizer."
@@ -7478,7 +7475,7 @@ msgstr "此訂單無法取消，因為在此訂單中購買的禮品卡{card}已
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
-msgstr "嘗試將錢退還給你時出錯。請聯繫活動召集人以獲取更多資訊。"
+msgstr "嘗試將錢退還給你時出錯。請聯繫活動組織者以獲取更多資訊。"
 
 #: pretix/base/services/seating.py:61 pretix/base/services/seating.py:128
 #, python-format
@@ -8647,7 +8644,7 @@ msgstr "從日曆或列表檢視中隱藏所有不可用的日期"
 msgid ""
 "This option currently only affects the calendar of this event series, not "
 "the organizer-wide calendar."
-msgstr "此當前選項只影響此事件系列的日曆，而不會影響召集人範圍的日曆。"
+msgstr "此當前選項只影響此事件系列的日曆，而不會影響組織者範圍的日曆。"
 
 #: pretix/base/settings.py:1626
 msgid "Hide all past dates from calendar"
@@ -8841,7 +8838,7 @@ msgstr ""
 msgid ""
 "Customers can only request a cancellation that needs to be approved by the "
 "event organizer before the order is canceled and a refund is issued."
-msgstr "客戶只能在取消訂單及退款前，請求取消需要活動召集人批准。"
+msgstr "客戶只能在取消訂單及退款前，請求取消需要活動組織者批准。"
 
 #: pretix/base/settings.py:1888
 msgid ""
@@ -9117,7 +9114,7 @@ msgstr ""
 "你好\n"
 "\n"
 "我們成功收到了你的{event}訂單。既然你訂購\n"
-"需要活動召集人批准的商品，我們要求你\n"
+"需要活動組織者批准的商品，我們要求你\n"
 "請耐心等待我們的下一封電子郵件。\n"
 "\n"
 "你可以更改訂單詳細資訊並查看訂單狀態\n"
@@ -10073,7 +10070,7 @@ msgstr "訂購日期"
 
 #: pretix/base/settings.py:3142
 msgid "Link back to organizer overview on all event pages"
-msgstr "連結回所有活動頁面上的召集人概述"
+msgstr "連結回所有活動頁面上的組織者概述"
 
 #: pretix/base/settings.py:3151
 msgid "Homepage text"
@@ -10654,7 +10651,7 @@ msgstr ""
 "\n"
 "我們特此確認以下數據粉碎工作已完成：\n"
 "\n"
-"召集人：%(organizer)s\n"
+"組織者：%(organizer)s\n"
 "\n"
 "事件： %(event)s\n"
 "\n"
@@ -13179,7 +13176,7 @@ msgstr "使舊的客戶端密碼失效並產生新的客戶端密碼"
 
 #: pretix/control/forms/organizer.py:1041
 msgid "Organizer short name"
-msgstr "召集人簡稱"
+msgstr "組織者簡稱"
 
 #: pretix/control/forms/organizer.py:1045
 msgid "Allow access to reusable media"
@@ -15177,7 +15174,7 @@ msgstr "登出"
 
 #: pretix/control/templates/pretixcontrol/base.html:245
 msgid "Organizer account"
-msgstr "召集人帳戶"
+msgstr "組織者帳戶"
 
 #: pretix/control/templates/pretixcontrol/base.html:268
 msgid "Search for events"
@@ -16026,7 +16023,7 @@ msgstr ""
 "你已被邀請加入Pretix上的團隊，這是一個執行活動的\n"
 "門票銷售平台。\n"
 "\n"
-"召集人：%(organizer)s\n"
+"組織者：%(organizer)s\n"
 "團隊：%(team)s\n"
 "\n"
 "如果你想加入該團隊，只需按下以下連結：\n"
@@ -16963,7 +16960,7 @@ msgstr "票名"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:48
 msgid "Capacity (optional)"
-msgstr "容量（選擇）"
+msgstr "容量（可選擇的）"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:101
 msgid "Add a new ticket type"
@@ -18951,7 +18948,7 @@ msgstr "發票資訊"
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:41
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:30
 msgid "(optional)"
-msgstr "可選擇的"
+msgstr "(可選擇的)"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:4
 #: pretix/control/templates/pretixcontrol/order/delete.html:8
@@ -20283,7 +20280,7 @@ msgstr "無法刪除此召集人帳戶，因為它已包含訂單、發票或設
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:6
 #, python-format
 msgid "Organizer: %(name)s"
-msgstr "召集人%(name)s"
+msgstr "組織者: %(name)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:6
 msgid "Change multiple devices"
@@ -20451,7 +20448,7 @@ msgstr "召集人設定"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:44
 msgid "Organizer page"
-msgstr "召集人頁面"
+msgstr "組織者頁面"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:68
 msgid "The links you configure here will also be shown on all of your events."
@@ -21452,7 +21449,7 @@ msgstr "第 1 步：下載數據"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:17
 msgid "(Optional) Step 1: Download data"
-msgstr "（選擇）第 1 步：下載數據"
+msgstr "（可選擇的）第 1 步：下載數據"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:20
 msgid ""
@@ -22207,7 +22204,7 @@ msgstr "優惠券代碼"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:17
 msgid "Prefix (optional)"
-msgstr "前置文字（可自選）"
+msgstr "前置文字（可選擇的）"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:21
 msgctxt "number_of_things"
@@ -24685,7 +24682,7 @@ msgstr "只能從現有付款中建立銀行轉帳退款。"
 
 #: pretix/plugins/banktransfer/payment.py:652
 msgid "BIC (optional)"
-msgstr "BIC( 可自選)"
+msgstr "BIC( 可選擇的)"
 
 #: pretix/plugins/banktransfer/payment.py:691
 msgid "Your input was invalid, please see below for details."
