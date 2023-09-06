@@ -373,7 +373,8 @@ class OrderSendView(BaseSenderView):
                     any_checkins=Exists(
                         Checkin.all.filter(
                             Q(position_id=OuterRef('pk')) | Q(position__addon_to_id=OuterRef('pk')),
-                            successful=True
+                            successful=True,
+                            list__consider_tickets_used=True,
                         )
                     )
                 )

@@ -62,6 +62,16 @@ class CheckinList(LoggedModel):
                                              'and valid for check-in regardless of which date they are purchased for. '
                                              'You can limit their validity through the advanced check-in rules, '
                                              'though.'))
+    ignore_in_statistics = models.BooleanField(
+        verbose_name=pgettext_lazy('checkin', 'Ignore check-ins on this list in statistics'),
+        default=False
+    )
+    consider_tickets_used = models.BooleanField(
+        verbose_name=pgettext_lazy('checkin', 'Tickets with a check-in on this list should be considered "used"'),
+        help_text=_('This is relevant in various situations, e.g. for deciding if a ticket can still be canceled by '
+                    'the customer.'),
+        default=True
+    )
     include_pending = models.BooleanField(verbose_name=pgettext_lazy('checkin', 'Include pending orders'),
                                           default=False,
                                           help_text=_('With this option, people will be able to check in even if the '

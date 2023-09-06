@@ -67,6 +67,7 @@ def send_mails_to_orders(event: Event, user: int, subject: dict, message: dict, 
                 any_checkins=Exists(
                     Checkin.objects.filter(
                         Q(position_id=OuterRef('pk')) | Q(position__addon_to_id=OuterRef('pk')),
+                        list__consider_tickets_used=True,
                     )
                 ),
                 matching_checkins=Exists(

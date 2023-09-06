@@ -1996,7 +1996,7 @@ class OrderChangeManager:
                     for a in current_addons[cp][k][:current_num - input_num]:
                         if a.canceled:
                             continue
-                        if a.checkins.exists():
+                        if a.checkins.filter(list__consider_tickets_used=True).exists():
                             raise OrderError(
                                 error_messages['addon_already_checked_in'] % {
                                     'addon': str(a.item.name),

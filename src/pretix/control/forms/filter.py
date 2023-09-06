@@ -2072,7 +2072,8 @@ class VoucherFilterForm(FilterForm):
                 qs = qs.filter(Q(valid_until__isnull=False) & Q(valid_until__lt=now())).filter(redeemed=0)
             elif s == 'c':
                 checkins = Checkin.objects.filter(
-                    position__voucher=OuterRef('pk')
+                    position__voucher=OuterRef('pk'),
+                    list__consider_tickets_used=True,
                 )
                 qs = qs.annotate(has_checkin=Exists(checkins)).filter(
                     redeemed__gt=0, has_checkin=True

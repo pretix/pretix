@@ -218,6 +218,8 @@ TEST_LIST_RES = {
     "subevent": None,
     "exit_all_at": None,
     "addon_match": False,
+    "ignore_in_statistics": False,
+    "consider_tickets_used": True,
     "rules": {}
 }
 
