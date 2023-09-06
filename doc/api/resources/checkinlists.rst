@@ -706,6 +706,7 @@ Order position endpoints
             "position": 1,
             "identifier": "WY3TP9SL",
             "ask_during_checkin": true,
+            "show_during_checkin": true,
             "options": [
               {
                 "id": 1,

@@ -85,10 +85,30 @@
                     {% endif %}
                 {% endif %}
                 {% if result.position %}
-                    {% if result.position.require_attention %}
+                    {% if result.require_attention %}
                         <p>
-                            <span class="fa fa-info-circle fa-fw"></span> {% trans "Special attention required" %}
+                            <strong>
+                                <span class="fa fa-info-circle text-info fa-fw"></span>
+                                {% trans "Special attention required" %}
+                            </strong>
                         </p>
+                    {% endif %}
+                    {% for t in result.checkin_texts %}
+                        <p>
+                            <span class="fa fa-info-circle text-muted fa-fw"></span>
+                            {{ t }}
+                        </p>
+                    {% endfor %}
+                    {% if result.position_object %}
+                        {% for a in result.position_object.answers.all %}
+                            {% if a.question.show_during_checkin %}
+                                <p>
+                                    <span class="fa fa-question-circle text-muted fa-fw"></span>
+                                    <strong>{{ a.question.question }}</strong>
+                                    {{ a }}
+                                </p>
+                            {% endif %}
+                        {% endfor %}
                     {% endif %}
                     <p>
                         <span class="fa fa-ticket fa-fw"></span>

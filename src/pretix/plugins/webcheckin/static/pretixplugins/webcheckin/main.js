@@ -25,6 +25,7 @@ window.vapp = new Vue({
     data: {
         api: {
             lists: document.querySelector('#app').attributes['data-api-lists'].value,
+            questions: document.querySelector('#app').attributes['data-api-questions'].value,
         },
         strings: {
             'checkinlist.select': gettext('Select a check-in list'),
@@ -65,6 +66,8 @@ window.vapp = new Vue({
             'status.checkin': gettext('Checked-in Tickets'),
             'status.position': gettext('Valid Tickets'),
             'status.inside': gettext('Currently inside'),
+            'yes': gettext('Yes'),
+            'no': gettext('No'),
         },
         event_name: document.querySelector('#app').attributes['data-event-name'].value,
         timezone: document.body.attributes['data-timezone'].value,

@@ -257,6 +257,7 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
             'valid_if_pending': True,
             'custom_followup_at': '2021-06-12',
             'checkin_attention': True,
+            'checkin_text': 'foobar',
             'email': 'foo@bar.com',
             'phone': '+4962219999',
             'locale': 'de',
@@ -280,6 +281,7 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
     assert order.comment == 'Here is a comment'
     assert order.custom_followup_at.isoformat() == '2021-06-12'
     assert order.checkin_attention
+    assert order.checkin_text == 'foobar'
     assert order.email == 'foo@bar.com'
     assert order.phone == '+4962219999'
     assert order.locale == 'de'
@@ -294,6 +296,7 @@ def test_order_update_allowed_fields(token_client, organizer, event, order):
         assert order.all_logentries().get(action_type='pretix.event.order.comment')
         assert order.all_logentries().get(action_type='pretix.event.order.custom_followup_at')
         assert order.all_logentries().get(action_type='pretix.event.order.checkin_attention')
+        assert order.all_logentries().get(action_type='pretix.event.order.checkin_text')
         assert order.all_logentries().get(action_type='pretix.event.order.contact.changed')
         assert order.all_logentries().get(action_type='pretix.event.order.phone.changed')
         assert order.all_logentries().get(action_type='pretix.event.order.locale.changed')

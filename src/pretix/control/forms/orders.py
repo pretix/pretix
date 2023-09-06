@@ -265,12 +265,13 @@ class ExporterForm(forms.Form):
 class CommentForm(I18nModelForm):
     class Meta:
         model = Order
-        fields = ['comment', 'checkin_attention', 'custom_followup_at']
+        fields = ['comment', 'checkin_attention', 'checkin_text', 'custom_followup_at']
         widgets = {
             'comment': forms.Textarea(attrs={
                 'rows': 3,
                 'class': 'helper-width-100',
             }),
+            'checkin_text': forms.TextInput(),
             'custom_followup_at': DatePickerWidget(),
         }
 

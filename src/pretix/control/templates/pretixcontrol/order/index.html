@@ -997,6 +997,7 @@
                                 {% bootstrap_field comment_form.comment show_help=True show_label=False %}
                                 {% bootstrap_field comment_form.custom_followup_at %}
                                 {% bootstrap_field comment_form.checkin_attention show_help=True show_label=False %}
+                                {% bootstrap_field comment_form.checkin_text show_help=True show_label=False %}
                                 {% if "can_change_orders" in request.eventpermset %}
                                     <button class="btn btn-default">
                                         {% trans "Update comment" %}

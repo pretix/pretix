@@ -407,6 +407,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.event.order.custom_followup_at': _('The order\'s follow-up date has been updated.'),
         'pretix.event.order.checkin_attention': _('The order\'s flag to require attention at check-in has been '
                                                   'toggled.'),
+        'pretix.event.order.checkin_text': _('The order\'s check-in text has been changed.'),
         'pretix.event.order.pretix.event.order.valid_if_pending': _('The order\'s flag to be considered valid even if '
                                                                     'unpaid has been toggled.'),
         'pretix.event.order.payment.changed': _('A new payment {local_id} has been started instead of the previous one.'),

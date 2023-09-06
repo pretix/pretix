@@ -29,6 +29,8 @@ position                              integer                    An integer, use
 checkin_attention                     boolean                    If ``true``, the check-in app should show a warning
                                                                  that this ticket requires special attention if such
                                                                  a variation is being scanned.
+checkin_text                          string                     Text that will be shown if a ticket of this type is
+                                                                 scanned (or ``null``).
 require_approval                      boolean                    If ``true``, orders with this variation will need to be
                                                                  approved by the event organizer before they can be
                                                                  paid.
@@ -94,6 +96,7 @@ Endpoints
             },
             "active": true,
             "checkin_attention": false,
+            "checkin_text": null,
             "require_approval": false,
             "require_membership": false,
             "require_membership_hidden": false,
@@ -119,6 +122,7 @@ Endpoints
             },
             "active": true,
             "checkin_attention": false,
+            "checkin_text": null,
             "require_approval": false,
             "require_membership": false,
             "require_membership_hidden": false,
@@ -179,6 +183,7 @@ Endpoints
         "free_price_suggestion": null,
         "active": true,
         "checkin_attention": false,
+        "checkin_text": null,
         "require_approval": false,
         "require_membership": false,
         "require_membership_hidden": false,
@@ -218,6 +223,7 @@ Endpoints
         "default_price": "10.00",
         "active": true,
         "checkin_attention": false,
+        "checkin_text": null,
         "require_approval": false,
         "require_membership": false,
         "require_membership_hidden": false,
@@ -248,6 +254,7 @@ Endpoints
         "free_price_suggestion": null,
         "active": true,
         "checkin_attention": false,
+        "checkin_text": null,
         "require_approval": false,
         "require_membership": false,
         "require_membership_hidden": false,
@@ -309,6 +316,7 @@ Endpoints
         "free_price_suggestion": null,
         "active": false,
         "checkin_attention": false,
+        "checkin_text": null,
         "require_approval": false,
         "require_membership": false,
         "require_membership_hidden": false,

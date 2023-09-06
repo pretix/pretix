@@ -74,6 +74,8 @@ max_per_order                           integer                    This product 
 checkin_attention                       boolean                    If ``true``, the check-in app should show a warning
                                                                    that this ticket requires special attention if such
                                                                    a product is being scanned.
+checkin_text                            string                     Text that will be shown if a ticket of this type is
+                                                                   scanned (or ``null``).
 original_price                          money (string)             An original price, shown for comparison, not used
                                                                    for price calculations (or ``null``).
 require_approval                        boolean                    If ``true``, orders with this product will need to be
@@ -137,6 +139,8 @@ variations                              list of objects            A list with o
 ├ checkin_attention                     boolean                    If ``true``, the check-in app should show a warning
                                                                    that this ticket requires special attention if such
                                                                    a variation is being scanned.
+├ checkin_text                          string                     Text that will be shown if a ticket of this type is
+                                                                   scanned (or ``null``).
 ├ require_approval                      boolean                    If ``true``, orders with this variation will need to be
                                                                    approved by the event organizer before they can be
                                                                    paid.
@@ -283,6 +287,7 @@ Endpoints
             "min_per_order": null,
             "max_per_order": null,
             "checkin_attention": false,
+            "checkin_text": null,
             "has_variations": false,
             "generate_tickets": null,
             "allow_waitinglist": true,
@@ -312,6 +317,7 @@ Endpoints
                  "free_price_suggestion": null,
                  "active": true,
                  "checkin_attention": false,
+                 "checkin_text": null,
                  "require_approval": false,
                  "require_membership": false,
                  "require_membership_types": [],
@@ -331,6 +337,7 @@ Endpoints
                  "free_price_suggestion": null,
                  "active": true,
                  "checkin_attention": false,
+                 "checkin_text": null,
                  "require_approval": false,
                  "require_membership": false,
                  "require_membership_types": [],
@@ -421,6 +428,7 @@ Endpoints
         "min_per_order": null,
         "max_per_order": null,
         "checkin_attention": false,
+        "checkin_text": null,
         "has_variations": false,
         "require_approval": false,
         "require_bundling": false,
@@ -447,6 +455,7 @@ Endpoints
              "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
+             "checkin_text": null,
              "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
@@ -466,6 +475,7 @@ Endpoints
              "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
+             "checkin_text": null,
              "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
@@ -537,6 +547,7 @@ Endpoints
         "min_per_order": null,
         "max_per_order": null,
         "checkin_attention": false,
+        "checkin_text": null,
         "require_approval": false,
         "require_bundling": false,
         "require_membership": false,
@@ -562,6 +573,7 @@ Endpoints
              "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
+             "checkin_text": null,
              "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
@@ -581,6 +593,7 @@ Endpoints
              "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
+             "checkin_text": null,
              "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
@@ -640,6 +653,7 @@ Endpoints
         "allow_waitinglist": true,
         "show_quota_left": null,
         "checkin_attention": false,
+        "checkin_text": null,
         "has_variations": true,
         "require_approval": false,
         "require_bundling": false,
@@ -666,6 +680,7 @@ Endpoints
              "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
+             "checkin_text": null,
              "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
@@ -685,6 +700,7 @@ Endpoints
              "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
+             "checkin_text": null,
              "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
@@ -775,6 +791,7 @@ Endpoints
         "min_per_order": null,
         "max_per_order": null,
         "checkin_attention": false,
+        "checkin_text": null,
         "has_variations": true,
         "require_approval": false,
         "require_bundling": false,
@@ -801,6 +818,7 @@ Endpoints
              "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
+             "checkin_text": null,
              "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],
@@ -820,6 +838,7 @@ Endpoints
              "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
+             "checkin_text": null,
              "require_approval": false,
              "require_membership": false,
              "require_membership_types": [],

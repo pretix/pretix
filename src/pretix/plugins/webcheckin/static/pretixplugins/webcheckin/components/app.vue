@@ -35,6 +35,14 @@
             <span v-if="checkResultSubevent">{{ checkResultSubevent }}<br></span>
             <span class="secret">{{ checkResult.position.secret }}</span>
             <span v-if="checkResult.position.seat"><br>{{ checkResult.position.seat.name }}</span>
+            <strong v-for="t in checkResult.checkin_texts"><br>{{ t }}</strong>
+            <span v-for="a in checkResult.position.answers">
+              <span v-if="questions[a.question].show_during_checkin">
+                <br>
+                <strong>{{ questions[a.question].question | i18nstring_localize }}:</strong>
+                {{ a.answer | answer(questions[a.question], $root.timezone, $root.strings) }}
+              </span>
+            </span>
           </div>
         </div>
         <div class="attention" v-if="checkResult && checkResult.require_attention">
@@ -228,6 +236,7 @@ export default {
       clearTimeout: null,
       showUnpaidModal: false,
       showQuestionsModal: false,
+      questions: {},
       answers: {},
     }
   },
@@ -236,6 +245,7 @@ export default {
     document.addEventListener("visibilitychange", this.globalKeydown)
     document.addEventListener('keydown', this.globalKeydown)
     this.statusInterval = window.setInterval(this.fetchStatus, 120 * 1000)
+    window.setTimeout(this.fetchQuestions, 100)
   },
   destroyed() {
     window.removeEventListener('focus', this.globalKeydown)
@@ -291,6 +301,24 @@ export default {
       } else {
         if (this.checkResult.reason === 'already_redeemed') return "orange";
         return "red";
+      }
+    },
+  },
+  filters: {
+    i18nstring_localize (value) {
+      return i18nstring_localize(value);
+    },
+    answer (value, question, timezone, strings) {
+      if (question.type === "B" && value === "True") {
+        return strings['yes']
+      } else if (question.type === "B" && value === "False") {
+        return strings['no']
+      } else if (question.type === "W" && !!value) {
+        return moment(value).tz(timezone).format("L LT")
+      } else if (question.type === "D" && !!value) {
+        return moment(value).format("L")
+      } else {
+        return value
       }
     },
   },
@@ -523,6 +551,21 @@ export default {
     switchList() {
       location.hash = ''
       this.checkinlist = null
+    },
+    fetchQuestions() {
+      const loadQuestions = (url) => {
+        fetch(url)
+            .then(response => response.json())
+            .then(data => {
+              for (const q of data.results) {
+                this.questions[q.id] = q
+              }
+            })
+            .catch(reason => {
+              console.log(reason)
+            })
+      }
+      loadQuestions(this.$root.api.questions)
     },
     fetchStatus() {
       this.statusLoading++

@@ -244,6 +244,11 @@ class Order(LockModel, LoggedModel):
                     'special attention. This will not show any details or custom message, so you need to brief your '
                     'check-in staff how to handle these cases.')
     )
+    checkin_text = models.TextField(
+        verbose_name=_('Check-in text'),
+        null=True, blank=True,
+        help_text=_('This text will be shown by the check-in app if a ticket of this order is scanned.')
+    )
     expiry_reminder_sent = models.BooleanField(
         default=False
     )
@@ -2424,6 +2429,17 @@ class OrderPosition(AbstractPosition):
         if self.order.checkin_attention or self.item.checkin_attention or (self.variation_id and self.variation.checkin_attention):
             return True
         return False
+
+    @cached_property
+    def checkin_texts(self):
+        texts = []
+        if self.order.checkin_text:
+            texts.append(self.order.checkin_text)
+        if self.variation_id and self.variation.checkin_text:
+            texts.append(self.variation.checkin_text)
+        if self.item.checkin_text:
+            texts.append(self.item.checkin_text)
+        return texts
 
     @property
     def checkins(self):
