@@ -498,6 +498,10 @@ def test_organizer_level(token_client, organizer, team, event, event2, order, or
     assert resp.status_code == 200
     assert len(resp.data['results']) == 2
 
+    resp = token_client.get('/api/v1/organizers/{}/orders/?subevent_after=2020-01-01T00:00:00Z'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert len(resp.data['results']) == 0
+
     resp = token_client.get('/api/v1/organizers/{}/orders/FOO/'.format(organizer.slug))
     assert resp.status_code == 200
 

@@ -116,12 +116,16 @@ with scopes_disabled():
 
         @scopes_disabled()
         def subevent_after_qs(self, qs, name, value):
+            if getattr(self.request, 'event', None):
+                subevents = self.request.event.subevents
+            else:
+                subevents = SubEvent.objects.filter(event__organizer=self.request.organizer)
+
             qs = qs.filter(
                 pk__in=Subquery(
                     OrderPosition.all.filter(
-                        subevent_id__in=SubEvent.objects.filter(
+                        subevent_id__in=subevents.filter(
                             Q(date_to__gt=value) | Q(date_from__gt=value, date_to__isnull=True),
-                            event=self.request.event
                         ).values_list('id'),
                     ).values_list('order_id')
                 )
@@ -129,12 +133,16 @@ with scopes_disabled():
             return qs
 
         def subevent_before_qs(self, qs, name, value):
+            if getattr(self.request, 'event', None):
+                subevents = self.request.event.subevents
+            else:
+                subevents = SubEvent.objects.filter(event__organizer=self.request.organizer)
+
             qs = qs.filter(
                 pk__in=Subquery(
                     OrderPosition.all.filter(
-                        subevent_id__in=SubEvent.objects.filter(
+                        subevent_id__in=subevents.filter(
                             Q(date_from__lt=value),
-                            event=self.request.event
                         ).values_list('id'),
                     ).values_list('order_id')
                 )
