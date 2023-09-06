@@ -70,7 +70,7 @@ last_modified                         datetime                   Last modificati
 
 .. versionchanged:: 2023.8.0
 
-    The ``search`` query parameter has been modified to filter sub-events by their parent events slug too.
+    For the organizer-wide endpoint, the ``search`` query parameter has been modified to filter sub-events by their parent events slug too.
 
 Endpoints
 ---------
