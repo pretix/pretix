@@ -298,12 +298,12 @@ class OrganizerOrderViewSet(OrderViewSetMixin, viewsets.ReadOnlyModelViewSet):
         if isinstance(self.request.auth, (TeamAPIToken, Device)):
             return Order.objects.filter(
                 event__organizer=self.request.organizer,
-                event__in=self.request.auth.get_events_with_permission(perm)
+                event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
             )
         elif self.request.user.is_authenticated:
             return Order.objects.filter(
                 event__organizer=self.request.organizer,
-                event__in=self.request.user.get_events_with_permission(perm)
+                event__in=self.request.user.get_events_with_permission(perm, request=self.request)
             )
         else:
             raise PermissionDenied()
@@ -1829,12 +1829,12 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         elif isinstance(self.request.auth, (TeamAPIToken, Device)):
             qs = Invoice.objects.filter(
                 event__organizer=self.request.organizer,
-                event__in=self.request.auth.get_events_with_permission(perm)
+                event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
             )
         elif self.request.user.is_authenticated:
             qs = Invoice.objects.filter(
                 event__organizer=self.request.organizer,
-                event__in=self.request.user.get_events_with_permission(perm)
+                event__in=self.request.user.get_events_with_permission(perm, request=self.request)
             )
         return qs.prefetch_related('lines').select_related('order', 'refers').annotate(
             nr=Concat('prefix', 'invoice_no')
