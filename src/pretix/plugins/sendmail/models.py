@@ -227,6 +227,7 @@ class Rule(models.Model, LoggingMixin):
 
     id = models.BigAutoField(primary_key=True)
     event = models.ForeignKey(Event, on_delete=models.CASCADE, related_name='sendmail_rules')
+    subevent = models.ForeignKey(SubEvent, null=True, on_delete=models.PROTECT)
 
     subject = I18nCharField(max_length=255, verbose_name=_('Subject'))
     template = I18nTextField(verbose_name=_('Message'))
@@ -278,16 +279,27 @@ class Rule(models.Model, LoggingMixin):
 
         create_sms = []
         if self.event.has_subevents:
-            for se in self.event.subevents.annotate(has_sm=Exists(ScheduledMail.objects.filter(
-                    subevent=OuterRef('pk'), rule=self))).filter(has_sm=False):
-                sm = ScheduledMail(rule=self, subevent=se, event=self.event)
-                sm.recompute()
-                create_sms.append(sm)
+            if self.subevent:
+                ScheduledMail.objects.get_or_create(rule=self, subevent=self.subevent, event=self.event)
+            else:
+                for se in self.event.subevents.annotate(has_sm=Exists(ScheduledMail.objects.filter(
+                        subevent=OuterRef('pk'), rule=self))).filter(has_sm=False):
+                    sm = ScheduledMail(rule=self, subevent=se, event=self.event)
+                    sm.recompute()
+                    create_sms.append(sm)
             ScheduledMail.objects.bulk_create(create_sms)
         else:
             ScheduledMail.objects.get_or_create(rule=self, event=self.event)
 
         if not is_creation:
+            if self.subevent:
+                keep_states = [ScheduledMail.STATE_COMPLETED]  # we keep rules where mails have already been sent
+                ScheduledMail.objects.filter(
+                    Q(rule=self),
+                    ~Q(subevent=self.subevent),
+                    ~Q(state__in=keep_states)
+                ).delete()
+
             update_sms = []
             for sm in self.scheduledmail_set.prefetch_related('event').select_related('subevent'):
                 if sm in create_sms:
