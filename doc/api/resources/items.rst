@@ -209,6 +209,7 @@ meta_data                               object                     Values set fo
 
 .. versionchanged:: 2023.10
 
+   The ``checkin_text`` and ``variations[x].checkin_text`` attributes have been added.
    The ``free_price_suggestion`` and ``variations[x].free_price_suggestion`` attributes have been added.
 
 .. versionchanged:: 2023.10

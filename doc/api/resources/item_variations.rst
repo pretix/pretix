@@ -60,6 +60,8 @@ meta_data                             object                     Values set for 
 .. versionchanged:: 2023.10
 
    The ``free_price_suggestion`` attribute has been added.
+   The ``checkin_text`` attribute has been added.
+
 
 Endpoints
 ---------

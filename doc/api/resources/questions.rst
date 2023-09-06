@@ -79,6 +79,10 @@ dependency_value                      string                     An old version 
                                                                  for one value. **Deprecated.**
 ===================================== ========================== =======================================================
 
+.. versionchanged:: 2023.8
+
+   The ``show_during_checkin`` attribute has been added.
+
 Endpoints
 ---------
 

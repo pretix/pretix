@@ -135,7 +135,7 @@ last_modified                         datetime                   Last modificati
 
 .. versionchanged:: 2023.8
 
-   The ``event`` attribute has been added. The organizer-level endpoint has been added.
+   The ``event`` and ``checkin_text`` attributes has been added. The organizer-level endpoint has been added.
 
 .. versionchanged:: 2023.9
 
