@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-06 08:12+0000\n"
-"PO-Revision-Date: 2023-07-27 11:58+0000\n"
+"PO-Revision-Date: 2023-09-06 08:39+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -547,22 +547,16 @@ msgid "Waiting list entry received voucher"
 msgstr "Wartelisten-Eintrag hat Gutschein erhalten"
 
 #: pretix/api/webhooks.py:370
-#, fuzzy
-#| msgid "Customer account"
 msgid "Customer account created"
-msgstr "Kundenkonto"
+msgstr "Kundenkonto erstellt"
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
-#| msgid "Customer account email change"
 msgid "Customer account changed"
-msgstr "Änderung der E-Mail-Adresse"
+msgstr "Kundenkonto geändert"
 
 #: pretix/api/webhooks.py:378
-#, fuzzy
-#| msgid "The customer account has been anonymized."
 msgid "Customer account anonymized"
-msgstr "Das Kundenkonto wurde anonymisiert."
+msgstr "Kundenkonto anonymisiert"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:938
@@ -3583,11 +3577,8 @@ msgid "Apply to specific products"
 msgstr "Auf bestimmte Produkte anwenden"
 
 #: pretix/base/models/discount.py:102
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
 msgid "Count add-on products"
-msgstr "Zusatzprodukte"
+msgstr "Zusatzprodukte einbeziehen"
 
 #: pretix/base/models/discount.py:103 pretix/base/models/discount.py:158
 msgid "Discounts never apply to bundled products"
@@ -3598,12 +3589,6 @@ msgid "Ignore products discounted by a voucher"
 msgstr "Ignoriere Produkte, die von einem Gutschein rabattiert werden"
 
 #: pretix/base/models/discount.py:108
-#, fuzzy
-#| msgid ""
-#| "If this option is checked, products that already received a discount "
-#| "through a voucher will not be considered for this discount. However, "
-#| "products that use a voucher only to e.g. unlock a hidden product or gain "
-#| "access to sold-out quota will still receive the discount."
 msgid ""
 "If this option is checked, products that already received a discount through "
 "a voucher will not be considered for this discount. However, products that "
@@ -3613,8 +3598,8 @@ msgstr ""
 "Wenn diese Option aktiv ist, werden Produkte, die bereits aufgrund eines "
 "Gutscheins einen Rabatt erhalten haben, nicht für Rabatte berücksichtigt. "
 "Wenn der Gutschein hingegen nur z.B. Freischaltung eines versteckten "
-"Produkts oder eines ausverkauften Kontingents verwendet wurde, wird der "
-"automatische Rabatt trotzdem gewährt."
+"Produkts oder eines ausverkauften Kontingents verwendet wurde, werden diese "
+"berücksichtigt."
 
 #: pretix/base/models/discount.py:113
 msgid "Minimum number of matching products"
@@ -3625,10 +3610,8 @@ msgid "Minimum gross value of matching products"
 msgstr "Minimaler Brutto-Gesamtbetrag passender Produkte"
 
 #: pretix/base/models/discount.py:125
-#, fuzzy
-#| msgid "Apply discount only to this number of matching products"
 msgid "Apply discount to same set of products"
-msgstr "Gewähre Rabatt nur für diese Anzahl passender Produkte"
+msgstr "Gewähre Rabatt für die selbe Auswahl von Produkten"
 
 #: pretix/base/models/discount.py:126
 msgid ""
@@ -3636,12 +3619,13 @@ msgid ""
 "than the condition for the discount given above. If you want, you can "
 "however also select a different selection of products."
 msgstr ""
+"Standardmäßig wird der Rabatt auf die selbe Produktauswahl angewendet wie "
+"oben als Rabattbedingung ausgewählt. Wenn Sie wollen, können Sie aber auch "
+"eine andere Auswahl an Produkten treffen."
 
 #: pretix/base/models/discount.py:132
-#, fuzzy
-#| msgid "Apply to specific products"
 msgid "Apply discount to specific products"
-msgstr "Auf bestimmte Produkte anwenden"
+msgstr "Rabatt auf bestimmte Produkte anwenden"
 
 #: pretix/base/models/discount.py:137
 msgid "Percentual discount on matching products"
@@ -3672,12 +3656,6 @@ msgid "Apply to add-on products"
 msgstr "Auf Zusatzprodukte anwenden"
 
 #: pretix/base/models/discount.py:163
-#, fuzzy
-#| msgid ""
-#| "If this option is checked, products that already received a discount "
-#| "through a voucher will not be considered for this discount. However, "
-#| "products that use a voucher only to e.g. unlock a hidden product or gain "
-#| "access to sold-out quota will still receive the discount."
 msgid ""
 "If this option is checked, products that already received a discount through "
 "a voucher will not be discounted. However, products that use a voucher only "
@@ -3685,10 +3663,10 @@ msgid ""
 "receive the discount."
 msgstr ""
 "Wenn diese Option aktiv ist, werden Produkte, die bereits aufgrund eines "
-"Gutscheins einen Rabatt erhalten haben, nicht für Rabatte berücksichtigt. "
-"Wenn der Gutschein hingegen nur z.B. Freischaltung eines versteckten "
-"Produkts oder eines ausverkauften Kontingents verwendet wurde, wird der "
-"automatische Rabatt trotzdem gewährt."
+"Gutscheins einen Rabatt erhalten haben, nicht rabattiert. Wenn der Gutschein "
+"hingegen nur z.B. Freischaltung eines versteckten Produkts oder eines "
+"ausverkauften Kontingents verwendet wurde, wird der automatische Rabatt "
+"trotzdem gewährt."
 
 #: pretix/base/models/discount.py:195
 msgid ""
@@ -3723,16 +3701,12 @@ msgstr ""
 "Sie einen minimalen Betrag setzen."
 
 #: pretix/base/models/discount.py:218
-#, fuzzy
-#| msgid ""
-#| "You cannot apply the discount only to some of the matched products if you "
-#| "are matching on a minimum value."
 msgid ""
 "You cannot apply the discount to a different set of products if the discount "
 "is only valid for bookings of different dates."
 msgstr ""
-"Sie können den Rabatt nicht nur auf manche der passenden Produkte anwenden, "
-"wenn Sie einen minimalen Betrag fordern."
+"Sie können den Rabatt nicht auf eine abweichende Produktauswahl anwenden, "
+"wenn der Rabatt nur für unterschiedliche Termine gilt."
 
 #: pretix/base/models/event.py:86
 msgid "The end of the presale period has to be later than its start."
@@ -8866,16 +8840,12 @@ msgid "Generate invoices"
 msgstr "Rechnungen ausstellen"
 
 #: pretix/base/settings.py:1036
-#, fuzzy
-#| msgid "Automatically on payment or when required by payment method"
 msgid "Automatically after payment or when required by payment method"
-msgstr "Automatisch bei Zahlung oder wenn die Zahlungsmethode es erfordert"
+msgstr "Automatisch nach Zahlung oder wenn die Zahlungsmethode es erfordert"
 
 #: pretix/base/settings.py:1037
-#, fuzzy
-#| msgid "Automatically for all created orders"
 msgid "Automatically before payment for all created orders"
-msgstr "Automatisch für alle neuen Bestellungen"
+msgstr "Automatisch vor Zahlung für alle neuen Bestellungen"
 
 #: pretix/base/settings.py:1041
 msgid "Invoices will never be automatically generated for free orders."
@@ -12222,18 +12192,20 @@ msgid ""
 "An invoice will be issued before payment if the customer selects one of the "
 "following payment methods: {list}"
 msgstr ""
+"Eine Rechnung wird vor der Zahlung erzeugt, wenn der Kunde eine der "
+"folgenden Zahlungsmethoden wählt: {list}"
 
 #: pretix/control/forms/event.py:909
 msgid ""
 "None of the currently configured payment methods will cause an invoice to be "
 "issued before payment."
 msgstr ""
+"Keine der derzeit konfigurierten Zahlungsmethoden wird eine "
+"Rechnungsausstellung vor Zahlung herbeiführen."
 
 #: pretix/control/forms/event.py:918
-#, fuzzy
-#| msgid "Recommended for new users"
 msgid "Recommended"
-msgstr "Empfohlen für neue Benutzer*innen"
+msgstr "Empfohlen"
 
 #: pretix/control/forms/event.py:927
 msgid "The online shop must be selected to receive these emails."
@@ -14800,11 +14772,8 @@ msgstr ""
 "Ein neuer Veranstalter wurde als Wertgutschein-Akzeptanzstelle eingeladen."
 
 #: pretix/control/logdisplay.py:344
-#, fuzzy
-#| msgid "A new gift card acceptor has been invited."
 msgid "A gift card acceptor has been removed."
-msgstr ""
-"Ein neuer Veranstalter wurde als Wertgutschein-Akzeptanzstelle eingeladen."
+msgstr "Ein Veranstalter wurde als Wertgutschein-Akzeptanzstelle entfernt."
 
 #: pretix/control/logdisplay.py:345
 msgid "A gift card issuer has been removed or declined."
@@ -18437,16 +18406,13 @@ msgid "Cart"
 msgstr "Warenkorb"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:338
-#, fuzzy
-#| msgid ""
-#| "The waiting list currently is not compatible with some advanced features "
-#| "of pretix such as add-on products or product bundles."
 msgid ""
 "The waiting list currently is not compatible with some advanced features of "
 "pretix such as hidden products, add-on products or product bundles."
 msgstr ""
 "Die Warteliste ist derzeit mit einigen fortgeschrittenen Funktionen von "
-"pretix wie z.B. Zusatzprodukten oder Produktpaketen inkompatibel."
+"pretix wie z.B. versteckten Produkten, Zusatzprodukten oder Produktpaketen "
+"inkompatibel."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:344
 msgid ""
@@ -26840,27 +26806,20 @@ msgid "Open BezahlCode in your banking app to start the payment process."
 msgstr "BezahlCode in Banking-App öffnen um den Zahlungsvorgang zu starten."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:112
-#, fuzzy
-#| msgid ""
-#| "Please additionally send my invoice directly to our accounting department"
 msgid ""
 "To send the invoice directly to your accounting department, please enter "
 "their email address:"
 msgstr ""
-"Ich möchte, dass die Rechnung zusätzlich direkt an unsere Buchhaltung "
-"geschickt wird"
+"Um die Rechnung auch direkt an Ihre Buchhaltung zu versenden, geben Sie "
+"deren E-Mail-Adresse hier an:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:118
-#, fuzzy
-#| msgid "Invoice recipient e-mail"
 msgid "Invoice recipient email"
-msgstr "E-Mail Rechnungsempfang:"
+msgstr "E-Mail Rechnungsempfänger"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:125
-#, fuzzy
-#| msgid "Send vouchers via email"
 msgid "Send invoice via email"
-msgstr "Gutscheine per E-Mail verschicken"
+msgstr "Rechnung per E-Mail verschicken"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:5
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:7
@@ -27125,21 +27084,21 @@ msgid ""
 "No pending bank transfer payment found. Maybe the order has been paid "
 "already?"
 msgstr ""
+"Keine offenen Banküberweisungs-Zahlungen gefunden. Möglicherweise wurde die "
+"Bestellung bereits bezahlt?"
 
 #: pretix/plugins/banktransfer/views.py:915
-#, fuzzy
-#| msgid "This order is not yet approved by the event organizer."
 msgid "Sending invoices via email is disabled by the event organizer."
-msgstr "Diese Bestellung wurde noch nicht vom Veranstalter freigegeben."
+msgstr "Der Rechnungsversand per E-Mail wurde vom Veranstalter deaktiviert."
 
 #: pretix/plugins/banktransfer/views.py:920
 msgid "No invoice found, please request an invoice first."
-msgstr ""
+msgstr "Keine Rechnung gefunden, bitte zuerst eine Rechnung anfragen."
 
 #: pretix/plugins/banktransfer/views.py:926
 #, python-brace-format
 msgid "Sending the latest invoice via e-mail to {email}."
-msgstr ""
+msgstr "Die neuste Rechnung wird an {email} verschickt."
 
 #: pretix/plugins/checkinlists/apps.py:47
 msgid "Check-in list exporter"
@@ -28226,17 +28185,15 @@ msgstr "Jeden, der ein Ticket bestellt hat"
 
 #: pretix/plugins/sendmail/models.py:223
 msgid "Everyone"
-msgstr ""
+msgstr "Alle"
 
 #: pretix/plugins/sendmail/models.py:224
-#, fuzzy
-#| msgid "Send to customers not checked in"
 msgid "Anyone who is or was checked in"
-msgstr "An Kunden ohne Check-in schicken"
+msgstr "Alle, die eingecheckt sind oder waren"
 
 #: pretix/plugins/sendmail/models.py:225
 msgid "Anyone who never checked in before"
-msgstr ""
+msgstr "Alle, die noch nie eingecheckt waren"
 
 #: pretix/plugins/sendmail/models.py:235
 msgid "Limit products"
@@ -28247,10 +28204,8 @@ msgid "Restrict to orders with status"
 msgstr "Auf Bestellungen mit Status einschränken"
 
 #: pretix/plugins/sendmail/models.py:243
-#, fuzzy
-#| msgid "Restrict to orders with status"
 msgid "Restrict to check-in status"
-msgstr "Auf Bestellungen mit Status einschränken"
+msgstr "Auf Check-in-Status einschränken"
 
 #: pretix/plugins/sendmail/models.py:257
 msgid "Send date"
