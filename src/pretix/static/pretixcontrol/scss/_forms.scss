@@ -788,12 +788,32 @@ table td > .checkbox input[type="checkbox"] {
   padding-bottom: 5px;
 }
 
-
 .batch-select-label {
   display: block;
   width: 100%;
   height: 1.5em;
   cursor: pointer;
+  margin: 0;
+}
+
+.dropdown-menu > li > button.btn {
+  display: block;
+  padding: 3px 20px;
+  clear: both;
+  font-weight: 400;
+  line-height: $line-height-base;
+  color: $dropdown-link-color;
+  white-space: nowrap;
+  background: inherit;
+  border: 0;
+  width: 100%;
+  text-align: left;
+
+  &:hover, &:focus {
+    color: $dropdown-link-hover-color;
+    text-decoration: none;
+    background-color: $dropdown-link-hover-bg;
+  }
 }
 
 .bulk-edit-field-group {

@@ -192,7 +192,6 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, CheckInList
 
 
 class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMixin, AsyncPostView):
-    template_name = 'pretixcontrol/organizers/device_bulk_edit.html'
     permission = ('can_change_orders', 'can_checkin_orders')
     context_object_name = 'device'
 

@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
+{% load bootstrap3 %}
 {% block title %}
     {% trans "Deny order" %}
 {% endblock %}
@@ -13,16 +14,7 @@
 
     <form method="post" href="">
         {% csrf_token %}
-        <div class="checkbox">
-            <label>
-                <input type="checkbox" name="send_email" value="on" checked="checked">
-                {% trans "Notify user by e-mail" %}
-            </label>
-        </div>
-        <p>
-            <label>{% trans "Comment (will be sent to the user)" %}</label>
-            <textarea name="comment" class="form-control" rows="5"></textarea>
-        </p>
+        {% bootstrap_form form %}
         <div class="row checkout-button-row">
             <div class="col-md-4">
                 <a class="btn btn-block btn-default btn-lg"
