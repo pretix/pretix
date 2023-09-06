@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-06 08:12+0000\n"
-"PO-Revision-Date: 2023-03-01 08:57+0000\n"
-"Last-Translator: Daniel Lopez <daniellopez2000@outlook.com>\n"
+"PO-Revision-Date: 2023-09-07 03:00+0000\n"
+"Last-Translator: Tuomas Savela <pupp3@icloud.com>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
 "fi/>\n"
 "Language: fi\n"
@@ -17,15 +17,15 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.15.2\n"
+"X-Generator: Weblate 4.18.2\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
-msgstr ""
+msgstr "Englanti"
 
 #: pretix/_base_settings.py:79
 msgid "German"
-msgstr ""
+msgstr "Saksa"
 
 #: pretix/_base_settings.py:80
 msgid "German (informal)"
@@ -29520,12 +29520,12 @@ msgstr ""
 
 #: pretix/presale/views/order.py:864
 msgid "You cannot modify this order"
-msgstr ""
+msgstr "Et voi muokata tätä tilausta"
 
 #: pretix/presale/views/order.py:954 pretix/presale/views/order.py:959
 #: pretix/presale/views/order.py:964
 msgid "You chose an invalid cancellation fee."
-msgstr ""
+msgstr "Valitsemasi peruutusmaksu ei ole validi."
 
 #: pretix/presale/views/order.py:980
 msgid "Canceled by customer"
@@ -29533,27 +29533,26 @@ msgstr "Asiakkaan peruuttama"
 
 #: pretix/presale/views/order.py:991
 msgid "The cancellation has been requested."
-msgstr ""
+msgstr "Peruutusta on pyydetty."
 
 #: pretix/presale/views/order.py:1045
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr ""
+msgstr "Lipun lataamista ei ole (vielä) sallittu tälle tilaukselle."
 
 #: pretix/presale/views/order.py:1054
 msgid "Please click the link we sent you via email to download your tickets."
-msgstr ""
+msgstr "Paina linkkiä jonka lähetimme sähköpostiisi ladataksesi lippusi."
 
 #: pretix/presale/views/order.py:1535
 #, python-brace-format
 msgid ""
 "The order has been changed. You can now proceed by paying the open amount of "
 "{amount}."
-msgstr ""
+msgstr "Tilaus on muutettu. Voit nyt jatkaa maksamalla avoimen summan {amount}."
 
 #: pretix/presale/views/order.py:1547
-#, fuzzy
 msgid "You did not make any changes."
-msgstr "Hakusi ei vastannut yhtäkään kuponkia."
+msgstr "Et tehnyt yhtään muutosta."
 
 #: pretix/presale/views/order.py:1571
 msgid "You may not change your order in a way that reduces the total price."
