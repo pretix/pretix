@@ -1294,7 +1294,11 @@ def send_expiry_warnings(sender, **kwargs):
     ).only('pk', 'event_id', 'expires').order_by('event_id'):
 
         lp = o.payments.last()
-        if lp and lp.payment_provider.prevent_reminder_mail(o, lp):
+        if (
+                lp and
+                lp.state in [OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING] and
+                lp.payment_provider.prevent_reminder_mail(o, lp)
+        ):
             continue
 
         if event_id != o.event_id:
