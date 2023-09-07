@@ -687,15 +687,51 @@ class PaymentReminderTests(TestCase):
     def test_prevent_reminder_mail(self):
         self.event.settings.mail_days_order_expire_warning = 12
         pprov = list(self.event.get_payment_providers().keys())[0]
+        for state in [
+            OrderPayment.PAYMENT_STATE_PENDING,
+            OrderPayment.PAYMENT_STATE_CREATED,
+        ]:
+            payment = self.order.payments.create(
+                state=state,
+                amount=self.order.total,
+                provider=pprov
+            )
+            payment.payment_provider.settings.set('_prevent_reminder_mail', True)
+            payment.save()
+            send_expiry_warnings(sender=self.event)
+            assert len(djmail.outbox) == 0
+
+    @classscope(attr='o')
+    def test_prevent_reminder_mail_failed_state(self):
+        self.event.settings.mail_days_order_expire_warning = 12
+        pprov = list(self.event.get_payment_providers().keys())[0]
         payment = self.order.payments.create(
-            state=OrderPayment.PAYMENT_STATE_PENDING,
+            state=OrderPayment.PAYMENT_STATE_CREATED,
             amount=self.order.total,
             provider=pprov
         )
         payment.payment_provider.settings.set('_prevent_reminder_mail', True)
         payment.save()
+        payment.fail()
+        djmail.outbox = []
         send_expiry_warnings(sender=self.event)
-        assert len(djmail.outbox) == 0
+        assert len(djmail.outbox) == 1
+
+    @classscope(attr='o')
+    def test_prevent_reminder_mail_confirmed_but_not_all_paid(self):
+        self.event.settings.mail_days_order_expire_warning = 12
+        pprov = list(self.event.get_payment_providers().keys())[0]
+        payment = self.order.payments.create(
+            state=OrderPayment.PAYMENT_STATE_CREATED,
+            amount=self.order.total / 2,
+            provider=pprov
+        )
+        payment.payment_provider.settings.set('_prevent_reminder_mail', True)
+        payment.save()
+        payment.confirm()
+        djmail.outbox = []
+        send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 1
 
     @classscope(attr='o')
     def test_paid(self):
