@@ -285,27 +285,31 @@
                         <li>
                             <button type="submit" class="btn"
                                     formaction="{% url "control:event.orders.bulk.approve" organizer=request.organizer.slug event=request.event.slug %}">
-                                <i class="fa fa-thumbs-up fa-fw text-green"></i> {% trans "Approve" %}
+                                <i class="fa fa-thumbs-up fa-fw text-green"></i>
+                                {% trans "Approve" %}
                             </button>
                         </li>
                         <li>
                             <button type="submit" class="btn"
                                     formaction="{% url "control:event.orders.bulk.deny" organizer=request.organizer.slug event=request.event.slug %}">
-                                <i class="fa fa-thumbs-down fa-fw text-danger"></i> {% trans "Deny" %}
+                                <i class="fa fa-thumbs-down fa-fw text-danger"></i>
+                                {% trans "Deny" %}
                             </button>
                         </li>
                         {% if not request.event.settings.payment_term_expire_automatically %}
                             <li>
                                 <button type="submit" class="btn"
                                         formaction="{% url "control:event.orders.bulk.expire" organizer=request.organizer.slug event=request.event.slug %}">
-                                    <i class="fa fa-times fa-fw"></i>{% trans "Mark as expired if overdue" %}
+                                    <i class="fa fa-times fa-fw"></i>
+                                    {% trans "Mark as expired if overdue" %}
                                 </button>
                             </li>
                         {% endif %}
                         <li>
                             <button type="submit" class="btn"
                                     formaction="{% url "control:event.orders.bulk.delete" organizer=request.organizer.slug event=request.event.slug %}">
-                                <i class="fa fa-trash fa-fw text-danger"></i>{% trans "Delete (test mode only)" %}
+                                <i class="fa fa-trash fa-fw text-danger"></i>
+                                {% trans "Delete (test mode only)" %}
                             </button>
                         </li>
                     </ul>
