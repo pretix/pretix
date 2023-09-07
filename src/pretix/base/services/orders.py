@@ -1289,9 +1289,18 @@ def send_expiry_warnings(sender, **kwargs):
     event_id = None
 
     for o in Order.objects.filter(
-        expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING,
-        datetime__lte=now() - timedelta(hours=2), require_approval=False
+            expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING,
+            datetime__lte=now() - timedelta(hours=2), require_approval=False
     ).only('pk', 'event_id', 'expires').order_by('event_id'):
+
+        lp = o.payments.last()
+        if (
+                lp and
+                lp.state in [OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING] and
+                lp.payment_provider.prevent_reminder_mail(o, lp)
+        ):
+            continue
+
         if event_id != o.event_id:
             settings = o.event.settings
             days = cache.get_or_set('{}:{}:setting_mail_days_order_expire_warning'.format('event', o.event_id),
