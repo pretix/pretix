@@ -1144,13 +1144,11 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
 
     def _get_is_business_heuristic(self):
         key = 'checkout_heuristic_is_business:' + str(self.event.pk)
-        cached_result = caches['default'].get(key)
-        if cached_result is None:
-            if caches['default'].add(key, False, timeout=10):  # return False while query is running
+        cached_result = caches['default'].get(key, default=False)
+        if not caches['default'].get(key + ':valid'):
+            if caches['default'].add(key + ':valid', True, timeout=10):  # set valid while query is running
                 QuestionsStep._update_is_business_heuristic.apply_async(args=(self.event.pk,))
-            return False
-        else:
-            return cached_result
+        return cached_result
 
     @staticmethod
     @app.task(base=EventTask)
@@ -1165,7 +1163,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         else:
             is_business = False
         key = 'checkout_heuristic_is_business:' + str(event.pk)
-        caches['default'].set(key, is_business, timeout=12 * 3600)  # 12 hours
+        caches['default'].set(key, is_business, timeout=30 * 24 * 3600)  # store result for 30 days
+        caches['default'].set(key + ':valid', True, timeout=12 * 3600)  # but recalculate after 12 hours
 
 
 class PaymentStep(CartMixin, TemplateFlowStep):
