@@ -1145,9 +1145,8 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     def _get_is_business_heuristic(self):
         key = 'checkout_heuristic_is_business:' + str(self.event.pk)
         cached_result = caches['default'].get(key, default=False)
-        if not caches['default'].get(key + ':valid'):
-            if caches['default'].add(key + ':valid', True, timeout=10):  # set valid while query is running
-                QuestionsStep._update_is_business_heuristic.apply_async(args=(self.event.pk,))
+        if caches['default'].add(key + ':valid', True, timeout=10):  # set valid while query is running
+            QuestionsStep._update_is_business_heuristic.apply_async(args=(self.event.pk,))
         return cached_result
 
     @staticmethod
