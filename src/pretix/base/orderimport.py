@@ -28,6 +28,7 @@ import pycountry
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
+from django.db.models import Q
 from django.utils import formats
 from django.utils.functional import cached_property
 from django.utils.translation import (
@@ -42,8 +43,8 @@ from phonenumbers import SUPPORTED_REGIONS
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import (
-    ItemVariation, OrderPosition, Question, QuestionAnswer, QuestionOption,
-    Seat, SubEvent,
+    Customer, ItemVariation, OrderPosition, Question, QuestionAnswer,
+    QuestionOption, Seat, SubEvent,
 )
 from pretix.base.services.pricing import get_price
 from pretix.base.settings import (
@@ -804,7 +805,7 @@ class QuestionColumn(ImportColumn):
                 return self.q.clean_answer(value)
 
     def assign(self, value, order, position, invoice_address, **kwargs):
-        if value:
+        if value is not None:
             if not hasattr(order, '_answers'):
                 order._answers = []
             if isinstance(value, QuestionOption):
@@ -826,6 +827,28 @@ class QuestionColumn(ImportColumn):
                 a.options.add(*a._options)
 
 
+class CustomerColumn(ImportColumn):
+    identifier = 'customer'
+    verbose_name = gettext_lazy('Customer')
+
+    def clean(self, value, previous_values):
+        if value:
+            try:
+                value = self.event.organizer.customers.get(
+                    Q(identifier=value) | Q(email__iexact=value) | Q(external_identifier=value)
+                )
+            except Customer.MultipleObjectsReturned:
+                value = self.event.organizer.customers.get(
+                    Q(identifier=value)
+                )
+            except Customer.DoesNotExist:
+                raise ValidationError(_('No matching customer was found.'))
+        return value
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        order.customer = value
+
+
 def get_all_columns(event):
     default = []
     if event.has_subevents:
@@ -837,6 +860,10 @@ def get_all_columns(event):
         Variation(event),
         InvoiceAddressCompany(event),
     ]
+    if event.settings.customer_accounts:
+        default += [
+            CustomerColumn(event),
+        ]
     scheme = PERSON_NAME_SCHEMES.get(event.settings.name_scheme)
     for n, l, w in scheme['fields']:
         default.append(InvoiceAddressNamePart(event, n, l))

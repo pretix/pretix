@@ -133,7 +133,12 @@ class EventExportersViewSet(ExportersMixin, viewsets.ViewSet):
     def exporters(self):
         exporters = []
         responses = register_data_exporters.send(self.request.event)
-        for ex in sorted([response(self.request.event, self.request.organizer) for r, response in responses if response], key=lambda ex: str(ex.verbose_name)):
+        raw_exporters = [response(self.request.event, self.request.organizer) for r, response in responses if response]
+        raw_exporters = [
+            ex for ex in raw_exporters
+            if ex.available_for_user(self.request.user if self.request.user and self.request.user.is_authenticated else None)
+        ]
+        for ex in sorted(raw_exporters, key=lambda ex: str(ex.verbose_name)):
             ex._serializer = JobRunSerializer(exporter=ex)
             exporters.append(ex)
         return exporters
@@ -166,7 +171,7 @@ class OrganizerExportersViewSet(ExportersMixin, viewsets.ViewSet):
             if (
                 not isinstance(ex, OrganizerLevelExportMixin) or
                 perm_holder.has_organizer_permission(self.request.organizer, ex.organizer_required_permission, self.request)
-            )
+            ) and ex.available_for_user(self.request.user if self.request.user and self.request.user.is_authenticated else None)
         ]
         for ex in sorted(raw_exporters, key=lambda ex: str(ex.verbose_name)):
             ex._serializer = JobRunSerializer(exporter=ex, events=events)

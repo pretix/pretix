@@ -61,7 +61,7 @@ Backend
              item_formsets, order_search_filter_q, order_search_forms
 
 .. automodule:: pretix.base.signals
-   :members: logentry_display, logentry_object_link, requiredaction_display, timeline_events, orderposition_blocked_display
+   :members: logentry_display, logentry_object_link, requiredaction_display, timeline_events, orderposition_blocked_display, customer_created, customer_signed_in
 
 Vouchers
 """"""""

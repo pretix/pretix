@@ -125,13 +125,13 @@ def test_perform_success(env, factory, monkeypatch):
 
     prov = StripeCC(event)
     req = factory.post('/', {
-        'stripe_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
-        'stripe_last4': '4242',
-        'stripe_brand': 'Visa'
+        'stripe_card_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
+        'stripe_card_last4': '4242',
+        'stripe_card_brand': 'Visa'
     })
     req.session = {}
     prov.checkout_prepare(req, {})
-    assert 'payment_stripe_payment_method_id' in req.session
+    assert 'payment_stripe_card_payment_method_id' in req.session
     payment = order.payments.create(
         provider='stripe_cc', amount=order.total
     )
@@ -158,13 +158,13 @@ def test_perform_success_zero_decimal_currency(env, factory, monkeypatch):
     monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
     req = factory.post('/', {
-        'stripe_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
-        'stripe_last4': '4242',
-        'stripe_brand': 'Visa'
+        'stripe_card_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
+        'stripe_card_last4': '4242',
+        'stripe_card_brand': 'Visa'
     })
     req.session = {}
     prov.checkout_prepare(req, {})
-    assert 'payment_stripe_payment_method_id' in req.session
+    assert 'payment_stripe_card_payment_method_id' in req.session
     payment = order.payments.create(
         provider='stripe_cc', amount=order.total
     )
@@ -183,13 +183,13 @@ def test_perform_card_error(env, factory, monkeypatch):
     monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
     req = factory.post('/', {
-        'stripe_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
-        'stripe_last4': '4242',
-        'stripe_brand': 'Visa'
+        'stripe_card_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
+        'stripe_card_last4': '4242',
+        'stripe_card_brand': 'Visa'
     })
     req.session = {}
     prov.checkout_prepare(req, {})
-    assert 'payment_stripe_payment_method_id' in req.session
+    assert 'payment_stripe_card_payment_method_id' in req.session
     with pytest.raises(PaymentException):
         payment = order.payments.create(
             provider='stripe_cc', amount=order.total
@@ -209,13 +209,13 @@ def test_perform_stripe_error(env, factory, monkeypatch):
     monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
     req = factory.post('/', {
-        'stripe_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
-        'stripe_last4': '4242',
-        'stripe_brand': 'Visa'
+        'stripe_card_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
+        'stripe_card_last4': '4242',
+        'stripe_card_brand': 'Visa'
     })
     req.session = {}
     prov.checkout_prepare(req, {})
-    assert 'payment_stripe_payment_method_id' in req.session
+    assert 'payment_stripe_card_payment_method_id' in req.session
     with pytest.raises(PaymentException):
         payment = order.payments.create(
             provider='stripe_cc', amount=order.total
@@ -244,13 +244,13 @@ def test_perform_failed(env, factory, monkeypatch):
     monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
     req = factory.post('/', {
-        'stripe_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
-        'stripe_last4': '4242',
-        'stripe_brand': 'Visa'
+        'stripe_card_payment_method_id': 'pm_189fTT2eZvKYlo2CvJKzEzeu',
+        'stripe_card_last4': '4242',
+        'stripe_card_brand': 'Visa'
     })
     req.session = {}
     prov.checkout_prepare(req, {})
-    assert 'payment_stripe_payment_method_id' in req.session
+    assert 'payment_stripe_card_payment_method_id' in req.session
     with pytest.raises(PaymentException):
         payment = order.payments.create(
             provider='stripe_cc', amount=order.total

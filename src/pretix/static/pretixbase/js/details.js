@@ -1,6 +1,42 @@
 /*global $ */
 
 setup_collapsible_details = function (el) {
+
+    el.find('details.sneak-peek:not([open])').each(function() {
+        this.open = true;
+        var $elements = $("> :not(summary)", this).show().filter(':not(.sneak-peek-trigger)');
+        var container = this;
+
+        if (Array.prototype.reduce.call($elements, function (h, e) {
+            return h + $(e).outerHeight();
+        }, 0) < 200) {
+            $(".sneak-peek-trigger", this).remove();
+            $(container).removeClass('sneak-peek');
+            container.style.removeProperty('height');
+            return;
+        }
+
+        $elements.attr('aria-hidden', 'true');
+
+        var trigger = $('summary, .sneak-peek-trigger button', container);
+        function onclick(e) {
+            e.preventDefault();
+
+            container.addEventListener('transitionend', function() {
+                $(container).removeClass('sneak-peek');
+                container.style.removeProperty('height');
+            }, {once: true});
+            container.style.height = container.scrollHeight + 'px';
+            $('.sneak-peek-trigger', container).fadeOut(function() {
+                $(this).remove();
+            });
+            $elements.removeAttr('aria-hidden');
+
+            trigger.off('click', onclick);
+        }
+        trigger.on('click', onclick);
+    });
+
     var isOpera = Object.prototype.toString.call(window.opera) == '[object Opera]';
     el.find("details summary").click(function (e) {
         if (this.tagName !== "A" && $(e.target).closest("a").length > 0) {

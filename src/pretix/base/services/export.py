@@ -26,7 +26,7 @@ from typing import Any, Dict, Union
 from celery.exceptions import MaxRetriesExceededError
 from django.conf import settings
 from django.core.files.base import ContentFile
-from django.db import connection, transaction
+from django.db import close_old_connections, connection, transaction
 from django.dispatch import receiver
 from django.utils.timezone import now, override
 from django.utils.translation import gettext
@@ -86,9 +86,12 @@ def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, 
                         gettext('Your export did not contain any data.')
                     )
                 file.filename, file.type, data = d
+
+                close_old_connections()  # This task can run very long, we might need a new DB connection
+
                 f = ContentFile(data)
                 file.file.save(cachedfile_name(file, file.filename), f)
-    return file.pk
+    return str(file.pk)
 
 
 @app.task(base=ProfiledOrganizerUserTask, throws=(ExportError,), bind=True)
@@ -154,9 +157,12 @@ def multiexport(self, organizer: Organizer, user: User, device: int, token: int,
                         gettext('Your export did not contain any data.')
                     )
                 file.filename, file.type, data = d
+
+                close_old_connections()  # This task can run very long, we might need a new DB connection
+
                 f = ContentFile(data)
                 file.file.save(cachedfile_name(file, file.filename), f)
-    return file.pk
+    return str(file.pk)
 
 
 def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, config_url, retry_func, has_permission):
@@ -214,6 +220,11 @@ def _run_scheduled_export(schedule, context: Union[Event, Organizer], exporter, 
                 raise ExportError(
                     gettext('Your exported data exceeded the size limit for scheduled exports.')
                 )
+
+            conn = transaction.get_connection()
+            if not conn.in_atomic_block:  # atomic execution only happens during tests or with celery always_eager on
+                close_old_connections()  # This task can run very long, we might need a new DB connection
+
             f = ContentFile(data)
             file.file.save(cachedfile_name(file, file.filename), f)
         except ExportEmptyError as e:
@@ -290,6 +301,8 @@ def scheduled_organizer_export(self, organizer: Organizer, schedule: int) -> Non
     if isinstance(exporter, OrganizerLevelExportMixin):
         if not schedule.owner.has_organizer_permission(organizer, exporter.organizer_required_permission):
             has_permission = False
+    if exporter and not exporter.available_for_user(schedule.owner):
+        has_permission = False
 
     _run_scheduled_export(
         schedule,

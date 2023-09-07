@@ -549,7 +549,9 @@ class OrderListExporter(MultiSheetListExporter):
             headers.append(_('End date'))
         headers += [
             _('Product'),
+            _('Product ID'),
             _('Variation'),
+            _('Variation ID'),
             _('Price'),
             _('Tax rate'),
             _('Tax rule'),
@@ -656,7 +658,9 @@ class OrderListExporter(MultiSheetListExporter):
                         row.append('')
                 row += [
                     str(op.item),
+                    str(op.item_id),
                     str(op.variation) if op.variation else '',
+                    str(op.variation_id) if op.variation_id else '',
                     op.price,
                     op.tax_rate,
                     str(op.tax_rule) if op.tax_rule else '',
@@ -1147,7 +1151,7 @@ class GiftcardTransactionListExporter(OrganizerLevelExportMixin, ListExporter):
     def iterate_list(self, form_data):
         qs = GiftCardTransaction.objects.filter(
             card__issuer=self.organizer,
-        ).order_by('datetime').select_related('card', 'order', 'order__event')
+        ).order_by('datetime').select_related('card', 'order', 'order__event', 'acceptor')
 
         if form_data.get('date_range'):
             dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['date_range'], self.timezone)
@@ -1163,6 +1167,7 @@ class GiftcardTransactionListExporter(OrganizerLevelExportMixin, ListExporter):
             _('Amount'),
             _('Currency'),
             _('Order'),
+            _('Organizer'),
         ]
         yield headers
 
@@ -1174,6 +1179,7 @@ class GiftcardTransactionListExporter(OrganizerLevelExportMixin, ListExporter):
                 obj.value,
                 obj.card.currency,
                 obj.order.full_code if obj.order else None,
+                str(obj.acceptor or ""),
             ]
             yield row
 

@@ -96,7 +96,7 @@ def control_nav_import(sender, request=None, **kwargs):
                     'active': (url.namespace == 'plugins:sendmail' and url.url_name.startswith('send')),
                 },
                 {
-                    'label': _('Automated emails'),
+                    'label': _('Scheduled emails'),
                     'url': reverse('plugins:sendmail:rule.list', kwargs={
                         'event': request.event.slug,
                         'organizer': request.event.organizer.slug,

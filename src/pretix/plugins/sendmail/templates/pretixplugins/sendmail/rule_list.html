@@ -1,9 +1,9 @@
 {% extends "pretixcontrol/event/base.html" %}
 {% load i18n %}
 {% load static %}
-{% block title %}{% trans "Automated email rules" %}{% endblock %}
+{% block title %}{% trans "Scheduled email rules" %}{% endblock %}
 {% block content %}
-    <h1>{% trans "Automated email rules" %}</h1>
+    <h1>{% trans "Scheduled email rules" %}</h1>
     <p>
         {% blocktrans trimmed %}
             Email rules allow you to automatically send emails to your customers at a specific time before or after
@@ -12,7 +12,7 @@
     </p>
     {% if not request.event.live %}
         <div class="alert alert-warning">
-            {% trans "Automated emails are not sent as long as your ticket shop is offline." %}
+            {% trans "Scheduled emails are not sent as long as your ticket shop is offline." %}
         </div>
     {% endif %}
 

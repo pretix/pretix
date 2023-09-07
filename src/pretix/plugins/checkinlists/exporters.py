@@ -39,7 +39,7 @@ import bleach
 import dateutil.parser
 from django import forms
 from django.db.models import (
-    Case, Exists, Max, OuterRef, Q, Subquery, Value, When,
+    Case, Exists, F, Max, OuterRef, Q, Subquery, Value, When,
 )
 from django.db.models.functions import Coalesce, NullIf
 from django.urls import reverse
@@ -98,6 +98,18 @@ class CheckInListMixin(BaseExporter):
                  forms.BooleanField(
                      label=_('Only tickets requiring special attention'),
                      required=False
+                 )),
+                ('status',
+                 forms.ChoiceField(
+                     label=_('Check-in status'),
+                     choices=(
+                         ('', _('All attendees')),
+                         ('1', _('Checked in')),
+                         ('2', pgettext_lazy('checkin state', 'Present')),
+                         ('3', pgettext_lazy('checkin state', 'Checked in but left')),
+                         ('0', _('Not checked in')),
+                     ),
+                     required=False,
                  )),
                 ('sort',
                  forms.ChoiceField(
@@ -170,6 +182,19 @@ class CheckInListMixin(BaseExporter):
         ).prefetch_related(
             'answers', 'answers__question', 'addon_to__answers', 'addon_to__answers__question'
         ).select_related('order', 'item', 'variation', 'addon_to', 'order__invoice_address', 'voucher', 'seat')
+
+        if form_data.get('status'):
+            s = form_data.get('status')
+            if s == '1':
+                qs = qs.filter(last_checked_in__isnull=False)
+            elif s == '2':
+                qs = qs.filter(pk__in=cl.positions_inside.values_list('pk'))
+            elif s == '3':
+                qs = qs.filter(last_checked_in__isnull=False).filter(
+                    Q(last_checked_out__isnull=False) & Q(last_checked_out__gte=F('last_checked_in'))
+                )
+            elif s == '0':
+                qs = qs.filter(last_checked_in__isnull=True)
 
         if not cl.all_products:
             qs = qs.filter(item__in=cl.limit_products.values_list('id', flat=True))

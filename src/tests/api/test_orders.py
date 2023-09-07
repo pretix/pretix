@@ -140,6 +140,37 @@ def order(event, item, taxrule, question):
 
 
 @pytest.fixture
+def order2(event2, item2):
+    testtime = datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc)
+
+    with mock.patch('django.utils.timezone.now') as mock_now:
+        mock_now.return_value = testtime
+        o = Order.objects.create(
+            code='BAR', event=event2, email='dummy@dummy.test',
+            status=Order.STATUS_PENDING, secret="asd436cvbfd1",
+            datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
+            expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
+            total=23, locale='en'
+        )
+        o.payments.create(
+            provider='banktransfer',
+            state='pending',
+            amount=Decimal('23.00'),
+        )
+        OrderPosition.objects.create(
+            order=o,
+            item=item2,
+            variation=None,
+            price=Decimal("23"),
+            attendee_name_parts={"full_name": "Peter", "_scheme": "full"},
+            secret="asdlfksdgdfgxcbfgdhfg",
+            pseudonymization_id="AC892345",
+            positionid=1,
+        )
+        return o
+
+
+@pytest.fixture
 def clist_autocheckin(event):
     c = event.checkin_lists.create(name="Default", all_products=True, auto_checkin_sales_channels=['web'])
     return c
@@ -228,6 +259,7 @@ TEST_REFUNDS_RES = [
 ]
 TEST_ORDER_RES = {
     "code": "FOO",
+    "event": "dummy",
     "status": "n",
     "testmode": False,
     "secret": "k24fiuwvu8kxz3y1",
@@ -458,6 +490,38 @@ def test_order_detail(token_client, organizer, event, order, item, taxrule, ques
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/?include_canceled_fees=true'.format(organizer.slug, event.slug, order.code))
     assert resp.status_code == 200
     assert len(resp.data['fees']) == 2
+
+
+@pytest.mark.django_db
+def test_organizer_level(token_client, organizer, team, event, event2, order, order2):
+    resp = token_client.get('/api/v1/organizers/{}/orders/'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert len(resp.data['results']) == 2
+
+    resp = token_client.get('/api/v1/organizers/{}/orders/?subevent_after=2020-01-01T00:00:00Z'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert len(resp.data['results']) == 0
+
+    resp = token_client.get('/api/v1/organizers/{}/orders/FOO/'.format(organizer.slug))
+    assert resp.status_code == 200
+
+    resp = token_client.get('/api/v1/organizers/{}/orders/BAR/'.format(organizer.slug))
+    assert resp.status_code == 200
+
+    with scopes_disabled():
+        team.all_events = False
+        team.save()
+        team.limit_events.set([event2])
+
+    resp = token_client.get('/api/v1/organizers/{}/orders/'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert len(resp.data['results']) == 1
+
+    resp = token_client.get('/api/v1/organizers/{}/orders/FOO/'.format(organizer.slug))
+    assert resp.status_code == 404
+
+    resp = token_client.get('/api/v1/organizers/{}/orders/BAR/'.format(organizer.slug))
+    assert resp.status_code == 200
 
 
 @pytest.mark.django_db
@@ -1793,6 +1857,8 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
     ))
     assert resp.status_code == 200
     assert resp.data['positions'][0].get('pdf_data')
+    assert resp.data['positions'][0]['pdf_data']['positionid'] == '1'
+    assert resp.data['positions'][0]['pdf_data']['order'] == order.code
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/{}/'.format(
         organizer.slug, event.slug, order.code
     ))
@@ -1806,6 +1872,8 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
         ))
     assert resp.status_code == 200
     assert resp.data['results'][0]['positions'][0].get('pdf_data')
+    assert resp.data['results'][0]['positions'][0]['pdf_data']['positionid'] == '1'
+    assert resp.data['results'][0]['positions'][0]['pdf_data']['order'] == order.code
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orders/'.format(
         organizer.slug, event.slug
     ))
@@ -1819,6 +1887,8 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
         ))
     assert resp.status_code == 200
     assert resp.data['results'][0].get('pdf_data')
+    assert resp.data['results'][0]['pdf_data']['positionid'] == '1'
+    assert resp.data['results'][0]['pdf_data']['order'] == order.code
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/'.format(
         organizer.slug, event.slug
     ))
@@ -1833,6 +1903,8 @@ def test_pdf_data(token_client, organizer, event, order, django_assert_max_num_q
     ))
     assert resp.status_code == 200
     assert resp.data.get('pdf_data')
+    assert resp.data['pdf_data']['positionid'] == '1'
+    assert resp.data['pdf_data']['order'] == order.code
     resp = token_client.get('/api/v1/organizers/{}/events/{}/orderpositions/{}/'.format(
         organizer.slug, event.slug, posid
     ))

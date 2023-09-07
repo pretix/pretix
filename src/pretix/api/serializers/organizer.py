@@ -36,9 +36,9 @@ from pretix.api.serializers.settings import SettingsSerializer
 from pretix.base.auth import get_auth_backends
 from pretix.base.i18n import get_language_without_region
 from pretix.base.models import (
-    Customer, Device, GiftCard, GiftCardTransaction, Membership,
-    MembershipType, OrderPosition, Organizer, ReusableMedium, SeatingPlan,
-    Team, TeamAPIToken, TeamInvite, User,
+    Customer, Device, GiftCard, GiftCardAcceptance, GiftCardTransaction,
+    Membership, MembershipType, OrderPosition, Organizer, ReusableMedium,
+    SeatingPlan, Team, TeamAPIToken, TeamInvite, User,
 )
 from pretix.base.models.seating import SeatingPlanLayoutValidator
 from pretix.base.services.mail import SendMailException, mail
@@ -93,6 +93,14 @@ class CustomerSerializer(I18nAwareModelSerializer):
         if data.get('name_parts') and '_scheme' not in data.get('name_parts'):
             data['name_parts']['_scheme'] = self.context['request'].organizer.settings.name_scheme
         return data
+
+    def validate_email(self, value):
+        qs = Customer.objects.filter(organizer=self.context['organizer'], email__iexact=value)
+        if self.instance and self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise ValidationError(_("An account with this email address is already registered."))
+        return value
 
 
 class CustomerCreateSerializer(CustomerSerializer):
@@ -183,8 +191,11 @@ class GiftCardSerializer(I18nAwareModelSerializer):
             qs = GiftCard.objects.filter(
                 secret=s
             ).filter(
-                Q(issuer=self.context["organizer"]) | Q(
-                    issuer__gift_card_collector_acceptance__collector=self.context["organizer"])
+                Q(issuer=self.context["organizer"]) |
+                Q(issuer__in=GiftCardAcceptance.objects.filter(
+                    acceptor=self.context["organizer"],
+                    active=True,
+                ).values_list('issuer', flat=True))
             )
             if self.instance:
                 qs = qs.exclude(pk=self.instance.pk)
@@ -248,6 +259,8 @@ class DeviceSerializer(serializers.ModelSerializer):
     unique_serial = serializers.CharField(read_only=True)
     hardware_brand = serializers.CharField(read_only=True)
     hardware_model = serializers.CharField(read_only=True)
+    os_name = serializers.CharField(read_only=True)
+    os_version = serializers.CharField(read_only=True)
     software_brand = serializers.CharField(read_only=True)
     software_version = serializers.CharField(read_only=True)
     created = serializers.DateTimeField(read_only=True)
@@ -260,7 +273,7 @@ class DeviceSerializer(serializers.ModelSerializer):
         fields = (
             'device_id', 'unique_serial', 'initialization_token', 'all_events', 'limit_events',
             'revoked', 'name', 'created', 'initialized', 'hardware_brand', 'hardware_model',
-            'software_brand', 'software_version', 'security_profile'
+            'os_name', 'os_version', 'software_brand', 'software_version', 'security_profile'
         )
 
 
@@ -387,6 +400,9 @@ class OrganizerSettingsSerializer(SettingsSerializer):
         'reusable_media_type_nfc_uid',
         'reusable_media_type_nfc_uid_autocreate_giftcard',
         'reusable_media_type_nfc_uid_autocreate_giftcard_currency',
+        'reusable_media_type_nfc_mf0aes',
+        'reusable_media_type_nfc_mf0aes_autocreate_giftcard',
+        'reusable_media_type_nfc_mf0aes_autocreate_giftcard_currency',
     ]
 
     def __init__(self, *args, **kwargs):

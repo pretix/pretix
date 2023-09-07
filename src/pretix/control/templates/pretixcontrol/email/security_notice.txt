@@ -11,6 +11,6 @@ You can review and change your account settings here:
 
 {{ url }}
 
-Best regards,
+Best regards,  
 Your pretix team
 {% endblocktrans %}

@@ -955,7 +955,10 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
         raise OrderError(e.message)
 
     require_approval = any(p.requires_approval(invoice_address=address) for p in positions)
-    fees = _get_fees(positions, payment_requests, address, meta_info, event, require_approval=require_approval)
+    try:
+        fees = _get_fees(positions, payment_requests, address, meta_info, event, require_approval=require_approval)
+    except TaxRule.SaleNotAllowed:
+        raise OrderError(error_messages['country_blocked'])
     total = pending_sum = sum([c.price for c in positions]) + sum([c.value for c in fees])
 
     order = Order(
@@ -986,7 +989,10 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
 
     for fee in fees:
         fee.order = order
-        fee._calculate_tax()
+        try:
+            fee._calculate_tax()
+        except TaxRule.SaleNotAllowed:
+            raise OrderError(error_messages['country_blocked'])
         if fee.tax_rule and not fee.tax_rule.pk:
             fee.tax_rule = None  # TODO: deprecate
         fee.save()
@@ -1288,12 +1294,12 @@ def expire_orders(sender, **kwargs):
         Exists(
             OrderFee.objects.filter(order_id=OuterRef('pk'), fee_type=OrderFee.FEE_TYPE_CANCELLATION)
         )
-    ).select_related('event').order_by('event_id')
+    ).prefetch_related('event').order_by('event_id')
     for o in qs:
         if o.event_id != event_id:
             expire = o.event.settings.get('payment_term_expire_automatically', as_type=bool)
             event_id = o.event_id
-        if expire:
+        if expire and now() >= o.payment_term_expire_date:
             mark_order_expired(o)
 
 
@@ -2494,6 +2500,11 @@ class OrderChangeManager:
             split_order.status = Order.STATUS_PAID
         else:
             split_order.status = Order.STATUS_PENDING
+            if self.order.status == Order.STATUS_PAID:
+                split_order.set_expires(
+                    now(),
+                    list(set(p.subevent_id for p in split_positions))
+                )
         split_order.save()
 
         if offset_amount > Decimal('0.00'):

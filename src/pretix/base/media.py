@@ -49,6 +49,9 @@ class BaseMediaType:
     def handle_unknown(self, organizer, identifier, user, auth):
         pass
 
+    def handle_new(self, organizer, medium, user, auth):
+        pass
+
     def __str__(self):
         return str(self.verbose_name)
 
@@ -108,9 +111,43 @@ class NfcUidMediaType(BaseMediaType):
                 return m
 
 
+class NfcMf0aesMediaType(BaseMediaType):
+    identifier = 'nfc_mf0aes'
+    verbose_name = 'NFC Mifare Ultralight AES'
+    medium_created_by_server = False
+    supports_giftcard = True
+    supports_orderposition = False
+
+    def handle_new(self, organizer, medium, user, auth):
+        from pretix.base.models import GiftCard
+
+        if organizer.settings.get(f'reusable_media_type_{self.identifier}_autocreate_giftcard', as_type=bool):
+            with transaction.atomic():
+                gc = GiftCard.objects.create(
+                    issuer=organizer,
+                    expires=organizer.default_gift_card_expiry,
+                    currency=organizer.settings.get(f'reusable_media_type_{self.identifier}_autocreate_giftcard_currency'),
+                )
+                medium.linked_giftcard = gc
+                medium.save()
+                medium.log_action(
+                    'pretix.reusable_medium.linked_giftcard.changed',
+                    user=user, auth=auth,
+                    data={
+                        'linked_giftcard': gc.pk
+                    }
+                )
+                gc.log_action(
+                    'pretix.giftcards.created',
+                    user=user, auth=auth,
+                )
+                return medium
+
+
 MEDIA_TYPES = {
     m.identifier: m for m in [
         BarcodePlainMediaType(),
         NfcUidMediaType(),
+        NfcMf0aesMediaType(),
     ]
 }

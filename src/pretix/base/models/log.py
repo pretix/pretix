@@ -88,9 +88,7 @@ class LogEntry(models.Model):
 
     class Meta:
         ordering = ('-datetime', '-id')
-        index_together = [
-            ['datetime', 'id']
-        ]
+        indexes = [models.Index(fields=["datetime", "id"])]
 
     def display(self):
         from ..signals import logentry_display

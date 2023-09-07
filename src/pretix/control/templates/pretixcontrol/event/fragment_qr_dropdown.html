@@ -1,0 +1,27 @@
+{% load i18n %}
+<ul class="dropdown-menu dropdown-menu-right">
+    <li>
+        <a href="{% url "control:event.qrcode" event=request.event.slug organizer=request.organizer.slug filetype="png" %}{% if url %}?url={{ url|urlencode }}{% endif %}"
+           target="_blank" download>
+            {% blocktrans with filetype="PNG" %}Download QR code as {{ filetype }} image{% endblocktrans %}
+        </a>
+    </li>
+    <li>
+        <a href="{% url "control:event.qrcode" event=request.event.slug organizer=request.organizer.slug filetype="svg" %}{% if url %}?url={{ url|urlencode }}{% endif %}"
+           target="_blank" download>
+            {% blocktrans with filetype="SVG" %}Download QR code as {{ filetype }} image{% endblocktrans %}
+        </a>
+    </li>
+    <li>
+        <a href="{% url "control:event.qrcode" event=request.event.slug organizer=request.organizer.slug filetype="jpeg" %}{% if url %}?url={{ url|urlencode }}{% endif %}"
+           target="_blank" download>
+            {% blocktrans with filetype="JPG" %}Download QR code as {{ filetype }} image{% endblocktrans %}
+        </a>
+    </li>
+    <li>
+        <a href="{% url "control:event.qrcode" event=request.event.slug organizer=request.organizer.slug filetype="gif" %}{% if url %}?url={{ url|urlencode }}{% endif %}"
+           target="_blank" download>
+            {% blocktrans with filetype="GIF" %}Download QR code as {{ filetype }} image{% endblocktrans %}
+        </a>
+    </li>
+</ul>

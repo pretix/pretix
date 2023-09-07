@@ -140,7 +140,7 @@ class BaseExporter:
         """
         return {}
 
-    def render(self, form_data: dict) -> Tuple[str, str, bytes]:
+    def render(self, form_data: dict) -> Tuple[str, str, Optional[bytes]]:
         """
         Render the exported file and return a tuple consisting of a filename, a file type
         and file content.
@@ -156,6 +156,13 @@ class BaseExporter:
         tasks.
         """
         raise NotImplementedError()  # NOQA
+
+    def available_for_user(self, user) -> bool:
+        """
+        Allows to do additional checks whether an exporter is available based on the user who calls it. Note that
+        ``user`` may be ``None`` e.g. during API usage.
+        """
+        return True
 
 
 class OrganizerLevelExportMixin:

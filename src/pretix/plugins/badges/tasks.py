@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+import tempfile
 from typing import List
 
 from django.core.files.base import ContentFile
@@ -41,7 +42,10 @@ logger = logging.getLogger(__name__)
 def badges_create_pdf(event: Event, fileid: int, positions: List[int]) -> int:
     file = CachedFile.objects.get(id=fileid)
 
-    pdfcontent = render_pdf(event, OrderPosition.objects.filter(id__in=positions), opt=OPTIONS['one'])
-    file.file.save(cachedfile_name(file, file.filename), ContentFile(pdfcontent.read()))
-    file.save()
+    with tempfile.TemporaryFile() as tmp_file:
+        render_pdf(event, OrderPosition.objects.filter(id__in=positions), opt=OPTIONS['one'],
+                   output_file=tmp_file)
+        tmp_file.seek(0)
+        file.file.save(cachedfile_name(file, file.filename), ContentFile(tmp_file.read()))
+        file.save()
     return file.pk

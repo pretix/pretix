@@ -1,7 +1,0 @@
-{% load i18n %}{% load l10n %}{% load money %}{% blocktrans with bank=details|safe total=amount|money:event.currency %}
-Please transfer the full amount to the following bank account.
-
-    Reference: {{ code }}
-    Amount: {{ total }}
-{{ bank }}
-{% endblocktrans %}

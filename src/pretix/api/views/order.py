@@ -44,6 +44,7 @@ from rest_framework.exceptions import (
     APIException, NotFound, PermissionDenied, ValidationError,
 )
 from rest_framework.mixins import CreateModelMixin
+from rest_framework.permissions import SAFE_METHODS
 from rest_framework.response import Response
 
 from pretix.api.models import OAuthAccessToken
@@ -115,12 +116,16 @@ with scopes_disabled():
 
         @scopes_disabled()
         def subevent_after_qs(self, qs, name, value):
+            if getattr(self.request, 'event', None):
+                subevents = self.request.event.subevents
+            else:
+                subevents = SubEvent.objects.filter(event__organizer=self.request.organizer)
+
             qs = qs.filter(
                 pk__in=Subquery(
                     OrderPosition.all.filter(
-                        subevent_id__in=SubEvent.objects.filter(
+                        subevent_id__in=subevents.filter(
                             Q(date_to__gt=value) | Q(date_from__gt=value, date_to__isnull=True),
-                            event=self.request.event
                         ).values_list('id'),
                     ).values_list('order_id')
                 )
@@ -128,12 +133,16 @@ with scopes_disabled():
             return qs
 
         def subevent_before_qs(self, qs, name, value):
+            if getattr(self.request, 'event', None):
+                subevents = self.request.event.subevents
+            else:
+                subevents = SubEvent.objects.filter(event__organizer=self.request.organizer)
+
             qs = qs.filter(
                 pk__in=Subquery(
                     OrderPosition.all.filter(
-                        subevent_id__in=SubEvent.objects.filter(
+                        subevent_id__in=subevents.filter(
                             Q(date_from__lt=value),
-                            event=self.request.event
                         ).values_list('id'),
                     ).values_list('order_id')
                 )
@@ -185,7 +194,7 @@ with scopes_disabled():
             )
 
 
-class OrderViewSet(viewsets.ModelViewSet):
+class OrderViewSetMixin:
     serializer_class = OrderSerializer
     queryset = Order.objects.none()
     filter_backends = (DjangoFilterBackend, TotalOrderingFilter)
@@ -193,19 +202,12 @@ class OrderViewSet(viewsets.ModelViewSet):
     ordering_fields = ('datetime', 'code', 'status', 'last_modified')
     filterset_class = OrderFilter
     lookup_field = 'code'
-    permission = 'can_view_orders'
-    write_permission = 'can_change_orders'
 
-    def get_serializer_context(self):
-        ctx = super().get_serializer_context()
-        ctx['event'] = self.request.event
-        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
-        ctx['exclude'] = self.request.query_params.getlist('exclude')
-        ctx['include'] = self.request.query_params.getlist('include')
-        return ctx
+    def get_base_queryset(self):
+        raise NotImplementedError()
 
     def get_queryset(self):
-        qs = self.request.event.orders
+        qs = self.get_base_queryset()
         if 'fees' not in self.request.GET.getlist('exclude'):
             if self.request.query_params.get('include_canceled_fees', 'false') == 'true':
                 fqs = OrderFee.all
@@ -227,11 +229,12 @@ class OrderViewSet(viewsets.ModelViewSet):
             opq = OrderPosition.all
         else:
             opq = OrderPosition.objects
-        if request.query_params.get('pdf_data', 'false') == 'true':
+        if request.query_params.get('pdf_data', 'false') == 'true' and getattr(request, 'event', None):
             prefetch_related_objects([request.organizer], 'meta_properties')
             prefetch_related_objects(
                 [request.event],
-                Prefetch('meta_values', queryset=EventMetaValue.objects.select_related('property'), to_attr='meta_values_cached'),
+                Prefetch('meta_values', queryset=EventMetaValue.objects.select_related('property'),
+                         to_attr='meta_values_cached'),
                 'questions',
                 'item_meta_properties',
             )
@@ -266,13 +269,12 @@ class OrderViewSet(viewsets.ModelViewSet):
                 )
             )
 
-    def _get_output_provider(self, identifier):
-        responses = register_ticket_outputs.send(self.request.event)
-        for receiver, response in responses:
-            prov = response(self.request.event)
-            if prov.identifier == identifier:
-                return prov
-        raise NotFound('Unknown output provider.')
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['exclude'] = self.request.query_params.getlist('exclude')
+        ctx['include'] = self.request.query_params.getlist('include')
+        ctx['pdf_data'] = False
+        return ctx
 
     @scopes_disabled()  # we are sure enough that get_queryset() is correct, so we save some perforamnce
     def list(self, request, **kwargs):
@@ -288,6 +290,45 @@ class OrderViewSet(viewsets.ModelViewSet):
 
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, headers={'X-Page-Generated': date})
+
+
+class OrganizerOrderViewSet(OrderViewSetMixin, viewsets.ReadOnlyModelViewSet):
+    def get_base_queryset(self):
+        perm = "can_view_orders" if self.request.method in SAFE_METHODS else "can_change_orders"
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            return Order.objects.filter(
+                event__organizer=self.request.organizer,
+                event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
+            )
+        elif self.request.user.is_authenticated:
+            return Order.objects.filter(
+                event__organizer=self.request.organizer,
+                event__in=self.request.user.get_events_with_permission(perm, request=self.request)
+            )
+        else:
+            raise PermissionDenied()
+
+
+class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
+    permission = 'can_view_orders'
+    write_permission = 'can_change_orders'
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        ctx['pdf_data'] = self.request.query_params.get('pdf_data', 'false') == 'true'
+        return ctx
+
+    def get_base_queryset(self):
+        return self.request.event.orders
+
+    def _get_output_provider(self, identifier):
+        responses = register_ticket_outputs.send(self.request.event)
+        for receiver, response in responses:
+            prov = response(self.request.event)
+            if prov.identifier == identifier:
+                return prov
+        raise NotFound('Unknown output provider.')
 
     @action(detail=True, url_name='download', url_path='download/(?P<output>[^/]+)')
     def download(self, request, output, **kwargs):
@@ -945,6 +986,7 @@ with scopes_disabled():
                 | Q(addon_to__attendee_email__icontains=value)
                 | Q(order__code__istartswith=value)
                 | Q(order__invoice_address__name_cached__icontains=value)
+                | Q(order__invoice_address__company__icontains=value)
                 | Q(order__email__icontains=value)
                 | Q(pk__in=matching_media)
             )
@@ -1781,11 +1823,24 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     write_permission = 'can_change_orders'
 
     def get_queryset(self):
-        return self.request.event.invoices.prefetch_related('lines').select_related('order', 'refers').annotate(
+        perm = "can_view_orders" if self.request.method in SAFE_METHODS else "can_change_orders"
+        if getattr(self.request, 'event', None):
+            qs = self.request.event.invoices
+        elif isinstance(self.request.auth, (TeamAPIToken, Device)):
+            qs = Invoice.objects.filter(
+                event__organizer=self.request.organizer,
+                event__in=self.request.auth.get_events_with_permission(perm, request=self.request)
+            )
+        elif self.request.user.is_authenticated:
+            qs = Invoice.objects.filter(
+                event__organizer=self.request.organizer,
+                event__in=self.request.user.get_events_with_permission(perm, request=self.request)
+            )
+        return qs.prefetch_related('lines').select_related('order', 'refers').annotate(
             nr=Concat('prefix', 'invoice_no')
         )
 
-    @action(detail=True, )
+    @action(detail=True)
     def download(self, request, **kwargs):
         invoice = self.get_object()
 
@@ -1804,7 +1859,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         return resp
 
     @action(detail=True, methods=['POST'])
-    def regenerate(self, request, **kwarts):
+    def regenerate(self, request, **kwargs):
         inv = self.get_object()
         if inv.canceled:
             raise ValidationError('The invoice has already been canceled.')
@@ -1814,7 +1869,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             raise PermissionDenied('The invoice file is no longer stored on the server.')
         elif inv.sent_to_organizer:
             raise PermissionDenied('The invoice file has already been exported.')
-        elif now().astimezone(self.request.event.timezone).date() - inv.date > datetime.timedelta(days=1):
+        elif now().astimezone(inv.event.timezone).date() - inv.date > datetime.timedelta(days=1):
             raise PermissionDenied('The invoice file is too old to be regenerated.')
         else:
             inv = regenerate_invoice(inv)
@@ -1829,7 +1884,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             return Response(status=204)
 
     @action(detail=True, methods=['POST'])
-    def reissue(self, request, **kwarts):
+    def reissue(self, request, **kwargs):
         inv = self.get_object()
         if inv.canceled:
             raise ValidationError('The invoice has already been canceled.')

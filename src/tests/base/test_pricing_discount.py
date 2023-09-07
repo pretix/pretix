@@ -1012,3 +1012,304 @@ def test_available_until(event, item):
     )
 
     assert sorted([p for p, d in apply_discounts(event, 'web', positions)]) == [Decimal('50.00'), Decimal('50.00')]
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_discount_other_products_min_count(event, item, item2):
+    # "For every 5 item2, one item1 gets in for free"
+    d1 = Discount(
+        event=event,
+        condition_min_count=5,
+        condition_all_products=False,
+        benefit_discount_matching_percent=100,
+        benefit_only_apply_to_cheapest_n_matches=1,
+        benefit_same_products=False,
+    )
+    d1.save()
+    d1.condition_limit_products.add(item2)
+    d1.benefit_limit_products.add(item)
+
+    positions = (
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('90.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('90.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('90.00'), False, False, Decimal('0.00')),
+    )
+    expected = (
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('90.00'),
+        Decimal('0.00'),
+        Decimal('0.00'),
+    )
+
+    new_prices = [p for p, d in apply_discounts(event, 'web', positions)]
+    assert sorted(new_prices) == sorted(expected)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_discount_other_products_min_count_no_addon(event, item, item2):
+    # "For every 2 item2, one item1 gets in for free, but no addons"
+    d1 = Discount(
+        event=event,
+        condition_min_count=2,
+        condition_all_products=False,
+        benefit_discount_matching_percent=100,
+        benefit_only_apply_to_cheapest_n_matches=1,
+        benefit_same_products=False,
+        benefit_apply_to_addons=False,
+    )
+    d1.save()
+    d1.condition_limit_products.add(item2)
+    d1.benefit_limit_products.add(item)
+
+    positions = (
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('90.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('90.00'), True, False, Decimal('0.00')),
+    )
+    expected = (
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('90.00'),
+        Decimal('0.00'),
+    )
+
+    new_prices = [p for p, d in apply_discounts(event, 'web', positions)]
+    assert sorted(new_prices) == sorted(expected)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_discount_other_products_min_count_no_voucher(event, item, item2):
+    # "For every 2 item2, one item1 gets in for free, but no discount on already discounted"
+    d1 = Discount(
+        event=event,
+        condition_min_count=2,
+        condition_all_products=False,
+        benefit_discount_matching_percent=100,
+        benefit_only_apply_to_cheapest_n_matches=1,
+        benefit_same_products=False,
+        benefit_ignore_voucher_discounted=True,
+    )
+    d1.save()
+    d1.condition_limit_products.add(item2)
+    d1.benefit_limit_products.add(item)
+
+    positions = (
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('40.00'), False, False, Decimal('50.00')),
+        (item.pk, None, Decimal('40.00'), False, False, Decimal('50.00')),
+        (item.pk, None, Decimal('90.00'), False, False, Decimal('0.00')),
+    )
+    expected = (
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('40.00'),
+        Decimal('40.00'),
+        Decimal('0.00'),
+    )
+
+    new_prices = [p for p, d in apply_discounts(event, 'web', positions)]
+    assert sorted(new_prices) == sorted(expected)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_discount_subgroup_cheapest_n_min_count(event, item, item2):
+    # "For every 4 products, you get one free, but only of type item"
+    d1 = Discount(
+        event=event,
+        condition_min_count=4,
+        condition_all_products=False,
+        benefit_discount_matching_percent=100,
+        benefit_only_apply_to_cheapest_n_matches=1,
+        benefit_same_products=False,
+    )
+    d1.save()
+    d1.condition_limit_products.add(item)
+    d1.condition_limit_products.add(item2)
+    d1.benefit_limit_products.add(item)
+
+    positions = (
+        # 11 items of item2, which contribute to the total count of 15, but do not get reduced
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
+        # 4 items of item, of which 3 of the cheapest will be reduced
+        (item.pk, None, Decimal('110.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('110.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('90.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('90.00'), False, False, Decimal('0.00')),
+    )
+    expected = (
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('100.00'),
+        Decimal('110.00'),
+        Decimal('0.00'),
+        Decimal('0.00'),
+        Decimal('0.00'),
+    )
+
+    new_prices = [p for p, d in apply_discounts(event, 'web', positions)]
+    assert sorted(new_prices) == sorted(expected)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_discount_other_products_min_value(event, item, item2):
+    # "If you buy item1 for at least €99, you get all item2 for 20% off"
+    d1 = Discount(
+        event=event,
+        condition_min_value=99,
+        condition_all_products=False,
+        benefit_discount_matching_percent=20,
+        benefit_same_products=False,
+    )
+    d1.save()
+    d1.condition_limit_products.add(item)
+    d1.benefit_limit_products.add(item2)
+
+    positions = (
+        (item.pk, None, Decimal('50.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('23.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('23.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('23.00'), False, False, Decimal('0.00')),
+    )
+    expected = (
+        Decimal('50.00'),
+        Decimal('23.00'),
+        Decimal('23.00'),
+        Decimal('23.00'),
+    )
+
+    new_prices = [p for p, d in apply_discounts(event, 'web', positions)]
+    assert sorted(new_prices) == sorted(expected)
+
+    positions = (
+        (item.pk, None, Decimal('50.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('50.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('23.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('23.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('23.00'), False, False, Decimal('0.00')),
+    )
+    expected = (
+        Decimal('50.00'),
+        Decimal('50.00'),
+        Decimal('18.40'),
+        Decimal('18.40'),
+        Decimal('18.40'),
+    )
+
+    new_prices = [p for p, d in apply_discounts(event, 'web', positions)]
+    assert sorted(new_prices) == sorted(expected)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_multiple_discounts_with_benefit_condition_overlap(event, item, item2):
+    # "For every 5 item2, you get one item1 for 20 % off." + "For every two item1, you get one 10% off."
+    d1 = Discount(
+        event=event,
+        condition_min_count=5,
+        condition_all_products=False,
+        benefit_only_apply_to_cheapest_n_matches=1,
+        benefit_discount_matching_percent=20,
+        benefit_same_products=False,
+        position=1,
+    )
+    d1.save()
+    d1.condition_limit_products.add(item2)
+    d1.benefit_limit_products.add(item)
+
+    d2 = Discount(
+        event=event,
+        condition_min_count=2,
+        condition_all_products=False,
+        benefit_only_apply_to_cheapest_n_matches=1,
+        benefit_discount_matching_percent=10,
+        benefit_same_products=True,
+        position=2,
+    )
+    d2.save()
+    d2.condition_limit_products.add(item)
+
+    positions = (
+        (item2.pk, None, Decimal('50.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('50.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('50.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('50.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('50.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('50.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('23.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('23.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('23.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('23.00'), False, False, Decimal('0.00')),
+    )
+    expected = (
+        # item2 remains untouched
+        Decimal('50.00'),
+        Decimal('50.00'),
+        Decimal('50.00'),
+        Decimal('50.00'),
+        Decimal('50.00'),
+        Decimal('50.00'),
+        # one item is reduced 20% because we have >5 item2
+        Decimal('18.40'),
+        # one item is reduced 10% because it's part of a group of two
+        Decimal('20.70'),
+        # two remain full price
+        Decimal('23.00'),
+        Decimal('23.00'),
+    )
+
+    new_prices = [p for p, d in apply_discounts(event, 'web', positions)]
+    assert sorted(new_prices) == sorted(expected)

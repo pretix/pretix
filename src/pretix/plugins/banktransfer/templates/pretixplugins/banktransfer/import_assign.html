@@ -11,10 +11,10 @@
             <span class="icon icon-upload"></span> {% trans "Continue" %}
         </button>
         <div class="flipped-scroll-wrapper clearfix">
-            <table class="table table-condensed flipped-scroll-inner">
+            <table class="table table-condensed table-th-sticky-horizontal flipped-scroll-inner">
                 <thead>
                 <tr>
-                    <th>{% trans "Date" %}</th>
+                    <th scope="row">{% trans "Date" %}</th>
                     {% for col in rows.0 %}
                         <th>
                             <input type="radio" name="date" value="{{ forloop.counter0 }}"/>
@@ -22,7 +22,7 @@
                     {% endfor %}
                 </tr>
                 <tr>
-                    <th>{% trans "Amount" %}</th>
+                    <th scope="row">{% trans "Amount" %}</th>
                     {% for col in rows.0 %}
                         <th>
                             <input type="radio" name="amount" value="{{ forloop.counter0 }}" required="required"/>
@@ -30,7 +30,7 @@
                     {% endfor %}
                 </tr>
                 <tr>
-                    <th>{% trans "Reference" %}</th>
+                    <th scope="row">{% trans "Reference" %}</th>
                     {% for col in rows.0 %}
                         <th>
                             <input type="checkbox" name="reference" value="{{ forloop.counter0 }}"/>
@@ -38,7 +38,7 @@
                     {% endfor %}
                 </tr>
                 <tr>
-                    <th>{% trans "Payer" %}</th>
+                    <th scope="row">{% trans "Payer" %}</th>
                     {% for col in rows.0 %}
                         <th>
                             <input type="checkbox" name="payer" value="{{ forloop.counter0 }}"/>
@@ -46,7 +46,7 @@
                     {% endfor %}
                 </tr>
                 <tr>
-                    <th>
+                    <th scope="row">
                         {% trans "IBAN" %}
                         <label for="id_iban_clear">
                             <span class="btn btn-default btn-sm fa fa-close"></span>
@@ -62,7 +62,7 @@
                     {% endfor %}
                 </tr>
                 <tr>
-                    <th>
+                    <th scope="row">
                         {% trans "BIC" %}
                         <label for="id_bic_clear">
                             <span class="btn btn-default btn-sm fa fa-close"></span>

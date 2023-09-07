@@ -121,5 +121,30 @@ class ReusableMedium(LoggedModel):
 
     class Meta:
         unique_together = (("identifier", "type", "organizer"),)
-        index_together = (("identifier", "type", "organizer"), ("updated", "id"))
+        indexes = [
+            models.Index(fields=("identifier", "type", "organizer")),
+            models.Index(fields=("updated", "id")),
+        ]
         ordering = "identifier", "type", "organizer"
+
+
+class MediumKeySet(models.Model):
+    organizer = models.ForeignKey('Organizer', on_delete=models.CASCADE, related_name='medium_key_sets')
+    public_id = models.BigIntegerField(
+        unique=True,
+    )
+    media_type = models.CharField(max_length=100)
+    active = models.BooleanField(default=True)
+    uid_key = models.BinaryField()
+    diversification_key = models.BinaryField()
+
+    objects = ScopedManager(organizer='organizer')
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["organizer", "media_type"],
+                condition=Q(active=True),
+                name="keyset_unique_active",
+            ),
+        ]

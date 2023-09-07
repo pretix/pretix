@@ -4,6 +4,6 @@ you requested a new password. Please go to the following page to reset your pass
 
 {{ url }}
 
-Best regards,
+Best regards,  
 Your pretix team
 {% endblocktrans %}

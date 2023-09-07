@@ -5,9 +5,9 @@
     <div class="panel panel-default items">
         <div class="panel-heading">
             <h3 class="panel-title">
-                <strong>{{ position.item }}</strong>
+                <strong>{{ position.item.name }}</strong>
                 {% if position.variation %}
-                    – {{ position.variation }}
+                    – {{ position.variation.value }}
                 {% endif %}
             </h3>
         </div>

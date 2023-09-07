@@ -223,6 +223,7 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('POST', 'api-v1:checkinrpc.redeem'),
         ('GET', 'api-v1:checkinrpc.search'),
         ('POST', 'api-v1:reusablemedium-lookup'),
+        ('POST', 'api-v1:reusablemedium-list'),
     )
 
 

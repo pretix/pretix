@@ -20,6 +20,7 @@ The order resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 code                                  string                     Order code
+event                                 string                     The slug of the parent event
 status                                string                     Order status, one of:
 
                                                                  * ``n`` – pending
@@ -129,6 +130,10 @@ last_modified                         datetime                   Last modificati
 .. versionchanged:: 4.16
 
    The ``valid_if_pending`` attribute has been added.
+
+.. versionchanged:: 2023.8
+
+   The ``event`` attribute has been added. The organizer-level endpoint has been added.
 
 
 .. _order-position-resource:
@@ -289,6 +294,7 @@ List of all orders
         "results": [
           {
             "code": "ABC12",
+            "event": "sampleconf",
             "status": "p",
             "testmode": false,
             "secret": "k24fiuwvu8kxz3y1",
@@ -441,6 +447,48 @@ List of all orders
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
 
+.. http:get:: /api/v1/organizers/(organizer)/orders/
+
+   Returns a list of all orders within all events of a given organizer (with sufficient access permissions).
+
+   Supported query parameters and output format of this endpoint are identical to the list endpoint within an event,
+   with the exception that the ``pdf_data`` parameter is not supported here.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      GET /api/v1/organizers/bigevents/orders/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 200 OK
+      Vary: Accept
+      Content-Type: application/json
+      X-Page-Generated: 2017-12-01T10:00:00Z
+
+      {
+        "count": 1,
+        "next": null,
+        "previous": null,
+        "results": [
+          {
+            "code": "ABC12",
+            "event": "sampleconf",
+            ...
+          }
+        ]
+      }
+
+   :param organizer: The ``slug`` field of the organizer to fetch
+   :statuscode 200: no error
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+
 Fetching individual orders
 --------------------------
 
@@ -466,6 +514,7 @@ Fetching individual orders
 
       {
         "code": "ABC12",
+        "event": "sampleconf",
         "status": "p",
         "testmode": false,
         "secret": "k24fiuwvu8kxz3y1",

@@ -640,7 +640,10 @@ class ItemsTest(ItemFormTest):
         prop = self.event1.item_meta_properties.create(name="Foo")
         self.item2.meta_values.create(property=prop, value="Bar")
 
+        doc = self.get_doc('/control/event/%s/%s/items/add?copy_from=%d' % (self.orga1.slug, self.event1.slug, self.item2.pk))
+        data = extract_form_fields(doc.select("form")[0])
         self.client.post('/control/event/%s/%s/items/add' % (self.orga1.slug, self.event1.slug), {
+            **data,
             'name_0': 'Intermediate',
             'default_price': '23.00',
             'tax_rate': '19.00',

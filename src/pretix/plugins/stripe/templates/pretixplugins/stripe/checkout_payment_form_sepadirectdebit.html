@@ -1,0 +1,67 @@
+{% load i18n %}
+{% load bootstrap3 %}
+
+<div class="form-horizontal stripe-container">
+    <div class="stripe-errors sr-only">
+
+    </div>
+    <noscript>
+        <div class="alert alert-warning">
+            {% trans "For a SEPA Debit payment, please turn on JavaScript." %}
+        </div>
+    </noscript>
+
+    {% if request.session.payment_stripe_sepa_debit_payment_method_id %}
+        <div id="stripe-current-account">
+            <p>{% blocktrans trimmed %}
+                You already entered a bank account that we will use to charge the payment amount.
+            {% endblocktrans %}</p>
+            <dl class="dl-horizontal">
+                <dt>{% trans "Banking Institution" %}</dt>
+                <dd id="stripe_sepa_debit_bank_display">{{ request.session.payment_stripe_sepa_debit_bank }}</dd>
+                <dt>{% trans "Account number" %}</dt>
+                <dd>
+                    **** **** ****
+                    <span id="stripe_sepa_debit_last4_display">{{ request.session.payment_stripe_sepa_debit_last4 }}</span>
+                    <button class="btn btn-xs btn-default" id="stripe_other_account" type="button">
+                        {% trans "Use a different account" %}
+                    </button>
+                </dd>
+            </dl>
+        </div>
+    {% endif %}
+    <div class="stripe-sepa_debit-form">
+        <div class="form-group">
+            <label class="col-md-3 control-label">IBAN</label>
+            <div class="col-md-9">
+                <div class="row equal" id="stripe-sepa_debit-elements">
+                    <div class="col-md-12 vcenter stripe-sepa">
+                        <div id="stripe-sepa" class="form-control">
+                            <span class="fa fa-spinner fa-spin"></span>
+                            <!-- a Stripe Element will be inserted here. -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% bootstrap_form form layout='horizontal' %}
+    </div>
+
+    <p class="help-block">
+        {% blocktrans trimmed with sepa_creditor_name=settings.sepa_creditor_name %}
+            By providing your payment information and confirming this payment, you authorize (A)
+            {{ sepa_creditor_name }} and Stripe, our payment service provider and/or PPRO, its local service provider,
+            to send instructions to your bank to debit your account and (B) your bank to debit your account in
+            accordance with those instructions. As part of your rights, you are entitled to a refund from your bank
+            under the terms and conditions of your agreement with your bank. A refund must be claimed within 8 weeks
+            starting from the date on which your account was debited. Your rights are explained in a statement that you
+            can obtain from your bank. You agree to receive notifications for future debits up to 2 days before they
+            occur.
+        {% endblocktrans %}
+        <input type="hidden" name="stripe_sepa_debit_payment_method_id" value="{{ request.session.payment_stripe_sepa_debit_payment_method_id }}" id="stripe_sepa_debit_payment_method_id"/>
+        <input type="checkbox" name="stripe_sepa_debit_country" value="{{ request.session.payment_stripe_sepa_debit_country }}" id="stripe_sepa_debit_country" class="hidden"/>
+        <input type="hidden" name="stripe_sepa_debit_last4" value="{{ request.session.payment_stripe_sepa_debit_last4 }}" id="stripe_sepa_debit_last4"/>
+        <input type="hidden" name="stripe_sepa_debit_bank" value="{{ request.session.payment_stripe_sepa_debit_bank }}" id="stripe_sepa_debit_bank"/>
+        <input type="hidden" name="stripe_sepa_debit_email" value="{{ email }}" id="stripe_sepa_debit_email"/>
+    </p>
+</div>

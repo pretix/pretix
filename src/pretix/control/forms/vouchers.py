@@ -271,7 +271,7 @@ class VoucherBulkForm(VoucherForm):
         required=False,
         initial=_('Hello,\n\n'
                   'with this email, we\'re sending you one or more vouchers for {event}:\n\n{voucher_list}\n\n'
-                  'You can redeem them here in our ticket shop:\n\n{url}\n\nBest regards,\n\n'
+                  'You can redeem them here in our ticket shop:\n\n{url}\n\nBest regards,  \n'
                   'Your {event} team')
     )
     send_recipients = forms.CharField(
@@ -340,6 +340,9 @@ class VoucherBulkForm(VoucherForm):
 
     def clean_send_recipients(self):
         raw = self.cleaned_data['send_recipients']
+        if self.cleaned_data.get('send', None) is False:
+            # No need to validate addresses if the section was turned off
+            return []
         if not raw:
             return []
         r = raw.split('\n')

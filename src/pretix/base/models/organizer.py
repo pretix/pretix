@@ -40,7 +40,7 @@ from django.conf import settings
 from django.core.mail import get_connection
 from django.core.validators import MinLengthValidator, RegexValidator
 from django.db import models
-from django.db.models import Exists, OuterRef, Q
+from django.db.models import Q
 from django.urls import reverse
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
@@ -157,17 +157,19 @@ class Organizer(LoggedModel):
         return self.cache.get_or_set(
             key='has_gift_cards',
             timeout=15,
-            default=lambda: self.issued_gift_cards.exists() or self.gift_card_issuer_acceptance.exists()
+            default=lambda: self.issued_gift_cards.exists() or self.gift_card_issuer_acceptance.filter(active=True).exists()
         )
 
     @property
     def accepted_gift_cards(self):
         from .giftcards import GiftCard, GiftCardAcceptance
 
-        return GiftCard.objects.annotate(
-            accepted=Exists(GiftCardAcceptance.objects.filter(issuer=OuterRef('issuer'), collector=self))
-        ).filter(
-            Q(issuer=self) | Q(accepted=True)
+        return GiftCard.objects.filter(
+            Q(issuer=self) |
+            Q(issuer__in=GiftCardAcceptance.objects.filter(
+                acceptor=self,
+                active=True,
+            ).values_list('issuer', flat=True))
         )
 
     @property

@@ -259,6 +259,46 @@ DEFAULTS = {
             label=_("Gift card currency"),
         )
     },
+    'reusable_media_type_nfc_mf0aes': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Active"),
+        )
+    },
+    'reusable_media_type_nfc_mf0aes_autocreate_giftcard': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Automatically create a new gift card if a new chip is encoded"),
+        )
+    },
+    'reusable_media_type_nfc_mf0aes_autocreate_giftcard_currency': {
+        'default': 'EUR',
+        'type': str,
+        'form_class': forms.ChoiceField,
+        'serializer_class': serializers.ChoiceField,
+        'serializer_kwargs': dict(
+            choices=[(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES],
+        ),
+        'form_kwargs': dict(
+            choices=[(c.alpha_3, c.alpha_3 + " - " + c.name) for c in settings.CURRENCIES],
+            label=_("Gift card currency"),
+        )
+    },
+    'reusable_media_type_nfc_mf0aes_random_uid': {
+        'default': 'False',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Use UID protection feature of NFC chip"),
+        )
+    },
     'max_items_per_order': {
         'default': '10',
         'type': int,
@@ -893,6 +933,28 @@ DEFAULTS = {
                         "the pool and can be ordered by other people."),
         )
     },
+    'payment_term_expire_delay_days': {
+        'default': '0',
+        'type': int,
+        'form_class': forms.IntegerField,
+        'serializer_class': serializers.IntegerField,
+        'form_kwargs': dict(
+            label=_('Expiration delay'),
+            help_text=_("The order will only actually expire this many days after the expiration date communicated "
+                        "to the customer. If you select \"Only end payment terms on weekdays\" above, this will also "
+                        "be respected. However, this will not delay beyond the \"last date of payments\" "
+                        "configured above, which is always enforced."),
+            # Every order in between the official expiry date and the delayed expiry date has a performance penalty
+            # for the cron job, so we limit this feature to 30 days to prevent arbitrary numbers of orders needing
+            # to be checked.
+            min_value=0,
+            max_value=30,
+        ),
+        'serializer_kwargs': dict(
+            min_value=0,
+            max_value=30,
+        ),
+    },
     'payment_pending_hidden': {
         'default': 'False',
         'type': bool,
@@ -971,10 +1033,10 @@ DEFAULTS = {
             widget=forms.RadioSelect,
             choices=(
                 ('False', _('Do not generate invoices')),
-                ('admin', _('Only manually in admin panel')),
+                ('paid', _('Automatically after payment or when required by payment method')),
+                ('True', _('Automatically before payment for all created orders')),
                 ('user', _('Automatically on user request')),
-                ('True', _('Automatically for all created orders')),
-                ('paid', _('Automatically on payment or when required by payment method')),
+                ('admin', _('Only manually in admin panel')),
             ),
             help_text=_("Invoices will never be automatically generated for free orders.")
         )
@@ -2018,8 +2080,8 @@ to your order for {event}.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_resend_all_links': {
         'type': LazyI18nString,
@@ -2034,8 +2096,8 @@ The list is as follows:
 
 {orders}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_free_attendee': {
         'type': LazyI18nString,
@@ -2050,8 +2112,8 @@ you have been registered for {event} successfully.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_free_attendee': {
         'type': bool,
@@ -2071,8 +2133,8 @@ no payment is required.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_placed_require_approval': {
         'type': LazyI18nString,
@@ -2089,8 +2151,8 @@ be patient and wait for our next email.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_placed': {
         'type': LazyI18nString,
@@ -2108,8 +2170,8 @@ of {total_with_currency}. Please complete your payment before {expire_date}.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_attachment_new_order': {
         'default': None,
@@ -2155,8 +2217,8 @@ a ticket for {event} has been ordered for you.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_changed': {
         'type': LazyI18nString,
@@ -2171,8 +2233,8 @@ your order for {event} has been changed.
 You can view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_paid': {
         'type': LazyI18nString,
@@ -2189,8 +2251,8 @@ we successfully received your payment for {event}. Thank you!
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_paid_attendee': {
         'type': bool,
@@ -2209,8 +2271,8 @@ a ticket for {event} that has been ordered for you is now paid.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_days_order_expire_warning': {
         'form_class': forms.IntegerField,
@@ -2242,8 +2304,8 @@ your payment before {expire_date}.
 You can view the payment information and the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_pending_warning': {
         'type': LazyI18nString,
@@ -2259,8 +2321,8 @@ Please keep in mind that you are required to pay before {expire_date}.
 You can view the payment information and the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_incomplete_payment': {
         'type': LazyI18nString,
@@ -2279,8 +2341,26 @@ missing additional payment of **{pending_sum}**.
 You can view the payment information and the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
+    },
+    'mail_subject_order_payment_failed': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("Payment failed for your order: {code}")),
+    },
+    'mail_text_order_payment_failed': {
+        'type': LazyI18nString,
+        'default': LazyI18nString.from_gettext(gettext_noop("""Hello,
+
+your payment attempt for your order for {event} has failed.
+
+Your order is still valid and you can try to pay again using the same or a different payment method. Please complete your payment before {expire_date}.
+
+You can retry the payment and view the status of your order at
+{url}
+
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_waiting_list': {
         'type': LazyI18nString,
@@ -2312,8 +2392,8 @@ as possible to the next person on the waiting list:
 
 {url_remove}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_canceled': {
         'type': LazyI18nString,
@@ -2330,8 +2410,8 @@ your order {code} for {event} has been canceled.
 You can view the details of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_approved': {
         'type': LazyI18nString,
@@ -2350,8 +2430,8 @@ You can select a payment method and perform the payment here:
 
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_approved_attendee': {
         'type': bool,
@@ -2370,8 +2450,8 @@ we approved a ticket ordered for you for {event}.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_approved_free': {
         'type': LazyI18nString,
@@ -2387,8 +2467,8 @@ at our event. As you only ordered free products, no payment is required.
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_send_order_approved_free_attendee': {
         'type': bool,
@@ -2407,8 +2487,8 @@ we approved a ticket ordered for you for {event}.
 You can view the details and status of your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_order_denied': {
         'type': LazyI18nString,
@@ -2426,8 +2506,8 @@ You can view the details of your order here:
 
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_text_order_custom_mail': {
         'type': LazyI18nString,
@@ -2436,8 +2516,8 @@ Your {event} team"""))
 You can change your order details and view the status of your order at
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_days_download_reminder': {
         'type': int,
@@ -2455,13 +2535,13 @@ Your {event} team"""))
         'type': LazyI18nString,
         'default': LazyI18nString.from_gettext(gettext_noop("""Hello {attendee_name},
 
-    you are registered for {event}.
+you are registered for {event}.
 
-    If you did not do so already, you can download your ticket here:
-    {url}
+If you did not do so already, you can download your ticket here:
+{url}
 
-    Best regards,
-    Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_download_reminder': {
         'type': LazyI18nString,
@@ -2476,8 +2556,8 @@ you bought a ticket for {event}.
 If you did not do so already, you can download your ticket here:
 {url}
 
-Best regards,
-Your {event} team"""))
+Best regards,  
+Your {event} team"""))  # noqa: W291
     },
     'mail_subject_customer_registration': {
         'type': LazyI18nString,
@@ -2497,9 +2577,9 @@ This link is valid for one day.
 
 If you did not sign up yourself, please ignore this email.
 
-Best regards,
+Best regards,  
 
-Your {organizer} team"""))
+Your {organizer} team"""))  # noqa: W291
     },
     'mail_subject_customer_email_change': {
         'type': LazyI18nString,
@@ -2519,9 +2599,9 @@ This link is valid for one day.
 
 If you did not request this, please ignore this email.
 
-Best regards,
+Best regards,  
 
-Your {organizer} team"""))
+Your {organizer} team"""))  # noqa: W291
     },
     'mail_subject_customer_reset': {
         'type': LazyI18nString,
@@ -2541,9 +2621,9 @@ This link is valid for one day.
 
 If you did not request a new password, please ignore this email.
 
-Best regards,
+Best regards,  
 
-Your {organizer} team"""))
+Your {organizer} team"""))  # noqa: W291
     },
     'smtp_use_custom': {
         'default': 'False',
@@ -3635,14 +3715,10 @@ def validate_organizer_settings(organizer, settings_dict):
     # This is not doing anything for the time being.
     # But earlier we called validate_event_settings for the organizer, too - and that didn't do anything for
     # organizer-settings either.
-    #
-    # N.B.: When actually fleshing out this stub, adding it to the OrganizerUpdateForm should be considered.
-    """
-    if settings_dict.get('reusable_media_type_ntag_pretix1') and settings_dict.get('reusable_media_type_nfc_uid'):
+    if settings_dict.get('reusable_media_type_nfc_mf0aes') and settings_dict.get('reusable_media_type_nfc_uid'):
         raise ValidationError({
             'reusable_media_type_nfc_uid': _('This needs to be disabled if other NFC-based types are active.')
         })
-    """
 
 
 def global_settings_object(holder):

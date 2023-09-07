@@ -273,9 +273,9 @@ class Order(LockModel, LoggedModel):
         verbose_name = _("Order")
         verbose_name_plural = _("Orders")
         ordering = ("-datetime", "-pk")
-        index_together = [
-            ["datetime", "id"],
-            ["last_modified", "id"],
+        indexes = [
+            models.Index(fields=["datetime", "id"]),
+            models.Index(fields=["last_modified", "id"]),
         ]
 
     def __str__(self):
@@ -898,6 +898,33 @@ class Order(LockModel, LoggedModel):
                 time(hour=23, minute=59, second=59)
             ), tz)
         return term_last
+
+    @property
+    def payment_term_expire_date(self):
+        delay = self.event.settings.get('payment_term_expire_delay_days', as_type=int)
+        if not delay:  # performance saver + backwards compatibility
+            return self.expires
+
+        term_last = self.payment_term_last
+        if term_last and self.expires > term_last:  # backwards compatibility
+            return self.expires
+
+        expires = self.expires.date() + timedelta(days=delay)
+        if self.event.settings.get('payment_term_weekdays'):
+            if expires.weekday() == 5:
+                expires += timedelta(days=2)
+            elif expires.weekday() == 6:
+                expires += timedelta(days=1)
+
+        tz = ZoneInfo(self.event.settings.timezone)
+        expires = make_aware(datetime.combine(
+            expires,
+            time(hour=23, minute=59, second=59)
+        ), tz)
+        if term_last:
+            return min(expires, term_last)
+        else:
+            return expires
 
     def _can_be_paid(self, count_waitinglist=True, ignore_date=False, force=False, lock=False) -> Union[bool, str]:
         error_messages = {
@@ -1664,12 +1691,13 @@ class OrderPayment(models.Model):
         if status_change:
             self.order.create_transactions()
 
-    def fail(self, info=None, user=None, auth=None, log_data=None):
+    def fail(self, info=None, user=None, auth=None, log_data=None, send_mail=True):
         """
         Marks the order as failed and sets info to ``info``, but only if the order is in ``created`` or ``pending``
         state. This is equivalent to setting ``state`` to ``OrderPayment.PAYMENT_STATE_FAILED`` and logging a failure,
-        but it adds strong database logging since we do not want to report a failure for an order that has just
+        but it adds strong database locking since we do not want to report a failure for an order that has just
         been marked as paid.
+        :param send_mail: Whether an email should be sent to the user about this event (default: ``True``).
         """
         with transaction.atomic():
             locked_instance = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=self.pk)
@@ -1694,6 +1722,17 @@ class OrderPayment(models.Model):
             'info': info,
             'data': log_data,
         }, user=user, auth=auth)
+
+        if send_mail:
+            with language(self.order.locale, self.order.event.settings.region):
+                email_subject = self.order.event.settings.mail_subject_order_payment_failed
+                email_template = self.order.event.settings.mail_text_order_payment_failed
+                email_context = get_email_context(event=self.order.event, order=self.order)
+                self.order.send_mail(
+                    email_subject, email_template, email_context,
+                    'pretix.event.order.email.payment_failed', user=user, auth=auth,
+                )
+
         return True
 
     def confirm(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
@@ -2735,8 +2774,8 @@ class Transaction(models.Model):
 
     class Meta:
         ordering = 'datetime', 'pk'
-        index_together = [
-            ['datetime', 'id']
+        indexes = [
+            models.Index(fields=['datetime', 'id'])
         ]
 
     def save(self, *args, **kwargs):

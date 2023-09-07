@@ -20,7 +20,8 @@
 # <https://www.gnu.org/licenses/>.
 #
 import json
-from datetime import datetime, timedelta
+import zoneinfo
+from datetime import date, datetime, timedelta
 from decimal import Decimal
 from zoneinfo import ZoneInfo
 
@@ -31,6 +32,7 @@ from django.test import TestCase
 from django.utils.timezone import make_aware, now
 from django_countries.fields import Country
 from django_scopes import scope
+from freezegun import freeze_time
 from tests.testdummy.signals import FoobazSalesChannel
 
 from pretix.base.decimal import round_decimal
@@ -407,6 +409,72 @@ def test_expiring_auto_disabled(event):
 
 
 @pytest.mark.django_db
+def test_expiring_auto_delayed(event):
+    event.settings.set('payment_term_expire_delay_days', 3)
+    event.settings.set('payment_term_last', date(2023, 7, 2))
+    event.settings.set('payment_term_weekdays', False)
+    event.settings.set('timezone', 'Europe/Berlin')
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=datetime(2023, 6, 22, 12, 13, 14, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        expires=datetime(2023, 6, 30, 23, 59, 59, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        total=0,
+    )
+    o2 = Order.objects.create(
+        code='FO2', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=datetime(2023, 6, 22, 12, 13, 14, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        expires=datetime(2023, 6, 28, 23, 59, 59, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        total=0,
+    )
+    assert o1.payment_term_expire_date == o1.expires + timedelta(days=2)  # limited by term_last
+    assert o2.payment_term_expire_date == o2.expires + timedelta(days=3)
+    with freeze_time("2023-06-29T00:01:00+02:00"):
+        expire_orders(None)
+        o1 = Order.objects.get(id=o1.id)
+        assert o1.status == Order.STATUS_PENDING
+        o2 = Order.objects.get(id=o2.id)
+        assert o2.status == Order.STATUS_PENDING
+
+    with freeze_time("2023-07-01T23:50:00+02:00"):
+        expire_orders(None)
+        o1 = Order.objects.get(id=o1.id)
+        assert o1.status == Order.STATUS_PENDING
+        o2 = Order.objects.get(id=o2.id)
+        assert o2.status == Order.STATUS_PENDING
+
+    with freeze_time("2023-07-02T00:01:00+02:00"):
+        expire_orders(None)
+        o1 = Order.objects.get(id=o1.id)
+        assert o1.status == Order.STATUS_PENDING
+        o2 = Order.objects.get(id=o2.id)
+        assert o2.status == Order.STATUS_EXPIRED
+
+    with freeze_time("2023-07-03T00:01:00+02:00"):
+        expire_orders(None)
+        o1 = Order.objects.get(id=o1.id)
+        assert o1.status == Order.STATUS_EXPIRED
+        o2 = Order.objects.get(id=o2.id)
+        assert o2.status == Order.STATUS_EXPIRED
+
+
+@pytest.mark.django_db
+def test_expiring_auto_delayed_weekdays(event):
+    event.settings.set('payment_term_expire_delay_days', 2)
+    event.settings.set('payment_term_weekdays', True)
+    event.settings.set('timezone', 'Europe/Berlin')
+    o1 = Order.objects.create(
+        code='FOO', event=event, email='dummy@dummy.test',
+        status=Order.STATUS_PENDING,
+        datetime=datetime(2023, 6, 22, 12, 13, 14, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        expires=datetime(2023, 6, 30, 23, 59, 59, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
+        total=0,
+    )
+    assert o1.payment_term_expire_date == o1.expires + timedelta(days=3)
+
+
+@pytest.mark.django_db
 def test_do_not_expire_if_approval_pending(event):
     o1 = Order.objects.create(
         code='FOO', event=event, email='dummy@dummy.test',
@@ -649,6 +717,47 @@ class PaymentReminderTests(TestCase):
         self.order.save()
         self.event.settings.mail_days_order_expire_warning = 2
         send_expiry_warnings(sender=self.event)
+        assert len(djmail.outbox) == 0
+
+
+class PaymentFailedTests(TestCase):
+    def setUp(self):
+        super().setUp()
+        self.o = Organizer.objects.create(name='Dummy', slug='dummy')
+        with scope(organizer=self.o):
+            self.event = Event.objects.create(
+                organizer=self.o, name='Dummy', slug='dummy',
+                date_from=now() + timedelta(days=2),
+                plugins='pretix.plugins.banktransfer'
+            )
+            self.order = Order.objects.create(
+                code='FOO', event=self.event, email='dummy@dummy.test',
+                status=Order.STATUS_PENDING, locale='en',
+                datetime=now() - timedelta(hours=4),
+                expires=now() - timedelta(hours=4) + timedelta(days=10),
+                total=Decimal('46.00'),
+            )
+            self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
+                                              default_price=Decimal('23.00'), admission=True)
+            self.op1 = OrderPosition.objects.create(
+                order=self.order, item=self.ticket, variation=None,
+                price=Decimal("23.00"), attendee_name_parts={'full_name': "Peter"}, positionid=1
+            )
+            djmail.outbox = []
+
+    @classscope(attr='o')
+    def test_send_payment_fail_mail(self):
+        payment = self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=self.order.total)
+        payment.save()
+        payment.fail()
+        assert len(djmail.outbox) == 1
+        assert "fail" in djmail.outbox[0].subject
+
+    @classscope(attr='o')
+    def test_no_payment_fail_mail_setting(self):
+        payment = self.order.payments.create(state=OrderPayment.PAYMENT_STATE_PENDING, amount=self.order.total)
+        payment.save()
+        payment.fail(send_mail=False)
         assert len(djmail.outbox) == 0
 
 
@@ -2119,6 +2228,7 @@ class OrderChangeManagerTests(TestCase):
     @classscope(attr='o')
     def test_split_and_change_higher(self):
         self.order.status = Order.STATUS_PAID
+        self.order.expires = now() - timedelta(days=1)
         self.order.save()
         self.order.payments.create(
             provider='manual',
@@ -2138,6 +2248,7 @@ class OrderChangeManagerTests(TestCase):
         assert not self.order.fees.exists()
         assert self.order.status == Order.STATUS_PAID
         assert self.order.pending_sum == Decimal('0.00')
+        assert self.order.expires < now()
         r = self.order.refunds.last()
         assert r.provider == 'offsetting'
         assert r.amount == Decimal('23.00')
@@ -2146,6 +2257,7 @@ class OrderChangeManagerTests(TestCase):
         # New order
         assert self.op2.order != self.order
         o2 = self.op2.order
+        assert o2.expires > now()
         assert o2.total == Decimal('42.00')
         assert o2.status == Order.STATUS_PENDING
         assert o2.positions.count() == 1

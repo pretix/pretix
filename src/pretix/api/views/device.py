@@ -19,8 +19,12 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import base64
 import logging
 
+from cryptography.hazmat.backends.openssl.backend import Backend
+from cryptography.hazmat.primitives.asymmetric import padding
+from cryptography.hazmat.primitives.serialization import load_pem_public_key
 from django.db.models import Exists, OuterRef, Q
 from django.db.models.functions import Coalesce
 from django.utils.timezone import now
@@ -34,6 +38,8 @@ from pretix.api.auth.device import DeviceTokenAuthentication
 from pretix.api.views.version import numeric_version
 from pretix.base.models import CheckinList, Device, SubEvent
 from pretix.base.models.devices import Gate, generate_api_token
+from pretix.base.models.media import MediumKeySet
+from pretix.base.services.media import get_keysets_for_organizer
 
 logger = logging.getLogger(__name__)
 
@@ -42,17 +48,73 @@ class InitializationRequestSerializer(serializers.Serializer):
     token = serializers.CharField(max_length=190)
     hardware_brand = serializers.CharField(max_length=190)
     hardware_model = serializers.CharField(max_length=190)
+    os_name = serializers.CharField(max_length=190, required=False, allow_null=True)
+    os_version = serializers.CharField(max_length=190, required=False, allow_null=True)
     software_brand = serializers.CharField(max_length=190)
     software_version = serializers.CharField(max_length=190)
     info = serializers.JSONField(required=False, allow_null=True)
+    rsa_pubkey = serializers.CharField(required=False, allow_null=True)
+
+    def validate(self, attrs):
+        if attrs.get('rsa_pubkey'):
+            try:
+                load_pem_public_key(
+                    attrs['rsa_pubkey'].encode(), Backend()
+                )
+            except:
+                raise ValidationError({'rsa_pubkey': ['Not a valid public key.']})
+        return attrs
 
 
 class UpdateRequestSerializer(serializers.Serializer):
     hardware_brand = serializers.CharField(max_length=190)
     hardware_model = serializers.CharField(max_length=190)
+    os_name = serializers.CharField(max_length=190, required=False, allow_null=True)
+    os_version = serializers.CharField(max_length=190, required=False, allow_null=True)
     software_brand = serializers.CharField(max_length=190)
     software_version = serializers.CharField(max_length=190)
     info = serializers.JSONField(required=False, allow_null=True)
+    rsa_pubkey = serializers.CharField(required=False, allow_null=True)
+
+    def validate(self, attrs):
+        if attrs.get('rsa_pubkey'):
+            try:
+                load_pem_public_key(
+                    attrs['rsa_pubkey'].encode(), Backend()
+                )
+            except:
+                raise ValidationError({'rsa_pubkey': ['Not a valid public key.']})
+        return attrs
+
+
+class RSAEncryptedField(serializers.Field):
+    def to_representation(self, value):
+        public_key = load_pem_public_key(
+            self.context['device'].rsa_pubkey.encode(), Backend()
+        )
+        cipher_text = public_key.encrypt(
+            # RSA/ECB/PKCS1Padding
+            value,
+            padding.PKCS1v15()
+        )
+        return base64.b64encode(cipher_text).decode()
+
+
+class MediumKeySetSerializer(serializers.ModelSerializer):
+    uid_key = RSAEncryptedField(read_only=True)
+    diversification_key = RSAEncryptedField(read_only=True)
+    organizer = serializers.SlugRelatedField(slug_field='slug', read_only=True)
+
+    class Meta:
+        model = MediumKeySet
+        fields = [
+            'public_id',
+            'organizer',
+            'active',
+            'media_type',
+            'uid_key',
+            'diversification_key',
+        ]
 
 
 class GateSerializer(serializers.ModelSerializer):
@@ -99,9 +161,12 @@ class InitializeView(APIView):
         device.initialized = now()
         device.hardware_brand = serializer.validated_data.get('hardware_brand')
         device.hardware_model = serializer.validated_data.get('hardware_model')
+        device.os_name = serializer.validated_data.get('os_name')
+        device.os_version = serializer.validated_data.get('os_version')
         device.software_brand = serializer.validated_data.get('software_brand')
         device.software_version = serializer.validated_data.get('software_version')
         device.info = serializer.validated_data.get('info')
+        device.rsa_pubkey = serializer.validated_data.get('rsa_pubkey')
         device.api_token = generate_api_token()
         device.save()
 
@@ -120,8 +185,15 @@ class UpdateView(APIView):
         device = request.auth
         device.hardware_brand = serializer.validated_data.get('hardware_brand')
         device.hardware_model = serializer.validated_data.get('hardware_model')
+        device.os_name = serializer.validated_data.get('os_name')
+        device.os_version = serializer.validated_data.get('os_version')
         device.software_brand = serializer.validated_data.get('software_brand')
         device.software_version = serializer.validated_data.get('software_version')
+        if serializer.validated_data.get('rsa_pubkey') and serializer.validated_data.get('rsa_pubkey') != device.rsa_pubkey:
+            if device.rsa_pubkey:
+                raise ValidationError({'rsa_pubkey': ['You cannot change the rsa_pubkey of the device once it is set.']})
+            else:
+                device.rsa_pubkey = serializer.validated_data.get('rsa_pubkey')
         device.info = serializer.validated_data.get('info')
         device.save()
         device.log_action('pretix.device.updated', data=serializer.validated_data, auth=device)
@@ -169,8 +241,12 @@ class InfoView(APIView):
                     'pretix': __version__,
                     'pretix_numeric': numeric_version(__version__),
                 }
-            }
-
+            },
+            'medium_key_sets': MediumKeySetSerializer(
+                get_keysets_for_organizer(device.organizer),
+                many=True,
+                context={'device': request.auth}
+            ).data if device.rsa_pubkey else []
         })
 
 

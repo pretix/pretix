@@ -18,7 +18,8 @@ The reusable medium resource contains the following public fields:
 Field                                 Type                       Description
 ===================================== ========================== =======================================================
 id                                    integer                    Internal ID of the medium
-type                                  string                     Type of medium, e.g. ``"barcode"`` or ``"nfc_uid"``.
+type                                  string                     Type of medium, e.g. ``"barcode"``, ``"nfc_uid"`` or ``"nfc_mf0aes"``.
+organizer                             string                     Organizer slug of the organizer who "owns" this medium.
 identifier                            string                     Unique identifier of the medium. The format depends on the ``type``.
 active                                boolean                    Whether this medium may be used.
 created                               datetime                   Date of creation
@@ -36,6 +37,7 @@ Existing media types are:
 
 - ``barcode``
 - ``nfc_uid``
+- ``nfc_mf0aes``
 
 Endpoints
 ---------
@@ -67,6 +69,7 @@ Endpoints
         "results": [
           {
             "id": 1,
+            "organizer": "bigevents",
             "identifier": "ABCDEFGH",
             "created": "2021-04-06T13:44:22.809377Z",
             "updated": "2021-04-06T13:44:22.809377Z",
@@ -123,6 +126,7 @@ Endpoints
 
       {
         "id": 1,
+        "organizer": "bigevents",
         "identifier": "ABCDEFGH",
         "created": "2021-04-06T13:44:22.809377Z",
         "updated": "2021-04-06T13:44:22.809377Z",
@@ -152,6 +156,9 @@ Endpoints
    Look up a new reusable medium by its identifier. In some cases, this might lead to the automatic creation of a new
    medium behind the scenes.
 
+   This endpoint, and this endpoint only, might return media from a different organizer if there is a cross-acceptance
+   agreement. In this case, only linked gift cards will be returned, no order position or customer records,
+
    **Example request**:
 
    .. sourcecode:: http
@@ -176,6 +183,7 @@ Endpoints
 
       {
         "id": 1,
+        "organizer": "bigevents",
         "identifier": "ABCDEFGH",
         "created": "2021-04-06T13:44:22.809377Z",
         "updated": "2021-04-06T13:44:22.809377Z",
@@ -235,6 +243,7 @@ Endpoints
 
       {
         "id": 1,
+        "organizer": "bigevents",
         "identifier": "ABCDEFGH",
         "created": "2021-04-06T13:44:22.809377Z",
         "updated": "2021-04-06T13:44:22.809377Z",
@@ -291,6 +300,7 @@ Endpoints
 
       {
         "id": 1,
+        "organizer": "bigevents",
         "identifier": "ABCDEFGH",
         "created": "2021-04-06T13:44:22.809377Z",
         "updated": "2021-04-06T13:44:22.809377Z",

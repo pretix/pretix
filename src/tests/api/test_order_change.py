@@ -420,6 +420,7 @@ def test_order_create_invoice(token_client, organizer, event, order):
         pos = order.positions.first()
     assert json.loads(json.dumps(resp.data)) == {
         'order': 'FOO',
+        'event': 'dummy',
         'number': 'DUMMY-00001',
         'is_cancellation': False,
         "invoice_from_name": "",

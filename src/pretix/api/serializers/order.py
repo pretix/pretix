@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import json
 import logging
 import os
 from collections import Counter, defaultdict
@@ -29,6 +28,7 @@ from decimal import Decimal
 import pycountry
 from django.conf import settings
 from django.core.files import File
+from django.db import models
 from django.db.models import F, Q
 from django.utils.encoding import force_str
 from django.utils.timezone import now
@@ -40,6 +40,7 @@ from rest_framework.exceptions import ValidationError
 from rest_framework.relations import SlugRelatedField
 from rest_framework.reverse import reverse
 
+from pretix.api.serializers import CompatibleJSONField
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
@@ -285,11 +286,12 @@ class FailedCheckinSerializer(I18nAwareModelSerializer):
     raw_item = serializers.PrimaryKeyRelatedField(queryset=Item.objects.none(), required=False, allow_null=True)
     raw_variation = serializers.PrimaryKeyRelatedField(queryset=ItemVariation.objects.none(), required=False, allow_null=True)
     raw_subevent = serializers.PrimaryKeyRelatedField(queryset=SubEvent.objects.none(), required=False, allow_null=True)
+    nonce = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = Checkin
         fields = ('error_reason', 'error_explanation', 'raw_barcode', 'raw_item', 'raw_variation',
-                  'raw_subevent', 'datetime', 'type', 'position')
+                  'raw_subevent', 'nonce', 'datetime', 'type', 'position')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -374,11 +376,15 @@ class PdfDataSerializer(serializers.Field):
                 self.context['vars_images'] = get_images(self.context['event'])
 
             for k, f in self.context['vars'].items():
-                try:
-                    res[k] = f['evaluate'](instance, instance.order, ev)
-                except:
-                    logger.exception('Evaluating PDF variable failed')
-                    res[k] = '(error)'
+                if 'evaluate_bulk' in f:
+                    # Will be evaluated later by our list serializers
+                    res[k] = (f['evaluate_bulk'], instance)
+                else:
+                    try:
+                        res[k] = f['evaluate'](instance, instance.order, ev)
+                    except:
+                        logger.exception('Evaluating PDF variable failed')
+                        res[k] = '(error)'
 
             if not hasattr(ev, '_cached_meta_data'):
                 ev._cached_meta_data = ev.meta_data
@@ -431,6 +437,38 @@ class PdfDataSerializer(serializers.Field):
             return res
 
 
+class OrderPositionListSerializer(serializers.ListSerializer):
+
+    def to_representation(self, data):
+        # We have a custom implementation of this method because PdfDataSerializer() might keep some elements unevaluated
+        # with a (callable, input) tuple. We'll loop over these entries and evaluate them bulk-wise to save on SQL queries.
+
+        if isinstance(self.parent, OrderSerializer) and isinstance(self.parent.parent, OrderListSerializer):
+            # Do not execute our custom code because it will be executed by OrderListSerializer later for the
+            # full result set.
+            return super().to_representation(data)
+
+        iterable = data.all() if isinstance(data, models.Manager) else data
+
+        data = []
+        evaluate_queue = defaultdict(list)
+
+        for item in iterable:
+            entry = self.child.to_representation(item)
+            if "pdf_data" in entry:
+                for k, v in entry["pdf_data"].items():
+                    if isinstance(v, tuple) and callable(v[0]):
+                        evaluate_queue[v[0]].append((v[1], entry, k))
+            data.append(entry)
+
+        for func, entries in evaluate_queue.items():
+            results = func([item for (item, entry, k) in entries])
+            for (item, entry, k), result in zip(entries, results):
+                entry["pdf_data"][k] = result
+
+        return data
+
+
 class OrderPositionSerializer(I18nAwareModelSerializer):
     checkins = CheckinSerializer(many=True, read_only=True)
     answers = AnswerSerializer(many=True)
@@ -442,6 +480,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     attendee_name = serializers.CharField(required=False)
 
     class Meta:
+        list_serializer_class = OrderPositionListSerializer
         model = OrderPosition
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'discount',
@@ -469,6 +508,20 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
 
     def validate(self, data):
         raise TypeError("this serializer is readonly")
+
+    def to_representation(self, data):
+        if isinstance(self.parent, (OrderListSerializer, OrderPositionListSerializer)):
+            # Do not execute our custom code because it will be executed by OrderListSerializer later for the
+            # full result set.
+            return super().to_representation(data)
+
+        entry = super().to_representation(data)
+        if "pdf_data" in entry:
+            for k, v in entry["pdf_data"].items():
+                if isinstance(v, tuple) and callable(v[0]):
+                    entry["pdf_data"][k] = v[0]([v[1]])[0]
+
+        return entry
 
 
 class RequireAttentionField(serializers.Field):
@@ -564,7 +617,7 @@ class PaymentURLField(serializers.URLField):
     def to_representation(self, instance: OrderPayment):
         if instance.state != OrderPayment.PAYMENT_STATE_CREATED:
             return None
-        return build_absolute_uri(self.context['event'], 'presale:event.order.pay', kwargs={
+        return build_absolute_uri(instance.order.event, 'presale:event.order.pay', kwargs={
             'order': instance.order.code,
             'secret': instance.order.secret,
             'payment': instance.pk,
@@ -609,13 +662,42 @@ class OrderRefundSerializer(I18nAwareModelSerializer):
 
 class OrderURLField(serializers.URLField):
     def to_representation(self, instance: Order):
-        return build_absolute_uri(self.context['event'], 'presale:event.order', kwargs={
+        return build_absolute_uri(instance.event, 'presale:event.order', kwargs={
             'order': instance.code,
             'secret': instance.secret,
         })
 
 
+class OrderListSerializer(serializers.ListSerializer):
+
+    def to_representation(self, data):
+        # We have a custom implementation of this method because PdfDataSerializer() might keep some elements
+        # unevaluated with a (callable, input) tuple. We'll loop over these entries and evaluate them bulk-wise to
+        # save on SQL queries.
+        iterable = data.all() if isinstance(data, models.Manager) else data
+
+        data = []
+        evaluate_queue = defaultdict(list)
+
+        for item in iterable:
+            entry = self.child.to_representation(item)
+            for p in entry.get("positions", []):
+                if "pdf_data" in p:
+                    for k, v in p["pdf_data"].items():
+                        if isinstance(v, tuple) and callable(v[0]):
+                            evaluate_queue[v[0]].append((v[1], p, k))
+            data.append(entry)
+
+        for func, entries in evaluate_queue.items():
+            results = func([item for (item, entry, k) in entries])
+            for (item, entry, k), result in zip(entries, results):
+                entry["pdf_data"][k] = result
+
+        return data
+
+
 class OrderSerializer(I18nAwareModelSerializer):
+    event = SlugRelatedField(slug_field='slug', read_only=True)
     invoice_address = InvoiceAddressSerializer(allow_null=True)
     positions = OrderPositionSerializer(many=True, read_only=True)
     fees = OrderFeeSerializer(many=True, read_only=True)
@@ -629,8 +711,9 @@ class OrderSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Order
+        list_serializer_class = OrderListSerializer
         fields = (
-            'code', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
+            'code', 'event', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
             'payment_provider', 'fees', 'total', 'comment', 'custom_followup_at', 'invoice_address', 'positions', 'downloads',
             'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
             'url', 'customer', 'valid_if_pending'
@@ -896,19 +979,6 @@ class OrderPositionCreateSerializer(I18nAwareModelSerializer):
                 )
 
         return data
-
-
-class CompatibleJSONField(serializers.JSONField):
-    def to_internal_value(self, data):
-        try:
-            return json.dumps(data)
-        except (TypeError, ValueError):
-            self.fail('invalid')
-
-    def to_representation(self, value):
-        if value:
-            return json.loads(value)
-        return value
 
 
 class WrappedList:
@@ -1556,6 +1626,7 @@ class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
 
 
 class InvoiceSerializer(I18nAwareModelSerializer):
+    event = SlugRelatedField(slug_field='slug', read_only=True)
     order = serializers.SlugRelatedField(slug_field='code', read_only=True)
     refers = serializers.SlugRelatedField(slug_field='full_invoice_no', read_only=True)
     lines = InlineInvoiceLineSerializer(many=True)
@@ -1564,7 +1635,7 @@ class InvoiceSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Invoice
-        fields = ('order', 'number', 'is_cancellation', 'invoice_from', 'invoice_from_name', 'invoice_from_zipcode',
+        fields = ('event', 'order', 'number', 'is_cancellation', 'invoice_from', 'invoice_from_name', 'invoice_from_zipcode',
                   'invoice_from_city', 'invoice_from_country', 'invoice_from_tax_id', 'invoice_from_vat_id',
                   'invoice_to', 'invoice_to_company', 'invoice_to_name', 'invoice_to_street', 'invoice_to_zipcode',
                   'invoice_to_city', 'invoice_to_state', 'invoice_to_country', 'invoice_to_vat_id', 'invoice_to_beneficiary',

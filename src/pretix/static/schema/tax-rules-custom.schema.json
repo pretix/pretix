@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Tax rules",
+  "description": "Dynamic taxation rules",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "description": "List of rules, executed in order until one matches",
+    "properties": {
+      "country": {
+        "description": "Country code to match. ZZ = any country, EU = any EU country. For selected countries, a state can be matched (e.g. US-NY for New York).",
+        "enum": ["ZZ", "EU", "AF", "EG", "AX", "AL", "DZ", "AS", "VI", "AD", "AO", "AI", "AQ", "AG", "GQ", "AR", "AM", "AW", "AZ", "ET", "AU", "AU-ACT", "AU-NSW", "AU-NT", "AU-QLD", "AU-SA", "AU-TAS", "AU-VIC", "AU-WA", "BS", "BH", "BD", "BB", "BE", "BZ", "BJ", "BM", "BT", "BO", "BQ", "BA", "BW", "BV", "BR", "BR-AC", "BR-AL", "BR-AP", "BR-AM", "BR-BA", "BR-CE", "BR-ES", "BR-GO", "BR-MA", "BR-MT", "BR-MS", "BR-MG", "BR-PR", "BR-PB", "BR-PA", "BR-PE", "BR-PI", "BR-RN", "BR-RS", "BR-RJ", "BR-RO", "BR-RR", "BR-SC", "BR-SE", "BR-SP", "BR-TO", "VG", "IO", "BN", "BG", "BF", "BI", "CL", "CN", "MP", "CK", "CR", "CI", "CW", "DK", "DE", "DM", "DO", "DJ", "EC", "SV", "ER", "EE", "FK", "FO", "FJ", "FI", "FR", "GF", "PF", "TF", "GA", "GM", "GE", "GH", "GI", "GD", "GR", "GL", "GP", "GU", "GT", "GG", "GN", "GW", "GY", "HT", "HM", "HN", "HK", "IN", "ID", "IQ", "IR", "IE", "IS", "IM", "IL", "IT", "JM", "JP", "YE", "JE", "JO", "KY", "KH", "CM", "CA", "CA-AB", "CA-BC", "CA-MB", "CA-NB", "CA-NL", "CA-NT", "CA-NS", "CA-NU", "CA-ON", "CA-PE", "CA-QC", "CA-SK", "CA-YT", "CV", "KZ", "QA", "KE", "KG", "KI", "CC", "CO", "KM", "CG", "CD", "HR", "CU", "KW", "LA", "LS", "LV", "LB", "LR", "LY", "LI", "LT", "LU", "MO", "MG", "MW", "MY", "MY-01", "MY-02", "MY-03", "MY-04", "MY-05", "MY-06", "MY-08", "MY-09", "MY-07", "MY-12", "MY-13", "MY-10", "MY-11", "MV", "ML", "MT", "MA", "MH", "MQ", "MR", "MU", "YT", "MK", "MX", "MX-AGU", "MX-BCN", "MX-BCS", "MX-CAM", "MX-CHP", "MX-CHH", "MX-CMX", "MX-COA", "MX-COL", "MX-DUR", "MX-GUA", "MX-GRO", "MX-HID", "MX-JAL", "MX-MIC", "MX-MOR", "MX-MEX", "MX-NAY", "MX-NLE", "MX-OAX", "MX-PUE", "MX-QUE", "MX-ROO", "MX-SLP", "MX-SIN", "MX-SON", "MX-TAB", "MX-TAM", "MX-TLA", "MX-VER", "MX-YUC", "MX-ZAC", "FM", "MD", "MC", "MN", "ME", "MS", "MZ", "MM", "NA", "NR", "NP", "NC", "NZ", "NI", "NL", "NE", "NG", "NU", "KP", "NF", "NO", "OM", "AT", "TL", "PK", "PS", "PW", "PA", "PG", "PY", "PE", "PH", "PN", "PL", "PT", "PR", "RE", "RW", "RO", "RU", "BL", "PM", "SB", "ZM", "WS", "SM", "ST", "SA", "SE", "CH", "SN", "RS", "SC", "SL", "ZW", "SG", "SX", "SK", "SI", "SO", "ES", "SJ", "LK", "SH", "KN", "LC", "MF", "VC", "ZA", "SD", "GS", "KR", "SS", "SR", "SZ", "SY", "TJ", "TW", "TZ", "TH", "TG", "TK", "TO", "TT", "TD", "CZ", "TN", "TR", "TM", "TC", "TV", "UG", "UA", "HU", "UY", "UM", "UZ", "VU", "VA", "VE", "AE", "US", "US-AL", "US-AK", "US-AS", "US-AZ", "US-AR", "US-CA", "US-CO", "US-CT", "US-DE", "US-DC", "US-FL", "US-GA", "US-GU", "US-HI", "US-ID", "US-IL", "US-IN", "US-IA", "US-KS", "US-KY", "US-LA", "US-ME", "US-MD", "US-MA", "US-MI", "US-MN", "US-MS", "US-MO", "US-MT", "US-NE", "US-NV", "US-NH", "US-NJ", "US-NM", "US-NY", "US-NC", "US-ND", "US-MP", "US-OH", "US-OK", "US-OR", "US-PA", "US-PR", "US-RI", "US-SC", "US-SD", "US-TN", "US-TX", "US-UM", "US-UT", "US-VT", "US-VI", "US-VA", "US-WA", "US-WV", "US-WI", "US-WY", "GB", "VN", "WF", "CX", "BY", "EH", "CF", "CY"]
+      },
+      "address_type": {
+        "description": "Type of customer, emtpy = any.",
+        "enum": ["", "individual", "business", "business_vat_id"]
+      },
+      "action": {
+        "description": "Action to take.",
+        "enum": ["vat", "reverse", "no", "block", "require_approval"]
+      },
+      "rate": {
+        "description": "Tax rate in case of action=vat or action=require_approval (or null for default)",
+        "type": ["string", "null"],
+        "pattern": "^[0-9]+(\\.[0-9]+)?$"
+      },
+      "invoice_text": {
+        "description": "Text on invoice (localized)",
+        "type": ["object", "null"],
+        "patternProperties": {
+          "[a-zA-Z-]+": {
+            "type": "string"
+          }
+        },
+        "additionalProperties": false
+      },
+      "ORDER": {
+        "description": "Internal, for backwards-compatibility, will be ignored.",
+        "type": "number"
+      },
+      "DELETE": {
+        "description": "Internal, for backwards-compatibility, will be ignored.",
+        "type": "boolean"
+      }
+    },
+    "required": ["country", "address_type", "action"],
+    "additionalProperties": false
+  }
+}

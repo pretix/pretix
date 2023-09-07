@@ -86,12 +86,14 @@ class GlobalSettingsForm(SettingsForm):
             ('leaflet_tiles', forms.CharField(
                 required=False,
                 label=_("Leaflet tiles URL pattern"),
-                help_text=_("e.g. {sample}").format(sample="https://a.tile.openstreetmap.org/{z}/{x}/{y}.png")
+                help_text=_("e.g. {sample}").format(sample="https://tile.openstreetmap.org/{z}/{x}/{y}.png")
             )),
             ('leaflet_tiles_attribution', forms.CharField(
                 required=False,
                 label=_("Leaflet tiles attribution"),
-                help_text=_("e.g. {sample}").format(sample='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors')
+                help_text=_("e.g. {sample}").format(
+                    sample='&copy; &lt;a href=&quot;https://www.openstreetmap.org/copyright&quot;&gt;OpenStreetMap&lt;/a&gt; contributors'
+                )
             )),
         ])
         responses = register_global_settings.send(self)

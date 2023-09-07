@@ -683,12 +683,16 @@ dictionaries as values that contain keys like in the following example::
         "product": {
             "label": _("Product name"),
             "editor_sample": _("Sample product"),
-            "evaluate": lambda orderposition, order, event: str(orderposition.item)
+            "evaluate": lambda orderposition, order, event: str(orderposition.item),
+            "evaluate_bulk": lambda orderpositions: [str(op.item) for op in orderpositions],
         }
     }
 
 The ``evaluate`` member will be called with the order position, order and event as arguments. The event might
 also be a subevent, if applicable.
+
+The ``evaluate_bulk`` member is optional but can significantly improve performance in some situations because you
+can perform database fetches in bulk instead of single queries for every position.
 """
 
 
@@ -786,4 +790,24 @@ This signal is sent out to collect serializable settings fields for the API. You
 return a dictionary mapping names of attributes in the settings store to DRF serializer field instances.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+customer_created = GlobalSignal()
+"""
+Arguments: ``customer``
+
+This signal is sent out every time a customer account is created. The ``customer``
+object is given as the first argument.
+
+The ``sender`` keyword argument will contain the organizer.
+"""
+
+customer_signed_in = GlobalSignal()
+"""
+Arguments: ``customer``
+
+This signal is sent out every time a customer signs in. The ``customer`` object
+is given as the first argument.
+
+The ``sender`` keyword argument will contain the organizer.
 """

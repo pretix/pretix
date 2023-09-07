@@ -33,7 +33,6 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import json
-import textwrap
 from collections import OrderedDict
 from decimal import Decimal
 
@@ -56,6 +55,7 @@ from pretix.base.i18n import language
 from pretix.base.models import InvoiceAddress, Order, OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
 from pretix.base.services.mail import SendMailException, mail, render_mail
+from pretix.base.templatetags.money import money_filter
 from pretix.helpers.format import format_map
 from pretix.plugins.banktransfer.templatetags.ibanformat import ibanformat
 from pretix.presale.views.cart import cart_session
@@ -454,26 +454,29 @@ class BankTransfer(BasePaymentProvider):
         return template.render(ctx)
 
     def order_pending_mail_render(self, order, payment) -> str:
-        template = get_template('pretixplugins/banktransfer/email/order_pending.txt')
-        bankdetails = []
+        t = gettext("Please transfer the full amount to the following bank account:")
+        t += "\n\n"
+
+        md_nl2br = "  \n"
         if self.settings.get('bank_details_type') == 'sepa':
-            bankdetails += [
-                _("Account holder"), ": ", self.settings.get('bank_details_sepa_name'), "\n",
-                _("IBAN"), ": ", ibanformat(self.settings.get('bank_details_sepa_iban')), "\n",
-                _("BIC"), ": ", self.settings.get('bank_details_sepa_bic'), "\n",
-                _("Bank"), ": ", self.settings.get('bank_details_sepa_bank'),
-            ]
-        if bankdetails and self.settings.get('bank_details', as_type=LazyI18nString):
-            bankdetails.append("\n")
-        bankdetails.append(self.settings.get('bank_details', as_type=LazyI18nString))
-        ctx = {
-            'event': self.event,
-            'order': order,
-            'code': self._code(order),
-            'amount': payment.amount,
-            'details': textwrap.indent(''.join(str(i) for i in bankdetails), '    '),
-        }
-        return template.render(ctx)
+            bankdetails = (
+                (_("Reference"), self._code(order)),
+                (_("Amount"), money_filter(payment.amount, self.event.currency)),
+                (_("Account holder"), self.settings.get('bank_details_sepa_name')),
+                (_("IBAN"), ibanformat(self.settings.get('bank_details_sepa_iban'))),
+                (_("BIC"), self.settings.get('bank_details_sepa_bic')),
+                (_("Bank"), self.settings.get('bank_details_sepa_bank')),
+            )
+        else:
+            bankdetails = (
+                (_("Reference"), self._code(order)),
+                (_("Amount"), money_filter(payment.amount, self.event.currency)),
+            )
+        t += md_nl2br.join([f"**{k}:** {v}" for k, v in bankdetails])
+        if self.settings.get('bank_details', as_type=LazyI18nString):
+            t += md_nl2br
+        t += str(self.settings.get('bank_details', as_type=LazyI18nString))
+        return t
 
     def swiss_qrbill(self, payment):
         if not self.settings.get('bank_details_sepa_iban') or not self.settings.get('bank_details_sepa_iban')[:2] in ('CH', 'LI'):
@@ -532,9 +535,11 @@ class BankTransfer(BasePaymentProvider):
             'eu_barcodes': self.event.currency == 'EUR',
             'pending_description': self.settings.get('pending_description', as_type=LazyI18nString),
             'details': self.settings.get('bank_details', as_type=LazyI18nString),
+            'has_invoices': payment.order.invoices.exists(),
+            'invoice_email_enabled': self.settings.get('invoice_email', as_type=bool),
         }
         ctx['any_barcodes'] = ctx['swiss_qrbill'] or ctx['eu_barcodes']
-        return template.render(ctx)
+        return template.render(ctx, request=request)
 
     def payment_control_render(self, request: HttpRequest, payment: OrderPayment) -> str:
         warning = None

@@ -38,6 +38,7 @@ from decimal import Decimal
 from urllib.parse import urlencode, urlparse
 from zoneinfo import ZoneInfo
 
+import pycountry
 from django import forms
 from django.conf import settings
 from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
@@ -48,7 +49,7 @@ from django.forms import (
 )
 from django.urls import reverse
 from django.utils.functional import cached_property
-from django.utils.html import escape
+from django.utils.html import escape, format_html
 from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
@@ -65,7 +66,8 @@ from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
 from pretix.base.settings import (
-    PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS, validate_event_settings,
+    COUNTRIES_WITH_STATE_IN_ADDRESS, DEFAULTS, PERSON_NAME_SCHEMES,
+    PERSON_NAME_TITLE_GROUPS, validate_event_settings,
 )
 from pretix.base.validators import multimail_validate
 from pretix.control.forms import (
@@ -749,6 +751,7 @@ class PaymentSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'payment_term_minutes',
         'payment_term_last',
         'payment_term_expire_automatically',
+        'payment_term_expire_delay_days',
         'payment_term_accept_late',
         'payment_pending_hidden',
         'payment_explanation',
@@ -896,6 +899,27 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
             (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
         )
         self.fields['invoice_numbers_counter_length'].validators.append(MaxValueValidator(15))
+
+        pps = [str(pp.verbose_name) for pp in event.get_payment_providers().values() if pp.requires_invoice_immediately]
+        if pps:
+            generate_paid_help_text = _('An invoice will be issued before payment if the customer selects one of the following payment methods: {list}').format(
+                list=', '.join(pps)
+            )
+        else:
+            generate_paid_help_text = _('None of the currently configured payment methods will cause an invoice to be issued before payment.')
+
+        generate_choices = list(DEFAULTS['invoice_generate']['form_kwargs']['choices'])
+        idx = [i for i, t in enumerate(generate_choices) if t[0] == 'paid'][0]
+        generate_choices[idx] = (
+            'paid',
+            format_html(
+                '{} <span class="label label-success">{}</span><br><span class="text-muted">{}</span>',
+                generate_choices[idx][1],
+                _('Recommended'),
+                generate_paid_help_text
+            )
+        )
+        self.fields['invoice_generate'].choices = generate_choices
 
 
 def contains_web_channel_validate(val):
@@ -1115,6 +1139,16 @@ class MailSettingsForm(SettingsForm):
         help_text=_("This email only applies to payment methods that can receive incomplete payments, "
                     "such as bank transfer."),
     )
+    mail_subject_order_payment_failed = I18nFormField(
+        label=_("Subject"),
+        required=False,
+        widget=I18nTextInput,
+    )
+    mail_text_order_payment_failed = I18nFormField(
+        label=_("Text"),
+        required=False,
+        widget=I18nTextarea,
+    )
     mail_subject_waiting_list = I18nFormField(
         label=_("Subject"),
         required=False,
@@ -1262,8 +1296,12 @@ class MailSettingsForm(SettingsForm):
         'mail_subject_order_placed_require_approval': ['event', 'order'],
         'mail_text_order_approved': ['event', 'order'],
         'mail_subject_order_approved': ['event', 'order'],
+        'mail_text_order_approved_attendee': ['event', 'order'],
+        'mail_subject_order_approved_attendee': ['event', 'order'],
         'mail_text_order_approved_free': ['event', 'order'],
         'mail_subject_order_approved_free': ['event', 'order'],
+        'mail_text_order_approved_free_attendee': ['event', 'order'],
+        'mail_subject_order_approved_free_attendee': ['event', 'order'],
         'mail_text_order_denied': ['event', 'order', 'comment'],
         'mail_subject_order_denied': ['event', 'order', 'comment'],
         'mail_text_order_paid': ['event', 'order', 'payment_info'],
@@ -1284,6 +1322,8 @@ class MailSettingsForm(SettingsForm):
         'mail_subject_order_pending_warning': ['event', 'order'],
         'mail_text_order_incomplete_payment': ['event', 'order', 'pending_sum'],
         'mail_subject_order_incomplete_payment': ['event', 'order'],
+        'mail_text_order_payment_failed': ['event', 'order'],
+        'mail_subject_order_payment_failed': ['event', 'order'],
         'mail_text_order_custom_mail': ['event', 'order'],
         'mail_text_download_reminder': ['event', 'order'],
         'mail_subject_download_reminder': ['event', 'order'],
@@ -1411,9 +1451,20 @@ class CountriesAndEU(CachedCountries):
     cache_subkey = 'with_any_or_eu'
 
 
+class CountriesAndEUAndStates(CountriesAndEU):
+    def __iter__(self):
+        for country_code, country_name in super().__iter__():
+            yield country_code, country_name
+            if country_code in COUNTRIES_WITH_STATE_IN_ADDRESS:
+                types, form = COUNTRIES_WITH_STATE_IN_ADDRESS[country_code]
+                yield from sorted(((state.code, country_name + " - " + state.name)
+                                   for state in pycountry.subdivisions.get(country_code=country_code)
+                                   if state.type in types), key=lambda s: s[1])
+
+
 class TaxRuleLineForm(I18nForm):
     country = LazyTypedChoiceField(
-        choices=CountriesAndEU(),
+        choices=CountriesAndEUAndStates(),
         required=False
     )
     address_type = forms.ChoiceField(

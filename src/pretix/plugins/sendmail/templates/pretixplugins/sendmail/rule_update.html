@@ -7,7 +7,7 @@
     <h1>{% trans "Update Email Rule" %}</h1>
     {% if not request.event.live %}
         <div class="alert alert-warning">
-            {% trans "Automated emails are not sent as long as your ticket shop is offline." %}
+            {% trans "Scheduled emails are not sent as long as your ticket shop is offline." %}
         </div>
     {% endif %}
     {% block inner %}
@@ -41,7 +41,12 @@
             <fieldset>
                 <legend>{% trans "Recipients" %}</legend>
                 {% bootstrap_field form.send_to layout='control' %}
-                {% bootstrap_field form.include_pending layout='control' %}
+                {% if form.subevent %}
+                    {% bootstrap_field form.subevent layout='control' %}
+                {% endif %}
+                {% bootstrap_field form.restrict_to_status layout='control' %}
+                {% bootstrap_field form.checked_in_status layout='control' %}
+                <hr>
                 {% bootstrap_field form.all_products layout='control' %}
                 {% bootstrap_field form.limit_products layout='horizontal' %}
             </fieldset>

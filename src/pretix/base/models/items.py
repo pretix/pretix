@@ -43,6 +43,7 @@ from typing import Optional, Tuple
 from zoneinfo import ZoneInfo
 
 import dateutil.parser
+import django_redis
 from dateutil.tz import datetime_exists
 from django.conf import settings
 from django.core.exceptions import ValidationError
@@ -57,7 +58,6 @@ from django.utils.functional import cached_property
 from django.utils.timezone import is_naive, make_aware, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries.fields import Country
-from django_redis import get_redis_connection
 from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
 
@@ -1463,7 +1463,7 @@ class Question(LoggedModel):
         (TYPE_PHONENUMBER, _("Phone number")),
     )
     UNLOCALIZED_TYPES = [TYPE_DATE, TYPE_TIME, TYPE_DATETIME]
-    ASK_DURING_CHECKIN_UNSUPPORTED = [TYPE_PHONENUMBER]
+    ASK_DURING_CHECKIN_UNSUPPORTED = []
 
     event = models.ForeignKey(
         Event,
@@ -1910,8 +1910,13 @@ class Quota(LoggedModel):
 
     def rebuild_cache(self, now_dt=None):
         if settings.HAS_REDIS:
-            rc = get_redis_connection("redis")
-            rc.hdel(f'quotas:{self.event_id}:availabilitycache', str(self.pk))
+            rc = django_redis.get_redis_connection("redis")
+            p = rc.pipeline()
+            p.hdel(f'quotas:{self.event_id}:availabilitycache', str(self.pk))
+            p.hdel(f'quotas:{self.event_id}:availabilitycache:nocw', str(self.pk))
+            p.hdel(f'quotas:{self.event_id}:availabilitycache:igcl', str(self.pk))
+            p.hdel(f'quotas:{self.event_id}:availabilitycache:nocw:igcl', str(self.pk))
+            p.execute()
             self.availability(now_dt=now_dt)
 
     def availability(

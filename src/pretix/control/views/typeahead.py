@@ -546,7 +546,7 @@ def variations_select2(request, **kwargs):
         F('item__category__position').asc(nulls_first=True),
         'item__category_id',
         'item__position',
-        'item__pk'
+        'item__pk',
         'position',
         'value'
     ).select_related('item')
@@ -718,7 +718,7 @@ def itemvarquota_select2(request, **kwargs):
             itemqs = request.event.items.prefetch_related('variations').filter(
                 Q(name__icontains=i18ncomp(query)) | Q(internal_name__icontains=query)
             )
-            quotaqs = request.event.quotas.filter(quotaf).select_related('subevent')
+            quotaqs = request.event.quotas.filter(quotaf).select_related('subevent').order_by('-subevent__date_from', 'name')
             more = False
         else:
             if page == 1:
@@ -727,7 +727,7 @@ def itemvarquota_select2(request, **kwargs):
                 )
             else:
                 itemqs = request.event.items.none()
-            quotaqs = request.event.quotas.filter(name__icontains=query).select_related('subevent')
+            quotaqs = request.event.quotas.filter(name__icontains=query).select_related('subevent').order_by('-subevent__date_from', 'name')
             total = quotaqs.count()
             pagesize = 20
             offset = (page - 1) * pagesize

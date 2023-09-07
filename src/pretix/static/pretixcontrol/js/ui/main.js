@@ -123,6 +123,8 @@ var form_handlers = function (el) {
 
     // Vouchers
     el.find("#voucher-bulk-codes-generate").click(function () {
+        if (!$("#voucher-bulk-codes-num").get(0).reportValidity())
+            return;
         var num = $("#voucher-bulk-codes-num").val();
         var prefix = $('#voucher-bulk-codes-prefix').val();
         if (num != "") {
@@ -782,7 +784,7 @@ function setup_basics(el) {
     el.find("input[data-toggle-table]").each(function (ev) {
         var $toggle = $(this);
         var $actionButtons = $(".batch-select-actions button", this.form);
-        var countLabels = $("<span></span>").appendTo($actionButtons);
+        var countLabels = $("<span></span>").appendTo($actionButtons.filter(function () { return !$(this).closest(".dropdown-menu").length }));
         var $table = $toggle.closest("table");
         var $selectAll = $table.find(".table-select-all");
         var $rows = $table.find("tbody tr");

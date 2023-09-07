@@ -60,7 +60,7 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms import PlaceholderValidator
 from pretix.base.models import (
     CartPosition, Event, GiftCard, InvoiceAddress, Order, OrderPayment,
-    OrderRefund, Quota,
+    OrderRefund, Quota, TaxRule,
 )
 from pretix.base.reldate import RelativeDateField, RelativeDateWrapper
 from pretix.base.settings import SettingsSandbox
@@ -76,6 +76,16 @@ from pretix.presale.views import get_cart, get_cart_total
 from pretix.presale.views.cart import cart_session, get_or_create_cart_id
 
 logger = logging.getLogger(__name__)
+
+
+class WalletQueries:
+    APPLEPAY = 'applepay'
+    GOOGLEPAY = 'googlepay'
+
+    WALLETS = (
+        (APPLEPAY, pgettext_lazy('payment', 'Apple Pay')),
+        (GOOGLEPAY, pgettext_lazy('payment', 'Google Pay')),
+    )
 
 
 class PaymentProviderForm(Form):
@@ -436,6 +446,19 @@ class BasePaymentProvider:
         d['_restrict_to_sales_channels']._as_type = list
         return d
 
+    @property
+    def walletqueries(self):
+        """
+        .. warning:: This property is considered **experimental**. It might change or get removed at any time without
+                     prior notice.
+
+        A list of wallet payment methods that should be dynamically joined to the public name of the payment method,
+        if they are available to the user.
+        The detection is made on a best effort basis with no guarantees of correctness and actual availability.
+        Wallets that pretix can check for are exposed through ``pretix.base.payment.WalletQueries``.
+        """
+        return []
+
     def settings_form_clean(self, cleaned_data):
         """
         Overriding this method allows you to inject custom validation into the settings form.
@@ -719,7 +742,7 @@ class BasePaymentProvider:
         the amount of money that should be paid.
 
         If you need any special behavior, you can return a string containing the URL the user will be redirected to.
-        If you are done with your process you should return the user to the order's detail page. Redirection is not
+        If you are done with your process you should return the user to the order's detail page. Redirection is only
         allowed if you set ``execute_payment_needs_user`` to ``True``.
 
         If the payment is completed, you should call ``payment.confirm()``. Please note that this might
@@ -1015,7 +1038,11 @@ class FreeOrderProvider(BasePaymentProvider):
 
         cart = get_cart(request)
         total = get_cart_total(request)
-        total += sum([f.value for f in get_fees(self.event, request, total, None, None, cart)])
+        try:
+            total += sum([f.value for f in get_fees(self.event, request, total, None, None, cart)])
+        except TaxRule.SaleNotAllowed:
+            # ignore for now, will fail on order creation
+            pass
         return total == 0
 
     def order_change_allowed(self, order: Order) -> bool:

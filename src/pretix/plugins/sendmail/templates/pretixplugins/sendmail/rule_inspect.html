@@ -11,7 +11,7 @@
     </p>
     {% if not request.event.live %}
         <div class="alert alert-warning">
-            {% trans "Automated emails are not sent as long as your ticket shop is offline." %}
+            {% trans "Scheduled emails are not sent as long as your ticket shop is offline." %}
         </div>
     {% endif %}
     <dl class="dl-horizontal">
@@ -47,7 +47,7 @@
                             <a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=sm.subevent.id %}?returnto={{ request.GET.urlencode|urlencode }}">
                                 {{ sm.subevent.name }}
                             </a><br>
-                            {{ sm.get_date_range_display }}
+                            {{ sm.subevent.get_date_range_display }}
                         </td>
                     {% endif %}
                     <td>

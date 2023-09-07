@@ -768,6 +768,102 @@
   }
 }
 
+.pretix-widget-lightbox-holder {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.8);
+  z-index: 16777271;
+  visibility: hidden;
+  opacity: 0;
+  transition: opacity 0.5s, visibility 0.5s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .pretix-widget-lightbox-loading svg {
+    margin: 40px;
+    -webkit-animation: pretix-widget-spin 6s linear infinite;
+    -moz-animation: pretix-widget-spin 6s linear infinite;
+    animation: pretix-widget-spin 6s linear infinite;
+  }
+
+  &.pretix-widget-lightbox-shown {
+    visibility: visible;
+    opacity: 1;
+    transition: opacity 0.5s, visibility 0.5s;
+  }
+
+  .pretix-widget-lightbox-inner {
+    position: relative;
+    background: white;
+    border-radius: 5px 5px 5px 5px;
+    -moz-border-radius: 5px 5px 5px 5px;
+    -webkit-border-radius: 5px 5px 5px 5px;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    -webkit-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    -moz-box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.1), 0 6px 20px 0 rgba(0, 0, 0, 0.09);
+    box-sizing: border-box;
+    padding: 10px;
+    max-width: 90%;
+    max-height: 90%;
+  }
+  &.pretix-widget-lightbox-isloading .pretix-widget-lightbox-inner {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    border: 0;
+  }
+
+  .pretix-widget-lightbox-image {
+    margin: 0;
+    padding: 0;
+    text-align: center;
+  }
+  .pretix-widget-lightbox-image img {
+    max-width: 80vw;
+    max-height: 80vh;
+    object-fit: scale-down;
+  }
+  .pretix-widget-lightbox-image figcaption {
+    margin: 0.5em 0 0;
+  }
+
+  .pretix-widget-lightbox-close {
+    position: absolute;
+    right: -12px;
+    top: -12px;
+    width: 24px;
+    height: 24px;
+    background: $brand-primary;
+    margin: 0;
+    border: none;
+    border-radius: 12px;
+    -moz-border-radius: 12px;
+    -webkit-border-radius: 12px;
+    text-align: center;
+    color: white;
+    font-weight: bold;
+    font-family: sans-serif;
+    text-decoration: none;
+    padding: 4px 0;
+    display: inline-block;
+    line-height: 16px;
+    cursor: pointer;
+  }
+
+  .pretix-widget-lightbox-close svg {
+    display: inline-block;
+    border: none;
+  }
+}
+
 .pretix-widget-primary-color {
   /* in SVG */
   fill: $brand-primary;

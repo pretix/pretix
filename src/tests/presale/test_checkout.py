@@ -456,6 +456,59 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
         cr1.refresh_from_db()
         assert cr1.price == Decimal('23.00')
 
+    def test_custom_tax_rules_blocked_on_fee(self):
+        self.tr7 = self.event.tax_rules.create(rate=7)
+        self.tr7.custom_rules = json.dumps([
+            {'country': 'AT', 'address_type': 'business_vat_id', 'action': 'reverse'},
+            {'country': 'ZZ', 'address_type': '', 'action': 'block'},
+        ])
+        self.tr7.save()
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.set('payment_banktransfer__fee_percent', 20)
+        self.event.settings.set('payment_banktransfer__fee_reverse_calc', False)
+        self.event.settings.set('tax_rate_default', self.tr7)
+        self.event.settings.invoice_address_vatid = True
+
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+
+        self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+            'is_business': 'business',
+            'company': 'Foo',
+            'name': 'Bar',
+            'street': 'Baz',
+            'zipcode': '12345',
+            'city': 'Here',
+            'country': 'DE',
+            'email': 'admin@localhost'
+        }, follow=True)
+
+        with mock.patch('pretix.base.services.tax._validate_vat_id_EU') as mock_validate:
+            mock_validate.return_value = 'AT123456'
+            self.client.post('/%s/%s/checkout/questions/' % (self.orga.slug, self.event.slug), {
+                'is_business': 'business',
+                'company': 'Foo',
+                'name': 'Bar',
+                'street': 'Baz',
+                'zipcode': '1234',
+                'city': 'Here',
+                'country': 'AT',
+                'vat_id': 'AT123456',
+                'email': 'admin@localhost'
+            }, follow=True)
+
+        self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'banktransfer'
+        }, follow=True)
+
+        r = self.client.post('/%s/%s/checkout/confirm/' % (self.orga.slug, self.event.slug), follow=True)
+        doc = BeautifulSoup(r.content.decode(), "lxml")
+        assert doc.select(".alert-danger")
+        assert "not available in the selected country" in doc.select(".alert-danger")[0].text
+
     def test_custom_tax_rules_blocked(self):
         self.tr19.custom_rules = json.dumps([
             {'country': 'AT', 'address_type': 'business_vat_id', 'action': 'reverse'},
@@ -1675,6 +1728,24 @@ class CheckoutTestCase(BaseCheckoutTestCase, TestCase):
             gc.refresh_from_db()
             assert gc.issuer == orga2
             assert gc.transactions.last().acceptor == self.orga
+
+    def test_giftcard_cross_organizer_inactive(self):
+        self.orga.issued_gift_cards.create(currency="EUR")
+        orga2 = Organizer.objects.create(slug="foo2", name="foo2")
+        gc = orga2.issued_gift_cards.create(currency="EUR")
+        gc.transactions.create(value=23, acceptor=orga2)
+        self.orga.gift_card_issuer_acceptance.create(issuer=orga2, active=False)
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        response = self.client.post('/%s/%s/checkout/payment/' % (self.orga.slug, self.event.slug), {
+            'payment': 'giftcard',
+            'giftcard': gc.secret
+        }, follow=True)
+        assert 'This gift card is not known.' in response.content.decode()
 
     def test_giftcard_in_test_mode(self):
         gc = self.orga.issued_gift_cards.create(currency="EUR")

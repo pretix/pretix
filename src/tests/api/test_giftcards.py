@@ -294,6 +294,19 @@ def test_giftcard_transact_cross_organizer(token_client, organizer, event, other
 
 
 @pytest.mark.django_db
+def test_giftcard_transact_cross_organizer_inactive(token_client, organizer, event, other_giftcard):
+    organizer.gift_card_issuer_acceptance.update(active=False)
+    resp = token_client.post(
+        '/api/v1/organizers/{}/giftcards/{}/transact/?include_accepted=true'.format(organizer.slug, other_giftcard.pk),
+        {
+            'value': '10.00',
+        },
+        format='json'
+    )
+    assert resp.status_code == 404
+
+
+@pytest.mark.django_db
 def test_giftcard_transact_min_zero(token_client, organizer, event, giftcard):
     resp = token_client.post(
         '/api/v1/organizers/{}/giftcards/{}/transact/'.format(organizer.slug, giftcard.pk),

@@ -88,6 +88,10 @@ from ...helpers.compat import CompatDeleteView
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
 
+def has_truthy_attr(cls, attr):
+    return hasattr(cls, attr) and getattr(cls, attr)
+
+
 class ItemList(ListView):
     model = Item
     context_object_name = 'items'
@@ -1184,30 +1188,46 @@ class MetaDataEditorMixin:
 
     @cached_property
     def meta_forms(self):
-        if hasattr(self, 'object') and self.object:
+        if getattr(self, 'object', None):
             val_instances = {
                 v.property_id: v for v in self.object.meta_values.all()
             }
         else:
             val_instances = {}
 
+        if getattr(self, 'copy_from', None):
+            defaults = {
+                v.property_id: v.value for v in self.copy_from.meta_values.all()
+            }
+        else:
+            defaults = {}
+
         formlist = []
 
         for p in self.request.event.item_meta_properties.all():
-            formlist.append(self._make_meta_form(p, val_instances))
+            formlist.append(self._make_meta_form(p, val_instances, defaults))
         return formlist
 
-    def _make_meta_form(self, p, val_instances):
+    def _make_meta_form(self, p, val_instances, defaults):
         return self.meta_form(
             prefix='prop-{}'.format(p.pk),
             property=p,
-            instance=val_instances.get(p.pk, self.meta_model(property=p, item=self.object)),
+            instance=val_instances.get(
+                p.pk,
+                self.meta_model(
+                    property=p,
+                    item=self.object if getattr(self, 'object', None) else None,
+                    value=defaults.get(p.pk, None)
+                )
+            ),
             data=(self.request.POST if self.request.method == "POST" else None)
         )
 
     def save_meta(self):
         for f in self.meta_forms:
             if f.cleaned_data.get('value'):
+                if not f.instance.item_id:
+                    f.instance.item = self.object
                 f.save()
             elif f.instance and f.instance.pk:
                 f.instance.delete()
@@ -1253,6 +1273,7 @@ class ItemCreate(EventPermissionRequiredMixin, MetaDataEditorMixin, CreateView):
         messages.success(self.request, _('Your changes have been saved.'))
 
         ret = super().form_valid(form)
+        self.save_meta()
         form.instance.log_action('pretix.event.item.added', user=self.request.user, data={
             k: (form.cleaned_data.get(k).name
                 if isinstance(form.cleaned_data.get(k), File)
@@ -1279,6 +1300,14 @@ class ItemCreate(EventPermissionRequiredMixin, MetaDataEditorMixin, CreateView):
         ctx['meta_forms'] = self.meta_forms
         return ctx
 
+    def post(self, request, *args, **kwargs):
+        self.object = None
+        form = self.get_form()
+        if form.is_valid() and all([f.is_valid() for f in self.meta_forms]):
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
 
 class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataEditorMixin, UpdateView):
     form_class = ItemUpdateForm
@@ -1293,6 +1322,11 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                 forms.extend(resp)
             else:
                 forms.append(resp)
+
+        for form in forms:
+            if has_truthy_attr(form, "title") and has_truthy_attr(form, "is_layout"):
+                raise ValueError("`title` and `is_layout` must not both be truthy values")
+
         return forms
 
     def get_success_url(self) -> str:

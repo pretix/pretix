@@ -607,6 +607,12 @@ class PaypalMethod(BasePaymentProvider):
                 response = self.client.execute(req)
             except IOError as e:
                 logger.exception('PayPal OrdersGetRequest: {}'.format(str(e)))
+                payment.fail(info={
+                    "error": {
+                        "name": "IOError",
+                        "message": str(e),
+                    }
+                })
                 raise PaymentException(_('We had trouble communicating with PayPal'))
             else:
                 pp_captured_order = response.result
@@ -615,9 +621,15 @@ class PaypalMethod(BasePaymentProvider):
                 ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=pp_captured_order.id)
             except ReferencedPayPalObject.MultipleObjectsReturned:
                 pass
-            if str(pp_captured_order.purchase_units[0].amount.value) != str(payment.amount) or \
+            if Decimal(pp_captured_order.purchase_units[0].amount.value) != payment.amount or \
                     pp_captured_order.purchase_units[0].amount.currency_code != self.event.currency:
                 logger.error('Value mismatch: Payment %s vs paypal trans %s' % (payment.id, str(pp_captured_order.dict())))
+                payment.fail(info={
+                    "error": {
+                        "name": "ValidationError",
+                        "message": "Value mismatch",
+                    }
+                })
                 raise PaymentException(_('We were unable to process your payment. See below for details on how to '
                                          'proceed.'))
 
@@ -660,6 +672,12 @@ class PaypalMethod(BasePaymentProvider):
                         self.client.execute(patchreq)
                     except IOError as e:
                         messages.error(request, _('We had trouble communicating with PayPal'))
+                        payment.fail(info={
+                            "error": {
+                                "name": "IOError",
+                                "message": str(e),
+                            }
+                        })
                         logger.exception('PayPal OrdersPatchRequest: {}'.format(str(e)))
                         return
 
