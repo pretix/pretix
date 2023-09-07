@@ -31,8 +31,18 @@ from pretix.base.models import Event, Membership, Quota, Seat, Voucher
 from pretix.testutils.middleware import storage as debug_storage
 
 logger = logging.getLogger('pretix.base.locking')
+
+# A lock acquisition is aborted if it takes longer than LOCK_ACQUISITION_TIMEOUT to prevent connection starvation
 LOCK_ACQUISITION_TIMEOUT = 3
+
+# We make the assumption that it is safe to e.g. transform an order into a cart if the order has a lifetime of more than
+# LOCK_TRUST_WINDOW into the future. In other words, we assume that a lock is never held longer than LOCK_TRUST_WINDOW.
+# This assumption holds true for all in-request locks, since our gunicorn default settings kill a worker that takes
+# longer than 60 seconds to process a request. It however does not hold true for celery tasks, especially long-running
+# ones, so this does introduce *some* risk of incorrect locking.
 LOCK_TRUST_WINDOW = 120
+
+# These are different offsets for the different types of keys we want to lock
 KEY_SPACES = {
     Event: 1,
     Quota: 2,
@@ -78,12 +88,15 @@ def lock_objects(objects, *, shared_lock_objects=None, replace_exclusive_with_sh
     """
     if (not objects and not shared_lock_objects) or 'skip-locking' in debug_storage.debugflags:
         return
+
     if 'fail-locking' in debug_storage.debugflags:
         raise LockTimeoutException()
+
     if not connection.in_atomic_block:
         raise RuntimeError(
             "You cannot create locks outside of an transaction"
         )
+
     if 'postgresql' in settings.DATABASES['default']['ENGINE']:
         shared_keys = set(pg_lock_key(obj) for obj in shared_lock_objects) if shared_lock_objects else set()
         exclusive_keys = set(pg_lock_key(obj) for obj in objects)
@@ -93,6 +106,7 @@ def lock_objects(objects, *, shared_lock_objects=None, replace_exclusive_with_sh
         calls = ", ".join([
             (f"pg_advisory_xact_lock({k})" if k in exclusive_keys else f"pg_advisory_xact_lock_shared({k})") for k in keys
         ])
+
         try:
             with connection.cursor() as cursor:
                 cursor.execute(f"SET LOCAL lock_timeout = '{LOCK_ACQUISITION_TIMEOUT}s';")
@@ -101,6 +115,7 @@ def lock_objects(objects, *, shared_lock_objects=None, replace_exclusive_with_sh
         except DatabaseError as e:
             logger.warning(f"Waiting for locks timed out: {e} on SELECT {calls};")
             raise LockTimeoutException()
+
     else:
         for model, instances in groupby(objects, key=lambda o: type(o)):
             model.objects.select_for_update().filter(pk__in=[o.pk for o in instances])
