@@ -1472,7 +1472,7 @@ class OrderTransition(OrderView):
                                 'organizer': self.request.event.organizer.slug,
                                 'code': self.order.code
                             }) + '?start-action=do_nothing&start-mode=partial&start-partial_amount={}&giftcard={}&comment={}'.format(
-                                round_decimal(self.order.pending_sum * -1),
+                                round_decimal(self.order.pending_sum * -1, self.order.event.currency),
                                 'true' if self.req and self.req.refund_as_giftcard else 'false',
                                 quote(gettext('Order canceled'))
                             ))
