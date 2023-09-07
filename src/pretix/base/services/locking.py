@@ -28,7 +28,7 @@ from django.db import DatabaseError, connection
 from django.utils.timezone import now
 
 from pretix.base.models import Event, Membership, Quota, Seat, Voucher
-from pretix.testutils.middleware import storage as debug_storage
+from pretix.testutils.middleware import debugflags_var
 
 logger = logging.getLogger('pretix.base.locking')
 
@@ -86,10 +86,10 @@ def lock_objects(objects, *, shared_lock_objects=None, replace_exclusive_with_sh
     However, this has a large performance penalty in case we have hundreds of locks required. Therefore, we always
     place a shared lock in the event, and if we have too many affected objects, we fall back to event-level locks.
     """
-    if (not objects and not shared_lock_objects) or 'skip-locking' in debug_storage.debugflags:
+    if (not objects and not shared_lock_objects) or 'skip-locking' in debugflags_var.get():
         return
 
-    if 'fail-locking' in debug_storage.debugflags:
+    if 'fail-locking' in debugflags_var.get():
         raise LockTimeoutException()
 
     if not connection.in_atomic_block:

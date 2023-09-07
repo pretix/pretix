@@ -80,12 +80,12 @@ from pretix.base.models import Customer, User
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import order_gracefully_delete
-from pretix.testutils.middleware import storage as debug_storage
 
 from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
 from ...helpers.format import format_map
 from ...helpers.names import build_name
+from ...testutils.middleware import debugflags_var
 from ._transactions import (
     _fail, _transactions_mark_order_clean, _transactions_mark_order_dirty,
 )
@@ -1032,7 +1032,7 @@ class Order(LockModel, LoggedModel):
         except Quota.QuotaExceededException as e:
             return str(e)
 
-        if 'sleep-after-quota-check' in debug_storage.debugflags:
+        if 'sleep-after-quota-check' in debugflags_var.get():
             sleep(2)
         return True
 

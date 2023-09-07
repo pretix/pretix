@@ -77,7 +77,7 @@ from pretix.celery_app import app
 from pretix.presale.signals import (
     checkout_confirm_messages, fee_calculation_for_cart,
 )
-from pretix.testutils.middleware import storage as debug_storage
+from pretix.testutils.middleware import debugflags_var
 
 
 class CartError(Exception):
@@ -1100,7 +1100,7 @@ class CartManager:
         self._operations.sort(key=lambda a: self.order[type(a)])
         seats_seen = set()
 
-        if 'sleep-after-quota-check' in debug_storage.debugflags:
+        if 'sleep-after-quota-check' in debugflags_var.get():
             sleep(2)
 
         for iop, op in enumerate(self._operations):
@@ -1308,7 +1308,7 @@ class CartManager:
                 _save_answers(p, {}, p._answers)
         CartPosition.objects.bulk_create([p for p in new_cart_positions if not getattr(p, '_answers', None) and not p.pk])
 
-        if 'sleep-before-commit' in debug_storage.debugflags:
+        if 'sleep-before-commit' in debugflags_var.get():
             sleep(2)
         return err
 

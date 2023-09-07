@@ -19,13 +19,12 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import threading
+import contextvars
 
 from django.conf import settings
 from django.db import connection
 
-storage = threading.local()
-storage.debugflags = []
+debugflags_var = contextvars.ContextVar('debugflags', default=frozenset())
 
 
 class DebugFlagMiddleware:
@@ -34,14 +33,14 @@ class DebugFlagMiddleware:
 
     def __call__(self, request):
         if '_debug_flag' in request.GET:
-            storage.debugflags = request.GET.getlist('_debug_flag')
+            debugflags_var.set(frozenset(request.GET.getlist('_debug_flag')))
         else:
-            storage.debugflags = []
+            debugflags_var.set(frozenset())
 
-        if 'skip-csrf' in storage.debugflags:
+        if 'skip-csrf' in debugflags_var.get():
             request.csrf_processing_done = True
 
-        if 'repeatable-read' in storage.debugflags:
+        if 'repeatable-read' in debugflags_var.get():
             with connection.cursor() as cursor:
                 if 'postgresql' in settings.DATABASES['default']['ENGINE']:
                     cursor.execute('SET SESSION CHARACTERISTICS AS TRANSACTION ISOLATION LEVEL REPEATABLE READ;')
@@ -51,7 +50,7 @@ class DebugFlagMiddleware:
         try:
             return self.get_response(request)
         finally:
-            if 'repeatable-read' in storage.debugflags:
+            if 'repeatable-read' in debugflags_var.get():
                 with connection.cursor() as cursor:
                     if 'postgresql' in settings.DATABASES['default']['ENGINE']:
                         cursor.execute('SET SESSION CHARACTERISTICS AS TRANSACTION ISOLATION LEVEL READ COMMITTED;')

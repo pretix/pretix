@@ -107,7 +107,7 @@ from pretix.celery_app import app
 from pretix.helpers import OF_SELF
 from pretix.helpers.models import modelcopy
 from pretix.helpers.periodic import minimum_interval
-from pretix.testutils.middleware import storage as debug_storage
+from pretix.testutils.middleware import debugflags_var
 
 
 class OrderError(Exception):
@@ -1153,7 +1153,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         except OrderError as e:
             err_out = e  # Don't raise directly to make sure transaction is committed, as it might have deleted things
         else:
-            if 'sleep-after-quota-check' in debug_storage.debugflags:
+            if 'sleep-after-quota-check' in debugflags_var.get():
                 sleep(2)
 
             order, payment_objs = _create_order(event, email, positions, now_dt, payment_requests,
