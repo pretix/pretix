@@ -334,7 +334,7 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
 * If you use the campaigns plugin, you can pass a campaign ID as a value to ``data-campaign``. This way, all orders
   made through this widget will be counted towards this campaign.
 
-* If you use the tracking plugin, you can enable cross-domain tracking. Use the html code to embed the widget and 
+* If you use the tracking plugin, you can enable cross-domain tracking. Use the HTML code to embed the widget and 
   add one the following code snippets. Make sure to replace all occurrences of <MEASUREMENT_ID> with your Google 
   Analytics MEASUREMENT_ID (G-XXXXXXXX)
 
