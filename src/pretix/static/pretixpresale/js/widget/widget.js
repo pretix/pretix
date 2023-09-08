@@ -1904,7 +1904,7 @@ var create_widget = function (element) {
     var observer = new MutationObserver((mutationList) => {
         mutationList.forEach((mutation) => {
             if (mutation.type == "attributes" && mutation.attributeName.startsWith("data-")) {
-                Vue.set(app.widget_data, mutation.attributeName, mutation.target.getAttribute(mutation.attributeName));
+                Vue.set(app.widget_data, mutation.attributeName.substring(5), mutation.target.getAttribute(mutation.attributeName));
             }
         });
     });
@@ -2003,7 +2003,7 @@ var create_button = function (element) {
     var observer = new MutationObserver((mutationList) => {
         mutationList.forEach((mutation) => {
             if (mutation.type == "attributes" && mutation.attributeName.startsWith("data-")) {
-                Vue.set(app.widget_data, mutation.attributeName, mutation.target.getAttribute(mutation.attributeName));
+                Vue.set(app.widget_data, mutation.attributeName.substring(5), mutation.target.getAttribute(mutation.attributeName));
             }
         });
     });
