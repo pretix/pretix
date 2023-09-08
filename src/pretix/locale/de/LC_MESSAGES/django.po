@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 07:50+0000\n"
-"PO-Revision-Date: 2023-09-06 10:30+0000\n"
+"PO-Revision-Date: 2023-09-08 08:07+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -6408,13 +6408,15 @@ msgstr ""
 
 #: pretix/base/payment.py:446
 msgid "Do not send a payment reminder mail"
-msgstr ""
+msgstr "Keine Zahlungserinnerungen verschicken"
 
 #: pretix/base/payment.py:447
 msgid ""
 "Users will not receive a reminder mail to pay for their order before it "
 "expires if they have chosen this payment method."
 msgstr ""
+"Kunden erhalten keine Zahlungserinnerungs-E-Mail bevor ihre Bestellung "
+"abläuft, wenn sie diese Zahlungsmethode ausgewählt haben."
 
 #: pretix/base/payment.py:494
 msgctxt "invoice"
@@ -21096,10 +21098,8 @@ msgstr "Summe"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:5
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:7
-#, fuzzy
-#| msgid "Modify order"
 msgid "Modify orders"
-msgstr "Bestellung bearbeiten"
+msgstr "Bestellungen bearbeiten"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:12
 #, python-format
@@ -21108,18 +21108,16 @@ msgid ""
 "<strong>%(allowed)s</strong> of the selected <strong>%(total)s</strong> "
 "orders."
 msgstr ""
+"Die Aktion <strong>%(label)s</strong> kann auf <strong>%(allowed)s</strong> "
+"der ausgewählten <strong>%(total)s</strong> Bestellungen angewendet werden."
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:71
-#, fuzzy
-#| msgid "You will not be able to continue."
 msgid "Do you want to continue?"
-msgstr "Sie können nicht fortfahren."
+msgstr "Möchten Sie fortfahren?"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:77
-#, fuzzy
-#| msgid "The transaction could not be reversed."
 msgid "This operation cannot be reversed."
-msgstr "Die Transaktion konnte nicht zurückgebucht werden."
+msgstr "Diese Operation kann nicht rückgängig gemacht werden."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:9
 msgid ""
@@ -21528,19 +21526,14 @@ msgstr "Zeile für Sammel-Operation auswählen"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:188
 #: pretix/control/templates/pretixcontrol/orders/index.html:191
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "                                        from %(start_date)s\n"
-#| "                                    "
+#, python-format
 msgctxt "followup"
 msgid ""
 "\n"
 "                                        TODO %(date)s"
 msgstr ""
 "\n"
-"                                        ab %(start_date)s\n"
-"                                    "
+"                                        TODO %(start_date)s"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:208
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:240
@@ -21601,22 +21594,17 @@ msgstr ""
 "betrachten Sie den \"Bestellüberblick\"."
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:282
-#, fuzzy
-#| msgctxt "subevents"
-#| msgid "Select date"
 msgid "Select action"
-msgstr "Termin auswählen"
+msgstr "Aktion auswählen"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:304
 #: pretix/control/views/orders.py:306
 msgid "Mark as expired if overdue"
-msgstr ""
+msgstr "Überfällige als abgelaufen markieren"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:312
-#, fuzzy
-#| msgid "Disable test mode"
 msgid "Delete (test mode only)"
-msgstr "Testmodus deaktivieren"
+msgstr "Löschen (nur Testmodus)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:5
 #: pretix/control/templates/pretixcontrol/orders/overview.html:16
