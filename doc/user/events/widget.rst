@@ -293,6 +293,11 @@ with that information::
     </pretix-widget>
 
 This works for the pretix Button as well, if you also specify a product.
+
+As data-attributes are reactive, you can change them with JavaScript as well. Please note, that once the user
+started the checkout process, we do not update the data-attributes in the existing checkout process to not
+interrupt the checkout UX.
+
 Currently, the following attributes are understood by pretix itself:
 
 * ``data-email`` will pre-fill the order email field as well as the attendee email field (if enabled).
