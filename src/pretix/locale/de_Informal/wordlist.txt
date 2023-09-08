@@ -367,6 +367,7 @@ XXXXX
 Yubikey
 Zahlungs
 Zahlungsbestätigungs
+Zahlungserinnerungs
 zahlungspflichtig
 Zahlungsplugins
 Zehnerkarten
