@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 07:50+0000\n"
-"PO-Revision-Date: 2023-09-08 08:07+0000\n"
+"PO-Revision-Date: 2023-09-08 08:16+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -21533,7 +21533,7 @@ msgid ""
 "                                        TODO %(date)s"
 msgstr ""
 "\n"
-"                                        TODO %(start_date)s"
+"                                        TODO %(date)s"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:208
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:240
