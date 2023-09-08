@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-09-08 07:50+0000\n"
+"POT-Creation-Date: 2023-09-08 13:36+0000\n"
 "PO-Revision-Date: 2023-09-02 14:00+0000\n"
 "Last-Translator: Ash So <ashs@vankaifong.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
@@ -297,7 +297,7 @@ msgid "\"{input}\" is not a valid choice."
 msgstr "\"{input}\"不是一個有效的選擇。"
 
 #: pretix/api/serializers/order.py:1262 pretix/api/views/cart.py:210
-#: pretix/base/services/orders.py:1468
+#: pretix/base/services/orders.py:1469
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
 msgstr "所選擇的座位\"{seat}\"不存在。"
@@ -548,8 +548,8 @@ msgstr "客戶帳戶已匿名化。"
 #: pretix/control/forms/event.py:770 pretix/control/forms/event.py:776
 #: pretix/control/forms/event.py:820 pretix/control/forms/event.py:1423
 #: pretix/control/forms/mailsetup.py:76 pretix/control/forms/mailsetup.py:118
-#: pretix/plugins/banktransfer/payment.py:667
-#: pretix/plugins/banktransfer/payment.py:673
+#: pretix/plugins/banktransfer/payment.py:668
+#: pretix/plugins/banktransfer/payment.py:674
 #: pretix/presale/forms/customer.py:139
 msgid "This field is required."
 msgstr "此欄位為必填欄位。"
@@ -2743,7 +2743,7 @@ msgid "Please enter the same password twice"
 msgstr "請輸入相同的密碼兩次"
 
 #: pretix/base/forms/auth.py:149
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:120
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:133
 msgid "Email address"
 msgstr "電子郵箱位址"
 
@@ -6771,14 +6771,14 @@ msgid "You cannot select more than %s item per order."
 msgid_plural "You cannot select more than %s items per order."
 msgstr[0] "每項訂單不能選擇超過 %s 的產品。"
 
-#: pretix/base/services/cart.py:118 pretix/base/services/orders.py:1477
+#: pretix/base/services/cart.py:118 pretix/base/services/orders.py:1478
 #, python-format
 msgid "You cannot select more than %(max)s item of the product %(product)s."
 msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s."
 msgstr[0] "不能選擇商品 %(product)s 的多個 %(max)s 專案。"
 
-#: pretix/base/services/cart.py:123 pretix/base/services/orders.py:1482
+#: pretix/base/services/cart.py:123 pretix/base/services/orders.py:1483
 #, python-format
 msgid "You need to select at least %(min)s item of the product %(product)s."
 msgid_plural ""
@@ -7499,85 +7499,85 @@ msgstr ""
 "在嘗試下訂單時，我們注意到訂單總數已更改。不是剛才價格發生了變化，就是你使用"
 "的禮品卡在此期間被使用了。請檢查下面的價格，然後重試。"
 
-#: pretix/base/services/orders.py:1456
+#: pretix/base/services/orders.py:1457
 msgid "You need to select a variation of the product."
 msgstr "你需要選擇產品的類別。"
 
-#: pretix/base/services/orders.py:1457
+#: pretix/base/services/orders.py:1458
 #, python-brace-format
 msgid ""
 "The quota {name} does not have enough capacity left to perform the operation."
 msgstr "{name}的額度 沒有足夠的剩餘容量來執行該操作。"
 
-#: pretix/base/services/orders.py:1458
+#: pretix/base/services/orders.py:1459
 msgid "There is no quota defined that allows this operation."
 msgstr "沒有允許此操作的配額的定義。"
 
-#: pretix/base/services/orders.py:1459
+#: pretix/base/services/orders.py:1460
 msgid "The selected product is not active or has no price set."
 msgstr "所選商品未處於活動狀態或未設定價格。"
 
-#: pretix/base/services/orders.py:1460
+#: pretix/base/services/orders.py:1461
 msgid ""
 "This operation would leave the order empty. Please cancel the order itself "
 "instead."
 msgstr "此操作會將訂單保留空白。請取消訂單本身。"
 
-#: pretix/base/services/orders.py:1462
+#: pretix/base/services/orders.py:1463
 msgid ""
 "This operation would make the order free and therefore immediately paid, "
 "however no quota is available."
 msgstr "此操作將使訂單免費，因此立即付款，但是沒有可用的額度。"
 
-#: pretix/base/services/orders.py:1465
+#: pretix/base/services/orders.py:1466
 msgid ""
 "This is an add-on product, please select the base position it should be "
 "added to."
 msgstr "這是一個附加商品，請選擇該商品並添加添加到應該的基本位置。"
 
-#: pretix/base/services/orders.py:1466
+#: pretix/base/services/orders.py:1467
 msgid ""
 "The selected base position does not allow you to add this product as an add-"
 "on."
 msgstr "所選的座位位置不允許你將此產品添加為附加部分。"
 
-#: pretix/base/services/orders.py:1467
+#: pretix/base/services/orders.py:1468
 msgid "You need to choose a subevent for the new position."
 msgstr "你需要為新職位選擇一個子事件。"
 
-#: pretix/base/services/orders.py:1470
+#: pretix/base/services/orders.py:1471
 #, python-brace-format
 msgid ""
 "You selected seat \"{seat}\" for a date that does not match the selected "
 "ticket date. Please choose a seat again."
 msgstr "你選擇的座位“{seat}”的日期與所選的票與日期不符合。請重新選擇座位。"
 
-#: pretix/base/services/orders.py:1472
+#: pretix/base/services/orders.py:1473
 msgid "The selected product requires you to select a seat."
 msgstr "所選商品要求你選擇一個座位。"
 
-#: pretix/base/services/orders.py:1473
+#: pretix/base/services/orders.py:1474
 msgid "The selected product does not allow to select a seat."
 msgstr "所選商品不允許選擇座位。"
 
-#: pretix/base/services/orders.py:1474
+#: pretix/base/services/orders.py:1475
 msgid "The selected country is blocked by your tax rule."
 msgstr "所選國家/地區被你的稅收規則封鎖。"
 
-#: pretix/base/services/orders.py:1475
+#: pretix/base/services/orders.py:1476
 msgid ""
 "You cannot change the price of a position that has been used to issue a gift "
 "card."
 msgstr "你無法更改已用於發行禮品卡的順序的價格。"
 
-#: pretix/base/services/orders.py:2252 pretix/base/services/orders.py:2268
+#: pretix/base/services/orders.py:2253 pretix/base/services/orders.py:2269
 #, python-brace-format
 msgid ""
 "A position can not be canceled since the gift card {card} purchased in this "
 "order has already been redeemed."
 msgstr "此訂單無法取消，因為在此訂單中購買的禮品卡{card}已經兌換。"
 
-#: pretix/base/services/orders.py:2860
+#: pretix/base/services/orders.py:2861
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
@@ -19144,13 +19144,13 @@ msgid "taxes"
 msgstr "稅"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:45
-#: pretix/control/templates/pretixcontrol/orders/index.html:289
+#: pretix/control/templates/pretixcontrol/orders/index.html:287
 #: pretix/control/views/orders.py:277
 msgid "Approve"
 msgstr "已批准"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:50
-#: pretix/control/templates/pretixcontrol/orders/index.html:296
+#: pretix/control/templates/pretixcontrol/orders/index.html:294
 #: pretix/control/views/orders.py:290
 msgid "Deny"
 msgstr "否認"
@@ -20192,29 +20192,22 @@ msgid "select row for batch-operation"
 msgstr "選擇行進行批處理操作"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:188
-#: pretix/control/templates/pretixcontrol/orders/index.html:191
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "                                        from %(start_date)s\n"
-#| "                                    "
+#: pretix/control/templates/pretixcontrol/orders/index.html:190
+#: pretix/control/templates/pretixcontrol/search/orders.html:80
+#: pretix/control/templates/pretixcontrol/search/orders.html:82
+#, python-format
 msgctxt "followup"
-msgid ""
-"\n"
-"                                        TODO %(date)s"
-msgstr ""
-"\n"
-"                                        從 %(start_date)s\n"
-"                                    "
+msgid "TODO %(date)s"
+msgstr "待辦事項%(date)s"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:208
+#: pretix/control/templates/pretixcontrol/orders/index.html:206
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:240
 #: pretix/control/templates/pretixcontrol/search/orders.html:95
 msgid "CANCELLATION REQUESTED"
 msgstr "要求已取消"
 
+#: pretix/control/templates/pretixcontrol/orders/index.html:209
 #: pretix/control/templates/pretixcontrol/orders/index.html:211
-#: pretix/control/templates/pretixcontrol/orders/index.html:213
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:243
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:245
 #: pretix/control/templates/pretixcontrol/search/orders.html:98
@@ -20222,59 +20215,59 @@ msgstr "要求已取消"
 msgid "REFUND PENDING"
 msgstr "退款待處理"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:216
+#: pretix/control/templates/pretixcontrol/orders/index.html:214
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:248
 #: pretix/control/templates/pretixcontrol/search/orders.html:103
 msgid "OVERPAID"
 msgstr "超付"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:218
+#: pretix/control/templates/pretixcontrol/orders/index.html:216
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:250
 #: pretix/control/templates/pretixcontrol/search/orders.html:105
 msgid "UNDERPAID"
 msgstr "工資過低"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:220
+#: pretix/control/templates/pretixcontrol/orders/index.html:218
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:252
 #: pretix/control/templates/pretixcontrol/search/orders.html:107
 msgid "FULLY PAID"
 msgstr "全額已付款"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:232
+#: pretix/control/templates/pretixcontrol/orders/index.html:230
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:264
 msgid "INVOICE NOT CANCELED"
 msgstr "發票未取消"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:244
+#: pretix/control/templates/pretixcontrol/orders/index.html:242
 msgid "Sum over all pages"
 msgstr "所有頁面的總和"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:247
+#: pretix/control/templates/pretixcontrol/orders/index.html:245
 #, python-format
 msgid "1 order"
 msgid_plural "%(s)s orders"
 msgstr[0] "一項訂單,%(s)s 訂單"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:256
-#: pretix/control/templates/pretixcontrol/orders/index.html:265
+#: pretix/control/templates/pretixcontrol/orders/index.html:254
+#: pretix/control/templates/pretixcontrol/orders/index.html:263
 msgid ""
 "This sum includes canceled orders. For your ticket revenue, look at the "
 "\"order overview\"."
 msgstr "此金額包括已取消的訂單。對於你的門票收入，請查看「訂單概覽」。"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:282
+#: pretix/control/templates/pretixcontrol/orders/index.html:280
 #, fuzzy
 #| msgctxt "subevents"
 #| msgid "Select date"
 msgid "Select action"
 msgstr "選擇日期"
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:304
+#: pretix/control/templates/pretixcontrol/orders/index.html:302
 #: pretix/control/views/orders.py:306
 msgid "Mark as expired if overdue"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/orders/index.html:312
+#: pretix/control/templates/pretixcontrol/orders/index.html:310
 #, fuzzy
 #| msgid "Disable test mode"
 msgid "Delete (test mode only)"
@@ -21619,13 +21612,6 @@ msgstr "佔位符"
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:33
 msgid "Formatting example"
 msgstr "格式設置範例"
-
-#: pretix/control/templates/pretixcontrol/search/orders.html:80
-#: pretix/control/templates/pretixcontrol/search/orders.html:82
-#, python-format
-msgctxt "followup"
-msgid "TODO %(date)s"
-msgstr "待辦事項%(date)s"
 
 #: pretix/control/templates/pretixcontrol/search/orders.html:116
 msgid ""
@@ -24705,7 +24691,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/payment.py:102
 #: pretix/plugins/banktransfer/payment.py:466
-#: pretix/plugins/banktransfer/payment.py:651
+#: pretix/plugins/banktransfer/payment.py:652
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:13
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:13
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:50
@@ -24857,7 +24843,7 @@ msgid "Please transfer the full amount to the following bank account:"
 msgstr "請將全額金額轉入以下銀行帳戶："
 
 #: pretix/plugins/banktransfer/payment.py:465
-#: pretix/plugins/banktransfer/payment.py:648
+#: pretix/plugins/banktransfer/payment.py:649
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:12
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:12
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:23
@@ -24880,24 +24866,24 @@ msgstr "帳戶持有人"
 msgid "Bank"
 msgstr "銀行"
 
-#: pretix/plugins/banktransfer/payment.py:547
+#: pretix/plugins/banktransfer/payment.py:548
 msgid "Invalid IBAN/BIC"
 msgstr "無效 IBAN/BIC"
 
-#: pretix/plugins/banktransfer/payment.py:618
+#: pretix/plugins/banktransfer/payment.py:619
 #, python-brace-format
 msgid "Bank account {iban}"
 msgstr "銀行帳戶 {iban}"
 
-#: pretix/plugins/banktransfer/payment.py:634
+#: pretix/plugins/banktransfer/payment.py:635
 msgid "Can only create a bank transfer refund from an existing payment."
 msgstr "只能從現有付款中建立銀行轉帳退款。"
 
-#: pretix/plugins/banktransfer/payment.py:654
+#: pretix/plugins/banktransfer/payment.py:655
 msgid "BIC (optional)"
 msgstr "BIC( 可選擇的)"
 
-#: pretix/plugins/banktransfer/payment.py:693
+#: pretix/plugins/banktransfer/payment.py:694
 msgid "Your input was invalid, please see below for details."
 msgstr "你的輸入無效，詳情請參閱下文。"
 
@@ -25169,7 +25155,19 @@ msgstr "使用銀行應用程式的QR閱讀器掃描此圖像以開始付款流�
 msgid "Open BezahlCode in your banking app to start the payment process."
 msgstr "在你的銀行應用程式中打開BezahlCode以開始付款流程。"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:112
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:111
+#, fuzzy, python-format
+#| msgid "We will send a copy of your invoice directly to %(recipient)s."
+msgid "At your request, we sent the invoice directly to %(recipient)s."
+msgstr "我們會將你的發票副本直接發送給%(recipient)s。"
+
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:116
+#, fuzzy
+#| msgid "Log in as someone else"
+msgid "Send again or somewhere else"
+msgstr "以其他人身份登錄"
+
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:125
 #, fuzzy
 #| msgid ""
 #| "Please additionally send my invoice directly to our accounting department"
@@ -25178,13 +25176,13 @@ msgid ""
 "their email address:"
 msgstr "另外，請將我的發票直接發送給我們的會計部門"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:118
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:131
 #, fuzzy
 #| msgid "Invoice recipient e-mail"
 msgid "Invoice recipient email"
 msgstr "發票收件者電子郵件"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:125
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:138
 #, fuzzy
 #| msgid "Send vouchers via email"
 msgid "Send invoice via email"
@@ -25445,7 +25443,7 @@ msgstr "此訂單尚未得到活動組織者的批准。"
 msgid "No invoice found, please request an invoice first."
 msgstr ""
 
-#: pretix/plugins/banktransfer/views.py:926
+#: pretix/plugins/banktransfer/views.py:932
 #, python-brace-format
 msgid "Sending the latest invoice via e-mail to {email}."
 msgstr ""
@@ -30443,6 +30441,20 @@ msgstr "寫入權限"
 #: pretix/settings.py:723
 msgid "Kosovo"
 msgstr "柯索沃"
+
+#, fuzzy, python-format
+#~| msgid ""
+#~| "\n"
+#~| "                                        from %(start_date)s\n"
+#~| "                                    "
+#~ msgctxt "followup"
+#~ msgid ""
+#~ "\n"
+#~ "                                        TODO %(date)s"
+#~ msgstr ""
+#~ "\n"
+#~ "                                        從 %(start_date)s\n"
+#~ "                                    "
 
 #~ msgid "Notify user by e-mail"
 #~ msgstr "以郵件通知使用者"
