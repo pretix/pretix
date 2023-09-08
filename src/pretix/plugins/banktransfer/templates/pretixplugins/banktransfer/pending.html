@@ -109,7 +109,7 @@ SCT
     {% if info.send_invoice_to %}
         <p>
             {% blocktrans trimmed with recipient=info.send_invoice_to %}
-                At your request, we are sending the invoice directly to {{ recipient }}.
+                At your request, we sent the invoice directly to {{ recipient }}.
             {% endblocktrans %}
             <a data-toggle="collapse" data-target="#payment_banktransfer_send_invoice_to" class="btn btn-default btn-xs">
                 <span class="fa fa-envelope-o"></span>
