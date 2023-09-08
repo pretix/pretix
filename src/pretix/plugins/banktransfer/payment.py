@@ -530,7 +530,7 @@ class BankTransfer(BasePaymentProvider):
             'code': self._code(payment.order),
             'order': payment.order,
             'amount': payment.amount,
-            'info': payment.info_data,
+            'payment_info': payment.info_data,
             'settings': self.settings,
             'swiss_qrbill': self.swiss_qrbill(payment),
             'eu_barcodes': self.event.currency == 'EUR',

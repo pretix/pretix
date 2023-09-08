@@ -106,9 +106,9 @@ SCT
 {% endif %}
 
 {% if invoice_email_enabled and has_invoices %}
-    {% if info.send_invoice_to %}
+    {% if payment_info.send_invoice_to %}
         <p>
-            {% blocktrans trimmed with recipient=info.send_invoice_to %}
+            {% blocktrans trimmed with recipient=payment_info.send_invoice_to %}
                 At your request, we sent the invoice directly to {{ recipient }}.
             {% endblocktrans %}
             <a data-toggle="collapse" data-target="#payment_banktransfer_send_invoice_to" class="btn btn-default btn-xs">
@@ -119,7 +119,7 @@ SCT
     {% endif %}
     <form id="payment_banktransfer_send_invoice_to" method="post"
           action="{% eventurl event "plugins:banktransfer:mail_invoice" order=order.code secret=order.secret %}"
-          {% if info.send_invoice_to %}class="collapse"{% endif %}>
+          {% if payment_info.send_invoice_to %}class="collapse"{% endif %}>
         {% csrf_token %}
         <p>
             {% blocktrans trimmed %}
