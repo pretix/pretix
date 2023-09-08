@@ -1297,6 +1297,7 @@ def send_expiry_warnings(sender, **kwargs):
         if (
                 lp and
                 lp.state in [OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING] and
+                lp.payment_provider and
                 lp.payment_provider.prevent_reminder_mail(o, lp)
         ):
             continue
