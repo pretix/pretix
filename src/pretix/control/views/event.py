@@ -1527,7 +1527,7 @@ class QuickSetupView(FormView):
 
 
 class EventQRCode(EventPermissionRequiredMixin, View):
-    permission = 'can_change_event_settings'
+    permission = None
 
     def get(self, request, *args, filetype, **kwargs):
         url = build_absolute_uri(request.event, 'presale:event.index')
