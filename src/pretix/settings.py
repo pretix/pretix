@@ -165,13 +165,13 @@ if SITE_URL.endswith('/'):
 
 CSRF_TRUSTED_ORIGINS = [urlparse(SITE_URL).scheme + '://' + urlparse(SITE_URL).hostname]
 
-TRUST_X_FORWARDED_FOR = config.get('pretix', 'trust_x_forwarded_for', fallback=False)
-USE_X_FORWARDED_HOST = config.get('pretix', 'trust_x_forwarded_host', fallback=False)
+TRUST_X_FORWARDED_FOR = config.getboolean('pretix', 'trust_x_forwarded_for', fallback=False)
+USE_X_FORWARDED_HOST = config.getboolean('pretix', 'trust_x_forwarded_host', fallback=False)
 
 
 REQUEST_ID_HEADER = config.get('pretix', 'request_id_header', fallback=False)
 
-if config.get('pretix', 'trust_x_forwarded_proto', fallback=False):
+if config.getboolean('pretix', 'trust_x_forwarded_proto', fallback=False):
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 PRETIX_PLUGINS_DEFAULT = config.get('pretix', 'plugins_default',
