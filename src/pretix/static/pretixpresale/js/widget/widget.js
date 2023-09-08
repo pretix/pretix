@@ -1901,8 +1901,19 @@ var create_widget = function (element) {
         }
     }
 
+    var observer = new MutationObserver((mutationList) => {
+        mutationList.forEach((mutation) => {
+            if (mutation.type == "attributes" && mutation.attributeName.startsWith("data-")) {
+                Vue.set(app.widget_data, mutation.attributeName, mutation.target.getAttribute(mutation.attributeName));
+            }
+        });
+    });
+    var observerOptions = { attributes: true };
+
     if (element.tagName !== "pretix-widget") {
         element.innerHTML = "<pretix-widget></pretix-widget>";
+        // we need to watch the container as well as the replaced root-node (see mounted())
+        observer.observe(element, observerOptions);
     }
 
     var app = new Vue({
@@ -1960,6 +1971,9 @@ var create_widget = function (element) {
         created: function () {
             this.reload();
         },
+        mounted: function () {
+            observer.observe(this.$el, observerOptions);
+        },
         computed: shared_root_computed,
         methods: shared_root_methods
     });
@@ -1986,8 +2000,19 @@ var create_button = function (element) {
         }
     }
 
+    var observer = new MutationObserver((mutationList) => {
+        mutationList.forEach((mutation) => {
+            if (mutation.type == "attributes" && mutation.attributeName.startsWith("data-")) {
+                Vue.set(app.widget_data, mutation.attributeName, mutation.target.getAttribute(mutation.attributeName));
+            }
+        });
+    });
+    var observerOptions = { attributes: true };
+
     if (element.tagName !== "pretix-button") {
         element.innerHTML = "<pretix-button>" + element.innerHTML + "</pretix-button>";
+        // Vue does not replace the container, so watch container as well
+        observer.observe(element, observerOptions);
     }
 
     var itemsplit = raw_items.split(",");
@@ -2019,6 +2044,9 @@ var create_button = function (element) {
             }
         },
         created: function () {
+        },
+        mounted: function () {
+            observer.observe(this.$el, observerOptions);
         },
         computed: shared_root_computed,
         methods: shared_root_methods
