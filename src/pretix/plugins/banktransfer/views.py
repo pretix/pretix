@@ -923,5 +923,11 @@ class SendInvoiceMailView(EventViewMixin, OrderDetailMixin, View):
         provider = last_payment.payment_provider
         provider.send_invoice_to_alternate_email(self.order, last_invoice, request.POST['email'])
 
+        last_payment.info_data = {
+            **last_payment.info_data,
+            'send_invoice_to': request.POST['email'],
+        }
+        last_payment.save(update_fields=['info'])
+
         messages.success(request, _('Sending the latest invoice via e-mail to {email}.').format(email=request.POST['email']))
         return redirect(self.get_order_url())
