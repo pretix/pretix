@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-06 08:12+0000\n"
-"PO-Revision-Date: 2023-09-07 15:55+0000\n"
+"PO-Revision-Date: 2023-09-08 07:44+0000\n"
 "Last-Translator: Aufa Fadhlurohman <aufafadlurohman@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix/id/>\n"
@@ -27042,7 +27042,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:301
 msgid "We're trying to reserve another one for you!"
-msgstr ""
+msgstr "Sedang mempersiapkan untuk Kamu!"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:302
 #: pretix/presale/templates/pretixpresale/event/index.html:173
@@ -27548,7 +27548,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
 #: pretix/presale/templates/pretixpresale/event/voucher.html:61
 msgid "We're now trying to reserve this for you!"
-msgstr ""
+msgstr "Sedang mempersiapkan untuk Kamu!"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:192
 msgid ""
