@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-08 08:16+0000\n"
+"PO-Revision-Date: 2023-09-08 13:52+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -26827,16 +26827,15 @@ msgid "Open BezahlCode in your banking app to start the payment process."
 msgstr "BezahlCode in Banking-App öffnen um den Zahlungsvorgang zu starten."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:111
-#, fuzzy, python-format
-#| msgid "We will send a copy of your invoice directly to %(recipient)s."
+#, python-format
 msgid "At your request, we sent the invoice directly to %(recipient)s."
-msgstr "Wir senden eine Kopie der Rechnung direkt an %(recipient)s."
+msgstr ""
+"Wir haben auf deinen Wunsch hin eine Kopie der Rechnung direkt an "
+"%(recipient)s gesendet."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:116
-#, fuzzy
-#| msgid "Log in as someone else"
 msgid "Send again or somewhere else"
-msgstr "Als jemand anders anmelden"
+msgstr "An andere Adresse oder erneut senden"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:125
 msgid ""
