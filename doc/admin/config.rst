@@ -171,7 +171,7 @@ Example::
 ``advisory_lock_index``
     On PostgreSQL, pretix uses the "advisory lock" feature. However, advisory locks use a server-wide name space and
     and are not scoped to a specific database. If you run multiple pretix applications with the same PostgreSQL server,
-    you should set separate values for this setting (integers up to 65535).
+    you should set separate values for this setting (integers up to 256).
 
 ``sslmode``, ``sslrootcert``
     Connection TLS details for the PostgreSQL database connection. Possible values of ``sslmode`` are ``disable``, ``allow``, ``prefer``, ``require``, ``verify-ca``, and ``verify-full``. ``sslrootcert`` should be the accessible path of the ca certificate. Both values are empty by default.
