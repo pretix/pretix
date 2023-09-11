@@ -26,6 +26,7 @@ from decimal import Decimal
 
 import django_filters
 import pytz
+from django.conf import settings
 from django.db import transaction
 from django.db.models import (
     Exists, F, OuterRef, Prefetch, Q, Subquery, prefetch_related_objects,
@@ -1181,7 +1182,7 @@ class OrderPositionViewSet(viewsets.ModelViewSet):
             ftype, ignored = mimetypes.guess_type(image_file.name)
             extension = os.path.basename(image_file.name).split('.')[-1]
         else:
-            img = Image.open(image_file)
+            img = Image.open(image_file, formats=settings.PILLOW_FORMATS_QUESTIONS_IMAGE)
             ftype = Image.MIME[img.format]
             extensions = {
                 'GIF': 'gif', 'TIFF': 'tif', 'BMP': 'bmp', 'JPEG': 'jpg', 'PNG': 'png'

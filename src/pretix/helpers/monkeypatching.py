@@ -21,6 +21,8 @@
 #
 from datetime import datetime
 
+from PIL import Image
+
 
 def monkeypatch_vobject_performance():
     """
@@ -52,5 +54,19 @@ def monkeypatch_vobject_performance():
     icalendar.tzinfo_eq = new_tzinfo_eq
 
 
+def monkeypatch_pillow_safer():
+    """
+    Pillow supports many file formats, among them EPS. For EPS, Pillow loads GhostScript whenever GhostScript
+    is installed (cannot officially be disabled). However, GhostScript is known for regular security vulnerabilities.
+    We have no use of reading EPS files and usually prevent this by using `Image.open(…, formats=[…])` to disable EPS
+    support explicitly. However, we are worried about our dependencies like reportlab using `Image.open` without the
+    `formats=` parameter. Therefore, as a defense in depth approach, we monkeypatch EPS support away by modifying the
+    internal image format registry of Pillow.
+    """
+    if "EPS" in Image.ID:
+        Image.ID.remove("EPS")
+
+
 def monkeypatch_all_at_ready():
     monkeypatch_vobject_performance()
+    monkeypatch_pillow_safer()
