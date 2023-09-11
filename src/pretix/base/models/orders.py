@@ -1219,7 +1219,7 @@ class QuestionAnswer(models.Model):
 
     @property
     def is_image(self):
-        return any(self.file.name.lower().endswith(e) for e in ('.jpg', '.png', '.gif', '.tiff', '.bmp', '.jpeg'))
+        return any(self.file.name.lower().endswith(e) for e in settings.FILE_UPLOAD_EXTENSIONS_QUESTION_IMAGE)
 
     @property
     def file_name(self):

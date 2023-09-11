@@ -23,6 +23,7 @@ import hashlib
 import math
 from io import BytesIO
 
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from PIL import Image, ImageOps, ImageSequence
@@ -165,7 +166,7 @@ def resize_image(image, size):
 
 def create_thumbnail(sourcename, size):
     source = default_storage.open(sourcename)
-    image = Image.open(BytesIO(source.read()))
+    image = Image.open(BytesIO(source.read()), formats=settings.PILLOW_FORMATS_QUESTIONS_IMAGE)
     try:
         image.load()
     except:
