@@ -22,6 +22,7 @@
 import logging
 from io import BytesIO
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.utils.translation import gettext_lazy as _
 from PIL.Image import MAX_IMAGE_PIXELS, DecompressionBombError
@@ -51,7 +52,7 @@ def validate_uploaded_file_for_valid_image(f):
 
     try:
         try:
-            image = Image.open(file)
+            image = Image.open(file, formats=settings.PILLOW_FORMATS_QUESTIONS_IMAGE)
             # verify() must be called immediately after the constructor.
             image.verify()
         except DecompressionBombError:

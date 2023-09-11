@@ -20,8 +20,9 @@
 # <https://www.gnu.org/licenses/>.
 #
 from arabic_reshaper import ArabicReshaper
+from django.conf import settings
 from django.utils.functional import SimpleLazyObject
-from PIL.Image import Resampling
+from PIL import Image
 from reportlab.lib.utils import ImageReader
 
 
@@ -33,7 +34,7 @@ class ThumbnailingImageReader(ImageReader):
             height = width * self._image.size[1] / self._image.size[0]
         self._image.thumbnail(
             size=(int(width * dpi / 72), int(height * dpi / 72)),
-            resample=Resampling.BICUBIC
+            resample=Image.Resampling.BICUBIC
         )
         self._data = None
         return width, height
@@ -43,6 +44,9 @@ class ThumbnailingImageReader(ImageReader):
         # file handle if the file is a JPEG, and therefore does not respect the
         # (smaller) size of the modified image.
         return None
+
+    def _read_image(self, fp):
+        return Image.open(fp, formats=settings.PILLOW_FORMATS_IMAGE)
 
 
 reshaper = SimpleLazyObject(lambda: ArabicReshaper(configuration={

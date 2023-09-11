@@ -521,7 +521,7 @@ def images_from_questions(sender, *args, **kwargs):
         else:
             a = op.answers.filter(question_id=question_id).first() or a
 
-        if not a or not a.file or not any(a.file.name.lower().endswith(e) for e in (".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".tiff")):
+        if not a or not a.file or not any(a.file.name.lower().endswith(e) for e in settings.FILE_UPLOAD_EXTENSIONS_QUESTION_IMAGE):
             return None
         else:
             if etag:
