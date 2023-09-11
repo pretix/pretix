@@ -127,7 +127,7 @@ class ClearableBasenameFileInput(forms.ClearableFileInput):
 
         @property
         def is_img(self):
-            return any(self.file.name.lower().endswith(e) for e in ('.jpg', '.jpeg', '.png', '.gif'))
+            return any(self.file.name.lower().endswith(e) for e in settings.FILE_UPLOAD_EXTENSIONS_IMAGE)
 
         def __str__(self):
             if hasattr(self.file, 'display_name'):

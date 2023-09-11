@@ -500,14 +500,14 @@ class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileFiel
                 file = BytesIO(data['content'])
 
         try:
-            image = Image.open(file)
+            image = Image.open(file, formats=settings.PILLOW_FORMATS_QUESTIONS_IMAGE)
             # verify() must be called immediately after the constructor.
             image.verify()
 
             # We want to do more than just verify(), so we need to re-open the file
             if hasattr(file, 'seek'):
                 file.seek(0)
-            image = Image.open(file)
+            image = Image.open(file, formats=settings.PILLOW_FORMATS_QUESTIONS_IMAGE)
 
             # load() is a potential DoS vector (see Django bug #18520), so we verify the size first
             if image.width > 10_000 or image.height > 10_000:
@@ -566,7 +566,7 @@ class PortraitImageField(SizeValidationMixin, ExtValidationMixin, forms.FileFiel
         return f
 
     def __init__(self, *args, **kwargs):
-        kwargs.setdefault('ext_whitelist', (".png", ".jpg", ".jpeg", ".jfif", ".tif", ".tiff", ".bmp"))
+        kwargs.setdefault('ext_whitelist', settings.FILE_UPLOAD_EXTENSIONS_QUESTION_IMAGE)
         kwargs.setdefault('max_size', settings.FILE_UPLOAD_MAX_SIZE_IMAGE)
         super().__init__(*args, **kwargs)
 
@@ -826,11 +826,7 @@ class BaseQuestionsForm(forms.Form):
                         help_text=help_text,
                         initial=initial.file if initial else None,
                         widget=UploadedFileWidget(position=pos, event=event, answer=initial),
-                        ext_whitelist=(
-                            ".png", ".jpg", ".gif", ".jpeg", ".pdf", ".txt", ".docx", ".gif", ".svg",
-                            ".pptx", ".ppt", ".doc", ".xlsx", ".xls", ".jfif", ".heic", ".heif", ".pages",
-                            ".bmp", ".tif", ".tiff"
-                        ),
+                        ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_OTHER,
                         max_size=settings.FILE_UPLOAD_MAX_SIZE_OTHER,
                     )
             elif q.type == Question.TYPE_DATE:

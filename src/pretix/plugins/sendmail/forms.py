@@ -76,11 +76,7 @@ class BaseMailForm(FormPlaceholderMixin, forms.Form):
     attachment = CachedFileField(
         label=_("Attachment"),
         required=False,
-        ext_whitelist=(
-            ".png", ".jpg", ".gif", ".jpeg", ".pdf", ".txt", ".docx", ".gif", ".svg",
-            ".pptx", ".ppt", ".doc", ".xlsx", ".xls", ".jfif", ".heic", ".heif", ".pages",
-            ".bmp", ".tif", ".tiff"
-        ),
+        ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_EMAIL_ATTACHMENT,
         help_text=_('Sending an attachment increases the chance of your email not arriving or being sorted into spam folders. We recommend only using PDFs '
                     'of no more than 2 MB in size.'),
         max_size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT
