@@ -80,7 +80,7 @@ def lock_objects(objects, *, shared_lock_objects=None, replace_exclusive_with_sh
     A shared lock will be created on objects passed in `shared_lock_objects`.
 
     If `objects` contains more than `replace_exclusive_with_shared_when_exclusive_are_more_than` objects, `objects`
-    will be ignored and `shared_lock_objects` will be used in its place.
+    will be ignored and `shared_lock_objects` will be used in its place and receive an exclusive lock.
 
     The idea behind it is this: Usually we create a lock on every quota, voucher, or seat contained in an order.
     However, this has a large performance penalty in case we have hundreds of locks required. Therefore, we always
