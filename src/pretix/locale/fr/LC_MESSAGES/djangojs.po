@@ -7,7 +7,7 @@ msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-21 11:46+0000\n"
-"PO-Revision-Date: 2023-08-02 02:00+0000\n"
+"PO-Revision-Date: 2023-09-11 10:00+0000\n"
 "Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "fr/>\n"
@@ -63,7 +63,7 @@ msgstr "iDEAL"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:42
 msgid "SEPA Direct Debit"
-msgstr "Prélèvement SEPA"
+msgstr "Mandat SEPA"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:43
 msgid "Bancontact"
