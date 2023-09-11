@@ -70,16 +70,22 @@ CELERY_TASK_ALWAYS_EAGER = True
 # Don't use redis
 SESSION_ENGINE = "django.contrib.sessions.backends.db"
 HAS_REDIS = False
+ORIGINAL_CACHES = CACHES
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.dummy.DummyCache',
     }
 }
+
+# Set databases
 DATABASE_REPLICA = 'default'
+DATABASES['default']['CONN_MAX_AGE'] = 0
+DATABASES.pop('replica', None)
+
+MIDDLEWARE.insert(0, 'pretix.testutils.middleware.DebugFlagMiddleware')
+
 
 # Don't run migrations
-
-
 class DisableMigrations(object):
 
     def __contains__(self, item):

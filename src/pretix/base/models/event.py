@@ -743,12 +743,7 @@ class Event(EventMixin, LoggedModel):
         return ObjectRelatedCache(self)
 
     def lock(self):
-        """
-        Returns a contextmanager that can be used to lock an event for bookings.
-        """
-        from pretix.base.services import locking
-
-        return locking.LockManager(self)
+        raise NotImplementedError("this method has been removed")
 
     def get_mail_backend(self, timeout=None):
         """

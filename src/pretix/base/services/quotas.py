@@ -191,7 +191,7 @@ class QuotaAvailability:
             update[q.event_id].append(q)
 
         for eventid, quotas in update.items():
-            rc.hmset(f'quotas:{eventid}:availabilitycache{self._cache_key_suffix}', {
+            rc.hset(f'quotas:{eventid}:availabilitycache{self._cache_key_suffix}', mapping={
                 str(q.id): ",".join(
                     [str(i) for i in self.results[q]] +
                     [str(int(time.time()))]

@@ -110,6 +110,7 @@ dependencies = [
 [project.optional-dependencies]
 memcached = ["pylibmc"]
 dev = [
+  "aiohttp==3.8.*",
   "coverage",
   "coveralls",
   "fakeredis==2.18.*",
@@ -120,6 +121,7 @@ dev = [
   "potypo",
   "pycodestyle==2.10.*",
   "pyflakes==3.0.*",
+  "pytest-asyncio",
   "pytest-cache",
   "pytest-cov",
   "pytest-django==4.*",

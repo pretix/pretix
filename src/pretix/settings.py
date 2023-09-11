@@ -114,6 +114,8 @@ elif 'mysql' in db_backend:
     print("pretix does no longer support running on MySQL/MariaDB")
     sys.exit(1)
 
+DATABASE_ADVISORY_LOCK_INDEX = config.getint('database', 'advisory_lock_index', fallback=0)
+
 db_options = {}
 
 postgresql_sslmode = config.get('database', 'sslmode', fallback='disable')
