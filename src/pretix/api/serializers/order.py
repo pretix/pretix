@@ -1176,7 +1176,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     pos_data['seat'] = Seat.DoesNotExist
                 else:
                     pos_data['seat'] = seat
-                seat_diff_for_locking[pos_data['seat']] += 1
+                    seat_diff_for_locking[pos_data['seat']] += 1
 
         if consume_carts:
             offset = now() + timedelta(seconds=LOCK_TRUST_WINDOW)
@@ -1209,7 +1209,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                 lock_objects(
                     [q for q, d in quota_diff_for_locking.items() if d > 0 and q.size is not None and not force] +
                     [v for v, d in voucher_diff_for_locking.items() if d > 0 and not force] +
-                    [s for s, d in seat_diff_for_locking.items() if d > 0 and s != Seat.DoesNotExist],
+                    [s for s, d in seat_diff_for_locking.items() if d > 0],
                     shared_lock_objects=[self.context['event']]
                 )
 
