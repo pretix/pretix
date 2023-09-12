@@ -394,6 +394,8 @@ class SerializerDateFrameField(serializers.CharField):
             resolve_timeframe_to_dates_inclusive(now(), data, timezone.utc)
         except:
             raise ValidationError("Invalid date frame")
+        else:
+            return data
 
     def to_representation(self, value):
         if value is None:
