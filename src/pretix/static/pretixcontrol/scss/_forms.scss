@@ -2,6 +2,14 @@
   color: $text-muted;
 }
 
+.content-placeholder {
+  padding-left: 0;
+  padding-right: 0;
+  display: inline;
+  background: none;
+  border: 0;
+}
+
 td > .form-group {
   margin-bottom: 0;
 }

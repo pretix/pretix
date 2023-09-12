@@ -46,6 +46,7 @@ from django_scopes.forms import SafeModelChoiceField
 
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
+from pretix.base.forms.widgets import format_placeholders_help_text
 from pretix.base.models import Item, Voucher
 from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
 from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
@@ -289,19 +290,15 @@ class VoucherBulkForm(VoucherForm):
     Recipient = namedtuple('Recipient', 'email number name tag')
 
     def _set_field_placeholders(self, fn, base_parameters):
-        phs = [
-            '{%s}' % p
-            for p in sorted(get_available_placeholders(self.instance.event, base_parameters).keys())
-        ]
-        ht = _('Available placeholders: {list}').format(
-            list=', '.join(phs)
-        )
+        placeholders = get_available_placeholders(self.instance.event, base_parameters)
+        ht = format_placeholders_help_text(placeholders, self.instance.event)
+
         if self.fields[fn].help_text:
             self.fields[fn].help_text += ' ' + str(ht)
         else:
             self.fields[fn].help_text = ht
         self.fields[fn].validators.append(
-            PlaceholderValidator(phs)
+            PlaceholderValidator(['{%s}' % p for p in placeholders.keys()])
         )
 
     class Meta:

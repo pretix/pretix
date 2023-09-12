@@ -54,7 +54,7 @@ from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
 from pretix.base.forms.questions import WrappedPhoneNumberPrefixWidget
 from pretix.base.forms.widgets import (
-    DatePickerWidget, SplitDateTimePickerWidget,
+    format_placeholders_help_text, DatePickerWidget, SplitDateTimePickerWidget,
 )
 from pretix.base.models import (
     Invoice, InvoiceAddress, ItemAddOn, Order, OrderFee, OrderPosition,
@@ -677,19 +677,14 @@ class OrderMailForm(forms.Form):
     )
 
     def _set_field_placeholders(self, fn, base_parameters):
-        phs = [
-            '{%s}' % p
-            for p in sorted(get_available_placeholders(self.order.event, base_parameters).keys())
-        ]
-        ht = _('Available placeholders: {list}').format(
-            list=', '.join(phs)
-        )
+        placeholders = get_available_placeholders(self.order.event, base_parameters)
+        ht = format_placeholders_help_text(placeholders, self.order.event)
         if self.fields[fn].help_text:
             self.fields[fn].help_text += ' ' + str(ht)
         else:
             self.fields[fn].help_text = ht
         self.fields[fn].validators.append(
-            PlaceholderValidator(phs)
+            PlaceholderValidator(['{%s}' % p for p in placeholders.keys()])
         )
 
     def __init__(self, *args, **kwargs):
@@ -872,19 +867,14 @@ class EventCancelForm(forms.Form):
     send_waitinglist_message = forms.CharField()
 
     def _set_field_placeholders(self, fn, base_parameters):
-        phs = [
-            '{%s}' % p
-            for p in sorted(get_available_placeholders(self.event, base_parameters).keys())
-        ]
-        ht = _('Available placeholders: {list}').format(
-            list=', '.join(phs)
-        )
+        placeholders = get_available_placeholders(self.event, base_parameters)
+        ht = format_placeholders_help_text(placeholders, self.event)
         if self.fields[fn].help_text:
             self.fields[fn].help_text += ' ' + str(ht)
         else:
             self.fields[fn].help_text = ht
         self.fields[fn].validators.append(
-            PlaceholderValidator(phs)
+            PlaceholderValidator(['{%s}' % p for p in placeholders.keys()])
         )
 
     def __init__(self, *args, **kwargs):

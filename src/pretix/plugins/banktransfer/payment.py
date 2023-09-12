@@ -51,6 +51,7 @@ from text_unidecode import unidecode
 
 from pretix.base.email import get_available_placeholders, get_email_context
 from pretix.base.forms import PlaceholderValidator
+from pretix.base.forms.widgets import format_placeholders_help_text
 from pretix.base.i18n import language
 from pretix.base.models import InvoiceAddress, Order, OrderPayment, OrderRefund
 from pretix.base.payment import BasePaymentProvider
@@ -205,13 +206,10 @@ class BankTransfer(BasePaymentProvider):
 
     @property
     def settings_form_fields(self):
-        phs = [
-            '{%s}' % p
-            for p in sorted(get_available_placeholders(self.event, ['event', 'order', 'invoice']).keys())
-        ]
-        phs_ht = _('Available placeholders: {list}').format(
-            list=', '.join(phs)
-        )
+        placeholders = get_available_placeholders(self.event, ['event', 'order', 'invoice'])
+        phs_ht = format_placeholders_help_text(placeholders, self.event)
+
+        phs = ['{%s}' % p for p in placeholders]
         more_fields = OrderedDict([
             ('invoice_email',
              forms.BooleanField(

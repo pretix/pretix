@@ -699,6 +699,35 @@ var form_handlers = function (el) {
     el.find("input[name*=question], select[name*=question]").change(questions_toggle_dependent);
     questions_toggle_dependent();
     questions_init_photos(el);
+
+    var lastFocusedInput;
+    $(document).on('focusin', 'input, textarea', function(e) {
+        lastFocusedInput = e.target;
+    }).on("click", function(e) {
+        if (e.target.classList.contains('content-placeholder')) {
+            var container = e.target.parentNode.parentNode;
+            if (!lastFocusedInput || !container.contains(lastFocusedInput)) {
+                lastFocusedInput = container.querySelector("input, textarea");
+                //lastFocusedInput.selectionStart = lastFocusedInput.selectionEnd = lastFocusedInput.value.length;
+            }
+            if (lastFocusedInput) {
+                var start = lastFocusedInput.selectionStart;
+                var end = lastFocusedInput.selectionEnd;
+                var v = lastFocusedInput.value;
+                var p = e.target.textContent;
+                if (start !== end && v.substring(start, start+1) !== "{" && v.substring(start-1, start) == "{" &&
+                    v.substring(end-1, end) !== "}" && v.substring(end, end+1) == "}") {
+                    // double-click on word does not select surrounding {}, so help to replace placeholders
+                    start--;
+                    end++;
+                }
+                lastFocusedInput.value = v.substring(0, start) + p + v.substring(end);
+                lastFocusedInput.selectionStart = start;
+                lastFocusedInput.selectionEnd = start + p.length
+                lastFocusedInput.focus();
+            }
+        }
+    });
 };
 
 function setup_basics(el) {

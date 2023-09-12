@@ -62,6 +62,7 @@ from pytz import common_timezones
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
+from pretix.base.forms.widgets import format_placeholders_help_text
 from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
@@ -1340,19 +1341,14 @@ class MailSettingsForm(SettingsForm):
     }
 
     def _set_field_placeholders(self, fn, base_parameters):
-        phs = [
-            '{%s}' % p
-            for p in sorted(get_available_placeholders(self.event, base_parameters).keys())
-        ]
-        ht = _('Available placeholders: {list}').format(
-            list=', '.join(phs)
-        )
+        placeholders = get_available_placeholders(self.event, base_parameters)
+        ht = format_placeholders_help_text(placeholders, self.event)
         if self.fields[fn].help_text:
             self.fields[fn].help_text += ' ' + str(ht)
         else:
             self.fields[fn].help_text = ht
         self.fields[fn].validators.append(
-            PlaceholderValidator(phs)
+            PlaceholderValidator(['{%s}' % p for p in placeholders.keys()])
         )
 
     def __init__(self, *args, **kwargs):
