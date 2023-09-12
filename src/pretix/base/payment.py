@@ -816,7 +816,7 @@ class BasePaymentProvider:
         an order to this one.
 
         The default implementation checks for the ``_availability_date`` setting to be either unset or in the future,
-        as well as for the ``_availabilty_from``, ``_total_max``, ``_total_min``, and ``_restricted_countries`` settings.
+        as well as for the ``_availability_from``, ``_total_max``, ``_total_min``, and ``_restricted_countries`` settings.
 
         :param order: The order object
         """
