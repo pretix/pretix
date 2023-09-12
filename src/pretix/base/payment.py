@@ -576,7 +576,6 @@ class BasePaymentProvider:
                 return False
             else:
                 availability_start = availability_start.datetime(self.event).date()
-            print(availability_start, now_dt)
 
             if availability_start:
                 if availability_start > now_dt.astimezone(tz).date():
