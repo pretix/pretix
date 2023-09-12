@@ -3,8 +3,10 @@ $(function () {
     // Every change to our supported JSON logic must be done
     // * in pretix.base.services.checkin
     // * in pretix.base.models.checkin
+    // * in pretix.helpers.jsonlogic_boolalg
     // * in checkinrules.js
     // * in libpretixsync
+    // * in pretixscan-ios
     'product': {
       'inList': {
         'label': gettext('is one of'),
@@ -17,6 +19,12 @@ $(function () {
         'cardinality': 2,
       }
     },
+    'gate': {
+      'inList': {
+        'label': gettext('is one of'),
+        'cardinality': 2,
+      }
+    },
     'datetime': {
       'isBefore': {
         'label': gettext('is before'),
@@ -24,6 +32,32 @@ $(function () {
       },
       'isAfter': {
         'label': gettext('is after'),
+        'cardinality': 2,
+      },
+    },
+    'int_by_datetime': {
+      '<': {
+        'label': '<',
+        'cardinality': 2,
+      },
+      '<=': {
+        'label': '≤',
+        'cardinality': 2,
+      },
+      '>': {
+        'label': '>',
+        'cardinality': 2,
+      },
+      '>=': {
+        'label': '≥',
+        'cardinality': 2,
+      },
+      '==': {
+        'label': '=',
+        'cardinality': 2,
+      },
+      '!=': {
+        'label': '≠',
         'cardinality': 2,
       },
     },
@@ -63,6 +97,10 @@ $(function () {
       'label': gettext('Product variation'),
       'type': 'variation',
     },
+    'gate': {
+      'label': gettext('Gate'),
+      'type': 'gate',
+    },
     'now': {
       'label': gettext('Current date and time'),
       'type': 'datetime',
@@ -78,6 +116,14 @@ $(function () {
     'entries_today': {
       'label': gettext('Number of previous entries since midnight'),
       'type': 'int',
+    },
+    'entries_since': {
+      'label': gettext('Number of previous entries since'),
+      'type': 'int_by_datetime',
+    },
+    'entries_before': {
+      'label': gettext('Number of previous entries before'),
+      'type': 'int_by_datetime',
     },
     'entries_days': {
       'label': gettext('Number of days with a previous entry'),

@@ -10,7 +10,7 @@
             <button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="wrapWithAND">AND
             </button>
             <button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="cutOut"
-                    v-if="operands && operands.length == 1 && (operator === 'or' || operator == 'and')"><span
+                    v-if="operands && operands.length === 1 && (operator === 'or' || operator === 'and')"><span
                     class="fa fa-cut"></span></button>
             <button type="button" class="checkin-rule-remove btn btn-xs btn-default" @click.prevent="remove"
                     v-if="level > 0"><span class="fa fa-trash"></span></button>
@@ -21,33 +21,41 @@
             <option v-for="(v, name) in vars" :value="name">{{ v.label }}</option>
         </select>
         <select v-bind:value="operator" v-on:input="setOperator" required class="form-control"
-                v-if="operator !== 'or' && operator !== 'and'">
+                v-if="operator !== 'or' && operator !== 'and' && vartype !== 'int_by_datetime'">
             <option></option>
             <option v-for="(v, name) in operators" :value="name">{{ v.label }}</option>
         </select>
         <select v-bind:value="timeType" v-on:input="setTimeType" required class="form-control"
-                v-if="vartype == 'datetime'">
+                v-if="vartype === 'datetime' || vartype === 'int_by_datetime'">
             <option value="date_from">{{texts.date_from}}</option>
             <option value="date_to">{{texts.date_to}}</option>
             <option value="date_admission">{{texts.date_admission}}</option>
             <option value="custom">{{texts.date_custom}}</option>
             <option value="customtime">{{texts.date_customtime}}</option>
         </select>
-        <datetimefield v-if="vartype == 'datetime' && timeType == 'custom'" :value="timeValue"
+        <datetimefield v-if="(vartype === 'datetime' || vartype === 'int_by_datetime') && timeType === 'custom'" :value="timeValue"
                        v-on:input="setTimeValue"></datetimefield>
-        <timefield v-if="vartype == 'datetime' && timeType == 'customtime'" :value="timeValue"
-            v-on:input="setTimeValue"></timefield>
+        <timefield v-if="(vartype === 'datetime' || vartype === 'int_by_datetime') && timeType === 'customtime'" :value="timeValue"
+                   v-on:input="setTimeValue"></timefield>
         <input class="form-control" required type="number"
-               v-if="vartype == 'datetime' && timeType && timeType != 'customtime' && timeType != 'custom'" v-bind:value="timeTolerance"
+               v-if="vartype === 'datetime' && timeType && timeType !== 'customtime' && timeType !== 'custom'" v-bind:value="timeTolerance"
                v-on:input="setTimeTolerance" :placeholder="texts.date_tolerance">
-        <input class="form-control" required type="number" v-if="vartype == 'int' && cardinality > 1"
+        <select v-bind:value="operator" v-on:input="setOperator" required class="form-control"
+                v-if="vartype === 'int_by_datetime'">
+          <option></option>
+          <option v-for="(v, name) in operators" :value="name">{{ v.label }}</option>
+        </select>
+        <input class="form-control" required type="number" v-if="(vartype === 'int' || vartype === 'int_by_datetime') && cardinality > 1"
                v-bind:value="rightoperand" v-on:input="setRightOperandNumber">
-        <lookup-select2 required v-if="vartype == 'product' && operator == 'inList'" :multiple="true"
+        <lookup-select2 required v-if="vartype === 'product' && operator === 'inList'" :multiple="true"
                         :value="rightoperand" v-on:input="setRightOperandProductList"
                         :url="productSelectURL"></lookup-select2>
-        <lookup-select2 required v-if="vartype == 'variation' && operator == 'inList'" :multiple="true"
+        <lookup-select2 required v-if="vartype === 'variation' && operator === 'inList'" :multiple="true"
                         :value="rightoperand" v-on:input="setRightOperandVariationList"
                         :url="variationSelectURL"></lookup-select2>
+        <lookup-select2 required v-if="vartype === 'gate' && operator === 'inList'" :multiple="true"
+                        :value="rightoperand" v-on:input="setRightOperandGateList"
+                        :url="gateSelectURL"></lookup-select2>
         <div class="checkin-rule-childrules" v-if="operator === 'or' || operator === 'and'">
             <div v-for="(op, opi) in operands">
                 <checkin-rule :rule="op" :index="opi" :level="level + 1" v-if="typeof op === 'object'"></checkin-rule>
@@ -79,6 +87,12 @@
         if (op === "and" || op === "or") {
           return op;
         } else if (this.rule[op] && this.rule[op][0]) {
+          if (this.rule[op][0]["entries_since"]) {
+            return "entries_since";
+          }
+          if (this.rule[op][0]["entries_before"]) {
+            return "entries_before";
+          }
           return this.rule[op][0]["var"];
         } else {
           return null;
@@ -113,7 +127,11 @@
         }
       },
       timeType: function () {
-        if (this.rightoperand && this.rightoperand['buildTime']) {
+        if (this.vartype === 'int_by_datetime') {
+          if (this.rule[this.operator][0][this.variable] && this.rule[this.operator][0][this.variable][0]['buildTime']) {
+            return this.rule[this.operator][0][this.variable][0]['buildTime'][0];
+          }
+        } else if (this.rightoperand && this.rightoperand['buildTime']) {
           return this.rightoperand['buildTime'][0];
         }
       },
@@ -126,7 +144,11 @@
         }
       },
       timeValue: function () {
-        if (this.rightoperand && this.rightoperand['buildTime']) {
+        if (this.vartype === 'int_by_datetime') {
+          if (this.rule[this.operator][0][this.variable][0]['buildTime']) {
+            return this.rule[this.operator][0][this.variable][0]['buildTime'][1];
+          }
+        } else if (this.rightoperand && this.rightoperand['buildTime']) {
           return this.rightoperand['buildTime'][1];
         }
       },
@@ -143,6 +165,9 @@
       },
       variationSelectURL: function () {
         return $("#variations-select2").text();
+      },
+      gateSelectURL: function () {
+        return $("#gates-select2").text();
       },
       vars: function () {
         return this.$root.VARS;
@@ -161,7 +186,19 @@
           this.$delete(this.rule, current_op);
         } else {
           if (current_val !== "and" && current_val !== "or" && current_val[0] && this.$root.VARS[event.target.value]['type'] === this.vartype) {
-            this.$set(this.rule[current_op][0], "var", event.target.value);
+            if (this.vartype === "int_by_datetime") {
+              var current_data = this.rule[current_op][0][this.variable];
+              var new_lhs = {};
+              new_lhs[event.target.value] = JSON.parse(JSON.stringify(current_data));
+              this.$set(this.rule[current_op], 0, new_lhs);
+            } else {
+              this.$set(this.rule[current_op][0], "var", event.target.value);
+            }
+          } else if (this.$root.VARS[event.target.value]['type'] === 'int_by_datetime') {
+            this.$delete(this.rule, current_op);
+            var o = {};
+            o[event.target.value] = [{"buildTime": [null, null]}]
+            this.$set(this.rule, "!!", [o]);
           } else {
             this.$delete(this.rule, current_op);
             this.$set(this.rule, "!!", [{"var": event.target.value}]);
@@ -192,17 +229,25 @@
         var time = {
           "buildTime": [event.target.value]
         };
-        if (this.rule[this.operator].length === 1) {
-          this.rule[this.operator].push(time);
+        if (this.vartype === "int_by_datetime") {
+          this.$set(this.rule[this.operator][0][this.variable], 0, time);
         } else {
-          this.$set(this.rule[this.operator], 1, time);
-        }
-        if (event.target.value === "custom") {
-          this.$set(this.rule[this.operator], 2, 0);
+          if (this.rule[this.operator].length === 1) {
+            this.rule[this.operator].push(time);
+          } else {
+            this.$set(this.rule[this.operator], 1, time);
+          }
+          if (event.target.value === "custom") {
+            this.$set(this.rule[this.operator], 2, 0);
+          }
         }
       },
       setTimeValue: function (val) {
-        this.$set(this.rule[this.operator][1]["buildTime"], 1, val);
+        if (this.vartype === "int_by_datetime") {
+          this.$set(this.rule[this.operator][0][this.variable][0]["buildTime"], 1, val);
+        } else {
+          this.$set(this.rule[this.operator][1]["buildTime"], 1, val);
+        }
       },
       setRightOperandProductList: function (val) {
         var products = {
@@ -231,6 +276,25 @@
           products["objectList"].push({
             "lookup": [
               "variation",
+              val[i].id,
+              val[i].text
+            ]
+          });
+        }
+        if (this.rule[this.operator].length === 1) {
+          this.rule[this.operator].push(products);
+        } else {
+          this.$set(this.rule[this.operator], 1, products);
+        }
+      },
+      setRightOperandGateList: function (val) {
+        var products = {
+          "objectList": []
+        };
+        for (var i = 0; i < val.length; i++) {
+          products["objectList"].push({
+            "lookup": [
+              "gate",
               val[i].id,
               val[i].text
             ]

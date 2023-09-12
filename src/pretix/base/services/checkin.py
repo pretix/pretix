@@ -87,7 +87,7 @@ def _build_time(t=None, value=None, ev=None, now_dt=None):
 
 
 def _logic_annotate_for_graphic_explain(rules, ev, rule_data, now_dt):
-    logic_environment = _get_logic_environment(ev, now_dt)
+    logic_environment = _get_logic_environment(ev, rule_data, now_dt)
     event = ev if isinstance(ev, Event) else ev.event
 
     def _evaluate_inners(r):
@@ -112,6 +112,8 @@ def _logic_annotate_for_graphic_explain(rules, ev, rule_data, now_dt):
                 val = str(event.items.get(pk=val))
             elif var == "variation":
                 val = str(ItemVariation.objects.get(item__event=event, pk=val))
+            elif var == "gate":
+                val = str(event.organizer.gates.get(pk=val))
             elif isinstance(val, datetime):
                 val = date_format(val.astimezone(ev.timezone), "SHORT_DATETIME_FORMAT")
             return {"var": var, "__result": val}
@@ -152,7 +154,7 @@ def _logic_explain(rules, ev, rule_data, now_dt=None):
     get in before 17:00". In the middle of the night it would switch to "You can only get in after 09:00".
     """
     now_dt = now_dt or now()
-    logic_environment = _get_logic_environment(ev, now_dt)
+    logic_environment = _get_logic_environment(ev, rule_data, now_dt)
     _var_values = {'False': False, 'True': True}
     _var_explanations = {}
 
@@ -174,15 +176,22 @@ def _logic_explain(rules, ev, rule_data, now_dt=None):
         _var_values[new_var_name] = result
         if not result:
             # Operator returned false, let's dig deeper
-            if "var" not in values[0]:
+            if "var" in values[0]:
+                if isinstance(values[0]["var"], list):
+                    values[0]["var"] = values[0]["var"][0]
+                _var_explanations[new_var_name] = {
+                    'operator': operator,
+                    'var': values[0]["var"],
+                    'rhs': values[1:],
+                }
+            elif "entries_since" in values[0] or "entries_before" in values[0]:
+                _var_explanations[new_var_name] = {
+                    'operator': operator,
+                    'var': values[0],
+                    'rhs': values[1:],
+                }
+            else:
                 raise ValueError("Binary operators should be normalized to have a variable on their left-hand side")
-            if isinstance(values[0]["var"], list):
-                values[0]["var"] = values[0]["var"][0]
-            _var_explanations[new_var_name] = {
-                'operator': operator,
-                'var': values[0]["var"],
-                'rhs': values[1:],
-            }
         return {'var': new_var_name}
     try:
         rules = _evaluate_inners(rules)
@@ -249,11 +258,17 @@ def _logic_explain(rules, ev, rule_data, now_dt=None):
         elif var == 'product' or var == 'variation':
             var_weights[vname] = (1000, 0)
             var_texts[vname] = _('Ticket type not allowed')
-        elif var in ('entries_number', 'entries_today', 'entries_days', 'minutes_since_last_entry', 'minutes_since_first_entry', 'now_isoweekday'):
+        elif var == 'gate':
+            var_weights[vname] = (10, 0)
+            var_texts[vname] = _('Wrong entrance gate')
+        elif var in ('entries_number', 'entries_today', 'entries_days', 'minutes_since_last_entry', 'minutes_since_first_entry', 'now_isoweekday') \
+                or (isinstance(var, dict) and ("entries_since" in var or "entries_before" in var)):
             w = {
                 'minutes_since_first_entry': 80,
                 'minutes_since_last_entry': 90,
                 'entries_days': 100,
+                'entries_since': 110,
+                'entries_before': 110,
                 'entries_number': 120,
                 'entries_today': 140,
                 'now_isoweekday': 210,
@@ -272,8 +287,24 @@ def _logic_explain(rules, ev, rule_data, now_dt=None):
                 'entries_days': _('number of days with an entry'),
                 'entries_number': _('number of entries'),
                 'entries_today': _('number of entries today'),
+                'entries_since': _('number of entries since {datetime}'),
+                'entries_before': _('number of entries before {datetime}'),
                 'now_isoweekday': _('week day'),
             }
+
+            if isinstance(var, dict) and ("entries_since" in var or "entries_before" in var):
+                varname = list(var.keys())[0]
+                cutoff = _build_time(*var[varname][0]['buildTime'], ev=ev, now_dt=now_dt).astimezone(ev.timezone)
+                if abs(now_dt - cutoff) < timedelta(hours=12):
+                    compare_to_text = date_format(cutoff, 'TIME_FORMAT')
+                else:
+                    compare_to_text = date_format(cutoff, 'SHORT_DATETIME_FORMAT')
+                l[varname] = str(l[varname].format(datetime=compare_to_text))
+                var = varname
+                var_result = getattr(rule_data, var)(cutoff)
+            else:
+                var_result = rule_data[var]
+
             compare_to = rhs[0]
             penalty = 0
 
@@ -290,7 +321,7 @@ def _logic_explain(rules, ev, rule_data, now_dt=None):
                     # These are "technical" comparisons without real meaning, we don't want to show them.
                     penalty = 1000
 
-            var_weights[vname] = (w[var] + operator_weights.get(operator, 0) + penalty, abs(compare_to - rule_data[var]))
+            var_weights[vname] = (w[var] + operator_weights.get(operator, 0) + penalty, abs(compare_to - var_result))
 
             if var == 'now_isoweekday':
                 compare_to = {
@@ -337,12 +368,14 @@ def _logic_explain(rules, ev, rule_data, now_dt=None):
     return ', '.join(var_texts[v] for v in paths_with_min_weight[0] if not _var_values[v])
 
 
-def _get_logic_environment(ev, now_dt):
+def _get_logic_environment(ev, rule_data, now_dt):
     # Every change to our supported JSON logic must be done
     # * in pretix.base.services.checkin
     # * in pretix.base.models.checkin
+    # * in pretix.helpers.jsonlogic_boolalg
     # * in checkinrules.js
     # * in libpretixsync
+    # * in pretixscan-ios
 
     def is_before(t1, t2, tolerance=None):
         if tolerance:
@@ -357,14 +390,18 @@ def _get_logic_environment(ev, now_dt):
     logic.add_operation('buildTime', partial(_build_time, ev=ev, now_dt=now_dt))
     logic.add_operation('isBefore', is_before)
     logic.add_operation('isAfter', lambda t1, t2, tol=None: is_before(t2, t1, tol))
+    logic.add_operation('entries_since', lambda t1: rule_data.entries_since(t1))
+    logic.add_operation('entries_before', lambda t1: rule_data.entries_before(t1))
     return logic
 
 
 class LazyRuleVars:
-    def __init__(self, position, clist, dt):
+    def __init__(self, position, clist, dt, gate):
         self._position = position
         self._clist = clist
         self._dt = dt
+        self._gate = gate
+        self.__cache = {}
 
     def __getitem__(self, item):
         if item[0] != '_' and hasattr(self, item):
@@ -379,6 +416,10 @@ class LazyRuleVars:
     def now_isoweekday(self):
         tz = self._clist.event.timezone
         return self._dt.astimezone(tz).isoweekday()
+
+    @property
+    def gate(self):
+        return self._gate.pk if self._gate else None
 
     @property
     def product(self):
@@ -397,6 +438,16 @@ class LazyRuleVars:
         tz = self._clist.event.timezone
         midnight = self._dt.astimezone(tz).replace(hour=0, minute=0, second=0, microsecond=0)
         return self._position.checkins.filter(type=Checkin.TYPE_ENTRY, list=self._clist, datetime__gte=midnight).count()
+
+    def entries_since(self, cutoff):
+        if ('entries_since', cutoff) not in self.__cache:
+            self.__cache['entries_since', cutoff] = self._position.checkins.filter(type=Checkin.TYPE_ENTRY, list=self._clist, datetime__gte=cutoff).count()
+        return self.__cache['entries_since', cutoff]
+
+    def entries_before(self, cutoff):
+        if ('entries_before', cutoff) not in self.__cache:
+            self.__cache['entries_before', cutoff] = self._position.checkins.filter(type=Checkin.TYPE_ENTRY, list=self._clist, datetime__lt=cutoff).count()
+        return self.__cache['entries_before', cutoff]
 
     @cached_property
     def entries_days(self):
@@ -446,8 +497,9 @@ class SQLLogic:
     * Comparison operators (==, !=, …) never contain boolean operators (and, or) further down in the stack
     """
 
-    def __init__(self, list):
+    def __init__(self, list, gate=None):
         self.list = list
+        self.gate = gate
         self.bool_ops = {
             "and": lambda *args: reduce(lambda total, arg: total & arg, args) if args else Q(),
             "or": lambda *args: reduce(lambda total, arg: total | arg, args) if args else Q(),
@@ -463,7 +515,7 @@ class SQLLogic:
             "isBefore": partial(self.comparison_to_q, operator=LowerThan, modifier=partial(tolerance, sign=1)),
             "isAfter": partial(self.comparison_to_q, operator=GreaterThan, modifier=partial(tolerance, sign=-1)),
         }
-        self.expression_ops = {'buildTime', 'objectList', 'lookup', 'var'}
+        self.expression_ops = {'buildTime', 'objectList', 'lookup', 'var', 'entries_since', 'entries_before'}
 
     def operation_to_expression(self, rule):
         if not isinstance(rule, dict):
@@ -511,6 +563,36 @@ class SQLLogic:
             return [self.operation_to_expression(v) for v in values]
         elif operator == 'lookup':
             return int(values[1])
+        elif operator == 'entries_since':
+            return Coalesce(
+                Subquery(
+                    Checkin.objects.filter(
+                        position_id=OuterRef('pk'),
+                        type=Checkin.TYPE_ENTRY,
+                        list_id=self.list.pk,
+                        datetime__gte=self.operation_to_expression(values[0]),
+                    ).values('position_id').order_by().annotate(
+                        c=Count('*')
+                    ).values('c')
+                ),
+                Value(0),
+                output_field=IntegerField()
+            )
+        elif operator == 'entries_before':
+            return Coalesce(
+                Subquery(
+                    Checkin.objects.filter(
+                        position_id=OuterRef('pk'),
+                        type=Checkin.TYPE_ENTRY,
+                        list_id=self.list.pk,
+                        datetime__lt=self.operation_to_expression(values[0]),
+                    ).values('position_id').order_by().annotate(
+                        c=Count('*')
+                    ).values('c')
+                ),
+                Value(0),
+                output_field=IntegerField()
+            )
         elif operator == 'var':
             if values[0] == 'now':
                 return Value(now().astimezone(timezone.utc))
@@ -520,6 +602,8 @@ class SQLLogic:
                 return F('item_id')
             elif values[0] == 'variation':
                 return F('variation_id')
+            elif values[0] == 'gate':
+                return Value(self.gate.pk if self.gate else None)
             elif values[0] == 'entries_number':
                 return Coalesce(
                     Subquery(
@@ -731,7 +815,8 @@ def _save_answers(op, answers, given_answers):
 def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, force=False,
                     ignore_unpaid=False, nonce=None, datetime=None, questions_supported=True,
                     user=None, auth=None, canceled_supported=False, type=Checkin.TYPE_ENTRY,
-                    raw_barcode=None, raw_source_type=None, from_revoked_secret=False, simulate=False):
+                    raw_barcode=None, raw_source_type=None, from_revoked_secret=False, simulate=False,
+                    gate=None):
     """
     Create a checkin for this particular order position and check-in list. Fails with CheckInError if the check in is
     not valid at this time.
@@ -746,6 +831,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
     :param nonce: A random nonce to prevent race conditions.
     :param datetime: The datetime of the checkin, defaults to now.
     :param simulate: If true, the check-in is not saved.
+    :param gate: The gate the check-in was performed at.
     """
 
     # !!!!!!!!!
@@ -860,8 +946,8 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 )
 
         if type == Checkin.TYPE_ENTRY and clist.rules:
-            rule_data = LazyRuleVars(op, clist, dt)
-            logic = _get_logic_environment(op.subevent or clist.event, now_dt=dt)
+            rule_data = LazyRuleVars(op, clist, dt, gate=gate)
+            logic = _get_logic_environment(op.subevent or clist.event, rule_data, now_dt=dt)
             if not logic.apply(clist.rules, rule_data):
                 if force:
                     force_used = True
@@ -885,6 +971,8 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         device = None
         if isinstance(auth, Device):
             device = auth
+            if not gate:
+                gate = device.gate
 
         last_cis = list(op.checkins.order_by('-datetime').filter(list=clist).only('type', 'nonce', 'position_id'))
         entry_allowed = (
@@ -908,7 +996,7 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                     list=clist,
                     datetime=dt,
                     device=device,
-                    gate=device.gate if device else None,
+                    gate=gate,
                     nonce=nonce,
                     forced=force and (not entry_allowed or from_revoked_secret or force_used),
                     force_sent=force,
