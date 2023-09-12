@@ -122,10 +122,12 @@
                 <table class="table table-condensed table-hover table-orders">
                     <thead>
                     <tr>
-                        <th>
-                            <label aria-label="{% trans "select all rows for batch-operation" %}"
-                                   class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
-                        </th>
+                        {% if "can_change_orders" in request.eventpermset %}
+                            <th>
+                                <label aria-label="{% trans "select all rows for batch-operation" %}"
+                                       class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
+                            </th>
+                        {% endif %}
                         <th>{% trans "Order code" %}
                             <a href="?{% url_replace request 'ordering' '-code' %}"><i class="fa fa-caret-down"></i></a>
                             <a href="?{% url_replace request 'ordering' 'code' %}"><i class="fa fa-caret-up"></i></a>
@@ -152,7 +154,7 @@
                             <a href="?{% url_replace request 'ordering' 'status' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
                     </tr>
-                    {% if page_obj.paginator.num_pages > 1 %}
+                    {% if page_obj.paginator.num_pages > 1 and "can_change_orders" in request.eventpermset %}
                         <tr class="table-select-all warning hidden">
                             <td>
                                 <input type="checkbox" name="__ALL" id="__all"
@@ -169,12 +171,14 @@
                     <tbody>
                     {% for o in orders %}
                         <tr>
-                            <td>
-                                <label aria-label="{% trans "select row for batch-operation" %}"
-                                       class="batch-select-label"><input type="checkbox" name="order"
-                                                                         class="batch-select-checkbox"
-                                                                         value="{{ o.pk }}"/></label>
-                            </td>
+                            {% if "can_change_orders" in request.eventpermset %}
+                                <td>
+                                    <label aria-label="{% trans "select row for batch-operation" %}"
+                                           class="batch-select-label"><input type="checkbox" name="order"
+                                                                             class="batch-select-checkbox"
+                                                                             value="{{ o.pk }}"/></label>
+                                </td>
+                            {% endif %}
                             <td>
                                 <strong>
                                     <a
@@ -272,47 +276,49 @@
                     {% endif %}
                 </table>
             </div>
-            <div class="batch-select-actions">
-                <div class="btn-group dropup">
-                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
-                            aria-haspopup="true" aria-expanded="false">
-                        <span class="caret"></span>
-                        {% trans "Select action" %}
-                    </button>
-                    <ul class="dropdown-menu">
-                        <li>
-                            <button type="submit" class="btn"
-                                    formaction="{% url "control:event.orders.bulk.approve" organizer=request.organizer.slug event=request.event.slug %}">
-                                <i class="fa fa-thumbs-up fa-fw text-green"></i>
-                                {% trans "Approve" %}
-                            </button>
-                        </li>
-                        <li>
-                            <button type="submit" class="btn"
-                                    formaction="{% url "control:event.orders.bulk.deny" organizer=request.organizer.slug event=request.event.slug %}">
-                                <i class="fa fa-thumbs-down fa-fw text-danger"></i>
-                                {% trans "Deny" %}
-                            </button>
-                        </li>
-                        {% if not request.event.settings.payment_term_expire_automatically %}
+            {% if "can_change_orders" in request.eventpermset %}
+                <div class="batch-select-actions">
+                    <div class="btn-group dropup">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                                aria-haspopup="true" aria-expanded="false">
+                            <span class="caret"></span>
+                            {% trans "Select action" %}
+                        </button>
+                        <ul class="dropdown-menu">
                             <li>
                                 <button type="submit" class="btn"
-                                        formaction="{% url "control:event.orders.bulk.expire" organizer=request.organizer.slug event=request.event.slug %}">
-                                    <i class="fa fa-times fa-fw"></i>
-                                    {% trans "Mark as expired if overdue" %}
+                                        formaction="{% url "control:event.orders.bulk.approve" organizer=request.organizer.slug event=request.event.slug %}">
+                                    <i class="fa fa-thumbs-up fa-fw text-green"></i>
+                                    {% trans "Approve" %}
                                 </button>
                             </li>
-                        {% endif %}
-                        <li>
-                            <button type="submit" class="btn"
-                                    formaction="{% url "control:event.orders.bulk.delete" organizer=request.organizer.slug event=request.event.slug %}">
-                                <i class="fa fa-trash fa-fw text-danger"></i>
-                                {% trans "Delete (test mode only)" %}
-                            </button>
-                        </li>
-                    </ul>
+                            <li>
+                                <button type="submit" class="btn"
+                                        formaction="{% url "control:event.orders.bulk.deny" organizer=request.organizer.slug event=request.event.slug %}">
+                                    <i class="fa fa-thumbs-down fa-fw text-danger"></i>
+                                    {% trans "Deny" %}
+                                </button>
+                            </li>
+                            {% if not request.event.settings.payment_term_expire_automatically %}
+                                <li>
+                                    <button type="submit" class="btn"
+                                            formaction="{% url "control:event.orders.bulk.expire" organizer=request.organizer.slug event=request.event.slug %}">
+                                        <i class="fa fa-times fa-fw"></i>
+                                        {% trans "Mark as expired if overdue" %}
+                                    </button>
+                                </li>
+                            {% endif %}
+                            <li>
+                                <button type="submit" class="btn"
+                                        formaction="{% url "control:event.orders.bulk.delete" organizer=request.organizer.slug event=request.event.slug %}">
+                                    <i class="fa fa-trash fa-fw text-danger"></i>
+                                    {% trans "Delete (test mode only)" %}
+                                </button>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
+            {% endif %}
         </form>
         {% include "pretixcontrol/pagination.html" %}
     {% endif %}
