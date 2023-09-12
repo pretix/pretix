@@ -670,6 +670,11 @@ def base_placeholders(sender, **kwargs):
         _("Mr Doe"),
     ))
     ph.append(SimpleFunctionalMailTextPlaceholder(
+        "name", ["waiting_list_entry"],
+        lambda waiting_list_entry: waiting_list_entry.name or "",
+        _("Mr Doe"),
+    ))
+    ph.append(SimpleFunctionalMailTextPlaceholder(
         "name_for_salutation", ["position_or_address"],
         lambda position_or_address: concatenation_for_salutation(get_best_name(position_or_address, parts=True)),
         _("Mr Doe"),
