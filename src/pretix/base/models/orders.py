@@ -2629,7 +2629,7 @@ class OrderPosition(AbstractPosition):
         with language(self.order.locale, self.order.event.settings.region):
             email_template = self.event.settings.mail_text_resend_link
             email_context = get_email_context(event=self.order.event, order=self.order, position=self)
-            email_subject = self.event.settings.mail_subject_resend_link
+            email_subject = self.event.settings.mail_subject_resend_link_attendee
             self.send_mail(
                 email_subject, email_template, email_context,
                 'pretix.event.order.email.resend', user=user, auth=auth,
