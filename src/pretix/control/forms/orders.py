@@ -54,7 +54,7 @@ from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
 from pretix.base.forms.questions import WrappedPhoneNumberPrefixWidget
 from pretix.base.forms.widgets import (
-    format_placeholders_help_text, DatePickerWidget, SplitDateTimePickerWidget,
+    DatePickerWidget, SplitDateTimePickerWidget, format_placeholders_help_text,
 )
 from pretix.base.models import (
     Invoice, InvoiceAddress, ItemAddOn, Order, OrderFee, OrderPosition,

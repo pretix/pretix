@@ -44,7 +44,7 @@ from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator
 from pretix.base.forms.widgets import (
-    format_placeholders_help_text, SplitDateTimePickerWidget, TimePickerWidget,
+    SplitDateTimePickerWidget, TimePickerWidget, format_placeholders_help_text,
 )
 from pretix.base.models import CheckinList, Item, Order, SubEvent
 from pretix.control.forms import CachedFileField, SplitDateTimeField

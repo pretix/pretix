@@ -63,7 +63,9 @@ from pretix.base.forms.questions import (
     NamePartsFormField, WrappedPhoneNumberPrefixWidget, get_country_by_locale,
     get_phone_prefix,
 )
-from pretix.base.forms.widgets import format_placeholders_help_text, SplitDateTimePickerWidget
+from pretix.base.forms.widgets import (
+    SplitDateTimePickerWidget, format_placeholders_help_text,
+)
 from pretix.base.models import (
     Customer, Device, EventMetaProperty, Gate, GiftCard, GiftCardAcceptance,
     Membership, MembershipType, OrderPosition, Organizer, ReusableMedium, Team,
