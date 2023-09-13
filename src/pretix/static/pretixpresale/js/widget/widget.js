@@ -11,7 +11,6 @@ window.PretixWidget = {
 };
 
 var Vue = module.exports;
-Vue.component('resize-observer', VueResize.ResizeObserver)
 
 var strings = {
     'quantity': django.pgettext('widget', 'Quantity'),
@@ -1493,7 +1492,6 @@ Vue.component('pretix-widget-event-week-calendar', {
 Vue.component('pretix-widget', {
     template: ('<div class="pretix-widget-wrapper" ref="wrapper">'
         + '<div :class="classObject">'
-        + '<resize-observer @notify="handleResize" />'
         + shared_loading_fragment
         + '<div class="pretix-widget-error-message" v-if="$root.error && $root.view !== \'event\'">{{ $root.error }}</div>'
         + '<div class="pretix-widget-error-action" v-if="$root.error && $root.connection_error"><a :href="$root.newTabTarget" class="pretix-widget-button" target="_blank">'
@@ -1513,7 +1511,15 @@ Vue.component('pretix-widget', {
     data: shared_widget_data,
     methods: shared_methods,
     mounted: function () {
-        this.mobile = this.$refs.wrapper.clientWidth <= 600;
+        this.handleResize();
+        var $this = this;
+        var debounce;
+        window.addEventListener("resize", function() {
+            if (debounce) clearTimeout(debounce);
+            debounce = setTimeout(function () {
+                $this.handleResize();
+            }, 250);
+        });
     },
     computed: {
         classObject: function () {
