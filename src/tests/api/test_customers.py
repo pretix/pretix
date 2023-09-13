@@ -105,6 +105,34 @@ def test_customer_create(token_client, organizer):
 
 
 @pytest.mark.django_db
+def test_customer_create_email_unique(token_client, organizer):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/customers/'.format(organizer.slug),
+        format='json',
+        data={
+            'identifier': 'IGNORED',
+            'email': 'bar@example.com',
+            'password': 'foobar',
+            'is_active': True,
+            'is_verified': True,
+        }
+    )
+    assert resp.status_code == 201
+    resp = token_client.post(
+        '/api/v1/organizers/{}/customers/'.format(organizer.slug),
+        format='json',
+        data={
+            'identifier': 'IGNORED',
+            'email': 'bar@example.com',
+            'password': 'foobar',
+            'is_active': True,
+            'is_verified': True,
+        }
+    )
+    assert resp.status_code == 400
+
+
+@pytest.mark.django_db
 def test_customer_create_send_email(token_client, organizer):
     resp = token_client.post(
         '/api/v1/organizers/{}/customers/'.format(organizer.slug),

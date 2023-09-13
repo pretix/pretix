@@ -396,11 +396,11 @@ argument will contain the request object.
 
 item_description = EventPluginSignal()
 """
-Arguments: ``item``, ``variation``
+Arguments: ``item``, ``variation``, ``subevent``
 
 This signal is sent out when the description of an item or variation is rendered and allows you to append
-additional text to the description. You are passed the ``item`` and ``variation`` and expected to return
-HTML.
+additional text to the description. You are passed the ``item``, ``variation`` and ``subevent``. You are
+expected to return HTML.
 """
 
 register_cookie_providers = EventPluginSignal()

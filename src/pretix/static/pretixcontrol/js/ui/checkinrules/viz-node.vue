@@ -19,6 +19,26 @@
                       {{ op.label }} {{ rightoperand }}
                     </strong>
                 </span>
+                <span v-else-if="vardata && vardata.type === 'int_by_datetime'">
+                    <span v-if="variable.startsWith('entries_')" class="fa fa-sign-in"></span>
+                    {{ vardata.label }}
+                    <span v-if="node.rule[operator][0][variable][0].buildTime[0] === 'custom'">
+                      {{ df(node.rule[operator][0][variable][0].buildTime[1]) }}
+                    </span>
+                    <span v-else-if="node.rule[operator][0][variable][0].buildTime[0] === 'customtime'">
+                      {{ tf(node.rule[operator][0][variable][0].buildTime[1]) }}
+                    </span>
+                    <span v-else>
+                      {{ this.$root.texts[node.rule[operator][0][variable][0].buildTime[0]] }}
+                    </span>
+                    <br>
+                    <span v-if="varresult !== null">
+                      {{varresult}}
+                    </span>
+                    <strong>
+                      {{ op.label }} {{ rightoperand }}
+                    </strong>
+                </span>
                 <span v-else-if="vardata && variable === 'now'">
                     <span class="fa fa-clock-o"></span> {{ vardata.label }}<br>
                     <span v-if="varresult !== null">
@@ -44,7 +64,9 @@
                     </strong>
                 </span>
                 <span v-else-if="vardata && operator === 'inList'">
-                    <span class="fa fa-ticket"></span> {{ vardata.label }}
+                    <span class="fa fa-sign-in" v-if="variable === 'gate'"></span>
+                    <span class="fa fa-ticket" v-else></span>
+                    {{ vardata.label }}
                     <span v-if="varresult !== null">
                       ({{varresult}})
                     </span>
@@ -138,6 +160,12 @@
       variable () {
         const op = this.operator;
         if (this.node.rule[op] && this.node.rule[op][0]) {
+          if (this.node.rule[op][0]["entries_since"]) {
+            return "entries_since";
+          }
+          if (this.node.rule[op][0]["entries_before"]) {
+            return "entries_before";
+          }
           return this.node.rule[op][0]["var"];
         } else {
           return "";
@@ -149,6 +177,8 @@
       varresult () {
         const op = this.operator;
         if (this.node.rule[op] && this.node.rule[op][0]) {
+          if (typeof this.node.rule[op][0]["__result"] === "undefined")
+            return null;
           return this.node.rule[op][0]["__result"];
         } else {
           return "";

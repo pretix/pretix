@@ -34,7 +34,7 @@ class RuleSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Rule
         fields = ['id', 'subject', 'template', 'all_products', 'limit_products', 'restrict_to_status',
-                  'send_date', 'send_offset_days', 'send_offset_time', 'date_is_absolute',
+                  'checked_in_status', 'send_date', 'send_offset_days', 'send_offset_time', 'date_is_absolute',
                   'offset_to_event_end', 'offset_is_after', 'send_to', 'enabled']
         read_only_fields = ['id']
 
@@ -87,6 +87,10 @@ class RuleSerializer(I18nAwareModelSerializer):
                     'n__not_pending_approval_and_not_valid_if_pending',
                 ]:
                     raise ValidationError(f'status {s} not allowed: restrict_to_status may only include valid states')
+
+        if full_data.get('checked_in_status') == "":
+            # even though "blank" is not allowed on this field, "" gets accepted without this check
+            raise ValidationError('empty string not allowed: use null to disable check-in based filtering')
 
         return full_data
 

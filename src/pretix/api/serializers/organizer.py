@@ -94,6 +94,14 @@ class CustomerSerializer(I18nAwareModelSerializer):
             data['name_parts']['_scheme'] = self.context['request'].organizer.settings.name_scheme
         return data
 
+    def validate_email(self, value):
+        qs = Customer.objects.filter(organizer=self.context['organizer'], email__iexact=value)
+        if self.instance and self.instance.pk:
+            qs = qs.exclude(pk=self.instance.pk)
+        if qs.exists():
+            raise ValidationError(_("An account with this email address is already registered."))
+        return value
+
 
 class CustomerCreateSerializer(CustomerSerializer):
     send_email = serializers.BooleanField(default=False, required=False, allow_null=True)

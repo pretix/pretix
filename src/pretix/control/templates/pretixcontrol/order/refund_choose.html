@@ -51,9 +51,9 @@
                                     <div class="input-group">
                                         <input type="text" name="refund-{{ p.pk }}"
                                                 {% if p.propose_refund %}
-                                                    value="{{ p.propose_refund|floatformat:2 }}"
+                                                    value="{{ p.propose_refund|money_numberfield:request.event.currency }}"
                                                 {% else %}
-                                                    placeholder="{{ p.propose_refund|floatformat:2 }}"
+                                                    placeholder="{{ p.propose_refund|money_numberfield:request.event.currency }}"
                                                 {% endif %}
                                                 title="" class="form-control">
                                         <span class="input-group-addon">
@@ -63,7 +63,7 @@
                                 {% elif p.full_refund_possible %}
                                     <label class="checkbox">
                                         <input type="checkbox" name="refund-{{ p.pk }}"
-                                                value="{{ p.amount|floatformat:2 }}"
+                                                value="{{ p.amount|money_numberfield:request.event.currency }}"
                                                 {% if p.propose_refund == p.amount %}checked{% endif %}>
                                         {% trans "Full amount" %} ({{ p.amount|money:request.event.currency }})
                                     </label>
@@ -101,7 +101,7 @@
                             <td class="text-right flip refund-amount">
                                 <div class="input-group">
                                     <input type="text" name="newrefund-{{ prov }}"
-                                            placeholder="{{ 0|floatformat:2 }}"
+                                            placeholder="{{ 0|money_numberfield:request.event.currency }}"
                                             title="" class="form-control">
                                     <span class="input-group-addon">
                                         {{ request.event.currency }}
@@ -119,7 +119,7 @@
                         <td class="text-right flip refund-amount">
                             <div class="input-group">
                                 <input type="text" name="refund-offsetting"
-                                        title="" class="form-control" placeholder="{{ 0|floatformat:2 }}">
+                                        title="" class="form-control" placeholder="{{ 0|money_numberfield:request.event.currency }}">
                                 <span class="input-group-addon">
                                     {{ request.event.currency }}
                                 </span>
@@ -144,9 +144,9 @@
                                 <input type="text" name="refund-new-giftcard"
                                         title="" class="form-control"
                                         {% if giftcard_proposal %}
-                                            value="{{ giftcard_proposal|floatformat:2 }}"
+                                            value="{{ giftcard_proposal|money_numberfield:request.event.currency }}"
                                         {% else %}
-                                            placeholder="{{ giftcard_proposal|floatformat:2 }}"
+                                            placeholder="{{ giftcard_proposal|money_numberfield:request.event.currency }}"
                                         {% endif %}
                                 >
                                 <span class="input-group-addon">
@@ -172,9 +172,9 @@
                             <div class="input-group">
                                 <input type="text" name="refund-manual"
                                         {% if remainder %}
-                                            value="{{ remainder|floatformat:2 }}"
+                                            value="{{ remainder|money_numberfield:request.event.currency }}"
                                         {% else %}
-                                            placeholder="{{ remainder|floatformat:2 }}"
+                                            placeholder="{{ remainder|money_numberfield:request.event.currency }}"
                                         {% endif %}
                                         title="" class="form-control">
                                 <span class="input-group-addon">

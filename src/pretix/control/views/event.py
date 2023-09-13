@@ -40,7 +40,7 @@ from collections import OrderedDict
 from decimal import Decimal
 from io import BytesIO
 from itertools import groupby
-from urllib.parse import urlsplit
+from urllib.parse import urlparse, urlsplit
 from zoneinfo import ZoneInfo
 
 import bleach
@@ -50,6 +50,7 @@ from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import PermissionDenied
 from django.core.files import File
 from django.db import transaction
 from django.db.models import ProtectedError
@@ -61,6 +62,7 @@ from django.http import (
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
 from django.views.generic import FormView, ListView
@@ -783,8 +785,8 @@ class MailSettingsRendererPreview(MailSettingsPreview):
         return ctx
 
     def get(self, request, *args, **kwargs):
-        v = str(request.event.settings.mail_text_order_payment_failed)
-        v = format_map(v, self.placeholders('mail_text_order_payment_failed'))
+        v = str(request.event.settings.mail_text_order_placed)
+        v = format_map(v, self.placeholders('mail_text_order_placed'))
         renderers = request.event.get_html_mail_renderers()
         if request.GET.get('renderer') in renderers:
             with rolledback_transaction():
@@ -1525,10 +1527,16 @@ class QuickSetupView(FormView):
 
 
 class EventQRCode(EventPermissionRequiredMixin, View):
-    permission = 'can_change_event_settings'
+    permission = None
 
     def get(self, request, *args, filetype, **kwargs):
         url = build_absolute_uri(request.event, 'presale:event.index')
+
+        if "url" in request.GET:
+            if url_has_allowed_host_and_scheme(request.GET["url"], allowed_hosts=[urlparse(url).netloc]):
+                url = request.GET["url"]
+            else:
+                raise PermissionDenied("Untrusted URL")
 
         qr = qrcode.QRCode(
             version=1,

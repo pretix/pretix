@@ -76,11 +76,7 @@ class BaseMailForm(FormPlaceholderMixin, forms.Form):
     attachment = CachedFileField(
         label=_("Attachment"),
         required=False,
-        ext_whitelist=(
-            ".png", ".jpg", ".gif", ".jpeg", ".pdf", ".txt", ".docx", ".gif", ".svg",
-            ".pptx", ".ppt", ".doc", ".xlsx", ".xls", ".jfif", ".heic", ".heif", ".pages",
-            ".bmp", ".tif", ".tiff"
-        ),
+        ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_EMAIL_ATTACHMENT,
         help_text=_('Sending an attachment increases the chance of your email not arriving or being sorted into spam folders. We recommend only using PDFs '
                     'of no more than 2 MB in size.'),
         max_size=settings.FILE_UPLOAD_MAX_SIZE_EMAIL_ATTACHMENT
@@ -309,10 +305,10 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
     class Meta:
         model = Rule
 
-        fields = ['subject', 'template', 'attach_ical',
-                  'send_date', 'send_offset_days', 'send_offset_time',
+        fields = ['subject', 'template', 'attach_ical', 'send_date',
+                  'send_offset_days', 'send_offset_time', 'subevent',
                   'all_products', 'limit_products', 'restrict_to_status',
-                  'send_to', 'enabled']
+                  'checked_in_status', 'send_to', 'enabled']
 
         field_classes = {
             'subevent': SafeModelMultipleChoiceField,
@@ -337,6 +333,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
                        'data-inverse-dependency': '#id_all_products'},
             ),
             'send_to': forms.RadioSelect,
+            'checked_in_status': forms.RadioSelect,
         }
 
     def __init__(self, *args, **kwargs):
@@ -357,6 +354,29 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
         kwargs['initial']['schedule_type'] = dia
 
         super().__init__(*args, **kwargs)
+
+        self.fields['subevent'] = forms.ModelChoiceField(
+            SubEvent.objects.none(),
+            label=pgettext_lazy('sendmail_form', 'Restrict to a specific event date'),
+            required=False,
+            empty_label=pgettext_lazy('subevent', 'All dates')
+        )
+
+        if self.event.has_subevents:
+            self.fields['subevent'].queryset = self.event.subevents.all()
+            self.fields['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'Date')
+                }
+            )
+            self.fields['subevent'].widget.choices = self.fields['subevent'].choices
+        else:
+            del self.fields['subevent']
 
         self.fields['limit_products'].queryset = Item.objects.filter(event=self.event)
 

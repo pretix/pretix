@@ -262,7 +262,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 continue
 
         item.description = str(item.description)
-        for recv, resp in item_description.send(sender=event, item=item, variation=None):
+        for recv, resp in item_description.send(sender=event, item=item, variation=None, subevent=subevent):
             if resp:
                 item.description += ("<br/>" if item.description else "") + resp
 
@@ -319,7 +319,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                         continue
 
                 var.description = str(var.description)
-                for recv, resp in item_description.send(sender=event, item=item, variation=var):
+                for recv, resp in item_description.send(sender=event, item=item, variation=var, subevent=subevent):
                     if resp:
                         var.description += ("<br/>" if var.description else "") + resp
 

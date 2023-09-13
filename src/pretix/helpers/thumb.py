@@ -25,6 +25,7 @@ import os
 from io import BytesIO
 
 from cairosvg import svg2png
+from django.conf import settings
 from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from PIL import Image, ImageOps, ImageSequence
@@ -185,7 +186,8 @@ def create_thumbnail(sourcename, size):
         image = Image.open(
             BytesIO(svg2png(file_obj=default_storage.open(sourcename))))
     else:
-        image = Image.open(BytesIO(source.read()))
+        image = Image.open(BytesIO(source.read()), formats=settings.PILLOW_FORMATS_QUESTIONS_IMAGE)
+
     try:
         image.load()
     except:

@@ -152,6 +152,7 @@ Example::
     password=abcd
     host=localhost
     port=3306
+    advisory_lock_index=1
     sslmode=require
     sslrootcert=/etc/pretix/postgresql-ca.crt
     sslcert=/etc/pretix/postgresql-client-crt.crt
@@ -167,11 +168,17 @@ Example::
 ``user``, ``password``, ``host``, ``port``
     Connection details for the database connection. Empty by default.
 
+``advisory_lock_index``
+    On PostgreSQL, pretix uses the "advisory lock" feature. However, advisory locks use a server-wide name space and
+    and are not scoped to a specific database. If you run multiple pretix applications with the same PostgreSQL server,
+    you should set separate values for this setting (integers up to 256).
+
 ``sslmode``, ``sslrootcert``
     Connection TLS details for the PostgreSQL database connection. Possible values of ``sslmode`` are ``disable``, ``allow``, ``prefer``, ``require``, ``verify-ca``, and ``verify-full``. ``sslrootcert`` should be the accessible path of the ca certificate. Both values are empty by default.
 
 ``sslcert``, ``sslkey``
     Connection mTLS details for the PostgreSQL database connection. It's also necessary to specify ``sslmode`` and ``sslrootcert`` parameters, please check the correct values from the TLS part. ``sslcert`` should be the accessible path of the client certificate.  ``sslkey`` should be the accessible path of the client key. All values are empty by default.
+
 .. _`config-replica`:
 
 Database replica settings

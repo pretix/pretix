@@ -32,6 +32,7 @@ from django_scopes.forms import (
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
+from pretix.base.models import Gate
 from pretix.base.models.checkin import Checkin, CheckinList
 from pretix.control.forms import ItemMultipleChoiceField
 from pretix.control.forms.widgets import Select2
@@ -201,3 +202,26 @@ class CheckinListSimulatorForm(forms.Form):
         initial=True,
         required=False,
     )
+    gate = SafeModelChoiceField(
+        label=_('Gate'),
+        empty_label=_('All gates'),
+        queryset=Gate.objects.none(),
+        required=False
+    )
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+
+        self.fields['gate'].queryset = self.event.organizer.gates.all()
+        self.fields['gate'].widget = Select2(
+            attrs={
+                'data-model-select2': 'generic',
+                'data-select2-url': reverse('control:organizer.gates.select2', kwargs={
+                    'organizer': self.event.organizer.slug,
+                }),
+                'data-placeholder': _('All gates'),
+            }
+        )
+        self.fields['gate'].widget.choices = self.fields['gate'].choices
+        self.fields['gate'].label = _('Gate')

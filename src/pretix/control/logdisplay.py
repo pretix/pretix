@@ -341,6 +341,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.giftcards.acceptance.added': _('Gift card acceptance for another organizer has been added.'),
         'pretix.giftcards.acceptance.removed': _('Gift card acceptance for another organizer has been removed.'),
         'pretix.giftcards.acceptance.acceptor.invited': _('A new gift card acceptor has been invited.'),
+        'pretix.giftcards.acceptance.acceptor.removed': _('A gift card acceptor has been removed.'),
         'pretix.giftcards.acceptance.issuer.removed': _('A gift card issuer has been removed or declined.'),
         'pretix.giftcards.acceptance.issuer.accepted': _('A new gift card issuer has been accepted.'),
         'pretix.webhook.created': _('The webhook has been created.'),

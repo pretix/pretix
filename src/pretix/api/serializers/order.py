@@ -22,11 +22,13 @@
 import logging
 import os
 from collections import Counter, defaultdict
+from datetime import timedelta
 from decimal import Decimal
 
 import pycountry
 from django.conf import settings
 from django.core.files import File
+from django.db import models
 from django.db.models import F, Q
 from django.utils.encoding import force_str
 from django.utils.timezone import now
@@ -58,10 +60,11 @@ from pretix.base.models.orders import (
 )
 from pretix.base.pdf import get_images, get_variables
 from pretix.base.services.cart import error_messages
-from pretix.base.services.locking import NoLockManager
+from pretix.base.services.locking import LOCK_TRUST_WINDOW, lock_objects
 from pretix.base.services.pricing import (
     apply_discounts, get_line_price, get_listed_price, is_included_for_free,
 )
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.settings import COUNTRIES_WITH_STATE_IN_ADDRESS
 from pretix.base.signals import register_ticket_outputs
 from pretix.helpers.countries import CachedCountries
@@ -283,11 +286,12 @@ class FailedCheckinSerializer(I18nAwareModelSerializer):
     raw_item = serializers.PrimaryKeyRelatedField(queryset=Item.objects.none(), required=False, allow_null=True)
     raw_variation = serializers.PrimaryKeyRelatedField(queryset=ItemVariation.objects.none(), required=False, allow_null=True)
     raw_subevent = serializers.PrimaryKeyRelatedField(queryset=SubEvent.objects.none(), required=False, allow_null=True)
+    nonce = serializers.CharField(required=False, allow_null=True)
 
     class Meta:
         model = Checkin
         fields = ('error_reason', 'error_explanation', 'raw_barcode', 'raw_item', 'raw_variation',
-                  'raw_subevent', 'datetime', 'type', 'position')
+                  'raw_subevent', 'nonce', 'datetime', 'type', 'position')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -372,11 +376,15 @@ class PdfDataSerializer(serializers.Field):
                 self.context['vars_images'] = get_images(self.context['event'])
 
             for k, f in self.context['vars'].items():
-                try:
-                    res[k] = f['evaluate'](instance, instance.order, ev)
-                except:
-                    logger.exception('Evaluating PDF variable failed')
-                    res[k] = '(error)'
+                if 'evaluate_bulk' in f:
+                    # Will be evaluated later by our list serializers
+                    res[k] = (f['evaluate_bulk'], instance)
+                else:
+                    try:
+                        res[k] = f['evaluate'](instance, instance.order, ev)
+                    except:
+                        logger.exception('Evaluating PDF variable failed')
+                        res[k] = '(error)'
 
             if not hasattr(ev, '_cached_meta_data'):
                 ev._cached_meta_data = ev.meta_data
@@ -429,6 +437,38 @@ class PdfDataSerializer(serializers.Field):
             return res
 
 
+class OrderPositionListSerializer(serializers.ListSerializer):
+
+    def to_representation(self, data):
+        # We have a custom implementation of this method because PdfDataSerializer() might keep some elements unevaluated
+        # with a (callable, input) tuple. We'll loop over these entries and evaluate them bulk-wise to save on SQL queries.
+
+        if isinstance(self.parent, OrderSerializer) and isinstance(self.parent.parent, OrderListSerializer):
+            # Do not execute our custom code because it will be executed by OrderListSerializer later for the
+            # full result set.
+            return super().to_representation(data)
+
+        iterable = data.all() if isinstance(data, models.Manager) else data
+
+        data = []
+        evaluate_queue = defaultdict(list)
+
+        for item in iterable:
+            entry = self.child.to_representation(item)
+            if "pdf_data" in entry:
+                for k, v in entry["pdf_data"].items():
+                    if isinstance(v, tuple) and callable(v[0]):
+                        evaluate_queue[v[0]].append((v[1], entry, k))
+            data.append(entry)
+
+        for func, entries in evaluate_queue.items():
+            results = func([item for (item, entry, k) in entries])
+            for (item, entry, k), result in zip(entries, results):
+                entry["pdf_data"][k] = result
+
+        return data
+
+
 class OrderPositionSerializer(I18nAwareModelSerializer):
     checkins = CheckinSerializer(many=True, read_only=True)
     answers = AnswerSerializer(many=True)
@@ -440,6 +480,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
     attendee_name = serializers.CharField(required=False)
 
     class Meta:
+        list_serializer_class = OrderPositionListSerializer
         model = OrderPosition
         fields = ('id', 'order', 'positionid', 'item', 'variation', 'price', 'attendee_name', 'attendee_name_parts',
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'discount',
@@ -467,6 +508,20 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
 
     def validate(self, data):
         raise TypeError("this serializer is readonly")
+
+    def to_representation(self, data):
+        if isinstance(self.parent, (OrderListSerializer, OrderPositionListSerializer)):
+            # Do not execute our custom code because it will be executed by OrderListSerializer later for the
+            # full result set.
+            return super().to_representation(data)
+
+        entry = super().to_representation(data)
+        if "pdf_data" in entry:
+            for k, v in entry["pdf_data"].items():
+                if isinstance(v, tuple) and callable(v[0]):
+                    entry["pdf_data"][k] = v[0]([v[1]])[0]
+
+        return entry
 
 
 class RequireAttentionField(serializers.Field):
@@ -562,7 +617,7 @@ class PaymentURLField(serializers.URLField):
     def to_representation(self, instance: OrderPayment):
         if instance.state != OrderPayment.PAYMENT_STATE_CREATED:
             return None
-        return build_absolute_uri(self.context['event'], 'presale:event.order.pay', kwargs={
+        return build_absolute_uri(instance.order.event, 'presale:event.order.pay', kwargs={
             'order': instance.order.code,
             'secret': instance.order.secret,
             'payment': instance.pk,
@@ -607,13 +662,42 @@ class OrderRefundSerializer(I18nAwareModelSerializer):
 
 class OrderURLField(serializers.URLField):
     def to_representation(self, instance: Order):
-        return build_absolute_uri(self.context['event'], 'presale:event.order', kwargs={
+        return build_absolute_uri(instance.event, 'presale:event.order', kwargs={
             'order': instance.code,
             'secret': instance.secret,
         })
 
 
+class OrderListSerializer(serializers.ListSerializer):
+
+    def to_representation(self, data):
+        # We have a custom implementation of this method because PdfDataSerializer() might keep some elements
+        # unevaluated with a (callable, input) tuple. We'll loop over these entries and evaluate them bulk-wise to
+        # save on SQL queries.
+        iterable = data.all() if isinstance(data, models.Manager) else data
+
+        data = []
+        evaluate_queue = defaultdict(list)
+
+        for item in iterable:
+            entry = self.child.to_representation(item)
+            for p in entry.get("positions", []):
+                if "pdf_data" in p:
+                    for k, v in p["pdf_data"].items():
+                        if isinstance(v, tuple) and callable(v[0]):
+                            evaluate_queue[v[0]].append((v[1], p, k))
+            data.append(entry)
+
+        for func, entries in evaluate_queue.items():
+            results = func([item for (item, entry, k) in entries])
+            for (item, entry, k), result in zip(entries, results):
+                entry["pdf_data"][k] = result
+
+        return data
+
+
 class OrderSerializer(I18nAwareModelSerializer):
+    event = SlugRelatedField(slug_field='slug', read_only=True)
     invoice_address = InvoiceAddressSerializer(allow_null=True)
     positions = OrderPositionSerializer(many=True, read_only=True)
     fees = OrderFeeSerializer(many=True, read_only=True)
@@ -627,8 +711,9 @@ class OrderSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Order
+        list_serializer_class = OrderListSerializer
         fields = (
-            'code', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
+            'code', 'event', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
             'payment_provider', 'fees', 'total', 'comment', 'custom_followup_at', 'invoice_address', 'positions', 'downloads',
             'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
             'url', 'customer', 'valid_if_pending'
@@ -1061,338 +1146,367 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         else:
             ia = None
 
-        lock_required = False
+        quotas_by_item = {}
+        quota_diff_for_locking = Counter()
+        voucher_diff_for_locking = Counter()
+        seat_diff_for_locking = Counter()
+        quota_usage = Counter()
+        voucher_usage = Counter()
+        seat_usage = Counter()
+        v_budget = {}
+        now_dt = now()
+        delete_cps = []
+        consume_carts = validated_data.pop('consume_carts', [])
+
         for pos_data in positions_data:
-            pos_data['_quotas'] = list(
-                pos_data.get('variation').quotas.filter(subevent=pos_data.get('subevent'))
-                if pos_data.get('variation')
-                else pos_data.get('item').quotas.filter(subevent=pos_data.get('subevent'))
-            )
-            if pos_data.get('voucher') or pos_data.get('seat') or any(q.size is not None for q in pos_data['_quotas']):
-                lock_required = True
+            if (pos_data.get('item'), pos_data.get('variation'), pos_data.get('subevent')) not in quotas_by_item:
+                quotas_by_item[pos_data.get('item'), pos_data.get('variation'), pos_data.get('subevent')] = list(
+                    pos_data.get('variation').quotas.filter(subevent=pos_data.get('subevent'))
+                    if pos_data.get('variation')
+                    else pos_data.get('item').quotas.filter(subevent=pos_data.get('subevent'))
+                )
+            for q in quotas_by_item[pos_data.get('item'), pos_data.get('variation'), pos_data.get('subevent')]:
+                quota_diff_for_locking[q] += 1
+            if pos_data.get('voucher'):
+                voucher_diff_for_locking[pos_data['voucher']] += 1
+            if pos_data.get('seat'):
+                try:
+                    seat = self.context['event'].seats.get(seat_guid=pos_data['seat'], subevent=pos_data.get('subevent'))
+                except Seat.DoesNotExist:
+                    pos_data['seat'] = Seat.DoesNotExist
+                else:
+                    pos_data['seat'] = seat
+                    seat_diff_for_locking[pos_data['seat']] += 1
 
-        lockfn = self.context['event'].lock
-        if simulate or not lock_required:
-            lockfn = NoLockManager
-        with lockfn() as now_dt:
-            free_seats = set()
-            seats_seen = set()
-            consume_carts = validated_data.pop('consume_carts', [])
-            delete_cps = []
-            quota_avail_cache = {}
-            v_budget = {}
-            voucher_usage = Counter()
-            if consume_carts:
-                for cp in CartPosition.objects.filter(
-                    event=self.context['event'], cart_id__in=consume_carts, expires__gt=now()
-                ):
-                    quotas = (cp.variation.quotas.filter(subevent=cp.subevent)
-                              if cp.variation else cp.item.quotas.filter(subevent=cp.subevent))
-                    for quota in quotas:
-                        if quota not in quota_avail_cache:
-                            quota_avail_cache[quota] = list(quota.availability())
-                        if quota_avail_cache[quota][1] is not None:
-                            quota_avail_cache[quota][1] += 1
-                    if cp.voucher:
-                        voucher_usage[cp.voucher] -= 1
-                    if cp.expires > now_dt:
-                        if cp.seat:
-                            free_seats.add(cp.seat)
-                    delete_cps.append(cp)
+        if consume_carts:
+            offset = now() + timedelta(seconds=LOCK_TRUST_WINDOW)
+            for cp in CartPosition.objects.filter(
+                event=self.context['event'], cart_id__in=consume_carts, expires__gt=now_dt
+            ):
+                quotas = (cp.variation.quotas.filter(subevent=cp.subevent)
+                          if cp.variation else cp.item.quotas.filter(subevent=cp.subevent))
+                for quota in quotas:
+                    if cp.expires > offset:
+                        quota_diff_for_locking[quota] -= 1
+                    quota_usage[quota] -= 1
+                if cp.voucher:
+                    if cp.expires > offset:
+                        voucher_diff_for_locking[cp.voucher] -= 1
+                    voucher_usage[cp.voucher] -= 1
+                if cp.seat:
+                    if cp.expires > offset:
+                        seat_diff_for_locking[cp.seat] -= 1
+                    seat_usage[cp.seat] -= 1
+                delete_cps.append(cp)
 
-            errs = [{} for p in positions_data]
+        if not simulate:
+            full_lock_required = seat_diff_for_locking and self.context['event'].settings.seating_minimal_distance > 0
+            if full_lock_required:
+                # We lock the entire event in this case since we don't want to deal with fine-granular locking
+                # in the case of seating distance enforcement
+                lock_objects([self.context['event']])
+            else:
+                lock_objects(
+                    [q for q, d in quota_diff_for_locking.items() if d > 0 and q.size is not None and not force] +
+                    [v for v, d in voucher_diff_for_locking.items() if d > 0 and not force] +
+                    [s for s, d in seat_diff_for_locking.items() if d > 0],
+                    shared_lock_objects=[self.context['event']]
+                )
 
-            for i, pos_data in enumerate(positions_data):
+        qa = QuotaAvailability()
+        qa.queue(*[q for q, d in quota_diff_for_locking.items() if d > 0])
+        qa.compute()
 
-                if pos_data.get('voucher'):
-                    v = pos_data['voucher']
+        # These are not technically correct as diff use due to the time offset applied above, so let's prevent accidental
+        # use further down
+        del quota_diff_for_locking, voucher_diff_for_locking, seat_diff_for_locking
 
-                    if pos_data.get('addon_to'):
-                        errs[i]['voucher'] = ['Vouchers are currently not supported for add-on products.']
-                        continue
+        errs = [{} for p in positions_data]
 
-                    if not v.applies_to(pos_data['item'], pos_data.get('variation')):
-                        errs[i]['voucher'] = [error_messages['voucher_invalid_item']]
-                        continue
+        for i, pos_data in enumerate(positions_data):
+            if pos_data.get('voucher'):
+                v = pos_data['voucher']
 
-                    if v.subevent_id and pos_data.get('subevent').pk != v.subevent_id:
-                        errs[i]['voucher'] = [error_messages['voucher_invalid_subevent']]
-                        continue
+                if pos_data.get('addon_to'):
+                    errs[i]['voucher'] = ['Vouchers are currently not supported for add-on products.']
+                    continue
 
-                    if v.valid_until is not None and v.valid_until < now_dt:
-                        errs[i]['voucher'] = [error_messages['voucher_expired']]
-                        continue
+                if not v.applies_to(pos_data['item'], pos_data.get('variation')):
+                    errs[i]['voucher'] = [error_messages['voucher_invalid_item']]
+                    continue
 
-                    voucher_usage[v] += 1
-                    if voucher_usage[v] > 0:
-                        redeemed_in_carts = CartPosition.objects.filter(
-                            Q(voucher=pos_data['voucher']) & Q(event=self.context['event']) & Q(expires__gte=now_dt)
-                        ).exclude(pk__in=[cp.pk for cp in delete_cps])
-                        v_avail = v.max_usages - v.redeemed - redeemed_in_carts.count()
-                        if v_avail < voucher_usage[v]:
-                            errs[i]['voucher'] = [
-                                'The voucher has already been used the maximum number of times.'
-                            ]
+                if v.subevent_id and pos_data.get('subevent').pk != v.subevent_id:
+                    errs[i]['voucher'] = [error_messages['voucher_invalid_subevent']]
+                    continue
 
-                    if v.budget is not None:
-                        price = pos_data.get('price')
-                        listed_price = get_listed_price(pos_data.get('item'), pos_data.get('variation'), pos_data.get('subevent'))
+                if v.valid_until is not None and v.valid_until < now_dt:
+                    errs[i]['voucher'] = [error_messages['voucher_expired']]
+                    continue
 
-                        if pos_data.get('voucher'):
-                            price_after_voucher = pos_data.get('voucher').calculate_price(listed_price)
-                        else:
-                            price_after_voucher = listed_price
-                        if price is None:
-                            price = price_after_voucher
+                voucher_usage[v] += 1
+                if voucher_usage[v] > 0:
+                    redeemed_in_carts = CartPosition.objects.filter(
+                        Q(voucher=pos_data['voucher']) & Q(event=self.context['event']) & Q(expires__gte=now_dt)
+                    ).exclude(pk__in=[cp.pk for cp in delete_cps])
+                    v_avail = v.max_usages - v.redeemed - redeemed_in_carts.count()
+                    if v_avail < voucher_usage[v]:
+                        errs[i]['voucher'] = [
+                            'The voucher has already been used the maximum number of times.'
+                        ]
 
-                        if v not in v_budget:
-                            v_budget[v] = v.budget - v.budget_used()
-                        disc = max(listed_price - price, 0)
-                        if disc > v_budget[v]:
-                            new_disc = v_budget[v]
-                            v_budget[v] -= new_disc
-                            if new_disc == Decimal('0.00') or pos_data.get('price') is not None:
-                                errs[i]['voucher'] = [
-                                    'The voucher has a remaining budget of {}, therefore a discount of {} can not be '
-                                    'given.'.format(v_budget[v] + new_disc, disc)
-                                ]
-                                continue
-                            pos_data['price'] = price + (disc - new_disc)
-                        else:
-                            v_budget[v] -= disc
+                if v.budget is not None:
+                    price = pos_data.get('price')
+                    listed_price = get_listed_price(pos_data.get('item'), pos_data.get('variation'), pos_data.get('subevent'))
 
-                seated = pos_data.get('item').seat_category_mappings.filter(subevent=pos_data.get('subevent')).exists()
-                if pos_data.get('seat'):
-                    if pos_data.get('addon_to'):
-                        errs[i]['seat'] = ['Seats are currently not supported for add-on products.']
-                        continue
-
-                    if not seated:
-                        errs[i]['seat'] = ['The specified product does not allow to choose a seat.']
-                    try:
-                        seat = self.context['event'].seats.get(seat_guid=pos_data['seat'], subevent=pos_data.get('subevent'))
-                    except Seat.DoesNotExist:
-                        errs[i]['seat'] = ['The specified seat does not exist.']
-                    else:
-                        pos_data['seat'] = seat
-                        if (seat not in free_seats and not seat.is_available(sales_channel=validated_data.get('sales_channel', 'web'))) or seat in seats_seen:
-                            errs[i]['seat'] = [gettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name)]
-                        seats_seen.add(seat)
-                elif seated:
-                    errs[i]['seat'] = ['The specified product requires to choose a seat.']
-
-                requested_valid_from = pos_data.pop('requested_valid_from', None)
-                if 'valid_from' not in pos_data and 'valid_until' not in pos_data:
-                    valid_from, valid_until = pos_data['item'].compute_validity(
-                        requested_start=(
-                            max(requested_valid_from, now())
-                            if requested_valid_from and pos_data['item'].validity_dynamic_start_choice
-                            else now()
-                        ),
-                        enforce_start_limit=True,
-                        override_tz=self.context['event'].timezone,
-                    )
-                    pos_data['valid_from'] = valid_from
-                    pos_data['valid_until'] = valid_until
-
-            if not force:
-                for i, pos_data in enumerate(positions_data):
                     if pos_data.get('voucher'):
-                        if pos_data['voucher'].allow_ignore_quota or pos_data['voucher'].block_quota:
+                        price_after_voucher = pos_data.get('voucher').calculate_price(listed_price)
+                    else:
+                        price_after_voucher = listed_price
+                    if price is None:
+                        price = price_after_voucher
+
+                    if v not in v_budget:
+                        v_budget[v] = v.budget - v.budget_used()
+                    disc = max(listed_price - price, 0)
+                    if disc > v_budget[v]:
+                        new_disc = v_budget[v]
+                        v_budget[v] -= new_disc
+                        if new_disc == Decimal('0.00') or pos_data.get('price') is not None:
+                            errs[i]['voucher'] = [
+                                'The voucher has a remaining budget of {}, therefore a discount of {} can not be '
+                                'given.'.format(v_budget[v] + new_disc, disc)
+                            ]
                             continue
+                        pos_data['price'] = price + (disc - new_disc)
+                    else:
+                        v_budget[v] -= disc
 
-                    if pos_data.get('subevent'):
-                        if pos_data.get('item').pk in pos_data['subevent'].item_overrides and pos_data['subevent'].item_overrides[pos_data['item'].pk].disabled:
-                            errs[i]['item'] = [gettext_lazy('The product "{}" is not available on this date.').format(
-                                str(pos_data.get('item'))
-                            )]
-                        if (
-                                pos_data.get('variation') and pos_data['variation'].pk in pos_data['subevent'].var_overrides and
-                                pos_data['subevent'].var_overrides[pos_data['variation'].pk].disabled
-                        ):
-                            errs[i]['item'] = [gettext_lazy('The product "{}" is not available on this date.').format(
-                                str(pos_data.get('item'))
-                            )]
+            seated = pos_data.get('item').seat_category_mappings.filter(subevent=pos_data.get('subevent')).exists()
+            if pos_data.get('seat'):
+                if pos_data.get('addon_to'):
+                    errs[i]['seat'] = ['Seats are currently not supported for add-on products.']
+                    continue
+                if not seated:
+                    errs[i]['seat'] = ['The specified product does not allow to choose a seat.']
+                seat = pos_data['seat']
+                if seat is Seat.DoesNotExist:
+                    errs[i]['seat'] = ['The specified seat does not exist.']
+                else:
+                    seat_usage[seat] += 1
+                    if (seat_usage[seat] > 0 and not seat.is_available(sales_channel=validated_data.get('sales_channel', 'web'))) or seat_usage[seat] > 1:
+                        errs[i]['seat'] = [gettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name)]
+            elif seated:
+                errs[i]['seat'] = ['The specified product requires to choose a seat.']
 
-                    new_quotas = pos_data['_quotas']
-                    if len(new_quotas) == 0:
-                        errs[i]['item'] = [gettext_lazy('The product "{}" is not assigned to a quota.').format(
+            requested_valid_from = pos_data.pop('requested_valid_from', None)
+            if 'valid_from' not in pos_data and 'valid_until' not in pos_data:
+                valid_from, valid_until = pos_data['item'].compute_validity(
+                    requested_start=(
+                        max(requested_valid_from, now())
+                        if requested_valid_from and pos_data['item'].validity_dynamic_start_choice
+                        else now()
+                    ),
+                    enforce_start_limit=True,
+                    override_tz=self.context['event'].timezone,
+                )
+                pos_data['valid_from'] = valid_from
+                pos_data['valid_until'] = valid_until
+
+        if not force:
+            for i, pos_data in enumerate(positions_data):
+                if pos_data.get('voucher'):
+                    if pos_data['voucher'].allow_ignore_quota or pos_data['voucher'].block_quota:
+                        continue
+
+                if pos_data.get('subevent'):
+                    if pos_data.get('item').pk in pos_data['subevent'].item_overrides and pos_data['subevent'].item_overrides[pos_data['item'].pk].disabled:
+                        errs[i]['item'] = [gettext_lazy('The product "{}" is not available on this date.').format(
                             str(pos_data.get('item'))
                         )]
-                    else:
-                        for quota in new_quotas:
-                            if quota not in quota_avail_cache:
-                                quota_avail_cache[quota] = list(quota.availability())
+                    if (
+                            pos_data.get('variation') and pos_data['variation'].pk in pos_data['subevent'].var_overrides and
+                            pos_data['subevent'].var_overrides[pos_data['variation'].pk].disabled
+                    ):
+                        errs[i]['item'] = [gettext_lazy('The product "{}" is not available on this date.').format(
+                            str(pos_data.get('item'))
+                        )]
 
-                            if quota_avail_cache[quota][1] is not None:
-                                quota_avail_cache[quota][1] -= 1
-                                if quota_avail_cache[quota][1] < 0:
-                                    errs[i]['item'] = [
-                                        gettext_lazy('There is not enough quota available on quota "{}" to perform the operation.').format(
-                                            quota.name
-                                        )
-                                    ]
-
-            if any(errs):
-                raise ValidationError({'positions': errs})
-
-            if validated_data.get('locale', None) is None:
-                validated_data['locale'] = self.context['event'].settings.locale
-            order = Order(event=self.context['event'], **validated_data)
-            order.set_expires(subevents=[p.get('subevent') for p in positions_data])
-            order.meta_info = "{}"
-            order.total = Decimal('0.00')
-            if validated_data.get('require_approval') is not None:
-                order.require_approval = validated_data['require_approval']
-            if simulate:
-                order = WrappedModel(order)
-                order.last_modified = now()
-                order.code = 'PREVIEW'
-            else:
-                order.save()
-
-            if ia:
-                if not simulate:
-                    ia.order = order
-                    ia.save()
+                new_quotas = quotas_by_item[pos_data.get('item'), pos_data.get('variation'), pos_data.get('subevent')]
+                if len(new_quotas) == 0:
+                    errs[i]['item'] = [gettext_lazy('The product "{}" is not assigned to a quota.').format(
+                        str(pos_data.get('item'))
+                    )]
                 else:
-                    order.invoice_address = ia
-                    ia.last_modified = now()
+                    for quota in new_quotas:
+                        quota_usage[quota] += 1
+                        if quota_usage[quota] > 0 and qa.results[quota][1] is not None:
+                            if qa.results[quota][1] < quota_usage[quota]:
+                                errs[i]['item'] = [
+                                    gettext_lazy('There is not enough quota available on quota "{}" to perform the operation.').format(
+                                        quota.name
+                                    )
+                                ]
 
-            # Generate position objects
-            pos_map = {}
-            for pos_data in positions_data:
-                addon_to = pos_data.pop('addon_to', None)
-                attendee_name = pos_data.pop('attendee_name', '')
-                if attendee_name and not pos_data.get('attendee_name_parts'):
-                    pos_data['attendee_name_parts'] = {
-                        '_legacy': attendee_name
-                    }
-                pos = OrderPosition(**{k: v for k, v in pos_data.items() if k != 'answers' and k != '_quotas' and k != 'use_reusable_medium'})
-                if simulate:
-                    pos.order = order._wrapped
-                else:
-                    pos.order = order
-                if addon_to:
-                    if simulate:
-                        pos.addon_to = pos_map[addon_to]
-                    else:
-                        pos.addon_to = pos_map[addon_to]
+        if any(errs):
+            raise ValidationError({'positions': errs})
 
-                pos_map[pos.positionid] = pos
-                pos_data['__instance'] = pos
+        if validated_data.get('locale', None) is None:
+            validated_data['locale'] = self.context['event'].settings.locale
+        order = Order(event=self.context['event'], **validated_data)
+        order.set_expires(subevents=[p.get('subevent') for p in positions_data])
+        order.meta_info = "{}"
+        order.total = Decimal('0.00')
+        if validated_data.get('require_approval') is not None:
+            order.require_approval = validated_data['require_approval']
+        if simulate:
+            order = WrappedModel(order)
+            order.last_modified = now()
+            order.code = 'PREVIEW'
+        else:
+            order.save()
 
-            # Calculate prices if not set
-            for pos_data in positions_data:
-                pos = pos_data['__instance']
-                if pos.addon_to_id and is_included_for_free(pos.item, pos.addon_to):
-                    listed_price = Decimal('0.00')
-                else:
-                    listed_price = get_listed_price(pos.item, pos.variation, pos.subevent)
-
-                if pos.price is None:
-                    if pos.voucher:
-                        price_after_voucher = pos.voucher.calculate_price(listed_price)
-                    else:
-                        price_after_voucher = listed_price
-
-                    line_price = get_line_price(
-                        price_after_voucher=price_after_voucher,
-                        custom_price_input=None,
-                        custom_price_input_is_net=False,
-                        tax_rule=pos.item.tax_rule,
-                        invoice_address=ia,
-                        bundled_sum=Decimal('0.00'),
-                    )
-                    pos.price = line_price.gross
-                    pos._auto_generated_price = True
-                else:
-                    if pos.voucher:
-                        if not pos.item.tax_rule or pos.item.tax_rule.price_includes_tax:
-                            price_after_voucher = max(pos.price, pos.voucher.calculate_price(listed_price))
-                        else:
-                            price_after_voucher = max(pos.price - pos.tax_value, pos.voucher.calculate_price(listed_price))
-                    else:
-                        price_after_voucher = listed_price
-                    pos._auto_generated_price = False
-                pos._voucher_discount = listed_price - price_after_voucher
-                if pos.voucher:
-                    pos.voucher_budget_use = max(listed_price - price_after_voucher, Decimal('0.00'))
-
-            order_positions = [pos_data['__instance'] for pos_data in positions_data]
-            discount_results = apply_discounts(
-                self.context['event'],
-                order.sales_channel,
-                [
-                    (cp.item_id, cp.subevent_id, cp.price, bool(cp.addon_to), cp.is_bundled, pos._voucher_discount)
-                    for cp in order_positions
-                ]
-            )
-            for cp, (new_price, discount) in zip(order_positions, discount_results):
-                if new_price != pos.price and pos._auto_generated_price:
-                    pos.price = new_price
-                pos.discount = discount
-
-            # Save instances
-            for pos_data in positions_data:
-                answers_data = pos_data.pop('answers', [])
-                use_reusable_medium = pos_data.pop('use_reusable_medium', None)
-                pos = pos_data['__instance']
-                pos._calculate_tax()
-
-                if simulate:
-                    pos = WrappedModel(pos)
-                    pos.id = 0
-                    answers = []
-                    for answ_data in answers_data:
-                        options = answ_data.pop('options', [])
-                        answ = WrappedModel(QuestionAnswer(**answ_data))
-                        answ.options = WrappedList(options)
-                        answers.append(answ)
-                    pos.answers = answers
-                    pos.pseudonymization_id = "PREVIEW"
-                    pos.checkins = []
-                    pos_map[pos.positionid] = pos
-                else:
-                    if pos.voucher:
-                        Voucher.objects.filter(pk=pos.voucher.pk).update(redeemed=F('redeemed') + 1)
-                    pos.save()
-                    seen_answers = set()
-                    for answ_data in answers_data:
-                        # Workaround for a pretixPOS bug :-(
-                        if answ_data.get('question') in seen_answers:
-                            continue
-                        seen_answers.add(answ_data.get('question'))
-
-                        options = answ_data.pop('options', [])
-
-                        if isinstance(answ_data['answer'], File):
-                            an = answ_data.pop('answer')
-                            answ = pos.answers.create(**answ_data, answer='')
-                            answ.file.save(os.path.basename(an.name), an, save=False)
-                            answ.answer = 'file://' + answ.file.name
-                            answ.save()
-                        else:
-                            answ = pos.answers.create(**answ_data)
-                            answ.options.add(*options)
-
-                    if use_reusable_medium:
-                        use_reusable_medium.linked_orderposition = pos
-                        use_reusable_medium.save(update_fields=['linked_orderposition'])
-                        use_reusable_medium.log_action(
-                            'pretix.reusable_medium.linked_orderposition.changed',
-                            data={
-                                'by_order': order.code,
-                                'linked_orderposition': pos.pk,
-                            }
-                        )
-
+        if ia:
             if not simulate:
-                for cp in delete_cps:
-                    if cp.addon_to_id:
+                ia.order = order
+                ia.save()
+            else:
+                order.invoice_address = ia
+                ia.last_modified = now()
+
+        # Generate position objects
+        pos_map = {}
+        for pos_data in positions_data:
+            addon_to = pos_data.pop('addon_to', None)
+            attendee_name = pos_data.pop('attendee_name', '')
+            if attendee_name and not pos_data.get('attendee_name_parts'):
+                pos_data['attendee_name_parts'] = {
+                    '_legacy': attendee_name
+                }
+            pos = OrderPosition(**{k: v for k, v in pos_data.items() if k != 'answers' and k != '_quotas' and k != 'use_reusable_medium'})
+            if simulate:
+                pos.order = order._wrapped
+            else:
+                pos.order = order
+            if addon_to:
+                if simulate:
+                    pos.addon_to = pos_map[addon_to]
+                else:
+                    pos.addon_to = pos_map[addon_to]
+
+            pos_map[pos.positionid] = pos
+            pos_data['__instance'] = pos
+
+        # Calculate prices if not set
+        for pos_data in positions_data:
+            pos = pos_data['__instance']
+            if pos.addon_to_id and is_included_for_free(pos.item, pos.addon_to):
+                listed_price = Decimal('0.00')
+            else:
+                listed_price = get_listed_price(pos.item, pos.variation, pos.subevent)
+
+            if pos.price is None:
+                if pos.voucher:
+                    price_after_voucher = pos.voucher.calculate_price(listed_price)
+                else:
+                    price_after_voucher = listed_price
+
+                line_price = get_line_price(
+                    price_after_voucher=price_after_voucher,
+                    custom_price_input=None,
+                    custom_price_input_is_net=False,
+                    tax_rule=pos.item.tax_rule,
+                    invoice_address=ia,
+                    bundled_sum=Decimal('0.00'),
+                )
+                pos.price = line_price.gross
+                pos._auto_generated_price = True
+            else:
+                if pos.voucher:
+                    if not pos.item.tax_rule or pos.item.tax_rule.price_includes_tax:
+                        price_after_voucher = max(pos.price, pos.voucher.calculate_price(listed_price))
+                    else:
+                        price_after_voucher = max(pos.price - pos.tax_value, pos.voucher.calculate_price(listed_price))
+                else:
+                    price_after_voucher = listed_price
+                pos._auto_generated_price = False
+            pos._voucher_discount = listed_price - price_after_voucher
+            if pos.voucher:
+                pos.voucher_budget_use = max(listed_price - price_after_voucher, Decimal('0.00'))
+
+        order_positions = [pos_data['__instance'] for pos_data in positions_data]
+        discount_results = apply_discounts(
+            self.context['event'],
+            order.sales_channel,
+            [
+                (cp.item_id, cp.subevent_id, cp.price, bool(cp.addon_to), cp.is_bundled, pos._voucher_discount)
+                for cp in order_positions
+            ]
+        )
+        for cp, (new_price, discount) in zip(order_positions, discount_results):
+            if new_price != pos.price and pos._auto_generated_price:
+                pos.price = new_price
+            pos.discount = discount
+
+        # Save instances
+        for pos_data in positions_data:
+            answers_data = pos_data.pop('answers', [])
+            use_reusable_medium = pos_data.pop('use_reusable_medium', None)
+            pos = pos_data['__instance']
+            pos._calculate_tax()
+
+            if simulate:
+                pos = WrappedModel(pos)
+                pos.id = 0
+                answers = []
+                for answ_data in answers_data:
+                    options = answ_data.pop('options', [])
+                    answ = WrappedModel(QuestionAnswer(**answ_data))
+                    answ.options = WrappedList(options)
+                    answers.append(answ)
+                pos.answers = answers
+                pos.pseudonymization_id = "PREVIEW"
+                pos.checkins = []
+                pos_map[pos.positionid] = pos
+            else:
+                if pos.voucher:
+                    Voucher.objects.filter(pk=pos.voucher.pk).update(redeemed=F('redeemed') + 1)
+                pos.save()
+                seen_answers = set()
+                for answ_data in answers_data:
+                    # Workaround for a pretixPOS bug :-(
+                    if answ_data.get('question') in seen_answers:
                         continue
-                    cp.addons.all().delete()
-                    cp.delete()
+                    seen_answers.add(answ_data.get('question'))
+
+                    options = answ_data.pop('options', [])
+
+                    if isinstance(answ_data['answer'], File):
+                        an = answ_data.pop('answer')
+                        answ = pos.answers.create(**answ_data, answer='')
+                        answ.file.save(os.path.basename(an.name), an, save=False)
+                        answ.answer = 'file://' + answ.file.name
+                        answ.save()
+                    else:
+                        answ = pos.answers.create(**answ_data)
+                        answ.options.add(*options)
+
+                if use_reusable_medium:
+                    use_reusable_medium.linked_orderposition = pos
+                    use_reusable_medium.save(update_fields=['linked_orderposition'])
+                    use_reusable_medium.log_action(
+                        'pretix.reusable_medium.linked_orderposition.changed',
+                        data={
+                            'by_order': order.code,
+                            'linked_orderposition': pos.pk,
+                        }
+                    )
+
+        if not simulate:
+            for cp in delete_cps:
+                if cp.addon_to_id:
+                    continue
+                cp.addons.all().delete()
+                cp.delete()
 
         order.total = sum([p.price for p in pos_map.values()])
         fees = []
@@ -1512,6 +1626,7 @@ class InlineInvoiceLineSerializer(I18nAwareModelSerializer):
 
 
 class InvoiceSerializer(I18nAwareModelSerializer):
+    event = SlugRelatedField(slug_field='slug', read_only=True)
     order = serializers.SlugRelatedField(slug_field='code', read_only=True)
     refers = serializers.SlugRelatedField(slug_field='full_invoice_no', read_only=True)
     lines = InlineInvoiceLineSerializer(many=True)
@@ -1520,7 +1635,7 @@ class InvoiceSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Invoice
-        fields = ('order', 'number', 'is_cancellation', 'invoice_from', 'invoice_from_name', 'invoice_from_zipcode',
+        fields = ('event', 'order', 'number', 'is_cancellation', 'invoice_from', 'invoice_from_name', 'invoice_from_zipcode',
                   'invoice_from_city', 'invoice_from_country', 'invoice_from_tax_id', 'invoice_from_vat_id',
                   'invoice_to', 'invoice_to_company', 'invoice_to_name', 'invoice_to_street', 'invoice_to_zipcode',
                   'invoice_to_city', 'invoice_to_state', 'invoice_to_country', 'invoice_to_vat_id', 'invoice_to_beneficiary',

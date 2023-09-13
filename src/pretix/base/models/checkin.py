@@ -265,16 +265,16 @@ class CheckinList(LoggedModel):
         # * in pretix.helpers.jsonlogic_boolalg
         # * in checkinrules.js
         # * in libpretixsync
-        # * in pretixscan-ios (in the future)
+        # * in pretixscan-ios
         top_level_operators = {
             '<', '<=', '>', '>=', '==', '!=', 'inList', 'isBefore', 'isAfter', 'or', 'and'
         }
         allowed_operators = top_level_operators | {
-            'buildTime', 'objectList', 'lookup', 'var',
+            'buildTime', 'objectList', 'lookup', 'var', 'entries_since', 'entries_before'
         }
         allowed_vars = {
             'product', 'variation', 'now', 'now_isoweekday', 'entries_number', 'entries_today', 'entries_days',
-            'minutes_since_last_entry', 'minutes_since_first_entry',
+            'minutes_since_last_entry', 'minutes_since_first_entry', 'gate',
         }
         if not rules or not isinstance(rules, dict):
             return rules
@@ -298,6 +298,10 @@ class CheckinList(LoggedModel):
             if values[0] not in allowed_vars:
                 raise ValidationError(f'Logic variable "{values[0]}" is currently not allowed.')
             return rules
+
+        if operator in ('entries_since', 'entries_before'):
+            if len(values) != 1 or "buildTime" not in values[0]:
+                raise ValidationError(f'Operator "{operator}" takes exactly one "buildTime" argument.')
 
         if operator in ('or', 'and') and seen_nonbool:
             raise ValidationError('You cannot use OR/AND logic on a level below a comparison operator.')

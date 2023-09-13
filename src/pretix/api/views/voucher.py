@@ -19,8 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import contextlib
-
 from django.db import transaction
 from django.db.models import F, Q
 from django.utils.timezone import now
@@ -69,30 +67,9 @@ class VoucherViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         return self.request.event.vouchers.select_related('seat').all()
 
-    def _predict_quota_check(self, data, instance):
-        # This method predicts if Voucher.clean_quota_needs_checking
-        # *migh* later require a quota check. It is only approximate
-        # and returns True a little too often. The point is to avoid
-        # locks when we know we won't need them.
-        if 'allow_ignore_quota' in data and data.get('allow_ignore_quota'):
-            return False
-        if instance and 'allow_ignore_quota' not in data and instance.allow_ignore_quota:
-            return False
-
-        if 'block_quota' in data and not data.get('block_quota'):
-            return False
-        if instance and 'block_quota' not in data and not instance.block_quota:
-            return False
-
-        return True
-
+    @transaction.atomic()
     def create(self, request, *args, **kwargs):
-        if self._predict_quota_check(request.data, None):
-            lockfn = request.event.lock
-        else:
-            lockfn = contextlib.suppress  # noop context manager
-        with lockfn():
-            return super().create(request, *args, **kwargs)
+        return super().create(request, *args, **kwargs)
 
     def perform_create(self, serializer):
         serializer.save(event=self.request.event)
@@ -108,13 +85,9 @@ class VoucherViewSet(viewsets.ModelViewSet):
         ctx['event'] = self.request.event
         return ctx
 
+    @transaction.atomic()
     def update(self, request, *args, **kwargs):
-        if self._predict_quota_check(request.data, self.get_object()):
-            lockfn = request.event.lock
-        else:
-            lockfn = contextlib.suppress  # noop context manager
-        with lockfn():
-            return super().update(request, *args, **kwargs)
+        return super().update(request, *args, **kwargs)
 
     def perform_update(self, serializer):
         serializer.save(event=self.request.event)
@@ -140,22 +113,18 @@ class VoucherViewSet(viewsets.ModelViewSet):
             super().perform_destroy(instance)
 
     @action(detail=False, methods=['POST'])
+    @transaction.atomic()
     def batch_create(self, request, *args, **kwargs):
-        if any(self._predict_quota_check(d, None) for d in request.data):
-            lockfn = request.event.lock
-        else:
-            lockfn = contextlib.suppress  # noop context manager
-        with lockfn():
-            serializer = self.get_serializer(data=request.data, many=True)
-            serializer.is_valid(raise_exception=True)
-            with transaction.atomic():
-                serializer.save(event=self.request.event)
-                for i, v in enumerate(serializer.instance):
-                    v.log_action(
-                        'pretix.voucher.added',
-                        user=self.request.user,
-                        auth=self.request.auth,
-                        data=self.request.data[i]
-                    )
+        serializer = self.get_serializer(data=request.data, many=True)
+        serializer.is_valid(raise_exception=True)
+        with transaction.atomic():
+            serializer.save(event=self.request.event)
+            for i, v in enumerate(serializer.instance):
+                v.log_action(
+                    'pretix.voucher.added',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data=self.request.data[i]
+                )
         headers = self.get_success_headers(serializer.data)
         return Response(serializer.data, status=status.HTTP_201_CREATED, headers=headers)

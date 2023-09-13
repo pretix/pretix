@@ -198,12 +198,12 @@ def waitinglist_widgets(sender, subevent=None, lazy=False, **kwargs):
                     else item.check_quotas(subevent=subevent, count_waitinglist=False, _cache=quota_cache)
                 )
                 if row[1] is None:
-                    happy += 1
+                    happy += wlt['cnt']
                 elif row[1] > 0:
-                    happy += 1
+                    happy += min(wlt['cnt'], row[1])
                     for q in quotas:
                         if q.size is not None:
-                            quota_cache[q.pk] = (quota_cache[q.pk][0], quota_cache[q.pk][1] - 1)
+                            quota_cache[q.pk] = (quota_cache[q.pk][0], quota_cache[q.pk][1] - min(wlt['cnt'], row[1]))
 
         widgets.append({
             'content': None if lazy else NUM_WIDGET.format(

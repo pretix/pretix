@@ -110,7 +110,7 @@
             <input type="hidden" name="start-action" value="do_nothing">
             <input type="hidden" name="start-mode" value="partial">
             {% localize off %}
-            <input type="hidden" name="start-partial_amount" value="{{ overpaid|floatformat:2 }}">
+            <input type="hidden" name="start-partial_amount" value="{{ overpaid|money_numberfield:request.event.currency }}">
             {% endlocalize %}
             <input type="hidden" name="comment" value="{% trans "Refund for overpayment" %}">
             <div class="alert alert-warning">

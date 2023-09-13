@@ -24,13 +24,13 @@ import time
 from collections import Counter, defaultdict
 from itertools import zip_longest
 
+import django_redis
 from django.conf import settings
 from django.db import models
 from django.db.models import (
     Case, Count, F, Func, Max, OuterRef, Q, Subquery, Sum, Value, When,
 )
 from django.utils.timezone import now
-from django_redis import get_redis_connection
 
 from pretix.base.models import (
     CartPosition, Checkin, Order, OrderPosition, Quota, Voucher,
@@ -102,6 +102,12 @@ class QuotaAvailability:
         self.count_waitinglist = defaultdict(int)
         self.count_cart = defaultdict(int)
 
+        self._cache_key_suffix = ""
+        if not self._count_waitinglist:
+            self._cache_key_suffix += ":nocw"
+        if self._ignore_closed:
+            self._cache_key_suffix += ":igcl"
+
         self.sizes = {}
 
     def queue(self, *quota):
@@ -121,17 +127,14 @@ class QuotaAvailability:
             if self._full_results:
                 raise ValueError("You cannot combine full_results and allow_cache.")
 
-            elif not self._count_waitinglist:
-                raise ValueError("If you set allow_cache, you need to set count_waitinglist.")
-
             elif settings.HAS_REDIS:
-                rc = get_redis_connection("redis")
+                rc = django_redis.get_redis_connection("redis")
                 quotas_by_event = defaultdict(list)
                 for q in [_q for _q in self._queue if _q.id in quota_ids_set]:
                     quotas_by_event[q.event_id].append(q)
 
                 for eventid, evquotas in quotas_by_event.items():
-                    d = rc.hmget(f'quotas:{eventid}:availabilitycache', [str(q.pk) for q in evquotas])
+                    d = rc.hmget(f'quotas:{eventid}:availabilitycache{self._cache_key_suffix}', [str(q.pk) for q in evquotas])
                     for redisval, q in zip(d, evquotas):
                         if redisval is not None:
                             data = [rv for rv in redisval.decode().split(',')]
@@ -164,12 +167,12 @@ class QuotaAvailability:
         if not settings.HAS_REDIS or not quotas:
             return
 
-        rc = get_redis_connection("redis")
+        rc = django_redis.get_redis_connection("redis")
         # We write the computed availability to redis in a per-event hash as
         #
         #   quota_id -> (availability_state, availability_number, timestamp).
         #
-        # We store this in a hash instead of inidividual values to avoid making two many redis requests
+        # We store this in a hash instead of individual values to avoid making too many redis requests
         # which would introduce latency.
 
         # The individual entries in the hash are "valid" for 120 seconds. This means in a typical peak scenario with
@@ -179,16 +182,16 @@ class QuotaAvailability:
         # these quotas. We choose 10 seconds since that should be well above the duration of a write.
 
         lock_name = '_'.join([str(p) for p in sorted([q.pk for q in quotas])])
-        if rc.exists(f'quotas:availabilitycachewrite:{lock_name}'):
+        if rc.exists(f'quotas:availabilitycachewrite:{lock_name}{self._cache_key_suffix}'):
             return
-        rc.setex(f'quotas:availabilitycachewrite:{lock_name}', '1', 10)
+        rc.setex(f'quotas:availabilitycachewrite:{lock_name}{self._cache_key_suffix}', '1', 10)
 
         update = defaultdict(list)
         for q in quotas:
             update[q.event_id].append(q)
 
         for eventid, quotas in update.items():
-            rc.hmset(f'quotas:{eventid}:availabilitycache', {
+            rc.hset(f'quotas:{eventid}:availabilitycache{self._cache_key_suffix}', mapping={
                 str(q.id): ",".join(
                     [str(i) for i in self.results[q]] +
                     [str(int(time.time()))]
@@ -197,7 +200,7 @@ class QuotaAvailability:
             # To make sure old events do not fill up our redis instance, we set an expiry on the cache. However, we set it
             # on 7 days even though we mostly ignore values older than 2 monites. The reasoning is that we have some places
             # where we set allow_cache_stale and use the old entries anyways to save on performance.
-            rc.expire(f'quotas:{eventid}:availabilitycache', 3600 * 24 * 7)
+            rc.expire(f'quotas:{eventid}:availabilitycache{self._cache_key_suffix}', 3600 * 24 * 7)
 
         # We used to also delete item_quota_cache:* from the event cache here, but as the cache
         # gets more complex, this does not seem worth it. The cache is only present for up to

@@ -805,7 +805,7 @@ class QuestionColumn(ImportColumn):
                 return self.q.clean_answer(value)
 
     def assign(self, value, order, position, invoice_address, **kwargs):
-        if value:
+        if value is not None:
             if not hasattr(order, '_answers'):
                 order._answers = []
             if isinstance(value, QuestionOption):

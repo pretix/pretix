@@ -546,7 +546,7 @@ def variations_select2(request, **kwargs):
         F('item__category__position').asc(nulls_first=True),
         'item__category_id',
         'item__position',
-        'item__pk'
+        'item__pk',
         'position',
         'value'
     ).select_related('item')
@@ -1010,7 +1010,7 @@ def devices_select2(request, **kwargs):
     return JsonResponse(doc)
 
 
-@organizer_permission_required(("can_view_orders", "can_change_organizer_settings"))
+@organizer_permission_required(("can_view_orders", "can_change_event_settings", "can_change_organizer_settings"))
 # This decorator is a bit of a hack since this is not technically an organizer permission, but it does the job here --
 # anyone who can see orders for any event can see the check-in log view where this is used as a filter
 def gate_select2(request, **kwargs):

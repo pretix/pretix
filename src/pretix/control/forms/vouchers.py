@@ -340,6 +340,9 @@ class VoucherBulkForm(VoucherForm):
 
     def clean_send_recipients(self):
         raw = self.cleaned_data['send_recipients']
+        if self.cleaned_data.get('send', None) is False:
+            # No need to validate addresses if the section was turned off
+            return []
         if not raw:
             return []
         r = raw.split('\n')

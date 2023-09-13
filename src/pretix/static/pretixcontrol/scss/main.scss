@@ -412,6 +412,11 @@ body.loading #wrapper {
         white-space: nowrap;
         overflow: hidden;
     }
+    .loading {
+        padding: 10px;
+        text-align: center;
+        color: lightgrey;
+    }
 }
 
 .sidebar-content {
@@ -808,7 +813,11 @@ tbody[data-dnd-url] {
 tbody th {
     background: $table-bg-hover;
 }
-
+.table-th-sticky-horizontal th[scope=row] {
+    position: sticky;
+    left: 0;
+    background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,255,255,1) 96%, rgba(255,255,255,0) 100%);;
+}
 .large-link-group {
     a.list-group-item {
         &::before {

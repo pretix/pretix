@@ -196,7 +196,14 @@ STATICFILES_DIRS = [
 
 STATICI18N_ROOT = os.path.join(BASE_DIR, "pretix/static")
 
-STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "django.contrib.staticfiles.storage.ManifestStaticFilesStorage",
+    },
+}
 
 # if os.path.exists(os.path.join(DATA_DIR, 'static')):
 #     STATICFILES_DIRS.insert(0, os.path.join(DATA_DIR, 'static'))
@@ -252,3 +259,20 @@ PRETIX_PRIMARY_COLOR = '#8E44B3'
 # stressful for some cache setups so it is enabled by default and currently can't be enabled through pretix.cfg
 CACHE_LARGE_VALUES_ALLOWED = False
 CACHE_LARGE_VALUES_ALIAS = 'default'
+
+# Allowed file extensions for various places plus matching Pillow formats.
+# Never allow EPS, it is full of dangerous bugs.
+FILE_UPLOAD_EXTENSIONS_IMAGE = (".png", ".jpg", ".gif", ".jpeg")
+PILLOW_FORMATS_IMAGE = ('PNG', 'GIF', 'JPEG')
+
+FILE_UPLOAD_EXTENSIONS_FAVICON = (".ico", ".png", "jpg", ".gif", ".jpeg")
+
+FILE_UPLOAD_EXTENSIONS_QUESTION_IMAGE = (".png", "jpg", ".gif", ".jpeg", ".bmp", ".tif", ".tiff", ".jfif")
+PILLOW_FORMATS_QUESTIONS_IMAGE = ('PNG', 'GIF', 'JPEG', 'BMP', 'TIFF')
+
+FILE_UPLOAD_EXTENSIONS_EMAIL_ATTACHMENT = (
+    ".png", ".jpg", ".gif", ".jpeg", ".pdf", ".txt", ".docx", ".gif", ".svg",
+    ".pptx", ".ppt", ".doc", ".xlsx", ".xls", ".jfif", ".heic", ".heif", ".pages",
+    ".bmp", ".tif", ".tiff"
+)
+FILE_UPLOAD_EXTENSIONS_OTHER = FILE_UPLOAD_EXTENSIONS_EMAIL_ATTACHMENT

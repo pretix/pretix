@@ -4,10 +4,10 @@
   "private": true,
   "scripts": {},
   "dependencies": {
-    "@babel/core": "^7.22.5",
-    "@babel/preset-env": "^7.22.9",
+    "@babel/core": "^7.22.11",
+    "@babel/preset-env": "^7.22.15",
     "@rollup/plugin-babel": "^6.0.3",
-    "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-node-resolve": "^15.2.1",
     "vue": "^2.7.14",
     "rollup": "^2.79.1",
     "rollup-plugin-vue": "^5.0.1",

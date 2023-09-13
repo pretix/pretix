@@ -37,7 +37,7 @@ dependencies = [
   "css-inline==0.8.*",
   "defusedcsv>=1.1.0",
   "dj-static",
-  "Django==4.1.*",
+  "Django==4.2.*",
   "django-bootstrap3==23.1.*",
   "django-compressor==4.3.*",
   "django-countries==7.5.*",
@@ -91,7 +91,7 @@ dependencies = [
   "pytz-deprecation-shim==0.1.*",
   "pyuca",
   "qrcode==7.4.*",
-  "redis==4.5.*,>=4.5.4",
+  "redis==4.6.*",
   "reportlab==4.0.*",
   "requests==2.31.*",
   "sentry-sdk==1.15.*",
@@ -111,8 +111,10 @@ dependencies = [
 [project.optional-dependencies]
 memcached = ["pylibmc"]
 dev = [
+  "aiohttp==3.8.*",
   "coverage",
   "coveralls",
+  "fakeredis==2.18.*",
   "flake8==6.0.*",
   "freezegun",
   "isort==5.12.*",
@@ -120,6 +122,7 @@ dev = [
   "potypo",
   "pycodestyle==2.10.*",
   "pyflakes==3.0.*",
+  "pytest-asyncio",
   "pytest-cache",
   "pytest-cov",
   "pytest-django==4.*",

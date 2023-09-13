@@ -1,0 +1,103 @@
+{% extends "pretixcontrol/event/base.html" %}
+{% load i18n %}
+{% load money %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Modify orders" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Modify orders" %}</h1>
+    <form action="{{ request.get_full_path }}" method="post" class="form-horizontal" data-asynctask
+          data-asynctask-long="">
+        {% csrf_token %}
+        <div class="alert alert-info">
+            {% blocktrans trimmed with label=label allowed=allowed.count total=total %}
+                The operation <strong>{{ label }}</strong> can be applied to <strong>{{ allowed }}</strong> of the
+                selected <strong>{{ total }}</strong> orders.
+            {% endblocktrans %}
+        </div>
+        {% if allowed %}
+            <div class="table-responsive">
+                <table class="table table-condensed table-hover table-orders">
+                    <thead>
+                    <tr>
+                        <th>{% trans "Order code" %}</th>
+                        <th>{% trans "User" %}</th>
+                        <th>{% trans "Order date" %}</th>
+                        <th class="text-right flip">{% trans "Order total" %}</th>
+                        <th class="text-right flip">{% trans "Status" %}</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for o in allowed|slice:":50" %}
+                        <tr>
+                            <td>
+                                <strong>
+                                    <a href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code %}">
+                                        {{ o.code }}</a>
+                                </strong>
+                                {% if o.testmode %}
+                                    <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ o.email|default_if_none:"" }}
+                                {% if o.invoice_address.name %}
+                                    <br>{{ o.invoice_address.name }}
+                                {% endif %}
+                            </td>
+                            <td>
+                            <span class="fa fa-fw fa-{{ o.sales_channel_obj.icon }} text-muted"
+                                  data-toggle="tooltip" title="{% trans o.sales_channel_obj.verbose_name %}"></span>
+                                {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                            </td>
+                            <td class="text-right flip">
+                                {{ o.total|money:request.event.currency }}
+                            </td>
+                            <td class="text-right flip">{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
+                        </tr>
+                    {% endfor %}
+                    {% if allowed.count > 50 %}
+                        <tr>
+                            <td>…</td>
+                            <td>…</td>
+                            <td>…</td>
+                            <td>…</td>
+                            <td>…</td>
+                        </tr>
+                    {% endif %}
+                    </tbody>
+                </table>
+            </div>
+            <p>
+                {% blocktrans trimmed %}
+                    Do you want to continue?
+                {% endblocktrans %}
+            </p>
+            <div class="alert alert-warning">
+                <strong>
+                    {% blocktrans trimmed %}
+                        This operation cannot be reversed.
+                    {% endblocktrans %}
+                </strong>
+            </div>
+            {% for k, l in request.POST.lists %}
+                {% if "bulkactionform" not in k %}
+                    {% for v in l %}
+                        <input type="hidden" name="{{ k }}" value="{{ v }}">
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+            {% bootstrap_form form layout="control" %}
+        {% endif %}
+        <div class="form-group submit-group">
+            <a href="{% url "control:event.orders" organizer=request.event.organizer.slug event=request.event.slug %}"
+               class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            {% if allowed %}
+                <button type="submit" class="btn btn-primary btn-save" value="confirm" name="operation">
+                    {{ label }}
+                </button>
+            {% endif %}
+        </div>
+    </form>
+{% endblock %}

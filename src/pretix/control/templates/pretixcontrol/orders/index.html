@@ -17,11 +17,12 @@
 
             {% if not request.event.live %}
                 <a href="{% url "control:event.live" event=request.event.slug organizer=request.event.organizer.slug %}"
-                        class="btn btn-primary btn-lg">
+                   class="btn btn-primary btn-lg">
                     {% trans "Take your shop live" %}
                 </a>
             {% else %}
-                <a href="{% eventurl request.event "presale:event.index" %}" class="btn btn-primary btn-lg" target="_blank">
+                <a href="{% eventurl request.event "presale:event.index" %}" class="btn btn-primary btn-lg"
+                   target="_blank">
                     {% trans "Go to the ticket shop" %}
                 </a>
             {% endif %}
@@ -40,9 +41,10 @@
             </p>
         {% else %}
             <form class="form-inline"
-                    action="{% url "control:event.orders.go" event=request.event.slug organizer=request.event.organizer.slug %}">
+                  action="{% url "control:event.orders.go" event=request.event.slug organizer=request.event.organizer.slug %}">
                 <p class="input-group">
-                    <input type="text" name="code" class="form-control" placeholder="{% trans "Order code" %}" autofocus>
+                    <input type="text" name="code" class="form-control" placeholder="{% trans "Order code" %}"
+                           autofocus>
                     <span class="input-group-btn">
                             <button class="btn btn-primary" type="submit">{% trans "Go!" %}</button>
                         </span>
@@ -82,7 +84,8 @@
                         {% endif %}
                     </div>
                     <div class="text-right flip">
-                        <a href="{% url "control:event.orders.search" event=request.event.slug organizer=request.event.organizer.slug %}" class="btn btn-default btn-lg">
+                        <a href="{% url "control:event.orders.search" event=request.event.slug organizer=request.event.organizer.slug %}"
+                           class="btn btn-default btn-lg">
                             {% trans "Advanced search" %}
                         </a>
                         <button class="btn btn-primary btn-lg" type="submit">
@@ -99,134 +102,218 @@
                 {% blocktrans trimmed with question=filter_form.cleaned_data.question.question %}
                     List filtered by answers to question "{{ question }}".
                 {% endblocktrans %}
-                <a href="?{% url_replace request 'question' '' 'answer' ''%}" class="text-muted">
+                <a href="?{% url_replace request 'question' '' 'answer' '' %}" class="text-muted">
                     <span class="fa fa-times"></span>
                     {% trans "Remove filter" %}
                 </a>
             </p>
         {% endif %}
-        <div class="table-responsive">
-            <table class="table table-condensed table-hover table-orders">
-                <thead>
-                <tr>
-                    <th>{% trans "Order code" %}
-                        <a href="?{% url_replace request 'ordering' '-code' %}"><i class="fa fa-caret-down"></i></a>
-                        <a href="?{% url_replace request 'ordering' 'code' %}"><i class="fa fa-caret-up"></i></a></th>
-                    <th>{% trans "User" %}
-                        <a href="?{% url_replace request 'ordering' '-email' %}"><i class="fa fa-caret-down"></i></a>
-                        <a href="?{% url_replace request 'ordering' 'email' %}"><i class="fa fa-caret-up"></i></a></th>
-                    <th>{% trans "Order date" %}
-                        <a href="?{% url_replace request 'ordering' '-datetime' %}"><i class="fa fa-caret-down"></i></a>
-                        <a href="?{% url_replace request 'ordering' 'datetime' %}"><i class="fa fa-caret-up"></i></a>
-                    </th>
-                    <th class="text-right flip">{% trans "Order paid / total" %}
-                        <a href="?{% url_replace request 'ordering' '-total' %}"><i class="fa fa-caret-down"></i></a>
-                        <a href="?{% url_replace request 'ordering' 'total' %}"><i class="fa fa-caret-up"></i></a></th>
-                    <th class="text-right flip">{% trans "Positions" %}</th>
-                    <th class="text-right flip">{% trans "Status" %}
-                        <a href="?{% url_replace request 'ordering' '-status' %}"><i class="fa fa-caret-down"></i></a>
-                        <a href="?{% url_replace request 'ordering' 'status' %}"><i class="fa fa-caret-up"></i></a></th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for o in orders %}
-                    <tr>
-                        <td>
-                            <strong>
-                                <a
-                                        href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code %}">
-                                    {{ o.code }}</a>
-                            </strong>
-                            {% if o.testmode %}
-                                <span class="label label-warning">{% trans "TEST MODE" %}</span>
-                            {% endif %}
-                            {% if o.custom_followup_due %}
-                                <span class="label label-danger">{% blocktrans with date=o.custom_followup_at|date:"SHORT_DATE_FORMAT" context "followup" %}TODO {{ date }}{% endblocktrans %}</span>
-                            {% elif o.custom_followup_at %}
-                                <span class="label label-default">{% blocktrans with date=o.custom_followup_at|date:"SHORT_DATE_FORMAT" context "followup" %}TODO {{ date }}{% endblocktrans %}</span>
-                            {% endif %}
-                        </td>
-                        <td>
-                            {{ o.email|default_if_none:"" }}
-                            {% if o.invoice_address.name %}
-                                <br>{{ o.invoice_address.name }}
-                            {% endif %}
-                        </td>
-                        <td>
-                            <span class="fa fa-fw fa-{{ o.sales_channel_obj.icon }} text-muted"
-                                  data-toggle="tooltip" title="{% trans o.sales_channel_obj.verbose_name %}"></span>
-                            {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
-                        </td>
-                        <td class="text-right flip">
-                            {% if o.has_cancellation_request %}
-                                <span class="label label-warning">{% trans "CANCELLATION REQUESTED" %}</span>
-                            {% endif %}
-                            {% if o.has_external_refund or o.has_pending_refund %}
-                                <span class="label label-danger">{% trans "REFUND PENDING" %}</span>
-                            {% elif o.has_pending_refund %}
-                                <span class="label label-warning">{% trans "REFUND PENDING" %}</span>
-                            {% endif %}
-                            {% if o.is_overpaid %}
-                                <span class="label label-warning">{% trans "OVERPAID" %}</span>
-                            {% elif o.is_underpaid  %}
-                                <span class="label label-danger">{% trans "UNDERPAID" %}</span>
-                            {% elif o.is_pending_with_full_payment %}
-                                <span class="label label-danger">{% trans "FULLY PAID" %}</span>
-                            {% endif %}
-                            {% if o.computed_payment_refund_sum == o.total or o.computed_payment_refund_sum == 0 %}
-                                <span class="text-muted">
-                            {% endif %}
-                            {{ o.computed_payment_refund_sum|money:request.event.currency }} /
-                            {% if o.computed_payment_refund_sum == o.total or o.computed_payment_refund_sum == 0 %}
-                                </span>
-                            {% endif %}
-                            {{ o.total|money:request.event.currency }}
-                            {% if o.status == "c" and o.icnt %}
-                                <br>
-                                <span class="label label-warning">{% trans "INVOICE NOT CANCELED" %}</span>
-                            {% endif %}
-                        </td>
-                        <td class="text-right flip">{{ o.pcnt|default_if_none:"0" }}</td>
-                        <td class="text-right flip">{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
-                    </tr>
+        <form action="{% url "control:organizer.device.bulk_edit" organizer=request.organizer.slug %}" method="post">
+            {% csrf_token %}
+            {% for field in filter_form %}
+                {{ field.as_hidden }}
+            {% endfor %}
+            {% for form in filter_forms %}
+                {% for field in form %}
+                    {{ field.as_hidden }}
                 {% endfor %}
-                </tbody>
-                {% if sums %}
-                    <tfoot>
+            {% endfor %}
+            <div class="table-responsive">
+                <table class="table table-condensed table-hover table-orders">
+                    <thead>
                     <tr>
-                        <th>{% trans "Sum over all pages" %}</th>
-                        <th></th>
                         <th>
-                            {% blocktrans trimmed count s=sums.c %}
-                                1 order
-                            {% plural %}
-                                {{ s }} orders
-                            {% endblocktrans %}
+                            <label aria-label="{% trans "select all rows for batch-operation" %}"
+                                   class="batch-select-label"><input type="checkbox" data-toggle-table/></label>
                         </th>
-                        <th class="text-right flip">
-                            {% if not filter_form.filtered %}
-                                <span class="fa fa-info-circle text-muted" data-toggle="tooltip"
-                                    title='{% trans 'This sum includes canceled orders. For your ticket revenue, look at the "order overview".' %}'></span>
-                                {% if sums.s|default_if_none:"none" != "none" %}
-                                    {{ sums.s|money:request.event.currency }}
-                                {% endif %}
-                            {% endif %}
+                        <th>{% trans "Order code" %}
+                            <a href="?{% url_replace request 'ordering' '-code' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'code' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
-                        <th class="text-right flip">
-                            {% if not filter_form.filtered %}
-                                <span class="fa fa-info-circle text-muted" data-toggle="tooltip"
-                                      title='{% trans 'This sum includes canceled orders. For your ticket revenue, look at the "order overview".' %}'></span>
-                                {% if sums.pc %}
-                                    {{ sums.pc }}
-                                {% endif %}
-                            {% endif %}
+                        <th>{% trans "User" %}
+                            <a href="?{% url_replace request 'ordering' '-email' %}"><i
+                                    class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'email' %}"><i class="fa fa-caret-up"></i></a>
                         </th>
-                        <th></th>
+                        <th>{% trans "Order date" %}
+                            <a href="?{% url_replace request 'ordering' '-datetime' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'datetime' %}"><i
+                                    class="fa fa-caret-up"></i></a>
+                        </th>
+                        <th class="text-right flip">{% trans "Order paid / total" %}
+                            <a href="?{% url_replace request 'ordering' '-total' %}"><i
+                                    class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'total' %}"><i class="fa fa-caret-up"></i></a>
+                        </th>
+                        <th class="text-right flip">{% trans "Positions" %}</th>
+                        <th class="text-right flip">{% trans "Status" %}
+                            <a href="?{% url_replace request 'ordering' '-status' %}"><i
+                                    class="fa fa-caret-down"></i></a>
+                            <a href="?{% url_replace request 'ordering' 'status' %}"><i class="fa fa-caret-up"></i></a>
+                        </th>
                     </tr>
-                    </tfoot>
-                {% endif %}
-            </table>
-        </div>
+                    {% if page_obj.paginator.num_pages > 1 %}
+                        <tr class="table-select-all warning hidden">
+                            <td>
+                                <input type="checkbox" name="__ALL" id="__all"
+                                       data-results-total="{{ page_obj.paginator.count }}">
+                            </td>
+                            <td colspan="6">
+                                <label for="__all">
+                                    {% trans "Select all results on other pages as well" %}
+                                </label>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    </thead>
+                    <tbody>
+                    {% for o in orders %}
+                        <tr>
+                            <td>
+                                <label aria-label="{% trans "select row for batch-operation" %}"
+                                       class="batch-select-label"><input type="checkbox" name="order"
+                                                                         class="batch-select-checkbox"
+                                                                         value="{{ o.pk }}"/></label>
+                            </td>
+                            <td>
+                                <strong>
+                                    <a
+                                            href="{% url "control:event.order" event=request.event.slug organizer=request.event.organizer.slug code=o.code %}">
+                                        {{ o.code }}</a>
+                                </strong>
+                                {% if o.testmode %}
+                                    <span class="label label-warning">{% trans "TEST MODE" %}</span>
+                                {% endif %}
+                                {% if o.custom_followup_due %}
+                                    <span class="label label-danger">{% blocktrans trimmed with date=o.custom_followup_at|date:"SHORT_DATE_FORMAT" context "followup" %}TODO {{ date }}{% endblocktrans %}</span>
+                                {% elif o.custom_followup_at %}
+                                    <span class="label label-default">{% blocktrans trimmed with date=o.custom_followup_at|date:"SHORT_DATE_FORMAT" context "followup" %}TODO {{ date }}{% endblocktrans %}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                {{ o.email|default_if_none:"" }}
+                                {% if o.invoice_address.name %}
+                                    <br>{{ o.invoice_address.name }}
+                                {% endif %}
+                            </td>
+                            <td>
+                                <span class="fa fa-fw fa-{{ o.sales_channel_obj.icon }} text-muted"
+                                      data-toggle="tooltip" title="{% trans o.sales_channel_obj.verbose_name %}"></span>
+                                {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
+                            </td>
+                            <td class="text-right flip">
+                                {% if o.has_cancellation_request %}
+                                    <span class="label label-warning">{% trans "CANCELLATION REQUESTED" %}</span>
+                                {% endif %}
+                                {% if o.has_external_refund or o.has_pending_refund %}
+                                    <span class="label label-danger">{% trans "REFUND PENDING" %}</span>
+                                {% elif o.has_pending_refund %}
+                                    <span class="label label-warning">{% trans "REFUND PENDING" %}</span>
+                                {% endif %}
+                                {% if o.is_overpaid %}
+                                    <span class="label label-warning">{% trans "OVERPAID" %}</span>
+                                {% elif o.is_underpaid %}
+                                    <span class="label label-danger">{% trans "UNDERPAID" %}</span>
+                                {% elif o.is_pending_with_full_payment %}
+                                    <span class="label label-danger">{% trans "FULLY PAID" %}</span>
+                                {% endif %}
+                                {% if o.computed_payment_refund_sum == o.total or o.computed_payment_refund_sum == 0 %}
+                                    <span class="text-muted">
+                                {% endif %}
+                                {{ o.computed_payment_refund_sum|money:request.event.currency }} /
+                                {% if o.computed_payment_refund_sum == o.total or o.computed_payment_refund_sum == 0 %}
+                                    </span>
+                                {% endif %}
+                                {{ o.total|money:request.event.currency }}
+                                {% if o.status == "c" and o.icnt %}
+                                    <br>
+                                    <span class="label label-warning">{% trans "INVOICE NOT CANCELED" %}</span>
+                                {% endif %}
+                            </td>
+                            <td class="text-right flip">{{ o.pcnt|default_if_none:"0" }}</td>
+                            <td class="text-right flip">{% include "pretixcontrol/orders/fragment_order_status.html" with order=o %}</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                    {% if sums %}
+                        <tfoot>
+                        <tr>
+                            <th></th>
+                            <th>{% trans "Sum over all pages" %}</th>
+                            <th></th>
+                            <th>
+                                {% blocktrans trimmed count s=sums.c %}
+                                    1 order
+                                {% plural %}
+                                    {{ s }} orders
+                                {% endblocktrans %}
+                            </th>
+                            <th class="text-right flip">
+                                {% if not filter_form.filtered %}
+                                    <span class="fa fa-info-circle text-muted" data-toggle="tooltip"
+                                          title='{% trans 'This sum includes canceled orders. For your ticket revenue, look at the "order overview".' %}'></span>
+                                    {% if sums.s|default_if_none:"none" != "none" %}
+                                        {{ sums.s|money:request.event.currency }}
+                                    {% endif %}
+                                {% endif %}
+                            </th>
+                            <th class="text-right flip">
+                                {% if not filter_form.filtered %}
+                                    <span class="fa fa-info-circle text-muted" data-toggle="tooltip"
+                                          title='{% trans 'This sum includes canceled orders. For your ticket revenue, look at the "order overview".' %}'></span>
+                                    {% if sums.pc %}
+                                        {{ sums.pc }}
+                                    {% endif %}
+                                {% endif %}
+                            </th>
+                            <th></th>
+                        </tr>
+                        </tfoot>
+                    {% endif %}
+                </table>
+            </div>
+            <div class="batch-select-actions">
+                <div class="btn-group dropup">
+                    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown"
+                            aria-haspopup="true" aria-expanded="false">
+                        <span class="caret"></span>
+                        {% trans "Select action" %}
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li>
+                            <button type="submit" class="btn"
+                                    formaction="{% url "control:event.orders.bulk.approve" organizer=request.organizer.slug event=request.event.slug %}">
+                                <i class="fa fa-thumbs-up fa-fw text-green"></i>
+                                {% trans "Approve" %}
+                            </button>
+                        </li>
+                        <li>
+                            <button type="submit" class="btn"
+                                    formaction="{% url "control:event.orders.bulk.deny" organizer=request.organizer.slug event=request.event.slug %}">
+                                <i class="fa fa-thumbs-down fa-fw text-danger"></i>
+                                {% trans "Deny" %}
+                            </button>
+                        </li>
+                        {% if not request.event.settings.payment_term_expire_automatically %}
+                            <li>
+                                <button type="submit" class="btn"
+                                        formaction="{% url "control:event.orders.bulk.expire" organizer=request.organizer.slug event=request.event.slug %}">
+                                    <i class="fa fa-times fa-fw"></i>
+                                    {% trans "Mark as expired if overdue" %}
+                                </button>
+                            </li>
+                        {% endif %}
+                        <li>
+                            <button type="submit" class="btn"
+                                    formaction="{% url "control:event.orders.bulk.delete" organizer=request.organizer.slug event=request.event.slug %}">
+                                <i class="fa fa-trash fa-fw text-danger"></i>
+                                {% trans "Delete (test mode only)" %}
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </form>
         {% include "pretixcontrol/pagination.html" %}
     {% endif %}
 {% endblock %}

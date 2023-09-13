@@ -761,6 +761,17 @@ class SSOLoginReturnView(RedirectBackMixin, View):
             try:
                 customer.save(force_insert=True)
                 customer_created.send(customer.organizer, customer=customer)
+                customer.log_action('pretix.customer.created', user=self.request.user, data=dict(
+                    identifier=identifier,
+                    external_identifier=profile['uid'],
+                    provider=self.provider.pk,
+                    email=profile['email'],
+                    phone=profile.get('phone') or None,
+                    name_parts=name_parts,
+                    is_active=True,
+                    is_verified=True,
+                    locale=request.LANGUAGE_CODE,
+                ))
             except IntegrityError:
                 # This might either be a race condition or the email address is taken
                 # by a different customer account

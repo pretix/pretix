@@ -36,6 +36,7 @@ import uuid
 from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
+from time import sleep
 from typing import List, Optional
 
 from celery.exceptions import MaxRetriesExceededError
@@ -62,7 +63,7 @@ from pretix.base.models.orders import OrderFee
 from pretix.base.models.tax import TaxRule
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.services.checkin import _save_answers
-from pretix.base.services.locking import LockTimeoutException, NoLockManager
+from pretix.base.services.locking import LockTimeoutException, lock_objects
 from pretix.base.services.pricing import (
     apply_discounts, get_line_price, get_listed_price, get_price,
     is_included_for_free,
@@ -76,6 +77,7 @@ from pretix.celery_app import app
 from pretix.presale.signals import (
     checkout_confirm_messages, fee_calculation_for_cart,
 )
+from pretix.testutils.middleware import debugflags_var
 
 
 class CartError(Exception):
@@ -1073,23 +1075,43 @@ class CartManager:
                     )
         return err
 
+    @transaction.atomic(durable=True)
     def _perform_operations(self):
+        full_lock_required = any(getattr(o, 'seat', False) for o in self._operations) and self.event.settings.seating_minimal_distance > 0
+        if full_lock_required:
+            # We lock the entire event in this case since we don't want to deal with fine-granular locking
+            # in the case of seating distance enforcement
+            lock_objects([self.event])
+        else:
+            lock_objects(
+                [q for q, d in self._quota_diff.items() if q.size is not None and d > 0] +
+                [v for v, d in self._voucher_use_diff.items() if d > 0] +
+                [getattr(o, 'seat', False) for o in self._operations if getattr(o, 'seat', False)],
+                shared_lock_objects=[self.event]
+            )
         vouchers_ok = self._get_voucher_availability()
         quotas_ok = _get_quota_availability(self._quota_diff, self.now_dt)
         err = None
         new_cart_positions = []
+        deleted_positions = set()
 
         err = err or self._check_min_max_per_product()
 
         self._operations.sort(key=lambda a: self.order[type(a)])
         seats_seen = set()
 
+        if 'sleep-after-quota-check' in debugflags_var.get():
+            sleep(2)
+
         for iop, op in enumerate(self._operations):
             if isinstance(op, self.RemoveOperation):
                 if op.position.expires > self.now_dt:
                     for q in op.position.quotas:
                         quotas_ok[q] += 1
-                op.position.addons.all().delete()
+                addons = op.position.addons.all()
+                deleted_positions |= {a.pk for a in addons}
+                addons.delete()
+                deleted_positions.add(op.position.pk)
                 op.position.delete()
 
             elif isinstance(op, (self.AddOperation, self.ExtendOperation)):
@@ -1239,20 +1261,28 @@ class CartManager:
                     if op.seat and not op.seat.is_available(ignore_cart=op.position, sales_channel=self._sales_channel,
                                                             ignore_voucher_id=op.position.voucher_id):
                         err = err or error_messages['seat_unavailable']
-                        op.position.addons.all().delete()
+
+                        addons = op.position.addons.all()
+                        deleted_positions |= {a.pk for a in addons}
+                        deleted_positions.add(op.position.pk)
+                        addons.delete()
                         op.position.delete()
                     elif available_count == 1:
                         op.position.expires = self._expiry
                         op.position.listed_price = op.listed_price
                         op.position.price_after_voucher = op.price_after_voucher
                         # op.position.price will be updated by recompute_final_prices_and_taxes()
-                        try:
-                            op.position.save(force_update=True, update_fields=['expires', 'listed_price', 'price_after_voucher'])
-                        except DatabaseError:
-                            # Best effort... The position might have been deleted in the meantime!
-                            pass
+                        if op.position.pk not in deleted_positions:
+                            try:
+                                op.position.save(force_update=True, update_fields=['expires', 'listed_price', 'price_after_voucher'])
+                            except DatabaseError:
+                                # Best effort... The position might have been deleted in the meantime!
+                                pass
                     elif available_count == 0:
-                        op.position.addons.all().delete()
+                        addons = op.position.addons.all()
+                        deleted_positions |= {a.pk for a in addons}
+                        deleted_positions.add(op.position.pk)
+                        addons.delete()
                         op.position.delete()
                     else:
                         raise AssertionError("ExtendOperation cannot affect more than one item")
@@ -1277,21 +1307,10 @@ class CartManager:
                     p.save()
                 _save_answers(p, {}, p._answers)
         CartPosition.objects.bulk_create([p for p in new_cart_positions if not getattr(p, '_answers', None) and not p.pk])
+
+        if 'sleep-before-commit' in debugflags_var.get():
+            sleep(2)
         return err
-
-    def _require_locking(self):
-        if self._voucher_use_diff:
-            # If any vouchers are used, we lock to make sure we don't redeem them to often
-            return True
-
-        if self._quota_diff and any(q.size is not None for q in self._quota_diff):
-            # If any quotas are affected that are not unlimited, we lock
-            return True
-
-        if any(getattr(o, 'seat', False) for o in self._operations):
-            return True
-
-        return False
 
     def recompute_final_prices_and_taxes(self):
         positions = sorted(list(self.positions), key=lambda op: -(op.addon_to_id or 0))
@@ -1331,18 +1350,14 @@ class CartManager:
         err = self.extend_expired_positions() or err
         err = err or self._check_min_per_voucher()
 
-        lockfn = NoLockManager
-        if self._require_locking():
-            lockfn = self.event.lock
+        self.now_dt = now()
 
-        with lockfn() as now_dt:
-            with transaction.atomic():
-                self.now_dt = now_dt
-                self._extend_expiry_of_valid_existing_positions()
-                err = self._perform_operations() or err
-                self.recompute_final_prices_and_taxes()
-            if err:
-                raise CartError(err)
+        self._extend_expiry_of_valid_existing_positions()
+        err = self._perform_operations() or err
+        self.recompute_final_prices_and_taxes()
+
+        if err:
+            raise CartError(err)
 
 
 def add_payment_to_cart(request, provider, min_value: Decimal=None, max_value: Decimal=None, info_data: dict=None):

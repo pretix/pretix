@@ -20,7 +20,6 @@
 # <https://www.gnu.org/licenses/>.
 #
 import pytest
-from django.conf import settings
 from django.template import Context, Template, TemplateSyntaxError
 from django.urls import NoReverseMatch
 from django.utils.timezone import now
@@ -36,7 +35,6 @@ def env():
         organizer=o, name='MRMCD2015', slug='2015',
         date_from=now()
     )
-    settings.SITE_URL = 'http://example.com'
     event.get_cache().clear()
     return o, event
 

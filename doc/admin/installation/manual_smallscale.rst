@@ -12,7 +12,7 @@ solution with many things readily set-up, look at :ref:`dockersmallscale`.
              get it right. If you're not feeling comfortable managing a Linux server, check out our hosting and service
              offers at `pretix.eu`_.
 
-We tested this guide on the Linux distribution **Debian 11.6** but it should work very similar on other
+We tested this guide on the Linux distribution **Debian 12** but it should work very similar on other
 modern distributions, especially on all systemd-based ones.
 
 Requirements
@@ -64,7 +64,7 @@ Package dependencies
 
 To build and run pretix, you will need the following debian packages::
 
-    # apt-get install git build-essential python-dev python3-venv python3 python3-pip \
+    # apt-get install git build-essential python3-dev python3-venv python3 python3-pip \
                       python3-dev libxml2-dev libxslt1-dev libffi-dev zlib1g-dev libssl-dev \
                       gettext libpq-dev libjpeg-dev libopenjp2-7-dev
 
@@ -130,9 +130,10 @@ We now install pretix, its direct dependencies and gunicorn::
 
 Note that you need Python 3.9 or newer. You can find out your Python version using ``python -V``.
 
-We also need to create a data directory::
+We also need to create a data directory and allow your webserver to traverse to the root directory::
 
     (venv)$ mkdir -p /var/pretix/data/media
+    (venv)$ chmod +x /var/pretix
 
 Finally, we compile static files and translation data and create the database structure::
 
@@ -248,14 +249,14 @@ The following snippet is an example on how to configure a nginx proxy for pretix
         }
 
         location /static/ {
-            alias /var/pretix/venv/lib/python3.10/site-packages/pretix/static.dist/;
+            alias /var/pretix/venv/lib/python3.11/site-packages/pretix/static.dist/;
             access_log off;
             expires 365d;
             add_header Cache-Control "public";
         }
     }
 
-.. note:: Remember to replace the ``python3.10`` in the ``/static/`` path in the config
+.. note:: Remember to replace the ``python3.11`` in the ``/static/`` path in the config
           above with your python version.
 
 We recommend reading about setting `strong encryption settings`_ for your web server.

@@ -76,7 +76,7 @@
                         <div class="panel-heading">
                             <h3 class="panel-title">
                                 {% trans "Invoice information" %}
-                                <a href="{% eventurl request.event "presale:event.checkout" step="questions" cart_namespace=cart_namespace|default_if_none:"" %}?invoice=1" aria-label="{% trans "Modify invoice information" %}" class="h6">
+                                <a href="{% eventurl request.event "presale:event.checkout" step="questions" cart_namespace=cart_namespace|default_if_none:"" %}?invoice=1#invoice-details" aria-label="{% trans "Modify invoice information" %}" class="h6">
                                     <span class="fa fa-edit" aria-hidden="true"></span>{% trans "Modify" %}
                                 </a>
                             </h3>

@@ -108,7 +108,10 @@ DEFAULT_VARIABLES = OrderedDict((
     ("positionid", {
         "label": _("Order position number"),
         "editor_sample": "1",
-        "evaluate": lambda orderposition, order, event: str(orderposition.positionid)
+        "evaluate": lambda orderposition, order, event: str(orderposition.positionid),
+        # There is no performance gain in using evaluate_bulk here, but we want to make sure it is used somewhere
+        # in core to make sure we notice if the implementation of the API breaks.
+        "evaluate_bulk": lambda orderpositions: [str(p.positionid) for p in orderpositions],
     }),
     ("order_positionid", {
         "label": _("Order code and position number"),
@@ -521,7 +524,7 @@ def images_from_questions(sender, *args, **kwargs):
         else:
             a = op.answers.filter(question_id=question_id).first() or a
 
-        if not a or not a.file or not any(a.file.name.lower().endswith(e) for e in (".jpg", ".jpeg", ".png", ".gif", ".bmp", ".tif", ".tiff")):
+        if not a or not a.file or not any(a.file.name.lower().endswith(e) for e in settings.FILE_UPLOAD_EXTENSIONS_QUESTION_IMAGE):
             return None
         else:
             if etag:
@@ -699,10 +702,10 @@ def get_seat(op: OrderPosition):
 
 def generate_compressed_addon_list(op, order, event):
     itemcount = defaultdict(int)
-    addons = (
+    addons = [p for p in (
         op.addons.all() if 'addons' in getattr(op, '_prefetched_objects_cache', {})
         else op.addons.select_related('item', 'variation')
-    )
+    ) if not p.canceled]
     for pos in addons:
         itemcount[pos.item, pos.variation] += 1
 

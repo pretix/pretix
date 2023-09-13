@@ -77,9 +77,9 @@
                             <span class="label label-warning">{% trans "TEST MODE" %}</span>
                         {% endif %}
                         {% if o.custom_followup_due %}
-                            <span class="label label-danger">{% blocktrans with date=o.custom_followup_at|date:"SHORT_DATE_FORMAT" context "followup" %}TODO {{ date }}{% endblocktrans %}</span>
+                            <span class="label label-danger">{% blocktrans trimmed with date=o.custom_followup_at|date:"SHORT_DATE_FORMAT" context "followup" %}TODO {{ date }}{% endblocktrans %}</span>
                         {% elif o.custom_followup_at %}
-                            <span class="label label-default">{% blocktrans with date=o.custom_followup_at|date:"SHORT_DATE_FORMAT" context "followup" %}TODO {{ date }}{% endblocktrans %}</span>
+                            <span class="label label-default">{% blocktrans trimmed with date=o.custom_followup_at|date:"SHORT_DATE_FORMAT" context "followup" %}TODO {{ date }}{% endblocktrans %}</span>
                         {% endif %}
                     </td>
                     <td>{{ o.event.name }}</td>

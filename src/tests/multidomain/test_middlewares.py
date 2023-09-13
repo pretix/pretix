@@ -20,7 +20,6 @@
 # <https://www.gnu.org/licenses/>.
 #
 import pytest
-from django.conf import settings
 from django.test.utils import override_settings
 from django.utils.timezone import now
 
@@ -36,7 +35,6 @@ def env():
         date_from=now(), live=True
     )
     event.get_cache().clear()
-    settings.SITE_URL = 'http://example.com'
     return o, event
 
 

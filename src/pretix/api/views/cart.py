@@ -25,6 +25,7 @@ from typing import List
 from django.db import transaction
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
+from django.utils.timezone import now
 from django.utils.translation import gettext as _
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
@@ -41,7 +42,7 @@ from pretix.base.models import CartPosition
 from pretix.base.services.cart import (
     _get_quota_availability, _get_voucher_availability, error_messages,
 )
-from pretix.base.services.locking import NoLockManager
+from pretix.base.services.locking import lock_objects
 
 
 class CartPositionViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnlyModelViewSet):
@@ -150,12 +151,21 @@ class CartPositionViewSet(CreateModelMixin, DestroyModelMixin, viewsets.ReadOnly
                     quota_diff[q] += 1
 
         seats_seen = set()
+        now_dt = now()
+        with transaction.atomic():
+            full_lock_required = seat_diff and self.request.event.settings.seating_minimal_distance > 0
+            if full_lock_required:
+                # We lock the entire event in this case since we don't want to deal with fine-granular locking
+                # in the case of seating distance enforcement
+                lock_objects([self.request.event])
+            else:
+                lock_objects(
+                    [q for q, d in quota_diff.items() if q.size is not None and d > 0] +
+                    [v for v, d in voucher_use_diff.items() if d > 0] +
+                    [s for s, d in seat_diff.items() if d > 0],
+                    shared_lock_objects=[self.request.event]
+                )
 
-        lockfn = NoLockManager
-        if self._require_locking(quota_diff, voucher_use_diff, seat_diff):
-            lockfn = self.request.event.lock
-
-        with lockfn() as now_dt, transaction.atomic():
             vouchers_ok, vouchers_depend_on_cart = _get_voucher_availability(
                 self.request.event,
                 voucher_use_diff,

@@ -35,7 +35,7 @@ jobs:
       - uses: actions/checkout@v2
       - uses: harmon758/postgresql-action@v1
         with:
-          postgresql version: '11'
+          postgresql version: '15'
           postgresql db: 'pretix'
           postgresql user: 'postgres'
           postgresql password: 'postgres'
@@ -66,6 +66,10 @@ jobs:
       - name: Run tests
         working-directory: ./src
         run: PRETIX_CONFIG_FILE=tests/travis_${{ matrix.database }}.cfg py.test -n 3 -p no:sugar --cov=./ --cov-report=xml --reruns 3 tests --maxfail=100
+      - name: Run concurrency tests
+        working-directory: ./src
+        run: PRETIX_CONFIG_FILE=tests/travis_${{ matrix.database }}.cfg py.test tests/concurrency_tests/ --reruns 0 --reuse-db
+        if: matrix.database == 'postgres'
       - name: Upload coverage
         uses: codecov/codecov-action@v1
         with:

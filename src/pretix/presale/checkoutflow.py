@@ -39,10 +39,13 @@ from decimal import Decimal
 
 from django.conf import settings
 from django.contrib import messages
+from django.core.cache import caches
 from django.core.exceptions import ImproperlyConfigured, ValidationError
 from django.core.signing import BadSignature, loads
 from django.core.validators import EmailValidator
-from django.db.models import F, Q
+from django.db import models
+from django.db.models import Count, F, Q, Sum
+from django.db.models.functions import Cast
 from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import redirect
 from django.utils import translation
@@ -62,12 +65,14 @@ from pretix.base.services.cart import (
 )
 from pretix.base.services.memberships import validate_memberships_in_order
 from pretix.base.services.orders import perform_order
+from pretix.base.services.tasks import EventTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import validate_cart_addons
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.base.templatetags.rich_text import rich_text_snippet
 from pretix.base.views.tasks import AsyncAction
+from pretix.celery_app import app
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
     ContactForm, InvoiceAddressForm, InvoiceNameForm, MembershipForm,
@@ -802,7 +807,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
     @cached_property
     def invoice_form(self):
         wd = self.cart_session.get('widget_data', {})
-        if not self.invoice_address.pk:
+        if self.invoice_address.pk:
+            wd_initial = {}
+        elif wd:
             wd_initial = {
                 'name_parts': {
                     k[21:].replace('-', '_'): v
@@ -817,7 +824,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 'country': wd.get('invoice-address-country', ''),
             }
         else:
-            wd_initial = {}
+            wd_initial = {
+                'is_business': self._get_is_business_heuristic(),
+            }
         initial = dict(wd_initial)
 
         if self.cart_customer:
@@ -1026,6 +1035,25 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         ctx['cart_session'] = self.cart_session
         ctx['invoice_address_asked'] = self.address_asked
 
+        def reduce_initial(v):
+            if isinstance(v, dict):
+                # try to flatten objects such as name_parts to a single string to determine whether they have any value set
+                return ''.join([v for k, v in v.items() if not k.startswith('_') and v])
+            else:
+                return v
+
+        def is_form_filled(form, ignore_keys=()):
+            return any([reduce_initial(v) for k, v in form.initial.items() if k not in ignore_keys])
+
+        ctx['invoice_address_open'] = (
+            self.request.event.settings.invoice_address_required or
+            self.request.event.settings.invoice_name_required or
+            'invoice' in self.request.GET or
+            # Checking for self.invoice_address.pk is not enough as when an invoice_address has been added and later edited to be empty, it’s not None.
+            # So check initial values as invoice_form can receive pre-filled values from invoice_address, widget-data or overwrites from plug-ins.
+            is_form_filled(self.invoice_form, ignore_keys=('is_business', 'country'))
+        )
+
         if self.cart_customer:
             if self.address_asked:
                 addresses = self.cart_customer.stored_addresses.all()
@@ -1113,6 +1141,29 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 profiles_list.append(data)
             ctx['profiles_data'] = profiles_list
         return ctx
+
+    def _get_is_business_heuristic(self):
+        key = 'checkout_heuristic_is_business:' + str(self.event.pk)
+        cached_result = caches['default'].get(key, default=False)
+        if caches['default'].add(key + ':valid', True, timeout=10):  # set valid while query is running
+            QuestionsStep._update_is_business_heuristic.apply_async(args=(self.event.pk,))
+        return cached_result
+
+    @staticmethod
+    @app.task(base=EventTask)
+    def _update_is_business_heuristic(event):
+        result = InvoiceAddress.objects.filter(order__event=event).aggregate(
+            total=Count('*'), business=Sum(Cast('is_business', output_field=models.IntegerField())))
+        if result['total'] < 100:
+            result = InvoiceAddress.objects.filter(order__event__organizer=event.organizer).aggregate(
+                total=Count('*'), business=Sum(Cast('is_business', output_field=models.IntegerField())))
+        if result['business'] and result['total']:
+            is_business = result['business'] / result['total'] >= 0.6
+        else:
+            is_business = False
+        key = 'checkout_heuristic_is_business:' + str(event.pk)
+        caches['default'].set(key, is_business, timeout=30 * 24 * 3600)  # store result for 30 days
+        caches['default'].set(key + ':valid', True, timeout=12 * 3600)  # but recalculate after 12 hours
 
 
 class PaymentStep(CartMixin, TemplateFlowStep):

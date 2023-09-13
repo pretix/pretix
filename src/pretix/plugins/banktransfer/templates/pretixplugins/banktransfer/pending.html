@@ -7,6 +7,7 @@
 {% load money %}
 {% load unidecode %}
 {% load rich_text %}
+{% load eventurl %}
 
 {% if pending_description %}
     {{ pending_description|rich_text }}
@@ -102,4 +103,42 @@ SCT
 </div>
 {% if swiss_qrbill %}
 <link rel="stylesheet" href="{% static "pretixplugins/banktransfer/swisscross.css" %}">
+{% endif %}
+
+{% if invoice_email_enabled and has_invoices %}
+    {% if payment_info.send_invoice_to %}
+        <p>
+            {% blocktrans trimmed with recipient=payment_info.send_invoice_to %}
+                At your request, we sent the invoice directly to {{ recipient }}.
+            {% endblocktrans %}
+            <a data-toggle="collapse" data-target="#payment_banktransfer_send_invoice_to" class="btn btn-default btn-xs">
+                <span class="fa fa-envelope-o"></span>
+                {% trans "Send again or somewhere else" %}
+            </a>
+        </p>
+    {% endif %}
+    <form id="payment_banktransfer_send_invoice_to" method="post"
+          action="{% eventurl event "plugins:banktransfer:mail_invoice" order=order.code secret=order.secret %}"
+          {% if payment_info.send_invoice_to %}class="collapse"{% endif %}>
+        {% csrf_token %}
+        <p>
+            {% blocktrans trimmed %}
+                To send the invoice directly to your accounting department, please enter their email address:
+            {% endblocktrans %}
+        </p>
+        <div class="row">
+            <div class="col-md-9 col-xs-12">
+                <label for="mail_invoice_email" class="sr-only">{% trans "Invoice recipient email" %}:</label>
+                <input type="email" name="email" id="mail_invoice_email" class="form-control" value="" required
+                    placeholder="{% trans "Email address" %}" />
+            </div>
+            <div class="col-md-3 col-xs-12">
+                <button class="btn btn-default btn-block">
+                    <span class="fa fa-envelope-o" aria-hidden="true"></span>
+                    {% trans "Send invoice via email" %}
+                </button>
+            </div>
+        </div>
+    </form>
+    <hr>
 {% endif %}

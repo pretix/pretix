@@ -18,3 +18,4 @@ Contents:
    email
    permissions
    logging
+   locking

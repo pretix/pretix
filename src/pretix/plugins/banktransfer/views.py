@@ -44,14 +44,18 @@ from typing import Set
 
 from django import forms
 from django.contrib import messages
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 from django.db import transaction
 from django.db.models import Count, Q, QuerySet
-from django.http import FileResponse, JsonResponse
+from django.http import FileResponse, Http404, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
+from django.utils.decorators import method_decorator
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
+from django.views.decorators.clickjacking import xframe_options_exempt
 from django.views.generic import DetailView, FormView, ListView, View
 from django.views.generic.detail import SingleObjectMixin
 from localflavor.generic.forms import BICFormField, IBANFormField
@@ -75,6 +79,8 @@ from pretix.plugins.banktransfer.refund_export import (
     build_sepa_xml, get_refund_export_csv,
 )
 from pretix.plugins.banktransfer.tasks import process_banktransfers
+from pretix.presale.views import EventViewMixin
+from pretix.presale.views.order import OrderDetailMixin
 
 logger = logging.getLogger('pretix.plugins.banktransfer')
 
@@ -886,3 +892,42 @@ class OrganizerSepaXMLExportView(OrganizerPermissionRequiredMixin, OrganizerDeta
             organizer=self.request.organizer,
             pk=self.kwargs.get('id')
         )
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class SendInvoiceMailView(EventViewMixin, OrderDetailMixin, View):
+    def post(self, request, *args, **kwargs):
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        try:
+            validate_email(request.POST['email'])
+        except ValidationError:
+            messages.error(request, _('Please enter a valid email address.'))
+            return redirect(self.get_order_url())
+
+        last_payment = self.order.payments.last()
+        if (not last_payment
+                or last_payment.provider != BankTransfer.identifier
+                or last_payment.state != OrderPayment.PAYMENT_STATE_CREATED):
+            messages.error(request, _('No pending bank transfer payment found. Maybe the order has been paid already?'))
+            return redirect(self.get_order_url())
+        if not last_payment.payment_provider.settings.get('invoice_email', as_type=bool):
+            messages.error(request, _('Sending invoices via email is disabled by the event organizer.'))
+            return redirect(self.get_order_url())
+
+        last_invoice = self.order.invoices.last()
+        if not last_invoice:
+            messages.error(request, _('No invoice found, please request an invoice first.'))
+            return redirect(self.get_order_url())
+
+        provider = last_payment.payment_provider
+        provider.send_invoice_to_alternate_email(self.order, last_invoice, request.POST['email'])
+
+        last_payment.info_data = {
+            **last_payment.info_data,
+            'send_invoice_to': request.POST['email'],
+        }
+        last_payment.save(update_fields=['info'])
+
+        messages.success(request, _('Sending the latest invoice via e-mail to {email}.').format(email=request.POST['email']))
+        return redirect(self.get_order_url())

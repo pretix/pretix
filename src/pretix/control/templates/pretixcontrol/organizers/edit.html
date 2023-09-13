@@ -295,6 +295,11 @@
                         {% bootstrap_field sform.invoice_regenerate_allowed layout="control" %}
                     </fieldset>
                 </div>
+                <div class="form-group submit-group">
+                    <button type="submit" class="btn btn-primary btn-save">
+                        {% trans "Save" %}
+                    </button>
+                </div>
             </div>
             <div class="col-xs-12 col-lg-2">
                 <div class="panel panel-default">
@@ -306,11 +311,6 @@
                     {% include "pretixcontrol/includes/logs.html" with obj=organizer %}
                 </div>
             </div>
-        </div>
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
         </div>
     </form>
 {% endblock %}

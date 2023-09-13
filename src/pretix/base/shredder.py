@@ -210,6 +210,8 @@ def slow_delete(qs, batch_size=1000, sleep_time=.5, progress_callback=None, prog
             break
         if total_deleted >= 0.8 * batch_size:
             time.sleep(sleep_time)
+        if progress_callback and progress_total:
+            progress_callback((progress_offset + total_deleted) / progress_total)
     return total_deleted
 
 

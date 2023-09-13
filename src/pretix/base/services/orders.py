@@ -35,10 +35,13 @@
 
 import json
 import logging
+import operator
 import sys
 from collections import Counter, defaultdict, namedtuple
 from datetime import datetime, time, timedelta
 from decimal import Decimal
+from functools import reduce
+from time import sleep
 from typing import List, Optional
 
 from celery.exceptions import MaxRetriesExceededError
@@ -82,7 +85,9 @@ from pretix.base.services import tickets
 from pretix.base.services.invoices import (
     generate_cancellation, generate_invoice, invoice_qualified,
 )
-from pretix.base.services.locking import LockTimeoutException, NoLockManager
+from pretix.base.services.locking import (
+    LOCK_TRUST_WINDOW, LockTimeoutException, lock_objects,
+)
 from pretix.base.services.mail import SendMailException
 from pretix.base.services.memberships import (
     create_membership, validate_memberships_in_order,
@@ -102,6 +107,7 @@ from pretix.celery_app import app
 from pretix.helpers import OF_SELF
 from pretix.helpers.models import modelcopy
 from pretix.helpers.periodic import minimum_interval
+from pretix.testutils.middleware import debugflags_var
 
 
 class OrderError(Exception):
@@ -209,9 +215,9 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
     if order.status != Order.STATUS_CANCELED:
         raise OrderError(_('The order was not canceled.'))
 
-    with order.event.lock() as now_dt:
-        is_available = order._is_still_available(now_dt, count_waitinglist=False, check_voucher_usage=True,
-                                                 check_memberships=True, force=force)
+    with transaction.atomic():
+        is_available = order._is_still_available(now(), count_waitinglist=False, check_voucher_usage=True,
+                                                 check_memberships=True, lock=True, force=force)
         if is_available is True:
             if order.payment_refund_sum >= order.total:
                 order.status = Order.STATUS_PAID
@@ -220,29 +226,28 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
             order.cancellation_date = None
             order.set_expires(now(),
                               order.event.subevents.filter(id__in=[p.subevent_id for p in order.positions.all()]))
-            with transaction.atomic():
-                order.save(update_fields=['expires', 'status', 'cancellation_date'])
-                order.log_action(
-                    'pretix.event.order.reactivated',
-                    user=user,
-                    auth=auth,
-                    data={
-                        'expires': order.expires,
-                    }
-                )
-                for position in order.positions.all():
-                    if position.voucher:
-                        Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') + 1))
+            order.save(update_fields=['expires', 'status', 'cancellation_date'])
+            order.log_action(
+                'pretix.event.order.reactivated',
+                user=user,
+                auth=auth,
+                data={
+                    'expires': order.expires,
+                }
+            )
+            for position in order.positions.all():
+                if position.voucher:
+                    Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') + 1))
 
-                    for gc in position.issued_gift_cards.all():
-                        gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
-                        gc.transactions.create(value=position.price, order=order, acceptor=order.event.organizer)
-                        break
+                for gc in position.issued_gift_cards.all():
+                    gc = GiftCard.objects.select_for_update(of=OF_SELF).get(pk=gc.pk)
+                    gc.transactions.create(value=position.price, order=order, acceptor=order.event.organizer)
+                    break
 
-                    for m in position.granted_memberships.all():
-                        m.canceled = False
-                        m.save()
-                order.create_transactions()
+                for m in position.granted_memberships.all():
+                    m.canceled = False
+                    m.save()
+            order.create_transactions()
         else:
             raise OrderError(is_available)
 
@@ -264,7 +269,6 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_p
     if new_date < now():
         raise OrderError(_('The new expiry date needs to be in the future.'))
 
-    @transaction.atomic
     def change(was_expired=True):
         old_date = order.expires
         order.expires = new_date
@@ -302,11 +306,11 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_p
                 generate_invoice(order)
             order.create_transactions()
 
-    if order.status == Order.STATUS_PENDING:
-        change(was_expired=False)
-    else:
-        with order.event.lock() as now_dt:
-            is_available = order._is_still_available(now_dt, count_waitinglist=False, force=force)
+    with transaction.atomic():
+        if order.status == Order.STATUS_PENDING:
+            change(was_expired=False)
+        else:
+            is_available = order._is_still_available(now(), count_waitinglist=False, lock=True, force=force)
             if is_available is True:
                 change(was_expired=True)
             else:
@@ -334,9 +338,8 @@ def mark_order_expired(order, user=None, auth=None):
             order = Order.objects.get(pk=order)
         if isinstance(user, int):
             user = User.objects.get(pk=user)
-        with order.event.lock():
-            order.status = Order.STATUS_EXPIRED
-            order.save(update_fields=['status'])
+        order.status = Order.STATUS_EXPIRED
+        order.save(update_fields=['status'])
 
         order.log_action('pretix.event.order.expired', user=user, auth=auth)
         i = order.invoices.filter(is_cancellation=False).last()
@@ -439,9 +442,8 @@ def deny_order(order, comment='', user=None, send_mail: bool=True, auth=None):
         if not order.require_approval or not order.status == Order.STATUS_PENDING:
             raise OrderError(_('This order is not pending approval.'))
 
-        with order.event.lock():
-            order.status = Order.STATUS_CANCELED
-            order.save(update_fields=['status'])
+        order.status = Order.STATUS_CANCELED
+        order.save(update_fields=['status'])
 
         order.log_action('pretix.event.order.denied', user=user, auth=auth, data={
             'comment': comment
@@ -521,51 +523,49 @@ def _cancel_order(order, user=None, send_mail: bool=True, api_token=None, device
                 m.save()
 
         if cancellation_fee:
-            with order.event.lock():
-                for position in order.positions.all():
-                    if position.voucher:
-                        Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
-                    position.canceled = True
-                    assign_ticket_secret(
-                        event=order.event, position=position, force_invalidate_if_revokation_list_used=True, force_invalidate=False, save=False
-                    )
-                    position.save(update_fields=['canceled', 'secret'])
-                new_fee = cancellation_fee
-                for fee in order.fees.all():
-                    if keep_fees and fee in keep_fees:
-                        new_fee -= fee.value
-                    else:
-                        fee.canceled = True
-                        fee.save(update_fields=['canceled'])
-
-                if new_fee:
-                    f = OrderFee(
-                        fee_type=OrderFee.FEE_TYPE_CANCELLATION,
-                        value=new_fee,
-                        tax_rule=order.event.settings.tax_rate_default,
-                        order=order,
-                    )
-                    f._calculate_tax()
-                    f.save()
-
-                if cancellation_fee > order.total:
-                    raise OrderError(_('The cancellation fee cannot be higher than the total amount of this order.'))
-                elif order.payment_refund_sum < cancellation_fee:
-                    order.status = Order.STATUS_PENDING
-                    order.set_expires()
+            for position in order.positions.all():
+                if position.voucher:
+                    Voucher.objects.filter(pk=position.voucher.pk).update(redeemed=Greatest(0, F('redeemed') - 1))
+                position.canceled = True
+                assign_ticket_secret(
+                    event=order.event, position=position, force_invalidate_if_revokation_list_used=True, force_invalidate=False, save=False
+                )
+                position.save(update_fields=['canceled', 'secret'])
+            new_fee = cancellation_fee
+            for fee in order.fees.all():
+                if keep_fees and fee in keep_fees:
+                    new_fee -= fee.value
                 else:
-                    order.status = Order.STATUS_PAID
-                order.total = cancellation_fee
-                order.cancellation_date = now()
-                order.save(update_fields=['status', 'cancellation_date', 'total'])
+                    fee.canceled = True
+                    fee.save(update_fields=['canceled'])
+
+            if new_fee:
+                f = OrderFee(
+                    fee_type=OrderFee.FEE_TYPE_CANCELLATION,
+                    value=new_fee,
+                    tax_rule=order.event.settings.tax_rate_default,
+                    order=order,
+                )
+                f._calculate_tax()
+                f.save()
+
+            if cancellation_fee > order.total:
+                raise OrderError(_('The cancellation fee cannot be higher than the total amount of this order.'))
+            elif order.payment_refund_sum < cancellation_fee:
+                order.status = Order.STATUS_PENDING
+                order.set_expires()
+            else:
+                order.status = Order.STATUS_PAID
+            order.total = cancellation_fee
+            order.cancellation_date = now()
+            order.save(update_fields=['status', 'cancellation_date', 'total'])
 
             if cancel_invoice and i:
                 invoices.append(generate_invoice(order))
         else:
-            with order.event.lock():
-                order.status = Order.STATUS_CANCELED
-                order.cancellation_date = now()
-                order.save(update_fields=['status', 'cancellation_date'])
+            order.status = Order.STATUS_CANCELED
+            order.cancellation_date = now()
+            order.save(update_fields=['status', 'cancellation_date'])
 
             for position in order.positions.all():
                 assign_ticket_secret(
@@ -666,6 +666,27 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
 
     sorted_positions = sorted(positions, key=lambda s: -int(s.is_bundled))
 
+    for cp in sorted_positions:
+        cp._cached_quotas = list(cp.quotas)
+
+    # Create locks
+    if any(cp.expires < now() + timedelta(seconds=LOCK_TRUST_WINDOW) for cp in sorted_positions):
+        # No need to perform any locking if the cart positions still guarantee everything long enough.
+        full_lock_required = any(
+            getattr(o, 'seat', False) for o in sorted_positions
+        ) and event.settings.seating_minimal_distance > 0
+        if full_lock_required:
+            # We lock the entire event in this case since we don't want to deal with fine-granular locking
+            # in the case of seating distance enforcement
+            lock_objects([event])
+        else:
+            lock_objects(
+                [q for q in reduce(operator.or_, (set(cp._cached_quotas) for cp in sorted_positions), set()) if q.size is not None] +
+                [op.voucher for op in sorted_positions if op.voucher] +
+                [op.seat for op in sorted_positions if op.seat],
+                shared_lock_objects=[event]
+            )
+
     # Check availability
     for i, cp in enumerate(sorted_positions):
         if cp.pk in deleted_positions:
@@ -675,7 +696,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             err = err or error_messages['unavailable']
             delete(cp)
             continue
-        quotas = list(cp.quotas)
+        quotas = cp._cached_quotas
 
         products_seen[cp.item] += 1
         if cp.item.max_per_order and products_seen[cp.item] > cp.item.max_per_order:
@@ -689,6 +710,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
         if cp.voucher:
             v_usages[cp.voucher] += 1
             if cp.voucher not in v_avail:
+                cp.voucher.refresh_from_db(fields=['redeemed'])
                 redeemed_in_carts = CartPosition.objects.filter(
                     Q(voucher=cp.voucher) & Q(event=event) & Q(expires__gte=now_dt)
                 ).exclude(cart_id=cp.cart_id)
@@ -927,91 +949,87 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
     payments = []
     sales_channel = get_all_sales_channels()[sales_channel]
 
-    with transaction.atomic():
+    try:
+        validate_memberships_in_order(customer, positions, event, lock=True, testmode=event.testmode)
+    except ValidationError as e:
+        raise OrderError(e.message)
 
-        try:
-            validate_memberships_in_order(customer, positions, event, lock=True, testmode=event.testmode)
-        except ValidationError as e:
-            raise OrderError(e.message)
+    require_approval = any(p.requires_approval(invoice_address=address) for p in positions)
+    try:
+        fees = _get_fees(positions, payment_requests, address, meta_info, event, require_approval=require_approval)
+    except TaxRule.SaleNotAllowed:
+        raise OrderError(error_messages['country_blocked'])
+    total = pending_sum = sum([c.price for c in positions]) + sum([c.value for c in fees])
 
-        require_approval = any(p.requires_approval(invoice_address=address) for p in positions)
+    order = Order(
+        status=Order.STATUS_PENDING,
+        event=event,
+        email=email,
+        phone=(meta_info or {}).get('contact_form_data', {}).get('phone'),
+        datetime=now_dt,
+        locale=get_language_without_region(locale),
+        total=total,
+        testmode=True if sales_channel.testmode_supported and event.testmode else False,
+        meta_info=json.dumps(meta_info or {}),
+        require_approval=require_approval,
+        sales_channel=sales_channel.identifier,
+        customer=customer,
+        valid_if_pending=valid_if_pending,
+    )
+    if customer:
+        order.email_known_to_work = customer.is_verified
+    order.set_expires(now_dt, event.subevents.filter(id__in=[p.subevent_id for p in positions]))
+    order.save()
+
+    if address:
+        if address.order is not None:
+            address.pk = None
+        address.order = order
+        address.save()
+
+    for fee in fees:
+        fee.order = order
         try:
-            fees = _get_fees(positions, payment_requests, address, meta_info, event, require_approval=require_approval)
+            fee._calculate_tax()
         except TaxRule.SaleNotAllowed:
             raise OrderError(error_messages['country_blocked'])
-        total = pending_sum = sum([c.price for c in positions]) + sum([c.value for c in fees])
+        if fee.tax_rule and not fee.tax_rule.pk:
+            fee.tax_rule = None  # TODO: deprecate
+        fee.save()
 
-        order = Order(
-            status=Order.STATUS_PENDING,
-            event=event,
-            email=email,
-            phone=(meta_info or {}).get('contact_form_data', {}).get('phone'),
-            datetime=now_dt,
-            locale=get_language_without_region(locale),
-            total=total,
-            testmode=True if sales_channel.testmode_supported and event.testmode else False,
-            meta_info=json.dumps(meta_info or {}),
-            require_approval=require_approval,
-            sales_channel=sales_channel.identifier,
-            customer=customer,
-            valid_if_pending=valid_if_pending,
-        )
-        if customer:
-            order.email_known_to_work = customer.is_verified
-        order.set_expires(now_dt, event.subevents.filter(id__in=[p.subevent_id for p in positions]))
-        order.save()
+    # Safety check: Is the amount we're now going to charge the same amount the user has been shown when they
+    # pressed "Confirm purchase"? If not, we should better warn the user and show the confirmation page again.
+    # We used to have a *known* case where this happened is if a gift card is used in two concurrent sessions,
+    # but this is now a payment error instead. So currently this code branch is usually only triggered by bugs
+    # in other places (e.g. tax calculation).
+    if shown_total is not None:
+        if Decimal(shown_total) != pending_sum:
+            raise OrderError(
+                _('While trying to place your order, we noticed that the order total has changed. Either one of '
+                  'the prices changed just now, or a gift card you used has been used in the meantime. Please '
+                  'check the prices below and try again.')
+            )
 
-        if address:
-            if address.order is not None:
-                address.pk = None
-            address.order = order
-            address.save()
+    if payment_requests and not order.require_approval:
+        for p in payment_requests:
+            if not p.get('multi_use_supported') or p['payment_amount'] > Decimal('0.00'):
+                payments.append(order.payments.create(
+                    state=OrderPayment.PAYMENT_STATE_CREATED,
+                    provider=p['provider'],
+                    amount=p['payment_amount'],
+                    fee=p.get('fee'),
+                    info=json.dumps(p['info_data']),
+                    process_initiated=False,
+                ))
 
-            order.save()
-
-        for fee in fees:
-            fee.order = order
-            try:
-                fee._calculate_tax()
-            except TaxRule.SaleNotAllowed:
-                raise OrderError(error_messages['country_blocked'])
-            if fee.tax_rule and not fee.tax_rule.pk:
-                fee.tax_rule = None  # TODO: deprecate
-            fee.save()
-
-        # Safety check: Is the amount we're now going to charge the same amount the user has been shown when they
-        # pressed "Confirm purchase"? If not, we should better warn the user and show the confirmation page again.
-        # We used to have a *known* case where this happened is if a gift card is used in two concurrent sessions,
-        # but this is now a payment error instead. So currently this code branch is usually only triggered by bugs
-        # in other places (e.g. tax calculation).
-        if shown_total is not None:
-            if Decimal(shown_total) != pending_sum:
-                raise OrderError(
-                    _('While trying to place your order, we noticed that the order total has changed. Either one of '
-                      'the prices changed just now, or a gift card you used has been used in the meantime. Please '
-                      'check the prices below and try again.')
-                )
-
-        if payment_requests and not order.require_approval:
-            for p in payment_requests:
-                if not p.get('multi_use_supported') or p['payment_amount'] > Decimal('0.00'):
-                    payments.append(order.payments.create(
-                        state=OrderPayment.PAYMENT_STATE_CREATED,
-                        provider=p['provider'],
-                        amount=p['payment_amount'],
-                        fee=p.get('fee'),
-                        info=json.dumps(p['info_data']),
-                        process_initiated=False,
-                    ))
-
-        orderpositions = OrderPosition.transform_cart_positions(positions, order)
-        order.create_transactions(positions=orderpositions, fees=fees, is_new=True)
-        order.log_action('pretix.event.order.placed')
-        if order.require_approval:
-            order.log_action('pretix.event.order.placed.require_approval')
-        if meta_info:
-            for msg in meta_info.get('confirm_messages', []):
-                order.log_action('pretix.event.order.consent', data={'msg': msg})
+    orderpositions = OrderPosition.transform_cart_positions(positions, order)
+    order.create_transactions(positions=orderpositions, fees=fees, is_new=True)
+    order.log_action('pretix.event.order.placed')
+    if order.require_approval:
+        order.log_action('pretix.event.order.placed.require_approval')
+    if meta_info:
+        for msg in meta_info.get('confirm_messages', []):
+            order.log_action('pretix.event.order.consent', data={'msg': msg})
 
     order_placed.send(event, order=order)
     return order, payments
@@ -1116,18 +1134,12 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         if result:
             valid_if_pending = True
 
-    lockfn = NoLockManager
-    locked = False
-    if positions.filter(Q(voucher__isnull=False) | Q(expires__lt=now() + timedelta(minutes=2)) | Q(seat__isnull=False)).exists():
-        # Performance optimization: If no voucher is used and no cart position is dangerously close to its expiry date,
-        # creating this order shouldn't be prone to any race conditions and we don't need to lock the event.
-        locked = True
-        lockfn = event.lock
-
     warnings = []
     any_payment_failed = False
 
-    with lockfn() as now_dt:
+    now_dt = now()
+    err_out = None
+    with transaction.atomic(durable=True):
         positions = list(
             positions.select_related('item', 'variation', 'subevent', 'seat', 'addon_to').prefetch_related('addons')
         )
@@ -1136,16 +1148,28 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
-        _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel, customer=customer)
-        order, payment_objs = _create_order(event, email, positions, now_dt, payment_requests,
-                                            locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
-                                            shown_total=shown_total, customer=customer, valid_if_pending=valid_if_pending)
         try:
-            for p in payment_objs:
-                if p.provider == 'free':
-                    p.confirm(send_mail=False, lock=not locked, generate_invoice=False)
-        except Quota.QuotaExceededException:
-            pass
+            _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel, customer=customer)
+        except OrderError as e:
+            err_out = e  # Don't raise directly to make sure transaction is committed, as it might have deleted things
+        else:
+            if 'sleep-after-quota-check' in debugflags_var.get():
+                sleep(2)
+
+            order, payment_objs = _create_order(event, email, positions, now_dt, payment_requests,
+                                                locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
+                                                shown_total=shown_total, customer=customer, valid_if_pending=valid_if_pending)
+
+            try:
+                for p in payment_objs:
+                    if p.provider == 'free':
+                        # Passing lock=False is safe here because it's absolutely impossible for the order to be expired
+                        # here before it is even committed.
+                        p.confirm(send_mail=False, lock=False, generate_invoice=False)
+            except Quota.QuotaExceededException:
+                pass
+    if err_out:
+        raise err_out
 
     # We give special treatment to GiftCardPayment here because our invoice renderer expects gift cards to already be
     # processed, and because we historically treat gift card orders like free orders with regards to email texts.
@@ -1289,9 +1313,19 @@ def send_expiry_warnings(sender, **kwargs):
     event_id = None
 
     for o in Order.objects.filter(
-        expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING,
-        datetime__lte=now() - timedelta(hours=2), require_approval=False
+            expires__gte=today, expiry_reminder_sent=False, status=Order.STATUS_PENDING,
+            datetime__lte=now() - timedelta(hours=2), require_approval=False
     ).only('pk', 'event_id', 'expires').order_by('event_id'):
+
+        lp = o.payments.last()
+        if (
+                lp and
+                lp.state in [OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING] and
+                lp.payment_provider and
+                lp.payment_provider.prevent_reminder_mail(o, lp)
+        ):
+            continue
+
         if event_id != o.event_id:
             settings = o.event.settings
             days = cache.get_or_set('{}:{}:setting_mail_days_order_expire_warning'.format('event', o.event_id),
@@ -2476,6 +2510,11 @@ class OrderChangeManager:
             split_order.status = Order.STATUS_PAID
         else:
             split_order.status = Order.STATUS_PENDING
+            if self.order.status == Order.STATUS_PAID:
+                split_order.set_expires(
+                    now(),
+                    list(set(p.subevent_id for p in split_positions))
+                )
         split_order.save()
 
         if offset_amount > Decimal('0.00'):
@@ -2643,6 +2682,19 @@ class OrderChangeManager:
         except ValidationError as e:
             raise OrderError(e.message)
 
+    def _create_locks(self):
+        full_lock_required = any(diff > 0 for diff in self._seatdiff.values()) and self.event.settings.seating_minimal_distance > 0
+        if full_lock_required:
+            # We lock the entire event in this case since we don't want to deal with fine-granular locking
+            # in the case of seating distance enforcement
+            lock_objects([self.event])
+        else:
+            lock_objects(
+                [q for q, d in self._quotadiff.items() if q.size is not None and d > 0] +
+                [s for s, d in self._seatdiff.items() if d > 0],
+                shared_lock_objects=[self.event]
+            )
+
     def commit(self, check_quotas=True):
         if self._committed:
             # an order change can only be committed once
@@ -2662,17 +2714,17 @@ class OrderChangeManager:
         self._payment_fee_diff()
 
         with transaction.atomic():
-            with self.order.event.lock():
-                if self.order.status in (Order.STATUS_PENDING, Order.STATUS_PAID):
-                    if check_quotas:
-                        self._check_quotas()
-                    self._check_seats()
-                self._check_complete_cancel()
-                self._check_and_lock_memberships()
-                try:
-                    self._perform_operations()
-                except TaxRule.SaleNotAllowed:
-                    raise OrderError(self.error_messages['tax_rule_country_blocked'])
+            if self.order.status in (Order.STATUS_PENDING, Order.STATUS_PAID):
+                if check_quotas:
+                    self._check_quotas()
+                self._check_seats()
+            self._create_locks()
+            self._check_complete_cancel()
+            self._check_and_lock_memberships()
+            try:
+                self._perform_operations()
+            except TaxRule.SaleNotAllowed:
+                raise OrderError(self.error_messages['tax_rule_country_blocked'])
             self._recalculate_total_and_payment_fee()
             self._check_paid_price_change()
             self._check_paid_to_free()

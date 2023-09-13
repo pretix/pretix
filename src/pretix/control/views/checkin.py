@@ -61,7 +61,7 @@ from pretix.control.forms.checkin import (
     CheckinListForm, CheckinListSimulatorForm,
 )
 from pretix.control.forms.filter import (
-    CheckinFilterForm, CheckinListAttendeeFilterForm,
+    CheckinFilterForm, CheckinListAttendeeFilterForm, CheckinListFilterForm,
 )
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import CreateView, PaginationMixin, UpdateView
@@ -192,7 +192,6 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, CheckInList
 
 
 class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMixin, AsyncPostView):
-    template_name = 'pretixcontrol/organizers/device_bulk_edit.html'
     permission = ('can_change_orders', 'can_checkin_orders')
     context_object_name = 'device'
 
@@ -279,13 +278,13 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     context_object_name = 'checkinlists'
     permission = 'can_view_orders'
     template_name = 'pretixcontrol/checkin/lists.html'
+    ordering = ('subevent__date_from', 'name', 'pk')
 
     def get_queryset(self):
         qs = self.request.event.checkin_lists.select_related('subevent').prefetch_related("limit_products")
 
-        if self.request.GET.get("subevent", "") != "":
-            s = self.request.GET.get("subevent", "")
-            qs = qs.filter(subevent_id=s)
+        if self.filter_form.is_valid():
+            qs = self.filter_form.filter_qs(qs)
         return qs
 
     def get_context_data(self, **kwargs):
@@ -304,8 +303,13 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
             'can_change_organizer_settings',
             self.request
         )
+        ctx['filter_form'] = self.filter_form
 
         return ctx
+
+    @cached_property
+    def filter_form(self):
+        return CheckinListFilterForm(data=self.request.GET, event=self.request.event)
 
 
 class CheckinListCreate(EventPermissionRequiredMixin, CreateView):
@@ -491,6 +495,11 @@ class CheckInListSimulator(EventPermissionRequiredMixin, FormView):
         r['Content-Security-Policy'] = 'script-src \'unsafe-eval\''
         return r
 
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs['event'] = self.request.event
+        return kwargs
+
     def get_initial(self):
         return {
             'datetime': now()
@@ -524,12 +533,13 @@ class CheckInListSimulator(EventPermissionRequiredMixin, FormView):
             request=self.request,  # this is not clean, but we need it in the serializers for URL generation
             legacy_url_support=False,
             simulate=True,
+            gate=form.cleaned_data.get("gate"),
         ).data
 
         if form.cleaned_data["checkin_type"] == Checkin.TYPE_ENTRY and self.list.rules and self.result.get("position")\
                 and (self.result["status"] in ("ok", "incomplete") or self.result["reason"] == "rules"):
             op = OrderPosition.objects.get(pk=self.result["position"]["id"])
-            rule_data = LazyRuleVars(op, self.list, form.cleaned_data["datetime"])
+            rule_data = LazyRuleVars(op, self.list, form.cleaned_data["datetime"], form.cleaned_data.get("gate"))
             rule_graph = _logic_annotate_for_graphic_explain(self.list.rules, op.subevent or self.list.event, rule_data,
                                                              form.cleaned_data["datetime"])
             self.result["rule_graph"] = rule_graph

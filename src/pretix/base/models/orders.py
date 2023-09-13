@@ -37,10 +37,13 @@ import copy
 import hashlib
 import json
 import logging
+import operator
 import string
 from collections import Counter
 from datetime import datetime, time, timedelta
 from decimal import Decimal
+from functools import reduce
+from time import sleep
 from typing import Any, Dict, List, Union
 from zoneinfo import ZoneInfo
 
@@ -75,7 +78,6 @@ from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import Customer, User
 from pretix.base.reldate import RelativeDateWrapper
-from pretix.base.services.locking import LOCK_TIMEOUT, NoLockManager
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import order_gracefully_delete
 
@@ -83,6 +85,7 @@ from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
 from ...helpers.format import format_map
 from ...helpers.names import build_name
+from ...testutils.middleware import debugflags_var
 from ._transactions import (
     _fail, _transactions_mark_order_clean, _transactions_mark_order_dirty,
 )
@@ -270,9 +273,9 @@ class Order(LockModel, LoggedModel):
         verbose_name = _("Order")
         verbose_name_plural = _("Orders")
         ordering = ("-datetime", "-pk")
-        index_together = [
-            ["datetime", "id"],
-            ["last_modified", "id"],
+        indexes = [
+            models.Index(fields=["datetime", "id"]),
+            models.Index(fields=["last_modified", "id"]),
         ]
 
     def __str__(self):
@@ -923,7 +926,7 @@ class Order(LockModel, LoggedModel):
         else:
             return expires
 
-    def _can_be_paid(self, count_waitinglist=True, ignore_date=False, force=False) -> Union[bool, str]:
+    def _can_be_paid(self, count_waitinglist=True, ignore_date=False, force=False, lock=False) -> Union[bool, str]:
         error_messages = {
             'late_lastdate': _("The payment can not be accepted as the last date of payments configured in the "
                                "payment settings is over."),
@@ -944,10 +947,11 @@ class Order(LockModel, LoggedModel):
         if not self.event.settings.get('payment_term_accept_late') and not ignore_date and not force:
             return error_messages['late']
 
-        return self._is_still_available(count_waitinglist=count_waitinglist, force=force)
+        return self._is_still_available(count_waitinglist=count_waitinglist, force=force, lock=lock)
 
-    def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, force=False,
+    def _is_still_available(self, now_dt: datetime=None, count_waitinglist=True, lock=False, force=False,
                             check_voucher_usage=False, check_memberships=False) -> Union[bool, str]:
+        from pretix.base.services.locking import lock_objects
         from pretix.base.services.memberships import (
             validate_memberships_in_order,
         )
@@ -966,9 +970,20 @@ class Order(LockModel, LoggedModel):
         try:
             if check_memberships:
                 try:
-                    validate_memberships_in_order(self.customer, positions, self.event, lock=False, testmode=self.testmode)
+                    validate_memberships_in_order(self.customer, positions, self.event, lock=lock, testmode=self.testmode)
                 except ValidationError as e:
                     raise Quota.QuotaExceededException(e.message)
+
+            for cp in positions:
+                cp._cached_quotas = list(cp.quotas) if not force else []
+
+            if lock:
+                lock_objects(
+                    [q for q in reduce(operator.or_, (set(cp._cached_quotas) for cp in positions), set()) if q.size is not None] +
+                    [op.voucher for op in positions if op.voucher and not force] +
+                    [op.seat for op in positions if op.seat],
+                    shared_lock_objects=[self.event]
+                )
 
             for i, op in enumerate(positions):
                 if op.seat:
@@ -994,7 +1009,7 @@ class Order(LockModel, LoggedModel):
                             voucher=op.voucher.code
                         ))
 
-                quotas = list(op.quotas)
+                quotas = op._cached_quotas
                 if len(quotas) == 0:
                     raise Quota.QuotaExceededException(error_messages['unavailable'].format(
                         item=str(op.item) + (' - ' + str(op.variation) if op.variation else '')
@@ -1016,6 +1031,9 @@ class Order(LockModel, LoggedModel):
                             ))
         except Quota.QuotaExceededException as e:
             return str(e)
+
+        if 'sleep-after-quota-check' in debugflags_var.get():
+            sleep(2)
         return True
 
     def send_mail(self, subject: Union[str, LazyI18nString], template: Union[str, LazyI18nString],
@@ -1246,7 +1264,7 @@ class QuestionAnswer(models.Model):
 
     @property
     def is_image(self):
-        return any(self.file.name.lower().endswith(e) for e in ('.jpg', '.png', '.gif', '.tiff', '.bmp', '.jpeg'))
+        return any(self.file.name.lower().endswith(e) for e in settings.FILE_UPLOAD_EXTENSIONS_QUESTION_IMAGE)
 
     @property
     def file_name(self):
@@ -1647,9 +1665,10 @@ class OrderPayment(models.Model):
         return self.order.event.get_payment_providers(cached=True).get(self.provider)
 
     @transaction.atomic()
-    def _mark_paid_inner(self, force, count_waitinglist, user, auth, ignore_date=False, overpaid=False):
+    def _mark_paid_inner(self, force, count_waitinglist, user, auth, ignore_date=False, overpaid=False, lock=False):
         from pretix.base.signals import order_paid
-        can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist, ignore_date=ignore_date, force=force)
+        can_be_paid = self.order._can_be_paid(count_waitinglist=count_waitinglist, ignore_date=ignore_date, force=force,
+                                              lock=lock)
         if can_be_paid is not True:
             self.order.log_action('pretix.event.order.quotaexceeded', {
                 'message': can_be_paid
@@ -1676,7 +1695,7 @@ class OrderPayment(models.Model):
         """
         Marks the order as failed and sets info to ``info``, but only if the order is in ``created`` or ``pending``
         state. This is equivalent to setting ``state`` to ``OrderPayment.PAYMENT_STATE_FAILED`` and logging a failure,
-        but it adds strong database logging since we do not want to report a failure for an order that has just
+        but it adds strong database locking since we do not want to report a failure for an order that has just
         been marked as paid.
         :param send_mail: Whether an email should be sent to the user about this event (default: ``True``).
         """
@@ -1780,25 +1799,24 @@ class OrderPayment(models.Model):
             ))
             return
 
-        self._mark_order_paid(count_waitinglist, send_mail, force, user, auth, mail_text, ignore_date, lock, payment_sum - refund_sum,
-                              generate_invoice)
+        with transaction.atomic():
+            self._mark_order_paid(count_waitinglist, send_mail, force, user, auth, mail_text, ignore_date, lock, payment_sum - refund_sum,
+                                  generate_invoice)
 
     def _mark_order_paid(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
                          ignore_date=False, lock=True, payment_refund_sum=0, allow_generate_invoice=True):
         from pretix.base.services.invoices import (
             generate_invoice, invoice_qualified,
         )
+        from pretix.base.services.locking import LOCK_TRUST_WINDOW
 
-        if (self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(seconds=LOCK_TIMEOUT * 2)) or not lock:
+        if lock and self.order.status == Order.STATUS_PENDING and self.order.expires > now() + timedelta(seconds=LOCK_TRUST_WINDOW):
             # Performance optimization. In this case, there's really no reason to lock everything and an atomic
             # database transaction is more than enough.
-            lockfn = NoLockManager
-        else:
-            lockfn = self.order.event.lock
+            lock = False
 
-        with lockfn():
-            self._mark_paid_inner(force, count_waitinglist, user, auth, overpaid=payment_refund_sum > self.order.total,
-                                  ignore_date=ignore_date)
+        self._mark_paid_inner(force, count_waitinglist, user, auth, overpaid=payment_refund_sum > self.order.total,
+                              ignore_date=ignore_date, lock=lock)
 
         invoice = None
         if invoice_qualified(self.order) and allow_generate_invoice:
@@ -2611,7 +2629,7 @@ class OrderPosition(AbstractPosition):
         with language(self.order.locale, self.order.event.settings.region):
             email_template = self.event.settings.mail_text_resend_link
             email_context = get_email_context(event=self.order.event, order=self.order, position=self)
-            email_subject = self.event.settings.mail_subject_resend_link
+            email_subject = self.event.settings.mail_subject_resend_link_attendee
             self.send_mail(
                 email_subject, email_template, email_context,
                 'pretix.event.order.email.resend', user=user, auth=auth,
@@ -2756,8 +2774,8 @@ class Transaction(models.Model):
 
     class Meta:
         ordering = 'datetime', 'pk'
-        index_together = [
-            ['datetime', 'id']
+        indexes = [
+            models.Index(fields=['datetime', 'id'])
         ]
 
     def save(self, *args, **kwargs):

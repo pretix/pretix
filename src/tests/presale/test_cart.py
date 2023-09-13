@@ -2415,6 +2415,25 @@ class CartAddonTest(CartTestMixin, TestCase):
         assert cp2.price == 0
 
     @classscope(attr='orga')
+    def test_extend_included_addon_no_longer_available(self):
+        self.addon1.price_included = True
+        self.addon1.save()
+        self.quota_tickets.size = 0
+        self.quota_tickets.save()
+        cp1 = CartPosition.objects.create(
+            expires=now() - timedelta(minutes=10), item=self.ticket, price=Decimal('23.00'),
+            event=self.event, cart_id=self.session_key
+        )
+        CartPosition.objects.create(
+            expires=now() - timedelta(minutes=10), item=self.workshop1, price=Decimal('0.00'),
+            event=self.event, cart_id=self.session_key, addon_to=cp1
+        )
+        self.cm.extend_expired_positions()
+        with self.assertRaises(CartError):
+            self.cm.commit()
+        assert CartPosition.objects.count() == 0
+
+    @classscope(attr='orga')
     def test_cart_addon_remove_parent(self):
         self.addon1.price_included = True
         self.addon1.save()

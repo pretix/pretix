@@ -1,4 +1,4 @@
-FROM python:3.11-bullseye
+FROM python:3.11-bookworm
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
@@ -20,20 +20,20 @@ RUN apt-get update && \
             supervisor \
             libmaxminddb0 \
             libmaxminddb-dev \
-            zlib1g-dev && \
+            zlib1g-dev \
+            nodejs  \
+            npm && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
-    dpkg-reconfigure locales && \
-	locale-gen C.UTF-8 && \
-	/usr/sbin/update-locale LANG=C.UTF-8 && \
+    dpkg-reconfigure locales &&  \
+    locale-gen C.UTF-8 &&  \
+    /usr/sbin/update-locale LANG=C.UTF-8 && \
     mkdir /etc/pretix && \
     mkdir /data && \
     useradd -ms /bin/bash -d /pretix -u 15371 pretixuser && \
     echo 'pretixuser ALL=(ALL) NOPASSWD:SETENV: /usr/bin/supervisord' >> /etc/sudoers && \
     mkdir /static && \
-    mkdir /etc/supervisord && \
-	curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash - && \
-    apt-get install -y nodejs
+    mkdir /etc/supervisord
 
 
 ENV LC_ALL=C.UTF-8 \
@@ -63,10 +63,10 @@ RUN pip3 install -U \
 RUN chmod +x /usr/local/bin/pretix && \
     rm /etc/nginx/sites-enabled/default && \
     cd /pretix/src && \
-    rm -f pretix.cfg && \
-	mkdir -p data && \
-    chown -R pretixuser:pretixuser /pretix /data data && \
-	sudo -u pretixuser make production
+    rm -f pretix.cfg &&  \
+    mkdir -p data && \
+    chown -R pretixuser:pretixuser /pretix /data data &&  \
+    sudo -u pretixuser make production
 
 USER pretixuser
 VOLUME ["/etc/pretix", "/data"]
