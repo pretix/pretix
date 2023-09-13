@@ -64,8 +64,8 @@ def format_placeholders_help_text(placeholders, event=None):
     placeholders = [(k, v.render_sample(event) if event else v) for k, v in placeholders.items()]
     placeholders.sort(key=lambda x: x[0])
     phs = [
-        '<button type="button" class="content-placeholder" title="%s">{%s}</button>' % (v.render_sample(event) if event else v, k)
-        for k, v in placeholders.items()
+        '<button type="button" class="content-placeholder" title="%s">{%s}</button>' % (_("Sample: %s") % v if v else "", k)
+        for k, v in placeholders
     ]
     return _('Available placeholders: {list}').format(
         list=', '.join(phs)
