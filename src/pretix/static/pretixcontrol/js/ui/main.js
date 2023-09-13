@@ -705,7 +705,7 @@ var form_handlers = function (el) {
         lastFocusedInput = e.target;
     }).on("click", function(e) {
         if (e.target.classList.contains('content-placeholder')) {
-            var container = e.target.parentNode.parentNode;
+            var container = $(e.target).closest(".form-group");
             if (!lastFocusedInput || !container.contains(lastFocusedInput)) {
                 lastFocusedInput = container.querySelector("input, textarea");
                 //lastFocusedInput.selectionStart = lastFocusedInput.selectionEnd = lastFocusedInput.value.length;
