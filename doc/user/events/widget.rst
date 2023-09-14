@@ -298,6 +298,11 @@ As data-attributes are reactive, you can change them with JavaScript as well. Pl
 started the checkout process, we do not update the data-attributes in the existing checkout process to not
 interrupt the checkout UX.
 
+When updating data-attributes through JavaScript, make sure you do not have a stale reference to the HTMLNode of the
+widget. When the widget is created, the original HTMLNode can happen to be replaced. So make sure to always have a
+fresh reference like so  
+``document.querySelectorAll("pretix-widget, pretix-button, .pretix-widget-wrapper")``
+
 Currently, the following attributes are understood by pretix itself:
 
 * ``data-email`` will pre-fill the order email field as well as the attendee email field (if enabled).
