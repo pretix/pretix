@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-14 08:35+0000\n"
+"PO-Revision-Date: 2023-09-14 08:51+0000\n"
 "Last-Translator: Ed Bennett <pyedward@swansea.ac.uk>\n"
 "Language-Team: Welsh <https://translate.pretix.eu/projects/pretix/pretix/cy/>"
 "\n"
@@ -18780,7 +18780,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:6
 msgid "Schedule"
-msgstr ""
+msgstr "Amserlen"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:15
 msgid "Repetition schedule"
@@ -18833,7 +18833,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:97
 msgid "Forever"
-msgstr ""
+msgstr "Am byth"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:110
 msgid ""
@@ -18859,7 +18859,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:122
 msgid "Owner"
-msgstr ""
+msgstr "Perchennog"
 
 #: pretix/control/templates/pretixcontrol/orders/fragment_export_schedule_form.html:128
 msgid ""
@@ -19070,7 +19070,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:10
 msgid "Sales"
-msgstr ""
+msgstr "Gwerthiannau"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:11
 msgid "Revenue (gross)"
