@@ -285,8 +285,10 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        for f in form.fields.values():
-            f.disabled = True
+        if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_change_vouchers',
+                                                      request=self.request):
+            for f in form.fields.values():
+                f.disabled = True
         return form
 
     def get_object(self, queryset=None) -> VoucherForm:
