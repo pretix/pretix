@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-14 10:02+0000\n"
+"PO-Revision-Date: 2023-09-14 15:37+0000\n"
 "Last-Translator: Ed Bennett <pyedward@swansea.ac.uk>\n"
 "Language-Team: Welsh <https://translate.pretix.eu/projects/pretix/pretix/cy/>"
 "\n"
@@ -4629,7 +4629,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:15
 msgid "Quota"
-msgstr ""
+msgstr "Cwota"
 
 #: pretix/base/models/items.py:1892 pretix/control/navigation.py:166
 #: pretix/control/templates/pretixcontrol/items/quotas.html:4
@@ -6472,7 +6472,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:113
 msgid "Ticket"
-msgstr ""
+msgstr "Tocyn"
 
 #: pretix/base/pdf.py:1167
 msgid "Your layout file is not a valid layout. Error message: {}"
@@ -21800,7 +21800,7 @@ msgstr ""
 
 #: pretix/control/views/event.py:1189 pretix/control/views/main.py:319
 msgid "VAT"
-msgstr ""
+msgstr "TAW"
 
 #: pretix/control/views/event.py:1218
 msgid "The new tax rule has been created."
