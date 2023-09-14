@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-14 10:02+0000\n"
+"PO-Revision-Date: 2023-09-15 06:00+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -7976,7 +7976,7 @@ msgstr ""
 "\n"
 "https://pretix.eu/about/en/blog/.\n"
 "\n"
-"S pozdravem,  \n"
+"S pozdravem,\n"
 "\n"
 "váš vývojový tým pretixu"
 
@@ -9001,19 +9001,15 @@ msgid "Generate tickets for add-on products and bundled products"
 msgstr "Generování vstupenek pro doplňkové produkty a spojené produkty"
 
 #: pretix/base/settings.py:1510
-#, fuzzy
-#| msgid ""
-#| "By default, tickets are only issued for products selected individually, "
-#| "not for add-on products. With this option, a separate ticket is issued "
-#| "for every add-on product as well."
 msgid ""
 "By default, tickets are only issued for products selected individually, not "
 "for add-on products or bundled products. With this option, a separate ticket "
 "is issued for every add-on product or bundled product as well."
 msgstr ""
 "Ve výchozím nastavení se vstupenky vystavují pouze pro jednotlivě vybrané "
-"produkty, nikoli pro doplňkové produkty. Při použití této možnosti se pro "
-"každý doplňkový produkt vystaví také samostatný vstupenka."
+"produkty, nikoli pro doplňkové produkty nebo spojené produkty. Při použití "
+"této možnosti se pro každý doplňkový produkt nebo spojený produkt vystaví "
+"také samostatná vstupenka."
 
 #: pretix/base/settings.py:1523
 msgid "Generate tickets for all products"
@@ -9920,25 +9916,12 @@ msgstr ""
 "Váš tým {event}"
 
 #: pretix/base/settings.py:2349
-#, fuzzy, python-brace-format
-#| msgid "Payment received for your order: {code}"
+#, python-brace-format
 msgid "Payment failed for your order: {code}"
-msgstr "Přijatá platba za vaši objednávku: {code}"
+msgstr "Platba objednávky se nezdařila: {code}"
 
 #: pretix/base/settings.py:2353
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "we did not yet receive a full payment for your order for {event}.\n"
-#| "Please keep in mind that we only guarantee your order if we receive\n"
-#| "your payment before {expire_date}.\n"
-#| "\n"
-#| "You can view the payment information and the status of your order at\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -9956,11 +9939,13 @@ msgid ""
 msgstr ""
 "Dobrý den,\n"
 "\n"
-"dosud jsme nepřijali celou platbu za vaši objednávku na {event}.\n"
-"Mějte prosím na paměti, že vaši objednávku garantujeme pouze v případě,\n"
-"že obdržíme vaši platbu před datem {expire_date}.\n"
+"váš pokus o platbu za objednávku na {event} se nezdařil.\n"
 "\n"
-"Informace o platbě a stav vaší objednávky si můžete prohlédnout na adrese\n"
+"Vaše objednávka je stále platná a můžete se pokusit zaplatit znovu stejným "
+"nebo jiným způsobem platby. Dokončete prosím platbu před datem {expire_date}."
+"\n"
+"\n"
+"Platbu můžete zopakovat a zobrazit stav své objednávky na adrese\n"
 "{url}\n"
 "\n"
 "S pozdravem,  \n"
@@ -10099,17 +10084,7 @@ msgstr ""
 "Váš tým {event}"
 
 #: pretix/base/settings.py:2446 pretix/base/settings.py:2483
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {attendee_name},\n"
-#| "\n"
-#| "a ticket for {event} has been ordered for you.\n"
-#| "\n"
-#| "You can view the details and status of your ticket here:\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10121,15 +10096,15 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Dobrý den, {attendee_name},\n"
+"Dobrý den,\n"
 "\n"
-"byla pro vás objednána vstupenka na akci {event}.\n"
+"schválili jsme pro vás objednanou vstupenku na {event}.\n"
 "\n"
 "Podrobnosti a stav vaší vstupenky si můžete prohlédnout zde:\n"
-"{url}.\n"
+"{url}\n"
 "\n"
 "S pozdravem,  \n"
-"Tým {event}"
+"Váš tým {event}"
 
 #: pretix/base/settings.py:2458
 #, python-brace-format
@@ -10221,17 +10196,7 @@ msgid "Your ticket is ready for download: {code}"
 msgstr "Vaše vstupenka je připravena ke stažení: {code}"
 
 #: pretix/base/settings.py:2536
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello {attendee_name},\n"
-#| "\n"
-#| "    you are registered for {event}.\n"
-#| "\n"
-#| "    If you did not do so already, you can download your ticket here:\n"
-#| "    {url}\n"
-#| "\n"
-#| "    Best regards,  \n"
-#| "    Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello {attendee_name},\n"
 "\n"
@@ -11698,26 +11663,20 @@ msgid "Barcode"
 msgstr ""
 
 #: pretix/control/forms/checkin.py:188
-#, fuzzy
-#| msgid "Check-in list"
 msgid "Check-in time"
-msgstr "Check-in seznam"
+msgstr "Čas check-inu"
 
 #: pretix/control/forms/checkin.py:192
-#, fuzzy
-#| msgid "Check-in list"
 msgid "Check-in type"
-msgstr "Check-in seznam"
+msgstr "Typ check-inu"
 
 #: pretix/control/forms/checkin.py:196
 msgid "Allow check-in of unpaid order (if check-in list permits it)"
 msgstr ""
 
 #: pretix/control/forms/checkin.py:200
-#, fuzzy
-#| msgid "Custom check-in rule"
 msgid "Support for check-in questions"
-msgstr "Vlastní pravidlo pro check-in"
+msgstr "Podpora pro otázky týkající se check-in"
 
 #: pretix/control/forms/event.py:87
 msgid "Use languages"
@@ -11930,10 +11889,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/event.py:918
-#, fuzzy
-#| msgid "Recommended for new users"
 msgid "Recommended"
-msgstr "Doporučeno pro nové uživatele"
+msgstr "Doporučeno"
 
 #: pretix/control/forms/event.py:927
 msgid "The online shop must be selected to receive these emails."
@@ -13788,10 +13745,8 @@ msgstr ""
 "velikost alespoň 200x200px, aby se přizpůsobila většině zařízení."
 
 #: pretix/control/forms/organizer.py:464 pretix/plugins/stripe/payment.py:298
-#, fuzzy
-#| msgid "Experimental feature"
 msgid "experimental"
-msgstr "Experimentální funkce"
+msgstr "Experimentální"
 
 #: pretix/control/forms/organizer.py:470
 msgid ""
@@ -13813,16 +13768,12 @@ msgid "Gift card value"
 msgstr "Hodnota dárkové karty"
 
 #: pretix/control/forms/organizer.py:700
-#, fuzzy
-#| msgid "An account with this email address is already registered."
 msgid "An medium with this type and identifier is already registered."
-msgstr "Účet s touto e-mailovou adresou je už registrován."
+msgstr "Médium s tímto typem a identifikátorem je již zaregistrováno."
 
 #: pretix/control/forms/organizer.py:801
-#, fuzzy
-#| msgid "An account with this email address is already registered."
 msgid "An account with this customer ID is already registered."
-msgstr "Účet s touto e-mailovou adresou je už registrován."
+msgstr "Účet s tímto ID zákazníka je již zaregistrován."
 
 #: pretix/control/forms/organizer.py:818
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:60
@@ -13902,16 +13853,12 @@ msgid "Invalidate old client secret and generate a new one"
 msgstr "Zneplatnit staré klientské tajemství a vygenerovat nové"
 
 #: pretix/control/forms/organizer.py:1041
-#, fuzzy
-#| msgid "Organizer name"
 msgid "Organizer short name"
-msgstr "Jméno organizátora"
+msgstr "Krátký název organizátora"
 
 #: pretix/control/forms/organizer.py:1045
-#, fuzzy
-#| msgid "Can manage customer accounts"
 msgid "Allow access to reusable media"
-msgstr "Umí spravovat účty zákazníků"
+msgstr "Umožnit přístup k opakovaně použitelným médiím"
 
 #: pretix/control/forms/organizer.py:1046
 msgid ""
@@ -13923,16 +13870,12 @@ msgid ""
 msgstr ""
 
 #: pretix/control/forms/organizer.py:1062
-#, fuzzy
-#| msgid "The selected date does not exist in this event series."
 msgid "The selected organizer does not exist or cannot be invited."
-msgstr "Vybrané datum v této řadě akcí neexistuje."
+msgstr "Vybraný organizátor neexistuje nebo jej nelze pozvat."
 
 #: pretix/control/forms/organizer.py:1064
-#, fuzzy
-#| msgid "The selected organizer was not found."
 msgid "The selected organizer has already been invited."
-msgstr "Vybraný organizátor nebyl nalezen."
+msgstr "Vybraný organizátor byl již pozván."
 
 #: pretix/control/forms/renderers.py:55
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:138
@@ -14068,21 +14011,7 @@ msgid "Your voucher for {event}"
 msgstr "Vaše poukázka na {event}"
 
 #: pretix/control/forms/vouchers.py:272
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "Hello,\n"
-#| "\n"
-#| "with this email, we're sending you one or more vouchers for {event}:\n"
-#| "\n"
-#| "{voucher_list}\n"
-#| "\n"
-#| "You can redeem them here in our ticket shop:\n"
-#| "\n"
-#| "{url}\n"
-#| "\n"
-#| "Best regards,  \n"
-#| "\n"
-#| "Your {event} team"
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -14108,7 +14037,6 @@ msgstr ""
 "{url}.\n"
 "\n"
 "S pozdravem,  \n"
-"\n"
 "Váš tým {event}"
 
 #: pretix/control/forms/vouchers.py:278
@@ -14473,28 +14401,20 @@ msgid "Gift card acceptance for another organizer has been removed."
 msgstr "Přijímání dárkových karet pro jiného organizátora bylo odstraněno."
 
 #: pretix/control/logdisplay.py:343
-#, fuzzy
-#| msgid "The gift card has been created."
 msgid "A new gift card acceptor has been invited."
-msgstr "Dárková karta byla vytvořena."
+msgstr "Nový organizátor byl pozván jako akceptor poukázek."
 
 #: pretix/control/logdisplay.py:344
-#, fuzzy
-#| msgid "The gift card has been created."
 msgid "A gift card acceptor has been removed."
-msgstr "Dárková karta byla vytvořena."
+msgstr "Akceptor dárkových karet byl odstraněn."
 
 #: pretix/control/logdisplay.py:345
-#, fuzzy
-#| msgid "The gift card has been created."
 msgid "A gift card issuer has been removed or declined."
-msgstr "Dárková karta byla vytvořena."
+msgstr "Vydavatel dárkových karet byl odstraněn nebo odmítnut."
 
 #: pretix/control/logdisplay.py:346
-#, fuzzy
-#| msgid "The gift card has been created."
 msgid "A new gift card issuer has been accepted."
-msgstr "Dárková karta byla vytvořena."
+msgstr "Nový vydavatel dárkových karet byl schválen."
 
 #: pretix/control/logdisplay.py:347
 msgid "The webhook has been created."
@@ -14581,34 +14501,24 @@ msgid "A new password has been set."
 msgstr "Bylo nastaveno nové heslo."
 
 #: pretix/control/logdisplay.py:368
-#, fuzzy
-#| msgid "The team has been created."
 msgid "The reusable medium has been created."
-msgstr "Tým byl vytvořen."
+msgstr "Bylo vytvořeno opakovaně použitelné médium."
 
 #: pretix/control/logdisplay.py:369
-#, fuzzy
-#| msgid "The payment has been created successfully."
 msgid "The reusable medium has been created automatically."
-msgstr "Platba byla úspěšně vytvořena."
+msgstr "Opakovaně použitelné médium bylo vytvořeno automaticky."
 
 #: pretix/control/logdisplay.py:370
-#, fuzzy
-#| msgid "The tax rule has been changed."
 msgid "The reusable medium has been changed."
-msgstr "Daňové pravidlo bylo změněno."
+msgstr "Opakovaně použitelné médium bylo změněno."
 
 #: pretix/control/logdisplay.py:371
-#, fuzzy
-#| msgid "The team has been created."
 msgid "The medium has been connected to a new ticket."
-msgstr "Tým byl vytvořen."
+msgstr "Médium bylo připojeno k nové vstupence."
 
 #: pretix/control/logdisplay.py:372
-#, fuzzy
-#| msgid "The team has been created."
 msgid "The medium has been connected to a new gift card."
-msgstr "Tým byl vytvořen."
+msgstr "Médium bylo spojeno s novou dárkovou kartou."
 
 #: pretix/control/logdisplay.py:373 pretix/control/logdisplay.py:414
 msgid "Sending of an email has failed."
@@ -14863,11 +14773,8 @@ msgstr ""
 "objednávky."
 
 #: pretix/control/logdisplay.py:437
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that payment has been received."
 msgid "An email has been sent to notify the user that the payment failed."
-msgstr "Uživateli byl poslán e-mail s upozorněním, že platba byla přijata."
+msgstr "Uživateli byl poslán e-mail s oznámením, že platba se nezdařila."
 
 #: pretix/control/logdisplay.py:438
 #, python-brace-format
@@ -15041,10 +14948,8 @@ msgid "The product has been changed."
 msgstr "Produkt byl změněn."
 
 #: pretix/control/logdisplay.py:484
-#, fuzzy
-#| msgid "The product has been created."
 msgid "The product has been reordered."
-msgstr "Produkt byl vytvořen."
+msgstr "Produkt byl přeřazen."
 
 #: pretix/control/logdisplay.py:485
 msgid "The product has been deleted."
@@ -15090,23 +14995,16 @@ msgid "A bundled item has been changed on this product."
 msgstr "U tohoto produktu byla změněna balíčková položka."
 
 #: pretix/control/logdisplay.py:495
-#, fuzzy
-#| msgid "A user has been added to the event team."
 msgid "A meta property has been added to this event."
-msgstr "Uživatel byl přidán do týmu akce."
+msgstr "K této akci byla přidána meta-vlastnost."
 
 #: pretix/control/logdisplay.py:496
-#, fuzzy
-#| msgid "A user has been removed from the event team."
 msgid "A meta property has been removed from this event."
-msgstr "Uživatel byl odstraněn z týmu akce."
+msgstr "Z této akce byla odstraněna meta-vlastnost."
 
 #: pretix/control/logdisplay.py:497
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "A quota has been changed on the event date."
 msgid "A meta property has been changed on this event."
-msgstr "Pro datum akce byla změněna kvóta."
+msgstr "U této akce byla změněna meta-vlastnost."
 
 #: pretix/control/logdisplay.py:498
 msgid "The quota has been added."
@@ -15141,10 +15039,8 @@ msgid "The category has been changed."
 msgstr "Kategorie byla změněna."
 
 #: pretix/control/logdisplay.py:506
-#, fuzzy
-#| msgid "The category has been deleted."
 msgid "The category has been reordered."
-msgstr "Kategorie byla odstraněna."
+msgstr "Kategorie byla přeřazena."
 
 #: pretix/control/logdisplay.py:507
 msgid "The question has been added."
@@ -15159,10 +15055,8 @@ msgid "The question has been changed."
 msgstr "Otázka byla změněna."
 
 #: pretix/control/logdisplay.py:510
-#, fuzzy
-#| msgid "The question has been deleted."
 msgid "The question has been reordered."
-msgstr "Otázka byla smazána."
+msgstr "Otázka byla přeřazena."
 
 #: pretix/control/logdisplay.py:511
 msgid "The discount has been added."
@@ -15707,10 +15601,8 @@ msgid "Webhooks"
 msgstr "Webhooky"
 
 #: pretix/control/navigation.py:534
-#, fuzzy
-#| msgid "Accept anyway"
 msgid "Acceptance"
-msgstr "Přijmout i tak"
+msgstr "Přijetí"
 
 #: pretix/control/navigation.py:555
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:6
@@ -16135,11 +16027,9 @@ msgid "ZVT Terminal"
 msgstr "ZVT terminál"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:17
-#, fuzzy
-#| msgid "Confirmation code"
 msgctxt "terminal_zvt"
 msgid "Confirmation mode"
-msgstr "Potvrzovací kód"
+msgstr "Potvrzovací režim"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:20
 msgctxt "terminal_zvt"
@@ -16385,10 +16275,8 @@ msgstr "Konfigurace seznamu"
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:167
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:8
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:20
-#, fuzzy
-#| msgid "Check-in history"
 msgid "Check-in simulator"
-msgstr "Historie check-inu"
+msgstr "Simulátor check-in"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:27
 #: pretix/control/templates/pretixcontrol/orders/overview.html:20
@@ -16746,16 +16634,12 @@ msgid "Simulate"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:65
-#, fuzzy
-#| msgid "All check-ins"
 msgid "Valid check-in"
-msgstr "Všechny check-iny"
+msgstr "Platný check-in"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:67
-#, fuzzy
-#| msgid "Additional information"
 msgid "Additional information required"
-msgstr "Další informace"
+msgstr "Potřebné další informace"
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:69
 msgid ""
@@ -16763,10 +16647,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/simulator.html:89
-#, fuzzy
-#| msgid "Requires special attention"
 msgid "Special attention required"
-msgstr "Vyžaduje pozornost"
+msgstr "Nutná zvláštní pozornost"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:9
 msgid "Go to event"
@@ -17346,17 +17228,13 @@ msgid "Your timeline"
 msgstr "Váš časový plán"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:20
-#, fuzzy
-#| msgid "System URL:"
 msgid "Shop URL:"
-msgstr "Adresa systému:"
+msgstr "Adresa obchodu:"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:27
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:51
-#, fuzzy
-#| msgid "Other QR code"
 msgid "Create QR code"
-msgstr "Další QR kód"
+msgstr "Vytvořit kód QR"
 
 #: pretix/control/templates/pretixcontrol/event/index.html:36
 msgid ""
@@ -17661,10 +17539,8 @@ msgid "Payment reminder"
 msgstr "Připomínka platby"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:108
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Payment failed"
-msgstr "Poplatek za platbu"
+msgstr "Platba se nezdařila"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:111
 msgid "Waiting list notification"
@@ -17719,8 +17595,6 @@ msgid "Deadlines"
 msgstr "Termíny"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:68
-#, fuzzy
-#| msgid "days"
 msgctxt "unit"
 msgid "days"
 msgstr "dny"
@@ -20449,10 +20323,8 @@ msgstr "Celkem"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:5
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:7
-#, fuzzy
-#| msgid "Modify order"
 msgid "Modify orders"
-msgstr "Změnit objednávku"
+msgstr "Změnit objednávky"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:12
 #, python-format
@@ -20463,16 +20335,12 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:71
-#, fuzzy
-#| msgid "You will not be able to continue."
 msgid "Do you want to continue?"
-msgstr "Nebudete moci pokračovat."
+msgstr "Chcete pokračovat?"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:77
-#, fuzzy
-#| msgid "This order is not yet approved."
 msgid "This operation cannot be reversed."
-msgstr "Tato objednávka dosud nebyla schválena."
+msgstr "Tuto operaci nelze vrátit zpět."
 
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:9
 msgid ""
@@ -20927,10 +20795,8 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:280
-#, fuzzy
-#| msgid "Select country"
 msgid "Select action"
-msgstr "Vyberte zemi"
+msgstr "Zvolte akci"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:302
 #: pretix/control/views/orders.py:306
@@ -20938,10 +20804,8 @@ msgid "Mark as expired if overdue"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:310
-#, fuzzy
-#| msgid "Delete question"
 msgid "Delete (test mode only)"
-msgstr "Smazat otázku"
+msgstr "Odstranit (pouze v testovacím režimu)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:5
 #: pretix/control/templates/pretixcontrol/orders/overview.html:16
@@ -21502,9 +21366,6 @@ msgstr "Transakce"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:73
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html:7
-#, fuzzy
-#| msgctxt "alert-messages"
-#| msgid "Information"
 msgid "Information"
 msgstr "Informace"
 
@@ -21525,16 +21386,12 @@ msgid "Gift card history"
 msgstr "Historie dárkových karet"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_invite.html:8
-#, fuzzy
-#| msgid "Delete organizer"
 msgid "Invite organizer"
-msgstr "Smazat organizátora"
+msgstr "Pozvat organizátora"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:8
-#, fuzzy
-#| msgid "Gift card code"
 msgid "Gift cards acceptance"
-msgstr "kód dárkové poukázky"
+msgstr "Akceptace dárkových karet"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:11
 msgid ""
@@ -21555,10 +21412,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:49
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:128
-#, fuzzy
-#| msgid "Unlimited"
 msgid "invited"
-msgstr "Neomezené"
+msgstr "pozvaný"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:62
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:140
@@ -21569,10 +21424,8 @@ msgid "Remove"
 msgstr "Odstranit"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:66
-#, fuzzy
-#| msgid "Accept anyway"
 msgid "Accept"
-msgstr "Přijmout i tak"
+msgstr "Přijmout"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:69
 #, fuzzy
@@ -23387,11 +23240,7 @@ msgid "Quota unlimited"
 msgstr "Název kvóty"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:225
-#, fuzzy, python-format
-#| msgid ""
-#| "\n"
-#| "                                    Waiting, product %(num)sx available\n"
-#| "                                "
+#, python-format
 msgid ""
 "\n"
 "                                            Waiting, product %(num)sx "
@@ -23399,8 +23248,9 @@ msgid ""
 "                                        "
 msgstr ""
 "\n"
-"                                    Čeká, produkt %(num)sx k dispozici\n"
-"                                "
+"                                            Čeká, produkt %(num)sx k "
+"dispozici\n"
+"                                        "
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:231
 msgid "Waiting, product unavailable"
