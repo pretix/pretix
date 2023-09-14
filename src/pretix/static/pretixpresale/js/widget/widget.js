@@ -735,9 +735,6 @@ var shared_methods = {
             window.open(redirect_url);
         }
     },
-    handleResize: function () {
-        this.mobile = this.$refs.wrapper.clientWidth <= 800;
-    }
 };
 
 var shared_widget_data = function () {
@@ -1511,15 +1508,22 @@ Vue.component('pretix-widget', {
     data: shared_widget_data,
     methods: shared_methods,
     mounted: function () {
-        this.handleResize();
-        var $this = this;
-        var debounce;
-        window.addEventListener("resize", function() {
-            if (debounce) clearTimeout(debounce);
-            debounce = setTimeout(function () {
-                $this.handleResize();
-            }, 250);
-        });
+        var thisObj = this;
+        if ("ResizeObserver" in window) {
+            var resizeObserver = new ResizeObserver(function(entries) {
+                thisObj.mobile = entries[0].contentRect.width <= 800;
+            });
+            resizeObserver.observe(this.$refs.wrapper);
+        } else {
+            this.mobile = this.$refs.wrapper.clientWidth <= 800;
+            var debounce;
+            window.addEventListener("resize", function() {
+                if (debounce) clearTimeout(debounce);
+                debounce = setTimeout(function () {
+                    thisObj.mobile = thisObj.$refs.wrapper.clientWidth <= 800;
+                }, 100);
+            });
+        }
     },
     computed: {
         classObject: function () {
