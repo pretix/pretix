@@ -341,8 +341,7 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
 
 * If you use the tracking plugin, you can enable cross-domain tracking. Please note: when you run your pretix-shop on a
   subdomain of your main tracking domain, then you do not need cross-domain tracking as tracking automatically works
-  across subdomains. See `Using a custom domain <https://docs.pretix.eu/en/latest/user/organizers/domain.html>` for
-  how to set this up.
+  across subdomains. See :ref:`custom_domain` for how to set this up.
 
   Please make sure to add the embedding website to your `Referral exclusions
   <https://support.google.com/analytics/answer/2795830>`_ in your Google Analytics settings.
