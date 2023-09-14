@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-14 08:51+0000\n"
+"PO-Revision-Date: 2023-09-14 09:08+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
 "\n"
@@ -3564,12 +3564,6 @@ msgid "Ignore products discounted by a voucher"
 msgstr "Ignorovat produkty zlevněné voucherem"
 
 #: pretix/base/models/discount.py:108
-#, fuzzy
-#| msgid ""
-#| "If this option is checked, products that already received a discount "
-#| "through a voucher will not be considered for this discount. However, "
-#| "products that use a voucher only to e.g. unlock a hidden product or gain "
-#| "access to sold-out quota will still receive the discount."
 msgid ""
 "If this option is checked, products that already received a discount through "
 "a voucher will not be considered for this discount. However, products that "
@@ -3577,9 +3571,9 @@ msgid ""
 "out quota will still be considered."
 msgstr ""
 "Pokud je tato možnost aktivní, nebudou se slevy vztahovat na produkty, na "
-"které již byla poskytnuta sleva na základě voucheru. Pokud byl naopak poukaz "
-"použit pouze například k odblokování skrytého produktu nebo vyprodané kvóty, "
-"bude automatická sleva poskytnuta i nadále."
+"které již byla poskytnuta sleva na základě voucheru. Produkty, které "
+"používají poukaz pouze např. k odemčení skrytého produktu nebo k získání "
+"přístupu k vyprodané kvótě, však budou stále brány v úvahu."
 
 #: pretix/base/models/discount.py:113
 msgid "Minimum number of matching products"
@@ -3590,10 +3584,8 @@ msgid "Minimum gross value of matching products"
 msgstr "Minimální celková brutto částka odpovídajících produktů"
 
 #: pretix/base/models/discount.py:125
-#, fuzzy
-#| msgid "Apply discount only to this number of matching products"
 msgid "Apply discount to same set of products"
-msgstr "Poskytnutí slevy pouze na tento počet odpovídajících produktů"
+msgstr "Poskytnutí slevy na stejný výběr produktů"
 
 #: pretix/base/models/discount.py:126
 msgid ""
@@ -3603,10 +3595,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/discount.py:132
-#, fuzzy
-#| msgid "Apply to specific products"
 msgid "Apply discount to specific products"
-msgstr "Použít na konkrétní produkty"
+msgstr "Uplatnit slevu na určité produkty"
 
 #: pretix/base/models/discount.py:137
 msgid "Percentual discount on matching products"
@@ -3637,22 +3627,16 @@ msgid "Apply to add-on products"
 msgstr "Použít na doplňkové produkty"
 
 #: pretix/base/models/discount.py:163
-#, fuzzy
-#| msgid ""
-#| "If this option is checked, products that already received a discount "
-#| "through a voucher will not be considered for this discount. However, "
-#| "products that use a voucher only to e.g. unlock a hidden product or gain "
-#| "access to sold-out quota will still receive the discount."
 msgid ""
 "If this option is checked, products that already received a discount through "
 "a voucher will not be discounted. However, products that use a voucher only "
 "to e.g. unlock a hidden product or gain access to sold-out quota will still "
 "receive the discount."
 msgstr ""
-"Pokud je tato možnost aktivní, nebudou se slevy vztahovat na produkty, na "
-"které již byla poskytnuta sleva na základě voucheru. Pokud byl naopak poukaz "
-"použit pouze například k odblokování skrytého produktu nebo vyprodané kvóty, "
-"bude automatická sleva poskytnuta i nadále."
+"Pokud je tato možnost aktivní, nebudou zlevněny produkty, na které již byla "
+"poskytnuta sleva prostřednictvím voucheru. Pokud byl naopak poukaz použit "
+"pouze například k odblokování skrytého produktu nebo vyprodané kvóty, bude "
+"automatická sleva poskytnuta i nadále."
 
 #: pretix/base/models/discount.py:195
 msgid ""
@@ -3685,16 +3669,12 @@ msgid ""
 msgstr "Pokud nastavíte minimální částku, nelze slevu omezit na různá data."
 
 #: pretix/base/models/discount.py:218
-#, fuzzy
-#| msgid ""
-#| "You cannot apply the discount only to some of the matched products if you "
-#| "are matching on a minimum value."
 msgid ""
 "You cannot apply the discount to a different set of products if the discount "
 "is only valid for bookings of different dates."
 msgstr ""
-"Slevu můžete uplatnit nejen na některé odpovídající produkty, pokud "
-"požadujete minimální částku."
+"Slevu nemůžete uplatnit na jinou sadu produktů, pokud je sleva platná pouze "
+"pro objednávky jiných termínů."
 
 #: pretix/base/models/event.py:86
 msgid "The end of the presale period has to be later than its start."
@@ -3987,11 +3967,8 @@ msgstr "Žádná hodnota nesmí obsahovat znak oddělovače."
 
 #: pretix/base/models/giftcards.py:81
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:50
-#, fuzzy
-#| msgctxt "timeline"
-#| msgid "End of ticket sales"
 msgid "Owned by ticket holder"
-msgstr "Konec předprodeje"
+msgstr "Vlastní držitel vstupenky"
 
 #: pretix/base/models/giftcards.py:93
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
@@ -4433,23 +4410,18 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/items.py:849
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "The selected media type is not enabled in your organizer settings."
-msgstr "Vybraný produkt není aktivní nebo nemá nastavenou cenu."
+msgstr "Vybraný typ média není v nastavení organizéru povolen."
 
 #: pretix/base/models/items.py:851
-#, fuzzy
-#| msgid "The selected item does not belong to this event."
 msgid "The selected media type does not support usage for tickets currently."
-msgstr "Vybraná položka nepatří k této akci."
+msgstr "Vybraný typ média v současné době nepodporuje použití pro vstupenky."
 
 #: pretix/base/models/items.py:853
-#, fuzzy
-#| msgid "The selected item does not belong to this event."
 msgid ""
 "The selected media type does not support usage for gift cards currently."
-msgstr "Vybraná položka nepatří k této akci."
+msgstr ""
+"Vybraný typ média v současné době nepodporuje použití pro dárkové karty."
 
 #: pretix/base/models/items.py:855
 msgid ""
@@ -4746,10 +4718,8 @@ msgid "Maximum value"
 msgstr "Maximální hodnota"
 
 #: pretix/base/models/items.py:1550
-#, fuzzy
-#| msgid "Maximum value"
 msgid "Maximum length"
-msgstr "Maximální hodnota"
+msgstr "Maximální délka"
 
 #: pretix/base/models/items.py:1556
 msgid "Validate file to be a portrait"
