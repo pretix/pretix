@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-14 08:31+0000\n"
+"PO-Revision-Date: 2023-09-14 08:35+0000\n"
 "Last-Translator: Ed Bennett <pyedward@swansea.ac.uk>\n"
 "Language-Team: Welsh <https://translate.pretix.eu/projects/pretix/pretix/cy/>"
 "\n"
@@ -18323,7 +18323,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:969
 msgid "Check"
-msgstr ""
+msgstr "Gwirio"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:1016
 msgid "Order history"
@@ -18347,7 +18347,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/mail_history.html:50
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/history.html:30
 msgid "Subject:"
-msgstr ""
+msgstr "Pwnc:"
 
 #: pretix/control/templates/pretixcontrol/order/pay.html:5
 #: pretix/control/templates/pretixcontrol/order/pay.html:9
@@ -18566,7 +18566,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/sendmail.html:41
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:88
 msgid "Send"
-msgstr ""
+msgstr "Anfon"
 
 #: pretix/control/templates/pretixcontrol/order/transactions.html:5
 #: pretix/control/templates/pretixcontrol/order/transactions.html:8
@@ -18598,7 +18598,7 @@ msgstr ""
 #: pretix/plugins/reports/accountingreport.py:441
 #: pretix/plugins/reports/accountingreport.py:565
 msgid "Sum"
-msgstr ""
+msgstr "Swm"
 
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:5
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:7
