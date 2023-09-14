@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-04-03 01:00+0000\n"
+"PO-Revision-Date: 2023-09-14 08:51+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
-"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
-">\n"
+"Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/>"
+"\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 5.0.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -293,16 +293,12 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Tento typ otázky nelze položit během registrace."
 
 #: pretix/api/serializers/media.py:108
-#, fuzzy
-#| msgid ""
-#| "A gift card with the same secret already exists in your or an affiliated "
-#| "organizer account."
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
-"Dárková karta se stejným kódem již ve vašem účtu, nebo v účtu přidruženého "
-"organizátora, existuje."
+"Ve vašem účtu organizátora již existuje médium se stejným identifikátorem a "
+"typem."
 
 #: pretix/api/serializers/order.py:77
 #, python-brace-format
@@ -455,10 +451,8 @@ msgid "Refund of payment failed"
 msgstr "Vrácení platby se nezdařilo"
 
 #: pretix/api/webhooks.py:289
-#, fuzzy
-#| msgid "Payment denied."
 msgid "Payment confirmed"
-msgstr "Platba odmítnuta."
+msgstr "Platba potvrzena"
 
 #: pretix/api/webhooks.py:293
 msgid "Order approved"
@@ -528,46 +522,32 @@ msgid "Test-Mode of shop has been deactivated"
 msgstr "Testovací režim byl deaktivován"
 
 #: pretix/api/webhooks.py:354
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry added"
-msgstr "Zápis na čekací listinu"
+msgstr "Přidán záznam na čekací listinu"
 
 #: pretix/api/webhooks.py:358
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry changed"
-msgstr "Zápis na čekací listinu"
+msgstr "Změna zápisu do čekací listiny"
 
 #: pretix/api/webhooks.py:362
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry deleted"
-msgstr "Zápis na čekací listinu"
+msgstr "Vymazání záznamu na čekací listině"
 
 #: pretix/api/webhooks.py:366
-#, fuzzy
-#| msgid "Waiting list entries"
 msgid "Waiting list entry received voucher"
-msgstr "Zápisy na čekací listině"
+msgstr "Zápis na čekací listinu obdržel poukaz"
 
 #: pretix/api/webhooks.py:370
-#, fuzzy
-#| msgid "Customer account"
 msgid "Customer account created"
-msgstr "Účet zákazníka"
+msgstr "Účet zákazníka vytvořen"
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
-#| msgid "Customer account email change"
 msgid "Customer account changed"
-msgstr "Změna e-mailu zákaznického účtu"
+msgstr "Zákaznický účet byl změněn"
 
 #: pretix/api/webhooks.py:378
-#, fuzzy
-#| msgid "Customer account"
 msgid "Customer account anonymized"
-msgstr "Účet zákazníka"
+msgstr "Účet zákazníka anonymizován"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:938
@@ -2243,10 +2223,8 @@ msgid "Invoice address state"
 msgstr "Stát fakturační adresy"
 
 #: pretix/base/exporters/orderlist.py:774
-#, fuzzy
-#| msgid "Server Transaction Code"
 msgid "Order transaction data"
-msgstr "Kód transakce serveru"
+msgstr "Údaje o objednávkových transakcích"
 
 #: pretix/base/exporters/orderlist.py:776
 msgid ""
@@ -2256,10 +2234,8 @@ msgid ""
 msgstr ""
 
 #: pretix/base/exporters/orderlist.py:792
-#, fuzzy
-#| msgid "Only include orders created within this date range."
 msgid "Only include transactions created within this date range."
-msgstr "Zahrnout pouze objednávky vytvořené v tomto rozsahu dat."
+msgstr "Zahrnout pouze transakce vytvořené v tomto rozsahu dat."
 
 #: pretix/base/exporters/orderlist.py:827 pretix/base/models/event.py:627
 #: pretix/base/models/items.py:391 pretix/base/models/items.py:1830
@@ -2291,22 +2267,16 @@ msgid "Currency"
 msgstr "Měna"
 
 #: pretix/base/exporters/orderlist.py:835
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Transaction date"
-msgstr "Kód transakce"
+msgstr "Datum transakce"
 
 #: pretix/base/exporters/orderlist.py:836
-#, fuzzy
-#| msgid "Transaction Code"
 msgid "Transaction time"
-msgstr "Kód transakce"
+msgstr "Čas transakce"
 
 #: pretix/base/exporters/orderlist.py:837
-#, fuzzy
-#| msgid "Order data"
 msgid "Old data"
-msgstr "Datum objednávky"
+msgstr "Staré údaje"
 
 #: pretix/base/exporters/orderlist.py:840 pretix/base/models/items.py:1361
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
@@ -2314,38 +2284,27 @@ msgid "Quantity"
 msgstr "Počet"
 
 #: pretix/base/exporters/orderlist.py:847
-#, fuzzy
-#| msgid "Internal reference"
 msgid "Internal fee type"
-msgstr "Interní číslo"
+msgstr "Interní typ poplatku"
 
 #: pretix/base/exporters/orderlist.py:849
-#, fuzzy
-#| msgid "Date"
 msgctxt "subevent"
 msgid "Date ID"
-msgstr "Datum"
+msgstr "Datum ID"
 
 #: pretix/base/exporters/orderlist.py:854
-#, fuzzy
-#| msgid "Tax rule"
 msgid "Tax rule ID"
-msgstr "Daňové pravidlo"
+msgstr "ID daňového pravidla"
 
 #: pretix/base/exporters/orderlist.py:857
 #: pretix/plugins/reports/accountingreport.py:319
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Gross value"
 msgid "Gross total"
-msgstr "Hrubá hodnota"
+msgstr "Hrubá hodnota celkem"
 
 #: pretix/base/exporters/orderlist.py:858
 #: pretix/plugins/reports/accountingreport.py:318
-#, fuzzy
-#| msgid "Total"
 msgid "Tax total"
-msgstr "Celkem"
+msgstr "Celkové daně"
 
 #: pretix/base/exporters/orderlist.py:868
 msgid ""
@@ -3230,11 +3189,9 @@ msgid "Modern Invoice Renderer (pretix 2.7)"
 msgstr "Moderní (pretix 2.7)"
 
 #: pretix/base/invoice.py:947
-#, fuzzy
-#| msgid "Please enter a valid state."
 msgctxt "invoice"
 msgid "(Please quote at all times.)"
-msgstr "Zadejte prosím platný stát."
+msgstr "(Vždy prosím uveďte.)"
 
 #: pretix/base/media.py:61
 msgid "Barcode / QR-Code"
@@ -3595,11 +3552,8 @@ msgid "Apply to specific products"
 msgstr "Použít na konkrétní produkty"
 
 #: pretix/base/models/discount.py:102
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
 msgid "Count add-on products"
-msgstr "Doplňkové produkty"
+msgstr "Počítat doplňkové produkty"
 
 #: pretix/base/models/discount.py:103 pretix/base/models/discount.py:158
 msgid "Discounts never apply to bundled products"
