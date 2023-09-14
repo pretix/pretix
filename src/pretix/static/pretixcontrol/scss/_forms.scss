@@ -2,6 +2,16 @@
   color: $text-muted;
 }
 
+.content-placeholder {
+  padding-left: 2px;
+  padding-right: 2px;
+  background: $gray-lighter;
+  border: 0;
+  border-radius: $border-radius-base;
+  margin-bottom: 4px;
+  margin-right: 6px;
+}
+
 td > .form-group {
   margin-bottom: 0;
 }

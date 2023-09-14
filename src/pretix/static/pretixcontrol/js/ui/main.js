@@ -699,6 +699,38 @@ var form_handlers = function (el) {
     el.find("input[name*=question], select[name*=question]").change(questions_toggle_dependent);
     questions_toggle_dependent();
     questions_init_photos(el);
+
+    var lastFocusedInput;
+    $(document).on('focusin', 'input, textarea', function(e) {
+        lastFocusedInput = e.target;
+    }).on("click", function(e) {
+        if (e.target.classList.contains('content-placeholder')) {
+            var container = e.target.closest(".form-group");
+            if (!lastFocusedInput || !container.contains(lastFocusedInput)) {
+                lastFocusedInput = container.querySelector("input, textarea");
+                //lastFocusedInput.selectionStart = lastFocusedInput.selectionEnd = lastFocusedInput.value.length;
+            }
+            if (lastFocusedInput) {
+                var start = lastFocusedInput.selectionStart;
+                var end = lastFocusedInput.selectionEnd;
+                var v = lastFocusedInput.value;
+                var p = e.target.textContent;
+                var phStart = /\{\w*$/.exec(v.substring(0, start));
+                var phEnd = /^\w*\}/.exec(v.substring(end));
+                if (phStart) {
+                    start -= phStart[0].length
+                }
+                if (phEnd) {
+                    end += phEnd[0].length;
+                }
+
+                lastFocusedInput.value = v.substring(0, start) + p + v.substring(end);
+                lastFocusedInput.selectionStart = start;
+                lastFocusedInput.selectionEnd = start + p.length
+                lastFocusedInput.focus();
+            }
+        }
+    });
 };
 
 function setup_basics(el) {

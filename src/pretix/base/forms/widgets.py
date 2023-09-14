@@ -60,6 +60,18 @@ def replace_arabic_numbers(inp):
     return inp.translate(table)
 
 
+def format_placeholders_help_text(placeholders, event=None):
+    placeholders = [(k, v.render_sample(event) if event else v) for k, v in placeholders.items()]
+    placeholders.sort(key=lambda x: x[0])
+    phs = [
+        '<button type="button" class="content-placeholder" title="%s">{%s}</button>' % (_("Sample: %s") % v if v else "", k)
+        for k, v in placeholders
+    ]
+    return _('Available placeholders: {list}').format(
+        list=' '.join(phs)
+    )
+
+
 class DatePickerWidget(forms.DateInput):
     def __init__(self, attrs=None, date_format=None):
         attrs = attrs or {}
