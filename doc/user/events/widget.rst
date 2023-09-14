@@ -334,11 +334,12 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
 * If you use the campaigns plugin, you can pass a campaign ID as a value to ``data-campaign``. This way, all orders
   made through this widget will be counted towards this campaign.
 
-* If you use the tracking plugin, you can enable cross-domain tracking. Use the HTML code to embed the widget and 
-  add one the following code snippets. Make sure to replace all occurrences of <MEASUREMENT_ID> with your Google 
-  Analytics MEASUREMENT_ID (G-XXXXXXXX)
+* If you use the tracking plugin, you can enable cross-domain tracking. Please note: when you run your pretix-shop on a
+  subdomain of your main tracking domain, then you do not need cross-domain tracking as tracking automatically works
+  across subdomains. See `Using a custom domain <https://docs.pretix.eu/en/latest/user/organizers/domain.html>` for
+  how to set this up.
 
-  Please also make sure to add the embedding website to your `Referral exclusions
+  Please make sure to add the embedding website to your `Referral exclusions
   <https://support.google.com/analytics/answer/2795830>`_ in your Google Analytics settings.
 
   Add Google Analytics as you normally would with all your `window.dataLayer` and `gtag` configurations. Also add the
@@ -346,7 +347,8 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
 
   * Block loading of the widget at most 2 seconds or until Google’s client- and session-ID are loaded. This method
     uses `window.pretixWidgetCallback`. Note that if it takes longer than 2 seconds to load, client- and session-ID
-    are never passed to the widget.
+    are never passed to the widget. Make sure to replace all occurrences of <MEASUREMENT_ID> with your Google 
+    Analytics MEASUREMENT_ID (G-XXXXXXXX)
 
         <script type="text/javascript">
             window.pretixWidgetCallback = function () {
@@ -385,7 +387,8 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
         </script>
 
   * Or asynchronously set data-attributes – the widgets are shown immediately, but once the user has started checkout,
-    data-attributes are not updated.
+    data-attributes are not updated. Make sure to replace all occurrences of <MEASUREMENT_ID> with your Google 
+    Analytics MEASUREMENT_ID (G-XXXXXXXX)
 
         <script type="text/javascript">
             window.addEventListener('load', function() {
