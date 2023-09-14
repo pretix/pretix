@@ -352,7 +352,7 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
   * Block loading of the widget at most 2 seconds or until Google’s client- and session-ID are loaded. This method
     uses `window.pretixWidgetCallback`. Note that if it takes longer than 2 seconds to load, client- and session-ID
     are never passed to the widget. Make sure to replace all occurrences of <MEASUREMENT_ID> with your Google 
-    Analytics MEASUREMENT_ID (G-XXXXXXXX)
+    Analytics MEASUREMENT_ID (G-XXXXXXXX)::
 
         <script type="text/javascript">
             window.pretixWidgetCallback = function () {
@@ -392,7 +392,7 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
 
   * Or asynchronously set data-attributes – the widgets are shown immediately, but once the user has started checkout,
     data-attributes are not updated. Make sure to replace all occurrences of <MEASUREMENT_ID> with your Google 
-    Analytics MEASUREMENT_ID (G-XXXXXXXX)
+    Analytics MEASUREMENT_ID (G-XXXXXXXX)::
 
         <script type="text/javascript">
             window.addEventListener('load', function() {
