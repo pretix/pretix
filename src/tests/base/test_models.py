@@ -1226,6 +1226,9 @@ class OrderTestCase(BaseQuotaTestCase):
         assert not self.order.can_modify_answers
         self.event.settings.set('invoice_address_asked', True)
         assert self.order.can_modify_answers
+        self.event.settings.set('invoice_address_asked', False)
+        self.event.settings.set('invoice_name_required', True)
+        assert self.order.can_modify_answers
         q = Question.objects.create(question='Foo', type=Question.TYPE_BOOLEAN, event=self.event)
         self.item1.questions.add(q)
         assert self.order.can_modify_answers

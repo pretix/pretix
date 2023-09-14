@@ -828,7 +828,7 @@ class Order(LockModel, LoggedModel):
                 if cp.has_checkin:
                     return False
 
-        if self.event.settings.get('invoice_address_asked', as_type=bool):
+        if self.event.settings.get('invoice_address_asked', as_type=bool) or self.event.settings.get('invoice_name_required', as_type=bool):
             return True
         ask_names = self.event.settings.get('attendee_names_asked', as_type=bool)
         for cp in positions:
