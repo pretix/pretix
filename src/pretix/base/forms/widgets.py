@@ -68,7 +68,7 @@ def format_placeholders_help_text(placeholders, event=None):
         for k, v in placeholders
     ]
     return _('Available placeholders: {list}').format(
-        list=', '.join(phs)
+        list=' '.join(phs)
     )
 
 
