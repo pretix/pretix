@@ -293,6 +293,16 @@ with that information::
     </pretix-widget>
 
 This works for the pretix Button as well, if you also specify a product.
+
+As data-attributes are reactive, you can change them with JavaScript as well. Please note, that once the user
+started the checkout process, we do not update the data-attributes in the existing checkout process to not
+interrupt the checkout UX.
+
+When updating data-attributes through JavaScript, make sure you do not have a stale reference to the HTMLNode of the
+widget. When the widget is created, the original HTMLNode can happen to be replaced. So make sure to always have a
+fresh reference like so  
+``document.querySelectorAll("pretix-widget, pretix-button, .pretix-widget-wrapper")``
+
 Currently, the following attributes are understood by pretix itself:
 
 * ``data-email`` will pre-fill the order email field as well as the attendee email field (if enabled).
@@ -329,125 +339,72 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
 * If you use the campaigns plugin, you can pass a campaign ID as a value to ``data-campaign``. This way, all orders
   made through this widget will be counted towards this campaign.
 
-* If you use the tracking plugin, you can enable cross-domain tracking. To do so, you need to initialize the 
-  pretix-widget manually. Use the html code to embed the widget and add one the following code snippets. Make sure to
-  replace all occurrences of <MEASUREMENT_ID> with your Google Analytics MEASUREMENT_ID (UA-XXXXXXX-X or G-XXXXXXXX)
+* If you use the tracking plugin, you can enable cross-domain tracking. Please note: when you run your pretix-shop on a
+  subdomain of your main tracking domain, then you do not need cross-domain tracking as tracking automatically works
+  across subdomains. See :ref:`custom_domain` for how to set this up.
 
-  Please also make sure to add the embedding website to your `Referral exclusions
+  Please make sure to add the embedding website to your `Referral exclusions
   <https://support.google.com/analytics/answer/2795830>`_ in your Google Analytics settings.
 
-  If you use Google Analytics 4 (GA4 – G-XXXXXXXX)::
+  Add Google Analytics as you normally would with all your `window.dataLayer` and `gtag` configurations. Also add the
+  widget code normally. Then you have two options:
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<MEASUREMENT_ID>"></script>
-    <script type="text/javascript">
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '<MEASUREMENT_ID>');
+  * Block loading of the widget at most 2 seconds or until Google’s client- and session-ID are loaded. This method
+    uses `window.pretixWidgetCallback`. Note that if it takes longer than 2 seconds to load, client- and session-ID
+    are never passed to the widget. Make sure to replace all occurrences of <MEASUREMENT_ID> with your Google 
+    Analytics MEASUREMENT_ID (G-XXXXXXXX)
 
-        window.pretixWidgetCallback = function () {
-            window.PretixWidget.build_widgets = false;
-            window.addEventListener('load', function() { // Wait for GA to be loaded
-                if (!window['google_tag_manager']) {
-                    window.PretixWidget.buildWidgets();
-                    return;
-                }
+        <script type="text/javascript">
+            window.pretixWidgetCallback = function () {
+                window.PretixWidget.build_widgets = false;
+                window.addEventListener('load', function() { // Wait for GA to be loaded
+                    if (!window['google_tag_manager']) {
+                        window.PretixWidget.buildWidgets();
+                        return;
+                    }
 
-                var clientId;
-                var sessionId;
-                var loadingTimeout;
-                function build() {
-                    // use loadingTimeout to make sure build() is only called once
-                    if (!loadingTimeout) return;
-                    window.clearTimeout(loadingTimeout);
-                    loadingTimeout = null;
-                    if (clientId) window.PretixWidget.widget_data["tracking-ga-id"] = clientId;
-                    if (sessionId) window.PretixWidget.widget_data["tracking-ga-sessid"] = sessionId;
-                    window.PretixWidget.buildWidgets();
-                };
-                // make sure to build pretix-widgets if gtag fails to load either client_id or session_id
-                loadingTimeout = window.setTimeout(build, 2000);
+                    var clientId;
+                    var sessionId;
+                    var loadingTimeout;
+                    function build() {
+                        // use loadingTimeout to make sure build() is only called once
+                        if (!loadingTimeout) return;
+                        window.clearTimeout(loadingTimeout);
+                        loadingTimeout = null;
+                        if (clientId) window.PretixWidget.widget_data["tracking-ga-id"] = clientId;
+                        if (sessionId) window.PretixWidget.widget_data["tracking-ga-sessid"] = sessionId;
+                        window.PretixWidget.buildWidgets();
+                    };
+                    // make sure to build pretix-widgets if gtag fails to load either client_id or session_id
+                    loadingTimeout = window.setTimeout(build, 2000);
 
+                    gtag('get', '<MEASUREMENT_ID>', 'client_id', function(id) {
+                        clientId = id;
+                        if (sessionId !== undefined) build();
+                    });
+                    gtag('get', '<MEASUREMENT_ID>', 'session_id', function(id) {
+                        sessionId = id;
+                        if (clientId !== undefined) build();
+                    });
+                });
+            };
+        </script>
+
+  * Or asynchronously set data-attributes – the widgets are shown immediately, but once the user has started checkout,
+    data-attributes are not updated. Make sure to replace all occurrences of <MEASUREMENT_ID> with your Google 
+    Analytics MEASUREMENT_ID (G-XXXXXXXX)
+
+        <script type="text/javascript">
+            window.addEventListener('load', function() {
                 gtag('get', '<MEASUREMENT_ID>', 'client_id', function(id) {
-                    clientId = id;
-                    if (sessionId !== undefined) build();
+                    const widgets = document.querySelectorAll("pretix-widget, pretix-button, .pretix-widget-wrapper");
+                    widgets.forEach(widget => widget.setAttribute("data-tracking-ga-id", id))
                 });
                 gtag('get', '<MEASUREMENT_ID>', 'session_id', function(id) {
-                    sessionId = id;
-                    if (clientId !== undefined) build();
+                    const widgets = document.querySelectorAll("pretix-widget, pretix-button, .pretix-widget-wrapper");
+                    widgets.forEach(widget => widget.setAttribute("data-tracking-ga-sessid", id))
                 });
             });
-        };
-    </script>
-
-  If you use Universal Analytics with ``gtag.js`` (UA-XXXXXXX-X)::
-
-    <script async src="https://www.googletagmanager.com/gtag/js?id=<MEASUREMENT_ID>"></script>
-    <script type="text/javascript">
-        window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
-        gtag('js', new Date());
-        gtag('config', '<MEASUREMENT_ID>');
-
-        window.pretixWidgetCallback = function () {
-            window.PretixWidget.build_widgets = false;
-            window.addEventListener('load', function() { // Wait for GA to be loaded
-                if (!window['google_tag_manager']) {
-                    window.PretixWidget.buildWidgets();
-                    return;
-                }
-
-                // make sure to build pretix-widgets if gtag fails to load client_id
-                var loadingTimeout = window.setTimeout(function() {
-                    loadingTimeout = null;
-                    window.PretixWidget.buildWidgets();
-                }, 1000);
-
-                gtag('get', '<MEASUREMENT_ID>', 'client_id', function(id) {
-                    if (loadingTimeout) {
-                        window.clearTimeout(loadingTimeout);
-                        window.PretixWidget.widget_data["tracking-ga-id"] = id;
-                        window.PretixWidget.buildWidgets();
-                    }
-                });
-            });
-        };
-    </script>
-
-  If you use ``analytics.js`` (Universal Analytics)::
-
-    <script>
-        (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-        (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-        m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-        })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
-
-        ga('create', '<MEASUREMENT_ID>', 'auto');
-        ga('send', 'pageview');
-
-        window.pretixWidgetCallback = function () {
-            window.PretixWidget.build_widgets = false;
-            window.addEventListener('load', function() { // Wait for GA to be loaded
-                if (!window['ga'] || !ga.create) {
-                    // Tracking is probably blocked
-                    window.PretixWidget.buildWidgets()
-                    return;
-                }
-
-                var loadingTimeout = window.setTimeout(function() {
-                    loadingTimeout = null;
-                    window.PretixWidget.buildWidgets();
-                }, 1000);
-                ga(function(tracker) {
-                    if (loadingTimeout) {
-                        window.clearTimeout(loadingTimeout);
-                        window.PretixWidget.widget_data["tracking-ga-id"] = tracker.get('clientId');
-                        window.PretixWidget.buildWidgets();
-                    }
-                });
-            });
-        };
-    </script>
-
+        </script>  
 
 .. _Let's Encrypt: https://letsencrypt.org/
