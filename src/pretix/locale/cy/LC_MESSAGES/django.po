@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-14 15:37+0000\n"
+"PO-Revision-Date: 2023-09-15 06:00+0000\n"
 "Last-Translator: Ed Bennett <pyedward@swansea.ac.uk>\n"
 "Language-Team: Welsh <https://translate.pretix.eu/projects/pretix/pretix/cy/>"
 "\n"
@@ -4099,7 +4099,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:608
 msgid "Validity"
-msgstr ""
+msgstr "Dilysrwydd"
 
 #: pretix/base/models/items.py:610
 msgid ""
@@ -4127,15 +4127,15 @@ msgstr ""
 
 #: pretix/base/models/items.py:626
 msgid "Hours"
-msgstr ""
+msgstr "Awr"
 
 #: pretix/base/models/items.py:630
 msgid "Days"
-msgstr ""
+msgstr "Diwrnod"
 
 #: pretix/base/models/items.py:634
 msgid "Months"
-msgstr ""
+msgstr "Misoedd"
 
 #: pretix/base/models/items.py:637
 msgid "Customers can select the validity start date"
@@ -4405,7 +4405,7 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:40
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:54
 msgid "Time"
-msgstr ""
+msgstr "Amser"
 
 #: pretix/base/models/items.py:1461
 msgid "Date and time"
@@ -14384,7 +14384,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:20
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:20
 msgid "Save"
-msgstr ""
+msgstr "Cadw"
 
 #: pretix/control/templates/pretixcontrol/auth/register.html:7
 msgid "Create a new account"
@@ -19620,11 +19620,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:66
 msgid "Accept"
-msgstr ""
+msgstr "Derbyn"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:69
 msgid "Decline"
-msgstr ""
+msgstr "Gwrthod"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:84
 msgid "Other organizers accepting gift cards from you"
@@ -26591,7 +26591,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:80
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:129
 msgid "Modify"
-msgstr ""
+msgstr "Newid"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:79
 msgid "Modify invoice information"
@@ -27741,7 +27741,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:150
 msgid "Print"
-msgstr ""
+msgstr "Argraffu"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:152
 #, python-format
@@ -28182,7 +28182,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:5
 msgid "Calendar"
-msgstr ""
+msgstr "Calendr"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:52
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:65
@@ -28206,12 +28206,12 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:12
 msgid "Week"
-msgstr ""
+msgstr "Wythnos"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:17
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:25
 msgid "Month"
-msgstr ""
+msgstr "Mis"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:27
 msgid "iCal"
@@ -28312,7 +28312,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
-msgstr ""
+msgstr "Helo!"
 
 #: pretix/presale/templates/pretixpresale/index.html:9
 #, python-format
@@ -28336,7 +28336,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
-msgstr ""
+msgstr "Mwynhauwch!"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:6
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:6
@@ -28447,7 +28447,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
 msgid "Registration"
-msgstr ""
+msgstr "Cofrestriad"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:11
 #, python-format
