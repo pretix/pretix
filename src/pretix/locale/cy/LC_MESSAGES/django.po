@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-14 08:51+0000\n"
+"PO-Revision-Date: 2023-09-14 10:02+0000\n"
 "Last-Translator: Ed Bennett <pyedward@swansea.ac.uk>\n"
 "Language-Team: Welsh <https://translate.pretix.eu/projects/pretix/pretix/cy/>"
 "\n"
@@ -17870,7 +17870,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/change.html:250
 msgid "–"
-msgstr ""
+msgstr "-"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:274
 msgid ""
@@ -19767,7 +19767,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:30
 msgctxt "reusable_media"
 msgid "Identifier"
-msgstr ""
+msgstr "Dynodwr"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:56
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:28
@@ -19779,7 +19779,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:42
 msgctxt "reusable_media"
 msgid "Connections"
-msgstr ""
+msgstr "Cysylltiadau"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:12
@@ -19878,7 +19878,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:6
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:6
 msgid "Team:"
-msgstr ""
+msgstr "Tîm:"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:30
@@ -19899,7 +19899,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:21
 msgid "Member"
-msgstr ""
+msgstr "Aelod"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:32
 msgid "Two-factor authentication enabled"
@@ -19943,7 +19943,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:38
 msgid "Members"
-msgstr ""
+msgstr "Aelodau"
 
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:54
 #, python-format
@@ -20063,23 +20063,23 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:31
 #: pretix/plugins/banktransfer/refund_export.py:46
 msgid "Code"
-msgstr ""
+msgstr "Côd"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:35
 msgid "Paste"
-msgstr ""
+msgstr "Gludo"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:39
 msgid "Undo"
-msgstr ""
+msgstr "Dad-wneud"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:43
 msgid "Redo"
-msgstr ""
+msgstr "Ail-wneud"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:48
 msgid "Editor"
-msgstr ""
+msgstr "Golygydd"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:66
 msgid ""
@@ -20131,7 +20131,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:141
 #: pretix/control/templates/pretixcontrol/pdf/index.html:173
 msgid "Loading…"
-msgstr ""
+msgstr "Llwytho…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:144
 msgid "Start editing"
@@ -20139,11 +20139,11 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:159
 msgid "Cut"
-msgstr ""
+msgstr "Torri"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:163
 msgid "Copy"
-msgstr ""
+msgstr "Copïo"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:180
 msgid "Layout name"
@@ -20231,15 +20231,15 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:363
 msgid "Style"
-msgstr ""
+msgstr "Arddull"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:365
 msgid "Dark"
-msgstr ""
+msgstr "Tywyll"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:366
 msgid "Light"
-msgstr ""
+msgstr "Golau"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:372
 msgid "Image content"
@@ -20250,7 +20250,7 @@ msgstr ""
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:34
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:29
 msgid "Content"
-msgstr ""
+msgstr "Cynnwys"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:392
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:50
@@ -20268,7 +20268,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:401
 msgid "Other…"
-msgstr ""
+msgstr "Arall…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:411
 msgid "Show available placeholders"
@@ -20470,12 +20470,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:258
 msgctxt "subevent"
 msgid "Preview"
-msgstr ""
+msgstr "Rhagolwg"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:265
 msgctxt "subevent"
 msgid "Times"
-msgstr ""
+msgstr "Amserau"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:339
 msgid "Start of first slot"
@@ -20495,7 +20495,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:370
 msgid "Create"
-msgstr ""
+msgstr "Creu"
 
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:377
 msgid "Add a single time slot"
