@@ -72,18 +72,22 @@
                 {% endif %}
             </p>
 
-            <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
-            <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create multiple new vouchers" %}</a>
+            {% if "can_change_vouchers" in request.eventpermset %}
+                <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                        class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
+                <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                        class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create multiple new vouchers" %}</a>
+            {% endif %}
         </div>
     {% else %}
         <p>
-            <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
-            <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
-                    class="btn btn-default"><i class="fa fa-plus"></i>
-                {% trans "Create multiple new vouchers" %}</a>
+            {% if "can_change_vouchers" in request.eventpermset %}
+                <a href="{% url "control:event.vouchers.add" organizer=request.event.organizer.slug event=request.event.slug %}"
+                        class="btn btn-default"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
+                <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
+                        class="btn btn-default"><i class="fa fa-plus"></i>
+                    {% trans "Create multiple new vouchers" %}</a>
+            {% endif %}
             <a href="?{% url_replace request "download" "yes" %}"
                     class="btn btn-default"><i class="fa fa-download"></i>
                 {% trans "Download list" %}</a>
@@ -94,13 +98,13 @@
                 <table class="table table-hover table-quotas">
                     <thead>
                     <tr>
-                        <th>
-                            {% if "can_change_vouchers" in request.eventpermset %}
+                        {% if "can_change_vouchers" in request.eventpermset %}
+                            <th>
                                 <label aria-label="{% trans "select all rows for batch-operation" %}" class="batch-select-label">
                                     <input type="checkbox" data-toggle-table />
                                 </label>
-                            {% endif %}
-                        </th>
+                            </th>
+                        {% endif %}
                         <th>
                             {% trans "Voucher code" %}
                             <a href="?{% url_replace request 'ordering' '-code' %}"><i class="fa fa-caret-down"></i></a>
@@ -139,13 +143,13 @@
                     <tbody>
                     {% for v in vouchers %}
                         <tr>
-                            <td>
-                                {% if "can_change_vouchers" in request.eventpermset %}
+                            {% if "can_change_vouchers" in request.eventpermset %}
+                                <td>
                                     <label aria-label="{% trans "select row for batch-operation" %}" class="batch-select-label">
                                         <input type="checkbox" name="voucher" class="batch-select-checkbox" value="{{ v.pk }}"/>
                                     </label>
-                                {% endif %}
-                            </td>
+                                </td>
+                            {% endif %}
                             <td>
                                 {% if not v.is_active %}<del>{% endif %}
                                 <strong><a href="{% url "control:event.voucher" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}">{{ v.code }}</a></strong>
@@ -186,11 +190,13 @@
                                 </td>
                             {% endif %}
                             <td class="text-right flip">
-                                <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ v.id }}"
-                                   class="btn btn-sm btn-default" title="{% trans "Use as a template for new vouchers" %}" data-toggle="tooltip">
-                                    <span class="fa fa-copy"></span>
-                                </a>
-                                <a href="{% url "control:event.voucher.delete" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                {% if "can_change_vouchers" in request.eventpermset %}
+                                    <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ v.id }}"
+                                       class="btn btn-sm btn-default" title="{% trans "Use as a template for new vouchers" %}" data-toggle="tooltip">
+                                        <span class="fa fa-copy"></span>
+                                    </a>
+                                    <a href="{% url "control:event.voucher.delete" organizer=request.event.organizer.slug event=request.event.slug voucher=v.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

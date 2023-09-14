@@ -40,7 +40,7 @@ import bleach
 from defusedcsv import csv
 from django.conf import settings
 from django.contrib import messages
-from django.core.exceptions import ValidationError
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import connection, transaction
 from django.db.models import Exists, OuterRef, Sum
 from django.http import (
@@ -269,7 +269,7 @@ class VoucherDelete(EventPermissionRequiredMixin, CompatDeleteView):
 class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
     model = Voucher
     template_name = 'pretixcontrol/vouchers/detail.html'
-    permission = 'can_change_vouchers'
+    permission = ('can_change_vouchers', 'can_view_vouchers')
     context_object_name = 'voucher'
 
     def form_invalid(self, form):
@@ -282,6 +282,14 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
             if response:
                 form_class = response
         return form_class
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        if not self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_change_vouchers',
+                                                      request=self.request):
+            for f in form.fields.values():
+                f.disabled = True
+        return form
 
     def get_object(self, queryset=None) -> VoucherForm:
         url = resolve(self.request.path_info)
@@ -304,6 +312,9 @@ class VoucherUpdate(EventPermissionRequiredMixin, UpdateView):
 
     @transaction.atomic
     def post(self, request, *args, **kwargs):
+        if not request.user.has_event_permission(request.organizer, request.event, 'can_change_vouchers',
+                                                 request=request):
+            raise PermissionDenied()
         return super().post(request, *args, **kwargs)
 
     def get_success_url(self) -> str:

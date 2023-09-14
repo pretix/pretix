@@ -114,10 +114,12 @@
                 </div>
             </div>
         </div>
-        <div class="form-group submit-group">
-            <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
-            </button>
-        </div>
+        {% if "can_change_vouchers" in request.eventpermset %}
+            <div class="form-group submit-group">
+                <button type="submit" class="btn btn-primary btn-save">
+                    {% trans "Save" %}
+                </button>
+            </div>
+        {% endif %}
     </form>
 {% endblock %}
