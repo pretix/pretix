@@ -3,11 +3,13 @@
 }
 
 .content-placeholder {
-  padding-left: 0;
-  padding-right: 0;
-  display: inline;
-  background: none;
+  padding-left: 2px;
+  padding-right: 2px;
+  background: $gray-lighter;
   border: 0;
+  border-radius: $border-radius-base;
+  margin-bottom: 4px;
+  margin-right: 6px;
 }
 
 td > .form-group {
