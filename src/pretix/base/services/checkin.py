@@ -259,7 +259,7 @@ def _logic_explain(rules, ev, rule_data, now_dt=None):
             var_weights[vname] = (1000, 0)
             var_texts[vname] = _('Ticket type not allowed')
         elif var == 'gate':
-            var_weights[vname] = (10, 0)
+            var_weights[vname] = (500, 0)
             var_texts[vname] = _('Wrong entrance gate')
         elif var in ('entries_number', 'entries_today', 'entries_days', 'minutes_since_last_entry', 'minutes_since_first_entry', 'now_isoweekday') \
                 or (isinstance(var, dict) and ("entries_since" in var or "entries_before" in var)):
