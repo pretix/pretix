@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-15 06:00+0000\n"
+"PO-Revision-Date: 2023-09-15 15:21+0000\n"
 "Last-Translator: Ed Bennett <pyedward@swansea.ac.uk>\n"
 "Language-Team: Welsh <https://translate.pretix.eu/projects/pretix/pretix/cy/>"
 "\n"
@@ -748,7 +748,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/questions.html:3
 #: pretix/control/templates/pretixcontrol/items/questions.html:5
 msgid "Questions"
-msgstr ""
+msgstr "Cwestiynau"
 
 #: pretix/base/exporters/customers.py:49 pretix/control/navigation.py:592
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:132
@@ -4421,7 +4421,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:17
 #: pretix/control/templates/pretixcontrol/items/questions.html:21
 msgid "Question"
-msgstr ""
+msgstr "Cwestiwn"
 
 #: pretix/base/models/items.py:1484 pretix/base/models/items.py:1727
 msgid ""
@@ -6863,7 +6863,7 @@ msgstr ""
 
 #: pretix/base/services/checkin.py:302 pretix/control/forms/filter.py:1135
 msgid "Saturday"
-msgstr ""
+msgstr "Dydd Sadwrn"
 
 #: pretix/base/services/checkin.py:303 pretix/control/forms/filter.py:1136
 msgid "Sunday"
@@ -14206,7 +14206,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/auth/invite.html:23
 #: pretix/control/templates/pretixcontrol/auth/register.html:18
 msgid "Login"
-msgstr ""
+msgstr "Mewngofnodi"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:27
 #: pretix/control/templates/pretixcontrol/auth/login.html:43
@@ -14791,7 +14791,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:32
 msgid "CSV"
-msgstr ""
+msgstr "CSV"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:73
 msgid "No attendee record was found."
@@ -14809,7 +14809,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/index.html:114
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:29
 msgid "Timestamp"
-msgstr ""
+msgstr "Stamp amser"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:125
 #: pretix/control/templates/pretixcontrol/orders/index.html:163
@@ -21651,7 +21651,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:86
 #: pretix/presale/views/widget.py:424
 msgid "Soon"
-msgstr ""
+msgstr "Yn fuan"
 
 #: pretix/control/views/dashboards.py:558
 #, python-brace-format
@@ -23262,7 +23262,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:50
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:24
 msgid "IBAN"
-msgstr ""
+msgstr "IBAN"
 
 #: pretix/plugins/banktransfer/payment.py:112
 #: pretix/plugins/banktransfer/payment.py:467
@@ -23271,7 +23271,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:66
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:25
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 #: pretix/plugins/banktransfer/payment.py:122
 msgid "Name of bank"
@@ -23416,7 +23416,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:33
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:41
 msgid "Bank"
-msgstr ""
+msgstr "Banc"
 
 #: pretix/plugins/banktransfer/payment.py:548
 msgid "Invalid IBAN/BIC"
@@ -23446,7 +23446,7 @@ msgstr ""
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:12
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:9
 msgid "Payer"
-msgstr ""
+msgstr "Talwr"
 
 #: pretix/plugins/banktransfer/signals.py:55
 #: pretix/plugins/banktransfer/signals.py:91
@@ -23616,7 +23616,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:92
 msgid "Clear"
-msgstr ""
+msgstr "Clirio"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:101
 msgid "Discard all"
@@ -23831,7 +23831,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:37
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:49
 msgid "Retry"
-msgstr ""
+msgstr "Ail-geisio"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
@@ -23881,11 +23881,11 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/views.py:356
 msgid "min"
-msgstr ""
+msgstr "isaf."
 
 #: pretix/plugins/banktransfer/views.py:357
 msgid "max"
-msgstr ""
+msgstr "uchaf."
 
 #: pretix/plugins/banktransfer/views.py:366
 msgid "Filter form is not valid."
@@ -24050,7 +24050,7 @@ msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:668
 msgid "Offline"
-msgstr ""
+msgstr "All-lein"
 
 #: pretix/plugins/checkinlists/exporters.py:669
 msgid "Offline override"
@@ -24071,7 +24071,7 @@ msgstr ""
 
 #: pretix/plugins/checkinlists/exporters.py:726
 msgid "OK"
-msgstr ""
+msgstr "Iawn"
 
 #: pretix/plugins/checkinlists/exporters.py:758
 msgid "Successful scans only"
@@ -24748,7 +24748,7 @@ msgstr ""
 
 #: pretix/plugins/returnurl/signals.py:86
 msgid "Redirection"
-msgstr ""
+msgstr "Ailgyfeiriad"
 
 #: pretix/plugins/returnurl/templates/returnurl/settings.html:7
 msgid ""
@@ -25257,7 +25257,7 @@ msgstr ""
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:8
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:10
 msgid "Statistics"
-msgstr ""
+msgstr "Ystadegau"
 
 #: pretix/plugins/statistics/apps.py:37
 msgid "Get a birds-eye view of your event sales with graphical statistics."
@@ -25506,7 +25506,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:343 pretix/plugins/stripe/payment.py:1407
 msgid "Alipay"
-msgstr ""
+msgstr "Alipay"
 
 #: pretix/plugins/stripe/payment.py:350 pretix/plugins/stripe/payment.py:1450
 msgid "Bancontact"
@@ -25707,7 +25707,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1541
 msgid "Belgium"
-msgstr ""
+msgstr "Gwlad Belg"
 
 #: pretix/plugins/stripe/payment.py:1542
 msgid "Netherlands"
@@ -25925,7 +25925,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:16
 msgid "Disconnect"
-msgstr ""
+msgstr "Datgysylltu"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:4
 msgid ""
@@ -26449,7 +26449,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:78
 #: pretix/presale/templates/pretixpresale/event/base.html:83
 msgid "Homepage"
-msgstr ""
+msgstr "Tudalen gartref"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:114
 #: pretix/presale/templates/pretixpresale/event/base.html:120
