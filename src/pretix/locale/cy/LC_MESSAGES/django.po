@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-15 15:21+0000\n"
+"PO-Revision-Date: 2023-09-16 08:00+0000\n"
 "Last-Translator: Ed Bennett <pyedward@swansea.ac.uk>\n"
 "Language-Team: Welsh <https://translate.pretix.eu/projects/pretix/pretix/cy/>"
 "\n"
@@ -15957,7 +15957,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:25
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:16
 msgid "Back"
-msgstr ""
+msgstr "Nôl"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:15
 msgid "Payment provider:"
@@ -24705,14 +24705,14 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:819
 #: pretix/plugins/reports/exporters.py:860
 msgid "Gross"
-msgstr ""
+msgstr "Crynswth"
 
 #: pretix/plugins/reports/exporters.py:538
 #: pretix/plugins/reports/exporters.py:768
 #: pretix/plugins/reports/exporters.py:820
 #: pretix/plugins/reports/exporters.py:860
 msgid "Tax"
-msgstr ""
+msgstr "Treth"
 
 #: pretix/plugins/reports/exporters.py:623
 msgid "Tax split list"
@@ -25348,7 +25348,7 @@ msgstr ""
 #: pretix/plugins/stripe/apps.py:31 pretix/plugins/stripe/apps.py:34
 #: pretix/plugins/stripe/payment.py:153
 msgid "Stripe"
-msgstr ""
+msgstr "Stripe"
 
 #: pretix/plugins/stripe/apps.py:40
 msgid ""
