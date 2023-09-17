@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
 "PO-Revision-Date: 2023-09-17 15:52+0000\n"
-"Last-Translator: Aufa Fadhlurohman <aufafadlurohman@gmail.com>\n"
+"Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix/id/>\n"
 "Language: id\n"
@@ -25,7 +25,7 @@ msgstr "Inggris"
 
 #: pretix/_base_settings.py:79
 msgid "German"
-msgstr "German"
+msgstr "Jerman"
 
 #: pretix/_base_settings.py:80
 msgid "German (informal)"
@@ -170,12 +170,12 @@ msgstr ""
 #: pretix/api/models.py:113 pretix/base/models/devices.py:123
 #: pretix/base/models/organizer.py:264
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "Semua acara (termasuk yang baru dibuat)"
 
 #: pretix/api/models.py:114 pretix/base/models/devices.py:124
 #: pretix/base/models/organizer.py:265
 msgid "Limit to events"
-msgstr ""
+msgstr "Batasi pada acara"
 
 #: pretix/api/models.py:115 pretix/base/exporters/orderlist.py:278
 #: pretix/base/exporters/orderlist.py:1029 pretix/base/models/orders.py:228
@@ -197,13 +197,13 @@ msgstr ""
 #: pretix/api/serializers/checkin.py:66 pretix/base/models/event.py:1595
 #: pretix/base/models/items.py:1715 pretix/base/models/items.py:1973
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "Satu atau lebih item bukan milik acara ini."
 
 #: pretix/api/serializers/checkin.py:70 pretix/api/serializers/checkin.py:73
 #: pretix/base/models/items.py:1984 pretix/base/models/items.py:1987
 #: pretix/base/models/waitinglist.py:308 pretix/base/models/waitinglist.py:311
 msgid "The subevent does not belong to this event."
-msgstr ""
+msgstr "Sub-acara tersebut bukan milik acara ini."
 
 #: pretix/api/serializers/checkin.py:77
 msgid "Unknown sales channel."
@@ -214,6 +214,8 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
+"Acara tidak dapat dibuat sebagai 'berlangsung'. Kuota dan pembayaran harus "
+"ditambahkan ke acara sebelum penjualan dapat ditayangkan."
 
 #: pretix/api/serializers/event.py:232 pretix/api/serializers/event.py:530
 #, python-brace-format
@@ -457,30 +459,30 @@ msgstr ""
 
 #: pretix/api/webhooks.py:309
 msgid "Event created"
-msgstr ""
+msgstr "Acara dibuat"
 
 #: pretix/api/webhooks.py:313
 msgid "Event details changed"
-msgstr ""
+msgstr "Detail acara berubah"
 
 #: pretix/api/webhooks.py:317
 msgid "Event deleted"
-msgstr ""
+msgstr "Acara dihapus"
 
 #: pretix/api/webhooks.py:321
 msgctxt "subevent"
 msgid "Event series date added"
-msgstr ""
+msgstr "Tanggal rangkaian acara ditambahkan"
 
 #: pretix/api/webhooks.py:325
 msgctxt "subevent"
 msgid "Event series date changed"
-msgstr ""
+msgstr "Tanggal rangkaian acara diubah"
 
 #: pretix/api/webhooks.py:329
 msgctxt "subevent"
 msgid "Event series date deleted"
-msgstr ""
+msgstr "Tanggal rangkaian acara dihapus"
 
 #: pretix/api/webhooks.py:333
 msgid ""
@@ -956,7 +958,7 @@ msgstr ""
 #: pretix/base/exporters/dekodi.py:105
 #, python-brace-format
 msgid "Event ticket {event}-{code}"
-msgstr ""
+msgstr "Tiket acara {event}-{code}"
 
 #: pretix/base/exporters/dekodi.py:220 pretix/base/exporters/invoices.py:74
 #: pretix/base/exporters/orderlist.py:127
@@ -969,7 +971,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:671
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
 msgid "Date range"
-msgstr ""
+msgstr "Rentang tanggal"
 
 #: pretix/base/exporters/dekodi.py:223 pretix/base/exporters/invoices.py:77
 msgid ""
@@ -979,18 +981,20 @@ msgstr ""
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
-msgstr ""
+msgstr "Data acara"
 
 #: pretix/base/exporters/events.py:48
 msgctxt "export_category"
 msgid "Event data"
-msgstr ""
+msgstr "Data acara"
 
 #: pretix/base/exporters/events.py:49
 msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
 msgstr ""
+"Unduh spreadsheet berisi informasi tentang semua acara di akun penyelenggara "
+"ini."
 
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/waitinglist.py:114
 #: pretix/base/models/event.py:536 pretix/base/pdf.py:225
@@ -999,7 +1003,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:62
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:58
 msgid "Event name"
-msgstr ""
+msgstr "Nama acara"
 
 #: pretix/base/exporters/events.py:58 pretix/base/models/event.py:552
 #: pretix/base/models/organizer.py:89
@@ -1013,7 +1017,7 @@ msgstr ""
 
 #: pretix/base/exporters/events.py:60 pretix/base/models/event.py:556
 msgid "Event currency"
-msgstr ""
+msgstr "Mata uang acara"
 
 #: pretix/base/exporters/events.py:61 pretix/base/models/auth.py:263
 #: pretix/base/models/exports.py:133 pretix/control/forms/exports.py:93
@@ -1025,14 +1029,14 @@ msgstr ""
 #: pretix/base/settings.py:3128 pretix/control/forms/subevents.py:472
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
-msgstr ""
+msgstr "Waktu mulai acara"
 
 #: pretix/base/exporters/events.py:63 pretix/base/models/event.py:561
 #: pretix/base/models/event.py:1406 pretix/base/pdf.py:287
 #: pretix/control/forms/subevents.py:477
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
-msgstr ""
+msgstr "Waktu berakhir acara"
 
 #: pretix/base/exporters/events.py:64 pretix/base/models/event.py:563
 #: pretix/base/models/event.py:1408 pretix/control/forms/subevents.py:482
@@ -1221,7 +1225,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:315
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:189
 msgid "Address"
-msgstr ""
+msgstr "Alamat"
 
 #: pretix/base/exporters/invoices.py:207 pretix/base/exporters/invoices.py:215
 #: pretix/base/exporters/invoices.py:333 pretix/base/exporters/invoices.py:341
@@ -1236,7 +1240,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:520
 #: pretix/plugins/reports/exporters.py:814
 msgid "ZIP code"
-msgstr ""
+msgstr "Kode Pos"
 
 #: pretix/base/exporters/invoices.py:208 pretix/base/exporters/invoices.py:216
 #: pretix/base/exporters/invoices.py:334 pretix/base/exporters/invoices.py:342
@@ -1251,7 +1255,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:521
 #: pretix/plugins/reports/exporters.py:815
 msgid "City"
-msgstr ""
+msgstr "Kota"
 
 #: pretix/base/exporters/invoices.py:209 pretix/base/exporters/invoices.py:217
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:343
@@ -1272,7 +1276,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:96
 #: pretix/presale/templates/pretixpresale/event/order.html:319
 msgid "Country"
-msgstr ""
+msgstr "Negara"
 
 #: pretix/base/exporters/invoices.py:210 pretix/base/exporters/invoices.py:336
 msgid "Tax ID"
@@ -1441,11 +1445,11 @@ msgstr ""
 
 #: pretix/base/exporters/invoices.py:325
 msgid "Event start date"
-msgstr ""
+msgstr "Tanggal mulai acara"
 
 #: pretix/base/exporters/invoices.py:349 pretix/base/pdf.py:279
 msgid "Event end date"
-msgstr ""
+msgstr "Tanggal berakhir acara"
 
 #: pretix/base/exporters/items.py:50
 msgid "Product data"
@@ -1717,7 +1721,7 @@ msgstr ""
 #: pretix/base/pdf.py:235 pretix/plugins/badges/exporters.py:459
 #: pretix/plugins/ticketoutputpdf/exporters.py:96
 msgid "Event date"
-msgstr ""
+msgstr "Tanggal acara"
 
 #: pretix/base/exporters/orderlist.py:137
 msgid ""
@@ -1734,7 +1738,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:113 pretix/control/forms/event.py:1579
 #: pretix/control/forms/organizer.py:110
 msgid "Event slug"
-msgstr ""
+msgstr "Slug acara"
 
 #: pretix/base/exporters/orderlist.py:256 pretix/base/notifications.py:201
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:25
@@ -1872,8 +1876,9 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:617 pretix/base/orderimport.py:700
 #: pretix/control/forms/filter.py:573
 #: pretix/control/templates/pretixcontrol/order/index.html:182
+#, fuzzy
 msgid "Sales channel"
-msgstr ""
+msgstr "Kanal penjualan"
 
 #: pretix/base/exporters/orderlist.py:279
 #: pretix/base/exporters/orderlist.py:585 pretix/base/models/orders.py:233
@@ -1908,7 +1913,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:435
 #: pretix/base/exporters/orderlist.py:846
 msgid "Fee type"
-msgstr ""
+msgstr "Jenis biaya"
 
 #: pretix/base/exporters/orderlist.py:437
 #: pretix/base/exporters/orderlist.py:555
@@ -1952,7 +1957,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:839
 #: pretix/plugins/checkinlists/exporters.py:663
 msgid "Position ID"
-msgstr ""
+msgstr "ID Posisi"
 
 #: pretix/base/exporters/orderlist.py:547
 #: pretix/base/exporters/orderlist.py:850
@@ -1985,7 +1990,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_change_form.html:20
 msgctxt "subevent"
 msgid "Date"
-msgstr ""
+msgstr "Tanggal"
 
 #: pretix/base/exporters/orderlist.py:548
 #: pretix/base/exporters/orderlist.py:1091
@@ -2197,7 +2202,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:44
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:71
 msgid "Event"
-msgstr ""
+msgstr "Acara"
 
 #: pretix/base/exporters/orderlist.py:829
 #: pretix/base/exporters/orderlist.py:1168
@@ -2211,7 +2216,7 @@ msgstr ""
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:15
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:65
 msgid "Currency"
-msgstr ""
+msgstr "Mata uang"
 
 #: pretix/base/exporters/orderlist.py:835
 msgid "Transaction date"
@@ -2237,7 +2242,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:849
 msgctxt "subevent"
 msgid "Date ID"
-msgstr ""
+msgstr "ID Tanggal"
 
 #: pretix/base/exporters/orderlist.py:854
 msgid "Tax rule ID"
@@ -2305,7 +2310,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:355
 #: pretix/presale/templates/pretixpresale/event/order.html:66
 msgid "Order"
-msgstr ""
+msgstr "Pesan"
 
 #: pretix/base/exporters/orderlist.py:1028
 #: pretix/base/exporters/orderlist.py:1211
@@ -2667,7 +2672,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/index.html:100
 msgctxt "subevents"
 msgid "Date"
-msgstr ""
+msgstr "Tanggal"
 
 #: pretix/base/exporters/waitinglist.py:119
 #: pretix/control/views/waitinglist.py:308
@@ -2950,7 +2955,7 @@ msgstr ""
 #: pretix/base/invoice.py:458
 msgctxt "invoice"
 msgid "Event"
-msgstr ""
+msgstr "Acara"
 
 #: pretix/base/invoice.py:484
 #, python-brace-format
@@ -3338,7 +3343,7 @@ msgstr ""
 #: pretix/base/models/customers.py:299 pretix/base/models/orders.py:1392
 #: pretix/base/models/orders.py:2971 pretix/base/settings.py:1093
 msgid "Company name"
-msgstr ""
+msgstr "Nama perusahaan"
 
 #: pretix/base/models/customers.py:303 pretix/base/models/orders.py:1396
 #: pretix/base/models/orders.py:2978 pretix/base/settings.py:81
@@ -4134,7 +4139,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:634
 msgid "Months"
-msgstr ""
+msgstr "Bulan"
 
 #: pretix/base/models/items.py:637
 msgid "Customers can select the validity start date"
@@ -4408,7 +4413,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1461
 msgid "Date and time"
-msgstr ""
+msgstr "Tanggal dan waktu"
 
 #: pretix/base/models/items.py:1462
 msgid "Country code (ISO 3166-1 alpha-2)"
@@ -5017,7 +5022,7 @@ msgstr ""
 #: pretix/control/views/vouchers.py:120
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html:8
 msgid "Value"
-msgstr ""
+msgstr "Nilai"
 
 #: pretix/base/models/orders.py:2358
 msgid "Order position"
@@ -8059,7 +8064,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1144
 msgid "EU VAT ID"
-msgstr ""
+msgstr "ID EU VAT"
 
 #: pretix/base/settings.py:1157
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
@@ -10767,7 +10772,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:111
 #: pretix/control/templates/pretixcontrol/pdf/index.html:424
 msgid "Text"
-msgstr ""
+msgstr "Teks"
 
 #: pretix/control/forms/event.py:1079
 msgid "Subject (sent by admin)"
@@ -12334,8 +12339,9 @@ msgid "Please confirm that you want to cancel ALL dates in this event series."
 msgstr ""
 
 #: pretix/control/forms/organizer.py:87
+#, fuzzy
 msgid "This slug is already in use. Please choose a different one."
-msgstr ""
+msgstr "This slug is already in use. Please choose a different one."
 
 #: pretix/control/forms/organizer.py:247
 msgid ""
@@ -15133,7 +15139,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:15
 msgid "Your upcoming events"
-msgstr ""
+msgstr "Acara mendatang Anda"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:20
 #: pretix/control/templates/pretixcontrol/events/create_base.html:4
@@ -15147,7 +15153,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:39
 msgid "View all upcoming events"
-msgstr ""
+msgstr "Lihat seluruh acara mendatang"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:44
 msgid "Your most recent events"
@@ -15862,7 +15868,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:97
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:120
 msgid "Preview"
-msgstr ""
+msgstr "Pratinjau"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:87
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:58
@@ -28468,11 +28474,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:25
 msgid "Past events"
-msgstr ""
+msgstr "Acara yang sudah berlalu"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:27
 msgid "Upcoming events"
-msgstr ""
+msgstr "Acara mendatang"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:124
 msgid "More info"
@@ -28488,11 +28494,11 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:135
 msgid "No public upcoming events found."
-msgstr ""
+msgstr "Tidak ada acara mendatang publik yang ditemukan."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:135
 msgid "Show past events"
-msgstr ""
+msgstr "Lihat acara yang lalu"
 
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
