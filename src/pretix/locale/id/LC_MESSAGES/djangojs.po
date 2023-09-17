@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-07-21 11:46+0000\n"
-"PO-Revision-Date: 2023-09-07 15:55+0000\n"
+"PO-Revision-Date: 2023-09-17 15:52+0000\n"
 "Last-Translator: Aufa Fadhlurohman <aufafadlurohman@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/id/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18.2\n"
+"X-Generator: Weblate 5.0.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -72,27 +72,30 @@ msgstr "Bancontact"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:44
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:45
 msgid "SOFORT"
-msgstr ""
+msgstr "SOFORT"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:46
+#, fuzzy
 msgid "eps"
-msgstr ""
+msgstr "eps"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:47
+#, fuzzy
 msgid "MyBank"
-msgstr ""
+msgstr "MyBank"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:48
+#, fuzzy
 msgid "Przelewy24"
-msgstr ""
+msgstr "Przelewy24"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:49
 msgid "Verkkopankki"
-msgstr ""
+msgstr "Verkkopankki"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:50
 msgid "PayU"
@@ -213,7 +216,7 @@ msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:40
 msgid "Scan a ticket or search and press return…"
-msgstr ""
+msgstr "Pindai tiket atau cari dan tekan kembali…"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:41
 msgid "Load more"
@@ -353,7 +356,7 @@ msgstr ""
 #: pretix/static/pretixbase/js/asynctask.js:160
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
 msgid "The request took too long. Please try again."
-msgstr ""
+msgstr "Permintaan terlalu lama. Silakan coba lagi."
 
 #: pretix/static/pretixbase/js/asynctask.js:201
 #: pretix/static/pretixcontrol/js/ui/mail.js:26
@@ -521,7 +524,7 @@ msgstr ""
 #: pretix/static/pretixcontrol/js/ui/editor.js:1033
 #: pretix/static/pretixcontrol/js/ui/editor.js:1083
 msgid "Error while uploading your PDF file, please try again."
-msgstr ""
+msgstr "Terjadi kesalahan saat mengunggah file PDF Anda, coba lagi."
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:1066
 msgid "Do you really want to leave the editor without saving your changes?"
@@ -546,6 +549,7 @@ msgstr ""
 #: pretix/static/pretixcontrol/js/ui/main.js:315
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
+"Warna Anda memiliki kontras yang layak dan mungkin cukup bagus untuk dibaca!"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:319
 msgid ""
@@ -640,7 +644,7 @@ msgstr ""
 
 #: pretix/static/pretixpresale/js/ui/main.js:412
 msgid "Please enter a quantity for one of the ticket types."
-msgstr ""
+msgstr "Masukkan jumlah untuk salah satu jenis tiket."
 
 #: pretix/static/pretixpresale/js/ui/main.js:448
 msgid "required"
@@ -783,7 +787,7 @@ msgstr ""
 #: pretix/static/pretixpresale/js/widget/widget.js:41
 msgctxt "widget"
 msgid "The cart could not be created. Please try again later"
-msgstr ""
+msgstr "Keranjang tidak dapat dibuat. Silakan coba lagi nanti"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:42
 msgctxt "widget"
