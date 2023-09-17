@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-08 07:44+0000\n"
+"PO-Revision-Date: 2023-09-17 15:52+0000\n"
 "Last-Translator: Aufa Fadhlurohman <aufafadlurohman@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix/id/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18.2\n"
+"X-Generator: Weblate 5.0.2\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -23834,7 +23834,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
-msgstr ""
+msgstr "Komentar:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:98
 msgid "No order code detected"
@@ -24089,7 +24089,7 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:134 pretix/plugins/paypal2/payment.py:1008
 #: pretix/plugins/paypal2/payment.py:1009
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/apps.py:53
 msgid ""
@@ -25489,7 +25489,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:329 pretix/plugins/stripe/payment.py:1283
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/stripe/payment.py:331 pretix/plugins/stripe/payment.py:338
 #: pretix/plugins/stripe/payment.py:345 pretix/plugins/stripe/payment.py:352
@@ -25501,7 +25501,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:336 pretix/plugins/stripe/payment.py:1355
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:343 pretix/plugins/stripe/payment.py:1407
 msgid "Alipay"
@@ -25509,11 +25509,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:350 pretix/plugins/stripe/payment.py:1450
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:357
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "Debit Langsung SEPA"
 
 #: pretix/plugins/stripe/payment.py:362
 msgid ""
@@ -25535,7 +25535,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:383
 msgid "SOFORT"
-msgstr ""
+msgstr "SOFORT"
 
 #: pretix/plugins/stripe/payment.py:388
 msgid ""
@@ -25554,8 +25554,9 @@ msgid "Multibanco"
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py:411 pretix/plugins/stripe/payment.py:1721
+#, fuzzy
 msgid "Przelewy24"
-msgstr ""
+msgstr "Przelewy24"
 
 #: pretix/plugins/stripe/payment.py:418 pretix/plugins/stripe/payment.py:1777
 msgid "WeChat Pay"
