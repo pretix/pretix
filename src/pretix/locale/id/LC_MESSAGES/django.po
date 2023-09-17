@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-17 15:52+0000\n"
-"Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
+"PO-Revision-Date: 2023-09-18 00:00+0000\n"
+"Last-Translator: Aufa Fadhlurohman <aufafadlurohman@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix/id/>\n"
 "Language: id\n"
@@ -28,12 +28,14 @@ msgid "German"
 msgstr "Jerman"
 
 #: pretix/_base_settings.py:80
+#, fuzzy
 msgid "German (informal)"
-msgstr ""
+msgstr "German (informal)"
 
 #: pretix/_base_settings.py:81
+#, fuzzy
 msgid "Arabic"
-msgstr ""
+msgstr "Arabic"
 
 #: pretix/_base_settings.py:82
 msgid "Chinese (simplified)"
@@ -2310,7 +2312,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:355
 #: pretix/presale/templates/pretixpresale/event/order.html:66
 msgid "Order"
-msgstr "Pesan"
+msgstr "Pesanan"
 
 #: pretix/base/exporters/orderlist.py:1028
 #: pretix/base/exporters/orderlist.py:1211
@@ -8064,7 +8066,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1144
 msgid "EU VAT ID"
-msgstr "ID EU VAT"
+msgstr "ID PPN"
 
 #: pretix/base/settings.py:1157
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
