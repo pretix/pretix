@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-18 09:04+0000\n"
+"PO-Revision-Date: 2023-09-18 10:01+0000\n"
 "Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix/id/>\n"
@@ -590,7 +590,7 @@ msgstr "Masukkan kode pos dengan format XXXX."
 #: pretix/base/auth.py:143
 #, python-brace-format
 msgid "{system} User"
-msgstr ""
+msgstr "{system} Pengguna"
 
 #: pretix/base/auth.py:152 pretix/base/exporters/customers.py:67
 #: pretix/base/forms/auth.py:246 pretix/base/models/auth.py:246
@@ -607,55 +607,57 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:299
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:26
 msgid "E-mail"
-msgstr ""
+msgstr "Surel"
 
 #: pretix/base/auth.py:154 pretix/base/forms/auth.py:153
 #: pretix/base/forms/auth.py:207 pretix/base/models/customers.py:96
 #: pretix/control/forms/mailsetup.py:55 pretix/presale/forms/customer.py:59
 #: pretix/presale/forms/customer.py:284
 msgid "Password"
-msgstr ""
+msgstr "Kata sandi"
 
 #: pretix/base/channels.py:119
 msgid "Online shop"
-msgstr ""
+msgstr "Toko onlineToko online"
 
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr ""
+msgstr "didukung oleh {name} berdasarkan <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
 #, python-format
 msgid "<a %(a_attr)s>ticketing powered by pretix</a>"
-msgstr ""
+msgstr "<a %(a_attr)s>tiket didukung oleh pretix</a>"
 
 #: pretix/base/context.py:61
 msgid "source code"
-msgstr ""
+msgstr "Kode sumber"
 
 #: pretix/base/customersso/oidc.py:59
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr ""
+msgstr "Opsi konfigurasi \"{name}\" tidak ada."
 
 #: pretix/base/customersso/oidc.py:67 pretix/base/customersso/oidc.py:72
 #, python-brace-format
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
 msgstr ""
+"Tidak dapat mengambil konfigurasi dari \"{url}\". Pesan kesalahan: \"{error}"
+"\"."
 
 #: pretix/base/customersso/oidc.py:78 pretix/base/customersso/oidc.py:83
 #: pretix/base/customersso/oidc.py:88 pretix/base/customersso/oidc.py:93
 #: pretix/base/customersso/oidc.py:98 pretix/base/customersso/oidc.py:103
 #, python-brace-format
 msgid "Incompatible SSO provider: \"{error}\"."
-msgstr ""
+msgstr "Penyedia SSO tidak kompatibel: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:109
 #, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr ""
+msgstr "Anda tidak meminta \"{scope}\"."
 
 #: pretix/base/customersso/oidc.py:115
 #, python-brace-format
@@ -663,6 +665,8 @@ msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
 msgstr ""
+"Anda meminta cakupan \"{scope}\" namun penyedia hanya mendukung ini: "
+"{scopes}."
 
 #: pretix/base/customersso/oidc.py:125
 #, python-brace-format
@@ -670,6 +674,7 @@ msgid ""
 "You are requesting field \"{field}\" but provider only supports these: "
 "{fields}."
 msgstr ""
+"Anda meminta kolom \"{field}\" namun penyedia hanya mendukung ini: {fields}."
 
 #: pretix/base/customersso/oidc.py:171 pretix/base/customersso/oidc.py:178
 #: pretix/base/customersso/oidc.py:197 pretix/base/customersso/oidc.py:214
@@ -678,13 +683,15 @@ msgstr ""
 #: pretix/presale/views/customer.py:807
 #, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr ""
+msgstr "Login tidak berhasil. Pesan kesalahan: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:204
 msgid ""
 "The email address on this account is not yet verified. Please first confirm "
 "the email address in your customer account."
 msgstr ""
+"Alamat email pada akun ini belum diverifikasi. Harap konfirmasi terlebih "
+"dahulu alamat email di akun pelanggan Anda."
 
 #: pretix/base/email.py:201 pretix/base/exporters/items.py:151
 #: pretix/base/exporters/items.py:195 pretix/control/views/main.py:311
@@ -695,70 +702,71 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:33
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/index.html:53
 msgid "Default"
-msgstr ""
+msgstr "Bawaan"
 
 #: pretix/base/email.py:208
 msgid "Simple with logo"
-msgstr ""
+msgstr "Sederhana dengan logo"
 
 #: pretix/base/email.py:550 pretix/base/email.py:632 pretix/base/email.py:648
 #: pretix/base/email.py:657 pretix/base/pdf.py:174 pretix/base/pdf.py:332
 #: pretix/base/services/invoices.py:466 pretix/control/views/event.py:797
+#, fuzzy
 msgid "John Doe"
-msgstr ""
+msgstr "John Doe"
 
 #: pretix/base/email.py:554
 msgid "Sample Corporation"
-msgstr ""
+msgstr "Perusahaan Sampel"
 
 #: pretix/base/email.py:594
 msgid "Sample Admission Ticket"
-msgstr ""
+msgstr "Contoh Tiket Masuk"
 
 #: pretix/base/email.py:636
 msgid "An individual text with a reason can be inserted here."
-msgstr ""
+msgstr "Teks individual dengan alasan dapat disisipkan di sini."
 
 #: pretix/base/email.py:640
 msgid "The amount has been charged to your card."
-msgstr ""
+msgstr "Jumlah tersebut telah dibebankan ke kartu Anda."
 
 #: pretix/base/email.py:644
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr ""
+msgstr "Silakan transfer uang ke rekening bank ini: 9999-9999-9999-9999"
 
 #: pretix/base/email.py:670 pretix/base/email.py:675 pretix/base/pdf.py:626
 #: pretix/base/pdf.py:649 pretix/control/forms/organizer.py:567
 msgid "Mr Doe"
-msgstr ""
+msgstr "Tuan Doe"
 
 #: pretix/base/exporter.py:187 pretix/base/exporter.py:317
 msgid "Export format"
-msgstr ""
+msgstr "Format ekspor"
 
 #: pretix/base/exporter.py:189
 msgid "Excel (.xlsx)"
-msgstr ""
+msgstr "Unggul (.xlsx)"
 
 #: pretix/base/exporter.py:190 pretix/base/exporter.py:309
 msgid "CSV (with commas)"
-msgstr ""
+msgstr "CSV (dengan koma)"
 
 #: pretix/base/exporter.py:191 pretix/base/exporter.py:310
 msgid "CSV (Excel-style)"
-msgstr ""
+msgstr "CSV (gaya Excel)"
 
 #: pretix/base/exporter.py:192 pretix/base/exporter.py:311
 msgid "CSV (with semicolons)"
-msgstr ""
+msgstr "CSV (dengan titik koma)"
 
 #: pretix/base/exporter.py:305
 msgid "Combined Excel (.xlsx)"
-msgstr ""
+msgstr "Gabungan Excel (.xlsx)"
 
 #: pretix/base/exporters/answers.py:52
 msgid "Question answer file uploads"
-msgstr ""
+msgstr "File jawaban pertanyaan diunggah"
 
 #: pretix/base/exporters/answers.py:53 pretix/base/exporters/json.py:52
 #: pretix/base/exporters/mail.py:53 pretix/base/exporters/orderlist.py:86
@@ -769,34 +777,36 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:624
 msgctxt "export_category"
 msgid "Order data"
-msgstr ""
+msgstr "Data pesanan"
 
 #: pretix/base/exporters/answers.py:54
 msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
 msgstr ""
+"Unduh file ZIP termasuk semua file yang telah diunggah oleh pelanggan Anda "
+"saat membuat pesanan."
 
 #: pretix/base/exporters/answers.py:64 pretix/base/models/items.py:1565
 #: pretix/control/navigation.py:182
 #: pretix/control/templates/pretixcontrol/items/questions.html:3
 #: pretix/control/templates/pretixcontrol/items/questions.html:5
 msgid "Questions"
-msgstr ""
+msgstr "Pertanyaan"
 
 #: pretix/base/exporters/customers.py:49 pretix/control/navigation.py:592
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:132
 msgid "Customer accounts"
-msgstr ""
+msgstr "Akun pelanggan"
 
 #: pretix/base/exporters/customers.py:51
 msgctxt "export_category"
 msgid "Customer accounts"
-msgstr ""
+msgstr "Akun pelanggan"
 
 #: pretix/base/exporters/customers.py:52
 msgid "Download a spreadsheet of all currently registered customer accounts."
-msgstr ""
+msgstr "Unduh spreadsheet semua akun pelanggan yang terdaftar saat ini."
 
 #: pretix/base/exporters/customers.py:64 pretix/base/models/customers.py:82
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:28
@@ -804,19 +814,19 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:40
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:20
 msgid "Customer ID"
-msgstr ""
+msgstr "ID Pelanggan"
 
 #: pretix/base/exporters/customers.py:65
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:31
 msgid "SSO provider"
-msgstr ""
+msgstr "penyedia SSO"
 
 #: pretix/base/exporters/customers.py:66 pretix/base/models/customers.py:108
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:35
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:65
 #: pretix/control/templates/pretixcontrol/users/form.html:43
 msgid "External identifier"
-msgstr ""
+msgstr "Pengidentifikasi eksternal"
 
 #: pretix/base/exporters/customers.py:68 pretix/base/exporters/orderlist.py:256
 #: pretix/base/exporters/orderlist.py:432
@@ -833,14 +843,14 @@ msgstr ""
 #: pretix/presale/forms/waitinglist.py:103
 #: pretix/presale/templates/pretixpresale/event/order.html:303
 msgid "Phone number"
-msgstr ""
+msgstr "Nomor telepon"
 
 #: pretix/base/exporters/customers.py:69 pretix/base/models/auth.py:248
 #: pretix/base/models/customers.py:97 pretix/base/models/orders.py:2972
 #: pretix/base/settings.py:3484 pretix/base/settings.py:3496
 #: pretix/control/templates/pretixcontrol/users/index.html:47
 msgid "Full name"
-msgstr ""
+msgstr "Nama lengkap"
 
 #: pretix/base/exporters/customers.py:74 pretix/base/exporters/invoices.py:205
 #: pretix/base/exporters/invoices.py:213 pretix/base/exporters/invoices.py:331
@@ -885,25 +895,25 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:29
 #: pretix/presale/templates/pretixpresale/organizers/index.html:40
 msgid "Name"
-msgstr ""
+msgstr "Nama"
 
 #: pretix/base/exporters/customers.py:77 pretix/base/models/customers.py:99
 msgid "Account active"
-msgstr ""
+msgstr "Akun aktif"
 
 #: pretix/base/exporters/customers.py:78 pretix/base/models/customers.py:100
 msgid "Verified email address"
-msgstr ""
+msgstr "Alamat email terverifikasi"
 
 #: pretix/base/exporters/customers.py:79 pretix/base/models/customers.py:101
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:67
 msgid "Last login"
-msgstr ""
+msgstr "Login terakhir"
 
 #: pretix/base/exporters/customers.py:80 pretix/base/models/customers.py:102
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:65
 msgid "Registration date"
-msgstr ""
+msgstr "Tanggal registrasi"
 
 #: pretix/base/exporters/customers.py:81 pretix/base/exporters/invoices.py:204
 #: pretix/base/exporters/waitinglist.py:118 pretix/base/models/auth.py:260
@@ -911,14 +921,14 @@ msgstr ""
 #: pretix/control/forms/event.py:1533 pretix/control/forms/exports.py:49
 #: pretix/control/forms/exports.py:88 pretix/control/views/waitinglist.py:308
 msgid "Language"
-msgstr ""
+msgstr "Bahasa"
 
 #: pretix/base/exporters/customers.py:82 pretix/base/models/customers.py:109
 #: pretix/base/models/media.py:110
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:71
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:68
 msgid "Notes"
-msgstr ""
+msgstr "Catatan"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:83
@@ -955,7 +965,7 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:723
 #: pretix/plugins/checkinlists/exporters.py:724
 msgid "Yes"
-msgstr ""
+msgstr "Iya"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:83
@@ -975,18 +985,20 @@ msgstr ""
 #: pretix/plugins/checkinlists/exporters.py:723
 #: pretix/plugins/checkinlists/exporters.py:724
 msgid "No"
-msgstr ""
+msgstr "Tidak"
 
 #: pretix/base/exporters/dekodi.py:42 pretix/base/exporters/invoices.py:66
 msgctxt "export_category"
 msgid "Invoices"
-msgstr ""
+msgstr "Faktur"
 
 #: pretix/base/exporters/dekodi.py:43
 msgid ""
 "Download invoices in a format that can be used by the dekodi NREI conversion "
 "software."
 msgstr ""
+"Unduh faktur dalam format yang dapat digunakan oleh perangkat lunak konversi "
+"dekodi NREI."
 
 #: pretix/base/exporters/dekodi.py:105
 #, python-brace-format
@@ -1011,6 +1023,9 @@ msgid ""
 "Only include invoices issued in this time frame. Note that the invoice date "
 "does not always correspond to the order or payment date."
 msgstr ""
+"Hanya sertakan faktur yang diterbitkan dalam jangka waktu ini. Perlu "
+"diperhatikan bahwa tanggal faktur tidak selalu sesuai dengan tanggal "
+"pemesanan atau pembayaran."
 
 #: pretix/base/exporters/events.py:47
 msgid "Event data"
@@ -1042,11 +1057,11 @@ msgstr "Nama acara"
 #: pretix/base/models/organizer.py:89
 #: pretix/control/templates/pretixcontrol/organizers/index.html:47
 msgid "Short form"
-msgstr ""
+msgstr "Bentuk pendek"
 
 #: pretix/base/exporters/events.py:59 pretix/base/models/event.py:554
 msgid "Shop is live"
-msgstr ""
+msgstr "Toko sedang siaran langsung"
 
 #: pretix/base/exporters/events.py:60 pretix/base/models/event.py:556
 msgid "Event currency"
@@ -1055,7 +1070,7 @@ msgstr "Mata uang acara"
 #: pretix/base/exporters/events.py:61 pretix/base/models/auth.py:263
 #: pretix/base/models/exports.py:133 pretix/control/forms/exports.py:93
 msgid "Timezone"
-msgstr ""
+msgstr "Zona waktu"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:559
 #: pretix/base/models/event.py:1404 pretix/base/settings.py:3118
@@ -1075,38 +1090,38 @@ msgstr "Waktu berakhir acara"
 #: pretix/base/models/event.py:1408 pretix/control/forms/subevents.py:482
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
-msgstr ""
+msgstr "Waktu masuk"
 
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:575
 #: pretix/base/models/event.py:1417 pretix/control/forms/subevents.py:92
 msgid "Start of presale"
-msgstr ""
+msgstr "Mulai dari pra-penjualan"
 
 #: pretix/base/exporters/events.py:66 pretix/base/models/event.py:569
 #: pretix/base/models/event.py:1411 pretix/control/forms/subevents.py:98
 msgid "End of presale"
-msgstr ""
+msgstr "Akhir pra-penjualan"
 
 #: pretix/base/exporters/events.py:67 pretix/base/exporters/invoices.py:350
 #: pretix/base/models/event.py:581 pretix/base/models/event.py:1423
 msgid "Location"
-msgstr ""
+msgstr "Lokasi"
 
 #: pretix/base/exporters/events.py:68 pretix/base/models/event.py:584
 #: pretix/base/models/event.py:1426
 msgid "Latitude"
-msgstr ""
+msgstr "Garis Lintang"
 
 #: pretix/base/exporters/events.py:69 pretix/base/models/event.py:592
 #: pretix/base/models/event.py:1434
 msgid "Longitude"
-msgstr ""
+msgstr "Garis bujur"
 
 #: pretix/base/exporters/events.py:70 pretix/base/models/event.py:604
 #: pretix/control/templates/pretixcontrol/event/index.html:128
 #: pretix/control/templates/pretixcontrol/order/index.html:990
 msgid "Internal comment"
-msgstr ""
+msgstr "Komentar internal"
 
 #: pretix/base/exporters/invoices.py:82 pretix/base/models/orders.py:1607
 #: pretix/base/models/orders.py:2011 pretix/control/forms/filter.py:203
@@ -1121,13 +1136,13 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:50
 #: pretix/control/templates/pretixcontrol/search/payments.html:93
 msgid "Payment provider"
-msgstr ""
+msgstr "Penyedia pembayaran"
 
 #: pretix/base/exporters/invoices.py:84 pretix/base/exporters/invoices.py:86
 #: pretix/control/forms/filter.py:205 pretix/control/forms/filter.py:920
 #: pretix/control/forms/filter.py:2151
 msgid "All payment providers"
-msgstr ""
+msgstr "Semua penyedia pembayaran"
 
 #: pretix/base/exporters/invoices.py:91
 msgid ""
@@ -1135,18 +1150,23 @@ msgid ""
 "this payment provider. Note that this might include some invoices of orders "
 "which in the end have been fully or partially paid with a different provider."
 msgstr ""
+"Hanya sertakan faktur untuk pesanan yang memiliki setidaknya satu upaya "
+"pembayaran dengan penyedia pembayaran ini. Perhatikan bahwa ini mungkin "
+"mencakup beberapa faktur pesanan yang pada akhirnya telah dibayar penuh atau "
+"sebagian dengan penyedia berbeda."
 
 #: pretix/base/exporters/invoices.py:125
 msgid "All invoices"
-msgstr ""
+msgstr "Semua faktur"
 
 #: pretix/base/exporters/invoices.py:126
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
 msgstr ""
+"Unduh semua faktur yang dibuat oleh sistem sebagai file ZIP atau file PDF."
 
 #: pretix/base/exporters/invoices.py:177
 msgid "Invoice data"
-msgstr ""
+msgstr "Data faktur"
 
 #: pretix/base/exporters/invoices.py:178
 msgid ""
@@ -1154,6 +1174,9 @@ msgid ""
 "The spreadsheet includes two sheets, one with a line for every invoice, and "
 "one with a line for every position of every invoice."
 msgstr ""
+"Unduh spreadsheet dengan data semua faktur yang dibuat oleh sistem. "
+"Spreadsheet mencakup dua lembar, satu dengan garis untuk setiap faktur, dan "
+"satu lagi dengan garis untuk setiap posisi setiap faktur."
 
 #: pretix/base/exporters/invoices.py:190 pretix/base/shredder.py:548
 #: pretix/control/templates/pretixcontrol/order/index.html:260
@@ -1162,15 +1185,15 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:235
 #: pretix/presale/templates/pretixpresale/event/order.html:256
 msgid "Invoices"
-msgstr ""
+msgstr "Faktur"
 
 #: pretix/base/exporters/invoices.py:191
 msgid "Invoice lines"
-msgstr ""
+msgstr "Garis faktur"
 
 #: pretix/base/exporters/invoices.py:198 pretix/base/exporters/invoices.py:317
 msgid "Invoice number"
-msgstr ""
+msgstr "Nomor faktur"
 
 #: pretix/base/exporters/invoices.py:199 pretix/base/exporters/invoices.py:326
 #: pretix/base/exporters/orderlist.py:1166
@@ -1186,7 +1209,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_giftcard_history.html:6
 #: pretix/presale/templates/pretixpresale/organizers/index.html:43
 msgid "Date"
-msgstr ""
+msgstr "Tanggal"
 
 #: pretix/base/exporters/invoices.py:200 pretix/base/exporters/invoices.py:327
 #: pretix/base/exporters/orderlist.py:256
@@ -1215,7 +1238,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:43
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:70
 msgid "Order code"
-msgstr ""
+msgstr "Kode pemesanan"
 
 #: pretix/base/exporters/invoices.py:201 pretix/base/exporters/invoices.py:328
 #: pretix/base/models/customers.py:384 pretix/base/models/waitinglist.py:76
@@ -1223,15 +1246,15 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/users/index.html:42
 #: pretix/control/views/waitinglist.py:307
 msgid "E-mail address"
-msgstr ""
+msgstr "Alamat email"
 
 #: pretix/base/exporters/invoices.py:202 pretix/base/exporters/invoices.py:329
 msgid "Invoice type"
-msgstr ""
+msgstr "Jenis faktur"
 
 #: pretix/base/exporters/invoices.py:203 pretix/base/exporters/invoices.py:330
 msgid "Cancellation of"
-msgstr ""
+msgstr "Pembatalan"
 
 #: pretix/base/exporters/invoices.py:205 pretix/base/exporters/invoices.py:206
 #: pretix/base/exporters/invoices.py:207 pretix/base/exporters/invoices.py:208
@@ -1241,7 +1264,7 @@ msgstr ""
 #: pretix/base/exporters/invoices.py:334 pretix/base/exporters/invoices.py:335
 #: pretix/base/exporters/invoices.py:336 pretix/base/exporters/invoices.py:337
 msgid "Invoice sender:"
-msgstr ""
+msgstr "Pengirim faktur:"
 
 #: pretix/base/exporters/invoices.py:206 pretix/base/exporters/invoices.py:332
 #: pretix/base/exporters/orderlist.py:264
@@ -1313,7 +1336,7 @@ msgstr "Negara"
 
 #: pretix/base/exporters/invoices.py:210 pretix/base/exporters/invoices.py:336
 msgid "Tax ID"
-msgstr ""
+msgstr "Id pajak"
 
 #: pretix/base/exporters/invoices.py:211 pretix/base/exporters/invoices.py:219
 #: pretix/base/exporters/invoices.py:337 pretix/base/exporters/invoices.py:345
@@ -1327,7 +1350,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:103
 #: pretix/presale/templates/pretixpresale/event/order.html:326
 msgid "VAT ID"
-msgstr ""
+msgstr "Identitas Pajak"
 
 #: pretix/base/exporters/invoices.py:212 pretix/base/exporters/invoices.py:213
 #: pretix/base/exporters/invoices.py:214 pretix/base/exporters/invoices.py:215
@@ -1340,7 +1363,7 @@ msgstr ""
 #: pretix/base/exporters/invoices.py:344 pretix/base/exporters/invoices.py:345
 #: pretix/base/exporters/invoices.py:346 pretix/base/exporters/invoices.py:347
 msgid "Invoice recipient:"
-msgstr ""
+msgstr "Penerima tagihan:"
 
 #: pretix/base/exporters/invoices.py:212 pretix/base/exporters/invoices.py:338
 #: pretix/base/exporters/orderlist.py:257
@@ -1357,11 +1380,11 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:87
 #: pretix/presale/templates/pretixpresale/event/order.html:307
 msgid "Company"
-msgstr ""
+msgstr "Perusahaan"
 
 #: pretix/base/exporters/invoices.py:214 pretix/base/exporters/invoices.py:340
 msgid "Street address"
-msgstr ""
+msgstr "alamat jalan"
 
 #: pretix/base/exporters/invoices.py:218 pretix/base/exporters/invoices.py:344
 #: pretix/base/exporters/orderlist.py:264
@@ -1377,44 +1400,44 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:322
 msgctxt "address"
 msgid "State"
-msgstr ""
+msgstr "Negara"
 
 #: pretix/base/exporters/invoices.py:220 pretix/base/exporters/invoices.py:346
 #: pretix/base/models/orders.py:2990 pretix/base/models/orders.py:3025
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:107
 msgid "Beneficiary"
-msgstr ""
+msgstr "Penerima"
 
 #: pretix/base/exporters/invoices.py:221 pretix/base/exporters/invoices.py:347
 #: pretix/base/models/orders.py:2985 pretix/base/orderimport.py:445
 #: pretix/control/templates/pretixcontrol/order/index.html:979
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:115
 msgid "Internal reference"
-msgstr ""
+msgstr "Referensi internal"
 
 #: pretix/base/exporters/invoices.py:222 pretix/control/forms/event.py:1482
 msgid "Reverse charge"
-msgstr ""
+msgstr "Membalikkan biaya"
 
 #: pretix/base/exporters/invoices.py:223
 msgid "Shown foreign currency"
-msgstr ""
+msgstr "Mata uang asing ditampilkan"
 
 #: pretix/base/exporters/invoices.py:224
 msgid "Foreign currency rate"
-msgstr ""
+msgstr "Nilai mata uang asing"
 
 #: pretix/base/exporters/invoices.py:225
 msgid "Total value (with taxes)"
-msgstr ""
+msgstr "Nilai total (termasuk pajak)"
 
 #: pretix/base/exporters/invoices.py:226
 msgid "Total value (without taxes)"
-msgstr ""
+msgstr "Nilai total (tanpa pajak)"
 
 #: pretix/base/exporters/invoices.py:227
 msgid "Payment matching IDs"
-msgstr ""
+msgstr "ID pencocokan pembayaran"
 
 #: pretix/base/exporters/invoices.py:228 pretix/base/exporters/invoices.py:348
 #: pretix/base/exporters/orderlist.py:283
@@ -1423,42 +1446,42 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/payment.html:10
 #: pretix/control/views/event.py:363
 msgid "Payment providers"
-msgstr ""
+msgstr "Penyedia pembayaran"
 
 #: pretix/base/exporters/invoices.py:284 pretix/base/exporters/invoices.py:387
 msgid "Cancellation"
-msgstr ""
+msgstr "Pembatalan"
 
 #: pretix/base/exporters/invoices.py:284 pretix/base/exporters/invoices.py:387
 #: pretix/control/templates/pretixcontrol/order/index.html:264
 #: pretix/presale/templates/pretixpresale/event/order.html:243
 msgid "Invoice"
-msgstr ""
+msgstr "Faktur"
 
 #: pretix/base/exporters/invoices.py:318
 msgid "Line number"
-msgstr ""
+msgstr "Nomor baris"
 
 #: pretix/base/exporters/invoices.py:319 pretix/base/exporters/orderlist.py:436
 #: pretix/base/models/items.py:415 pretix/base/models/items.py:1004
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:32
 msgid "Description"
-msgstr ""
+msgstr "Keterangan"
 
 #: pretix/base/exporters/invoices.py:320 pretix/control/forms/orders.py:338
 msgid "Gross price"
-msgstr ""
+msgstr "Harga kotor"
 
 #: pretix/base/exporters/invoices.py:321
 msgid "Net price"
-msgstr ""
+msgstr "Harga bersih"
 
 #: pretix/base/exporters/invoices.py:322 pretix/base/exporters/orderlist.py:440
 #: pretix/base/exporters/orderlist.py:558
 #: pretix/base/exporters/orderlist.py:856 pretix/base/models/orders.py:2163
 #: pretix/base/models/orders.py:2310 pretix/base/models/orders.py:2750
 msgid "Tax value"
-msgstr ""
+msgstr "Nilai pajak"
 
 #: pretix/base/exporters/invoices.py:323 pretix/base/exporters/orderlist.py:438
 #: pretix/base/exporters/orderlist.py:556
@@ -1470,11 +1493,11 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:766
 #: pretix/plugins/reports/exporters.py:811
 msgid "Tax rate"
-msgstr ""
+msgstr "Persentase pajak"
 
 #: pretix/base/exporters/invoices.py:324
 msgid "Tax name"
-msgstr ""
+msgstr "Nama pajak"
 
 #: pretix/base/exporters/invoices.py:325
 msgid "Event start date"
@@ -1486,51 +1509,51 @@ msgstr "Tanggal berakhir acara"
 
 #: pretix/base/exporters/items.py:50
 msgid "Product data"
-msgstr ""
+msgstr "Data produk"
 
 #: pretix/base/exporters/items.py:51 pretix/base/exporters/orderlist.py:1080
 msgctxt "export_category"
 msgid "Product data"
-msgstr ""
+msgstr "Data produk"
 
 #: pretix/base/exporters/items.py:52
 msgid "Download a spreadsheet with details about all products and variations."
-msgstr ""
+msgstr "Unduh spreadsheet dengan detail tentang semua produk dan variasi."
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:552
 #: pretix/base/exporters/orderlist.py:842
 msgid "Product ID"
-msgstr ""
+msgstr "ID Produk"
 
 #: pretix/base/exporters/items.py:59 pretix/base/exporters/orderlist.py:554
 #: pretix/base/exporters/orderlist.py:844
 msgid "Variation ID"
-msgstr ""
+msgstr "ID Variasi"
 
 #: pretix/base/exporters/items.py:60 pretix/base/models/items.py:114
 #: pretix/base/pdf.py:152
 #: pretix/control/templates/pretixcontrol/items/category.html:4
 #: pretix/control/templates/pretixcontrol/items/category.html:6
 msgid "Product category"
-msgstr ""
+msgstr "Kategori Produk"
 
 #: pretix/base/exporters/items.py:61 pretix/base/models/discount.py:60
 #: pretix/base/models/items.py:95 pretix/base/models/items.py:406
 #: pretix/base/models/tax.py:163
 #: pretix/control/templates/pretixcontrol/items/discounts.html:56
 msgid "Internal name"
-msgstr ""
+msgstr "Nama dalaman"
 
 #: pretix/base/exporters/items.py:65 pretix/base/models/items.py:403
 msgid "Item name"
-msgstr ""
+msgstr "Nama barang"
 
 #: pretix/base/exporters/items.py:69 pretix/base/exporters/orderlist.py:553
 #: pretix/base/exporters/orderlist.py:845
 #: pretix/base/exporters/waitinglist.py:112 pretix/base/models/items.py:997
 #: pretix/base/models/orders.py:1349 pretix/base/models/orders.py:2726
 msgid "Variation"
-msgstr ""
+msgstr "Variasi"
 
 #: pretix/base/exporters/items.py:72 pretix/base/models/customers.py:57
 #: pretix/base/models/customers.py:392 pretix/base/models/discount.py:56
@@ -1542,41 +1565,41 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/plugins.html:55
 #: pretix/control/templates/pretixcontrol/users/index.html:51
 msgid "Active"
-msgstr ""
+msgstr "Aktif"
 
 #: pretix/base/exporters/items.py:73 pretix/base/models/discount.py:68
 #: pretix/base/models/items.py:560 pretix/base/models/items.py:1057
 #: pretix/control/forms/discounts.py:87 pretix/control/forms/event.py:954
 #: pretix/control/forms/item.py:545 pretix/control/forms/item.py:781
 msgid "Sales channels"
-msgstr ""
+msgstr "Saluran penjualan"
 
 #: pretix/base/exporters/items.py:74 pretix/base/models/items.py:420
 #: pretix/base/models/items.py:1015
 msgid "Default price"
-msgstr ""
+msgstr "Harga bawaan"
 
 #: pretix/base/exporters/items.py:75 pretix/base/models/items.py:428
 msgid "Free price input"
-msgstr ""
+msgstr "Masukan harga gratis"
 
 #: pretix/base/exporters/items.py:76 pretix/base/models/items.py:436
 msgid "Sales tax"
-msgstr ""
+msgstr "Pajak Penjualan"
 
 #: pretix/base/exporters/items.py:77 pretix/base/models/items.py:441
 msgid "Is an admission ticket"
-msgstr ""
+msgstr "Merupakan tiket masuk"
 
 #: pretix/base/exporters/items.py:78
 #: pretix/control/templates/pretixcontrol/item/create.html:74
 #: pretix/control/templates/pretixcontrol/item/index.html:87
 msgid "Personalized ticket"
-msgstr ""
+msgstr "Tiket yang dipersonalisasi"
 
 #: pretix/base/exporters/items.py:79 pretix/base/models/items.py:455
 msgid "Generate tickets"
-msgstr ""
+msgstr "Hasilkan tiket"
 
 #: pretix/base/exporters/items.py:80 pretix/base/exporters/orderlist.py:1087
 #: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:339
@@ -1600,7 +1623,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:94
 #: pretix/presale/views/widget.py:391
 msgid "Waiting list"
-msgstr ""
+msgstr "Daftar tunggu"
 
 #: pretix/base/exporters/items.py:81 pretix/base/models/discount.py:74
 #: pretix/base/models/items.py:174 pretix/base/models/items.py:230
@@ -1610,7 +1633,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:170
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:148
 msgid "Available from"
-msgstr ""
+msgstr "tersedia dari"
 
 #: pretix/base/exporters/items.py:82 pretix/base/models/discount.py:79
 #: pretix/base/models/items.py:179 pretix/base/models/items.py:235
@@ -1620,90 +1643,96 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:174
 #: pretix/control/templates/pretixcontrol/subevents/detail.html:152
 msgid "Available until"
-msgstr ""
+msgstr "Tersedia sampai"
 
 #: pretix/base/exporters/items.py:83 pretix/base/models/items.py:499
 msgid "This product can only be bought using a voucher."
-msgstr ""
+msgstr "Produk ini hanya dapat dibeli menggunakan voucher."
 
 #: pretix/base/exporters/items.py:84 pretix/base/models/items.py:512
 msgid ""
 "This product will only be shown if a voucher matching the product is "
 "redeemed."
 msgstr ""
+"Produk ini hanya akan ditampilkan jika voucher yang cocok dengan produk "
+"ditukarkan."
 
 #: pretix/base/exporters/items.py:85 pretix/base/models/items.py:505
 msgid "Buying this product requires approval"
-msgstr ""
+msgstr "Membeli produk ini memerlukan persetujuan"
 
 #: pretix/base/exporters/items.py:86 pretix/base/models/items.py:518
 msgid "Only sell this product as part of a bundle"
-msgstr ""
+msgstr "Hanya menjual produk ini sebagai bagian dari paket"
 
 #: pretix/base/exporters/items.py:87 pretix/base/models/items.py:525
 msgid "Allow product to be canceled or changed"
-msgstr ""
+msgstr "Izinkan produk dibatalkan atau diubah"
 
 #: pretix/base/exporters/items.py:88 pretix/base/models/items.py:531
 msgid "Minimum amount per order"
-msgstr ""
+msgstr "Jumlah minimum per pesanan"
 
 #: pretix/base/exporters/items.py:89 pretix/base/models/items.py:538
 msgid "Maximum amount per order"
-msgstr ""
+msgstr "Jumlah maksimum per pesanan"
 
 #: pretix/base/exporters/items.py:90 pretix/base/exporters/orderlist.py:277
 #: pretix/base/models/items.py:546 pretix/base/models/items.py:1070
 #: pretix/base/models/orders.py:238 pretix/control/forms/filter.py:584
 #: pretix/plugins/checkinlists/exporters.py:508
 msgid "Requires special attention"
-msgstr ""
+msgstr "Membutuhkan perhatian khusus"
 
 #: pretix/base/exporters/items.py:91 pretix/base/models/items.py:553
 #: pretix/base/models/items.py:1018
 msgid "Original price"
-msgstr ""
+msgstr "Harga asli"
 
 #: pretix/base/exporters/items.py:92 pretix/base/models/items.py:565
 msgid "This product is a gift card"
-msgstr ""
+msgstr "Produk ini adalah kartu hadiah"
 
 #: pretix/base/exporters/items.py:93 pretix/base/models/items.py:571
 #: pretix/base/models/items.py:1032
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:41
 #: pretix/control/templates/pretixcontrol/item/include_variations.html:148
 msgid "Require a valid membership"
-msgstr ""
+msgstr "Membutuhkan keanggotaan yang valid"
 
 #: pretix/base/exporters/items.py:94 pretix/base/models/items.py:580
 #: pretix/base/models/items.py:1041
 msgid "Hide without a valid membership"
-msgstr ""
+msgstr "Sembunyikan tanpa keanggotaan yang valid"
 
 #: pretix/base/exporters/json.py:51 pretix/base/exporters/orderlist.py:85
 msgid "Order data"
-msgstr ""
+msgstr "Data pesanan"
 
 #: pretix/base/exporters/json.py:53
 msgid ""
 "Download a structured JSON representation of all orders. This might be "
 "useful for the import in third-party systems."
 msgstr ""
+"Unduh representasi JSON terstruktur dari semua pesanan. Ini mungkin berguna "
+"untuk impor di sistem pihak ketiga."
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
-msgstr ""
+msgstr "Alamat email (file teks)"
 
 #: pretix/base/exporters/mail.py:54
 msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
 msgstr ""
+"Unduh file teks dengan semua alamat email yang dikumpulkan baik dari pembeli "
+"atau dari pemegang tiket."
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:460
 #: pretix/plugins/reports/exporters.py:642
 msgid "Filter by status"
-msgstr ""
+msgstr "Saring berdasarkan status"
 
 #: pretix/base/exporters/orderlist.py:87
 msgid ""
@@ -1711,6 +1740,10 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
+"Unduh spreadsheet semua pesanan. Spreadsheet akan mencakup tiga lembar, satu "
+"dengan garis untuk setiap pesanan, satu dengan garis untuk setiap posisi "
+"pesanan, dan satu lagi dengan garis untuk setiap biaya tambahan yang "
+"dikenakan dalam pesanan."
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/models/orders.py:271
 #: pretix/control/navigation.py:253 pretix/control/navigation.py:360
@@ -1722,33 +1755,33 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:630
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:53
 msgid "Orders"
-msgstr ""
+msgstr "Pesanan"
 
 #: pretix/base/exporters/orderlist.py:100 pretix/base/models/orders.py:2359
 #: pretix/base/notifications.py:205
 msgid "Order positions"
-msgstr ""
+msgstr "Posisi pesanan"
 
 #: pretix/base/exporters/orderlist.py:101
 msgid "Order fees"
-msgstr ""
+msgstr "Biaya pesanan"
 
 #: pretix/base/exporters/orderlist.py:109
 msgid "Only paid orders"
-msgstr ""
+msgstr "Hanya pesanan berbayar"
 
 #: pretix/base/exporters/orderlist.py:115
 msgid "Include payment amounts"
-msgstr ""
+msgstr "Sertakan jumlah pembayaran"
 
 #: pretix/base/exporters/orderlist.py:121
 msgid "Show multiple choice answers grouped in one column"
-msgstr ""
+msgstr "Menampilkan jawaban pilihan ganda yang dikelompokkan dalam satu kolom"
 
 #: pretix/base/exporters/orderlist.py:130
 #: pretix/plugins/reports/exporters.py:674
 msgid "Only include orders created within this date range."
-msgstr ""
+msgstr "Hanya sertakan pesanan yang dibuat dalam rentang tanggal ini."
 
 #: pretix/base/exporters/orderlist.py:134 pretix/base/notifications.py:194
 #: pretix/base/pdf.py:235 pretix/plugins/badges/exporters.py:459
@@ -1761,6 +1794,9 @@ msgid ""
 "Only include orders including at least one ticket for a date in this range. "
 "Will also include other dates in case of mixed orders!"
 msgstr ""
+"Hanya sertakan pesanan yang mencakup setidaknya satu tiket untuk tanggal "
+"dalam rentang ini. Juga akan menyertakan tanggal lain jika ada pesanan "
+"campuran!"
 
 #: pretix/base/exporters/orderlist.py:256
 #: pretix/base/exporters/orderlist.py:428
@@ -1780,7 +1816,7 @@ msgstr "Slug acara"
 #: pretix/plugins/reports/exporters.py:859
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:73
 msgid "Order total"
-msgstr ""
+msgstr "Jumlah pesanan"
 
 #: pretix/base/exporters/orderlist.py:256
 #: pretix/base/exporters/orderlist.py:430
@@ -1822,8 +1858,9 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:47
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:75
 #: pretix/presale/templates/pretixpresale/organizers/index.html:46
+#, fuzzy
 msgid "Status"
-msgstr ""
+msgstr "Status"
 
 #: pretix/base/exporters/orderlist.py:256
 #: pretix/base/exporters/orderlist.py:431
@@ -1835,7 +1872,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:146
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:34
 msgid "Email"
-msgstr ""
+msgstr "Surel"
 
 #: pretix/base/exporters/orderlist.py:257
 #: pretix/base/exporters/orderlist.py:433
@@ -1857,7 +1894,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:46
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:72
 msgid "Order date"
-msgstr ""
+msgstr "Tanggal pemesanan"
 
 #: pretix/base/exporters/orderlist.py:257
 #: pretix/base/exporters/orderlist.py:434
@@ -1865,45 +1902,45 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:833
 #: pretix/plugins/checkinlists/exporters.py:507
 msgid "Order time"
-msgstr ""
+msgstr "Waktu pemesanan"
 
 #: pretix/base/exporters/orderlist.py:265
 msgid "Custom address field"
-msgstr ""
+msgstr "Bidang alamat khusus"
 
 #: pretix/base/exporters/orderlist.py:265
 msgid "Date of last payment"
-msgstr ""
+msgstr "Tanggal pembayaran terakhir"
 
 #: pretix/base/exporters/orderlist.py:265 pretix/base/services/stats.py:232
 msgid "Fees"
-msgstr ""
+msgstr "Biaya"
 
 #: pretix/base/exporters/orderlist.py:265
 #: pretix/base/exporters/orderlist.py:617 pretix/base/orderimport.py:626
 #: pretix/control/templates/pretixcontrol/order/index.html:185
 #: pretix/control/templates/pretixcontrol/pdf/index.html:230
 msgid "Order locale"
-msgstr ""
+msgstr "Pesan lokal"
 
 #: pretix/base/exporters/orderlist.py:270
 #, python-brace-format
 msgid "Gross at {rate} % tax"
-msgstr ""
+msgstr "Kotor sebesar {rate} % pajak"
 
 #: pretix/base/exporters/orderlist.py:271
 #, python-brace-format
 msgid "Net at {rate} % tax"
-msgstr ""
+msgstr "Bersih sebesar {rate} % pajak"
 
 #: pretix/base/exporters/orderlist.py:272
 #, python-brace-format
 msgid "Tax value at {rate} % tax"
-msgstr ""
+msgstr "Nilai pajak sebesar {rate} % pajak"
 
 #: pretix/base/exporters/orderlist.py:275
 msgid "Invoice numbers"
-msgstr ""
+msgstr "Nomor faktur"
 
 #: pretix/base/exporters/orderlist.py:276
 #: pretix/base/exporters/orderlist.py:617 pretix/base/orderimport.py:700
@@ -1917,31 +1954,31 @@ msgstr "Kanal penjualan"
 #: pretix/base/exporters/orderlist.py:585 pretix/base/models/orders.py:233
 #: pretix/control/forms/filter.py:238
 msgid "Follow-up date"
-msgstr ""
+msgstr "Tanggal tindak lanjut"
 
 #: pretix/base/exporters/orderlist.py:280
 #: pretix/control/templates/pretixcontrol/orders/index.html:148
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:207
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:74
 msgid "Positions"
-msgstr ""
+msgstr "Posisi"
 
 #: pretix/base/exporters/orderlist.py:281
 #: pretix/base/exporters/orderlist.py:618 pretix/base/models/orders.py:264
 #: pretix/control/forms/filter.py:555
 msgid "E-mail address verified"
-msgstr ""
+msgstr "Alamat email terverifikasi"
 
 #: pretix/base/exporters/orderlist.py:282
 #: pretix/base/exporters/orderlist.py:452
 #: pretix/base/exporters/orderlist.py:619
 msgid "External customer ID"
-msgstr ""
+msgstr "ID pelanggan eksternal"
 
 #: pretix/base/exporters/orderlist.py:287
 #, python-brace-format
 msgid "Paid by {method}"
-msgstr ""
+msgstr "Dibayar oleh {method}"
 
 #: pretix/base/exporters/orderlist.py:435
 #: pretix/base/exporters/orderlist.py:846
@@ -1963,7 +2000,7 @@ msgstr "Jenis biaya"
 #: pretix/plugins/checkinlists/exporters.py:479
 #: pretix/plugins/reports/accountingreport.py:314
 msgid "Price"
-msgstr ""
+msgstr "Harga"
 
 #: pretix/base/exporters/orderlist.py:439
 #: pretix/base/exporters/orderlist.py:557
@@ -1972,19 +2009,19 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/tax_edit.html:16
 #: pretix/control/templates/pretixcontrol/order/change.html:155
 msgid "Tax rule"
-msgstr ""
+msgstr "Aturan pajak"
 
 #: pretix/base/exporters/orderlist.py:442
 #: pretix/base/exporters/orderlist.py:447
 #: pretix/base/exporters/orderlist.py:605
 #: pretix/base/exporters/orderlist.py:609 pretix/base/pdf.py:331
 msgid "Invoice address name"
-msgstr ""
+msgstr "Nama alamat faktur"
 
 #: pretix/base/exporters/orderlist.py:466
 #: pretix/base/exporters/orderlist.py:641 pretix/base/models/orders.py:170
 msgid "canceled"
-msgstr ""
+msgstr "dibatalkan"
 
 #: pretix/base/exporters/orderlist.py:539
 #: pretix/base/exporters/orderlist.py:839
@@ -2041,7 +2078,7 @@ msgstr "Tanggal"
 #: pretix/plugins/badges/exporters.py:441
 #: pretix/plugins/checkinlists/exporters.py:498
 msgid "Start date"
-msgstr ""
+msgstr "Mulai tanggal"
 
 #: pretix/base/exporters/orderlist.py:549
 #: pretix/base/exporters/orderlist.py:1092
@@ -2054,7 +2091,7 @@ msgstr ""
 #: pretix/plugins/badges/exporters.py:448
 #: pretix/plugins/checkinlists/exporters.py:499
 msgid "End date"
-msgstr ""
+msgstr "Tanggal akhir"
 
 #: pretix/base/exporters/orderlist.py:551
 #: pretix/base/exporters/orderlist.py:843 pretix/base/models/items.py:674
@@ -2081,7 +2118,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:45
 msgid "Product"
-msgstr ""
+msgstr "Produk"
 
 #: pretix/base/exporters/orderlist.py:559
 #: pretix/base/exporters/orderlist.py:564 pretix/base/forms/questions.py:636
@@ -2100,7 +2137,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:26
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:133
 msgid "Attendee name"
-msgstr ""
+msgstr "Nama peserta"
 
 #: pretix/base/exporters/orderlist.py:566 pretix/base/forms/questions.py:642
 #: pretix/base/models/customers.py:296 pretix/base/models/orders.py:1366
@@ -2110,49 +2147,50 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:176
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:179
 msgid "Attendee email"
-msgstr ""
+msgstr "email peserta"
 
 #: pretix/base/exporters/orderlist.py:573 pretix/base/models/vouchers.py:311
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:5
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:8
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:156
+#, fuzzy
 msgid "Voucher"
-msgstr ""
+msgstr "Voucher"
 
 #: pretix/base/exporters/orderlist.py:574
 msgid "Pseudonymization ID"
-msgstr ""
+msgstr "ID pseudonimisasi"
 
 #: pretix/base/exporters/orderlist.py:575 pretix/control/forms/filter.py:667
 #: pretix/control/templates/pretixcontrol/order/change.html:258
 msgid "Ticket secret"
-msgstr ""
+msgstr "Rahasia tiket"
 
 #: pretix/base/exporters/orderlist.py:576 pretix/base/orderimport.py:720
 #: pretix/plugins/checkinlists/exporters.py:510
 msgid "Seat ID"
-msgstr ""
+msgstr "ID kursi"
 
 #: pretix/base/exporters/orderlist.py:577
 #: pretix/plugins/checkinlists/exporters.py:511
 msgid "Seat name"
-msgstr ""
+msgstr "Nama kursi"
 
 #: pretix/base/exporters/orderlist.py:578
 #: pretix/plugins/checkinlists/exporters.py:512
 msgid "Seat zone"
-msgstr ""
+msgstr "Zona tempat duduk"
 
 #: pretix/base/exporters/orderlist.py:579
 #: pretix/plugins/checkinlists/exporters.py:513
 msgid "Seat row"
-msgstr ""
+msgstr "Barisan kursi"
 
 #: pretix/base/exporters/orderlist.py:580
 #: pretix/plugins/checkinlists/exporters.py:514
 msgid "Seat number"
-msgstr ""
+msgstr "Nomor kursi"
 
 #: pretix/base/exporters/orderlist.py:581
 #: pretix/control/templates/pretixcontrol/order/change.html:208
@@ -2161,7 +2199,7 @@ msgstr ""
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:108
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:110
 msgid "Blocked"
-msgstr ""
+msgstr "Diblokir"
 
 #: pretix/base/exporters/orderlist.py:582 pretix/base/models/orders.py:2326
 #: pretix/base/orderimport.py:654
@@ -2170,7 +2208,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:22
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:131
 msgid "Valid from"
-msgstr ""
+msgstr "Berlaku dari"
 
 #: pretix/base/exporters/orderlist.py:583 pretix/base/models/orders.py:2331
 #: pretix/base/models/vouchers.py:221 pretix/base/orderimport.py:677
@@ -2180,36 +2218,36 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:24
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:132
 msgid "Valid until"
-msgstr ""
+msgstr "Berlaku hingga"
 
 #: pretix/base/exporters/orderlist.py:584
 msgid "Order comment"
-msgstr ""
+msgstr "Komentar pesanan"
 
 #: pretix/base/exporters/orderlist.py:611 pretix/base/pdf.py:341
 msgid "Invoice address street"
-msgstr ""
+msgstr "Jalan alamat faktur"
 
 #: pretix/base/exporters/orderlist.py:611 pretix/base/pdf.py:346
 msgid "Invoice address ZIP code"
-msgstr ""
+msgstr "Kode pos alamat faktur"
 
 #: pretix/base/exporters/orderlist.py:611 pretix/base/pdf.py:351
 msgid "Invoice address city"
-msgstr ""
+msgstr "Kota alamat faktur"
 
 #: pretix/base/exporters/orderlist.py:612 pretix/base/pdf.py:361
 msgid "Invoice address country"
-msgstr ""
+msgstr "Negara alamat faktur"
 
 #: pretix/base/exporters/orderlist.py:613
 msgctxt "address"
 msgid "Invoice address state"
-msgstr ""
+msgstr "Status alamat faktur"
 
 #: pretix/base/exporters/orderlist.py:774
 msgid "Order transaction data"
-msgstr ""
+msgstr "Data transaksi pesanan"
 
 #: pretix/base/exporters/orderlist.py:776
 msgid ""
@@ -2217,10 +2255,14 @@ msgid ""
 "changes to products, prices or tax rates. The information is only accurate "
 "for changes made with pretix versions released after October 2021."
 msgstr ""
+"Unduh spreadsheet berisi semua perubahan substansial pada pesanan, misalnya "
+"semua perubahan pada produk, harga, atau tarif pajak. Informasi ini hanya "
+"akurat untuk perubahan yang dilakukan dengan versi pretix yang dirilis "
+"setelah Oktober 2021."
 
 #: pretix/base/exporters/orderlist.py:792
 msgid "Only include transactions created within this date range."
-msgstr ""
+msgstr "Hanya sertakan transaksi yang dibuat dalam rentang tanggal ini."
 
 #: pretix/base/exporters/orderlist.py:827 pretix/base/models/event.py:627
 #: pretix/base/models/items.py:391 pretix/base/models/items.py:1830
@@ -2253,24 +2295,24 @@ msgstr "Mata uang"
 
 #: pretix/base/exporters/orderlist.py:835
 msgid "Transaction date"
-msgstr ""
+msgstr "Tanggal transaksi"
 
 #: pretix/base/exporters/orderlist.py:836
 msgid "Transaction time"
-msgstr ""
+msgstr "Waktu transaksi"
 
 #: pretix/base/exporters/orderlist.py:837
 msgid "Old data"
-msgstr ""
+msgstr "Data lama"
 
 #: pretix/base/exporters/orderlist.py:840 pretix/base/models/items.py:1361
 #: pretix/control/templates/pretixcontrol/order/transactions.html:22
 msgid "Quantity"
-msgstr ""
+msgstr "Kuantitas"
 
 #: pretix/base/exporters/orderlist.py:847
 msgid "Internal fee type"
-msgstr ""
+msgstr "Jenis biaya internal"
 
 #: pretix/base/exporters/orderlist.py:849
 msgctxt "subevent"
@@ -2279,57 +2321,62 @@ msgstr "ID Tanggal"
 
 #: pretix/base/exporters/orderlist.py:854
 msgid "Tax rule ID"
-msgstr ""
+msgstr "ID aturan pajak"
 
 #: pretix/base/exporters/orderlist.py:857
 #: pretix/plugins/reports/accountingreport.py:319
 msgid "Gross total"
-msgstr ""
+msgstr "Jumlah kotor"
 
 #: pretix/base/exporters/orderlist.py:858
 #: pretix/plugins/reports/accountingreport.py:318
 msgid "Tax total"
-msgstr ""
+msgstr "Jumlah pajak"
 
 #: pretix/base/exporters/orderlist.py:868
 msgid ""
 "This value is supplied for informational purposes, it is not part of the "
 "original transaction data and might have changed since the transaction."
 msgstr ""
+"Nilai ini diberikan untuk tujuan informasi, ini bukan bagian dari data "
+"transaksi asli dan mungkin telah berubah sejak transaksi tersebut."
 
 #: pretix/base/exporters/orderlist.py:891
 msgid "Converted from legacy version"
-msgstr ""
+msgstr "Dikonversi dari versi lawas"
 
 #: pretix/base/exporters/orderlist.py:953
 msgid "Payments and refunds"
-msgstr ""
+msgstr "Pembayaran dan pengembalian uang"
 
 #: pretix/base/exporters/orderlist.py:955
 msgid "Download a spreadsheet of all payments or refunds of every order."
 msgstr ""
+"Unduh spreadsheet semua pembayaran atau pengembalian dana setiap pesanan."
 
 #: pretix/base/exporters/orderlist.py:964
 msgid "Date range (payment date)"
-msgstr ""
+msgstr "Rentang tanggal (tanggal pembayaran)"
 
 #: pretix/base/exporters/orderlist.py:967
 msgid ""
 "Note that using this will exclude any non-confirmed payments or non-"
 "completed refunds."
 msgstr ""
+"Perhatikan bahwa penggunaan ini akan mengecualikan pembayaran yang belum "
+"dikonfirmasi atau pengembalian dana yang belum selesai."
 
 #: pretix/base/exporters/orderlist.py:971
 msgid "Date range (start of transaction)"
-msgstr ""
+msgstr "Rentang tanggal (mulai transaksi)"
 
 #: pretix/base/exporters/orderlist.py:977
 msgid "Payment states"
-msgstr ""
+msgstr "Status pembayaran"
 
 #: pretix/base/exporters/orderlist.py:985
 msgid "Refund states"
-msgstr ""
+msgstr "Status pengembalian dana"
 
 #: pretix/base/exporters/orderlist.py:1028
 #: pretix/base/exporters/orderlist.py:1169
@@ -2351,23 +2398,23 @@ msgstr "Pesanan"
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:5
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control_legacy.html:5
 msgid "Payment ID"
-msgstr ""
+msgstr "ID Pembayaran"
 
 #: pretix/base/exporters/orderlist.py:1028
 #: pretix/base/exporters/orderlist.py:1309
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:30
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:59
 msgid "Creation date"
-msgstr ""
+msgstr "Tanggal pembuatan"
 
 #: pretix/base/exporters/orderlist.py:1028
 #: pretix/control/templates/pretixcontrol/order/index.html:834
 msgid "Completion date"
-msgstr ""
+msgstr "Tanggal penyelesaian"
 
 #: pretix/base/exporters/orderlist.py:1029
 msgid "Status code"
-msgstr ""
+msgstr "Kode status"
 
 #: pretix/base/exporters/orderlist.py:1029
 #: pretix/base/exporters/orderlist.py:1167
@@ -2384,7 +2431,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:25
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:13
 msgid "Amount"
-msgstr ""
+msgstr "Jumlah"
 
 #: pretix/base/exporters/orderlist.py:1029
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:94
@@ -2395,83 +2442,83 @@ msgstr ""
 #: pretix/plugins/reports/accountingreport.py:495
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:29
 msgid "Payment method"
-msgstr ""
+msgstr "Cara Pembayaran"
 
 #: pretix/base/exporters/orderlist.py:1029
 msgid "Matching ID"
-msgstr ""
+msgstr "ID yang cocok"
 
 #: pretix/base/exporters/orderlist.py:1029
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
 msgid "Payment details"
-msgstr ""
+msgstr "Rincian Pembayaran"
 
 #: pretix/base/exporters/orderlist.py:1079
 msgid "Quota availabilities"
-msgstr ""
+msgstr "Ketersediaan kuota"
 
 #: pretix/base/exporters/orderlist.py:1081
 msgid ""
 "Download a spreadsheet of all quotas including their current availability."
-msgstr ""
+msgstr "Unduh spreadsheet berisi semua kuota termasuk ketersediaannya saat ini."
 
 #: pretix/base/exporters/orderlist.py:1086
 #: pretix/control/templates/pretixcontrol/items/quotas.html:45
 msgid "Quota name"
-msgstr ""
+msgstr "Nama kuota"
 
 #: pretix/base/exporters/orderlist.py:1086
 #: pretix/control/templates/pretixcontrol/items/quota.html:56
 msgid "Total quota"
-msgstr ""
+msgstr "Jumlah kuota"
 
 #: pretix/base/exporters/orderlist.py:1086
 #: pretix/control/templates/pretixcontrol/event/cancel.html:19
 #: pretix/control/views/item.py:944
 msgid "Paid orders"
-msgstr ""
+msgstr "Pesanan berbayar"
 
 #: pretix/base/exporters/orderlist.py:1086 pretix/control/views/item.py:949
 msgid "Pending orders"
-msgstr ""
+msgstr "Pesanan tertunda"
 
 #: pretix/base/exporters/orderlist.py:1086
 msgid "Blocking vouchers"
-msgstr ""
+msgstr "Memblokir voucher"
 
 #: pretix/base/exporters/orderlist.py:1087 pretix/control/views/item.py:968
 msgid "Current user's carts"
-msgstr ""
+msgstr "Keranjang pengguna saat ini"
 
 #: pretix/base/exporters/orderlist.py:1087
 msgid "Exited orders"
-msgstr ""
+msgstr "Pesanan yang keluar"
 
 #: pretix/base/exporters/orderlist.py:1087
 msgid "Current availability"
-msgstr ""
+msgstr "Ketersediaan saat ini"
 
 #: pretix/base/exporters/orderlist.py:1104
 #: pretix/base/exporters/orderlist.py:1111
 #: pretix/control/templates/pretixcontrol/items/quota.html:58
 #: pretix/control/views/item.py:975
 msgid "Infinite"
-msgstr ""
+msgstr "Tak terbatas"
 
 #: pretix/base/exporters/orderlist.py:1133
 #: pretix/plugins/reports/accountingreport.py:770
 msgid "Gift card transactions"
-msgstr ""
+msgstr "Transaksi kartu hadiah"
 
 #: pretix/base/exporters/orderlist.py:1135
 #: pretix/base/exporters/orderlist.py:1240
 msgctxt "export_category"
 msgid "Gift cards"
-msgstr ""
+msgstr "Kartu hadiah"
 
 #: pretix/base/exporters/orderlist.py:1136
 msgid "Download a spreadsheet of all gift card transactions."
-msgstr ""
+msgstr "Unduh spreadsheet semua transaksi kartu hadiah."
 
 #: pretix/base/exporters/orderlist.py:1164
 #: pretix/base/exporters/orderlist.py:1211
@@ -2483,7 +2530,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:156
 msgid "Gift card code"
-msgstr ""
+msgstr "Kode kartu hadiah"
 
 #: pretix/base/exporters/orderlist.py:1165
 #: pretix/base/exporters/orderlist.py:1254
@@ -2492,7 +2539,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:1311 pretix/control/forms/filter.py:1314
 #: pretix/control/templates/pretixcontrol/event/live.html:75
 msgid "Test mode"
-msgstr ""
+msgstr "Modus uji"
 
 #: pretix/base/exporters/orderlist.py:1170 pretix/base/models/organizer.py:94
 #: pretix/control/forms/event.py:106 pretix/control/forms/event.py:112
@@ -2508,7 +2555,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:112
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:9
 msgid "Organizer"
-msgstr ""
+msgstr "Penyelenggara"
 
 #: pretix/base/exporters/orderlist.py:1177 pretix/base/invoice.py:512
 #: pretix/control/templates/pretixcontrol/base.html:279
@@ -2535,40 +2582,42 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:89
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:145
 msgid "TEST MODE"
-msgstr ""
+msgstr "MODE UJI"
 
 #: pretix/base/exporters/orderlist.py:1192
 msgid "Gift card redemptions"
-msgstr ""
+msgstr "Penukaran kartu hadiah"
 
 #: pretix/base/exporters/orderlist.py:1194
 msgid ""
 "Download a spreadsheet of all payments or refunds that involve gift cards."
 msgstr ""
+"Unduh spreadsheet berisi semua pembayaran atau pengembalian dana yang "
+"melibatkan kartu hadiah."
 
 #: pretix/base/exporters/orderlist.py:1211
 #: pretix/control/templates/pretixcontrol/giftcards/payment.html:16
 msgid "Issuer"
-msgstr ""
+msgstr "Penerbit"
 
 #: pretix/base/exporters/orderlist.py:1238 pretix/control/navigation.py:524
 #: pretix/control/navigation.py:542
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:156
 #: pretix/plugins/reports/accountingreport.py:888
 msgid "Gift cards"
-msgstr ""
+msgstr "Kartu hadiah"
 
 #: pretix/base/exporters/orderlist.py:1241
 msgid "Download a spreadsheet of all gift cards including their current value."
-msgstr ""
+msgstr "Unduh spreadsheet semua kartu hadiah termasuk nilainya saat ini."
 
 #: pretix/base/exporters/orderlist.py:1248
 msgid "Show value at"
-msgstr ""
+msgstr "Tunjukkan nilai di"
 
 #: pretix/base/exporters/orderlist.py:1251
 msgid "Defaults to the time of report."
-msgstr ""
+msgstr "Default pada waktu laporan."
 
 #: pretix/base/exporters/orderlist.py:1256
 #: pretix/base/exporters/orderlist.py:1266 pretix/control/forms/filter.py:507
@@ -2587,24 +2636,24 @@ msgstr ""
 #: pretix/plugins/reports/accountingreport.py:104
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:67
 msgid "All"
-msgstr ""
+msgstr "SemuaSemua"
 
 #: pretix/base/exporters/orderlist.py:1258 pretix/control/forms/filter.py:1315
 msgid "Live"
-msgstr ""
+msgstr "Hidup"
 
 #: pretix/base/exporters/orderlist.py:1267 pretix/control/forms/filter.py:1323
 #: pretix/control/templates/pretixcontrol/pdf/index.html:374
 msgid "Empty"
-msgstr ""
+msgstr "Kosong"
 
 #: pretix/base/exporters/orderlist.py:1268 pretix/control/forms/filter.py:1324
 msgid "Valid and with value"
-msgstr ""
+msgstr "Valid dan bernilai"
 
 #: pretix/base/exporters/orderlist.py:1269 pretix/control/forms/filter.py:1325
 msgid "Expired and with value"
-msgstr ""
+msgstr "Kedaluwarsa dan bernilai"
 
 #: pretix/base/exporters/orderlist.py:1270 pretix/control/forms/filter.py:226
 #: pretix/control/forms/filter.py:1326 pretix/control/forms/filter.py:1965
@@ -2615,21 +2664,21 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:360
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:27
 msgid "Expired"
-msgstr ""
+msgstr "Kedaluwarsa"
 
 #: pretix/base/exporters/orderlist.py:1308 pretix/base/models/giftcards.py:98
 msgid "Test mode card"
-msgstr ""
+msgstr "Kartu mode uji"
 
 #: pretix/base/exporters/orderlist.py:1310 pretix/base/models/giftcards.py:102
 #: pretix/control/templates/pretixcontrol/order/index.html:195
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:62
 msgid "Expiry date"
-msgstr ""
+msgstr "Tanggal kadaluarsa"
 
 #: pretix/base/exporters/orderlist.py:1311 pretix/control/forms/orders.py:830
 msgid "Special terms and conditions"
-msgstr ""
+msgstr "Syarat dan ketentuan khusus"
 
 #: pretix/base/exporters/orderlist.py:1313
 #: pretix/control/templates/pretixcontrol/order/change.html:94
@@ -2637,69 +2686,69 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:32
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:65
 msgid "Current value"
-msgstr ""
+msgstr "Nilai sekarang"
 
 #: pretix/base/exporters/orderlist.py:1314
 msgid "Created in order"
-msgstr ""
+msgstr "Dibuat secara berurutan"
 
 #: pretix/base/exporters/orderlist.py:1315
 msgid "Last invoice number of order"
-msgstr ""
+msgstr "Nomor faktur pesanan terakhir"
 
 #: pretix/base/exporters/orderlist.py:1316
 msgid "Last invoice date of order"
-msgstr ""
+msgstr "Tanggal faktur terakhir pemesanan"
 
 #: pretix/base/exporters/waitinglist.py:42
 msgctxt "export_category"
 msgid "Waiting list"
-msgstr ""
+msgstr "Daftar tunggu"
 
 #: pretix/base/exporters/waitinglist.py:43
 msgid "Download a spread sheet with all your waiting list data."
-msgstr ""
+msgstr "Unduh spreadsheet dengan semua data daftar tunggu Anda."
 
 #: pretix/base/exporters/waitinglist.py:49
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:87
 msgid "All entries"
-msgstr ""
+msgstr "Semua masukan"
 
 #: pretix/base/exporters/waitinglist.py:54
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:90
 msgid "Waiting for a voucher"
-msgstr ""
+msgstr "Menunggu voucher"
 
 #: pretix/base/exporters/waitinglist.py:59
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:92
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:212
 #: pretix/control/views/waitinglist.py:326
 msgid "Voucher assigned"
-msgstr ""
+msgstr "Voucher diberikan"
 
 #: pretix/base/exporters/waitinglist.py:64
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:95
 msgid "Waiting for redemption"
-msgstr ""
+msgstr "Menunggu penebusan"
 
 #: pretix/base/exporters/waitinglist.py:72
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:208
 #: pretix/control/views/waitinglist.py:322
 msgid "Voucher redeemed"
-msgstr ""
+msgstr "Voucher telah ditukarkan"
 
 #: pretix/base/exporters/waitinglist.py:80
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:101
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:210
 #: pretix/control/views/waitinglist.py:324
 msgid "Voucher expired"
-msgstr ""
+msgstr "Voucher sudah habis masa berlakunya"
 
 #: pretix/base/exporters/waitinglist.py:111 pretix/base/pdf.py:122
 #: pretix/control/forms/event.py:1685
 #: pretix/control/templates/pretixcontrol/items/index.html:35
 msgid "Product name"
-msgstr ""
+msgstr "Nama Produk"
 
 #: pretix/base/exporters/waitinglist.py:115 pretix/base/orderimport.py:187
 #: pretix/control/templates/pretixcontrol/checkin/index.html:100
@@ -2710,7 +2759,7 @@ msgstr "Tanggal"
 #: pretix/base/exporters/waitinglist.py:119
 #: pretix/control/views/waitinglist.py:308
 msgid "Priority"
-msgstr ""
+msgstr "Prioritas"
 
 #: pretix/base/exporters/waitinglist.py:121 pretix/base/models/vouchers.py:190
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:18
@@ -2722,7 +2771,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:12
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:19
 msgid "Voucher code"
-msgstr ""
+msgstr "Kode Voucher"
 
 #: pretix/base/forms/__init__.py:140
 #, python-format
@@ -2730,57 +2779,62 @@ msgid ""
 "Due to technical reasons you cannot set inputs, that need to be masked (e.g. "
 "passwords), to %(value)s."
 msgstr ""
+"Karena alasan teknis, Anda tidak dapat mengatur input, yang perlu ditutup ("
+"misalnya kata sandi), ke %(nilai)s.Karena alasan teknis, Anda tidak dapat "
+"mengatur input, yang perlu ditutup (misalnya kata sandi), ke %(nilai)s."
 
 #: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:168
 msgid "Keep me logged in"
-msgstr ""
+msgstr "buat saya tetap masuk"
 
 #: pretix/base/forms/auth.py:60 pretix/base/forms/auth.py:261
 msgid "This combination of credentials is not known to our system."
-msgstr ""
+msgstr "Kombinasi kredensial ini tidak diketahui oleh sistem kami."
 
 #: pretix/base/forms/auth.py:61 pretix/base/forms/user.py:57
 #: pretix/presale/forms/customer.py:366 pretix/presale/forms/customer.py:438
 msgid "For security reasons, please wait 5 minutes before you try again."
-msgstr ""
+msgstr "Demi alasan keamanan, harap tunggu 5 menit sebelum Anda mencoba lagi."
 
 #: pretix/base/forms/auth.py:62 pretix/base/forms/auth.py:262
 msgid "This account is inactive."
-msgstr ""
+msgstr "Akun ini tidak aktif."
 
 #: pretix/base/forms/auth.py:145
 msgid ""
 "You already registered with that email address, please use the login form."
 msgstr ""
+"Anda sudah terdaftar dengan alamat email tersebut, silahkan gunakan form "
+"login."
 
 #: pretix/base/forms/auth.py:146 pretix/base/forms/auth.py:204
 #: pretix/base/forms/user.py:56 pretix/control/forms/users.py:45
 #: pretix/presale/forms/customer.py:277 pretix/presale/forms/customer.py:365
 msgid "Please enter the same password twice"
-msgstr ""
+msgstr "Silakan masukkan kata sandi yang sama dua kali"
 
 #: pretix/base/forms/auth.py:149
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:133
 msgid "Email address"
-msgstr ""
+msgstr "Alamat email"
 
 #: pretix/base/forms/auth.py:161 pretix/base/forms/auth.py:213
 #: pretix/presale/forms/customer.py:290 pretix/presale/forms/customer.py:384
 msgid "Repeat password"
-msgstr ""
+msgstr "Masukkan kata kunci kembali"
 
 #: pretix/base/forms/questions.py:207
 msgid "Please do not use special characters in names."
-msgstr ""
+msgstr "Harap jangan menggunakan karakter khusus dalam nama."
 
 #: pretix/base/forms/questions.py:266
 msgid "Please enter a shorter name."
-msgstr ""
+msgstr "Silakan masukkan nama yang lebih pendek."
 
 #: pretix/base/forms/questions.py:283
 msgctxt "phonenumber"
 msgid "International area code"
-msgstr ""
+msgstr "Kode area internasional"
 
 #: pretix/base/forms/questions.py:307
 msgctxt "phonenumber"
