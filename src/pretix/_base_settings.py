@@ -89,6 +89,7 @@ ALL_LANGUAGES = [
     ('fi', _('Finnish')),
     ('gl', _('Galician')),
     ('el', _('Greek')),
+    ('id', _('Indonesian')),
     ('it', _('Italian')),
     ('lv', _('Latvian')),
     ('pl', _('Polish')),
