@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
 "PO-Revision-Date: 2023-09-18 07:47+0000\n"
-"Last-Translator: Aufa Fadhlurohman <aufafadlurohman@gmail.com>\n"
+"Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix/id/>\n"
 "Language: id\n"
@@ -28,9 +28,8 @@ msgid "German"
 msgstr "Jerman"
 
 #: pretix/_base_settings.py:80
-#, fuzzy
 msgid "German (informal)"
-msgstr "German (informal)"
+msgstr "Jerman (informal)"
 
 #: pretix/_base_settings.py:81
 #, fuzzy
@@ -103,31 +102,31 @@ msgstr "Polish"
 
 #: pretix/_base_settings.py:95
 msgid "Portuguese (Portugal)"
-msgstr ""
+msgstr "Portugis (Portugal)"
 
 #: pretix/_base_settings.py:96
 msgid "Portuguese (Brazil)"
-msgstr ""
+msgstr "Portugis (Brazil)"
 
 #: pretix/_base_settings.py:97
 msgid "Romanian"
-msgstr ""
+msgstr "Romania"
 
 #: pretix/_base_settings.py:98
 msgid "Russian"
-msgstr ""
+msgstr "Rusia"
 
 #: pretix/_base_settings.py:99
 msgid "Spanish"
-msgstr ""
+msgstr "Spanyol"
 
 #: pretix/_base_settings.py:100
 msgid "Turkish"
-msgstr ""
+msgstr "Turki"
 
 #: pretix/_base_settings.py:101
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukraina"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
