@@ -1,4 +1,5 @@
 {% load i18n %}
+{% load money %}
 
 {% if payment_info %}
     <dl class="dl-horizontal">
@@ -59,7 +60,7 @@
         {% endif %}
         {% if "amount" in payment_info %}
             <dt>{% trans "Total value" %}</dt>
-            <dd>{{ payment_info.amount|floatformat:2 }}</dd>
+            <dd>{{ payment_info.amount|money_numberfield:event.currency }}</dd>
         {% endif %}
         {% if "currency" in payment_info %}
             <dt>{% trans "Currency" %}</dt>
