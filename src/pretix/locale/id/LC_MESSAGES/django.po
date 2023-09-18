@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
 "PO-Revision-Date: 2023-09-18 10:05+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix/id/>\n"
 "Language: id\n"
@@ -3150,12 +3150,12 @@ msgstr "Harga tunggal: {net_price} net / {gross_price} bruto"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr ""
+msgstr "Harga tunggal: {price}"
 
 #: pretix/base/invoice.py:677 pretix/base/invoice.py:683
 msgctxt "invoice"
 msgid "Invoice total"
-msgstr ""
+msgstr "Jumlah faktur"
 
 #: pretix/base/invoice.py:693
 msgctxt "invoice"
