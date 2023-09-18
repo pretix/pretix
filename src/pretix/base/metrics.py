@@ -264,7 +264,7 @@ def metric_values():
 
     # Metrics from redis
     if settings.HAS_REDIS:
-        for key, value in redis.hscan_iter(REDIS_KEY):
+        for key, value in redis.hscan_iter(REDIS_KEY, count=1000):
             dkey = key.decode("utf-8")
             splitted = dkey.split("{", 2)
             value = float(value.decode("utf-8"))
