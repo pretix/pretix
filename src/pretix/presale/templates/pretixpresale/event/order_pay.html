@@ -1,6 +1,7 @@
 {% extends "pretixpresale/event/base.html" %}
 {% load i18n %}
 {% load eventurl %}
+{% load money %}
 {% block title %}{% trans "Pay order" %}{% endblock %}
 {% block content %}
     <h2>
@@ -9,7 +10,7 @@
         {% endblocktrans %}
     </h2>
 
-    <form method="post" class="form-horizontal" href="" data-total="{{ order.total|floatformat:2 }}">
+    <form method="post" class="form-horizontal" href="" data-total="{{ order.total|money_numberfield:request.event.currency }}">
         {% csrf_token %}
         <input type="hidden" name="payment" value="{{ provider.identifier }}">
         <div class="form-horizontal payment-redo-form">
