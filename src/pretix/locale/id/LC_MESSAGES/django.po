@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-18 07:47+0000\n"
-"Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
+"PO-Revision-Date: 2023-09-18 09:04+0000\n"
+"Last-Translator: Aufa Fadhlurohman <aufafadlurohman@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix/id/>\n"
 "Language: id\n"
@@ -133,52 +133,55 @@ msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
+"Akses perangkat penuh (membaca dan mengubah pesanan dan kartu hadiah, "
+"membaca produk dan pengaturan)"
 
 #: pretix/api/auth/devicesecurity.py:53
 msgid "pretixSCAN"
-msgstr ""
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:90
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
 msgstr ""
+"pretixSCAN (mode kios, tidak ada sinkronisasi pesanan, tidak ada pencarian)"
 
 #: pretix/api/auth/devicesecurity.py:124
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "pretixSCAN (hanya online, tidak ada sinkronisasi pesanan)"
 
 #: pretix/api/auth/devicesecurity.py:159
 msgid "pretixPOS"
-msgstr ""
+msgstr "pretixPOSpretixPOS"
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:391
 msgid "Application name"
-msgstr ""
+msgstr "Nama aplikasi"
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:410
 msgid "Redirection URIs"
-msgstr ""
+msgstr "URI pengalihan"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:411
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Daftar URI yang diizinkan, dipisahkan spasi"
 
 #: pretix/api/models.py:46 pretix/base/models/customers.py:395
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:106
 msgid "Client ID"
-msgstr ""
+msgstr "ID Klien"
 
 #: pretix/api/models.py:50
 msgid "Client secret"
-msgstr ""
+msgstr "Rahasia klien"
 
 #: pretix/api/models.py:111
 msgid "Enable webhook"
-msgstr ""
+msgstr "Aktifkan webhook"
 
 #: pretix/api/models.py:112
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "URL sasaran"
 
 #: pretix/api/models.py:113 pretix/base/models/devices.py:123
 #: pretix/base/models/organizer.py:264
@@ -201,11 +204,11 @@ msgstr "Batasi pada acara"
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/checkinlists/exporters.py:509
 msgid "Comment"
-msgstr ""
+msgstr "Komentar"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1302
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "Produk \"{}\" tidak ditetapkan ke kuota."
 
 #: pretix/api/serializers/checkin.py:66 pretix/base/models/event.py:1595
 #: pretix/base/models/items.py:1715 pretix/base/models/items.py:1973
@@ -220,7 +223,7 @@ msgstr "Sub-acara tersebut bukan milik acara ini."
 
 #: pretix/api/serializers/checkin.py:77
 msgid "Unknown sales channel."
-msgstr ""
+msgstr "Saluran penjualan tidak dikenal."
 
 #: pretix/api/serializers/event.py:217
 msgid ""
@@ -233,100 +236,113 @@ msgstr ""
 #: pretix/api/serializers/event.py:232 pretix/api/serializers/event.py:530
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Properti data meta '{name}' tidak ada."
 
 #: pretix/api/serializers/event.py:235 pretix/api/serializers/event.py:533
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr ""
+msgstr "Properti data meta '{name}' tidak mengizinkan nilai '{value}'."
 
 #: pretix/api/serializers/event.py:278
 #, python-brace-format
 msgid "Unknown plugin: '{name}'."
-msgstr ""
+msgstr "Plugin tidak dikenal: '{name}'."
 
 #: pretix/api/serializers/item.py:74 pretix/api/serializers/item.py:123
 #: pretix/api/serializers/item.py:323
 #, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr ""
+msgstr "Properti data meta item '{name}' tidak ada."
 
 #: pretix/api/serializers/item.py:182 pretix/control/forms/item.py:1077
 msgid "The bundled item must not be the same item as the bundling one."
-msgstr ""
+msgstr "Barang yang dibundel tidak boleh sama dengan barang yang dibundling."
 
 #: pretix/api/serializers/item.py:185 pretix/control/forms/item.py:1079
 msgid "The bundled item must not have bundles on its own."
-msgstr ""
+msgstr "Item yang dibundel tidak boleh memiliki bundel tersendiri."
 
 #: pretix/api/serializers/item.py:262
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
+"Memperbarui add-on, bundel, atau variasi melalui PATCH/PUT tidak didukung. "
+"Silakan gunakan titik akhir bersarang khusus."
 
 #: pretix/api/serializers/item.py:270
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "Hanya produk tiket masuk yang saat ini dapat dipersonalisasi."
 
 #: pretix/api/serializers/item.py:281
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Produk kartu hadiah tidak boleh dikaitkan dengan tarif pajak selain nol "
+"karena pajak penjualan akan diterapkan saat kartu hadiah ditukarkan."
 
 #: pretix/api/serializers/item.py:286 pretix/control/forms/item.py:609
 msgid "Gift card products should not be admission products at the same time."
 msgstr ""
+"Produk kartu hadiah tidak boleh menjadi produk tiket masuk pada saat yang "
+"bersamaan."
 
 #: pretix/api/serializers/item.py:462
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
+"Opsi pembaruan melalui PATCH/PUT tidak didukung. Silakan gunakan titik akhir "
+"bersarang khusus."
 
 #: pretix/api/serializers/item.py:476 pretix/control/forms/item.py:118
 msgid "Question cannot depend on a question asked during check-in."
 msgstr ""
+"Pertanyaan tidak dapat bergantung pada pertanyaan yang diajukan saat check-"
+"in."
 
 #: pretix/api/serializers/item.py:481 pretix/control/forms/item.py:123
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "Ketergantungan melingkar antar pertanyaan terdeteksi."
 
 #: pretix/api/serializers/item.py:486 pretix/control/forms/item.py:132
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "Pertanyaan seperti ini tidak dapat ditanyakan pada saat check-in."
 
 #: pretix/api/serializers/media.py:108
 msgid ""
 "A medium with the same identifier and type already exists in your organizer "
 "account."
 msgstr ""
+"Media dengan pengenal dan jenis yang sama sudah ada di akun penyelenggara "
+"Anda."
 
 #: pretix/api/serializers/order.py:77
 #, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr ""
+msgstr "\"{input}\" bukan pilihan yang valid."
 
 #: pretix/api/serializers/order.py:1262 pretix/api/views/cart.py:210
 #: pretix/base/services/orders.py:1469
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
-msgstr ""
+msgstr "Kursi yang dipilih \"{seat}\" tidak tersedia."
 
 #: pretix/api/serializers/order.py:1289 pretix/api/serializers/order.py:1296
 msgid "The product \"{}\" is not available on this date."
-msgstr ""
+msgstr "Produk \"{}\" tidak tersedia pada tanggal ini."
 
 #: pretix/api/serializers/order.py:1314 pretix/api/views/cart.py:190
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
+"Kuota yang tersedia pada kuota \"{}\" tidak cukup untuk melakukan operasi."
 
 #: pretix/api/serializers/organizer.py:102
 #: pretix/control/forms/organizer.py:802 pretix/presale/forms/customer.py:439
 msgid "An account with this email address is already registered."
-msgstr ""
+msgstr "Akun dengan alamat email ini sudah terdaftar."
 
 #: pretix/api/serializers/organizer.py:205
 #: pretix/control/forms/organizer.py:651
@@ -334,26 +350,28 @@ msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
 msgstr ""
+"Kartu hadiah dengan rahasia yang sama sudah ada di akun penyelenggara Anda "
+"atau akun penyelenggara afiliasinya."
 
 #: pretix/api/serializers/organizer.py:291
 #: pretix/control/views/organizer.py:730
 msgid "pretix account invitation"
-msgstr ""
+msgstr "undangan akun pretix"
 
 #: pretix/api/serializers/organizer.py:313
 #: pretix/control/views/organizer.py:829
 msgid "This user already has been invited for this team."
-msgstr ""
+msgstr "Pengguna ini telah diundang untuk tim ini."
 
 #: pretix/api/serializers/organizer.py:329
 #: pretix/control/views/organizer.py:846
 msgid "This user already has permissions for this team."
-msgstr ""
+msgstr "Pengguna ini sudah memiliki izin untuk tim ini."
 
 #: pretix/api/views/cart.py:199
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr ""
+msgstr "Voucher yang ditentukan telah digunakan sebanyak jumlah maksimum."
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:468
 #, python-brace-format
@@ -361,114 +379,115 @@ msgid ""
 "The application \"{application_name}\" has been authorized to access your "
 "account."
 msgstr ""
+"Aplikasi \"{application_name}\" telah diotorisasi untuk mengakses akun Anda."
 
 #: pretix/api/views/order.py:579 pretix/control/views/orders.py:1514
 #: pretix/presale/views/order.py:754 pretix/presale/views/order.py:827
 msgid "You cannot generate an invoice for this order."
-msgstr ""
+msgstr "Anda tidak dapat membuat faktur untuk pesanan ini."
 
 #: pretix/api/views/order.py:584 pretix/control/views/orders.py:1516
 #: pretix/presale/views/order.py:756 pretix/presale/views/order.py:829
 msgid "An invoice for this order already exists."
-msgstr ""
+msgstr "Faktur untuk pesanan ini sudah ada."
 
 #: pretix/api/views/order.py:610 pretix/control/views/orders.py:1640
 #: pretix/control/views/users.py:141
 msgid "There was an error sending the mail. Please try again later."
-msgstr ""
+msgstr "Terjadi kesalahan saat mengirim email. Silakan coba lagi nanti."
 
 #: pretix/api/views/order.py:688 pretix/base/services/cart.py:203
 #: pretix/base/services/orders.py:179 pretix/presale/views/order.py:811
 msgid "One of the selected products is not available in the selected country."
-msgstr ""
+msgstr "Salah satu produk yang dipilih tidak tersedia di negara yang dipilih."
 
 #: pretix/api/webhooks.py:225 pretix/base/notifications.py:233
 msgid "New order placed"
-msgstr ""
+msgstr "Pesanan baru ditempatkan"
 
 #: pretix/api/webhooks.py:229 pretix/base/notifications.py:239
 msgid "New order requires approval"
-msgstr ""
+msgstr "Pesanan baru memerlukan persetujuan"
 
 #: pretix/api/webhooks.py:233 pretix/base/notifications.py:245
 msgid "Order marked as paid"
-msgstr ""
+msgstr "Pesanan ditandai sebagai dibayar"
 
 #: pretix/api/webhooks.py:237 pretix/base/models/checkin.py:343
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
 #: pretix/control/views/orders.py:1477
 msgid "Order canceled"
-msgstr ""
+msgstr "Pesanan dibatalkan"
 
 #: pretix/api/webhooks.py:241 pretix/base/notifications.py:257
 msgid "Order reactivated"
-msgstr ""
+msgstr "Pesanan diaktifkan kembali"
 
 #: pretix/api/webhooks.py:245 pretix/base/notifications.py:263
 msgid "Order expired"
-msgstr ""
+msgstr "Pesanan sudah habis masa berlakunya"
 
 #: pretix/api/webhooks.py:249
 msgid "Order expiry date changed"
-msgstr ""
+msgstr "Tanggal kadaluwarsa pesanan diubah"
 
 #: pretix/api/webhooks.py:253 pretix/base/notifications.py:269
 msgid "Order information changed"
-msgstr ""
+msgstr "Informasi pesanan berubah"
 
 #: pretix/api/webhooks.py:257 pretix/base/notifications.py:275
 msgid "Order contact address changed"
-msgstr ""
+msgstr "Alamat kontak pesanan diubah"
 
 #: pretix/api/webhooks.py:261 pretix/base/notifications.py:281
 #: pretix/control/templates/pretixcontrol/event/mail.html:102
 msgid "Order changed"
-msgstr ""
+msgstr "Pesanan berubah"
 
 #: pretix/api/webhooks.py:265
 msgid "Refund of payment created"
-msgstr ""
+msgstr "Pengembalian dana pembayaran dibuat"
 
 #: pretix/api/webhooks.py:269 pretix/base/notifications.py:293
 msgid "External refund of payment"
-msgstr ""
+msgstr "Pengembalian pembayaran eksternal"
 
 #: pretix/api/webhooks.py:273
 msgid "Refund of payment requested by customer"
-msgstr ""
+msgstr "Pengembalian dana pembayaran yang diminta oleh pelanggan"
 
 #: pretix/api/webhooks.py:277
 msgid "Refund of payment completed"
-msgstr ""
+msgstr "Pengembalian dana pembayaran selesai"
 
 #: pretix/api/webhooks.py:281
 msgid "Refund of payment canceled"
-msgstr ""
+msgstr "Pengembalian dana pembayaran dibatalkan"
 
 #: pretix/api/webhooks.py:285
 msgid "Refund of payment failed"
-msgstr ""
+msgstr "Pengembalian dana pembayaran gagal"
 
 #: pretix/api/webhooks.py:289
 msgid "Payment confirmed"
-msgstr ""
+msgstr "Pembayaran dikonfirmasi"
 
 #: pretix/api/webhooks.py:293
 msgid "Order approved"
-msgstr ""
+msgstr "Pesanan disetujui"
 
 #: pretix/api/webhooks.py:297
 msgid "Order denied"
-msgstr ""
+msgstr "Pesanan ditolak"
 
 #: pretix/api/webhooks.py:301
 msgid "Ticket checked in"
-msgstr ""
+msgstr "Tiket sudah check in"
 
 #: pretix/api/webhooks.py:305
 msgid "Ticket check-in reverted"
-msgstr ""
+msgstr "Check-in tiket dikembalikan"
 
 #: pretix/api/webhooks.py:309
 msgid "Event created"
@@ -502,50 +521,52 @@ msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
 msgstr ""
+"Produk diubah (termasuk produk yang ditambahkan atau dihapus dan termasuk "
+"perubahan pada objek bertingkat seperti variasi atau paket)"
 
 #: pretix/api/webhooks.py:338
 msgid "Shop taken live"
-msgstr ""
+msgstr "Toko diambil secara langsung"
 
 #: pretix/api/webhooks.py:342
 msgid "Shop taken offline"
-msgstr ""
+msgstr "Toko diambil secara offline"
 
 #: pretix/api/webhooks.py:346
 msgid "Test-Mode of shop has been activated"
-msgstr ""
+msgstr "Mode Tes toko telah diaktifkan"
 
 #: pretix/api/webhooks.py:350
 msgid "Test-Mode of shop has been deactivated"
-msgstr ""
+msgstr "Mode Uji toko telah dinonaktifkan"
 
 #: pretix/api/webhooks.py:354
 msgid "Waiting list entry added"
-msgstr ""
+msgstr "Entri daftar tunggu ditambahkan"
 
 #: pretix/api/webhooks.py:358
 msgid "Waiting list entry changed"
-msgstr ""
+msgstr "Entri daftar tunggu diubah"
 
 #: pretix/api/webhooks.py:362
 msgid "Waiting list entry deleted"
-msgstr ""
+msgstr "Entri daftar tunggu dihapus"
 
 #: pretix/api/webhooks.py:366
 msgid "Waiting list entry received voucher"
-msgstr ""
+msgstr "Entri daftar tunggu menerima voucher"
 
 #: pretix/api/webhooks.py:370
 msgid "Customer account created"
-msgstr ""
+msgstr "Akun pelanggan dibuat"
 
 #: pretix/api/webhooks.py:374
 msgid "Customer account changed"
-msgstr ""
+msgstr "Akun pelanggan berubah"
 
 #: pretix/api/webhooks.py:378
 msgid "Customer account anonymized"
-msgstr ""
+msgstr "Akun pelanggan dianonimkan"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:938
@@ -557,15 +578,15 @@ msgstr ""
 #: pretix/plugins/banktransfer/payment.py:674
 #: pretix/presale/forms/customer.py:139
 msgid "This field is required."
-msgstr ""
+msgstr "Bagian ini diperlukan."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr ""
+msgstr "Masukkan kode pos dengan format XXX."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr ""
+msgstr "Masukkan kode pos dengan format XXXX."
 
 #: pretix/base/auth.py:143
 #, python-brace-format
