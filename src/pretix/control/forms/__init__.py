@@ -51,6 +51,7 @@ from django_scopes.forms import SafeModelMultipleChoiceField
 from pretix.helpers.hierarkey import clean_filename
 
 from ...base.forms import I18nModelForm
+from ...helpers.i18n import get_language_score
 from ...helpers.images import (
     IMAGE_EXTS, validate_uploaded_file_for_valid_image,
 )
@@ -325,6 +326,7 @@ class MultipleLanguagesWidget(forms.CheckboxSelectMultiple):
         opt = super().create_option(name, value, label, selected, index, subindex, attrs)
         opt['official'] = value in settings.LANGUAGES_OFFICIAL
         opt['incubating'] = value in settings.LANGUAGES_INCUBATING
+        opt['score'] = round(get_language_score(value) / get_language_score("de") * 100)
         return opt
 
 

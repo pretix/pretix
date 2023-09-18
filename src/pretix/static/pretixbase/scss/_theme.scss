@@ -116,6 +116,33 @@ input[type=number]::-webkit-outer-spin-button {
   font-weight: normal;
 }
 
+.label-outline {
+  background: transparent;
+  &.label-default {
+    border: 1px solid $label-default-bg;
+    color: $label-default-bg;
+  }
+  &.label-primary {
+    border: 1px solid $label-primary-bg;
+    color: $brand-primary;
+  }
+  &.label-success {
+    border: 1px solid $label-success-bg;
+    color: $brand-success;
+  }
+  &.label-info {
+    border: 1px solid $label-info-bg;
+    color: $brand-info;
+  }
+  &.label-warning {
+    border: 1px solid $label-warning-bg;
+    color: $brand-warning;
+  }
+  &.label-danger {
+    border: 1px solid $label-danger-bg;
+    color: $brand-danger;
+  }
+}
 
 .alert {
   text-align: left;
