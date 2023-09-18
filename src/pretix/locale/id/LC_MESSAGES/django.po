@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-18 15:41+0000\n"
+"PO-Revision-Date: 2023-09-18 15:42+0000\n"
 "Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix/id/>\n"
@@ -30061,7 +30061,7 @@ msgstr[0] "Anda harus memilih %(min_count)s dari kategori ini."
 #, python-format
 msgid "You can choose %(max_count)s option from this category."
 msgid_plural "You can choose up to %(max_count)s options from this category."
-msgstr[0] "Anda dapat memilih opsi %(max_count)s dari kategori ini."
+msgstr[0] "Anda dapat memilih sampai %(max_count)s opsi dari kategori ini."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:33
 #, python-format
@@ -30069,6 +30069,8 @@ msgid ""
 "You can choose between %(min_count)s and %(max_count)s options from this "
 "category."
 msgstr ""
+"Anda dapat memilih antara opsi %(min_count)s dan %(max_count)s dari kategori "
+"ini."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:63
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:242
@@ -30077,7 +30079,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:279
 #, python-format
 msgid "minimum amount to order: %(num)s"
-msgstr ""
+msgstr "jumlah minimum untuk memesan: %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:75
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:148
@@ -30092,7 +30094,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:319
 msgctxt "price"
 msgid "free"
-msgstr ""
+msgstr "gratis"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:77
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:51
