@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-18 15:43+0000\n"
+"PO-Revision-Date: 2023-09-19 05:00+0000\n"
 "Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix/id/>\n"
@@ -6729,7 +6729,6 @@ msgstr "Waktu masuk acara"
 
 #: pretix/base/pdf.py:309 pretix/base/pdf.py:405 pretix/base/pdf.py:429
 #: pretix/base/pdf.py:453
-#, fuzzy
 msgid "19:00"
 msgstr "19:00"
 
@@ -6750,7 +6749,6 @@ msgid "Sesame Street 42"
 msgstr "jalan wijen 42"
 
 #: pretix/base/pdf.py:347
-#, fuzzy
 msgid "12345"
 msgstr "12345"
 
@@ -15674,7 +15672,6 @@ msgstr "Pembatalan"
 
 #: pretix/control/navigation.py:113
 #: pretix/control/templates/pretixcontrol/event/widget.html:8
-#, fuzzy
 msgid "Widget"
 msgstr "Widget"
 
@@ -15762,7 +15759,6 @@ msgid "Notifications"
 msgstr "Pemberitahuan"
 
 #: pretix/control/navigation.py:390
-#, fuzzy
 msgid "2FA"
 msgstr "2FA"
 
@@ -16502,12 +16498,10 @@ msgstr "Simulator check-in"
 #: pretix/control/templates/pretixcontrol/checkin/index.html:27
 #: pretix/control/templates/pretixcontrol/orders/overview.html:20
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:64
-#, fuzzy
 msgid "PDF"
 msgstr "PDF"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:32
-#, fuzzy
 msgid "CSV"
 msgstr "CSV"
 
@@ -20458,7 +20452,7 @@ msgstr "TIDAK AMAN"
 #: pretix/control/templates/pretixcontrol/order/index.html:655
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:352
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:399
-#, fuzzy, python-format
+#, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(taxname)s"
 msgstr "<strong>plus</strong> %(rate)s%% %(taxname)s"
 
@@ -20484,7 +20478,6 @@ msgstr "Pajak"
 #: pretix/plugins/reports/exporters.py:600
 #: pretix/plugins/reports/exporters.py:930
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:449
-#, fuzzy
 msgid "Total"
 msgstr "Total"
 
@@ -21311,7 +21304,7 @@ msgstr "pilih baris untuk operasi batch"
 #: pretix/control/templates/pretixcontrol/orders/index.html:190
 #: pretix/control/templates/pretixcontrol/search/orders.html:80
 #: pretix/control/templates/pretixcontrol/search/orders.html:82
-#, fuzzy, python-format
+#, python-format
 msgctxt "followup"
 msgid "TODO %(date)s"
 msgstr "TODO %(date)s"
@@ -21672,7 +21665,6 @@ msgid "System URL:"
 msgstr "URL Sistem:"
 
 #: pretix/control/templates/pretixcontrol/organizers/device_connect.html:25
-#, fuzzy
 msgid "Token:"
 msgstr "Token:"
 
@@ -22537,7 +22529,6 @@ msgid "Redo"
 msgstr "Mengulangi"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:48
-#, fuzzy
 msgid "Editor"
 msgstr "Editor"
 
@@ -22667,7 +22658,6 @@ msgid "Preferred language"
 msgstr "Bahasa pilihan"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:239
-#, fuzzy
 msgid "x (mm)"
 msgstr "x (mm)"
 
@@ -23226,7 +23216,6 @@ msgid "Android (Google Play)"
 msgstr "Android (Google Play)"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_confirm_totp.html:23
-#, fuzzy
 msgid "Android (F-Droid)"
 msgstr "Android (F-Droid)"
 
@@ -23486,7 +23475,6 @@ msgid "E-Mail notification"
 msgstr "Pemberitahuan email"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
-#, fuzzy
 msgid "Global"
 msgstr "Global"
 
@@ -23573,7 +23561,6 @@ msgid "Method"
 msgstr "metode"
 
 #: pretix/control/templates/pretixcontrol/user/staff_session_edit.html:31
-#, fuzzy
 msgid "URL"
 msgstr "URL"
 
@@ -24034,7 +24021,6 @@ msgstr ""
 "<strong>%(entry)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/transfer.html:19
-#, fuzzy
 msgid "Transfer"
 msgstr "Transfer"
 
@@ -25625,7 +25611,6 @@ msgid "Order {}"
 msgstr "Memesan {}"
 
 #: pretix/control/views/typeahead.py:128
-#, fuzzy
 msgid "Voucher {}"
 msgstr "Voucher {}"
 
@@ -26108,7 +26093,6 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:13
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:50
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:24
-#, fuzzy
 msgid "IBAN"
 msgstr "IBAN"
 
@@ -26118,7 +26102,6 @@ msgstr "IBAN"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:14
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:66
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:25
-#, fuzzy
 msgid "BIC"
 msgstr "BIC"
 
@@ -26290,7 +26273,6 @@ msgstr "Pemilik akun"
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:27
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:33
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:41
-#, fuzzy
 msgid "Bank"
 msgstr "Bank"
 
@@ -26731,6 +26713,8 @@ msgid_plural ""
 "You are trying to download a refund export from %(date)s with %(cnt)s order "
 "and a total of %(sum)s."
 msgstr[0] ""
+"Anda mencoba mengunduh ekspor pengembalian dana dari %(date)s dengan %(cnt)s "
+"pesanan dan total %(sum)s."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:23
 msgid ""
@@ -27061,7 +27045,7 @@ msgstr "Akun paypal"
 
 #: pretix/plugins/paypal/payment.py:116 pretix/plugins/paypal2/payment.py:109
 #: pretix/plugins/stripe/payment.py:268
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
@@ -28608,7 +28592,6 @@ msgid "iDEAL"
 msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:343 pretix/plugins/stripe/payment.py:1407
-#, fuzzy
 msgid "Alipay"
 msgstr "Alipay"
 
@@ -28663,17 +28646,14 @@ msgstr ""
 "memungkinkan adanya jeda ini."
 
 #: pretix/plugins/stripe/payment.py:397 pretix/plugins/stripe/payment.py:1602
-#, fuzzy
 msgid "EPS"
 msgstr "EPS"
 
 #: pretix/plugins/stripe/payment.py:404 pretix/plugins/stripe/payment.py:1674
-#, fuzzy
 msgid "Multibanco"
 msgstr "Multibanco"
 
 #: pretix/plugins/stripe/payment.py:411 pretix/plugins/stripe/payment.py:1721
-#, fuzzy
 msgid "Przelewy24"
 msgstr "Przelewy24"
 
@@ -28830,14 +28810,12 @@ msgid "Germany"
 msgstr "Jerman"
 
 #: pretix/plugins/stripe/payment.py:1540
-#, fuzzy
 msgid "Austria"
 msgstr "Austria"
 
 #: pretix/plugins/stripe/payment.py:1541
-#, fuzzy
 msgid "Belgium"
-msgstr "Belgium"
+msgstr "Belgia"
 
 #: pretix/plugins/stripe/payment.py:1542
 msgid "Netherlands"
@@ -28986,8 +28964,8 @@ msgid ""
 "This transaction will be marked as Mail Order/Telephone Order, exempting it "
 "from Strong Customer Authentication (SCA) whenever possible"
 msgstr ""
-"Transaksi ini akan ditandai sebagai Mail Order/Telephone Order, kecuali jika "
-"memungkinkan dari Strong Customer Authentication (SCA)."
+"Transaksi ini akan ditandai sebagai Mail Order/Telephone Order, kecuali dari "
+"Strong Customer Authentication (SCA) jika memungkinkan"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:16
 msgid "For a credit card payment, please turn on JavaScript."
@@ -29068,7 +29046,6 @@ msgid "Payer name"
 msgstr "Nama pembayar"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:55
-#, fuzzy
 msgid "MOTO"
 msgstr "MOTO"
 
@@ -30128,7 +30105,7 @@ msgstr "Tampilkan varian"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:145
 #: pretix/presale/templates/pretixpresale/event/voucher.html:290
 msgid "Original price:"
-msgstr ""
+msgstr "Harga asli:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:132
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:262
@@ -30137,7 +30114,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:155
 #: pretix/presale/templates/pretixpresale/event/voucher.html:300
 msgid "New price:"
-msgstr ""
+msgstr "Harga baru:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:142
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:271
@@ -30149,7 +30126,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:312
 #, python-format
 msgid "Modify price for %(item)s"
-msgstr ""
+msgstr "Ubah harga untuk %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:161
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:289
@@ -30158,7 +30135,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:190
 #: pretix/presale/templates/pretixpresale/event/voucher.html:333
 msgid "incl. taxes"
-msgstr ""
+msgstr "termasuk. pajak"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:164
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:292
@@ -30168,7 +30145,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:337
 #, python-format
 msgid "<strong>plus</strong> %(rate)s%% %(name)s"
-msgstr ""
+msgstr "<strong>plus</strong> %(rate)s%% %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:168
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:296
@@ -30178,7 +30155,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:343
 #, python-format
 msgid "incl. %(rate)s%% %(name)s"
-msgstr ""
+msgstr "termasuk. %(rate)s%% %(name)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:189
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:195
@@ -30186,7 +30163,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:240
 #, python-format
 msgid "Add %(item)s, %(var)s to cart"
-msgstr ""
+msgstr "Tambahkan %(item)s, %(var)s ke keranjang"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:191
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:325
@@ -30196,7 +30173,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:363
 msgctxt "checkbox"
 msgid "Select"
-msgstr ""
+msgstr "Pilih"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:195
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:329
@@ -30205,14 +30182,14 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:224
 #: pretix/presale/templates/pretixpresale/event/voucher.html:367
 msgid "Decrease quantity"
-msgstr ""
+msgstr "Kurangi kuantitas"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:204
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:212
 #: pretix/presale/templates/pretixpresale/event/voucher.html:230
 #, python-format
 msgid "Quantity of %(item)s, %(var)s to order"
-msgstr ""
+msgstr "Jumlah %(item)s, %(var)s yang akan dipesan"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:205
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:340
@@ -30221,7 +30198,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:231
 #: pretix/presale/templates/pretixpresale/event/voucher.html:376
 msgid "Increase quantity"
-msgstr ""
+msgstr "Tingkatkan kuantitas"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:322
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:339
@@ -30229,28 +30206,28 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:385
 #, python-format
 msgid "Add %(item)s to cart"
-msgstr ""
+msgstr "Tambahkan %(item)s ke keranjang"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:338
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:357
 #: pretix/presale/templates/pretixpresale/event/voucher.html:374
 #, python-format
 msgid "Quantity of %(item)s to order"
-msgstr ""
+msgstr "Jumlah %(item)s yang akan dipesan"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:354
 msgid "There are no add-ons available for this product."
-msgstr ""
+msgstr "Tidak ada tambahan yang tersedia untuk produk ini."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:71
 msgid "FULLY BOOKED"
-msgstr ""
+msgstr "SUDAH TERPESAN SEMUA"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:73
 msgid "SOLD OUT"
-msgstr ""
+msgstr "TERJUAL HABIS"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:20
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:81
@@ -30261,89 +30238,89 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:96
 #: pretix/presale/views/widget.py:395
 msgid "Reserved"
-msgstr ""
+msgstr "Telah direservasi"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:22
 msgid "All remaining products are reserved but might become available again."
-msgstr ""
+msgstr "Semua produk yang tersisa sudah dipesan tetapi mungkin tersedia lagi."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:15
 msgid "Price per item"
-msgstr ""
+msgstr "Harga per item"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:18
 msgid "Price total"
-msgstr ""
+msgstr "Jumlah harga"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:42
 msgid "Seat:"
-msgstr ""
+msgstr "Kursi:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:60
 msgctxt "subevent"
 msgid "Date:"
-msgstr ""
+msgstr "Tanggal:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:83
 msgid "Location:"
-msgstr ""
+msgstr "Lokasi:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:85
 msgid "Show full location"
-msgstr ""
+msgstr "Tampilkan lokasi lengkap"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:96
 msgid "Membership:"
-msgstr ""
+msgstr "Keanggotaan:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:127
 msgid "This ticket is blocked."
-msgstr ""
+msgstr "Tiket ini diblokir."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:134
 msgctxt "ticket_checkins"
 msgid "Usage:"
-msgstr ""
+msgstr "Penggunaan:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:138
 #, python-format
 msgid "This ticket has been used once."
 msgid_plural "This ticket has been used %(count)s times."
 msgstr[0] ""
-msgstr[1] ""
+"Tiket ini telah digunakan satu kali.Tiket ini telah digunakan %(count)s kali."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:170
 msgid "No attendee name provided"
-msgstr ""
+msgstr "Tidak ada nama peserta yang disediakan"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:223
 msgid "The image you previously uploaded"
-msgstr ""
+msgstr "Gambar yang Anda unggah sebelumnya"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:269
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:336
 msgid "The price of this product was reduced because of an automatic discount."
-msgstr ""
+msgstr "Harga produk ini diturunkan karena diskon otomatis."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:272
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:339
 msgid "Discounted"
-msgstr ""
+msgstr "Diskon"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:281
 msgid "Okay, we're removing that…"
-msgstr ""
+msgstr "Oke, kami akan menghapusnya…"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:286
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:288
 #, python-format
 msgid "Remove %(item)s from your cart"
-msgstr ""
+msgstr "Hapus %(item)s dari keranjang Anda"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:291
 #, python-format
 msgid "Remove one %(item)s from your cart"
-msgstr ""
+msgstr "Hapus satu %(item)s dari keranjang Anda"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:293
 #, python-format
@@ -30351,6 +30328,8 @@ msgid ""
 "Remove one %(item)s from your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
+"Hapus satu %(item)s dari keranjang Anda. Saat ini Anda memiliki %(count)s di "
+"keranjang Anda."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:301
 msgid "We're trying to reserve another one for you!"
@@ -30365,11 +30344,13 @@ msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
 "your purchase."
 msgstr ""
+"Setelah barang berada di keranjang, Anda memiliki waktu %(time)s menit untuk "
+"menyelesaikan pembelian."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:321
 #, python-format
 msgid "Add one more %(item)s to your cart"
-msgstr ""
+msgstr "Tambahkan satu %(item)s lagi ke keranjang Anda"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:323
 #, python-format
@@ -30377,72 +30358,75 @@ msgid ""
 "Add one more %(item)s to your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
+"Tambahkan satu %(item)s lagi ke keranjang Anda. Saat ini Anda memiliki "
+"%(count)s di keranjang Anda."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:377
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:20
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:20
 msgid "Current value:"
-msgstr ""
+msgstr "Nilai sekarang:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:451
 #, python-format
 msgid "One product"
 msgid_plural "%(num)s products"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "%(num)s produk"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:465
 #, python-format
 msgid "incl. %(tax_sum)s taxes"
-msgstr ""
+msgstr "termasuk %(tax_sum)s pajak"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:482
 #, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
-msgstr ""
+msgstr "Item di keranjang Anda dipesan untuk Anda selama %(minutes)s menit."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:486
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
 msgstr ""
+"Item di keranjang Anda tidak lagi disediakan untuk Anda. Anda masih dapat "
+"menyelesaikan pesanan Anda selama masih tersedia."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:490
 msgid "Overview of your ordered products."
-msgstr ""
+msgstr "Ikhtisar produk pesanan Anda."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:30
 msgid "Continue with order process"
-msgstr ""
+msgstr "Lanjutkan proses pemesanan"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:35
 #: pretix/presale/templates/pretixpresale/event/index.html:219
 #: pretix/presale/templates/pretixpresale/event/voucher.html:417
 msgid "Proceed with checkout"
-msgstr ""
+msgstr "Lanjutkan dengan pembayaran"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:43
 msgid "Empty cart"
-msgstr ""
+msgstr "Keranjang kosong"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:48
 #: pretix/presale/templates/pretixpresale/event/index.html:236
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:12
 msgid "Redeem a voucher"
-msgstr ""
+msgstr "Tukarkan voucher"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:51
 msgid "We're applying this voucher to your cart..."
-msgstr ""
+msgstr "Kami menerapkan voucher ini ke keranjang Anda..."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:59
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:26
 msgid "Redeem voucher"
-msgstr ""
+msgstr "Tukarkan voucher"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:10
 msgid "Change summary"
-msgstr ""
+msgstr "Ubah ringkasan"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:19
 #, python-format
@@ -30450,12 +30434,15 @@ msgid ""
 "Change position #%(positionid)s from \"%(old_item)s – %(old_variation)s\" to "
 "\"%(new_item)s – %(new_variation)s\""
 msgstr ""
+"Ubah posisi #%(positionid)s dari \"%(old_item)s – %(old_variation)s\" "
+"menjadi \"%(new_item)s – %(new_variation)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:23
 #, python-format
 msgid ""
 "Change position #%(positionid)s from \"%(old_item)s\" to \"%(new_item)s\""
 msgstr ""
+"Ubah posisi #%(positionid)s dari \"%(old_item)s\" menjadi \"%(new_item)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:30
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:56
@@ -30463,62 +30450,65 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:106
 #, python-format
 msgid "Add-on product to position #%(positionid)s"
-msgstr ""
+msgstr "Produk tambahan ke posisi #%(positionid)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:40
 #, python-format
 msgid "Change date of position #%(positionid)s from \"%(old)s\" to \"%(new)s\""
 msgstr ""
+"Ubah tanggal posisi #%(positionid)s dari \"%(old)s\" menjadi \"%(new)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:50
 #, python-format
 msgid "Change price of position #%(positionid)s from %(old)s to %(new)s"
-msgstr ""
+msgstr "Ubah harga posisi #%(positionid)s dari %(old)s menjadi %(new)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:70
 #, python-format
 msgid "Add position (%(item)s – %(variation)s)"
-msgstr ""
+msgstr "Tambahkan posisi (%(item)s – %(variation)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:74
 #, python-format
 msgid "Add position (%(item)s)"
-msgstr ""
+msgstr "Tambahkan posisi (%(item)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:95
 #, python-format
 msgid "Remove position #%(positionid)s (%(item)s – %(variation)s)"
-msgstr ""
+msgstr "Hapus posisi #%(positionid)s (%(item)s – %(variation)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:99
 #, python-format
 msgid "Remove position #%(positionid)s (%(item)s)"
-msgstr ""
+msgstr "Hapus posisi #%(positionid)s (%(item)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:121
 msgid "Total price change"
-msgstr ""
+msgstr "Perubahan harga total"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:130
 msgid "New order total"
-msgstr ""
+msgstr "Jumlah pesanan baru"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:136
 msgid "You already paid"
-msgstr ""
+msgstr "Anda sudah membayar"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:144
 msgid "You will need to pay"
-msgstr ""
+msgstr "Anda harus membayar"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:147
 msgid ""
 "Your entire order will be considered unpaid until you paid this difference."
 msgstr ""
+"Seluruh pesanan Anda akan dianggap belum dibayar sampai Anda membayar "
+"selisihnya."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:150
 msgid "You will be refunded"
-msgstr ""
+msgstr "Anda akan mendapatkan pengembalian dana"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:154
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:109
@@ -30526,6 +30516,8 @@ msgid ""
 "The organizer will get in touch with you to clarify the details of your "
 "refund."
 msgstr ""
+"Penyelenggara akan menghubungi Anda untuk mengklarifikasi rincian "
+"pengembalian dana Anda."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:156
 #: pretix/presale/templates/pretixpresale/event/order.html:382
@@ -30536,6 +30528,8 @@ msgid ""
 "The refund will be issued in form of a gift card that you can use for "
 "further purchases."
 msgstr ""
+"Pengembalian dana akan diberikan dalam bentuk kartu hadiah yang dapat Anda "
+"gunakan untuk pembelian selanjutnya."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:159
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:147
@@ -30545,6 +30539,9 @@ msgid ""
 "method. Depending on the payment method, please allow for up to two weeks "
 "before this appears on your statement."
 msgstr ""
+"Jumlah pengembalian dana akan secara otomatis dikirim kembali ke metode "
+"pembayaran awal Anda. Tergantung pada metode pembayarannya, harap tunggu "
+"hingga dua minggu sebelum ini muncul di laporan mutasi Anda."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:165
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:165
@@ -30555,32 +30552,37 @@ msgid ""
 "to initiate the transfer manually. Please be patient as this might take a "
 "bit longer."
 msgstr ""
+"Dengan metode pembayaran yang Anda gunakan, jumlah pengembalian dana "
+"<strong>tidak dapat dikirimkan kembali kepada Anda secara otomatis</strong>. "
+"Sebaliknya, penyelenggara acara perlu melakukan transfer secara manual. "
+"Harap bersabar karena ini mungkin memerlukan waktu lebih lama."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:2
 msgctxt "checkoutflow"
 msgid "Checkout steps"
-msgstr ""
+msgstr "Langkah-langkah pembayaran"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:12
 msgid "Completed:"
-msgstr ""
+msgstr "Lengkap:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:14
 msgid "Current:"
-msgstr ""
+msgstr "Saat ini:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:26
 msgctxt "checkoutflow"
 msgid "Order confirmed"
-msgstr ""
+msgstr "Pesanan dikonfirmasi"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:14
 msgid "Please check your email account, we've sent you your tickets."
-msgstr ""
+msgstr "Silakan periksa akun email Anda, kami telah mengirimkan tiket Anda."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:16
 msgid "Please check your email account, we've sent you an email."
 msgstr ""
+"Silakan periksa akun email Anda, kami telah mengirimkan email kepada Anda."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:21
 msgid ""
@@ -30588,43 +30590,50 @@ msgid ""
 "the order clicked the link in the email they received to confirm the email "
 "address is valid."
 msgstr ""
+"Anda dapat mengunduh tiket Anda di sini segera setelah orang yang melakukan "
+"pemesanan mengklik tautan di email yang mereka terima untuk mengonfirmasi "
+"bahwa alamat email tersebut valid."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:26
 msgid ""
 "If you click the link in our email, you will be able to download your "
 "tickets here."
 msgstr ""
+"Jika Anda mengeklik tautan di email kami, Anda akan dapat mengunduh tiket "
+"Anda di sini."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:30
 msgid ""
 "If the email has no attachment, click the link in our email and you will be "
 "able to download them from here."
 msgstr ""
+"Jika email tidak memiliki lampiran, klik link di email kami dan Anda akan "
+"dapat mendownloadnya dari sini."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:57
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:82
 msgid "Please have your ticket ready when entering the event."
-msgstr ""
+msgstr "Harap siapkan tiket Anda saat memasuki acara."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:85
 msgid "Download your tickets using the buttons below."
-msgstr ""
+msgstr "Unduh tiket Anda menggunakan tombol di bawah."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:94
 #, python-format
 msgid "You will be able to download your tickets here starting on %(date)s."
-msgstr ""
+msgstr "Anda dapat mengunduh tiket Anda di sini mulai %(date)s."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:6
 msgid "Where does the event happen?"
-msgstr ""
+msgstr "Dimana peristiwa tersebut terjadi?"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:13
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:14
 msgid "When does the event happen?"
-msgstr ""
+msgstr "Kapan peristiwa tersebut terjadi?"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:20
 #, python-format
@@ -30634,41 +30643,41 @@ msgstr "Mulai: %(time)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:29
 #, python-format
 msgid "End: %(time)s"
-msgstr ""
+msgstr "Berakhir: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:41
 #, python-format
 msgid "Admission: %(time)s"
-msgstr ""
+msgstr "Tiket Masuk: %(time)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:49
 #, python-format
 msgid "Admission: %(datetime)s"
-msgstr ""
+msgstr "Penerimaan: %(datetime)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:62
 msgid "Add to Calendar"
-msgstr ""
+msgstr "Tambahkan ke Kalender"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:7
 msgctxt "order state"
 msgid "Confirmation pending"
-msgstr ""
+msgstr "Konfirmasi tertunda"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:11
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:22
 msgctxt "order state"
 msgid "Confirmed"
-msgstr ""
+msgstr "Dikonfirmasi"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_order_status.html:13
 msgid "Payment pending"
-msgstr ""
+msgstr "Pembayaran tertunda"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:78
 msgid "Uncategorized items"
-msgstr ""
+msgstr "Item yang tidak dikategorikan"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:26
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:234
@@ -30676,7 +30685,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:261
 #, python-format
 msgid "Show full-size image of %(item)s"
-msgstr ""
+msgstr "Tampilkan gambar ukuran penuh %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:166
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:311
@@ -30684,7 +30693,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:336
 #, python-format
 msgid "%(value)s incl. taxes"
-msgstr ""
+msgstr "%(value)s termasuk. pajak"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:172
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:317
@@ -30692,38 +30701,38 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:342
 #, python-format
 msgid "%(value)s without taxes"
-msgstr ""
+msgstr "%(value)s tanpa pajak"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:182
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:327
 msgid "Enter a voucher code below to buy this ticket."
-msgstr ""
+msgstr "Masukkan kode voucher di bawah untuk membeli tiket ini."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:280
 #: pretix/presale/templates/pretixpresale/event/voucher.html:307
 #, python-format
 msgid "Set price in %(currency)s for %(item)s"
-msgstr ""
+msgstr "Tetapkan harga dalam %(currency)s untuk %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
 msgid "%(num)s currently available"
-msgstr ""
+msgstr "%(num)s saat ini tersedia"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:4
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:4
 msgid "calendar navigation"
-msgstr ""
+msgstr "navigasi kalender"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:9
 #, python-format
 msgid "Show previous month, %(month)s"
-msgstr ""
+msgstr "Tampilkan bulan sebelumnya, %(month)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:22
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:24
 msgid "Select month to show"
-msgstr ""
+msgstr "Pilih bulan untuk ditampilkan"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:32
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:36
@@ -30731,27 +30740,27 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:28
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:40
 msgid "Go"
-msgstr ""
+msgstr "Go"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:39
 #, python-format
 msgid "Show next month, %(month)s"
-msgstr ""
+msgstr "Tampilkan bulan depan, %(month)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:9
 #, python-format
 msgid "Show previous week, %(week)s"
-msgstr ""
+msgstr "Tampilkan minggu sebelumnya, %(week)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:22
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:26
 msgid "Select week to show"
-msgstr ""
+msgstr "Pilih minggu untuk ditampilkan"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:43
 #, python-format
 msgid "Show next week, %(week)s"
-msgstr ""
+msgstr "Tampilkan minggu depan, %(week)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:25
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:72
@@ -30760,7 +30769,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:85
 #: pretix/presale/views/widget.py:380
 msgid "Few tickets left"
-msgstr ""
+msgstr "Hanya sedikit tiket yang tersisa"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:28
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:75
@@ -30770,7 +30779,7 @@ msgstr ""
 #: pretix/presale/views/widget.py:385
 msgctxt "available_event_in_list"
 msgid "Buy now"
-msgstr ""
+msgstr "Beli sekarang"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:30
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:45
@@ -30793,23 +30802,23 @@ msgstr "Pesan sekarang"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:101
 #: pretix/presale/views/widget.py:402
 msgid "Fully booked"
-msgstr ""
+msgstr "Sudah terpesan semua"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:50
 #: pretix/presale/templates/pretixpresale/organizers/index.html:110
 #, python-format
 msgid "Sale starts %(date)s"
-msgstr ""
+msgstr "Penjualan dimulai %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:55
 #: pretix/presale/templates/pretixpresale/organizers/index.html:115
 msgid "Not yet on sale"
-msgstr ""
+msgstr "Belum dijual"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:13
 msgctxt "form"
 msgid "has error"
-msgstr ""
+msgstr "memiliki kesalahan"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:14
 #: pretix/presale/templates/pretixpresale/event/index.html:18
@@ -30819,42 +30828,46 @@ msgid ""
 "                Calendar for %(datetime)s\n"
 "            "
 msgstr ""
+"\n"
+"                Kalender untuk %(datetime)s\n"
+"            "
 
 #: pretix/presale/templates/pretixpresale/event/index.html:48
 msgid "Your cart, general information, add products to your cart"
-msgstr ""
+msgstr "Keranjang Anda, informasi umum, tambahkan produk ke keranjang Anda"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:48
 msgid "General information, add products to your cart"
-msgstr ""
+msgstr "Informasi umum, tambahkan produk ke keranjang Anda"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:68
 msgid "Please select a date to redeem your voucher."
-msgstr ""
+msgstr "Silakan pilih tanggal untuk menukarkan voucher Anda."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:82
 msgid "View other date"
-msgstr ""
+msgstr "Lihat tanggal lainnya"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:87
 msgid "Choose date to book a ticket"
-msgstr ""
+msgstr "Pilih tanggal untuk memesan tiket"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:92
 msgctxt "subevent"
 msgid "Other dates"
-msgstr ""
+msgstr "Tanggal lainnya"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:142
 #: pretix/presale/views/waiting.py:100 pretix/presale/views/widget.py:709
 msgid "The booking period for this event is over."
-msgstr ""
+msgstr "Periode pemesanan untuk acara ini telah berakhir."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:150
 #: pretix/presale/views/widget.py:711
 #, python-format
 msgid "The booking period for this event will start on %(date)s at %(time)s."
 msgstr ""
+"Periode pemesanan untuk acara ini akan dimulai pada %(date)s pukul %(time)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:172
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
@@ -30868,25 +30881,28 @@ msgid ""
 "you want, you can add yourself to the waiting list. We will then notify if "
 "seats are available again."
 msgstr ""
+"Beberapa kategori pada denah tempat duduk di atas saat ini sudah terjual "
+"habis. Jika mau, Anda dapat menambahkan diri Anda ke daftar tunggu. Kami "
+"kemudian akan memberi tahu jika kursi tersedia lagi."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:201
 msgid "Join waiting list"
-msgstr ""
+msgstr "Bergabunglah dalam daftar tunggu"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:217
 #: pretix/presale/templates/pretixpresale/event/voucher.html:415
 msgctxt "free_tickets"
 msgid "Register"
-msgstr ""
+msgstr "Daftar"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:222
 #: pretix/presale/templates/pretixpresale/event/voucher.html:420
 msgid "Add to cart"
-msgstr ""
+msgstr "Masukkan ke keranjang"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:243
 msgid "If you already ordered a ticket"
-msgstr ""
+msgstr "Jika Anda sudah memesan tiket"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:247
 msgid ""
@@ -30895,6 +30911,10 @@ msgid ""
 "cannot find the link, click on the following button to request the link to "
 "your order to be sent to you again."
 msgstr ""
+"Jika Anda ingin melihat atau mengubah status dan detail pesanan Anda, klik "
+"tautan di salah satu email yang kami kirimkan kepada Anda selama proses "
+"pemesanan. Jika Anda tidak dapat menemukan tautannya, klik tombol berikut "
+"untuk meminta tautan pesanan Anda dikirimkan lagi kepada Anda."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:256
 msgid "Resend order link"
@@ -30903,38 +30923,45 @@ msgstr "Kirim ulang tautan pesanan"
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
 msgid "Thank you!"
-msgstr ""
+msgstr "Terima kasih!"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:14
 #: pretix/presale/templates/pretixpresale/event/order.html:32
 msgid "Your order has been placed successfully. See below for details."
-msgstr ""
+msgstr "Pesanan Anda telah berhasil dilakukan. Lihat di bawah untuk detailnya."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:16
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 msgid "Your order has been processed successfully! See below for details."
-msgstr ""
+msgstr "Pesanan Anda telah berhasil diproses! Lihat di bawah untuk detailnya."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:50
 msgid "We successfully received your payment. See below for details."
-msgstr ""
+msgstr "Kami berhasil menerima pembayaran Anda. Lihat di bawah untuk detailnya."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""
 "Please note that we still await approval by the event organizer before your "
 "order is confirmed."
 msgstr ""
+"Perlu diketahui bahwa kami masih menunggu persetujuan dari pihak "
+"penyelenggara acara sebelum pesanan Anda dikonfirmasi."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:39
 msgid ""
 "Please note that we still await approval by the event organizer before you "
 "can pay and complete this order."
 msgstr ""
+"Perlu diketahui bahwa kami masih menunggu persetujuan dari pihak "
+"penyelenggara acara sebelum Anda dapat membayar dan menyelesaikan pesanan "
+"ini."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:43
 msgid "Please note that we still await your payment to complete the process."
 msgstr ""
+"Harap diperhatikan bahwa kami masih menunggu pembayaran Anda untuk "
+"menyelesaikan prosesnya."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
 msgid ""
@@ -30942,46 +30969,55 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
+"Harap tandai atau simpan tautan ke halaman ini jika Anda ingin mengakses "
+"pesanan Anda nanti. Kami juga mengirimi Anda email berisi tautan ke alamat "
+"yang Anda tentukan."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:58
 msgid ""
 "Please save the following link if you want to access your order later. We "
 "also sent you an email containing the link to the address you specified."
 msgstr ""
+"Silakan simpan tautan berikut jika Anda ingin mengakses pesanan Anda nanti. "
+"Kami juga mengirimi Anda email berisi tautan ke alamat yang Anda tentukan."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:73
 #: pretix/presale/templates/pretixpresale/event/position.html:18
 msgid "View in backend"
-msgstr ""
+msgstr "Lihat di bagian belakang"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:90
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr ""
+msgstr "Pembayaran sebesar %(total)s masih tertunda untuk pesanan ini."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:95
 #, python-format
 msgid "Please complete your payment before %(date)s"
-msgstr ""
+msgstr "Harap selesaikan pembayaran Anda sebelum %(date)s"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:107
 msgid "Re-try payment or choose another payment method"
-msgstr ""
+msgstr "Coba lagi pembayaran atau pilih metode pembayaran lain"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:125
 msgid ""
 "We've received your request to cancel this order. Please stay patient while "
 "the event organizer decides on the cancellation."
 msgstr ""
+"Kami telah menerima permintaan Anda untuk membatalkan pesanan ini. Harap "
+"bersabar sementara pihak penyelenggara acara memutuskan pembatalan tersebut."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:143
 #, python-format
 msgid "A refund of %(amount)s will be sent out to you soon, please be patient."
 msgstr ""
+"Pengembalian dana sebesar %(amount)s akan segera dikirimkan kepada Anda, "
+"harap bersabar."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:150
 msgid "Print"
-msgstr ""
+msgstr "Mencetak"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:152
 #, python-format
@@ -30989,16 +31025,19 @@ msgid ""
 "We've issued your refund of %(amount)s as a gift card. On your next purchase "
 "with us, you can use the following gift card code during payment:"
 msgstr ""
+"Kami telah mengirimkan pengembalian dana Anda sebesar %(amount)s sebagai "
+"kartu hadiah. Pada pembelian berikutnya bersama kami, Anda dapat menggunakan "
+"kode kartu hadiah berikut selama pembayaran:"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:162
 #, python-format
 msgid "The current value of your gift card is %(value)s."
-msgstr ""
+msgstr "Nilai kartu hadiah Anda saat ini adalah %(value)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:169
 #, python-format
 msgid "This gift card is valid until %(expiry)s."
-msgstr ""
+msgstr "Kartu hadiah ini berlaku hingga %(expiry)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:180
 #, python-format
@@ -31006,58 +31045,65 @@ msgid ""
 "A refund of %(amount)s has been sent to you. Depending on the payment "
 "method, please allow for up to 14 days until it shows up on your statement."
 msgstr ""
+"Pengembalian dana sebesar %(amount)s telah dikirimkan kepada Anda. "
+"Tergantung pada metode pembayarannya, harap tunggu hingga 14 hari hingga "
+"muncul di laporan mutasi Anda."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
 msgid "Change ordered items"
-msgstr ""
+msgstr "Ubah item yang dipesan"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/order.html:290
 msgid "Change details"
-msgstr ""
+msgstr "Ubah detailnya"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:262
 msgid ""
 "You need to select a payment method above before you can request an invoice."
 msgstr ""
+"Anda harus memilih metode pembayaran di atas sebelum Anda dapat meminta "
+"invoice."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:267
 #: pretix/presale/templates/pretixpresale/event/order.html:274
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:85
 msgid "Request invoice"
-msgstr ""
+msgstr "Minta faktur"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:286
 msgid "Your information"
-msgstr ""
+msgstr "Informasi Anda"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:289
 msgid "Change your information"
-msgstr ""
+msgstr "Ubah informasi Anda"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:334
 msgid "Internal Reference"
-msgstr ""
+msgstr "Referensi internal"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:348
 msgctxt "action"
 msgid "Change or cancel your order"
-msgstr ""
+msgstr "Ubah atau batalkan pesanan Anda"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:355
 msgid ""
 "If you want to make changes to the products you bought, you can click on the "
 "button to change your order."
 msgstr ""
+"Jika Anda ingin melakukan perubahan pada produk yang Anda beli, Anda dapat "
+"mengklik tombol untuk mengubah pesanan."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:363
 msgid "Change order"
-msgstr ""
+msgstr "Perintah diubah"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:373
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:27
 msgid "You can request to cancel this order."
-msgstr ""
+msgstr "Anda dapat meminta untuk membatalkan pesanan ini."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:376
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:30
@@ -31066,6 +31112,9 @@ msgid ""
 "receive a full refund or if a cancellation fee is deducted according to "
 "their cancellation policy."
 msgstr ""
+"Jika permintaan Anda disetujui, penyelenggara akan menentukan apakah Anda "
+"akan menerima pengembalian dana penuh atau dipotong biaya pembatalan sesuai "
+"dengan kebijakan pembatalan mereka."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:384
 #: pretix/presale/templates/pretixpresale/event/order.html:420
@@ -31073,12 +31122,14 @@ msgstr ""
 msgid ""
 "The refund can be issued to your original payment method or as a gift card."
 msgstr ""
+"Pengembalian dana dapat diberikan ke metode pembayaran asli Anda atau "
+"sebagai kartu hadiah."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:386
 #: pretix/presale/templates/pretixpresale/event/order.html:422
 #: pretix/presale/templates/pretixpresale/event/order.html:443
 msgid "The refund will be issued to your original payment method."
-msgstr ""
+msgstr "Pengembalian dana akan diberikan ke metode pembayaran asli Anda."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:388
 #: pretix/presale/templates/pretixpresale/event/order.html:401
@@ -31086,16 +31137,20 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:445
 #: pretix/presale/templates/pretixpresale/event/order.html:467
 msgid "This will invalidate all tickets in this order."
-msgstr ""
+msgstr "Ini akan membatalkan semua tiket dalam urutan ini."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:393
 msgid ""
 "You can request to cancel this order, but you will not receive a refund."
 msgstr ""
+"Anda dapat meminta untuk membatalkan pesanan ini, namun Anda tidak akan "
+"menerima pengembalian dana."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:397
 msgid "You can cancel this order, but you will not receive a refund."
 msgstr ""
+"Anda dapat membatalkan pesanan ini, namun Anda tidak akan menerima "
+"pengembalian dana."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:406
 #, python-format
@@ -31104,6 +31159,9 @@ msgid ""
 "cancellation fee of <strong>%(fee)s</strong> will be kept and you will "
 "receive a refund of the remainder."
 msgstr ""
+"Anda dapat meminta untuk membatalkan pesanan ini. Jika permintaan Anda "
+"disetujui, biaya pembatalan sebesar <strong>%(fee)s</strong> akan ditahan "
+"dan Anda akan menerima pengembalian dana sisanya."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:412
 #, python-format
@@ -31112,16 +31170,22 @@ msgid ""
 "<strong>%(fee)s</strong> will be kept and you will receive a refund of the "
 "remainder."
 msgstr ""
+"Anda dapat membatalkan pesanan ini. Dalam hal ini, biaya pembatalan sebesar "
+"<strong>%(fee)s</strong> akan dikenakan dan Anda akan menerima pengembalian "
+"dana sisanya."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:429
 msgid ""
 "You can request to cancel this order. If your request is approved, you get a "
 "full refund."
 msgstr ""
+"Anda dapat meminta untuk membatalkan pesanan ini. Jika permintaan Anda "
+"disetujui, Anda mendapatkan pengembalian dana penuh."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:434
 msgid "You can cancel this order and receive a full refund."
 msgstr ""
+"Anda dapat membatalkan pesanan ini dan menerima pengembalian dana penuh."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:458
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:54
@@ -31130,20 +31194,23 @@ msgid ""
 "You can cancel this order. As per our cancellation policy, you will still be "
 "required to pay a cancellation fee of <strong>%(fee)s</strong>."
 msgstr ""
+"Anda dapat membatalkan pesanan ini. Sesuai dengan kebijakan pembatalan kami, "
+"Anda tetap diharuskan membayar biaya pembatalan sebesar "
+"<strong>%(fee)s</strong>."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:463
 msgid "You can cancel this order using the following button."
-msgstr ""
+msgstr "Anda dapat membatalkan pesanan ini menggunakan tombol berikut."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:11
 #, python-format
 msgid "Request cancellation: %(code)s"
-msgstr ""
+msgstr "Permintaan pembatalan: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:15
 #, python-format
 msgid "Cancel order: %(code)s"
-msgstr ""
+msgstr "Batalkan pesanan: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:38
 msgid ""
@@ -31151,12 +31218,18 @@ msgid ""
 "organizer will then decide on your request. If they approve, your order will "
 "be canceled and all tickets will be invalidated."
 msgstr ""
+"Anda dapat meminta pembatalan pesanan Anda di halaman ini. Penyelenggara "
+"acara kemudian akan memutuskan permintaan Anda. Jika mereka menyetujuinya, "
+"pesanan Anda akan dibatalkan dan semua tiket akan menjadi tidak berlaku."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:46
 msgid ""
 "If you cancel this order, all tickets will be invalidated and you can no "
 "longer use them. You cannot revert this action."
 msgstr ""
+"Jika Anda membatalkan pesanan ini, semua tiket akan menjadi tidak berlaku "
+"dan Anda tidak dapat menggunakannya lagi. Anda tidak dapat mengembalikan "
+"tindakan ini."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:62
 #, python-format
@@ -31164,114 +31237,124 @@ msgid ""
 "If you want, you can request a refund for the full amount minus a "
 "cancellation fee of %(fee)s."
 msgstr ""
+"Jika mau, Anda dapat meminta pengembalian dana sejumlah penuh dikurangi "
+"biaya pembatalan sebesar %(fee)s."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:67
 msgid "If you want, you can request a full refund."
-msgstr ""
+msgstr "Jika mau, Anda dapat meminta pengembalian dana penuh."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:96
 msgid "Enter custom amount"
-msgstr ""
+msgstr "Masukkan jumlah khusus"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:101
 msgid "Refund amount:"
-msgstr ""
+msgstr "Jumlah pengembalian uang:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:117
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:138
 #, python-format
 msgid "Your gift card will be valid until %(expiry_date)s."
-msgstr ""
+msgstr "Kartu hadiah Anda akan berlaku hingga %(expiry_date)s."
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:126
 msgid "I want the refund as a gift card for later purchases"
 msgstr ""
+"Saya ingin pengembalian dana sebagai kartu hadiah untuk pembelian berikutnya"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:132
 msgid "I want the refund to be sent to my original payment method"
-msgstr ""
+msgstr "Saya ingin pengembalian dana dikirim ke metode pembayaran asli saya"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:154
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:185
 msgid "The following payment methods will be used to refund the money to you:"
 msgstr ""
+"Metode pembayaran berikut akan digunakan untuk mengembalikan uang kepada "
+"Anda:"
 
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:218
 msgid "Yes, request cancellation"
-msgstr ""
+msgstr "Ya, minta pembatalan"
 
 #: pretix/presale/templates/pretixpresale/event/order_change_confirm.html:19
 msgid "Please confirm the following changes to your order."
-msgstr ""
+msgstr "Harap konfirmasi perubahan berikut pada pesanan Anda."
 
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:10
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:10
 #, python-format
 msgid "Gift card: %(code)s"
-msgstr ""
+msgstr "Kartu hadiah: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:5
 msgid "Modify order"
-msgstr ""
+msgstr "Ubah pesanan"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:8
 #, python-format
 msgid "Modify order: %(code)s"
-msgstr ""
+msgstr "Ubah urutan: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:18
 msgid ""
 "Modifying your invoice address will not automatically generate a new "
 "invoice. Please contact us if you need a new invoice."
 msgstr ""
+"Mengubah alamat faktur Anda tidak akan secara otomatis menghasilkan faktur "
+"baru. Silakan hubungi kami jika Anda memerlukan faktur baru."
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:87
 msgid "Save changes"
-msgstr ""
+msgstr "Simpan perubahan"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:5
 msgid "Change payment method"
-msgstr ""
+msgstr "Ubah metode pembayaran"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:12
 #, python-format
 msgid "Choose payment method: %(code)s"
-msgstr ""
+msgstr "Pilih metode pembayaran: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:17
 msgid ""
 "Please note: If you change your payment method, your order total will change "
 "by the amount displayed to the right of each method."
 msgstr ""
+"Harap diperhatikan: Jika Anda mengubah metode pembayaran, total pesanan Anda "
+"akan berubah sesuai jumlah yang ditampilkan di sebelah kanan setiap metode."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:51
 msgid "There are no alternative payment providers available for this order."
 msgstr ""
+"Tidak ada penyedia pembayaran alternatif yang tersedia untuk pesanan ini."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:16
 msgid "Please confirm the following payment details."
-msgstr ""
+msgstr "Harap konfirmasi rincian pembayaran berikut."
 
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:22
 #, python-format
 msgid "Total: %(total)s"
-msgstr ""
+msgstr "Jumlah: %(total)s"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:7
 msgid "Registration details"
-msgstr ""
+msgstr "Rincian pendaftaran"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:10
 msgid "Your registration"
-msgstr ""
+msgstr "Pendaftaran Anda"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:31
 msgid "Your items"
-msgstr ""
+msgstr "Barang Anda"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:41
 msgid "Additional information"
-msgstr ""
+msgstr "Informasi tambahan"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:46
 #, python-format
@@ -31279,17 +31362,21 @@ msgid ""
 "This order is managed for you by %(email)s. Please contact them for any "
 "questions regarding payment, cancellation or changes to this order."
 msgstr ""
+"Pesanan ini dikelola untuk Anda oleh %(email)s. Silakan hubungi mereka jika "
+"ada pertanyaan mengenai pembayaran, pembatalan, atau perubahan pesanan ini."
 
 #: pretix/presale/templates/pretixpresale/event/position.html:58
 msgctxt "action"
 msgid "Change your ticket"
-msgstr ""
+msgstr "Ganti tiket Anda"
 
 #: pretix/presale/templates/pretixpresale/event/position.html:63
 msgid ""
 "If you want to make changes to the components of your ticket, you can click "
 "on the following button."
 msgstr ""
+"Jika Anda ingin melakukan perubahan pada komponen tiket Anda, Anda dapat "
+"mengklik tombol berikut."
 
 #: pretix/presale/templates/pretixpresale/event/position.html:68
 #, python-format
@@ -31298,6 +31385,8 @@ msgid ""
 "changes, please get in touch with the person who bought the ticket "
 "(%(email)s)."
 msgstr ""
+"Anda hanya dapat melakukan beberapa perubahan pada tiket ini sendiri. Untuk "
+"perubahan tambahan, silakan menghubungi orang yang membeli tiket (%(email)s)."
 
 #: pretix/presale/templates/pretixpresale/event/position.html:77
 #: pretix/presale/templates/pretixpresale/event/position_change.html:5
@@ -31305,17 +31394,20 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:6
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:11
 msgid "Change ticket"
-msgstr ""
+msgstr "Ganti tiket"
 
 #: pretix/presale/templates/pretixpresale/event/position_change.html:16
 msgid ""
 "Please select the desired changes to your ticket. Note that you can only "
 "perform changes that do not change the total price of the ticket."
 msgstr ""
+"Silakan pilih perubahan yang diinginkan pada tiket Anda. Perlu diperhatikan "
+"bahwa Anda hanya dapat melakukan perubahan yang tidak mengubah total harga "
+"tiket."
 
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:19
 msgid "Please confirm the following changes to your ticket."
-msgstr ""
+msgstr "Harap konfirmasikan perubahan berikut pada tiket Anda."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
@@ -31328,10 +31420,14 @@ msgid ""
 "you used for your order. We will send you an email with links to all orders "
 "you placed using this email address."
 msgstr ""
+"Jika Anda kehilangan tautan ke pesanan atau pesanan Anda, silakan masukkan "
+"alamat email yang Anda gunakan untuk pesanan Anda. Kami akan mengirimi Anda "
+"email berisi tautan ke semua pesanan yang Anda lakukan menggunakan alamat "
+"email ini."
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:30
 msgid "Send links"
-msgstr ""
+msgstr "Kirim tautan"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:17
@@ -31339,43 +31435,47 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:36
 #: pretix/presale/templates/pretixpresale/event/voucher_form.html:9
 msgid "Voucher redemption"
-msgstr ""
+msgstr "Penukaran voucher"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:20
 msgid "This voucher is valid only for the following specific date and time."
-msgstr ""
+msgstr "Voucher ini hanya berlaku untuk tanggal dan waktu tertentu berikut ini."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:43
 msgid ""
 "For the selected date, there are currently no products available that can be "
 "bought with this voucher. Please try a different date or a different voucher."
 msgstr ""
+"Untuk tanggal yang dipilih, saat ini belum tersedia produk yang dapat dibeli "
+"dengan voucher ini. Silakan coba tanggal lain atau voucher lain."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:47
 msgid ""
 "There are currently no products available that can be bought with this "
 "voucher."
-msgstr ""
+msgstr "Saat ini tidak ada produk yang dapat dibeli dengan voucher ini."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:52
 msgid ""
 "You entered a voucher code that allows you to buy one of the following "
 "products at the specified price:"
 msgstr ""
+"Anda memasukkan kode voucher yang memungkinkan Anda membeli salah satu "
+"produk berikut dengan harga yang ditentukan:"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:113
 #, python-format
 msgid "from %(minprice)s"
-msgstr ""
+msgstr "dari %(minprice)s"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:406
 #, python-format
 msgid "You need to select at least %(number)s products."
-msgstr ""
+msgstr "Anda harus memilih setidaknya %(number)s produk."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:5
 msgid "Add me to the waiting list"
-msgstr ""
+msgstr "Tambahkan saya ke daftar tunggu"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:22
 #, python-format
@@ -31384,6 +31484,10 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
+"Jika tiket tersedia kembali, kami akan menginformasikan orang pertama dalam "
+"daftar tunggu. Jika kami memberi tahu Anda, Anda memiliki waktu %(hours)s "
+"jam untuk membeli tiket sampai kami menugaskannya ke orang berikutnya dalam "
+"daftar."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:28
 msgid ""
@@ -31391,6 +31495,9 @@ msgid ""
 "you need to add yourself to the waiting list multiple times. There is no "
 "guarantee that you will receive a certain number of tickets."
 msgstr ""
+"Perhatikan bahwa Anda hanya akan menerima satu tiket. Jika Anda memerlukan "
+"beberapa tiket, Anda perlu menambahkan diri Anda ke daftar tunggu beberapa "
+"kali. Tidak ada jaminan bahwa Anda akan menerima sejumlah tiket tertentu."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:32
 msgid ""
@@ -31399,14 +31506,18 @@ msgid ""
 "email addresses. There is no guarantee that you will receive a certain "
 "number of tickets."
 msgstr ""
+"Perhatikan bahwa Anda hanya akan menerima satu tiket. Jika Anda memerlukan "
+"beberapa tiket, Anda perlu menambahkan diri Anda ke daftar tunggu beberapa "
+"kali dengan alamat email berbeda. Tidak ada jaminan bahwa Anda akan menerima "
+"sejumlah tiket tertentu."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:39
 msgid "Add me to the list"
-msgstr ""
+msgstr "Tambahkan saya pada daftar"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:5
 msgid "Remove me from the waiting list"
-msgstr ""
+msgstr "Hapus saya dari daftar tunggu"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:9
 msgid ""
@@ -31414,27 +31525,31 @@ msgid ""
 "need the ticket any more, please be so kind and remove your ticket from the "
 "list so we can pass it on to the next person waiting as quickly as possible!"
 msgstr ""
+"Anda telah dipilih dari daftar tunggu kami untuk membeli tiket. Jika Anda "
+"tidak memerlukan tiket itu lagi, mohon berbaik hati dan hapus tiket Anda "
+"dari daftar sehingga kami dapat meneruskannya kepada orang berikutnya yang "
+"menunggu secepat mungkin!"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:16
 msgctxt "waitinglist"
 msgid "Yes, remove my ticket"
-msgstr ""
+msgstr "Ya, hapus tiket saya"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:5
 msgid "Calendar"
-msgstr ""
+msgstr "Kalender"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:52
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:65
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:37
 msgid "(continued)"
-msgstr ""
+msgstr "(lanjutan)"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:61
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:46
 msgctxt "timerange"
 msgid "until"
-msgstr ""
+msgstr "sampai"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:98
 #, python-format
@@ -31443,29 +31558,32 @@ msgid ""
 "                                                        from %(start_date)s\n"
 "                                                    "
 msgstr ""
+"\n"
+"                                                        dari %(start_date)s\n"
+"                                                    "
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:12
 msgid "Week"
-msgstr ""
+msgstr "Pekan"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:17
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:25
 msgid "Month"
-msgstr ""
+msgstr "Bulan"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:27
 msgid "iCal"
-msgstr ""
+msgstr "iCal"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:24
 msgctxt "day calendar"
 msgid "Single events"
-msgstr ""
+msgstr "Acara tunggal"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:78
 msgctxt "timerange"
 msgid "to"
-msgstr ""
+msgstr "ke"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:119
 #, python-format
@@ -31474,73 +31592,80 @@ msgid ""
 "                                    from %(start_date)s\n"
 "                                "
 msgstr ""
+"\n"
+"                                    dari %(start_date)s\n"
+"                                "
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:5
 msgid "customer account"
-msgstr ""
+msgstr "akun pelanggan"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:8
 msgid "View customer account"
-msgstr ""
+msgstr "Lihat akun pelanggan"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:9
 msgid "View user profile"
-msgstr ""
+msgstr "Lihat profil pengguna"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:15
 msgid "We've started the requested process in a new window."
-msgstr ""
+msgstr "Kami telah memulai proses yang diminta di jendela baru."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:18
 msgid "If you do not see the new window, we can help you launch it again."
 msgstr ""
+"Jika Anda tidak melihat jendela baru, kami dapat membantu Anda "
+"meluncurkannya kembali."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:23
 msgid "Open window again"
-msgstr ""
+msgstr "Buka jendela lagi"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:27
 msgid ""
 "Once the process in the new window has been completed, you can continue here."
-msgstr ""
+msgstr "Setelah proses di jendela baru selesai, Anda dapat melanjutkan di sini."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:69
 msgid "Adjust settings in detail"
-msgstr ""
+msgstr "Sesuaikan pengaturan secara detail"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:74
 msgid "Required cookies"
-msgstr ""
+msgstr "Cookie yang diperlukan"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:76
 msgid ""
 "Functional cookies (e.g. shopping cart, login, payment, language preference) "
 "and technical cookies (e.g. security purposes)"
 msgstr ""
+"Cookie fungsional (misalnya keranjang belanja, login, pembayaran, preferensi "
+"bahasa) dan cookie teknis (misalnya tujuan keamanan)"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:89
 msgctxt "cookie_usage"
 msgid "Functionality"
-msgstr ""
+msgstr "Kegunaan"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:91
 msgctxt "cookie_usage"
 msgid "Analytics"
-msgstr ""
+msgstr "Analisis"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:93
 msgctxt "cookie_usage"
 msgid "Marketing"
-msgstr ""
+msgstr "Pemasaran"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:95
 msgctxt "cookie_usage"
 msgid "Social features"
-msgstr ""
+msgstr "Fitur sosial"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:114
 msgid "Save selection"
-msgstr ""
+msgstr "Simpan pilihan"
 
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:82
 #, python-format
@@ -31549,10 +31674,13 @@ msgid ""
 "                                        from %(start_date)s\n"
 "                                    "
 msgstr ""
+"\n"
+"                                        dari %(start_date)s\n"
+"                                    "
 
 #: pretix/presale/templates/pretixpresale/index.html:7
 msgid "Hello!"
-msgstr ""
+msgstr "Halo!"
 
 #: pretix/presale/templates/pretixpresale/index.html:9
 #, python-format
@@ -31560,12 +31688,16 @@ msgid ""
 "This is a self-hosted installation of <a %(a_attr)s>pretix, your free and "
 "open source ticket sales software</a>."
 msgstr ""
+"Ini adalah instalasi <a %(a_attr)s>pretix yang dihosting sendiri, perangkat "
+"lunak penjualan tiket sumber terbuka dan gratis</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:15
 msgid ""
 "If you're looking to buy a ticket, you need to follow a direct link to an "
 "event or organizer profile."
 msgstr ""
+"Jika Anda ingin membeli tiket, Anda harus mengikuti tautan langsung ke "
+"profil acara atau penyelenggara."
 
 #: pretix/presale/templates/pretixpresale/index.html:20
 #, python-format
@@ -31573,138 +31705,142 @@ msgid ""
 "If you're looking to configure this installation, please <a %(a_attr)s>head "
 "over here</a>."
 msgstr ""
+"Jika Anda ingin mengonfigurasi instalasi ini, silakan <a %(a_attr)s>buka di "
+"sini</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
-msgstr ""
+msgstr "Menikmati!"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:6
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:6
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:6
 msgid "Event overview"
-msgstr ""
+msgstr "Ikhtisar acara"
 
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:60
 #: pretix/presale/templates/pretixpresale/organizers/calendar_day.html:69
 #: pretix/presale/templates/pretixpresale/organizers/calendar_week.html:81
 msgid "Note that the events in this view are in different timezones."
 msgstr ""
+"Perhatikan bahwa peristiwa dalam tampilan ini berada dalam zona waktu yang "
+"berbeda."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:7
 msgid "Delete address"
-msgstr ""
+msgstr "Hapus alamat"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_address_delete.html:12
 msgid "Do you really want to delete the following address from your account?"
-msgstr ""
+msgstr "Apakah Anda benar-benar ingin menghapus alamat berikut dari akun Anda?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:15
 msgid "Account information"
-msgstr ""
+msgstr "Informasi Akun"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:11
 msgid "Update your account information"
-msgstr ""
+msgstr "Perbarui informasi akun Anda"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:11
 #, python-format
 msgid "Sign in to your account at %(org)s"
-msgstr ""
+msgstr "Masuk ke akun Anda di %(org)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:38
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:20
 msgid "Create account"
-msgstr ""
+msgstr "Buat Akun"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:10
 msgid "Your membership"
-msgstr ""
+msgstr "Keanggotaan Anda"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:6
 msgid "Password reset"
-msgstr ""
+msgstr "Penyetelan ulang kata sandi"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_password.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_setpassword.html:11
 msgid "Set a new password for your account"
-msgstr ""
+msgstr "Tetapkan kata sandi baru untuk akun Anda"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:7
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:10
 msgid "Your account"
-msgstr ""
+msgstr "Akun Anda"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:23
 msgid "Login method"
-msgstr ""
+msgstr "Metode masuk"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:39
 msgid "Change account information"
-msgstr ""
+msgstr "Ubah informasi akun"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:44
 msgid "Change password"
-msgstr ""
+msgstr "Ganti kata sandi"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:59
 msgid "Addresses"
-msgstr ""
+msgstr "Alamat"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:62
 msgid "Attendee profiles"
-msgstr ""
+msgstr "Profil peserta"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:179
 msgid "No memberships are stored in your account."
-msgstr ""
+msgstr "Tidak ada keanggotaan yang disimpan di akun Anda."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:211
 msgid "No addresses are stored in your account."
-msgstr ""
+msgstr "Tidak ada alamat yang disimpan di akun Anda."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:222
 msgid "Profile"
-msgstr ""
+msgstr "Profil"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:244
 msgid "No attendee profiles are stored in your account."
-msgstr ""
+msgstr "Tidak ada profil peserta yang disimpan di akun Anda."
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:4
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:7
 msgid "Delete profile"
-msgstr ""
+msgstr "Hapus profil"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:12
 msgid "Do you really want to delete the following profile from your account?"
-msgstr ""
+msgstr "Apakah Anda benar-benar ingin menghapus profil berikut dari akun Anda?"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:6
 msgid "Registration"
-msgstr ""
+msgstr "Registrasi"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:11
 #, python-format
 msgid "Create a new account at %(org)s"
-msgstr ""
+msgstr "Buat akun baru di %(org)s"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_registration.html:24
 msgid "Log in to an existing account"
-msgstr ""
+msgstr "Masuk ke akun yang ada"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_resetpw.html:20
 msgid "Request a new password"
-msgstr ""
+msgstr "Minta kata sandi baru"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:8
 msgid "Event list"
-msgstr ""
+msgstr "Daftar acara"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:25
 msgid "Past events"
@@ -31716,15 +31852,15 @@ msgstr "Acara mendatang"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:124
 msgid "More info"
-msgstr ""
+msgstr "Info lebih lanjut"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:133
 msgid "No archived events found."
-msgstr ""
+msgstr "Tidak ada acara yang diarsipkan ditemukan."
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:133
 msgid "Show upcoming"
-msgstr ""
+msgstr "Pertunjukan yang akan datang"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:135
 msgid "No public upcoming events found."
@@ -31737,29 +31873,29 @@ msgstr "Lihat acara yang lalu"
 #: pretix/presale/templates/pretixpresale/pagination.html:14
 #, python-format
 msgid "Page %(page)s of %(of)s"
-msgstr ""
+msgstr "Halaman %(page)s dari %(of)s"
 
 #: pretix/presale/templates/pretixpresale/postmessage.html:21
 #: pretix/presale/templates/pretixpresale/waiting.html:22
 msgid "We are processing your request …"
-msgstr ""
+msgstr "Kami sedang memproses permintaan Anda …"
 
 #: pretix/presale/utils.py:242 pretix/presale/utils.py:369
 #: pretix/presale/utils.py:370
 msgid "The selected event was not found."
-msgstr ""
+msgstr "Acara yang dipilih tidak ditemukan."
 
 #: pretix/presale/utils.py:329
 msgid "The selected ticket shop is currently not available."
-msgstr ""
+msgstr "Toko tiket yang dipilih saat ini tidak tersedia."
 
 #: pretix/presale/utils.py:335
 msgid "This feature is not enabled."
-msgstr ""
+msgstr "Fitur ini tidak diaktifkan."
 
 #: pretix/presale/utils.py:378 pretix/presale/utils.py:384
 msgid "The selected organizer was not found."
-msgstr ""
+msgstr "Penyelenggara yang dipilih tidak ditemukan."
 
 #: pretix/presale/views/__init__.py:258
 #, python-brace-format
@@ -31767,64 +31903,72 @@ msgid ""
 "Your selected payment method can only be used for a payment of at least "
 "{amount}."
 msgstr ""
+"Metode pembayaran yang Anda pilih hanya dapat digunakan untuk pembayaran "
+"minimal {amount}."
 
 #: pretix/presale/views/cart.py:183
 msgid "Please enter positive numbers only."
-msgstr ""
+msgstr "Harap masukkan angka positif saja."
 
 #: pretix/presale/views/cart.py:421
 msgid "We applied the voucher to as many products in your cart as we could."
-msgstr ""
+msgstr "Kami menerapkan voucher ke sebanyak mungkin produk di keranjang Anda."
 
 #: pretix/presale/views/cart.py:443
 msgid "Your cart has been updated."
-msgstr ""
+msgstr "Keranjang Anda telah diperbarui."
 
 #: pretix/presale/views/cart.py:446 pretix/presale/views/cart.py:471
 msgid "Your cart is now empty."
-msgstr ""
+msgstr "Keranjang Anda sekarang kosong."
 
 #: pretix/presale/views/cart.py:486
 msgid "The products have been successfully added to your cart."
-msgstr ""
+msgstr "Produk telah berhasil ditambahkan ke keranjang Anda."
 
 #: pretix/presale/views/cart.py:510 pretix/presale/views/event.py:450
 #: pretix/presale/views/widget.py:346
 msgid "Tickets for this event cannot be purchased on this sales channel."
-msgstr ""
+msgstr "Tiket untuk acara ini tidak dapat dibeli di saluran penjualan ini."
 
 #: pretix/presale/views/cart.py:650
 msgctxt "subevent"
 msgid "We were unable to find the specified date."
-msgstr ""
+msgstr "Kami tidak dapat menemukan tanggal yang ditentukan."
 
 #: pretix/presale/views/checkout.py:55
 msgid "Your cart is empty"
-msgstr ""
+msgstr "keranjang Anda kosong"
 
 #: pretix/presale/views/checkout.py:59
 msgid "The booking period for this event is over or has not yet started."
-msgstr ""
+msgstr "Periode pemesanan untuk acara ini telah berakhir atau belum dimulai."
 
 #: pretix/presale/views/customer.py:247
 msgid ""
 "Your account has been created. Please follow the link in the email we sent "
 "you to activate your account and choose a password."
 msgstr ""
+"Akun anda telah dibuat. Silakan ikuti tautan di email yang kami kirimkan "
+"kepada Anda untuk mengaktifkan akun Anda dan memilih kata sandi."
 
 #: pretix/presale/views/customer.py:268 pretix/presale/views/customer.py:271
 #: pretix/presale/views/customer.py:556 pretix/presale/views/customer.py:562
 msgid "You clicked an invalid link."
-msgstr ""
+msgstr "Anda mengeklik tautan yang tidak valid."
 
 #: pretix/presale/views/customer.py:291
 msgid "Your new password has been set! You can now use it to log in."
 msgstr ""
+"Kata sandi baru Anda telah ditetapkan! Anda sekarang dapat menggunakannya "
+"untuk masuk."
 
 #: pretix/presale/views/customer.py:331
 msgid ""
 "We've sent you an email with further instructions on resetting your password."
 msgstr ""
+"Kami telah mengirimi Anda email berisi petunjuk lebih lanjut tentang cara "
+"menyetel ulang kata sandi Anda."
 
 #: pretix/presale/views/customer.py:524
 msgid ""
@@ -31832,10 +31976,13 @@ msgid ""
 "your email address. The email address of your account will be changed as "
 "soon as you click that link."
 msgstr ""
+"Perubahan yang Anda buat sudah disimpan. Kami telah mengirimi Anda email "
+"berisi tautan untuk memperbarui alamat email Anda. Alamat email akun Anda "
+"akan diubah segera setelah Anda mengeklik tautan itu."
 
 #: pretix/presale/views/customer.py:572
 msgid "Your email address has been updated."
-msgstr ""
+msgstr "Alamat email Anda telah diperbarui."
 
 #: pretix/presale/views/customer.py:785 pretix/presale/views/customer.py:796
 #, python-brace-format
@@ -31843,72 +31990,77 @@ msgid ""
 "We were unable to use your login since the email address {email} is already "
 "used for a different account in this system."
 msgstr ""
+"Kami tidak dapat menggunakan login Anda karena alamat email {email} sudah "
+"digunakan untuk akun lain di sistem ini."
 
 #: pretix/presale/views/event.py:792
 msgid "Unknown event code or not authorized to access this event."
 msgstr ""
+"Kode acara tidak diketahui atau tidak diizinkan untuk mengakses acara ini."
 
 #: pretix/presale/views/event.py:799
 msgctxt "subevent"
 msgid "No date selected."
-msgstr ""
+msgstr "Tidak ada tanggal yang dipilih."
 
 #: pretix/presale/views/event.py:802
 msgctxt "subevent"
 msgid "Unknown date selected."
-msgstr ""
+msgstr "Tanggal tidak diketahui dipilih."
 
 #: pretix/presale/views/event.py:827 pretix/presale/views/event.py:835
 #: pretix/presale/views/event.py:838
 msgid "Please go back and try again."
-msgstr ""
+msgstr "Silakan kembali dan coba lagi."
 
 #: pretix/presale/views/order.py:395 pretix/presale/views/order.py:460
 #: pretix/presale/views/order.py:535
 msgid "The payment for this order cannot be continued."
-msgstr ""
+msgstr "Pembayaran pesanan ini tidak dapat dilanjutkan."
 
 #: pretix/presale/views/order.py:400 pretix/presale/views/order.py:469
 #: pretix/presale/views/order.py:544 pretix/presale/views/order.py:585
 msgid "The payment is too late to be accepted."
-msgstr ""
+msgstr "Pembayaran sudah terlambat untuk diterima."
 
 #: pretix/presale/views/order.py:483
 msgid "An invoice has been generated."
-msgstr ""
+msgstr "Faktur telah dibuat."
 
 #: pretix/presale/views/order.py:580
 msgid "The payment method for this order cannot be changed."
-msgstr ""
+msgstr "Metode pembayaran pesanan ini tidak dapat diubah."
 
 #: pretix/presale/views/order.py:591
 msgid "A payment is currently pending for this order."
-msgstr ""
+msgstr "Pembayaran sedang menunggu pesanan ini."
 
 #: pretix/presale/views/order.py:864
 msgid "You cannot modify this order"
-msgstr ""
+msgstr "Anda tidak dapat mengubah pesanan ini"
 
 #: pretix/presale/views/order.py:954 pretix/presale/views/order.py:959
 #: pretix/presale/views/order.py:964
 msgid "You chose an invalid cancellation fee."
-msgstr ""
+msgstr "Anda memilih biaya pembatalan yang tidak valid."
 
 #: pretix/presale/views/order.py:980
 msgid "Canceled by customer"
-msgstr ""
+msgstr "Dibatalkan oleh pelanggan"
 
 #: pretix/presale/views/order.py:991
 msgid "The cancellation has been requested."
-msgstr ""
+msgstr "Pembatalan telah diminta."
 
 #: pretix/presale/views/order.py:1045
 msgid "Ticket download is not (yet) enabled for this order."
-msgstr ""
+msgstr "Pengunduhan tiket belum (belum) diaktifkan untuk pesanan ini."
 
 #: pretix/presale/views/order.py:1054
 msgid "Please click the link we sent you via email to download your tickets."
 msgstr ""
+"Silakan klik tautan yang kami kirimkan melalui email untuk mengunduh tiket "
+"Anda."
 
 #: pretix/presale/views/order.py:1535
 #, python-brace-format
@@ -31916,36 +32068,46 @@ msgid ""
 "The order has been changed. You can now proceed by paying the open amount of "
 "{amount}."
 msgstr ""
+"Urutannya telah diubah. Anda sekarang dapat melanjutkan dengan membayar "
+"jumlah terbuka sebesar {amount}."
 
 #: pretix/presale/views/order.py:1547
 msgid "You did not make any changes."
-msgstr ""
+msgstr "Anda tidak melakukan perubahan apa pun."
 
 #: pretix/presale/views/order.py:1571
 msgid "You may not change your order in a way that reduces the total price."
 msgstr ""
+"Anda tidak boleh mengubah pesanan Anda sedemikian rupa sehingga mengurangi "
+"harga total."
 
 #: pretix/presale/views/order.py:1573
 msgid "You may only change your order in a way that increases the total price."
 msgstr ""
+"Anda hanya dapat mengubah pesanan Anda sedemikian rupa sehingga meningkatkan "
+"harga total."
 
 #: pretix/presale/views/order.py:1575
 msgid "You may not change your order in a way that changes the total price."
 msgstr ""
+"Anda tidak boleh mengubah pesanan Anda sedemikian rupa sehingga mengubah "
+"harga total."
 
 #: pretix/presale/views/order.py:1583
 msgid ""
 "You may not change your order in a way that increases the total price since "
 "payments are no longer being accepted for this event."
 msgstr ""
+"Anda tidak boleh mengubah pesanan dengan cara yang meningkatkan harga total "
+"karena pembayaran tidak lagi diterima untuk acara ini."
 
 #: pretix/presale/views/order.py:1598 pretix/presale/views/order.py:1629
 msgid "You cannot change this order."
-msgstr ""
+msgstr "Anda tidak dapat mengubah urutan ini."
 
 #: pretix/presale/views/user.py:61
 msgid "We had difficulties processing your input."
-msgstr ""
+msgstr "Kami mengalami kesulitan memproses masukan Anda."
 
 #: pretix/presale/views/user.py:70
 #, python-brace-format
@@ -31955,74 +32117,90 @@ msgid ""
 "{number} hours. If the email did not arrive, please check your spam folder "
 "and also double check that you used the correct email address."
 msgstr ""
+"Jika alamat email yang Anda masukkan valid dan terkait dengan tiket, kami "
+"telah mengirimkan email berisi tautan ke tiket Anda dalam {number} jam "
+"terakhir. Jika email tidak sampai, harap periksa folder spam Anda dan "
+"periksa kembali apakah Anda menggunakan alamat email yang benar."
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."
 msgstr ""
+"Kami mengalami masalah dalam mengirim email saat ini, silakan periksa lagi "
+"nanti."
 
 #: pretix/presale/views/user.py:94
 msgid ""
 "If there were any orders by this user, they will receive an email with their "
 "order codes."
 msgstr ""
+"Jika ada pesanan dari pengguna ini, mereka akan menerima email berisi kode "
+"pesanan mereka."
 
 #: pretix/presale/views/waiting.py:96
 msgid "Waiting lists are disabled for this event."
-msgstr ""
+msgstr "Daftar tunggu dinonaktifkan untuk acara ini."
 
 #: pretix/presale/views/waiting.py:125
 msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
 msgstr ""
+"Anda tidak dapat menambahkan diri Anda ke daftar tunggu karena produk ini "
+"sedang tersedia."
 
 #: pretix/presale/views/waiting.py:131
 msgid ""
 "We've added you to the waiting list. You will receive an email as soon as "
 "this product gets available again."
 msgstr ""
+"Kami telah menambahkan Anda ke daftar tunggu. Anda akan menerima email "
+"segera setelah produk ini tersedia kembali."
 
 #: pretix/presale/views/waiting.py:158
 msgid "We could not find you on our waiting list."
-msgstr ""
+msgstr "Kami tidak dapat menemukan Anda di daftar tunggu kami."
 
 #: pretix/presale/views/waiting.py:162
 msgid ""
 "Your waiting list spot is no longer valid or already used. There's nothing "
 "more to do here."
 msgstr ""
+"Tempat daftar tunggu Anda sudah tidak valid atau sudah digunakan. Tidak ada "
+"lagi yang bisa dilakukan di sini."
 
 #: pretix/presale/views/waiting.py:172
 msgid ""
 "Thank you very much! We will assign your spot on the waiting list to someone "
 "else."
 msgstr ""
+"Terima kasih banyak! Kami akan menugaskan tempat Anda di daftar tunggu "
+"kepada orang lain."
 
 #: pretix/presale/views/widget.py:341
 msgid "This ticket shop is currently disabled."
-msgstr ""
+msgstr "Toko tiket ini saat ini dinonaktifkan."
 
 #: pretix/presale/views/widget.py:355
 msgid "The selected date does not exist in this event series."
-msgstr ""
+msgstr "Tanggal yang dipilih tidak ada dalam rangkaian acara ini."
 
 #: pretix/presale/views/widget.py:418
 #, python-format
 msgid "from %(start_date)s"
-msgstr ""
+msgstr "dari %(start_date)s"
 
 #: pretix/settings.py:710
 msgid "User profile only"
-msgstr ""
+msgstr "Hanya profil pengguna"
 
 #: pretix/settings.py:711
 msgid "Read access"
-msgstr ""
+msgstr "Akses baca"
 
 #: pretix/settings.py:712
 msgid "Write access"
-msgstr ""
+msgstr "Akses tulis"
 
 #: pretix/settings.py:723
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
