@@ -326,7 +326,8 @@ class MultipleLanguagesWidget(forms.CheckboxSelectMultiple):
         opt = super().create_option(name, value, label, selected, index, subindex, attrs)
         opt['official'] = value in settings.LANGUAGES_OFFICIAL
         opt['incubating'] = value in settings.LANGUAGES_INCUBATING
-        opt['score'] = round(get_language_score(value) / get_language_score("de") * 100)
+        base_score = get_language_score("de")
+        opt['score'] = round(get_language_score(value) / base_score * 100)
         return opt
 
 
