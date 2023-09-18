@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-18 00:00+0000\n"
+"PO-Revision-Date: 2023-09-18 07:47+0000\n"
 "Last-Translator: Aufa Fadhlurohman <aufafadlurohman@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix/id/>\n"
@@ -38,56 +38,68 @@ msgid "Arabic"
 msgstr "Arabic"
 
 #: pretix/_base_settings.py:82
+#, fuzzy
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Chinese (simplified)"
 
 #: pretix/_base_settings.py:83
+#, fuzzy
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Chinese (traditional)"
 
 #: pretix/_base_settings.py:84
+#, fuzzy
 msgid "Czech"
-msgstr ""
+msgstr "Czech"
 
 #: pretix/_base_settings.py:85
+#, fuzzy
 msgid "Danish"
-msgstr ""
+msgstr "Danish"
 
 #: pretix/_base_settings.py:86
+#, fuzzy
 msgid "Dutch"
-msgstr ""
+msgstr "Dutch"
 
 #: pretix/_base_settings.py:87
+#, fuzzy
 msgid "Dutch (informal)"
-msgstr ""
+msgstr "Dutch (informal)"
 
 #: pretix/_base_settings.py:88
+#, fuzzy
 msgid "French"
-msgstr ""
+msgstr "French"
 
 #: pretix/_base_settings.py:89
+#, fuzzy
 msgid "Finnish"
-msgstr ""
+msgstr "Finnish"
 
 #: pretix/_base_settings.py:90
+#, fuzzy
 msgid "Galician"
-msgstr ""
+msgstr "Galician"
 
 #: pretix/_base_settings.py:91
+#, fuzzy
 msgid "Greek"
-msgstr ""
+msgstr "Greek"
 
 #: pretix/_base_settings.py:92
+#, fuzzy
 msgid "Italian"
-msgstr ""
+msgstr "Italian"
 
 #: pretix/_base_settings.py:93
+#, fuzzy
 msgid "Latvian"
-msgstr ""
+msgstr "Latvian"
 
 #: pretix/_base_settings.py:94
 msgid "Polish"
-msgstr ""
+msgstr "Polish"
 
 #: pretix/_base_settings.py:95
 msgid "Portuguese (Portugal)"
