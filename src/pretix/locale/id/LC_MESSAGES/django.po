@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-18 10:01+0000\n"
+"PO-Revision-Date: 2023-09-18 10:05+0000\n"
 "Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix/id/>\n"
@@ -2839,205 +2839,223 @@ msgstr "Kode area internasional"
 #: pretix/base/forms/questions.py:307
 msgctxt "phonenumber"
 msgid "Phone number (without international area code)"
-msgstr ""
+msgstr "Nomor telepon (tanpa kode area internasional)"
 
 #: pretix/base/forms/questions.py:468
 msgid ""
 "You uploaded an image in landscape orientation. Please upload an image in "
 "portrait orientation."
 msgstr ""
+"Anda mengunggah gambar dalam orientasi lanskap. Silakan unggah gambar dalam "
+"orientasi potret."
 
 #: pretix/base/forms/questions.py:471
 msgid "Please upload an image where the width is 3/4 of the height."
-msgstr ""
+msgstr "Silakan unggah gambar yang lebarnya 3/4 dari tingginya."
 
 #: pretix/base/forms/questions.py:474
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload an "
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
+"File yang Anda upload memiliki jumlah piksel yang sangat besar, harap unggah "
+"gambar dengan ukuran maksimal 10000 x 10000 piksel."
 
 #: pretix/base/forms/questions.py:477
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
 msgstr ""
+"Unggah gambar yang valid. File yang Anda unggah bukan gambar atau gambar "
+"rusak."
 
 #: pretix/base/forms/questions.py:611 pretix/base/forms/questions.py:619
 msgid ""
 "If you keep this empty, the ticket will be valid starting at the time of "
 "purchase."
-msgstr ""
+msgstr "Jika Anda mengosongkannya, tiket akan berlaku mulai saat pembelian."
 
 #: pretix/base/forms/questions.py:664 pretix/base/forms/questions.py:992
 msgid "Street and Number"
-msgstr ""
+msgstr "Jalan dan nomor"
 
 #: pretix/base/forms/questions.py:698 pretix/base/forms/questions.py:1044
 msgctxt "address"
 msgid "Select state"
-msgstr ""
+msgstr "Pilih negara bagian"
 
 #: pretix/base/forms/questions.py:1031
 msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
 msgstr ""
+"Opsional, namun bergantung pada negara tempat Anda tinggal, kami mungkin "
+"perlu mengenakan pajak tambahan jika Anda tidak memasukinya."
 
 #: pretix/base/forms/questions.py:1033 pretix/base/forms/questions.py:1039
 msgid "If you are registered in Switzerland, you can enter your UID instead."
-msgstr ""
+msgstr "Jika Anda terdaftar di Swiss, Anda dapat memasukkan UID Anda."
 
 #: pretix/base/forms/questions.py:1037
 msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
 msgstr ""
+"Opsional, namun Anda mungkin diharuskan untuk mengklaim manfaat pajak pada "
+"invoice Anda, bergantung pada negara tempat tinggal Anda dan penjual."
 
 #: pretix/base/forms/questions.py:1129
 msgid "You need to provide a company name."
-msgstr ""
+msgstr "Anda perlu memberikan nama perusahaan."
 
 #: pretix/base/forms/questions.py:1131
 msgid "You need to provide your name."
-msgstr ""
+msgstr "Anda perlu memberikan nama Anda."
 
 #: pretix/base/forms/user.py:51 pretix/control/forms/users.py:43
 msgid ""
 "There already is an account associated with this e-mail address. Please "
 "choose a different one."
 msgstr ""
+"Sudah ada akun yang dikaitkan dengan alamat email ini. Silakan pilih yang "
+"lain."
 
 #: pretix/base/forms/user.py:53
 msgid ""
 "Please enter your current password if you want to change your e-mail address "
 "or password."
 msgstr ""
+"Silakan masukkan kata sandi Anda saat ini jika Anda ingin mengubah alamat "
+"email atau kata sandi Anda."
 
 #: pretix/base/forms/user.py:55 pretix/presale/forms/customer.py:364
 #: pretix/presale/forms/customer.py:437
 msgid "The current password you entered was not correct."
-msgstr ""
+msgstr "Kata sandi yang Anda masukkan saat ini salah."
 
 #: pretix/base/forms/user.py:58
 msgid "Please choose a password different to your current one."
-msgstr ""
+msgstr "Silakan pilih kata sandi yang berbeda dengan kata sandi Anda saat ini."
 
 #: pretix/base/forms/user.py:63 pretix/presale/forms/customer.py:373
 #: pretix/presale/forms/customer.py:442
 msgid "Your current password"
-msgstr ""
+msgstr "Kata sandi Anda saat ini"
 
 #: pretix/base/forms/user.py:67 pretix/control/forms/users.py:50
 #: pretix/presale/forms/customer.py:378
 msgid "New password"
-msgstr ""
+msgstr "Kata sandi baru"
 
 #: pretix/base/forms/user.py:71 pretix/control/forms/users.py:54
 msgid "Repeat new password"
-msgstr ""
+msgstr "Ulangi kata sandi baru"
 
 #: pretix/base/forms/user.py:75 pretix/control/forms/organizer.py:361
 #: pretix/control/forms/users.py:58
 msgid "Default timezone"
-msgstr ""
+msgstr "Zona waktu bawaan"
 
 #: pretix/base/forms/user.py:76 pretix/control/forms/users.py:59
 msgid ""
 "Only used for views that are not bound to an event. For all event views, the "
 "event timezone is used instead."
 msgstr ""
+"Hanya digunakan untuk tampilan yang tidak terikat pada suatu peristiwa. "
+"Untuk semua tampilan acara, zona waktu acara digunakan sebagai gantinya."
 
 #: pretix/base/forms/user.py:175
 msgid "Device name"
-msgstr ""
+msgstr "Nama perangkat"
 
 #: pretix/base/forms/user.py:176
 msgid "Device type"
-msgstr ""
+msgstr "Tipe perangkat"
 
 #: pretix/base/forms/user.py:177
 msgid "Smartphone with the Authenticator application"
-msgstr ""
+msgstr "Ponsel pintar dengan aplikasi Authenticator"
 
 #: pretix/base/forms/user.py:178
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
 msgstr ""
+"Token perangkat keras yang kompatibel dengan WebAuthn (misalnya Yubikey)"
 
 #: pretix/base/forms/validators.py:62
 msgid ""
 "Invalid placeholder syntax: You used a different number of \"{\" than of "
 "\"}\"."
 msgstr ""
+"Sintaks placeholder tidak valid: Anda menggunakan jumlah \"{\" than of \"}\"."
 
 #: pretix/base/forms/validators.py:73
 #, python-format
 msgid "Invalid placeholder(s): %(value)s"
-msgstr ""
+msgstr "Placeholder tidak valid: %(nilai)sPlaceholder tidak valid: %(nilai)s"
 
 #: pretix/base/forms/widgets.py:218 pretix/base/forms/widgets.py:223
 msgid "Business or institutional customer"
-msgstr ""
+msgstr "Pelanggan bisnis atau institusi"
 
 #: pretix/base/forms/widgets.py:222
 msgid "Individual customer"
-msgstr ""
+msgstr "Pelanggan individu"
 
 #: pretix/base/invoice.py:86
 #, python-format
 msgctxt "invoice"
 msgid "Page %d of %d"
-msgstr ""
+msgstr "Halaman %d dari %d"
 
 #: pretix/base/invoice.py:323
 msgctxt "invoice"
 msgid "Classic renderer (pretix 1.0)"
-msgstr ""
+msgstr "Penyaji klasik (pretix 1.0)"
 
 #: pretix/base/invoice.py:367
 msgctxt "invoice"
 msgid "Invoice from"
-msgstr ""
+msgstr "Faktur dari"
 
 #: pretix/base/invoice.py:373
 msgctxt "invoice"
 msgid "Invoice to"
-msgstr ""
+msgstr "Faktur ke"
 
 #: pretix/base/invoice.py:401 pretix/base/invoice.py:951
 msgctxt "invoice"
 msgid "Order code"
-msgstr ""
+msgstr "Kode pemesanan"
 
 #: pretix/base/invoice.py:410 pretix/base/invoice.py:964
 msgctxt "invoice"
 msgid "Cancellation number"
-msgstr ""
+msgstr "Nomor pembatalan"
 
 #: pretix/base/invoice.py:416 pretix/base/invoice.py:966
 msgctxt "invoice"
 msgid "Original invoice"
-msgstr ""
+msgstr "Tagihan asli"
 
 #: pretix/base/invoice.py:421 pretix/base/invoice.py:971
 msgctxt "invoice"
 msgid "Invoice number"
-msgstr ""
+msgstr "Nomor faktur"
 
 #: pretix/base/invoice.py:429 pretix/base/invoice.py:986
 msgctxt "invoice"
 msgid "Cancellation date"
-msgstr ""
+msgstr "Tanggal pembatalan"
 
 #: pretix/base/invoice.py:435
 msgctxt "invoice"
 msgid "Original invoice date"
-msgstr ""
+msgstr "Tanggal faktur asli"
 
 #: pretix/base/invoice.py:442 pretix/base/invoice.py:988
 msgctxt "invoice"
 msgid "Invoice date"
-msgstr ""
+msgstr "Tanggal faktur"
 
 #: pretix/base/invoice.py:458
 msgctxt "invoice"
@@ -3051,81 +3069,83 @@ msgid ""
 "{from_date}\n"
 "until {to_date}"
 msgstr ""
+"{from_date}\n"
+"sampai tanggal {to_date}"
 
 #: pretix/base/invoice.py:517 pretix/base/services/mail.py:473
 #, python-brace-format
 msgctxt "invoice"
 msgid "Invoice {num}"
-msgstr ""
+msgstr "Faktur {num}"
 
 #: pretix/base/invoice.py:560
 #, python-brace-format
 msgctxt "invoice"
 msgid "Customer reference: {reference}"
-msgstr ""
+msgstr "Referensi pelanggan: {reference}"
 
 #: pretix/base/invoice.py:568
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr ""
+msgstr "ID PPN Pelanggan"
 
 #: pretix/base/invoice.py:575
 msgctxt "invoice"
 msgid "Beneficiary"
-msgstr ""
+msgstr "Penerima"
 
 #: pretix/base/invoice.py:596
 msgctxt "invoice"
 msgid "Tax Invoice"
-msgstr ""
+msgstr "Faktur pajak"
 
 #: pretix/base/invoice.py:597
 msgctxt "invoice"
 msgid "Invoice"
-msgstr ""
+msgstr "Faktur"
 
 #: pretix/base/invoice.py:598
 #: pretix/control/templates/pretixcontrol/order/index.html:264
 #: pretix/presale/templates/pretixpresale/event/order.html:243
 msgctxt "invoice"
 msgid "Cancellation"
-msgstr ""
+msgstr "Pembatalan"
 
 #: pretix/base/invoice.py:620 pretix/base/invoice.py:628
 msgctxt "invoice"
 msgid "Description"
-msgstr ""
+msgstr "Keterangan"
 
 #: pretix/base/invoice.py:621 pretix/base/invoice.py:629
 msgctxt "invoice"
 msgid "Qty"
-msgstr ""
+msgstr "Jumlah"
 
 #: pretix/base/invoice.py:622 pretix/base/invoice.py:768
 msgctxt "invoice"
 msgid "Tax rate"
-msgstr ""
+msgstr "Persentase pajak"
 
 #: pretix/base/invoice.py:623
 msgctxt "invoice"
 msgid "Net"
-msgstr ""
+msgstr "Bersih"
 
 #: pretix/base/invoice.py:624
 msgctxt "invoice"
 msgid "Gross"
-msgstr ""
+msgstr "Bruto"
 
 #: pretix/base/invoice.py:630
 msgctxt "invoice"
 msgid "Amount"
-msgstr ""
+msgstr "Jumlah"
 
 #: pretix/base/invoice.py:642
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {net_price} net / {gross_price} gross"
-msgstr ""
+msgstr "Harga tunggal: {net_price} net / {gross_price} bruto"
 
 #: pretix/base/invoice.py:659
 #, python-brace-format
