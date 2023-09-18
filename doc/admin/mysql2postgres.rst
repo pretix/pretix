@@ -16,11 +16,16 @@ already upgraded to pretix 5.0 or later, downgrade back to the last 4.x release 
 Update database schema
 ----------------------
 
-Before you start, make sure your database schema is up to date::
+Before you start, make sure your database schema is up to date. With a local installation::
 
     # sudo -u pretix -s
     $ source /var/pretix/venv/bin/activate
     (venv)$ python -m pretix migrate
+
+With a docker installation::
+
+    docker exec -it pretix.service pretix migrate
+
 
 Install PostgreSQL
 ------------------
@@ -70,9 +75,13 @@ Of course, instead of all this you can also run a PostgreSQL docker container an
 Stop pretix
 -----------
 
-To prevent any more changes to your data, stop pretix from running::
+To prevent any more changes to your data, stop pretix from running. With a local installation::
 
     # systemctl stop pretix-web pretix-worker
+
+With docker::
+
+    # systemctl stop pretix
 
 Change configuration
 --------------------
@@ -90,11 +99,15 @@ Change the database configuration in your ``/etc/pretix/pretix.cfg`` file::
 Create database schema
 -----------------------
 
-To create the schema in your new PostgreSQL database, use the following commands::
+To create the schema in your new PostgreSQL database, use the following commands. With a local installation::
 
     # sudo -u pretix -s
     $ source /var/pretix/venv/bin/activate
     (venv)$ python -m pretix migrate
+
+With docker::
+
+    # docker run --rm -v /var/pretix-data:/data -v /etc/pretix:/etc/pretix -v /var/run/redis:/var/run/redis pretix/standalone:stable migrate
 
 
 Migrate your data
@@ -144,10 +157,17 @@ Afterwards, delete the file again::
 Start pretix
 ------------
 
-Now, restart pretix. Maybe stop your MySQL server as a verification step that you are no longer using it::
+Stop your MySQL server as a verification step that you are no longer using it::
 
     # systemctl stop mariadb
+
+Then, restart pretix. With a local installation::
+
     # systemctl start pretix-web pretix-worker
+
+With a docker installation::
+
+    # systemctl start pretix
 
 And you're done! After you've verified everything has been copied correctly, you can delete the old MySQL database.
 
