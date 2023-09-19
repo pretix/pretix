@@ -301,18 +301,40 @@ class SlugWidget(forms.TextInput):
 
 
 class MultipleLanguagesWidget(forms.CheckboxSelectMultiple):
+    template_name = 'pretixcontrol/multi_languages_select.html'
     option_template_name = 'pretixcontrol/multi_languages_widget.html'
 
     def sort(self):
-        self.choices = sorted(self.choices, key=lambda l: (
+        def filter_and_sort(choices, languages, cond=True):
+            return sorted(
+                [c for c in choices if (c[0] in languages) == cond],
+                key=lambda c: str(c[1])
+            )
+        self.choices = (
             (
-                0 if l[0] in settings.LANGUAGES_OFFICIAL
-                else (
-                    1 if l[0] not in settings.LANGUAGES_INCUBATING
-                    else 2
-                )
-            ), str(l[1])
-        ))
+                '',
+                filter_and_sort(self.choices, settings.LANGUAGES_OFFICIAL)
+            ),
+            (
+                (
+                    _('Community translations'),
+                    _('These translations are not maintained by the pretix team. We cannot vouch for their correctness '
+                        'and new or recently changed features might not be translated and will show in English instead. '
+                        'You can <a href="{translate_url}">help translating</a>.'.format(translate_url='https://translate.pretix.eu')),
+                    'fa fa-group'
+                ),
+                filter_and_sort(self.choices, settings.LANGUAGES_OFFICIAL.union(settings.LANGUAGES_INCUBATING), False)
+            ),
+            (
+                (
+                    _('Development only'),
+                    _('These translations are still in progress. These languages can currently only be selected on development '
+                        'installations of pretix, not in production.'),
+                    'fa fa-flask text-danger'
+                ),
+                filter_and_sort(self.choices, settings.LANGUAGES_INCUBATING)
+            )
+        )
 
     def options(self, name, value, attrs=None):
         self.sort()

@@ -1,32 +1,16 @@
 {% load i18n %}
 {% if widget.wrap_label %}
-    <label{% if widget.attrs.id %} for="{{ widget.attrs.id }}"{% endif %}>
+    <label{% if widget.attrs.id %} for="{{ widget.attrs.id }}"{% endif %} class="">
 {% endif %}
 {% include "django/forms/widgets/input.html" %}
 {% if widget.wrap_label %}
-    {{ widget.label }}
+        <span>{{ widget.label }}</span>
     {% if widget.incubating or not widget.official %}
-        <span class="text-muted label label-{% if widget.score > 50 %}success{% else %}default{% endif %} label-outline"
-              data-toggle="tooltip"
-              title="{% trans "This percentage of texts is translated across all parts of the system including most plugins. Even a low value might be enough if you only use specific features. Untranslated texts will show up in English." %}">
+        &nbsp;
+        <span class="label label-outline label-{% if widget.score > 50 %}success{% else %}{% if widget.score > 30 %}info{% else %}default{% endif %}{% endif %}"
+          data-toggle="tooltip"
+          title="{% trans "This percentage of texts is translated across all parts of the system including most plugins. Even a low value might be enough if you only use specific features. Untranslated texts will show up in English." %}">
             {{ widget.score }} %
-        </span>
-    {% endif %}
-    {% if widget.incubating %}
-        &nbsp;
-        <span class="text-muted label label-default label-outline"
-              data-toggle="tooltip"
-              title="{% trans "The translation for this language is still in progress. This language can currently only be selected on development installations of pretix, not in production." %}">
-            <div class="fa fa-flask text-danger"></div>
-            {% trans "Development only" %}
-        </span>
-    {% elif not widget.official %}
-        &nbsp;
-        <span class="text-muted label label-default label-outline"
-              data-toggle="tooltip"
-              title="{% trans "This translation is not maintained by the pretix team. We cannot vouch for its correctness and new or recently changed features might not be translated and will show in English instead. You can help translating at translate.pretix.eu." %}">
-            <span class="fa fa-group"></span>
-            {% trans "Community translation" %}
         </span>
     {% endif %}
     </label>
