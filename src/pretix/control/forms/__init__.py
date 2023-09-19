@@ -320,7 +320,7 @@ class MultipleLanguagesWidget(forms.CheckboxSelectMultiple):
                     _('Community translations'),
                     _('These translations are not maintained by the pretix team. We cannot vouch for their correctness '
                         'and new or recently changed features might not be translated and will show in English instead. '
-                        'You can <a href="{translate_url}">help translating</a>.'.format(translate_url='https://translate.pretix.eu')),
+                        'You can <a href="{translate_url}" target="_blank">help translating</a>.'.format(translate_url='https://translate.pretix.eu')),
                     'fa fa-group'
                 ),
                 filter_and_sort(self.choices, settings.LANGUAGES_OFFICIAL.union(settings.LANGUAGES_INCUBATING), False)
