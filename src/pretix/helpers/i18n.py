@@ -23,10 +23,10 @@ import gettext as gettext_module
 import json
 import os
 import re
+from functools import lru_cache
 
 from django.apps import apps
 from django.conf import settings
-from django.core.cache import cache
 from django.utils import translation
 from django.utils.formats import get_format
 from django.utils.translation import to_locale
@@ -164,6 +164,7 @@ def i18ncomp(query):
     return json.dumps(str(query))[1:-1]
 
 
+@lru_cache
 def get_language_score(locale):
     """
     For a given language code, return a numeric score on how well-translated the language is. The score
@@ -172,9 +173,6 @@ def get_language_score(locale):
 
     Note that there is no valid score for "en", since it's technically not "translated".
     """
-    if score := cache.get(f"language_score:{locale}"):
-        return score
-
     catalog = None
     app_configs = reversed(apps.get_app_configs())
 
@@ -223,5 +221,4 @@ def get_language_score(locale):
         score = 1
     else:
         score = len(list(catalog.items())) or 1
-    cache.set(f"language_score:{locale}", score, timeout=3600 * 8)
     return score
