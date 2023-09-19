@@ -1,10 +1,10 @@
 {% load i18n %}
 {% if widget.wrap_label %}
-    <label{% if widget.attrs.id %} for="{{ widget.attrs.id }}"{% endif %} class="">
+    <label{% if widget.attrs.id %} for="{{ widget.attrs.id }}"{% endif %}>
 {% endif %}
 {% include "django/forms/widgets/input.html" %}
 {% if widget.wrap_label %}
-        <span>{{ widget.label }}</span>
+    {{ widget.label }}
     {% if widget.incubating or not widget.official %}
         &nbsp;
         <span class="label label-outline label-{% if widget.score > 50 %}success{% else %}{% if widget.score > 30 %}info{% else %}default{% endif %}{% endif %}"
