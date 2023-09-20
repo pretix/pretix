@@ -19,12 +19,18 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import gettext as gettext_module
 import json
+import os
 import re
+from functools import lru_cache
 
+from django.apps import apps
 from django.conf import settings
 from django.utils import translation
 from django.utils.formats import get_format
+from django.utils.translation import to_locale
+from django.utils.translation.trans_real import TranslationCatalog
 
 date_conversion_to_moment = {
     '%a': 'ddd',
@@ -156,3 +162,63 @@ def get_moment_locale(locale=None):
 
 def i18ncomp(query):
     return json.dumps(str(query))[1:-1]
+
+
+@lru_cache
+def get_language_score(locale):
+    """
+    For a given language code, return a numeric score on how well-translated the language is. The score
+    is an integer greater than 1 and can be arbitrarily high, so it's only useful for comparing with
+    other languages.
+
+    Note that there is no valid score for "en", since it's technically not "translated".
+    """
+    catalog = None
+    app_configs = reversed(apps.get_app_configs())
+
+    for app in app_configs:
+        # Filter out all third-party apps by looking for the pretix name and for valid pretix plugins
+        if not app.name.startswith("pretix") and not hasattr(app, 'PretixPluginMeta'):
+            continue
+        if hasattr(app, 'PretixPluginMeta'):
+            # Filter out invisible plugins and plugins only available to some users
+            p = app.PretixPluginMeta
+            if not getattr(p, 'visible', True) or hasattr(app, 'is_available'):
+                continue
+        localedir = os.path.join(app.path, "locale")
+        if os.path.exists(localedir):
+            try:
+                translation = gettext_module.translation(
+                    domain="django",
+                    localedir=localedir,
+                    languages=[to_locale(locale)],
+                    fallback=False,
+                )
+            except:
+                continue
+            if catalog is None:
+                catalog = TranslationCatalog(translation)
+            else:
+                catalog.update(translation)
+
+    # Add pretix' main translation folder as well as installation-specific translation folders
+    for localedir in reversed(settings.LOCALE_PATHS):
+        try:
+            translation = gettext_module.translation(
+                domain="django",
+                localedir=localedir,
+                languages=[to_locale(locale)],
+                fallback=False,
+            )
+        except:
+            continue
+        if catalog is None:
+            catalog = TranslationCatalog(translation)
+        else:
+            catalog.update(translation)
+
+    if not catalog:
+        score = 1
+    else:
+        score = len(list(catalog.items())) or 1
+    return score

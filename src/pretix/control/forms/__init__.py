@@ -44,6 +44,7 @@ from django.forms.utils import from_current_timezone
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
+from django.utils.text import format_lazy
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelMultipleChoiceField
@@ -51,6 +52,7 @@ from django_scopes.forms import SafeModelMultipleChoiceField
 from pretix.helpers.hierarkey import clean_filename
 
 from ...base.forms import I18nModelForm
+from ...helpers.i18n import get_language_score
 from ...helpers.images import (
     IMAGE_EXTS, validate_uploaded_file_for_valid_image,
 )
@@ -300,18 +302,43 @@ class SlugWidget(forms.TextInput):
 
 
 class MultipleLanguagesWidget(forms.CheckboxSelectMultiple):
+    template_name = 'pretixcontrol/multi_languages_select.html'
     option_template_name = 'pretixcontrol/multi_languages_widget.html'
 
     def sort(self):
-        self.choices = sorted(self.choices, key=lambda l: (
+        def filter_and_sort(choices, languages, cond=True):
+            return sorted(
+                [c for c in choices if (c[0] in languages) == cond],
+                key=lambda c: str(c[1])
+            )
+        self.choices = (
             (
-                0 if l[0] in settings.LANGUAGES_OFFICIAL
-                else (
-                    1 if l[0] not in settings.LANGUAGES_INCUBATING
-                    else 2
-                )
-            ), str(l[1])
-        ))
+                '',
+                filter_and_sort(self.choices, settings.LANGUAGES_OFFICIAL)
+            ),
+            (
+                (
+                    _('Community translations'),
+                    format_lazy(
+                        _('These translations are not maintained by the pretix team. We cannot vouch for their correctness '
+                            'and new or recently changed features might not be translated and will show in English instead. '
+                            'You can <a href="{translate_url}" target="_blank">help translating</a>.'),
+                        translate_url='https://translate.pretix.eu'
+                    ),
+                    'fa fa-group'
+                ),
+                filter_and_sort(self.choices, settings.LANGUAGES_OFFICIAL.union(settings.LANGUAGES_INCUBATING), False)
+            ),
+            (
+                (
+                    _('Development only'),
+                    _('These translations are still in progress. These languages can currently only be selected on development '
+                        'installations of pretix, not in production.'),
+                    'fa fa-flask text-danger'
+                ),
+                filter_and_sort(self.choices, settings.LANGUAGES_INCUBATING)
+            )
+        )
 
     def options(self, name, value, attrs=None):
         self.sort()
@@ -325,6 +352,8 @@ class MultipleLanguagesWidget(forms.CheckboxSelectMultiple):
         opt = super().create_option(name, value, label, selected, index, subindex, attrs)
         opt['official'] = value in settings.LANGUAGES_OFFICIAL
         opt['incubating'] = value in settings.LANGUAGES_INCUBATING
+        base_score = get_language_score("de")
+        opt['score'] = round(get_language_score(value) / base_score * 100)
         return opt
 
 

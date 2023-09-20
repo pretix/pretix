@@ -116,6 +116,22 @@ input[type=number]::-webkit-outer-spin-button {
   font-weight: normal;
 }
 
+.checkbox-group {
+  margin-top: 1.25em;
+  margin-bottom: 1.25em;
+}
+.checkbox-group-legend {
+  margin-bottom: .65em;
+  border-bottom: 1px solid #ccc;
+  font-weight: bold;
+}
+.checkbox-group-legend > span {
+  background: white;
+  padding: .5em;
+  padding-left: 0;
+  position: relative;
+  top: .35em;
+}
 
 .alert {
   text-align: left;

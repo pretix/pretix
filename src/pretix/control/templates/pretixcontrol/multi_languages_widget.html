@@ -5,13 +5,12 @@
 {% include "django/forms/widgets/input.html" %}
 {% if widget.wrap_label %}
     {{ widget.label }}
-    {% if widget.incubating %}
-        <span class="label label-danger" data-toggle="tooltip" title="{% trans "The translation for this language is still in progress. This language can currently only be selected on development installations of pretix, not in production." %}">
-            {% trans "Translation in development" %}
-        </span>
-    {% elif not widget.official %}
-        <span class="label label-warning" data-toggle="tooltip" title="{% trans "This translation is not maintained by the pretix team. We cannot vouch for its correctness and new or recently changed features might not be translated and will show in English instead. You can help translating at translate.pretix.eu." %}">
-            {% trans "Unofficial translation" %}
+    {% if widget.incubating or not widget.official %}
+        &nbsp;
+        <span class="label label-{% if widget.score > 50 %}success{% else %}{% if widget.score > 30 %}info{% else %}default{% endif %}{% endif %}"
+          data-toggle="tooltip"
+          title="{% trans "This percentage of texts is translated across all parts of the system including most plugins. Even a low value might be enough if you only use specific features. Untranslated texts will show up in English." %}">
+            {{ widget.score }} %
         </span>
     {% endif %}
     </label>
