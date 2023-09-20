@@ -44,6 +44,7 @@ from django.forms.utils import from_current_timezone
 from django.urls import reverse
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
+from django.utils.text import format_lazy
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes.forms import SafeModelMultipleChoiceField
@@ -318,9 +319,12 @@ class MultipleLanguagesWidget(forms.CheckboxSelectMultiple):
             (
                 (
                     _('Community translations'),
-                    _('These translations are not maintained by the pretix team. We cannot vouch for their correctness '
-                        'and new or recently changed features might not be translated and will show in English instead. '
-                        'You can <a href="{translate_url}" target="_blank">help translating</a>.'.format(translate_url='https://translate.pretix.eu')),
+                    format_lazy(
+                        _('These translations are not maintained by the pretix team. We cannot vouch for their correctness '
+                            'and new or recently changed features might not be translated and will show in English instead. '
+                            'You can <a href="{translate_url}" target="_blank">help translating</a>.'),
+                        translate_url='https://translate.pretix.eu'
+                    ),
                     'fa fa-group'
                 ),
                 filter_and_sort(self.choices, settings.LANGUAGES_OFFICIAL.union(settings.LANGUAGES_INCUBATING), False)
