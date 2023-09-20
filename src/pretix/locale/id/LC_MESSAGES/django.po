@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-08 13:36+0000\n"
-"PO-Revision-Date: 2023-09-19 22:00+0000\n"
+"PO-Revision-Date: 2023-09-20 14:01+0000\n"
 "Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
 "pretix/id/>\n"
@@ -595,7 +595,7 @@ msgstr "{system} Pengguna"
 #: pretix/presale/templates/pretixpresale/event/order.html:299
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:26
 msgid "E-mail"
-msgstr "Surel"
+msgstr "E-mail"
 
 #: pretix/base/auth.py:154 pretix/base/forms/auth.py:153
 #: pretix/base/forms/auth.py:207 pretix/base/models/customers.py:96
@@ -1858,7 +1858,7 @@ msgstr "Status"
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:146
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:34
 msgid "Email"
-msgstr "Surel"
+msgstr "Email"
 
 #: pretix/base/exporters/orderlist.py:257
 #: pretix/base/exporters/orderlist.py:433
@@ -2978,11 +2978,11 @@ msgstr "Placeholder tidak valid: %(value)s"
 
 #: pretix/base/forms/widgets.py:218 pretix/base/forms/widgets.py:223
 msgid "Business or institutional customer"
-msgstr "Pelanggan bisnis atau institusi"
+msgstr "Bisnis atau Institusi"
 
 #: pretix/base/forms/widgets.py:222
 msgid "Individual customer"
-msgstr "Pelanggan individu"
+msgstr "Individu"
 
 #: pretix/base/invoice.py:86
 #, python-format
@@ -10881,7 +10881,7 @@ msgstr "Mx"
 #: pretix/base/settings.py:3510 pretix/base/settings.py:3531
 #: pretix/base/settings.py:3553
 msgid "Given name"
-msgstr "Nama pemberian"
+msgstr "Nama depan"
 
 #: pretix/base/settings.py:3352 pretix/base/settings.py:3365
 #: pretix/base/settings.py:3381 pretix/base/settings.py:3397
@@ -10890,7 +10890,7 @@ msgstr "Nama pemberian"
 #: pretix/base/settings.py:3511 pretix/base/settings.py:3532
 #: pretix/base/settings.py:3554
 msgid "Family name"
-msgstr "Nama keluarga"
+msgstr "Nama belakang"
 
 #: pretix/base/settings.py:3356 pretix/base/settings.py:3372
 #: pretix/base/settings.py:3388 pretix/base/settings.py:3403
@@ -15653,7 +15653,7 @@ msgstr "Pembayaran"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:120
 #: pretix/presale/templates/pretixpresale/organizers/index.html:122
 msgid "Tickets"
-msgstr "TiketTiket"
+msgstr "Tiket"
 
 #: pretix/control/navigation.py:89
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:3
@@ -19859,7 +19859,7 @@ msgstr "Apakah Anda benar-benar ingin menyetujui pesanan ini?"
 #: pretix/control/templates/pretixcontrol/order/refund_cancel.html:27
 #: pretix/presale/templates/pretixpresale/event/order_cancel.html:212
 msgid "No, take me back"
-msgstr "Tidak, bawa aku kembali"
+msgstr "Tidak, kembali"
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:25
 msgid "Yes, approve order"
@@ -24288,7 +24288,7 @@ msgstr "Tidak ada tanggal"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:107
 #: pretix/presale/views/widget.py:414
 msgid "Sale over"
-msgstr "Penjualan berakhir"
+msgstr "Pemesanan berakhir"
 
 #: pretix/control/views/dashboards.py:533
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:103
@@ -29740,7 +29740,7 @@ msgstr "Keranjang sudah habis masa berlakunya"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:37
 msgid "Show full cart"
-msgstr "Tampilkan keranjang penuh"
+msgstr "Tampilkan secara lengkap"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:49
 #: pretix/presale/templates/pretixpresale/event/index.html:78
@@ -29773,7 +29773,7 @@ msgstr "Ubah pembayaran"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:80
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:129
 msgid "Modify"
-msgstr "Memodifikasi"
+msgstr "Ubah"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:79
 msgid "Modify invoice information"
@@ -30717,7 +30717,7 @@ msgstr "Tetapkan harga dalam %(currency)s untuk %(item)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_quota_left.html:4
 #, python-format
 msgid "%(num)s currently available"
-msgstr "saat ini tersedia %(num)s"
+msgstr "Saat ini tersedia %(num)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar.html:4
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_calendar_week.html:4
@@ -30893,7 +30893,7 @@ msgstr "Bergabunglah dalam daftar tunggu"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:415
 msgctxt "free_tickets"
 msgid "Register"
-msgstr "Daftar"
+msgstr "Registrasi"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:222
 #: pretix/presale/templates/pretixpresale/event/voucher.html:420
@@ -31081,7 +31081,7 @@ msgstr "Ubah informasi Anda"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:334
 msgid "Internal Reference"
-msgstr "Referensi internal"
+msgstr "Kode referensi internal"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:348
 msgctxt "action"
