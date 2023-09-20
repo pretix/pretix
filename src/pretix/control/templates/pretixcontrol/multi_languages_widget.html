@@ -7,7 +7,7 @@
     {{ widget.label }}
     {% if widget.incubating or not widget.official %}
         &nbsp;
-        <span class="label label-outline label-{% if widget.score > 50 %}success{% else %}{% if widget.score > 30 %}info{% else %}default{% endif %}{% endif %}"
+        <span class="label label-{% if widget.score > 50 %}success{% else %}{% if widget.score > 30 %}info{% else %}default{% endif %}{% endif %}"
           data-toggle="tooltip"
           title="{% trans "This percentage of texts is translated across all parts of the system including most plugins. Even a low value might be enough if you only use specific features. Untranslated texts will show up in English." %}">
             {{ widget.score }} %
