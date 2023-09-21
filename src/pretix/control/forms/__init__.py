@@ -339,6 +339,7 @@ class MultipleLanguagesWidget(forms.CheckboxSelectMultiple):
                 filter_and_sort(self.choices, settings.LANGUAGES_INCUBATING)
             )
         )
+        self.choices = [c for c in self.choices if len(c[1])]
 
     def options(self, name, value, attrs=None):
         self.sort()
