@@ -38,7 +38,7 @@ from django.views.generic import RedirectView
 
 import pretix.control.urls
 import pretix.presale.urls
-from pretix.base.views import js_helpers, applepay
+from pretix.base.views import applepay, js_helpers
 
 from .base.views import (
     cachedfiles, csp, health, js_catalog, metrics, redirect, source,
