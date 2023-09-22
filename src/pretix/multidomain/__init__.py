@@ -33,12 +33,20 @@
 # License for the specific language governing permissions and limitations under the License.
 
 from django.urls import URLPattern
-from django.urls.resolvers import RegexPattern
+from django.urls.resolvers import RegexPattern, RoutePattern
 
 
 def event_url(route, view, name=None, require_live=True):
     if callable(view):
         pattern = RegexPattern(route, name=name, is_endpoint=True)
+        pattern._require_live = require_live
+        return URLPattern(pattern, view, {}, name)
+    raise TypeError('view must be a callable.')
+
+
+def event_path(route, view, name=None, require_live=True):
+    if callable(view):
+        pattern = RoutePattern(route, name=name, is_endpoint=True)
         pattern._require_live = require_live
         return URLPattern(pattern, view, {}, name)
     raise TypeError('view must be a callable.')
