@@ -38,7 +38,7 @@ from django.views.generic import RedirectView
 
 import pretix.control.urls
 import pretix.presale.urls
-from pretix.base.views import js_helpers
+from pretix.base.views import js_helpers, applepay
 
 from .base.views import (
     cachedfiles, csp, health, js_catalog, metrics, redirect, source,
@@ -57,7 +57,9 @@ base_patterns = [
     re_path(r'^agpl_source$', source.get_source, name='source'),
     re_path(r'^js_helpers/states/$', js_helpers.states, name='js_helpers.states'),
     re_path(r'^api/v1/', include(('pretix.api.urls', 'pretixapi'), namespace='api-v1')),
-    re_path(r'^api/$', RedirectView.as_view(url='/api/v1/'), name='redirect-api-version')
+    re_path(r'^api/$', RedirectView.as_view(url='/api/v1/'), name='redirect-api-version'),
+    re_path(r'^.well-known/apple-developer-merchantid-domain-association$',
+            applepay.association, name='applepay.association'),
 ]
 
 control_patterns = [

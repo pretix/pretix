@@ -476,13 +476,6 @@ def oauth_disconnect(request, **kwargs):
     }))
 
 
-@xframe_options_exempt
-def applepay_association(request, *args, **kwargs):
-    r = render(request, 'pretixplugins/stripe/apple-developer-merchantid-domain-association')
-    r._csp_ignore = True
-    return r
-
-
 class StripeOrderView:
     def dispatch(self, request, *args, **kwargs):
         try:

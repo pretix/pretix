@@ -25,8 +25,7 @@ from pretix.multidomain import event_url
 
 from .views import (
     OrganizerSettingsFormView, ReturnView, ScaReturnView, ScaView,
-    applepay_association, oauth_disconnect, oauth_return, redirect_view,
-    webhook,
+    oauth_disconnect, oauth_return, redirect_view, webhook,
 )
 
 event_patterns = [
@@ -38,13 +37,6 @@ event_patterns = [
         re_path(r'^sca/(?P<order>[^/]+)/(?P<hash>[^/]+)/(?P<payment>[0-9]+)/return/$',
                 ScaReturnView.as_view(), name='sca.return'),
     ])),
-    re_path(r'^.well-known/apple-developer-merchantid-domain-association$',
-            applepay_association, name='applepay.association'),
-]
-
-organizer_patterns = [
-    re_path(r'^.well-known/apple-developer-merchantid-domain-association$',
-            applepay_association, name='applepay.association'),
 ]
 
 urlpatterns = [
@@ -54,6 +46,4 @@ urlpatterns = [
             OrganizerSettingsFormView.as_view(), name='settings.connect'),
     re_path(r'^_stripe/webhook/$', webhook, name='webhook'),
     re_path(r'^_stripe/oauth_return/$', oauth_return, name='oauth.return'),
-    re_path(r'^.well-known/apple-developer-merchantid-domain-association$',
-            applepay_association, name='applepay.association'),
 ]
