@@ -67,6 +67,7 @@ charge
 Checkout
 Chrome
 Choice
+Community
 CONFIRM
 Connect
 Consent
