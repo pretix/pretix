@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-25 23:11+0000\n"
-"PO-Revision-Date: 2023-09-08 13:52+0000\n"
+"PO-Revision-Date: 2023-09-25 23:45+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.18.2\n"
+"X-Generator: Weblate 5.0.2\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
@@ -106,7 +106,7 @@ msgstr "Griechisch"
 
 #: pretix/_base_settings.py:92
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonesisch"
 
 #: pretix/_base_settings.py:93
 msgid "Italian"
@@ -3028,10 +3028,9 @@ msgid "Invalid placeholder(s): %(value)s"
 msgstr "Ungültige(r) Platzhalter: %(value)s"
 
 #: pretix/base/forms/widgets.py:67
-#, fuzzy, python-format
-#| msgid "Sample city"
+#, python-format
 msgid "Sample: %s"
-msgstr "Musterstadt"
+msgstr "Beispiel: %s"
 
 #: pretix/base/forms/widgets.py:70
 #, python-brace-format
@@ -6339,14 +6338,10 @@ msgstr ""
 "auswählen."
 
 #: pretix/base/payment.py:342
-#, fuzzy
-#| msgid ""
-#| "Users will not be able to choose this payment provider after the given "
-#| "date."
 msgid ""
 "Users will not be able to choose this payment provider before the given date."
 msgstr ""
-"Käufer können diese Zahlungsmethode nur bis zu (einschließlich) diesem Datum "
+"Käufer können diese Zahlungsmethode nur (einschließlich) nach diesem Datum "
 "auswählen."
 
 #: pretix/base/payment.py:347
@@ -7479,10 +7474,8 @@ msgid "Ticket type not allowed"
 msgstr "Ticketart nicht erlaubt"
 
 #: pretix/base/services/checkin.py:263
-#, fuzzy
-#| msgid "Create a new gate"
 msgid "Wrong entrance gate"
-msgstr "Neue Station erstellen"
+msgstr "Falscher Eingang / Station"
 
 #: pretix/base/services/checkin.py:285
 msgid "time since last entry"
@@ -7505,16 +7498,14 @@ msgid "number of entries today"
 msgstr "Anzahl Eintritte heute"
 
 #: pretix/base/services/checkin.py:290
-#, fuzzy, python-brace-format
-#| msgid "number of entries today"
+#, python-brace-format
 msgid "number of entries since {datetime}"
-msgstr "Anzahl Eintritte heute"
+msgstr "Anzahl Eintritte seit {datetime}"
 
 #: pretix/base/services/checkin.py:291
-#, fuzzy, python-brace-format
-#| msgid "number of entries today"
+#, python-brace-format
 msgid "number of entries before {datetime}"
-msgstr "Anzahl Eintritte heute"
+msgstr "Anzahl Eintritte vor {datetime}"
 
 #: pretix/base/services/checkin.py:292
 msgid "week day"
@@ -12033,44 +12024,32 @@ msgid "Filetype not allowed!"
 msgstr "Dateityp nicht erlaubt!"
 
 #: pretix/control/forms/__init__.py:321
-#, fuzzy
-#| msgid "Unofficial translation"
 msgid "Community translations"
-msgstr "inoffizielle Übersetzung"
+msgstr "Community-Übersetzungen"
 
 #: pretix/control/forms/__init__.py:323
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This translation is not maintained by the pretix team. We cannot vouch "
-#| "for its correctness and new or recently changed features might not be "
-#| "translated and will show in English instead. You can help translating at "
-#| "translate.pretix.eu."
+#, python-brace-format
 msgid ""
 "These translations are not maintained by the pretix team. We cannot vouch "
 "for their correctness and new or recently changed features might not be "
 "translated and will show in English instead. You can <a "
 "href=\"{translate_url}\" target=\"_blank\">help translating</a>."
 msgstr ""
-"Diese Übersetzung wird nicht vom pretix-Team gepflegt. Wir können für ihre "
-"Korrektheit nicht garantieren und neue oder kürzlich geänderte Funktionen "
-"können stattdessen auf Englisch erscheinen. Sie können unter translate."
-"pretix.eu bei der Übersetzung helfen."
+"Diese Übersetzungen werden nicht vom pretix-Team gepflegt. Wir können für "
+"ihre Korrektheit nicht garantieren und neue oder kürzlich geänderte "
+"Funktionen können stattdessen auf Englisch erscheinen. Sie können <a href=\""
+"{translate_url}\" target=\"_blank\">bei der Übersetzung helfen</a>."
 
 #: pretix/control/forms/__init__.py:334
 msgid "Development only"
-msgstr ""
+msgstr "In Entwicklung"
 
 #: pretix/control/forms/__init__.py:335
-#, fuzzy
-#| msgid ""
-#| "The translation for this language is still in progress. This language can "
-#| "currently only be selected on development installations of pretix, not in "
-#| "production."
 msgid ""
 "These translations are still in progress. These languages can currently only "
 "be selected on development installations of pretix, not in production."
 msgstr ""
-"Die Übersetzung für diese Sprache ist noch in Arbeit. Die Sprache kann "
+"Die Übersetzung für diese Sprachen sind noch in Arbeit. Die Sprachen können "
 "derzeit nur in Entwicklungsumgebungen von pretix ausgewählt werden, nicht in "
 "Produktivinstallationen."
 
@@ -20030,6 +20009,10 @@ msgid ""
 "including most plugins. Even a low value might be enough if you only use "
 "specific features. Untranslated texts will show up in English."
 msgstr ""
+"Dieser Anteil an Texten ist übersetzt über alle Systemteile hinweg inklusive "
+"der meisten Erweiterungen. Auch ein niedriger Wert kann genug sein, wenn Sie "
+"nur bestimmte Funktionen benutzen. Nicht übersetzte Texte tauchen auf "
+"Englisch auf."
 
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:6
@@ -22326,14 +22309,6 @@ msgid "Other organizers accepting gift cards from you"
 msgstr "Andere Veranstalter, die deine Wertgutscheine akzeptieren"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:87
-#, fuzzy
-#| msgid ""
-#| "You can invite other organizers to accept your gift cards. After you have "
-#| "done so, they need to go to the same page in their account and accept "
-#| "your invitation. Note that other organizers will be able to add money to "
-#| "gift cards as well that you will need to collect form them. It is your "
-#| "responsibility to handle the exchange of money to offset the transactions "
-#| "between the two organizers."
 msgid ""
 "You can invite other organizers to accept your gift cards. After you have "
 "done so, they need to go to the same page in their account and accept your "
