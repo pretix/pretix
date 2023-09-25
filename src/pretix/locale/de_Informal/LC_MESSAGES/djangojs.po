@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-25 23:12+0000\n"
-"PO-Revision-Date: 2023-06-27 14:35+0000\n"
+"PO-Revision-Date: 2023-09-25 23:46+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.0.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -423,7 +423,7 @@ msgstr "Variante"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
 msgid "Gate"
-msgstr ""
+msgstr "Station"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
 msgid "Current date and time"
@@ -442,16 +442,12 @@ msgid "Number of previous entries since midnight"
 msgstr "Anzahl bisheriger Eintritte seit Mitternacht"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
-#, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries since"
-msgstr "Anzahl bisheriger Eintritte"
+msgstr "Anzahl bisheriger Eintritte seit"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:125
-#, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries before"
-msgstr "Anzahl bisheriger Eintritte"
+msgstr "Anzahl bisheriger Eintritte vor"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:129
 msgid "Number of days with a previous entry"
@@ -698,10 +694,8 @@ msgid "Your local time:"
 msgstr "Deine lokale Zeit:"
 
 #: pretix/static/pretixpresale/js/walletdetection.js:39
-#, fuzzy
-#| msgid "Apple Pay"
 msgid "Google Pay"
-msgstr "Apple Pay"
+msgstr "Google Pay"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
