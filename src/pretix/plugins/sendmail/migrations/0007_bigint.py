@@ -6,10 +6,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        (
-            "pretixbase",
-            "0246_rename_logentry_datetime_id_pretixbase__datetim_b1fe5a_idx_and_more",
-        ),
+        ("pretixbase", "0246_bigint"),
         ("sendmail", "0006_rule_subevent_alter_rule_checked_in_status"),
     ]
 
