@@ -397,7 +397,12 @@ class VoucherBulkForm(VoucherForm):
             for c in data['codes']:
                 if len(c) < 5:
                     raise ValidationError({
-                        'codes': [_('The voucher code {code} ist too short. Make sure all voucher codes are at least {min_length} characters long.').format(code=c, min_length=5)]
+                        'codes': [
+                            _('The voucher code {code} ist too short. Make sure all voucher codes are at least {min_length} characters long.').format(
+                                code=c,
+                                min_length=5
+                            )
+                        ]
                     })
                 if c in codes_seen:
                     raise ValidationError(_('The voucher code {code} appears in your list twice.').format(code=c))
