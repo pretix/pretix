@@ -35,7 +35,7 @@ contact_name                          string                     Contact person 
 contact_name_parts                    object of strings          Decomposition of contact name (i.e. given name, family name)
 contact_email                         string                     Contact person email address (or ``null``)
 booth                                 string                     Booth number (or ``null``). Maximum 100 characters.
-locale                                string                     Locale for communication with the exhibitor (or ``null``).
+locale                                string                     Locale for communication with the exhibitor.
 access_code                           string                     Access code for the exhibitor to access their data or use the lead scanning app (read-only).
 allow_lead_scanning                   boolean                    Enables lead scanning app
 allow_lead_access                     boolean                    Enables access to data gathered by the lead scanning app
@@ -356,7 +356,6 @@ Endpoints
         "contact_email": "johnson@as.example.org",
         "booth": "A2",
         "locale": "de",
-        "access_code": "VKHZ2FU8",
         "allow_lead_scanning": true,
         "allow_lead_access": true,
         "allow_voucher_access": true,
