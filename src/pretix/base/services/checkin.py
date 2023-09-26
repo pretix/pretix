@@ -53,8 +53,8 @@ from django.utils.translation import gettext as _
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.models import (
-    Checkin, CheckinList, Device, Event, ItemVariation, Order, OrderPosition,
-    QuestionOption,
+    Checkin, CheckinList, Device, Event, Gate, Item, ItemVariation, Order,
+    OrderPosition, QuestionOption,
 )
 from pretix.base.signals import checkin_created, order_placed, periodic_task
 from pretix.helpers import OF_SELF
@@ -109,11 +109,20 @@ def _logic_annotate_for_graphic_explain(rules, ev, rule_data, now_dt):
             var = values[0] if isinstance(values, list) else values
             val = rule_data[var]
             if var == "product":
-                val = str(event.items.get(pk=val))
+                try:
+                    val = str(event.items.get(pk=val))
+                except Item.DoesNotExist:
+                    val = "?"
             elif var == "variation":
-                val = str(ItemVariation.objects.get(item__event=event, pk=val))
+                try:
+                    val = str(ItemVariation.objects.get(item__event=event, pk=val))
+                except ItemVariation.DoesNotExist:
+                    val = "?"
             elif var == "gate":
-                val = str(event.organizer.gates.get(pk=val))
+                try:
+                    val = str(event.organizer.gates.get(pk=val))
+                except Gate.DoesNotExist:
+                    val = "?"
             elif isinstance(val, datetime):
                 val = date_format(val.astimezone(ev.timezone), "SHORT_DATETIME_FORMAT")
             return {"var": var, "__result": val}
