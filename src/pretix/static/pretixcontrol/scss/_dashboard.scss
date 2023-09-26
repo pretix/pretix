@@ -6,6 +6,11 @@
   margin-right: -5px;
 }
 
+.dashboard.dashboard-panels {
+  margin-left: -15px;
+  margin-right: -15px;
+}
+
 .dashboard .widget-container {
   flex: 1 0 auto;
   align-self: stretch;
@@ -63,18 +68,18 @@
   }
 }
 
-.dashboard .shopstate {
+.shopstate {
   text-align: center;
-  padding: 18px 0;
 
   span.live, span.off {
     display: block;
-    font-size: 20px;
-    padding: 10px 0;
+    font-size: 18px;
   }
+
   span.live {
     color: $brand-success;
   }
+
   span.off {
     color: $brand-danger;
   }
