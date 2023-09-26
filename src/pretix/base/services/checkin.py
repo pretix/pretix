@@ -114,15 +114,21 @@ def _logic_annotate_for_graphic_explain(rules, ev, rule_data, now_dt):
                 except Item.DoesNotExist:
                     val = "?"
             elif var == "variation":
-                try:
-                    val = str(ItemVariation.objects.get(item__event=event, pk=val))
-                except ItemVariation.DoesNotExist:
-                    val = "?"
+                if not val:
+                    val = "-"
+                else:
+                    try:
+                        val = str(ItemVariation.objects.get(item__event=event, pk=val))
+                    except ItemVariation.DoesNotExist:
+                        val = "?"
             elif var == "gate":
-                try:
-                    val = str(event.organizer.gates.get(pk=val))
-                except Gate.DoesNotExist:
-                    val = "?"
+                if not val:
+                    val = "-"
+                else:
+                    try:
+                        val = str(event.organizer.gates.get(pk=val))
+                    except Gate.DoesNotExist:
+                        val = "?"
             elif isinstance(val, datetime):
                 val = date_format(val.astimezone(ev.timezone), "SHORT_DATETIME_FORMAT")
             return {"var": var, "__result": val}
