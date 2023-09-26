@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-25 23:11+0000\n"
-"PO-Revision-Date: 2023-09-18 07:47+0000\n"
-"Last-Translator: Rubén Vargas <rd_01@rocketmail.com>\n"
+"PO-Revision-Date: 2023-09-27 01:00+0000\n"
+"Last-Translator: Igor Támara <igor@tamarapatino.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -4191,10 +4191,10 @@ msgid "Owned by ticket holder"
 msgstr "Descargue sus entradas aquí:"
 
 #: pretix/base/models/giftcards.py:93
-#, fuzzy
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
 msgstr ""
-"La URL semántica solo puede contener letras, números, puntos y guiones."
+"El código de la tarjeta de regalo puede contener solamente letras, números, "
+"puntos y guiones."
 
 #: pretix/base/models/giftcards.py:105
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:39
@@ -4203,9 +4203,8 @@ msgid "Special terms and conditions"
 msgstr "Términos y condiciones especiales"
 
 #: pretix/base/models/giftcards.py:217 pretix/base/models/giftcards.py:221
-#, fuzzy
 msgid "Manual transaction"
-msgstr "Transliteración"
+msgstr "Transacción manual"
 
 #: pretix/base/models/invoices.py:185
 #, python-format
@@ -4262,9 +4261,8 @@ msgid "{category} (Add-On products)"
 msgstr "{category} (Productos Adicionales)"
 
 #: pretix/base/models/items.py:172 pretix/base/models/items.py:228
-#, fuzzy
 msgid "Disable product for this date"
-msgstr "Opcional. Ningún producto será vendido antes de esta fecha."
+msgstr "Inhabilitar el producto para esta fecha"
 
 #: pretix/base/models/items.py:176 pretix/base/models/items.py:232
 #: pretix/base/models/items.py:480
@@ -4277,35 +4275,32 @@ msgid "This product will not be sold after the given date."
 msgstr "Este producto no será vendido después de la fecha dada."
 
 #: pretix/base/models/items.py:370
-#, fuzzy
 msgid "Event validity (default)"
-msgstr "(Propuesta de evento)"
+msgstr "Validez del evento (De forma predeterminada)"
 
 #: pretix/base/models/items.py:371
-#, fuzzy
 msgid "Fixed time frame"
-msgstr "Cliente"
+msgstr "Ventana de tiempo fija"
 
 #: pretix/base/models/items.py:372
-#, fuzzy
 msgid "Dynamic validity"
-msgstr "Tarjeta de regalo"
+msgstr "Validez dinámica"
 
 #: pretix/base/models/items.py:379 pretix/base/models/items.py:661
 msgid "Don't use re-usable media, use regular one-off tickets"
-msgstr ""
+msgstr "No usar medios reutilizables, usar tiquetes de un solo uso"
 
 #: pretix/base/models/items.py:380
 msgid "Require an existing medium to be re-used"
-msgstr ""
+msgstr "Exigir que se reuse un medio ya existente"
 
 #: pretix/base/models/items.py:381
 msgid "Require a previously unknown medium to be newly added"
-msgstr ""
+msgstr "Exigir que un medio desconocido anteriormente se adicione de nuevo"
 
 #: pretix/base/models/items.py:382
 msgid "Require either an existing or a new medium to be used"
-msgstr ""
+msgstr "Exigir que se use un medio existente o uno nuevo"
 
 #: pretix/base/models/items.py:398 pretix/base/models/items.py:1264
 #: pretix/control/templates/pretixcontrol/items/index.html:40
@@ -4322,7 +4317,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:416
 msgid "This is shown below the product name in lists."
-msgstr "Esto es mostrado debajo del nombre del producto en listas."
+msgstr "Esto se muestra debajo del nombre del producto en listas."
 
 #: pretix/base/models/items.py:421
 msgid ""
@@ -4356,31 +4351,29 @@ msgstr ""
 "evento"
 
 #: pretix/base/models/items.py:448
-#, fuzzy
 msgid "Is a personalized ticket"
-msgstr "Es un ticket de admision"
+msgstr "Es un ticket personalizado"
 
 #: pretix/base/models/items.py:450
-#, fuzzy
 msgid "Whether or not buying this product allows to enter attendee information"
 msgstr ""
-"Si la compra de este producto permite o no que una persona ingrese a su "
-"evento"
+"Si la compra de este producto permite o no ingresar la información del "
+"asistente"
 
 #: pretix/base/models/items.py:459
 msgid "Show a waiting list for this ticket"
-msgstr "Mostrar una lista de espera para este ticket"
+msgstr "Mostrar una lista de espera para este tiquete"
 
 #: pretix/base/models/items.py:460
-#, fuzzy
 msgid "This will only work if waiting lists are enabled for this event."
 msgstr ""
-"Esto sólo funcionará para las listas de espera habilitadas para este evento."
+"Esto sólo funcionará si las listas de espera están habilitadas para este "
+"evento."
 
 #: pretix/base/models/items.py:464 pretix/base/settings.py:1333
 #: pretix/control/forms/event.py:1594 pretix/control/forms/event.py:1598
 msgid "Show number of tickets left"
-msgstr "Mostrar el número de entradas que quedan"
+msgstr "Mostrar el número de tiquetes que quedan"
 
 #: pretix/base/models/items.py:465
 msgid "Publicly show how many tickets are still available."
