@@ -477,6 +477,10 @@ class VoucherFormTest(SoupTestMixin, TransactionTestCase):
         self._create_bulk_vouchers({
             'codes': 'ABCDE\nDEFGH\nIJKLM\nNOPQR\nSTUVW\nXYZ',
             'itemvar': '%d' % self.ticket.pk,
+        }, expected_failure=True)
+        self._create_bulk_vouchers({
+            'codes': 'ABCDE\nDEFGH\nIJKLM\nNOPQR\nSTUVW',
+            'itemvar': '%d' % self.ticket.pk,
         })
 
     def test_create_blocking_bulk_quota_full(self):
