@@ -30,11 +30,6 @@ class Migration(migrations.Migration):
             old_fields=("updated", "id"),
         ),
         migrations.RenameIndex(
-            model_name="reusablemedium",
-            new_name="pretixbase__identif_798d22_idx",
-            old_fields=("identifier", "type", "organizer"),
-        ),
-        migrations.RenameIndex(
             model_name="transaction",
             new_name="pretixbase__datetim_b20405_idx",
             old_fields=("datetime", "id"),
