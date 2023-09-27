@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-25 23:11+0000\n"
-"PO-Revision-Date: 2023-09-11 10:00+0000\n"
-"Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
+"PO-Revision-Date: 2023-09-27 20:00+0000\n"
+"Last-Translator: Mossroy <mossroy@mossroy.fr>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.18.2\n"
+"X-Generator: Weblate 5.0.2\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -104,7 +104,7 @@ msgstr "Grec"
 
 #: pretix/_base_settings.py:92
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonésien"
 
 #: pretix/_base_settings.py:93
 msgid "Italian"
@@ -3040,10 +3040,9 @@ msgid "Invalid placeholder(s): %(value)s"
 msgstr "Caractère générique invalide : %(value)s"
 
 #: pretix/base/forms/widgets.py:67
-#, fuzzy, python-format
-#| msgid "Sample city"
+#, python-format
 msgid "Sample: %s"
-msgstr "Ville exemple"
+msgstr "Exemple"
 
 #: pretix/base/forms/widgets.py:70
 #, python-brace-format
@@ -7545,16 +7544,14 @@ msgid "number of entries today"
 msgstr "nombre d’entrées aujourd’hui"
 
 #: pretix/base/services/checkin.py:290
-#, fuzzy, python-brace-format
-#| msgid "number of entries today"
+#, python-brace-format
 msgid "number of entries since {datetime}"
-msgstr "nombre d’entrées aujourd’hui"
+msgstr "nombre d’entrées depuis {datetime}"
 
 #: pretix/base/services/checkin.py:291
-#, fuzzy, python-brace-format
-#| msgid "number of entries today"
+#, python-brace-format
 msgid "number of entries before {datetime}"
-msgstr "nombre d’entrées aujourd’hui"
+msgstr "nombre d’entrées avant {datetime}"
 
 #: pretix/base/services/checkin.py:292
 msgid "week day"
@@ -12131,12 +12128,7 @@ msgid "Community translations"
 msgstr "Traduction non officielle"
 
 #: pretix/control/forms/__init__.py:323
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "This translation is not maintained by the pretix team. We cannot vouch "
-#| "for its correctness and new or recently changed features might not be "
-#| "translated and will show in English instead. You can help translating at "
-#| "translate.pretix.eu."
+#, python-brace-format
 msgid ""
 "These translations are not maintained by the pretix team. We cannot vouch "
 "for their correctness and new or recently changed features might not be "
@@ -12146,7 +12138,8 @@ msgstr ""
 "Cette traduction n'est pas maintenue par l'équipe de pretix. Nous ne pouvons "
 "pas garantir son exactitude et les fonctionnalités nouvelles ou récemment "
 "modifiées peuvent ne pas être traduites et s'afficheront en anglais à la "
-"place. Vous pouvez nous aider à traduire sur translate.pretix.eu."
+"place. Vous pouvez nous <a href=\"{translate_url}\" target=\"_blank\">aider "
+"à traduire</a>."
 
 #: pretix/control/forms/__init__.py:334
 msgid "Development only"
@@ -20183,6 +20176,10 @@ msgid ""
 "including most plugins. Even a low value might be enough if you only use "
 "specific features. Untranslated texts will show up in English."
 msgstr ""
+"Ce pourcentage de textes est traduit dans toutes les parties du système, y "
+"compris la plupart des plugins. Même une valeur faible peut suffire si vous "
+"n'utilisez que des fonctionnalités spécifiques. Les textes non traduits "
+"s'afficheront en anglais."
 
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:4
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:6
