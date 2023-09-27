@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-25 23:11+0000\n"
-"PO-Revision-Date: 2023-09-27 01:00+0000\n"
+"PO-Revision-Date: 2023-09-27 06:59+0000\n"
 "Last-Translator: Igor Támara <igor@tamarapatino.org>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -4395,6 +4395,12 @@ msgid ""
 "out. There might be a short period in which both products are visible while "
 "all tickets in the referenced quota are reserved, but not yet sold."
 msgstr ""
+"Si selecciona una quota aquí, este producto solamente se mostrará cuando la "
+"quota no está disponible. Si se combina con la opción de esconder productos "
+"vendidos, esto permite intercambiar productos por unos más costosos cuando "
+"se agoten. Puede haber un período corto en el cual ambos productos son "
+"visibles mientras todos los tiquetes en la quota referenciada están "
+"reservados, pero todavía no vendidos."
 
 #: pretix/base/models/items.py:501
 msgid ""
@@ -4413,7 +4419,7 @@ msgid ""
 msgstr ""
 "Si este producto es parte de un pedido, el pedido será puesto en un estado "
 "de \"aprobación\" y tendrá que ser confirmado por usted antes de que pueda "
-"ser pagado y completado. Puede utilizarlo, por ejemplo, para entradas con "
+"ser pagado y completado. Puede utilizarlo, por ejemplo, para tiquetes con "
 "descuento que sólo están disponibles para grupos específicos."
 
 #: pretix/base/models/items.py:514
@@ -4436,14 +4442,13 @@ msgstr ""
 "predefinidos!"
 
 #: pretix/base/models/items.py:527
-#, fuzzy
 msgid ""
 "If this is checked, the usual cancellation and order change settings of this "
 "event apply. If this is unchecked, orders containing this product can not be "
 "canceled by users but only by you."
 msgstr ""
-"Si está chequeado, aplica la configuración usual de cancelación para este "
-"evento. Si no está chequeado, las ordenes conteniendo este producto no "
+"Si está seleccionado, aplica la configuración usual de cancelación para este "
+"evento. Si no está seleccionado, las ordenes conteniendo este producto no "
 "pueden ser canceladas por los usuarios, solo por usted."
 
 #: pretix/base/models/items.py:534
@@ -4453,8 +4458,8 @@ msgid ""
 "limit for this product."
 msgstr ""
 "Este producto sólo se puede comprar si se agrega al carrito por lo menos "
-"esta vez muchas veces. Si mantiene el campo vacío o lo fija en 0, no hay "
-"ningún límite especial para este producto."
+"esta cantidad de veces. Si deja el campo vacío o lo fija en 0, no hay ningún "
+"límite especial para este producto."
 
 #: pretix/base/models/items.py:541
 msgid ""
@@ -4463,10 +4468,10 @@ msgid ""
 "product. The limit for the maximum number of items in the whole order "
 "applies regardless."
 msgstr ""
-"Este producto sólo puede ser comprado como máximo este muchas veces dentro "
-"de una orden. Si mantiene el campo vacío o lo fija en 0, no hay ningún "
-"límite especial para este producto. El límite para el número máximo de "
-"posiciones en todo el pedido se aplica independientemente."
+"Este producto sólo puede ser comprado como máximo este número de veces "
+"dentro de una orden. Si mantiene el campo vacío o lo fija en 0, no hay "
+"ningún límite especial para este producto. El límite para el número máximo "
+"de artículos en todo el pedido se aplica independientemente."
 
 #: pretix/base/models/items.py:548 pretix/base/models/items.py:1072
 msgid ""
@@ -4475,11 +4480,11 @@ msgid ""
 "tickets to indicate to the person at check-in that the student ID card still "
 "needs to be checked."
 msgstr ""
-"Si lo ajusta, la aplicación de registro mostrará una advertencia visible de "
-"que este ticket requiere una atención especial. Puede utilizar esta opción, "
-"por ejemplo, para los tickets de estudiante, con el fin de indicar a la "
-"persona en el momento de la facturación que todavía es necesario comprobar "
-"el carné de estudiante."
+"Si lo selecciona, la aplicación de registro mostrará una advertencia visible "
+"que indica que este tiquete requiere una atención especial. Puede utilizar "
+"esta opción, por ejemplo, para los tiquetes de estudiante, con el fin de "
+"indicar a la persona en el momento de la entrada que su carné tendrá que ser "
+"validado."
 
 #: pretix/base/models/items.py:556 pretix/base/models/items.py:1021
 msgid ""
@@ -4487,8 +4492,8 @@ msgid ""
 "current price is a discounted one. This is just a cosmetic setting and will "
 "not actually impact pricing."
 msgstr ""
-"Si está configurado, se mostrará junto al precio actual para mostrar que el "
-"precio actual es uno con descuento. Esto es sólo un escenario cosmético y no "
+"Si está elegido, se mostrará junto al precio actual para mostrar que el "
+"precio actual tiene descuento. Esto es sólo un ajuste cosmético y no "
 "afectará realmente a los precios."
 
 #: pretix/base/models/items.py:566
@@ -4500,38 +4505,41 @@ msgstr ""
 "valor equivalente al producto."
 
 #: pretix/base/models/items.py:576
-#, fuzzy
 msgid "Allowed membership types"
-msgstr "Membresía del equipo"
+msgstr "Tipos de membresía admitidos"
 
 #: pretix/base/models/items.py:581 pretix/base/models/items.py:1042
 msgid ""
 "Do not show this unless the customer is logged in and has a valid "
 "membership. Be aware that this means it will never be visible in the widget."
 msgstr ""
+"No utilice este a menos que el cliente esté autenticado y tiene una "
+"membresía válida. Tenga en cuenta que esto significa que nunca será visible "
+"en el componente."
 
 #: pretix/base/models/items.py:590
 msgid "This product creates a membership of type"
-msgstr ""
+msgstr "Este producto crea una membresía de tipo"
 
 #: pretix/base/models/items.py:593
 msgid ""
 "The duration of the membership is the same as the duration of the event or "
 "event series date"
 msgstr ""
+"La duración de la membresía es la misma que la duración del evento o la "
+"serie de eventos"
 
 #: pretix/base/models/items.py:597
 msgid "Membership duration in days"
-msgstr ""
+msgstr "Duración de la membresía en días"
 
 #: pretix/base/models/items.py:601
 msgid "Membership duration in months"
-msgstr ""
+msgstr "Duración de la membresía en meses"
 
 #: pretix/base/models/items.py:608
-#, fuzzy
 msgid "Validity"
-msgstr "Válido hasta"
+msgstr "Validez"
 
 #: pretix/base/models/items.py:610
 msgid ""
@@ -4544,21 +4552,27 @@ msgid ""
 "change the settings here later, existing tickets will not be affected by the "
 "change but keep their current validity."
 msgstr ""
+"Cuando se configura un evento regular o una serie de eventos con ventanas de "
+"tiempo, típicamente NO requiere cambiar este valor. La configuración "
+"predeterminada significa que el período de validez de los tiquetes no será "
+"decidida por el producto, pero si por el evento y la configuración del "
+"ingreso. Sólo use las otras opciones si necesita que se den cuenta de una "
+"reserva de un tiquete de un año con una fecha dinámica de inicio. Tenga en "
+"cuenta que la validez estará almacenada en el tiquete, de forma que si "
+"cambia la configuración aquí posteriormente, los tiquetes no se afectarán "
+"por el cambio y mantendrán la validez original."
 
 #: pretix/base/models/items.py:618
-#, fuzzy
 msgid "Start of validity"
-msgstr "Tarjeta de regalo"
+msgstr "Inicio de validez"
 
 #: pretix/base/models/items.py:619
-#, fuzzy
 msgid "End of validity"
-msgstr "Finalización de preventa"
+msgstr "Finalización de validez"
 
 #: pretix/base/models/items.py:622
-#, fuzzy
 msgid "Minutes"
-msgstr "minutos"
+msgstr "Minutos"
 
 #: pretix/base/models/items.py:626
 msgid "Hours"
@@ -4569,32 +4583,31 @@ msgid "Days"
 msgstr "Días"
 
 #: pretix/base/models/items.py:634
-#, fuzzy
 msgid "Months"
-msgstr "mes"
+msgstr "Meses"
 
 #: pretix/base/models/items.py:637
-#, fuzzy
 msgid "Customers can select the validity start date"
-msgstr "Clientes pueden cancelar ordenes pagadas"
+msgstr "Los clientes pueden seleccionar la fecha de inicio de la validez"
 
 #: pretix/base/models/items.py:638
 msgid "If not selected, the validity always starts at the time of purchase."
 msgstr ""
+"Si no se selecciona, la validez siempre comienza en el momento de la compra."
 
 #: pretix/base/models/items.py:643
-#, fuzzy
 msgid "Maximum future start"
-msgstr "Máximo total de la orden"
+msgstr "Fecha máxima de inicio"
 
 #: pretix/base/models/items.py:644
-#, fuzzy
 msgid "The selected start date may only be this many days in the future."
-msgstr "El elemento seleccionado no pertenece a este evento."
+msgstr ""
+"La fecha de incio seleccionada puede ser máximo esta cantidad de días en el "
+"futuro."
 
 #: pretix/base/models/items.py:650
 msgid "Reusable media policy"
-msgstr "Condiciones de utilización de imágenes"
+msgstr "Condiciones de utilización de medios"
 
 #: pretix/base/models/items.py:652
 msgid ""
@@ -4605,10 +4618,16 @@ msgid ""
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
+"Si este producto debiera estar almacenado en un medio físico reusable, puede "
+"adjuntar una política de medio físico. Esto no se requiere para tiquetes "
+"regulares, que usan un código de barras de única vez, pero solamente para "
+"productos como tiquetes renovables de temporada o de tarjetas de regalo de "
+"muñeca recargables. Esta es una característica avanzada que también requiere "
+"configuración específica de uso de tiquetes y configuración de impresión."
 
 #: pretix/base/models/items.py:662
 msgid "Reusable media type"
-msgstr ""
+msgstr "Tipo de medio reusable"
 
 #: pretix/base/models/items.py:664
 msgid ""
@@ -4616,6 +4635,10 @@ msgid ""
 "Note that not all media types support all types of products, and not all "
 "media types are supported across all sales channels or check-in processes."
 msgstr ""
+"Elija el tipo de medio físico que debería usarse para este producto. Tenga "
+"en cuenta que no todos los tipos de medio soportan todos los tipos de "
+"productos, y no todos los tipos de medios se soportan en todos los canales "
+"de ventas o el proceso de entrada."
 
 #: pretix/base/models/items.py:675 pretix/base/models/items.py:1505
 #: pretix/control/forms/filter.py:409 pretix/control/forms/filter.py:1765
@@ -4637,11 +4660,14 @@ msgid ""
 "If you select a reusable media policy, you also need to select a reusable "
 "media type."
 msgstr ""
+"Si selecciona una política de medios reusables también sera necesario que "
+"seleccione un tipo de medio reusable."
 
 #: pretix/base/models/items.py:849
-#, fuzzy
 msgid "The selected media type is not enabled in your organizer settings."
-msgstr "El producto seleccionado no está activo o no tiene precio fijo."
+msgstr ""
+"El tipo de medio seleccionado no está activo en sus configuraciones de "
+"organizador."
 
 #: pretix/base/models/items.py:851
 #, fuzzy
@@ -4649,10 +4675,11 @@ msgid "The selected media type does not support usage for tickets currently."
 msgstr "El elemento seleccionado no pertenece a este evento."
 
 #: pretix/base/models/items.py:853
-#, fuzzy
 msgid ""
 "The selected media type does not support usage for gift cards currently."
-msgstr "El elemento seleccionado no pertenece a este evento."
+msgstr ""
+"El tipo de medio seleccionado no soporta el uso de tarjetas de regalo en "
+"este momento."
 
 #: pretix/base/models/items.py:855
 msgid ""
@@ -4660,6 +4687,9 @@ msgid ""
 "Instead, gift cards for some reusable media types can be created or re-"
 "charged directly at the POS."
 msgstr ""
+"En este momento no puede crear tarjetas de regalo con un tipo de medio "
+"reusable. En cambio, las tarjetas de regalo para algunos tipos de medio "
+"reusables pueden crearse o recargarse directamente en el POS."
 
 #: pretix/base/models/items.py:863
 msgid ""
@@ -4689,9 +4719,8 @@ msgid "This is shown below the variation name in lists."
 msgstr "Esto se muestra debajo del nombre de la variación en las listas."
 
 #: pretix/base/models/items.py:1025
-#, fuzzy
 msgid "Require approval"
-msgstr "La nueva orden requiere aprobación"
+msgstr "Se requiere aprobación"
 
 #: pretix/base/models/items.py:1027
 #, fuzzy
@@ -4709,9 +4738,8 @@ msgstr ""
 #: pretix/base/models/items.py:1037 pretix/control/navigation.py:565
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:4
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:6
-#, fuzzy
 msgid "Membership types"
-msgstr "Membresía del equipo"
+msgstr "Tipos de membresía"
 
 #: pretix/base/models/items.py:1049
 #, fuzzy
@@ -4729,22 +4757,21 @@ msgid ""
 "if a sales channel is selected here but not on product level, the variation "
 "will not be available."
 msgstr ""
+"La selección de canales de venta para el producto como un todo toma "
+"precedencia, de forma que si se selecciona un canal de ventas aquí pero no "
+"un nivel de producto, la variación no estará disponible."
 
 #: pretix/base/models/items.py:1064
-#, fuzzy
 msgid "Show only if a matching voucher is redeemed."
-msgstr ""
-"Este producto sólo se mostrará si se canjea un recibo que coincida con el "
-"producto."
+msgstr "Mostrar solamente si un vale coincidente se redime."
 
 #: pretix/base/models/items.py:1066
-#, fuzzy
 msgid ""
 "This variation will be hidden from the event page until the user enters a "
 "voucher that unlocks this variation."
 msgstr ""
 "Este producto no se mostrará en la página del evento hasta que el usuario "
-"introduzca un código de recibo que desbloquee el producto."
+"introduzca un vale que desbloquee el producto."
 
 #: pretix/base/models/items.py:1080 pretix/base/models/vouchers.py:262
 #: pretix/base/models/waitinglist.py:99 pretix/base/orderimport.py:285
@@ -4773,23 +4800,22 @@ msgid ""
 "If selected, adding add-ons to this ticket is free, even if the add-ons "
 "would normally cost money individually."
 msgstr ""
-"Si se selecciona esta opción, la adición de complementos a este Ticket es "
+"Si se selecciona esta opción, la adición de complementos a este tiquete es "
 "gratuita, incluso si los complementos normalmente cuestan dinero "
 "individualmente."
 
 #: pretix/base/models/items.py:1283
-#, fuzzy
 msgid "Allow the same product to be selected multiple times"
-msgstr "No se pueden seleccionar más de %s posiciones por pedido."
+msgstr "Permitir que el mismo producto se seleccione múltiples veces"
 
 #: pretix/base/models/items.py:1302
 msgid "The add-on's category must belong to the same event as the item."
 msgstr ""
-"La categoría del add-on debe pertenecer al mismo evento que el artículo."
+"La categoría del complemento debe pertenecer al mismo evento que el artículo."
 
 #: pretix/base/models/items.py:1307
 msgid "The item already has an add-on of this category."
-msgstr "El artículo ya tiene un add-on de esta categoría."
+msgstr "El artículo ya tiene un complemento de esta categoría."
 
 #: pretix/base/models/items.py:1312
 msgid "The minimum count needs to be equal to or greater than zero."
@@ -4804,14 +4830,12 @@ msgid "The maximum count needs to be greater than the minimum count."
 msgstr "El conteo máximo debe ser mayor que el conteo mínimo."
 
 #: pretix/base/models/items.py:1349
-#, fuzzy
 msgid "Bundled item"
-msgstr "artículo inválido"
+msgstr "artículo incluído"
 
 #: pretix/base/models/items.py:1355
-#, fuzzy
 msgid "Bundled variation"
-msgstr "Variación de la muestra"
+msgstr "Variación de la agrupación"
 
 #: pretix/base/models/items.py:1366
 msgid "Designated price part"
@@ -4826,27 +4850,25 @@ msgid ""
 msgstr ""
 "Si se establece, se mostrará que este artículo agrupado es responsable de "
 "cierto valor del precio bruto total. Esto puede ser importante en casos de "
-"impuestos mixtos, pero de lo contrario puede mantenerse en blanco. Este "
-"valor NO se agregará al precio del artículo base."
+"impuestos mixtos, pero puede mantenerse en blanco. Este valor NO se agregará "
+"al precio del artículo base."
 
 #: pretix/base/models/items.py:1390
-#, fuzzy
 msgid "The bundled item must belong to the same event as the item."
 msgstr ""
-"La categoría del add-on debe pertenecer al mismo evento que el artículo."
+"La agrupación de artículos debe pertenecer al mismo evento que el artículo."
 
 #: pretix/base/models/items.py:1392
-#, fuzzy
 msgid "A variation needs to be set for this item."
-msgstr "Esta variación no pertenece a este producto."
+msgstr "Se requiere establecer una variación para este artículo."
 
 #: pretix/base/models/items.py:1394
 msgid "The chosen variation does not belong to this item."
-msgstr "La variación escogida no pertenece a este item."
+msgstr "La variación escogida no pertenece a este artículo."
 
 #: pretix/base/models/items.py:1399
 msgid "The count needs to be equal to or greater than zero."
-msgstr "El conteo necesita ser igual o mayor que cero."
+msgstr "Se requiere que la cantidad sea igual o mayor que cero."
 
 #: pretix/base/models/items.py:1452
 msgid "Number"
@@ -4866,11 +4888,11 @@ msgstr "Sí/No"
 
 #: pretix/base/models/items.py:1456
 msgid "Choose one from a list"
-msgstr "Seleccione uno de la lista"
+msgstr "Seleccione uno de una lista"
 
 #: pretix/base/models/items.py:1457
 msgid "Choose multiple from a list"
-msgstr "Seleccione varios de la lista"
+msgstr "Seleccione varios de una lista"
 
 #: pretix/base/models/items.py:1458
 msgid "File upload"
@@ -4900,12 +4922,12 @@ msgid "Question"
 msgstr "Pregunta"
 
 #: pretix/base/models/items.py:1484 pretix/base/models/items.py:1727
-#, fuzzy
 msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores."
 msgstr ""
-"El nombre de la propiedad puede solo contener letras, números y guión bajo."
+"El nombre de la propiedad puede contener sólo letras, números, puntos, "
+"líneas y guión bajo."
 
 #: pretix/base/models/items.py:1489
 msgid "Help text"
@@ -4937,6 +4959,8 @@ msgstr ""
 #: pretix/base/models/items.py:1515
 msgid "Not supported by all check-in apps for all question types."
 msgstr ""
+"No se soporta por todas las aplicaciones de registro para todos los tipos de "
+"preguntas."
 
 #: pretix/base/models/items.py:1519
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
@@ -4944,43 +4968,37 @@ msgid "Hidden question"
 msgstr "Pregunta oculta"
 
 #: pretix/base/models/items.py:1520
-#, fuzzy
 msgid "This question will only show up in the backend."
-msgstr "Esta pregunta se hará durante el registro."
+msgstr "Esta pregunta sólo se mostrará en el backend."
 
 #: pretix/base/models/items.py:1524
-#, fuzzy
 msgid "Print answer on invoices"
-msgstr "Texto en las facturas"
+msgstr "Imprimir respuesta en las facturas"
 
 #: pretix/base/models/items.py:1532 pretix/base/models/items.py:1538
 #: pretix/base/models/items.py:1544
-#, fuzzy
 msgid "Minimum value"
-msgstr "Número mínimo"
+msgstr "Valor mínimo"
 
 #: pretix/base/models/items.py:1533 pretix/base/models/items.py:1536
 #: pretix/base/models/items.py:1539 pretix/base/models/items.py:1542
 #: pretix/base/models/items.py:1545 pretix/base/models/items.py:1548
 #: pretix/base/models/items.py:1552
-#, fuzzy
 msgid "Currently not supported in our apps and during check-in"
-msgstr "La pregunta no debe depender de otra realizada durante el registro."
+msgstr "No se soporta en nuestras aplicaciones ni durante el registro"
 
 #: pretix/base/models/items.py:1535 pretix/base/models/items.py:1541
 #: pretix/base/models/items.py:1547
-#, fuzzy
 msgid "Maximum value"
-msgstr "Número máximo"
+msgstr "Valor máximo"
 
 #: pretix/base/models/items.py:1550
-#, fuzzy
 msgid "Maximum length"
-msgstr "Número máximo"
+msgstr "Longitud máxima"
 
 #: pretix/base/models/items.py:1556
 msgid "Validate file to be a portrait"
-msgstr ""
+msgstr "Validar que el archivo sea vertical"
 
 #: pretix/base/models/items.py:1557
 msgid ""
