@@ -11,6 +11,10 @@
   margin-right: -15px;
 }
 
+.no-background {
+  background: none !important;
+}
+
 .dashboard .widget-container {
   flex: 1 0 auto;
   align-self: stretch;
@@ -57,23 +61,27 @@
 .dashboard .numwidget {
   .num {
     display: block;
-    padding: 10px 0 10px;
     text-align: center;
     font-size: 40px;
   }
+
   .text {
     display: block;
     text-align: center;
     font-size: 20px;
   }
+
+  .text-add {
+    display: block;
+    padding: 10px 0;
+    text-align: center;
+    font-size: 20px;
+  }
 }
 
-.shopstate {
-  text-align: center;
-
+.shop_state {
   span.live, span.off {
-    display: block;
-    font-size: 18px;
+    font-size: 16px;
   }
 
   span.live {
@@ -82,6 +90,10 @@
 
   span.off {
     color: $brand-danger;
+  }
+
+  a {
+    vertical-align: top;
   }
 }
 

@@ -30,9 +30,14 @@
             </button>
             {% include "pretixcontrol/event/fragment_qr_dropdown.html" with url=0 %}
         </div>
-        <span id="shop_state" class="pull-right">
+        <br>
+        <span id="shop_state" class="shop_state">
+            {{ shop_state.content|safe }}
             <a href="{{ shop_state.url }}">
-                {{ shop_state.content|safe }}
+                <button type="button" class="btn btn-default btn-xs btn-wrench js-only" href="{{ shop_state.url }}">
+                    <i class="fa fa-wrench" aria-hidden="true"></i>
+                    <span class="sr-only">{% trans "Change shop state" %}</span>
+                </button>
             </a>
         </span>
         <div class="clearfix"></div>
@@ -88,6 +93,26 @@
         </div>
     {% endif %}
     <!-- Warnings ----------------------------------------------------------------------------------------------------->
+    <!-- Comments ----------------------------------------------------------------------------------------------------->
+    <div class="widget-container widget-small">
+        {% trans "Internal comment" %}
+        <form class="form" method="post"
+              action="{% url "control:event.comment" event=request.event.slug organizer=request.event.organizer.slug %}">
+            {% csrf_token %}
+            <div class="row">
+                {% bootstrap_field comment_form.comment layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
+            </div>
+            {% if not comment_form.readonly %}
+                <p class="text-right flip">
+                    <br>
+                    <button class="btn btn-default">
+                        {% trans "Update comment" %}
+                    </button>
+                </p>
+            {% endif %}
+        </form>
+    </div>
+    <!-- Comments ----------------------------------------------------------------------------------------------------->
 
     {% eventsignal request.event "pretix.control.signals.event_dashboard_top" request=request %}
     <!-- Timeline ----------------------------------------------------------------------------------------------------->
@@ -102,7 +127,7 @@
     <!-- Timeline ----------------------------------------------------------------------------------------------------->
     <!-- Big numbers ---------------------------------------------------------------------------------------------->
     <div class="dashboard">
-        <div class="widget-container widget-small">
+        <!--<div class="widget-container widget-small">
             <a href="{{ attendees_ordered.url }}" class="widget">
                 {{ attendees_ordered.content|safe }}
             </a>
@@ -111,8 +136,13 @@
             <a href="{{ attendees_paid.url }}" class="widget">
                 {{ attendees_paid.content|safe }}
             </a>
+        </div>-->
+        <div class="widget-container widget-small no-background">
+            <a href="{{ attendees_paid_ordered.url }}" class="widget">
+                {{ attendees_paid_ordered.content|safe }}
+            </a>
         </div>
-        <div class="widget-container widget-small">
+        <div class="widget-container widget-small no-background">
             <a href="{{ total_revenue.url }}" class="widget">
                 {{ total_revenue.content|safe }}
             </a>
@@ -243,58 +273,70 @@
     </div>
     <!-- Check-Ins ---------------------------------------------------------------------------------------------------->
     <!-- Quotas ------------------------------------------------------------------------------------------------------->
+    <thead>
+        <tr>
+            <th>
+                {% trans "Name" %}
+            </th>
+            <th>
+                {% trans "Begin" %}
+                <a href="? url_replace request 'filter-ordering' '-date_from' %}"><i class="fa fa-caret-down"></i></a>
+                <a href="? url_replace request 'filter-ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
+            </th>
+            <th>
+                {% trans "Paid tickets per quota" %}
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in subevents %}
+            <td>
+                <strong><a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}?returnto={{ request.GET.urlencode|urlencode }}">
+                    {{ s.name }}</a></strong><br>
+                <small class="text-muted">
+                    #{{ s.pk }}
+                </small>
+            </td>
+            <td>
+                {{ s.get_date_from_display }}<br>
+                <span class="text-muted">
+                   {{ s.date_from|date:"l" }}
+                </span>
+            </td>
+            <td>
+                {% for q in s.first_quotas|slice:":3" %}
+                    {% include "pretixcontrol/fragment_quota_box_paid.html" with quota=q %}
+                {% endfor %}
+                {% if s.first_quotas|length > 3 %}
+                    <a href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}?subevent={{ s.id }}"
+                            class="quotabox-more" data-toggle="tooltip" title="{% trans "More quotas" %}"
+                            data-placement="top">
+                        &middot;&middot;&middot;
+                    </a>
+                {% endif %}
+            </td>
+        {% endfor %}
+    </tbody>
     <!-- Quotas ------------------------------------------------------------------------------------------------------->
-    <div class="dashboard dashboard-panels">
-    <!-- Comments ----------------------------------------------------------------------------------------------------->
-    <div class="col-md-6 px-md-0">
-        <div class="panel panel-default items">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Internal comment" %}
-                </h3>
-            </div>
-            <div class="panel-body">
-                <form class="form" method="post"
-                      action="{% url "control:event.comment" event=request.event.slug organizer=request.event.organizer.slug %}">
-                    {% csrf_token %}
-                    <div class="row">
-                        {% bootstrap_field comment_form.comment layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
-                    </div>
-                    {% if not comment_form.readonly %}
-                        <p class="text-right flip">
-                            <br>
-                            <button class="btn btn-default">
-                                {% trans "Update comment" %}
-                            </button>
-                        </p>
-                    {% endif %}
-                </form>
-            </div>
-        </div>
-    </div>
-    <!-- Comments ----------------------------------------------------------------------------------------------------->
     <!-- Logs --------------------------------------------------------------------------------------------------------->
-    <div class="col-md-6">
-        <div class="panel panel-default">
-            <div class="panel-heading">
-                <h3 class="panel-title">
-                    {% trans "Event logs" %}
-                </h3>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">
+                {% trans "Event logs" %}
+            </h3>
+        </div>
+        <ul class="list-group" id="logs_target">
+            <div class="logs-lazy-loading">
+                <span class="fa fa-cog fa-4x"></span>
             </div>
-            <ul class="list-group" id="logs_target">
-                <div class="logs-lazy-loading">
-                    <span class="fa fa-cog fa-4x"></span>
-                </div>
-            </ul>
-            <div class="panel-footer">
-                <a href="{% url "control:event.log" event=request.event.slug organizer=request.event.organizer.slug %}">
-                    {% trans "Show more logs" %}
-                </a>
-            </div>
+        </ul>
+        <div class="panel-footer">
+            <a href="{% url "control:event.log" event=request.event.slug organizer=request.event.organizer.slug %}">
+                {% trans "Show more logs" %}
+            </a>
         </div>
     </div>
     <!-- Logs --------------------------------------------------------------------------------------------------------->
-    </div>
     <script type="application/json" id="rev-data">{{ rev_data|escapejson }}</script>
     <script type="application/text" id="currency">{{ request.event.currency }}</script>
 {% endblock %}

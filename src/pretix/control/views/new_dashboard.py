@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, timedelta
+import datetime
 from decimal import Decimal
 
 import dateutil
@@ -20,7 +20,10 @@ from pretix.base.timeline import timeline_for_event
 from pretix.control.forms.event import CommentForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import ChartContainingView
-from pretix.control.views.dashboards import NUM_WIDGET
+
+NUM_WIDGET = str('<div class="numwidget"><span class="num">{num}</span>'
+                 '<span class="text">{text}</span>'
+                 '<span class="text-add">{text_add}</span></div>')
 
 
 class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView):
@@ -54,15 +57,11 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
         else:
             opqs = OrderPosition.objects
 
-        tickc = opqs.filter(
-            order__event=self.request.event, item__admission=True,
-            order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING),
-        ).count()
-
         ctx['shop_state'] = {
             'display_size': 'small',
             'priority': 1000,
-            'content': '<div class="shopstate pull-left"><span class="{cls}"><span class="fa {icon}"></span> {state}</span></div>'.format(
+            'content': '<span class="{cls}">{t1} {state} <span class="fa {icon}"></span></span>'.format(
+                t1=_('Your ticket shop is'),
                 state=_('live') if self.request.event.live and not self.request.event.testmode else (
                     _('live and in test mode') if self.request.event.live else (
                         _('not yet public') if not self.request.event.testmode else (
@@ -73,7 +72,7 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                 icon='fa-check-circle' if self.request.event.live and not self.request.event.testmode else (
                     'fa-warning' if self.request.event.live else (
                         'fa-times-circle' if not self.request.event.testmode else (
-                            'fa-times-circle'
+                            'fa-lock'
                         )
                     )
                 ),
@@ -93,22 +92,38 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             cl.auto_checkin_sales_channels = [sales_channels[channel] for channel in cl.auto_checkin_sales_channels]
         ctx['checkinlists'] = qs
 
+        tickc = opqs.filter(
+            order__event=self.request.event, item__admission=True,
+            order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING),
+        ).count()
         ctx['attendees_ordered'] = {
-            'content': NUM_WIDGET.format(num=tickc, text=_('Attendees (ordered)')),
+            'content': NUM_WIDGET.format(num=f'{tickc} <span class="fa fa-users"></span>',
+                                         text=_('Attendees (ordered)'),
+                                         text_add=''),
             'priority': 100,
             'url': reverse('control:event.orders', kwargs={
                 'event': self.request.event.slug,
                 'organizer': self.request.event.organizer.slug
             }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
         }
-
         paidc = opqs.filter(
             order__event=self.request.event, item__admission=True,
             order__status=Order.STATUS_PAID,
         ).count()
-
         ctx['attendees_paid'] = {
-            'content': NUM_WIDGET.format(num=paidc, text=_('Attendees (paid)')),
+            'content': NUM_WIDGET.format(num=f'{paidc} <span class="fa fa-money"></span>', text=_('Attendees (paid)'),
+                                         text_add=''),
+            'priority': 100,
+            'url': reverse('control:event.orders.overview', kwargs={
+                'event': self.request.event.slug,
+                'organizer': self.request.event.organizer.slug
+            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
+        }
+        ctx['attendees_paid_ordered'] = {
+            'content': NUM_WIDGET.format(
+                num=f'<span class="fa fa-user"></span> {tickc}',
+                text=_('Attendees'),
+                text_add=_(f'{paidc} paid, {tickc - paidc} pending')),
             'priority': 100,
             'url': reverse('control:event.orders.overview', kwargs={
                 'event': self.request.event.slug,
@@ -131,8 +146,8 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
         ctx['total_revenue'] = {
             'content': NUM_WIDGET.format(
                 num=formats.localize(round_decimal(rev, self.request.event.currency)),
-                text=_('Total revenue ({currency})').format(currency=self.request.event.currency)
-            ),
+                text=_('Total revenue ({currency})').format(currency=self.request.event.currency),
+                text_add=''),
             'priority': 100,
             'url': reverse('control:event.orders.overview', kwargs={
                 'event': self.request.event.slug,
@@ -143,15 +158,15 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
         cache = self.request.event.cache
         ckey = str(subevent.pk) if subevent else 'all'
         tz = timezone.get_current_timezone()
-        # op_date = OrderPayment.objects.filter(
-        #     order=OuterRef('order'),
-        #     state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
-        #     payment_date__isnull=False
-        # ).values('order').annotate(
-        #     m=Max('payment_date')
-        # ).values(
-        #     'm'
-        # ).order_by()
+        op_date = OrderPayment.objects.filter(
+            order=OuterRef('order'),
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
+            payment_date__isnull=False
+        ).values('order').annotate(
+            m=Max('payment_date')
+        ).values(
+            'm'
+        ).order_by()
         p_date = OrderPayment.objects.filter(
             order=OuterRef('pk'),
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
@@ -164,23 +179,23 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
         ctx['rev_data'] = cache.get('statistics_rev_data' + ckey)
         if not ctx['rev_data']:
             rev_by_day = {}
-            # if subevent:
-            #     for o in OrderPosition.objects.annotate(
-            #             payment_date=Subquery(op_date, output_field=DateTimeField())
-            #     ).filter(order__event=self.request.event,
-            #              subevent=subevent,
-            #              order__status=Order.STATUS_PAID,
-            #              payment_date__isnull=False).values('payment_date', 'price'):
-            #         day = o['payment_date'].astimezone(tz).date()
-            #         rev_by_day[day] = rev_by_day.get(day, 0) + o['price']
-            # else:
-            for o in Order.objects.annotate(
-                    payment_date=Subquery(p_date, output_field=DateTimeField())
-            ).filter(event=self.request.event,
-                     status=Order.STATUS_PAID,
-                     payment_date__isnull=False).values('payment_date', 'total'):
-                day = o['payment_date'].astimezone(tz).date()
-                rev_by_day[day] = rev_by_day.get(day, 0) + o['total']
+            if subevent:
+                for o in OrderPosition.objects.annotate(
+                        payment_date=Subquery(op_date, output_field=DateTimeField())
+                ).filter(order__event=self.request.event,
+                         subevent=subevent,
+                         order__status=Order.STATUS_PAID,
+                         payment_date__isnull=False).values('payment_date', 'price'):
+                    day = o['payment_date'].astimezone(tz).date()
+                    rev_by_day[day] = rev_by_day.get(day, 0) + o['price']
+            else:
+                for o in Order.objects.annotate(
+                        payment_date=Subquery(p_date, output_field=DateTimeField())
+                ).filter(event=self.request.event,
+                         status=Order.STATUS_PAID,
+                         payment_date__isnull=False).values('payment_date', 'total'):
+                    day = o['payment_date'].astimezone(tz).date()
+                    rev_by_day[day] = rev_by_day.get(day, 0) + o['total']
 
             data = []
             total = 0
@@ -189,11 +204,13 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                     dtstart=min(rev_by_day.keys() if rev_by_day else [datetime.date.today()]),
                     until=max(rev_by_day.keys() if rev_by_day else [datetime.date.today()])):
                 d = d.date()
-                total += float(rev_by_day.get(d, 0))
-                data.append({
-                    'date': d.strftime('%Y-%m-%d'),
-                    'revenue': round(total, 2),
-                })
+                rev = float(rev_by_day.get(d, 0))
+                if True:  # rev != 0:
+                    total += rev
+                    data.append({
+                        'date': d.strftime('%Y-%m-%d'),
+                        'revenue': round(total, 2),
+                    })
             ctx['rev_data'] = json.dumps(data)
             cache.set('statistics_rev_data' + ckey, ctx['rev_data'])
         # ctx = ctx | statistics.get_context_data(IndexView(request=request))
@@ -228,6 +245,6 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             for t in timeline_for_event(self.request.event, subevent)
         ]
         ctx['today'] = now().astimezone(self.request.event.timezone).date()
-        ctx['nearly_now'] = now().astimezone(self.request.event.timezone) - timedelta(seconds=20)
+        ctx['nearly_now'] = now().astimezone(self.request.event.timezone) - datetime.timedelta(seconds=20)
         # resp['Content-Security-Policy'] = "style-src 'unsafe-inline'"
         return ctx
