@@ -97,7 +97,7 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING),
         ).count()
         ctx['attendees_ordered'] = {
-            'content': NUM_WIDGET.format(num=f'{tickc} <span class="fa fa-users"></span>',
+            'content': NUM_WIDGET.format(num=f'{tickc} <span class="fa fa-user"></span>',
                                          text=_('Attendees (ordered)'),
                                          text_add=''),
             'priority': 100,
@@ -121,9 +121,9 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
         }
         ctx['attendees_paid_ordered'] = {
             'content': NUM_WIDGET.format(
-                num=f'<span class="fa fa-user"></span> {tickc}',
-                text=_('Attendees'),
-                text_add=_(f'{paidc} paid, {tickc - paidc} pending')),
+                num='<span class="fa fa-money"></span>',
+                text=_(f'{paidc} paid, {tickc - paidc} pending'),
+                text_add=''),
             'priority': 100,
             'url': reverse('control:event.orders.overview', kwargs={
                 'event': self.request.event.slug,

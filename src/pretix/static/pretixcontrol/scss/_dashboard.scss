@@ -11,10 +11,6 @@
   margin-right: -15px;
 }
 
-.no-background {
-  background: none !important;
-}
-
 .dashboard .widget-container {
   flex: 1 0 auto;
   align-self: stretch;
@@ -22,6 +18,12 @@
   border: 5px solid white;
   min-height: 140px;
   background: #F8F8F8;
+}
+
+.dashboard .widget-container.event-dashboard {
+  background: none !important;
+  padding: 0 5px 15px;
+  min-height: 0;
 }
 
 .dashboard .widget-container.widget-full {
@@ -34,8 +36,6 @@
 
 .dashboard .widget-container.widget-small {
   width: 25%;
-  margin: 0;
-  padding: 0;
 }
 
 .dashboard .widget-container.widget-lazy-loading {
