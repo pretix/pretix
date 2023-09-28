@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-25 23:11+0000\n"
-"PO-Revision-Date: 2023-09-27 20:00+0000\n"
+"PO-Revision-Date: 2023-09-28 14:05+0000\n"
 "Last-Translator: Mossroy <mossroy@mossroy.fr>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -6374,14 +6374,10 @@ msgstr ""
 "la date indiquée."
 
 #: pretix/base/payment.py:342
-#, fuzzy
-#| msgid ""
-#| "Users will not be able to choose this payment provider after the given "
-#| "date."
 msgid ""
 "Users will not be able to choose this payment provider before the given date."
 msgstr ""
-"Les utilisateurs ne pourront plus choisir ce fournisseur de paiement après "
+"Les utilisateurs ne pourront plus choisir ce fournisseur de paiement avant "
 "la date indiquée."
 
 #: pretix/base/payment.py:347
@@ -7521,7 +7517,7 @@ msgstr "Type de ticket interdit"
 #, fuzzy
 #| msgid "Create a new gate"
 msgid "Wrong entrance gate"
-msgstr "Créer une nouvelle porte"
+msgstr "Mauvaise porte"
 
 #: pretix/base/services/checkin.py:285
 msgid "time since last entry"
@@ -12122,10 +12118,8 @@ msgid "Filetype not allowed!"
 msgstr "Type de fichier interdit !"
 
 #: pretix/control/forms/__init__.py:321
-#, fuzzy
-#| msgid "Unofficial translation"
 msgid "Community translations"
-msgstr "Traduction non officielle"
+msgstr "Traductions communautaires"
 
 #: pretix/control/forms/__init__.py:323
 #, python-brace-format
