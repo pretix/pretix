@@ -1418,7 +1418,10 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
                       (self.event.settings.timezone,
                        self.event.date_from.astimezone(ZoneInfo(self.event.settings.timezone)).strftime(fmt)),
                       ical, 'incorrect start time')
-        self.assertNotIn('DTEND', ical, 'unexpected end time attribute')
+        self.assertIn('DTEND;TZID=%s:%s' %
+                      (self.event.settings.timezone,
+                       (self.event.date_from.astimezone(ZoneInfo(self.event.settings.timezone)) + datetime.timedelta(hours=1)).strftime(fmt)),
+                      ical, 'incorrect end time')
 
     def test_no_date_to_and_time(self):
         self.event.settings.show_date_to = False
@@ -1426,7 +1429,7 @@ class EventIcalDownloadTest(EventTestMixin, SoupTest):
         self.event.save()
         ical = self.client.get('/%s/%s/ical/' % (self.orga.slug, self.event.slug)).content.decode()
         self.assertIn('DTSTART;VALUE=DATE:%s' % self.event.date_from.strftime('%Y%m%d'), ical, 'incorrect start date')
-        self.assertNotIn('DTEND', ical, 'unexpected end time attribute')
+        self.assertIn('DTEND;VALUE=DATE:%s' % (self.event.date_from + datetime.timedelta(days=1)).strftime('%Y%m%d'), ical, 'incorrect start date')
 
     def test_local_date_diff_from_utc(self):
         self.event.date_from = datetime.datetime(2013, 12, 26, 21, 57, 58, tzinfo=datetime.timezone.utc)
