@@ -36,6 +36,12 @@
 
 .dashboard .widget-container.widget-small {
   width: 25%;
+
+  .icon {
+    color: lighten($brand-primary, 15%);
+    font-size: 34px;
+    font-weight: bold;
+  }
 }
 
 .dashboard .widget-container.widget-lazy-loading {

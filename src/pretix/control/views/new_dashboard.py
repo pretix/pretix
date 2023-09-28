@@ -96,34 +96,15 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
             order__event=self.request.event, item__admission=True,
             order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING),
         ).count()
-        ctx['attendees_ordered'] = {
-            'content': NUM_WIDGET.format(num=f'{tickc} <span class="fa fa-user"></span>',
-                                         text=_('Attendees (ordered)'),
-                                         text_add=''),
-            'priority': 100,
-            'url': reverse('control:event.orders', kwargs={
-                'event': self.request.event.slug,
-                'organizer': self.request.event.organizer.slug
-            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
-        }
         paidc = opqs.filter(
             order__event=self.request.event, item__admission=True,
             order__status=Order.STATUS_PAID,
         ).count()
-        ctx['attendees_paid'] = {
-            'content': NUM_WIDGET.format(num=f'{paidc} <span class="fa fa-money"></span>', text=_('Attendees (paid)'),
-                                         text_add=''),
-            'priority': 100,
-            'url': reverse('control:event.orders.overview', kwargs={
-                'event': self.request.event.slug,
-                'organizer': self.request.event.organizer.slug
-            }) + ('?subevent={}'.format(subevent.pk) if subevent else '')
-        }
         ctx['attendees_paid_ordered'] = {
             'content': NUM_WIDGET.format(
-                num='<span class="fa fa-money"></span>',
-                text=_(f'{paidc} paid, {tickc - paidc} pending'),
-                text_add=''),
+                num=f'<span class="fa fa-user icon"></span> {tickc}',
+                text=_('Attendees'),
+                text_add=f'{paidc} paid, {tickc - paidc} pending'),
             'priority': 100,
             'url': reverse('control:event.orders.overview', kwargs={
                 'event': self.request.event.slug,
@@ -145,9 +126,13 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
 
         ctx['total_revenue'] = {
             'content': NUM_WIDGET.format(
-                num=formats.localize(round_decimal(rev, self.request.event.currency)),
-                text=_('Total revenue ({currency})').format(currency=self.request.event.currency),
-                text_add=''),
+                num='<span class="icon">{currency}</span> {amount}'.format(
+                    currency=self.request.event.currency,
+                    amount=formats.localize(round_decimal(rev, self.request.event.currency))
+                ),
+                text='',
+                text_add=_('Total revenue')
+            ),
             'priority': 100,
             'url': reverse('control:event.orders.overview', kwargs={
                 'event': self.request.event.slug,
@@ -213,7 +198,6 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                     })
             ctx['rev_data'] = json.dumps(data)
             cache.set('statistics_rev_data' + ckey, ctx['rev_data'])
-        # ctx = ctx | statistics.get_context_data(IndexView(request=request))
 
         ctx['has_overpaid_orders'] = can_view_orders and Order.annotate_overpayments(self.request.event.orders).filter(
             Q(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=0))
