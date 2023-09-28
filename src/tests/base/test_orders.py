@@ -3733,6 +3733,7 @@ def test_issue_when_paid_and_changed(event):
     op.refresh_from_db()
     assert op.secret == gc1.secret
 
+    order.refresh_from_db()
     ocm = OrderChangeManager(order)
     ocm.add_position(ticket, None, Decimal('12.00'))
     ocm.commit()
