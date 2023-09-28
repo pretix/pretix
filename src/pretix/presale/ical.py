@@ -68,14 +68,16 @@ def get_public_ical(events):
         else:
             vevent.add('dtstart').value = ev.date_from.astimezone(tz).date()
 
-        # ignore event.settings.show_date_to as ics needs an end for an event
-        dtend = ev.date_to.astimezone(tz) if ev.date_to else ev.date_from.astimezone(tz)
+        # always add dtend as calendar apps otherwise have display issues
+        use_date_to = event.settings.show_date_to and ev.date_to
+        dtend = (ev.date_to if use_date_to else ev.date_from).astimezone(tz)
+
         if not event.settings.show_times:
             # with full-day events date_to in pretix is included (e.g. last day)
             # whereas dtend in vcalendar is non-inclusive => add one day for export
             dtend = dtend.date() + datetime.timedelta(days=1)
-        elif not ev.date_to:
-            # no end-date given, add 1h as a default duration to dtend/ev.date_from
+        elif not use_date_to:
+            # date_from used as end-date => add 1h as a default duration
             dtend = dtend + datetime.timedelta(hours=1)
         vevent.add('dtend').value = dtend
 
