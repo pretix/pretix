@@ -42,14 +42,14 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
         can_view_orders = self.request.user.has_event_permission(self.request.organizer, self.request.event,
                                                                  'can_view_orders',
                                                                  request=self.request)
-        can_change_event_settings = self.request.user.has_event_permission(self.request.organizer, self.request.event,
-                                                                           'can_change_event_settings',
-                                                                           request=self.request)
+        # can_change_event_settings = self.request.user.has_event_permission(self.request.organizer, self.request.event,
+        #                                                                    'can_change_event_settings',
+        #                                                                    request=self.request)
 
         ctx = {
             'subevent': subevent,
             'comment_form': CommentForm(initial={'comment': self.request.event.comment},
-                                        readonly=not can_change_event_settings),
+                                        readonly=True),  # not can_change_event_settings),
         }
 
         if subevent:

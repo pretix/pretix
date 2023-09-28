@@ -7,41 +7,63 @@
 {% load eventsignal %}
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
-    <h1>
-        {{ request.event.name }}
-        <small>
-            {% if request.event.has_subevents %}
-                {% trans "Event series" %}
-            {% else %}
-                {{ request.event.get_date_range_display }}
-            {% endif %}
-        </small>
-    </h1>
-    <div class="helper-space-below">
-        {% trans "Shop URL:" %}
-        <span id="shop_url" class="text-muted">{% abseventurl request.event "presale:event.index" %}</span>
-        <button type="button" class="btn btn-default btn-xs btn-clipboard js-only" data-clipboard-target="#shop_url">
-            <i class="fa fa-clipboard" aria-hidden="true"></i>
-            <span class="sr-only">{% trans "Copy to clipboard" %}</span>
-        </button>
-        <div class="btn-group helper-display-inline-block">
-            <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" title="{% trans "Create QR code" %}" aria-haspopup="true" aria-expanded="false">
-                <i class="fa fa-qrcode" aria-hidden="true"></i>
+    <div id="header-area" class="col-lg-8">
+        <h1>
+            {{ request.event.name }}
+            <small>
+                {% if request.event.has_subevents %}
+                    {% trans "Event series" %}
+                {% else %}
+                    {{ request.event.get_date_range_display }}
+                {% endif %}
+            </small>
+        </h1>
+
+        <div class="helper-space-below">
+            {% trans "Shop URL:" %}
+            <span id="shop_url" class="text-muted">{% abseventurl request.event "presale:event.index" %}</span>
+            <button type="button" class="btn btn-default btn-xs btn-clipboard js-only" data-clipboard-target="#shop_url">
+                <i class="fa fa-clipboard" aria-hidden="true"></i>
+                <span class="sr-only">{% trans "Copy to clipboard" %}</span>
             </button>
-            {% include "pretixcontrol/event/fragment_qr_dropdown.html" with url=0 %}
-        </div>
-        <br>
-        <span id="shop_state" class="shop_state">
-            {{ shop_state.content|safe }}
-            <a href="{{ shop_state.url }}">
-                <button type="button" class="btn btn-default btn-xs btn-wrench js-only" href="{{ shop_state.url }}">
-                    <i class="fa fa-wrench" aria-hidden="true"></i>
-                    <span class="sr-only">{% trans "Change shop state" %}</span>
+            <div class="btn-group helper-display-inline-block">
+                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" title="{% trans "Create QR code" %}" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-qrcode" aria-hidden="true"></i>
                 </button>
-            </a>
-        </span>
-        <div class="clearfix"></div>
+                {% include "pretixcontrol/event/fragment_qr_dropdown.html" with url=0 %}
+            </div>
+            <br>
+            <span id="shop_state" class="shop_state">
+                {{ shop_state.content|safe }}
+                <a href="{{ shop_state.url }}">
+                    <button type="button" class="btn btn-default btn-xs btn-wrench js-only" href="{{ shop_state.url }}">
+                        <i class="fa fa-wrench" aria-hidden="true"></i>
+                        <span class="sr-only">{% trans "Change shop state" %}</span>
+                    </button>
+                </a>
+            </span>
+            <div class="clearfix"></div>
+        </div>
     </div>
+    <!-- Comments ----------------------------------------------------------------------------------------------------->
+    <div class="event-comment col-lg-4">
+        {% trans "Internal comment" %}
+        <form class="form" method="post"
+              action="{% url "control:event.comment" event=request.event.slug organizer=request.event.organizer.slug %}">
+            {% csrf_token %}
+            <div class="row">
+                {% bootstrap_field comment_form.comment layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
+            </div>
+            {% if not comment_form.readonly %}
+                <p class="text-right flip">
+                    <button class="btn btn-default">
+                        {% trans "Update comment" %}
+                    </button>
+                </p>
+            {% endif %}
+        </form>
+    </div>
+    <!-- Comments ----------------------------------------------------------------------------------------------------->
 
     <!-- Warnings ----------------------------------------------------------------------------------------------------->
     {% if has_overpaid_orders %}
@@ -93,26 +115,6 @@
         </div>
     {% endif %}
     <!-- Warnings ----------------------------------------------------------------------------------------------------->
-    <!-- Comments ----------------------------------------------------------------------------------------------------->
-    <div class="widget-container widget-small">
-        {% trans "Internal comment" %}
-        <form class="form" method="post"
-              action="{% url "control:event.comment" event=request.event.slug organizer=request.event.organizer.slug %}">
-            {% csrf_token %}
-            <div class="row">
-                {% bootstrap_field comment_form.comment layout="horizontal" show_help=True show_label=False horizontal_field_class="col-md-12" %}
-            </div>
-            {% if not comment_form.readonly %}
-                <p class="text-right flip">
-                    <br>
-                    <button class="btn btn-default">
-                        {% trans "Update comment" %}
-                    </button>
-                </p>
-            {% endif %}
-        </form>
-    </div>
-    <!-- Comments ----------------------------------------------------------------------------------------------------->
 
     {% eventsignal request.event "pretix.control.signals.event_dashboard_top" request=request %}
     <!-- Timeline ----------------------------------------------------------------------------------------------------->

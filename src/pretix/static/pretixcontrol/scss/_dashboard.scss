@@ -20,7 +20,7 @@
   align-self: stretch;
   padding: 15px 5px;
   border: 5px solid white;
-  min-height: 160px;
+  min-height: 140px;
   background: #F8F8F8;
 }
 
@@ -34,6 +34,8 @@
 
 .dashboard .widget-container.widget-small {
   width: 25%;
+  margin: 0;
+  padding: 0;
 }
 
 .dashboard .widget-container.widget-lazy-loading {
@@ -73,9 +75,16 @@
 
   .text-add {
     display: block;
-    padding: 10px 0;
+    //padding: 10px 0;
     text-align: center;
     font-size: 20px;
+  }
+}
+
+.event-comment {
+  textarea.form-control {
+    height: 0;
+    min-height: 95px;
   }
 }
 
