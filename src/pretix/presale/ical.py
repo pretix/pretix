@@ -68,13 +68,16 @@ def get_public_ical(events):
         else:
             vevent.add('dtstart').value = ev.date_from.astimezone(tz).date()
 
-        if event.settings.show_date_to and ev.date_to:
-            if event.settings.show_times:
-                vevent.add('dtend').value = ev.date_to.astimezone(tz)
-            else:
-                # with full-day events date_to in pretix is included (e.g. last day)
-                # whereas dtend in vcalendar is non-inclusive => add one day for export
-                vevent.add('dtend').value = ev.date_to.astimezone(tz).date() + datetime.timedelta(days=1)
+        # ignore event.settings.show_date_to as ics needs an end for an event
+        dtend = ev.date_to.astimezone(tz) if ev.date_to else ev.date_from.astimezone(tz)
+        if not event.settings.show_times:
+            # with full-day events date_to in pretix is included (e.g. last day)
+            # whereas dtend in vcalendar is non-inclusive => add one day for export
+            dtend = dtend.date() + datetime.timedelta(days=1)
+        elif not ev.date_to:
+            # no end-date given, add 1h as a default duration to dtend/ev.date_from
+            dtend = dtend + datetime.timedelta(hours=1)
+        vevent.add('dtend').value = dtend
 
         descr = []
         descr.append(_('Tickets: {url}').format(url=url))
