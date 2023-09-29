@@ -230,7 +230,8 @@ Endpoints
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/(id)/vouchers/
 
    Returns a list of all vouchers connected to an exhibitor. The response contains the same data as described in
-   :ref:`rest-vouchers`.
+   :ref:`rest-vouchers`, plus an additional field ``exhibitor_comment`` that is shown to the exhibitor. It can only
+   be modified using the ``attach`` API call below.
 
    **Example request**:
 
@@ -285,7 +286,7 @@ Endpoints
 .. http:post:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/(id)/vouchers/attach/
 
    Attaches an **existing** voucher to an exhibitor. You need to send either the ``id`` **or** the ``code`` field of
-   the voucher.
+   the voucher. You can call this method multiple times to update the optional ``exhibitor_comment`` field.
 
    **Example request**:
 
@@ -296,7 +297,8 @@ Endpoints
       Accept: application/json, text/javascript
 
      {
-       "id": 15
+       "id": 15,
+       "exhibitor_comment": "Free ticket"
      }
 
    **Example request**:
@@ -308,7 +310,8 @@ Endpoints
       Accept: application/json, text/javascript
 
      {
-       "code": "43K6LKM37FBVR2YG"
+       "code": "43K6LKM37FBVR2YG",
+       "exhibitor_comment": "Free ticket"
      }
 
    **Example response**:
@@ -410,7 +413,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      PATCH /api/v1/organizers/bigevents/events/sampleconf/digitalcontents/1/ HTTP/1.1
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/exhibitors/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
