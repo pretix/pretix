@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-25 23:11+0000\n"
-"PO-Revision-Date: 2023-09-28 14:05+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2023-10-03 04:00+0000\n"
+"Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -7514,10 +7514,8 @@ msgid "Ticket type not allowed"
 msgstr "Type de ticket interdit"
 
 #: pretix/base/services/checkin.py:263
-#, fuzzy
-#| msgid "Create a new gate"
 msgid "Wrong entrance gate"
-msgstr "Mauvaise porte"
+msgstr "Mauvaise porte d'entrée"
 
 #: pretix/base/services/checkin.py:285
 msgid "time since last entry"
@@ -12137,20 +12135,15 @@ msgstr ""
 
 #: pretix/control/forms/__init__.py:334
 msgid "Development only"
-msgstr ""
+msgstr "Développement seulement"
 
 #: pretix/control/forms/__init__.py:335
-#, fuzzy
-#| msgid ""
-#| "The translation for this language is still in progress. This language can "
-#| "currently only be selected on development installations of pretix, not in "
-#| "production."
 msgid ""
 "These translations are still in progress. These languages can currently only "
 "be selected on development installations of pretix, not in production."
 msgstr ""
-"La traduction de cette langue est toujours en cours. Ce langage ne peut "
-"actuellement être sélectionné que sur des installations de développement de "
+"La traduction de ces langues est toujours en cours. Ces langage ne peuvent "
+"actuellement être sélectionnés que sur des installations de développement de "
 "pretix, pas en production."
 
 #: pretix/control/forms/checkin.py:93 pretix/control/forms/event.py:1524
@@ -22485,14 +22478,6 @@ msgid "Other organizers accepting gift cards from you"
 msgstr "D’autres organisateurs acceptent les cartes-cadeaux de votre part"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:87
-#, fuzzy
-#| msgid ""
-#| "You can invite other organizers to accept your gift cards. After you have "
-#| "done so, they need to go to the same page in their account and accept "
-#| "your invitation. Note that other organizers will be able to add money to "
-#| "gift cards as well that you will need to collect form them. It is your "
-#| "responsibility to handle the exchange of money to offset the transactions "
-#| "between the two organizers."
 msgid ""
 "You can invite other organizers to accept your gift cards. After you have "
 "done so, they need to go to the same page in their account and accept your "
@@ -22505,8 +22490,8 @@ msgstr ""
 "Une fois que vous l’avez fait, ils doivent aller à la même page dans leur "
 "compte et accepter votre invitation. Notez que d’autres organisateurs "
 "pourront également ajouter de l’argent aux cartes-cadeaux que vous devrez "
-"collecter auprès d’eux. Il est de votre responsabilité de gérer l’échange "
-"d’argent pour compenser les transactions entre les deux organisateurs."
+"collecter auprès d’eux. Il est de votre responsabilité de gérer l’échange d’"
+"argent pour compenser les transactions entre les deux organisateurs."
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:95
 msgid ""
