@@ -441,12 +441,9 @@ class OrderView(EventPermissionRequiredMixin, DetailView):
         ctx = super().get_context_data(**kwargs)
         ctx['can_generate_invoice'] = invoice_qualified(self.order) and (
             self.request.event.settings.invoice_generate in ('admin', 'user', 'paid', 'True')
-        ) and (
+        ) and self.order.status in (Order.STATUS_PAID, Order.STATUS_PENDING) and (
             not self.order.invoices.exists()
-            or (
-                self.order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
-                and self.order.invoices.filter(is_cancellation=True).count() >= self.order.invoices.filter(is_cancellation=False).count()
-            )
+            or self.order.invoices.filter(is_cancellation=True).count() >= self.order.invoices.filter(is_cancellation=False).count()
         )
         return ctx
 
@@ -1612,7 +1609,7 @@ class OrderInvoiceReissue(OrderView):
                 messages.error(self.request, _('The invoice has been cleaned of personal data.'))
             else:
                 c = generate_cancellation(inv)
-                if self.order.status != Order.STATUS_CANCELED:
+                if self.order.status not in (Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
                     inv = generate_invoice(self.order)
                 else:
                     inv = c
