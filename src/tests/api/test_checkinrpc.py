@@ -699,6 +699,19 @@ def test_question_upload(token_client, organizer, clist, event, order, question)
 
 
 @pytest.mark.django_db
+def test_question_expand(token_client, organizer, clist, event, order, question):
+    with scopes_disabled():
+        p = order.positions.first()
+        question[0].save()
+        p.answers.create(question=question[0], answer="3")
+
+    resp = _redeem(token_client, organizer, clist, p.secret, {"answers": {question[0].pk: ""}}, query="?expand=answers.question")
+    assert resp.status_code == 201
+    assert resp.data["status"] == "ok"
+    assert resp.data["position"]["answers"][0]["question"]["question"]["en"] == "Size"
+
+
+@pytest.mark.django_db
 def test_store_failed(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()

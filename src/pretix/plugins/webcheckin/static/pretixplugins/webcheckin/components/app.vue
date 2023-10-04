@@ -37,10 +37,10 @@
             <span v-if="checkResult.position.seat"><br>{{ checkResult.position.seat.name }}</span>
             <strong v-for="t in checkResult.checkin_texts"><br>{{ t }}</strong>
             <span v-for="a in checkResult.position.answers">
-              <span v-if="questions[a.question].show_during_checkin">
+              <span v-if="a.question.show_during_checkin">
                 <br>
-                <strong>{{ questions[a.question].question | i18nstring_localize }}:</strong>
-                {{ a.answer | answer(questions[a.question], $root.timezone, $root.strings) }}
+                <strong>{{ a.question.question | i18nstring_localize }}:</strong>
+                {{ a.answer | answer(a.question, $root.timezone, $root.strings) }}
               </span>
             </span>
           </div>
@@ -236,7 +236,6 @@ export default {
       clearTimeout: null,
       showUnpaidModal: false,
       showQuestionsModal: false,
-      questions: {},
       answers: {},
     }
   },
@@ -245,7 +244,6 @@ export default {
     document.addEventListener("visibilitychange", this.globalKeydown)
     document.addEventListener('keydown', this.globalKeydown)
     this.statusInterval = window.setInterval(this.fetchStatus, 120 * 1000)
-    window.setTimeout(this.fetchQuestions, 100)
   },
   destroyed() {
     window.removeEventListener('focus', this.globalKeydown)
@@ -367,7 +365,7 @@ export default {
         this.$refs.input.blur()
       })
 
-      let url = this.$root.api.lists + this.checkinlist.id + '/positions/' + encodeURIComponent(id) + '/redeem/?expand=item&expand=subevent&expand=variation'
+      let url = this.$root.api.lists + this.checkinlist.id + '/positions/' + encodeURIComponent(id) + '/redeem/?expand=item&expand=subevent&expand=variation&expand=answers.question'
       if (untrusted)  {
         url += '&untrusted_input=true'
       }
@@ -551,21 +549,6 @@ export default {
     switchList() {
       location.hash = ''
       this.checkinlist = null
-    },
-    fetchQuestions() {
-      const loadQuestions = (url) => {
-        fetch(url)
-            .then(response => response.json())
-            .then(data => {
-              for (const q of data.results) {
-                this.questions[q.id] = q
-              }
-            })
-            .catch(reason => {
-              console.log(reason)
-            })
-      }
-      loadQuestions(this.$root.api.questions)
     },
     fetchStatus() {
       this.statusLoading++

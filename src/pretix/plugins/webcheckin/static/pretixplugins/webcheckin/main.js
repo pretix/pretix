@@ -25,7 +25,6 @@ window.vapp = new Vue({
     data: {
         api: {
             lists: document.querySelector('#app').attributes['data-api-lists'].value,
-            questions: document.querySelector('#app').attributes['data-api-questions'].value,
         },
         strings: {
             'checkinlist.select': gettext('Select a check-in list'),

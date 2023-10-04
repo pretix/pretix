@@ -44,7 +44,7 @@ from pretix.api.serializers import CompatibleJSONField
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
-    InlineItemVariationSerializer, ItemSerializer,
+    InlineItemVariationSerializer, ItemSerializer, QuestionSerializer,
 )
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.decimal import round_decimal
@@ -584,6 +584,9 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
 
         if 'variation' in self.context['expand']:
             self.fields['variation'] = InlineItemVariationSerializer(read_only=True)
+
+        if 'answers.question' in self.context['expand']:
+            self.fields['answers'].child.fields['question'] = QuestionSerializer(read_only=True)
 
 
 class OrderPaymentTypeField(serializers.Field):
