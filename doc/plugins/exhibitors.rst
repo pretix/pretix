@@ -230,7 +230,7 @@ Endpoints
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/(id)/vouchers/
 
    Returns a list of all vouchers connected to an exhibitor. The response contains the same data as described in
-   :ref:`rest-vouchers`, plus an additional field ``exhibitor_comment`` that is shown to the exhibitor. It can only
+   :ref:`rest-vouchers` as well as for each voucher an additional field ``exhibitor_comment`` that is shown to the exhibitor. It can only
    be modified using the ``attach`` API call below.
 
    **Example request**:
