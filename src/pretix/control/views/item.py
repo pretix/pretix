@@ -717,13 +717,13 @@ class QuestionView(EventPermissionRequiredMixin, QuestionMixin, ChartContainingV
         total = sum(a['count'] for a in r)
         for a in r:
             a['percentage'] = (a['count'] / total * 100.) if total else 0
-        return r
+        return r, total
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['items'] = self.object.items.all()
         stats = self.get_answer_statistics()
-        ctx['stats'] = stats
+        ctx['stats'], ctx['total'] = stats
         ctx['stats_json'] = json.dumps(stats)
         return ctx
 
