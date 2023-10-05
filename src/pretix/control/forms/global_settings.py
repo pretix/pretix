@@ -38,6 +38,7 @@ from django import forms
 from django.utils.translation import gettext_lazy as _
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
+from pretix import settings
 from pretix.base.forms import SecretKeySettingsField, SettingsForm
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.signals import register_global_settings
@@ -95,6 +96,13 @@ class GlobalSettingsForm(SettingsForm):
                     sample='&copy; &lt;a href=&quot;https://www.openstreetmap.org/copyright&quot;&gt;OpenStreetMap&lt;/a&gt; contributors'
                 )
             )),
+            ('apple_domain_association', forms.CharField(
+                required=False,
+                label=_("ApplePay MerchantID Domain Association"),
+                help_text=_("Will be served at {domain}/.well-known/apple-developer-merchantid-domain-association").format(
+                    domain=settings.SITE_URL
+                )
+            ))
         ])
         responses = register_global_settings.send(self)
         for r, response in sorted(responses, key=lambda r: str(r[0])):
