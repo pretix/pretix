@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-25 23:11+0000\n"
-"PO-Revision-Date: 2023-10-03 04:00+0000\n"
+"PO-Revision-Date: 2023-10-06 03:00+0000\n"
 "Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -3042,7 +3042,7 @@ msgstr "Caractère générique invalide : %(value)s"
 #: pretix/base/forms/widgets.py:67
 #, python-format
 msgid "Sample: %s"
-msgstr "Exemple: %s"
+msgstr "Exemple : %s"
 
 #: pretix/base/forms/widgets.py:70
 #, python-brace-format
@@ -29701,8 +29701,8 @@ msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
-"Désolé, une erreur s’est produite dans le processus de paiement. Veuillez "
-"vérifier le lien dans vos e-mails pour continuer."
+"Désolé, une erreur s'est produite lors du traitement du paiement. SVP "
+"vérifiez le lien dans vos courriels pour continuer."
 
 #: pretix/plugins/stripe/views.py:567
 msgid ""
