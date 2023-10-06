@@ -214,7 +214,13 @@ Vue.component('availbox', {
         + '<a :href="waiting_list_url" target="_blank" @click="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!require_voucher && avail[0] === 100">'
-        + '<label class="pretix-widget-item-count-single-label" v-if="order_max === 1">'
+        + '<label class="pretix-widget-item-count-single-label pretix-widget-btn-checkbox" v-if="order_max === 1 && $root.single_item_select == \'button\'">'
+        + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name"'
+        + '       v-bind:aria-label="label_select_item"'
+        + '>'
+        + '<i class="pretix-widget-icon-cart" aria-hidden="true"></i> Select'
+        + '</label>'
+        + '<label class="pretix-widget-item-count-single-label" v-else-if="order_max === 1">'
         + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name"'
         + '       v-bind:aria-label="label_select_item"'
         + '>'
@@ -1904,6 +1910,7 @@ var create_widget = function (element) {
     var items = element.attributes.items ? element.attributes.items.value : null;
     var variations = element.attributes.variations ? element.attributes.variations.value : null;
     var categories = element.attributes.categories ? element.attributes.categories.value : null;
+    var single_item_select = element.getAttribute("single-item-select") || "checkbox";
     for (var i = 0; i < element.attributes.length; i++) {
         var attrib = element.attributes[i];
         if (attrib.name.match(/^data-.*$/)) {
@@ -1950,6 +1957,7 @@ var create_widget = function (element) {
                 voucher_code: voucher,
                 display_net_prices: false,
                 use_native_spinners: false,
+                single_item_select: single_item_select,
                 voucher_explanation_text: null,
                 show_variations_expanded: !!variations,
                 skip_ssl: skip_ssl,
