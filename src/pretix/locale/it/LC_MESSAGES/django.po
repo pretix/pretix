@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-25 23:11+0000\n"
-"PO-Revision-Date: 2023-06-26 23:00+0000\n"
-"Last-Translator: M C <micasadmail@gmail.com>\n"
+"PO-Revision-Date: 2023-10-08 23:00+0000\n"
+"Last-Translator: Sanny <s.logiudice@comune.venariareale.to.it>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
 "Language: it\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.0.2\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:140
@@ -1157,7 +1157,7 @@ msgstr "Longitudine"
 #: pretix/control/templates/pretixcontrol/event/index.html:128
 #: pretix/control/templates/pretixcontrol/order/index.html:990
 msgid "Internal comment"
-msgstr "Nota interna"
+msgstr "commento interno"
 
 #: pretix/base/exporters/invoices.py:82 pretix/base/models/orders.py:1625
 #: pretix/base/models/orders.py:2029 pretix/control/forms/filter.py:203
@@ -1580,7 +1580,7 @@ msgstr "Categoria prodotto"
 #: pretix/base/models/tax.py:163
 #: pretix/control/templates/pretixcontrol/items/discounts.html:56
 msgid "Internal name"
-msgstr "Nome interno"
+msgstr "nome interno"
 
 #: pretix/base/exporters/items.py:65 pretix/base/models/items.py:403
 msgid "Item name"
@@ -2540,7 +2540,7 @@ msgstr "Disponibilità attuale"
 #: pretix/control/templates/pretixcontrol/items/quota.html:58
 #: pretix/control/views/item.py:975
 msgid "Infinite"
-msgstr "Infinita"
+msgstr "Infinito"
 
 #: pretix/base/exporters/orderlist.py:1133
 #: pretix/plugins/reports/accountingreport.py:770
@@ -3043,7 +3043,7 @@ msgstr "Azienda o ente istituzionale"
 
 #: pretix/base/forms/widgets.py:234
 msgid "Individual customer"
-msgstr "Persona fisica"
+msgstr "cliente individuale"
 
 #: pretix/base/invoice.py:86
 #, python-format
@@ -3386,7 +3386,7 @@ msgstr ""
 #: pretix/base/models/checkin.py:76 pretix/control/navigation.py:626
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
 msgid "Gates"
-msgstr "Ingressi"
+msgstr "Cancelli"
 
 #: pretix/base/models/checkin.py:77
 msgid ""
@@ -3568,7 +3568,7 @@ msgstr ""
 
 #: pretix/base/models/devices.py:71 pretix/base/models/items.py:1478
 msgid "Internal identifier"
-msgstr ""
+msgstr "identificatore interno"
 
 #: pretix/base/models/devices.py:91 pretix/base/models/items.py:1586
 msgid "This identifier is already used for a different question."
@@ -3590,7 +3590,7 @@ msgstr ""
 
 #: pretix/base/models/devices.py:135
 msgid "Initialization date"
-msgstr ""
+msgstr "data di inizializzazione"
 
 #: pretix/base/models/discount.py:45
 msgctxt "subevent"
@@ -4334,7 +4334,7 @@ msgstr "minuti"
 
 #: pretix/base/models/items.py:626
 msgid "Hours"
-msgstr ""
+msgstr "Ore"
 
 #: pretix/base/models/items.py:630
 msgid "Days"
@@ -4646,7 +4646,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:1489
 msgid "Help text"
-msgstr ""
+msgstr "testo d'aiuto"
 
 #: pretix/base/models/items.py:1490
 msgid "If the question needs to be explained or clarified, do it here!"
@@ -4676,7 +4676,7 @@ msgstr ""
 #: pretix/base/models/items.py:1519
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
 msgid "Hidden question"
-msgstr ""
+msgstr "Domanda nascosta"
 
 #: pretix/base/models/items.py:1520
 msgid "This question will only show up in the backend."
@@ -5229,7 +5229,7 @@ msgstr ""
 
 #: pretix/base/models/orders.py:2150
 msgid "Insurance fee"
-msgstr ""
+msgstr "assicurazione"
 
 #: pretix/base/models/orders.py:2151
 msgid "Other fees"
@@ -6197,7 +6197,7 @@ msgstr ""
 
 #: pretix/base/payment.py:1070
 msgid "Free of charge"
-msgstr ""
+msgstr "Gratuito"
 
 #: pretix/base/payment.py:1102
 msgid "Box office"
@@ -8195,11 +8195,11 @@ msgstr ""
 
 #: pretix/base/settings.py:830 pretix/base/settings.py:839
 msgid "in days"
-msgstr ""
+msgstr "in giorni"
 
 #: pretix/base/settings.py:831 pretix/base/settings.py:840
 msgid "in minutes"
-msgstr ""
+msgstr "in minuti"
 
 #: pretix/base/settings.py:835
 #, fuzzy
@@ -9927,7 +9927,7 @@ msgstr ""
 #: pretix/base/settings.py:2795 pretix/base/settings.py:2838
 #: pretix/control/forms/organizer.py:424
 msgid "Header image"
-msgstr ""
+msgstr "immagine dell'header"
 
 #: pretix/base/settings.py:2798
 msgid ""
@@ -10100,7 +10100,7 @@ msgstr ""
 
 #: pretix/base/settings.py:3151
 msgid "Homepage text"
-msgstr ""
+msgstr "Testo dell'homepage"
 
 #: pretix/base/settings.py:3153
 msgid "This will be displayed on the organizer homepage."
@@ -10435,23 +10435,23 @@ msgstr ""
 
 #: pretix/base/templates/400.html:4 pretix/base/templates/400.html:8
 msgid "Bad Request"
-msgstr ""
+msgstr "Richiesta Errata"
 
 #: pretix/base/templates/400.html:9
 msgid "We were unable to parse your request."
-msgstr ""
+msgstr "Non riusciamo ad elaborare la tua richiesta."
 
 #: pretix/base/templates/400.html:12 pretix/base/templates/400_hostname.html:47
 #: pretix/base/templates/403.html:12 pretix/base/templates/404.html:12
 #: pretix/base/templates/500.html:22 pretix/base/templates/csrffail.html:26
 msgid "Take a step back"
-msgstr ""
+msgstr "Fai un passo indietro"
 
 #: pretix/base/templates/400.html:13 pretix/base/templates/400_hostname.html:48
 #: pretix/base/templates/403.html:13 pretix/base/templates/500.html:23
 #: pretix/presale/templates/pretixpresale/event/cookies.html:40
 msgid "Try again"
-msgstr ""
+msgstr "Prova di nuovo"
 
 #: pretix/base/templates/400_hostname.html:4
 #: pretix/base/templates/400_hostname.html:8
@@ -10484,7 +10484,7 @@ msgstr "Pagamenti ricevuti"
 
 #: pretix/base/templates/400_hostname.html:32
 msgid "ignored"
-msgstr ""
+msgstr "ignorato"
 
 #: pretix/base/templates/400_hostname.html:35
 msgid "Derived host from headers"
@@ -10521,19 +10521,19 @@ msgstr ""
 
 #: pretix/base/templates/500.html:4 pretix/base/templates/500.html:8
 msgid "Internal Server Error"
-msgstr ""
+msgstr "Errore Interno del Server"
 
 #: pretix/base/templates/500.html:9
 msgid "We had trouble processing your request."
-msgstr ""
+msgstr "Abbiamo problemi a processare la tua richiesta."
 
 #: pretix/base/templates/500.html:10
 msgid "If this problem persists, please contact us."
-msgstr ""
+msgstr "Se il problema persiste, per favore contattaci."
 
 #: pretix/base/templates/500.html:13
 msgid "If you contact us, please send us the following code:"
-msgstr ""
+msgstr "Se ci contatti, per favore invia il seguente codice:"
 
 #: pretix/base/templates/csrffail.html:4 pretix/base/templates/csrffail.html:8
 msgid "Verification failed"
@@ -11564,7 +11564,7 @@ msgstr ""
 
 #: pretix/control/forms/event.py:1469
 msgid "Individual"
-msgstr ""
+msgstr "individuale"
 
 #: pretix/control/forms/event.py:1470
 msgid "Business"
@@ -12086,7 +12086,7 @@ msgstr ""
 
 #: pretix/control/forms/filter.py:1964
 msgid "Fully redeemed"
-msgstr ""
+msgstr "Voucher esauriti"
 
 #: pretix/control/forms/filter.py:1966
 msgid "Redeemed and checked in with ticket"
@@ -12582,11 +12582,11 @@ msgstr ""
 #: pretix/control/forms/item.py:1046 pretix/control/forms/orders.py:362
 #: pretix/control/forms/orders.py:550
 msgid "inactive"
-msgstr ""
+msgstr "inattivo"
 
 #: pretix/control/forms/mailsetup.py:40
 msgid "Hostname"
-msgstr ""
+msgstr "nome host"
 
 #: pretix/control/forms/mailsetup.py:45
 msgid "Port"
@@ -12630,7 +12630,7 @@ msgstr ""
 
 #: pretix/control/forms/orderimport.py:30
 msgid "Import mode"
-msgstr ""
+msgstr "modo importazione"
 
 #: pretix/control/forms/orderimport.py:32
 msgid "Create a separate order for each line"
@@ -13260,7 +13260,7 @@ msgstr ""
 
 #: pretix/control/forms/rrule.py:43
 msgid "Interval"
-msgstr ""
+msgstr "Intervallo"
 
 #: pretix/control/forms/rrule.py:69
 msgid "Number of repetitions"
@@ -15041,7 +15041,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:6
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:21
 msgid "Log in"
-msgstr ""
+msgstr "Accedi"
 
 #: pretix/control/templates/pretixcontrol/auth/login.html:38
 msgid "Lost password?"
@@ -16383,7 +16383,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:14
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:42
 msgid "Geo coordinates"
-msgstr ""
+msgstr "Coordinate geografiche"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata.html:15
 #: pretix/control/templates/pretixcontrol/event/settings.html:130
@@ -16746,7 +16746,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:96
 msgid "Free order"
-msgstr ""
+msgstr "Ordine gratuito"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:99
 #: pretix/control/templates/pretixcontrol/order/index.html:241
@@ -16908,7 +16908,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:63
 msgid "Incompatible"
-msgstr ""
+msgstr "incompatibile"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:67
 msgid "Not available"
@@ -17010,7 +17010,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:188
 msgid "Getting in touch with you"
-msgstr ""
+msgstr "Rimani in contatto con noi"
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:190
 msgid ""
@@ -17022,7 +17022,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/settings.html:13
 #: pretix/control/templates/pretixcontrol/user/settings.html:11
 msgid "General settings"
-msgstr ""
+msgstr "Impostazioni generali"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:21
 msgid "Basics"
@@ -17653,7 +17653,7 @@ msgstr "Componente"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:60
 msgid "Installed version"
-msgstr ""
+msgstr "versione installata"
 
 #: pretix/control/templates/pretixcontrol/global_update.html:61
 msgid "Latest version"
@@ -19192,7 +19192,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:880
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:118
 msgid "Ignore"
-msgstr ""
+msgstr "Ignora"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:886
 #: pretix/control/templates/pretixcontrol/order/refund_process.html:58
@@ -20322,7 +20322,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:81
 msgid "Hardware model"
-msgstr ""
+msgstr "Modello hardware"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:139
 msgid "Not yet initialized"
@@ -21282,7 +21282,7 @@ msgstr "Conferma l'ordine"
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:33
 msgid "Formatting example"
-msgstr ""
+msgstr "Esempio di formattazione"
 
 #: pretix/control/templates/pretixcontrol/search/orders.html:116
 msgid ""
@@ -21879,7 +21879,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 msgid "Global"
-msgstr "Generale"
+msgstr "Globale"
 
 #: pretix/control/templates/pretixcontrol/user/notifications.html:70
 #: pretix/control/templates/pretixcontrol/user/notifications.html:72
@@ -22054,7 +22054,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:25
 msgid "Generate random codes"
-msgstr ""
+msgstr "Genera codici casuali"
 
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:29
 msgid "Copy codes"
@@ -22679,9 +22679,8 @@ msgstr ""
 "affinchè le modifiche diventino attive."
 
 #: pretix/control/views/event.py:364
-#, fuzzy
 msgid "Integrations"
-msgstr "Numeri fattura"
+msgstr "integrazioni"
 
 #: pretix/control/views/event.py:365
 #, fuzzy
@@ -23547,7 +23546,7 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:537
 msgid "The new organizer has been created."
-msgstr ""
+msgstr "Il nuovo organizzatore è stato creato."
 
 #: pretix/control/views/organizer.py:540
 msgid "Administrators"
@@ -24106,7 +24105,7 @@ msgstr ""
 #: pretix/plugins/badges/exporters.py:420
 #: pretix/plugins/ticketoutputpdf/exporters.py:80
 msgid "Include pending orders"
-msgstr ""
+msgstr "inclusi gli ordini incompleti"
 
 #: pretix/plugins/badges/exporters.py:425
 msgid "Include add-on or bundled positions"
@@ -26755,7 +26754,7 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py:1049
 #, python-format
 msgid "Stripe reported an error with your card: %s"
-msgstr ""
+msgstr "Stripe ha riportato un errore con la tua carta: %s"
 
 #: pretix/plugins/stripe/payment.py:618 pretix/plugins/stripe/payment.py:779
 #: pretix/plugins/stripe/payment.py:967 pretix/plugins/stripe/payment.py:1061
@@ -26764,6 +26763,8 @@ msgid ""
 "We had trouble communicating with Stripe. Please try again and get in touch "
 "with us if this problem persists."
 msgstr ""
+"Ci sono problemi nella comunicazione con Stripe. Per favore prova di nuovo e "
+"contattaci se il problema persiste."
 
 #: pretix/plugins/stripe/payment.py:636 pretix/plugins/stripe/payment.py:1001
 msgid ""
@@ -26882,7 +26883,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:1536
 msgid "Germany"
-msgstr ""
+msgstr "Germania"
 
 #: pretix/plugins/stripe/payment.py:1537
 msgid "Austria"
@@ -27685,7 +27686,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/base.html:78
 #: pretix/presale/templates/pretixpresale/event/base.html:83
 msgid "Homepage"
-msgstr ""
+msgstr "Homepage"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:114
 #: pretix/presale/templates/pretixpresale/event/base.html:120
@@ -28124,7 +28125,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:97
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:89
 msgid "Hide variants"
-msgstr "Nascondi varianti"
+msgstr "Nascondi le varianti"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:99
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:91
@@ -28176,7 +28177,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:190
 #: pretix/presale/templates/pretixpresale/event/voucher.html:333
 msgid "incl. taxes"
-msgstr "tasse incluse"
+msgstr "incl. tasse"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:164
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:292
@@ -28239,7 +28240,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:231
 #: pretix/presale/templates/pretixpresale/event/voucher.html:376
 msgid "Increase quantity"
-msgstr ""
+msgstr "aumenta la quantità"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:322
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:339
@@ -28840,7 +28841,7 @@ msgstr "Prenota ora"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:101
 #: pretix/presale/views/widget.py:401
 msgid "Fully booked"
-msgstr "Tutto esaurito"
+msgstr "Esaurito"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:50
 #: pretix/presale/templates/pretixpresale/organizers/index.html:110
@@ -29104,7 +29105,7 @@ msgstr "Le tue informazioni"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:334
 msgid "Internal Reference"
-msgstr "Riferimento interno"
+msgstr "Riferimento Interno"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:348
 msgctxt "action"
@@ -29540,7 +29541,7 @@ msgstr "Mese"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:27
 msgid "iCal"
-msgstr ""
+msgstr "iCal"
 
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:24
 #, fuzzy
