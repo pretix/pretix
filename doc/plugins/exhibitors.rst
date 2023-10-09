@@ -461,6 +461,36 @@ Endpoints
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event/exhibitor does not exist **or** you have no permission to change it.
 
+.. http:post:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/(id)/send_access_code/
+
+   Sends an email to the exhibitor with their access code.
+
+   **Example request**:
+
+   .. sourcecode:: http
+
+      POST /api/v1/organizers/bigevents/events/sampleconf/exhibitors/1/send_access_code/ HTTP/1.1
+      Host: pretix.eu
+      Accept: application/json, text/javascript
+
+
+   **Example response**:
+
+   .. sourcecode:: http
+
+      HTTP/1.1 204 No Content
+      Vary: Accept
+
+   :param organizer: The ``slug`` field of the organizer to modify
+   :param event: The ``slug`` field of the event to modify
+   :param code: The ``id`` field of the exhibitor to send an email for
+   :statuscode 200: no error
+   :statuscode 400: The exhibitor does not have an email address associated
+   :statuscode 401: Authentication failure
+   :statuscode 403: The requested organizer/event does not exist **or** you have no permission to view this resource.
+   :statuscode 404: The requested exhibitor does not exist.
+   :statuscode 503: The email could not be sent.
+
 
 .. http:delete:: /api/v1/organizers/(organizer)/events/(event)/exhibitors/(id)/
 
