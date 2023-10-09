@@ -139,6 +139,8 @@ error_messages = {
         'meantime. Please see below for details.'
     ),
     'internal': gettext_lazy("An internal error occurred, please try again."),
+    'race_condition': gettext_lazy("This order was changed by someone else simultaneously. Please check if your "
+                                   "changes are still accurate and try again."),
     'empty': gettext_lazy("Your cart is empty."),
     'max_items_per_product': ngettext_lazy(
         "You cannot select more than %(max)s item of the product %(product)s. We removed the surplus items from your cart.",
@@ -2714,6 +2716,10 @@ class OrderChangeManager:
         self._payment_fee_diff()
 
         with transaction.atomic():
+            locked_instance = Order.objects.select_for_update(of=OF_SELF).get(pk=self.order.pk)
+            if locked_instance.last_modified != self.order.last_modified:
+                raise OrderError(error_messages['race_condition'])
+
             if self.order.status in (Order.STATUS_PENDING, Order.STATUS_PAID):
                 if check_quotas:
                     self._check_quotas()
