@@ -602,7 +602,24 @@
         <fieldset>
             <legend>{% trans "Additional settings" %}</legend>
             {% for f in plugin_forms %}
-                {% bootstrap_form f layout="control" %}
+                {% if f.title %}
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <h3 class="panel-title">
+                                {{ f.title }}
+                            </h3>
+                        </div>
+                        <div class="panel-body">
+                            {% if f.template %}
+                                {% include f.template with form=f %}
+                            {% else %}
+                                {% bootstrap_form f layout="control" %}
+                            {% endif %}
+                        </div>
+                    </div>
+                {% else %}
+                    {% bootstrap_form f layout="control" %}
+                {% endif %}
             {% endfor %}
         </fieldset>
         <div class="form-group submit-group">
