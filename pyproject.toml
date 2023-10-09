@@ -29,7 +29,7 @@ dependencies = [
   "arabic-reshaper==3.0.0",  # Support for Arabic in reportlab
   "babel",
   "BeautifulSoup4==4.12.*",
-  "bleach==5.0.*",
+  "bleach==6.1.*",
   "celery==5.3.*",
   "chardet==5.1.*",
   "cryptography>=3.4.2",
