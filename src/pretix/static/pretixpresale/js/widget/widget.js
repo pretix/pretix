@@ -1717,11 +1717,10 @@ var shared_root_methods = {
         });
     },
     startwaiting: function () {
-        var redirect_url = this.$root.target_url + 'w/' + widget_id;
+        var redirect_url = this.$root.target_url + 'w/' + widget_id + '/waitinglist/?iframe=1&locale=' + lang;
         if (this.$root.subevent){
-            redirect_url += '/' + this.$root.subevent;
+            redirect_url += '&subevent=' + this.$root.subevent;
         }
-        redirect_url += '/waitinglist/?iframe=1&locale=' + lang;
         if (this.$root.useIframe) {
             var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
             this.$root.overlay.frame_loading = true;
