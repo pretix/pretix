@@ -32,7 +32,7 @@
           {% abseventurl request.event "presale:event.index" as indexurl %}
         {% endif %}
         {% if form.cleaned_data.compatibility_mode %}
-            <pre>&lt;div class="pretix-widget-compat" event="{% abseventurl request.event "presale:event.index" %}"{% if form.cleaned_data.subevent %} subevent="{{ form.cleaned_data.subevent.pk }}"{% endif %}{% if form.cleaned_data.voucher %} voucher="{{ form.cleaned_data.voucher }}"{% endif %}&gt;&lt;/div&gt;
+            <pre>&lt;div class="pretix-widget-compat" event="{% abseventurl request.event "presale:event.index" %}"{% if form.cleaned_data.subevent %} subevent="{{ form.cleaned_data.subevent.pk }}"{% endif %}{% if form.cleaned_data.voucher %} voucher="{{ form.cleaned_data.voucher }}"{% endif %} single-item-select="button"&gt;&lt;/div&gt;
 &lt;noscript&gt;
    &lt;div class="pretix-widget"&gt;
         &lt;div class="pretix-widget-info-message"&gt;
@@ -45,7 +45,7 @@
 &lt;/noscript&gt;
 </pre>
         {% else %}
-        <pre>&lt;pretix-widget event="{% abseventurl request.event "presale:event.index" %}"{% if form.cleaned_data.subevent %} subevent="{{ form.cleaned_data.subevent.pk }}"{% endif %}{% if form.cleaned_data.voucher %} voucher="{{ form.cleaned_data.voucher }}"{% endif %}&gt;&lt;/pretix-widget&gt;
+        <pre>&lt;pretix-widget event="{% abseventurl request.event "presale:event.index" %}"{% if form.cleaned_data.subevent %} subevent="{{ form.cleaned_data.subevent.pk }}"{% endif %}{% if form.cleaned_data.voucher %} voucher="{{ form.cleaned_data.voucher }}"{% endif %} single-item-select="button"&gt;&lt;/pretix-widget&gt;
 &lt;noscript&gt;
    &lt;div class="pretix-widget"&gt;
         &lt;div class="pretix-widget-info-message"&gt;
