@@ -20,6 +20,7 @@ $gray-lightest: lighten(#000, 97.25%);
 $font-family-sans-serif:  "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif !default;
 $text-color: #222222 !default;
 $text-muted: #767676 !default;
+$input-color-placeholder: lighten(#000, 70%) !default;
 
 $brand-primary: #7f5a91 !default;
 $brand-success: #50a167 !default;
