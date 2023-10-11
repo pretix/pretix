@@ -562,17 +562,21 @@ class ConfirmChangeView(View):
             messages.error(request, _('You clicked an invalid link.'))
             return HttpResponseRedirect(self.get_success_url())
 
-        with transaction.atomic():
-            customer.email = data['email']
-            customer.save()
-            customer.log_action('pretix.customer.changed', {
-                'email': data['email']
-            })
+        try:
+            with transaction.atomic():
+                customer.email = data['email']
+                customer.save()
+                customer.log_action('pretix.customer.changed', {
+                    'email': data['email']
+                })
+        except IntegrityError:
+            messages.success(request, _('Your email address has not been updated since the address is already in use '
+                                        'for another customer account.'))
+        else:
+            messages.success(request, _('Your email address has been updated.'))
 
-        messages.success(request, _('Your email address has been updated.'))
-
-        if customer == request.customer:
-            update_customer_session_auth_hash(self.request, customer)
+            if customer == request.customer:
+                update_customer_session_auth_hash(self.request, customer)
 
         return HttpResponseRedirect(self.get_success_url())
 
