@@ -24,10 +24,16 @@ from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import Seat, Voucher
+from pretix.base.models.vouchers import generate_codes
 
 
 class VoucherListSerializer(serializers.ListSerializer):
     def create(self, validated_data):
+        vouchers_without_codes = [v for v in validated_data if not v.get('code')]
+
+        for voucher_data, code in zip(vouchers_without_codes, generate_codes(self.context['event'].organizer, num=len(vouchers_without_codes), prefix=None)):
+            voucher_data['code'] = code
+
         codes = set()
         seats = set()
         errs = []

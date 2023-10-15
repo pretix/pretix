@@ -1092,6 +1092,50 @@ def test_create_multiple_vouchers_duplicate_code(token_client, organizer, event,
         assert Voucher.objects.count() == 0
 
 
+@pytest.mark.django_db
+def test_create_multiple_vouchers_autogenerate_codes(token_client, organizer, event, item):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/vouchers/batch_create/'.format(organizer.slug, event.slug),
+        data=[
+            {
+                'max_usages': 1,
+                'valid_until': None,
+                'block_quota': False,
+                'allow_ignore_quota': False,
+                'price_mode': 'set',
+                'value': '12.00',
+                'item': item.pk,
+                'variation': None,
+                'quota': None,
+                'tag': 'Foo',
+                'comment': '',
+                'subevent': None
+            },
+            {
+                'max_usages': 1,
+                'valid_until': None,
+                'block_quota': True,
+                'allow_ignore_quota': False,
+                'price_mode': 'set',
+                'value': '12.00',
+                'item': item.pk,
+                'variation': None,
+                'quota': None,
+                'tag': 'Foo',
+                'comment': '',
+                'subevent': None
+            }
+        ], format='json'
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        assert Voucher.objects.count() == 2
+        v1 = Voucher.objects.get(code=resp.data[0]['code'])
+        assert not v1.block_quota
+        v2 = Voucher.objects.get(code=resp.data[1]['code'])
+        assert v2.block_quota
+
+
 @pytest.fixture
 def seatingplan(organizer, event):
     plan = SeatingPlan.objects.create(
