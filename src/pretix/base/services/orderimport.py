@@ -54,14 +54,15 @@ class DataImportError(LazyLocaleException):
         super().__init__(msg)
 
 
-def parse_csv(file, length=None, mode="strict"):
+def parse_csv(file, length=None, mode="strict", charset=None):
     file.seek(0)
     data = file.read(length)
-    try:
-        import chardet
-        charset = chardet.detect(data)['encoding']
-    except ImportError:
-        charset = file.charset
+    if not charset:
+        try:
+            import chardet
+            charset = chardet.detect(data)['encoding']
+        except ImportError:
+            charset = file.charset
     data = data.decode(charset or "utf-8", mode)
     # If the file was modified on a Mac, it only contains \r as line breaks
     if '\r' in data and '\n' not in data:
@@ -85,12 +86,12 @@ def setif(record, obj, attr, setting):
 
 
 @app.task(base=ProfiledEventTask, throws=(DataImportError,))
-def import_orders(event: Event, fileid: str, settings: dict, locale: str, user) -> None:
+def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, charset=None) -> None:
     cf = CachedFile.objects.get(id=fileid)
     user = User.objects.get(pk=user)
     with language(locale, event.settings.region):
         cols = get_all_columns(event)
-        parsed = parse_csv(cf.file)
+        parsed = parse_csv(cf.file, charset=charset)
         orders = []
         order = None
         data = []

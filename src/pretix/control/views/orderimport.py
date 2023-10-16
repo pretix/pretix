@@ -51,6 +51,15 @@ from pretix.control.forms.orderimport import ProcessForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 
 logger = logging.getLogger(__name__)
+ENCODINGS = (
+    "utf8", "utf16", "utf32",
+    "iso-8859-1", "iso-8859-2", "iso-8859-3", "iso-8859-4", "iso-8859-5", "iso-8859-6", "iso-8859-7",
+    "iso-8859-8", "iso-8859-9", "iso-8859-10", "iso-8859-11", "iso-8859-12", "iso-8859-13", "iso-8859-14",
+    "iso-8859-15", "iso-8859-16",
+    "maccyrillic", "macgreek", "maciceland", "maclatin2", "macroman", "macturkish",
+    "windows-1250", "windows-1251", "windows-1252", "windows-1253", "windows-1254", "windows-1255",
+    "windows-1256", "windows-1257", "windows-1258"
+)
 
 
 class ImportView(EventPermissionRequiredMixin, TemplateView):
@@ -83,11 +92,20 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
             type='text/csv',
         )
         cf.file.save('import.csv', request.FILES['file'])
+
+        if self.request.POST.get("charset") in ENCODINGS:
+            charset = self.request.POST.get("charset")
+        else:
+            charset = "auto"
+
         return redirect(reverse('control:event.orders.import.process', kwargs={
             'event': request.event.slug,
             'organizer': request.organizer.slug,
             'file': cf.id
-        }))
+        }) + "?charset=" + charset)
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(encodings=ENCODINGS)
 
 
 class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
@@ -108,9 +126,13 @@ class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
 
     def form_valid(self, form):
         self.request.event.settings.order_import_settings = form.cleaned_data
+        if self.request.GET.get("charset") in ENCODINGS:
+            charset = self.request.GET.get("charset")
+        else:
+            charset = None
         return self.do(
             self.request.event.pk, self.file.id, form.cleaned_data, self.request.LANGUAGE_CODE,
-            self.request.user.pk
+            self.request.user.pk, charset
         )
 
     @cached_property
@@ -119,8 +141,12 @@ class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
 
     @cached_property
     def parsed(self):
+        if self.request.GET.get("charset") in ENCODINGS:
+            charset = self.request.GET.get("charset")
+        else:
+            charset = None
         try:
-            return parse_csv(self.file.file, 1024 * 1024)
+            return parse_csv(self.file.file, 1024 * 1024, charset=charset)
         except UnicodeDecodeError:
             messages.warning(
                 self.request,
@@ -129,7 +155,7 @@ class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
                     "Some characters were replaced with a placeholder."
                 )
             )
-            return parse_csv(self.file.file, 1024 * 1024, "replace")
+            return parse_csv(self.file.file, 1024 * 1024, "replace", charset=charset)
 
     def get(self, request, *args, **kwargs):
         if 'async_id' in request.GET and settings.HAS_CELERY:
