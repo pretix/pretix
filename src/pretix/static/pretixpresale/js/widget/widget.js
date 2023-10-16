@@ -1013,7 +1013,7 @@ Vue.component('pretix-widget-event-form', {
                             break;
                         }
                     }
-                    if (item.variations.length === 0 && item.price.gross !== "0.00") {
+                    if ((item.variations.length === 0 && item.price.gross !== "0.00") || item.mandatory_priced_addons) {
                         all_free = false;
                         break;
                     }
