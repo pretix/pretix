@@ -516,12 +516,13 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             items = [i for i in items if not i.requires_seat]
             context['itemnum'] = len(items)
             context['allfree'] = all(
-                item.display_price.gross == Decimal('0.00') for item in items if not item.has_variations
+                item.display_price.gross == Decimal('0.00') and not item.mandatory_priced_addons
+                for item in items if not item.has_variations
             ) and all(
                 all(
                     var.display_price.gross == Decimal('0.00')
                     for var in item.available_variations
-                )
+                ) and not item.mandatory_priced_addons
                 for item in items if item.has_variations
             )
 
