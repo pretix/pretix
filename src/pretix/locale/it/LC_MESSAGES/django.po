@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-09-25 23:11+0000\n"
-"PO-Revision-Date: 2023-10-16 08:33+0000\n"
+"PO-Revision-Date: 2023-10-16 08:41+0000\n"
 "Last-Translator: Sanny <s.logiudice@comune.venariareale.to.it>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
 "it/>\n"
@@ -3732,24 +3732,31 @@ msgid ""
 "You need to either set a minimum number of matching products or a minimum "
 "value."
 msgstr ""
+"Devi impostare un numero minimo di prodotti abbinati o un valore minimo."
 
 #: pretix/base/models/discount.py:205
 msgid ""
 "You cannot apply the discount only to some of the matched products if you "
 "are matching on a minimum value."
 msgstr ""
+"Non puoi applicare lo sconto solo  ad alcuni prodotti se li abbini con il "
+"valore minimo."
 
 #: pretix/base/models/discount.py:211
 msgid ""
 "You cannot apply the discount only to bookings of different dates if you are "
 "matching on a minimum value."
 msgstr ""
+"Non puoi applicare lo sconto solo per l'acquisto in date diverse se "
+"l'abbinamento è effettuato sul valore minimo."
 
 #: pretix/base/models/discount.py:218
 msgid ""
 "You cannot apply the discount to a different set of products if the discount "
 "is only valid for bookings of different dates."
 msgstr ""
+"Non puoi applicare lo sconto su diversi pacchetti di prodotti se lo sconto è "
+"valido solo per l'acquisto in date diverse."
 
 #: pretix/base/models/event.py:86
 msgid "The end of the presale period has to be later than its start."
@@ -3781,13 +3788,15 @@ msgstr "Lo slug può contenere solo lettere, numeri, punti e trattini."
 
 #: pretix/base/models/event.py:565 pretix/base/models/event.py:1392
 msgid "Show in lists"
-msgstr ""
+msgstr "Mostra nelle liste"
 
 #: pretix/base/models/event.py:566
 msgid ""
 "If selected, this event will show up publicly on the list of events for your "
 "organizer account."
 msgstr ""
+"Se selezionato, questo evento sarà pubblicamente visibile nella lista degli "
+"eventi della tua organizzazione."
 
 #: pretix/base/models/event.py:570 pretix/base/models/event.py:1407
 #: pretix/control/forms/subevents.py:99
