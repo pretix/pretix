@@ -124,6 +124,24 @@ If you want to disable voucher input in the widget, you can pass the ``disable-v
 
    <pretix-widget event="https://pretix.eu/demo/democon/" disable-vouchers></pretix-widget>
 
+Enabling the button-style single item select
+--------------------------------------------
+
+By default, the widget uses a checkbox to select items, that can only be bought in quantities of one. If you want to match
+the button-style of that checkbox with the one in the pretix shop, you can use the ``single-item-select`` attribute::
+
+   <pretix-widget event="https://pretix.eu/demo/democon/" single-item-select="button"></pretix-widget>
+
+.. image:: img/widget_checkbox_button.png
+   :align: center
+   :class: screenshot
+
+.. note::
+
+        Due to compatibilty with existing widget installations, the default value for ``single-item-select``
+        is ``checkbox``. This might change in the future, so make sure, to set the attribute to 
+        ``single-item-select="checkbox"`` if you need it.
+
 Filtering products
 ------------------
 
