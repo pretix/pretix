@@ -24,6 +24,8 @@ from decimal import Decimal
 import django_filters
 from django.contrib.auth.hashers import make_password
 from django.db import transaction
+from django.db.models import OuterRef, Subquery, Sum
+from django.db.models.functions import Coalesce
 from django.shortcuts import get_object_or_404
 from django.utils.functional import cached_property
 from django_filters.rest_framework import DjangoFilterBackend, FilterSet
@@ -155,8 +157,13 @@ class GiftCardViewSet(viewsets.ModelViewSet):
             qs = self.request.organizer.accepted_gift_cards
         else:
             qs = self.request.organizer.issued_gift_cards.all()
+        s = GiftCardTransaction.objects.filter(
+            card=OuterRef('pk')
+        ).order_by().values('card').annotate(s=Sum('value')).values('s')
         return qs.prefetch_related(
             'issuer'
+        ).annotate(
+            cached_value=Coalesce(Subquery(s), Decimal('0.00'))
         )
 
     def get_serializer_context(self):

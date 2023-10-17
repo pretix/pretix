@@ -116,6 +116,8 @@ class GiftCard(LoggedModel):
 
     @property
     def value(self):
+        if hasattr(self, 'cached_value'):
+            return self.cached_value or Decimal('0.00')
         return self.transactions.aggregate(s=Sum('value'))['s'] or Decimal('0.00')
 
     def accepted_by(self, organizer):
