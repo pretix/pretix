@@ -21,8 +21,9 @@ from pretix.control.forms.event import CommentForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views import ChartContainingView
 
-NUM_WIDGET = str('<div class="numwidget"><span class="num">{num}</span>'
-                 '<span class="text">{text}</span>'
+NUM_WIDGET = str('<div class="numwidget">'
+                 '<span class="num">{num}</span>'
+                 '<span class="text"><span class="label-primary">{text}</span></span>'
                  '<span class="text-add">{text_add}</span></div>')
 
 
@@ -102,8 +103,8 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
         ).count()
         ctx['attendees_paid_ordered'] = {
             'content': NUM_WIDGET.format(
-                num=f'<span class="fa fa-user icon"></span> {tickc}',
-                text=_('Attendees'),
+                num=f'{tickc}',
+                text=_('<span class="fa fa-user icon"></span> Attendees'),
                 text_add=f'{paidc} paid, {tickc - paidc} pending'),
             'priority': 100,
             'url': reverse('control:event.orders.overview', kwargs={
@@ -130,8 +131,8 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                     currency=self.request.event.currency,
                     amount=formats.localize(round_decimal(rev, self.request.event.currency))
                 ),
-                text='',
-                text_add=_('Total revenue')
+                text=_('Total revenue'),
+                text_add=''
             ),
             'priority': 100,
             'url': reverse('control:event.orders.overview', kwargs={
