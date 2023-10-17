@@ -36,6 +36,12 @@ def register_pdf(sender, **kwargs):
     return PDFCheckinList
 
 
+@receiver(register_data_exporters, dispatch_uid="export_checkin_code_csv")
+def register_csv_codes(sender, **kwargs):
+    from .exporters import CSVCheckinCodeList
+    return CSVCheckinCodeList
+
+
 @receiver(register_data_exporters, dispatch_uid="export_checkin_list")
 def register_log(sender, **kwargs):
     from .exporters import CheckinLogList

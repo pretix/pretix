@@ -478,13 +478,7 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
         headers += [
             _('Product'), _('Price'), _('Checked in'), _('Checked out'), _('Automatically checked in')
         ]
-        if not cl.include_pending:
-            qs = qs.filter(
-                Q(order__status=Order.STATUS_PAID) |
-                Q(order__status=Order.STATUS_PENDING, order__valid_if_pending=True)
-            )
-        else:
-            qs = qs.filter(order__status__in=(Order.STATUS_PAID, Order.STATUS_PENDING))
+        if cl.include_pending:
             headers.append(_('Paid'))
 
         if form_data['secrets']:
@@ -633,6 +627,76 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
                 op.city or '',
                 op.country if op.country else '',
                 op.state or '',
+            ]
+
+            yield row
+
+    def get_filename(self):
+        return '{}_checkin_{}'.format(self.event.slug, safe_for_filename(self.cl.name))
+
+
+class CSVCheckinCodeList(CheckInListMixin, ListExporter):
+    name = "overview"
+    identifier = 'checkinlistcodes'
+    verbose_name = gettext_lazy('Valid check-in codes')
+    category = pgettext_lazy('export_category', 'Check-in')
+    description = gettext_lazy("Download a spreadsheet with all valid check-in barcodes e.g. for import into a "
+                               "different system. Does not included blocked codes or personal data.")
+
+    @property
+    def additional_form_fields(self):
+        f = self._fields
+        f.pop('secrets')
+        f.pop('attention_only')
+        f.pop('status')
+        f.pop('sort')
+        f.pop('questions')
+        return f
+
+    def iterate_list(self, form_data):
+        self.cl = cl = self.event.checkin_lists.get(pk=form_data['list'])
+
+        qs = self._get_queryset(cl, form_data)
+        qs = qs.filter(blocked__isnull=True)
+
+        headers = [
+            _('Secret'),
+            _('Product'),
+            _('Variation'),
+            _('Paid'),
+        ]
+
+        if self.event.has_subevents:
+            headers.append(pgettext('subevent', 'Date'))
+            headers.append(_('Start date'))
+            headers.append(_('End date'))
+
+        headers.append(_('Valid from'))
+        headers.append(_('Valid until'))
+        yield headers
+
+        yield self.ProgressSetTotal(total=qs.count())
+
+        for op in qs:
+            row = [
+                op.secret,
+                str(op.item),
+                (str(op.variation.value) if op.variation else ""),
+                _('Yes') if op.order.status == Order.STATUS_PAID else _('No'),
+            ]
+            if self.event.has_subevents:
+                row.append(str(op.subevent.name))
+                row.append(date_format(op.subevent.date_from.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT'))
+                if op.subevent.date_to:
+                    row.append(
+                        date_format(op.subevent.date_to.astimezone(self.event.timezone), 'SHORT_DATETIME_FORMAT')
+                    )
+                else:
+                    row.append('')
+
+            row += [
+                date_format(op.valid_from, 'SHORT_DATETIME_FORMAT') if op.valid_from else '',
+                date_format(op.valid_until, 'SHORT_DATETIME_FORMAT') if op.valid_until else '',
             ]
 
             yield row
