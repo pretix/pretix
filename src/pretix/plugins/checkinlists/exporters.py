@@ -628,11 +628,17 @@ class CSVCheckinList(CheckInListMixin, ListExporter):
                 _('Yes') if op.blocked else '',
                 date_format(op.valid_from, 'SHORT_DATETIME_FORMAT') if op.valid_from else '',
                 date_format(op.valid_until, 'SHORT_DATETIME_FORMAT') if op.valid_until else '',
-                op.street or '',
-                op.zipcode or '',
-                op.city or '',
-                op.country if op.country else '',
-                op.state or '',
+            ]
+            if (op.street or op.zipcode or op.city):
+                address = op
+            else:
+                address = ia
+            row += [
+                address.street or '',
+                address.zipcode or '',
+                address.city or '',
+                address.country if address.country else '',
+                address.state or '',
             ]
 
             yield row
