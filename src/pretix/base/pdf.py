@@ -992,6 +992,7 @@ class Renderer:
             canvas.rotate(o.get('rotation', 0) * -1)
             p.drawOn(canvas, 0, -h - ad[1] / 2.5)
         else:
+            height_of_one_line = lineheight * float(o['fontsize']) * 1.05
             if lineheight != 1.0:
                 # lineheight adds to ascent/descent offsets, just empirical values again to get
                 # reportlab to render similarly to browser canvas
@@ -999,9 +1000,9 @@ class Renderer:
                     ad[0],
                     ad[1] + (lineheight - 1.0) * float(o['fontsize']) * 1.05
                 )
-            canvas.translate(float(o['left']) * mm, float(o['bottom']) * mm + h)
+            canvas.translate(float(o['left']) * mm, float(o['bottom']) * mm + height_of_one_line)
             canvas.rotate(o.get('rotation', 0) * -1)
-            p.drawOn(canvas, 0, -h - ad[1])
+            p.drawOn(canvas, 0, -height_of_one_line - ad[1])
         canvas.restoreState()
 
     def draw_page(self, canvas: Canvas, order: Order, op: OrderPosition, show_page=True, only_page=None):
