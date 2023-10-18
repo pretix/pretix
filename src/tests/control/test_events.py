@@ -587,7 +587,8 @@ class EventsTest(SoupTest):
     @staticmethod
     def _fake_spf_record(hostname):
         return {
-            'test.pretix.dev': 'v=spf1 a mx include:level2.pretix.dev ~all',
+            'test.pretix.dev': 'v=spf1 redirect=_spf.pretix.dev',
+            '_spf.pretix.dev': 'v=spf1 a mx include:level2.pretix.dev ~all',
             'level2.pretix.dev': 'v=spf1 a mx +include:level3.pretix.dev include:spftest.pretix.dev '
                                  '-include:level4.pretix.dev ~all',
             'level3.pretix.dev': 'v=spf1 a mx include:test2.pretix.dev ~all',

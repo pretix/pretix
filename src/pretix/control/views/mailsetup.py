@@ -73,6 +73,11 @@ def _check_spf_record(not_found_lookup_parts, spf_record, depth):
             rec_record = get_spf_record(hostname)
             if rec_record:
                 _check_spf_record(not_found_lookup_parts, rec_record, depth + 1)
+        elif p.startswith('redirect='):
+            _, hostname = p.split('=')
+            rec_record = get_spf_record(hostname)
+            if rec_record:
+                _check_spf_record(not_found_lookup_parts, rec_record, depth + 1)
 
 
 def check_spf_record(lookup, spf_record):
