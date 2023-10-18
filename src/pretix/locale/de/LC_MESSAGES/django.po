@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-18 07:25+0000\n"
-"PO-Revision-Date: 2023-10-16 08:33+0000\n"
+"PO-Revision-Date: 2023-10-18 09:35+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14,7 +14,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 5.1\n"
 "X-Poedit-Bookmarks: -1,-1,904,-1,-1,-1,-1,-1,-1,-1\n"
 
 #: pretix/_base_settings.py:78
@@ -7833,6 +7833,9 @@ msgid ""
 "This order was changed by someone else simultaneously. Please check if your "
 "changes are still accurate and try again."
 msgstr ""
+"Diese Bestellung wurde zeitgleich von einem anderen Benutzer bearbeitet. "
+"Bitte prüfe, ob deine Änderungen immer noch zutreffend sind und probiere es "
+"erneut."
 
 #: pretix/base/services/orders.py:144
 msgid "Your cart is empty."
@@ -13236,7 +13239,7 @@ msgstr "Leaflet-Kacheln Rechte"
 
 #: pretix/control/forms/global_settings.py:101
 msgid "ApplePay MerchantID Domain Association"
-msgstr ""
+msgstr "ApplePay Händler-ID Domain-Bestätigung"
 
 #: pretix/control/forms/global_settings.py:102
 #, python-brace-format
@@ -13244,6 +13247,8 @@ msgid ""
 "Will be served at {domain}/.well-known/apple-developer-merchantid-domain-"
 "association"
 msgstr ""
+"Wird unter {domain}/.well-known/apple-developer-merchantid-domain-"
+"association ausgeliefert"
 
 #: pretix/control/forms/global_settings.py:120
 msgid "Perform update checks"
@@ -14578,6 +14583,8 @@ msgid ""
 "The voucher code {code} is too short. Make sure all voucher codes are at "
 "least {min_length} characters long."
 msgstr ""
+"Der Gutscheincode {code} ist zu kurz. Alle Codes sollten mindestens "
+"{min_length} Zeichen lang sein."
 
 #: pretix/control/forms/vouchers.py:408
 #, python-brace-format
@@ -21542,13 +21549,11 @@ msgstr "Datei importieren"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:25
 msgid "Character set"
-msgstr ""
+msgstr "Zeichensatz"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:27
-#, fuzzy
-#| msgid "Generate automatically"
 msgid "Detect automatically"
-msgstr "Automatisch generieren"
+msgstr "Automatisch erkennen"
 
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:35
 msgid "Start import"
@@ -32274,12 +32279,9 @@ msgid "Upcoming events"
 msgstr "Nächste Veranstaltungen"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:64
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Create multiple dates"
 msgctxt "subevent"
 msgid "Multiple dates"
-msgstr "Mehrere Termine erstellen"
+msgstr "Mehrere Termine"
 
 #: pretix/presale/templates/pretixpresale/organizers/index.html:132
 msgid "More info"
@@ -32419,6 +32421,8 @@ msgid ""
 "Your email address has not been updated since the address is already in use "
 "for another customer account."
 msgstr ""
+"Ihre E-Mail-Adresse wurde nicht geändert, da die Adresse bereits in einem "
+"anderen Kundenkonto verwendet wird."
 
 #: pretix/presale/views/customer.py:576
 msgid "Your email address has been updated."
