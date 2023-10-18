@@ -11,6 +11,7 @@ AGPLv
 Alipay
 and
 App
+ApplePay
 Apps
 APM
 as

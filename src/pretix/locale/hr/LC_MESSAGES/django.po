@@ -12781,7 +12781,7 @@ msgstr ""
 #: pretix/control/forms/vouchers.py:401
 #, python-brace-format
 msgid ""
-"The voucher code {code} ist too short. Make sure all voucher codes are at "
+"The voucher code {code} is too short. Make sure all voucher codes are at "
 "least {min_length} characters long."
 msgstr ""
 
