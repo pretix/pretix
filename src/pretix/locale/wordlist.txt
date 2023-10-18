@@ -3,6 +3,7 @@ ABN
 AES
 AGPL
 Alipay
+ApplePay
 APM
 acceptor
 analytics
@@ -77,6 +78,7 @@ LLC
 MapQuest
 MariaDB
 Mercado
+MerchantID
 Mifare
 MOTO
 Multibanco
