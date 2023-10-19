@@ -241,10 +241,28 @@
                             </button>
                         </p>
                 </fieldset>
+                {% for f in plugin_forms %}
+                    {% if f.title %}
+                        <fieldset>
+                            <legend>{{ f.title }}</legend>
+                            {% if f.template %}
+                                {% include f.template with form=f %}
+                            {% else %}
+                                {% bootstrap_form f layout="control" %}
+                            {% endif %}
+                        </fieldset>
+                    {% endif %}
+                {% endfor %}
                 <fieldset>
                     <legend>{% trans "Additional settings" %}</legend>
                     {% for f in plugin_forms %}
-                        {% bootstrap_form f layout="control" %}
+                        {% if not f.title %}
+                            {% if f.template %}
+                                {% include f.template with form=f %}
+                            {% else %}
+                                {% bootstrap_form f layout="control" %}
+                            {% endif %}
+                        {% endif %}
                     {% endfor %}
                 </fieldset>
             </div>
