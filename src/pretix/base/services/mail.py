@@ -605,7 +605,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                             'pretix.email.error',
                             data={
                                 'subject': 'Internal error',
-                                'message': 'Max retries exceeded',
+                                'message': f'Max retries exceeded after error "{str(e)}"',
                                 'recipient': '',
                                 'invoices': [],
                             }
