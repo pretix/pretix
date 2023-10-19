@@ -39,7 +39,6 @@ import mimetypes
 import os
 import re
 import smtplib
-import ssl
 import warnings
 from email.mime.image import MIMEImage
 from email.utils import formataddr
@@ -597,7 +596,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
 
             raise SendMailException('Failed to send an email to {}.'.format(to))
         except Exception as e:
-            if isinstance(e, (smtplib.SMTPServerDisconnected, smtplib.SMTPConnectError, ssl.SSLError, OSError)):
+            if isinstance(e, OSError) and not isinstance(e, smtplib.SMTPNotSupportedError):
                 try:
                     self.retry(max_retries=5, countdown=[10, 30, 60, 300, 900, 900][self.request.retries])
                 except MaxRetriesExceededError:
