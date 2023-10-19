@@ -49,7 +49,7 @@ class TicketLayoutItemForm(forms.ModelForm):
             self.fields['layout'].label = _('PDF ticket layout for {channel}').format(
                 channel=self.sales_channel.verbose_name
             )
-            self.fields['layout'].empty_label = _('(Same as above)')
+            self.fields['layout'].empty_label = _('(Same as PDF ticket layout)')
         else:
             self.fields['layout'].label = _('PDF ticket layout')
             self.fields['layout'].empty_label = _('(Event default)')
