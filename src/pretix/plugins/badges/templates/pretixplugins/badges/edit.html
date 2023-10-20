@@ -18,21 +18,12 @@
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         {% bootstrap_field form.name layout="control" %}
-        <div class="form-group">
-            <label class="col-md-3 control-label">
-                {% trans "Badge design" %}
-            </label>
-            <div class="col-md-9">
-                <p>
-                    {% blocktrans trimmed %}
-                        You can modify the design after you saved this page.
-                    {% endblocktrans %}
-                </p>
-            </div>
-        </div>
+        {% if form.template %}
+            {% bootstrap_field form.template layout="control" %}
+        {% endif %}
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
-                {% trans "Save" %}
+                {% trans "Save & continue" %}
             </button>
         </div>
     </form>

@@ -25,9 +25,18 @@ from django.forms.models import ModelChoiceIterator
 from django.utils.translation import gettext_lazy as _
 
 from pretix.plugins.badges.models import BadgeItem, BadgeLayout
+from pretix.plugins.badges.templates import TEMPLATES
 
 
 class BadgeLayoutForm(forms.ModelForm):
+    template = forms.ChoiceField(
+        label=_('Template'),
+        help_text=_('You can modify the layout or change to a different page size in the next step.'),
+        choices=((k, v['label']) for k, v in TEMPLATES.items()),
+        widget=forms.RadioSelect,
+        initial='a7land',
+    )
+
     class Meta:
         model = BadgeLayout
         fields = ('name',)
