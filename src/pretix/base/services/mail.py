@@ -98,6 +98,9 @@ def clean_sender_name(sender_name: str) -> str:
     # Emails with @ in their sender name are rejected by some mailservers (e.g. Microsoft) because it looks like
     # a phishing attempt.
     sender_name = sender_name.replace("@", " ")
+    # Emails with : in their sender name are treated by Microsoft like emails with no From header at all, leading
+    # to a higher spam likelihood.
+    sender_name = sender_name.replace(":", " ")
 
     # Emails with excessively long sender names are rejected by some mailservers
     if len(sender_name) > 75:
