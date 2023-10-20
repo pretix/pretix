@@ -40,6 +40,7 @@ at :ref:`plugin-docs`.
    webhooks
    seatingplans
    exporters
+   scheduled_exports
    shredders
    sendmail_rules
    billing_invoices

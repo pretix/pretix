@@ -34,10 +34,13 @@
 
 import copy
 import uuid
+import zoneinfo
+from datetime import time
 
 import pytest
+from django.utils.timezone import now
 
-from pretix.base.models import CachedFile
+from pretix.base.models import CachedFile, User
 
 SAMPLE_EXPORTER_CONFIG = {
     "identifier": "orderlist",
@@ -277,3 +280,532 @@ def test_org_level_export(token_client, organizer, team, event):
         '_format': 'xlsx',
     }, format='json')
     assert resp.status_code == 404
+
+
+@pytest.fixture
+def event_scheduled_export(event, user):
+    e = event.scheduled_exports.create(
+        owner=user,
+        export_identifier="orderlist",
+        export_form_data={
+            "_format": "xlsx",
+            "date_range": "year_this"
+        },
+        locale="en",
+        mail_additional_recipients="foo@example.org",
+        mail_subject="Current order list",
+        mail_template="Here is the current order list",
+        schedule_rrule="DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH",
+        schedule_rrule_time=time(4, 0, 0),
+    )
+    e.compute_next_run()
+    e.save()
+    return e
+
+
+TEST_SCHEDULED_EXPORT_RES = {
+    "owner": "dummy@dummy.dummy",
+    "export_identifier": "orderlist",
+    "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+    "locale": "en",
+    "mail_additional_recipients": "foo@example.org",
+    "mail_additional_recipients_cc": "",
+    "mail_additional_recipients_bcc": "",
+    "mail_subject": "Current order list",
+    "mail_template": "Here is the current order list",
+    "schedule_rrule": "DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH",
+    "schedule_rrule_time": "04:00:00",
+    "error_counter": 0,
+}
+
+
+@pytest.mark.django_db
+def test_event_scheduled_export_list_token(token_client, organizer, event, user, team, event_scheduled_export):
+    res = dict(TEST_SCHEDULED_EXPORT_RES)
+    res["id"] = event_scheduled_export.pk
+    res["schedule_next_run"] = event_scheduled_export.schedule_next_run.astimezone(zoneinfo.ZoneInfo("UTC")). \
+        isoformat().replace("+00:00", "Z")
+
+    # Token can see it because it has change permission
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/scheduled_exports/'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+    team.can_change_event_settings = False
+    team.save()
+
+    # Token can no longer sees it an gets error message
+    resp = token_client.get('/api/v1/organizers/{}/events/{}/scheduled_exports/'.format(organizer.slug, event.slug))
+    assert resp.status_code == 403
+
+
+@pytest.mark.django_db
+def test_event_scheduled_export_list_user(user_client, organizer, event, user, team, event_scheduled_export):
+    user2 = User.objects.create_user('dummy2@dummy.dummy', 'dummy')
+    team.members.add(user2)
+
+    res = dict(TEST_SCHEDULED_EXPORT_RES)
+    res["id"] = event_scheduled_export.pk
+    res["schedule_next_run"] = event_scheduled_export.schedule_next_run.astimezone(zoneinfo.ZoneInfo("UTC")).\
+        isoformat().replace("+00:00", "Z")
+
+    # User can see it because its their own
+    resp = user_client.get('/api/v1/organizers/{}/events/{}/scheduled_exports/'.format(organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+
+    team.can_change_event_settings = False
+    team.save()
+
+    # Owner still can
+    resp = user_client.get('/api/v1/organizers/{}/events/{}/scheduled_exports/'.format(organizer.slug, event.slug))
+    assert [res] == resp.data['results']
+
+    # Other user can't see it and gets empty list
+    user_client.force_authenticate(user=user2)
+    resp = user_client.get('/api/v1/organizers/{}/events/{}/scheduled_exports/'.format(organizer.slug, event.slug))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_event_scheduled_export_detail(token_client, organizer, event, user, event_scheduled_export):
+    res = dict(TEST_SCHEDULED_EXPORT_RES)
+    res["id"] = event_scheduled_export.pk
+    res["schedule_next_run"] = event_scheduled_export.schedule_next_run.astimezone(zoneinfo.ZoneInfo("UTC")).\
+        isoformat().replace("+00:00", "Z")
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/events/{}/scheduled_exports/{}/'.format(
+            organizer.slug, event.slug, event_scheduled_export.pk
+        )
+    )
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_event_scheduled_export_create(user_client, organizer, event, user):
+    resp = user_client.post(
+        '/api/v1/organizers/{}/events/{}/scheduled_exports/'.format(organizer.slug, event.slug),
+        data={
+            "export_identifier": "orderlist",
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "locale": "en",
+            "mail_additional_recipients": "foo@example.org",
+            "mail_additional_recipients_cc": "",
+            "mail_additional_recipients_bcc": "",
+            "mail_subject": "Current order list",
+            "mail_template": "Here is the current order list",
+            "schedule_rrule": "DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH",
+            "schedule_rrule_time": "04:00:00",
+        },
+        format='json',
+    )
+    assert resp.status_code == 201
+    created = event.scheduled_exports.get(id=resp.data["id"])
+    assert created.export_form_data == {"_format": "xlsx", "date_range": "year_this"}
+    assert created.owner == user
+    assert created.schedule_next_run > now()
+
+
+@pytest.mark.django_db
+def test_event_scheduled_export_create_requires_user(token_client, organizer, event, user):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/scheduled_exports/'.format(organizer.slug, event.slug),
+        data={
+            "export_identifier": "orderlist",
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "locale": "en",
+            "mail_additional_recipients": "foo@example.org",
+            "mail_additional_recipients_cc": "",
+            "mail_additional_recipients_bcc": "",
+            "mail_subject": "Current order list",
+            "mail_template": "Here is the current order list",
+            "schedule_rrule": "DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH",
+            "schedule_rrule_time": "04:00:00",
+        },
+        format='json',
+    )
+    assert resp.status_code == 403
+
+
+@pytest.mark.django_db
+def test_event_scheduled_export_delete_token(token_client, organizer, event, user, event_scheduled_export):
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/events/{}/scheduled_exports/{}/'.format(
+            organizer.slug, event.slug, event_scheduled_export.pk,
+        ),
+    )
+    assert resp.status_code == 204
+    assert not event.scheduled_exports.exists()
+
+
+@pytest.mark.django_db
+def test_event_scheduled_export_update_token(token_client, organizer, event, user, event_scheduled_export):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/scheduled_exports/{}/'.format(
+            organizer.slug, event.slug, event_scheduled_export.pk,
+        ),
+        data={
+            "export_form_data": {"_format": "xlsx", "date_range": "month_this"},
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    created = event.scheduled_exports.get(id=resp.data["id"])
+    assert created.export_form_data == {"_format": "xlsx", "date_range": "month_this"}
+
+
+@pytest.fixture
+def org_scheduled_export(organizer, user):
+    e = organizer.scheduled_exports.create(
+        owner=user,
+        export_identifier="orderlist",
+        export_form_data={
+            "_format": "xlsx",
+            "date_range": "year_this"
+        },
+        locale="en",
+        mail_additional_recipients="foo@example.org",
+        mail_subject="Current order list",
+        mail_template="Here is the current order list",
+        schedule_rrule="DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH",
+        schedule_rrule_time=time(4, 0, 0),
+    )
+    e.compute_next_run()
+    e.save()
+    return e
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_list_token(token_client, organizer, user, team, org_scheduled_export):
+    res = dict(TEST_SCHEDULED_EXPORT_RES)
+    res["id"] = org_scheduled_export.pk
+    res["schedule_next_run"] = org_scheduled_export.schedule_next_run.astimezone(zoneinfo.ZoneInfo("UTC")). \
+        isoformat().replace("+00:00", "Z")
+    res["timezone"] = "UTC"
+
+    # Token can see it because it has change permission
+    resp = token_client.get('/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [res] == resp.data['results']
+
+    team.can_change_organizer_settings = False
+    team.save()
+
+    # Token can no longer sees it an gets error message
+    resp = token_client.get('/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug))
+    assert resp.status_code == 403
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_list_user(user_client, organizer, user, team, org_scheduled_export):
+    user2 = User.objects.create_user('dummy2@dummy.dummy', 'dummy')
+    team.members.add(user2)
+
+    res = dict(TEST_SCHEDULED_EXPORT_RES)
+    res["id"] = org_scheduled_export.pk
+    res["schedule_next_run"] = org_scheduled_export.schedule_next_run.astimezone(zoneinfo.ZoneInfo("UTC")). \
+        isoformat().replace("+00:00", "Z")
+    res["timezone"] = "UTC"
+
+    # User can see it because its their own
+    resp = user_client.get('/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug))
+    assert [res] == resp.data['results']
+
+    team.can_change_organizer_settings = False
+    team.save()
+
+    # Owner still can
+    resp = user_client.get('/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug))
+    assert [res] == resp.data['results']
+
+    # Other user can't see it and gets empty list
+    user_client.force_authenticate(user=user2)
+    resp = user_client.get('/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug))
+    assert resp.status_code == 200
+    assert [] == resp.data['results']
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_detail(token_client, organizer, user, org_scheduled_export):
+    res = dict(TEST_SCHEDULED_EXPORT_RES)
+    res["id"] = org_scheduled_export.pk
+    res["schedule_next_run"] = org_scheduled_export.schedule_next_run.astimezone(zoneinfo.ZoneInfo("UTC")). \
+        isoformat().replace("+00:00", "Z")
+    res["timezone"] = "UTC"
+
+    resp = token_client.get(
+        '/api/v1/organizers/{}/scheduled_exports/{}/'.format(
+            organizer.slug, org_scheduled_export.pk
+        )
+    )
+    assert resp.status_code == 200
+    assert res == resp.data
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_create(user_client, organizer, user):
+    resp = user_client.post(
+        '/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug),
+        data={
+            "export_identifier": "orderlist",
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "locale": "en",
+            "mail_additional_recipients": "foo@example.org",
+            "mail_additional_recipients_cc": "",
+            "mail_additional_recipients_bcc": "",
+            "mail_subject": "Current order list",
+            "mail_template": "Here is the current order list",
+            "schedule_rrule": "DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH",
+            "schedule_rrule_time": "04:00:00",
+        },
+        format='json',
+    )
+    assert resp.status_code == 201
+    created = organizer.scheduled_exports.get(id=resp.data["id"])
+    assert created.export_form_data == {"_format": "xlsx", "date_range": "year_this", "event_date_range": "/"}
+    assert created.owner == user
+    assert created.schedule_next_run > now()
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_create_requires_user(token_client, organizer, user):
+    resp = token_client.post(
+        '/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug),
+        data={
+            "export_identifier": "orderlist",
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "locale": "en",
+            "mail_additional_recipients": "foo@example.org",
+            "mail_additional_recipients_cc": "",
+            "mail_additional_recipients_bcc": "",
+            "mail_subject": "Current order list",
+            "mail_template": "Here is the current order list",
+            "schedule_rrule": "DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH",
+            "schedule_rrule_time": "04:00:00",
+        },
+        format='json',
+    )
+    assert resp.status_code == 403
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_delete_token(token_client, organizer, user, org_scheduled_export):
+    resp = token_client.delete(
+        '/api/v1/organizers/{}/scheduled_exports/{}/'.format(
+            organizer.slug, org_scheduled_export.pk,
+        ),
+    )
+    assert resp.status_code == 204
+    assert not organizer.scheduled_exports.exists()
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_update_token(token_client, organizer, user, org_scheduled_export):
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/scheduled_exports/{}/'.format(
+            organizer.slug, org_scheduled_export.pk,
+        ),
+        data={
+            "export_form_data": {"_format": "xlsx", "date_range": "month_this"},
+            "timezone": "America/New_York"
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    created = organizer.scheduled_exports.get(id=resp.data["id"])
+    assert created.export_form_data == {"_format": "xlsx", "date_range": "month_this", "event_date_range": "/"}
+    assert created.timezone == "America/New_York"
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_validate_identifier(user_client, organizer, user):
+    resp = user_client.post(
+        '/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug),
+        data={
+            "export_identifier": "unknownorg",
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "locale": "en",
+            "mail_additional_recipients": "foo@example.org",
+            "mail_additional_recipients_cc": "",
+            "mail_additional_recipients_bcc": "",
+            "mail_subject": "Current order list",
+            "mail_template": "Here is the current order list",
+            "schedule_rrule": "DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH",
+            "schedule_rrule_time": "04:00:00",
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"export_identifier": ["\"unknownorg\" is not a valid choice."]}
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_validate_form_data(user_client, organizer, user):
+    resp = user_client.post(
+        '/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug),
+        data={
+            "export_identifier": "orderlist",
+            "export_form_data": {"_format": "xlsx", "date_range": "UNKNOWN"},
+            "locale": "en",
+            "mail_additional_recipients": "foo@example.org",
+            "mail_additional_recipients_cc": "",
+            "mail_additional_recipients_bcc": "",
+            "mail_subject": "Current order list",
+            "mail_template": "Here is the current order list",
+            "schedule_rrule": "DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH",
+            "schedule_rrule_time": "04:00:00",
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"export_form_data": {"date_range": ["Invalid date frame"]}}
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_validate_locale(user_client, organizer, user):
+    resp = user_client.post(
+        '/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug),
+        data={
+            "export_identifier": "orderlist",
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "locale": "BLÖDSINN",
+            "mail_additional_recipients": "",
+            "mail_additional_recipients_cc": "",
+            "mail_additional_recipients_bcc": "",
+            "mail_subject": "Current order list",
+            "mail_template": "Here is the current order list",
+            "schedule_rrule": "DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH",
+            "schedule_rrule_time": "04:00:00",
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"locale": ["\"BLÖDSINN\" is not a valid choice."]}
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_validate_timezone(user_client, organizer, user):
+    resp = user_client.post(
+        '/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug),
+        data={
+            "export_identifier": "orderlist",
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "locale": "de",
+            "mail_additional_recipients": "",
+            "mail_additional_recipients_cc": "",
+            "mail_additional_recipients_bcc": "",
+            "mail_subject": "Current order list",
+            "mail_template": "Here is the current order list",
+            "schedule_rrule": "DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH",
+            "schedule_rrule_time": "04:00:00",
+            "timezone": "Invalid"
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"timezone": ["\"Invalid\" is not a valid choice."]}
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_validate_additional_recipients(user_client, organizer, user):
+    resp = user_client.post(
+        '/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug),
+        data={
+            "export_identifier": "orderlist",
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "locale": "en",
+            "mail_additional_recipients": "aaaaaa",
+            "mail_additional_recipients_cc": "",
+            "mail_additional_recipients_bcc": "",
+            "mail_subject": "Current order list",
+            "mail_template": "Here is the current order list",
+            "schedule_rrule": "DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH",
+            "schedule_rrule_time": "04:00:00",
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"mail_additional_recipients": ["Enter a valid email address."]}
+
+    resp = user_client.post(
+        '/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug),
+        data={
+            "export_identifier": "orderlist",
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "locale": "en",
+            "mail_additional_recipients": "a@b.com,a@b.com,a@b.com,a@b.com,a@b.com,a@b.com,a@b.com,a@b.com,a@b.com,"
+                                          "a@b.com,a@b.com,a@b.com,a@b.com,a@b.com,a@b.com,a@b.com,a@b.com,a@b.com,"
+                                          "a@b.com,a@b.com,a@b.com,a@b.com,a@b.com,a@b.com,a@b.com,a@b.com",
+            "mail_additional_recipients_cc": "",
+            "mail_additional_recipients_bcc": "",
+            "mail_subject": "Current order list",
+            "mail_template": "Here is the current order list",
+            "schedule_rrule": "DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH",
+            "schedule_rrule_time": "04:00:00",
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"mail_additional_recipients": ["Please enter less than 25 recipients."]}
+
+
+@pytest.mark.django_db
+def test_org_scheduled_export_validate_rrule(user_client, organizer, user):
+    resp = user_client.post(
+        '/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug),
+        data={
+            "export_identifier": "orderlist",
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "locale": "en",
+            "mail_additional_recipients": "",
+            "mail_additional_recipients_cc": "",
+            "mail_additional_recipients_bcc": "",
+            "mail_subject": "Current order list",
+            "mail_template": "Here is the current order list",
+            "schedule_rrule": "invalid content",
+            "schedule_rrule_time": "04:00:00",
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"schedule_rrule": ["Not a valid rrule."]}
+
+    resp = user_client.post(
+        '/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug),
+        data={
+            "export_identifier": "orderlist",
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "locale": "en",
+            "mail_additional_recipients": "",
+            "mail_additional_recipients_cc": "",
+            "mail_additional_recipients_bcc": "",
+            "mail_subject": "Current order list",
+            "mail_template": "Here is the current order list",
+            "schedule_rrule": "DTSTART:20230118T000000\nRRULE:FREQ=WEEKLY;BYDAY=TU,WE,TH\nEXRULE:FREQ=WEEKLY;COUNT=4;INTERVAL=2;BYDAY=TU,TH",
+            "schedule_rrule_time": "04:00:00",
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"schedule_rrule": ["Only a single RRULE is allowed, no combination of rules."]}
+
+    resp = user_client.post(
+        '/api/v1/organizers/{}/scheduled_exports/'.format(organizer.slug),
+        data={
+            "export_identifier": "orderlist",
+            "export_form_data": {"_format": "xlsx", "date_range": "year_this"},
+            "locale": "en",
+            "mail_additional_recipients": "",
+            "mail_additional_recipients_cc": "",
+            "mail_additional_recipients_bcc": "",
+            "mail_subject": "Current order list",
+            "mail_template": "Here is the current order list",
+            "schedule_rrule": "DTSTART:20230118T000000\nRRULE:FREQ=YEARLY;BYEASTER=0",
+            "schedule_rrule_time": "04:00:00",
+        },
+        format='json',
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"schedule_rrule": ["BYEASTER not supported"]}

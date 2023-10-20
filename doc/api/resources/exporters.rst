@@ -1,5 +1,7 @@
 .. spelling:word-list:: checkin
 
+.. _rest-exporters:
+
 Data exporters
 ==============
 

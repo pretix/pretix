@@ -79,7 +79,7 @@ class AbstractScheduledExport(LoggedModel):
     )
 
     schedule_rrule = models.TextField(
-        null=True, blank=True, validators=[RRuleValidator()]
+        null=True, blank=True, validators=[RRuleValidator(enforce_simple=True)]
     )
     schedule_rrule_time = models.TimeField(
         verbose_name=_("Requested start time"),
