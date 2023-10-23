@@ -1726,7 +1726,7 @@ class ExportMixin:
 
 
 class ExportDoView(OrganizerPermissionRequiredMixin, ExportMixin, AsyncAction, TemplateView):
-    known_errortypes = ['ExportError']
+    known_errortypes = ['ExportError', 'ExportEmptyError']
     task = multiexport
     template_name = 'pretixcontrol/organizers/export_form.html'
 

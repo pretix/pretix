@@ -2503,7 +2503,7 @@ class ExportMixin:
 
 class ExportDoView(EventPermissionRequiredMixin, ExportMixin, AsyncAction, TemplateView):
     permission = 'can_view_orders'
-    known_errortypes = ['ExportError']
+    known_errortypes = ['ExportError', 'ExportEmptyError']
     task = export
     template_name = 'pretixcontrol/orders/export_form.html'
 

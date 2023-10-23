@@ -63,7 +63,7 @@ class ExportEmptyError(ExportError):
     pass
 
 
-@app.task(base=ProfiledEventTask, throws=(ExportError,), bind=True)
+@app.task(base=ProfiledEventTask, throws=(ExportError, ExportEmptyError), bind=True)
 def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, Any]) -> None:
     def set_progress(val):
         if not self.request.called_directly:
@@ -94,7 +94,7 @@ def export(self, event: Event, fileid: str, provider: str, form_data: Dict[str, 
     return str(file.pk)
 
 
-@app.task(base=ProfiledOrganizerUserTask, throws=(ExportError,), bind=True)
+@app.task(base=ProfiledOrganizerUserTask, throws=(ExportError, ExportEmptyError), bind=True)
 def multiexport(self, organizer: Organizer, user: User, device: int, token: int, fileid: str, provider: str,
                 form_data: Dict[str, Any], staff_session=False) -> None:
     if device:
