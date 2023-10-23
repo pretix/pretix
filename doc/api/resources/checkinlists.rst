@@ -45,7 +45,7 @@ consider_tickets_used                 boolean                    If ``true`` (de
 
     The ``addon_match`` attribute has been added.
 
-.. versionchanged:: 2023.8
+.. versionchanged:: 2023.9
 
     The ``ignore_in_statistics`` and ``consider_tickets_used`` attributes have been added.
 
