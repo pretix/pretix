@@ -37,11 +37,17 @@ allow_entry_after_exit                boolean                    If ``true``, su
 rules                                 object                     Custom check-in logic. The contents of this field are currently not considered a stable API and modifications through the API are highly discouraged.
 exit_all_at                           datetime                   Automatically check out (i.e. perform an exit scan) at this point in time. After this happened, this property will automatically be set exactly one day into the future. Note that this field is considered "internal configuration" and if you pull the list with ``If-Modified-Since``, the daily change in this field will not trigger a response.
 addon_match                           boolean                    If ``true``, tickets on this list can be redeemed by scanning their parent ticket if this still leads to an unambiguous match.
+ignore_in_statistics                  boolean                    If ``true``, check-ins on this list will be ignored in most reporting features.
+consider_tickets_used                 boolean                    If ``true`` (default), tickets checked in on this list will be considered "used" by other functionality, i.e. when checking if they can still be canceled.
 ===================================== ========================== =======================================================
 
 .. versionchanged:: 4.12
 
     The ``addon_match`` attribute has been added.
+
+.. versionchanged:: 2023.9
+
+    The ``ignore_in_statistics`` and ``consider_tickets_used`` attributes have been added.
 
 Endpoints
 ---------

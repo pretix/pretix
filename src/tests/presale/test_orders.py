@@ -776,6 +776,26 @@ class OrdersTest(BaseOrdersTest):
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PENDING
 
+    def test_orders_cancel_paid_checkin_list(self):
+        self.order.status = Order.STATUS_PAID
+        self.order.save()
+        with scopes_disabled():
+            cl = self.event.checkin_lists.create(name="Foo")
+            self.order.positions.first().checkins.create(list=cl)
+        self.event.settings.cancel_allow_user_paid = True
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 302
+
+        cl.consider_tickets_used = False
+        cl.save()
+
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/cancel' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+
     def test_orders_cancel_forbidden(self):
         self.event.settings.set('cancel_allow_user', False)
         self.client.post(

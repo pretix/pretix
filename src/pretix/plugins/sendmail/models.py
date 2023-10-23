@@ -133,10 +133,10 @@ class ScheduledMail(models.Model):
 
         if self.rule.checked_in_status == "no_checkin":
             filter_orders_by_op = True
-            op_qs = op_qs.filter(~Exists(Checkin.objects.filter(position_id=OuterRef('pk'))))
+            op_qs = op_qs.filter(~Exists(Checkin.objects.filter(position_id=OuterRef('pk'), list__consider_tickets_used=True)))
         elif self.rule.checked_in_status == "checked_in":
             filter_orders_by_op = True
-            op_qs = op_qs.filter(Exists(Checkin.objects.filter(position_id=OuterRef('pk'))))
+            op_qs = op_qs.filter(Exists(Checkin.objects.filter(position_id=OuterRef('pk'), list__consider_tickets_used=True)))
 
         status_q = Q(status__in=self.rule.restrict_to_status)
         if 'n__pending_approval' in self.rule.restrict_to_status:

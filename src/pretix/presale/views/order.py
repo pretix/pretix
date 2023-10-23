@@ -246,7 +246,10 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
             qs = qs.annotate(
                 checkin_count=Subquery(
                     Checkin.objects.filter(
-                        successful=True, type=Checkin.TYPE_ENTRY, position_id=OuterRef('pk')
+                        successful=True,
+                        type=Checkin.TYPE_ENTRY,
+                        position_id=OuterRef('pk'),
+                        list__consider_tickets_used=True,
                     ).order_by().values('position').annotate(c=Count('*')).values('c')
                 )
             )
@@ -358,7 +361,10 @@ class OrderPositionDetails(EventViewMixin, OrderPositionDetailMixin, CartMixin, 
             qs = qs.annotate(
                 checkin_count=Subquery(
                     Checkin.objects.filter(
-                        successful=True, type=Checkin.TYPE_ENTRY, position_id=OuterRef('pk')
+                        successful=True,
+                        type=Checkin.TYPE_ENTRY,
+                        position_id=OuterRef('pk'),
+                        list__consider_tickets_used=True,
                     ).order_by().values('position').annotate(c=Count('*')).values('c')
                 )
             )

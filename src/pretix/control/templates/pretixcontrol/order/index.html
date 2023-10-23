@@ -390,7 +390,7 @@
                                         {% elif c.auto_checked_in %}
                                             <span class="fa fa-fw fa-magic text-success" data-toggle="tooltip_html" title="{{ c.list.name|force_escape|force_escape }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Automatically checked in: {{ date }}{% endblocktrans %}{% if c.gate %}<br>{{ c.gate }}{% endif %}"></span>
                                         {% else %}
-                                            <span class="fa fa-fw fa-check text-success" data-toggle="tooltip_html" title="{{ c.list.name|force_escape|force_escape }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Entry scan: {{ date }}{% endblocktrans %}{% if c.gate %}<br>{{ c.gate }}{% endif %}"></span>
+                                            <span class="fa fa-fw fa-check {% if c.list.consider_tickets_used %}text-success{% else %}text-muted{% endif %}" data-toggle="tooltip_html" title="{{ c.list.name|force_escape|force_escape }}<br>{% blocktrans trimmed with date=c.datetime|date:'SHORT_DATETIME_FORMAT' %}Entry scan: {{ date }}{% endblocktrans %}{% if c.gate %}<br>{{ c.gate }}{% endif %}"></span>
                                         {% endif %}
                                     {% endfor %}
                                 {% endif %}
