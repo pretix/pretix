@@ -195,6 +195,7 @@ class LoginFormTest(TestCase):
 
 class RegistrationFormTest(TestCase):
 
+    @override_settings(PRETIX_REGISTRATION=True)
     def test_different_passwords(self):
         response = self.client.post('/control/register', {
             'email': 'dummy@dummy.dummy',
@@ -203,6 +204,7 @@ class RegistrationFormTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(PRETIX_REGISTRATION=True)
     def test_user_attribute_similarity_passwords(self):
         response = self.client.post('/control/register', {
             'email': 'dummy@dummy.dummy',
@@ -211,6 +213,7 @@ class RegistrationFormTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(PRETIX_REGISTRATION=True)
     def test_short_passwords(self):
         response = self.client.post('/control/register', {
             'email': 'dummy@dummy.dummy',
@@ -219,6 +222,7 @@ class RegistrationFormTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(PRETIX_REGISTRATION=True)
     def test_common_passwords(self):
         response = self.client.post('/control/register', {
             'email': 'dummy@dummy.dummy',
@@ -241,6 +245,7 @@ class RegistrationFormTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(PRETIX_REGISTRATION=True)
     def test_numeric_passwords(self):
         response = self.client.post('/control/register', {
             'email': 'dummy@dummy.dummy',
@@ -256,6 +261,7 @@ class RegistrationFormTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(PRETIX_REGISTRATION=True)
     def test_empty_passwords(self):
         response = self.client.post('/control/register', {
             'email': 'dummy@dummy.dummy',
@@ -271,6 +277,7 @@ class RegistrationFormTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(PRETIX_REGISTRATION=True)
     def test_email_duplicate(self):
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         response = self.client.post('/control/register', {
@@ -280,6 +287,7 @@ class RegistrationFormTest(TestCase):
         })
         self.assertEqual(response.status_code, 200)
 
+    @override_settings(PRETIX_REGISTRATION=True)
     def test_success(self):
         response = self.client.post('/control/register', {
             'email': 'dummy@dummy.dummy',
