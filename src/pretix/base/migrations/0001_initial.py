@@ -10,6 +10,7 @@ def initial_user(apps, schema_editor):
     user = User(email='admin@localhost')
     user.is_staff = True
     user.is_superuser = True
+    user.needs_password_change = True
     user.password = make_password('admin')
     user.save()
 
