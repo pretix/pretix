@@ -409,7 +409,9 @@ label .optional {
 .select2-hidden-accessible {
     top: 50px;
 }
-
+.select2-selection__placeholder {
+  font-style: italic;
+}
 .large-select2-field-container .select2-container--bootstrap .select2-selection--multiple {
   height: 150px;
   overflow-y: auto;
