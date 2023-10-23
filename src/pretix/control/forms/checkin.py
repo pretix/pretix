@@ -113,6 +113,8 @@ class CheckinListForm(forms.ModelForm):
             'gates',
             'exit_all_at',
             'addon_match',
+            'consider_tickets_used',
+            'ignore_in_statistics',
         ]
         widgets = {
             'limit_products': forms.CheckboxSelectMultiple(attrs={

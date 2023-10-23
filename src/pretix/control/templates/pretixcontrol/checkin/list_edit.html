@@ -71,6 +71,8 @@
                 {% if form.gates %}
                     {% bootstrap_field form.gates layout="control" %}
                 {% endif %}
+                {% bootstrap_field form.consider_tickets_used layout="control" %}
+                {% bootstrap_field form.ignore_in_statistics layout="control" %}
 
                 <h3>{% trans "Custom check-in rule" %}</h3>
                 <div id="rules-editor" class="form-inline">
