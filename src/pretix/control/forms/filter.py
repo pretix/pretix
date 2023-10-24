@@ -1304,6 +1304,8 @@ class GiftCardFilterForm(FilterForm):
         'issuance': 'issuance',
         'expires': F('expires').asc(nulls_last=True),
         '-expires': F('expires').desc(nulls_first=True),
+        'last_tx': F('last_tx').asc(nulls_first=True),
+        '-last_tx': F('last_tx').desc(nulls_last=True),
         'secret': 'secret',
         'value': 'cached_value',
     }

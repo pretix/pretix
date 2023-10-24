@@ -1435,8 +1435,12 @@ class GiftCardListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixi
         s = GiftCardTransaction.objects.filter(
             card=OuterRef('pk')
         ).order_by().values('card').annotate(s=Sum('value')).values('s')
+        s_last_tx = GiftCardTransaction.objects.filter(
+            card=OuterRef('pk')
+        ).order_by().values('card').annotate(m=Max('datetime')).values('m')
         qs = self.request.organizer.issued_gift_cards.annotate(
-            cached_value=Coalesce(Subquery(s), Decimal('0.00'))
+            cached_value=Coalesce(Subquery(s), Decimal('0.00')),
+            last_tx=Subquery(s_last_tx),
         ).order_by('-issuance')
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)

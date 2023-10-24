@@ -62,6 +62,9 @@
                     <th>{% trans "Expiry date" %}
                         <a href="?{% url_replace request 'ordering' '-expires' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'expires' %}"><i class="fa fa-caret-up"></i></a></th>
+                    <th>{% trans "Last transaction" %}
+                        <a href="?{% url_replace request 'ordering' '-last_tx' %}"><i class="fa fa-caret-down"></i></a>
+                        <a href="?{% url_replace request 'ordering' 'last_tx' %}"><i class="fa fa-caret-up"></i></a></th>
                     <th class="text-right">{% trans "Current value" %}
                         <a href="?{% url_replace request 'ordering' '-value' %}"><i class="fa fa-caret-down"></i></a>
                         <a href="?{% url_replace request 'ordering' 'value' %}"><i class="fa fa-caret-up"></i></a></th>
@@ -83,6 +86,7 @@
                         </td>
                         <td>{{ g.issuance|date:"SHORT_DATETIME_FORMAT" }}</td>
                         <td>{% if g.expires %}{{ g.expires|date:"SHORT_DATETIME_FORMAT" }}{% endif %}</td>
+                        <td>{% if g.last_tx %}{{ g.last_tx|date:"SHORT_DATETIME_FORMAT" }}{% endif %}</td>
                         <td class="text-right">
                             {{ g.cached_value|money:g.currency }}
                         </td>
