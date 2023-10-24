@@ -8,9 +8,13 @@
 		{% csrf_token %}
 		<p>{% blocktrans %}Are you sure you want to delete the question <strong>{{ question }}</strong>?{% endblocktrans %}</p>
 		{% if dependent|length > 0 %}
-			<p>{% blocktrans %}All answers to the question given by the buyers of the following products will be <strong>lost</strong>.{% endblocktrans %}</p>
+			<div class="alert alert-warning">
+				<p>{% blocktrans %}All answers to the question given by the buyers of the following products will be <strong>lost</strong>.{% endblocktrans %}
+					{% blocktrans with url=edit_url|add:"#tab-0-1-open" %}If you want to keep the answers, <a href="{{url}}">edit the question</a> and set it to hidden.{% endblocktrans %}
+				</p>
+			</div>
 			{% for item in dependent %}
-				<li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.pk %}">{{ item.name }}</a></li>
+				<li><a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.pk %}">{{ item }}</a></li>
 			{% endfor %}
 		{% endif %}
 		<div class="form-group submit-group">
@@ -18,7 +22,7 @@
                 {% trans "Cancel" %}
             </a>
             <button type="submit" class="btn btn-danger btn-save">
-                {% trans "Delete" %}
+                {% trans "Delete question and all answers" %}
             </button>
 		</div>
 	</form>
