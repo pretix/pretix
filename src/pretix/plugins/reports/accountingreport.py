@@ -762,17 +762,27 @@ class ReportExporter(ReportlabExportMixin, BaseExporter):
         else:
             tx_before = Decimal("0.00")
 
-        tx_during = self._giftcard_transaction_qs(form_data, currency).aggregate(s=Sum("value"))[
+        tx_during_pos = self._giftcard_transaction_qs(form_data, currency).filter(value__gte=Decimal("0.00")).aggregate(s=Sum("value"))[
             "s"
         ] or Decimal("0.00")
         tdata.append(
             [
-                Paragraph(_("Gift card transactions"), tstyle),
-                Paragraph(money_filter(tx_during, currency), tstyle_right),
+                Paragraph(_("Gift card transactions (credit)"), tstyle),
+                Paragraph(money_filter(tx_during_pos, currency), tstyle_right),
             ]
         )
 
-        open_after = tx_before + tx_during
+        tx_during_neg = self._giftcard_transaction_qs(form_data, currency).filter(value__lt=Decimal("0.00")).aggregate(s=Sum("value"))[
+            "s"
+        ] or Decimal("0.00")
+        tdata.append(
+            [
+                Paragraph(_("Gift card transactions (debit)"), tstyle),
+                Paragraph(money_filter(tx_during_neg, currency), tstyle_right),
+            ]
+        )
+
+        open_after = tx_before + tx_during_pos + tx_during_neg
         tdata.append(
             [
                 Paragraph(
