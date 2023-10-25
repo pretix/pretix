@@ -350,6 +350,7 @@ class Recover(TemplateView):
             if not default_token_generator.check_token(user, self.request.GET.get('token')):
                 return self.invalid('invalid')
             user.set_password(self.form.cleaned_data['password'])
+            user.needs_password_change = False
             user.save()
             messages.success(request, _('You can now login using your new password.'))
             user.log_action('pretix.control.auth.user.forgot_password.recovered')
