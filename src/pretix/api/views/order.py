@@ -110,10 +110,11 @@ with scopes_disabled():
         item = django_filters.CharFilter(field_name='all_positions', lookup_expr='item_id', distinct=True)
         variation = django_filters.CharFilter(field_name='all_positions', lookup_expr='variation_id', distinct=True)
         subevent = django_filters.CharFilter(field_name='all_positions', lookup_expr='subevent_id', distinct=True)
+        customer = django_filters.CharFilter(field_name='customer__identifier')
 
         class Meta:
             model = Order
-            fields = ['code', 'status', 'email', 'locale', 'testmode', 'require_approval']
+            fields = ['code', 'status', 'email', 'locale', 'testmode', 'require_approval', 'customer']
 
         @scopes_disabled()
         def subevent_after_qs(self, qs, name, value):

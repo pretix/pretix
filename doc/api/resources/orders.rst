@@ -135,6 +135,10 @@ last_modified                         datetime                   Last modificati
 
    The ``event`` attribute has been added. The organizer-level endpoint has been added.
 
+.. versionchanged:: 2023.9
+
+   The ``customer`` query parameter has been added.
+
 
 .. _order-position-resource:
 
@@ -420,6 +424,7 @@ List of all orders
    :query string code: Only return orders that match the given order code
    :query string status: Only return orders in the given order status (see above)
    :query string search: Only return orders matching a given search query (matching for names, email addresses, and company names)
+   :query string customer: Only show orders linked to the given customer.
    :query integer item: Only return orders with a position that contains this item ID. *Warning:* Result will also include orders if they contain mixed items, and it will even return orders where the item is only contained in a canceled position.
    :query integer variation: Only return orders with a position that contains this variation ID. *Warning:* Result will also include orders if they contain mixed items and variations, and it will even return orders where the variation is only contained in a canceled position.
    :query boolean testmode: Only return orders with ``testmode`` set to ``true`` or ``false``
@@ -1566,6 +1571,7 @@ List of all order positions
                            ``order__datetime,positionid``
    :query string order: Only return positions of the order with the given order code
    :query string search: Fuzzy search matching the attendee name, order code, invoice address name as well as to the beginning of the secret.
+   :query string customer: Only show orders linked to the given customer.
    :query integer item: Only return positions with the purchased item matching the given ID.
    :query integer item__in: Only return positions with the purchased item matching one of the given comma-separated IDs.
    :query integer variation: Only return positions with the purchased item variation matching the given ID.
