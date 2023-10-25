@@ -75,7 +75,7 @@ Example::
     The cookie domain to be set. Defaults to ``None``.
 
 ``registration``
-    Enables or disables the registration of new admin users. Defaults to ``on``.
+    Enables or disables the registration of new admin users. Defaults to ``off``.
 
 ``password_reset``
     Enables or disables password reset. Defaults to ``on``.
