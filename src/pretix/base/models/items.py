@@ -431,6 +431,12 @@ class Item(LoggedModel):
                     "additional donations for your event. This is currently not supported for products that are "
                     "bought as an add-on to other products.")
     )
+    free_price_suggestion = models.DecimalField(
+        verbose_name=_("Suggested price"),
+        help_text=_("This price will be used as the default value of the input field. The user can choose a lower "
+                    "value, but not lower than the price this product would have without the free price option."),
+        max_digits=13, decimal_places=2, null=True, blank=True,
+    )
     tax_rule = models.ForeignKey(
         'TaxRule',
         verbose_name=_('Sales tax'),
@@ -1020,6 +1026,12 @@ class ItemVariation(models.Model):
         max_digits=13, decimal_places=2,
         help_text=_('If set, this will be displayed next to the current price to show that the current price is a '
                     'discounted one. This is just a cosmetic setting and will not actually impact pricing.')
+    )
+    free_price_suggestion = models.DecimalField(
+        verbose_name=_("Suggested price"),
+        help_text=_("This price will be used as the default value of the input field. The user can choose a lower "
+                    "value, but not lower than the price this product would have without the free price option."),
+        max_digits=13, decimal_places=2, null=True, blank=True,
     )
     require_approval = models.BooleanField(
         verbose_name=_('Require approval'),

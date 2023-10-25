@@ -577,6 +577,8 @@ class ItemUpdateForm(I18nModelForm):
         )
         self.fields['category'].widget.choices = self.fields['category'].choices
 
+        self.fields['free_price_suggestion'].widget.attrs['data-display-dependency'] = '#id_free_price'
+
         qs = self.event.organizer.membership_types.all()
         if qs:
             self.fields['require_membership_types'].queryset = qs
@@ -664,6 +666,7 @@ class ItemUpdateForm(I18nModelForm):
             'picture',
             'default_price',
             'free_price',
+            'free_price_suggestion',
             'tax_rule',
             'available_from',
             'available_until',
@@ -797,6 +800,8 @@ class ItemVariationForm(I18nModelForm):
             del self.fields['require_membership']
             del self.fields['require_membership_types']
 
+        self.fields['free_price_suggestion'].widget.attrs['data-display-dependency'] = '#id_free_price'
+
         self.meta_fields = []
         meta_defaults = {}
         if self.instance.pk:
@@ -829,6 +834,7 @@ class ItemVariationForm(I18nModelForm):
             'value',
             'active',
             'default_price',
+            'free_price_suggestion',
             'original_price',
             'description',
             'require_approval',
