@@ -39,6 +39,7 @@ import re
 import urllib.parse
 from collections import OrderedDict
 from decimal import Decimal
+from json import JSONDecodeError
 
 import stripe
 from django import forms
@@ -675,9 +676,12 @@ class StripeMethod(BasePaymentProvider):
         }
 
     def api_refund_details(self, refund: OrderRefund):
-        return {
-            "id": refund.info_data.get("id", None),
-        }
+        try:
+            return {
+                "id": refund.info_data.get("id", None),
+            }
+        except JSONDecodeError:
+            return {}
 
     def payment_control_render(self, request, payment) -> str:
         if payment.info:
