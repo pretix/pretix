@@ -343,6 +343,10 @@ styles. It is advisable to set a prefix for your form to avoid clashes with othe
 your form instance will automatically being set to the subevent that has just been created. During
 creation, ``copy_from`` can be a subevent that is being copied from.
 
+Your forms may also have two special properties: ``template`` with a template that will be
+included to render the form, and ``title``, which will be used as a headline. Your template
+will be passed a ``form`` variable with your form.
+
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
