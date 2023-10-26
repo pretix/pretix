@@ -46,9 +46,7 @@ from django.utils.crypto import get_random_string
 from django.utils.html import conditional_escape
 from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
-from django_scopes.forms import (
-    SafeModelChoiceField, SafeModelMultipleChoiceField,
-)
+from django_scopes.forms import SafeModelChoiceField
 from i18nfield.forms import (
     I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
 )
@@ -611,11 +609,12 @@ class WebHookForm(forms.ModelForm):
         fields = ['target_url', 'enabled', 'all_events', 'limit_events', 'comment']
         widgets = {
             'limit_events': forms.CheckboxSelectMultiple(attrs={
-                'data-inverse-dependency': '#id_all_events'
+                'data-inverse-dependency': '#id_all_events',
+                'class': 'scrolling-multiple-choice scrolling-multiple-choice-large',
             }),
         }
         field_classes = {
-            'limit_events': SafeModelMultipleChoiceField
+            'limit_events': SafeEventMultipleChoiceField
         }
 
 
