@@ -139,7 +139,15 @@
                                                         placeholder="0"
                                                         min="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                         name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}_price"
-                                                        title="{% blocktrans trimmed with item=var.value %}Modify price for {{ item }}{% endblocktrans %}"
+                                                        {% if var.initial_price.gross != var.display_price.gross %}
+                                                            {% if event.settings.display_net_prices %}
+                                                                title="{% blocktrans trimmed with item=var.value price=var.display_price.net|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
+                                                            {% else %}
+                                                                title="{% blocktrans trimmed with item=var.value price=var.display_price.gross|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
+                                                            {% endif %}
+                                                        {% else %}
+                                                            title="{% blocktrans trimmed with item=var.value %}Modify price for {{ item }}{% endblocktrans %}"
+                                                        {% endif %}
                                                         step="any"
                                                         value="{% if event.settings.display_net_prices %}{{ var.initial_price.net|money_numberfield:event.currency }}{% else %}{{ var.initial_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                 >
@@ -268,7 +276,15 @@
                                                 id="price-item-{{ form.pos.pk }}-{{ item.pk }}"
                                                 min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                 name="cp_{{ form.pos.pk }}_item_{{ item.id }}_price"
-                                                title="{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}"
+                                                {% if item.initial_price.gross != item.display_price.gross %}
+                                                    {% if event.settings.display_net_prices %}
+                                                        title="{% blocktrans trimmed with item=item.name price=item.display_price.net|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
+                                                    {% else %}
+                                                        title="{% blocktrans trimmed with item=item.name price=item.display_price.gross|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
+                                                    {% endif %}
+                                                {% else %}
+                                                    title="{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}"
+                                                {% endif %}
                                                 value="{% if event.settings.display_net_prices %}{{ item.initial_price.net|money_numberfield:event.currency }}{% else %}{{ item.initial_price.gross|money_numberfield:event.currency }}{% endif %}"
                                                 step="any">
                                     </div>
