@@ -167,7 +167,7 @@
                                                                min="{% if event.settings.display_net_prices %}{{ var.display_price.net|stringformat:"0.2f" }}{% else %}{{ var.display_price.gross|stringformat:"0.2f" }}{% endif %}"
                                                                name="price_{{ item.id }}_{{ var.id }}"
                                                                title="{% blocktrans trimmed with item=var.value %}Modify price for {{ item }}{% endblocktrans %}"
-                                                               value="{% if event.settings.display_net_prices %}{{var.display_price.net|stringformat:"0.2f" }}{% else %}{{ var.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                               value="{% if event.settings.display_net_prices %}{{var.suggested_price.net|stringformat:"0.2f" }}{% else %}{{ var.suggested_price.gross|stringformat:"0.2f" }}{% endif %}"
                                                                step="any">
                                                     </div>
                                                     <p>
@@ -310,7 +310,7 @@
                                                     min="{% if event.settings.display_net_prices %}{{ item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
                                                     name="price_{{ item.id }}"
                                                     title="{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}"
-                                                    value="{% if event.settings.display_net_prices %}{{ item.display_price.net|stringformat:"0.2f" }}{% else %}{{ item.display_price.gross|stringformat:"0.2f" }}{% endif %}"
+                                                    value="{% if event.settings.display_net_prices %}{{ item.suggested_price.net|stringformat:"0.2f" }}{% else %}{{ item.suggested_price.gross|stringformat:"0.2f" }}{% endif %}"
                                                     step="any">
                                     </div>
                                     <p>

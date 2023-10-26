@@ -29,6 +29,8 @@ free_price                              boolean                    If ``true``, 
                                                                    they buy the product (however, the price can't be set
                                                                    lower than the price defined by ``default_price`` or
                                                                    otherwise).
+free_price_suggestion                   money (string)             A suggested price, used as a default value if
+                                                                   ``free_price`` is set (or ``null``).
 tax_rate                                decimal (string)           The VAT rate to be applied for this item (read-only,
                                                                    set through ``tax_rule``).
 tax_rule                                integer                    The internal ID of the applied tax rule (or ``null``).
@@ -123,6 +125,8 @@ variations                              list of objects            A list with o
 ├ price                                 money (string)             The price used for this variation. This is either the
                                                                    same as ``default_price`` if that value is set or equal
                                                                    to the item's ``default_price``.
+├ free_price_suggestion                 money (string)             A suggested price, used as a default value if
+                                                                   ``free_price`` is set (or ``null``).
 ├ original_price                        money (string)             An original price, shown for comparison, not used
                                                                    for price calculations (or ``null``).
 ├ active                                boolean                    If ``false``, this variation will not be sold or shown.
@@ -196,6 +200,10 @@ meta_data                               object                     Values set fo
 
    The ``media_policy`` and ``media_type`` attributes have been added.
 
+.. versionchanged:: 2023.9
+
+   The ``free_price_suggestion`` and ``variations[x].free_price_suggestion`` attributes have been added.
+
 Notes
 -----
 
@@ -246,6 +254,7 @@ Endpoints
             "active": true,
             "description": null,
             "free_price": false,
+            "free_price_suggestion": null,
             "tax_rate": "0.00",
             "tax_rule": 1,
             "admission": false,
@@ -291,6 +300,7 @@ Endpoints
                  "default_price": "10.00",
                  "price": "10.00",
                  "original_price": null,
+                 "free_price_suggestion": null,
                  "active": true,
                  "checkin_attention": false,
                  "require_approval": false,
@@ -309,6 +319,7 @@ Endpoints
                  "default_price": null,
                  "price": "23.00",
                  "original_price": null,
+                 "free_price_suggestion": null,
                  "active": true,
                  "checkin_attention": false,
                  "require_approval": false,
@@ -377,6 +388,7 @@ Endpoints
         "active": true,
         "description": null,
         "free_price": false,
+        "free_price_suggestion": null,
         "tax_rate": "0.00",
         "tax_rule": 1,
         "admission": false,
@@ -422,6 +434,7 @@ Endpoints
              "default_price": "10.00",
              "price": "10.00",
              "original_price": null,
+             "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
              "require_approval": false,
@@ -440,6 +453,7 @@ Endpoints
              "default_price": null,
              "price": "23.00",
              "original_price": null,
+             "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
              "require_approval": false,
@@ -489,6 +503,7 @@ Endpoints
         "active": true,
         "description": null,
         "free_price": false,
+        "free_price_suggestion": null,
         "tax_rate": "0.00",
         "tax_rule": 1,
         "admission": false,
@@ -533,6 +548,7 @@ Endpoints
              "default_price": "10.00",
              "price": "10.00",
              "original_price": null,
+             "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
              "require_approval": false,
@@ -551,6 +567,7 @@ Endpoints
              "default_price": null,
              "price": "23.00",
              "original_price": null,
+             "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
              "require_approval": false,
@@ -588,6 +605,7 @@ Endpoints
         "active": true,
         "description": null,
         "free_price": false,
+        "free_price_suggestion": null,
         "tax_rate": "0.00",
         "tax_rule": 1,
         "admission": false,
@@ -633,6 +651,7 @@ Endpoints
              "default_price": "10.00",
              "price": "10.00",
              "original_price": null,
+             "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
              "require_approval": false,
@@ -651,6 +670,7 @@ Endpoints
              "default_price": null,
              "price": "23.00",
              "original_price": null,
+             "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
              "require_approval": false,
@@ -719,6 +739,7 @@ Endpoints
         "active": true,
         "description": null,
         "free_price": false,
+        "free_price_suggestion": null,
         "tax_rate": "0.00",
         "tax_rule": 1,
         "admission": false,
@@ -764,6 +785,7 @@ Endpoints
              "default_price": "10.00",
              "price": "10.00",
              "original_price": null,
+             "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
              "require_approval": false,
@@ -782,6 +804,7 @@ Endpoints
              "default_price": null,
              "price": "23.00",
              "original_price": null,
+             "free_price_suggestion": null,
              "active": true,
              "checkin_attention": false,
              "require_approval": false,

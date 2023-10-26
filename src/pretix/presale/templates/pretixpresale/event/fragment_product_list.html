@@ -140,7 +140,7 @@
                                                    name="price_{{ item.id }}_{{ var.id }}"
                                                    title="{% blocktrans trimmed with item=var.value %}Modify price for {{ item }}{% endblocktrans %}"
                                                    step="any"
-                                                   value="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
+                                                   value="{% if event.settings.display_net_prices %}{{ var.suggested_price.net|money_numberfield:event.currency }}{% else %}{{ var.suggested_price.gross|money_numberfield:event.currency }}{% endif %}"
                                             >
                                         </div>
                                         <p>
@@ -285,7 +285,7 @@
                                        min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
                                        name="price_{{ item.id }}"
                                        title="{% blocktrans trimmed with item=item.name %}Modify price for {{ item }}{% endblocktrans %}"
-                                       value="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
+                                       value="{% if event.settings.display_net_prices %}{{ item.suggested_price.net|money_numberfield:event.currency }}{% else %}{{ item.suggested_price.gross|money_numberfield:event.currency }}{% endif %}"
                                        step="any">
                             </div>
                             <p>

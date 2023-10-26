@@ -300,6 +300,10 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 price = original_price
 
             item.display_price = item.tax(price, currency=event.currency, include_bundled=True)
+            if item.free_price and item.free_price_suggestion is not None:
+                item.suggested_price = item.tax(max(price, item.free_price_suggestion), currency=event.currency, include_bundled=True)
+            else:
+                item.suggested_price = item.display_price
 
             if price != original_price:
                 item.original_price = item.tax(original_price, currency=event.currency, include_bundled=True)
@@ -345,6 +349,15 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                     price = original_price
 
                 var.display_price = var.tax(price, currency=event.currency, include_bundled=True)
+
+                if item.free_price and var.free_price_suggestion is not None:
+                    var.suggested_price = item.tax(max(price, var.free_price_suggestion), currency=event.currency,
+                                                   include_bundled=True)
+                elif item.free_price and item.free_price_suggestion is not None:
+                    var.suggested_price = item.tax(max(price, item.free_price_suggestion), currency=event.currency,
+                                                   include_bundled=True)
+                else:
+                    var.suggested_price = var.display_price
 
                 if price != original_price:
                     var.original_price = var.tax(original_price, currency=event.currency, include_bundled=True)

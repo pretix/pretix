@@ -570,7 +570,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                                     rate=a.tax_rate,
                                 )
                             else:
-                                v.initial_price = v.display_price
+                                v.initial_price = v.suggested_price
                         i.expand = any(v.initial for v in i.available_variations)
                     else:
                         i.initial = len(current_addon_products[i.pk, None])
@@ -584,7 +584,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                                 rate=a.tax_rate,
                             )
                         else:
-                            i.initial_price = i.display_price
+                            i.initial_price = i.suggested_price
 
                 if items:
                     formsetentry['categories'].append({
