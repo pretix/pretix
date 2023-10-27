@@ -265,50 +265,59 @@
     </div>
     <!-- Check-Ins ---------------------------------------------------------------------------------------------------->
     <!-- Quotas ------------------------------------------------------------------------------------------------------->
-    <thead>
-        <tr>
-            <th>
-                {% trans "Name" %}
-            </th>
-            <th>
-                {% trans "Begin" %}
-                <a href="? url_replace request 'filter-ordering' '-date_from' %}"><i class="fa fa-caret-down"></i></a>
-                <a href="? url_replace request 'filter-ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
-            </th>
-            <th>
-                {% trans "Paid tickets per quota" %}
-            </th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for s in subevents %}
-            <td>
-                <strong><a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}?returnto={{ request.GET.urlencode|urlencode }}">
-                    {{ s.name }}</a></strong><br>
-                <small class="text-muted">
-                    #{{ s.pk }}
-                </small>
-            </td>
-            <td>
-                {{ s.get_date_from_display }}<br>
-                <span class="text-muted">
-                   {{ s.date_from|date:"l" }}
-                </span>
-            </td>
-            <td>
-                {% for q in s.first_quotas|slice:":3" %}
-                    {% include "pretixcontrol/fragment_quota_box_paid.html" with quota=q %}
-                {% endfor %}
-                {% if s.first_quotas|length > 3 %}
-                    <a href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}?subevent={{ s.id }}"
-                            class="quotabox-more" data-toggle="tooltip" title="{% trans "More quotas" %}"
-                            data-placement="top">
-                        &middot;&middot;&middot;
-                    </a>
-                {% endif %}
-            </td>
-        {% endfor %}
-    </tbody>
+    <div class="panel panel-default">
+        <div class="panel-heading">
+            <h3 class="panel-title">{% trans "Quotas" %}</h3>
+        </div>
+        <div class="table-responsive">
+            <table class="table table-hover table-quotas">
+                <thead>
+                    <tr>
+                        <th>
+                            {% trans "Name" %}
+                        </th>
+                        <th>
+                            {% trans "Begin" %}
+                            <a href="? url_replace request 'filter-ordering' '-date_from' %}"><i class="fa fa-caret-down"></i></a>
+                            <a href="? url_replace request 'filter-ordering' 'date_from' %}"><i class="fa fa-caret-up"></i></a>
+                        </th>
+                        <th>
+                            {% trans "Paid tickets per quota" %}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for s in subevents %}
+                        <td>
+                            <strong><a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=s.id %}?returnto={{ request.GET.urlencode|urlencode }}">
+                                {{ s.name }}</a></strong><br>
+                            <small class="text-muted">
+                                #{{ s.pk }}
+                            </small>
+                        </td>
+                        <td>
+                            {{ s.get_date_from_display }}<br>
+                            <span class="text-muted">
+                               {{ s.date_from|date:"l" }}
+                            </span>
+                        </td>
+                        <td>
+                            {% for q in s.first_quotas|slice:":3" %}
+                                {% include "pretixcontrol/fragment_quota_box_paid.html" with quota=q %}
+                            {% endfor %}
+                            {% if s.first_quotas|length > 3 %}
+                                <a href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}?subevent={{ s.id }}"
+                                        class="quotabox-more" data-toggle="tooltip" title="{% trans "More quotas" %}"
+                                        data-placement="top">
+                                    &middot;&middot;&middot;
+                                </a>
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                </tbody>
+                </table>
+        </div>
+    </div>
     <!-- Quotas ------------------------------------------------------------------------------------------------------->
     <!-- Logs --------------------------------------------------------------------------------------------------------->
     <div class="panel panel-default">
