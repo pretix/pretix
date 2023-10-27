@@ -348,7 +348,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      PATCH /api/v1/organizers/bigevents/events/sampleconf/items/1/ HTTP/1.1
+      PATCH /api/v1/organizers/bigevents/events/sampleconf/questions/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
       Content-Type: application/json
@@ -415,7 +415,7 @@ Endpoints
    :param event: The ``slug`` field of the event to modify
    :param id: The ``id`` field of the question to modify
    :statuscode 200: no error
-   :statuscode 400: The item could not be modified due to invalid submitted data
+   :statuscode 400: The question could not be modified due to invalid submitted data
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to change this resource.
 
@@ -427,7 +427,7 @@ Endpoints
 
    .. sourcecode:: http
 
-      DELETE /api/v1/organizers/bigevents/events/sampleconf/items/1/ HTTP/1.1
+      DELETE /api/v1/organizers/bigevents/events/sampleconf/questions/1/ HTTP/1.1
       Host: pretix.eu
       Accept: application/json, text/javascript
 
@@ -440,7 +440,7 @@ Endpoints
 
    :param organizer: The ``slug`` field of the organizer to modify
    :param event: The ``slug`` field of the event to modify
-   :param id: The ``id`` field of the item to delete
+   :param id: The ``id`` field of the question to delete
    :statuscode 204: no error
    :statuscode 401: Authentication failure
    :statuscode 403: The requested organizer/event does not exist **or** you have no permission to delete this resource.

@@ -20,11 +20,14 @@
 # <https://www.gnu.org/licenses/>.
 #
 from django import forms
+from django.conf import settings
 from django.http import QueryDict
+from pytz import common_timezones
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
 from pretix.base.exporter import OrganizerLevelExportMixin
+from pretix.base.models import ScheduledEventExport, ScheduledOrganizerExport
 from pretix.base.timeframes import DateFrameField, SerializerDateFrameField
 
 
@@ -197,3 +200,92 @@ class JobRunSerializer(serializers.Serializer):
             raise ValidationError(self.errors)
 
         return not bool(self._errors)
+
+
+class ScheduledExportSerializer(serializers.ModelSerializer):
+    schedule_next_run = serializers.DateTimeField(read_only=True)
+    export_identifier = serializers.ChoiceField(choices=[])
+    locale = serializers.ChoiceField(choices=settings.LANGUAGES, default='en')
+    owner = serializers.SlugRelatedField(slug_field='email', read_only=True)
+    error_counter = serializers.IntegerField(read_only=True)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['export_identifier'].choices = [(e, e) for e in self.context['exporters']]
+
+    def validate(self, attrs):
+        if attrs.get("export_form_data"):
+            identifier = attrs.get('export_identifier', self.instance.export_identifier if self.instance else None)
+            exporter = self.context['exporters'].get(identifier)
+            if exporter:
+                try:
+                    JobRunSerializer(exporter=exporter).to_internal_value(attrs["export_form_data"])
+                except ValidationError as e:
+                    raise ValidationError({"export_form_data": e.detail})
+            else:
+                raise ValidationError({"export_identifier": ["Unknown exporter."]})
+        return attrs
+
+    def validate_mail_additional_recipients(self, value):
+        d = value.replace(' ', '')
+        if len(d.split(',')) > 25:
+            raise ValidationError('Please enter less than 25 recipients.')
+        return d
+
+    def validate_mail_additional_recipients_cc(self, value):
+        d = value.replace(' ', '')
+        if len(d.split(',')) > 25:
+            raise ValidationError('Please enter less than 25 recipients.')
+        return d
+
+    def validate_mail_additional_recipients_bcc(self, value):
+        d = value.replace(' ', '')
+        if len(d.split(',')) > 25:
+            raise ValidationError('Please enter less than 25 recipients.')
+        return d
+
+
+class ScheduledEventExportSerializer(ScheduledExportSerializer):
+
+    class Meta:
+        model = ScheduledEventExport
+        fields = [
+            'id',
+            'owner',
+            'export_identifier',
+            'export_form_data',
+            'locale',
+            'mail_additional_recipients',
+            'mail_additional_recipients_cc',
+            'mail_additional_recipients_bcc',
+            'mail_subject',
+            'mail_template',
+            'schedule_rrule',
+            'schedule_rrule_time',
+            'schedule_next_run',
+            'error_counter',
+        ]
+
+
+class ScheduledOrganizerExportSerializer(ScheduledExportSerializer):
+    timezone = serializers.ChoiceField(default=settings.TIME_ZONE, choices=[(a, a) for a in common_timezones])
+
+    class Meta:
+        model = ScheduledOrganizerExport
+        fields = [
+            'id',
+            'owner',
+            'export_identifier',
+            'export_form_data',
+            'locale',
+            'mail_additional_recipients',
+            'mail_additional_recipients_cc',
+            'mail_additional_recipients_bcc',
+            'mail_subject',
+            'mail_template',
+            'schedule_rrule',
+            'schedule_rrule_time',
+            'schedule_next_run',
+            'timezone',
+            'error_counter',
+        ]

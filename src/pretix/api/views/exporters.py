@@ -29,14 +29,20 @@ from django.utils.functional import cached_property
 from django.utils.timezone import now
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 
+from pretix.api.pagination import TotalOrderingFilter
 from pretix.api.serializers.exporters import (
-    ExporterSerializer, JobRunSerializer,
+    ExporterSerializer, JobRunSerializer, ScheduledEventExportSerializer,
+    ScheduledOrganizerExportSerializer,
 )
 from pretix.base.exporter import OrganizerLevelExportMixin
-from pretix.base.models import CachedFile, Device, Event, TeamAPIToken
+from pretix.base.models import (
+    CachedFile, Device, Event, ScheduledEventExport, ScheduledOrganizerExport,
+    TeamAPIToken,
+)
 from pretix.base.services.export import export, multiexport
 from pretix.base.signals import (
     register_data_exporters, register_multievent_data_exporters,
@@ -199,3 +205,152 @@ class OrganizerExportersViewSet(ExportersMixin, viewsets.ViewSet):
             'provider': instance.identifier,
             'form_data': data
         })
+
+
+class ScheduledExportersViewSet(viewsets.ModelViewSet):
+    filter_backends = (TotalOrderingFilter,)
+    ordering = ('id',)
+    ordering_fields = ('id', 'export_identifier', 'schedule_next_run')
+
+
+class ScheduledEventExportViewSet(ScheduledExportersViewSet):
+    serializer_class = ScheduledEventExportSerializer
+    queryset = ScheduledEventExport.objects.none()
+    permission = 'can_view_orders'
+
+    def get_queryset(self):
+        perm_holder = self.request.auth if isinstance(self.request.auth, (TeamAPIToken, Device)) else self.request.user
+        if not perm_holder.has_event_permission(self.request.organizer, self.request.event, 'can_change_event_settings',
+                                                request=self.request):
+            if self.request.user.is_authenticated:
+                qs = self.request.event.scheduled_exports.filter(owner=self.request.user)
+            else:
+                raise PermissionDenied('Scheduled exports require either permission to change event settings or '
+                                       'user-specific API access.')
+        else:
+            qs = self.request.event.scheduled_exports
+        return qs.select_related("owner")
+
+    def perform_create(self, serializer):
+        if not self.request.user.is_authenticated:
+            raise PermissionDenied('Creation of exports requires user-specific API access.')
+        serializer.save(event=self.request.event, owner=self.request.user)
+        serializer.instance.compute_next_run()
+        serializer.instance.save(update_fields=["schedule_next_run"])
+        self.request.event.log_action(
+            'pretix.event.export.schedule.added',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['event'] = self.request.event
+        ctx['exporters'] = self.exporters
+        return ctx
+
+    @cached_property
+    def exporters(self):
+        responses = register_data_exporters.send(self.request.event)
+        exporters = [response(self.request.event, self.request.organizer) for r, response in responses if response]
+        return {e.identifier: e for e in exporters}
+
+    def perform_update(self, serializer):
+        serializer.save(event=self.request.event)
+        serializer.instance.compute_next_run()
+        serializer.instance.error_counter = 0
+        serializer.instance.error_last_message = None
+        serializer.instance.save(update_fields=["schedule_next_run", "error_counter", "error_last_message"])
+        self.request.event.log_action(
+            'pretix.event.export.schedule.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    def perform_destroy(self, instance):
+        self.request.event.log_action(
+            'pretix.event.export.schedule.deleted',
+            user=self.request.user,
+            auth=self.request.auth,
+        )
+        super().perform_destroy(instance)
+
+
+class ScheduledOrganizerExportViewSet(ScheduledExportersViewSet):
+    serializer_class = ScheduledOrganizerExportSerializer
+    queryset = ScheduledOrganizerExport.objects.none()
+    permission = None
+
+    def get_queryset(self):
+        perm_holder = self.request.auth if isinstance(self.request.auth, (TeamAPIToken, Device)) else self.request.user
+        if not perm_holder.has_organizer_permission(self.request.organizer, 'can_change_organizer_settings',
+                                                    request=self.request):
+            if self.request.user.is_authenticated:
+                qs = self.request.organizer.scheduled_exports.filter(owner=self.request.user)
+            else:
+                raise PermissionDenied('Scheduled exports require either permission to change organizer settings or '
+                                       'user-specific API access.')
+        else:
+            qs = self.request.organizer.scheduled_exports
+        return qs.select_related("owner")
+
+    def perform_create(self, serializer):
+        if not self.request.user.is_authenticated:
+            raise PermissionDenied('Creation of exports requires user-specific API access.')
+        serializer.save(organizer=self.request.organizer, owner=self.request.user)
+        serializer.instance.compute_next_run()
+        serializer.instance.save(update_fields=["schedule_next_run"])
+        self.request.organizer.log_action(
+            'pretix.organizer.export.schedule.added',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    def get_serializer_context(self):
+        ctx = super().get_serializer_context()
+        ctx['organizer'] = self.request.organizer
+        ctx['exporters'] = self.exporters
+        return ctx
+
+    @cached_property
+    def events(self):
+        if isinstance(self.request.auth, (TeamAPIToken, Device)):
+            return self.request.auth.get_events_with_permission('can_view_orders')
+        elif self.request.user.is_authenticated:
+            return self.request.user.get_events_with_permission('can_view_orders', self.request).filter(
+                organizer=self.request.organizer
+            )
+
+    @cached_property
+    def exporters(self):
+        responses = register_multievent_data_exporters.send(self.request.organizer)
+        exporters = [
+            response(Event.objects.none() if issubclass(response, OrganizerLevelExportMixin) else self.events,
+                     self.request.organizer)
+            for r, response in responses if response
+        ]
+        return {e.identifier: e for e in exporters}
+
+    def perform_update(self, serializer):
+        serializer.save(organizer=self.request.organizer)
+        serializer.instance.compute_next_run()
+        serializer.instance.error_counter = 0
+        serializer.instance.error_last_message = None
+        serializer.instance.save(update_fields=["schedule_next_run", "error_counter", "error_last_message"])
+        self.request.organizer.log_action(
+            'pretix.organizer.export.schedule.changed',
+            user=self.request.user,
+            auth=self.request.auth,
+            data=self.request.data
+        )
+
+    def perform_destroy(self, instance):
+        self.request.organizer.log_action(
+            'pretix.organizer.export.schedule.deleted',
+            user=self.request.user,
+            auth=self.request.auth,
+        )
+        super().perform_destroy(instance)
