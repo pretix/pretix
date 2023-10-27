@@ -39,6 +39,7 @@ from decimal import Decimal
 from hashlib import sha1
 
 import bleach
+import dateutil
 from django import forms
 from django.conf import settings
 from django.contrib import messages
@@ -1636,7 +1637,10 @@ class ExportMixin:
                 for k in initial:
                     if initial[k] and k in test_form.fields:
                         try:
-                            initial[k] = test_form.fields[k].to_python(initial[k])
+                            if isinstance(test_form.fields[k], forms.SplitDateTimeField):
+                                initial[k] = dateutil.parser.parse(initial[k])
+                            else:
+                                initial[k] = test_form.fields[k].to_python(initial[k])
                         except Exception:
                             pass
             else:
