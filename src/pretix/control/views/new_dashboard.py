@@ -1,9 +1,11 @@
-import json
 import datetime
+import json
 from decimal import Decimal
 
 import dateutil
-from django.db.models import DateTimeField, Max, OuterRef, Q, Subquery, Sum, Prefetch, F
+from django.db.models import (
+    DateTimeField, F, Max, OuterRef, Prefetch, Q, Subquery, Sum,
+)
 from django.db.models.functions import Coalesce
 from django.urls import reverse
 from django.utils import formats, timezone
