@@ -208,7 +208,7 @@ class EventWizardBasicsForm(I18nModelForm):
             del self.fields['team']
         else:
             self.fields['team'].queryset = self.user.teams.filter(organizer=self.organizer)
-            if not self.organizer.settings.get("event_team_provisioning", True, as_type=bool):
+            if self.organizer.pk and not self.organizer.settings.get("event_team_provisioning", True, as_type=bool):
                 self.fields['team'].required = True
                 self.fields['team'].empty_label = None
                 self.fields['team'].initial = 0
