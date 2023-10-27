@@ -181,8 +181,6 @@ ausverkauft ist und daher der Einlösecode nicht mehr Nutzbar ist.
 
 Unterstützung
 -------------
-Das pretix Support-Team hilft Ihnen gerne bei Fragen: support@pretix.eu / 06221/32177-50
-
 Weitergehende Informationen zum KulturPass finden Sie auch auf der `Webseite des KulturPasses`_, sowie im
 `KulturPass Serviceportal`_.
 
