@@ -43,6 +43,10 @@ Registerung und die Einrichtung eines "Shops" sowie der dazugehörigen Angebote 
     `Einstellungen Ihres Veranstalterkontos`_ (Veranstalter-Konto -> Einstellungen -> KulturPass). Diese Daten müssen
     Sie nur einmalig für alle Ihre Veranstaltungen angeben.
 
+    Im `KulturPass-Backend`_ finden Sie die benötigten Informationen indem Sie auf das Benutzer-Symbol in der oberen,
+    rechten Ecke klicken, "Profil" und dann "API Schlüssel" auswählen bzw. indem Sie auf "Einstellungen" in der
+    Navigation links und dann "Shop" auswählen.
+
 .. note::
 
     Zu jeden Zeitpunkt kann nur ein Hintergrund-System mit dem KulturPass-System verbunden sein. Werden
@@ -127,7 +131,7 @@ anderen Zahlungsmethoden mit angeboten.
 Die Gelder für mit dem KulturPass bezahlte Tickets erhalten Sie in Form einer Sammel-Überweisung von der Stiftung
 Digitale Chancen auf das von Ihnen beim KulturPass Onboarding angegeben Bankkonto.
 
-In Ihrem `_KulturPass-Backend`_ können Sie über den Menüpunkt "Buchhaltung" Ihre bereits erfolgten und kommenden
+In Ihrem `KulturPass-Backend`_ können Sie über den Menüpunkt "Buchhaltung" Ihre bereits erfolgten und kommenden
 Auszahlungen betrachten.
 
 .. note::
