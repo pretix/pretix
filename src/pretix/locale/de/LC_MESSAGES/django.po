@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 12:47+0000\n"
-"PO-Revision-Date: 2023-10-18 09:35+0000\n"
+"PO-Revision-Date: 2023-10-27 07:35+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -3340,18 +3340,21 @@ msgstr ""
 #: pretix/base/models/checkin.py:66
 msgctxt "checkin"
 msgid "Ignore check-ins on this list in statistics"
-msgstr ""
+msgstr "Ignoriere Check-ins auf dieser Liste in Statistiken"
 
 #: pretix/base/models/checkin.py:70
 msgctxt "checkin"
 msgid "Tickets with a check-in on this list should be considered \"used\""
 msgstr ""
+"Tickets mit einem Check-in auf dieser Liste sollen als \"benutzt\" gelten"
 
 #: pretix/base/models/checkin.py:71
 msgid ""
 "This is relevant in various situations, e.g. for deciding if a ticket can "
 "still be canceled by the customer."
 msgstr ""
+"Dies ist für einige Entscheidungen relevant, z.B. ob ein Ticket noch vom "
+"Kunden selbst storniert werden kann."
 
 #: pretix/base/models/checkin.py:75
 msgctxt "checkin"
@@ -19853,12 +19856,12 @@ msgid ""
 "If you want to keep the answers, <a href=\"%(url)s\">edit the question</a> "
 "and set it to hidden."
 msgstr ""
+"Wenn Sie die Antworten beibehalten möchten, <a href=\"%(url)s\">bearbeiten "
+"Sie die Frage</a> und setzen Sie sie auf \"versteckt\"."
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:25
-#, fuzzy
-#| msgid "Delete question"
 msgid "Delete question and all answers"
-msgstr "Frage löschen"
+msgstr "Frage und alle Antworten löschen"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:30
 msgid ""
@@ -22443,10 +22446,8 @@ msgid "Manually issue a gift card"
 msgstr "Wertgutschein manuell ausstellen"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:65
-#, fuzzy
-#| msgid "Latin transcription"
 msgid "Last transaction"
-msgstr "Transkription"
+msgstr "Letzte Transaktion"
 
 #: pretix/control/templates/pretixcontrol/organizers/index.html:9
 msgid ""
@@ -27377,16 +27378,17 @@ msgid "Secret"
 msgstr "Secret"
 
 #: pretix/plugins/checkinlists/exporters.py:647
-#, fuzzy
-#| msgid "Valid check-in"
 msgid "Valid check-in codes"
-msgstr "Gültiger Check-In"
+msgstr "Gültige Check-in-Codes"
 
 #: pretix/plugins/checkinlists/exporters.py:649
 msgid ""
 "Download a spreadsheet with all valid check-in barcodes e.g. for import into "
 "a different system. Does not included blocked codes or personal data."
 msgstr ""
+"Laden Sie eine Tabelle mit allen gültigen Barcodes zum Check-in herunter, "
+"z.B. für den Import in ein anderes System. Enthält keine gesperrten Codes "
+"und keine persönlichen Daten."
 
 #: pretix/plugins/checkinlists/exporters.py:717
 msgid "Check-in log (all scans)"
@@ -28073,16 +28075,12 @@ msgid "Total gift card value at {datetime}"
 msgstr "Gesamtwert der Wertgutscheine am {datetime}"
 
 #: pretix/plugins/reports/accountingreport.py:770
-#, fuzzy
-#| msgid "Gift card transactions"
 msgid "Gift card transactions (credit)"
-msgstr "Wertgutschein-Transaktionen"
+msgstr "Wertgutschein-Transaktionen (Aufbuchungen)"
 
 #: pretix/plugins/reports/accountingreport.py:780
-#, fuzzy
-#| msgid "Gift card transactions"
 msgid "Gift card transactions (debit)"
-msgstr "Wertgutschein-Transaktionen"
+msgstr "Wertgutschein-Transaktionen (Abbuchungen)"
 
 #: pretix/plugins/reports/accountingreport.py:882
 msgid "Open items"
@@ -29636,10 +29634,8 @@ msgid "PDF ticket layout for {channel}"
 msgstr "PDF-Ticketlayout für {channel}"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:52
-#, fuzzy
-#| msgid "PDF ticket layout"
 msgid "(Same as PDF ticket layout)"
-msgstr "PDF-Ticketlayout"
+msgstr "(Wie PDF-Ticketlayout)"
 
 #: pretix/plugins/ticketoutputpdf/forms.py:54
 msgid "PDF ticket layout"
@@ -32666,16 +32662,13 @@ msgstr ""
 "ist."
 
 #: pretix/presale/views/waiting.py:132
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "We've added you to the waiting list. You will receive an email as soon as "
-#| "this product gets available again."
+#, python-brace-format
 msgid ""
 "We've added you to the waiting list. We will send an email to {email} as "
 "soon as this product gets available again."
 msgstr ""
-"Wir haben Sie zur Warteliste hinzugefügt. Sie erhalten eine E-Mail, sobald "
-"das Produkt wieder verfügbar ist."
+"Wir haben Sie zur Warteliste hinzugefügt. Wir senden eine E-Mail an {email}, "
+"sobald das Produkt wieder verfügbar ist."
 
 #: pretix/presale/views/waiting.py:160
 msgid "We could not find you on our waiting list."
