@@ -80,7 +80,7 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
         voucher__isnull=True
     ).select_related('item', 'variation', 'subevent').prefetch_related(
         'item__quotas', 'variation__quotas'
-    ).order_by('-priority', 'created')
+    ).order_by('-priority', 'created', 'pk')
 
     if subevent_id and event.has_subevents:
         subevent = event.subevents.get(id=subevent_id)
