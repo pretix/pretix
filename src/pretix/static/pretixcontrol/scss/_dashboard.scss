@@ -121,6 +121,11 @@
   }
 }
 
+.table-quotas {
+  max-height: 250px;
+  overflow: auto;
+}
+
 .widget-container.widget-container-event {
   padding: 0;
   cursor: pointer;

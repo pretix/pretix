@@ -3,7 +3,8 @@ import datetime
 from decimal import Decimal
 
 import dateutil
-from django.db.models import DateTimeField, Max, OuterRef, Q, Subquery, Sum
+from django.db.models import DateTimeField, Max, OuterRef, Q, Subquery, Sum, Prefetch, F
+from django.db.models.functions import Coalesce
 from django.urls import reverse
 from django.utils import formats, timezone
 from django.utils.timezone import now
@@ -92,6 +93,15 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                 cl.subevent.event = self.request.event  # re-use same event object to make sure settings are cached
             cl.auto_checkin_sales_channels = [sales_channels[channel] for channel in cl.auto_checkin_sales_channels]
         ctx['checkinlists'] = qs
+
+        qs = self.request.event.subevents
+        if list:
+            qs = qs.prefetch_related(
+                Prefetch('quotas',
+                         queryset=self.request.event.quotas.annotate(s=Coalesce(F('size'), 0)).order_by('-s'),
+                         to_attr='first_quotas')
+            )
+        ctx['subevents'] = qs
 
         tickc = opqs.filter(
             order__event=self.request.event, item__admission=True,
