@@ -15,6 +15,7 @@ ApplePay
 Apps
 APM
 as
+Aufbuchungen
 Aufteilungsliste
 aufzubuchen
 auschecken
