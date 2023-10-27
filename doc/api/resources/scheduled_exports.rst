@@ -22,7 +22,9 @@ id                                    integer                    Internal ID of 
 owner                                 string                     Email address of the user who created this schedule (read-only).
                                                                  This address will always receive the export and the export
                                                                  will only contain data that this user has permission
-                                                                 to access at the time of the export.
+                                                                 to access at the time of the export. **We consider this
+                                                                 field experimental, it's behaviour might change in the future.
+                                                                 Note that the email address of a user can change at any time.**
 export_identifier                     string                     Identifier of the export to run, see :ref:`rest-exporters`
 export_form_data                      object                     Input data for the export, format depends on the export,
                                                                  see :ref:`rest-exporters` for more details.
