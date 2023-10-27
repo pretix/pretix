@@ -1172,9 +1172,9 @@ class OrderPositionGiftCardDetails(EventViewMixin, OrderPositionDetailMixin, Lis
 
     @cached_property
     def giftcard(self):
-        return GiftCard.objects.filter(
+        return get_object_or_404(GiftCard.objects.filter(
             Q(owner_ticket_id=self.position.pk) | Q(owner_ticket__addon_to_id=self.position.pk)
-        ).get(pk=self.kwargs['pk'])
+        ), pk=self.kwargs['pk'])
 
     def get_queryset(self):
         return self.giftcard.transactions.order_by('-datetime', '-pk')
