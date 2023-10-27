@@ -274,6 +274,7 @@ class WidgetAPIProductList(EventListMixin, View):
                         'order_min': item.min_per_order,
                         'order_max': item.order_max if not item.has_variations else None,
                         'price': price_dict(item, item.display_price) if not item.has_variations else None,
+                        'suggested_price': price_dict(item, item.suggested_price) if not item.has_variations else None,
                         'min_price': item.min_price if item.has_variations else None,
                         'max_price': item.max_price if item.has_variations else None,
                         'allow_waitinglist': item.allow_waitinglist,
@@ -296,6 +297,7 @@ class WidgetAPIProductList(EventListMixin, View):
                                 'order_max': var.order_max,
                                 'description': str(rich_text(var.description, safelinks=False)) if var.description else None,
                                 'price': price_dict(item, var.display_price),
+                                'suggested_price': price_dict(item, var.suggested_price),
                                 'original_price': (
                                     (
                                         var.original_price.net

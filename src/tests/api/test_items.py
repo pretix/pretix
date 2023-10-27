@@ -285,6 +285,7 @@ TEST_ITEM_RES = {
     "bundles": [],
     "show_quota_left": None,
     "original_price": None,
+    "free_price_suggestion": None,
     "meta_data": {
         "day": "Tuesday"
     },
@@ -384,6 +385,7 @@ def test_item_detail_variations(token_client, organizer, event, team, item):
         "id": var.pk,
         "value": {"en": "Children"},
         "default_price": None,
+        "free_price_suggestion": None,
         "price": "23.00",
         "active": True,
         "description": None,
@@ -1313,6 +1315,7 @@ TEST_VARIATIONS_RES = {
     "available_until": None,
     "hide_without_voucher": False,
     "original_price": None,
+    "free_price_suggestion": None,
     "meta_data": {}
 }
 
@@ -1334,6 +1337,7 @@ TEST_VARIATIONS_UPDATE = {
     "available_until": None,
     "hide_without_voucher": False,
     "original_price": None,
+    "free_price_suggestion": None,
     "meta_data": {}
 }
 

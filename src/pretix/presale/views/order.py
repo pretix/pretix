@@ -1355,7 +1355,7 @@ class OrderChangeMixin:
                                         rate=a.tax_rate,
                                     )
                                 else:
-                                    v.initial_price = v.display_price
+                                    v.initial_price = v.suggested_price
                             i.expand = any(v.initial for v in i.available_variations)
                         else:
                             i.initial = len(current_addon_products[i.pk, None])
@@ -1369,7 +1369,7 @@ class OrderChangeMixin:
                                     rate=a.tax_rate,
                                 )
                             else:
-                                i.initial_price = i.display_price
+                                i.initial_price = i.suggested_price
 
                     if items:
                         p.addon_form['categories'].append({

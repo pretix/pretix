@@ -72,6 +72,7 @@
                     {% bootstrap_field form.active layout="control" %}
                     {% bootstrap_field form.value layout="control" %}
                     {% bootstrap_field form.default_price addon_after=request.event.currency layout="control" %}
+                    {% bootstrap_field form.free_price_suggestion addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field form.original_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field form.description layout="control" %}
                     {% if form.meta_fields %}
@@ -170,6 +171,7 @@
                     {% bootstrap_field formset.empty_form.active layout="control" %}
                     {% bootstrap_field formset.empty_form.value layout="control" %}
                     {% bootstrap_field formset.empty_form.default_price addon_after=request.event.currency layout="control" %}
+                    {% bootstrap_field formset.empty_form.free_price_suggestion addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field formset.empty_form.original_price addon_after=request.event.currency layout="control" %}
                     {% bootstrap_field formset.empty_form.description layout="control" %}
                     {% if formset.empty_form.meta_fields %}

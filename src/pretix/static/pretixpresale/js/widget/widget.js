@@ -336,7 +336,7 @@ Vue.component('pricebox', {
         + '<div v-if="free_price">'
         + '{{ $root.currency }} '
         + '<input type="number" class="pretix-widget-pricebox-price-input" placeholder="0" '
-        + '       :min="display_price_nonlocalized" :value="display_price_nonlocalized" :name="field_name"'
+        + '       :min="display_price_nonlocalized" :value="suggested_price_nonlocalized" :name="field_name"'
         + '       step="any" aria-label="'+strings.price+'">'
         + '</div>'
         + '<small class="pretix-widget-pricebox-tax" v-if="price.rate != \'0.00\' && price.gross != \'0.00\'">'
@@ -347,6 +347,7 @@ Vue.component('pricebox', {
         price: Object,
         free_price: Boolean,
         field_name: String,
+        suggested_price: Object,
         original_price: String,
         mandatory_priced_addons: Boolean,
     },
@@ -363,6 +364,17 @@ Vue.component('pricebox', {
                 return parseFloat(this.price.net).toFixed(2);
             } else {
                 return parseFloat(this.price.gross).toFixed(2);
+            }
+        },
+        suggested_price_nonlocalized: function () {
+            var price = this.suggested_price;
+            if (price === null) {
+                price = this.price;
+            }
+            if (this.$root.display_net_prices) {
+                return parseFloat(price.net).toFixed(2);
+            } else {
+                return parseFloat(price.gross).toFixed(2);
             }
         },
         original_line: function () {
@@ -420,7 +432,7 @@ Vue.component('variation', {
         // Price
         + '<div class="pretix-widget-item-price-col">'
         + '<pricebox :price="variation.price" :free_price="item.free_price" :original_price="orig_price" '
-        + '          :mandatory_priced_addons="item.mandatory_priced_addons"'
+        + '          :mandatory_priced_addons="item.mandatory_priced_addons" :suggested_price="variation.suggested_price"'
         + '          :field_name="\'price_\' + item.id + \'_\' + variation.id" v-if="$root.showPrices">'
         + '</pricebox>'
         + '<span v-if="!$root.showPrices">&nbsp;</span>'
@@ -478,7 +490,7 @@ Vue.component('item', {
         // Price
         + '<div class="pretix-widget-item-price-col">'
         + '<pricebox :price="item.price" :free_price="item.free_price" v-if="!item.has_variations && $root.showPrices"'
-        + '          :mandatory_priced_addons="item.mandatory_priced_addons"'
+        + '          :mandatory_priced_addons="item.mandatory_priced_addons" :suggested_price="item.suggested_price"'
         + '          :field_name="\'price_\' + item.id" :original_price="item.original_price">'
         + '</pricebox>'
         + '<div class="pretix-widget-pricebox" v-if="item.has_variations && $root.showPrices">{{ pricerange }}</div>'
