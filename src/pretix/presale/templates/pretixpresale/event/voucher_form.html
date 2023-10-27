@@ -9,6 +9,10 @@
 {% block title %}{% trans "Voucher redemption" %}{% endblock %}
 
 {% block content %}
+    {% if show_cart %}
+        {% include "pretixpresale/event/fragment_cart_box.html" with open=request.GET.show_cart %}
+    {% endif %}
+
     <h2>{% trans "Redeem a voucher" %}</h2>
-    {% include "pretixpresale/event/fragment_voucher_form.html" %}
+    {% include "pretixpresale/event/fragment_voucher_form.html" with next_url=request.path|add:"?show_cart=true" %}
 {% endblock %}

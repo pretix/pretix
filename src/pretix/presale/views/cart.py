@@ -600,8 +600,11 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
             context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.checkout.start',
                                                     kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
         else:
-            context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.index',
-                                                    kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
+            if 'next' in self.request.GET and url_has_allowed_host_and_scheme(self.request.GET.get("next"), allowed_hosts=None):
+                context['cart_redirect'] = self.request.GET.get('next')
+            else:
+                context['cart_redirect'] = eventreverse(self.request.event, 'presale:event.index',
+                                                        kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
         if context['cart_redirect'].startswith('https:'):
             context['cart_redirect'] = '/' + context['cart_redirect'].split('/', 3)[3]
         return context
@@ -634,7 +637,10 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
                 else:
                     err = error_messages['voucher_invalid']
         else:
-            return render(request, 'pretixpresale/event/voucher_form.html')
+            context = {}
+            context['cart'] = self.get_cart()
+            context['show_cart'] = context['cart']['positions']
+            return render(request, 'pretixpresale/event/voucher_form.html', context)
 
         if request.event.presale_start and now() < request.event.presale_start:
             err = error_messages['not_started']
