@@ -4,7 +4,7 @@ KulturPass
 .. note::
 
     Since the KulturPass is specific to event organizers within Germany, the following page is also  only provided in
-    german. Should you require assistance with the KulturPass and do not speak this language, please feel free reach
+    German. Should you require assistance with the KulturPass and do not speak this language, please feel free reach
     out to support@pretix.eu.
 
 
@@ -49,15 +49,15 @@ Registerung und die Einrichtung eines "Shops" sowie der dazugehörigen Angebote 
 
 .. note::
 
-    Zu jeden Zeitpunkt kann nur ein Hintergrund-System mit dem KulturPass-System verbunden sein. Werden
-    unterschiedliche Systeme oder gar mehrere pretix Veranstalterkonten mit dem gleichen KulturPass-System verbunden,
-    können keine Bestellungen mehr verarbeitet werden und Angebote nicht automatisiert an den KulturPass Marktplatz
+    Zu jedem Zeitpunkt kann nur ein Hintergrundsystem mit dem KulturPass-System verbunden sein. Werden
+    unterschiedliche Systeme oder gar mehrere pretix-Veranstalterkonten mit dem gleichen KulturPass-System verbunden,
+    können keine Bestellungen mehr verarbeitet werden und Angebote nicht automatisiert an den KulturPass-Marktplatz
     übermittelt werden. Eingehende Bestellungen von Jugendlichen werden in diesem Fall automatisch abgelehnt, da diese
     nicht eindeutig zugeordnet werden können. Ebenso überschreibt die Bereitstellung der Angebote eines Systems die
     Angebote eines anderen Systems.
 
     Wenn Sie mehrere Systeme haben, die den KulturPass-Marktplatz bedienen sollen, wenden Sie sich bitte an den
-    KulturPass-Support um sich einen weiteren Shop einrichten zu lassen.
+    KulturPass-Support, um sich einen weiteren Shop einrichten zu lassen.
 
 5. Aktivierung der KulturPass-Erweiterungen
     Alle Veranstaltungen, die Sie über den KulturPass anbieten möchten, benötigen die `KulturPass-Erweiterung`_.
@@ -78,12 +78,12 @@ Registerung und die Einrichtung eines "Shops" sowie der dazugehörigen Angebote 
     Aktivieren Sie die Option für drei Produkte für 1, 10 und 100 Euro, so wird Ihr Angebot im KulturPass-Marktplatz
     für 100 Euro gelistet werden. Dies bedeutet im Umkehrschluss auch, dass das KulturPass-Guthaben eines Jugendlichen
     auch mindestens 100 Euro betragen muss, damit er Ihr Angebot in Anspruch nehmen kann - auch wenn die betroffene
-    Person lediglich das 1 Euro-Angebot wahrnehmen möchte. Erst mit dem 100 Euro KulturPass Einlösecode wählt die
-    Kaufende Person in Ihrem pretix-Shop aus, welches Produkt erworben werden soll. Ein Restguthaben wird nach dem Kauf
-    automatisch zurückerstattet und dem KulturPass Konto wieder gutgeschrieben.
+    Person lediglich das 1 Euro-Angebot wahrnehmen möchte. Erst mit dem 100 Euro KulturPass-Einlösecode wählt die
+    kaufende Person in Ihrem pretix-Shop aus, welches Produkt erworben werden soll. Ein Restguthaben wird nach dem Kauf
+    automatisch zurückerstattet und dem KulturPass-Konto wieder gutgeschrieben.
 
 7. Konfiguration des Marktplatz-Eintrages
-    Je nach dem ob es sich bei Ihrer Veranstaltung um eine Einzelveranstaltung oder eine Veranstaltungsreihe handelt,
+    Je nach dem, ob es sich bei Ihrer Veranstaltung um eine Einzelveranstaltung oder eine Veranstaltungsreihe handelt,
     müssen Sie die folgende Einstellung einmalig oder pro Veranstaltungstermin vornehmen.
 
     Einzelveranstaltungen konfigurieren Sie über den Menüpunkt "KulturPass" in den Einstellungen Ihrer Veranstaltung;
@@ -121,7 +121,7 @@ Registerung und die Einrichtung eines "Shops" sowie der dazugehörigen Angebote 
 Verwalten von KulturPass-Bestellungen
 -------------------------------------
 Durch die Nutzung der pretix-Integration mit dem KulturPass-System müssen Sie sich - bis auf die Kennzeichnung von
-Produkten die per KulturPass erworben werden dürfen sowie die Bereitstellung von Veranstaltungs-Informationen für den
+Produkten, die per KulturPass erworben werden dürfen, sowie die Bereitstellung von Veranstaltungs-Informationen für den
 KulturPass-Marktplatz - um nichts kümmern: pretix übermittelt automatisch Ihre Veranstaltungen, wickelt die Einlösung
 der Tickets ab und führt die Abrechnung mit dem Hintergrund-System durch.
 
@@ -161,8 +161,8 @@ elektronischen Personalausweis identifiziert haben - ein Guthaben von 200 Euro, 
 KulturPass-Marktplatz eingelöst werden kann.
 
 Im Falle von Veranstaltungen, die per pretix verkauft werden, wählt der Kunde ein Angebot aus und erhält im folgenden
-binnen kurzer Zeit einen Code und einen Link um diesen einzulösen. Der Link bringt den Kunden direkt auf die Seite der
-betreffenden pretix-Veranstaltung, wo der Kunde darauf hingewiesen wird, für welche Produkte der Code genutzt werden
+binnen kurzer Zeit (ca. 10-20 Minuten) einen Code und einen Link, um diesen einzulösen. Der Link bringt den Kunden direkt auf die Seite der
+betreffenden pretix-Veranstaltung. Hier wird der Kunde darauf hingewiesen, für welche Produkte der Code genutzt werden
 kann.
 
 Im Bezahlschritt des Verkaufsprozesses wird dem Kunden vorgeschlagen, seinen KulturPass Einlösecode nun zu nutzen, um
@@ -174,7 +174,7 @@ das KulturPass-Konto erstattet.
 Wurden hingegen mehrere Artikel in den Warenkorb gelegt, so kann die Differenz mit einem anderen, regulären
 Zahlungsmittel erfolgen.
 
-Einlösecodes welche vom Kunden nicht binnen 48 Stunden eingelöst werden, werden automatisch storniert und dem
+Einlösecodes, die vom Kunden nicht binnen 48 Stunden eingelöst werden, werden automatisch storniert und dem
 KulturPass-Konto wieder gutgeschrieben. Dieser Mechanismus greift auch, wenn eine Veranstaltung mittlerweile
 ausverkauft ist und daher der Einlösecode nicht mehr Nutzbar ist.
 
