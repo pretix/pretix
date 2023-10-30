@@ -19,6 +19,7 @@ from pretix.base.models import SubEvent
 from pretix.base.models.orders import (
     CancellationRequest, Order, OrderPayment, OrderPosition, OrderRefund,
 )
+from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.timeline import timeline_for_event
 from pretix.control.forms.event import CommentForm
 from pretix.control.permissions import EventPermissionRequiredMixin
@@ -104,6 +105,24 @@ class IndexView(EventPermissionRequiredMixin, ChartContainingView, TemplateView)
                          to_attr='first_quotas')
             )
         ctx['subevents'] = qs
+        quotas = []
+        for s in ctx['subevents']:
+            s.first_quotas = s.first_quotas[:4]
+            quotas += list(s.first_quotas)
+
+        qa = QuotaAvailability(early_out=False)
+        for q in quotas:
+            qa.queue(q)
+        qa.compute()
+
+        for q in quotas:
+            q.cached_avail = qa.results[q]
+            q.cached_availability_paid_orders = qa.count_paid_orders.get(q, 0)
+            if q.size is not None:
+                q.percent_paid = min(
+                    100,
+                    round(q.cached_availability_paid_orders / q.size * 100) if q.size > 0 else 100
+                )
 
         tickc = opqs.filter(
             order__event=self.request.event, item__admission=True,
