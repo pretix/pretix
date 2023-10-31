@@ -325,6 +325,16 @@ class Order(LockModel, LoggedModel):
     def email_confirm_hash(self):
         return hashlib.sha256(settings.SECRET_KEY.encode() + self.secret.encode()).hexdigest()[:9]
 
+    def get_extended_status_display(self):
+        if self.status == Order.STATUS_PENDING:
+            if self.require_approval:
+                return _("Approval pending")
+            elif self.valid_if_pending:
+                return pgettext_lazy("order state", "Pending (confirmed)")
+        elif self.status == Order.STATUS_PAID and self.count_positions == 0:
+            return _("Canceled (paid fee)")
+        return self.get_status_display()
+
     @property
     def fees(self):
         """
