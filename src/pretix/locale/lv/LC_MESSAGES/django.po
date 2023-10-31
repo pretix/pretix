@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 12:47+0000\n"
-"PO-Revision-Date: 2022-09-15 21:00+0000\n"
-"Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
+"PO-Revision-Date: 2023-11-01 05:00+0000\n"
+"Last-Translator: Jāzeps Benjamins Baško <jazeps.basko@gmail.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
 "lv/>\n"
 "Language: lv\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n % 10 == 0 || n % 100 >= 11 && n % 100 <= "
 "19) ? 0 : ((n % 10 == 1 && n % 100 != 11) ? 1 : 2);\n"
-"X-Generator: Weblate 4.14\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -42,11 +42,11 @@ msgstr "Ķīniešu (vienkāršota)"
 
 #: pretix/_base_settings.py:83
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Ķīniešu (tradicionālā)"
 
 #: pretix/_base_settings.py:84
 msgid "Czech"
-msgstr ""
+msgstr "Čehu"
 
 #: pretix/_base_settings.py:85
 msgid "Danish"
@@ -78,7 +78,7 @@ msgstr "Grieķu"
 
 #: pretix/_base_settings.py:92
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonēziešu"
 
 #: pretix/_base_settings.py:93
 msgid "Italian"
@@ -102,7 +102,7 @@ msgstr "Portugāļu (Brazīlija)"
 
 #: pretix/_base_settings.py:98
 msgid "Romanian"
-msgstr ""
+msgstr "Rumāņu"
 
 #: pretix/_base_settings.py:99
 msgid "Russian"
@@ -118,7 +118,7 @@ msgstr "Turku"
 
 #: pretix/_base_settings.py:102
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ukraiņu"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -1032,10 +1032,8 @@ msgstr "Pasākuma biļete {event}-{code}"
 #: pretix/plugins/reports/exporters.py:434
 #: pretix/plugins/reports/exporters.py:671
 #: pretix/plugins/ticketoutputpdf/exporters.py:85
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date range"
-msgstr "Datums un laiks"
+msgstr "Datumu apgabals"
 
 #: pretix/base/exporters/dekodi.py:223 pretix/base/exporters/invoices.py:77
 #, fuzzy
@@ -3035,10 +3033,9 @@ msgid "Invalid placeholder(s): %(value)s"
 msgstr "Nederīgs (-i) vietturis (-i): %(value)s"
 
 #: pretix/base/forms/widgets.py:67
-#, fuzzy, python-format
-#| msgid "Sample city"
+#, python-format
 msgid "Sample: %s"
-msgstr "Piemēra pilsēta"
+msgstr "Piemērs: %s"
 
 #: pretix/base/forms/widgets.py:70
 #, python-brace-format
@@ -7946,16 +7943,11 @@ msgstr ""
 "sēdvietām, tāpēc mēs noņēmām pozīciju no jūsu groza."
 
 #: pretix/base/services/orders.py:202
-#, fuzzy, python-format
-#| msgid ""
-#| "This order can not be canceled since the gift card {card} purchased in "
-#| "this order has already been redeemed."
+#, python-format
 msgid ""
 "You cannot remove the position %(addon)s since it has already been checked "
 "in."
-msgstr ""
-"Šo pasūtījumu nevar atcelt, jo dāvanu karte {card}, kas iegādāta šajā "
-"pasūtījumā, jau ir izmantota."
+msgstr "Pozīciju %(addon)s nevar atcelt, jo tas jau ir iečekots."
 
 #: pretix/base/services/orders.py:218
 #, fuzzy
@@ -8747,7 +8739,7 @@ msgstr ""
 
 #: pretix/base/settings.py:996
 msgid "Accept late payments"
-msgstr ""
+msgstr "Pieņemt kavētus maksājumus"
 
 #: pretix/base/settings.py:997
 msgid ""
@@ -10869,10 +10861,8 @@ msgid "Your export failed."
 msgstr "Exportētie faili"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:4
-#, fuzzy
-#| msgid "Refund reason"
 msgid "Reason:"
-msgstr "Naudas atmaksāšanas iemesls"
+msgstr "Iemesls:"
 
 #: pretix/base/templates/pretixbase/email/export_failed.txt:7
 msgid "If your export fails five times in a row, it will no longer be sent."
@@ -15293,7 +15283,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/user/history.html:10
 #: pretix/control/templates/pretixcontrol/user/settings.html:70
 msgid "Account history"
-msgstr ""
+msgstr "Konta vēsture"
 
 #: pretix/control/navigation.py:415
 msgid "All users"
@@ -15390,7 +15380,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:7
 msgid "Accept an invitation"
-msgstr ""
+msgstr "Pieņemt ielūgumu"
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:10
 #, python-format
@@ -15654,7 +15644,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/base.html:373
 msgid "Read more"
-msgstr ""
+msgstr "Lasīt vairāk"
 
 #: pretix/control/templates/pretixcontrol/base.html:390
 msgid ""
@@ -16367,7 +16357,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:39
 msgid "View all upcoming events"
-msgstr ""
+msgstr "Skatīt visus gaidāmos pasākumus"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:44
 msgid "Your most recent events"
@@ -16375,7 +16365,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:60
 msgid "View all recent events"
-msgstr ""
+msgstr "Skatīt visus nesenos pasākumus"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:65
 msgid "Your event series"
@@ -16387,7 +16377,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:86
 msgid "Other features"
-msgstr ""
+msgstr "Citas iespējas"
 
 #: pretix/control/templates/pretixcontrol/email/email_setup.txt:1
 #, python-format
@@ -16421,6 +16411,15 @@ msgid ""
 "Best regards,  \n"
 "Your pretix team\n"
 msgstr ""
+"Sveicināti!\n"
+"\n"
+"Jūs pieprasījāt paroles maiņu. Lūdzu, dodieties uz šo lapu, lai atstatītu "
+"paroli:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Ar cieņu\n"
+"pretix komanda\n"
 
 #: pretix/control/templates/pretixcontrol/email/invitation.txt:1
 #, python-format
@@ -18449,13 +18448,11 @@ msgid ""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:21
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the rule <strong>%(subject)s</strong>?"
+#, python-format
 msgid "Are you sure you want to delete the discount <strong>%(name)s</strong>?"
 msgstr ""
-"Vai esat pārliecināts/-a, ka vēlaties dzēst noteikumu <strong>%(subject)s</"
-"strong>?"
+"Vai esat pārliecināts/-a, ka vēlaties dzēst atlaidi "
+"<strong>%(name)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:25
 #, python-format
@@ -19472,10 +19469,9 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:450
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:107
-#, fuzzy, python-format
-#| msgid "Admission: %(datetime)s"
+#, python-format
 msgid "Valid %(datetime_range)s"
-msgstr "Ieeja: %(datetime)s"
+msgstr "Korekts %(datetime_range)s"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:496
 msgid "Ticket page"
@@ -20452,7 +20448,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/refunds.html:74
 msgid "Actions"
-msgstr ""
+msgstr "Darbības"
 
 #: pretix/control/templates/pretixcontrol/orders/search.html:7
 #: pretix/control/templates/pretixcontrol/orders/search.html:9
@@ -20969,10 +20965,8 @@ msgid "Remove"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:66
-#, fuzzy
-#| msgid "Accept anyway"
 msgid "Accept"
-msgstr "Piekrist tik un tā"
+msgstr "Piekrist"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:69
 msgid "Decline"
