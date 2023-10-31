@@ -400,10 +400,38 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
 
             item._remove = not bool(item.available_variations)
 
+    # Hide all products according to their `hidden_if_item_available` attribute
+    # We do this in a loop until no more changes are done, since hiding one item can have an effect on another item
+    # and we have no guarantee to iterate over them in the correct order.
+    # We hide a product if
+    # - `hidden_if_item_available` points to a product that *is* part of the original result set *but* either removed
+    #   by a filter above or sold out
+    # - OR `hidden_if_item_available` points to a product that has already been hidden by the same mechanism
+    # The second condition makes not much sense going only from the name of `hidden_if_item_available` but is
+    # required to have it behave useful for transitive relationships.
+    item_map = {i.pk: i for i in items}
+    while True:
+        changed = False
+
+        for item in items:
+            if item.hidden_if_item_available_id in item_map:
+                dependency = item_map[item.hidden_if_item_available_id]
+                dependency_unavailable = (
+                    dependency._remove or
+                    (dependency.has_variations and not [v for v in item.available_variations if v.cached_availability[0] >= Quota.AVAILABILITY_RESERVED]) or
+                    (not dependency.has_variations and dependency.cached_availability[0] < Quota.AVAILABILITY_RESERVED)
+                )
+                if (not dependency_unavailable or getattr(dependency, '_hide_for_available', False)) and not getattr(item, '_hide_for_available', False):
+                    item._hide_for_available = True
+                    changed = True
+
+        if not changed:
+            break
+
     if not quota_cache_existed and not voucher and not allow_addons and not base_qs_set and not filter_items and not filter_categories:
         event.cache.set(quota_cache_key, quota_cache, 5)
     items = [item for item in items
-             if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove]
+             if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove and not getattr(item, '_hide_for_available', False)]
     return items, display_add_to_cart
 
 

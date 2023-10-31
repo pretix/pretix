@@ -52,9 +52,12 @@ available_from                          datetime                   The first dat
                                                                    (or ``null``).
 available_until                         datetime                   The last date time at which this item can be bought
                                                                    (or ``null``).
-hidden_if_available                     integer                    The internal ID of a quota object, or ``null``. If
+hidden_if_available                     integer                    **DEPRECATED** The internal ID of a quota object, or ``null``. If
                                                                    set, this item won't be shown publicly as long as this
                                                                    quota is available.
+hidden_if_item_available                integer                    The internal ID of a different item, or ``null``. If
+                                                                   set, this item won't be shown publicly as long as this
+                                                                   other item is available.
 require_voucher                         boolean                    If ``true``, this item can only be bought using a
                                                                    voucher that is specifically assigned to this item.
 hide_without_voucher                    boolean                    If ``true``, this item is only shown during the voucher
@@ -204,6 +207,11 @@ meta_data                               object                     Values set fo
 
    The ``free_price_suggestion`` and ``variations[x].free_price_suggestion`` attributes have been added.
 
+.. versionchanged:: 2023.10
+
+   The ``hidden_if_item_available`` attributes has been added, the ``hidden_if_available`` attribute has been
+   deprecated.
+
 Notes
 -----
 
@@ -268,6 +276,7 @@ Endpoints
             "available_from": null,
             "available_until": null,
             "hidden_if_available": null,
+            "hidden_if_item_available": null,
             "require_voucher": false,
             "hide_without_voucher": false,
             "allow_cancel": true,
@@ -402,6 +411,7 @@ Endpoints
         "available_from": null,
         "available_until": null,
         "hidden_if_available": null,
+        "hidden_if_item_available": null,
         "require_voucher": false,
         "hide_without_voucher": false,
         "allow_cancel": true,
@@ -517,6 +527,7 @@ Endpoints
         "available_from": null,
         "available_until": null,
         "hidden_if_available": null,
+        "hidden_if_item_available": null,
         "require_voucher": false,
         "hide_without_voucher": false,
         "allow_cancel": true,
@@ -619,6 +630,7 @@ Endpoints
         "available_from": null,
         "available_until": null,
         "hidden_if_available": null,
+        "hidden_if_item_available": null,
         "require_voucher": false,
         "hide_without_voucher": false,
         "allow_cancel": true,
@@ -753,6 +765,7 @@ Endpoints
         "available_from": null,
         "available_until": null,
         "hidden_if_available": null,
+        "hidden_if_item_available": null,
         "require_voucher": false,
         "hide_without_voucher": false,
         "generate_tickets": null,

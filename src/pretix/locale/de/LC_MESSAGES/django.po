@@ -4255,7 +4255,7 @@ msgstr "Produktbild"
 
 #: pretix/base/models/items.py:491
 msgid "Only show after sellout of"
-msgstr "Nicht anzeigen, wenn anderes Kontingent verfügbar"
+msgstr "Nicht anzeigen, wenn anderes Produkt verfügbar"
 
 #: pretix/base/models/items.py:492
 msgid ""
