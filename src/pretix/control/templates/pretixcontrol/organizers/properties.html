@@ -18,6 +18,9 @@
         <thead>
         <tr>
             <th>{% trans "Property" %}</th>
+            <th class="iconcol"></th>
+            <th class="iconcol"></th>
+            <th class="iconcol"></th>
             <th></th>
         </tr>
         </thead>
@@ -29,6 +32,21 @@
                         {{ p.name }}
                     </a>
                 </strong></td>
+                <td>
+                    {% if p.filter_allowed %}
+                        <span class="fa fa-filter text-muted" data-toggle="tooltip" title="{% trans "Can be used for filtering" %}"></span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if p.filter_public %}
+                        <span class="fa fa-eye text-muted" data-toggle="tooltip" title="{% trans "Show filter option to customers" %}"></span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if p.protected %}
+                        <span class="fa fa-lock text-muted" data-toggle="tooltip" title="{% trans "Can only be changed by organizer-level administrators" %}"></span>
+                    {% endif %}
+                </td>
                 <td class="text-right flip">
                     <a href="{% url "control:organizer.property.edit" organizer=request.organizer.slug property=p.id %}"
                             class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>

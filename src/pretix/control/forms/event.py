@@ -321,7 +321,7 @@ class EventMetaValueForm(forms.ModelForm):
                 label=self.property.name,
                 choices=[
                     ('', _('Default ({value})').format(value=self.property.default) if self.property.default else ''),
-                ] + [(a.strip(), a.strip()) for a in self.property.allowed_values.splitlines()],
+                ] + [(a.strip(), a.strip()) for a in self.property.allowed_value_keys],
             )
         else:
             self.fields['value'].label = self.property.name

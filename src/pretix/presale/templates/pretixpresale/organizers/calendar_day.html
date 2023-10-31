@@ -46,6 +46,7 @@
             </div>
         </div>
     </form>
+    {% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
     {% include "pretixpresale/fragment_day_calendar.html" with show_avail=request.organizer.settings.event_list_availability %}
     <div class="col-sm-4 visible-xs text-center">
         {% if has_before %}

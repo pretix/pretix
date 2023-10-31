@@ -51,6 +51,7 @@ from django.shortcuts import redirect
 from django.templatetags.static import static
 from django.utils.decorators import method_decorator
 from django.utils.formats import date_format, get_format
+from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, now
 from django.views import View
 from django.views.decorators.cache import cache_page
@@ -68,6 +69,7 @@ from pretix.helpers.formats.en.formats import (
 )
 from pretix.helpers.thumb import get_thumbnail
 from pretix.multidomain.urlreverse import eventreverse
+from pretix.presale.forms.organizer import EventListFilterForm
 from pretix.presale.ical import get_public_ical
 from pretix.presale.views import OrganizerViewMixin
 
@@ -91,8 +93,8 @@ def filter_qs_by_attr(qs, request):
 
     props = {
         p.name: p for p in request.organizer.meta_properties.filter(
+            Q(filter_allowed=True) | Q(filter_public=True),
             name__in=attrs.keys(),
-            filter_allowed=True,
         )
     }
 
@@ -141,6 +143,18 @@ def filter_qs_by_attr(qs, request):
 
 
 class EventListMixin:
+    @cached_property
+    def filter_form(self):
+        return EventListFilterForm(
+            data=self.request.GET,
+            organizer=self.request.organizer,
+            event=getattr(self.request, 'event', None),
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['filter_form'] = self.filter_form
+        return ctx
 
     def _get_event_queryset(self):
         query = Q(is_public=True) & Q(live=True)

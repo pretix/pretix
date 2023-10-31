@@ -133,6 +133,11 @@
                                     {{ s.name }}</a></strong><br>
                                 <small class="text-muted">
                                     #{{ s.pk }}
+                                    {% for k, v in s.meta_data.items %}
+                                        {% if v %}
+                                            <small class="text-muted">&middot; {{ k }}: {{ v }}</small>
+                                        {% endif %}
+                                    {% endfor %}
                                 </small>
                             </td>
                             <td>

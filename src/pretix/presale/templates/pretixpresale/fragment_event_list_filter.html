@@ -1,0 +1,24 @@
+{% load i18n %}
+{% load eventurl %}
+{% load urlreplace %}
+{% load bootstrap3 %}
+{% load getitem %}
+
+{% if filter_form.fields %}
+    <form class="event-list-filter-form" method="get">
+        {% for f, v in request.GET.items %}
+            {% if "attr[" not in f %}
+                <input type="hidden" name="{{ f }}" value="{{ v }}">
+            {% endif %}
+        {% endfor %}
+        <div class="event-list-filter-form-row">
+            {% for f in filter_form.fields %}
+                {% bootstrap_field filter_form|getitem:f %}
+            {% endfor %}
+            <button type="submit" class="btn btn-primary">
+                <span class="fa fa-filter" aria-hidden="true"></span>
+                {% trans "Filter" %}
+            </button>
+        </div>
+    </form>
+{% endif %}

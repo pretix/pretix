@@ -33,6 +33,7 @@
             </div>
         </div>
     </div>
+    {% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
     {% if events %}
     <div class="event-list">
         <div class="row hidden-xs hidden-sm">

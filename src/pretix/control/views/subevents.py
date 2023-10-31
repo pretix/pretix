@@ -120,7 +120,10 @@ class SubEventList(EventPermissionRequiredMixin, PaginationMixin, SubEventQueryM
     permission = 'can_change_settings'
 
     def get_queryset(self):
-        return super().get_queryset(True)
+        return super().get_queryset(True).prefetch_related(
+            'meta_values',
+            'meta_values__property',
+        )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

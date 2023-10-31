@@ -97,12 +97,13 @@ from pretix.control.forms.filter import (
 from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
     CustomerCreateForm, CustomerUpdateForm, DeviceBulkEditForm, DeviceForm,
-    EventMetaPropertyForm, GateForm, GiftCardAcceptanceInviteForm,
-    GiftCardCreateForm, GiftCardUpdateForm, MailSettingsForm,
-    MembershipTypeForm, MembershipUpdateForm, OrganizerDeleteForm,
-    OrganizerFooterLinkFormset, OrganizerForm, OrganizerSettingsForm,
-    OrganizerUpdateForm, ReusableMediumCreateForm, ReusableMediumUpdateForm,
-    SSOClientForm, SSOProviderForm, TeamForm, WebHookForm,
+    EventMetaPropertyAllowedValueFormSet, EventMetaPropertyForm, GateForm,
+    GiftCardAcceptanceInviteForm, GiftCardCreateForm, GiftCardUpdateForm,
+    MailSettingsForm, MembershipTypeForm, MembershipUpdateForm,
+    OrganizerDeleteForm, OrganizerFooterLinkFormset, OrganizerForm,
+    OrganizerSettingsForm, OrganizerUpdateForm, ReusableMediumCreateForm,
+    ReusableMediumUpdateForm, SSOClientForm, SSOProviderForm, TeamForm,
+    WebHookForm,
 )
 from pretix.control.forms.rrule import RRuleForm
 from pretix.control.logdisplay import OVERVIEW_BANLIST
@@ -2043,14 +2044,44 @@ class EventMetaPropertyListView(OrganizerDetailViewMixin, OrganizerPermissionReq
         return self.request.organizer.meta_properties.all()
 
 
-class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
-    model = EventMetaProperty
+class EventMetaPropertyEditorMixin:
     template_name = 'pretixcontrol/organizers/property_edit.html'
-    permission = 'can_change_organizer_settings'
     form_class = EventMetaPropertyForm
 
+    @cached_property
+    def formset(self):
+        return EventMetaPropertyAllowedValueFormSet(
+            data=self.request.POST if self.request.method == "POST" else None,
+            organizer=self.request.organizer,
+            initial=self.object.allowed_values or [],
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['formset'] = self.formset
+        return ctx
+
+    def get_form_kwargs(self):
+        return {
+            **super().get_form_kwargs(),
+            'event': self.request.organizer,
+        }
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object(self.get_queryset())
+        form = self.get_form()
+        if form.is_valid() and self.formset.is_valid():
+            return self.form_valid(form)
+        else:
+            return self.form_invalid(form)
+
+
+class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, EventMetaPropertyEditorMixin, CreateView):
+    model = EventMetaProperty
+    permission = 'can_change_organizer_settings'
+
     def get_object(self, queryset=None):
-        return get_object_or_404(EventMetaProperty, organizer=self.request.organizer, pk=self.kwargs.get('property'))
+        return EventMetaProperty()
 
     def get_success_url(self):
         return reverse('control:organizer.properties', kwargs={
@@ -2060,6 +2091,9 @@ class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionR
     def form_valid(self, form):
         messages.success(self.request, _('The property has been created.'))
         form.instance.organizer = self.request.organizer
+        form.instance.allowed_values = [
+            f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
+        ]
         ret = super().form_valid(form)
         form.instance.log_action('pretix.property.created', user=self.request.user, data={
             k: getattr(self.object, k) for k in form.changed_data
@@ -2071,12 +2105,10 @@ class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionR
         return super().form_invalid(form)
 
 
-class EventMetaPropertyUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
+class EventMetaPropertyUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, EventMetaPropertyEditorMixin, UpdateView):
     model = EventMetaProperty
-    template_name = 'pretixcontrol/organizers/property_edit.html'
     permission = 'can_change_organizer_settings'
     context_object_name = 'property'
-    form_class = EventMetaPropertyForm
 
     def get_object(self, queryset=None):
         return get_object_or_404(EventMetaProperty, organizer=self.request.organizer, pk=self.kwargs.get('property'))
@@ -2087,7 +2119,10 @@ class EventMetaPropertyUpdateView(OrganizerDetailViewMixin, OrganizerPermissionR
         })
 
     def form_valid(self, form):
-        if form.has_changed():
+        form.instance.allowed_values = [
+            f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
+        ]
+        if form.has_changed() or self.formset.has_changed():
             self.object.log_action('pretix.property.changed', user=self.request.user, data={
                 k: getattr(self.object, k)
                 for k in form.changed_data
