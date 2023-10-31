@@ -89,6 +89,8 @@ class UpdateRequestSerializer(serializers.Serializer):
 
 class RSAEncryptedField(serializers.Field):
     def to_representation(self, value):
+        if isinstance(value, memoryview):
+            value = value.tobytes()
         public_key = load_pem_public_key(
             self.context['device'].rsa_pubkey.encode(), Backend()
         )
