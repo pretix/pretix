@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 12:47+0000\n"
-"PO-Revision-Date: 2022-10-21 04:00+0000\n"
+"PO-Revision-Date: 2023-11-01 20:50+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix/nb_NO/>\n"
@@ -17,27 +17,27 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.14.1\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
-msgstr ""
+msgstr "Engelsk"
 
 #: pretix/_base_settings.py:79
 msgid "German"
-msgstr ""
+msgstr "Tysk"
 
 #: pretix/_base_settings.py:80
 msgid "German (informal)"
-msgstr ""
+msgstr "Tysk (uformelt)"
 
 #: pretix/_base_settings.py:81
 msgid "Arabic"
-msgstr ""
+msgstr "Arabisk"
 
 #: pretix/_base_settings.py:82
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Kinesisk"
 
 #: pretix/_base_settings.py:83
 msgid "Chinese (traditional)"
