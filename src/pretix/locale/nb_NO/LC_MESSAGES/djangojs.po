@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-18 07:26+0000\n"
-"PO-Revision-Date: 2022-06-20 02:00+0000\n"
+"PO-Revision-Date: 2023-11-01 21:42+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/nb_NO/>\n"
@@ -17,13 +17,13 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:68
 msgid "Marked as paid"
-msgstr "Sett som betalt"
+msgstr "Merkert som betalt"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:76
 msgid "Comment:"
@@ -286,16 +286,12 @@ msgid "Ticket code revoked/changed"
 msgstr "Billettkode tilbakekalt/endret"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-#, fuzzy
-#| msgid "Ticket not paid"
 msgid "Ticket blocked"
-msgstr "Billett ikke betalt"
+msgstr "Billett blokkert"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-#, fuzzy
-#| msgid "Ticket not paid"
 msgid "Ticket not valid at this time"
-msgstr "Billett ikke betalt"
+msgstr "Billetten er ikke gyldig på dette tidspunktet"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Order canceled"
@@ -303,7 +299,7 @@ msgstr "Ordre kansellert"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "Billettkoden er tvetydig på listen"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Checked-in Tickets"
