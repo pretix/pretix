@@ -82,7 +82,7 @@ def filter_qs_by_attr(qs, request):
     attrs = {}
     for i, item in enumerate(request.GET.items()):
         k, v = item
-        if k.startswith("attr[") and k.endswith("]"):
+        if k.startswith("attr[") and k.endswith("]") and v.strip():
             attrs[k[5:-1]] = v
 
     skey = 'filter_qs_by_attr_{}_{}'.format(request.organizer.pk, request.event.pk if hasattr(request, 'event') else '')
