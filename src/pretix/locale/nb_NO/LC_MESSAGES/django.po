@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 12:47+0000\n"
-"PO-Revision-Date: 2023-11-01 20:50+0000\n"
+"PO-Revision-Date: 2023-11-01 21:42+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix/nb_NO/>\n"
@@ -3477,21 +3477,19 @@ msgstr "Denne Billettypen er ikke lov ikke her"
 
 #: pretix/base/models/checkin.py:365
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "Billettkoden er tvetydig på listen"
 
 #: pretix/base/models/checkin.py:366
 msgid "Server error"
 msgstr ""
 
 #: pretix/base/models/checkin.py:367
-#, fuzzy
-#| msgid "Ticket checked in"
 msgid "Ticket blocked"
-msgstr "Billett sjekket inn"
+msgstr "Billett blokkert"
 
 #: pretix/base/models/checkin.py:368
 msgid "Ticket not valid at this time"
-msgstr ""
+msgstr "Billetten er ikke gyldig på dette tidspunktet"
 
 #: pretix/base/models/customers.py:55
 #, fuzzy
@@ -14749,7 +14747,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_change.html:65
 #: pretix/presale/templates/pretixpresale/event/position_change.html:29
 msgid "Continue"
-msgstr ""
+msgstr "Fortsett"
 
 #: pretix/control/templates/pretixcontrol/auth/oauth_authorization.html:8
 msgid "Authorize an application"
@@ -18756,7 +18754,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:930
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:449
 msgid "Total"
-msgstr ""
+msgstr "Totalt"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:705
 #: pretix/presale/templates/pretixpresale/event/order.html:209
@@ -24462,7 +24460,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:80
 msgid "Comment:"
-msgstr ""
+msgstr "Kommentar:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:98
 msgid "No order code detected"
@@ -26213,7 +26211,7 @@ msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:358
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "SEPA Direct Debit"
 
 #: pretix/plugins/stripe/payment.py:363
 msgid ""
