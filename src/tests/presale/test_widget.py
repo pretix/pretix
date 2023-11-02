@@ -776,6 +776,68 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 'meta_filter_fields': [],
             }
 
+    def test_event_list_filtersets_from_allowed_values(self):
+        self.event.has_subevents = True
+        self.event.settings.timezone = 'Europe/Berlin'
+        self.event.save()
+        with freeze_time("2019-01-01 10:00:00"):
+            with scopes_disabled():
+                self.orga.meta_properties.create(
+                    name="Language",
+                    default="EN",
+                    filter_public=True,
+                    allowed_values=[
+                        {"key": "EN", "label": "English"},
+                        {"key": "DE", "label": "German"},
+                    ]
+                )
+
+            response = self.client.get('/%s/widget/product_list' % (self.orga.slug,))
+            data = json.loads(response.content.decode())
+            assert data["meta_filter_fields"] == [
+                {
+                    "choices": [["", ""], ["EN", "English"], ["DE", "German"]],
+                    "key": "attr[Language]",
+                    "label": "Language"
+                }
+            ]
+
+    def test_event_list_filtersets_from_existing_values(self):
+        self.event.has_subevents = True
+        self.event.settings.timezone = 'Europe/Berlin'
+        self.event.save()
+        with freeze_time("2019-01-01 10:00:00"):
+            with scopes_disabled():
+                p = self.orga.meta_properties.create(
+                    name="Language",
+                    default="DE",
+                    filter_public=True,
+                )
+                e = self.orga.events.create(name="Future", live=True, is_public=True, slug='future', date_from=now() + datetime.timedelta(days=3))
+                se = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
+                e.meta_values.create(property=p, value="EN")
+                se.meta_values.create(property=p, value="DE")
+
+            response = self.client.get('/%s/widget/product_list' % (self.orga.slug,))
+            data = json.loads(response.content.decode())
+            assert data["meta_filter_fields"] == [
+                {
+                    "choices": [["", ""], ["DE", "DE"], ["EN", "EN"]],
+                    "key": "attr[Language]",
+                    "label": "Language"
+                }
+            ]
+
+            response = self.client.get('/%s/%s/widget/product_list' % (self.orga.slug, self.event.slug))
+            data = json.loads(response.content.decode())
+            assert data["meta_filter_fields"] == [
+                {
+                    "choices": [["", ""], ["DE", "DE"]],
+                    "key": "attr[Language]",
+                    "label": "Language"
+                }
+            ]
+
     def test_event_calendar(self):
         self.event.has_subevents = True
         self.event.settings.timezone = 'Europe/Berlin'
