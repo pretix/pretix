@@ -34,7 +34,7 @@ class BadgeLayoutForm(forms.ModelForm):
         help_text=_('You can modify the layout or change to a different page size in the next step.'),
         choices=((k, v['label']) for k, v in TEMPLATES.items()),
         widget=forms.RadioSelect,
-        initial='a7land',
+        initial='a6l',
     )
 
     class Meta:

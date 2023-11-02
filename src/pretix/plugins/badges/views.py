@@ -20,10 +20,10 @@
 # <https://www.gnu.org/licenses/>.
 #
 import json
-from _decimal import Decimal
 from datetime import timedelta
 from io import BytesIO
 
+from _decimal import Decimal
 from django.contrib import messages
 from django.contrib.staticfiles import finders
 from django.core.files import File
@@ -51,10 +51,10 @@ from pretix.control.views.pdf import BaseEditorView
 from pretix.helpers.models import modelcopy
 from pretix.plugins.badges.forms import BadgeLayoutForm
 from pretix.plugins.badges.tasks import badges_create_pdf
-from .templates import TEMPLATES
 
 from ...helpers.compat import CompatDeleteView
 from .models import BadgeLayout
+from .templates import TEMPLATES
 
 
 class LayoutListView(EventPermissionRequiredMixin, ListView):
