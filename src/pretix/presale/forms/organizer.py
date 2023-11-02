@@ -80,7 +80,7 @@ class EventListFilterForm(forms.Form):
         self.event = kwargs.pop('event', None)
         super().__init__(*args, **kwargs)
 
-        for k, v in meta_filtersets(self.organizer, self.event):
+        for k, v in meta_filtersets(self.organizer, self.event).items():
             self.fields[k] = forms.ChoiceField(
                 label=v["label"],
                 choices=v["choices"],

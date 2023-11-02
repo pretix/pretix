@@ -63,6 +63,7 @@ from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.daterange import daterange
 from pretix.helpers.thumb import get_thumbnail
 from pretix.multidomain.urlreverse import build_absolute_uri
+from pretix.presale.forms.organizer import meta_filtersets
 from pretix.presale.views.cart import get_or_create_cart_id
 from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
@@ -464,6 +465,9 @@ class WidgetAPIProductList(EventListMixin, View):
         o = getattr(request, 'event', request.organizer)
         list_type = self.request.GET.get("style", o.settings.event_list_type)
         data['list_type'] = list_type
+        data['meta_filter_fields'] = [
+            {**v, "key": k} for k, v in meta_filtersets(request.organizer, getattr(request, 'event', None)).items()
+        ]
 
         if hasattr(self.request, 'event') and data['list_type'] not in ("calendar", "week"):
             # only allow list-view of more than 50 subevents if ordering is by data as this can be done in the database
@@ -596,7 +600,14 @@ class WidgetAPIProductList(EventListMixin, View):
             offset = int(self.request.GET.get("offset", 0))
             limit = 50
             if hasattr(self.request, 'event'):
-                evs = filter_qs_by_attr(self.request.event.subevents_annotated(self.request.sales_channel.identifier), self.request)
+                evs = filter_qs_by_attr(
+                    self.request.event.subevents_annotated(self.request.sales_channel.identifier),
+                    self.request,
+                    match_subevents_with_conditions=(
+                        Q(Q(date_to__isnull=True) & Q(date_from__gte=now() - timedelta(hours=24)))
+                        | Q(date_to__gte=now() - timedelta(hours=24))
+                    ),
+                )
                 evs = self.request.event.subevents_sorted(evs)
                 ordering = self.request.event.settings.get('frontpage_subevent_ordering', default='date_ascending', as_type=str)
                 data['has_more_events'] = False

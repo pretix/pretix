@@ -605,6 +605,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             data = json.loads(response.content.decode())
             assert data == {
                 'list_type': 'list',
+                'meta_filter_fields': [],
                 'name': '30C3',
                 'frontpage_text': '',
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">ticketing powered by pretix</a>',
@@ -633,6 +634,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             data = json.loads(response.content.decode())
             assert data == {
                 'list_type': 'calendar',
+                'meta_filter_fields': [],
                 'date': '2019-01-01',
                 'name': '30C3',
                 'frontpage_text': '',
@@ -708,6 +710,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             data = json.loads(response.content.decode())
             assert data == {
                 'list_type': 'week',
+                'meta_filter_fields': [],
                 'name': '30C3',
                 'frontpage_text': '',
                 'week': [2019, 1],
@@ -769,7 +772,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
                      'event_url': 'http://example.com/ccc/future/',
                      'name': 'Future'}
                 ],
-                'list_type': 'list'
+                'list_type': 'list',
+                'meta_filter_fields': [],
             }
 
     def test_event_calendar(self):
@@ -794,6 +798,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             assert data == {
                 'date': '2019-01-01',
                 'list_type': 'calendar',
+                'meta_filter_fields': [],
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">ticketing powered by pretix</a>',
                 'weeks': [
                     [None,
