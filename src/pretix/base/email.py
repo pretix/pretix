@@ -149,6 +149,7 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
         }
         if self.organizer:
             htmlctx['organizer'] = self.organizer
+            htmlctx['color'] = self.organizer.settings.primary_color
 
         if self.event:
             htmlctx['event'] = self.event
