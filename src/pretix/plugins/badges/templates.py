@@ -94,7 +94,7 @@ TEMPLATES = {
         "layout": _simple_template(*pagesizes.portrait(pagesizes.A7)),
     },
     "82x203butterfly": {
-        "label": _("82 x 203 mm butterfly badge"),
+        "label": format_lazy(_("{width} x {height} mm butterfly badge"), width=82, height=203),
         "pagesize": (82 * mm, 203 * mm),
         "layout": [
             {
