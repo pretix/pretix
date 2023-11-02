@@ -200,7 +200,7 @@ meta_data                               object                     Values set fo
 
    The ``media_policy`` and ``media_type`` attributes have been added.
 
-.. versionchanged:: 2023.9
+.. versionchanged:: 2023.10
 
    The ``free_price_suggestion`` and ``variations[x].free_price_suggestion`` attributes have been added.
 
