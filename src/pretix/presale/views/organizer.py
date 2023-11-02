@@ -34,6 +34,7 @@
 import calendar
 import hashlib
 import math
+import operator
 from collections import defaultdict
 from datetime import date, datetime, time, timedelta
 from functools import reduce
@@ -46,7 +47,7 @@ from django.conf import settings
 from django.core.cache import caches
 from django.db.models import Exists, Max, Min, OuterRef, Prefetch, Q
 from django.db.models.functions import Coalesce, Greatest
-from django.http import Http404, HttpResponse
+from django.http import Http404, HttpResponse, QueryDict
 from django.shortcuts import redirect
 from django.templatetags.static import static
 from django.utils.decorators import method_decorator
@@ -74,10 +75,15 @@ from pretix.presale.ical import get_public_ical
 from pretix.presale.views import OrganizerViewMixin
 
 
-def filter_qs_by_attr(qs, request):
+def filter_qs_by_attr(qs, request, match_subevents_with_conditions: Q=None):
     """
     We'll allow to filter the event list using attributes defined in the event meta data
     models in the format ?attr[meta_name]=meta_value
+
+    :param qs: The base queryset over events or subevents
+    :param request: The request
+    :param match_subevents_with_conditions: If not None, an Event will also match if it has at least one subevent
+                                            fulfilling the conditions given and matching the search
     """
     attrs = {}
     for i, item in enumerate(request.GET.items()):
@@ -97,6 +103,7 @@ def filter_qs_by_attr(qs, request):
             name__in=attrs.keys(),
         )
     }
+    conditions = []
 
     for i, item in enumerate(attrs.items()):
         attr, v = item
@@ -138,7 +145,24 @@ def filter_qs_by_attr(qs, request):
                 annotations['attr_{}_any'.format(i)] = Exists(emv_with_any_value)
                 filters |= Q(**{'attr_{}_any'.format(i): False})
 
-        qs = qs.annotate(**annotations).filter(filters)
+        qs = qs.annotate(**annotations)
+        conditions.append(filters)
+
+    if conditions:
+        if match_subevents_with_conditions:
+            qs = qs.annotate(
+                match_by_subevents=Exists(
+                    filter_qs_by_attr(
+                        SubEvent.objects.filter(
+                            match_subevents_with_conditions,
+                            event=OuterRef('pk'),
+                        ),
+                        request,
+                    )
+                )
+            ).filter(reduce(operator.and_, conditions) | Q(match_by_subevents=True))
+        else:
+            qs = qs.filter(reduce(operator.and_, conditions))
     return qs
 
 
@@ -156,7 +180,7 @@ class EventListMixin:
         ctx['filter_form'] = self.filter_form
         return ctx
 
-    def _get_event_queryset(self):
+    def _get_event_list_queryset(self):
         query = Q(is_public=True) & Q(live=True)
         qs = self.request.organizer.events.using(settings.DATABASE_REPLICA).filter(query)
         qs = qs.filter(sales_channels__contains=self.request.sales_channel.identifier)
@@ -168,26 +192,26 @@ class EventListMixin:
             max_fromto=Greatest(Max('subevents__date_to'), Max('subevents__date_from')),
         )
         if "old" in self.request.GET:
+            date_q = Q(date_to__lt=now()) | (Q(date_to__isnull=True) & Q(date_from__lt=now()))
             qs = qs.filter(
-                Q(Q(has_subevents=False) & Q(
-                    Q(date_to__lt=now()) | Q(Q(date_to__isnull=True) & Q(date_from__lt=now()))
-                )) | Q(Q(has_subevents=True) & Q(
-                    Q(min_to__lt=now()) | Q(min_from__lt=now()))
+                Q(Q(has_subevents=False) & date_q) | Q(
+                    Q(has_subevents=True) & Q(Q(min_to__lt=now()) | Q(min_from__lt=now()))
                 )
             ).annotate(
                 order_to=Coalesce('max_fromto', 'max_to', 'max_from', 'date_to', 'date_from'),
             ).order_by('-order_to')
         else:
+            date_q = Q(date_to__gte=now()) | (Q(date_to__isnull=True) & Q(date_from__gte=now()))
             qs = qs.filter(
-                Q(Q(has_subevents=False) & Q(
-                    Q(date_to__gte=now()) | Q(Q(date_to__isnull=True) & Q(date_from__gte=now()))
-                )) | Q(Q(has_subevents=True) & Q(
+                Q(Q(has_subevents=False) & date_q) | Q(Q(has_subevents=True) & Q(
                     Q(max_to__gte=now()) | Q(max_from__gte=now()))
                 )
             ).annotate(
                 order_from=Coalesce('min_from', 'date_from'),
             ).order_by('order_from')
-        qs = Event.annotated(filter_qs_by_attr(qs, self.request))
+        qs = Event.annotated(filter_qs_by_attr(
+            qs, self.request, match_subevents_with_conditions=Q(active=True) & Q(is_public=True) & date_q
+        ))
         return qs
 
     def _set_month_to_next_subevent(self):
@@ -401,7 +425,7 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
             return super().get(request, *args, **kwargs)
 
     def get_queryset(self):
-        return self._get_event_queryset()
+        return self._get_event_list_queryset()
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -412,6 +436,14 @@ class OrganizerIndex(OrganizerViewMixin, EventListMixin, ListView):
                     event.min_from.astimezone(event.tzname),
                     (event.max_fromto or event.max_to or event.max_from).astimezone(event.tzname)
                 )
+
+        query_data = self.request.GET.copy()
+        filter_query_data = QueryDict(mutable=True)
+        for k, v in query_data.items():
+            if k.startswith("attr[") and v:
+                filter_query_data[k] = v
+        ctx["filterquery"] = f"?{filter_query_data.urlencode()}" if filter_query_data else ""
+
         return ctx
 
 

@@ -629,7 +629,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 ]
             else:
                 data['events'] = []
-                qs = self._get_event_queryset()
+                qs = self._get_event_list_queryset()
                 for event in qs:
                     tz = ZoneInfo(event.cache.get_or_set('timezone', lambda: event.settings.timezone))
                     if event.has_subevents:

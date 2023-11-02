@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load eventurl %}
+{% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
 <ul class="list-unstyled">
 {% for subev in subevent_list.subevent_list %}
     <li class="subevent-row">

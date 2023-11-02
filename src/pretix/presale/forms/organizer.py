@@ -26,6 +26,53 @@ from i18nfield.strings import LazyI18nString
 from pretix.base.models import EventMetaValue, SubEventMetaValue
 
 
+def meta_filtersets(organizer, event=None):
+    fields = {}
+    for prop in organizer.meta_properties.filter(filter_public=True):
+        if prop.allowed_values:
+            choices = [(v["key"], str(LazyI18nString(v["label"])) or v["key"]) for v in prop.allowed_values]
+        elif event:
+            existing_values = set()
+            if event.meta_data.get(prop.name):
+                existing_values.add(event.meta_data.get(prop.name))
+            existing_values |= set(SubEventMetaValue.objects.using(settings.DATABASE_REPLICA).filter(
+                property=prop,
+                subevent__event=event,
+                subevent__event__live=True,
+                subevent__event__is_public=True,
+                subevent__active=True,
+                subevent__is_public=True,
+            ).values_list("value", flat=True).distinct())
+            choices = [(k, k) for k in sorted(existing_values)]
+        else:
+            existing_values = set()
+            if prop.default:
+                existing_values.add(prop.default)
+            existing_values |= set(EventMetaValue.objects.using(settings.DATABASE_REPLICA).filter(
+                property=prop,
+                event__organizer=organizer,
+                event__live=True,
+                event__is_public=True,
+            ).values_list("value", flat=True).distinct())
+            existing_values |= set(SubEventMetaValue.objects.using(settings.DATABASE_REPLICA).filter(
+                property=prop,
+                subevent__event__organizer=organizer,
+                subevent__event__live=True,
+                subevent__event__is_public=True,
+                subevent__active=True,
+                subevent__is_public=True,
+            ).values_list("value", flat=True).distinct())
+            choices = [(k, k) for k in sorted(existing_values)]
+
+        choices.insert(0, ("", ""))
+        if len(choices) > 1:
+            fields[f"attr[{prop.name}]"] = {
+                "label": str(prop.public_label) or prop.name,
+                "choices": choices
+            }
+    return fields
+
+
 class EventListFilterForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
@@ -33,46 +80,9 @@ class EventListFilterForm(forms.Form):
         self.event = kwargs.pop('event', None)
         super().__init__(*args, **kwargs)
 
-        for prop in self.organizer.meta_properties.filter(filter_public=True):
-            if prop.allowed_values:
-                choices = [(v["key"], LazyI18nString(v["label"])) for v in prop.allowed_values]
-            elif self.event:
-                existing_values = set()
-                if self.event.meta_data.get(prop.name):
-                    existing_values.add(self.event.meta_data.get(prop.name))
-                existing_values |= set(SubEventMetaValue.objects.using(settings.DATABASE_REPLICA).filter(
-                    property=prop,
-                    subevent__event=self.event,
-                    subevent__event__live=True,
-                    subevent__event__is_public=True,
-                    subevent__active=True,
-                    subevent__is_public=True,
-                ).values_list("value", flat=True).distinct())
-                choices = [(k, k) for k in sorted(existing_values)]
-            else:
-                existing_values = set()
-                if prop.default:
-                    existing_values.add(prop.default)
-                existing_values |= set(EventMetaValue.objects.using(settings.DATABASE_REPLICA).filter(
-                    property=prop,
-                    event__organizer=self.organizer,
-                    event__live=True,
-                    event__is_public=True,
-                ).values_list("value", flat=True).distinct())
-                existing_values |= set(SubEventMetaValue.objects.using(settings.DATABASE_REPLICA).filter(
-                    property=prop,
-                    subevent__event__organizer=self.organizer,
-                    subevent__event__live=True,
-                    subevent__event__is_public=True,
-                    subevent__active=True,
-                    subevent__is_public=True,
-                ).values_list("value", flat=True).distinct())
-                choices = [(k, k) for k in sorted(existing_values)]
-
-            choices.insert(0, ("", ""))
-            if len(choices) > 1:
-                self.fields[f"attr[{prop.name}]"] = forms.ChoiceField(
-                    label=str(prop.public_label) or prop.name,
-                    choices=choices,
-                    required=False,
-                )
+        for k, v in meta_filtersets(self.organizer, self.event):
+            self.fields[k] = forms.ChoiceField(
+                label=v["label"],
+                choices=v["choices"],
+                required=False,
+            )

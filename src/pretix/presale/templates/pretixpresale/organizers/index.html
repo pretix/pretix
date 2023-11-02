@@ -125,7 +125,7 @@
                     {% endif %}
                 </div>
                 <div class="col-md-2 col-xs-6 text-right flip">
-                    <a class="btn btn-primary btn-block" href="{{ url }}">
+                    <a class="btn btn-primary btn-block" href="{{ url }}{% if e.has_subevents and e.match_by_subevents %}{{ filterquery }}{% endif %}">
                         {% if e.has_subevents %}<span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Tickets" %}
                         {% elif e.presale_is_running and e.best_availability_state == 100 %}
                             <span class="fa fa-ticket" aria-hidden="true"></span> {% trans "Tickets" %}

@@ -6,8 +6,9 @@
 
 {% if filter_form.fields %}
     <form class="event-list-filter-form" method="get">
+        <input type="hidden" name="filtered" value="1">
         {% for f, v in request.GET.items %}
-            {% if "attr[" not in f %}
+            {% if f not in filter_form.fields %}
                 <input type="hidden" name="{{ f }}" value="{{ v }}">
             {% endif %}
         {% endfor %}
