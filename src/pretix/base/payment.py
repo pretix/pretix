@@ -817,7 +817,7 @@ class BasePaymentProvider:
         """
         return ""
 
-    def order_change_allowed(self, order: Order) -> bool:
+    def order_change_allowed(self, order: Order, request: HttpRequest=None) -> bool:
         """
         Will be called to check whether it is allowed to change the payment method of
         an order to this one.
@@ -835,7 +835,12 @@ class BasePaymentProvider:
             return False
 
         if self.settings.get('_hidden', as_type=bool):
-            return False
+            if request:
+                hashes = request.session.get('pretix_unlock_hashes', [])
+                if hashlib.sha256((self.settings._hidden_seed + self.event.slug).encode()).hexdigest() not in hashes:
+                    return False
+            else:
+                return False
 
         restricted_countries = self.settings.get('_restricted_countries', as_type=list)
         if restricted_countries:
