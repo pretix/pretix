@@ -2053,7 +2053,7 @@ class EventMetaPropertyEditorMixin:
         return EventMetaPropertyAllowedValueFormSet(
             data=self.request.POST if self.request.method == "POST" else None,
             organizer=self.request.organizer,
-            initial=self.object.allowed_values or [],
+            initial=(self.object.allowed_values or []) if self.object else [],
         )
 
     def get_context_data(self, **kwargs):

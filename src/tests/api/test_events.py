@@ -198,6 +198,10 @@ def test_event_list_filter(token_client, organizer, event):
 
     resp = token_client.get('/api/v1/organizers/{}/events/?attr[type]='.format(organizer.slug))
     assert resp.status_code == 200
+    assert resp.data['count'] == 1
+
+    resp = token_client.get('/api/v1/organizers/{}/events/?attr[type]=Unknown'.format(organizer.slug))
+    assert resp.status_code == 200
     assert resp.data['count'] == 0
 
     resp = token_client.get('/api/v1/organizers/{}/events/?date_from_after=2017-12-27T10:00:00Z'.format(organizer.slug))
@@ -231,7 +235,10 @@ def test_event_get(token_client, organizer, event):
 
 @pytest.mark.django_db
 def test_event_create(team, token_client, organizer, event, meta_prop):
-    meta_prop.allowed_values = "Conference\nWorkshop"
+    meta_prop.allowed_values = [
+        {"key": "Conference", "label": {"en": "Conference"}},
+        {"key": "Workshop", "label": {"en": "Workshop"}},
+    ]
     meta_prop.save()
     team.can_change_organizer_settings = False
     team.save()
