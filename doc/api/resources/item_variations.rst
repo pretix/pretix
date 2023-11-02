@@ -55,7 +55,7 @@ meta_data                             object                     Values set for 
 
    The ``meta_data`` and ``checkin_attention`` attributes have been added.
 
-.. versionchanged:: 2023.9
+.. versionchanged:: 2023.10
 
    The ``free_price_suggestion`` attribute has been added.
 
