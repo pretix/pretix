@@ -142,10 +142,6 @@
                     <td>
                         {% if new_pending_sum > 0 %}
                             <strong>{% trans "You will need to pay" %}</strong>
-                            <br>
-                            <span class="text-muted">
-                                {% trans "Your entire order will be considered unpaid until you paid this difference." %}
-                            </span>
                         {% else %}
                             <strong>{% trans "You will be refunded" %}</strong>
                             <br>
@@ -184,6 +180,12 @@
         </table>
     </div>
 </div>
+{% if new_pending_sum > 0 and order.status == "p" %}
+    <div class="alert alert-warning">
+        <strong>{% trans "Your entire order will be considered unpaid until you paid this difference." %}</strong>
+        {% trans "You might not be able to use any of the tickets in your order until this payment has been received." %}
+    </div>
+{% endif %}
 {% for k, l in request.POST.lists %}
     {% for v in l %}
         <input type="hidden" name="{{ k }}" value="{{ v }}">
