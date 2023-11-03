@@ -7,10 +7,10 @@
 	<form action="" method="post" class="form-horizontal">
 		{% csrf_token %}
 		<p>{% blocktrans with name=checkinlist.name %}Are you sure you want to delete the check-in list <strong>{{ name }}</strong>?{% endblocktrans %}</p>
-		{% if checkinlist.checkins.exists > 0 %}
-			<p>{% blocktrans trimmed with num=checkinlist.checkins.count %}
+		{% if checkinlist.checkins.exists %}
+			<div class="alert alert-warning">{% blocktrans trimmed with num=checkinlist.checkins.count %}
                 This will delete the information of <strong>{{ num }}</strong> check-ins as well.
-            {% endblocktrans %}</p>
+            {% endblocktrans %}</div>
 		{% endif %}
 		<div class="form-group submit-group">
             <a href="{% url "control:event.orders.checkinlists" organizer=request.event.organizer.slug event=request.event.slug %}"
@@ -18,7 +18,11 @@
                 {% trans "Cancel" %}
             </a>
             <button type="submit" class="btn btn-danger btn-save">
-                {% trans "Delete" %}
+                {% if checkinlist.checkins.exists %}
+                    {% trans "Delete list and all check-ins" %}
+                {% else %}
+                    {% trans "Delete" %}
+                {% endif %}
             </button>
 		</div>
 	</form>
