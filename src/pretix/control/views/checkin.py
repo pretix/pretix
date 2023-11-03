@@ -45,7 +45,7 @@ from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.timezone import is_aware, make_aware, now
 from django.utils.translation import gettext_lazy as _
-from django.views.generic import FormView, ListView
+from django.views.generic import FormView, ListView, TemplateView
 from i18nfield.strings import LazyI18nString
 
 from pretix.api.views.checkin import _redeem_process
@@ -191,9 +191,23 @@ class CheckInListShow(EventPermissionRequiredMixin, PaginationMixin, CheckInList
         return ctx
 
 
+class CheckInListBulkRevertConfirmView(CheckInListQueryMixin, EventPermissionRequiredMixin, TemplateView):
+    template_name = "pretixcontrol/checkin/bulk_revert_confirm.html"
+
+    def post(self, request, *args, **kwargs):
+        self.list = get_object_or_404(self.request.event.checkin_lists.all(), pk=kwargs.get("list"))
+        return super().get(request, *args, **kwargs)
+
+    def get_context_data(self, **kwargs):
+        return super().get_context_data(
+            **kwargs,
+            cnt=self.get_queryset().count(),
+            checkinlist=self.list,
+        )
+
+
 class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMixin, AsyncPostView):
     permission = ('can_change_orders', 'can_checkin_orders')
-    context_object_name = 'device'
 
     def dispatch(self, request, *args, **kwargs):
         self.list = get_object_or_404(self.request.event.checkin_lists.all(), pk=kwargs.get("list"))
@@ -216,14 +230,15 @@ class CheckInListBulkActionView(CheckInListQueryMixin, EventPermissionRequiredMi
                 if op.order.status == Order.STATUS_PAID or (
                     (self.list.include_pending or op.order.valid_if_pending) and op.order.status == Order.STATUS_PENDING
                 ):
-                    Checkin.objects.filter(position=op, list=self.list).delete()
-                    op.order.log_action('pretix.event.checkin.reverted', data={
-                        'position': op.id,
-                        'positionid': op.positionid,
-                        'list': self.list.pk,
-                        'web': True
-                    }, user=request.user)
-                    op.order.touch()
+                    _, deleted = Checkin.objects.filter(position=op, list=self.list).delete()
+                    if deleted:
+                        op.order.log_action('pretix.event.checkin.reverted', data={
+                            'position': op.id,
+                            'positionid': op.positionid,
+                            'list': self.list.pk,
+                            'web': True
+                        }, user=request.user)
+                        op.order.touch()
 
             return 'reverted', request.POST.get('returnquery')
         else:

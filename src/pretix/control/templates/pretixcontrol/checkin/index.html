@@ -216,7 +216,10 @@
                 </button>
             {% endif %}
             {% if "can_change_orders" in request.eventpermset %}
-                <button type="submit" class="btn btn-danger btn-save" name="revert" value="true">
+                <button type="submit" class="btn btn-danger btn-save" name="revert"
+                        formaction="{% url "control:event.orders.checkinlists.bulk_revert" event=request.event.slug organizer=request.event.organizer.slug list=checkinlist.pk %}"
+                        data-no-asynctask
+                        value="true">
                     <span class="fa fa-trash" aria-hidden="true"></span>
                     {% trans "Delete all check-ins of selected attendees" %}
                 </button>

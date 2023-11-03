@@ -438,6 +438,7 @@ urlpatterns = [
         re_path(r'^checkinlists/select2$', typeahead.checkinlist_select2, name='event.orders.checkinlists.select2'),
         re_path(r'^checkinlists/(?P<list>\d+)/$', checkin.CheckInListShow.as_view(), name='event.orders.checkinlists.show'),
         re_path(r'^checkinlists/(?P<list>\d+)/simulator$', checkin.CheckInListSimulator.as_view(), name='event.orders.checkinlists.simulator'),
+        re_path(r'^checkinlists/(?P<list>\d+)/bulk_revert$', checkin.CheckInListBulkRevertConfirmView.as_view(), name='event.orders.checkinlists.bulk_revert'),
         re_path(r'^checkinlists/(?P<list>\d+)/bulk_action$', checkin.CheckInListBulkActionView.as_view(), name='event.orders.checkinlists.bulk_action'),
         re_path(r'^checkinlists/(?P<list>\d+)/change$', checkin.CheckinListUpdate.as_view(),
                 name='event.orders.checkinlists.edit'),
