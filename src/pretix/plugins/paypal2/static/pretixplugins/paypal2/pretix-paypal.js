@@ -57,6 +57,7 @@ var pretixpaypal = {
         wechatpay: gettext('WeChat Pay'),
         mercadopago: gettext('Mercado Pago')
     },
+    readyToSubmitApproval: false,
 
     load: function () {
         if (pretixpaypal.paypal === null) {
@@ -141,6 +142,8 @@ var pretixpaypal = {
                 }
             }
         };
+
+        document.addEventListener("visibilitychange", this.onApproveSubmit);
     },
 
     ready: function () {
@@ -225,12 +228,16 @@ var pretixpaypal = {
 
                 let method = pretixpaypal.paypage ? "wallet" : pretixpaypal.method.method;
                 let selectorstub = "#payment_paypal_" + method;
-                var $form = $(selectorstub + "_oid").closest("form");
-                // Insert the tokens into the form so it gets submitted to the server
+                // Insert the tokens into the form, so it gets submitted to the server
                 $(selectorstub + "_oid").val(pretixpaypal.order_id);
                 $(selectorstub + "_payer").val(pretixpaypal.payer_id);
-                // and submit
-                $form.get(0).submit();
+
+                // We are moving the submission to a separate function, which is also an EventListener, since
+                // SFSafariView refuses to submit a form that is not visible. Unfortunately, that is exactly the case
+                // when the ticket shop is used on iOS within an SFSafariView and the PayPal payment popup has not
+                // closed itself quickly enough.
+                pretixpaypal.readyToSubmitApproval = true;
+                pretixpaypal.onApproveSubmit();
 
                 // billingToken: null
                 // facilitatorAccessToken: "A21AAL_fEu0gDD-sIXyOy65a6MjgSJJrhmxuPcxxUGnL5gW2DzTxiiAksfoC4x8hD-BjeY1LsFVKl7ceuO7UR1a9pQr8Q_AVw"
@@ -246,6 +253,16 @@ var pretixpaypal = {
         } else {
             pretixpaypal.continue_button.text(gettext('Payment method unavailable'));
             pretixpaypal.continue_button.show();
+        }
+    },
+
+    onApproveSubmit: function() {
+        if (document.visibilityState === "visible" && pretixpaypal.readyToSubmitApproval === true) {
+            let method = pretixpaypal.paypage ? "wallet" : pretixpaypal.method.method;
+            let selectorstub = "#payment_paypal_" + method;
+            var $form = $(selectorstub + "_oid").closest("form");
+
+            $form.get(0).submit();
         }
     },
 
