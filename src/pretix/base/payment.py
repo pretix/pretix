@@ -836,7 +836,7 @@ class BasePaymentProvider:
 
         if self.settings.get('_hidden', as_type=bool):
             if request:
-                hashes = request.session.get('pretix_unlock_hashes', [])
+                hashes = set(request.session.get('pretix_unlock_hashes', [])) | set(order.meta_info_data.get('unlock_hashes', []))
                 if hashlib.sha256((self.settings._hidden_seed + self.event.slug).encode()).hexdigest() not in hashes:
                     return False
             else:
