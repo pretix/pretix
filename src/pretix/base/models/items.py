@@ -507,10 +507,10 @@ class Item(LoggedModel):
         on_delete=models.SET_NULL,
         verbose_name=_("Only show after sellout of"),
         help_text=_("If you select a product here, this product will only be shown when that product is "
-                    "not available (sold out, inactive, not in time frame, …). If combined with the option to hide "
-                    "sold-out products, this allows you to swap out products for more expensive ones once the cheaper"
-                    "option is sold out. There might be a short period in which both products are visible while all "
-                    "tickets of the referenced product are reserved, but not yet sold.")
+                    "sold out. If combined with the option to hide sold-out products, this allows you to "
+                    "swap out products for more expensive ones once the cheaper option is sold out. There might "
+                    "be a short period in which both products are visible while all tickets of the referenced "
+                    "product are reserved, but not yet sold.")
     )
     require_voucher = models.BooleanField(
         verbose_name=_('This product can only be bought using a voucher.'),

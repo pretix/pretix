@@ -127,52 +127,77 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
     else:
         prefetch_membership_types = []
 
+    prefetch_var = Prefetch(
+        'variations',
+        to_attr='available_variations',
+        queryset=ItemVariation.objects.using(settings.DATABASE_REPLICA).annotate(
+            subevent_disabled=Exists(
+                SubEventItemVariation.objects.filter(
+                    Q(disabled=True) | Q(available_from__gt=now()) | Q(available_until__lt=now()),
+                    variation_id=OuterRef('pk'),
+                    subevent=subevent,
+                )
+            ),
+        ).filter(
+            variation_q,
+            active=True,
+            sales_channels__contains=channel,
+            quotas__isnull=False,
+            subevent_disabled=False
+        ).prefetch_related(
+            *prefetch_membership_types,
+            Prefetch('quotas',
+                     to_attr='_subevent_quotas',
+                     queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(
+                         subevent=subevent))
+        ).distinct()
+    )
+    prefetch_quotas = Prefetch(
+        'quotas',
+        to_attr='_subevent_quotas',
+        queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)
+    )
+    prefetch_bundles = Prefetch(
+        'bundles',
+        queryset=ItemBundle.objects.using(settings.DATABASE_REPLICA).prefetch_related(
+            Prefetch('bundled_item',
+                     queryset=event.items.using(settings.DATABASE_REPLICA).select_related(
+                         'tax_rule').prefetch_related(
+                         Prefetch('quotas',
+                                  to_attr='_subevent_quotas',
+                                  queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(
+                                      subevent=subevent)),
+                     )),
+            Prefetch('bundled_variation',
+                     queryset=ItemVariation.objects.using(
+                         settings.DATABASE_REPLICA
+                     ).select_related('item', 'item__tax_rule').filter(item__event=event).prefetch_related(
+                         Prefetch('quotas',
+                                  to_attr='_subevent_quotas',
+                                  queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(
+                                      subevent=subevent)),
+                     )),
+        )
+    )
+
     items = base_qs.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher, allow_addons=allow_addons).select_related(
         'category', 'tax_rule',  # for re-grouping
         'hidden_if_available',
     ).prefetch_related(
         *prefetch_membership_types,
-        Prefetch('quotas',
-                 to_attr='_subevent_quotas',
-                 queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)),
-        Prefetch('bundles',
-                 queryset=ItemBundle.objects.using(settings.DATABASE_REPLICA).prefetch_related(
-                     Prefetch('bundled_item',
-                              queryset=event.items.using(settings.DATABASE_REPLICA).select_related('tax_rule').prefetch_related(
-                                  Prefetch('quotas',
-                                           to_attr='_subevent_quotas',
-                                           queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)),
-                              )),
-                     Prefetch('bundled_variation',
-                              queryset=ItemVariation.objects.using(
-                                  settings.DATABASE_REPLICA
-                              ).select_related('item', 'item__tax_rule').filter(item__event=event).prefetch_related(
-                                  Prefetch('quotas',
-                                           to_attr='_subevent_quotas',
-                                           queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)),
-                              )),
-                 )),
-        Prefetch('variations', to_attr='available_variations',
-                 queryset=ItemVariation.objects.using(settings.DATABASE_REPLICA).annotate(
-                     subevent_disabled=Exists(
-                         SubEventItemVariation.objects.filter(
-                             Q(disabled=True) | Q(available_from__gt=now()) | Q(available_until__lt=now()),
-                             variation_id=OuterRef('pk'),
-                             subevent=subevent,
-                         )
-                     ),
-                 ).filter(
-                     variation_q,
-                     active=True,
-                     sales_channels__contains=channel,
-                     quotas__isnull=False,
-                     subevent_disabled=False
-                 ).prefetch_related(
-                     *prefetch_membership_types,
-                     Prefetch('quotas',
-                              to_attr='_subevent_quotas',
-                              queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent))
-                 ).distinct()),
+        Prefetch(
+            'hidden_if_item_available',
+            queryset=event.items.annotate(
+                has_variations=Count('variations'),
+            ).prefetch_related(
+                prefetch_var,
+                prefetch_quotas,
+                prefetch_bundles,
+            )
+        ),
+        prefetch_quotas,
+        prefetch_var,
+        prefetch_bundles,
     ).annotate(
         quotac=Count('quotas'),
         has_variations=Count('variations'),
@@ -253,6 +278,19 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         if item.hidden_if_available:
             q = item.hidden_if_available.availability(_cache=quota_cache)
             if q[0] == Quota.AVAILABILITY_OK:
+                item._remove = True
+                continue
+
+        if item.hidden_if_item_available:
+            if item.hidden_if_item_available.has_variations:
+                dependency_available = any(
+                    var.check_quotas(subevent=subevent, _cache=quota_cache, include_bundled=True)[0] == Quota.AVAILABILITY_OK
+                    for var in item.hidden_if_item_available.available_variations
+                )
+            else:
+                q = item.hidden_if_item_available.check_quotas(subevent=subevent, _cache=quota_cache, include_bundled=True)
+                dependency_available = q[0] == Quota.AVAILABILITY_OK
+            if dependency_available:
                 item._remove = True
                 continue
 
@@ -399,34 +437,6 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 item.best_variation_availability = max([v.cached_availability[0] for v in item.available_variations])
 
             item._remove = not bool(item.available_variations)
-
-    # Hide all products according to their `hidden_if_item_available` attribute
-    # We do this in a loop until no more changes are done, since hiding one item can have an effect on another item
-    # and we have no guarantee to iterate over them in the correct order.
-    # We hide a product if
-    # - `hidden_if_item_available` points to a product that *is* part of the original result set *but* either removed
-    #   by a filter above or sold out
-    # - OR `hidden_if_item_available` points to a product that has already been hidden by the same mechanism
-    # The second condition makes not much sense going only from the name of `hidden_if_item_available` but is
-    # required to have it behave useful for transitive relationships.
-    item_map = {i.pk: i for i in items}
-    while True:
-        changed = False
-
-        for item in items:
-            if item.hidden_if_item_available_id in item_map:
-                dependency = item_map[item.hidden_if_item_available_id]
-                dependency_unavailable = (
-                    dependency._remove or
-                    (dependency.has_variations and not [v for v in item.available_variations if v.cached_availability[0] >= Quota.AVAILABILITY_RESERVED]) or
-                    (not dependency.has_variations and dependency.cached_availability[0] < Quota.AVAILABILITY_RESERVED)
-                )
-                if (not dependency_unavailable or getattr(dependency, '_hide_for_available', False)) and not getattr(item, '_hide_for_available', False):
-                    item._hide_for_available = True
-                    changed = True
-
-        if not changed:
-            break
 
     if not quota_cache_existed and not voucher and not allow_addons and not base_qs_set and not filter_items and not filter_categories:
         event.cache.set(quota_cache_key, quota_cache, 5)
