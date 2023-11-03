@@ -277,6 +277,7 @@ TEST_ITEM_RES = {
     "min_per_order": None,
     "max_per_order": None,
     "hidden_if_available": None,
+    "hidden_if_item_available": None,
     "checkin_attention": False,
     "has_variations": False,
     "require_approval": False,
