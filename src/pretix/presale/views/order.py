@@ -1595,6 +1595,8 @@ class OrderChangeMixin:
             raise OrderError(_('You may only change your order in a way that increases the total price.'))
         if ocm._totaldiff != Decimal('0.00') and pr == 'eq':
             raise OrderError(_('You may not change your order in a way that changes the total price.'))
+        if ocm._totaldiff < Decimal('0.00') and self.order.total + ocm._totaldiff < self.order.payment_refund_sum and pr == 'gte_paid':
+            raise OrderError(_('You may not change your order in a way that would require a refund.'))
 
         if ocm._totaldiff > Decimal('0.00') and self.order.status == Order.STATUS_PAID:
             self.order.set_expires(
