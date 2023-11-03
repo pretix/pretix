@@ -21,9 +21,9 @@
 #
 import json
 from datetime import timedelta
+from decimal import Decimal
 from io import BytesIO
 
-from _decimal import Decimal
 from django.contrib import messages
 from django.contrib.staticfiles import finders
 from django.core.files import File
