@@ -289,9 +289,17 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
             ctx['can_pay'] = False
 
             for provider in self.request.event.get_payment_providers().values():
-                if provider.is_enabled and provider.order_change_allowed(self.order):
-                    ctx['can_pay'] = True
-                    break
+                if provider.is_enabled:
+
+                    if 'request' in inspect.signature(provider.order_change_allowed).parameters:
+                        if provider.is_enabled and provider.order_change_allowed(self.order, request=self.request):
+                            ctx['can_pay'] = True
+                            break
+
+                    else:
+                        if provider.is_enabled and provider.order_change_allowed(self.order):
+                            ctx['can_pay'] = True
+                            break
 
             if lp and lp.state not in (OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED,
                                        OrderPayment.PAYMENT_STATE_CANCELED):
@@ -665,8 +673,16 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
         providers = []
         pending_sum = self.order.pending_sum
         for provider in self.request.event.get_payment_providers().values():
-            if not provider.is_enabled or not provider.order_change_allowed(self.order):
+            if not provider.is_enabled:
                 continue
+
+            if 'request' in inspect.signature(provider.order_change_allowed).parameters:
+                if not provider.order_change_allowed(self.order, request=self.request):
+                    continue
+            else:
+                if not provider.order_change_allowed(self.order):
+                    continue
+
             current_fee = sum(f.value for f in self.open_fees) or Decimal('0.00')
             fee = provider.calculate_fee(pending_sum - current_fee)
             if 'order' in inspect.signature(provider.payment_form_render).parameters:

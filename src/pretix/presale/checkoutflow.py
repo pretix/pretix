@@ -1515,6 +1515,9 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
                 str(m) for m in self.confirm_messages.values()
             ]
         }
+        unlock_hashes = request.session.get('pretix_unlock_hashes', [])
+        if unlock_hashes:
+            meta_info['unlock_hashes'] = unlock_hashes
         for receiver, response in order_meta_from_request.send(sender=request.event, request=request):
             meta_info.update(response)
 
