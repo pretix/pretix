@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 12:47+0000\n"
-"PO-Revision-Date: 2023-07-04 06:00+0000\n"
-"Last-Translator: Maciej Szymczak <maciej+github@szymczak.at>\n"
+"PO-Revision-Date: 2023-11-06 09:00+0000\n"
+"Last-Translator: Fast128 <fast128@post.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.17\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -78,7 +78,7 @@ msgstr "Grecki"
 
 #: pretix/_base_settings.py:92
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonezyjski"
 
 #: pretix/_base_settings.py:93
 msgid "Italian"
@@ -333,10 +333,8 @@ msgstr ""
 
 #: pretix/api/serializers/organizer.py:102
 #: pretix/control/forms/organizer.py:798 pretix/presale/forms/customer.py:439
-#, fuzzy
-#| msgid "A voucher with this code already exists."
 msgid "An account with this email address is already registered."
-msgstr "Voucher o tym kodzie już istnieje."
+msgstr "Konto o tym adresie e-mail już istnieje."
 
 #: pretix/api/serializers/organizer.py:205
 #: pretix/control/forms/organizer.py:647
@@ -551,23 +549,16 @@ msgid "Waiting list entry received voucher"
 msgstr "Osoba z listy oczekujących dostała voucher"
 
 #: pretix/api/webhooks.py:370
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgid "Customer account created"
-msgstr "Klient"
+msgstr "Stworzono konto użytkownika"
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
-#| msgid "Account information changed"
 msgid "Customer account changed"
-msgstr "Zmiana informacji konta"
+msgstr "Zmieniono konto użytkownika"
 
 #: pretix/api/webhooks.py:378
-#, fuzzy
-#| msgid "This product can only be bought using a voucher."
 msgid "Customer account anonymized"
-msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
+msgstr "Konto użytkownika zanonimizowane"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:934
@@ -2947,7 +2938,7 @@ msgstr "Wprowadzone obecne hasło jest nieprawidłowe."
 
 #: pretix/base/forms/user.py:58
 msgid "Please choose a password different to your current one."
-msgstr ""
+msgstr "Nowe hasło nie może być identyczne jak obecne."
 
 #: pretix/base/forms/user.py:63 pretix/presale/forms/customer.py:373
 #: pretix/presale/forms/customer.py:442
@@ -2989,10 +2980,8 @@ msgid "Smartphone with the Authenticator application"
 msgstr "Smartfon z aplikacją Authenticator"
 
 #: pretix/base/forms/user.py:178
-#, fuzzy
-#| msgid "U2F-compatible hardware token (e.g. Yubikey)"
 msgid "WebAuthn-compatible hardware token (e.g. Yubikey)"
-msgstr "Token hardware'owy kompatybilny z U2F (np. Yubikey)"
+msgstr "Token hardware'owy kompatybilny z WebAuthn (np. Yubikey)"
 
 #: pretix/base/forms/validators.py:62
 msgid ""
@@ -3016,11 +3005,9 @@ msgstr "Przedsprzedaż nierozpoczęta"
 #, fuzzy, python-brace-format
 #| msgid "Invalid placeholder(s): %(value)s"
 msgid "Available placeholders: {list}"
-msgstr "Nieprawidłowy(e) symbol(e) zastępstwa: %(value)s"
+msgstr "Dostępne symbole zastępstwa: %(value)"
 
 #: pretix/base/forms/widgets.py:230 pretix/base/forms/widgets.py:235
-#, fuzzy
-#| msgid "Business customer"
 msgid "Business or institutional customer"
 msgstr "Klient firmowy"
 
@@ -3112,12 +3099,9 @@ msgid "Customer reference: {reference}"
 msgstr "Adnotacja klienta: {reference}"
 
 #: pretix/base/invoice.py:568
-#, fuzzy
-#| msgctxt "refund_source"
-#| msgid "Customer"
 msgctxt "invoice"
 msgid "Customer VAT ID"
-msgstr "Klient"
+msgstr "Numer NIP Klienta"
 
 #: pretix/base/invoice.py:575
 msgctxt "invoice"
@@ -3125,11 +3109,9 @@ msgid "Beneficiary"
 msgstr "Beneficjent"
 
 #: pretix/base/invoice.py:596
-#, fuzzy
-#| msgid "Invoice"
 msgctxt "invoice"
 msgid "Tax Invoice"
-msgstr "Faktura"
+msgstr "Faktura VAT"
 
 #: pretix/base/invoice.py:597
 msgctxt "invoice"
@@ -3177,14 +3159,14 @@ msgstr "Wartość"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {net_price} net / {gross_price} gross"
-msgstr ""
+msgstr "Cena jednostkowa: {net_price} netto / {gross_price} brutto"
 
 #: pretix/base/invoice.py:659
 #, fuzzy, python-brace-format
 #| msgid "Original price"
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "Cena oryginalna"
+msgstr "Cena jednostkowa"
 
 #: pretix/base/invoice.py:677 pretix/base/invoice.py:683
 msgctxt "invoice"
@@ -3192,30 +3174,24 @@ msgid "Invoice total"
 msgstr "Razem"
 
 #: pretix/base/invoice.py:693
-#, fuzzy
-#| msgid "Only successful payments"
 msgctxt "invoice"
 msgid "Received payments"
-msgstr "Tylko pomyślne płatności"
+msgstr "Otrzymane płatności"
 
 #: pretix/base/invoice.py:698
 msgctxt "invoice"
 msgid "Outstanding payments"
-msgstr ""
+msgstr "Zaległe płatności"
 
 #: pretix/base/invoice.py:715
-#, fuzzy
-#| msgid "Gift card"
 msgctxt "invoice"
 msgid "Paid by gift card"
-msgstr "Karta prezentowa"
+msgstr "Zapłacono kartą prezentową"
 
 #: pretix/base/invoice.py:720
-#, fuzzy
-#| msgid "Question option"
 msgctxt "invoice"
 msgid "Remaining amount"
-msgstr "Opcja pytania"
+msgstr "Pozostała kwota"
 
 #: pretix/base/invoice.py:769
 msgctxt "invoice"
@@ -3266,11 +3242,8 @@ msgstr ""
 "Centrylny w dniu {date}, suma faktury wynosi: {total}.."
 
 #: pretix/base/invoice.py:858
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Classic renderer (pretix 1.0)"
 msgid "Modern Invoice Renderer (pretix 2.7)"
-msgstr "Klasyczny renderer (pretix 1.0)"
+msgstr "Modern Invoice Renderer (pretix 2.7)"
 
 #: pretix/base/invoice.py:947
 #, fuzzy
@@ -3281,12 +3254,12 @@ msgstr "Proszę wpisać to samo hasło dwukrotnie"
 
 #: pretix/base/media.py:61
 msgid "Barcode / QR-Code"
-msgstr ""
+msgstr "Kod kreskowy / Kod QR"
 
 #: pretix/base/media.py:77
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:237
 msgid "NFC UID-based"
-msgstr ""
+msgstr "NFC na bazie UID"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -3306,10 +3279,8 @@ msgid "Date joined"
 msgstr "Data dołączenia"
 
 #: pretix/base/models/auth.py:256
-#, fuzzy
-#| msgid "Repeat new password"
 msgid "Force user to select a new password"
-msgstr "Powtórz nowe hasło"
+msgstr "Wymuś wybranie nowego hasła użytkownika"
 
 #: pretix/base/models/auth.py:266
 msgid "Two-factor authentication is required to log in"
@@ -3369,18 +3340,20 @@ msgstr ""
 #: pretix/base/models/checkin.py:66
 msgctxt "checkin"
 msgid "Ignore check-ins on this list in statistics"
-msgstr ""
+msgstr "Ignoruj zameldowania obecne na tej liście w statystykach"
 
 #: pretix/base/models/checkin.py:70
 msgctxt "checkin"
 msgid "Tickets with a check-in on this list should be considered \"used\""
-msgstr ""
+msgstr "Zameldowane bilety z tej listy powinny być uważane za \"użyte\""
 
 #: pretix/base/models/checkin.py:71
 msgid ""
 "This is relevant in various situations, e.g. for deciding if a ticket can "
 "still be canceled by the customer."
 msgstr ""
+"To istotne w wielu sytuacjach, np żeby zdecydować czy bilet może być "
+"anulowany przez klienta."
 
 #: pretix/base/models/checkin.py:75
 msgctxt "checkin"
@@ -3399,6 +3372,7 @@ msgstr ""
 #: pretix/base/models/checkin.py:80
 msgid "Allow checking in add-on tickets by scanning the main ticket"
 msgstr ""
+"Pozwól na zameldowanie dodatkowych biletów przez skanowanie głównego biletu"
 
 #: pretix/base/models/checkin.py:82
 msgid ""
@@ -3410,36 +3384,37 @@ msgstr ""
 #: pretix/base/models/checkin.py:86 pretix/control/navigation.py:626
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:5
 msgid "Gates"
-msgstr ""
+msgstr "Bramki"
 
 #: pretix/base/models/checkin.py:87
 msgid ""
 "Does not have any effect for the validation of tickets, only for the "
 "automatic configuration of check-in devices."
 msgstr ""
+"Nie wpływa na sprawdzenie ważności biletu, tylko na automatyczną "
+"konfigurację urządzeń do sprawdzania biletów."
 
 #: pretix/base/models/checkin.py:91
 msgid "Allow re-entering after an exit scan"
-msgstr ""
+msgstr "Pozwól na ponowne wejście bo zeskanowaniu na wyjściu"
 
 #: pretix/base/models/checkin.py:95
 msgid "Allow multiple entries per ticket"
-msgstr ""
+msgstr "Pozwól na wielokrotne wejścia na ten sam bilet"
 
 #: pretix/base/models/checkin.py:96
 msgid ""
 "Use this option to turn off warnings if a ticket is scanned a second time."
 msgstr ""
+"Użyj tej opcji by wyłączyć ostrzeżenie, że bilet jest skanowany ponownie."
 
 #: pretix/base/models/checkin.py:100
-#, fuzzy
-#| msgid "Ticket checked in"
 msgid "Automatically check out everyone at"
-msgstr "Bilet zameldowany"
+msgstr "Automatycznie zamelduj wszystkich w"
 
 #: pretix/base/models/checkin.py:106
 msgid "Sales channels to automatically check in"
-msgstr ""
+msgstr "Kanały sprzedaży do automatycznego sprawdzania biletów"
 
 #: pretix/base/models/checkin.py:107
 msgid ""
@@ -3450,18 +3425,16 @@ msgid ""
 msgstr ""
 
 #: pretix/base/models/checkin.py:340
-#, fuzzy
-#| msgid "Country"
 msgid "Entry"
-msgstr "Kraj"
+msgstr "Wejście"
 
 #: pretix/base/models/checkin.py:341
 msgid "Exit"
-msgstr ""
+msgstr "Wyjście"
 
 #: pretix/base/models/checkin.py:358
 msgid "Unknown ticket"
-msgstr ""
+msgstr "Bilet nieznany"
 
 #: pretix/base/models/checkin.py:359
 msgid "Ticket not paid"
@@ -3469,7 +3442,7 @@ msgstr "Bilet nie został opłacony"
 
 #: pretix/base/models/checkin.py:360
 msgid "Forbidden by custom rule"
-msgstr ""
+msgstr "Zabronione przez niestandardową regułę"
 
 #: pretix/base/models/checkin.py:361
 #, fuzzy
@@ -3497,7 +3470,7 @@ msgstr "Przedsprzedaż nierozpoczęta"
 
 #: pretix/base/models/checkin.py:365
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "Kod biletu jest niejednoznaczny na liście"
 
 #: pretix/base/models/checkin.py:366
 #, fuzzy
@@ -3518,14 +3491,12 @@ msgid "Ticket not valid at this time"
 msgstr "Produkt nie będzie sprzedawany przed podaną datą."
 
 #: pretix/base/models/customers.py:55
-#, fuzzy
-#| msgid "Attendee name"
 msgid "Provider name"
-msgstr "Imię uczstnika"
+msgstr "Imię dostarczyciela"
 
 #: pretix/base/models/customers.py:60
 msgid "Login button label"
-msgstr ""
+msgstr "Etykieta przycisku logowania"
 
 #: pretix/base/models/customers.py:64
 #, fuzzy
@@ -3547,6 +3518,8 @@ msgid ""
 "The identifier may only contain letters, numbers, dots, dashes, and "
 "underscores. It must start and end with a letter or number."
 msgstr ""
+"Identyfikator może zawierać jedynie litery, cyfry, kropki, średniki i "
+"podkreślniki. Może zaczynać się i kończyć literą, lub cyfrą."
 
 #: pretix/base/models/customers.py:299 pretix/base/models/orders.py:1410
 #: pretix/base/models/orders.py:2989 pretix/base/settings.py:1093
@@ -3562,40 +3535,34 @@ msgstr "Proszę wybrać kraj"
 #: pretix/base/models/customers.py:370
 msgctxt "openidconnect"
 msgid "Confidential"
-msgstr ""
+msgstr "Poufne"
 
 #: pretix/base/models/customers.py:371
 msgctxt "openidconnect"
 msgid "Public"
-msgstr ""
+msgstr "Publiczne"
 
 #: pretix/base/models/customers.py:377
-#, fuzzy
-#| msgid "Cart positions"
 msgctxt "openidconnect"
 msgid "Authorization code"
-msgstr "Pozycje wózka"
+msgstr "Kod autoryzacyjny"
 
 #: pretix/base/models/customers.py:378
 msgctxt "openidconnect"
 msgid "Implicit"
-msgstr ""
+msgstr "Domniemany"
 
 #: pretix/base/models/customers.py:382
 msgid "OpenID Connect access (required)"
 msgstr ""
 
 #: pretix/base/models/customers.py:383
-#, fuzzy
-#| msgid "Creation date"
 msgid "Profile data (name, addresses)"
-msgstr "Data stworzenia"
+msgstr "Dane profilu (nazwa, adresy)"
 
 #: pretix/base/models/customers.py:403
-#, fuzzy
-#| msgid "Payment fee"
 msgid "Client type"
-msgstr "Prowizja płatności"
+msgstr "Typ klienta"
 
 #: pretix/base/models/customers.py:406
 #, fuzzy
@@ -3605,11 +3572,11 @@ msgstr "Typ urządzenia"
 
 #: pretix/base/models/customers.py:417
 msgid "Allowed access scopes"
-msgstr ""
+msgstr "Zakres dozwolonego dostępu"
 
 #: pretix/base/models/customers.py:418
 msgid "Separate multiple values with spaces"
-msgstr ""
+msgstr "Rozdziel wiele wartości spacją"
 
 #: pretix/base/models/devices.py:71 pretix/base/models/items.py:1478
 msgid "Internal identifier"
@@ -3626,7 +3593,7 @@ msgstr "Identyfikator użyty przy innym pytaniu."
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:16
 #: pretix/plugins/checkinlists/exporters.py:741
 msgid "Gate"
-msgstr ""
+msgstr "Bramka"
 
 #: pretix/base/models/devices.py:132
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:83
@@ -3640,7 +3607,7 @@ msgstr "Data inicjalizacji"
 #: pretix/base/models/discount.py:45
 msgctxt "subevent"
 msgid "Dates can be mixed without limitation"
-msgstr ""
+msgstr "Daty mogą być mieszane bez ograniczeń"
 
 #: pretix/base/models/discount.py:46
 #, fuzzy
@@ -3652,7 +3619,7 @@ msgstr "Produkt nie będzie sprzedawany przed podaną datą."
 #: pretix/base/models/discount.py:47
 msgctxt "subevent"
 msgid "Each matching product must be for a different date"
-msgstr ""
+msgstr "Każdy pasujący produkt musi być na inną datę"
 
 #: pretix/base/models/discount.py:65 pretix/base/models/items.py:1010
 #: pretix/base/models/items.py:1287 pretix/base/models/items.py:1511
@@ -3673,7 +3640,7 @@ msgstr "Wszystkie produkty (łącznie z nowo stworzonymi)"
 
 #: pretix/base/models/discount.py:97
 msgid "Apply to specific products"
-msgstr ""
+msgstr "Zastosuj do wybranych produktów"
 
 #: pretix/base/models/discount.py:102
 #, fuzzy
@@ -3683,11 +3650,11 @@ msgstr "Ograniczenie do produktów"
 
 #: pretix/base/models/discount.py:103 pretix/base/models/discount.py:158
 msgid "Discounts never apply to bundled products"
-msgstr ""
+msgstr "Zniżki nigdy nie obowiązuja dla zgrupowanych produktów"
 
 #: pretix/base/models/discount.py:107 pretix/base/models/discount.py:162
 msgid "Ignore products discounted by a voucher"
-msgstr ""
+msgstr "Ignoruj produkty ze zniżką z kuponu"
 
 #: pretix/base/models/discount.py:108
 msgid ""
@@ -3696,14 +3663,18 @@ msgid ""
 "use a voucher only to e.g. unlock a hidden product or gain access to sold-"
 "out quota will still be considered."
 msgstr ""
+"Jeżeli ta opcja jest zaznaczona, produkty które już otrzymały zniżkę z "
+"vouchera nie będą kwalifikować się do tej zniżki. Podukty przy których użyto "
+"vouchera np po to by odblokować ukryty produkt, lub uzyskać dostęp do "
+"wyprzedanego produktu nadal będą kwalifikować się do  zniżki."
 
 #: pretix/base/models/discount.py:113
 msgid "Minimum number of matching products"
-msgstr ""
+msgstr "Minimalna ilość zgodnych produktów"
 
 #: pretix/base/models/discount.py:117
 msgid "Minimum gross value of matching products"
-msgstr ""
+msgstr "Minimalna wartość brutto zgodnych produktów"
 
 #: pretix/base/models/discount.py:125
 #, fuzzy
@@ -3726,11 +3697,11 @@ msgstr "Ograniczenie do produktów"
 
 #: pretix/base/models/discount.py:137
 msgid "Percentual discount on matching products"
-msgstr ""
+msgstr "Procentowa zniżka na zgodnych produktach"
 
 #: pretix/base/models/discount.py:144
 msgid "Apply discount only to this number of matching products"
-msgstr ""
+msgstr "Zastosuj zniżkę tylko dla tej ilości zgodnych produktów"
 
 #: pretix/base/models/discount.py:146
 msgid ""
@@ -4375,7 +4346,7 @@ msgid ""
 "many times. If you keep the field empty or set it to 0, there is no special "
 "limit for this product."
 msgstr ""
-"Ten produkt może zostać zamówiony tylko jeśli wózek użytkownika zawiera go "
+"Ten produkt może zostać zamówiony tylko jeśli koszyk użytkownika zawiera go "
 "przynajmniej tyle razy. Pozostawienie pola pustego lub wprowadzenie 0 "
 "wyłącza ten limit."
 
@@ -5556,10 +5527,8 @@ msgstr ""
 "uprawnienie."
 
 #: pretix/base/models/organizer.py:283
-#, fuzzy
-#| msgid "Internal comment"
 msgid "Can manage customer accounts"
-msgstr "Komentarz wewnętrzny"
+msgstr "Może zarządzać kontami użytkownikó∑"
 
 #: pretix/base/models/organizer.py:287
 #, fuzzy
@@ -7045,10 +7014,8 @@ msgid "Seat: seat number"
 msgstr "Ulica i numer domu"
 
 #: pretix/base/pdf.py:487
-#, fuzzy
-#| msgid "Date and time"
 msgid "Date and time of first scan"
-msgstr "Data i czas"
+msgstr "Data i czas pierwszego skanu"
 
 #: pretix/base/pdf.py:493
 #, fuzzy
@@ -7761,6 +7728,8 @@ msgid ""
 "You selected a membership for the product \"{product}\" which does not "
 "require a membership."
 msgstr ""
+"Wybrano członkowstwo dla produktu \"{product}\", któryh nie wymaga "
+"członkowstwa."
 
 #: pretix/base/services/memberships.py:113
 #, python-brace-format
@@ -7768,13 +7737,12 @@ msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
 msgstr ""
+"Wybrano produkt \"{product}\" który wymaga wybrania aktywnego członkowstwa."
 
 #: pretix/base/services/memberships.py:142
-#, fuzzy
-#| msgid "You cannot select an item that belongs to a different event."
 msgid ""
 "You selected a membership that is connected to a different customer account."
-msgstr "Wybrano przedmiot należący do innego wydarzenia."
+msgstr "Wybrano członkowstwo, które jest połączone z innym kontem klienta."
 
 #: pretix/base/services/memberships.py:147
 #, fuzzy
@@ -7792,6 +7760,8 @@ msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "an event taking place at {date}."
 msgstr ""
+"Wybrano członkowstwo które jest ważne od {start} do {end}, ale wybrane "
+"wydarzenie ma miejsce {date}."
 
 #: pretix/base/services/memberships.py:174
 #, python-brace-format
@@ -7799,6 +7769,8 @@ msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
 "product \"{product}\"."
 msgstr ""
+"Wybrano członkowstwo typu \"{type}\", które nie jest dozwolone dla produktu "
+"\"{product}\"."
 
 #: pretix/base/services/memberships.py:183
 #, python-brace-format
@@ -29774,7 +29746,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:243
 msgid "If you already ordered a ticket"
-msgstr ""
+msgstr "Jeżeli bilet jest już zamówiony"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:247
 msgid ""
@@ -29786,7 +29758,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:256
 msgid "Resend order link"
-msgstr ""
+msgstr "Wyślij ponownie link do zamówienia"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
@@ -30228,10 +30200,8 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
-#, fuzzy
-#| msgid "Pending orders"
 msgid "Resend order links"
-msgstr "Zamówienia w toku"
+msgstr "Wyślij ponownie linki do zamówienia"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:15
 msgid ""
@@ -30964,6 +30934,8 @@ msgid ""
 "We've added you to the waiting list. We will send an email to {email} as "
 "soon as this product gets available again."
 msgstr ""
+"Dodaliśmy Cię do listy oczekujących. Wyślemi Ci mail na {email} kiedy "
+"produkt będzie znów dostępny."
 
 #: pretix/presale/views/waiting.py:160
 #, fuzzy
