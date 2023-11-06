@@ -575,7 +575,7 @@ class ItemUpdateForm(I18nModelForm):
         else:
             del self.fields['hidden_if_available']
 
-        self.fields['hidden_if_item_available'].queryset = self.event.items.all()
+        self.fields['hidden_if_item_available'].queryset = self.event.items.exclude(id=self.instance.id)
         self.fields['hidden_if_item_available'].widget = Select2(
             attrs={
                 'data-model-select2': 'generic',
