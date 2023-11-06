@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 12:47+0000\n"
-"PO-Revision-Date: 2023-09-27 06:59+0000\n"
-"Last-Translator: Igor Támara <igor@tamarapatino.org>\n"
+"PO-Revision-Date: 2023-11-06 09:00+0000\n"
+"Last-Translator: Zona Vip <contacto@zonavip.mx>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
 "Language: es\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -10909,7 +10909,7 @@ msgstr "Srx."
 #: pretix/base/settings.py:3515 pretix/base/settings.py:3536
 #: pretix/base/settings.py:3558
 msgid "Given name"
-msgstr "Nombre dado"
+msgstr "Nombre"
 
 #: pretix/base/settings.py:3357 pretix/base/settings.py:3370
 #: pretix/base/settings.py:3386 pretix/base/settings.py:3402
