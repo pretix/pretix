@@ -21,6 +21,7 @@
 #
 from decimal import ROUND_HALF_UP, Decimal
 
+from babel import Locale, UnknownLocaleError
 from babel.numbers import format_currency
 from django import template
 from django.conf import settings
@@ -51,6 +52,14 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
     if hide_currency:
         return floatformat(value, places)
 
+    locale_parts = translation.get_language().split('-', 1)
+    locale = locale_parts[0]
+    if len(locale_parts) > 1 and len(locale_parts[1]) == 2:
+        try:
+            locale = Locale(locale_parts[0], locale_parts[1].upper())
+        except UnknownLocaleError:
+            pass
+
     try:
         if rounded != value:
             # We display decimal places even if we shouldn't for this currency if rounding
@@ -60,7 +69,7 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
                 arg,
                 floatformat(value, 2)
             )
-        return format_currency(value, arg, locale=translation.get_language()[:2])
+        return format_currency(value, arg, locale=locale)
     except:
         return '{} {}'.format(
             arg,
