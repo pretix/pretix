@@ -1434,6 +1434,53 @@ class OrderChangeAddonsTest(BaseOrdersTest):
         self.order.refresh_from_db()
         assert self.order.total == Decimal('35.00')
 
+    def test_allow_user_price_gte_paid(self):
+        self.event.settings.change_allow_user_price = 'gte_paid'
+        with scopes_disabled():
+            OrderPosition.objects.create(
+                order=self.order,
+                item=self.workshop1,
+                variation=None,
+                price=Decimal("12"),
+                addon_to=self.ticket_pos,
+                attendee_name_parts={'full_name': "Peter"}
+            )
+            self.order.total += Decimal("12")
+            self.order.save()
+            self.order.payments.create(amount=Decimal("23"), provider="manual", state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+            },
+            follow=True
+        )
+        assert 'alert-danger' not in response.content.decode()
+
+        with scopes_disabled():
+            self.order.payments.create(amount=Decimal("12"), provider="manual", state=OrderPayment.PAYMENT_STATE_CONFIRMED)
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+        assert 'refund' in response.content.decode()
+
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'confirm': 'true'
+            },
+            follow=True
+        )
+        assert 'alert-danger' in response.content.decode()
+        assert 'refund' in response.content.decode()
+        self.order.refresh_from_db()
+        assert self.order.total == Decimal('35.00')
+
     def test_allow_user_price_eq(self):
         self.event.settings.change_allow_user_price = 'eq'
         response = self.client.post(
