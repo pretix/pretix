@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("pretixbase", "0246_bigint"),
+        ("pretixbase", "0249_hidden_if_item_available"),
     ]
 
     operations = [
