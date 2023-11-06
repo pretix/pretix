@@ -1,0 +1,31 @@
+{% extends "pretixcontrol/items/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Delete check-ins" %}{% endblock %}
+{% block inside %}
+	<h1>{% trans "Delete check-ins" %}</h1>
+	<form action="{% url "control:event.orders.checkinlists.bulk_action" event=request.event.slug organizer=request.event.organizer.slug list=checkinlist.pk %}" method="post" class="form-horizontal" data-asynctask>
+		{% csrf_token %}
+        {% for k, l in request.POST.lists %}
+            {% for v in l %}
+                <input type="hidden" name="{{ k }}" value="{{ v }}">
+            {% endfor %}
+        {% endfor %}
+		<p>
+            {% blocktrans trimmed count count=cnt %}
+                Are you sure you want to permanently delete the check-ins of <strong>one ticket</strong>.
+            {% plural %}
+                Are you sure you want to permanently delete the check-ins of <strong>{{ count }} tickets</strong>?
+            {% endblocktrans %}
+        </p>
+		<div class="form-group submit-group">
+            <a href="{% url "control:event.orders.checkinlists" organizer=request.event.organizer.slug event=request.event.slug %}"
+                    class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-danger btn-save">
+                {% trans "Delete" %}
+            </button>
+		</div>
+	</form>
+{% endblock %}

@@ -205,22 +205,27 @@
                     </tbody>
                 </table>
             </div>
-            {% if "can_change_orders" in request.eventpermset or "can_checkin_orders" in request.eventpermset %}
-                <button type="submit" class="btn btn-primary btn-save">
-                    <span class="fa fa-sign-in" aria-hidden="true"></span>
-                    {% trans "Check-In selected attendees" %}
-                </button>
-                <button type="submit" class="btn btn-default btn-save" name="checkout" value="true">
-                    <span class="fa fa-sign-out" aria-hidden="true"></span>
-                    {% trans "Check-Out selected attendees" %}
-                </button>
-            {% endif %}
-            {% if "can_change_orders" in request.eventpermset %}
-                <button type="submit" class="btn btn-danger btn-save" name="revert" value="true">
-                    <span class="fa fa-trash" aria-hidden="true"></span>
-                    {% trans "Delete all check-ins of selected attendees" %}
-                </button>
-            {% endif %}
+            <div class="batch-select-actions">
+                {% if "can_change_orders" in request.eventpermset or "can_checkin_orders" in request.eventpermset %}
+                    <button type="submit" class="btn btn-primary btn-save">
+                        <span class="fa fa-sign-in" aria-hidden="true"></span>
+                        {% trans "Check-In selected attendees" %}
+                    </button>
+                    <button type="submit" class="btn btn-default btn-save" name="checkout" value="true">
+                        <span class="fa fa-sign-out" aria-hidden="true"></span>
+                        {% trans "Check-Out selected attendees" %}
+                    </button>
+                {% endif %}
+                {% if "can_change_orders" in request.eventpermset %}
+                    <button type="submit" class="btn btn-danger btn-save" name="revert"
+                            formaction="{% url "control:event.orders.checkinlists.bulk_revert" event=request.event.slug organizer=request.event.organizer.slug list=checkinlist.pk %}"
+                            data-no-asynctask
+                            value="true">
+                        <span class="fa fa-trash" aria-hidden="true"></span>
+                        {% trans "Delete all check-ins of selected attendees" %}
+                    </button>
+                {% endif %}
+            </div>
         </form>
         {% include "pretixcontrol/pagination.html" %}
     {% endif %}
