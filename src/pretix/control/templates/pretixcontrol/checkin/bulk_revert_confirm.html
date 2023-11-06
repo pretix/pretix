@@ -11,7 +11,13 @@
                 <input type="hidden" name="{{ k }}" value="{{ v }}">
             {% endfor %}
         {% endfor %}
-		<p>{% blocktrans with count=cnt %}Are you sure you want to permanently delete the check-ins of <strong>{{ count }} tickets</strong>?{% endblocktrans %}</p>
+		<p>
+            {% blocktrans trimmed count count=cnt %}
+                Are you sure you want to permanently delete the check-ins of <strong>one ticket</strong>.
+            {% plural %}
+                Are you sure you want to permanently delete the check-ins of <strong>{{ count }} tickets</strong>?
+            {% endblocktrans %}
+        </p>
 		<div class="form-group submit-group">
             <a href="{% url "control:event.orders.checkinlists" organizer=request.event.organizer.slug event=request.event.slug %}"
                     class="btn btn-default btn-cancel">
