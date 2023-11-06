@@ -494,7 +494,7 @@ class Item(LoggedModel):
         'Quota',
         null=True, blank=True,
         on_delete=models.SET_NULL,
-        verbose_name=_("Only show after sellout of"),
+        verbose_name=pgettext_lazy("hidden_if_available_legacy", "Only show after sellout of"),
         help_text=_("If you select a quota here, this product will only be shown when that quota is "
                     "unavailable. If combined with the option to hide sold-out products, this allows you to "
                     "swap out products for more expensive ones once they are sold out. There might be a short period "

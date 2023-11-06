@@ -441,7 +441,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
     if not quota_cache_existed and not voucher and not allow_addons and not base_qs_set and not filter_items and not filter_categories:
         event.cache.set(quota_cache_key, quota_cache, 5)
     items = [item for item in items
-             if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove and not getattr(item, '_hide_for_available', False)]
+             if (len(item.available_variations) > 0 or not item.has_variations) and not item._remove]
     return items, display_add_to_cart
 
 
