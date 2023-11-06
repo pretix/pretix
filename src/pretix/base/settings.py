@@ -1677,8 +1677,8 @@ DEFAULTS = {
                 ('gte', _('Only allow changes if the resulting price is higher or equal than the previous price.')),
                 ('gt', _('Only allow changes if the resulting price is higher than the previous price.')),
                 ('eq', _('Only allow changes if the resulting price is equal to the previous price.')),
-                ('gte_paid', _('Allow changes regardless of price, as long as no refund is required (i.e. not more '
-                               'than the resulting price has already been paid).')),
+                ('gte_paid', _('Allow changes regardless of price, as long as no refund is required (i.e. the resulting '
+                               'price is not lower than what has already been paid).')),
                 ('any', _('Allow changes regardless of price, even if this results in a refund.')),
             )
         ),
