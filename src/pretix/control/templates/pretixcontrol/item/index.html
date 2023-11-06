@@ -169,7 +169,10 @@
                         {% endif %}
                         {% bootstrap_field form.allow_cancel layout="control" %}
                         {% bootstrap_field form.allow_waitinglist layout="control" %}
-                        {% bootstrap_field form.hidden_if_available layout="control" %}
+                        {% if form.hidden_if_available %}
+                            {% bootstrap_field form.hidden_if_available layout="control" %}
+                        {% endif %}
+                        {% bootstrap_field form.hidden_if_item_available layout="control" %}
                     </fieldset>
                     {% for v in formsets.values %}
                         <fieldset>

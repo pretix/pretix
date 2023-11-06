@@ -857,6 +857,10 @@ class Event(EventMixin, LoggedModel):
                 v.item = i
                 v.save(force_insert=True)
 
+        for i in self.items.filter(hidden_if_item_available__isnull=False):
+            i.hidden_if_item_available = item_map[i.hidden_if_item_available_id]
+            i.save()
+
         for imv in ItemMetaValue.objects.filter(item__event=other):
             imv.pk = None
             imv.property = item_meta_properties_map[imv.property_id]

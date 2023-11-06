@@ -494,12 +494,23 @@ class Item(LoggedModel):
         'Quota',
         null=True, blank=True,
         on_delete=models.SET_NULL,
-        verbose_name=_("Only show after sellout of"),
+        verbose_name=pgettext_lazy("hidden_if_available_legacy", "Only show after sellout of"),
         help_text=_("If you select a quota here, this product will only be shown when that quota is "
                     "unavailable. If combined with the option to hide sold-out products, this allows you to "
                     "swap out products for more expensive ones once they are sold out. There might be a short period "
                     "in which both products are visible while all tickets in the referenced quota are reserved, "
                     "but not yet sold.")
+    )
+    hidden_if_item_available = models.ForeignKey(
+        'Item',
+        null=True, blank=True,
+        on_delete=models.SET_NULL,
+        verbose_name=_("Only show after sellout of"),
+        help_text=_("If you select a product here, this product will only be shown when that product is "
+                    "sold out. If combined with the option to hide sold-out products, this allows you to "
+                    "swap out products for more expensive ones once the cheaper option is sold out. There might "
+                    "be a short period in which both products are visible while all tickets of the referenced "
+                    "product are reserved, but not yet sold.")
     )
     require_voucher = models.BooleanField(
         verbose_name=_('This product can only be bought using a voucher.'),
