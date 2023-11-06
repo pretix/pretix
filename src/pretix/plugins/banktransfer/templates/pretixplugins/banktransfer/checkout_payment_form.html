@@ -2,33 +2,41 @@
 {% load ibanformat %}
 {% load bootstrap3 %}
 
-<p>{% blocktrans trimmed %}
-    After completing your purchase, we will ask you to transfer the money to the following
-    bank account, using a personal reference code:
-{% endblocktrans %}</p>
+{% if details or code %}
+    <p>{% blocktrans trimmed %}
+        After completing your purchase, we will ask you to transfer the money to the following
+        bank account, using a personal reference code:
+    {% endblocktrans %}</p>
 
-{% if settings.bank_details_type == "sepa" %}
-    <dl class="dl-horizontal">
-        <dt>{% trans "Account holder" %}: </dt><dd>{{ settings.bank_details_sepa_name }}</dd>
-        <dt>{% trans "IBAN" %}: </dt><dd>{{ settings.bank_details_sepa_iban|ibanformat }}</dd>
-        <dt>{% trans "BIC" %}: </dt><dd>{{ settings.bank_details_sepa_bic }}</dd>
-        <dt>{% trans "Bank" %}: </dt><dd>{{ settings.bank_details_sepa_bank }}</dd>
-    </dl>
-{% endif %}
+    {% if not code %}<div class="user-select-none">{% endif %}
+    {% if settings.bank_details_type == "sepa" %}
+        <dl class="dl-horizontal" data-toggle="tooltip" title="{% trans "Please do not yet start a payment. We'll assign you a personal reference code after you completed the order." %}">
+            <dt>{% trans "Account holder" %}: </dt><dd>{{ settings.bank_details_sepa_name }}</dd>
+            <dt>{% trans "IBAN" %}: </dt><dd>{{ settings.bank_details_sepa_iban|ibanformat }}</dd>
+            <dt>{% trans "BIC" %}: </dt><dd>{{ settings.bank_details_sepa_bic }}</dd>
+            <dt>{% trans "Bank" %}: </dt><dd>{{ settings.bank_details_sepa_bank }}</dd>
+        </dl>
+    {% endif %}
 
-{% if details %}
     {{ details|linebreaks }}
-{% endif %}
-{% if code %}
-    <dl class="dl-horizontal">
-        <dt>{% trans "Reference code (important):" %} </dt><dd><strong>{{ code }}</strong></dd>
-    </dl>
+    {% if not code %}</div>{% endif %}
+
+    {% if code %}
+        <dl class="dl-horizontal">
+            <dt>{% trans "Reference code (important):" %} </dt><dd><strong>{{ code }}</strong></dd>
+        </dl>
+    {% else %}
+        <p>
+            <strong>
+                {% trans "We will assign you a personal reference code to use after you completed the order." %}
+            </strong>
+        </p>
+    {% endif %}
 {% else %}
-    <p>
-        <strong>
-            {% trans "We will assign you a personal reference code to use after you completed the order." %}
-        </strong>
-    </p>
+    <p>{% blocktrans trimmed %}
+        After completing your purchase, we will ask you to transfer the money to our bank account, using a personal
+        reference code.
+    {% endblocktrans %}</p>
 {% endif %}
 {% if form.fields %}
     <div class="col-md-12">
