@@ -52,7 +52,7 @@ from pretix.base.models import Seat, SeatCategoryMapping
 from ..decimal import round_decimal
 from .base import LoggedModel
 from .event import Event, SubEvent
-from .items import Item, ItemVariation, Quota
+from .items import Item, ItemVariation, Quota, ItemCategory
 from .orders import Order, OrderPosition
 
 
@@ -305,6 +305,13 @@ class Voucher(LoggedModel):
         default=False
     )
 
+    applicable_to = models.ManyToManyField(
+        ItemCategory,
+        blank=True,
+        null=True,
+        help_text=_("Select items categories to which this voucher should be applicable. "
+                    "\n Default: ALL categories and items")
+    )
     objects = ScopedManager(organizer='event__organizer')
 
     class Meta:
@@ -560,7 +567,7 @@ class Voucher(LoggedModel):
             return False
         return True
 
-    def calculate_price(self, original_price: Decimal, max_discount: Decimal=None) -> Decimal:
+    def calculate_price(self, original_price: Decimal, max_discount: Decimal=None, item=None) -> Decimal:
         """
         Returns how the price given in original_price would be modified if this
         voucher is applied, i.e. replaced by a different price or reduced by a
@@ -568,6 +575,10 @@ class Voucher(LoggedModel):
         original price will be returned.
         """
         if self.value is not None:
+            if self.applicable_to.exists() and item is not None:
+                if not self.applicable_to.filter(id=item.category.id).exists():
+                    return original_price
+
             if not isinstance(self.value, Decimal):
                 self.value = Decimal(self.value)
             if self.price_mode == 'set':

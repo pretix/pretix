@@ -53,6 +53,8 @@ from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
 from pretix.control.signals import voucher_form_validation
 from pretix.helpers.models import modelcopy
 
+from src.pretix.base.models import ItemCategory
+
 
 class FakeChoiceField(forms.ChoiceField):
     def valid_value(self, value):
@@ -66,6 +68,11 @@ class VoucherForm(I18nModelForm):
             "This product is added to the user's cart if the voucher is redeemed."
         ),
         required=True
+    )
+    categories = forms.MultipleChoiceField(
+        label=_("Categories of items to which this voucher should be applicable"),
+        help_text=_("Specify product categories to which this voucher should be applicable. Default: ALL"),
+        required=False
     )
 
     class Meta:
@@ -87,7 +94,11 @@ class VoucherForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         instance = kwargs.get('instance')
         initial = kwargs.get('initial')
+        initial_categories = []
+
         if instance:
+            initial_categories = instance.applicable_to.all() if instance else ItemCategory.objects.none()
+
             self.initial_instance_data = modelcopy(instance)
             try:
                 if instance.variation:
@@ -101,6 +112,13 @@ class VoucherForm(I18nModelForm):
         else:
             self.initial_instance_data = None
         super().__init__(*args, **kwargs)
+
+        # Set the choices for the categories field with all ItemCategory objects
+        self.fields['categories'].choices = [(category.id, category.name) for category in ItemCategory.objects.all()]
+
+        # Set the initial values for the categories field if there's an instance with applicable_to categories
+        if instance:
+            self.fields['categories'].initial = [category.id for category in initial_categories]
 
         if instance.event.has_subevents:
             self.fields['subevent'].queryset = instance.event.subevents.all()
@@ -244,7 +262,16 @@ class VoucherForm(I18nModelForm):
         return data
 
     def save(self, commit=True):
-        return super().save(commit)
+        voucher = super().save(commit=False)
+        if commit:
+            voucher.applicable_to.clear()
+        # Add selected categories
+        category_ids = self.cleaned_data.get('categories')
+        voucher.applicable_to.set(category_ids)
+        if commit:
+            voucher.save()
+
+        return voucher
 
 
 class VoucherBulkForm(VoucherForm):

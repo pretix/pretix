@@ -48,7 +48,7 @@ def get_price(item: Item, variation: ItemVariation = None,
     price = get_listed_price(item, variation, subevent)
 
     if voucher:
-        price = voucher.calculate_price(price, max_discount=max_discount)
+        price = voucher.calculate_price(price, max_discount=max_discount, item=item)
 
     if tax_rule is not None:
         tax_rule = tax_rule

@@ -531,7 +531,7 @@ class CartManager:
                 else:
                     listed_price = get_listed_price(cp.item, cp.variation, cp.subevent)
                 if cp.voucher:
-                    price_after_voucher = cp.voucher.calculate_price(listed_price)
+                    price_after_voucher = cp.voucher.calculate_price(listed_price, item=cp.item)
                 else:
                     price_after_voucher = listed_price
 
@@ -599,7 +599,7 @@ class CartManager:
                     listed_price = get_listed_price(p.item, p.variation, p.subevent)
             else:
                 listed_price = p.listed_price
-            price_after_voucher = voucher.calculate_price(listed_price)
+            price_after_voucher = voucher.calculate_price(listed_price, item=p.item)
 
             voucher_use_diff[voucher] += 1
             ops.append((listed_price - price_after_voucher, self.VoucherOperation(p, voucher, price_after_voucher)))

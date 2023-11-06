@@ -1259,7 +1259,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     listed_price = get_listed_price(pos_data.get('item'), pos_data.get('variation'), pos_data.get('subevent'))
 
                     if pos_data.get('voucher'):
-                        price_after_voucher = pos_data.get('voucher').calculate_price(listed_price)
+                        price_after_voucher = pos_data.get('voucher').calculate_price(listed_price,
+                                                                                      item=pos_data.get("item"))
                     else:
                         price_after_voucher = listed_price
                     if price is None:
@@ -1406,7 +1407,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
             if pos.price is None:
                 if pos.voucher:
-                    price_after_voucher = pos.voucher.calculate_price(listed_price)
+                    price_after_voucher = pos.voucher.calculate_price(listed_price, item=pos.item)
                 else:
                     price_after_voucher = listed_price
 
@@ -1423,9 +1424,11 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             else:
                 if pos.voucher:
                     if not pos.item.tax_rule or pos.item.tax_rule.price_includes_tax:
-                        price_after_voucher = max(pos.price, pos.voucher.calculate_price(listed_price))
+                        price_after_voucher = max(pos.price, pos.voucher.calculate_price(listed_price,
+                                                                                         item=pos.item))
                     else:
-                        price_after_voucher = max(pos.price - pos.tax_value, pos.voucher.calculate_price(listed_price))
+                        price_after_voucher = max(pos.price - pos.tax_value, pos.voucher.calculate_price(listed_price,
+                                                                                                         item=pos.item))
                 else:
                     price_after_voucher = listed_price
                 pos._auto_generated_price = False
