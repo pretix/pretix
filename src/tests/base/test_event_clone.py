@@ -71,7 +71,8 @@ def test_full_clone_same_organizer():
     # todo: test that item pictures are copied, not linked
     ItemMetaValue.objects.create(item=item1, property=item_meta, value="Foo")
     assert item1.meta_data
-    item2 = event.items.create(category=category, tax_rule=tax_rule, name="T-shirt", default_price=15)
+    item2 = event.items.create(category=category, tax_rule=tax_rule, name="T-shirt", default_price=15,
+                               hidden_if_item_available=item1)
     item2v = item2.variations.create(value="red", default_price=15)
     item2v.meta_values.create(property=item_meta, value="Bar")
     item2.require_membership_types.add(membership_type)
@@ -156,6 +157,7 @@ def test_full_clone_same_organizer():
     assert copied_item1.addons.get().addon_category == copied_event.categories.get()
     assert copied_item1.bundles.get().bundled_item == copied_item2
     assert copied_item1.bundles.get().bundled_variation == copied_item2.variations.get()
+    assert copied_item2.hidden_if_item_available == copied_item1
     assert copied_q1.items.get() == copied_item1
     assert copied_q2.items.get() == copied_item2
     assert copied_q2.variations.get() == copied_item2.variations.get()
