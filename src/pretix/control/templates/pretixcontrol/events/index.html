@@ -33,6 +33,12 @@
                         {% bootstrap_field filter_form.status %}
                     </div>
                     <div class="col-md-3 col-sm-6 col-xs-12">
+                        {% bootstrap_field filter_form.date_from %}
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
+                        {% bootstrap_field filter_form.date_until %}
+                    </div>
+                    <div class="col-md-3 col-sm-6 col-xs-12">
                         {% bootstrap_field filter_form.organizer %}
                     </div>
                     {% for mf in meta_fields %}

@@ -1599,6 +1599,20 @@ class EventFilterForm(FilterForm):
         }),
         required=False
     )
+    date_from = forms.DateField(
+        label=_('Date from'),
+        required=False,
+        widget=DatePickerWidget({
+            'placeholder': _('Date from'),
+        }),
+    )
+    date_until = forms.DateField(
+        label=_('Date until'),
+        required=False,
+        widget=DatePickerWidget({
+            'placeholder': _('Date until'),
+        }),
+    )
 
     def __init__(self, *args, **kwargs):
         self.request = kwargs.pop('request')
@@ -1679,6 +1693,22 @@ class EventFilterForm(FilterForm):
             qs = qs.filter(
                 Q(name__icontains=i18ncomp(query)) | Q(slug__icontains=query)
             )
+
+        if fdata.get('date_until'):
+            date_end = make_aware(datetime.combine(
+                fdata.get('date_until') + timedelta(days=1),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), get_current_timezone())
+            qs = qs.filter(
+                Q(date_to__isnull=True, date_from__lt=date_end) |
+                Q(date_to__isnull=False, date_to__lt=date_end)
+            )
+        if fdata.get('date_from'):
+            date_start = make_aware(datetime.combine(
+                fdata.get('date_from'),
+                time(hour=0, minute=0, second=0, microsecond=0)
+            ), get_current_timezone())
+            qs = qs.filter(date_from__gte=date_start)
 
         filters_by_property_name = {}
         for i, p in enumerate(self.meta_properties):
