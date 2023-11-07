@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 12:47+0000\n"
-"PO-Revision-Date: 2023-11-06 09:00+0000\n"
+"PO-Revision-Date: 2023-11-07 14:00+0000\n"
 "Last-Translator: Zona Vip <contacto@zonavip.mx>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -455,7 +455,7 @@ msgstr "Reembolso del pago completado"
 
 #: pretix/api/webhooks.py:281
 msgid "Refund of payment canceled"
-msgstr "Reembolso del pago anulado."
+msgstr "Reembolso del pago anulado"
 
 #: pretix/api/webhooks.py:285
 msgid "Refund of payment failed"
@@ -526,7 +526,7 @@ msgstr "La tienda ha sido desconectada"
 
 #: pretix/api/webhooks.py:346
 msgid "Test-Mode of shop has been activated"
-msgstr "Modo de pruebas de la tienda ha sido activado."
+msgstr "Modo de pruebas de la tienda ha sido activado"
 
 #: pretix/api/webhooks.py:350
 msgid "Test-Mode of shop has been deactivated"
@@ -1575,7 +1575,7 @@ msgstr "Activo"
 #: pretix/control/forms/discounts.py:87 pretix/control/forms/event.py:955
 #: pretix/control/forms/item.py:545 pretix/control/forms/item.py:781
 msgid "Sales channels"
-msgstr "Canales de ventas"
+msgstr "Canal de ventas"
 
 #: pretix/base/exporters/items.py:74 pretix/base/models/items.py:420
 #: pretix/base/models/items.py:1015
@@ -1984,7 +1984,7 @@ msgstr "Pagado con {method}"
 #: pretix/base/exporters/orderlist.py:435
 #: pretix/base/exporters/orderlist.py:846
 msgid "Fee type"
-msgstr "Tipo de tarifa"
+msgstr "Tarifa por billete"
 
 #: pretix/base/exporters/orderlist.py:437
 #: pretix/base/exporters/orderlist.py:555
@@ -2027,8 +2027,9 @@ msgstr "cancelado"
 #: pretix/base/exporters/orderlist.py:539
 #: pretix/base/exporters/orderlist.py:839
 #: pretix/plugins/checkinlists/exporters.py:733
+#, fuzzy
 msgid "Position ID"
-msgstr "ID de la Posición"
+msgstr "Posición"
 
 #: pretix/base/exporters/orderlist.py:547
 #: pretix/base/exporters/orderlist.py:850
@@ -2095,7 +2096,7 @@ msgstr "Fecha de inicio"
 #: pretix/plugins/checkinlists/exporters.py:493
 #: pretix/plugins/checkinlists/exporters.py:678
 msgid "End date"
-msgstr "Fecha de fin"
+msgstr "Fecha final"
 
 #: pretix/base/exporters/orderlist.py:551
 #: pretix/base/exporters/orderlist.py:843 pretix/base/models/items.py:674
@@ -3010,9 +3011,9 @@ msgid "Invalid placeholder(s): %(value)s"
 msgstr "Persona(s) interesada(s) inválida(s): %(value)s"
 
 #: pretix/base/forms/widgets.py:67
-#, fuzzy, python-format
+#, python-format
 msgid "Sample: %s"
-msgstr "Ciudad de ejemplo"
+msgstr "Ciudad de ejemplo: %s"
 
 #: pretix/base/forms/widgets.py:70
 #, fuzzy, python-brace-format
@@ -3476,14 +3477,12 @@ msgid "Server error"
 msgstr "Error interno del servidor"
 
 #: pretix/base/models/checkin.py:367
-#, fuzzy
 msgid "Ticket blocked"
-msgstr "Código de ticket"
+msgstr "Ticket bloqueado"
 
 #: pretix/base/models/checkin.py:368
-#, fuzzy
 msgid "Ticket not valid at this time"
-msgstr "Este recibo no es válido para esta fecha de evento."
+msgstr "Ticket no válido en este momento"
 
 #: pretix/base/models/customers.py:55
 #, fuzzy
@@ -5210,7 +5209,7 @@ msgstr "Localización"
 #: pretix/base/models/orders.py:228 pretix/control/forms/filter.py:560
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
 msgid "Total amount"
-msgstr "Monto total"
+msgstr "Cantidad total"
 
 #: pretix/base/models/orders.py:232 pretix/base/models/vouchers.py:292
 msgid ""
@@ -5463,8 +5462,9 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:19
 #: pretix/control/templates/pretixcontrol/organizers/index.html:6
 #: pretix/control/templates/pretixcontrol/organizers/index.html:8
+#, fuzzy
 msgid "Organizers"
-msgstr "Organizadores"
+msgstr "Cuenta del organizador"
 
 #: pretix/base/models/organizer.py:262
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:35
@@ -6283,10 +6283,11 @@ msgstr "No se encontraron respuestas coincidentes."
 
 #: pretix/base/orderimport.py:740 pretix/base/services/cart.py:202
 #: pretix/base/services/orderimport.py:158
-#, fuzzy
 msgid ""
 "The seat you selected has already been taken. Please select a different seat."
-msgstr "Esta URL semántica ya está en uso. Por favor, elija una diferente."
+msgstr ""
+"El asiento que has seleccionado ya está ocupado. Por favor seleccione un "
+"asiento diferente."
 
 #: pretix/base/orderimport.py:743 pretix/base/services/cart.py:199
 #, fuzzy
@@ -7429,9 +7430,8 @@ msgstr ""
 "complemento de otro proyecto."
 
 #: pretix/base/services/cart.py:200
-#, fuzzy
 msgid "Please select a valid seat."
-msgstr "Por favor, seleccione una cuota."
+msgstr "Por favor seleccione un asiento válido."
 
 #: pretix/base/services/cart.py:201
 #, fuzzy
@@ -21649,9 +21649,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:87
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:116
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:171
-#, fuzzy
 msgid "Details"
-msgstr "Detalles del pedido"
+msgstr "Detalles"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:53
 #, fuzzy
@@ -22775,7 +22774,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:141
 #: pretix/control/templates/pretixcontrol/pdf/index.html:173
 msgid "Loading…"
-msgstr "Cargando…"
+msgstr "Cargado…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:144
 msgid "Start editing"
@@ -26958,9 +26957,8 @@ msgid "Search text"
 msgstr "Buscar"
 
 #: pretix/plugins/banktransfer/views.py:356
-#, fuzzy
 msgid "min"
-msgstr "Pie de imprenta"
+msgstr "Información de contacto"
 
 #: pretix/plugins/banktransfer/views.py:357
 #, fuzzy
@@ -29940,7 +29938,7 @@ msgstr "Contactar con el organizador del evento"
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:129
 #: pretix/presale/templates/pretixpresale/organizers/base.html:91
 msgid "Privacy policy"
-msgstr ""
+msgstr "Aviso de Privacidad"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:176
 #: pretix/presale/templates/pretixpresale/organizers/base.html:94
@@ -29951,7 +29949,7 @@ msgstr "Configuración de la factura"
 #: pretix/presale/templates/pretixpresale/event/base.html:179
 #: pretix/presale/templates/pretixpresale/organizers/base.html:97
 msgid "Imprint"
-msgstr "Pie de imprenta"
+msgstr "Información de contacto"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:10
 msgid ""
@@ -30007,9 +30005,8 @@ msgid "Cart expired"
 msgstr "El carrito de compras ha expirado"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:37
-#, fuzzy
 msgid "Show full cart"
-msgstr "Mostrar información"
+msgstr "Mostrar carrito completo"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:49
 #: pretix/presale/templates/pretixpresale/event/index.html:78
