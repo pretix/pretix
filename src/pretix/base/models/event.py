@@ -1665,16 +1665,17 @@ class EventMetaProperty(LoggedModel):
         help_text=_("This field will be shown to filter events or reports in the backend, and it can also be used "
                     "for hidden filter parameters in the frontend (e.g. using the widget).")
     )
+    position = models.IntegerField(
+        default=0
+    )
 
     def full_clean(self, exclude=None, validate_unique=True):
         super().full_clean(exclude, validate_unique)
         if self.default and self.required:
             raise ValidationError(_("A property can either be required or have a default value, not both."))
-        if self.default and self.allowed_values and self.default not in self.allowed_value_keys:
-            raise ValidationError(_("You cannot set a default value that is not a valid value."))
 
     class Meta:
-        ordering = ("name",)
+        ordering = ("position", "name",)
 
     @property
     def allowed_value_keys(self):

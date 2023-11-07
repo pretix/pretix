@@ -17,7 +17,7 @@ def convert_allowed_values(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("pretixbase", "0248_item_free_price_suggestion"),
+        ("pretixbase", "0249_hidden_if_item_available"),
     ]
 
     operations = [
@@ -30,6 +30,11 @@ class Migration(migrations.Migration):
             model_name="eventmetaproperty",
             name="public_label",
             field=i18nfield.fields.I18nCharField(null=True),
+        ),
+        migrations.AddField(
+            model_name="eventmetaproperty",
+            name="position",
+            field=models.IntegerField(default=0),
         ),
         migrations.AddField(
             model_name="eventmetaproperty",

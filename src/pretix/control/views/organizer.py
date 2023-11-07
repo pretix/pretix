@@ -37,6 +37,7 @@ import re
 from datetime import time, timedelta
 from decimal import Decimal
 from hashlib import sha1
+from json import JSONDecodeError
 
 import bleach
 import dateutil
@@ -52,7 +53,7 @@ from django.db.models import (
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.forms import DecimalField
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, Http404
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.formats import date_format
@@ -60,6 +61,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views import View
+from django.views.decorators.http import require_http_methods
 from django.views.generic import (
     CreateView, DetailView, FormView, ListView, TemplateView, UpdateView,
 )
@@ -108,7 +110,7 @@ from pretix.control.forms.organizer import (
 from pretix.control.forms.rrule import RRuleForm
 from pretix.control.logdisplay import OVERVIEW_BANLIST
 from pretix.control.permissions import (
-    AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
+    AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin, organizer_permission_required,
 )
 from pretix.control.signals import nav_organizer
 from pretix.control.views import PaginationMixin
@@ -2067,13 +2069,24 @@ class EventMetaPropertyEditorMixin:
             'event': self.request.organizer,
         }
 
+    def is_default_valid(self):
+        allowed_value_keys = [
+            f.cleaned_data.get("key") for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
+        ]
+        default = self.form.cleaned_data["default"]
+        print(default, allowed_value_keys)
+        if default and allowed_value_keys and default not in allowed_value_keys:
+            messages.error(self.request, _("You cannot set a default value that is not a valid value."))
+            return False
+        return True
+
     def post(self, request, *args, **kwargs):
         self.object = self.get_object(self.get_queryset())
-        form = self.get_form()
-        if form.is_valid() and self.formset.is_valid():
-            return self.form_valid(form)
+        self.form = self.get_form()
+        if self.form.is_valid() and self.formset.is_valid() and self.is_default_valid():
+            return self.form_valid(self.form)
         else:
-            return self.form_invalid(form)
+            return self.form_invalid(self.form)
 
 
 class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, EventMetaPropertyEditorMixin, CreateView):
@@ -2157,6 +2170,75 @@ class EventMetaPropertyDeleteView(OrganizerDetailViewMixin, OrganizerPermissionR
         self.object.delete()
         messages.success(request, _('The selected property has been deleted.'))
         return redirect(success_url)
+
+
+def meta_property_move(request, property, up=True):
+    property = get_object_or_404(request.organizer.meta_properties, id=property)
+    properties = list(request.organizer.meta_properties.order_by("position"))
+
+    index = properties.index(property)
+    if index != 0 and up:
+        properties[index - 1], properties[index] = properties[index], properties[index - 1]
+    elif index != len(properties) - 1 and not up:
+        properties[index + 1], properties[index] = properties[index], properties[index + 1]
+
+    for i, prop in enumerate(properties):
+        if prop.position != i:
+            prop.position = i
+            prop.save()
+            prop.log_action(
+                'pretix.property.reordered', user=request.user, data={
+                    'position': i,
+                }
+            )
+    messages.success(request, _('The order of properties has been updated.'))
+
+
+@organizer_permission_required("can_change_organizer_settings")
+@require_http_methods(["POST"])
+def meta_property_move_up(request, organizer, property):
+    meta_property_move(request, property, up=True)
+    return redirect('control:organizer.properties',
+                    organizer=request.organizer.slug)
+
+
+@organizer_permission_required("can_change_organizer_settings")
+@require_http_methods(["POST"])
+def meta_property_move_down(request, organizer, property):
+    meta_property_move(request, property, up=False)
+    return redirect('control:organizer.properties',
+                    organizer=request.organizer.slug)
+
+
+@transaction.atomic
+@organizer_permission_required("can_change_items")
+@require_http_methods(["POST"])
+def reorder_meta_properties(request, organizer):
+    try:
+        ids = json.loads(request.body.decode('utf-8'))['ids']
+    except (JSONDecodeError, KeyError, ValueError):
+        return HttpResponseBadRequest("expected JSON: {ids:[]}")
+
+    input_meta_properties = list(request.organizer.meta_properties.filter(id__in=[i for i in ids if i.isdigit()]))
+
+    if len(input_meta_properties) != len(ids):
+        raise Http404(_("Some of the provided object ids are invalid."))
+
+    if len(input_meta_properties) != request.organizer.meta_properties.count():
+        raise Http404(_("Not all objects have been selected."))
+
+    for c in input_meta_properties:
+        pos = ids.index(str(c.pk))
+        if pos != c.position:  # Save unneccessary UPDATE queries
+            c.position = pos
+            c.save(update_fields=['position'])
+            c.log_action(
+                'pretix.property.reordered', user=request.user, data={
+                    'position': pos,
+                }
+            )
+
+    return HttpResponse()
 
 
 class LogView(OrganizerPermissionRequiredMixin, PaginationMixin, ListView):
