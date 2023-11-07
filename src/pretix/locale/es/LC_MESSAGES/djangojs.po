@@ -8,16 +8,16 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-18 07:26+0000\n"
-"PO-Revision-Date: 2021-11-25 21:00+0000\n"
-"Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
-"Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/es/>\n"
+"PO-Revision-Date: 2023-11-07 14:00+0000\n"
+"Last-Translator: Zona Vip <contacto@zonavip.mx>\n"
+"Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/es/>\n"
 "Language: es\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -52,7 +52,7 @@ msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:39
 msgid "Credit Card"
-msgstr ""
+msgstr "Tarjeta de crédito"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:40
 msgid "PayPal Pay Later"
@@ -288,16 +288,12 @@ msgid "Ticket code revoked/changed"
 msgstr "Código de ticket revocado/cambiado"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-#, fuzzy
-#| msgid "Ticket not paid"
 msgid "Ticket blocked"
-msgstr "Ticket por pagar"
+msgstr "Ticket bloqueado"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-#, fuzzy
-#| msgid "Ticket not paid"
 msgid "Ticket not valid at this time"
-msgstr "Ticket por pagar"
+msgstr "Ticket no válido en este momento"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Order canceled"
@@ -427,11 +423,11 @@ msgstr "Ver variaciones del producto"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
 msgid "Gate"
-msgstr ""
+msgstr "Puerta"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
 msgid "Current date and time"
-msgstr "Fecha y hora"
+msgstr "Fecha y hora actual"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:109
 msgid "Current day of the week (1 = Monday, 7 = Sunday)"
