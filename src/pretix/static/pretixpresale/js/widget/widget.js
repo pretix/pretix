@@ -1649,6 +1649,7 @@ var shared_root_methods = {
             url = url + '&style=' + encodeURIComponent(this.$root.style);
         }
         var root = this.$root;
+        var oldView = root.view;
         api._getJSON(url, function (data, xhr) {
             if (typeof xhr.responseURL !== "undefined") {
                 var new_url = xhr.responseURL.substr(0, xhr.responseURL.indexOf("/widget/product_list?") + 1);
@@ -1718,6 +1719,13 @@ var shared_root_methods = {
                 // If we're on desktop and someone selects a seating-only event in a calendar, let's open it right away,
                 // but only if the person didn't close it before.
                 root.startseating()
+            } else if (oldView !== null && root.view !== oldView) {
+                Vue.nextTick(function () {
+                    console.log("next tick", root.$refs, root.$refs.wrapper)
+                    if (root.$children[0].$refs.wrapper) {
+                        root.$children[0].$refs.wrapper.scrollIntoView();
+                    }
+                })
             }
         }, function (error) {
             root.categories = [];
