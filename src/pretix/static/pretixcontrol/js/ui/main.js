@@ -772,6 +772,17 @@ function setup_basics(el) {
         }
     });
 
+    el.find('a.pagination-selection').click(function () {
+        var inp = prompt(gettext("Enter page number."));
+        if (inp) {
+            if (!parseInt(inp) || parseInt(inp) < 1 || parseInt(inp) > parseInt($(this).attr("data-max"))) {
+                alert(gettext("Invalid page number."));
+            } else {
+                location.href = $(this).attr("data-href").replace("_PAGE_", inp);
+            }
+        }
+    });
+
     var url = document.location.toString();
     if (url.match('#')) {
         $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');

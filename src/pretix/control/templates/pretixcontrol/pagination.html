@@ -6,26 +6,47 @@
     <ul class="pagination">
         {% if is_paginated %}
             {% if page_obj.has_previous %}
+                {% if page_obj.previous_page_number > 1 %}
+                    <li>
+                        <a href="?{% url_replace request 'page' page_obj.num_pages %}" title="{% trans "Go to page 1" %}">
+                            <span class="fa fa-angle-double-left"></span>
+                        </a>
+                    </li>
+                {% endif %}
                 <li>
-                    <a href="?{% url_replace request 'page' page_obj.previous_page_number %}">
-                        <span>&laquo;</span>
+                    <a href="?{% url_replace request 'page' page_obj.previous_page_number %}" title="{% blocktrans with page=page_obj.previous_page_number %}Go to page {{ page }}{% endblocktrans %}">
+                        <span class="fa fa-angle-left"></span>
                     </a>
                 </li>
             {% endif %}
-            <li class="page-current"><a>
+            <li class="page-current">
+                <a {% if page_obj.paginator.count %}
+                    class="pagination-selection"
+                    data-href="?{% url_replace request 'page' '_PAGE_' %}"
+                    data-max="{{ page_obj.paginator.num_pages }}"
+                    title="{% trans "Click to choose a page" %}"
+                    {% endif %}>
                 {% blocktrans trimmed with page=page_obj.number of=page_obj.paginator.num_pages count=page_obj.paginator.count|intcomma %}
                     Page {{ page }} of {{ of }} ({{ count }} elements)
                 {% endblocktrans %}
-            </a></li>
+                </a>
+            </li>
             {% if page_obj.has_next %}
                 <li>
-                        <a href="?{% url_replace request 'page' page_obj.next_page_number %}">
-                        <span>&raquo;</span>
+                    <a href="?{% url_replace request 'page' page_obj.next_page_number %}" title="{% blocktrans with page=page_obj.next_page_number %}Go to page {{ page }}{% endblocktrans %}">
+                        <span class="fa fa-angle-right"></span>
+                    </a>
+                </li>
+            {% endif %}
+            {% if page_obj.paginator.count and page_obj.paginator.num_pages > page_obj.next_page_number %}
+                <li>
+                    <a href="?{% url_replace request 'page' page_obj.paginator.num_pages %}" title="{% blocktrans with page=page_obj.paginator.num_pages %}Go to page {{ page }}{% endblocktrans %}">
+                        <span class="fa fa-angle-double-right"></span>
                     </a>
                 </li>
             {% endif %}
         {% else %}
-        {% if page_obj.paginator.count > 1 %}
+            {% if page_obj.paginator.count > 1 %}
                 <li class="page-current"><a>
                     {% blocktrans trimmed with count=page_obj.paginator.count|intcomma %}
                         {{ count }} elements
