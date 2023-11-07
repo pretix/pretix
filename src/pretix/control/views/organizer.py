@@ -53,7 +53,9 @@ from django.db.models import (
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.forms import DecimalField
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse, Http404
+from django.http import (
+    Http404, HttpResponse, HttpResponseBadRequest, JsonResponse,
+)
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.formats import date_format
@@ -110,7 +112,8 @@ from pretix.control.forms.organizer import (
 from pretix.control.forms.rrule import RRuleForm
 from pretix.control.logdisplay import OVERVIEW_BANLIST
 from pretix.control.permissions import (
-    AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin, organizer_permission_required,
+    AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
+    organizer_permission_required,
 )
 from pretix.control.signals import nav_organizer
 from pretix.control.views import PaginationMixin
