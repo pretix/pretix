@@ -345,7 +345,13 @@
         <div class="panel panel-default panel-cancellation">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    {% trans "Change or cancel your order" context "action" %}
+                    {% if order.user_cancel_deadline %}
+                        {% blocktrans trimmed context "action" with deadline=order.user_cancel_deadline %}
+                            Change or cancel your order until {{ deadline }}
+                        {% endblocktrans %}
+                    {% else %}
+                        {% trans "Change or cancel your order" context "action" %}
+                    {% endif %}
                 </h3>
             </div>
             <ul class="list-group">
