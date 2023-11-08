@@ -345,13 +345,7 @@
         <div class="panel panel-default panel-cancellation">
             <div class="panel-heading">
                 <h3 class="panel-title">
-                    {% if order.user_cancel_deadline %}
-                        {% blocktrans trimmed context "action" with deadline=order.user_cancel_deadline %}
-                            Change or cancel your order until {{ deadline }}
-                        {% endblocktrans %}
-                    {% else %}
-                        {% trans "Change or cancel your order" context "action" %}
-                    {% endif %}
+                    {% trans "Change or cancel your order" context "action" %}
                 </h3>
             </div>
             <ul class="list-group">
@@ -472,6 +466,16 @@
                                 {% endif %}
                                 {% trans "This will invalidate all tickets in this order." %}
                             </p>
+
+                            {% if order.user_cancel_deadline %}
+                                <p>
+                                {% with date_human=order.user_cancel_deadline|date:"DATETIME_FORMAT"|safe date_iso=order.user_cancel_deadline.isoformat %}
+                                    {% blocktrans trimmed with deadline='<time datetime="'|add:date_iso|add:'">'|add:date_human|add:"</time>"|safe %}
+                                        Cancelation is possible until {{ deadline }}.
+                                    {% endblocktrans %}
+                                {% endwith %}
+                                </p>
+                            {% endif %}
                             <p>
                                 <a href="{% eventurl event 'presale:event.order.cancel' secret=order.secret order=order.code %}"
                                         class="btn btn-danger">
