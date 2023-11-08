@@ -2009,7 +2009,12 @@ var create_widget = function (element) {
         watch: {
             'view': function (newValue, oldValue) {
                 if (oldValue) {
-                    this.$el.scrollIntoView()
+                    // always make sure the widget is scrolled to the top
+                    // as we only check top, we do not need to wait for a redraw
+                    var rect = this.$el.getBoundingClientRect();
+                    if (rect.top < 0) {
+                        this.$el.scrollIntoView();
+                    }
                 }
             }
         }
