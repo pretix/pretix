@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 12:47+0000\n"
 "PO-Revision-Date: 2023-11-09 03:00+0000\n"
-"Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
+"Last-Translator: Maciej Sowilski <maciej.sowilski@syrreal.net>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -7143,7 +7143,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:104
 msgid "Unknown cart position."
-msgstr ""
+msgstr "Nieznana pozycja koszyka."
 
 #: pretix/base/services/cart.py:105
 msgctxt "subevent"
@@ -7203,8 +7203,14 @@ msgid_plural ""
 "We removed %(product)s from your cart as you can not buy less than %(min)s "
 "items of it."
 msgstr[0] ""
+"Produkt %(product)s został usunięty z koszyka. Minimalna ilość do zakupu to "
+"%(min)s."
 msgstr[1] ""
+"Produkty %(product)s zostały usunięte z koszyka. Minimalna ilość do zakupu "
+"to %(min)s."
 msgstr[2] ""
+"Produkty %(product)s zostały usunięte z koszyka. Minimalna ilość do zakupu "
+"to %(min)s."
 
 #: pretix/base/services/cart.py:134 pretix/base/services/orders.py:154
 #: pretix/presale/templates/pretixpresale/event/index.html:157
@@ -7231,12 +7237,16 @@ msgid ""
 "The booking period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
+"Nie rozpoczęto jeszcze sprzedaży biletów na to wydarzenie.  Bilety zostały "
+"usunięte z koszyka."
 
 #: pretix/base/services/cart.py:141 pretix/base/services/orders.py:182
 msgid ""
 "The booking period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
+"Sprzedaż biletów na to wydarzenie została już zakończona.  Bilety zostały "
+"usunięte z koszyka."
 
 #: pretix/base/services/cart.py:143
 msgid "The entered price is not a number."
@@ -7815,6 +7825,8 @@ msgid ""
 "The price of some of the items in your cart has changed in the meantime. "
 "Please see below for details."
 msgstr ""
+"Cena części produktów z koszyka zmieniła się w międzyczasie. Szczegóły "
+"poniżej."
 
 #: pretix/base/services/orders.py:141
 msgid "An internal error occurred, please try again."
@@ -7839,8 +7851,14 @@ msgid_plural ""
 "You cannot select more than %(max)s items of the product %(product)s. We "
 "removed the surplus items from your cart."
 msgstr[0] ""
+"Nie można wybrać więcej niż %(max)s szt produktu %(product)s. Nadmiar został "
+"usunięty z koszyka."
 msgstr[1] ""
+"Nie można wybrać więcej niż %(max)s szt produktu %(product)s. Nadmiar został "
+"usunięty z koszyka."
 msgstr[2] ""
+"Nie można wybrać więcej niż %(max)s szt produktu %(product)s. Nadmiar został "
+"usunięty z koszyka."
 
 #: pretix/base/services/orders.py:155
 #, fuzzy
@@ -7852,7 +7870,7 @@ msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
 msgid ""
 "The voucher code used for one of the items in your cart is not known in our "
 "database."
-msgstr ""
+msgstr "Nieznany kod vouchera."
 
 #: pretix/base/services/orders.py:163
 msgid ""
@@ -7860,24 +7878,32 @@ msgid ""
 "used the maximum number of times allowed. We removed this item from your "
 "cart."
 msgstr ""
+"Voucher na jeden z produktów w koszyku został już wykorzystany maksymalną "
+"ilość razy. Produkt usunięty z koszyka."
 
 #: pretix/base/services/orders.py:167
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
+"Voucher użyty dla jednego z produktów w koszyku został  użyty zbyt wiele "
+"razy. Cena produktu została zaktualizowana."
 
 #: pretix/base/services/orders.py:171
 msgid ""
 "The voucher code used for one of the items in your cart is expired. We "
 "removed this item from your cart."
 msgstr ""
+"Voucher na jeden z produktów z koszyka jest już nie ważny. Produkt usunięto "
+"z koszyka."
 
 #: pretix/base/services/orders.py:174
 msgid ""
 "The voucher code used for one of the items in your cart is not valid for "
 "this item. We removed this item from your cart."
 msgstr ""
+"Voucher użyty do jednego z produktów z koszyka nie jest ważny z tym "
+"produktem. Produkt został usunięty z koszyka."
 
 #: pretix/base/services/orders.py:176
 msgid "You need a valid voucher code to order one of the products."
@@ -7888,18 +7914,24 @@ msgid ""
 "The booking period for one of the events in your cart has not yet started. "
 "The affected positions have been removed from your cart."
 msgstr ""
+"Nie rozpoczęto jeszcze sprzedaży biletów na wydarzenie. Prodykty usunięto z "
+"koszyka."
 
 #: pretix/base/services/orders.py:185
 msgid ""
 "One of the seats in your order was invalid, we removed the position from "
 "your cart."
 msgstr ""
+"Jedno z miejsc wybranych w zamówieniu było nieprawidłowe i zostało usunięte "
+"z koszyka."
 
 #: pretix/base/services/orders.py:186
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
 msgstr ""
+"Jedno z miejsc z zamówienia zostało zajęte w miedzyczasie i zostało usunięte "
+"z koszyka."
 
 #: pretix/base/services/orders.py:202
 #, python-format
@@ -8246,6 +8278,8 @@ msgid ""
 "Independent of your choice, the cart will show gross prices as this is the "
 "price that needs to be paid."
 msgstr ""
+"Niezależnie od wyboru koszyk będzie pokazywać kwotę brutto, która musi być "
+"zapłacona."
 
 #: pretix/base/settings.py:335
 msgid "Hide prices on attendee ticket page"
@@ -8548,12 +8582,12 @@ msgstr ""
 #: pretix/base/settings.py:783
 msgid ""
 "The number of minutes the items in a user's cart are reserved for this user."
-msgstr ""
+msgstr "Ilość minut którą produkty są zarezerwowane w koszyku tego użytkownika."
 
 #: pretix/base/settings.py:792
 msgid ""
 "Directly redirect to check-out after a product has been added to the cart."
-msgstr ""
+msgstr "Przekieruj do podsumowania zaraz po dodaniu produktu do koszyka."
 
 #: pretix/base/settings.py:801
 #, fuzzy
@@ -17573,7 +17607,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:330
 msgid "Cart"
-msgstr ""
+msgstr "Koszyk"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:338
 msgid ""
@@ -18606,6 +18640,9 @@ msgid ""
 "overlapping discounts, the first one in the order of the list below will "
 "apply."
 msgstr ""
+"Produkty w koszyku mogą być pod wpływem tylko przez jednej zniżki. Jeżeli "
+"zastosowano wiele zniżek działać będzie tylko pierwsza, którą dodano do "
+"zamówienia."
 
 #: pretix/control/templates/pretixcontrol/items/discounts.html:36
 msgid "You haven't created any discounts yet."
@@ -22753,7 +22790,7 @@ msgstr "Data w serii wydarzeń"
 msgid ""
 "Are you sure you want to delete any cart positions with voucher "
 "<strong>%(voucher)s</strong>?"
-msgstr ""
+msgstr "Czy na pewno usunąć produkty z voucherem  <strong>%(voucher)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:10
 msgid ""
@@ -22777,6 +22814,8 @@ msgid ""
 "This voucher is currently used in %(number)s cart sessions and might not be "
 "free to use until the cart sessions expire."
 msgstr ""
+"Ten voucher jest obecnie używany w %(number)s aktywnych koszyków i może nie "
+"być dostępny przez jakiś czas, aż do  końca sesji tych koszyków."
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:28
 #, fuzzy
@@ -28520,6 +28559,8 @@ msgid ""
 "For some of the products in your cart, you can choose additional options "
 "before you continue."
 msgstr ""
+"Dla niektórych produktów w koszyku można wybrać dodatkowe opcje przed "
+"kontynuowaniem."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_addons.html:13
 msgid "We're now trying to book these add-ons for you!"
@@ -28834,6 +28875,8 @@ msgid ""
 "cookie to remember who you are and what is in your cart. Please change your "
 "browser settings accordingly."
 msgstr ""
+"Przeglądarka nie obsługuje cookies. Cookies są wymagane dla działania "
+"sklepu. Proszę zmienić przeglądarkę, lub jej ustawienia."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:16
 #, python-format
@@ -28985,7 +29028,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:240
 #, python-format
 msgid "Add %(item)s, %(var)s to cart"
-msgstr ""
+msgstr "Dodaj  %(item)s, %(var)s  do koszyka"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:191
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:325
@@ -29030,7 +29073,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:385
 #, python-format
 msgid "Add %(item)s to cart"
-msgstr ""
+msgstr "Dodaj %(item)s do koszyka"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:338
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:357
@@ -29156,12 +29199,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:288
 #, python-format
 msgid "Remove %(item)s from your cart"
-msgstr ""
+msgstr "Usuń %(item)s z koszyka"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:291
 #, python-format
 msgid "Remove one %(item)s from your cart"
-msgstr ""
+msgstr "Usuń 1 sztukę %(item)s z koszyka"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:293
 #, python-format
@@ -29169,6 +29212,7 @@ msgid ""
 "Remove one %(item)s from your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
+"Usuń jedną sztukę %(item)s z koszyka. Obecnie w koszyku jest %(count)s sztuk."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:301
 msgid "We're trying to reserve another one for you!"
@@ -29182,12 +29226,12 @@ msgstr ""
 msgid ""
 "Once the items are in your cart, you will have %(time)s minutes to complete "
 "your purchase."
-msgstr ""
+msgstr "Produkty dodane do koszyka są rezerwowane na %(time)s minut."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:321
 #, python-format
 msgid "Add one more %(item)s to your cart"
-msgstr ""
+msgstr "Dodaj jeszcze jedną sztukę %(item)s do koszyka"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:323
 #, python-format
@@ -29195,6 +29239,8 @@ msgid ""
 "Add one more %(item)s to your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
+"Dodaj jeszcze jedną sztukę %(item)s do koszyka. W koszyku obecnie znajduje "
+"się %(count)s sztuk."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:377
 #: pretix/presale/templates/pretixpresale/event/order_giftcard.html:20
@@ -29250,7 +29296,7 @@ msgstr "Przejdź do podsumowania"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:43
 msgid "Empty cart"
-msgstr ""
+msgstr "Opróżnij koszyk"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:48
 #: pretix/presale/templates/pretixpresale/event/index.html:236
