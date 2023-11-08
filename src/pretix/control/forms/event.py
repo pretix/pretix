@@ -558,6 +558,7 @@ class EventSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'low_availability_percentage',
         'event_list_type',
         'event_list_available_only',
+        'event_list_filters',
         'event_calendar_future_only',
         'frontpage_text',
         'event_info_text',
@@ -645,6 +646,7 @@ class EventSettingsForm(EventSettingsValidationMixin, SettingsForm):
             del self.fields['frontpage_subevent_ordering']
             del self.fields['event_list_type']
             del self.fields['event_list_available_only']
+            del self.fields['event_list_filters']
             del self.fields['event_calendar_future_only']
 
         # create "virtual" fields for better UX when editing <name>_asked and <name>_required fields

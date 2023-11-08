@@ -316,6 +316,9 @@
                 {% if sform.event_list_available_only %}
                     {% bootstrap_field sform.event_list_available_only layout="control" %}
                 {% endif %}
+                {% if sform.event_list_filters %}
+                    {% bootstrap_field sform.event_list_filters layout="control" %}
+                {% endif %}
                 {% if sform.event_calendar_future_only %}
                     {% bootstrap_field sform.event_calendar_future_only layout="control" %}
                 {% endif %}

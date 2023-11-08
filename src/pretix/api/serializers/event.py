@@ -705,6 +705,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'frontpage_subevent_ordering',
         'event_list_type',
         'event_list_available_only',
+        'event_list_filters',
         'event_calendar_future_only',
         'frontpage_text',
         'event_info_text',

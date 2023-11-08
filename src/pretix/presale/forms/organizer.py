@@ -28,6 +28,8 @@ from pretix.base.models import EventMetaValue, SubEventMetaValue
 
 def meta_filtersets(organizer, event=None):
     fields = {}
+    if not (event or organizer).settings.event_list_filters:
+        return fields
     for prop in organizer.meta_properties.filter(filter_public=True):
         if prop.allowed_values:
             choices = [(v["key"], str(LazyI18nString(v["label"])) or v["key"]) for v in prop.allowed_values]
