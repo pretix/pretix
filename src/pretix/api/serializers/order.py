@@ -501,7 +501,7 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
             # /events/…/checkinlists/…/positions/
             # We're unable to check this on this level if we're on /checkinrpc/, in which case we rely on the view
             # layer to not set pdf_data=true in the first place.
-            request and hasattr(request, 'event') and 'can_view_orders' not in request.eventpermset
+            request and hasattr(request, 'eventpermset') and 'can_view_orders' not in request.eventpermset
         )
         if ('pdf_data' in self.context and not self.context['pdf_data']) or pdf_data_forbidden:
             self.fields.pop('pdf_data', None)
