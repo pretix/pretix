@@ -103,15 +103,17 @@ def get_all_sales_channels():
     if _ALL_CHANNELS:
         return _ALL_CHANNELS
 
-    types = OrderedDict()
+    channels = []
     for recv, ret in register_sales_channels.send(None):
         if isinstance(ret, (list, tuple)):
-            for r in ret:
-                types[r.identifier] = r
+            channels += ret
         else:
-            types[ret.identifier] = ret
-    _ALL_CHANNELS = types
-    return types
+            channels.append(ret)
+    channels.sort(key=lambda c: c.identifier)
+    _ALL_CHANNELS = OrderedDict([(c.identifier, c) for c in channels])
+    if 'web' in _ALL_CHANNELS:
+        _ALL_CHANNELS.move_to_end('web', last=False)
+    return _ALL_CHANNELS
 
 
 class WebshopSalesChannel(SalesChannel):
