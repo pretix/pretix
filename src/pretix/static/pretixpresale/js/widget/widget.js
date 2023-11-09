@@ -2005,7 +2005,19 @@ var create_widget = function (element) {
             observer.observe(this.$el, observerOptions);
         },
         computed: shared_root_computed,
-        methods: shared_root_methods
+        methods: shared_root_methods,
+        watch: {
+            'view': function (newValue, oldValue) {
+                if (oldValue) {
+                    // always make sure the widget is scrolled to the top
+                    // as we only check top, we do not need to wait for a redraw
+                    var rect = this.$el.getBoundingClientRect();
+                    if (rect.top < 0) {
+                        this.$el.scrollIntoView();
+                    }
+                }
+            }
+        }
     });
     create_overlay(app);
     return app;
