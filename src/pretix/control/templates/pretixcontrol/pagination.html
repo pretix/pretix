@@ -25,6 +25,7 @@
                     data-href="?{% url_replace request 'page' '_PAGE_' %}"
                     data-max="{{ page_obj.paginator.num_pages }}"
                     title="{% trans "Click to choose a page" %}"
+                    href="#"
                     {% endif %}>
                 {% blocktrans trimmed with page=page_obj.number of=page_obj.paginator.num_pages count=page_obj.paginator.count|intcomma %}
                     Page {{ page }} of {{ of }} ({{ count }} elements)
