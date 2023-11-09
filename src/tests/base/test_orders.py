@@ -198,7 +198,7 @@ def test_expiry_last_relative(event):
     event.date_from = now() + timedelta(days=5)
     event.save()
     event.settings.set('payment_term_last', RelativeDateWrapper(
-        RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
+        RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
     ))
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today,
@@ -238,7 +238,7 @@ def test_expiry_last_relative_subevents(event):
     )
 
     event.settings.set('payment_term_last', RelativeDateWrapper(
-        RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
+        RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
     ))
     order = _create_order(event, email='dummy@example.org', positions=[cp1, cp2],
                           now_dt=today,
