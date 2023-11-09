@@ -111,7 +111,7 @@ def get_all_sales_channels():
             channels.append(ret)
     channels.sort(key=lambda c: c.identifier)
     _ALL_CHANNELS = OrderedDict([(c.identifier, c) for c in channels])
-    if ('web' in _ALL_CHANNELS):
+    if 'web' in _ALL_CHANNELS:
         _ALL_CHANNELS.move_to_end('web', last=False)
     return _ALL_CHANNELS
 
