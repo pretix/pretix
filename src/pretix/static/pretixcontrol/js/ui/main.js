@@ -772,7 +772,8 @@ function setup_basics(el) {
         }
     });
 
-    el.find('a.pagination-selection').click(function () {
+    el.find('a.pagination-selection').click(function (e) {
+        e.preventDefault();
         var max = parseInt($(this).data("max"))
         var inp = prompt(gettext("Enter page number between 1 and %(max)s.").replace("%(max)s", max));
         if (inp) {
