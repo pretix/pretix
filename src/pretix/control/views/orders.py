@@ -1891,7 +1891,7 @@ class OrderChange(OrderView):
                     ocm.cancel_fee(f)
                     continue
 
-                if f.form.cleaned_data['value'] != f.value:
+                if f.form.cleaned_data['value'] is not None and f.form.cleaned_data['value'] != f.value:
                     ocm.change_fee(f, f.form.cleaned_data['value'])
 
                 if f.form.cleaned_data['tax_rule'] and f.form.cleaned_data['tax_rule'] != f.tax_rule:
