@@ -1001,6 +1001,7 @@ class Event(EventMixin, LoggedModel):
             'presale_widget_css_file',
             'presale_widget_css_checksum',
         )
+        settings_to_save = []
         for s in other.settings._objects.all():
             if s.key in skip_settings:
                 continue
@@ -1018,16 +1019,17 @@ class Event(EventMixin, LoggedModel):
                 )
                 newname = default_storage.save(fname, fi)
                 s.value = 'file://' + newname
-                s.save()
+                settings_to_save.append(s)
             elif s.key == 'tax_rate_default':
                 try:
                     if int(s.value) in tax_map:
                         s.value = tax_map.get(int(s.value)).pk
-                        s.save()
+                        settings_to_save.append(s)
                 except ValueError:
                     pass
             else:
-                s.save()
+                settings_to_save.append(s)
+        other.settings._objects.bulk_create(settings_to_save)
 
         self.settings.flush()
         event_copy_data.send(
