@@ -13,13 +13,13 @@
                 {% elif selopt.value == "relative_minutes" %}
                     {% include widget.subwidgets.5.template_name with widget=widget.subwidgets.5 %}
                     {% trans "minutes" %}
-                    {% include widget.subwidgets.6.template_name with widget=widget.subwidgets.6 %}
+                    {% include widget.subwidgets.7.template_name with widget=widget.subwidgets.7 %}
                     {% include widget.subwidgets.3.template_name with widget=widget.subwidgets.3 %}
                 {% elif selopt.value == "relative" %}
                     {% include widget.subwidgets.2.template_name with widget=widget.subwidgets.2 %}
                     {% trans "days" %}
+                    {% include widget.subwidgets.8.template_name with widget=widget.subwidgets.8 %}
                     {% include widget.subwidgets.6.template_name with widget=widget.subwidgets.6 %}
-                    {% include widget.subwidgets.3.template_name with widget=widget.subwidgets.3 %}
                     {% trans "at" %}
                     {% include widget.subwidgets.4.template_name with widget=widget.subwidgets.4 %}
                 {% endif %}
