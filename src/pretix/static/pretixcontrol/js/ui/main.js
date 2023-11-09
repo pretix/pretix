@@ -772,6 +772,19 @@ function setup_basics(el) {
         }
     });
 
+    el.find('a.pagination-selection').click(function (e) {
+        e.preventDefault();
+        var max = parseInt($(this).data("max"))
+        var inp = prompt(gettext("Enter page number between 1 and %(max)s.").replace("%(max)s", max));
+        if (inp) {
+            if (!parseInt(inp) || parseInt(inp) < 1 || parseInt(inp) > max) {
+                alert(gettext("Invalid page number."));
+            } else {
+                location.href = $(this).attr("data-href").replace("_PAGE_", inp);
+            }
+        }
+    });
+
     var url = document.location.toString();
     if (url.match('#')) {
         $('.nav-tabs a[href="#' + url.split('#')[1] + '"]').tab('show');
