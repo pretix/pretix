@@ -145,7 +145,7 @@ class RelativeDateWrapper:
                     minutes=int(parts[2]),
                     base_date_name=parts[3],
                     time=None,
-                    is_after=parts[4] == "after",
+                    is_after=len(parts) > 4 and parts[4] == "after",
                 )
             else:
                 if parts[2] == '-':
