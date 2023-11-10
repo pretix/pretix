@@ -159,7 +159,7 @@ class RelativeDateWrapper:
                         base_date_name=parts[3],
                         time=time,
                         minutes=None,
-                        is_after=parts[4] == "after",
+                        is_after=len(parts) > 4 and parts[4] == "after",
                     )
                 except ValueError:
                     data = RelativeDate(
