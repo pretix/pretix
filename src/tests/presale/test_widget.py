@@ -786,7 +786,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                     name="Language",
                     default="EN",
                     filter_public=True,
-                    allowed_values=[
+                    choices=[
                         {"key": "EN", "label": "English"},
                         {"key": "DE", "label": "German"},
                     ]

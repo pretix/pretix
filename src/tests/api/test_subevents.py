@@ -256,7 +256,7 @@ def test_all_subevents_list_filter(token_client, organizer, event, subevent):
 
 @pytest.mark.django_db
 def test_subevent_create(team, token_client, organizer, event, subevent, meta_prop, item):
-    meta_prop.allowed_values = [{"key": "Conference", "label": {"en": "Conference"}}, {"key": "Workshop", "label": {"en": "Workshop"}}]
+    meta_prop.choices = [{"key": "Conference", "label": {"en": "Conference"}}, {"key": "Workshop", "label": {"en": "Workshop"}}]
     meta_prop.save()
     team.can_change_organizer_settings = False
     team.save()

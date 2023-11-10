@@ -8,11 +8,11 @@ import pretix.helpers.json
 def convert_allowed_values(apps, schema_editor):
     EventMetaProperty = apps.get_model('pretixbase', 'EventMetaProperty')
     for emp in EventMetaProperty.objects.filter(allowed_values__isnull=False):
-        emp.allowed_values_new = [
+        emp.choices = [
             {"key": _v.strip(), "label": {"en": _v.strip()}}
             for _v in emp.allowed_values.splitlines()
         ]
-        emp.save(update_fields=["allowed_values_new"])
+        emp.save(update_fields=["choices"])
 
 
 class Migration(migrations.Migration):
@@ -38,7 +38,7 @@ class Migration(migrations.Migration):
         ),
         migrations.AddField(
             model_name="eventmetaproperty",
-            name="allowed_values_new",
+            name="choices",
             field=models.JSONField(null=True, encoder=pretix.helpers.json.CustomJSONEncoder),
         ),
         migrations.RunPython(
@@ -48,10 +48,5 @@ class Migration(migrations.Migration):
         migrations.RemoveField(
             model_name="eventmetaproperty",
             name="allowed_values",
-        ),
-        migrations.RenameField(
-            model_name="eventmetaproperty",
-            new_name="allowed_values",
-            old_name="allowed_values_new",
         ),
     ]

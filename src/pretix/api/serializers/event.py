@@ -230,8 +230,8 @@ class EventSerializer(I18nAwareModelSerializer):
         for key, v in value['meta_data'].items():
             if key not in self.meta_properties:
                 raise ValidationError(_('Meta data property \'{name}\' does not exist.').format(name=key))
-            if self.meta_properties[key].allowed_values:
-                if v not in self.meta_properties[key].allowed_value_keys:
+            if self.meta_properties[key].choices:
+                if v not in self.meta_properties[key].choice_keys:
                     raise ValidationError(_('Meta data property \'{name}\' does not allow value \'{value}\'.').format(name=key, value=v))
         return value
 
@@ -528,8 +528,8 @@ class SubEventSerializer(I18nAwareModelSerializer):
         for key, v in value['meta_data'].items():
             if key not in self.meta_properties:
                 raise ValidationError(_('Meta data property \'{name}\' does not exist.').format(name=key))
-            if self.meta_properties[key].allowed_values:
-                if v not in self.meta_properties[key].allowed_value_keys:
+            if self.meta_properties[key].choices:
+                if v not in self.meta_properties[key].choice_keys:
                     raise ValidationError(_('Meta data property \'{name}\' does not allow value \'{value}\'.').format(name=key, value=v))
         return value
 

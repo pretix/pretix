@@ -235,7 +235,7 @@ def test_event_get(token_client, organizer, event):
 
 @pytest.mark.django_db
 def test_event_create(team, token_client, organizer, event, meta_prop):
-    meta_prop.allowed_values = [
+    meta_prop.choices = [
         {"key": "Conference", "label": {"en": "Conference"}},
         {"key": "Workshop", "label": {"en": "Workshop"}},
     ]

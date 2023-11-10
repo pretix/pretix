@@ -2058,7 +2058,7 @@ class EventMetaPropertyEditorMixin:
         return EventMetaPropertyAllowedValueFormSet(
             data=self.request.POST if self.request.method == "POST" else None,
             organizer=self.request.organizer,
-            initial=(self.object.allowed_values or []) if self.object else [],
+            initial=(self.object.choices or []) if self.object else [],
         )
 
     def get_context_data(self, **kwargs):
@@ -2073,12 +2073,11 @@ class EventMetaPropertyEditorMixin:
         }
 
     def is_default_valid(self):
-        allowed_value_keys = [
+        choice_keys = [
             f.cleaned_data.get("key") for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
         ]
         default = self.form.cleaned_data["default"]
-        print(default, allowed_value_keys)
-        if default and allowed_value_keys and default not in allowed_value_keys:
+        if default and choice_keys and default not in choice_keys:
             messages.error(self.request, _("You cannot set a default value that is not a valid value."))
             return False
         return True
@@ -2107,7 +2106,7 @@ class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionR
     def form_valid(self, form):
         messages.success(self.request, _('The property has been created.'))
         form.instance.organizer = self.request.organizer
-        form.instance.allowed_values = [
+        form.instance.choices = [
             f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
         ]
         ret = super().form_valid(form)
@@ -2135,7 +2134,7 @@ class EventMetaPropertyUpdateView(OrganizerDetailViewMixin, OrganizerPermissionR
         })
 
     def form_valid(self, form):
-        form.instance.allowed_values = [
+        form.instance.choices = [
             f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
         ]
         if form.has_changed() or self.formset.has_changed():

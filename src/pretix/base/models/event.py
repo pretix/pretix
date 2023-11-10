@@ -1647,7 +1647,7 @@ class EventMetaProperty(LoggedModel):
         help_text=_("If checked, an event can only be taken live if the property is set. In event series, its always "
                     "optional to set a value for individual dates")
     )
-    allowed_values = models.JSONField(
+    choices = models.JSONField(
         null=True, blank=True,
         encoder=CustomJSONEncoder,
         verbose_name=_("Valid values"),
@@ -1678,9 +1678,9 @@ class EventMetaProperty(LoggedModel):
         ordering = ("position", "name",)
 
     @property
-    def allowed_value_keys(self):
-        if self.allowed_values:
-            return [v["key"] for v in self.allowed_values]
+    def choice_keys(self):
+        if self.choices:
+            return [v["key"] for v in self.choices]
 
 
 class EventMetaValue(LoggedModel):

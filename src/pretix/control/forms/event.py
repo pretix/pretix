@@ -316,12 +316,12 @@ class EventMetaValueForm(forms.ModelForm):
         self.property = kwargs.pop('property')
         self.disabled = kwargs.pop('disabled')
         super().__init__(*args, **kwargs)
-        if self.property.allowed_values:
+        if self.property.choices:
             self.fields['value'] = forms.ChoiceField(
                 label=self.property.name,
                 choices=[
                     ('', _('Default ({value})').format(value=self.property.default) if self.property.default else ''),
-                ] + [(a.strip(), a.strip()) for a in self.property.allowed_value_keys],
+                ] + [(a.strip(), a.strip()) for a in self.property.choice_keys],
             )
         else:
             self.fields['value'].label = self.property.name

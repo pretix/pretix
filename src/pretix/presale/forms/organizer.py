@@ -31,8 +31,8 @@ def meta_filtersets(organizer, event=None):
     if not (event or organizer).settings.event_list_filters:
         return fields
     for prop in organizer.meta_properties.filter(filter_public=True):
-        if prop.allowed_values:
-            choices = [(v["key"], str(LazyI18nString(v["label"])) or v["key"]) for v in prop.allowed_values]
+        if prop.choices:
+            choices = [(v["key"], str(LazyI18nString(v["label"])) or v["key"]) for v in prop.choices]
         elif event:
             existing_values = set()
             if event.meta_data.get(prop.name):
