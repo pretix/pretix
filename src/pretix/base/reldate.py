@@ -167,7 +167,7 @@ class RelativeDateWrapper:
                         base_date_name=parts[3],
                         time=time,
                         minutes=None,
-                        is_after=parts[4] == "after",
+                        is_after=len(parts) > 4 and parts[4] == "after",
                     )
             if data.base_date_name not in [k[0] for k in BASE_CHOICES]:
                 raise ValueError('{} is not a valid base date'.format(data.base_date_name))
