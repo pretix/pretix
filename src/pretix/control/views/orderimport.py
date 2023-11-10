@@ -32,7 +32,6 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-import csv
 import logging
 from datetime import timedelta
 
@@ -147,24 +146,16 @@ class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
         else:
             charset = None
         try:
-            try:
-                c = parse_csv(self.file.file, 1024 * 1024, charset=charset)
-                if c is not None:
-                    return list(c)
-            except UnicodeDecodeError:
-                messages.warning(
-                    self.request,
-                    _(
-                        "We could not identify the character encoding of the CSV file. "
-                        "Some characters were replaced with a placeholder."
-                    )
+            return parse_csv(self.file.file, 1024 * 1024, charset=charset)
+        except UnicodeDecodeError:
+            messages.warning(
+                self.request,
+                _(
+                    "We could not identify the character encoding of the CSV file. "
+                    "Some characters were replaced with a placeholder."
                 )
-                c = parse_csv(self.file.file, 1024 * 1024, "replace", charset=charset)
-                if c is not None:
-                    return list(c)
-        except csv.Error:
-            logger.exception("Could not parse CSV file")
-            return None
+            )
+            return parse_csv(self.file.file, 1024 * 1024, "replace", charset=charset)
 
     def get(self, request, *args, **kwargs):
         if 'async_id' in request.GET and settings.HAS_CELERY:
@@ -202,5 +193,5 @@ class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
         ctx = super().get_context_data(**kwargs)
         ctx['file'] = self.file
         ctx['parsed'] = self.parsed
-        ctx['sample_rows'] = self.parsed[:3]
+        ctx['sample_rows'] = list(self.parsed)[:3]
         return ctx
