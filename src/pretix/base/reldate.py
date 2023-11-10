@@ -39,7 +39,7 @@ BASE_CHOICES = (
     ('presale_end', _('Presale end')),
 )
 
-RelativeDate = namedtuple('RelativeDate', ['days_before', 'minutes_before', 'time', 'base_date_name'])
+RelativeDate = namedtuple('RelativeDate', ['days', 'minutes', 'time', 'is_after', 'base_date_name'], defaults=(0, None, None, False, 'date_from'))
 
 
 class RelativeDateWrapper:
@@ -64,7 +64,7 @@ class RelativeDateWrapper:
         elif isinstance(self.data, datetime.date):
             return self.data
         else:
-            if self.data.minutes_before is not None:
+            if self.data.minutes is not None:
                 raise ValueError('A minute-based relative datetime can not be used as a date')
 
             tz = ZoneInfo(event.settings.timezone)
@@ -77,7 +77,10 @@ class RelativeDateWrapper:
             else:
                 base_date = getattr(event, self.data.base_date_name) or event.date_from
 
-            new_date = base_date.astimezone(tz) - datetime.timedelta(days=self.data.days_before)
+            if self.data.is_after:
+                new_date = base_date.astimezone(tz) + datetime.timedelta(days=self.data.days)
+            else:
+                new_date = base_date.astimezone(tz) - datetime.timedelta(days=self.data.days)
             return new_date.date()
 
     def datetime(self, event) -> datetime.datetime:
@@ -96,10 +99,16 @@ class RelativeDateWrapper:
             else:
                 base_date = getattr(event, self.data.base_date_name) or event.date_from
 
-            if self.data.minutes_before is not None:
-                return base_date.astimezone(tz) - datetime.timedelta(minutes=self.data.minutes_before)
+            if self.data.minutes is not None:
+                if self.data.is_after:
+                    return base_date.astimezone(tz) + datetime.timedelta(minutes=self.data.minutes)
+                else:
+                    return base_date.astimezone(tz) - datetime.timedelta(minutes=self.data.minutes)
             else:
-                new_date = (base_date.astimezone(tz) - datetime.timedelta(days=self.data.days_before)).astimezone(tz)
+                if self.data.is_after:
+                    new_date = (base_date.astimezone(tz) + datetime.timedelta(days=self.data.days)).astimezone(tz)
+                else:
+                    new_date = (base_date.astimezone(tz) - datetime.timedelta(days=self.data.days)).astimezone(tz)
                 if self.data.time:
                     new_date = new_date.replace(
                         hour=self.data.time.hour,
@@ -113,15 +122,17 @@ class RelativeDateWrapper:
         if isinstance(self.data, (datetime.datetime, datetime.date)):
             return self.data.isoformat()
         else:
-            if self.data.minutes_before is not None:
-                return 'RELDATE/minutes/{}/{}/'.format(  #
-                    self.data.minutes_before,
-                    self.data.base_date_name
+            if self.data.minutes is not None:
+                return 'RELDATE/minutes/{}/{}/{}'.format(  #
+                    self.data.minutes,
+                    self.data.base_date_name,
+                    'after' if self.data.is_after else '',
                 )
-            return 'RELDATE/{}/{}/{}/'.format(  #
-                self.data.days_before,
+            return 'RELDATE/{}/{}/{}/{}'.format(  #
+                self.data.days,
                 self.data.time.strftime('%H:%M:%S') if self.data.time else '-',
-                self.data.base_date_name
+                self.data.base_date_name,
+                'after' if self.data.is_after else '',
             )
 
     @classmethod
@@ -130,10 +141,11 @@ class RelativeDateWrapper:
             parts = input.split('/')
             if parts[1] == 'minutes':
                 data = RelativeDate(
-                    days_before=0,
-                    minutes_before=int(parts[2]),
+                    days=0,
+                    minutes=int(parts[2]),
                     base_date_name=parts[3],
-                    time=None
+                    time=None,
+                    is_after=len(parts) > 4 and parts[4] == "after",
                 )
             else:
                 if parts[2] == '-':
@@ -143,17 +155,19 @@ class RelativeDateWrapper:
                     time = datetime.time(hour=int(timeparts[0]), minute=int(timeparts[1]), second=int(timeparts[2]))
                 try:
                     data = RelativeDate(
-                        days_before=int(parts[1] or 0),
+                        days=int(parts[1] or 0),
                         base_date_name=parts[3],
                         time=time,
-                        minutes_before=None
+                        minutes=None,
+                        is_after=len(parts) > 4 and parts[4] == "after",
                     )
                 except ValueError:
                     data = RelativeDate(
-                        days_before=0,
+                        days=0,
                         base_date_name=parts[3],
                         time=time,
-                        minutes_before=None
+                        minutes=None,
+                        is_after=len(parts) > 4 and parts[4] == "after",
                     )
             if data.base_date_name not in [k[0] for k in BASE_CHOICES]:
                 raise ValueError('{} is not a valid base date'.format(data.base_date_name))
@@ -165,20 +179,30 @@ class RelativeDateWrapper:
         return len(self.to_string())
 
 
+BEFORE_AFTER_CHOICE = (
+    ('before', _('before')),
+    ('after', _('after')),
+)
+
+
 class RelativeDateTimeWidget(forms.MultiWidget):
     template_name = 'pretixbase/forms/widgets/reldatetime.html'
 
     def __init__(self, *args, **kwargs):
         self.status_choices = kwargs.pop('status_choices')
+        base_choices = kwargs.pop('base_choices')
         widgets = (
             forms.RadioSelect(choices=self.status_choices),
             forms.DateTimeInput(
                 attrs={'class': 'datetimepicker'}
             ),
             forms.NumberInput(),
-            forms.Select(choices=kwargs.pop('base_choices')),
+            forms.Select(choices=base_choices),
             forms.TimeInput(attrs={'placeholder': _('Time'), 'class': 'timepickerfield'}),
             forms.NumberInput(),
+            forms.Select(choices=base_choices),
+            forms.Select(choices=BEFORE_AFTER_CHOICE),
+            forms.Select(choices=BEFORE_AFTER_CHOICE),
         )
         super().__init__(widgets=widgets, *args, **kwargs)
 
@@ -186,12 +210,14 @@ class RelativeDateTimeWidget(forms.MultiWidget):
         if isinstance(value, str):
             value = RelativeDateWrapper.from_string(value)
         if not value:
-            return ['unset', None, 1, 'date_from', None, 0]
+            return ['unset', None, 1, 'date_from', None, 0, "date_from", "before", "before"]
         elif isinstance(value.data, (datetime.datetime, datetime.date)):
-            return ['absolute', value.data, 1, 'date_from', None, 0]
-        elif value.data.minutes_before is not None:
-            return ['relative_minutes', None, None, value.data.base_date_name, None, value.data.minutes_before]
-        return ['relative', None, value.data.days_before, value.data.base_date_name, value.data.time, 0]
+            return ['absolute', value.data, 1, 'date_from', None, 0, "date_from", "before", "before"]
+        elif value.data.minutes is not None:
+            return ['relative_minutes', None, None, value.data.base_date_name, None, value.data.minutes, value.data.base_date_name,
+                    "after" if value.data.is_after else "before", "after" if value.data.is_after else "before"]
+        return ['relative', None, value.data.days, value.data.base_date_name, value.data.time, 0, value.data.base_date_name,
+                "after" if value.data.is_after else "before", "after" if value.data.is_after else "before"]
 
     def get_context(self, name, value, attrs):
         ctx = super().get_context(name, value, attrs)
@@ -234,6 +260,18 @@ class RelativeDateTimeField(forms.MultiValueField):
             forms.IntegerField(
                 required=False
             ),
+            forms.ChoiceField(
+                choices=choices,
+                required=False
+            ),
+            forms.ChoiceField(
+                choices=BEFORE_AFTER_CHOICE,
+                required=False
+            ),
+            forms.ChoiceField(
+                choices=BEFORE_AFTER_CHOICE,
+                required=False
+            ),
         )
         if 'widget' not in kwargs:
             kwargs['widget'] = RelativeDateTimeWidget(status_choices=status_choices, base_choices=choices)
@@ -257,17 +295,19 @@ class RelativeDateTimeField(forms.MultiValueField):
             return None
         elif data_list[0] == 'relative_minutes':
             return RelativeDateWrapper(RelativeDate(
-                days_before=0,
+                days=0,
                 base_date_name=data_list[3],
                 time=None,
-                minutes_before=data_list[5]
+                minutes=data_list[5],
+                is_after=data_list[7] == "after",
             ))
         else:
             return RelativeDateWrapper(RelativeDate(
-                days_before=data_list[2],
-                base_date_name=data_list[3],
+                days=data_list[2],
+                base_date_name=data_list[6],
                 time=data_list[4],
-                minutes_before=None
+                minutes=None,
+                is_after=data_list[8] == "after",
             ))
 
     def has_changed(self, initial, data):
@@ -298,6 +338,7 @@ class RelativeDateWidget(RelativeDateTimeWidget):
             ),
             forms.NumberInput(),
             forms.Select(choices=kwargs.pop('base_choices')),
+            forms.Select(choices=BEFORE_AFTER_CHOICE),
         )
         forms.MultiWidget.__init__(self, widgets=widgets, *args, **kwargs)
 
@@ -305,10 +346,10 @@ class RelativeDateWidget(RelativeDateTimeWidget):
         if isinstance(value, str):
             value = RelativeDateWrapper.from_string(value)
         if not value:
-            return ['unset', None, 1, 'date_from']
+            return ['unset', None, 1, 'date_from', 'before']
         elif isinstance(value.data, (datetime.datetime, datetime.date)):
-            return ['absolute', value.data, 1, 'date_from']
-        return ['relative', None, value.data.days_before, value.data.base_date_name]
+            return ['absolute', value.data, 1, 'date_from', 'before']
+        return ['relative', None, value.data.days, value.data.base_date_name, "after" if value.data.is_after else "before"]
 
 
 class RelativeDateField(RelativeDateTimeField):
@@ -335,6 +376,10 @@ class RelativeDateField(RelativeDateTimeField):
                 choices=BASE_CHOICES,
                 required=False
             ),
+            forms.ChoiceField(
+                choices=BEFORE_AFTER_CHOICE,
+                required=False
+            ),
         )
         if 'widget' not in kwargs:
             kwargs['widget'] = RelativeDateWidget(status_choices=status_choices, base_choices=BASE_CHOICES)
@@ -351,9 +396,10 @@ class RelativeDateField(RelativeDateTimeField):
             return None
         else:
             return RelativeDateWrapper(RelativeDate(
-                days_before=data_list[2],
+                days=data_list[2],
                 base_date_name=data_list[3],
-                time=None, minutes_before=None
+                time=None, minutes=None,
+                is_after=data_list[4] == "after"
             ))
 
     def clean(self, value):

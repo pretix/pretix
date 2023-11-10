@@ -758,16 +758,16 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
             initial['time_to'] = i.date_to.astimezone(tz).time() if i.date_to else None
             initial['time_admission'] = i.date_admission.astimezone(tz).time() if i.date_admission else None
             initial['rel_presale_start'] = RelativeDateWrapper(RelativeDate(
-                days_before=(i.date_from.astimezone(tz).date() - i.presale_start.astimezone(tz).date()).days,
+                days=(i.date_from.astimezone(tz).date() - i.presale_start.astimezone(tz).date()).days,
                 base_date_name='date_from',
                 time=i.presale_start.astimezone(tz).time(),
-                minutes_before=None
+                minutes=None
             )) if i.presale_start else None
             initial['rel_presale_end'] = RelativeDateWrapper(RelativeDate(
-                days_before=(i.date_from.astimezone(tz).date() - i.presale_end.astimezone(tz).date()).days,
+                days=(i.date_from.astimezone(tz).date() - i.presale_end.astimezone(tz).date()).days,
                 base_date_name='date_from',
                 time=i.presale_end.astimezone(tz).time(),
-                minutes_before=None
+                minutes=None
             )) if i.presale_end else None
         else:
             kwargs['instance'] = SubEvent(event=self.request.event)

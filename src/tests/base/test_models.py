@@ -1108,7 +1108,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.op2.subevent = se2
         self.op2.save()
         self.event.settings.set('payment_term_last', RelativeDateWrapper(
-            RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
+            RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
         ))
 
         self.order.status = Order.STATUS_EXPIRED
@@ -1251,7 +1251,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.op2.subevent = se2
         self.op2.save()
         self.event.settings.set('last_order_modification_date', RelativeDateWrapper(
-            RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
+            RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
         ))
         assert self.order.can_modify_answers
         self.op2.subevent = se3
@@ -1267,7 +1267,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=datetime.timezone.utc)
         self.event.save()
         self.event.settings.set('payment_term_last', RelativeDateWrapper(
-            RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
+            RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
         ))
         assert self.order.payment_term_last == datetime.datetime(2017, 5, 1, 23, 59, 59, tzinfo=datetime.timezone.utc)
 
@@ -1283,7 +1283,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.op2.subevent = se2
         self.op2.save()
         self.event.settings.set('payment_term_last', RelativeDateWrapper(
-            RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
+            RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
         ))
         assert self.order.payment_term_last > now()
         self.op2.subevent = se3
@@ -1299,7 +1299,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.event.date_from = datetime.datetime(2017, 5, 3, 12, 0, 0, tzinfo=datetime.timezone.utc)
         self.event.save()
         self.event.settings.set('ticket_download_date', RelativeDateWrapper(
-            RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
+            RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
         ))
         assert self.order.ticket_download_date == datetime.datetime(2017, 5, 1, 12, 0, 0, tzinfo=datetime.timezone.utc)
 
@@ -1315,7 +1315,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.op2.subevent = se2
         self.op2.save()
         self.event.settings.set('ticket_download_date', RelativeDateWrapper(
-            RelativeDate(days_before=2, time=None, base_date_name='date_from', minutes_before=None)
+            RelativeDate(days=2, time=None, base_date_name='date_from', minutes=None)
         ))
         assert self.order.ticket_download_date > now()
         self.op2.subevent = se3
@@ -1486,13 +1486,13 @@ class OrderTestCase(BaseQuotaTestCase):
 
         assert self.order.user_cancel_deadline is None
         self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
-            RelativeDate(days_before=2, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes_before=None)
+            RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes=None)
         ))
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_cancel_deadline > now()
         assert self.order.user_cancel_allowed
         self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
-            RelativeDate(days_before=4, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes_before=None)
+            RelativeDate(days=4, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes=None)
         ))
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_cancel_deadline < now()
@@ -1511,7 +1511,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.op2.save()
 
         self.event.settings.set('cancel_allow_user_until', RelativeDateWrapper(
-            RelativeDate(days_before=2, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes_before=None)
+            RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes=None)
         ))
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_cancel_deadline < now()
@@ -1922,13 +1922,13 @@ class OrderTestCase(BaseQuotaTestCase):
 
         assert self.order.user_change_deadline is None
         self.event.settings.set('change_allow_user_until', RelativeDateWrapper(
-            RelativeDate(days_before=2, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes_before=None)
+            RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes=None)
         ))
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_change_deadline > now()
         assert self.order.user_change_allowed
         self.event.settings.set('change_allow_user_until', RelativeDateWrapper(
-            RelativeDate(days_before=4, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes_before=None)
+            RelativeDate(days=4, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes=None)
         ))
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_change_deadline < now()
@@ -1950,7 +1950,7 @@ class OrderTestCase(BaseQuotaTestCase):
         self.op2.save()
 
         self.event.settings.set('change_allow_user_until', RelativeDateWrapper(
-            RelativeDate(days_before=2, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes_before=None)
+            RelativeDate(days=2, time=datetime.time(14, 0, 0), base_date_name='date_from', minutes=None)
         ))
         self.order = Order.objects.get(pk=self.order.pk)
         assert self.order.user_change_deadline < now()
