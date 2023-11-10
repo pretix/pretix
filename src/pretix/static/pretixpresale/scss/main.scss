@@ -336,6 +336,7 @@ body.loading .container {
 }
 
 .collapse-indicator {
+    display: none;
     -moz-transition: all 150ms ease-in 0s;
     -webkit-transition: all 150ms ease-in 0s;
     -o-transition: all 150ms ease-in 0s;
@@ -357,6 +358,28 @@ body.loading .container {
     justify-content: space-between;
     outline: 0;
     text-decoration: none;
+    position: relative;
+    padding-left: 30px;
+}
+
+.panel-title a[data-toggle="collapse"]::before,
+details .panel-title::before {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    margin-top: -.5em;
+    content: "";
+    width: 1em;
+    height: 1em;
+    font: normal normal normal 14px/1 FontAwesome;
+    display: inline-block;
+    text-align: center;
+    transform: rotate(-90deg);
+    transition: transform 150ms ease-in 0s;
+}
+.panel-title a:not(.collapsed)::before,
+details.details-open .panel-title::before {
+    transform: rotate(0deg);
 }
 
 .panel-default .panel-title a[data-toggle="collapse"]:hover {
