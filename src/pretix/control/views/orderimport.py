@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
+import csv
 # This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
 # the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
 #
@@ -157,6 +157,14 @@ class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
             )
             return parse_csv(self.file.file, 1024 * 1024, "replace", charset=charset)
 
+    @cached_property
+    def parsed_list(self):
+        try:
+            return list(self.parsed)
+        except csv.Error:
+            logger.exception("Could not parse full CSV file")
+            return None
+
     def get(self, request, *args, **kwargs):
         if 'async_id' in request.GET and settings.HAS_CELERY:
             return self.get_result(request)
@@ -174,7 +182,7 @@ class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
     def dispatch(self, request, *args, **kwargs):
         if 'async_id' in request.GET and settings.HAS_CELERY:
             return self.get_result(request)
-        if not self.parsed:
+        if not self.parsed or not self.parsed_list:
             messages.error(request, _('We\'ve been unable to parse the uploaded file as a CSV file.'))
             return redirect(reverse('control:event.orders.import', kwargs={
                 'event': request.event.slug,
@@ -193,5 +201,5 @@ class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
         ctx = super().get_context_data(**kwargs)
         ctx['file'] = self.file
         ctx['parsed'] = self.parsed
-        ctx['sample_rows'] = list(self.parsed)[:3]
+        ctx['sample_rows'] = self.parsed_list[:3]
         return ctx
