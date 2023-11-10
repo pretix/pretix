@@ -565,6 +565,8 @@ organizer level.
 .. warning:: This API is intended for advanced users. Even though we take care to validate your input, you will be
              able to break your event using this API by creating situations of conflicting settings. Please take care.
 
+.. note:: When authenticating with :ref:`rest-deviceauth`, only a limited subset of settings is available.
+
 .. http:get:: /api/v1/organizers/(organizer)/events/(event)/settings/
 
    Get current values of event settings.
