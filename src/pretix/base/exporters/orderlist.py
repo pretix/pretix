@@ -1007,20 +1007,20 @@ class PaymentListExporter(ListExporter):
         if form_data.get('end_date_range'):
             dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['end_date_range'], self.timezone)
             if dt_start:
-                payments = payments.filter(created__gte=dt_start)
-                refunds = refunds .filter(created__gte=dt_start)
+                payments = payments.filter(payment_date__gte=dt_start)
+                refunds = refunds.filter(execution_date__gte=dt_start)
             if dt_end:
-                payments = payments.filter(created__lt=dt_end)
-                refunds = refunds .filter(created__lt=dt_end)
+                payments = payments.filter(payment_date__lt=dt_end)
+                refunds = refunds.filter(execution_date__lt=dt_end)
 
         if form_data.get('start_end_date_range'):
             dt_start, dt_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['start_date_range'], self.timezone)
             if dt_start:
-                payments = payments.filter(payment_date__gte=dt_start)
-                refunds = refunds .filter(execution_date__gte=dt_start)
+                payments = payments.filter(created__gte=dt_start)
+                refunds = refunds.filter(created__gte=dt_start)
             if dt_end:
-                payments = payments.filter(payment_date__lt=dt_end)
-                refunds = refunds.filter(execution_date__lt=dt_end)
+                payments = payments.filter(created__lt=dt_end)
+                refunds = refunds.filter(created__lt=dt_end)
 
         objs = sorted(list(payments) + list(refunds), key=lambda o: o.created)
 
