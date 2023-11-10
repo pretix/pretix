@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load eventurl %}
 {% load urlreplace %}
+{% include "pretixpresale/fragment_event_list_filter.html" with request=request %}
 <nav aria-label="{% trans "calendar navigation" %}">
     <ul class="row calendar-nav">
         <li class="col-sm-4 col-xs-2 text-left flip">

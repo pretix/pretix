@@ -393,12 +393,12 @@ class SubEventMetaValueForm(forms.ModelForm):
         self.default = kwargs.pop('default', None)
         self.disabled = kwargs.pop('disabled', False)
         super().__init__(*args, **kwargs)
-        if self.property.allowed_values:
+        if self.property.choices:
             self.fields['value'] = forms.ChoiceField(
                 label=self.property.name,
                 choices=[
                     ('', _('Default ({value})').format(value=self.default or self.property.default) if self.default or self.property.default else ''),
-                ] + [(a.strip(), a.strip()) for a in self.property.allowed_values.splitlines()],
+                ] + [(a.strip(), a.strip()) for a in self.property.choice_keys],
             )
         else:
             self.fields['value'].label = self.property.name

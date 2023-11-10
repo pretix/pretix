@@ -1093,6 +1093,46 @@ Vue.component('pretix-widget-event-form', {
     }
 });
 
+Vue.component('pretix-widget-event-list-filter-field', {
+    template: ('<div class="pretix-widget-event-list-filter-field">'
+        + '<label :for="id">{{ field.label }}</label>'
+        + '<select :id="id" :name="field.key" @change="onChange($event)" :value="currentValue">'
+        + '<option v-for="choice in field.choices" :value="choice[0]">{{ choice[1] }}</option>'
+        + '</select>'
+        + '</div>'),
+    props: {
+        field: Object
+    },
+    methods: {
+        onChange: function(event) {
+            var filterParams = new URLSearchParams(this.$root.filter);
+            if (event.target.value) {
+                filterParams.set(this.field.key, event.target.value);
+            } else {
+                filterParams.delete(this.field.key);
+            }
+            this.$root.filter = filterParams.toString();
+            this.$root.loading++;
+            this.$root.reload();
+        },
+    },
+    computed: {
+        id: function () {
+            return widget_id + "_" + this.field.key;
+        },
+        currentValue: function () {
+            var filterParams = new URLSearchParams(this.$root.filter);
+            return filterParams.get(this.field.key) || "";
+        },
+    },
+});
+
+Vue.component('pretix-widget-event-list-filter-form', {
+    template: ('<div class="pretix-widget-event-list-filter-form">'
+        + '<pretix-widget-event-list-filter-field v-for="field in $root.meta_filter_fields" :field="field" :key="field.key"></pretix-widget-event-list-filter-field>'
+        + '</div>'),
+});
+
 Vue.component('pretix-widget-event-list-entry', {
     template: ('<a :class="classObject" @click.prevent.stop="select">'
         + '<div class="pretix-widget-event-list-entry-name">{{ event.name }}</div>'
@@ -1142,6 +1182,7 @@ Vue.component('pretix-widget-event-list', {
         + '<strong>{{ $root.name }}</strong>'
         + '</div>'
         + '<div class="pretix-widget-event-description" v-if="$root.parent_stack.length > 0 && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
+        + '<pretix-widget-event-list-filter-form v-if="!$root.disable_filters && $root.meta_filter_fields.length > 0"></pretix-widget-event-list-filter-form>'
         + '<pretix-widget-event-list-entry v-for="event in $root.events" :event="event" :key="event.url"></pretix-widget-event-list-entry>'
         + '<p class="pretix-widget-event-list-load-more" v-if="$root.has_more_events"><button @click.prevent.stop="load_more">'+strings.load_more+'</button></p>'
         + '</div>'),
@@ -1360,6 +1401,9 @@ Vue.component('pretix-widget-event-calendar', {
         + '</div>'
         + '<div class="pretix-widget-event-description" v-if="$root.parent_stack.length > 0 && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
 
+        // Filter
+        + '<pretix-widget-event-list-filter-form v-if="!$root.disable_filters && $root.meta_filter_fields.length > 0"></pretix-widget-event-list-filter-form>'
+
         // Calendar navigation
         + '<div class="pretix-widget-event-calendar-head">'
         + '<a class="pretix-widget-event-calendar-previous-month" href="#" @click.prevent.stop="prevmonth" role="button">&laquo; '
@@ -1441,6 +1485,9 @@ Vue.component('pretix-widget-event-week-calendar', {
         + '<div class="pretix-widget-event-header" v-if="$root.parent_stack.length > 0">'
         + '<strong>{{ $root.name }}</strong>'
         + '</div>'
+
+        // Filter
+        + '<pretix-widget-event-list-filter-form v-if="!$root.disable_filters && $root.meta_filter_fields.length > 0"></pretix-widget-event-list-filter-form>'
 
         // Calendar navigation
         + '<div class="pretix-widget-event-description" v-if="$root.parent_stack.length > 0 && $root.frontpage_text" v-html="$root.frontpage_text"></div>'
@@ -1671,6 +1718,7 @@ var shared_root_methods = {
                 root.view = "weeks";
                 root.name = data.name;
                 root.frontpage_text = data.frontpage_text;
+                root.meta_filter_fields = data.meta_filter_fields;
             } else if (data.days !== undefined) {
                 root.days = data.days;
                 root.date = null;
@@ -1679,6 +1727,7 @@ var shared_root_methods = {
                 root.view = "days";
                 root.name = data.name;
                 root.frontpage_text = data.frontpage_text;
+                root.meta_filter_fields = data.meta_filter_fields;
             } else if (data.events !== undefined) {
                 root.events = root.append_events && root.events ? root.events.concat(data.events) : data.events;
                 root.append_events = false;
@@ -1687,6 +1736,7 @@ var shared_root_methods = {
                 root.name = data.name;
                 root.frontpage_text = data.frontpage_text;
                 root.has_more_events = data.has_more_events;
+                root.meta_filter_fields = data.meta_filter_fields;
             } else {
                 root.view = "event";
                 root.name = data.name;
@@ -1917,6 +1967,7 @@ var create_widget = function (element) {
     var skip_ssl = element.attributes["skip-ssl-check"] ? true : false;
     var disable_iframe = element.attributes["disable-iframe"] ? true : false;
     var disable_vouchers = element.attributes["disable-vouchers"] ? true : false;
+    var disable_filters = element.attributes["disable-filters"] ? true : false;
     var widget_data = JSON.parse(JSON.stringify(window.PretixWidget.widget_data));
     var filter = element.attributes.filter ? element.attributes.filter.value : null;
     var items = element.attributes.items ? element.attributes.items.value : null;
@@ -1990,12 +2041,14 @@ var create_widget = function (element) {
                 widget_id: 'pretix-widget-' + widget_id,
                 vouchers_exist: false,
                 disable_vouchers: disable_vouchers,
+                disable_filters: disable_filters,
                 cart_exists: false,
                 itemcount: 0,
                 overlay: null,
                 poweredby: "",
                 has_seating_plan: false,
                 has_seating_plan_waitinglist: false,
+                meta_filter_fields: [],
             }
         },
         created: function () {

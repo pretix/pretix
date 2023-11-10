@@ -1606,6 +1606,16 @@ DEFAULTS = {
             help_text=_('If your event series has more than 50 dates in the future, only the month or week calendar can be used.')
         ),
     },
+    'event_list_filters': {
+        'default': 'True',
+        'type': bool,
+        'form_class': forms.BooleanField,
+        'serializer_class': serializers.BooleanField,
+        'form_kwargs': dict(
+            label=_("Show filter options for calendar or list view"),
+            help_text=_("You can set up possible filters as meta properties in your organizer settings.")
+        )
+    },
     'event_list_available_only': {
         'default': 'False',
         'type': bool,

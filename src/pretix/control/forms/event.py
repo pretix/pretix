@@ -316,12 +316,12 @@ class EventMetaValueForm(forms.ModelForm):
         self.property = kwargs.pop('property')
         self.disabled = kwargs.pop('disabled')
         super().__init__(*args, **kwargs)
-        if self.property.allowed_values:
+        if self.property.choices:
             self.fields['value'] = forms.ChoiceField(
                 label=self.property.name,
                 choices=[
                     ('', _('Default ({value})').format(value=self.property.default) if self.property.default else ''),
-                ] + [(a.strip(), a.strip()) for a in self.property.allowed_values.splitlines()],
+                ] + [(a.strip(), a.strip()) for a in self.property.choice_keys],
             )
         else:
             self.fields['value'].label = self.property.name
@@ -558,6 +558,7 @@ class EventSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'low_availability_percentage',
         'event_list_type',
         'event_list_available_only',
+        'event_list_filters',
         'event_calendar_future_only',
         'frontpage_text',
         'event_info_text',
@@ -645,6 +646,7 @@ class EventSettingsForm(EventSettingsValidationMixin, SettingsForm):
             del self.fields['frontpage_subevent_ordering']
             del self.fields['event_list_type']
             del self.fields['event_list_available_only']
+            del self.fields['event_list_filters']
             del self.fields['event_calendar_future_only']
 
         # create "virtual" fields for better UX when editing <name>_asked and <name>_required fields

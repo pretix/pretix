@@ -139,6 +139,41 @@
   }
 }
 
+.event-list-filter-form {
+  .event-list-filter-form-row {
+    display: flex;
+    flex-direction: row;
+    align-items: end;
+    .form-group {
+      display: block;
+      width: 100%;
+      margin: 0 15px 0 0;
+    }
+
+    button {
+      flex: 0;
+      white-space: nowrap;
+      /* Visual alignment with the selects */
+      padding-top: 7px;
+      padding-bottom: 7px;
+    }
+  }
+  margin-bottom: 15px;
+}
+@media (max-width: $screen-xs-max) {
+  .event-list-filter-form {
+    .event-list-filter-form-row {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      .form-group {
+        display: block;
+        width: 100%;
+        margin: 0 0 5px;
+      }
+    }
+  }
+}
 
 
 

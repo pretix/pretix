@@ -14,29 +14,56 @@
         <span class="fa fa-plus"></span>
         {% trans "Create a new property" %}
     </a>
-    <table class="table table-condensed table-hover">
-        <thead>
-        <tr>
-            <th>{% trans "Property" %}</th>
-            <th></th>
-        </tr>
-        </thead>
-        <tbody>
-        {% for p in properties %}
+    <form method="post">
+        {% csrf_token %}
+        <table class="table table-condensed table-hover">
+            <thead>
             <tr>
-                <td><strong>
-                    <a href="{% url "control:organizer.property.edit" organizer=request.organizer.slug property=p.id %}">
-                        {{ p.name }}
-                    </a>
-                </strong></td>
-                <td class="text-right flip">
-                    <a href="{% url "control:organizer.property.edit" organizer=request.organizer.slug property=p.id %}"
-                            class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
-                    <a href="{% url "control:organizer.property.delete" organizer=request.organizer.slug property=p.id %}"
-                            class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
-                </td>
+                <th>{% trans "Property" %}</th>
+                <th class="iconcol"></th>
+                <th class="iconcol"></th>
+                <th class="iconcol"></th>
+                <th class="action-col-2"></th>
+                <th class="action-col-2"></th>
             </tr>
-        {% endfor %}
-        </tbody>
-    </table>
+            </thead>
+            <tbody data-dnd-url="{% url "control:organizer.properties.reorder" organizer=request.organizer.slug %}">
+            {% for p in properties %}
+                <tr data-dnd-id="{{ p.pk }}">
+                    <td><strong>
+                        <a href="{% url "control:organizer.property.edit" organizer=request.organizer.slug property=p.id %}">
+                            {{ p.name }}
+                        </a>
+                    </strong></td>
+                    <td>
+                        {% if p.filter_allowed %}
+                            <span class="fa fa-filter text-muted" data-toggle="tooltip" title="{% trans "Can be used for filtering" %}"></span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if p.filter_public %}
+                            <span class="fa fa-eye text-muted" data-toggle="tooltip" title="{% trans "Show filter option to customers" %}"></span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if p.protected %}
+                            <span class="fa fa-lock text-muted" data-toggle="tooltip" title="{% trans "Can only be changed by organizer-level administrators" %}"></span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button formaction="{% url "control:organizer.property.up" organizer=request.organizer.slug property=p.id %}" class="btn btn-default btn-sm sortable-up"{% if forloop.counter0 == 0 and not page_obj.has_previous %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
+                        <button formaction="{% url "control:organizer.property.down" organizer=request.organizer.slug property=p.id %}" class="btn btn-default btn-sm sortable-down"{% if forloop.revcounter0 == 0 and not page_obj.has_next %} disabled{% endif %}><i class="fa fa-arrow-down"></i></button>
+                        <span class="dnd-container"></span>
+                    </td>
+                    <td class="text-right flip">
+                        <a href="{% url "control:organizer.property.edit" organizer=request.organizer.slug property=p.id %}"
+                                class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                        <a href="{% url "control:organizer.property.delete" organizer=request.organizer.slug property=p.id %}"
+                                class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </form>
 {% endblock %}

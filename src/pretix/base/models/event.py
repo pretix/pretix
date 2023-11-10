@@ -20,7 +20,6 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-import logging
 # This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
 # the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
 #
@@ -33,6 +32,7 @@ import logging
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
+import logging
 import os
 import string
 import uuid
@@ -71,7 +71,7 @@ from pretix.base.validators import EventSlugBanlistValidator
 from pretix.helpers.database import GroupConcat
 from pretix.helpers.daterange import daterange
 from pretix.helpers.hierarkey import clean_filename
-from pretix.helpers.json import safe_string
+from pretix.helpers.json import CustomJSONEncoder, safe_string
 from pretix.helpers.thumb import get_thumbnail
 
 from ..settings import settings_hierarkey
@@ -1647,26 +1647,40 @@ class EventMetaProperty(LoggedModel):
         help_text=_("If checked, an event can only be taken live if the property is set. In event series, its always "
                     "optional to set a value for individual dates")
     )
-    allowed_values = models.TextField(
+    choices = models.JSONField(
         null=True, blank=True,
+        encoder=CustomJSONEncoder,
         verbose_name=_("Valid values"),
-        help_text=_("If you keep this empty, any value is allowed. Otherwise, enter one possible value per line.")
+    )
+    filter_public = models.BooleanField(
+        default=False, verbose_name=_("Show filter option to customers"),
+        help_text=_("This field will be shown to filter events in the public event list and calendar.")
+    )
+    public_label = I18nCharField(
+        verbose_name=_("Public name"),
+        null=True, blank=True,
     )
     filter_allowed = models.BooleanField(
         default=True, verbose_name=_("Can be used for filtering"),
         help_text=_("This field will be shown to filter events or reports in the backend, and it can also be used "
                     "for hidden filter parameters in the frontend (e.g. using the widget).")
     )
+    position = models.IntegerField(
+        default=0
+    )
 
     def full_clean(self, exclude=None, validate_unique=True):
         super().full_clean(exclude, validate_unique)
         if self.default and self.required:
             raise ValidationError(_("A property can either be required or have a default value, not both."))
-        if self.default and self.allowed_values and self.default not in self.allowed_values.splitlines():
-            raise ValidationError(_("You cannot set a default value that is not a valid value."))
 
     class Meta:
-        ordering = ("name",)
+        ordering = ("position", "name",)
+
+    @property
+    def choice_keys(self):
+        if self.choices:
+            return [v["key"] for v in self.choices]
 
 
 class EventMetaValue(LoggedModel):

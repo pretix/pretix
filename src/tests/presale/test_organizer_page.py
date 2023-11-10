@@ -72,6 +72,21 @@ def test_attributes_on_page(env, client):
     r = client.get('/mrmcd/?attr[loc]=HH')
     assert 'MRMCD2015' in r.rendered_content
 
+    with scopes_disabled():
+        series = env[0].events.create(
+            name="Workshop Series",
+            has_subevents=True,
+            live=True,
+            date_from=now() + timedelta(days=3)
+        )
+        se = series.subevents.create(name="Future", active=True, date_from=now() + timedelta(days=3))
+        se.meta_values.create(property=prop, value="B")
+
+    r = client.get('/mrmcd/?attr[loc]=B')
+    assert 'Workshop Series' in r.rendered_content
+    r = client.get('/mrmcd/?attr[loc]=MA')
+    assert 'Workshop Series' not in r.rendered_content
+
     prop.filter_allowed = False
     prop.save()
     r = client.get('/mrmcd/?attr[loc]=MA')

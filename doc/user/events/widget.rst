@@ -196,6 +196,10 @@ settings. For example, if you set up a meta data property called "Promoted" that
 
    <pretix-widget event="https://pretix.eu/demo/series/" list-type="list" filter="attr[Promoted]=Yes"></pretix-widget>
 
+If you have enabled public filters in your meta data attribute configuration, a filter formshows up. To disable, use::
+
+   <pretix-widget event="https://pretix.eu/demo/democon/" disable-filters></pretix-widget>
+
 pretix Button
 -------------
 

@@ -37,6 +37,7 @@ import re
 from datetime import time, timedelta
 from decimal import Decimal
 from hashlib import sha1
+from json import JSONDecodeError
 
 import bleach
 import dateutil
@@ -52,7 +53,9 @@ from django.db.models import (
 )
 from django.db.models.functions import Coalesce, Greatest
 from django.forms import DecimalField
-from django.http import HttpResponse, HttpResponseBadRequest, JsonResponse
+from django.http import (
+    Http404, HttpResponse, HttpResponseBadRequest, JsonResponse,
+)
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.formats import date_format
@@ -60,6 +63,7 @@ from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext, gettext_lazy as _
 from django.views import View
+from django.views.decorators.http import require_http_methods
 from django.views.generic import (
     CreateView, DetailView, FormView, ListView, TemplateView, UpdateView,
 )
@@ -97,17 +101,19 @@ from pretix.control.forms.filter import (
 from pretix.control.forms.orders import ExporterForm
 from pretix.control.forms.organizer import (
     CustomerCreateForm, CustomerUpdateForm, DeviceBulkEditForm, DeviceForm,
-    EventMetaPropertyForm, GateForm, GiftCardAcceptanceInviteForm,
-    GiftCardCreateForm, GiftCardUpdateForm, MailSettingsForm,
-    MembershipTypeForm, MembershipUpdateForm, OrganizerDeleteForm,
-    OrganizerFooterLinkFormset, OrganizerForm, OrganizerSettingsForm,
-    OrganizerUpdateForm, ReusableMediumCreateForm, ReusableMediumUpdateForm,
-    SSOClientForm, SSOProviderForm, TeamForm, WebHookForm,
+    EventMetaPropertyAllowedValueFormSet, EventMetaPropertyForm, GateForm,
+    GiftCardAcceptanceInviteForm, GiftCardCreateForm, GiftCardUpdateForm,
+    MailSettingsForm, MembershipTypeForm, MembershipUpdateForm,
+    OrganizerDeleteForm, OrganizerFooterLinkFormset, OrganizerForm,
+    OrganizerSettingsForm, OrganizerUpdateForm, ReusableMediumCreateForm,
+    ReusableMediumUpdateForm, SSOClientForm, SSOProviderForm, TeamForm,
+    WebHookForm,
 )
 from pretix.control.forms.rrule import RRuleForm
 from pretix.control.logdisplay import OVERVIEW_BANLIST
 from pretix.control.permissions import (
     AdministratorPermissionRequiredMixin, OrganizerPermissionRequiredMixin,
+    organizer_permission_required,
 )
 from pretix.control.signals import nav_organizer
 from pretix.control.views import PaginationMixin
@@ -2043,14 +2049,54 @@ class EventMetaPropertyListView(OrganizerDetailViewMixin, OrganizerPermissionReq
         return self.request.organizer.meta_properties.all()
 
 
-class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CreateView):
-    model = EventMetaProperty
+class EventMetaPropertyEditorMixin:
     template_name = 'pretixcontrol/organizers/property_edit.html'
-    permission = 'can_change_organizer_settings'
     form_class = EventMetaPropertyForm
 
+    @cached_property
+    def formset(self):
+        return EventMetaPropertyAllowedValueFormSet(
+            data=self.request.POST if self.request.method == "POST" else None,
+            organizer=self.request.organizer,
+            initial=(self.object.choices or []) if self.object else [],
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['formset'] = self.formset
+        return ctx
+
+    def get_form_kwargs(self):
+        return {
+            **super().get_form_kwargs(),
+            'event': self.request.organizer,
+        }
+
+    def is_default_valid(self):
+        choice_keys = [
+            f.cleaned_data.get("key") for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
+        ]
+        default = self.form.cleaned_data["default"]
+        if default and choice_keys and default not in choice_keys:
+            messages.error(self.request, _("You cannot set a default value that is not a valid value."))
+            return False
+        return True
+
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object(self.get_queryset())
+        self.form = self.get_form()
+        if self.form.is_valid() and self.formset.is_valid() and self.is_default_valid():
+            return self.form_valid(self.form)
+        else:
+            return self.form_invalid(self.form)
+
+
+class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, EventMetaPropertyEditorMixin, CreateView):
+    model = EventMetaProperty
+    permission = 'can_change_organizer_settings'
+
     def get_object(self, queryset=None):
-        return get_object_or_404(EventMetaProperty, organizer=self.request.organizer, pk=self.kwargs.get('property'))
+        return EventMetaProperty()
 
     def get_success_url(self):
         return reverse('control:organizer.properties', kwargs={
@@ -2060,6 +2106,9 @@ class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionR
     def form_valid(self, form):
         messages.success(self.request, _('The property has been created.'))
         form.instance.organizer = self.request.organizer
+        form.instance.choices = [
+            f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
+        ]
         ret = super().form_valid(form)
         form.instance.log_action('pretix.property.created', user=self.request.user, data={
             k: getattr(self.object, k) for k in form.changed_data
@@ -2071,12 +2120,10 @@ class EventMetaPropertyCreateView(OrganizerDetailViewMixin, OrganizerPermissionR
         return super().form_invalid(form)
 
 
-class EventMetaPropertyUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, UpdateView):
+class EventMetaPropertyUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, EventMetaPropertyEditorMixin, UpdateView):
     model = EventMetaProperty
-    template_name = 'pretixcontrol/organizers/property_edit.html'
     permission = 'can_change_organizer_settings'
     context_object_name = 'property'
-    form_class = EventMetaPropertyForm
 
     def get_object(self, queryset=None):
         return get_object_or_404(EventMetaProperty, organizer=self.request.organizer, pk=self.kwargs.get('property'))
@@ -2087,7 +2134,10 @@ class EventMetaPropertyUpdateView(OrganizerDetailViewMixin, OrganizerPermissionR
         })
 
     def form_valid(self, form):
-        if form.has_changed():
+        form.instance.choices = [
+            f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
+        ]
+        if form.has_changed() or self.formset.has_changed():
             self.object.log_action('pretix.property.changed', user=self.request.user, data={
                 k: getattr(self.object, k)
                 for k in form.changed_data
@@ -2122,6 +2172,75 @@ class EventMetaPropertyDeleteView(OrganizerDetailViewMixin, OrganizerPermissionR
         self.object.delete()
         messages.success(request, _('The selected property has been deleted.'))
         return redirect(success_url)
+
+
+def meta_property_move(request, property, up=True):
+    property = get_object_or_404(request.organizer.meta_properties, id=property)
+    properties = list(request.organizer.meta_properties.order_by("position"))
+
+    index = properties.index(property)
+    if index != 0 and up:
+        properties[index - 1], properties[index] = properties[index], properties[index - 1]
+    elif index != len(properties) - 1 and not up:
+        properties[index + 1], properties[index] = properties[index], properties[index + 1]
+
+    for i, prop in enumerate(properties):
+        if prop.position != i:
+            prop.position = i
+            prop.save()
+            prop.log_action(
+                'pretix.property.reordered', user=request.user, data={
+                    'position': i,
+                }
+            )
+    messages.success(request, _('The order of properties has been updated.'))
+
+
+@organizer_permission_required("can_change_organizer_settings")
+@require_http_methods(["POST"])
+def meta_property_move_up(request, organizer, property):
+    meta_property_move(request, property, up=True)
+    return redirect('control:organizer.properties',
+                    organizer=request.organizer.slug)
+
+
+@organizer_permission_required("can_change_organizer_settings")
+@require_http_methods(["POST"])
+def meta_property_move_down(request, organizer, property):
+    meta_property_move(request, property, up=False)
+    return redirect('control:organizer.properties',
+                    organizer=request.organizer.slug)
+
+
+@transaction.atomic
+@organizer_permission_required("can_change_items")
+@require_http_methods(["POST"])
+def reorder_meta_properties(request, organizer):
+    try:
+        ids = json.loads(request.body.decode('utf-8'))['ids']
+    except (JSONDecodeError, KeyError, ValueError):
+        return HttpResponseBadRequest("expected JSON: {ids:[]}")
+
+    input_meta_properties = list(request.organizer.meta_properties.filter(id__in=[i for i in ids if i.isdigit()]))
+
+    if len(input_meta_properties) != len(ids):
+        raise Http404(_("Some of the provided object ids are invalid."))
+
+    if len(input_meta_properties) != request.organizer.meta_properties.count():
+        raise Http404(_("Not all objects have been selected."))
+
+    for c in input_meta_properties:
+        pos = ids.index(str(c.pk))
+        if pos != c.position:  # Save unneccessary UPDATE queries
+            c.position = pos
+            c.save(update_fields=['position'])
+            c.log_action(
+                'pretix.property.reordered', user=request.user, data={
+                    'position': pos,
+                }
+            )
+
+    return HttpResponse()
 
 
 class LogView(OrganizerPermissionRequiredMixin, PaginationMixin, ListView):

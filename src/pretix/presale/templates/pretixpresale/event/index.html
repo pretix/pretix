@@ -70,7 +70,7 @@
             {% endif %}
         {% endif %}
 
-        {% if subevent and "date" not in request.GET %}
+        {% if subevent and "date" not in request.GET and "filtered" not in request.GET %}
             <p>
             {% if show_cart %}
                 <button class="subevent-toggle btn btn-primary btn-block btn-lg" aria-expanded="false">

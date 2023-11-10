@@ -39,7 +39,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db.models import Q
-from django.forms import inlineformset_factory
+from django.forms import formset_factory, inlineformset_factory
 from django.forms.utils import ErrorDict
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -48,7 +48,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelChoiceField
 from i18nfield.forms import (
-    I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
+    I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
 )
 from phonenumber_field.formfields import PhoneNumberField
 from pytz import common_timezones
@@ -195,13 +195,49 @@ class SafeOrderPositionChoiceField(forms.ModelChoiceField):
         return f'{op.order.code}-{op.positionid} ({str(op.item) + ((" - " + str(op.variation)) if op.variation else "")})'
 
 
-class EventMetaPropertyForm(forms.ModelForm):
+class EventMetaPropertyForm(I18nModelForm):
     class Meta:
         model = EventMetaProperty
-        fields = ['name', 'default', 'required', 'protected', 'allowed_values', 'filter_allowed']
+        fields = ['name', 'default', 'required', 'protected', 'filter_public', 'public_label', 'filter_allowed']
         widgets = {
-            'default': forms.TextInput()
+            'default': forms.TextInput(),
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['public_label'].widget.attrs['data-display-dependency'] = '#id_filter_public'
+
+
+class EventMetaPropertyAllowedValueForm(I18nForm):
+    key = forms.CharField(
+        label=_('Internal name'),
+        max_length=250,
+        required=True
+    )
+    label = I18nFormField(
+        label=_('Public name'),
+        required=False,
+        widget=I18nTextInput,
+        widget_kwargs=dict(attrs={
+            'placeholder': _('Public name'),
+        })
+    )
+
+
+class I18nBaseFormSet(I18nFormSetMixin, forms.BaseFormSet):
+    # compatibility shim for django-i18nfield library
+
+    def __init__(self, *args, **kwargs):
+        self.organizer = kwargs.pop('organizer', None)
+        if self.organizer:
+            kwargs['locales'] = self.organizer.settings.get('locales')
+        super().__init__(*args, **kwargs)
+
+
+EventMetaPropertyAllowedValueFormSet = formset_factory(
+    EventMetaPropertyAllowedValueForm, formset=I18nBaseFormSet,
+    can_order=True, can_delete=True, extra=0
+)
 
 
 class MembershipTypeForm(I18nModelForm):

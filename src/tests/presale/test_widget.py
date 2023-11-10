@@ -605,6 +605,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             data = json.loads(response.content.decode())
             assert data == {
                 'list_type': 'list',
+                'meta_filter_fields': [],
                 'name': '30C3',
                 'frontpage_text': '',
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">ticketing powered by pretix</a>',
@@ -633,6 +634,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             data = json.loads(response.content.decode())
             assert data == {
                 'list_type': 'calendar',
+                'meta_filter_fields': [],
                 'date': '2019-01-01',
                 'name': '30C3',
                 'frontpage_text': '',
@@ -708,6 +710,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             data = json.loads(response.content.decode())
             assert data == {
                 'list_type': 'week',
+                'meta_filter_fields': [],
                 'name': '30C3',
                 'frontpage_text': '',
                 'week': [2019, 1],
@@ -769,8 +772,71 @@ class WidgetCartTest(CartTestMixin, TestCase):
                      'event_url': 'http://example.com/ccc/future/',
                      'name': 'Future'}
                 ],
-                'list_type': 'list'
+                'list_type': 'list',
+                'meta_filter_fields': [],
             }
+
+    def test_event_list_filtersets_from_allowed_values(self):
+        self.event.has_subevents = True
+        self.event.settings.timezone = 'Europe/Berlin'
+        self.event.save()
+        with freeze_time("2019-01-01 10:00:00"):
+            with scopes_disabled():
+                self.orga.meta_properties.create(
+                    name="Language",
+                    default="EN",
+                    filter_public=True,
+                    choices=[
+                        {"key": "EN", "label": "English"},
+                        {"key": "DE", "label": "German"},
+                    ]
+                )
+
+            response = self.client.get('/%s/widget/product_list' % (self.orga.slug,))
+            data = json.loads(response.content.decode())
+            assert data["meta_filter_fields"] == [
+                {
+                    "choices": [["", ""], ["EN", "English"], ["DE", "German"]],
+                    "key": "attr[Language]",
+                    "label": "Language"
+                }
+            ]
+
+    def test_event_list_filtersets_from_existing_values(self):
+        self.event.has_subevents = True
+        self.event.settings.timezone = 'Europe/Berlin'
+        self.event.save()
+        with freeze_time("2019-01-01 10:00:00"):
+            with scopes_disabled():
+                p = self.orga.meta_properties.create(
+                    name="Language",
+                    default="DE",
+                    filter_public=True,
+                )
+                e = self.orga.events.create(name="Future", live=True, is_public=True, slug='future', date_from=now() + datetime.timedelta(days=3))
+                se = self.event.subevents.create(name="Future", active=True, date_from=now() + datetime.timedelta(days=3))
+                e.meta_values.create(property=p, value="EN")
+                se.meta_values.create(property=p, value="DE")
+
+            response = self.client.get('/%s/widget/product_list' % (self.orga.slug,))
+            data = json.loads(response.content.decode())
+            assert data["meta_filter_fields"] == [
+                {
+                    "choices": [["", ""], ["DE", "DE"], ["EN", "EN"]],
+                    "key": "attr[Language]",
+                    "label": "Language"
+                }
+            ]
+
+            response = self.client.get('/%s/%s/widget/product_list' % (self.orga.slug, self.event.slug))
+            data = json.loads(response.content.decode())
+            assert data["meta_filter_fields"] == [
+                {
+                    "choices": [["", ""], ["DE", "DE"]],
+                    "key": "attr[Language]",
+                    "label": "Language"
+                }
+            ]
 
     def test_event_calendar(self):
         self.event.has_subevents = True
@@ -794,6 +860,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             assert data == {
                 'date': '2019-01-01',
                 'list_type': 'calendar',
+                'meta_filter_fields': [],
                 'poweredby': '<a href="https://pretix.eu" target="_blank" rel="noopener">ticketing powered by pretix</a>',
                 'weeks': [
                     [None,

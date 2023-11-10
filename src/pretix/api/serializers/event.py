@@ -230,8 +230,8 @@ class EventSerializer(I18nAwareModelSerializer):
         for key, v in value['meta_data'].items():
             if key not in self.meta_properties:
                 raise ValidationError(_('Meta data property \'{name}\' does not exist.').format(name=key))
-            if self.meta_properties[key].allowed_values:
-                if v not in [_v.strip() for _v in self.meta_properties[key].allowed_values.splitlines()]:
+            if self.meta_properties[key].choices:
+                if v not in self.meta_properties[key].choice_keys:
                     raise ValidationError(_('Meta data property \'{name}\' does not allow value \'{value}\'.').format(name=key, value=v))
         return value
 
@@ -528,8 +528,8 @@ class SubEventSerializer(I18nAwareModelSerializer):
         for key, v in value['meta_data'].items():
             if key not in self.meta_properties:
                 raise ValidationError(_('Meta data property \'{name}\' does not exist.').format(name=key))
-            if self.meta_properties[key].allowed_values:
-                if v not in [_v.strip() for _v in self.meta_properties[key].allowed_values.splitlines()]:
+            if self.meta_properties[key].choices:
+                if v not in self.meta_properties[key].choice_keys:
                     raise ValidationError(_('Meta data property \'{name}\' does not allow value \'{value}\'.').format(name=key, value=v))
         return value
 
@@ -705,6 +705,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'frontpage_subevent_ordering',
         'event_list_type',
         'event_list_available_only',
+        'event_list_filters',
         'event_calendar_future_only',
         'frontpage_text',
         'event_info_text',
