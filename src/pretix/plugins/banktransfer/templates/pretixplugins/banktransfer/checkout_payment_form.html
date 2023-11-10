@@ -8,9 +8,9 @@
         bank account, using a personal reference code:
     {% endblocktrans %}</p>
 
-    {% if not code %}<div class="user-select-none">{% endif %}
+    {% if not code %}<div class="user-select-none" data-toggle="tooltip" title="{% trans "Please do not yet start a payment. We'll assign you a personal reference code after you completed the order." %}">{% endif %}
     {% if settings.bank_details_type == "sepa" %}
-        <dl class="dl-horizontal" data-toggle="tooltip" title="{% trans "Please do not yet start a payment. We'll assign you a personal reference code after you completed the order." %}">
+        <dl class="dl-horizontal">
             <dt>{% trans "Account holder" %}: </dt><dd>{{ settings.bank_details_sepa_name }}</dd>
             <dt>{% trans "IBAN" %}: </dt><dd>{{ settings.bank_details_sepa_iban|ibanformat }}</dd>
             <dt>{% trans "BIC" %}: </dt><dd>{{ settings.bank_details_sepa_bic }}</dd>
