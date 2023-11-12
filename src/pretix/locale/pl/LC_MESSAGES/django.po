@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-10-26 12:47+0000\n"
-"PO-Revision-Date: 2023-11-09 03:00+0000\n"
-"Last-Translator: Maciej Sowilski <maciej.sowilski@syrreal.net>\n"
+"PO-Revision-Date: 2023-11-12 13:26+0000\n"
+"Last-Translator: Fast128 <fast128@post.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -6495,7 +6495,7 @@ msgstr ""
 
 #: pretix/base/payment.py:1180
 msgid "Payment process description during checkout"
-msgstr ""
+msgstr "Opis procesu płatności podczas podsumowania"
 
 #: pretix/base/payment.py:1181
 msgid ""
