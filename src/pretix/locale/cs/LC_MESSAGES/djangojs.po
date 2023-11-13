@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-10-18 07:26+0000\n"
+"POT-Creation-Date: 2023-11-13 15:14+0000\n"
 "PO-Revision-Date: 2023-09-15 06:00+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -130,18 +130,18 @@ msgstr "WeChat Pay"
 msgid "Mercado Pago"
 msgstr "Mercado Pago"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:164
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
 msgid "Continue"
 msgstr "Pokračovat"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:222
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:204
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:235
 msgid "Confirming your payment …"
 msgstr "Potvrzuji vaši platbu …"
 
-#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:247
+#: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:254
 msgid "Payment method unavailable"
 msgstr "Způsob platby není k dispozici"
 
@@ -602,15 +602,23 @@ msgstr "Žádný"
 msgid "Selected only"
 msgstr "Pouze vybrané"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:926
+#: pretix/static/pretixcontrol/js/ui/main.js:778
+msgid "Enter page number between 1 and %(max)s."
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:781
+msgid "Invalid page number."
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/main.js:939
 msgid "Use a different name internally"
 msgstr "Interně používat jiný název"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:966
+#: pretix/static/pretixcontrol/js/ui/main.js:979
 msgid "Click to close"
 msgstr "Kliknutím zavřete"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1041
+#: pretix/static/pretixcontrol/js/ui/main.js:1054
 msgid "You have unsaved changes!"
 msgstr "Máte neuložené změny!"
 
