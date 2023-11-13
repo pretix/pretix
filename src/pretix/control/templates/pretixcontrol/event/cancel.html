@@ -14,6 +14,7 @@
                 {% bootstrap_field form.cancel_allow_user_unpaid_keep layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_unpaid_keep_percentage layout="control" %}
                 {% bootstrap_field form.cancel_allow_user_unpaid_keep_fees layout="control" %}
+                {% bootstrap_field form.cancel_terms_unpaid layout="control" %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Paid orders" %}</legend>
@@ -32,6 +33,7 @@
                     {% bootstrap_field form.cancel_allow_user_paid_adjust_fees_step layout="control" %}
                 </div>
                 {% bootstrap_field form.cancel_allow_user_paid_refund_as_giftcard layout="control" %}
+                {% bootstrap_field form.cancel_terms_paid layout="control" %}
                 {% if not gets_notification %}
                     <div class="alert alert-warning">
                         {% blocktrans trimmed %}

@@ -1926,6 +1926,32 @@ DEFAULTS = {
             label=_("Do not allow cancellations after"),
         )
     },
+    'cancel_terms_paid': {
+        'default': None,
+        'type': LazyI18nString,
+        'serializer_class': I18nField,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Terms of cancellation"),
+            widget=I18nTextarea,
+            widget_kwargs={'attrs': {'rows': '2'}},
+            help_text=_("This text will be shown when cancellation is allowed for a paid order. Leave empty if you "
+                        "want pretix to automatically generate the terms of cancellation based on your settings.")
+        )
+    },
+    'cancel_terms_unpaid': {
+        'default': None,
+        'type': LazyI18nString,
+        'serializer_class': I18nField,
+        'form_class': I18nFormField,
+        'form_kwargs': dict(
+            label=_("Terms of cancellation"),
+            widget=I18nTextarea,
+            widget_kwargs={'attrs': {'rows': '2'}},
+            help_text=_("This text will be shown when cancellation is allowed for an unpaid or free order. Leave empty "
+                        "if you want pretix to automatically generate the terms of cancellation based on your settings.")
+        )
+    },
     'contact_mail': {
         'default': None,
         'type': str,
