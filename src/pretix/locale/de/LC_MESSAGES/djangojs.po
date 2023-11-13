@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-13 15:14+0000\n"
-"PO-Revision-Date: 2023-09-25 23:46+0000\n"
+"PO-Revision-Date: 2023-11-13 15:57+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -606,11 +606,11 @@ msgstr "Nur ausgewählte"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:778
 msgid "Enter page number between 1 and %(max)s."
-msgstr ""
+msgstr "Geben Sie eine Seitenzahl zwischen 1 und %(max)s ein."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:781
 msgid "Invalid page number."
-msgstr ""
+msgstr "Ungültige Seitenzahl."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:939
 msgid "Use a different name internally"
@@ -727,12 +727,9 @@ msgid "Price"
 msgstr "Preis"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Select %s"
 msgctxt "widget"
 msgid "Select"
-msgstr "%s auswählen"
+msgstr "Auswählen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
 #, javascript-format
