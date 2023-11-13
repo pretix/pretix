@@ -342,13 +342,6 @@ body.loading .container {
     transition: all 150ms ease-in 0s;
 }
 
-.panel-title a:not(.collapsed) .collapse-indicator {
-    -webkit-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    transform: rotate(180deg);
-}
-
 .panel-title a[data-toggle="collapse"], details .panel-title {
     display: flex;
     padding: 0.75*$line-height-computed;
@@ -417,13 +410,12 @@ details summary {
     -webkit-user-select: none;
     user-select: none;
 }
-.nojs details[open] .panel-heading .collapse-indicator,
-details.details-open .panel-heading .collapse-indicator,
-[aria-expanded=true]>.collapse-indicator {
-    -webkit-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    transform: rotate(180deg);
+.nojs details:not([open], .details-open) .panel-heading .collapse-indicator,
+[aria-expanded=false]>.collapse-indicator {
+    -webkit-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    transform: rotate(-90deg);
 }
 
 details.sneak-peek {
