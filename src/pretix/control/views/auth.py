@@ -266,7 +266,7 @@ class Forgot(TemplateView):
             has_redis = settings.HAS_REDIS
 
             try:
-                user = User.objects.get(email__iexact=email)
+                user = User.objects.get(is_active=True, email__iexact=email)
 
                 if has_redis:
                     from django_redis import get_redis_connection
@@ -330,7 +330,7 @@ class Recover(TemplateView):
         if request.user.is_authenticated:
             return redirect(request.GET.get("next", 'control:index'))
         try:
-            user = User.objects.get(id=self.request.GET.get('id'), auth_backend='native')
+            user = User.objects.get(id=self.request.GET.get('id'), is_active=True, auth_backend='native')
         except User.DoesNotExist:
             return self.invalid('unknownuser')
         if not default_token_generator.check_token(user, self.request.GET.get('token')):
