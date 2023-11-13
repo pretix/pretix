@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-13 15:14+0000\n"
-"PO-Revision-Date: 2023-11-10 00:00+0000\n"
-"Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2023-11-13 16:05+0000\n"
+"Last-Translator: Christiaan de Die le Clercq <contact@techwolf12.nl>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -3351,12 +3351,14 @@ msgstr ""
 #: pretix/base/models/checkin.py:66
 msgctxt "checkin"
 msgid "Ignore check-ins on this list in statistics"
-msgstr ""
+msgstr "Negeer ingecheckte tickets van deze lijst in de statistieken"
 
 #: pretix/base/models/checkin.py:70
 msgctxt "checkin"
 msgid "Tickets with a check-in on this list should be considered \"used\""
 msgstr ""
+"Tickets op deze lijst die ingechecked zijn moeten als \"gebruikt\" worden "
+"gezien"
 
 #: pretix/base/models/checkin.py:71
 msgid ""
@@ -4199,7 +4201,7 @@ msgstr "Dynamische geldigheid"
 
 #: pretix/base/models/items.py:379 pretix/base/models/items.py:678
 msgid "Don't use re-usable media, use regular one-off tickets"
-msgstr ""
+msgstr "Gebruik geen herbruikbare media, gebruik tickets voor enkel gebruik"
 
 #: pretix/base/models/items.py:380
 msgid "Require an existing medium to be re-used"
@@ -4561,7 +4563,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:667
 msgid "Reusable media policy"
-msgstr ""
+msgstr "Herbruikbare media regels"
 
 #: pretix/base/models/items.py:669
 msgid ""
