@@ -199,7 +199,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
         positions = list(
             invoice.order.positions.select_related('addon_to', 'item', 'tax_rule', 'subevent', 'variation').annotate(
                 addon_c=Count('addons')
-            ).prefetch_related('answers', 'answers__question').order_by('positionid', 'id')
+            ).prefetch_related('answers', 'answers__options', 'answers__question').order_by('positionid', 'id')
         )
 
         reverse_charge = False
@@ -247,7 +247,7 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 desc += "<br />{}{} {}".format(
                     answ.question.question,
                     "" if str(answ.question.question).endswith("?") else ":",
-                    str(answ)
+                    answ.to_string_i18n()
                 )
 
             if invoice.event.has_subevents:
