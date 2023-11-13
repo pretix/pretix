@@ -22,6 +22,7 @@ BezahlCode
 BLIK
 blocklist
 BN
+Bokmål
 Boleto
 Bundles
 chardet
