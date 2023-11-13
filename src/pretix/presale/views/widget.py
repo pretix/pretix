@@ -405,7 +405,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 availability['reason'] = 'full'
             else:  # unknown / no product
                 availability['color'] = 'none'
-                availability['text'] = 'More info'
+                availability['text'] = gettext('More info')
                 availability['reason'] = 'unknown'
         elif ev.presale_is_running:
             availability['color'] = 'green'
