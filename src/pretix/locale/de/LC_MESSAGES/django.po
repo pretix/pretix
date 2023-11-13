@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-13 15:14+0000\n"
-"PO-Revision-Date: 2023-11-03 04:00+0000\n"
+"PO-Revision-Date: 2023-11-13 15:57+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -87,7 +87,7 @@ msgstr "Lettisch"
 
 #: pretix/_base_settings.py:95
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Norwegisch (Bokmål)"
 
 #: pretix/_base_settings.py:96
 msgid "Polish"
@@ -3970,24 +3970,21 @@ msgstr "Erlaubte Werte"
 
 #: pretix/base/models/event.py:1656
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:45
-#, fuzzy
-#| msgid "Show number of check-ins to customer"
 msgid "Show filter option to customers"
-msgstr "Zeige Anzahl der Check-ins für Kund*innen an"
+msgstr "Zeige Filterfunktion in Kundenansicht an"
 
 #: pretix/base/models/event.py:1657
 msgid ""
 "This field will be shown to filter events in the public event list and "
 "calendar."
 msgstr ""
+"Dieses Feld wird angeboten, um Veranstaltungen in der öffentlichen "
+"Veranstaltungsliste und dem öffentlichen Veranstaltungskalender zu filtern."
 
 #: pretix/base/models/event.py:1660 pretix/control/forms/organizer.py:218
 #: pretix/control/forms/organizer.py:222
-#, fuzzy
-#| msgctxt "openidconnect"
-#| msgid "Public"
 msgid "Public name"
-msgstr "Öffentlich"
+msgstr "Öffentlicher Name"
 
 #: pretix/base/models/event.py:1664
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
@@ -4231,10 +4228,8 @@ msgstr ""
 "einem anderen Projekt verkauft werden, nicht unterstützt."
 
 #: pretix/base/models/items.py:435 pretix/base/models/items.py:1042
-#, fuzzy
-#| msgid "Net price"
 msgid "Suggested price"
-msgstr "Nettopreis"
+msgstr "Vorgeschlagener Preis"
 
 #: pretix/base/models/items.py:436 pretix/base/models/items.py:1043
 msgid ""
@@ -4242,6 +4237,9 @@ msgid ""
 "can choose a lower value, but not lower than the price this product would "
 "have without the free price option."
 msgstr ""
+"Dieser Preis wird als Standardwert für das Eingabefeld verwendet. Ein "
+"geringerer Preis kann eingegeben werden, aber nicht niedriger als der Preis, "
+"den das Produkt ohne die Option zur freien Preiseingabe hätte."
 
 #: pretix/base/models/items.py:449
 msgid "Whether or not buying this product allows a person to enter your event"
@@ -4282,11 +4280,9 @@ msgid "Product picture"
 msgstr "Produktbild"
 
 #: pretix/base/models/items.py:497
-#, fuzzy
-#| msgid "Only show after sellout of"
 msgctxt "hidden_if_available_legacy"
 msgid "Only show after sellout of"
-msgstr "Nicht anzeigen, wenn anderes Produkt verfügbar"
+msgstr "Nicht anzeigen, wenn Kontingent verfügbar"
 
 #: pretix/base/models/items.py:498
 msgid ""
@@ -4309,14 +4305,6 @@ msgid "Only show after sellout of"
 msgstr "Nicht anzeigen, wenn anderes Produkt verfügbar"
 
 #: pretix/base/models/items.py:509
-#, fuzzy
-#| msgid ""
-#| "If you select a quota here, this product will only be shown when that "
-#| "quota is unavailable. If combined with the option to hide sold-out "
-#| "products, this allows you to swap out products for more expensive ones "
-#| "once they are sold out. There might be a short period in which both "
-#| "products are visible while all tickets in the referenced quota are "
-#| "reserved, but not yet sold."
 msgid ""
 "If you select a product here, this product will only be shown when that "
 "product is sold out. If combined with the option to hide sold-out products, "
@@ -4325,13 +4313,13 @@ msgid ""
 "products are visible while all tickets of the referenced product are "
 "reserved, but not yet sold."
 msgstr ""
-"Wenn Sie hier ein Kontingent auswählen, wird dieses Produkt nur angezeigt "
-"wenn dieses andere Kontingent nicht verfügbar ist. In Kombination mit der "
-"Möglichkeit, ausverkaufte Produkte anzuzeigen, erlaubt dies Ihnen, ein "
-"Produkt durch ein teureres auszutauschen, sobald es ausverkauft wurde. Es "
-"kann einen kurzen Zeitraum geben, in dem beide Produkte sichtbar sind, wenn "
-"alle Produkte des hier eingestellten Kontingentes reserviert sind, aber noch "
-"nicht verkauft wurden."
+"Wenn Sie hier ein Produkt auswählen, wird dieses Produkt nur angezeigt wenn "
+"dieses andere Produkt ausverkauft ist. In Kombination mit der Möglichkeit, "
+"ausverkaufte Produkte anzuzeigen, erlaubt dies Ihnen, ein Produkt durch ein "
+"teureres auszutauschen, sobald es ausverkauft wurde. Es kann einen kurzen "
+"Zeitraum geben, in dem beide Produkte sichtbar sind, wenn alle Tickets des "
+"hier eingestellten Produktes reserviert sind, aber noch nicht verkauft "
+"wurden."
 
 #: pretix/base/models/items.py:518
 msgid ""
@@ -7143,14 +7131,12 @@ msgid "Presale end"
 msgstr "Ende des Vorverkaufs"
 
 #: pretix/base/reldate.py:183
-#, fuzzy
-#| msgid "days before"
 msgid "before"
-msgstr "Tage bevor"
+msgstr "bevor"
 
 #: pretix/base/reldate.py:184
 msgid "after"
-msgstr ""
+msgstr "nach"
 
 #: pretix/base/reldate.py:231 pretix/base/reldate.py:359
 msgid "Fixed date:"
@@ -9508,21 +9494,16 @@ msgstr ""
 "der Monats- oder Wochenkalender verwendet werden."
 
 #: pretix/base/settings.py:1615
-#, fuzzy
-#| msgid "Hide all unavailable dates from calendar or list views"
 msgid "Show filter options for calendar or list view"
-msgstr ""
-"Verstecke alle nicht verfügbaren Termine in Kalender- oder Listenansichten"
+msgstr "Zeige Filteroptionen in Kalender- und Listenansicht"
 
 #: pretix/base/settings.py:1616
-#, fuzzy
-#| msgid "The selected media type is not enabled in your organizer settings."
 msgid ""
 "You can set up possible filters as meta properties in your organizer "
 "settings."
 msgstr ""
-"Der ausgewählte Medientyp ist in den Veranstalter-Einstellungen nicht "
-"aktiviert."
+"Sie können Meta-Eigenschaften in den Veranstaltereinstellungen als filterbar "
+"deklarieren."
 
 #: pretix/base/settings.py:1625
 msgid "Hide all unavailable dates from calendar or list views"
@@ -9596,6 +9577,9 @@ msgid ""
 "Allow changes regardless of price, as long as no refund is required (i.e. "
 "the resulting price is not lower than what has already been paid)."
 msgstr ""
+"Erlaube Änderungen unabhängig vom Preis, solange keine Erstattung notwendig "
+"wird (d.h. die neue Bestellsumme ist nicht niedriger als der Betrag, der "
+"bereits bezahlt wurde)."
 
 #: pretix/base/settings.py:1692 pretix/base/settings.py:1703
 msgid "Allow changes regardless of price, even if this results in a refund."
@@ -13673,6 +13657,8 @@ msgid ""
 "This option is deprecated. For new products, use the newer option below that "
 "refers to another product instead of a quota."
 msgstr ""
+"Diese Option wird entfernt. Für neue Produkte wird die neuere Option weiter "
+"unten empfohlen, die ein anderes Produkt statt einem Kontingent referenziert."
 
 #: pretix/control/forms/item.py:570 pretix/control/forms/item.py:586
 msgid "Shown independently of other products"
@@ -16810,16 +16796,11 @@ msgstr "Bargeld"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:4
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:6
-#, fuzzy
-#| msgid "Delete check-in list"
 msgid "Delete check-ins"
-msgstr "Check-in-Liste löschen"
+msgstr "Check-ins löschen"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:15
-#, fuzzy, python-format
-#| msgid ""
-#| "Are you sure you want to delete the check-in list <strong>%(name)s</"
-#| "strong>?"
+#, python-format
 msgid ""
 "Are you sure you want to permanently delete the check-ins of <strong>one "
 "ticket</strong>."
@@ -16827,9 +16808,11 @@ msgid_plural ""
 "Are you sure you want to permanently delete the check-ins of "
 "<strong>%(count)s tickets</strong>?"
 msgstr[0] ""
-"Möchten Sie die Check-in-Liste <strong>%(name)s</strong> wirklich löschen?"
+"Möchten Sie die Check-ins von <strong>einem Ticket</strong> wirklich "
+"unwiderruflich löschen?"
 msgstr[1] ""
-"Möchten Sie die Check-in-Liste <strong>%(name)s</strong> wirklich löschen?"
+"Möchten Sie die Check-ins von <strong>%(count)s Tickets</strong> wirklich "
+"unwiderruflich löschen?"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:24
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:18
@@ -17156,10 +17139,8 @@ msgid ""
 msgstr "Dies löscht auch die <strong>%(num)s</strong> gespeicherten Check-ins."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:22
-#, fuzzy
-#| msgid "Delete question and all answers"
 msgid "Delete list and all check-ins"
-msgstr "Frage und alle Antworten löschen"
+msgstr "Liste und alle Check-ins löschen"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:48
 #: pretix/control/templates/pretixcontrol/event/payment.html:74
@@ -19358,16 +19339,12 @@ msgstr ""
 "bereits ausverkauft ist."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:37
-#, fuzzy
-#| msgid ""
-#| "This product is currently not being shown since you configured below that "
-#| "it should only be visible if a certain other quota is already sold out."
 msgid ""
 "This product is currently not being shown since you configured below that it "
 "should only be visible if a certain other product is already sold out."
 msgstr ""
-"Dieses Produkt wird im Moment nicht verkauft, da unten konfiguriert wurde, "
-"dass es nur angezeigt werden soll, wenn ein bestimmtes anderes Kontingent "
+"Dieses Produkt wird im Moment nicht angezeigt, da unten konfiguriert wurde, "
+"dass es nur angezeigt werden soll, wenn ein bestimmtes anderes Produkt "
 "bereits ausverkauft ist."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:19
@@ -22693,25 +22670,16 @@ msgid "Property:"
 msgstr "Eigenschaft:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:17
-#, fuzzy
-#| msgid "Allowed titles"
 msgid "Allowed values"
-msgstr "Zur Auswahl stehende Titel"
+msgstr "Erlaubte Werte"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:21
-#, fuzzy
-#| msgid ""
-#| "If you keep this empty, the ticket will be valid starting at the time of "
-#| "purchase."
 msgid "If you keep this empty, all input will be allowed."
-msgstr ""
-"Wenn Sie dieses Feld leer lassen, ist das Ticket ab dem Kaufzeitpunkt gültig."
+msgstr "Wenn Sie diesen Abschnitt leer lassen, sind beliebige Eingaben erlaubt."
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:79
-#, fuzzy
-#| msgid "Add a new rule"
 msgid "Add a new value"
-msgstr "Neue Regel hinzufügen"
+msgstr "Neuen Wert hinzufügen"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:14
 msgid "No media have been created yet."
@@ -23013,24 +22981,19 @@ msgid "Create webhook"
 msgstr "Webhook erstellen"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:11
-#, fuzzy
-#| msgid "Go to shop"
 msgid "Go to page 1"
-msgstr "Shop aufrufen"
+msgstr "Zu Seite 1 springen"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:17
 #: pretix/control/templates/pretixcontrol/pagination.html:37
 #: pretix/control/templates/pretixcontrol/pagination.html:44
-#, fuzzy, python-format
-#| msgid "Page %(page)s"
+#, python-format
 msgid "Go to page %(page)s"
-msgstr "Seite %(page)s"
+msgstr "Zu Seite %(page)s springen"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:27
-#, fuzzy
-#| msgid "Click here to change"
 msgid "Click to choose a page"
-msgstr "Hier klicken zum Ändern"
+msgstr "Hier klicken, um eine Seite auszuwählen"
 
 #: pretix/control/templates/pretixcontrol/pagination.html:30
 #, python-format
@@ -25567,10 +25530,10 @@ msgid "This payment can not be confirmed at the moment."
 msgstr "Diese Zahlung kann im Moment nicht bestätigt werden."
 
 #: pretix/control/views/orders.py:1145
-#, fuzzy
-#| msgid "You entered an order that could not be found."
 msgid "You entered an order in an event with a different currency."
-msgstr "Sie haben eine unbekannte Bestellnummer eingegeben."
+msgstr ""
+"Sie haben eine Bestellung in einer Veranstaltung mit einer anderen Währung "
+"ausgewählt."
 
 #: pretix/control/views/orders.py:1196
 msgid ""
@@ -26094,10 +26057,8 @@ msgid "The selected property has been deleted."
 msgstr "Die ausgewählte Eigenschaft wurde gelöscht."
 
 #: pretix/control/views/organizer.py:2196
-#, fuzzy
-#| msgid "The order of items has been updated."
 msgid "The order of properties has been updated."
-msgstr "Die Reihenfolge der Produkte wurde gespeichert."
+msgstr "Die Reihenfolge der Eigenschaften wurde geändert."
 
 #: pretix/control/views/organizer.py:2373
 #: pretix/control/views/organizer.py:2487
@@ -26547,16 +26508,15 @@ msgstr ""
 "Frage vom Typ Zahl gibt, die keine gültige Zahl sind."
 
 #: pretix/plugins/badges/forms.py:33
-#, fuzzy
-#| msgid "Simulate"
 msgid "Template"
-msgstr "Simulieren"
+msgstr "Vorlage"
 
 #: pretix/plugins/badges/forms.py:34
 msgid ""
 "You can modify the layout or change to a different page size in the next "
 "step."
 msgstr ""
+"Sie können das Layout oder die Seitengröße im nächsten Schritt anpassen."
 
 #: pretix/plugins/badges/forms.py:51
 msgid "(Do not print badges)"
@@ -26586,33 +26546,25 @@ msgid "Badge layout {val}"
 msgstr "Badge-Layout {val}"
 
 #: pretix/plugins/badges/templates.py:77
-#, fuzzy
-#| msgid "Landscape"
 msgid "A6 landscape"
-msgstr "Querformat"
+msgstr "A6 Querformat"
 
 #: pretix/plugins/badges/templates.py:82
-#, fuzzy
-#| msgid "Portrait"
 msgid "A6 portrait"
-msgstr "Hochformat"
+msgstr "A6 Hochformat"
 
 #: pretix/plugins/badges/templates.py:87
-#, fuzzy
-#| msgid "Landscape"
 msgid "A7 landscape"
-msgstr "Querformat"
+msgstr "A7 Querformat"
 
 #: pretix/plugins/badges/templates.py:92
-#, fuzzy
-#| msgid "Portrait"
 msgid "A7 portrait"
-msgstr "Hochformat"
+msgstr "A7 Hochformat"
 
 #: pretix/plugins/badges/templates.py:97
 #, python-brace-format
 msgid "{width} x {height} mm butterfly badge"
-msgstr ""
+msgstr "{width} x {height} Butterfly-Badge"
 
 #: pretix/plugins/badges/templates.py:183
 #: pretix/plugins/badges/templates.py:188
@@ -26627,7 +26579,7 @@ msgstr ""
 #: pretix/plugins/badges/templates.py:233
 #, python-brace-format
 msgid "{width} x {height} mm label"
-msgstr ""
+msgstr "{width} x {height} Etikett"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/control_order_info.html:16
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:27
@@ -26652,10 +26604,8 @@ msgid "Badge layout: %(name)s"
 msgstr "Badge-Layout: %(name)s"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/edit.html:26
-#, fuzzy
-#| msgid "Save selection"
 msgid "Save & continue"
-msgstr "Auswahl speichern"
+msgstr "Speichern & weiter"
 
 #: pretix/plugins/badges/templates/pretixplugins/badges/index.html:10
 msgid "You haven't created any badge layouts yet."
@@ -27041,16 +26991,12 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
-#, fuzzy
-#| msgid ""
-#| "We will assign you a personal reference code to use after you completed "
-#| "the order."
 msgid ""
 "Please do not yet start a payment. We'll assign you a personal reference "
 "code after you completed the order."
 msgstr ""
-"Wir werden Ihnen nach Absenden der Bestellung einen persönlichen "
-"Verwendungszweck zuweisen."
+"Bitte bezahlen Sie noch nicht. Wir werden Ihnen nach Absenden der Bestellung "
+"einen persönlichen Verwendungszweck zuweisen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:26
@@ -27069,16 +27015,12 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:36
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:36
-#, fuzzy
-#| msgid ""
-#| "After completing your purchase, we will ask you to transfer the money to "
-#| "the following bank account, using a personal reference code:"
 msgid ""
 "After completing your purchase, we will ask you to transfer the money to our "
 "bank account, using a personal reference code."
 msgstr ""
 "Nach Abschluss der Bestellung bitten wir Sie, das Geld unter Verwendung des "
-"persönlichen Verwendungszwecks auf das folgende Bankkonto zu überweisen:"
+"persönlichen Verwendungszwecks auf unser Bankkonto zu überweisen."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:43
 #, python-format
@@ -30890,10 +30832,9 @@ msgstr "Neuer Preis:"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:173
 #: pretix/presale/templates/pretixpresale/event/voucher.html:322
 #: pretix/presale/templates/pretixpresale/event/voucher.html:324
-#, fuzzy, python-format
-#| msgid "Modify price for %(item)s"
+#, python-format
 msgid "Modify price for %(item)s, at least %(price)s"
-msgstr "Preis von %(item)s verändern"
+msgstr "Preis von %(item)s verändern, mindestens %(price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:149
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:286
@@ -31345,15 +31286,12 @@ msgstr ""
 "Differenzbetrag bezahlt wurde."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:186
-#, fuzzy
-#| msgid ""
-#| "An email has been sent to notify the user that payment has been received."
 msgid ""
 "You might not be able to use any of the tickets in your order until this "
 "payment has been received."
 msgstr ""
-"Eine E-Mail wurde verschickt, die den Benutzer auf den Eingang der Bezahlung "
-"hinweist."
+"Sie können alle Tickets in dieser Bestellung möglicherweise nicht nutzen, "
+"bis diese Zahlung eingegangen ist."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_checkoutflow.html:2
 msgctxt "checkoutflow"
@@ -32923,12 +32861,10 @@ msgstr ""
 "ändert."
 
 #: pretix/presale/views/order.py:1599
-#, fuzzy
-#| msgid "You may not change your order in a way that reduces the total price."
 msgid "You may not change your order in a way that would require a refund."
 msgstr ""
-"Sie können Ihre Bestellung nicht so ändern, dass sich der Gesamtbetrag "
-"reduziert."
+"Sie können Ihre Bestellung nicht so ändern, dass eine Erstattung notwendig "
+"wird."
 
 #: pretix/presale/views/order.py:1607
 msgid ""
