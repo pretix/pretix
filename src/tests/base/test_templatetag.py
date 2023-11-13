@@ -19,34 +19,92 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+from decimal import Decimal
+
 from django.template import Context, Template
 from django.test import RequestFactory
+from django.utils import translation
 
-TEMPLATE_REPLACE_PAGE = Template("{% load urlreplace %}{% url_replace request 'page' 3 %}")
+from pretix import settings
+
+TEMPLATE_REPLACE_PAGE = Template(
+    "{% load urlreplace %}{% url_replace request 'page' 3 %}"
+)
+TEMPLATE_MONEY_FILTER = Template("{% load money %}{{ my_amount|money:my_currency }}")
+NBSP = "\xa0"
 
 
 def test_urlreplace_add__first_parameter():
     factory = RequestFactory()
-    request = factory.get('/customer/details')
-    rendered = TEMPLATE_REPLACE_PAGE.render(Context({
-        'request': request
-    })).strip()
-    assert rendered == 'page=3'
+    request = factory.get("/customer/details")
+    rendered = TEMPLATE_REPLACE_PAGE.render(Context({"request": request})).strip()
+    assert rendered == "page=3"
 
 
 def test_urlreplace_add_parameter():
     factory = RequestFactory()
-    request = factory.get('/customer/details?foo=bar')
-    rendered = TEMPLATE_REPLACE_PAGE.render(Context({
-        'request': request
-    })).strip()
-    assert rendered in ('foo=bar&amp;page=3', 'page=3&amp;foo=bar')
+    request = factory.get("/customer/details?foo=bar")
+    rendered = TEMPLATE_REPLACE_PAGE.render(Context({"request": request})).strip()
+    assert rendered in ("foo=bar&amp;page=3", "page=3&amp;foo=bar")
 
 
 def test_urlreplace_replace_parameter():
     factory = RequestFactory()
-    request = factory.get('/customer/details?page=15')
-    rendered = TEMPLATE_REPLACE_PAGE.render(Context({
-        'request': request
-    })).strip()
-    assert rendered == 'page=3'
+    request = factory.get("/customer/details?page=15")
+    rendered = TEMPLATE_REPLACE_PAGE.render(Context({"request": request})).strip()
+    assert rendered == "page=3"
+
+
+def _render_money_filter(locale, amount, currency):
+    factory = RequestFactory()
+    translation.activate(locale)
+    request = factory.get("/foo/bar")
+    return TEMPLATE_MONEY_FILTER.render(
+        Context(
+            {
+                "request": request,
+                "my_amount": amount,
+                "my_currency": currency,
+            }
+        )
+    ).strip()
+
+
+def test_money_filter_de_EUR_happycase():
+    rendered = _render_money_filter("de", Decimal("1.23"), "EUR")
+    assert rendered == "1,23" + NBSP + "€"
+
+
+def test_money_filter_de_EUR_happycase2():
+    rendered = _render_money_filter("de", Decimal("1000.00"), "EUR")
+    assert rendered == "1.000,00" + NBSP + "€"
+
+
+def test_money_filter_de_JPY_happycase():
+    rendered = _render_money_filter("de", Decimal("1023"), "JPY")
+    assert rendered == "1.023" + NBSP + "¥"
+
+
+def test_money_filter_de_unknown_currency():
+    rendered = _render_money_filter("de", Decimal("1234.56"), "FOO")
+    assert rendered == "1.234,56 FOO"
+
+
+def test_money_filter_de_unknown_currency2():
+    rendered = _render_money_filter("de", Decimal("1234.567"), "FOO")
+    assert rendered == "FOO 1234,57"
+
+
+def test_money_filter_en_JPY_happycase():
+    rendered = _render_money_filter("en", Decimal("1023"), "JPY")
+    assert rendered == "¥1,023"
+
+
+def test_money_filter_de_JPY_rounding_error():
+    rendered = _render_money_filter("de", Decimal("1023.1"), "JPY")
+    assert rendered == "JPY 1023,10"
+
+
+def test_money_filter_de_EUR_rounding_error():
+    rendered = _render_money_filter("de", Decimal("1.234"), "EUR")
+    assert rendered == "EUR 1,23"  # TODO - should this really be handled differently then JPY?
