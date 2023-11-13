@@ -336,7 +336,6 @@ body.loading .container {
 }
 
 .collapse-indicator {
-    display: none;
     -moz-transition: all 150ms ease-in 0s;
     -webkit-transition: all 150ms ease-in 0s;
     -o-transition: all 150ms ease-in 0s;
@@ -360,6 +359,12 @@ body.loading .container {
     text-decoration: none;
     position: relative;
     padding-left: 30px;
+}
+
+.panel-title a[data-toggle="collapse"] .collapse-indicator,
+details .panel-title .collapse-indicator {
+    /* hide old collapse indicators until they are all removed from HTML */
+    display: none;
 }
 
 .panel-title a[data-toggle="collapse"]::before,
