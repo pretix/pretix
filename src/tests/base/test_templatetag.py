@@ -21,11 +21,11 @@
 #
 from decimal import Decimal
 
+import pytest
 from django.template import Context, Template
 from django.test import RequestFactory
 from django.utils import translation
 
-from pretix import settings
 from pretix.base.templatetags.money import money_filter
 
 TEMPLATE_REPLACE_PAGE = Template(
@@ -56,11 +56,35 @@ def test_urlreplace_replace_parameter():
     assert rendered == "page=3"
 
 
-def _render_money_filter(locale, amount, currency):
+@pytest.mark.parametrize(
+    "locale,amount,currency,expected",
+    [
+        ("en", None, "USD", "$0.00"),
+        ("en", 1000000, "USD", "$1,000,000.00"),
+        ("en", Decimal("1000.00"), "USD", "$1,000.00"),
+        ("de", Decimal("1.23"), "EUR", "1,23" + NBSP + "€"),
+        ("de", Decimal("1000.00"), "EUR", "1.000,00" + NBSP + "€"),
+        ("de", Decimal("1023"), "JPY", "1.023" + NBSP + "¥"),
+
+        ("en", Decimal("1023"), "JPY", "¥1,023"),
+
+        ("pt-pt", Decimal("10.00"), "EUR", "10,00" + NBSP + "€"),
+        ("pt-br", Decimal("10.00"), "EUR", "€" + NBSP + "10,00"),
+
+        # unknown currency
+        ("de", Decimal("1234.56"), "FOO", "1.234,56" + NBSP + "FOO"),
+        ("de", Decimal("1234.567"), "FOO", "1.234,57" + NBSP + "FOO"),
+
+        # rounding errors
+        ("de", Decimal("1.234"), "EUR", "1,23" + NBSP + "€"),
+        ("de", Decimal("1023.1"), "JPY", "JPY 1023,10"),
+    ]
+)
+def test_money_filter(locale, amount, currency, expected):
     factory = RequestFactory()
     translation.activate(locale)
     request = factory.get("/foo/bar")
-    return TEMPLATE_MONEY_FILTER.render(
+    rendered = TEMPLATE_MONEY_FILTER.render(
         Context(
             {
                 "request": request,
@@ -69,78 +93,17 @@ def _render_money_filter(locale, amount, currency):
             }
         )
     ).strip()
+    assert rendered == expected
 
 
-def test_money_filter_en_USD():
-    rendered = _render_money_filter("en", Decimal("1000.00"), "USD")
-    assert rendered == "$1,000.00"
-
-
-def test_money_filter_de_EUR():
-    rendered = _render_money_filter("de", Decimal("1.23"), "EUR")
-    assert rendered == "1,23" + NBSP + "€"
-
-
-def test_money_filter_de_EUR_2():
-    rendered = _render_money_filter("de", Decimal("1000.00"), "EUR")
-    assert rendered == "1.000,00" + NBSP + "€"
-
-
-def test_money_filter_de_EUR_hidecurrency():
-    translation.activate("de")
-    rendered = money_filter(Decimal("1000.00"), "EUR", hide_currency=True)
-    assert rendered == "1000,00"
-
-
-def test_money_filter_en_EUR_hidecurrency():
-    translation.activate("en")
-    rendered = money_filter(Decimal("1000.00"), "EUR", hide_currency=True)
-    assert rendered == "1000.00"
-
-
-
-def test_money_filter_de_JPY():
-    rendered = _render_money_filter("de", Decimal("1023"), "JPY")
-    assert rendered == "1.023" + NBSP + "¥"
-
-
-def test_money_filter_de_unknown_currency():
-    rendered = _render_money_filter("de", Decimal("1234.56"), "FOO")
-    assert rendered == "1.234,56" + NBSP + "FOO"
-
-
-def test_money_filter_de_unknown_currency2():
-    rendered = _render_money_filter("de", Decimal("1234.567"), "FOO")
-    assert rendered == "1.234,57" + NBSP + "FOO"
-
-
-def test_money_filter_en_JPY():
-    rendered = _render_money_filter("en", Decimal("1023"), "JPY")
-    assert rendered == "¥1,023"
-
-
-def test_money_filter_de_JPY_rounding_error():
-    rendered = _render_money_filter("de", Decimal("1023.1"), "JPY")
-    assert rendered == "JPY 1023,10"
-
-
-def test_money_filter_de_JPY_rounding_error_hidecurrency():
-    translation.activate("de")
-    rendered = money_filter(Decimal("1023.1"), "JPY", hide_currency=True)
-    assert rendered == "1023,10"
-
-
-def test_money_filter_de_EUR_rounding_error():
-    rendered = _render_money_filter("de", Decimal("1.234"), "EUR")
-    assert rendered == "1,23" + NBSP + "€"
-
-
-def test_money_filter_pt_PT_EUR():
-    rendered = _render_money_filter("pt-pt", Decimal("10.00"), "EUR")
-    assert rendered == "10,00" + NBSP + "€"
-
-
-def test_money_filter_pt_BR_EUR():
-    rendered = _render_money_filter("pt-br", Decimal("10.00"), "EUR")
-    assert rendered == "€" + NBSP + "10,00"
-
+@pytest.mark.parametrize(
+    "locale,amount,currency,expected",
+    [
+        ("de", Decimal("1000.00"), "EUR", "1000,00"),
+        ("en", Decimal("1000.00"), "EUR", "1000.00"),
+        ("de", Decimal("1023.1"), "JPY", "1023,10"),
+    ]
+)
+def test_money_filter_hidecurrency(locale, amount, currency, expected):
+    translation.activate(locale)
+    assert money_filter(amount, currency, hide_currency=True) == expected
