@@ -266,6 +266,10 @@ class Order(LockModel, LoggedModel):
         default=False,
         verbose_name=_('E-mail address verified')
     )
+    invoice_dirty = models.BooleanField(
+        # Invoice needs to be re-issued when the order is paid again
+        default=False,
+    )
 
     objects = ScopedManager(organizer='event__organizer')
 
@@ -1841,7 +1845,8 @@ class OrderPayment(models.Model):
             cancellations = self.order.invoices.filter(is_cancellation=True).count()
             gen_invoice = (
                 (invoices == 0 and self.order.event.settings.get('invoice_generate') in ('True', 'paid')) or
-                0 < invoices <= cancellations
+                0 < invoices <= cancellations or
+                self.order.invoice_dirty
             )
             if gen_invoice:
                 invoice = generate_invoice(
