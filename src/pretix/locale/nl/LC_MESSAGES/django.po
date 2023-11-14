@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-13 15:14+0000\n"
-"PO-Revision-Date: 2023-11-13 16:05+0000\n"
-"Last-Translator: Christiaan de Die le Clercq <contact@techwolf12.nl>\n"
+"PO-Revision-Date: 2023-11-14 23:00+0000\n"
+"Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -1052,7 +1052,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/events/index.html:68
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:64
 msgid "Event name"
-msgstr "Evenementsnaam"
+msgstr "Naam evenement"
 
 #: pretix/base/exporters/events.py:58 pretix/base/models/event.py:552
 #: pretix/base/models/organizer.py:89
@@ -1812,7 +1812,7 @@ msgstr ""
 #: pretix/base/exporters/waitinglist.py:113 pretix/control/forms/event.py:1577
 #: pretix/control/forms/organizer.py:110
 msgid "Event slug"
-msgstr "Evenementsslug"
+msgstr "Evenement slug"
 
 #: pretix/base/exporters/orderlist.py:256 pretix/base/notifications.py:201
 #: pretix/control/templates/pretixcontrol/orders/bulk_action.html:25
@@ -1986,7 +1986,7 @@ msgstr "Betaald met {method}"
 #: pretix/base/exporters/orderlist.py:435
 #: pretix/base/exporters/orderlist.py:846
 msgid "Fee type"
-msgstr "Toeslagtype"
+msgstr "Type kost"
 
 #: pretix/base/exporters/orderlist.py:437
 #: pretix/base/exporters/orderlist.py:555
@@ -2030,7 +2030,7 @@ msgstr "geannuleerd"
 #: pretix/base/exporters/orderlist.py:839
 #: pretix/plugins/checkinlists/exporters.py:733
 msgid "Position ID"
-msgstr "Plaatsnummer"
+msgstr "Positie ID"
 
 #: pretix/base/exporters/orderlist.py:547
 #: pretix/base/exporters/orderlist.py:850
@@ -2083,7 +2083,7 @@ msgstr "Datum"
 #: pretix/plugins/checkinlists/exporters.py:492
 #: pretix/plugins/checkinlists/exporters.py:677
 msgid "Start date"
-msgstr "Begindatum"
+msgstr "Startdatum"
 
 #: pretix/base/exporters/orderlist.py:549
 #: pretix/base/exporters/orderlist.py:1092
@@ -5307,7 +5307,7 @@ msgstr "Taal"
 #: pretix/base/models/orders.py:228 pretix/control/forms/filter.py:560
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
 msgid "Total amount"
-msgstr "Totaalbedrag"
+msgstr "Totaal bedrag"
 
 #: pretix/base/models/orders.py:232 pretix/base/models/vouchers.py:292
 msgid ""
@@ -9167,7 +9167,7 @@ msgstr "bijv. belastingnummer in Duitsland, ABN in Australië, …"
 
 #: pretix/base/settings.py:1144
 msgid "EU VAT ID"
-msgstr "EU-btw-nummer"
+msgstr "EU BTW-nummer"
 
 #: pretix/base/settings.py:1157
 msgid "e.g. With this document, we sent you the invoice for your ticket order."
@@ -13211,14 +13211,14 @@ msgstr "Inactief"
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:114
 #: pretix/control/templates/pretixcontrol/subevents/index.html:167
 msgid "Presale not started"
-msgstr "Voorverkoop nog niet begonnen"
+msgstr "Voorverkoop nog niet gestart"
 
 #: pretix/control/forms/filter.py:1099 pretix/control/forms/filter.py:1574
 #: pretix/control/templates/pretixcontrol/events/index.html:148
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:112
 #: pretix/control/templates/pretixcontrol/subevents/index.html:165
 msgid "Presale over"
-msgstr "Voorverkoop afgelopen"
+msgstr "Voorverkoop voorbij"
 
 #: pretix/control/forms/filter.py:1104 pretix/control/forms/filter.py:1107
 #: pretix/control/forms/filter.py:1603 pretix/control/forms/filter.py:1606
@@ -17209,7 +17209,7 @@ msgstr[1] ""
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:40
 #: pretix/presale/templates/pretixpresale/event/position_change.html:24
 msgid "Cancel"
-msgstr "Annuleren"
+msgstr "Annuleer"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:27
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:24
@@ -17251,7 +17251,7 @@ msgstr "Annuleren"
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:235
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile_delete.html:26
 msgid "Delete"
-msgstr "Verwijderen"
+msgstr "Verwijder"
 
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:9
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:41
@@ -19451,7 +19451,7 @@ msgstr "Winkel uitgeschakeld"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:169
 #: pretix/control/views/dashboards.py:535
 msgid "On sale"
-msgstr "In de verkoop"
+msgstr "In verkoop"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:157
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:121
@@ -23481,7 +23481,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/pdf/index.html:141
 #: pretix/control/templates/pretixcontrol/pdf/index.html:173
 msgid "Loading…"
-msgstr "Laden…"
+msgstr "Aan het laden…"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:144
 msgid "Start editing"
@@ -26446,7 +26446,7 @@ msgstr "De volgorde van items is bijgewerkt."
 #: pretix/control/views/organizer.py:2615
 #: pretix/control/views/organizer.py:2880
 msgid "The selected object has been deleted."
-msgstr "Het gekozen object is verwijderd."
+msgstr "Het geselecteerde object is verwijderd."
 
 #: pretix/control/views/organizer.py:2407
 #, fuzzy
@@ -27769,7 +27769,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:34
 msgid "Download"
-msgstr "Downloaden"
+msgstr "Download"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
@@ -28424,7 +28424,8 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:330 pretix/plugins/paypal2/views.py:248
 msgid "An error occurred during connecting with PayPal, please try again."
 msgstr ""
-"Er trad een fout op tijdens het verbinden met PayPal, probeer het opnieuw."
+"Er vond een fout plaats tijdens het verbinden met PayPal. Gelieve opnieuw te "
+"proberen."
 
 #: pretix/plugins/paypal2/payment.py:454 pretix/plugins/paypal2/payment.py:938
 #, fuzzy
@@ -28703,10 +28704,8 @@ msgid "Split event series by date"
 msgstr "Evenementenreeks: datum toegevoegd"
 
 #: pretix/plugins/reports/accountingreport.py:128
-#, fuzzy
-#| msgid "Enabled"
 msgid "End"
-msgstr "Ingeschakeld"
+msgstr "Einde"
 
 #: pretix/plugins/reports/accountingreport.py:139
 msgid "Report includes test orders which may be deleted later!"
