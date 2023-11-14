@@ -39,8 +39,6 @@ from bs4 import BeautifulSoup
 from django.test import TestCase
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
-
-from pretix.base.services.invoices import generate_invoice
 from tests.base import extract_form_fields
 
 from pretix.base.models import (
@@ -49,6 +47,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import OrderPayment
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
+from pretix.base.services.invoices import generate_invoice
 
 
 class BaseOrdersTest(TestCase):
