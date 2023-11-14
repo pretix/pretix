@@ -47,11 +47,12 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
-from django.db import transaction
+from django.db import models, transaction
 from django.db.models import (
-    Count, Exists, F, IntegerField, OuterRef, Prefetch, ProtectedError, Q,
-    QuerySet, Subquery, Sum,
+    Case, Count, Exists, F, IntegerField, OuterRef, Prefetch, ProtectedError,
+    Q, QuerySet, Subquery, Sum, Value, When,
 )
+from django.db.models.functions import Coalesce
 from django.forms import formset_factory
 from django.http import (
     FileResponse, Http404, HttpResponseNotAllowed, HttpResponseRedirect,
@@ -315,6 +316,54 @@ class OrderExpireBulkActionView(BaseOrderBulkActionView):
 
     def execute_single(self, instance, form: forms.Form):
         mark_order_expired(instance, user=self.request.user)
+
+
+class OrderOverpaidRefundBulkActionView(BaseOrderBulkActionView):
+    label = _("Refund overpaid amount")
+
+    def allowed_for(self, queryset):
+        payment_sum = OrderPayment.objects.filter(
+            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
+            order=OuterRef('pk')
+        ).order_by().values('order').annotate(s=Sum('amount')).values('s')
+        refund_sum = OrderRefund.objects.filter(
+            state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
+                       OrderRefund.REFUND_STATE_CREATED),
+            order=OuterRef('pk')
+        ).order_by().values('order').annotate(s=Sum('amount')).values('s')
+        payment_sum_sq = Subquery(payment_sum, output_field=models.DecimalField(decimal_places=2, max_digits=13))
+        refund_sum_sq = Subquery(refund_sum, output_field=models.DecimalField(decimal_places=2, max_digits=13))
+        queryset = queryset.annotate(
+            pending_sum_t=F('total') - Coalesce(payment_sum_sq, Decimal('0.00')) + Coalesce(refund_sum_sq,
+                                                                                            Decimal('0.00')),
+            pending_sum_rc=-1 * Coalesce(payment_sum_sq, Decimal('0.00')) + Coalesce(refund_sum_sq, Decimal('0.00')),
+            is_overpaid=Case(
+                When(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=-1e-8),
+                     then=Value(1)),
+                When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=-1e-8),
+                     then=Value(1)),
+                default=Value(0),
+                output_field=models.IntegerField()
+            ))
+        return queryset.filter(
+            status=Order.STATUS_PAID,
+            is_overpaid=True
+        )
+
+    def execute_single(self, instance: Order, form: forms.Form):
+        if instance.pending_sum < 0:
+            proposals = instance.propose_auto_refunds(instance.pending_sum * -1)
+            for payment, amount in proposals.items():
+                refund = OrderRefund.objects.create(
+                    order=instance,
+                    payment=payment,
+                    source=OrderRefund.REFUND_SOURCE_ADMIN,
+                    state=OrderRefund.REFUND_STATE_CREATED,
+                    amount=amount,
+                    comment=_("Refund for overpayment"),
+                    provider=payment.provider
+                )
+                payment.payment_provider.execute_refund(refund)
 
 
 class OrderDeleteBulkActionView(BaseOrderBulkActionView):
