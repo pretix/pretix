@@ -2628,6 +2628,11 @@ class OrderChangeManager:
                 ) or (
                     self.event.settings.invoice_generate == "paid" and
                     self.order.status == Order.STATUS_PAID
+                ) or (
+                    # Backwards-compatible behaviour
+                    self.event.settings.invoice_generate not in ("True", "paid") and
+                    i and
+                    not i.refered.exists()
                 )
             )
 

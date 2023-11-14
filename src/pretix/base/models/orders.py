@@ -1849,8 +1849,10 @@ class OrderPayment(models.Model):
                 self.order.invoice_dirty
             )
             if gen_invoice:
-                if invoices and invoices >= cancellations:
-                    generate_cancellation(self.order.invoices.filter(is_cancellation=False).last())
+                if invoices:
+                    last_i = self.order.invoices.filter(is_cancellation=False).last()
+                    if not last_i.refered.exists():
+                        generate_cancellation(last_i)
                 invoice = generate_invoice(
                     self.order,
                     trigger_pdf=not send_mail or not self.order.event.settings.invoice_email_attachment
