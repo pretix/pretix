@@ -3027,7 +3027,7 @@ def change_payment_provider(order: Order, payment_provider, amount=None, new_pay
 
     if recreate_invoices:
         i = order.invoices.filter(is_cancellation=False).last()
-        if (order.invoice_dirty or (i and order.total != oldtotal)) and not i.canceled:
+        if i and order.total != oldtotal and not i.canceled:
             generate_cancellation(i)
             generate_invoice(order)
 
