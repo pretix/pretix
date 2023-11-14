@@ -8,17 +8,17 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-13 15:14+0000\n"
-"PO-Revision-Date: 2023-09-16 08:00+0000\n"
-"Last-Translator: Ed Bennett <pyedward@swansea.ac.uk>\n"
-"Language-Team: Welsh <https://translate.pretix.eu/projects/pretix/pretix/cy/"
-">\n"
+"PO-Revision-Date: 2023-11-14 11:00+0000\n"
+"Last-Translator: Charliecoleg <DM229135@colegsirgar.ac.uk>\n"
+"Language-Team: Welsh <https://translate.pretix.eu/projects/pretix/pretix/cy/>"
+"\n"
 "Language: cy\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=(n==0) ? 0 : (n==1) ? 1 : (n==2) ? 2 : "
 "(n==3) ? 3 :(n==6) ? 4 : 5;\n"
-"X-Generator: Weblate 5.0.1\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -78,7 +78,7 @@ msgstr "Groeg"
 
 #: pretix/_base_settings.py:92
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonesaidd"
 
 #: pretix/_base_settings.py:93
 msgid "Italian"
@@ -90,7 +90,7 @@ msgstr "Latfieg"
 
 #: pretix/_base_settings.py:95
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Bokmål Norwyaidd"
 
 #: pretix/_base_settings.py:96
 msgid "Polish"
@@ -129,62 +129,64 @@ msgid ""
 "Full device access (reading and changing orders and gift cards, reading of "
 "products and settings)"
 msgstr ""
+"Mynediad llawn i ddyfeisiau (darllen a newid archebion a chardiau rhodd, "
+"darllen cynhyrchion a lleoliadau)"
 
 #: pretix/api/auth/devicesecurity.py:53
 msgid "pretixSCAN"
-msgstr ""
+msgstr "pretixSCAN"
 
 #: pretix/api/auth/devicesecurity.py:90
 msgid "pretixSCAN (kiosk mode, no order sync, no search)"
-msgstr ""
+msgstr "pretixSCAN (Modd ciosg, dim cysonyn gorchymyn, dim chwilio)"
 
 #: pretix/api/auth/devicesecurity.py:124
 msgid "pretixSCAN (online only, no order sync)"
-msgstr ""
+msgstr "pretixSCAN (ar-lein yn unig, dim cysoni archeb)"
 
 #: pretix/api/auth/devicesecurity.py:159
 msgid "pretixPOS"
-msgstr ""
+msgstr "pretixPOS"
 
 #: pretix/api/models.py:39 pretix/base/models/customers.py:391
 msgid "Application name"
-msgstr ""
+msgstr "Enw'r cais"
 
 #: pretix/api/models.py:42 pretix/base/models/customers.py:410
 msgid "Redirection URIs"
-msgstr ""
+msgstr "Ailgyfeirio URIs"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:411
 msgid "Allowed URIs list, space separated"
-msgstr ""
+msgstr "Rhestr URIs a ganiateir, gofod wedi'i wahanu"
 
 #: pretix/api/models.py:46 pretix/base/models/customers.py:395
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:106
 msgid "Client ID"
-msgstr ""
+msgstr "ID cleient"
 
 #: pretix/api/models.py:50
 msgid "Client secret"
-msgstr ""
+msgstr "Cyfrinach y cleient"
 
 #: pretix/api/models.py:111
 msgid "Enable webhook"
-msgstr ""
+msgstr "Galluogi webhook"
 
 #: pretix/api/models.py:112
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:36
 msgid "Target URL"
-msgstr ""
+msgstr "URL Targed"
 
 #: pretix/api/models.py:113 pretix/base/models/devices.py:123
 #: pretix/base/models/organizer.py:264
 msgid "All events (including newly created ones)"
-msgstr ""
+msgstr "Pob digwyddiad (gan gynnwys rhai newydd eu creu)"
 
 #: pretix/api/models.py:114 pretix/base/models/devices.py:124
 #: pretix/base/models/organizer.py:265
 msgid "Limit to events"
-msgstr ""
+msgstr "Cyfyngu ar ddigwyddiadau"
 
 #: pretix/api/models.py:115 pretix/base/exporters/orderlist.py:278
 #: pretix/base/exporters/orderlist.py:1029 pretix/base/models/orders.py:231
@@ -201,18 +203,18 @@ msgstr "Sylw"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1336
 msgid "The product \"{}\" is not assigned to a quota."
-msgstr ""
+msgstr "Nid yw'r cynnyrch \"{}\" yn cael ei neilltuo i gwota."
 
 #: pretix/api/serializers/checkin.py:66 pretix/base/models/event.py:1596
 #: pretix/base/models/items.py:1738 pretix/base/models/items.py:1996
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "Nid yw un neu fwy o eitemau yn perthyn i'r digwyddiad hwn."
 
 #: pretix/api/serializers/checkin.py:70 pretix/api/serializers/checkin.py:73
 #: pretix/base/models/items.py:2007 pretix/base/models/items.py:2010
 #: pretix/base/models/waitinglist.py:308 pretix/base/models/waitinglist.py:311
 msgid "The subevent does not belong to this event."
-msgstr ""
+msgstr "Nid yw'r digwyddiad yn perthyn i'r digwyddiad hwn."
 
 #: pretix/api/serializers/checkin.py:77
 msgid "Unknown sales channel."
@@ -1518,7 +1520,7 @@ msgstr "Amrywiad"
 #: pretix/control/templates/pretixcontrol/event/plugins.html:55
 #: pretix/control/templates/pretixcontrol/users/index.html:51
 msgid "Active"
-msgstr ""
+msgstr "Actif"
 
 #: pretix/base/exporters/items.py:73 pretix/base/models/discount.py:68
 #: pretix/base/models/items.py:577 pretix/base/models/items.py:1080
@@ -3786,11 +3788,8 @@ msgstr ""
 
 #: pretix/base/models/event.py:1660 pretix/control/forms/organizer.py:218
 #: pretix/control/forms/organizer.py:222
-#, fuzzy
-#| msgctxt "openidconnect"
-#| msgid "Public"
 msgid "Public name"
-msgstr "Cyhoeddus"
+msgstr "Enw cyhoeddus"
 
 #: pretix/base/models/event.py:1664
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
@@ -5904,7 +5903,7 @@ msgstr ""
 #: pretix/base/payment.py:256
 #: pretix/presale/templates/pretixpresale/event/order.html:115
 msgid "Pay now"
-msgstr ""
+msgstr "Talwch nawr"
 
 #: pretix/base/payment.py:330
 msgid "Enable payment method"
@@ -5944,7 +5943,7 @@ msgstr ""
 
 #: pretix/base/payment.py:369 pretix/base/payment.py:378
 msgid "Additional fee"
-msgstr ""
+msgstr "Ffi ychwanegol"
 
 #: pretix/base/payment.py:370
 msgid "Absolute value"
@@ -20153,7 +20152,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:81
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:122
 msgid "Add"
-msgstr ""
+msgstr "ychwanegu"
 
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:88
 msgid "API tokens"
