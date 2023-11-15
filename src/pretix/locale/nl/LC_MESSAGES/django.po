@@ -7432,8 +7432,8 @@ msgstr ""
 
 #: pretix/base/services/cart.py:165
 #, python-format
-msgid "This voucher code can only be redeemed %d more times."
-msgstr "Deze vouchercode kan nog %d keren worden gebruikt."
+msgid "This voucher code can only be redeemed %d times."
+msgstr "Deze vouchercode kan slechts %d keer gebruikt worden."
 
 #: pretix/base/services/cart.py:166
 msgid ""

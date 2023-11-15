@@ -7428,7 +7428,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:165
 #, python-format
-msgid "This voucher code can only be redeemed %d more times."
+msgid "This voucher code can only be redeemed %d times."
 msgstr "Ce code de bon d'achat ne peut être échangé que %d fois."
 
 #: pretix/base/services/cart.py:166

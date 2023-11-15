@@ -7889,7 +7889,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:165
 #, python-format
-msgid "This voucher code can only be redeemed %d more times."
+msgid "This voucher code can only be redeemed %d times."
 msgstr "Αυτός ο κωδικός κουπονιού μπορεί να εξαργυρωθεί %d περισσότερες φορές."
 
 #: pretix/base/services/cart.py:166

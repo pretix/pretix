@@ -7254,7 +7254,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:165
 #, python-format
-msgid "This voucher code can only be redeemed %d more times."
+msgid "This voucher code can only be redeemed %d times."
 msgstr "Tento kód poukázky lze uplatnit pouze %dkrát."
 
 #: pretix/base/services/cart.py:166

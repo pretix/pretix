@@ -162,7 +162,7 @@ error_messages = {
         'to redeem it before but did not complete the checkout process. You can try to use it '
         'again in %d minutes.'
     ),
-    'voucher_redeemed_partial': gettext_lazy('This voucher code can only be redeemed %d more times.'),
+    'voucher_redeemed_partial': gettext_lazy('This voucher code can only be redeemed %d times.'),
     'voucher_whole_cart_not_combined': gettext_lazy('Applying a voucher to the whole cart should not be combined with other operations.'),
     'voucher_double': gettext_lazy(
         'You already used this voucher code. Remove the associated line from your '

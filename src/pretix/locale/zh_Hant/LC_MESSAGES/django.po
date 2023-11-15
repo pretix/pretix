@@ -7027,7 +7027,7 @@ msgstr ""
 
 #: pretix/base/services/cart.py:165
 #, python-format
-msgid "This voucher code can only be redeemed %d more times."
+msgid "This voucher code can only be redeemed %d times."
 msgstr "此優惠券代碼只能兌換 %d 次。"
 
 #: pretix/base/services/cart.py:166
