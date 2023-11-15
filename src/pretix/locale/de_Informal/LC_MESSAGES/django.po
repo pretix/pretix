@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-15 14:27+0000\n"
-"PO-Revision-Date: 2023-11-13 16:01+0000\n"
+"PO-Revision-Date: 2023-11-15 14:42+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -5314,16 +5314,11 @@ msgid "approval pending"
 msgstr "Freigabe ausstehend"
 
 #: pretix/base/models/orders.py:335
-#, fuzzy
-#| msgctxt "order state"
-#| msgid "Pending (confirmed)"
 msgctxt "order state"
 msgid "pending (confirmed)"
 msgstr "ausstehend (bestätigt)"
 
 #: pretix/base/models/orders.py:337
-#, fuzzy
-#| msgid "Canceled (paid fee)"
 msgid "canceled (paid fee)"
 msgstr "storniert (bezahlte Gebühr)"
 
