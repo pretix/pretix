@@ -392,6 +392,16 @@ as the first argument.
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+refund_requested = EventPluginSignal()
+"""
+Arguments: ``order``
+
+This signal is sent out when a refund is requested for an order and it needs to be approved manually.
+The order object is given as the first argument.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 order_reactivated = EventPluginSignal()
 """
 Arguments: ``order``

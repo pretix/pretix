@@ -81,7 +81,8 @@ from pretix.base.services.orders import (
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate, invalidate_cache
 from pretix.base.signals import (
-    allow_ticket_download, order_modified, register_ticket_outputs,
+    allow_ticket_download, order_modified, refund_requested,
+    register_ticket_outputs,
 )
 from pretix.base.templatetags.money import money_filter
 from pretix.base.views.mixins import OrderQuestionsViewMixin
@@ -997,6 +998,7 @@ class OrderCancelDo(EventViewMixin, OrderDetailMixin, AsyncAction, View):
                 refund_as_giftcard=giftcard,
             )
             self.order.log_action('pretix.event.order.refund.requested')
+            refund_requested.send(self.order.event, order=self.order)
             return self.success(None)
         else:
             comment = gettext('Canceled by customer')
