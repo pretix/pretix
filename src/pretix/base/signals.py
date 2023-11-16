@@ -279,6 +279,13 @@ however for this signal, the ``sender`` **may also be None** to allow creating t
 notification settings!
 """
 
+notification = EventPluginSignal()
+"""
+This signal is sent out when a notification is send.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 register_sales_channels = django.dispatch.Signal()
 """
 This signal is sent out to get all known sales channels types. Receivers should return an
@@ -388,16 +395,6 @@ Arguments: ``order``
 
 This signal is sent out every time an order is canceled. The order object is given
 as the first argument.
-
-As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
-"""
-
-refund_requested = EventPluginSignal()
-"""
-Arguments: ``order``
-
-This signal is sent out when a refund is requested for an order and it needs to be approved manually.
-The order object is given as the first argument.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """

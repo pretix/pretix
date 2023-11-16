@@ -101,7 +101,7 @@ from pretix.base.signals import (
     allow_ticket_download, order_approved, order_canceled, order_changed,
     order_denied, order_expired, order_fee_calculation, order_paid,
     order_placed, order_split, order_valid_if_pending, periodic_task,
-    refund_requested, validate_order,
+    validate_order,
 )
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
@@ -2900,7 +2900,6 @@ def _try_auto_refund(order, auto_refund=True, manual_refund=False, allow_partial
 
     if notify_admin:
         order.log_action('pretix.event.order.refund.requested')
-        refund_requested.send(order.event, order=order)
     if error:
         raise OrderError(
             _(
