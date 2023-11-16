@@ -81,8 +81,7 @@ from pretix.base.services.orders import (
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate, invalidate_cache
 from pretix.base.signals import (
-    allow_ticket_download, order_modified,
-    register_ticket_outputs,
+    allow_ticket_download, order_modified, register_ticket_outputs,
 )
 from pretix.base.templatetags.money import money_filter
 from pretix.base.views.mixins import OrderQuestionsViewMixin
