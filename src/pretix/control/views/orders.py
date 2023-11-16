@@ -214,10 +214,14 @@ class BaseOrderBulkActionView(OrderSearchMixin, EventPermissionRequiredMixin, As
     def execute_bulk(self, queryset: QuerySet, form: forms.Form):
         qs = self.allowed_for(self.allowed_for(self.get_queryset()))
         total = qs.count()
+        orders_with_successful_action = 0
         for i, o in enumerate(qs):
-            self.execute_single(o, form)
+            res = self.execute_single(o, form)
+            if res:
+                orders_with_successful_action += 1
             if i % 100 == 0:
                 self.async_set_progress(i / total * 100)
+        return orders_with_successful_action, total
 
     def get_error_url(self):
         return self.get_success_url(None)
@@ -232,6 +236,9 @@ class BaseOrderBulkActionView(OrderSearchMixin, EventPermissionRequiredMixin, As
             'event': self.request.event.slug,
             'organizer': self.request.event.organizer.slug,
         })
+
+    def get_success_message(self, value):
+        return _("Succesfully executed the action \"{label}\" on {success} of {total} orders.").format(success=value[0], label=self.label, total=value[1])
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -272,7 +279,7 @@ class BaseOrderBulkActionView(OrderSearchMixin, EventPermissionRequiredMixin, As
 
     @transaction.atomic()
     def async_form_valid(self, task, form):
-        self.execute_bulk(self.allowed_for(self.get_queryset()), form)
+        return self.execute_bulk(self.allowed_for(self.get_queryset()), form)
 
 
 class OrderApproveBulkActionView(BaseOrderBulkActionView):
@@ -286,6 +293,7 @@ class OrderApproveBulkActionView(BaseOrderBulkActionView):
 
     def execute_single(self, instance, form: forms.Form):
         approve_order(instance, user=self.request.user)
+        return True
 
 
 class OrderDenyBulkActionView(BaseOrderBulkActionView):
@@ -302,6 +310,7 @@ class OrderDenyBulkActionView(BaseOrderBulkActionView):
         deny_order(instance, user=self.request.user,
                    comment=form.cleaned_data.get('comment') or None,
                    send_mail=form.cleaned_data['send_email'])
+        return True
 
 
 class OrderExpireBulkActionView(BaseOrderBulkActionView):
@@ -316,54 +325,36 @@ class OrderExpireBulkActionView(BaseOrderBulkActionView):
 
     def execute_single(self, instance, form: forms.Form):
         mark_order_expired(instance, user=self.request.user)
+        return True
 
 
 class OrderOverpaidRefundBulkActionView(BaseOrderBulkActionView):
     label = _("Refund overpaid amount")
 
     def allowed_for(self, queryset):
-        payment_sum = OrderPayment.objects.filter(
-            state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
-            order=OuterRef('pk')
-        ).order_by().values('order').annotate(s=Sum('amount')).values('s')
-        refund_sum = OrderRefund.objects.filter(
-            state__in=(OrderRefund.REFUND_STATE_DONE, OrderRefund.REFUND_STATE_TRANSIT,
-                       OrderRefund.REFUND_STATE_CREATED),
-            order=OuterRef('pk')
-        ).order_by().values('order').annotate(s=Sum('amount')).values('s')
-        payment_sum_sq = Subquery(payment_sum, output_field=models.DecimalField(decimal_places=2, max_digits=13))
-        refund_sum_sq = Subquery(refund_sum, output_field=models.DecimalField(decimal_places=2, max_digits=13))
-        queryset = queryset.annotate(
-            pending_sum_t=F('total') - Coalesce(payment_sum_sq, Decimal('0.00')) + Coalesce(refund_sum_sq,
-                                                                                            Decimal('0.00')),
-            pending_sum_rc=-1 * Coalesce(payment_sum_sq, Decimal('0.00')) + Coalesce(refund_sum_sq, Decimal('0.00')),
-            is_overpaid=Case(
-                When(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=-1e-8),
-                     then=Value(1)),
-                When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=-1e-8),
-                     then=Value(1)),
-                default=Value(0),
-                output_field=models.IntegerField()
-            ))
-        return queryset.filter(
+        return Order.annotate_overpayments(queryset).filter(
             status=Order.STATUS_PAID,
             is_overpaid=True
         )
 
     def execute_single(self, instance: Order, form: forms.Form):
         if instance.pending_sum < 0:
-            proposals = instance.propose_auto_refunds(instance.pending_sum * -1)
-            for payment, amount in proposals.items():
-                refund = OrderRefund.objects.create(
-                    order=instance,
-                    payment=payment,
-                    source=OrderRefund.REFUND_SOURCE_ADMIN,
-                    state=OrderRefund.REFUND_STATE_CREATED,
-                    amount=amount,
-                    comment=_("Refund for overpayment"),
-                    provider=payment.provider
-                )
-                payment.payment_provider.execute_refund(refund)
+            try:
+                proposals = instance.propose_auto_refunds(instance.pending_sum * -1)
+                for payment, amount in proposals.items():
+                    refund = OrderRefund.objects.create(
+                        order=instance,
+                        payment=payment,
+                        source=OrderRefund.REFUND_SOURCE_ADMIN,
+                        state=OrderRefund.REFUND_STATE_CREATED,
+                        amount=amount,
+                        comment=_("Refund for overpayment"),
+                        provider=payment.provider
+                    )
+                    payment.payment_provider.execute_refund(refund)
+                    return True
+            except (ValueError, PaymentException):
+                return False
 
 
 class OrderDeleteBulkActionView(BaseOrderBulkActionView):
