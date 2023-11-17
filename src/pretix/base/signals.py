@@ -281,7 +281,7 @@ notification settings!
 
 notification = EventPluginSignal()
 """
-This signal is sent out when a notification is send.
+This signal is sent out when a notification is sent.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
