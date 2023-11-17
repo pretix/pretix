@@ -281,6 +281,8 @@ notification settings!
 
 notification = EventPluginSignal()
 """
+Arguments: ``logentry_id``, ``notification_type``
+
 This signal is sent out when a notification is sent.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
