@@ -8,8 +8,9 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-15 14:27+0000\n"
-"PO-Revision-Date: 2021-05-30 13:17+0000\n"
-"Last-Translator: albert <albert.serra.monner@gmail.com>\n"
+"PO-Revision-Date: 2023-11-19 06:00+0000\n"
+"Last-Translator: Adrià Vilanova Martínez <apps+translate-dot-pretix-dot-"
+"eu@avm99963.com>\n"
 "Language-Team: Catalan <https://translate.pretix.eu/projects/pretix/pretix/"
 "ca/>\n"
 "Language: ca\n"
@@ -17,7 +18,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.6\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -200,7 +201,7 @@ msgstr "Límit pels esdeveniments"
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/checkinlists/exporters.py:503
 msgid "Comment"
-msgstr "Commentari"
+msgstr "Comentari"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1336
 msgid "The product \"{}\" is not assigned to a quota."
@@ -232,7 +233,7 @@ msgstr ""
 #: pretix/api/serializers/event.py:232 pretix/api/serializers/event.py:530
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr "No existeix la propietat de dada meta '{name}'."
+msgstr "No existeix la propietat de metadades '{name}'."
 
 #: pretix/api/serializers/event.py:235 pretix/api/serializers/event.py:533
 #, fuzzy, python-brace-format
@@ -6932,7 +6933,7 @@ msgstr "Categoria del tiquet"
 
 #: pretix/base/pdf.py:160 pretix/base/pdf.py:165
 msgid "123.45 EUR"
-msgstr "123.45 EUR"
+msgstr "123,45 €"
 
 #: pretix/base/pdf.py:164
 msgid "Price including add-ons"
@@ -28515,10 +28516,8 @@ msgid "Type of schedule time"
 msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:382
-#, fuzzy
-#| msgid "Absolute value"
 msgid "Absolute"
-msgstr "Valor absolut"
+msgstr "Absolut"
 
 #: pretix/plugins/sendmail/forms.py:383
 #, fuzzy
