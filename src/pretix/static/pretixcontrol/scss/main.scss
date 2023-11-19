@@ -482,7 +482,7 @@ td > .dl-horizontal {
     transform: rotate(180deg);
 }
 
-.panel-title a[data-toggle="collapse"], details h3.panel-title, details h4.panel-title {
+.panel-title a[data-toggle="collapse"], details .panel-title {
     display: flex;
     padding: 10px 15px;
     margin: -10px -15px;
@@ -490,6 +490,37 @@ td > .dl-horizontal {
     justify-content: space-between;
     outline: 0;
     text-decoration: none;
+    position: relative;
+    padding-left: 30px;
+}
+details strong.panel-title {
+    display: inline-block;
+}
+
+.panel-title a[data-toggle="collapse"] .collapse-indicator,
+details .panel-title .collapse-indicator {
+    /* hide old collapse indicators until they are all removed from HTML */
+    display: none;
+}
+
+.panel-title a[data-toggle="collapse"]::before,
+details .panel-title::before {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    margin-top: -.5em;
+    content: "";
+    width: 1em;
+    height: 1em;
+    font: normal normal normal 14px/1 FontAwesome;
+    display: inline-block;
+    text-align: center;
+    transform: rotate(-90deg);
+    transition: transform 150ms ease-in 0s;
+}
+.panel-title a:not(.collapsed)::before,
+details.details-open .panel-title::before {
+    transform: rotate(0deg);
 }
 
 .panel-title a[data-toggle="collapse"]:hover {
@@ -507,6 +538,9 @@ td > p:last-child,
 .panel-body > .table:last-child,
 .panel-body > .table-responsive:last-child > .table:last-child {
     margin-bottom: 0;
+}
+.alert > p + p, .alert > p + ul, .alert > ul + p {
+    margin-top: 5px;
 }
 
 .fa.disabled {

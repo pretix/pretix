@@ -589,9 +589,9 @@
                                                             </a>
                                                         {% endif %}
                                                     {% elif q.type == "M" %}
-                                                        {{ q.answer|rich_text_snippet }}
+                                                        {{ q.answer.to_string_i18n|rich_text_snippet }}
                                                     {% else %}
-                                                        {{ q.answer|linebreaksbr }}
+                                                        {{ q.answer.to_string_i18n|linebreaksbr }}
                                                     {% endif %}
                                                 {% else %}
                                                     <em>{% trans "not answered" %}</em>

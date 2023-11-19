@@ -1141,6 +1141,9 @@ class OrderRefundView(OrderView):
                         messages.error(self.request, _('You entered an order that could not be found.'))
                         is_valid = False
                     else:
+                        if order.event.currency != self.request.event.currency:
+                            messages.error(self.request, _('You entered an order in an event with a different currency.'))
+                            is_valid = False
                         refunds.append(OrderRefund(
                             order=self.order,
                             payment=None,

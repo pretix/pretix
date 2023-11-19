@@ -567,7 +567,7 @@ def variables_from_questions(sender, *args, **kwargs):
         if not a:
             return ""
         else:
-            return str(a)
+            return a.to_string_i18n()
 
     d = {}
     for q in sender.questions.all():

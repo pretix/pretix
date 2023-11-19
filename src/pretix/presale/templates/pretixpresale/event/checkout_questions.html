@@ -21,7 +21,6 @@
                 <summary class="panel-heading">
                     <h3 class="panel-title">
                         <strong>{% trans "Contact information" %}</strong>
-                        <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                     </h3>
                 </summary>
                 <div id="contact">
@@ -40,8 +39,6 @@
                             <strong>{% trans "Invoice information" %}{% if not event.settings.invoice_address_required and not event.settings.invoice_name_required %}
                                 {% trans "(optional)" %}
                             {% endif %}</strong>
-
-                            <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                         </h3>
                     </summary>
                     {% if addresses_data %}
@@ -88,10 +85,7 @@
                                         <button type="button" data-id="{{ forloop.counter0 }}" name="copy"
                                                 class="js-copy-answers btn btn-default btn-xs">{% trans "Copy answers from above" %}</button>
                                     {% endif %}
-                                    <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                                 </span>
-                            {% else %}
-                                <i class="fa fa-angle-down collapse-indicator" aria-hidden="true"></i>
                             {% endif %}
                         </h3>
                     </summary>

@@ -25,7 +25,6 @@
                             <strong>{% trans "Invoice information" %} {% if not request.event.settings.invoice_address_required %}
                                 {% trans "(optional)" %}
                             {% endif %}</strong>
-                            <i class="fa fa-angle-down collapse-indicator"></i>
                         </h4>
                     </summary>
                     <div id="invoice">
@@ -42,7 +41,6 @@
                             <strong>{{ pos.item }}{% if pos.variation %}
                                 – {{ pos.variation }}
                             {% endif %}</strong>
-                            <i class="fa fa-angle-down collapse-indicator"></i>
                         </h4>
                     </summary>
                     <div id="cp{{ pos.id }}">

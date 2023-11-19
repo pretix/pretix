@@ -1,5 +1,6 @@
 {% load i18n %}
 {% load bootstrap3 %}
+{# Changes should be replicated in pretixcontrol/orders/fragment_order_status.html and in pretix/base/models/orders.py #}
 {% if order.status == "n" %}
     {% if order.require_approval %}
         {% trans "Approval pending" %}

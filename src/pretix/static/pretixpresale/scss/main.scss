@@ -342,13 +342,6 @@ body.loading .container {
     transition: all 150ms ease-in 0s;
 }
 
-.panel-title a:not(.collapsed) .collapse-indicator {
-    -webkit-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    transform: rotate(180deg);
-}
-
 .panel-title a[data-toggle="collapse"], details .panel-title {
     display: flex;
     padding: 0.75*$line-height-computed;
@@ -357,6 +350,34 @@ body.loading .container {
     justify-content: space-between;
     outline: 0;
     text-decoration: none;
+    position: relative;
+    padding-left: 30px;
+}
+
+.panel-title a[data-toggle="collapse"] .collapse-indicator,
+details .panel-title .collapse-indicator {
+    /* hide old collapse indicators until they are all removed from HTML */
+    display: none;
+}
+
+.panel-title a[data-toggle="collapse"]::before,
+details .panel-title::before {
+    position: absolute;
+    top: 50%;
+    left: 10px;
+    margin-top: -.5em;
+    content: "";
+    width: 1em;
+    height: 1em;
+    font: normal normal normal 14px/1 FontAwesome;
+    display: inline-block;
+    text-align: center;
+    transform: rotate(-90deg);
+    transition: transform 150ms ease-in 0s;
+}
+.panel-title a:not(.collapsed)::before,
+details.details-open .panel-title::before {
+    transform: rotate(0deg);
 }
 
 .panel-default .panel-title a[data-toggle="collapse"]:hover {
@@ -389,13 +410,12 @@ details summary {
     -webkit-user-select: none;
     user-select: none;
 }
-.nojs details[open] .panel-heading .collapse-indicator,
-details.details-open .panel-heading .collapse-indicator,
-[aria-expanded=true]>.collapse-indicator {
-    -webkit-transform: rotate(180deg);
-    -ms-transform: rotate(180deg);
-    -moz-transform: rotate(180deg);
-    transform: rotate(180deg);
+.nojs details:not([open], .details-open) .panel-heading .collapse-indicator,
+[aria-expanded=false]>.collapse-indicator {
+    -webkit-transform: rotate(-90deg);
+    -ms-transform: rotate(-90deg);
+    -moz-transform: rotate(-90deg);
+    transform: rotate(-90deg);
 }
 
 details.sneak-peek {

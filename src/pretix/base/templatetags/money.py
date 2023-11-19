@@ -21,6 +21,7 @@
 #
 from decimal import ROUND_HALF_UP, Decimal
 
+from babel import Locale, UnknownLocaleError
 from babel.numbers import format_currency
 from django import template
 from django.conf import settings
@@ -47,25 +48,29 @@ def money_filter(value: Decimal, arg='', hide_currency=False):
     places = settings.CURRENCY_PLACES.get(arg, 2)
     rounded = value.quantize(Decimal('1') / 10 ** places, ROUND_HALF_UP)
     if places < 2 and rounded != value:
-        places = 2
+        # We display decimal places even if we shouldn't for this currency if rounding
+        # would make the numbers incorrect. If this branch executes, it's likely a bug in
+        # pretix, but we won't show wrong numbers!
+        if hide_currency:
+            return floatformat(value, 2)
+        else:
+            return '{} {}'.format(arg, floatformat(value, 2))
+
     if hide_currency:
         return floatformat(value, places)
 
+    locale_parts = translation.get_language().split("-", 1)
+    locale = locale_parts[0]
+    if len(locale_parts) > 1 and len(locale_parts[1]) == 2:
+        try:
+            locale = Locale(locale_parts[0], locale_parts[1].upper())
+        except UnknownLocaleError:
+            pass
+
     try:
-        if rounded != value:
-            # We display decimal places even if we shouldn't for this currency if rounding
-            # would make the numbers incorrect. If this branch executes, it's likely a bug in
-            # pretix, but we won't show wrong numbers!
-            return '{} {}'.format(
-                arg,
-                floatformat(value, 2)
-            )
-        return format_currency(value, arg, locale=translation.get_language()[:2])
+        return format_currency(value, arg, locale=locale)
     except:
-        return '{} {}'.format(
-            arg,
-            floatformat(value, places)
-        )
+        return '{} {}'.format(arg, floatformat(value, places))
 
 
 @register.filter("money_numberfield")

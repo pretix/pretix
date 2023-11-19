@@ -325,6 +325,18 @@ class Order(LockModel, LoggedModel):
     def email_confirm_hash(self):
         return hashlib.sha256(settings.SECRET_KEY.encode() + self.secret.encode()).hexdigest()[:9]
 
+    def get_extended_status_display(self):
+        # Changes in this method should to be replicated in pretixcontrol/orders/fragment_order_status.html
+        # and pretixpresale/event/fragment_order_status.html
+        if self.status == Order.STATUS_PENDING:
+            if self.require_approval:
+                return _("approval pending")
+            elif self.valid_if_pending:
+                return pgettext_lazy("order state", "pending (confirmed)")
+        elif self.status == Order.STATUS_PAID and self.count_positions == 0:
+            return _("canceled (paid fee)")
+        return self.get_status_display()
+
     @property
     def fees(self):
         """
@@ -1271,6 +1283,21 @@ class QuestionAnswer(models.Model):
         return self.file.name.split('.', 1)[-1]
 
     def __str__(self):
+        return self.to_string(use_cached=True)
+
+    def to_string_i18n(self):
+        return self.to_string(use_cached=False)
+
+    def to_string(self, use_cached=True):
+        """
+        Render this answer as a string.
+
+        :param use_cached: If ``True`` (default), choice and multiple choice questions will show their cached
+                           value, i.e. the value of the selected options at the time of saving and in the language
+                           the answer was saved in. If ``False``, the values will instead be loaded from the
+                           database, yielding current and translated values of the options. However, additional database
+                           queries might be required.
+        """
         if self.question.type == Question.TYPE_BOOLEAN and self.answer == "True":
             return str(_("Yes"))
         elif self.question.type == Question.TYPE_BOOLEAN and self.answer == "False":
@@ -1305,6 +1332,8 @@ class QuestionAnswer(models.Model):
                 return PhoneNumber.from_string(self.answer).as_international
             except NumberParseException:
                 return self.answer
+        elif self.question.type in (Question.TYPE_CHOICE, Question.TYPE_CHOICE_MULTIPLE) and self.answer and not use_cached:
+            return ", ".join(str(o.answer) for o in self.options.all())
         else:
             return self.answer
 
