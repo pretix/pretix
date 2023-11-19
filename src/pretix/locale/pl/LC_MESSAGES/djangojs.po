@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-13 15:14+0000\n"
-"PO-Revision-Date: 2019-09-24 19:00+0000\n"
-"Last-Translator: Serge Bazanski <q3k@hackerspace.pl>\n"
+"PO-Revision-Date: 2023-11-19 21:52+0000\n"
+"Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "pl/>\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 3.5.1\n"
+"X-Generator: Weblate 5.1.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -242,11 +242,8 @@ msgid "Canceled"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:46
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Redeem"
 msgid "Redeemed"
-msgstr "Użyj"
+msgstr "Wykorzystany"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:47
 msgid "Cancel"
@@ -504,15 +501,15 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:166
 msgid "Event start"
-msgstr ""
+msgstr "Rozpoczęcie wydarzenia"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:167
 msgid "Event end"
-msgstr ""
+msgstr "Koniec wydarzenia"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:168
 msgid "Event admission"
-msgstr ""
+msgstr "Wstęp na wydarzenie"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:169
 msgid "custom date and time"
@@ -532,7 +529,7 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:173
 msgid "minutes"
-msgstr ""
+msgstr "minut"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:174
 msgid "Duplicate"
