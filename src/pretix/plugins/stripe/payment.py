@@ -329,28 +329,32 @@ class StripeSettingsHolder(BasePaymentProvider):
                  forms.BooleanField(
                      label=_('giropay'),
                      disabled=self.event.currency != 'EUR',
-                     help_text=_('Needs to be enabled in your Stripe account first.'),
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before work properly.'),
                      required=False,
                  )),
                 ('method_ideal',
                  forms.BooleanField(
                      label=_('iDEAL'),
                      disabled=self.event.currency != 'EUR',
-                     help_text=_('Needs to be enabled in your Stripe account first.'),
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before work properly.'),
                      required=False,
                  )),
                 ('method_alipay',
                  forms.BooleanField(
                      label=_('Alipay'),
                      disabled=self.event.currency not in ('EUR', 'AUD', 'CAD', 'GBP', 'HKD', 'JPY', 'NZD', 'SGD', 'USD'),
-                     help_text=_('Needs to be enabled in your Stripe account first.'),
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before work properly.'),
                      required=False,
                  )),
                 ('method_bancontact',
                  forms.BooleanField(
                      label=_('Bancontact'),
                      disabled=self.event.currency != 'EUR',
-                     help_text=_('Needs to be enabled in your Stripe account first.'),
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before work properly.'),
                      required=False,
                  )),
                 ('method_sepa_debit',
@@ -358,7 +362,8 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('SEPA Direct Debit'),
                      disabled=self.event.currency != 'EUR',
                      help_text=(
-                         _('Needs to be enabled in your Stripe account first.') +
+                         _('Some payment methods might need to be enabled in the settings of your Stripe account '
+                           'before work properly.') +
                          '<div class="alert alert-warning">%s</div>' % _(
                              'SEPA Direct Debit payments via Stripe are <strong>not</strong> processed '
                              'instantly but might take up to <strong>14 days</strong> to be confirmed in some cases. '
@@ -384,7 +389,8 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('SOFORT'),
                      disabled=self.event.currency != 'EUR',
                      help_text=(
-                         _('Needs to be enabled in your Stripe account first.') +
+                         _('Stripe is in the process of removing this payment method. If you created your Stripe '
+                           'account after November 2023, you cannot use this payment method.') +
                          '<div class="alert alert-warning">%s</div>' % _(
                              'Despite the name, Sofort payments via Stripe are <strong>not</strong> processed '
                              'instantly but might take up to <strong>14 days</strong> to be confirmed in some cases. '
@@ -397,28 +403,32 @@ class StripeSettingsHolder(BasePaymentProvider):
                  forms.BooleanField(
                      label=_('EPS'),
                      disabled=self.event.currency != 'EUR',
-                     help_text=_('Needs to be enabled in your Stripe account first.'),
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before work properly.'),
                      required=False,
                  )),
                 ('method_multibanco',
                  forms.BooleanField(
                      label=_('Multibanco'),
                      disabled=self.event.currency != 'EUR',
-                     help_text=_('Needs to be enabled in your Stripe account first.'),
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before work properly.'),
                      required=False,
                  )),
                 ('method_przelewy24',
                  forms.BooleanField(
                      label=_('Przelewy24'),
                      disabled=self.event.currency not in ['EUR', 'PLN'],
-                     help_text=_('Needs to be enabled in your Stripe account first.'),
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before work properly.'),
                      required=False,
                  )),
                 ('method_wechatpay',
                  forms.BooleanField(
                      label=_('WeChat Pay'),
                      disabled=self.event.currency not in ['AUD', 'CAD', 'EUR', 'GBP', 'HKD', 'JPY', 'SGD', 'USD'],
-                     help_text=_('Needs to be enabled in your Stripe account first.'),
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before work properly.'),
                      required=False,
                  )),
             ] + extra_fields + list(super().settings_form_fields.items()) + moto_settings
