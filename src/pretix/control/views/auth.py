@@ -322,7 +322,8 @@ class Recover(TemplateView):
     }
 
     def dispatch(self, request, *args, **kwargs):
-        if not settings.PRETIX_PASSWORD_RESET or 'native' not in get_auth_backends():
+        # settings.PRETIX_PASSWORD_RESET is not checked here to allow admin-sent recovery links
+        if 'native' not in get_auth_backends():
             raise PermissionDenied('Registration is disabled')
         return super().dispatch(request, *args, **kwargs)
 
