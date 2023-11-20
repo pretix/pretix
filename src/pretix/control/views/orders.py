@@ -74,6 +74,7 @@ from i18nfield.strings import LazyI18nString
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.decimal import round_decimal
 from pretix.base.email import get_email_context
+from pretix.base.exporter import MultiSheetListExporter
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedCombinedTicket, CachedFile, CachedTicket, Checkin, Invoice,
@@ -2479,6 +2480,7 @@ class ExportMixin:
                 prefix=ex.identifier,
                 initial=initial
             )
+            ex.multisheet_warning = isinstance(ex, MultiSheetListExporter) and len(ex.sheets) > 1
             ex.form.fields = ex.export_form_fields
             return ex
 
