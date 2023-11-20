@@ -10,78 +10,93 @@
     {% endif %}
     <form class="form-horizontal" action="" method="post">
         {% csrf_token %}
-        {% bootstrap_form form layout="control" %}
-
-        <div class="form-group">
-            <label class="col-md-3 control-label">
-                {% trans "Allowed values" %}<br>
-                <span class="optional">{% trans "Optional" %}</span>
-            </label>
-            <div class="col-md-9">
-                <p class="help-block">{% trans "If you keep this empty, all input will be allowed." %}</p>
-                <div class="formset tax-rules-formset" data-formset data-formset-prefix="{{ formset.prefix }}">
-                    {{ formset.management_form }}
-                    {% bootstrap_formset_errors formset %}
-                    <script type="form-template" data-formset-empty-form>
-                        {% escapescript %}
-                            <div class="row tax-rule-line" data-formset-form>
-                                <div class="sr-only">
-                                    {{ formset.empty_form.id }}
-                                    {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
-                                    {% bootstrap_field formset.empty_form.ORDER form_group_class="" layout="inline" %}
+        {% bootstrap_form_errors form layout="control" %}
+        <fieldset>
+            <legend>{% trans "General" %}</legend>
+            {% bootstrap_field form.name layout="control" %}
+            {% bootstrap_field form.default layout="control" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Usage" %}</legend>
+            {% bootstrap_field form.filter_allowed layout="control" %}
+            {% bootstrap_field form.filter_public layout="control" %}
+            {% bootstrap_field form.public_label layout="control" %}
+        </fieldset>
+        <fieldset>
+            <legend>{% trans "Validation" %}</legend>
+            {% bootstrap_field form.required layout="control" %}
+            {% bootstrap_field form.protected layout="control" %}
+            <div class="form-group">
+                <label class="col-md-3 control-label">
+                    {% trans "Allowed values" %}<br>
+                    <span class="optional">{% trans "Optional" %}</span>
+                </label>
+                <div class="col-md-9">
+                    <p class="help-block">{% trans "If you keep this empty, all input will be allowed." %}</p>
+                    <div class="formset tax-rules-formset" data-formset data-formset-prefix="{{ formset.prefix }}">
+                        {{ formset.management_form }}
+                        {% bootstrap_formset_errors formset %}
+                        <script type="form-template" data-formset-empty-form>
+                            {% escapescript %}
+                                <div class="row tax-rule-line" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ formset.empty_form.id }}
+                                        {% bootstrap_field formset.empty_form.DELETE form_group_class="" layout="inline" %}
+                                        {% bootstrap_field formset.empty_form.ORDER form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="col-sm-6 col-md-4 col-lg-5">
+                                        {% bootstrap_field formset.empty_form.key layout='inline' form_group_class="" %}
+                                    </div>
+                                    <div class="col-sm-6 col-md-4 col-lg-5">
+                                        {% bootstrap_field formset.empty_form.label layout='inline' form_group_class="" %}
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 col-lg-2 text-right flip">
+                                        <button type="button" class="btn btn-default" data-formset-move-up-button>
+                                            <i class="fa fa-arrow-up"></i></button>
+                                        <button type="button" class="btn btn-default" data-formset-move-down-button>
+                                            <i class="fa fa-arrow-down"></i></button>
+                                        <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                            <i class="fa fa-trash"></i></button>
+                                    </div>
                                 </div>
-                                <div class="col-sm-6 col-md-4 col-lg-5">
-                                    {% bootstrap_field formset.empty_form.key layout='inline' form_group_class="" %}
+                            {% endescapescript %}
+                        </script>
+                        <div data-formset-body class="tax-rule-lines">
+                            {% for form in formset %}
+                                {% bootstrap_form_errors form %}
+                                <div class="row tax-rule-line" data-formset-form>
+                                    <div class="sr-only">
+                                        {{ form.id }}
+                                        {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
+                                        {% bootstrap_field form.ORDER form_group_class="" layout="inline" %}
+                                    </div>
+                                    <div class="col-sm-6 col-md-4 col-lg-5">
+                                        {% bootstrap_field form.key layout='inline' form_group_class="" %}
+                                    </div>
+                                    <div class="col-sm-6 col-md-4 col-lg-5">
+                                        {% bootstrap_field form.label layout='inline' form_group_class="" %}
+                                    </div>
+                                    <div class="col-sm-6 col-md-3 col-lg-2 text-right flip">
+                                        <button type="button" class="btn btn-default" data-formset-move-up-button>
+                                            <i class="fa fa-arrow-up"></i></button>
+                                        <button type="button" class="btn btn-default" data-formset-move-down-button>
+                                            <i class="fa fa-arrow-down"></i></button>
+                                        <button type="button" class="btn btn-danger" data-formset-delete-button>
+                                            <i class="fa fa-trash"></i></button>
+                                    </div>
                                 </div>
-                                <div class="col-sm-6 col-md-4 col-lg-5">
-                                    {% bootstrap_field formset.empty_form.label layout='inline' form_group_class="" %}
-                                </div>
-                                <div class="col-sm-6 col-md-3 col-lg-2 text-right flip">
-                                    <button type="button" class="btn btn-default" data-formset-move-up-button>
-                                        <i class="fa fa-arrow-up"></i></button>
-                                    <button type="button" class="btn btn-default" data-formset-move-down-button>
-                                        <i class="fa fa-arrow-down"></i></button>
-                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                        <i class="fa fa-trash"></i></button>
-                                </div>
+                            {% endfor %}
+                        </div>
+                        <div class="row tax-rule-line" data-formset-form>
+                            <div class="col-sm-12">
+                                <button type="button" class="btn btn-default" data-formset-add>
+                                    <i class="fa fa-plus"></i> {% trans "Add a new value" %}</button>
                             </div>
-                        {% endescapescript %}
-                    </script>
-                    <div data-formset-body class="tax-rule-lines">
-                        {% for form in formset %}
-                            {% bootstrap_form_errors form %}
-                            <div class="row tax-rule-line" data-formset-form>
-                                <div class="sr-only">
-                                    {{ form.id }}
-                                    {% bootstrap_field form.DELETE form_group_class="" layout="inline" %}
-                                    {% bootstrap_field form.ORDER form_group_class="" layout="inline" %}
-                                </div>
-                                <div class="col-sm-6 col-md-4 col-lg-5">
-                                    {% bootstrap_field form.key layout='inline' form_group_class="" %}
-                                </div>
-                                <div class="col-sm-6 col-md-4 col-lg-5">
-                                    {% bootstrap_field form.label layout='inline' form_group_class="" %}
-                                </div>
-                                <div class="col-sm-6 col-md-3 col-lg-2 text-right flip">
-                                    <button type="button" class="btn btn-default" data-formset-move-up-button>
-                                        <i class="fa fa-arrow-up"></i></button>
-                                    <button type="button" class="btn btn-default" data-formset-move-down-button>
-                                        <i class="fa fa-arrow-down"></i></button>
-                                    <button type="button" class="btn btn-danger" data-formset-delete-button>
-                                        <i class="fa fa-trash"></i></button>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                    <div class="row tax-rule-line" data-formset-form>
-                        <div class="col-sm-12">
-                            <button type="button" class="btn btn-default" data-formset-add>
-                                <i class="fa fa-plus"></i> {% trans "Add a new value" %}</button>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </fieldset>
 
         <div class="form-group submit-group">
             <button type="submit" class="btn btn-primary btn-save">
