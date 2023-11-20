@@ -279,6 +279,15 @@ however for this signal, the ``sender`` **may also be None** to allow creating t
 notification settings!
 """
 
+notification = EventPluginSignal()
+"""
+Arguments: ``logentry_id``, ``notification_type``
+
+This signal is sent out when a notification is sent.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 register_sales_channels = django.dispatch.Signal()
 """
 This signal is sent out to get all known sales channels types. Receivers should return an
