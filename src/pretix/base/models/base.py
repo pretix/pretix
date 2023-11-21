@@ -87,17 +87,17 @@ class LoggingMixin:
         from .organizer import Organizer, TeamAPIToken
 
         event = None
-        organizer = None
+        organizer_id = None
         if isinstance(self, Organizer):
-            organizer = self
+            organizer_id = self.pk
         elif isinstance(self, Event):
             event = self
-            organizer = self.organizer
+            organizer_id = self.organizer_id
         elif hasattr(self, 'event'):
             event = self.event
-            organizer = self.event.organizer
-        elif hasattr(self, 'organizer'):
-            organizer = self.organizer
+            organizer_id = self.event.organizer_id
+        elif hasattr(self, 'organizer_id'):
+            organizer_id = self.organizer_id
 
         if user and not user.is_authenticated:
             user = None
@@ -115,7 +115,7 @@ class LoggingMixin:
             kwargs['api_token'] = api_token
 
         logentry = LogEntry(content_object=self, user=user, action_type=action, event=event,
-                            organizer_link=organizer, **kwargs)
+                            organizer_link_id=organizer_id, **kwargs)
         if isinstance(data, dict):
             sensitivekeys = ['password', 'secret', 'api_key']
 
