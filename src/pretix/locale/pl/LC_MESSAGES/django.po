@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-15 14:27+0000\n"
-"PO-Revision-Date: 2023-11-21 06:00+0000\n"
+"PO-Revision-Date: 2023-11-21 15:57+0000\n"
 "Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -3450,7 +3450,7 @@ msgstr "Zabronione przez niestandardową regułę"
 
 #: pretix/base/models/checkin.py:361
 msgid "Ticket code revoked/changed"
-msgstr "Kod biletu cofnięty / zmieniony"
+msgstr "Kod biletu cofnięty/zmieniony"
 
 #: pretix/base/models/checkin.py:362
 msgid "Information required"
@@ -12648,7 +12648,7 @@ msgstr "Wszystkie produkty"
 #: pretix/control/views/typeahead.py:666 pretix/control/views/typeahead.py:740
 #, python-brace-format
 msgid "{product} – Any variation"
-msgstr "{product} - wszystkie opcje"
+msgstr "{product} – wszystkie opcje"
 
 #: pretix/control/forms/filter.py:518 pretix/control/forms/orders.py:785
 msgctxt "subevent"
@@ -12974,7 +12974,7 @@ msgstr "Wyszukaj voucher"
 #: pretix/control/views/vouchers.py:131
 #, python-brace-format
 msgid "Any product in quota \"{quota}\""
-msgstr "Każdy produkt w limicie \\ \"{quota} \\"
+msgstr "Każdy produkt w limicie \"{quota}\""
 
 #: pretix/control/forms/filter.py:2189
 msgid "Refund status"
@@ -13598,7 +13598,7 @@ msgstr ""
 #: pretix/control/forms/orders.py:165 pretix/control/forms/orders.py:212
 #: pretix/control/forms/orders.py:226
 msgid "Notify customer by email"
-msgstr "Powiadom klienta przez e -mail"
+msgstr "Powiadom klienta przez e-mail"
 
 #: pretix/control/forms/orders.py:172
 msgid "Keep a cancellation fee of"
@@ -13660,7 +13660,7 @@ msgid ""
 "the same."
 msgstr ""
 "Ponownie oblicz podatki na podstawie ustawień adresu i produktu, zachowaj "
-"taką samą kwotę netto."
+"taką samą kwotę brutto."
 
 #: pretix/control/forms/orders.py:285
 msgid ""
@@ -13688,7 +13688,7 @@ msgstr "Powiadom użytkownika"
 msgid ""
 "Send an email to the customer notifying that their order has been changed."
 msgstr ""
-"Wyślij wiadomość e -mail do klienta z informacją o tym, że jego zamówienie "
+"Wyślij wiadomość e-mail do klienta z informacją o tym, że jego zamówienie "
 "zostało zmienione."
 
 #: pretix/control/forms/orders.py:307
@@ -13817,7 +13817,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:732
 msgid "Do nothing and keep the order as it is."
-msgstr "Nie rób nic i zachowaj zamówienie tak, jak było.."
+msgstr "Nie rób nic i zachowaj zamówienie tak, jak było."
 
 #: pretix/control/forms/orders.py:759
 msgid "The refund amount needs to be positive and less than {}."
@@ -13928,16 +13928,18 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"Witaj,\\\n"
+"Witaj,\n"
+"\n"
 "Z przykrością informujemy Cię, że wydarzenie {event} zostało anulowane.\n"
 "\n"
 "Zwrócimy Ci {refund_amount} za pomocą metody płatności, z której "
-"korzystałaś(eś).\\N\n"
+"korzystałaś(eś).\n"
+"\n"
 "Możesz wyświetlić aktualny stan swojego zamówienia tutaj:\n"
 "\n"
 "{url}\n"
 "\n"
-"Pozdrawiamy,\n"
+"Pozdrawiamy,  \n"
 "\n"
 "Zespół {event}"
 
@@ -13954,12 +13956,13 @@ msgid ""
 "\n"
 "Your {event} team"
 msgstr ""
-"Witaj,\\\n"
+"Witaj,\n"
+"\n"
 "Z przykrością informujemy Cię, że wydarzenie {event} zostało anulowane.\n"
 "\n"
 "W związku z tym nie otrzymasz biletu z listy rezerwowej.\n"
 "\n"
-"Pozdrawiamy,\n"
+"Pozdrawiamy,  \n"
 "\n"
 "Zespół {event}"
 
@@ -14024,7 +14027,7 @@ msgstr ""
 
 #: pretix/control/forms/organizer.py:535
 msgid "This will be attached to every email."
-msgstr "Zostanie to dołączone do każdego e -maila."
+msgstr "Zostanie to dołączone do każdego e-maila."
 
 #: pretix/control/forms/organizer.py:627
 msgctxt "webhooks"
@@ -14191,7 +14194,7 @@ msgstr "miesiąc(e)"
 
 #: pretix/control/forms/rrule.py:37
 msgid "week(s)"
-msgstr "tydzień(tygodnie)"
+msgstr "tydzień/tygodnie"
 
 #: pretix/control/forms/rrule.py:38
 msgid "day(s)"
@@ -14295,7 +14298,7 @@ msgstr ""
 
 #: pretix/control/forms/vouchers.py:260
 msgid "Send vouchers via email"
-msgstr "Wyślij kupony za pośrednictwem poczty e -mail"
+msgstr "Wyślij kupony za pośrednictwem poczty e-mail"
 
 #: pretix/control/forms/vouchers.py:267
 #, python-brace-format
@@ -14318,7 +14321,8 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Witaj,\\\n"
+"Witaj,\n"
+"\n"
 "Wysyłamy ci jeden lub więcej voucherówna {event}:\n"
 "\n"
 "{voucher_list}\n"
@@ -14327,7 +14331,7 @@ msgstr ""
 "\n"
 "{url}\n"
 "\n"
-"Pozdrawiamy,\n"
+"Pozdrawiamy,  \n"
 "Zespół {event}"
 
 #: pretix/control/forms/vouchers.py:279
@@ -14863,7 +14867,7 @@ msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
 
 #: pretix/control/logdisplay.py:373 pretix/control/logdisplay.py:414
 msgid "Sending of an email has failed."
-msgstr "Wysyłanie wiadomości e -mail nie powiodło się."
+msgstr "Wysyłanie wiadomości e-mail nie powiodło się."
 
 #: pretix/control/logdisplay.py:374
 msgid "The event's internal comment has been updated."
@@ -15245,7 +15249,7 @@ msgstr ""
 #: pretix/control/logdisplay.py:474
 #, python-brace-format
 msgid "The organizer \"{name}\" has been deleted."
-msgstr "Organizator \"{name} \" został usunięty."
+msgstr "Organizator \"{name}\" został usunięty."
 
 #: pretix/control/logdisplay.py:475
 msgid "The voucher has been created."
@@ -31318,8 +31322,8 @@ msgid ""
 "If you're looking to configure this installation, please <a %(a_attr)s>head "
 "over here</a>."
 msgstr ""
-"Jeśli chcesz skonfigurować tę instalację, proszę <a %(a_attr)s> przejdź "
-"tutaj </a>."
+"Jeśli chcesz skonfigurować tę instalację, proszę <a %(a_attr)s>przejdź "
+"tutaj</a>."
 
 #: pretix/presale/templates/pretixpresale/index.html:24
 msgid "Enjoy!"
