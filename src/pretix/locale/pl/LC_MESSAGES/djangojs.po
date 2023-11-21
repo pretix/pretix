@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-13 15:14+0000\n"
-"PO-Revision-Date: 2023-11-21 06:00+0000\n"
-"Last-Translator: Joanna Kochel <kochel.joanna@gmail.com>\n"
+"PO-Revision-Date: 2023-11-21 15:57+0000\n"
+"Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "pl/>\n"
 "Language: pl\n"
@@ -290,7 +290,7 @@ msgstr "Wejście niedozwolone"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:60
 msgid "Ticket code revoked/changed"
-msgstr "Kod biletu cofnięty / zmieniony"
+msgstr "Kod biletu cofnięty/zmieniony"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
 msgid "Ticket blocked"
@@ -886,8 +886,8 @@ msgid ""
 "this ticket shop. Please click \"Continue\" to retry in a new tab."
 msgstr ""
 "Nie mogliśmy stworzyć twojego koszyka, ponieważ obecnie jest zbyt wielu "
-"użytkowników w tym sklepie. Kliknij \\ „Kontynuuj \\”, aby spróbować "
-"ponownie w nowej karcie."
+"użytkowników w tym sklepie. Kliknij \"Kontynuuj\", aby spróbować ponownie w "
+"nowej karcie."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
