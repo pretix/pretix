@@ -23,13 +23,13 @@ def backfill_organizer(apps, schema_editor):
             continue
         if "organizer" in model._meta.fields:
             LogEntry.objects.filter(
-                organizer_link__isnull=True, event__isnull=False, content_type=ct,
+                organizer_link__isnull=True, event__isnull=True, content_type=ct,
             ).update(
                 organizer_link_id=Subquery(model.objects.filter(pk=OuterRef('object_id')).values('organizer_id'))
             )
         elif "event" in model._meta.fields:
             LogEntry.objects.filter(
-                organizer_link__isnull=True, event__isnull=False, content_type=ct,
+                organizer_link__isnull=True, event__isnull=True, content_type=ct,
             ).update(
                 organizer_link_id=Subquery(model.objects.filter(pk=OuterRef('object_id')).values('event__organizer_id'))
             )
