@@ -128,7 +128,7 @@ class LogEntry(models.Model):
         from .organizer import Organizer
 
         if self.organizer_link:
-            return self.event.organizer_link
+            return self.organizer_link
         elif self.event:
             return self.event.organizer
         elif hasattr(self.content_object, 'event'):
