@@ -109,7 +109,7 @@ LANGUAGES_RTL = {
     'ar', 'hw'
 }
 LANGUAGES_INCUBATING = {
-    'pl', 'fi', 'pt-br', 'gl',
+    'fi', 'pt-br', 'gl',
 }
 LOCALE_PATHS = [
     os.path.join(os.path.dirname(__file__), 'locale'),
