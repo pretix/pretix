@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-13 15:14+0000\n"
-"PO-Revision-Date: 2023-11-22 20:48+0000\n"
+"PO-Revision-Date: 2023-11-22 21:02+0000\n"
 "Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "pl/>\n"
@@ -273,9 +273,8 @@ msgid "Information required"
 msgstr "Wymagane informacje"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
-#, fuzzy
 msgid "Unknown ticket"
-msgstr "Nieznany błąd."
+msgstr "Bilet nieznany"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Ticket type not allowed here"
@@ -428,9 +427,8 @@ msgid "Product"
 msgstr "Produkt"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:97
-#, fuzzy
 msgid "Product variation"
-msgstr "Możliwe warianty"
+msgstr "Wariant produktu"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
 msgid "Gate"
