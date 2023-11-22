@@ -2645,7 +2645,7 @@ class OrderChangeManager:
                     self.order.invoice_dirty = True
                     self.order.save(update_fields=["invoice_dirty"])
             else:
-                if i and not i.refered.exists():
+                if i and not i.canceled:
                     self._invoices.append(generate_cancellation(i))
 
     def _check_complete_cancel(self):
