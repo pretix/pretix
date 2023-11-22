@@ -37,7 +37,7 @@ def backfill_organizer(apps, schema_editor):
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("pretixbase", "0250_eventmetaproperty_filter_public"),
+        ("pretixbase", "0251_order_invoice_dirty"),
     ]
 
     operations = [
