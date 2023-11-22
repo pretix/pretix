@@ -84,13 +84,21 @@ class LoggingMixin:
         from .devices import Device
         from .event import Event
         from .log import LogEntry
-        from .organizer import TeamAPIToken
+        from .organizer import Organizer, TeamAPIToken
 
         event = None
-        if isinstance(self, Event):
+        organizer_id = None
+        if isinstance(self, Organizer):
+            organizer_id = self.pk
+        elif isinstance(self, Event):
             event = self
+            organizer_id = self.organizer_id
         elif hasattr(self, 'event'):
             event = self.event
+            organizer_id = self.event.organizer_id
+        elif hasattr(self, 'organizer_id'):
+            organizer_id = self.organizer_id
+
         if user and not user.is_authenticated:
             user = None
 
@@ -106,7 +114,8 @@ class LoggingMixin:
         elif isinstance(api_token, TeamAPIToken):
             kwargs['api_token'] = api_token
 
-        logentry = LogEntry(content_object=self, user=user, action_type=action, event=event, **kwargs)
+        logentry = LogEntry(content_object=self, user=user, action_type=action, event=event,
+                            organizer_link_id=organizer_id, **kwargs)
         if isinstance(data, dict):
             sensitivekeys = ['password', 'secret', 'api_key']
 

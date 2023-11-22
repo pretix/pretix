@@ -78,6 +78,7 @@ class LogEntry(models.Model):
     device = models.ForeignKey('Device', null=True, blank=True, on_delete=models.PROTECT)
     oauth_application = models.ForeignKey('pretixapi.OAuthApplication', null=True, blank=True, on_delete=models.PROTECT)
     event = models.ForeignKey('Event', null=True, blank=True, on_delete=models.SET_NULL)
+    organizer_link = models.ForeignKey('Organizer', null=True, blank=True, on_delete=models.PROTECT)
     action_type = models.CharField(max_length=255)
     data = models.TextField(default='{}')
     visible = models.BooleanField(default=True)
@@ -126,7 +127,9 @@ class LogEntry(models.Model):
     def organizer(self):
         from .organizer import Organizer
 
-        if self.event:
+        if self.organizer_link:
+            return self.organizer_link
+        elif self.event:
             return self.event.organizer
         elif hasattr(self.content_object, 'event'):
             return self.content_object.event.organizer
