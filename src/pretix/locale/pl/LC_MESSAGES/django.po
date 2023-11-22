@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-15 14:27+0000\n"
-"PO-Revision-Date: 2023-11-22 20:17+0000\n"
+"PO-Revision-Date: 2023-11-22 20:48+0000\n"
 "Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -3436,8 +3436,9 @@ msgid "Exit"
 msgstr "Wyjście"
 
 #: pretix/base/models/checkin.py:358
+#, fuzzy
 msgid "Unknown ticket"
-msgstr "Bilet nieznany"
+msgstr "Nieznany błąd."
 
 #: pretix/base/models/checkin.py:359
 msgid "Ticket not paid"
@@ -4619,8 +4620,9 @@ msgstr ""
 
 #: pretix/base/models/items.py:1103 pretix/base/models/vouchers.py:262
 #: pretix/base/models/waitinglist.py:99 pretix/base/orderimport.py:285
+#, fuzzy
 msgid "Product variation"
-msgstr "Wariant produktu"
+msgstr "Możliwe warianty"
 
 #: pretix/base/models/items.py:1104
 #: pretix/control/templates/pretixcontrol/item/create.html:111
