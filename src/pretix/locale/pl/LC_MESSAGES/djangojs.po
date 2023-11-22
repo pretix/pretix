@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-13 15:14+0000\n"
-"PO-Revision-Date: 2023-11-22 20:17+0000\n"
+"PO-Revision-Date: 2023-11-22 20:48+0000\n"
 "Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "pl/>\n"
@@ -189,6 +189,7 @@ msgid "Search results"
 msgstr "Wyniki wyszukiwania"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:34
+#, fuzzy
 msgid "No tickets found"
 msgstr "Zamknięcie sklepu biletowego"
 
@@ -272,8 +273,9 @@ msgid "Information required"
 msgstr "Wymagane informacje"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
+#, fuzzy
 msgid "Unknown ticket"
-msgstr "Bilet nieznany"
+msgstr "Nieznany błąd."
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Ticket type not allowed here"
@@ -304,6 +306,7 @@ msgid "Ticket code is ambiguous on list"
 msgstr "Kod biletu jest niejednoznaczny na liście"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
+#, fuzzy
 msgid "Checked-in Tickets"
 msgstr "QR zameldowania"
 
@@ -316,11 +319,13 @@ msgid "Currently inside"
 msgstr "Obecnie w środku"
 
 #: pretix/static/lightbox/js/lightbox.js:96
+#, fuzzy
 msgid "close"
 msgstr "Zamknąć"
 
 #: pretix/static/pretixbase/js/asynctask.js:58
 #: pretix/static/pretixbase/js/asynctask.js:135
+#, fuzzy
 msgid ""
 "Your request is currently being processed. Depending on the size of your "
 "event, this might take up to a few minutes."
@@ -331,6 +336,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:63
 #: pretix/static/pretixbase/js/asynctask.js:140
+#, fuzzy
 msgid "Your request has been queued on the server and will soon be processed."
 msgstr ""
 "Zapytanie zostało zakolejkowane po stronie serwera i rozpoczyna "
@@ -365,6 +371,7 @@ msgstr ""
 
 #: pretix/static/pretixbase/js/asynctask.js:160
 #: pretix/static/pretixcontrol/js/ui/mail.js:21
+#, fuzzy
 msgid "The request took too long. Please try again."
 msgstr "Zapytanie trwało zbyt długo. Prosimy spróbować ponownie."
 
@@ -421,8 +428,9 @@ msgid "Product"
 msgstr "Produkt"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:97
+#, fuzzy
 msgid "Product variation"
-msgstr "Wariant produktu"
+msgstr "Możliwe warianty"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
 msgid "Gate"
@@ -529,6 +537,7 @@ msgid "Barcode area"
 msgstr "Miejsce na kod kreskowy"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:657
+#, fuzzy
 msgid "Image area"
 msgstr "Miejsce na kod kreskowy"
 
@@ -664,6 +673,7 @@ msgid "Cart expired"
 msgstr "Koszyk wygasł"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:50
+#, fuzzy
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Przedmioty w koszyku są zarezerwowane na jedną minutę."
@@ -671,10 +681,12 @@ msgstr[1] "Przedmioty w koszyku są zarezerwowane na {num} minuty."
 msgstr[2] "Przedmioty w koszyku są zarezerwowane na {num} minut."
 
 #: pretix/static/pretixpresale/js/ui/main.js:171
+#, fuzzy
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "od %(currency)s %(price)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:179
+#, fuzzy
 msgid "You get %(currency)s %(amount)s back"
 msgstr "od %(currency)s %(price)s"
 
@@ -687,6 +699,7 @@ msgid "Please enter a quantity for one of the ticket types."
 msgstr "Proszę wybrać liczbę dla jednego z typów biletów."
 
 #: pretix/static/pretixpresale/js/ui/main.js:448
+#, fuzzy
 msgid "required"
 msgstr "Koszyk wygasł"
 
@@ -735,7 +748,7 @@ msgid "Select %s"
 msgstr "Wybierz %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
-#, javascript-format
+#, fuzzy, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
 msgstr "Możliwe warianty"
@@ -827,6 +840,7 @@ msgstr ""
 "nowej zakładce by kontynuować."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:40
+#, fuzzy
 msgctxt "widget"
 msgid "Open ticket shop"
 msgstr "Zamknięcie sklepu biletowego"
@@ -926,6 +940,7 @@ msgid "Next week"
 msgstr "W przyszłym tygodniu."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:60
+#, fuzzy
 msgctxt "widget"
 msgid "Previous week"
 msgstr "Zeszły miesiąc"
