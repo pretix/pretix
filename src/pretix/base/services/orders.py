@@ -2632,7 +2632,7 @@ class OrderChangeManager:
                     # Backwards-compatible behaviour
                     self.event.settings.invoice_generate not in ("True", "paid") and
                     i and
-                    not i.refered.exists()
+                    not i.canceled
                 )
             )
 
