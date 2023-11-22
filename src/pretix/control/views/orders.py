@@ -47,12 +47,11 @@ from django.conf import settings
 from django.contrib import messages
 from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
-from django.db import models, transaction
+from django.db import transaction
 from django.db.models import (
-    Case, Count, Exists, F, IntegerField, OuterRef, Prefetch, ProtectedError,
-    Q, QuerySet, Subquery, Sum, Value, When,
+    Count, Exists, F, IntegerField, OuterRef, Prefetch, ProtectedError, Q,
+    QuerySet, Subquery, Sum
 )
-from django.db.models.functions import Coalesce
 from django.forms import formset_factory
 from django.http import (
     FileResponse, Http404, HttpResponseNotAllowed, HttpResponseRedirect,
@@ -332,10 +331,7 @@ class OrderOverpaidRefundBulkActionView(BaseOrderBulkActionView):
     label = _("Refund overpaid amount")
 
     def allowed_for(self, queryset):
-        return Order.annotate_overpayments(queryset).filter(
-            status=Order.STATUS_PAID,
-            is_overpaid=True
-        )
+        return Order.annotate_overpayments(queryset).filter(is_overpaid=True)
 
     def execute_single(self, instance: Order, form: forms.Form):
         if instance.pending_sum < 0:
