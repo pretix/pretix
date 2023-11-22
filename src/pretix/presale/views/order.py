@@ -487,9 +487,13 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         try:
-            if not self.order.invoices.exists() and invoice_qualified(self.order):
+            i = self.order.invoices.filter(is_cancellation=False).last()
+            has_active_invoice = i and not i.canceled
+            if (not has_active_invoice or self.order.invoice_dirty) and invoice_qualified(self.order):
                 if self.request.event.settings.get('invoice_generate') == 'True' or (
                         self.request.event.settings.get('invoice_generate') == 'paid' and self.payment.payment_provider.requires_invoice_immediately):
+                    if has_active_invoice:
+                        generate_cancellation(i)
                     i = generate_invoice(self.order)
                     self.order.log_action('pretix.event.order.invoice.generated', data={
                         'invoice': i.pk

@@ -266,6 +266,10 @@ class Order(LockModel, LoggedModel):
         default=False,
         verbose_name=_('E-mail address verified')
     )
+    invoice_dirty = models.BooleanField(
+        # Invoice needs to be re-issued when the order is paid again
+        default=False,
+    )
 
     objects = ScopedManager(organizer='event__organizer')
 
@@ -1835,7 +1839,7 @@ class OrderPayment(models.Model):
     def _mark_order_paid(self, count_waitinglist=True, send_mail=True, force=False, user=None, auth=None, mail_text='',
                          ignore_date=False, lock=True, payment_refund_sum=0, allow_generate_invoice=True):
         from pretix.base.services.invoices import (
-            generate_invoice, invoice_qualified,
+            generate_cancellation, generate_invoice, invoice_qualified,
         )
         from pretix.base.services.locking import LOCK_TRUST_WINDOW
 
@@ -1853,9 +1857,14 @@ class OrderPayment(models.Model):
             cancellations = self.order.invoices.filter(is_cancellation=True).count()
             gen_invoice = (
                 (invoices == 0 and self.order.event.settings.get('invoice_generate') in ('True', 'paid')) or
-                0 < invoices <= cancellations
+                0 < invoices <= cancellations or
+                self.order.invoice_dirty
             )
             if gen_invoice:
+                if invoices:
+                    last_i = self.order.invoices.filter(is_cancellation=False).last()
+                    if not last_i.canceled:
+                        generate_cancellation(last_i)
                 invoice = generate_invoice(
                     self.order,
                     trigger_pdf=not send_mail or not self.order.event.settings.invoice_email_attachment

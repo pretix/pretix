@@ -2619,14 +2619,34 @@ class OrderChangeManager:
     def _reissue_invoice(self):
         i = self.order.invoices.filter(is_cancellation=False).last()
         if self.reissue_invoice and self._invoice_dirty:
-            if i and not i.refered.exists():
-                self._invoices.append(generate_cancellation(i))
-            if invoice_qualified(self.order) and \
-                (i or
-                 self.event.settings.invoice_generate == 'True' or (
-                     self.open_payment is not None and self.event.settings.invoice_generate == 'paid' and
-                     self.open_payment.payment_provider.requires_invoice_immediately)):
-                self._invoices.append(generate_invoice(self.order))
+            order_now_qualified = invoice_qualified(self.order)
+            invoice_should_be_generated = (
+                self.event.settings.invoice_generate == "True" or (
+                    self.event.settings.invoice_generate == "paid" and
+                    self.open_payment is not None and
+                    self.open_payment.payment_provider.requires_invoice_immediately
+                ) or (
+                    self.event.settings.invoice_generate == "paid" and
+                    self.order.status == Order.STATUS_PAID
+                ) or (
+                    # Backwards-compatible behaviour
+                    self.event.settings.invoice_generate not in ("True", "paid") and
+                    i and
+                    not i.canceled
+                )
+            )
+
+            if order_now_qualified:
+                if invoice_should_be_generated:
+                    if i and not i.canceled:
+                        self._invoices.append(generate_cancellation(i))
+                    self._invoices.append(generate_invoice(self.order))
+                else:
+                    self.order.invoice_dirty = True
+                    self.order.save(update_fields=["invoice_dirty"])
+            else:
+                if i and not i.canceled:
+                    self._invoices.append(generate_cancellation(i))
 
     def _check_complete_cancel(self):
         current = self.order.positions.count()
