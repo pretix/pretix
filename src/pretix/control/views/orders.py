@@ -50,7 +50,7 @@ from django.core.files import File
 from django.db import transaction
 from django.db.models import (
     Count, Exists, F, IntegerField, OuterRef, Prefetch, ProtectedError, Q,
-    QuerySet, Subquery, Sum
+    QuerySet, Subquery, Sum,
 )
 from django.forms import formset_factory
 from django.http import (
