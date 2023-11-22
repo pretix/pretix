@@ -1851,7 +1851,7 @@ class OrderPayment(models.Model):
             if gen_invoice:
                 if invoices:
                     last_i = self.order.invoices.filter(is_cancellation=False).last()
-                    if not last_i.refered.exists():
+                    if not last_i.canceled:
                         generate_cancellation(last_i)
                 invoice = generate_invoice(
                     self.order,
