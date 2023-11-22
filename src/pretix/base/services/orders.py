@@ -2638,7 +2638,7 @@ class OrderChangeManager:
 
             if order_now_qualified:
                 if invoice_should_be_generated:
-                    if i and not i.refered.exists():
+                    if i and not i.canceled:
                         self._invoices.append(generate_cancellation(i))
                     self._invoices.append(generate_invoice(self.order))
                 else:
