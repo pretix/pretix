@@ -488,7 +488,7 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
     def post(self, request, *args, **kwargs):
         try:
             i = self.order.invoices.filter(is_cancellation=False).last()
-            has_active_invoice = i and not i.refered.exists()
+            has_active_invoice = i and not i.canceled
             if (not has_active_invoice or self.order.invoice_dirty) and invoice_qualified(self.order):
                 if self.request.event.settings.get('invoice_generate') == 'True' or (
                         self.request.event.settings.get('invoice_generate') == 'paid' and self.payment.payment_provider.requires_invoice_immediately):
