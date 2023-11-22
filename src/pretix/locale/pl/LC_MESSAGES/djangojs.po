@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-13 15:14+0000\n"
-"PO-Revision-Date: 2023-11-22 19:52+0000\n"
-"Last-Translator: Joanna Kochel <kochel.joanna@gmail.com>\n"
+"PO-Revision-Date: 2023-11-22 20:17+0000\n"
+"Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "pl/>\n"
 "Language: pl\n"
@@ -273,7 +273,7 @@ msgstr "Wymagane informacje"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:56
 msgid "Unknown ticket"
-msgstr "Nieznany błąd."
+msgstr "Bilet nieznany"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:57
 msgid "Ticket type not allowed here"
@@ -422,7 +422,7 @@ msgstr "Produkt"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:97
 msgid "Product variation"
-msgstr "Możliwe warianty"
+msgstr "Wariant produktu"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
 msgid "Gate"
@@ -653,6 +653,7 @@ msgstr[1] "({num} daty więcej)"
 msgstr[2] "({num} dat więcej)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:43
+#, fuzzy
 msgid ""
 "The items in your cart are no longer reserved for you. You can still "
 "complete your order as long as they’re available."
