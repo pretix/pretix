@@ -1336,13 +1336,87 @@ class StripeAffirm(StripePaymentIntentMethod):
         }
 
     def payment_form_render(self, request, total, order=None) -> str:
-        template = get_template('pretixplugins/stripe/checkout_payment_form_affirm.html')
+        template = get_template('pretixplugins/stripe/checkout_payment_form_simple_messaging_noform.html')
         ctx = {
             'request': request,
             'event': self.event,
             'total': self._decimal_to_int(total),
+            'method': self.method,
         }
         return template.render(ctx)
+
+
+class StripeKlarna(StripePaymentIntentMethod):
+    identifier = "stripe_klarna"
+    verbose_name = _("Klarna via Stripe")
+    public_name = " / ".join(
+        [str(_("Klarna")), str(_("SOFORT (instant bank transfer)"))]
+    )
+    method = "klarna"
+    redirect_action_handling = "redirect"
+
+    def payment_is_valid_session(self, request):
+        # Klarna does not have a payment_method_id, so we set it manually to None during checkout.
+        # But we still need to check for its presence here.
+        if "payment_stripe_{}_payment_method_id".format(self.method) in request.session:
+            return True
+        return False
+
+    def checkout_prepare(self, request, cart):
+        # Klarna does not have a payment_method_id, so we set it manually to None during checkout, so that we can
+        # verify later on if we are in or outside the checkout process.
+        request.session[
+            "payment_stripe_{}_payment_method_id".format(self.method)
+        ] = None
+        return True
+
+    def _payment_intent_kwargs(self, request, payment):
+        try:
+            ia = payment.order.invoice_address
+        except InvoiceAddress.DoesNotExist:
+            ia = InvoiceAddress(order=payment.order)
+
+        return {
+            "payment_method_data": {
+                "type": "klarna",
+                "billing_details": {
+                    "email": payment.order.email,
+                    "address": {
+                        "country": ia.country or guess_country(self.event),
+                    },
+                },
+            }
+        }
+
+    def payment_form_render(self, request, total, order=None) -> str:
+        template = get_template(
+            "pretixplugins/stripe/checkout_payment_form_simple_messaging_noform.html"
+        )
+        ctx = {
+            "request": request,
+            "event": self.event,
+            "total": self._decimal_to_int(total),
+            "method": self.method,
+        }
+        return template.render(ctx)
+
+    def test_mode_message(self):
+        if self.settings.connect_client_id and not self.settings.secret_key:
+            is_testmode = True
+        else:
+            is_testmode = (
+                self.settings.secret_key and "_test_" in self.settings.secret_key
+            )
+        if is_testmode:
+            return mark_safe(
+                _(
+                    "The Stripe plugin is operating in test mode. You can use one of <a {args}>many test "
+                    "cards</a> to perform a transaction. No money will actually be transferred."
+                ).format(
+                    args='href="https://docs.klarna.com/resources/test-environment/sample-customer-data/" target="_blank"'
+                )
+            )
+        return None
 
 
 class StripeGiropay(StripeMethod):

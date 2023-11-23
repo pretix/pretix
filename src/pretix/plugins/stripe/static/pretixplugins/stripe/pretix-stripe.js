@@ -7,6 +7,7 @@ var pretixstripe = {
     card: null,
     sepa: null,
     affirm: null,
+    klarna: null,
     paymentRequest: null,
     paymentRequestButton: null,
 
@@ -172,6 +173,16 @@ var pretixstripe = {
 
                         pretixstripe.affirm.mount('#stripe-affirm');
                     }
+                    if ($("#stripe-klarna").length) {
+                        pretixstripe.klarna = pretixstripe.elements.create('paymentMethodMessaging', {
+                            'amount': parseInt($("#stripe_klarna_total").val()),
+                            'currency': $("#stripe_klarna_currency").val(),
+                            'countryCode': $.trim($("body").attr("data-locale")).toUpperCase(),
+                            'paymentMethodTypes': ['klarna'],
+                        });
+
+                        pretixstripe.klarna.mount('#stripe-klarna');
+                    }
                     if ($("#stripe-payment-request-button").length && pretixstripe.paymentRequest != null) {
                         pretixstripe.paymentRequestButton = pretixstripe.elements.create('paymentRequestButton', {
                             paymentRequest: pretixstripe.paymentRequest,
@@ -280,11 +291,12 @@ $(function () {
         $("input[name=payment][value=stripe]").is(':checked')
         || $("input[name=payment][value=stripe_sepa_debit]").is(':checked')
         || $("input[name=payment][value=stripe_affirm]").is(':checked')
+        || $("input[name=payment][value=stripe_klarna]").is(':checked')
         || $(".payment-redo-form").length) {
         pretixstripe.load();
     } else {
         $("input[name=payment]").change(function () {
-            if (['stripe', 'stripe_sepa_debit', 'stripe_affirm'].indexOf($(this).val()) > -1) {
+            if (['stripe', 'stripe_sepa_debit', 'stripe_affirm', 'stripe_klarna'].indexOf($(this).val()) > -1) {
                 pretixstripe.load();
             }
         })
