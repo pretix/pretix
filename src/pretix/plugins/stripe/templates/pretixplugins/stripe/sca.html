@@ -8,6 +8,7 @@
     {% include "pretixplugins/stripe/presale_head.html" with settings=stripe_settings %}
     <script type="text/plain" id="stripe_payment_intent_client_secret">{{ payment_intent_client_secret }}</script>
     <script type="text/plain" id="stripe_payment_intent_next_action_redirect_url">{{ payment_intent_next_action_redirect_url }}</script>
+    <script type="text/plain" id="stripe_payment_intent_redirect_action_handling">{{ payment_intent_redirect_action_handling }}</script>
 {% endblock %}
 {% block content %}
     <div class="panel panel-primary">

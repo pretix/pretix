@@ -6,6 +6,7 @@ var pretixstripe = {
     elements: null,
     card: null,
     sepa: null,
+    affirm: null,
     paymentRequest: null,
     paymentRequestButton: null,
 
@@ -163,6 +164,14 @@ var pretixstripe = {
                             $('.stripe-container').closest("form").find(".checkout-button-row .btn-primary").prop("disabled", false);
                         });
                     }
+                    if ($("#stripe-affirm").length) {
+                        pretixstripe.affirm = pretixstripe.elements.create('affirmMessage', {
+                            'amount': parseInt($("#stripe_affirm_total").val()),
+                            'currency': $("#stripe_affirm_currency").val(),
+                        });
+
+                        pretixstripe.affirm.mount('#stripe-affirm');
+                    }
                     if ($("#stripe-payment-request-button").length && pretixstripe.paymentRequest != null) {
                         pretixstripe.paymentRequestButton = pretixstripe.elements.create('paymentRequestButton', {
                             paymentRequest: pretixstripe.paymentRequest,
@@ -207,24 +216,44 @@ var pretixstripe = {
             }
         });
     },
-    'handleCardActioniFrame': function (payment_intent_next_action_redirect_url) {
+    'handlePaymentRedirectAction': function (payment_intent_next_action_redirect_url) {
         waitingDialog.show(gettext("Contacting your bank …"));
-        let iframe = document.createElement('iframe');
-        iframe.src = payment_intent_next_action_redirect_url;
-        iframe.className = 'embed-responsive-item';
-        $('#scacontainer').append(iframe);
-        $('#scacontainer iframe').on("load", function () {
-            waitingDialog.hide();
-        });
+
+        let payment_intent_redirect_action_handling = $.trim($("#stripe_payment_intent_redirect_action_handling").html());
+        if (payment_intent_redirect_action_handling === 'iframe') {
+            let iframe = document.createElement('iframe');
+            iframe.src = payment_intent_next_action_redirect_url;
+            iframe.className = 'embed-responsive-item';
+            $('#scacontainer').append(iframe);
+            $('#scacontainer iframe').on("load", function () {
+                waitingDialog.hide();
+            });
+        } else if (payment_intent_redirect_action_handling === 'redirect') {
+            window.location.href = payment_intent_next_action_redirect_url;
+        }
     }
 };
 $(function () {
     if ($("#stripe_payment_intent_SCA_status").length) {
-        window.parent.postMessage('3DS-authentication-complete.' + $.trim($("#order_status").html()), '*');
-        return;
+        let payment_intent_redirect_action_handling = $.trim($("#stripe_payment_intent_redirect_action_handling").html());
+        let order_status = $.trim($("#order_status").html());
+        let order_url = $.trim($("#order_url").html())
+
+        if (payment_intent_redirect_action_handling === 'iframe') {
+            window.parent.postMessage('3DS-authentication-complete.' + order_status, '*');
+            return;
+        } else if (payment_intent_redirect_action_handling === 'redirect') {
+            waitingDialog.show(gettext("Confirming your payment …"));
+
+            if (order_status === 'p') {
+                window.location.href = order_url + '?paid=yes';
+            } else {
+                window.location.href = order_url;
+            }
+        }
     } else if ($("#stripe_payment_intent_next_action_redirect_url").length) {
         let payment_intent_next_action_redirect_url = $.trim($("#stripe_payment_intent_next_action_redirect_url").html());
-        pretixstripe.handleCardActioniFrame(payment_intent_next_action_redirect_url);
+        pretixstripe.handlePaymentRedirectAction(payment_intent_next_action_redirect_url);
     } else if ($("#stripe_payment_intent_client_secret").length) {
         let payment_intent_client_secret = $.trim($("#stripe_payment_intent_client_secret").html());
         pretixstripe.handleCardAction(payment_intent_client_secret);
@@ -247,11 +276,15 @@ $(function () {
     if (!$(".stripe-container").length)
         return;
 
-    if ($("input[name=payment][value=stripe]").is(':checked') || $("input[name=payment][value=stripe_sepa_debit]").is(':checked') || $(".payment-redo-form").length) {
+    if (
+        $("input[name=payment][value=stripe]").is(':checked')
+        || $("input[name=payment][value=stripe_sepa_debit]").is(':checked')
+        || $("input[name=payment][value=stripe_affirm]").is(':checked')
+        || $(".payment-redo-form").length) {
         pretixstripe.load();
     } else {
         $("input[name=payment]").change(function () {
-            if (['stripe', 'stripe_sepa_debit'].indexOf($(this).val()) > -1) {
+            if (['stripe', 'stripe_sepa_debit', 'stripe_affirm'].indexOf($(this).val()) > -1) {
                 pretixstripe.load();
             }
         })

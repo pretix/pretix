@@ -1,0 +1,20 @@
+{% load i18n %}
+{% load bootstrap3 %}
+
+<div class="form-horizontal stripe-container">
+    <div id="stripe-affirm">
+        <span class="fa fa-spinner fa-spin"></span>
+        <!-- a Stripe Element will be inserted here. -->
+    </div>
+
+    <p class="help-block">
+        {% blocktrans trimmed %}
+            After you submitted your order, we will redirect you to the payment service provider to complete your
+            payment.
+            You will then be redirected back here to get your tickets.
+        {% endblocktrans %}
+    </p>
+
+    <input type="hidden" name="stripe_affirm_total" value="{{ total }}" id="stripe_affirm_total"/>
+    <input type="hidden" id="stripe_affirm_currency" value="{{ event.currency }}"/>
+</div>
