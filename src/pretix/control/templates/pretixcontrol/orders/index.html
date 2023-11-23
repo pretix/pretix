@@ -299,6 +299,13 @@
                                     {% trans "Deny" %}
                                 </button>
                             </li>
+                            <li>
+                                <button type="submit" class="btn"
+                                        formaction="{% url "control:event.orders.bulk.refund_overpaid" organizer=request.organizer.slug event=request.event.slug %}">
+                                    <i class="fa fa-money fa-fw text-danger"></i>
+                                    {% trans "Refund overpaid amount" %}
+                                </button>
+                            </li>
                             {% if not request.event.settings.payment_term_expire_automatically %}
                                 <li>
                                     <button type="submit" class="btn"
