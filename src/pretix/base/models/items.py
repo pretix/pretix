@@ -374,6 +374,13 @@ class Item(LoggedModel):
         (VALIDITY_MODE_DYNAMIC, _('Dynamic validity')),
     )
 
+    UNAVAIL_MODE_HIDDEN = "hide"
+    UNAVAIL_MODE_INFO = "info"
+    UNAVAIL_MODES = (
+        (UNAVAIL_MODE_HIDDEN, _("Hide product if unavailable")),
+        (UNAVAIL_MODE_INFO, _("Show info text if unavailable")),
+    )
+
     MEDIA_POLICY_REUSE = 'reuse'
     MEDIA_POLICY_NEW = 'new'
     MEDIA_POLICY_REUSE_OR_NEW = 'reuse_or_new'
@@ -487,10 +494,20 @@ class Item(LoggedModel):
         null=True, blank=True,
         help_text=_('This product will not be sold before the given date.')
     )
+    available_from_mode = models.CharField(
+        choices=UNAVAIL_MODES,
+        default=UNAVAIL_MODE_HIDDEN,
+        max_length=16,
+    )
     available_until = models.DateTimeField(
         verbose_name=_("Available until"),
         null=True, blank=True,
         help_text=_('This product will not be sold after the given date.')
+    )
+    available_until_mode = models.CharField(
+        choices=UNAVAIL_MODES,
+        default=UNAVAIL_MODE_HIDDEN,
+        max_length=16,
     )
     hidden_if_available = models.ForeignKey(
         'Quota',

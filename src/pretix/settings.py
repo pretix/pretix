@@ -688,6 +688,7 @@ BOOTSTRAP3 = {
         'default': 'pretix.base.forms.renderers.FieldRenderer',
         'inline': 'pretix.base.forms.renderers.InlineFieldRenderer',
         'control': 'pretix.control.forms.renderers.ControlFieldRenderer',
+        'control_with_visibility': 'pretix.control.forms.renderers.ControlFieldWithVisibilityRenderer',
         'bulkedit': 'pretix.control.forms.renderers.BulkEditFieldRenderer',
         'bulkedit_inline': 'pretix.control.forms.renderers.InlineBulkEditFieldRenderer',
         'checkout': 'pretix.presale.forms.renderers.CheckoutFieldRenderer',

@@ -99,6 +99,21 @@ class ControlFieldRenderer(FieldRenderer):
             attrs = ''
         return '<div class="{klass}"{attrs}>{html}</div>'.format(klass=self.get_form_group_class(), html=html, attrs=attrs)
 
+class ControlFieldWithVisibilityRenderer(ControlFieldRenderer):
+    def __init__(self, *args, **kwargs):
+        kwargs['layout'] = 'horizontal'
+        kwargs['horizontal_field_class'] = 'col-md-7'
+        self.visibility_field = kwargs['visibility_field']
+        super().__init__(*args, **kwargs)
+
+    def render_visibility_field(self):
+        return self.visibility_field.as_widget(attrs=self.visibility_field.field.widget.attrs)
+
+    def wrap_field(self, html):
+        html = super().wrap_field(html)
+        html += '<div class="col-md-2 text-right">' + self.render_visibility_field() + '</div>'
+        return html
+
 
 class BulkEditMixin:
 

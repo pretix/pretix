@@ -65,7 +65,7 @@ from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
     ItemMultipleChoiceField, SizeValidationMixin, SplitDateTimeField,
-    SplitDateTimePickerWidget,
+    SplitDateTimePickerWidget, ButtonGroupRadioSelect,
 )
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.models import modelcopy
@@ -562,6 +562,14 @@ class ItemUpdateForm(I18nModelForm):
         )
         change_decimal_field(self.fields['default_price'], self.event.currency)
 
+        self.fields['available_from_mode'].widget = ButtonGroupRadioSelect(
+            choices=self.fields['available_from_mode'].choices,
+            option_icons={
+                Item.UNAVAIL_MODE_HIDDEN: 'eye-slash',
+                Item.UNAVAIL_MODE_INFO: 'info'
+            }
+        )
+
         if self.instance.hidden_if_available_id:
             self.fields['hidden_if_available'].queryset = self.event.quotas.all()
             self.fields['hidden_if_available'].help_text = format_html(
@@ -713,7 +721,9 @@ class ItemUpdateForm(I18nModelForm):
             'free_price_suggestion',
             'tax_rule',
             'available_from',
+            'available_from_mode',
             'available_until',
+            'available_until_mode',
             'require_voucher',
             'require_approval',
             'hide_without_voucher',
