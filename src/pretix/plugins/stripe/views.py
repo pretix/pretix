@@ -599,6 +599,7 @@ class ScaView(StripeOrderView, View):
                 ctx['payment_intent_client_secret'] = intent.client_secret
             elif intent.next_action.type == 'redirect_to_url':
                 ctx['payment_intent_next_action_redirect_url'] = intent.next_action.redirect_to_url['url']
+                ctx['payment_intent_redirect_action_handling'] = prov.redirect_action_handling
 
             r = render(request, 'pretixplugins/stripe/sca.html', ctx)
             r._csp_ignore = True
@@ -623,8 +624,16 @@ class ScaReturnView(StripeOrderView, View):
             messages.error(request, str(e))
 
         self.order.refresh_from_db()
+        ctx = {
+            'order': self.order,
+            'payment_intent_redirect_action_handling': prov.redirect_action_handling,
+            'order_url': eventreverse(self.request.event, 'presale:event.order', kwargs={
+                'order': self.order.code,
+                'secret': self.order.secret
+            }),
+        }
 
-        return render(request, 'pretixplugins/stripe/sca_return.html', {'order': self.order})
+        return render(request, 'pretixplugins/stripe/sca_return.html', ctx)
 
 
 class OrganizerSettingsFormView(DecoupleMixin, OrganizerDetailViewMixin, AdministratorPermissionRequiredMixin, FormView):

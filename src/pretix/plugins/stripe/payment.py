@@ -123,7 +123,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - Mexico Bank Transfer: ✗
 #
 # Buy now, pay later
-# - Affirm: ✗
+# - Affirm: ✓
 # - Afterpay/Clearpay: ✗
 # - Klarna: ✗
 #
@@ -419,6 +419,16 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('WeChat Pay'),
                      disabled=self.event.currency not in ['AUD', 'CAD', 'EUR', 'GBP', 'HKD', 'JPY', 'SGD', 'USD'],
                      help_text=_('Needs to be enabled in your Stripe account first.'),
+                     required=False,
+                 )),
+                ('method_affirm',
+                 forms.BooleanField(
+                     label=_('Affirm'),
+                     disabled=self.event.currency not in ['USD', 'CAD'],
+                     help_text=' '.join([
+                         _('Needs to be enabled in your Stripe account first.'),
+                         _('Only available for payments between $50 and $30,000.')
+                     ]),
                      required=False,
                  )),
             ] + extra_fields + list(super().settings_form_fields.items()) + moto_settings
@@ -856,6 +866,7 @@ class StripeMethod(BasePaymentProvider):
 class StripePaymentIntentMethod(StripeMethod):
     identifier = ''
     method = ''
+    redirect_action_handling = 'iframe'  # or redirect
 
     def payment_is_valid_session(self, request):
         return request.session.get('payment_stripe_{}_payment_method_id'.format(self.method), '') != ''
@@ -886,6 +897,9 @@ class StripePaymentIntentMethod(StripeMethod):
 
         try:
             if self.payment_is_valid_session(request):
+                payment_method_id = request.session.get('payment_stripe_{}_payment_method_id'.format(self.method), None)
+                idempotency_key_seed = payment_method_id if payment_method_id is not None else payment.full_id
+
                 params = {}
                 params.update(self._connect_kwargs(payment))
                 params.update(self.api_kwargs)
@@ -903,7 +917,7 @@ class StripePaymentIntentMethod(StripeMethod):
                 intent = stripe.PaymentIntent.create(
                     amount=self._get_amount(payment),
                     currency=self.event.currency.lower(),
-                    payment_method=request.session['payment_stripe_{}_payment_method_id'.format(self.method)],
+                    payment_method=payment_method_id,
                     payment_method_types=[self.method],
                     confirmation_method='manual',
                     confirm=True,
@@ -918,7 +932,7 @@ class StripePaymentIntentMethod(StripeMethod):
                         'code': payment.order.code
                     },
                     # TODO: Is this sufficient?
-                    idempotency_key=str(self.event.id) + payment.order.code + request.session['payment_stripe_{}_payment_method_id'.format(self.method)],
+                    idempotency_key=str(self.event.id) + payment.order.code + idempotency_key_seed,
                     return_url=build_absolute_uri(self.event, 'plugins:stripe:sca.return', kwargs={
                         'order': payment.order.code,
                         'payment': payment.pk,
@@ -1276,6 +1290,49 @@ class StripeSEPADirectDebit(StripePaymentIntentMethod):
             for field in fields:
                 if 'payment_stripe_sepa_debit_{}'.format(field) in request.session:
                     del request.session['payment_stripe_sepa_debit_{}'.format(field)]
+
+
+class StripeAffirm(StripePaymentIntentMethod):
+    identifier = 'stripe_affirm'
+    verbose_name = _('Affirm via Stripe')
+    public_name = _('Affirm')
+    method = 'affirm'
+    redirect_action_handling = 'redirect'
+
+    def payment_is_valid_session(self, request):
+        # Affirm does not have a payment_method_id, so we set it manually to None during checkout.
+        # But we still need to check for its presence here.
+        if 'payment_stripe_{}_payment_method_id'.format(self.method) in request.session:
+            return True
+        return False
+
+    def checkout_prepare(self, request, cart):
+        # Affirm does not have a payment_method_id, so we set it manually to None during checkout, so that we can
+        # verify later on if we are in or outside the checkout process.
+        request.session['payment_stripe_{}_payment_method_id'.format(self.method)] = None
+        return True
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        return Decimal(50.00) <= total <= Decimal(30000.00) and super().is_allowed(request, total)
+
+    def order_change_allowed(self, order: Order, request: HttpRequest=None) -> bool:
+        return Decimal(50.00) <= order.pending_sum <= Decimal(30000.00) and super().order_change_allowed(order, request)
+
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            'payment_method_data': {
+                'type': 'affirm',
+            }
+        }
+
+    def payment_form_render(self, request, total, order=None) -> str:
+        template = get_template('pretixplugins/stripe/checkout_payment_form_affirm.html')
+        ctx = {
+            'request': request,
+            'event': self.event,
+            'total': self._decimal_to_int(total),
+        }
+        return template.render(ctx)
 
 
 class StripeGiropay(StripeMethod):
