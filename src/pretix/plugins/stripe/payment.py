@@ -436,7 +436,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('Affirm'),
                      disabled=self.event.currency not in ['USD', 'CAD'],
                      help_text=' '.join([
-                         str(_('Needs to be enabled in your Stripe account first.'),)
+                         str(_('Needs to be enabled in your Stripe account first.')),
                          str(_('Only available for payments between $50 and $30,000.'))
                      ]),
                      required=False,
