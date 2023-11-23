@@ -384,7 +384,7 @@ def register_default_webhook_events(sender, **kwargs):
 def notify_webhooks(logentry_ids: list):
     if not isinstance(logentry_ids, list):
         logentry_ids = [logentry_ids]
-    qs = LogEntry.all.select_related('event', 'event__organizer').filter(id__in=logentry_ids)
+    qs = LogEntry.all.select_related('event', 'event__organizer', 'organizer_link').filter(id__in=logentry_ids)
     _org, _at, webhooks = None, None, None
     for logentry in qs:
         if not logentry.organizer:

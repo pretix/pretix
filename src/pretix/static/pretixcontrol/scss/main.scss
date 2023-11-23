@@ -539,6 +539,9 @@ td > p:last-child,
 .panel-body > .table-responsive:last-child > .table:last-child {
     margin-bottom: 0;
 }
+.alert > p + p, .alert > p + ul, .alert > ul + p {
+    margin-top: 5px;
+}
 
 .fa.disabled {
     color: $text-muted;

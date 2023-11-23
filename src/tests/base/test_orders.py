@@ -1167,6 +1167,7 @@ class OrderChangeManagerTests(TestCase):
         with scope(organizer=self.o):
             self.event = Event.objects.create(organizer=self.o, name='Dummy', slug='dummy', date_from=now(),
                                               plugins='pretix.plugins.banktransfer')
+            self.event.settings.invoice_generate = "True"
             self.order = Order.objects.create(
                 code='FOO', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING, locale='en',
@@ -1259,6 +1260,8 @@ class OrderChangeManagerTests(TestCase):
         self.event.has_subevents = True
         self.event.save()
         se1 = self.event.subevents.create(name="Foo", date_from=now())
+        self.order.positions.update(subevent=se1)
+        self.order.transactions.update(subevent=se1)
         se2 = self.event.subevents.create(name="Bar", date_from=now())
         self.op1.subevent = se1
         self.op1.save()
@@ -1281,6 +1284,8 @@ class OrderChangeManagerTests(TestCase):
         self.event.save()
         s = self.op1.secret
         se1 = self.event.subevents.create(name="Foo", date_from=now())
+        self.order.positions.update(subevent=se1)
+        self.order.transactions.update(subevent=se1)
         se2 = self.event.subevents.create(name="Bar", date_from=now())
         SubEventItem.objects.create(subevent=se2, item=self.ticket, price=12)
         self.op1.subevent = se1
@@ -1305,6 +1310,8 @@ class OrderChangeManagerTests(TestCase):
         self.event.save()
         se1 = self.event.subevents.create(name="Foo", date_from=now())
         se2 = self.event.subevents.create(name="Bar", date_from=now())
+        self.order.positions.update(subevent=se1)
+        self.order.transactions.update(subevent=se1)
         SubEventItem.objects.create(subevent=se2, item=self.ticket, price=12)
         s = self.op1.secret
         self.op1.subevent = se1
@@ -1327,6 +1334,8 @@ class OrderChangeManagerTests(TestCase):
         self.event.has_subevents = True
         self.event.save()
         se1 = self.event.subevents.create(name="Foo", date_from=now())
+        self.order.positions.update(subevent=se1)
+        self.order.transactions.update(subevent=se1)
         se2 = self.event.subevents.create(name="Bar", date_from=now())
         SubEventItem.objects.create(subevent=se2, item=self.ticket, price=12)
         self.op1.subevent = se1
@@ -1948,6 +1957,7 @@ class OrderChangeManagerTests(TestCase):
         self.event.has_subevents = True
         self.event.save()
         se1 = self.event.subevents.create(name="Foo", date_from=now())
+        self.order.positions.update(subevent=se1)
         SubEventItem.objects.create(subevent=se1, item=self.ticket, price=12)
         self.quota.subevent = se1
         self.quota.save()
@@ -1982,6 +1992,53 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.invoices.count() == 3
         new_inv = self.order.invoices.get(is_cancellation=False, refered__isnull=True)
         assert new_inv.lines.first().tax_rate == Decimal('18.00')
+
+    @classscope(attr='o')
+    def test_reissue_invoice_paid_only_after_payment(self):
+        self.event.settings.invoice_generate = "paid"
+        generate_invoice(self.order)
+        assert self.order.invoices.count() == 1
+        self.ocm.add_position(self.ticket, None, Decimal('2.00'))
+        self.ocm.commit()
+        assert self.order.invoices.count() == 1
+        self.order.payments.create(
+            provider='manual', amount=self.order.total
+        ).confirm()
+        assert self.order.invoices.count() == 3
+
+    @classscope(attr='o')
+    def test_reissue_invoice_paid_stays_paid(self):
+        self.event.settings.invoice_generate = "paid"
+        self.order.payments.create(
+            provider='manual', amount=self.order.total
+        ).confirm()
+        self.order.refresh_from_db()
+        assert self.order.invoices.count() == 1
+        self.ocm.change_price(self.op1, Decimal('2.00'))
+        self.ocm.commit()
+        assert self.order.invoices.count() == 3
+
+    @classscope(attr='o')
+    def test_reissue_invoice_paid_only_directly_if_payment_requires_immediate(self):
+        self.event.settings.invoice_generate = "paid"
+        self.event.settings.payment_banktransfer_invoice_immediately = True
+        self.order.payments.create(
+            provider='banktransfer', amount=self.order.total
+        )
+        generate_invoice(self.order)
+        assert self.order.invoices.count() == 1
+        self.ocm.add_position(self.ticket, None, Decimal('2.00'))
+        self.ocm.commit()
+        assert self.order.invoices.count() == 3
+
+    @classscope(attr='o')
+    def test_reissue_invoice_if_disabled_but_previous_invoice_exists(self):
+        self.event.settings.invoice_generate = "False"
+        generate_invoice(self.order)
+        assert self.order.invoices.count() == 1
+        self.ocm.add_position(self.ticket, None, Decimal('2.00'))
+        self.ocm.commit()
+        assert self.order.invoices.count() == 3
 
     @classscope(attr='o')
     def test_no_new_invoice_for_free_order(self):
@@ -2122,6 +2179,7 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_split_simple(self):
+        self.event.settings.invoice_generate = "False"
         old_secret = self.op2.secret
         self.ocm.split(self.op2)
         self.ocm.commit()
@@ -2142,6 +2200,7 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_split_include_addons(self):
+        self.event.settings.invoice_generate = "False"
         self.shirt.category = self.event.categories.create(name='Add-ons', is_addon=True)
         self.ticket.addons.create(addon_category=self.shirt.category)
         self.ocm.add_position(self.shirt, None, Decimal('13.00'), self.op2)
@@ -2555,6 +2614,7 @@ class OrderChangeManagerTests(TestCase):
 
     @classscope(attr='o')
     def test_split_to_free_invoice(self):
+        self.event.settings.invoice_generate = "False"
         self.event.settings.invoice_include_free = False
         self.ocm.change_price(self.op2, Decimal('0.00'))
         self.ocm.commit()
@@ -2771,6 +2831,8 @@ class OrderChangeManagerTests(TestCase):
         self.event.save()
         se1 = self.event.subevents.create(name="Foo", date_from=now())
         se2 = self.event.subevents.create(name="Bar", date_from=now())
+        self.order.positions.update(subevent=se1)
+        self.order.transactions.update(subevent=se1)
         self.op1.subevent = se1
         self.op1.seat = self.seat_a1
         self.op1.save()

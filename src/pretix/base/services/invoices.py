@@ -395,6 +395,10 @@ def generate_invoice(order: Order, trigger_pdf=True):
     if order.status == Order.STATUS_CANCELED:
         generate_cancellation(invoice, trigger_pdf)
 
+    if order.invoice_dirty:
+        order.invoice_dirty = False
+        order.save(update_fields=['invoice_dirty'])
+
     return invoice
 
 

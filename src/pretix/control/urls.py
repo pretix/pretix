@@ -423,6 +423,7 @@ urlpatterns = [
         re_path(r'^orders/bulk/approve$', orders.OrderApproveBulkActionView.as_view(), name='event.orders.bulk.approve'),
         re_path(r'^orders/bulk/deny$', orders.OrderDenyBulkActionView.as_view(), name='event.orders.bulk.deny'),
         re_path(r'^orders/bulk/expire$', orders.OrderExpireBulkActionView.as_view(), name='event.orders.bulk.expire'),
+        re_path(r'^orders/bulk/refund_overpaid$', orders.OrderOverpaidRefundBulkActionView.as_view(), name='event.orders.bulk.refund_overpaid'),
         re_path(r'^orders/bulk/delete$', orders.OrderDeleteBulkActionView.as_view(), name='event.orders.bulk.delete'),
         re_path(r'^orders/search$', orders.OrderSearch.as_view(), name='event.orders.search'),
         re_path(r'^dangerzone/$', event.DangerZone.as_view(), name='event.dangerzone'),

@@ -72,7 +72,9 @@ from pretix.api.models import ApiCall, WebHook
 from pretix.api.webhooks import manually_retry_all_calls
 from pretix.base.auth import get_auth_backends
 from pretix.base.channels import get_all_sales_channels
-from pretix.base.exporter import OrganizerLevelExportMixin
+from pretix.base.exporter import (
+    MultiSheetListExporter, OrganizerLevelExportMixin,
+)
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Customer, Device, Gate, GiftCard, Invoice, LogEntry,
@@ -1665,6 +1667,7 @@ class ExportMixin:
                 prefix=ex.identifier,
                 initial=initial
             )
+            ex.multisheet_warning = isinstance(ex, MultiSheetListExporter) and len(ex.sheets) > 1
             ex.form.fields = ex.export_form_fields
             if not isinstance(ex, OrganizerLevelExportMixin):
                 ex.form.fields.update([

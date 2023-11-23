@@ -26,6 +26,17 @@
         <fieldset>
             <legend>{% trans "Export options" %}</legend>
             {% bootstrap_form exporter.form layout='control' %}
+
+            {% if "_format" in exporter.form.fields and exporter.multisheet_warning %}
+                <div data-display-dependency="#id_{{ exporter.form.prefix }}-_format" data-display-dependency-value="xlsx">
+                    <div class="alert alert-info">
+                        {% blocktrans trimmed %}
+                            Your generated Excel file will have <strong>multiple sheets</strong>. Some data you are
+                            looking for might not be on the first sheet.
+                        {% endblocktrans %}
+                    </div>
+                </div>
+            {% endif %}
         </fieldset>
         {% if schedule_form %}
             {% include "pretixcontrol/orders/fragment_export_schedule_form.html" %}

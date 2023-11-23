@@ -47,6 +47,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.orders import OrderPayment
 from pretix.base.reldate import RelativeDate, RelativeDateWrapper
+from pretix.base.services.invoices import generate_invoice
 
 
 class BaseOrdersTest(TestCase):
@@ -560,6 +561,196 @@ class OrderChangeVariationTest(BaseOrdersTest):
         self.order.refresh_from_db()
         assert self.order.status == Order.STATUS_PENDING
         assert self.order.pending_sum == Decimal('2.00')
+
+    def _change_to(self, pos, item, var):
+        response = self.client.get(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret)
+        )
+        assert response.status_code == 200
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), {
+                f'op-{pos.pk}-itemvar': f'{item.pk}-{var.pk}',
+                f'op-{self.ticket_pos.pk}-itemvar': f'{self.ticket.pk}',
+            }, follow=True)
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        form_data = extract_form_fields(doc.select('.main-box form')[0])
+        form_data['confirm'] = 'true'
+        response = self.client.post(
+            '/%s/%s/order/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret), form_data, follow=True
+        )
+        self.assertRedirects(response,
+                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                      self.order.secret),
+                             target_status_code=200)
+
+    def test_change_issue_invoice_immediately(self):
+        self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_user_price = 'any'
+        self.event.settings.invoice_generate = 'True'
+
+        with scopes_disabled():
+            shirt_pos = OrderPosition.objects.create(
+                order=self.order,
+                item=self.shirt,
+                variation=self.shirt_blue,
+                price=Decimal("12"),
+            )
+            generate_invoice(self.order)
+        self._change_to(shirt_pos, self.shirt, self.shirt_red)
+        shirt_pos.refresh_from_db()
+        assert shirt_pos.variation == self.shirt_red
+        assert shirt_pos.price == Decimal('14.00')
+        self.order.refresh_from_db()
+        assert not self.order.invoice_dirty
+        assert self.order.status == Order.STATUS_PENDING
+        with scopes_disabled():
+            assert self.order.invoices.count() == 3
+        self.order.refresh_from_db()
+        assert not self.order.invoice_dirty
+
+    def test_change_issue_invoice_after_payment(self):
+        self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_user_price = 'any'
+        self.event.settings.invoice_generate = 'paid'
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.set('payment_banktransfer_invoice_immediately', False)
+
+        with scopes_disabled():
+            shirt_pos = OrderPosition.objects.create(
+                order=self.order,
+                item=self.shirt,
+                variation=self.shirt_blue,
+                price=Decimal("12"),
+            )
+            generate_invoice(self.order)
+        self._change_to(shirt_pos, self.shirt, self.shirt_red)
+        shirt_pos.refresh_from_db()
+        assert shirt_pos.variation == self.shirt_red
+        assert shirt_pos.price == Decimal('14.00')
+        self.order.refresh_from_db()
+        assert self.order.invoice_dirty
+        assert self.order.status == Order.STATUS_PENDING
+        with scopes_disabled():
+            assert self.order.invoices.count() == 1
+        self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'banktransfer'
+            }
+        )
+        with scopes_disabled():
+            self.client.post(
+                '/%s/%s/order/%s/%s/pay/%s/confirm' % (self.orga.slug, self.event.slug, self.order.code,
+                                                       self.order.secret, self.order.payments.last().pk),
+                {}
+            )
+            assert self.order.invoices.count() == 1
+            p_new = self.order.payments.last()
+            p_new.confirm()
+            assert self.order.invoices.count() == 3
+            self.order.refresh_from_db()
+            assert not self.order.invoice_dirty
+
+    def test_change_issue_invoice_before_payment(self):
+        self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_user_price = 'any'
+        self.event.settings.invoice_generate = 'paid'
+        self.event.settings.set('payment_banktransfer__enabled', True)
+        self.event.settings.set('payment_banktransfer_invoice_immediately', True)
+
+        with scopes_disabled():
+            shirt_pos = OrderPosition.objects.create(
+                order=self.order,
+                item=self.shirt,
+                variation=self.shirt_blue,
+                price=Decimal("12"),
+            )
+            generate_invoice(self.order)
+        self._change_to(shirt_pos, self.shirt, self.shirt_red)
+        shirt_pos.refresh_from_db()
+        assert shirt_pos.variation == self.shirt_red
+        assert shirt_pos.price == Decimal('14.00')
+        self.order.refresh_from_db()
+        assert self.order.invoice_dirty
+        assert self.order.status == Order.STATUS_PENDING
+        with scopes_disabled():
+            assert self.order.invoices.count() == 1
+        self.client.post(
+            '/%s/%s/order/%s/%s/pay/change' % (self.orga.slug, self.event.slug, self.order.code, self.order.secret),
+            {
+                'payment': 'banktransfer'
+            }
+        )
+        with scopes_disabled():
+            self.client.post(
+                '/%s/%s/order/%s/%s/pay/%s/confirm' % (self.orga.slug, self.event.slug, self.order.code,
+                                                       self.order.secret, self.order.payments.last().pk),
+                {}
+            )
+            assert self.order.invoices.count() == 3
+            p_new = self.order.payments.last()
+            p_new.confirm()
+            assert self.order.invoices.count() == 3
+            self.order.refresh_from_db()
+            assert not self.order.invoice_dirty
+
+    def test_change_issue_invoice_before_refund(self):
+        self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_user_price = 'any'
+        self.event.settings.invoice_generate = 'paid'
+
+        with scopes_disabled():
+            shirt_pos = OrderPosition.objects.create(
+                order=self.order,
+                item=self.shirt,
+                variation=self.shirt_red,
+                price=Decimal("14"),
+            )
+            self.order.total = Decimal("37.00")
+            self.order.save()
+            p = self.order.payments.create(state="created", provider="banktransfer", amount=Decimal("37.00"))
+            p.confirm()
+            self.order.refresh_from_db()
+            assert self.order.status == Order.STATUS_PAID
+            assert self.order.invoices.count() == 1
+        self._change_to(shirt_pos, self.shirt, self.shirt_blue)
+        shirt_pos.refresh_from_db()
+        assert shirt_pos.variation == self.shirt_blue
+        assert shirt_pos.price == Decimal('12.00')
+        self.order.refresh_from_db()
+        assert not self.order.invoice_dirty
+        assert self.order.status == Order.STATUS_PAID
+        with scopes_disabled():
+            assert self.order.invoices.count() == 3
+
+    def test_change_issue_invoice_when_now_paid(self):
+        self.event.settings.change_allow_user_variation = True
+        self.event.settings.change_allow_user_price = 'any'
+        self.event.settings.invoice_generate = 'paid'
+
+        with scopes_disabled():
+            shirt_pos = OrderPosition.objects.create(
+                order=self.order,
+                item=self.shirt,
+                variation=self.shirt_red,
+                price=Decimal("14"),
+            )
+            self.order.total = Decimal("37.00")
+            self.order.save()
+            p = self.order.payments.create(state="created", provider="banktransfer", amount=Decimal("35.00"))
+            p.confirm()
+            self.order.refresh_from_db()
+            assert self.order.status == Order.STATUS_PENDING
+            generate_invoice(self.order)
+        self._change_to(shirt_pos, self.shirt, self.shirt_blue)
+        shirt_pos.refresh_from_db()
+        assert shirt_pos.variation == self.shirt_blue
+        assert shirt_pos.price == Decimal('12.00')
+        self.order.refresh_from_db()
+        assert not self.order.invoice_dirty
+        assert self.order.status == Order.STATUS_PAID
+        with scopes_disabled():
+            assert self.order.invoices.count() == 3
 
 
 class OrderChangeAddonsTest(BaseOrdersTest):

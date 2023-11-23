@@ -11,7 +11,7 @@
     {% else %}
         <h1>{% trans "Date" context "subevent" %}</h1>
     {% endif %}
-    <form action="" method="post" class="form-horizontal" enctype="multipart/form-datai">
+    <form action="" method="post" class="form-horizontal" enctype="multipart/form-data">
         {% csrf_token %}
         {% bootstrap_form_errors form %}
         {% for f in itemvar_forms %}
