@@ -379,7 +379,7 @@ $(function () {
         });
     }
     if (sessionStorage) {
-        $("[data-save-scrollpos]").click(function () {
+        $("[data-save-scrollpos]").on("click submit", function () {
             sessionStorage.setItem('scrollpos', window.scrollY);
         });
     }

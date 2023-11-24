@@ -5,7 +5,7 @@
 {% load getitem %}
 
 {% if filter_form.fields %}
-    <form class="event-list-filter-form" method="get">
+    <form class="event-list-filter-form" method="get" data-save-scrollpos>
         <input type="hidden" name="filtered" value="1">
         {% for f, v in request.GET.items %}
             {% if f not in filter_form.fields %}

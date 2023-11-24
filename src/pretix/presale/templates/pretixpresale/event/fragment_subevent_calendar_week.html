@@ -52,12 +52,12 @@
 {% include "pretixpresale/fragment_week_calendar.html" with show_avail=event.settings.event_list_availability days=subevent_list.days show_names=subevent_list.show_names %}
 <div class="visible-xs text-center" aria-hidden="true">
     <a href="?{% url_replace request "date" subevent_list.before|date:"o-\WW" %}"
-            class="btn btn-default">
+       class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with week=subevent_list.before|date:subevent_list.week_format %}Show previous week, {{ week }}{% endblocktrans %}">
         <span class="fa fa-arrow-left" aria-hidden="true"></span>
         {{ subevent_list.before|date:subevent_list.week_format }}
     </a>
     <a href="?{% url_replace request "date" subevent_list.after|date:"o-\WW" %}"
-            class="btn btn-default">
+       class="btn btn-default" data-save-scrollpos aria-label="{% blocktrans with week=subevent_list.after|date:subevent_list.week_format %}Show next week, {{ week }}{% endblocktrans %}">
         {{ subevent_list.after|date:subevent_list.week_format }}
         <span class="fa fa-arrow-right" aria-hidden="true"></span>
     </a>
