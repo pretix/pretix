@@ -243,7 +243,7 @@ def test_require_approval(position, clist):
     clist.save()
     with pytest.raises(CheckInError) as excinfo:
         perform_checkin(position, clist, {}, ignore_unpaid=True)
-    assert excinfo.value.code == 'unpaid'
+    assert excinfo.value.code == 'unapproved'
     perform_checkin(position, clist, {}, ignore_unpaid=True, force=True)
     assert position.checkins.count() == 1
 

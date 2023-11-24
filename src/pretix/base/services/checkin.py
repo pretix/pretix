@@ -874,6 +874,15 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                 'blocked'
             )
 
+    if op.order.status == Order.STATUS_PENDING and op.order.require_approval:
+        if force:
+            force_used = True
+        else:
+            raise CheckInError(
+                _('This order is not yet approved.'),
+                'unapproved',
+            )
+
     if type != Checkin.TYPE_EXIT and op.valid_from and op.valid_from > dt:
         if force:
             force_used = True
@@ -941,14 +950,6 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
                     'product'
                 )
 
-        if op.order.status != Order.STATUS_PAID and op.order.require_approval:
-            if force:
-                force_used = True
-            else:
-                raise CheckInError(
-                    _('This order is not yet approved.'),
-                    'unpaid'
-                )
         elif op.order.status != Order.STATUS_PAID and not op.order.valid_if_pending and not (
             ignore_unpaid and clist.include_pending and op.order.status == Order.STATUS_PENDING
         ):

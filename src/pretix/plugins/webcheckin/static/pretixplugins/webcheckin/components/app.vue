@@ -278,8 +278,10 @@ export default {
         return this.$root.strings['result.ok']
       } else if (this.checkResult.status === 'incomplete') {
         return this.$root.strings['result.questions']
-      } else {
+      } else if (this.$root.strings['result.' + this.checkResult.reason]) {
         return this.$root.strings['result.' + this.checkResult.reason]
+      } else {
+        return this.checkResult.reason
       }
     },
     checkResultColor () {

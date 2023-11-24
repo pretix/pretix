@@ -217,6 +217,7 @@ Checking a ticket in
    * ``rules`` - Check-in prevented by a user-defined rule.
    * ``ambiguous`` - Multiple tickets match scan, rejected.
    * ``revoked`` - Ticket code has been revoked.
+   * ``unapproved`` - Order has not yet been approved.
    * ``error`` - Internal error.
 
    In case of reason ``rules`` and ``invalid_time``, there might be an additional response field ``reason_explanation``
