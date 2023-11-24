@@ -570,6 +570,14 @@ class ItemUpdateForm(I18nModelForm):
             }
         )
 
+        self.fields['available_until_mode'].widget = ButtonGroupRadioSelect(
+            choices=self.fields['available_until_mode'].choices,
+            option_icons={
+                Item.UNAVAIL_MODE_HIDDEN: 'eye-slash',
+                Item.UNAVAIL_MODE_INFO: 'info'
+            }
+        )
+
         if self.instance.hidden_if_available_id:
             self.fields['hidden_if_available'].queryset = self.event.quotas.all()
             self.fields['hidden_if_available'].help_text = format_html(
@@ -636,6 +644,18 @@ class ItemUpdateForm(I18nModelForm):
             self.fields['require_membership_types'].queryset = qs
             self.fields['grant_membership_type'].queryset = qs
             self.fields['grant_membership_type'].empty_label = _('No membership granted')
+
+            self.fields['require_membership_hidden'].widget = ButtonGroupRadioSelect(
+                choices=(
+                    (True, _("Hide product if unavailable")),
+                    (False, _("Show info text if unavailable")),
+                ),
+                option_icons={
+                    True: 'eye-slash',
+                    False: 'info'
+                }
+            )
+
         else:
             del self.fields['require_membership']
             del self.fields['require_membership_types']

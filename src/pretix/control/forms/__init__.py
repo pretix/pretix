@@ -426,6 +426,6 @@ class ButtonGroupRadioSelect(forms.RadioSelect):
         super().__init__(*args, **kwargs)
 
     def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        attrs['icon'] = self.option_icons[value]
         opt = super().create_option(name, value, label, selected, index, subindex, attrs)
-        opt['label'] = mark_safe('<i class="fa fa-' + self.option_icons[value] + '"></i>')
         return opt
