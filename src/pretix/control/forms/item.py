@@ -659,15 +659,15 @@ class ItemUpdateForm(I18nModelForm):
 
             self.fields['require_membership_hidden'].widget = ButtonGroupRadioSelect(
                 choices=(
-                    (True, _("Hide product if unavailable")),
-                    (False, _("Show info text if unavailable")),
+                    (True, self.fields['require_membership_hidden'].help_text),
+                    (False, _("Display this product regardless of membership status. The customer needs to log in during the order process.")),
                 ),
                 option_icons={
                     True: 'eye-slash',
-                    False: 'info'
-                }
+                    False: 'eye'
+                },
+                attrs={'data-checkbox-dependency': '#id_require_membership'}
             )
-
         else:
             del self.fields['require_membership']
             del self.fields['require_membership_types']

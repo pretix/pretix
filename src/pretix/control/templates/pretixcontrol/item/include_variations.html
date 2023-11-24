@@ -101,10 +101,9 @@
                     {% bootstrap_field form.hide_without_voucher layout="control" %}
                     {% bootstrap_field form.require_approval layout="control" %}
                     {% if form.require_membership %}
-                        {% bootstrap_field form.require_membership layout="control" %}
+                        {% bootstrap_field form.require_membership visibility_field=form.require_membership_hidden layout="control_with_visibility" %}
                         <div data-display-dependency="#{{ form.require_membership.id_for_label }}">
                             {% bootstrap_field form.require_membership_types layout="control" %}
-                            {% bootstrap_field form.require_membership_hidden layout="control" %}
                         </div>
                     {% endif %}
                     {% bootstrap_field form.checkin_attention layout="control" %}
