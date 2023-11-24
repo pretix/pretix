@@ -421,7 +421,6 @@ class ButtonGroupRadioSelect(forms.RadioSelect):
     option_template_name = 'pretixcontrol/button_group_radio_option.html'
 
     def __init__(self, *args, **kwargs):
-        kwargs['attrs'] = {'class': 'btn-group btn-group-toggle'}
         self.option_icons = kwargs.pop('option_icons')
         super().__init__(*args, **kwargs)
 

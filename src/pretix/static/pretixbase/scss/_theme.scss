@@ -100,6 +100,16 @@ input[type=number]::-webkit-outer-spin-button {
   outline: 0;
 }
 
+.btn-primary-if-active {
+  @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border);
+  box-shadow: 0px 0px 0px 1px #cccccc inset;
+  box-sizing: border-box;
+
+  &.active {
+    @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+  }
+}
+
 .btn-invisible {
   background: transparent;
   border: transparent;
