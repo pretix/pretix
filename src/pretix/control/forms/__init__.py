@@ -416,6 +416,7 @@ class ItemMultipleChoiceField(SafeModelMultipleChoiceField):
     def label_from_instance(self, obj):
         return str(obj) if obj.active else mark_safe(f'<strike class="text-muted">{escape(obj)}</strike>')
 
+
 class ButtonGroupRadioSelect(forms.RadioSelect):
     template_name = 'pretixcontrol/button_group_radio.html'
     option_template_name = 'pretixcontrol/button_group_radio_option.html'

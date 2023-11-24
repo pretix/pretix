@@ -99,6 +99,7 @@ class ControlFieldRenderer(FieldRenderer):
             attrs = ''
         return '<div class="{klass}"{attrs}>{html}</div>'.format(klass=self.get_form_group_class(), html=html, attrs=attrs)
 
+
 class ControlFieldWithVisibilityRenderer(ControlFieldRenderer):
     def __init__(self, *args, **kwargs):
         kwargs['layout'] = 'horizontal'
