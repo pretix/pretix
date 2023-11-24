@@ -656,18 +656,6 @@ class ItemUpdateForm(I18nModelForm):
             self.fields['require_membership_types'].queryset = qs
             self.fields['grant_membership_type'].queryset = qs
             self.fields['grant_membership_type'].empty_label = _('No membership granted')
-
-            self.fields['require_membership_hidden'].widget = ButtonGroupRadioSelect(
-                choices=(
-                    (True, self.fields['require_membership_hidden'].help_text),
-                    (False, _("Display this product regardless of membership status. The customer needs to log in during the order process.")),
-                ),
-                option_icons={
-                    True: 'eye-slash',
-                    False: 'eye'
-                },
-                attrs={'data-checkbox-dependency': '#id_require_membership'}
-            )
         else:
             del self.fields['require_membership']
             del self.fields['require_membership_types']
@@ -889,16 +877,6 @@ class ItemVariationForm(I18nModelForm):
         self.fields['description'].widget.attrs['rows'] = 3
         if qs:
             self.fields['require_membership_types'].queryset = qs
-            self.fields['require_membership_hidden'].widget = ButtonGroupRadioSelect(
-                choices=(
-                    (True, self.fields['require_membership_hidden'].help_text),
-                    (False, _("Display this product regardless of membership status. The customer needs to log in during the order process.")),
-                ),
-                option_icons={
-                    True: 'eye-slash',
-                    False: 'eye',
-                },
-            )
         else:
             del self.fields['require_membership']
             del self.fields['require_membership_types']

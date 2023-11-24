@@ -167,9 +167,10 @@
                         {% bootstrap_field form.require_voucher visibility_field=form.hide_without_voucher layout="control_with_visibility" %}
                         {% bootstrap_field form.require_bundling layout="control" horizontal_field_class="col-md-7" %}
                         {% if form.require_membership %}
-                            {% bootstrap_field form.require_membership visibility_field=form.require_membership_hidden layout="control_with_visibility" %}
+                            {% bootstrap_field form.require_membership layout="control" %}
                             <div data-display-dependency="#{{ form.require_membership.id_for_label }}">
                                 {% bootstrap_field form.require_membership_types layout="control" horizontal_field_class="col-md-7" %}
+                                {% bootstrap_field form.require_membership_hidden layout="control" horizontal_field_class="col-md-7" %}
                             </div>
                         {% endif %}
                         {% bootstrap_field form.allow_cancel layout="control" horizontal_field_class="col-md-7" %}
