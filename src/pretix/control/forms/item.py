@@ -578,6 +578,18 @@ class ItemUpdateForm(I18nModelForm):
             }
         )
 
+        self.fields['hide_without_voucher'].widget = ButtonGroupRadioSelect(
+            choices=(
+                (True, _("Hide product if unavailable")),
+                (False, _("Show info text if unavailable")),
+            ),
+            option_icons={
+                True: 'eye-slash',
+                False: 'info'
+            },
+            attrs={'data-checkbox-dependency': '#id_require_voucher'}
+        )
+
         if self.instance.hidden_if_available_id:
             self.fields['hidden_if_available'].queryset = self.event.quotas.all()
             self.fields['hidden_if_available'].help_text = format_html(
@@ -683,6 +695,9 @@ class ItemUpdateForm(I18nModelForm):
                         "Gift card products should not be admission products at the same time."
                     )
                 )
+
+        if not d.get('require_voucher'):
+            d['hide_without_voucher'] = False
 
         if d.get('require_membership') and not d.get('require_membership_types'):
             self.add_error(
@@ -874,6 +889,16 @@ class ItemVariationForm(I18nModelForm):
         self.fields['description'].widget.attrs['rows'] = 3
         if qs:
             self.fields['require_membership_types'].queryset = qs
+            self.fields['require_membership_hidden'].widget = ButtonGroupRadioSelect(
+                choices=(
+                    (True, self.fields['require_membership_hidden'].help_text),
+                    (False, _("Display this product regardless of membership status. The customer needs to log in during the order process.")),
+                ),
+                option_icons={
+                    True: 'eye-slash',
+                    False: 'eye',
+                },
+            )
         else:
             del self.fields['require_membership']
             del self.fields['require_membership_types']
