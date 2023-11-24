@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("pretixbase", "0250_eventmetaproperty_filter_public"),
+        ("pretixbase", "0252_logentry_organizer"),
     ]
 
     operations = [
