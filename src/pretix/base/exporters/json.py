@@ -111,7 +111,7 @@ class JSONExporter(BaseExporter):
                                 'description': str(variation.description),
                                 'position': variation.position,
                                 'checkin_attention': variation.checkin_attention,
-                                'checkin_Text': variation.checkin_text,
+                                'checkin_text': variation.checkin_text,
                                 'require_approval': variation.require_approval,
                                 'require_membership': variation.require_membership,
                                 'sales_channels': variation.sales_channels,
