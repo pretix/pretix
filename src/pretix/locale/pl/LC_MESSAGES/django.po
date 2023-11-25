@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-15 14:27+0000\n"
 "PO-Revision-Date: 2023-11-25 13:23+0000\n"
-"Last-Translator: Joanna Kochel <kochel.joanna@gmail.com>\n"
+"Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -7525,7 +7525,7 @@ msgstr ""
 #, python-brace-format
 msgctxt "invoice"
 msgid "Please complete your payment before {expire_date}."
-msgstr "Dokończ płatność przed {expire_date}."
+msgstr "Proszę dokończyć płatność przed {expire_date}."
 
 #: pretix/base/services/invoices.py:115
 #, python-brace-format
@@ -18754,7 +18754,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/index.html:108
 #: pretix/presale/views/widget.py:402
 msgid "Sold out"
-msgstr ""
+msgstr "Wyprzedane"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:7
 msgid ""
@@ -28313,7 +28313,7 @@ msgstr "Podatki"
 
 #: pretix/presale/forms/order.py:132
 msgid "No other variation of this product is currently available for you."
-msgstr "Nie ma obecnie innych wariantów tego produktu, które byłyby dostępne"
+msgstr "Nie ma obecnie innych wariantów tego produktu, które byłyby dostępne."
 
 #: pretix/presale/forms/order.py:137
 #, fuzzy
@@ -28851,9 +28851,8 @@ msgstr "Pokaż warianty"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:271
 #: pretix/presale/templates/pretixpresale/event/voucher.html:145
 #: pretix/presale/templates/pretixpresale/event/voucher.html:298
-#, fuzzy
 msgid "Original price:"
-msgstr "Cena oryginalna"
+msgstr "Cena oryginalna:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:132
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:270
@@ -28937,10 +28936,9 @@ msgstr "Dodaj  %(item)s, %(var)s  do koszyka"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:358
 #: pretix/presale/templates/pretixpresale/event/voucher.html:228
 #: pretix/presale/templates/pretixpresale/event/voucher.html:379
-#, fuzzy
 msgctxt "checkbox"
 msgid "Select"
-msgstr "Przedsprzedaż nierozpoczęta"
+msgstr "Wybierz"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:203
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:345
@@ -29156,9 +29154,9 @@ msgid "incl. %(tax_sum)s taxes"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:482
-#, fuzzy, python-format
+#, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
-msgstr "Produkty w koszyku są zarezerwowanie przez %(minutes) minut."
+msgstr "Produkty w koszyku są zarezerwowanie przez %(minutes)s minut."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:486
 msgid ""
