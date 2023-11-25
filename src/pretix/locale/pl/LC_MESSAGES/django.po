@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-15 14:27+0000\n"
-"PO-Revision-Date: 2023-11-25 18:20+0000\n"
+"PO-Revision-Date: 2023-11-25 18:36+0000\n"
 "Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -5562,7 +5562,7 @@ msgstr "Oficjalna nazwa"
 
 #: pretix/base/models/tax.py:169
 msgid "Should be short, e.g. \"VAT\""
-msgstr "Powinna być krótkia, np. \"VAT\"\\"
+msgstr "Powinna być krótkia, np. \"VAT\""
 
 #: pretix/base/models/tax.py:186
 msgid "The configured product prices include the tax amount"
@@ -5655,7 +5655,7 @@ msgstr "Wykorzystany"
 
 #: pretix/base/models/vouchers.py:205
 msgid "Minimum usages"
-msgstr "Minimalna ilość użyć"
+msgstr "Minimalna ilość użyć"
 
 #: pretix/base/models/vouchers.py:206
 msgid ""
@@ -6568,7 +6568,7 @@ msgstr "Nazwa produktu i odmiana"
 
 #: pretix/base/pdf.py:138
 msgid "Sample product – sample variation"
-msgstr "Przkładowy product - przykładowa odmiana"
+msgstr "Przkładowy product – przykładowa odmiana"
 
 #: pretix/base/pdf.py:145
 #, fuzzy
@@ -15181,7 +15181,7 @@ msgstr ""
 
 #: pretix/control/logdisplay.py:607
 msgid "The user confirmed the following message: \"{}\""
-msgstr "Użytkownik potwierdził następującą wiadomość: \"{}\\"
+msgstr "Użytkownik potwierdził następującą wiadomość: \"{}\""
 
 #: pretix/control/logdisplay.py:614
 #, python-brace-format
@@ -15566,7 +15566,7 @@ msgid ""
 "accept the invitation with your existing account."
 msgstr ""
 "Jeśli masz już konto na tej stronie z innym adresem e-mail, możesz najpierw "
-"<a %(login_href)s>zalogować się </a>, a następnie kliknąćten link, aby "
+"<a %(login_href)s>zalogować się</a>, a następnie kliknąćten link, aby "
 "zaakceptować zaproszenie swoim istniejącym kontem."
 
 #: pretix/control/templates/pretixcontrol/auth/invite.html:23
@@ -15803,7 +15803,7 @@ msgstr "Szukaj wydarzeń"
 msgid ""
 "We've detected that you are using <strong>Microsoft Internet Explorer</"
 "strong>."
-msgstr "Wykryliśmy, że używasz <strong>Microsoft Internet Explorer </strong>."
+msgstr "Wykryliśmy, że używasz <strong>Microsoft Internet Explorer</strong>."
 
 #: pretix/control/templates/pretixcontrol/base.html:328
 msgid ""
@@ -15813,7 +15813,7 @@ msgid ""
 "in the next months."
 msgstr ""
 "Internet Explorer to stara przeglądarka, która nie obsługuje wielu "
-"najnowszych technologiiużywanych w internecie oparte na. Niektóre funkcje "
+"najnowszych technologii używanych w internecie oparte na. Niektóre funkcje "
 "mogą już nie działać poprawnie. Planujemy przestać obsługiwać Internet "
 "Explorer w backendzie administracyjnym w najbliższych miesiącach."
 
@@ -19620,7 +19620,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/order/index.html:318
 msgid "Email invoices"
-msgstr "Faktury e -mail"
+msgstr "Faktury e-mail"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:327
 #: pretix/control/templates/pretixcontrol/order/index.html:339
@@ -21233,7 +21233,7 @@ msgid ""
 "to."
 msgstr ""
 "Poniższa lista pokazuje wszystkie konta organizatora, do których masz dostęp "
-"administracyjny administracyjny."
+"administracyjny."
 
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:4
 #: pretix/control/templates/pretixcontrol/organizers/logs.html:6
@@ -29192,7 +29192,7 @@ msgstr "Aktywuj kupon"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:48
 msgid "We're applying this voucher to your cart..."
-msgstr "Aktywujemy ten kupon dla twojego koszyka ..."
+msgstr "Aktywujemy ten kupon dla twojego koszyka..."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:56
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:26
@@ -30177,9 +30177,9 @@ msgid "from %(minprice)s"
 msgstr "od %(minprice)s"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:422
-#, fuzzy, python-format
+#, python-format
 msgid "You need to select at least %(number)s products."
-msgstr "Musisz wybrać co najmniej %(liczbę) produktów."
+msgstr "Musisz wybrać co najmniej %(number)s produktów."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:5
 msgid "Add me to the waiting list"
