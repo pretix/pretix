@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-13 15:14+0000\n"
 "PO-Revision-Date: 2023-11-25 13:23+0000\n"
-"Last-Translator: Joanna Kochel <kochel.joanna@gmail.com>\n"
+"Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "pl/>\n"
 "Language: pl\n"
@@ -316,9 +316,8 @@ msgid "Currently inside"
 msgstr "Obecnie w środku"
 
 #: pretix/static/lightbox/js/lightbox.js:96
-#, fuzzy
 msgid "close"
-msgstr "Zamknąć"
+msgstr "zamknąć"
 
 #: pretix/static/pretixbase/js/asynctask.js:58
 #: pretix/static/pretixbase/js/asynctask.js:135
@@ -666,12 +665,11 @@ msgid "Cart expired"
 msgstr "Koszyk wygasł"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:50
-#, fuzzy
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Przedmioty w koszyku są zarezerwowane na jedną minutę."
-msgstr[1] "Przedmioty w koszyku są zarezerwowane na {num} minuty."
-msgstr[2] "Przedmioty w koszyku są zarezerwowane na {num} minut."
+msgstr[1] "Przedmioty w koszyku są zarezerwowane na {num} minuty."
+msgstr[2] "Przedmioty w koszyku są zarezerwowane na {num} minut."
 
 #: pretix/static/pretixpresale/js/ui/main.js:171
 #, fuzzy
