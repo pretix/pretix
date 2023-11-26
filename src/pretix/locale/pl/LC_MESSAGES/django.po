@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-15 14:27+0000\n"
-"PO-Revision-Date: 2023-11-25 18:36+0000\n"
-"Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
+"PO-Revision-Date: 2023-11-27 07:00+0000\n"
+"Last-Translator: Fast128 <fast128@post.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -19420,18 +19420,18 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:39
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:29
 msgid "Invoice information"
-msgstr ""
+msgstr "Dane do faktury"
 
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:26
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:40
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:30
 msgid "(optional)"
-msgstr ""
+msgstr "(opcjonalne)"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:4
 #: pretix/control/templates/pretixcontrol/order/delete.html:8
 msgid "Delete order"
-msgstr ""
+msgstr "Usuń zamówienie"
 
 #: pretix/control/templates/pretixcontrol/order/delete.html:10
 msgid ""
@@ -21955,14 +21955,14 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/select2_widget.html:9
 msgid "Please enable JavaScript in your browser."
-msgstr ""
+msgstr "Proszę uruchomić obsługę JavaScript w przeglądarce."
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:5
 #: pretix/control/templates/pretixcontrol/shredder/download.html:8
 #: pretix/control/templates/pretixcontrol/shredder/index.html:5
 #: pretix/control/templates/pretixcontrol/shredder/index.html:8
 msgid "Data shredder"
-msgstr ""
+msgstr "Niszczarka danych"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:15
 msgid "Step 1: Download data"
@@ -25251,12 +25251,12 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:11
-#, fuzzy
 msgid ""
 "Please do not yet start a payment. We'll assign you a personal reference "
 "code after you completed the order."
 msgstr ""
-"Kod do umieszczenia w tytule zostanie przypisany po przesłaniu zamówienia."
+"Proszę jeszcze nie rozpoczynać płatności. Przypiszemy ci osobisty kod "
+"referencyjny po zakończeniu zamówienia."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:26
@@ -25285,17 +25285,15 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:43
 #, python-format
 msgid "We will send a copy of your invoice directly to %(recipient)s."
-msgstr ""
+msgstr "Wyślemy kopię faktury bezpośrednio do %(recipient)s."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:6
-#, fuzzy
 msgid "Send invoice to"
-msgstr "Nabywca"
+msgstr "Wyślij fakturę do"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:14
-#, fuzzy
 msgid "Account"
-msgstr "Ilość"
+msgstr "Konto"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:28
 #, fuzzy
@@ -26315,6 +26313,10 @@ msgid ""
 "and to fill in your payment details. You will then be redirected back here "
 "to review and confirm your order."
 msgstr ""
+"Po kliknięciu przycisku \"Kontynuuj\", będziemy mogli wybrać, w jaki sposób "
+"chcesz dokonać płatności i wprowadzić szczegóły płatności. Następnie "
+"zostaniesz przekierowany z powrotem tutaj, aby sprawdzić i potwierdzić swoje "
+"zamówienie."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:16
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:19
@@ -28524,22 +28526,21 @@ msgstr "Proszę sprawdzić szczegóły poniżej i potwierdzić zamówienie."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:14
 msgid "Please hang tight, we're finalizing your order!"
-msgstr ""
+msgstr "Finalizujemy zamówienie!"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:22
 msgid "Add or remove tickets"
-msgstr ""
+msgstr "Dodaj lub usuń bilety"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:44
-#, fuzzy
 msgid "Modify payment"
-msgstr "Komentarz"
+msgstr "Zmodyfikuj płatność"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:45
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:80
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:129
 msgid "Modify"
-msgstr ""
+msgstr "Zmodyfikuj"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:79
 #, fuzzy
@@ -28558,7 +28559,7 @@ msgstr "Zmień dane kontaktowe"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:171
 msgid "Confirmations"
-msgstr ""
+msgstr "Potwierdzenia"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:189
 msgid ""
@@ -28566,12 +28567,17 @@ msgid ""
 "approval by the event organizer before it can be confirmed and forms a valid "
 "contract."
 msgstr ""
+"Po złożeniu zamówienia za pomocą poniższego przycisku, będzie wymagało "
+"zatwierdzenia przez organizatora wydarzenia, zanim zostanie potwierdzone i "
+"stanie się ważną umową."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:191
 msgid ""
 "We will send you an email as soon as the event organizer approved or "
 "rejected your order."
 msgstr ""
+"Wyślemy ci e-mail, gdy tylko organizator wydarzenia zatwierdzi lub odrzuci "
+"Twoje zamówienie."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:195
 msgid ""
@@ -28580,16 +28586,15 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:211
 msgid "Place binding order"
-msgstr ""
+msgstr "Złóż zamówienie z obowiązkiem zapłaty"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:213
 msgid "Submit registration"
-msgstr ""
+msgstr "Złóż zgłoszenie"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:20
-#, fuzzy
 msgid "Log in with a customer account"
-msgstr "Komentarz wewnętrzny"
+msgstr "Zaloguj się kontem klienta"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:29
 msgid "You are currently logged in with the following credentials."
@@ -29699,7 +29704,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:50
 msgid "We successfully received your payment. See below for details."
-msgstr ""
+msgstr "Otrzymaliśmy pomyślnie Twoją płatność. Poniżej znajdziesz szczegóły."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:35
 msgid ""
@@ -29723,6 +29728,9 @@ msgid ""
 "your order later. We also sent you an email containing the link to the "
 "address you specified."
 msgstr ""
+"Proszę dodaj tę stronę do zakładek lub zapisz link, jeśli chcesz uzyskać "
+"późniejszy dostęp do swojego zamówienia. Wysłaliśmy również e-mail "
+"zawierający link na podany przez Ciebie adres."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:58
 msgid ""
