@@ -100,7 +100,8 @@ def lock_objects(objects, *, shared_lock_objects=None, replace_exclusive_with_sh
     if 'postgresql' in settings.DATABASES['default']['ENGINE']:
         shared_keys = set(pg_lock_key(obj) for obj in shared_lock_objects) if shared_lock_objects else set()
         exclusive_keys = set(pg_lock_key(obj) for obj in objects)
-        if replace_exclusive_with_shared_when_exclusive_are_more_than and len(exclusive_keys) > replace_exclusive_with_shared_when_exclusive_are_more_than:
+        if replace_exclusive_with_shared_when_exclusive_are_more_than and shared_keys and \
+                len(exclusive_keys) > replace_exclusive_with_shared_when_exclusive_are_more_than:
             exclusive_keys = shared_keys
         keys = sorted(list(shared_keys | exclusive_keys))
         calls = ", ".join([
