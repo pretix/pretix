@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-15 14:27+0000\n"
-"PO-Revision-Date: 2023-11-27 07:00+0000\n"
-"Last-Translator: Fast128 <fast128@post.pl>\n"
+"PO-Revision-Date: 2023-11-27 17:00+0000\n"
+"Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -21955,7 +21955,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/select2_widget.html:9
 msgid "Please enable JavaScript in your browser."
-msgstr "Proszę uruchomić obsługę JavaScript w przeglądarce."
+msgstr "Proszę uruchomić obsługę JavaScript w przeglądarce."
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:5
 #: pretix/control/templates/pretixcontrol/shredder/download.html:8
@@ -26313,7 +26313,7 @@ msgid ""
 "and to fill in your payment details. You will then be redirected back here "
 "to review and confirm your order."
 msgstr ""
-"Po kliknięciu przycisku \"Kontynuuj\", będziemy mogli wybrać, w jaki sposób "
+"Po kliknięciu przycisku \"Kontynuuj\", będziesz mogli wybrać, w jaki sposób "
 "chcesz dokonać płatności i wprowadzić szczegóły płatności. Następnie "
 "zostaniesz przekierowany z powrotem tutaj, aby sprawdzić i potwierdzić swoje "
 "zamówienie."
