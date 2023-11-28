@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-13 15:14+0000\n"
+"POT-Creation-Date: 2023-11-28 14:51+0000\n"
 "PO-Revision-Date: 2022-03-15 00:00+0000\n"
 "Last-Translator: Yuriko Matsunami <y.matsunami@enobyte.com>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -138,8 +138,9 @@ msgid "Continue"
 msgstr "次へ"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:204
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:235
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:213
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:246
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:264
 msgid "Confirming your payment …"
 msgstr "お支払い内容の確認"
 
@@ -161,15 +162,15 @@ msgstr "支払い済みの注文"
 msgid "Total revenue"
 msgstr "売上合計"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:13
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:14
 msgid "Contacting Stripe …"
 msgstr "お問い合わせはこちら"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:70
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:71
 msgid "Total"
 msgstr "合計"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:211
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:220
 msgid "Contacting your bank …"
 msgstr "銀行へ問い合わせ中…"
 
@@ -308,16 +309,32 @@ msgid "Ticket code is ambiguous on list"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
+msgid "Order not approved"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Checked-in Tickets"
 msgstr "チェックイン済みのチケット"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Valid Tickets"
 msgstr "有効なチケット"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
 msgid "Currently inside"
 msgstr "現在オンラインです"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:270
+msgid "Yes"
+msgstr "はい"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
+#: pretix/static/pretixcontrol/js/ui/question.js:138
+#: pretix/static/pretixpresale/js/ui/questions.js:270
+msgid "No"
+msgstr "いいえ"
 
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
@@ -637,16 +654,6 @@ msgstr "その他"
 #: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
 msgstr "総数"
-
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:270
-msgid "Yes"
-msgstr "はい"
-
-#: pretix/static/pretixcontrol/js/ui/question.js:138
-#: pretix/static/pretixpresale/js/ui/questions.js:270
-msgid "No"
-msgstr "いいえ"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:111
 msgid "(one more date)"

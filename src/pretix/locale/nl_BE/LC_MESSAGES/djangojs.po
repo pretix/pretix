@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-13 15:14+0000\n"
+"POT-Creation-Date: 2023-11-28 14:51+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: Automatically generated\n"
 "Language-Team: none\n"
@@ -134,8 +134,9 @@ msgid "Continue"
 msgstr ""
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:204
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:235
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:213
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:246
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:264
 msgid "Confirming your payment …"
 msgstr ""
 
@@ -157,15 +158,15 @@ msgstr ""
 msgid "Total revenue"
 msgstr ""
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:13
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:14
 msgid "Contacting Stripe …"
 msgstr ""
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:70
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:71
 msgid "Total"
 msgstr ""
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:211
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:220
 msgid "Contacting your bank …"
 msgstr ""
 
@@ -300,15 +301,31 @@ msgid "Ticket code is ambiguous on list"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
-msgid "Checked-in Tickets"
+msgid "Order not approved"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
-msgid "Valid Tickets"
+msgid "Checked-in Tickets"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
+msgid "Valid Tickets"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
 msgid "Currently inside"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:270
+msgid "Yes"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
+#: pretix/static/pretixcontrol/js/ui/question.js:138
+#: pretix/static/pretixpresale/js/ui/questions.js:270
+msgid "No"
 msgstr ""
 
 #: pretix/static/lightbox/js/lightbox.js:96
@@ -611,16 +628,6 @@ msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:270
-msgid "Yes"
-msgstr ""
-
-#: pretix/static/pretixcontrol/js/ui/question.js:138
-#: pretix/static/pretixpresale/js/ui/questions.js:270
-msgid "No"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:111

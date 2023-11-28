@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-13 15:14+0000\n"
+"POT-Creation-Date: 2023-11-28 14:51+0000\n"
 "PO-Revision-Date: 2023-05-18 01:00+0000\n"
 "Last-Translator: M C <micasadmail@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -138,8 +138,9 @@ msgid "Continue"
 msgstr "Continua"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:204
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:235
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:213
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:246
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:264
 msgid "Confirming your payment …"
 msgstr "Stiamo processando il tuo pagamento …"
 
@@ -161,15 +162,15 @@ msgstr "Ordini pagati"
 msgid "Total revenue"
 msgstr "Ricavi totali"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:13
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:14
 msgid "Contacting Stripe …"
 msgstr "Sto contattando Stripe …"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:70
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:71
 msgid "Total"
 msgstr "Totale"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:211
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:220
 msgid "Contacting your bank …"
 msgstr "Sto contattando la tua banca …"
 
@@ -305,16 +306,32 @@ msgid "Ticket code is ambiguous on list"
 msgstr ""
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
+msgid "Order not approved"
+msgstr ""
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Checked-in Tickets"
 msgstr "Biglietti controllati"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
 msgid "Valid Tickets"
 msgstr "Biglietti validi"
 
-#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:67
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:68
 msgid "Currently inside"
 msgstr "Attualmente all'interno"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:69
+#: pretix/static/pretixcontrol/js/ui/question.js:137
+#: pretix/static/pretixpresale/js/ui/questions.js:270
+msgid "Yes"
+msgstr "Si"
+
+#: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:70
+#: pretix/static/pretixcontrol/js/ui/question.js:138
+#: pretix/static/pretixpresale/js/ui/questions.js:270
+msgid "No"
+msgstr "No"
 
 #: pretix/static/lightbox/js/lightbox.js:96
 msgid "close"
@@ -635,16 +652,6 @@ msgstr "Altri"
 #: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
 msgstr "Conteggio"
-
-#: pretix/static/pretixcontrol/js/ui/question.js:137
-#: pretix/static/pretixpresale/js/ui/questions.js:270
-msgid "Yes"
-msgstr "Si"
-
-#: pretix/static/pretixcontrol/js/ui/question.js:138
-#: pretix/static/pretixpresale/js/ui/questions.js:270
-msgid "No"
-msgstr "No"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:111
 msgid "(one more date)"
