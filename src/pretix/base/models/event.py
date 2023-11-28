@@ -798,6 +798,11 @@ class Event(EventMixin, LoggedModel):
         self.save()
         self.log_action('pretix.object.cloned', data={'source': other.slug, 'source_id': other.pk})
 
+        for emv in EventMetaValue.objects.filter(event=other):
+            emv.pk = None
+            emv.event = self
+            emv.save(force_insert=True)
+
         for fl in EventFooterLink.objects.filter(event=other):
             fl.pk = None
             fl.event = self

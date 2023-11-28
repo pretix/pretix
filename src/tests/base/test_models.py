@@ -2133,12 +2133,14 @@ class EventTest(TestCase):
 
     @classscope(attr='organizer')
     def test_copy(self):
+        prop = self.organizer.meta_properties.create(name="Language")
         event1 = Event.objects.create(
             organizer=self.organizer, name='Download', slug='ab1234',
             date_from=datetime.datetime(2013, 12, 26, 9, 0, 0, tzinfo=datetime.timezone.utc),
             date_admission=datetime.datetime(2013, 12, 26, 8, 0, 0, tzinfo=datetime.timezone.utc),
             is_public=True,
         )
+        event1.meta_values.create(property=prop, value="DE")
         tr7 = event1.tax_rules.create(rate=Decimal('7.00'))
         c1 = event1.categories.create(name='Tickets')
         c2 = event1.categories.create(name='Workshops')
@@ -2176,6 +2178,7 @@ class EventTest(TestCase):
             assert a.event == event1
 
         assert event2.date_admission == datetime.datetime(2013, 12, 27, 8, 0, 0, tzinfo=datetime.timezone.utc)
+        assert event2.meta_data["Language"] == "DE"
 
         trnew = event2.tax_rules.first()
         assert trnew.rate == tr7.rate
