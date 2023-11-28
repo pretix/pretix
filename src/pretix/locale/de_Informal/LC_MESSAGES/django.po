@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-28 15:26+0000\n"
-"PO-Revision-Date: 2023-11-15 14:42+0000\n"
+"PO-Revision-Date: 2023-11-28 15:36+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1.1\n"
+"X-Generator: Weblate 5.2.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -305,10 +305,8 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Diese Art von Frage kann nicht beim Check-In gestellt werden."
 
 #: pretix/api/serializers/item.py:490 pretix/control/forms/item.py:140
-#, fuzzy
-#| msgid "This type of question cannot be asked during check-in."
 msgid "This type of question cannot be shown during check-in."
-msgstr "Diese Art von Frage kann nicht beim Check-In gestellt werden."
+msgstr "Diese Art von Frage kann nicht beim Check-In angezeigt werden."
 
 #: pretix/api/serializers/media.py:108
 msgid ""
@@ -1700,10 +1698,8 @@ msgstr "Benötigt besondere Behandlung"
 #: pretix/base/exporters/items.py:91 pretix/base/exporters/orderlist.py:278
 #: pretix/base/models/items.py:572 pretix/base/models/items.py:1107
 #: pretix/base/models/orders.py:248
-#, fuzzy
-#| msgid "Check-in time"
 msgid "Check-in text"
-msgstr "Check-in-Zeitpunkt"
+msgstr "Check-in-Hinweis"
 
 #: pretix/base/exporters/items.py:92 pretix/base/models/items.py:577
 #: pretix/base/models/items.py:1042
@@ -3499,10 +3495,8 @@ msgid "Ticket blocked"
 msgstr "Ticket gesperrt"
 
 #: pretix/base/models/checkin.py:369
-#, fuzzy
-#| msgid "Order approved"
 msgid "Order not approved"
-msgstr "Bestellung freigegeben"
+msgstr "Bestellung nicht freigegeben"
 
 #: pretix/base/models/checkin.py:370
 msgid "Ticket not valid at this time"
@@ -4426,6 +4420,8 @@ msgid ""
 "This text will be shown by the check-in app if a ticket of this type is "
 "scanned."
 msgstr ""
+"Dieser Text wird von der Check-in-App angezeigt, wenn ein Ticket von diesem "
+"Typ gescannt wird."
 
 #: pretix/base/models/items.py:580 pretix/base/models/items.py:1045
 msgid ""
@@ -4904,10 +4900,8 @@ msgid "Not supported by all check-in apps for all question types."
 msgstr "Nicht für alle Fragetypen von allen unseren Check-in-Apps unterstützt."
 
 #: pretix/base/models/items.py:1557
-#, fuzzy
-#| msgid "Ask during check-in"
 msgid "Show answer during check-in"
-msgstr "Beim Check-in fragen"
+msgstr "Antwort beim Check-in anzeigen"
 
 #: pretix/base/models/items.py:1562
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
@@ -5337,13 +5331,12 @@ msgstr ""
 "nützlich, deren Studierendenausweis noch geprüft werden soll."
 
 #: pretix/base/models/orders.py:250
-#, fuzzy
-#| msgid ""
-#| "This text will be shown above the invoice address form during checkout."
 msgid ""
 "This text will be shown by the check-in app if a ticket of this order is "
 "scanned."
-msgstr "Dieser Text wird über der Eingabe der Rechnungsadresse angezeigt."
+msgstr ""
+"Dieser Text wird von der Check-in-App angezeigt, wenn ein Ticket dieser "
+"Bestellung gescannt wird."
 
 #: pretix/base/models/orders.py:260 pretix/base/models/orders.py:1436
 msgid "Meta information"
@@ -9822,10 +9815,8 @@ msgid "Refund method"
 msgstr "Erstattungsweg"
 
 #: pretix/base/settings.py:1945 pretix/base/settings.py:1958
-#, fuzzy
-#| msgid "Generate cancellation"
 msgid "Terms of cancellation"
-msgstr "Stornobeleg erstellen"
+msgstr "Stornobedingungen"
 
 #: pretix/base/settings.py:1948
 msgid ""
@@ -9833,6 +9824,10 @@ msgid ""
 "empty if you want pretix to automatically generate the terms of cancellation "
 "based on your settings."
 msgstr ""
+"Dieser Text wird angezeigt, wenn die Stornierung für eine bezahlte "
+"Bestellung möglich ist. Wenn das Feld leer ist, generiert pretix automatisch "
+"die angezeigten Stornobedingungen auf Basis der hier getroffenen "
+"Einstellungen."
 
 #: pretix/base/settings.py:1961
 msgid ""
@@ -9840,6 +9835,10 @@ msgid ""
 "order. Leave empty if you want pretix to automatically generate the terms of "
 "cancellation based on your settings."
 msgstr ""
+"Dieser Text wird angezeigt, wenn die Stornierung für eine unbezahlte oder "
+"kostenlose Bestellung möglich ist. Wenn das Feld leer ist, generiert pretix "
+"automatisch die angezeigten Stornobedingungen auf Basis der hier getroffenen "
+"Einstellungen."
 
 #: pretix/base/settings.py:1971 pretix/control/forms/event.py:1627
 msgid "Contact address"
@@ -15330,10 +15329,8 @@ msgid "The order's flag to require attention at check-in has been toggled."
 msgstr "Der interne Kommentar wurde geändert."
 
 #: pretix/control/logdisplay.py:410
-#, fuzzy
-#| msgid "The order's secret has been changed."
 msgid "The order's check-in text has been changed."
-msgstr "Die Ticket-Codes und der Link zur Bestell-Seite wurde geändert."
+msgstr "Der Check-in-Hinweis der Bestellung wurde geändert."
 
 #: pretix/control/logdisplay.py:411
 msgid ""
@@ -21584,6 +21581,9 @@ msgid ""
 "Your generated Excel file will have <strong>multiple sheets</strong>. Some "
 "data you are looking for might not be on the first sheet."
 msgstr ""
+"Die erstellte Excel-Datei wird <strong>mehrere Tabellenblätter</strong> "
+"beinhalten. Die Daten, die du benötigst, befinden sich möglicherweise nicht "
+"alle auf dem ersten Tabellenblatt."
 
 #: pretix/control/templates/pretixcontrol/orders/export_form.html:52
 #: pretix/control/templates/pretixcontrol/organizers/export_form.html:53
@@ -21899,10 +21899,8 @@ msgstr "Aktion auswählen"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:306
 #: pretix/control/views/orders.py:331
-#, fuzzy
-#| msgid "Refund full paid amount"
 msgid "Refund overpaid amount"
-msgstr "Vollen Zahlungsbetrag erstatten"
+msgstr "Überzahlten Betrag erstatten"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:314
 #: pretix/control/views/orders.py:316
@@ -22733,16 +22731,12 @@ msgid "Property:"
 msgstr "Eigenschaft:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:20
-#, fuzzy
-#| msgid "Usages"
 msgid "Usage"
-msgstr "Nutzungen"
+msgstr "Nutzung"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:26
-#, fuzzy
-#| msgid "Variation"
 msgid "Validation"
-msgstr "Variante"
+msgstr "Validierung"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:31
 msgid "Allowed values"
@@ -25460,6 +25454,8 @@ msgstr "Wir konnten die hochgeladene Datei nicht als CSV-Datei parsen."
 msgid ""
 "Successfully executed the action \"{label}\" on {success} of {total} orders."
 msgstr ""
+"Die Aktion \"{label}\" wurde erfolgreich für {success} von {total} "
+"Bestellungen ausgeführt."
 
 #: pretix/control/views/orders.py:534
 msgid "Your invoice"
@@ -29327,6 +29323,8 @@ msgid ""
 "Some payment methods might need to be enabled in the settings of your Stripe "
 "account before work properly."
 msgstr ""
+"Manche Zahlungsmethoden müssen in den Einstellungen deines Stripe-Kontos "
+"aktiviert werden bevor sie funktionieren."
 
 #: pretix/plugins/stripe/payment.py:338 pretix/plugins/stripe/payment.py:1423
 msgid "iDEAL"
@@ -29378,6 +29376,8 @@ msgid ""
 "Stripe is in the process of removing this payment method. If you created "
 "your Stripe account after November 2023, you cannot use this payment method."
 msgstr ""
+"Stripe entfernt diese Zahlungsmethode. Wenn du deinen Stripe-Account nach "
+"November 2023 angelegt hast, kannst du diese Zahlungsmethode nicht nutzen."
 
 #: pretix/plugins/stripe/payment.py:395
 msgid ""
@@ -29410,7 +29410,7 @@ msgstr "WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:436 pretix/plugins/stripe/payment.py:1308
 msgid "Affirm"
-msgstr ""
+msgstr "Affirm"
 
 #: pretix/plugins/stripe/payment.py:439
 msgid "Needs to be enabled in your Stripe account first."
@@ -29418,7 +29418,7 @@ msgstr "Muss erst im Stripe-Account aktiviert werden."
 
 #: pretix/plugins/stripe/payment.py:440
 msgid "Only available for payments between $50 and $30,000."
-msgstr ""
+msgstr "Nur verfügbar für Zahlungen zwischen 50 $ und 30.000 $."
 
 #: pretix/plugins/stripe/payment.py:448
 msgid "Destination"
@@ -29526,10 +29526,8 @@ msgid "Account Holder Country"
 msgstr "Land (Kontoinhaber*in)"
 
 #: pretix/plugins/stripe/payment.py:1307
-#, fuzzy
-#| msgid "Alipay via Stripe"
 msgid "Affirm via Stripe"
-msgstr "Alipay über Stripe"
+msgstr "Affirm über Stripe"
 
 #: pretix/plugins/stripe/payment.py:1350
 msgid "giropay via Stripe"
