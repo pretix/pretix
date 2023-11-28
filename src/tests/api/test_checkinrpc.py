@@ -472,6 +472,21 @@ def test_require_product(token_client, organizer, clist, event, order):
 
 
 @pytest.mark.django_db
+def test_checkin_texts(token_client, organizer, clist, event, order):
+    with scopes_disabled():
+        p = order.positions.first()
+        p.item.checkin_text = 'A'
+        p.item.save()
+        order.checkin_text = 'B'
+        order.save()
+
+    resp = _redeem(token_client, organizer, clist, p.secret, {})
+    assert resp.status_code == 201
+    assert resp.data['status'] == 'ok'
+    assert resp.data['checkin_texts'] == ['B', 'A']
+
+
+@pytest.mark.django_db
 def test_require_paid(token_client, organizer, clist, event, order):
     with scopes_disabled():
         p = order.positions.first()
@@ -681,6 +696,19 @@ def test_question_upload(token_client, organizer, clist, event, order, question)
     with scopes_disabled():
         assert order.positions.first().answers.get(question=question[0]).answer.startswith('file://')
         assert order.positions.first().answers.get(question=question[0]).file
+
+
+@pytest.mark.django_db
+def test_question_expand(token_client, organizer, clist, event, order, question):
+    with scopes_disabled():
+        p = order.positions.first()
+        question[0].save()
+        p.answers.create(question=question[0], answer="3")
+
+    resp = _redeem(token_client, organizer, clist, p.secret, {"answers": {question[0].pk: ""}}, query="?expand=answers.question")
+    assert resp.status_code == 201
+    assert resp.data["status"] == "ok"
+    assert resp.data["position"]["answers"][0]["question"]["question"]["en"] == "Size"
 
 
 @pytest.mark.django_db

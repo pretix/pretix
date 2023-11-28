@@ -827,6 +827,16 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
                     }
                 )
 
+            if 'checkin_text' in self.request.data and serializer.instance.checkin_text != self.request.data.get('checkin_text'):
+                serializer.instance.log_action(
+                    'pretix.event.order.checkin_text',
+                    user=self.request.user,
+                    auth=self.request.auth,
+                    data={
+                        'new_value': self.request.data.get('checkin_text')
+                    }
+                )
+
             if 'valid_if_pending' in self.request.data and serializer.instance.valid_if_pending != self.request.data.get('valid_if_pending'):
                 serializer.instance.log_action(
                     'pretix.event.order.valid_if_pending',

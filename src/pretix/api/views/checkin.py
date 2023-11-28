@@ -536,6 +536,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                                 'reason': Checkin.REASON_ALREADY_REDEEMED,
                                 'reason_explanation': None,
                                 'require_attention': False,
+                                'checkin_texts': [],
                                 '__warning': 'Compatibility hack active due to detected old pretixSCAN version',
                             }, status=400)
                     except:  # we don't care e.g. about invalid version numbers
@@ -547,6 +548,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'reason': Checkin.REASON_INVALID,
                     'reason_explanation': None,
                     'require_attention': False,
+                    'checkin_texts': [],
                     'list': MiniCheckinListSerializer(checkinlists[0]).data,
                 }, status=404)
             elif revoked_matches and force:
@@ -576,6 +578,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                     'reason': Checkin.REASON_REVOKED,
                     'reason_explanation': None,
                     'require_attention': False,
+                    'checkin_texts': [],
                     'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, revoked_matches[
                         0].event)).data,
                     'list': MiniCheckinListSerializer(list_by_event[revoked_matches[0].event_id]).data,
@@ -631,6 +634,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'reason': Checkin.REASON_AMBIGUOUS,
                 'reason_explanation': None,
                 'require_attention': op.require_checkin_attention,
+                'checkin_texts': op.checkin_texts,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
@@ -679,6 +683,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             return Response({
                 'status': 'incomplete',
                 'require_attention': op.require_checkin_attention,
+                'checkin_texts': op.checkin_texts,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'questions': [
                     QuestionSerializer(q).data for q in e.questions
@@ -709,6 +714,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
                 'reason': e.code,
                 'reason_explanation': e.reason,
                 'require_attention': op.require_checkin_attention,
+                'checkin_texts': op.checkin_texts,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=400)
@@ -716,6 +722,7 @@ def _redeem_process(*, checkinlists, raw_barcode, answers_data, datetime, force,
             return Response({
                 'status': 'ok',
                 'require_attention': op.require_checkin_attention,
+                'checkin_texts': op.checkin_texts,
                 'position': CheckinListOrderPositionSerializer(op, context=_make_context(context, op.order.event)).data,
                 'list': MiniCheckinListSerializer(list_by_event[op.order.event_id]).data,
             }, status=201)

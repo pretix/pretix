@@ -66,6 +66,8 @@ window.vapp = new Vue({
             'status.checkin': gettext('Checked-in Tickets'),
             'status.position': gettext('Valid Tickets'),
             'status.inside': gettext('Currently inside'),
+            'yes': gettext('Yes'),
+            'no': gettext('No'),
         },
         event_name: document.querySelector('#app').attributes['data-event-name'].value,
         timezone: document.body.attributes['data-timezone'].value,

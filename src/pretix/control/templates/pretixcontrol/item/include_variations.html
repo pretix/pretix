@@ -108,6 +108,7 @@
                         </div>
                     {% endif %}
                     {% bootstrap_field form.checkin_attention layout="control" %}
+                    {% bootstrap_field form.checkin_text layout="control" %}
                 </div>
             </details>
         {% endfor %}
@@ -206,6 +207,7 @@
                         </div>
                     {% endif %}
                     {% bootstrap_field formset.empty_form.checkin_attention layout="control" %}
+                    {% bootstrap_field formset.empty_form.checkin_text layout="control" %}
                 </div>
             </details>
         {% endescapescript %}

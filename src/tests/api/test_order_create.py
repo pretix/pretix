@@ -392,6 +392,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
         ],
         'downloads': [],
         'checkin_attention': False,
+        'checkin_text': None,
         'payments': [],
         'refunds': [],
         'require_approval': False,

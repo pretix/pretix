@@ -31,6 +31,7 @@ Checking a ticket in
    This endpoint supports passing multiple check-in lists to perform a multi-event scan. However, each check-in list
    passed needs to be from a distinct event.
 
+   :query string expand: Expand a field inside the ``position`` object into a full object. Currently ``subevent``, ``item``, ``variation``, and ``answers.question`` are supported. Can be passed multiple times.
    :<json string secret: Scanned QR code corresponding to the ``secret`` attribute of a ticket.
    :<json string source_type: Type of source the ``secret`` was obtained form. Defaults to ``"barcode"``.
    :<json array lists: List of check-in list IDs to search on. No two check-in lists may be from the same event.
@@ -63,6 +64,7 @@ Checking a ticket in
                            ``checkin_attention`` flag set. (3) If ``attendee_name`` is empty, it may automatically fall
                            back to values from a parent product or from invoice addresses.
    :>json boolean require_attention: Whether or not the ``require_attention`` flag is set on the item or order.
+   :>json list checkin_texts: List of additional texts to show to the user.
    :>json object list: Excerpt of information about the matching :ref:`check-in list <rest-checkinlists>` (if any was found),
                        including the attributes ``id``, ``name``, ``event``, ``subevent``, and ``include_pending``.
    :>json object questions: List of questions to be answered for check-in, only set on status ``"incomplete"``.
@@ -103,6 +105,7 @@ Checking a ticket in
           …
         },
         "require_attention": false,
+        "checkin_texts": [],
         "list": {
           "id": 1,
           "name": "Default check-in list",
@@ -125,6 +128,7 @@ Checking a ticket in
           …
         },
         "require_attention": false,
+        "checkin_texts": [],
         "list": {
           "id": 1,
           "name": "Default check-in list",
@@ -142,6 +146,7 @@ Checking a ticket in
             "position": 1,
             "identifier": "WY3TP9SL",
             "ask_during_checkin": true,
+            "show_during_checkin": true,
             "options": [
               {
                 "id": 1,
@@ -178,7 +183,8 @@ Checking a ticket in
         "status": "error",
         "reason": "invalid",
         "reason_explanation": null,
-        "require_attention": false
+        "require_attention": false,
+        "checkin_texts": []
       }
 
    **Example error response (known, but invalid ticket)**:
@@ -193,6 +199,7 @@ Checking a ticket in
         "reason": "unpaid",
         "reason_explanation": null,
         "require_attention": false,
+        "checkin_texts": [],
         "list": {
           "id": 1,
           "name": "Default check-in list",

@@ -288,6 +288,7 @@ TEST_ORDER_RES = {
     "comment": "",
     "custom_followup_at": None,
     "checkin_attention": False,
+    "checkin_text": None,
     "invoice_address": {
         "last_modified": "2017-12-01T10:00:00Z",
         "is_business": False,

@@ -25,6 +25,7 @@
       data-pretixlocale="{{ request.LANGUAGE_CODE }}" data-timezone="{{ request.event.settings.timezone }}">
 <div
         data-api-lists="{% url "api-v1:checkinlist-list" event=request.event.slug organizer=request.organizer.slug %}"
+        data-api-questions="{% url "api-v1:question-list" event=request.event.slug organizer=request.organizer.slug %}"
         data-event-name="{{ request.event.name }}"
         id="app"></div>
 {% compress js %}

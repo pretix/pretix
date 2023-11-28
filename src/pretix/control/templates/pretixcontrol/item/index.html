@@ -202,6 +202,7 @@
                     <fieldset>
                         <legend>{% trans "Check-in & Validity" %}</legend>
                         {% bootstrap_field form.checkin_attention layout="control" %}
+                        {% bootstrap_field form.checkin_text layout="control" %}
                         {% bootstrap_field form.validity_mode layout="control" %}
                         <div data-display-dependency="#{{ form.validity_mode.id_for_label }}" data-display-dependency-value="fixed">
                             {% bootstrap_field form.validity_fixed_from layout="control" %}

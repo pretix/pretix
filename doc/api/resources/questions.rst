@@ -44,6 +44,8 @@ identifier                            string                     An arbitrary st
 ask_during_checkin                    boolean                    If ``true``, this question will not be asked while
                                                                  buying the ticket, but will show up when redeeming
                                                                  the ticket instead.
+show_during_checkin                   boolean                    If ``true``, the answer to the question will be shown
+                                                                 during check-in (if the check-in client supports it).
 hidden                                boolean                    If ``true``, the question will only be shown in the
                                                                  backend.
 print_on_invoice                      boolean                    If ``true``, the question will only be shown on
@@ -76,6 +78,10 @@ dependency_values                     list of strings            If ``dependency
 dependency_value                      string                     An old version of ``dependency_values`` that only allows
                                                                  for one value. **Deprecated.**
 ===================================== ========================== =======================================================
+
+.. versionchanged:: 2023.8
+
+   The ``show_during_checkin`` attribute has been added.
 
 Endpoints
 ---------
@@ -115,6 +121,7 @@ Endpoints
             "position": 1,
             "identifier": "WY3TP9SL",
             "ask_during_checkin": false,
+            "show_during_checkin": false,
             "hidden": false,
             "print_on_invoice": false,
             "valid_number_min": null,
@@ -194,6 +201,7 @@ Endpoints
         "position": 1,
         "identifier": "WY3TP9SL",
         "ask_during_checkin": false,
+        "show_during_checkin": false,
         "hidden": false,
         "print_on_invoice": false,
         "valid_number_min": null,
@@ -257,6 +265,7 @@ Endpoints
         "items": [1, 2],
         "position": 1,
         "ask_during_checkin": false,
+        "show_during_checkin": false,
         "hidden": false,
         "print_on_invoice": false,
         "dependency_question": null,
@@ -293,6 +302,7 @@ Endpoints
         "position": 1,
         "identifier": "WY3TP9SL",
         "ask_during_checkin": false,
+        "show_during_checkin": false,
         "hidden": false,
         "print_on_invoice": false,
         "dependency_question": null,
@@ -376,6 +386,7 @@ Endpoints
         "position": 2,
         "identifier": "WY3TP9SL",
         "ask_during_checkin": false,
+        "show_during_checkin": false,
         "hidden": false,
         "print_on_invoice": false,
         "dependency_question": null,

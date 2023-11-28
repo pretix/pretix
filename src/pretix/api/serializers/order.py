@@ -44,7 +44,7 @@ from pretix.api.serializers import CompatibleJSONField
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
-    InlineItemVariationSerializer, ItemSerializer,
+    InlineItemVariationSerializer, ItemSerializer, QuestionSerializer,
 )
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.decimal import round_decimal
@@ -585,6 +585,9 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
         if 'variation' in self.context['expand']:
             self.fields['variation'] = InlineItemVariationSerializer(read_only=True)
 
+        if 'answers.question' in self.context['expand']:
+            self.fields['answers'].child.fields['question'] = QuestionSerializer(read_only=True)
+
 
 class OrderPaymentTypeField(serializers.Field):
     # TODO: Remove after pretix 2.2
@@ -715,7 +718,7 @@ class OrderSerializer(I18nAwareModelSerializer):
         fields = (
             'code', 'event', 'status', 'testmode', 'secret', 'email', 'phone', 'locale', 'datetime', 'expires', 'payment_date',
             'payment_provider', 'fees', 'total', 'comment', 'custom_followup_at', 'invoice_address', 'positions', 'downloads',
-            'checkin_attention', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
+            'checkin_attention', 'checkin_text', 'last_modified', 'payments', 'refunds', 'require_approval', 'sales_channel',
             'url', 'customer', 'valid_if_pending'
         )
         read_only_fields = (
@@ -771,8 +774,8 @@ class OrderSerializer(I18nAwareModelSerializer):
     def update(self, instance, validated_data):
         # Even though all fields that shouldn't be edited are marked as read_only in the serializer
         # (hopefully), we'll be extra careful here and be explicit about the model fields we update.
-        update_fields = ['comment', 'custom_followup_at', 'checkin_attention', 'email', 'locale', 'phone',
-                         'valid_if_pending']
+        update_fields = ['comment', 'custom_followup_at', 'checkin_attention', 'checkin_text', 'email', 'locale',
+                         'phone', 'valid_if_pending']
 
         if 'invoice_address' in validated_data:
             iadata = validated_data.pop('invoice_address')
@@ -1036,9 +1039,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     class Meta:
         model = Order
         fields = ('code', 'status', 'testmode', 'email', 'phone', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
-                  'invoice_address', 'positions', 'checkin_attention', 'payment_info', 'payment_date', 'consume_carts',
-                  'force', 'send_email', 'simulate', 'customer', 'custom_followup_at', 'require_approval',
-                  'valid_if_pending')
+                  'invoice_address', 'positions', 'checkin_attention', 'checkin_text', 'payment_info', 'payment_date',
+                  'consume_carts', 'force', 'send_email', 'simulate', 'customer', 'custom_followup_at',
+                  'require_approval', 'valid_if_pending')
 
     def validate_payment_provider(self, pp):
         if pp is None:

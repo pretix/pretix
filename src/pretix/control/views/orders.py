@@ -513,7 +513,8 @@ class OrderDetail(OrderView):
         ctx['comment_form'] = CommentForm(initial={
             'comment': self.order.comment,
             'custom_followup_at': self.order.custom_followup_at,
-            'checkin_attention': self.order.checkin_attention
+            'checkin_attention': self.order.checkin_attention,
+            'checkin_text': self.order.checkin_text,
         })
         ctx['display_locale'] = dict(settings.LANGUAGES)[self.object.locale or self.request.event.settings.locale]
 
@@ -747,7 +748,13 @@ class OrderComment(OrderView):
                 self.order.log_action('pretix.event.order.checkin_attention', user=self.request.user, data={
                     'new_value': form.cleaned_data.get('checkin_attention')
                 })
-            self.order.save(update_fields=['checkin_attention', 'comment', 'custom_followup_at'])
+
+            if form.cleaned_data.get('checkin_text') != self.order.checkin_text:
+                self.order.checkin_text = form.cleaned_data.get('checkin_text')
+                self.order.log_action('pretix.event.order.checkin_text', user=self.request.user, data={
+                    'new_value': form.cleaned_data.get('checkin_text')
+                })
+            self.order.save(update_fields=['checkin_attention', 'checkin_text', 'comment', 'custom_followup_at'])
             self.order.refresh_from_db()
             messages.success(self.request, _('The comment has been updated.'))
         else:
