@@ -237,7 +237,7 @@ class BaseOrderBulkActionView(OrderSearchMixin, EventPermissionRequiredMixin, As
         })
 
     def get_success_message(self, value):
-        return _("Succesfully executed the action \"{label}\" on {success} of {total} orders.").format(success=value[0], label=self.label, total=value[1])
+        return _("Successfully executed the action \"{label}\" on {success} of {total} orders.").format(success=value[0], label=self.label, total=value[1])
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
