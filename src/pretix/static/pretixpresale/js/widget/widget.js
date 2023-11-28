@@ -1739,6 +1739,10 @@ var shared_root_methods = {
                 root.meta_filter_fields = data.meta_filter_fields;
             } else {
                 root.view = "event";
+                // Replace target_url and subevent with canonical values in case they were slightly wrong
+                root.target_url = data.target_url;
+                root.subevent = data.subevent;
+                // Event data
                 root.name = data.name;
                 root.frontpage_text = data.frontpage_text;
                 root.date_range = data.date_range;

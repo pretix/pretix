@@ -682,6 +682,8 @@ class WidgetAPIProductList(EventListMixin, View):
                 return self.response(cached_data)
 
         data = {
+            'target_url': build_absolute_uri(request.event, 'presale:event.index'),
+            'subevent': self.subevent.pk if self.subevent else None,
             'currency': request.event.currency,
             'display_net_prices': request.event.settings.display_net_prices,
             'use_native_spinners': request.event.settings.widget_use_native_spinners,
