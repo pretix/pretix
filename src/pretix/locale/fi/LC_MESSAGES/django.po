@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-28 14:51+0000\n"
+"POT-Creation-Date: 2023-11-28 15:26+0000\n"
 "PO-Revision-Date: 2023-09-07 03:00+0000\n"
 "Last-Translator: Tuomas Savela <pupp3@icloud.com>\n"
 "Language-Team: Finnish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -23270,7 +23270,7 @@ msgstr "Ladatun CSV-tiedoston parsiminen epäonnistui."
 #: pretix/control/views/orders.py:240
 #, python-brace-format
 msgid ""
-"Succesfully executed the action \"{label}\" on {success} of {total} orders."
+"Successfully executed the action \"{label}\" on {success} of {total} orders."
 msgstr ""
 
 #: pretix/control/views/orders.py:534

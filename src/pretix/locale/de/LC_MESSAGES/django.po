@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-28 14:51+0000\n"
+"POT-Creation-Date: 2023-11-28 15:26+0000\n"
 "PO-Revision-Date: 2023-11-16 11:30+0000\n"
 "Last-Translator: Mira <mira@weller-it.com>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
@@ -25500,7 +25500,7 @@ msgstr "Wir konnten die hochgeladene Datei nicht als CSV-Datei parsen."
 #: pretix/control/views/orders.py:240
 #, python-brace-format
 msgid ""
-"Succesfully executed the action \"{label}\" on {success} of {total} orders."
+"Successfully executed the action \"{label}\" on {success} of {total} orders."
 msgstr ""
 
 #: pretix/control/views/orders.py:534

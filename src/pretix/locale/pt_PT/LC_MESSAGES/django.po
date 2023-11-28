@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-28 14:51+0000\n"
+"POT-Creation-Date: 2023-11-28 15:26+0000\n"
 "PO-Revision-Date: 2023-04-24 19:00+0000\n"
 "Last-Translator: Vasco Baleia <vb2003.12@gmail.com>\n"
 "Language-Team: Portuguese (Portugal) <https://translate.pretix.eu/projects/"
@@ -25658,7 +25658,7 @@ msgstr "Nós fomos incapazes de analisar o ficheiro enviado como ficheiro CSV."
 #: pretix/control/views/orders.py:240
 #, python-brace-format
 msgid ""
-"Succesfully executed the action \"{label}\" on {success} of {total} orders."
+"Successfully executed the action \"{label}\" on {success} of {total} orders."
 msgstr ""
 
 #: pretix/control/views/orders.py:534

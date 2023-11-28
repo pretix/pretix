@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-28 14:51+0000\n"
+"POT-Creation-Date: 2023-11-28 15:26+0000\n"
 "PO-Revision-Date: 2022-04-25 16:10+0000\n"
 "Last-Translator: fsnaix <truonggiangsn@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
@@ -22465,7 +22465,7 @@ msgstr ""
 #: pretix/control/views/orders.py:240
 #, python-brace-format
 msgid ""
-"Succesfully executed the action \"{label}\" on {success} of {total} orders."
+"Successfully executed the action \"{label}\" on {success} of {total} orders."
 msgstr ""
 
 #: pretix/control/views/orders.py:534
