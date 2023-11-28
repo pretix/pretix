@@ -352,6 +352,7 @@ class Checkin(models.Model):
     REASON_AMBIGUOUS = 'ambiguous'
     REASON_ERROR = 'error'
     REASON_BLOCKED = 'blocked'
+    REASON_UNAPPROVED = 'unapproved'
     REASON_INVALID_TIME = 'invalid_time'
     REASONS = (
         (REASON_CANCELED, _('Order canceled')),
@@ -365,6 +366,7 @@ class Checkin(models.Model):
         (REASON_AMBIGUOUS, _('Ticket code is ambiguous on list')),
         (REASON_ERROR, _('Server error')),
         (REASON_BLOCKED, _('Ticket blocked')),
+        (REASON_UNAPPROVED, _('Order not approved')),
         (REASON_INVALID_TIME, _('Ticket not valid at this time')),
     )
 

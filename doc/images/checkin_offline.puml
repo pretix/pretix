@@ -25,27 +25,27 @@ partition "data-based check" {
     else
         -down->[yes] "Is one or more block set on the ticket?"
         --> if "" then
-            -right->[no] "Return error BLOCKED"
+            -right->[yes] "Return error BLOCKED"
         else
-            -down->[yes] "If this is not an exit, is the valid_from/valid_until\nconstraint on the ticket fulfilled?"
+            -down->[no] "Is the order in status PENDING and not yet approved?"
             --> if "" then
-                -right->[no] "Return error INVALID_TIME"
+                -right->[yes] "Return error UNAPPROVED"
             else
-                -down->[yes] "Is the product part of the check-in list?"
+                -down->[no] "If this is not an exit, is the valid_from/valid_until\nconstraint on the ticket fulfilled?"
                 --> if "" then
-                    -right->[no] "Return error PRODUCT"
+                    -right->[no] "Return error INVALID_TIME"
                 else
-                    -down->[yes] "Is the subevent part of the check-in list?"
+                    -down->[yes] "Is the product part of the check-in list?"
                     --> if "" then
-                        -right->[no] "Return error INVALID"
-                        note bottom: TODO\ninconsistent\nwith online\ncheck
+                        -right->[no] "Return error PRODUCT"
                     else
-                        -down->[yes] "Is the order in status PAID?"
+                        -down->[yes] "Is the subevent part of the check-in list?"
                         --> if "" then
-                            -right->[no] "Is Order.require_approval set?"
+                            -right->[no] "Return error INVALID"
+                            note bottom: TODO\ninconsistent\nwith online\ncheck
+                        else
+                            -down->[yes] "Is the order in status PAID?"
                             --> if "" then
-                                -->[yes] "Return error UNPAID "
-                            else
                                 -right->[no] "Is Order.valid_if_pending set?"
                                 --> if "" then
                                     -->[yes] "Is this an entry or exit?"
@@ -62,9 +62,9 @@ partition "data-based check" {
                                         endif
                                     endif
                                 endif
+                            else
+                                -down->[yes] "Is this an entry or exit?"
                             endif
-                        else
-                            -down->[yes] "Is this an entry or exit?"
                         endif
                     endif
                 endif

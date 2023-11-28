@@ -62,6 +62,7 @@ window.vapp = new Vue({
             'result.invalid_time': gettext('Ticket not valid at this time'),
             'result.canceled': gettext('Order canceled'),
             'result.ambiguous': gettext('Ticket code is ambiguous on list'),
+            'result.unapproved': gettext('Order not approved'),
             'status.checkin': gettext('Checked-in Tickets'),
             'status.position': gettext('Valid Tickets'),
             'status.inside': gettext('Currently inside'),
