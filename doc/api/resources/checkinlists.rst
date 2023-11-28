@@ -632,8 +632,8 @@ Order position endpoints
                                        set this to ``false``. In that case, questions will just be ignored. Defaults
                                        to ``true``.
    :<json boolean canceled_supported: When this parameter is set to ``true``, the response code ``canceled`` may be
-                                      returned. Otherwise, canceled orders will return ``unpaid``. (**Deprecated**, will
-                                      be removed and always ``true`` in the future.)
+                                      returned. Otherwise, canceled orders will return ``unpaid``. (**Deprecated**, in
+                                      the future, this will be ignored and ``canceled`` may always be returned.)
    :<json datetime datetime: Specifies the datetime of the check-in. If not supplied, the current time will be used.
    :<json boolean force: Specifies that the check-in should succeed regardless of revoked barcode, previous check-ins or required
                          questions that have not been filled. This is usually used to upload offline scans that already happened,
