@@ -47,5 +47,30 @@ Or, with a docker installation::
 
     $ docker exec -it pretix.service pretix create_order_transactions
 
+Upgrade to 2023.6.0 or newer
+""""""""""""""""""""""""""""
+
+MariaDB and MySQL are no longer supported.
+
+Upgrade to 2023.8.0 or newer
+""""""""""""""""""""""""""""
+
+PostgreSQL 11 is now required.
+
+Upgrade to 2023.9.0 or newer
+""""""""""""""""""""""""""""
+
+This release includes a migration that changes the `id` column of all core database tables from `integer`
+to `bigint`. If you have a large database, the migration step of the upgrade might take significantly longer than
+usual, so plan the update accordingly.
+
+The default value for the `registration` setting in `pretix.cfg` has changed to `false`.
+
+Upgrade to 2023.10.0 or newer
+"""""""""""""""""""""""""""""
+
+This release includes a migration that changes retroactively fills an `organizer` column in the table
+`pretixbase_logentry`. If you have a large database, the migration step of the upgrade might take significantly
+longer than usual, so plan the update accordingly.
 
 .. _blog: https://pretix.eu/about/en/blog/

@@ -276,7 +276,8 @@ Restarting the service can take a few seconds, especially if the update requires
 Replace ``stable`` above with a specific version number like ``1.0`` or with ``latest`` for the development
 version, if you want to.
 
-Make sure to also read :ref:`update_notes` and the release notes of the version you are updating to.
+Make sure to also read :ref:`update_notes` and the release notes of the version you are updating to. Pay special
+attention to the "Runtime and server environment" section of all release notes between your current and new version.
 
 .. _`docker_plugininstall`:
 

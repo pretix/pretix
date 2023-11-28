@@ -286,7 +286,8 @@ To upgrade to a new pretix release, pull the latest code changes and run the fol
     (venv)$ python -m pretix updatestyles
     # systemctl restart pretix-web pretix-worker
 
-Make sure to also read :ref:`update_notes` and the release notes of the version you are updating to.
+Make sure to also read :ref:`update_notes` and the release notes of the version you are updating to. Pay special
+attention to the "Runtime and server environment" section of all release notes between your current and new version.
 
 .. _`manual_plugininstall`:
 
