@@ -96,11 +96,9 @@ a.searchresult, .check-result {
 .check-result-status {
   height: 30vh;
   max-height: 200px;
-  font-size: 35px;
-  text-transform: uppercase;
-  font-weight: bold;
   text-align: center;
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   color: white;
@@ -117,6 +115,21 @@ a.searchresult, .check-result {
   &.check-result-purple {
     background: $brand-primary;
   }
+  .check-result-text {
+    font-size: 35px;
+    font-weight: bold;
+    margin-bottom: 10px;
+  }
+  .check-result-item {
+    font-size: 28px;
+  }
+}
+.check-result .panel-body code {
+  float: right;
+  background: none;
+  font-size: 18px;
+  line-height: 1.1;
+  padding: 0;
 }
 
 .attention {
@@ -137,7 +150,7 @@ a.searchresult, .check-result {
 
 @-webkit-keyframes blinking {
   0%, 49% {
-    background-color: $brand-primary;
+    background-color: $brand-info;
     color: white;
   }
   50%, 100% {

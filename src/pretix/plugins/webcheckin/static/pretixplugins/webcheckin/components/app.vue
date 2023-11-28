@@ -25,17 +25,22 @@
           {{ checkError }}
         </div>
         <div :class="'check-result-status check-result-' + checkResultColor">
-          {{ checkResultText }}
+          <div class="check-result-text">{{ checkResultText }}</div>
+          <div class="check-result-item">{{ checkResultItemvar }}</div>
+          <div class="check-result-reason" v-if="checkResult.reason_explanation">{{ checkResult.reason_explanation }}</div>
+
+        </div>
+        <div class="attention" v-if="checkResult && checkResult.require_attention">
+          <span class="fa fa-warning"></span>
+          {{ $root.strings['check.attention'] }}
         </div>
         <div class="panel-body" v-if="checkResult.position">
           <div class="details">
-            <h4>{{ checkResult.position.order }}-{{ checkResult.position.positionid }} {{ checkResult.position.attendee_name }}</h4>
-            <strong v-if="checkResult.reason_explanation">{{ checkResult.reason_explanation }}<br></strong>
-            <span>{{ checkResultItemvar }}</span><br>
+            <code>{{ checkResult.position.order }}-{{ checkResult.position.positionid }}</code>
+            <h4>{{ checkResult.position.attendee_name }}</h4>
             <span v-if="checkResultSubevent">{{ checkResultSubevent }}<br></span>
             <span class="secret">{{ checkResult.position.secret }}</span>
             <span v-if="checkResult.position.seat"><br>{{ checkResult.position.seat.name }}</span>
-            <strong v-for="t in checkResult.checkin_texts"><br>{{ t }}</strong>
             <span v-for="a in checkResult.position.answers">
               <span v-if="a.question.show_during_checkin">
                 <br>
@@ -43,11 +48,8 @@
                 {{ a.answer | answer(a.question, $root.timezone, $root.strings) }}
               </span>
             </span>
+            <strong v-for="t in checkResult.checkin_texts"><br>{{ t }}</strong>
           </div>
-        </div>
-        <div class="attention" v-if="checkResult && checkResult.require_attention">
-          <span class="fa fa-warning"></span>
-          {{ $root.strings['check.attention'] }}
         </div>
       </div>
 
@@ -423,7 +425,7 @@ export default {
             } else if (data.status === 'error' && data.reason === 'invalid' && fallbackToSearch) {
               this.startSearch(false)
             } else {
-              this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
+              this.clearTimeout = window.setTimeout(this.clear, 1000 * 30)
               this.fetchStatus()
             }
           })
@@ -431,7 +433,7 @@ export default {
             this.checkLoading = false
             this.checkResult = {}
             this.checkError = reason.toString()
-            this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
+            this.clearTimeout = window.setTimeout(this.clear, 1000 * 30)
           })
     },
     globalKeydown(e) {
@@ -511,13 +513,13 @@ export default {
             } else {
               this.searchError = data
             }
-            this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
+            this.clearTimeout = window.setTimeout(this.clear, 1000 * 30)
           })
           .catch(reason => {
             this.searchLoading = false
             this.searchResults = []
             this.searchError = reason
-            this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
+            this.clearTimeout = window.setTimeout(this.clear, 1000 * 30)
           })
     },
     searchNext() {
@@ -534,12 +536,12 @@ export default {
             } else {
               this.searchError = data
             }
-            this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
+            this.clearTimeout = window.setTimeout(this.clear, 1000 * 30)
           })
           .catch(reason => {
             this.searchLoading = false
             this.searchError = reason
-            this.clearTimeout = window.setTimeout(this.clear, 1000 * 20)
+            this.clearTimeout = window.setTimeout(this.clear, 1000 * 30)
           })
     },
     switchType() {
