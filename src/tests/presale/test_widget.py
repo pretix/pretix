@@ -162,6 +162,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
         assert data == {
+            "target_url": "http://example.com/ccc/30c3/",
+            "subevent": None,
             "name": "30C3",
             "date_range": f"Dec. 26, {self.event.date_from.year} 00:00",
             "frontpage_text": "",
@@ -363,6 +365,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
         assert data == {
+            "target_url": "http://example.com/ccc/30c3/",
+            "subevent": None,
             "name": "30C3",
             "date_range": f"Dec. 26, {self.event.date_from.year} 00:00",
             "frontpage_text": "",
@@ -421,6 +425,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
         assert data == {
+            "target_url": "http://example.com/ccc/30c3/",
+            "subevent": None,
             "name": "30C3",
             "date_range": f"Dec. 26, {self.event.date_from.year} 00:00",
             "frontpage_text": "",
@@ -503,6 +509,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert response['Access-Control-Allow-Origin'] == '*'
         data = json.loads(response.content.decode())
         assert data == {
+            "target_url": "http://example.com/ccc/30c3/",
+            "subevent": None,
             "name": "30C3",
             "date_range": f"Dec. 26, {self.event.date_from.year} 00:00",
             "frontpage_text": "",
