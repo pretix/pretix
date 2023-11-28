@@ -6,6 +6,7 @@ Absenderinformation
 Absendername
 Admin
 Adminbereich
+Affirm
 AGPL
 AGPLv
 Alipay
@@ -340,6 +341,7 @@ URIs
 Ursprüngl
 USt
 Überweisungs
+Überzahlten
 Validierung
 Venmo
 Veranstaltereinstellungen
