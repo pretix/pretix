@@ -263,8 +263,8 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
         # IMPORTANT: If this is updated, also update the ItemVariation query
         # in models/event.py: EventMixin.annotated()
         Q(active=True)
-        & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
-        & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+        & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()) | Q(available_from_mode='info'))
+        & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()) | Q(available_until_mode='info'))
         & Q(sales_channels__contains=channel) & Q(require_bundling=False)
     )
     if not allow_addons:
@@ -796,6 +796,20 @@ class Item(LoggedModel):
         if not self.active or not self.is_available_by_time(now_dt):
             return False
         return True
+
+    @property
+    def unavailability_reason(self) -> str:
+        now_dt = now()
+        if not self.active:
+            return 'active'
+        elif self.available_from and self.available_from > now_dt:
+            return 'available_from'
+        elif self.available_until and self.available_until < now_dt:
+            return 'available_until'
+        elif self.require_voucher or self.hide_without_voucher:
+            return 'require_voucher'
+        else:
+            return None
 
     def _get_quotas(self, ignored_quotas=None, subevent=None):
         check_quotas = set(getattr(

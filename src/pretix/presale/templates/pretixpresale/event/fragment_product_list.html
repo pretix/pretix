@@ -185,11 +185,8 @@
                                     {% endif %}
                                     </p>
                                 </div>
-                                {% if item.require_voucher %}
-                                    <div class="col-md-2 col-sm-3 col-xs-6 availability-box unavailable">
-                                        <p><small><a href="#voucher">{% trans "Enter a voucher code below to buy this ticket." %}</a></small></p>
-                                    </div>
-                                {% elif var.cached_availability.0 == 100 %}
+                            xxx{{ item.get_unavailability_reason }}
+                                {% if var.cached_availability.0 == 100 and not item.unavailability_reason %}
                                     <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
 										{% if var.order_max == 1 %}
                                             <label class="btn btn-default btn-checkbox">
@@ -338,11 +335,7 @@
                         {% endif %}
                         </p>
                     </div>
-                    {% if item.require_voucher %}
-                        <div class="col-md-2 col-sm-3 col-xs-6 availability-box unavailable">
-                            <p><small><a href="#voucher">{% trans "Enter a voucher code below to buy this ticket." %}</a></small></p>
-                        </div>
-                    {% elif item.cached_availability.0 == 100 %}
+                    {% if item.cached_availability.0 == 100 and not item.unavailability_reason %}
                         <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
 							{% if item.order_max == 1 %}
                                 <label class="btn btn-default btn-checkbox">
