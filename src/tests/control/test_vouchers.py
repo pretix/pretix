@@ -365,6 +365,19 @@ class VoucherFormTest(SoupTestMixin, TransactionTestCase):
         v.refresh_from_db()
         assert v.valid_until < now()
 
+    def test_change_voucher_validity_to_valid_quota_full_already_redeemed(self):
+        self.quota_tickets.size = 1
+        self.quota_tickets.save()
+        with scopes_disabled():
+            v = self.event.vouchers.create(item=self.ticket, valid_until=now() - datetime.timedelta(days=3),
+                                           block_quota=True, redeemed=1, max_usages=2)
+        self._change_voucher(v, {
+            'valid_until_0': (now() + datetime.timedelta(days=3)).strftime('%Y-%m-%d'),
+            'valid_until_1': (now() + datetime.timedelta(days=3)).strftime('%H:%M:%S')
+        })
+        v.refresh_from_db()
+        assert v.valid_until > now()
+
     def test_change_voucher_validity_to_valid_quota_free(self):
         with scopes_disabled():
             v = self.event.vouchers.create(item=self.ticket, valid_until=now() - datetime.timedelta(days=3),

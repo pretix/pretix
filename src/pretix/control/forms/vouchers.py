@@ -201,6 +201,8 @@ class VoucherForm(I18nModelForm):
             cnt = len(data['codes']) * data.get('max_usages', 0)
         else:
             cnt = data.get('max_usages', 0)
+            if self.instance and self.instance.pk:
+                cnt -= self.instance.redeemed  # these do not need quota any more
 
         Voucher.clean_item_properties(
             data, self.instance.event,
