@@ -424,5 +424,10 @@ class Discount(LoggedModel):
                                 break
 
             for g in candidate_groups:
-                self._apply_min_count(positions, g, g, result)
+                self._apply_min_count(
+                    positions,
+                    [idx for idx in g if idx in condition_candidates],
+                    [idx for idx in g if idx in benefit_candidates],
+                    result
+                )
         return result

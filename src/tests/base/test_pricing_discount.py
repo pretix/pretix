@@ -967,6 +967,31 @@ def test_limit_products(event, item, item2):
 
 @pytest.mark.django_db
 @scopes_disabled()
+def test_limit_products_subevents_distinct(event, item, item2):
+    d1 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=20, condition_all_products=False,
+                  subevent_mode=Discount.SUBEVENT_MODE_DISTINCT)
+    d1.save()
+    d1.condition_limit_products.add(item)
+
+    positions = (
+        (item.pk, 1, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item.pk, 2, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item.pk, 3, Decimal('100.00'), False, False, Decimal('0.00')),
+        (item2.pk, 4, Decimal('50.00'), False, False, Decimal('0.00')),
+    )
+    expected = (
+        Decimal('80.00'),
+        Decimal('80.00'),
+        Decimal('80.00'),
+        Decimal('50.00'),
+    )
+
+    new_prices = [p for p, d in apply_discounts(event, 'web', positions)]
+    assert sorted(new_prices) == sorted(expected)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
 def test_sales_channels(event, item):
     d1 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=20, sales_channels=['resellers'])
     d1.save()
