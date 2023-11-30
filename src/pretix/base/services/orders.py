@@ -2620,7 +2620,7 @@ class OrderChangeManager:
         i = self.order.invoices.filter(is_cancellation=False).last()
         if self.reissue_invoice and self._invoice_dirty:
             order_now_qualified = invoice_qualified(self.order)
-            invoice_should_be_generated = (
+            invoice_should_be_generated_now = (
                 self.event.settings.invoice_generate == "True" or (
                     self.event.settings.invoice_generate == "paid" and
                     self.open_payment is not None and
@@ -2635,13 +2635,16 @@ class OrderChangeManager:
                     not i.canceled
                 )
             )
+            invoice_should_be_generated_later = not invoice_should_be_generated_now and (
+                self.event.settings.invoice_generate in ("True", "paid")
+            )
 
             if order_now_qualified:
-                if invoice_should_be_generated:
+                if invoice_should_be_generated_now:
                     if i and not i.canceled:
                         self._invoices.append(generate_cancellation(i))
                     self._invoices.append(generate_invoice(self.order))
-                else:
+                elif invoice_should_be_generated_later:
                     self.order.invoice_dirty = True
                     self.order.save(update_fields=["invoice_dirty"])
             else:

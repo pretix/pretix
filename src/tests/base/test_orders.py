@@ -2007,6 +2007,20 @@ class OrderChangeManagerTests(TestCase):
         assert self.order.invoices.count() == 3
 
     @classscope(attr='o')
+    def test_reissue_invoice_paid_only_after_payment_only_if_enabled(self):
+        self.event.settings.invoice_generate = "False"
+        assert self.order.invoices.count() == 0
+        self.ocm.add_position(self.ticket, None, Decimal('2.00'))
+        self.ocm.commit()
+        assert self.order.invoices.count() == 0
+        self.order.refresh_from_db()
+        assert not self.order.invoice_dirty
+        self.order.payments.create(
+            provider='manual', amount=self.order.total
+        ).confirm()
+        assert self.order.invoices.count() == 0
+
+    @classscope(attr='o')
     def test_reissue_invoice_paid_stays_paid(self):
         self.event.settings.invoice_generate = "paid"
         self.order.payments.create(
