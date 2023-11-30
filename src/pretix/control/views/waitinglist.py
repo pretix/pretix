@@ -267,7 +267,7 @@ class WaitingListView(EventPermissionRequiredMixin, WaitingListQuerySetMixin, Pa
                     free_seats = num_free_seats_for_product - num_valid_vouchers_for_product
                     wle.availability = (
                         Quota.AVAILABILITY_GONE if free_seats == 0 else wle.availability[0],
-                        min(free_seats, wle.availability[1])
+                        min(free_seats, wle.availability[1]) if wle.availability[1] is not None else free_seats,
                     )
 
                 itemvar_cache[(wle.item, wle.variation, wle.subevent)] = wle.availability
