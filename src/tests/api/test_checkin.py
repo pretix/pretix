@@ -35,7 +35,7 @@ from tests.const import SAMPLE_PNG
 
 from pretix.api.serializers.item import QuestionSerializer
 from pretix.base.models import (
-    Checkin, CheckinList, InvoiceAddress, Order, OrderPosition,
+    Checkin, CheckinList, InvoiceAddress, Order, OrderPosition, LogEntry,
 )
 
 
@@ -1128,11 +1128,17 @@ def test_store_failed(token_client, organizer, clist, event, order):
     ), {
         'raw_barcode': '123456',
         'nonce': '4321',
-        'error_reason': 'invalid'
+        'error_reason': 'invalid',
+        'debug_data': {'foo': 'bar'},
     }, format='json')
     assert resp.status_code == 201
     with scopes_disabled():
         assert Checkin.all.filter(successful=False).exists()
+        for le in LogEntry.objects.filter():
+            print(le.parsed_data)
+        assert LogEntry.objects.filter(action_type='pretix.event.checkin.unknown').first().parsed_data['debug_data'] == {
+            'foo': 'bar'
+        }
 
     resp = token_client.post('/api/v1/organizers/{}/events/{}/checkinlists/{}/failed_checkins/'.format(
         organizer.slug, event.slug, clist.pk,
@@ -1162,7 +1168,7 @@ def test_store_failed(token_client, organizer, clist, event, order):
         'raw_barcode': '123456',
         'nonce': '1234',
         'position': p.pk,
-        'error_reason': 'unpaid'
+        'error_reason': 'unpaid',
     }, format='json')
     assert resp.status_code == 201
     with scopes_disabled():

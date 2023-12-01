@@ -152,6 +152,11 @@ class CheckinListViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['POST'], url_name='failed_checkins')
     @transaction.atomic()
     def failed_checkins(self, *args, **kwargs):
+        additional_log_data = {}
+        if 'debug_data' in self.request.data:
+            # Intentionally undocumented, might be removed again
+            additional_log_data['debug_data'] = self.request.data.pop('debug_data')
+
         serializer = FailedCheckinSerializer(
             data=self.request.data,
             context={'event': self.request.event}
@@ -194,14 +199,16 @@ class CheckinListViewSet(viewsets.ModelViewSet):
                 'reason_explanation': c.error_explanation,
                 'datetime': c.datetime,
                 'type': c.type,
-                'list': c.list.pk
+                'list': c.list.pk,
+                **additional_log_data,
             }, user=self.request.user, auth=self.request.auth)
         else:
             self.request.event.log_action('pretix.event.checkin.unknown', data={
                 'datetime': c.datetime,
                 'type': c.type,
                 'list': c.list.pk,
-                'barcode': c.raw_barcode
+                'barcode': c.raw_barcode,
+                **additional_log_data,
             }, user=self.request.user, auth=self.request.auth)
 
         return Response(serializer.data, status=201)
