@@ -19,9 +19,11 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import types
 from datetime import datetime
 
 from PIL import Image
+from requests.adapters import HTTPAdapter
 
 
 def monkeypatch_vobject_performance():
@@ -68,5 +70,23 @@ def monkeypatch_pillow_safer():
 
 
 def monkeypatch_all_at_ready():
+    monkeypatch_vobject_performance()
+    monkeypatch_pillow_safer()
+
+
+def monkeypatch_requests_timeout():
+    """
+    The requests package does not by default set a timeout for outgoing HTTP requests. This is dangerous especially since
+    celery tasks have no timeout on the task as a whole (as web requests do), so HTTP requests to a non-responding
+    external service could lead to a clogging of the entire celery queue.
+    """
+    old_httpadapter_send = HTTPAdapter.send
+
+    def httpadapter_send(self, request, timeout=None, **kwargs):
+        if timeout is None:
+            timeout = 3
+        return types.MethodType(old_httpadapter_send, self)(request, timeout=timeout, **kwargs)
+
+    HTTPAdapter.send = httpadapter_send
     monkeypatch_vobject_performance()
     monkeypatch_pillow_safer()
