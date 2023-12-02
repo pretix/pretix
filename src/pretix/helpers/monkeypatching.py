@@ -88,5 +88,3 @@ def monkeypatch_requests_timeout():
         return types.MethodType(old_httpadapter_send, self)(request, timeout=timeout, **kwargs)
 
     HTTPAdapter.send = httpadapter_send
-    monkeypatch_vobject_performance()
-    monkeypatch_pillow_safer()
