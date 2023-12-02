@@ -69,11 +69,6 @@ def monkeypatch_pillow_safer():
         Image.ID.remove("EPS")
 
 
-def monkeypatch_all_at_ready():
-    monkeypatch_vobject_performance()
-    monkeypatch_pillow_safer()
-
-
 def monkeypatch_requests_timeout():
     """
     The requests package does not by default set a timeout for outgoing HTTP requests. This is dangerous especially since
@@ -88,3 +83,9 @@ def monkeypatch_requests_timeout():
         return types.MethodType(old_httpadapter_send, self)(request, timeout=timeout, **kwargs)
 
     HTTPAdapter.send = httpadapter_send
+
+
+def monkeypatch_all_at_ready():
+    monkeypatch_vobject_performance()
+    monkeypatch_pillow_safer()
+    monkeypatch_requests_timeout()

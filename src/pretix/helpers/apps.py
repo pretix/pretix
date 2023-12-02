@@ -27,8 +27,5 @@ class PretixHelpersConfig(AppConfig):
     label = 'pretixhelpers'
 
     def ready(self):
-        from .monkeypatching import (
-            monkeypatch_all_at_ready, monkeypatch_requests_timeout,
-        )
+        from .monkeypatching import monkeypatch_all_at_ready
         monkeypatch_all_at_ready()
-        monkeypatch_requests_timeout()
