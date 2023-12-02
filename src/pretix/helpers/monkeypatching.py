@@ -79,7 +79,7 @@ def monkeypatch_requests_timeout():
 
     def httpadapter_send(self, request, timeout=None, **kwargs):
         if timeout is None:
-            timeout = 3
+            timeout = 30
         return types.MethodType(old_httpadapter_send, self)(request, timeout=timeout, **kwargs)
 
     HTTPAdapter.send = httpadapter_send
