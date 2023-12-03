@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-28 15:26+0000\n"
-"PO-Revision-Date: 2023-11-27 17:00+0000\n"
+"PO-Revision-Date: 2023-12-03 22:00+0000\n"
 "Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.1.1\n"
+"X-Generator: Weblate 5.2.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -28846,7 +28846,7 @@ msgstr "Zanim przejdziemy dalej, potrzebujemy odpowiedzi na kilka pytań."
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:10
 msgid ""
 "You need to fill all fields that are marked with <span>*</span> to continue."
-msgstr "Pola oznaczone <span>*</span>są wymagane."
+msgstr "Pola oznaczone <span>*</span> są wymagane."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:51
 #, fuzzy
