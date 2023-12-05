@@ -65,6 +65,8 @@ ALLOWED_TAGS_SNIPPET = [
     'i',
     'strong',
     'span',
+    'strike',
+    's',
     # Update doc/user/markdown.rst if you change this!
 ]
 ALLOWED_TAGS = ALLOWED_TAGS_SNIPPET + [
