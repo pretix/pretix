@@ -343,8 +343,8 @@ Endpoints
    Creates a new event with properties as set in the request body. The properties that are copied are: ``is_public``,
    ``testmode``, ``has_subevents``, settings, plugin settings, items, variations, add-ons, quotas, categories, tax rules, questions.
 
-   If the ``plugins``, ``has_subevents`` and/or ``is_public`` fields are present in the post body this will determine their
-   value. Otherwise their value will be copied from the existing event.
+   If the ``plugins``, ``has_subevents``, ``meta_data`` and/or ``is_public`` fields are present in the post body this will
+   determine their  value. Otherwise their value will be copied from the existing event.
 
    Please note that you can only copy from events under the same organizer this way. Use the ``clone_from`` parameter
    when creating a new event for this instead.

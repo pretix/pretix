@@ -416,7 +416,7 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop, urls
             "location": None,
             "slug": "2030",
             "meta_data": {
-                "type": "Conference"
+                "type": "Workshop"
             },
             "plugins": [
                 "pretix.plugins.ticketoutputpdf"
@@ -434,7 +434,7 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop, urls
         assert cloned_event.testmode
         assert cloned_event.date_admission.isoformat() == "2018-12-27T08:00:00+00:00"
         assert organizer.events.get(slug="2030").meta_values.filter(
-            property__name=meta_prop.name, value="Conference"
+            property__name=meta_prop.name, value="Workshop"
         ).exists()
         assert cloned_event.settings.timezone == "Europe/Vienna"
 
@@ -454,9 +454,6 @@ def test_event_create_with_clone(token_client, organizer, event, meta_prop, urls
             "presale_end": None,
             "location": None,
             "slug": "2031",
-            "meta_data": {
-                "type": "Conference"
-            }
         },
         format='json'
     )

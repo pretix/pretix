@@ -254,7 +254,7 @@ class EventViewSet(viewsets.ModelViewSet):
         new_event = serializer.save(organizer=self.request.organizer)
 
         if copy_from:
-            new_event.copy_data_from(copy_from)
+            new_event.copy_data_from(copy_from, skip_meta_data='meta_data' in serializer.validated_data)
 
             if plugins is not None:
                 new_event.set_active_plugins(plugins)

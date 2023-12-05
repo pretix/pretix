@@ -775,7 +775,7 @@ class Event(EventMixin, LoggedModel):
             time(hour=23, minute=59, second=59)
         ), tz)
 
-    def copy_data_from(self, other):
+    def copy_data_from(self, other, skip_meta_data=False):
         from pretix.presale.style import regenerate_css
 
         from ..signals import event_copy_data
@@ -798,10 +798,11 @@ class Event(EventMixin, LoggedModel):
         self.save()
         self.log_action('pretix.object.cloned', data={'source': other.slug, 'source_id': other.pk})
 
-        for emv in EventMetaValue.objects.filter(event=other):
-            emv.pk = None
-            emv.event = self
-            emv.save(force_insert=True)
+        if not skip_meta_data:
+            for emv in EventMetaValue.objects.filter(event=other):
+                emv.pk = None
+                emv.event = self
+                emv.save(force_insert=True)
 
         for fl in EventFooterLink.objects.filter(event=other):
             fl.pk = None
