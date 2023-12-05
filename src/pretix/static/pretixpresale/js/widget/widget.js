@@ -32,6 +32,9 @@ var strings = {
     'tax_plus_mixed': django.pgettext('widget', 'plus taxes'),
     'quota_left': django.pgettext('widget', 'currently available: %s'),
     'voucher_required': django.pgettext('widget', 'Only available with a voucher'),
+    'not_yet_available': django.pgettext('widget', 'Not yet available'),
+    'not_available_anymore': django.pgettext('widget', 'Not available anymore'),
+    'not_available': django.pgettext('widget', 'Currently not available'),
     'order_min': django.pgettext('widget', 'minimum amount to order: %s'),
     'exit': django.pgettext('widget', 'Close ticket shop'),
     'loading_error': django.pgettext('widget', 'The ticket shop could not be loaded.'),
@@ -190,22 +193,31 @@ var widget_id = makeid(16);
 /* Vue Components */
 Vue.component('availbox', {
     template: ('<div class="pretix-widget-availability-box">'
-        + '<div class="pretix-widget-availability-unavailable" v-if="require_voucher">'
+        + '<div class="pretix-widget-availability-unavailable" v-if="item.current_unavailability_reason === \'require_voucher\'">'
         + '<small><a @click.prevent.stop="focus_voucher_field" role="button">' + strings.voucher_required + '</a></small>'
         + '</div>'
+        + '<div class="pretix-widget-availability-unavailable" v-if="item.current_unavailability_reason === \'available_from\'">'
+        + '<small>' + strings.not_yet_available + '</small>'
+        + '</div>'
+        + '<div class="pretix-widget-availability-unavailable" v-if="item.current_unavailability_reason === \'available_until\'">'
+        + '<small>' + strings.not_available_anymore + '</small>'
+        + '</div>'
+        + '<div class="pretix-widget-availability-unavailable" v-if="item.current_unavailability_reason === \'active\'">'
+        + '<small>' + strings.not_available + '</small>'
+        + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
-        + '       v-if="!require_voucher && avail[0] < 100 && avail[0] > 10">'
+        + '       v-if="!item.current_unavailability_reason && avail[0] < 100 && avail[0] > 10">'
         + strings.reserved
         + '</div>'
         + '<div class="pretix-widget-availability-gone" '
-        + '       v-if="!require_voucher && avail[0] <= 10">'
+        + '       v-if="!item.current_unavailability_reason && avail[0] <= 10">'
         + strings.sold_out
         + '</div>'
         + '<div class="pretix-widget-waiting-list-link"'
         + '     v-if="waiting_list_show">'
         + '<a :href="waiting_list_url" target="_blank" @click="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
         + '</div>'
-        + '<div class="pretix-widget-availability-available" v-if="!require_voucher && avail[0] === 100">'
+        + '<div class="pretix-widget-availability-available" v-if="!item.current_unavailability_reason && avail[0] === 100">'
         + '<label class="pretix-widget-item-count-single-label pretix-widget-btn-checkbox" v-if="order_max === 1 && $root.single_item_select == \'button\'">'
         + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name"'
         + '       v-bind:aria-label="label_select_item"'
@@ -245,9 +257,6 @@ Vue.component('availbox', {
             return {
                 'pretix-widget-item-count-group': !this.$root.use_native_spinners
             }
-        },
-        require_voucher: function () {
-            return this.item.require_voucher && !this.$root.voucher_code
         },
         amount_selected: {
             cache: false,
