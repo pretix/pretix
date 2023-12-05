@@ -118,17 +118,8 @@ var getISOWeeks = function (y) {
 
 /* HTTP API Call helpers */
 var api = {
-    '_getXHR': function () {
-        try {
-            return new window.XMLHttpRequest();
-        } catch (e) {
-            // explicitly bubble up the exception if not found
-            return new window.ActiveXObject('Microsoft.XMLHTTP');
-        }
-    },
-
     '_getJSON': function (endpoint, callback, err_callback) {
-        var xhr = api._getXHR();
+        var xhr = new window.XMLHttpRequest();
         xhr.open("GET", endpoint, true);
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
@@ -160,7 +151,7 @@ var api = {
                 return encodeURIComponent(el.name) + '=' + encodeURIComponent(el.value);
             }).join('&');
 
-        var xhr = api._getXHR();
+        var xhr = new window.XMLHttpRequest();
         xhr.open("POST", endpoint, true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = function (e) {
