@@ -300,6 +300,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 item._remove = True
                 continue
 
+        item.current_unavailability_reason = item.unavailability_reason(has_voucher=voucher)
+
         item.description = str(item.description)
         for recv, resp in item_description.send(sender=event, item=item, variation=None, subevent=subevent):
             if resp:

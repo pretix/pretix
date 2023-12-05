@@ -799,16 +799,15 @@ class Item(LoggedModel):
             return False
         return True
 
-    @property
-    def unavailability_reason(self) -> str:
-        now_dt = now()
+    def unavailability_reason(self, now_dt: datetime=None, has_voucher=False) -> str:
+        now_dt = now_dt or now()
         if not self.active:
             return 'active'
         elif self.available_from and self.available_from > now_dt:
             return 'available_from'
         elif self.available_until and self.available_until < now_dt:
             return 'available_until'
-        elif self.require_voucher or self.hide_without_voucher:
+        elif (self.require_voucher or self.hide_without_voucher) and not has_voucher:
             return 'require_voucher'
         else:
             return None
