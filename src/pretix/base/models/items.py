@@ -720,6 +720,8 @@ class Item(LoggedModel):
         return str(self.internal_name or self.name)
 
     def save(self, *args, **kwargs):
+        if self.hide_without_voucher:
+            self.require_voucher = True
         super().save(*args, **kwargs)
         if self.event:
             self.event.cache.clear()
