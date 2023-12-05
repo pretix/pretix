@@ -91,7 +91,15 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
     user = User.objects.get(pk=user)
     with language(locale, event.settings.region):
         cols = get_all_columns(event)
-        parsed = parse_csv(cf.file, charset=charset)
+        try:
+            parsed = parse_csv(cf.file, charset=charset)
+        except UnicodeDecodeError as e:
+            raise DataImportError(
+                _(
+                    'Error decoding special characters in your file: {message}').format(
+                    message=str(e)
+                )
+            )
         orders = []
         order = None
         data = []
