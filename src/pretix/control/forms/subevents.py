@@ -463,6 +463,7 @@ class RRuleFormSetForm(RRuleForm):
 
 RRuleFormSet = formset_factory(
     RRuleFormSetForm,
+    min_num=1, validate_min=True,
     can_order=False, can_delete=True, extra=1
 )
 
