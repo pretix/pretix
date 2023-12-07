@@ -194,10 +194,12 @@ A complete record could look like this::
 
    v=spf1 a mx include:_spf.pretix.eu ~all
 
-Make sure to read up on the `SPF specification`_. If you want to authenticate your emails with DKIM, set up a DNS TXT
-record for the subdomain ``pretix._domainkey`` with the following contents::
+Make sure to read up on the `SPF specification`_.
 
-   v=DKIM1; k=rsa; p=MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDXrDk6lwOWX00e2MbiiJac6huI+gnzLf9N4G1FnBv3PXq8fz3i2q1szH72OF5mAlKm3zXO4cl/uxx+lfidS1ERbX6Bn9BRstBTQUKWC4JFj8Yk9+fwT7LWehDURazLdTzfsIjJFudLLvxtOKSaOCtMhbPX05DIhziaqVCBqgz/NQIDAQAB
+If you want to authenticate your emails with DKIM, set up a ``CNAME`` record for the subdomain ``pretix._domainkey``
+pointing to ``dkim.pretix.eu``::
+
+   pretix._domainkey.mydomain.com. CNAME dkim.pretix.eu.
 
 Then, please contact support@pretix.eu and we will enable DKIM for your domain on our mail servers.
 
