@@ -3,15 +3,15 @@
 
 {% if item.current_unavailability_reason == 'require_voucher' %}
     <div class="col-md-2 col-sm-3 col-xs-6 availability-box unavailable">
-        <p><small><a href="#voucher">{% trans "Enter a voucher code below to buy this ticket." %}</a></small></p>
+        <p><small><a href="#voucher">{% trans "Enter a voucher code below to buy this product." %}</a></small></p>
     </div>
 {% elif item.current_unavailability_reason == 'available_from' %}
     <div class="col-md-2 col-sm-3 col-xs-6 availability-box unavailable">
-        <p><small>{% trans "This ticket isn't available yet." %}</small></p>
+        <p><small>{% trans "Not available yet." %}</small></p>
     </div>
 {% elif item.current_unavailability_reason == 'available_until' %}
     <div class="col-md-2 col-sm-3 col-xs-6 availability-box unavailable">
-        <p><small>{% trans "This ticket isn't available any more." %}</small></p>
+        <p><small>{% trans "Not available any more." %}</small></p>
     </div>
 {% elif avail <= 10 %}
     <div class="col-md-2 col-sm-3 col-xs-6 availability-box gone">

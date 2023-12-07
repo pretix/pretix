@@ -581,7 +581,7 @@ class ItemUpdateForm(I18nModelForm):
         self.fields['hide_without_voucher'].widget = ButtonGroupRadioSelect(
             choices=(
                 (True, _("Hide product if unavailable")),
-                (False, _("Show info text if unavailable")),
+                (False, _("Show product with info on why it’s unavailable")),
             ),
             option_icons={
                 True: 'eye-slash',
