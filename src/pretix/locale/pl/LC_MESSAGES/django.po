@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-28 15:26+0000\n"
-"PO-Revision-Date: 2023-12-03 22:00+0000\n"
-"Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
+"PO-Revision-Date: 2023-12-08 08:00+0000\n"
+"Last-Translator: Joanna Kochel <kochel.joanna@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -6111,9 +6111,8 @@ msgid "Invalid setting for column \"{header}\"."
 msgstr ""
 
 #: pretix/base/orderimport.py:177
-#, fuzzy
 msgid "Enter a valid phone number."
-msgstr "Numer linii"
+msgstr "Wprowadź ważny numer telefonu."
 
 #: pretix/base/orderimport.py:205 pretix/presale/views/waiting.py:113
 msgctxt "subevent"
@@ -6524,9 +6523,8 @@ msgstr ""
 
 #: pretix/base/payment.py:1447 pretix/base/payment.py:1497
 #: pretix/base/payment.py:1545
-#, fuzzy
 msgid "This gift card is no longer valid."
-msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
+msgstr "Ta karta podarunkowa nie jest już ważna."
 
 #: pretix/base/payment.py:1450 pretix/base/payment.py:1500
 msgid "All credit on this gift card has been used."
@@ -6563,9 +6561,10 @@ msgid "This gift card is not accepted by this event organizer."
 msgstr "Zamówienie nie zostało jeszcze potwierdzone przez organizatora."
 
 #: pretix/base/payment.py:1539
-#, fuzzy
 msgid "This gift card was used in the meantime. Please try again."
-msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
+msgstr ""
+"Ta karta podarunkowa została wykorzystana w międzyczasie. Proszę spróbuj "
+"ponownie."
 
 #: pretix/base/pdf.py:97
 msgid "Ticket code (barcode content)"
@@ -7668,10 +7667,9 @@ msgid "You are receiving this email because you placed an order for {event}."
 msgstr "Otrzymujesz ten e-mail, ponieważ złożyłeś zamówienie na {event}."
 
 #: pretix/base/services/mail.py:459
-#, fuzzy
 msgctxt "attachment_filename"
 msgid "Calendar invite"
-msgstr "Wariant produktu"
+msgstr "Zaproszenie do kalendarza"
 
 #: pretix/base/services/memberships.py:105
 #, python-brace-format
@@ -9520,14 +9518,14 @@ msgstr ""
 #: pretix/base/settings.py:2181 pretix/base/settings.py:2199
 #, python-brace-format
 msgid "Your order: {code}"
-msgstr ""
+msgstr "Twoje zamówienie: {code}"
 
 #: pretix/base/settings.py:2111 pretix/base/settings.py:2144
 #: pretix/base/settings.py:2249 pretix/base/settings.py:2482
 #: pretix/base/settings.py:2519
 #, python-brace-format
 msgid "Your event registration: {code}"
-msgstr ""
+msgstr "Rejestracja zdarzenia: {code}"
 
 #: pretix/base/settings.py:2115
 #, python-brace-format
@@ -9736,7 +9734,7 @@ msgstr ""
 #: pretix/base/settings.py:2265
 #, python-brace-format
 msgid "Your order has been changed: {code}"
-msgstr ""
+msgstr "Twoje zamówienie zostało zmienione: {code}"
 
 #: pretix/base/settings.py:2269
 #, python-brace-format
@@ -9797,7 +9795,7 @@ msgstr ""
 #: pretix/base/settings.py:2303
 #, python-brace-format
 msgid "Event registration confirmed: {code}"
-msgstr ""
+msgstr "Rejestracja zdarzenia potwierdzona: {code}"
 
 #: pretix/base/settings.py:2307
 #, python-brace-format
@@ -9836,7 +9834,7 @@ msgstr ""
 #: pretix/base/settings.py:2334
 #, python-brace-format
 msgid "Your order is about to expire: {code}"
-msgstr ""
+msgstr "Twoje zamówienie ma wygasa: {code}"
 
 #: pretix/base/settings.py:2338
 #, python-brace-format
@@ -9869,7 +9867,7 @@ msgstr ""
 #: pretix/base/settings.py:2352
 #, python-brace-format
 msgid "Your order is pending payment: {code}"
-msgstr ""
+msgstr "Twoje zamówienie jest w oczekiwaniu na płatność: {code}"
 
 #: pretix/base/settings.py:2356
 #, python-brace-format
@@ -9898,9 +9896,9 @@ msgstr ""
 "Zespół {event}"
 
 #: pretix/base/settings.py:2369
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Incomplete payment received: {code}"
-msgstr "Płatność otrzymana dla zamówienia: {code}"
+msgstr "Otrzymana niekompletna płatność: {code}"
 
 #: pretix/base/settings.py:2373
 #, python-brace-format
@@ -9935,9 +9933,9 @@ msgstr ""
 "Zespół {event}"
 
 #: pretix/base/settings.py:2389
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Payment failed for your order: {code}"
-msgstr "Płatność otrzymana dla zamówienia: {code}"
+msgstr "Płatność nie powiodła się za zamówienie: {code}"
 
 #: pretix/base/settings.py:2393
 #, python-brace-format
@@ -10037,7 +10035,7 @@ msgstr ""
 #: pretix/base/settings.py:2440
 #, python-brace-format
 msgid "Order canceled: {code}"
-msgstr ""
+msgstr "Zamów anulowany: {code}"
 
 #: pretix/base/settings.py:2444
 #, python-brace-format
@@ -10162,7 +10160,7 @@ msgstr ""
 #: pretix/base/settings.py:2535
 #, python-brace-format
 msgid "Order denied: {code}"
-msgstr ""
+msgstr "Odmowa zamówienia: {code}"
 
 #: pretix/base/settings.py:2539
 #, python-brace-format
@@ -10216,7 +10214,7 @@ msgstr ""
 #: pretix/base/settings.py:2572 pretix/base/settings.py:2588
 #, python-brace-format
 msgid "Your ticket is ready for download: {code}"
-msgstr ""
+msgstr "Twój bilet jest gotowy do pobrania: {code}"
 
 #: pretix/base/settings.py:2576
 #, python-brace-format
@@ -13371,7 +13369,7 @@ msgstr ""
 
 #: pretix/control/forms/orders.py:324
 msgid "Add-on to"
-msgstr ""
+msgstr "Dodatek do"
 
 #: pretix/control/forms/orders.py:329
 #: pretix/control/templates/pretixcontrol/checkin/index.html:104
@@ -13697,9 +13695,8 @@ msgid "Event types"
 msgstr ""
 
 #: pretix/control/forms/organizer.py:659
-#, fuzzy
 msgid "Gift card value"
-msgstr "Karta prezentowa"
+msgstr "Wartość karty podarunkowej"
 
 #: pretix/control/forms/organizer.py:732
 #, fuzzy
@@ -17465,7 +17462,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/position_change_confirm.html:25
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:16
 msgid "Back"
-msgstr ""
+msgstr "Z powrotem"
 
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:15
 msgid "Payment provider:"
@@ -17931,7 +17928,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:7
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:40
 msgid "Ticket download"
-msgstr ""
+msgstr "Pobieranie biletu"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:11
 msgid "Download settings"
@@ -19623,7 +19620,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/index.html:168
 #: pretix/presale/templates/pretixpresale/event/order.html:21
 msgid "Order details"
-msgstr ""
+msgstr "Szczegóły zamówienia"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:178
 #, fuzzy
@@ -19845,7 +19842,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:4
 #: pretix/control/templates/pretixcontrol/order/pay_cancel.html:8
 msgid "Cancel payment"
-msgstr ""
+msgstr "Anuluj płatność"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:771
 msgid "Confirm as paid"
@@ -19888,7 +19885,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:94
 #: pretix/presale/templates/pretixpresale/event/order.html:317
 msgid "ZIP code and city"
-msgstr ""
+msgstr "Kod pocztowy i miasto"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:963
 msgid "Valid EU VAT ID"
@@ -22885,7 +22882,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:15
 #, python-format
 msgid "Order %(code)s"
-msgstr ""
+msgstr "Zamówienie %(code)s"
 
 #: pretix/control/templates/pretixcontrol/vouchers/detail.html:23
 #, python-format
@@ -23474,7 +23471,7 @@ msgstr ""
 #: pretix/control/views/event.py:802
 #, python-format
 msgid "Your order: %(code)s"
-msgstr ""
+msgstr "Twoje zamówienie: %(code)s"
 
 #: pretix/control/views/event.py:810
 msgid "Unknown e-mail renderer."
@@ -23922,7 +23919,7 @@ msgstr ""
 
 #: pretix/control/views/orders.py:674 pretix/presale/views/order.py:1073
 msgid "Ticket download is not enabled for this product."
-msgstr ""
+msgstr "Pobieranie biletów nie jest włączone dla tego produktu."
 
 #: pretix/control/views/orders.py:795
 msgid "The order has been deleted."
@@ -25236,7 +25233,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/payment.py:455
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:15
 msgid "Please transfer the full amount to the following bank account:"
-msgstr ""
+msgstr "Prześlij pełną kwotę na następujące konto bankowe:"
 
 #: pretix/plugins/banktransfer/payment.py:463
 #: pretix/plugins/banktransfer/payment.py:647
@@ -25249,7 +25246,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:32
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:35
 msgid "Account holder"
-msgstr ""
+msgstr "Właściciel konta"
 
 #: pretix/plugins/banktransfer/payment.py:466
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:17
@@ -25260,7 +25257,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:34
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:42
 msgid "Bank"
-msgstr ""
+msgstr "Bank"
 
 #: pretix/plugins/banktransfer/payment.py:546
 msgid "Invalid IBAN/BIC"
@@ -25364,7 +25361,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:39
 msgid "Reference code (important):"
-msgstr ""
+msgstr "Kod referencyjny (ważny):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:31
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:31
@@ -25376,13 +25373,12 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:36
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:36
-#, fuzzy
 msgid ""
 "After completing your purchase, we will ask you to transfer the money to our "
 "bank account, using a personal reference code."
 msgstr ""
-"Po utworzeniu zamówienia, poprosimy o przelanie pieniędzy na następujące "
-"konto bankowe, umieszczając następujący kod w tytule przelewu:"
+"Po sfinalizowaniu zakupu poprosimy Cię o przelanie pieniędzy na nasze konto "
+"bankowe, korzystając z osobistego kodu referencyjnego."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:43
 #, python-format
@@ -25398,13 +25394,12 @@ msgid "Account"
 msgstr "Konto"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:28
-#, fuzzy
 msgid "Transfer amount"
-msgstr "Wartość całkowita"
+msgstr "Kwota przelewu"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:38
 msgid "Reference code"
-msgstr ""
+msgstr "Kod referencyjny (tytuł przelewu)"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:4
 msgid ""
@@ -25535,7 +25530,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:38
 msgid "Amount:"
-msgstr ""
+msgstr "Kwota:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:42
 msgid ""
@@ -25547,7 +25542,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:71
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:91
 msgid "Scan the qr-code with your banking app"
-msgstr ""
+msgstr "Zeskanuj code QR za pomocą aplikacji bankowej"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:64
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:74
@@ -25556,10 +25551,12 @@ msgid ""
 "Scan this image with your banking app’s QR-Reader to start the payment "
 "process."
 msgstr ""
+"Zeskanuj ten obraz za pomocą czytnika QR aplikacji bankowej, aby rozpocząć "
+"proces płatności. aby rozpocząć proces płatności."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:94
 msgid "Open BezahlCode in your banking app to start the payment process."
-msgstr ""
+msgstr "Otwórz BezahlCode w aplikacji bankowej, aby rozpocząć proces płatności."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:111
 #, python-format
@@ -26058,7 +26055,7 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:616 pretix/plugins/paypal2/payment.py:674
 #: pretix/plugins/paypal2/payment.py:932 pretix/plugins/paypal2/payment.py:942
 msgid "We had trouble communicating with PayPal"
-msgstr ""
+msgstr "Mieliśmy problem z komunikowaniem się z PayPal"
 
 #: pretix/plugins/paypal/payment.py:371 pretix/plugins/paypal/payment.py:380
 #: pretix/plugins/paypal/payment.py:454 pretix/plugins/paypal2/payment.py:598
@@ -26068,6 +26065,8 @@ msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
 msgstr ""
+"Nie mogliśmy przetworzyć Twojej płatności. Poniżej znajdziesz szczegóły "
+"dotyczące dalszego postępowania."
 
 #: pretix/plugins/paypal/payment.py:435 pretix/plugins/paypal/payment.py:444
 #: pretix/plugins/paypal2/payment.py:726
@@ -26075,6 +26074,8 @@ msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
 msgstr ""
+"PayPal nie zatwierdził jeszcze płatności. Poinformujemy Cię jak tylko "
+"płatność zostanie zakończona."
 
 #: pretix/plugins/paypal/payment.py:469 pretix/plugins/paypal2/payment.py:754
 #: pretix/plugins/stripe/payment.py:654 pretix/plugins/stripe/payment.py:1026
@@ -26107,6 +26108,8 @@ msgid ""
 "The total amount listed above will be withdrawn from your PayPal account "
 "after the confirmation of your purchase."
 msgstr ""
+"Całkowita kwota podana powyżej zostanie pobrana z Twojego konta PayPal po "
+"potwierdzeniu zakupu."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/checkout_payment_form.html:3
 msgid ""
@@ -26144,6 +26147,8 @@ msgid ""
 "Our attempt to execute your Payment via PayPal has failed. Please try again "
 "or contact us."
 msgstr ""
+"Nasza próba zrealizowania płatności za pośrednictwem systemu PayPal nie "
+"powiodła się. Spróbuj ponownie lub skontaktuj się z nami."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:8
@@ -26151,36 +26156,40 @@ msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
 msgstr ""
+"Czekamy na odpowiedź od PayPal w sprawie Twojej płatności. Jeśli zajmie to "
+"więcej niż kilka godzin, skontaktuj się z nami."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:17
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
-msgstr ""
+msgstr "Proces płatności rozpoczął się w nowym oknie."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
 msgstr ""
+"Okno do wprowadzenia danych płatności nie zostało otwarte lub zostało "
+"zamknięte?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:25
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:25
 msgid "Click here in order to open the window."
-msgstr ""
+msgstr "Kliknij tutaj, aby otworzyć okno."
 
 #: pretix/plugins/paypal/views.py:106 pretix/plugins/paypal2/views.py:319
 msgid "Invalid response from PayPal received."
-msgstr ""
+msgstr "Otrzymano błędną odpowiedź od PayPal"
 
 #: pretix/plugins/paypal/views.py:122 pretix/plugins/paypal2/views.py:340
 msgid "It looks like you canceled the PayPal payment"
-msgstr ""
+msgstr "Wygląda na to, że anulowałeś płatność PayPal"
 
 #: pretix/plugins/paypal/views.py:254 pretix/plugins/paypal2/views.py:519
 msgid "Your PayPal account has been disconnected."
-msgstr ""
+msgstr "Twoje konto PayPal zostało odłączone."
 
 #: pretix/plugins/paypal2/apps.py:40
 msgid ""
@@ -26204,9 +26213,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/paypal2/payment.py:145
-#, fuzzy
 msgid "Alternative Payment Methods"
-msgstr "Metoda płatności"
+msgstr "Alternatywne metody płatności"
 
 #: pretix/plugins/paypal2/payment.py:147
 msgid ""
@@ -26290,27 +26298,26 @@ msgstr ""
 
 #: pretix/plugins/paypal2/payment.py:330 pretix/plugins/paypal2/views.py:248
 msgid "An error occurred during connecting with PayPal, please try again."
-msgstr ""
+msgstr "Wystąpił bład podczas łączenia z PayPal, spróbuj ponownie."
 
 #: pretix/plugins/paypal2/payment.py:454 pretix/plugins/paypal2/payment.py:938
-#, fuzzy
 msgid ""
 "Something went wrong when requesting the payment status. Please try again."
-msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
+msgstr ""
+"Coś poszło nie tak podczas żądania statusu płatności. Proszę spróbuj "
+"ponownie."
 
 #: pretix/plugins/paypal2/payment.py:463 pretix/plugins/paypal2/payment.py:947
-#, fuzzy
 msgid "You may need to enable JavaScript for PayPal payments."
-msgstr "Wybrano podwydarzenie dla wydarzenie nieseryjnego."
+msgstr "Może być konieczne włączenie JavaScript dla płatności PayPal."
 
 #: pretix/plugins/paypal2/payment.py:1015
 msgid "PayPal APM"
 msgstr "PayPal APM"
 
 #: pretix/plugins/paypal2/payment.py:1016
-#, fuzzy
 msgid "PayPal Alternative Payment Methods"
-msgstr "Metoda płatności"
+msgstr "Alternatywne metody płatności PayPal"
 
 #: pretix/plugins/paypal2/signals.py:59
 msgid "Payment completed."
@@ -26333,28 +26340,24 @@ msgid "Payment pending."
 msgstr "Oczekiwanie na płatność."
 
 #: pretix/plugins/paypal2/signals.py:64
-#, fuzzy
 msgctxt "paypal"
 msgid "Order approved."
-msgstr "Zamówienie zatwierdzone"
+msgstr "Zamówienie zatwierdzone."
 
 #: pretix/plugins/paypal2/signals.py:65
-#, fuzzy
 msgctxt "paypal"
 msgid "Order completed."
-msgstr "Komentarz do zamówienia"
+msgstr "Zamówienie zakończone."
 
 #: pretix/plugins/paypal2/signals.py:66
-#, fuzzy
 msgctxt "paypal"
 msgid "Capture completed."
-msgstr "Data realizacji"
+msgstr "Płatność zakończona."
 
 #: pretix/plugins/paypal2/signals.py:67
-#, fuzzy
 msgctxt "paypal"
 msgid "Capture pending."
-msgstr "w toku"
+msgstr "Płatność w toku."
 
 #: pretix/plugins/paypal2/signals.py:76
 msgid "PayPal reported an event: {}"
@@ -26392,22 +26395,25 @@ msgstr "Prawie gotowe …"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:12
 msgid "Please click on the \"Pay now\" button below to confirm your payment."
-msgstr ""
+msgstr "Kliknij poniższy przycisk \\ „Pay Now \\”, aby potwierdzić płatność."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:15
 msgid "We will then charge your PayPal account and finalize the order."
-msgstr ""
+msgstr "Następnie obciążymy Twoje konto PayPal i sfinalizujemy zamówienie."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:27
 msgid ""
 "After placing your order, you will be able to select your desired payment "
 "method, including PayPal."
 msgstr ""
+"Po złożeniu zamówienia będziesz mógł wybrać żądaną metodę płatności w tym "
+"PayPal."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:5
 msgid ""
 "Please click the \"Pay with PayPal\" button below to start your payment."
 msgstr ""
+"Kliknij przycisk \\ „Pay With PayPal \\” poniżej, aby rozpocząć płatność."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:9
 msgid ""
@@ -26426,9 +26432,8 @@ msgid "Error"
 msgstr "Błąd"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:24
-#, fuzzy
 msgid "Capture status"
-msgstr "Dane zamówienia"
+msgstr "Status płatności"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:27
 msgid ""
@@ -26454,9 +26459,8 @@ msgid "Pay order: %(code)s"
 msgstr "Zlecenie zapłaty: %(code)s"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:26
-#, fuzzy
 msgid "Please turn on JavaScript."
-msgstr "Proszę wpisać to samo hasło dwukrotnie"
+msgstr "Proszę włączyć JavaScript."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:29
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:55
@@ -28161,9 +28165,8 @@ msgid "Download tickets (PDF)"
 msgstr "Pobierz bilety (PDF)"
 
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:66
-#, fuzzy
 msgid "Download ticket (PDF)"
-msgstr "Data i czas"
+msgstr "Pobierz bilet (pdf)"
 
 #: pretix/plugins/ticketoutputpdf/views.py:62
 msgid "Default ticket layout"
@@ -28454,19 +28457,18 @@ msgstr "Wariant produktu wybranego powyżej."
 #: pretix/presale/forms/renderers.py:51
 msgctxt "form"
 msgid "is valid"
-msgstr ""
+msgstr "jest ważny"
 
 #: pretix/presale/forms/renderers.py:53
 msgctxt "form"
 msgid "has errors"
-msgstr ""
+msgstr "ma błędy"
 
 #: pretix/presale/forms/renderers.py:65
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:14
-#, fuzzy
 msgctxt "form"
 msgid "required"
-msgstr "wygaśnięte"
+msgstr "wymagane"
 
 #: pretix/presale/ical.py:85 pretix/presale/ical.py:141
 #, python-brace-format
@@ -28672,9 +28674,8 @@ msgid "Modify"
 msgstr "Zmodyfikuj"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:79
-#, fuzzy
 msgid "Modify invoice information"
-msgstr "Metadane"
+msgstr "Zmodyfikuj informacje na fakturze"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:127
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:23
@@ -28955,7 +28956,7 @@ msgstr "bezpłatne"
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:51
 #, python-format
 msgid "from %(price)s"
-msgstr ""
+msgstr "z %(price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:82
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:56
@@ -29509,17 +29510,16 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:76
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:82
 msgid "Please have your ticket ready when entering the event."
-msgstr ""
+msgstr "Udając się na wydarzenie przygotuj swój bilet."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:85
-#, fuzzy
 msgid "Download your tickets using the buttons below."
-msgstr "Wymagane uwierzytelnianie dwuskładnikowe (2FA)"
+msgstr "Pobierz bilety za pomocą poniższych przycisków."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_downloads.html:94
 #, python-format
 msgid "You will be able to download your tickets here starting on %(date)s."
-msgstr ""
+msgstr "Będziesz mógł pobrać bilety tutaj, zaczynając od %(date)s."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:5
 #: pretix/presale/templates/pretixpresale/event/fragment_event_info.html:6
@@ -29758,13 +29758,13 @@ msgstr "Data zamówienia"
 #: pretix/presale/templates/pretixpresale/event/index.html:142
 #: pretix/presale/views/waiting.py:100 pretix/presale/views/widget.py:723
 msgid "The booking period for this event is over."
-msgstr ""
+msgstr "Okres rezerwacji tego wydarzenia dobiegł końca."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:150
 #: pretix/presale/views/widget.py:725
-#, python-format
+#, fuzzy, python-format
 msgid "The booking period for this event will start on %(date)s at %(time)s."
-msgstr ""
+msgstr "Okres rezerwacji tego wydarzenia rozpocznie się %(date)s o %(hour)s."
 
 #: pretix/presale/templates/pretixpresale/event/index.html:172
 #: pretix/presale/templates/pretixpresale/event/seatingplan.html:23
@@ -29780,9 +29780,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/index.html:201
-#, fuzzy
 msgid "Join waiting list"
-msgstr "Lista oczekiwania"
+msgstr "Dołącz do listy oczekujących"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:217
 #: pretix/presale/templates/pretixpresale/event/voucher.html:431
@@ -29831,6 +29830,8 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:48
 msgid "Your order has been processed successfully! See below for details."
 msgstr ""
+"Twoje zamówienie zostało pomyślnie przetworzone! Szczegółowe informacje "
+"znajdują się poniżej."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:18
 #: pretix/presale/templates/pretixpresale/event/order.html:50
@@ -29851,7 +29852,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:43
 msgid "Please note that we still await your payment to complete the process."
-msgstr ""
+msgstr "Pamiętaj, że nadal czekamy na Twoją płatność w celu ukończenia procesu."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:55
 msgid ""
@@ -29877,7 +29878,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:90
 #, python-format
 msgid "A payment of %(total)s is still pending for this order."
-msgstr ""
+msgstr "To zamówienie nadal oczekuje na płatność %(total)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:95
 #, python-format
@@ -29913,12 +29914,12 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order.html:162
 #, python-format
 msgid "The current value of your gift card is %(value)s."
-msgstr ""
+msgstr "Obecna wartość Twojej karty podarunkowej to %(value)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:169
-#, python-format
+#, fuzzy, python-format
 msgid "This gift card is valid until %(expiry)s."
-msgstr ""
+msgstr "Ta karta podarunkowa jest ważna do %(valid)s."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:180
 #, python-format
@@ -29928,14 +29929,13 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:198
-#, fuzzy
 msgid "Change ordered items"
-msgstr "Może edytować"
+msgstr "Zmień zamówione produkty"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:199
 #: pretix/presale/templates/pretixpresale/event/order.html:290
 msgid "Change details"
-msgstr ""
+msgstr "Zmień szczegóły"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:262
 msgid ""
@@ -30332,6 +30332,9 @@ msgid ""
 "waiting list. If we notify you, you'll have %(hours)s hours time to buy a "
 "ticket until we assign it to the next person on the list."
 msgstr ""
+"Jeżeli bilety będą ponownie dostępne, poinformujemy o tym pierwsze osoby na "
+"liście oczekujących. Jeśli Cię powiadomimy, będziesz mieć %(hours)s godzin "
+"na zakup biletu, dopóki nie przypiszemy go kolejnej osobie na liście."
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:28
 msgid ""
@@ -30359,9 +30362,8 @@ msgid "Add me to the list"
 msgstr "Dodaj mnie do listy"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:5
-#, fuzzy
 msgid "Remove me from the waiting list"
-msgstr "Informacje o zamówieniu zostały zmienione"
+msgstr "Usuń mnie z listy oczekujących"
 
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:9
 msgid ""
@@ -30797,9 +30799,9 @@ msgid "Your cart is empty"
 msgstr "Twój koszyk jest pusty"
 
 #: pretix/presale/views/checkout.py:59
-#, fuzzy
 msgid "The booking period for this event is over or has not yet started."
-msgstr "Zakończenie wydarzenie musi mieć miejsce przed jego rozpoczęciem."
+msgstr ""
+"Okres rezerwacji tego wydarzenia dobiegł końca lub jeszcze się nie rozpoczął."
 
 #: pretix/presale/views/customer.py:247
 msgid ""
@@ -30968,9 +30970,8 @@ msgstr ""
 "Płatności nie są już akceptowane przez to wydarzenie."
 
 #: pretix/presale/views/order.py:1626 pretix/presale/views/order.py:1657
-#, fuzzy
 msgid "You cannot change this order."
-msgstr "Wybrano podwydarzenie dla wydarzenie nieseryjnego."
+msgstr "Nie możesz zmienić tego zamówienia."
 
 #: pretix/presale/views/user.py:61
 msgid "We had difficulties processing your input."
@@ -31026,9 +31027,8 @@ msgstr ""
 "produkt będzie znów dostępny."
 
 #: pretix/presale/views/waiting.py:160
-#, fuzzy
 msgid "We could not find you on our waiting list."
-msgstr "Informacje o zamówieniu zostały zmienione"
+msgstr "Nie mogliśmy cię znaleźć na naszej liście oczekujących."
 
 #: pretix/presale/views/waiting.py:164
 msgid ""
