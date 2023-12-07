@@ -153,19 +153,33 @@ class BaseDataShredder:
 
 
 def shred_log_fields(logentry, banlist=None, whitelist=None):
+    def _shred(d, banlist, whitelist):
+        shredded = False
+        if whitelist:
+            for k, v in d.items():
+                if k not in whitelist:
+                    if isinstance(d[k], list):
+                        d[k] = ['█'] * len(d[k])
+                    if isinstance(d[k], dict):
+                        _shred(d[k], None, ['__'])
+                    elif d[k]:
+                        d[k] = '█'
+                    shredded = True
+        elif banlist:
+            for k in banlist:
+                if k in d:
+                    if isinstance(d[k], list):
+                        d[k] = ['█'] * len(d[k])
+                    if isinstance(d[k], dict):
+                        _shred(d, None, ['__'])
+                    elif d[k]:
+                        d[k] = '█'
+                    shredded = True
+        return shredded
+
     d = logentry.parsed_data
     initial_data = copy.copy(d)
-    shredded = False
-    if whitelist:
-        for k, v in d.items():
-            if k not in whitelist:
-                d[k] = '█'
-                shredded = True
-    elif banlist:
-        for f in banlist:
-            if f in d:
-                d[f] = '█'
-                shredded = True
+    shredded = _shred(d, banlist, whitelist)
     if d != initial_data:
         logentry.data = json.dumps(d)
         logentry.shredded = logentry.shredded or shredded
