@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-28 15:26+0000\n"
 "PO-Revision-Date: 2023-12-08 08:00+0000\n"
-"Last-Translator: Joanna Kochel <kochel.joanna@gmail.com>\n"
+"Last-Translator: Fast128 <fast128@post.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -26117,9 +26117,9 @@ msgid ""
 "payment details. You will then be redirected back here to review and confirm "
 "your order."
 msgstr ""
-"Po kliknięciu \"Kontynuuj\" przekierujemy Cię do PayPal w celu płatności. Po "
-"dokonaniu płatności system przekieruje Cię z powrotem tutaj by potwierdzić "
-"zamówienie."
+"Po kliknięciu \"Kontynuuj\" przekierujemy Cię do PayPal w celu uzupełnienia "
+"danych do płatności. Po uzupełnieniu danych do płatności system przekieruje "
+"Cię z powrotem tutaj by potwierdzić zamówienie."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:6
@@ -28926,7 +28926,7 @@ msgid ""
 "You can choose between %(min_count)s and %(max_count)s options from this "
 "category."
 msgstr ""
-"Możesz wybrać opcje między %(min_count)s a %(max_count)s w tej kategorii."
+"Możesz wybrać pomiędzy %(min_count)s a %(max_count)s opcji w tej kategorii."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:63
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:250
