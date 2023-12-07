@@ -460,6 +460,9 @@ var editor = {
             return;
         }
         if (o.type === 'activeSelection') {
+            o.forEachControl(function(control, k) {
+                o.setControlVisible(k, true);
+            });
             // limit controls to the ones which are common to each element in selection
             for (var obj of o.getObjects()) {
                 if (obj.type === "text" || obj.type === "textarea") {
