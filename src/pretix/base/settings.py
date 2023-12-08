@@ -2910,6 +2910,25 @@ Your {organizer} team"""))  # noqa: W291
             label=_('Use header image also for events without an individually uploaded logo'),
         )
     },
+    'favicon': {
+        'default': None,
+        'type': File,
+        'form_class': ExtFileField,
+        'form_kwargs': dict(
+            label=_('Favicon'),
+            ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_FAVICON,
+            max_size=settings.FILE_UPLOAD_MAX_SIZE_FAVICON,
+            help_text=_('If you provide a favicon, we will show it instead of the default pretix icon. '
+                        'We recommend a size of at least 200x200px to accommodate most devices.')
+        ),
+        'serializer_class': UploadedFileField,
+        'serializer_kwargs': dict(
+            allowed_types=[
+                'image/png', 'image/jpeg', 'image/gif', 'image/x-icon', 'image/vnd.microsoft.icon',
+            ],
+            max_size=settings.FILE_UPLOAD_MAX_SIZE_FAVICON,
+        )
+    },
     'og_image': {
         'default': None,
         'type': File,

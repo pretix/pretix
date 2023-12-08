@@ -164,9 +164,9 @@ def resize_image(image, size):
     return image
 
 
-def create_thumbnail(sourcename, size):
+def create_thumbnail(sourcename, size, formats=None):
     source = default_storage.open(sourcename)
-    image = Image.open(BytesIO(source.read()), formats=settings.PILLOW_FORMATS_QUESTIONS_IMAGE)
+    image = Image.open(BytesIO(source.read()), formats=formats or settings.PILLOW_FORMATS_QUESTIONS_IMAGE)
     try:
         image.load()
     except:
@@ -208,9 +208,9 @@ def create_thumbnail(sourcename, size):
     return t
 
 
-def get_thumbnail(source, size):
+def get_thumbnail(source, size, formats=None):
     # Assumes files are immutable
     try:
         return Thumbnail.objects.get(source=source, size=size)
     except Thumbnail.DoesNotExist:
-        return create_thumbnail(source, size)
+        return create_thumbnail(source, size, formats=formats)

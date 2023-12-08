@@ -1229,7 +1229,8 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
 
 class OrganizerFavicon(View):
     def get(self, *args, **kwargs):
-        if self.request.organizer.settings.favicon:
-            return redirect_to_url(get_thumbnail(self.request.organizer.settings.favicon, '32x32^').thumb.url)
+        icon_file = self.request.organizer.settings.get('favicon', as_type=str, default='')[7:]
+        if icon_file:
+            return redirect_to_url(get_thumbnail(icon_file, '32x32^', formats=settings.PILLOW_FORMATS_QUESTIONS_FAVICON).thumb.url)
         else:
             return redirect_to_url(static("pretixbase/img/favicon.ico"))

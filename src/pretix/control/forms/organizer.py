@@ -423,6 +423,7 @@ class OrganizerSettingsForm(SettingsForm):
         'organizer_link_back',
         'organizer_logo_image_large',
         'organizer_logo_image_inherit',
+        'favicon',
         'giftcard_length',
         'giftcard_expiry_years',
         'locales',
@@ -463,14 +464,6 @@ class OrganizerSettingsForm(SettingsForm):
                     'in the page header. By default, we show your logo with a size of up to 1140x120 pixels. You '
                     'can increase the size with the setting below. We recommend not using small details on the picture '
                     'as it will be resized on smaller screens.')
-    )
-    favicon = ExtFileField(
-        label=_('Favicon'),
-        ext_whitelist=settings.FILE_UPLOAD_EXTENSIONS_FAVICON,
-        required=False,
-        max_size=settings.FILE_UPLOAD_MAX_SIZE_FAVICON,
-        help_text=_('If you provide a favicon, we will show it instead of the default pretix icon. '
-                    'We recommend a size of at least 200x200px to accommodate most devices.')
     )
 
     def __init__(self, *args, **kwargs):
