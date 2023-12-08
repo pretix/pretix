@@ -193,18 +193,20 @@ var widget_id = makeid(16);
 /* Vue Components */
 Vue.component('availbox', {
     template: ('<div class="pretix-widget-availability-box">'
-        + '<div class="pretix-widget-availability-unavailable" v-if="item.current_unavailability_reason === \'require_voucher\'">'
+        + '<div class="pretix-widget-availability-unavailable"'
+        + '     v-if="item.current_unavailability_reason === \'require_voucher\'">'
         + '<small><a @click.prevent.stop="focus_voucher_field" role="button">{{unavailability_reason_message}}</a></small>'
         + '</div>'
-        + '<div class="pretix-widget-availability-unavailable" v-if="item.current_unavailability_reason && item.current_unavailability_reason !== \'require_voucher\'">'
+        + '<div class="pretix-widget-availability-unavailable"'
+        + '     v-else-if="item.current_unavailability_reason">'
         + '<small>{{unavailability_reason_message}}</small>'
         + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
-        + '       v-if="!item.current_unavailability_reason && avail[0] < 100 && avail[0] > 10">'
+        + '     v-else-if="avail[0] < 100 && avail[0] > 10">'
         + strings.reserved
         + '</div>'
         + '<div class="pretix-widget-availability-gone" '
-        + '       v-if="!item.current_unavailability_reason && avail[0] <= 10">'
+        + '     v-else-if="avail[0] <= 10">'
         + strings.sold_out
         + '</div>'
         + '<div class="pretix-widget-waiting-list-link"'
