@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-28 15:26+0000\n"
-"PO-Revision-Date: 2023-12-08 15:45+0000\n"
+"PO-Revision-Date: 2023-12-08 15:54+0000\n"
 "Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -13881,7 +13881,7 @@ msgstr ""
 #: pretix/control/forms/rrule.py:110 pretix/control/forms/rrule.py:149
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:21
 msgid "Day"
-msgstr ""
+msgstr "Dzień"
 
 #: pretix/control/forms/rrule.py:112 pretix/control/forms/rrule.py:151
 msgid "Weekend day"
