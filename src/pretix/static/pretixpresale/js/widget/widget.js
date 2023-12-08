@@ -31,10 +31,10 @@ var strings = {
     'tax_incl_mixed': django.pgettext('widget', 'incl. taxes'),
     'tax_plus_mixed': django.pgettext('widget', 'plus taxes'),
     'quota_left': django.pgettext('widget', 'currently available: %s'),
-    'voucher_required': django.pgettext('widget', 'Only available with a voucher'),
-    'not_yet_available': django.pgettext('widget', 'Not yet available'),
-    'not_available_anymore': django.pgettext('widget', 'Not available anymore'),
-    'not_available': django.pgettext('widget', 'Currently not available'),
+    'unavailable_require_voucher': django.pgettext('widget', 'Only available with a voucher'),
+    'unavailable_available_from': django.pgettext('widget', 'Not yet available'),
+    'unavailable_available_until': django.pgettext('widget', 'Not available anymore'),
+    'unavailable_active': django.pgettext('widget', 'Currently not available'),
     'order_min': django.pgettext('widget', 'minimum amount to order: %s'),
     'exit': django.pgettext('widget', 'Close ticket shop'),
     'loading_error': django.pgettext('widget', 'The ticket shop could not be loaded.'),
@@ -194,16 +194,10 @@ var widget_id = makeid(16);
 Vue.component('availbox', {
     template: ('<div class="pretix-widget-availability-box">'
         + '<div class="pretix-widget-availability-unavailable" v-if="item.current_unavailability_reason === \'require_voucher\'">'
-        + '<small><a @click.prevent.stop="focus_voucher_field" role="button">' + strings.voucher_required + '</a></small>'
+        + '<small><a @click.prevent.stop="focus_voucher_field" role="button">{{unavailability_reason_message}}</a></small>'
         + '</div>'
-        + '<div class="pretix-widget-availability-unavailable" v-if="item.current_unavailability_reason === \'available_from\'">'
-        + '<small>' + strings.not_yet_available + '</small>'
-        + '</div>'
-        + '<div class="pretix-widget-availability-unavailable" v-if="item.current_unavailability_reason === \'available_until\'">'
-        + '<small>' + strings.not_available_anymore + '</small>'
-        + '</div>'
-        + '<div class="pretix-widget-availability-unavailable" v-if="item.current_unavailability_reason === \'active\'">'
-        + '<small>' + strings.not_available + '</small>'
+        + '<div class="pretix-widget-availability-unavailable" v-if="item.current_unavailability_reason && item.current_unavailability_reason !== \'require_voucher\'">'
+        + '<small>{{unavailability_reason_message}}</small>'
         + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
         + '       v-if="!item.current_unavailability_reason && avail[0] < 100 && avail[0] > 10">'
@@ -257,6 +251,13 @@ Vue.component('availbox', {
             return {
                 'pretix-widget-item-count-group': !this.$root.use_native_spinners
             }
+        },
+        unavailability_reason_message: function () {
+            var reason = this.item.current_unavailability_reason
+            if (reason) {
+                return strings["unavailable_" + reason] || reason;
+            }
+            return "";
         },
         amount_selected: {
             cache: false,
