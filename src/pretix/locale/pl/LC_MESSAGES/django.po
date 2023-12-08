@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-28 15:26+0000\n"
 "PO-Revision-Date: 2023-12-09 07:00+0000\n"
-"Last-Translator: Fast128 <fast128@post.pl>\n"
+"Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -9540,7 +9540,7 @@ msgstr "Twoje zamówienie: {code}"
 #: pretix/base/settings.py:2519
 #, python-brace-format
 msgid "Your event registration: {code}"
-msgstr "Rejestracja zdarzenia: {code}"
+msgstr "Twoja rejestracja na wydarzenie: {code}"
 
 #: pretix/base/settings.py:2115
 #, python-brace-format
@@ -9810,7 +9810,7 @@ msgstr ""
 #: pretix/base/settings.py:2303
 #, python-brace-format
 msgid "Event registration confirmed: {code}"
-msgstr "Rejestracja zdarzenia potwierdzona: {code}"
+msgstr "Rejestracja na wydarzenie potwierdzona: {code}"
 
 #: pretix/base/settings.py:2307
 #, python-brace-format
@@ -9950,7 +9950,7 @@ msgstr ""
 #: pretix/base/settings.py:2389
 #, python-brace-format
 msgid "Payment failed for your order: {code}"
-msgstr "Płatność nie powiodła się za zamówienie: {code}"
+msgstr "Płatność za zamówienie nieudana: {code}"
 
 #: pretix/base/settings.py:2393
 #, python-brace-format
@@ -10050,7 +10050,7 @@ msgstr ""
 #: pretix/base/settings.py:2440
 #, python-brace-format
 msgid "Order canceled: {code}"
-msgstr "Zamów anulowany: {code}"
+msgstr "Zamówienie anulowane: {code}"
 
 #: pretix/base/settings.py:2444
 #, python-brace-format
@@ -10142,7 +10142,7 @@ msgstr ""
 #: pretix/base/settings.py:2498
 #, python-brace-format
 msgid "Order approved and confirmed: {code}"
-msgstr "Zamówienie zatwierdzony i potwierdzony: {code}"
+msgstr "Zamówienie zatwierdzone i potwierdzone: {code}"
 
 #: pretix/base/settings.py:2502
 #, python-brace-format
@@ -10175,7 +10175,7 @@ msgstr ""
 #: pretix/base/settings.py:2535
 #, python-brace-format
 msgid "Order denied: {code}"
-msgstr "Odmowa zamówienia: {code}"
+msgstr "Zamówienie odrzucone: {code}"
 
 #: pretix/base/settings.py:2539
 #, python-brace-format
