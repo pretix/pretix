@@ -122,7 +122,7 @@ class WaitingListForm(forms.ModelForm):
             else:
                 self.instance.variation = None
 
-        except ObjectDoesNotExist:
+        except (ObjectDoesNotExist, ValueError):
             raise ValidationError(_("Invalid product selected."))
 
         data = super().clean()
