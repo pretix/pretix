@@ -459,26 +459,6 @@ var editor = {
         if (!o) {
             return;
         }
-        if (o.type === 'activeSelection') {
-            o.forEachControl(function(control, k) {
-                o.setControlVisible(k, true);
-            });
-            // limit controls to the ones which are common to each element in selection
-            for (var obj of o.getObjects()) {
-                if (obj.type === "text" || obj.type === "textarea") {
-                    // special case „text“ in group does not support any controls
-                    o.forEachControl(function(control, k) {
-                        o.setControlVisible(k, false);
-                    });
-                    return
-                }
-                obj.forEachControl(function(control, k) {
-                    if (!obj.isControlVisible(k)) {
-                        o.setControlVisible(k, false);
-                    }
-                })
-            }
-        }
         var bottom = editor.pdf_viewport.height - o.height * o.scaleY - o.top;
         if (o.downward) {
             bottom = editor.pdf_viewport.height - o.top;
@@ -486,7 +466,15 @@ var editor = {
         $("#toolbox-position-x").val(editor._px2mm(o.left).toFixed(2));
         $("#toolbox-position-y").val(editor._px2mm(bottom).toFixed(2));
 
-        if (o.type === "barcodearea") {
+        if (o.type === 'activeSelection') {
+            // limit controls to the ones which are common to each element in selection
+            o.forEachControl(function(control, k) {
+                o.setControlVisible(k, o.getObjects().every(function(obj) {
+                    // special case „text“ in group does not support any controls
+                    return obj.type !== "text" && obj.type !== "textarea" && obj.isControlVisible(k)
+                }));
+            });
+        } else if (o.type === "barcodearea") {
             $("#toolbox-squaresize").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
             $("#toolbox-qrwhitespace").prop("checked", o.nowhitespace || false);
         } else if (o.type === "imagearea") {
