@@ -50,6 +50,7 @@ from pretix.base.services.orderimport import import_orders, parse_csv
 from pretix.base.views.tasks import AsyncAction
 from pretix.control.forms.orderimport import ProcessForm
 from pretix.control.permissions import EventPermissionRequiredMixin
+from pretix.helpers.http import redirect_to_url
 
 logger = logging.getLogger(__name__)
 ENCODINGS = (
@@ -69,19 +70,19 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         if 'file' not in request.FILES:
-            return redirect(reverse('control:event.orders.import', kwargs={
+            return redirect_to_url(reverse('control:event.orders.import', kwargs={
                 'event': request.event.slug,
                 'organizer': request.organizer.slug,
             }))
         if not request.FILES['file'].name.lower().endswith('.csv'):
             messages.error(request, _('Please only upload CSV files.'))
-            return redirect(reverse('control:event.orders.import', kwargs={
+            return redirect_to_url(reverse('control:event.orders.import', kwargs={
                 'event': request.event.slug,
                 'organizer': request.organizer.slug,
             }))
         if request.FILES['file'].size > settings.FILE_UPLOAD_MAX_SIZE_OTHER:
             messages.error(request, _('Please do not upload files larger than 10 MB.'))
-            return redirect(reverse('control:event.orders.import', kwargs={
+            return redirect_to_url(reverse('control:event.orders.import', kwargs={
                 'event': request.event.slug,
                 'organizer': request.organizer.slug,
             }))

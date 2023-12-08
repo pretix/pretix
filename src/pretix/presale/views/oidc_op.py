@@ -44,6 +44,7 @@ from pretix.base.customersso.oidc import (
 from pretix.base.models.customers import (
     CustomerSSOAccessToken, CustomerSSOClient, CustomerSSOGrant,
 )
+from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.middlewares import CsrfViewMiddleware
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.forms.customer import AuthenticationForm
@@ -106,7 +107,7 @@ class AuthorizeView(View):
             CsrfViewMiddleware(lambda: None)._check_token(request)
         except:
             # External request, we prefer GET and will redirect to prevent confusion with our login form
-            return redirect(request.path + '?' + request.POST.urlencode())
+            return redirect_to_url(request.path + '?' + request.POST.urlencode())
         return self._process_auth_request(request, request.GET)
 
     def _final_error(self, error, error_description):

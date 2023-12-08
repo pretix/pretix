@@ -86,6 +86,7 @@ from pretix.base.signals import (
 from pretix.base.templatetags.money import money_filter
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
+from pretix.helpers.http import redirect_to_url
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.presale.forms.checkout import InvoiceAddressForm, QuestionsForm
@@ -420,9 +421,9 @@ class OrderPaymentStart(EventViewMixin, OrderDetailMixin, TemplateView):
         if 'payment_change_{}'.format(self.order.pk) in request.session:
             del request.session['payment_change_{}'.format(self.order.pk)]
         if isinstance(resp, str):
-            return redirect(resp)
+            return redirect_to_url(resp)
         elif resp is True:
-            return redirect(self.get_confirm_url())
+            return redirect_to_url(self.get_confirm_url())
         else:
             return self.get(request, *args, **kwargs)
 
@@ -574,9 +575,9 @@ class OrderPaymentComplete(EventViewMixin, OrderDetailMixin, View):
             return redirect(self.get_order_url())
 
         if self.order.status == Order.STATUS_PAID:
-            return redirect(resp or self.get_order_url() + '?paid=yes')
+            return redirect_to_url(resp or self.get_order_url() + '?paid=yes')
         else:
-            return redirect(resp or self.get_order_url() + '?thanks=yes')
+            return redirect_to_url(resp or self.get_order_url() + '?thanks=yes')
 
     def get_payment_url(self):
         return eventreverse(self.request.event, 'presale:event.order.pay', kwargs={

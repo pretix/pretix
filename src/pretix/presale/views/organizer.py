@@ -48,7 +48,6 @@ from django.core.cache import caches
 from django.db.models import Exists, Max, Min, OuterRef, Prefetch, Q
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponse, QueryDict
-from django.shortcuts import redirect
 from django.templatetags.static import static
 from django.utils.decorators import method_decorator
 from django.utils.formats import date_format, get_format
@@ -68,6 +67,7 @@ from pretix.helpers.daterange import daterange
 from pretix.helpers.formats.en.formats import (
     SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT,
 )
+from pretix.helpers.http import redirect_to_url
 from pretix.helpers.thumb import get_thumbnail
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.organizer import EventListFilterForm
@@ -655,7 +655,7 @@ class CalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         if all(k in request.GET for k in keys):
             get_params = {k: v for k, v in request.GET.items() if k not in keys}
             get_params["date"] = "%s-%s" % (request.GET.get("year"), request.GET.get("month"))
-            return redirect(self.request.path + "?" + urlencode(get_params))
+            return redirect_to_url(self.request.path + "?" + urlencode(get_params))
 
         self._set_month_year()
         return super().get(request, *args, **kwargs)
@@ -736,7 +736,7 @@ class WeekCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
         if all(k in request.GET for k in keys):
             get_params = {k: v for k, v in request.GET.items() if k not in keys}
             get_params["date"] = "%s-W%s" % (request.GET.get("year"), request.GET.get("week"))
-            return redirect(self.request.path + "?" + urlencode(get_params))
+            return redirect_to_url(self.request.path + "?" + urlencode(get_params))
 
         self._set_week_year()
         return super().get(request, *args, **kwargs)
@@ -1230,6 +1230,6 @@ class OrganizerIcalDownload(OrganizerViewMixin, View):
 class OrganizerFavicon(View):
     def get(self, *args, **kwargs):
         if self.request.organizer.settings.favicon:
-            return redirect(get_thumbnail(self.request.organizer.settings.favicon, '32x32^').thumb.url)
+            return redirect_to_url(get_thumbnail(self.request.organizer.settings.favicon, '32x32^').thumb.url)
         else:
-            return redirect(static("pretixbase/img/favicon.ico"))
+            return redirect_to_url(static("pretixbase/img/favicon.ico"))

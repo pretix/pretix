@@ -23,13 +23,13 @@ from urllib.parse import quote
 
 from django.contrib import messages
 from django.http import Http404
-from django.shortcuts import redirect
 from django.utils.decorators import method_decorator
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import View
 
 from pretix.base.services.cart import CartError
 from pretix.base.signals import validate_cart
+from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.checkoutflow import get_checkout_flow
 from pretix.presale.views import (
@@ -94,4 +94,4 @@ class CheckoutView(View):
     def redirect(self, url):
         if 'cart_id' in self.request.GET:
             url += ('&' if '?' in url else '?') + 'cart_id=' + quote(self.request.GET.get('cart_id'))
-        return redirect(url)
+        return redirect_to_url(url)

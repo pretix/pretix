@@ -47,7 +47,6 @@ from django.db import models
 from django.db.models import Count, F, Q, Sum
 from django.db.models.functions import Cast
 from django.http import HttpResponseNotAllowed, JsonResponse
-from django.shortcuts import redirect
 from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.translation import (
@@ -73,6 +72,7 @@ from pretix.base.templatetags.phone_format import phone_format
 from pretix.base.templatetags.rich_text import rich_text_snippet
 from pretix.base.views.tasks import AsyncAction
 from pretix.celery_app import app
+from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.checkout import (
     ContactForm, InvoiceAddressForm, InvoiceNameForm, MembershipForm,
@@ -320,23 +320,23 @@ class CustomerStep(CartMixin, TemplateFlowStep):
 
         if request.POST.get("customer_mode") == 'login':
             if self.cart_session.get('customer'):
-                return redirect(self.get_next_url(request))
+                return redirect_to_url(self.get_next_url(request))
             elif request.customer:
                 self.cart_session['customer_mode'] = 'login'
                 self.cart_session['customer'] = request.customer.pk
                 self.cart_session['customer_cart_tied_to_login'] = True
-                return redirect(self.get_next_url(request))
+                return redirect_to_url(self.get_next_url(request))
             elif self.request.POST.get("login-sso-data"):
                 if not self._handle_sso_login():
                     messages.error(request, _('We failed to process your authentication request, please try again.'))
                     return self.render()
-                return redirect(self.get_next_url(request))
+                return redirect_to_url(self.get_next_url(request))
             elif self.event.settings.customer_accounts_native and self.login_form.is_valid():
                 customer_login(self.request, self.login_form.get_customer())
                 self.cart_session['customer_mode'] = 'login'
                 self.cart_session['customer'] = self.login_form.get_customer().pk
                 self.cart_session['customer_cart_tied_to_login'] = True
-                return redirect(self.get_next_url(request))
+                return redirect_to_url(self.get_next_url(request))
             else:
                 return self.render()
         elif request.POST.get("customer_mode") == 'register' and self.signup_allowed:
@@ -345,13 +345,13 @@ class CustomerStep(CartMixin, TemplateFlowStep):
                 self.cart_session['customer_mode'] = 'login'
                 self.cart_session['customer'] = customer.pk
                 self.cart_session['customer_cart_tied_to_login'] = False
-                return redirect(self.get_next_url(request))
+                return redirect_to_url(self.get_next_url(request))
             else:
                 return self.render()
         elif request.POST.get("customer_mode") == 'guest' and self.guest_allowed:
             self.cart_session['customer'] = None
             self.cart_session['customer_mode'] = 'guest'
-            return redirect(self.get_next_url(request))
+            return redirect_to_url(self.get_next_url(request))
         else:
             return self.render()
 
@@ -453,7 +453,7 @@ class MembershipStep(CartMixin, TemplateFlowStep):
             for f in self.forms:
                 f.position.save(update_fields=['used_membership'])
 
-        return redirect(self.get_next_url(request))
+        return redirect_to_url(self.get_next_url(request))
 
     def is_completed(self, request, warn=False):
         self.request = request
@@ -932,9 +932,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 messages.info(request, _('Due to the invoice address you entered, we need to apply a different tax '
                                          'rate to your purchase and the price of the products in your cart has '
                                          'changed accordingly.'))
-                return redirect(self.get_next_url(request) + '?open_cart=true')
+                return redirect_to_url(self.get_next_url(request) + '?open_cart=true')
 
-        return redirect(self.get_next_url(request))
+        return redirect_to_url(self.get_next_url(request))
 
     def is_completed(self, request, warn=False):
         self.request = request
@@ -1237,7 +1237,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
 
         if "remove_payment" in request.POST:
             self._remove_payment(request.POST["remove_payment"])
-            return redirect(self.get_step_url(request))
+            return redirect_to_url(self.get_step_url(request))
 
         for p in self.provider_forms:
             pprov = p['provider']
@@ -1277,7 +1277,7 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                         cart = self.get_cart()
                         valid, remainder = self.current_payments_valid(cart['total'])
                         if valid:
-                            return redirect(self.get_next_url(request))
+                            return redirect_to_url(self.get_next_url(request))
                         else:
                             # Show payment step again to select another method
                             messages.success(
@@ -1287,9 +1287,9 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                                     money_filter(remainder, self.event.currency)
                                 )
                             )
-                            return redirect(self.get_step_url(request))
+                            return redirect_to_url(self.get_step_url(request))
                     elif isinstance(resp, str):
-                        return redirect(resp)
+                        return redirect_to_url(resp)
                 else:
                     if resp is True or isinstance(resp, str):
                         # There can only be one payment method that does not have multi_use_supported, remove all
@@ -1298,14 +1298,14 @@ class PaymentStep(CartMixin, TemplateFlowStep):
                         add_payment_to_cart(request, pprov, None, None, None)
 
                         if isinstance(resp, str):
-                            return redirect(resp)
+                            return redirect_to_url(resp)
                         else:
-                            return redirect(self.get_next_url(request))
+                            return redirect_to_url(self.get_next_url(request))
                 return self.render()
 
         if self.is_completed(request, warn=False):
             # All payments already accounted for, no need to select one
-            return redirect(self.get_next_url(request))
+            return redirect_to_url(self.get_next_url(request))
 
         messages.error(self.request, _("Please select a payment method."))
         return self.render()
@@ -1507,7 +1507,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
                             'redirect': self.get_error_url(),
                             'message': msg
                         })
-                    return redirect(self.get_error_url())
+                    return redirect_to_url(self.get_error_url())
 
         meta_info = {
             'contact_form_data': self.cart_session.get('contact_form_data', {}),

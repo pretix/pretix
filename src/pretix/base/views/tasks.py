@@ -34,7 +34,7 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files.uploadedfile import UploadedFile
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse, QueryDict
-from django.shortcuts import redirect, render
+from django.shortcuts import render
 from django.test import RequestFactory
 from django.utils import timezone, translation
 from django.utils.datastructures import MultiValueDict
@@ -47,6 +47,7 @@ from redis import ResponseError
 from pretix.base.models import CachedFile, User
 from pretix.base.services.tasks import ProfiledEventTask
 from pretix.celery_app import app
+from pretix.helpers.http import redirect_to_url
 
 logger = logging.getLogger('pretix.base.tasks')
 
@@ -152,7 +153,7 @@ class AsyncMixin:
                 'redirect': self.get_success_url(value),
                 'message': str(self.get_success_message(value))
             })
-        return redirect(self.get_success_url(value))
+        return redirect_to_url(self.get_success_url(value))
 
     def error(self, exception):
         if isinstance(exception, PermissionDenied):
@@ -165,7 +166,7 @@ class AsyncMixin:
                 'redirect': self.get_error_url(),
                 'message': str(self.get_error_message(exception))
             })
-        return redirect(self.get_error_url())
+        return redirect_to_url(self.get_error_url())
 
     def get_error_message(self, exception):
         if isinstance(exception, dict) and exception['exc_type'] in self.known_errortypes:
@@ -203,7 +204,7 @@ class AsyncAction(AsyncMixin):
                     return self.success(res.info)
                 else:
                     return self.error(res.info)
-            return redirect(self.get_check_url(res.id, False))
+            return redirect_to_url(self.get_check_url(res.id, False))
 
     def get(self, request, *args, **kwargs):
         if 'async_id' in request.GET and settings.HAS_CELERY:
@@ -375,7 +376,7 @@ class AsyncFormView(AsyncMixin, FormView):
                     return self.success(res.info)
                 else:
                     return self.error(res.info)
-            return redirect(self.get_check_url(res.id, False))
+            return redirect_to_url(self.get_check_url(res.id, False))
 
 
 class AsyncPostView(AsyncMixin, View):
@@ -478,4 +479,4 @@ class AsyncPostView(AsyncMixin, View):
                     return self.success(res.info)
                 else:
                     return self.error(res.info)
-            return redirect(self.get_check_url(res.id, False))
+            return redirect_to_url(self.get_check_url(res.id, False))

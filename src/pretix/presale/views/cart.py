@@ -44,7 +44,7 @@ from django.contrib import messages
 from django.core.cache import caches
 from django.db.models import Q
 from django.http import FileResponse, Http404, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.utils import translation
 from django.utils.crypto import get_random_string
 from django.utils.decorators import method_decorator
@@ -430,7 +430,7 @@ class CartApplyVoucher(EventViewMixin, CartActionMixin, AsyncAction, View):
                     'redirect': self.get_error_url()
                 })
             else:
-                return redirect(self.get_error_url())
+                return redirect_to_url(self.get_error_url())
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
@@ -451,14 +451,14 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
                 return self.do(self.request.event.id, int(request.POST.get('id')), get_or_create_cart_id(self.request),
                                translation.get_language(), request.sales_channel.identifier)
             except ValueError:
-                return redirect(self.get_error_url())
+                return redirect_to_url(self.get_error_url())
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
                     'redirect': self.get_error_url()
                 })
             else:
-                return redirect(self.get_error_url())
+                return redirect_to_url(self.get_error_url())
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
@@ -537,7 +537,7 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
                     'message': str(error_messages['empty'])
                 })
             else:
-                return redirect(self.get_error_url())
+                return redirect_to_url(self.get_error_url())
 
 
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
@@ -660,8 +660,12 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
                 self.subevent = self.voucher.subevent
 
             if not err and not self.subevent:
-                return redirect(eventreverse(self.request.event, 'presale:event.index',
-                                kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''}) + '?voucher=' + quote(self.voucher.code))
+                return redirect_to_url(
+                    eventreverse(
+                        self.request.event, 'presale:event.index',
+                        kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''}
+                    ) + '?voucher=' + quote(self.voucher.code)
+                )
         else:
             pass
 
@@ -678,7 +682,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
 
     def get(self, request, *args, **kwargs):
         if 'iframe' in request.GET and 'require_cookie' not in request.GET:
-            return redirect(request.get_full_path() + '&require_cookie=1')
+            return redirect_to_url(request.get_full_path() + '&require_cookie=1')
 
         if len(self.request.GET.get('widget_data', '{}')) > 3:
             # We've been passed data from a widget, we need to create a cart session to store it.

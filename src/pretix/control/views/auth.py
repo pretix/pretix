@@ -87,8 +87,8 @@ def process_login(request, user, keep_logged_in):
         auth_login(request, user)
         request.session['pretix_auth_login_time'] = int(time.time())
         if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
-            return redirect(next_url)
-        return redirect(reverse('control:index'))
+            return redirect_to_url(next_url)
+        return redirect('control:index')
 
 
 def login(request):
@@ -149,7 +149,10 @@ def register(request):
         raise PermissionDenied('Registration is disabled')
     ctx = {}
     if request.user.is_authenticated:
-        return redirect(request.GET.get("next", 'control:index'))
+        next_url = request.GET.get("next") or reverse("control:index")
+        if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
+            return redirect_to_url(next_url)
+        return redirect("control:index")
     if request.method == 'POST':
         form = RegistrationForm(data=request.POST)
         if form.is_valid():
@@ -256,7 +259,10 @@ class Forgot(TemplateView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect(request.GET.get("next", 'control:index'))
+            next_url = request.GET.get("next") or reverse("control:index")
+            if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
+                return redirect_to_url(next_url)
+            return redirect("control:index")
         return super().get(request, *args, **kwargs)
 
     def post(self, request, *args, **kwargs):
@@ -329,7 +335,10 @@ class Recover(TemplateView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect(request.GET.get("next", 'control:index'))
+            next_url = request.GET.get("next") or reverse("control:index")
+            if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
+                return redirect_to_url(next_url)
+            return redirect("control:index")
         try:
             user = User.objects.get(id=self.request.GET.get('id'), is_active=True, auth_backend='native')
         except User.DoesNotExist:
@@ -453,7 +462,7 @@ class Login2FAView(TemplateView):
             del request.session['pretix_auth_2fa_time']
             if "next" in request.GET and url_has_allowed_host_and_scheme(request.GET.get("next"), allowed_hosts=None):
                 return redirect_to_url(request.GET.get("next"))
-            return redirect(reverse('control:index'))
+            return redirect('control:index')
         else:
             messages.error(request, _('Invalid code, please try again.'))
             return redirect('control:auth.login.2fa')

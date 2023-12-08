@@ -36,7 +36,6 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.shortcuts import redirect
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views import View
@@ -44,6 +43,7 @@ from django.views.generic import TemplateView
 
 from pretix.base.email import get_email_context
 from pretix.base.services.mail import INVALID_ADDRESS, SendMailException, mail
+from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.forms.user import ResendLinkForm
 from pretix.presale.views import EventViewMixin
@@ -71,7 +71,7 @@ class ResendLinkView(EventViewMixin, TemplateView):
                                           'already sent you an email with a link to your ticket in the past {number} hours. '
                                           'If the email did not arrive, please check your spam folder and also double check '
                                           'that you used the correct email address.').format(number=24))
-                return redirect(eventreverse(self.request.event, 'presale:event.resend_link'))
+                return redirect_to_url(eventreverse(self.request.event, 'presale:event.resend_link'))
             else:
                 rc.setex('pretix_resend_{}_{}'.format(request.event.pk, user), 3600 * 24, '1')
 
@@ -92,7 +92,7 @@ class ResendLinkView(EventViewMixin, TemplateView):
             return self.get(request, *args, **kwargs)
 
         messages.success(self.request, _('If there were any orders by this user, they will receive an email with their order codes.'))
-        return redirect(eventreverse(self.request.event, 'presale:event.index'))
+        return redirect_to_url(eventreverse(self.request.event, 'presale:event.index'))
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -107,4 +107,4 @@ class UnlockHashView(EventViewMixin, View):
         hashes = request.session.get('pretix_unlock_hashes', [])
         hashes.append(kwargs.get('hash'))
         request.session['pretix_unlock_hashes'] = hashes
-        return redirect(eventreverse(self.request.event, 'presale:event.index'))
+        return redirect_to_url(eventreverse(self.request.event, 'presale:event.index'))

@@ -63,6 +63,7 @@ from pretix.base.payment import PaymentException
 from pretix.base.services.cart import add_payment_to_cart, get_fees
 from pretix.base.settings import GlobalSettingsObject
 from pretix.control.permissions import event_permission_required
+from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.plugins.paypal2.client.customer.partners_merchantintegrations_get_request import (
     PartnersMerchantIntegrationsGetRequest,
@@ -222,7 +223,7 @@ def isu_return(request, *args, **kwargs):
         missing_getparams = set(getparams) - set(request.GET)
         missing_sessionparams = {p for p in sessionparams if p not in request.session}
         logger.exception('PayPal2 - Missing params in GET {} and/or Session {}'.format(missing_getparams, missing_sessionparams))
-        return redirect(reverse('control:index'))
+        return redirect('control:index')
 
     event = get_object_or_404(Event, pk=request.session['payment_paypal_isu_event'])
 
@@ -282,7 +283,7 @@ def isu_return(request, *args, **kwargs):
                             if third_party.partner_client_id == prov.client.environment.client_id:
                                 event.settings.payment_paypal_isu_scopes = third_party.scopes
 
-    return redirect(reverse('control:event.settings.payment.provider', kwargs={
+    return redirect_to_url(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': event.organizer.slug,
         'event': event.slug,
         'provider': 'paypal_settings'
@@ -345,12 +346,12 @@ def abort(request, *args, **kwargs):
         payment = None
 
     if payment:
-        return redirect(eventreverse(request.event, 'presale:event.order', kwargs={
+        return redirect_to_url(eventreverse(request.event, 'presale:event.order', kwargs={
             'order': payment.order.code,
             'secret': payment.order.secret
         }) + ('?paid=yes' if payment.order.status == Order.STATUS_PAID else ''))
     else:
-        return redirect(eventreverse(request.event, 'presale:event.checkout', kwargs={'step': 'payment'}))
+        return redirect_to_url(eventreverse(request.event, 'presale:event.checkout', kwargs={'step': 'payment'}))
 
 
 @csrf_exempt
@@ -518,7 +519,7 @@ def isu_disconnect(request, **kwargs):
     request.event.settings.payment_paypal__enabled = False
     messages.success(request, _('Your PayPal account has been disconnected.'))
 
-    return redirect(reverse('control:event.settings.payment.provider', kwargs={
+    return redirect_to_url(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': request.event.organizer.slug,
         'event': request.event.slug,
         'provider': 'paypal_settings'

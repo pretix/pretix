@@ -49,7 +49,7 @@ from django.db.models import (
     Count, Exists, IntegerField, OuterRef, Prefetch, Q, Value,
 )
 from django.http import Http404, HttpResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
 from django.utils.formats import get_format
 from django.utils.functional import SimpleLazyObject
@@ -78,6 +78,7 @@ from pretix.presale.views.organizer import (
 )
 
 from ...helpers.formats.en.formats import SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT
+from ...helpers.http import redirect_to_url
 from . import (
     CartMixin, EventViewMixin, allow_frame_if_namespaced, get_cart,
     iframe_entry_view_wrapper,
@@ -456,14 +457,14 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         if all(k in request.GET for k in keys):
             get_params = {k: v for k, v in request.GET.items() if k not in keys}
             get_params["date"] = "%s-%s" % (request.GET.get("year"), request.GET.get("month"))
-            return redirect(self.request.path + "?" + urlencode(get_params))
+            return redirect_to_url(self.request.path + "?" + urlencode(get_params))
 
         # redirect old week-year-URLs to new date-URLs
         keys = ("week", "year")
         if all(k in request.GET for k in keys):
             get_params = {k: v for k, v in request.GET.items() if k not in keys}
             get_params["date"] = "%s-W%s" % (request.GET.get("year"), request.GET.get("week"))
-            return redirect(self.request.path + "?" + urlencode(get_params))
+            return redirect_to_url(self.request.path + "?" + urlencode(get_params))
 
         from pretix.presale.views.cart import get_or_create_cart_id
 
@@ -471,11 +472,11 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
             # User has clicked "Open in a new tab" link in widget
             get_or_create_cart_id(request)
-            return redirect(eventreverse(request.event, 'presale:event.index', kwargs=kwargs))
+            return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs))
         elif request.GET.get('iframe', '') == '1' and 'take_cart_id' in request.GET:
             # Widget just opened, a cart already exists. Let's to a stupid redirect to check if cookies are disabled
             get_or_create_cart_id(request)
-            return redirect(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urllib.parse.urlencode({
+            return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urllib.parse.urlencode({
                 'require_cookie': 'true',
                 'cart_id': request.GET.get('take_cart_id'),
                 **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
@@ -510,7 +511,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 return super().get(request, *args, **kwargs)
         else:
             if 'subevent' in kwargs:
-                return redirect(self.get_index_url())
+                return redirect_to_url(self.get_index_url())
             else:
                 return super().get(request, *args, **kwargs)
 
@@ -787,11 +788,11 @@ class SeatingPlanView(EventViewMixin, TemplateView):
         if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
             # User has clicked "Open in a new tab" link in widget
             get_or_create_cart_id(request)
-            return redirect(eventreverse(request.event, 'presale:event.seatingplan', kwargs=kwargs))
+            return redirect_to_url(eventreverse(request.event, 'presale:event.seatingplan', kwargs=kwargs))
         elif request.GET.get('iframe', '') == '1' and 'take_cart_id' in request.GET:
             # Widget just opened, a cart already exists. Let's to a stupid redirect to check if cookies are disabled
             get_or_create_cart_id(request)
-            return redirect(eventreverse(request.event, 'presale:event.seatingplan', kwargs=kwargs) + '?require_cookie=true&cart_id={}'.format(
+            return redirect_to_url(eventreverse(request.event, 'presale:event.seatingplan', kwargs=kwargs) + '?require_cookie=true&cart_id={}'.format(
                 request.GET.get('take_cart_id')
             ))
         elif request.GET.get('iframe', '') == '1' and len(self.request.GET.get('widget_data', '{}')) > 3:
@@ -890,4 +891,4 @@ class EventAuth(View):
                 raise PermissionDenied(_('Please go back and try again.'))
 
         request.session['pretix_event_access_{}'.format(request.event.pk)] = parent
-        return redirect(eventreverse(request.event, 'presale:event.index'))
+        return redirect_to_url(eventreverse(request.event, 'presale:event.index'))

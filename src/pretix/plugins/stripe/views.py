@@ -65,6 +65,7 @@ from pretix.control.permissions import (
 from pretix.control.views.event import DecoupleMixin
 from pretix.control.views.organizer import OrganizerDetailViewMixin
 from pretix.helpers import OF_SELF
+from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.plugins.stripe.forms import OrganizerStripeSettingsForm
 from pretix.plugins.stripe.models import ReferencedStripeObject
@@ -102,13 +103,13 @@ def redirect_view(request, *args, **kwargs):
 def oauth_return(request, *args, **kwargs):
     if 'payment_stripe_oauth_event' not in request.session:
         messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
-        return redirect(reverse('control:index'))
+        return redirect('control:index')
 
     event = get_object_or_404(Event, pk=request.session['payment_stripe_oauth_event'])
 
     if request.GET.get('state') != request.session['payment_stripe_oauth_token']:
         messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
-        return redirect(reverse('control:event.settings.payment.provider', kwargs={
+        return redirect_to_url(reverse('control:event.settings.payment.provider', kwargs={
             'organizer': event.organizer.slug,
             'event': event.slug,
             'provider': 'stripe_settings'
@@ -147,7 +148,7 @@ def oauth_return(request, *args, **kwargs):
             except:
                 logger.exception('Failed to obtain OAuth token')
                 messages.error(request, _('An error occurred during connecting with Stripe, please try again.'))
-                return redirect(reverse('control:event.settings.payment.provider', kwargs={
+                return redirect_to_url(reverse('control:event.settings.payment.provider', kwargs={
                     'organizer': event.organizer.slug,
                     'event': event.slug,
                     'provider': 'stripe_settings'
@@ -188,7 +189,7 @@ def oauth_return(request, *args, **kwargs):
 
             stripe_verify_domain.apply_async(args=(event.pk, get_domain_for_event(event)))
 
-    return redirect(reverse('control:event.settings.payment.provider', kwargs={
+    return redirect_to_url(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': event.organizer.slug,
         'event': event.slug,
         'provider': 'stripe_settings'
@@ -469,7 +470,7 @@ def oauth_disconnect(request, **kwargs):
     request.event.settings.payment_stripe__enabled = False
     messages.success(request, _('Your Stripe account has been disconnected.'))
 
-    return redirect(reverse('control:event.settings.payment.provider', kwargs={
+    return redirect_to_url(reverse('control:event.settings.payment.provider', kwargs={
         'organizer': request.event.organizer.slug,
         'event': request.event.slug,
         'provider': 'stripe_settings'
@@ -503,9 +504,9 @@ class StripeOrderView:
         if self.request.session.get('payment_stripe_order_secret') != self.order.secret and not self.payment.provider.startswith('stripe'):
             messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
                                            'in your emails to continue.'))
-            return redirect(eventreverse(self.request.event, 'presale:event.index'))
+            return redirect_to_url(eventreverse(self.request.event, 'presale:event.index'))
 
-        return redirect(eventreverse(self.request.event, 'presale:event.order', kwargs={
+        return redirect_to_url(eventreverse(self.request.event, 'presale:event.order', kwargs={
             'order': self.order.code,
             'secret': self.order.secret
         }) + ('?paid=yes' if self.order.status == Order.STATUS_PAID else ''))
@@ -522,12 +523,12 @@ class ReturnView(StripeOrderView, View):
             logger.exception('Could not retrieve source')
             messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
                                            'in your emails to continue.'))
-            return redirect(eventreverse(self.request.event, 'presale:event.index'))
+            return redirect_to_url(eventreverse(self.request.event, 'presale:event.index'))
 
         if src.client_secret != request.GET.get('client_secret'):
             messages.error(self.request, _('Sorry, there was an error in the payment process. Please check the link '
                                            'in your emails to continue.'))
-            return redirect(eventreverse(self.request.event, 'presale:event.index'))
+            return redirect_to_url(eventreverse(self.request.event, 'presale:event.index'))
 
         with transaction.atomic():
             self.order.refresh_from_db()
@@ -664,7 +665,7 @@ class OrganizerSettingsFormView(DecoupleMixin, OrganizerDetailViewMixin, Adminis
                     }
                 )
             messages.success(self.request, _('Your changes have been saved.'))
-            return redirect(self.get_success_url())
+            return redirect_to_url(self.get_success_url())
         else:
             messages.error(self.request, _('We could not save your changes. See below for details.'))
             return self.get(request)
