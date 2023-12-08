@@ -467,7 +467,7 @@ var editor = {
         $("#toolbox-position-y").val(editor._px2mm(bottom).toFixed(2));
 
         if (o.type === 'activeSelection') {
-            // limit controls to the ones which are common to each element in selection
+            // limit controls to the ones which are common to every element in selection
             o.forEachControl(function(control, k) {
                 o.setControlVisible(k, o.getObjects().every(function(obj) {
                     // special case „text“ in group does not support any controls
