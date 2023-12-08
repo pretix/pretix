@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-28 15:26+0000\n"
-"PO-Revision-Date: 2023-12-08 15:54+0000\n"
-"Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
+"PO-Revision-Date: 2023-12-09 07:00+0000\n"
+"Last-Translator: Fast128 <fast128@post.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -5281,12 +5281,12 @@ msgstr "Zamówiony przedmiot \"{seat}\" nie jest już dostępny."
 #: pretix/base/models/orders.py:983
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr ""
+msgstr "Kupon \"{voucher}” nie ma już wystarczającego budżetu."
 
 #: pretix/base/models/orders.py:984
 #, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr ""
+msgstr "Kupon \"{voucher}\" został wykorzystany w międzyczasie."
 
 #: pretix/base/models/orders.py:1315
 msgid "<file>"
@@ -7192,8 +7192,14 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
+"Kod kuponu „%(voucher)s” można wykorzystać tylko wtedy, gdy wybierzesz co "
+"najmnie jeden pasujący produkt."
 msgstr[1] ""
+"Kod kuponu „%(voucher)s” można wykorzystać tylko wtedy, gdy wybierzesz co "
+"najmniej %(number)s pasujące produkty."
 msgstr[2] ""
+"Kod kuponu „%(voucher)s” można wykorzystać tylko wtedy, gdy wybierzesz co "
+"najmniej %(number)s pasujących produktów."
 
 #: pretix/base/services/cart.py:152
 #, python-format
@@ -7206,8 +7212,17 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
+"Kod kuponu „%(voucher)s” można wykorzystać tylko wtedy, gdy wybierzesz co "
+"najmniej jeden pasujący produkt. Dlatego usunęliśmy z Twojego koszyka "
+"niektóre pozycje, których nie można już kupić w ten sposób."
 msgstr[1] ""
+"Kod kuponu „%(voucher)s” można wykorzystać tylko wtedy, gdy wybierzesz co "
+"najmniej %(number)s pasujące produkty. Dlatego usunęliśmy z Twojego koszyka "
+"niektóre pozycje, których nie można już kupić w ten sposób."
 msgstr[2] ""
+"Kod kuponu „%(voucher)s” można wykorzystać tylko wtedy, gdy wybierzesz co "
+"najmniej %(number)s pasujących produktów. Dlatego usunęliśmy z Twojego "
+"koszyka niektóre pozycje, których nie można już kupić w ten sposób."
 
 #: pretix/base/services/cart.py:158
 msgid ""
@@ -10527,13 +10542,15 @@ msgstr ""
 
 #: pretix/base/settings.py:3007
 msgid "Voucher explanation"
-msgstr ""
+msgstr "Wyjaśnienie vouchera"
 
 #: pretix/base/settings.py:3010
 msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
 msgstr ""
+"Ten tekst będzie pokazany obok miejsca na wpisanie kodu vouchera. Można tu "
+"wpisać np. jak uzyskać kod."
 
 #: pretix/base/settings.py:3020
 #, fuzzy
@@ -19811,15 +19828,13 @@ msgstr "Razem"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:705
 #: pretix/presale/templates/pretixpresale/event/order.html:209
-#, fuzzy
 msgid "Successful payments"
-msgstr "Tylko pomyślne płatności"
+msgstr "Pomyślne płatności"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:714
 #: pretix/presale/templates/pretixpresale/event/order.html:218
-#, fuzzy
 msgid "Pending total"
-msgstr "Zamówienia w toku"
+msgstr "Oczekuje na wpłatę:"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:740
 #: pretix/control/templates/pretixcontrol/search/payments.html:88
@@ -24593,9 +24608,8 @@ msgid "Order {}"
 msgstr "Zamówienie {val}"
 
 #: pretix/control/views/typeahead.py:128
-#, fuzzy
 msgid "Voucher {}"
-msgstr "Voucher"
+msgstr "Voucher {}"
 
 #: pretix/control/views/user.py:145
 msgid "The password you entered was invalid, please try again."
@@ -24698,12 +24712,11 @@ msgstr "Produkt"
 #: pretix/control/views/vouchers.py:207 pretix/control/views/vouchers.py:239
 #: pretix/control/views/vouchers.py:301
 msgid "The requested voucher does not exist."
-msgstr ""
+msgstr "Żądany voucher nie istnieje."
 
 #: pretix/control/views/vouchers.py:217
-#, fuzzy
 msgid "The selected cart positions have been removed."
-msgstr "Produkt może być kupiony tylko przy użyciu vouchera."
+msgstr "Wybrane pozycje z koszyka zostały usunięte."
 
 #: pretix/control/views/vouchers.py:243 pretix/control/views/vouchers.py:253
 msgid "A voucher can not be deleted if it already has been redeemed."
@@ -24720,11 +24733,11 @@ msgstr ""
 
 #: pretix/control/views/vouchers.py:403
 msgid "There is no voucher with the given voucher code."
-msgstr ""
+msgstr "Kod vouchera nie istnieje w systemie."
 
 #: pretix/control/views/vouchers.py:518
 msgid "The new vouchers have been created."
-msgstr ""
+msgstr "Nowe kody vouchera zostały utworzone."
 
 #: pretix/control/views/vouchers.py:641
 msgid "The selected vouchers have been deleted or disabled."
@@ -26095,9 +26108,8 @@ msgstr "Płatność za tę fakturę została już otrzymana."
 
 #: pretix/plugins/paypal/payment.py:705 pretix/plugins/paypal/payment.py:713
 #: pretix/plugins/paypal2/payment.py:989 pretix/plugins/paypal2/payment.py:997
-#, fuzzy
 msgid "PayPal payment ID"
-msgstr "ID płatności"
+msgstr "ID płatności PayPal"
 
 #: pretix/plugins/paypal/payment.py:707 pretix/plugins/paypal2/payment.py:991
 msgid "PayPal sale ID"
@@ -29012,7 +29024,7 @@ msgstr "Cena netto"
 #: pretix/presale/templates/pretixpresale/event/voucher.html:324
 #, python-format
 msgid "Modify price for %(item)s, at least %(price)s"
-msgstr ""
+msgstr "Zmodyfikuj cenę dla %(item)s, cena minimalna:j %(price)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:149
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:286
@@ -29024,7 +29036,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/voucher.html:327
 #, python-format
 msgid "Modify price for %(item)s"
-msgstr ""
+msgstr "Zmień cenę dla %(item)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:169
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:305
