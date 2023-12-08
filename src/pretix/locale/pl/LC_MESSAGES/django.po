@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-28 15:26+0000\n"
-"PO-Revision-Date: 2023-12-08 09:58+0000\n"
+"PO-Revision-Date: 2023-12-08 15:45+0000\n"
 "Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -5688,7 +5688,7 @@ msgstr "Obniży cenę produktu o (%)"
 
 #: pretix/base/models/vouchers.py:197
 msgid "Number of times this voucher can be redeemed."
-msgstr "Liczba razy, ile można wykorzystać voucher"
+msgstr "Liczba razy, ile można wykorzystać voucher."
 
 #: pretix/base/models/vouchers.py:201 pretix/control/views/vouchers.py:119
 msgid "Redeemed"
@@ -5963,7 +5963,7 @@ msgstr "Numery na liście"
 
 #: pretix/base/models/waitinglist.py:159
 msgid "This product is currently not available."
-msgstr "Produkt obecnie niedostępny"
+msgstr "Produkt obecnie niedostępny."
 
 #: pretix/base/models/waitinglist.py:186
 #, fuzzy
@@ -21169,7 +21169,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_edit.html:6
 #, python-format
 msgid "Gift card: %(card)s"
-msgstr ""
+msgstr "Karta prezentowa: %(card)s"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:36
 #, fuzzy
@@ -25309,7 +25309,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/signals.py:132
 #, python-brace-format
 msgid "Invoice {invoice_number}"
-msgstr ""
+msgstr "Faktura {invoice_number}"
 
 #: pretix/plugins/banktransfer/signals.py:137
 #, python-brace-format
@@ -26182,7 +26182,7 @@ msgstr "Kliknij tutaj, aby otworzyć okno."
 
 #: pretix/plugins/paypal/views.py:106 pretix/plugins/paypal2/views.py:319
 msgid "Invalid response from PayPal received."
-msgstr "Otrzymano błędną odpowiedź od PayPal"
+msgstr "Otrzymano błędną odpowiedź od PayPal."
 
 #: pretix/plugins/paypal/views.py:122 pretix/plugins/paypal2/views.py:340
 msgid "It looks like you canceled the PayPal payment"
@@ -28354,13 +28354,12 @@ msgstr "Data stworzenia"
 
 #: pretix/presale/forms/checkout.py:129
 msgid "Save address in my customer account for future purchases"
-msgstr "Zapisz adres na moim koncie klienta, by użyć go do przyszłych zakupów."
+msgstr "Zapisz adres na moim koncie klienta, by użyć go do przyszłych zakupów"
 
 #: pretix/presale/forms/checkout.py:158
 msgid "Save answers to my customer profiles for future purchases"
 msgstr ""
-"Zapiszodpowiedzi dotyczące profilu klienta, by użyć ich do przyszłych "
-"zakupów."
+"Zapiszodpowiedzi dotyczące profilu klienta, by użyć ich do przyszłych zakupów"
 
 #: pretix/presale/forms/checkout.py:165
 msgid "Save to profile"
@@ -30144,7 +30143,7 @@ msgstr "Potwierdź następujące zmiany w zamówieniu."
 #: pretix/presale/templates/pretixpresale/event/position_giftcard.html:10
 #, python-format
 msgid "Gift card: %(code)s"
-msgstr ""
+msgstr "Karta prezentowa: %(code)s"
 
 #: pretix/presale/templates/pretixpresale/event/order_modify.html:5
 msgid "Modify order"
