@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-28 15:26+0000\n"
-"PO-Revision-Date: 2023-12-09 07:00+0000\n"
+"PO-Revision-Date: 2023-12-09 11:40+0000\n"
 "Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
@@ -5281,12 +5281,12 @@ msgstr "Zamówiony przedmiot \"{seat}\" nie jest już dostępny."
 #: pretix/base/models/orders.py:983
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
-msgstr "Kupon \"{voucher}” nie ma już wystarczającego budżetu."
+msgstr "Kupon „{voucher}” nie ma już wystarczającego budżetu."
 
 #: pretix/base/models/orders.py:984
 #, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
-msgstr "Kupon \"{voucher}\" został wykorzystany w międzyczasie."
+msgstr "Kupon „{voucher}” został wykorzystany w międzyczasie."
 
 #: pretix/base/models/orders.py:1315
 msgid "<file>"
@@ -26408,7 +26408,7 @@ msgstr "Prawie gotowe …"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:12
 msgid "Please click on the \"Pay now\" button below to confirm your payment."
-msgstr "Kliknij poniższy przycisk \"Pay Now\", aby potwierdzić płatność."
+msgstr "Kliknij poniższy przycisk \"Zapłać teraz\", aby potwierdzić płatność."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_confirm.html:15
 msgid "We will then charge your PayPal account and finalize the order."
@@ -26425,7 +26425,7 @@ msgstr ""
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:5
 msgid ""
 "Please click the \"Pay with PayPal\" button below to start your payment."
-msgstr "Kliknij przycisk \"Pay With PayPal\" poniżej, aby rozpocząć płatność."
+msgstr "Kliknij przycisk \"Zapłać z PayPal\" poniżej, aby rozpocząć płatność."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:9
 msgid ""
