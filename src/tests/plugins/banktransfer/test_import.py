@@ -43,8 +43,8 @@ from django.utils.timezone import now
 from django_scopes import scopes_disabled
 
 from pretix.base.models import (
-    Event, Item, Order, OrderFee, OrderPayment, OrderPosition, Organizer,
-    Quota, Team, User,
+    Event, Item, Order, OrderFee, OrderPayment, OrderPosition, OrderRefund,
+    Organizer, Quota, Team, User,
 )
 from pretix.base.services.invoices import generate_invoice
 from pretix.plugins.banktransfer.models import BankImportJob, BankTransaction
@@ -138,6 +138,11 @@ def job(env):
 
 @pytest.fixture
 def orga_job(env):
+    return BankImportJob.objects.create(organizer=env[0].organizer).pk
+
+
+@pytest.fixture
+def orga_job2(env):
     return BankImportJob.objects.create(organizer=env[0].organizer).pk
 
 
@@ -610,3 +615,81 @@ def test_pending_paypal_replace_fee_missing(env, job):
         assert env[2].fees.count() == 1
         assert env[2].fees.last().value == Decimal('1.00')
         assert env[2].total == Decimal('24.00')
+
+
+@pytest.mark.django_db
+def test_refund_handling_no_payments(env, orga_job):
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY-1234S',
+        'date': '2016-01-26',
+        'amount': '-23.00'
+    }])
+    with scopes_disabled():
+        env[2].refresh_from_db()
+        assert env[2].status == Order.STATUS_PENDING
+        assert env[2].payments.count() == 0
+        r = env[2].refunds.get()
+        assert r.state == OrderRefund.REFUND_STATE_EXTERNAL
+        assert r.amount == Decimal("23.00")
+
+
+@pytest.mark.django_db
+def test_refund_handling_refund_for_payment(env, orga_job, orga_job2):
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY-1234S',
+        'date': '2016-01-26',
+        'amount': '13.00'
+    }])
+    with scopes_disabled():
+        env[2].refresh_from_db()
+        assert env[2].status == Order.STATUS_PENDING
+        p = env[2].payments.get()
+
+    process_banktransfers(orga_job2, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Erstattung DUMMY-1234S',
+        'date': '2016-01-27',
+        'amount': '-13.00'
+    }])
+    with scopes_disabled():
+        env[2].refresh_from_db()
+        assert env[2].status == Order.STATUS_PENDING
+        assert env[2].payments.count() == 1
+        r = env[2].refunds.get()
+        assert r.state == OrderRefund.REFUND_STATE_EXTERNAL
+        assert r.payment == p
+        assert r.amount == Decimal("13.00")
+
+
+@pytest.mark.django_db
+def test_refund_handling_pending_refund(env, orga_job, orga_job2):
+    process_banktransfers(orga_job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY-1234S',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    with scopes_disabled():
+        env[2].refresh_from_db()
+        assert env[2].status == Order.STATUS_PAID
+        env[2].status = Order.STATUS_PENDING
+        env[2].save()
+        r = env[2].refunds.create(
+            state=OrderRefund.REFUND_STATE_CREATED,
+            provider="manual",
+            amount="23.00",
+        )
+
+    process_banktransfers(orga_job2, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Erstattung DUMMY-1234S',
+        'date': '2016-01-27',
+        'amount': '-23.00'
+    }])
+    with scopes_disabled():
+        env[2].refresh_from_db()
+        r.refresh_from_db()
+        assert env[2].payments.count() == 1
+        assert r.state == OrderRefund.REFUND_STATE_DONE

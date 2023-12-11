@@ -32,6 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+import json
 import logging
 import re
 from decimal import Decimal
@@ -42,13 +43,14 @@ from django.conf import settings
 from django.db import transaction
 from django.db.models import Max, Min, Q
 from django.db.models.functions import Length
+from django.utils.timezone import now
 from django.utils.translation import gettext_noop
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
-    Event, Invoice, Order, OrderPayment, Organizer, Quota,
+    Event, Invoice, Order, OrderPayment, OrderRefund, Organizer, Quota,
 )
 from pretix.base.payment import PaymentException
 from pretix.base.services.locking import LockTimeoutException
@@ -194,6 +196,53 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = N
 
     trans.state = BankTransaction.STATE_VALID
     for order, amount in splits:
+        info_data = {
+            'reference': trans.reference,
+            'date': trans.date_parsed.isoformat() if trans.date_parsed else trans.date,
+            'payer': trans.payer,
+            'iban': trans.iban,
+            'bic': trans.bic,
+            'full_amount': str(trans.amount),
+            'trans_id': trans.pk
+        }
+        if amount < Decimal("0.00"):
+            pending_refund = order.refunds.filter(
+                amount=-amount,
+                provider__in=('manual', 'banktransfer'),
+                state__in=(OrderRefund.REFUND_STATE_CREATED, OrderRefund.REFUND_STATE_TRANSIT),
+            ).first()
+            existing_payment = order.payments.filter(
+                provider='banktransfer',
+                state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED,),
+            ).first()
+            if pending_refund:
+                pending_refund.provider = "banktransfer"
+                pending_refund.info_data = {
+                    **pending_refund.info_data,
+                    **info_data,
+                }
+                pending_refund.done()
+            elif existing_payment:
+                existing_payment.create_external_refund(
+                    amount=-amount,
+                    info=json.dumps(info_data)
+                )
+            else:
+                r = order.refunds.create(
+                    state=OrderRefund.REFUND_STATE_EXTERNAL,
+                    source=OrderRefund.REFUND_SOURCE_EXTERNAL,
+                    amount=-amount,
+                    order=order,
+                    execution_date=now(),
+                    provider='banktransfer',
+                    info=json.dumps(info_data)
+                )
+                order.log_action('pretix.event.order.refund.created.externally', {
+                    'local_id': r.local_id,
+                    'provider': r.provider,
+                })
+            continue
+
         try:
             p, created = order.payments.get_or_create(
                 amount=amount,
@@ -213,13 +262,7 @@ def _handle_transaction(trans: BankTransaction, matches: tuple, event: Event = N
 
         p.info_data = {
             **p.info_data,
-            'reference': trans.reference,
-            'date': trans.date_parsed.isoformat() if trans.date_parsed else trans.date,
-            'payer': trans.payer,
-            'iban': trans.iban,
-            'bic': trans.bic,
-            'full_amount': str(trans.amount),
-            'trans_id': trans.pk
+            **info_data,
         }
 
         if created:
