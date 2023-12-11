@@ -222,6 +222,8 @@ class OrderViewSetMixin:
             qs = qs.prefetch_related('refunds', 'refunds__payment')
         if 'invoice_address' not in self.request.GET.getlist('exclude'):
             qs = qs.select_related('invoice_address')
+        if 'customer' not in self.request.GET.getlist('exclude'):
+            qs = qs.select_related('customer')
 
         qs = qs.prefetch_related(self._positions_prefetch(self.request))
         return qs
