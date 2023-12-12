@@ -79,7 +79,7 @@ def monkeypatch_requests_timeout():
 
     def httpadapter_send(self, request, stream=False, timeout=None, verify=True, cert=None, proxies=None, **kwargs):
         if timeout is None:
-            timeout = 3
+            timeout = 30
         return types.MethodType(old_httpadapter_send, self)(
             request, stream=stream, timeout=timeout, verify=verify, cert=cert, proxies=proxies,
             **kwargs
