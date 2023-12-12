@@ -2143,6 +2143,12 @@ class OrderRefund(models.Model):
             self.local_id = (self.order.refunds.aggregate(m=Max('local_id'))['m'] or 0) + 1
             if 'update_fields' in kwargs:
                 kwargs['update_fields'] = {'local_id'}.union(kwargs['update_fields'])
+
+        if self.state == OrderRefund.REFUND_STATE_DONE and not self.execution_date:
+            self.execution_date = now()
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'execution_date'}.union(kwargs['update_fields'])
+
         super().save(*args, **kwargs)
 
 

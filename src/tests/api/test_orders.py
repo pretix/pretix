@@ -1677,6 +1677,7 @@ def test_refund_create_webhook_sent(token_client, organizer, event, order):
     assert r.provider == "manual"
     assert r.amount == Decimal("23.00")
     assert r.state == "done"
+    assert r.execution_date
     with scopes_disabled():
         assert order.all_logentries().get(action_type="pretix.event.order.refund.done")
 
