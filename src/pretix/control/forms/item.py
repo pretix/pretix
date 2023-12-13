@@ -64,8 +64,8 @@ from pretix.base.models import (
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
-    ItemMultipleChoiceField, SizeValidationMixin, SplitDateTimeField,
-    SplitDateTimePickerWidget, ButtonGroupRadioSelect,
+    ButtonGroupRadioSelect, ItemMultipleChoiceField, SizeValidationMixin,
+    SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.models import modelcopy

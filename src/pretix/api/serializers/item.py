@@ -235,7 +235,8 @@ class ItemSerializer(I18nAwareModelSerializer):
         model = Item
         fields = ('id', 'category', 'name', 'internal_name', 'active', 'sales_channels', 'description',
                   'default_price', 'free_price', 'free_price_suggestion', 'tax_rate', 'tax_rule', 'admission',
-                  'personalized', 'position', 'picture', 'available_from', 'available_until',
+                  'personalized', 'position', 'picture',
+                  'available_from', 'available_from_mode', 'available_until', 'available_until_mode',
                   'require_voucher', 'hide_without_voucher', 'allow_cancel', 'require_bundling',
                   'min_per_order', 'max_per_order', 'checkin_attention', 'checkin_text', 'has_variations', 'variations',
                   'addons', 'bundles', 'original_price', 'require_approval', 'generate_tickets',
