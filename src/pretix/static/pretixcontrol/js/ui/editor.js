@@ -468,10 +468,10 @@ var editor = {
 
         if (o.type === 'activeSelection') {
             // limit controls to the ones which are common to every element in selection
-            o.forEachControl(function(control, k) {
-                o.setControlVisible(k, o.getObjects().every(function(obj) {
+            o.forEachControl(function(control, key) {
+                o.setControlVisible(key, o.getObjects().every(function(obj) {
                     // special case „text“ in group does not support any controls
-                    return obj.type !== "text" && obj.type !== "textarea" && obj.isControlVisible(k)
+                    return obj.type !== "text" && obj.type !== "textarea" && obj.isControlVisible(key)
                 }));
             });
         } else if (o.type === "barcodearea") {
