@@ -137,13 +137,17 @@ last_modified                         datetime                   Last modificati
 
    The ``event`` attribute has been added. The organizer-level endpoint has been added.
 
+.. versionchanged:: 2023.9
+
+   The ``customer`` query parameter has been added.
+
 .. versionchanged:: 2023.10
 
    The ``checkin_text`` attribute has been added.
 
-.. versionchanged:: 2023.9
+.. versionchanged:: 2024.1
 
-   The ``customer`` query parameter has been added.
+   The ``expires`` attribute can now be passed during order creation.
 
 
 .. _order-position-resource:
@@ -728,6 +732,8 @@ Updating order fields
    * ``invoice_address`` (you always need to supply the full object, or ``null`` to delete the current address)
 
    * ``valid_if_pending``
+
+   * ``expires``
 
    **Example request**:
 

@@ -246,6 +246,7 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert o.status == Order.STATUS_PENDING
     assert o.sales_channel == "web"
     assert o.valid_if_pending
+    assert o.expires > now()
     assert not o.testmode
 
     with scopes_disabled():
@@ -275,6 +276,37 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert answ.answer == "S"
     with scopes_disabled():
         assert o.transactions.count() == 2
+
+
+@pytest.mark.django_db
+def test_order_create_expires(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+
+    expires = now() - datetime.timedelta(hours=7)
+    res['expires'] = expires.isoformat()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"expires": ["Expiration date must be in the future."]}
+
+    expires = now() + datetime.timedelta(hours=7)
+    res['expires'] = expires.isoformat()
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert not resp.data['positions'][0].get('pdf_data')
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+    assert o.expires == expires
+    assert o.status == Order.STATUS_PENDING
 
 
 @pytest.mark.django_db

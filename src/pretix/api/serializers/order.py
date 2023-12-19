@@ -1035,13 +1035,14 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         super().__init__(*args, **kwargs)
         self.fields['positions'].child.fields['voucher'].queryset = self.context['event'].vouchers.all()
         self.fields['customer'].queryset = self.context['event'].organizer.customers.all()
+        self.fields['expires'].required = False
 
     class Meta:
         model = Order
         fields = ('code', 'status', 'testmode', 'email', 'phone', 'locale', 'payment_provider', 'fees', 'comment', 'sales_channel',
                   'invoice_address', 'positions', 'checkin_attention', 'checkin_text', 'payment_info', 'payment_date',
                   'consume_carts', 'force', 'send_email', 'simulate', 'customer', 'custom_followup_at',
-                  'require_approval', 'valid_if_pending')
+                  'require_approval', 'valid_if_pending', 'expires')
 
     def validate_payment_provider(self, pp):
         if pp is None:
@@ -1049,6 +1050,11 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         if pp not in self.context['event'].get_payment_providers():
             raise ValidationError('The given payment provider is not known.')
         return pp
+
+    def validate_expires(self, expires):
+        if expires < now():
+            raise ValidationError('Expiration date must be in the future.')
+        return expires
 
     def validate_sales_channel(self, channel):
         if channel not in get_all_sales_channels():
@@ -1356,7 +1362,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         if validated_data.get('locale', None) is None:
             validated_data['locale'] = self.context['event'].settings.locale
         order = Order(event=self.context['event'], **validated_data)
-        order.set_expires(subevents=[p.get('subevent') for p in positions_data])
+        if not validated_data.get('expires'):
+            order.set_expires(subevents=[p.get('subevent') for p in positions_data])
         order.meta_info = "{}"
         order.total = Decimal('0.00')
         if validated_data.get('require_approval') is not None:
