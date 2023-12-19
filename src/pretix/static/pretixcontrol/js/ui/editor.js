@@ -466,7 +466,15 @@ var editor = {
         $("#toolbox-position-x").val(editor._px2mm(o.left).toFixed(2));
         $("#toolbox-position-y").val(editor._px2mm(bottom).toFixed(2));
 
-        if (o.type === "barcodearea") {
+        if (o.type === 'activeSelection') {
+            // limit controls to the ones which are common to every element in selection
+            o.forEachControl(function(control, key) {
+                o.setControlVisible(key, o.getObjects().every(function(obj) {
+                    // special case „text“ in group does not support any controls
+                    return obj.type !== "text" && obj.type !== "textarea" && obj.isControlVisible(key)
+                }));
+            });
+        } else if (o.type === "barcodearea") {
             $("#toolbox-squaresize").val(editor._px2mm(o.height * o.scaleY).toFixed(2));
             $("#toolbox-qrwhitespace").prop("checked", o.nowhitespace || false);
         } else if (o.type === "imagearea") {
