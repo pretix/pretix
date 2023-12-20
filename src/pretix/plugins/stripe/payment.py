@@ -85,10 +85,11 @@ from pretix.presale.views.cart import cart_session
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
+
 # State of the payment methods
 #
 # Source: https://stripe.com/docs/payments/payment-methods/overview
-# Last Update: 2023-04-24
+# Last Update: 2023-12-20
 #
 # Cards
 # - Credit and Debit Cards: ✓
@@ -125,9 +126,11 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # Buy now, pay later
 # - Affirm: ✓
 # - Afterpay/Clearpay: ✗
-# - Klarna: ✗
+# - Klarna: ✓
+# - Zip: ✗
 #
 # Real-time payments
+# - Swish: ✗
 # - PayNow: ✗
 # - PromptPay: ✗
 # - Pix: ✗
@@ -143,6 +146,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - Secure Remote Commerce: ✗
 # - Link: ✓ (PaymentRequestButton)
 # - Cash App Pay: ✗
+# - PayPal: ✗
 # - MobilePay: ✗
 # - Alipay: ✓
 # - WeChat Pay: ✓
@@ -330,7 +334,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('giropay'),
                      disabled=self.event.currency != 'EUR',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_ideal',
@@ -338,7 +342,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('iDEAL'),
                      disabled=self.event.currency != 'EUR',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_alipay',
@@ -346,7 +350,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('Alipay'),
                      disabled=self.event.currency not in ('EUR', 'AUD', 'CAD', 'GBP', 'HKD', 'JPY', 'NZD', 'SGD', 'USD'),
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_bancontact',
@@ -354,7 +358,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('Bancontact'),
                      disabled=self.event.currency != 'EUR',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_sepa_debit',
@@ -404,7 +408,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('EPS'),
                      disabled=self.event.currency != 'EUR',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_multibanco',
@@ -412,7 +416,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('Multibanco'),
                      disabled=self.event.currency != 'EUR',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_przelewy24',
@@ -420,7 +424,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('Przelewy24'),
                      disabled=self.event.currency not in ['EUR', 'PLN'],
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_wechatpay',
@@ -428,7 +432,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('WeChat Pay'),
                      disabled=self.event.currency not in ['AUD', 'CAD', 'EUR', 'GBP', 'HKD', 'JPY', 'SGD', 'USD'],
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_affirm',
@@ -436,8 +440,25 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('Affirm'),
                      disabled=self.event.currency not in ['USD', 'CAD'],
                      help_text=' '.join([
-                         str(_('Needs to be enabled in your Stripe account first.')),
+                         str(_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                               'before they work properly.')),
                          str(_('Only available for payments between $50 and $30,000.'))
+                     ]),
+                     required=False,
+                 )),
+                ('method_klarna',
+                 forms.BooleanField(
+                     label=_('Klarna'),
+                     disabled=self.event.currency not in [
+                         'AUD', 'CAD', 'CHF', 'CZK', 'DKK', 'EUR', 'GBP', 'NOK', 'NZD', 'PLN', 'SEK', 'USD'
+                     ],
+                     help_text=' '.join([
+                         str(_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                               'before they work properly.')),
+                         str(_('Klarna and Stripe will decide which of the payment methods offered by Klarna are '
+                               'available to the user.')),
+                         str(_('Klarna\'s terms of services do not allow it to be used by charities or political '
+                               'organizations.')),
                      ]),
                      required=False,
                  )),
