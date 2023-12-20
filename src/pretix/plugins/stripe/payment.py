@@ -59,7 +59,9 @@ from django_countries import countries
 from pretix import __version__
 from pretix.base.decimal import round_decimal
 from pretix.base.forms import SecretKeySettingsField
-from pretix.base.forms.questions import guess_country
+from pretix.base.forms.questions import (
+    guess_country, guess_country_from_request,
+)
 from pretix.base.models import (
     Event, InvoiceAddress, Order, OrderPayment, OrderRefund, Quota,
 )
@@ -85,10 +87,11 @@ from pretix.presale.views.cart import cart_session
 
 logger = logging.getLogger('pretix.plugins.stripe')
 
+
 # State of the payment methods
 #
 # Source: https://stripe.com/docs/payments/payment-methods/overview
-# Last Update: 2023-04-24
+# Last Update: 2023-12-20
 #
 # Cards
 # - Credit and Debit Cards: ✓
@@ -125,9 +128,11 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # Buy now, pay later
 # - Affirm: ✓
 # - Afterpay/Clearpay: ✗
-# - Klarna: ✗
+# - Klarna: ✓
+# - Zip: ✗
 #
 # Real-time payments
+# - Swish: ✗
 # - PayNow: ✗
 # - PromptPay: ✗
 # - Pix: ✗
@@ -143,6 +148,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - Secure Remote Commerce: ✗
 # - Link: ✓ (PaymentRequestButton)
 # - Cash App Pay: ✗
+# - PayPal: ✗
 # - MobilePay: ✗
 # - Alipay: ✓
 # - WeChat Pay: ✓
@@ -330,7 +336,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('giropay'),
                      disabled=self.event.currency != 'EUR',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_ideal',
@@ -338,7 +344,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('iDEAL'),
                      disabled=self.event.currency != 'EUR',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_alipay',
@@ -346,7 +352,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('Alipay'),
                      disabled=self.event.currency not in ('EUR', 'AUD', 'CAD', 'GBP', 'HKD', 'JPY', 'NZD', 'SGD', 'USD'),
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_bancontact',
@@ -354,7 +360,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('Bancontact'),
                      disabled=self.event.currency != 'EUR',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_sepa_debit',
@@ -404,7 +410,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('EPS'),
                      disabled=self.event.currency != 'EUR',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_multibanco',
@@ -412,7 +418,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('Multibanco'),
                      disabled=self.event.currency != 'EUR',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_przelewy24',
@@ -420,7 +426,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('Przelewy24'),
                      disabled=self.event.currency not in ['EUR', 'PLN'],
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_wechatpay',
@@ -428,7 +434,7 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('WeChat Pay'),
                      disabled=self.event.currency not in ['AUD', 'CAD', 'EUR', 'GBP', 'HKD', 'JPY', 'SGD', 'USD'],
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
-                                 'before work properly.'),
+                                 'before they work properly.'),
                      required=False,
                  )),
                 ('method_affirm',
@@ -436,8 +442,25 @@ class StripeSettingsHolder(BasePaymentProvider):
                      label=_('Affirm'),
                      disabled=self.event.currency not in ['USD', 'CAD'],
                      help_text=' '.join([
-                         str(_('Needs to be enabled in your Stripe account first.')),
+                         str(_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                               'before they work properly.')),
                          str(_('Only available for payments between $50 and $30,000.'))
+                     ]),
+                     required=False,
+                 )),
+                ('method_klarna',
+                 forms.BooleanField(
+                     label=_('Klarna'),
+                     disabled=self.event.currency not in [
+                         'AUD', 'CAD', 'CHF', 'CZK', 'DKK', 'EUR', 'GBP', 'NOK', 'NZD', 'PLN', 'SEK', 'USD'
+                     ],
+                     help_text=' '.join([
+                         str(_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                               'before they work properly.')),
+                         str(_('Klarna and Stripe will decide which of the payment methods offered by Klarna are '
+                               'available to the user.')),
+                         str(_('Klarna\'s terms of services do not allow it to be used by charities or political '
+                               'organizations.')),
                      ]),
                      required=False,
                  )),
@@ -1336,13 +1359,110 @@ class StripeAffirm(StripePaymentIntentMethod):
         }
 
     def payment_form_render(self, request, total, order=None) -> str:
-        template = get_template('pretixplugins/stripe/checkout_payment_form_affirm.html')
+        template = get_template('pretixplugins/stripe/checkout_payment_form_simple_messaging_noform.html')
         ctx = {
             'request': request,
             'event': self.event,
             'total': self._decimal_to_int(total),
+            'method': self.method,
         }
         return template.render(ctx)
+
+
+class StripeKlarna(StripePaymentIntentMethod):
+    identifier = "stripe_klarna"
+    verbose_name = _("Klarna via Stripe")
+    public_name = _("Klarna")
+    method = "klarna"
+    redirect_action_handling = "redirect"
+    allowed_countries = {"US", "CA", "AU", "NZ", "GB", "IE", "FR", "ES", "DE", "AT", "BE", "DK", "FI", "IT", "NL", "NO", "SE"}
+
+    def payment_is_valid_session(self, request):
+        # Klarna does not have a payment_method_id, so we set it manually to None during checkout.
+        # But we still need to check for its presence here.
+        if "payment_stripe_{}_payment_method_id".format(self.method) in request.session:
+            return True
+        return False
+
+    def checkout_prepare(self, request, cart):
+        # Klarna does not have a payment_method_id, so we set it manually to None during checkout, so that we can
+        # verify later on if we are in or outside the checkout process.
+        request.session[
+            "payment_stripe_{}_payment_method_id".format(self.method)
+        ] = None
+        return True
+
+    def _detect_country(self, request, order=None):
+        def get_invoice_address():
+            if order and getattr(order, 'invoice_address', None):
+                request._checkout_flow_invoice_address = order.invoice_address
+            if not hasattr(request, '_checkout_flow_invoice_address'):
+                cs = cart_session(request)
+                iapk = cs.get('invoice_address')
+                if not iapk:
+                    request._checkout_flow_invoice_address = InvoiceAddress()
+                else:
+                    try:
+                        request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                    except InvoiceAddress.DoesNotExist:
+                        request._checkout_flow_invoice_address = InvoiceAddress()
+            return request._checkout_flow_invoice_address
+
+        ia = get_invoice_address()
+        country = None
+        if ia.country:
+            country = str(ia.country)
+        if country not in self.allowed_countries:
+            country = guess_country_from_request(request, self.event)
+        if country not in self.allowed_countries:
+            country = self.settings.merchant_country
+        if country not in self.allowed_countries:
+            country = "DE"
+        return country
+
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            "payment_method_data": {
+                "type": "klarna",
+                "billing_details": {
+                    "email": payment.order.email,
+                    "address": {
+                        "country": self._detect_country(request, payment.order),
+                    },
+                },
+            }
+        }
+
+    def payment_form_render(self, request, total, order=None) -> str:
+        template = get_template(
+            "pretixplugins/stripe/checkout_payment_form_simple_messaging_noform.html"
+        )
+        ctx = {
+            "request": request,
+            "event": self.event,
+            "total": self._decimal_to_int(total),
+            "method": self.method,
+            "country": self._detect_country(request, order)
+        }
+        return template.render(ctx)
+
+    def test_mode_message(self):
+        if self.settings.connect_client_id and not self.settings.secret_key:
+            is_testmode = True
+        else:
+            is_testmode = (
+                self.settings.secret_key and "_test_" in self.settings.secret_key
+            )
+        if is_testmode:
+            return mark_safe(
+                _(
+                    "The Stripe plugin is operating in test mode. You can use one of <a {args}>many test "
+                    "cards</a> to perform a transaction. No money will actually be transferred."
+                ).format(
+                    args='href="https://docs.klarna.com/resources/test-environment/sample-customer-data/" target="_blank"'
+                )
+            )
+        return None
 
 
 class StripeGiropay(StripeMethod):

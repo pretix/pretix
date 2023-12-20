@@ -2,7 +2,7 @@
 {% load bootstrap3 %}
 
 <div class="form-horizontal stripe-container">
-    <div id="stripe-affirm">
+    <div id="stripe-{{ method }}">
         <span class="fa fa-spinner fa-spin"></span>
         <!-- a Stripe Element will be inserted here. -->
     </div>
@@ -15,6 +15,9 @@
         {% endblocktrans %}
     </p>
 
-    <input type="hidden" name="stripe_affirm_total" value="{{ total }}" id="stripe_affirm_total"/>
-    <input type="hidden" id="stripe_affirm_currency" value="{{ event.currency }}"/>
+    <input type="hidden" name="stripe_{{ method }}_total" value="{{ total }}" id="stripe_{{ method }}_total"/>
+    <input type="hidden" id="stripe_{{ method }}_currency" value="{{ event.currency }}"/>
+    {% if country %}
+        <input type="hidden" id="stripe_{{ method }}_country" value="{{ country }}"/>
+    {% endif %}
 </div>
