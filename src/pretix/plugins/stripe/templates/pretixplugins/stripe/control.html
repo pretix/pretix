@@ -29,7 +29,7 @@
                 {% if details.sepadirectdebit.verified_name %}
                     <dt>{% trans "Payer name" %}</dt>
                     <dd>{{ details.sepadirectdebit.verified_name }}</dd>
-                {% endif %}}
+                {% endif %}
             {% endif %}
             {% if details.type == "giropay" %}
                 <dt>{% trans "Bank" %}</dt>
@@ -37,6 +37,14 @@
                 {% if details.giropay.verified_name %}
                     <dt>{% trans "Payer name" %}</dt>
                     <dd>{{ details.giropay.verified_name }}</dd>
+                {% endif %}
+            {% endif %}
+            {% if details.type == "eps" %}
+                <dt>{% trans "Bank" %}</dt>
+                <dd>{{ details.eps.bank }}</dd>
+                {% if details.eps.verified_name %}
+                    <dt>{% trans "Payer name" %}</dt>
+                    <dd>{{ details.eps.verified_name }}</dd>
                 {% endif %}
             {% endif %}
             {% if details.type == "bancontact" %}
