@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-11-28 15:26+0000\n"
-"PO-Revision-Date: 2023-11-14 23:00+0000\n"
-"Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2023-12-20 08:11+0000\n"
+"Last-Translator: RobertSF92 <robert@semperfi-it.com>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1.1\n"
+"X-Generator: Weblate 5.2.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -76,7 +76,7 @@ msgstr "Grieks"
 
 #: pretix/_base_settings.py:92
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonesisch"
 
 #: pretix/_base_settings.py:93
 msgid "Italian"
@@ -88,7 +88,7 @@ msgstr "Lets"
 
 #: pretix/_base_settings.py:95
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Noorse Bokmål"
 
 #: pretix/_base_settings.py:96
 msgid "Polish"
@@ -557,16 +557,12 @@ msgid "Waiting list entry received voucher"
 msgstr "Wachtlijstitem heeft voucher ontvangen"
 
 #: pretix/api/webhooks.py:370
-#, fuzzy
-#| msgid "Customer account"
 msgid "Customer account created"
-msgstr "Klantenaccount"
+msgstr "Klantaccount aangemaakt"
 
 #: pretix/api/webhooks.py:374
-#, fuzzy
-#| msgid "Customer account email change"
 msgid "Customer account changed"
-msgstr "Verandering van het e-mailadres"
+msgstr "Klantaccount gewijzigd"
 
 #: pretix/api/webhooks.py:378
 #, fuzzy
@@ -1698,10 +1694,8 @@ msgstr "Vereist speciale aandacht"
 #: pretix/base/exporters/items.py:91 pretix/base/exporters/orderlist.py:278
 #: pretix/base/models/items.py:572 pretix/base/models/items.py:1107
 #: pretix/base/models/orders.py:248
-#, fuzzy
-#| msgid "Check-in list"
 msgid "Check-in text"
-msgstr "Inchecklijst"
+msgstr "Incheck text"
 
 #: pretix/base/exporters/items.py:92 pretix/base/models/items.py:577
 #: pretix/base/models/items.py:1042
