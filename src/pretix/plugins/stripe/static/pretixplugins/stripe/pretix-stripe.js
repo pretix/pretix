@@ -174,14 +174,19 @@ var pretixstripe = {
                         pretixstripe.affirm.mount('#stripe-affirm');
                     }
                     if ($("#stripe-klarna").length) {
-                        pretixstripe.klarna = pretixstripe.elements.create('paymentMethodMessaging', {
-                            'amount': parseInt($("#stripe_klarna_total").val()),
-                            'currency': $("#stripe_klarna_currency").val(),
-                            'countryCode': $.trim($("body").attr("data-locale")).toUpperCase(),
-                            'paymentMethodTypes': ['klarna'],
-                        });
+                        try {
+                            pretixstripe.klarna = pretixstripe.elements.create('paymentMethodMessaging', {
+                                'amount': parseInt($("#stripe_klarna_total").val()),
+                                'currency': $("#stripe_klarna_currency").val(),
+                                'countryCode': $("#stripe_klarna_country").val(),
+                                'paymentMethodTypes': ['klarna'],
+                            });
 
-                        pretixstripe.klarna.mount('#stripe-klarna');
+                            pretixstripe.klarna.mount('#stripe-klarna');
+                        } catch (e) {
+                            console.error(e);
+                            $("#stripe-klarna").html("<div class='alert alert-danger'>Technical error, please contact support: " + e + "</div>");
+                        }
                     }
                     if ($("#stripe-payment-request-button").length && pretixstripe.paymentRequest != null) {
                         pretixstripe.paymentRequestButton = pretixstripe.elements.create('paymentRequestButton', {

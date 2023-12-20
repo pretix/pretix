@@ -17,4 +17,7 @@
 
     <input type="hidden" name="stripe_{{ method }}_total" value="{{ total }}" id="stripe_{{ method }}_total"/>
     <input type="hidden" id="stripe_{{ method }}_currency" value="{{ event.currency }}"/>
+    {% if country %}
+        <input type="hidden" id="stripe_{{ method }}_country" value="{{ country }}"/>
+    {% endif %}
 </div>

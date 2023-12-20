@@ -59,7 +59,7 @@ from django_countries import countries
 from pretix import __version__
 from pretix.base.decimal import round_decimal
 from pretix.base.forms import SecretKeySettingsField
-from pretix.base.forms.questions import guess_country
+from pretix.base.forms.questions import guess_country, guess_country_from_request
 from pretix.base.models import (
     Event, InvoiceAddress, Order, OrderPayment, OrderRefund, Quota,
 )
@@ -1349,11 +1349,10 @@ class StripeAffirm(StripePaymentIntentMethod):
 class StripeKlarna(StripePaymentIntentMethod):
     identifier = "stripe_klarna"
     verbose_name = _("Klarna via Stripe")
-    public_name = " / ".join(
-        [str(_("Klarna")), str(_("SOFORT (instant bank transfer)"))]
-    )
+    public_name = _("Klarna")
     method = "klarna"
     redirect_action_handling = "redirect"
+    allowed_countries = {"US", "CA", "AU", "NZ", "GB", "IE", "FR", "ES", "DE", "AT", "BE", "DK", "FI", "IT", "NL", "NO", "SE"}
 
     def payment_is_valid_session(self, request):
         # Klarna does not have a payment_method_id, so we set it manually to None during checkout.
@@ -1370,19 +1369,42 @@ class StripeKlarna(StripePaymentIntentMethod):
         ] = None
         return True
 
-    def _payment_intent_kwargs(self, request, payment):
-        try:
-            ia = payment.order.invoice_address
-        except InvoiceAddress.DoesNotExist:
-            ia = InvoiceAddress(order=payment.order)
+    def _detect_country(self, request, order=None):
+        def get_invoice_address():
+            if order and getattr(order, 'invoice_address', None):
+                request._checkout_flow_invoice_address = order.invoice_address
+            if not hasattr(request, '_checkout_flow_invoice_address'):
+                cs = cart_session(request)
+                iapk = cs.get('invoice_address')
+                if not iapk:
+                    request._checkout_flow_invoice_address = InvoiceAddress()
+                else:
+                    try:
+                        request._checkout_flow_invoice_address = InvoiceAddress.objects.get(pk=iapk, order__isnull=True)
+                    except InvoiceAddress.DoesNotExist:
+                        request._checkout_flow_invoice_address = InvoiceAddress()
+            return request._checkout_flow_invoice_address
 
+        ia = get_invoice_address()
+        country = None
+        if ia.country:
+            country = str(ia.country)
+        if country not in self.allowed_countries:
+            country = guess_country_from_request(request, self.event)
+        if country not in self.allowed_countries:
+            country = self.settings.merchant_country
+        if country not in self.allowed_countries:
+            country = "DE"
+        return country
+
+    def _payment_intent_kwargs(self, request, payment):
         return {
             "payment_method_data": {
                 "type": "klarna",
                 "billing_details": {
                     "email": payment.order.email,
                     "address": {
-                        "country": ia.country or guess_country(self.event),
+                        "country": self._detect_country(request, payment.order),
                     },
                 },
             }
@@ -1397,6 +1419,7 @@ class StripeKlarna(StripePaymentIntentMethod):
             "event": self.event,
             "total": self._decimal_to_int(total),
             "method": self.method,
+            "country": self._detect_country(request, order)
         }
         return template.render(ctx)
 
