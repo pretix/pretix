@@ -1,0 +1,3 @@
+[submodule "pretix-regex-validation"]
+	path = pretix-regex-validation
+	url = https://github.com/pretix-unofficial/pretix-regex-validation
