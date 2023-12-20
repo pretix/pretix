@@ -78,7 +78,7 @@ class LogEntry(models.Model):
     device = models.ForeignKey('Device', null=True, blank=True, on_delete=models.PROTECT)
     oauth_application = models.ForeignKey('pretixapi.OAuthApplication', null=True, blank=True, on_delete=models.PROTECT)
     event = models.ForeignKey('Event', null=True, blank=True, on_delete=models.SET_NULL)
-    organizer_link = models.ForeignKey('Organizer', null=True, blank=True, on_delete=models.PROTECT)
+    organizer = models.ForeignKey('Organizer', null=True, blank=True, on_delete=models.PROTECT, db_column='organizer_link_id')
     action_type = models.CharField(max_length=255)
     data = models.TextField(default='{}')
     visible = models.BooleanField(default=True)
@@ -122,22 +122,6 @@ class LogEntry(models.Model):
             no_type = no_type or no_types.get(typepath + ('.*' if typepath != self.action_type else ''))
             typepath = typepath.rsplit('.', 1)[0]
         return no_type
-
-    @cached_property
-    def organizer(self):
-        from .organizer import Organizer
-
-        if self.organizer_link:
-            return self.organizer_link
-        elif self.event:
-            return self.event.organizer
-        elif hasattr(self.content_object, 'event'):
-            return self.content_object.event.organizer
-        elif hasattr(self.content_object, 'organizer'):
-            return self.content_object.organizer
-        elif isinstance(self.content_object, Organizer):
-            return self.content_object
-        return None
 
     @cached_property
     def display_object(self):

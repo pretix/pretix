@@ -115,7 +115,7 @@ class LoggingMixin:
             kwargs['api_token'] = api_token
 
         logentry = LogEntry(content_object=self, user=user, action_type=action, event=event,
-                            organizer_link_id=organizer_id, **kwargs)
+                            organizer_id=organizer_id, **kwargs)
         if isinstance(data, dict):
             sensitivekeys = ['password', 'secret', 'api_key']
 
