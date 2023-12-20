@@ -209,7 +209,10 @@ class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
 
         date_attrs['placeholder'] = lazy(date_placeholder, str)
         time_attrs['placeholder'] = lazy(time_placeholder, str)
-
+        date_attrs['aria-label'] = _('Date')
+        time_attrs['aria-label'] = _('Time')
+        if 'aria-label' in attrs:
+            del attrs['aria-label']
         widgets = (
             forms.DateInput(attrs=date_attrs, format=date_format),
             forms.TimeInput(attrs=time_attrs, format=time_format),

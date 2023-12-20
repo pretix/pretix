@@ -20,7 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 from bootstrap3.text import text_value
-from django.forms import CheckboxInput
+from django.forms import CheckboxInput, CheckboxSelectMultiple, RadioSelect
 from django.forms.utils import flatatt
 from django.utils.html import format_html
 from django.utils.safestring import mark_safe
@@ -30,7 +30,7 @@ from i18nfield.forms import I18nFormField
 from pretix.base.forms.renderers import FieldRenderer, InlineFieldRenderer
 
 
-def render_label(content, label_for=None, label_class=None, label_title='', optional=False):
+def render_label(content, label_for=None, label_class=None, label_title='', label_id='', optional=False):
     """
     Render a label with content
     """
@@ -41,6 +41,8 @@ def render_label(content, label_for=None, label_class=None, label_title='', opti
         attrs['class'] = label_class
     if label_title:
         attrs['title'] = label_title
+    if label_id:
+        attrs['id'] = label_id
 
     if text_value(content) == '&#160;':
         # Empty label, e.g. checkbox
@@ -61,6 +63,7 @@ class ControlFieldRenderer(FieldRenderer):
     def __init__(self, *args, **kwargs):
         kwargs['layout'] = 'horizontal'
         super().__init__(*args, **kwargs)
+        self.is_group_widget = isinstance(self.widget, (CheckboxSelectMultiple, RadioSelect, )) or (self.is_multi_widget and len(self.widget.widgets) > 1)
 
     def add_label(self, html):
         label = self.get_label()
@@ -73,13 +76,28 @@ class ControlFieldRenderer(FieldRenderer):
         else:
             required = self.field.field.required
 
+        if self.is_group_widget:
+            label_for = ""
+            label_id = "legend-{}".format(self.field.html_name)
+        else:
+            label_for = self.field.id_for_label
+            label_id = ""
+
         html = render_label(
             label,
-            label_for=self.field.id_for_label,
+            label_for=label_for,
             label_class=self.get_label_class(),
+            label_id=label_id,
             optional=not required and not isinstance(self.widget, CheckboxInput)
         ) + html
         return html
+
+    def wrap_label_and_field(self, html):
+        if self.is_group_widget:
+            attrs = ' role="group" aria-labelledby="legend-{}"'.format(self.field.html_name)
+        else:
+            attrs = ''
+        return '<div class="{klass}"{attrs}>{html}</div>'.format(klass=self.get_form_group_class(), html=html, attrs=attrs)
 
 
 class BulkEditMixin:
