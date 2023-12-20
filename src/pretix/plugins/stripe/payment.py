@@ -744,7 +744,24 @@ class StripeMethod(BasePaymentProvider):
         if not obj.info:
             return
         d = json.loads(obj.info)
-        new = {}
+
+        keys = (
+            'amount', 'currency', 'status', 'id', 'amount_capturable', 'amount_details', 'amount_received',
+            'application', 'application_fee_amount', 'canceled_at', 'confirmation_method', 'created', 'description',
+            'last_payment_error', 'payment_method', 'statement_descriptor', 'livemode'
+        )
+        new = {k: v for k, v in d.items() if k in keys}
+
+        if d.get("latest_charge"):
+            keys = (
+                'amount', 'amount_captured', 'amount_refunded', 'application', 'application_fee_amount',
+                'balance_transaction', 'captured', 'created', 'currency', 'description', 'destination',
+                'disputed', 'failure_balance_transaction', 'failure_code', 'failure_message', 'id',
+                'livemode', 'metadata', 'object', 'on_behalf_of', 'outcome', 'paid', 'payment_intent',
+                'payment_method', 'receipt_url', 'refunded', 'status', 'transfer_data', 'transfer_group',
+            )
+            new["latest_charge"] = {k: v for k, v in d["latest_charge"].items() if k in keys}
+
         if d.get('source'):
             new['source'] = {
                 'id': d['source'].get('id'),
@@ -756,18 +773,10 @@ class StripeMethod(BasePaymentProvider):
                 'bic': d['source'].get('bic'),
                 'card': {
                     'brand': d['source'].get('card', {}).get('brand'),
-                    'country': d['source'].get('card', {}).get('cuntry'),
+                    'country': d['source'].get('card', {}).get('country'),
                     'last4': d['source'].get('card', {}).get('last4'),
                 }
             }
-        if 'amount' in d:
-            new['amount'] = d['amount']
-        if 'currency' in d:
-            new['currency'] = d['currency']
-        if 'status' in d:
-            new['status'] = d['status']
-        if 'id' in d:
-            new['id'] = d['id']
 
         new['_shredded'] = True
         obj.info = json.dumps(new)
