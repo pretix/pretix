@@ -59,7 +59,9 @@ from django_countries import countries
 from pretix import __version__
 from pretix.base.decimal import round_decimal
 from pretix.base.forms import SecretKeySettingsField
-from pretix.base.forms.questions import guess_country, guess_country_from_request
+from pretix.base.forms.questions import (
+    guess_country, guess_country_from_request,
+)
 from pretix.base.models import (
     Event, InvoiceAddress, Order, OrderPayment, OrderRefund, Quota,
 )
