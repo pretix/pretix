@@ -783,7 +783,7 @@ class StripeMethod(BasePaymentProvider):
         obj.save(update_fields=['info'])
 
         for le in obj.order.all_logentries().filter(
-                action_type="pretix.plugins.stripe.event"
+            action_type="pretix.plugins.stripe.event"
         ).exclude(data="", shredded=True):
             d = le.parsed_data
             if 'data' in d:

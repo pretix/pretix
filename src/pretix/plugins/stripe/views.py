@@ -273,7 +273,11 @@ def charge_webhook(event, event_json, charge_id, rso):
     prov._init_api()
 
     try:
-        charge = stripe.Charge.retrieve(charge_id, expand=['dispute'], **prov.api_kwargs)
+        charge = stripe.Charge.retrieve(
+            charge_id,
+            expand=['dispute', 'refunds', 'payment_intent', 'payment_intent.latest_charge'],
+            **prov.api_kwargs
+        )
     except stripe.error.StripeError:
         logger.exception('Stripe error on webhook. Event data: %s' % str(event_json))
         return HttpResponse('Charge not found', status=500)
@@ -321,7 +325,7 @@ def charge_webhook(event, event_json, charge_id, rso):
 
         order.log_action('pretix.plugins.stripe.event', data=event_json)
 
-        is_refund = charge['refunds']['total_count'] or charge['dispute']
+        is_refund = charge['amount_refunded'] or charge['refunds']['total_count'] or charge['dispute']
         if is_refund:
             known_refunds = [r.info_data.get('id') for r in payment.refunds.all()]
             migrated_refund_amounts = [r.amount for r in payment.refunds.all() if not r.info_data.get('id')]
@@ -354,6 +358,8 @@ def charge_webhook(event, event_json, charge_id, rso):
                                                                    OrderPayment.PAYMENT_STATE_CANCELED,
                                                                    OrderPayment.PAYMENT_STATE_FAILED):
             try:
+                if charge.payment_intent:
+                    payment.info = str(charge.payment_intent)
                 payment.confirm()
             except LockTimeoutException:
                 return HttpResponse("Lock timeout, please try again.", status=503)
@@ -444,9 +450,9 @@ def paymentintent_webhook(event, event_json, paymentintent_id, rso):
         logger.exception('Stripe error on webhook. Event data: %s' % str(event_json))
         return HttpResponse('Charge not found', status=500)
 
-    for charge in paymentintent.latest_charge.data:
+    if paymentintent.latest_charge:
         ReferencedStripeObject.objects.get_or_create(
-            reference=charge.id,
+            reference=paymentintent.latest_charge.id,
             defaults={'order': rso.payment.order, 'payment': rso.payment}
         )
 
