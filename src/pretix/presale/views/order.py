@@ -677,7 +677,7 @@ class OrderPayChangeMethod(EventViewMixin, OrderDetailMixin, TemplateView):
     def provider_forms(self):
         providers = []
         pending_sum = self.order.pending_sum
-        for provider in sorted(self.request.event.get_payment_providers().values(), key=lambda p: (-p.priority, str(p.public_name))):
+        for provider in sorted(self.request.event.get_payment_providers().values(), key=lambda p: (-p.priority, str(p.public_name).title())):
             if not provider.is_enabled:
                 continue
 

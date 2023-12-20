@@ -1064,7 +1064,7 @@ class Event(EventMixin, LoggedModel):
                     providers[pp.identifier] = pp
 
             self._cached_payment_providers = OrderedDict(sorted(
-                providers.items(), key=lambda v: (-v[1].priority, str(v[1].verbose_name))
+                providers.items(), key=lambda v: (-v[1].priority, str(v[1].verbose_name).title())
             ))
         return self._cached_payment_providers
 
