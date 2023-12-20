@@ -30893,6 +30893,20 @@ msgstr "COMPLÈTEMENT RÉSERVÉ"
 msgid "SideBurn general sale tickets will be assigned by lottery"
 msgstr "Les billets de la vente générale SideBurn seront attribués par lotterie"
 
+#: pretix/presale/templates/pretixpresale/event/checkout_questions.html:22
+msgid "Before you proceed, please read the following documents"
+msgstr "Avant de continuer, veuillez lire les documents suivants"
+
+msgid "Release of Waiver and Liability"
+msgstr "Libération de renonciation et de responsabilité"
+
+msgid "SideBurn Code of Conduct"
+msgstr "Code de conduite SideBurn"
+
+msgid "For each document, enter the confirmation words in the form below to show you agree."
+msgstr "Pour chaque document, saisissez les mots de confirmation dans le formulaire ci-dessous pour montrer que vous êtes d'accord."
+
+
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:73
 msgid "SOLD OUT"

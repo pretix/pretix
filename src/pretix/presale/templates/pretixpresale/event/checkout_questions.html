@@ -17,6 +17,25 @@
     <form class="form-horizontal" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         <div class="panel-group" id="questions_group">
+
+            <div class="alert alert-danger">
+                <h2>{% trans "Before you proceed, please read the following documents" %}:
+                    <br />
+                    <br />
+                    <ul>
+                        <li>
+                            <a href="https://drive.google.com/file/d/1JOYvMnkqqK5gUBTiE8CqMQ-I4CxEaq3F/view?usp=sharing" target="_blank">{% trans "Release of Waiver and Liability" %}</a>
+                        </li>
+                        <br />
+                        <li>
+                            <a href="https://drive.google.com/file/d/1xtqLID6R3dG3zFK8EAxC1DyPMNSfthNL/view?usp=sharing" target="_blank">{% trans "SideBurn Code of Conduct" %} </a>
+                        </li>
+                    </ul>
+                    <br />
+                    {% trans "For each document, enter the confirmation words in the form below to show you agree." %}
+                </h2>
+            </div>
+
             <details class="panel panel-default" open>
                 <summary class="panel-heading">
                     <h3 class="panel-title">
