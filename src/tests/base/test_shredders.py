@@ -39,6 +39,7 @@ from pretix.base.shredder import (
     AttendeeInfoShredder, CachedTicketShredder, EmailAddressShredder,
     InvoiceAddressShredder, InvoiceShredder, PaymentInfoShredder,
     QuestionAnswerShredder, WaitingListShredder, shred_constraints,
+    shred_log_fields,
 )
 
 
@@ -412,3 +413,83 @@ def test_shred_constraint_after_event_subevents(event):
         date_to=now_dt + timedelta(hours=1)
     )
     assert shred_constraints(event)
+
+
+@pytest.mark.django_db
+def test_shred_log_fields_banlist(event):
+    le = event.log_action("foo.bar", data={
+        "dict": {
+            "subdict": {
+                "foo": "bar",
+                "empty": None,
+            }
+        },
+        "list": [
+            {
+                "foo": "bar",
+            },
+            "baz",
+        ],
+        "string": "foo",
+        "bool": True,
+        "int": 0,
+    })
+    shred_log_fields(le, banlist=["dict", "list", "int", "bool"])
+    assert le.shredded
+    assert le.parsed_data == {
+        "dict": {
+            "subdict": {
+                "foo": "█",
+                "empty": None,
+            }
+        },
+        "list": [
+            {
+                "foo": "█",
+            },
+            "█",
+        ],
+        "string": "foo",
+        "bool": "█",
+        "int": 0,
+    }
+
+
+@pytest.mark.django_db
+def test_shred_log_fields_whitelist(event):
+    le = event.log_action("foo.bar", data={
+        "dict": {
+            "subdict": {
+                "foo": "bar",
+                "empty": None,
+            }
+        },
+        "list": [
+            {
+                "foo": "bar",
+            },
+            "baz",
+        ],
+        "string": "foo",
+        "bool": True,
+        "int": 0,
+    })
+    shred_log_fields(le, whitelist=["string"])
+    assert le.shredded
+    assert le.parsed_data == {
+        "dict": {
+            "subdict": {
+                "foo": "█",
+                "empty": None,
+            }
+        },
+        "list": [
+            {
+                "foo": "█",
+            },
+            "█",
+        ],
+        "string": "foo",
+        "bool": "█",
+        "int": 0,
+    }

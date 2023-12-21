@@ -159,9 +159,16 @@ def shred_log_fields(logentry, banlist=None, whitelist=None):
             for k, v in d.items():
                 if k not in whitelist:
                     if isinstance(d[k], list):
-                        d[k] = ['█'] * len(d[k])
-                    if isinstance(d[k], dict):
-                        _shred(d[k], None, ['__'])
+                        newlist = []
+                        for i in d[k]:
+                            if isinstance(i, dict):
+                                _shred(i, None, [None])
+                            else:
+                                i = '█'
+                            newlist.append(i)
+                        d[k] = newlist
+                    elif isinstance(d[k], dict):
+                        _shred(d[k], None, [None])
                     elif d[k]:
                         d[k] = '█'
                     shredded = True
@@ -169,9 +176,16 @@ def shred_log_fields(logentry, banlist=None, whitelist=None):
             for k in banlist:
                 if k in d:
                     if isinstance(d[k], list):
-                        d[k] = ['█'] * len(d[k])
-                    if isinstance(d[k], dict):
-                        _shred(d, None, ['__'])
+                        newlist = []
+                        for i in d[k]:
+                            if isinstance(i, dict):
+                                _shred(i, None, [None])
+                            else:
+                                i = '█'
+                            newlist.append(i)
+                        d[k] = newlist
+                    elif isinstance(d[k], dict):
+                        _shred(d[k], None, [None])
                     elif d[k]:
                         d[k] = '█'
                     shredded = True
