@@ -446,7 +446,7 @@ class PaypalMethod(BasePaymentProvider):
                 response = self.client.execute(req)
             except IOError as e:
                 messages.warning(request, _('We had trouble communicating with PayPal'))
-                logger.exception('PayPal OrdersGetRequest: {}'.format(str(e)))
+                logger.exception('PayPal OrdersGetRequest({}): {}'.format(paypal_order_id, str(e)))
                 return False
             else:
                 if response.result.status == 'APPROVED':
@@ -602,15 +602,17 @@ class PaypalMethod(BasePaymentProvider):
                 if not self.settings.isu_merchant_id:
                     raise PaymentException('Payment method misconfigured')
             self.init_api()
+            paypal_oid = request.session.get('payment_paypal_oid')
             try:
-                req = OrdersGetRequest(request.session.get('payment_paypal_oid'))
+                req = OrdersGetRequest(paypal_oid)
                 response = self.client.execute(req)
             except IOError as e:
-                logger.exception('PayPal OrdersGetRequest: {}'.format(str(e)))
+                logger.exception('PayPal OrdersGetRequest({}): {}'.format(paypal_oid, str(e)))
                 payment.fail(info={
                     "error": {
                         "name": "IOError",
                         "message": str(e),
+                        "order_id": paypal_oid,
                     }
                 })
                 raise PaymentException(_('We had trouble communicating with PayPal'))
@@ -676,9 +678,10 @@ class PaypalMethod(BasePaymentProvider):
                             "error": {
                                 "name": "IOError",
                                 "message": str(e),
-                            }
+                            },
+                            "order_id": paypal_oid,
                         })
-                        logger.exception('PayPal OrdersPatchRequest: {}'.format(str(e)))
+                        logger.exception('PayPal OrdersPatchRequest({}): {}'.format(paypal_oid, str(e)))
                         return
 
                 try:
@@ -704,11 +707,11 @@ class PaypalMethod(BasePaymentProvider):
                         pass
 
                     payment.fail(info={**pp_captured_order.dict(), "error": error}, log_data=error)
-                    logger.exception('PayPal OrdersCaptureRequest: {}'.format(str(e)))
+                    logger.exception('PayPal OrdersCaptureRequest({}): {}'.format(pp_captured_order.id, str(e)))
                     raise PaymentException(text)
                 except IOError as e:
                     payment.fail(info={**pp_captured_order.dict(), "error": {"message": str(e)}}, log_data={"error": str(e)})
-                    logger.exception('PayPal OrdersCaptureRequest: {}'.format(str(e)))
+                    logger.exception('PayPal OrdersCaptureRequest({}): {}'.format(pp_captured_order.id, str(e)))
                     raise PaymentException(
                         _('We were unable to process your payment. See below for details on how to proceed.')
                     )
@@ -930,7 +933,7 @@ class PaypalMethod(BasePaymentProvider):
                 response = self.client.execute(req)
             except IOError as e:
                 messages.warning(request, _('We had trouble communicating with PayPal'))
-                logger.exception('PayPal OrdersGetRequest: {}'.format(str(e)))
+                logger.exception('PayPal OrdersGetRequest({}): {}'.format(paypal_order_id, str(e)))
                 return False
             else:
                 if response.result.status == 'APPROVED':
