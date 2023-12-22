@@ -22,6 +22,7 @@
 import copy
 import hashlib
 import logging
+import uuid
 
 import requests
 from django.core.cache import cache
@@ -109,6 +110,9 @@ class PayPalHttpClient(VendorPayPalHttpClient):
 
         if self.environment.partner_id:
             request.headers["PayPal-Partner-Attribution-Id"] = self.environment.partner_id
+
+        if "PayPal-Request-Id" not in request.headers:
+            request.headers["PayPal-Request-Id"] = str(uuid.uuid4())
 
     def execute(self, request):
         reqCpy = copy.deepcopy(request)
