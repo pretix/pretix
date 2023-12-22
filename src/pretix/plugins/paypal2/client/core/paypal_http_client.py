@@ -42,7 +42,7 @@ class LogOnRetry(Retry):
         try:
             return super().increment(method, url, response, error, _pool, _stacktrace)
         except MaxRetryError:
-            logger.warning(f'PayPal2 Retry failed {logstr} after {len(self.history)} attempts')
+            logger.error(f'PayPal2 Retry failed {logstr} after {len(self.history)} attempts')
             raise
 
 
