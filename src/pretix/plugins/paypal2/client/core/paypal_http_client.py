@@ -58,6 +58,9 @@ class PayPalHttpClient(VendorPayPalHttpClient):
             # with PayPal's system, where executing GET on the same order ID would only succeed
             # ~50% of the time, as if we were routed to inconsistent databases within PayPal.
             status_forcelist=[404, 500, 502, 503, 504],
+            # We also need to add non-idempotent methods since OrdersPatchRequest and OrdersCaptureRequest
+            # are also affected. Oof. Let's hope we're idempotent enough by setting PayPal-Request-Id.
+            allowed_methods=["HEAD", "GET", "PUT", "DELETE", "OPTIONS", "TRACE", "PATCH", "POST"],
             raise_on_status=False,
         )
         self.session.mount('https://', HTTPAdapter(max_retries=retries))
