@@ -19,15 +19,49 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import copy
 import hashlib
+import logging
 
+import requests
 from django.core.cache import cache
 from paypalcheckoutsdk.core import (
     AccessToken, PayPalHttpClient as VendorPayPalHttpClient,
 )
+from requests.adapters import HTTPAdapter
+from urllib3 import Retry
+from urllib3.exceptions import MaxRetryError
+
+logger = logging.getLogger(__name__)
+
+
+class LogOnRetry(Retry):
+    def increment(self, method=None, url=None, response=None, error=None, _pool=None, _stacktrace=None) -> Retry:
+        logstr = f'({method} {url}): {error if error else (response.status if response else "unknown")}'
+        logger.warning(f'PayPal2 Retry called {logstr} after {len(self.history)} attempts')
+        try:
+            return super().increment(method, url, response, error, _pool, _stacktrace)
+        except MaxRetryError:
+            logger.warning(f'PayPal2 Retry failed {logstr} after {len(self.history)} attempts')
+            raise
 
 
 class PayPalHttpClient(VendorPayPalHttpClient):
+    def __init__(self, environment):
+        super().__init__(environment)
+
+        self.session = requests.Session()
+        retries = LogOnRetry(
+            total=5,
+            backoff_factor=0.05,
+            # Yes, we retry on 404. Starting December 20th, we noticed high levels of inconsistency
+            # with PayPal's system, where executing GET on the same order ID would only succeed
+            # ~50% of the time, as if we were routed to inconsistent databases within PayPal.
+            status_forcelist=[404, 500, 502, 503, 504],
+            raise_on_status=False,
+        )
+        self.session.mount('https://', HTTPAdapter(max_retries=retries))
+
     def __call__(self, request):
         # Cached access tokens are not updated by PayPal to include new Merchants that granted access rights since
         # the access token was generated. Therefor we increment the cycle count and by that invalidate the cached
@@ -72,3 +106,36 @@ class PayPalHttpClient(VendorPayPalHttpClient):
 
         if self.environment.partner_id:
             request.headers["PayPal-Partner-Attribution-Id"] = self.environment.partner_id
+
+    def execute(self, request):
+        reqCpy = copy.deepcopy(request)
+
+        try:
+            getattr(reqCpy, 'headers')
+        except AttributeError:
+            reqCpy.headers = {}
+
+        for injector in self._injectors:
+            injector(reqCpy)
+
+        data = None
+
+        formatted_headers = self.format_headers(reqCpy.headers)
+
+        if "user-agent" not in formatted_headers:
+            reqCpy.headers["user-agent"] = self.get_user_agent()
+
+        if hasattr(reqCpy, 'body') and reqCpy.body is not None:
+            raw_headers = reqCpy.headers
+            reqCpy.headers = formatted_headers
+            data = self.encoder.serialize_request(reqCpy)
+            reqCpy.headers = self.map_headers(raw_headers, formatted_headers)
+
+        resp = self.session.request(
+            method=reqCpy.verb,
+            url=self.environment.base_url + reqCpy.path,
+            headers=reqCpy.headers,
+            data=data
+        )
+
+        return self.parse_response(resp)
