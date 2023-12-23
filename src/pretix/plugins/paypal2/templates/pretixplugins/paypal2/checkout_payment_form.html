@@ -13,6 +13,15 @@
     {% endif %}
 </p>
 
-<input type="hidden" name="payment_paypal_{{ method }}_oid" value="" id="payment_paypal_{{ method }}_oid" />
-<input type="hidden" name="payment_paypal_{{ method }}_payer" value="" id="payment_paypal_{{ method }}_payer" />
-<input type="hidden" name="payment_paypal_{{ method }}_xhr" value="{{ xhr }}" id="payment_paypal_{{ method }}_xhr" />
+{% if known_issue %}
+    <div class="alert alert-info">
+        {% blocktrans trimmed %}
+            There is currently a known issue with PayPal that causes some payments to fail. If your payment fails,
+            please just try again. You can also try with a different payment method, if you prefer.
+        {% endblocktrans %}
+    </div>
+{% endif %}
+
+<input type="hidden" name="payment_paypal_{{ method }}_oid" value="" id="payment_paypal_{{ method }}_oid"/>
+<input type="hidden" name="payment_paypal_{{ method }}_payer" value="" id="payment_paypal_{{ method }}_payer"/>
+<input type="hidden" name="payment_paypal_{{ method }}_xhr" value="{{ xhr }}" id="payment_paypal_{{ method }}_xhr"/>

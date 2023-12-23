@@ -1,9 +1,16 @@
 {% load i18n %}
 
 {% if retry %}
-    <p>{% blocktrans trimmed %}
-        Our attempt to execute your Payment via PayPal has failed. Please try again or contact us.
-    {% endblocktrans %}</p>
+    {% if is_known_issue %}
+        <div class="alert alert-info">{% blocktrans trimmed %}
+            Your payment has failed due to a known issue within PayPal. Please try again, there is a high chance of the
+            payment succeeding on a second or third attempt. You can also try other payment methods, if available.
+        {% endblocktrans %}</div>
+    {% else %}
+        <p>{% blocktrans trimmed %}
+            Our attempt to execute your payment via PayPal has failed. Please try again or contact us.
+        {% endblocktrans %}</p>
+    {% endif %}
 {% else %}
     <p>{% blocktrans trimmed %}
         We're waiting for an answer from PayPal regarding your payment. Please contact us, if this

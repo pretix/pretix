@@ -24,11 +24,13 @@ import json
 import logging
 import urllib.parse
 from collections import OrderedDict
+from datetime import timedelta
 from decimal import Decimal
 
 from django import forms
 from django.conf import settings
 from django.contrib import messages
+from django.core.cache import cache
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.templatetags.static import static
@@ -38,6 +40,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext as __, gettext_lazy as _
 from django_countries import countries
+from django_scopes import scopes_disabled
 from i18nfield.strings import LazyI18nString
 from paypalcheckoutsdk.orders import (
     OrdersCaptureRequest, OrdersCreateRequest, OrdersGetRequest,
@@ -424,12 +427,25 @@ class PaypalMethod(BasePaymentProvider):
                     kwargs[key] = request.resolver_match.kwargs[key]
             return kwargs
 
+        @scopes_disabled()
+        def count_known_failures():
+            return OrderPayment.objects.filter(
+                provider="paypal", info__contains="RESOURCE_NOT_FOUND", created__gt=now() - timedelta(hours=2)
+            ).count()
+
+        known_issue_failures = cache.get_or_set(
+            'paypal2_known_issue_failures',
+            count_known_failures(),
+            600
+        )
+
         template = get_template('pretixplugins/paypal2/checkout_payment_form.html')
         ctx = {
             'request': request,
             'event': self.event,
             'settings': self.settings,
             'method': self.method,
+            'known_issue': known_issue_failures > 1,
             'xhr': eventreverse(self.event, 'plugins:paypal2:xhr', kwargs=build_kwargs())
         }
         return template.render(ctx)
@@ -445,7 +461,12 @@ class PaypalMethod(BasePaymentProvider):
                 req = OrdersGetRequest(paypal_order_id)
                 response = self.client.execute(req)
             except IOError as e:
-                messages.warning(request, _('We had trouble communicating with PayPal'))
+                if "RESOURCE_NOT_FOUND" in str(e):
+                    messages.warning(request, _('Your payment has failed due to a known issue within PayPal. Please try '
+                                                'again, there is a high chance of the payment succeeding on a second '
+                                                'or third attempt. You can also try other payment methods, if available.'))
+                else:
+                    messages.warning(request, _('We had trouble communicating with PayPal'))
                 logger.exception('PayPal OrdersGetRequest({}): {}'.format(paypal_order_id, str(e)))
                 return False
             else:
@@ -566,7 +587,12 @@ class PaypalMethod(BasePaymentProvider):
             })
             response = self.client.execute(paymentreq)
         except IOError as e:
-            messages.error(request, _('We had trouble communicating with PayPal'))
+            if "RESOURCE_NOT_FOUND" in str(e):
+                messages.error(request, _('Your payment has failed due to a known issue within PayPal. Please try '
+                                          'again, there is a high chance of the payment succeeding on a second '
+                                          'or third attempt. You can also try other payment methods, if available.'))
+            else:
+                messages.error(request, _('We had trouble communicating with PayPal'))
             logger.exception('PayPal OrdersCreateRequest: {}'.format(str(e)))
         else:
             if response.result.status not in ('CREATED', 'PAYER_ACTION_REQUIRED'):
@@ -615,6 +641,10 @@ class PaypalMethod(BasePaymentProvider):
                         "order_id": paypal_oid,
                     }
                 })
+                if "RESOURCE_NOT_FOUND" in str(e):
+                    raise PaymentException(_('Your payment has failed due to a known issue within PayPal. Please try '
+                                             'again, there is a high chance of the payment succeeding on a second '
+                                             'or third attempt. You can also try other payment methods, if available.'))
                 raise PaymentException(_('We had trouble communicating with PayPal'))
             else:
                 pp_captured_order = response.result
@@ -673,7 +703,13 @@ class PaypalMethod(BasePaymentProvider):
                         ])
                         self.client.execute(patchreq)
                     except IOError as e:
-                        messages.error(request, _('We had trouble communicating with PayPal'))
+                        if "RESOURCE_NOT_FOUND" in str(e):
+                            messages.error(request,
+                                           _('Your payment has failed due to a known issue within PayPal. Please try '
+                                             'again, there is a high chance of the payment succeeding on a second '
+                                             'or third attempt. You can also try other payment methods, if available.'))
+                        else:
+                            messages.error(request, _('We had trouble communicating with PayPal'))
                         payment.fail(info={
                             "error": {
                                 "name": "IOError",
@@ -712,9 +748,14 @@ class PaypalMethod(BasePaymentProvider):
                 except IOError as e:
                     payment.fail(info={**pp_captured_order.dict(), "error": {"message": str(e)}}, log_data={"error": str(e)})
                     logger.exception('PayPal OrdersCaptureRequest({}): {}'.format(pp_captured_order.id, str(e)))
-                    raise PaymentException(
-                        _('We were unable to process your payment. See below for details on how to proceed.')
-                    )
+                    if "RESOURCE_NOT_FOUND" in str(e):
+                        raise PaymentException(
+                            _('Your payment has failed due to a known issue within PayPal. Please try '
+                              'again, there is a high chance of the payment succeeding on a second '
+                              'or third attempt. You can also try other payment methods, if available.')
+                        )
+                    else:
+                        raise PaymentException(_('We were unable to process your payment. See below for details on how to proceed.'))
                 else:
                     pp_captured_order = response.result
 
@@ -769,9 +810,13 @@ class PaypalMethod(BasePaymentProvider):
                 retry = False
         except (KeyError, IndexError):
             pass
+
+        error = payment.info_data.get("error", {})
+        is_known_issue = error.get("name") == "RESOURCE_NOT_FOUND" or "RESOURCE_NOT_FOUND" in error.get("message")
+
         template = get_template('pretixplugins/paypal2/pending.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings,
-               'retry': retry, 'order': payment.order}
+               'retry': retry, 'order': payment.order, 'is_known_issue': is_known_issue}
         return template.render(ctx)
 
     def matching_id(self, payment: OrderPayment):
@@ -932,7 +977,15 @@ class PaypalMethod(BasePaymentProvider):
                 req = OrdersGetRequest(paypal_order_id)
                 response = self.client.execute(req)
             except IOError as e:
-                messages.warning(request, _('We had trouble communicating with PayPal'))
+                if "RESOURCE_NOT_FOUND" in str(e):
+                    messages.warning(
+                        request,
+                        _('Your payment has failed due to a known issue within PayPal. Please try '
+                          'again, there is a high chance of the payment succeeding on a second '
+                          'or third attempt. You can also try other payment methods, if available.')
+                    )
+                else:
+                    messages.warning(request, _('We had trouble communicating with PayPal'))
                 logger.exception('PayPal OrdersGetRequest({}): {}'.format(paypal_order_id, str(e)))
                 return False
             else:
