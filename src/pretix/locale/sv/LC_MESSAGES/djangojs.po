@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-28 14:51+0000\n"
+"POT-Creation-Date: 2023-12-23 10:30+0000\n"
 "PO-Revision-Date: 2022-03-03 07:00+0000\n"
 "Last-Translator: MaLund13 <mart.lund13@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -138,9 +138,9 @@ msgid "Continue"
 msgstr "Fortsätt"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:213
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:246
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:264
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:229
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:262
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:280
 msgid "Confirming your payment …"
 msgstr "Bekräftar din betalning …"
 
@@ -162,15 +162,15 @@ msgstr "Betalade beställningar"
 msgid "Total revenue"
 msgstr "Totalt"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:14
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:15
 msgid "Contacting Stripe …"
 msgstr "Kontaktar Stripe …"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:71
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:72
 msgid "Total"
 msgstr "Totalt"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:220
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:236
 msgid "Contacting your bank …"
 msgstr "Kontaktar din bank …"
 
@@ -536,44 +536,44 @@ msgstr "QR-kod för att Checka in"
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Bakgrunds-filen till PDFen kunde inte laddas av följande orsak:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:648
+#: pretix/static/pretixcontrol/js/ui/editor.js:656
 msgid "Group of objects"
 msgstr "Grupp av objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:653
+#: pretix/static/pretixcontrol/js/ui/editor.js:661
 msgid "Text object"
 msgstr "Textobjekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:655
+#: pretix/static/pretixcontrol/js/ui/editor.js:663
 msgid "Barcode area"
 msgstr "QR-kod-område"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:657
+#: pretix/static/pretixcontrol/js/ui/editor.js:665
 msgid "Image area"
 msgstr "Bildområde"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:659
+#: pretix/static/pretixcontrol/js/ui/editor.js:667
 msgid "Powered by pretix"
 msgstr "Drivs av pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:661
+#: pretix/static/pretixcontrol/js/ui/editor.js:669
 msgid "Object"
 msgstr "Objekt"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:665
+#: pretix/static/pretixcontrol/js/ui/editor.js:673
 msgid "Ticket design"
 msgstr "Biljettdesign"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:964
+#: pretix/static/pretixcontrol/js/ui/editor.js:972
 msgid "Saving failed."
 msgstr "Misslyckades att spara."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1033
-#: pretix/static/pretixcontrol/js/ui/editor.js:1083
+#: pretix/static/pretixcontrol/js/ui/editor.js:1041
+#: pretix/static/pretixcontrol/js/ui/editor.js:1091
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Ett fel uppstod när du laddade upp din PDF-fil, vänligen försök igen."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1066
+#: pretix/static/pretixcontrol/js/ui/editor.js:1074
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Vill du verkligen lämna editorn utan att spara dina ändringar?"
 

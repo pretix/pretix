@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-28 14:51+0000\n"
+"POT-Creation-Date: 2023-12-23 10:30+0000\n"
 "PO-Revision-Date: 2020-01-24 08:00+0000\n"
 "Last-Translator: Prokaj Miklós <mixolid0@gmail.com>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -141,9 +141,9 @@ msgid "Continue"
 msgstr "Folytatás"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:213
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:246
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:264
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:229
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:262
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:280
 msgid "Confirming your payment …"
 msgstr "A fizetés megerősítése…"
 
@@ -165,15 +165,15 @@ msgstr "Kifizetett megrendelések"
 msgid "Total revenue"
 msgstr "Teljes bevétel"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:14
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:15
 msgid "Contacting Stripe …"
 msgstr "Kapcsolatfelvétel Stripe-pal…"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:71
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:72
 msgid "Total"
 msgstr "Teljes"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:220
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:236
 msgid "Contacting your bank …"
 msgstr "Kapcsolatfelvétel a bankjával…"
 
@@ -558,46 +558,46 @@ msgstr "Check in QR"
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "A PDF háttér fájl nem tölthető be a következők miatt:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:648
+#: pretix/static/pretixcontrol/js/ui/editor.js:656
 msgid "Group of objects"
 msgstr "tárgy csoport"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:653
+#: pretix/static/pretixcontrol/js/ui/editor.js:661
 msgid "Text object"
 msgstr "Szöveg"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:655
+#: pretix/static/pretixcontrol/js/ui/editor.js:663
 msgid "Barcode area"
 msgstr "Vonalkód terület"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:657
+#: pretix/static/pretixcontrol/js/ui/editor.js:665
 #, fuzzy
 #| msgid "Barcode area"
 msgid "Image area"
 msgstr "Vonalkód terület"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:659
+#: pretix/static/pretixcontrol/js/ui/editor.js:667
 msgid "Powered by pretix"
 msgstr "pretix által működtetett"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:661
+#: pretix/static/pretixcontrol/js/ui/editor.js:669
 msgid "Object"
 msgstr "objektum"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:665
+#: pretix/static/pretixcontrol/js/ui/editor.js:673
 msgid "Ticket design"
 msgstr "Jegy design"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:964
+#: pretix/static/pretixcontrol/js/ui/editor.js:972
 msgid "Saving failed."
 msgstr "Mentés sikertelen."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1033
-#: pretix/static/pretixcontrol/js/ui/editor.js:1083
+#: pretix/static/pretixcontrol/js/ui/editor.js:1041
+#: pretix/static/pretixcontrol/js/ui/editor.js:1091
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Hiba a PDF fájl feltöltése közben, próbálja újra."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1066
+#: pretix/static/pretixcontrol/js/ui/editor.js:1074
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Biztosan ki akar lépni a szerkesztőből a változtatások mentése nélkül?"
 

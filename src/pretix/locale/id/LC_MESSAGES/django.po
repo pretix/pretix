@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-28 15:26+0000\n"
+"POT-Creation-Date: 2023-12-23 10:29+0000\n"
 "PO-Revision-Date: 2023-11-18 15:00+0000\n"
 "Last-Translator: liimee <git.taaa@fedora.email>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
@@ -18,6 +18,37 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.1.1\n"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:963
+#: pretix/control/templates/pretixcontrol/events/index.html:146
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
+#: pretix/control/views/dashboards.py:529
+msgid "Shop disabled"
+msgstr "Toko dinonaktifkan"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:965
+#: pretix/control/forms/filter.py:1099 pretix/control/forms/filter.py:1574
+#: pretix/control/templates/pretixcontrol/events/index.html:148
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:112
+#: pretix/control/templates/pretixcontrol/subevents/index.html:165
+msgid "Presale over"
+msgstr "Prapenjualan selesai"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:967
+#: pretix/control/forms/filter.py:1098 pretix/control/forms/filter.py:1573
+#: pretix/control/templates/pretixcontrol/events/index.html:150
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:114
+#: pretix/control/templates/pretixcontrol/subevents/index.html:167
+msgid "Presale not started"
+msgstr "Prapenjualan belum dimulai"
+
+#: htmlcov/pretix_control_views_dashboards_py.html:969
+#: pretix/control/templates/pretixcontrol/events/index.html:152
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:116
+#: pretix/control/templates/pretixcontrol/subevents/index.html:169
+#: pretix/control/views/dashboards.py:535
+msgid "On sale"
+msgstr "Di jual"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -161,7 +192,7 @@ msgid "Allowed URIs list, space separated"
 msgstr "Daftar URI yang diizinkan, dipisahkan spasi"
 
 #: pretix/api/models.py:46 pretix/base/models/customers.py:395
-#: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:106
+#: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:109
 msgid "Client ID"
 msgstr "ID Klien"
 
@@ -201,11 +232,11 @@ msgstr "Batasi pada acara"
 msgid "Comment"
 msgstr "Komentar"
 
-#: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1339
+#: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1345
 msgid "The product \"{}\" is not assigned to a quota."
 msgstr "Produk \"{}\" tidak ditetapkan ke kuota."
 
-#: pretix/api/serializers/checkin.py:66 pretix/base/models/event.py:1601
+#: pretix/api/serializers/checkin.py:66 pretix/base/models/event.py:1602
 #: pretix/base/models/items.py:1758 pretix/base/models/items.py:2016
 msgid "One or more items do not belong to this event."
 msgstr "Satu atau lebih item bukan milik acara ini."
@@ -324,29 +355,29 @@ msgstr ""
 msgid "\"{input}\" is not a valid choice."
 msgstr "\"{input}\" bukan pilihan yang valid."
 
-#: pretix/api/serializers/order.py:1300 pretix/api/views/cart.py:220
+#: pretix/api/serializers/order.py:1306 pretix/api/views/cart.py:220
 #: pretix/base/services/orders.py:1497
 #, python-brace-format
 msgid "The selected seat \"{seat}\" is not available."
 msgstr "Kursi yang dipilih \"{seat}\" tidak tersedia."
 
-#: pretix/api/serializers/order.py:1326 pretix/api/serializers/order.py:1333
+#: pretix/api/serializers/order.py:1332 pretix/api/serializers/order.py:1339
 msgid "The product \"{}\" is not available on this date."
 msgstr "Produk \"{}\" tidak tersedia pada tanggal ini."
 
-#: pretix/api/serializers/order.py:1348 pretix/api/views/cart.py:200
+#: pretix/api/serializers/order.py:1354 pretix/api/views/cart.py:200
 msgid ""
 "There is not enough quota available on quota \"{}\" to perform the operation."
 msgstr ""
 "Kuota yang tersedia pada kuota \"{}\" tidak cukup untuk melakukan operasi."
 
 #: pretix/api/serializers/organizer.py:102
-#: pretix/control/forms/organizer.py:834 pretix/presale/forms/customer.py:439
+#: pretix/control/forms/organizer.py:827 pretix/presale/forms/customer.py:439
 msgid "An account with this email address is already registered."
 msgstr "Akun dengan alamat email ini sudah terdaftar."
 
 #: pretix/api/serializers/organizer.py:205
-#: pretix/control/forms/organizer.py:683
+#: pretix/control/forms/organizer.py:676
 msgid ""
 "A gift card with the same secret already exists in your or an affiliated "
 "organizer account."
@@ -382,23 +413,23 @@ msgid ""
 msgstr ""
 "Aplikasi \"{application_name}\" telah diotorisasi untuk mengakses akun kamu."
 
-#: pretix/api/views/order.py:581 pretix/control/views/orders.py:1558
-#: pretix/presale/views/order.py:780 pretix/presale/views/order.py:853
+#: pretix/api/views/order.py:583 pretix/control/views/orders.py:1558
+#: pretix/presale/views/order.py:781 pretix/presale/views/order.py:854
 msgid "You cannot generate an invoice for this order."
 msgstr "Anda tidak dapat membuat faktur untuk pesanan ini."
 
-#: pretix/api/views/order.py:586 pretix/control/views/orders.py:1560
-#: pretix/presale/views/order.py:782 pretix/presale/views/order.py:855
+#: pretix/api/views/order.py:588 pretix/control/views/orders.py:1560
+#: pretix/presale/views/order.py:783 pretix/presale/views/order.py:856
 msgid "An invoice for this order already exists."
 msgstr "Faktur untuk pesanan ini sudah ada."
 
-#: pretix/api/views/order.py:612 pretix/control/views/orders.py:1684
+#: pretix/api/views/order.py:614 pretix/control/views/orders.py:1684
 #: pretix/control/views/users.py:141
 msgid "There was an error sending the mail. Please try again later."
 msgstr "Terjadi kesalahan saat mengirim email. Silakan coba lagi nanti."
 
-#: pretix/api/views/order.py:690 pretix/base/services/cart.py:205
-#: pretix/base/services/orders.py:187 pretix/presale/views/order.py:837
+#: pretix/api/views/order.py:692 pretix/base/services/cart.py:205
+#: pretix/base/services/orders.py:187 pretix/presale/views/order.py:838
 msgid "One of the selected products is not available in the selected country."
 msgstr "Salah satu produk yang dipilih tidak tersedia di negara yang dipilih."
 
@@ -738,7 +769,7 @@ msgstr "Silakan transfer uang ke rekening bank ini: 9999-9999-9999-9999"
 
 #: pretix/base/email.py:671 pretix/base/email.py:676 pretix/base/email.py:681
 #: pretix/base/pdf.py:626 pretix/base/pdf.py:649
-#: pretix/control/forms/organizer.py:603
+#: pretix/control/forms/organizer.py:596
 msgid "Mr Doe"
 msgstr "Tuan Doe"
 
@@ -848,8 +879,8 @@ msgid "Phone number"
 msgstr "Nomor telepon"
 
 #: pretix/base/exporters/customers.py:69 pretix/base/models/auth.py:248
-#: pretix/base/models/customers.py:97 pretix/base/models/orders.py:3044
-#: pretix/base/settings.py:3529 pretix/base/settings.py:3541
+#: pretix/base/models/customers.py:97 pretix/base/models/orders.py:3050
+#: pretix/base/settings.py:3548 pretix/base/settings.py:3560
 #: pretix/control/templates/pretixcontrol/users/index.html:47
 msgid "Full name"
 msgstr "Nama lengkap"
@@ -859,13 +890,13 @@ msgstr "Nama lengkap"
 #: pretix/base/exporters/invoices.py:339 pretix/base/exporters/orderlist.py:257
 #: pretix/base/exporters/waitinglist.py:108 pretix/base/forms/questions.py:1092
 #: pretix/base/models/devices.py:66 pretix/base/models/devices.py:128
-#: pretix/base/models/event.py:1408 pretix/base/models/event.py:1645
+#: pretix/base/models/event.py:1409 pretix/base/models/event.py:1646
 #: pretix/base/models/items.py:1884 pretix/base/models/items.py:2057
 #: pretix/base/models/memberships.py:41 pretix/base/models/organizer.py:73
 #: pretix/base/models/seating.py:61 pretix/base/models/waitinglist.py:69
-#: pretix/base/settings.py:3160 pretix/base/settings.py:3170
-#: pretix/base/settings.py:3518 pretix/control/forms/filter.py:614
-#: pretix/control/forms/item.py:362 pretix/control/forms/organizer.py:859
+#: pretix/base/settings.py:3179 pretix/base/settings.py:3189
+#: pretix/base/settings.py:3537 pretix/control/forms/filter.py:614
+#: pretix/control/forms/item.py:362 pretix/control/forms/organizer.py:852
 #: pretix/control/templates/pretixcontrol/checkin/index.html:109
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:91
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:26
@@ -1077,47 +1108,47 @@ msgid "Timezone"
 msgstr "Zona waktu"
 
 #: pretix/base/exporters/events.py:62 pretix/base/models/event.py:559
-#: pretix/base/models/event.py:1410 pretix/base/settings.py:3158
-#: pretix/base/settings.py:3168 pretix/control/forms/subevents.py:472
+#: pretix/base/models/event.py:1411 pretix/base/settings.py:3177
+#: pretix/base/settings.py:3187 pretix/control/forms/subevents.py:473
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:268
 msgid "Event start time"
 msgstr "Waktu mulai acara"
 
 #: pretix/base/exporters/events.py:63 pretix/base/models/event.py:561
-#: pretix/base/models/event.py:1412 pretix/base/pdf.py:287
-#: pretix/control/forms/subevents.py:477
+#: pretix/base/models/event.py:1413 pretix/base/pdf.py:287
+#: pretix/control/forms/subevents.py:478
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:270
 msgid "Event end time"
 msgstr "Waktu berakhir acara"
 
 #: pretix/base/exporters/events.py:64 pretix/base/models/event.py:563
-#: pretix/base/models/event.py:1414 pretix/control/forms/subevents.py:482
+#: pretix/base/models/event.py:1415 pretix/control/forms/subevents.py:483
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:274
 msgid "Admission time"
 msgstr "Waktu masuk"
 
 #: pretix/base/exporters/events.py:65 pretix/base/models/event.py:575
-#: pretix/base/models/event.py:1423 pretix/control/forms/subevents.py:92
+#: pretix/base/models/event.py:1424 pretix/control/forms/subevents.py:92
 msgid "Start of presale"
 msgstr "Mulai dari pra-penjualan"
 
 #: pretix/base/exporters/events.py:66 pretix/base/models/event.py:569
-#: pretix/base/models/event.py:1417 pretix/control/forms/subevents.py:98
+#: pretix/base/models/event.py:1418 pretix/control/forms/subevents.py:98
 msgid "End of presale"
 msgstr "Akhir pra-penjualan"
 
 #: pretix/base/exporters/events.py:67 pretix/base/exporters/invoices.py:350
-#: pretix/base/models/event.py:581 pretix/base/models/event.py:1429
+#: pretix/base/models/event.py:581 pretix/base/models/event.py:1430
 msgid "Location"
 msgstr "Lokasi"
 
 #: pretix/base/exporters/events.py:68 pretix/base/models/event.py:584
-#: pretix/base/models/event.py:1432
+#: pretix/base/models/event.py:1433
 msgid "Latitude"
 msgstr "Garis Lintang"
 
 #: pretix/base/exporters/events.py:69 pretix/base/models/event.py:592
-#: pretix/base/models/event.py:1440
+#: pretix/base/models/event.py:1441
 msgid "Longitude"
 msgstr "Garis bujur"
 
@@ -1182,7 +1213,7 @@ msgstr ""
 "Spreadsheet mencakup dua lembar, satu dengan garis untuk setiap faktur, dan "
 "satu lagi dengan garis untuk setiap posisi setiap faktur."
 
-#: pretix/base/exporters/invoices.py:190 pretix/base/shredder.py:548
+#: pretix/base/exporters/invoices.py:190 pretix/base/shredder.py:576
 #: pretix/control/templates/pretixcontrol/order/index.html:260
 #: pretix/control/templates/pretixcontrol/order/index.html:333
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:294
@@ -1202,9 +1233,9 @@ msgstr "Nomor faktur"
 #: pretix/base/exporters/invoices.py:199 pretix/base/exporters/invoices.py:326
 #: pretix/base/exporters/orderlist.py:1168
 #: pretix/base/exporters/orderlist.py:1213
-#: pretix/base/exporters/waitinglist.py:107 pretix/base/models/items.py:1496
-#: pretix/base/models/orders.py:218 pretix/base/models/orders.py:2780
-#: pretix/base/models/orders.py:2886
+#: pretix/base/exporters/waitinglist.py:107 pretix/base/forms/widgets.py:212
+#: pretix/base/models/items.py:1496 pretix/base/models/orders.py:218
+#: pretix/base/models/orders.py:2786 pretix/base/models/orders.py:2892
 #: pretix/control/templates/pretixcontrol/order/transactions.html:19
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:72
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:17
@@ -1275,7 +1306,7 @@ msgstr "Pengirim faktur:"
 #: pretix/base/exporters/orderlist.py:451
 #: pretix/base/exporters/orderlist.py:570 pretix/base/forms/questions.py:661
 #: pretix/base/models/customers.py:300 pretix/base/models/orders.py:1449
-#: pretix/base/models/orders.py:3046 pretix/base/orderimport.py:352
+#: pretix/base/models/orders.py:3052 pretix/base/orderimport.py:352
 #: pretix/base/orderimport.py:498 pretix/control/forms/filter.py:618
 #: pretix/control/forms/filter.py:649
 #: pretix/control/templates/pretixcontrol/order/index.html:948
@@ -1293,7 +1324,7 @@ msgstr "Alamat"
 #: pretix/base/exporters/orderlist.py:451
 #: pretix/base/exporters/orderlist.py:571 pretix/base/forms/questions.py:672
 #: pretix/base/models/customers.py:301 pretix/base/models/orders.py:1450
-#: pretix/base/models/orders.py:3047 pretix/base/orderimport.py:363
+#: pretix/base/models/orders.py:3053 pretix/base/orderimport.py:363
 #: pretix/base/orderimport.py:509 pretix/base/settings.py:1105
 #: pretix/control/forms/filter.py:622 pretix/control/forms/filter.py:653
 #: pretix/control/views/item.py:479
@@ -1308,7 +1339,7 @@ msgstr "Kode Pos"
 #: pretix/base/exporters/orderlist.py:451
 #: pretix/base/exporters/orderlist.py:572 pretix/base/forms/questions.py:680
 #: pretix/base/models/customers.py:302 pretix/base/models/orders.py:1451
-#: pretix/base/models/orders.py:3048 pretix/base/orderimport.py:374
+#: pretix/base/models/orders.py:3054 pretix/base/orderimport.py:374
 #: pretix/base/orderimport.py:520 pretix/base/settings.py:1117
 #: pretix/control/forms/filter.py:627 pretix/control/forms/filter.py:658
 #: pretix/control/views/item.py:489
@@ -1323,7 +1354,7 @@ msgstr "Kota"
 #: pretix/base/exporters/orderlist.py:451
 #: pretix/base/exporters/orderlist.py:573 pretix/base/forms/questions.py:692
 #: pretix/base/models/customers.py:303 pretix/base/models/orders.py:1452
-#: pretix/base/models/orders.py:3049 pretix/base/models/orders.py:3050
+#: pretix/base/models/orders.py:3055 pretix/base/models/orders.py:3056
 #: pretix/base/orderimport.py:390 pretix/base/orderimport.py:536
 #: pretix/base/settings.py:1126 pretix/control/forms/filter.py:632
 #: pretix/control/forms/filter.py:663
@@ -1346,7 +1377,7 @@ msgstr "Id pajak"
 #: pretix/base/exporters/invoices.py:337 pretix/base/exporters/invoices.py:345
 #: pretix/base/exporters/orderlist.py:265
 #: pretix/base/exporters/orderlist.py:451
-#: pretix/base/exporters/orderlist.py:616 pretix/base/models/orders.py:3053
+#: pretix/base/exporters/orderlist.py:616 pretix/base/models/orders.py:3059
 #: pretix/base/orderimport.py:434
 #: pretix/control/templates/pretixcontrol/order/index.html:959
 #: pretix/plugins/reports/exporters.py:817
@@ -1395,7 +1426,7 @@ msgstr "alamat jalan"
 #: pretix/base/exporters/orderlist.py:451
 #: pretix/base/exporters/orderlist.py:574 pretix/base/forms/questions.py:716
 #: pretix/base/forms/questions.py:1058 pretix/base/models/customers.py:304
-#: pretix/base/models/orders.py:1453 pretix/base/models/orders.py:3052
+#: pretix/base/models/orders.py:1453 pretix/base/models/orders.py:3058
 #: pretix/base/orderimport.py:409
 #: pretix/control/templates/pretixcontrol/order/index.html:955
 #: pretix/plugins/checkinlists/exporters.py:517
@@ -1407,13 +1438,13 @@ msgid "State"
 msgstr "Negara"
 
 #: pretix/base/exporters/invoices.py:220 pretix/base/exporters/invoices.py:346
-#: pretix/base/models/orders.py:3062 pretix/base/models/orders.py:3097
+#: pretix/base/models/orders.py:3068 pretix/base/models/orders.py:3103
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:107
 msgid "Beneficiary"
 msgstr "Penerima"
 
 #: pretix/base/exporters/invoices.py:221 pretix/base/exporters/invoices.py:347
-#: pretix/base/models/orders.py:3057 pretix/base/orderimport.py:445
+#: pretix/base/models/orders.py:3063 pretix/base/orderimport.py:445
 #: pretix/control/templates/pretixcontrol/order/index.html:979
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:115
 msgid "Internal reference"
@@ -1482,16 +1513,16 @@ msgstr "Harga bersih"
 
 #: pretix/base/exporters/invoices.py:322 pretix/base/exporters/orderlist.py:442
 #: pretix/base/exporters/orderlist.py:560
-#: pretix/base/exporters/orderlist.py:858 pretix/base/models/orders.py:2224
-#: pretix/base/models/orders.py:2371 pretix/base/models/orders.py:2822
+#: pretix/base/exporters/orderlist.py:858 pretix/base/models/orders.py:2230
+#: pretix/base/models/orders.py:2377 pretix/base/models/orders.py:2828
 msgid "Tax value"
 msgstr "Nilai pajak"
 
 #: pretix/base/exporters/invoices.py:323 pretix/base/exporters/orderlist.py:440
 #: pretix/base/exporters/orderlist.py:558
-#: pretix/base/exporters/orderlist.py:855 pretix/base/models/orders.py:2215
-#: pretix/base/models/orders.py:2362 pretix/base/models/orders.py:2813
-#: pretix/base/models/orders.py:2896 pretix/base/models/tax.py:183
+#: pretix/base/exporters/orderlist.py:855 pretix/base/models/orders.py:2221
+#: pretix/base/models/orders.py:2368 pretix/base/models/orders.py:2819
+#: pretix/base/models/orders.py:2902 pretix/base/models/tax.py:183
 #: pretix/control/templates/pretixcontrol/order/transactions.html:21
 #: pretix/plugins/reports/accountingreport.py:315
 #: pretix/plugins/reports/exporters.py:766
@@ -1555,14 +1586,14 @@ msgstr "Nama barang"
 #: pretix/base/exporters/items.py:69 pretix/base/exporters/orderlist.py:555
 #: pretix/base/exporters/orderlist.py:847
 #: pretix/base/exporters/waitinglist.py:112 pretix/base/models/items.py:1021
-#: pretix/base/models/orders.py:1405 pretix/base/models/orders.py:2798
+#: pretix/base/models/orders.py:1405 pretix/base/models/orders.py:2804
 #: pretix/plugins/checkinlists/exporters.py:671
 msgid "Variation"
 msgstr "Variasi"
 
 #: pretix/base/exporters/items.py:72 pretix/base/models/customers.py:57
 #: pretix/base/models/customers.py:392 pretix/base/models/discount.py:56
-#: pretix/base/models/event.py:1399 pretix/base/models/items.py:414
+#: pretix/base/models/event.py:1400 pretix/base/models/items.py:414
 #: pretix/base/models/items.py:1025 pretix/base/models/media.py:77
 #: pretix/base/settings.py:202 pretix/base/settings.py:237
 #: pretix/base/settings.py:268 pretix/control/forms/filter.py:1095
@@ -1607,7 +1638,7 @@ msgid "Generate tickets"
 msgstr "Hasilkan tiket"
 
 #: pretix/base/exporters/items.py:80 pretix/base/exporters/orderlist.py:1089
-#: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:339
+#: pretix/base/exporters/waitinglist.py:41 pretix/base/shredder.py:367
 #: pretix/control/forms/event.py:1603 pretix/control/navigation.py:235
 #: pretix/control/templates/pretixcontrol/event/settings.html:339
 #: pretix/control/templates/pretixcontrol/orders/cancel.html:62
@@ -1771,7 +1802,7 @@ msgstr ""
 msgid "Orders"
 msgstr "Pesanan"
 
-#: pretix/base/exporters/orderlist.py:100 pretix/base/models/orders.py:2420
+#: pretix/base/exporters/orderlist.py:100 pretix/base/models/orders.py:2426
 #: pretix/base/notifications.py:205
 msgid "Order positions"
 msgstr "Posisi pesanan"
@@ -2000,7 +2031,7 @@ msgstr "Jenis biaya"
 #: pretix/base/exporters/orderlist.py:439
 #: pretix/base/exporters/orderlist.py:557
 #: pretix/base/exporters/orderlist.py:854 pretix/base/models/orders.py:1410
-#: pretix/base/models/orders.py:2809 pretix/base/orderimport.py:577
+#: pretix/base/models/orders.py:2815 pretix/base/orderimport.py:577
 #: pretix/base/pdf.py:159
 #: pretix/control/templates/pretixcontrol/item/index.html:146
 #: pretix/control/templates/pretixcontrol/order/change.html:184
@@ -2045,7 +2076,7 @@ msgstr "ID Posisi"
 #: pretix/base/exporters/orderlist.py:852
 #: pretix/base/exporters/orderlist.py:1092 pretix/base/models/checkin.py:59
 #: pretix/base/models/items.py:1880 pretix/base/models/orders.py:1395
-#: pretix/base/models/orders.py:2805 pretix/base/models/vouchers.py:187
+#: pretix/base/models/orders.py:2811 pretix/base/models/vouchers.py:187
 #: pretix/base/models/waitinglist.py:61 pretix/control/forms/event.py:1527
 #: pretix/control/forms/filter.py:413 pretix/control/forms/filter.py:1803
 #: pretix/control/forms/filter.py:2027 pretix/control/forms/filter.py:2142
@@ -2140,7 +2171,7 @@ msgstr "Produk"
 #: pretix/base/exporters/orderlist.py:566 pretix/base/forms/questions.py:636
 #: pretix/base/models/customers.py:289 pretix/base/models/orders.py:1414
 #: pretix/base/orderimport.py:459 pretix/base/pdf.py:173
-#: pretix/control/forms/filter.py:637 pretix/control/forms/organizer.py:928
+#: pretix/control/forms/filter.py:637 pretix/control/forms/organizer.py:921
 #: pretix/control/templates/pretixcontrol/order/index.html:513
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:119
 #: pretix/control/views/item.py:433 pretix/plugins/badges/exporters.py:473
@@ -2216,7 +2247,7 @@ msgstr "Nomor kursi"
 msgid "Blocked"
 msgstr "Diblokir"
 
-#: pretix/base/exporters/orderlist.py:584 pretix/base/models/orders.py:2387
+#: pretix/base/exporters/orderlist.py:584 pretix/base/models/orders.py:2393
 #: pretix/base/orderimport.py:654
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:116
 #: pretix/plugins/checkinlists/exporters.py:510
@@ -2226,7 +2257,7 @@ msgstr "Diblokir"
 msgid "Valid from"
 msgstr "Berlaku dari"
 
-#: pretix/base/exporters/orderlist.py:585 pretix/base/models/orders.py:2392
+#: pretix/base/exporters/orderlist.py:585 pretix/base/models/orders.py:2398
 #: pretix/base/models/vouchers.py:221 pretix/base/orderimport.py:677
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:117
 #: pretix/control/views/vouchers.py:118
@@ -2283,7 +2314,7 @@ msgstr "Hanya sertakan transaksi yang dibuat dalam rentang tanggal ini."
 
 #: pretix/base/exporters/orderlist.py:829 pretix/base/models/event.py:627
 #: pretix/base/models/items.py:393 pretix/base/models/items.py:1873
-#: pretix/base/models/orders.py:193 pretix/base/models/orders.py:2878
+#: pretix/base/models/orders.py:193 pretix/base/models/orders.py:2884
 #: pretix/base/models/vouchers.py:181 pretix/base/models/waitinglist.py:55
 #: pretix/base/notifications.py:187 pretix/control/forms/filter.py:888
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:204
@@ -2399,8 +2430,8 @@ msgstr "Status pengembalian dana"
 #: pretix/base/exporters/orderlist.py:1171
 #: pretix/base/exporters/orderlist.py:1213 pretix/base/models/orders.py:282
 #: pretix/base/models/orders.py:1650 pretix/base/models/orders.py:2053
-#: pretix/base/models/orders.py:2204 pretix/base/models/orders.py:2351
-#: pretix/base/models/orders.py:2771
+#: pretix/base/models/orders.py:2210 pretix/base/models/orders.py:2357
+#: pretix/base/models/orders.py:2777
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:118
 #: pretix/control/templates/pretixcontrol/search/payments.html:78
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:15
@@ -3020,11 +3051,18 @@ msgstr "Kota sampel"
 msgid "Available placeholders: {list}"
 msgstr "Placeholder yang tersedia: {list}"
 
-#: pretix/base/forms/widgets.py:230 pretix/base/forms/widgets.py:235
+#: pretix/base/forms/widgets.py:213 pretix/base/models/items.py:1497
+#: pretix/base/reldate.py:201 pretix/plugins/checkinlists/exporters.py:729
+#: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:40
+#: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:54
+msgid "Time"
+msgstr "Waktu"
+
+#: pretix/base/forms/widgets.py:233 pretix/base/forms/widgets.py:238
 msgid "Business or institutional customer"
 msgstr "Bisnis atau Institusi"
 
-#: pretix/base/forms/widgets.py:234
+#: pretix/base/forms/widgets.py:237
 msgid "Individual customer"
 msgstr "Individu"
 
@@ -3522,13 +3560,13 @@ msgstr ""
 "harus dimulai dan diakhiri dengan huruf atau angka."
 
 #: pretix/base/models/customers.py:299 pretix/base/models/orders.py:1448
-#: pretix/base/models/orders.py:3043 pretix/base/settings.py:1093
+#: pretix/base/models/orders.py:3049 pretix/base/settings.py:1093
 msgid "Company name"
 msgstr "Nama perusahaan"
 
 #: pretix/base/models/customers.py:303 pretix/base/models/orders.py:1452
-#: pretix/base/models/orders.py:3050 pretix/base/settings.py:81
-#: pretix/plugins/stripe/payment.py:263
+#: pretix/base/models/orders.py:3056 pretix/base/settings.py:81
+#: pretix/plugins/stripe/payment.py:269
 msgid "Select country"
 msgstr "Pilih negara"
 
@@ -3789,7 +3827,7 @@ msgstr ""
 msgid "The slug may only contain letters, numbers, dots and dashes."
 msgstr "Siput hanya boleh berisi huruf, angka, titik, dan garis."
 
-#: pretix/base/models/event.py:565 pretix/base/models/event.py:1403
+#: pretix/base/models/event.py:565 pretix/base/models/event.py:1404
 msgid "Show in lists"
 msgstr "Tampilkan dalam daftar"
 
@@ -3801,7 +3839,7 @@ msgstr ""
 "Jika dipilih, acara ini akan ditampilkan secara publik di daftar acara akun "
 "penyelenggara kamu."
 
-#: pretix/base/models/event.py:570 pretix/base/models/event.py:1418
+#: pretix/base/models/event.py:570 pretix/base/models/event.py:1419
 #: pretix/control/forms/subevents.py:99
 msgid ""
 "Optional. No products will be sold after this date. If you do not set this "
@@ -3811,7 +3849,7 @@ msgstr ""
 "tidak menetapkan nilai ini, prapenjualan akan berakhir setelah tanggal akhir "
 "acara kamu."
 
-#: pretix/base/models/event.py:576 pretix/base/models/event.py:1424
+#: pretix/base/models/event.py:576 pretix/base/models/event.py:1425
 #: pretix/control/forms/subevents.py:93
 msgid "Optional. No products will be sold before this date."
 msgstr "Opsional. Tidak ada produk yang akan dijual sebelum tanggal ini."
@@ -3830,7 +3868,7 @@ msgstr "Plugin"
 msgid "Event series"
 msgstr "Rangkaian acara"
 
-#: pretix/base/models/event.py:612 pretix/base/models/event.py:1452
+#: pretix/base/models/event.py:612 pretix/base/models/event.py:1453
 msgid "Seating plan"
 msgstr "Rencana tempat duduk"
 
@@ -3855,7 +3893,7 @@ msgstr "Jual tiket acara ini hanya di saluran penjualan berikut."
 msgid "Events"
 msgstr "Acara"
 
-#: pretix/base/models/event.py:1226
+#: pretix/base/models/event.py:1227
 msgid ""
 "You have configured at least one paid product but have not enabled any "
 "payment methods."
@@ -3863,39 +3901,39 @@ msgstr ""
 "Anda telah mengonfigurasi setidaknya satu produk berbayar tetapi belum "
 "mengaktifkan metode pembayaran apa pun."
 
-#: pretix/base/models/event.py:1229
+#: pretix/base/models/event.py:1230
 msgid "You need to configure at least one quota to sell anything."
 msgstr "Anda perlu mengonfigurasi setidaknya satu kuota untuk menjual apa pun."
 
-#: pretix/base/models/event.py:1234
+#: pretix/base/models/event.py:1235
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
 msgstr "Anda perlu mengisi parameter meta \"{property}\"."
 
-#: pretix/base/models/event.py:1349
+#: pretix/base/models/event.py:1350
 msgid ""
 "Once created an event cannot change between an series and a single event."
 msgstr ""
 "Setelah dibuat, suatu acara tidak dapat berubah antara rangkaian dan satu "
 "acara."
 
-#: pretix/base/models/event.py:1355
+#: pretix/base/models/event.py:1356
 msgid "The event slug cannot be changed."
 msgstr "Siput acara tidak dapat diubah."
 
-#: pretix/base/models/event.py:1358
+#: pretix/base/models/event.py:1359
 msgid "This slug has already been used for a different event."
 msgstr "Siput ini telah digunakan untuk acara berbeda."
 
-#: pretix/base/models/event.py:1364
+#: pretix/base/models/event.py:1365
 msgid "The event cannot end before it starts."
 msgstr "Acara tidak dapat berakhir sebelum dimulai."
 
-#: pretix/base/models/event.py:1370
+#: pretix/base/models/event.py:1371
 msgid "The event's presale cannot end before it starts."
 msgstr "Prapenjualan acara tidak dapat berakhir sebelum dimulai."
 
-#: pretix/base/models/event.py:1400
+#: pretix/base/models/event.py:1401
 msgid ""
 "Only with this checkbox enabled, this date is visible in the frontend to "
 "users."
@@ -3903,7 +3941,7 @@ msgstr ""
 "Hanya dengan mengaktifkan kotak centang ini, tanggal ini dapat dilihat di "
 "frontend oleh pengguna."
 
-#: pretix/base/models/event.py:1404
+#: pretix/base/models/event.py:1405
 msgid ""
 "If selected, this event will show up publicly on the list of dates for your "
 "event."
@@ -3911,44 +3949,44 @@ msgstr ""
 "Jika dipilih, acara ini akan ditampilkan secara publik di daftar tanggal "
 "acara kamu."
 
-#: pretix/base/models/event.py:1449 pretix/base/settings.py:2959
+#: pretix/base/models/event.py:1450 pretix/base/settings.py:2978
 msgid "Frontpage text"
 msgstr "Teks halaman depan"
 
-#: pretix/base/models/event.py:1464
+#: pretix/base/models/event.py:1465
 msgid "Date in event series"
 msgstr "Tanggal dalam rangkaian acara"
 
-#: pretix/base/models/event.py:1465
+#: pretix/base/models/event.py:1466
 msgid "Dates in event series"
 msgstr "Tanggal dalam rangkaian acara"
 
-#: pretix/base/models/event.py:1607
+#: pretix/base/models/event.py:1608
 msgid "One or more variations do not belong to this event."
 msgstr "Satu atau lebih variasi tidak termasuk dalam acara ini."
 
-#: pretix/base/models/event.py:1637 pretix/base/models/items.py:2049
+#: pretix/base/models/event.py:1638 pretix/base/models/items.py:2049
 msgid "Can not contain spaces or special characters except underscores"
 msgstr "Tidak boleh mengandung spasi atau karakter khusus kecuali garis bawah"
 
-#: pretix/base/models/event.py:1642 pretix/base/models/items.py:2054
+#: pretix/base/models/event.py:1643 pretix/base/models/items.py:2054
 msgid "The property name may only contain letters, numbers and underscores."
 msgstr "Nama properti hanya boleh berisi huruf, angka, dan garis bawah."
 
-#: pretix/base/models/event.py:1647
+#: pretix/base/models/event.py:1648
 msgid "Default value"
 msgstr "Nilai bawaan"
 
-#: pretix/base/models/event.py:1649
+#: pretix/base/models/event.py:1650
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:50
 msgid "Can only be changed by organizer-level administrators"
 msgstr "Hanya dapat diubah oleh administrator tingkat penyelenggara"
 
-#: pretix/base/models/event.py:1651
+#: pretix/base/models/event.py:1652
 msgid "Required for events"
 msgstr "Diperlukan untuk acara"
 
-#: pretix/base/models/event.py:1652
+#: pretix/base/models/event.py:1653
 msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
@@ -3957,24 +3995,24 @@ msgstr ""
 "propertinya disetel. Dalam rangkaian acara, selalu opsional untuk menetapkan "
 "nilai untuk masing-masing tanggal"
 
-#: pretix/base/models/event.py:1658 pretix/base/models/items.py:2066
+#: pretix/base/models/event.py:1659 pretix/base/models/items.py:2066
 msgid "Valid values"
 msgstr "Nilai yang valid"
 
-#: pretix/base/models/event.py:1661
+#: pretix/base/models/event.py:1662
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:45
 #, fuzzy
 #| msgid "Show number of check-ins to customer"
 msgid "Show filter option to customers"
 msgstr "Tunjukkan jumlah check-in kepada pelanggan"
 
-#: pretix/base/models/event.py:1662
+#: pretix/base/models/event.py:1663
 msgid ""
 "This field will be shown to filter events in the public event list and "
 "calendar."
 msgstr ""
 
-#: pretix/base/models/event.py:1665 pretix/control/forms/organizer.py:218
+#: pretix/base/models/event.py:1666 pretix/control/forms/organizer.py:218
 #: pretix/control/forms/organizer.py:222
 #, fuzzy
 #| msgctxt "openidconnect"
@@ -3982,12 +4020,12 @@ msgstr ""
 msgid "Public name"
 msgstr "Publik"
 
-#: pretix/base/models/event.py:1669
+#: pretix/base/models/event.py:1670
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
 msgid "Can be used for filtering"
 msgstr "Dapat digunakan untuk menyaring"
 
-#: pretix/base/models/event.py:1670
+#: pretix/base/models/event.py:1671
 msgid ""
 "This field will be shown to filter events or reports in the backend, and it "
 "can also be used for hidden filter parameters in the frontend (e.g. using "
@@ -3997,15 +4035,15 @@ msgstr ""
 "backend, dan juga dapat digunakan untuk parameter filter tersembunyi di "
 "frontend (misalnya menggunakan widget)."
 
-#: pretix/base/models/event.py:1680
+#: pretix/base/models/event.py:1681
 msgid "A property can either be required or have a default value, not both."
 msgstr "Properti dapat diwajibkan atau memiliki nilai default, tidak keduanya."
 
-#: pretix/base/models/event.py:1760 pretix/base/models/organizer.py:488
+#: pretix/base/models/event.py:1761 pretix/base/models/organizer.py:488
 msgid "Link text"
 msgstr "Teks tautan"
 
-#: pretix/base/models/event.py:1763 pretix/base/models/organizer.py:491
+#: pretix/base/models/event.py:1764 pretix/base/models/organizer.py:491
 msgid "Link URL"
 msgstr "URL tautan"
 
@@ -4035,16 +4073,16 @@ msgstr "Penerima tambahan (Bcc)"
 #: pretix/control/forms/event.py:1136 pretix/control/forms/event.py:1148
 #: pretix/control/forms/event.py:1158 pretix/control/forms/event.py:1168
 #: pretix/control/forms/orders.py:665 pretix/control/forms/orders.py:887
-#: pretix/control/forms/orders.py:914 pretix/control/forms/organizer.py:546
-#: pretix/control/forms/organizer.py:556 pretix/control/forms/organizer.py:566
-#: pretix/control/forms/vouchers.py:264 pretix/plugins/sendmail/forms.py:69
+#: pretix/control/forms/orders.py:914 pretix/control/forms/organizer.py:539
+#: pretix/control/forms/organizer.py:549 pretix/control/forms/organizer.py:559
+#: pretix/control/forms/vouchers.py:266 pretix/plugins/sendmail/forms.py:69
 #: pretix/plugins/sendmail/forms.py:85 pretix/plugins/sendmail/models.py:232
 msgid "Subject"
 msgstr "Subjek"
 
 #: pretix/base/models/exports.py:78 pretix/control/forms/orders.py:701
 #: pretix/control/forms/orders.py:717 pretix/control/forms/orders.py:895
-#: pretix/control/forms/orders.py:922 pretix/control/forms/vouchers.py:270
+#: pretix/control/forms/orders.py:922 pretix/control/forms/vouchers.py:272
 #: pretix/plugins/sendmail/forms.py:70 pretix/plugins/sendmail/forms.py:90
 #: pretix/plugins/sendmail/models.py:233
 msgid "Message"
@@ -4809,13 +4847,6 @@ msgstr "Pilih beberapa dari daftar"
 msgid "File upload"
 msgstr "Unggah berkas"
 
-#: pretix/base/models/items.py:1497 pretix/base/reldate.py:201
-#: pretix/plugins/checkinlists/exporters.py:729
-#: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:40
-#: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:54
-msgid "Time"
-msgstr "Waktu"
-
 #: pretix/base/models/items.py:1498
 msgid "Date and time"
 msgstr "Tanggal dan waktu"
@@ -4998,7 +5029,7 @@ msgid "Leave empty for an unlimited number of tickets."
 msgstr "Biarkan kosong untuk jumlah tiket yang tidak terbatas."
 
 #: pretix/base/models/items.py:1893 pretix/base/models/orders.py:1399
-#: pretix/base/models/orders.py:2792
+#: pretix/base/models/orders.py:2798
 #: pretix/control/templates/pretixcontrol/checkin/index.html:97
 msgid "Item"
 msgstr "Barang"
@@ -5112,48 +5143,48 @@ msgstr ""
 "Jika kamu membiarkannya kosong, nilai apa pun diperbolehkan. Jika tidak, "
 "masukkan satu kemungkinan nilai per baris."
 
-#: pretix/base/models/log.py:160
+#: pretix/base/models/log.py:144
 #, python-brace-format
 msgid "Order {val}"
 msgstr "Pesan {val}"
 
-#: pretix/base/models/log.py:170
+#: pretix/base/models/log.py:154
 #, python-brace-format
 msgid "Voucher {val}…"
 msgstr "Voucher {val}…"
 
-#: pretix/base/models/log.py:180
+#: pretix/base/models/log.py:164
 #, python-brace-format
 msgid "Product {val}"
 msgstr "Produk {val}"
 
-#: pretix/base/models/log.py:190
+#: pretix/base/models/log.py:174
 #, python-brace-format
 msgctxt "subevent"
 msgid "Date {val}"
 msgstr "Tanggal {val}"
 
-#: pretix/base/models/log.py:200
+#: pretix/base/models/log.py:184
 #, python-brace-format
 msgid "Quota {val}"
 msgstr "Kuota {val}"
 
-#: pretix/base/models/log.py:210
+#: pretix/base/models/log.py:194
 #, python-brace-format
 msgid "Discount {val}"
 msgstr "Diskon {val}"
 
-#: pretix/base/models/log.py:220
+#: pretix/base/models/log.py:204
 #, python-brace-format
 msgid "Category {val}"
 msgstr "Kategori {val}"
 
-#: pretix/base/models/log.py:230
+#: pretix/base/models/log.py:214
 #, python-brace-format
 msgid "Question {val}"
 msgstr "Pertanyaan {val}"
 
-#: pretix/base/models/log.py:240
+#: pretix/base/models/log.py:224
 #, python-brace-format
 msgid "Tax rule {val}"
 msgstr "Aturan pajak {val}"
@@ -5169,7 +5200,7 @@ msgid "Identifier"
 msgstr "Pengidentifikasi"
 
 #: pretix/base/models/media.py:81 pretix/base/models/orders.py:224
-#: pretix/base/models/orders.py:2890 pretix/control/forms/orders.py:72
+#: pretix/base/models/orders.py:2896 pretix/control/forms/orders.py:72
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:138
 msgid "Expiration date"
 msgstr "Tanggal habis tempo"
@@ -5257,7 +5288,7 @@ msgid "expired"
 msgstr "kedaluwarsa"
 
 #: pretix/base/models/orders.py:199 pretix/base/orderimport.py:832
-#: pretix/control/forms/orders.py:641 pretix/control/forms/organizer.py:786
+#: pretix/control/forms/orders.py:641 pretix/control/forms/organizer.py:779
 msgid "Customer"
 msgstr "Pelanggan"
 
@@ -5410,7 +5441,7 @@ msgid "refunded"
 msgstr "dikembalikan"
 
 #: pretix/base/models/orders.py:1666 pretix/base/models/orders.py:2080
-#: pretix/base/shredder.py:601
+#: pretix/base/shredder.py:629
 msgid "Payment information"
 msgstr "Informasi Pembayaran"
 
@@ -5473,34 +5504,34 @@ msgstr ""
 "Dapat ditampilkan kepada pengguna akhir atau digunakan misalnya. sebagai "
 "bagian dari referensi pembayaran."
 
-#: pretix/base/models/orders.py:2189
+#: pretix/base/models/orders.py:2195
 msgid "Payment fee"
 msgstr "Biaya pembayaran"
 
-#: pretix/base/models/orders.py:2190
+#: pretix/base/models/orders.py:2196
 msgid "Shipping fee"
 msgstr "Biaya pengiriman"
 
-#: pretix/base/models/orders.py:2191
+#: pretix/base/models/orders.py:2197
 msgid "Service fee"
 msgstr "Biaya jasa"
 
-#: pretix/base/models/orders.py:2192
+#: pretix/base/models/orders.py:2198
 #: pretix/control/templates/pretixcontrol/order/index.html:149
 msgid "Cancellation fee"
 msgstr "Biaya pembatalan"
 
-#: pretix/base/models/orders.py:2193
+#: pretix/base/models/orders.py:2199
 msgid "Insurance fee"
 msgstr "Biaya asuransi"
 
-#: pretix/base/models/orders.py:2194
+#: pretix/base/models/orders.py:2200
 msgid "Other fees"
 msgstr "Biaya lainnya"
 
-#: pretix/base/models/orders.py:2195 pretix/base/payment.py:1310
+#: pretix/base/models/orders.py:2201 pretix/base/payment.py:1310
 #: pretix/base/payment.py:1315 pretix/base/settings.py:975
-#: pretix/control/forms/organizer.py:772
+#: pretix/control/forms/organizer.py:765
 #: pretix/control/templates/pretixcontrol/items/index.html:90
 #: pretix/control/templates/pretixcontrol/order/index.html:144
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:375
@@ -5509,7 +5540,7 @@ msgstr "Biaya lainnya"
 msgid "Gift card"
 msgstr "Kartu ucapan"
 
-#: pretix/base/models/orders.py:2200
+#: pretix/base/models/orders.py:2206
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:74
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:115
 #: pretix/control/views/vouchers.py:119
@@ -5517,27 +5548,27 @@ msgstr "Kartu ucapan"
 msgid "Value"
 msgstr "Nilai"
 
-#: pretix/base/models/orders.py:2419
+#: pretix/base/models/orders.py:2425
 msgid "Order position"
 msgstr "Posisi pesanan"
 
-#: pretix/base/models/orders.py:2883
+#: pretix/base/models/orders.py:2889
 msgid "Cart ID (e.g. session key)"
 msgstr "ID Keranjang (misalnya kunci sesi)"
 
-#: pretix/base/models/orders.py:2920
+#: pretix/base/models/orders.py:2926
 msgid "Cart position"
 msgstr "Posisi gerobak"
 
-#: pretix/base/models/orders.py:2921
+#: pretix/base/models/orders.py:2927
 msgid "Cart positions"
 msgstr "Posisi gerobak"
 
-#: pretix/base/models/orders.py:3042
+#: pretix/base/models/orders.py:3048
 msgid "Business customer"
 msgstr "Pelanggan bisnis"
 
-#: pretix/base/models/orders.py:3058
+#: pretix/base/models/orders.py:3064
 msgid "This reference will be printed on your invoice for your convenience."
 msgstr "Referensi ini akan dicetak pada invoice kamu untuk kenyamanan kamu."
 
@@ -5724,7 +5755,7 @@ msgstr ""
 "ada jaminan yang diberikan untuk perhitungan pajak yang benar. GUNAKAN "
 "DENGAN RISIKO ANDA SENDIRI."
 
-#: pretix/base/models/tax.py:203 pretix/plugins/stripe/payment.py:287
+#: pretix/base/models/tax.py:203 pretix/plugins/stripe/payment.py:293
 msgid "Merchant country"
 msgstr "Negara pedagang"
 
@@ -6228,7 +6259,7 @@ msgstr "Setelan tidak valid untuk kolom \"{header}\"."
 msgid "Enter a valid phone number."
 msgstr "Masukkan nomor telepon yang valid."
 
-#: pretix/base/orderimport.py:205 pretix/presale/views/waiting.py:113
+#: pretix/base/orderimport.py:205 pretix/presale/views/waiting.py:117
 msgctxt "subevent"
 msgid "You need to select a date."
 msgstr "Anda harus memilih tanggal."
@@ -6352,7 +6383,7 @@ msgid "No matching seat was found."
 msgstr "Tidak ditemukan kursi yang cocok."
 
 #: pretix/base/orderimport.py:740 pretix/base/services/cart.py:202
-#: pretix/base/services/orderimport.py:158
+#: pretix/base/services/orderimport.py:166
 msgid ""
 "The seat you selected has already been taken. Please select a different seat."
 msgstr "Kursi yang kamu pilih sudah terisi. Silakan pilih kursi lain."
@@ -7103,8 +7134,8 @@ msgstr "Nama alamat faktur untuk salam"
 msgid "Invoice address name: {part}"
 msgstr "Nama alamat faktur: {part}"
 
-#: pretix/base/pdf.py:1039 pretix/control/forms/organizer.py:723
-#: pretix/control/forms/organizer.py:759
+#: pretix/base/pdf.py:1039 pretix/control/forms/organizer.py:716
+#: pretix/control/forms/organizer.py:752
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:113
 msgid "Ticket"
@@ -7178,7 +7209,7 @@ msgstr ""
 msgid "Event canceled"
 msgstr "Acara dibatalkan"
 
-#: pretix/base/services/cart.py:100 pretix/base/services/orderimport.py:218
+#: pretix/base/services/cart.py:100 pretix/base/services/orderimport.py:226
 #: pretix/base/services/orders.py:151
 msgid ""
 "We were not able to process your request completely as the server was too "
@@ -7255,7 +7286,7 @@ msgstr[0] ""
 
 #: pretix/base/services/cart.py:134 pretix/base/services/orders.py:154
 #: pretix/presale/templates/pretixpresale/event/index.html:157
-#: pretix/presale/views/waiting.py:104 pretix/presale/views/widget.py:730
+#: pretix/presale/views/waiting.py:105 pretix/presale/views/widget.py:730
 msgid "The booking period for this event has not yet started."
 msgstr "Periode pemesanan untuk acara ini belum dimulai."
 
@@ -7854,7 +7885,12 @@ msgstr ""
 "berlangsung pada {date}, namun kamu sudah menggunakan keanggotaan yang sama "
 "untuk tiket berbeda pada waktu yang sama."
 
-#: pretix/base/services/orderimport.py:113
+#: pretix/base/services/orderimport.py:99
+#, python-brace-format
+msgid "Error decoding special characters in your file: {message}"
+msgstr ""
+
+#: pretix/base/services/orderimport.py:121
 #, python-brace-format
 msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
@@ -7863,7 +7899,7 @@ msgstr ""
 "Terjadi kesalahan saat mengimpor nilai \"{value}\" untuk kolom \"{column}\" "
 "pada baris \"{line}\": {message}"
 
-#: pretix/base/services/orderimport.py:148
+#: pretix/base/services/orderimport.py:156
 #, python-brace-format
 msgid "Invalid data in row {row}: {message}"
 msgstr "Data tidak valid di baris {row}: {message}"
@@ -8012,8 +8048,8 @@ msgstr "Tanggal kedaluwarsa yang baru harus di masa depan."
 msgid "This order is not pending approval."
 msgstr "Pesanan ini tidak menunggu persetujuan."
 
-#: pretix/base/services/orders.py:503 pretix/presale/views/order.py:905
-#: pretix/presale/views/order.py:954
+#: pretix/base/services/orders.py:503 pretix/presale/views/order.py:906
+#: pretix/presale/views/order.py:955
 msgid "You cannot cancel this order."
 msgstr "Anda tidak dapat membatalkan pesanan ini."
 
@@ -8140,7 +8176,7 @@ msgstr ""
 "Posisi tidak dapat dibatalkan karena kartu hadiah {card} yang dibeli dalam "
 "pesanan ini telah ditukarkan."
 
-#: pretix/base/services/orders.py:2926
+#: pretix/base/services/orders.py:2929
 msgid ""
 "There was an error while trying to send the money back to you. Please "
 "contact the event organizer for further information."
@@ -10794,7 +10830,7 @@ msgid "Only respected by modern browsers."
 msgstr "Hanya dihormati oleh browser modern."
 
 #: pretix/base/settings.py:2835 pretix/base/settings.py:2878
-#: pretix/control/forms/organizer.py:458
+#: pretix/control/forms/organizer.py:459
 msgid "Header image"
 msgstr "Gambar tajuk"
 
@@ -10837,7 +10873,7 @@ msgstr ""
 "penyelenggara digunakan, opsi ini akan diabaikan dan judul acara akan selalu "
 "ditampilkan."
 
-#: pretix/base/settings.py:2881 pretix/control/forms/organizer.py:462
+#: pretix/base/settings.py:2881 pretix/control/forms/organizer.py:463
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. By default, we show your logo with a size of up to "
@@ -10858,10 +10894,23 @@ msgstr ""
 "Gunakan juga gambar header untuk acara tanpa logo yang diunggah satu per satu"
 
 #: pretix/base/settings.py:2918
+msgid "Favicon"
+msgstr "favicon"
+
+#: pretix/base/settings.py:2921
+msgid ""
+"If you provide a favicon, we will show it instead of the default pretix "
+"icon. We recommend a size of at least 200x200px to accommodate most devices."
+msgstr ""
+"Jika kamu memberikan favicon, kami akan menampilkannya, bukan ikon awalan "
+"default. Kami merekomendasikan ukuran minimal 200x200px untuk mengakomodasi "
+"sebagian besar perangkat."
+
+#: pretix/base/settings.py:2937
 msgid "Social media image"
 msgstr "Gambar media sosial"
 
-#: pretix/base/settings.py:2921
+#: pretix/base/settings.py:2940
 msgid ""
 "This picture will be used as a preview if you post links to your ticket shop "
 "on social media. Facebook advises to use a picture size of 1200 x 630 "
@@ -10877,20 +10926,20 @@ msgstr ""
 "Jika kamu tidak mengisinya, kami akan menggunakan logo yang diberikan di "
 "atas."
 
-#: pretix/base/settings.py:2939
+#: pretix/base/settings.py:2958
 msgid "Logo image"
 msgstr "Gambar logo"
 
-#: pretix/base/settings.py:2943
+#: pretix/base/settings.py:2962
 msgid "We will show your logo with a maximal height and width of 2.5 cm."
 msgstr ""
 "Kami akan menampilkan logo kamu dengan tinggi dan lebar maksimal 2,5 cm."
 
-#: pretix/base/settings.py:2969 pretix/base/settings.py:3075
+#: pretix/base/settings.py:2988 pretix/base/settings.py:3094
 msgid "Info text"
 msgstr "Teks informasi"
 
-#: pretix/base/settings.py:2972 pretix/base/settings.py:3077
+#: pretix/base/settings.py:2991 pretix/base/settings.py:3096
 msgid ""
 "Not displayed anywhere by default, but if you want to, you can use this e.g. "
 "in ticket templates."
@@ -10898,11 +10947,11 @@ msgstr ""
 "Tidak ditampilkan di mana pun secara default, tetapi jika kamu mau, kamu "
 "dapat menggunakan ini, misalnya. dalam templat tiket."
 
-#: pretix/base/settings.py:2981
+#: pretix/base/settings.py:3000
 msgid "Banner text (top)"
 msgstr "Teks spanduk (atas)"
 
-#: pretix/base/settings.py:2984
+#: pretix/base/settings.py:3003
 msgid ""
 "This text will be shown above every page of your shop. Please only use this "
 "for very important messages."
@@ -10910,11 +10959,11 @@ msgstr ""
 "Teks ini akan ditampilkan di atas setiap halaman toko kamu. Harap gunakan "
 "ini hanya untuk pesan yang sangat penting."
 
-#: pretix/base/settings.py:2994
+#: pretix/base/settings.py:3013
 msgid "Banner text (bottom)"
 msgstr "Teks spanduk (bawah)"
 
-#: pretix/base/settings.py:2997
+#: pretix/base/settings.py:3016
 msgid ""
 "This text will be shown below every page of your shop. Please only use this "
 "for very important messages."
@@ -10922,11 +10971,11 @@ msgstr ""
 "Teks ini akan ditampilkan di bawah setiap halaman toko kamu. Harap gunakan "
 "ini hanya untuk pesan yang sangat penting."
 
-#: pretix/base/settings.py:3007
+#: pretix/base/settings.py:3026
 msgid "Voucher explanation"
 msgstr "Penjelasan voucher"
 
-#: pretix/base/settings.py:3010
+#: pretix/base/settings.py:3029
 msgid ""
 "This text will be shown next to the input for a voucher code. You can use it "
 "e.g. to explain how to obtain a voucher code."
@@ -10934,11 +10983,11 @@ msgstr ""
 "Teks ini akan ditampilkan di sebelah masukan kode voucher. Kamu dapat "
 "menggunakannya mis. untuk menjelaskan cara mendapatkan kode voucher."
 
-#: pretix/base/settings.py:3020
+#: pretix/base/settings.py:3039
 msgid "Attendee data explanation"
 msgstr "Penjelasan data peserta"
 
-#: pretix/base/settings.py:3023
+#: pretix/base/settings.py:3042
 msgid ""
 "This text will be shown above the questions asked for every personalized "
 "product. You can use it e.g. to explain why you need information from them."
@@ -10947,11 +10996,11 @@ msgstr ""
 "produk yang dipersonalisasi. Kamu dapat menggunakannya mis. untuk "
 "menjelaskan mengapa kamu memerlukan informasi dari mereka."
 
-#: pretix/base/settings.py:3033
+#: pretix/base/settings.py:3052
 msgid "Additional success message"
 msgstr "Pesan sukses tambahan"
 
-#: pretix/base/settings.py:3034
+#: pretix/base/settings.py:3053
 msgid ""
 "This message will be shown after an order has been created successfully. It "
 "will be shown in additional to the default text."
@@ -10959,11 +11008,11 @@ msgstr ""
 "Pesan ini akan ditampilkan setelah pesanan berhasil dibuat. Ini akan "
 "ditampilkan sebagai tambahan pada teks default."
 
-#: pretix/base/settings.py:3046
+#: pretix/base/settings.py:3065
 msgid "Help text of the phone number field"
 msgstr "Teks bantuan pada kolom nomor telepon"
 
-#: pretix/base/settings.py:3053
+#: pretix/base/settings.py:3072
 msgid ""
 "Make sure to enter a valid email address. We will send you an order "
 "confirmation including a link that you need to access your order later."
@@ -10972,15 +11021,15 @@ msgstr ""
 "kamu konfirmasi pesanan termasuk tautan yang kamu perlukan untuk mengakses "
 "pesanan kamu nanti."
 
-#: pretix/base/settings.py:3060
+#: pretix/base/settings.py:3079
 msgid "Help text of the email field"
 msgstr "Teks bantuan pada kolom email"
 
-#: pretix/base/settings.py:3086
+#: pretix/base/settings.py:3105
 msgid "Allow creating a new team during event creation"
 msgstr "Izinkan pembuatan tim baru selama pembuatan acara"
 
-#: pretix/base/settings.py:3087
+#: pretix/base/settings.py:3106
 msgid ""
 "Users that do not have access to all events under this organizer, must "
 "select one of their teams to have access to the created event. This setting "
@@ -10992,36 +11041,36 @@ msgstr ""
 "dibuat. Setelan ini memungkinkan pengguna membuat tim khusus acara dengan "
 "cepat, meskipun mereka tidak memiliki izin \"Dapat mengubah tim dan izin\"."
 
-#: pretix/base/settings.py:3159 pretix/base/settings.py:3169
+#: pretix/base/settings.py:3178 pretix/base/settings.py:3188
 msgid "Event start time (descending)"
 msgstr "Waktu mulai acara (menurun)"
 
-#: pretix/base/settings.py:3161 pretix/base/settings.py:3171
+#: pretix/base/settings.py:3180 pretix/base/settings.py:3190
 msgid "Name (descending)"
 msgstr "Nama (menurun)"
 
-#: pretix/base/settings.py:3166
+#: pretix/base/settings.py:3185
 msgctxt "subevent"
 msgid "Date ordering"
 msgstr "Pemesanan tanggal"
 
-#: pretix/base/settings.py:3182
+#: pretix/base/settings.py:3201
 msgid "Link back to organizer overview on all event pages"
 msgstr "Tautan kembali ke ikhtisar penyelenggara di semua halaman acara"
 
-#: pretix/base/settings.py:3191
+#: pretix/base/settings.py:3210
 msgid "Homepage text"
 msgstr "Teks beranda"
 
-#: pretix/base/settings.py:3193
+#: pretix/base/settings.py:3212
 msgid "This will be displayed on the organizer homepage."
 msgstr "Ini akan ditampilkan di beranda penyelenggara."
 
-#: pretix/base/settings.py:3208
+#: pretix/base/settings.py:3227
 msgid "Length of gift card codes"
 msgstr "Panjang kode kartu hadiah"
 
-#: pretix/base/settings.py:3209
+#: pretix/base/settings.py:3228
 msgid ""
 "The system generates by default {}-character long gift card codes. However, "
 "if a different length is required, it can be set here."
@@ -11029,11 +11078,11 @@ msgstr ""
 "Sistem menghasilkan kode kartu hadiah sepanjang {}karakter secara default. "
 "Namun, jika diperlukan panjang yang berbeda, dapat diatur di sini."
 
-#: pretix/base/settings.py:3219
+#: pretix/base/settings.py:3238
 msgid "Validity of gift card codes in years"
 msgstr "Validitas kode kartu hadiah dalam beberapa tahun"
 
-#: pretix/base/settings.py:3220
+#: pretix/base/settings.py:3239
 msgid ""
 "If you set a number here, gift cards will by default expire at the end of "
 "the year after this many years. If you keep it empty, gift cards do not have "
@@ -11044,11 +11093,11 @@ msgstr ""
 "membiarkannya kosong, kartu hadiah tidak memiliki tanggal kedaluwarsa yang "
 "jelas."
 
-#: pretix/base/settings.py:3229
+#: pretix/base/settings.py:3248
 msgid "Enable cookie consent management features"
 msgstr "Aktifkan fitur pengelolaan persetujuan cookie"
 
-#: pretix/base/settings.py:3235
+#: pretix/base/settings.py:3254
 msgid ""
 "By clicking \"Accept all cookies\", you agree to the storing of cookies and "
 "use of similar technologies on your device."
@@ -11056,11 +11105,11 @@ msgstr ""
 "Dengan mengeklik \"Terima semua cookie\", kamu menyetujui penyimpanan cookie "
 "dan penggunaan teknologi serupa di perangkat kamu."
 
-#: pretix/base/settings.py:3242
+#: pretix/base/settings.py:3261
 msgid "Dialog text"
 msgstr "Teks dialog"
 
-#: pretix/base/settings.py:3249
+#: pretix/base/settings.py:3268
 msgid ""
 "We use cookies and similar technologies to gather data that allows us to "
 "improve this website and our offerings. If you do not agree, we will only "
@@ -11072,39 +11121,39 @@ msgstr ""
 "tidak setuju, kami hanya akan menggunakan cookie jika cookie tersebut "
 "penting untuk menyediakan layanan yang ditawarkan situs web ini."
 
-#: pretix/base/settings.py:3257
+#: pretix/base/settings.py:3276
 msgid "Secondary dialog text"
 msgstr "Teks dialog sekunder"
 
-#: pretix/base/settings.py:3263
+#: pretix/base/settings.py:3282
 msgid "Privacy settings"
 msgstr "Pengaturan Privasi"
 
-#: pretix/base/settings.py:3268
+#: pretix/base/settings.py:3287
 msgid "Dialog title"
 msgstr "Judul dialog"
 
-#: pretix/base/settings.py:3274
+#: pretix/base/settings.py:3293
 msgid "Accept all cookies"
 msgstr "Terima semua cookie"
 
-#: pretix/base/settings.py:3279
+#: pretix/base/settings.py:3298
 msgid "\"Accept\" button description"
 msgstr "Deskripsi tombol \"Accept (Terima)\""
 
-#: pretix/base/settings.py:3285
+#: pretix/base/settings.py:3304
 msgid "Required cookies only"
 msgstr "Hanya cookie yang diperlukan"
 
-#: pretix/base/settings.py:3290
+#: pretix/base/settings.py:3309
 msgid "\"Reject\" button description"
 msgstr "Deskripsi tombol \"Reject\""
 
-#: pretix/base/settings.py:3300
+#: pretix/base/settings.py:3319
 msgid "Customers can choose their own seats"
 msgstr "Pelanggan dapat memilih tempat duduknya sendiri"
 
-#: pretix/base/settings.py:3301
+#: pretix/base/settings.py:3320
 msgid ""
 "If disabled, you will need to manually assign seats in the backend. Note "
 "that this can mean people will not know their seat after their purchase and "
@@ -11114,159 +11163,159 @@ msgstr ""
 "Perhatikan bahwa ini bisa berarti orang tidak akan mengetahui tempat "
 "duduknya setelah pembelian dan mungkin tidak tertulis di tiketnya."
 
-#: pretix/base/settings.py:3325
+#: pretix/base/settings.py:3344
 msgid "Show button to copy user input from other products"
 msgstr "Tampilkan tombol untuk menyalin input pengguna dari produk lain"
 
-#: pretix/base/settings.py:3339
+#: pretix/base/settings.py:3358
 msgid "Most common English titles"
 msgstr "Judul bahasa Inggris yang paling umum"
 
-#: pretix/base/settings.py:3349
+#: pretix/base/settings.py:3368
 msgid "Most common German titles"
 msgstr "Gelaran Jerman yang paling biasa"
 
-#: pretix/base/settings.py:3362
+#: pretix/base/settings.py:3381
 msgctxt "person_name_salutation"
 msgid "Ms"
 msgstr "MS"
 
-#: pretix/base/settings.py:3363
+#: pretix/base/settings.py:3382
 msgctxt "person_name_salutation"
 msgid "Mr"
 msgstr "Tn"
 
-#: pretix/base/settings.py:3364
+#: pretix/base/settings.py:3383
 msgctxt "person_name_salutation"
 msgid "Mx"
 msgstr "Mx"
 
-#: pretix/base/settings.py:3396 pretix/base/settings.py:3409
-#: pretix/base/settings.py:3425 pretix/base/settings.py:3475
-#: pretix/base/settings.py:3488 pretix/base/settings.py:3502
-#: pretix/base/settings.py:3555 pretix/base/settings.py:3576
-#: pretix/base/settings.py:3598
+#: pretix/base/settings.py:3415 pretix/base/settings.py:3428
+#: pretix/base/settings.py:3444 pretix/base/settings.py:3494
+#: pretix/base/settings.py:3507 pretix/base/settings.py:3521
+#: pretix/base/settings.py:3574 pretix/base/settings.py:3595
+#: pretix/base/settings.py:3617
 msgid "Given name"
 msgstr "Nama depan"
 
-#: pretix/base/settings.py:3397 pretix/base/settings.py:3410
-#: pretix/base/settings.py:3426 pretix/base/settings.py:3442
-#: pretix/base/settings.py:3459 pretix/base/settings.py:3474
-#: pretix/base/settings.py:3489 pretix/base/settings.py:3503
-#: pretix/base/settings.py:3556 pretix/base/settings.py:3577
-#: pretix/base/settings.py:3599
+#: pretix/base/settings.py:3416 pretix/base/settings.py:3429
+#: pretix/base/settings.py:3445 pretix/base/settings.py:3461
+#: pretix/base/settings.py:3478 pretix/base/settings.py:3493
+#: pretix/base/settings.py:3508 pretix/base/settings.py:3522
+#: pretix/base/settings.py:3575 pretix/base/settings.py:3596
+#: pretix/base/settings.py:3618
 msgid "Family name"
 msgstr "Nama belakang"
 
-#: pretix/base/settings.py:3401 pretix/base/settings.py:3417
-#: pretix/base/settings.py:3433 pretix/base/settings.py:3448
-#: pretix/base/settings.py:3466 pretix/base/settings.py:3481
-#: pretix/base/settings.py:3511 pretix/base/settings.py:3535
-#: pretix/base/settings.py:3567 pretix/base/settings.py:3589
-#: pretix/base/settings.py:3620
+#: pretix/base/settings.py:3420 pretix/base/settings.py:3436
+#: pretix/base/settings.py:3452 pretix/base/settings.py:3467
+#: pretix/base/settings.py:3485 pretix/base/settings.py:3500
+#: pretix/base/settings.py:3530 pretix/base/settings.py:3554
+#: pretix/base/settings.py:3586 pretix/base/settings.py:3608
+#: pretix/base/settings.py:3639
 msgctxt "person_name_sample"
 msgid "John"
 msgstr "John"
 
-#: pretix/base/settings.py:3402 pretix/base/settings.py:3418
-#: pretix/base/settings.py:3434 pretix/base/settings.py:3450
-#: pretix/base/settings.py:3468 pretix/base/settings.py:3482
-#: pretix/base/settings.py:3512 pretix/base/settings.py:3568
-#: pretix/base/settings.py:3590 pretix/base/settings.py:3621
+#: pretix/base/settings.py:3421 pretix/base/settings.py:3437
+#: pretix/base/settings.py:3453 pretix/base/settings.py:3469
+#: pretix/base/settings.py:3487 pretix/base/settings.py:3501
+#: pretix/base/settings.py:3531 pretix/base/settings.py:3587
+#: pretix/base/settings.py:3609 pretix/base/settings.py:3640
 msgctxt "person_name_sample"
 msgid "Doe"
 msgstr "Doe"
 
-#: pretix/base/settings.py:3408 pretix/base/settings.py:3424
-#: pretix/base/settings.py:3456 pretix/base/settings.py:3575
-#: pretix/base/settings.py:3597
+#: pretix/base/settings.py:3427 pretix/base/settings.py:3443
+#: pretix/base/settings.py:3475 pretix/base/settings.py:3594
+#: pretix/base/settings.py:3616
 msgctxt "person_name"
 msgid "Title"
 msgstr "Judul"
 
-#: pretix/base/settings.py:3416 pretix/base/settings.py:3432
-#: pretix/base/settings.py:3465 pretix/base/settings.py:3588
-#: pretix/base/settings.py:3619
+#: pretix/base/settings.py:3435 pretix/base/settings.py:3451
+#: pretix/base/settings.py:3484 pretix/base/settings.py:3607
+#: pretix/base/settings.py:3638
 msgctxt "person_name_sample"
 msgid "Dr"
 msgstr "Dr"
 
-#: pretix/base/settings.py:3440 pretix/base/settings.py:3457
+#: pretix/base/settings.py:3459 pretix/base/settings.py:3476
 msgid "First name"
 msgstr "Nama depan"
 
-#: pretix/base/settings.py:3441 pretix/base/settings.py:3458
+#: pretix/base/settings.py:3460 pretix/base/settings.py:3477
 msgid "Middle name"
 msgstr "Nama tengah"
 
-#: pretix/base/settings.py:3522 pretix/base/settings.py:3534
-#: pretix/control/forms/organizer.py:597
+#: pretix/base/settings.py:3541 pretix/base/settings.py:3553
+#: pretix/control/forms/organizer.py:590
 msgctxt "person_name_sample"
 msgid "John Doe"
 msgstr "John Doe"
 
-#: pretix/base/settings.py:3528
+#: pretix/base/settings.py:3547
 msgid "Calling name"
 msgstr "Nama panggilan"
 
-#: pretix/base/settings.py:3542
+#: pretix/base/settings.py:3561
 msgid "Latin transcription"
 msgstr "Transkripsi Latin"
 
-#: pretix/base/settings.py:3554 pretix/base/settings.py:3574
-#: pretix/base/settings.py:3596
+#: pretix/base/settings.py:3573 pretix/base/settings.py:3593
+#: pretix/base/settings.py:3615
 msgctxt "person_name"
 msgid "Salutation"
 msgstr "Sapaan"
 
-#: pretix/base/settings.py:3566 pretix/base/settings.py:3587
-#: pretix/base/settings.py:3618
+#: pretix/base/settings.py:3585 pretix/base/settings.py:3606
+#: pretix/base/settings.py:3637
 msgctxt "person_name_sample"
 msgid "Mr"
 msgstr "Tn"
 
-#: pretix/base/settings.py:3600
+#: pretix/base/settings.py:3619
 msgctxt "person_name"
 msgid "Degree (after name)"
 msgstr "Gelar (setelah nama)"
 
-#: pretix/base/settings.py:3622
+#: pretix/base/settings.py:3641
 msgctxt "person_name_sample"
 msgid "MA"
 msgstr "MA"
 
-#: pretix/base/settings.py:3729 pretix/control/forms/event.py:220
+#: pretix/base/settings.py:3748 pretix/control/forms/event.py:220
 msgid ""
 "Your default locale must also be enabled for your event (see box above)."
 msgstr ""
 "Lokal default kamu juga harus diaktifkan untuk acara kamu (lihat kotak di "
 "atas)."
 
-#: pretix/base/settings.py:3733
+#: pretix/base/settings.py:3752
 msgid ""
 "You cannot require specifying attendee names if you do not ask for them."
 msgstr ""
 "Anda tidak dapat meminta untuk menyebutkan nama peserta jika kamu tidak "
 "memintanya."
 
-#: pretix/base/settings.py:3737
+#: pretix/base/settings.py:3756
 msgid "You have to ask for attendee emails if you want to make them required."
 msgstr "Anda harus meminta email peserta jika kamu ingin mewajibkannya."
 
-#: pretix/base/settings.py:3741
+#: pretix/base/settings.py:3760
 msgid ""
 "You have to ask for invoice addresses if you want to make them required."
 msgstr "Anda harus menanyakan alamat faktur jika ingin mewajibkannya."
 
-#: pretix/base/settings.py:3745
+#: pretix/base/settings.py:3764
 msgid "You have to require invoice addresses to require for company names."
 msgstr "Anda harus meminta alamat faktur untuk meminta nama perusahaan."
 
-#: pretix/base/settings.py:3752
+#: pretix/base/settings.py:3771
 msgid "The last payment date cannot be before the end of presale."
 msgstr "Tanggal pembayaran terakhir tidak boleh sebelum akhir prapenjualan."
 
-#: pretix/base/settings.py:3765
+#: pretix/base/settings.py:3784
 msgid "This needs to be disabled if other NFC-based types are active."
 msgstr "Ini perlu dinonaktifkan jika tipe berbasis NFC lainnya aktif."
 
@@ -11278,19 +11327,19 @@ msgstr "Acara kamu harus selesai untuk menggunakan fitur ini."
 msgid "Your ticket shop needs to be offline to use this feature."
 msgstr "Toko tiket kamu harus offline untuk menggunakan fitur ini."
 
-#: pretix/base/shredder.py:229
+#: pretix/base/shredder.py:257
 msgid "Phone numbers"
 msgstr "Nomor telepon"
 
-#: pretix/base/shredder.py:231
+#: pretix/base/shredder.py:259
 msgid "This will remove all phone numbers from orders."
 msgstr "Ini akan menghapus semua nomor telepon dari pesanan."
 
-#: pretix/base/shredder.py:262
+#: pretix/base/shredder.py:290
 msgid "E-mails"
 msgstr "Email"
 
-#: pretix/base/shredder.py:264
+#: pretix/base/shredder.py:292
 msgid ""
 "This will remove all e-mail addresses from orders and attendees, as well as "
 "logged email contents. This will also remove the association to customer "
@@ -11300,7 +11349,7 @@ msgstr ""
 "email yang dicatat. Tindakan ini juga akan menghapus pengaitan ke akun "
 "pelanggan."
 
-#: pretix/base/shredder.py:341
+#: pretix/base/shredder.py:369
 msgid ""
 "This will remove all names, email addresses, and phone numbers from the "
 "waiting list."
@@ -11308,11 +11357,11 @@ msgstr ""
 "Ini akan menghapus semua nama, alamat email, dan nomor telepon dari daftar "
 "tunggu."
 
-#: pretix/base/shredder.py:393
+#: pretix/base/shredder.py:421
 msgid "Attendee info"
 msgstr "Informasi peserta"
 
-#: pretix/base/shredder.py:395
+#: pretix/base/shredder.py:423
 msgid ""
 "This will remove all attendee names and postal addresses from order "
 "positions, as well as logged changes to them."
@@ -11320,11 +11369,11 @@ msgstr ""
 "Ini akan menghapus semua nama peserta dan alamat pos dari posisi pesanan, "
 "serta perubahan yang dicatat pada mereka."
 
-#: pretix/base/shredder.py:473
+#: pretix/base/shredder.py:501
 msgid "Invoice addresses"
 msgstr "Alamat faktur"
 
-#: pretix/base/shredder.py:476
+#: pretix/base/shredder.py:504
 msgid ""
 "This will remove all invoice addresses from orders, as well as logged "
 "changes to them."
@@ -11332,18 +11381,18 @@ msgstr ""
 "Ini akan menghapus semua alamat faktur dari pesanan, serta perubahan yang "
 "dicatat pada pesanan tersebut."
 
-#: pretix/base/shredder.py:507
+#: pretix/base/shredder.py:535
 msgid "Question answers"
 msgstr "Jawaban pertanyaan"
 
-#: pretix/base/shredder.py:509
+#: pretix/base/shredder.py:537
 msgid ""
 "This will remove all answers to questions, as well as logged changes to them."
 msgstr ""
 "Ini akan menghapus semua jawaban atas pertanyaan, serta perubahan yang "
 "dicatat pada pertanyaan tersebut."
 
-#: pretix/base/shredder.py:551
+#: pretix/base/shredder.py:579
 msgid ""
 "This will remove all invoice PDFs, as well as any of their text content that "
 "might contain personal data from the database. Invoice numbers and totals "
@@ -11352,17 +11401,17 @@ msgstr ""
 "Ini akan menghapus semua PDF faktur, serta konten teks apa pun yang mungkin "
 "berisi data pribadi dari database. Nomor dan total faktur akan disimpan."
 
-#: pretix/base/shredder.py:580
+#: pretix/base/shredder.py:608
 msgid "Cached ticket files"
 msgstr "File tiket dalam cache"
 
-#: pretix/base/shredder.py:582
+#: pretix/base/shredder.py:610
 msgid "This will remove all cached ticket files. No download will be offered."
 msgstr ""
 "Ini akan menghapus semua file tiket yang di-cache. Tidak ada unduhan yang "
 "akan ditawarkan."
 
-#: pretix/base/shredder.py:604
+#: pretix/base/shredder.py:632
 msgid ""
 "This will remove payment-related information. Depending on the payment "
 "method, all data will be removed or personal data only. No download will be "
@@ -12034,11 +12083,11 @@ msgstr ""
 "harap aktifkan kembali cookie tersebut, setidaknya untuk situs ini, atau "
 "untuk permintaan 'asal yang sama'."
 
-#: pretix/base/views/tasks.py:177
+#: pretix/base/views/tasks.py:178
 msgid "An unexpected error has occurred, please try again later."
 msgstr "Terjadi kesalahan yang tidak terduga, silakan coba lagi nanti."
 
-#: pretix/base/views/tasks.py:180
+#: pretix/base/views/tasks.py:181
 msgid "The task has been completed."
 msgstr "Tugas telah selesai."
 
@@ -12281,12 +12330,12 @@ msgstr ""
 "memasukkan judul, kamu dapat menggunakan ini untuk membatasi kumpulan judul "
 "yang dapat dipilih."
 
-#: pretix/control/forms/event.py:632 pretix/control/forms/organizer.py:484
+#: pretix/control/forms/event.py:632 pretix/control/forms/organizer.py:477
 #, python-brace-format
 msgid "Ask for {fields}, display like {example}"
 msgstr "Mintalah {fields}, tampilkan seperti {example}"
 
-#: pretix/control/forms/event.py:638 pretix/control/forms/organizer.py:490
+#: pretix/control/forms/event.py:638 pretix/control/forms/organizer.py:483
 msgid "Free text input"
 msgstr "Masukan teks gratis"
 
@@ -12394,15 +12443,15 @@ msgstr ""
 "Email ini hanya akan dikirim ke pesanan dari saluran penjualan ini. Toko "
 "online harus diaktifkan."
 
-#: pretix/control/forms/event.py:968 pretix/control/forms/organizer.py:525
+#: pretix/control/forms/event.py:968 pretix/control/forms/organizer.py:518
 msgid "Bcc address"
 msgstr "Alamat Bcc"
 
-#: pretix/control/forms/event.py:969 pretix/control/forms/organizer.py:526
+#: pretix/control/forms/event.py:969 pretix/control/forms/organizer.py:519
 msgid "All emails will be sent to this address as a Bcc copy"
 msgstr "Semua email akan dikirim ke alamat ini sebagai salinan Bcc"
 
-#: pretix/control/forms/event.py:975 pretix/control/forms/organizer.py:532
+#: pretix/control/forms/event.py:975 pretix/control/forms/organizer.py:525
 msgid "Signature"
 msgstr "Tanda tangan"
 
@@ -12412,7 +12461,7 @@ msgid "This will be attached to every email. Available placeholders: {event}"
 msgstr ""
 "Ini akan dilampirkan ke setiap email. Placeholder yang tersedia: {event}"
 
-#: pretix/control/forms/event.py:983 pretix/control/forms/organizer.py:540
+#: pretix/control/forms/event.py:983 pretix/control/forms/organizer.py:533
 msgid "e.g. your contact details"
 msgstr "misalnya rincian kontak Anda"
 
@@ -12462,8 +12511,8 @@ msgstr "Teks dikirim ke peserta"
 #: pretix/control/forms/event.py:1079 pretix/control/forms/event.py:1141
 #: pretix/control/forms/event.py:1153 pretix/control/forms/event.py:1163
 #: pretix/control/forms/event.py:1173 pretix/control/forms/event.py:1178
-#: pretix/control/forms/organizer.py:551 pretix/control/forms/organizer.py:561
-#: pretix/control/forms/organizer.py:571
+#: pretix/control/forms/organizer.py:544 pretix/control/forms/organizer.py:554
+#: pretix/control/forms/organizer.py:564
 #: pretix/control/templates/pretixcontrol/event/mail.html:88
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:111
 #: pretix/control/templates/pretixcontrol/pdf/index.html:424
@@ -12938,20 +12987,6 @@ msgstr "Belanja langsung dan pra-penjualan berjalan"
 #: pretix/control/forms/filter.py:1097 pretix/control/forms/filter.py:1913
 msgid "Inactive"
 msgstr "Tidak aktif"
-
-#: pretix/control/forms/filter.py:1098 pretix/control/forms/filter.py:1573
-#: pretix/control/templates/pretixcontrol/events/index.html:150
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:114
-#: pretix/control/templates/pretixcontrol/subevents/index.html:167
-msgid "Presale not started"
-msgstr "Prapenjualan belum dimulai"
-
-#: pretix/control/forms/filter.py:1099 pretix/control/forms/filter.py:1574
-#: pretix/control/templates/pretixcontrol/events/index.html:148
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:112
-#: pretix/control/templates/pretixcontrol/subevents/index.html:165
-msgid "Presale over"
-msgstr "Prapenjualan selesai"
 
 #: pretix/control/forms/filter.py:1104 pretix/control/forms/filter.py:1107
 #: pretix/control/forms/filter.py:1603 pretix/control/forms/filter.py:1606
@@ -14231,24 +14266,11 @@ msgstr ""
 "Perangkat kamu tidak akan memiliki akses ke apa pun, silakan pilih beberapa "
 "acara."
 
-#: pretix/control/forms/organizer.py:468
-msgid "Favicon"
-msgstr "favicon"
-
-#: pretix/control/forms/organizer.py:472
-msgid ""
-"If you provide a favicon, we will show it instead of the default pretix "
-"icon. We recommend a size of at least 200x200px to accommodate most devices."
-msgstr ""
-"Jika kamu memberikan favicon, kami akan menampilkannya, bukan ikon awalan "
-"default. Kami merekomendasikan ukuran minimal 200x200px untuk mengakomodasi "
-"sebagian besar perangkat."
-
-#: pretix/control/forms/organizer.py:500 pretix/plugins/stripe/payment.py:299
+#: pretix/control/forms/organizer.py:493 pretix/plugins/stripe/payment.py:305
 msgid "experimental"
 msgstr "eksperimental"
 
-#: pretix/control/forms/organizer.py:506
+#: pretix/control/forms/organizer.py:499
 msgid ""
 "This feature is currently in an experimental stage. It only supports very "
 "limited use cases and might change at any point."
@@ -14256,65 +14278,65 @@ msgstr ""
 "Fitur ini sedang dalam tahap percobaan. Ini hanya mendukung kasus penggunaan "
 "yang sangat terbatas dan dapat berubah sewaktu-waktu."
 
-#: pretix/control/forms/organizer.py:535
+#: pretix/control/forms/organizer.py:528
 msgid "This will be attached to every email."
 msgstr "Ini akan dilampirkan ke setiap email."
 
-#: pretix/control/forms/organizer.py:627
+#: pretix/control/forms/organizer.py:620
 msgctxt "webhooks"
 msgid "Event types"
 msgstr "Jenis acara"
 
-#: pretix/control/forms/organizer.py:659
+#: pretix/control/forms/organizer.py:652
 msgid "Gift card value"
 msgstr "Nilai kartu hadiah"
 
-#: pretix/control/forms/organizer.py:732
+#: pretix/control/forms/organizer.py:725
 msgid "An medium with this type and identifier is already registered."
 msgstr "Media dengan jenis dan pengenal ini sudah terdaftar."
 
-#: pretix/control/forms/organizer.py:833
+#: pretix/control/forms/organizer.py:826
 msgid "An account with this customer ID is already registered."
 msgstr "Akun dengan ID pelanggan ini sudah terdaftar."
 
-#: pretix/control/forms/organizer.py:850
+#: pretix/control/forms/organizer.py:843
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:60
 #: pretix/presale/forms/customer.py:156 pretix/presale/forms/customer.py:472
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:32
 msgid "Phone"
 msgstr "Telepon"
 
-#: pretix/control/forms/organizer.py:957
+#: pretix/control/forms/organizer.py:950
 msgctxt "sso_oidc"
 msgid "Base URL"
 msgstr "URL dasar"
 
-#: pretix/control/forms/organizer.py:961
+#: pretix/control/forms/organizer.py:954
 msgctxt "sso_oidc"
 msgid "Client ID"
 msgstr "ID Klien"
 
-#: pretix/control/forms/organizer.py:965
+#: pretix/control/forms/organizer.py:958
 msgctxt "sso_oidc"
 msgid "Client secret"
 msgstr "Rahasia klien"
 
-#: pretix/control/forms/organizer.py:969
+#: pretix/control/forms/organizer.py:962
 msgctxt "sso_oidc"
 msgid "Scope"
 msgstr "Cakupan"
 
-#: pretix/control/forms/organizer.py:970
+#: pretix/control/forms/organizer.py:963
 msgctxt "sso_oidc"
 msgid "Multiple scopes separated with spaces."
 msgstr "Beberapa cakupan dipisahkan dengan spasi."
 
-#: pretix/control/forms/organizer.py:974
+#: pretix/control/forms/organizer.py:967
 msgctxt "sso_oidc"
 msgid "User ID field"
 msgstr "Bidang ID Pengguna"
 
-#: pretix/control/forms/organizer.py:975
+#: pretix/control/forms/organizer.py:968
 msgctxt "sso_oidc"
 msgid ""
 "We will assume that the contents of the user ID fields are unique and can "
@@ -14323,12 +14345,12 @@ msgstr ""
 "Kami akan berasumsi bahwa isi bidang ID pengguna adalah unik dan tidak akan "
 "pernah berubah untuk pengguna."
 
-#: pretix/control/forms/organizer.py:981
+#: pretix/control/forms/organizer.py:974
 msgctxt "sso_oidc"
 msgid "Email field"
 msgstr "bidang email"
 
-#: pretix/control/forms/organizer.py:982
+#: pretix/control/forms/organizer.py:975
 msgctxt "sso_oidc"
 msgid ""
 "We will assume that all email addresses received from the SSO provider are "
@@ -14339,30 +14361,30 @@ msgstr ""
 "diverifikasi sebagai milik pengguna. Jika hal ini tidak dapat dijamin, "
 "masalah keamanan mungkin timbul."
 
-#: pretix/control/forms/organizer.py:989
+#: pretix/control/forms/organizer.py:982
 msgctxt "sso_oidc"
 msgid "Phone field"
 msgstr "Bidang telepon"
 
-#: pretix/control/forms/organizer.py:1007
+#: pretix/control/forms/organizer.py:1000
 #, python-brace-format
 msgctxt "sso_oidc"
 msgid "{label} field"
 msgstr "bidang {label}"
 
-#: pretix/control/forms/organizer.py:1040
+#: pretix/control/forms/organizer.py:1033
 msgid "Invalidate old client secret and generate a new one"
 msgstr "Batalkan validasi rahasia klien lama dan buat yang baru"
 
-#: pretix/control/forms/organizer.py:1073
+#: pretix/control/forms/organizer.py:1066
 msgid "Organizer short name"
 msgstr "Nama pendek penyelenggara"
 
-#: pretix/control/forms/organizer.py:1077
+#: pretix/control/forms/organizer.py:1070
 msgid "Allow access to reusable media"
 msgstr "Izinkan akses ke media yang dapat digunakan kembali"
 
-#: pretix/control/forms/organizer.py:1078
+#: pretix/control/forms/organizer.py:1071
 msgid ""
 "This is required if you want the other organizer to participate in a shared "
 "system with e.g. NFC payment chips. You should only use this option for "
@@ -14377,21 +14399,21 @@ msgstr ""
 "penyelenggara lain akses ke materi kunci kriptografi yang diperlukan untuk "
 "berinteraksi dengan jenis media tersebut."
 
-#: pretix/control/forms/organizer.py:1094
+#: pretix/control/forms/organizer.py:1087
 msgid "The selected organizer does not exist or cannot be invited."
 msgstr "Penyelenggara yang dipilih tidak ada atau tidak dapat diundang."
 
-#: pretix/control/forms/organizer.py:1096
+#: pretix/control/forms/organizer.py:1089
 msgid "The selected organizer has already been invited."
 msgstr "Penyelenggara yang dipilih telah diundang."
 
-#: pretix/control/forms/renderers.py:55
+#: pretix/control/forms/renderers.py:57
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:139
 msgctxt "form"
 msgid "Optional"
 msgstr "Opsional"
 
-#: pretix/control/forms/renderers.py:107
+#: pretix/control/forms/renderers.py:125
 #: pretix/control/templates/pretixcontrol/organizers/device_bulk_edit.html:26
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:48
 #: pretix/control/templates/pretixcontrol/subevents/bulk_edit.html:194
@@ -14489,7 +14511,7 @@ msgstr "ID kursi tertentu"
 msgid "Invalid product selected."
 msgstr "Produk yang dipilih tidak valid."
 
-#: pretix/control/forms/vouchers.py:217
+#: pretix/control/forms/vouchers.py:219
 msgid ""
 "The voucher only matches hidden products but you have not selected that it "
 "should show them."
@@ -14497,11 +14519,11 @@ msgstr ""
 "Voucher hanya cocok dengan produk tersembunyi tetapi kamu belum memilih "
 "untuk menampilkannya."
 
-#: pretix/control/forms/vouchers.py:253
+#: pretix/control/forms/vouchers.py:255
 msgid "Codes"
 msgstr "Kode"
 
-#: pretix/control/forms/vouchers.py:255
+#: pretix/control/forms/vouchers.py:257
 msgid ""
 "Add one voucher code per line. We suggest that you copy this list and save "
 "it into a file."
@@ -14509,16 +14531,16 @@ msgstr ""
 "Tambahkan satu kode voucher per baris. Kami menyarankan kamu menyalin daftar "
 "ini dan menyimpannya ke dalam file."
 
-#: pretix/control/forms/vouchers.py:260
+#: pretix/control/forms/vouchers.py:262
 msgid "Send vouchers via email"
 msgstr "Kirim voucher melalui email"
 
-#: pretix/control/forms/vouchers.py:267
+#: pretix/control/forms/vouchers.py:269
 #, python-brace-format
 msgid "Your voucher for {event}"
 msgstr "Voucher kamu untuk {event}"
 
-#: pretix/control/forms/vouchers.py:273
+#: pretix/control/forms/vouchers.py:275
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -14548,18 +14570,18 @@ msgstr ""
 "Salam,\n"
 "Tim {event} Anda"
 
-#: pretix/control/forms/vouchers.py:279
+#: pretix/control/forms/vouchers.py:281
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_create.html:28
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_update.html:42
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/send_form.html:25
 msgid "Recipients"
 msgstr "Penerima"
 
-#: pretix/control/forms/vouchers.py:283
+#: pretix/control/forms/vouchers.py:285
 msgid "or"
 msgstr "atau"
 
-#: pretix/control/forms/vouchers.py:287
+#: pretix/control/forms/vouchers.py:289
 msgid ""
 "You can either supply a list of email addresses with one email address per "
 "line, or a CSV file with a title column and one or more of the columns "
@@ -14569,28 +14591,28 @@ msgstr ""
 "baris, atau file CSV dengan kolom judul dan satu atau beberapa kolom "
 "\"email\", \"nomor\", \"nama\", atau \"tag\"."
 
-#: pretix/control/forms/vouchers.py:320
+#: pretix/control/forms/vouchers.py:322
 msgid "Maximum usages per voucher"
 msgstr "Pemakaian maksimal per voucher"
 
-#: pretix/control/forms/vouchers.py:323
+#: pretix/control/forms/vouchers.py:325
 msgid "Number of times times EACH of these vouchers can be redeemed."
 msgstr "Berapa kali SETIAP voucher ini dapat ditukarkan."
 
-#: pretix/control/forms/vouchers.py:332
+#: pretix/control/forms/vouchers.py:334
 msgid "Specific seat IDs"
 msgstr "ID kursi tertentu"
 
-#: pretix/control/forms/vouchers.py:349
+#: pretix/control/forms/vouchers.py:351
 msgid "CSV input needs to contain a header row in the first line."
 msgstr "Masukan CSV harus berisi baris header di baris pertama."
 
-#: pretix/control/forms/vouchers.py:354
+#: pretix/control/forms/vouchers.py:356
 #, python-brace-format
 msgid "CSV parsing failed: {error}."
 msgstr "Penguraian CSV gagal: {error}."
 
-#: pretix/control/forms/vouchers.py:356
+#: pretix/control/forms/vouchers.py:358
 msgid ""
 "CSV input was not recognized to have multiple columns, maybe you have some "
 "invalid quoted field in your input."
@@ -14598,44 +14620,44 @@ msgstr ""
 "Masukan CSV tidak dikenali memiliki banyak kolom, mungkin kamu memiliki "
 "beberapa kolom tanda kutip yang tidak valid di masukan Anda."
 
-#: pretix/control/forms/vouchers.py:358
+#: pretix/control/forms/vouchers.py:360
 #, python-brace-format
 msgid "CSV input needs to contain a field with the header \"{header}\"."
 msgstr "Masukan CSV harus berisi kolom dengan header \"{header}\"."
 
-#: pretix/control/forms/vouchers.py:361
+#: pretix/control/forms/vouchers.py:363
 #, python-brace-format
 msgid "CSV input contains an unknown field with the header \"{header}\"."
 msgstr ""
 "Masukan CSV berisi bidang yang tidak diketahui dengan header \"{header}\"."
 
-#: pretix/control/forms/vouchers.py:366 pretix/control/forms/vouchers.py:381
+#: pretix/control/forms/vouchers.py:368 pretix/control/forms/vouchers.py:383
 #, python-brace-format
 msgid "{value} is not a valid email address."
 msgstr "{value} bukan alamat email yang valid."
 
-#: pretix/control/forms/vouchers.py:375
+#: pretix/control/forms/vouchers.py:377
 #, python-brace-format
 msgid "Invalid value in row {number}."
 msgstr "Nilai tidak valid di baris {number}."
 
-#: pretix/control/forms/vouchers.py:394
+#: pretix/control/forms/vouchers.py:396
 msgid "A voucher with one of these codes already exists."
 msgstr "Voucher dengan salah satu kode ini sudah ada."
 
-#: pretix/control/forms/vouchers.py:401
+#: pretix/control/forms/vouchers.py:403
 #, python-brace-format
 msgid ""
 "The voucher code {code} is too short. Make sure all voucher codes are at "
 "least {min_length} characters long."
 msgstr ""
 
-#: pretix/control/forms/vouchers.py:408
+#: pretix/control/forms/vouchers.py:410
 #, python-brace-format
 msgid "The voucher code {code} appears in your list twice."
 msgstr "Kode voucher {code} muncul di daftar kamu dua kali."
 
-#: pretix/control/forms/vouchers.py:412
+#: pretix/control/forms/vouchers.py:414
 msgid ""
 "If vouchers should be sent by email, subject, message and recipients need to "
 "be specified."
@@ -14643,14 +14665,14 @@ msgstr ""
 "Jika voucher harus dikirim melalui email, subjek, pesan dan penerima harus "
 "ditentukan."
 
-#: pretix/control/forms/vouchers.py:419
+#: pretix/control/forms/vouchers.py:421
 #, python-brace-format
 msgid ""
 "You generated {codes} vouchers, but entered recipients for {recp} vouchers."
 msgstr ""
 "Anda membuat voucher {codes}, namun memasukkan penerima voucher {recp}."
 
-#: pretix/control/forms/vouchers.py:424
+#: pretix/control/forms/vouchers.py:426
 msgid "You need to specify as many seats as voucher codes."
 msgstr "Anda perlu menentukan kursi sebanyak kode voucher."
 
@@ -15167,7 +15189,7 @@ msgid "The order locale has been changed."
 msgstr "Lokal pesanan telah diubah."
 
 #: pretix/control/logdisplay.py:403 pretix/control/views/orders.py:1566
-#: pretix/presale/views/order.py:788 pretix/presale/views/order.py:861
+#: pretix/presale/views/order.py:789 pretix/presale/views/order.py:862
 msgid "The invoice has been generated."
 msgstr "Faktur telah dibuat."
 
@@ -15176,7 +15198,7 @@ msgid "The invoice has been regenerated."
 msgstr "Faktur telah dibuat ulang."
 
 #: pretix/control/logdisplay.py:405 pretix/control/views/orders.py:1666
-#: pretix/presale/views/order.py:874
+#: pretix/presale/views/order.py:875
 msgid "The invoice has been reissued."
 msgstr "Faktur telah diterbitkan kembali."
 
@@ -15838,7 +15860,7 @@ msgid "The order has been canceled (comment: \"{comment}\")."
 msgstr "Pesanan telah dibatalkan (komentar: \"{comment}\")."
 
 #: pretix/control/logdisplay.py:617 pretix/control/views/orders.py:1524
-#: pretix/presale/views/order.py:1019
+#: pretix/presale/views/order.py:1020
 msgid "The order has been canceled."
 msgstr "Pesanan telah dibatalkan."
 
@@ -15943,7 +15965,7 @@ msgstr "Diblokir secara manual"
 msgid "Blocked because of an API integration"
 msgstr "Diblokir karena integrasi API"
 
-#: pretix/control/middleware.py:150 pretix/control/middleware.py:164
+#: pretix/control/middleware.py:151 pretix/control/middleware.py:165
 msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
@@ -15951,7 +15973,7 @@ msgstr ""
 "Acara yang dipilih tidak ditemukan atau kamu tidak memiliki izin untuk "
 "mengaturnya."
 
-#: pretix/control/middleware.py:177 pretix/control/middleware.py:187
+#: pretix/control/middleware.py:178 pretix/control/middleware.py:188
 msgid ""
 "The selected organizer was not found or you have no permission to "
 "administrate it."
@@ -16187,8 +16209,8 @@ msgstr "Media yang dapat digunakan kembali"
 msgid "Devices"
 msgstr "PerangkatPerangkat"
 
-#: pretix/control/permissions.py:71 pretix/control/permissions.py:108
-#: pretix/control/permissions.py:139 pretix/control/permissions.py:156
+#: pretix/control/permissions.py:72 pretix/control/permissions.py:109
+#: pretix/control/permissions.py:140 pretix/control/permissions.py:157
 msgid "You do not have permission to view this content."
 msgstr "Anda tidak memiliki izin untuk melihat konten ini."
 
@@ -18320,7 +18342,7 @@ msgstr ""
 #: pretix/control/views/subevents.py:1562 pretix/control/views/user.py:217
 #: pretix/control/views/users.py:110 pretix/control/views/vouchers.py:304
 #: pretix/plugins/badges/views.py:154 pretix/plugins/sendmail/views.py:653
-#: pretix/plugins/stripe/views.py:666
+#: pretix/plugins/stripe/views.py:667
 #: pretix/plugins/ticketoutputpdf/views.py:172
 #: pretix/presale/views/customer.py:476 pretix/presale/views/customer.py:528
 msgid "Your changes have been saved."
@@ -19031,19 +19053,6 @@ msgstr "Seri"
 #: pretix/control/templates/pretixcontrol/subevents/index.html:155
 msgid "More quotas"
 msgstr "Lebih banyak kuota"
-
-#: pretix/control/templates/pretixcontrol/events/index.html:146
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
-#: pretix/control/views/dashboards.py:529
-msgid "Shop disabled"
-msgstr "Toko dinonaktifkan"
-
-#: pretix/control/templates/pretixcontrol/events/index.html:152
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:116
-#: pretix/control/templates/pretixcontrol/subevents/index.html:169
-#: pretix/control/views/dashboards.py:535
-msgid "On sale"
-msgstr "Di jual"
 
 #: pretix/control/templates/pretixcontrol/events/index.html:157
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:121
@@ -24538,7 +24547,7 @@ msgstr "Nomor halaman itu bukan bilangan bulat"
 msgid "That page number is less than 1"
 msgstr "Nomor halaman itu kurang dari 1"
 
-#: pretix/control/views/auth.py:187
+#: pretix/control/views/auth.py:190
 msgid ""
 "You used an invalid link. Please copy the link from your email to the "
 "address bar and make sure it is correct and that the link has not been used "
@@ -24548,7 +24557,7 @@ msgstr ""
 "kamu ke bilah alamat dan pastikan sudah benar dan tautan tersebut belum "
 "pernah digunakan sebelumnya."
 
-#: pretix/control/views/auth.py:193
+#: pretix/control/views/auth.py:196
 msgid ""
 "You cannot accept the invitation for \"{}\" as you already are part of this "
 "team."
@@ -24556,16 +24565,16 @@ msgstr ""
 "Anda tidak bisa menerima undangan untuk \"{}\" karena kamu sudah menjadi "
 "bagian dari tim ini."
 
-#: pretix/control/views/auth.py:207
+#: pretix/control/views/auth.py:210
 msgid "You are now part of the team \"{}\"."
 msgstr "Anda sekarang menjadi bagian dari tim \"{}\"."
 
-#: pretix/control/views/auth.py:237
+#: pretix/control/views/auth.py:240
 msgid "Welcome to pretix! You are now part of the team \"{}\"."
 msgstr ""
 "Selamat datang di pretix! kamu sekarang menjadi bagian dari tim \"{}\"."
 
-#: pretix/control/views/auth.py:295
+#: pretix/control/views/auth.py:301
 msgid ""
 "If the address is registered to valid account, then we have sent you an e-"
 "mail containing further instructions. Please note that we will send at most "
@@ -24575,7 +24584,7 @@ msgstr ""
 "email berisi instruksi lebih lanjut kepada Anda. Harap diperhatikan bahwa "
 "kami akan mengirimkan paling banyak satu email setiap 24 jam."
 
-#: pretix/control/views/auth.py:298
+#: pretix/control/views/auth.py:304
 msgid ""
 "If the address is registered to valid account, then we have sent you an e-"
 "mail containing further instructions."
@@ -24583,7 +24592,7 @@ msgstr ""
 "Jika alamat terdaftar pada akun yang valid, maka kami telah mengirimkan "
 "email berisi instruksi lebih lanjut kepada Anda."
 
-#: pretix/control/views/auth.py:318
+#: pretix/control/views/auth.py:324
 msgid ""
 "You clicked on an invalid link. Please check that you copied the full web "
 "address into your address bar. Please note that the link is only valid for "
@@ -24594,20 +24603,20 @@ msgstr ""
 "hanya berlaku selama tiga hari dan tautan tersebut hanya dapat digunakan "
 "satu kali."
 
-#: pretix/control/views/auth.py:321
+#: pretix/control/views/auth.py:327
 msgid "We were unable to find the user you requested a new password for."
 msgstr ""
 "Kami tidak dapat menemukan pengguna yang kamu minta kata sandi barunya."
 
-#: pretix/control/views/auth.py:356
+#: pretix/control/views/auth.py:365
 msgid "You can now login using your new password."
 msgstr "Anda sekarang dapat login menggunakan kata sandi baru Anda."
 
-#: pretix/control/views/auth.py:403
+#: pretix/control/views/auth.py:412
 msgid "Please try again."
 msgstr "Silakan coba lagi."
 
-#: pretix/control/views/auth.py:458
+#: pretix/control/views/auth.py:467
 msgid "Invalid code, please try again."
 msgstr "Kode salah, coba lagi."
 
@@ -24644,7 +24653,7 @@ msgstr "Daftar check-in baru telah dibuat."
 #: pretix/control/views/vouchers.py:276 pretix/control/views/vouchers.py:350
 #: pretix/control/views/vouchers.py:533 pretix/control/views/waitinglist.py:413
 #: pretix/plugins/badges/views.py:114 pretix/plugins/sendmail/views.py:582
-#: pretix/plugins/sendmail/views.py:659 pretix/plugins/stripe/views.py:669
+#: pretix/plugins/sendmail/views.py:659 pretix/plugins/stripe/views.py:670
 #: pretix/plugins/ticketoutputpdf/views.py:132
 msgid "We could not save your changes. See below for details."
 msgstr ""
@@ -24852,7 +24861,7 @@ msgid "Unknown e-mail renderer."
 msgstr "Penyaji email tidak dikenal."
 
 #: pretix/control/views/event.py:826 pretix/control/views/orders.py:670
-#: pretix/presale/views/order.py:1060 pretix/presale/views/order.py:1067
+#: pretix/presale/views/order.py:1061 pretix/presale/views/order.py:1068
 msgid "You requested an invalid ticket output type."
 msgstr "Anda meminta jenis keluaran tiket yang tidak valid."
 
@@ -25287,15 +25296,15 @@ msgstr ""
 msgid "Access for the selected application has been revoked."
 msgstr "Akses untuk aplikasi yang dipilih telah dicabut."
 
-#: pretix/control/views/orderimport.py:77
+#: pretix/control/views/orderimport.py:78
 msgid "Please only upload CSV files."
 msgstr "Harap hanya unggah file CSV."
 
-#: pretix/control/views/orderimport.py:83
+#: pretix/control/views/orderimport.py:84
 msgid "Please do not upload files larger than 10 MB."
 msgstr "Harap jangan mengunggah file yang lebih besar dari 10 MB."
 
-#: pretix/control/views/orderimport.py:155
+#: pretix/control/views/orderimport.py:156
 msgid ""
 "We could not identify the character encoding of the CSV file. Some "
 "characters were replaced with a placeholder."
@@ -25303,11 +25312,11 @@ msgstr ""
 "Kami tidak dapat mengidentifikasi pengkodean karakter file CSV. Beberapa "
 "karakter diganti dengan placeholder."
 
-#: pretix/control/views/orderimport.py:175
+#: pretix/control/views/orderimport.py:176
 msgid "The import was successful."
 msgstr "Impor berhasil."
 
-#: pretix/control/views/orderimport.py:187
+#: pretix/control/views/orderimport.py:188
 msgid "We've been unable to parse the uploaded file as a CSV file."
 msgstr "Kami tidak dapat menguraikan file yang diunggah sebagai file CSV."
 
@@ -25344,20 +25353,20 @@ msgstr[0] ""
 "Tim {event} Anda"
 
 #: pretix/control/views/orders.py:672 pretix/plugins/banktransfer/views.py:901
-#: pretix/presale/views/order.py:163 pretix/presale/views/order.py:210
-#: pretix/presale/views/order.py:341 pretix/presale/views/order.py:404
-#: pretix/presale/views/order.py:472 pretix/presale/views/order.py:551
-#: pretix/presale/views/order.py:596 pretix/presale/views/order.py:775
-#: pretix/presale/views/order.py:888 pretix/presale/views/order.py:903
-#: pretix/presale/views/order.py:952 pretix/presale/views/order.py:1069
-#: pretix/presale/views/order.py:1241 pretix/presale/views/order.py:1624
-#: pretix/presale/views/order.py:1655
+#: pretix/presale/views/order.py:164 pretix/presale/views/order.py:211
+#: pretix/presale/views/order.py:342 pretix/presale/views/order.py:405
+#: pretix/presale/views/order.py:473 pretix/presale/views/order.py:552
+#: pretix/presale/views/order.py:597 pretix/presale/views/order.py:776
+#: pretix/presale/views/order.py:889 pretix/presale/views/order.py:904
+#: pretix/presale/views/order.py:953 pretix/presale/views/order.py:1070
+#: pretix/presale/views/order.py:1242 pretix/presale/views/order.py:1625
+#: pretix/presale/views/order.py:1656
 msgid "Unknown order code or not authorized to access this order."
 msgstr ""
 "Kode pesanan tidak diketahui atau tidak diizinkan untuk mengakses pesanan "
 "ini."
 
-#: pretix/control/views/orders.py:674 pretix/presale/views/order.py:1073
+#: pretix/control/views/orders.py:674 pretix/presale/views/order.py:1074
 msgid "Ticket download is not enabled for this product."
 msgstr "Pengunduhan tiket tidak diaktifkan untuk produk ini."
 
@@ -25605,15 +25614,15 @@ msgstr "Faktur telah dibersihkan dari data pribadi."
 msgid "The email has been queued to be sent."
 msgstr "Email telah diantri untuk dikirim."
 
-#: pretix/control/views/orders.py:1711 pretix/presale/views/order.py:1250
+#: pretix/control/views/orders.py:1711 pretix/presale/views/order.py:1251
 msgid "This invoice has not been found"
 msgstr "Faktur ini belum ditemukan"
 
-#: pretix/control/views/orders.py:1718 pretix/presale/views/order.py:1257
+#: pretix/control/views/orders.py:1718 pretix/presale/views/order.py:1258
 msgid "The invoice file is no longer stored on the server."
 msgstr "File faktur tidak lagi disimpan di server."
 
-#: pretix/control/views/orders.py:1723 pretix/presale/views/order.py:1262
+#: pretix/control/views/orders.py:1723 pretix/presale/views/order.py:1263
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
@@ -25640,7 +25649,7 @@ msgstr "Tindakan ini hanya diperbolehkan untuk pending order."
 msgid "This action is only allowed for canceled orders."
 msgstr "Tindakan ini hanya diperbolehkan untuk pesanan yang dibatalkan."
 
-#: pretix/control/views/orders.py:2036 pretix/presale/views/order.py:1534
+#: pretix/control/views/orders.py:2036 pretix/presale/views/order.py:1535
 msgid "An error occurred. Please see the details below."
 msgstr "Terjadi kesalahan. Silakan lihat detailnya di bawah ini."
 
@@ -25649,12 +25658,12 @@ msgid "The order has been changed and the user has been notified."
 msgstr "Urutan telah diubah dan pengguna telah diberitahu."
 
 #: pretix/control/views/orders.py:2046 pretix/control/views/orders.py:2180
-#: pretix/control/views/orders.py:2217 pretix/presale/views/order.py:1569
+#: pretix/control/views/orders.py:2217 pretix/presale/views/order.py:1570
 msgid "The order has been changed."
 msgstr "Urutannya telah diubah."
 
 #: pretix/control/views/orders.py:2073 pretix/presale/checkoutflow.py:890
-#: pretix/presale/views/order.py:830
+#: pretix/presale/views/order.py:831
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
 msgstr ""
@@ -25684,7 +25693,7 @@ msgstr "Pesan kamu telah dimasukkan ke dalam antrean dan akan dikirim ke {}."
 msgid "Failed to send mail to the following user: {}"
 msgstr "Gagal mengirim email ke pengguna berikut: {}"
 
-#: pretix/control/views/orders.py:2398 pretix/presale/views/order.py:1032
+#: pretix/control/views/orders.py:2398 pretix/presale/views/order.py:1033
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
@@ -26788,8 +26797,8 @@ msgstr "Silakan transfer seluruh jumlah ke rekening bank berikut:"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:14
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:23
 #: pretix/plugins/banktransfer/views.py:835
-#: pretix/plugins/stripe/payment.py:1367 pretix/plugins/stripe/payment.py:1534
-#: pretix/plugins/stripe/payment.py:1683
+#: pretix/plugins/stripe/payment.py:1487 pretix/plugins/stripe/payment.py:1654
+#: pretix/plugins/stripe/payment.py:1803
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:32
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:35
 msgid "Account holder"
@@ -26882,17 +26891,17 @@ msgstr ""
 "\n"
 "Tim {event} Anda"
 
-#: pretix/plugins/banktransfer/tasks.py:170
+#: pretix/plugins/banktransfer/tasks.py:172
 msgid "The order has already been canceled."
 msgstr "Pesanan telah dibatalkan."
 
-#: pretix/plugins/banktransfer/tasks.py:176
+#: pretix/plugins/banktransfer/tasks.py:178
 #: pretix/plugins/banktransfer/views.py:106
 #: pretix/plugins/banktransfer/views.py:193
 msgid "Currencies do not match."
 msgstr "Mata uang tidak cocok."
 
-#: pretix/plugins/banktransfer/tasks.py:186
+#: pretix/plugins/banktransfer/tasks.py:188
 msgid "Automatic split to multiple orders not possible."
 msgstr "Pembagian otomatis ke beberapa pesanan tidak dimungkinkan."
 
@@ -27521,7 +27530,7 @@ msgstr "Otomatis check in"
 #: pretix/plugins/checkinlists/exporters.py:485
 #: pretix/plugins/checkinlists/exporters.py:669
 #: pretix/plugins/checkinlists/exporters.py:734
-#: pretix/plugins/paypal/payment.py:123 pretix/plugins/paypal2/payment.py:116
+#: pretix/plugins/paypal/payment.py:123 pretix/plugins/paypal2/payment.py:119
 msgid "Secret"
 msgstr "Rahasia"
 
@@ -27588,9 +27597,9 @@ msgstr ""
 "Metode pembayaran yang sepenuhnya dapat disesuaikan untuk pemrosesan manual."
 
 #: pretix/plugins/paypal/apps.py:44 pretix/plugins/paypal/apps.py:47
-#: pretix/plugins/paypal/payment.py:75 pretix/plugins/paypal2/payment.py:78
-#: pretix/plugins/paypal2/payment.py:134 pretix/plugins/paypal2/payment.py:1008
-#: pretix/plugins/paypal2/payment.py:1009
+#: pretix/plugins/paypal/payment.py:75 pretix/plugins/paypal2/payment.py:81
+#: pretix/plugins/paypal2/payment.py:137 pretix/plugins/paypal2/payment.py:1064
+#: pretix/plugins/paypal2/payment.py:1065
 msgid "PayPal"
 msgstr "PayPal"
 
@@ -27602,7 +27611,7 @@ msgstr ""
 "Terima pembayaran dengan akun PayPal Anda. PayPal adalah salah satu metode "
 "pembayaran paling populer di seluruh dunia."
 
-#: pretix/plugins/paypal/payment.py:91 pretix/plugins/paypal2/payment.py:372
+#: pretix/plugins/paypal/payment.py:91 pretix/plugins/paypal2/payment.py:375
 msgid ""
 "The PayPal sandbox is being used, you can test without actually sending "
 "money but you will need a PayPal sandbox user to log in."
@@ -27614,28 +27623,28 @@ msgstr ""
 msgid "PayPal account"
 msgstr "Akun paypal"
 
-#: pretix/plugins/paypal/payment.py:116 pretix/plugins/paypal2/payment.py:109
-#: pretix/plugins/stripe/payment.py:269
+#: pretix/plugins/paypal/payment.py:116 pretix/plugins/paypal2/payment.py:112
+#: pretix/plugins/stripe/payment.py:275
 #, python-brace-format
 msgid "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 msgstr "<a target=\"_blank\" rel=\"noopener\" href=\"{docs_url}\">{text}</a>"
 
-#: pretix/plugins/paypal/payment.py:117 pretix/plugins/paypal2/payment.py:110
-#: pretix/plugins/stripe/payment.py:270
+#: pretix/plugins/paypal/payment.py:117 pretix/plugins/paypal2/payment.py:113
+#: pretix/plugins/stripe/payment.py:276
 msgid "Click here for a tutorial on how to obtain the required keys"
 msgstr ""
 "Klik di sini untuk tutorial tentang cara mendapatkan kunci yang diperlukan"
 
-#: pretix/plugins/paypal/payment.py:129 pretix/plugins/paypal2/payment.py:122
-#: pretix/plugins/stripe/payment.py:249
+#: pretix/plugins/paypal/payment.py:129 pretix/plugins/paypal2/payment.py:125
+#: pretix/plugins/stripe/payment.py:255
 msgid "Endpoint"
 msgstr "Titik akhir"
 
-#: pretix/plugins/paypal/payment.py:141 pretix/plugins/paypal2/payment.py:196
+#: pretix/plugins/paypal/payment.py:141 pretix/plugins/paypal2/payment.py:199
 msgid "Reference prefix"
 msgstr "Awalan referensi"
 
-#: pretix/plugins/paypal/payment.py:142 pretix/plugins/paypal2/payment.py:197
+#: pretix/plugins/paypal/payment.py:142 pretix/plugins/paypal2/payment.py:200
 msgid ""
 "Any value entered here will be added in front of the regular booking "
 "reference containing the order number."
@@ -27643,11 +27652,11 @@ msgstr ""
 "Nilai apa pun yang dimasukkan di sini akan ditambahkan di depan referensi "
 "pemesanan reguler yang berisi nomor pesanan."
 
-#: pretix/plugins/paypal/payment.py:148 pretix/plugins/paypal2/payment.py:203
+#: pretix/plugins/paypal/payment.py:148 pretix/plugins/paypal2/payment.py:206
 msgid "Reference postfix"
 msgstr "Referensi postfix"
 
-#: pretix/plugins/paypal/payment.py:149 pretix/plugins/paypal2/payment.py:204
+#: pretix/plugins/paypal/payment.py:149 pretix/plugins/paypal2/payment.py:207
 msgid ""
 "Any value entered here will be added behind the regular booking reference "
 "containing the order number."
@@ -27655,7 +27664,7 @@ msgstr ""
 "Nilai apa pun yang dimasukkan di sini akan ditambahkan di belakang referensi "
 "pemesanan reguler yang berisi nomor pesanan."
 
-#: pretix/plugins/paypal/payment.py:187 pretix/plugins/paypal2/payment.py:257
+#: pretix/plugins/paypal/payment.py:187 pretix/plugins/paypal2/payment.py:260
 msgid "Disconnect from PayPal"
 msgstr "Putuskan sambungan dari PayPal"
 
@@ -27663,17 +27672,17 @@ msgstr "Putuskan sambungan dari PayPal"
 #: pretix/plugins/paypal/payment.py:342 pretix/plugins/paypal/payment.py:357
 #: pretix/plugins/paypal/payment.py:425 pretix/plugins/paypal/payment.py:428
 #: pretix/plugins/paypal/payment.py:586 pretix/plugins/paypal/payment.py:663
-#: pretix/plugins/paypal2/payment.py:448 pretix/plugins/paypal2/payment.py:458
-#: pretix/plugins/paypal2/payment.py:569 pretix/plugins/paypal2/payment.py:573
-#: pretix/plugins/paypal2/payment.py:616 pretix/plugins/paypal2/payment.py:674
-#: pretix/plugins/paypal2/payment.py:932 pretix/plugins/paypal2/payment.py:942
+#: pretix/plugins/paypal2/payment.py:469 pretix/plugins/paypal2/payment.py:479
+#: pretix/plugins/paypal2/payment.py:595 pretix/plugins/paypal2/payment.py:599
+#: pretix/plugins/paypal2/payment.py:648 pretix/plugins/paypal2/payment.py:712
+#: pretix/plugins/paypal2/payment.py:988 pretix/plugins/paypal2/payment.py:998
 msgid "We had trouble communicating with PayPal"
 msgstr "Kami mengalami kesulitan berkomunikasi dengan PayPal"
 
 #: pretix/plugins/paypal/payment.py:371 pretix/plugins/paypal/payment.py:380
-#: pretix/plugins/paypal/payment.py:454 pretix/plugins/paypal2/payment.py:598
-#: pretix/plugins/paypal2/payment.py:633 pretix/plugins/paypal2/payment.py:688
-#: pretix/plugins/paypal2/payment.py:713 pretix/plugins/paypal2/payment.py:739
+#: pretix/plugins/paypal/payment.py:454 pretix/plugins/paypal2/payment.py:624
+#: pretix/plugins/paypal2/payment.py:665 pretix/plugins/paypal2/payment.py:727
+#: pretix/plugins/paypal2/payment.py:758 pretix/plugins/paypal2/payment.py:783
 msgid ""
 "We were unable to process your payment. See below for details on how to "
 "proceed."
@@ -27682,7 +27691,7 @@ msgstr ""
 "tentang cara melanjutkan."
 
 #: pretix/plugins/paypal/payment.py:435 pretix/plugins/paypal/payment.py:444
-#: pretix/plugins/paypal2/payment.py:726
+#: pretix/plugins/paypal2/payment.py:770
 msgid ""
 "PayPal has not yet approved the payment. We will inform you as soon as the "
 "payment completed."
@@ -27690,27 +27699,29 @@ msgstr ""
 "PayPal belum menyetujui pembayaran tersebut. Kami akan memberi tahu kamu "
 "segera setelah pembayaran selesai."
 
-#: pretix/plugins/paypal/payment.py:469 pretix/plugins/paypal2/payment.py:754
-#: pretix/plugins/stripe/payment.py:654 pretix/plugins/stripe/payment.py:1026
+#: pretix/plugins/paypal/payment.py:469 pretix/plugins/paypal2/payment.py:798
+#: pretix/plugins/stripe/payment.py:677 pretix/plugins/stripe/payment.py:1049
 msgid "There was an error sending the confirmation mail."
 msgstr "Terjadi kesalahan saat mengirim email konfirmasi."
 
 #: pretix/plugins/paypal/payment.py:562 pretix/plugins/paypal/payment.py:569
-#: pretix/plugins/paypal2/payment.py:898 pretix/plugins/paypal2/payment.py:919
+#: pretix/plugins/paypal2/payment.py:946 pretix/plugins/paypal2/payment.py:967
 msgid "Refunding the amount via PayPal failed: {}"
 msgstr "Gagal mengembalikan jumlah tersebut melalui PayPal: {}"
 
 #: pretix/plugins/paypal/payment.py:704 pretix/plugins/paypal/payment.py:712
-#: pretix/plugins/paypal2/payment.py:988 pretix/plugins/paypal2/payment.py:996
+#: pretix/plugins/paypal2/payment.py:1044
+#: pretix/plugins/paypal2/payment.py:1052
 msgid "The payment for this invoice has already been received."
 msgstr "Pembayaran untuk faktur ini telah diterima."
 
 #: pretix/plugins/paypal/payment.py:705 pretix/plugins/paypal/payment.py:713
-#: pretix/plugins/paypal2/payment.py:989 pretix/plugins/paypal2/payment.py:997
+#: pretix/plugins/paypal2/payment.py:1045
+#: pretix/plugins/paypal2/payment.py:1053
 msgid "PayPal payment ID"
 msgstr "ID pembayaran PayPal"
 
-#: pretix/plugins/paypal/payment.py:707 pretix/plugins/paypal2/payment.py:991
+#: pretix/plugins/paypal/payment.py:707 pretix/plugins/paypal2/payment.py:1047
 msgid "PayPal sale ID"
 msgstr "ID penjualan PayPal"
 
@@ -27753,7 +27764,6 @@ msgid "Total value"
 msgstr "Nilai total"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:4
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:4
 msgid ""
 "Our attempt to execute your Payment via PayPal has failed. Please try again "
 "or contact us."
@@ -27762,7 +27772,7 @@ msgstr ""
 "Silakan coba lagi atau hubungi kami."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/pending.html:8
-#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:8
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:15
 msgid ""
 "We're waiting for an answer from PayPal regarding your payment. Please "
 "contact us, if this takes more than a few hours."
@@ -27789,15 +27799,15 @@ msgstr ""
 msgid "Click here in order to open the window."
 msgstr "Klik di sini untuk membuka jendela."
 
-#: pretix/plugins/paypal/views.py:106 pretix/plugins/paypal2/views.py:319
+#: pretix/plugins/paypal/views.py:107 pretix/plugins/paypal2/views.py:320
 msgid "Invalid response from PayPal received."
 msgstr "Respons yang diterima tidak valid dari PayPal."
 
-#: pretix/plugins/paypal/views.py:122 pretix/plugins/paypal2/views.py:340
+#: pretix/plugins/paypal/views.py:123 pretix/plugins/paypal2/views.py:341
 msgid "It looks like you canceled the PayPal payment"
 msgstr "Sepertinya kamu membatalkan pembayaran PayPal"
 
-#: pretix/plugins/paypal/views.py:254 pretix/plugins/paypal2/views.py:519
+#: pretix/plugins/paypal/views.py:255 pretix/plugins/paypal2/views.py:520
 msgid "Your PayPal account has been disconnected."
 msgstr "Akun PayPal kamu telah terputus."
 
@@ -27815,11 +27825,11 @@ msgstr ""
 "mereka bahkan tidak memerlukan akun PayPal. PayPal adalah salah satu metode "
 "pembayaran paling populer di seluruh dunia."
 
-#: pretix/plugins/paypal2/payment.py:95
+#: pretix/plugins/paypal2/payment.py:98
 msgid "PayPal Merchant ID"
 msgstr "ID Pedagang PayPal"
 
-#: pretix/plugins/paypal2/payment.py:137
+#: pretix/plugins/paypal2/payment.py:140
 msgid ""
 "Even if a customer chooses an Alternative Payment Method, they will always "
 "have the option to revert back to paying with their PayPal account. For this "
@@ -27829,11 +27839,11 @@ msgstr ""
 "memiliki opsi untuk kembali membayar dengan akun PayPal mereka. Oleh karena "
 "itu, metode pembayaran ini selalu aktif."
 
-#: pretix/plugins/paypal2/payment.py:145
+#: pretix/plugins/paypal2/payment.py:148
 msgid "Alternative Payment Methods"
 msgstr "Metode Pembayaran Alternatif"
 
-#: pretix/plugins/paypal2/payment.py:147
+#: pretix/plugins/paypal2/payment.py:150
 msgid ""
 "In addition to payments through a PayPal account, you can also offer your "
 "customers the option to pay with credit cards and other, local payment "
@@ -27849,11 +27859,11 @@ msgstr ""
 "akan ditentukan berdasarkan lokasi pembeli. Bagi pedagang Jerman, ini adalah "
 "penerus langsung PayPal Plus."
 
-#: pretix/plugins/paypal2/payment.py:162
+#: pretix/plugins/paypal2/payment.py:165
 msgid "Disable SEPA Direct Debit"
 msgstr "Nonaktifkan Debit Langsung SEPA"
 
-#: pretix/plugins/paypal2/payment.py:164
+#: pretix/plugins/paypal2/payment.py:167
 msgid ""
 "While most payment methods cannot be recalled by a customer without "
 "outlining their exact grief with the merchants, SEPA Direct Debit can be "
@@ -27868,11 +27878,11 @@ msgstr ""
 "pembayaran Debit Langsung SEPA untuk mengurangi risiko tagihan balik yang "
 "mahal."
 
-#: pretix/plugins/paypal2/payment.py:178
+#: pretix/plugins/paypal2/payment.py:181
 msgid "Enable Buy Now Pay Later"
 msgstr "Aktifkan Beli Sekarang Bayar Nanti"
 
-#: pretix/plugins/paypal2/payment.py:180
+#: pretix/plugins/paypal2/payment.py:183
 msgid ""
 "Offer your customers the possibility to buy now (up to a certain limit) and "
 "pay in multiple installments or within 30 days. You, as the merchant, are "
@@ -27882,15 +27892,15 @@ msgstr ""
 "batas tertentu) dan membayar dalam beberapa kali angsuran atau dalam waktu "
 "30 hari. Kamu, sebagai pedagang, segera mendapatkan uang Anda."
 
-#: pretix/plugins/paypal2/payment.py:212
+#: pretix/plugins/paypal2/payment.py:215
 msgid "-- Automatic --"
 msgstr "-- Otomatis --"
 
-#: pretix/plugins/paypal2/payment.py:218
+#: pretix/plugins/paypal2/payment.py:221
 msgid "Buyer country"
 msgstr "Negara pembeli"
 
-#: pretix/plugins/paypal2/payment.py:242
+#: pretix/plugins/paypal2/payment.py:245
 msgid ""
 "To accept payments via PayPal, you will need an account at PayPal. By "
 "clicking on the following button, you can either create a new PayPal account "
@@ -27900,12 +27910,12 @@ msgstr ""
 "Dengan mengklik tombol berikut, kamu dapat membuat akun PayPal baru atau "
 "menghubungkan pretix ke akun yang sudah ada."
 
-#: pretix/plugins/paypal2/payment.py:247
+#: pretix/plugins/paypal2/payment.py:250
 #, python-brace-format
 msgid "Connect with {icon} PayPal"
 msgstr "Terhubung dengan {icon} PayPal"
 
-#: pretix/plugins/paypal2/payment.py:261
+#: pretix/plugins/paypal2/payment.py:264
 msgid ""
 "Please configure a PayPal Webhook to the following endpoint in order to "
 "automatically cancel orders when payments are refunded externally."
@@ -27913,18 +27923,18 @@ msgstr ""
 "Harap konfigurasikan Webhook PayPal ke titik akhir berikut untuk membatalkan "
 "pesanan secara otomatis ketika pembayaran dikembalikan secara eksternal."
 
-#: pretix/plugins/paypal2/payment.py:272
+#: pretix/plugins/paypal2/payment.py:275
 msgid "PayPal does not process payments in your event's currency."
 msgstr "PayPal tidak memproses pembayaran dalam mata uang acara Anda."
 
-#: pretix/plugins/paypal2/payment.py:273
+#: pretix/plugins/paypal2/payment.py:276
 msgid ""
 "Please check this PayPal page for a complete list of supported currencies."
 msgstr ""
 "Silakan periksa halaman PayPal ini untuk daftar lengkap mata uang yang "
 "didukung."
 
-#: pretix/plugins/paypal2/payment.py:278
+#: pretix/plugins/paypal2/payment.py:281
 msgid ""
 "Your event's currency is supported by PayPal as a payment and balance "
 "currency for in-country accounts only. This means, that the receiving as "
@@ -27937,24 +27947,34 @@ msgstr ""
 "pengirim harus dibuat di negara yang sama dan menggunakan mata uang yang "
 "sama. Rekening luar negeri tidak dapat mengirimkan pembayaran apa pun."
 
-#: pretix/plugins/paypal2/payment.py:330 pretix/plugins/paypal2/views.py:248
+#: pretix/plugins/paypal2/payment.py:333 pretix/plugins/paypal2/views.py:249
 msgid "An error occurred during connecting with PayPal, please try again."
 msgstr "Terjadi kesalahan saat menghubungkan dengan PayPal, silakan coba lagi."
 
-#: pretix/plugins/paypal2/payment.py:454 pretix/plugins/paypal2/payment.py:938
+#: pretix/plugins/paypal2/payment.py:465 pretix/plugins/paypal2/payment.py:591
+#: pretix/plugins/paypal2/payment.py:645 pretix/plugins/paypal2/payment.py:708
+#: pretix/plugins/paypal2/payment.py:753 pretix/plugins/paypal2/payment.py:983
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:5
+msgid ""
+"Your payment has failed due to a known issue within PayPal. Please try "
+"again, there is a high chance of the payment succeeding on a second or third "
+"attempt. You can also try other payment methods, if available."
+msgstr ""
+
+#: pretix/plugins/paypal2/payment.py:475 pretix/plugins/paypal2/payment.py:994
 msgid ""
 "Something went wrong when requesting the payment status. Please try again."
 msgstr "Terjadi error saat meminta status pembayaran. Silakan coba lagi."
 
-#: pretix/plugins/paypal2/payment.py:463 pretix/plugins/paypal2/payment.py:947
+#: pretix/plugins/paypal2/payment.py:484 pretix/plugins/paypal2/payment.py:1003
 msgid "You may need to enable JavaScript for PayPal payments."
 msgstr "Anda mungkin perlu mengaktifkan JavaScript untuk pembayaran PayPal."
 
-#: pretix/plugins/paypal2/payment.py:1015
+#: pretix/plugins/paypal2/payment.py:1071
 msgid "PayPal APM"
 msgstr "APM PayPal"
 
-#: pretix/plugins/paypal2/payment.py:1016
+#: pretix/plugins/paypal2/payment.py:1072
 msgid "PayPal Alternative Payment Methods"
 msgstr "Metode Pembayaran Alternatif PayPal"
 
@@ -28065,6 +28085,13 @@ msgstr ""
 "yang kamu inginkan dan mengisi rincian pembayaran Anda. Kamu kemudian akan "
 "diarahkan kembali ke sini untuk meninjau dan mengonfirmasi pesanan Anda."
 
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:18
+msgid ""
+"There is currently a known issue with PayPal that causes some payments to "
+"fail. If your payment fails, please just try again. You can also try with a "
+"different payment method, if you prefer."
+msgstr ""
+
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:16
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:19
 msgid "Error"
@@ -28106,7 +28133,19 @@ msgstr "Silakan aktifkan JavaScript."
 msgid "Please select how you want to pay."
 msgstr "Silakan pilih cara pembayaran yang kamu inginkan."
 
-#: pretix/plugins/paypal2/views.py:221
+#: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:10
+#, fuzzy
+#| msgid ""
+#| "Our attempt to execute your Payment via PayPal has failed. Please try "
+#| "again or contact us."
+msgid ""
+"Our attempt to execute your payment via PayPal has failed. Please try again "
+"or contact us."
+msgstr ""
+"Upaya kami untuk mengeksekusi Pembayaran kamu melalui PayPal telah gagal. "
+"Silakan coba lagi atau hubungi kami."
+
+#: pretix/plugins/paypal2/views.py:222
 msgid ""
 "An error occurred returning from PayPal: request parameters missing. Please "
 "try again."
@@ -28114,7 +28153,7 @@ msgstr ""
 "Terjadi kesalahan saat kembali dari PayPal: parameter permintaan hilang. "
 "Silakan coba lagi."
 
-#: pretix/plugins/paypal2/views.py:257
+#: pretix/plugins/paypal2/views.py:258
 msgid ""
 "An error occurred returning from PayPal: result parameters missing. Please "
 "try again."
@@ -28122,7 +28161,7 @@ msgstr ""
 "Terjadi kesalahan saat kembali dari PayPal: parameter hasil hilang. Silakan "
 "coba lagi."
 
-#: pretix/plugins/paypal2/views.py:262
+#: pretix/plugins/paypal2/views.py:263
 msgid ""
 "An error occurred returning from PayPal: session parameter not matching. "
 "Please try again."
@@ -28130,7 +28169,7 @@ msgstr ""
 "Terjadi kesalahan saat kembali dari PayPal: parameter sesi tidak cocok. "
 "Silakan coba lagi."
 
-#: pretix/plugins/paypal2/views.py:267
+#: pretix/plugins/paypal2/views.py:268
 msgid ""
 "The e-mail address on your PayPal account has not yet been confirmed. You "
 "will need to do this before you can start accepting payments."
@@ -28138,7 +28177,7 @@ msgstr ""
 "Alamat email di akun PayPal kamu belum dikonfirmasi. Kamu harus melakukan "
 "ini sebelum dapat mulai menerima pembayaran."
 
-#: pretix/plugins/paypal2/views.py:273
+#: pretix/plugins/paypal2/views.py:274
 msgid ""
 "Your PayPal account is now connected to pretix. You can change the settings "
 "in detail below."
@@ -28978,7 +29017,7 @@ msgstr ""
 "di sini, segera setelah pesanan pertama dikirimkan!"
 
 #: pretix/plugins/stripe/apps.py:31 pretix/plugins/stripe/apps.py:34
-#: pretix/plugins/stripe/payment.py:154
+#: pretix/plugins/stripe/payment.py:160
 msgid "Stripe"
 msgstr "Garis"
 
@@ -29013,7 +29052,7 @@ msgstr "Stripe Connect: Biaya aplikasi (maks)"
 msgid "Stripe Connect: App fee (min)"
 msgstr "Stripe Connect: Biaya aplikasi (min)"
 
-#: pretix/plugins/stripe/payment.py:183
+#: pretix/plugins/stripe/payment.py:189
 msgid ""
 "To accept payments via Stripe, you will need an account at Stripe. By "
 "clicking on the following button, you can either create a new Stripe account "
@@ -29023,15 +29062,15 @@ msgstr ""
 "Dengan mengklik tombol berikut, kamu dapat membuat akun Stripe baru yang "
 "menghubungkan pretix ke akun yang sudah ada."
 
-#: pretix/plugins/stripe/payment.py:187
+#: pretix/plugins/stripe/payment.py:193
 msgid "Connect with Stripe"
 msgstr "Terhubung dengan Stripe"
 
-#: pretix/plugins/stripe/payment.py:197
+#: pretix/plugins/stripe/payment.py:203
 msgid "Disconnect from Stripe"
 msgstr "Putuskan sambungan dari Stripe"
 
-#: pretix/plugins/stripe/payment.py:201
+#: pretix/plugins/stripe/payment.py:207
 msgid ""
 "Please configure a <a href=\"https://dashboard.stripe.com/account/"
 "webhooks\">Stripe Webhook</a> to the following endpoint in order to "
@@ -29043,22 +29082,22 @@ msgstr ""
 "pesanan secara otomatis ketika biaya dikembalikan secara eksternal dan untuk "
 "memproses metode pembayaran asinkron seperti SOFORT."
 
-#: pretix/plugins/stripe/payment.py:213
+#: pretix/plugins/stripe/payment.py:219
 msgid "Enable MOTO payments for resellers"
 msgstr "Aktifkan pembayaran MOTO untuk pengecer"
 
-#: pretix/plugins/stripe/payment.py:215
+#: pretix/plugins/stripe/payment.py:221
 msgid ""
 "Gated feature (needs to be enabled for your account by Stripe support first)"
 msgstr ""
 "Fitur terjaga keamanannya (perlu diaktifkan untuk akun kamu melalui dukungan "
 "Stripe terlebih dahulu)"
 
-#: pretix/plugins/stripe/payment.py:223
+#: pretix/plugins/stripe/payment.py:229
 msgid "Stripe Integration security guide"
 msgstr "Panduan keamanan Integrasi Stripe"
 
-#: pretix/plugins/stripe/payment.py:217
+#: pretix/plugins/stripe/payment.py:223
 #, python-format
 msgid ""
 "We can flag the credit card transaction you make through the reseller "
@@ -29075,21 +29114,21 @@ msgstr ""
 "penilaian mandiri PCI-DSS tahunan seperti SAQ D setebal 40 halaman. Silakan "
 "lihat %s untuk informasi lebih lanjut mengenai subjek ini."
 
-#: pretix/plugins/stripe/payment.py:239 pretix/plugins/stripe/payment.py:244
+#: pretix/plugins/stripe/payment.py:245 pretix/plugins/stripe/payment.py:250
 msgid "Stripe account"
 msgstr "akun garis"
 
-#: pretix/plugins/stripe/payment.py:252
+#: pretix/plugins/stripe/payment.py:258
 msgctxt "stripe"
 msgid "Live"
 msgstr "Hidup"
 
-#: pretix/plugins/stripe/payment.py:253
+#: pretix/plugins/stripe/payment.py:259
 msgctxt "stripe"
 msgid "Testing"
 msgstr "Pengujian"
 
-#: pretix/plugins/stripe/payment.py:255
+#: pretix/plugins/stripe/payment.py:261
 msgid ""
 "If your event is in test mode, we will always use Stripe's test API, "
 "regardless of this setting."
@@ -29097,15 +29136,15 @@ msgstr ""
 "Jika acara kamu berada dalam mode pengujian, kami akan selalu menggunakan "
 "API pengujian Stripe, apa pun pengaturannya."
 
-#: pretix/plugins/stripe/payment.py:268
+#: pretix/plugins/stripe/payment.py:274
 msgid "Publishable key"
 msgstr "Kunci yang dapat diterbitkan"
 
-#: pretix/plugins/stripe/payment.py:279
+#: pretix/plugins/stripe/payment.py:285
 msgid "Secret key"
 msgstr "Kunci rahasia"
 
-#: pretix/plugins/stripe/payment.py:288
+#: pretix/plugins/stripe/payment.py:294
 msgid ""
 "The country in which your Stripe-account is registered in. Usually, this is "
 "your country of residence."
@@ -29113,11 +29152,11 @@ msgstr ""
 "Negara tempat akun Stripe kamu terdaftar. Biasanya, ini adalah negara tempat "
 "tinggal Anda."
 
-#: pretix/plugins/stripe/payment.py:297
+#: pretix/plugins/stripe/payment.py:303
 msgid "Check for Apple Pay/Google Pay"
 msgstr "Periksa Apple Pay/Google Pay"
 
-#: pretix/plugins/stripe/payment.py:301
+#: pretix/plugins/stripe/payment.py:307
 msgid ""
 "pretix will attempt to check if the customer's web browser supports wallet-"
 "based payment methods like Apple Pay or Google Pay and display them "
@@ -29131,11 +29170,11 @@ msgstr ""
 "ini tidak mempertimbangkan apakah Google Pay/Apple Pay telah dinonaktifkan "
 "di Dasbor Stripe."
 
-#: pretix/plugins/stripe/payment.py:310
+#: pretix/plugins/stripe/payment.py:316
 msgid "Statement descriptor postfix"
 msgstr "Postfix deskriptor pernyataan"
 
-#: pretix/plugins/stripe/payment.py:311
+#: pretix/plugins/stripe/payment.py:317
 #, python-brace-format
 msgid ""
 "Any value entered here will be shown on the customer's credit card bill or "
@@ -29150,41 +29189,47 @@ msgstr ""
 "metode pembayaran, hanya sejumlah karakter yang diperbolehkan. Kami tidak "
 "menyarankan memasukkan lebih dari {cnt} karakter ke dalam kolom ini."
 
-#: pretix/plugins/stripe/payment.py:325
+#: pretix/plugins/stripe/payment.py:331
 msgid "Credit card payments"
 msgstr "Pembayaran kartu kredit"
 
-#: pretix/plugins/stripe/payment.py:330 pretix/plugins/stripe/payment.py:1351
+#: pretix/plugins/stripe/payment.py:336 pretix/plugins/stripe/payment.py:1471
 msgid "giropay"
 msgstr "giropay"
 
-#: pretix/plugins/stripe/payment.py:332 pretix/plugins/stripe/payment.py:340
-#: pretix/plugins/stripe/payment.py:348 pretix/plugins/stripe/payment.py:356
-#: pretix/plugins/stripe/payment.py:365 pretix/plugins/stripe/payment.py:406
-#: pretix/plugins/stripe/payment.py:414 pretix/plugins/stripe/payment.py:422
-#: pretix/plugins/stripe/payment.py:430
+#: pretix/plugins/stripe/payment.py:338 pretix/plugins/stripe/payment.py:346
+#: pretix/plugins/stripe/payment.py:354 pretix/plugins/stripe/payment.py:362
+#: pretix/plugins/stripe/payment.py:412 pretix/plugins/stripe/payment.py:420
+#: pretix/plugins/stripe/payment.py:428 pretix/plugins/stripe/payment.py:436
+#: pretix/plugins/stripe/payment.py:445 pretix/plugins/stripe/payment.py:458
+msgid ""
+"Some payment methods might need to be enabled in the settings of your Stripe "
+"account before they work properly."
+msgstr ""
+
+#: pretix/plugins/stripe/payment.py:344 pretix/plugins/stripe/payment.py:1543
+msgid "iDEAL"
+msgstr "iDEAL"
+
+#: pretix/plugins/stripe/payment.py:352 pretix/plugins/stripe/payment.py:1595
+msgid "Alipay"
+msgstr "Alipay"
+
+#: pretix/plugins/stripe/payment.py:360 pretix/plugins/stripe/payment.py:1638
+msgid "Bancontact"
+msgstr "Bancontact"
+
+#: pretix/plugins/stripe/payment.py:368
+msgid "SEPA Direct Debit"
+msgstr "Debit Langsung SEPA"
+
+#: pretix/plugins/stripe/payment.py:371
 msgid ""
 "Some payment methods might need to be enabled in the settings of your Stripe "
 "account before work properly."
 msgstr ""
 
-#: pretix/plugins/stripe/payment.py:338 pretix/plugins/stripe/payment.py:1423
-msgid "iDEAL"
-msgstr "iDEAL"
-
-#: pretix/plugins/stripe/payment.py:346 pretix/plugins/stripe/payment.py:1475
-msgid "Alipay"
-msgstr "Alipay"
-
-#: pretix/plugins/stripe/payment.py:354 pretix/plugins/stripe/payment.py:1518
-msgid "Bancontact"
-msgstr "Bancontact"
-
-#: pretix/plugins/stripe/payment.py:362
-msgid "SEPA Direct Debit"
-msgstr "Debit Langsung SEPA"
-
-#: pretix/plugins/stripe/payment.py:368
+#: pretix/plugins/stripe/payment.py:374
 msgid ""
 "SEPA Direct Debit payments via Stripe are <strong>not</strong> processed "
 "instantly but might take up to <strong>14 days</strong> to be confirmed in "
@@ -29197,11 +29242,11 @@ msgstr ""
 "pembayaran ini hanya jika jangka waktu pembayaran Anda memungkinkan adanya "
 "jeda ini."
 
-#: pretix/plugins/stripe/payment.py:376
+#: pretix/plugins/stripe/payment.py:382
 msgid "SEPA Creditor Mandate Name"
 msgstr "Nama Mandat Kreditur SEPA"
 
-#: pretix/plugins/stripe/payment.py:378
+#: pretix/plugins/stripe/payment.py:384
 msgid ""
 "Please provide your SEPA Creditor Mandate Name, that will be displayed to "
 "the user."
@@ -29209,17 +29254,17 @@ msgstr ""
 "Harap berikan Nama Mandat Kreditur SEPA Anda, yang akan ditampilkan kepada "
 "pengguna."
 
-#: pretix/plugins/stripe/payment.py:389
+#: pretix/plugins/stripe/payment.py:395
 msgid "SOFORT"
 msgstr "SOFORT"
 
-#: pretix/plugins/stripe/payment.py:392
+#: pretix/plugins/stripe/payment.py:398
 msgid ""
 "Stripe is in the process of removing this payment method. If you created "
 "your Stripe account after November 2023, you cannot use this payment method."
 msgstr ""
 
-#: pretix/plugins/stripe/payment.py:395
+#: pretix/plugins/stripe/payment.py:401
 msgid ""
 "Despite the name, Sofort payments via Stripe are <strong>not</strong> "
 "processed instantly but might take up to <strong>14 days</strong> to be "
@@ -29232,39 +29277,51 @@ msgstr ""
 "aktifkan metode pembayaran ini hanya jika jangka waktu pembayaran kamu "
 "memungkinkan adanya jeda ini."
 
-#: pretix/plugins/stripe/payment.py:404 pretix/plugins/stripe/payment.py:1667
+#: pretix/plugins/stripe/payment.py:410 pretix/plugins/stripe/payment.py:1787
 msgid "EPS"
 msgstr "EPS"
 
-#: pretix/plugins/stripe/payment.py:412 pretix/plugins/stripe/payment.py:1739
+#: pretix/plugins/stripe/payment.py:418 pretix/plugins/stripe/payment.py:1859
 msgid "Multibanco"
 msgstr "Multibanco"
 
-#: pretix/plugins/stripe/payment.py:420 pretix/plugins/stripe/payment.py:1786
+#: pretix/plugins/stripe/payment.py:426 pretix/plugins/stripe/payment.py:1906
 msgid "Przelewy24"
 msgstr "Przelewy24"
 
-#: pretix/plugins/stripe/payment.py:428 pretix/plugins/stripe/payment.py:1842
+#: pretix/plugins/stripe/payment.py:434 pretix/plugins/stripe/payment.py:1962
 msgid "WeChat Pay"
 msgstr "Pembayaran WeChat"
 
-#: pretix/plugins/stripe/payment.py:436 pretix/plugins/stripe/payment.py:1308
+#: pretix/plugins/stripe/payment.py:442 pretix/plugins/stripe/payment.py:1331
 msgid "Affirm"
 msgstr ""
 
-#: pretix/plugins/stripe/payment.py:439
-msgid "Needs to be enabled in your Stripe account first."
-msgstr "Harus diaktifkan di akun Stripe kamu terlebih dahulu."
-
-#: pretix/plugins/stripe/payment.py:440
+#: pretix/plugins/stripe/payment.py:447
 msgid "Only available for payments between $50 and $30,000."
 msgstr ""
 
-#: pretix/plugins/stripe/payment.py:448
+#: pretix/plugins/stripe/payment.py:453 pretix/plugins/stripe/payment.py:1375
+msgid "Klarna"
+msgstr ""
+
+#: pretix/plugins/stripe/payment.py:460
+msgid ""
+"Klarna and Stripe will decide which of the payment methods offered by Klarna "
+"are available to the user."
+msgstr ""
+
+#: pretix/plugins/stripe/payment.py:462
+msgid ""
+"Klarna's terms of services do not allow it to be used by charities or "
+"political organizations."
+msgstr ""
+
+#: pretix/plugins/stripe/payment.py:471
 msgid "Destination"
 msgstr "Tujuan"
 
-#: pretix/plugins/stripe/payment.py:474
+#: pretix/plugins/stripe/payment.py:497 pretix/plugins/stripe/payment.py:1459
 #, python-brace-format
 msgid ""
 "The Stripe plugin is operating in test mode. You can use one of <a {args}"
@@ -29275,15 +29332,15 @@ msgstr ""
 "dari <a {args}>banyak kartu tes</a> untuk melakukan transaksi. Tidak ada "
 "uang yang benar-benar akan ditransfer."
 
-#: pretix/plugins/stripe/payment.py:614 pretix/plugins/stripe/payment.py:977
-#: pretix/plugins/stripe/payment.py:1077
+#: pretix/plugins/stripe/payment.py:637 pretix/plugins/stripe/payment.py:1000
+#: pretix/plugins/stripe/payment.py:1100
 #, python-format
 msgid "Stripe reported an error with your card: %s"
 msgstr "Stripe melaporkan kesalahan pada kartu Anda: %s"
 
-#: pretix/plugins/stripe/payment.py:639 pretix/plugins/stripe/payment.py:803
-#: pretix/plugins/stripe/payment.py:995 pretix/plugins/stripe/payment.py:1089
-#: pretix/plugins/stripe/payment.py:1904
+#: pretix/plugins/stripe/payment.py:662 pretix/plugins/stripe/payment.py:826
+#: pretix/plugins/stripe/payment.py:1018 pretix/plugins/stripe/payment.py:1112
+#: pretix/plugins/stripe/payment.py:2024
 msgid ""
 "We had trouble communicating with Stripe. Please try again and get in touch "
 "with us if this problem persists."
@@ -29291,7 +29348,7 @@ msgstr ""
 "Kami mengalami kesulitan berkomunikasi dengan Stripe. Silakan coba lagi dan "
 "hubungi kami jika masalah ini terus berlanjut."
 
-#: pretix/plugins/stripe/payment.py:657 pretix/plugins/stripe/payment.py:1029
+#: pretix/plugins/stripe/payment.py:680 pretix/plugins/stripe/payment.py:1052
 msgid ""
 "Your payment is pending completion. We will inform you as soon as the "
 "payment completed."
@@ -29299,16 +29356,16 @@ msgstr ""
 "Pembayaran kamu menunggu penyelesaian. Kami akan memberi tahu kamu segera "
 "setelah pembayaran selesai."
 
-#: pretix/plugins/stripe/payment.py:666 pretix/plugins/stripe/payment.py:1043
+#: pretix/plugins/stripe/payment.py:689 pretix/plugins/stripe/payment.py:1066
 #, python-format
 msgid "Stripe reported an error: %s"
 msgstr "Stripe melaporkan kesalahan: %s"
 
-#: pretix/plugins/stripe/payment.py:733
+#: pretix/plugins/stripe/payment.py:756
 msgid "No payment information found."
 msgstr "Tidak ada informasi pembayaran yang ditemukan."
 
-#: pretix/plugins/stripe/payment.py:768
+#: pretix/plugins/stripe/payment.py:791
 msgid ""
 "We had trouble communicating with Stripe. Please try again and contact "
 "support if the problem persists."
@@ -29316,138 +29373,144 @@ msgstr ""
 "Kami mengalami kesulitan berkomunikasi dengan Stripe. Silakan coba lagi dan "
 "hubungi dukungan jika masalah terus berlanjut."
 
-#: pretix/plugins/stripe/payment.py:772
+#: pretix/plugins/stripe/payment.py:795
 msgid "Stripe returned an error"
 msgstr "Stripe mengembalikan kesalahan"
 
-#: pretix/plugins/stripe/payment.py:889
+#: pretix/plugins/stripe/payment.py:912
 msgid "You may need to enable JavaScript for Stripe payments."
 msgstr "Anda mungkin perlu mengaktifkan JavaScript untuk pembayaran Stripe."
 
-#: pretix/plugins/stripe/payment.py:1037
+#: pretix/plugins/stripe/payment.py:1060
 msgid "Your payment failed. Please try again."
 msgstr "Pembayaran kamu gagal. Silakan coba lagi."
 
-#: pretix/plugins/stripe/payment.py:1095
+#: pretix/plugins/stripe/payment.py:1118
 msgid "Credit card via Stripe"
 msgstr "Kartu kredit melalui Stripe"
 
-#: pretix/plugins/stripe/payment.py:1096
+#: pretix/plugins/stripe/payment.py:1119
 msgid "Credit card"
 msgstr "Kartu kredit"
 
-#: pretix/plugins/stripe/payment.py:1182
+#: pretix/plugins/stripe/payment.py:1205
 msgid "SEPA Debit via Stripe"
 msgstr "Debit SEPA melalui Stripe"
 
-#: pretix/plugins/stripe/payment.py:1183
+#: pretix/plugins/stripe/payment.py:1206
 msgid "SEPA Debit"
 msgstr "Debit SEPA"
 
-#: pretix/plugins/stripe/payment.py:1222
+#: pretix/plugins/stripe/payment.py:1245
 msgid "Account Holder Name"
 msgstr "nama pemilik akun"
 
-#: pretix/plugins/stripe/payment.py:1227
+#: pretix/plugins/stripe/payment.py:1250
 msgid "Account Holder Street"
 msgstr "Jalan Pemegang Rekening"
 
-#: pretix/plugins/stripe/payment.py:1239
+#: pretix/plugins/stripe/payment.py:1262
 msgid "Account Holder Postal Code"
 msgstr "Kode Pos Pemegang Rekening"
 
-#: pretix/plugins/stripe/payment.py:1251
+#: pretix/plugins/stripe/payment.py:1274
 msgid "Account Holder City"
 msgstr "Kota Pemegang Rekening"
 
-#: pretix/plugins/stripe/payment.py:1263
+#: pretix/plugins/stripe/payment.py:1286
 msgid "Account Holder Country"
 msgstr "Negara Pemegang Rekening"
 
-#: pretix/plugins/stripe/payment.py:1307
+#: pretix/plugins/stripe/payment.py:1330
 #, fuzzy
 #| msgid "Alipay via Stripe"
 msgid "Affirm via Stripe"
 msgstr "Alipay melalui Stripe"
 
-#: pretix/plugins/stripe/payment.py:1350
+#: pretix/plugins/stripe/payment.py:1374
+#, fuzzy
+#| msgid "Alipay via Stripe"
+msgid "Klarna via Stripe"
+msgstr "Alipay melalui Stripe"
+
+#: pretix/plugins/stripe/payment.py:1470
 msgid "giropay via Stripe"
 msgstr "giropay melalui Stripe"
 
-#: pretix/plugins/stripe/payment.py:1382 pretix/plugins/stripe/payment.py:1549
-#: pretix/plugins/stripe/payment.py:1698
+#: pretix/plugins/stripe/payment.py:1502 pretix/plugins/stripe/payment.py:1669
+#: pretix/plugins/stripe/payment.py:1818
 msgid "unknown name"
 msgstr "nama yang tidak diketahui"
 
-#: pretix/plugins/stripe/payment.py:1414 pretix/plugins/stripe/payment.py:1466
-#: pretix/plugins/stripe/payment.py:1581 pretix/plugins/stripe/payment.py:1730
-#: pretix/plugins/stripe/payment.py:1833
+#: pretix/plugins/stripe/payment.py:1534 pretix/plugins/stripe/payment.py:1586
+#: pretix/plugins/stripe/payment.py:1701 pretix/plugins/stripe/payment.py:1850
+#: pretix/plugins/stripe/payment.py:1953
 #, python-brace-format
 msgid "Bank account at {bank}"
 msgstr "Rekening bank di {bank}"
 
-#: pretix/plugins/stripe/payment.py:1422
+#: pretix/plugins/stripe/payment.py:1542
 msgid "iDEAL via Stripe"
 msgstr "iDEAL melalui Stripe"
 
-#: pretix/plugins/stripe/payment.py:1474
+#: pretix/plugins/stripe/payment.py:1594
 msgid "Alipay via Stripe"
 msgstr "Alipay melalui Stripe"
 
-#: pretix/plugins/stripe/payment.py:1517
+#: pretix/plugins/stripe/payment.py:1637
 msgid "Bancontact via Stripe"
 msgstr "Bankontak melalui Stripe"
 
-#: pretix/plugins/stripe/payment.py:1589
+#: pretix/plugins/stripe/payment.py:1709
 msgid "SOFORT via Stripe"
 msgstr "SOFORT melalui Stripe"
 
-#: pretix/plugins/stripe/payment.py:1590
+#: pretix/plugins/stripe/payment.py:1710
 msgid "SOFORT (instant bank transfer)"
 msgstr "SOFORT (transfer bank instan)"
 
-#: pretix/plugins/stripe/payment.py:1606
+#: pretix/plugins/stripe/payment.py:1726
 msgid "Country of your bank"
 msgstr "Negara bank Anda"
 
-#: pretix/plugins/stripe/payment.py:1607
+#: pretix/plugins/stripe/payment.py:1727
 msgid "Germany"
 msgstr "Jerman"
 
-#: pretix/plugins/stripe/payment.py:1608
+#: pretix/plugins/stripe/payment.py:1728
 msgid "Austria"
 msgstr "Austria"
 
-#: pretix/plugins/stripe/payment.py:1609
+#: pretix/plugins/stripe/payment.py:1729
 msgid "Belgium"
 msgstr "Belgia"
 
-#: pretix/plugins/stripe/payment.py:1610
+#: pretix/plugins/stripe/payment.py:1730
 msgid "Netherlands"
 msgstr "Belanda"
 
-#: pretix/plugins/stripe/payment.py:1611
+#: pretix/plugins/stripe/payment.py:1731
 msgid "Spain"
 msgstr "Spanyol"
 
-#: pretix/plugins/stripe/payment.py:1655
+#: pretix/plugins/stripe/payment.py:1775
 #, python-brace-format
 msgid "Bank account {iban} at {bank}"
 msgstr "Rekening bank {iban} di {bank}"
 
-#: pretix/plugins/stripe/payment.py:1666
+#: pretix/plugins/stripe/payment.py:1786
 msgid "EPS via Stripe"
 msgstr "EPS melalui Stripe"
 
-#: pretix/plugins/stripe/payment.py:1738
+#: pretix/plugins/stripe/payment.py:1858
 msgid "Multibanco via Stripe"
 msgstr "Multibanco melalui Stripe"
 
-#: pretix/plugins/stripe/payment.py:1785
+#: pretix/plugins/stripe/payment.py:1905
 msgid "Przelewy24 via Stripe"
 msgstr "Przelewy24 melalui Stripe"
 
-#: pretix/plugins/stripe/payment.py:1841
+#: pretix/plugins/stripe/payment.py:1961
 msgid "WeChat Pay via Stripe"
 msgstr "WeChat Bayar melalui Stripe"
 
@@ -29553,8 +29616,8 @@ msgid "Account number"
 msgstr "Nomor akun"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:24
-#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_affirm.html:11
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple.html:4
+#: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple_messaging_noform.html:11
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_simple_noform.html:2
 msgid ""
 "After you submitted your order, we will redirect you to the payment service "
@@ -29706,16 +29769,16 @@ msgstr "Konfirmasi pembayaran: %(code)s"
 msgid "Confirming your payment…"
 msgstr "Mengonfirmasi pembayaran Anda…"
 
-#: pretix/plugins/stripe/views.py:104 pretix/plugins/stripe/views.py:110
-#: pretix/plugins/stripe/views.py:137 pretix/plugins/stripe/views.py:149
+#: pretix/plugins/stripe/views.py:105 pretix/plugins/stripe/views.py:111
+#: pretix/plugins/stripe/views.py:138 pretix/plugins/stripe/views.py:150
 msgid "An error occurred during connecting with Stripe, please try again."
 msgstr "Terjadi kesalahan saat menghubungkan dengan Stripe, silakan coba lagi."
 
-#: pretix/plugins/stripe/views.py:157 pretix/plugins/stripe/views.py:159
+#: pretix/plugins/stripe/views.py:158 pretix/plugins/stripe/views.py:160
 msgid "Stripe returned an error: {}"
 msgstr "Stripe mengembalikan kesalahan: {}"
 
-#: pretix/plugins/stripe/views.py:162
+#: pretix/plugins/stripe/views.py:163
 msgid ""
 "Your Stripe account is now connected to pretix. You can change the settings "
 "in detail below."
@@ -29723,12 +29786,12 @@ msgstr ""
 "Akun Stripe kamu sekarang terhubung ke pretix. Kamu dapat mengubah "
 "pengaturan secara detail di bawah."
 
-#: pretix/plugins/stripe/views.py:470
+#: pretix/plugins/stripe/views.py:471
 msgid "Your Stripe account has been disconnected."
 msgstr "Akun Stripe kamu telah terputus."
 
-#: pretix/plugins/stripe/views.py:504 pretix/plugins/stripe/views.py:523
-#: pretix/plugins/stripe/views.py:528
+#: pretix/plugins/stripe/views.py:505 pretix/plugins/stripe/views.py:524
+#: pretix/plugins/stripe/views.py:529
 msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
@@ -29736,7 +29799,7 @@ msgstr ""
 "Maaf, terjadi kesalahan dalam proses pembayaran. Silakan periksa tautan di "
 "email kamu untuk melanjutkan."
 
-#: pretix/plugins/stripe/views.py:560
+#: pretix/plugins/stripe/views.py:561
 msgid ""
 "We had trouble authorizing your card payment. Please try again and get in "
 "touch with us if this problem persists."
@@ -29744,7 +29807,7 @@ msgstr ""
 "Kami mengalami masalah dalam mengotorisasi pembayaran kartu Anda. Silakan "
 "coba lagi dan hubungi kami jika masalah ini terus berlanjut."
 
-#: pretix/plugins/stripe/views.py:587 pretix/plugins/stripe/views.py:590
+#: pretix/plugins/stripe/views.py:588 pretix/plugins/stripe/views.py:591
 msgid "Sorry, there was an error in the payment process."
 msgstr "Maaf, terjadi kesalahan dalam proses pembayaran."
 
@@ -29959,7 +30022,7 @@ msgstr "Produk tambahan"
 #: pretix/presale/checkoutflow.py:632 pretix/presale/checkoutflow.py:640
 #: pretix/presale/views/cart.py:176 pretix/presale/views/cart.py:181
 #: pretix/presale/views/cart.py:199 pretix/presale/views/cart.py:212
-#: pretix/presale/views/order.py:1456 pretix/presale/views/order.py:1464
+#: pretix/presale/views/order.py:1457 pretix/presale/views/order.py:1465
 msgid "Please enter numbers only."
 msgstr "Silakan masukkan angka saja."
 
@@ -30013,7 +30076,7 @@ msgstr ""
 "Metode pembayaran kamu telah diterapkan, namun {} masih perlu dibayar. "
 "Silakan pilih metode pembayaran untuk sisanya."
 
-#: pretix/presale/checkoutflow.py:1310 pretix/presale/views/order.py:725
+#: pretix/presale/checkoutflow.py:1310 pretix/presale/views/order.py:726
 msgid "Please select a payment method."
 msgstr "Silakan pilih metode pembayaran."
 
@@ -30022,8 +30085,8 @@ msgstr "Silakan pilih metode pembayaran."
 msgid "Please select a payment method to proceed."
 msgstr "Silakan pilih metode pembayaran untuk melanjutkan."
 
-#: pretix/presale/checkoutflow.py:1367 pretix/presale/views/order.py:478
-#: pretix/presale/views/order.py:557
+#: pretix/presale/checkoutflow.py:1367 pretix/presale/views/order.py:479
+#: pretix/presale/views/order.py:558
 msgid "The payment information you entered was incomplete."
 msgstr "Informasi pembayaran yang kamu masukkan tidak lengkap."
 
@@ -31500,7 +31563,7 @@ msgid "Other dates"
 msgstr "Tanggal lainnya"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:142
-#: pretix/presale/views/waiting.py:100 pretix/presale/views/widget.py:723
+#: pretix/presale/views/waiting.py:101 pretix/presale/views/widget.py:723
 msgid "The booking period for this event is over."
 msgstr "Periode pemesanan untuk acara ini telah berakhir."
 
@@ -32581,7 +32644,7 @@ msgstr "Keranjang Anda sekarang kosong."
 msgid "The products have been successfully added to your cart."
 msgstr "Produk telah berhasil ditambahkan ke keranjang Anda."
 
-#: pretix/presale/views/cart.py:510 pretix/presale/views/event.py:501
+#: pretix/presale/views/cart.py:510 pretix/presale/views/event.py:502
 #: pretix/presale/views/widget.py:348
 msgid "Tickets for this event cannot be purchased on this sales channel."
 msgstr "Tiket untuk acara ini tidak dapat dibeli di saluran penjualan ini."
@@ -32654,76 +32717,76 @@ msgstr ""
 "Kami tidak dapat menggunakan login Anda karena alamat email {email} sudah "
 "digunakan untuk akun lain di sistem ini."
 
-#: pretix/presale/views/event.py:844
+#: pretix/presale/views/event.py:845
 msgid "Unknown event code or not authorized to access this event."
 msgstr ""
 "Kode acara tidak diketahui atau tidak diizinkan untuk mengakses acara ini."
 
-#: pretix/presale/views/event.py:851
+#: pretix/presale/views/event.py:852
 msgctxt "subevent"
 msgid "No date selected."
 msgstr "Tidak ada tanggal yang dipilih."
 
-#: pretix/presale/views/event.py:854
+#: pretix/presale/views/event.py:855
 msgctxt "subevent"
 msgid "Unknown date selected."
 msgstr "Tanggal tidak diketahui dipilih."
 
-#: pretix/presale/views/event.py:879 pretix/presale/views/event.py:887
-#: pretix/presale/views/event.py:890
+#: pretix/presale/views/event.py:880 pretix/presale/views/event.py:888
+#: pretix/presale/views/event.py:891
 msgid "Please go back and try again."
 msgstr "Silakan kembali dan coba lagi."
 
-#: pretix/presale/views/order.py:409 pretix/presale/views/order.py:474
-#: pretix/presale/views/order.py:553
+#: pretix/presale/views/order.py:410 pretix/presale/views/order.py:475
+#: pretix/presale/views/order.py:554
 msgid "The payment for this order cannot be continued."
 msgstr "Pembayaran pesanan ini tidak dapat dilanjutkan."
 
-#: pretix/presale/views/order.py:414 pretix/presale/views/order.py:483
-#: pretix/presale/views/order.py:562 pretix/presale/views/order.py:603
+#: pretix/presale/views/order.py:415 pretix/presale/views/order.py:484
+#: pretix/presale/views/order.py:563 pretix/presale/views/order.py:604
 msgid "The payment is too late to be accepted."
 msgstr "Pembayaran sudah terlambat untuk diterima."
 
-#: pretix/presale/views/order.py:501
+#: pretix/presale/views/order.py:502
 msgid "An invoice has been generated."
 msgstr "Faktur telah dibuat."
 
-#: pretix/presale/views/order.py:598
+#: pretix/presale/views/order.py:599
 msgid "The payment method for this order cannot be changed."
 msgstr "Metode pembayaran pesanan ini tidak dapat diubah."
 
-#: pretix/presale/views/order.py:609
+#: pretix/presale/views/order.py:610
 msgid "A payment is currently pending for this order."
 msgstr "Pembayaran sedang menunggu pesanan ini."
 
-#: pretix/presale/views/order.py:890
+#: pretix/presale/views/order.py:891
 msgid "You cannot modify this order"
 msgstr "Anda tidak dapat mengubah pesanan ini"
 
-#: pretix/presale/views/order.py:980 pretix/presale/views/order.py:985
-#: pretix/presale/views/order.py:990
+#: pretix/presale/views/order.py:981 pretix/presale/views/order.py:986
+#: pretix/presale/views/order.py:991
 msgid "You chose an invalid cancellation fee."
 msgstr "Anda memilih biaya pembatalan yang tidak valid."
 
-#: pretix/presale/views/order.py:1006
+#: pretix/presale/views/order.py:1007
 msgid "Canceled by customer"
 msgstr "Dibatalkan oleh pelanggan"
 
-#: pretix/presale/views/order.py:1017
+#: pretix/presale/views/order.py:1018
 msgid "The cancellation has been requested."
 msgstr "Pembatalan telah diminta."
 
-#: pretix/presale/views/order.py:1071
+#: pretix/presale/views/order.py:1072
 msgid "Ticket download is not (yet) enabled for this order."
 msgstr "Pengunduhan tiket belum (belum) diaktifkan untuk pesanan ini."
 
-#: pretix/presale/views/order.py:1080
+#: pretix/presale/views/order.py:1081
 msgid "Please click the link we sent you via email to download your tickets."
 msgstr ""
 "Silakan klik tautan yang kami kirimkan melalui email untuk mengunduh tiket "
 "Anda."
 
-#: pretix/presale/views/order.py:1561
+#: pretix/presale/views/order.py:1562
 #, python-brace-format
 msgid ""
 "The order has been changed. You can now proceed by paying the open amount of "
@@ -32732,29 +32795,29 @@ msgstr ""
 "Urutannya telah diubah. Kamu sekarang dapat melanjutkan dengan membayar "
 "jumlah terbuka sebesar {amount}."
 
-#: pretix/presale/views/order.py:1573
+#: pretix/presale/views/order.py:1574
 msgid "You did not make any changes."
 msgstr "Anda tidak melakukan perubahan apa pun."
 
-#: pretix/presale/views/order.py:1597
+#: pretix/presale/views/order.py:1598
 msgid "You may not change your order in a way that reduces the total price."
 msgstr ""
 "Anda tidak boleh mengubah pesanan Anda sedemikian rupa sehingga mengurangi "
 "harga total."
 
-#: pretix/presale/views/order.py:1599
+#: pretix/presale/views/order.py:1600
 msgid "You may only change your order in a way that increases the total price."
 msgstr ""
 "Anda hanya dapat mengubah pesanan Anda sedemikian rupa sehingga meningkatkan "
 "harga total."
 
-#: pretix/presale/views/order.py:1601
+#: pretix/presale/views/order.py:1602
 msgid "You may not change your order in a way that changes the total price."
 msgstr ""
 "Anda tidak boleh mengubah pesanan Anda sedemikian rupa sehingga mengubah "
 "harga total."
 
-#: pretix/presale/views/order.py:1603
+#: pretix/presale/views/order.py:1604
 #, fuzzy
 #| msgid "You may not change your order in a way that reduces the total price."
 msgid "You may not change your order in a way that would require a refund."
@@ -32762,7 +32825,7 @@ msgstr ""
 "Anda tidak boleh mengubah pesanan Anda sedemikian rupa sehingga mengurangi "
 "harga total."
 
-#: pretix/presale/views/order.py:1611
+#: pretix/presale/views/order.py:1612
 msgid ""
 "You may not change your order in a way that increases the total price since "
 "payments are no longer being accepted for this event."
@@ -32770,7 +32833,7 @@ msgstr ""
 "Anda tidak boleh mengubah pesanan dengan cara yang meningkatkan harga total "
 "karena pembayaran tidak lagi diterima untuk acara ini."
 
-#: pretix/presale/views/order.py:1626 pretix/presale/views/order.py:1657
+#: pretix/presale/views/order.py:1627 pretix/presale/views/order.py:1658
 msgid "You cannot change this order."
 msgstr "Anda tidak dapat mengubah urutan ini."
 
@@ -32805,11 +32868,11 @@ msgstr ""
 "Jika ada pesanan dari pengguna ini, mereka akan menerima email berisi kode "
 "pesanan mereka."
 
-#: pretix/presale/views/waiting.py:96
+#: pretix/presale/views/waiting.py:97
 msgid "Waiting lists are disabled for this event."
 msgstr "Daftar tunggu dinonaktifkan untuk acara ini."
 
-#: pretix/presale/views/waiting.py:125
+#: pretix/presale/views/waiting.py:129
 msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
@@ -32817,7 +32880,7 @@ msgstr ""
 "Anda tidak dapat menambahkan diri Anda ke daftar tunggu karena produk ini "
 "sedang tersedia."
 
-#: pretix/presale/views/waiting.py:132
+#: pretix/presale/views/waiting.py:136
 #, fuzzy, python-brace-format
 #| msgid ""
 #| "We've added you to the waiting list. You will receive an email as soon as "
@@ -32829,11 +32892,11 @@ msgstr ""
 "Kami telah menambahkan Anda ke daftar tunggu. Kamu akan menerima email "
 "segera setelah produk ini tersedia kembali."
 
-#: pretix/presale/views/waiting.py:160
+#: pretix/presale/views/waiting.py:164
 msgid "We could not find you on our waiting list."
 msgstr "Kami tidak dapat menemukan Anda di daftar tunggu kami."
 
-#: pretix/presale/views/waiting.py:164
+#: pretix/presale/views/waiting.py:168
 msgid ""
 "Your waiting list spot is no longer valid or already used. There's nothing "
 "more to do here."
@@ -32841,7 +32904,7 @@ msgstr ""
 "Tempat daftar tunggu Anda sudah tidak valid atau sudah digunakan. Tidak ada "
 "lagi yang bisa dilakukan di sini."
 
-#: pretix/presale/views/waiting.py:174
+#: pretix/presale/views/waiting.py:178
 msgid ""
 "Thank you very much! We will assign your spot on the waiting list to someone "
 "else."
@@ -32877,6 +32940,9 @@ msgstr "Akses tulis"
 #: pretix/settings.py:725
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#~ msgid "Needs to be enabled in your Stripe account first."
+#~ msgstr "Harus diaktifkan di akun Stripe kamu terlebih dahulu."
 
 #~ msgid "minutes before"
 #~ msgstr "menit sebelumnya"

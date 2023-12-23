@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-28 14:51+0000\n"
+"POT-Creation-Date: 2023-12-23 10:30+0000\n"
 "PO-Revision-Date: 2022-02-22 22:00+0000\n"
 "Last-Translator: Ismael Menéndez Fernández <ismael.menendez@balidea.com>\n"
 "Language-Team: Galician <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -138,9 +138,9 @@ msgid "Continue"
 msgstr "Continuar"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:213
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:246
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:264
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:229
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:262
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:280
 msgid "Confirming your payment …"
 msgstr "Confirmando o pagamento…"
 
@@ -162,15 +162,15 @@ msgstr "Pedidos pagados"
 msgid "Total revenue"
 msgstr "Ingresos totais"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:14
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:15
 msgid "Contacting Stripe …"
 msgstr "Contactando con Stripe…"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:71
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:72
 msgid "Total"
 msgstr "Total"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:220
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:236
 msgid "Contacting your bank …"
 msgstr "Contactando co banco…"
 
@@ -538,45 +538,45 @@ msgstr "QR de validación"
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "O arquivo PDF de fondo non se puido cargar polo motivo seguinte:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:648
+#: pretix/static/pretixcontrol/js/ui/editor.js:656
 msgid "Group of objects"
 msgstr "Grupo de obxectos"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:653
+#: pretix/static/pretixcontrol/js/ui/editor.js:661
 msgid "Text object"
 msgstr "Obxecto de texto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:655
+#: pretix/static/pretixcontrol/js/ui/editor.js:663
 msgid "Barcode area"
 msgstr "Área para código de barras"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:657
+#: pretix/static/pretixcontrol/js/ui/editor.js:665
 msgid "Image area"
 msgstr "Área de imaxe"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:659
+#: pretix/static/pretixcontrol/js/ui/editor.js:667
 msgid "Powered by pretix"
 msgstr "Desenvolto por Pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:661
+#: pretix/static/pretixcontrol/js/ui/editor.js:669
 msgid "Object"
 msgstr "Obxecto"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:665
+#: pretix/static/pretixcontrol/js/ui/editor.js:673
 msgid "Ticket design"
 msgstr "Deseño do tícket"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:964
+#: pretix/static/pretixcontrol/js/ui/editor.js:972
 msgid "Saving failed."
 msgstr "O gardado fallou."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1033
-#: pretix/static/pretixcontrol/js/ui/editor.js:1083
+#: pretix/static/pretixcontrol/js/ui/editor.js:1041
+#: pretix/static/pretixcontrol/js/ui/editor.js:1091
 msgid "Error while uploading your PDF file, please try again."
 msgstr ""
 "Houbo un erro mentres se cargaba o arquivo PDF. Por favor, inténteo de novo."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1066
+#: pretix/static/pretixcontrol/js/ui/editor.js:1074
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Realmente desexa saír do editor sen gardar os cambios?"
 

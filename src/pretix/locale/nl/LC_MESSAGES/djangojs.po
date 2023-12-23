@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-11-28 14:51+0000\n"
+"POT-Creation-Date: 2023-12-23 10:30+0000\n"
 "PO-Revision-Date: 2023-11-14 23:00+0000\n"
 "Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -137,9 +137,9 @@ msgid "Continue"
 msgstr "Doorgaan"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:213
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:246
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:264
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:229
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:262
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:280
 msgid "Confirming your payment …"
 msgstr "Betaling bevestigen …"
 
@@ -161,15 +161,15 @@ msgstr "Betaalde bestellingen"
 msgid "Total revenue"
 msgstr "Totaalomzet"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:14
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:15
 msgid "Contacting Stripe …"
 msgstr "Verbinding maken met Stripe …"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:71
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:72
 msgid "Total"
 msgstr "Totaal"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:220
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:236
 msgid "Contacting your bank …"
 msgstr "Verbinding maken met uw bank …"
 
@@ -536,44 +536,44 @@ msgstr "QR-code voor check-in"
 msgid "The PDF background file could not be loaded for the following reason:"
 msgstr "Het PDF-achtergrondbestand kon niet geladen worden met als reden:"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:648
+#: pretix/static/pretixcontrol/js/ui/editor.js:656
 msgid "Group of objects"
 msgstr "Groep van objecten"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:653
+#: pretix/static/pretixcontrol/js/ui/editor.js:661
 msgid "Text object"
 msgstr "Tekstobject"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:655
+#: pretix/static/pretixcontrol/js/ui/editor.js:663
 msgid "Barcode area"
 msgstr "Barcode gebied"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:657
+#: pretix/static/pretixcontrol/js/ui/editor.js:665
 msgid "Image area"
 msgstr "Afbeeldingsgebied"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:659
+#: pretix/static/pretixcontrol/js/ui/editor.js:667
 msgid "Powered by pretix"
 msgstr "Mogelijk gemaakt door pretix"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:661
+#: pretix/static/pretixcontrol/js/ui/editor.js:669
 msgid "Object"
 msgstr "Object"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:665
+#: pretix/static/pretixcontrol/js/ui/editor.js:673
 msgid "Ticket design"
 msgstr "Ticketontwerp"
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:964
+#: pretix/static/pretixcontrol/js/ui/editor.js:972
 msgid "Saving failed."
 msgstr "Opslaan mislukt."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1033
-#: pretix/static/pretixcontrol/js/ui/editor.js:1083
+#: pretix/static/pretixcontrol/js/ui/editor.js:1041
+#: pretix/static/pretixcontrol/js/ui/editor.js:1091
 msgid "Error while uploading your PDF file, please try again."
 msgstr "Probleem bij het uploaden van het PDF-bestand, probeer het opnieuw."
 
-#: pretix/static/pretixcontrol/js/ui/editor.js:1066
+#: pretix/static/pretixcontrol/js/ui/editor.js:1074
 msgid "Do you really want to leave the editor without saving your changes?"
 msgstr "Wilt u de editor verlaten zonder uw wijzigingen op te slaan?"
 
