@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-23 10:29+0000\n"
-"PO-Revision-Date: 2023-12-20 06:00+0000\n"
-"Last-Translator: Felix Hartnagel <felix@fhcom.de>\n"
+"PO-Revision-Date: 2023-12-23 10:45+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -7949,7 +7949,7 @@ msgstr ""
 #: pretix/base/services/orderimport.py:99
 #, python-brace-format
 msgid "Error decoding special characters in your file: {message}"
-msgstr ""
+msgstr "Fehler beim Dekodieren von Sonderzeichen in deiner Datei: {message}"
 
 #: pretix/base/services/orderimport.py:121
 #, python-brace-format
@@ -28104,6 +28104,11 @@ msgid ""
 "again, there is a high chance of the payment succeeding on a second or third "
 "attempt. You can also try other payment methods, if available."
 msgstr ""
+"Deine Zahlung ist fehlgeschlagen. Es handelt sich hierbei um ein bekanntes "
+"Problem auf Seiten von PayPal. Bitte probiere es erneut, wahrscheinlich "
+"klappt die Zahlung beim zweiten oder dritten Versuch. Du kannst auch eine "
+"andere Zahlungsmethode verwenden, wenn weitere Zahlungsmethoden verfügbar "
+"sind."
 
 #: pretix/plugins/paypal2/payment.py:475 pretix/plugins/paypal2/payment.py:994
 msgid ""
@@ -28238,6 +28243,10 @@ msgid ""
 "fail. If your payment fails, please just try again. You can also try with a "
 "different payment method, if you prefer."
 msgstr ""
+"Es gibt derzeit ein bekanntes Problem mit PayPal, das teilweise zu "
+"fehlschlagenden Zahlungen führt. Wenn deine Zahlung fehlschlägt, probiere es "
+"einfach erneut. Du kannst es auf Wunsch auch mit einer anderen "
+"Zahlungsmethode erneut versuchen."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:16
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:19
@@ -28282,10 +28291,6 @@ msgid "Please select how you want to pay."
 msgstr "Bitte wähle die gewünschte Zahlungsmethode aus."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pending.html:10
-#, fuzzy
-#| msgid ""
-#| "Our attempt to execute your Payment via PayPal has failed. Please try "
-#| "again or contact us."
 msgid ""
 "Our attempt to execute your payment via PayPal has failed. Please try again "
 "or contact us."
@@ -29358,10 +29363,6 @@ msgstr "giropay"
 #: pretix/plugins/stripe/payment.py:412 pretix/plugins/stripe/payment.py:420
 #: pretix/plugins/stripe/payment.py:428 pretix/plugins/stripe/payment.py:436
 #: pretix/plugins/stripe/payment.py:445 pretix/plugins/stripe/payment.py:458
-#, fuzzy
-#| msgid ""
-#| "Some payment methods might need to be enabled in the settings of your "
-#| "Stripe account before work properly."
 msgid ""
 "Some payment methods might need to be enabled in the settings of your Stripe "
 "account before they work properly."
@@ -29469,19 +29470,23 @@ msgstr "Nur verfügbar für Zahlungen zwischen 50 $ und 30.000 $."
 
 #: pretix/plugins/stripe/payment.py:453 pretix/plugins/stripe/payment.py:1375
 msgid "Klarna"
-msgstr ""
+msgstr "Klarna"
 
 #: pretix/plugins/stripe/payment.py:460
 msgid ""
 "Klarna and Stripe will decide which of the payment methods offered by Klarna "
 "are available to the user."
 msgstr ""
+"Klarna und Stripe legen fest, welche der von Klarna angebotenen "
+"Zahlungsmethoden dem Kunden angeboten werden."
 
 #: pretix/plugins/stripe/payment.py:462
 msgid ""
 "Klarna's terms of services do not allow it to be used by charities or "
 "political organizations."
 msgstr ""
+"Die Geschäftsbedingungen von Klarna erlauben keinen Einsatz für wohltätige "
+"oder politische Organisationen."
 
 #: pretix/plugins/stripe/payment.py:471
 msgid "Destination"
@@ -29593,10 +29598,8 @@ msgid "Affirm via Stripe"
 msgstr "Affirm über Stripe"
 
 #: pretix/plugins/stripe/payment.py:1374
-#, fuzzy
-#| msgid "Alipay via Stripe"
 msgid "Klarna via Stripe"
-msgstr "Alipay über Stripe"
+msgstr "Klarna über Stripe"
 
 #: pretix/plugins/stripe/payment.py:1470
 msgid "giropay via Stripe"
