@@ -72,6 +72,8 @@ integrations
 iOS
 ISU
 JSON
+Klarna
+Klarna's
 Kosovo
 Lead
 Leaflet

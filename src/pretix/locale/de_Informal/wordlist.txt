@@ -167,6 +167,7 @@ JavaScript
 JSON
 Kategoriebeschreibung
 Key
+Klarna
 Kombitickets
 Kompatibilitätsmodus
 Konfigurations
