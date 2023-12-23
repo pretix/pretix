@@ -812,7 +812,7 @@ class PaypalMethod(BasePaymentProvider):
             pass
 
         error = payment.info_data.get("error", {})
-        is_known_issue = error.get("name") == "RESOURCE_NOT_FOUND" or "RESOURCE_NOT_FOUND" in error.get("message")
+        is_known_issue = error.get("name") == "RESOURCE_NOT_FOUND" or "RESOURCE_NOT_FOUND" in (error.get("message") or "")
 
         template = get_template('pretixplugins/paypal2/pending.html')
         ctx = {'request': request, 'event': self.event, 'settings': self.settings,
