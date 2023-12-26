@@ -400,7 +400,7 @@ class ProfileView(CustomerRequiredMixin, ListView):
         for o in ctx['orders']:
             if o.pk not in annotated:
                 continue
-            o.count_positions = annotated.get(o.pk)['pcnt']
+            o.pcnt = annotated.get(o.pk)['pcnt']
         return ctx
 
 
