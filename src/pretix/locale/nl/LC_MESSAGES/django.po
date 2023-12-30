@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-23 10:29+0000\n"
-"PO-Revision-Date: 2023-12-20 08:11+0000\n"
-"Last-Translator: RobertSF92 <robert@semperfi-it.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2023-12-30 21:00+0000\n"
+"Last-Translator: Christiaan de Die le Clercq <contact@techwolf12.nl>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: htmlcov/pretix_control_views_dashboards_py.html:963
 #: pretix/control/templates/pretixcontrol/events/index.html:146
@@ -18694,10 +18694,8 @@ msgid "Order approval process"
 msgstr "Goedkeuringsproces voor bestellingen"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:126
-#, fuzzy
-#| msgid "Attachment"
 msgid "Attachments"
-msgstr "Bijlage"
+msgstr "Bijlages"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:5
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:5
@@ -26370,7 +26368,7 @@ msgstr "De nieuwe organisator is aangemaakt."
 
 #: pretix/control/views/organizer.py:549
 msgid "Administrators"
-msgstr "Administrators"
+msgstr "Beheerders"
 
 #: pretix/control/views/organizer.py:611
 msgid "The team has been created. You can now add members to the team."
@@ -28481,10 +28479,8 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/paypal2/payment.py:215
-#, fuzzy
-#| msgid "Customer account"
 msgid "-- Automatic --"
-msgstr "Klantenaccount"
+msgstr "-- Automatisch --"
 
 #: pretix/plugins/paypal2/payment.py:221
 #, fuzzy
