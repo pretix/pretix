@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-23 10:29+0000\n"
-"PO-Revision-Date: 2024-01-01 02:00+0000\n"
+"PO-Revision-Date: 2024-01-02 09:00+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -108,7 +108,7 @@ msgstr "Griego"
 
 #: pretix/_base_settings.py:92
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonesio"
 
 #: pretix/_base_settings.py:93
 msgid "Italian"
@@ -120,7 +120,7 @@ msgstr "Letón"
 
 #: pretix/_base_settings.py:95
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Noruego Bokmål"
 
 #: pretix/_base_settings.py:96
 msgid "Polish"
@@ -2075,9 +2075,8 @@ msgstr "cancelado"
 #: pretix/base/exporters/orderlist.py:541
 #: pretix/base/exporters/orderlist.py:841
 #: pretix/plugins/checkinlists/exporters.py:733
-#, fuzzy
 msgid "Position ID"
-msgstr "Posición"
+msgstr "ID de posición"
 
 #: pretix/base/exporters/orderlist.py:549
 #: pretix/base/exporters/orderlist.py:852
@@ -2501,9 +2500,8 @@ msgid "Payment method"
 msgstr "Método de pago"
 
 #: pretix/base/exporters/orderlist.py:1031
-#, fuzzy
 msgid "Matching ID"
-msgstr "Configuración de pagos"
+msgstr "ID coincidente"
 
 #: pretix/base/exporters/orderlist.py:1031
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:38
@@ -3064,9 +3062,9 @@ msgid "Sample: %s"
 msgstr "Ciudad de ejemplo: %s"
 
 #: pretix/base/forms/widgets.py:70
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr "Marcadores de posición disponibles: {event}, {url}"
+msgstr "Marcadores de posición disponibles: {list}"
 
 #: pretix/base/forms/widgets.py:213 pretix/base/models/items.py:1497
 #: pretix/base/reldate.py:201 pretix/plugins/checkinlists/exporters.py:729
@@ -3281,14 +3279,14 @@ msgid "Included taxes"
 msgstr "Impuestos incluidos"
 
 #: pretix/base/invoice.py:829
-#, python-brace-format
+#, fuzzy, python-brace-format
 msgctxt "invoice"
 msgid ""
 "Using the conversion rate of 1:{rate} as published by the {authority} on "
 "{date}, this corresponds to:"
 msgstr ""
-"Usar el tipo de conversión de 1:{rate} publicado por {authority} el {date}, "
-"esto corresponde a:"
+"Utilizando la tasa de conversión de 1:{rate} publicada por la {authority} el "
+"{date}, esto corresponde a:"
 
 #: pretix/base/invoice.py:844
 #, python-brace-format
@@ -3543,19 +3541,16 @@ msgid "Ticket blocked"
 msgstr "Ticket bloqueado"
 
 #: pretix/base/models/checkin.py:369
-#, fuzzy
-#| msgid "Order approved"
 msgid "Order not approved"
-msgstr "Orden aprobada"
+msgstr "Orden no aprobada"
 
 #: pretix/base/models/checkin.py:370
 msgid "Ticket not valid at this time"
 msgstr "Ticket no válido en este momento"
 
 #: pretix/base/models/customers.py:55
-#, fuzzy
 msgid "Provider name"
-msgstr "Nombre del producto"
+msgstr "Nombre del proveedor"
 
 #: pretix/base/models/customers.py:60
 msgid "Login button label"
@@ -3605,10 +3600,9 @@ msgid "Public"
 msgstr "Perfil público"
 
 #: pretix/base/models/customers.py:377
-#, fuzzy
 msgctxt "openidconnect"
 msgid "Authorization code"
-msgstr "Código de transacción"
+msgstr "Código de Autorización"
 
 #: pretix/base/models/customers.py:378
 msgctxt "openidconnect"
@@ -3617,32 +3611,27 @@ msgstr "Implícito"
 
 #: pretix/base/models/customers.py:382
 msgid "OpenID Connect access (required)"
-msgstr ""
+msgstr "Acceso a OpenID Connect (obligatorio)"
 
 #: pretix/base/models/customers.py:383
-#, fuzzy
 msgid "Profile data (name, addresses)"
-msgstr "Crear una nueva fecha"
+msgstr "Datos del perfil (nombre, direcciones)"
 
 #: pretix/base/models/customers.py:403
-#, fuzzy
 msgid "Client type"
-msgstr "Tipos de eventos"
+msgstr "Tipo de cliente"
 
 #: pretix/base/models/customers.py:406
-#, fuzzy
 msgid "Grant type"
-msgstr "Tipo de tarjeta"
+msgstr "Tipo de subvención"
 
 #: pretix/base/models/customers.py:417
-#, fuzzy
 msgid "Allowed access scopes"
-msgstr "Membresía del equipo"
+msgstr "Ámbitos de acceso permitidos"
 
 #: pretix/base/models/customers.py:418
-#, fuzzy
 msgid "Separate multiple values with spaces"
-msgstr "Crear múltiples vales"
+msgstr "Separe varios valores con espacios"
 
 #: pretix/base/models/devices.py:71 pretix/base/models/items.py:1516
 msgid "Internal identifier"
@@ -3676,10 +3665,9 @@ msgid "Dates can be mixed without limitation"
 msgstr "Las fechas se pueden mezclar sin limitación"
 
 #: pretix/base/models/discount.py:46
-#, fuzzy
 msgctxt "subevent"
 msgid "All matching products must be for the same date"
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "Todos los productos coincidentes deben ser para la misma fecha."
 
 #: pretix/base/models/discount.py:47
 #, fuzzy
@@ -4114,9 +4102,8 @@ msgid "Additional recipients (Cc)"
 msgstr "Parametrizaciones adicionales"
 
 #: pretix/base/models/exports.py:69
-#, fuzzy
 msgid "Additional recipients (Bcc)"
-msgstr "Parametrizaciones adicionales"
+msgstr "Destinatarios adicionales (CCO)"
 
 #: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1074
 #: pretix/control/forms/event.py:1136 pretix/control/forms/event.py:1148
@@ -4153,9 +4140,8 @@ msgstr "Ningún valor debe contener el carácter delimitador."
 
 #: pretix/base/models/giftcards.py:81
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:50
-#, fuzzy
 msgid "Owned by ticket holder"
-msgstr "Descargue sus entradas aquí:"
+msgstr "Propietario del titular del billete"
 
 #: pretix/base/models/giftcards.py:93
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
@@ -4505,6 +4491,8 @@ msgid ""
 "This text will be shown by the check-in app if a ticket of this type is "
 "scanned."
 msgstr ""
+"Este texto será mostrado por la aplicación de check-in si se escanea un "
+"ticket de este tipo."
 
 #: pretix/base/models/items.py:580 pretix/base/models/items.py:1045
 msgid ""
@@ -6769,6 +6757,10 @@ msgid ""
 "payment. You can use the placeholders {order}, {amount}, {currency} and "
 "{amount_with_currency}."
 msgstr ""
+"Este texto se incluirá como marcador de posición {payment_info} en los "
+"correos electrónicos de confirmación del pedido. Debe indicar al usuario "
+"cómo proceder con el pago. Puede utilizar los marcadores de posición {order}"
+", {amount}, {currency} y {amount_with_currency}."
 
 #: pretix/base/payment.py:1199
 msgid "Payment process description for pending orders"
@@ -7140,7 +7132,7 @@ msgstr "Ciudad de ejemplo"
 
 #: pretix/base/pdf.py:362
 msgid "Atlantis"
-msgstr ""
+msgstr "Atlántida"
 
 #: pretix/base/pdf.py:366
 msgid "List of Add-Ons"
@@ -7222,7 +7214,7 @@ msgstr "Válido hasta"
 
 #: pretix/base/pdf.py:460
 msgid "Reusable Medium ID"
-msgstr ""
+msgstr "ID mediana reutilizable"
 
 #: pretix/base/pdf.py:465
 #, fuzzy
@@ -7377,6 +7369,9 @@ msgid ""
 "pretix signature scheme 1 (for very large events, changes semantics of "
 "offline scanning – please refer to documentation or support for details)"
 msgstr ""
+"esquema de firma de pretix 1 (para eventos muy grandes, cambia la semántica "
+"del escaneo fuera de línea; consulte la documentación o el soporte para "
+"obtener más detalles)"
 
 #: pretix/base/services/cancelevent.py:229
 #: pretix/base/services/cancelevent.py:287
@@ -7522,7 +7517,11 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
+"El código de cupón \"%(voucher)s\" solo se puede utilizar si selecciona al "
+"menos %(number)s productos coincidentes."
 msgstr[1] ""
+"Los códigoa de cupónes \"%(voucher)s\" solo se pueden utilizar si selecciona "
+"al menos %(number)s productos coincidentes."
 
 #: pretix/base/services/cart.py:152
 #, python-format
@@ -7535,7 +7534,13 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
+"El código de cupón \"%(voucher)s\" solo se puede utilizar si selecciona al "
+"menos %(number)s productos coincidentes. Por lo tanto, hemos eliminado "
+"algunas posiciones de su carrito que ya no se pueden comprar así."
 msgstr[1] ""
+"Los códigos de cupónes \"%(voucher)s\" solo se pueden utilizar si selecciona "
+"al menos %(number)s productos coincidentes. Por lo tanto, hemos eliminado "
+"algunas posiciones de su carrito que ya no se pueden comprar así."
 
 #: pretix/base/services/cart.py:158
 msgid ""
@@ -7567,6 +7572,8 @@ msgid ""
 "Applying a voucher to the whole cart should not be combined with other "
 "operations."
 msgstr ""
+"La aplicación de un bono a todo el carrito no debe combinarse con otras "
+"operaciones."
 
 #: pretix/base/services/cart.py:168
 msgid ""
@@ -7595,6 +7602,9 @@ msgid ""
 "for. If you want to add something new to your cart using that voucher, you "
 "can do so with the voucher redemption option on the bottom of the page."
 msgstr ""
+"No encontramos ninguna posición en su carrito para la que podamos usar este "
+"cupón. Si desea agregar algo nuevo a su carrito usando ese cupón, puede "
+"hacerlo con la opción de canje de cupón en la parte inferior de la página."
 
 #: pretix/base/services/cart.py:180
 msgid "Your voucher is valid for a product that is currently not for sale."
@@ -7659,6 +7669,8 @@ msgid ""
 "You can select every add-ons from the category %(cat)s for the product "
 "%(base)s at most once."
 msgstr ""
+"Puede seleccionar todos los complementos de la categoría %(cat)s para el "
+"producto %(base)s como máximo una vez."
 
 #: pretix/base/services/cart.py:197
 #, fuzzy
@@ -7703,6 +7715,8 @@ msgid ""
 "The configuration of this product requires mapping to a physical medium, "
 "which is currently not available online."
 msgstr ""
+"La configuración de este producto requiere la asignación a un medio físico, "
+"que actualmente no está disponible en línea."
 
 #: pretix/base/services/checkin.py:214
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:36
@@ -7856,7 +7870,7 @@ msgstr "La orden no está marcada como pagada."
 #: pretix/base/services/checkin.py:973
 #, python-brace-format
 msgid "Entry not permitted: {explanation}."
-msgstr ""
+msgstr "Entrada no permitida: {explanation}."
 
 #: pretix/base/services/checkin.py:982
 msgid "You need to answer questions to complete this check-in."
@@ -7873,7 +7887,7 @@ msgstr "Unión Europea"
 
 #: pretix/base/services/currencies.py:40
 msgid "Czech National Bank"
-msgstr ""
+msgstr "Banco Nacional Checo"
 
 #: pretix/base/services/export.py:86 pretix/base/services/export.py:157
 #: pretix/base/services/export.py:215
@@ -7899,6 +7913,8 @@ msgstr "Permiso denegado"
 #: pretix/base/services/export.py:221
 msgid "Your exported data exceeded the size limit for scheduled exports."
 msgstr ""
+"Sus datos exportados excedieron el límite de tamaño para las exportaciones "
+"programadas."
 
 #: pretix/base/services/invoices.py:103
 #, python-brace-format
@@ -8082,11 +8098,14 @@ msgid ""
 "place at {date}, however you already used the same membership for a "
 "different ticket at the same time."
 msgstr ""
+"Estás intentando utilizar una membresía del tipo \"{type}\" para un evento "
+"que tendrá lugar el {date}, sin embargo, ya usaste la misma membresía para "
+"una entrada diferente al mismo tiempo."
 
 #: pretix/base/services/orderimport.py:99
 #, python-brace-format
 msgid "Error decoding special characters in your file: {message}"
-msgstr ""
+msgstr "Error al decodificar caracteres especiales en su archivo: {message}"
 
 #: pretix/base/services/orderimport.py:121
 #, python-brace-format
@@ -8094,6 +8113,8 @@ msgid ""
 "Error while importing value \"{value}\" for column \"{column}\" in line "
 "\"{line}\": {message}"
 msgstr ""
+"Error al importar el valor \"{value}\" para la columna \"{column}\" en la "
+"línea \"{line}\": {message}"
 
 #: pretix/base/services/orderimport.py:156
 #, fuzzy, python-brace-format
@@ -8405,6 +8426,8 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already sold."
 msgstr ""
+"No puedes cambiar el plan ya que el asiento \"%s\" no está presente en el "
+"nuevo plan y ya está vendido."
 
 #: pretix/base/services/seating.py:131
 #, python-format
@@ -8412,6 +8435,8 @@ msgid ""
 "You can not change the plan since seat \"%s\" is not present in the new plan "
 "and is already used in a voucher."
 msgstr ""
+"No puedes cambiar el plan ya que el asiento \"%s\" no está presente en el "
+"nuevo plan y ya está utilizado en un bono."
 
 #: pretix/base/services/shredder.py:126 pretix/control/views/shredder.py:96
 msgid ""
@@ -8600,6 +8625,8 @@ msgstr "Código de la tarjeta de regalo"
 msgid ""
 "Automatically create a new gift card if a previously unknown chip is seen"
 msgstr ""
+"Cree automáticamente una nueva tarjeta de regalo si se ve un chip "
+"previamente desconocido"
 
 #: pretix/base/settings.py:259 pretix/base/settings.py:290
 #, fuzzy
@@ -8609,10 +8636,11 @@ msgstr "Código de la tarjeta de regalo"
 #: pretix/base/settings.py:277
 msgid "Automatically create a new gift card if a new chip is encoded"
 msgstr ""
+"Cree automáticamente una nueva tarjeta de regalo si se codifica un nuevo chip"
 
 #: pretix/base/settings.py:299
 msgid "Use UID protection feature of NFC chip"
-msgstr ""
+msgstr "Utilice la función de protección UID del chip NFC"
 
 #: pretix/base/settings.py:313
 msgid "Maximum number of items per order"
@@ -8813,6 +8841,8 @@ msgid ""
 "Based on Czech National Bank daily rates, whenever the invoice amount is not "
 "in CZK."
 msgstr ""
+"Basado en las tarifas diarias del Banco Nacional Checo, siempre que el "
+"importe de la factura no esté en CZK."
 
 #: pretix/base/settings.py:541
 msgid "Require invoice address"
@@ -8843,6 +8873,12 @@ msgid ""
 "details as well as for displaying the value on the invoice. It will be shown "
 "on the invoice below the headline. The field will not be required."
 msgstr ""
+"Si desea agregar un campo de texto personalizado, p.e. para obtener un "
+"número de registro específico de su país, en el formulario de dirección de "
+"facturación, complete la etiqueta aquí. Esta etiqueta se utilizará tanto "
+"para pedirle al usuario que ingrese sus datos como para mostrar el valor en "
+"la factura. Se mostrará en la factura debajo del título. El campo no será "
+"obligatorio."
 
 #: pretix/base/settings.py:587
 msgid "Ask for VAT ID"
@@ -8855,6 +8891,9 @@ msgid ""
 "only requested from business customers in the following countries: "
 "{countries}"
 msgstr ""
+"Solo funciona si se solicita una dirección de factura. El ID de IVA nunca es "
+"obligatorio y solo se solicita a clientes comerciales en los siguientes "
+"países: {countries}"
 
 #: pretix/base/settings.py:602
 #, fuzzy
@@ -8915,6 +8954,8 @@ msgid ""
 "The part of your invoice number after your prefix will be filled up with "
 "leading zeros up to this length, e.g. INV-001 or INV-00001."
 msgstr ""
+"La parte de su número de factura después de su prefijo se completará con "
+"ceros a la izquierda hasta esta longitud, p.e. INV-001 o INV-00001."
 
 #: pretix/base/settings.py:659
 msgid "Generate invoices with consecutive numbers"
@@ -9160,6 +9201,7 @@ msgstr ""
 #: pretix/base/settings.py:964
 msgid "Hide \"payment pending\" state on customer-facing pages"
 msgstr ""
+"Ocultar el estado \"pago pendiente\" en las páginas orientadas al cliente"
 
 #: pretix/base/settings.py:965
 msgid ""
@@ -9167,6 +9209,9 @@ msgid ""
 "but no indication of missing payment will be visible on the ticket pages of "
 "attendees who did not buy the ticket themselves."
 msgstr ""
+"El panel de instrucciones de pago aún se mostrará al cliente principal, pero "
+"no se verá ninguna indicación de pago faltante en las páginas de tickets de "
+"los asistentes que no compraron el ticket ellos mismos."
 
 #: pretix/base/settings.py:980
 msgid ""
@@ -9247,6 +9292,8 @@ msgstr ""
 #: pretix/base/settings.py:1050
 msgid "Automatically cancel and reissue invoice on address changes"
 msgstr ""
+"Cancelar y reemitir automáticamente la factura en caso de cambios de "
+"dirección"
 
 #: pretix/base/settings.py:1051
 msgid ""
@@ -9260,7 +9307,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1062
 msgid "Allow to update existing invoices"
-msgstr ""
+msgstr "Permitir actualizar facturas existentes"
 
 #: pretix/base/settings.py:1063
 msgid ""
@@ -9268,6 +9315,10 @@ msgid ""
 "most countries, we recommend to leave this option turned off and always "
 "issue a new invoice if a change needs to be made."
 msgstr ""
+"De forma predeterminada, las facturas nunca más podrán modificarse una vez "
+"emitidas. En la mayoría de los países, recomendamos dejar esta opción "
+"desactivada y emitir siempre una nueva factura si es necesario realizar "
+"algún cambio."
 
 #: pretix/base/settings.py:1078
 msgid "Address line"
@@ -9283,7 +9334,7 @@ msgstr "Número de identificación tributaria"
 
 #: pretix/base/settings.py:1135
 msgid "e.g. tax number in Germany, ABN in Australia, …"
-msgstr ""
+msgstr "p.ej. número fiscal en Alemania, ABN en Australia,…"
 
 #: pretix/base/settings.py:1144
 msgid "EU VAT ID"
@@ -9358,7 +9409,7 @@ msgstr ""
 
 #: pretix/base/settings.py:1221
 msgid "Email address to receive a copy of each invoice"
-msgstr ""
+msgstr "Dirección de correo electrónico para recibir una copia de cada factura."
 
 #: pretix/base/settings.py:1222
 msgid ""
@@ -9366,6 +9417,10 @@ msgid ""
 "creation. You can use this for an automated import of invoices to your "
 "accounting system. The invoice will be the only attachment of the email."
 msgstr ""
+"Cada factura recién creada se enviará a esta dirección de correo electrónico "
+"poco después de su creación. Puede utilizar esto para una importación "
+"automatizada de facturas a su sistema de contabilidad. La factura será el "
+"único archivo adjunto del correo electrónico."
 
 #: pretix/base/settings.py:1233
 msgid "Show items outside presale period"
@@ -9388,7 +9443,7 @@ msgstr "Lenguaje predefinido"
 
 #: pretix/base/settings.py:1280
 msgid "Region"
-msgstr ""
+msgstr "Región"
 
 #: pretix/base/settings.py:1281
 msgid ""
@@ -9397,6 +9452,11 @@ msgid ""
 "less priority than the language and is therefore mostly relevant for "
 "languages used in different regions globally (like English)."
 msgstr ""
+"Se utilizará para determinar el formato de fecha y hora, así como el país "
+"predeterminado para las direcciones y números de teléfono de los clientes. "
+"Para el formato, esto tiene menos prioridad que el idioma y, por lo tanto, "
+"es más relevante para los idiomas utilizados en diferentes regiones del "
+"mundo (como el inglés)."
 
 #: pretix/base/settings.py:1293
 #, fuzzy
@@ -9408,6 +9468,9 @@ msgid ""
 "If disabled, no date or time will be shown on the ticket shop's front page. "
 "This settings does however not affect the display in other locations."
 msgstr ""
+"Si está desactivado, no se mostrará ninguna fecha ni hora en la página "
+"principal de la taquilla. Sin embargo, esta configuración no afecta la "
+"visualización en otras ubicaciones."
 
 #: pretix/base/settings.py:1304
 msgid "Show event end date"
@@ -9549,6 +9612,8 @@ msgid ""
 "If you ask for a phone number, explain why you do so and what you will use "
 "the phone number for."
 msgstr ""
+"Si solicita un número de teléfono, explique por qué lo hace y para qué "
+"utilizará el número de teléfono."
 
 #: pretix/base/settings.py:1461
 #, fuzzy
@@ -9569,6 +9634,12 @@ msgid ""
 "failed scans will not be counted, and the user will not see the different "
 "check-in lists."
 msgstr ""
+"Con esta opción habilitada, tus clientes podrán ver cuántas veces ingresaron "
+"al evento. Por lo general, esto no es necesario, pero puede ser útil en "
+"combinación con boletos que se pueden usar una cantidad específica de veces, "
+"para que los clientes puedan ver cuántas veces ya se han usado. Las salidas "
+"o escaneos fallidos no se contabilizarán y el usuario no verá las diferentes "
+"listas de check-in."
 
 #: pretix/base/settings.py:1487
 #, fuzzy
@@ -9577,7 +9648,7 @@ msgstr "Recordatorio para descargar los tickets"
 
 #: pretix/base/settings.py:1488
 msgid "If this is off, nobody can download a ticket."
-msgstr ""
+msgstr "Si esto está desactivado, nadie podrá descargar un ticket."
 
 #: pretix/base/settings.py:1497
 msgid "Download date"
@@ -9605,6 +9676,10 @@ msgid ""
 "for add-on products or bundled products. With this option, a separate ticket "
 "is issued for every add-on product or bundled product as well."
 msgstr ""
+"De forma predeterminada, los tickets solo se emiten para productos "
+"seleccionados individualmente, no para productos complementarios o productos "
+"agrupados. Con esta opción, también se emite un ticket separado para cada "
+"producto complementario o producto incluido."
 
 #: pretix/base/settings.py:1523
 #, fuzzy
@@ -9617,6 +9692,9 @@ msgid ""
 "\"admission ticket\"in the product settings. You can also turn off ticket "
 "issuing in every product separately."
 msgstr ""
+"Si está desactivado, los tickets solo se emiten para productos marcados como "
+"\"ticket de entrada\" en la configuración del producto. También puedes "
+"desactivar la emisión de tickets en cada producto por separado."
 
 #: pretix/base/settings.py:1536
 #, fuzzy
@@ -9628,10 +9706,13 @@ msgid ""
 "If turned off, ticket downloads are only possible after an order has been "
 "marked as paid."
 msgstr ""
+"Si está desactivado, la descarga de tickets solo será posible después de que "
+"un pedido se haya marcado como pagado."
 
 #: pretix/base/settings.py:1548
 msgid "Do not issue ticket before email address is validated"
 msgstr ""
+"No emita ticket antes de que se valide la dirección de correo electrónico"
 
 #: pretix/base/settings.py:1549
 msgid ""
@@ -9641,6 +9722,12 @@ msgid ""
 "from the page as soon as they clicked a link in the email. Does not affect "
 "orders performed through other sales channels."
 msgstr ""
+"Si está activado, los ticket no se ofrecerán para descargar directamente "
+"después de la compra. Se adjuntarán al correo electrónico de confirmación de "
+"pago (si el tamaño del archivo no es demasiado grande) y el cliente podrá "
+"descargarlos de la página tan pronto como haga clic en un enlace del correo "
+"electrónico. No afecta a los pedidos realizados a través de otros canales de "
+"venta."
 
 #: pretix/base/settings.py:1565
 #, fuzzy
@@ -9654,6 +9741,10 @@ msgid ""
 "in the event list or calendar. If you keep this option empty, low "
 "availability will not be shown publicly."
 msgstr ""
+"Si la disponibilidad de entradas cae por debajo de este porcentaje, el "
+"evento (o una fecha, si es una serie de eventos) se resaltará como de baja "
+"disponibilidad en la lista de eventos o calendario. Si mantiene esta opción "
+"vacía, la baja disponibilidad no se mostrará públicamente."
 
 #: pretix/base/settings.py:1580
 msgid "Show availability in event overviews"
@@ -9694,10 +9785,12 @@ msgid ""
 "If your event series has more than 50 dates in the future, only the month or "
 "week calendar can be used."
 msgstr ""
+"Si su serie de eventos tiene más de 50 fechas en el futuro, solo se puede "
+"utilizar el calendario mensual o semanal."
 
 #: pretix/base/settings.py:1615
 msgid "Show filter options for calendar or list view"
-msgstr ""
+msgstr "Mostrar opciones de filtro para calendario o vista de lista"
 
 #: pretix/base/settings.py:1616
 #, fuzzy
@@ -9712,20 +9805,25 @@ msgstr ""
 #: pretix/base/settings.py:1625
 msgid "Hide all unavailable dates from calendar or list views"
 msgstr ""
+"Ocultar todas las fechas no disponibles del calendario o de las vistas de "
+"lista"
 
 #: pretix/base/settings.py:1626 pretix/base/settings.py:1637
 msgid ""
 "This option currently only affects the calendar of this event series, not "
 "the organizer-wide calendar."
 msgstr ""
+"Actualmente, esta opción solo afecta al calendario de esta serie de eventos, "
+"no al calendario de todo el organizador."
 
 #: pretix/base/settings.py:1636
 msgid "Hide all past dates from calendar"
-msgstr ""
+msgstr "Ocultar todas las fechas pasadas del calendario"
 
 #: pretix/base/settings.py:1647
 msgid "Allow customers to modify their information after they checked in."
 msgstr ""
+"Permita que los clientes modifiquen su información después de registrarse."
 
 #: pretix/base/settings.py:1656
 msgid "Last date of modifications"
@@ -9758,26 +9856,35 @@ msgid ""
 "Only allow changes if the resulting price is higher or equal than the "
 "previous price."
 msgstr ""
+"Sólo permitir cambios si el precio resultante es mayor o igual que el precio "
+"anterior."
 
 #: pretix/base/settings.py:1688 pretix/base/settings.py:1699
 msgid ""
 "Only allow changes if the resulting price is higher than the previous price."
 msgstr ""
+"Sólo permitir cambios si el precio resultante es superior al precio anterior."
 
 #: pretix/base/settings.py:1689 pretix/base/settings.py:1700
 msgid ""
 "Only allow changes if the resulting price is equal to the previous price."
 msgstr ""
+"Solo permitir cambios si el precio resultante es igual al precio anterior."
 
 #: pretix/base/settings.py:1690 pretix/base/settings.py:1701
 msgid ""
 "Allow changes regardless of price, as long as no refund is required (i.e. "
 "the resulting price is not lower than what has already been paid)."
 msgstr ""
+"Permitir cambios independientemente del precio, siempre y cuando no se "
+"requiera devolución (es decir, que el precio resultante no sea inferior al "
+"ya pagado)."
 
 #: pretix/base/settings.py:1692 pretix/base/settings.py:1703
 msgid "Allow changes regardless of price, even if this results in a refund."
 msgstr ""
+"Permitir cambios independientemente del precio, incluso si esto resulta en "
+"un reembolso."
 
 #: pretix/base/settings.py:1696
 #, fuzzy
@@ -9802,10 +9909,16 @@ msgid ""
 "in individually. Use with care, and preferably only in combination with a "
 "limitation on price changes above."
 msgstr ""
+"De forma predeterminada, los cambios de pedido están deshabilitados después "
+"de que se haya registrado cualquier ticket del pedido. Si marca esta "
+"casilla, se elimina este requisito. Todavía no es posible eliminar un "
+"producto complementario que ya se haya registrado individualmente. Úselo con "
+"cuidado y preferiblemente solo en combinación con la limitación de cambios "
+"de precios mencionada anteriormente."
 
 #: pretix/base/settings.py:1736
 msgid "Allow individual attendees to change their ticket"
-msgstr ""
+msgstr "Permitir que los asistentes individuales cambien su entrada"
 
 #: pretix/base/settings.py:1737
 msgid ""
@@ -9815,6 +9928,11 @@ msgid ""
 "total price of the order. Such changes can always only be made by the main "
 "customer."
 msgstr ""
+"De forma predeterminada, solo la persona que solicitó los tickets puede "
+"realizar cambios. Si marca esta casilla, los asistentes individuales también "
+"pueden realizar cambios. Sin embargo, los asistentes individuales siempre "
+"podrán realizar cambios que no cambien el precio total del pedido. Estos "
+"cambios sólo los puede realizar siempre el cliente principal."
 
 #: pretix/base/settings.py:1749
 msgid "Customers can cancel their unpaid orders"
@@ -9832,6 +9950,9 @@ msgid ""
 "never charged. Note that it will be your responsibility to claim the "
 "cancellation fee from the user."
 msgstr ""
+"Sólo afecta a pedidos pendientes de pago, nunca se cobra tarifa de "
+"cancelación para pedidos gratuitos. Tenga en cuenta que será su "
+"responsabilidad reclamar la tarifa de cancelación al usuario."
 
 #: pretix/base/settings.py:1772
 #, fuzzy
@@ -9874,19 +9995,24 @@ msgstr "Mantener una tarifa de cancelación porcentual"
 
 #: pretix/base/settings.py:1850
 msgid "Allow customers to voluntarily choose a lower refund"
-msgstr ""
+msgstr "Permitir que los clientes elijan voluntariamente un reembolso más bajo"
 
 #: pretix/base/settings.py:1851
 msgid ""
 "With this option enabled, your customers can choose to get a smaller refund "
 "to support you."
 msgstr ""
+"Con esta opción habilitada, sus clientes pueden optar por obtener un "
+"reembolso menor para respaldarlo."
 
 #: pretix/base/settings.py:1856
 msgid ""
 "However, if you want us to help keep the lights on here, please consider "
 "using the slider below to request a smaller refund. Thank you!"
 msgstr ""
+"Sin embargo, si desea que le ayudemos a mantener las luces encendidas aquí, "
+"considere utilizar el control deslizante a continuación para solicitar un "
+"reembolso menor. ¡Gracias!"
 
 #: pretix/base/settings.py:1863
 #, fuzzy
@@ -9900,6 +10026,10 @@ msgid ""
 "like to receive. You can use it e.g. to explain choosing a lower refund will "
 "help your organization."
 msgstr ""
+"Este texto se mostrará entre la explicación de cómo funcionan los reembolsos "
+"y el control deslizante que sus clientes pueden usar para elegir el monto "
+"que desean recibir. Puedes usarlo p.e. explicar que elegir un reembolso más "
+"bajo ayudará a su organización."
 
 #: pretix/base/settings.py:1881
 msgid "Step size for reduction amount"
@@ -33027,51 +33157,45 @@ msgid "Please click the link we sent you via email to download your tickets."
 msgstr ""
 
 #: pretix/presale/views/order.py:1562
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "The order has been changed. You can now proceed by paying the open amount of "
 "{amount}."
 msgstr ""
-"La orden ha sido cancelada. Puedes seleccionar como deseas transferir el "
-"dinero de vuelta al usuario."
+"El pedido ha sido cambiado. Ahora puede continuar pagando el monto pendiente "
+"de {amount}."
 
 #: pretix/presale/views/order.py:1574
-#, fuzzy
 msgid "You did not make any changes."
-msgstr "Su búsqueda no ha encontrado ningún recibo."
+msgstr "No hiciste ningún cambio."
 
 #: pretix/presale/views/order.py:1598
 msgid "You may not change your order in a way that reduces the total price."
-msgstr ""
+msgstr "No puede cambiar su pedido de manera que reduzca el precio total."
 
 #: pretix/presale/views/order.py:1600
 msgid "You may only change your order in a way that increases the total price."
-msgstr ""
+msgstr "Sólo puede cambiar su pedido de forma que aumente el precio total."
 
 #: pretix/presale/views/order.py:1602
-#, fuzzy
 msgid "You may not change your order in a way that changes the total price."
-msgstr ""
-"Es necesario introducir un precio si se desea modificar el precio del "
-"producto."
+msgstr "No puede cambiar su pedido de manera que cambie el precio total."
 
 #: pretix/presale/views/order.py:1604
-#, fuzzy
 msgid "You may not change your order in a way that would require a refund."
-msgstr ""
-"Es necesario introducir un precio si se desea modificar el precio del "
-"producto."
+msgstr "No puede cambiar su pedido de manera que requiera un reembolso."
 
 #: pretix/presale/views/order.py:1612
 msgid ""
 "You may not change your order in a way that increases the total price since "
 "payments are no longer being accepted for this event."
 msgstr ""
+"No puede cambiar su pedido de manera que aumente el precio total ya que ya "
+"no se aceptan pagos para este evento."
 
 #: pretix/presale/views/order.py:1627 pretix/presale/views/order.py:1658
-#, fuzzy
 msgid "You cannot change this order."
-msgstr "No puede cancelar este pedido."
+msgstr "No puedes cambiar este pedido."
 
 #: pretix/presale/views/user.py:61
 msgid "We had difficulties processing your input."
@@ -33085,12 +33209,17 @@ msgid ""
 "{number} hours. If the email did not arrive, please check your spam folder "
 "and also double check that you used the correct email address."
 msgstr ""
+"Si la dirección de correo electrónico que ingresó es válida y está asociada "
+"con un ticket, le enviamos un correo electrónico con un enlace a su ticket "
+"en las últimas {number} horas. Si el correo electrónico no llegó, verifique "
+"su carpeta de correo no deseado y también verifique que utilizó la dirección "
+"de correo electrónico correcta."
 
 #: pretix/presale/views/user.py:91
 msgid "We have trouble sending emails right now, please check back later."
 msgstr ""
-"Tenemos problemas para enviar correos electrónicos ahora mismo, por favor "
-"regrese más tarde."
+"Tenemos problemas para enviar correos electrónicos en este momento; vuelva a "
+"consultar más tarde."
 
 #: pretix/presale/views/user.py:94
 msgid ""
@@ -33113,24 +33242,25 @@ msgstr ""
 "actualmente disponible."
 
 #: pretix/presale/views/waiting.py:136
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "We've added you to the waiting list. We will send an email to {email} as "
 "soon as this product gets available again."
 msgstr ""
-"Te hemos añadido a la lista de espera. Usted recibirá un correo electrónico "
-"tan pronto como las entradas estén disponibles de nuevo."
+"Te hemos agregado a la lista de espera. Enviaremos un correo electrónico a "
+"{email} tan pronto como este producto vuelva a estar disponible."
 
 #: pretix/presale/views/waiting.py:164
-#, fuzzy
 msgid "We could not find you on our waiting list."
-msgstr "Enviar vales"
+msgstr "No pudimos encontrarte en nuestra lista de espera."
 
 #: pretix/presale/views/waiting.py:168
 msgid ""
 "Your waiting list spot is no longer valid or already used. There's nothing "
 "more to do here."
 msgstr ""
+"Su lugar en la lista de espera ya no es válido o ya está utilizado. No hay "
+"nada más que hacer aquí."
 
 #: pretix/presale/views/waiting.py:178
 msgid ""
@@ -33146,9 +33276,8 @@ msgid "This ticket shop is currently disabled."
 msgstr "La taquilla seleccionada no está disponible en este momento."
 
 #: pretix/presale/views/widget.py:357
-#, fuzzy
 msgid "The selected date does not exist in this event series."
-msgstr "El elemento seleccionado no pertenece a este evento."
+msgstr "La fecha seleccionada no existe en esta serie de eventos."
 
 #: pretix/presale/views/widget.py:420
 #, python-format
@@ -33169,7 +33298,7 @@ msgstr "Acceso de escritura"
 
 #: pretix/settings.py:725
 msgid "Kosovo"
-msgstr ""
+msgstr "Kosovo"
 
 #~ msgid "Needs to be enabled in your Stripe account first."
 #~ msgstr "Debe habilitarse primero en su cuenta de Stripe."
