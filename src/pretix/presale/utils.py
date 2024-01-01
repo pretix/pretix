@@ -254,7 +254,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 domain = get_event_domain(request.event)
                 if domain:
                     if request.port and request.port not in (80, 443):
-                        domain = '%s:%d' % (domain, request.port)
+                        domain = f'{domain}:{request.port}'
                     path = request.get_full_path().split("/", 2)[-1]
                     r = redirect_to_url(urljoin('%s://%s' % (request.scheme, domain), path))
                     r['Access-Control-Allow-Origin'] = '*'
