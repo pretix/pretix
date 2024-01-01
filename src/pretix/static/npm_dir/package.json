@@ -11,6 +11,6 @@
     "vue": "^2.7.15",
     "rollup": "^2.79.1",
     "rollup-plugin-vue": "^5.0.1",
-    "vue-template-compiler": "^2.7.15"
+    "vue-template-compiler": "^2.7.16"
   }
 }
