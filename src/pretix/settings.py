@@ -41,6 +41,7 @@ from json import loads
 from urllib.parse import urlparse
 
 import importlib_metadata as metadata
+from django.core.exceptions import ImproperlyConfigured
 from django.utils.crypto import get_random_string
 from kombu import Queue
 
@@ -494,6 +495,11 @@ for k, v in ALL_LANGUAGES: # noqa
     if LANGUAGES_ENABLED and k not in LANGUAGES_ENABLED:
         continue
     LANGUAGES.append((k, v))
+
+if LANGUAGE_CODE not in {l[0] for l in LANGUAGES}:
+    raise ImproperlyConfigured(
+        f"Default language {LANGUAGE_CODE} is not one of the available and enabled languages."
+    )
 
 
 AUTH_USER_MODEL = 'pretixbase.User'
