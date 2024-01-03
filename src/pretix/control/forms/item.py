@@ -614,6 +614,15 @@ class ItemUpdateForm(I18nModelForm):
 
         self.fields['free_price_suggestion'].widget.attrs['data-display-dependency'] = '#id_free_price'
 
+        self.fields['validity_dynamic_start_choice'] = forms.TypedChoiceField(
+            label=_("Start of validity"),
+            choices=(
+                ("False", _("Purchase date")),
+                ("True", _("Date chosen by customer")),
+            ),
+            coerce=lambda x: x == 'True',
+        )
+
         qs = self.event.organizer.membership_types.all()
         if qs:
             self.fields['require_membership_types'].queryset = qs

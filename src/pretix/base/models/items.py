@@ -631,7 +631,7 @@ class Item(LoggedModel):
         null=True, blank=True, max_length=16,
         verbose_name=_('Validity'),
         help_text=_(
-            'When setting up a regular event, or an event series with time slots, you typically to NOT need to change '
+            'When setting up a regular event, or an event series with time slots, you typically do NOT need to change '
             'this value. The default setting means that the validity time of tickets will not be decided by the '
             'product, but by the event and check-in configuration. Only use the other options if you need them to '
             'realize e.g. a booking of a year-long ticket with a dynamic start date. Note that the validity will be '

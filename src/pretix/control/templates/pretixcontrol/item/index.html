@@ -209,6 +209,7 @@
                             {% bootstrap_field form.validity_fixed_until layout="control" %}
                         </div>
                         <div data-display-dependency="#{{ form.validity_mode.id_for_label }}" data-display-dependency-value="dynamic">
+                            {% bootstrap_field form.validity_dynamic_start_choice layout="control" %}
                             <div class="form-group metadata-group">
                                 <label class="col-md-3 control-label">{% trans "Duration" %}</label>
                                 <div class="col-md-9">
@@ -231,8 +232,7 @@
                                     </div>
                                 </div>
                             </div>
-                            {% bootstrap_field form.validity_dynamic_start_choice layout="control" %}
-                            <div data-display-dependency="#{{ form.validity_dynamic_start_choice.id_for_label }}">
+                            <div data-display-dependency="#{{ form.validity_dynamic_start_choice.id_for_label }}" data-display-dependency-value="True">
                                 {% trans "days" as t_days %}
                                 {% bootstrap_field form.validity_dynamic_start_choice_day_limit addon_after=t_days layout="control" %}
                             </div>
