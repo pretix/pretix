@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-03 10:29+0000\n"
-"PO-Revision-Date: 2023-12-23 10:45+0000\n"
+"PO-Revision-Date: 2024-01-03 12:07+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -4486,16 +4486,6 @@ msgid "Validity"
 msgstr "Gültigkeit"
 
 #: pretix/base/models/items.py:634
-#, fuzzy
-#| msgid ""
-#| "When setting up a regular event, or an event series with time slots, you "
-#| "typically to NOT need to change this value. The default setting means "
-#| "that the validity time of tickets will not be decided by the product, but "
-#| "by the event and check-in configuration. Only use the other options if "
-#| "you need them to realize e.g. a booking of a year-long ticket with a "
-#| "dynamic start date. Note that the validity will be stored with the "
-#| "ticket, so if you change the settings here later, existing tickets will "
-#| "not be affected by the change but keep their current validity."
 msgid ""
 "When setting up a regular event, or an event series with time slots, you "
 "typically do NOT need to change this value. The default setting means that "
@@ -13747,16 +13737,12 @@ msgid "Shown independently of other products"
 msgstr "Unabhängig von anderen Produkten angezeigt"
 
 #: pretix/control/forms/item.py:620
-#, fuzzy
-#| msgid "Purchased"
 msgid "Purchase date"
-msgstr "Verkäufe"
+msgstr "Kaufdatum"
 
 #: pretix/control/forms/item.py:621
-#, fuzzy
-#| msgid "Canceled by customer"
 msgid "Date chosen by customer"
-msgstr "Storniert durch Kunde"
+msgstr "Wunschdatum des Kunden"
 
 #: pretix/control/forms/item.py:630
 msgid "No membership granted"
@@ -31835,26 +31821,20 @@ msgstr "Link erneut senden"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:4
 #: pretix/presale/templates/pretixpresale/event/offline.html:8
-#, fuzzy
-#| msgid "Go offline"
 msgid "Shop offline"
-msgstr "Shop ausschalten"
+msgstr "Shop ausgeschaltet"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:9
-#, fuzzy
-#| msgid "This ticket shop is currently disabled."
 msgid "This ticket shop is currently turned off."
-msgstr "Dieser Ticket-Shop ist im Moment nicht verfügbar."
+msgstr "Dieser Ticket-Shop ist im Moment nicht aktiv."
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:10
 msgid "It is only accessible to authenticated team members."
-msgstr ""
+msgstr "Er ist nur für angemeldete Team-Mitglieder zugänglich."
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:11
-#, fuzzy
-#| msgid "Please try again."
 msgid "Please try again later."
-msgstr "Bitte erneut versuchen."
+msgstr "Bitte später erneut versuchen."
 
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
