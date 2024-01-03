@@ -705,6 +705,7 @@ class OrderMailForm(forms.Form):
         )
         self.fields['attach_invoices'].queryset = order.invoices.all()
         self._set_field_placeholders('message', ['event', 'order'])
+        self._set_field_placeholders('subject', ['event', 'order'])
 
 
 class OrderPositionMailForm(OrderMailForm):
@@ -720,6 +721,7 @@ class OrderPositionMailForm(OrderMailForm):
             initial=self.order.event.settings.mail_text_order_custom_mail.localize(self.order.locale),
         )
         self._set_field_placeholders('message', ['event', 'order', 'position'])
+        self._set_field_placeholders('subject', ['event', 'order'])
 
 
 class OrderRefundForm(forms.Form):
