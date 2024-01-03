@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-23 10:29+0000\n"
+"POT-Creation-Date: 2024-01-03 10:29+0000\n"
 "PO-Revision-Date: 2023-09-02 14:00+0000\n"
 "Last-Translator: Ash So <ashs@vankaifong.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
@@ -18,37 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 4.18.2\n"
-
-#: htmlcov/pretix_control_views_dashboards_py.html:963
-#: pretix/control/templates/pretixcontrol/events/index.html:146
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
-#: pretix/control/views/dashboards.py:529
-msgid "Shop disabled"
-msgstr "禁用商店"
-
-#: htmlcov/pretix_control_views_dashboards_py.html:965
-#: pretix/control/forms/filter.py:1099 pretix/control/forms/filter.py:1574
-#: pretix/control/templates/pretixcontrol/events/index.html:148
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:112
-#: pretix/control/templates/pretixcontrol/subevents/index.html:165
-msgid "Presale over"
-msgstr "預售結束"
-
-#: htmlcov/pretix_control_views_dashboards_py.html:967
-#: pretix/control/forms/filter.py:1098 pretix/control/forms/filter.py:1573
-#: pretix/control/templates/pretixcontrol/events/index.html:150
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:114
-#: pretix/control/templates/pretixcontrol/subevents/index.html:167
-msgid "Presale not started"
-msgstr "預售尚未開始"
-
-#: htmlcov/pretix_control_views_dashboards_py.html:969
-#: pretix/control/templates/pretixcontrol/events/index.html:152
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:116
-#: pretix/control/templates/pretixcontrol/subevents/index.html:169
-#: pretix/control/views/dashboards.py:535
-msgid "On sale"
-msgstr "在售"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -276,11 +245,11 @@ msgstr "未知擴充：'{name}'。"
 msgid "Item meta data property '{name}' does not exist."
 msgstr "項目元數據屬性“{name}”不存在。"
 
-#: pretix/api/serializers/item.py:182 pretix/control/forms/item.py:1124
+#: pretix/api/serializers/item.py:182 pretix/control/forms/item.py:1133
 msgid "The bundled item must not be the same item as the bundling one."
 msgstr "捆綁商品不得與捆綁商品為同一商品。"
 
-#: pretix/api/serializers/item.py:185 pretix/control/forms/item.py:1126
+#: pretix/api/serializers/item.py:185 pretix/control/forms/item.py:1135
 msgid "The bundled item must not have bundles on its own."
 msgstr "捆綁商品不得單獨捆綁。"
 
@@ -301,7 +270,7 @@ msgid ""
 "sales tax will be applied when the gift card is redeemed."
 msgstr "禮品卡產品不應與非零稅率相關聯，因為在兌換禮品卡時會徵收銷售稅。"
 
-#: pretix/api/serializers/item.py:287 pretix/control/forms/item.py:646
+#: pretix/api/serializers/item.py:287 pretix/control/forms/item.py:655
 msgid "Gift card products should not be admission products at the same time."
 msgstr "禮品卡產品不得同時為入場商品。"
 
@@ -1575,7 +1544,7 @@ msgstr "活躍"
 #: pretix/base/exporters/items.py:73 pretix/base/models/discount.py:68
 #: pretix/base/models/items.py:584 pretix/base/models/items.py:1087
 #: pretix/control/forms/discounts.py:87 pretix/control/forms/event.py:959
-#: pretix/control/forms/item.py:556 pretix/control/forms/item.py:823
+#: pretix/control/forms/item.py:556 pretix/control/forms/item.py:832
 msgid "Sales channels"
 msgstr "銷售管道"
 
@@ -2041,7 +2010,7 @@ msgstr "位置ID"
 #: pretix/control/forms/filter.py:2027 pretix/control/forms/filter.py:2142
 #: pretix/control/forms/filter.py:2224 pretix/control/forms/filter.py:2441
 #: pretix/control/forms/item.py:250 pretix/control/forms/orders.py:344
-#: pretix/control/forms/orders.py:396 pretix/control/forms/orders.py:773
+#: pretix/control/forms/orders.py:396 pretix/control/forms/orders.py:775
 #: pretix/control/forms/vouchers.py:114
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:98
 #: pretix/control/templates/pretixcontrol/items/quotas.html:51
@@ -2673,7 +2642,7 @@ msgstr "測試模式卡片"
 msgid "Expiry date"
 msgstr "到期日"
 
-#: pretix/base/exporters/orderlist.py:1313 pretix/control/forms/orders.py:826
+#: pretix/base/exporters/orderlist.py:1313 pretix/control/forms/orders.py:828
 msgid "Special terms and conditions"
 msgstr "特殊條款和條件"
 
@@ -3982,8 +3951,8 @@ msgstr "其他收件者（密件副本）"
 #: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1074
 #: pretix/control/forms/event.py:1136 pretix/control/forms/event.py:1148
 #: pretix/control/forms/event.py:1158 pretix/control/forms/event.py:1168
-#: pretix/control/forms/orders.py:665 pretix/control/forms/orders.py:887
-#: pretix/control/forms/orders.py:914 pretix/control/forms/organizer.py:539
+#: pretix/control/forms/orders.py:665 pretix/control/forms/orders.py:889
+#: pretix/control/forms/orders.py:916 pretix/control/forms/organizer.py:539
 #: pretix/control/forms/organizer.py:549 pretix/control/forms/organizer.py:559
 #: pretix/control/forms/vouchers.py:266 pretix/plugins/sendmail/forms.py:69
 #: pretix/plugins/sendmail/forms.py:85 pretix/plugins/sendmail/models.py:232
@@ -3991,8 +3960,8 @@ msgid "Subject"
 msgstr "主題"
 
 #: pretix/base/models/exports.py:78 pretix/control/forms/orders.py:701
-#: pretix/control/forms/orders.py:717 pretix/control/forms/orders.py:895
-#: pretix/control/forms/orders.py:922 pretix/control/forms/vouchers.py:272
+#: pretix/control/forms/orders.py:718 pretix/control/forms/orders.py:897
+#: pretix/control/forms/orders.py:924 pretix/control/forms/vouchers.py:272
 #: pretix/plugins/sendmail/forms.py:70 pretix/plugins/sendmail/forms.py:90
 #: pretix/plugins/sendmail/models.py:233
 msgid "Message"
@@ -4372,9 +4341,19 @@ msgid "Validity"
 msgstr "有效性"
 
 #: pretix/base/models/items.py:634
+#, fuzzy
+#| msgid ""
+#| "When setting up a regular event, or an event series with time slots, you "
+#| "typically to NOT need to change this value. The default setting means "
+#| "that the validity time of tickets will not be decided by the product, but "
+#| "by the event and check-in configuration. Only use the other options if "
+#| "you need them to realize e.g. a booking of a year-long ticket with a "
+#| "dynamic start date. Note that the validity will be stored with the "
+#| "ticket, so if you change the settings here later, existing tickets will "
+#| "not be affected by the change but keep their current validity."
 msgid ""
 "When setting up a regular event, or an event series with time slots, you "
-"typically to NOT need to change this value. The default setting means that "
+"typically do NOT need to change this value. The default setting means that "
 "the validity time of tickets will not be decided by the product, but by the "
 "event and check-in configuration. Only use the other options if you need "
 "them to realize e.g. a booking of a year-long ticket with a dynamic start "
@@ -4388,7 +4367,7 @@ msgstr ""
 "性將與票證一起儲存，因此如你稍後在此處更改設定，現有票證將不受更改的影響，但"
 "會保留其當前有效性。"
 
-#: pretix/base/models/items.py:642
+#: pretix/base/models/items.py:642 pretix/control/forms/item.py:618
 msgid "Start of validity"
 msgstr "有效期開始"
 
@@ -4551,7 +4530,7 @@ msgstr "此類別不會在給定日期之前出售。"
 msgid "This variation will not be sold after the given date."
 msgstr "此類別在給定日期之後將不會出售。"
 
-#: pretix/base/models/items.py:1089 pretix/control/forms/item.py:828
+#: pretix/base/models/items.py:1089 pretix/control/forms/item.py:837
 msgid ""
 "The sales channel selection for the product as a whole takes precedence, so "
 "if a sales channel is selected here but not on product level, the variation "
@@ -4871,7 +4850,7 @@ msgstr "保留空白以獲得無限數量的票。"
 msgid "Item"
 msgstr "物品"
 
-#: pretix/base/models/items.py:1901 pretix/control/forms/item.py:771
+#: pretix/base/models/items.py:1901 pretix/control/forms/item.py:780
 msgid "Variations"
 msgstr "類別"
 
@@ -9161,7 +9140,7 @@ msgstr ""
 "如果付款方式允許，已支付的款項將自動退還。否則，我們將建立手動退款，供你手動"
 "處理。"
 
-#: pretix/base/settings.py:1820 pretix/control/forms/orders.py:833
+#: pretix/base/settings.py:1820 pretix/control/forms/orders.py:835
 msgid "Keep a fixed cancellation fee"
 msgstr "保留固定的取消費用"
 
@@ -9169,7 +9148,7 @@ msgstr "保留固定的取消費用"
 msgid "Keep payment, shipping and service fees"
 msgstr "保留付款、運費和服務費"
 
-#: pretix/base/settings.py:1841 pretix/control/forms/orders.py:844
+#: pretix/base/settings.py:1841 pretix/control/forms/orders.py:846
 msgid "Keep a percentual cancellation fee"
 msgstr "保留百分比取消費用"
 
@@ -10839,12 +10818,14 @@ msgstr "我們無法理解你的請求。"
 #: pretix/base/templates/400.html:12 pretix/base/templates/400_hostname.html:47
 #: pretix/base/templates/403.html:12 pretix/base/templates/404.html:12
 #: pretix/base/templates/500.html:22 pretix/base/templates/csrffail.html:26
+#: pretix/presale/templates/pretixpresale/event/offline.html:13
 msgid "Take a step back"
 msgstr "返回前步驟"
 
 #: pretix/base/templates/400.html:13 pretix/base/templates/400_hostname.html:48
 #: pretix/base/templates/403.html:13 pretix/base/templates/500.html:23
 #: pretix/presale/templates/pretixpresale/event/cookies.html:40
+#: pretix/presale/templates/pretixpresale/event/offline.html:14
 msgid "Try again"
 msgstr "請重試"
 
@@ -10907,6 +10888,7 @@ msgstr "你無權訪問此頁面。"
 #: pretix/control/templates/pretixcontrol/base.html:193
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:6
+#: pretix/presale/templates/pretixpresale/event/offline.html:21
 msgid "Admin mode"
 msgstr "管理員模式"
 
@@ -11083,14 +11065,14 @@ msgstr "上傳照片"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:20
-#: pretix/control/templates/pretixcontrol/item/index.html:217
+#: pretix/control/templates/pretixcontrol/item/index.html:218
 #: pretix/control/templates/pretixcontrol/item/index.html:236
 #: pretix/control/templates/pretixcontrol/item/index.html:249
 msgid "days"
 msgstr "日"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
-#: pretix/control/templates/pretixcontrol/item/index.html:215
+#: pretix/control/templates/pretixcontrol/item/index.html:216
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
 msgid "minutes"
@@ -11474,7 +11456,7 @@ msgstr "發生意外錯誤，請稍後重試。"
 msgid "The task has been completed."
 msgstr "任務已完成。"
 
-#: pretix/control/forms/__init__.py:207 pretix/control/forms/item.py:684
+#: pretix/control/forms/__init__.py:207 pretix/control/forms/item.py:693
 #, python-brace-format
 msgid "Please do not upload files larger than {size}!"
 msgstr "請不要上傳大於 {size} 的文件！"
@@ -11529,7 +11511,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:2145 pretix/control/forms/filter.py:2161
 #: pretix/control/forms/filter.py:2227 pretix/control/forms/filter.py:2262
 #: pretix/control/forms/filter.py:2444 pretix/control/forms/filter.py:2459
-#: pretix/control/forms/orders.py:775 pretix/control/forms/orders.py:948
+#: pretix/control/forms/orders.py:777 pretix/control/forms/orders.py:950
 #: pretix/control/templates/pretixcontrol/event/fragment_subevent_choice_simple.html:5
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:52
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:114
@@ -11646,7 +11628,7 @@ msgstr "從...複製設定"
 msgid "Do not copy"
 msgstr "不要複製"
 
-#: pretix/control/forms/event.py:323 pretix/control/forms/item.py:1151
+#: pretix/control/forms/event.py:323 pretix/control/forms/item.py:1160
 #: pretix/control/forms/subevents.py:400
 #, python-brace-format
 msgid "Default ({value})"
@@ -12251,12 +12233,12 @@ msgstr "所有商品"
 msgid "{product} – Any variation"
 msgstr "{product}– 任何類別"
 
-#: pretix/control/forms/filter.py:518 pretix/control/forms/orders.py:786
+#: pretix/control/forms/filter.py:518 pretix/control/forms/orders.py:788
 msgctxt "subevent"
 msgid "All dates starting at or after"
 msgstr "所有以或之後開始的日期"
 
-#: pretix/control/forms/filter.py:524 pretix/control/forms/orders.py:793
+#: pretix/control/forms/filter.py:524 pretix/control/forms/orders.py:795
 msgctxt "subevent"
 msgid "All dates starting before"
 msgstr "之前開始的所有日期"
@@ -12330,6 +12312,20 @@ msgstr "現場購物和預售運行"
 #: pretix/control/forms/filter.py:1097 pretix/control/forms/filter.py:1913
 msgid "Inactive"
 msgstr "非活躍"
+
+#: pretix/control/forms/filter.py:1098 pretix/control/forms/filter.py:1573
+#: pretix/control/templates/pretixcontrol/events/index.html:150
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:114
+#: pretix/control/templates/pretixcontrol/subevents/index.html:167
+msgid "Presale not started"
+msgstr "預售尚未開始"
+
+#: pretix/control/forms/filter.py:1099 pretix/control/forms/filter.py:1574
+#: pretix/control/templates/pretixcontrol/events/index.html:148
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:112
+#: pretix/control/templates/pretixcontrol/subevents/index.html:165
+msgid "Presale over"
+msgstr "預售結束"
 
 #: pretix/control/forms/filter.py:1104 pretix/control/forms/filter.py:1107
 #: pretix/control/forms/filter.py:1603 pretix/control/forms/filter.py:1606
@@ -12945,23 +12941,35 @@ msgstr ""
 msgid "Shown independently of other products"
 msgstr "獨立於其他商品的顯示"
 
+#: pretix/control/forms/item.py:620
+#, fuzzy
+#| msgid "Purchased"
+msgid "Purchase date"
+msgstr "已購買"
+
 #: pretix/control/forms/item.py:621
+#, fuzzy
+#| msgid "Canceled by customer"
+msgid "Date chosen by customer"
+msgstr "客戶取消"
+
+#: pretix/control/forms/item.py:630
 msgid "No membership granted"
 msgstr "未授予會員資格"
 
-#: pretix/control/forms/item.py:640
+#: pretix/control/forms/item.py:649
 msgid ""
 "Gift card products should use a tax rule with a rate of 0 percent since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr "禮品卡商品應使用稅率為 0% 的稅收規則，因為在兌換禮品卡時將收取銷售稅。"
 
-#: pretix/control/forms/item.py:654 pretix/control/forms/item.py:909
+#: pretix/control/forms/item.py:663 pretix/control/forms/item.py:918
 msgid ""
 "If a valid membership is required, at least one valid membership type needs "
 "to be selected."
 msgstr "如果需要有效的會員資格，則需要至少選擇一種有效的會員資格類型。"
 
-#: pretix/control/forms/item.py:665
+#: pretix/control/forms/item.py:674
 msgid ""
 "Your product grants a non-transferable membership and should therefore be a "
 "personalized admission ticket. Otherwise customers might not be able to use "
@@ -12972,11 +12980,11 @@ msgstr ""
 "無法使用會員資格。如果希望成員資格是非個人化的，請將成員資格類型設置為可轉"
 "讓。"
 
-#: pretix/control/forms/item.py:674
+#: pretix/control/forms/item.py:683
 msgid "The start of validity must be before the end of validity."
 msgstr "有效期的開始時間必須在有效期結束之前。"
 
-#: pretix/control/forms/item.py:780
+#: pretix/control/forms/item.py:789
 #, python-format
 msgid ""
 "The variation \"%s\" cannot be deleted because it has already been ordered "
@@ -12986,39 +12994,39 @@ msgstr ""
 "類別「%s」 無法刪除，因為該類型已由使用者訂購或當前在使用者的購物車中。請將類"
 "別設定為「非活動」。"
 
-#: pretix/control/forms/item.py:855
+#: pretix/control/forms/item.py:864
 msgid "Use value from product"
 msgstr "使用商品的數值"
 
-#: pretix/control/forms/item.py:936
+#: pretix/control/forms/item.py:945
 msgid "Add-ons"
 msgstr "附加部份"
 
-#: pretix/control/forms/item.py:960
+#: pretix/control/forms/item.py:969
 msgid "You added the same add-on category twice"
 msgstr "你添加兩次相同的載入項目類別"
 
-#: pretix/control/forms/item.py:1005
+#: pretix/control/forms/item.py:1014
 msgid ""
 "Be aware that setting a minimal number makes it impossible to buy this "
 "product if all available add-ons are sold out."
 msgstr "請注意，如果所有可用的附加元件都售罄，則設置最小數量將無法購買此商品。"
 
-#: pretix/control/forms/item.py:1012
+#: pretix/control/forms/item.py:1021
 msgid "Bundled products"
 msgstr "捆綁商品"
 
-#: pretix/control/forms/item.py:1062
+#: pretix/control/forms/item.py:1071
 msgid "You added the same bundled product twice."
 msgstr "您添加兩次相同的捆綁商品。"
 
-#: pretix/control/forms/item.py:1068
+#: pretix/control/forms/item.py:1077
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:23
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:50
 msgid "Bundled product"
 msgstr "捆綁商品"
 
-#: pretix/control/forms/item.py:1093 pretix/control/forms/orders.py:363
+#: pretix/control/forms/item.py:1102 pretix/control/forms/orders.py:363
 #: pretix/control/forms/orders.py:551
 msgid "inactive"
 msgstr "非活躍"
@@ -13340,38 +13348,38 @@ msgstr "附加發票"
 msgid "Recipient"
 msgstr "收件人"
 
-#: pretix/control/forms/orders.py:730
+#: pretix/control/forms/orders.py:732
 msgid ""
 "Cancel the order. All tickets will no longer work. This can not be reverted."
 msgstr "取消訂單。所有票證將不再有效。這無法還原。"
 
-#: pretix/control/forms/orders.py:731
+#: pretix/control/forms/orders.py:733
 msgid ""
 "Mark the order as pending and allow the user to pay the open amount with "
 "another payment method."
 msgstr "將訂單標記為待處理，並允許使用者使用其他付款方式支付未結金額。"
 
-#: pretix/control/forms/orders.py:733
+#: pretix/control/forms/orders.py:735
 msgid "Do nothing and keep the order as it is."
 msgstr "什麼都不做，保持訂單不變。"
 
-#: pretix/control/forms/orders.py:760
+#: pretix/control/forms/orders.py:762
 msgid "The refund amount needs to be positive and less than {}."
 msgstr "退款金額必須為正且小於 {}。"
 
-#: pretix/control/forms/orders.py:766
+#: pretix/control/forms/orders.py:768
 msgid "You need to specify an amount for a partial refund."
 msgstr "你需要指定部分退款的金額。"
 
-#: pretix/control/forms/orders.py:778
+#: pretix/control/forms/orders.py:780
 msgid "Cancel all dates"
 msgstr "取消所有日期"
 
-#: pretix/control/forms/orders.py:797
+#: pretix/control/forms/orders.py:799
 msgid "Automatically refund money if possible"
 msgstr "如果可能，自動退款"
 
-#: pretix/control/forms/orders.py:800
+#: pretix/control/forms/orders.py:802
 msgid ""
 "Only available for payment method that support automatic refunds. Tickets "
 "that have been blocked (manually or by a plugin) are not auto-canceled and "
@@ -13380,11 +13388,11 @@ msgstr ""
 "只適用於支持自動退款的付款方式。被阻止（手動或件阻止）的門票不會自動取消，你"
 "需要手動處理。"
 
-#: pretix/control/forms/orders.py:804
+#: pretix/control/forms/orders.py:806
 msgid "Create refund in the manual refund to-do list"
 msgstr "在手動退款待辦事項清單中建立退款"
 
-#: pretix/control/forms/orders.py:807
+#: pretix/control/forms/orders.py:809
 msgid ""
 "Manual refunds will be created which will be listed in the manual refund to-"
 "do list. When combined with the automatic refund functionally, only payments "
@@ -13396,29 +13404,29 @@ msgstr ""
 "用時，只有使用不支援自動退款的付款方式的付款才會出現在你的手動退款待辦事項清"
 "單中。不要檢查你是否想通過用不同的訂單抵消或發行禮品卡來退還某些訂單。"
 
-#: pretix/control/forms/orders.py:813
+#: pretix/control/forms/orders.py:815
 msgid ""
 "Refund order value to a gift card instead instead of the original payment "
 "method"
 msgstr "將訂單價值退還到禮品卡，而不是原始付款方式"
 
-#: pretix/control/forms/orders.py:819
+#: pretix/control/forms/orders.py:821
 msgid "Gift card validity"
 msgstr "禮品卡有效性"
 
-#: pretix/control/forms/orders.py:838
+#: pretix/control/forms/orders.py:840
 msgid "Keep a fixed cancellation fee per ticket"
 msgstr "每張票保留固定的取消費"
 
-#: pretix/control/forms/orders.py:839
+#: pretix/control/forms/orders.py:841
 msgid "Free tickets and add-on products are not counted"
 msgstr "免費門票和附加產品不計算在內"
 
-#: pretix/control/forms/orders.py:849
+#: pretix/control/forms/orders.py:851
 msgid "Keep fees"
 msgstr "保留費用"
 
-#: pretix/control/forms/orders.py:852
+#: pretix/control/forms/orders.py:854
 msgid ""
 "The selected types of fees will not be refunded but instead added to the "
 "cancellation fee. Fees are never refunded in when an order in an event "
@@ -13428,20 +13436,20 @@ msgstr ""
 "所選類型的費用將不予退還，而是添加到取消費用中。當活動系列中的訂單僅部分取消"
 "時，費用永遠不會退還，因為訂單由多個日期的門票組成。"
 
-#: pretix/control/forms/orders.py:858
+#: pretix/control/forms/orders.py:860
 msgid "Send information via email"
 msgstr "透過電子郵件發送資訊"
 
-#: pretix/control/forms/orders.py:864
+#: pretix/control/forms/orders.py:866
 msgid "Send information to waiting list"
 msgstr "將資訊發送到候補名單"
 
-#: pretix/control/forms/orders.py:890 pretix/control/forms/orders.py:916
+#: pretix/control/forms/orders.py:892 pretix/control/forms/orders.py:918
 #, python-brace-format
 msgid "Canceled: {event}"
 msgstr "已取消: {event}"
 
-#: pretix/control/forms/orders.py:901
+#: pretix/control/forms/orders.py:903
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -13472,7 +13480,7 @@ msgstr ""
 "\n"
 "你的 {event} 團隊"
 
-#: pretix/control/forms/orders.py:928
+#: pretix/control/forms/orders.py:930
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -13495,24 +13503,24 @@ msgstr ""
 "\n"
 "你的 {event} 團隊"
 
-#: pretix/control/forms/orders.py:960 pretix/plugins/sendmail/forms.py:127
+#: pretix/control/forms/orders.py:962 pretix/plugins/sendmail/forms.py:127
 #: pretix/plugins/sendmail/forms.py:220
 msgctxt "subevent"
 msgid "Please either select a specific date or a date range, not both."
 msgstr "請選擇特定日期或日期範圍，而不是兩者兼而有之。"
 
-#: pretix/control/forms/orders.py:962
+#: pretix/control/forms/orders.py:964
 msgctxt "subevent"
 msgid "Please either select all dates or a date range, not both."
 msgstr "請選擇所有日期或日期範圍，而不是兩者兼而有之。"
 
-#: pretix/control/forms/orders.py:964 pretix/plugins/sendmail/forms.py:129
+#: pretix/control/forms/orders.py:966 pretix/plugins/sendmail/forms.py:129
 #: pretix/plugins/sendmail/forms.py:222
 msgctxt "subevent"
 msgid "If you set a date range, please set both a start and an end."
 msgstr "如果你設定日期範圍，請同時設定開始和結束。"
 
-#: pretix/control/forms/orders.py:966
+#: pretix/control/forms/orders.py:968
 msgid "Please confirm that you want to cancel ALL dates in this event series."
 msgstr "請確認你要取消此活動系列中的所有日期。"
 
@@ -18075,6 +18083,19 @@ msgstr "系列"
 msgid "More quotas"
 msgstr "更多額度"
 
+#: pretix/control/templates/pretixcontrol/events/index.html:146
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
+#: pretix/control/views/dashboards.py:529
+msgid "Shop disabled"
+msgstr "禁用商店"
+
+#: pretix/control/templates/pretixcontrol/events/index.html:152
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:116
+#: pretix/control/templates/pretixcontrol/subevents/index.html:169
+#: pretix/control/views/dashboards.py:535
+msgid "On sale"
+msgstr "在售"
+
 #: pretix/control/templates/pretixcontrol/events/index.html:157
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:121
 msgid "Open event dashboard"
@@ -18529,24 +18550,24 @@ msgstr "門票和徽章標誌圖片"
 msgid "Check-in & Validity"
 msgstr "辦理check-in和有效期"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:213
+#: pretix/control/templates/pretixcontrol/item/index.html:214
 msgid "Duration"
 msgstr "期間"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:216
+#: pretix/control/templates/pretixcontrol/item/index.html:217
 msgid "hours"
 msgstr "小時"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:218
+#: pretix/control/templates/pretixcontrol/item/index.html:219
 #: pretix/control/templates/pretixcontrol/item/index.html:250
 msgid "months"
 msgstr "月"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:219
+#: pretix/control/templates/pretixcontrol/item/index.html:220
 msgid "years"
 msgstr "年"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:225
+#: pretix/control/templates/pretixcontrol/item/index.html:226
 msgid ""
 "If you select a duration given in days, months or years, the validity will "
 "always end at the end of a full day (midnight), plus the number of minutes "
@@ -29927,6 +29948,29 @@ msgstr ""
 msgid "Resend order link"
 msgstr "重新傳送訂單連結"
 
+#: pretix/presale/templates/pretixpresale/event/offline.html:4
+#: pretix/presale/templates/pretixpresale/event/offline.html:8
+#, fuzzy
+#| msgid "Go offline"
+msgid "Shop offline"
+msgstr "離線"
+
+#: pretix/presale/templates/pretixpresale/event/offline.html:9
+#, fuzzy
+#| msgid "This ticket shop is currently disabled."
+msgid "This ticket shop is currently turned off."
+msgstr "該售票商店目前停用。"
+
+#: pretix/presale/templates/pretixpresale/event/offline.html:10
+msgid "It is only accessible to authenticated team members."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/offline.html:11
+#, fuzzy
+#| msgid "Please try again."
+msgid "Please try again later."
+msgstr "請重試。"
+
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
 msgid "Thank you!"
@@ -30825,14 +30869,10 @@ msgstr "頁%(page)s 的頁 %(of)s"
 msgid "We are processing your request …"
 msgstr "我們正在處理你的請求…"
 
-#: pretix/presale/utils.py:242 pretix/presale/utils.py:369
+#: pretix/presale/utils.py:241 pretix/presale/utils.py:369
 #: pretix/presale/utils.py:370
 msgid "The selected event was not found."
 msgstr "找不到所選活動。"
-
-#: pretix/presale/utils.py:329
-msgid "The selected ticket shop is currently not available."
-msgstr "所選售票商店目前不可用。"
 
 #: pretix/presale/utils.py:335
 msgid "This feature is not enabled."
@@ -31116,21 +31156,24 @@ msgstr "該活動系列中不存在所選日期。"
 msgid "from %(start_date)s"
 msgstr "從 %(start_date)s"
 
-#: pretix/settings.py:712
+#: pretix/settings.py:718
 msgid "User profile only"
 msgstr "僅用戶個人資料"
 
-#: pretix/settings.py:713
+#: pretix/settings.py:719
 msgid "Read access"
 msgstr "讀取權限"
 
-#: pretix/settings.py:714
+#: pretix/settings.py:720
 msgid "Write access"
 msgstr "寫入權限"
 
-#: pretix/settings.py:725
+#: pretix/settings.py:731
 msgid "Kosovo"
 msgstr "柯索沃"
+
+#~ msgid "The selected ticket shop is currently not available."
+#~ msgstr "所選售票商店目前不可用。"
 
 #~ msgid "Needs to be enabled in your Stripe account first."
 #~ msgstr "需要先在你的 Stripe 帳戶中啟用。"

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-23 10:29+0000\n"
+"POT-Creation-Date: 2024-01-03 10:29+0000\n"
 "PO-Revision-Date: 2023-11-18 15:00+0000\n"
 "Last-Translator: liimee <git.taaa@fedora.email>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
@@ -18,37 +18,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Weblate 5.1.1\n"
-
-#: htmlcov/pretix_control_views_dashboards_py.html:963
-#: pretix/control/templates/pretixcontrol/events/index.html:146
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
-#: pretix/control/views/dashboards.py:529
-msgid "Shop disabled"
-msgstr "Toko dinonaktifkan"
-
-#: htmlcov/pretix_control_views_dashboards_py.html:965
-#: pretix/control/forms/filter.py:1099 pretix/control/forms/filter.py:1574
-#: pretix/control/templates/pretixcontrol/events/index.html:148
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:112
-#: pretix/control/templates/pretixcontrol/subevents/index.html:165
-msgid "Presale over"
-msgstr "Prapenjualan selesai"
-
-#: htmlcov/pretix_control_views_dashboards_py.html:967
-#: pretix/control/forms/filter.py:1098 pretix/control/forms/filter.py:1573
-#: pretix/control/templates/pretixcontrol/events/index.html:150
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:114
-#: pretix/control/templates/pretixcontrol/subevents/index.html:167
-msgid "Presale not started"
-msgstr "Prapenjualan belum dimulai"
-
-#: htmlcov/pretix_control_views_dashboards_py.html:969
-#: pretix/control/templates/pretixcontrol/events/index.html:152
-#: pretix/control/templates/pretixcontrol/organizers/detail.html:116
-#: pretix/control/templates/pretixcontrol/subevents/index.html:169
-#: pretix/control/views/dashboards.py:535
-msgid "On sale"
-msgstr "Di jual"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -280,11 +249,11 @@ msgstr "Plugin tidak dikenal: '{name}'."
 msgid "Item meta data property '{name}' does not exist."
 msgstr "Properti data meta item '{name}' tidak ada."
 
-#: pretix/api/serializers/item.py:182 pretix/control/forms/item.py:1124
+#: pretix/api/serializers/item.py:182 pretix/control/forms/item.py:1133
 msgid "The bundled item must not be the same item as the bundling one."
 msgstr "Barang yang dibundel tidak boleh sama dengan barang yang dibundling."
 
-#: pretix/api/serializers/item.py:185 pretix/control/forms/item.py:1126
+#: pretix/api/serializers/item.py:185 pretix/control/forms/item.py:1135
 msgid "The bundled item must not have bundles on its own."
 msgstr "Item yang dibundel tidak boleh memiliki bundel tersendiri."
 
@@ -308,7 +277,7 @@ msgstr ""
 "Produk kartu hadiah tidak boleh dikaitkan dengan tarif pajak selain nol "
 "karena pajak penjualan akan diterapkan saat kartu hadiah ditukarkan."
 
-#: pretix/api/serializers/item.py:287 pretix/control/forms/item.py:646
+#: pretix/api/serializers/item.py:287 pretix/control/forms/item.py:655
 msgid "Gift card products should not be admission products at the same time."
 msgstr ""
 "Produk kartu hadiah tidak boleh menjadi produk tiket masuk pada saat yang "
@@ -1606,7 +1575,7 @@ msgstr "Aktif"
 #: pretix/base/exporters/items.py:73 pretix/base/models/discount.py:68
 #: pretix/base/models/items.py:584 pretix/base/models/items.py:1087
 #: pretix/control/forms/discounts.py:87 pretix/control/forms/event.py:959
-#: pretix/control/forms/item.py:556 pretix/control/forms/item.py:823
+#: pretix/control/forms/item.py:556 pretix/control/forms/item.py:832
 msgid "Sales channels"
 msgstr "Saluran penjualan"
 
@@ -2082,7 +2051,7 @@ msgstr "ID Posisi"
 #: pretix/control/forms/filter.py:2027 pretix/control/forms/filter.py:2142
 #: pretix/control/forms/filter.py:2224 pretix/control/forms/filter.py:2441
 #: pretix/control/forms/item.py:250 pretix/control/forms/orders.py:344
-#: pretix/control/forms/orders.py:396 pretix/control/forms/orders.py:773
+#: pretix/control/forms/orders.py:396 pretix/control/forms/orders.py:775
 #: pretix/control/forms/vouchers.py:114
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:98
 #: pretix/control/templates/pretixcontrol/items/quotas.html:51
@@ -2724,7 +2693,7 @@ msgstr "Kartu mode uji"
 msgid "Expiry date"
 msgstr "Tanggal kadaluarsa"
 
-#: pretix/base/exporters/orderlist.py:1313 pretix/control/forms/orders.py:826
+#: pretix/base/exporters/orderlist.py:1313 pretix/control/forms/orders.py:828
 msgid "Special terms and conditions"
 msgstr "Syarat dan ketentuan khusus"
 
@@ -4072,8 +4041,8 @@ msgstr "Penerima tambahan (Bcc)"
 #: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1074
 #: pretix/control/forms/event.py:1136 pretix/control/forms/event.py:1148
 #: pretix/control/forms/event.py:1158 pretix/control/forms/event.py:1168
-#: pretix/control/forms/orders.py:665 pretix/control/forms/orders.py:887
-#: pretix/control/forms/orders.py:914 pretix/control/forms/organizer.py:539
+#: pretix/control/forms/orders.py:665 pretix/control/forms/orders.py:889
+#: pretix/control/forms/orders.py:916 pretix/control/forms/organizer.py:539
 #: pretix/control/forms/organizer.py:549 pretix/control/forms/organizer.py:559
 #: pretix/control/forms/vouchers.py:266 pretix/plugins/sendmail/forms.py:69
 #: pretix/plugins/sendmail/forms.py:85 pretix/plugins/sendmail/models.py:232
@@ -4081,8 +4050,8 @@ msgid "Subject"
 msgstr "Subjek"
 
 #: pretix/base/models/exports.py:78 pretix/control/forms/orders.py:701
-#: pretix/control/forms/orders.py:717 pretix/control/forms/orders.py:895
-#: pretix/control/forms/orders.py:922 pretix/control/forms/vouchers.py:272
+#: pretix/control/forms/orders.py:718 pretix/control/forms/orders.py:897
+#: pretix/control/forms/orders.py:924 pretix/control/forms/vouchers.py:272
 #: pretix/plugins/sendmail/forms.py:70 pretix/plugins/sendmail/forms.py:90
 #: pretix/plugins/sendmail/models.py:233
 msgid "Message"
@@ -4503,9 +4472,19 @@ msgid "Validity"
 msgstr "Keabsahan"
 
 #: pretix/base/models/items.py:634
+#, fuzzy
+#| msgid ""
+#| "When setting up a regular event, or an event series with time slots, you "
+#| "typically to NOT need to change this value. The default setting means "
+#| "that the validity time of tickets will not be decided by the product, but "
+#| "by the event and check-in configuration. Only use the other options if "
+#| "you need them to realize e.g. a booking of a year-long ticket with a "
+#| "dynamic start date. Note that the validity will be stored with the "
+#| "ticket, so if you change the settings here later, existing tickets will "
+#| "not be affected by the change but keep their current validity."
 msgid ""
 "When setting up a regular event, or an event series with time slots, you "
-"typically to NOT need to change this value. The default setting means that "
+"typically do NOT need to change this value. The default setting means that "
 "the validity time of tickets will not be decided by the product, but by the "
 "event and check-in configuration. Only use the other options if you need "
 "them to realize e.g. a booking of a year-long ticket with a dynamic start "
@@ -4522,7 +4501,7 @@ msgstr ""
 "di sini nanti, tiket yang ada tidak akan terpengaruh oleh perubahan tersebut "
 "tetapi tetap mempertahankan validitasnya saat ini."
 
-#: pretix/base/models/items.py:642
+#: pretix/base/models/items.py:642 pretix/control/forms/item.py:618
 msgid "Start of validity"
 msgstr "Mulai validitas"
 
@@ -4701,7 +4680,7 @@ msgstr "Variasi ini tidak akan dijual sebelum tanggal yang ditentukan."
 msgid "This variation will not be sold after the given date."
 msgstr "Variasi ini tidak akan dijual setelah tanggal yang ditentukan."
 
-#: pretix/base/models/items.py:1089 pretix/control/forms/item.py:828
+#: pretix/base/models/items.py:1089 pretix/control/forms/item.py:837
 msgid ""
 "The sales channel selection for the product as a whole takes precedence, so "
 "if a sales channel is selected here but not on product level, the variation "
@@ -5034,7 +5013,7 @@ msgstr "Biarkan kosong untuk jumlah tiket yang tidak terbatas."
 msgid "Item"
 msgstr "Barang"
 
-#: pretix/base/models/items.py:1901 pretix/control/forms/item.py:771
+#: pretix/base/models/items.py:1901 pretix/control/forms/item.py:780
 msgid "Variations"
 msgstr "Variasi"
 
@@ -9658,7 +9637,7 @@ msgstr ""
 "mengizinkannya. Jika tidak, pengembalian dana manual akan dibuat untuk kamu "
 "proses secara manual."
 
-#: pretix/base/settings.py:1820 pretix/control/forms/orders.py:833
+#: pretix/base/settings.py:1820 pretix/control/forms/orders.py:835
 msgid "Keep a fixed cancellation fee"
 msgstr "Pertahankan biaya pembatalan tetap"
 
@@ -9666,7 +9645,7 @@ msgstr "Pertahankan biaya pembatalan tetap"
 msgid "Keep payment, shipping and service fees"
 msgstr "Simpan pembayaran, biaya pengiriman dan layanan"
 
-#: pretix/base/settings.py:1841 pretix/control/forms/orders.py:844
+#: pretix/base/settings.py:1841 pretix/control/forms/orders.py:846
 msgid "Keep a percentual cancellation fee"
 msgstr "Pertahankan biaya pembatalan persen"
 
@@ -11432,12 +11411,14 @@ msgstr "Kami tidak dapat menguraikan permintaan kamu."
 #: pretix/base/templates/400.html:12 pretix/base/templates/400_hostname.html:47
 #: pretix/base/templates/403.html:12 pretix/base/templates/404.html:12
 #: pretix/base/templates/500.html:22 pretix/base/templates/csrffail.html:26
+#: pretix/presale/templates/pretixpresale/event/offline.html:13
 msgid "Take a step back"
 msgstr "Ambil langkah mundur"
 
 #: pretix/base/templates/400.html:13 pretix/base/templates/400_hostname.html:48
 #: pretix/base/templates/403.html:13 pretix/base/templates/500.html:23
 #: pretix/presale/templates/pretixpresale/event/cookies.html:40
+#: pretix/presale/templates/pretixpresale/event/offline.html:14
 msgid "Try again"
 msgstr "Coba lagi"
 
@@ -11503,6 +11484,7 @@ msgstr "Anda tidak memiliki akses ke halaman ini."
 #: pretix/control/templates/pretixcontrol/base.html:193
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:4
 #: pretix/control/templates/pretixcontrol/user/staff_session_start.html:6
+#: pretix/presale/templates/pretixpresale/event/offline.html:21
 msgid "Admin mode"
 msgstr "Modus admin"
 
@@ -11691,14 +11673,14 @@ msgstr "Mengunggah foto"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldate.html:15
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:20
-#: pretix/control/templates/pretixcontrol/item/index.html:217
+#: pretix/control/templates/pretixcontrol/item/index.html:218
 #: pretix/control/templates/pretixcontrol/item/index.html:236
 #: pretix/control/templates/pretixcontrol/item/index.html:249
 msgid "days"
 msgstr "hari"
 
 #: pretix/base/templates/pretixbase/forms/widgets/reldatetime.html:15
-#: pretix/control/templates/pretixcontrol/item/index.html:215
+#: pretix/control/templates/pretixcontrol/item/index.html:216
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:355
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:364
 msgid "minutes"
@@ -12091,7 +12073,7 @@ msgstr "Terjadi kesalahan yang tidak terduga, silakan coba lagi nanti."
 msgid "The task has been completed."
 msgstr "Tugas telah selesai."
 
-#: pretix/control/forms/__init__.py:207 pretix/control/forms/item.py:684
+#: pretix/control/forms/__init__.py:207 pretix/control/forms/item.py:693
 #, python-brace-format
 msgid "Please do not upload files larger than {size}!"
 msgstr "Harap jangan mengunggah file yang lebih besar dari {size}!"
@@ -12148,7 +12130,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:2145 pretix/control/forms/filter.py:2161
 #: pretix/control/forms/filter.py:2227 pretix/control/forms/filter.py:2262
 #: pretix/control/forms/filter.py:2444 pretix/control/forms/filter.py:2459
-#: pretix/control/forms/orders.py:775 pretix/control/forms/orders.py:948
+#: pretix/control/forms/orders.py:777 pretix/control/forms/orders.py:950
 #: pretix/control/templates/pretixcontrol/event/fragment_subevent_choice_simple.html:5
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:52
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:114
@@ -12272,7 +12254,7 @@ msgstr "Salin konfigurasi dari"
 msgid "Do not copy"
 msgstr "Jangan ditiru"
 
-#: pretix/control/forms/event.py:323 pretix/control/forms/item.py:1151
+#: pretix/control/forms/event.py:323 pretix/control/forms/item.py:1160
 #: pretix/control/forms/subevents.py:400
 #, python-brace-format
 msgid "Default ({value})"
@@ -12906,12 +12888,12 @@ msgstr "Semua produk"
 msgid "{product} – Any variation"
 msgstr "{product} – Variasi apa pun"
 
-#: pretix/control/forms/filter.py:518 pretix/control/forms/orders.py:786
+#: pretix/control/forms/filter.py:518 pretix/control/forms/orders.py:788
 msgctxt "subevent"
 msgid "All dates starting at or after"
 msgstr "Semua tanggal dimulai pada atau setelahnya"
 
-#: pretix/control/forms/filter.py:524 pretix/control/forms/orders.py:793
+#: pretix/control/forms/filter.py:524 pretix/control/forms/orders.py:795
 msgctxt "subevent"
 msgid "All dates starting before"
 msgstr "Semua tanggal dimulai sebelumnya"
@@ -12987,6 +12969,20 @@ msgstr "Belanja langsung dan pra-penjualan berjalan"
 #: pretix/control/forms/filter.py:1097 pretix/control/forms/filter.py:1913
 msgid "Inactive"
 msgstr "Tidak aktif"
+
+#: pretix/control/forms/filter.py:1098 pretix/control/forms/filter.py:1573
+#: pretix/control/templates/pretixcontrol/events/index.html:150
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:114
+#: pretix/control/templates/pretixcontrol/subevents/index.html:167
+msgid "Presale not started"
+msgstr "Prapenjualan belum dimulai"
+
+#: pretix/control/forms/filter.py:1099 pretix/control/forms/filter.py:1574
+#: pretix/control/templates/pretixcontrol/events/index.html:148
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:112
+#: pretix/control/templates/pretixcontrol/subevents/index.html:165
+msgid "Presale over"
+msgstr "Prapenjualan selesai"
 
 #: pretix/control/forms/filter.py:1104 pretix/control/forms/filter.py:1107
 #: pretix/control/forms/filter.py:1603 pretix/control/forms/filter.py:1606
@@ -13626,11 +13622,23 @@ msgstr ""
 msgid "Shown independently of other products"
 msgstr "Ditampilkan secara independen dari produk lain"
 
+#: pretix/control/forms/item.py:620
+#, fuzzy
+#| msgid "Purchased"
+msgid "Purchase date"
+msgstr "Dibeli"
+
 #: pretix/control/forms/item.py:621
+#, fuzzy
+#| msgid "Canceled by customer"
+msgid "Date chosen by customer"
+msgstr "Dibatalkan oleh pelanggan"
+
+#: pretix/control/forms/item.py:630
 msgid "No membership granted"
 msgstr "Tidak ada keanggotaan yang diberikan"
 
-#: pretix/control/forms/item.py:640
+#: pretix/control/forms/item.py:649
 msgid ""
 "Gift card products should use a tax rule with a rate of 0 percent since "
 "sales tax will be applied when the gift card is redeemed."
@@ -13638,7 +13646,7 @@ msgstr ""
 "Produk kartu hadiah harus menggunakan aturan pajak dengan tarif 0 persen "
 "karena pajak penjualan akan diterapkan saat kartu hadiah ditukarkan."
 
-#: pretix/control/forms/item.py:654 pretix/control/forms/item.py:909
+#: pretix/control/forms/item.py:663 pretix/control/forms/item.py:918
 msgid ""
 "If a valid membership is required, at least one valid membership type needs "
 "to be selected."
@@ -13646,7 +13654,7 @@ msgstr ""
 "Jika diperlukan keanggotaan yang valid, setidaknya satu jenis keanggotaan "
 "yang valid harus dipilih."
 
-#: pretix/control/forms/item.py:665
+#: pretix/control/forms/item.py:674
 msgid ""
 "Your product grants a non-transferable membership and should therefore be a "
 "personalized admission ticket. Otherwise customers might not be able to use "
@@ -13659,11 +13667,11 @@ msgstr ""
 "ingin keanggotaan tidak dipersonalisasi, atur jenis keanggotaan agar dapat "
 "ditransfer."
 
-#: pretix/control/forms/item.py:674
+#: pretix/control/forms/item.py:683
 msgid "The start of validity must be before the end of validity."
 msgstr "Awal masa berlaku harus sebelum masa berlaku berakhir."
 
-#: pretix/control/forms/item.py:780
+#: pretix/control/forms/item.py:789
 #, python-format
 msgid ""
 "The variation \"%s\" cannot be deleted because it has already been ordered "
@@ -13674,19 +13682,19 @@ msgstr ""
 "sedang ada di keranjang pengguna. Harap setel variasinya sebagai \"tidak "
 "aktif\"."
 
-#: pretix/control/forms/item.py:855
+#: pretix/control/forms/item.py:864
 msgid "Use value from product"
 msgstr "Gunakan nilai dari produk"
 
-#: pretix/control/forms/item.py:936
+#: pretix/control/forms/item.py:945
 msgid "Add-ons"
 msgstr "Pengaya"
 
-#: pretix/control/forms/item.py:960
+#: pretix/control/forms/item.py:969
 msgid "You added the same add-on category twice"
 msgstr "Anda menambahkan kategori tambahan yang sama dua kali"
 
-#: pretix/control/forms/item.py:1005
+#: pretix/control/forms/item.py:1014
 msgid ""
 "Be aware that setting a minimal number makes it impossible to buy this "
 "product if all available add-ons are sold out."
@@ -13694,21 +13702,21 @@ msgstr ""
 "Ketahuilah bahwa menetapkan jumlah minimal membuat pembelian produk ini "
 "tidak mungkin dilakukan jika semua add-on yang tersedia telah terjual habis."
 
-#: pretix/control/forms/item.py:1012
+#: pretix/control/forms/item.py:1021
 msgid "Bundled products"
 msgstr "Produk yang dibundel"
 
-#: pretix/control/forms/item.py:1062
+#: pretix/control/forms/item.py:1071
 msgid "You added the same bundled product twice."
 msgstr "Anda menambahkan produk paket yang sama dua kali."
 
-#: pretix/control/forms/item.py:1068
+#: pretix/control/forms/item.py:1077
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:23
 #: pretix/control/templates/pretixcontrol/item/include_bundles.html:50
 msgid "Bundled product"
 msgstr "Produk yang dibundel"
 
-#: pretix/control/forms/item.py:1093 pretix/control/forms/orders.py:363
+#: pretix/control/forms/item.py:1102 pretix/control/forms/orders.py:363
 #: pretix/control/forms/orders.py:551
 msgid "inactive"
 msgstr "tidak aktif"
@@ -14054,14 +14062,14 @@ msgstr "Lampirkan faktur"
 msgid "Recipient"
 msgstr "Penerima"
 
-#: pretix/control/forms/orders.py:730
+#: pretix/control/forms/orders.py:732
 msgid ""
 "Cancel the order. All tickets will no longer work. This can not be reverted."
 msgstr ""
 "Batalkan pesanan. Semua tiket tidak lagi berfungsi. Ini tidak dapat "
 "dikembalikan."
 
-#: pretix/control/forms/orders.py:731
+#: pretix/control/forms/orders.py:733
 msgid ""
 "Mark the order as pending and allow the user to pay the open amount with "
 "another payment method."
@@ -14069,27 +14077,27 @@ msgstr ""
 "Tandai pesanan sebagai tertunda dan izinkan pengguna membayar jumlah terbuka "
 "dengan metode pembayaran lain."
 
-#: pretix/control/forms/orders.py:733
+#: pretix/control/forms/orders.py:735
 msgid "Do nothing and keep the order as it is."
 msgstr "Jangan melakukan apa pun dan pertahankan urutannya sebagaimana adanya."
 
-#: pretix/control/forms/orders.py:760
+#: pretix/control/forms/orders.py:762
 msgid "The refund amount needs to be positive and less than {}."
 msgstr "Jumlah pengembalian dana harus positif dan kurang dari {}."
 
-#: pretix/control/forms/orders.py:766
+#: pretix/control/forms/orders.py:768
 msgid "You need to specify an amount for a partial refund."
 msgstr "Anda perlu menentukan jumlah pengembalian dana sebagian."
 
-#: pretix/control/forms/orders.py:778
+#: pretix/control/forms/orders.py:780
 msgid "Cancel all dates"
 msgstr "Batalkan semua tanggal"
 
-#: pretix/control/forms/orders.py:797
+#: pretix/control/forms/orders.py:799
 msgid "Automatically refund money if possible"
 msgstr "Secara otomatis mengembalikan uang jika memungkinkan"
 
-#: pretix/control/forms/orders.py:800
+#: pretix/control/forms/orders.py:802
 msgid ""
 "Only available for payment method that support automatic refunds. Tickets "
 "that have been blocked (manually or by a plugin) are not auto-canceled and "
@@ -14099,11 +14107,11 @@ msgstr ""
 "otomatis. Tiket yang telah diblokir (secara manual atau dengan plugin) tidak "
 "dibatalkan secara otomatis dan kamu harus menanganinya secara manual."
 
-#: pretix/control/forms/orders.py:804
+#: pretix/control/forms/orders.py:806
 msgid "Create refund in the manual refund to-do list"
 msgstr "Buat pengembalian dana di daftar tugas pengembalian dana manual"
 
-#: pretix/control/forms/orders.py:807
+#: pretix/control/forms/orders.py:809
 msgid ""
 "Manual refunds will be created which will be listed in the manual refund to-"
 "do list. When combined with the automatic refund functionally, only payments "
@@ -14119,30 +14127,30 @@ msgstr ""
 "mengembalikan dana sebagian pesanan dengan mengimbangi pesanan yang berbeda "
 "atau menerbitkan kartu hadiah."
 
-#: pretix/control/forms/orders.py:813
+#: pretix/control/forms/orders.py:815
 msgid ""
 "Refund order value to a gift card instead instead of the original payment "
 "method"
 msgstr ""
 "Kembalikan nilai pesanan ke kartu hadiah, bukan ke metode pembayaran asli"
 
-#: pretix/control/forms/orders.py:819
+#: pretix/control/forms/orders.py:821
 msgid "Gift card validity"
 msgstr "Validitas kartu hadiah"
 
-#: pretix/control/forms/orders.py:838
+#: pretix/control/forms/orders.py:840
 msgid "Keep a fixed cancellation fee per ticket"
 msgstr "Pertahankan biaya pembatalan tetap per tiket"
 
-#: pretix/control/forms/orders.py:839
+#: pretix/control/forms/orders.py:841
 msgid "Free tickets and add-on products are not counted"
 msgstr "Tiket gratis dan produk tambahan tidak dihitung"
 
-#: pretix/control/forms/orders.py:849
+#: pretix/control/forms/orders.py:851
 msgid "Keep fees"
 msgstr "Pertahankan biaya"
 
-#: pretix/control/forms/orders.py:852
+#: pretix/control/forms/orders.py:854
 msgid ""
 "The selected types of fees will not be refunded but instead added to the "
 "cancellation fee. Fees are never refunded in when an order in an event "
@@ -14154,20 +14162,20 @@ msgstr ""
 "rangkaian acara hanya dibatalkan sebagian karena terdiri dari tiket untuk "
 "beberapa tanggal."
 
-#: pretix/control/forms/orders.py:858
+#: pretix/control/forms/orders.py:860
 msgid "Send information via email"
 msgstr "Kirim informasi melalui email"
 
-#: pretix/control/forms/orders.py:864
+#: pretix/control/forms/orders.py:866
 msgid "Send information to waiting list"
 msgstr "Kirim informasi ke daftar tunggu"
 
-#: pretix/control/forms/orders.py:890 pretix/control/forms/orders.py:916
+#: pretix/control/forms/orders.py:892 pretix/control/forms/orders.py:918
 #, python-brace-format
 msgid "Canceled: {event}"
 msgstr "Dibatalkan: {event}"
 
-#: pretix/control/forms/orders.py:901
+#: pretix/control/forms/orders.py:903
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -14200,7 +14208,7 @@ msgstr ""
 "\n"
 "Tim {event} Anda"
 
-#: pretix/control/forms/orders.py:928
+#: pretix/control/forms/orders.py:930
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -14224,24 +14232,24 @@ msgstr ""
 "\n"
 "Tim {event} Anda"
 
-#: pretix/control/forms/orders.py:960 pretix/plugins/sendmail/forms.py:127
+#: pretix/control/forms/orders.py:962 pretix/plugins/sendmail/forms.py:127
 #: pretix/plugins/sendmail/forms.py:220
 msgctxt "subevent"
 msgid "Please either select a specific date or a date range, not both."
 msgstr "Harap pilih tanggal atau rentang tanggal tertentu, jangan keduanya."
 
-#: pretix/control/forms/orders.py:962
+#: pretix/control/forms/orders.py:964
 msgctxt "subevent"
 msgid "Please either select all dates or a date range, not both."
 msgstr "Silakan pilih semua tanggal atau rentang tanggal, jangan keduanya."
 
-#: pretix/control/forms/orders.py:964 pretix/plugins/sendmail/forms.py:129
+#: pretix/control/forms/orders.py:966 pretix/plugins/sendmail/forms.py:129
 #: pretix/plugins/sendmail/forms.py:222
 msgctxt "subevent"
 msgid "If you set a date range, please set both a start and an end."
 msgstr "Jika kamu menetapkan rentang tanggal, harap tetapkan awal dan akhir."
 
-#: pretix/control/forms/orders.py:966
+#: pretix/control/forms/orders.py:968
 msgid "Please confirm that you want to cancel ALL dates in this event series."
 msgstr ""
 "Harap konfirmasi bahwa kamu ingin membatalkan SEMUA tanggal dalam rangkaian "
@@ -19054,6 +19062,19 @@ msgstr "Seri"
 msgid "More quotas"
 msgstr "Lebih banyak kuota"
 
+#: pretix/control/templates/pretixcontrol/events/index.html:146
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:110
+#: pretix/control/views/dashboards.py:529
+msgid "Shop disabled"
+msgstr "Toko dinonaktifkan"
+
+#: pretix/control/templates/pretixcontrol/events/index.html:152
+#: pretix/control/templates/pretixcontrol/organizers/detail.html:116
+#: pretix/control/templates/pretixcontrol/subevents/index.html:169
+#: pretix/control/views/dashboards.py:535
+msgid "On sale"
+msgstr "Di jual"
+
 #: pretix/control/templates/pretixcontrol/events/index.html:157
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:121
 msgid "Open event dashboard"
@@ -19546,24 +19567,24 @@ msgstr "Tiket & Lencana"
 msgid "Check-in & Validity"
 msgstr "Check-in & Validitas"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:213
+#: pretix/control/templates/pretixcontrol/item/index.html:214
 msgid "Duration"
 msgstr "Durasi"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:216
+#: pretix/control/templates/pretixcontrol/item/index.html:217
 msgid "hours"
 msgstr "jam"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:218
+#: pretix/control/templates/pretixcontrol/item/index.html:219
 #: pretix/control/templates/pretixcontrol/item/index.html:250
 msgid "months"
 msgstr "bulan"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:219
+#: pretix/control/templates/pretixcontrol/item/index.html:220
 msgid "years"
 msgstr "bertahun-tahun"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:225
+#: pretix/control/templates/pretixcontrol/item/index.html:226
 msgid ""
 "If you select a duration given in days, months or years, the validity will "
 "always end at the end of a full day (midnight), plus the number of minutes "
@@ -31625,6 +31646,29 @@ msgstr ""
 msgid "Resend order link"
 msgstr "Kirim ulang tautan pesanan"
 
+#: pretix/presale/templates/pretixpresale/event/offline.html:4
+#: pretix/presale/templates/pretixpresale/event/offline.html:8
+#, fuzzy
+#| msgid "Go offline"
+msgid "Shop offline"
+msgstr "Offline"
+
+#: pretix/presale/templates/pretixpresale/event/offline.html:9
+#, fuzzy
+#| msgid "This ticket shop is currently disabled."
+msgid "This ticket shop is currently turned off."
+msgstr "Toko tiket ini saat ini dinonaktifkan."
+
+#: pretix/presale/templates/pretixpresale/event/offline.html:10
+msgid "It is only accessible to authenticated team members."
+msgstr ""
+
+#: pretix/presale/templates/pretixpresale/event/offline.html:11
+#, fuzzy
+#| msgid "Please try again."
+msgid "Please try again later."
+msgstr "Silakan coba lagi."
+
 #: pretix/presale/templates/pretixpresale/event/order.html:12
 #: pretix/presale/templates/pretixpresale/event/order.html:29
 msgid "Thank you!"
@@ -32598,14 +32642,10 @@ msgstr "Halaman %(page)s dari %(of)s"
 msgid "We are processing your request …"
 msgstr "Kami sedang memproses permintaan Anda …"
 
-#: pretix/presale/utils.py:242 pretix/presale/utils.py:369
+#: pretix/presale/utils.py:241 pretix/presale/utils.py:369
 #: pretix/presale/utils.py:370
 msgid "The selected event was not found."
 msgstr "Acara yang dipilih tidak ditemukan."
-
-#: pretix/presale/utils.py:329
-msgid "The selected ticket shop is currently not available."
-msgstr "Toko tiket yang dipilih saat ini tidak tersedia."
 
 #: pretix/presale/utils.py:335
 msgid "This feature is not enabled."
@@ -32925,21 +32965,24 @@ msgstr "Tanggal yang dipilih tidak ada dalam rangkaian acara ini."
 msgid "from %(start_date)s"
 msgstr "dari %(start_date)s"
 
-#: pretix/settings.py:712
+#: pretix/settings.py:718
 msgid "User profile only"
 msgstr "Hanya profil pengguna"
 
-#: pretix/settings.py:713
+#: pretix/settings.py:719
 msgid "Read access"
 msgstr "Akses baca"
 
-#: pretix/settings.py:714
+#: pretix/settings.py:720
 msgid "Write access"
 msgstr "Akses tulis"
 
-#: pretix/settings.py:725
+#: pretix/settings.py:731
 msgid "Kosovo"
 msgstr "Kosovo"
+
+#~ msgid "The selected ticket shop is currently not available."
+#~ msgstr "Toko tiket yang dipilih saat ini tidak tersedia."
 
 #~ msgid "Needs to be enabled in your Stripe account first."
 #~ msgstr "Harus diaktifkan di akun Stripe kamu terlebih dahulu."
