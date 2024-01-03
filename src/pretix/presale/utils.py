@@ -38,17 +38,16 @@ from importlib import import_module
 from urllib.parse import urljoin
 
 from django.conf import settings
-from django.core.exceptions import PermissionDenied
 from django.db.models import Q
-from django.http import Http404
+from django.http import Http404, HttpResponseForbidden
 from django.middleware.csrf import rotate_token
+from django.template import loader
 from django.template.response import TemplateResponse
 from django.urls import resolve
 from django.utils.crypto import constant_time_compare
 from django.utils.functional import SimpleLazyObject
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
-from django.views.defaults import permission_denied
 from django_scopes import scope
 
 from pretix.base.middleware import LocaleMiddleware
@@ -325,8 +324,9 @@ def _detect_event(request, require_live=True, require_plugin=None):
                 if not can_access:
                     # Directly construct view instead of just calling `raise` since this case is so common that we
                     # don't want it to show in our log files.
-                    return permission_denied(
-                        request, PermissionDenied(_('The selected ticket shop is currently not available.'))
+                    template = loader.get_template("pretixpresale/event/offline.html")
+                    return HttpResponseForbidden(
+                        template.render(request=request)
                     )
 
             if require_plugin:
