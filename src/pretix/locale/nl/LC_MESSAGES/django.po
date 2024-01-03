@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2023-12-23 10:29+0000\n"
-"PO-Revision-Date: 2023-12-30 21:00+0000\n"
-"Last-Translator: Christiaan de Die le Clercq <contact@techwolf12.nl>\n"
+"PO-Revision-Date: 2024-01-03 08:57+0000\n"
+"Last-Translator: RobertSF92 <robert@semperfi-it.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -2364,11 +2364,9 @@ msgid "Internal fee type"
 msgstr "Intern tarieftype"
 
 #: pretix/base/exporters/orderlist.py:851
-#, fuzzy
-#| msgid "Date"
 msgctxt "subevent"
 msgid "Date ID"
-msgstr "Datum"
+msgstr "Datum ID"
 
 #: pretix/base/exporters/orderlist.py:856
 #, fuzzy
