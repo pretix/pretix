@@ -1171,3 +1171,21 @@ def test_auto_check_out_dst(event, position, clist):
         process_exit_all(sender=None)
     clist.refresh_from_db()
     assert clist.exit_all_at.astimezone(event.timezone) == datetime(2021, 3, 30, 2, 30, tzinfo=event.timezone)
+
+
+@pytest.mark.django_db
+def test_sql_empty_collection(position, clist, event):
+    event.has_subevents = True
+    event.save()
+    event.settings.timezone = 'Europe/Berlin'
+    se1 = event.subevents.create(name="Foo", date_from=datetime(2020, 2, 1, 12, 0, 0, tzinfo=event.timezone))
+    position.subevent = se1
+    position.save()
+    clist.rules = {"inList": [{"var": "product"}, {"objectList": []}]}
+    clist.save()
+    with freeze_time("2020-02-01 10:51:00"):
+        assert not OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+        assert 'Entry not permitted: Ticket type not allowed.'
