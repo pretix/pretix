@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-03 10:29+0000\n"
-"PO-Revision-Date: 2024-01-03 02:00+0000\n"
+"PO-Revision-Date: 2024-01-03 12:07+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -7953,10 +7953,9 @@ msgstr ""
 "{event}."
 
 #: pretix/base/services/mail.py:459
-#, fuzzy
 msgctxt "attachment_filename"
 msgid "Calendar invite"
-msgstr "Reenviar enlace"
+msgstr "Invitación al calendario"
 
 #: pretix/base/services/memberships.py:105
 #, python-brace-format
@@ -10352,9 +10351,8 @@ msgstr ""
 "su equipo {event}"
 
 #: pretix/base/settings.py:2221
-#, fuzzy
 msgid "Attachment for new orders"
-msgstr "Partir en un nuevo orden"
+msgstr "Adjunto para nuevos pedidos"
 
 #: pretix/base/settings.py:2226
 #, python-brace-format
@@ -18335,6 +18333,9 @@ msgid ""
 "Refunds can be issued as a gift card if the respective option is set, but "
 "there is no customer choice between gift card and direct refund."
 msgstr ""
+"Los reembolsos se pueden emitir como una tarjeta de regalo si se establece "
+"la opción respectiva, pero el cliente no puede elegir entre una tarjeta de "
+"regalo y un reembolso directo."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:5
 #: pretix/control/templates/pretixcontrol/event/live.html:131
@@ -18355,6 +18356,8 @@ msgid ""
 "You can take your event offline. Nobody except your team will be able to see "
 "or access it any more."
 msgstr ""
+"Puedes desconectar tu evento. Nadie, excepto tu equipo, podrá verlo ni "
+"acceder a él."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:34
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:47
@@ -18369,6 +18372,8 @@ msgid ""
 "If you need to call off your event you want to cancel and refund all "
 "tickets, you can do so through this option."
 msgstr ""
+"Si necesita cancelar su evento y desea cancelar y reembolsar todas las "
+"entradas, puede hacerlo a través de esta opción."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:55
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:68
@@ -18383,6 +18388,9 @@ msgid ""
 "event and only retain the financial information such as the number and type "
 "of tickets sold."
 msgstr ""
+"Puede eliminar datos personales como nombres y direcciones de correo "
+"electrónico de su evento y solo conservar la información financiera, como la "
+"cantidad y el tipo de entradas vendidas."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:76
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:89
@@ -18395,6 +18403,8 @@ msgid ""
 "You can delete your event completely only as long as it does not contain any "
 "undeletable data, such as orders not performed in test mode."
 msgstr ""
+"Puedes eliminar tu evento por completo solo siempre que no contenga datos no "
+"eliminables, como pedidos no realizados en modo de prueba."
 
 #: pretix/control/templates/pretixcontrol/event/delete.html:9
 msgid ""
@@ -18473,7 +18483,7 @@ msgstr "Datos de geocodificación © OpenStreetMap"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:4
 msgid "Failed to retrieve geo coordinates"
-msgstr ""
+msgstr "No se pudieron recuperar las coordenadas geográficas"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_geodata_autoupdate.html:5
 msgid "Retrieving geo coordinates …"
@@ -18515,7 +18525,7 @@ msgstr "Este plugin informa de los siguientes problemas:"
 #: pretix/control/templates/pretixcontrol/event/fragment_qr_dropdown.html:24
 #, python-format
 msgid "Download QR code as %(filetype)s image"
-msgstr ""
+msgstr "Descargar el código QR como imagen de %(filetype)s"
 
 #: pretix/control/templates/pretixcontrol/event/fragment_timeline.html:5
 #, fuzzy
@@ -18664,6 +18674,8 @@ msgid ""
 "Your shop is already live, however the following issues would normally "
 "prevent your shop to go live:"
 msgstr ""
+"Su tienda ya está activa, sin embargo, los siguientes problemas normalmente "
+"impedirían que su tienda esté activa:"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:37
 #: pretix/control/templates/pretixcontrol/event/live.html:56
@@ -18822,7 +18834,7 @@ msgstr "Usar un servidor SMTP personalizado"
 #: pretix/control/templates/pretixcontrol/event/mail.html:27
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:28
 msgid "System-provided email server"
-msgstr ""
+msgstr "Servidor de correo electrónico proporcionado por el sistema"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:60
 #, fuzzy
@@ -18891,9 +18903,8 @@ msgid "Order approval process"
 msgstr "Proceso de aprobación de pedidos"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:126
-#, fuzzy
 msgid "Attachments"
-msgstr "Archivos de tickets en caché"
+msgstr "Archivos adjuntos"
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:5
 #: pretix/control/templates/pretixcontrol/event/payment_provider.html:5
@@ -18919,6 +18930,8 @@ msgid ""
 "%(plugin_settings_href)s>plugin settings</a> and activate one or more "
 "payment plugins."
 msgstr ""
+"No hay proveedores de pago disponibles. Vaya a la <a %(plugin_settings_href)"
+"s>configuración del complemento</a> y active uno o más complementos de pago."
 
 #: pretix/control/templates/pretixcontrol/event/payment.html:60
 msgid "Deadlines"
@@ -18977,6 +18990,10 @@ msgid ""
 "Plugins might bring additional software functionality, connect your event to "
 "third-party services, or apply other forms of customizations."
 msgstr ""
+"En esta página, puede elegir los complementos que desea habilitar para su "
+"evento. Los complementos pueden aportar funciones de software adicionales, "
+"conectar su evento a servicios de terceros o aplicar otras formas de "
+"personalizaciones."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:17
 #: pretix/control/views/checkin.py:420 pretix/control/views/discounts.py:114
@@ -19017,7 +19034,7 @@ msgstr "Tus cambios han sido guardados."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:36
 msgid "Top recommendation"
-msgstr ""
+msgstr "Recomendación top"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:40
 #, fuzzy
@@ -19282,6 +19299,10 @@ msgid ""
 "privacy policy will be linked automatically (if you configured them), so you "
 "do not need to add them here."
 msgstr ""
+"Estos enlaces se mostrarán en el pie de página de su taquilla. Por ejemplo, "
+"podría vincular sus términos de servicio aquí. Su dirección de contacto, pie "
+"de imprenta y política de privacidad se vincularán automáticamente (si las "
+"configuró), por lo que no es necesario que las agregue aquí."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:304
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:119
@@ -19298,6 +19319,9 @@ msgid ""
 "The waiting list currently is not compatible with some advanced features of "
 "pretix such as hidden products, add-on products or product bundles."
 msgstr ""
+"Actualmente, la lista de espera no es compatible con algunas funciones "
+"avanzadas de pretix, como productos ocultos, productos complementarios o "
+"paquetes de productos."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:347
 msgid ""
@@ -19306,12 +19330,20 @@ msgid ""
 "quota, you might run into situations where people are sent an email from the "
 "waiting list but still are unable to book a seat."
 msgstr ""
+"La lista de espera determina la disponibilidad principalmente en función de "
+"las cuotas. Si utiliza un plan de asientos y su número de asientos "
+"disponibles es menor que la cuota disponible, es posible que se encuentre "
+"con situaciones en las que las personas reciban un correo electrónico desde "
+"la lista de espera pero aún así no puedan reservar un asiento."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:354
 msgid ""
 "Specifically, this means the waiting list is not safe to use together with "
 "the minimum distance feature of our seating plan module."
 msgstr ""
+"Específicamente, esto significa que no es seguro usar la lista de espera "
+"junto con la función de distancia mínima de nuestro módulo de distribución "
+"de asientos."
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:370
 msgid "Item metadata"
@@ -19450,12 +19482,12 @@ msgstr "Tasa"
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:41
 #, python-format
 msgid "incl. %(rate)s %%"
-msgstr ""
+msgstr "incluido %(rate)s %%"
 
 #: pretix/control/templates/pretixcontrol/event/tax_index.html:43
 #, python-format
 msgid "excl. %(rate)s %%"
-msgstr ""
+msgstr "excluido %(rate)s %%"
 
 #: pretix/control/templates/pretixcontrol/event/tickets.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:13
@@ -19658,19 +19690,24 @@ msgstr "Tipos de eventos"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:13
 msgid "Singular event or non-event shop"
-msgstr ""
+msgstr "Evento singular o tienda sin eventos"
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:15
 msgid ""
 "An event with individual configuration. If you create more events later, you "
 "can copy the event to save yourself some work."
 msgstr ""
+"Un evento con configuración individual. Si crea más eventos más adelante, "
+"puede copiar el evento para ahorrarse algo de trabajo."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:21
 msgid ""
 "Examples: Conferences, workshops, trade fairs, one-off concerts, sale of "
 "digital content, multi-day events with combination tickets."
 msgstr ""
+"Ejemplos: conferencias, talleres, ferias comerciales, conciertos puntuales, "
+"venta de contenidos digitales, eventos de varios días con entradas "
+"combinadas."
 
 #: pretix/control/templates/pretixcontrol/events/create_foundation.html:32
 msgid "Event series or time slot booking"
@@ -20034,9 +20071,8 @@ msgstr "Ajustes básicos"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:96
 #: pretix/control/templates/pretixcontrol/item/index.html:109
-#, fuzzy
 msgid "Non-personalized ticket"
-msgstr "Generar tickets"
+msgstr "Entrada no personalizada"
 
 #: pretix/control/templates/pretixcontrol/item/create.html:98
 #: pretix/control/templates/pretixcontrol/item/index.html:111
@@ -29063,7 +29099,7 @@ msgstr ""
 
 #: pretix/plugins/sendmail/forms.py:72
 msgid "Attachment"
-msgstr ""
+msgstr "Adjunto"
 
 #: pretix/plugins/sendmail/forms.py:75
 msgid ""
@@ -29071,6 +29107,9 @@ msgid ""
 "being sorted into spam folders. We recommend only using PDFs of no more than "
 "2 MB in size."
 msgstr ""
+"Enviar un archivo adjunto aumenta las posibilidades de que su correo "
+"electrónico no llegue o se clasifique en carpetas de spam. Recomendamos "
+"utilizar únicamente archivos PDF de no más de 2 MB de tamaño."
 
 #: pretix/plugins/sendmail/forms.py:103
 #, fuzzy
