@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-03 10:29+0000\n"
-"PO-Revision-Date: 2024-01-04 09:00+0000\n"
+"PO-Revision-Date: 2024-01-05 03:00+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -7563,7 +7563,7 @@ msgid "You can not select two variations of the same add-on product."
 msgstr "No se pueden seleccionar dos variantes del mismo producto adicional."
 
 #: pretix/base/services/cart.py:187 pretix/base/services/orders.py:192
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You can select at most %(max)s add-on from the category %(cat)s for the "
 "product %(base)s."
@@ -7575,10 +7575,10 @@ msgstr[0] ""
 "el producto %(base)s."
 msgstr[1] ""
 "Puede seleccionar como máximo %(max)s add-ons de la categoría %(cat)s para "
-"el producto %(base)s."
+"los productos %(base)s."
 
 #: pretix/base/services/cart.py:192 pretix/base/services/orders.py:197
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "You need to select at least %(min)s add-on from the category %(cat)s for the "
 "product %(base)s."
@@ -7590,7 +7590,7 @@ msgstr[0] ""
 "el producto %(base)s."
 msgstr[1] ""
 "Necesita seleccionar al menos %(min)s add-ons de la categoría %(cat)s para "
-"el producto %(base)s."
+"los productos %(base)s."
 
 #: pretix/base/services/cart.py:196 pretix/base/services/orders.py:201
 #, python-format
@@ -7697,14 +7697,14 @@ msgid "number of entries today"
 msgstr "Número de tickets"
 
 #: pretix/base/services/checkin.py:305
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "number of entries since {datetime}"
-msgstr "Número de tickets"
+msgstr "número de entradas desde {datetime}"
 
 #: pretix/base/services/checkin.py:306
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "number of entries before {datetime}"
-msgstr "Número de tickets"
+msgstr "número de entradas antes del {datetime}"
 
 #: pretix/base/services/checkin.py:307
 #, fuzzy
@@ -7770,9 +7770,9 @@ msgid "This order is not yet approved."
 msgstr "Esta orden no está pendiente de aprobación."
 
 #: pretix/base/services/checkin.py:891 pretix/base/services/checkin.py:895
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "This ticket is only valid after {datetime}."
-msgstr "Este recibo no es válido para esta fecha de evento."
+msgstr "Este billete sólo es válido después del {datetime}."
 
 #: pretix/base/services/checkin.py:905 pretix/base/services/checkin.py:909
 #, fuzzy, python-brace-format
@@ -13813,9 +13813,8 @@ msgstr ""
 "los correos electrónicos serán enviados por este servidor localmente."
 
 #: pretix/control/forms/global_settings.py:143
-#, fuzzy
 msgid "Changes to pretix"
-msgstr "Cambiar"
+msgstr "Cambios en pretix"
 
 #: pretix/control/forms/global_settings.py:146
 msgid ""
@@ -25879,6 +25878,10 @@ msgid ""
 "license terms as pretix (AGPLv3 + additional restrictions). Make sure to "
 "keep it up to date!"
 msgstr ""
+"Debe realizar todos los cambios que realizó en el código fuente de pretix y "
+"estar disponibles gratuitamente para todos los visitantes de su sitio en "
+"forma de código fuente bajo los mismos términos de licencia que pretix ("
+"AGPLv3 + restricciones adicionales). ¡Asegúrate de mantenerlo actualizado!"
 
 #: pretix/control/views/global_settings.py:227
 msgid ""
