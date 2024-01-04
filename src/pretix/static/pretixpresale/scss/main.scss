@@ -278,6 +278,14 @@ body.loading .container {
         float: left;
         margin-top: 3px;
     }
+    & > img {
+        width: 26px;
+        height: auto;
+        float: left;
+        margin-top: 3px;
+        position: relative;
+        left: 3.71423px;  /* Position analog to what fa-fw does */
+    }
     p {
         min-height: 30px;
         margin-left: 40px;
