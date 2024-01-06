@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-03 10:29+0000\n"
-"PO-Revision-Date: 2024-01-05 03:00+0000\n"
+"PO-Revision-Date: 2024-01-07 02:00+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -23408,11 +23408,16 @@ msgid ""
 "in one event, and require valid memberships to allow purchases in another "
 "event."
 msgstr ""
+"Puede definir tipos de membresía. Estos le permiten vincular productos de "
+"diferentes eventos. Puede vender una membresía como parte de un producto en "
+"un evento y exigir membresías válidas para permitir compras en otro evento."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:15
 msgid ""
 "This can be used to enable products like year passes, tickets of ten, etc."
 msgstr ""
+"Esto se puede utilizar para habilitar productos como abonos de año, billetes "
+"de diez, etc."
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:7
 msgid ""
@@ -23518,7 +23523,7 @@ msgstr "Conectar"
 #, python-format
 msgctxt "reusable_media"
 msgid "Medium %(id)s"
-msgstr ""
+msgstr "%(id)s medio"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:86
 #, fuzzy
@@ -23530,7 +23535,7 @@ msgstr "Historia del equipo"
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html:16
 msgctxt "reusable_media"
 msgid "New medium"
-msgstr ""
+msgstr "Nuevo medio"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:5
 #, fuzzy
@@ -23549,7 +23554,7 @@ msgstr "Un recibo no se puede borrar si ya ha sido canjeado."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:6
 msgid "SSO client:"
-msgstr ""
+msgstr "Cliente SSO:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:8
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:15
@@ -23563,6 +23568,9 @@ msgid ""
 "account credentials by setting up your other systems as a Single-Sign-On "
 "(SSO) client based on OpenID Connect."
 msgstr ""
+"Puede permitir que sus clientes inicien sesión en otros sistemas utilizando "
+"las credenciales de su cuenta de cliente configurando sus otros sistemas "
+"como un cliente de inicio de sesión único (SSO) basado en OpenID Connect."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:5
 #, fuzzy
@@ -23601,6 +23609,9 @@ msgid ""
 "You can connect existing Single-Sign-On (SSO) providers to allow your "
 "customers to log in using your own account system."
 msgstr ""
+"Puede conectar proveedores de inicio de sesión único (SSO) existentes para "
+"permitir que sus clientes inicien sesión utilizando su propio sistema de "
+"cuenta."
 
 #: pretix/control/templates/pretixcontrol/organizers/team_delete.html:5
 msgid "Delete team:"
@@ -23741,6 +23752,8 @@ msgid ""
 "Webhooks scheduled to be retried in less than %(minutes)s minutes may not be "
 "listed here and can no longer be stopped or expedited."
 msgstr ""
+"Es posible que los webhooks programados para reintentar en menos de "
+"%(minutes)s minutos no aparezcan aquí y ya no se puedan detener ni acelerar."
 
 #: pretix/control/templates/pretixcontrol/organizers/webhook_logs.html:44
 msgid "This webhook was retried since it previously failed."
@@ -23972,6 +23985,8 @@ msgid ""
 "If you want to use a custom background, it already needs to have the correct "
 "size."
 msgstr ""
+"Después de cambiar el tamaño de la página, debe crear un nuevo fondo vacío. "
+"Si desea utilizar un fondo personalizado, ya debe tener el tamaño correcto."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:221
 #, fuzzy
@@ -23997,13 +24012,16 @@ msgstr "Tamaño (mm)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:274
 msgid "Render without whitespace"
-msgstr ""
+msgstr "Renderizar sin espacios en blanco"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:276
 msgid ""
 "Required for consistent size across platforms. Supported on Android starting "
 "with pretixPRINT 2.3.3 and on Desktop with pretixSCAN 1.9.3."
 msgstr ""
+"Requerido para un tamaño consistente en todas las plataformas. Compatible "
+"con Android a partir de pretixPRINT 2.3.3 y en escritorio con pretixSCAN 1.9."
+"3."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:282
 msgid "Font size (pt)"
@@ -24020,11 +24038,11 @@ msgstr "Color del texto"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:313
 msgid "Flow multiple lines downward from specified position"
-msgstr ""
+msgstr "Fluye varias líneas hacia abajo desde una posición especificada"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:356
 msgid "Rotation (°)"
-msgstr ""
+msgstr "Rotación (°)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:363
 msgid "Style"
@@ -24064,7 +24082,7 @@ msgstr "Atributo de evento:"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:400
 msgid "Other… (multilingual)"
-msgstr ""
+msgstr "Otro… (multilingüe)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:401
 msgid "Other…"
@@ -24102,10 +24120,13 @@ msgid ""
 "generated by plugins. If you want to embed a logo or other images, use a "
 "custom background instead."
 msgstr ""
+"Puede usar esto para agregar imágenes cargadas por usuarios a partir de "
+"preguntas o imágenes generadas por complementos. Si desea incrustar un "
+"logotipo u otras imágenes, utilice un fondo personalizado."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:451
 msgid "Dynamic image"
-msgstr ""
+msgstr "Imagen dinámica"
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:16
 #, fuzzy
@@ -24121,6 +24142,13 @@ msgid ""
 "however most of them can also be empty in some cases depending on "
 "configuration."
 msgstr ""
+"Puede utilizar marcadores de posición en textos personalizados en tickets "
+"para enriquecer su texto con datos individuales. Los marcadores de posición "
+"disponibles dependen de la configuración de su evento, los complementos "
+"activados, el producto seleccionado y la entrada del usuario. Esta página "
+"enumera todos los marcadores de posición técnicamente disponibles para su "
+"evento; sin embargo, la mayoría de ellos también pueden estar vacíos en "
+"algunos casos dependiendo de la configuración."
 
 #: pretix/control/templates/pretixcontrol/pdf/placeholders.html:31
 #, fuzzy
