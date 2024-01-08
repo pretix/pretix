@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import hashlib
 import logging
 from urllib.parse import quote
 
@@ -36,7 +37,8 @@ logger = logging.getLogger(__name__)
 class GeoCodeView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
         q = self.request.GET.get('q')
-        cd = cache.get('geocode:{}'.format(q))
+        cache_key = 'geocode:{}'.format(hashlib.sha256(q.encode()).hexdigest())
+        cd = cache.get(cache_key)
         if cd:
             return JsonResponse({
                 'success': True,
@@ -61,7 +63,7 @@ class GeoCodeView(LoginRequiredMixin, View):
                 'results': []
             }, status=200)
 
-        cache.set('geocode:{}'.format(q), res, timeout=3600 * 6)
+        cache.set(cache_key, res, timeout=3600 * 6)
         return JsonResponse({
             'success': True,
             'results': res
