@@ -335,7 +335,7 @@ def _get_unknown_transactions(job: BankImportJob, data: list, event: Event = Non
                                 date=row.get('date', ''),
                                 iban=row.get('iban', ''),
                                 bic=row.get('bic', ''),
-                                external_id=row.get('external_id', ''),
+                                external_id=row.get('external_id'),
                                 currency=event.currency if event else job.currency)
 
         trans.date_parsed = parse_date(trans.date)
