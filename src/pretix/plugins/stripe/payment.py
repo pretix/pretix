@@ -693,7 +693,10 @@ class StripeMethod(BasePaymentProvider):
 
         try:
             if payment_info['id'].startswith('pi_'):
-                chargeid = payment_info['latest_charge']['id']
+                if 'latest_charge' in payment_info:
+                    chargeid = payment_info['latest_charge']['id']
+                else:
+                    chargeid = payment_info['charges']['data'][0]['id']
             else:
                 chargeid = payment_info['id']
 
