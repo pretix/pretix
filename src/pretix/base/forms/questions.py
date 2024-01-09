@@ -137,7 +137,6 @@ class NamePartsWidget(forms.MultiWidget):
         for i, field in enumerate(self.scheme['fields']):
             fname, label, size = field
             fval = value.get(fname, "")
-            print(field, repr(fval))
             if fname == "salutation" and fname in value and fval == "":
                 fval = "empty"
             data.append(fval)
