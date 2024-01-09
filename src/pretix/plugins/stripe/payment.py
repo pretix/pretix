@@ -811,7 +811,8 @@ class StripeMethod(BasePaymentProvider):
         try:
             return self._handle_payment_intent(request, payment)
         finally:
-            del request.session['payment_stripe_{}_payment_method_id'.format(self.method)]
+            if 'payment_stripe_{}_payment_method_id'.format(self.method) in request.session:
+                del request.session['payment_stripe_{}_payment_method_id'.format(self.method)]
 
     def is_moto(self, request, payment=None) -> bool:
         return False
@@ -1660,40 +1661,32 @@ class StripeSofort(StripeMethod):
             ))),
         ])
 
-    def _create_source(self, request, payment):
-        source = stripe.Source.create(
-            type='sofort',
-            amount=self._get_amount(payment),
-            currency=self.event.currency.lower(),
-            metadata={
-                'order': str(payment.order.id),
-                'event': self.event.id,
-                'code': payment.order.code
-            },
-            statement_descriptor=self.statement_descriptor(payment, 35),
-            sofort={
-                'country': request.session.get('payment_stripe_sofort_bank_country'),
-            },
-            redirect={
-                'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
-                    'order': payment.order.code,
-                    'payment': payment.pk,
-                    'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
-                })
-            },
-            **self.api_kwargs
-        )
-        return source
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            "payment_method_data": {
+                "type": "sofort",
+                "sofort": {
+                    "country": (request.session.get(f"payment_stripe_{self.method}_bank_country") or "DE").upper()
+                },
+            }
+        }
+
+    def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        try:
+            return super().execute_payment(request, payment)
+        finally:
+            if f'payment_stripe_{self.method}_bank_country' in request.session:
+                del request.session[f'payment_stripe_{self.method}_bank_country']
 
     def payment_is_valid_session(self, request):
         return (
-            request.session.get('payment_stripe_sofort_bank_country', '') != ''
+            request.session.get(f'payment_stripe_{self.method}_bank_country', '') != ''
         )
 
     def checkout_prepare(self, request, cart):
         form = self.payment_form(request)
         if form.is_valid():
-            request.session['payment_stripe_sofort_bank_country'] = form.cleaned_data['bank_country']
+            request.session[f'payment_stripe_{self.method}_bank_country'] = form.cleaned_data['bank_country']
             return True
         return False
 
