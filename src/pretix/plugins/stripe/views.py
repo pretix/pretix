@@ -358,7 +358,7 @@ def charge_webhook(event, event_json, charge_id, rso):
                                                                    OrderPayment.PAYMENT_STATE_CANCELED,
                                                                    OrderPayment.PAYMENT_STATE_FAILED):
             try:
-                if charge.payment_intent:
+                if getattr(charge, "payment_intent", None):
                     payment.info = str(charge.payment_intent)
                 payment.confirm()
             except LockTimeoutException:
