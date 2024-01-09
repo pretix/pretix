@@ -322,9 +322,17 @@ var form_handlers = function (el) {
         }
     });
 
+    function findDependency(searchString, sourceElement) {
+        if (searchString.substr(0, 1) === '<') {
+            return $(sourceElement).closest("form, .form-horizontal").find(searchString.substr(1));
+        } else {
+            return $(searchString);
+        }
+    }
+
     el.find("input[data-checkbox-dependency]").each(function () {
         var dependent = $(this),
-            dependency = $($(this).attr("data-checkbox-dependency")),
+            dependency = findDependency($(this).attr("data-checkbox-dependency"), this),
             update = function () {
                 var enabled = dependency.prop('checked');
                 dependent.prop('disabled', !enabled).closest('.form-group, .form-field-boundary').toggleClass('disabled', !enabled);
@@ -337,14 +345,8 @@ var form_handlers = function (el) {
     });
 
     el.find("select[data-inverse-dependency], input[data-inverse-dependency]").each(function () {
-        var dependency = $(this).attr("data-inverse-dependency");
-        if (dependency.substr(0, 1) === '<') {
-            dependency = $(this).closest("form, .form-horizontal").find(dependency.substr(1));
-        } else {
-            dependency = $(dependency);
-        }
-
         var dependent = $(this),
+            dependency = findDependency($(this).attr("data-inverse-dependency"), this),
             update = function () {
                 var enabled = !dependency.prop('checked');
                 dependent.prop('disabled', !enabled).closest('.form-group, .form-field-boundary').toggleClass('disabled', !enabled);
@@ -355,14 +357,17 @@ var form_handlers = function (el) {
 
     el.find("div[data-display-dependency], textarea[data-display-dependency], input[data-display-dependency], select[data-display-dependency]").each(function () {
         var dependent = $(this),
-            dependency = $($(this).attr("data-display-dependency")),
+            dependency = findDependency($(this).attr("data-display-dependency"), this),
             update = function (ev) {
                 var enabled = dependency.toArray().some(function(d) {
                     if (d.type === 'checkbox' || d.type === 'radio') {
                         return d.checked;
                     } else if (d.type === 'select-one') {
-                        if (dependent.attr("data-display-dependency-value")) {
-                            return d.value === dependent.attr("data-display-dependency-value");
+                        var checkValue;
+                        if ((checkValue = /^\/(.*)\/$/.exec(dependent.attr("data-display-dependency-regex")))) {
+                            return new RegExp(checkValue[1]).test(d.value);
+                        } else if ((checkValue = dependent.attr("data-display-dependency-value"))) {
+                            return d.value === checkValue;
                         } else {
                             return !!d.value
                         }
