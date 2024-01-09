@@ -643,16 +643,14 @@ class StripeMethod(BasePaymentProvider):
             payment_info = json.loads(payment.info)
             if 'amount' in payment_info:
                 payment_info['amount'] /= 10 ** settings.CURRENCY_PLACES.get(self.event.currency, 2)
+            if payment_info.get("latest_charge"):
+                details = payment_info["latest_charge"].get("payment_method_details", {})
+            elif payment_info.get("charges") and payment_info["charges"]["data"]:
+                details = payment_info["charges"]["data"][0].get("payment_method_details", {})
+            elif payment_info.get("source"):
+                details = payment_info["source"]
         else:
             payment_info = None
-
-        if payment_info and payment_info.get("latest_charge"):
-            details = payment_info["latest_charge"].get("payment_method_details", {})
-        elif payment_info and payment_info.get("charges") and payment_info["charges"]["data"]:
-            details = payment_info["charges"]["data"][0].get("payment_method_details", {})
-        elif payment_info and payment_info.get("source"):
-            details = payment_info["source"]
-        else:
             details = {}
         details.setdefault('owner', {})
 
