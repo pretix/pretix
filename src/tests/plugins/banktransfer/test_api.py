@@ -75,6 +75,7 @@ RES_JOB = {
          'checksum': '',
          'iban': '',
          'bic': '',
+         'external_id': None,
          'amount': '0.00',
          'date': 'unknown',
          'state': 'error',

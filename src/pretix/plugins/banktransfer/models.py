@@ -82,6 +82,7 @@ class BankTransaction(models.Model):
     currency = models.CharField(max_length=10, null=True)
     state = models.CharField(max_length=32, choices=STATES, default=STATE_UNCHECKED)
     message = models.TextField()
+    external_id = models.CharField(max_length=190, db_index=True, null=True, blank=True)
     checksum = models.CharField(max_length=190, db_index=True)
     payer = models.TextField(blank=True)
     reference = models.TextField(blank=True)

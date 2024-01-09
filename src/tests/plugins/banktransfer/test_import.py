@@ -693,3 +693,66 @@ def test_refund_handling_pending_refund(env, orga_job, orga_job2):
         r.refresh_from_db()
         assert env[2].payments.count() == 1
         assert r.state == OrderRefund.REFUND_STATE_DONE
+
+
+@pytest.mark.django_db
+def test_ignore_by_checksum(env, job):
+    process_banktransfers(job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY6789Z',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    with scopes_disabled():
+        assert BankTransaction.objects.count() == 1
+
+    process_banktransfers(job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung    DUMMY6789Z',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    with scopes_disabled():
+        assert BankTransaction.objects.count() == 1
+
+    process_banktransfers(job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung    DUMMY6789Z',
+        'date': '2016-01-27',
+        'amount': '23.00'
+    }])
+    with scopes_disabled():
+        assert BankTransaction.objects.count() == 2
+
+
+@pytest.mark.django_db
+def test_ignore_by_external_id(env, job):
+    process_banktransfers(job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Bestellung DUMMY6789Z',
+        'external_id': 'abcd12345',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    with scopes_disabled():
+        assert BankTransaction.objects.count() == 1
+
+    process_banktransfers(job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Completely different reference because banks are weird',
+        'external_id': 'abcd12345',
+        'date': '2016-01-26',
+        'amount': '23.00'
+    }])
+    with scopes_disabled():
+        assert BankTransaction.objects.count() == 1
+
+    process_banktransfers(job, [{
+        'payer': 'Karla Kundin',
+        'reference': 'Same ID with different amount because banks are weird',
+        'external_id': 'abcd12345',
+        'date': '2016-01-26',
+        'amount': '24.00'
+    }])
+    with scopes_disabled():
+        assert BankTransaction.objects.count() == 2
