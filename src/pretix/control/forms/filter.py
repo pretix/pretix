@@ -230,6 +230,7 @@ class OrderFilterForm(FilterForm):
                 ('partially_paid', _('Partially paid')),
                 ('underpaid', _('Underpaid (but confirmed)')),
                 ('pendingpaid', _('Pending (but fully paid)')),
+                ('pendingnopayment', _('Pending (but no current payment)')),
             )),
             (_('Approval process'), (
                 ('na', _('Approved, payment pending')),
@@ -326,6 +327,18 @@ class OrderFilterForm(FilterForm):
                 qs = qs.filter(
                     Q(status__in=(Order.STATUS_EXPIRED, Order.STATUS_PENDING)) & Q(pending_sum_t__lte=0)
                     & Q(require_approval=False)
+                )
+            elif s == 'pendingnopayment':
+                qs = qs.exclude(
+                    Exists(
+                        OrderPayment.objects.filter(
+                            order=OuterRef('pk'),
+                            state__in=(OrderPayment.PAYMENT_STATE_CREATED, OrderPayment.PAYMENT_STATE_PENDING)
+                        )
+                    )
+                ).filter(
+                    status=Order.STATUS_PENDING,
+                    require_approval=False,
                 )
             elif s == 'partially_paid':
                 qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
