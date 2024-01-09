@@ -125,7 +125,7 @@ class NamePartsWidget(forms.MultiWidget):
             if fname == 'title' and self.titles:
                 widgets.append(Select(attrs=a, choices=[('', '')] + [(d, d) for d in self.titles[1]]))
             elif fname == 'salutation':
-                widgets.append(Select(attrs=a, choices=[('', '---')] + PERSON_NAME_SALUTATIONS))
+                widgets.append(Select(attrs=a, choices=[('', '---'), ('empty', '')] + PERSON_NAME_SALUTATIONS))
             else:
                 widgets.append(self.widget(attrs=a))
         super().__init__(widgets, attrs)
@@ -136,7 +136,10 @@ class NamePartsWidget(forms.MultiWidget):
         data = []
         for i, field in enumerate(self.scheme['fields']):
             fname, label, size = field
-            data.append(value.get(fname, ""))
+            fval = value.get(fname, "")
+            if fname == "salutation" and fname in value and fval == "":
+                fval = "empty"
+            data.append(fval)
         if '_legacy' in value and not data[-1]:
             data[-1] = value.get('_legacy', '')
         elif not any(d for d in data) and '_scheme' in value:
@@ -190,7 +193,8 @@ class NamePartsFormField(forms.MultiValueField):
         data = {}
         data['_scheme'] = self.scheme_name
         for i, value in enumerate(data_list):
-            data[self.scheme['fields'][i][0]] = value or ''
+            key = self.scheme['fields'][i][0]
+            data[key] = value or ''
         return data
 
     def __init__(self, *args, **kwargs):
@@ -239,7 +243,7 @@ class NamePartsFormField(forms.MultiValueField):
                 d.pop('validators', None)
                 field = forms.ChoiceField(
                     **d,
-                    choices=[('', '---')] + PERSON_NAME_SALUTATIONS
+                    choices=[('', '---'), ('empty', '')] + PERSON_NAME_SALUTATIONS
                 )
             else:
                 field = forms.CharField(**defaults)
@@ -264,6 +268,9 @@ class NamePartsFormField(forms.MultiValueField):
 
         if sum(len(v) for v in value.values() if v) > 250:
             raise forms.ValidationError(_('Please enter a shorter name.'), code='max_length')
+
+        if value.get("salutation") == "empty":
+            value["salutation"] = ""
 
         return value
 
