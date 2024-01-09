@@ -1529,7 +1529,7 @@ class StripeRedirectWithAccountNamePaymentIntentMethod(StripeRedirectMethod):
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
         try:
             return super().execute_payment(request, payment)
-        except:
+        finally:
             if f'payment_stripe_{self.method}_account' in request.session:
                 del request.session[f'payment_stripe_{self.method}_account']
 
