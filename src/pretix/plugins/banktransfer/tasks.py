@@ -307,6 +307,9 @@ def _get_unknown_transactions(job: BankImportJob, data: list, event: Event = Non
     known_checksums = set(t['checksum'] for t in BankTransaction.objects.filter(
         Q(event=event) if event else Q(organizer=organizer)
     ).values('checksum'))
+    known_by_external_id = set((t['external_id'], t['date'], t['amount']) for t in BankTransaction.objects.filter(
+        Q(event=event) if event else Q(organizer=organizer), external_id__isnull=False
+    ).values('external_id', 'date', 'amount'))
 
     transactions = []
     for row in data:
@@ -328,14 +331,17 @@ def _get_unknown_transactions(job: BankImportJob, data: list, event: Event = Non
         trans = BankTransaction(event=event, organizer=organizer, import_job=job,
                                 payer=row.get('payer', ''),
                                 reference=row.get('reference', ''),
-                                amount=amount, date=row.get('date', ''),
-                                iban=row.get('iban', ''), bic=row.get('bic', ''),
+                                amount=amount,
+                                date=row.get('date', ''),
+                                iban=row.get('iban', ''),
+                                bic=row.get('bic', ''),
+                                external_id=row.get('external_id', ''),
                                 currency=event.currency if event else job.currency)
 
         trans.date_parsed = parse_date(trans.date)
 
         trans.checksum = trans.calculate_checksum()
-        if trans.checksum not in known_checksums:
+        if trans.checksum not in known_checksums and (not trans.external_id or (trans.external_id, trans.date, trans.amount) not in known_by_external_id):
             trans.state = BankTransaction.STATE_UNCHECKED
             trans.save()
             transactions.append(trans)

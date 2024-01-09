@@ -46,7 +46,7 @@ class BankTransactionSerializer(serializers.ModelSerializer):
     class Meta:
         model = BankTransaction
         fields = ('state', 'message', 'checksum', 'payer', 'reference', 'amount', 'date', 'order',
-                  'comment', 'iban', 'bic', 'currency')
+                  'comment', 'iban', 'bic', 'currency', 'external_id')
 
 
 class BankImportJobSerializer(serializers.ModelSerializer):

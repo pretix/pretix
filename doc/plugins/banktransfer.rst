@@ -32,6 +32,7 @@ transactions                          list of objects            Transactions in
 ├ checksum                            string                     Checksum computed from payer, reference, amount and
                                                                  date
 ├ payer                               string                     Payment source
+├ external_id                         string                     Unique ID of the payment from an external source
 ├ reference                           string                     Payment reference
 ├ amount                              string                     Payment amount
 ├ iban                                string                     Payment IBAN
@@ -85,6 +86,7 @@ Endpoints
                 "date": "26.06.2017",
                 "payer": "John Doe",
                 "order": null,
+                "external_id": null,
                 "iban": "",
                 "bic": "",
                 "checksum": "5de03a601644dfa63420dacfd285565f8375a8f2",
@@ -139,6 +141,7 @@ Endpoints
             "iban": "",
             "bic": "",
             "order": null,
+            "external_id": null,
             "checksum": "5de03a601644dfa63420dacfd285565f8375a8f2",
             "reference": "GUTSCHRIFT\r\nSAMPLECONF-NAB12 EREF: SAMPLECONF-NAB12\r\nIBAN: DE1234556…",
             "state": "nomatch",
