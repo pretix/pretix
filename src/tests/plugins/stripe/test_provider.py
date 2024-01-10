@@ -40,7 +40,7 @@ import pytest
 from django.test import RequestFactory
 from django.utils.timezone import now
 from django_scopes import scope
-from stripe.error import APIConnectionError, CardError
+from stripe import error
 
 from pretix.base.models import Event, Order, OrderRefund, Organizer
 from pretix.base.payment import PaymentException
@@ -178,7 +178,7 @@ def test_perform_card_error(env, factory, monkeypatch):
     event, order = env
 
     def paymentintent_create(**kwargs):
-        raise CardError(message='Foo', param='foo', code=100)
+        raise error.CardError(message='Foo', param='foo', code=100)
 
     monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
@@ -204,7 +204,7 @@ def test_perform_stripe_error(env, factory, monkeypatch):
     event, order = env
 
     def paymentintent_create(**kwargs):
-        raise CardError(message='Foo', param='foo', code=100)
+        raise error.CardError(message='Foo', param='foo', code=100)
 
     monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
@@ -296,7 +296,7 @@ def test_refund_unavailable(env, factory, monkeypatch):
 
     def charge_retr(*args, **kwargs):
         def refund_create(amount):
-            raise APIConnectionError(message='Foo')
+            raise error.APIConnectionError(message='Foo')
 
         c = MockedCharge()
         c.refunds.create = refund_create
