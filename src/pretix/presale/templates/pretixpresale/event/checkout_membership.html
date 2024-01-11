@@ -65,8 +65,7 @@
                         {% endif %}
                         {% if form.is_empty %}
                             <div class="alert alert-danger">
-                                {% trans "Your account does not include an active membership that allows you to buy this product." %}
-                                {% trans "You will not be able to continue." %}
+                                {% trans "This product can only be purchased when you are logged in with a customer account that includes a valid membership or authorization for this type of product." %}
                             </div>
                             <div class="sr-only">
                                 {% bootstrap_form form layout="checkout" %}
