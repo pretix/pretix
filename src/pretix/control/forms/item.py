@@ -883,6 +883,22 @@ class ItemVariationForm(I18nModelForm):
 
         self.fields['free_price_suggestion'].widget.attrs['data-display-dependency'] = '#id_free_price'
 
+        self.fields['available_from_mode'].widget = ButtonGroupRadioSelect(
+            choices=self.fields['available_from_mode'].choices,
+            option_icons={
+                Item.UNAVAIL_MODE_HIDDEN: 'eye-slash',
+                Item.UNAVAIL_MODE_INFO: 'info'
+            }
+        )
+
+        self.fields['available_until_mode'].widget = ButtonGroupRadioSelect(
+            choices=self.fields['available_until_mode'].choices,
+            option_icons={
+                Item.UNAVAIL_MODE_HIDDEN: 'eye-slash',
+                Item.UNAVAIL_MODE_INFO: 'info'
+            }
+        )
+
         self.meta_fields = []
         meta_defaults = {}
         if self.instance.pk:
@@ -925,7 +941,9 @@ class ItemVariationForm(I18nModelForm):
             'checkin_attention',
             'checkin_text',
             'available_from',
+            'available_from_mode',
             'available_until',
+            'available_until_mode',
             'sales_channels',
             'hide_without_voucher',
         ]
