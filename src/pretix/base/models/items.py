@@ -1110,10 +1110,20 @@ class ItemVariation(models.Model):
         null=True, blank=True,
         help_text=_('This variation will not be sold before the given date.')
     )
+    available_from_mode = models.CharField(
+        choices=Item.UNAVAIL_MODES,
+        default=Item.UNAVAIL_MODE_HIDDEN,
+        max_length=16,
+    )
     available_until = models.DateTimeField(
         verbose_name=_("Available until"),
         null=True, blank=True,
         help_text=_('This variation will not be sold after the given date.')
+    )
+    available_until_mode = models.CharField(
+        choices=Item.UNAVAIL_MODES,
+        default=Item.UNAVAIL_MODE_HIDDEN,
+        max_length=16,
     )
     sales_channels = fields.MultiStringField(
         verbose_name=_('Sales channels'),

@@ -85,7 +85,8 @@ class ItemVariationSerializer(I18nAwareModelSerializer):
         fields = ('id', 'value', 'active', 'description',
                   'position', 'default_price', 'price', 'original_price', 'free_price_suggestion', 'require_approval',
                   'require_membership', 'require_membership_types', 'require_membership_hidden',
-                  'checkin_attention', 'checkin_text', 'available_from', 'available_until',
+                  'checkin_attention', 'checkin_text',
+                  'available_from', 'available_from_mode', 'available_until', 'available_until_mode',
                   'sales_channels', 'hide_without_voucher', 'meta_data')
 
     def __init__(self, *args, **kwargs):

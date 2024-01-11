@@ -45,8 +45,16 @@ sales_channels                        list of strings            Sales channels 
                                                                  available.
 available_from                        datetime                   The first date time at which this variation can be bought
                                                                  (or ``null``).
+available_from_mode                   string                     If ``hide`` (the default), this variation is hidden in the shop
+                                                                 if unavailable due to the available_from setting.
+                                                                 If ``info``, the variation is visible, but can't be purchased,
+                                                                 and a note explaining the unavailability is displayed.
 available_until                       datetime                   The last date time at which this variation can be bought
                                                                  (or ``null``).
+available_until_mode                  string                     If ``hide`` (the default), this variation is hidden in the shop
+                                                                 if unavailable due to the available_until setting.
+                                                                 If ``info``, the variation is visible, but can't be purchased,
+                                                                 and a note explaining the unavailability is displayed.
 hide_without_voucher                  boolean                    If ``true``, this variation is only shown during the voucher
                                                                  redemption process, but not in the normal shop
                                                                  frontend.
@@ -105,7 +113,9 @@ Endpoints
             "require_membership_types": [],
             "sales_channels": ["web"],
             "available_from": null,
+            "available_from_mode": "hide",
             "available_until": null,
+            "available_until_mode": "hide",
             "hide_without_voucher": false,
             "description": {
               "en": "Test2"
@@ -131,7 +141,9 @@ Endpoints
             "require_membership_types": [],
             "sales_channels": ["web"],
             "available_from": null,
+            "available_from_mode": "hide",
             "available_until": null,
+            "available_until_mode": "hide",
             "hide_without_voucher": false,
             "description": {},
             "position": 1,
@@ -192,7 +204,9 @@ Endpoints
         "require_membership_types": [],
         "sales_channels": ["web"],
         "available_from": null,
+        "available_from_mode": "hide",
         "available_until": null,
+        "available_until_mode": "hide",
         "hide_without_voucher": false,
         "description": null,
         "position": 0,
@@ -232,7 +246,9 @@ Endpoints
         "require_membership_types": [],
         "sales_channels": ["web"],
         "available_from": null,
+        "available_from_mode": "hide",
         "available_until": null,
+        "available_until_mode": "hide",
         "hide_without_voucher": false,
         "description": null,
         "position": 0,
@@ -263,7 +279,9 @@ Endpoints
         "require_membership_types": [],
         "sales_channels": ["web"],
         "available_from": null,
+        "available_from_mode": "hide",
         "available_until": null,
+        "available_until_mode": "hide",
         "hide_without_voucher": false,
         "description": null,
         "position": 0,
@@ -325,7 +343,9 @@ Endpoints
         "require_membership_types": [],
         "sales_channels": ["web"],
         "available_from": null,
+        "available_from_mode": "hide",
         "available_until": null,
+        "available_until_mode": "hide",
         "hide_without_voucher": false,
         "description": null,
         "position": 1,
