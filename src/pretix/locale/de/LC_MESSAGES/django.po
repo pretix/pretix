@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2024-01-10 02:00+0000\n"
-"Last-Translator: Mira <weller@rami.io>\n"
+"PO-Revision-Date: 2024-01-11 10:18+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -12979,10 +12979,8 @@ msgid "Pending (but fully paid)"
 msgstr "ausstehend (aber voll bezahlt)"
 
 #: pretix/control/forms/filter.py:233
-#, fuzzy
-#| msgid "Pending (but fully paid)"
 msgid "Pending (but no current payment)"
-msgstr "ausstehend (aber voll bezahlt)"
+msgstr "ausstehend (aber keine laufende Zahlung)"
 
 #: pretix/control/forms/filter.py:235
 msgid "Approval process"
@@ -17671,15 +17669,17 @@ msgstr "Auf Veranstalter-Einstellungen zurücksetzen"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:29
 msgid "This is the SPF record we found on your domain:"
-msgstr "Wir haben diesen SPF-Eintrag für Ihre Domain gefunden:"
+msgstr "Diesen SPF-Eintrag haben wir für Ihre Domain gefunden:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:33
 msgid "To fix this, include the following part before the last word:"
-msgstr "Um dies zu beheben, fügen Sie vor dem letzten Wort folgenden Teil ein:"
+msgstr ""
+"Um dieses Problem zu beheben, fügen Sie den folgenden Teil vor dem letzten "
+"Wort ein:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:38
 msgid "Your new SPF record could look like this:"
-msgstr "Ihr neuer SPF-Eintrag könnte z.B. so aussehen:"
+msgstr "Ihr neuer SPF-Eintrag könnte so aussehen:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:43
 msgid ""
@@ -25409,11 +25409,11 @@ msgid ""
 "the domain. You can do so through the DNS settings at the provider you "
 "registered your domain with."
 msgstr ""
-"Wir konnten keinen SPF-Eintrag für die verwendete Domain finden. Daher gibt "
-"es eine große Chance, dass die E-Mails beim Empfänger in den Spam-Ordner "
-"sortiert werden oder nicht ankommen. Wir empfehlen daher dringend einen SPF-"
-"Eintrag zu setzen. Dies können Sie in den DNS-Einstellungen des Providers "
-"vornehmen, bei dem die Domain registriert wurde."
+"Wir konnten keinen SPF-Eintrag für die Domain finden. Es gibt daher eine "
+"hohe Chance, dass die E-Mails abgelehnt werden oder im Spam landen. Sie "
+"sollten einen SPF-Eintrag für Ihre Domain hinzufügen. Dies können Sie in den "
+"DNS-Einstellungen des Providers tun, bei dem Sie Ihre Domain registriert "
+"haben."
 
 #: pretix/control/views/mailsetup.py:207
 msgid ""
@@ -25423,11 +25423,10 @@ msgid ""
 "update the DNS settings of your domain to include this system in the SPF "
 "record."
 msgstr ""
-"Wir haben einen SPF-Eintrag für die verwendete Domain gefunden, aber er "
-"enthält den Mailserver dieses Systems nicht. Die E-Mails würden daher mit "
-"sehr hoher Wahrscheinlichkeit beim Empfänger in den Spam-Ordner sortiert "
-"werden oder nicht ankommen. Sie sollten die DNS-Einstellungen Ihrer Domain "
-"ändern, sodass dieses System im SPF-Eintrag vorkommt."
+"Wir haben einen SPF-Eintrag für die Domain gefunden, aber es enthält unseren "
+"Mailserver nicht. Es gibt daher eine hohe Chance, dass die E-Mails abgelehnt "
+"werden oder im Spam landen. Sie sollten die DNS-Einstellungen Ihrer Domain "
+"so anpassen, dass sie dieses System im SPF-Eintrag enthalten."
 
 #: pretix/control/views/mailsetup.py:216
 msgid "The verification code was incorrect, please try again."
@@ -30818,6 +30817,9 @@ msgid ""
 "account that includes a valid membership or authorization for this type of "
 "product."
 msgstr ""
+"Dieses Produkt kann nur gekauft werden, wenn Sie mit einem Kundenkonto "
+"eingeloggt sind, das eine gültige Mitgliedschaft oder Autorisierung für "
+"diese Art von Produkt enthält."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:12
 msgid "You already selected the following payment methods:"
