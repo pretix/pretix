@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2024-01-10 02:00+0000\n"
-"Last-Translator: Mira <weller@rami.io>\n"
+"PO-Revision-Date: 2024-01-11 10:18+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -12956,10 +12956,8 @@ msgid "Pending (but fully paid)"
 msgstr "ausstehend (aber voll bezahlt)"
 
 #: pretix/control/forms/filter.py:233
-#, fuzzy
-#| msgid "Pending (but fully paid)"
 msgid "Pending (but no current payment)"
-msgstr "ausstehend (aber voll bezahlt)"
+msgstr "ausstehend (aber keine laufende Zahlung)"
 
 #: pretix/control/forms/filter.py:235
 msgid "Approval process"
@@ -30763,6 +30761,9 @@ msgid ""
 "account that includes a valid membership or authorization for this type of "
 "product."
 msgstr ""
+"Dieses Produkt kann nur gekauft werden, wenn du mit einem Kundenkonto "
+"eingeloggt bist, das eine gültige Mitgliedschaft oder Autorisierung für "
+"diese Art von Produkt enthält."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:12
 msgid "You already selected the following payment methods:"
