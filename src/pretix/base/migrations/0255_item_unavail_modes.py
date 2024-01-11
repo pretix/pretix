@@ -5,7 +5,7 @@ from django.db import migrations, models
 
 class Migration(migrations.Migration):
     dependencies = [
-        ("pretixbase", "0253_checkin_info"),
+        ("pretixbase", "0254_alter_logentry_organizer_link_and_more"),
     ]
 
     operations = [
