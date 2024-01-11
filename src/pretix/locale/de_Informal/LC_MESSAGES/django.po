@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2024-01-11 10:18+0000\n"
+"PO-Revision-Date: 2024-01-11 13:07+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17641,7 +17641,7 @@ msgstr "Auf Veranstalter-Einstellungen zurücksetzen"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:29
 msgid "This is the SPF record we found on your domain:"
-msgstr "Wir haben diesen SPF-Eintrag für deine Domain gefunden:"
+msgstr "Diesen SPF-Eintrag haben wir für deine Domain gefunden:"
 
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:33
 msgid "To fix this, include the following part before the last word:"
@@ -25380,11 +25380,10 @@ msgid ""
 "update the DNS settings of your domain to include this system in the SPF "
 "record."
 msgstr ""
-"Wir haben einen SPF-Eintrag für die verwendete Domain gefunden, aber er "
-"enthält den Mailserver dieses Systems nicht. Die E-Mails würden daher mit "
-"sehr hoher Wahrscheinlichkeit beim Empfänger in den Spam-Ordner sortiert "
-"werden oder nicht ankommen. Du solltest die DNS-Einstellungen deiner Domain "
-"ändern, sodass dieses System im SPF-Eintrag vorkommt."
+"Wir haben einen SPF-Eintrag für die Domain gefunden, aber es enthält unseren "
+"Mailserver nicht. Es gibt daher eine hohe Chance, dass die E-Mails abgelehnt "
+"werden oder im Spam landen. Du solltest die DNS-Einstellungen deiner Domain "
+"so anpassen, dass sie dieses System im SPF-Eintrag enthalten."
 
 #: pretix/control/views/mailsetup.py:216
 msgid "The verification code was incorrect, please try again."
