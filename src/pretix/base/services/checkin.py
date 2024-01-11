@@ -31,6 +31,7 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
+import logging
 import os
 from datetime import datetime, timedelta, timezone
 from functools import partial, reduce
@@ -64,6 +65,8 @@ from pretix.helpers.jsonlogic_query import (
     Equal, GreaterEqualThan, GreaterThan, InList, LowerEqualThan, LowerThan,
     MinutesSince, tolerance,
 )
+
+logger = logging.getLogger(__name__)
 
 
 def _build_time(t=None, value=None, ev=None, now_dt=None):
@@ -964,7 +967,16 @@ def perform_checkin(op: OrderPosition, clist: CheckinList, given_answers: dict, 
         if type == Checkin.TYPE_ENTRY and clist.rules:
             rule_data = LazyRuleVars(op, clist, dt, gate=gate)
             logic = _get_logic_environment(op.subevent or clist.event, rule_data, now_dt=dt)
-            if not logic.apply(clist.rules, rule_data):
+            try:
+                logic_result = logic.apply(clist.rules, rule_data)
+            except Exception:
+                logger.exception("Check-in rule evaluation failed")
+                raise CheckInError(
+                    _('Evaluation of custom rules has failed.'),
+                    'rules',
+                )
+
+            if not logic_result:
                 if force:
                     force_used = True
                 else:
