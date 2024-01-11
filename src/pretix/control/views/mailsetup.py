@@ -44,7 +44,7 @@ logger = logging.getLogger(__name__)
 def get_spf_record(hostname):
     try:
         r = dns.resolver.Resolver()
-        for resp in r.query(hostname, 'TXT'):
+        for resp in r.resolve(hostname, 'TXT'):
             data = b''.join(resp.strings).decode()
             if data.lower().strip().startswith('v=spf1 '):  # RFC7208, section 4.5
                 return data
