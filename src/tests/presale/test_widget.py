@@ -182,7 +182,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 {
                     "items": [
                         {
-                            "require_voucher": False,
+                            "current_unavailability_reason": None,
                             "order_min": None,
                             "max_price": None,
                             "price": {"gross": "23.00", "net": "19.33", "tax": "3.67", "name": "", "rate": "19.00", "includes_mixed_tax_rate": False},
@@ -203,7 +203,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                             "order_max": 4
                         },
                         {
-                            "require_voucher": False,
+                            "current_unavailability_reason": None,
                             "order_min": None,
                             "max_price": "14.00",
                             "price": None,
@@ -269,7 +269,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             {
                 "items": [
                     {
-                        "require_voucher": False,
+                        "current_unavailability_reason": None,
                         "order_min": None,
                         "max_price": None,
                         "price": {"gross": "23.00", "net": "19.33", "tax": "3.67", "name": "", "rate": "19.00",
@@ -318,7 +318,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
             {
                 "items": [
                     {
-                        "require_voucher": False,
+                        "current_unavailability_reason": None,
                         "order_min": None,
                         "max_price": "14.00",
                         "price": None,
@@ -385,7 +385,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                 {
                     "items": [
                         {
-                            "require_voucher": False,
+                            "current_unavailability_reason": None,
                             "order_min": None,
                             "max_price": None,
                             "price": {"gross": "23.00", "net": "19.33", "tax": "3.67", "name": "", "rate": "19.00", "includes_mixed_tax_rate": False},
@@ -453,7 +453,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
                             'has_variations': 2,
                             "allow_waitinglist": True,
                             "mandatory_priced_addons": False,
-                            'require_voucher': False,
+                            'current_unavailability_reason': None,
                             'order_min': None,
                             'order_max': None,
                             'price': None,
