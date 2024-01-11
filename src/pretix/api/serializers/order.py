@@ -1077,6 +1077,10 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError(
                 'An order cannot be empty.'
             )
+        if len(data) > settings.PRETIX_MAX_ORDER_SIZE:
+            raise ValidationError(
+                'Orders cannot have more than %(max)s positions.' % {'max': settings.PRETIX_MAX_ORDER_SIZE}
+            )
         errs = [{} for p in data]
         if any([p.get('positionid') for p in data]):
             if not all([p.get('positionid') for p in data]):

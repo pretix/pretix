@@ -26,6 +26,7 @@ from decimal import Decimal
 from unittest import mock
 
 import pytest
+from django.conf import settings
 from django.core import mail as djmail
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
@@ -276,6 +277,31 @@ def test_order_create(token_client, organizer, event, item, quota, question):
     assert answ.answer == "S"
     with scopes_disabled():
         assert o.transactions.count() == 2
+
+
+@pytest.mark.django_db
+def test_order_create_max_size(token_client, organizer, event, item, quota, question):
+    quota.size = settings.PRETIX_MAX_ORDER_SIZE * 2
+    quota.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'] = [
+        {
+            "item": item.pk,
+            "variation": None,
+            "price": "23.00",
+            "attendee_name_parts": {"full_name": "Peter"},
+            "attendee_email": None,
+            "addon_to": None,
+            "subevent": None
+        }
+    ] * (settings.PRETIX_MAX_ORDER_SIZE + 1)
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"positions": [f"Orders cannot have more than {settings.PRETIX_MAX_ORDER_SIZE} positions."]}
 
 
 @pytest.mark.django_db

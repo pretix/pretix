@@ -306,6 +306,7 @@ DEFAULTS = {
         'serializer_class': serializers.IntegerField,
         'serializer_kwargs': dict(
             min_value=1,
+            max_value=settings.PRETIX_MAX_ORDER_SIZE,
         ),
         'form_kwargs': dict(
             min_value=1,

@@ -41,6 +41,7 @@ from typing import List, Optional
 
 from celery.exceptions import MaxRetriesExceededError
 from django import forms
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import DatabaseError, transaction
 from django.db.models import Count, Exists, IntegerField, OuterRef, Q, Value
@@ -378,8 +379,9 @@ class CartManager:
             cartsize += sum([op.count for op in self._operations if isinstance(op, self.AddOperation) and not op.addon_to])
             cartsize -= len([1 for op in self._operations if isinstance(op, self.RemoveOperation) if
                              not op.position.addon_to_id])
-            if cartsize > int(self.event.settings.max_items_per_order):
-                raise CartError(error_messages['max_items'] % self.event.settings.max_items_per_order)
+            limit = min(int(self.event.settings.max_items_per_order), settings.PRETIX_MAX_ORDER_SIZE)
+            if cartsize > limit:
+                raise CartError(error_messages['max_items'] % limit)
 
     def _check_item_constraints(self, op, current_ops=[]):
         if isinstance(op, (self.AddOperation, self.ExtendOperation)):
