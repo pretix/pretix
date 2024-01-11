@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-23 10:30+0000\n"
+"POT-Creation-Date: 2024-01-11 10:07+0000\n"
 "PO-Revision-Date: 2023-09-20 14:01+0000\n"
 "Last-Translator: Mahdia Aliyy <mahdlyy.k@gmail.com>\n"
 "Language-Team: Indonesian <https://translate.pretix.eu/projects/pretix/"
@@ -609,40 +609,40 @@ msgstr ""
 "Warna Anda memiliki kontras yang buruk untuk teks dengan latar belakang "
 "putih, harap pilih warna yang lebih gelap."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:468
-#: pretix/static/pretixcontrol/js/ui/main.js:488
+#: pretix/static/pretixcontrol/js/ui/main.js:473
+#: pretix/static/pretixcontrol/js/ui/main.js:493
 msgid "Search query"
 msgstr "Permintaan pencarian"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:486
+#: pretix/static/pretixcontrol/js/ui/main.js:491
 msgid "All"
 msgstr "Semua"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:487
+#: pretix/static/pretixcontrol/js/ui/main.js:492
 msgid "None"
 msgstr "Tidak ada"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:491
+#: pretix/static/pretixcontrol/js/ui/main.js:496
 msgid "Selected only"
 msgstr "Hanya dipilih"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:778
+#: pretix/static/pretixcontrol/js/ui/main.js:783
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:781
+#: pretix/static/pretixcontrol/js/ui/main.js:786
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:939
+#: pretix/static/pretixcontrol/js/ui/main.js:944
 msgid "Use a different name internally"
 msgstr "Gunakan nama yang berbeda secara internal"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:979
+#: pretix/static/pretixcontrol/js/ui/main.js:984
 msgid "Click to close"
 msgstr "Klik untuk menutup"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1054
+#: pretix/static/pretixcontrol/js/ui/main.js:1059
 msgid "You have unsaved changes!"
 msgstr "Anda memiliki perubahan yang belum disimpan!"
 

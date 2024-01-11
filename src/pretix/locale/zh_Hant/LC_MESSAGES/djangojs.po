@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-23 10:30+0000\n"
+"POT-Creation-Date: 2024-01-11 10:07+0000\n"
 "PO-Revision-Date: 2023-08-31 07:00+0000\n"
 "Last-Translator: Ash So <ashs@vankaifong.com>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
@@ -591,40 +591,40 @@ msgid ""
 "darker shade."
 msgstr "你的色彩與白色背景上的文字對比度差，請選擇較深的色調。"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:468
-#: pretix/static/pretixcontrol/js/ui/main.js:488
+#: pretix/static/pretixcontrol/js/ui/main.js:473
+#: pretix/static/pretixcontrol/js/ui/main.js:493
 msgid "Search query"
 msgstr "搜索查詢"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:486
+#: pretix/static/pretixcontrol/js/ui/main.js:491
 msgid "All"
 msgstr "所有"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:487
+#: pretix/static/pretixcontrol/js/ui/main.js:492
 msgid "None"
 msgstr "無"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:491
+#: pretix/static/pretixcontrol/js/ui/main.js:496
 msgid "Selected only"
 msgstr "只選定"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:778
+#: pretix/static/pretixcontrol/js/ui/main.js:783
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:781
+#: pretix/static/pretixcontrol/js/ui/main.js:786
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:939
+#: pretix/static/pretixcontrol/js/ui/main.js:944
 msgid "Use a different name internally"
 msgstr "在內部使用其他名稱"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:979
+#: pretix/static/pretixcontrol/js/ui/main.js:984
 msgid "Click to close"
 msgstr "點擊關閉"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1054
+#: pretix/static/pretixcontrol/js/ui/main.js:1059
 msgid "You have unsaved changes!"
 msgstr "你有未儲存的變更！"
 

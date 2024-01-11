@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2023-12-23 10:30+0000\n"
+"POT-Creation-Date: 2024-01-11 10:07+0000\n"
 "PO-Revision-Date: 2023-11-25 22:12+0000\n"
 "Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -601,40 +601,40 @@ msgstr ""
 "Wybrany kolor ma za słaby kontrast dla tekstu na białym tle, prosimy wybrać "
 "ciemniejszy odcień."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:468
-#: pretix/static/pretixcontrol/js/ui/main.js:488
+#: pretix/static/pretixcontrol/js/ui/main.js:473
+#: pretix/static/pretixcontrol/js/ui/main.js:493
 msgid "Search query"
 msgstr "Wyszukiwana fraza"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:486
+#: pretix/static/pretixcontrol/js/ui/main.js:491
 msgid "All"
 msgstr "Zaznacz wszystko"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:487
+#: pretix/static/pretixcontrol/js/ui/main.js:492
 msgid "None"
 msgstr "Odznacz wszystko"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:491
+#: pretix/static/pretixcontrol/js/ui/main.js:496
 msgid "Selected only"
 msgstr "Tylko wybrane"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:778
+#: pretix/static/pretixcontrol/js/ui/main.js:783
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Wprowadź numer strony między 1 a %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:781
+#: pretix/static/pretixcontrol/js/ui/main.js:786
 msgid "Invalid page number."
 msgstr "Niepoprawny numer strony."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:939
+#: pretix/static/pretixcontrol/js/ui/main.js:944
 msgid "Use a different name internally"
 msgstr "Użyj innej nazwy wewnętrznie"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:979
+#: pretix/static/pretixcontrol/js/ui/main.js:984
 msgid "Click to close"
 msgstr "Zamknij"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1054
+#: pretix/static/pretixcontrol/js/ui/main.js:1059
 msgid "You have unsaved changes!"
 msgstr "Masz niezapisane zmiany!"
 
