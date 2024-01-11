@@ -196,17 +196,21 @@ A complete record could look like this::
 
 Make sure to read up on the `SPF specification`_.
 
-If you want to authenticate your emails with DKIM, set up a ``CNAME`` record for the subdomain ``pretix._domainkey``
+If you want to authenticate your emails with `DKIM`_, set up a ``CNAME`` record for the subdomain ``pretix._domainkey``
 pointing to ``dkim.pretix.eu``::
 
    pretix._domainkey.mydomain.com. CNAME dkim.pretix.eu.
 
 Then, please contact support@pretix.eu and we will enable DKIM for your domain on our mail servers.
 
+For senders with larger volumes, Google Mail also requires you to have a `DMARC`_ policy (that may however be ``p=none``).
+
 .. note:: Many SMTP servers impose rate limits on the sent emails, such as a maximum number of emails sent per hour.
           These SMTP servers are often not suitable for use with pretix, in case you want to send an email to many
           hundreds or thousands of ticket buyers. Depending on how the rate limit is implemented, emails might be lost
           in this case, as pretix only retries email delivery for a certain time period.
 
+.. _DKIM: https://en.wikipedia.org/wiki/DomainKeys_Identified_Mail
 .. _Sender Policy Framework: https://en.wikipedia.org/wiki/Sender_Policy_Framework
 .. _SPF specification: http://www.open-spf.org/SPF_Record_Syntax
+.. _DMARC: https://en.wikipedia.org/wiki/DMARC
