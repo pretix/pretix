@@ -43,6 +43,7 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from tests.base import SoupTest
+from tests.plugins.stripe.test_checkout import apple_domain_create
 from tests.plugins.stripe.test_provider import MockedCharge
 
 from pretix.base.models import (
@@ -2081,15 +2082,17 @@ def test_refund_paid_order_automatically_failed(client, env, monkeypatch):
         p.confirm()
     client.login(email='dummy@dummy.dummy', password='dummy')
 
-    def charge_retr(*args, **kwargs):
-        def refund_create(amount):
-            raise PaymentException('This failed.')
+    def refund_create(*args, **kwargs):
+        raise PaymentException('This failed.')
 
+    def charge_retr(*args, **kwargs):
         c = MockedCharge()
         c.refunds.create = refund_create
         return c
 
+    monkeypatch.setattr("stripe.ApplePayDomain.create", apple_domain_create)
     monkeypatch.setattr("stripe.Charge.retrieve", charge_retr)
+    monkeypatch.setattr("stripe.Refund.create", refund_create)
 
     r = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
         'start-partial_amount': '7.00',
@@ -2123,18 +2126,20 @@ def test_refund_paid_order_automatically(client, env, monkeypatch):
         p.confirm()
     client.login(email='dummy@dummy.dummy', password='dummy')
 
-    def charge_retr(*args, **kwargs):
-        def refund_create(amount):
-            r = MockedCharge()
-            r.id = 'foo'
-            r.status = 'succeeded'
-            return r
+    def refund_create(*args, **kwargs):
+        r = MockedCharge()
+        r.id = 'foo'
+        r.status = 'succeeded'
+        return r
 
+    def charge_retr(*args, **kwargs):
         c = MockedCharge()
         c.refunds.create = refund_create
         return c
 
+    monkeypatch.setattr("stripe.ApplePayDomain.create", apple_domain_create)
     monkeypatch.setattr("stripe.Charge.retrieve", charge_retr)
+    monkeypatch.setattr("stripe.Refund.create", refund_create)
 
     client.post('/control/event/dummy/dummy/orders/FOO/refund', {
         'start-partial_amount': '7.00',

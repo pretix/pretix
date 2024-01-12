@@ -31,6 +31,7 @@ from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from stripe.error import APIConnectionError
+from tests.plugins.stripe.test_checkout import apple_domain_create
 from tests.plugins.stripe.test_provider import MockedCharge
 
 from pretix.base.models import InvoiceAddress, Order, OrderPosition
@@ -744,13 +745,14 @@ def test_payment_refund_fail(token_client, organizer, event, order, monkeypatch)
 
 @pytest.mark.django_db
 def test_payment_refund_success(token_client, organizer, event, order, monkeypatch):
-    def charge_retr(*args, **kwargs):
-        def refund_create(amount):
-            r = MockedCharge()
-            r.id = 'foo'
-            r.status = 'succeeded'
-            return r
 
+    def refund_create(*args, **kwargs):
+        r = MockedCharge()
+        r.id = 'foo'
+        r.status = 'succeeded'
+        return r
+
+    def charge_retr(*args, **kwargs):
         c = MockedCharge()
         c.refunds.create = refund_create
         return c
@@ -765,7 +767,9 @@ def test_payment_refund_success(token_client, organizer, event, order, monkeypat
                 'id': 'ch_123345345'
             })
         )
+    monkeypatch.setattr("stripe.ApplePayDomain.create", apple_domain_create)
     monkeypatch.setattr("stripe.Charge.retrieve", charge_retr)
+    monkeypatch.setattr("stripe.Refund.create", refund_create)
     resp = token_client.post('/api/v1/organizers/{}/events/{}/orders/{}/payments/{}/refund/'.format(
         organizer.slug, event.slug, order.code, p1.local_id
     ), format='json', data={

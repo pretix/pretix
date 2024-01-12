@@ -639,6 +639,7 @@ class StripeMethod(BasePaymentProvider):
             return {}
 
     def payment_control_render(self, request, payment) -> str:
+        details = {}
         if payment.info:
             payment_info = json.loads(payment.info)
             if 'amount' in payment_info:
@@ -651,7 +652,6 @@ class StripeMethod(BasePaymentProvider):
                 details = payment_info["source"]
         else:
             payment_info = None
-            details = {}
         details.setdefault('owner', {})
 
         template = get_template('pretixplugins/stripe/control.html')
