@@ -812,7 +812,7 @@ class Item(LoggedModel):
             return 'require_voucher'
         elif subevent_item and subevent_item.available_from and subevent_item.available_from > now_dt:
             return 'available_from'
-        elif subevent_item and subevent_item.available_until and subevent_item.available_until > now_dt:
+        elif subevent_item and subevent_item.available_until and subevent_item.available_until < now_dt:
             return 'available_until'
         else:
             return None
@@ -1318,7 +1318,7 @@ class ItemVariation(models.Model):
             return 'available_until'
         elif subevent_var and subevent_var.available_from and subevent_var.available_from > now_dt:
             return 'available_from'
-        elif subevent_var and subevent_var.available_until and subevent_var.available_until > now_dt:
+        elif subevent_var and subevent_var.available_until and subevent_var.available_until < now_dt:
             return 'available_until'
         else:
             return None
