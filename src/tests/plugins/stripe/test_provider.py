@@ -55,6 +55,7 @@ def env():
             organizer=o, name='Dummy', slug='dummy',
             date_from=now(), live=True
         )
+        event.settings.set('payment_stripe_publishable_key', 'nokey')
         o1 = Order.objects.create(
             code='FOOBAR', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
@@ -75,11 +76,11 @@ def factory():
     return RequestFactory()
 
 
-class MockedRefunds():
+class MockedRefunds:
     pass
 
 
-class MockedCharge():
+class MockedCharge:
     status = ''
     paid = False
     id = 'ch_123345345'
@@ -96,16 +97,25 @@ class MockedCharge():
         pass
 
 
-class Object():
+class Object:
     pass
 
 
-class MockedPaymentintent():
+class MockedPaymentintent:
     status = ''
     id = 'pi_1EUon12Tb35ankTnZyvC3SdE'
+    latest_charge = MockedCharge()
     charges = Object()
-    charges.data = [MockedCharge()]
+    charges.data = [latest_charge]
     last_payment_error = None
+
+
+class MockedAppleDomain:
+    livemode = True
+
+
+def apple_domain_create(**kwargs):
+    return MockedAppleDomain()
 
 
 @pytest.mark.django_db
@@ -118,9 +128,10 @@ def test_perform_success(env, factory, monkeypatch):
         assert kwargs['payment_method'] == 'pm_189fTT2eZvKYlo2CvJKzEzeu'
         c = MockedPaymentintent()
         c.status = 'succeeded'
-        c.charges.data[0].paid = True
+        c.latest_charge.paid = True
         return c
 
+    monkeypatch.setattr("stripe.ApplePayDomain.create", apple_domain_create)
     monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
 
     prov = StripeCC(event)
@@ -152,9 +163,10 @@ def test_perform_success_zero_decimal_currency(env, factory, monkeypatch):
         assert kwargs['payment_method'] == 'pm_189fTT2eZvKYlo2CvJKzEzeu'
         c = MockedPaymentintent()
         c.status = 'succeeded'
-        c.charges.data[0].paid = True
+        c.latest_charge.paid = True
         return c
 
+    monkeypatch.setattr("stripe.ApplePayDomain.create", apple_domain_create)
     monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
     req = factory.post('/', {
@@ -180,6 +192,7 @@ def test_perform_card_error(env, factory, monkeypatch):
     def paymentintent_create(**kwargs):
         raise error.CardError(message='Foo', param='foo', code=100)
 
+    monkeypatch.setattr("stripe.ApplePayDomain.create", apple_domain_create)
     monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
     req = factory.post('/', {
@@ -206,6 +219,7 @@ def test_perform_stripe_error(env, factory, monkeypatch):
     def paymentintent_create(**kwargs):
         raise error.CardError(message='Foo', param='foo', code=100)
 
+    monkeypatch.setattr("stripe.ApplePayDomain.create", apple_domain_create)
     monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
     req = factory.post('/', {
@@ -236,11 +250,12 @@ def test_perform_failed(env, factory, monkeypatch):
         c = MockedPaymentintent()
         c.status = 'failed'
         c.failure_message = 'Foo'
-        c.charges.data[0].paid = True
+        c.latest_charge.paid = True
         c.last_payment_error = Object()
         c.last_payment_error.message = "Foo"
         return c
 
+    monkeypatch.setattr("stripe.ApplePayDomain.create", apple_domain_create)
     monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
     prov = StripeCC(event)
     req = factory.post('/', {
@@ -264,18 +279,20 @@ def test_perform_failed(env, factory, monkeypatch):
 def test_refund_success(env, factory, monkeypatch):
     event, order = env
 
-    def charge_retr(*args, **kwargs):
-        def refund_create(amount):
-            r = MockedCharge()
-            r.id = 'foo'
-            r.status = 'succeeded'
-            return r
+    def refund_create(*args, **kwargs):
+        r = MockedCharge()
+        r.id = 'foo'
+        r.status = 'succeeded'
+        return r
 
+    def charge_retr(*args, **kwargs):
         c = MockedCharge()
         c.refunds.create = refund_create
         return c
 
+    monkeypatch.setattr("stripe.ApplePayDomain.create", apple_domain_create)
     monkeypatch.setattr("stripe.Charge.retrieve", charge_retr)
+    monkeypatch.setattr("stripe.Refund.create", refund_create)
     order.status = Order.STATUS_PAID
     p = order.payments.create(provider='stripe_cc', amount=order.total, info=json.dumps({
         'id': 'ch_123345345'
@@ -294,15 +311,17 @@ def test_refund_success(env, factory, monkeypatch):
 def test_refund_unavailable(env, factory, monkeypatch):
     event, order = env
 
-    def charge_retr(*args, **kwargs):
-        def refund_create(amount):
-            raise error.APIConnectionError(message='Foo')
+    def refund_create(*args, **kwargs):
+        raise error.APIConnectionError(message='Foo')
 
+    def charge_retr(*args, **kwargs):
         c = MockedCharge()
         c.refunds.create = refund_create
         return c
 
+    monkeypatch.setattr("stripe.ApplePayDomain.create", apple_domain_create)
     monkeypatch.setattr("stripe.Charge.retrieve", charge_retr)
+    monkeypatch.setattr("stripe.Refund.create", refund_create)
     order.status = Order.STATUS_PAID
     p = order.payments.create(provider='stripe_cc', amount=order.total, info=json.dumps({
         'id': 'ch_123345345'

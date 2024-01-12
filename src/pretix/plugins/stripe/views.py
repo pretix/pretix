@@ -273,7 +273,11 @@ def charge_webhook(event, event_json, charge_id, rso):
     prov._init_api()
 
     try:
-        charge = stripe.Charge.retrieve(charge_id, expand=['dispute'], **prov.api_kwargs)
+        charge = stripe.Charge.retrieve(
+            charge_id,
+            expand=['dispute', 'refunds', 'payment_intent', 'payment_intent.latest_charge'],
+            **prov.api_kwargs
+        )
     except stripe.error.StripeError:
         logger.exception('Stripe error on webhook. Event data: %s' % str(event_json))
         return HttpResponse('Charge not found', status=500)
@@ -321,7 +325,7 @@ def charge_webhook(event, event_json, charge_id, rso):
 
         order.log_action('pretix.plugins.stripe.event', data=event_json)
 
-        is_refund = charge['refunds']['total_count'] or charge['dispute']
+        is_refund = charge['amount_refunded'] or charge['refunds']['total_count'] or charge['dispute']
         if is_refund:
             known_refunds = [r.info_data.get('id') for r in payment.refunds.all()]
             migrated_refund_amounts = [r.amount for r in payment.refunds.all() if not r.info_data.get('id')]
@@ -354,6 +358,8 @@ def charge_webhook(event, event_json, charge_id, rso):
                                                                    OrderPayment.PAYMENT_STATE_CANCELED,
                                                                    OrderPayment.PAYMENT_STATE_FAILED):
             try:
+                if getattr(charge, "payment_intent", None):
+                    payment.info = str(charge.payment_intent)
                 payment.confirm()
             except LockTimeoutException:
                 return HttpResponse("Lock timeout, please try again.", status=503)
@@ -439,14 +445,14 @@ def paymentintent_webhook(event, event_json, paymentintent_id, rso):
     prov._init_api()
 
     try:
-        paymentintent = stripe.PaymentIntent.retrieve(paymentintent_id, **prov.api_kwargs)
+        paymentintent = stripe.PaymentIntent.retrieve(paymentintent_id, expand=["latest_charge"], **prov.api_kwargs)
     except stripe.error.StripeError:
         logger.exception('Stripe error on webhook. Event data: %s' % str(event_json))
         return HttpResponse('Charge not found', status=500)
 
-    for charge in paymentintent.charges.data:
+    if paymentintent.latest_charge:
         ReferencedStripeObject.objects.get_or_create(
-            reference=charge.id,
+            reference=paymentintent.latest_charge.id,
             defaults={'order': rso.payment.order, 'payment': rso.payment}
         )
 
@@ -581,6 +587,7 @@ class ScaView(StripeOrderView, View):
             try:
                 intent = stripe.PaymentIntent.retrieve(
                     payment_info['id'],
+                    expand=["latest_charge"],
                     **prov.api_kwargs
                 )
             except stripe.error.InvalidRequestError:
@@ -591,12 +598,15 @@ class ScaView(StripeOrderView, View):
             messages.error(self.request, _('Sorry, there was an error in the payment process.'))
             return self._redirect_to_order()
 
-        if intent.status == 'requires_action' and intent.next_action.type in ['use_stripe_sdk', 'redirect_to_url']:
+        if intent.status == 'requires_action' and intent.next_action.type in [
+            'use_stripe_sdk', 'redirect_to_url', 'alipay_handle_redirect', 'wechat_pay_display_qr_code'
+        ]:
             ctx = {
                 'order': self.order,
                 'stripe_settings': StripeSettingsHolder(self.order.event).settings,
             }
-            if intent.next_action.type == 'use_stripe_sdk':
+            ctx['payment_intent_action_type'] = intent.next_action.type
+            if intent.next_action.type in ('use_stripe_sdk', 'alipay_handle_redirect', 'wechat_pay_display_qr_code'):
                 ctx['payment_intent_client_secret'] = intent.client_secret
             elif intent.next_action.type == 'redirect_to_url':
                 ctx['payment_intent_next_action_redirect_url'] = intent.next_action.redirect_to_url['url']

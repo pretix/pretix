@@ -208,7 +208,7 @@ var pretixstripe = {
             }
         );
     },
-    'handleCardAction': function (payment_intent_client_secret) {
+    'withStripe': function (callback) {
         $.ajax({
             url: 'https://js.stripe.com/v3/',
             dataType: 'script',
@@ -223,13 +223,68 @@ var pretixstripe = {
                         locale: $.trim($("body").attr("data-locale"))
                     });
                 }
-                pretixstripe.stripe.handleCardAction(
-                    payment_intent_client_secret
-                ).then(function (result) {
+                callback();
+            }
+        });
+    },
+    'handleAlipayAction': function (payment_intent_client_secret) {
+        pretixstripe.withStripe(function () {
+            pretixstripe.stripe.confirmAlipayPayment(
+                payment_intent_client_secret,
+                {
+                    return_url: window.location.href
+                }
+            ).then(function (result) {
+                if (result.error) {
+                    waitingDialog.hide();
+                    $(".stripe-errors").stop().hide().removeClass("sr-only");
+                    $(".stripe-errors").html("<div class='alert alert-danger'>Technical error, please contact support: " + result.error.message + "</div>");
+                    $(".stripe-errors").slideDown();
+                } else {
+                    waitingDialog.show(gettext("Confirming your payment …"));
+                }
+            });
+        });
+    },
+    'handleWechatAction': function (payment_intent_client_secret) {
+        pretixstripe.withStripe(function () {
+            pretixstripe.stripe.confirmWechatPayPayment(
+                payment_intent_client_secret,
+                {
+                    payment_method_options: {
+                        wechat_pay: {
+                            client: 'web',
+                        },
+                    },
+                }
+            ).then(function (result) {
+                if (result.error) {
+                    waitingDialog.hide();
+                    $(".stripe-errors").stop().hide().removeClass("sr-only");
+                    $(".stripe-errors").html("<div class='alert alert-danger'>Technical error, please contact support: " + result.error.message + "</div>");
+                    $(".stripe-errors").slideDown();
+                } else {
                     waitingDialog.show(gettext("Confirming your payment …"));
                     location.reload();
-                });
-            }
+                }
+            });
+        });
+    },
+    'handleCardAction': function (payment_intent_client_secret) {
+        pretixstripe.withStripe(function () {
+            pretixstripe.stripe.handleCardAction(
+                payment_intent_client_secret
+            ).then(function (result) {
+                if (result.error) {
+                    waitingDialog.hide();
+                    $(".stripe-errors").stop().hide().removeClass("sr-only");
+                    $(".stripe-errors").html("<div class='alert alert-danger'>Technical error, please contact support: " + result.error.message + "</div>");
+                    $(".stripe-errors").slideDown();
+                } else {
+                    waitingDialog.show(gettext("Confirming your payment …"));
+                    location.reload();
+                }
+            });
         });
     },
     'handlePaymentRedirectAction': function (payment_intent_next_action_redirect_url) {
@@ -270,6 +325,12 @@ $(function () {
     } else if ($("#stripe_payment_intent_next_action_redirect_url").length) {
         let payment_intent_next_action_redirect_url = $.trim($("#stripe_payment_intent_next_action_redirect_url").html());
         pretixstripe.handlePaymentRedirectAction(payment_intent_next_action_redirect_url);
+    } else if ($.trim($("#stripe_payment_intent_action_type").html()) === "wechat_pay_display_qr_code") {
+        let payment_intent_client_secret = $.trim($("#stripe_payment_intent_client_secret").html());
+        pretixstripe.handleWechatAction(payment_intent_client_secret);
+    } else if ($.trim($("#stripe_payment_intent_action_type").html()) === "alipay_handle_redirect") {
+        let payment_intent_client_secret = $.trim($("#stripe_payment_intent_client_secret").html());
+        pretixstripe.handleAlipayAction(payment_intent_client_secret);
     } else if ($("#stripe_payment_intent_client_secret").length) {
         let payment_intent_client_secret = $.trim($("#stripe_payment_intent_client_secret").html());
         pretixstripe.handleCardAction(payment_intent_client_secret);

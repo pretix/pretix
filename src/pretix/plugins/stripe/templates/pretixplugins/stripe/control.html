@@ -7,56 +7,65 @@
             <dt>{% trans "Charge ID" %}</dt>
             <dd>{{ payment_info.id }}</dd>
         {% endif %}
-        {% if "source" in payment_info %}
-            {% if payment_info.source.card %}
+        {% if details %}
+            {% if details.card %}
                 <dt>{% trans "Card type" %}</dt>
-                <dd>{{ payment_info.source.card.brand }}</dd>
-                <dt>{% trans "Card number" %}</dt>
-                <dd>**** **** **** {{ payment_info.source.card.last4 }}</dd>
-                {% if payment_info.source.owner.name %}
-                    <dt>{% trans "Payer name" %}</dt>
-                    <dd>{{ payment_info.source.owner.name }}</dd>
-                {% endif %}
-            {% endif %}
-            {% if payment_info.source.type == "sepa_debit" %}
-                <dt>{% trans "Bank" %}</dt>
-                <dd>{{ payment_info.source.sepadirectdebit.bank_name }}</dd>
-                <dt>{% trans "Payer name" %}</dt>
-                <dd>{{ payment_info.source.owner.verified_name|default:payment_info.source.owner.name }}</dd>
-            {% endif %}
-            {% if payment_info.source.type == "giropay" %}
-                <dt>{% trans "Bank" %}</dt>
-                <dd>{{ payment_info.source.giropay.bank_name }} ({{ payment_info.source.giropay.bic }})</dd>
-                <dt>{% trans "Payer name" %}</dt>
-                <dd>{{ payment_info.source.owner.verified_name|default:payment_info.source.owner.name }}</dd>
-            {% endif %}
-            {% if payment_info.source.type == "bancontact" %}
-                <dt>{% trans "Bank" %}</dt>
-                <dd>{{ payment_info.source.bancontact.bank_name }} ({{ payment_info.source.bancontact.bic }})</dd>
-                {% if owner in payment_info.source %}
-                    <dt>{% trans "Payer name" %}</dt>
-                    <dd>{{ payment_info.source.owner.verified_name|default:payment_info.source.owner.name }}</dd>
-               {% endif %}
-            {% endif %}
-            {% if payment_info.source.type == "ideal" %}
-                <dt>{% trans "Bank" %}</dt>
-                <dd>{{ payment_info.source.ideal.bank }} ({{ payment_info.source.ideal.bic }})</dd>
-                <dt>{% trans "Payer name" %}</dt>
-                <dd>{{ payment_info.source.owner.verified_name|default:payment_info.source.owner.name }}</dd>
-            {% endif %}
-        {% endif %}
-        {% if payment_info.charges.data.0 %}
-            {% if payment_info.charges.data.0.payment_method_details.card %}
-                <dt>{% trans "Card type" %}</dt>
-                <dd>{{ payment_info.charges.data.0.payment_method_details.card.brand }}</dd>
+                <dd>{{ details.card.brand }}</dd>
                 <dt>{% trans "Card number" %}</dt>
                 <dd>
-                    **** **** **** {{ payment_info.charges.data.0.payment_method_details.card.last4 }}
-                    {% if payment_info.charges.data.0.payment_method_details.card.moto %}
+                    **** **** **** {{ details.card.last4 }}
+                    {% if details.card.moto %}
                         <span class="label label-info">{% trans "MOTO" %}</span>
                     {% endif %}
                 </dd>
             {% endif %}
+            {% if details.type == "sepa_debit" %}
+                <dt>{% trans "Bank" %}</dt>
+                <dd>{{ details.sepadirectdebit.bank_name }}</dd>
+                {% if details.sepadirectdebit.verified_name %}
+                    <dt>{% trans "Payer name" %}</dt>
+                    <dd>{{ details.sepadirectdebit.verified_name }}</dd>
+                {% endif %}
+            {% endif %}
+            {% if details.type == "giropay" %}
+                <dt>{% trans "Bank" %}</dt>
+                <dd>{{ details.giropay.bank_name }} ({{ details.giropay.bic }})</dd>
+                {% if details.giropay.verified_name %}
+                    <dt>{% trans "Payer name" %}</dt>
+                    <dd>{{ details.giropay.verified_name }}</dd>
+                {% endif %}
+            {% endif %}
+            {% if details.type == "eps" %}
+                <dt>{% trans "Bank" %}</dt>
+                <dd>{{ details.eps.bank }}</dd>
+                {% if details.eps.verified_name %}
+                    <dt>{% trans "Payer name" %}</dt>
+                    <dd>{{ details.eps.verified_name }}</dd>
+                {% endif %}
+            {% endif %}
+            {% if details.type == "bancontact" %}
+                <dt>{% trans "Bank" %}</dt>
+                <dd>{{ details.bancontact.bank_name }} ({{ details.bancontact.bic }})</dd>
+                {% if details.bancontact.verified_name %}
+                    <dt>{% trans "Payer name" %}</dt>
+                    <dd>{{ details.bancontact.verified_name }}</dd>
+               {% endif %}
+            {% endif %}
+            {% if details.type == "ideal" %}
+                <dt>{% trans "Bank" %}</dt>
+                <dd>{{ details.ideal.bank }} ({{ details.ideal.bic }})</dd>
+                {% if details.ideal.verified_name %}
+                    <dt>{% trans "Payer name" %}</dt>
+                    <dd>{{ details.ideal.verified_name }}</dd>
+                {% endif %}
+            {% endif %}
+        {% endif %}
+        {% if details.owner.verified_name %}
+            <dt>{% trans "Payer name" %}</dt>
+            <dd>{{ details.owner.verified_name }}</dd>
+        {% elif details.owner.name %}
+            <dt>{% trans "Payer name" %}</dt>
+            <dd>{{ details.owner.name }}</dd>
         {% endif %}
         {% if "amount" in payment_info %}
             <dt>{% trans "Total value" %}</dt>

@@ -6,9 +6,14 @@
 {% block custom_header %}
     {{ block.super }}
     {% include "pretixplugins/stripe/presale_head.html" with settings=stripe_settings %}
+    <script type="text/plain" id="stripe_payment_intent_action_type">{{ payment_intent_action_type }}</script>
     <script type="text/plain" id="stripe_payment_intent_client_secret">{{ payment_intent_client_secret }}</script>
-    <script type="text/plain" id="stripe_payment_intent_next_action_redirect_url">{{ payment_intent_next_action_redirect_url }}</script>
-    <script type="text/plain" id="stripe_payment_intent_redirect_action_handling">{{ payment_intent_redirect_action_handling }}</script>
+    {% if payment_intent_next_action_redirect_url %}
+        <script type="text/plain" id="stripe_payment_intent_next_action_redirect_url">{{ payment_intent_next_action_redirect_url }}</script>
+    {% endif %}}
+    {% if payment_intent_redirect_action_handling %}
+        <script type="text/plain" id="stripe_payment_intent_redirect_action_handling">{{ payment_intent_redirect_action_handling }}</script>
+    {% endif %}
 {% endblock %}
 {% block content %}
     <div class="panel panel-primary">
@@ -18,6 +23,9 @@
                     Confirm payment: {{ code }}
                 {% endblocktrans %}
             </h3>
+        </div>
+        <div class="stripe-errors sr-only panel-body">
+
         </div>
         <div class="panel-body embed-responsive embed-responsive-sca" id="scacontainer">
 

@@ -43,7 +43,7 @@ from pretix.base.models import (
 from pretix.testutils.sessions import add_cart_session, get_cart_session_key
 
 
-class MockedCharge():
+class MockedCharge:
     status = ''
     paid = False
     id = 'ch_123345345'
@@ -52,16 +52,25 @@ class MockedCharge():
         pass
 
 
-class Object():
+class Object:
     pass
 
 
-class MockedPaymentintent():
+class MockedPaymentintent:
     status = ''
     id = 'pi_1EUon12Tb35ankTnZyvC3SdE'
+    latest_charge = MockedCharge()
     charges = Object()
-    charges.data = [MockedCharge()]
+    charges.data = [latest_charge]
     last_payment_error = None
+
+
+class MockedAppleDomain:
+    livemode = True
+
+
+def apple_domain_create(**kwargs):
+    return MockedAppleDomain()
 
 
 @pytest.fixture
@@ -80,6 +89,7 @@ def env(client):
     quota_tickets.items.add(ticket)
     event.settings.set('attendee_names_asked', False)
     event.settings.set('payment_stripe__enabled', True)
+    event.settings.set('payment_stripe_publishable_key', 'nokey')
     add_cart_session(client, event, {'email': 'admin@localhost'})
     return client, ticket
 
@@ -92,10 +102,11 @@ def test_payment(env, monkeypatch):
         assert kwargs['payment_method'] == 'pm_189fTT2eZvKYlo2CvJKzEzeu'
         c = MockedPaymentintent()
         c.status = 'succeeded'
-        c.charges.data[0].paid = True
+        c.latest_charge.paid = True
         setattr(paymentintent_create, 'called', True)
         return c
 
+    monkeypatch.setattr("stripe.ApplePayDomain.create", apple_domain_create)
     monkeypatch.setattr("stripe.PaymentIntent.create", paymentintent_create)
 
     client, ticket = env
