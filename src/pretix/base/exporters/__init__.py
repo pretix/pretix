@@ -28,4 +28,5 @@ from .items import *  # noqa
 from .json import *  # noqa
 from .mail import *  # noqa
 from .orderlist import *  # noqa
+from .reusablemedia import *  # noqa
 from .waitinglist import *  # noqa
