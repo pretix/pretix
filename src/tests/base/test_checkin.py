@@ -847,6 +847,85 @@ def test_rules_entries_before(event, position, clist):
 
 
 @pytest.mark.django_db
+def test_rules_entries_days_since(event, position, clist):
+    # Ticket is valid once before X and on one day after X
+    event.settings.timezone = 'Europe/Berlin'
+    clist.allow_multiple_entries = True
+    clist.rules = {
+        "or": [
+            {"<=": [{"var": "entries_number"}, 0]},
+            {"and": [
+                {"isAfter": [{"var": "now"}, {"buildTime": ["custom", "2020-01-01T23:00:00.000+01:00"]}, 0]},
+                {"or": [
+                    {">": [{"var": "entries_today"}, 0]},
+                    {"<=": [{"entries_days_since": [{"buildTime": ["custom", "2020-01-01T23:00:00.000+01:00"]}]}, 0]},
+                ]}
+            ]},
+        ],
+    }
+    clist.save()
+    with freeze_time("2020-01-01 22:00:00+01:00"):
+        assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        perform_checkin(position, clist, {})
+
+        assert not OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+        assert 'Maximum number of entries exceeded' in str(excinfo.value)
+
+    with freeze_time("2020-01-02 23:10:00+01:00"):
+        assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        perform_checkin(position, clist, {})
+
+        perform_checkin(position, clist, {})
+        assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+
+    with freeze_time("2020-01-03 23:10:00+01:00"):
+        assert not OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+        assert 'Maximum number of days with an entry since 2020-01-01 23:00 exceeded' in str(excinfo.value)
+
+
+@pytest.mark.django_db
+def test_rules_entries_days_before(event, position, clist):
+    # Ticket is valid after 23:00 only if people already showed up on two days before
+    event.settings.timezone = 'Europe/Berlin'
+    clist.allow_multiple_entries = True
+    clist.rules = {
+        "or": [
+            {"isBefore": [{"var": "now"}, {"buildTime": ["custom", "2020-01-01T23:00:00.000+01:00"]}, 0]},
+            {"and": [
+                {"isAfter": [{"var": "now"}, {"buildTime": ["custom", "2020-01-01T23:00:00.000+01:00"]}, 0]},
+                {">=": [{"entries_days_before": [{"buildTime": ["custom", "2020-01-01T23:00:00.000+01:00"]}]}, 2]},
+            ]},
+        ],
+    }
+    clist.save()
+
+    with freeze_time("2019-12-30 22:00:00+01:00"):
+        assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        perform_checkin(position, clist, {})
+
+    with freeze_time("2020-01-02 23:10:00+01:00"):
+        assert not OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        with pytest.raises(CheckInError) as excinfo:
+            perform_checkin(position, clist, {})
+        assert excinfo.value.code == 'rules'
+        assert 'Minimum number of days with an entry before 2020-01-01 23:00 exceeded.' in str(excinfo.value)
+
+    with freeze_time("2019-12-31 22:00:00+01:00"):
+        assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        perform_checkin(position, clist, {})
+
+    with freeze_time("2020-01-02 23:10:00+01:00"):
+        assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+        perform_checkin(position, clist, {})
+
+
+@pytest.mark.django_db
 def test_rules_time_isafter_tolerance(event, position, clist):
     # Ticket is valid starting 10 minutes before admission time
     event.settings.timezone = 'Europe/Berlin'
