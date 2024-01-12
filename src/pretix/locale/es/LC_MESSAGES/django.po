@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2024-01-12 19:00+0000\n"
+"PO-Revision-Date: 2024-01-13 09:00+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -232,12 +232,12 @@ msgstr ""
 #: pretix/api/serializers/event.py:232 pretix/api/serializers/event.py:530
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr "La meta propiedad '{name}' no existe."
+msgstr "La propiedad de metadatos '{name}' no existe."
 
 #: pretix/api/serializers/event.py:235 pretix/api/serializers/event.py:533
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "Los metadatos de propiedad '{name}' no permite el valor '{value}'."
+msgstr "La propiedad de metadatos '{name}' no permite el valor '{value}'."
 
 #: pretix/api/serializers/event.py:278
 #, python-brace-format
@@ -1281,7 +1281,7 @@ msgstr "Cancelación de"
 #: pretix/base/exporters/invoices.py:334 pretix/base/exporters/invoices.py:335
 #: pretix/base/exporters/invoices.py:336 pretix/base/exporters/invoices.py:337
 msgid "Invoice sender:"
-msgstr "Emisor de factura:"
+msgstr "Remitente de la factura:"
 
 #: pretix/base/exporters/invoices.py:206 pretix/base/exporters/invoices.py:332
 #: pretix/base/exporters/orderlist.py:264
@@ -2298,7 +2298,7 @@ msgstr "Pais"
 #: pretix/base/exporters/orderlist.py:615
 msgctxt "address"
 msgid "Invoice address state"
-msgstr "Estado"
+msgstr "Estado o provincia para la dirección de la factura"
 
 #: pretix/base/exporters/orderlist.py:776
 msgid "Order transaction data"
@@ -3950,7 +3950,7 @@ msgstr "Tienes que configurar al menos una cuota para vender algo."
 #: pretix/base/models/event.py:1235
 #, python-brace-format
 msgid "You need to fill the meta parameter \"{property}\"."
-msgstr "Por favor llene el parámetro\"{property}\"."
+msgstr "Debe completar el metaparámetro \"{property}\"."
 
 #: pretix/base/models/event.py:1350
 msgid ""
@@ -4014,7 +4014,8 @@ msgstr ""
 #: pretix/base/models/event.py:1643 pretix/base/models/items.py:2054
 msgid "The property name may only contain letters, numbers and underscores."
 msgstr ""
-"El nombre de la propiedad puede solo contener letras, números y guión bajo."
+"El nombre de la propiedad sólo puede contener letras, números y guiones "
+"bajos."
 
 #: pretix/base/models/event.py:1648
 msgid "Default value"
@@ -4034,9 +4035,9 @@ msgid ""
 "If checked, an event can only be taken live if the property is set. In event "
 "series, its always optional to set a value for individual dates"
 msgstr ""
-"Solo un evento puede establecerse en vivo si se activa esta propiedad. En "
-"series de eventos, siempre es opcional establecer un valor para fechas "
-"individuales"
+"Si está marcado, un evento solo se puede transmitir en vivo si la propiedad "
+"está configurada. En series de eventos, siempre es opcional establecer un "
+"valor para fechas individuales"
 
 #: pretix/base/models/event.py:1659 pretix/base/models/items.py:2066
 msgid "Valid values"
@@ -6121,9 +6122,8 @@ msgid "You need to choose a specific product if you select a seat."
 msgstr "Debes elegir un producto específico si seleccionas un asiento."
 
 #: pretix/base/models/vouchers.py:503
-#, fuzzy
 msgid "Seat-specific vouchers can only be used once."
-msgstr "Este reembolso no puede ser procesado en este momento."
+msgstr "Los vales de asiento específicos solo se pueden utilizar una vez."
 
 #: pretix/base/models/vouchers.py:506
 #, python-brace-format
@@ -6223,9 +6223,8 @@ msgid "Order status"
 msgstr "Estado del pedido"
 
 #: pretix/base/notifications.py:222
-#, fuzzy
 msgid "Purchased products"
-msgstr "Cambiar productos"
+msgstr "Productos comprados"
 
 #: pretix/base/notifications.py:223
 #: pretix/base/templates/pretixbase/email/order_details.html:147
@@ -6253,9 +6252,9 @@ msgid "Order {order.code} has been canceled."
 msgstr "La orden {order.code} ha sido cancelada."
 
 #: pretix/base/notifications.py:258
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Order {order.code} has been reactivated."
-msgstr "El orden {order.code} ha sido cambiado."
+msgstr "El pedido {order.code} ha sido reactivado."
 
 #: pretix/base/notifications.py:264
 #, python-brace-format
@@ -6310,9 +6309,8 @@ msgid "Invalid setting for column \"{header}\"."
 msgstr "Configuración no válida para la columna \"{header}\"."
 
 #: pretix/base/orderimport.py:177
-#, fuzzy
 msgid "Enter a valid phone number."
-msgstr "Ha introducido un número no válido."
+msgstr "Ingrese un número de teléfono válido."
 
 #: pretix/base/orderimport.py:205 pretix/presale/views/waiting.py:117
 msgctxt "subevent"
@@ -6320,41 +6318,34 @@ msgid "You need to select a date."
 msgstr "Necesitas seleccionar una fecha."
 
 #: pretix/base/orderimport.py:224 pretix/base/orderimport.py:236
-#, fuzzy
 msgctxt "subevent"
 msgid "No matching date was found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "No se encontró ninguna fecha coincidente."
 
 #: pretix/base/orderimport.py:226 pretix/base/orderimport.py:238
-#, fuzzy
 msgctxt "subevent"
 msgid "Multiple matching dates were found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "Se encontraron varias fechas coincidentes."
 
 #: pretix/base/orderimport.py:274
-#, fuzzy
 msgid "No matching product was found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "No se encontró ningún producto coincidente."
 
 #: pretix/base/orderimport.py:276
-#, fuzzy
 msgid "Multiple matching products were found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "Se encontraron varios productos coincidentes."
 
 #: pretix/base/orderimport.py:305
-#, fuzzy
 msgid "No matching variation was found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "No se encontró ninguna variación coincidente."
 
 #: pretix/base/orderimport.py:307
-#, fuzzy
 msgid "Multiple matching variations were found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "Se encontraron múltiples variaciones coincidentes."
 
 #: pretix/base/orderimport.py:310
-#, fuzzy
 msgid "You need to select a variation for this product."
-msgstr "Necesita seleccionar una variación del producto."
+msgstr "Debe seleccionar una variación para este producto."
 
 #: pretix/base/orderimport.py:322 pretix/base/orderimport.py:337
 #: pretix/base/orderimport.py:352 pretix/base/orderimport.py:363
@@ -6370,26 +6361,21 @@ msgid "Invoice address"
 msgstr "Dirección para facturación"
 
 #: pretix/base/orderimport.py:397 pretix/base/orderimport.py:543
-#, fuzzy
 msgid "Please enter a valid country code."
-msgstr "Por favor, introduzca una dirección de correo electrónico válida."
+msgstr "Por favor ingrese un código de país válido."
 
 #: pretix/base/orderimport.py:414 pretix/base/orderimport.py:560
-#, fuzzy
 msgid "States are not supported for this country."
-msgstr ""
-"Los reembolsos automáticos no son soportados por este proveedor de pago."
+msgstr "Los estados no son compatibles con este país."
 
 #: pretix/base/orderimport.py:422 pretix/base/orderimport.py:568
-#, fuzzy
 msgid "Please enter a valid state."
-msgstr "Por favor, seleccione una cuota."
+msgstr "Por favor ingrese un estado válido."
 
 #: pretix/base/orderimport.py:471 pretix/control/forms/filter.py:654
 #: pretix/control/forms/filter.py:641
-#, fuzzy
 msgid "Attendee e-mail address"
-msgstr "Correo electrónico del participante"
+msgstr "Dirección de correo electrónico del asistente"
 
 #: pretix/base/orderimport.py:487 pretix/base/orderimport.py:498
 #: pretix/base/orderimport.py:509 pretix/base/orderimport.py:520
@@ -6402,19 +6388,16 @@ msgstr "Correo electrónico del participante"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:200
 #: pretix/control/forms/filter.py:645 pretix/control/forms/filter.py:649
 #: pretix/control/forms/filter.py:653 pretix/control/forms/filter.py:663
-#, fuzzy
 msgid "Attendee address"
-msgstr "Insignias de participante"
+msgstr "Dirección del asistente"
 
 #: pretix/base/orderimport.py:555
-#, fuzzy
 msgid "State"
-msgstr "Estado"
+msgstr "Estado o provincia"
 
 #: pretix/base/orderimport.py:578
-#, fuzzy
 msgid "Calculate from product"
-msgstr "Crear un primer producto"
+msgstr "Calcular a partir del producto"
 
 #: pretix/base/orderimport.py:586 pretix/control/views/orders.py:1103
 #: pretix/control/views/orders.py:1132 pretix/control/views/orders.py:1176
@@ -6429,9 +6412,8 @@ msgid "Ticket code"
 msgstr "Código de ticket"
 
 #: pretix/base/orderimport.py:605
-#, fuzzy
 msgid "Generate automatically"
-msgstr "Registrado automáticamente"
+msgstr "Generar automáticamente"
 
 #: pretix/base/orderimport.py:614
 msgid "You cannot assign a position secret that already exists."
@@ -9562,9 +9544,10 @@ msgstr ""
 "utilizará el número de teléfono."
 
 #: pretix/base/settings.py:1461
-#, fuzzy
 msgid "Maximum number of entries per email address for the same product"
-msgstr "Número máximo de artículos por pedido"
+msgstr ""
+"Número máximo de entradas por dirección de correo electrónico para el mismo "
+"producto"
 
 #: pretix/base/settings.py:1473
 #, fuzzy
@@ -10181,8 +10164,9 @@ msgid ""
 "Sender name used in conjunction with the sender address for outgoing emails. "
 "Defaults to your event name."
 msgstr ""
-"Los correos salientes usan el nombre de remitente y su dirección de correo. "
-"Por defecto se usa el nombre del evento."
+"Nombre del remitente utilizado junto con la dirección del remitente para "
+"correos electrónicos salientes. El valor predeterminado es el nombre de su "
+"evento."
 
 #: pretix/base/settings.py:2107 pretix/base/settings.py:2164
 #: pretix/base/settings.py:2181 pretix/base/settings.py:2199
@@ -11637,14 +11621,14 @@ msgid "E-mails"
 msgstr "Correos electrónicos"
 
 #: pretix/base/shredder.py:292
-#, fuzzy
 msgid ""
 "This will remove all e-mail addresses from orders and attendees, as well as "
 "logged email contents. This will also remove the association to customer "
 "accounts."
 msgstr ""
 "Esto eliminará todas las direcciones de correo electrónico de los pedidos y "
-"asistentes, así como los contenidos de correo electrónico registrados."
+"los asistentes, así como el contenido del correo electrónico registrado. "
+"Esto también eliminará la asociación a las cuentas de los clientes."
 
 #: pretix/base/shredder.py:369
 msgid ""
@@ -12446,9 +12430,8 @@ msgid "Filetype not allowed!"
 msgstr "Tipo de archivo no permitido!"
 
 #: pretix/control/forms/__init__.py:321
-#, fuzzy
 msgid "Community translations"
-msgstr "Traducción no oficial"
+msgstr "Traducciones de la comunidad"
 
 #: pretix/control/forms/__init__.py:323
 #, python-brace-format
@@ -12837,9 +12820,8 @@ msgstr "Cambiar la dirección de contacto del pedido"
 #: pretix/control/forms/event.py:1003 pretix/control/forms/event.py:1030
 #: pretix/control/forms/event.py:1057 pretix/control/forms/event.py:1193
 #: pretix/control/forms/event.py:1238 pretix/control/forms/event.py:1268
-#, fuzzy
 msgid "Send an email to attendees"
-msgstr "Enviar un nuevo correo electrónico basado en esto"
+msgstr "Enviar un correo electrónico a los asistentes"
 
 #: pretix/control/forms/event.py:1004 pretix/control/forms/event.py:1031
 #: pretix/control/forms/event.py:1058 pretix/control/forms/event.py:1194
@@ -12856,16 +12838,14 @@ msgstr ""
 #: pretix/control/forms/event.py:1009 pretix/control/forms/event.py:1036
 #: pretix/control/forms/event.py:1063 pretix/control/forms/event.py:1199
 #: pretix/control/forms/event.py:1244 pretix/control/forms/event.py:1274
-#, fuzzy
 msgid "Subject sent to attendees"
-msgstr "Texto (enviado por admin)"
+msgstr "Asunto enviado a los asistentes"
 
 #: pretix/control/forms/event.py:1014 pretix/control/forms/event.py:1041
 #: pretix/control/forms/event.py:1068 pretix/control/forms/event.py:1204
 #: pretix/control/forms/event.py:1249 pretix/control/forms/event.py:1279
-#, fuzzy
 msgid "Text sent to attendees"
-msgstr "Texto (enviado por admin)"
+msgstr "Texto enviado a los asistentes"
 
 #: pretix/control/forms/event.py:1079 pretix/control/forms/event.py:1141
 #: pretix/control/forms/event.py:1153 pretix/control/forms/event.py:1163
@@ -13035,9 +13015,8 @@ msgid "Sale not allowed"
 msgstr "Venta no permitida"
 
 #: pretix/control/forms/event.py:1485
-#, fuzzy
 msgid "Order requires approval"
-msgstr "La nueva orden requiere aprobación"
+msgstr "El pedido requiere aprobación"
 
 #: pretix/control/forms/event.py:1489
 #, fuzzy
@@ -13255,9 +13234,8 @@ msgid "Pending (but no current payment)"
 msgstr "Pendiente (pero pagado completamente)"
 
 #: pretix/control/forms/filter.py:235 pretix/control/forms/filter.py:234
-#, fuzzy
 msgid "Approval process"
-msgstr "Proceso de aprobación de pedidos"
+msgstr "Proceso de aprobación"
 
 #: pretix/control/forms/filter.py:236 pretix/control/forms/filter.py:235
 #, fuzzy
@@ -15477,24 +15455,20 @@ msgid "The footer links have been changed."
 msgstr "Los detalles de la orden han sido cambiados."
 
 #: pretix/control/logdisplay.py:336 pretix/control/logdisplay.py:452
-#, fuzzy
 msgid "A scheduled export has been added."
-msgstr "Se ha añadido el contingente."
+msgstr "Se ha agregado una exportación programada."
 
 #: pretix/control/logdisplay.py:337 pretix/control/logdisplay.py:453
-#, fuzzy
 msgid "A scheduled export has been changed."
-msgstr "El producto ha sido cambiado."
+msgstr "Se ha modificado una exportación programada."
 
 #: pretix/control/logdisplay.py:338 pretix/control/logdisplay.py:454
-#, fuzzy
 msgid "A scheduled export has been deleted."
-msgstr "Se ha eliminado el producto seleccionado."
+msgstr "Se ha eliminado una exportación programada."
 
 #: pretix/control/logdisplay.py:339 pretix/control/logdisplay.py:455
-#, fuzzy
 msgid "A scheduled export has been executed."
-msgstr "Se ha eliminado el producto seleccionado."
+msgstr "Se ha ejecutado una exportación programada."
 
 #: pretix/control/logdisplay.py:340 pretix/control/logdisplay.py:456
 #, python-brace-format
@@ -15661,7 +15635,7 @@ msgstr "El correo electrónico ha sido puesto en cola para ser enviado."
 
 #: pretix/control/logdisplay.py:373 pretix/control/logdisplay.py:415
 msgid "Sending of an email has failed."
-msgstr "El envío de email ha fallado."
+msgstr "El envío de un correo electrónico ha fallado."
 
 #: pretix/control/logdisplay.py:374
 msgid "The event's internal comment has been updated."
@@ -16172,19 +16146,16 @@ msgid "A bundled item has been changed on this product."
 msgstr "Se ha modificado un add-on en este producto."
 
 #: pretix/control/logdisplay.py:496
-#, fuzzy
 msgid "A meta property has been added to this event."
-msgstr "Se ha añadido un usuario al equipo del evento."
+msgstr "Se ha agregado una metapropiedad a este evento."
 
 #: pretix/control/logdisplay.py:497
-#, fuzzy
 msgid "A meta property has been removed from this event."
-msgstr "Un usuario ha sido eliminado del equipo de eventos."
+msgstr "Se ha eliminado una metapropiedad de este evento."
 
 #: pretix/control/logdisplay.py:498
-#, fuzzy
 msgid "A meta property has been changed on this event."
-msgstr "Se ha modificado un contingente en la fecha del evento."
+msgstr "Se ha cambiado una metapropiedad en este evento."
 
 #: pretix/control/logdisplay.py:499
 msgid "The quota has been added."
@@ -16802,9 +16773,8 @@ msgstr "Ticket checkeado"
 
 #: pretix/control/navigation.py:487
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:5
-#, fuzzy
 msgid "Event metadata"
-msgstr "Fecha del evento"
+msgstr "Metadatos del evento"
 
 #: pretix/control/navigation.py:501
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:6
@@ -17722,14 +17692,12 @@ msgid "Check-In selected attendees"
 msgstr "Registrar participantes seleccionados"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:216
-#, fuzzy
 msgid "Check-Out selected attendees"
-msgstr "Registrar participantes seleccionados"
+msgstr "Consultar a los asistentes seleccionados"
 
 #: pretix/control/templates/pretixcontrol/checkin/index.html:225
-#, fuzzy
 msgid "Delete all check-ins of selected attendees"
-msgstr "Registrar participantes seleccionados"
+msgstr "Eliminar todos los registros de los asistentes seleccionados"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:4
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:6
@@ -18128,9 +18096,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/email_setup.html:8
 #: pretix/control/templates/pretixcontrol/email_setup_simple.html:8
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:8
-#, fuzzy
 msgid "E-mail sending"
-msgstr "Configuración de correo electrónico"
+msgstr "Envío de correo electrónico"
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:21
 #, fuzzy
@@ -20219,7 +20186,6 @@ msgid "Deactivate"
 msgstr "Desactivar"
 
 #: pretix/control/templates/pretixcontrol/item/include_addons.html:5
-#, fuzzy
 msgid ""
 "With add-ons, you can specify products that can be bought as an addition to "
 "this product. For example, if you host a conference with a base conference "
@@ -20230,17 +20196,15 @@ msgid ""
 "product. You can also specify the minimum and maximum number of add-ons of "
 "the given category that can or need to be chosen."
 msgstr ""
-"Con los complementos, puede especificar los productos que se pueden comprar "
-"como complemento de este producto. Por ejemplo, si usted es anfitrión de una "
-"conferencia con un ticket de conferencia base y un número de talleres, "
-"podría definir los talleres como complementos al ticket de la conferencia. "
-"Con esta configuración, los talleres no se pueden comprar por sí solos, sino "
-"sólo en combinación con una entrada a la conferencia. Aquí puede especificar "
-"las categorías de productos que se pueden utilizar como complementos de este "
-"producto. También puede especificar el número mínimo y máximo de add-ons de "
-"la categoría que puede o debe seleccionarse. El usuario puede comprar todos "
-"los complementos de la categoría al mismo tiempo. Si un producto adicional "
-"tiene múltiples variaciones, sólo se puede comprar una de ellas."
+"Con los complementos, puede especificar productos que se pueden comprar como "
+"complemento a este producto. Por ejemplo, si organiza una conferencia con un "
+"ticket de conferencia base y varios talleres, puede definir los talleres "
+"como complementos al ticket de conferencia. Con esta configuración, los "
+"talleres no se pueden comprar solos sino sólo en combinación con una entrada "
+"a la conferencia. Aquí puede especificar categorías de productos que se "
+"pueden utilizar como complementos de este producto. También puede "
+"especificar el número mínimo y máximo de complementos de la categoría "
+"determinada que pueden o deben elegirse."
 
 #: pretix/control/templates/pretixcontrol/item/include_addons.html:28
 #: pretix/control/templates/pretixcontrol/item/include_addons.html:62
@@ -22175,9 +22139,8 @@ msgstr "Exportación de datos"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:11
 #: pretix/control/templates/pretixcontrol/organizers/export.html:11
-#, fuzzy
 msgid "Scheduled exports"
-msgstr "Entrada reducida"
+msgstr "Exportaciones programadas"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:28
 #: pretix/control/templates/pretixcontrol/organizers/export.html:28
@@ -22186,9 +22149,8 @@ msgstr "Próxima ejecución:"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:32
 #: pretix/control/templates/pretixcontrol/organizers/export.html:32
-#, fuzzy
 msgid "No next run scheduled"
-msgstr "Entrada reducida"
+msgstr "No hay próxima ejecución programada"
 
 #: pretix/control/templates/pretixcontrol/orders/export.html:37
 #: pretix/control/templates/pretixcontrol/organizers/export.html:37
@@ -22235,9 +22197,8 @@ msgstr "Recomendado para nuevos usuarios"
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:6
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:4
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:6
-#, fuzzy
 msgid "Delete scheduled export"
-msgstr "Eliminar seleccionado"
+msgstr "Eliminar exportación programada"
 
 #: pretix/control/templates/pretixcontrol/orders/export_delete.html:9
 #: pretix/control/templates/pretixcontrol/organizers/export_delete.html:9
@@ -22413,9 +22374,8 @@ msgstr "Cancelada (tarifa pagada)"
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:8
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:4
 #: pretix/control/templates/pretixcontrol/orders/import_start.html:6
-#, fuzzy
 msgid "Import attendees"
-msgstr "Todos los asistentes"
+msgstr "Importar asistentes"
 
 #: pretix/control/templates/pretixcontrol/orders/import_process.html:13
 #, fuzzy
@@ -23440,18 +23400,16 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:15
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:9
-#, fuzzy
 msgid "Create a new property"
-msgstr "Crear un nuevo producto"
+msgstr "Crear una nueva propiedad"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:5
 msgid "Delete property:"
 msgstr "Eliminar propiedad:"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_delete.html:8
-#, fuzzy
 msgid "Are you sure you want to delete the property?"
-msgstr "¿Estás seguro de que quieres borrar el equipo?"
+msgstr "¿Está seguro de que desea eliminar la propiedad?"
 
 #: pretix/control/templates/pretixcontrol/organizers/property_edit.html:7
 msgid "Property:"
@@ -25167,7 +25125,7 @@ msgstr "Todavía no ha creado ningún documento."
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:77
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:86
 msgid "Create a new voucher"
-msgstr "Crear un nuevo recibo"
+msgstr "Crear un nuevo vale"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:79
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:89
@@ -26178,9 +26136,8 @@ msgid "The verification code was incorrect, please try again."
 msgstr "El registro no pudo completarse. Por favor, inténtalo de nuevo."
 
 #: pretix/control/views/mailsetup.py:221
-#, fuzzy
 msgid "Sender address verification"
-msgstr "Dirección del remitente"
+msgstr "Verificación de la dirección del remitente"
 
 #: pretix/control/views/mailsetup.py:277
 #, python-format
@@ -26945,14 +26902,12 @@ msgstr ""
 "No se puede seleccionar una cuota que pertenezca a un evento diferente."
 
 #: pretix/control/views/organizer.py:2110
-#, fuzzy
 msgid "The property has been created."
-msgstr "El producto ha sido creado."
+msgstr "La propiedad ha sido creada."
 
 #: pretix/control/views/organizer.py:2176
-#, fuzzy
 msgid "The selected property has been deleted."
-msgstr "Se ha eliminado el producto seleccionado."
+msgstr "La propiedad seleccionada ha sido eliminada."
 
 #: pretix/control/views/organizer.py:2199
 #, fuzzy
@@ -27745,9 +27700,8 @@ msgid "Invoice email text"
 msgstr "Texto del correo electrónico de la factura"
 
 #: pretix/plugins/banktransfer/payment.py:254
-#, fuzzy
 msgid "Restrict to business customers"
-msgstr "Cliente de negocios"
+msgstr "Restringir a clientes empresariales"
 
 #: pretix/plugins/banktransfer/payment.py:255
 msgid ""
@@ -29342,9 +29296,8 @@ msgid "Report exporter"
 msgstr "Exportador de informes"
 
 #: pretix/plugins/reports/apps.py:51
-#, fuzzy
 msgid "Generate printable reports about your sales."
-msgstr "Este plugin le permite generar informes imprimibles sobre sus ventas."
+msgstr "Genera informes imprimibles sobre tus ventas."
 
 #: pretix/plugins/reports/exporters.py:96
 #, fuzzy, python-format
@@ -29521,22 +29474,19 @@ msgstr "Esperando"
 
 #: pretix/plugins/sendmail/forms.py:109 pretix/plugins/sendmail/forms.py:183
 #: pretix/plugins/sendmail/forms.py:355
-#, fuzzy
 msgctxt "sendmail_form"
 msgid "Restrict to a specific event date"
-msgstr "Añadir entradas para una fecha diferente"
+msgstr "Restringir a una fecha de evento específica"
 
 #: pretix/plugins/sendmail/forms.py:115 pretix/plugins/sendmail/forms.py:189
-#, fuzzy
 msgctxt "sendmail_form"
 msgid "Restrict to event dates starting at or after"
-msgstr "Enviar sólo a clientes de"
+msgstr "Restringir a fechas de eventos que comiencen en o después"
 
 #: pretix/plugins/sendmail/forms.py:120 pretix/plugins/sendmail/forms.py:194
-#, fuzzy
 msgctxt "sendmail_form"
 msgid "Restrict to event dates starting before"
-msgstr "Enviar sólo a clientes de"
+msgstr "Restringir a fechas de eventos que comiencen antes"
 
 #: pretix/plugins/sendmail/forms.py:161
 #, fuzzy
@@ -29545,10 +29495,9 @@ msgid "Send to"
 msgstr "Fecha de fin"
 
 #: pretix/plugins/sendmail/forms.py:171
-#, fuzzy
 msgctxt "sendmail_form"
 msgid "Restrict to products"
-msgstr "Restringir a países"
+msgstr "Restringir a productos"
 
 #: pretix/plugins/sendmail/forms.py:176
 #, fuzzy
@@ -29561,16 +29510,14 @@ msgid "Restrict to recipients without check-in"
 msgstr "Restringir a destinatarios sin check-in"
 
 #: pretix/plugins/sendmail/forms.py:199
-#, fuzzy
 msgctxt "sendmail_form"
 msgid "Restrict to orders created at or after"
-msgstr "Enviar a clientes con estado del pedido"
+msgstr "Restringir a pedidos creados en o después"
 
 #: pretix/plugins/sendmail/forms.py:204
-#, fuzzy
 msgctxt "sendmail_form"
 msgid "Restrict to orders created before"
-msgstr "Enviar sólo a clientes de"
+msgstr "Restringir a pedidos creados antes"
 
 #: pretix/plugins/sendmail/forms.py:230
 #, fuzzy
@@ -29605,10 +29552,9 @@ msgid "pending with payment overdue"
 msgstr "pendiente con pago atrasado"
 
 #: pretix/plugins/sendmail/forms.py:249
-#, fuzzy
 msgctxt "sendmail_form"
 msgid "Restrict to orders with status"
-msgstr "Lista de pedidos con impuestos (PDF)"
+msgstr "Restringir a pedidos con estado"
 
 #: pretix/plugins/sendmail/forms.py:274 pretix/plugins/sendmail/forms.py:278
 msgctxt "sendmail_form"
@@ -29644,10 +29590,9 @@ msgid "Relative, after event end"
 msgstr "Relativo, después del final del evento"
 
 #: pretix/plugins/sendmail/forms.py:403
-#, fuzzy
 msgctxt "sendmail_from"
 msgid "Restrict to orders with status"
-msgstr "Lista de pedidos con impuestos (PDF)"
+msgstr "Restringir a pedidos con estado"
 
 #: pretix/plugins/sendmail/forms.py:418
 msgid "Please specify the send date"
@@ -29663,9 +29608,8 @@ msgid "Please specify a product"
 msgstr "Por favor especifica un producto"
 
 #: pretix/plugins/sendmail/models.py:51
-#, fuzzy
 msgid "scheduled"
-msgstr "Entrada reducida"
+msgstr "programado"
 
 #: pretix/plugins/sendmail/models.py:52
 #, fuzzy
@@ -29703,14 +29647,12 @@ msgid "Limit products"
 msgstr "Limitar a productos"
 
 #: pretix/plugins/sendmail/models.py:239
-#, fuzzy
 msgid "Restrict to orders with status"
-msgstr "Lista de pedidos con impuestos (PDF)"
+msgstr "Restringir a pedidos con estado"
 
 #: pretix/plugins/sendmail/models.py:244
-#, fuzzy
 msgid "Restrict to check-in status"
-msgstr "Lista de pedidos con impuestos (PDF)"
+msgstr "Restringir al estado de check-in"
 
 #: pretix/plugins/sendmail/models.py:258
 #, fuzzy
@@ -29766,14 +29708,12 @@ msgstr[0] "%(count)d día antes del inicio del evento a las %(time)s"
 msgstr[1] "%(count)d días antes del inicio del evento a las %(time)s"
 
 #: pretix/plugins/sendmail/signals.py:99
-#, fuzzy
 msgid "Scheduled emails"
-msgstr "Correo electrónico del participante"
+msgstr "Correos electrónicos programados"
 
 #: pretix/plugins/sendmail/signals.py:122
-#, fuzzy
 msgid "Mass email was sent to customers or attendees."
-msgstr "Un e-mail personalizado ha sido enviado."
+msgstr "Se envió correo electrónico masivo a clientes o asistentes."
 
 #: pretix/plugins/sendmail/signals.py:123
 #, fuzzy
@@ -29799,7 +29739,7 @@ msgstr "Se actualizó una regla de correo electrónico"
 
 #: pretix/plugins/sendmail/signals.py:128
 msgid "A scheduled email was sent to the order"
-msgstr "Un correo electrónico programado a sido enviado al pedido"
+msgstr "Se envió un correo electrónico programado al pedido"
 
 #: pretix/plugins/sendmail/signals.py:129
 msgid "A scheduled email was sent to a ticket holder"
@@ -29904,9 +29844,8 @@ msgstr "El correo electrónico fue enviado"
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:22
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:30
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:31
-#, fuzzy
 msgid "Scheduled time"
-msgstr "Entrada reducida"
+msgstr "Hora programada"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:35
 #, fuzzy
@@ -29915,9 +29854,8 @@ msgstr "Selección de datos"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
-#, fuzzy
 msgid "Scheduled email rules"
-msgstr "Correo electrónico del participante"
+msgstr "Reglas de correo electrónico programadas"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:8
 msgid ""
@@ -29954,9 +29892,8 @@ msgid "Last execution:"
 msgstr "Última ejecución:"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:82
-#, fuzzy
 msgid "Inspect scheduled times"
-msgstr "Entrada reducida"
+msgstr "Inspeccionar los horarios programados"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:95
 msgid "You haven't created any rules yet."
@@ -30015,9 +29952,8 @@ msgstr ""
 "contacto de %s en los próximos minutos."
 
 #: pretix/plugins/sendmail/views.py:250
-#, fuzzy
 msgid "Orders or attendees"
-msgstr "Todos los asistentes"
+msgstr "Pedidos o asistentes"
 
 #: pretix/plugins/sendmail/views.py:251
 msgid ""
@@ -31304,8 +31240,8 @@ msgstr ""
 msgid ""
 "There was an error sending the confirmation mail. Please try again later."
 msgstr ""
-"Se ha producido un error al enviar el mail de confirmación. Por favor, "
-"inténtelo de nuevo más tarde."
+"Hubo un error al enviar el correo de confirmación. Por favor, inténtelo de "
+"nuevo más tarde."
 
 #: pretix/presale/forms/checkout.py:70
 msgid "E-mail address (repeated)"
@@ -31697,14 +31633,14 @@ msgid "Confirmations"
 msgstr "Confirmaciones"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:189
-#, fuzzy
 msgid ""
 "After you submitted your order using the button below, it will require "
 "approval by the event organizer before it can be confirmed and forms a valid "
 "contract."
 msgstr ""
-"Su pedido requiere la aprobación del organizador del evento antes de que "
-"pueda ser confirmado y formar un contrato válido."
+"Después de enviar su pedido usando el botón a continuación, requerirá la "
+"aprobación del organizador del evento antes de que pueda confirmarse y "
+"formar un contrato válido."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:191
 #, fuzzy
