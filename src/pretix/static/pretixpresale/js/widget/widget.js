@@ -198,7 +198,7 @@ Vue.component('availbox', {
         + '<small><a @click.prevent.stop="focus_voucher_field" role="button">{{unavailability_reason_message}}</a></small>'
         + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
-        + '     v-else-if="item.current_unavailability_reason">'
+        + '     v-else-if="unavailability_reason_message">'
         + '<small>{{unavailability_reason_message}}</small>'
         + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
@@ -213,7 +213,7 @@ Vue.component('availbox', {
         + '     v-if="waiting_list_show">'
         + '<a :href="waiting_list_url" target="_blank" @click="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
         + '</div>'
-        + '<div class="pretix-widget-availability-available" v-if="!item.current_unavailability_reason && avail[0] === 100">'
+        + '<div class="pretix-widget-availability-available" v-if="!unavailability_reason_message && avail[0] === 100">'
         + '<label class="pretix-widget-item-count-single-label pretix-widget-btn-checkbox" v-if="order_max === 1 && $root.single_item_select == \'button\'">'
         + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name"'
         + '       v-bind:aria-label="label_select_item"'
@@ -255,7 +255,7 @@ Vue.component('availbox', {
             }
         },
         unavailability_reason_message: function () {
-            var reason = this.item.current_unavailability_reason
+            var reason = this.item.current_unavailability_reason || this.variation.current_unavailability_reason;
             if (reason) {
                 return strings["unavailable_" + reason] || reason;
             }
