@@ -298,7 +298,7 @@ class OverviewReport(Report):
             story.append(Spacer(1, 5 * mm))
 
         if form_data.get('subevent_date_range'):
-            d_start, d_end = resolve_timeframe_to_dates_inclusive(now(), form_data['subevent_date_range'], self.timezone)
+            d_start, d_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['subevent_date_range'], self.timezone)
             story += [
                 Paragraph(_('{axis} between {start} and {end}').format(
                     axis=_('Event date'),
