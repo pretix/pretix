@@ -129,6 +129,14 @@ $(function () {
       'label': gettext('Number of days with a previous entry'),
       'type': 'int',
     },
+    'entries_days_since': {
+      'label': gettext('Number of days with a previous entry since'),
+      'type': 'int_by_datetime',
+    },
+    'entries_days_before': {
+      'label': gettext('Number of days with a previous entry before'),
+      'type': 'int_by_datetime',
+    },
     'minutes_since_last_entry': {
       'label': gettext('Minutes since last entry (-1 on first entry)'),
       'type': 'int',

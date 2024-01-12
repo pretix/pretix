@@ -280,7 +280,8 @@ class CheckinList(LoggedModel):
             '<', '<=', '>', '>=', '==', '!=', 'inList', 'isBefore', 'isAfter', 'or', 'and'
         }
         allowed_operators = top_level_operators | {
-            'buildTime', 'objectList', 'lookup', 'var', 'entries_since', 'entries_before'
+            'buildTime', 'objectList', 'lookup', 'var', 'entries_since', 'entries_before', 'entries_days_since',
+            'entries_days_before',
         }
         allowed_vars = {
             'product', 'variation', 'now', 'now_isoweekday', 'entries_number', 'entries_today', 'entries_days',
@@ -309,7 +310,7 @@ class CheckinList(LoggedModel):
                 raise ValidationError(f'Logic variable "{values[0]}" is currently not allowed.')
             return rules
 
-        if operator in ('entries_since', 'entries_before'):
+        if operator in ('entries_since', 'entries_before', 'entries_days_since', 'entries_days_before'):
             if len(values) != 1 or "buildTime" not in values[0]:
                 raise ValidationError(f'Operator "{operator}" takes exactly one "buildTime" argument.')
 

@@ -93,6 +93,12 @@
           if (this.rule[op][0]["entries_before"]) {
             return "entries_before";
           }
+          if (this.rule[op][0]["entries_days_since"]) {
+            return "entries_days_since";
+          }
+          if (this.rule[op][0]["entries_days_before"]) {
+            return "entries_days_before";
+          }
           return this.rule[op][0]["var"];
         } else {
           return null;
