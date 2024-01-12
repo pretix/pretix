@@ -135,7 +135,9 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         queryset=ItemVariation.objects.using(settings.DATABASE_REPLICA).annotate(
             subevent_disabled=Exists(
                 SubEventItemVariation.objects.filter(
-                    Q(disabled=True) | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now())) | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now())),
+                    Q(disabled=True)
+                    | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now()))
+                    | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now())),
                     variation_id=OuterRef('pk'),
                     subevent=subevent,
                 )
@@ -205,7 +207,9 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         has_variations=Count('variations'),
         subevent_disabled=Exists(
             SubEventItem.objects.filter(
-                Q(disabled=True) | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now())) | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now())),
+                Q(disabled=True)
+                | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now()))
+                | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now())),
                 item_id=OuterRef('pk'),
                 subevent=subevent,
             )

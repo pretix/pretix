@@ -227,7 +227,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                                         "rate": "19.00", "includes_mixed_tax_rate": False},
                                     "description": None,
                                     "avail": [100, None],
-                                    "order_max": 2
+                                    "order_max": 2,
+                                    "current_unavailability_reason": None,
                                 },
                                 {
                                     "value": "Blue",
@@ -239,7 +240,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                                         "rate": "19.00", "includes_mixed_tax_rate": False},
                                     "description": None,
                                     "avail": [100, None],
-                                    "order_max": 2
+                                    "order_max": 2,
+                                    "current_unavailability_reason": None,
                                 }
                             ],
                             "id": self.shirt.pk,
@@ -342,7 +344,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                                     "rate": "19.00", "includes_mixed_tax_rate": False},
                                 "description": None,
                                 "avail": [100, None],
-                                "order_max": 2
+                                "order_max": 2,
+                                "current_unavailability_reason": None,
                             }
                         ],
                         "id": self.shirt.pk,
@@ -486,7 +489,8 @@ class WidgetCartTest(CartTestMixin, TestCase):
                                         'name': '',
                                         'includes_mixed_tax_rate': False
                                     },
-                                    'avail': [100, None]
+                                    'avail': [100, None],
+                                    'current_unavailability_reason': None,
                                 },
                             ]
                         }
