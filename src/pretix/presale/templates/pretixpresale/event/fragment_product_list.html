@@ -185,7 +185,7 @@
                                     {% endif %}
                                     </p>
                                 </div>
-                                {% if var.cached_availability.0 == 100 and not item.current_unavailability_reason %}
+                                {% if var.cached_availability.0 == 100 and not item.current_unavailability_reason and not var.current_unavailability_reason %}
                                     <div class="col-md-2 col-sm-3 col-xs-6 availability-box available">
 										{% if var.order_max == 1 %}
                                             <label class="btn btn-default btn-checkbox">
