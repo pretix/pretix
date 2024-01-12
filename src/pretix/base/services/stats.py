@@ -112,7 +112,7 @@ def dictsum(*dicts) -> dict:
 
 def order_overview(
         event: Event, subevent: SubEvent=None, date_filter='', date_from=None, date_until=None, fees=False,
-        admission_only=False, base_qs=None, base_fees_qs=None,
+        admission_only=False, base_qs=None, base_fees_qs=None, subevent_date_from=None, subevent_date_until=None
 ) -> Tuple[List[Tuple[ItemCategory, List[Item]]], Dict[str, Tuple[Decimal, Decimal]]]:
     items = event.items.all().select_related(
         'category',  # for re-grouping
@@ -125,6 +125,11 @@ def order_overview(
         qs = qs.filter(subevent__in=subevent)
     elif subevent:
         qs = qs.filter(subevent=subevent)
+    if subevent_date_from:
+        qs = qs.filter(subevent__date_from__gte=subevent_date_from)
+    if subevent_date_until:
+        qs = qs.filter(subevent__date_from__lt=subevent_date_until)
+
     if admission_only:
         qs = qs.filter(item__admission=True)
         items = items.filter(admission=True)
@@ -232,7 +237,7 @@ def order_overview(
     payment_cat_obj.name = _('Fees')
     payment_items = []
 
-    if subevent is None and fees:
+    if subevent is None and not subevent_date_from and not subevent_date_until and fees:
         qs = OrderFee.all if base_fees_qs is None else base_fees_qs
         qs = qs.filter(
             order__event=event
