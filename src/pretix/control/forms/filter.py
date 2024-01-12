@@ -57,7 +57,7 @@ from pretix.base.forms.widgets import (
 from pretix.base.models import (
     Checkin, CheckinList, Device, Event, EventMetaProperty, EventMetaValue,
     Gate, Invoice, InvoiceAddress, Item, Order, OrderPayment, OrderPosition,
-    OrderRefund, Organizer, Question, QuestionAnswer, Quota, SubEvent,
+    OrderRefund, Organizer, Question, QuestionAnswer, SubEvent,
     SubEventMetaValue, Team, TeamAPIToken, TeamInvite, Voucher,
 )
 from pretix.base.signals import register_payment_providers
@@ -591,10 +591,11 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
         widget=FilterNullBooleanSelect,
         label=_('At least one ticket with check-in'),
     )
-    quota = SafeModelChoiceField(
-        queryset=Quota.objects.none(),
-        label=_('Affected quota'),
+    checkin_attention = forms.NullBooleanField(
         required=False,
+        widget=FilterNullBooleanSelect,
+        label=_('Requires special attention'),
+        help_text=_('Only matches orders with the attention checkbox set directly for the order, not based on the product.'),
     )
 
     def __init__(self, *args, **kwargs):
@@ -679,17 +680,6 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             label=_('Ticket secret'),
             required=False
         )
-        self.fields['quota'].queryset = self.event.quotas.all()
-        self.fields['quota'].widget = Select2(
-            attrs={
-                'data-model-select2': 'generic',
-                'data-select2-url': reverse('control:event.items.quotas.select2', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                }),
-            }
-        )
-        self.fields['quota'].widget.choices = self.fields['quota'].choices
         for q in self.event.questions.all():
             self.fields['question_{}'.format(q.pk)] = forms.CharField(
                 label=q.question,
@@ -782,12 +772,6 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
         if fdata.get('ticket_secret'):
             qs = qs.filter(
                 all_positions__secret__icontains=fdata.get('ticket_secret')
-            ).distinct()
-        if fdata.get('quota'):
-            quota = fdata['quota']
-            qs = qs.filter(
-                Q(all_positions__item__in=quota.items.all(), all_positions__variation__isnull=True) |
-                Q(all_positions__variation__in=quota.variations.all())
             ).distinct()
         for q in self.event.questions.all():
             if fdata.get(f'question_{q.pk}'):
