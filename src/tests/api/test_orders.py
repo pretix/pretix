@@ -30,7 +30,7 @@ from django.core import mail as djmail
 from django.utils.timezone import now
 from django_countries.fields import Country
 from django_scopes import scopes_disabled
-from stripe.error import APIConnectionError
+from stripe import error
 from tests.plugins.stripe.test_checkout import apple_domain_create
 from tests.plugins.stripe.test_provider import MockedCharge
 
@@ -788,7 +788,7 @@ def test_payment_refund_success(token_client, organizer, event, order, monkeypat
 def test_payment_refund_unavailable(token_client, organizer, event, order, monkeypatch):
     def charge_retr(*args, **kwargs):
         def refund_create(amount):
-            raise APIConnectionError(message='Foo')
+            raise error.APIConnectionError(message='Foo')
 
         c = MockedCharge()
         c.refunds.create = refund_create
