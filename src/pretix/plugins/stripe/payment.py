@@ -644,7 +644,7 @@ class StripeMethod(BasePaymentProvider):
             payment_info = json.loads(payment.info)
             if 'amount' in payment_info:
                 payment_info['amount'] /= 10 ** settings.CURRENCY_PLACES.get(self.event.currency, 2)
-            if payment_info.get("latest_charge"):
+            if isinstance(payment_info.get("latest_charge"), dict):
                 details = payment_info["latest_charge"].get("payment_method_details", {})
             elif payment_info.get("charges") and payment_info["charges"]["data"]:
                 details = payment_info["charges"]["data"][0].get("payment_method_details", {})
@@ -693,7 +693,7 @@ class StripeMethod(BasePaymentProvider):
 
         try:
             if payment_info['id'].startswith('pi_'):
-                if 'latest_charge' in payment_info:
+                if 'latest_charge' in payment_info and isinstance(payment_info.get("latest_charge"), dict):
                     chargeid = payment_info['latest_charge']['id']
                 else:
                     chargeid = payment_info['charges']['data'][0]['id']
@@ -1247,7 +1247,7 @@ class StripeCC(StripeMethod):
     def payment_presale_render(self, payment: OrderPayment) -> str:
         pi = payment.info_data or {}
         try:
-            if "latest_charge" in pi:
+            if "latest_charge" in pi and isinstance(pi.get("latest_charge"), dict):
                 card = pi["latest_charge"]["payment_method_details"]["card"]
             else:
                 card = pi["source"]["card"]
