@@ -7,10 +7,10 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2024-01-03 08:57+0000\n"
-"Last-Translator: RobertSF92 <robert@semperfi-it.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2024-01-15 05:00+0000\n"
+"Last-Translator: BMaster <tom@anoebis.be>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
@@ -303,10 +303,8 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Deze soort vraag kan niet bij het inchecken worden gesteld."
 
 #: pretix/api/serializers/item.py:490 pretix/control/forms/item.py:140
-#, fuzzy
-#| msgid "This type of question cannot be asked during check-in."
 msgid "This type of question cannot be shown during check-in."
-msgstr "Deze soort vraag kan niet bij het inchecken worden gesteld."
+msgstr "Dit soort vraag kan niet bij het inchecken worden gesteld."
 
 #: pretix/api/serializers/media.py:108
 msgid ""
@@ -565,10 +563,8 @@ msgid "Customer account changed"
 msgstr "Klantaccount gewijzigd"
 
 #: pretix/api/webhooks.py:378
-#, fuzzy
-#| msgid "The customer account has been anonymized."
 msgid "Customer account anonymized"
-msgstr "Het klantenaccount is geanonimiseerd."
+msgstr "Het klantenaccount is geanonimiseerd"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:941
@@ -2277,10 +2273,8 @@ msgstr ""
 "versies uitgebracht na oktober 2021."
 
 #: pretix/base/exporters/orderlist.py:794
-#, fuzzy
-#| msgid "Only include orders created within this date range."
 msgid "Only include transactions created within this date range."
-msgstr "Alleen bestellingen aangemaakt tussen deze data."
+msgstr "Alleen bestellingen aangemaakt tussen deze datums."
 
 #: pretix/base/exporters/orderlist.py:829 pretix/base/models/event.py:627
 #: pretix/base/models/items.py:393 pretix/base/models/items.py:1873
@@ -2338,18 +2332,13 @@ msgid "Date ID"
 msgstr "Datum ID"
 
 #: pretix/base/exporters/orderlist.py:856
-#, fuzzy
-#| msgid "Tax rule"
 msgid "Tax rule ID"
-msgstr "Belastingregel"
+msgstr "Belastingregel ID"
 
 #: pretix/base/exporters/orderlist.py:859
 #: pretix/plugins/reports/accountingreport.py:319
-#, fuzzy
-#| msgctxt "invoice"
-#| msgid "Gross value"
 msgid "Gross total"
-msgstr "Bruto waarde"
+msgstr "Bruto totaal"
 
 #: pretix/base/exporters/orderlist.py:860
 #: pretix/plugins/reports/accountingreport.py:318
@@ -2363,6 +2352,8 @@ msgid ""
 "This value is supplied for informational purposes, it is not part of the "
 "original transaction data and might have changed since the transaction."
 msgstr ""
+"Deze waarde wordt enkel ter informatie getoond, en is geen deel van de "
+"oorspronkelijke transactie en kan gewijzigd zijn na de transactie."
 
 #: pretix/base/exporters/orderlist.py:893
 msgid "Converted from legacy version"
@@ -3021,10 +3012,9 @@ msgid "Invalid placeholder(s): %(value)s"
 msgstr "Ongeldige plaatsaanduiding(en): %(value)s"
 
 #: pretix/base/forms/widgets.py:67
-#, fuzzy, python-format
-#| msgid "Sample city"
+#, python-format
 msgid "Sample: %s"
-msgstr "Voorbeeldstad"
+msgstr "Voorbeeld: %s"
 
 #: pretix/base/forms/widgets.py:70
 #, python-brace-format
@@ -3378,6 +3368,8 @@ msgid ""
 "This is relevant in various situations, e.g. for deciding if a ticket can "
 "still be canceled by the customer."
 msgstr ""
+"Dit is relevant in verschillende situaties, b.v. om te beslissen of een "
+"ticket nog kan worden geannuleerd door de klant."
 
 #: pretix/base/models/checkin.py:75
 msgctxt "checkin"
@@ -3506,10 +3498,8 @@ msgid "Ticket blocked"
 msgstr "Ticket geblokkeerd"
 
 #: pretix/base/models/checkin.py:369
-#, fuzzy
-#| msgid "Order approved"
 msgid "Order not approved"
-msgstr "Bestelling goedgekeurd"
+msgstr "Bestelling niet goedgekeurd"
 
 #: pretix/base/models/checkin.py:370
 msgid "Ticket not valid at this time"
@@ -3659,11 +3649,8 @@ msgid "Apply to specific products"
 msgstr "Pas toe op specifieke producten"
 
 #: pretix/base/models/discount.py:102
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Add-on products"
 msgid "Count add-on products"
-msgstr "Add-onproducten"
+msgstr "Add-on producten"
 
 #: pretix/base/models/discount.py:103 pretix/base/models/discount.py:158
 msgid "Discounts never apply to bundled products"
@@ -3674,12 +3661,6 @@ msgid "Ignore products discounted by a voucher"
 msgstr "Negeer producten die korting krijgen door een voucher"
 
 #: pretix/base/models/discount.py:108
-#, fuzzy
-#| msgid ""
-#| "If this option is checked, products that already received a discount "
-#| "through a voucher will not be considered for this discount. However, "
-#| "products that use a voucher only to e.g. unlock a hidden product or gain "
-#| "access to sold-out quota will still receive the discount."
 msgid ""
 "If this option is checked, products that already received a discount through "
 "a voucher will not be considered for this discount. However, products that "
@@ -3689,7 +3670,7 @@ msgstr ""
 "Als deze optie is aangevinkt, worden producten die korting kregen door een "
 "voucher niet in rekening genomen voor deze korting. Echter producten die een "
 "voucher alleen gebruiken om bvb een verborgen product te tonen of om toegang "
-"te krijgen tot uitverkochte producten zullen nog steeds een korting krijgen."
+"te krijgen tot uitverkochte producten zullen nog steeds worden overwogen."
 
 #: pretix/base/models/discount.py:113
 msgid "Minimum number of matching products"
@@ -3700,10 +3681,8 @@ msgid "Minimum gross value of matching products"
 msgstr "Minimum bruto waarde van overeenkomstige producten"
 
 #: pretix/base/models/discount.py:125
-#, fuzzy
-#| msgid "Apply discount only to this number of matching products"
 msgid "Apply discount to same set of products"
-msgstr "Pas de korting enkel toe op dit aantal relevante producten"
+msgstr "Pas de korting enkel toe op dezelfde set van producten"
 
 #: pretix/base/models/discount.py:126
 msgid ""
@@ -3711,10 +3690,11 @@ msgid ""
 "than the condition for the discount given above. If you want, you can "
 "however also select a different selection of products."
 msgstr ""
+"Standaard wordt de korting toegepast op dezelfde selectie producten als de "
+"hierboven gegeven kortingsvoorwaarde. Als u wilt, kunt u echter ook een "
+"ander assortiment producten selecteren."
 
 #: pretix/base/models/discount.py:132
-#, fuzzy
-#| msgid "Apply to specific products"
 msgid "Apply discount to specific products"
 msgstr "Pas toe op specifieke producten"
 
@@ -3747,12 +3727,6 @@ msgid "Apply to add-on products"
 msgstr "Toepassen op add-on producten"
 
 #: pretix/base/models/discount.py:163
-#, fuzzy
-#| msgid ""
-#| "If this option is checked, products that already received a discount "
-#| "through a voucher will not be considered for this discount. However, "
-#| "products that use a voucher only to e.g. unlock a hidden product or gain "
-#| "access to sold-out quota will still receive the discount."
 msgid ""
 "If this option is checked, products that already received a discount through "
 "a voucher will not be discounted. However, products that use a voucher only "
@@ -3760,9 +3734,9 @@ msgid ""
 "receive the discount."
 msgstr ""
 "Als deze optie is aangevinkt, worden producten die korting kregen door een "
-"voucher niet in rekening genomen voor deze korting. Echter producten die een "
-"voucher alleen gebruiken om bvb een verborgen product te tonen of om toegang "
-"te krijgen tot uitverkochte producten zullen nog steeds een korting krijgen."
+"voucher niet afgeprijsd. Echter producten die een voucher alleen gebruiken "
+"om bvb een verborgen product te tonen of om toegang te krijgen tot "
+"uitverkochte producten zullen nog steeds een korting krijgen."
 
 #: pretix/base/models/discount.py:195
 msgid ""
@@ -3797,16 +3771,12 @@ msgstr ""
 "op een minimumwaarde filtert."
 
 #: pretix/base/models/discount.py:218
-#, fuzzy
-#| msgid ""
-#| "You cannot apply the discount only to some of the matched products if you "
-#| "are matching on a minimum value."
 msgid ""
 "You cannot apply the discount to a different set of products if the discount "
 "is only valid for bookings of different dates."
 msgstr ""
-"U kunt de korting niet toepassen op slechts enkele van de producten als u op "
-"een minimumwaarde filtert."
+"Je kunt de korting niet toepassen op een andere set producten als de korting "
+"alleen geldig is voor boekingen op verschillende data."
 
 #: pretix/base/models/event.py:86
 msgid "The end of the presale period has to be later than its start."
@@ -4014,24 +3984,21 @@ msgstr "Toegestane waarden"
 
 #: pretix/base/models/event.py:1662
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:45
-#, fuzzy
-#| msgid "Show number of tickets left"
 msgid "Show filter option to customers"
-msgstr "Toon resterend aantal tickets"
+msgstr "Toon filteroptie aan klanten"
 
 #: pretix/base/models/event.py:1663
 msgid ""
 "This field will be shown to filter events in the public event list and "
 "calendar."
 msgstr ""
+"Dit veld wordt getoond om evenementen in de openbare evenementenlijst en "
+"agenda te filteren."
 
 #: pretix/base/models/event.py:1666 pretix/control/forms/organizer.py:218
 #: pretix/control/forms/organizer.py:222
-#, fuzzy
-#| msgctxt "openidconnect"
-#| msgid "Public"
 msgid "Public name"
-msgstr "Openbaar"
+msgstr "Openbare naam"
 
 #: pretix/base/models/event.py:1670
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
@@ -4119,10 +4086,8 @@ msgstr "Geen waarde kan het scheidingsteken bevatten."
 
 #: pretix/base/models/giftcards.py:81
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:50
-#, fuzzy
-#| msgid "Download your ticket here:"
 msgid "Owned by ticket holder"
-msgstr "Download uw ticket hier:"
+msgstr "Eigendom van tickethouder"
 
 #: pretix/base/models/giftcards.py:93
 msgid "The gift card code may only contain letters, numbers, dots and dashes."
@@ -4224,15 +4189,15 @@ msgstr "Gebruik geen herbruikbare media, gebruik tickets voor enkel gebruik"
 
 #: pretix/base/models/items.py:382
 msgid "Require an existing medium to be re-used"
-msgstr ""
+msgstr "Vereisen dat een bestaand medium wordt hergebruikt"
 
 #: pretix/base/models/items.py:383
 msgid "Require a previously unknown medium to be newly added"
-msgstr ""
+msgstr "Vereisen dat een voorheen onbekend medium als nieuw wordt toegevoegd"
 
 #: pretix/base/models/items.py:384
 msgid "Require either an existing or a new medium to be used"
-msgstr ""
+msgstr "Vereist dat een bestaand of een nieuw medium wordt gebruikt"
 
 #: pretix/base/models/items.py:400 pretix/base/models/items.py:1299
 #: pretix/control/templates/pretixcontrol/items/index.html:40
@@ -4277,10 +4242,8 @@ msgstr ""
 "gekocht."
 
 #: pretix/base/models/items.py:437 pretix/base/models/items.py:1049
-#, fuzzy
-#| msgid "Net price"
 msgid "Suggested price"
-msgstr "Nettoprijs"
+msgstr "Voorgestelde prijs"
 
 #: pretix/base/models/items.py:438 pretix/base/models/items.py:1050
 msgid ""
@@ -4288,6 +4251,9 @@ msgid ""
 "can choose a lower value, but not lower than the price this product would "
 "have without the free price option."
 msgstr ""
+"Deze prijs zal worden gebruikt als de standaard waarde van het input veld. "
+"De gebruiker kan een lagere waarde kiezen, maar niet lager dan de prijs die "
+"het product zou hebben zonder de gratis optie."
 
 #: pretix/base/models/items.py:451
 msgid "Whether or not buying this product allows a person to enter your event"
@@ -4329,7 +4295,7 @@ msgstr "Productfoto"
 #| msgid "Only show after sellout of"
 msgctxt "hidden_if_available_legacy"
 msgid "Only show after sellout of"
-msgstr "Toon alleen nadat quotum is uitverkocht"
+msgstr "Toon alleen na uitverkoop van"
 
 #: pretix/base/models/items.py:500
 msgid ""
@@ -4465,6 +4431,8 @@ msgid ""
 "This text will be shown by the check-in app if a ticket of this type is "
 "scanned."
 msgstr ""
+"Deze tekst zal bij de check-in app worden getoond als een ticket van dit "
+"type gescand wordt."
 
 #: pretix/base/models/items.py:580 pretix/base/models/items.py:1045
 msgid ""
@@ -4523,16 +4491,6 @@ msgid "Validity"
 msgstr "Geldigheid"
 
 #: pretix/base/models/items.py:634
-#, fuzzy
-#| msgid ""
-#| "When setting up a regular event, or an event series with time slots, you "
-#| "typically to NOT need to change this value. The default setting means "
-#| "that the validity time of tickets will not be decided by the product, but "
-#| "by the event and check-in configuration. Only use the other options if "
-#| "you need them to realize e.g. a booking of a year-long ticket with a "
-#| "dynamic start date. Note that the validity will be stored with the "
-#| "ticket, so if you change the settings here later, existing tickets will "
-#| "not be affected by the change but keep their current validity."
 msgid ""
 "When setting up a regular event, or an event series with time slots, you "
 "typically do NOT need to change this value. The default setting means that "
@@ -4609,6 +4567,12 @@ msgid ""
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
+"Als dit product op een herbruikbaar fysiek medium moet worden opgeslagen, "
+"kunt u een fysiek mediabeleid bijvoegen. Dit is niet vereist voor reguliere "
+"tickets, die slechts een eenmalige barcode gebruiken, maar alleen voor "
+"producten zoals hernieuwbare seizoenskaarten of oplaadbare "
+"cadeaukaartpolsbandjes. Dit is een geavanceerde functie die ook een "
+"specifieke configuratie van ticketing- en afdrukinstellingen vereist."
 
 #: pretix/base/models/items.py:686
 msgid "Reusable media type"
@@ -4620,6 +4584,10 @@ msgid ""
 "Note that not all media types support all types of products, and not all "
 "media types are supported across all sales channels or check-in processes."
 msgstr ""
+"Selecteer het type fysiek medium dat voor dit product moet worden gebruikt. "
+"Houd er rekening mee dat niet alle mediatypen alle soorten producten "
+"ondersteunen, en dat niet alle mediatypen worden ondersteund in alle "
+"verkoopkanalen of incheckprocessen."
 
 #: pretix/base/models/items.py:699 pretix/base/models/items.py:1543
 #: pretix/control/forms/filter.py:422 pretix/control/forms/filter.py:1810
@@ -4641,32 +4609,36 @@ msgid ""
 "If you select a reusable media policy, you also need to select a reusable "
 "media type."
 msgstr ""
+"Als u een herbruikbaar mediabeleid selecteert, moet u ook een herbruikbaar "
+"mediatype selecteren."
 
 #: pretix/base/models/items.py:873
-#, fuzzy
-#| msgid "The selected product is not active or has no price set."
 msgid "The selected media type is not enabled in your organizer settings."
-msgstr "Het gekozen product is niet actief of heeft geen ingestelde prijs."
+msgstr ""
+"Het geselecteerde mediatype is niet ingeschakeld in uw organizerinstellingen."
 
 #: pretix/base/models/items.py:875
-#, fuzzy
-#| msgid "The selected item does not belong to this event."
 msgid "The selected media type does not support usage for tickets currently."
-msgstr "Het geselecteerde item hoort niet bij dit evenement."
+msgstr ""
+"Het geselecteerde mediatype ondersteunt momenteel geen gebruik voor tickets."
 
 #: pretix/base/models/items.py:877
-#, fuzzy
-#| msgid "The selected item does not belong to this event."
 msgid ""
 "The selected media type does not support usage for gift cards currently."
-msgstr "Het geselecteerde item hoort niet bij dit evenement."
+msgstr ""
+"Het geselecteerde mediatype ondersteunt momenteel geen gebruik van "
+"cadeaubonnen."
 
 #: pretix/base/models/items.py:879
+#, fuzzy
 msgid ""
 "You currently cannot create gift cards with a reusable media policy. "
 "Instead, gift cards for some reusable media types can be created or re-"
 "charged directly at the POS."
 msgstr ""
+"Momenteel kun je geen cadeaubonnen maken met een herbruikbaar mediabeleid. "
+"In plaats daarvan kunnen cadeaubonnen voor sommige herbruikbare mediatypen "
+"rechtstreeks op het POS worden aangemaakt of opnieuw worden opgeladen."
 
 #: pretix/base/models/items.py:887
 msgid ""
@@ -4927,10 +4899,8 @@ msgid "Not supported by all check-in apps for all question types."
 msgstr "Niet al onze incheckapps ondersteunen dit voor alle vraagsoorten."
 
 #: pretix/base/models/items.py:1557
-#, fuzzy
-#| msgid "Ask during check-in"
 msgid "Show answer during check-in"
-msgstr "Vraag tijdens check-in"
+msgstr "Toon antwoord tijdens check-in"
 
 #: pretix/base/models/items.py:1562
 #: pretix/control/templates/pretixcontrol/items/questions.html:66
@@ -4963,10 +4933,8 @@ msgid "Maximum value"
 msgstr "Maximumwaarde"
 
 #: pretix/base/models/items.py:1593
-#, fuzzy
-#| msgid "Maximum value"
 msgid "Maximum length"
-msgstr "Maximumwaarde"
+msgstr "Maximumlengte"
 
 #: pretix/base/models/items.py:1599
 msgid "Validate file to be a portrait"
@@ -5155,16 +5123,16 @@ msgid "Subevent cannot be null for event series."
 msgstr "Het onderevenement kan niet leeg zijn voor evenementreeksen."
 
 #: pretix/base/models/items.py:2061
-#, fuzzy
-#| msgid "Required for events"
 msgid "Required for products"
-msgstr "Verplicht voor evenementen"
+msgstr "Verplicht voor producten"
 
 #: pretix/base/models/items.py:2062
 msgid ""
 "If checked, this property must be set in each product. Does not apply if a "
 "default value is set."
 msgstr ""
+"Indien aangevinkt, moet deze eigenschap in elk product worden ingesteld. "
+"Geldt niet als er een standaardwaarde is ingesteld."
 
 #: pretix/base/models/items.py:2067
 msgid ""
@@ -5221,18 +5189,16 @@ msgid "Tax rule {val}"
 msgstr "Belastingregel {val}"
 
 #: pretix/base/models/media.py:67
-#, fuzzy
-#| msgid "Fee type"
 msgctxt "reusable_medium"
 msgid "Media type"
-msgstr "Toeslagtype"
+msgstr "Mediatype"
 
 #: pretix/base/models/media.py:73
 #, fuzzy
 #| msgid "Internal identifier"
 msgctxt "reusable_medium"
 msgid "Identifier"
-msgstr "Intern kenmerk"
+msgstr "Identifier"
 
 #: pretix/base/models/media.py:81 pretix/base/models/orders.py:224
 #: pretix/base/models/orders.py:2896 pretix/control/forms/orders.py:72
@@ -5247,16 +5213,12 @@ msgid "Customer account"
 msgstr "Klantenaccount"
 
 #: pretix/base/models/media.py:97
-#, fuzzy
-#| msgid "Link text"
 msgid "Linked ticket"
-msgstr "Linktekst"
+msgstr "Gekoppeld ticket"
 
 #: pretix/base/models/media.py:104
-#, fuzzy
-#| msgid "Issued gift cards"
 msgid "Linked gift card"
-msgstr "Uitgegeven cadeaubonnen"
+msgstr "Gekoppelde cadeaubon"
 
 #: pretix/base/models/memberships.py:44
 msgid "Membership is transferable"
@@ -5368,15 +5330,12 @@ msgstr ""
 "tevoren informeren over hoe deze gevallen moeten worden afgehandeld."
 
 #: pretix/base/models/orders.py:250
-#, fuzzy
-#| msgid ""
-#| "This text will be shown above the invoice address form during checkout."
 msgid ""
 "This text will be shown by the check-in app if a ticket of this order is "
 "scanned."
 msgstr ""
-"Deze tekst wordt boven de invulvelden voor het factuuradres getoond tijdens "
-"het afrekenen."
+"Deze tekst wordt door de check-in app getoond als een ticket van deze "
+"bestelling wordt gescand."
 
 #: pretix/base/models/orders.py:260 pretix/base/models/orders.py:1436
 msgid "Meta information"
@@ -5388,17 +5347,13 @@ msgid "approval pending"
 msgstr "wacht op goedkeuring"
 
 #: pretix/base/models/orders.py:344
-#, fuzzy
-#| msgid "Pending (overdue)"
 msgctxt "order state"
 msgid "pending (confirmed)"
-msgstr "Openstaand (achterstallig)"
+msgstr "in behandeling (bevestigd)"
 
 #: pretix/base/models/orders.py:346
-#, fuzzy
-#| msgid "Canceled (paid fee)"
 msgid "canceled (paid fee)"
-msgstr "Geannuleerd (betaalde kosten)"
+msgstr "geannuleerd (betaalde kosten)"
 
 #: pretix/base/models/orders.py:952
 msgid ""
@@ -5668,10 +5623,8 @@ msgid "Can manage customer accounts"
 msgstr "Kan klantenaccounts beheren"
 
 #: pretix/base/models/organizer.py:287
-#, fuzzy
-#| msgid "Can manage customer accounts"
 msgid "Can manage reusable media"
-msgstr "Kan klantenaccounts beheren"
+msgstr "Kan herbruikbare media beheren"
 
 #: pretix/base/models/organizer.py:291
 msgid "Can manage gift cards"
@@ -5755,10 +5708,8 @@ msgid "Seat {number}"
 msgstr "Stoel {number}"
 
 #: pretix/base/models/tax.py:157
-#, fuzzy
-#| msgid "Your layout file is not a valid seating plan. Error message: {}"
 msgid "Your set of rules is not valid. Error message: {}"
-msgstr "Uw lay-outbestand is geen geldige stoelplattegrond. Foutmelding: {}"
+msgstr "Uw set regels is niet geldig. Foutmelding: {}"
 
 #: pretix/base/models/tax.py:168
 msgid "Official name"
@@ -5882,6 +5833,11 @@ msgid ""
 "usages in some cases can be lower than this limit, e.g. in case of "
 "cancellations."
 msgstr ""
+"Indien ingesteld op meer dan één, moet de voucher bij het eerste gebruik "
+"voor zoveel producten worden ingewisseld. Bij later gebruik kan het ook voor "
+"kleinere aantallen producten worden gebruikt. Houd er rekening mee dat dit "
+"betekent dat het totale aantal toepassingen in sommige gevallen lager kan "
+"zijn dan deze limiet, bijvoorbeeld bij annuleringen."
 
 #: pretix/base/models/vouchers.py:213
 msgid "Maximum discount budget"
@@ -5976,12 +5932,15 @@ msgstr "Toon verborgen producten die overeenkomen met deze voucher"
 #: pretix/base/models/vouchers.py:300
 msgid "Offer all add-on products for free when redeeming this voucher"
 msgstr ""
+"Bied alle add-on producten gratis aan wanneer deze voucher gebruikt wordt"
 
 #: pretix/base/models/vouchers.py:304
 msgid ""
 "Include all bundled products without a designated price when redeeming this "
 "voucher"
 msgstr ""
+"Voeg alle gebundelde producten zonder een aangegeven prijs toe bij het "
+"inwisselen van deze voucher"
 
 #: pretix/base/models/vouchers.py:312 pretix/control/navigation.py:265
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:6
@@ -23178,11 +23137,9 @@ msgstr "Intern kenmerk"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:56
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:28
-#, fuzzy
-#| msgid "Fee type"
 msgctxt "reusable_media"
 msgid "Media type"
-msgstr "Toeslagtype"
+msgstr "Mediatype"
 
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:59
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:42
@@ -27553,17 +27510,13 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:36
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:36
-#, fuzzy
-#| msgid ""
-#| "After completing your purchase, we will ask you to transfer the money to "
-#| "the following bank account, using a personal reference code:"
 msgid ""
 "After completing your purchase, we will ask you to transfer the money to our "
 "bank account, using a personal reference code."
 msgstr ""
 "Nadat u uw bestelling heeft afgerond zullen we u vragen om het te betalen "
-"bedrag over te maken naar het volgende bankrekeningnummer, met in de "
-"beschrijving een persoonlijke betalingscode:"
+"bedrag over te maken naar onze bankrekening, met in de beschrijving een "
+"persoonlijke betalingscode."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:43
 #, python-format
