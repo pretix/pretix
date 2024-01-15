@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2024-01-13 09:00+0000\n"
+"PO-Revision-Date: 2024-01-16 01:00+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -6420,9 +6420,8 @@ msgid "You cannot assign a position secret that already exists."
 msgstr "No puede asignar un secreto de posición que ya exista."
 
 #: pretix/base/orderimport.py:645
-#, fuzzy
 msgid "Please enter a valid language code."
-msgstr "Por favor, introduzca una dirección de correo electrónico válida."
+msgstr "Por favor ingrese un código de idioma válido."
 
 #: pretix/base/orderimport.py:669 pretix/base/orderimport.py:692
 #, python-brace-format
@@ -6430,19 +6429,16 @@ msgid "Could not parse {value} as a date and time."
 msgstr "No se puede analizar {value} como fecha y hora."
 
 #: pretix/base/orderimport.py:711
-#, fuzzy
 msgid "Please enter a valid sales channel."
-msgstr "Por favor, introduzca una dirección de correo electrónico válida."
+msgstr "Por favor ingresa un canal de ventas válido."
 
 #: pretix/base/orderimport.py:735
-#, fuzzy
 msgid "Multiple matching seats were found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "Se encontraron varios asientos coincidentes."
 
 #: pretix/base/orderimport.py:737
-#, fuzzy
 msgid "No matching seat was found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "No se encontró ningún asiento coincidente."
 
 #: pretix/base/orderimport.py:740 pretix/base/services/cart.py:202
 #: pretix/base/services/orderimport.py:166
@@ -6453,19 +6449,16 @@ msgstr ""
 "asiento diferente."
 
 #: pretix/base/orderimport.py:743 pretix/base/services/cart.py:199
-#, fuzzy
 msgid "You need to select a specific seat."
-msgstr "Necesitas seleccionar una fecha."
+msgstr "Debes seleccionar un asiento específico."
 
 #: pretix/base/orderimport.py:793 pretix/base/orderimport.py:801
-#, fuzzy
 msgid "Ambiguous option selected."
-msgstr "Selección de opción inválida."
+msgstr "Opción ambigua seleccionada."
 
 #: pretix/base/orderimport.py:845
-#, fuzzy
 msgid "No matching customer was found."
-msgstr "No se encontraron respuestas coincidentes."
+msgstr "No se encontró ningún cliente coincidente."
 
 #: pretix/base/payment.py:86
 #, fuzzy
@@ -19220,9 +19213,8 @@ msgid "Manage questions"
 msgstr "Incluir preguntas"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:116
-#, fuzzy
 msgid "Other settings"
-msgstr "Configuración del usuario"
+msgstr "Otros ajustes"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:122
 msgid "Texts"
