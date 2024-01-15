@@ -284,6 +284,9 @@
                         <th>
                             {% trans "Paid tickets per quota" %}
                         </th>
+                        <th>
+                            {% trans "Capacity left" %}
+                        </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -315,8 +318,47 @@
                                     </a>
                                 {% endif %}
                             </td>
+                            <td>
+                                {% for q in s.first_quotas %}
+                                {% include "pretixcontrol/items/fragment_quota_availability.html" with availability=q.cached_avail closed=q.closed %}
+                                {% endfor %}
+                            </td>
                         </tr>
                     {% endfor %}
+                {% endif %}
+                {% if subevent %}
+                    <tr>
+                        <td>
+                            <strong><a href="{% url "control:event.subevent" organizer=request.event.organizer.slug event=request.event.slug subevent=subevent.id %}?returnto={{ request.GET.urlencode|urlencode }}">
+                                {{ subevent.name }}</a></strong><br>
+                            <small class="text-muted">
+                                #{{ subevent.pk }}
+                            </small>
+                        </td>
+                        <td>
+                            {{ subevent.get_date_from_display }}<br>
+                            <span class="text-muted">
+                               {{ subevent.date_from|date:"l" }}
+                            </span>
+                        </td>
+                        <td>
+                            {% for q in subevent.first_quotas|slice:":3" %}
+                                {% include "pretixcontrol/fragment_quota_box_paid.html" with quota=q %}
+                            {% endfor %}
+                            {% if subevent.first_quotas|length > 3 %}
+                                <a href="{% url "control:event.items.quotas" organizer=request.event.organizer.slug event=request.event.slug %}?subevent={{ subevent.id }}"
+                                        class="quotabox-more" data-toggle="tooltip" title="{% trans "More quotas" %}"
+                                        data-placement="top">
+                                    &middot;&middot;&middot;
+                                </a>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% for q in subevent.first_quotas %}
+                            {% include "pretixcontrol/items/fragment_quota_availability.html" with availability=q.cached_avail closed=q.closed %}
+                            {% endfor %}
+                        </td>
+                    </tr>
                 {% endif %}
                 </tbody>
                 </table>
