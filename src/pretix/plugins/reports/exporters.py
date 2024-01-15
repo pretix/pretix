@@ -35,6 +35,7 @@
 import copy
 import tempfile
 from collections import OrderedDict, defaultdict
+from datetime import timedelta
 from decimal import Decimal
 
 from dateutil.parser import parse
@@ -303,7 +304,7 @@ class OverviewReport(Report):
                 Paragraph(_('{axis} between {start} and {end}').format(
                     axis=_('Event date'),
                     start=date_format(d_start, 'SHORT_DATE_FORMAT') if d_start else '–',
-                    end=date_format(d_end, 'SHORT_DATE_FORMAT') if d_end else '–',
+                    end=date_format(d_end - timedelta(hours=1), 'SHORT_DATE_FORMAT') if d_end else '–',
                 ), self.get_style()),
                 Spacer(1, 5 * mm)
             ]
@@ -315,7 +316,7 @@ class OverviewReport(Report):
         else:
             d_start, d_end = None, None
         if form_data.get('subevent_date_range'):
-            sd_start, sd_end = resolve_timeframe_to_dates_inclusive(now(), form_data['subevent_date_range'], self.timezone)
+            sd_start, sd_end = resolve_timeframe_to_datetime_start_inclusive_end_exclusive(now(), form_data['subevent_date_range'], self.timezone)
         else:
             sd_start, sd_end = None, None
         return order_overview(
