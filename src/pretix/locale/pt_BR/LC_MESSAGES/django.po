@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2022-12-21 20:00+0000\n"
-"Last-Translator: Fazenda Dengo <fazendadengo@gmail.com>\n"
+"PO-Revision-Date: 2024-01-17 05:00+0000\n"
+"Last-Translator: Pedro Portela <pportela@disroot.org>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 4.15\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -33,71 +33,67 @@ msgstr "Alemão (informal)"
 
 #: pretix/_base_settings.py:81
 msgid "Arabic"
-msgstr ""
+msgstr "Árabe"
 
 #: pretix/_base_settings.py:82
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "Chinês (simplificado)"
 
 #: pretix/_base_settings.py:83
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "Chinês (tradicional)"
 
 #: pretix/_base_settings.py:84
 msgid "Czech"
-msgstr ""
+msgstr "Tcheco"
 
 #: pretix/_base_settings.py:85
 msgid "Danish"
-msgstr ""
+msgstr "Dinamarquês"
 
 #: pretix/_base_settings.py:86
 msgid "Dutch"
-msgstr ""
+msgstr "Holandês"
 
 #: pretix/_base_settings.py:87
-#, fuzzy
-#| msgid "German (informal)"
 msgid "Dutch (informal)"
-msgstr "Alemão (informal)"
+msgstr "Holandês (informal)"
 
 #: pretix/_base_settings.py:88
 msgid "French"
-msgstr ""
+msgstr "Francês"
 
 #: pretix/_base_settings.py:89
 msgid "Finnish"
-msgstr ""
+msgstr "Finlandês"
 
 #: pretix/_base_settings.py:90
 msgid "Galician"
-msgstr ""
+msgstr "Galego"
 
 #: pretix/_base_settings.py:91
 msgid "Greek"
-msgstr ""
+msgstr "Grego"
 
 #: pretix/_base_settings.py:92
 msgid "Indonesian"
-msgstr ""
+msgstr "Indonésio"
 
 #: pretix/_base_settings.py:93
 msgid "Italian"
-msgstr ""
+msgstr "Italiano"
 
 #: pretix/_base_settings.py:94
 msgid "Latvian"
-msgstr ""
+msgstr "Letão"
 
 #: pretix/_base_settings.py:95
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Bokmål Norueguês"
 
 #: pretix/_base_settings.py:96
-#, fuzzy
-#| msgid "English"
 msgid "Polish"
-msgstr "Inglês"
+msgstr "Polonês"
 
 #: pretix/_base_settings.py:97
 msgid "Portuguese (Portugal)"
@@ -109,7 +105,7 @@ msgstr "Português (Brasil)"
 
 #: pretix/_base_settings.py:99
 msgid "Romanian"
-msgstr ""
+msgstr "Romeno"
 
 #: pretix/_base_settings.py:100
 msgid "Russian"
@@ -125,7 +121,7 @@ msgstr "Turco"
 
 #: pretix/_base_settings.py:103
 msgid "Ukrainian"
-msgstr ""
+msgstr "Ucraniano"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -202,7 +198,7 @@ msgstr "Limitar a eventos"
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/checkinlists/exporters.py:503
 msgid "Comment"
-msgstr "Comente"
+msgstr "Comentário"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1345
 msgid "The product \"{}\" is not assigned to a quota."
@@ -234,12 +230,12 @@ msgstr ""
 #: pretix/api/serializers/event.py:232 pretix/api/serializers/event.py:530
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr "Propriedade Meta Data '{name}' não existe."
+msgstr "Propriedade Metadado '{name}' não existe."
 
 #: pretix/api/serializers/event.py:235 pretix/api/serializers/event.py:533
 #, python-brace-format
 msgid "Meta data property '{name}' does not allow value '{value}'."
-msgstr "Propriedade Meta Data '{name}' não aceita o valor '{value}'."
+msgstr "Propriedade Metadado '{name}' não aceita o valor '{value}'."
 
 #: pretix/api/serializers/event.py:278
 #, python-brace-format
@@ -270,7 +266,7 @@ msgstr ""
 
 #: pretix/api/serializers/item.py:271
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "Atualmente somente produtos de entrada podem ser personalizados."
 
 #: pretix/api/serializers/item.py:282
 msgid ""
@@ -289,8 +285,8 @@ msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
-"A atualização de complementos via PATCH / PUT não é suportada. Use o "
-"endpoint aninhado dedicado."
+"A atualização de complementos via PATCH/PUT não é suportada. Use o nó "
+"aninhado dedicado."
 
 #: pretix/api/serializers/item.py:477 pretix/control/forms/item.py:118
 msgid "Question cannot depend on a question asked during check-in."
@@ -302,13 +298,11 @@ msgstr "Dependência circular entre perguntas detectado."
 
 #: pretix/api/serializers/item.py:487 pretix/control/forms/item.py:132
 msgid "This type of question cannot be asked during check-in."
-msgstr "Esse tipo de pergunta não pode ser respondida durante o check-in."
+msgstr "Este tipo de pergunta não pode ser respondida durante o check-in."
 
 #: pretix/api/serializers/item.py:490 pretix/control/forms/item.py:140
-#, fuzzy
-#| msgid "This type of question cannot be asked during check-in."
 msgid "This type of question cannot be shown during check-in."
-msgstr "Esse tipo de pergunta não pode ser respondida durante o check-in."
+msgstr "Esse tipo de pergunta não pode ser mostrada durante o check-in."
 
 #: pretix/api/serializers/media.py:108
 #, fuzzy
@@ -323,10 +317,9 @@ msgstr ""
 "algum organizador afiliado."
 
 #: pretix/api/serializers/order.py:79
-#, fuzzy, python-brace-format
-#| msgid "Your cart has been updated."
+#, python-brace-format
 msgid "\"{input}\" is not a valid choice."
-msgstr "Seu carrinho foi atualizado."
+msgstr "\"{input}\" não é uma escolha válida."
 
 #: pretix/api/serializers/order.py:1306 pretix/api/views/cart.py:220
 #: pretix/base/services/orders.py:1497
