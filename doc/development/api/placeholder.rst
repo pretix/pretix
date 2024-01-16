@@ -1,10 +1,11 @@
 .. highlight:: python
    :linenothreshold: 5
 
-Writing an e-mail placeholder plugin
+Writing a template placeholder plugin
 ====================================
 
-An email placeholder is a dynamic value that pretix users can use in their email templates.
+A template placeholder is a dynamic value that pretix users can use in their email templates and in several other
+configurable texts.
 
 Please read :ref:`Creating a plugin <pluginsetup>` first, if you haven't already.
 
@@ -12,8 +13,8 @@ Placeholder registration
 ------------------------
 
 The placeholder API does not make a lot of usage from signals, however, it
-does use a signal to get a list of all available email placeholders. Your plugin
-should listen for this signal and return an instance of a subclass of ``pretix.base.email.BaseMailTextPlaceholder``:
+does use a signal to get a list of all available placeholders. Your plugin
+should listen for this signal and return an instance of a subclass of ``pretix.base.services.placeholders.BaseMailTextPlaceholder``:
 
 .. code-block:: python
 
@@ -24,7 +25,7 @@ should listen for this signal and return an instance of a subclass of ``pretix.b
 
     @receiver(register_mail_placeholders, dispatch_uid="placeholder_custom")
     def register_mail_renderers(sender, **kwargs):
-        from .email import MyPlaceholderClass
+        from .placeholders import MyPlaceholderClass
         return MyPlaceholder()
 
 
@@ -51,7 +52,7 @@ There are a few more that are only to be used internally but not by plugins.
 The placeholder class
 ---------------------
 
-.. class:: pretix.base.email.BaseMailTextPlaceholder
+.. class:: pretix.base.services.placeholders.BaseTextPlaceholder
 
    .. autoattribute:: identifier
 
@@ -77,7 +78,7 @@ functions:
 
 .. code-block:: python
 
-     placeholder = SimpleFunctionalMailTextPlaceholder(
+     placeholder = SimpleFunctionalTextPlaceholder(
          'code', ['order'], lambda order: order.code, sample='F8VVL'
      )
 

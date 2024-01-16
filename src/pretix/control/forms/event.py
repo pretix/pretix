@@ -60,12 +60,11 @@ from i18nfield.forms import (
 from pytz import common_timezones
 
 from pretix.base.channels import get_all_sales_channels
-from pretix.base.email import get_available_placeholders
 from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
-from pretix.base.forms.widgets import format_placeholders_help_text
 from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
+from pretix.base.services.placeholders import FormPlaceholderMixin
 from pretix.base.settings import (
     COUNTRIES_WITH_STATE_IN_ADDRESS, DEFAULTS, PERSON_NAME_SCHEMES,
     PERSON_NAME_TITLE_GROUPS, validate_event_settings,
@@ -503,7 +502,7 @@ class EventSettingsValidationMixin:
                 del self.cleaned_data[field]
 
 
-class EventSettingsForm(EventSettingsValidationMixin, SettingsForm):
+class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, SettingsForm):
     timezone = forms.ChoiceField(
         choices=((a, a) for a in common_timezones),
         label=_("Event timezone"),
@@ -596,17 +595,6 @@ class EventSettingsForm(EventSettingsValidationMixin, SettingsForm):
     base_context = {
         'frontpage_text': ['event'],
     }
-
-    def _set_field_placeholders(self, fn, base_parameters):
-        placeholders = get_available_placeholders(self.event, base_parameters)
-        ht = format_placeholders_help_text(placeholders, self.event)
-        if self.fields[fn].help_text:
-            self.fields[fn].help_text += ' ' + str(ht)
-        else:
-            self.fields[fn].help_text = ht
-        self.fields[fn].validators.append(
-            PlaceholderValidator(['{%s}' % p for p in placeholders.keys()])
-        )
 
     def _resolve_virtual_keys_input(self, data, prefix=''):
         # set all dependants of virtual_keys and
@@ -951,7 +939,7 @@ def contains_web_channel_validate(val):
         raise ValidationError(_("The online shop must be selected to receive these emails."))
 
 
-class MailSettingsForm(SettingsForm):
+class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     auto_fields = [
         'mail_prefix',
         'mail_from_name',
@@ -1362,17 +1350,6 @@ class MailSettingsForm(SettingsForm):
         'mail_subject_resend_all_links': ['event', 'orders'],
         'mail_attach_ical_description': ['event', 'event_or_subevent'],
     }
-
-    def _set_field_placeholders(self, fn, base_parameters):
-        placeholders = get_available_placeholders(self.event, base_parameters)
-        ht = format_placeholders_help_text(placeholders, self.event)
-        if self.fields[fn].help_text:
-            self.fields[fn].help_text += ' ' + str(ht)
-        else:
-            self.fields[fn].help_text = ht
-        self.fields[fn].validators.append(
-            PlaceholderValidator(['{%s}' % p for p in placeholders.keys()])
-        )
 
     def __init__(self, *args, **kwargs):
         self.event = event = kwargs.get('obj')
