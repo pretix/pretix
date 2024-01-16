@@ -53,12 +53,12 @@ from django.views.i18n import (
 from lxml import html
 
 from pretix.base.context import get_powered_by
-from pretix.base.email import get_email_context
 from pretix.base.i18n import language
 from pretix.base.models import (
     CartPosition, Event, ItemVariation, Quota, SubEvent, Voucher,
 )
 from pretix.base.services.cart import error_messages
+from pretix.base.services.placeholders import get_placeholder_context
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.daterange import daterange
@@ -702,7 +702,7 @@ class WidgetAPIProductList(EventListMixin, View):
         ev = self.subevent or request.event
         data['name'] = str(ev.name)
 
-        templating_context = get_email_context(event_or_subevent=ev, event=request.event)
+        templating_context = get_placeholder_context(event_or_subevent=ev, event=request.event)
         if self.subevent:
             data['frontpage_text'] = str(rich_text(format_map(self.subevent.frontpage_text, templating_context), safelinks=False))
             data['location'] = str(rich_text(self.subevent.location, safelinks=False))

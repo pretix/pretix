@@ -60,7 +60,6 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from pretix.base.channels import get_all_sales_channels
-from pretix.base.email import get_email_context
 from pretix.base.models import (
     ItemVariation, Quota, SeatCategoryMapping, Voucher,
 )
@@ -68,6 +67,7 @@ from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.items import (
     ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
 )
+from pretix.base.services.placeholders import get_placeholder_context
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.compat import date_fromisocalendar
 from pretix.helpers.format import format_map
@@ -587,7 +587,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         context['cart'] = self.get_cart()
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
 
-        templating_context = get_email_context(event_or_subevent=self.subevent or self.request.event, event=self.request.event)
+        templating_context = get_placeholder_context(event_or_subevent=self.subevent or self.request.event, event=self.request.event)
         if self.subevent:
             context['frontpage_text'] = format_map(str(self.subevent.frontpage_text), templating_context)
         else:
