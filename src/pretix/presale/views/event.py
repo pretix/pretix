@@ -60,6 +60,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from pretix.base.channels import get_all_sales_channels
+from pretix.base.email import get_email_context
 from pretix.base.models import (
     ItemVariation, Quota, SeatCategoryMapping, Voucher,
 )
@@ -69,6 +70,7 @@ from pretix.base.models.items import (
 )
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.compat import date_fromisocalendar
+from pretix.helpers.format import format_map
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_public_ical
 from pretix.presale.signals import item_description
@@ -585,10 +587,11 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         context['cart'] = self.get_cart()
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
 
+        templating_context = get_email_context(event_or_subevent=self.subevent or self.request.event, event=self.request.event)
         if self.subevent:
-            context['frontpage_text'] = str(self.subevent.frontpage_text)
+            context['frontpage_text'] = format_map(str(self.subevent.frontpage_text), templating_context)
         else:
-            context['frontpage_text'] = str(self.request.event.settings.frontpage_text)
+            context['frontpage_text'] = format_map(str(self.request.event.settings.frontpage_text), templating_context)
 
         if self.request.event.has_subevents:
             context['subevent_list'] = SimpleLazyObject(self._subevent_list_context)

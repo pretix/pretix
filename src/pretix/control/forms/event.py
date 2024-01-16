@@ -593,6 +593,21 @@ class EventSettingsForm(EventSettingsValidationMixin, SettingsForm):
         'og_image',
     ]
 
+    base_context = {
+        'frontpage_text': ['event'],
+    }
+
+    def _set_field_placeholders(self, fn, base_parameters):
+        placeholders = get_available_placeholders(self.event, base_parameters)
+        ht = format_placeholders_help_text(placeholders, self.event)
+        if self.fields[fn].help_text:
+            self.fields[fn].help_text += ' ' + str(ht)
+        else:
+            self.fields[fn].help_text = ht
+        self.fields[fn].validators.append(
+            PlaceholderValidator(['{%s}' % p for p in placeholders.keys()])
+        )
+
     def _resolve_virtual_keys_input(self, data, prefix=''):
         # set all dependants of virtual_keys and
         # delete all virtual_fields to prevent them from being saved
@@ -681,6 +696,10 @@ class EventSettingsForm(EventSettingsValidationMixin, SettingsForm):
                 self.initial[virtual_key] = 'optional'
             else:
                 self.initial[virtual_key] = 'do_not_ask'
+
+        for k, v in self.base_context.items():
+            self._set_field_placeholders(k, v)
+
 
     @cached_property
     def changed_data(self):
