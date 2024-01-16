@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2024-01-16 01:00+0000\n"
+"PO-Revision-Date: 2024-01-16 17:00+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -6461,16 +6461,14 @@ msgid "No matching customer was found."
 msgstr "No se encontró ningún cliente coincidente."
 
 #: pretix/base/payment.py:86
-#, fuzzy
 msgctxt "payment"
 msgid "Apple Pay"
-msgstr "Aplicar"
+msgstr "iOS - Apple Pay"
 
 #: pretix/base/payment.py:87
-#, fuzzy
 msgctxt "payment"
 msgid "Google Pay"
-msgstr "Android (Google Play)"
+msgstr "Android (Google Pay)"
 
 #: pretix/base/payment.py:256
 #: pretix/presale/templates/pretixpresale/event/order.html:115
@@ -6489,11 +6487,10 @@ msgstr ""
 "indicada."
 
 #: pretix/base/payment.py:342
-#, fuzzy
 msgid ""
 "Users will not be able to choose this payment provider before the given date."
 msgstr ""
-"Los usuarios no podrán elegir este proveedor de pago después de la fecha "
+"Los usuarios no podrán elegir este proveedor de pago antes de la fecha "
 "indicada."
 
 #: pretix/base/payment.py:347
@@ -6593,9 +6590,8 @@ msgstr ""
 "seleccionados."
 
 #: pretix/base/payment.py:429
-#, fuzzy
 msgid "Hide payment method"
-msgstr "Habilitar método de pago"
+msgstr "Ocultar método de pago"
 
 #: pretix/base/payment.py:432
 msgid ""
