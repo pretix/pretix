@@ -688,7 +688,6 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
         for k, v in self.base_context.items():
             self._set_field_placeholders(k, v)
 
-
     @cached_property
     def changed_data(self):
         data = []

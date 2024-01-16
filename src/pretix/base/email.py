@@ -213,4 +213,3 @@ class UnembellishedMailRenderer(TemplateBasedMailRenderer):
 @receiver(register_html_mail_renderers, dispatch_uid="pretixbase_email_renderers")
 def base_renderers(sender, **kwargs):
     return [ClassicMailRenderer, UnembellishedMailRenderer]
-

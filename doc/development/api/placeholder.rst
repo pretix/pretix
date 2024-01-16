@@ -14,7 +14,7 @@ Placeholder registration
 
 The placeholder API does not make a lot of usage from signals, however, it
 does use a signal to get a list of all available placeholders. Your plugin
-should listen for this signal and return an instance of a subclass of ``pretix.base.services.placeholders.BaseMailTextPlaceholder``:
+should listen for this signal and return an instance of a subclass of ``pretix.base.services.placeholders.BaseTextPlaceholder``:
 
 .. code-block:: python
 
