@@ -259,9 +259,6 @@ class WaitingListEntry(LoggedModel):
         if not self.email:
             return
 
-        for k, v in self.event.meta_data.items():
-            context['meta_' + k] = v
-
         with language(self.locale, self.event.settings.region):
             recipient = self.email
 
