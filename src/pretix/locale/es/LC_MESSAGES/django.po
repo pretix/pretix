@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2024-01-17 21:31+0000\n"
+"PO-Revision-Date: 2024-01-18 09:00+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -8076,14 +8076,13 @@ msgstr ""
 "artículo de su carrito."
 
 #: pretix/base/services/orders.py:167
-#, fuzzy
 msgid ""
 "The voucher code used for one of the items in your cart has already been too "
 "often. We adjusted the price of the item in your cart."
 msgstr ""
-"El código de recibo utilizado para uno de los artículos de su carrito ya ha "
-"sido utilizado el máximo número de veces permitido. Hemos quitado este "
-"artículo de su carrito."
+"El código de cupón utilizado para uno de los artículos de su carrito ya se "
+"ha utilizado con demasiada frecuencia. Ajustamos el precio del artículo en "
+"su carrito."
 
 #: pretix/base/services/orders.py:171
 msgid ""
@@ -8102,9 +8101,8 @@ msgstr ""
 "es válido para este artículo. Hemos quitado este artículo de su carrito."
 
 #: pretix/base/services/orders.py:176
-#, fuzzy
 msgid "You need a valid voucher code to order one of the products."
-msgstr "Necesita un código de recibo válido para pedir este producto."
+msgstr "Necesita un código de cupón válido para pedir uno de los productos."
 
 #: pretix/base/services/orders.py:178
 msgid ""
@@ -8115,23 +8113,20 @@ msgstr ""
 "comenzado. Las posiciones afectadas han sido eliminadas de su carrito."
 
 #: pretix/base/services/orders.py:185
-#, fuzzy
 msgid ""
 "One of the seats in your order was invalid, we removed the position from "
 "your cart."
 msgstr ""
-"El código del recibo utilizado para uno de los artículos de su carrito ha "
-"caducado. Hemos quitado este artículo de su carrito."
+"Uno de los asientos de su pedido no era válido, eliminamos la posición de su "
+"carrito."
 
 #: pretix/base/services/orders.py:186
-#, fuzzy
 msgid ""
 "One of the seats in your order has been taken in the meantime, we removed "
 "the position from your cart."
 msgstr ""
-"El código de recibo utilizado para uno de los artículos de su carrito ya ha "
-"sido utilizado el máximo número de veces permitido. Hemos quitado este "
-"artículo de su carrito."
+"Uno de los asientos de su pedido ha sido ocupado. Mientras tanto, eliminamos "
+"la posición de su carrito."
 
 #: pretix/base/services/orders.py:202
 #, python-format
@@ -8141,9 +8136,8 @@ msgid ""
 msgstr "No puede eliminar la posición %(addon)s ya que ya se ha registrado."
 
 #: pretix/base/services/orders.py:218
-#, fuzzy
 msgid "The order was not canceled."
-msgstr "El pedido ha sido cancelado."
+msgstr "El pedido no fue cancelado."
 
 #: pretix/base/services/orders.py:272 pretix/control/forms/orders.py:120
 msgid "The new expiry date needs to be in the future."
@@ -8168,12 +8162,11 @@ msgstr ""
 "comprado en esta orden ya se ha canjeado."
 
 #: pretix/base/services/orders.py:555 pretix/control/forms/orders.py:205
-#, fuzzy
 msgid ""
 "The cancellation fee cannot be higher than the total amount of this order."
 msgstr ""
-"La tarifa de cancelación no puede ser mayor que el crédito de pago para esta "
-"orden."
+"La tarifa de cancelación no puede ser superior al importe total de este "
+"pedido."
 
 #: pretix/base/services/orders.py:942
 msgid "The selected payment methods do not cover the total balance."
@@ -8255,18 +8248,16 @@ msgstr ""
 "la de la entrada. Por favor, escoge de nuevo un asiento."
 
 #: pretix/base/services/orders.py:1501
-#, fuzzy
 msgid "The selected product requires you to select a seat."
-msgstr "El producto seleccionado no está activo o no tiene precio fijo."
+msgstr "El producto seleccionado requiere que selecciones un asiento."
 
 #: pretix/base/services/orders.py:1502
 msgid "The selected product does not allow to select a seat."
 msgstr "El producto seleccionado no permite seleccionar asiento."
 
 #: pretix/base/services/orders.py:1503
-#, fuzzy
 msgid "The selected country is blocked by your tax rule."
-msgstr "El producto seleccionado no está activo o no tiene precio fijo."
+msgstr "El país seleccionado está bloqueado por su norma fiscal."
 
 #: pretix/base/services/orders.py:1504
 msgid ""
@@ -8461,9 +8452,8 @@ msgstr ""
 "sesión único."
 
 #: pretix/base/settings.py:179
-#, fuzzy
 msgid "Match orders based on email address"
-msgstr "Correo electrónico del participante"
+msgstr "Emparejar pedidos según la dirección de correo electrónico"
 
 #: pretix/base/settings.py:180
 msgid ""
@@ -8475,9 +8465,8 @@ msgstr ""
 "inició sesión durante la compra."
 
 #: pretix/base/settings.py:190
-#, fuzzy
 msgid "Activate re-usable media"
-msgstr "Desactivar seleccionado"
+msgstr "Activar medios reutilizables"
 
 #: pretix/base/settings.py:191
 msgid ""
@@ -8501,9 +8490,8 @@ msgstr ""
 "previamente desconocido"
 
 #: pretix/base/settings.py:259 pretix/base/settings.py:290
-#, fuzzy
 msgid "Gift card currency"
-msgstr "Código de la tarjeta de regalo"
+msgstr "Moneda de la tarjeta de regalo"
 
 #: pretix/base/settings.py:277
 msgid "Automatically create a new gift card if a new chip is encoded"
@@ -8618,19 +8606,16 @@ msgid "Ask for company per ticket"
 msgstr "Preguntar por compañía por billete"
 
 #: pretix/base/settings.py:412
-#, fuzzy
 msgid "Require company per ticket"
-msgstr "Requiere direcciones de correo electrónico por ticket"
+msgstr "Requerir compañía por ticket"
 
 #: pretix/base/settings.py:422
-#, fuzzy
 msgid "Ask for postal addresses per ticket"
-msgstr "Solicitar direcciones de correo electrónico por ticket"
+msgstr "Solicitar direcciones postales por ticket"
 
 #: pretix/base/settings.py:431
-#, fuzzy
 msgid "Require postal addresses per ticket"
-msgstr "Requiere direcciones de correo electrónico por ticket"
+msgstr "Requerir direcciones postales por ticket"
 
 #: pretix/base/settings.py:441
 msgid "Ask for the order email address twice"
@@ -8682,9 +8667,8 @@ msgstr ""
 "ubicaciones."
 
 #: pretix/base/settings.py:517
-#, fuzzy
 msgid "Show exchange rates"
-msgstr "Mostrar fecha de finalización del evento"
+msgstr "Mostrar tipos de cambio"
 
 #: pretix/base/settings.py:520 pretix/base/settings.py:528
 #: pretix/control/forms/item.py:538
@@ -8793,9 +8777,8 @@ msgstr ""
 "contengan productos gratuitos."
 
 #: pretix/base/settings.py:636
-#, fuzzy
 msgid "Show expiration date of order"
-msgstr "Mostrar ordenes pagadas de más"
+msgstr "Mostrar fecha de vencimiento del pedido"
 
 #: pretix/base/settings.py:637
 msgid ""
@@ -8938,9 +8921,8 @@ msgid "in minutes"
 msgstr "en minutos"
 
 #: pretix/base/settings.py:835
-#, fuzzy
 msgid "Set payment term"
-msgstr "Ampliar la condición de pago"
+msgstr "Establecer plazo de pago"
 
 #: pretix/base/settings.py:842
 msgid ""
@@ -8972,22 +8954,20 @@ msgid "Only end payment terms on weekdays"
 msgstr "Finalice sólo las condiciones de pago en días laborables"
 
 #: pretix/base/settings.py:878
-#, fuzzy
 msgid ""
 "If this is activated and the payment term of any order ends on a Saturday or "
 "Sunday, it will be moved to the next Monday instead. This is required in "
 "some countries by civil law. This will not effect the last date of payments "
 "configured below."
 msgstr ""
-"Si está activado y el plazo de pago de cualquier pedido finaliza un sábado o "
-"domingo, se trasladará al lunes siguiente. Esto es requerido en algunos "
-"países por la ley civil. Esto no afectará la última fecha de pagos "
-"configurada anteriormente."
+"Si esto se activa y el plazo de pago de cualquier pedido finaliza en sábado "
+"o domingo, se trasladará al lunes siguiente. Esto es requerido en algunos "
+"países por ley civil. Esto no afectará la última fecha de pagos configurada "
+"a continuación."
 
 #: pretix/base/settings.py:894
-#, fuzzy
 msgid "Payment term in minutes"
-msgstr "Plazo de pago en días"
+msgstr "Plazo de pago en minutos"
 
 #: pretix/base/settings.py:895
 msgid ""
@@ -9007,14 +8987,13 @@ msgid "Last date of payments"
 msgstr "Última fecha de pagos"
 
 #: pretix/base/settings.py:919
-#, fuzzy
 msgid ""
 "The last date any payments are accepted. This has precedence over the terms "
 "configured above. If you use the event series feature and an order contains "
 "tickets for multiple dates, the earliest date will be used."
 msgstr ""
-"La última fecha en la que se aceptan pagos. Esto tiene prioridad sobre el "
-"número de días configurado anteriormente. Si utiliza la función de serie de "
+"La última fecha en que se aceptan pagos. Esto tiene prioridad sobre los "
+"términos configurados anteriormente. Si utiliza la función de serie de "
 "eventos y un pedido contiene entradas para varias fechas, se utilizará la "
 "fecha más temprana."
 
@@ -9034,9 +9013,8 @@ msgstr ""
 "ordenados por otras personas."
 
 #: pretix/base/settings.py:942
-#, fuzzy
 msgid "Expiration delay"
-msgstr "Fecha de expiración"
+msgstr "Retraso de vencimiento"
 
 #: pretix/base/settings.py:943
 msgid ""
