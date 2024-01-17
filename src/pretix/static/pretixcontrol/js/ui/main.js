@@ -105,7 +105,7 @@ $(document).ajaxError(function (event, jqXHR, settings, thrownError) {
     } else if (c.length > 0) {
         ajaxErrDialog.show(c.first().html());
     } else if (thrownError !== "abort" && thrownError !== "") {
-        console.log(thrownError);
+        console.error(event, jqXHR, settings, thrownError);
         alert(gettext('Unknown error.'));
     }
 });
