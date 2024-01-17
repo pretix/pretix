@@ -853,7 +853,7 @@ class StripeMethod(BasePaymentProvider):
                         event=self.event.slug.upper(),
                         code=payment.order.code
                     ),
-                    statement_descriptor=self.statement_descriptor(payment),
+                    statement_descriptor_suffix=self.statement_descriptor(payment),
                     metadata={
                         'order': str(payment.order.id),
                         'event': self.event.id,
