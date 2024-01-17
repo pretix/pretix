@@ -1612,7 +1612,7 @@ Vue.component('pretix-button', {
         + '<input type="hidden" name="locale" :value="$root.lang" />'
         + '<input type="hidden" name="widget_data" :value="$root.widget_data_json" />'
         + '<input type="hidden" v-for="item in $root.items" :name="item.item" :value="item.count" />'
-        + '<button class="pretix-button" @click="buy">{{ $root.button_text }}</button>'
+        + '<button class="pretix-button" @click="buy" v-html="$root.button_text"></button>'
         + '</form>'
         + '<div class="pretix-widget-clear"></div>'
         + '</div>'
