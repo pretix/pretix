@@ -58,11 +58,10 @@ from pretix.base.models import (
     CartPosition, Event, ItemVariation, Quota, SubEvent, Voucher,
 )
 from pretix.base.services.cart import error_messages
-from pretix.base.services.placeholders import get_placeholder_context
+from pretix.base.services.placeholders import PlaceholderContext
 from pretix.base.settings import GlobalSettingsObject
 from pretix.base.templatetags.rich_text import rich_text
 from pretix.helpers.daterange import daterange
-from pretix.helpers.format import format_map
 from pretix.helpers.thumb import get_thumbnail
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.forms.organizer import meta_filtersets
@@ -702,12 +701,12 @@ class WidgetAPIProductList(EventListMixin, View):
         ev = self.subevent or request.event
         data['name'] = str(ev.name)
 
-        templating_context = get_placeholder_context(event_or_subevent=ev, event=request.event)
+        templating_context = PlaceholderContext(event_or_subevent=ev, event=request.event)
         if self.subevent:
-            data['frontpage_text'] = str(rich_text(format_map(self.subevent.frontpage_text, templating_context), safelinks=False))
+            data['frontpage_text'] = str(rich_text(templating_context.format(self.subevent.frontpage_text), safelinks=False))
             data['location'] = str(rich_text(self.subevent.location, safelinks=False))
         else:
-            data['frontpage_text'] = str(rich_text(format_map(request.event.settings.frontpage_text, templating_context), safelinks=False))
+            data['frontpage_text'] = str(rich_text(templating_context.format(request.event.settings.frontpage_text), safelinks=False))
             data['location'] = str(rich_text(request.event.location, safelinks=False))
         data['date_range'] = self._get_date_range(ev, request.event)
         fail = False

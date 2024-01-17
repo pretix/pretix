@@ -37,6 +37,7 @@ from pretix.base.i18n import (
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.settings import PERSON_NAME_SCHEMES, get_name_parts_localized
 from pretix.base.signals import register_mail_placeholders
+from pretix.helpers.format import SafeFormatter
 
 logger = logging.getLogger('pretix.base.services.placeholders')
 
@@ -104,10 +105,9 @@ class SimpleFunctionalTextPlaceholder(BaseTextPlaceholder):
             return self._sample
 
 
-def get_placeholder_context(**kwargs):
+def _extend_placeholder_kwargs(kwargs):
     from pretix.base.models import InvoiceAddress
 
-    event = kwargs['event']
     if 'position' in kwargs:
         kwargs.setdefault("position_or_address", kwargs['position'])
     if 'order' in kwargs:
@@ -118,18 +118,46 @@ def get_placeholder_context(**kwargs):
             kwargs['invoice_address'] = InvoiceAddress(order=kwargs['order'])
         finally:
             kwargs.setdefault("position_or_address", kwargs['invoice_address'])
-    ctx = {}
-    for r, val in register_mail_placeholders.send(sender=event):
-        if not isinstance(val, (list, tuple)):
-            val = [val]
-        for v in val:
-            if all(rp in kwargs for rp in v.required_context):
-                try:
-                    ctx[v.identifier] = v.render(kwargs)
-                except:
-                    ctx[v.identifier] = '(error)'
-                    logger.exception(f'Failed to process template placeholder {v.identifier}.')
-    return ctx
+
+
+def get_placeholder_context(**kwargs):
+    return PlaceholderContext(**kwargs).render_all()
+
+
+class PlaceholderContext(SafeFormatter):
+    def __init__(self, **kwargs):
+        super().__init__({})
+        _extend_placeholder_kwargs(kwargs)
+        event = kwargs['event']
+        self.context_args = kwargs
+        self.placeholders = {}
+        self.cache = {}
+        for r, val in register_mail_placeholders.send(sender=event):
+            if not isinstance(val, (list, tuple)):
+                val = [val]
+            for v in val:
+                if all(rp in kwargs for rp in v.required_context):
+                    self.placeholders[v.identifier] = v
+
+    def render_placeholder(self, placeholder):
+        try:
+            return self.cache[placeholder.identifier]
+        except KeyError:
+            try:
+                value = self.cache[placeholder.identifier] = placeholder.render(self.context_args)
+                return value
+            except:
+                logger.exception(f'Failed to process template placeholder {placeholder.identifier}.')
+                return '(error)'
+
+    def render_all(self):
+        return {identifier: self.render_placeholder(placeholder)
+                for (identifier, placeholder) in self.placeholders.items()}
+
+    def get_value(self, key, args, kwargs):
+        if key not in self.placeholders:
+            return '{' + str(key) + '}'
+        return self.render_placeholder(self.placeholders[key])
 
 
 def _placeholder_payments(order, payments):

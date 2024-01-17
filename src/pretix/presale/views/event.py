@@ -67,10 +67,9 @@ from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.items import (
     ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
 )
-from pretix.base.services.placeholders import get_placeholder_context
+from pretix.base.services.placeholders import PlaceholderContext
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.compat import date_fromisocalendar
-from pretix.helpers.format import format_map
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_public_ical
 from pretix.presale.signals import item_description
@@ -587,11 +586,11 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         context['cart'] = self.get_cart()
         context['has_addon_choices'] = any(cp.has_addon_choices for cp in get_cart(self.request))
 
-        templating_context = get_placeholder_context(event_or_subevent=self.subevent or self.request.event, event=self.request.event)
+        templating_context = PlaceholderContext(event_or_subevent=self.subevent or self.request.event, event=self.request.event)
         if self.subevent:
-            context['frontpage_text'] = format_map(str(self.subevent.frontpage_text), templating_context)
+            context['frontpage_text'] = templating_context.format(str(self.subevent.frontpage_text))
         else:
-            context['frontpage_text'] = format_map(str(self.request.event.settings.frontpage_text), templating_context)
+            context['frontpage_text'] = templating_context.format(str(self.request.event.settings.frontpage_text))
 
         if self.request.event.has_subevents:
             context['subevent_list'] = SimpleLazyObject(self._subevent_list_context)
