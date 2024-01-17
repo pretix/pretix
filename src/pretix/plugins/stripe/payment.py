@@ -842,6 +842,11 @@ class StripeMethod(BasePaymentProvider):
                         }
                     })
 
+                if self.method == "card":
+                    params['statement_descriptor_suffix'] = self.statement_descriptor(payment)
+                else:
+                    params['statement_descriptor'] = self.statement_descriptor(payment)
+
                 intent = stripe.PaymentIntent.create(
                     amount=self._get_amount(payment),
                     currency=self.event.currency.lower(),
@@ -853,7 +858,6 @@ class StripeMethod(BasePaymentProvider):
                         event=self.event.slug.upper(),
                         code=payment.order.code
                     ),
-                    statement_descriptor_suffix=self.statement_descriptor(payment),
                     metadata={
                         'order': str(payment.order.id),
                         'event': self.event.id,
