@@ -36,13 +36,12 @@ from pretix.base.models import Event
 from pretix.base.signals import register_html_mail_renderers
 from pretix.base.templatetags.rich_text import markdown_compile_email
 
-from pretix.base.services.placeholders import ( # noqa
-    get_available_placeholders
+from pretix.base.services.placeholders import (  # noqa
+    get_available_placeholders, PlaceholderContext
 )
 from pretix.base.services.placeholders import ( # noqa
     BaseTextPlaceholder as BaseMailTextPlaceholder,
     SimpleFunctionalTextPlaceholder as SimpleFunctionalMailTextPlaceholder,
-    get_placeholder_context as get_email_context,
 )
 from pretix.base.settings import get_name_parts_localized # noqa
 
@@ -213,3 +212,7 @@ class UnembellishedMailRenderer(TemplateBasedMailRenderer):
 @receiver(register_html_mail_renderers, dispatch_uid="pretixbase_email_renderers")
 def base_renderers(sender, **kwargs):
     return [ClassicMailRenderer, UnembellishedMailRenderer]
+
+
+def get_email_context(**kwargs):
+    return PlaceholderContext(**kwargs).render_all()

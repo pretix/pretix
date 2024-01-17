@@ -105,39 +105,42 @@ class SimpleFunctionalTextPlaceholder(BaseTextPlaceholder):
             return self._sample
 
 
-def _extend_placeholder_kwargs(kwargs):
-    from pretix.base.models import InvoiceAddress
-
-    if 'position' in kwargs:
-        kwargs.setdefault("position_or_address", kwargs['position'])
-    if 'order' in kwargs:
-        try:
-            if not kwargs.get('invoice_address'):
-                kwargs['invoice_address'] = kwargs['order'].invoice_address
-        except InvoiceAddress.DoesNotExist:
-            kwargs['invoice_address'] = InvoiceAddress(order=kwargs['order'])
-        finally:
-            kwargs.setdefault("position_or_address", kwargs['invoice_address'])
-
-
-def get_placeholder_context(**kwargs):
-    return PlaceholderContext(**kwargs).render_all()
-
-
 class PlaceholderContext(SafeFormatter):
+    """
+    Holds the contextual arguments and corresponding list of available placeholders for formatting
+    an email or other templated text.
+
+    Example:
+        context = PlaceholderContext(event=my_event, order=my_order)
+        formatted_doc = context.format(input_doc)
+    """
     def __init__(self, **kwargs):
         super().__init__({})
-        _extend_placeholder_kwargs(kwargs)
-        event = kwargs['event']
         self.context_args = kwargs
+        self._extend_context_args()
         self.placeholders = {}
         self.cache = {}
+        event = kwargs['event']
         for r, val in register_mail_placeholders.send(sender=event):
             if not isinstance(val, (list, tuple)):
                 val = [val]
             for v in val:
                 if all(rp in kwargs for rp in v.required_context):
                     self.placeholders[v.identifier] = v
+
+    def _extend_context_args(self):
+        from pretix.base.models import InvoiceAddress
+
+        if 'position' in self.context_args:
+            self.context_args.setdefault("position_or_address", self.context_args['position'])
+        if 'order' in self.context_args:
+            try:
+                if not self.context_args.get('invoice_address'):
+                    self.context_args['invoice_address'] = self.context_args['order'].invoice_address
+            except InvoiceAddress.DoesNotExist:
+                self.context_args['invoice_address'] = InvoiceAddress(order=self.context_args['order'])
+            finally:
+                self.context_args.setdefault("position_or_address", self.context_args['invoice_address'])
 
     def render_placeholder(self, placeholder):
         try:
