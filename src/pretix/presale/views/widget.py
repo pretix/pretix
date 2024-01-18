@@ -703,10 +703,10 @@ class WidgetAPIProductList(EventListMixin, View):
 
         templating_context = PlaceholderContext(event_or_subevent=ev, event=request.event)
         if self.subevent:
-            data['frontpage_text'] = str(rich_text(templating_context.format(self.subevent.frontpage_text), safelinks=False))
+            data['frontpage_text'] = str(rich_text(templating_context.format(str(self.subevent.frontpage_text)), safelinks=False))
             data['location'] = str(rich_text(self.subevent.location, safelinks=False))
         else:
-            data['frontpage_text'] = str(rich_text(templating_context.format(request.event.settings.frontpage_text), safelinks=False))
+            data['frontpage_text'] = str(rich_text(templating_context.format(str(request.event.settings.frontpage_text)), safelinks=False))
             data['location'] = str(rich_text(request.event.location, safelinks=False))
         data['date_range'] = self._get_date_range(ev, request.event)
         fail = False
