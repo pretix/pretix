@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2024-01-18 09:00+0000\n"
+"PO-Revision-Date: 2024-01-19 02:00+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -7780,9 +7780,8 @@ msgid "You do not have sufficient permission to perform this export."
 msgstr "No tiene permiso suficiente para realizar esta exportación."
 
 #: pretix/base/services/export.py:189
-#, fuzzy
 msgid "Export failed"
-msgstr "Fichero de importación"
+msgstr "Exportación fallida"
 
 #: pretix/base/services/export.py:206
 msgid "Permission denied."
@@ -7877,13 +7876,13 @@ msgstr ""
 "configuración del evento."
 
 #: pretix/base/services/mail.py:268
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "You are receiving this email because someone placed an order for {event} for "
 "you."
 msgstr ""
-"Usted está recibiendo este correo electrónico porque realizó un pedido para "
-"{event}."
+"Estás recibiendo este correo electrónico porque alguien realizó un pedido de "
+"{event} para ti."
 
 #: pretix/base/services/mail.py:272 pretix/base/services/mail.py:288
 #, python-brace-format
@@ -7925,10 +7924,11 @@ msgstr ""
 "activa."
 
 #: pretix/base/services/memberships.py:142
-#, fuzzy
 msgid ""
 "You selected a membership that is connected to a different customer account."
-msgstr "No puede seleccionar un elemento que pertenezca a un evento diferente."
+msgstr ""
+"Seleccionó una membresía que está conectada a una cuenta de cliente "
+"diferente."
 
 #: pretix/base/services/memberships.py:147
 #, fuzzy
@@ -12351,13 +12351,12 @@ msgid "Development only"
 msgstr "Solo desarrollo"
 
 #: pretix/control/forms/__init__.py:335
-#, fuzzy
 msgid ""
 "These translations are still in progress. These languages can currently only "
 "be selected on development installations of pretix, not in production."
 msgstr ""
-"La traducción de este idioma está todavía en curso. Este lenguaje sólo puede "
-"ser seleccionado actualmente en instalaciones de desarrollo de pretix, no en "
+"Estas traducciones aún están en progreso. Actualmente, estos idiomas solo se "
+"pueden seleccionar en instalaciones de desarrollo de pretix, no en "
 "producción."
 
 #: pretix/control/forms/checkin.py:93 pretix/control/forms/event.py:1528
@@ -19859,22 +19858,20 @@ msgstr ""
 "que debería ser vendido en cierto rango de tiempo."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:29
-#, fuzzy
 msgid ""
 "This product is currently not being shown since you configured below that it "
 "should only be visible if a certain other quota is already sold out."
 msgstr ""
-"Este producto no esta siendo vendido actualmente ya que configuraste abajo "
-"que debería ser vendido en cierto rango de tiempo."
+"Este producto no se muestra actualmente porque configuró a continuación que "
+"solo debería ser visible si otra cuota determinada ya está agotada."
 
 #: pretix/control/templates/pretixcontrol/item/base.html:37
-#, fuzzy
 msgid ""
 "This product is currently not being shown since you configured below that it "
 "should only be visible if a certain other product is already sold out."
 msgstr ""
-"Este producto no esta siendo vendido actualmente ya que configuraste abajo "
-"que debería ser vendido en cierto rango de tiempo."
+"Este producto no se muestra actualmente porque configuró a continuación que "
+"solo debería ser visible si otro producto determinado ya está agotado."
 
 #: pretix/control/templates/pretixcontrol/item/create.html:19
 #: pretix/control/templates/pretixcontrol/item/index.html:22
@@ -25263,9 +25260,8 @@ msgid "Currently set on organizer level"
 msgstr "Actualmente configurado en el nivel de organizador"
 
 #: pretix/control/templatetags/hierarkey_form.py:68
-#, fuzzy
 msgid "Currently set on global level"
-msgstr "Actualmente a la venta"
+msgstr "Actualmente establecido a nivel global"
 
 #: pretix/control/templatetags/hierarkey_form.py:71
 msgid ""
@@ -31254,11 +31250,10 @@ msgid "plus taxes"
 msgstr "más impuestos"
 
 #: pretix/presale/forms/order.py:132
-#, fuzzy
 msgid "No other variation of this product is currently available for you."
 msgstr ""
-"No puede agregarse a la lista de espera ya que este producto está "
-"actualmente disponible."
+"Actualmente no hay ninguna otra variación de este producto disponible para "
+"usted."
 
 #: pretix/presale/forms/order.py:137
 #, fuzzy
@@ -32705,9 +32700,8 @@ msgid "Shop offline"
 msgstr "Desconectarse"
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:9
-#, fuzzy
 msgid "This ticket shop is currently turned off."
-msgstr "La taquilla seleccionada no está disponible en este momento."
+msgstr "Esta taquilla está actualmente cerrada."
 
 #: pretix/presale/templates/pretixpresale/event/offline.html:10
 msgid "It is only accessible to authenticated team members."
@@ -34012,9 +34006,8 @@ msgstr ""
 "persona."
 
 #: pretix/presale/views/widget.py:343
-#, fuzzy
 msgid "This ticket shop is currently disabled."
-msgstr "La taquilla seleccionada no está disponible en este momento."
+msgstr "Esta taquilla está actualmente inhabilitada."
 
 #: pretix/presale/views/widget.py:357
 msgid "The selected date does not exist in this event series."
