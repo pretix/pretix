@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2023-08-31 07:00+0000\n"
-"Last-Translator: Ash So <ashs@vankaifong.com>\n"
+"PO-Revision-Date: 2024-01-18 09:00+0000\n"
+"Last-Translator: Clau Lung <claudia@wyng.hk>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/zh_Hant/>\n"
 "Language: zh_Hant\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 4.18.2\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -304,7 +304,7 @@ msgstr "清單上的票券代碼不清楚"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Order not approved"
-msgstr ""
+msgstr "票券未確認"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Checked-in Tickets"
@@ -449,10 +449,8 @@ msgid "Number of previous entries since midnight"
 msgstr "自從深夜時先前入場的數量"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
-#, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries since"
-msgstr "先前入場的數量"
+msgstr "之前入場的數量"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:125
 #, fuzzy
