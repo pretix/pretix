@@ -344,7 +344,7 @@ class Discount(LoggedModel):
 
         elif self.subevent_mode == self.SUBEVENT_MODE_SAME:
             def key(idx):
-                return positions[idx][1]  # subevent_id
+                return positions[idx][1] or 0  # subevent_id
 
             # Build groups of candidates with the same subevent, then apply our regular algorithm
             # to each group
