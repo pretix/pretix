@@ -670,7 +670,7 @@ class ItemUpdateForm(I18nModelForm):
         if d.get('grant_membership_type'):
             if not d['grant_membership_type'].transferable and not d['personalized']:
                 self.add_error(
-                    'personalized' if d['admission'] else 'admission',
+                    'personalized' if d.get('admission') else 'admission',
                     _("Your product grants a non-transferable membership and should therefore be a personalized "
                       "admission ticket. Otherwise customers might not be able to use the membership later. If you "
                       "want the membership to be non-personalized, set the membership type to be transferable.")
