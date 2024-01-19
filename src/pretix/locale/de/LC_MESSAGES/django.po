@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2024-01-11 13:07+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2024-01-19 14:40+0000\n"
+"Last-Translator: chandi <pretixtranslate@chandi.it>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -24852,11 +24852,11 @@ msgstr "Das ausgewählte List wurde gelöscht."
 
 #: pretix/control/views/dashboards.py:114
 msgid "Attendees (ordered)"
-msgstr "Teilnehmer (bestellt)"
+msgstr "Teilnehmende (bestellt)"
 
 #: pretix/control/views/dashboards.py:124
 msgid "Attendees (paid)"
-msgstr "Teilnehmer (bezahlt)"
+msgstr "Teilnehmende (bezahlt)"
 
 #: pretix/control/views/dashboards.py:135
 #, python-brace-format
