@@ -138,7 +138,7 @@ the button-style of that checkbox with the one in the pretix shop, you can use t
 
 .. note::
 
-        Due to compatibilty with existing widget installations, the default value for ``single-item-select``
+        Due to compatibility with existing widget installations, the default value for ``single-item-select``
         is ``checkbox``. This might change in the future, so make sure, to set the attribute to 
         ``single-item-select="checkbox"`` if you need it.
 
@@ -196,7 +196,7 @@ settings. For example, if you set up a meta data property called "Promoted" that
 
    <pretix-widget event="https://pretix.eu/demo/series/" list-type="list" filter="attr[Promoted]=Yes"></pretix-widget>
 
-If you have enabled public filters in your meta data attribute configuration, a filter formshows up. To disable, use::
+If you have enabled public filters in your meta data attribute configuration, a filter-form shows up. To disable, use::
 
    <pretix-widget event="https://pretix.eu/demo/democon/" disable-filters></pretix-widget>
 
