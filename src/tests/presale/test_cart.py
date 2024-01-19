@@ -38,6 +38,7 @@ from datetime import timedelta
 from decimal import Decimal
 
 from bs4 import BeautifulSoup
+from django.conf import settings
 from django.test import TestCase
 from django.utils.timezone import now
 from django_countries.fields import Country
@@ -983,6 +984,23 @@ class CartTest(CartTestMixin, TestCase):
         self.event.settings.max_items_per_order = 5
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '5',
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        doc = BeautifulSoup(response.rendered_content, "lxml")
+        self.assertIn('more than', doc.select('.alert-danger')[0].text)
+        with scopes_disabled():
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
+
+    def test_max_items_global(self):
+        with scopes_disabled():
+            CartPosition.objects.create(
+                event=self.event, cart_id=self.session_key, item=self.ticket,
+                price=23, expires=now() + timedelta(minutes=10)
+            )
+        self.event.settings.max_items_per_order = settings.PRETIX_MAX_ORDER_SIZE + 100
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: str(settings.PRETIX_MAX_ORDER_SIZE + 1),
         }, follow=True)
         self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)

@@ -1512,6 +1512,7 @@ class OrderChangeManager:
             "You need to select at least %(min)s items of the product %(product)s.",
             "min"
         ),
+        'max_order_size': gettext_lazy('Orders cannot have more than %(max)s positions.'),
     }
     ItemOperation = namedtuple('ItemOperation', ('position', 'item', 'variation'))
     SubeventOperation = namedtuple('SubeventOperation', ('position', 'subevent'))
@@ -2599,6 +2600,14 @@ class OrderChangeManager:
         self.order.total = total + payment_fee
         self.order.save()
 
+    def _check_order_size(self):
+        if (len(self.order.positions.all()) + len([op for op in self._operations if isinstance(op, self.AddOperation)])) > settings.PRETIX_MAX_ORDER_SIZE:
+            raise OrderError(
+                self.error_messages['max_order_size'] % {
+                    'max': settings.PRETIX_MAX_ORDER_SIZE,
+                }
+            )
+
     def _payment_fee_diff(self):
         total = self.order.total + self._totaldiff
         if self.open_payment:
@@ -2739,6 +2748,7 @@ class OrderChangeManager:
 
         # finally, incorporate difference in payment fees
         self._payment_fee_diff()
+        self._check_order_size()
 
         with transaction.atomic():
             locked_instance = Order.objects.select_for_update(of=OF_SELF).get(pk=self.order.pk)

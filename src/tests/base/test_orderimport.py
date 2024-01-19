@@ -25,6 +25,7 @@ from decimal import Decimal
 from io import StringIO
 
 import pytest
+from django.conf import settings as django_settings
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
 from django_scopes import scopes_disabled
@@ -57,7 +58,7 @@ def user():
     return User.objects.create_user('test@localhost', 'test')
 
 
-def inputfile_factory():
+def inputfile_factory(multiplier=1):
     d = [
         {
             'A': 'Dieter',
@@ -103,6 +104,8 @@ def inputfile_factory():
             'L': '',
         },
     ]
+    if multiplier > 1:
+        d = d * multiplier
     f = StringIO()
     w = csv.DictWriter(f, ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L'], dialect=csv.excel)
     w.writeheader()
@@ -164,6 +167,19 @@ def test_import_as_one_order(user, event, item):
     o = event.orders.get()
     assert o.positions.count() == 3
     assert set(pos.positionid for pos in o.positions.all()) == {1, 2, 3}
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_import_as_one_order_max_size(user, event, item):
+    settings = dict(DEFAULT_SETTINGS)
+    settings['item'] = 'static:{}'.format(item.pk)
+    settings['orders'] = 'one'
+
+    import_orders.apply(
+        args=(event.pk, inputfile_factory(multiplier=django_settings.PRETIX_MAX_ORDER_SIZE).id, settings, 'en', user.pk)
+    )
+    assert event.orders.count() == 0
 
 
 @pytest.mark.django_db

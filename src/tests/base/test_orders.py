@@ -26,6 +26,7 @@ from decimal import Decimal
 from zoneinfo import ZoneInfo
 
 import pytest
+from django.conf import settings
 from django.core import mail as djmail
 from django.db.models import F, Sum
 from django.test import TestCase
@@ -1828,6 +1829,13 @@ class OrderChangeManagerTests(TestCase):
         self.quota.delete()
         with self.assertRaises(OrderError):
             self.ocm.add_position(self.shirt, None, None, None)
+
+    @classscope(attr='o')
+    def test_add_item_limit(self):
+        for i in range(settings.PRETIX_MAX_ORDER_SIZE):
+            self.ocm.add_position(self.shirt, None, None, None)
+        with self.assertRaises(OrderError):
+            self.ocm.commit()
 
     @classscope(attr='o')
     def test_add_item_success(self):
