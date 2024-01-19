@@ -310,6 +310,7 @@ DEFAULTS = {
         ),
         'form_kwargs': dict(
             min_value=1,
+            max_value=settings.PRETIX_MAX_ORDER_SIZE,
             required=True,
             label=_("Maximum number of items per order"),
             help_text=_("Add-on products will not be counted.")
