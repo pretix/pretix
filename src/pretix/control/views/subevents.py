@@ -399,6 +399,19 @@ class SubEventEditorMixin(MetaDataEditorMixin):
             except SubEvent.DoesNotExist:
                 pass
 
+    def _copy_from_date_to_relative(self, value):
+        if not value:
+            return value
+        tz = self.request.event.timezone
+        days = (self.copy_from.date_from.astimezone(tz).date() - value.astimezone(tz).date()).days
+        return RelativeDateWrapper(RelativeDate(
+            days=abs(days),
+            base_date_name='date_from',
+            time=value.astimezone(tz).time(),
+            minutes=None,
+            is_after=days < 0,
+        ))
+
     @cached_property
     def itemvar_forms(self):
         se_item_instances = {
@@ -411,15 +424,21 @@ class SubEventEditorMixin(MetaDataEditorMixin):
         if self.copy_from:
             se_item_instances = {
                 sei.item_id: SubEventItem(
-                    item=sei.item, price=sei.price, disabled=sei.disabled,
-                    available_from=sei.available_from, available_until=sei.available_until
+                    item=sei.item,
+                    price=sei.price,
+                    disabled=sei.disabled,
+                    available_from=sei.available_from,
+                    available_until=sei.available_until
                 )
                 for sei in SubEventItem.objects.filter(subevent=self.copy_from).select_related('item')
             }
             se_var_instances = {
                 sei.variation_id: SubEventItemVariation(
-                    variation=sei.variation, price=sei.price, disabled=sei.disabled,
-                    available_from=sei.available_from, available_until=sei.available_until
+                    variation=sei.variation,
+                    price=sei.price,
+                    disabled=sei.disabled,
+                    available_from=sei.available_from,
+                    available_until=sei.available_until
                 )
                 for sei in SubEventItemVariation.objects.filter(subevent=self.copy_from).select_related('variation')
             }
@@ -429,17 +448,34 @@ class SubEventEditorMixin(MetaDataEditorMixin):
             if i.has_variations:
                 for v in i.variations.all():
                     inst = se_var_instances.get(v.pk) or SubEventItemVariation(subevent=self.object, variation=v)
+                    if self.copy_from:
+                        initial = {
+                            'rel_available_from': self._copy_from_date_to_relative(inst.available_from),
+                            'rel_available_until': self._copy_from_date_to_relative(inst.available_until)
+                        }
+                    else:
+                        initial = {}
                     formlist.append(self.itemvarformclass(
                         prefix='itemvar-{}'.format(v.pk),
-                        item=i, variation=v,
+                        item=i,
+                        variation=v,
+                        initial=initial,
                         instance=inst,
                         data=(self.request.POST if self.request.method == "POST" else None)
                     ))
             else:
                 inst = se_item_instances.get(i.pk) or SubEventItem(subevent=self.object, item=i)
+                if self.copy_from:
+                    initial = {
+                        'rel_available_from': self._copy_from_date_to_relative(inst.available_from),
+                        'rel_available_until': self._copy_from_date_to_relative(inst.available_until)
+                    }
+                else:
+                    initial = {}
                 formlist.append(self.itemformclass(
                     prefix='item-{}'.format(i.pk),
                     item=i,
+                    initial=initial,
                     instance=inst,
                     data=(self.request.POST if self.request.method == "POST" else None)
                 ))
@@ -757,18 +793,8 @@ class SubEventBulkCreate(SubEventEditorMixin, EventPermissionRequiredMixin, Asyn
             initial['time_from'] = i.date_from.astimezone(tz).time()
             initial['time_to'] = i.date_to.astimezone(tz).time() if i.date_to else None
             initial['time_admission'] = i.date_admission.astimezone(tz).time() if i.date_admission else None
-            initial['rel_presale_start'] = RelativeDateWrapper(RelativeDate(
-                days=(i.date_from.astimezone(tz).date() - i.presale_start.astimezone(tz).date()).days,
-                base_date_name='date_from',
-                time=i.presale_start.astimezone(tz).time(),
-                minutes=None
-            )) if i.presale_start else None
-            initial['rel_presale_end'] = RelativeDateWrapper(RelativeDate(
-                days=(i.date_from.astimezone(tz).date() - i.presale_end.astimezone(tz).date()).days,
-                base_date_name='date_from',
-                time=i.presale_end.astimezone(tz).time(),
-                minutes=None
-            )) if i.presale_end else None
+            initial['rel_presale_start'] = self._copy_from_date_to_relative(i.presale_start)
+            initial['rel_presale_end'] = self._copy_from_date_to_relative(i.presale_end)
         else:
             kwargs['instance'] = SubEvent(event=self.request.event)
             initial['location'] = self.request.event.location
