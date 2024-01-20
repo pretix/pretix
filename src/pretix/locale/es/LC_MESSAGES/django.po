@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2024-01-19 02:00+0000\n"
+"PO-Revision-Date: 2024-01-21 02:00+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -9896,9 +9896,8 @@ msgstr ""
 "método de pago"
 
 #: pretix/base/settings.py:1913 pretix/base/settings.py:1923
-#, fuzzy
 msgid "All refunds are issued as gift cards"
-msgstr "Entrega una tarjeta regalo manualmente"
+msgstr "Todos los reembolsos se emiten como tarjetas de regalo"
 
 #: pretix/base/settings.py:1914 pretix/base/settings.py:1924
 msgid "Do not handle refunds automatically at all"
@@ -9906,14 +9905,12 @@ msgstr "No gestionar reembolsos automáticamente"
 
 #: pretix/base/settings.py:1919
 #: pretix/control/templates/pretixcontrol/order/index.html:141
-#, fuzzy
 msgid "Refund method"
-msgstr "Orden de reembolso"
+msgstr "Método de reembolso"
 
 #: pretix/base/settings.py:1945 pretix/base/settings.py:1958
-#, fuzzy
 msgid "Terms of cancellation"
-msgstr "Generar cancelación"
+msgstr "Condiciones de cancelación"
 
 #: pretix/base/settings.py:1948
 msgid ""
@@ -9962,13 +9959,12 @@ msgid "Privacy Policy URL"
 msgstr "URL de la política de privacidad"
 
 #: pretix/base/settings.py:1992
-#, fuzzy
 msgid ""
 "This should point e.g. to a part of your website that explains how you use "
 "data gathered in your ticket shop."
 msgstr ""
-"Esto debería apuntar, por ejemplo, a una parte de su sitio web que tenga sus "
-"datos de contacto e información legal."
+"Esto debería señalar, por ejemplo, a una parte de su sitio web que explica "
+"cómo utiliza los datos recopilados en su tienda de entradas."
 
 #: pretix/base/settings.py:2014
 msgid "Attach ticket files"
@@ -10012,9 +10008,8 @@ msgstr ""
 "que se haya confirmado el pago."
 
 #: pretix/base/settings.py:2047
-#, fuzzy
 msgid "Event description"
-msgstr "Descripción del producto"
+msgstr "Descripción del evento"
 
 #: pretix/base/settings.py:2050
 msgid ""
@@ -10079,9 +10074,9 @@ msgstr "Su pedido: {code}"
 #: pretix/base/settings.py:2111 pretix/base/settings.py:2144
 #: pretix/base/settings.py:2249 pretix/base/settings.py:2482
 #: pretix/base/settings.py:2519
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Your event registration: {code}"
-msgstr "Su pedido: {code}"
+msgstr "Registro de su evento: {code}"
 
 #: pretix/base/settings.py:2115
 #, python-brace-format
@@ -10352,9 +10347,9 @@ msgstr ""
 "su equipo {event}"
 
 #: pretix/base/settings.py:2303
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Event registration confirmed: {code}"
-msgstr "Pedido aprobado y confirmado: {code}"
+msgstr "Inscripción al evento confirmada: {code}"
 
 #: pretix/base/settings.py:2307
 #, python-brace-format
@@ -10456,9 +10451,9 @@ msgstr ""
 "su equipo {event}"
 
 #: pretix/base/settings.py:2369
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "Incomplete payment received: {code}"
-msgstr "Pago recibido por su pedido: {code}"
+msgstr "Pago incompleto recibido: {code}"
 
 #: pretix/base/settings.py:2373
 #, python-brace-format
@@ -10662,7 +10657,7 @@ msgstr ""
 "su equipo {event}"
 
 #: pretix/base/settings.py:2486 pretix/base/settings.py:2523
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid ""
 "Hello,\n"
 "\n"
@@ -10674,15 +10669,15 @@ msgid ""
 "Best regards,  \n"
 "Your {event} team"
 msgstr ""
-"Hola, \n"
+"Hola,\n"
 "\n"
-"su pedido para {event} ha sido cambiado. \n"
+"aprobamos un boleto solicitado para usted para {event}.\n"
 "\n"
-"Puede ver el estado de su pedido en\n"
-"{url} \n"
+"Puedes ver los detalles y el estado de tu ticket aquí:\n"
+"{url}\n"
 "\n"
-"Saludos cordiales,  \n"
-"su equipo {event}"
+"Atentamente,\n"
+"Tu equipo de {event}"
 
 #: pretix/base/settings.py:2498
 #, python-brace-format
@@ -10992,12 +10987,10 @@ msgstr "Sólo respetado por los navegadores modernos."
 
 #: pretix/base/settings.py:2835 pretix/base/settings.py:2878
 #: pretix/control/forms/organizer.py:459
-#, fuzzy
 msgid "Header image"
-msgstr "Nombre del participante"
+msgstr "Imagen de cabecera"
 
 #: pretix/base/settings.py:2838
-#, fuzzy
 msgid ""
 "If you provide a logo image, we will by default not show your event name and "
 "date in the page header. By default, we show your logo with a size of up to "
@@ -11005,9 +10998,12 @@ msgid ""
 "recommend not using small details on the picture as it will be resized on "
 "smaller screens."
 msgstr ""
-"Si nos proporciona una imagen de logotipo, por defecto no mostraremos el "
-"nombre y la fecha de su evento en el encabezado de la página. Mostraremos su "
-"logotipo con una altura máxima de 120 píxeles."
+"Si proporciona una imagen de logotipo, de forma predeterminada no "
+"mostraremos el nombre ni la fecha de su evento en el encabezado de la "
+"página. De forma predeterminada, mostramos su logotipo con un tamaño de "
+"hasta 1140x120 píxeles. Puede aumentar el tamaño con la configuración "
+"siguiente. Recomendamos no utilizar pequeños detalles en la imagen, ya que "
+"cambiará de tamaño en pantallas más pequeñas."
 
 #: pretix/base/settings.py:2858 pretix/base/settings.py:2900
 msgid "Use header image in its full size"
@@ -11034,7 +11030,6 @@ msgstr ""
 "título del evento."
 
 #: pretix/base/settings.py:2881 pretix/control/forms/organizer.py:463
-#, fuzzy
 msgid ""
 "If you provide a logo image, we will by default not show your organization "
 "name in the page header. By default, we show your logo with a size of up to "
@@ -11042,9 +11037,12 @@ msgid ""
 "recommend not using small details on the picture as it will be resized on "
 "smaller screens."
 msgstr ""
-"Si nos proporciona una imagen de logotipo, por defecto no mostraremos el "
-"nombre de su organización en el encabezado de la página. Mostraremos su "
-"logotipo con una altura máxima de 120 píxeles."
+"Si proporciona una imagen de logotipo, de forma predeterminada no "
+"mostraremos el nombre de su organización en el encabezado de la página. De "
+"forma predeterminada, mostramos su logotipo con un tamaño de hasta 1140x120 "
+"píxeles. Puede aumentar el tamaño con la configuración siguiente. "
+"Recomendamos no utilizar pequeños detalles en la imagen, ya que cambiará de "
+"tamaño en pantallas más pequeñas."
 
 #: pretix/base/settings.py:2910
 msgid "Use header image also for events without an individually uploaded logo"
@@ -11109,13 +11107,12 @@ msgid "Banner text (top)"
 msgstr "Texto del banner (arriba)"
 
 #: pretix/base/settings.py:3003
-#, fuzzy
 msgid ""
 "This text will be shown above every page of your shop. Please only use this "
 "for very important messages."
 msgstr ""
-"Este texto se mostrará arriba de las opciones de pago. Puedes explicarle las "
-"opciones al usuario aquí, si quieres."
+"Este texto se mostrará encima de cada página de tu tienda. Utilice esto "
+"únicamente para mensajes muy importantes."
 
 #: pretix/base/settings.py:3013
 msgid "Banner text (bottom)"
@@ -11143,9 +11140,8 @@ msgstr ""
 "código de descuento."
 
 #: pretix/base/settings.py:3039
-#, fuzzy
 msgid "Attendee data explanation"
-msgstr "Nombre del participante"
+msgstr "Explicación de los datos de los asistentes"
 
 #: pretix/base/settings.py:3042
 msgid ""
@@ -11157,9 +11153,8 @@ msgstr ""
 "de ellos."
 
 #: pretix/base/settings.py:3052
-#, fuzzy
 msgid "Additional success message"
-msgstr "Tarifa adicional"
+msgstr "Mensaje de éxito adicional"
 
 #: pretix/base/settings.py:3053
 msgid ""
@@ -11243,9 +11238,8 @@ msgstr ""
 "diferente, se puede configurar aquí."
 
 #: pretix/base/settings.py:3238
-#, fuzzy
 msgid "Validity of gift card codes in years"
-msgstr "Código de la tarjeta de regalo"
+msgstr "Validez de los códigos de tarjetas regalo en años"
 
 #: pretix/base/settings.py:3239
 msgid ""
@@ -11270,9 +11264,8 @@ msgstr ""
 "cookies y el uso de tecnologías similares en su dispositivo."
 
 #: pretix/base/settings.py:3261
-#, fuzzy
 msgid "Dialog text"
-msgstr "Texto adicional"
+msgstr "Texto de diálogo"
 
 #: pretix/base/settings.py:3268
 msgid ""
@@ -11291,33 +11284,28 @@ msgid "Secondary dialog text"
 msgstr "Dialogo de texto secundario"
 
 #: pretix/base/settings.py:3282
-#, fuzzy
 msgid "Privacy settings"
-msgstr "Configuración de precios"
+msgstr "La configuración de privacidad"
 
 #: pretix/base/settings.py:3287
-#, fuzzy
 msgid "Dialog title"
-msgstr "Titulos permitidos"
+msgstr "Título del diálogo"
 
 #: pretix/base/settings.py:3293
 msgid "Accept all cookies"
 msgstr "Aceptar todas las cookies"
 
 #: pretix/base/settings.py:3298
-#, fuzzy
 msgid "\"Accept\" button description"
-msgstr "Descripción del producto"
+msgstr "Descripción del botón \"Aceptar\""
 
 #: pretix/base/settings.py:3304
-#, fuzzy
 msgid "Required cookies only"
-msgstr "Pregunta requerida"
+msgstr "Solo cookies requeridas"
 
 #: pretix/base/settings.py:3309
-#, fuzzy
 msgid "\"Reject\" button description"
-msgstr "Descripción del producto"
+msgstr "Descripción del botón \"Rechazar\""
 
 #: pretix/base/settings.py:3319
 #, fuzzy
