@@ -1299,9 +1299,22 @@ class CartManager:
 
                 op.position.price_after_voucher = op.price_after_voucher
                 op.position.voucher = op.voucher
-                # op.posiiton.price will be set in recompute_final_prices_and_taxes
+                # op.position.price will be set in recompute_final_prices_and_taxes
                 op.position.save(update_fields=['price_after_voucher', 'voucher'])
                 vouchers_ok[op.voucher] -= 1
+
+                if op.voucher.all_bundles_included or op.voucher.all_addons_included:
+                    for a in op.position.addons.all():
+                        if a.is_bundled and op.voucher.all_bundles_included and a.price:
+                            a.listed_price = Decimal("0.00")
+                            a.price_after_voucher = Decimal("0.00")
+                            # a.price will be set in recompute_final_prices_and_taxes
+                            a.save(update_fields=['listed_price', 'price_after_voucher'])
+                        elif not a.is_bundled and op.voucher.all_addons_included and a.price and not a.custom_price_input:
+                            a.listed_price = Decimal("0.00")
+                            a.price_after_voucher = Decimal("0.00")
+                            # op.positon.price will be set in recompute_final_prices_and_taxes
+                            a.save(update_fields=['listed_price', 'price_after_voucher'])
 
         for p in new_cart_positions:
             if getattr(p, '_answers', None):

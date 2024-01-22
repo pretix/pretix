@@ -3644,6 +3644,62 @@ class CartBundleTest(CartTestMixin, TestCase):
         assert b.price == Decimal('1.50')
 
     @classscope(attr='orga')
+    def test_voucher_apply_affect_bundled(self):
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() + timedelta(minutes=10)
+        )
+        a = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=2.5, expires=now() + timedelta(minutes=10), is_bundled=False
+        )
+        b = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() + timedelta(minutes=10), is_bundled=True
+        )
+        v = Voucher.objects.create(
+            event=self.event, price_mode='set', value=Decimal('0.00'), max_usages=100,
+            all_bundles_included=True, all_addons_included=False, item=self.ticket,
+        )
+
+        self.cm.apply_voucher(v.code)
+        self.cm.commit()
+        cp.refresh_from_db()
+        b.refresh_from_db()
+        a.refresh_from_db()
+        assert cp.price == Decimal('0.00')
+        assert a.price == Decimal('2.50')
+        assert b.price == Decimal('0.00')
+
+    @classscope(attr='orga')
+    def test_voucher_apply_affect_addons(self):
+        cp = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.ticket,
+            price=21.5, expires=now() + timedelta(minutes=10)
+        )
+        a = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() + timedelta(minutes=10), is_bundled=False
+        )
+        b = CartPosition.objects.create(
+            event=self.event, cart_id=self.session_key, item=self.trans, addon_to=cp,
+            price=1.5, expires=now() + timedelta(minutes=10), is_bundled=True
+        )
+        v = Voucher.objects.create(
+            event=self.event, price_mode='set', value=Decimal('0.00'), max_usages=100,
+            all_addons_included=True, all_bundles_included=False,
+        )
+
+        self.cm.apply_voucher(v.code)
+        self.cm.commit()
+        cp.refresh_from_db()
+        b.refresh_from_db()
+        a.refresh_from_db()
+        assert cp.price == Decimal('0.00')
+        assert a.price == Decimal('0.00')
+        assert b.price == Decimal('1.50')
+
+    @classscope(attr='orga')
     def test_extend_base_price_changed(self):
         cp = CartPosition.objects.create(
             event=self.event, cart_id=self.session_key, item=self.ticket,
