@@ -557,7 +557,7 @@ class StripeMethod(BasePaymentProvider):
             # the postfix.
             return '{code} {postfix}'.format(
                 code=payment.order.code,
-                postfix=re.sub("[^a-zA-Z0-9-_. ]", "", str(unidecode(self.settings.postfix))),
+                postfix=re.sub("[^a-zA-Z0-9-_. ]", "", unidecode(str(self.settings.postfix))),
             )[:length]
         else:
             # If no custom postfix is set, we transmit the event slug and event name for backwards compatibility
@@ -565,7 +565,7 @@ class StripeMethod(BasePaymentProvider):
             return '{event}-{code} {eventname}'.format(
                 event=self.event.slug.upper(),
                 code=payment.order.code,
-                eventname=re.sub("[^a-zA-Z0-9-_. ]", "", str(unidecode(self.event.name))),
+                eventname=re.sub("[^a-zA-Z0-9-_. ]", "", unidecode(str(self.event.name))),
             )[:length]
 
     @property
