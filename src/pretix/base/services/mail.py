@@ -183,6 +183,7 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
     if auto_email:
         headers['X-Auto-Response-Suppress'] = 'OOF, NRN, AutoReply, RN'
         headers['Auto-Submitted'] = 'auto-generated'
+    headers.setdefault('X-Mailer', 'pretix')
 
     with language(locale):
         if isinstance(context, dict) and event:
