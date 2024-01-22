@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2024-01-22 11:15+0000\n"
+"PO-Revision-Date: 2024-01-22 17:08+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -11940,16 +11940,14 @@ msgid "Yesterday"
 msgstr "Ayer"
 
 #: pretix/base/timeframes.py:67
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Last 7 days"
-msgstr "Última fecha"
+msgstr "Los últimos 7 días"
 
 #: pretix/base/timeframes.py:76
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Last 14 days"
-msgstr "Última fecha"
+msgstr "Últimos 14 días"
 
 #: pretix/base/timeframes.py:85
 msgctxt "reporting_timeframe"
@@ -13520,9 +13518,8 @@ msgstr "Filtrar por etiqueta…"
 
 #: pretix/control/forms/filter.py:2247 pretix/plugins/reports/exporters.py:665
 #: pretix/control/forms/filter.py:2234
-#, fuzzy
 msgid "Date of last successful payment"
-msgstr "Fecha del último pago"
+msgstr "Fecha del último pago exitoso"
 
 #: pretix/control/forms/filter.py:2287 pretix/control/forms/filter.py:2274
 #, fuzzy
@@ -15400,9 +15397,8 @@ msgid "The SSO provider has been changed."
 msgstr "El orden ha sido cambiado."
 
 #: pretix/control/logdisplay.py:353
-#, fuzzy
 msgid "The SSO provider has been deleted."
-msgstr "La orden ha sido eliminada."
+msgstr "El proveedor de SSO ha sido eliminado."
 
 #: pretix/control/logdisplay.py:354
 #, fuzzy
@@ -15415,9 +15411,8 @@ msgid "The SSO client has been changed."
 msgstr "La categoría ha sido cambiada."
 
 #: pretix/control/logdisplay.py:356
-#, fuzzy
 msgid "The SSO client has been deleted."
-msgstr "El evento ha sido borrado."
+msgstr "El cliente SSO ha sido eliminado."
 
 #: pretix/control/logdisplay.py:357 pretix/control/views/organizer.py:2303
 #, fuzzy
@@ -15430,9 +15425,8 @@ msgid "The membership type has been changed."
 msgstr "Se ha modificado la fecha del evento."
 
 #: pretix/control/logdisplay.py:359
-#, fuzzy
 msgid "The membership type has been deleted."
-msgstr "Se ha borrado la fecha del evento."
+msgstr "El tipo de membresía ha sido eliminado."
 
 #: pretix/control/logdisplay.py:360
 #, fuzzy
@@ -15455,9 +15449,8 @@ msgid "A membership of this account has been changed."
 msgstr "Se ha cambiado una opción de respuesta."
 
 #: pretix/control/logdisplay.py:364
-#, fuzzy
 msgid "A membership of this account has been deleted."
-msgstr "Su cuenta ha sido habilitada."
+msgstr "Se ha eliminado una membresía de esta cuenta."
 
 #: pretix/control/logdisplay.py:365
 #, fuzzy
@@ -15513,9 +15506,8 @@ msgid "The event has been canceled."
 msgstr "El reembolso ha sido cancelado."
 
 #: pretix/control/logdisplay.py:376
-#, fuzzy
 msgid "An event has been deleted."
-msgstr "El evento ha sido borrado."
+msgstr "Se ha eliminado un evento."
 
 #: pretix/control/logdisplay.py:377
 msgid "A removal process for personal data has been started."
@@ -15560,9 +15552,8 @@ msgid "The order has been marked as paid."
 msgstr "El pedido ha sido marcado como pagado."
 
 #: pretix/control/logdisplay.py:387
-#, fuzzy
 msgid "The cancellation request has been deleted."
-msgstr "Se ha borrado la pregunta seleccionada."
+msgstr "La solicitud de cancelación ha sido eliminada."
 
 #: pretix/control/logdisplay.py:388
 msgid "The order has been refunded."
@@ -16085,9 +16076,8 @@ msgid "The discount has been added."
 msgstr "Se ha añadido el contingente."
 
 #: pretix/control/logdisplay.py:513
-#, fuzzy
 msgid "The discount has been deleted."
-msgstr "El producto fue eliminado."
+msgstr "El descuento ha sido eliminado."
 
 #: pretix/control/logdisplay.py:514
 #, fuzzy
@@ -16231,9 +16221,8 @@ msgid "The gate has been changed."
 msgstr "La categoría ha sido cambiada."
 
 #: pretix/control/logdisplay.py:551
-#, fuzzy
 msgid "The gate has been deleted."
-msgstr "El equipo ha sido eliminado."
+msgstr "La puerta ha sido eliminada."
 
 #: pretix/control/logdisplay.py:552
 msgctxt "subevent"
@@ -17026,13 +17015,13 @@ msgid ""
 "disable this feature or enter your email address to get notified via email "
 "if a new update arrives. This message will disappear once you clicked it."
 msgstr ""
-"A partir de la versión 1.2.0, pretix comprueba automáticamente si hay "
-"actualizaciones en segundo plano. Durante esta comprobación, los datos "
-"anónimos son transmitidos a los servidores operados por los desarrolladores "
-"de pretix. Haga clic en este mensaje para obtener más información, "
-"deshabilite esta función o introduzca su dirección de correo electrónico "
-"para recibir una notificación por correo electrónico si llega una nueva "
-"actualización. Este mensaje desaparecerá una vez que haga clic en él."
+"A partir de la versión 1.2.0, pretix busca actualizaciones automáticamente "
+"en segundo plano. Durante esta verificación, se transmiten datos anónimos a "
+"servidores operados por los desarrolladores de pretix. Haga clic en este "
+"mensaje para obtener más información, deshabilite esta función o ingrese su "
+"dirección de correo electrónico para recibir una notificación por correo "
+"electrónico si llega una nueva actualización. Este mensaje desaparecerá una "
+"vez que hagas clic en él."
 
 #: pretix/control/templates/pretixcontrol/base.html:418
 msgid ""
@@ -17231,9 +17220,8 @@ msgstr "Efectivo"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:4
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:6
-#, fuzzy
 msgid "Delete check-ins"
-msgstr "Borrar lista de registro"
+msgstr "Eliminar registros"
 
 #: pretix/control/templates/pretixcontrol/checkin/bulk_revert_confirm.html:15
 #, python-format
@@ -17586,9 +17574,8 @@ msgstr ""
 "Esto también eliminará la información de <strong>%(num)s</strong> registros."
 
 #: pretix/control/templates/pretixcontrol/checkin/list_delete.html:22
-#, fuzzy
 msgid "Delete list and all check-ins"
-msgstr "Borrar pregunta"
+msgstr "Eliminar lista y todos los registros"
 
 #: pretix/control/templates/pretixcontrol/checkin/list_edit.html:48
 #: pretix/control/templates/pretixcontrol/event/payment.html:74
@@ -18198,9 +18185,8 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:5
 #: pretix/control/templates/pretixcontrol/event/live.html:131
 #: pretix/control/templates/pretixcontrol/event/settings.html:452
-#, fuzzy
 msgid "Cancel or delete event"
-msgstr "Puede crear eventos"
+msgstr "Cancelar o eliminar evento"
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:9
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:25
@@ -20246,9 +20232,8 @@ msgstr "Historial de la cuenta"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:4
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:6
-#, fuzzy
 msgid "Delete discount"
-msgstr "Borrar fecha"
+msgstr "Eliminar descuento"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:10
 #, python-format
@@ -20261,10 +20246,11 @@ msgstr ""
 "                sido utilizado como parte de un pedido."
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:21
-#, fuzzy, python-format
+#, python-format
 msgid "Are you sure you want to delete the discount <strong>%(name)s</strong>?"
 msgstr ""
-"¿Está seguro de que desea eliminar la categoría <strong>%(name)s</strong>?"
+"¿Estás seguro de que deseas eliminar los <strong>%(name)s</strong> de "
+"descuento?"
 
 #: pretix/control/templates/pretixcontrol/items/discount_delete.html:25
 #, python-format
@@ -20503,9 +20489,8 @@ msgstr ""
 "y configúrela como oculta."
 
 #: pretix/control/templates/pretixcontrol/items/question_delete.html:25
-#, fuzzy
 msgid "Delete question and all answers"
-msgstr "Borrar pregunta"
+msgstr "Eliminar pregunta y todas las respuestas"
 
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:30
 msgid ""
@@ -20912,9 +20897,8 @@ msgstr ""
 "electrónico individualmente en el siguiente paso."
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:26
-#, fuzzy
 msgid "Yes, delete request"
-msgstr "Sí, eliminar la orden"
+msgstr "Sí, eliminar solicitud"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:7
 #: pretix/control/templates/pretixcontrol/order/change.html:13
@@ -21270,9 +21254,8 @@ msgid "Original payment method"
 msgstr "Método de pago original"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:155
-#, fuzzy
 msgid "Delete request"
-msgstr "Borrar pregunta"
+msgstr "Borrar petición"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:168
 #: pretix/presale/templates/pretixpresale/event/order.html:21
@@ -22422,9 +22405,8 @@ msgid "Mark as expired if overdue"
 msgstr "Marcar como vencido si está vencido"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:322
-#, fuzzy
 msgid "Delete (test mode only)"
-msgstr "Desactivar el modo de prueba"
+msgstr "Eliminar (solo modo de prueba)"
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:5
 #: pretix/control/templates/pretixcontrol/orders/overview.html:16
@@ -22607,16 +22589,16 @@ msgid "New customer"
 msgstr "Cualquier cliente"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:15
-#, fuzzy
 msgid "Are you sure you want to delete this membership?"
-msgstr "¿Estás seguro de que quieres borrar el equipo?"
+msgstr "¿Estás seguro de que deseas eliminar esta membresía?"
 
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:17
-#, fuzzy
 msgid ""
 "This membership cannot be deleted since it has been used in an order. Change "
 "its end date to the past instead."
-msgstr "Un recibo no se puede borrar si ya ha sido canjeado."
+msgstr ""
+"Esta membresía no se puede eliminar ya que se ha utilizado en un pedido. En "
+"su lugar, cambie su fecha de finalización al pasado."
 
 #: pretix/control/templates/pretixcontrol/organizers/customers.html:14
 msgid "No customer accounts have been created yet."
@@ -23170,9 +23152,8 @@ msgid "Manually issue a gift card"
 msgstr "Entrega una tarjeta regalo manualmente"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcards.html:65
-#, fuzzy
 msgid "Last transaction"
-msgstr "Transliteración"
+msgstr "Última transacción"
 
 #: pretix/control/templates/pretixcontrol/organizers/index.html:9
 msgid ""
@@ -23205,14 +23186,12 @@ msgid "Delete membership type:"
 msgstr "Eliminar tipo de membresía:"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:9
-#, fuzzy
 msgid "Are you sure you want to delete this membership type?"
-msgstr "¿Estás seguro de que quieres borrar el equipo?"
+msgstr "¿Está seguro de que desea eliminar este tipo de membresía?"
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_delete.html:11
-#, fuzzy
 msgid "This membership type cannot be deleted since it has already been used."
-msgstr "Un recibo no se puede borrar si ya ha sido canjeado."
+msgstr "Este tipo de membresía no se puede eliminar porque ya se ha utilizado."
 
 #: pretix/control/templates/pretixcontrol/organizers/membershiptype_edit.html:6
 msgid "Membership type:"
@@ -23351,14 +23330,12 @@ msgid "Delete SSO client:"
 msgstr "Eliminar cliente SSO:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:9
-#, fuzzy
 msgid "Are you sure you want to delete this SSO client?"
-msgstr "¿Estás seguro de que quieres borrar el equipo?"
+msgstr "¿Está seguro de que desea eliminar este cliente SSO?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_delete.html:11
-#, fuzzy
 msgid "This SSO client cannot be deleted since it has already been used."
-msgstr "Un recibo no se puede borrar si ya ha sido canjeado."
+msgstr "Este cliente SSO no se puede eliminar porque ya se ha utilizado."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:6
 msgid "SSO client:"
@@ -23385,14 +23362,12 @@ msgid "Delete SSO provider:"
 msgstr "Eliminar proveedor de SSO:"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:9
-#, fuzzy
 msgid "Are you sure you want to delete this SSO provider?"
-msgstr "¿Estás seguro de que quieres borrar el equipo?"
+msgstr "¿Está seguro de que desea eliminar este proveedor de SSO?"
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_delete.html:11
-#, fuzzy
 msgid "This SSO provider cannot be deleted since it has already been used."
-msgstr "Un recibo no se puede borrar si ya ha sido canjeado."
+msgstr "Este proveedor de SSO no se puede eliminar porque ya se ha utilizado."
 
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:6
 #, fuzzy
@@ -23771,17 +23746,15 @@ msgstr "Altura (mm)"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:197
 msgid "Background PDF"
-msgstr "Fondo PDF"
+msgstr "PDF de fondo"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:200
-#, fuzzy
 msgid "Create empty background"
-msgstr "Crear una nueva cuenta"
+msgstr "Crear fondo vacío"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:205
-#, fuzzy
 msgid "Upload custom background"
-msgstr "Subir nuevo fondo"
+msgstr "Subir fondo personalizado"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:211
 msgid ""
@@ -23793,14 +23766,12 @@ msgstr ""
 "Si desea utilizar un fondo personalizado, ya debe tener el tamaño correcto."
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:221
-#, fuzzy
 msgid "Download current background"
-msgstr "Subir nuevo fondo"
+msgstr "Descargar fondo actual"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:228
-#, fuzzy
 msgid "Preferred language"
-msgstr "Idiomas de uso"
+msgstr "Idioma preferido"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:239
 msgid "x (mm)"
@@ -24007,15 +23978,14 @@ msgid "(Optional) Step 1: Download data"
 msgstr "Paso 1: Descargar datos"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:20
-#, fuzzy
 msgid ""
 "You are about to permanently delete data from the server, even though you "
 "might be required to keep some of this data on file. You can therefore "
 "download the following file and store it in a safe place:"
 msgstr ""
-"Está a punto de eliminar datos del servidor de forma permanente, aunque es "
-"posible que se le pida que guarde algunos de estos datos en un archivo. Por "
-"lo tanto, debe descargar el siguiente archivo y guardarlo en un lugar seguro:"
+"Está a punto de eliminar permanentemente datos del servidor, aunque es "
+"posible que deba conservar algunos de estos datos en el archivo. Por lo "
+"tanto, puedes descargar el siguiente archivo y guardarlo en un lugar seguro:"
 
 #: pretix/control/templates/pretixcontrol/shredder/download.html:29
 msgid "Download data"
@@ -24906,17 +24876,17 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:4
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:6
-#, fuzzy
 msgid "Delete carts"
-msgstr "Borrar fechas"
+msgstr "Eliminar carritos"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:9
-#, fuzzy, python-format
+#, python-format
 msgid ""
 "Are you sure you want to delete any cart positions with voucher "
 "<strong>%(voucher)s</strong>?"
 msgstr ""
-"¿Está seguro de que desea borrar el recibo <strong>%(voucher)s</strong>?"
+"¿Está seguro de que desea eliminar alguna posición del carrito con vales "
+"<strong>%(voucher)s</strong>?"
 
 #: pretix/control/templates/pretixcontrol/vouchers/delete_carts.html:10
 msgid ""
@@ -25051,14 +25021,12 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:4
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:6
-#, fuzzy
 msgid "Delete entries"
-msgstr "Borrar entrada"
+msgstr "Eliminar entradas"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:10
-#, fuzzy
 msgid "Are you sure you want to delete the following entries?"
-msgstr "¿Está seguro de que desea borrar las fechas siguientes?"
+msgstr "¿Está seguro de que desea eliminar las siguientes entradas?"
 
 #: pretix/control/templates/pretixcontrol/waitinglist/delete_bulk.html:21
 msgid ""
@@ -25514,9 +25482,8 @@ msgid "The requested discount does not exist."
 msgstr "La lista solicitada no existe."
 
 #: pretix/control/views/discounts.py:78
-#, fuzzy
 msgid "The selected discount has been deleted."
-msgstr "Se ha borrado la lista seleccionada."
+msgstr "El descuento seleccionado ha sido eliminado."
 
 #: pretix/control/views/discounts.py:86
 #, fuzzy
@@ -26745,9 +26712,8 @@ msgid "All events (that I have access to)"
 msgstr "Todos los eventos (a los que tengo acceso)"
 
 #: pretix/control/views/organizer.py:2041
-#, fuzzy
 msgid "The selected gate has been deleted."
-msgstr "Se ha borrado la fecha seleccionada."
+msgstr "La puerta seleccionada ha sido eliminada."
 
 #: pretix/control/views/organizer.py:2084
 #, fuzzy
@@ -26772,9 +26738,8 @@ msgstr "Se ha actualizado el orden de las posiciones."
 #: pretix/control/views/organizer.py:2490
 #: pretix/control/views/organizer.py:2618
 #: pretix/control/views/organizer.py:2883
-#, fuzzy
 msgid "The selected object has been deleted."
-msgstr "Se ha eliminado el producto seleccionado."
+msgstr "El objeto seleccionado ha sido eliminado."
 
 #: pretix/control/views/organizer.py:2410
 #, fuzzy
@@ -27048,9 +27013,8 @@ msgid "{num} vouchers have been created and sent out via email."
 msgstr "Se han creado vales {num} y se han enviado por correo electrónico."
 
 #: pretix/control/views/waitinglist.py:167
-#, fuzzy
 msgid "The selected entries have been deleted."
-msgstr "Se ha borrado la entrada seleccionada."
+msgstr "Las entradas seleccionadas han sido eliminadas."
 
 #: pretix/control/views/waitinglist.py:180
 msgid ""
@@ -27802,9 +27766,9 @@ msgstr "Importación actualmente en ejecución…"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base.html:11
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_base_organizer.html:11
-#, fuzzy, python-format
+#, python-format
 msgid "Last import: %(date)s"
-msgstr "Última actualización: %(date)s"
+msgstr "Última importación: %(date)s"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:8
 #, python-format
@@ -29366,9 +29330,8 @@ msgid "Restrict to orders created before"
 msgstr "Restringir a pedidos creados antes"
 
 #: pretix/plugins/sendmail/forms.py:230
-#, fuzzy
 msgid "Everyone who placed an order"
-msgstr "Cualquiera que haya solicitado una entrada"
+msgstr "Todos los que hicieron un pedido"
 
 #: pretix/plugins/sendmail/forms.py:234 pretix/plugins/sendmail/models.py:218
 msgid ""
@@ -29660,9 +29623,8 @@ msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:6
-#, fuzzy
 msgid "Delete Email Rule"
-msgstr "Borrar regla fiscal"
+msgstr "Eliminar regla de correo electrónico"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_delete.html:9
 #, python-format
@@ -29694,9 +29656,8 @@ msgid "Scheduled time"
 msgstr "Hora programada"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:35
-#, fuzzy
 msgid "Last schedule computation"
-msgstr "Selección de datos"
+msgstr "Cálculo del último horario"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:4
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:6
@@ -29714,9 +29675,8 @@ msgstr ""
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:22
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:100
-#, fuzzy
 msgid "Create a new rule"
-msgstr "Crear una nueva regla fiscal"
+msgstr "Crear una nueva regla"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:33
 #, fuzzy
@@ -29837,9 +29797,8 @@ msgid "Your rule has been created."
 msgstr "Se ha creado el usuario."
 
 #: pretix/plugins/sendmail/views.py:740
-#, fuzzy
 msgid "The selected rule has been deleted."
-msgstr "Se ha borrado la regla fiscal seleccionada."
+msgstr "La regla seleccionada ha sido eliminada."
 
 #: pretix/plugins/statistics/apps.py:30 pretix/plugins/statistics/apps.py:33
 #: pretix/plugins/statistics/signals.py:37
