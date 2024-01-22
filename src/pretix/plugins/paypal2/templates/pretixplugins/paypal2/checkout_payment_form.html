@@ -3,6 +3,10 @@
 <p>
     {% if method == "wallet" %}
         {% blocktrans trimmed %}
+            A PayPal account is required to use this online payment method. Please keep your account information
+            ready to enter in the next step.
+        {% endblocktrans %}
+        {% blocktrans trimmed %}
             Please click the "Pay with PayPal" button below to start your payment.
         {% endblocktrans %}
     {% else %}

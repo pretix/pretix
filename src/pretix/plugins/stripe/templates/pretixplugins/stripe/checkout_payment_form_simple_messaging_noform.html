@@ -1,6 +1,8 @@
 {% load i18n %}
 {% load bootstrap3 %}
-
+{% if explanation %}
+    <p>{{ explanation }}</p>
+{% endif %}
 <div class="form-horizontal stripe-container">
     <div id="stripe-{{ method }}">
         <span class="fa fa-spinner fa-spin"></span>
@@ -10,8 +12,7 @@
     <p class="help-block">
         {% blocktrans trimmed %}
             After you submitted your order, we will redirect you to the payment service provider to complete your
-            payment.
-            You will then be redirected back here to get your tickets.
+            payment. You will then be redirected back here to get your tickets.
         {% endblocktrans %}
     </p>
 

@@ -1,5 +1,8 @@
 {% load i18n %}
-<p>{% blocktrans trimmed %}
+{% if explanation %}
+<p>{{ explanation }}</p>
+{% endif %}
+<p class="help-block">{% blocktrans trimmed %}
     After you submitted your order, we will redirect you to the payment service provider to complete your payment.
     You will then be redirected back here to get your tickets.
 {% endblocktrans %}</p>

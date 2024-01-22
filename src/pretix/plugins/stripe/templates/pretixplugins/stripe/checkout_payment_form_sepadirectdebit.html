@@ -1,6 +1,9 @@
 {% load i18n %}
 {% load bootstrap3 %}
 
+{% if explanation %}
+<p>{{ explanation }}</p>
+{% endif %}
 <div class="form-horizontal stripe-container">
     <div class="stripe-errors sr-only">
 

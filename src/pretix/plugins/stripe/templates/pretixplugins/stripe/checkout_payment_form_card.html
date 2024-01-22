@@ -1,5 +1,8 @@
 {% load i18n %}
 
+{% if explanation %}
+<p>{{ explanation }}</p>
+{% endif %}
 <div class="form-horizontal stripe-container">
     {% if is_moto %}
         <h1>
