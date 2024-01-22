@@ -55,6 +55,7 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import now
 from django.utils.translation import gettext, gettext_lazy as _, pgettext
 from django_countries import countries
+from text_unidecode import unidecode
 
 from pretix import __version__
 from pretix.base.decimal import round_decimal
@@ -556,7 +557,7 @@ class StripeMethod(BasePaymentProvider):
             # the postfix.
             return '{code} {postfix}'.format(
                 code=payment.order.code,
-                postfix=re.sub('[^a-zA-Z0-9 ]', '', str(self.settings.postfix)),
+                postfix=re.sub("[^a-zA-Z0-9-_. ]", "", unidecode(str(self.settings.postfix))),
             )[:length]
         else:
             # If no custom postfix is set, we transmit the event slug and event name for backwards compatibility
@@ -564,7 +565,7 @@ class StripeMethod(BasePaymentProvider):
             return '{event}-{code} {eventname}'.format(
                 event=self.event.slug.upper(),
                 code=payment.order.code,
-                eventname=re.sub('[^a-zA-Z0-9 ]', '', str(self.event.name))
+                eventname=re.sub("[^a-zA-Z0-9-_. ]", "", unidecode(str(self.event.name))),
             )[:length]
 
     @property
