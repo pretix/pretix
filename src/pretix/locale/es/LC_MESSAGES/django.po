@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-11 10:07+0000\n"
-"PO-Revision-Date: 2024-01-21 02:00+0000\n"
+"PO-Revision-Date: 2024-01-22 11:15+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -7931,9 +7931,8 @@ msgstr ""
 "diferente."
 
 #: pretix/base/services/memberships.py:147
-#, fuzzy
 msgid "You selected membership that has been canceled."
-msgstr "Se ha modificado la fecha del evento."
+msgstr "Seleccionó una membresía que ha sido cancelada."
 
 #: pretix/base/services/memberships.py:152
 msgid "You can only use a test mode membership for test mode tickets."
@@ -9110,9 +9109,8 @@ msgid "Automatically after payment or when required by payment method"
 msgstr "Automáticamente después del pago o cuando lo requiera el método de pago"
 
 #: pretix/base/settings.py:1037
-#, fuzzy
 msgid "Automatically before payment for all created orders"
-msgstr "Automáticamente para todas las órdenes creadas"
+msgstr "Automáticamente antes del pago de todos los pedidos creados"
 
 #: pretix/base/settings.py:1041
 msgid "Invoices will never be automatically generated for free orders."
@@ -9289,9 +9287,8 @@ msgstr ""
 "mundo (como el inglés)."
 
 #: pretix/base/settings.py:1293
-#, fuzzy
 msgid "Show event times and dates on the ticket shop"
-msgstr "Preguntarle a los motores de búsqueda no indexar la tienda de tickets"
+msgstr "Mostrar horarios y fechas de eventos en la taquilla"
 
 #: pretix/base/settings.py:1294
 msgid ""
@@ -9393,49 +9390,40 @@ msgstr ""
 "reasignado a la siguiente persona en la lista."
 
 #: pretix/base/settings.py:1404
-#, fuzzy
 msgid "Ask for a name"
-msgstr "Solicitar los nombres de los asistentes"
+msgstr "Solicitar un nombre"
 
 #: pretix/base/settings.py:1405
-#, fuzzy
 msgid "Ask for a name when signing up to the waiting list."
-msgstr "Se ha modificado una entrada en la lista de espera."
+msgstr "Pregunta por un nombre al apuntarte a la lista de espera."
 
 #: pretix/base/settings.py:1414
-#, fuzzy
 msgid "Require name"
-msgstr "Se requiere el nombre del cliente"
+msgstr "Requerir nombre"
 
 #: pretix/base/settings.py:1415
-#, fuzzy
 msgid "Require a name when signing up to the waiting list.."
-msgstr "Se ha modificado una entrada en la lista de espera."
+msgstr "Requerir un nombre al inscribirse en la lista de espera."
 
 #: pretix/base/settings.py:1425
-#, fuzzy
 msgid "Ask for a phone number"
-msgstr "Solicitar los nombres de los asistentes"
+msgstr "Solicitar un numero de teléfono"
 
 #: pretix/base/settings.py:1426
-#, fuzzy
 msgid "Ask for a phone number when signing up to the waiting list."
-msgstr "Se ha modificado una entrada en la lista de espera."
+msgstr "Solicita un número de teléfono al apuntarte a la lista de espera."
 
 #: pretix/base/settings.py:1435
-#, fuzzy
 msgid "Require phone number"
-msgstr "Número de línea"
+msgstr "Requerir número de teléfono"
 
 #: pretix/base/settings.py:1436
-#, fuzzy
 msgid "Require a phone number when signing up to the waiting list.."
-msgstr "Se ha modificado una entrada en la lista de espera."
+msgstr "Requerir un número de teléfono al registrarse en la lista de espera."
 
 #: pretix/base/settings.py:1446
-#, fuzzy
 msgid "Phone number explanation"
-msgstr "Explicación del recibo"
+msgstr "Explicación del número de teléfono"
 
 #: pretix/base/settings.py:1449
 msgid ""
@@ -9452,9 +9440,8 @@ msgstr ""
 "producto"
 
 #: pretix/base/settings.py:1473
-#, fuzzy
 msgid "Show number of check-ins to customer"
-msgstr "Mostrar el número de entradas que quedan"
+msgstr "Mostrar número de check-ins al cliente"
 
 #: pretix/base/settings.py:1474
 msgid ""
@@ -9557,9 +9544,8 @@ msgstr ""
 "venta."
 
 #: pretix/base/settings.py:1565
-#, fuzzy
 msgid "Low availability threshold"
-msgstr "Disponibilidad de cuotas"
+msgstr "Umbral de disponibilidad bajo"
 
 #: pretix/base/settings.py:1566
 msgid ""
@@ -9594,14 +9580,12 @@ msgid "List"
 msgstr "Lista"
 
 #: pretix/base/settings.py:1595 pretix/base/settings.py:1603
-#, fuzzy
 msgid "Week calendar"
-msgstr "Calendario"
+msgstr "Calendario semanal"
 
 #: pretix/base/settings.py:1596 pretix/base/settings.py:1604
-#, fuzzy
 msgid "Month calendar"
-msgstr "Calendario"
+msgstr "Calendario mensual"
 
 #: pretix/base/settings.py:1600
 msgid "Default overview style"
@@ -9620,13 +9604,12 @@ msgid "Show filter options for calendar or list view"
 msgstr "Mostrar opciones de filtro para calendario o vista de lista"
 
 #: pretix/base/settings.py:1616
-#, fuzzy
 msgid ""
 "You can set up possible filters as meta properties in your organizer "
 "settings."
 msgstr ""
-"El tipo de medio seleccionado no está activo en sus configuraciones de "
-"organizador."
+"Puede configurar posibles filtros como metapropiedades en la configuración "
+"de su organizador."
 
 #: pretix/base/settings.py:1625
 msgid "Hide all unavailable dates from calendar or list views"
@@ -9668,14 +9651,12 @@ msgstr ""
 "entradas para varias fechas de eventos, se utilizará la fecha más temprana."
 
 #: pretix/base/settings.py:1668
-#, fuzzy
 msgid "Customers can change the variation of the products they purchased"
-msgstr "Clientes pueden cancelar ordenes pagadas"
+msgstr "Los clientes pueden cambiar la variación de los productos que compraron"
 
 #: pretix/base/settings.py:1677
-#, fuzzy
 msgid "Customers can change their selected add-on products"
-msgstr "Clientes pueden cancelar ordenes pagadas"
+msgstr "Los clientes pueden cambiar los productos complementarios seleccionados"
 
 #: pretix/base/settings.py:1687 pretix/base/settings.py:1698
 msgid ""
@@ -9713,9 +9694,8 @@ msgstr ""
 "un reembolso."
 
 #: pretix/base/settings.py:1696
-#, fuzzy
 msgid "Requirement for changed prices"
-msgstr "Requiere direcciones de correo electrónico por ticket"
+msgstr "Requisito de precios modificados"
 
 #: pretix/base/settings.py:1714
 msgid "Do not allow changes after"
