@@ -7,6 +7,7 @@
 {% load eventsignal %}
 {% block title %}{{ request.event.name }}{% endblock %}
 {% block content %}
+    <div class="row">
     <div id="header-area" class="col-lg-8">
         <h1>
             {{ request.event.name }}
@@ -63,9 +64,11 @@
             {% endif %}
         </form>
     </div>
+    </div>
     <!-- Comments ----------------------------------------------------------------------------------------------------->
 
     <!-- Warnings ----------------------------------------------------------------------------------------------------->
+    <div class="row-form-errors">
     {% if has_overpaid_orders %}
         <div class="alert alert-warning">
             {% blocktrans trimmed %}
@@ -114,6 +117,7 @@
                class="btn btn-primary">{% trans "Show affected orders" %}</a>
         </div>
     {% endif %}
+    </div>
     <!-- Warnings ----------------------------------------------------------------------------------------------------->
 
     {% eventsignal request.event "pretix.control.signals.event_dashboard_top" request=request %}
