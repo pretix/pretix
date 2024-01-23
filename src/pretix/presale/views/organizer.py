@@ -45,7 +45,9 @@ import dateutil
 import isoweek
 from django.conf import settings
 from django.core.cache import caches
-from django.db.models import Exists, Max, Min, OuterRef, Prefetch, Q
+from django.db.models import (
+    Case, Exists, F, Max, Min, OuterRef, Prefetch, Q, Value, When,
+)
 from django.db.models.functions import Coalesce, Greatest
 from django.http import Http404, HttpResponse, QueryDict
 from django.templatetags.static import static
@@ -216,11 +218,16 @@ class EventListMixin:
 
     def _set_month_to_next_subevent(self):
         tz = self.request.event.timezone
-        next_sev = self.request.event.subevents.using(settings.DATABASE_REPLICA).filter(
-            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
+        next_sev = self.request.event.subevents.using(settings.DATABASE_REPLICA).annotate(
+            effective_date=Case(
+                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now(), then=Value(now())),
+                default=F('date_from'),
+            )
+        ).filter(
+            effective_date__gte=now(),
             active=True,
             is_public=True,
-        ).select_related('event').order_by('date_from').first()
+        ).select_related('event').order_by('effective_date').first()
 
         if next_sev:
             datetime_from = next_sev.date_from
@@ -231,21 +238,31 @@ class EventListMixin:
             self.month = now().month
 
     def _set_month_to_next_event(self):
-        next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).filter(
-            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
+        next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).annotate(
+            effective_date=Case(
+                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now(), then=Value(now())),
+                default=F('date_from'),
+            )
+        ).filter(
+            effective_date__gte=now(),
             organizer=self.request.organizer,
             live=True,
             is_public=True,
             has_subevents=False
-        ), self.request).order_by('date_from').first()
-        next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).filter(
-            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
+        ), self.request).order_by('effective_date').first()
+        next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).annotate(
+            effective_date=Case(
+                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now(), then=Value(now())),
+                default=F('date_from'),
+            )
+        ).filter(
+            effective_date__gte=now(),
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
             active=True,
             is_public=True,
-        ), self.request).select_related('event').order_by('date_from').first()
+        ), self.request).select_related('event').order_by('effective_date').first()
 
         datetime_from = None
         if (next_ev and next_sev and next_sev.date_from < next_ev.date_from) or (next_sev and not next_ev):
@@ -278,11 +295,16 @@ class EventListMixin:
 
     def _set_week_to_next_subevent(self):
         tz = self.request.event.timezone
-        next_sev = self.request.event.subevents.using(settings.DATABASE_REPLICA).filter(
-            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
+        next_sev = self.request.event.subevents.using(settings.DATABASE_REPLICA).annotate(
+            effective_date=Case(
+                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now(), then=Value(now())),
+                default=F('date_from'),
+            )
+        ).filter(
+            effective_date__gte=now(),
             active=True,
             is_public=True,
-        ).select_related('event').order_by('date_from').first()
+        ).select_related('event').order_by('effective_date').first()
 
         if next_sev:
             datetime_from = next_sev.date_from
@@ -293,21 +315,31 @@ class EventListMixin:
             self.week = now().isocalendar()[1]
 
     def _set_week_to_next_event(self):
-        next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).filter(
-            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
+        next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).annotate(
+            effective_date=Case(
+                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now(), then=Value(now())),
+                default=F('date_from'),
+            )
+        ).filter(
+            effective_date__gte=now(),
             organizer=self.request.organizer,
             live=True,
             is_public=True,
             has_subevents=False
-        ), self.request).order_by('date_from').first()
-        next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).filter(
-            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
+        ), self.request).order_by('effective_date').first()
+        next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).annotate(
+            effective_date=Case(
+                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now(), then=Value(now())),
+                default=F('date_from'),
+            )
+        ).filter(
+            effective_date__gte=now(),
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
             active=True,
             is_public=True,
-        ), self.request).select_related('event').order_by('date_from').first()
+        ), self.request).select_related('event').order_by('effective_date').first()
 
         datetime_from = None
         if (next_ev and next_sev and next_sev.date_from < next_ev.date_from) or (next_sev and not next_ev):
