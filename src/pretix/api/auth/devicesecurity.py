@@ -185,6 +185,7 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('GET', 'api-v1:order-detail'),
         ('DELETE', 'api-v1:orderposition-detail'),
         ('PATCH', 'api-v1:orderposition-detail'),
+        ('GET', 'api-v1:orderposition-list'),
         ('GET', 'api-v1:orderposition-answer'),
         ('GET', 'api-v1:orderposition-pdf_image'),
         ('POST', 'api-v1:order-mark-canceled'),
@@ -223,6 +224,7 @@ class PretixPosSecurityProfile(AllowListSecurityProfile):
         ('POST', 'api-v1:checkinrpc.redeem'),
         ('GET', 'api-v1:checkinrpc.search'),
         ('POST', 'api-v1:reusablemedium-lookup'),
+        ('GET', 'api-v1:reusablemedium-list'),
         ('POST', 'api-v1:reusablemedium-list'),
     )
 
