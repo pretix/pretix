@@ -119,9 +119,9 @@ from pretix.control.forms.filter import (
     RefundFilterForm,
 )
 from pretix.control.forms.orders import (
-    CancelForm, CommentForm, ConfirmPaymentForm, DenyForm, EventCancelForm,
-    ExporterForm, ExtendForm, MarkPaidForm, OrderContactForm,
-    OrderFeeChangeForm, OrderLocaleForm, OrderMailForm, OrderPositionAddForm,
+    CancelForm, CommentForm, DenyForm, EventCancelForm, ExporterForm,
+    ExtendForm, MarkPaidForm, OrderContactForm, OrderFeeChangeForm,
+    OrderLocaleForm, OrderMailForm, OrderPositionAddForm,
     OrderPositionAddFormset, OrderPositionChangeForm, OrderPositionMailForm,
     OrderRefundForm, OtherOperationsForm, ReactivateOrderForm,
 )
@@ -1014,9 +1014,10 @@ class OrderPaymentConfirm(OrderView):
 
     @cached_property
     def mark_paid_form(self):
-        return ConfirmPaymentForm(
+        return MarkPaidForm(
             instance=self.order,
             data=self.request.POST if self.request.method == "POST" else None,
+            payment=self.payment,
         )
 
     def post(self, *args, **kwargs):
@@ -1027,8 +1028,19 @@ class OrderPaymentConfirm(OrderView):
                     'order': self.order,
                 })
             try:
+                payment_date = None
+                if self.mark_paid_form.cleaned_data['payment_date'] != now().date():
+                    payment_date = make_aware(datetime.combine(
+                        self.mark_paid_form.cleaned_data['payment_date'],
+                        time(hour=0, minute=0, second=0)
+                    ), self.order.event.timezone)
+
+                self.payment.amount = self.mark_paid_form.cleaned_data['amount']
+                self.payment.save(update_fields=['amount'])
                 self.payment.confirm(user=self.request.user,
+                                     send_mail=self.mark_paid_form.cleaned_data['send_email'],
                                      count_waitinglist=False,
+                                     payment_date=payment_date,
                                      force=self.mark_paid_form.cleaned_data.get('force', False))
             except Quota.QuotaExceededException as e:
                 messages.error(self.request, str(e))
