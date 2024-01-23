@@ -3229,6 +3229,12 @@ Your {organizer} team"""))  # noqa: W291
             label=_('Length of gift card codes'),
             help_text=_('The system generates by default {}-character long gift card codes. However, if a different length '
                         'is required, it can be set here.'.format(settings.ENTROPY['giftcard_secret'])),
+            min_value=6,
+            max_value=64,
+        ),
+        'serializer_kwargs': dict(
+            min_value=6,
+            max_value=64,
         )
     },
     'giftcard_expiry_years': {
