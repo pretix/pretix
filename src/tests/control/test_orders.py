@@ -1823,7 +1823,10 @@ def test_confirm_payment(client, env):
     with scopes_disabled():
         p = env[2].payments.last()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/confirm'.format(p.pk), {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/confirm'.format(p.pk), {
+        'amount': str(p.amount),
+        'payment_date': str(now().date().isoformat()),
+    }, follow=True)
     assert 'alert-success' in response.content.decode()
     p.refresh_from_db()
     assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
@@ -1838,7 +1841,10 @@ def test_confirm_payment_invalid_state(client, env):
     p.state = OrderPayment.PAYMENT_STATE_FAILED
     p.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/confirm'.format(p.pk), {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/confirm'.format(p.pk), {
+        'amount': str(p.amount),
+        'payment_date': str(now().date().isoformat()),
+    }, follow=True)
     assert 'alert-danger' in response.content.decode()
     p.refresh_from_db()
     assert p.state == OrderPayment.PAYMENT_STATE_FAILED
@@ -1853,7 +1859,10 @@ def test_confirm_payment_partal_amount(client, env):
     p.amount -= Decimal(5.00)
     p.save()
     client.login(email='dummy@dummy.dummy', password='dummy')
-    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/confirm'.format(p.pk), {}, follow=True)
+    response = client.post('/control/event/dummy/dummy/orders/FOO/payments/{}/confirm'.format(p.pk), {
+        'amount': str(p.amount),
+        'payment_date': str(now().date().isoformat()),
+    }, follow=True)
     assert 'alert-success' in response.content.decode()
     p.refresh_from_db()
     assert p.state == OrderPayment.PAYMENT_STATE_CONFIRMED
