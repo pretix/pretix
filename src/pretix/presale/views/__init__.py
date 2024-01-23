@@ -54,7 +54,6 @@ from pretix.base.models import (
 from pretix.base.services.cart import get_fees
 from pretix.base.templatetags.money import money_filter
 from pretix.helpers.cookies import set_cookie_without_samesite
-from pretix.multidomain.middlewares import get_cookie_domain
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.signals import question_form_fields
 
@@ -469,7 +468,6 @@ def iframe_entry_view_wrapper(view_func):
                 locale,
                 max_age=max_age,
                 expires=(datetime.utcnow() + timedelta(seconds=max_age)).strftime('%a, %d-%b-%Y %H:%M:%S GMT'),
-                domain=get_cookie_domain(request)
             )
             return resp
 
