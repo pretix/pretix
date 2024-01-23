@@ -44,6 +44,8 @@ def set_cookie_without_samesite(request, response, key, *args, **kwargs):
         # This will only work on secure cookies as well
         # https://www.chromestatus.com/feature/5633521622188032
         response.cookies[key]['secure'] = is_secure
+        # CHIPS
+        response.cookies[key]['Partitioned'] = True
 
 
 # Based on https://www.chromium.org/updates/same-site/incompatible-clients
