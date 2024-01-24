@@ -176,6 +176,7 @@ landesspezifische
 Lead
 Leaflet
 Linktext
+Logindaten
 Lösch
 loszulegen
 Ltd
@@ -204,6 +205,7 @@ number
 NXP
 OK
 On
+Onlinebanking
 Open
 OpenCage
 OpenID
