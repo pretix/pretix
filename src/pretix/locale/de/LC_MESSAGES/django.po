@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-24 13:03+0000\n"
-"PO-Revision-Date: 2024-01-19 14:40+0000\n"
-"Last-Translator: chandi <pretixtranslate@chandi.it>\n"
+"PO-Revision-Date: 2024-01-24 14:42+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -2738,21 +2738,16 @@ msgid "Reusable media"
 msgstr "Wiederverwendbare Medien"
 
 #: pretix/base/exporters/reusablemedia.py:35
-#, fuzzy
-#| msgid "Reusable media"
 msgctxt "export_category"
 msgid "Reusable media"
 msgstr "Wiederverwendbare Medien"
 
 #: pretix/base/exporters/reusablemedia.py:36
-#, fuzzy
-#| msgid ""
-#| "Download a spreadsheet with information on all events in this organizer "
-#| "account."
 msgid ""
 "Download a spread sheet with the data of all reusable medias on your account."
 msgstr ""
-"Tabelle (Excel oder CSV) mit Veranstaltungen in diesem Veranstalterkonto."
+"Tabelle (Excel oder CSV) mit allen wiederverwendbaren Medien in diesem "
+"Veranstalterkonto."
 
 #: pretix/base/exporters/reusablemedia.py:46 pretix/base/models/media.py:67
 msgctxt "reusable_medium"
@@ -7648,16 +7643,14 @@ msgid "number of entries before {datetime}"
 msgstr "Anzahl Eintritte vor {datetime}"
 
 #: pretix/base/services/checkin.py:312
-#, fuzzy, python-brace-format
-#| msgid "number of entries since {datetime}"
+#, python-brace-format
 msgid "number of days with an entry since {datetime}"
-msgstr "Anzahl Eintritte seit {datetime}"
+msgstr "Anzahl Tage mit einem Zutritt seit {datetime}"
 
 #: pretix/base/services/checkin.py:313
-#, fuzzy, python-brace-format
-#| msgid "number of entries before {datetime}"
+#, python-brace-format
 msgid "number of days with an entry before {datetime}"
-msgstr "Anzahl Eintritte vor {datetime}"
+msgstr "Anzahl Tage mit einem Zutritt vor {datetime}"
 
 #: pretix/base/services/checkin.py:314
 msgid "week day"
@@ -7743,7 +7736,7 @@ msgstr "Die Bestellung ist nicht als bezahlt markiert."
 
 #: pretix/base/services/checkin.py:1044
 msgid "Evaluation of custom rules has failed."
-msgstr ""
+msgstr "Auswertung der benutzerdefinierten Regeln fehlgeschlagen."
 
 #: pretix/base/services/checkin.py:1054
 #, python-brace-format
@@ -7990,7 +7983,7 @@ msgstr ""
 #: pretix/base/services/orderimport.py:130 pretix/base/services/orders.py:1515
 #, python-format
 msgid "Orders cannot have more than %(max)s positions."
-msgstr ""
+msgstr "Bestellungen können nicht mehr als %(max)s Tickets enthalten."
 
 #: pretix/base/services/orderimport.py:162
 #, python-brace-format
@@ -13106,10 +13099,8 @@ msgid "At least one ticket with check-in"
 msgstr "Mindestens ein Ticket mit Check-in"
 
 #: pretix/control/forms/filter.py:596
-#, fuzzy
-#| msgid "Delete quota"
 msgid "Affected quota"
-msgstr "Kontingent löschen"
+msgstr "Betroffenes Kontingent"
 
 #: pretix/control/forms/filter.py:635 pretix/control/forms/filter.py:640
 #: pretix/control/forms/filter.py:666 pretix/control/forms/filter.py:671
@@ -28325,6 +28316,8 @@ msgid ""
 "A PayPal account is required to use this online payment method. Please keep "
 "your account information ready to enter in the next step."
 msgstr ""
+"Ein PayPal-Konto wird benötigt, um diese Online-Zahlmethode zu nutzen. Bitte "
+"halten Sie ihre Logindaten zur Eingabe im nächsten Schritt bereit."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:9
 msgid ""
@@ -29719,6 +29712,10 @@ msgid ""
 "German banks, usually after one-time activation. Please keep your online "
 "banking account and login information available."
 msgstr ""
+"giropay ist ein Online-Zahlverfahren, das für die Kunden der meisten "
+"deutschen Banken und Sparkassen nutzbar ist, teilweise nach einmaliger "
+"Aktivierung. Bitte halten Sie Ihre Kontodaten und Onlinebanking-Zugangsdaten "
+"bereit."
 
 #: pretix/plugins/stripe/payment.py:1574 pretix/plugins/stripe/payment.py:1641
 #: pretix/plugins/stripe/payment.py:1742
@@ -29741,6 +29738,8 @@ msgid ""
 "iDEAL is an online payment method available to customers of Dutch banks. "
 "Please keep your online banking account and login information available."
 msgstr ""
+"iDEAL ist ein Online-Zahlverfahren für die Kunden niederländischer Banken. "
+"Bitte halten Sie Ihre Kontodaten und Onlinebanking-Zugangsdaten bereit."
 
 #: pretix/plugins/stripe/payment.py:1619
 msgid "Alipay via Stripe"
@@ -29751,6 +29750,8 @@ msgid ""
 "This payment method is available to customers of the Chinese payment system "
 "Alipay. Please keep your login information available."
 msgstr ""
+"Dieses Online-Zahlverfahren ist für die Kunden des chinesischen "
+"Zahlungsdienstes Alipay nutzbar. Bitte halten Sie Ihre Zugangsdaten bereit."
 
 #: pretix/plugins/stripe/payment.py:1631
 msgid "Bancontact via Stripe"
@@ -29811,6 +29812,8 @@ msgid ""
 "banks. Please keep your online banking account and login information "
 "available."
 msgstr ""
+"Przelewy24 ist ein Online-Zahlverfahren für die Kunden polnischer Banken. "
+"Bitte halten Sie Ihre Kontodaten und Onlinebanking-Zugangsdaten bereit."
 
 #: pretix/plugins/stripe/payment.py:1849
 msgid "WeChat Pay via Stripe"
@@ -29821,6 +29824,8 @@ msgid ""
 "This payment method is available to users of the Chinese app WeChat. Please "
 "keep your login information available."
 msgstr ""
+"Diese Zahlungsmethode steht den Nutzern der chinesischen App WeChat zur "
+"Verfügung. Bitte halten Sie Ihre Zugangsdaten bereit."
 
 #: pretix/plugins/stripe/signals.py:91
 msgid "Charge succeeded."
