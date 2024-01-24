@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: French\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-11 10:07+0000\n"
+"POT-Creation-Date: 2024-01-24 13:03+0000\n"
 "PO-Revision-Date: 2023-09-11 10:00+0000\n"
 "Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -135,9 +135,11 @@ msgid "Continue"
 msgstr "Continuer"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:229
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:262
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:280
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:244
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:267
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:284
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
 msgid "Confirming your payment …"
 msgstr "Confirmation de votre paiement…"
 
@@ -167,7 +169,7 @@ msgstr "Communication avec Stripe …"
 msgid "Total"
 msgstr "Total"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:236
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:291
 msgid "Contacting your bank …"
 msgstr "Communication avec votre banque …"
 
@@ -474,54 +476,66 @@ msgid "Number of days with a previous entry"
 msgstr "Nombre de jours avec entrée préalable"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:133
+#, fuzzy
+#| msgid "Number of days with a previous entry"
+msgid "Number of days with a previous entry since"
+msgstr "Nombre de jours avec entrée préalable"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:137
+#, fuzzy
+#| msgid "Number of days with a previous entry"
+msgid "Number of days with a previous entry before"
+msgstr "Nombre de jours avec entrée préalable"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:141
 msgid "Minutes since last entry (-1 on first entry)"
 msgstr "Minutes depuis la dernière entrée (-1 à la première entrée)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:137
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:145
 msgid "Minutes since first entry (-1 on first entry)"
 msgstr "Minutes depuis la première entrée (-1 à la première entrée)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:164
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:172
 msgid "All of the conditions below (AND)"
 msgstr "Toutes les conditions suivantes (ET)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:165
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:173
 msgid "At least one of the conditions below (OR)"
 msgstr "Au moins une des conditions suivantes (OU)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:166
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:174
 msgid "Event start"
 msgstr "Début de l'événement"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:167
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:175
 msgid "Event end"
 msgstr "Fin de l'événement"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:168
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:176
 msgid "Event admission"
 msgstr "Admission à l'événement"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:169
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:177
 msgid "custom date and time"
 msgstr "date et heure personnalisée"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:170
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:178
 msgid "custom time"
 msgstr "heure personnalisée"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:171
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:179
 msgid "Tolerance (minutes)"
 msgstr "Tolérance (minutes)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:172
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:180
 msgid "Add condition"
 msgstr "Ajouter une condition"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:173
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:181
 msgid "minutes"
 msgstr "minutes"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:174
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
 msgid "Duplicate"
 msgstr "Doublon"
 

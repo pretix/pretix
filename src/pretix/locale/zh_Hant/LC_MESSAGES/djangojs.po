@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-11 10:07+0000\n"
+"POT-Creation-Date: 2024-01-24 13:03+0000\n"
 "PO-Revision-Date: 2024-01-22 17:08+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: Chinese (Traditional) <https://translate.pretix.eu/projects/"
@@ -136,9 +136,11 @@ msgid "Continue"
 msgstr "繼續"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:225
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:229
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:262
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:280
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:244
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:267
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:284
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:317
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:341
 msgid "Confirming your payment …"
 msgstr "確認你的付款資訊...…"
 
@@ -168,7 +170,7 @@ msgstr "聯繫 Stripe 當中…"
 msgid "Total"
 msgstr "全部"
 
-#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:236
+#: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:291
 msgid "Contacting your bank …"
 msgstr "聯繫你的銀行當中…"
 
@@ -463,54 +465,66 @@ msgid "Number of days with a previous entry"
 msgstr "先前入場的天數數量"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:133
+#, fuzzy
+#| msgid "Number of days with a previous entry"
+msgid "Number of days with a previous entry since"
+msgstr "先前入場的天數數量"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:137
+#, fuzzy
+#| msgid "Number of days with a previous entry"
+msgid "Number of days with a previous entry before"
+msgstr "先前入場的天數數量"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:141
 msgid "Minutes since last entry (-1 on first entry)"
 msgstr "自從最後入場之後的分鐘(-1是第一次入場)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:137
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:145
 msgid "Minutes since first entry (-1 on first entry)"
 msgstr "自從第一次入場的分鐘(-1是第一次入場)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:164
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:172
 msgid "All of the conditions below (AND)"
 msgstr "以下所有的條件 (和)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:165
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:173
 msgid "At least one of the conditions below (OR)"
 msgstr "以下至少其中一個條件 (或)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:166
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:174
 msgid "Event start"
 msgstr "活動開始"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:167
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:175
 msgid "Event end"
 msgstr "活動結束"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:168
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:176
 msgid "Event admission"
 msgstr "活動管理"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:169
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:177
 msgid "custom date and time"
 msgstr "客製化日期與時間"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:170
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:178
 msgid "custom time"
 msgstr "客製化時間"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:171
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:179
 msgid "Tolerance (minutes)"
 msgstr "容忍度 (分鐘)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:172
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:180
 msgid "Add condition"
 msgstr "增加條件"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:173
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:181
 msgid "minutes"
 msgstr "分鐘"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:174
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
 msgid "Duplicate"
 msgstr "重覆"
 
