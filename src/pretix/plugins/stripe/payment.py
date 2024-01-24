@@ -484,6 +484,7 @@ class StripeMethod(BasePaymentProvider):
     method = ''
     redirect_action_handling = 'iframe'  # or redirect
     confirmation_method = 'manual'
+    explanation = ''
 
     def __init__(self, event: Event):
         super().__init__(event)
@@ -1174,6 +1175,7 @@ class StripeRedirectMethod(StripeMethod):
             'request': request,
             'event': self.event,
             'settings': self.settings,
+            'explanation': self.explanation,
         }
         return template.render(ctx)
 
@@ -1204,6 +1206,7 @@ class StripeCC(StripeMethod):
             'event': self.event,
             'total': self._decimal_to_int(total),
             'settings': self.settings,
+            'explanation': self.explanation,
             'is_moto': self.is_moto(request)
         }
         return template.render(ctx)
@@ -1297,6 +1300,7 @@ class StripeSEPADirectDebit(StripeMethod):
             'event': self.event,
             'settings': self.settings,
             'form': self.payment_form(request),
+            'explanation': self.explanation,
             'email': order.email if order else cs.get('email', '')
         }
         return template.render(ctx)
@@ -1429,6 +1433,7 @@ class StripeAffirm(StripeMethod):
             'request': request,
             'event': self.event,
             'total': self._decimal_to_int(total),
+            'explanation': self.explanation,
             'method': self.method,
         }
         return template.render(ctx)
@@ -1491,6 +1496,7 @@ class StripeKlarna(StripeRedirectMethod):
             "event": self.event,
             "total": self._decimal_to_int(total),
             "method": self.method,
+            'explanation': self.explanation,
             "country": self._detect_country(request, order)
         }
         return template.render(ctx)
@@ -1522,6 +1528,7 @@ class StripeRedirectWithAccountNamePaymentIntentMethod(StripeRedirectMethod):
             'request': request,
             'event': self.event,
             'settings': self.settings,
+            'explanation': self.explanation,
             'form': self.payment_form(request)
         }
         return template.render(ctx)
@@ -1553,6 +1560,10 @@ class StripeGiropay(StripeRedirectWithAccountNamePaymentIntentMethod):
     verbose_name = _('giropay via Stripe')
     public_name = _('giropay')
     method = 'giropay'
+    explanation = _(
+        'giropay is an online payment method available to all customers of most German banks, usually after one-time '
+        'activation. Please keep your online banking account and login information available.'
+    )
 
     def _payment_intent_kwargs(self, request, payment):
         return {
@@ -1584,6 +1595,10 @@ class StripeIdeal(StripeRedirectMethod):
     verbose_name = _('iDEAL via Stripe')
     public_name = _('iDEAL')
     method = 'ideal'
+    explanation = _(
+        'iDEAL is an online payment method available to customers of Dutch banks. Please keep your online '
+        'banking account and login information available.'
+    )
 
     def payment_presale_render(self, payment: OrderPayment) -> str:
         pi = payment.info_data or {}
@@ -1605,6 +1620,10 @@ class StripeAlipay(StripeRedirectMethod):
     public_name = _('Alipay')
     method = 'alipay'
     confirmation_method = 'automatic'
+    explanation = _(
+        'This payment method is available to customers of the Chinese payment system Alipay. Please keep '
+        'your login information available.'
+    )
 
 
 class StripeBancontact(StripeRedirectWithAccountNamePaymentIntentMethod):
@@ -1650,6 +1669,7 @@ class StripeSofort(StripeMethod):
             'request': request,
             'event': self.event,
             'settings': self.settings,
+            'explanation': self.explanation,
             'form': self.payment_form(request)
         }
         return template.render(ctx)
@@ -1750,6 +1770,7 @@ class StripeMultibanco(StripeSourceMethod):
             'request': request,
             'event': self.event,
             'settings': self.settings,
+            'explanation': self.explanation,
             'form': self.payment_form(request)
         }
         return template.render(ctx)
@@ -1790,6 +1811,10 @@ class StripePrzelewy24(StripeRedirectMethod):
     verbose_name = _('Przelewy24 via Stripe')
     public_name = _('Przelewy24')
     method = 'p24'
+    explanation = _(
+        'Przelewy24 is an online payment method available to customers of Polish banks. Please keep your online '
+        'banking account and login information available.'
+    )
 
     def _payment_intent_kwargs(self, request, payment):
         return {
@@ -1825,6 +1850,10 @@ class StripeWeChatPay(StripeRedirectMethod):
     public_name = _('WeChat Pay')
     method = 'wechat_pay'
     confirmation_method = 'automatic'
+    explanation = _(
+        'This payment method is available to users of the Chinese app WeChat. Please keep your login information '
+        'available.'
+    )
 
     @property
     def is_enabled(self) -> bool:
