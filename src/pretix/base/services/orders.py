@@ -1418,12 +1418,8 @@ def send_download_reminders(sender, **kwargs):
             if o.status != Order.STATUS_PAID:
                 if o.status != Order.STATUS_PENDING or o.require_approval or (not o.valid_if_pending and not o.event.settings.ticket_download_pending):
                     continue
-            send = False
-            for p in positions:
-                if p.generate_ticket:
-                    send = True
-                    break
-            if not send:
+
+            if not any(p.generate_ticket for p in positions):
                 continue
 
             with language(o.locale, o.event.settings.region):

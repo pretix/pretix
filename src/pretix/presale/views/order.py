@@ -200,25 +200,6 @@ class TicketPageMixin:
         )
         return ctx
 
-
-@method_decorator(xframe_options_exempt, 'dispatch')
-class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin, TemplateView):
-    template_name = "pretixpresale/event/order.html"
-
-    def get(self, request, *args, **kwargs):
-        self.kwargs = kwargs
-        if not self.order:
-            raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.order.status == Order.STATUS_PENDING:
-            payment_to_complete = self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_CREATED, process_initiated=False).first()
-            if payment_to_complete:
-                return redirect(eventreverse(self.request.event, 'presale:event.order.pay.complete', kwargs={
-                    'order': self.order.code,
-                    'secret': self.order.secret,
-                    'payment': payment_to_complete.pk
-                }))
-        return super().get(request, *args, **kwargs)
-
     @cached_property
     def download_buttons(self):
         buttons = []
@@ -238,6 +219,25 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
                 'javascript_required': provider.javascript_required
             })
         return buttons
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin, TemplateView):
+    template_name = "pretixpresale/event/order.html"
+
+    def get(self, request, *args, **kwargs):
+        self.kwargs = kwargs
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        if self.order.status == Order.STATUS_PENDING:
+            payment_to_complete = self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_CREATED, process_initiated=False).first()
+            if payment_to_complete:
+                return redirect(eventreverse(self.request.event, 'presale:event.order.pay.complete', kwargs={
+                    'order': self.order.code,
+                    'secret': self.order.secret,
+                    'payment': payment_to_complete.pk
+                }))
+        return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -341,26 +341,6 @@ class OrderPositionDetails(EventViewMixin, OrderPositionDetailMixin, CartMixin, 
         if not self.position:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         return super().get(request, *args, **kwargs)
-
-    @cached_property
-    def download_buttons(self):
-        buttons = []
-
-        responses = register_ticket_outputs.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
-            if not provider.is_enabled:
-                continue
-            buttons.append({
-                'text': provider.download_button_text or 'Download',
-                'icon': provider.download_button_icon or 'fa-download',
-                'identifier': provider.identifier,
-                'multi': provider.multi_download_enabled,
-                'multi_text': provider.multi_download_button_text or 'Download',
-                'long_text': provider.long_download_button_text or 'Download',
-                'javascript_required': provider.javascript_required
-            })
-        return buttons
 
     def get_context_data(self, **kwargs):
         qs = self.order.positions.select_related('tax_rule').filter(
