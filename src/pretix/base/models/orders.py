@@ -44,7 +44,7 @@ from datetime import datetime, time, timedelta
 from decimal import Decimal
 from functools import reduce
 from time import sleep
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List, Union, Iterable
 from zoneinfo import ZoneInfo
 
 import dateutil
@@ -79,7 +79,7 @@ from pretix.base.i18n import language
 from pretix.base.models import Customer, User
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.settings import PERSON_NAME_SCHEMES
-from pretix.base.signals import order_gracefully_delete
+from pretix.base.signals import order_gracefully_delete, allow_ticket_download
 
 from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
@@ -1199,6 +1199,16 @@ class Order(LockModel, LoggedModel):
         self._transaction_key_reset()
         _transactions_mark_order_clean(self.pk)
         return create
+
+    @property
+    def plugins_allow_ticket_download(self):
+        signal_response = allow_ticket_download.send(self.event, order=self)
+        if all([r == True for rr, r in signal_response]):
+            return True
+        elif any([r == False for rr, r in signal_response]):
+            return False
+        else:
+            return set.intersection(*[set(r) for rr, r in signal_response if isinstance(r, Iterable)])
 
 
 def answerfile_name(instance, filename: str) -> str:

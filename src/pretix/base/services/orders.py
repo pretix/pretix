@@ -1408,7 +1408,7 @@ def send_download_reminders(sender, **kwargs):
             if o.download_reminder_sent:
                 # Race condition
                 continue
-            if not all([r for rr, r in allow_ticket_download.send(event, order=o)]):
+            if not o.plugins_allow_ticket_download:
                 continue
 
             if not o.ticket_download_available:

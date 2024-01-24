@@ -177,7 +177,7 @@ class TicketPageMixin:
 
         ctx['order'] = self.order
 
-        can_download = all([r for rr, r in allow_ticket_download.send(self.request.event, order=self.order)])
+        can_download = self.order.plugins_allow_ticket_download
         ctx['plugins_allow_ticket_download'] = can_download
         if self.request.event.settings.ticket_download_date:
             ctx['ticket_download_date'] = self.order.ticket_download_date
@@ -1048,7 +1048,7 @@ class OrderDownloadMixin:
 
     @cached_property
     def output(self):
-        if not all([r for rr, r in allow_ticket_download.send(self.request.event, order=self.order)]):
+        if not self.order.plugins_allow_ticket_download:
             return None
         responses = register_ticket_outputs.send(self.request.event)
         for receiver, response in responses:

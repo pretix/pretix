@@ -124,7 +124,7 @@ def preview(event: int, provider: str):
 
 
 def get_tickets_for_order(order, base_position=None):
-    can_download = all([r for rr, r in allow_ticket_download.send(order.event, order=order)])
+    can_download = order.plugins_allow_ticket_download
     if not can_download:
         return []
     if not order.ticket_download_available:
