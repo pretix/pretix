@@ -21,6 +21,7 @@
 #
 import types
 from datetime import datetime
+from http import cookies
 
 from PIL import Image
 from requests.adapters import HTTPAdapter
@@ -88,7 +89,14 @@ def monkeypatch_requests_timeout():
     HTTPAdapter.send = httpadapter_send
 
 
+def monkeypatch_cookie_morsel():
+    # See https://code.djangoproject.com/ticket/34613
+    cookies.Morsel._flags.add("partitioned")
+    cookies.Morsel._reserved.setdefault("partitioned", "Partitioned")
+
+
 def monkeypatch_all_at_ready():
     monkeypatch_vobject_performance()
     monkeypatch_pillow_safer()
     monkeypatch_requests_timeout()
+    monkeypatch_cookie_morsel()
