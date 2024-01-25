@@ -26,7 +26,11 @@
             {% for u in team.members.all %}
                 <tr>
                     <td>
-                        {{ u.email }}
+                        {% if request.user.is_staff and staff_session %}
+                            <strong><a href="{% url "control:users.edit" id=u.pk %}">{{ u.email }}</a></strong>
+                        {% else %}
+                            {{ u.email }}
+                        {% endif %}
                         {% if u.require_2fa %}
                             <span class="fa fa-shield text-success" data-toggle="tooltip"
                                     title="{% trans "Two-factor authentication enabled" %}">
