@@ -21,6 +21,7 @@
 #
 import logging
 import os
+from typing import Iterable
 
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
@@ -124,8 +125,8 @@ def preview(event: int, provider: str):
 
 
 def get_tickets_for_order(order, base_position=None):
-    can_download = order.plugins_allow_ticket_download
-    if not can_download:
+    positions_with_ticket = order.positions_with_tickets
+    if not positions_with_ticket:
         return []
     if not order.ticket_download_available:
         return []
@@ -138,7 +139,7 @@ def get_tickets_for_order(order, base_position=None):
 
     tickets = []
 
-    positions = list(order.positions_with_tickets)
+    positions = list(positions_with_ticket)
     if base_position:
         # Only the given position and its children
         positions = [

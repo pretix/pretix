@@ -1408,19 +1408,16 @@ def send_download_reminders(sender, **kwargs):
             if o.download_reminder_sent:
                 # Race condition
                 continue
-            if not o.plugins_allow_ticket_download:
+            positions = o.positions_with_tickets
+            if not positions:
                 continue
 
             if not o.ticket_download_available:
                 continue
-            positions = o.positions.select_related('item')
 
             if o.status != Order.STATUS_PAID:
                 if o.status != Order.STATUS_PENDING or o.require_approval or (not o.valid_if_pending and not o.event.settings.ticket_download_pending):
                     continue
-
-            if not any(p.generate_ticket for p in positions):
-                continue
 
             with language(o.locale, o.event.settings.region):
                 o.download_reminder_sent = True

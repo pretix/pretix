@@ -115,7 +115,8 @@ class PdfTicketOutput(BaseTicketOutput):
     def generate_order(self, order: Order):
         merger = PdfWriter()
         with language(order.locale, self.event.settings.region):
-            for op in order.positions_with_tickets:
+            for op in self.get_tickets_to_print(order):
+                print("generating ticket ",op)
                 layout = override_layout.send_chained(
                     order.event, 'layout', orderposition=op, layout=self.layout_map.get(
                         (op.item_id, self.override_channel or order.sales_channel),

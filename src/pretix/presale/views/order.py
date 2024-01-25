@@ -177,14 +177,11 @@ class TicketPageMixin:
 
         ctx['order'] = self.order
 
-        can_download = self.order.plugins_allow_ticket_download
+        can_download = self.order.positions_with_tickets
         ctx['plugins_allow_ticket_download'] = can_download
         if self.request.event.settings.ticket_download_date:
             ctx['ticket_download_date'] = self.order.ticket_download_date
-        can_download = (
-            can_download and self.order.ticket_download_available and
-            list(self.order.positions_with_tickets)
-        )
+        can_download = can_download and self.order.ticket_download_available
         ctx['download_email_required'] = can_download and (
             self.request.event.settings.ticket_download_require_validated_email and
             self.order.sales_channel == 'web' and
@@ -261,7 +258,10 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
             queryset=qs,
             order=self.order
         )
-        ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p.generate_ticket]
+        download_allowed = self.order.positions_with_tickets
+        ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p in download_allowed]
+        for allowed_op in ctx['tickets_with_download']:
+            allowed_op.ticket_download_allowed = True
         ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
             [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
         )
@@ -365,7 +365,10 @@ class OrderPositionDetails(EventViewMixin, OrderPositionDetailMixin, CartMixin, 
             queryset=qs,
             order=self.order
         )
-        ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p.generate_ticket]
+        download_allowed = self.order.positions_with_tickets
+        ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p in download_allowed]
+        for allowed_op in ctx['tickets_with_download']:
+            allowed_op.ticket_download_allowed = True
         ctx['attendee_change_allowed'] = self.position.attendee_change_allowed
         return ctx
 
@@ -1028,7 +1031,7 @@ class OrderDownloadMixin:
 
     @cached_property
     def output(self):
-        if not self.order.plugins_allow_ticket_download:
+        if not self.order.positions_with_tickets:
             return None
         responses = register_ticket_outputs.send(self.request.event)
         for receiver, response in responses:

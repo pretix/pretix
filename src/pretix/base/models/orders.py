@@ -1138,11 +1138,19 @@ class Order(LockModel, LoggedModel):
             )
 
     @property
+    def positions_with_tickets_ignoring_plugins(self):
+        return (op for op in self.positions.select_related('item') if op.generate_ticket)
+
+    @property
     def positions_with_tickets(self):
-        for op in self.positions.select_related('item'):
-            if not op.generate_ticket:
-                continue
-            yield op
+        signal_response = allow_ticket_download.send(self.event, order=self)
+        print("signal_response", signal_response)
+        if all([r is True for rr, r in signal_response]):
+            return self.positions_with_tickets_ignoring_plugins
+        elif any([r is False for rr, r in signal_response]):
+            return []
+        else:
+            return set.intersection(set(self.positions_with_tickets_ignoring_plugins), *[set(r) for rr, r in signal_response if isinstance(r, Iterable)])
 
     def create_transactions(self, is_new=False, positions=None, fees=None, dt_now=None, migrated=False,
                             _backfill_before_cancellation=False, save=True):
@@ -1200,15 +1208,6 @@ class Order(LockModel, LoggedModel):
         _transactions_mark_order_clean(self.pk)
         return create
 
-    @property
-    def plugins_allow_ticket_download(self):
-        signal_response = allow_ticket_download.send(self.event, order=self)
-        if all([r == True for rr, r in signal_response]):
-            return True
-        elif any([r == False for rr, r in signal_response]):
-            return False
-        else:
-            return set.intersection(*[set(r) for rr, r in signal_response if isinstance(r, Iterable)])
 
 
 def answerfile_name(instance, filename: str) -> str:
