@@ -826,6 +826,8 @@ class SSOLoginReturnView(RedirectBackMixin, View):
                 popup_origin
             )
 
+        customer_signed_in.send(customer.organizer, customer=customer)
+
         if popup_origin:
             return render(self.request, 'pretixpresale/postmessage.html', {
                 'message': {
@@ -839,7 +841,6 @@ class SSOLoginReturnView(RedirectBackMixin, View):
             })
         else:
             customer_login(self.request, customer)
-            customer_signed_in.send(customer.organizer, customer=customer)
             return redirect_to_url(self.get_success_url(redirect_to))
 
     def _fail(self, message, popup_origin):
