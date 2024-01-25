@@ -54,7 +54,7 @@ class IdempotencyMiddleware:
 
         auth_hash_parts = '{}:{}'.format(
             request.headers.get('Authorization', ''),
-            request.COOKIES.get(settings.SESSION_COOKIE_NAME, '')
+            request.COOKIES.get('__Host-' + settings.SESSION_COOKIE_NAME, request.COOKIES.get(settings.SESSION_COOKIE_NAME, ''))
         )
         auth_hash = sha1(auth_hash_parts.encode()).hexdigest()
         idempotency_key = request.headers.get('X-Idempotency-Key', '')

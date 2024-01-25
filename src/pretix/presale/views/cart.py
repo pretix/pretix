@@ -97,7 +97,10 @@ class CartActionMixin:
         if 'locale' in self.request.GET:
             query['locale'] = self.request.GET['locale']
         disclose_cart_id = (
-            'iframe' in self.request.GET or settings.SESSION_COOKIE_NAME not in self.request.COOKIES
+            'iframe' in self.request.GET or (
+                settings.SESSION_COOKIE_NAME not in self.request.COOKIES and
+                '__Host-' + settings.SESSION_COOKIE_NAME not in self.request.COOKIES
+            )
         ) and self.kwargs.get('cart_namespace')
         if disclose_cart_id:
             cart_id = get_or_create_cart_id(self.request)
@@ -120,7 +123,10 @@ class CartActionMixin:
             else:
                 u += '?require_cookie=true'
             disclose_cart_id = (
-                'iframe' in self.request.GET or settings.SESSION_COOKIE_NAME not in self.request.COOKIES
+                'iframe' in self.request.GET or (
+                    settings.SESSION_COOKIE_NAME not in self.request.COOKIES and
+                    '__Host-' + settings.SESSION_COOKIE_NAME not in self.request.COOKIES
+                )
             ) and self.kwargs.get('cart_namespace')
             if disclose_cart_id:
                 cart_id = get_or_create_cart_id(self.request)
@@ -592,7 +598,8 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
 
         context['new_tab'] = (
             'require_cookie' in self.request.GET and
-            settings.SESSION_COOKIE_NAME not in self.request.COOKIES
+            settings.SESSION_COOKIE_NAME not in self.request.COOKIES and
+            '__Host-' + settings.SESSION_COOKIE_NAME not in self.request.COOKIES
             # Cookies are not supported! Lets just make the form open in a new tab
         )
 

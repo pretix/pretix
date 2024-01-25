@@ -42,7 +42,7 @@ class IdempotencyQueryView(APIView):
         idempotency_key = request.GET.get("key")
         auth_hash_parts = '{}:{}'.format(
             request.headers.get('Authorization', ''),
-            request.COOKIES.get(settings.SESSION_COOKIE_NAME, '')
+            request.COOKIES.get('__Host-' + settings.SESSION_COOKIE_NAME, request.COOKIES.get(settings.SESSION_COOKIE_NAME, ''))
         )
         auth_hash = sha1(auth_hash_parts.encode()).hexdigest()
         if not idempotency_key:
