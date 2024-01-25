@@ -40,10 +40,12 @@ from django.contrib.sessions.middleware import (
     SessionMiddleware as BaseSessionMiddleware,
 )
 from django.core.cache import cache
-from django.core.exceptions import DisallowedHost
+from django.core.exceptions import DisallowedHost, ImproperlyConfigured
 from django.http.request import split_domain_port
 from django.middleware.csrf import (
-    CSRF_SESSION_KEY, CsrfViewMiddleware as BaseCsrfMiddleware,
+    CSRF_SESSION_KEY, CSRF_TOKEN_LENGTH,
+    CsrfViewMiddleware as BaseCsrfMiddleware, _check_token_format,
+    _unmask_cipher_token,
 )
 from django.shortcuts import render
 from django.urls import set_urlconf
@@ -144,6 +146,13 @@ class SessionMiddleware(BaseSessionMiddleware):
     a custom domain.
     """
 
+    def process_request(self, request):
+        session_key = request.COOKIES.get(
+            '__Host-' + settings.SESSION_COOKIE_NAME,
+            request.COOKIES.get(settings.SESSION_COOKIE_NAME)
+        )
+        request.session = self.SessionStore(session_key)
+
     def process_response(self, request, response):
         try:
             accessed = request.session.accessed
@@ -154,7 +163,10 @@ class SessionMiddleware(BaseSessionMiddleware):
         else:
             # First check if we need to delete this cookie.
             # The session should be deleted only if the session is entirely empty
-            if settings.SESSION_COOKIE_NAME in request.COOKIES and empty:
+            is_secure = request.scheme == 'https'
+            if '__Host-' + settings.SESSION_COOKIE_NAME in request.COOKIES and empty:
+                response.delete_cookie('__Host-' + settings.SESSION_COOKIE_NAME)
+            elif settings.SESSION_COOKIE_NAME in request.COOKIES and empty:
                 response.delete_cookie(settings.SESSION_COOKIE_NAME)
             else:
                 if accessed:
@@ -171,12 +183,14 @@ class SessionMiddleware(BaseSessionMiddleware):
                     # Skip session save for 500 responses, refs #3881.
                     if response.status_code != 500:
                         request.session.save()
+                        if is_secure and settings.SESSION_COOKIE_NAME in request.COOKIES:  # remove legacy cookie
+                            response.delete_cookie(settings.SESSION_COOKIE_NAME)
+                            response.delete_cookie(settings.SESSION_COOKIE_NAME, samesite="None")
                         set_cookie_without_samesite(
                             request, response,
-                            settings.SESSION_COOKIE_NAME,
+                            '__Host-' + settings.SESSION_COOKIE_NAME if is_secure else settings.SESSION_COOKIE_NAME,
                             request.session.session_key, max_age=max_age,
                             expires=expires,
-                            domain=get_cookie_domain(request),
                             path=settings.SESSION_COOKIE_PATH,
                             secure=request.scheme == 'https',
                             httponly=settings.SESSION_COOKIE_HTTPONLY or None
@@ -191,38 +205,52 @@ class CsrfViewMiddleware(BaseCsrfMiddleware):
     a custom domain.
     """
 
+    def _get_secret(self, request):
+        if settings.CSRF_USE_SESSIONS:
+            try:
+                csrf_secret = request.session.get(CSRF_SESSION_KEY)
+            except AttributeError:
+                raise ImproperlyConfigured(
+                    "CSRF_USE_SESSIONS is enabled, but request.session is not "
+                    "set. SessionMiddleware must appear before CsrfViewMiddleware "
+                    "in MIDDLEWARE."
+                )
+        else:
+            try:
+                csrf_secret = request.COOKIES.get('__Host-' + settings.CSRF_COOKIE_NAME)
+                if not csrf_secret:
+                    csrf_secret = request.COOKIES[settings.CSRF_COOKIE_NAME]
+            except KeyError:
+                csrf_secret = None
+            else:
+                # This can raise InvalidTokenFormat.
+                _check_token_format(csrf_secret)
+        if csrf_secret is None:
+            return None
+        # Django versions before 4.0 masked the secret before storing.
+        if len(csrf_secret) == CSRF_TOKEN_LENGTH:
+            csrf_secret = _unmask_cipher_token(csrf_secret)
+        return csrf_secret
+
     def _set_csrf_cookie(self, request, response):
         if settings.CSRF_USE_SESSIONS:
             if request.session.get(CSRF_SESSION_KEY) != request.META["CSRF_COOKIE"]:
                 request.session[CSRF_SESSION_KEY] = request.META["CSRF_COOKIE"]
         else:
+            is_secure = request.scheme == 'https'
             # Set the CSRF cookie even if it's already set, so we renew
             # the expiry timer.
+            if is_secure and settings.CSRF_COOKIE_NAME in request.COOKIES:  # remove legacy cookie
+                response.delete_cookie(settings.CSRF_COOKIE_NAME)
+                response.delete_cookie(settings.CSRF_COOKIE_NAME, samesite="None")
             set_cookie_without_samesite(
                 request, response,
-                settings.CSRF_COOKIE_NAME,
+                '__Host-' + settings.CSRF_COOKIE_NAME if is_secure else settings.CSRF_COOKIE_NAME,
                 request.META["CSRF_COOKIE"],
                 max_age=settings.CSRF_COOKIE_AGE,
-                domain=get_cookie_domain(request),
                 path=settings.CSRF_COOKIE_PATH,
-                secure=request.scheme == 'https',
+                secure=is_secure,
                 httponly=settings.CSRF_COOKIE_HTTPONLY
             )
             # Content varies with the CSRF cookie, so set the Vary header.
             patch_vary_headers(response, ('Cookie',))
-
-
-def get_cookie_domain(request):
-    if '.' not in request.host:
-        # As per spec, browsers do not accept cookie domains without dots in it,
-        # e.g. "localhost", see http://curl.haxx.se/rfc/cookie_spec.html
-        return None
-    default_domain, default_port = split_domain_port(urlparse(settings.SITE_URL).netloc)
-    if request.host == default_domain:
-        # We are on our main domain, set the cookie domain the user has chosen
-        return settings.SESSION_COOKIE_DOMAIN
-    else:
-        # We are on an organizer's custom domain, set no cookie domain, as we do not want
-        # the cookies to be present on any other domain. Setting an explicit value can be
-        # dangerous, see http://erik.io/blog/2014/03/04/definitive-guide-to-cookie-domains/
-        return None

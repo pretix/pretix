@@ -165,11 +165,10 @@ def test_cookie_domain_on_event_domain(env, client):
 
 @pytest.mark.django_db
 def test_cookie_domain_on_main_domain(env, client):
-    with override_settings(SESSION_COOKIE_DOMAIN='example.com'):
-        client.post('/mrmcd/2015/cart/add', HTTP_HOST='example.com')
-        r = client.get('/mrmcd/2015/', HTTP_HOST='example.com')
-        assert r.client.cookies['pretix_csrftoken']['domain'] == 'example.com'
-        assert r.client.cookies['pretix_session']['domain'] == 'example.com'
+    client.post('/mrmcd/2015/cart/add', HTTP_HOST='example.com')
+    r = client.get('/mrmcd/2015/', HTTP_HOST='example.com')
+    assert r.client.cookies['pretix_csrftoken']['domain'] == ''
+    assert r.client.cookies['pretix_session']['domain'] == ''
 
 
 @pytest.mark.django_db
@@ -200,8 +199,8 @@ def test_cookie_samesite_none(env, client, agent):
     client.post('/mrmcd/2015/cart/add', HTTP_HOST='example.com', HTTP_USER_AGENT=agent,
                 secure=True)
     r = client.get('/mrmcd/2015/', HTTP_HOST='example.com', HTTP_USER_AGENT=agent, secure=True)
-    assert r.client.cookies['pretix_csrftoken']['samesite'] == 'None'
-    assert r.client.cookies['pretix_session']['samesite'] == 'None'
+    assert r.client.cookies['__Host-pretix_csrftoken']['samesite'] == 'None'
+    assert r.client.cookies['__Host-pretix_session']['samesite'] == 'None'
 
 
 @pytest.mark.django_db
@@ -220,4 +219,4 @@ def test_cookie_samesite_none(env, client, agent):
 def test_cookie_samesite_none_only_on_compatible_browsers(env, client, agent):
     client.post('/mrmcd/2015/cart/add', HTTP_HOST='example.com', HTTP_USER_AGENT=agent, secure=True)
     r = client.get('/mrmcd/2015/', HTTP_HOST='example.com', HTTP_USER_AGENT=agent, secure=True)
-    assert not r.client.cookies['pretix_csrftoken'].get('samesite')
+    assert not r.client.cookies['__Host-pretix_csrftoken'].get('samesite')

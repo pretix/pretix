@@ -42,7 +42,6 @@ Example::
     currency=EUR
     datadir=/data
     plugins_default=pretix.plugins.sendmail,pretix.plugins.statistics
-    cookie_domain=.pretix.de
 
 ``instance_name``
     The name of this installation. Default: ``pretix.de``
@@ -70,9 +69,6 @@ Example::
 
 ``auth_backends``
     A comma-separated list of available auth backends. Defaults to ``pretix.base.auth.NativeAuthBackend``.
-
-``cookie_domain``
-    The cookie domain to be set. Defaults to ``None``.
 
 ``registration``
     Enables or disables the registration of new admin users. Defaults to ``off``.

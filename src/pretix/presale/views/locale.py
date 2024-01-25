@@ -40,7 +40,6 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.views.generic import View
 
 from pretix.helpers.cookies import set_cookie_without_samesite
-from pretix.multidomain.middlewares import get_cookie_domain
 
 from .robots import NoSearchIndexViewMixin
 
@@ -63,7 +62,6 @@ class LocaleSet(NoSearchIndexViewMixin, View):
                 max_age=max_age,
                 expires=(datetime.utcnow() + timedelta(seconds=max_age)).strftime(
                     '%a, %d-%b-%Y %H:%M:%S GMT'),
-                domain=get_cookie_domain(request)
             )
 
         return resp

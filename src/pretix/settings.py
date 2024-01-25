@@ -335,8 +335,6 @@ if HAS_CELERY:
 else:
     CELERY_TASK_ALWAYS_EAGER = True
 
-SESSION_COOKIE_DOMAIN = config.get('pretix', 'cookie_domain', fallback=None)
-
 CACHE_TICKETS_HOURS = config.getint('cache', 'tickets', fallback=24 * 3)
 
 ENTROPY = {
