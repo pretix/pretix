@@ -151,10 +151,6 @@ class ForceQuotaConfirmationForm(forms.Form):
             del self.fields['force']
 
 
-class ConfirmPaymentForm(ForceQuotaConfirmationForm):
-    pass
-
-
 class ReactivateOrderForm(ForceQuotaConfirmationForm):
     pass
 
@@ -220,10 +216,11 @@ class DenyForm(forms.Form):
     )
 
 
-class MarkPaidForm(ConfirmPaymentForm):
+class MarkPaidForm(ForceQuotaConfirmationForm):
     send_email = forms.BooleanField(
         required=False,
         label=_('Notify customer by email'),
+        help_text=_('A mail will only be sent if the order is fully paid after this.'),
         initial=True
     )
     amount = forms.DecimalField(
@@ -240,9 +237,10 @@ class MarkPaidForm(ConfirmPaymentForm):
     )
 
     def __init__(self, *args, **kwargs):
+        payment = kwargs.pop('payment', None)
         super().__init__(*args, **kwargs)
         change_decimal_field(self.fields['amount'], self.instance.event.currency)
-        self.fields['amount'].initial = max(Decimal('0.00'), self.instance.pending_sum)
+        self.fields['amount'].initial = max(Decimal('0.00'), payment.amount if payment else self.instance.pending_sum)
 
 
 class ExporterForm(forms.Form):
