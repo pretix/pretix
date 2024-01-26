@@ -36,6 +36,8 @@ geo_lon                               float                      Longitude of th
 has_subevents                         boolean                    ``true`` if the event series feature is active for this
                                                                  event. Cannot change after event is created.
 meta_data                             object                     Values set for organizer-specific meta data parameters.
+                                                                 The allowed keys need to be set up as meta properties
+                                                                 in the organizer configuration.
 plugins                               list                       A list of package names of the enabled plugins for this
                                                                  event.
 seating_plan                          integer                    If reserved seating is in use, the ID of a seating
