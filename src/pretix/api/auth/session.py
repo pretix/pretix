@@ -20,7 +20,9 @@
 # <https://www.gnu.org/licenses/>.
 #
 from rest_framework import exceptions
-from rest_framework.authentication import SessionAuthentication as BaseSessionAuthentication
+from rest_framework.authentication import (
+    SessionAuthentication as BaseSessionAuthentication,
+)
 
 from pretix.multidomain.middlewares import CsrfViewMiddleware
 

@@ -58,9 +58,13 @@ class WidgetCartTest(CartTestMixin, TestCase):
         )
 
     def test_iframe_entry_view_wrapper(self):
-        self.client.get('/%s/%s/?iframe=1&locale=de' % (self.orga.slug, self.event.slug))
+        self.event.settings.locales = ["de", "en"]
+        r = self.client.get('/%s/%s/?iframe=1&locale=de' % (self.orga.slug, self.event.slug), headers={
+            "Accept-Language": "en-GB,en-US;q=0.9,en;q=0.8",
+        })
         assert 'iframe_session' in self.client.session
         assert self.client.cookies[settings.LANGUAGE_COOKIE_NAME].value == "de"
+        assert r.headers["Content-Language"] == "de"
 
     def test_allow_frame_if_namespaced(self):
         response = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug))

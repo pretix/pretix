@@ -44,6 +44,25 @@ from pretix.multidomain.urlreverse import (
 _supported = None
 
 
+def get_supported_language(requested_language, allowed_languages, default_language):
+    language = requested_language
+    if language not in allowed_languages:
+        firstpart = language.split('-')[0]
+        if firstpart in allowed_languages:
+            language = firstpart
+        else:
+            language = default_language
+            for lang in allowed_languages:
+                if lang.startswith(firstpart + '-'):
+                    language = lang
+                    break
+    if language not in allowed_languages:
+        # This seems redundant, but can happen in the rare edge case that settings.locale is (wrongfully)
+        # not part of settings.locales
+        language = allowed_languages[0]
+    return language
+
+
 class LocaleMiddleware(MiddlewareMixin):
 
     """
@@ -65,20 +84,11 @@ class LocaleMiddleware(MiddlewareMixin):
                 settings_holder = None
 
             if settings_holder:
-                if language not in settings_holder.settings.locales:
-                    firstpart = language.split('-')[0]
-                    if firstpart in settings_holder.settings.locales:
-                        language = firstpart
-                    else:
-                        language = settings_holder.settings.locale
-                        for lang in settings_holder.settings.locales:
-                            if lang.startswith(firstpart + '-'):
-                                language = lang
-                                break
-                if language not in settings_holder.settings.locales:
-                    # This seems redundant, but can happen in the rare edge case that settings.locale is (wrongfully)
-                    # not part of settings.locales
-                    language = settings_holder.settings.locales[0]
+                language = get_supported_language(
+                    language,
+                    settings_holder.settings.locales,
+                    settings_holder.settings.locale,
+                )
                 if '-' not in language and settings_holder.settings.region:
                     language += '-' + settings_holder.settings.region
         else:

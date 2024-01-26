@@ -41,12 +41,14 @@ from itertools import groupby
 from django.conf import settings
 from django.contrib import messages
 from django.db.models import Exists, OuterRef, Prefetch, Sum
+from django.utils import translation
 from django.utils.functional import cached_property
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes import scopes_disabled
 
-from pretix.base.i18n import language
+from pretix.base.i18n import get_language_without_region
+from pretix.base.middleware import get_supported_language
 from pretix.base.models import (
     CartPosition, Customer, InvoiceAddress, ItemAddOn, Question,
     QuestionAnswer, QuestionOption, TaxRule,
@@ -455,11 +457,24 @@ def iframe_entry_view_wrapper(view_func):
 
         locale = request.GET.get('locale')
         if locale and locale in [lc for lc, ll in settings.LANGUAGES]:
-            region = None
+            lng = locale
             if hasattr(request, 'event'):
+                lng = get_supported_language(
+                    lng,
+                    request.event.settings.locales,
+                    request.event.settings.locale,
+                )
+
                 region = request.event.settings.region
-            with language(locale, region):
-                resp = view_func(request, *args, **kwargs)
+                if '-' not in lng and region:
+                    lng += '-' + region.lower()
+
+            # with language() is not good enough here – we really need to take the role of LocaleMiddleware and modify
+            # global state, because template rendering might be happening lazily.
+            translation.activate(lng)
+            request.LANGUAGE_CODE = get_language_without_region()
+            resp = view_func(request, *args, **kwargs)
+
             max_age = 10 * 365 * 24 * 60 * 60
             set_cookie_without_samesite(
                 request,

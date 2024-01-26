@@ -24,9 +24,9 @@ import time
 import pytest
 from bs4 import BeautifulSoup
 from django.test import Client
+from tests.base import extract_form_fields
 
 from pretix.base.models import Organizer
-from tests.base import extract_form_fields
 
 
 @pytest.mark.django_db
