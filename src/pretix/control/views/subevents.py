@@ -295,6 +295,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
             ]
             extra = 0
 
+        kwargs['multiselect'] = True
         formsetclass = inlineformset_factory(
             SubEvent, Quota,
             form=QuotaForm, formset=QuotaFormSet, min_num=1, validate_min=True,

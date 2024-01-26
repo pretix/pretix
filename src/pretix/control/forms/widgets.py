@@ -77,3 +77,7 @@ class Select2ItemVarQuotaMixin(Select2Mixin):
 
 class Select2ItemVarQuota(Select2ItemVarQuotaMixin, forms.Select):
     pass
+
+
+class Select2ItemVarQuotaMulti(Select2ItemVarQuotaMixin, forms.SelectMultiple):
+    pass

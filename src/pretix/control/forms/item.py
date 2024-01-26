@@ -67,7 +67,7 @@ from pretix.control.forms import (
     ButtonGroupRadioSelect, ItemMultipleChoiceField, SizeValidationMixin,
     SplitDateTimeField, SplitDateTimePickerWidget,
 )
-from pretix.control.forms.widgets import Select2, Select2Multiple
+from pretix.control.forms.widgets import Select2, Select2ItemVarQuotaMulti
 from pretix.helpers.models import modelcopy
 from pretix.helpers.money import change_decimal_field
 
@@ -209,13 +209,14 @@ class QuestionOptionForm(I18nModelForm):
 class QuotaForm(I18nModelForm):
     itemvars = forms.ChoiceField(
         label=_("Products"),
-        required=True
+        required=True,
     )
 
     def __init__(self, **kwargs):
         self.instance = kwargs.get('instance', None)
         self.event = kwargs.get('event')
         items = kwargs.pop('items', None) or self.event.items.prefetch_related('variations')
+        multiselect = kwargs.pop('multiselect', None)
         self.original_instance = modelcopy(self.instance) if self.instance else None
         initial = kwargs.get('initial', {})
         if self.instance and self.instance.pk and 'itemvars' not in initial:
@@ -236,16 +237,9 @@ class QuotaForm(I18nModelForm):
             else:
                 choices.append(('{}'.format(item.pk), str(item) if item.active else mark_safe(f'<strike class="text-muted">{escape(item)}</strike>')))
 
-        if len(choices) < 8:
-            self.fields['itemvars'] = forms.MultipleChoiceField(
-                label=_('Products'),
-                required=True,
-                choices=choices,
-                widget=forms.CheckboxSelectMultiple
-            )
-        else:
+        if multiselect:
             self.fields['itemvars'].choices = choices
-            self.fields['itemvars'].widget = Select2Multiple(
+            self.fields['itemvars'].widget = Select2ItemVarQuotaMulti(
                 attrs={
                     'data-model-select2': 'generic',
                     'data-select2-url': reverse('control:event.items.itemvar.select2', kwargs={
@@ -257,6 +251,13 @@ class QuotaForm(I18nModelForm):
             )
             self.fields['itemvars'].required = True
             self.fields['itemvars'].widget.choices = self.fields['itemvars'].choices
+        else:
+            self.fields['itemvars'] = forms.MultipleChoiceField(
+                label=_('Products'),
+                required=True,
+                choices=choices,
+                widget=forms.CheckboxSelectMultiple
+            )
 
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()
