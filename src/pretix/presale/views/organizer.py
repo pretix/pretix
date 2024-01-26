@@ -218,19 +218,20 @@ class EventListMixin:
 
     def _set_month_to_next_subevent(self):
         tz = self.request.event.timezone
+        now_dt = now()
         next_sev = self.request.event.subevents.using(settings.DATABASE_REPLICA).annotate(
             effective_date=Case(
-                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now(), then=Value(now())),
+                When(date_from__lt=now_dt, date_to__isnull=False, date_to__gte=now_dt, then=Value(now_dt)),
                 default=F('date_from'),
             )
         ).filter(
-            effective_date__gte=now(),
+            effective_date__gte=now_dt,
             active=True,
             is_public=True,
         ).select_related('event').order_by('effective_date').first()
 
         if next_sev:
-            datetime_from = next_sev.date_from
+            datetime_from = next_sev.effective_date
             self.year = datetime_from.astimezone(tz).year
             self.month = datetime_from.astimezone(tz).month
         else:
@@ -238,13 +239,14 @@ class EventListMixin:
             self.month = now().month
 
     def _set_month_to_next_event(self):
+        now_dt = now()
         next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).annotate(
             effective_date=Case(
-                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now(), then=Value(now())),
+                When(date_from__lt=now_dt, date_to__isnull=False, date_to__gte=now_dt, then=Value(now())),
                 default=F('date_from'),
             )
         ).filter(
-            effective_date__gte=now(),
+            effective_date__gte=now_dt,
             organizer=self.request.organizer,
             live=True,
             is_public=True,
@@ -252,11 +254,11 @@ class EventListMixin:
         ), self.request).order_by('effective_date').first()
         next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).annotate(
             effective_date=Case(
-                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now(), then=Value(now())),
+                When(date_from__lt=now_dt, date_to__isnull=False, date_to__gte=now_dt, then=Value(now_dt)),
                 default=F('date_from'),
             )
         ).filter(
-            effective_date__gte=now(),
+            effective_date__gte=now_dt,
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
@@ -265,11 +267,11 @@ class EventListMixin:
         ), self.request).select_related('event').order_by('effective_date').first()
 
         datetime_from = None
-        if (next_ev and next_sev and next_sev.date_from < next_ev.date_from) or (next_sev and not next_ev):
-            datetime_from = next_sev.date_from
+        if (next_ev and next_sev and next_sev.effective_date < next_ev.effective_date) or (next_sev and not next_ev):
+            datetime_from = next_sev.effective_date
             next_ev = next_sev.event
         elif next_ev:
-            datetime_from = next_ev.date_from
+            datetime_from = next_ev.effective_date
 
         if datetime_from:
             tz = next_ev.timezone
@@ -294,20 +296,21 @@ class EventListMixin:
                 self._set_month_to_next_event()
 
     def _set_week_to_next_subevent(self):
+        now_dt = now()
         tz = self.request.event.timezone
         next_sev = self.request.event.subevents.using(settings.DATABASE_REPLICA).annotate(
             effective_date=Case(
-                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now(), then=Value(now())),
+                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now_dt, then=Value(now_dt)),
                 default=F('date_from'),
             )
         ).filter(
-            effective_date__gte=now(),
+            effective_date__gte=now_dt,
             active=True,
             is_public=True,
         ).select_related('event').order_by('effective_date').first()
 
         if next_sev:
-            datetime_from = next_sev.date_from
+            datetime_from = next_sev.effective_date
             self.year = datetime_from.astimezone(tz).isocalendar()[0]
             self.week = datetime_from.astimezone(tz).isocalendar()[1]
         else:
@@ -315,13 +318,14 @@ class EventListMixin:
             self.week = now().isocalendar()[1]
 
     def _set_week_to_next_event(self):
+        now_dt = now()
         next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).annotate(
             effective_date=Case(
-                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now(), then=Value(now())),
+                When(date_from__lt=now_dt, date_to__isnull=False, date_to__gte=now_dt, then=Value(now_dt)),
                 default=F('date_from'),
             )
         ).filter(
-            effective_date__gte=now(),
+            effective_date__gte=now_dt,
             organizer=self.request.organizer,
             live=True,
             is_public=True,
@@ -329,11 +333,11 @@ class EventListMixin:
         ), self.request).order_by('effective_date').first()
         next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).annotate(
             effective_date=Case(
-                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now(), then=Value(now())),
+                When(date_from__lt=now_dt, date_to__isnull=False, date_to__gte=now_dt, then=Value(now_dt)),
                 default=F('date_from'),
             )
         ).filter(
-            effective_date__gte=now(),
+            effective_date__gte=now_dt,
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
@@ -342,11 +346,11 @@ class EventListMixin:
         ), self.request).select_related('event').order_by('effective_date').first()
 
         datetime_from = None
-        if (next_ev and next_sev and next_sev.date_from < next_ev.date_from) or (next_sev and not next_ev):
-            datetime_from = next_sev.date_from
+        if (next_ev and next_sev and next_sev.effective_date < next_ev.effective_date) or (next_sev and not next_ev):
+            datetime_from = next_sev.effective_date
             next_ev = next_sev.event
         elif next_ev:
-            datetime_from = next_ev.date_from
+            datetime_from = next_ev.effective_date
 
         if datetime_from:
             tz = next_ev.timezone
@@ -857,21 +861,32 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
     template_name = 'pretixpresale/organizers/calendar_day.html'
 
     def _set_date_to_next_event(self):
-        next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).filter(
-            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
+        now_dt = now()
+        next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).anootate(
+            effective_date=Case(
+                When(date_from__lt=now_dt, date_to__isnull=False, date_to__gte=now_dt, then=Value(now_dt)),
+                default=F('date_from'),
+            )
+        ).filter(
+            effective_date__gte=now_dt,
             organizer=self.request.organizer,
             live=True,
             is_public=True,
             date_from__gte=now(),
-        ), self.request).order_by('date_from').first()
-        next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).filter(
-            Q(date_from__gte=now()) | Q(date_to__isnull=False, date_to__gte=now()),
+        ), self.request).order_by('effective_date').first()
+        next_sev = filter_qs_by_attr(SubEvent.objects.using(settings.DATABASE_REPLICA).annotate(
+            effective_date=Case(
+                When(date_from__lt=now_dt, date_to__isnull=False, date_to__gte=now_dt, then=Value(now_dt)),
+                default=F('date_from'),
+            )
+        ).filter(
+            effective_date__gte=now_dt,
             event__organizer=self.request.organizer,
             event__is_public=True,
             event__live=True,
             active=True,
             is_public=True,
-        ), self.request).select_related('event').order_by('date_from').first()
+        ), self.request).select_related('event').order_by('effective_date').first()
 
         datetime_from = None
         if (next_ev and next_sev and next_sev.date_from < next_ev.date_from) or (next_sev and not next_ev):
