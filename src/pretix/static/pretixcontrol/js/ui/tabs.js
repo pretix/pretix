@@ -12,7 +12,8 @@ $(function () {
         var validity_error = false;
         $form.find("fieldset").each(function () {
             var $fieldset = $(this);
-            var tid = "tab-" + j + "-" + i;
+            var tid = $fieldset.attr("id");
+            if (!tid) tid = "tab-" + j + "-" + i;
             var $tabli = $("<li>").appendTo($tabs);
             var $tablink = $("<a>").attr("role", "tab")
                 .attr("data-toggle", "tab")
