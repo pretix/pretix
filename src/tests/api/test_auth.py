@@ -22,8 +22,11 @@
 import time
 
 import pytest
+from bs4 import BeautifulSoup
+from django.test import Client
 
 from pretix.base.models import Organizer
+from tests.base import extract_form_fields
 
 
 @pytest.mark.django_db
@@ -61,6 +64,46 @@ def test_session_auth_relative_timeout(client, user, team):
 
     resp = client.get('/api/v1/organizers/')
     assert resp.status_code == 403
+
+
+@pytest.mark.django_db
+def test_session_auth_csrf(user, team):
+    team.members.add(user)
+    client = Client(enforce_csrf_checks=True)
+    client.login(email=user.email, password='dummy')
+
+    resp = client.post('/api/v1/organizers/dummy/events/', secure=True, headers={
+        'Referer': 'https://localhost',
+        'Host': 'localhost',
+    })
+    assert resp.status_code == 403
+    assert "CSRF Failed: CSRF cookie not set." in str(resp.data)
+
+    resp = client.get('/control/events/add', secure=True)
+    assert resp.status_code == 200
+    doc = BeautifulSoup(resp.render().content, "lxml")
+    form_data = extract_form_fields(doc.select('form')[0])
+
+    resp = client.post('/api/v1/organizers/dummy/events/', secure=True, headers={
+        'Referer': 'https://localhost',
+        'Host': 'localhost',
+    })
+    assert resp.status_code == 403
+    assert "CSRF Failed: CSRF token missing." in str(resp.data)
+
+    resp = client.post('/api/v1/organizers/dummy/events/', headers={
+        'X-CSRFToken': form_data['csrfmiddlewaretoken'],
+        'Host': 'localhost',
+    }, secure=True)
+    assert resp.status_code == 403
+    assert "CSRF Failed: Referer checking failed - no Referer." in str(resp.data)
+
+    resp = client.post('/api/v1/organizers/dummy/events/', headers={
+        'X-CSRFToken': form_data['csrfmiddlewaretoken'],
+        'Referer': 'https://localhost',
+        'Host': 'localhost',
+    }, secure=True)
+    assert resp.status_code == 400
 
 
 @pytest.mark.django_db

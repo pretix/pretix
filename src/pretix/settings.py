@@ -398,7 +398,7 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'pretix.api.auth.token.TeamTokenAuthentication',
         'pretix.api.auth.device.DeviceTokenAuthentication',
-        'rest_framework.authentication.SessionAuthentication',
+        'pretix.api.auth.session.SessionAuthentication',
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     ),
     'DEFAULT_RENDERER_CLASSES': (
