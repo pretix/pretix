@@ -300,7 +300,7 @@ class EventListMixin:
         tz = self.request.event.timezone
         next_sev = self.request.event.subevents.using(settings.DATABASE_REPLICA).annotate(
             effective_date=Case(
-                When(date_from__lt=now(), date_to__isnull=False, date_to__gte=now_dt, then=Value(now_dt)),
+                When(date_from__lt=now_dt, date_to__isnull=False, date_to__gte=now_dt, then=Value(now_dt)),
                 default=F('date_from'),
             )
         ).filter(
