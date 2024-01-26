@@ -1144,7 +1144,6 @@ class Order(LockModel, LoggedModel):
     @property
     def positions_with_tickets(self):
         signal_response = allow_ticket_download.send(self.event, order=self)
-        print("signal_response", signal_response)
         if all([r is True for rr, r in signal_response]):
             return self.positions_with_tickets_ignoring_plugins
         elif any([r is False for rr, r in signal_response]):

@@ -1013,8 +1013,6 @@ class OrderDownloadMixin:
 
     @cached_property
     def output(self):
-        if not self.order.positions_with_tickets:
-            return None
         responses = register_ticket_outputs.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
@@ -1033,9 +1031,10 @@ class OrderDownloadMixin:
             return self.error(OrderError(_('You requested an invalid ticket output type.')))
         if not self.order or ('position' in kwargs and not self.order_position):
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if not self.order.ticket_download_available:
+        positions = list(self.order.positions_with_tickets)
+        if not self.order.ticket_download_available or not positions:
             return self.error(OrderError(_('Ticket download is not (yet) enabled for this order.')))
-        if 'position' in kwargs and not self.order_position.generate_ticket:
+        if 'position' in kwargs and self.order_position not in positions:
             return self.error(OrderError(_('Ticket download is not enabled for this product.')))
 
         if (
