@@ -175,9 +175,11 @@ class TicketPageMixin:
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
+        positions_with_tickets = self.order.positions_with_tickets
+
         ctx['order'] = self.order
 
-        can_download = self.order.positions_with_tickets
+        can_download = bool(positions_with_tickets)
         ctx['plugins_allow_ticket_download'] = can_download
         if self.request.event.settings.ticket_download_date:
             ctx['ticket_download_date'] = self.order.ticket_download_date
@@ -188,6 +190,28 @@ class TicketPageMixin:
             not self.order.email_known_to_work
         )
         ctx['can_download'] = can_download and not ctx['download_email_required']
+
+        qs = self.context_query_set
+        if self.request.event.settings.show_checkin_number_user:
+            qs = qs.annotate(
+                checkin_count=Subquery(
+                    Checkin.objects.filter(
+                        successful=True,
+                        type=Checkin.TYPE_ENTRY,
+                        position_id=OuterRef('pk'),
+                        list__consider_tickets_used=True,
+                    ).order_by().values('position').annotate(c=Count('*')).values('c')
+                )
+            )
+        ctx['cart'] = self.get_cart(
+            answers=True, downloads=ctx['can_download'],
+            queryset=qs,
+            order=self.order
+        )
+
+        ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p in positions_with_tickets]
+        for allowed_op in ctx['tickets_with_download']:
+            allowed_op.ticket_download_allowed = True
 
         ctx['download_buttons'] = self.download_buttons
 
@@ -237,31 +261,11 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
+        self.context_query_set = (
+            self.order.positions.prefetch_related('issued_gift_cards', 'owned_gift_cards').select_related('tax_rule')
+        )
         ctx = super().get_context_data(**kwargs)
 
-        qs = self.order.positions.prefetch_related('issued_gift_cards', 'owned_gift_cards').select_related('tax_rule')
-        if self.request.event.settings.show_checkin_number_user:
-            qs = qs.annotate(
-                checkin_count=Subquery(
-                    Checkin.objects.filter(
-                        successful=True,
-                        type=Checkin.TYPE_ENTRY,
-                        position_id=OuterRef('pk'),
-                        list__consider_tickets_used=True,
-                    ).order_by().values('position').annotate(c=Count('*')).values('c')
-                )
-            )
-
-        ctx['cart'] = self.get_cart(
-            answers=True,
-            downloads=ctx['can_download'],
-            queryset=qs,
-            order=self.order
-        )
-        download_allowed = self.order.positions_with_tickets
-        ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p in download_allowed]
-        for allowed_op in ctx['tickets_with_download']:
-            allowed_op.ticket_download_allowed = True
         ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
             [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
         )
@@ -343,32 +347,12 @@ class OrderPositionDetails(EventViewMixin, OrderPositionDetailMixin, CartMixin, 
         return super().get(request, *args, **kwargs)
 
     def get_context_data(self, **kwargs):
-        qs = self.order.positions.select_related('tax_rule').filter(
+        self.context_query_set = self.order.positions.select_related('tax_rule').filter(
             Q(pk=self.position.pk) | Q(addon_to__id=self.position.pk)
         )
-        if self.request.event.settings.show_checkin_number_user:
-            qs = qs.annotate(
-                checkin_count=Subquery(
-                    Checkin.objects.filter(
-                        successful=True,
-                        type=Checkin.TYPE_ENTRY,
-                        position_id=OuterRef('pk'),
-                        list__consider_tickets_used=True,
-                    ).order_by().values('position').annotate(c=Count('*')).values('c')
-                )
-            )
         ctx = super().get_context_data(**kwargs)
         ctx['can_download_multi'] = False
         ctx['position'] = self.position
-        ctx['cart'] = self.get_cart(
-            answers=True, downloads=ctx['can_download'],
-            queryset=qs,
-            order=self.order
-        )
-        download_allowed = self.order.positions_with_tickets
-        ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p in download_allowed]
-        for allowed_op in ctx['tickets_with_download']:
-            allowed_op.ticket_download_allowed = True
         ctx['attendee_change_allowed'] = self.position.attendee_change_allowed
         return ctx
 
