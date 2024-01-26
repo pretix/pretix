@@ -236,27 +236,27 @@ class QuotaForm(I18nModelForm):
             else:
                 choices.append(('{}'.format(item.pk), str(item) if item.active else mark_safe(f'<strike class="text-muted">{escape(item)}</strike>')))
 
-        # self.fields['itemvars'] = forms.MultipleChoiceField(
-        #     label=_('Products'),
-        #     required=True,
-        #     choices=choices,
-        #     widget=forms.CheckboxSelectMultiple
-        # )
-        # self.fields['itemvars'] = forms.ChoiceField(widget=Select2Widget)
-        self.fields['itemvars'].choices = choices
-        # self.fields['itemvars'].queryset = self.event.subevents.all()
-        self.fields['itemvars'].widget = Select2Multiple(
-            attrs={
-                'data-model-select2': 'generic',
-                'data-select2-url': reverse('control:event.items.itemvar.select2', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                }),
-                'data-placeholder': _('All products')
-            }
-        )
-        self.fields['itemvars'].required = True
-        self.fields['itemvars'].widget.choices = self.fields['itemvars'].choices
+        if len(choices) < 8:
+            self.fields['itemvars'] = forms.MultipleChoiceField(
+                label=_('Products'),
+                required=True,
+                choices=choices,
+                widget=forms.CheckboxSelectMultiple
+            )
+        else:
+            self.fields['itemvars'].choices = choices
+            self.fields['itemvars'].widget = Select2Multiple(
+                attrs={
+                    'data-model-select2': 'generic',
+                    'data-select2-url': reverse('control:event.items.itemvar.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': _('All products')
+                }
+            )
+            self.fields['itemvars'].required = True
+            self.fields['itemvars'].widget.choices = self.fields['itemvars'].choices
 
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()
