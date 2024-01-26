@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-24 13:03+0000\n"
 "PO-Revision-Date: 2024-01-26 23:00+0000\n"
-"Last-Translator: Freek Engelbarts <freekengelbarts@gmail.com>\n"
+"Last-Translator: Alain <alain@waag.org>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -6850,7 +6850,7 @@ msgstr "Voorbeeld productvariantomschrijving"
 
 #: pretix/base/pdf.py:153
 msgid "Ticket category"
-msgstr "Productcategorie"
+msgstr "Ticket-categorie"
 
 #: pretix/base/pdf.py:160 pretix/base/pdf.py:165
 msgid "123.45 EUR"
