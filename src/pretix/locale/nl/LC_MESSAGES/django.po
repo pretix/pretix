@@ -8,7 +8,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-24 13:03+0000\n"
 "PO-Revision-Date: 2024-01-26 23:00+0000\n"
-"Last-Translator: BMaster <tom@anoebis.be>\n"
+"Last-Translator: Freek Engelbarts <freekengelbarts@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -8736,6 +8736,9 @@ msgid ""
 "same for all lines. It will be shown on every line if there are different "
 "locations."
 msgstr ""
+"De locatie van uw event zal onder de lijst met producten getoond worden, als "
+"deze allemaal hetzelfde zijn. Het zal op elke lijn getoond worden, als het "
+"verschillende locaties zijn."
 
 #: pretix/base/settings.py:519
 #, fuzzy
