@@ -3733,6 +3733,7 @@ class SettingsSandbox:
         del self._event.settings[self._convert_key(key)]
 
     def get(self, key: str, default: Any = None, as_type: type = str, binary_file: bool = False):
+        print(self._convert_key(key))
         return self._event.settings.get(
             self._convert_key(key), default=default, as_type=as_type, binary_file=binary_file
         )

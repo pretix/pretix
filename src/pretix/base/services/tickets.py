@@ -21,7 +21,6 @@
 #
 import logging
 import os
-from typing import Iterable
 
 from django.core.files.base import ContentFile
 from django.utils.timezone import now
@@ -35,7 +34,7 @@ from pretix.base.models import (
 )
 from pretix.base.services.tasks import EventTask, ProfiledTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
-from pretix.base.signals import allow_ticket_download, register_ticket_outputs
+from pretix.base.signals import register_ticket_outputs
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
 
@@ -125,8 +124,8 @@ def preview(event: int, provider: str):
 
 
 def get_tickets_for_order(order, base_position=None):
-    positions_with_ticket = order.positions_with_tickets
-    if not positions_with_ticket:
+    positions = list(order.positions_with_tickets)
+    if not positions:
         return []
     if not order.ticket_download_available:
         return []
@@ -136,10 +135,8 @@ def get_tickets_for_order(order, base_position=None):
         for receiver, response
         in register_ticket_outputs.send(order.event)
     ]
-
     tickets = []
 
-    positions = list(positions_with_ticket)
     if base_position:
         # Only the given position and its children
         positions = [
@@ -203,7 +200,6 @@ def get_tickets_for_order(order, base_position=None):
                     ))
                 except:
                     logger.exception('Failed to generate ticket.')
-
     return tickets
 
 

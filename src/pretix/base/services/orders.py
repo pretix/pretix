@@ -98,10 +98,9 @@ from pretix.base.services.pricing import (
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
 from pretix.base.signals import (
-    allow_ticket_download, order_approved, order_canceled, order_changed,
-    order_denied, order_expired, order_fee_calculation, order_paid,
-    order_placed, order_split, order_valid_if_pending, periodic_task,
-    validate_order,
+    order_approved, order_canceled, order_changed, order_denied, order_expired,
+    order_fee_calculation, order_paid, order_placed, order_split,
+    order_valid_if_pending, periodic_task, validate_order,
 )
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
@@ -1409,7 +1408,7 @@ def send_download_reminders(sender, **kwargs):
                 # Race condition
                 continue
             positions = o.positions_with_tickets
-            if not positions:
+            if not list(positions):
                 continue
 
             if not o.ticket_download_available:
@@ -1435,10 +1434,7 @@ def send_download_reminders(sender, **kwargs):
                     logger.exception('Reminder email could not be sent')
 
                 if event.settings.mail_send_download_reminder_attendee:
-                    for p in o.positions.all():
-                        if not p.generate_ticket:
-                            continue
-
+                    for p in o.positions_with_tickets:
                         if p.subevent_id:
                             reminder_date = (p.subevent.date_from - timedelta(days=days)).replace(
                                 hour=0, minute=0, second=0, microsecond=0
