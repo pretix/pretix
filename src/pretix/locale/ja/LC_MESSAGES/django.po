@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-24 13:03+0000\n"
-"PO-Revision-Date: 2023-09-28 14:05+0000\n"
-"Last-Translator: Takanori Suzuki <takanori@takanory.net>\n"
+"PO-Revision-Date: 2024-01-26 23:00+0000\n"
+"Last-Translator: Ryo <saremba@rami.io>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
 "ja/>\n"
 "Language: ja\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -33,27 +33,30 @@ msgstr ""
 
 #: pretix/_base_settings.py:81
 msgid "Arabic"
-msgstr ""
+msgstr "アラビア語"
 
 #: pretix/_base_settings.py:82
+#, fuzzy
 msgid "Chinese (simplified)"
-msgstr ""
+msgstr "中国語（簡体字)"
 
 #: pretix/_base_settings.py:83
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "中国語（繁体字）"
 
 #: pretix/_base_settings.py:84
 msgid "Czech"
-msgstr ""
+msgstr "チェコ"
 
 #: pretix/_base_settings.py:85
+#, fuzzy
 msgid "Danish"
-msgstr ""
+msgstr "デンマーク語"
 
 #: pretix/_base_settings.py:86
+#, fuzzy
 msgid "Dutch"
-msgstr ""
+msgstr "オランダ語"
 
 #: pretix/_base_settings.py:87
 msgid "Dutch (informal)"
