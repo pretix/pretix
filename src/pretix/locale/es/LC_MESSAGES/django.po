@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-24 13:03+0000\n"
-"PO-Revision-Date: 2024-01-22 17:08+0000\n"
+"PO-Revision-Date: 2024-01-29 08:00+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -2935,12 +2935,11 @@ msgid "Reusable media"
 msgstr "Medios reutilizables"
 
 #: pretix/base/exporters/reusablemedia.py:36
-#, fuzzy
 msgid ""
 "Download a spread sheet with the data of all reusable medias on your account."
 msgstr ""
-"Descarga una hoja de cálculo con información sobre todos los eventos en esta "
-"cuenta de organizador."
+"Descarga una hoja de cálculo con los datos de todos los medios reutilizables "
+"de tu cuenta."
 
 #: pretix/base/exporters/reusablemedia.py:46 pretix/base/models/media.py:67
 msgctxt "reusable_medium"
@@ -7865,14 +7864,14 @@ msgid "number of entries before {datetime}"
 msgstr "número de entradas antes del {datetime}"
 
 #: pretix/base/services/checkin.py:312
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "number of days with an entry since {datetime}"
-msgstr "número de entradas desde {datetime}"
+msgstr "número de días con una entrada desde {datetime}"
 
 #: pretix/base/services/checkin.py:313
-#, fuzzy, python-brace-format
+#, python-brace-format
 msgid "number of days with an entry before {datetime}"
-msgstr "número de entradas antes del {datetime}"
+msgstr "número de días con una entrada antes del {datetime}"
 
 #: pretix/base/services/checkin.py:314 pretix/base/services/checkin.py:307
 msgid "week day"
@@ -7976,7 +7975,7 @@ msgstr "La orden no está marcada como pagada."
 
 #: pretix/base/services/checkin.py:1044
 msgid "Evaluation of custom rules has failed."
-msgstr ""
+msgstr "La evaluación de las reglas personalizadas ha fallado."
 
 #: pretix/base/services/checkin.py:1054 pretix/base/services/checkin.py:973
 #, python-brace-format
@@ -8228,7 +8227,7 @@ msgstr ""
 #: pretix/base/services/orderimport.py:130 pretix/base/services/orders.py:1515
 #, python-format
 msgid "Orders cannot have more than %(max)s positions."
-msgstr ""
+msgstr "Las órdenes no pueden tener más del %(max)s de posiciones."
 
 #: pretix/base/services/orderimport.py:162
 #: pretix/base/services/orderimport.py:156
@@ -12283,16 +12282,14 @@ msgid "by week"
 msgstr "por semana"
 
 #: pretix/base/timeframes.py:121
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current week to date"
-msgstr "Crear fecha"
+msgstr "Semana actual hasta la fecha"
 
 #: pretix/base/timeframes.py:130
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Previous week"
-msgstr "Previsualizar"
+msgstr "Semana pasada"
 
 #: pretix/base/timeframes.py:139
 msgctxt "reporting_timeframe"
@@ -12300,23 +12297,20 @@ msgid "Next week"
 msgstr "La próxima semana"
 
 #: pretix/base/timeframes.py:148
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current month"
-msgstr "Moneda"
+msgstr "Mes actual"
 
 #: pretix/base/timeframes.py:152 pretix/base/timeframes.py:161
 #: pretix/base/timeframes.py:170 pretix/base/timeframes.py:179
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "by month"
-msgstr "mes(es)"
+msgstr "Por mes"
 
 #: pretix/base/timeframes.py:157
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current month to date"
-msgstr "Fecha de creación"
+msgstr "Mes actual hasta la fecha"
 
 #: pretix/base/timeframes.py:166
 msgctxt "reporting_timeframe"
@@ -12324,16 +12318,14 @@ msgid "Previous month"
 msgstr "Mes anterior"
 
 #: pretix/base/timeframes.py:175
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Next month"
-msgstr "Contenido del texto"
+msgstr "Próximo mes"
 
 #: pretix/base/timeframes.py:184
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current quarter"
-msgstr "Temas de actualidad"
+msgstr "Trimestre actual"
 
 #: pretix/base/timeframes.py:188 pretix/base/timeframes.py:197
 #: pretix/base/timeframes.py:206 pretix/base/timeframes.py:217
@@ -12342,10 +12334,9 @@ msgid "by quarter"
 msgstr "por trimestre"
 
 #: pretix/base/timeframes.py:193
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current quarter to date"
-msgstr "Carrito actual del usuario"
+msgstr "Trimestre actual hasta la fecha"
 
 #: pretix/base/timeframes.py:202
 msgctxt "reporting_timeframe"
@@ -12358,10 +12349,9 @@ msgid "Next quarter"
 msgstr "Siguiente trimestre"
 
 #: pretix/base/timeframes.py:222
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current year"
-msgstr "Temas de actualidad"
+msgstr "Año corriente"
 
 #: pretix/base/timeframes.py:226 pretix/base/timeframes.py:235
 #: pretix/base/timeframes.py:244 pretix/base/timeframes.py:253
@@ -12370,16 +12360,14 @@ msgid "by year"
 msgstr "por año"
 
 #: pretix/base/timeframes.py:231
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Current year to date"
-msgstr "Actualmente a la venta"
+msgstr "Año actual hasta la fecha"
 
 #: pretix/base/timeframes.py:240
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Previous year"
-msgstr "Vista previa del correo electrónico"
+msgstr "Año anterior"
 
 #: pretix/base/timeframes.py:249
 msgctxt "reporting_timeframe"
@@ -12392,10 +12380,9 @@ msgid "All future (excluding today)"
 msgstr "Todo el futuro (excepto hoy)"
 
 #: pretix/base/timeframes.py:262 pretix/base/timeframes.py:271
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "Other"
-msgstr "Otros"
+msgstr "Otro"
 
 #: pretix/base/timeframes.py:267
 msgctxt "reporting_timeframe"
@@ -12403,32 +12390,27 @@ msgid "All past (including today)"
 msgstr "Todo el pasado (incluido el presente)"
 
 #: pretix/base/timeframes.py:284
-#, fuzzy
 msgctxt "timeframe"
 msgid "Start"
-msgstr "Fecha de inicio"
+msgstr "Inicio"
 
 #: pretix/base/timeframes.py:285
-#, fuzzy
 msgctxt "timeframe"
 msgid "End"
-msgstr "Habilitado"
+msgstr "Fin"
 
 #: pretix/base/timeframes.py:318
-#, fuzzy
 msgid "The end date must be after the start date."
-msgstr "La finalización del evento tiene que ser después de su inicio."
+msgstr "La fecha de finalización debe ser posterior a la fecha de inicio."
 
 #: pretix/base/timeframes.py:324
-#, fuzzy
 msgid "Custom timeframe"
-msgstr "Cliente"
+msgstr "Plazo personalizado"
 
 #: pretix/base/timeframes.py:326
-#, fuzzy
 msgctxt "reporting_timeframe"
 msgid "All time"
-msgstr "Todas las entradas"
+msgstr "Todo el tiempo"
 
 #: pretix/base/timeline.py:59
 msgctxt "timeline"
@@ -12456,16 +12438,14 @@ msgid "End of ticket sales"
 msgstr "Fin de la venta de entradas"
 
 #: pretix/base/timeline.py:104
-#, fuzzy
 msgctxt "timeline"
 msgid "Customers can no longer modify their orders"
-msgstr "Clientes pueden cancelar ordenes pagadas"
+msgstr "Los clientes ya no pueden modificar sus pedido"
 
 #: pretix/base/timeline.py:117
-#, fuzzy
 msgctxt "timeline"
 msgid "No more payments can be completed"
-msgstr "Marcar el pago como completo"
+msgstr "No se pueden completar más pagos"
 
 #: pretix/base/timeline.py:129
 msgctxt "timeline"
@@ -12478,10 +12458,9 @@ msgid "Customers can no longer cancel free or unpaid orders"
 msgstr "Los clientes ya no pueden cancelar pedidos gratuitos o no pagados"
 
 #: pretix/base/timeline.py:153
-#, fuzzy
 msgctxt "timeline"
 msgid "Customers can no longer cancel paid orders"
-msgstr "Clientes pueden cancelar ordenes pagadas"
+msgstr "Los clientes ya no pueden cancelar pedidos pagados"
 
 #: pretix/base/timeline.py:167
 msgctxt "timeline"
@@ -12581,9 +12560,8 @@ msgstr ""
 "mismo origen\"."
 
 #: pretix/base/views/tasks.py:178
-#, fuzzy
 msgid "An unexpected error has occurred, please try again later."
-msgstr "Se ha producido un error interno, inténtelo de nuevo."
+msgstr "Se ha producido un error inesperado, inténtelo de nuevo más tarde."
 
 #: pretix/base/views/tasks.py:181
 msgid "The task has been completed."
@@ -12670,14 +12648,12 @@ msgid "Barcode"
 msgstr "Código de barras"
 
 #: pretix/control/forms/checkin.py:191
-#, fuzzy
 msgid "Check-in time"
-msgstr "Lista de registro"
+msgstr "Hora de entrada"
 
 #: pretix/control/forms/checkin.py:195
-#, fuzzy
 msgid "Check-in type"
-msgstr "Lista de registro"
+msgstr "Tipo de check-in"
 
 #: pretix/control/forms/checkin.py:199
 msgid "Allow check-in of unpaid order (if check-in list permits it)"
@@ -12685,9 +12661,8 @@ msgstr ""
 "Permitir el check-in de pedidos impagos (si la lista de check-in lo permite)"
 
 #: pretix/control/forms/checkin.py:203
-#, fuzzy
 msgid "Support for check-in questions"
-msgstr "No chequeado"
+msgstr "Soporte para preguntas de check-in"
 
 #: pretix/control/forms/checkin.py:209 pretix/control/forms/checkin.py:225
 #: pretix/control/forms/filter.py:2328 pretix/control/forms/filter.py:2370
@@ -12795,9 +12770,8 @@ msgid "You cannot choose the base domain of this installation."
 msgstr "No puede elegir el dominio base de esta instalación."
 
 #: pretix/control/forms/event.py:399 pretix/control/forms/organizer.py:160
-#, fuzzy
 msgid "This domain is already in use for a different event or organizer."
-msgstr "Este dominio ya se utiliza para un organizador diferente."
+msgstr "Este dominio ya está en uso para otro evento u organizador."
 
 #: pretix/control/forms/event.py:494
 #, python-brace-format
@@ -12981,15 +12955,13 @@ msgstr "Renderizador de correo HTML"
 
 #: pretix/control/forms/event.py:993 pretix/control/forms/event.py:1020
 #: pretix/control/forms/event.py:1047 pretix/control/forms/event.py:1183
-#, fuzzy
 msgid "Subject sent to order contact address"
-msgstr "Cambiar la dirección de contacto del pedido"
+msgstr "Asunto enviado a la dirección de contacto del pedido"
 
 #: pretix/control/forms/event.py:998 pretix/control/forms/event.py:1025
 #: pretix/control/forms/event.py:1052 pretix/control/forms/event.py:1188
-#, fuzzy
 msgid "Text sent to order contact address"
-msgstr "Cambiar la dirección de contacto del pedido"
+msgstr "Texto enviado a la dirección de contacto del pedido"
 
 #: pretix/control/forms/event.py:1003 pretix/control/forms/event.py:1030
 #: pretix/control/forms/event.py:1057 pretix/control/forms/event.py:1193
@@ -13033,23 +13005,20 @@ msgid "Text"
 msgstr "Texto"
 
 #: pretix/control/forms/event.py:1084
-#, fuzzy
 msgid "Subject (sent by admin)"
-msgstr "Texto (enviado por admin)"
+msgstr "Asunto (enviado por administrador)"
 
 #: pretix/control/forms/event.py:1089
-#, fuzzy
 msgid "Subject (sent by admin to attendee)"
-msgstr "Texto (enviado por admin)"
+msgstr "Asunto (enviado por el administrador al asistente)"
 
 #: pretix/control/forms/event.py:1094
 msgid "Text (sent by admin)"
 msgstr "Texto (enviado por admin)"
 
 #: pretix/control/forms/event.py:1099
-#, fuzzy
 msgid "Subject (requested by user)"
-msgstr "Texto (solicitado por el usuario)"
+msgstr "Asunto (solicitado por el usuario)"
 
 #: pretix/control/forms/event.py:1104
 msgid "Text (requested by user)"
@@ -13088,24 +13057,20 @@ msgstr ""
 "evento de pedido. Si el campo está vacío, el correo nunca será enviado."
 
 #: pretix/control/forms/event.py:1216
-#, fuzzy
 msgid "Subject for received order"
-msgstr "Orden recibida"
+msgstr "Asunto para pedido recibido"
 
 #: pretix/control/forms/event.py:1221
-#, fuzzy
 msgid "Text for received order"
-msgstr "Orden recibida"
+msgstr "Texto para pedido recibido"
 
 #: pretix/control/forms/event.py:1226
-#, fuzzy
 msgid "Subject for approved order"
-msgstr "Sí, aprobar la orden"
+msgstr "Sujeto a orden aprobada"
 
 #: pretix/control/forms/event.py:1231
-#, fuzzy
 msgid "Text for approved order"
-msgstr "Sí, aprobar la orden"
+msgstr "Texto para pedido aprobado"
 
 #: pretix/control/forms/event.py:1234 pretix/control/forms/event.py:1252
 msgid ""
