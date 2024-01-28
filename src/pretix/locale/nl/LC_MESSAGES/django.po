@@ -7,8 +7,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-24 13:03+0000\n"
-"PO-Revision-Date: 2024-01-26 23:00+0000\n"
-"Last-Translator: BerkieBb <377jhgamer@gmail.com>\n"
+"PO-Revision-Date: 2024-01-28 21:00+0000\n"
+"Last-Translator: BMaster <tom@anoebis.be>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
 "\n"
 "Language: nl\n"
@@ -30831,10 +30831,6 @@ msgid "Payment"
 msgstr "Betaling"
 
 #: pretix/presale/checkoutflow.py:1285
-#, fuzzy
-#| msgid ""
-#| "Your gift card has been applied, but {} still need to be paid. Please "
-#| "select a payment method."
 msgid ""
 "Your payment method has been applied, but {} still need to be paid. Please "
 "select a payment method for the remainder."
@@ -31363,10 +31359,8 @@ msgid ""
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:12
-#, fuzzy
-#| msgid "Please confirm the following payment details."
 msgid "You already selected the following payment methods:"
-msgstr "Bevestig de volgende betalingsdetails."
+msgstr "De volgende betaalmethodes heeft u reeds geselecteerd:"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:26
 #, fuzzy
@@ -31376,8 +31370,6 @@ msgid "Remove payment"
 msgstr "Ontvangen betalingen"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:38
-#, fuzzy
-#| msgid "Pending amount"
 msgid "Remaining balance"
 msgstr "Openstaand bedrag"
 
@@ -31388,10 +31380,8 @@ msgid "Please select a payment method below."
 msgstr "Selecteer een betaalmethode."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:52
-#, fuzzy
-#| msgid "Please select how you want to pay."
 msgid "Please select how you want to pay the remaining balance:"
-msgstr "Selecteer hoe u wilt betalen."
+msgstr "Selecteer hoe u het resterende bedrag wil betalen."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_payment.html:95
 msgid "This sales channel does not provide support for test mode."
