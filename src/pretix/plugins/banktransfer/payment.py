@@ -376,7 +376,7 @@ class BankTransfer(BasePaymentProvider):
                                         order=order,
                                         invoice=invoice,
                                         event_or_subevent=self.event,
-                                        invoice_address=order.invoice_address)
+                                        invoice_address=getattr(order, 'invoice_address', None) or InvoiceAddress())
             template = self.settings.get('invoice_email_text', as_type=LazyI18nString)
             subject = self.settings.get('invoice_email_subject', as_type=LazyI18nString)
 
