@@ -862,7 +862,7 @@ class DayCalendarView(OrganizerViewMixin, EventListMixin, TemplateView):
 
     def _set_date_to_next_event(self):
         now_dt = now()
-        next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).anootate(
+        next_ev = filter_qs_by_attr(Event.objects.using(settings.DATABASE_REPLICA).annotate(
             effective_date=Case(
                 When(date_from__lt=now_dt, date_to__isnull=False, date_to__gte=now_dt, then=Value(now_dt)),
                 default=F('date_from'),
