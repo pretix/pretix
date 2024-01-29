@@ -2,7 +2,7 @@
    :linenothreshold: 5
 
 Writing a template placeholder plugin
-====================================
+=====================================
 
 A template placeholder is a dynamic value that pretix users can use in their email templates and in several other
 configurable texts.
