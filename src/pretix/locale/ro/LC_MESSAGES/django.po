@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-24 13:03+0000\n"
+"POT-Creation-Date: 2024-01-29 11:16+0000\n"
 "PO-Revision-Date: 2022-04-28 02:00+0000\n"
 "Last-Translator: Edd28 <chitu_edy@yahoo.com>\n"
 "Language-Team: Romanian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -394,17 +394,17 @@ msgid ""
 msgstr ""
 "Aplicația \"{application_name}\" a fost autorizată să vă acceseze contul."
 
-#: pretix/api/views/order.py:583 pretix/control/views/orders.py:1558
+#: pretix/api/views/order.py:583 pretix/control/views/orders.py:1570
 #: pretix/presale/views/order.py:781 pretix/presale/views/order.py:854
 msgid "You cannot generate an invoice for this order."
 msgstr "Nu puteți genera o factură pentru această comandă."
 
-#: pretix/api/views/order.py:588 pretix/control/views/orders.py:1560
+#: pretix/api/views/order.py:588 pretix/control/views/orders.py:1572
 #: pretix/presale/views/order.py:783 pretix/presale/views/order.py:856
 msgid "An invoice for this order already exists."
 msgstr "Există deja o factură pentru această comandă."
 
-#: pretix/api/views/order.py:614 pretix/control/views/orders.py:1684
+#: pretix/api/views/order.py:614 pretix/control/views/orders.py:1696
 #: pretix/control/views/users.py:141
 msgid "There was an error sending the mail. Please try again later."
 msgstr ""
@@ -431,7 +431,7 @@ msgstr "Comandă marcată ca fiind plătită"
 #: pretix/api/webhooks.py:237 pretix/base/models/checkin.py:359
 #: pretix/base/notifications.py:251
 #: pretix/control/templates/pretixcontrol/event/mail.html:114
-#: pretix/control/views/orders.py:1521
+#: pretix/control/views/orders.py:1533
 msgid "Order canceled"
 msgstr "Comandă anulată"
 
@@ -926,7 +926,7 @@ msgstr "Nume complet"
 #: pretix/control/templates/pretixcontrol/organizers/membershiptypes.html:26
 #: pretix/control/templates/pretixcontrol/organizers/ssoclients.html:20
 #: pretix/control/templates/pretixcontrol/organizers/ssoproviders.html:20
-#: pretix/control/templates/pretixcontrol/organizers/team_members.html:96
+#: pretix/control/templates/pretixcontrol/organizers/team_members.html:100
 #: pretix/control/templates/pretixcontrol/subevents/index.html:93
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:144
 #: pretix/control/views/waitinglist.py:307 pretix/plugins/badges/models.py:53
@@ -1524,7 +1524,7 @@ msgstr "Numărul liniei"
 msgid "Description"
 msgstr "Descriere"
 
-#: pretix/base/exporters/invoices.py:320 pretix/control/forms/orders.py:339
+#: pretix/base/exporters/invoices.py:320 pretix/control/forms/orders.py:337
 msgid "Gross price"
 msgstr "Preț brut"
 
@@ -2114,8 +2114,8 @@ msgstr "ID-ul poziției"
 #: pretix/control/forms/filter.py:426 pretix/control/forms/filter.py:1832
 #: pretix/control/forms/filter.py:2056 pretix/control/forms/filter.py:2171
 #: pretix/control/forms/filter.py:2253 pretix/control/forms/filter.py:2470
-#: pretix/control/forms/item.py:250 pretix/control/forms/orders.py:344
-#: pretix/control/forms/orders.py:396 pretix/control/forms/orders.py:775
+#: pretix/control/forms/item.py:250 pretix/control/forms/orders.py:342
+#: pretix/control/forms/orders.py:394 pretix/control/forms/orders.py:773
 #: pretix/control/forms/vouchers.py:114
 #: pretix/control/templates/pretixcontrol/checkin/lists.html:98
 #: pretix/control/templates/pretixcontrol/items/quotas.html:51
@@ -2176,7 +2176,7 @@ msgstr "Data încheierii"
 #: pretix/base/exporters/orderlist.py:845 pretix/base/models/items.py:698
 #: pretix/base/models/vouchers.py:250 pretix/base/models/waitinglist.py:91
 #: pretix/base/orderimport.py:255 pretix/control/forms/filter.py:2062
-#: pretix/control/forms/filter.py:2317 pretix/control/forms/orders.py:319
+#: pretix/control/forms/filter.py:2317 pretix/control/forms/orders.py:317
 #: pretix/control/forms/vouchers.py:64
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/control/templates/pretixcontrol/item/base.html:3
@@ -2777,7 +2777,7 @@ msgstr "Card pentru test"
 msgid "Expiry date"
 msgstr "Dată expirare"
 
-#: pretix/base/exporters/orderlist.py:1313 pretix/control/forms/orders.py:828
+#: pretix/base/exporters/orderlist.py:1313 pretix/control/forms/orders.py:826
 msgid "Special terms and conditions"
 msgstr "Termeni și condiții speciale"
 
@@ -4228,17 +4228,17 @@ msgstr "Setari aditionale"
 #: pretix/base/models/exports.py:74 pretix/control/forms/event.py:1074
 #: pretix/control/forms/event.py:1136 pretix/control/forms/event.py:1148
 #: pretix/control/forms/event.py:1158 pretix/control/forms/event.py:1168
-#: pretix/control/forms/orders.py:665 pretix/control/forms/orders.py:889
-#: pretix/control/forms/orders.py:916 pretix/control/forms/organizer.py:539
+#: pretix/control/forms/orders.py:663 pretix/control/forms/orders.py:887
+#: pretix/control/forms/orders.py:914 pretix/control/forms/organizer.py:539
 #: pretix/control/forms/organizer.py:549 pretix/control/forms/organizer.py:559
 #: pretix/control/forms/vouchers.py:266 pretix/plugins/sendmail/forms.py:69
 #: pretix/plugins/sendmail/forms.py:85 pretix/plugins/sendmail/models.py:232
 msgid "Subject"
 msgstr "Subiect"
 
-#: pretix/base/models/exports.py:78 pretix/control/forms/orders.py:701
-#: pretix/control/forms/orders.py:718 pretix/control/forms/orders.py:897
-#: pretix/control/forms/orders.py:924 pretix/control/forms/vouchers.py:272
+#: pretix/base/models/exports.py:78 pretix/control/forms/orders.py:699
+#: pretix/control/forms/orders.py:716 pretix/control/forms/orders.py:895
+#: pretix/control/forms/orders.py:922 pretix/control/forms/vouchers.py:272
 #: pretix/plugins/sendmail/forms.py:70 pretix/plugins/sendmail/forms.py:90
 #: pretix/plugins/sendmail/models.py:233
 msgid "Message"
@@ -5451,7 +5451,7 @@ msgid "expired"
 msgstr "expirat"
 
 #: pretix/base/models/orders.py:199 pretix/base/orderimport.py:832
-#: pretix/control/forms/orders.py:641 pretix/control/forms/organizer.py:779
+#: pretix/control/forms/orders.py:639 pretix/control/forms/organizer.py:779
 msgid "Customer"
 msgstr "Client"
 
@@ -6427,7 +6427,7 @@ msgstr "Setare invalidă pentru coloana \"{header}\"."
 msgid "Enter a valid phone number."
 msgstr "Introduceți un număr de telefon valid."
 
-#: pretix/base/orderimport.py:205 pretix/presale/views/waiting.py:117
+#: pretix/base/orderimport.py:205 pretix/presale/views/waiting.py:118
 msgctxt "subevent"
 msgid "You need to select a date."
 msgstr "Trebuie să selectați o dată."
@@ -6509,9 +6509,9 @@ msgstr "Stat"
 msgid "Calculate from product"
 msgstr "Se calculează din produs"
 
-#: pretix/base/orderimport.py:586 pretix/control/views/orders.py:1103
-#: pretix/control/views/orders.py:1132 pretix/control/views/orders.py:1176
-#: pretix/control/views/orders.py:1211 pretix/control/views/orders.py:1234
+#: pretix/base/orderimport.py:586 pretix/control/views/orders.py:1115
+#: pretix/control/views/orders.py:1144 pretix/control/views/orders.py:1188
+#: pretix/control/views/orders.py:1223 pretix/control/views/orders.py:1246
 msgid "You entered an invalid number."
 msgstr "Ați introdus un număr invalid."
 
@@ -6847,7 +6847,7 @@ msgstr ""
 msgid "Offsetting"
 msgstr "Compensarea"
 
-#: pretix/base/payment.py:1273 pretix/control/views/orders.py:1185
+#: pretix/base/payment.py:1273 pretix/control/views/orders.py:1197
 msgid "You entered an order that could not be found."
 msgstr "Ați introdus o comandă care nu a putut fi găsită."
 
@@ -7268,7 +7268,7 @@ msgid "Ground floor, Row 3, Seat 4"
 msgstr "Parter, rândul 3, locul 4"
 
 #: pretix/base/pdf.py:468 pretix/base/pdf.py:474
-#: pretix/control/forms/orders.py:328
+#: pretix/control/forms/orders.py:326
 msgid "General admission"
 msgstr "Acces general"
 
@@ -7431,7 +7431,7 @@ msgstr ""
 "Nu am reușit să procesăm cererea dvs. în totalitate, deoarece serverul a "
 "fost prea ocupat. Vă rugăm să încercați din nou."
 
-#: pretix/base/services/cart.py:104 pretix/presale/views/cart.py:242
+#: pretix/base/services/cart.py:104 pretix/presale/views/cart.py:248
 msgid "You did not select any products."
 msgstr "Nu ați selectat niciun produs."
 
@@ -7525,7 +7525,7 @@ msgstr[2] ""
 
 #: pretix/base/services/cart.py:135 pretix/base/services/orders.py:154
 #: pretix/presale/templates/pretixpresale/event/index.html:157
-#: pretix/presale/views/waiting.py:105 pretix/presale/views/widget.py:730
+#: pretix/presale/views/waiting.py:106 pretix/presale/views/widget.py:730
 #, fuzzy
 #| msgid "The presale period for this event has not yet started."
 msgid "The booking period for this event has not yet started."
@@ -8405,7 +8405,7 @@ msgstr ""
 "Această comandă nu poate fi anulată deoarece cardul cadou {card} "
 "achiziționat în această comandă a fost deja revendicat."
 
-#: pretix/base/services/orders.py:555 pretix/control/forms/orders.py:205
+#: pretix/base/services/orders.py:555 pretix/control/forms/orders.py:201
 #, fuzzy
 #| msgid ""
 #| "The cancellation fee cannot be higher than the payment credit of this "
@@ -10053,7 +10053,7 @@ msgstr ""
 "lucru. În caz contrar, se va crea o rambursare manuală pe care o veți "
 "procesa manual."
 
-#: pretix/base/settings.py:1822 pretix/control/forms/orders.py:835
+#: pretix/base/settings.py:1822 pretix/control/forms/orders.py:833
 msgid "Keep a fixed cancellation fee"
 msgstr "Păstrați o taxă de anulare fixă"
 
@@ -10061,7 +10061,7 @@ msgstr "Păstrați o taxă de anulare fixă"
 msgid "Keep payment, shipping and service fees"
 msgstr "Păstrați taxele de plată, de expediere și de servicii"
 
-#: pretix/base/settings.py:1843 pretix/control/forms/orders.py:846
+#: pretix/base/settings.py:1843 pretix/control/forms/orders.py:844
 msgid "Keep a percentual cancellation fee"
 msgstr "Păstrați o taxă de anulare procentuală"
 
@@ -12673,7 +12673,7 @@ msgstr ""
 #: pretix/control/forms/filter.py:2174 pretix/control/forms/filter.py:2190
 #: pretix/control/forms/filter.py:2256 pretix/control/forms/filter.py:2291
 #: pretix/control/forms/filter.py:2473 pretix/control/forms/filter.py:2488
-#: pretix/control/forms/orders.py:777 pretix/control/forms/orders.py:950
+#: pretix/control/forms/orders.py:775 pretix/control/forms/orders.py:948
 #: pretix/control/templates/pretixcontrol/event/fragment_subevent_choice_simple.html:5
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:52
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:114
@@ -13476,12 +13476,12 @@ msgstr "Toate produsele"
 msgid "{product} – Any variation"
 msgstr "{product} - Orice variație"
 
-#: pretix/control/forms/filter.py:531 pretix/control/forms/orders.py:788
+#: pretix/control/forms/filter.py:531 pretix/control/forms/orders.py:786
 msgctxt "subevent"
 msgid "All dates starting at or after"
 msgstr "Toate datele care încep la sau după"
 
-#: pretix/control/forms/filter.py:537 pretix/control/forms/orders.py:795
+#: pretix/control/forms/filter.py:537 pretix/control/forms/orders.py:793
 msgctxt "subevent"
 msgid "All dates starting before"
 msgstr "Toate datele care încep înainte de"
@@ -14305,8 +14305,8 @@ msgstr "Ați adăugat același produs la pachet de două ori."
 msgid "Bundled product"
 msgstr "Produs la pachet"
 
-#: pretix/control/forms/item.py:1102 pretix/control/forms/orders.py:363
-#: pretix/control/forms/orders.py:551
+#: pretix/control/forms/item.py:1102 pretix/control/forms/orders.py:361
+#: pretix/control/forms/orders.py:549
 msgid "inactive"
 msgstr "inactiv"
 
@@ -14433,16 +14433,16 @@ msgstr ""
 "planificat! De asemenea, operațiunea va fi efectuată indiferent de setările "
 "pentru plățile întârziate."
 
-#: pretix/control/forms/orders.py:165 pretix/control/forms/orders.py:212
-#: pretix/control/forms/orders.py:226
+#: pretix/control/forms/orders.py:161 pretix/control/forms/orders.py:208
+#: pretix/control/forms/orders.py:222
 msgid "Notify customer by email"
 msgstr "Notificarea clientului prin e-mail"
 
-#: pretix/control/forms/orders.py:172
+#: pretix/control/forms/orders.py:168
 msgid "Keep a cancellation fee of"
 msgstr "Păstrați o taxă de anulare de"
 
-#: pretix/control/forms/orders.py:173
+#: pretix/control/forms/orders.py:169
 #, fuzzy
 #| msgid ""
 #| "If you keep a fee, all positions within this order will be canceled and "
@@ -14463,15 +14463,15 @@ msgstr ""
 "de anulare dacă doriți să le păstrați. Vă rugăm să introduceți întotdeauna o "
 "valoare brută, taxele vor fi calculate automat."
 
-#: pretix/control/forms/orders.py:179
+#: pretix/control/forms/orders.py:175
 msgid "Generate cancellation for invoice"
 msgstr "Generați anularea pentru factură"
 
-#: pretix/control/forms/orders.py:184 pretix/control/forms/orders.py:216
+#: pretix/control/forms/orders.py:180 pretix/control/forms/orders.py:212
 msgid "Comment (will be sent to the user)"
 msgstr "Comentariu (va fi trimis utilizatorului)"
 
-#: pretix/control/forms/orders.py:185 pretix/control/forms/orders.py:217
+#: pretix/control/forms/orders.py:181 pretix/control/forms/orders.py:213
 msgid ""
 "Will be included in the notification email when the respective placeholder "
 "is present in the configured email text."
@@ -14479,11 +14479,15 @@ msgstr ""
 "Va fi inclusă în e-mailul de notificare atunci când în textul configurat al "
 "e-mailului este prezent simbolul corespunzător."
 
-#: pretix/control/forms/orders.py:233
+#: pretix/control/forms/orders.py:223
+msgid "A mail will only be sent if the order is fully paid after this."
+msgstr ""
+
+#: pretix/control/forms/orders.py:230
 msgid "Payment amount"
 msgstr "Sumă de plată"
 
-#: pretix/control/forms/orders.py:237
+#: pretix/control/forms/orders.py:234
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:24
 #: pretix/plugins/reports/exporters.py:499
 #: pretix/plugins/reports/exporters.py:561
@@ -14492,21 +14496,21 @@ msgstr "Sumă de plată"
 msgid "Payment date"
 msgstr "Data plății"
 
-#: pretix/control/forms/orders.py:260
+#: pretix/control/forms/orders.py:258
 #, fuzzy
 #| msgid "Please select a valid seat."
 msgid "Please select some events."
 msgstr "Vă rugăm să selectați un loc valid."
 
-#: pretix/control/forms/orders.py:281
+#: pretix/control/forms/orders.py:279
 msgid "Re-calculate taxes"
 msgstr "Recalcularea taxelor"
 
-#: pretix/control/forms/orders.py:284
+#: pretix/control/forms/orders.py:282
 msgid "Do not re-calculate taxes"
 msgstr "Nu se recalculează taxele"
 
-#: pretix/control/forms/orders.py:285
+#: pretix/control/forms/orders.py:283
 msgid ""
 "Re-calculate taxes based on address and product settings, keep gross amount "
 "the same."
@@ -14514,7 +14518,7 @@ msgstr ""
 "Recalculează taxele pe baza setărilor privind adresa și produsul, păstrând "
 "aceeași sumă brută."
 
-#: pretix/control/forms/orders.py:286
+#: pretix/control/forms/orders.py:284
 msgid ""
 "Re-calculate taxes based on address and product settings, keep net amount "
 "the same."
@@ -14522,11 +14526,11 @@ msgstr ""
 "Recalculează taxele pe baza setărilor privind adresa și produsul, menținând "
 "aceeași sumă netă."
 
-#: pretix/control/forms/orders.py:291
+#: pretix/control/forms/orders.py:289
 msgid "Issue a new invoice if required"
 msgstr "Emiterea unei noi facturi, dacă este necesar"
 
-#: pretix/control/forms/orders.py:295
+#: pretix/control/forms/orders.py:293
 msgid ""
 "If an invoice exists for this order and this operation would change its "
 "contents, the old invoice will be canceled and a new invoice will be issued."
@@ -14535,27 +14539,27 @@ msgstr ""
 "operațiune ar modifica conținutul acesteia, vechea factură va fi anulată și "
 "se va emite o nouă factură."
 
-#: pretix/control/forms/orders.py:300
+#: pretix/control/forms/orders.py:298
 msgid "Notify user"
 msgstr "Notifica utilizatorul"
 
-#: pretix/control/forms/orders.py:304
+#: pretix/control/forms/orders.py:302
 msgid ""
 "Send an email to the customer notifying that their order has been changed."
 msgstr ""
 "Trimiteți un e-mail clientului prin care îl anunțați că i-a fost modificată "
 "comanda."
 
-#: pretix/control/forms/orders.py:308
+#: pretix/control/forms/orders.py:306
 msgid "Allow to overbook quotas when performing this operation"
 msgstr ""
 "Permiteți supra-rezervarea cotelor atunci când efectuați această operațiune"
 
-#: pretix/control/forms/orders.py:324
+#: pretix/control/forms/orders.py:322
 msgid "Add-on to"
 msgstr "Supliment Add-on la"
 
-#: pretix/control/forms/orders.py:329
+#: pretix/control/forms/orders.py:327
 #: pretix/control/templates/pretixcontrol/checkin/index.html:104
 #: pretix/control/templates/pretixcontrol/order/change.html:123
 #: pretix/control/views/vouchers.py:119
@@ -14564,7 +14568,7 @@ msgstr "Supliment Add-on la"
 msgid "Seat"
 msgstr "Loc"
 
-#: pretix/control/forms/orders.py:332
+#: pretix/control/forms/orders.py:330
 #: pretix/control/templates/pretixcontrol/order/change.html:172
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:5
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:9
@@ -14574,64 +14578,64 @@ msgstr "Loc"
 msgid "Membership"
 msgstr "Abonament"
 
-#: pretix/control/forms/orders.py:340
+#: pretix/control/forms/orders.py:338
 msgid "Including taxes, if any. Keep empty for the product's default price"
 msgstr ""
 "Inclusiv taxele, dacă este cazul. Păstrați gol pentru prețul implicit al "
 "produsului"
 
-#: pretix/control/forms/orders.py:455 pretix/control/forms/orders.py:459
-#: pretix/control/forms/orders.py:487 pretix/control/forms/orders.py:527
-#: pretix/control/forms/orders.py:546 pretix/control/forms/orders.py:564
-#: pretix/control/forms/orders.py:592
+#: pretix/control/forms/orders.py:453 pretix/control/forms/orders.py:457
+#: pretix/control/forms/orders.py:485 pretix/control/forms/orders.py:525
+#: pretix/control/forms/orders.py:544 pretix/control/forms/orders.py:562
+#: pretix/control/forms/orders.py:590
 msgid "(Unchanged)"
 msgstr "(Neschimbat)"
 
-#: pretix/control/forms/orders.py:465 pretix/control/forms/orders.py:587
+#: pretix/control/forms/orders.py:463 pretix/control/forms/orders.py:585
 msgid "New price (gross)"
 msgstr "Preț nou (brut)"
 
-#: pretix/control/forms/orders.py:469
+#: pretix/control/forms/orders.py:467
 #, fuzzy
 #| msgid "Ticket secret"
 msgid "Ticket is blocked"
 msgstr "Cheie secretă bilet"
 
-#: pretix/control/forms/orders.py:474
+#: pretix/control/forms/orders.py:472
 msgid "Validity start"
 msgstr ""
 
-#: pretix/control/forms/orders.py:479
+#: pretix/control/forms/orders.py:477
 #, fuzzy
 #| msgid "Valid until"
 msgid "Validity end"
 msgstr "Valabil până la"
 
-#: pretix/control/forms/orders.py:491
+#: pretix/control/forms/orders.py:489
 msgid "Generate a new secret"
 msgstr "Generarea unei noi chei secrete"
 
-#: pretix/control/forms/orders.py:495
+#: pretix/control/forms/orders.py:493
 msgid "Cancel this position"
 msgstr "Anulați această poziție"
 
-#: pretix/control/forms/orders.py:499
+#: pretix/control/forms/orders.py:497
 msgid "Split into new order"
 msgstr "Împărțită într-o comandă nouă"
 
-#: pretix/control/forms/orders.py:565
+#: pretix/control/forms/orders.py:563
 msgid "(No membership)"
 msgstr "(Fără abonament)"
 
-#: pretix/control/forms/orders.py:596
+#: pretix/control/forms/orders.py:594
 msgid "Remove this fee"
 msgstr "Eliminați această taxă"
 
-#: pretix/control/forms/orders.py:611
+#: pretix/control/forms/orders.py:609
 msgid "Invalidate secrets"
 msgstr "Invalidarea cheilor secrete"
 
-#: pretix/control/forms/orders.py:612
+#: pretix/control/forms/orders.py:610
 msgid ""
 "Regenerates the order and ticket secrets. You will need to re-send the link "
 "to the order page to the user and the user will need to download his tickets "
@@ -14642,11 +14646,11 @@ msgstr ""
 "va trebui să descarce din nou biletele sale. Vechile versiuni vor fi "
 "invalide."
 
-#: pretix/control/forms/orders.py:669 pretix/plugins/sendmail/forms.py:208
+#: pretix/control/forms/orders.py:667 pretix/plugins/sendmail/forms.py:208
 msgid "Attach tickets"
 msgstr "Atașați bilete"
 
-#: pretix/control/forms/orders.py:670 pretix/plugins/sendmail/forms.py:209
+#: pretix/control/forms/orders.py:668 pretix/plugins/sendmail/forms.py:209
 msgid ""
 "Will be ignored if tickets exceed a given size limit to ensure email "
 "deliverability."
@@ -14654,24 +14658,24 @@ msgstr ""
 "Vor fi ignorate dacă biletele depășesc o anumită limită de dimensiune pentru "
 "a asigura livrarea e-mailurilor."
 
-#: pretix/control/forms/orders.py:674
+#: pretix/control/forms/orders.py:672
 msgid "Attach invoices"
 msgstr "Atașați facturi"
 
-#: pretix/control/forms/orders.py:695
+#: pretix/control/forms/orders.py:693
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_inspect.html:20
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:30
 msgid "Recipient"
 msgstr "Destinatar"
 
-#: pretix/control/forms/orders.py:732
+#: pretix/control/forms/orders.py:730
 msgid ""
 "Cancel the order. All tickets will no longer work. This can not be reverted."
 msgstr ""
 "Anulați comanda. Toate biletele nu vor mai funcționa. Acest lucru nu mai "
 "poate reveni la starea inițială."
 
-#: pretix/control/forms/orders.py:733
+#: pretix/control/forms/orders.py:731
 msgid ""
 "Mark the order as pending and allow the user to pay the open amount with "
 "another payment method."
@@ -14679,38 +14683,38 @@ msgstr ""
 "Marcați comanda ca fiind în așteptare și permiteți utilizatorului să "
 "plătească suma rămasă cu o altă metodă de plată."
 
-#: pretix/control/forms/orders.py:735
+#: pretix/control/forms/orders.py:733
 msgid "Do nothing and keep the order as it is."
 msgstr "Nu faceți nimic și păstrați comanda așa cum este."
 
-#: pretix/control/forms/orders.py:762
+#: pretix/control/forms/orders.py:760
 msgid "The refund amount needs to be positive and less than {}."
 msgstr "Valoarea rambursabilă trebuie să fie pozitivă și mai mică decât {}."
 
-#: pretix/control/forms/orders.py:768
+#: pretix/control/forms/orders.py:766
 msgid "You need to specify an amount for a partial refund."
 msgstr "Trebuie să specificați o sumă pentru o rambursare parțială."
 
-#: pretix/control/forms/orders.py:780
+#: pretix/control/forms/orders.py:778
 msgid "Cancel all dates"
 msgstr "Anulați toate datele"
 
-#: pretix/control/forms/orders.py:799
+#: pretix/control/forms/orders.py:797
 msgid "Automatically refund money if possible"
 msgstr "Rambursați automat banii dacă este posibil"
 
-#: pretix/control/forms/orders.py:802
+#: pretix/control/forms/orders.py:800
 msgid ""
 "Only available for payment method that support automatic refunds. Tickets "
 "that have been blocked (manually or by a plugin) are not auto-canceled and "
 "you will need to deal with them manually."
 msgstr ""
 
-#: pretix/control/forms/orders.py:806
+#: pretix/control/forms/orders.py:804
 msgid "Create refund in the manual refund to-do list"
 msgstr "Creează rambursarea în lista pentru rambursări manuale"
 
-#: pretix/control/forms/orders.py:809
+#: pretix/control/forms/orders.py:807
 msgid ""
 "Manual refunds will be created which will be listed in the manual refund to-"
 "do list. When combined with the automatic refund functionally, only payments "
@@ -14725,7 +14729,7 @@ msgstr ""
 "bifați dacă doriți să rambursați o parte din comenzi prin compensare cu alte "
 "comenzi sau prin emiterea de carduri cadou."
 
-#: pretix/control/forms/orders.py:815
+#: pretix/control/forms/orders.py:813
 msgid ""
 "Refund order value to a gift card instead instead of the original payment "
 "method"
@@ -14733,23 +14737,23 @@ msgstr ""
 "Rambursați valoarea comenzii pe un card cadou în locul metodei de plată "
 "originale"
 
-#: pretix/control/forms/orders.py:821
+#: pretix/control/forms/orders.py:819
 msgid "Gift card validity"
 msgstr "Valabilitatea cardului cadou"
 
-#: pretix/control/forms/orders.py:840
+#: pretix/control/forms/orders.py:838
 msgid "Keep a fixed cancellation fee per ticket"
 msgstr "Păstrați o taxă de anulare fixă pentru fiecare bilet"
 
-#: pretix/control/forms/orders.py:841
+#: pretix/control/forms/orders.py:839
 msgid "Free tickets and add-on products are not counted"
 msgstr "Biletele gratuite și produsele adiționale nu sunt luate în considerare"
 
-#: pretix/control/forms/orders.py:851
+#: pretix/control/forms/orders.py:849
 msgid "Keep fees"
 msgstr "Păstrați taxele"
 
-#: pretix/control/forms/orders.py:854
+#: pretix/control/forms/orders.py:852
 msgid ""
 "The selected types of fees will not be refunded but instead added to the "
 "cancellation fee. Fees are never refunded in when an order in an event "
@@ -14761,20 +14765,20 @@ msgstr ""
 "dintr-o serie de evenimente este anulată doar parțial, deoarece constă în "
 "bilete pentru mai multe date."
 
-#: pretix/control/forms/orders.py:860
+#: pretix/control/forms/orders.py:858
 msgid "Send information via email"
 msgstr "Trimiteți informații prin e-mail"
 
-#: pretix/control/forms/orders.py:866
+#: pretix/control/forms/orders.py:864
 msgid "Send information to waiting list"
 msgstr "Trimiteți informații pe lista de așteptare"
 
-#: pretix/control/forms/orders.py:892 pretix/control/forms/orders.py:918
+#: pretix/control/forms/orders.py:890 pretix/control/forms/orders.py:916
 #, python-brace-format
 msgid "Canceled: {event}"
 msgstr "Anulat: {event}"
 
-#: pretix/control/forms/orders.py:903
+#: pretix/control/forms/orders.py:901
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -14805,7 +14809,7 @@ msgstr ""
 "\n"
 "Echipa {event}"
 
-#: pretix/control/forms/orders.py:930
+#: pretix/control/forms/orders.py:928
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -14828,7 +14832,7 @@ msgstr ""
 "\n"
 "Echipa {event}"
 
-#: pretix/control/forms/orders.py:962 pretix/plugins/sendmail/forms.py:127
+#: pretix/control/forms/orders.py:960 pretix/plugins/sendmail/forms.py:127
 #: pretix/plugins/sendmail/forms.py:220
 msgctxt "subevent"
 msgid "Please either select a specific date or a date range, not both."
@@ -14836,13 +14840,13 @@ msgstr ""
 "Vă rugăm să selectați fie o dată specifică, fie un interval de date, nu "
 "ambele."
 
-#: pretix/control/forms/orders.py:964
+#: pretix/control/forms/orders.py:962
 msgctxt "subevent"
 msgid "Please either select all dates or a date range, not both."
 msgstr ""
 "Vă rugăm să selectați fie toate datele, fie un interval de date, nu ambele."
 
-#: pretix/control/forms/orders.py:966 pretix/plugins/sendmail/forms.py:129
+#: pretix/control/forms/orders.py:964 pretix/plugins/sendmail/forms.py:129
 #: pretix/plugins/sendmail/forms.py:222
 msgctxt "subevent"
 msgid "If you set a date range, please set both a start and an end."
@@ -14850,7 +14854,7 @@ msgstr ""
 "Dacă stabiliți un interval de date, vă rugăm să stabiliți atât începutul, "
 "cât și sfârșitul."
 
-#: pretix/control/forms/orders.py:968
+#: pretix/control/forms/orders.py:966
 msgid "Please confirm that you want to cancel ALL dates in this event series."
 msgstr ""
 "Vă rugăm să confirmați că doriți să anulați TOATE datele din această serie "
@@ -15805,11 +15809,11 @@ msgstr "Comanda a fost marcată ca fiind plătită."
 msgid "The order has been set to require payment before use."
 msgstr "Voucherul a fost trimis la {recipient}."
 
-#: pretix/control/logdisplay.py:385 pretix/control/views/orders.py:1529
+#: pretix/control/logdisplay.py:385 pretix/control/views/orders.py:1541
 msgid "The order has been marked as expired."
 msgstr "Comanda a fost marcată ca fiind expirată."
 
-#: pretix/control/logdisplay.py:386 pretix/control/views/orders.py:1427
+#: pretix/control/logdisplay.py:386 pretix/control/views/orders.py:1439
 msgid "The order has been marked as paid."
 msgstr "Comanda a fost marcată ca fiind plătită."
 
@@ -15821,7 +15825,7 @@ msgstr "Cererea de anulare a fost ștearsă."
 msgid "The order has been refunded."
 msgstr "Comanda a fost rambursată."
 
-#: pretix/control/logdisplay.py:389 pretix/control/views/orders.py:1808
+#: pretix/control/logdisplay.py:389 pretix/control/views/orders.py:1820
 msgid "The order has been reactivated."
 msgstr "Comanda a fost reactivată."
 
@@ -15877,16 +15881,16 @@ msgstr "Contul clientului a fost modificat."
 msgid "The order locale has been changed."
 msgstr "S-a schimbat locația comenzii."
 
-#: pretix/control/logdisplay.py:403 pretix/control/views/orders.py:1566
+#: pretix/control/logdisplay.py:403 pretix/control/views/orders.py:1578
 #: pretix/presale/views/order.py:789 pretix/presale/views/order.py:862
 msgid "The invoice has been generated."
 msgstr "Factura a fost generată."
 
-#: pretix/control/logdisplay.py:404 pretix/control/views/orders.py:1637
+#: pretix/control/logdisplay.py:404 pretix/control/views/orders.py:1649
 msgid "The invoice has been regenerated."
 msgstr "Factura a fost regenerată."
 
-#: pretix/control/logdisplay.py:405 pretix/control/views/orders.py:1666
+#: pretix/control/logdisplay.py:405 pretix/control/views/orders.py:1678
 #: pretix/presale/views/order.py:875
 msgid "The invoice has been reissued."
 msgstr "Factura a fost emisă din nou."
@@ -16581,7 +16585,7 @@ msgstr "Utilizatorul a confirmat următorul mesaj: \"{}\""
 msgid "The order has been canceled (comment: \"{comment}\")."
 msgstr "Comanda a fost anulată (comentariu: \"{comment}\")."
 
-#: pretix/control/logdisplay.py:617 pretix/control/views/orders.py:1524
+#: pretix/control/logdisplay.py:617 pretix/control/views/orders.py:1536
 #: pretix/presale/views/order.py:1020
 msgid "The order has been canceled."
 msgstr "Comanda a fost anulată."
@@ -17514,7 +17518,7 @@ msgstr[2] ""
 #: pretix/control/templates/pretixcontrol/order/change_questions.html:81
 #: pretix/control/templates/pretixcontrol/order/extend.html:25
 #: pretix/control/templates/pretixcontrol/order/pay.html:34
-#: pretix/control/templates/pretixcontrol/order/pay_complete.html:28
+#: pretix/control/templates/pretixcontrol/order/pay_complete.html:34
 #: pretix/control/templates/pretixcontrol/order/reactivate.html:31
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:207
 #: pretix/control/templates/pretixcontrol/order/refund_done.html:26
@@ -19116,8 +19120,8 @@ msgstr ""
 #: pretix/control/views/organizer.py:2845
 #: pretix/control/views/organizer.py:2921
 #: pretix/control/views/organizer.py:3017
-#: pretix/control/views/organizer.py:3045 pretix/control/views/subevents.py:488
-#: pretix/control/views/subevents.py:1562 pretix/control/views/user.py:217
+#: pretix/control/views/organizer.py:3045 pretix/control/views/subevents.py:524
+#: pretix/control/views/subevents.py:1588 pretix/control/views/user.py:217
 #: pretix/control/views/users.py:110 pretix/control/views/vouchers.py:304
 #: pretix/plugins/badges/views.py:154 pretix/plugins/sendmail/views.py:653
 #: pretix/plugins/stripe/views.py:677
@@ -21415,7 +21419,7 @@ msgid "Deny"
 msgstr "Revocă"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:57
-#: pretix/control/templates/pretixcontrol/order/pay_complete.html:31
+#: pretix/control/templates/pretixcontrol/order/pay_complete.html:37
 msgid "Mark as paid"
 msgstr "Marcați ca fiind plătită"
 
@@ -23245,9 +23249,9 @@ msgstr "Nelimitat"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:62
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:140
-#: pretix/control/templates/pretixcontrol/organizers/team_members.html:43
-#: pretix/control/templates/pretixcontrol/organizers/team_members.html:63
-#: pretix/control/templates/pretixcontrol/organizers/team_members.html:109
+#: pretix/control/templates/pretixcontrol/organizers/team_members.html:47
+#: pretix/control/templates/pretixcontrol/organizers/team_members.html:67
+#: pretix/control/templates/pretixcontrol/organizers/team_members.html:113
 msgid "Remove"
 msgstr "Șterge"
 
@@ -23629,23 +23633,23 @@ msgstr "Permisiuni pentru evenimente"
 msgid "Member"
 msgstr "Membru"
 
-#: pretix/control/templates/pretixcontrol/organizers/team_members.html:32
+#: pretix/control/templates/pretixcontrol/organizers/team_members.html:36
 msgid "Two-factor authentication enabled"
 msgstr "Autentificare cu doi factori activată"
 
-#: pretix/control/templates/pretixcontrol/organizers/team_members.html:36
+#: pretix/control/templates/pretixcontrol/organizers/team_members.html:40
 msgid "Two-factor authentication disabled"
 msgstr "Autentificarea în doi-factori este dezactivată"
 
-#: pretix/control/templates/pretixcontrol/organizers/team_members.html:53
+#: pretix/control/templates/pretixcontrol/organizers/team_members.html:57
 msgid "invited, pending response"
 msgstr "invitat, în așteptarea răspunsului"
 
-#: pretix/control/templates/pretixcontrol/organizers/team_members.html:55
+#: pretix/control/templates/pretixcontrol/organizers/team_members.html:59
 msgid "resend invite"
 msgstr "retrimiteți invitația"
 
-#: pretix/control/templates/pretixcontrol/organizers/team_members.html:73
+#: pretix/control/templates/pretixcontrol/organizers/team_members.html:77
 msgid ""
 "To add a new user, you can enter their email address here. If they already "
 "have a pretix account, they will immediately be added to the event. "
@@ -23655,16 +23659,16 @@ msgstr ""
 "acestuia. Dacă aceștia au deja un cont pretix, vor fi adăugați imediat la "
 "eveniment. În caz contrar, li se va trimite un e-mail cu o invitație."
 
-#: pretix/control/templates/pretixcontrol/organizers/team_members.html:81
-#: pretix/control/templates/pretixcontrol/organizers/team_members.html:122
+#: pretix/control/templates/pretixcontrol/organizers/team_members.html:85
+#: pretix/control/templates/pretixcontrol/organizers/team_members.html:126
 msgid "Add"
 msgstr "Adaugă"
 
-#: pretix/control/templates/pretixcontrol/organizers/team_members.html:88
+#: pretix/control/templates/pretixcontrol/organizers/team_members.html:92
 msgid "API tokens"
 msgstr "Tokene API"
 
-#: pretix/control/templates/pretixcontrol/organizers/team_members.html:132
+#: pretix/control/templates/pretixcontrol/organizers/team_members.html:136
 msgid "Team history"
 msgstr "Istoricul echipei"
 
@@ -25513,9 +25517,9 @@ msgstr "Noua listă de check-in a fost creată."
 #: pretix/control/views/item.py:930 pretix/control/views/item.py:1134
 #: pretix/control/views/item.py:1300 pretix/control/views/item.py:1483
 #: pretix/control/views/organizer.py:263 pretix/control/views/organizer.py:291
-#: pretix/control/views/organizer.py:1155 pretix/control/views/subevents.py:467
-#: pretix/control/views/subevents.py:593 pretix/control/views/subevents.py:1006
-#: pretix/control/views/subevents.py:1464 pretix/control/views/user.py:330
+#: pretix/control/views/organizer.py:1155 pretix/control/views/subevents.py:503
+#: pretix/control/views/subevents.py:629 pretix/control/views/subevents.py:1032
+#: pretix/control/views/subevents.py:1490 pretix/control/views/user.py:330
 #: pretix/control/views/vouchers.py:276 pretix/control/views/vouchers.py:350
 #: pretix/control/views/vouchers.py:533 pretix/control/views/waitinglist.py:413
 #: pretix/plugins/badges/views.py:114 pretix/plugins/sendmail/views.py:582
@@ -26339,7 +26343,7 @@ msgstr ""
 "\n"
 "Echipa {event}"
 
-#: pretix/control/views/orders.py:1039
+#: pretix/control/views/orders.py:1051
 msgid ""
 "The payment has been marked as complete, but we were unable to send a "
 "confirmation mail."
@@ -26347,21 +26351,21 @@ msgstr ""
 "Plata a fost marcată ca fiind completă, dar nu am putut trimite un e-mail de "
 "confirmare."
 
-#: pretix/control/views/orders.py:1042
+#: pretix/control/views/orders.py:1054
 msgid "The payment has been marked as complete."
 msgstr "Plata a fost marcată ca fiind completă."
 
-#: pretix/control/views/orders.py:1044
+#: pretix/control/views/orders.py:1056
 msgid "This payment can not be confirmed at the moment."
 msgstr "Această plată nu poate fi confirmată în acest moment."
 
-#: pretix/control/views/orders.py:1189
+#: pretix/control/views/orders.py:1201
 #, fuzzy
 #| msgid "You entered an order that could not be found."
 msgid "You entered an order in an event with a different currency."
 msgstr "Ați introdus o comandă care nu a putut fi găsită."
 
-#: pretix/control/views/orders.py:1240
+#: pretix/control/views/orders.py:1252
 msgid ""
 "You can not refund more than the amount of a payment that is not yet "
 "refunded."
@@ -26369,7 +26373,7 @@ msgstr ""
 "Nu puteți rambursa mai mult decât suma unei plăți care nu a fost încă "
 "rambursată."
 
-#: pretix/control/views/orders.py:1245
+#: pretix/control/views/orders.py:1257
 msgid ""
 "You selected a partial refund for a payment method that only supports full "
 "refunds."
@@ -26377,7 +26381,7 @@ msgstr ""
 "Ați selectat o rambursare parțială pentru o metodă de plată care acceptă "
 "numai rambursări integrale."
 
-#: pretix/control/views/orders.py:1275
+#: pretix/control/views/orders.py:1287
 msgid ""
 "One of the refunds failed to be processed. You should retry to refund in a "
 "different way. The error message was: {}"
@@ -26385,11 +26389,11 @@ msgstr ""
 "Una dintre rambursări nu a fost procesată. Ar trebui să încercați din nou să "
 "efectuați rambursarea într-un alt mod. Mesajul de eroare a fost următorul: {}"
 
-#: pretix/control/views/orders.py:1281
+#: pretix/control/views/orders.py:1293
 msgid "A refund of {} has been processed."
 msgstr "A fost procesată o rambursare de {}."
 
-#: pretix/control/views/orders.py:1285
+#: pretix/control/views/orders.py:1297
 msgid ""
 "A refund of {} has been saved, but not yet fully executed. You can mark it "
 "as complete below."
@@ -26397,18 +26401,18 @@ msgstr ""
 "O rambursare de {} a fost salvată, dar nu a fost încă executată integral. "
 "Puteți să o marcați ca fiind completă mai jos."
 
-#: pretix/control/views/orders.py:1314
+#: pretix/control/views/orders.py:1326
 msgid ""
 "A new gift card was created. You can now send the user their gift card code."
 msgstr ""
 "A fost creat un nou card cadou. Acum puteți trimite utilizatorului codul "
 "cardului cadou."
 
-#: pretix/control/views/orders.py:1322
+#: pretix/control/views/orders.py:1334
 msgid "Your gift card code"
 msgstr "Codul cardului dvs. cadou"
 
-#: pretix/control/views/orders.py:1324
+#: pretix/control/views/orders.py:1336
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -26429,13 +26433,13 @@ msgstr ""
 "\n"
 "Echipa {event}"
 
-#: pretix/control/views/orders.py:1335
+#: pretix/control/views/orders.py:1347
 msgid "The refunds you selected do not match the selected total refund amount."
 msgstr ""
 "Rambursările pe care le-ați selectat nu corespund cu suma totală de "
 "rambursare selectată."
 
-#: pretix/control/views/orders.py:1494
+#: pretix/control/views/orders.py:1506
 msgid ""
 "The order has been marked as paid, but we were unable to send a confirmation "
 "mail."
@@ -26443,11 +26447,11 @@ msgstr ""
 "Comanda a fost marcată ca fiind plătită, dar nu am putut trimite un e-mail "
 "de confirmare."
 
-#: pretix/control/views/orders.py:1497
+#: pretix/control/views/orders.py:1509
 msgid "The payment has been created successfully."
 msgstr "Plata a fost creată cu succes."
 
-#: pretix/control/views/orders.py:1511
+#: pretix/control/views/orders.py:1523
 msgid ""
 "The order has been canceled. You can now select how you want to transfer the "
 "money back to the user."
@@ -26455,20 +26459,20 @@ msgstr ""
 "Comanda a fost anulată. Acum puteți selecta modul în care doriți să "
 "transferați banii înapoi către utilizator."
 
-#: pretix/control/views/orders.py:1580 pretix/control/views/orders.py:1584
+#: pretix/control/views/orders.py:1592 pretix/control/views/orders.py:1596
 msgid "No VAT ID specified."
 msgstr "Nu este specificat niciun cod de TVA."
 
-#: pretix/control/views/orders.py:1588
+#: pretix/control/views/orders.py:1600
 msgid "No country specified."
 msgstr "Nu este specificată nicio țară."
 
-#: pretix/control/views/orders.py:1592
+#: pretix/control/views/orders.py:1604
 msgid "VAT ID could not be checked since this country is not supported."
 msgstr ""
 "Codul TVA nu a putut fi verificat, deoarece această țară nu este acceptată."
 
-#: pretix/control/views/orders.py:1603
+#: pretix/control/views/orders.py:1615
 msgid ""
 "The VAT ID could not be checked, as the VAT checking service of the country "
 "is currently not available."
@@ -26476,47 +26480,47 @@ msgstr ""
 "Codul TVA nu a putut fi verificat, deoarece serviciul de verificare a TVA "
 "din țara respectivă nu este disponibil în prezent."
 
-#: pretix/control/views/orders.py:1606
+#: pretix/control/views/orders.py:1618
 msgid "This VAT ID is valid."
 msgstr "Acest cod de TVA este valabil."
 
-#: pretix/control/views/orders.py:1620 pretix/control/views/orders.py:1651
+#: pretix/control/views/orders.py:1632 pretix/control/views/orders.py:1663
 msgid "Unknown invoice."
 msgstr "Factură necunoscută."
 
-#: pretix/control/views/orders.py:1623
+#: pretix/control/views/orders.py:1635
 msgid "Invoices may not be changed after they are created."
 msgstr "Facturile nu pot fi modificate după ce au fost create."
 
-#: pretix/control/views/orders.py:1625 pretix/control/views/orders.py:1654
+#: pretix/control/views/orders.py:1637 pretix/control/views/orders.py:1666
 msgid "The invoice has already been canceled."
 msgstr "Factura a fost deja anulată."
 
-#: pretix/control/views/orders.py:1627
+#: pretix/control/views/orders.py:1639
 msgid "The invoice file has already been exported."
 msgstr "Fișierul facturii a fost deja exportat."
 
-#: pretix/control/views/orders.py:1629
+#: pretix/control/views/orders.py:1641
 msgid "The invoice file is too old to be regenerated."
 msgstr "Fișierul facturii este prea vechi pentru a fi regenerat."
 
-#: pretix/control/views/orders.py:1631 pretix/control/views/orders.py:1656
+#: pretix/control/views/orders.py:1643 pretix/control/views/orders.py:1668
 msgid "The invoice has been cleaned of personal data."
 msgstr "Factura a fost curățată de datele cu caracter personal."
 
-#: pretix/control/views/orders.py:1687
+#: pretix/control/views/orders.py:1699
 msgid "The email has been queued to be sent."
 msgstr "E-mailul a fost pus în coadă pentru a fi trimis."
 
-#: pretix/control/views/orders.py:1711 pretix/presale/views/order.py:1251
+#: pretix/control/views/orders.py:1723 pretix/presale/views/order.py:1251
 msgid "This invoice has not been found"
 msgstr "Această factură nu a fost găsită"
 
-#: pretix/control/views/orders.py:1718 pretix/presale/views/order.py:1258
+#: pretix/control/views/orders.py:1730 pretix/presale/views/order.py:1258
 msgid "The invoice file is no longer stored on the server."
 msgstr "Fișierul facturii nu mai este stocat pe server."
 
-#: pretix/control/views/orders.py:1723 pretix/presale/views/order.py:1263
+#: pretix/control/views/orders.py:1735 pretix/presale/views/order.py:1263
 msgid ""
 "The invoice file has not yet been generated, we will generate it for you "
 "now. Please try again in a few seconds."
@@ -26524,11 +26528,11 @@ msgstr ""
 "Fișierul de factură nu a fost încă generat, îl vom genera pentru dvs acum. "
 "Vă rugăm să încercați din nou în câteva secunde."
 
-#: pretix/control/views/orders.py:1751
+#: pretix/control/views/orders.py:1763
 msgid "The payment term has been changed."
 msgstr "Termenul de plată a fost modificat."
 
-#: pretix/control/views/orders.py:1756 pretix/control/views/orders.py:1813
+#: pretix/control/views/orders.py:1768 pretix/control/views/orders.py:1825
 msgid ""
 "We were not able to process the request completely as the server was too "
 "busy."
@@ -26536,28 +26540,28 @@ msgstr ""
 "Nu am reușit să procesăm cererea în întregime, deoarece serverul era prea "
 "ocupat."
 
-#: pretix/control/views/orders.py:1764
+#: pretix/control/views/orders.py:1776
 msgid "This action is only allowed for pending orders."
 msgstr "Această acțiune este permisă numai pentru comenzile în curs."
 
-#: pretix/control/views/orders.py:1819
+#: pretix/control/views/orders.py:1831
 msgid "This action is only allowed for canceled orders."
 msgstr "Această acțiune este permisă numai pentru comenzile anulate."
 
-#: pretix/control/views/orders.py:2036 pretix/presale/views/order.py:1535
+#: pretix/control/views/orders.py:2048 pretix/presale/views/order.py:1535
 msgid "An error occurred. Please see the details below."
 msgstr "S-a produs o eroare. Vă rugăm să consultați detaliile de mai jos."
 
-#: pretix/control/views/orders.py:2044
+#: pretix/control/views/orders.py:2056
 msgid "The order has been changed and the user has been notified."
 msgstr "Comanda a fost modificată, iar utilizatorul a fost notificat."
 
-#: pretix/control/views/orders.py:2046 pretix/control/views/orders.py:2180
-#: pretix/control/views/orders.py:2217 pretix/presale/views/order.py:1570
+#: pretix/control/views/orders.py:2058 pretix/control/views/orders.py:2192
+#: pretix/control/views/orders.py:2229 pretix/presale/views/order.py:1570
 msgid "The order has been changed."
 msgstr "Comanda a fost schimbată."
 
-#: pretix/control/views/orders.py:2073 pretix/presale/checkoutflow.py:890
+#: pretix/control/views/orders.py:2085 pretix/presale/checkoutflow.py:890
 #: pretix/presale/views/order.py:831
 msgid ""
 "We had difficulties processing your input. Please review the errors below."
@@ -26565,30 +26569,30 @@ msgstr ""
 "Am întâmpinat dificultăți în procesarea datelor dumneavoastră. Vă rugăm să "
 "analizați erorile de mai jos."
 
-#: pretix/control/views/orders.py:2182
+#: pretix/control/views/orders.py:2194
 msgid "Nothing about the order had to be changed."
 msgstr "Nimic nu a trebuit să fie schimbat în legătură cu comanda."
 
-#: pretix/control/views/orders.py:2263 pretix/plugins/sendmail/views.py:174
+#: pretix/control/views/orders.py:2275 pretix/plugins/sendmail/views.py:174
 msgid "We could not send the email. See below for details."
 msgstr "Nu am putut trimite e-mailul. Vedeți mai jos pentru detalii."
 
-#: pretix/control/views/orders.py:2279 pretix/control/views/orders.py:2344
+#: pretix/control/views/orders.py:2291 pretix/control/views/orders.py:2356
 #: pretix/plugins/sendmail/views.py:204 pretix/plugins/sendmail/views.py:605
 #: pretix/plugins/sendmail/views.py:681
 #, python-brace-format
 msgid "Subject: {subject}"
 msgstr "Subiect: {subject}"
 
-#: pretix/control/views/orders.py:2293 pretix/control/views/orders.py:2359
+#: pretix/control/views/orders.py:2305 pretix/control/views/orders.py:2371
 msgid "Your message has been queued and will be sent to {}."
 msgstr "Mesajul dvs. a fost pus în coadă și va fi trimis la {}."
 
-#: pretix/control/views/orders.py:2297 pretix/control/views/orders.py:2362
+#: pretix/control/views/orders.py:2309 pretix/control/views/orders.py:2374
 msgid "Failed to send mail to the following user: {}"
 msgstr "Nu s-a reușit trimiterea de mesaje către următorul utilizator: {}"
 
-#: pretix/control/views/orders.py:2398 pretix/presale/views/order.py:1033
+#: pretix/control/views/orders.py:2410 pretix/presale/views/order.py:1033
 msgid ""
 "This link is no longer valid. Please go back, refresh the page, and try "
 "again."
@@ -26596,38 +26600,38 @@ msgstr ""
 "Acest link nu mai este valabil. Vă rugăm să vă întoarceți, să reîmprospătați "
 "pagina și să încercați din nou."
 
-#: pretix/control/views/orders.py:2474
+#: pretix/control/views/orders.py:2486
 msgid "There is no order with the given order code."
 msgstr "Nu există nicio comandă cu codul de comandă dat."
 
-#: pretix/control/views/orders.py:2580 pretix/control/views/organizer.py:1768
+#: pretix/control/views/orders.py:2592 pretix/control/views/organizer.py:1768
 msgid "The selected exporter was not found."
 msgstr "Exportatorul selectat nu a fost găsit."
 
-#: pretix/control/views/orders.py:2590 pretix/control/views/organizer.py:1778
+#: pretix/control/views/orders.py:2602 pretix/control/views/organizer.py:1778
 msgid "There was a problem processing your input. See below for error details."
 msgstr ""
 "A existat o problemă în procesarea datelor dumneavoastră. Vedeți mai jos "
 "pentru detalii despre eroare."
 
-#: pretix/control/views/orders.py:2625 pretix/control/views/organizer.py:1821
+#: pretix/control/views/orders.py:2637 pretix/control/views/organizer.py:1821
 #, python-brace-format
 msgid ""
 "Your export schedule has been saved. The next export will start around "
 "{datetime}."
 msgstr ""
 
-#: pretix/control/views/orders.py:2630 pretix/control/views/organizer.py:1826
+#: pretix/control/views/orders.py:2642 pretix/control/views/organizer.py:1826
 msgid "Your export schedule has been saved, but no next export is planned."
 msgstr ""
 
-#: pretix/control/views/orders.py:2669 pretix/control/views/organizer.py:1866
+#: pretix/control/views/orders.py:2681 pretix/control/views/organizer.py:1866
 #, fuzzy, python-brace-format
 #| msgid "Export date"
 msgid "Export: {title}"
 msgstr "Export date"
 
-#: pretix/control/views/orders.py:2670 pretix/control/views/organizer.py:1868
+#: pretix/control/views/orders.py:2682 pretix/control/views/organizer.py:1868
 #, python-brace-format
 msgid ""
 "Hello,\n"
@@ -26635,18 +26639,18 @@ msgid ""
 "attached to this email, you can find a new scheduled report for {name}."
 msgstr ""
 
-#: pretix/control/views/orders.py:2738 pretix/control/views/organizer.py:1936
+#: pretix/control/views/orders.py:2750 pretix/control/views/organizer.py:1936
 msgid ""
 "Your export is queued to start soon. The results will be send via email. "
 "Depending on system load and type and size of export, this may take a few "
 "minutes."
 msgstr ""
 
-#: pretix/control/views/orders.py:2817
+#: pretix/control/views/orders.py:2829
 msgid "All orders have been canceled."
 msgstr "Toate comenzile au fost anulate."
 
-#: pretix/control/views/orders.py:2819
+#: pretix/control/views/orders.py:2831
 #, python-brace-format
 msgid ""
 "The orders have been canceled. An error occurred with {count} orders, please "
@@ -26655,7 +26659,7 @@ msgstr ""
 "Comenzile au fost anulate. A apărut o eroare cu {count} comenzi, vă rugăm să "
 "verificați toate comenzile neanulate."
 
-#: pretix/control/views/orders.py:2840
+#: pretix/control/views/orders.py:2852
 msgid "Your input was not valid."
 msgstr "Intrarea dvs nu a fost validă."
 
@@ -26948,7 +26952,7 @@ msgstr "Din păcate, nu am putut procesa acest fișier PDF ({reason})."
 msgid "The selected data was deleted successfully."
 msgstr "Datele selectate au fost șterse cu succes."
 
-#: pretix/control/views/subevents.py:168 pretix/control/views/subevents.py:476
+#: pretix/control/views/subevents.py:168 pretix/control/views/subevents.py:512
 msgctxt "subevent"
 msgid "The requested date does not exist."
 msgstr "Data solicitată nu există."
@@ -26963,31 +26967,31 @@ msgctxt "subevent"
 msgid "The selected date has been deleted."
 msgstr "Data selectată a fost ștearsă."
 
-#: pretix/control/views/subevents.py:565
+#: pretix/control/views/subevents.py:601
 msgctxt "subevent"
 msgid "The new date has been created."
 msgstr "Noua dată a fost creată."
 
-#: pretix/control/views/subevents.py:631
+#: pretix/control/views/subevents.py:667
 msgctxt "subevent"
 msgid "The selected dates have been disabled."
 msgstr "Datele selectate au fost dezactivate."
 
-#: pretix/control/views/subevents.py:641
+#: pretix/control/views/subevents.py:677
 msgctxt "subevent"
 msgid "The selected dates have been enabled."
 msgstr "Datele selectate au fost activate."
 
-#: pretix/control/views/subevents.py:664
+#: pretix/control/views/subevents.py:700
 msgctxt "subevent"
 msgid "The selected dates have been deleted or disabled."
 msgstr "Datele selectate au fost șterse sau dezactivate."
 
-#: pretix/control/views/subevents.py:855
+#: pretix/control/views/subevents.py:881
 msgid "Please do not create more than 100.000 dates at once."
 msgstr "Vă rugăm să nu creați mai mult de 100.000 de date deodată."
 
-#: pretix/control/views/subevents.py:997
+#: pretix/control/views/subevents.py:1023
 msgctxt "subevent"
 msgid "{} new dates have been created."
 msgstr "{} au fost create date noi."
@@ -31122,8 +31126,8 @@ msgid "Add-on products"
 msgstr "Produse suplimentare add-on"
 
 #: pretix/presale/checkoutflow.py:632 pretix/presale/checkoutflow.py:640
-#: pretix/presale/views/cart.py:176 pretix/presale/views/cart.py:181
-#: pretix/presale/views/cart.py:199 pretix/presale/views/cart.py:212
+#: pretix/presale/views/cart.py:182 pretix/presale/views/cart.py:187
+#: pretix/presale/views/cart.py:205 pretix/presale/views/cart.py:218
 #: pretix/presale/views/order.py:1457 pretix/presale/views/order.py:1465
 msgid "Please enter numbers only."
 msgstr "Vă rugăm să introduceți numai numere."
@@ -32726,7 +32730,7 @@ msgid "Other dates"
 msgstr "Alte date"
 
 #: pretix/presale/templates/pretixpresale/event/index.html:142
-#: pretix/presale/views/waiting.py:101 pretix/presale/views/widget.py:723
+#: pretix/presale/views/waiting.py:102 pretix/presale/views/widget.py:723
 #, fuzzy
 #| msgid "The presale period for this event is over."
 msgid "The booking period for this event is over."
@@ -33811,43 +33815,43 @@ msgstr "Această funcție nu este activată."
 msgid "The selected organizer was not found."
 msgstr "Organizatorul selectat nu a fost găsit."
 
-#: pretix/presale/views/__init__.py:259
+#: pretix/presale/views/__init__.py:260
 #, python-brace-format
 msgid ""
 "Your selected payment method can only be used for a payment of at least "
 "{amount}."
 msgstr ""
 
-#: pretix/presale/views/cart.py:183
+#: pretix/presale/views/cart.py:189
 msgid "Please enter positive numbers only."
 msgstr "Vă rugăm să introduceți numai numere pozitive."
 
-#: pretix/presale/views/cart.py:421
+#: pretix/presale/views/cart.py:427
 msgid "We applied the voucher to as many products in your cart as we could."
 msgstr ""
 "Am aplicat voucherul la cât mai multe produse din coșul dumneavoastră de "
 "cumpărături."
 
-#: pretix/presale/views/cart.py:443
+#: pretix/presale/views/cart.py:449
 msgid "Your cart has been updated."
 msgstr "Coșul dvs. a fost actualizat."
 
-#: pretix/presale/views/cart.py:446 pretix/presale/views/cart.py:471
+#: pretix/presale/views/cart.py:452 pretix/presale/views/cart.py:477
 msgid "Your cart is now empty."
 msgstr "Coșul dvs. este acum gol."
 
-#: pretix/presale/views/cart.py:486
+#: pretix/presale/views/cart.py:492
 msgid "The products have been successfully added to your cart."
 msgstr "Produsele au fost adăugate cu succes în coșul dvs."
 
-#: pretix/presale/views/cart.py:510 pretix/presale/views/event.py:506
+#: pretix/presale/views/cart.py:516 pretix/presale/views/event.py:507
 #: pretix/presale/views/widget.py:348
 msgid "Tickets for this event cannot be purchased on this sales channel."
 msgstr ""
 "Biletele pentru acest eveniment nu pot fi achiziționate pe acest canal de "
 "vânzări."
 
-#: pretix/presale/views/cart.py:658
+#: pretix/presale/views/cart.py:665
 msgctxt "subevent"
 msgid "We were unable to find the specified date."
 msgstr "Nu am reușit să găsim data specificată."
@@ -33913,24 +33917,24 @@ msgid ""
 "used for a different account in this system."
 msgstr ""
 
-#: pretix/presale/views/event.py:849
+#: pretix/presale/views/event.py:850
 msgid "Unknown event code or not authorized to access this event."
 msgstr ""
 "Cod eveniment necunoscut sau nu sunteți autorizat să accesați acest "
 "eveniment."
 
-#: pretix/presale/views/event.py:856
+#: pretix/presale/views/event.py:857
 msgctxt "subevent"
 msgid "No date selected."
 msgstr "Nu a fost selectată nicio dată."
 
-#: pretix/presale/views/event.py:859
+#: pretix/presale/views/event.py:860
 msgctxt "subevent"
 msgid "Unknown date selected."
 msgstr "Data selectată este necunoscută."
 
-#: pretix/presale/views/event.py:884 pretix/presale/views/event.py:892
-#: pretix/presale/views/event.py:895
+#: pretix/presale/views/event.py:885 pretix/presale/views/event.py:893
+#: pretix/presale/views/event.py:896
 msgid "Please go back and try again."
 msgstr "Vă rugăm să vă întoarceți și să încercați din nou."
 
@@ -34061,11 +34065,11 @@ msgstr ""
 "În cazul în care au existat comenzi ale acestui utilizator, acesta va primi "
 "un e-mail cu codurile de comandă."
 
-#: pretix/presale/views/waiting.py:97
+#: pretix/presale/views/waiting.py:98
 msgid "Waiting lists are disabled for this event."
 msgstr "Listele de așteptare sunt dezactivate pentru acest eveniment."
 
-#: pretix/presale/views/waiting.py:129
+#: pretix/presale/views/waiting.py:130
 msgid ""
 "You cannot add yourself to the waiting list as this product is currently "
 "available."
@@ -34073,7 +34077,7 @@ msgstr ""
 "Nu vă puteți adăuga pe lista de așteptare, deoarece acest produs este "
 "disponibil în prezent."
 
-#: pretix/presale/views/waiting.py:136
+#: pretix/presale/views/waiting.py:137
 #, fuzzy, python-brace-format
 #| msgid ""
 #| "We've added you to the waiting list. You will receive an email as soon as "
@@ -34085,11 +34089,11 @@ msgstr ""
 "V-am adăugat pe lista de așteptare. Veți primi un e-mail de îndată ce acest "
 "produs va fi din nou disponibil."
 
-#: pretix/presale/views/waiting.py:164
+#: pretix/presale/views/waiting.py:165
 msgid "We could not find you on our waiting list."
 msgstr "Nu v-am putut găsi pe lista de așteptare."
 
-#: pretix/presale/views/waiting.py:168
+#: pretix/presale/views/waiting.py:169
 msgid ""
 "Your waiting list spot is no longer valid or already used. There's nothing "
 "more to do here."
@@ -34097,7 +34101,7 @@ msgstr ""
 "Locul de pe lista de așteptare nu mai este valabil sau a fost deja folosit. "
 "Nu mai este nimic de făcut aici."
 
-#: pretix/presale/views/waiting.py:178
+#: pretix/presale/views/waiting.py:179
 msgid ""
 "Thank you very much! We will assign your spot on the waiting list to someone "
 "else."
@@ -34118,19 +34122,19 @@ msgstr "Data selectată nu există în această serie de evenimente."
 msgid "from %(start_date)s"
 msgstr "de la %(start_date)s"
 
-#: pretix/settings.py:718
+#: pretix/settings.py:716
 msgid "User profile only"
 msgstr "Doar profilul utilizatorului"
 
-#: pretix/settings.py:719
+#: pretix/settings.py:717
 msgid "Read access"
 msgstr "Acces la citire"
 
-#: pretix/settings.py:720
+#: pretix/settings.py:718
 msgid "Write access"
 msgstr "Acces la scriere"
 
-#: pretix/settings.py:731
+#: pretix/settings.py:729
 msgid "Kosovo"
 msgstr "Kosovo"
 
