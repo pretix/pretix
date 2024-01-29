@@ -66,9 +66,10 @@ from pretix.presale.utils import (
 )
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
 
-# FIXME:Hacky solution to get around the fact that there is no event variable in the customer request context. Will need update every year.
+# FIXME:Hacky solution to get around the fact that there is no event variable in the customer request context. Assumes
+# Assumes "/current" URL will redirect to the appropriate event.
 
-STOREFRONT_URL='/sideburn/sideburn2023'
+STOREFRONT_URL='/current'
 
 class RedirectBackMixin:
     redirect_field_name = 'next'
