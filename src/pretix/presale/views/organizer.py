@@ -654,7 +654,7 @@ def days_for_template(ebd, week, future_only=False):
             'events': sorted(ebd.get(day), key=sort_ev) if day in ebd else []
         }
         for day in week.days()
-        if not future_only or day > now().astimezone(get_current_timezone()).date()
+        if not future_only or day >= now().astimezone(get_current_timezone()).date()
     ]
 
 
@@ -677,7 +677,7 @@ def weeks_for_template(ebd, year, month, future_only=False):
         ]
         for week in calendar.monthcalendar(year, month)
         if not future_only or (
-            any(day != 0 and date(year, month, day) > today for day in week)
+            any(day != 0 and date(year, month, day) >= today for day in week)
         )
     ]
 
