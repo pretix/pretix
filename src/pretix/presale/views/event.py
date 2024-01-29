@@ -679,6 +679,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 timeout=120,
             )
             context['weeks'] = weeks_for_template(ebd, self.year, self.month, future_only=self.request.event.settings.event_calendar_future_only)
+            context['weeks'] = weeks_for_template(ebd, self.year, self.month, future_only=self.request.event.settings.event_calendar_future_only)
             context['months'] = [date(self.year, i + 1, 1) for i in range(12)]
             if self.request.event.settings.event_calendar_future_only:
                 context['years'] = range(now().year, now().year + 3)
