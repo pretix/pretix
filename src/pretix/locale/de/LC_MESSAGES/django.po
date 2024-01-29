@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-29 11:16+0000\n"
-"PO-Revision-Date: 2024-01-24 14:42+0000\n"
+"PO-Revision-Date: 2024-01-29 11:27+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -14071,6 +14071,8 @@ msgstr ""
 #: pretix/control/forms/orders.py:223
 msgid "A mail will only be sent if the order is fully paid after this."
 msgstr ""
+"Eine E-Mail wird nur verschickt, wenn die Bestellung durch diese Aktion "
+"vollständig bezahlt wird."
 
 #: pretix/control/forms/orders.py:230
 msgid "Payment amount"
