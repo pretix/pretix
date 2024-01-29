@@ -208,8 +208,6 @@ class TicketPageMixin:
         )
 
         ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p in positions_with_tickets]
-        for allowed_op in ctx['tickets_with_download']:
-            allowed_op.ticket_download_allowed = True
 
         ctx['download_buttons'] = self.download_buttons
 
