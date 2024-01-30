@@ -207,7 +207,7 @@ class QuestionOptionForm(I18nModelForm):
 
 
 class QuotaForm(I18nModelForm):
-    itemvars = forms.ChoiceField(
+    itemvars = forms.MultipleChoiceField(
         label=_("Products"),
         required=True,
     )
@@ -247,7 +247,8 @@ class QuotaForm(I18nModelForm):
                         'organizer': self.event.organizer.slug,
                     }),
                     'data-placeholder': _('All products')
-                }
+                },
+                choices=choices,
             )
             self.fields['itemvars'].required = True
             self.fields['itemvars'].widget.choices = self.fields['itemvars'].choices
