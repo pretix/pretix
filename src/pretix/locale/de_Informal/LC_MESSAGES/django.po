@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-30 16:10+0000\n"
-"PO-Revision-Date: 2024-01-29 11:27+0000\n"
+"PO-Revision-Date: 2024-01-30 16:22+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -3318,7 +3318,7 @@ msgstr ""
 
 #: pretix/base/invoice.py:858
 msgid "Default invoice renderer (European-style letter)"
-msgstr ""
+msgstr "Standard-Rechnungslayout (europäischer Brief-Stil)"
 
 #: pretix/base/invoice.py:947
 msgctxt "invoice"
@@ -3327,14 +3327,13 @@ msgstr "(Bitte stets angeben.)"
 
 #: pretix/base/invoice.py:994
 msgid "Simplified invoice renderer"
-msgstr ""
+msgstr "Vereinfachtes Rechnungslayout"
 
 #: pretix/base/invoice.py:1013
-#, fuzzy, python-brace-format
-#| msgid "Event date range"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Event date: {date_range}"
-msgstr "Veranstaltungsdatum Beginn und Ende"
+msgstr "Veranstaltungsdatum: {date_range}"
 
 #: pretix/base/media.py:61
 msgid "Barcode / QR-Code"
@@ -12120,6 +12119,8 @@ msgid ""
 "automatically because the event is over and no end of presale has been "
 "configured"
 msgstr ""
+"automatisch, weil die Veranstaltung vorbei ist und kein Verkaufsende "
+"konfiguriert wurde"
 
 #: pretix/base/timeline.py:106
 msgctxt "timeline"
@@ -27336,17 +27337,12 @@ msgstr "Betrag:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:42
 msgid "There is no further action required on this website."
-msgstr ""
+msgstr "Du musst auf dieser Seite nichts weiter tun."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:43
-#, fuzzy
-#| msgid ""
-#| "We will send you an email as soon as the event organizer approved or "
-#| "rejected your order."
 msgid "We will send you an email as soon as we received your payment."
 msgstr ""
-"Wir informieren dich per E-Mail, sobald der Veranstalter deine Bestellung "
-"freigegeben oder abgelehnt hat."
+"Wir informieren dich per E-Mail, sobald wir deine Zahlung erhalten haben."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:61
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:72
