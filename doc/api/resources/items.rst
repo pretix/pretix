@@ -51,13 +51,13 @@ sales_channels                          list of strings            Sales channel
 available_from                          datetime                   The first date time at which this item can be bought
                                                                    (or ``null``).
 available_from_mode                     string                     If ``hide`` (the default), this item is hidden in the shop
-                                                                   if unavailable due to the available_from setting.
+                                                                   if unavailable due to the ``available_from`` setting.
                                                                    If ``info``, the item is visible, but can't be purchased,
                                                                    and a note explaining the unavailability is displayed.
 available_until                         datetime                   The last date time at which this item can be bought
                                                                    (or ``null``).
 available_until_mode                    string                     If ``hide`` (the default), this item is hidden in the shop
-                                                                   if unavailable due to the available_until setting.
+                                                                   if unavailable due to the ``available_until`` setting.
                                                                    If ``info``, the item is visible, but can't be purchased,
                                                                    and a note explaining the unavailability is displayed.
 hidden_if_available                     integer                    **DEPRECATED** The internal ID of a quota object, or ``null``. If
@@ -165,13 +165,13 @@ variations                              list of objects            A list with o
 ├ available_from                        datetime                   The first date time at which this variation can be bought
                                                                    (or ``null``).
 ├ available_from_mode                   string                     If ``hide`` (the default), this variation is hidden in the shop
-                                                                   if unavailable due to the available_from setting.
+                                                                   if unavailable due to the ``available_from`` setting.
                                                                    If ``info``, the variation is visible, but can't be purchased,
                                                                    and a note explaining the unavailability is displayed.
 ├ available_until                       datetime                   The last date time at which this variation can be bought
                                                                    (or ``null``).
 ├ available_until_mode                  string                     If ``hide`` (the default), this variation is hidden in the shop
-                                                                   if unavailable due to the available_until setting.
+                                                                   if unavailable due to the ``available_until`` setting.
                                                                    If ``info``, the variation is visible, but can't be purchased,
                                                                    and a note explaining the unavailability is displayed.
 ├ hide_without_voucher                  boolean                    If ``true``, this variation is only shown during the voucher
