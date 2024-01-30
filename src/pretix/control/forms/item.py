@@ -242,7 +242,7 @@ class QuotaForm(I18nModelForm):
             self.fields['itemvars'].widget = Select2ItemVarQuotaMulti(
                 attrs={
                     'data-model-select2': 'generic',
-                    'data-select2-url': reverse('control:event.items.itemvar.select2', kwargs={
+                    'data-select2-url': reverse('control:event.items.itemvars.select2', kwargs={
                         'event': self.event.slug,
                         'organizer': self.event.organizer.slug,
                     }),
