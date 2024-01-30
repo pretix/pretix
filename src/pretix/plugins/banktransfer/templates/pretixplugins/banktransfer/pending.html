@@ -38,8 +38,9 @@
             <dt>{% trans "Amount:" %}</dt><dd>{{ amount|money:event.currency }}</dd>
             <dt>{% trans "Reference code (important):" %}</dt><dd><b>{{ code }}</b></dd>
         </dl>
-        <p>
-            {% trans "After you sent the bank transfer, you can close this window. We will send you an email as soon as we received your payment." %}
+        <p class="text-muted">
+            {% trans "There is no further action required on this website." %}
+            {% trans "We will send you an email as soon as we received your payment." %}
         </p>
     </div>
     {% if settings.bank_details_type == "sepa" and any_barcodes %}
