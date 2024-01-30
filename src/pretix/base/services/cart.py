@@ -114,7 +114,7 @@ error_messages = {
         'the quantity you selected. Please see below for details.'
     ),
     'unavailable_listed': gettext_lazy(
-        'Some of the products you selected are no longer available.'
+        'Some of the products you selected are no longer available. '
         'The following products are affected and have not been added to your cart: %s'
     ),
     'in_part_listed': gettext_lazy(
