@@ -37,9 +37,12 @@ contact_email                         string                     Contact person 
 booth                                 string                     Booth number (or ``null``). Maximum 100 characters.
 locale                                string                     Locale for communication with the exhibitor.
 access_code                           string                     Access code for the exhibitor to access their data or use the lead scanning app (read-only).
+lead_scanning_access_code             string                     Access code for the exhibitor to use the lead scanning app but not access data (read-only).
 allow_lead_scanning                   boolean                    Enables lead scanning app
 allow_lead_access                     boolean                    Enables access to data gathered by the lead scanning app
 allow_voucher_access                  boolean                    Enables access to data gathered by exhibitor vouchers
+lead_scanning_scope_by_device         string                     Enables lead scanning to be handled as one lead per attendee
+                                                                 per scanning device, instead of only per exhibitor.
 comment                               string                     Internal comment, not shown to exhibitor
 ===================================== ========================== =======================================================
 
@@ -62,6 +65,7 @@ data                                  list of objects            Attendee data s
                                                                  except in a few cases where it contains an additional list of objects
                                                                  with ``value`` and ``label`` keys (e.g. splitting of names).
 device_name                           string                     User-defined name for the device used for scanning (or ``null``).
+device_uuid                           string                     UUID of device used for scanning (or ``null``).
 ===================================== ========================== =======================================================
 
 Endpoints
@@ -107,7 +111,9 @@ Endpoints
             "contact_email": "johnson@as.example.org",
             "booth": "A2",
             "locale": "de",
-            "access_code": "VKHZ2FU8",
+            "access_code": "VKHZ2FU84",
+            "lead_scanning_access_code": "WVK2B8PZ",
+            "lead_scanning_scope_by_device": false,
             "allow_lead_scanning": true,
             "allow_lead_access": true,
             "allow_voucher_access": true,
@@ -158,7 +164,9 @@ Endpoints
         "contact_email": "johnson@as.example.org",
         "booth": "A2",
         "locale": "de",
-        "access_code": "VKHZ2FU8",
+        "access_code": "VKHZ2FU84",
+        "lead_scanning_access_code": "WVK2B8PZ",
+        "lead_scanning_scope_by_device": false,
         "allow_lead_scanning": true,
         "allow_lead_access": true,
         "allow_voucher_access": true,
@@ -388,7 +396,9 @@ Endpoints
         "contact_email": "johnson@as.example.org",
         "booth": "A2",
         "locale": "de",
-        "access_code": "VKHZ2FU8",
+        "access_code": "VKHZ2FU84",
+        "lead_scanning_access_code": "WVK2B8PZ",
+        "lead_scanning_scope_by_device": false,
         "allow_lead_scanning": true,
         "allow_lead_access": true,
         "allow_voucher_access": true,
@@ -446,7 +456,9 @@ Endpoints
         "contact_email": "johnson@as.example.org",
         "booth": "A2",
         "locale": "de",
-        "access_code": "VKHZ2FU8",
+        "access_code": "VKHZ2FU84",
+        "lead_scanning_access_code": "WVK2B8PZ",
+        "lead_scanning_scope_by_device": false,
         "allow_lead_scanning": true,
         "allow_lead_access": true,
         "allow_voucher_access": true,
@@ -561,6 +573,7 @@ name                                  string                     Exhibitor name
 booth                                 string                     Booth number (or ``null``)
 event                                 object                     Object describing the event
 ├ name                                multi-lingual string       Event name
+├ end_date                            datetime                   End date of the event. After this time, the app could show a warning that the event is over.
 ├ imprint_url                         string                     URL to legal notice page. If not ``null``, a button in the app should link to this page.
 ├ privacy_url                         string                     URL to privacy notice page. If not ``null``, a button in the app should link to this page.
 ├ help_url                            string                     URL to help page. If not ``null``, a button in the app should link to this page.
@@ -596,6 +609,7 @@ scan_types                            list of objects            Only used for a
       "booth": "A2",
       "event": {
         "name": {"en": "Sample conference", "de": "Beispielkonferenz"},
+        "end_date": "2017-12-28T10:00:00+00:00",
         "slug": "bigevents",
         "imprint_url": null,
         "privacy_url": null,
@@ -634,6 +648,7 @@ On the request, you should set the following properties:
 * ``tags`` with the list of selected tags
 * ``rating`` with the rating assigned by the exhibitor
 * ``device_name`` with a user-specified name of the device used for scanning (max. 190 characters), or ``null``
+* ``device_uuid`` with a auto-generated UUID of the device used for scanning, or ``null``
 
 If you submit ``tags`` and ``rating`` to be ``null`` and ``notes`` to be ``""``, the server
 responds with the previously saved information and will not delete that information. If you
@@ -668,7 +683,8 @@ The request for this looks like this:
       "scan_type": "lead",
       "tags": ["foo"],
       "rating": 4,
-      "device_name": "DEV1"
+      "device_name": "DEV1",
+      "device_uuid": "d8c2ec53-d602-4a08-882d-db4cf54344a2"
     }
 
    **Example response:**
@@ -701,7 +717,9 @@ The request for this looks like this:
         },
         "rating": 4,
         "tags": ["foo"],
-        "notes": "Great customer, wants our newsletter"
+        "notes": "Great customer, wants our newsletter",
+        "device_name": "DEV1",
+        "device_uuid": "d8c2ec53-d602-4a08-882d-db4cf54344a2"
     }
 
    :statuscode 200: No error, leads was not scanned for the first time
@@ -756,7 +774,9 @@ You can also fetch existing leads (if you are authorized to do so):
           },
           "rating": 4,
           "tags": ["foo"],
-          "notes": "Great customer, wants our newsletter"
+          "notes": "Great customer, wants our newsletter",
+          "device_name": "DEV1",
+          "device_uuid": "d8c2ec53-d602-4a08-882d-db4cf54344a2"
         }
       ]
     }
