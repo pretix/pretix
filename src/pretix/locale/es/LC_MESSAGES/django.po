@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-30 16:10+0000\n"
-"PO-Revision-Date: 2024-01-29 08:00+0000\n"
+"PO-Revision-Date: 2024-01-31 04:00+0000\n"
 "Last-Translator: Eduardo Fernandez <sistemas@oyasama.es>\n"
 "Language-Team: Spanish <https://translate.pretix.eu/projects/pretix/pretix/"
 "es/>\n"
@@ -2740,7 +2740,6 @@ msgid "Reusable media"
 msgstr "Medios reutilizables"
 
 #: pretix/base/exporters/reusablemedia.py:35
-#, fuzzy
 msgctxt "export_category"
 msgid "Reusable media"
 msgstr "Medios reutilizables"
@@ -3324,7 +3323,7 @@ msgstr ""
 
 #: pretix/base/invoice.py:858
 msgid "Default invoice renderer (European-style letter)"
-msgstr ""
+msgstr "Formato de facturas predeterminado (carta de estilo europeo)"
 
 #: pretix/base/invoice.py:947
 msgctxt "invoice"
@@ -3333,14 +3332,13 @@ msgstr "{Por favor, siempre seleccionar quota.}"
 
 #: pretix/base/invoice.py:994
 msgid "Simplified invoice renderer"
-msgstr ""
+msgstr "Formato de facturas simplificado"
 
 #: pretix/base/invoice.py:1013
-#, fuzzy, python-brace-format
-#| msgid "Event date range"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Event date: {date_range}"
-msgstr "Rango de fechas de evento"
+msgstr "Fecha del evento: {date_range}"
 
 #: pretix/base/media.py:61
 msgid "Barcode / QR-Code"
@@ -12099,6 +12097,8 @@ msgid ""
 "automatically because the event is over and no end of presale has been "
 "configured"
 msgstr ""
+"automáticamente porque el evento ha terminado y no se ha configurado ningún "
+"final de preventa"
 
 #: pretix/base/timeline.py:106
 msgctxt "timeline"
@@ -12732,9 +12732,8 @@ msgstr ""
 "continuación."
 
 #: pretix/control/forms/event.py:1256
-#, fuzzy
 msgid "Subject for approved free order"
-msgstr "Pedido aprobado"
+msgstr "Sujeto a pedido gratuito aprobado"
 
 #: pretix/control/forms/event.py:1261
 msgid "Text for approved free order"
@@ -12806,9 +12805,8 @@ msgid "Order requires approval"
 msgstr "El pedido requiere aprobación"
 
 #: pretix/control/forms/event.py:1489
-#, fuzzy
 msgid "Deviating tax rate"
-msgstr "Tipo del impuesto sobre las ventas"
+msgstr "Tasa impositiva divergente"
 
 #: pretix/control/forms/event.py:1494 pretix/control/forms/event.py:1498
 msgid "Text on invoice"
@@ -12939,9 +12937,8 @@ msgstr "Pagado (o cancelado con tarifa de pago)"
 
 #: pretix/control/forms/filter.py:215
 #: pretix/control/templates/pretixcontrol/items/question.html:21
-#, fuzzy
 msgid "Paid or confirmed"
-msgstr "Orden confirmada"
+msgstr "Pagado o confirmado"
 
 #: pretix/control/forms/filter.py:216
 #: pretix/control/templates/pretixcontrol/items/question.html:22
@@ -12957,33 +12954,28 @@ msgid "Pending or paid"
 msgstr "Pendiente o pagado"
 
 #: pretix/control/forms/filter.py:219
-#, fuzzy
 msgid "Cancellations"
-msgstr "Cancelación"
+msgstr "Cancelaciones"
 
 #: pretix/control/forms/filter.py:220
-#, fuzzy
 msgid "Canceled (fully)"
-msgstr "Cancelada (tarifa pagada)"
+msgstr "Cancelado (completamente)"
 
 #: pretix/control/forms/filter.py:221
-#, fuzzy
 msgid "Canceled (fully or with paid fee)"
-msgstr "Cancelado (o con tarifa pagada)"
+msgstr "Cancelado (totalmente o con tarifa pagada)"
 
 #: pretix/control/forms/filter.py:222
-#, fuzzy
 msgid "Cancellation requested"
-msgstr "Tarifa de cancelación"
+msgstr "Cancelación solicitada"
 
 #: pretix/control/forms/filter.py:223
 msgid "Fully canceled but invoice not canceled"
 msgstr "Totalmente cancelado pero factura no cancelada"
 
 #: pretix/control/forms/filter.py:225
-#, fuzzy
 msgid "Payment process"
-msgstr "Proveedores de pago"
+msgstr "Proceso de pago"
 
 #: pretix/control/forms/filter.py:227
 #: pretix/control/templates/pretixcontrol/items/question.html:26
@@ -14103,6 +14095,8 @@ msgstr ""
 #: pretix/control/forms/orders.py:223
 msgid "A mail will only be sent if the order is fully paid after this."
 msgstr ""
+"Sólo se enviará un correo si el pedido se paga en su totalidad después de "
+"esto."
 
 #: pretix/control/forms/orders.py:230
 msgid "Payment amount"
@@ -27704,7 +27698,7 @@ msgstr "Importe:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:42
 msgid "There is no further action required on this website."
-msgstr ""
+msgstr "No es necesario realizar ninguna otra acción en este sitio web."
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:43
 #, fuzzy
@@ -28695,6 +28689,9 @@ msgid ""
 "A PayPal account is required to use this online payment method. Please keep "
 "your account information ready to enter in the next step."
 msgstr ""
+"Se requiere una cuenta PayPal para utilizar este método de pago en línea. "
+"Mantenga la información de su cuenta lista para ingresar en el siguiente "
+"paso."
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/checkout_payment_form.html:9
 msgid ""
@@ -30157,6 +30154,10 @@ msgid ""
 "German banks, usually after one-time activation. Please keep your online "
 "banking account and login information available."
 msgstr ""
+"giropay es un método de pago en línea disponible para todos los clientes de "
+"la mayoría de los bancos alemanes, generalmente después de una activación "
+"única. Mantenga su cuenta bancaria en línea y su información de inicio de "
+"sesión disponibles."
 
 #: pretix/plugins/stripe/payment.py:1574 pretix/plugins/stripe/payment.py:1641
 #: pretix/plugins/stripe/payment.py:1742
@@ -30179,6 +30180,9 @@ msgid ""
 "iDEAL is an online payment method available to customers of Dutch banks. "
 "Please keep your online banking account and login information available."
 msgstr ""
+"iDEAL es un método de pago en línea disponible para clientes de bancos "
+"holandeses. Mantenga su cuenta bancaria en línea y su información de inicio "
+"de sesión disponibles."
 
 #: pretix/plugins/stripe/payment.py:1619
 msgid "Alipay via Stripe"
@@ -30189,6 +30193,8 @@ msgid ""
 "This payment method is available to customers of the Chinese payment system "
 "Alipay. Please keep your login information available."
 msgstr ""
+"Este método de pago está disponible para los clientes del sistema de pago "
+"chino Alipay. Mantenga su información de inicio de sesión disponible."
 
 #: pretix/plugins/stripe/payment.py:1631
 msgid "Bancontact via Stripe"
@@ -30253,6 +30259,9 @@ msgid ""
 "banks. Please keep your online banking account and login information "
 "available."
 msgstr ""
+"Przelewy24 es un método de pago en línea disponible para los clientes de los "
+"bancos polacos. Mantenga su cuenta bancaria en línea y su información de "
+"inicio de sesión disponibles."
 
 #: pretix/plugins/stripe/payment.py:1849
 #, fuzzy
@@ -30264,6 +30273,8 @@ msgid ""
 "This payment method is available to users of the Chinese app WeChat. Please "
 "keep your login information available."
 msgstr ""
+"Este método de pago está disponible para los usuarios de la aplicación china "
+"WeChat. Mantenga su información de inicio de sesión disponible."
 
 #: pretix/plugins/stripe/signals.py:91
 msgid "Charge succeeded."
