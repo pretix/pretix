@@ -24,6 +24,7 @@ from datetime import datetime, time, timedelta
 
 from django.db.models import Q
 from django.urls import reverse
+from django.utils.text import format_lazy
 from django.utils.timezone import make_aware
 from django.utils.translation import pgettext_lazy
 
@@ -89,9 +90,10 @@ def timeline_for_event(event, subevent=None):
         datetime=(
             ev.presale_end or ev.date_to or ev.date_from.astimezone(ev.timezone).replace(hour=23, minute=59, second=59)
         ),
-        description='{}{}'.format(
+        description=format_lazy(
+            '{} ({})',
             pgettext_lazy('timeline', 'End of ticket sales'),
-            f" ({pgettext_lazy('timeline', 'automatically because the event is over and no end of presale has been configured')})" if not ev.presale_end else ""
+            pgettext_lazy('timeline', 'automatically because the event is over and no end of presale has been configured') if not ev.presale_end else ""
         ),
         edit_url=ev_edit_url
     ))
