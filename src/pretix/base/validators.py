@@ -72,6 +72,7 @@ class EventSlugBanlistValidator(BanlistValidator):
         'widget',
         'customer',
         'account',
+        'lead',
     ]
 
 
@@ -92,6 +93,7 @@ class OrganizerSlugBanlistValidator(BanlistValidator):
         'api',
         'csp_report',
         'widget',
+        'lead',
     ]
 
 
