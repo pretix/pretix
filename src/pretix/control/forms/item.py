@@ -220,7 +220,7 @@ class QuotaForm(I18nModelForm):
         self.original_instance = modelcopy(self.instance) if self.instance else None
         initial = kwargs.get('initial', {})
         if self.instance and self.instance.pk and 'itemvars' not in initial:
-            initial['itemvars'] = [str(i.pk) for i in self.instance.items.all()] + [
+            initial['itemvars'] = [str(i.pk) for i in self.instance.items.all() if (len(i.variations.all()) == 0)] + [
                 '{}-{}'.format(v.item_id, v.pk) for v in self.instance.variations.all()
             ]
         kwargs['initial'] = initial
@@ -250,8 +250,6 @@ class QuotaForm(I18nModelForm):
                 },
                 choices=choices,
             )
-            self.fields['itemvars'].required = True
-            self.fields['itemvars'].widget.choices = self.fields['itemvars'].choices
         else:
             self.fields['itemvars'] = forms.MultipleChoiceField(
                 label=_('Products'),
