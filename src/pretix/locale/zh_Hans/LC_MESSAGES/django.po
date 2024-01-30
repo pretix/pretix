@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-29 11:16+0000\n"
+"POT-Creation-Date: 2024-01-30 16:10+0000\n"
 "PO-Revision-Date: 2023-05-30 08:02+0000\n"
 "Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Chinese (Simplified) <https://translate.pretix.eu/projects/"
@@ -1691,7 +1691,7 @@ msgstr "生成门票"
 #: pretix/presale/templates/pretixpresale/event/index.html:188
 #: pretix/presale/templates/pretixpresale/event/waitinglist.html:3
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:3
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:81
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:78
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:102
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:66
 #: pretix/presale/templates/pretixpresale/organizers/index.html:103
@@ -3041,7 +3041,7 @@ msgid "Please enter the same password twice"
 msgstr "请输入两次相同的密码"
 
 #: pretix/base/forms/auth.py:149
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:133
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:134
 msgid "Email address"
 msgstr "电子邮件地址"
 
@@ -3469,8 +3469,8 @@ msgid ""
 msgstr "使用转换率为1：{rate}由欧洲中央银行发布{date}，发票总额于{total}。"
 
 #: pretix/base/invoice.py:858
-msgid "Modern Invoice Renderer (pretix 2.7)"
-msgstr "现代发票渲染器（pretix 2.7）"
+msgid "Default invoice renderer (European-style letter)"
+msgstr ""
 
 #: pretix/base/invoice.py:947
 #, fuzzy
@@ -3478,6 +3478,17 @@ msgstr "现代发票渲染器（pretix 2.7）"
 msgctxt "invoice"
 msgid "(Please quote at all times.)"
 msgstr "请选择一个有效的座位。"
+
+#: pretix/base/invoice.py:994
+msgid "Simplified invoice renderer"
+msgstr ""
+
+#: pretix/base/invoice.py:1013
+#, fuzzy, python-brace-format
+#| msgid "Event date range"
+msgctxt "invoice"
+msgid "Event date: {date_range}"
+msgstr "活动日期范围"
 
 #: pretix/base/media.py:61
 msgid "Barcode / QR-Code"
@@ -12177,76 +12188,83 @@ msgctxt "reporting_timeframe"
 msgid "All time"
 msgstr "所有条目"
 
-#: pretix/base/timeline.py:59
+#: pretix/base/timeline.py:60
 msgctxt "timeline"
 msgid "Your event starts"
 msgstr "您的活动开始"
 
-#: pretix/base/timeline.py:67
+#: pretix/base/timeline.py:68
 msgctxt "timeline"
 msgid "Your event ends"
 msgstr "您的活动结束"
 
-#: pretix/base/timeline.py:75
+#: pretix/base/timeline.py:76
 msgctxt "timeline"
 msgid "Admissions for your event start"
 msgstr "活动入场开始时间"
 
-#: pretix/base/timeline.py:83
+#: pretix/base/timeline.py:84
 msgctxt "timeline"
 msgid "Start of ticket sales"
 msgstr "售票开始"
 
-#: pretix/base/timeline.py:93
+#: pretix/base/timeline.py:95
 msgctxt "timeline"
 msgid "End of ticket sales"
 msgstr "售票结束"
 
-#: pretix/base/timeline.py:104
+#: pretix/base/timeline.py:96
+msgctxt "timeline"
+msgid ""
+"automatically because the event is over and no end of presale has been "
+"configured"
+msgstr ""
+
+#: pretix/base/timeline.py:106
 msgctxt "timeline"
 msgid "Customers can no longer modify their orders"
 msgstr "客户无法再修改其订单"
 
-#: pretix/base/timeline.py:117
+#: pretix/base/timeline.py:119
 msgctxt "timeline"
 msgid "No more payments can be completed"
 msgstr "无法再完成付款"
 
-#: pretix/base/timeline.py:129
+#: pretix/base/timeline.py:131
 msgctxt "timeline"
 msgid "Tickets can be downloaded"
 msgstr "可下载门票"
 
-#: pretix/base/timeline.py:141
+#: pretix/base/timeline.py:143
 msgctxt "timeline"
 msgid "Customers can no longer cancel free or unpaid orders"
 msgstr "客户不能再取消免费或未付款的订单"
 
-#: pretix/base/timeline.py:153
+#: pretix/base/timeline.py:155
 msgctxt "timeline"
 msgid "Customers can no longer cancel paid orders"
 msgstr "客户无法再取消已付款的订单"
 
-#: pretix/base/timeline.py:167
+#: pretix/base/timeline.py:169
 msgctxt "timeline"
 msgid "Download reminders are being sent out"
 msgstr "正在发送下载提醒"
 
-#: pretix/base/timeline.py:180 pretix/base/timeline.py:203
-#: pretix/base/timeline.py:253
+#: pretix/base/timeline.py:182 pretix/base/timeline.py:205
+#: pretix/base/timeline.py:255
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes available"
 msgstr "产品{name}变为可用"
 
-#: pretix/base/timeline.py:191 pretix/base/timeline.py:215
-#: pretix/base/timeline.py:264
+#: pretix/base/timeline.py:193 pretix/base/timeline.py:217
+#: pretix/base/timeline.py:266
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
 msgstr "产品“{name}”变为不可用"
 
-#: pretix/base/timeline.py:229
+#: pretix/base/timeline.py:231
 #, fuzzy, python-brace-format
 #| msgctxt "timeline"
 #| msgid "Product \"{name}\" becomes available"
@@ -12254,7 +12272,7 @@ msgctxt "timeline"
 msgid "Discount \"{name}\" becomes active"
 msgstr "产品{name}变为可用"
 
-#: pretix/base/timeline.py:240
+#: pretix/base/timeline.py:242
 #, fuzzy, python-brace-format
 #| msgctxt "timeline"
 #| msgid "Product \"{name}\" becomes unavailable"
@@ -12262,7 +12280,7 @@ msgctxt "timeline"
 msgid "Discount \"{name}\" becomes inactive"
 msgstr "产品“{name}”变为不可用"
 
-#: pretix/base/timeline.py:280
+#: pretix/base/timeline.py:282
 #, fuzzy, python-brace-format
 #| msgctxt "timeline"
 #| msgid "Product \"{name}\" becomes available"
@@ -12270,7 +12288,7 @@ msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes available"
 msgstr "产品{name}变为可用"
 
-#: pretix/base/timeline.py:294
+#: pretix/base/timeline.py:296
 #, fuzzy, python-brace-format
 #| msgctxt "timeline"
 #| msgid "Product \"{name}\" becomes unavailable"
@@ -12278,7 +12296,7 @@ msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes unavailable"
 msgstr "产品“{name}”变为不可用"
 
-#: pretix/base/timeline.py:325
+#: pretix/base/timeline.py:327
 #, python-brace-format
 msgctxt "timeline"
 msgid "Payment provider \"{name}\" can no longer be selected"
@@ -20347,7 +20365,7 @@ msgstr "完全保留"
 
 #: pretix/control/templates/pretixcontrol/items/fragment_quota_availability.html:16
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:40
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:86
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:83
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:107
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:71
 #: pretix/presale/templates/pretixpresale/organizers/index.html:108
@@ -25369,7 +25387,7 @@ msgstr "没有日期"
 
 #: pretix/control/views/dashboards.py:531
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:48
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:94
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:91
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:116
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:79
 #: pretix/presale/templates/pretixpresale/organizers/index.html:116
@@ -25378,7 +25396,7 @@ msgid "Sale over"
 msgstr "售完"
 
 #: pretix/control/views/dashboards.py:533
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:103
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:100
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:123
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:86
 #: pretix/presale/views/widget.py:426
@@ -27735,55 +27753,62 @@ msgid "Amount:"
 msgstr "数量："
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:42
-msgid ""
-"After you sent the bank transfer, you can close this window. We will send "
-"you an email as soon as we received your payment."
+msgid "There is no further action required on this website."
 msgstr ""
-"发送银行转帐后，您可以关闭此窗口。 我们会在收到您的付款后立即向您发送电子邮"
-"件。"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:60
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:71
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:91
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:43
+#, fuzzy
+#| msgid ""
+#| "We will sent you an email as soon as the event organizer approved or "
+#| "rejected your order. If your order was approved, we will send you a link "
+#| "that you can use to pay."
+msgid "We will send you an email as soon as we received your payment."
+msgstr ""
+"我们会在活动组织者批准或拒绝您的订单后立即向您发送电子邮件。 如果您的订单获得"
+"批准，我们会向您发送一个可用于支付的链接。"
+
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:61
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:72
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:92
 msgid "Scan the qr-code with your banking app"
 msgstr ""
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:64
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:74
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:95
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:65
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:75
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:96
 msgid ""
 "Scan this image with your banking app’s QR-Reader to start the payment "
 "process."
 msgstr ""
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:94
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:95
 msgid "Open BezahlCode in your banking app to start the payment process."
 msgstr ""
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:111
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:112
 #, python-format
 msgid "At your request, we sent the invoice directly to %(recipient)s."
 msgstr ""
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:116
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:117
 #, fuzzy
 #| msgid "Log in as someone else"
 msgid "Send again or somewhere else"
 msgstr "以其他人身份登录"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:125
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:126
 msgid ""
 "To send the invoice directly to your accounting department, please enter "
 "their email address:"
 msgstr ""
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:131
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:132
 #, fuzzy
 #| msgid "Invoice recipient:"
 msgid "Invoice recipient email"
 msgstr "发票收件人:"
 
-#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:138
+#: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:139
 #, fuzzy
 #| msgid "Send vouchers"
 msgid "Send invoice via email"
@@ -31823,7 +31848,7 @@ msgstr "售完"
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:20
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:81
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:37
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:83
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:80
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:104
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:68
 #: pretix/presale/templates/pretixpresale/organizers/index.html:105
@@ -32417,7 +32442,7 @@ msgid "Show next week, %(week)s"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:26
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:72
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:69
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:93
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:57
 #: pretix/presale/templates/pretixpresale/organizers/index.html:94
@@ -32428,7 +32453,7 @@ msgid "Few tickets left"
 msgstr "PDF票证布局"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:29
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:75
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:72
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:96
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:60
 #: pretix/presale/templates/pretixpresale/organizers/index.html:97
@@ -32441,8 +32466,8 @@ msgstr "现在付款"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:31
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:46
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:77
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:92
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:74
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:89
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:98
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:114
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:62
@@ -32454,7 +32479,7 @@ msgid "Book now"
 msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_subevent_list.html:42
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:88
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:85
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:110
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:73
 #: pretix/presale/templates/pretixpresale/organizers/index.html:110
@@ -33207,13 +33232,13 @@ msgctxt "waitinglist"
 msgid "Yes, remove my ticket"
 msgstr "添加新的票据类型"
 
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:5
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:6
 #, fuzzy
 #| msgid "Add to Calendar"
 msgid "Calendar"
 msgstr "添加到日历"
 
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:52
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:49
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:65
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:37
 #, fuzzy
@@ -33221,7 +33246,7 @@ msgstr "添加到日历"
 msgid "(continued)"
 msgstr "继续"
 
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:61
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:58
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:46
 #, fuzzy
 #| msgid "Date and time"
@@ -33229,7 +33254,7 @@ msgctxt "timerange"
 msgid "until"
 msgstr "日期和时间"
 
-#: pretix/presale/templates/pretixpresale/fragment_calendar.html:98
+#: pretix/presale/templates/pretixpresale/fragment_calendar.html:95
 #, python-format
 msgid ""
 "\n"
@@ -33752,22 +33777,22 @@ msgid ""
 "used for a different account in this system."
 msgstr ""
 
-#: pretix/presale/views/event.py:850
+#: pretix/presale/views/event.py:851
 msgid "Unknown event code or not authorized to access this event."
 msgstr "未知活动代码或未授权访问此事件。"
 
-#: pretix/presale/views/event.py:857
+#: pretix/presale/views/event.py:858
 msgctxt "subevent"
 msgid "No date selected."
 msgstr "未选择日期。"
 
-#: pretix/presale/views/event.py:860
+#: pretix/presale/views/event.py:861
 msgctxt "subevent"
 msgid "Unknown date selected."
 msgstr "选择了未知日期。"
 
-#: pretix/presale/views/event.py:885 pretix/presale/views/event.py:893
-#: pretix/presale/views/event.py:896
+#: pretix/presale/views/event.py:886 pretix/presale/views/event.py:894
+#: pretix/presale/views/event.py:897
 msgid "Please go back and try again."
 msgstr "请返回重试。"
 
@@ -33963,6 +33988,16 @@ msgstr "录入权限"
 #: pretix/settings.py:729
 msgid "Kosovo"
 msgstr ""
+
+#~ msgid "Modern Invoice Renderer (pretix 2.7)"
+#~ msgstr "现代发票渲染器（pretix 2.7）"
+
+#~ msgid ""
+#~ "After you sent the bank transfer, you can close this window. We will send "
+#~ "you an email as soon as we received your payment."
+#~ msgstr ""
+#~ "发送银行转帐后，您可以关闭此窗口。 我们会在收到您的付款后立即向您发送电子"
+#~ "邮件。"
 
 #, fuzzy
 #~| msgid "Add-on products will not be counted."
