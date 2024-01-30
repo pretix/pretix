@@ -113,6 +113,15 @@ error_messages = {
         'Some of the products you selected are no longer available in '
         'the quantity you selected. Please see below for details.'
     ),
+    'unavailable_listed': gettext_lazy(
+        'Some of the products you selected are no longer available.'
+        'The following products are affected and have not been added to your cart: %s'
+    ),
+    'in_part_listed': gettext_lazy(
+        'Some of the products you selected are no longer available in '
+        'the quantity you selected. The following products are affected and have not '
+        'been added to your cart: %s'
+    ),
     'max_items': ngettext_lazy(
         "You cannot select more than %s item per order.",
         "You cannot select more than %s items per order."
@@ -1105,6 +1114,8 @@ class CartManager:
         if 'sleep-after-quota-check' in debugflags_var.get():
             sleep(2)
 
+        err_unavailable_products = []
+
         for iop, op in enumerate(self._operations):
             if isinstance(op, self.RemoveOperation):
                 if op.position.expires > self.now_dt:
@@ -1132,9 +1143,15 @@ class CartManager:
                     voucher_available_count = min(voucher_available_count, vouchers_ok[op.voucher])
 
                 if quota_available_count < 1:
-                    err = err or error_messages['unavailable']
+                    err = err or error_messages['unavailable_listed']
+                    err_unavailable_products.append(
+                        f'{op.item.name} – {op.variation}' if op.variation else op.item.name
+                    )
                 elif quota_available_count < requested_count:
-                    err = err or error_messages['in_part']
+                    err = err or error_messages['in_part_listed']
+                    err_unavailable_products.append(
+                        f'{op.item.name} – {op.variation}' if op.variation else op.item.name
+                    )
 
                 if voucher_available_count < 1:
                     if op.voucher in self._voucher_depend_on_cart:
@@ -1151,16 +1168,25 @@ class CartManager:
                         b_quotas = list(b.quotas)
                         if not b_quotas:
                             if not op.voucher or not op.voucher.allow_ignore_quota:
-                                err = err or error_messages['unavailable']
+                                err = err or error_messages['unavailable_listed']
+                                err_unavailable_products.append(
+                                    f'{op.item.name} – {op.variation}' if op.variation else op.item.name
+                                )
                                 available_count = 0
                             continue
                         b_quota_available_count = min(available_count * b.count, min(quotas_ok[q] for q in b_quotas))
                         if b_quota_available_count < b.count:
-                            err = err or error_messages['unavailable']
+                            err = err or error_messages['unavailable_listed']
+                            err_unavailable_products.append(
+                                f'{op.item.name} – {op.variation}' if op.variation else op.item.name
+                            )
                             available_count = 0
                         elif b_quota_available_count < available_count * b.count:
-                            err = err or error_messages['in_part']
+                            err = err or error_messages['in_part_listed']
                             available_count = b_quota_available_count // b.count
+                            err_unavailable_products.append(
+                                f'{op.item.name} – {op.variation}' if op.variation else op.item.name
+                            )
                         for q in b_quotas:
                             quotas_ok[q] -= available_count * b.count
                             # TODO: is this correct?
@@ -1325,6 +1351,10 @@ class CartManager:
 
         if 'sleep-before-commit' in debugflags_var.get():
             sleep(2)
+
+        if err in (error_messages['unavailable_listed'], error_messages['in_part_listed']):
+            err = err % ', '.join(str(p) for p in err_unavailable_products)
+
         return err
 
     def recompute_final_prices_and_taxes(self):
