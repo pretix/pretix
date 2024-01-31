@@ -51,6 +51,7 @@ var strings = {
     'close': django.pgettext('widget', 'Close'),
     'continue': django.pgettext('widget', 'Continue'),
     'variations': django.pgettext('widget', 'See variations'),
+    'hide_variations': django.pgettext('widget', 'Hide variations'),
     'back_to_list': django.pgettext('widget', 'Choose a different event'),
     'back_to_dates': django.pgettext('widget', 'Choose a different date'),
     'back': django.pgettext('widget', 'Back'),
@@ -500,7 +501,10 @@ Vue.component('item', {
         // Availability
         + '<div class="pretix-widget-item-availability-col">'
         + '<a v-if="show_toggle" :href="\'#\' + item.id + \'-variants\'" @click.prevent.stop="expand" role="button" tabindex="0"'
-        + '   v-bind:aria-expanded="expanded ? \'true\': \'false\'" v-bind:aria-controls="item.id + \'-variants\'">'+ strings.variations + '</a>'
+        + '   v-bind:aria-expanded="expanded ? \'true\': \'false\'" v-bind:aria-controls="item.id + \'-variants\'">'
+        + '<span v-if="!expanded">' + strings.variations + '</span>'
+        + '<span v-if="expanded">' + strings.hide_variations + '</span>'
+        + '</a>'
         + '<availbox v-if="!item.has_variations" :item="item"></availbox>'
         + '</div>'
 
