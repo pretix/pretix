@@ -96,6 +96,9 @@ class BaseTicketOutput:
         """
         raise NotImplementedError()
 
+    def get_tickets_to_print(self, order):
+        return order.positions_with_tickets
+
     def generate_order(self, order: Order) -> Tuple[str, str, str]:
         """
         This method is the same as order() but should not generate one file per order position
@@ -116,7 +119,7 @@ class BaseTicketOutput:
         """
         with tempfile.TemporaryDirectory() as d:
             with ZipFile(os.path.join(d, 'tmp.zip'), 'w') as zipf:
-                for pos in order.positions_with_tickets:
+                for pos in self.get_tickets_to_print(order):
                     fname, __, content = self.generate(pos)
                     zipf.writestr('{}-{}{}'.format(
                         order.code, pos.positionid, os.path.splitext(fname)[1]

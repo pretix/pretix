@@ -44,7 +44,7 @@ from datetime import datetime, time, timedelta
 from decimal import Decimal
 from functools import reduce
 from time import sleep
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, Iterable, List, Union
 from zoneinfo import ZoneInfo
 
 import dateutil
@@ -79,7 +79,7 @@ from pretix.base.i18n import language
 from pretix.base.models import Customer, User
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.settings import PERSON_NAME_SCHEMES
-from pretix.base.signals import order_gracefully_delete
+from pretix.base.signals import allow_ticket_download, order_gracefully_delete
 
 from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
@@ -1138,11 +1138,18 @@ class Order(LockModel, LoggedModel):
             )
 
     @property
+    def positions_with_tickets_ignoring_plugins(self):
+        return (op for op in self.positions.select_related('item') if op.generate_ticket)
+
+    @property
     def positions_with_tickets(self):
-        for op in self.positions.select_related('item'):
-            if not op.generate_ticket:
-                continue
-            yield op
+        signal_response = allow_ticket_download.send(self.event, order=self)
+        if all([r is True for rr, r in signal_response]):
+            return self.positions_with_tickets_ignoring_plugins
+        elif any([r is False for rr, r in signal_response]):
+            return []
+        else:
+            return set.intersection(set(self.positions_with_tickets_ignoring_plugins), *[set(r) for rr, r in signal_response if isinstance(r, Iterable)])
 
     def create_transactions(self, is_new=False, positions=None, fees=None, dt_now=None, migrated=False,
                             _backfill_before_cancellation=False, save=True):

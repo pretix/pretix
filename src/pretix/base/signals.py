@@ -646,7 +646,7 @@ allow_ticket_download = EventPluginSignal()
 Arguments: ``order``
 
 This signal is sent out to check if tickets for an order can be downloaded. If any receiver returns false,
-a download will not be offered.
+a download will not be offered. If a receiver returns a list of OrderPositions, only those will be downloadable.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
