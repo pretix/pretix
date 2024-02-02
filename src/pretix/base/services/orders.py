@@ -1407,8 +1407,8 @@ def send_download_reminders(sender, **kwargs):
             if o.download_reminder_sent:
                 # Race condition
                 continue
-            positions = o.positions_with_tickets
-            if not list(positions):
+            positions = list(o.positions_with_tickets)
+            if not positions:
                 continue
 
             if not o.ticket_download_available:
@@ -1434,7 +1434,7 @@ def send_download_reminders(sender, **kwargs):
                     logger.exception('Reminder email could not be sent')
 
                 if event.settings.mail_send_download_reminder_attendee:
-                    for p in o.positions_with_tickets:
+                    for p in positions:
                         if p.subevent_id:
                             reminder_date = (p.subevent.date_from - timedelta(days=days)).replace(
                                 hour=0, minute=0, second=0, microsecond=0

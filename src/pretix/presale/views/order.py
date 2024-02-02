@@ -173,8 +173,7 @@ class TicketPageMixin:
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
-        positions_with_tickets = self.order.positions_with_tickets
-
+        positions_with_tickets = list(self.order.positions_with_tickets)
         ctx['order'] = self.order
 
         can_download = bool(positions_with_tickets)
