@@ -352,7 +352,7 @@ class OverviewReport(Report):
             ('SPAN', (11, 1), (12, 1)),
             ('ALIGN', (0, 0), (-1, 1), 'CENTER'),
             ('ALIGN', (1, 2), (-1, -1), 'RIGHT'),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
             ('FONTNAME', (0, 0), (-1, 1), 'OpenSansBd'),
             ('FONTNAME', (0, -1), (-1, -1), 'OpenSansBd'),
             ('FONTSIZE', (0, 0), (-1, -1), 8),
