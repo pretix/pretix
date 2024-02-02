@@ -3663,7 +3663,7 @@ COUNTRIES_WITH_STATE_IN_ADDRESS = {
     'BR': (['State'], 'short'),
     'CA': (['Province', 'Territory'], 'short'),
     # 'CN': (['Province', 'Autonomous region', 'Munincipality'], 'long'),
-    'MY': (['State'], 'long'),
+    'MY': (['State', 'Federal territory'], 'long'),
     'MX': (['State', 'Federal district'], 'short'),
     'US': (['State', 'Outlying area', 'District'], 'short'),
 }
