@@ -417,7 +417,7 @@ class OverviewReport(Report):
                     tdata[-1].append(floatformat(tup[0].num[l][2 if net else 1], places))
             for item in tup[1]:
                 tdata.append([
-                    str(item)
+                    Paragraph(str(item), tstyle)
                 ])
                 for l, s in states:
                     tdata[-1].append(str(item.num[l][0]))
