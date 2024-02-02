@@ -36,7 +36,7 @@ from pretix.base.i18n import (
 )
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.settings import PERSON_NAME_SCHEMES, get_name_parts_localized
-from pretix.base.signals import register_mail_placeholders
+from pretix.base.signals import register_mail_placeholders, register_text_placeholders
 from pretix.helpers.format import SafeFormatter
 
 logger = logging.getLogger('pretix.base.services.placeholders')
@@ -121,7 +121,10 @@ class PlaceholderContext(SafeFormatter):
         self.placeholders = {}
         self.cache = {}
         event = kwargs['event']
-        for r, val in register_mail_placeholders.send(sender=event):
+        for r, val in [
+            *register_mail_placeholders.send(sender=event),
+            *register_text_placeholders.send(sender=event)
+        ]:
             if not isinstance(val, (list, tuple)):
                 val = [val]
             for v in val:
@@ -200,7 +203,7 @@ def get_best_name(position_or_address, parts=False):
     return {} if parts else ""
 
 
-@receiver(register_mail_placeholders, dispatch_uid="pretixbase_register_mail_placeholders")
+@receiver(register_text_placeholders, dispatch_uid="pretixbase_register_text_placeholders")
 def base_placeholders(sender, **kwargs):
     from pretix.multidomain.urlreverse import build_absolute_uri
 
@@ -570,7 +573,7 @@ def get_available_placeholders(event, base_parameters):
         base_parameters.append('invoice_address')
         base_parameters.append('position_or_address')
     params = {}
-    for r, val in register_mail_placeholders.send(sender=event):
+    for r, val in [*register_mail_placeholders.send(sender=event), *register_text_placeholders.send(sender=event)]:
         if not isinstance(val, (list, tuple)):
             val = [val]
         for v in val:

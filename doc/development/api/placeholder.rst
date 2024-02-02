@@ -4,7 +4,7 @@
 Writing a template placeholder plugin
 =====================================
 
-A template placeholder is a dynamic value that pretix users can use in their email templates and in several other
+A template placeholder is a dynamic value that pretix users can use in their email templates and in other
 configurable texts.
 
 Please read :ref:`Creating a plugin <pluginsetup>` first, if you haven't already.
@@ -20,11 +20,11 @@ should listen for this signal and return an instance of a subclass of ``pretix.b
 
     from django.dispatch import receiver
 
-    from pretix.base.signals import register_mail_placeholders
+    from pretix.base.signals import register_text_placeholders
 
 
-    @receiver(register_mail_placeholders, dispatch_uid="placeholder_custom")
-    def register_mail_renderers(sender, **kwargs):
+    @receiver(register_text_placeholders, dispatch_uid="placeholder_custom")
+    def register_placeholder_renderers(sender, **kwargs):
         from .placeholders import MyPlaceholderClass
         return MyPlaceholder()
 
@@ -32,12 +32,12 @@ should listen for this signal and return an instance of a subclass of ``pretix.b
 Context mechanism
 -----------------
 
-Emails are sent in different "contexts" within pretix. For example, many emails are sent in the
-the context of an order, but some are not, such as the notification of a waiting list voucher.
+Templates are used in different "contexts" within pretix. For example, many emails are rendered from
+templates in the context of an order, but some are not, such as the notification of a waiting list voucher.
 
-Not all placeholders make sense in every email, and placeholders usually depend some parameters
+Not all placeholders make sense everywhere, and placeholders usually depend on some parameters
 themselves, such as the ``Order`` object. Therefore, placeholders are expected to explicitly declare
-what values they depend on and they will only be available in an email if all those dependencies are
+what values they depend on and they will only be available in a context where all those dependencies are
 met. Currently, placeholders can depend on the following context parameters:
 
 * ``event``
