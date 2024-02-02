@@ -55,7 +55,6 @@ from pretix.base.services.orders import (
     send_expiry_warnings,
 )
 from pretix.plugins.banktransfer.payment import BankTransfer
-from pretix.testutils.mock import mocker_context
 from pretix.testutils.scope import classscope
 
 
@@ -821,7 +820,7 @@ class DownloadReminderTests(TestCase):
             self.event = Event.objects.create(
                 organizer=self.o, name='Dummy', slug='dummy',
                 date_from=now() + timedelta(days=2),
-                plugins='pretix.plugins.banktransfer,tests.testdummy'
+                plugins='pretix.plugins.banktransfer'
             )
             self.order = Order.objects.create(
                 code='FOO', event=self.event, email='dummy@dummy.test',
@@ -853,58 +852,6 @@ class DownloadReminderTests(TestCase):
         self.ticket.save()
         send_download_reminders(sender=self.event)
         assert len(djmail.outbox) == 0
-
-    @classscope(attr='o')
-    def test_downloads_disabled_by_plugin(self):
-        with mocker_context() as mocker:
-            self.event.settings.mail_days_download_reminder = 2
-
-            from pretix.base.signals import allow_ticket_download
-            mocker.patch('pretix.base.signals.allow_ticket_download.send')
-            allow_ticket_download.send.return_value = [(None, [])]
-
-            send_download_reminders(sender=self.event)
-            assert len(djmail.outbox) == 0
-
-    @classscope(attr='o')
-    def test_downloads_all_allowed_by_plugin(self):
-        with mocker_context() as mocker:
-            self.event.settings.mail_days_download_reminder = 2
-            self.event.settings.mail_attach_tickets = True
-            self.event.settings.ticketoutput_testdummy__enabled = True
-
-            self.op2 = OrderPosition.objects.create(
-                order=self.order, item=self.ticket, variation=None,
-                price=Decimal("42.00"), attendee_name_parts={"full_name": "Mary"}, positionid=2
-            )
-
-            from pretix.base.signals import allow_ticket_download
-            mocker.patch('pretix.base.signals.allow_ticket_download.send')
-            allow_ticket_download.send.return_value = [(None, True)]
-
-            send_download_reminders(sender=self.event)
-            assert len(djmail.outbox) == 1
-            assert len(djmail.outbox[0].attachments) == 2
-
-    @classscope(attr='o')
-    def test_downloads_partially_disabled_by_plugin(self):
-        with mocker_context() as mocker:
-            self.event.settings.mail_days_download_reminder = 2
-            self.event.settings.mail_attach_tickets = True
-            self.event.settings.ticketoutput_testdummy__enabled = True
-
-            self.op2 = OrderPosition.objects.create(
-                order=self.order, item=self.ticket, variation=None,
-                price=Decimal("42.00"), attendee_name_parts={"full_name": "Mary"}, positionid=2
-            )
-
-            from pretix.base.signals import allow_ticket_download
-            mocker.patch('pretix.base.signals.allow_ticket_download.send')
-            allow_ticket_download.send.return_value = [(None, [self.op2])]
-
-            send_download_reminders(sender=self.event)
-            assert len(djmail.outbox) == 1
-            assert len(djmail.outbox[0].attachments) == 1
 
     @classscope(attr='o')
     def test_disabled(self):

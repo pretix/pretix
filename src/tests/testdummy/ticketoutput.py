@@ -33,7 +33,3 @@ class DummyTicketOutput(BaseTicketOutput):
 
     def generate(self, op):
         return 'test.txt', 'text/plain', str(op.order.id)
-
-    @property
-    def multi_download_enabled(self) -> bool:
-        return False
