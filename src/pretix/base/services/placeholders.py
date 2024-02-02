@@ -36,7 +36,9 @@ from pretix.base.i18n import (
 )
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.settings import PERSON_NAME_SCHEMES, get_name_parts_localized
-from pretix.base.signals import register_mail_placeholders, register_text_placeholders
+from pretix.base.signals import (
+    register_mail_placeholders, register_text_placeholders,
+)
 from pretix.helpers.format import SafeFormatter
 
 logger = logging.getLogger('pretix.base.services.placeholders')
