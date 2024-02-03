@@ -82,3 +82,11 @@ functions:
          'code', ['order'], lambda order: order.code, sample='F8VVL'
      )
 
+Signals
+-------
+
+.. automodule:: pretix.base.signals
+   :members: register_text_placeholders
+.. automodule:: pretix.base.signals
+   :members: register_mail_placeholders
+

@@ -13,7 +13,8 @@ Core
 .. automodule:: pretix.base.signals
    :members: periodic_task, event_live_issues, event_copy_data, email_filter, register_notification_types, notification,
       item_copy_data, register_sales_channels, register_global_settings, quota_availability, global_email_filter,
-      register_ticket_secret_generators, gift_card_transaction_display
+      register_ticket_secret_generators, gift_card_transaction_display,
+      register_text_placeholders, register_mail_placeholders
 
 Order events
 """"""""""""
