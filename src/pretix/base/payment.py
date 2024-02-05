@@ -849,6 +849,8 @@ class BasePaymentProvider:
             except InvoiceAddress.DoesNotExist:
                 pass
             else:
+                if str(ia.country) == '':
+                    pass
                 if str(ia.country) not in restricted_countries:
                     return False
 
