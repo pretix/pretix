@@ -273,9 +273,12 @@ class StripeSettingsHolder(BasePaymentProvider):
                 ('publishable_key',
                  forms.CharField(
                      label=_('Publishable key'),
-                     help_text=_('<a target="_blank" rel="noopener" href="{docs_url}">{text}</a>').format(
-                         text=_('Click here for a tutorial on how to obtain the required keys'),
-                         docs_url='https://docs.pretix.eu/en/latest/user/payments/stripe.html'
+                     help_text='<a target="_blank" rel="noopener" href="{docs_url}" class="btn btn-primary">{text}</a><br>'
+                               '<p class="help-block">{help}</p>'.format(
+                         text=_('Generate API keys'),
+                         docs_url='https://marketplace.stripe.com/apps/install/link/eu.pretix.plugins.stripe.rak',
+                         help=_('The button above will install our Stripe app to your account and will generate you '
+                                'API keys with the recommended permission level for optimal usage with pretix.')
                      ),
                      validators=(
                          StripeKeyValidator('pk_'),
