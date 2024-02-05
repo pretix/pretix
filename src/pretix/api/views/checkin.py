@@ -285,6 +285,8 @@ with scopes_disabled():
             return queryset.filter(last_checked_in__isnull=not value)
 
         def check_rules_qs(self, queryset, name, value):
+            if not value:
+                return queryset
             if not self.checkinlist.rules:
                 return queryset
             return queryset.filter(
