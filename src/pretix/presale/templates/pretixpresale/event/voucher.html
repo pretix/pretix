@@ -212,7 +212,7 @@
                                                 {% endif %}
                                                 </p>
                                             </div>
-                                            {% if var.cached_availability.0 == 100 %}
+                                            {% if var.cached_availability.0 == 100 and not item.current_unavailability_reason %}
                                                 <div class="col-md-2 col-sm-3 col-xs-6 availability-box available radio-box">
                                                     {% if max_times > 1 %}
                                                         {% if var.order_max == 1 %}
@@ -251,7 +251,7 @@
                                                     {% endif %}
                                                 </div>
                                             {% else %}
-                                                {% include "pretixpresale/event/fragment_availability.html" with price=var.display_price.gross avail=var.cached_availability.0 %}
+                                                {% include "pretixpresale/event/fragment_availability.html" with price=var.display_price.gross avail=var.cached_availability.0 item=item %}
                                             {% endif %}
                                             <div class="clearfix"></div>
                                         </article>
@@ -363,7 +363,7 @@
                                     {% endif %}
                                     </p>
                                 </div>
-                                {% if item.cached_availability.0 == 100 %}
+                                {% if item.cached_availability.0 == 100 and not item.current_unavailability_reason %}
                                     <div class="col-md-2 col-sm-3 col-xs-6 availability-box available radio-box">
                                         {% if max_times > 1 %}
                                             {% if item.order_max == 1 %}
@@ -404,7 +404,7 @@
                                         {% endif %}
                                     </div>
                                 {% else %}
-                                    {% include "pretixpresale/event/fragment_availability.html" with price=item.display_price.gross avail=item.cached_availability.0 %}
+                                    {% include "pretixpresale/event/fragment_availability.html" with price=item.display_price.gross avail=item.cached_availability.0 item=item %}
                                 {% endif %}
                                 <div class="clearfix"></div>
                             </article>

@@ -64,8 +64,8 @@ from pretix.base.models import (
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
-    ItemMultipleChoiceField, SizeValidationMixin, SplitDateTimeField,
-    SplitDateTimePickerWidget,
+    ButtonGroupRadioSelect, ItemMultipleChoiceField, SizeValidationMixin,
+    SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.models import modelcopy
@@ -380,7 +380,9 @@ class ItemCreateForm(I18nModelForm):
                 'description',
                 'active',
                 'available_from',
+                'available_from_mode',
                 'available_until',
+                'available_until_mode',
                 'require_voucher',
                 'hide_without_voucher',
                 'allow_cancel',
@@ -562,6 +564,34 @@ class ItemUpdateForm(I18nModelForm):
         )
         change_decimal_field(self.fields['default_price'], self.event.currency)
 
+        self.fields['available_from_mode'].widget = ButtonGroupRadioSelect(
+            choices=self.fields['available_from_mode'].choices,
+            option_icons={
+                Item.UNAVAIL_MODE_HIDDEN: 'eye-slash',
+                Item.UNAVAIL_MODE_INFO: 'info'
+            }
+        )
+
+        self.fields['available_until_mode'].widget = ButtonGroupRadioSelect(
+            choices=self.fields['available_until_mode'].choices,
+            option_icons={
+                Item.UNAVAIL_MODE_HIDDEN: 'eye-slash',
+                Item.UNAVAIL_MODE_INFO: 'info'
+            }
+        )
+
+        self.fields['hide_without_voucher'].widget = ButtonGroupRadioSelect(
+            choices=(
+                (True, _("Hide product if unavailable")),
+                (False, _("Show product with info on why it’s unavailable")),
+            ),
+            option_icons={
+                True: 'eye-slash',
+                False: 'info'
+            },
+            attrs={'data-checkbox-dependency': '#id_require_voucher'}
+        )
+
         if self.instance.hidden_if_available_id:
             self.fields['hidden_if_available'].queryset = self.event.quotas.all()
             self.fields['hidden_if_available'].help_text = format_html(
@@ -656,6 +686,9 @@ class ItemUpdateForm(I18nModelForm):
                     )
                 )
 
+        if not d.get('require_voucher'):
+            d['hide_without_voucher'] = False
+
         if d.get('require_membership') and not d.get('require_membership_types'):
             self.add_error(
                 'require_membership_types',
@@ -713,7 +746,9 @@ class ItemUpdateForm(I18nModelForm):
             'free_price_suggestion',
             'tax_rule',
             'available_from',
+            'available_from_mode',
             'available_until',
+            'available_until_mode',
             'require_voucher',
             'require_approval',
             'hide_without_voucher',
@@ -850,6 +885,22 @@ class ItemVariationForm(I18nModelForm):
 
         self.fields['free_price_suggestion'].widget.attrs['data-display-dependency'] = '#id_free_price'
 
+        self.fields['available_from_mode'].widget = ButtonGroupRadioSelect(
+            choices=self.fields['available_from_mode'].choices,
+            option_icons={
+                Item.UNAVAIL_MODE_HIDDEN: 'eye-slash',
+                Item.UNAVAIL_MODE_INFO: 'info'
+            }
+        )
+
+        self.fields['available_until_mode'].widget = ButtonGroupRadioSelect(
+            choices=self.fields['available_until_mode'].choices,
+            option_icons={
+                Item.UNAVAIL_MODE_HIDDEN: 'eye-slash',
+                Item.UNAVAIL_MODE_INFO: 'info'
+            }
+        )
+
         self.meta_fields = []
         meta_defaults = {}
         if self.instance.pk:
@@ -892,7 +943,9 @@ class ItemVariationForm(I18nModelForm):
             'checkin_attention',
             'checkin_text',
             'available_from',
+            'available_from_mode',
             'available_until',
+            'available_until_mode',
             'sales_channels',
             'hide_without_voucher',
         ]

@@ -263,8 +263,8 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
         # IMPORTANT: If this is updated, also update the ItemVariation query
         # in models/event.py: EventMixin.annotated()
         Q(active=True)
-        & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
-        & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+        & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()) | Q(available_from_mode='info'))
+        & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()) | Q(available_until_mode='info'))
         & Q(sales_channels__contains=channel) & Q(require_bundling=False)
     )
     if not allow_addons:
@@ -372,6 +372,13 @@ class Item(LoggedModel):
         (None, _('Event validity (default)')),
         (VALIDITY_MODE_FIXED, _('Fixed time frame')),
         (VALIDITY_MODE_DYNAMIC, _('Dynamic validity')),
+    )
+
+    UNAVAIL_MODE_HIDDEN = "hide"
+    UNAVAIL_MODE_INFO = "info"
+    UNAVAIL_MODES = (
+        (UNAVAIL_MODE_HIDDEN, _("Hide product if unavailable")),
+        (UNAVAIL_MODE_INFO, _("Show info text if unavailable")),
     )
 
     MEDIA_POLICY_REUSE = 'reuse'
@@ -487,10 +494,20 @@ class Item(LoggedModel):
         null=True, blank=True,
         help_text=_('This product will not be sold before the given date.')
     )
+    available_from_mode = models.CharField(
+        choices=UNAVAIL_MODES,
+        default=UNAVAIL_MODE_HIDDEN,
+        max_length=16,
+    )
     available_until = models.DateTimeField(
         verbose_name=_("Available until"),
         null=True, blank=True,
         help_text=_('This product will not be sold after the given date.')
+    )
+    available_until_mode = models.CharField(
+        choices=UNAVAIL_MODES,
+        default=UNAVAIL_MODE_HIDDEN,
+        max_length=16,
     )
     hidden_if_available = models.ForeignKey(
         'Quota',
@@ -703,6 +720,8 @@ class Item(LoggedModel):
         return str(self.internal_name or self.name)
 
     def save(self, *args, **kwargs):
+        if self.hide_without_voucher:
+            self.require_voucher = True
         super().save(*args, **kwargs)
         if self.event:
             self.event.cache.clear()
@@ -779,6 +798,24 @@ class Item(LoggedModel):
         if not self.active or not self.is_available_by_time(now_dt):
             return False
         return True
+
+    def unavailability_reason(self, now_dt: datetime=None, has_voucher=False, subevent=None) -> Optional[str]:
+        now_dt = now_dt or now()
+        subevent_item = subevent and subevent.item_overrides.get(self.pk)
+        if not self.active:
+            return 'active'
+        elif self.available_from and self.available_from > now_dt:
+            return 'available_from'
+        elif self.available_until and self.available_until < now_dt:
+            return 'available_until'
+        elif (self.require_voucher or self.hide_without_voucher) and not has_voucher:
+            return 'require_voucher'
+        elif subevent_item and subevent_item.available_from and subevent_item.available_from > now_dt:
+            return 'available_from'
+        elif subevent_item and subevent_item.available_until and subevent_item.available_until < now_dt:
+            return 'available_until'
+        else:
+            return None
 
     def _get_quotas(self, ignored_quotas=None, subevent=None):
         check_quotas = set(getattr(
@@ -1078,10 +1115,20 @@ class ItemVariation(models.Model):
         null=True, blank=True,
         help_text=_('This variation will not be sold before the given date.')
     )
+    available_from_mode = models.CharField(
+        choices=Item.UNAVAIL_MODES,
+        default=Item.UNAVAIL_MODE_HIDDEN,
+        max_length=16,
+    )
     available_until = models.DateTimeField(
         verbose_name=_("Available until"),
         null=True, blank=True,
         help_text=_('This variation will not be sold after the given date.')
+    )
+    available_until_mode = models.CharField(
+        choices=Item.UNAVAIL_MODES,
+        default=Item.UNAVAIL_MODE_HIDDEN,
+        max_length=16,
     )
     sales_channels = fields.MultiStringField(
         verbose_name=_('Sales channels'),
@@ -1259,6 +1306,22 @@ class ItemVariation(models.Model):
         if not self.active or not self.is_available_by_time(now_dt):
             return False
         return True
+
+    def unavailability_reason(self, now_dt: datetime=None, has_voucher=False, subevent=None) -> Optional[str]:
+        now_dt = now_dt or now()
+        subevent_var = subevent and subevent.var_overrides.get(self.pk)
+        if not self.active:
+            return 'active'
+        elif self.available_from and self.available_from > now_dt:
+            return 'available_from'
+        elif self.available_until and self.available_until < now_dt:
+            return 'available_until'
+        elif subevent_var and subevent_var.available_from and subevent_var.available_from > now_dt:
+            return 'available_from'
+        elif subevent_var and subevent_var.available_until and subevent_var.available_until < now_dt:
+            return 'available_until'
+        else:
+            return None
 
     @property
     def meta_data(self):

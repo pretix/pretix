@@ -908,6 +908,10 @@ tbody th {
     display: block !important;
 }
 
+.btn-group .btn:not(:first-child) {
+    margin-left: -1px;
+}
+
 @import "../../pretixbase/scss/_rtl.scss";
 @import "../../bootstrap/scss/_rtl.scss";
 @import "_rtl.scss";

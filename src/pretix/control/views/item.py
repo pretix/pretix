@@ -1493,6 +1493,8 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
             messages.info(self.request, _("You disabled this item, but it is still part of a product bundle. "
                                           "Your participants won't be able to buy the bundle unless you remove this "
                                           "item from it."))
+        if ctx['item'].hide_without_voucher:
+            ctx['item'].require_voucher = True
 
         ctx['sales_channels'] = get_all_sales_channels()
         return ctx

@@ -415,3 +415,17 @@ class FontSelect(forms.RadioSelect):
 class ItemMultipleChoiceField(SafeModelMultipleChoiceField):
     def label_from_instance(self, obj):
         return str(obj) if obj.active else mark_safe(f'<strike class="text-muted">{escape(obj)}</strike>')
+
+
+class ButtonGroupRadioSelect(forms.RadioSelect):
+    template_name = 'pretixcontrol/button_group_radio.html'
+    option_template_name = 'pretixcontrol/button_group_radio_option.html'
+
+    def __init__(self, *args, **kwargs):
+        self.option_icons = kwargs.pop('option_icons')
+        super().__init__(*args, **kwargs)
+
+    def create_option(self, name, value, label, selected, index, subindex=None, attrs=None):
+        attrs['icon'] = self.option_icons[value]
+        opt = super().create_option(name, value, label, selected, index, subindex, attrs)
+        return opt

@@ -31,7 +31,10 @@ var strings = {
     'tax_incl_mixed': django.pgettext('widget', 'incl. taxes'),
     'tax_plus_mixed': django.pgettext('widget', 'plus taxes'),
     'quota_left': django.pgettext('widget', 'currently available: %s'),
-    'voucher_required': django.pgettext('widget', 'Only available with a voucher'),
+    'unavailable_require_voucher': django.pgettext('widget', 'Only available with a voucher'),
+    'unavailable_available_from': django.pgettext('widget', 'Not yet available'),
+    'unavailable_available_until': django.pgettext('widget', 'Not available anymore'),
+    'unavailable_active': django.pgettext('widget', 'Currently not available'),
     'order_min': django.pgettext('widget', 'minimum amount to order: %s'),
     'exit': django.pgettext('widget', 'Close ticket shop'),
     'loading_error': django.pgettext('widget', 'The ticket shop could not be loaded.'),
@@ -118,17 +121,8 @@ var getISOWeeks = function (y) {
 
 /* HTTP API Call helpers */
 var api = {
-    '_getXHR': function () {
-        try {
-            return new window.XMLHttpRequest();
-        } catch (e) {
-            // explicitly bubble up the exception if not found
-            return new window.ActiveXObject('Microsoft.XMLHTTP');
-        }
-    },
-
     '_getJSON': function (endpoint, callback, err_callback) {
-        var xhr = api._getXHR();
+        var xhr = new window.XMLHttpRequest();
         xhr.open("GET", endpoint, true);
         xhr.onload = function (e) {
             if (xhr.readyState === 4) {
@@ -160,7 +154,7 @@ var api = {
                 return encodeURIComponent(el.name) + '=' + encodeURIComponent(el.value);
             }).join('&');
 
-        var xhr = api._getXHR();
+        var xhr = new window.XMLHttpRequest();
         xhr.open("POST", endpoint, true);
         xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
         xhr.onload = function (e) {
@@ -199,22 +193,27 @@ var widget_id = makeid(16);
 /* Vue Components */
 Vue.component('availbox', {
     template: ('<div class="pretix-widget-availability-box">'
-        + '<div class="pretix-widget-availability-unavailable" v-if="require_voucher">'
-        + '<small><a @click.prevent.stop="focus_voucher_field" role="button">' + strings.voucher_required + '</a></small>'
+        + '<div class="pretix-widget-availability-unavailable"'
+        + '     v-if="item.current_unavailability_reason === \'require_voucher\'">'
+        + '<small><a @click.prevent.stop="focus_voucher_field" role="button">{{unavailability_reason_message}}</a></small>'
         + '</div>'
         + '<div class="pretix-widget-availability-unavailable"'
-        + '       v-if="!require_voucher && avail[0] < 100 && avail[0] > 10">'
+        + '     v-else-if="unavailability_reason_message">'
+        + '<small>{{unavailability_reason_message}}</small>'
+        + '</div>'
+        + '<div class="pretix-widget-availability-unavailable"'
+        + '     v-else-if="avail[0] < 100 && avail[0] > 10">'
         + strings.reserved
         + '</div>'
         + '<div class="pretix-widget-availability-gone" '
-        + '       v-if="!require_voucher && avail[0] <= 10">'
+        + '     v-else-if="avail[0] <= 10">'
         + strings.sold_out
         + '</div>'
         + '<div class="pretix-widget-waiting-list-link"'
         + '     v-if="waiting_list_show">'
         + '<a :href="waiting_list_url" target="_blank" @click="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
         + '</div>'
-        + '<div class="pretix-widget-availability-available" v-if="!require_voucher && avail[0] === 100">'
+        + '<div class="pretix-widget-availability-available" v-if="!unavailability_reason_message && avail[0] === 100">'
         + '<label class="pretix-widget-item-count-single-label pretix-widget-btn-checkbox" v-if="order_max === 1 && $root.single_item_select == \'button\'">'
         + '<input type="checkbox" value="1" :checked="!!amount_selected" @change="amount_selected = $event.target.checked" :name="input_name"'
         + '       v-bind:aria-label="label_select_item"'
@@ -255,8 +254,12 @@ Vue.component('availbox', {
                 'pretix-widget-item-count-group': !this.$root.use_native_spinners
             }
         },
-        require_voucher: function () {
-            return this.item.require_voucher && !this.$root.voucher_code
+        unavailability_reason_message: function () {
+            var reason = this.item.current_unavailability_reason || this.variation.current_unavailability_reason;
+            if (reason) {
+                return strings["unavailable_" + reason] || reason;
+            }
+            return "";
         },
         amount_selected: {
             cache: false,

@@ -48,6 +48,7 @@ from django.core.exceptions import PermissionDenied
 from django.db.models import (
     Count, Exists, IntegerField, OuterRef, Prefetch, Q, Value,
 )
+from django.db.models.lookups import Exact
 from django.http import Http404, HttpResponse
 from django.shortcuts import get_object_or_404, render
 from django.utils.decorators import method_decorator
@@ -118,8 +119,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         requires_seat = Value(0, output_field=IntegerField())
 
     variation_q = (
-        Q(Q(available_from__isnull=True) | Q(available_from__lte=now())) &
-        Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+        Q(Q(available_from__isnull=True) | Q(available_from__lte=now()) | Q(available_from_mode='info')) &
+        Q(Q(available_until__isnull=True) | Q(available_until__gte=now()) | Q(available_until_mode='info'))
     )
     if not voucher or not voucher.show_hidden_items:
         variation_q &= Q(hide_without_voucher=False)
@@ -135,7 +136,9 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         queryset=ItemVariation.objects.using(settings.DATABASE_REPLICA).annotate(
             subevent_disabled=Exists(
                 SubEventItemVariation.objects.filter(
-                    Q(disabled=True) | Q(available_from__gt=now()) | Q(available_until__lt=now()),
+                    Q(disabled=True)
+                    | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now()))
+                    | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now())),
                     variation_id=OuterRef('pk'),
                     subevent=subevent,
                 )
@@ -205,7 +208,9 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         has_variations=Count('variations'),
         subevent_disabled=Exists(
             SubEventItem.objects.filter(
-                Q(disabled=True) | Q(available_from__gt=now()) | Q(available_until__lt=now()),
+                Q(disabled=True)
+                | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now()))
+                | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now())),
                 item_id=OuterRef('pk'),
                 subevent=subevent,
             )
@@ -300,6 +305,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
             if not memberships or not any([m.membership_type in item.require_membership_types.all() for m in memberships]):
                 item._remove = True
                 continue
+
+        item.current_unavailability_reason = item.unavailability_reason(has_voucher=voucher, subevent=subevent)
 
         item.description = str(item.description)
         for recv, resp in item_description.send(sender=event, item=item, variation=None, subevent=subevent):
@@ -414,6 +421,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
 
                 if not display_add_to_cart:
                     display_add_to_cart = not item.requires_seat and var.order_max > 0
+
+                var.current_unavailability_reason = var.unavailability_reason(has_voucher=voucher, subevent=subevent)
 
             item.original_price = (
                 item.tax(item.original_price, currency=event.currency, include_bundled=True,

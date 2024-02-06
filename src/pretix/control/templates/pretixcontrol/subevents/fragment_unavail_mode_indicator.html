@@ -1,0 +1,6 @@
+{% load i18n %}
+{% if mode == "hide" %}
+<span class="pull-right text-muted unavail-mode-indicator" data-toggle="tooltip" title="{% trans "Hide product if unavailable" %}. {% if f.variation %}{% trans "You can change this option in the variation settings." %}{% else %}{% trans "You can change this option in the product settings." %}{% endif %}"><span class="fa fa-eye-slash"></span></span>
+{% else %}
+<span class="pull-right text-muted unavail-mode-indicator" data-toggle="tooltip" title="{% trans "Show info text if unavailable" %}. {% if f.variation %}{% trans "You can change this option in the variation settings." %}{% else %}{% trans "You can change this option in the product settings." %}{% endif %}"><span class="fa fa-info-circle"></span></span>
+{% endif %}

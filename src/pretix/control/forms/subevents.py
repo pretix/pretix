@@ -260,6 +260,8 @@ class SubEventItemForm(SubEventItemOrVariationFormMixin, forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['price'].widget.attrs['placeholder'] = money_filter(self.item.default_price, self.item.event.currency, hide_currency=True)
         self.fields['price'].label = str(self.item)
+        self.available_from_mode = self.item.available_from_mode
+        self.available_until_mode = self.item.available_until_mode
 
     class Meta:
         model = SubEventItem
@@ -287,6 +289,8 @@ class SubEventItemVariationForm(SubEventItemOrVariationFormMixin, forms.ModelFor
         super().__init__(*args, **kwargs)
         self.fields['price'].widget.attrs['placeholder'] = money_filter(self.variation.price, self.item.event.currency, hide_currency=True)
         self.fields['price'].label = '{} – {}'.format(str(self.item), self.variation.value)
+        self.available_from_mode = self.variation.available_from_mode
+        self.available_until_mode = self.variation.available_until_mode
 
     class Meta:
         model = SubEventItemVariation

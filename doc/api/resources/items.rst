@@ -50,8 +50,16 @@ sales_channels                          list of strings            Sales channel
                                                                    ``"web"`` or ``"resellers"``. Defaults to ``["web"]``.
 available_from                          datetime                   The first date time at which this item can be bought
                                                                    (or ``null``).
+available_from_mode                     string                     If ``hide`` (the default), this item is hidden in the shop
+                                                                   if unavailable due to the ``available_from`` setting.
+                                                                   If ``info``, the item is visible, but can't be purchased,
+                                                                   and a note explaining the unavailability is displayed.
 available_until                         datetime                   The last date time at which this item can be bought
                                                                    (or ``null``).
+available_until_mode                    string                     If ``hide`` (the default), this item is hidden in the shop
+                                                                   if unavailable due to the ``available_until`` setting.
+                                                                   If ``info``, the item is visible, but can't be purchased,
+                                                                   and a note explaining the unavailability is displayed.
 hidden_if_available                     integer                    **DEPRECATED** The internal ID of a quota object, or ``null``. If
                                                                    set, this item won't be shown publicly as long as this
                                                                    quota is available.
@@ -156,8 +164,16 @@ variations                              list of objects            A list with o
                                                                    available.
 ├ available_from                        datetime                   The first date time at which this variation can be bought
                                                                    (or ``null``).
+├ available_from_mode                   string                     If ``hide`` (the default), this variation is hidden in the shop
+                                                                   if unavailable due to the ``available_from`` setting.
+                                                                   If ``info``, the variation is visible, but can't be purchased,
+                                                                   and a note explaining the unavailability is displayed.
 ├ available_until                       datetime                   The last date time at which this variation can be bought
                                                                    (or ``null``).
+├ available_until_mode                  string                     If ``hide`` (the default), this variation is hidden in the shop
+                                                                   if unavailable due to the ``available_until`` setting.
+                                                                   If ``info``, the variation is visible, but can't be purchased,
+                                                                   and a note explaining the unavailability is displayed.
 ├ hide_without_voucher                  boolean                    If ``true``, this variation is only shown during the voucher
                                                                    redemption process, but not in the normal shop
                                                                    frontend.
@@ -279,7 +295,9 @@ Endpoints
             "position": 0,
             "picture": null,
             "available_from": null,
+            "available_from_mode": "hide",
             "available_until": null,
+            "available_until_mode": "hide",
             "hidden_if_available": null,
             "hidden_if_item_available": null,
             "require_voucher": false,
@@ -324,7 +342,9 @@ Endpoints
                  "require_membership_types": [],
                  "sales_channels": ["web"],
                  "available_from": null,
+                 "available_from_mode": "hide",
                  "available_until": null,
+                 "available_until_mode": "hide",
                  "hide_without_voucher": false,
                  "description": null,
                  "meta_data": {},
@@ -344,7 +364,9 @@ Endpoints
                  "require_membership_types": [],
                  "sales_channels": ["web"],
                  "available_from": null,
+                 "available_from_mode": "hide",
                  "available_until": null,
+                 "available_until_mode": "hide",
                  "hide_without_voucher": false,
                  "description": null,
                  "meta_data": {},
@@ -417,7 +439,9 @@ Endpoints
         "position": 0,
         "picture": null,
         "available_from": null,
+        "available_from_mode": "hide",
         "available_until": null,
+        "available_until_mode": "hide",
         "hidden_if_available": null,
         "hidden_if_item_available": null,
         "require_voucher": false,
@@ -463,7 +487,9 @@ Endpoints
              "description": null,
              "sales_channels": ["web"],
              "available_from": null,
+             "available_from_mode": "hide",
              "available_until": null,
+             "available_until_mode": "hide",
              "hide_without_voucher": false,
              "meta_data": {},
              "position": 0
@@ -482,7 +508,9 @@ Endpoints
              "require_membership_types": [],
              "sales_channels": ["web"],
              "available_from": null,
+             "available_from_mode": "hide",
              "available_until": null,
+             "available_until_mode": "hide",
              "hide_without_voucher": false,
              "description": null,
              "meta_data": {},
@@ -536,7 +564,9 @@ Endpoints
         "position": 0,
         "picture": null,
         "available_from": null,
+        "available_from_mode": "hide",
         "available_until": null,
+        "available_until_mode": "hide",
         "hidden_if_available": null,
         "hidden_if_item_available": null,
         "require_voucher": false,
@@ -580,7 +610,9 @@ Endpoints
              "require_membership_types": [],
              "sales_channels": ["web"],
              "available_from": null,
+             "available_from_mode": "hide",
              "available_until": null,
+             "available_until_mode": "hide",
              "hide_without_voucher": false,
              "description": null,
              "meta_data": {},
@@ -600,7 +632,9 @@ Endpoints
              "require_membership_types": [],
              "sales_channels": ["web"],
              "available_from": null,
+             "available_from_mode": "hide",
              "available_until": null,
+             "available_until_mode": "hide",
              "hide_without_voucher": false,
              "description": null,
              "meta_data": {},
@@ -642,7 +676,9 @@ Endpoints
         "position": 0,
         "picture": null,
         "available_from": null,
+        "available_from_mode": "hide",
         "available_until": null,
+        "available_until_mode": "hide",
         "hidden_if_available": null,
         "hidden_if_item_available": null,
         "require_voucher": false,
@@ -687,7 +723,9 @@ Endpoints
              "require_membership_types": [],
              "sales_channels": ["web"],
              "available_from": null,
+             "available_from_mode": "hide",
              "available_until": null,
+             "available_until_mode": "hide",
              "hide_without_voucher": false,
              "description": null,
              "meta_data": {},
@@ -707,7 +745,9 @@ Endpoints
              "require_membership_types": [],
              "sales_channels": ["web"],
              "available_from": null,
+             "available_from_mode": "hide",
              "available_until": null,
+             "available_until_mode": "hide",
              "hide_without_voucher": false,
              "description": null,
              "meta_data": {},
@@ -780,7 +820,9 @@ Endpoints
         "position": 0,
         "picture": null,
         "available_from": null,
+        "available_from_mode": "hide",
         "available_until": null,
+        "available_until_mode": "hide",
         "hidden_if_available": null,
         "hidden_if_item_available": null,
         "require_voucher": false,
@@ -825,7 +867,9 @@ Endpoints
              "require_membership_types": [],
              "sales_channels": ["web"],
              "available_from": null,
+             "available_from_mode": "hide",
              "available_until": null,
+             "available_until_mode": "hide",
              "hide_without_voucher": false,
              "description": null,
              "meta_data": {},
@@ -845,7 +889,9 @@ Endpoints
              "require_membership_types": [],
              "sales_channels": ["web"],
              "available_from": null,
+             "available_from_mode": "hide",
              "available_until": null,
+             "available_until_mode": "hide",
              "hide_without_voucher": false,
              "description": null,
              "meta_data": {},

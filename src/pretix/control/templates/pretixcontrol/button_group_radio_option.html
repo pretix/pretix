@@ -1,0 +1,2 @@
+<label{% if widget.attrs.id %} for="{{ widget.attrs.id }}"{% endif %} class="btn btn-primary-if-active form-field-boundary {% if widget.attrs.checked %} active{% endif %}" title="{{ widget.label }}" data-toggle="tooltip">
+{% include "django/forms/widgets/input.html" %} <span class="fa fa-{{ widget.attrs.icon }}"></span></label>
