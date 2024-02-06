@@ -434,10 +434,9 @@ Offering wallet payments (Apple Pay, Google Pay) within the widget
 ------------------------------------------------------------------
 
 Some payment providers (such as Stripe) also offer Apple or Google Pay. But in order to use them, the domain of the
-payment needs to be approved first. Unless otherwise noted within the specific payment provider plugin, pretix will
-take care of the domain verification process for you automatically, when taking your shop live. However, pretix can
-only validate the domain that is being used for your default, "stand-alone" shop (such as
-https://pretix.eu/demo/democon/ ).
+payment needs to be approved first. As of right now, pretix will take care of the domain verification process for you
+automatically, when using Stripe. However, pretix can only validate the domain that is being used for your default,
+"stand-alone" shop (such as https://pretix.eu/demo/democon/ ).
 
 When embedding the widget on your website, the domain of the embedding page will also need to be validated in order to
 be able to use it for wallet payments.
