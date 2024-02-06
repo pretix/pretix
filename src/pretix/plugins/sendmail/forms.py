@@ -41,28 +41,16 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelMultipleChoiceField
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 
-from pretix.base.email import get_available_placeholders
-from pretix.base.forms import I18nModelForm, PlaceholderValidator
+from pretix.base.forms import I18nModelForm
 from pretix.base.forms.widgets import (
-    SplitDateTimePickerWidget, TimePickerWidget, format_placeholders_help_text,
+    SplitDateTimePickerWidget, TimePickerWidget,
 )
 from pretix.base.models import CheckinList, Item, Order, SubEvent
 from pretix.control.forms import CachedFileField, SplitDateTimeField
 from pretix.control.forms.widgets import Select2, Select2Multiple
 from pretix.plugins.sendmail.models import Rule
 
-
-class FormPlaceholderMixin:
-    def _set_field_placeholders(self, fn, base_parameters):
-        placeholders = get_available_placeholders(self.event, base_parameters)
-        ht = format_placeholders_help_text(placeholders, self.event)
-        if self.fields[fn].help_text:
-            self.fields[fn].help_text += ' ' + str(ht)
-        else:
-            self.fields[fn].help_text = ht
-        self.fields[fn].validators.append(
-            PlaceholderValidator(['{%s}' % p for p in placeholders.keys()])
-        )
+from pretix.base.services.placeholders import FormPlaceholderMixin  # noqa
 
 
 class BaseMailForm(FormPlaceholderMixin, forms.Form):

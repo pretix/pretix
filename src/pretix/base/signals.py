@@ -220,12 +220,18 @@ subclass of pretix.base.payment.BasePaymentProvider or a list of these
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
-register_mail_placeholders = EventPluginSignal()
+register_text_placeholders = EventPluginSignal()
 """
-This signal is sent out to get all known email text placeholders. Receivers should return
-an instance of a subclass of pretix.base.email.BaseMailTextPlaceholder or a list of these.
+This signal is sent out to get all known text placeholders. Receivers should return
+an instance of a subclass of pretix.base.services.placeholders.BaseTextPlaceholder or a
+list of these.
 
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
+register_mail_placeholders = EventPluginSignal()
+"""
+**DEPRECATED**: This signal has a new name, please use ``register_text_placeholders`` instead.
 """
 
 register_html_mail_renderers = EventPluginSignal()

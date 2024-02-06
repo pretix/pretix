@@ -61,6 +61,7 @@ from pretix.base.models import (
     TaxRule,
 )
 from pretix.base.models.event import SubEvent
+from pretix.base.services.placeholders import FormPlaceholderMixin
 from pretix.base.services.pricing import get_price
 from pretix.control.forms import SplitDateTimeField
 from pretix.control.forms.widgets import Select2
@@ -767,7 +768,7 @@ class OrderRefundForm(forms.Form):
         return data
 
 
-class EventCancelForm(forms.Form):
+class EventCancelForm(FormPlaceholderMixin, forms.Form):
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
         label=pgettext_lazy('subevent', 'Date'),
@@ -866,17 +867,6 @@ class EventCancelForm(forms.Form):
     )
     send_waitinglist_subject = forms.CharField()
     send_waitinglist_message = forms.CharField()
-
-    def _set_field_placeholders(self, fn, base_parameters):
-        placeholders = get_available_placeholders(self.event, base_parameters)
-        ht = format_placeholders_help_text(placeholders, self.event)
-        if self.fields[fn].help_text:
-            self.fields[fn].help_text += ' ' + str(ht)
-        else:
-            self.fields[fn].help_text = ht
-        self.fields[fn].validators.append(
-            PlaceholderValidator(['{%s}' % p for p in placeholders.keys()])
-        )
 
     def __init__(self, *args, **kwargs):
         self.event = kwargs.pop('event')

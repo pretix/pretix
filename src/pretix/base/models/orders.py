@@ -1090,9 +1090,6 @@ class Order(LockModel, LoggedModel):
         if not self.email and not (position and position.attendee_email):
             return
 
-        for k, v in self.event.meta_data.items():
-            context['meta_' + k] = v
-
         with language(self.locale, self.event.settings.region):
             recipient = self.email
             if position and position.attendee_email:
@@ -2649,9 +2646,6 @@ class OrderPosition(AbstractPosition):
 
         if not self.attendee_email:
             return
-
-        for k, v in self.event.meta_data.items():
-            context['meta_' + k] = v
 
         with language(self.order.locale, self.order.event.settings.region):
             recipient = self.attendee_email

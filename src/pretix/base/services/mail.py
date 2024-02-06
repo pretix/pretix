@@ -186,10 +186,6 @@ def mail(email: Union[str, Sequence[str]], subject: str, template: Union[str, La
     headers.setdefault('X-Mailer', 'pretix')
 
     with language(locale):
-        if isinstance(context, dict) and event:
-            for k, v in event.meta_data.items():
-                context['meta_' + k] = v
-
         if isinstance(context, dict) and order:
             try:
                 context.update({
