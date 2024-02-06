@@ -352,7 +352,7 @@ class OverviewReport(Report):
             ('SPAN', (11, 1), (12, 1)),
             ('ALIGN', (0, 0), (-1, 1), 'CENTER'),
             ('ALIGN', (1, 2), (-1, -1), 'RIGHT'),
-            ('VALIGN', (0, 0), (-1, -1), 'MIDDLE'),
+            ('VALIGN', (0, 0), (-1, -1), 'TOP'),
             ('FONTNAME', (0, 0), (-1, 1), 'OpenSansBd'),
             ('FONTNAME', (0, -1), (-1, -1), 'OpenSansBd'),
             ('FONTSIZE', (0, 0), (-1, -1), 8),
@@ -417,7 +417,7 @@ class OverviewReport(Report):
                     tdata[-1].append(floatformat(tup[0].num[l][2 if net else 1], places))
             for item in tup[1]:
                 tdata.append([
-                    str(item)
+                    Paragraph(str(item), tstyle)
                 ])
                 for l, s in states:
                     tdata[-1].append(str(item.num[l][0]))
