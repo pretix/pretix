@@ -80,9 +80,7 @@ from pretix.base.services.orders import (
 )
 from pretix.base.services.pricing import get_price
 from pretix.base.services.tickets import generate, invalidate_cache
-from pretix.base.signals import (
-    allow_ticket_download, order_modified, register_ticket_outputs,
-)
+from pretix.base.signals import order_modified, register_ticket_outputs
 from pretix.base.templatetags.money import money_filter
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
@@ -175,22 +173,40 @@ class TicketPageMixin:
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
 
+        positions_with_tickets = list(self.order.positions_with_tickets)
         ctx['order'] = self.order
 
-        can_download = all([r for rr, r in allow_ticket_download.send(self.request.event, order=self.order)])
+        can_download = bool(positions_with_tickets)
         ctx['plugins_allow_ticket_download'] = can_download
         if self.request.event.settings.ticket_download_date:
             ctx['ticket_download_date'] = self.order.ticket_download_date
-        can_download = (
-            can_download and self.order.ticket_download_available and
-            list(self.order.positions_with_tickets)
-        )
+        can_download = can_download and self.order.ticket_download_available
         ctx['download_email_required'] = can_download and (
             self.request.event.settings.ticket_download_require_validated_email and
             self.order.sales_channel == 'web' and
             not self.order.email_known_to_work
         )
         ctx['can_download'] = can_download and not ctx['download_email_required']
+
+        qs = self.context_query_set
+        if self.request.event.settings.show_checkin_number_user:
+            qs = qs.annotate(
+                checkin_count=Subquery(
+                    Checkin.objects.filter(
+                        successful=True,
+                        type=Checkin.TYPE_ENTRY,
+                        position_id=OuterRef('pk'),
+                        list__consider_tickets_used=True,
+                    ).order_by().values('position').annotate(c=Count('*')).values('c')
+                )
+            )
+        ctx['cart'] = self.get_cart(
+            answers=True, downloads=ctx['can_download'],
+            queryset=qs,
+            order=self.order
+        )
+
+        ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p in positions_with_tickets]
 
         ctx['download_buttons'] = self.download_buttons
 
@@ -199,25 +215,6 @@ class TicketPageMixin:
             and self.request.user.has_event_permission(self.request.organizer, self.request.event, 'can_view_orders', request=self.request)
         )
         return ctx
-
-
-@method_decorator(xframe_options_exempt, 'dispatch')
-class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin, TemplateView):
-    template_name = "pretixpresale/event/order.html"
-
-    def get(self, request, *args, **kwargs):
-        self.kwargs = kwargs
-        if not self.order:
-            raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if self.order.status == Order.STATUS_PENDING:
-            payment_to_complete = self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_CREATED, process_initiated=False).first()
-            if payment_to_complete:
-                return redirect(eventreverse(self.request.event, 'presale:event.order.pay.complete', kwargs={
-                    'order': self.order.code,
-                    'secret': self.order.secret,
-                    'payment': payment_to_complete.pk
-                }))
-        return super().get(request, *args, **kwargs)
 
     @cached_property
     def download_buttons(self):
@@ -239,29 +236,31 @@ class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin,
             })
         return buttons
 
+
+@method_decorator(xframe_options_exempt, 'dispatch')
+class OrderDetails(EventViewMixin, OrderDetailMixin, CartMixin, TicketPageMixin, TemplateView):
+    template_name = "pretixpresale/event/order.html"
+
+    def get(self, request, *args, **kwargs):
+        self.kwargs = kwargs
+        if not self.order:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        if self.order.status == Order.STATUS_PENDING:
+            payment_to_complete = self.order.payments.filter(state=OrderPayment.PAYMENT_STATE_CREATED, process_initiated=False).first()
+            if payment_to_complete:
+                return redirect(eventreverse(self.request.event, 'presale:event.order.pay.complete', kwargs={
+                    'order': self.order.code,
+                    'secret': self.order.secret,
+                    'payment': payment_to_complete.pk
+                }))
+        return super().get(request, *args, **kwargs)
+
     def get_context_data(self, **kwargs):
+        self.context_query_set = (
+            self.order.positions.prefetch_related('issued_gift_cards', 'owned_gift_cards').select_related('tax_rule')
+        )
         ctx = super().get_context_data(**kwargs)
 
-        qs = self.order.positions.prefetch_related('issued_gift_cards', 'owned_gift_cards').select_related('tax_rule')
-        if self.request.event.settings.show_checkin_number_user:
-            qs = qs.annotate(
-                checkin_count=Subquery(
-                    Checkin.objects.filter(
-                        successful=True,
-                        type=Checkin.TYPE_ENTRY,
-                        position_id=OuterRef('pk'),
-                        list__consider_tickets_used=True,
-                    ).order_by().values('position').annotate(c=Count('*')).values('c')
-                )
-            )
-
-        ctx['cart'] = self.get_cart(
-            answers=True,
-            downloads=ctx['can_download'],
-            queryset=qs,
-            order=self.order
-        )
-        ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p.generate_ticket]
         ctx['can_download_multi'] = any([b['multi'] for b in self.download_buttons]) and (
             [p.generate_ticket for p in ctx['cart']['positions']].count(True) > 1
         )
@@ -342,50 +341,13 @@ class OrderPositionDetails(EventViewMixin, OrderPositionDetailMixin, CartMixin, 
             raise Http404(_('Unknown order code or not authorized to access this order.'))
         return super().get(request, *args, **kwargs)
 
-    @cached_property
-    def download_buttons(self):
-        buttons = []
-
-        responses = register_ticket_outputs.send(self.request.event)
-        for receiver, response in responses:
-            provider = response(self.request.event)
-            if not provider.is_enabled:
-                continue
-            buttons.append({
-                'text': provider.download_button_text or 'Download',
-                'icon': provider.download_button_icon or 'fa-download',
-                'identifier': provider.identifier,
-                'multi': provider.multi_download_enabled,
-                'multi_text': provider.multi_download_button_text or 'Download',
-                'long_text': provider.long_download_button_text or 'Download',
-                'javascript_required': provider.javascript_required
-            })
-        return buttons
-
     def get_context_data(self, **kwargs):
-        qs = self.order.positions.select_related('tax_rule').filter(
+        self.context_query_set = self.order.positions.select_related('tax_rule').filter(
             Q(pk=self.position.pk) | Q(addon_to__id=self.position.pk)
         )
-        if self.request.event.settings.show_checkin_number_user:
-            qs = qs.annotate(
-                checkin_count=Subquery(
-                    Checkin.objects.filter(
-                        successful=True,
-                        type=Checkin.TYPE_ENTRY,
-                        position_id=OuterRef('pk'),
-                        list__consider_tickets_used=True,
-                    ).order_by().values('position').annotate(c=Count('*')).values('c')
-                )
-            )
         ctx = super().get_context_data(**kwargs)
         ctx['can_download_multi'] = False
         ctx['position'] = self.position
-        ctx['cart'] = self.get_cart(
-            answers=True, downloads=ctx['can_download'],
-            queryset=qs,
-            order=self.order
-        )
-        ctx['tickets_with_download'] = [p for p in ctx['cart']['positions'] if p.generate_ticket]
         ctx['attendee_change_allowed'] = self.position.attendee_change_allowed
         return ctx
 
@@ -1048,8 +1010,6 @@ class OrderDownloadMixin:
 
     @cached_property
     def output(self):
-        if not all([r for rr, r in allow_ticket_download.send(self.request.event, order=self.order)]):
-            return None
         responses = register_ticket_outputs.send(self.request.event)
         for receiver, response in responses:
             provider = response(self.request.event)
@@ -1068,9 +1028,10 @@ class OrderDownloadMixin:
             return self.error(OrderError(_('You requested an invalid ticket output type.')))
         if not self.order or ('position' in kwargs and not self.order_position):
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if not self.order.ticket_download_available:
+        positions = list(self.order.positions_with_tickets)
+        if not self.order.ticket_download_available or not positions:
             return self.error(OrderError(_('Ticket download is not (yet) enabled for this order.')))
-        if 'position' in kwargs and not self.order_position.generate_ticket:
+        if 'position' in kwargs and self.order_position not in positions:
             return self.error(OrderError(_('Ticket download is not enabled for this product.')))
 
         if (

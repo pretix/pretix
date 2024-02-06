@@ -34,7 +34,7 @@ from pretix.base.models import (
 )
 from pretix.base.services.tasks import EventTask, ProfiledTask
 from pretix.base.settings import PERSON_NAME_SCHEMES
-from pretix.base.signals import allow_ticket_download, register_ticket_outputs
+from pretix.base.signals import register_ticket_outputs
 from pretix.celery_app import app
 from pretix.helpers.database import rolledback_transaction
 
@@ -124,8 +124,8 @@ def preview(event: int, provider: str):
 
 
 def get_tickets_for_order(order, base_position=None):
-    can_download = all([r for rr, r in allow_ticket_download.send(order.event, order=order)])
-    if not can_download:
+    positions = list(order.positions_with_tickets)
+    if not positions:
         return []
     if not order.ticket_download_available:
         return []
@@ -135,10 +135,8 @@ def get_tickets_for_order(order, base_position=None):
         for receiver, response
         in register_ticket_outputs.send(order.event)
     ]
-
     tickets = []
 
-    positions = list(order.positions_with_tickets)
     if base_position:
         # Only the given position and its children
         positions = [
@@ -202,7 +200,6 @@ def get_tickets_for_order(order, base_position=None):
                     ))
                 except:
                     logger.exception('Failed to generate ticket.')
-
     return tickets
 
 

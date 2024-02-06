@@ -98,10 +98,9 @@ from pretix.base.services.pricing import (
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
 from pretix.base.signals import (
-    allow_ticket_download, order_approved, order_canceled, order_changed,
-    order_denied, order_expired, order_fee_calculation, order_paid,
-    order_placed, order_split, order_valid_if_pending, periodic_task,
-    validate_order,
+    order_approved, order_canceled, order_changed, order_denied, order_expired,
+    order_fee_calculation, order_paid, order_placed, order_split,
+    order_valid_if_pending, periodic_task, validate_order,
 )
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
@@ -1408,23 +1407,16 @@ def send_download_reminders(sender, **kwargs):
             if o.download_reminder_sent:
                 # Race condition
                 continue
-            if not all([r for rr, r in allow_ticket_download.send(event, order=o)]):
+            positions = list(o.positions_with_tickets)
+            if not positions:
                 continue
 
             if not o.ticket_download_available:
                 continue
-            positions = o.positions.select_related('item')
 
             if o.status != Order.STATUS_PAID:
                 if o.status != Order.STATUS_PENDING or o.require_approval or (not o.valid_if_pending and not o.event.settings.ticket_download_pending):
                     continue
-            send = False
-            for p in positions:
-                if p.generate_ticket:
-                    send = True
-                    break
-            if not send:
-                continue
 
             with language(o.locale, o.event.settings.region):
                 o.download_reminder_sent = True
@@ -1442,10 +1434,7 @@ def send_download_reminders(sender, **kwargs):
                     logger.exception('Reminder email could not be sent')
 
                 if event.settings.mail_send_download_reminder_attendee:
-                    for p in o.positions.all():
-                        if not p.generate_ticket:
-                            continue
-
+                    for p in positions:
                         if p.subevent_id:
                             reminder_date = (p.subevent.date_from - timedelta(days=days)).replace(
                                 hour=0, minute=0, second=0, microsecond=0
