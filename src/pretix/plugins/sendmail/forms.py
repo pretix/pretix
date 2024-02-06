@@ -165,7 +165,7 @@ class OrderMailForm(BaseMailForm):
         required=False
     )
     checkin_lists = SafeModelMultipleChoiceField(queryset=CheckinList.objects.none(), required=False)  # overridden later
-    not_checked_in = forms.BooleanField(label=pgettext_lazy('sendmail_form', 'Restrict to recipients without check-in'), required=False)
+    not_checked_in = forms.BooleanField(label=pgettext_lazy('sendmail_form', 'Restrict to recipients without check-in on any list'), required=False)
     subevent = forms.ModelChoiceField(
         SubEvent.objects.none(),
         label=pgettext_lazy('sendmail_form', 'Restrict to a specific event date'),
