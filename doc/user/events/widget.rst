@@ -429,4 +429,25 @@ Hosted or pretix Enterprise are active, you can pass the following fields:
             });
         </script>  
 
+
+Offering wallet payments (Apple Pay, Google Pay) within the widget
+------------------------------------------------------------------
+
+Some payment providers (such as Stripe) also offer Apple or Google Pay. But in order to use them, the domain of the
+payment needs to be approved first. As of right now, pretix will take care of the domain verification process for you
+automatically, when using Stripe. However, pretix can only validate the domain that is being used for your default,
+"stand-alone" shop (such as https://pretix.eu/demo/democon/ ).
+
+When embedding the widget on your website, the domain of the embedding page will also need to be validated in order to
+be able to use it for wallet payments.
+
+The details might vary from payment provider to payment provider, but generally speaking, it will either involve just
+telling your payment provider the domain name and (for Apple Pay) placing an
+``apple-developer-merchantid-domain-association``-file into the ``.well-known``-directory of your domain.
+
+Further reading:
+
+* `Stripe Payment Method Domain registration`_
+
 .. _Let's Encrypt: https://letsencrypt.org/
+.. _Stripe Payment Method Domain registration: https://stripe.com/docs/payments/payment-methods/pmd-registration
