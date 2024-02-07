@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-01-30 16:10+0000\n"
-"PO-Revision-Date: 2023-04-28 11:49+0000\n"
+"PO-Revision-Date: 2024-02-08 04:00+0000\n"
 "Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.16.4\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -30277,7 +30277,7 @@ msgstr "Ingen tilføjelser er tilgængelige for dette produkt."
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:71
 msgid "FULLY BOOKED"
-msgstr ""
+msgstr "UDSOLGT"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:8
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:73
@@ -30307,9 +30307,8 @@ msgid "Price per item"
 msgstr "Effekt på pris"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:18
-#, fuzzy
 msgid "Price total"
-msgstr "Fakturatotal"
+msgstr "Samlet pris"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:42
 msgid "Seat:"
