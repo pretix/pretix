@@ -61,7 +61,9 @@
                             {% for form in forms %}
                                 {% if form.pos.item != pos.item %}
                                     {# Add-Ons #}
-                                    <legend>+ {{ form.pos.item.name }}</legend>
+                                    <legend>+ {{ form.pos.item.name }}{% if form.pos.variation %}
+                                    – {{ form.pos.variation.value }}
+                                    {% endif %}</legend>
                                 {% endif %}
                                 {% bootstrap_form form layout="checkout" %}
                             {% endfor %}
