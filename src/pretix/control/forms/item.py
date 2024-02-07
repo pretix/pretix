@@ -238,7 +238,6 @@ class QuotaForm(I18nModelForm):
                 choices.append(('{}'.format(item.pk), str(item) if item.active else mark_safe(f'<strike class="text-muted">{escape(item)}</strike>')))
 
         if multiselect:
-            self.fields['itemvars'].choices = choices
             self.fields['itemvars'].widget = Select2ItemVarQuotaMulti(
                 attrs={
                     'data-model-select2': 'generic',
@@ -251,12 +250,9 @@ class QuotaForm(I18nModelForm):
                 choices=choices,
             )
         else:
-            self.fields['itemvars'] = forms.MultipleChoiceField(
-                label=_('Products'),
-                required=True,
-                choices=choices,
-                widget=forms.CheckboxSelectMultiple
-            )
+            self.fields['itemvars'].widget = forms.CheckboxSelectMultiple()
+
+        self.fields['itemvars'].choices = choices
 
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()
