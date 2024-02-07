@@ -67,7 +67,7 @@ from pretix.control.forms import (
     ButtonGroupRadioSelect, ItemMultipleChoiceField, SizeValidationMixin,
     SplitDateTimeField, SplitDateTimePickerWidget,
 )
-from pretix.control.forms.widgets import Select2, Select2ItemVarQuotaMulti
+from pretix.control.forms.widgets import Select2, Select2ItemVarMulti
 from pretix.helpers.models import modelcopy
 from pretix.helpers.money import change_decimal_field
 
@@ -238,7 +238,7 @@ class QuotaForm(I18nModelForm):
                 choices.append(('{}'.format(item.pk), str(item) if item.active else mark_safe(f'<strike class="text-muted">{escape(item)}</strike>')))
 
         if searchable_selection:
-            self.fields['itemvars'].widget = Select2ItemVarQuotaMulti(
+            self.fields['itemvars'].widget = Select2ItemVarMulti(
                 attrs={
                     'data-model-select2': 'generic',
                     'data-select2-url': reverse('control:event.items.itemvars.select2', kwargs={
