@@ -79,7 +79,7 @@ class Select2ItemVarQuota(Select2ItemVarQuotaMixin, forms.Select):
     pass
 
 
-class Select2ItemVarQuotaMulti(Select2Mixin, forms.SelectMultiple):
+class Select2ItemVarMulti(Select2Mixin, forms.SelectMultiple):
     def options(self, name, value, attrs=None):
         # we need this for multi-selection without a queryset for the selection of items and variations
         for i, v in enumerate(value):
