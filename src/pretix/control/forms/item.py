@@ -216,7 +216,7 @@ class QuotaForm(I18nModelForm):
         self.instance = kwargs.get('instance', None)
         self.event = kwargs.get('event')
         items = kwargs.pop('items', None) or self.event.items.prefetch_related('variations')
-        multiselect = kwargs.pop('multiselect', None)
+        searchable_selection = kwargs.pop('searchable_selection', None)
         self.original_instance = modelcopy(self.instance) if self.instance else None
         initial = kwargs.get('initial', {})
         if self.instance and self.instance.pk and 'itemvars' not in initial:
@@ -237,7 +237,7 @@ class QuotaForm(I18nModelForm):
             else:
                 choices.append(('{}'.format(item.pk), str(item) if item.active else mark_safe(f'<strike class="text-muted">{escape(item)}</strike>')))
 
-        if multiselect:
+        if searchable_selection:
             self.fields['itemvars'].widget = Select2ItemVarQuotaMulti(
                 attrs={
                     'data-model-select2': 'generic',

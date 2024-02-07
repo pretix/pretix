@@ -360,7 +360,7 @@ class BulkSubEventItemVariationForm(SubEventItemVariationForm):
 class QuotaFormSet(I18nInlineFormSet):
 
     def __init__(self, *args, **kwargs):
-        self.multiselect = kwargs.pop('multiselect', None)
+        self.searchable_selection = kwargs.pop('searchable_selection', None)
         self.event = kwargs.pop('event', None)
         self.locales = self.event.settings.get('locales')
         super().__init__(*args, **kwargs)
@@ -373,7 +373,7 @@ class QuotaFormSet(I18nInlineFormSet):
         kwargs['locales'] = self.locales
         kwargs['event'] = self.event
         kwargs['items'] = self.items
-        kwargs['multiselect'] = self.multiselect
+        kwargs['searchable_selection'] = self.searchable_selection
         return super()._construct_form(i, **kwargs)
 
     @property
