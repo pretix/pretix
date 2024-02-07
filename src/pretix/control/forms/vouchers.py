@@ -63,7 +63,8 @@ class VoucherForm(I18nModelForm):
     itemvar = FakeChoiceField(
         label=_("Product"),
         help_text=_(
-            "This product is added to the user's cart if the voucher is redeemed."
+            "This product is added to the user's cart if the voucher is redeemed. Instead of a specific product, you "
+            "can also select a quota. In this case, all products assigned to this quota can be selected."
         ),
         required=True
     )
