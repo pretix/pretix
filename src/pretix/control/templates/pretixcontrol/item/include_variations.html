@@ -194,7 +194,8 @@
                             </div>
                         </div>
                     {% endif %}
-                    {% bootstrap_field formset.empty_form.available_from layout="control" %}
+                    {% bootstrap_field formset.empty_form.available_from visibility_field=formset.empty_form.available_from_mode layout="control_with_visibility"  %}
+                    {% bootstrap_field formset.empty_form.available_until visibility_field=formset.empty_form.available_until_mode layout="control_with_visibility" %}
                     {% bootstrap_field formset.empty_form.available_until layout="control" %}
                     {% bootstrap_field formset.empty_form.sales_channels layout="control" %}
                     {% bootstrap_field formset.empty_form.hide_without_voucher layout="control" %}
