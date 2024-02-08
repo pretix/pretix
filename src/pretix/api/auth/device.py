@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import logging
+
 from django.contrib.auth.models import AnonymousUser
 from django_scopes import scopes_disabled
 from rest_framework import exceptions
@@ -28,6 +30,8 @@ from pretix.api.auth.devicesecurity import (
     DEVICE_SECURITY_PROFILES, FullAccessSecurityProfile,
 )
 from pretix.base.models import Device
+
+logger = logging.getLogger(__name__)
 
 
 class DeviceTokenAuthentication(TokenAuthentication):
@@ -46,6 +50,7 @@ class DeviceTokenAuthentication(TokenAuthentication):
             raise exceptions.AuthenticationFailed('Device has not been initialized.')
 
         if device.revoked:
+            logging.warning(f'Connection attempt of revoked device {device.pk}.')
             raise exceptions.AuthenticationFailed('Device access has been revoked.')
 
         return AnonymousUser(), device
