@@ -179,6 +179,11 @@ country                               string                     Attendee countr
 state                                 string                     Attendee state (ISO 3166-2 code). Only supported in
                                                                  AU, BR, CA, CN, MY, MX, and US, otherwise ``null``.
 voucher                               integer                    Internal ID of the voucher used for this position (or ``null``)
+voucher_budget_use                    money (string)             Amount of money discounted by the voucher, corresponding
+                                                                 to how much of the ``budget`` of the voucher is consumed.
+                                                                 **Important:** Do not rely on this amount to be a useful
+                                                                 value if the position's price, product or voucher
+                                                                 are changed *after* the order was created. Can be ``null``.
 tax_rate                              decimal (string)           VAT rate applied for this position
 tax_value                             money (string)             VAT included in this position
 tax_rule                              integer                    The ID of the used tax rule (or ``null``)
@@ -367,6 +372,7 @@ List of all orders
                 "country": "DE",
                 "state": null,
                 "voucher": null,
+                "voucher_budget_use": null,
                 "tax_rate": "0.00",
                 "tax_value": "0.00",
                 "tax_rule": null,
@@ -589,6 +595,7 @@ Fetching individual orders
             "country": "DE",
             "state": null,
             "voucher": null,
+            "voucher_budget_use": null,
             "tax_rate": "0.00",
             "tax_rule": null,
             "tax_value": "0.00",
@@ -1541,6 +1548,7 @@ List of all order positions
             },
             "attendee_email": null,
             "voucher": null,
+            "voucher_budget_use": null,
             "tax_rate": "0.00",
             "tax_rule": null,
             "tax_value": "0.00",
@@ -1654,6 +1662,7 @@ Fetching individual positions
         },
         "attendee_email": null,
         "voucher": null,
+        "voucher_budget_use": null,
         "tax_rate": "0.00",
         "tax_rule": null,
         "tax_value": "0.00",

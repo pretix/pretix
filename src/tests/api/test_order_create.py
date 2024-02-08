@@ -341,10 +341,14 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
     question.type = Question.TYPE_CHOICE_MULTIPLE
     question.save()
     with scopes_disabled():
+        voucher = event.vouchers.create(price_mode="set", value=21.50, item=item, budget=Decimal('2.50'),
+                                        max_usages=999)
         opt = question.options.create(answer="L")
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
     res['positions'][0]['answers'][0]['options'] = [opt.pk]
+    res['positions'][0]['voucher'] = voucher.code
+    del res['positions'][0]['price']
     res['simulate'] = True
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -391,7 +395,7 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
                 'canceled': False
             }
         ],
-        'total': '23.25',
+        'total': '21.75',
         'comment': '',
         "custom_followup_at": None,
         'invoice_address': {
@@ -416,11 +420,12 @@ def test_order_create_simulate(token_client, organizer, event, item, quota, ques
                 'positionid': 1,
                 'item': item.pk,
                 'variation': None,
-                'price': '23.00',
+                'price': '21.50',
                 'attendee_name': 'Peter',
                 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'},
                 'attendee_email': None,
-                'voucher': None,
+                'voucher': voucher.pk,
+                'voucher_budget_use': '1.50',
                 'tax_rate': '0.00',
                 'tax_value': '0.00',
                 'addon_to': None,
@@ -498,13 +503,13 @@ def test_order_create_positionids_addons_simulated(token_client, organizer, even
         {'id': 0, 'order': '', 'positionid': 1, 'item': item.pk, 'variation': None, 'price': '23.00',
          'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
-         'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00', 'discount': None,
+         'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00', 'discount': None, 'voucher_budget_use': None,
          'addon_to': None, 'subevent': None, 'checkins': [], 'downloads': [], 'answers': [], 'tax_rule': None,
          'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None},
         {'id': 0, 'order': '', 'positionid': 2, 'item': item.pk, 'variation': None, 'price': '23.00',
          'attendee_name': 'Peter', 'attendee_name_parts': {'full_name': 'Peter', '_scheme': 'full'}, 'company': None,
          'street': None, 'zipcode': None, 'city': None, 'country': None, 'state': None, 'attendee_email': None,
-         'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00', 'discount': None,
+         'voucher': None, 'tax_rate': '0.00', 'tax_value': '0.00', 'discount': None, 'voucher_budget_use': None,
          'addon_to': 1, 'subevent': None, 'checkins': [], 'downloads': [], 'answers': [], 'tax_rule': None,
          'pseudonymization_id': 'PREVIEW', 'seat': None, 'canceled': False, 'valid_from': None, 'valid_until': None, 'blocked': None}
     ]
@@ -2558,6 +2563,8 @@ def test_order_create_autopricing_voucher_budget_partially(token_client, organiz
         ), format='json', data=res
     )
     assert resp.status_code == 201
+    assert resp.data["positions"][0]["voucher_budget_use"] == "1.50"
+    assert resp.data["positions"][1]["voucher_budget_use"] == "1.00"
     with scopes_disabled():
         o = Order.objects.get(code=resp.data['code'])
         p = o.positions.first()
