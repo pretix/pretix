@@ -502,8 +502,7 @@ Vue.component('item', {
         + '<div class="pretix-widget-item-availability-col">'
         + '<a v-if="show_toggle" :href="\'#\' + item.id + \'-variants\'" @click.prevent.stop="expand" role="button" tabindex="0"'
         + '   v-bind:aria-expanded="expanded ? \'true\': \'false\'" v-bind:aria-controls="item.id + \'-variants\'">'
-        + '<span v-show="!expanded" class="pretix-widget-collapse-indicator">' + strings.variations + '</span>'
-        + '<span v-show="expanded" class="pretix-widget-collapse-indicator">' + strings.hide_variations + '</span>'
+        + '{{ variationsLink }}'
         + '</a>'
         + '<availbox v-if="!item.has_variations" :item="item"></availbox>'
         + '</div>'
@@ -600,6 +599,9 @@ Vue.component('item', {
             } else {
                 return this.$root.currency + " " + floatformat(this.item.min_price, 2);
             }
+        },
+        variationsLink: function () {
+            return this.expanded ? strings.hide_variations : strings.variations;
         },
     }
 });
