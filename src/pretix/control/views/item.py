@@ -1483,6 +1483,12 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
         messages.error(self.request, _('We could not save your changes. See below for details.'))
         return super().form_invalid(form)
 
+    def get_object(self, queryset=None) -> Item:
+        o = super().get_object(queryset)
+        if o.hide_without_voucher:
+            o.require_voucher = True
+        return o
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data()
         ctx['plugin_forms'] = self.plugin_forms
@@ -1493,8 +1499,6 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
             messages.info(self.request, _("You disabled this item, but it is still part of a product bundle. "
                                           "Your participants won't be able to buy the bundle unless you remove this "
                                           "item from it."))
-        if ctx['item'].hide_without_voucher:
-            ctx['item'].require_voucher = True
 
         ctx['sales_channels'] = get_all_sales_channels()
         return ctx
