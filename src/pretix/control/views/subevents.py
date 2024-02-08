@@ -281,7 +281,7 @@ class SubEventEditorMixin(MetaDataEditorMixin):
                     'name': q.name,
                     'release_after_exit': q.release_after_exit,
                     'ignore_for_event_availability': q.ignore_for_event_availability,
-                    'itemvars': [str(i.pk) for i in q.items.all()] + [
+                    'itemvars': [str(i.pk) for i in q.items.all() if (len(i.variations.all()) == 0)] + [
                         '{}-{}'.format(v.item_id, v.pk) for v in q.variations.all()
                     ]
                 } for q in self.copy_from.quotas.prefetch_related('items', 'variations')

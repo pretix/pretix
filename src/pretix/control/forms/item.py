@@ -245,7 +245,7 @@ class QuotaForm(I18nModelForm):
                         'event': self.event.slug,
                         'organizer': self.event.organizer.slug,
                     }),
-                    'data-placeholder': _('All products')
+                    'data-placeholder': _('No products')
                 },
                 choices=choices,
             )
