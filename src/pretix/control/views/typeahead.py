@@ -685,6 +685,47 @@ def itemvar_select2(request, **kwargs):
 
 
 @event_permission_required(None)
+def itemvars_select2(request, **kwargs):
+    query = request.GET.get('query', '')
+    try:
+        page = int(request.GET.get('page', '1'))
+    except ValueError:
+        page = 1
+
+    pagesize = 20
+    offset = (page - 1) * pagesize
+
+    choices = []
+
+    # We are very unlikely to need pagination
+    itemqs = request.event.items.prefetch_related('variations').filter(
+        Q(name__icontains=i18ncomp(query)) | Q(internal_name__icontains=query))
+    total = itemqs.count()
+
+    for i in itemqs[offset:offset + pagesize]:
+        variations = list(i.variations.all())
+        if variations:
+            for v in variations:
+                choices.append(('%d-%d' % (i.pk, v.pk), '%s – %s' % (i, v.value), not v.active))
+        else:
+            choices.append((str(i.pk), str(i), not i.active))
+
+    doc = {
+        'results': [
+            {
+                'id': k,
+                'text': str(v),
+            }
+            for k, v, d in choices
+        ],
+        'pagination': {
+            "more": total >= (offset + pagesize)
+        }
+    }
+    return JsonResponse(doc)
+
+
+@event_permission_required(None)
 def itemvarquota_select2(request, **kwargs):
     query = request.GET.get('query', '')
     try:

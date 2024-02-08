@@ -67,7 +67,7 @@ from pretix.control.forms import (
     ButtonGroupRadioSelect, ItemMultipleChoiceField, SizeValidationMixin,
     SplitDateTimeField, SplitDateTimePickerWidget,
 )
-from pretix.control.forms.widgets import Select2
+from pretix.control.forms.widgets import Select2, Select2ItemVarMulti
 from pretix.helpers.models import modelcopy
 from pretix.helpers.money import change_decimal_field
 
@@ -207,14 +207,20 @@ class QuestionOptionForm(I18nModelForm):
 
 
 class QuotaForm(I18nModelForm):
+    itemvars = forms.MultipleChoiceField(
+        label=_("Products"),
+        required=True,
+    )
+
     def __init__(self, **kwargs):
         self.instance = kwargs.get('instance', None)
         self.event = kwargs.get('event')
         items = kwargs.pop('items', None) or self.event.items.prefetch_related('variations')
+        searchable_selection = kwargs.pop('searchable_selection', None)
         self.original_instance = modelcopy(self.instance) if self.instance else None
         initial = kwargs.get('initial', {})
         if self.instance and self.instance.pk and 'itemvars' not in initial:
-            initial['itemvars'] = [str(i.pk) for i in self.instance.items.all()] + [
+            initial['itemvars'] = [str(i.pk) for i in self.instance.items.all() if (len(i.variations.all()) == 0)] + [
                 '{}-{}'.format(v.item_id, v.pk) for v in self.instance.variations.all()
             ]
         kwargs['initial'] = initial
@@ -231,12 +237,22 @@ class QuotaForm(I18nModelForm):
             else:
                 choices.append(('{}'.format(item.pk), str(item) if item.active else mark_safe(f'<strike class="text-muted">{escape(item)}</strike>')))
 
-        self.fields['itemvars'] = forms.MultipleChoiceField(
-            label=_('Products'),
-            required=True,
-            choices=choices,
-            widget=forms.CheckboxSelectMultiple
-        )
+        if searchable_selection:
+            self.fields['itemvars'].widget = Select2ItemVarMulti(
+                attrs={
+                    'data-model-select2': 'generic',
+                    'data-select2-url': reverse('control:event.items.itemvars.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': _('All products')
+                },
+                choices=choices,
+            )
+        else:
+            self.fields['itemvars'].widget = forms.CheckboxSelectMultiple()
+
+        self.fields['itemvars'].choices = choices
 
         if self.event.has_subevents:
             self.fields['subevent'].queryset = self.event.subevents.all()
