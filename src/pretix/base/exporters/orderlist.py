@@ -209,7 +209,7 @@ class OrderListExporter(MultiSheetListExporter):
             return qs.annotate(**annotations).filter(**filters)
         return qs
 
-    def iterate_orders(self, form_data: dict):
+    def orders_qs(self, form_data):
         p_date = OrderPayment.objects.filter(
             order=OuterRef('pk'),
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED),
@@ -250,6 +250,10 @@ class OrderListExporter(MultiSheetListExporter):
 
         if form_data['paid_only']:
             qs = qs.filter(status=Order.STATUS_PAID)
+        return qs
+
+    def iterate_orders(self, form_data: dict):
+        qs = self.orders_qs(form_data)
         tax_rates = self._get_all_tax_rates(qs)
 
         headers = [
@@ -406,7 +410,7 @@ class OrderListExporter(MultiSheetListExporter):
             row += self.event_object_cache[order.event_id].meta_data.values()
             yield row
 
-    def iterate_fees(self, form_data: dict):
+    def fees_qs(self, form_data):
         p_providers = OrderPayment.objects.filter(
             order=OuterRef('order'),
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED,
@@ -425,6 +429,10 @@ class OrderListExporter(MultiSheetListExporter):
             qs = qs.filter(order__status=Order.STATUS_PAID, canceled=False)
 
         qs = self._date_filter(qs, form_data, rel='order__')
+        return qs
+
+    def iterate_fees(self, form_data: dict):
+        qs = self.fees_qs(form_data)
 
         headers = [
             _('Event slug'),
@@ -506,7 +514,19 @@ class OrderListExporter(MultiSheetListExporter):
             row += self.event_object_cache[order.event_id].meta_data.values()
             yield row
 
+    def positions_qs(self, form_data: dict):
+        qs = OrderPosition.all.filter(
+            order__event__in=self.events,
+        )
+        if form_data['paid_only']:
+            qs = qs.filter(order__status=Order.STATUS_PAID, canceled=False)
+
+        qs = self._date_filter(qs, form_data, rel='order__')
+        return qs
+
     def iterate_positions(self, form_data: dict):
+        base_qs = self.positions_qs(form_data)
+
         p_providers = OrderPayment.objects.filter(
             order=OuterRef('order'),
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED,
@@ -516,9 +536,6 @@ class OrderListExporter(MultiSheetListExporter):
         ).values(
             'm'
         ).order_by()
-        base_qs = OrderPosition.all.filter(
-            order__event__in=self.events,
-        )
         qs = base_qs.annotate(
             payment_providers=Subquery(p_providers, output_field=CharField()),
         ).select_related(
@@ -528,10 +545,6 @@ class OrderListExporter(MultiSheetListExporter):
             'subevent', 'subevent__meta_values',
             'answers', 'answers__question', 'answers__options'
         )
-        if form_data['paid_only']:
-            qs = qs.filter(order__status=Order.STATUS_PAID, canceled=False)
-
-        qs = self._date_filter(qs, form_data, rel='order__')
 
         has_subevents = self.events.filter(has_subevents=True).exists()
 
