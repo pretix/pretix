@@ -291,7 +291,7 @@ class EventViewSet(viewsets.ModelViewSet):
         try:
             with transaction.atomic():
                 instance.organizer.log_action(
-                    'pretix.event.deleted', user=self.request.user,
+                    'pretix.event.deleted', user=self.request.user, auth=self.request.auth,
                     data={
                         'event_id': instance.pk,
                         'name': str(instance.name),
