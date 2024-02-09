@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 14:51+0000\n"
-"PO-Revision-Date: 2023-11-28 15:36+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2024-02-10 00:00+0000\n"
+"Last-Translator: Phin Wolkwitz <wolkwitz@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 5.3.1\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -826,24 +826,19 @@ msgid "Only available with a voucher"
 msgstr "Nur mit Gutschein verfügbar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
-#, fuzzy
-#| msgid "Payment method unavailable"
 msgctxt "widget"
 msgid "Not yet available"
-msgstr "Zahlungsmethode nicht verfügbar"
+msgstr "Noch nicht verfügbar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
 msgid "Not available anymore"
-msgstr ""
+msgstr "Nicht mehr verfügbar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "currently available: %s"
 msgctxt "widget"
 msgid "Currently not available"
-msgstr "aktuell verfügbar: %s"
+msgstr "Aktuell nicht verfügbar"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 #, javascript-format
@@ -935,20 +930,14 @@ msgid "Continue"
 msgstr "Fortfahren"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Select variant %s"
 msgctxt "widget"
 msgid "Show variants"
-msgstr "Variante %s auswählen"
+msgstr "Varianten zeigen"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "Select variant %s"
 msgctxt "widget"
 msgid "Hide variants"
-msgstr "Variante %s auswählen"
+msgstr "Varianten verstecken"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgctxt "widget"
