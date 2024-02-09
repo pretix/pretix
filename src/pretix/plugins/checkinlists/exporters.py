@@ -384,7 +384,9 @@ class PDFCheckinList(ReportlabExportMixin, CheckInListMixin, BaseExporter):
             name = op.attendee_name or (op.addon_to.attendee_name if op.addon_to else '') or ian
             company = op.company or (op.addon_to.company if op.addon_to else '') or iac
             if company:
-                name += "<br/>" + company
+                if name:
+                    name += "<br/>"
+                name += company
 
             item = "{} ({})".format(
                 str(op.item) + (" – " + str(op.variation.value) if op.variation else ""),
