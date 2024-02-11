@@ -256,7 +256,7 @@ Vue.component('availbox', {
             }
         },
         unavailability_reason_message: function () {
-            var reason = this.item.has_variations ? this.variation.current_unavailability_reason : this.item.current_unavailability_reason;
+            var reason = this.item.current_unavailability_reason || this.variation?.current_unavailability_reason;
             if (reason) {
                 return strings["unavailable_" + reason] || reason;
             }
