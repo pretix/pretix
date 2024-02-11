@@ -211,7 +211,7 @@ Vue.component('availbox', {
         + strings.sold_out
         + '</div>'
         + '<div class="pretix-widget-waiting-list-link"'
-        + '     v-if="waiting_list_show">'
+        + '     v-if="waiting_list_show && !unavailability_reason_message">'
         + '<a :href="waiting_list_url" target="_blank" @click="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!unavailability_reason_message && avail[0] === 100">'
