@@ -430,7 +430,7 @@
   .pretix-widget-item-availability-col {
     text-align: center;
 
-    a::before {
+    .pretix-widget-collapse-indicator::before {
       content: "";
       display: inline-block;
       width: $font-size-base;
@@ -438,7 +438,8 @@
       background: url("data:image/svg+xml,%3Csvg viewBox='0 0 14 14' xmlns='http://www.w3.org/2000/svg' xml:space='preserve'%3E%3Cpath fill='#{url-friendly-colour($link-color)}' d='M6.395 4.151a.268.268 0 0 0-.177.077l-.386.386a.259.259 0 0 0-.077.177c.002.067.029.13.077.179l3.033 3.031-3.033 3.032a.255.255 0 0 0-.077.177.253.253 0 0 0 .077.178l.386.385a.268.268 0 0 0 .177.077.27.27 0 0 0 .178-.077l3.595-3.595a.259.259 0 0 0 .077-.177.255.255 0 0 0-.077-.176L6.573 4.228a.257.257 0 0 0-.178-.077Z'/%3E%3C/svg%3E");
       transition: transform .5s;
     }
-    a[aria-expanded=true]::before {
+
+    .pretix-widget-collapse-indicator[aria-expanded=true]::before {
       transform: rotate(90deg);
     }
   }
