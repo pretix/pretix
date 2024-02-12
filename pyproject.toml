@@ -110,7 +110,7 @@ dependencies = [
 [project.optional-dependencies]
 memcached = ["pylibmc"]
 dev = [
-  "aiohttp==3.8.*",
+  "aiohttp==3.9.*",
   "coverage",
   "coveralls",
   "fakeredis==2.18.*",
