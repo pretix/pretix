@@ -54,7 +54,6 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 from django_otp import match_token
-from webauthn import verify_authentication_response
 from webauthn.helpers import generate_challenge
 
 from pretix.base.auth import get_auth_backends
@@ -434,7 +433,7 @@ class Login2FAView(TemplateView):
             for d in devices:
                 credential_current_sign_count = d.sign_count if isinstance(d, WebAuthnDevice) else 0
                 try:
-                    webauthn_assertion_response = verify_authentication_response(
+                    webauthn_assertion_response = webauthn.verify_authentication_response(
                         credential=resp,
                         expected_challenge=base64.b64decode(challenge),
                         expected_rp_id=get_webauthn_rp_id(self.request),
@@ -450,7 +449,7 @@ class Login2FAView(TemplateView):
                         # https://www.w3.org/TR/webauthn/#sctn-appid-extension says
                         # "When verifying the assertion, expect that the rpIdHash MAY be the hash of the AppID instead of the RP ID."
                         try:
-                            webauthn_assertion_response = verify_authentication_response(
+                            webauthn_assertion_response = webauthn.verify_authentication_response(
                                 credential=resp,
                                 expected_challenge=base64.b64decode(challenge),
                                 expected_rp_id=get_u2f_appid(self.request),

@@ -56,10 +56,6 @@ from django.views.generic import FormView, ListView, TemplateView, UpdateView
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from django_scopes import scopes_disabled
-from webauthn import (
-    generate_registration_options, options_to_json,
-    verify_authentication_response, verify_registration_response,
-)
 from webauthn.helpers import generate_challenge, generate_user_handle
 
 from pretix.base.auth import get_auth_backends
@@ -111,7 +107,7 @@ class ReauthView(TemplateView):
             for d in devices:
                 credential_current_sign_count = d.sign_count if isinstance(d, WebAuthnDevice) else 0
                 try:
-                    webauthn_assertion_response = verify_authentication_response(
+                    webauthn_assertion_response = webauthn.verify_authentication_response(
                         credential=resp,
                         expected_challenge=base64.b64decode(challenge),
                         expected_rp_id=get_webauthn_rp_id(self.request),
@@ -127,7 +123,7 @@ class ReauthView(TemplateView):
                         # https://www.w3.org/TR/webauthn/#sctn-appid-extension says
                         # "When verifying the assertion, expect that the rpIdHash MAY be the hash of the AppID instead of the RP ID."
                         try:
-                            webauthn_assertion_response = verify_authentication_response(
+                            webauthn_assertion_response = webauthn.verify_authentication_response(
                                 credential=resp,
                                 expected_challenge=base64.b64decode(challenge),
                                 expected_rp_id=get_u2f_appid(self.request),
@@ -419,7 +415,7 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
         ] + [
             device.webauthndevice for device in U2FDevice.objects.filter(confirmed=True, user=self.request.user)
         ]
-        make_credential_options = generate_registration_options(
+        make_credential_options = webauthn.generate_registration_options(
             rp_id=get_webauthn_rp_id(self.request),
             rp_name=get_webauthn_rp_id(self.request),
             user_id=ukey,
@@ -427,7 +423,7 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
             challenge=challenge,
             exclude_credentials=devices,
         )
-        ctx['jsondata'] = options_to_json(make_credential_options)
+        ctx['jsondata'] = webauthn.options_to_json(make_credential_options)
 
         return ctx
 
@@ -437,7 +433,7 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
             ukey = self.request.session['webauthn_register_ukey']
             resp = json.loads(self.request.POST.get("token"))
 
-            registration_verification = verify_registration_response(
+            registration_verification = webauthn.verify_registration_response(
                 credential=resp,
                 expected_challenge=base64.b64decode(challenge),
                 expected_rp_id=get_webauthn_rp_id(self.request),

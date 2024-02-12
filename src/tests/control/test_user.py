@@ -40,7 +40,9 @@ from django_otp.oath import TOTP
 from django_otp.plugins.otp_static.models import StaticDevice
 from django_otp.plugins.otp_totp.models import TOTPDevice
 from tests.base import SoupTest, extract_form_fields
-from webauthn import WebAuthnCredential
+from webauthn.registration.verify_registration_response import (
+    VerifiedRegistration,
+)
 
 from pretix.base.models import (
     Event, Organizer, U2FDevice, User, WebAuthnDevice,
@@ -356,9 +358,9 @@ class UserSettings2FATest(SoupTest):
             }, follow=True)
 
         m = self.monkeypatch
-        m.setattr("webauthn.WebAuthnRegistrationResponse.verify",
-                  lambda *args, **kwargs: WebAuthnCredential(
-                      '', '', b'asd', b'foo', 1
+        m.setattr("webauthn.verify_registration_response",
+                  lambda *args, **kwargs: VerifiedRegistration(
+                      b'', b'', 1, '', 'foo', 'public-key', True, b'', 'single_device', True
                   ))
 
         d = WebAuthnDevice.objects.first()
