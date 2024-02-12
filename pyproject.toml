@@ -115,7 +115,7 @@ dev = [
   "fakeredis==2.18.*",
   "flake8==6.0.*",
   "freezegun",
-  "isort==5.12.*",
+  "isort==5.13.*",
   "pep8-naming==0.13.*",
   "potypo",
   "pycodestyle==2.10.*",
