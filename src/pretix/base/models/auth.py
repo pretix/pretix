@@ -53,13 +53,11 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_otp.models import Device
 from django_scopes import scopes_disabled
-from u2flib_server.utils import (
-    pub_key_from_der, websafe_decode, websafe_encode,
-)
 
 from pretix.base.i18n import language
 from pretix.helpers.urls import build_absolute_uri
 
+from ...helpers.u2f import pub_key_from_der, websafe_decode, websafe_encode
 from .base import LoggingMixin
 
 
