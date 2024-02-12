@@ -35,16 +35,23 @@ async function fetch_json(url, options) {
  * @param {Object} credentialCreateOptionsFromServer
  */
 const transformCredentialCreateOptions = function (credentialCreateOptionsFromServer) {
-    let {challenge, user} = credentialCreateOptionsFromServer;
-    user.id = Uint8Array.from(
-        atob(credentialCreateOptionsFromServer.user.id), c => c.charCodeAt(0));
+    let {challenge, user, excludeCredentials} = credentialCreateOptionsFromServer;
+    user.id = user.id.replace(/\_/g, "/").replace(/\-/g, "+");
+    user.id = Uint8Array.from(atob(user.id), c => c.charCodeAt(0));
 
-    challenge = Uint8Array.from(
-        atob(credentialCreateOptionsFromServer.challenge), c => c.charCodeAt(0));
+    challenge = challenge.replace(/\_/g, "/").replace(/\-/g, "+");
+    challenge = Uint8Array.from(atob(challenge), c => c.charCodeAt(0));
+
+    excludeCredentials = excludeCredentials.map(credentialDescriptor => {
+        let {id} = credentialDescriptor;
+        id = id.replace(/\_/g, "/").replace(/\-/g, "+");
+        id = Uint8Array.from(atob(id), c => c.charCodeAt(0));
+        return Object.assign({}, credentialDescriptor, {id});
+    });
 
     const transformedCredentialCreateOptions = Object.assign(
         {}, credentialCreateOptionsFromServer,
-        {challenge, user});
+        {challenge, user, excludeCredentials});
 
     return transformedCredentialCreateOptions;
 };
@@ -56,22 +63,25 @@ const transformCredentialCreateOptions = function (credentialCreateOptionsFromSe
  * @param {PublicKeyCredential} newAssertion
  */
 const transformNewAssertionForServer = (newAssertion) => {
-    const attObj = new Uint8Array(
-        newAssertion.response.attestationObject);
-    const clientDataJSON = new Uint8Array(
-        newAssertion.response.clientDataJSON);
-    const rawId = new Uint8Array(
-        newAssertion.rawId);
+    const attObj = new Uint8Array(newAssertion.response.attestationObject);
+    const clientDataJSON = new Uint8Array(newAssertion.response.clientDataJSON);
+    const rawId = new Uint8Array(newAssertion.rawId);
+    const transports = newAssertion.response.getTransports();
+    const authenticatorAttachment = newAssertion.authenticatorAttachment;
 
     const registrationClientExtensions = newAssertion.getClientExtensionResults();
 
     return {
         id: newAssertion.id,
         rawId: b64enc(rawId),
+        response: {
+            attestationObject: b64enc(attObj),
+            clientDataJSON: b64enc(clientDataJSON),
+            transports: transports,
+        },
         type: newAssertion.type,
-        attObj: b64enc(attObj),
-        clientData: b64enc(clientDataJSON),
-        registrationClientExtensions: JSON.stringify(registrationClientExtensions)
+        clientExtensionResults: JSON.stringify(registrationClientExtensions),
+        authenticatorAttachment: authenticatorAttachment,
     };
 };
 
@@ -79,8 +89,8 @@ const transformNewAssertionForServer = (newAssertion) => {
 const transformCredentialRequestOptions = (credentialRequestOptionsFromServer) => {
     let {challenge, allowCredentials} = credentialRequestOptionsFromServer;
 
-    challenge = Uint8Array.from(
-        atob(challenge), c => c.charCodeAt(0));
+    challenge = challenge.replace(/\_/g, "/").replace(/\-/g, "+");
+    challenge = Uint8Array.from(atob(challenge), c => c.charCodeAt(0));
 
     allowCredentials = allowCredentials.map(credentialDescriptor => {
         let {id} = credentialDescriptor;
@@ -106,16 +116,22 @@ const transformAssertionForServer = (newAssertion) => {
     const clientDataJSON = new Uint8Array(newAssertion.response.clientDataJSON);
     const rawId = new Uint8Array(newAssertion.rawId);
     const sig = new Uint8Array(newAssertion.response.signature);
+    const userHandle = new Uint8Array(newAssertion.response.userHandle);
     const assertionClientExtensions = newAssertion.getClientExtensionResults();
+    const authenticatorAttachment = newAssertion.authenticatorAttachment;
 
     return {
         id: newAssertion.id,
         rawId: b64enc(rawId),
         type: newAssertion.type,
-        authData: b64RawEnc(authData),
-        clientData: b64RawEnc(clientDataJSON),
-        signature: hexEncode(sig),
-        assertionClientExtensions: JSON.stringify(assertionClientExtensions)
+        response: {
+            authenticatorData: b64RawEnc(authData),
+            clientDataJSON: b64RawEnc(clientDataJSON),
+            signature: b64RawEnc(sig),
+            userHandle: b64RawEnc(userHandle),
+        },
+        authenticatorAttachment: authenticatorAttachment,
+        clientExtensionResults: JSON.stringify(assertionClientExtensions)
     };
 };
 

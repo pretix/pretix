@@ -37,9 +37,7 @@ import json
 import operator
 from datetime import timedelta
 from functools import reduce
-from urllib.parse import urlparse
 
-import webauthn
 from django.conf import settings
 from django.contrib.auth.models import (
     AbstractBaseUser, BaseUserManager, PermissionsMixin,
@@ -53,11 +51,12 @@ from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_otp.models import Device
 from django_scopes import scopes_disabled
+from webauthn.helpers.structs import PublicKeyCredentialDescriptor
 
 from pretix.base.i18n import language
 from pretix.helpers.urls import build_absolute_uri
 
-from ...helpers.u2f import pub_key_from_der, websafe_decode, websafe_encode
+from ...helpers.u2f import pub_key_from_der, websafe_decode
 from .base import LoggingMixin
 
 
@@ -606,7 +605,12 @@ class U2FDevice(Device):
     json_data = models.TextField()
 
     @property
-    def webauthnuser(self):
+    def webauthndevice(self):
+        d = json.loads(self.json_data)
+        return PublicKeyCredentialDescriptor(websafe_decode(d['keyHandle']))
+
+    @property
+    def webauthnpubkey(self):
         d = json.loads(self.json_data)
         # We manually need to convert the pubkey from DER format (used in our
         # former U2F implementation) to the format required by webauthn. This
@@ -618,16 +622,7 @@ class U2FDevice(Device):
                 pub_key.public_numbers().x, pub_key.public_numbers().y
             )
         )
-        return webauthn.WebAuthnUser(
-            d['keyHandle'],
-            self.user.email,
-            str(self.user),
-            settings.SITE_URL,
-            d['keyHandle'],
-            websafe_encode(pub_key),
-            1,
-            urlparse(settings.SITE_URL).netloc
-        )
+        return pub_key
 
 
 class WebAuthnDevice(Device):
@@ -639,14 +634,9 @@ class WebAuthnDevice(Device):
     sign_count = models.IntegerField(default=0)
 
     @property
-    def webauthnuser(self):
-        return webauthn.WebAuthnUser(
-            self.ukey,
-            self.user.email,
-            str(self.user),
-            settings.SITE_URL,
-            self.credential_id,
-            self.pub_key,
-            self.sign_count,
-            urlparse(settings.SITE_URL).netloc
-        )
+    def webauthndevice(self):
+        return PublicKeyCredentialDescriptor(websafe_decode(self.credential_id))
+
+    @property
+    def webauthnpubkey(self):
+        return websafe_decode(self.pub_key)
