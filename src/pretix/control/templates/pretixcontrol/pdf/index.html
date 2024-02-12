@@ -234,7 +234,62 @@
                             </select>
                         </div>
                     </div>
+                    <div class="row control-group poweredby">
+                        <div class="col-sm-12">
+                            <label>{% trans "Style" %}</label><br>
+                            <select class="input-block-level form-control" id="toolbox-poweredby-style">
+                                <option value="dark">{% trans "Dark" %}</option>
+                                <option value="white">{% trans "Light" %}</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row control-group imagecontent">
+                        <div class="col-sm-12">
+                            <label>{% trans "Image content" %}</label><br>
+                            <select class="input-block-level form-control" id="toolbox-imagecontent">
+                                <option value="">{% trans "Empty" %}</option>
+                                {% for varname, var in images.items %}
+                                    <option value="{{ varname }}">{{ var.label }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row control-group text textcontent">
+                        <div class="col-sm-12">
+                            <label>{% trans "Content" %}</label><br>
+                            <select class="input-block-level form-control" id="toolbox-content">
+                                {% for varname, var in variables.items %}
+                                    {% if not var.hidden %}
+                                        <option data-sample="{{ var.editor_sample }}" {% if var.migrate_from %}data-old-value="{{ var.migrate_from }}"{% endif %} value="{{ varname }}">{{ var.label }}</option>
+                                    {% endif %}
+                                {% endfor %}
+                                {% for p in request.organizer.meta_properties.all %}
+                                    <option value="meta:{{ p.name }}">
+                                        {% trans "Event attribute:" %} {{ p.name }}
+                                    </option>
+                                {% endfor %}
+                                {% for p in request.event.item_meta_properties.all %}
+                                    <option value="itemmeta:{{ p.name }}">
+                                        {% trans "Item attribute:" %} {{ p.name }}
+                                    </option>
+                                {% endfor %}
+                                <option value="other_i18n">{% trans "Other… (multilingual)" %}</option>
+                                <option value="other">{% trans "Other…" %}</option>
+                            </select>
+                            <textarea type="text" value="" class="input-block-level form-control"
+                                    id="toolbox-content-other"></textarea>
+                            <div class="i18n-form-group" id="toolbox-content-other-i18n">
+                                {% for l in request.event.settings.locales %}
+                                    <textarea id="toolbox-content-other-{{ l }}" rows="3" class="input-block-level form-control" title="{{ l }}" lang="{{ l }}"></textarea>
+                                {% endfor %}
+                            </div>
+                            <p class="help-block" id="toolbox-content-other-help">
+                                <a href="?placeholders=true" target="_blank">{% trans "Show available placeholders" %}</a>
+                            </p>
+                        </div>
+                    </div>
                     <div class="row control-group position">
+                        <hr/>
                         <div class="col-sm-6">
                             <label>{% trans "x (mm)" %}</label><br>
                             <input type="number" value="13" class="input-block-level form-control" step="0.01"
@@ -357,62 +412,6 @@
                                     </button>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="row control-group poweredby">
-                        <div class="col-sm-12">
-                            <label>{% trans "Style" %}</label><br>
-                            <select class="input-block-level form-control" id="toolbox-poweredby-style">
-                                <option value="dark">{% trans "Dark" %}</option>
-                                <option value="white">{% trans "Light" %}</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row control-group imagecontent">
-                        <hr/>
-                        <div class="col-sm-12">
-                            <label>{% trans "Image content" %}</label><br>
-                            <select class="input-block-level form-control" id="toolbox-imagecontent">
-                                <option value="">{% trans "Empty" %}</option>
-                                {% for varname, var in images.items %}
-                                    <option value="{{ varname }}">{{ var.label }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-                    </div>
-                    <div class="row control-group text textcontent">
-                        <hr/>
-                        <div class="col-sm-12">
-                            <label>{% trans "Content" %}</label><br>
-                            <select class="input-block-level form-control" id="toolbox-content">
-                                {% for varname, var in variables.items %}
-                                    {% if not var.hidden %}
-                                        <option data-sample="{{ var.editor_sample }}" {% if var.migrate_from %}data-old-value="{{ var.migrate_from }}"{% endif %} value="{{ varname }}">{{ var.label }}</option>
-                                    {% endif %}
-                                {% endfor %}
-                                {% for p in request.organizer.meta_properties.all %}
-                                    <option value="meta:{{ p.name }}">
-                                        {% trans "Event attribute:" %} {{ p.name }}
-                                    </option>
-                                {% endfor %}
-                                {% for p in request.event.item_meta_properties.all %}
-                                    <option value="itemmeta:{{ p.name }}">
-                                        {% trans "Item attribute:" %} {{ p.name }}
-                                    </option>
-                                {% endfor %}
-                                <option value="other_i18n">{% trans "Other… (multilingual)" %}</option>
-                                <option value="other">{% trans "Other…" %}</option>
-                            </select>
-                            <textarea type="text" value="" class="input-block-level form-control"
-                                    id="toolbox-content-other"></textarea>
-                            <div class="i18n-form-group" id="toolbox-content-other-i18n">
-                                {% for l in request.event.settings.locales %}
-                                    <textarea id="toolbox-content-other-{{ l }}" rows="3" class="input-block-level form-control" title="{{ l }}" lang="{{ l }}"></textarea>
-                                {% endfor %}
-                            </div>
-                            <p class="help-block" id="toolbox-content-other-help">
-                                <a href="?placeholders=true" target="_blank">{% trans "Show available placeholders" %}</a>
-                            </p>
                         </div>
                     </div>
                 </div>
