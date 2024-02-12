@@ -52,7 +52,7 @@ dependencies = [
   "django-oauth-toolkit==2.2.*",
   "django-otp==1.2.*",
   "django-phonenumber-field==7.1.*",
-  "django-redis==5.2.*",
+  "django-redis==5.4.*",
   "django-scopes==2.0.*",
   "django-statici18n==2.4.*",
   "djangorestframework==3.14.*",
