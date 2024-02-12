@@ -42,6 +42,11 @@ class OAuthApplication(AbstractApplication):
         verbose_name=_("Redirection URIs"),
         help_text=_("Allowed URIs list, space separated")
     )
+    post_logout_redirect_uris = models.TextField(
+        blank=True, validators=[URIValidator],
+        help_text=_("Allowed Post Logout URIs list, space separated"),
+        default="",
+    )
     client_id = models.CharField(
         verbose_name=_("Client ID"),
         max_length=100, unique=True, default=generate_client_id, db_index=True
