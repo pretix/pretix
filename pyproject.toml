@@ -54,7 +54,7 @@ dependencies = [
   "django-phonenumber-field==7.1.*",
   "django-redis==5.2.*",
   "django-scopes==2.0.*",
-  "django-statici18n==2.3.*",
+  "django-statici18n==2.4.*",
   "djangorestframework==3.14.*",
   "dnspython==2.3.*",
   "drf_ujson2==1.7.*",
