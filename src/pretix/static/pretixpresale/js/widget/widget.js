@@ -211,7 +211,7 @@ Vue.component('availbox', {
         + strings.sold_out
         + '</div>'
         + '<div class="pretix-widget-waiting-list-link"'
-        + '     v-if="waiting_list_show">'
+        + '     v-if="waiting_list_show && !unavailability_reason_message">'
         + '<a :href="waiting_list_url" target="_blank" @click="$root.open_link_in_frame">' + strings.waiting_list + '</a>'
         + '</div>'
         + '<div class="pretix-widget-availability-available" v-if="!unavailability_reason_message && avail[0] === 100">'
@@ -256,7 +256,7 @@ Vue.component('availbox', {
             }
         },
         unavailability_reason_message: function () {
-            var reason = this.item.has_variations ? this.variation.current_unavailability_reason : this.item.current_unavailability_reason;
+            var reason = this.item.current_unavailability_reason || this.variation?.current_unavailability_reason;
             if (reason) {
                 return strings["unavailable_" + reason] || reason;
             }
