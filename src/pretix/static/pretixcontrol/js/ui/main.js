@@ -613,6 +613,13 @@ var form_handlers = function (el) {
                 }, 50);
             }
         });
+        if ($s[0].hasAttribute("data-close-on-clear")) {
+            $s.on("select2:clear", function () {
+                window.setTimeout(function () {
+                    $s.select2('close');
+                }, 50);
+            });
+        }
     });
 
     el.find('[data-model-select2=event]').each(function () {
