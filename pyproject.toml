@@ -40,7 +40,7 @@ dependencies = [
   "django-bootstrap3==23.1.*",
   "django-compressor==4.4",
   "django-countries==7.5.*",
-  "django-filter==23.2",
+  "django-filter==23.5",
   "django-formset-js-improved==0.5.0.3",
   "django-formtools==2.5.1",
   "django-hierarkey==1.1.*",
