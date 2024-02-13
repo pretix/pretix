@@ -1,4 +1,6 @@
 {% load static %}
+{% load startswith %}
+
 @font-face {
     font-family: 'AND';
     font-style: normal;
@@ -27,9 +29,9 @@
     {% else %}
         font-weight: normal;
     {% endif %}
-    src: {% if "woff2" in formats %}url('{% static formats.woff2 %}') format('woff2'),{% endif %}
-         {% if "woff" in formats %}url('{% static formats.woff %}') format('woff'),{% endif %}
-         {% if "truetype" in formats %}url('{% static formats.truetype %}') format('truetype'){% endif %};
+    src: {% if "woff2" in formats %}{% if formats.woff2|startswith:'https' %}url('{{ formats.woff2 }}'){% else %}url('{% static formats.woff2 %}'){% endif %} format('woff2'),{% endif %}
+         {% if "woff" in formats %}{% if formats.woff|startswith:'https' %}url('{{ formats.woff }}'){% else %}url('{% static formats.woff %}'){% endif %} format('woff'),{% endif %}
+         {% if "truetype" in formats %}{% if formats.truetype|startswith:'https' %}url('{{ formats.truetype }}'){% else %}url('{% static formats.truetype %}'){% endif %} format('truetype'){% endif %};
 }
 .preload-font[data-family="{{family}}"][data-style="{{style}}"] {
     font-family: '{{ family }}', 'AND';

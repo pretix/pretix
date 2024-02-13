@@ -78,7 +78,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
 from pretix.base.i18n import language
-from pretix.base.models import Order, OrderPosition, Question
+from pretix.base.models import Order, OrderPosition, Question, Event
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import layout_image_variables, layout_text_variables
 from pretix.base.templatetags.money import money_filter
@@ -740,7 +740,7 @@ class Renderer:
             self.bg_pdf = None
 
     @classmethod
-    def _register_fonts(cls):
+    def _register_fonts(cls, event: Event = None):
         if hasattr(cls, '_fonts_registered'):
             return
         pdfmetrics.registerFont(TTFont('Open Sans', finders.find('fonts/OpenSans-Regular.ttf')))
@@ -748,7 +748,7 @@ class Renderer:
         pdfmetrics.registerFont(TTFont('Open Sans B', finders.find('fonts/OpenSans-Bold.ttf')))
         pdfmetrics.registerFont(TTFont('Open Sans B I', finders.find('fonts/OpenSans-BoldItalic.ttf')))
 
-        for family, styles in get_fonts().items():
+        for family, styles in get_fonts(event, pdf_only=True).items():
             pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
             if 'italic' in styles:
                 pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
@@ -938,6 +938,12 @@ class Renderer:
             font += ' B'
         if o['italic']:
             font += ' I'
+
+        # Since pdfmetrics.registerFont is global, we want to make sure that no one tries to sneak in a font, they
+        # should not have access to.
+        if font not in list(get_fonts(order.event, pdf_only=True).keys()) + ['Open Sans']:
+            logger.warning(f'Unauthorized use of font "{font}"')
+            font = 'Open Sans'
 
         try:
             ad = getAscentDescent(font, float(o['fontsize']))

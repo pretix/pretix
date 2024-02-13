@@ -79,6 +79,7 @@ from pretix.helpers.countries import CachedCountries
 from pretix.multidomain.models import KnownDomain
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.banktransfer.payment import BankTransfer
+from pretix.presale.style import get_fonts
 
 
 class EventWizardFoundationForm(forms.Form):
@@ -651,6 +652,9 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
             del self.fields['event_list_available_only']
             del self.fields['event_list_filters']
             del self.fields['event_calendar_future_only']
+        self.fields['primary_font'].choices += [
+            (a, {"title": a, "data": v}) for a, v in get_fonts(self.event, pdf_only=False).items()
+        ]
 
         # create "virtual" fields for better UX when editing <name>_asked and <name>_required fields
         self.virtual_keys = []

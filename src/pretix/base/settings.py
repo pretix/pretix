@@ -89,7 +89,7 @@ def primary_font_kwargs():
 
     choices = [('Open Sans', 'Open Sans')]
     choices += sorted([
-        (a, {"title": a, "data": v}) for a, v in get_fonts().items() if not v.get('pdf_only', False)
+        (a, {"title": a, "data": v}) for a, v in get_fonts(pdf_only=False).items()
     ], key=lambda a: a[0])
     return {
         'choices': choices,
