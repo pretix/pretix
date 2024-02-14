@@ -32,11 +32,11 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-
+import base64
 import json
 import logging
 import time
-from urllib.parse import quote
+from urllib.parse import quote, urlparse
 
 import webauthn
 from django.conf import settings
@@ -54,6 +54,7 @@ from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
 from django.views.generic import TemplateView
 from django_otp import match_token
+from webauthn.helpers import generate_challenge
 
 from pretix.base.auth import get_auth_backends
 from pretix.base.forms.auth import (
@@ -62,7 +63,6 @@ from pretix.base.forms.auth import (
 from pretix.base.models import TeamInvite, U2FDevice, User, WebAuthnDevice
 from pretix.base.services.mail import SendMailException
 from pretix.helpers.http import redirect_to_url
-from pretix.helpers.webauthn import generate_challenge
 
 logger = logging.getLogger(__name__)
 
@@ -389,6 +389,10 @@ def get_u2f_appid(request):
     return settings.SITE_URL
 
 
+def get_webauthn_rp_id(request):
+    return urlparse(settings.SITE_URL).hostname
+
+
 class Login2FAView(TemplateView):
     template_name = 'pretixcontrol/auth/login_2fa.html'
 
@@ -427,25 +431,41 @@ class Login2FAView(TemplateView):
                 devices = U2FDevice.objects.filter(user=self.user)
 
             for d in devices:
+                credential_current_sign_count = d.sign_count if isinstance(d, WebAuthnDevice) else 0
                 try:
-                    wu = d.webauthnuser
-
-                    if isinstance(d, U2FDevice):
-                        # RP_ID needs to be appId for U2F devices, but we can't
-                        # set it that way in U2FDevice.webauthnuser, since that
-                        # breaks the frontend part.
-                        wu.rp_id = settings.SITE_URL
-
-                    webauthn_assertion_response = webauthn.WebAuthnAssertionResponse(
-                        wu,
-                        resp,
-                        challenge,
-                        settings.SITE_URL,
-                        uv_required=False  # User Verification
+                    webauthn_assertion_response = webauthn.verify_authentication_response(
+                        credential=resp,
+                        expected_challenge=base64.b64decode(challenge),
+                        expected_rp_id=get_webauthn_rp_id(self.request),
+                        expected_origin=settings.SITE_URL,
+                        credential_public_key=d.webauthnpubkey,
+                        credential_current_sign_count=credential_current_sign_count,
                     )
-                    sign_count = webauthn_assertion_response.verify()
+                    sign_count = webauthn_assertion_response.new_sign_count
+                    if sign_count < credential_current_sign_count:
+                        raise Exception("Possible replay attack, sign count not higher")
                 except Exception:
-                    logger.exception('U2F login failed')
+                    if isinstance(d, U2FDevice):
+                        # https://www.w3.org/TR/webauthn/#sctn-appid-extension says
+                        # "When verifying the assertion, expect that the rpIdHash MAY be the hash of the AppID instead of the RP ID."
+                        try:
+                            webauthn_assertion_response = webauthn.verify_authentication_response(
+                                credential=resp,
+                                expected_challenge=base64.b64decode(challenge),
+                                expected_rp_id=get_u2f_appid(self.request),
+                                expected_origin=settings.SITE_URL,
+                                credential_public_key=d.webauthnpubkey,
+                                credential_current_sign_count=credential_current_sign_count,
+                            )
+                            if webauthn_assertion_response.new_sign_count < 1:
+                                raise Exception("Possible replay attack, sign count set")
+                        except Exception:
+                            logger.exception('U2F login failed')
+                        else:
+                            valid = True
+                            break
+                    else:
+                        logger.exception('Webauthn login failed')
                 else:
                     if isinstance(d, WebAuthnDevice):
                         d.sign_count = sign_count
@@ -471,23 +491,24 @@ class Login2FAView(TemplateView):
         ctx = super().get_context_data()
         if 'webauthn_challenge' in self.request.session:
             del self.request.session['webauthn_challenge']
-        challenge = generate_challenge(32)
-        self.request.session['webauthn_challenge'] = challenge
+        challenge = generate_challenge()
+        self.request.session['webauthn_challenge'] = base64.b64encode(challenge).decode()
         devices = [
-            device.webauthnuser for device in WebAuthnDevice.objects.filter(confirmed=True, user=self.user)
+            device.webauthndevice for device in WebAuthnDevice.objects.filter(confirmed=True, user=self.user)
         ] + [
-            device.webauthnuser for device in U2FDevice.objects.filter(confirmed=True, user=self.user)
+            device.webauthndevice for device in U2FDevice.objects.filter(confirmed=True, user=self.user)
         ]
         if devices:
-            webauthn_assertion_options = webauthn.WebAuthnAssertionOptions(
-                devices,
-                challenge
+            auth_options = webauthn.generate_authentication_options(
+                rp_id=get_webauthn_rp_id(self.request),
+                challenge=challenge,
+                allow_credentials=devices,
             )
-            ad = webauthn_assertion_options.assertion_dict
-            ad['extensions'] = {
-                'appid': get_u2f_appid(self.request)
-            }
-            ctx['jsondata'] = json.dumps(ad)
+
+            # Backwards compatibility to U2F
+            j = json.loads(webauthn.options_to_json(auth_options))
+            j["extensions"] = {"appid": get_u2f_appid(self.request)}
+            ctx['jsondata'] = json.dumps(j)
         return ctx
 
     def get(self, request, *args, **kwargs):

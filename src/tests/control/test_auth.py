@@ -45,6 +45,9 @@ from django.test import TestCase, override_settings
 from django.utils.timezone import now
 from django_otp.oath import TOTP
 from django_otp.plugins.otp_totp.models import TOTPDevice
+from webauthn.authentication.verify_authentication_response import (
+    VerifiedAuthentication,
+)
 
 from pretix.base.models import U2FDevice, User
 from pretix.helpers import security
@@ -382,7 +385,7 @@ class Login2FAFormTest(TestCase):
             raise Exception("Failed")
 
         m = self.monkeypatch
-        m.setattr("webauthn.WebAuthnAssertionResponse.verify", fail)
+        m.setattr("webauthn.verify_authentication_response", fail)
         U2FDevice.objects.create(
             user=self.user, name='test',
             json_data='{"appId": "https://local.pretix.eu", "keyHandle": '
@@ -403,7 +406,10 @@ class Login2FAFormTest(TestCase):
 
     def test_u2f_valid(self):
         m = self.monkeypatch
-        m.setattr("webauthn.WebAuthnAssertionResponse.verify", lambda *args, **kwargs: 1)
+        m.setattr("webauthn.verify_authentication_response",
+                  lambda *args, **kwargs: VerifiedAuthentication(
+                      b'', 1, 'single_device', True,
+                  ))
 
         U2FDevice.objects.create(
             user=self.user, name='test',
