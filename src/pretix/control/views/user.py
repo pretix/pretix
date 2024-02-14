@@ -127,7 +127,7 @@ class ReauthView(TemplateView):
                                 credential=resp,
                                 expected_challenge=base64.b64decode(challenge),
                                 expected_rp_id=get_u2f_appid(self.request),
-                                expected_origin=settings.SITE_URL.rstrip("/"),
+                                expected_origin=settings.SITE_URL,
                                 credential_public_key=d.webauthnpubkey,
                                 credential_current_sign_count=credential_current_sign_count,
                             )
