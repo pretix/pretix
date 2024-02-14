@@ -486,11 +486,11 @@ class OrderPositionSerializer(I18nAwareModelSerializer):
                   'company', 'street', 'zipcode', 'city', 'country', 'state', 'discount',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
                   'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'canceled',
-                  'valid_from', 'valid_until', 'blocked')
+                  'valid_from', 'valid_until', 'blocked', 'voucher_budget_use')
         read_only_fields = (
             'id', 'order', 'positionid', 'item', 'variation', 'price', 'voucher', 'tax_rate', 'tax_value', 'secret',
             'addon_to', 'subevent', 'checkins', 'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data',
-            'seat', 'canceled', 'discount', 'valid_from', 'valid_until', 'blocked'
+            'seat', 'canceled', 'discount', 'valid_from', 'valid_until', 'blocked', 'voucher_budget_use'
         )
 
     def __init__(self, *args, **kwargs):

@@ -183,6 +183,7 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
             "discount": None,
             "attendee_email": None,
             "voucher": None,
+            "voucher_budget_use": None,
             "tax_rate": "0.00",
             "tax_value": "0.00",
             "secret": op.secret,

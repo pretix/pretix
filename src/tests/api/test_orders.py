@@ -188,6 +188,7 @@ TEST_ORDERPOSITION_RES = {
     "attendee_name": "Peter",
     "attendee_email": None,
     "voucher": None,
+    "voucher_budget_use": None,
     "discount": None,
     "tax_rate": "0.00",
     "tax_value": "0.00",
