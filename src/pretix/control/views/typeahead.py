@@ -674,6 +674,7 @@ def itemvar_select2(request, **kwargs):
             {
                 'id': k,
                 'text': str(v),
+                'inactive': d,
             }
             for k, v, d in choices
         ],
@@ -715,6 +716,7 @@ def itemvars_select2(request, **kwargs):
             {
                 'id': k,
                 'text': str(v),
+                'inactive': d,
             }
             for k, v, d in choices
         ],
