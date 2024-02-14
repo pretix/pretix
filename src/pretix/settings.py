@@ -683,8 +683,8 @@ CELERY_TASK_ROUTES = ([
 BOOTSTRAP3 = {
     'success_css_class': '',
     'field_renderers': {
-        'default': 'pretix.base.forms.renderers.FieldRenderer',
-        'inline': 'pretix.base.forms.renderers.InlineFieldRenderer',
+        'default': 'bootstrap3.renderers.FieldRenderer',
+        'inline': 'bootstrap3.renderers.InlineFieldRenderer',
         'control': 'pretix.control.forms.renderers.ControlFieldRenderer',
         'control_with_visibility': 'pretix.control.forms.renderers.ControlFieldWithVisibilityRenderer',
         'bulkedit': 'pretix.control.forms.renderers.BulkEditFieldRenderer',
