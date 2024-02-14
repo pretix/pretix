@@ -437,7 +437,7 @@ class User2FADeviceConfirmWebAuthnView(RecentAuthenticationRequiredMixin, Templa
                 credential=resp,
                 expected_challenge=base64.b64decode(challenge),
                 expected_rp_id=get_webauthn_rp_id(self.request),
-                expected_origin=settings.SITE_URL.rstrip("/"),
+                expected_origin=settings.SITE_URL,
             )
 
             # Check that the credentialId is not yet registered to any other user.
