@@ -119,7 +119,7 @@ dev = [
   "pep8-naming==0.13.*",
   "potypo",
   "pycodestyle==2.10.*",
-  "pyflakes==3.0.*",
+  "pyflakes==3.2.*",
   "pytest-asyncio",
   "pytest-cache",
   "pytest-cov",
