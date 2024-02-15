@@ -70,6 +70,10 @@
                             {% endblocktrans %}
                         </em>
                         {% endif %}
+                        {% if position.attendee_name %}
+                            – <span class="fa fa-user" aria-hidden="true"></span>
+                            {{ position.attendee_name }}
+                        {% endif %}
                     </h3>
                 </div>
                 <div class="panel-body">
