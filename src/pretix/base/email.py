@@ -189,7 +189,7 @@ class TemplateBasedMailRenderer(BaseHTMLMailRenderer):
         tpl = get_template(self.template_name)
         body_html = tpl.render(htmlctx)
 
-        inliner = css_inline.CSSInliner(remove_style_tags=True)
+        inliner = css_inline.CSSInliner(keep_style_tags=False)
         body_html = inliner.inline(body_html)
 
         return body_html

@@ -136,7 +136,7 @@ def send_notification_mail(notification: Notification, user: User):
     tpl_html = get_template('pretixbase/email/notification.html')
 
     body_html = tpl_html.render(ctx)
-    inliner = css_inline.CSSInliner(remove_style_tags=True)
+    inliner = css_inline.CSSInliner(keep_style_tags=False)
     body_html = inliner.inline(body_html)
 
     tpl_plain = get_template('pretixbase/email/notification.txt')
