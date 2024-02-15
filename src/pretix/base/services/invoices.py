@@ -104,10 +104,10 @@ def build_invoice(invoice: Invoice) -> Invoice:
                 expire_date=date_format(invoice.order.expires, "SHORT_DATE_FORMAT")
             )
 
-        invoice.introductory_text = str(introductory).replace('\n', '<br />')
-        invoice.additional_text = str(additional).replace('\n', '<br />')
+        invoice.introductory_text = str(introductory).replace('\n', '<br />').replace('\r', '')
+        invoice.additional_text = str(additional).replace('\n', '<br />').replace('\r', '')
         invoice.footer_text = str(footer)
-        invoice.payment_provider_text = str(payment).replace('\n', '<br />')
+        invoice.payment_provider_text = str(payment).replace('\n', '<br />').replace('\r', '')
         invoice.payment_provider_stamp = str(payment_stamp) if payment_stamp else None
 
         try:
