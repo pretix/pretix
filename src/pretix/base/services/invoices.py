@@ -462,10 +462,10 @@ def build_preview_invoice_pdf(event):
         footer = event.settings.get('invoice_footer_text', as_type=LazyI18nString)
         payment = _("A payment provider specific text might appear here.")
 
-        invoice.introductory_text = str(introductory).replace('\n', '<br />')
-        invoice.additional_text = str(additional).replace('\n', '<br />')
+        invoice.introductory_text = str(introductory).replace('\n', '<br />').replace('\r', '')
+        invoice.additional_text = str(additional).replace('\n', '<br />').replace('\r', '')
         invoice.footer_text = str(footer)
-        invoice.payment_provider_text = str(payment).replace('\n', '<br />')
+        invoice.payment_provider_text = str(payment).replace('\n', '<br />').replace('\r', '')
         invoice.payment_provider_stamp = _('paid')
         invoice.invoice_to_name = _("John Doe")
         invoice.invoice_to_street = _("214th Example Street")
