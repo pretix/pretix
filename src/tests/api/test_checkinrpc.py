@@ -309,6 +309,25 @@ def test_by_medium_not_connected(token_client, organizer, clist, event, order):
 
 
 @pytest.mark.django_db
+def test_by_medium_wrong_event(token_client, organizer, clist, event, order2):
+    with scopes_disabled():
+        ReusableMedium.objects.create(
+            type="barcode",
+            identifier="abcdef",
+            organizer=organizer,
+            linked_orderposition=order2.positions.first(),
+        )
+    resp = _redeem(token_client, organizer, clist, "abcdef", {"source_type": "barcode"})
+    assert resp.status_code == 404
+    assert resp.data['status'] == 'error'
+    assert resp.data['reason'] == 'invalid'
+    with scopes_disabled():
+        ci = clist.checkins.get()
+    assert ci.raw_barcode == "abcdef"
+    assert ci.raw_source_type == "barcode"
+
+
+@pytest.mark.django_db
 def test_by_medium_wrong_type(token_client, organizer, clist, event, order):
     with scopes_disabled():
         ReusableMedium.objects.create(
