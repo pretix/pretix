@@ -62,7 +62,7 @@ def soft_equals(a, b):
 
 def hard_equals(a, b):
     """Implements the '===' operator."""
-    if type(a) != type(b):
+    if type(a) is not type(b):
         return False
     return a == b
 
