@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 14:51+0000\n"
-"PO-Revision-Date: 2023-11-02 13:01+0000\n"
+"PO-Revision-Date: 2024-02-16 13:44+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix/nb_NO/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.1.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -89,7 +89,7 @@ msgstr "Latvisk"
 
 #: pretix/_base_settings.py:95
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "Norsk Bokmål"
 
 #: pretix/_base_settings.py:96
 msgid "Polish"
@@ -303,10 +303,8 @@ msgid "This type of question cannot be asked during check-in."
 msgstr "Denne type spørsmål kan ikke bli spurt under innsjekk."
 
 #: pretix/api/serializers/item.py:493 pretix/control/forms/item.py:140
-#, fuzzy
-#| msgid "This type of question cannot be asked during check-in."
 msgid "This type of question cannot be shown during check-in."
-msgstr "Denne type spørsmål kan ikke bli spurt under innsjekk."
+msgstr "Denne type spørsmål kan ikke vises under innsjekk."
 
 #: pretix/api/serializers/media.py:108
 msgid ""
@@ -1661,10 +1659,8 @@ msgstr "Krever oppmerksomhet"
 #: pretix/base/exporters/items.py:91 pretix/base/exporters/orderlist.py:282
 #: pretix/base/models/items.py:589 pretix/base/models/items.py:1154
 #: pretix/base/models/orders.py:248
-#, fuzzy
-#| msgid "Check-in time"
 msgid "Check-in text"
-msgstr "Innsjekkingstid"
+msgstr "Innsjekkingstekst"
 
 #: pretix/base/exporters/items.py:92 pretix/base/models/items.py:594
 #: pretix/base/models/items.py:1079
@@ -2701,11 +2697,9 @@ msgid "Reusable media"
 msgstr "Gjenbrukbart medie"
 
 #: pretix/base/exporters/reusablemedia.py:35
-#, fuzzy
-#| msgid "Reusable media"
 msgctxt "export_category"
 msgid "Reusable media"
-msgstr "Gjenbrukbart medie"
+msgstr "Gjenbrukbart media"
 
 #: pretix/base/exporters/reusablemedia.py:36
 #, fuzzy
