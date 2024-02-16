@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 14:51+0000\n"
-"PO-Revision-Date: 2024-01-28 21:00+0000\n"
-"Last-Translator: BMaster <tom@anoebis.be>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2024-02-16 23:00+0000\n"
+"Last-Translator: Mark Leenen <leenenmark@gmail.com>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -2694,7 +2694,7 @@ msgstr "Laatste factuurdatum van bestelling"
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:9
 msgid "Reusable media"
-msgstr ""
+msgstr "Herbruikbare media"
 
 #: pretix/base/exporters/reusablemedia.py:35
 #, fuzzy
@@ -3288,7 +3288,7 @@ msgstr ""
 
 #: pretix/base/invoice.py:858
 msgid "Default invoice renderer (European-style letter)"
-msgstr ""
+msgstr "Standaard renderer facturen (brief Europese stijl)"
 
 #: pretix/base/invoice.py:947
 msgctxt "invoice"
@@ -3297,7 +3297,7 @@ msgstr "(Gelieve steeds te vermelden.)"
 
 #: pretix/base/invoice.py:994
 msgid "Simplified invoice renderer"
-msgstr ""
+msgstr "Versimpelde renderer facturen"
 
 #: pretix/base/invoice.py:1013
 #, fuzzy, python-brace-format
@@ -4237,7 +4237,7 @@ msgstr "Wachtend, product niet beschikbaar"
 #: pretix/base/models/items.py:381
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
 msgid "Show info text if unavailable"
-msgstr ""
+msgstr "Toon infotekst indien niet beschikbaar"
 
 #: pretix/base/models/items.py:388 pretix/base/models/items.py:702
 msgid "Don't use re-usable media, use regular one-off tickets"
@@ -5917,6 +5917,10 @@ msgid ""
 "of a specific product, you can also select a quota. In this case, all "
 "products assigned to this quota can be selected."
 msgstr ""
+"Dit product wordt toegevoegd aan de gebruiker's winkelwagen als de voucher "
+"wordt ingewisseld. In plaats van een specifiek product, kunt u ook een "
+"quotum selecteren. In dat geval kunnen alle aan dit quotum toegevoegde "
+"producten worden geselecteerd."
 
 #: pretix/base/models/vouchers.py:265
 msgid "This variation of the product select above is being used."
@@ -5987,6 +5991,9 @@ msgid ""
 "as part of a bundle, since vouchers cannot be applied to add-on products or "
 "bundled products."
 msgstr ""
+"U kunt niet een product selecteren dat alleen beschikbaar is als een add-on "
+"product of als onderdeel van een bundel, omdat vouchers niet toegepast "
+"kunnen worden op add-on producten of gebundelde producten."
 
 #: pretix/base/models/vouchers.py:348
 #, fuzzy
@@ -6594,13 +6601,15 @@ msgstr ""
 
 #: pretix/base/payment.py:452
 msgid "Do not send a payment reminder mail"
-msgstr ""
+msgstr "Stuur geen betalingsherinnering per mail"
 
 #: pretix/base/payment.py:453
 msgid ""
 "Users will not receive a reminder mail to pay for their order before it "
 "expires if they have chosen this payment method."
 msgstr ""
+"Gebruikers zullen geen herinneringsmail ontvangen om te betalen voor hun "
+"bestelling voordat deze verloopt als ze deze betalingsmethode selecteren."
 
 #: pretix/base/payment.py:500
 msgctxt "invoice"
