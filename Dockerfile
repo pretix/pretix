@@ -2,27 +2,27 @@ FROM python:3.11-bookworm
 
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
-            build-essential \
-            gettext \
-            git \
-            libffi-dev \
-            libjpeg-dev \
-            libmemcached-dev \
-            libpq-dev \
-            libssl-dev \
-            libxml2-dev \
-            libxslt1-dev \
-            locales \
-            nginx \
-            python3-virtualenv \
-            python3-dev \
-            sudo \
-            supervisor \
-            libmaxminddb0 \
-            libmaxminddb-dev \
-            zlib1g-dev \
-            nodejs  \
-            npm && \
+    build-essential \
+    gettext \
+    git \
+    libffi-dev \
+    libjpeg-dev \
+    libmemcached-dev \
+    libpq-dev \
+    libssl-dev \
+    libxml2-dev \
+    libxslt1-dev \
+    locales \
+    nginx \
+    python3-virtualenv \
+    python3-dev \
+    sudo \
+    supervisor \
+    libmaxminddb0 \
+    libmaxminddb-dev \
+    zlib1g-dev \
+    nodejs  \
+    npm && \
     apt-get clean && \
     rm -rf /var/lib/apt/lists/* && \
     dpkg-reconfigure locales &&  \
@@ -51,13 +51,13 @@ COPY _build /pretix/_build
 COPY src /pretix/src
 
 RUN pip3 install -U \
-        pip \
-        setuptools \
-        wheel && \
+    pip \
+    setuptools \
+    wheel && \
     cd /pretix && \
     PRETIX_DOCKER_BUILD=TRUE pip3 install \
-        -e ".[memcached]" \
-        gunicorn django-extensions ipython && \
+    -e ".[memcached]" \
+    gunicorn django-extensions ipython && \
     rm -rf ~/.cache/pip
 
 RUN chmod +x /usr/local/bin/pretix && \
@@ -67,6 +67,13 @@ RUN chmod +x /usr/local/bin/pretix && \
     mkdir -p data && \
     chown -R pretixuser:pretixuser /pretix /data data &&  \
     sudo -u pretixuser make production
+
+RUN git clone https://github.com/pretix-unofficial/pretix-cliques.git && \
+    cd pretix-cliques  && \
+    pwd && \
+    ls -rsa && \
+    pip install -e . && \
+    make
 
 USER pretixuser
 VOLUME ["/etc/pretix", "/data"]
