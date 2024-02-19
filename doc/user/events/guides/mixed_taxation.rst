@@ -19,4 +19,3 @@ Then, head to the **Bundled products** tab of the "conference ticket" and add th
 
 Once a customer tries to buy the € 450 conference ticket, a sub-product will be added and the price will automatically be split into the two components, leading to a correct computation of taxes.
 
-You can find more use cases in these specialized guides:
