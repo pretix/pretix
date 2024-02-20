@@ -219,8 +219,10 @@ class ExtValidationMixin:
 
     def clean(self, *args, **kwargs):
         data = super().clean(*args, **kwargs)
-        if isinstance(data, UploadedFile):
-            filename = data.name
+
+        from ...base.models import CachedFile
+        if isinstance(data, (UploadedFile, CachedFile)):
+            filename = data.name if isinstance(data, UploadedFile) else data.filename
             ext = os.path.splitext(filename)[1]
             ext = ext.lower()
             if ext not in self.ext_whitelist:
