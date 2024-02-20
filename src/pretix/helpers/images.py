@@ -44,11 +44,12 @@ def validate_uploaded_file_for_valid_image(f):
     # have to read the data into memory.
     if hasattr(f, 'temporary_file_path'):
         file = f.temporary_file_path()
+    elif hasattr(f, 'read'):
+        if hasattr(f, 'seek') and callable(f.seek):
+            f.seek(0)
+        file = BytesIO(f.read())
     else:
-        if hasattr(f, 'read'):
-            file = BytesIO(f.read())
-        else:
-            file = BytesIO(f['content'])
+        file = BytesIO(f['content'])
 
     try:
         try:
