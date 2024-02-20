@@ -270,6 +270,9 @@ class CachedFileField(ExtFileField):
             cf.save()
             data._uploaded_to = cf
             return cf
+        if isinstance(data, CachedFile):
+            return data
+
         return super().bound_data(data, initial)
 
     def clean(self, *args, **kwargs):
