@@ -229,7 +229,7 @@ class ExtValidationMixin:
                 raise forms.ValidationError(_("Filetype not allowed!"))
 
             if ext in IMAGE_EXTS:
-                validate_uploaded_file_for_valid_image(data)
+                validate_uploaded_file_for_valid_image(data if isinstance(data, UploadedFile) else data.file)
 
         return data
 
