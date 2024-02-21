@@ -758,7 +758,7 @@ class StripeMethod(BasePaymentProvider):
         )
         new = {k: v for k, v in d.items() if k in keys}
 
-        if d.get("latest_charge"):
+        if d.get("latest_charge") and not isinstance(d["latest_charge"], str):
             keys = (
                 'amount', 'amount_captured', 'amount_refunded', 'application', 'application_fee_amount',
                 'balance_transaction', 'captured', 'created', 'currency', 'description', 'destination',
