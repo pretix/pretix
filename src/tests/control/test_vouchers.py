@@ -254,7 +254,7 @@ class VoucherFormTest(SoupTestMixin, TransactionTestCase):
         self._create_voucher({
             'itemvar': '%d' % self.shirt.pk,
             'block_quota': 'on'
-        }, expected_failure=True)
+        })
 
     def test_create_blocking_item_voucher_quota_full_invalid(self):
         self.quota_shirts.size = 0
