@@ -62,6 +62,7 @@ from pretix.plugins.sendmail.tasks import (
 )
 
 from ...helpers.format import format_map
+from ...helpers.models import modelcopy
 from . import forms
 from .models import Rule, ScheduledMail
 
@@ -573,9 +574,23 @@ class CreateRule(EventPermissionRequiredMixin, CreateView):
 
     model = Rule
 
+    @cached_property
+    def copy_from(self):
+        if self.request.GET.get("copy_from") and not getattr(self, 'object', None):
+            try:
+                return Rule.objects.get(pk=self.request.GET.get("copy_from"), event=self.request.event)
+            except Rule.DoesNotExist:
+                pass
+
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
         kwargs['event'] = self.request.event
+
+        if self.copy_from:
+            i = modelcopy(self.copy_from)
+            i.pk = None
+            i.redeemed = 0
+            kwargs["instance"] = i
         return kwargs
 
     def form_invalid(self, form):

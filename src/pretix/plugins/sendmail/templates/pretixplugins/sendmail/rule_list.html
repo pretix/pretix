@@ -80,6 +80,7 @@
                         </td>
                         <td class="text-right flip">
                             <a class="btn btn-sm btn-default" href="{% url "plugins:sendmail:rule.schedule" organizer=request.organizer.slug event=request.event.slug rule=r.pk %}" data-toggle="tooltip" title="{% trans "Inspect scheduled times" %}"><i class="fa fa-list"></i></a>
+                            <a class="btn btn-sm btn-default" href="{% url "plugins:sendmail:rule.create" organizer=request.organizer.slug event=request.event.slug %}?copy_from={{ r.pk }}" title="{% trans "Use as a template for a new rule" %}" data-toggle="tooltip"><i class="fa fa-copy"></i></a>
                             <a class="btn btn-sm btn-default" href="{% url "plugins:sendmail:rule.update" organizer=request.organizer.slug event=request.event.slug rule=r.pk %}"><i class="fa fa-edit"></i></a>
                             <a class="btn btn-sm btn-danger" href="{% url "plugins:sendmail:rule.delete" organizer=request.organizer.slug event=request.event.slug rule=r.pk %}"><i class="fa fa-trash"></i></a>
                         </td>
