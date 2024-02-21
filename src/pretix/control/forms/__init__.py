@@ -259,6 +259,12 @@ class CachedFileField(ExtFileField):
         if isinstance(data, File):
             if hasattr(data, '_uploaded_to'):
                 return data._uploaded_to
+
+            try:
+                self.clean(data)
+            except ValidationError:
+                return None
+
             cf = CachedFile.objects.create(
                 expires=now() + datetime.timedelta(days=1),
                 date=now(),
