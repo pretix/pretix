@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 14:51+0000\n"
-"PO-Revision-Date: 2024-02-22 08:32+0000\n"
+"PO-Revision-Date: 2024-02-22 08:44+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -4226,15 +4226,13 @@ msgstr "Dynamischer Zeitraum"
 
 #: pretix/base/models/items.py:380 pretix/control/forms/item.py:601
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:3
-#, fuzzy
-#| msgid "Waiting, product unavailable"
 msgid "Hide product if unavailable"
-msgstr "Wartet, Produkt nicht verfügbar"
+msgstr "Verstecke das Produkt, wenn es nicht verfügbar ist"
 
 #: pretix/base/models/items.py:381
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
 msgid "Show info text if unavailable"
-msgstr ""
+msgstr "Zeige einen Info-Text außerhalb der Verfügbarkeit"
 
 #: pretix/base/models/items.py:388 pretix/base/models/items.py:702
 msgid "Don't use re-usable media, use regular one-off tickets"
@@ -5907,6 +5905,10 @@ msgid ""
 "of a specific product, you can also select a quota. In this case, all "
 "products assigned to this quota can be selected."
 msgstr ""
+"Dieses Produkt wird zum Warenkorb des Benutzers hinzugefügt, wenn der "
+"Gutschein eingelöst wird. Statt eines spezifischen Produktes, kann auch ein "
+"Kontingent gewählt werden. In diesem Fall können alle Produkte, die diesem "
+"Kontingent zugewiesen sind, ausgewählt werden."
 
 #: pretix/base/models/vouchers.py:265
 msgid "This variation of the product select above is being used."
@@ -7290,29 +7292,25 @@ msgstr ""
 "gewünschten Anzahl verfügbar, bitte überprüfe deinen Warenkorb."
 
 #: pretix/base/services/cart.py:117
-#, fuzzy, python-format
-#| msgid ""
-#| "Some of the products you selected are no longer available in the quantity "
-#| "you selected. Please see below for details."
+#, python-format
 msgid ""
 "Some of the products you selected are no longer available. The following "
 "products are affected and have not been added to your cart: %s"
 msgstr ""
-"Einige der ausgewählten Produkte sind zwischenzeitlich nicht mehr in der "
-"gewünschten Anzahl verfügbar, bitte überprüfe deinen Warenkorb."
+"Einige der ausgewählten Produkte sind zwischenzeitlich nicht mehr verfügbar. "
+"Die folgenden Produkte sind betroffen und wurden nicht zum Warenkorb "
+"hinzugefügt: %s"
 
 #: pretix/base/services/cart.py:121
-#, fuzzy, python-format
-#| msgid ""
-#| "Some of the products you selected are no longer available in the quantity "
-#| "you selected. Please see below for details."
+#, python-format
 msgid ""
 "Some of the products you selected are no longer available in the quantity "
 "you selected. The following products are affected and have not been added to "
 "your cart: %s"
 msgstr ""
 "Einige der ausgewählten Produkte sind zwischenzeitlich nicht mehr in der "
-"gewünschten Anzahl verfügbar, bitte überprüfe deinen Warenkorb."
+"gewünschten Anzahl verfügbar. Die folgenden Produkte sind betroffen und "
+"wurden nicht zum Warenkorb hinzugefügt: %s"
 
 #: pretix/base/services/cart.py:126
 #, python-format
@@ -13746,10 +13744,8 @@ msgid "Dependencies between questions are not supported during check-in."
 msgstr "Abhängigkeiten zwischen Fragen sind beim Check-In nicht möglich."
 
 #: pretix/control/forms/item.py:248
-#, fuzzy
-#| msgid "All products"
 msgid "No products"
-msgstr "Alle Produkte"
+msgstr "Keine Produkte"
 
 #: pretix/control/forms/item.py:314
 msgid "The product should exist in multiple variations"
@@ -13839,10 +13835,8 @@ msgstr ""
 "der Veranstaltung außer des VIP-Bereiches."
 
 #: pretix/control/forms/item.py:602
-#, fuzzy
-#| msgid "The ordered product \"{item}\" is no longer available."
 msgid "Show product with info on why it’s unavailable"
-msgstr "Das Produkt \"{item}\" ist nicht mehr verfügbar."
+msgstr "Zeige das Produkt mit einer Information, warum es nicht verfügbar ist."
 
 #: pretix/control/forms/item.py:615
 msgid ""
@@ -23864,17 +23858,13 @@ msgstr "Termin-Verlauf"
 
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:3
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
-#, fuzzy
-#| msgid "You can cancel this order using the following button."
 msgid "You can change this option in the variation settings."
-msgstr "Du kannst diese Bestellung mit dem folgenden Knopf stornieren."
+msgstr "Du kannst diese Option in den Einstellungen der Variante verändern."
 
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:3
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
-#, fuzzy
-#| msgid "Can change product settings"
 msgid "You can change this option in the product settings."
-msgstr "Kann Produkte ändern"
+msgstr "Du kannst diese Option in den Einstellungen des Produkts verändern."
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:11
 msgid "You haven't created any dates for this event series yet."
