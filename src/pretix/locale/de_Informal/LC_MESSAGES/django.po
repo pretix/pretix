@@ -28752,12 +28752,9 @@ msgid "Filter check-in status"
 msgstr "Nach Check-in-Status filtern"
 
 #: pretix/plugins/sendmail/forms.py:168
-#, fuzzy
-#| msgctxt "sendmail_form"
-#| msgid "Restrict to recipients with check-in on list"
 msgctxt "sendmail_form"
 msgid "Restrict to recipients without check-in on any list"
-msgstr "Auf Empfänger mit Check-in auf dieser Liste einschränken"
+msgstr "Auf Empfänger ohne Check-in auf irgendeiner Liste einschränken"
 
 #: pretix/plugins/sendmail/forms.py:187
 msgctxt "sendmail_form"
@@ -29439,10 +29436,8 @@ msgid "Publishable key"
 msgstr "Veröffentlichbarer Schlüssel"
 
 #: pretix/plugins/stripe/payment.py:278
-#, fuzzy
-#| msgid "Generate tickets"
 msgid "Generate API keys"
-msgstr "Tickets generieren"
+msgstr "API-Schlüssel generieren"
 
 #: pretix/plugins/stripe/payment.py:280
 msgid ""
@@ -29450,6 +29445,9 @@ msgid ""
 "generate you API keys with the recommended permission level for optimal "
 "usage with pretix."
 msgstr ""
+"Der Button oben wird unsere Stripe-App in Ihrem Stripe-Konto installieren "
+"und API-Schlüssel mit dem empfohlenen Berechtigungslevel für die Verwendung "
+"mit pretix generieren."
 
 #: pretix/plugins/stripe/payment.py:289
 msgid "Secret key"
@@ -31284,22 +31282,16 @@ msgid "There are no add-ons available for this product."
 msgstr "Es sind keine Zusatzprodukte für dieses Produkt verfügbar."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:6
-#, fuzzy
-#| msgid "Enter a voucher code below to buy this ticket."
 msgid "Enter a voucher code below to buy this product."
 msgstr "Gib unten einen Gutscheincode ein, um dieses Produkt zu bestellen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:10
-#, fuzzy
-#| msgid "Not available"
 msgid "Not available yet."
-msgstr "Nicht verfügbar"
+msgstr "Noch nicht verfügbar."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:14
-#, fuzzy
-#| msgid "Not available"
 msgid "Not available any more."
-msgstr "Nicht verfügbar"
+msgstr "Nicht mehr verfügbar."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:19
 #: pretix/presale/templates/pretixpresale/event/fragment_product_list.html:71
