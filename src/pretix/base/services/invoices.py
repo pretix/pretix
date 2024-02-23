@@ -488,7 +488,7 @@ def build_preview_invoice_pdf(event):
                     InvoiceLine.objects.create(
                         invoice=invoice, description=_("Sample product {}").format(i + 1),
                         gross_value=tax.gross, tax_value=tax.tax,
-                        tax_rate=tax.rate
+                        tax_rate=tax.rate, tax_name=tax.name
                     )
         else:
             for i in range(5):
