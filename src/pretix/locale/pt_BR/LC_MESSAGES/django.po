@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-09 14:51+0000\n"
-"PO-Revision-Date: 2024-01-17 05:00+0000\n"
-"Last-Translator: Pedro Portela <pportela@disroot.org>\n"
+"PO-Revision-Date: 2024-02-27 02:00+0000\n"
+"Last-Translator: Adriano Lima <adrianocardoso1991@gmail.com>\n"
 "Language-Team: Portuguese (Brazil) <https://translate.pretix.eu/projects/"
 "pretix/pretix/pt_BR/>\n"
 "Language: pt_BR\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -460,7 +460,7 @@ msgstr "Reembolso externo do pagamento"
 
 #: pretix/api/webhooks.py:273
 msgid "Refund of payment requested by customer"
-msgstr ""
+msgstr "Reembolso de pagamento solicitado pelo cliente"
 
 #: pretix/api/webhooks.py:277
 #, fuzzy
@@ -534,6 +534,8 @@ msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
 msgstr ""
+"Produto alterado (incluindo produto adicionado ou excluído e incluindo "
+"alterações em objetos aninhados como variaçoes ou pacotes)"
 
 #: pretix/api/webhooks.py:338
 #, fuzzy
@@ -610,15 +612,15 @@ msgstr "Seu carrinho foi atualizado."
 #: pretix/plugins/banktransfer/payment.py:672
 #: pretix/presale/forms/customer.py:139
 msgid "This field is required."
-msgstr ""
+msgstr "Este campo é obrigatório."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr ""
+msgstr "Insira um código postal no formato XXX."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
-msgstr ""
+msgstr "Insira um código postal no formato XXXX."
 
 #: pretix/base/auth.py:143
 #, python-brace-format
@@ -670,20 +672,22 @@ msgstr "código fonte"
 #: pretix/base/customersso/oidc.py:59
 #, python-brace-format
 msgid "Configuration option \"{name}\" is missing."
-msgstr ""
+msgstr "A opção de configuração \"{name}\" está ausente."
 
 #: pretix/base/customersso/oidc.py:67 pretix/base/customersso/oidc.py:72
 #, python-brace-format
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
 msgstr ""
+"Não foi possível recuperar a configuração de \"{url} \". Mensagem de erro: \""
+"{error} \"."
 
 #: pretix/base/customersso/oidc.py:78 pretix/base/customersso/oidc.py:83
 #: pretix/base/customersso/oidc.py:88 pretix/base/customersso/oidc.py:93
 #: pretix/base/customersso/oidc.py:98 pretix/base/customersso/oidc.py:103
 #, python-brace-format
 msgid "Incompatible SSO provider: \"{error}\"."
-msgstr ""
+msgstr "Provedor de SSO incompatível: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:109
 #, fuzzy, python-brace-format
@@ -697,6 +701,8 @@ msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
 msgstr ""
+"Você está solicitando o escopo \"{scope}\" mas o provedor oferece suporte "
+"apenas a estes: \"{scopes}\"."
 
 #: pretix/base/customersso/oidc.py:125
 #, python-brace-format
@@ -704,6 +710,8 @@ msgid ""
 "You are requesting field \"{field}\" but provider only supports these: "
 "{fields}."
 msgstr ""
+"Você está solicitando o campo \"{field}\" mas o provedor oferece suporte "
+"apenas a estes: \"{fields}\"."
 
 #: pretix/base/customersso/oidc.py:171 pretix/base/customersso/oidc.py:178
 #: pretix/base/customersso/oidc.py:197 pretix/base/customersso/oidc.py:214
@@ -712,7 +720,7 @@ msgstr ""
 #: pretix/presale/views/customer.py:811
 #, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr ""
+msgstr "O login não foi bem sucedido. Mensagem de erro: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:204
 msgid ""
