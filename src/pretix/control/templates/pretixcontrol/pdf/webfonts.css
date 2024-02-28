@@ -15,7 +15,7 @@
 
 {% for family, styles in fonts.items %}
 {% for style, formats in styles.items %}
-{% if "sample" not in style %}
+{% if "sample" not in style and "pdf_only" not in style %}
 @font-face {
     font-family: '{{ family }}';
     {% if style == "italic" or style == "bolditalic" %}
