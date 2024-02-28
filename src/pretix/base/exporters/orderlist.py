@@ -257,8 +257,8 @@ class OrderListExporter(MultiSheetListExporter):
         tax_rates = self._get_all_tax_rates(qs)
 
         headers = [
-            _('Event slug'), _('Order code'), _('Order total'), _('Status'), _('Email'), _('Phone number'),
-            _('Order date'), _('Order time'), _('Company'), _('Name'),
+            _('Event slug'), _('Event name'), _('Order code'), _('Order total'), _('Status'), _('Email'),
+            _('Phone number'), _('Order date'), _('Order time'), _('Company'), _('Name'),
         ]
         name_scheme = PERSON_NAME_SCHEMES[self.event.settings.name_scheme] if not self.is_multievent else None
         if name_scheme and len(name_scheme['fields']) > 1:
@@ -335,6 +335,7 @@ class OrderListExporter(MultiSheetListExporter):
 
             row = [
                 self.event_object_cache[order.event_id].slug,
+                str(self.event_object_cache[order.event_id].name),
                 order.code,
                 order.total,
                 order.get_extended_status_display(),
@@ -436,6 +437,7 @@ class OrderListExporter(MultiSheetListExporter):
 
         headers = [
             _('Event slug'),
+            _('Event name'),
             _('Order code'),
             _('Status'),
             _('Email'),
@@ -472,6 +474,7 @@ class OrderListExporter(MultiSheetListExporter):
             tz = ZoneInfo(order.event.settings.timezone)
             row = [
                 self.event_object_cache[order.event_id].slug,
+                str(self.event_object_cache[order.event_id].name),
                 order.code,
                 _("canceled") if op.canceled else order.get_extended_status_display(),
                 order.email,
@@ -550,6 +553,7 @@ class OrderListExporter(MultiSheetListExporter):
 
         headers = [
             _('Event slug'),
+            _('Event name'),
             _('Order code'),
             _('Position ID'),
             _('Status'),
@@ -651,6 +655,7 @@ class OrderListExporter(MultiSheetListExporter):
                 tz = ZoneInfo(self.event_object_cache[order.event_id].settings.timezone)
                 row = [
                     self.event_object_cache[order.event_id].slug,
+                    str(self.event_object_cache[order.event_id].name),
                     order.code,
                     op.positionid,
                     _("canceled") if op.canceled else order.get_extended_status_display(),
