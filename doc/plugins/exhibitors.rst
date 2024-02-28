@@ -34,6 +34,7 @@ internal_id                           string                     Can be used for
 contact_name                          string                     Contact person (or ``null``)
 contact_name_parts                    object of strings          Decomposition of contact name (i.e. given name, family name)
 contact_email                         string                     Contact person email address (or ``null``)
+contact_cc_email                      string                     Copy email addresses, can be multiple separated by comma (or ``null``)
 booth                                 string                     Booth number (or ``null``). Maximum 100 characters.
 locale                                string                     Locale for communication with the exhibitor.
 access_code                           string                     Access code for the exhibitor to access their data or use the lead scanning app (read-only).
@@ -109,6 +110,7 @@ Endpoints
                 "title": "Dr"
             },
             "contact_email": "johnson@as.example.org",
+            "contact_cc_email": "miller@as.example.org,smith@as.example.org",
             "booth": "A2",
             "locale": "de",
             "access_code": "VKHZ2FU84",
@@ -162,6 +164,7 @@ Endpoints
             "title": "Dr"
         },
         "contact_email": "johnson@as.example.org",
+        "contact_cc_email": "miller@as.example.org,smith@as.example.org",
         "booth": "A2",
         "locale": "de",
         "access_code": "VKHZ2FU84",
@@ -365,6 +368,7 @@ Endpoints
             "title": "Dr"
         },
         "contact_email": "johnson@as.example.org",
+        "contact_cc_email": "miller@as.example.org,smith@as.example.org",
         "booth": "A2",
         "locale": "de",
         "allow_lead_scanning": true,
@@ -394,6 +398,7 @@ Endpoints
             "title": "Dr"
         },
         "contact_email": "johnson@as.example.org",
+        "contact_cc_email": "miller@as.example.org,smith@as.example.org",
         "booth": "A2",
         "locale": "de",
         "access_code": "VKHZ2FU84",
@@ -454,6 +459,7 @@ Endpoints
             "title": "Dr"
         },
         "contact_email": "johnson@as.example.org",
+        "contact_cc_email": "miller@as.example.org,smith@as.example.org",
         "booth": "A2",
         "locale": "de",
         "access_code": "VKHZ2FU84",
