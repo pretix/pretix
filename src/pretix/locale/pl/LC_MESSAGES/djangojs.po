@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 14:51+0000\n"
+"POT-Creation-Date: 2024-02-28 13:11+0000\n"
 "PO-Revision-Date: 2023-11-25 22:12+0000\n"
 "Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -632,23 +632,23 @@ msgstr "Odznacz wszystko"
 msgid "Selected only"
 msgstr "Tylko wybrane"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:784
+#: pretix/static/pretixcontrol/js/ui/main.js:791
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Wprowadź numer strony między 1 a %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:787
+#: pretix/static/pretixcontrol/js/ui/main.js:794
 msgid "Invalid page number."
 msgstr "Niepoprawny numer strony."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:945
+#: pretix/static/pretixcontrol/js/ui/main.js:952
 msgid "Use a different name internally"
 msgstr "Użyj innej nazwy wewnętrznie"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:985
+#: pretix/static/pretixcontrol/js/ui/main.js:992
 msgid "Click to close"
 msgstr "Zamknij"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1060
+#: pretix/static/pretixcontrol/js/ui/main.js:1067
 msgid "You have unsaved changes!"
 msgstr "Masz niezapisane zmiany!"
 

@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-09 14:51+0000\n"
+"POT-Creation-Date: 2024-02-28 13:11+0000\n"
 "PO-Revision-Date: 2023-11-14 23:00+0000\n"
 "Last-Translator: Thomas Vranken <thvranken@gmail.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix-js/"
@@ -637,23 +637,23 @@ msgstr "Geen"
 msgid "Selected only"
 msgstr "Alleen geselecteerde"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:784
+#: pretix/static/pretixcontrol/js/ui/main.js:791
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:787
+#: pretix/static/pretixcontrol/js/ui/main.js:794
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:945
+#: pretix/static/pretixcontrol/js/ui/main.js:952
 msgid "Use a different name internally"
 msgstr "Gebruik intern een andere naam"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:985
+#: pretix/static/pretixcontrol/js/ui/main.js:992
 msgid "Click to close"
 msgstr "Klik om te sluiten"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1060
+#: pretix/static/pretixcontrol/js/ui/main.js:1067
 msgid "You have unsaved changes!"
 msgstr "U heeft nog niet opgeslagen wijzigingen!"
 
