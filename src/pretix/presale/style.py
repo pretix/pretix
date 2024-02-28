@@ -203,7 +203,8 @@ def regenerate_organizer_css(organizer_id: int, regenerate_events=True):
 
 register_fonts = Signal()
 """
-Return a dictionaries of the following structure. Paths should be relative to static root.
+Return a dictionaries of the following structure. Paths should be relative to static root or an absolute URL. In the
+latter case, the fonts won't be available for PDF-rendering.
 
 {
     "font name": {
@@ -228,8 +229,10 @@ Return a dictionaries of the following structure. Paths should be relative to st
 
 register_event_fonts = EventPluginSignal()
 """
-Return a dictionaries of the following structure. Paths should be relative to static root.
+Return a dictionaries of the following structure. Paths should be relative to static root or an absolute URL. In the
+latter case, the fonts won't be available for PDF-rendering.
 As with all plugin signals, the ``sender`` keyword argument will contain the event.
+
 {
     "font name": {
         "regular": {

@@ -935,6 +935,9 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
             )
         )
         self.fields['invoice_generate'].choices = generate_choices
+        self.fields['invoice_renderer_font'].choices += [
+            (a, a) for a in get_fonts(event, pdf_support_required=True).keys()
+        ]
 
 
 def contains_web_channel_validate(val):
