@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 13:11+0000\n"
-"PO-Revision-Date: 2024-02-28 13:24+0000\n"
+"PO-Revision-Date: 2024-02-28 13:29+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -162,7 +162,7 @@ msgstr "Liste erlaubter URIs, mit Leerzeichen getrennt"
 
 #: pretix/api/models.py:47
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "Liste erlaubter URIs nach Logout, mit Leerzeichen getrennt"
+msgstr "Liste erlaubter URIs nach Abmeldung, mit Leerzeichen getrennt"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:395
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:109
