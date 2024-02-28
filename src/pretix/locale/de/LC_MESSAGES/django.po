@@ -5,7 +5,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 13:11+0000\n"
-"PO-Revision-Date: 2024-02-22 08:44+0000\n"
+"PO-Revision-Date: 2024-02-28 13:24+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
@@ -159,10 +159,8 @@ msgid "Allowed URIs list, space separated"
 msgstr "Liste erlaubter URIs, mit Leerzeichen getrennt"
 
 #: pretix/api/models.py:47
-#, fuzzy
-#| msgid "Allowed URIs list, space separated"
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "Liste erlaubter URIs, mit Leerzeichen getrennt"
+msgstr "Liste erlaubter URIs nach Logout, mit Leerzeichen getrennt"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:395
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:109
@@ -379,7 +377,7 @@ msgstr ""
 
 #: pretix/api/views/checkin.py:604 pretix/api/views/checkin.py:611
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "Medium ist mit anderer Veranstaltung verbunden"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:469
 #, python-brace-format
@@ -29178,11 +29176,8 @@ msgid "Inspect scheduled times"
 msgstr "Versandzeiten anzeigen"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:83
-#, fuzzy
-#| msgctxt "subevent"
-#| msgid "Use as a template for a new date"
 msgid "Use as a template for a new rule"
-msgstr "Als Vorlage für neuen Termin verwenden"
+msgstr "Als Vorlage für neue Regel verwenden"
 
 #: pretix/plugins/sendmail/templates/pretixplugins/sendmail/rule_list.html:96
 msgid "You haven't created any rules yet."
