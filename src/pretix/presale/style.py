@@ -252,7 +252,7 @@ As with all plugin signals, the ``sender`` keyword argument will contain the eve
 """
 
 
-def get_fonts(event: Event = None, pdf_only=False):
+def get_fonts(event: Event = None, pdf_support_required=False):
     def nested_dict_values(d):
         for v in d.values():
             if isinstance(v, dict):
@@ -272,8 +272,8 @@ def get_fonts(event: Event = None, pdf_only=False):
             received_fonts.update(value)
 
     for font, payload in received_fonts.items():
-        if pdf_only:
-            if any(v.startswith('https') for v in list(nested_dict_values(payload))):
+        if pdf_support_required:
+            if any('//' in v for v in list(nested_dict_values(payload))):
                 continue
             f.update({font: payload})
         else:

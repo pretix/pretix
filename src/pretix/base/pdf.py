@@ -748,7 +748,7 @@ class Renderer:
         pdfmetrics.registerFont(TTFont('Open Sans B', finders.find('fonts/OpenSans-Bold.ttf')))
         pdfmetrics.registerFont(TTFont('Open Sans B I', finders.find('fonts/OpenSans-BoldItalic.ttf')))
 
-        for family, styles in get_fonts(event, pdf_only=True).items():
+        for family, styles in get_fonts(event, pdf_support_required=True).items():
             pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
             if 'italic' in styles:
                 pdfmetrics.registerFont(TTFont(family + ' I', finders.find(styles['italic']['truetype'])))
@@ -941,7 +941,7 @@ class Renderer:
 
         # Since pdfmetrics.registerFont is global, we want to make sure that no one tries to sneak in a font, they
         # should not have access to.
-        if font not in list(get_fonts(order.event, pdf_only=True).keys()) + ['Open Sans']:
+        if font not in list(get_fonts(order.event, pdf_support_required=True).keys()) + ['Open Sans']:
             logger.warning(f'Unauthorized use of font "{font}"')
             font = 'Open Sans'
 

@@ -270,7 +270,7 @@ class SecurityMiddleware(MiddlewareMixin):
 
         font_src = set()
         if hasattr(request, 'event'):
-            for font in get_fonts(request.event, pdf_only=False).values():
+            for font in get_fonts(request.event, pdf_support_required=False).values():
                 for path in list(nested_dict_values(font)):
                     font_location = urlparse(path)
                     if font_location.scheme and font_location.netloc:

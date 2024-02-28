@@ -653,7 +653,7 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
             del self.fields['event_list_filters']
             del self.fields['event_calendar_future_only']
         self.fields['primary_font'].choices += [
-            (a, {"title": a, "data": v}) for a, v in get_fonts(self.event, pdf_only=False).items()
+            (a, {"title": a, "data": v}) for a, v in get_fonts(self.event, pdf_support_required=False).items()
         ]
 
         # create "virtual" fields for better UX when editing <name>_asked and <name>_required fields

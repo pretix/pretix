@@ -262,7 +262,7 @@ class BaseEditorView(EventPermissionRequiredMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['fonts'] = get_fonts(self.request.event, pdf_only=True)
+        ctx['fonts'] = get_fonts(self.request.event, pdf_support_required=True)
         ctx['pdf'] = self.get_current_background()
         ctx['variables'] = self.get_variables()
         ctx['images'] = self.get_images()
@@ -278,7 +278,7 @@ class FontsCSSView(TemplateView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['fonts'] = get_fonts(self.request.event if hasattr(self.request, 'event') else None)
+        ctx['fonts'] = get_fonts(self.request.event if hasattr(self.request, 'event') else None, pdf_support_required=True)
         return ctx
 
 
