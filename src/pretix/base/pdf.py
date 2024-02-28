@@ -52,6 +52,7 @@ import reportlab.rl_config
 from bidi.algorithm import get_display
 from django.conf import settings
 from django.contrib.staticfiles import finders
+from django.core.cache import cache
 from django.core.exceptions import ValidationError
 from django.db.models import Max, Min
 from django.db.models.fields.files import FieldFile
@@ -941,7 +942,11 @@ class Renderer:
 
         # Since pdfmetrics.registerFont is global, we want to make sure that no one tries to sneak in a font, they
         # should not have access to.
-        if font not in list(get_fonts(order.event, pdf_support_required=True).keys()) + ['Open Sans']:
+        event_fonts = cache.get(f'event_fonts_pdf_support_required_{order.event.pk}')
+        if not event_fonts:
+            event_fonts = list(get_fonts(order.event, pdf_support_required=True).keys()) + ['Open Sans']
+            cache.set(f'event_fonts_pdf_support_required_{order.event.pk}', event_fonts, 30)
+        if font not in event_fonts:
             logger.warning(f'Unauthorized use of font "{font}"')
             font = 'Open Sans'
 
