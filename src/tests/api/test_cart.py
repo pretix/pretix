@@ -934,7 +934,7 @@ def test_cartpos_create_with_voucher_unknown(token_client, organizer, event, ite
 @pytest.mark.django_db
 def test_cartpos_create_with_voucher_invalid_item(token_client, organizer, event, item, quota):
     with scopes_disabled():
-        item2 = event.items.create(name="item2")
+        item2 = event.items.create(name="item2", default_price=0)
         voucher = event.vouchers.create(code="FOOBAR", item=item2)
     res = copy.deepcopy(CARTPOS_CREATE_PAYLOAD)
     res['item'] = item.pk

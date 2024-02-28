@@ -430,7 +430,7 @@ class Item(LoggedModel):
         help_text=_("If this product has multiple variations, you can set different prices for each of the "
                     "variations. If a variation does not have a special price or if you do not have variations, "
                     "this price will be used."),
-        max_digits=13, decimal_places=2, null=True
+        max_digits=13, decimal_places=2,
     )
     free_price = models.BooleanField(
         default=False,
