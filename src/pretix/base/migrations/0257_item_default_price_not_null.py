@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0254_alter_logentry_organizer_link_and_more"),
+        ("pretixbase", "0256_itemvariation_unavail_modes"),
     ]
 
     operations = [
