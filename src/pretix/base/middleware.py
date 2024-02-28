@@ -20,7 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 from collections import OrderedDict
-from urllib.parse import urlsplit, urlparse
+from urllib.parse import urlparse, urlsplit
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from django.conf import settings

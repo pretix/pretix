@@ -79,7 +79,7 @@ from reportlab.pdfgen.canvas import Canvas
 from reportlab.platypus import Paragraph
 
 from pretix.base.i18n import language
-from pretix.base.models import Order, OrderPosition, Question, Event
+from pretix.base.models import Event, Order, OrderPosition, Question
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import layout_image_variables, layout_text_variables
 from pretix.base.templatetags.money import money_filter
