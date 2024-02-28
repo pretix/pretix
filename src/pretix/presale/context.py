@@ -94,19 +94,20 @@ def _default_context(request):
         else:
             ctx['footer_text'] = str(text)
 
-    for receiver, response in global_html_page_header.send(None, request=request):
-        _html_page_header.append(response)
-    for receiver, response in global_html_head.send(None, request=request):
-        _html_head.append(response)
-    for receiver, response in global_html_footer.send(None, request=request):
-        _html_foot.append(response)
-    for receiver, response in global_footer_link.send(None, request=request):
-        if isinstance(response, list):
-            _footer += response
-        else:
-            _footer.append(response)
+    if request.resolver_match:  # do not run on 404 pages
+        for receiver, response in global_html_page_header.send(None, request=request):
+            _html_page_header.append(response)
+        for receiver, response in global_html_head.send(None, request=request):
+            _html_head.append(response)
+        for receiver, response in global_html_footer.send(None, request=request):
+            _html_foot.append(response)
+        for receiver, response in global_footer_link.send(None, request=request):
+            if isinstance(response, list):
+                _footer += response
+            else:
+                _footer.append(response)
 
-    if hasattr(request, 'event') and get_scope():
+    if request.resolver_match and hasattr(request, 'event') and get_scope():
         for receiver, response in html_head.send(request.event, request=request):
             _html_head.append(response)
         for receiver, response in html_page_header.send(request.event, request=request):
@@ -153,10 +154,10 @@ def _default_context(request):
 
         if request.resolver_match:
             ctx['cart_namespace'] = request.resolver_match.kwargs.get('cart_namespace', '')
-    elif hasattr(request, 'organizer'):
+    elif request.resolver_match and hasattr(request, 'organizer'):
         ctx['languages'] = [get_language_info(code) for code in request.organizer.settings.locales]
 
-    if hasattr(request, 'organizer'):
+    if request.resolver_match and hasattr(request, 'organizer'):
         if request.organizer.settings.presale_css_file and not hasattr(request, 'event'):
             ctx['css_file'] = default_storage.url(request.organizer.settings.presale_css_file)
         ctx['organizer_logo'] = request.organizer.settings.get('organizer_logo_image', as_type=str, default='')[7:]
