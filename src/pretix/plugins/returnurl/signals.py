@@ -77,7 +77,7 @@ def returnurl_process_request(sender, request, **kwargs):
 
 
 def check_against_prefix_list(u, allowlist):
-    return any(u.startswith(allow.strip() for allow in allowlist.split("\n") if allow.strip() != ""))
+    return any(u.startswith(allow.strip()) for allow in allowlist.split("\n") if allow.strip() != "")
 
 
 @receiver(nav_event_settings, dispatch_uid='returnurl_nav')
