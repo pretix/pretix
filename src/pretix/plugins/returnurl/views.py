@@ -19,6 +19,8 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import re
+
 from django import forms
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _
@@ -31,10 +33,12 @@ from pretix.control.views.event import (
 
 
 class ReturnSettingsForm(SettingsForm):
-    returnurl_prefix = forms.URLField(
-        label=_("Base redirection URL"),
-        help_text=_("Redirection will only be allowed to URLs that start with this prefix."),
+    returnurl_prefix = forms.RegexField(
+        label=_("Base redirection URLs"),
+        help_text=_("Redirection will only be allowed to URLs that start with one of these prefixes. Enter one or more allowed URL prefix per line. "),
         required=False,
+        widget=forms.Textarea,
+        regex=re.compile(r'^(https://.*/.*\n*)*$')
     )
 
 

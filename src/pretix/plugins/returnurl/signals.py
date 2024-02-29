@@ -71,9 +71,13 @@ def returnurl_process_request(sender, request, **kwargs):
             u = request.GET.get('return_url')
             if not sender.settings.returnurl_prefix:
                 raise PermissionDenied('No return URL prefix set.')
-            elif not u.startswith(sender.settings.returnurl_prefix):
+            elif not check_against_prefix_list(u, sender.settings.returnurl_prefix):
                 raise PermissionDenied('Invalid return URL.')
             request.session[key] = u
+
+
+def check_against_prefix_list(u, allowlist):
+    return any(u.startswith(allow.strip() for allow in allowlist.split("\n") if allow.strip() != ""))
 
 
 @receiver(nav_event_settings, dispatch_uid='returnurl_nav')
