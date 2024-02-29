@@ -383,6 +383,7 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
     if event:
         with scopes_disabled():
             event = Event.objects.get(id=event)
+            organizer = event.organizer
         backend = event.get_mail_backend()
         cm = lambda: scope(organizer=event.organizer)  # noqa
     elif organizer:
