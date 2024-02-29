@@ -38,7 +38,7 @@ class ReturnSettingsForm(SettingsForm):
         help_text=_("Redirection will only be allowed to URLs that start with one of these prefixes. Enter one or more allowed URL prefix per line. "),
         required=False,
         widget=forms.Textarea,
-        regex=re.compile(r'^(https://.*/.*\n*)*$')
+        regex=re.compile(r'^((https://.*/.*|http://localhost[:/].*)\n*)*$')
     )
 
 
