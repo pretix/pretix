@@ -123,8 +123,6 @@ class ClearableBasenameFileInput(forms.ClearableFileInput):
 
         @property
         def name(self):
-            if hasattr(self.file, 'display_name'):
-                return self.file.display_name
             return self.file.name
 
         @property
