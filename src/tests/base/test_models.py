@@ -284,6 +284,29 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
 
     @classscope(attr='o')
+    def test_voucher_all_variations(self):
+        self.quota.variations.add(self.var1)
+        self.quota.size = 1
+        self.quota.save()
+
+        self.quota2 = Quota.objects.create(name="Test", size=2, event=self.event)
+        self.quota2.variations.add(self.var2)
+
+        self.quota3 = Quota.objects.create(name="Test", size=2, event=self.event)
+        self.quota3.variations.add(self.var3)
+
+        v = Voucher.objects.create(item=self.item2, event=self.event)
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+        self.assertEqual(self.var2.check_quotas(), (Quota.AVAILABILITY_OK, 2))
+        self.assertEqual(self.var3.check_quotas(), (Quota.AVAILABILITY_OK, 2))
+
+        v.block_quota = True
+        v.save()
+        self.assertEqual(self.var1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
+        self.assertEqual(self.var2.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+        self.assertEqual(self.var3.check_quotas(), (Quota.AVAILABILITY_OK, 2))
+
+    @classscope(attr='o')
     def test_voucher_quota(self):
         self.quota.variations.add(self.var1)
         self.quota.size = 1
@@ -979,9 +1002,8 @@ class VoucherTestCase(BaseQuotaTestCase):
 
     @classscope(attr='o')
     def test_voucher_specify_variation_for_block_quota(self):
-        with self.assertRaises(ValidationError):
-            v = Voucher(item=self.item2, block_quota=True, event=self.event)
-            v.clean()
+        v = Voucher(item=self.item2, block_quota=True, event=self.event)
+        v.clean()
 
     @classscope(attr='o')
     def test_voucher_no_item_but_variation(self):

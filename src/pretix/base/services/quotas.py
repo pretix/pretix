@@ -90,8 +90,8 @@ class QuotaAvailability:
         self._count_waitinglist = count_waitinglist
         self._ignore_closed = ignore_closed
         self._full_results = full_results
-        self._item_to_quotas = defaultdict(list)
-        self._var_to_quotas = defaultdict(list)
+        self._item_to_quotas = defaultdict(set)
+        self._var_to_quotas = defaultdict(set)
         self._early_out = early_out
         self._quota_objects = {}
         self.results = {}
@@ -243,13 +243,16 @@ class QuotaAvailability:
             quota_id__in=[q.pk for q in quotas]
         ).values('quota_id', 'item_id')
         for m in q_items:
-            self._item_to_quotas[m['item_id']].append(self._quota_objects[m['quota_id']])
+            self._item_to_quotas[m['item_id']].add(self._quota_objects[m['quota_id']])
 
         q_vars = Quota.variations.through.objects.filter(
             quota_id__in=[q.pk for q in quotas]
-        ).values('quota_id', 'itemvariation_id')
+        ).values('quota_id', 'itemvariation_id', 'itemvariation__item_id')
         for m in q_vars:
-            self._var_to_quotas[m['itemvariation_id']].append(self._quota_objects[m['quota_id']])
+            self._var_to_quotas[m['itemvariation_id']].add(self._quota_objects[m['quota_id']])
+            # We can't be 100% certain that a quota, when it is connected to a variation, is also always connected to
+            # the parent item, so we double-check here just to be sure.
+            self._item_to_quotas[m['itemvariation__item_id']].add(self._quota_objects[m['quota_id']])
 
         self._compute_orders(quotas, q_items, q_vars, size_left)
 
@@ -378,7 +381,10 @@ class QuotaAvailability:
             Q(
                 Q(
                     Q(variation_id__isnull=True) &
-                    Q(item_id__in={i['item_id'] for i in q_items if i['quota_id'] in quota_ids})
+                    Q(item_id__in=(
+                        {i['item_id'] for i in q_items if i['quota_id'] in quota_ids} |
+                        {i['itemvariation__item_id'] for i in q_vars if i['quota_id'] in quota_ids}
+                    ))
                 ) | Q(
                     variation_id__in={i['itemvariation_id'] for i in q_vars if i['quota_id'] in quota_ids}
                 ) | Q(
