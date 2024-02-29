@@ -974,6 +974,7 @@
   }
   .pretix-widget-item-price-col, .pretix-widget-item-availability-col {
     width: 50%;
+    min-width: 140px;
   }
   .pretix-widget-action {
     width: 100%;
@@ -1081,16 +1082,6 @@
     background: white;
     svg path {
       fill: $brand-primary;
-    }
-  }
-}
-
-@media (max-width: 300px) {
-  .pretix-widget.pretix-widget-mobile {
-    .pretix-widget-item-price-col, .pretix-widget-item-availability-col {
-      width: 100%;
-      float: none;
-      text-align: left;
     }
   }
 }
