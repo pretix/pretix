@@ -1079,3 +1079,12 @@
     }
   }
 }
+
+@media (max-width: 300px) {
+  .pretix-widget.pretix-widget-mobile {
+    .pretix-widget-item-price-col, .pretix-widget-item-availability-col {
+      width: 100%;
+      float: none;
+    }
+  }
+}
