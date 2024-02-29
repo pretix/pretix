@@ -95,7 +95,8 @@ If you want the user to return to your application after the payment is complete
 Enter the base URL of your web application. This will allow you to redirect to pages under this base URL later on.
 For example, if you want users to be redirected to ``https://example.org/order/return?tx_id=1234``, you could now
 either enter ``https://example.org/order/`` or ``https://example.org/``.
-Please note that in the latter case the trailing slash is required, ``https://example.org`` is not allowed.
+Please note that in the latter case the trailing slash is required, ``https://example.org`` is not allowed to prevent.
+Only base URLs with a secure (``https://``) or local (``http://localhost``) origin are permitted.
 
 The user will be redirected back to your page instead of pretix' order confirmation page after the payment,
 **regardless of whether it was successful or not**. We will append an ``error=…`` query parameter with an error
