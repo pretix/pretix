@@ -32,9 +32,14 @@ def clean_filename(fname):
 
     "Terms.pdf" → "Terms.pdf.OybgvyAH.22c0583727d5bc.pdf"
 
-    This function reverses this operation:
+    This function reverses this operation (leaving names without doubled extension as-is):
 
     "Terms.pdf.OybgvyAH.22c0583727d5bc.pdf" → "Terms.pdf"
+    "Terms.pdf" → "Terms.pdf"
     """
     ext = '.' + fname.split('.')[-1]
-    return fname.rsplit(ext + ".", 1)[0] + ext
+    parts = fname.rsplit(ext + ".", 1)
+    if len(parts) == 1:
+        return parts[0]
+    else:
+        return parts[0] + ext
