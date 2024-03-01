@@ -967,8 +967,14 @@
     float: none;
     margin-bottom: 5px;
   }
+  .pretix-widget-item-info-col:after {
+    display: block;
+    content: "";
+    clear: both;
+  }
   .pretix-widget-item-price-col, .pretix-widget-item-availability-col {
     width: 50%;
+    min-width: 140px;
   }
   .pretix-widget-action {
     width: 100%;
