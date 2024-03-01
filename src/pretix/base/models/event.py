@@ -265,6 +265,9 @@ class EventMixin:
 
     @property
     def event_microdata(self):
+        if self.settings.event_microdata:
+            return self.settings.event_microdata
+
         import json
 
         eventdict = {
