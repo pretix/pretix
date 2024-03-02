@@ -345,7 +345,7 @@ to speed up various operations::
     The location of redis, as a URL of the form ``redis://[:password]@localhost:6379/0``
     or ``unix://[:password]@/path/to/socket.sock?db=0``
 
-``session``
+``sessions``
     When this is set to ``True``, redis will be used as the session storage.
 
 ``sentinels``
