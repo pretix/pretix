@@ -1025,7 +1025,7 @@ class Event(EventMixin, LoggedModel):
 
             s.object = self
             s.pk = None
-            if s.value.startswith('file://'):
+            if s.value.startswith('file://') and not s.value.startswith('file://priv/'):
                 fi = default_storage.open(s.value[len('file://'):], 'rb')
                 nonce = get_random_string(length=8)
                 fname_base = clean_filename(os.path.basename(s.value))
