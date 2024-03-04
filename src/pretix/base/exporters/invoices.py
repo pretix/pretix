@@ -86,6 +86,7 @@ class InvoiceExporterMixin:
                          ('', _('All payment providers')),
                      ] + [
                          (k, v.verbose_name) for k, v in self.event.get_payment_providers().items()
+                         if not v.is_meta
                      ],
                      required=False,
                      help_text=_('Only include invoices for orders that have at least one payment attempt '
