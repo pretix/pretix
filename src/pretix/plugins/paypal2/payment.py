@@ -586,6 +586,9 @@ class PaypalMethod(BasePaymentProvider):
                 },
             })
             response = self.client.execute(paymentreq)
+
+            if payment:
+                ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=response.result.id)
         except IOError as e:
             if "RESOURCE_NOT_FOUND" in str(e):
                 messages.error(request, _('Your payment has failed due to a known issue within PayPal. Please try '

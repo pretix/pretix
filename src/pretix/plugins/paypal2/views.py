@@ -482,29 +482,32 @@ def webhook(request, *args, **kwargs):
                     amount=payment.amount - known_sum
                 )
     elif payment.state in (OrderPayment.PAYMENT_STATE_PENDING, OrderPayment.PAYMENT_STATE_CREATED,
-                           OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED) \
-            and sale['status'] == 'COMPLETED':
-        any_captures = False
-        all_captures_completed = True
-        for purchaseunit in sale['purchase_units']:
-            for capture in purchaseunit['payments']['captures']:
-                try:
-                    ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment,
-                                                                 reference=capture['id'])
-                except ReferencedPayPalObject.MultipleObjectsReturned:
-                    pass
+                           OrderPayment.PAYMENT_STATE_CANCELED, OrderPayment.PAYMENT_STATE_FAILED):
+        if sale['status'] == 'COMPLETED':
+            any_captures = False
+            all_captures_completed = True
+            for purchaseunit in sale['purchase_units']:
+                for capture in purchaseunit['payments']['captures']:
+                    try:
+                        ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment,
+                                                                     reference=capture['id'])
+                    except ReferencedPayPalObject.MultipleObjectsReturned:
+                        pass
 
-                if capture['status'] not in ('COMPLETED', 'REFUNDED', 'PARTIALLY_REFUNDED'):
-                    all_captures_completed = False
-                else:
-                    any_captures = True
-        if any_captures and all_captures_completed:
-            try:
-                payment.info = json.dumps(sale.dict())
-                payment.save(update_fields=['info'])
-                payment.confirm()
-            except Quota.QuotaExceededException:
-                pass
+                    if capture['status'] not in ('COMPLETED', 'REFUNDED', 'PARTIALLY_REFUNDED'):
+                        all_captures_completed = False
+                    else:
+                        any_captures = True
+            if any_captures and all_captures_completed:
+                try:
+                    payment.info = json.dumps(sale.dict())
+                    payment.save(update_fields=['info'])
+                    payment.confirm()
+                except Quota.QuotaExceededException:
+                    pass
+        elif sale['status'] == 'APPROVED':
+            request.session['payment_paypal_oid'] = payment.info_data['id']
+            payment.payment_provider.execute_payment(request, payment)
 
     return HttpResponse(status=200)
 
