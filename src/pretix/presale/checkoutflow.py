@@ -545,6 +545,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                             )
                             if getattr(self.request, 'customer', None) else None
                         ),
+                        now_dt=self.request.now_dt,
                     )
                     item_cache[ckey] = items
                 else:

@@ -569,6 +569,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
                     testmode=self.request.event.testmode
                 ) if getattr(self.request, 'customer', None) else None
             ),
+            now_dt=self.request.now_dt,
         )
 
         # Calculate how many options the user still has. If there is only one option, we can

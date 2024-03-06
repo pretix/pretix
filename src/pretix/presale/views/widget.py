@@ -256,6 +256,7 @@ class WidgetAPIProductList(EventListMixin, View):
                     testmode=self.request.event.testmode
                 ) if getattr(self.request, 'customer', None) else None
             ),
+            now_dt=self.request.now_dt,
         )
 
         grps = []
@@ -409,11 +410,11 @@ class WidgetAPIProductList(EventListMixin, View):
                 availability['color'] = 'none'
                 availability['text'] = gettext('More info')
                 availability['reason'] = 'unknown'
-        elif ev.presale_is_running:
+        elif ev.presale_is_running_by_time(self.request.now_dt):
             availability['color'] = 'green'
             availability['text'] = gettext('Book now')
             availability['reason'] = 'ok'
-        elif ev.presale_has_ended:
+        elif ev.presale_has_ended_by_time(self.request.now_dt):
             availability['color'] = 'red'
             availability['text'] = gettext('Sale over')
             availability['reason'] = 'over'

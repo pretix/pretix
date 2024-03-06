@@ -59,6 +59,7 @@ class WaitingListForm(forms.ModelForm):
                 )
                 if customer else None
             ),
+            now_dt=request.now_dt,
         )
         for i in items:
             if not i.allow_waitinglist:
