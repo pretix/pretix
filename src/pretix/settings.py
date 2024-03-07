@@ -454,6 +454,7 @@ MIDDLEWARE = [
     'pretix.base.middleware.LocaleMiddleware',
     'pretix.base.middleware.SecurityMiddleware',
     'pretix.presale.middleware.EventMiddleware',
+    'pretix.presale.timemachine.TimeMachineMiddleware',
     'pretix.api.middleware.ApiScopeMiddleware',
 ]
 
