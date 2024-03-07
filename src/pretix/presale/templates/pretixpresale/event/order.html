@@ -239,7 +239,7 @@
                         <ul>
                             {% for i in invoices %}
                                 <li>
-                                    <a href="{% eventurl event "presale:event.invoice.download" invoice=i.pk secret=order.secret order=order.code %}">
+                                    <a href="{% eventurl event "presale:event.invoice.download" invoice=i.pk secret=order.secret order=order.code %}" target="_blank">
                                         {% if i.is_cancellation %}{% trans "Cancellation" context "invoice" %}{% else %}{% trans "Invoice" %}{% endif %}
                                         {{ i.number }}</a> ({{ i.date|date:"SHORT_DATE_FORMAT" }})
                                 </li>
