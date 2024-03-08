@@ -153,7 +153,7 @@ var form_handlers = function (el) {
         var $others = $("input[name^=" + $(this).attr("data-exclusive-prefix") + "]:not([name=" + $(this).attr("name") + "])");
         $(this).on('click change', function () {
             if ($(this).prop('checked')) {
-                $others.prop('checked', false);
+                $others.prop('checked', false).trigger('change');
             }
         });
     });
