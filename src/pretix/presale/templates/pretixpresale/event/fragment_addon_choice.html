@@ -333,6 +333,9 @@
                                             {% elif item.initial %}
                                                 checked="checked"
                                             {% endif %}
+                                            {% if c.max_count == 1 %}
+                                            data-exclusive-prefix="cp_{{ form.pos.pk }}_item_"
+                                            {% endif %}
                                             name="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                             id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                             aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
