@@ -904,8 +904,8 @@ details {
   }
 }
 
-.select2-container [aria-multiselectable] .select2-results__option span strike::before,
-.select2-container [aria-multiselectable] .select2-results__option span span::before {
+.select2-container [aria-multiselectable] .select2-results__option > span > strike:first-child::before,
+.select2-container [aria-multiselectable] .select2-results__option > span > span:first-child::before {
   content: "";
   font-family: FontAwesome;
   display: inline-block;
@@ -913,8 +913,8 @@ details {
   width: 1.28571em;
   text-align: center;
 }
-.select2-container [aria-multiselectable] .select2-results__option[aria-selected=true] span strike::before,
-.select2-container [aria-multiselectable] .select2-results__option[aria-selected=true] span span::before {
+.select2-container [aria-multiselectable] .select2-results__option[aria-selected=true] > span > strike:first-child::before,
+.select2-container [aria-multiselectable] .select2-results__option[aria-selected=true] > span > span:first-child::before {
   content: ""
 }
 
