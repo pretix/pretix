@@ -625,6 +625,7 @@ var form_handlers = function (el) {
     el.find('[data-model-select2=event]').each(function () {
         var $s = $(this);
         $s.select2({
+            closeOnSelect: !this.hasAttribute('multiple'),
             theme: "bootstrap",
             delay: 100,
             allowClear: !$s.prop("required"),
