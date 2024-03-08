@@ -34,6 +34,7 @@
 # License for the specific language governing permissions and limitations under the License.
 import logging
 import os
+import re
 import string
 import uuid
 from collections import Counter, OrderedDict, defaultdict
@@ -1025,7 +1026,7 @@ class Event(EventMixin, LoggedModel):
 
             s.object = self
             s.pk = None
-            if s.value.startswith('file://') and not s.value.startswith('file://priv/'):
+            if s.value.startswith('file://') and not re.match(r"file://(\d+/)?priv/", s.value):
                 fi = default_storage.open(s.value[len('file://'):], 'rb')
                 nonce = get_random_string(length=8)
                 fname_base = clean_filename(os.path.basename(s.value))
