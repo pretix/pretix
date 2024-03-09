@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 13:11+0000\n"
-"PO-Revision-Date: 2024-02-16 23:00+0000\n"
+"PO-Revision-Date: 2024-03-10 03:00+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix/nb_NO/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.4.2\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -378,7 +378,7 @@ msgstr ""
 
 #: pretix/api/views/checkin.py:604 pretix/api/views/checkin.py:611
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "Medium koblet til andre eventer"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:469
 #, python-brace-format
@@ -2715,15 +2715,10 @@ msgid "Reusable media"
 msgstr "Gjenbrukbart media"
 
 #: pretix/base/exporters/reusablemedia.py:36
-#, fuzzy
-#| msgid ""
-#| "Download a spreadsheet with information on all events in this organizer "
-#| "account."
 msgid ""
 "Download a spread sheet with the data of all reusable medias on your account."
 msgstr ""
-"Last ned en regneark med informasjon om alle arrangementer i denne "
-"arrangørens konto."
+"Last ned et regneark med informasjon om alle arrangementer på din konto."
 
 #: pretix/base/exporters/reusablemedia.py:46 pretix/base/models/media.py:67
 msgctxt "reusable_medium"
@@ -3223,11 +3218,10 @@ msgid "Single price: {net_price} net / {gross_price} gross"
 msgstr "Enkeltpris: {net_price} netto / {gross_price} brutto"
 
 #: pretix/base/invoice.py:659
-#, fuzzy, python-brace-format
-#| msgid "Net price"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {price}"
-msgstr "Nettopris"
+msgstr "Pris for en: {price}"
 
 #: pretix/base/invoice.py:677 pretix/base/invoice.py:683
 msgctxt "invoice"
@@ -3308,11 +3302,10 @@ msgid "Simplified invoice renderer"
 msgstr "Forenklet fakturagenerator"
 
 #: pretix/base/invoice.py:1013
-#, fuzzy, python-brace-format
-#| msgid "Event date range"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Event date: {date_range}"
-msgstr "Datoområde for arrangementet"
+msgstr "Dato for arrangement: {date_range}"
 
 #: pretix/base/media.py:61
 msgid "Barcode / QR-Code"
@@ -3548,10 +3541,8 @@ msgid "Ticket blocked"
 msgstr "Billett blokkert"
 
 #: pretix/base/models/checkin.py:370
-#, fuzzy
-#| msgid "Order approved"
 msgid "Order not approved"
-msgstr "Ordre godkjent"
+msgstr "Ordre ikke godkjent"
 
 #: pretix/base/models/checkin.py:371
 msgid "Ticket not valid at this time"
@@ -4040,10 +4031,8 @@ msgstr "Gyldige verdier"
 
 #: pretix/base/models/event.py:1662
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:45
-#, fuzzy
-#| msgid "Show number of check-ins to customer"
 msgid "Show filter option to customers"
-msgstr "Vis antall innsjekkinger til kunden."
+msgstr "Vis filteralternativ til kunder"
 
 #: pretix/base/models/event.py:1663
 msgid ""
@@ -4055,11 +4044,8 @@ msgstr ""
 
 #: pretix/base/models/event.py:1666 pretix/control/forms/organizer.py:218
 #: pretix/control/forms/organizer.py:222
-#, fuzzy
-#| msgctxt "openidconnect"
-#| msgid "Public"
 msgid "Public name"
-msgstr "Offentlig"
+msgstr "Offentlig navn"
 
 #: pretix/base/models/event.py:1670
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
@@ -4245,10 +4231,8 @@ msgstr "Dynamisk gyldighet"
 
 #: pretix/base/models/items.py:380 pretix/control/forms/item.py:601
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:3
-#, fuzzy
-#| msgid "Waiting, product unavailable"
 msgid "Hide product if unavailable"
-msgstr "Venter, produktet er ikke tilgjengelig."
+msgstr "Skjul produktet om ikke tilgjengelig"
 
 #: pretix/base/models/items.py:381
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
@@ -4316,10 +4300,8 @@ msgstr ""
 "produkter som kjøpes som tillegg til andre produkter."
 
 #: pretix/base/models/items.py:444 pretix/base/models/items.py:1086
-#, fuzzy
-#| msgid "Net price"
 msgid "Suggested price"
-msgstr "Nettopris"
+msgstr "Foreslått pris"
 
 #: pretix/base/models/items.py:445 pretix/base/models/items.py:1087
 msgid ""
@@ -4369,11 +4351,9 @@ msgid "Product picture"
 msgstr "Produktbilde"
 
 #: pretix/base/models/items.py:516
-#, fuzzy
-#| msgid "Only show after sellout of"
 msgctxt "hidden_if_available_legacy"
 msgid "Only show after sellout of"
-msgstr "Vises kun etter utsolgt."
+msgstr "Vises kun etter utsolgt av"
 
 #: pretix/base/models/items.py:517
 msgid ""
@@ -22069,7 +22049,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:285
 msgid "Select action"
-msgstr "Velg tilstand"
+msgstr "Velg handling"
 
 #: pretix/control/templates/pretixcontrol/orders/index.html:306
 #: pretix/control/views/orders.py:331
@@ -31365,7 +31345,7 @@ msgstr "Legg til %(item)s, %(var)s i handlekurven."
 #: pretix/presale/templates/pretixpresale/event/voucher.html:379
 msgctxt "checkbox"
 msgid "Select"
-msgstr "Velg tilstand"
+msgstr "Velg"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:203
 #: pretix/presale/templates/pretixpresale/event/fragment_addon_choice.html:345
