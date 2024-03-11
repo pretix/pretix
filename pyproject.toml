@@ -56,7 +56,7 @@ dependencies = [
   "django-scopes==2.0.*",
   "django-statici18n==2.4.*",
   "djangorestframework==3.14.*",
-  "dnspython==2.5.*",
+  "dnspython==2.6.*",
   "drf_ujson2==1.7.*",
   "geoip2==4.*",
   "importlib_metadata==7.*",  # Polyfill, we can probably drop this once we require Python 3.10+
