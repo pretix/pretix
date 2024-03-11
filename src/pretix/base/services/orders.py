@@ -2671,6 +2671,7 @@ class OrderChangeManager:
 
         for p in self.order.positions.all():
             cp = CartPosition(
+                event=self.event,
                 item=p.item,
                 variation=p.variation,
                 attendee_name_parts=p.attendee_name_parts,
@@ -2691,16 +2692,23 @@ class OrderChangeManager:
                 positions_to_fake_cart[op.position].seat = op.seat
             elif isinstance(op, self.MembershipOperation):
                 positions_to_fake_cart[op.position].used_membership = op.membership
+            elif isinstance(op, self.ChangeValidFromOperation):
+                positions_to_fake_cart[op.position].override_valid_from = op.valid_from
+            elif isinstance(op, self.ChangeValidUntilOperation):
+                positions_to_fake_cart[op.position].override_valid_until = op.valid_until
             elif isinstance(op, self.CancelOperation) and op.position in positions_to_fake_cart:
                 fake_cart.remove(positions_to_fake_cart[op.position])
             elif isinstance(op, self.AddOperation):
                 cp = CartPosition(
+                    event=self.event,
                     item=op.item,
                     variation=op.variation,
                     used_membership=op.membership,
                     subevent=op.subevent,
                     seat=op.seat,
                 )
+                cp.override_valid_from = op.valid_from
+                cp.override_valid_until = op.valid_until
                 fake_cart.append(cp)
         try:
             validate_memberships_in_order(self.order.customer, fake_cart, self.event, lock=True, ignored_order=self.order, testmode=self.order.testmode)

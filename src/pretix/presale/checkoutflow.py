@@ -445,10 +445,11 @@ class MembershipStep(CartMixin, TemplateFlowStep):
             f.position.used_membership = f.cleaned_data['membership']
 
         try:
-            validate_memberships_in_order(self.cart_customer, self.positions, self.request.event, lock=False, testmode=self.request.event.testmode)
+            validate_memberships_in_order(self.cart_customer, self.positions, self.request.event, lock=False, testmode=self.request.event.testmode,
+                                          valid_from_not_chosen=True)
         except ValidationError as e:
             messages.error(self.request, e.message)
-            self.render()
+            return self.render()
         else:
             for f in self.forms:
                 f.position.save(update_fields=['used_membership'])
@@ -933,6 +934,13 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                                          'rate to your purchase and the price of the products in your cart has '
                                          'changed accordingly.'))
                 return redirect_to_url(self.get_next_url(request) + '?open_cart=true')
+
+        try:
+            validate_memberships_in_order(self.cart_customer, self.positions, self.request.event, lock=False,
+                                          testmode=self.request.event.testmode, valid_from_not_chosen=False)
+        except ValidationError as e:
+            messages.error(self.request, e.message)
+            return self.render()
 
         return redirect_to_url(self.get_next_url(request))
 
