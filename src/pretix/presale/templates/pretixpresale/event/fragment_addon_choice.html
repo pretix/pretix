@@ -193,7 +193,7 @@
                                                         {% endif %}
                                                         id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                         name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
-                                                        data-exclusive-prefix="cp_{{ form.pos.pk }}_variation_{{ item.id }}_"
+                                                        data-exclusive-prefix="cp_{{ form.pos.pk }}_"
                                                         aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}">
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                 {% trans "Select" context "checkbox" %}
@@ -334,7 +334,7 @@
                                                 checked="checked"
                                             {% endif %}
                                             {% if c.max_count == 1 %}
-                                            data-exclusive-prefix="cp_{{ form.pos.pk }}_item_"
+                                            data-exclusive-prefix="cp_{{ form.pos.pk }}_"
                                             {% endif %}
                                             name="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                             id="cp_{{ form.pos.pk }}_item_{{ item.id }}"

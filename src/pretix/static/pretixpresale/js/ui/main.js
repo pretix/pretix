@@ -149,13 +149,11 @@ var form_handlers = function (el) {
         ).find("canvas").attr("role", "img").attr("aria-label", this.getAttribute("data-desc"));
     });
 
-    el.find("input[data-exclusive-prefix]").each(function () {
-        var $others = $("input[name^=" + $(this).attr("data-exclusive-prefix") + "]:not([name=" + $(this).attr("name") + "])");
-        $(this).on('click change', function () {
-            if ($(this).prop('checked')) {
-                $others.prop('checked', false).trigger('change');
-            }
-        });
+
+    el.find("fieldset:has(input[data-exclusive-prefix])").on('change', function (e) {
+        if (e.target.checked) {
+            $(".input[type=checkbox][name^=" + e.target.getAttribute("data-exclusive-prefix") + "]:checked", this).not(e.target).prop('checked', false).trigger('change');
+        }
     });
 
     el.find("input[name*=question], select[name*=question]").change(questions_toggle_dependent);
