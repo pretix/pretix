@@ -6,7 +6,7 @@
 {% load eventsignal %}
 {% load rich_text %}
 {% for c in form.categories %}
-    <fieldset{% if c.max_count == 1 or not c.multi_allowed %} data-addon-exclusive{% endif %}>
+    <fieldset{% if c.max_count == 1 %} data-addon-exclusive{% endif %}>
         <legend>{{ c.category.name }}</legend>
         {% if c.category.description %}
             {{ c.category.description|rich_text }}
