@@ -159,7 +159,7 @@ var form_handlers = function (el) {
         this.addEventListener("change", function (e) {
             var variations = e.target.closest(".variations");
             if (variations && !multipleAllowed && e.target.checked) {
-                // deactivate all other checkboxes inside this variations
+                // uncheck all other checkboxes inside this variations
                 $(".availability-box input:checked", variations).not(e.target).prop("checked", false).trigger("change");
             }
 
