@@ -150,10 +150,42 @@ var form_handlers = function (el) {
     });
 
 
-    el.find("fieldset[data-addon-exclusive]").on('change', function (e) {
-        if (e.target.checked) {
-            $(".availability-box input:checked", this).not(e.target).prop('checked', false).trigger('change');
-        }
+    el.find("fieldset[data-addon-max-count]").each(function() {
+        // usually addons are only allowed once one per item
+        var multipleAllowed = this.hasAttribute("data-addon-multi-allowed");
+        var $inputs = $(".availability-box input", this);
+        var max = parseInt(this.getAttribute("data-addon-max-count"));
+        var desc = $(".addon-count-desc", this).text().trim();
+        this.addEventListener("change", function (e) {
+            var variations = e.target.closest(".variations");
+            if (variations && !multipleAllowed && e.target.checked) {
+                // deactivate all other checkboxes inside this variations
+                $(".availability-box input:checked", variations).not(e.target).prop("checked", false).trigger("change");
+            }
+
+            if (max === 1) {
+                if (e.target.checked) {
+                    $inputs.filter(":checked").not(e.target).prop("checked", false).trigger("change");
+                }
+                return;
+            }
+            var total = $inputs.toArray().reduce(function(a, e) {
+                return a + (e.type == "checkbox" ? (e.checked ? parseInt(e.value) : 0) : parseInt(e.value) || 0);
+            }, 0);
+            if (total > max) {
+                if (e.target.type == "checkbox") {
+                    e.target.checked = false;
+                } else {
+                    e.target.value = e.target.value - (total - max);
+                }
+                $(e.target).trigger("change").closest(".availability-box").tooltip({
+                    "title": desc,
+                }).tooltip('show');
+                e.preventDefault();
+            } else {
+                $(".availability-box", this).tooltip('destroy')
+            }
+        });
     });
 
     el.find("input[name*=question], select[name*=question]").change(questions_toggle_dependent);

@@ -6,13 +6,13 @@
 {% load eventsignal %}
 {% load rich_text %}
 {% for c in form.categories %}
-    <fieldset{% if c.max_count == 1 %} data-addon-exclusive{% endif %}>
+    <fieldset data-addon-max-count="{{ c.max_count }}"{% if c.multi_allowed %} data-addon-multi-allowed{% endif %}>
         <legend>{{ c.category.name }}</legend>
         {% if c.category.description %}
             {{ c.category.description|rich_text }}
         {% endif %}
         {% if c.min_count == c.max_count %}
-            <p>
+            <p class="addon-count-desc">
                 {% blocktrans trimmed count min_count=c.min_count %}
                     You need to choose exactly one option from this category.
                 {% plural %}
@@ -21,7 +21,7 @@
             </p>
         {% elif c.min_count == 0 and c.max_count >= c.items|length and not c.multi_allowed %}
         {% elif c.min_count == 0 %}
-            <p>
+            <p class="addon-count-desc">
                 {% blocktrans trimmed count max_count=c.max_count %}
                     You can choose {{ max_count }} option from this category.
                 {% plural %}
@@ -29,7 +29,7 @@
                 {% endblocktrans %}
             </p>
         {% else %}
-            <p>
+            <p class="addon-count-desc">
                 {% blocktrans trimmed with min_count=c.min_count max_count=c.max_count %}
                     You can choose between {{ min_count }} and {{ max_count }} options from
                     this category.
