@@ -123,7 +123,7 @@ var form_handlers = function (el) {
         var controls = document.getElementById(this.getAttribute("data-controls"));
         var currentValue = parseFloat(controls.value);
         controls.value = Math.max(controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (currentValue || 0) + step));
-        controls.dispatchEvent(new Event("change"));
+        controls.dispatchEvent(new Event("change", { bubbles: true }));
     });
     el.find(".btn-checkbox input").on("change", function (e) {
         $(this).closest(".btn-checkbox")
