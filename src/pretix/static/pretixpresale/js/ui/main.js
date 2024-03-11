@@ -150,9 +150,9 @@ var form_handlers = function (el) {
     });
 
 
-    el.find("fieldset:has(input[data-exclusive-prefix])").on('change', function (e) {
+    el.find("fieldset[data-addon-exclusive]").on('change', function (e) {
         if (e.target.checked) {
-            $(".input[type=checkbox][name^=" + e.target.getAttribute("data-exclusive-prefix") + "]:checked", this).not(e.target).prop('checked', false).trigger('change');
+            $(".availability-box input:checked", this).not(e.target).prop('checked', false).trigger('change');
         }
     });
 

@@ -6,7 +6,7 @@
 {% load eventsignal %}
 {% load rich_text %}
 {% for c in form.categories %}
-    <fieldset>
+    <fieldset{% if c.max_count == 1 or not c.multi_allowed %} data-addon-exclusive{% endif %}>
         <legend>{{ c.category.name }}</legend>
         {% if c.category.description %}
             {{ c.category.description|rich_text }}
@@ -193,7 +193,6 @@
                                                         {% endif %}
                                                         id="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
                                                         name="cp_{{ form.pos.pk }}_variation_{{ item.id }}_{{ var.id }}"
-                                                        data-exclusive-prefix="cp_{{ form.pos.pk }}_"
                                                         aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}">
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                 {% trans "Select" context "checkbox" %}
@@ -332,9 +331,6 @@
                                                 required="required"
                                             {% elif item.initial %}
                                                 checked="checked"
-                                            {% endif %}
-                                            {% if c.max_count == 1 %}
-                                            data-exclusive-prefix="cp_{{ form.pos.pk }}_"
                                             {% endif %}
                                             name="cp_{{ form.pos.pk }}_item_{{ item.id }}"
                                             id="cp_{{ form.pos.pk }}_item_{{ item.id }}"
