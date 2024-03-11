@@ -31,6 +31,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         ('returnurl', '0001_initial'),
+        ('pretixbase', '0257_item_default_price_not_null'),
     ]
 
     operations = [
