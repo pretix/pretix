@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 13:11+0000\n"
-"PO-Revision-Date: 2024-03-10 03:00+0000\n"
+"PO-Revision-Date: 2024-03-11 20:00+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix/nb_NO/>\n"
@@ -630,7 +630,7 @@ msgstr "Nettbutikk"
 #: pretix/base/context.py:45
 #, python-brace-format
 msgid "powered by {name} based on <a {a_attr}>pretix</a>"
-msgstr "drevet av {name} bassert på <a {a_attr}>pretix</a>"
+msgstr "drevet av {name} basert på <a {a_attr}>pretix</a>"
 
 #: pretix/base/context.py:52
 #, python-format
@@ -31601,7 +31601,7 @@ msgstr "Fortsett med utsjekkingen."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:40
 msgid "Empty cart"
-msgstr "Tom handlekurv"
+msgstr "Tøm handlekurv"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart_box.html:45
 #: pretix/presale/templates/pretixpresale/event/index.html:236
