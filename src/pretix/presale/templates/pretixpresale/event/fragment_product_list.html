@@ -228,7 +228,7 @@
                     </div>
                 </article>
             {% else %}
-                <article aria-labelledby="item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="item-{{ item.pk }}-description"{% endif %} class="row product-row simple" id="item-{{ item.pk }}"{% if not item.free_price %} data-price="{{ item.price }}"{% endif %}>
+                <article aria-labelledby="item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="item-{{ item.pk }}-description"{% endif %} class="row product-row simple" id="item-{{ item.pk }}"{% if not item.free_price %} data-price="{{ item.default_price }}"{% endif %}>
                     <div class="col-md-8 col-sm-6 col-xs-12">
                         {% if item.picture %}
                             <a href="{{ item.picture.url }}" class="productpicture"
