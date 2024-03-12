@@ -816,8 +816,7 @@ class SeatingPlanView(EventViewMixin, TemplateView):
                 **utm_params,
                 'require_cookie': 'true',
                 'cart_id': request.GET.get('take_cart_id'),
-                })
-            )
+            }))
         elif request.GET.get('iframe', '') == '1' and len(self.request.GET.get('widget_data', '{}')) > 3:
             # We've been passed data from a widget, we need to create a cart session to store it.
             get_or_create_cart_id(request)
