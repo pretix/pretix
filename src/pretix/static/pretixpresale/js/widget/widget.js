@@ -1914,6 +1914,9 @@ var shared_root_computed = {
         if (!this.$root.cart_exists) {
             checkout_url += "checkout/start";
         }
+        if (this.$root.additionalURLParams) {
+            checkout_url += '?' + this.$root.additionalURLParams;
+        }
         var form_target = this.target_url + 'w/' + widget_id + '/cart/add?iframe=1&next=' + encodeURIComponent(checkout_url);
         var cookie = getCookie(this.cookieName);
         if (cookie) {
