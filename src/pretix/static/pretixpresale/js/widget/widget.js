@@ -718,6 +718,18 @@ var shared_methods = {
         if (this.$root.useIframe) {
             event.preventDefault();
         } else {
+            if (this.$root.additionalURLParams) {
+                var params = new URLSearchParams(this.$root.additionalURLParams);
+                for (var [key, value] of params.entries()) {
+                    if (!event.target.form.elements[key]) {
+                        var input = document.createElement("input");
+                        input.type = "hidden";
+                        input.name = key;
+                        input.value = value;
+                        event.target.form.appendChild(input);
+                    }
+                }
+            }
             return;
         }
         var redirect_url = this.$root.voucherFormTarget + '&voucher=' + encodeURIComponent(this.voucher) + '&subevent=' + this.$root.subevent;
@@ -1893,6 +1905,9 @@ var shared_root_computed = {
         }
         if (this.subevent) {
             form_target += "&subevent=" + this.subevent;
+        }
+        if (this.$root.additionalURLParams) {
+            form_target += '&' + this.$root.additionalURLParams;
         }
         return form_target;
     },
