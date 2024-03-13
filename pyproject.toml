@@ -123,7 +123,7 @@ dev = [
   "pytest-cov",
   "pytest-django==4.*",
   "pytest-mock==3.12.*",
-  "pytest-rerunfailures==13.*",
+  "pytest-rerunfailures==14.*",
   "pytest-sugar",
   "pytest-xdist==3.5.*",
   "pytest==8.1.*",
