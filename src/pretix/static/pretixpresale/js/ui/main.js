@@ -123,7 +123,7 @@ var form_handlers = function (el) {
         var controls = document.getElementById(this.getAttribute("data-controls"));
         var currentValue = parseFloat(controls.value);
         controls.value = Math.max(controls.min, Math.min(controls.max || Number.MAX_SAFE_INTEGER, (currentValue || 0) + step));
-        controls.dispatchEvent(new Event("change"));
+        controls.dispatchEvent(new Event("change", { bubbles: true }));
     });
     el.find(".btn-checkbox input").on("change", function (e) {
         $(this).closest(".btn-checkbox")
@@ -149,11 +149,41 @@ var form_handlers = function (el) {
         ).find("canvas").attr("role", "img").attr("aria-label", this.getAttribute("data-desc"));
     });
 
-    el.find("input[data-exclusive-prefix]").each(function () {
-        var $others = $("input[name^=" + $(this).attr("data-exclusive-prefix") + "]:not([name=" + $(this).attr("name") + "])");
-        $(this).on('click change', function () {
-            if ($(this).prop('checked')) {
-                $others.prop('checked', false).trigger('change');
+
+    el.find("fieldset[data-addon-max-count]").each(function() {
+        // usually addons are only allowed once one per item
+        var multipleAllowed = this.hasAttribute("data-addon-multi-allowed");
+        var $inputs = $(".availability-box input", this);
+        var max = parseInt(this.getAttribute("data-addon-max-count"));
+        var desc = $(".addon-count-desc", this).text().trim();
+        this.addEventListener("change", function (e) {
+            var variations = e.target.closest(".variations");
+            if (variations && !multipleAllowed && e.target.checked) {
+                // uncheck all other checkboxes inside this variations
+                $(".availability-box input:checked", variations).not(e.target).prop("checked", false).trigger("change");
+            }
+
+            if (max === 1) {
+                if (e.target.checked) {
+                    $inputs.filter(":checked").not(e.target).prop("checked", false).trigger("change");
+                }
+                return;
+            }
+            var total = $inputs.toArray().reduce(function(a, e) {
+                return a + (e.type == "checkbox" ? (e.checked ? parseInt(e.value) : 0) : parseInt(e.value) || 0);
+            }, 0);
+            if (total > max) {
+                if (e.target.type == "checkbox") {
+                    e.target.checked = false;
+                } else {
+                    e.target.value = e.target.value - (total - max);
+                }
+                $(e.target).trigger("change").closest(".availability-box").tooltip({
+                    "title": desc,
+                }).tooltip('show');
+                e.preventDefault();
+            } else {
+                $(".availability-box", this).tooltip('destroy')
             }
         });
     });

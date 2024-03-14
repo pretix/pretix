@@ -197,7 +197,7 @@ error_messages = {
         'You need to select at least %(min)s add-ons from the category %(cat)s for the product %(base)s.',
         'min'
     ),
-    'addon_no_multi': gettext_lazy('You can select every add-ons from the category %(cat)s for the product %(base)s at most once.'),
+    'addon_no_multi': gettext_lazy('You can select every add-on from the category %(cat)s for the product %(base)s at most once.'),
     'addon_already_checked_in': gettext_lazy('You cannot remove the position %(addon)s since it has already been checked in.'),
 }
 

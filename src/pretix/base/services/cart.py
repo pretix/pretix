@@ -203,7 +203,7 @@ error_messages = {
         'You need to select at least %(min)s add-ons from the category %(cat)s for the product %(base)s.',
         'min'
     ),
-    'addon_no_multi': gettext_lazy('You can select every add-ons from the category %(cat)s for the product %(base)s at most once.'),
+    'addon_no_multi': gettext_lazy('You can select every add-on from the category %(cat)s for the product %(base)s at most once.'),
     'addon_only': gettext_lazy('One of the products you selected can only be bought as an add-on to another product.'),
     'bundled_only': gettext_lazy('One of the products you selected can only be bought part of a bundle.'),
     'seat_required': gettext_lazy('You need to select a specific seat.'),
