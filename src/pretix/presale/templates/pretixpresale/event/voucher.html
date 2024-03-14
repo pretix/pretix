@@ -127,7 +127,10 @@
                                 </div>
                                 <div class="variations">
                                     {% for var in item.available_variations %}
-                                        <article aria-labelledby="item-{{ item.pk }}-{{ var.pk }}-legend"{% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %} class="row product-row variation" id="item-{{ item.pk }}-{{ var.pk }}">
+                                        <article aria-labelledby="item-{{ item.pk }}-{{ var.pk }}-legend"{% if var.description %} aria-describedby="item-{{ item.pk }}-{{ var.pk }}-description"{% endif %} class="row product-row variation" id="item-{{ item.pk }}-{{ var.pk }}"
+                                        {% if not item.free_price %}
+                                            data-price="{% if event.settings.display_net_prices %}{{ var.display_price.net|unlocalize }}{% else %}{{ var.display_price.gross|unlocalize }}{% endif %}"
+                                        {% endif %}>
                                             <div class="col-md-8 col-sm-6 col-xs-12">
                                                 <h5 id="item-{{ item.pk }}-{{ var.pk }}-legend">{{ var }}</h5>
                                                 {% if var.description %}
@@ -259,7 +262,10 @@
                                 </div>
                             </article>
                         {% else %}
-                            <article aria-labelledby="item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="item-{{ item.pk }}-description"{% endif %} class="row product-row simple" id="item-{{ item.pk }}">
+                            <article aria-labelledby="item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="item-{{ item.pk }}-description"{% endif %} class="row product-row simple" id="item-{{ item.pk }}"
+                            {% if not item.free_price %}
+                                data-price="{% if event.settings.display_net_prices %}{{ item.display_price.net|unlocalize }}{% else %}{{ item.display_price.gross|unlocalize }}{% endif %}"
+                            {% endif %}>
                                 <div class="col-md-8 col-sm-6 col-xs-12">
                                     {% if item.picture %}
                                         <a href="{{ item.picture.url }}" class="productpicture"
