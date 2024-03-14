@@ -486,6 +486,7 @@ class StripeMethod(BasePaymentProvider):
     identifier = ''
     method = ''
     redirect_action_handling = 'iframe'  # or redirect
+    redirect_in_widget_allowed = True
     confirmation_method = 'manual'
     explanation = ''
 
@@ -932,11 +933,7 @@ class StripeMethod(BasePaymentProvider):
                 payment.info = str(intent)
                 payment.state = OrderPayment.PAYMENT_STATE_CREATED
                 payment.save()
-                return build_absolute_uri(self.event, 'plugins:stripe:sca', kwargs={
-                    'order': payment.order.code,
-                    'payment': payment.pk,
-                    'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
-                })
+                return self._redirect_to_sca(request, payment)
 
             if intent.status == 'requires_confirmation':
                 payment.info = str(intent)
@@ -970,6 +967,20 @@ class StripeMethod(BasePaymentProvider):
                 logger.info('Charge failed: %s' % str(intent))
                 payment.fail(info=str(intent))
                 raise PaymentException(_('Stripe reported an error: %s') % intent.last_payment_error.message)
+
+    def _redirect_to_sca(self, request, payment):
+        url = build_absolute_uri(self.event, 'plugins:stripe:sca', kwargs={
+            'order': payment.order.code,
+            'payment': payment.pk,
+            'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+        })
+        if not self.redirect_in_widget_allowed and request.session.get('iframe_session', False):
+            return build_absolute_uri(self.event, 'plugins:stripe:redirect') + '?data=' + signing.dumps({
+                'url': url,
+                'session': {},
+            }, salt='safe-redirect')
+
+        return url
 
     def _confirm_payment_intent(self, request, payment):
         self._init_api()
@@ -1448,6 +1459,7 @@ class StripeKlarna(StripeRedirectMethod):
     public_name = _("Klarna")
     method = "klarna"
     allowed_countries = {"US", "CA", "AU", "NZ", "GB", "IE", "FR", "ES", "DE", "AT", "BE", "DK", "FI", "IT", "NL", "NO", "SE"}
+    redirect_in_widget_allowed = False
 
     def _detect_country(self, request, order=None):
         def get_invoice_address():
@@ -1567,6 +1579,7 @@ class StripeGiropay(StripeRedirectWithAccountNamePaymentIntentMethod):
         'giropay is an online payment method available to all customers of most German banks, usually after one-time '
         'activation. Please keep your online banking account and login information available.'
     )
+    redirect_in_widget_allowed = False
 
     def _payment_intent_kwargs(self, request, payment):
         return {
@@ -1602,6 +1615,7 @@ class StripeIdeal(StripeRedirectMethod):
         'iDEAL is an online payment method available to customers of Dutch banks. Please keep your online '
         'banking account and login information available.'
     )
+    redirect_in_widget_allowed = False
 
     def payment_presale_render(self, payment: OrderPayment) -> str:
         pi = payment.info_data or {}
@@ -1634,6 +1648,7 @@ class StripeBancontact(StripeRedirectWithAccountNamePaymentIntentMethod):
     verbose_name = _('Bancontact via Stripe')
     public_name = _('Bancontact')
     method = 'bancontact'
+    redirect_in_widget_allowed = False
 
     def _payment_intent_kwargs(self, request, payment):
         return {
@@ -1665,6 +1680,7 @@ class StripeSofort(StripeMethod):
     verbose_name = _('SOFORT via Stripe')
     public_name = _('SOFORT (instant bank transfer)')
     method = 'sofort'
+    redirect_in_widget_allowed = False
 
     def payment_form_render(self, request) -> str:
         template = get_template('pretixplugins/stripe/checkout_payment_form_simple.html')
@@ -1735,6 +1751,7 @@ class StripeEPS(StripeRedirectWithAccountNamePaymentIntentMethod):
     verbose_name = _('EPS via Stripe')
     public_name = _('EPS')
     method = 'eps'
+    redirect_in_widget_allowed = False
 
     def _payment_intent_kwargs(self, request, payment):
         return {
@@ -1766,6 +1783,7 @@ class StripeMultibanco(StripeSourceMethod):
     verbose_name = _('Multibanco via Stripe')
     public_name = _('Multibanco')
     method = 'multibanco'
+    redirect_in_widget_allowed = False
 
     def payment_form_render(self, request) -> str:
         template = get_template('pretixplugins/stripe/checkout_payment_form_simple_noform.html')
@@ -1818,6 +1836,7 @@ class StripePrzelewy24(StripeRedirectMethod):
         'Przelewy24 is an online payment method available to customers of Polish banks. Please keep your online '
         'banking account and login information available.'
     )
+    redirect_in_widget_allowed = False
 
     def _payment_intent_kwargs(self, request, payment):
         return {
