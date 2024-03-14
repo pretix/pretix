@@ -1143,7 +1143,7 @@ var editor = {
             editor.dirty = true;
             editor._update_save_button();
         });
-        $("#pdf-info-width, #pdf-info-height").bind('change', editor._paper_size_warning);
+        $("#pdf-info-width, #pdf-info-height").bind('change input', editor._paper_size_warning);
 
         $.getJSON($("#schema-url").text(), function (data) {
             editor.schema = data;
