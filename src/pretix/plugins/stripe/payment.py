@@ -969,21 +969,18 @@ class StripeMethod(BasePaymentProvider):
                 raise PaymentException(_('Stripe reported an error: %s') % intent.last_payment_error.message)
 
     def _redirect_to_sca(self, request, payment):
+        url = build_absolute_uri(self.event, 'plugins:stripe:sca', kwargs={
+            'order': payment.order.code,
+            'payment': payment.pk,
+            'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+        })
         if not self.redirect_in_widget_allowed and request.session.get('iframe_session', False):
-            return build_absolute_uri(request.event, 'plugins:stripe:redirect') + '?data=' + signing.dumps({
-                'url': build_absolute_uri(self.event, 'plugins:stripe:sca', kwargs={
-                    'order': payment.order.code,
-                    'payment': payment.pk,
-                    'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
-                }),
+            return build_absolute_uri(self.event, 'plugins:stripe:redirect') + '?data=' + signing.dumps({
+                'url': url,
                 'session': {},
             }, salt='safe-redirect')
-        else:
-            return build_absolute_uri(self.event, 'plugins:stripe:sca', kwargs={
-                'order': payment.order.code,
-                'payment': payment.pk,
-                'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
-            })
+
+        return url
 
     def _confirm_payment_intent(self, request, payment):
         self._init_api()
