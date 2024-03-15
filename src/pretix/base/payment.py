@@ -1311,9 +1311,7 @@ class GiftCardPayment(BasePaymentProvider):
 
     @property
     def public_name(self) -> str:
-        return str(self.settings.get("public_name", as_type=LazyI18nString)) or _(
-            "Gift card"
-        )
+        return str(self.settings.get("public_name", as_type=LazyI18nString) or _("Gift card"))
 
     @property
     def settings_form_fields(self):
