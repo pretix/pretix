@@ -19,6 +19,7 @@ external_identifier                   string                     External ID of 
                                                                  the API, but is read-only for customers created through a
                                                                  SSO integration.
 email                                 string                     Customer email address
+phone                                 string                     Customer phone number
 name                                  string                     Name of this customer (or ``null``)
 name_parts                            object of strings          Decomposition of name (i.e. given name, family name)
 is_active                             boolean                    Whether this account is active
@@ -38,6 +39,10 @@ password                              string                     Can only be set
 .. versionchanged:: 4.3
 
    Passwords can now be set through the API during customer creation.
+
+.. versionchanged:: 2024.3
+
+   The attribute ``phone`` has been added.
 
 Endpoints
 ---------
@@ -71,6 +76,7 @@ Endpoints
             "identifier": "8WSAJCJ",
             "external_identifier": null,
             "email": "customer@example.org",
+            "phone": "+493012345678",
             "name": "John Doe",
             "name_parts": {
                 "_scheme": "full",
@@ -118,6 +124,7 @@ Endpoints
         "identifier": "8WSAJCJ",
         "external_identifier": null,
         "email": "customer@example.org",
+        "phone": "+493012345678",
         "name": "John Doe",
         "name_parts": {
             "_scheme": "full",
@@ -155,6 +162,7 @@ Endpoints
 
       {
         "email": "test@example.org",
+        "phone": "+493012345678",
         "password": "verysecret",
         "send_email": true
       }
@@ -171,6 +179,7 @@ Endpoints
         "identifier": "8WSAJCJ",
         "external_identifier": null,
         "email": "test@example.org",
+        "phone": "+493012345678",
         ...
       }
 
@@ -215,6 +224,7 @@ Endpoints
         "identifier": "8WSAJCJ",
         "external_identifier": null,
         "email": "test@example.org",
+        "phone": "+493012345678",
         …
       }
 
@@ -249,6 +259,7 @@ Endpoints
         "identifier": "8WSAJCJ",
         "external_identifier": null,
         "email": null,
+        "phone": null,
         …
       }
 
