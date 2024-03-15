@@ -147,9 +147,13 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
                 _('You selected membership that has been canceled.')
             )
 
-        if m.testmode != testmode:
+        if m.testmode and not testmode:
             raise ValidationError(
-                _('You can only use a test mode membership for test mode tickets.')
+                _('You can not use a test mode membership for tickets that are not in test mode.')
+            )
+        elif not m.testmode and testmode:
+            raise ValidationError(
+                _('You need to add a test mode membership to the customer account to use it in test mode.')
             )
 
         ev = p.subevent or event
