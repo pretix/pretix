@@ -625,7 +625,7 @@ class ClassicInvoiceRenderer(BaseReportlabInvoiceRenderer):
             )]
         else:
             tdata = [(
-                Paragraph(self._normalize(pgettext('invoice', 'Description')), self.stylesheet['BoldRight']),
+                Paragraph(self._normalize(pgettext('invoice', 'Description')), self.stylesheet['Bold']),
                 Paragraph(self._normalize(pgettext('invoice', 'Qty')), self.stylesheet['BoldRightNoSplit']),
                 Paragraph(self._normalize(pgettext('invoice', 'Amount')), self.stylesheet['BoldRightNoSplit']),
             )]
