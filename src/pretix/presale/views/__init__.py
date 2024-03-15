@@ -170,7 +170,7 @@ class CartMixin:
             )
 
             if not grouping_allowed:
-                return (pos.pk,) + (0, ) * 9
+                return (pos.pk,)
             else:
                 return (
                     (pos.addon_to_id or 0),
