@@ -265,7 +265,7 @@ def test_sendmail_rule_specified_subevent(order, event_series, subevent1, subeve
     order.save()
 
     rule = event_series.sendmail_rules.create(date_is_absolute=False, offset_is_after=False, send_offset_days=1,
-                                              send_offset_time=datetime.time(4, 30), subevent=subevent1,
+                                              send_offset_time=datetime.time(0, 0), subevent=subevent1,
                                               subject='meow', template='meow meow meow')
 
     sendmail_run_rules(None)

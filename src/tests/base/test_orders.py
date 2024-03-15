@@ -663,7 +663,7 @@ class PaymentReminderTests(TestCase):
                 code='FOO', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING, locale='en',
                 datetime=now() - timedelta(hours=4),
-                expires=now() - timedelta(hours=4) + timedelta(days=10),
+                expires=now().replace(hour=12, minute=0, second=0) + timedelta(days=10),
                 total=Decimal('46.00'),
             )
             self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
