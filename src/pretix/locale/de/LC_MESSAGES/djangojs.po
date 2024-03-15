@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-02-28 13:11+0000\n"
-"PO-Revision-Date: 2024-02-10 00:00+0000\n"
-"Last-Translator: Phin Wolkwitz <wolkwitz@rami.io>\n"
+"PO-Revision-Date: 2024-03-15 18:00+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix-js/"
 "de/>\n"
 "Language: de\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -474,16 +474,12 @@ msgid "Number of days with a previous entry"
 msgstr "Anzahl an Tagen mit vorherigem Eintritt"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:133
-#, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry since"
-msgstr "Anzahl an Tagen mit vorherigem Eintritt"
+msgstr "Anzahl an Tagen mit vorherigem Eintritt seit"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:137
-#, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry before"
-msgstr "Anzahl an Tagen mit vorherigem Eintritt"
+msgstr "Anzahl an Tagen mit vorherigem Eintritt vor"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:141
 msgid "Minutes since last entry (-1 on first entry)"
