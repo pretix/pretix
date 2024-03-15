@@ -220,7 +220,7 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
         is_available = order._is_still_available(now(), count_waitinglist=False, check_voucher_usage=True,
                                                  check_memberships=True, lock=True, force=force)
         if is_available is True:
-            if order.payment_refund_sum >= order.total:
+            if order.payment_refund_sum >= order.total and not order.require_approval:
                 order.status = Order.STATUS_PAID
             else:
                 order.status = Order.STATUS_PENDING
@@ -2500,7 +2500,7 @@ class OrderChangeManager:
 
         remaining_total = sum([p.price for p in self.order.positions.all()]) + sum([f.value for f in self.order.fees.all()])
         offset_amount = min(max(0, self.completed_payment_sum - remaining_total), split_order.total)
-        if offset_amount >= split_order.total:
+        if offset_amount >= split_order.total and not split_order.require_approval:
             split_order.status = Order.STATUS_PAID
         else:
             split_order.status = Order.STATUS_PENDING

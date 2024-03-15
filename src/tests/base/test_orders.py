@@ -2331,6 +2331,39 @@ class OrderChangeManagerTests(TestCase):
         assert not o2.invoices.exists()
 
     @classscope(attr='o')
+    def test_split_require_approval_all_free(self):
+        self.op1.price = Decimal("0.00")
+        self.op1.save()
+        self.op2.price = Decimal("0.00")
+        self.op1.save()
+        self.order.total = Decimal("0.00")
+        self.order.payments.all().delete()
+        self.op2.item.require_approval = True
+        self.op2.item.save()
+        self.order.require_approval = True
+        self.order.save()
+        old_secret = self.op2.secret
+        self.ocm.split(self.op2)
+        self.ocm.commit()
+        self.order.refresh_from_db()
+        self.op2.refresh_from_db()
+        assert self.order.status == Order.STATUS_PENDING
+        assert self.order.total == Decimal('0.00')
+        assert self.order.positions.count() == 1
+        assert self.op2.order != self.order
+        assert self.op2.order.require_approval
+        o2 = self.op2.order
+        assert o2.total == Decimal('0.00')
+        assert o2.status == Order.STATUS_PENDING
+        assert o2.positions.count() == 1
+        assert o2.code != self.order.code
+        assert o2.secret != self.order.secret
+        assert o2.datetime > self.order.datetime
+        assert self.op2.secret != old_secret
+        assert not self.order.invoices.exists()
+        assert not o2.invoices.exists()
+
+    @classscope(attr='o')
     def test_split_pending_payment_fees(self):
         # Set payment fees
         self.event.settings.set('tax_rate_default', self.tr19.pk)
