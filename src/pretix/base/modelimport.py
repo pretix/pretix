@@ -20,12 +20,19 @@
 # <https://www.gnu.org/licenses/>.
 #
 import csv
+import datetime
 import io
+import re
+from decimal import Decimal, DecimalException
 
 from django.core.exceptions import ValidationError
-from django.utils.translation import gettext as _, gettext_lazy
+from django.core.validators import validate_integer
+from django.utils import formats
+from django.utils.functional import cached_property
+from django.utils.translation import gettext as _, gettext_lazy, pgettext
 
 from pretix.base.i18n import LazyLocaleException
+from pretix.base.models import SubEvent
 
 
 class DataImportError(LazyLocaleException):
@@ -159,8 +166,122 @@ class ImportColumn:
         """
         pass
 
+    @property
+    def timezone(self):
+        return self.event.timezone
+
 
 def i18n_flat(l):
     if isinstance(l.data, dict):
         return l.data.values()
     return [l.data]
+
+
+class BooleanColumnMixin:
+    default_value = None
+    initial = "static:false"
+
+    def static_choices(self):
+        return (
+            ("false", _("No")),
+            ("true", _("Yes")),
+        )
+
+    def clean(self, value, previous_values):
+        if not value:
+            return False
+
+        if value.lower() in ("true", "1", "yes", _("Yes").lower()):
+            return True
+        elif value.lower() in ("false", "0", "no", _("No").lower()):
+            return False
+        else:
+            raise ValidationError(_("Could not parse {value} as a yes/no value.").format(value=value))
+
+
+class DatetimeColumnMixin:
+    def clean(self, value, previous_values):
+        if not value:
+            return
+
+        input_formats = formats.get_format('DATETIME_INPUT_FORMATS', use_l10n=True)
+        for format in input_formats:
+            try:
+                d = datetime.datetime.strptime(value, format)
+                d = d.replace(tzinfo=self.timezone)
+                return d
+            except (ValueError, TypeError):
+                pass
+        else:
+            raise ValidationError(_("Could not parse {value} as a date and time.").format(value=value))
+
+
+class DecimalColumnMixin:
+    def clean(self, value, previous_values):
+        if value not in (None, ''):
+            value = formats.sanitize_separators(re.sub(r'[^0-9.,-]', '', value))
+            try:
+                value = Decimal(value)
+            except (DecimalException, TypeError):
+                raise ValidationError(_('You entered an invalid number.'))
+            return value
+
+
+class IntegerColumnMixin:
+    def clean(self, value, previous_values):
+        if value is not None:
+            validate_integer(value)
+            return int(value)
+
+
+class SubeventColumnMixin:
+
+    def __init__(self, *args, **kwargs):
+        self._subevent_cache = {}
+        super().__init__(*args, **kwargs)
+
+    @cached_property
+    def subevents(self):
+        return list(self.event.subevents.filter(active=True).order_by('date_from'))
+
+    def static_choices(self):
+        return [
+            (str(p.pk), str(p)) for p in self.subevents
+        ]
+
+    def clean(self, value, previous_values):
+        if value in self._subevent_cache:
+            return self._subevent_cache[value]
+
+        input_formats = formats.get_format('DATETIME_INPUT_FORMATS', use_l10n=True)
+        for format in input_formats:
+            try:
+                d = datetime.datetime.strptime(value, format)
+                d = d.replace(tzinfo=self.event.timezone)
+                try:
+                    se = self.event.subevents.get(
+                        active=True,
+                        date_from__gt=d - datetime.timedelta(seconds=1),
+                        date_from__lt=d + datetime.timedelta(seconds=1),
+                    )
+                    self._subevent_cache[value] = se
+                    return se
+                except SubEvent.DoesNotExist:
+                    raise ValidationError(pgettext("subevent", "No matching date was found."))
+                except SubEvent.MultipleObjectsReturned:
+                    raise ValidationError(pgettext("subevent", "Multiple matching dates were found."))
+            except (ValueError, TypeError):
+                continue
+
+        matches = [
+            p for p in self.subevents
+            if str(p.pk) == value or any(
+                (v and v == value) for v in i18n_flat(p.name)) or p.date_from.isoformat() == value
+        ]
+        if len(matches) == 0:
+            raise ValidationError(pgettext("subevent", "No matching date was found."))
+        if len(matches) > 1:
+            raise ValidationError(pgettext("subevent", "Multiple matching dates were found."))
+
+        self._subevent_cache[value] = matches[0]
+        return matches[0]

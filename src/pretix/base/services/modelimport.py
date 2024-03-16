@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 from decimal import Decimal
+from typing import List
 
 from django.conf import settings as django_settings
 from django.core.exceptions import ValidationError
@@ -28,11 +29,12 @@ from django.utils.timezone import now
 from django.utils.translation import gettext as _
 
 from pretix.base.i18n import language
-from pretix.base.modelimport import DataImportError, parse_csv
+from pretix.base.modelimport import DataImportError, ImportColumn, parse_csv
 from pretix.base.modelimport_orders import get_order_import_columns
+from pretix.base.modelimport_vouchers import get_voucher_import_columns
 from pretix.base.models import (
     CachedFile, Event, InvoiceAddress, Order, OrderPayment, OrderPosition,
-    User,
+    User, Voucher,
 )
 from pretix.base.models.orders import Transaction
 from pretix.base.services.invoices import generate_invoice, invoice_qualified
@@ -42,49 +44,53 @@ from pretix.base.signals import order_paid, order_placed
 from pretix.celery_app import app
 
 
+def _validate(cf: CachedFile, charset: str, cols: List[ImportColumn], settings: dict):
+    try:
+        parsed = parse_csv(cf.file, charset=charset)
+    except UnicodeDecodeError as e:
+        raise DataImportError(
+            _(
+                'Error decoding special characters in your file: {message}').format(
+                message=str(e)
+            )
+        )
+    data = []
+    for i, record in enumerate(parsed):
+        if not any(record.values()):
+            continue
+        values = {}
+        for c in cols:
+            val = c.resolve(settings, record)
+            if isinstance(val, str):
+                val = val.strip()
+            try:
+                values[c.identifier] = c.clean(val, values)
+            except ValidationError as e:
+                raise DataImportError(
+                    _(
+                        'Error while importing value "{value}" for column "{column}" in line "{line}": {message}').format(
+                        value=val if val is not None else '', column=c.verbose_name, line=i + 1, message=e.message
+                    )
+                )
+        data.append(values)
+    return data
+
+
 @app.task(base=ProfiledEventTask, throws=(DataImportError,))
 def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, charset=None) -> None:
     cf = CachedFile.objects.get(id=fileid)
     user = User.objects.get(pk=user)
     with language(locale, event.settings.region):
         cols = get_order_import_columns(event)
-        try:
-            parsed = parse_csv(cf.file, charset=charset)
-        except UnicodeDecodeError as e:
-            raise DataImportError(
-                _(
-                    'Error decoding special characters in your file: {message}').format(
-                    message=str(e)
-                )
-            )
-        orders = []
-        order = None
-        data = []
-
-        # Run validation
-        for i, record in enumerate(parsed):
-            if not any(record.values()):
-                continue
-            values = {}
-            for c in cols:
-                val = c.resolve(settings, record)
-                if isinstance(val, str):
-                    val = val.strip()
-                try:
-                    values[c.identifier] = c.clean(val, values)
-                except ValidationError as e:
-                    raise DataImportError(
-                        _(
-                            'Error while importing value "{value}" for column "{column}" in line "{line}": {message}').format(
-                            value=val if val is not None else '', column=c.verbose_name, line=i + 1, message=e.message
-                        )
-                    )
-            data.append(values)
+        data = _validate(cf, charset, cols, settings)
 
         if settings['orders'] == 'one' and len(data) > django_settings.PRETIX_MAX_ORDER_SIZE:
             raise DataImportError(
                 _('Orders cannot have more than %(max)s positions.') % {'max': django_settings.PRETIX_MAX_ORDER_SIZE}
             )
+
+        orders = []
+        order = None
 
         # Prepare model objects. Yes, this might consume lots of RAM, but allows us to make the actual SQL transaction
         # shorter. We'll see what works better in reality…
@@ -113,8 +119,8 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                 for c in cols:
                     c.assign(record.get(c.identifier), order, position, order._address)
 
-            except ImportError as e:
-                raise ImportError(
+            except (ValidationError, ImportError) as e:
+                raise DataImportError(
                     _('Invalid data in row {row}: {message}').format(row=i, message=str(e))
                 )
 
@@ -125,7 +131,7 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                     lock_objects(lock_seats, shared_lock_objects=[event])
                     for s in lock_seats:
                         if not s.is_available():
-                            raise ImportError(_('The seat you selected has already been taken. Please select a different seat.'))
+                            raise DataImportError(_('The seat you selected has already been taken. Please select a different seat.'))
 
                 save_transactions = []
                 for o in orders:
@@ -187,4 +193,62 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
         except DataImportError:
             raise ValidationError(_('We were not able to process your request completely as the server was too busy. '
                                     'Please try again.'))
+    cf.delete()
+
+
+@app.task(base=ProfiledEventTask, throws=(DataImportError,))
+def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user, charset=None) -> None:
+    cf = CachedFile.objects.get(id=fileid)
+    user = User.objects.get(pk=user)
+    with language(locale, event.settings.region):
+        cols = get_voucher_import_columns(event)
+        data = _validate(cf, charset, cols, settings)
+
+        # Prepare model objects. Yes, this might consume lots of RAM, but allows us to make the actual SQL transaction
+        # shorter. We'll see what works better in reality…
+        vouchers = []
+        lock_seats = []
+        for i, record in enumerate(data):
+            try:
+                voucher = Voucher(event=event)
+                vouchers.append(voucher)
+                if voucher.seat is not None:
+                    lock_seats.append(voucher.seat)
+
+                Voucher.clean_item_properties(
+                    record,
+                    event,
+                    record.get('quota'),
+                    record.get('item'),
+                    record.get('variation'),
+                    block_quota=record.get('block_quota')
+                )
+                Voucher.clean_subevent(record, event)
+                Voucher.clean_max_usages(record, 0)
+
+                for c in cols:
+                    c.assign(record.get(c.identifier), voucher)
+            except (ValidationError, ImportError) as e:
+                raise DataImportError(
+                    _('Invalid data in row {row}: {message}').format(row=i, message=str(e))
+                )
+
+        with transaction.atomic():
+            # We don't support quotas here, so we only need to lock if seats are in use
+            if lock_seats:
+                lock_objects(lock_seats, shared_lock_objects=[event])
+                for s in lock_seats:
+                    if not s.is_available():
+                        raise DataImportError(
+                            _('The seat you selected has already been taken. Please select a different seat.'))
+
+            for v in vouchers:
+                v.save()
+                v.log_action(
+                    'pretix.voucher.added',
+                    user=user,
+                    data={'source': 'import'}
+                )
+                for c in cols:
+                    c.save(v)
     cf.delete()

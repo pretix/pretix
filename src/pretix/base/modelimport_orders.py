@@ -19,17 +19,13 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import datetime
-import re
 from collections import defaultdict
-from decimal import Decimal, DecimalException
 
 import pycountry
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.db.models import Q
-from django.utils import formats
 from django.utils.functional import cached_property
 from django.utils.translation import (
     gettext as _, gettext_lazy, pgettext, pgettext_lazy,
@@ -42,10 +38,13 @@ from phonenumbers import SUPPORTED_REGIONS
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms.questions import guess_country
-from pretix.base.modelimport import ImportColumn, i18n_flat
+from pretix.base.modelimport import (
+    DatetimeColumnMixin, DecimalColumnMixin, ImportColumn, SubeventColumnMixin,
+    i18n_flat,
+)
 from pretix.base.models import (
     Customer, ItemVariation, OrderPosition, Question, QuestionAnswer,
-    QuestionOption, Seat, SubEvent,
+    QuestionOption, Seat,
 )
 from pretix.base.services.pricing import get_price
 from pretix.base.settings import (
@@ -90,63 +89,15 @@ class PhoneColumn(ImportColumn):
         order.phone = value
 
 
-class SubeventColumn(ImportColumn):
+class SubeventColumn(SubeventColumnMixin, ImportColumn):
     identifier = 'subevent'
     verbose_name = pgettext_lazy('subevents', 'Date')
     default_value = None
 
-    def __init__(self, *args, **kwargs):
-        self._subevent_cache = {}
-        super().__init__(*args, **kwargs)
-
-    @cached_property
-    def subevents(self):
-        return list(self.event.subevents.filter(active=True).order_by('date_from'))
-
-    def static_choices(self):
-        return [
-            (str(p.pk), str(p)) for p in self.subevents
-        ]
-
     def clean(self, value, previous_values):
         if not value:
             raise ValidationError(pgettext("subevent", "You need to select a date."))
-
-        if value in self._subevent_cache:
-            return self._subevent_cache[value]
-
-        input_formats = formats.get_format('DATETIME_INPUT_FORMATS', use_l10n=True)
-        for format in input_formats:
-            try:
-                d = datetime.datetime.strptime(value, format)
-                d = d.replace(tzinfo=self.event.timezone)
-                try:
-                    se = self.event.subevents.get(
-                        active=True,
-                        date_from__gt=d - datetime.timedelta(seconds=1),
-                        date_from__lt=d + datetime.timedelta(seconds=1),
-                    )
-                    self._subevent_cache[value] = se
-                    return se
-                except SubEvent.DoesNotExist:
-                    raise ValidationError(pgettext("subevent", "No matching date was found."))
-                except SubEvent.MultipleObjectsReturned:
-                    raise ValidationError(pgettext("subevent", "Multiple matching dates were found."))
-            except (ValueError, TypeError):
-                continue
-
-        matches = [
-            p for p in self.subevents
-            if str(p.pk) == value or any(
-                (v and v == value) for v in i18n_flat(p.name)) or p.date_from.isoformat() == value
-        ]
-        if len(matches) == 0:
-            raise ValidationError(pgettext("subevent", "No matching date was found."))
-        if len(matches) > 1:
-            raise ValidationError(pgettext("subevent", "Multiple matching dates were found."))
-
-        self._subevent_cache[value] = matches[0]
-        return matches[0]
+        return super().clean(value, previous_values)
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         position.subevent = value
@@ -474,19 +425,10 @@ class AttendeeState(ImportColumn):
         position.state = value or ''
 
 
-class Price(ImportColumn):
+class Price(DecimalColumnMixin, ImportColumn):
     identifier = 'price'
     verbose_name = gettext_lazy('Price')
     default_label = gettext_lazy('Calculate from product')
-
-    def clean(self, value, previous_values):
-        if value not in (None, ''):
-            value = formats.sanitize_separators(re.sub(r'[^0-9.,-]', '', value))
-            try:
-                value = Decimal(value)
-            except (DecimalException, TypeError):
-                raise ValidationError(_('You entered an invalid number.'))
-            return value
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         if value is None:
@@ -551,47 +493,17 @@ class Locale(ImportColumn):
         order.locale = value
 
 
-class ValidFrom(ImportColumn):
+class ValidFrom(DatetimeColumnMixin, ImportColumn):
     identifier = 'valid_from'
     verbose_name = gettext_lazy('Valid from')
-
-    def clean(self, value, previous_values):
-        if not value:
-            return
-
-        input_formats = formats.get_format('DATETIME_INPUT_FORMATS', use_l10n=True)
-        for format in input_formats:
-            try:
-                d = datetime.datetime.strptime(value, format)
-                d = d.replace(tzinfo=self.event.timezone)
-                return d
-            except (ValueError, TypeError):
-                pass
-        else:
-            raise ValidationError(_("Could not parse {value} as a date and time.").format(value=value))
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         position.valid_from = value
 
 
-class ValidUntil(ImportColumn):
+class ValidUntil(DatetimeColumnMixin, ImportColumn):
     identifier = 'valid_until'
     verbose_name = gettext_lazy('Valid until')
-
-    def clean(self, value, previous_values):
-        if not value:
-            return
-
-        input_formats = formats.get_format('DATETIME_INPUT_FORMATS', use_l10n=True)
-        for format in input_formats:
-            try:
-                d = datetime.datetime.strptime(value, format)
-                d = d.replace(tzinfo=self.event.timezone)
-                return d
-            except (ValueError, TypeError):
-                pass
-        else:
-            raise ValidationError(_("Could not parse {value} as a date and time.").format(value=value))
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         position.valid_until = value

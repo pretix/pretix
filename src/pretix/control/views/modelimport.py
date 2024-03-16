@@ -46,9 +46,13 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, TemplateView
 
 from pretix.base.models import CachedFile
-from pretix.base.services.modelimport import import_orders, parse_csv
+from pretix.base.services.modelimport import (
+    import_orders, import_vouchers, parse_csv,
+)
 from pretix.base.views.tasks import AsyncAction
-from pretix.control.forms.modelimport import OrdersProcessForm
+from pretix.control.forms.modelimport import (
+    OrdersProcessForm, VouchersProcessForm,
+)
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.http import redirect_to_url
 
@@ -184,7 +188,7 @@ class BaseProcessView(AsyncAction, FormView):
         return super().dispatch(request, *args, **kwargs)
 
     def get_error_url(self):
-        return reverse(self.request.path)
+        return self.request.path
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -232,6 +236,49 @@ class OrderProcessView(EventPermissionRequiredMixin, BaseProcessView):
 
     def get_success_url(self, value):
         return reverse('control:event.orders', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.organizer.slug,
+        })
+
+
+class VoucherImportView(EventPermissionRequiredMixin, BaseImportView):
+    template_name = 'pretixcontrol/vouchers/import_start.html'
+    permission = 'can_change_vouchers'
+
+    def get_process_url(self, request, cf, charset):
+        return reverse('control:event.vouchers.import.process', kwargs={
+            'event': request.event.slug,
+            'organizer': request.organizer.slug,
+            'file': cf.id
+        }) + "?charset=" + charset
+
+
+class VoucherProcessView(EventPermissionRequiredMixin, BaseProcessView):
+    permission = 'can_change_vouchers'
+    template_name = 'pretixcontrol/vouchers/import_process.html'
+    form_class = VouchersProcessForm
+    task = import_vouchers
+    settings_key = 'voucher_import_settings'
+
+    @property
+    def settings_holder(self):
+        return self.request.event
+
+    def get_form_kwargs(self):
+        k = super().get_form_kwargs()
+        k.update({
+            'event': self.request.event,
+        })
+        return k
+
+    def get_form_url(self):
+        return reverse('control:event.vouchers.import', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.organizer.slug,
+        })
+
+    def get_success_url(self, value):
+        return reverse('control:event.vouchers', kwargs={
             'event': self.request.event.slug,
             'organizer': self.request.organizer.slug,
         })
