@@ -52,9 +52,17 @@ Example::
 ``currency``
     The default currency as a three-letter code. Defaults to ``EUR``.
 
+``cachedir``
+    The local path to a directory where temporary files will be stored.
+    Defaults to the ``cache`` directory below the ``datadir``.
+
 ``datadir``
     The local path to a data directory that will be used for storing user uploads and similar
     data. Defaults to the value of the environment variable ``DATA_DIR`` or ``data``.
+
+``logdir``
+    The local path to a directory where log files will be stored.
+    Defaults to the ``logs`` directory below the ``datadir``.
 
 ``plugins_default``
     A comma-separated list of plugins that are enabled by default for all new events.
