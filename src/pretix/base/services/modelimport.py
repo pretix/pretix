@@ -19,8 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import csv
-import io
 from decimal import Decimal
 
 from django.conf import settings as django_settings
@@ -29,13 +27,14 @@ from django.db import transaction
 from django.utils.timezone import now
 from django.utils.translation import gettext as _
 
-from pretix.base.i18n import LazyLocaleException, language
+from pretix.base.i18n import language
+from pretix.base.modelimport import DataImportError, parse_csv
+from pretix.base.modelimport_orders import get_order_import_columns
 from pretix.base.models import (
     CachedFile, Event, InvoiceAddress, Order, OrderPayment, OrderPosition,
     User,
 )
 from pretix.base.models.orders import Transaction
-from pretix.base.orderimport import get_all_columns
 from pretix.base.services.invoices import generate_invoice, invoice_qualified
 from pretix.base.services.locking import lock_objects
 from pretix.base.services.tasks import ProfiledEventTask
@@ -43,55 +42,12 @@ from pretix.base.signals import order_paid, order_placed
 from pretix.celery_app import app
 
 
-class DataImportError(LazyLocaleException):
-    def __init__(self, *args):
-        msg = args[0]
-        msgargs = args[1] if len(args) > 1 else None
-        self.args = args
-        if msgargs:
-            msg = _(msg) % msgargs
-        else:
-            msg = _(msg)
-        super().__init__(msg)
-
-
-def parse_csv(file, length=None, mode="strict", charset=None):
-    file.seek(0)
-    data = file.read(length)
-    if not charset:
-        try:
-            import chardet
-            charset = chardet.detect(data)['encoding']
-        except ImportError:
-            charset = file.charset
-    data = data.decode(charset or "utf-8", mode)
-    # If the file was modified on a Mac, it only contains \r as line breaks
-    if '\r' in data and '\n' not in data:
-        data = data.replace('\r', '\n')
-
-    try:
-        dialect = csv.Sniffer().sniff(data.split("\n")[0], delimiters=";,.#:")
-    except csv.Error:
-        return None
-
-    if dialect is None:
-        return None
-
-    reader = csv.DictReader(io.StringIO(data), dialect=dialect)
-    return reader
-
-
-def setif(record, obj, attr, setting):
-    if setting.startswith('csv:'):
-        setattr(obj, attr, record[setting[4:]] or '')
-
-
 @app.task(base=ProfiledEventTask, throws=(DataImportError,))
 def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, charset=None) -> None:
     cf = CachedFile.objects.get(id=fileid)
     user = User.objects.get(pk=user)
     with language(locale, event.settings.region):
-        cols = get_all_columns(event)
+        cols = get_order_import_columns(event)
         try:
             parsed = parse_csv(cf.file, charset=charset)
         except UnicodeDecodeError as e:

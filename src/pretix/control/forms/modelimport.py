@@ -22,10 +22,10 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.services.orderimport import get_all_columns
+from pretix.base.services.modelimport import get_order_import_columns
 
 
-class ProcessForm(forms.Form):
+class OrdersProcessForm(forms.Form):
     orders = forms.ChoiceField(
         label=_('Import mode'),
         choices=(
@@ -57,7 +57,7 @@ class ProcessForm(forms.Form):
             ('csv:{}'.format(h), _('CSV column: "{name}"').format(name=h)) for h in headers
         ]
 
-        for c in get_all_columns(self.event):
+        for c in get_order_import_columns(self.event):
             choices = []
             if c.default_value:
                 choices.append((c.default_value, c.default_label))

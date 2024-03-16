@@ -38,7 +38,7 @@ from django.views.generic.base import RedirectView
 
 from pretix.control.views import (
     auth, checkin, dashboards, discounts, event, geo, global_settings, item,
-    main, oauth, orderimport, orders, organizer, pdf, search, shredder,
+    main, modelimport, oauth, orders, organizer, pdf, search, shredder,
     subevents, typeahead, user, users, vouchers, waitinglist,
 )
 
@@ -412,8 +412,8 @@ urlpatterns = [
         re_path(r'^invoice/(?P<invoice>[^/]+)$', orders.InvoiceDownload.as_view(),
                 name='event.invoice.download'),
         re_path(r'^orders/overview/$', orders.OverView.as_view(), name='event.orders.overview'),
-        re_path(r'^orders/import/$', orderimport.ImportView.as_view(), name='event.orders.import'),
-        re_path(r'^orders/import/(?P<file>[^/]+)/$', orderimport.ProcessView.as_view(), name='event.orders.import.process'),
+        re_path(r'^orders/import/$', modelimport.OrderImportView.as_view(), name='event.orders.import'),
+        re_path(r'^orders/import/(?P<file>[^/]+)/$', modelimport.OrderProcessView.as_view(), name='event.orders.import.process'),
         re_path(r'^orders/export/$', orders.ExportView.as_view(), name='event.orders.export'),
         re_path(r'^orders/export/(?P<pk>[^/]+)/run$', orders.RunScheduledExportView.as_view(), name='event.orders.export.scheduled.run'),
         re_path(r'^orders/export/(?P<pk>[^/]+)/delete$', orders.DeleteScheduledExportView.as_view(), name='event.orders.export.scheduled.delete'),

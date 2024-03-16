@@ -46,9 +46,9 @@ from django.utils.translation import gettext_lazy as _
 from django.views.generic import FormView, TemplateView
 
 from pretix.base.models import CachedFile
-from pretix.base.services.orderimport import import_orders, parse_csv
+from pretix.base.services.modelimport import import_orders, parse_csv
 from pretix.base.views.tasks import AsyncAction
-from pretix.control.forms.orderimport import ProcessForm
+from pretix.control.forms.modelimport import OrdersProcessForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.helpers.http import redirect_to_url
 
@@ -64,28 +64,16 @@ ENCODINGS = (
 )
 
 
-class ImportView(EventPermissionRequiredMixin, TemplateView):
-    template_name = 'pretixcontrol/orders/import_start.html'
-    permission = 'can_change_orders'
-
+class BaseImportView(TemplateView):
     def post(self, request, *args, **kwargs):
         if 'file' not in request.FILES:
-            return redirect_to_url(reverse('control:event.orders.import', kwargs={
-                'event': request.event.slug,
-                'organizer': request.organizer.slug,
-            }))
+            return redirect_to_url(request.path)
         if not request.FILES['file'].name.lower().endswith('.csv'):
             messages.error(request, _('Please only upload CSV files.'))
-            return redirect_to_url(reverse('control:event.orders.import', kwargs={
-                'event': request.event.slug,
-                'organizer': request.organizer.slug,
-            }))
+            return redirect_to_url(request.path)
         if request.FILES['file'].size > settings.FILE_UPLOAD_MAX_SIZE_OTHER:
             messages.error(request, _('Please do not upload files larger than 10 MB.'))
-            return redirect_to_url(reverse('control:event.orders.import', kwargs={
-                'event': request.event.slug,
-                'organizer': request.organizer.slug,
-            }))
+            return redirect_to_url(request.path)
 
         cf = CachedFile.objects.create(
             expires=now() + timedelta(days=1),
@@ -100,41 +88,47 @@ class ImportView(EventPermissionRequiredMixin, TemplateView):
         else:
             charset = "auto"
 
-        return redirect(reverse('control:event.orders.import.process', kwargs={
-            'event': request.event.slug,
-            'organizer': request.organizer.slug,
-            'file': cf.id
-        }) + "?charset=" + charset)
+        return redirect(self.get_process_url(request, cf, charset))
 
     def get_context_data(self, **kwargs):
         return super().get_context_data(encodings=ENCODINGS)
 
+    def get_process_url(self, request, cf, charset):
+        raise NotImplementedError()  # noqa
 
-class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
-    permission = 'can_change_orders'
-    template_name = 'pretixcontrol/orders/import_process.html'
-    form_class = ProcessForm
-    task = import_orders
+
+class BaseProcessView(AsyncAction, FormView):
     known_errortypes = ['DataImportError']
+
+    @property
+    def settings_key(self):
+        raise NotImplementedError()  # noqa
+
+    @property
+    def settings_holder(self):
+        raise NotImplementedError()  # noqa
 
     def get_form_kwargs(self):
         k = super().get_form_kwargs()
         k.update({
-            'event': self.request.event,
-            'initial': self.request.event.settings.order_import_settings,
+            'initial': self.settings_holder.settings.get(self.settings_key, as_type=dict),
             'headers': self.parsed.fieldnames
         })
         return k
 
     def form_valid(self, form):
-        self.request.event.settings.order_import_settings = form.cleaned_data
+        self.settings_holder.settings.set(self.settings_key, form.cleaned_data)
         if self.request.GET.get("charset") in ENCODINGS:
             charset = self.request.GET.get("charset")
         else:
             charset = None
         return self.do(
-            self.request.event.pk, self.file.id, form.cleaned_data, self.request.LANGUAGE_CODE,
-            self.request.user.pk, charset
+            self.settings_holder.pk,
+            self.file.id,
+            form.cleaned_data,
+            self.request.LANGUAGE_CODE,
+            self.request.user.pk,
+            charset,
         )
 
     @cached_property
@@ -176,28 +170,21 @@ class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
         return _('The import was successful.')
 
     def get_success_url(self, value):
-        return reverse('control:event.orders', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.organizer.slug,
-        })
+        raise NotImplementedError()  # noqa
+
+    def get_form_url(self):
+        raise NotImplementedError()  # noqa
 
     def dispatch(self, request, *args, **kwargs):
         if 'async_id' in request.GET and settings.HAS_CELERY:
             return self.get_result(request)
         if not self.parsed or not self.parsed_list:
             messages.error(request, _('We\'ve been unable to parse the uploaded file as a CSV file.'))
-            return redirect(reverse('control:event.orders.import', kwargs={
-                'event': request.event.slug,
-                'organizer': request.organizer.slug,
-            }))
+            return redirect(self.get_form_url())
         return super().dispatch(request, *args, **kwargs)
 
     def get_error_url(self):
-        return reverse('control:event.orders.import.process', kwargs={
-            'event': self.request.event.slug,
-            'organizer': self.request.organizer.slug,
-            'file': self.file.id
-        })
+        return reverse(self.request.path)
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
@@ -205,3 +192,46 @@ class ProcessView(EventPermissionRequiredMixin, AsyncAction, FormView):
         ctx['parsed'] = self.parsed
         ctx['sample_rows'] = self.parsed_list[:3]
         return ctx
+
+
+class OrderImportView(EventPermissionRequiredMixin, BaseImportView):
+    template_name = 'pretixcontrol/orders/import_start.html'
+    permission = 'can_change_orders'
+
+    def get_process_url(self, request, cf, charset):
+        return reverse('control:event.orders.import.process', kwargs={
+            'event': request.event.slug,
+            'organizer': request.organizer.slug,
+            'file': cf.id
+        }) + "?charset=" + charset
+
+
+class OrderProcessView(EventPermissionRequiredMixin, BaseProcessView):
+    permission = 'can_change_orders'
+    template_name = 'pretixcontrol/orders/import_process.html'
+    form_class = OrdersProcessForm
+    task = import_orders
+    settings_key = 'order_import_settings'
+
+    @property
+    def settings_holder(self):
+        return self.request.event
+
+    def get_form_kwargs(self):
+        k = super().get_form_kwargs()
+        k.update({
+            'event': self.request.event,
+        })
+        return k
+
+    def get_form_url(self):
+        return reverse('control:event.orders.import', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.organizer.slug,
+        })
+
+    def get_success_url(self, value):
+        return reverse('control:event.orders', kwargs={
+            'event': self.request.event.slug,
+            'organizer': self.request.organizer.slug,
+        })
