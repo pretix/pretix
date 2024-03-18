@@ -33,6 +33,7 @@ from pretix.base.models import (
     OrderPosition, SubEvent,
 )
 from pretix.helpers import OF_SELF
+from pretix.presale.timemachine import time_machine_now
 
 
 def membership_validity(item: Item, subevent: Optional[SubEvent], event: Event):
@@ -48,7 +49,7 @@ def membership_validity(item: Item, subevent: Optional[SubEvent], event: Event):
 
     else:
         # Always start at start of day
-        date_start = now().astimezone(tz).replace(hour=0, minute=0, second=0, microsecond=0)
+        date_start = time_machine_now().astimezone(tz).replace(hour=0, minute=0, second=0, microsecond=0)
         date_end = date_start
 
         if item.grant_membership_duration_months:

@@ -85,6 +85,7 @@ from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
 from ...helpers.format import format_map
 from ...helpers.names import build_name
+from ...presale.timemachine import time_machine_now
 from ...testutils.middleware import debugflags_var
 from ._transactions import (
     _fail, _transactions_mark_order_clean, _transactions_mark_order_dirty,
@@ -3063,9 +3064,9 @@ class CartPosition(AbstractPosition):
     def predicted_validity(self):
         return self.item.compute_validity(
             requested_start=(
-                max(self.requested_valid_from, now())
+                max(self.requested_valid_from, time_machine_now())
                 if self.requested_valid_from and self.item.validity_dynamic_start_choice
-                else now()
+                else time_machine_now()
             ),
             override_tz=self.event.timezone,
         )
