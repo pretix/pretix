@@ -42,3 +42,13 @@ def thumb(source, arg):
         # default_storage.url works for all files in NanoCDNStorage. For others, this may return an invalid URL.
         # But for a fallback, this can probably be accepted.
         return source.url if hasattr(source, 'url') else default_storage.url(source.name)
+
+
+@register.filter
+def favicon_thumb(source, arg):
+    try:
+        return get_thumbnail(source, arg, formats=PILLOW_FORMATS_QUESTIONS_FAVICON).thumb.url
+    except:
+        logger.exception(f'Failed to create thumbnail of {source}')
+        return source.url if hasattr(source, 'url') else default_storage.url(source.name)
+

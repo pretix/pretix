@@ -22,12 +22,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=0">
     {% block custom_header %}{% endblock %}
     {% if settings.favicon %}
-        <link rel="icon" href="{{ settings.favicon|thumb:'16x16^' }}">
-        <link rel="shortcut icon" href="{{ settings.favicon|thumb:'16x16^' }}">
-        <link rel="icon" type="image/png" sizes="16x16" href="{{ settings.favicon|thumb:'16x16^' }}">
-        <link rel="icon" type="image/png" sizes="32x32" href="{{ settings.favicon|thumb:'32x32^' }}">
-        <link rel="icon" type="image/png" sizes="192x192" href="{{ settings.favicon|thumb:'192x192^' }}">
-        <link rel="apple-touch-icon" sizes="180x180" href="{{ settings.favicon|thumb:'180x180^' }}">
+        <link rel="icon" href="{{ settings.favicon|favicon_thumb:'16x16^' }}">
+        <link rel="shortcut icon" href="{{ settings.favicon|favicon_thumb:'16x16^' }}">
+        <link rel="icon" type="image/png" sizes="16x16" href="{{ settings.favicon|favicon_thumb:'16x16^' }}">
+        <link rel="icon" type="image/png" sizes="32x32" href="{{ settings.favicon|favicon_thumb:'32x32^' }}">
+        <link rel="icon" type="image/png" sizes="192x192" href="{{ settings.favicon|favicon_thumb:'192x192^' }}">
+        <link rel="apple-touch-icon" sizes="180x180" href="{{ settings.favicon|favicon_thumb:'180x180^' }}">
     {% elif development_warning or debug_warning %}
         <link rel="shortcut icon" href="{% static "pretixbase/img/favicon-debug.ico" %}">
     {% else %}
