@@ -30,15 +30,26 @@ class ProcessForm(forms.Form):
 
     def __init__(self, *args, **kwargs):
         headers = kwargs.pop('headers')
-        initital = kwargs.pop('initial', {})
+        initital = kwargs.pop('initial', {}) or {}
         kwargs['initial'] = initital
+        columns = self.get_columns()
+        column_keys = {c.identifier for c in columns}
+
+        if not initital or all(k not in column_keys for k in initital.keys()):
+            for c in columns:
+                initital.setdefault(c.identifier, c.initial)
+                for h in headers:
+                    if h == c.identifier or h == str(c.verbose_name):
+                        initital[c.identifier] = 'csv:{}'.format(h)
+                        break
+
         super().__init__(*args, **kwargs)
 
         header_choices = [
             ('csv:{}'.format(h), _('CSV column: "{name}"').format(name=h)) for h in headers
         ]
 
-        for c in self.get_columns():
+        for c in columns:
             choices = []
             if c.default_value:
                 choices.append((c.default_value, c.default_label))
@@ -49,7 +60,6 @@ class ProcessForm(forms.Form):
             self.fields[c.identifier] = forms.ChoiceField(
                 label=str(c.verbose_name),
                 choices=choices,
-                initial=c.initial,
                 widget=forms.Select(
                     attrs={'data-static': 'true'}
                 )
