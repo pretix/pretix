@@ -22,6 +22,7 @@
 import logging
 
 from django import template
+from django.conf import settings
 from django.core.files import File
 from django.core.files.storage import default_storage
 
@@ -35,8 +36,13 @@ logger = logging.getLogger(__name__)
 def thumb(source, arg):
     if isinstance(source, File):
         source = source.name
+    formats = list(set().union(
+        settings.PILLOW_FORMATS_IMAGE,
+        settings.PILLOW_FORMATS_QUESTIONS_FAVICON,
+        settings.PILLOW_FORMATS_QUESTIONS_IMAGE
+    ))
     try:
-        return get_thumbnail(source, arg).thumb.url
+        return get_thumbnail(source, arg, formats=formats).thumb.url
     except:
         logger.exception(f'Failed to create thumbnail of {source}')
         return default_storage.url(source)
