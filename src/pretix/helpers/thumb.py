@@ -24,7 +24,7 @@ import math
 from io import BytesIO
 
 from django.conf import settings
-from django.core.files.base import ContentFile, File
+from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from PIL import Image, ImageOps, ImageSequence
 from PIL.Image import Resampling
@@ -165,7 +165,7 @@ def resize_image(image, size):
 
 
 def create_thumbnail(source, size, formats=None):
-    source_name = source.name if isinstance(source, File) else source
+    source_name = str(source)
 
     # HACK: this ensures that the file is opened in binary mode, which is not guaranteed otherwise, esp. for
     # files retrieved from hierarkey. For Django Files in FileSystemStorage, where source.name is the absolute
@@ -218,7 +218,7 @@ def create_thumbnail(source, size, formats=None):
 def get_thumbnail(source, size, formats=None):
     # Assumes files are immutable
     try:
-        source_name = source.name if isinstance(source, File) else source
+        source_name = str(source)
         return Thumbnail.objects.get(source=source_name, size=size)
     except Thumbnail.DoesNotExist:
         return create_thumbnail(source, size, formats=formats)
