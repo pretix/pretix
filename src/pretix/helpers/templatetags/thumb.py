@@ -22,7 +22,6 @@
 import logging
 
 from django import template
-from django.core.files import File
 from django.core.files.storage import default_storage
 
 from pretix._base_settings import PILLOW_FORMATS_QUESTIONS_FAVICON
@@ -51,4 +50,3 @@ def favicon_thumb(source, arg):
     except:
         logger.exception(f'Failed to create thumbnail of {source}')
         return source.url if hasattr(source, 'url') else default_storage.url(source.name)
-
