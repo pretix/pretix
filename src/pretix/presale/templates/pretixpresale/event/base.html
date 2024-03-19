@@ -34,16 +34,16 @@
         </div>
     {% endif %}
     {% if request.now_dt_is_fake %}
-        <div class="offline-banner">
+        <div class="timemachine-banner">
             <div class="container">
                 <span class="fa fa-clock-o" aria-hidden="true"></span>
                 {% trans "You are currently using the time machine. The ticket shop is rendered as if it were" %} {{ request.now_dt }}
-                <a href="{{ site_url }}{% url "control:event.live" event=event.slug organizer=event.organizer.slug %}">
+                <a href="{{ site_url }}{% url "control:event.live" event=event.slug organizer=event.organizer.slug %}" class="btn-link">
                     {% trans "Change" %}
                 </a>
                 <form action="{{ site_url }}{% url "control:event.live" event=event.slug organizer=event.organizer.slug %}" method="post" class="download-btn-form">
                     {% csrf_token %}
-                    <input type="submit" class="btn btn-link" value="{% trans "Go back to current time" %}" name="timemachine_disable">
+                    <button type="submit" class="btn-link" value="true" name="timemachine_disable">{% trans "Go back to current time" %}</button>
                 </form>
             </div>
         </div>

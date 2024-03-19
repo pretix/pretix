@@ -187,18 +187,19 @@ article.item-with-variations .product-row:last-child:after {
 div.front-page {
     margin-top: 30px;
 }
-.offline-banner {
-    background: $brand-danger;
+.offline-banner, .timemachine-banner {
     color: white;
     width: 100%;
     padding: 5px;
     text-align: center;
 
-    a {
+    a, .btn-link {
         text-decoration: underline;
         color: white;
     }
 }
+.offline-banner { background: $brand-danger; }
+.timemachine-banner { background: $brand-warning; }
 #questions_group .panel-title a {
     line-height: 22px;
 }
