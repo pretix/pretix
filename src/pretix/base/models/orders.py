@@ -541,7 +541,7 @@ class Order(LockModel, LoggedModel):
         self.save(update_fields=['last_modified'])
 
     def set_expires(self, now_dt=None, subevents=None):
-        now_dt = now_dt or now()
+        now_dt = now_dt or time_machine_now()
         tz = ZoneInfo(self.event.settings.timezone)
         mode = self.event.settings.get('payment_term_mode')
         if mode == 'days':

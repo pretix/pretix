@@ -106,6 +106,7 @@ from pretix.celery_app import app
 from pretix.helpers import OF_SELF
 from pretix.helpers.models import modelcopy
 from pretix.helpers.periodic import minimum_interval
+from pretix.presale.timemachine import time_machine_now
 from pretix.testutils.middleware import debugflags_var
 
 
@@ -1163,7 +1164,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
     warnings = []
     any_payment_failed = False
 
-    now_dt = now()
+    now_dt = time_machine_now()
     err_out = None
     with transaction.atomic(durable=True):
         positions = list(
