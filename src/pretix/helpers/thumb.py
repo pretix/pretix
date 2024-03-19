@@ -21,6 +21,7 @@
 #
 import hashlib
 import math
+import os
 from io import BytesIO
 
 from django.conf import settings
@@ -182,12 +183,13 @@ def create_thumbnail(source, size, formats=None):
     frames = [resize_image(frame, size) for frame in ImageSequence.Iterator(image)]
     image_out = frames[0]
     save_kwargs = {}
+    source_ext = os.path.splitext(source_name)[1].lower()
 
-    if source_name.lower().endswith('.jpg') or source_name.lower().endswith('.jpeg'):
+    if source_ext == '.jpg' or source_ext == '.jpeg':
         # Yields better file sizes for photos
         target_ext = 'jpeg'
         quality = 95
-    elif source_name.lower().endswith('.gif') or source_name.lower().endswith('.png'):
+    elif source_ext =='.gif' or source_ext == '.png':
         target_ext = source_name.lower()[-3:]
         quality = None
         image_out.info = image.info
@@ -203,7 +205,7 @@ def create_thumbnail(source, size, formats=None):
     checksum = hashlib.md5(image.tobytes()).hexdigest()
     name = checksum + '.' + size.replace('^', 'c') + '.' + target_ext
     buffer = BytesIO()
-    if image_out.mode == "P" and source_name.lower().endswith('.png'):
+    if image_out.mode == "P" and source_ext == '.png':
         image_out = image_out.convert('RGBA')
     if image_out.mode not in ("1", "L", "RGB", "RGBA"):
         image_out = image_out.convert('RGB')
