@@ -111,14 +111,14 @@ def import_orders(event: Event, fileid: str, settings: dict, locale: str, user, 
                 position = OrderPosition(positionid=len(order._positions) + 1)
                 position.attendee_name_parts = {'_scheme': event.settings.name_scheme}
                 position.meta_info = {}
-                if position.seat is not None:
-                    lock_seats.append(position.seat)
                 order._positions.append(position)
                 position.assign_pseudonymization_id()
 
                 for c in cols:
                     c.assign(record.get(c.identifier), order, position, order._address)
 
+                if position.seat is not None:
+                    lock_seats.append(position.seat)
             except (ValidationError, ImportError) as e:
                 raise DataImportError(
                     _('Invalid data in row {row}: {message}').format(row=i, message=str(e))
@@ -212,8 +212,6 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
             try:
                 voucher = Voucher(event=event)
                 vouchers.append(voucher)
-                if voucher.seat is not None:
-                    lock_seats.append(voucher.seat)
 
                 Voucher.clean_item_properties(
                     record,
@@ -228,6 +226,9 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
 
                 for c in cols:
                     c.assign(record.get(c.identifier), voucher)
+
+                if voucher.seat is not None:
+                    lock_seats.append(voucher.seat)
             except (ValidationError, ImportError) as e:
                 raise DataImportError(
                     _('Invalid data in row {row}: {message}').format(row=i, message=str(e))
