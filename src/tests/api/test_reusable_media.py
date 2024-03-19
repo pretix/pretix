@@ -155,6 +155,7 @@ def test_medium_detail(token_client, organizer, event, medium, giftcard, custome
             "identifier": customer.identifier,
             "external_identifier": None,
             "email": "foo@example.org",
+            "phone": None,
             "name": "Foo",
             "name_parts": {"_legacy": "Foo"},
             "is_active": True,
