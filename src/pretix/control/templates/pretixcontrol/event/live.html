@@ -46,7 +46,7 @@
                             {% endfor %}
                         </ul>
                     </div>
-                    <div class="test-right">
+                    <div class="text-right">
                         <button type="submit" class="btn btn-primary btn-lg btn-save" disabled>
                             {% trans "Go live" %}
                         </button>
@@ -82,10 +82,10 @@
                     <p>
                         {% trans "Your shop is currently in test mode. All orders are not persistent and can be deleted at any point." %}
                     </p>
-                    <div class="form-inline">
-                        <label class="checkbox">
+                    <div class="checkbox">
+                        <label>
                             <input type="checkbox" name="delete" value="yes" />
-                            {% trans "Permanently delete all orders created in test mode" %}
+                            <b>{% trans "Permanently delete all orders created in test mode" %}</b>
                         </label>
                     </div>
                     <div class="text-right">
