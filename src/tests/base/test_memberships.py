@@ -631,6 +631,8 @@ def test_validate_membership_parallel_validity_dynamic(event, customer, membersh
 
 @pytest.mark.django_db
 def test_validate_membership_parallel_validity_fixed(event, customer, membership, requiring_ticket, membership_type):
+    event.date_from = datetime(2021, 0, 1, 0, 0, 0, 0, tzinfo=TZ)
+    event.save()
     requiring_ticket.validity_mode = Item.VALIDITY_MODE_FIXED
     requiring_ticket.validity_fixed_from = now().replace(hour=2, minute=20, second=0)
     requiring_ticket.validity_fixed_until = now().replace(hour=6, minute=20, second=0)

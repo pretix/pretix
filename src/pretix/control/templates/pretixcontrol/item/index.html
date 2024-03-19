@@ -267,6 +267,7 @@
                         {% bootstrap_field form.show_quota_left layout="control" %}
                         {% for f in plugin_forms %}
                             {% if not f.is_layouts and not f.title %}
+                                <hr />
                                 {% if f.template and not "template" in f.fields %}
                                     {% include f.template with form=f %}
                                 {% else %}
