@@ -46,6 +46,8 @@ from zoneinfo import ZoneInfo
 import bleach
 import qrcode
 import qrcode.image.svg
+from dateutil import parser
+from django import forms
 from django.apps import apps
 from django.conf import settings
 from django.contrib import messages
@@ -63,7 +65,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
-from django.utils.timezone import now
+from django.utils.timezone import now, get_current_timezone
 from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
 from django.views.generic import FormView, ListView
 from django.views.generic.base import TemplateView, View
@@ -91,9 +93,10 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
-from pretix.multidomain.urlreverse import build_absolute_uri, get_event_domain
+from pretix.multidomain.urlreverse import build_absolute_uri, get_event_domain, eventreverse
 from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
+from ...base.forms.widgets import SplitDateTimePickerWidget
 
 from ...base.i18n import language
 from ...base.models.items import (
@@ -950,18 +953,40 @@ class EventPermissions(EventSettingsViewMixin, EventPermissionRequiredMixin, Tem
     template_name = 'pretixcontrol/event/permissions.html'
 
 
+class TimemachineForm(forms.Form):
+    now_dt = forms.SplitDateTimeField(
+        label=_('Fake date time'),
+        widget=SplitDateTimePickerWidget(),
+        initial=lambda: now().astimezone(get_current_timezone())
+    )
+
+
 class EventLive(EventPermissionRequiredMixin, TemplateView):
     permission = 'can_change_event_settings'
     template_name = 'pretixcontrol/event/live.html'
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.timemachine_form = TimemachineForm(
+            data=request.method == 'POST' and request.POST or None,
+            initial={'now_dt':parser.parse(request.session.get('timemachine_now_dt', None))} if request.session.get('timemachine_now_dt', None) else {}
+        )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['issues'] = self.request.event.live_issues
         ctx['actual_orders'] = self.request.event.orders.filter(testmode=False).exists()
+        ctx['timemachine_form'] = self.timemachine_form
         return ctx
 
     def post(self, request, *args, **kwargs):
-        if request.POST.get("live") == "true" and not self.request.event.live_issues:
+        if self.timemachine_form.is_valid():
+            request.session['timemachine_now_dt'] = str(self.timemachine_form.cleaned_data['now_dt'])
+            return redirect(eventreverse(request.event, "presale:event.index"))
+        elif request.POST.get("timemachine_disable"):
+            request.session['timemachine_now_dt'] = None
+            messages.success(self.request, _('Time machine disabled!'))
+        elif request.POST.get("live") == "true" and not self.request.event.live_issues:
             with transaction.atomic():
                 request.event.live = True
                 request.event.save()

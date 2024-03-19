@@ -46,16 +46,16 @@ class TimeMachineMiddleware:
 
     def __call__(self, request):
         if hasattr(request, 'event') and hasattr(request, '_namespace') and request._namespace == 'presale' and \
-                'time_machine' in request.COOKIES and \
+                'timemachine_now_dt' in request.session and \
                 request.user.has_event_permission(request.organizer, request.event, 'can_change_event_settings', request):
             print("setting now_dt from cookie")
-            request.now_dt = parse(request.COOKIES['time_machine'])
+            request.now_dt = parse(request.session['timemachine_now_dt'])
             request.now_dt_is_fake = True
         else:
             print("setting now_dt to now",
                   "hasevent?",hasattr(request, 'event') ,
                   "namespace?",hasattr(request, '_namespace') and request._namespace,
-                  "cookies?",request.COOKIES)
+                  "cookies?",request.session)
             request.now_dt = now()
             request.now_dt_is_fake = False
 

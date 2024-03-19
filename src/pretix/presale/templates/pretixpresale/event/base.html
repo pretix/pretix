@@ -36,11 +36,15 @@
     {% if request.now_dt_is_fake %}
         <div class="offline-banner">
             <div class="container">
-                <span class="fa fa-user-secret" aria-hidden="true"></span>
+                <span class="fa fa-clock-o" aria-hidden="true"></span>
                 {% trans "You are currently using the time machine. The ticket shop is rendered as if it were" %} {{ request.now_dt }}
-                <a href="#">
-                    {% trans "Go back to current time" %}
+                <a href="{{ site_url }}{% url "control:event.live" event=event.slug organizer=event.organizer.slug %}">
+                    {% trans "Change" %}
                 </a>
+                <form action="{{ site_url }}{% url "control:event.live" event=event.slug organizer=event.organizer.slug %}" method="post" class="download-btn-form">
+                    {% csrf_token %}
+                    <input type="submit" class="btn btn-link" value="{% trans "Go back to current time" %}" name="timemachine_disable">
+                </form>
             </div>
         </div>
     {% endif %}
