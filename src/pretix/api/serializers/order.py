@@ -1585,7 +1585,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         if order.total == Decimal('0.00') and validated_data.get('status') == Order.STATUS_PAID and not payment_provider:
             payment_provider = 'free'
 
-        if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
+        if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID and not validated_data.get('require_approval'):
             order.status = Order.STATUS_PAID
             order.save()
             order.payments.create(
@@ -1597,6 +1597,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         elif validated_data.get('status') == Order.STATUS_PAID:
             if not payment_provider:
                 raise ValidationError('You cannot create a paid order without a payment provider.')
+            if validated_data.get('require_approval'):
+                raise ValidationError('You cannot create a paid order that requires approval.')
             order.payments.create(
                 amount=order.total,
                 provider=payment_provider,
