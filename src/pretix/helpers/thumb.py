@@ -21,6 +21,7 @@
 #
 import hashlib
 import math
+import os
 from io import BytesIO
 
 from django.conf import settings
@@ -164,9 +165,16 @@ def resize_image(image, size):
     return image
 
 
-def create_thumbnail(sourcename, size, formats=None):
-    source = default_storage.open(sourcename)
-    image = Image.open(BytesIO(source.read()), formats=formats or settings.PILLOW_FORMATS_QUESTIONS_IMAGE)
+def create_thumbnail(source, size, formats=None):
+    source_name = str(source)
+
+    # HACK: this ensures that the file is opened in binary mode, which is not guaranteed otherwise, esp. for
+    # files retrieved from hierarkey. For Django Files in FileSystemStorage, where source.name is the absolute
+    # filesystem path, this only works because _open() uses safe_join, which accepts absolute paths if they match the
+    # expected base dir. For NanoCDN Files, this works because source.name is set to the storage path.
+    source_rb = default_storage.open(source_name, mode='rb')
+
+    image = Image.open(BytesIO(source_rb.read()), formats=formats or settings.PILLOW_FORMATS_QUESTIONS_IMAGE)
     try:
         image.load()
     except:
@@ -175,13 +183,14 @@ def create_thumbnail(sourcename, size, formats=None):
     frames = [resize_image(frame, size) for frame in ImageSequence.Iterator(image)]
     image_out = frames[0]
     save_kwargs = {}
+    source_ext = os.path.splitext(source_name)[1].lower()
 
-    if source.name.lower().endswith('.jpg') or source.name.lower().endswith('.jpeg'):
+    if source_ext == '.jpg' or source_ext == '.jpeg':
         # Yields better file sizes for photos
         target_ext = 'jpeg'
         quality = 95
-    elif source.name.lower().endswith('.gif') or source.name.lower().endswith('.png'):
-        target_ext = source.name.lower()[-3:]
+    elif source_ext =='.gif' or source_ext == '.png':
+        target_ext = source_name.lower()[-3:]
         quality = None
         image_out.info = image.info
         save_kwargs = {
@@ -196,14 +205,14 @@ def create_thumbnail(sourcename, size, formats=None):
     checksum = hashlib.md5(image.tobytes()).hexdigest()
     name = checksum + '.' + size.replace('^', 'c') + '.' + target_ext
     buffer = BytesIO()
-    if image_out.mode == "P" and source.name.lower().endswith('.png'):
+    if image_out.mode == "P" and source_ext == '.png':
         image_out = image_out.convert('RGBA')
     if image_out.mode not in ("1", "L", "RGB", "RGBA"):
         image_out = image_out.convert('RGB')
     image_out.save(fp=buffer, format=target_ext.upper(), quality=quality, **save_kwargs)
     imgfile = ContentFile(buffer.getvalue())
 
-    t = Thumbnail.objects.create(source=sourcename, size=size)
+    t = Thumbnail.objects.create(source=source_name, size=size)
     t.thumb.save(name, imgfile)
     return t
 
@@ -211,6 +220,7 @@ def create_thumbnail(sourcename, size, formats=None):
 def get_thumbnail(source, size, formats=None):
     # Assumes files are immutable
     try:
-        return Thumbnail.objects.get(source=source, size=size)
+        source_name = str(source)
+        return Thumbnail.objects.get(source=source_name, size=size)
     except Thumbnail.DoesNotExist:
         return create_thumbnail(source, size, formats=formats)
