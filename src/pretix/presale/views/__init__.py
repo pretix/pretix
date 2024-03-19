@@ -170,9 +170,20 @@ class CartMixin:
             )
 
             if not grouping_allowed:
-                return (pos.pk,) + (0, ) * 6
+                return (pos.pk,)
             else:
-                return (pos.addon_to_id or 0), pos.subevent_id, pos.item_id, pos.variation_id, pos.price, (pos.voucher_id or 0), (pos.seat_id or 0)
+                return (
+                    (pos.addon_to_id or 0),
+                    pos.subevent_id,
+                    pos.item_id,
+                    pos.variation_id,
+                    pos.price,
+                    (pos.voucher_id or 0),
+                    (pos.seat_id or 0),
+                    pos.valid_from,
+                    pos.valid_until,
+                    pos.used_membership_id,
+                )
 
         positions = []
         for k, g in groupby(sorted(lcp, key=lambda c: c.sort_key), key=group_key):
