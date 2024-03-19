@@ -980,12 +980,12 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
         return ctx
 
     def post(self, request, *args, **kwargs):
-        if self.timemachine_form.is_valid():
+        if request.POST.get("timemachine_disable"):
+            del request.session['timemachine_now_dt']
+            messages.success(self.request, _('Time machine disabled!'))
+        elif self.timemachine_form.is_valid():
             request.session['timemachine_now_dt'] = str(self.timemachine_form.cleaned_data['now_dt'])
             return redirect(eventreverse(request.event, "presale:event.index"))
-        elif request.POST.get("timemachine_disable"):
-            request.session['timemachine_now_dt'] = None
-            messages.success(self.request, _('Time machine disabled!'))
         elif request.POST.get("live") == "true" and not self.request.event.live_issues:
             with transaction.atomic():
                 request.event.live = True
