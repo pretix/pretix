@@ -124,6 +124,28 @@
             <div class="clear"></div>
         </div>
     </div>
+    <div class="panel {% if request.session.timemachine_now_dt %}panel-success{% else %}panel-default{% endif %}">
+        <div class="panel-heading">
+            {% trans "Time machine" %}
+        </div>
+        <div class="panel-body">
+            <form action="" method="post" class="">
+                {% csrf_token %}
+                {% bootstrap_form_errors timemachine_form %}
+
+                <p>{% trans "Test your shop as if it were a different date and time." %}</p>
+
+                {% bootstrap_field timemachine_form.now_dt layout="control" show_label=False field_class="col-md-6" %}
+                <div class="text-right">
+                    <button type="submit" class="btn btn-default btn-lg btn-save">
+                        {% trans "Enable time machine" %}
+                    </button>
+                </div>
+            </form>
+
+            <div class="clear"></div>
+        </div>
+    </div>
     <div class="text-right">
         <a href="{% url "control:event.dangerzone" organizer=request.organizer.slug event=request.event.slug %}"
                 class="btn btn-default btn-lg">
