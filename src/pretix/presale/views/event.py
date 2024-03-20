@@ -154,13 +154,13 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
             Prefetch('quotas',
                      to_attr='_subevent_quotas',
                      queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(
-                         subevent=subevent))
+                         subevent=subevent).select_related("subevent"))
         ).distinct()
     )
     prefetch_quotas = Prefetch(
         'quotas',
         to_attr='_subevent_quotas',
-        queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)
+        queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent).select_related("subevent")
     )
     prefetch_bundles = Prefetch(
         'bundles',
@@ -546,7 +546,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['ev'].presale_is_running
         )
 
-        context['allow_waitinglist'] = self.request.event.settings.waiting_list_enabled and context['ev'].presale_is_running
+        context['allow_waitinglist'] = context['ev'].waiting_list_active and context['ev'].presale_is_running
 
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items

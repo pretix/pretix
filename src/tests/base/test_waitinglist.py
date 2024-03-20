@@ -30,6 +30,7 @@ from pretix.base.models import (
     Event, Item, ItemVariation, Organizer, Quota, Voucher, WaitingListEntry,
 )
 from pretix.base.models.waitinglist import WaitingListException
+from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 from pretix.base.services.waitinglist import (
     assign_automatically, process_waitinglist,
 )
@@ -197,6 +198,25 @@ class WaitingListTestCase(TestCase):
         self.event.settings.set('waiting_list_enabled', True)
         self.event.settings.set('waiting_list_auto', True)
         self.event.presale_end = now() - timedelta(days=1)
+        self.event.save()
+        with scope(organizer=self.o):
+            for i in range(5):
+                WaitingListEntry.objects.create(
+                    event=self.event, item=self.item2, variation=self.var1, email='foo{}@bar.com'.format(i)
+                )
+        process_waitinglist(None)
+        with scope(organizer=self.o):
+            assert WaitingListEntry.objects.filter(voucher__isnull=True).count() == 5
+            assert Voucher.objects.count() == 0
+            self.event.presale_end = now() + timedelta(days=1)
+            self.event.save()
+
+    def test_send_periodic_auto_disable(self):
+        self.event.settings.set('waiting_list_enabled', True)
+        self.event.settings.set('waiting_list_auto', True)
+        self.event.settings.waiting_list_auto_disable = RelativeDateWrapper(
+            RelativeDate(days=0, time=None, base_date_name='date_from', minutes=20, is_after=False)
+        )
         self.event.save()
         with scope(organizer=self.o):
             for i in range(5):

@@ -54,6 +54,7 @@ from pretix.base.models import (
     User, WaitingListEntry,
 )
 from pretix.base.models.items import SubEventItem, SubEventItemVariation
+from pretix.base.reldate import RelativeDate, RelativeDateWrapper
 
 
 class EventTestMixin:
@@ -1011,6 +1012,21 @@ class WaitingListTest(EventTestMixin, SoupTest):
 
     def test_disabled(self):
         self.event.settings.set('waiting_list_enabled', False)
+        response = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotIn('waitinglist', response.rendered_content)
+        response = self.client.get(
+            '/%s/%s/waitinglist/?item=%d' % (self.orga.slug, self.event.slug, self.item.pk + 1)
+        )
+        self.assertEqual(response.status_code, 302)
+
+    def test_auto_disable(self):
+        self.event.settings.set('waiting_list_enabled', True)
+        self.event.settings.waiting_list_auto_disable = RelativeDateWrapper(
+            RelativeDate(days=900, time=datetime.time(9, 0, 0), base_date_name='date_from', minutes=None, is_after=False)
+        )
         response = self.client.get(
             '/%s/%s/' % (self.orga.slug, self.event.slug)
         )

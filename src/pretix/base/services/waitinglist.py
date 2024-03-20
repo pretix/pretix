@@ -110,6 +110,9 @@ def assign_automatically(event: Event, user_id: int=None, subevent_id: int=None)
                 continue
             if wle.subevent and not wle.subevent.presale_is_running:
                 continue
+            if event.settings.waiting_list_auto_disable and event.settings.waiting_list_auto_disable.datetime(wle.subevent or event) <= now():
+                gone.add((wle.item, wle.variation, wle.subevent))
+                continue
             if not wle.item.is_available():
                 gone.add((wle.item, wle.variation, wle.subevent))
                 continue

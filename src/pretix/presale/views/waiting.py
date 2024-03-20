@@ -118,6 +118,10 @@ class WaitingView(EventViewMixin, FormView):
                 messages.error(request, pgettext_lazy('subevent', "You need to select a date."))
                 return redirect(self.get_index_url())
 
+        if not (self.subevent or self.request.event).waiting_list_active:
+            messages.error(request, _("Waiting lists are disabled for this event."))
+            return redirect(self.get_index_url())
+
         return super().dispatch(request, *args, **kwargs)
 
     def form_valid(self, form):
