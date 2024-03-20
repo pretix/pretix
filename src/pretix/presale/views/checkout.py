@@ -19,7 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-from urllib.parse import quote
+from urllib.parse import quote, urlencode
 
 from django.contrib import messages
 from django.http import Http404
@@ -75,7 +75,8 @@ class CheckoutView(View):
                 return self.redirect(previous_step.get_step_url(request) if previous_step else self.get_index_url(request))
 
             if 'step' not in kwargs:
-                return self.redirect(step.get_step_url(request))
+                utm_params = {k: v for k, v in request.GET.items() if k.startswith("utm_")}
+                return self.redirect(step.get_step_url(request) + '?' + urlencode(utm_params))
             is_selected = (step.identifier == kwargs.get('step', ''))
             if "async_id" not in request.GET and not is_selected and not step.is_completed(request, warn=not is_selected):
                 return self.redirect(step.get_step_url(request))
