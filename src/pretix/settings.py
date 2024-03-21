@@ -443,6 +443,7 @@ MIDDLEWARE = [
     'pretix.base.middleware.LocaleMiddleware',
     'pretix.base.middleware.SecurityMiddleware',
     'pretix.presale.middleware.EventMiddleware',
+    'pretix.presale.middleware.TimeMachineMiddleware',
     'pretix.api.middleware.ApiScopeMiddleware',
 ]
 

@@ -80,6 +80,15 @@ from .organizer import Organizer, Team
 logger = logging.getLogger(__name__)
 
 
+def annotate_with_time_based_properties(events_or_subevents, now_dt):
+    print("annotate_with_time_based_properties", now_dt)
+    for e_s in events_or_subevents:
+        if e_s:
+            e_s.presale_is_running = e_s.presale_is_running_by_time(now_dt)
+            e_s.presale_has_ended = e_s.presale_has_ended_by_time(now_dt)
+    return events_or_subevents
+
+
 class EventMixin:
     def clean(self):
         if self.presale_start and self.presale_end and self.presale_start > self.presale_end:
@@ -229,17 +238,17 @@ class EventMixin:
         else:
             return self.presale_end
 
-    @property
-    def presale_has_ended(self):
+    def presale_has_ended_by_time(self, now_dt: datetime=None):
         """
         Is true, when ``presale_end`` is set and in the past.
         """
+        now_dt = now_dt or now()
         if self.effective_presale_end:
-            return now() > self.effective_presale_end
+            return now_dt > self.effective_presale_end
         elif self.date_to:
-            return now() > self.date_to
+            return now_dt > self.date_to
         else:
-            return now().astimezone(self.timezone).date() > self.date_from.astimezone(self.timezone).date()
+            return now_dt.astimezone(self.timezone).date() > self.date_from.astimezone(self.timezone).date()
 
     @property
     def effective_presale_start(self):
@@ -253,15 +262,15 @@ class EventMixin:
         else:
             return self.presale_start
 
-    @property
-    def presale_is_running(self):
+    def presale_is_running_by_time(self, now_dt: datetime=None):
         """
         Is true, when ``presale_end`` is not set or in the future and ``presale_start`` is not
         set or in the past.
         """
-        if self.effective_presale_start and now() < self.effective_presale_start:
+        now_dt = now_dt or now()
+        if self.effective_presale_start and now_dt < self.effective_presale_start:
             return False
-        return not self.presale_has_ended
+        return not self.presale_has_ended_by_time(now_dt)
 
     @property
     def event_microdata(self):
@@ -683,12 +692,12 @@ class Event(EventMixin, LoggedModel):
 
         return qs_annotated
 
-    @property
-    def presale_has_ended(self):
+    def presale_has_ended_by_time(self, now_dt: datetime = None):
+        now_dt = now_dt or now()
         if self.has_subevents:
-            return self.presale_end and now() > self.presale_end
+            return self.presale_end and now_dt > self.presale_end
         else:
-            return super().presale_has_ended
+            return super().presale_has_ended_by_time(now_dt)
 
     def delete_all_orders(self, really=False):
         from .checkin import Checkin

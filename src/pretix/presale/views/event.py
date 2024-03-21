@@ -63,7 +63,7 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import (
     ItemVariation, Quota, SeatCategoryMapping, Voucher,
 )
-from pretix.base.models.event import Event, SubEvent
+from pretix.base.models.event import Event, SubEvent, annotate_with_time_based_properties
 from pretix.base.models.items import (
     ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
 )
@@ -104,7 +104,8 @@ def item_group_by_category(items):
 
 def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0, base_qs=None, allow_addons=False,
                       quota_cache=None, filter_items=None, filter_categories=None, memberships=None,
-                      ignore_hide_sold_out_for_item_ids=None):
+                      ignore_hide_sold_out_for_item_ids=None, now_dt: datetime=None):
+    now_dt = now_dt or now()
     base_qs_set = base_qs is not None
     base_qs = base_qs if base_qs is not None else event.items
 
@@ -118,8 +119,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         requires_seat = Value(0, output_field=IntegerField())
 
     variation_q = (
-        Q(Q(available_from__isnull=True) | Q(available_from__lte=now()) | Q(available_from_mode='info')) &
-        Q(Q(available_until__isnull=True) | Q(available_until__gte=now()) | Q(available_until_mode='info'))
+        Q(Q(available_from__isnull=True) | Q(available_from__lte=now_dt) | Q(available_from_mode='info')) &
+        Q(Q(available_until__isnull=True) | Q(available_until__gte=now_dt) | Q(available_until_mode='info'))
     )
     if not voucher or not voucher.show_hidden_items:
         variation_q &= Q(hide_without_voucher=False)
@@ -136,8 +137,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
             subevent_disabled=Exists(
                 SubEventItemVariation.objects.filter(
                     Q(disabled=True)
-                    | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now()))
-                    | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now())),
+                    | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now_dt))
+                    | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now_dt)),
                     variation_id=OuterRef('pk'),
                     subevent=subevent,
                 )
@@ -208,8 +209,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
         subevent_disabled=Exists(
             SubEventItem.objects.filter(
                 Q(disabled=True)
-                | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now()))
-                | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now())),
+                | (Exact(OuterRef('available_from_mode'), 'hide') & Q(available_from__gt=now_dt))
+                | (Exact(OuterRef('available_until_mode'), 'hide') & Q(available_until__lt=now_dt)),
                 item_id=OuterRef('pk'),
                 subevent=subevent,
             )
@@ -305,7 +306,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 item._remove = True
                 continue
 
-        item.current_unavailability_reason = item.unavailability_reason(has_voucher=voucher, subevent=subevent)
+        item.current_unavailability_reason = item.unavailability_reason(now_dt=now_dt, has_voucher=voucher, subevent=subevent)
 
         item.description = str(item.description)
         for recv, resp in item_description.send(sender=event, item=item, variation=None, subevent=subevent):
@@ -421,7 +422,7 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 if not display_add_to_cart:
                     display_add_to_cart = not item.requires_seat and var.order_max > 0
 
-                var.current_unavailability_reason = var.unavailability_reason(has_voucher=voucher, subevent=subevent)
+                var.current_unavailability_reason = var.unavailability_reason(now_dt=now_dt, has_voucher=voucher, subevent=subevent)
 
             item.original_price = (
                 item.tax(item.original_price, currency=event.currency, include_bundled=True,
@@ -537,6 +538,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         context['ev'] = self.subevent or self.request.event
         context['subevent'] = self.subevent
+        annotate_with_time_based_properties([self.request.event, self.subevent], self.request.now_dt)
 
         # Show voucher option if an event is selected and vouchers exist
         vouchers_exist = self.request.event.cache.get('vouchers_exist')
@@ -545,10 +547,10 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             self.request.event.cache.set('vouchers_exist', vouchers_exist)
         context['show_vouchers'] = context['vouchers_exist'] = vouchers_exist and (
             (self.request.event.has_subevents and not self.subevent) or
-            context['ev'].presale_is_running
+            context['ev'].presale_is_running_by_time(self.request.now_dt)
         )
 
-        context['allow_waitinglist'] = self.request.event.settings.waiting_list_enabled and context['ev'].presale_is_running
+        context['allow_waitinglist'] = self.request.event.settings.waiting_list_enabled and context['ev'].presale_is_running_by_time(self.request.now_dt)
 
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items
@@ -564,6 +566,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                         testmode=self.request.event.testmode
                     ) if getattr(self.request, 'customer', None) else None
                 ),
+                now_dt=self.request.now_dt
             )
 
             context['waitinglist_seated'] = False
@@ -614,7 +617,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
 
         context['show_cart'] = (
             context['cart']['positions'] and (
-                self.request.event.has_subevents or self.request.event.presale_is_running
+                self.request.event.has_subevents or self.request.event.presale_is_running_by_time(self.request.now_dt)
             )
         )
         if self.request.event.settings.redirect_to_checkout_directly:
@@ -681,6 +684,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 limit_before, after, ebd, set(), self.request.event,
                 self.kwargs.get('cart_namespace'),
                 voucher,
+                now_dt=self.request.now_dt,
             )
 
             # Hide names of subevents in event series where it is always the same.  No need to show the name of the museum thousands of times
@@ -740,6 +744,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 limit_before, after, ebd, set(), self.request.event,
                 self.kwargs.get('cart_namespace'),
                 voucher,
+                now_dt=self.request.now_dt,
             )
 
             # Hide names of subevents in event series where it is always the same.  No need to show the name of the museum thousands of times
@@ -778,7 +783,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 future_only=self.request.event.settings.event_calendar_future_only
             )
         else:
-            context['subevent_list'] = self.request.event.subevents_sorted(
+            context['subevent_list'] = annotate_with_time_based_properties(self.request.event.subevents_sorted(
                 filter_qs_by_attr(
                     self.request.event.subevents_annotated(
                         self.request.sales_channel.identifier,
@@ -786,7 +791,8 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                     ).using(settings.DATABASE_REPLICA),
                     self.request
                 )
-            )
+            ), self.request.now_dt)
+
             if self.request.event.settings.event_list_available_only and not voucher:
                 context['subevent_list'] = [
                     se for se in context['subevent_list']

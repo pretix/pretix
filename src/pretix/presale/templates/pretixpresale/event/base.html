@@ -33,6 +33,17 @@
             </div>
         </div>
     {% endif %}
+    {% if request.now_dt_is_fake %}
+        <div class="offline-banner">
+            <div class="container">
+                <span class="fa fa-user-secret" aria-hidden="true"></span>
+                {% trans "You are currently using the time machine. The ticket shop is rendered as if it were" %} {{ request.now_dt }}
+                <a href="#">
+                    {% trans "Go back to current time" %}
+                </a>
+            </div>
+        </div>
+    {% endif %}
     <div class="container page-header-links {% if event.settings.theme_color_background|upper != "#FFFFFF" or event_logo_image_large %}page-header-links-outside{% endif %}">
         {% if event.settings.locales|length > 1 or request.organizer.settings.customer_accounts %}
             {% if event.settings.theme_color_background|upper != "#FFFFFF" or event_logo_image_large %}

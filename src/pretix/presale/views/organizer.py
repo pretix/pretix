@@ -63,6 +63,7 @@ from pretix.base.i18n import language
 from pretix.base.models import (
     Event, EventMetaValue, Organizer, Quota, SubEvent, SubEventMetaValue,
 )
+from pretix.base.models.event import annotate_with_time_based_properties
 from pretix.base.services.quotas import QuotaAvailability
 from pretix.helpers.compat import date_fromisocalendar
 from pretix.helpers.daterange import daterange
@@ -549,14 +550,16 @@ def add_events_for_days(request, baseqs, before, after, ebd, timezones):
             })
 
 
-def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_namespace=None, voucher=None):
+def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_namespace=None, voucher=None, now_dt=None):
+    print("add_subevents_for_days", now_dt)
+    now_dt = now_dt or now()
     qs = qs.filter(active=True, is_public=True).filter(
         Q(Q(date_to__gte=before) & Q(date_from__lte=after)) |
         Q(Q(date_to__isnull=True) & Q(date_from__gte=before) & Q(date_from__lte=after))
     ).order_by(
         'date_from'
     )
-
+    qs = annotate_with_time_based_properties(qs, now_dt)
     quotas_to_compute = []
     for se in qs:
         if se.presale_is_running:

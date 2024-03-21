@@ -1311,7 +1311,8 @@ class OrderChangeMixin:
                                 )
                                 if self.order.customer else None
                             ),
-                            ignore_hide_sold_out_for_item_ids={k[0] for k in current_addon_products.keys()}
+                            ignore_hide_sold_out_for_item_ids={k[0] for k in current_addon_products.keys()},
+                            now_dt=self.request.now_dt,
                         )
                         item_cache[ckey] = items
                     else:

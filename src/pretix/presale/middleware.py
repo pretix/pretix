@@ -32,8 +32,11 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
+from dateutil.parser import parse
+
 from django.template.response import TemplateResponse
 from django.urls import resolve
+from django.utils.timezone import now
 from django_scopes import scope
 
 from pretix.base.channels import WebshopSalesChannel
@@ -79,3 +82,27 @@ class EventMiddleware:
                 response = response.render()
 
         return response
+
+
+class TimeMachineMiddleware:
+    def __init__(self, get_response=None):
+        self.get_response = get_response
+        super().__init__()
+
+    def __call__(self, request):
+        if hasattr(request, 'event') and hasattr(request, '_namespace') and request._namespace == 'presale' and \
+                'time_machine' in request.COOKIES and \
+                request.user.has_event_permission(request.organizer, request.event, 'can_change_event_settings', request):
+            print("setting now_dt from cookie")
+            request.now_dt = parse(request.COOKIES['time_machine'])
+            request.now_dt_is_fake = True
+        else:
+            print("setting now_dt to now",
+                  "hasevent?",hasattr(request, 'event') ,
+                  "namespace?",hasattr(request, '_namespace') and request._namespace,
+                  "cookies?",request.COOKIES)
+            request.now_dt = now()
+
+        return self.get_response(request)
+
+

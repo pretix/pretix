@@ -55,7 +55,7 @@ class CheckoutView(View):
             messages.error(request, _("Your cart is empty"))
             return self.redirect(self.get_index_url(self.request))
 
-        if not request.event.presale_is_running:
+        if not request.event.presale_is_running_by_time(request.now_dt):
             messages.error(request, _("The booking period for this event is over or has not yet started."))
             return self.redirect(self.get_index_url(self.request))
 
