@@ -398,7 +398,7 @@ class Order(LockModel, LoggedModel):
     @scopes_disabled()
     def pending_sum(self):
         total = self.total
-        if self.status in (Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
+        if self.status == Order.STATUS_CANCELED:
             total = Decimal('0.00')
         payment_sum = self.payments.filter(
             state__in=(OrderPayment.PAYMENT_STATE_CONFIRMED, OrderPayment.PAYMENT_STATE_REFUNDED)
