@@ -124,6 +124,13 @@
                 </button>
             </div>
         </form>
+    {% elif order.status == "e" and order.payment_refund_sum != 0 %}
+        <div class="alert alert-warning">
+            {% blocktrans trimmed with amount=order.payment_refund_sum|money:request.event.currency %}
+                This order is expired even though it received payments of {{ amount }}. You can choose to refund
+                the money below or reactivate it by extending the payment deadline.
+            {% endblocktrans %}
+        </div>
     {% endif %}
 
     <div class="row">
