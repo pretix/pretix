@@ -45,4 +45,4 @@ def thumb(source, arg):
         # HACK: source.url works for some types of files (e.g. FieldFile), and for all files retrieved from Hierarkey,
         # default_storage.url works for all files in NanoCDNStorage. For others, this may return an invalid URL.
         # But for a fallback, this can probably be accepted.
-        return source.url if hasattr(source, 'url') else default_storage.url(source.name)
+        return source.url if hasattr(source, 'url') else default_storage.url(str(source))
