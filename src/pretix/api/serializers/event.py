@@ -687,6 +687,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'allow_modifications_after_checkin',
         'show_quota_left',
         'waiting_list_enabled',
+        'waiting_list_auto_disable',
         'waiting_list_hours',
         'waiting_list_auto',
         'waiting_list_names_asked',

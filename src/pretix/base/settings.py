@@ -1397,6 +1397,19 @@ DEFAULTS = {
             widget=forms.NumberInput(),
         )
     },
+    'waiting_list_auto_disable': {
+        'default': None,
+        'type': RelativeDateWrapper,
+        'form_class': RelativeDateTimeField,
+        'serializer_class': SerializerRelativeDateTimeField,
+        'form_kwargs': dict(
+            label=_("Disable waiting list"),
+            help_text=_("The waiting list will be fully disabled after this date. This means that nobody can add "
+                        "themselves to the waiting list any more, but also that tickets will be available for sale "
+                        "again if quota permits, even if there are still people on the waiting list. Vouchers that "
+                        "have already been sent remain active."),
+        )
+    },
     'waiting_list_names_asked': {
         'default': 'False',
         'type': bool,

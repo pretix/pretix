@@ -10,6 +10,10 @@
         <div class="alert alert-danger">
             {% trans "The waiting list is disabled, so if the event is sold out, people cannot add themselves to this list. If you want to enable it, go to the event settings." %}
         </div>
+    {% elif not request.event.waiting_list_active and not request.event.has_subevents %}
+        <div class="alert alert-danger">
+            {% trans "The waiting list is no longer active for this event. The waiting list no longer affects quotas and no longer notifies waiting users." %}
+        </div>
     {% endif %}
     <div class="row">
         {% if 'can_change_orders' in request.eventpermset %}

@@ -230,6 +230,14 @@ class EventMixin:
             return self.presale_end
 
     @property
+    def waiting_list_active(self):
+        if not self.settings.waiting_list_enabled:
+            return False
+        if self.settings.waiting_list_auto_disable:
+            return self.settings.waiting_list_auto_disable.datetime(self) > now()
+        return True
+
+    @property
     def presale_has_ended(self):
         """
         Is true, when ``presale_end`` is set and in the past.
