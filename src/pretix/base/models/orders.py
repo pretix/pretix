@@ -451,9 +451,9 @@ class Order(LockModel, LoggedModel):
         if results:
             qs = qs.annotate(
                 is_overpaid=Case(
-                    When(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=-1e-8),
+                    When(~Q(status__in=(Order.STATUS_CANCELED, Order.STATUS_EXPIRED)) & Q(pending_sum_t__lt=-1e-8),
                          then=Value(1)),
-                    When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=-1e-8),
+                    When(Q(status__in=(Order.STATUS_CANCELED, Order.STATUS_EXPIRED)) & Q(pending_sum_rc__lt=-1e-8),
                          then=Value(1)),
                     default=Value(0),
                     output_field=models.IntegerField()
@@ -468,7 +468,7 @@ class Order(LockModel, LoggedModel):
                 is_underpaid=Case(
                     When(Q(status=Order.STATUS_PAID) & Q(pending_sum_t__gt=1e-8),
                          then=Value(1)),
-                    When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__gt=1e-8),
+                    When(Q(status__in=(Order.STATUS_CANCELED, Order.STATUS_EXPIRED)) & Q(pending_sum_rc__gt=1e-8),
                          then=Value(1)),
                     default=Value(0),
                     output_field=models.IntegerField()
