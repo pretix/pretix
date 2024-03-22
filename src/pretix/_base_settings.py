@@ -111,6 +111,7 @@ LANGUAGES_RTL = {
 LANGUAGES_INCUBATING = {
     'fi', 'pt-br', 'gl',
 }
+LANGUAGES = ALL_LANGUAGES
 LOCALE_PATHS = [
     os.path.join(os.path.dirname(__file__), 'locale'),
 ]
