@@ -77,6 +77,9 @@ class DiscountForm(I18nModelForm):
             'benefit_limit_products': forms.CheckboxSelectMultiple(attrs={
                 'class': 'scrolling-multiple-choice',
             }),
+            'limit_sales_channels': forms.CheckboxSelectMultiple(attrs={
+                'data-inverse-dependency': '<[name$=all_sales_channels]',
+            }),
             'benefit_only_apply_to_cheapest_n_matches': forms.NumberInput(
                 attrs={
                     'data-display-dependency': '#id_condition_min_count',
