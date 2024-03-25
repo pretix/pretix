@@ -180,7 +180,7 @@ class EventSerializer(I18nAwareModelSerializer):
                   'date_to', 'date_admission', 'is_public', 'presale_start',
                   'presale_end', 'location', 'geo_lat', 'geo_lon', 'has_subevents', 'meta_data', 'seating_plan',
                   'plugins', 'seat_category_mapping', 'timezone', 'item_meta_properties', 'valid_keys',
-                  'sales_channels', 'best_availability_state', 'public_url')
+                  'all_sales_channels', 'limit_sales_channels', 'best_availability_state', 'public_url')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

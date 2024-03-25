@@ -49,7 +49,6 @@ from django.views.generic import FormView, ListView, TemplateView
 from i18nfield.strings import LazyI18nString
 
 from pretix.api.views.checkin import _redeem_process
-from pretix.base.channels import get_all_sales_channels
 from pretix.base.models import Checkin, Order, OrderPosition
 from pretix.base.models.checkin import CheckinList
 from pretix.base.services.checkin import (
@@ -296,7 +295,9 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     ordering = ('subevent__date_from', 'name', 'pk')
 
     def get_queryset(self):
-        qs = self.request.event.checkin_lists.select_related('subevent').prefetch_related("limit_products")
+        qs = self.request.event.checkin_lists.select_related('subevent').prefetch_related(
+            "limit_products", "auto_checkin_sales_channels"
+        )
 
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
@@ -305,12 +306,10 @@ class CheckinListList(EventPermissionRequiredMixin, PaginationMixin, ListView):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         clists = list(ctx['checkinlists'])
-        sales_channels = get_all_sales_channels()
 
         for cl in clists:
             if cl.subevent:
                 cl.subevent.event = self.request.event  # re-use same event object to make sure settings are cached
-            cl.auto_checkin_sales_channels = [sales_channels[channel] for channel in cl.auto_checkin_sales_channels]
         ctx['checkinlists'] = clists
 
         ctx['can_change_organizer_settings'] = self.request.user.has_organizer_permission(

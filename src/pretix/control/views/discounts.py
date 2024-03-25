@@ -43,7 +43,7 @@ from pretix.control.permissions import (
 )
 from pretix.helpers.models import modelcopy
 
-from ...base.channels import get_all_sales_channels
+from ...base.channels import get_all_sales_channel_types
 from ...helpers.compat import CompatDeleteView
 from . import CreateView, PaginationMixin, UpdateView
 
@@ -194,7 +194,7 @@ class DiscountList(PaginationMixin, ListView):
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['sales_channels'] = get_all_sales_channels()
+        ctx['sales_channels'] = get_all_sales_channel_types()
         return ctx
 
 

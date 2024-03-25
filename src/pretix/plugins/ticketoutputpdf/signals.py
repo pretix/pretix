@@ -28,7 +28,7 @@ from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.channels import get_all_sales_channels
+from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.models import Event
 from pretix.base.signals import (  # NOQA: legacy import
     EventPluginSignal, event_copy_data, item_copy_data, layout_text_variables,
@@ -67,7 +67,7 @@ def register_multievent_data(sender, **kwargs):
 def control_item_forms(sender, request, item, **kwargs):
     forms = []
     queryset = sender.ticket_layouts.all()
-    for k, v in sorted(list(get_all_sales_channels().items()), key=lambda a: (int(a[0] != 'web'), a[0])):
+    for k, v in sorted(list(get_all_sales_channel_types().items()), key=lambda a: (int(a[0] != 'web'), a[0])):
         try:
             inst = TicketLayoutItem.objects.get(item=item, sales_channel=k)
         except TicketLayoutItem.DoesNotExist:

@@ -50,7 +50,7 @@ from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelChoiceField
 
-from pretix.base.channels import get_all_sales_channels
+from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.forms.widgets import (
     DatePickerWidget, SplitDateTimePickerWidget, TimePickerWidget,
 )
@@ -605,7 +605,7 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             del self.fields['subevents_to']
 
         self.fields['sales_channel'].choices = [('', '')] + [
-            (k, v.verbose_name) for k, v in get_all_sales_channels().items()
+            (k, v.verbose_name) for k, v in get_all_sales_channel_types().items()
         ]
 
         locale_names = dict(settings.LANGUAGES)

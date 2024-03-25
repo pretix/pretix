@@ -46,6 +46,7 @@ from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext_lazy as _
+from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField
 
 from pretix.base.models.base import LoggedModel
@@ -504,3 +505,45 @@ class OrganizerFooterLink(models.Model):
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
         self.organizer.cache.clear()
+
+
+class SalesChannel(LoggedModel):
+    organizer = models.ForeignKey('Organizer', on_delete=models.CASCADE, related_name='sales_channels')
+    label = I18nCharField(
+        max_length=200,
+        verbose_name=_("Name"),
+    )
+    identifier = models.CharField(
+        verbose_name=_("Internal identifier"),
+        max_length=200,
+        validators=[
+            RegexValidator(
+                regex=r"^[a-zA-Z0-9.\-_]+$",
+                message=_("The identifier may only contain letters, numbers, dots, dashes, and underscores."),
+            ),
+        ],
+    )
+    type = models.CharField(
+        verbose_name=_("Type"),
+        max_length=200,
+    )
+    configuration = models.JSONField(default=dict)
+
+    objects = ScopedManager(organizer="organizer")
+
+    class Meta:
+        ordering = ("type", "identifier")
+
+    def __str__(self):
+        return str(self.label)
+
+    @cached_property
+    def _type(self):
+        from ..channels import get_all_sales_channel_types
+
+        types = get_all_sales_channel_types()
+        return types[self.type]
+
+    @property
+    def icon(self):
+        return self._type.icon

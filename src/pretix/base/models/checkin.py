@@ -46,7 +46,6 @@ from django_scopes import ScopedManager, scopes_disabled
 
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import LoggedModel
-from pretix.base.models.fields import MultiStringField
 from pretix.helpers import PostgresWindowFrame
 
 
@@ -100,13 +99,13 @@ class CheckinList(LoggedModel):
         verbose_name=_('Automatically check out everyone at'),
         null=True, blank=True
     )
-    auto_checkin_sales_channels = MultiStringField(
-        default=[],
-        blank=True,
+    auto_checkin_sales_channels = models.ManyToManyField(
+        "SalesChannel",
         verbose_name=_('Sales channels to automatically check in'),
         help_text=_('All items on this check-in list will be automatically marked as checked-in when purchased through '
                     'any of the selected sales channels. This option can be useful when tickets sold at the box office '
-                    'are not checked again before entry and should be considered validated directly upon purchase.')
+                    'are not checked again before entry and should be considered validated directly upon purchase.'),
+        blank=False,
     )
     rules = models.JSONField(default=dict, blank=True)
 

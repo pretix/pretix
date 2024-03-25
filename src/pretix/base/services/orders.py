@@ -62,7 +62,7 @@ from django.utils.translation import gettext as _, gettext_lazy, ngettext_lazy
 from django_scopes import scopes_disabled
 
 from pretix.api.models import OAuthApplication
-from pretix.base.channels import get_all_sales_channels
+from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.email import get_email_context
 from pretix.base.i18n import get_language_without_region, language
 from pretix.base.media import MEDIA_TYPES
@@ -964,7 +964,7 @@ def _create_order(event: Event, email: str, positions: List[CartPosition], now_d
                   meta_info: dict=None, sales_channel: str='web', shown_total=None,
                   customer=None, valid_if_pending=False):
     payments = []
-    sales_channel = get_all_sales_channels()[sales_channel]
+    sales_channel = get_all_sales_channel_types()[sales_channel]
 
     try:
         validate_memberships_in_order(customer, positions, event, lock=True, testmode=event.testmode)

@@ -44,9 +44,7 @@ from django.conf import settings
 from django.core.exceptions import NON_FIELD_ERRORS, ValidationError
 from django.core.validators import MaxValueValidator
 from django.db.models import Prefetch, Q, prefetch_related_objects
-from django.forms import (
-    CheckboxSelectMultiple, formset_factory, inlineformset_factory,
-)
+from django.forms import formset_factory, inlineformset_factory
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.html import escape, format_html
@@ -54,12 +52,13 @@ from django.utils.safestring import mark_safe
 from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
 from django_countries.fields import LazyTypedChoiceField
+from django_scopes.forms import SafeModelMultipleChoiceField
 from i18nfield.forms import (
     I18nForm, I18nFormField, I18nFormSetMixin, I18nTextInput,
 )
 from pytz import common_timezones
 
-from pretix.base.channels import get_all_sales_channels
+from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.forms import (
     I18nMarkdownTextarea, I18nModelForm, PlaceholderValidator, SettingsForm,
 )
@@ -378,16 +377,7 @@ class EventUpdateForm(I18nModelForm):
                 required=False,
                 help_text=_('You need to configure the custom domain in the webserver beforehand.')
             )
-        self.fields['sales_channels'] = forms.MultipleChoiceField(
-            label=self.fields['sales_channels'].label,
-            help_text=self.fields['sales_channels'].help_text,
-            required=self.fields['sales_channels'].required,
-            initial=self.fields['sales_channels'].initial,
-            choices=(
-                (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
-            ),
-            widget=forms.CheckboxSelectMultiple
-        )
+        self.fields['limit_sales_channels'].queryset = self.event.organizer.sales_channels.all()
 
     def clean_domain(self):
         d = self.cleaned_data['domain']
@@ -444,7 +434,8 @@ class EventUpdateForm(I18nModelForm):
             'location',
             'geo_lat',
             'geo_lon',
-            'sales_channels'
+            'all_sales_channels',
+            'limit_sales_channels',
         ]
         field_classes = {
             'date_from': SplitDateTimeField,
@@ -452,6 +443,7 @@ class EventUpdateForm(I18nModelForm):
             'date_admission': SplitDateTimeField,
             'presale_start': SplitDateTimeField,
             'presale_end': SplitDateTimeField,
+            'limit_sales_channels': SafeModelMultipleChoiceField,
         }
         widgets = {
             'date_from': SplitDateTimePickerWidget(),
@@ -459,7 +451,9 @@ class EventUpdateForm(I18nModelForm):
             'date_admission': SplitDateTimePickerWidget(attrs={'data-date-default': '#id_date_from_0'}),
             'presale_start': SplitDateTimePickerWidget(),
             'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}),
-            'sales_channels': CheckboxSelectMultiple(),
+            'limit_sales_channels': forms.CheckboxSelectMultiple(attrs={
+                'data-inverse-dependency': '<[name$=all_sales_channels]'
+            }),
         }
 
 
@@ -915,7 +909,7 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         locale_names = dict(settings.LANGUAGES)
         self.fields['invoice_language'].choices = [('__user__', _('The user\'s language'))] + [(a, locale_names[a]) for a in event.settings.locales]
         self.fields['invoice_generate_sales_channels'].choices = (
-            (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
+            (c.identifier, c.verbose_name) for c in get_all_sales_channel_types().values()
         )
         self.fields['invoice_numbers_counter_length'].validators.append(MaxValueValidator(15))
 
@@ -961,7 +955,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     ]
 
     mail_sales_channel_placed_paid = forms.MultipleChoiceField(
-        choices=lambda: [(ident, sc.verbose_name) for ident, sc in get_all_sales_channels().items()],
+        choices=lambda: [(ident, sc.verbose_name) for ident, sc in get_all_sales_channel_types().items()],
         label=_('Sales channels for checkout emails'),
         help_text=_('The order placed and paid emails will only be send to orders from these sales channels. '
                     'The online shop must be enabled.'),
@@ -972,7 +966,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     )
 
     mail_sales_channel_download_reminder = forms.MultipleChoiceField(
-        choices=lambda: [(ident, sc.verbose_name) for ident, sc in get_all_sales_channels().items()],
+        choices=lambda: [(ident, sc.verbose_name) for ident, sc in get_all_sales_channel_types().items()],
         label=_('Sales channels'),
         help_text=_('This email will only be send to orders from these sales channels. The online shop must be enabled.'),
         widget=forms.CheckboxSelectMultiple(

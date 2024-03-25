@@ -66,7 +66,6 @@ from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.fields import I18nCharField, I18nTextField
 
 from pretix.base.models.base import LoggedModel
-from pretix.base.models.fields import MultiStringField
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.timemachine import time_machine_now
 from pretix.base.validators import EventSlugBanlistValidator
@@ -496,9 +495,9 @@ class EventMixin:
 
 
 def default_sales_channels():
-    from ..channels import get_all_sales_channels
+    from ..channels import get_all_sales_channel_types
 
-    return list(get_all_sales_channels().keys())
+    return list(get_all_sales_channel_types().keys())
 
 
 @settings_hierarkey.add(parent_field='organizer', cache_namespace='event')
@@ -628,10 +627,14 @@ class Event(EventMixin, LoggedModel):
         auto_now=True, db_index=True
     )
 
-    sales_channels = MultiStringField(
-        verbose_name=_('Restrict to specific sales channels'),
-        help_text=_('Only sell tickets for this event on the following sales channels.'),
-        default=default_sales_channels,
+    all_sales_channels = models.BooleanField(
+        verbose_name=_("Sell on all sales channels"),
+        default=True,
+    )
+    limit_sales_channels = models.ManyToManyField(
+        "SalesChannel",
+        verbose_name=_("Restrict to specific sales channels"),
+        blank=True,
     )
 
     objects = ScopedManager(organizer='organizer')

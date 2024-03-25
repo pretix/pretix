@@ -56,7 +56,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.channels import get_all_sales_channels
+from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.forms import I18nMarkdownTextarea, PlaceholderValidator
 from pretix.base.models import (
     CartPosition, Event, GiftCard, InvoiceAddress, Order, OrderPayment,
@@ -417,7 +417,7 @@ class BasePaymentProvider:
              forms.MultipleChoiceField(
                  label=_('Restrict to specific sales channels'),
                  choices=(
-                     (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
+                     (c.identifier, c.verbose_name) for c in get_all_sales_channel_types().values()
                      if c.payment_restrictions_supported
                  ),
                  initial=['web'],

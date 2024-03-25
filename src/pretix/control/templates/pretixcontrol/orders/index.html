@@ -201,8 +201,8 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <span class="fa fa-fw fa-{{ o.sales_channel_obj.icon }} text-muted"
-                                      data-toggle="tooltip" title="{% trans o.sales_channel_obj.verbose_name %}"></span>
+                                <span class="fa fa-fw fa-{{ o.sales_channel.icon }} text-muted"
+                                      data-toggle="tooltip" title="{{ o.sales_channel.label }}"></span>
                                 {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
                             </td>
                             <td class="text-right flip">

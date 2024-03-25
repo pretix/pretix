@@ -137,9 +137,9 @@
                             {% endif %}
                         {% endif %}
                         <td>
-                            {% for channel in cl.auto_checkin_sales_channels %}
+                            {% for channel in cl.auto_checkin_sales_channels.all %}
                                 <span class="fa fa-{{ channel.icon }} text-muted"
-                                      data-toggle="tooltip" title="{% trans channel.verbose_name %}"></span>
+                                      data-toggle="tooltip" title="{{ channel.label }}"></span>
                             {% endfor %}
                         </td>
                         <td>

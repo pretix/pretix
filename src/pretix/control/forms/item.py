@@ -55,7 +55,6 @@ from django_scopes.forms import (
 )
 from i18nfield.forms import I18nFormField, I18nTextarea
 
-from pretix.base.channels import get_all_sales_channels
 from pretix.base.forms import I18nFormSet, I18nMarkdownTextarea, I18nModelForm
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
@@ -413,7 +412,7 @@ class ItemCreateForm(I18nModelForm):
                 'checkin_text',
                 'free_price',
                 'original_price',
-                'sales_channels',
+                'all_sales_channels',
                 'issue_giftcard',
                 'require_approval',
                 'allow_waitinglist',
@@ -440,12 +439,11 @@ class ItemCreateForm(I18nModelForm):
             )
             for f in fields:
                 setattr(self.instance, f, getattr(src, f))
+            if not self.instance.all_sales_channels:
+                self.instance.limit_sales_channels.set(src.limit_sales_channels.all())
 
             if src.picture:
                 self.instance.picture.save(os.path.basename(src.picture.name), src.picture)
-        else:
-            # Add to all sales channels by default
-            self.instance.sales_channels = list(get_all_sales_channels().keys())
 
         self.instance.position = (self.event.items.aggregate(p=Max('position'))['p'] or 0) + 1
         if not self.instance.admission:
@@ -574,14 +572,7 @@ class ItemUpdateForm(I18nModelForm):
         if self.event.tax_rules.exists():
             self.fields['tax_rule'].required = True
         self.fields['description'].widget.attrs['rows'] = '4'
-        self.fields['sales_channels'] = forms.MultipleChoiceField(
-            label=_('Sales channels'),
-            required=False,
-            choices=(
-                (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
-            ),
-            widget=forms.CheckboxSelectMultiple
-        )
+        self.fields['limit_sales_channels'].queryset = self.event.organizer.sales_channels.all()
         change_decimal_field(self.fields['default_price'], self.event.currency)
 
         self.fields['available_from_mode'].widget = ButtonGroupRadioSelect(
@@ -772,7 +763,8 @@ class ItemUpdateForm(I18nModelForm):
             'name',
             'internal_name',
             'active',
-            'sales_channels',
+            'all_sales_channels',
+            'limit_sales_channels',
             'admission',
             'personalized',
             'description',
@@ -829,6 +821,7 @@ class ItemUpdateForm(I18nModelForm):
             'hidden_if_item_available': SafeModelChoiceField,
             'grant_membership_type': SafeModelChoiceField,
             'require_membership_types': SafeModelMultipleChoiceField,
+            'limit_sales_channels': SafeModelMultipleChoiceField,
         }
         widgets = {
             'available_from': SplitDateTimePickerWidget(),
@@ -844,6 +837,9 @@ class ItemUpdateForm(I18nModelForm):
             'min_per_order': forms.widgets.NumberInput(attrs={'min': 0}),
             'checkin_text': forms.TextInput(),
             'description': I18nMarkdownTextarea,
+            'limit_sales_channels': forms.CheckboxSelectMultiple(attrs={
+                'data-inverse-dependency': '<[name$=all_sales_channels]'
+            }),
         }
 
 
@@ -900,18 +896,7 @@ class ItemVariationForm(I18nModelForm):
         qs = kwargs.pop('membership_types')
         super().__init__(*args, **kwargs)
         change_decimal_field(self.fields['default_price'], self.event.currency)
-        self.fields['sales_channels'] = forms.MultipleChoiceField(
-            label=_('Sales channels'),
-            required=False,
-            choices=(
-                (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
-            ),
-            help_text=_('The sales channel selection for the product as a whole takes precedence, so if a sales channel is '
-                        'selected here but not on product level, the variation will not be available.'),
-            widget=forms.CheckboxSelectMultiple
-        )
-        if not self.instance.pk:
-            self.initial.setdefault('sales_channels', list(get_all_sales_channels().keys()))
+        self.fields['limit_sales_channels'].queryset = self.event.organizer.sales_channels.all()
 
         self.fields['description'].widget.attrs['rows'] = 3
         if qs:
@@ -983,12 +968,14 @@ class ItemVariationForm(I18nModelForm):
             'available_from_mode',
             'available_until',
             'available_until_mode',
-            'sales_channels',
+            'all_sales_channels',
+            'limit_sales_channels',
             'hide_without_voucher',
         ]
         field_classes = {
             'available_from': SplitDateTimeField,
             'available_until': SplitDateTimeField,
+            'limit_sales_channels': SafeModelMultipleChoiceField,
         }
         widgets = {
             'available_from': SplitDateTimePickerWidget(),
@@ -997,6 +984,9 @@ class ItemVariationForm(I18nModelForm):
                 'class': 'scrolling-multiple-choice'
             }),
             'checkin_text': forms.TextInput(),
+            'limit_sales_channels': forms.CheckboxSelectMultiple(attrs={
+                'data-inverse-dependency': '<[name$=all_sales_channels]'
+            }),
         }
 
     def clean(self):
