@@ -61,7 +61,6 @@ from django_countries.fields import Country
 from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
 
-from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
 from pretix.base.models.tax import TaxedPrice
@@ -597,9 +596,14 @@ class Item(LoggedModel):
         help_text=_('If set, this will be displayed next to the current price to show that the current price is a '
                     'discounted one. This is just a cosmetic setting and will not actually impact pricing.')
     )
-    sales_channels = fields.MultiStringField(
-        verbose_name=_('Sales channels'),
-        default=['web'],
+    all_sales_channels = models.BooleanField(
+        verbose_name=_("Sell on all sales channels"),
+        default=True,
+    )
+    limit_sales_channels = models.ManyToManyField(
+        "SalesChannel",
+        verbose_name=_("Restrict to specific sales channels"),
+        help_text=_('Only sell tickets for this product on the selected sales channels.'),
         blank=True,
     )
     issue_giftcard = models.BooleanField(
@@ -1022,8 +1026,8 @@ class Item(LoggedModel):
 
 
 def _all_sales_channels_identifiers():
-    from pretix.base.channels import get_all_sales_channels
-    return list(get_all_sales_channels().keys())
+    from pretix.base.channels import get_all_sales_channel_types
+    return list(get_all_sales_channel_types().keys())
 
 
 class ItemVariation(models.Model):
@@ -1130,9 +1134,13 @@ class ItemVariation(models.Model):
         default=Item.UNAVAIL_MODE_HIDDEN,
         max_length=16,
     )
-    sales_channels = fields.MultiStringField(
-        verbose_name=_('Sales channels'),
-        default=_all_sales_channels_identifiers,
+    all_sales_channels = models.BooleanField(
+        verbose_name=_("Sell on all sales channels the product is sold on"),
+        default=True,
+    )
+    limit_sales_channels = models.ManyToManyField(
+        "SalesChannel",
+        verbose_name=_("Restrict to specific sales channels"),
         help_text=_('The sales channel selection for the product as a whole takes precedence, so if a sales channel is '
                     'selected here but not on product level, the variation will not be available.'),
         blank=True,

@@ -22,9 +22,9 @@
 from decimal import Decimal
 
 from django import forms
-from django.utils.translation import gettext_lazy as _
+from django_scopes.forms import SafeModelMultipleChoiceField
 
-from pretix.base.channels import get_all_sales_channels
+from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.forms import I18nModelForm
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import Discount
@@ -38,7 +38,8 @@ class DiscountForm(I18nModelForm):
         fields = [
             'active',
             'internal_name',
-            'sales_channels',
+            'all_sales_channels',
+            'limit_sales_channels',
             'available_from',
             'available_until',
             'subevent_mode',
@@ -60,6 +61,7 @@ class DiscountForm(I18nModelForm):
             'available_until': SplitDateTimeField,
             'condition_limit_products': ItemMultipleChoiceField,
             'benefit_limit_products': ItemMultipleChoiceField,
+            'limit_sales_channels': SafeModelMultipleChoiceField,
         }
         widgets = {
             'subevent_mode': forms.RadioSelect,
@@ -72,6 +74,9 @@ class DiscountForm(I18nModelForm):
             'benefit_limit_products': forms.CheckboxSelectMultiple(attrs={
                 'class': 'scrolling-multiple-choice',
             }),
+            'limit_sales_channels': forms.CheckboxSelectMultiple(attrs={
+                'data-inverse-dependency': '<[name$=all_sales_channels]',
+            }),
             'benefit_only_apply_to_cheapest_n_matches': forms.NumberInput(
                 attrs={
                     'data-display-dependency': '#id_condition_min_count',
@@ -83,14 +88,8 @@ class DiscountForm(I18nModelForm):
         self.event = kwargs['event']
         super().__init__(*args, **kwargs)
 
-        self.fields['sales_channels'] = forms.MultipleChoiceField(
-            label=_('Sales channels'),
-            required=True,
-            choices=(
-                (c.identifier, c.verbose_name) for c in get_all_sales_channels().values()
-                if c.discounts_supported
-            ),
-            widget=forms.CheckboxSelectMultiple,
+        self.fields['limit_sales_channels'].queryset = self.event.organizer.sales_channels.filter(
+            type__in=[k for k, v in get_all_sales_channel_types().items() if v.discounts_supported]
         )
         self.fields['condition_limit_products'].queryset = self.event.items.all()
         self.fields['benefit_limit_products'].queryset = self.event.items.all()

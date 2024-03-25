@@ -27,7 +27,7 @@ from openpyxl.styles import Alignment
 from openpyxl.utils import get_column_letter
 
 from ...helpers.safe_openpyxl import SafeCell
-from ..channels import get_all_sales_channels
+from ..channels import get_all_sales_channel_types
 from ..exporter import ListExporter
 from ..models import ItemMetaValue, ItemVariation, ItemVariationMetaValue
 from ..signals import register_data_exporters
@@ -53,7 +53,7 @@ class ItemDataExporter(ListExporter):
 
     def iterate_list(self, form_data):
         locales = self.event.settings.locales
-        scs = get_all_sales_channels()
+        scs = get_all_sales_channel_types()
         header = [
             _("Product ID"),
             _("Variation ID"),

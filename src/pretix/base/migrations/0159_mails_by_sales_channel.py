@@ -2,7 +2,7 @@
 
 from django.db import migrations
 
-from pretix.base.channels import get_all_sales_channels
+from pretix.base.channels import get_all_sales_channel_types
 
 
 def set_sales_channels(apps, schema_editor):
@@ -11,7 +11,7 @@ def set_sales_channels(apps, schema_editor):
     # Therefore, for existing events, we enable all sales channels
     Event_SettingsStore = apps.get_model('pretixbase', 'Event_SettingsStore')
     Event = apps.get_model('pretixbase', 'Event')
-    all_sales_channels = "[" + ", ".join('"' + sc + '"' for sc in get_all_sales_channels()) + "]"
+    all_sales_channels = "[" + ", ".join('"' + sc + '"' for sc in get_all_sales_channel_types()) + "]"
     batch_size = 1000
     Event_SettingsStore.objects.bulk_create([
         Event_SettingsStore(

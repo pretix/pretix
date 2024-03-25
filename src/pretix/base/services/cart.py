@@ -52,7 +52,7 @@ from django.utils.translation import (
 )
 from django_scopes import scopes_disabled
 
-from pretix.base.channels import get_all_sales_channels
+from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.i18n import language
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import (
@@ -383,7 +383,7 @@ class CartManager:
         })
 
     def _check_max_cart_size(self):
-        if not get_all_sales_channels()[self._sales_channel].unlimited_items_per_order:
+        if not get_all_sales_channel_types()[self._sales_channel].unlimited_items_per_order:
             cartsize = self.positions.filter(addon_to__isnull=True).count()
             cartsize += sum([op.count for op in self._operations if isinstance(op, self.AddOperation) and not op.addon_to])
             cartsize -= len([1 for op in self._operations if isinstance(op, self.RemoveOperation) if

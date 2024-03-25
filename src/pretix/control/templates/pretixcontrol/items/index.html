@@ -56,10 +56,10 @@
                                 <br>
                                 <small class="text-muted">
                                     #{{ i.pk }}
-                                    {% for k, c in sales_channels.items %}
-                                        {% if k in i.sales_channels %}
+                                    {% for c in sales_channels %}
+                                        {% if i.all_sales_channels or c in i.limit_sales_channels.all %}
                                             <span class="fa fa-fw fa-{{ c.icon }} text-muted"
-                                                  data-toggle="tooltip" title="{% trans c.verbose_name %}"></span>
+                                                  data-toggle="tooltip" title="{{ c.label }}"></span>
                                         {% else %}
                                         {% endif %}
                                     {% endfor %}

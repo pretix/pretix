@@ -33,7 +33,6 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes import ScopedManager
 
 from pretix.base.decimal import round_decimal
-from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
 
 
@@ -64,10 +63,14 @@ class Discount(LoggedModel):
         default=0,
         verbose_name=_("Position")
     )
-    sales_channels = fields.MultiStringField(
-        verbose_name=_('Sales channels'),
-        default=['web'],
-        blank=False,
+    all_sales_channels = models.BooleanField(
+        verbose_name=_("All supported sales channels"),
+        default=True,
+    )
+    limit_sales_channels = models.ManyToManyField(
+        "SalesChannel",
+        verbose_name=_("Sales channels"),
+        blank=True,
     )
 
     available_from = models.DateTimeField(

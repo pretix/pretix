@@ -46,7 +46,7 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
     InlineItemVariationSerializer, ItemSerializer, QuestionSerializer,
 )
-from pretix.base.channels import get_all_sales_channels
+from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.models import (
@@ -1057,7 +1057,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         return expires
 
     def validate_sales_channel(self, channel):
-        if channel not in get_all_sales_channels():
+        if channel not in get_all_sales_channel_types():
             raise ValidationError('Unknown sales channel.')
         return channel
 
@@ -1125,7 +1125,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     def validate_testmode(self, testmode):
         if 'sales_channel' in self.initial_data:
             try:
-                sales_channel = get_all_sales_channels()[self.initial_data['sales_channel']]
+                sales_channel = get_all_sales_channel_types()[self.initial_data['sales_channel']]
 
                 if testmode and not sales_channel.testmode_supported:
                     raise ValidationError('This sales channel does not provide support for test mode.')

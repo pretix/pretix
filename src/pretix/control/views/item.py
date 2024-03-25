@@ -83,7 +83,6 @@ from pretix.control.permissions import (
 from pretix.control.signals import item_forms, item_formsets
 from pretix.helpers.models import modelcopy
 
-from ...base.channels import get_all_sales_channels
 from ...helpers.compat import CompatDeleteView
 from . import ChartContainingView, CreateView, PaginationMixin, UpdateView
 
@@ -105,14 +104,14 @@ class ItemList(ListView):
             event=self.request.event
         ).annotate(
             var_count=Count('variations')
-        ).prefetch_related("category").order_by(
+        ).prefetch_related("category", "limit_sales_channels").order_by(
             F('category__position').asc(nulls_first=True),
             'category', 'position'
         )
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['sales_channels'] = get_all_sales_channels()
+        ctx['sales_channels'] = self.request.organizer.sales_channels.all()
         return ctx
 
 
@@ -1500,7 +1499,7 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                                           "Your participants won't be able to buy the bundle unless you remove this "
                                           "item from it."))
 
-        ctx['sales_channels'] = get_all_sales_channels()
+        ctx['sales_channels'] = self.request.organizer.sales_channels.all()
         return ctx
 
     @cached_property
@@ -1512,7 +1511,9 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
                 can_order=True, can_delete=True, extra=0
             )(
                 self.request.POST if self.request.method == "POST" else None,
-                queryset=ItemVariation.objects.filter(item=self.get_object()).prefetch_related('meta_values', 'require_membership_types'),
+                queryset=ItemVariation.objects.filter(item=self.get_object()).prefetch_related(
+                    'meta_values', 'limit_sales_channels', 'require_membership_types'
+                ),
                 event=self.request.event, prefix="variations"
             )),
             ('addons', inlineformset_factory(

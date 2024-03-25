@@ -44,7 +44,7 @@ from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from tests.const import SAMPLE_PNG
 
-from pretix.base.channels import get_all_sales_channels
+from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.models import (
     CartPosition, InvoiceAddress, Item, ItemAddOn, ItemBundle, ItemCategory,
     ItemVariation, Order, OrderPosition, Question, QuestionOption, Quota,
@@ -400,7 +400,7 @@ def test_item_detail_variations(token_client, organizer, event, team, item):
         "require_membership": False,
         "require_membership_hidden": False,
         "require_membership_types": [],
-        "sales_channels": list(get_all_sales_channels().keys()),
+        "sales_channels": list(get_all_sales_channel_types().keys()),
         "available_from": None,
         "available_until": None,
         "available_from_mode": "hide",
@@ -596,7 +596,7 @@ def test_item_create_with_variation(token_client, organizer, event, item, catego
         assert new_item.variations.first().value.localize('de') == "Kommentar"
         assert new_item.variations.first().value.localize('en') == "Comment"
         assert new_item.variations.first().require_approval is True
-        assert set(new_item.variations.first().sales_channels) == set(get_all_sales_channels().keys())
+        assert set(new_item.variations.first().sales_channels) == set(get_all_sales_channel_types().keys())
         assert new_item.variations.first().meta_data == {"day": "Wednesday"}
 
 
@@ -1331,7 +1331,7 @@ TEST_VARIATIONS_RES = {
     "require_membership": False,
     "require_membership_hidden": False,
     "require_membership_types": [],
-    "sales_channels": list(get_all_sales_channels().keys()),
+    "sales_channels": list(get_all_sales_channel_types().keys()),
     "available_from": None,
     "available_until": None,
     "available_from_mode": "hide",
@@ -1413,7 +1413,7 @@ def test_variations_create(token_client, organizer, event, item, variation):
         var = ItemVariation.objects.get(pk=resp.data['id'])
     assert var.position == 1
     assert var.price == 23.0
-    assert set(var.sales_channels) == set(get_all_sales_channels().keys())
+    assert set(var.sales_channels) == set(get_all_sales_channel_types().keys())
     assert var.meta_data == {"day": "Wednesday"}
 
 

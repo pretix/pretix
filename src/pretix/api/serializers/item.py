@@ -63,7 +63,7 @@ class InlineItemVariationSerializer(I18nAwareModelSerializer):
                   'require_membership', 'require_membership_types', 'require_membership_hidden',
                   'checkin_attention', 'checkin_text',
                   'available_from', 'available_from_mode', 'available_until', 'available_until_mode',
-                  'sales_channels', 'hide_without_voucher', 'meta_data')
+                  'all_sales_channels', 'limit_sales_channels', 'hide_without_voucher', 'meta_data')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -88,7 +88,7 @@ class ItemVariationSerializer(I18nAwareModelSerializer):
                   'require_membership', 'require_membership_types', 'require_membership_hidden',
                   'checkin_attention', 'checkin_text',
                   'available_from', 'available_from_mode', 'available_until', 'available_until_mode',
-                  'sales_channels', 'hide_without_voucher', 'meta_data')
+                  'all_sales_channels', 'limit_sales_channels', 'hide_without_voucher', 'meta_data')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -235,8 +235,8 @@ class ItemSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Item
-        fields = ('id', 'category', 'name', 'internal_name', 'active', 'sales_channels', 'description',
-                  'default_price', 'free_price', 'free_price_suggestion', 'tax_rate', 'tax_rule', 'admission',
+        fields = ('id', 'category', 'name', 'internal_name', 'active', 'all_sales_channels', 'limit_sales_channels',
+                  'description', 'default_price', 'free_price', 'free_price_suggestion', 'tax_rate', 'tax_rule', 'admission',
                   'personalized', 'position', 'picture',
                   'available_from', 'available_from_mode', 'available_until', 'available_until_mode',
                   'require_voucher', 'hide_without_voucher', 'allow_cancel', 'require_bundling',

@@ -40,7 +40,7 @@ from i18nfield.strings import LazyI18nString
 from phonenumber_field.phonenumber import to_python
 from phonenumbers import SUPPORTED_REGIONS
 
-from pretix.base.channels import get_all_sales_channels
+from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.forms.questions import guess_country
 from pretix.base.models import (
     Customer, ItemVariation, OrderPosition, Question, QuestionAnswer,
@@ -701,13 +701,13 @@ class Saleschannel(ImportColumn):
 
     def static_choices(self):
         return [
-            (sc.identifier, sc.verbose_name) for sc in get_all_sales_channels().values()
+            (sc.identifier, sc.verbose_name) for sc in get_all_sales_channel_types().values()
         ]
 
     def clean(self, value, previous_values):
         if not value:
             value = 'web'
-        if value not in get_all_sales_channels():
+        if value not in get_all_sales_channel_types():
             raise ValidationError(_("Please enter a valid sales channel."))
         return value
 

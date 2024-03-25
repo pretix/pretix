@@ -36,7 +36,7 @@ from django.template.response import TemplateResponse
 from django.urls import resolve
 from django_scopes import scope
 
-from pretix.base.channels import WebshopSalesChannel
+from pretix.base.channels import WebshopSalesChannelType
 from pretix.presale.signals import process_response
 
 from .utils import _detect_event
@@ -58,7 +58,7 @@ class EventMiddleware:
 
         if not hasattr(request, 'sales_channel'):
             # The environ lookup is only relevant during unit testing
-            request.sales_channel = request.environ.get('PRETIX_SALES_CHANNEL', WebshopSalesChannel())
+            request.sales_channel = request.environ.get('PRETIX_SALES_CHANNEL', WebshopSalesChannelType())
 
         if url.namespace != 'presale':
             return self.get_response(request)

@@ -71,7 +71,7 @@ from django.views.generic import (
 from pretix.api.models import ApiCall, WebHook
 from pretix.api.webhooks import manually_retry_all_calls
 from pretix.base.auth import get_auth_backends
-from pretix.base.channels import get_all_sales_channels
+from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.exporter import (
     MultiSheetListExporter, OrganizerLevelExportMixin,
 )
@@ -2730,7 +2730,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             )
         }
 
-        scs = get_all_sales_channels()
+        scs = get_all_sales_channel_types()
         for o in ctx['orders']:
             if o.pk not in annotated:
                 continue

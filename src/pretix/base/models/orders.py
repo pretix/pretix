@@ -266,7 +266,11 @@ class Order(LockModel, LoggedModel):
     require_approval = models.BooleanField(
         default=False
     )
-    sales_channel = models.CharField(max_length=190, default="web")
+    sales_channel = models.ForeignKey(
+        "SalesChannel",
+        on_delete=models.PROTECT,
+        null=True, blank=True,
+    )
     email_known_to_work = models.BooleanField(
         default=False,
         verbose_name=_('E-mail address verified')

@@ -71,7 +71,6 @@ from django.views.generic import (
 )
 from i18nfield.strings import LazyI18nString
 
-from pretix.base.channels import get_all_sales_channels
 from pretix.base.decimal import round_decimal
 from pretix.base.email import get_email_context
 from pretix.base.exporter import MultiSheetListExporter
@@ -374,7 +373,7 @@ class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin,
     def get_queryset(self):
         qs = Order.objects.filter(
             event=self.request.event
-        ).select_related('invoice_address')
+        ).select_related('invoice_address').prefetch_related("sales_channel")
 
         if self.filter_form.is_valid():
             qs = self.filter_form.filter_qs(qs)
@@ -419,7 +418,6 @@ class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin,
             )
         }
 
-        scs = get_all_sales_channels()
         for o in ctx['orders']:
             if o.pk not in annotated:
                 continue
@@ -432,7 +430,6 @@ class OrderList(OrderSearchMixin, EventPermissionRequiredMixin, PaginationMixin,
             o.has_cancellation_request = annotated.get(o.pk)['has_cancellation_request']
             o.computed_payment_refund_sum = annotated.get(o.pk)['computed_payment_refund_sum']
             o.icnt = annotated.get(o.pk)['icnt']
-            o.sales_channel_obj = scs[o.sales_channel]
 
         if ctx['page_obj'].paginator.count < 1000:
             # Performance safeguard: Only count positions if the data set is small
@@ -519,7 +516,6 @@ class OrderDetail(OrderView):
         ctx['display_locale'] = dict(settings.LANGUAGES)[self.object.locale or self.request.event.settings.locale]
 
         ctx['overpaid'] = self.order.pending_sum * -1
-        ctx['sales_channel'] = get_all_sales_channels().get(self.order.sales_channel)
         ctx['download_buttons'] = self.download_buttons
         ctx['payment_refund_sum'] = self.order.payment_refund_sum
         ctx['pending_sum'] = self.order.pending_sum
