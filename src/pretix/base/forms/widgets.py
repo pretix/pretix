@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import os
-from datetime import date, datetime
+from datetime import datetime
 
 from django import forms
 from django.utils.formats import get_format
