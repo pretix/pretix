@@ -625,7 +625,7 @@ class BaseQuestionsForm(forms.Form):
                     label=_('Start date'),
                     help_text='' if initial else _('If you keep this empty, the ticket will be valid starting at the time of purchase.'),
                     required=bool(initial),
-                    initial=initial,
+                    initial=pos.requested_valid_from or initial,
                     widget=DatePickerWidget(attrs),
                     validators=([MaxDateValidator(max_date.date())] if max_date else []) + [MinDateValidator(min_date.date())]
                 )
@@ -634,7 +634,7 @@ class BaseQuestionsForm(forms.Form):
                     label=_('Start date'),
                     help_text='' if initial else _('If you keep this empty, the ticket will be valid starting at the time of purchase.'),
                     required=bool(initial),
-                    initial=initial,
+                    initial=pos.requested_valid_from or initial,
                     widget=SplitDateTimePickerWidget(
                         time_format=get_format_without_seconds('TIME_INPUT_FORMATS'),
                         min_date=min_date,
