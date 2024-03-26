@@ -270,7 +270,9 @@ def get_fonts(event: Event = None, pdf_support_required=False):
     for recv, value in register_fonts.send(0):
         received_fonts.update(value)
 
-    if event:
+    # When deleting an event, the function is still getting called with an event.
+    # We check specifically if there is a PK present to make sure the event actually exists.
+    if event and event.pk:
         for recv, value in register_event_fonts.send(event):
             received_fonts.update(value)
 
