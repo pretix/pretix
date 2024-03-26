@@ -78,7 +78,9 @@ var form_handlers = function (el) {
         }
         if ($(this).is('[data-max]')) {
             opts["maxDate"] = $(this).attr("data-max");
-            opts["viewDate"] = $(this).attr("data-max");
+            opts["viewDate"] = (opts.minDate &&   // if minDate and maxDate are set, use the one closer to now as viewDate
+                    Math.abs(+new Date(opts.minDate) - new Date()) < Math.abs(+new Date(opts.maxDate) - new Date())
+            ) ? opts.minDate : opts.maxDate;
         }
         $(this).datetimepicker(opts);
         if ($(this).parent().is('.splitdatetimerow')) {
