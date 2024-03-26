@@ -182,7 +182,7 @@ class BaseReportlabInvoiceRenderer(BaseInvoiceRenderer):
         pdfmetrics.registerFontFamily('OpenSans', normal='OpenSans', bold='OpenSansBd',
                                       italic='OpenSansIt', boldItalic='OpenSansBI')
 
-        for family, styles in get_fonts().items():
+        for family, styles in get_fonts(event=self.event, pdf_support_required=True).items():
             if family == self.event.settings.invoice_renderer_font:
                 pdfmetrics.registerFont(TTFont(family, finders.find(styles['regular']['truetype'])))
                 self.font_regular = family

@@ -20,7 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 from collections import OrderedDict
-from urllib.parse import urlsplit
+from urllib.parse import urlparse, urlsplit
 from zoneinfo import ZoneInfo, ZoneInfoNotFoundError
 
 from django.conf import settings
@@ -40,6 +40,7 @@ from pretix.base.settings import global_settings_object
 from pretix.multidomain.urlreverse import (
     get_event_domain, get_organizer_domain,
 )
+from pretix.presale.style import get_fonts
 
 _supported = None
 
@@ -240,6 +241,14 @@ class SecurityMiddleware(MiddlewareMixin):
     )
 
     def process_response(self, request, resp):
+        def nested_dict_values(d):
+            for v in d.values():
+                if isinstance(v, dict):
+                    yield from nested_dict_values(v)
+                else:
+                    if isinstance(v, str):
+                        yield v
+
         url = resolve(request.path_info)
 
         if settings.DEBUG and resp.status_code >= 400:
@@ -259,6 +268,14 @@ class SecurityMiddleware(MiddlewareMixin):
         if gs.settings.leaflet_tiles:
             img_src.append(gs.settings.leaflet_tiles[:gs.settings.leaflet_tiles.index("/", 10)].replace("{s}", "*"))
 
+        font_src = set()
+        if hasattr(request, 'event'):
+            for font in get_fonts(request.event, pdf_support_required=False).values():
+                for path in list(nested_dict_values(font)):
+                    font_location = urlparse(path)
+                    if font_location.scheme and font_location.netloc:
+                        font_src.add('{}://{}'.format(font_location.scheme, font_location.netloc))
+
         h = {
             'default-src': ["{static}"],
             'script-src': ['{static}'],
@@ -267,7 +284,7 @@ class SecurityMiddleware(MiddlewareMixin):
             'style-src': ["{static}", "{media}"],
             'connect-src': ["{dynamic}", "{media}"],
             'img-src': ["{static}", "{media}", "data:"] + img_src,
-            'font-src': ["{static}"],
+            'font-src': ["{static}"] + list(font_src),
             'media-src': ["{static}", "data:"],
             # form-action is not only used to match on form actions, but also on URLs
             # form-actions redirect to. In the context of e.g. payment providers or
