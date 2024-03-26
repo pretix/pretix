@@ -345,7 +345,13 @@
         <div class="panel panel-default panel-cancellation">
             <div class="panel-heading">
                 <h3 class="panel-title">
+                {% if user_change_allowed and user_cancel_allowed %}
                     {% trans "Change or cancel your order" context "action" %}
+                {% elif user_change_allowed %}
+                    {% trans "Change your order" context "action" %}
+                {% else %}
+                    {% trans "Cancel your order" context "action" %}
+                {% endif %}
                 </h3>
             </div>
             <ul class="list-group">
