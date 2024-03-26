@@ -93,6 +93,8 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
     :param lock: Whether to place a SELECT FOR UPDATE lock on the selected memberships
     :param ignored_order: An order that should be ignored for usage counting
     :param testmode: If ``True``, only test mode memberships are allowed. If ``False``, test mode memberships are not allowed.
+    :param valid_from_not_chosen: Set to ``True`` to indicate that the customer is in an early step of the checkout flow
+                                  where the valid_from date is not selected yet. In this case, the valid_from date is not checked.
     """
     tz = event.timezone
     applicable_positions = [
