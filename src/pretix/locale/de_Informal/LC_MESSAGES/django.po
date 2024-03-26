@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-03-26 13:36+0000\n"
-"PO-Revision-Date: 2024-02-28 13:29+0000\n"
+"PO-Revision-Date: 2024-03-26 15:47+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4\n"
+"X-Generator: Weblate 5.4.2\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -5263,11 +5263,6 @@ msgid "Parallel usage is allowed"
 msgstr "Parallele Nutzung ist möglich"
 
 #: pretix/base/models/memberships.py:51
-#, fuzzy
-#| msgid ""
-#| "If this is selected, the membership can be used to purchase tickets for "
-#| "events happening at the same time. Note that this will only check for an "
-#| "identical start time of the events, not for any overlap between events."
 msgid ""
 "If this is selected, the membership can be used to purchase tickets for "
 "events happening at the same time. Note that this will only check for an "
@@ -5278,7 +5273,8 @@ msgstr ""
 "Wenn diese Option gewählt ist, können mit der Mitgliedschaft mehrere Tickets "
 "für Veranstaltungen gebucht werden, die gleichzeitig stattfinden. Es wird "
 "nur auf eine identische Startzeit der Veranstaltung geprüft, nicht auf "
-"überlappende Veranstaltungen."
+"überlappende Veranstaltungen. Überlappende Zeiträume werden geprüft, wenn es "
+"eine Ticketgültigkeit auf Produktebene gibt."
 
 #: pretix/base/models/memberships.py:57 pretix/base/models/vouchers.py:196
 #: pretix/control/views/vouchers.py:119
@@ -7568,15 +7564,12 @@ msgstr[1] ""
 "Produkt %(base)s auswählen."
 
 #: pretix/base/services/cart.py:206 pretix/base/services/orders.py:200
-#, fuzzy, python-format
-#| msgid ""
-#| "You can select every add-ons from the category %(cat)s for the product "
-#| "%(base)s at most once."
+#, python-format
 msgid ""
 "You can select every add-on from the category %(cat)s for the product "
 "%(base)s at most once."
 msgstr ""
-"Sie können jedes Zusatzprodukte aus der Kategorie %(cat)s für das Produkt "
+"Du kannst jedes Zusatzprodukt aus der Kategorie %(cat)s für das Produkt "
 "%(base)s höchstens ein mal auswählen."
 
 #: pretix/base/services/cart.py:207
@@ -8000,35 +7993,27 @@ msgstr ""
 "Anzahl von {number} mal zu nutzen."
 
 #: pretix/base/services/memberships.py:215
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "You are trying to use a membership of type \"{type}\" for an event taking "
-#| "place at {date}, however you already used the same membership for a "
-#| "different ticket at the same time."
+#, python-brace-format
 msgid ""
 "You are trying to use a membership of type \"{type}\" for a ticket valid "
 "from {valid_from} until {valid_until}, however you already used the same "
 "membership for a different ticket that overlaps with this time frame "
 "({conflict_from} – {conflict_until})."
 msgstr ""
-"Du versuchst eine Mitgliedschaft vom Typ \"{type}\" für eine Veranstaltung "
-"am {date} zu nutzen, hast diese Mitgliedschaft jedoch schon für ein anderes "
-"Ticket zur selben Zeit benutzt."
+"Du versuchst eine Mitgliedschaft vom Typ \"{type}\" für ein Ticket mit "
+"Gültigkeit vom {valid_from} bis {valid_until} zu nutzen, hast diese "
+"Mitgliedschaft jedoch schon für ein anderes Ticket mit überlappendem "
+"Zeitraum ({conflict_from} – {conflict_until}) verwendet."
 
 #: pretix/base/services/memberships.py:219
 #: pretix/base/services/memberships.py:221
-#, fuzzy
-#| msgctxt "timeframe"
-#| msgid "Start"
 msgid "start"
 msgstr "Beginn"
 
 #: pretix/base/services/memberships.py:220
 #: pretix/base/services/memberships.py:222
-#, fuzzy
-#| msgid "Event end"
 msgid "open end"
-msgstr "Veranstaltungsende"
+msgstr "offenes Ende"
 
 #: pretix/base/services/memberships.py:232
 #, python-brace-format
@@ -9477,10 +9462,8 @@ msgstr ""
 "werden."
 
 #: pretix/base/settings.py:1406
-#, fuzzy
-#| msgid "Enable waiting list"
 msgid "Disable waiting list"
-msgstr "Warteliste aktivieren"
+msgstr "Warteliste deaktivieren"
 
 #: pretix/base/settings.py:1407
 msgid ""
@@ -9490,6 +9473,11 @@ msgid ""
 "still people on the waiting list. Vouchers that have already been sent "
 "remain active."
 msgstr ""
+"Die Warteliste wird nach diesem Zeitpunkt vollständig deaktiviert. Niemand "
+"kann sich mehr in die Warteliste eintragen und keine weiteren Gutscheine "
+"werden verschickt. Wenn es das Kontingent zulässt, werden Tickets wieder zum "
+"Verkauf frei, selbst wenn es noch Einträge auf der Warteliste gibt. Bereits "
+"verschickte Gutscheine behalten ihre Gültigkeit."
 
 #: pretix/base/settings.py:1419
 msgid "Ask for a name"
@@ -20977,6 +20965,9 @@ msgid ""
 "can choose to refund the money below or reactivate it by extending the "
 "payment deadline."
 msgstr ""
+"Diese Bestellung ist abgelaufen obwohl Zahlungen in Höhe von %(amount)s "
+"eingegangen sind. Du kannst unten eine Erstattung anstoßen oder die "
+"Bestellung reaktivieren, indem du die Zahlungsfrist verlängerst."
 
 #: pretix/control/templates/pretixcontrol/order/index.html:142
 msgid "Cancellation request"
@@ -24692,6 +24683,8 @@ msgid ""
 "The waiting list is no longer active for this event. The waiting list no "
 "longer affects quotas and no longer notifies waiting users."
 msgstr ""
+"Die Warteliste ist für diese Veranstaltung nicht mehr aktiv. Die Warteliste "
+"beeinflusst keine Kontingente mehr und benachrichtigt keine Benutzer mehr."
 
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:25
 msgid "Send vouchers"
@@ -28774,10 +28767,8 @@ msgstr ""
 "benutzt, aber einen eigenen Checkout für die anderen Schritte verwendest."
 
 #: pretix/plugins/returnurl/views.py:37
-#, fuzzy
-#| msgid "Base redirection URL"
 msgid "Base redirection URLs"
-msgstr "Basis-URL zur Weiterleitung"
+msgstr "Basis-URLs zur Weiterleitung"
 
 #: pretix/plugins/returnurl/views.py:38
 msgid ""
@@ -28785,6 +28776,9 @@ msgid ""
 "prefixes. Enter one or more allowed URL prefix per line. URL prefixes must "
 "include a slash after the hostname."
 msgstr ""
+"Die Weiterleitung ist nur für URLs erlaubt, die mit einem dieser Präfixe "
+"starten. Gib eine oder mehrere Präfixe pro Zeile ein. Die Präfixe müssen "
+"einen Slash nach dem Hostnamen enthalten."
 
 #: pretix/plugins/sendmail/apps.py:38
 msgid "Send out emails to all your customers or specific groups of customers."
@@ -32289,18 +32283,14 @@ msgid "Change or cancel your order"
 msgstr "Bestellung stornieren oder umbuchen"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:351
-#, fuzzy
-#| msgid "Change order"
 msgctxt "action"
 msgid "Change your order"
-msgstr "Bestellung umbuchen"
+msgstr "Bestellung ändern"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:353
-#, fuzzy
-#| msgid "Cancel order"
 msgctxt "action"
 msgid "Cancel your order"
-msgstr "Stornieren"
+msgstr "Bestellung stornieren"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:361
 msgid ""
