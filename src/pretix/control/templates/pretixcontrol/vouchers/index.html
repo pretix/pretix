@@ -77,6 +77,8 @@
                         class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create a new voucher" %}</a>
                 <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
                         class="btn btn-primary btn-lg"><i class="fa fa-plus"></i> {% trans "Create multiple new vouchers" %}</a>
+                <a href="{% url "control:event.vouchers.import" organizer=request.event.organizer.slug event=request.event.slug %}"
+                   class="btn btn-default btn-lg"><i class="fa fa-upload"></i> {% trans "Import vouchers" %}</a>
             {% endif %}
         </div>
     {% else %}
@@ -87,6 +89,9 @@
                 <a href="{% url "control:event.vouchers.bulk" organizer=request.event.organizer.slug event=request.event.slug %}"
                         class="btn btn-default"><i class="fa fa-plus"></i>
                     {% trans "Create multiple new vouchers" %}</a>
+                <a href="{% url "control:event.vouchers.import" organizer=request.event.organizer.slug event=request.event.slug %}" 
+                   class="btn btn-default"><i class="fa fa-upload"></i>
+                    {% trans "Import vouchers" %}</a>
             {% endif %}
             <a href="?{% url_replace request "download" "yes" %}"
                     class="btn btn-default"><i class="fa fa-download"></i>

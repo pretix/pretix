@@ -785,6 +785,15 @@ to define additional columns that can be read during import. You are expected to
 As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
 """
 
+voucher_import_columns = EventPluginSignal()
+"""
+This signal is sent out if the user performs an import of vouchers from an external source. You can use this
+to define additional columns that can be read during import. You are expected to return a list of instances of
+``ImportColumn`` subclasses.
+
+As with all event-plugin signals, the ``sender`` keyword argument will contain the event.
+"""
+
 validate_event_settings = EventPluginSignal()
 """
 Arguments: ``settings_dict``
