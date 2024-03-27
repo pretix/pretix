@@ -212,7 +212,7 @@ class VariationColumn(ImportColumn):
         if value:
             matches = [
                 p for p in self.items
-                if str(p.pk) == value or any((v and v == value) for v in i18n_flat(p.value)) and p.item_id == previous_values['item'].pk
+                if (str(p.pk) == value or any((v and v == value) for v in i18n_flat(p.value))) and p.item_id == previous_values['item'].pk
             ]
             if len(matches) == 0:
                 raise ValidationError(_("No matching variation was found."))
