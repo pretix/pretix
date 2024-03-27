@@ -7,7 +7,7 @@ Extending the import process
 ============================
 
 It's possible through the backend to import objects into pretix, for example orders from a legacy ticketing system. If
-your plugins defines additional data structures around those objects, it might be useful to make it possible to import
+your plugin defines additional data structures around those objects, it might be useful to make it possible to import
 them as well.
 
 Import process
