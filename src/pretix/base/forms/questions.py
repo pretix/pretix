@@ -611,7 +611,7 @@ class BaseQuestionsForm(forms.Form):
                 max_date = None
             min_date = now()
             initial = None
-            if item.require_membership and pos.used_membership:
+            if (item.require_membership or (pos.variation and pos.variation.require_membership)) and pos.used_membership:
                 if pos.used_membership.date_start >= now():
                     initial = min_date = pos.used_membership.date_start
                 max_date = min(max_date, pos.used_membership.date_end) if max_date else pos.used_membership.date_end
