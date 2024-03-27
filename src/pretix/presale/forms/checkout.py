@@ -225,7 +225,9 @@ class MembershipForm(forms.Form):
 
         memberships = [
             m for m in self.memberships
-            if m.is_valid(ev) and m.membership_type in types
+            if m.membership_type in types and (
+                m.is_valid(ev, self.position.valid_from, valid_from_not_chosen=self.position.item.validity_dynamic_start_choice)
+            )
         ]
 
         if len(memberships) == 1:

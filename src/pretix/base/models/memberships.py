@@ -163,8 +163,12 @@ class Membership(models.Model):
     def attendee_name(self):
         return build_name(self.attendee_name_parts, fallback_scheme=lambda: self.customer.organizer.settings.name_scheme)
 
-    def is_valid(self, ev=None):
-        if ev:
+    def is_valid(self, ev=None, ticket_valid_from=None, valid_from_not_chosen=False):
+        if valid_from_not_chosen:
+            return not self.canceled and self.date_end >= now()
+        elif ticket_valid_from:
+            dt = ticket_valid_from
+        elif ev:
             dt = ev.date_from
         else:
             dt = now()
