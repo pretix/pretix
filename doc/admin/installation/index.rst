@@ -12,5 +12,6 @@ for your needs.
    general
    docker_smallscale
    manual_smallscale
+   kubernetes
    dev_version
    enterprise
