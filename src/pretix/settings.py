@@ -142,7 +142,7 @@ if USE_DATABASE_TLS or USE_DATABASE_MTLS:
 
     db_options.update(tls_config)
 
-db_disable_server_side_cursors = db_backend == 'postgresql' and config.get('database', 'disable_server_side_cursors', fallback=False)
+db_disable_server_side_cursors = db_backend == 'postgresql' and config.getboolean('database', 'disable_server_side_cursors', fallback=False)
 
 DATABASES = {
     'default': {
