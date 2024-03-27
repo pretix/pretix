@@ -39,7 +39,7 @@ dependencies = [
   "Django==4.2.*",
   "django-bootstrap3==23.6.*",
   "django-compressor==4.4",
-  "django-countries==7.5.*",
+  "django-countries==7.6",
   "django-filter==24.1",
   "django-formset-js-improved==0.5.0.3",
   "django-formtools==2.5.1",
