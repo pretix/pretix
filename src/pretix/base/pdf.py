@@ -935,16 +935,17 @@ class Renderer:
 
     def _draw_textarea(self, canvas: Canvas, op: OrderPosition, order: Order, o: dict):
         font = o['fontfamily']
-        if o['bold']:
-            font += ' B'
-        if o['italic']:
-            font += ' I'
 
         # Since pdfmetrics.registerFont is global, we want to make sure that no one tries to sneak in a font, they
         # should not have access to.
         if font not in self.event_fonts:
             logger.warning(f'Unauthorized use of font "{font}"')
             font = 'Open Sans'
+
+        if o['bold']:
+            font += ' B'
+        if o['italic']:
+            font += ' I'
 
         try:
             ad = getAscentDescent(font, float(o['fontsize']))
