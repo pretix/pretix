@@ -32,51 +32,36 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from django.template.response import TemplateResponse
-from django.urls import resolve
-from django_scopes import scope
-
-from pretix.base.channels import WebshopSalesChannel
-from pretix.presale.signals import process_response
-
-from .utils import _detect_event
+import threading
+from dateutil.parser import parse
+from django.utils.timezone import now
 
 
-class EventMiddleware:
-    NO_REQUIRE_LIVE_URLS = {
-        'event.widget.productlist',
-        'event.widget.css',
-    }
+class TimeMachineMiddleware:
+    tls = threading.local()
 
     def __init__(self, get_response=None):
         self.get_response = get_response
         super().__init__()
 
     def __call__(self, request):
-        url = resolve(request.path_info)
-        request._namespace = url.namespace
+        if hasattr(request, 'event') and hasattr(request, '_namespace') and request._namespace == 'presale' and \
+                'timemachine_now_dt' in request.session and \
+                request.user.has_event_permission(request.organizer, request.event, 'can_change_event_settings', request):
+            request.now_dt = parse(request.session['timemachine_now_dt'])
+            request.now_dt_is_fake = True
+        else:
+            request.now_dt = now()
+            request.now_dt_is_fake = False
 
-        if not hasattr(request, 'sales_channel'):
-            # The environ lookup is only relevant during unit testing
-            request.sales_channel = request.environ.get('PRETIX_SALES_CHANNEL', WebshopSalesChannel())
+        try:
+            TimeMachineMiddleware.tls.now_dt = request.now_dt
 
-        if url.namespace != 'presale':
             return self.get_response(request)
+        finally:
+            TimeMachineMiddleware.tls.now_dt = None
 
-        if 'organizer' in url.kwargs or 'event' in url.kwargs or getattr(request, 'event_domain', False) or getattr(request, 'organizer_domain', False):
-            redirect = _detect_event(request, require_live=url.url_name not in self.NO_REQUIRE_LIVE_URLS)
-            if redirect:
-                return redirect
 
-        with scope(organizer=getattr(request, 'organizer', None)):
-            response = self.get_response(request)
-
-            if hasattr(request, '_namespace') and request._namespace == 'presale' and hasattr(request, 'event'):
-                for receiver, r in process_response.send(request.event, request=request, response=response):
-                    response = r
-
-            if isinstance(response, TemplateResponse):
-                response = response.render()
-
-        return response
+def time_machine_now():
+    return getattr(TimeMachineMiddleware.tls, 'now_dt', None) or now()
 

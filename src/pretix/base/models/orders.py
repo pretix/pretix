@@ -85,6 +85,7 @@ from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
 from ...helpers.format import format_map
 from ...helpers.names import build_name
+from ...presale.timemachine import time_machine_now
 from ...testutils.middleware import debugflags_var
 from ._transactions import (
     _fail, _transactions_mark_order_clean, _transactions_mark_order_dirty,
@@ -525,7 +526,7 @@ class Order(LockModel, LoggedModel):
         self.save(update_fields=['last_modified'])
 
     def set_expires(self, now_dt=None, subevents=None):
-        now_dt = now_dt or now()
+        now_dt = now_dt or time_machine_now()
         tz = ZoneInfo(self.event.settings.timezone)
         mode = self.event.settings.get('payment_term_mode')
         if mode == 'days':
@@ -3021,9 +3022,9 @@ class CartPosition(AbstractPosition):
     def predicted_validity(self):
         return self.item.compute_validity(
             requested_start=(
-                max(self.requested_valid_from, now())
+                max(self.requested_valid_from, time_machine_now())
                 if self.requested_valid_from and self.item.validity_dynamic_start_choice
-                else now()
+                else time_machine_now()
             ),
             override_tz=self.event.timezone,
         )

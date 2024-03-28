@@ -46,7 +46,7 @@
                             {% endfor %}
                         </ul>
                     </div>
-                    <div class="test-right">
+                    <div class="text-right">
                         <button type="submit" class="btn btn-primary btn-lg btn-save" disabled>
                             {% trans "Go live" %}
                         </button>
@@ -82,10 +82,10 @@
                     <p>
                         {% trans "Your shop is currently in test mode. All orders are not persistent and can be deleted at any point." %}
                     </p>
-                    <div class="form-inline">
-                        <label class="checkbox">
+                    <div class="checkbox">
+                        <label>
                             <input type="checkbox" name="delete" value="yes" />
-                            {% trans "Permanently delete all orders created in test mode" %}
+                            <b>{% trans "Permanently delete all orders created in test mode" %}</b>
                         </label>
                     </div>
                     <div class="text-right">
@@ -121,6 +121,33 @@
                 </form>
 
             {% endif %}
+            <div class="clear"></div>
+        </div>
+    </div>
+    <div class="panel {% if request.session.timemachine_now_dt %}panel-success{% else %}panel-default{% endif %}">
+        <div class="panel-heading">
+            {% trans "Time machine" %}
+        </div>
+        <div class="panel-body">
+            <form action="" method="post" class="">
+                {% csrf_token %}
+                {% bootstrap_form_errors timemachine_form %}
+
+                <p>{% trans "Test your shop as if it were a different date and time." %}</p>
+
+                {% bootstrap_field timemachine_form.now_dt layout="control" show_label=False field_class="col-md-6" %}
+                <div class="text-right">
+                    <button type="submit" class="btn btn-default btn-lg btn-save">
+                        {% if request.session.timemachine_now_dt %}{% trans "Change" %}{% else %}{% trans "Enable time machine" %}{% endif %}
+                    </button>
+                    {% if request.session.timemachine_now_dt %}
+                    <button name="timemachine_disable" value="true" type="submit" class="btn btn-default btn-lg btn-save">
+                        {% trans "Disable" %}
+                    </button>
+                    {% endif %}
+                </div>
+            </form>
+
             <div class="clear"></div>
         </div>
     </div>
