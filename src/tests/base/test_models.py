@@ -2581,7 +2581,7 @@ class CheckinListTestCase(TestCase):
             )
             self.cl_tickets.limit_products.add(self.item1)
             o = Order.objects.create(
-                code='FOO', event=self.event, email='dummy@dummy.test',
+                code='FOO1', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_PAID,
                 datetime=now(), expires=now() + timedelta(days=10),
                 total=Decimal("30"), locale='en'
@@ -2608,7 +2608,7 @@ class CheckinListTestCase(TestCase):
             op3.checkins.create(list=self.cl_both)
 
             o = Order.objects.create(
-                code='FOO', event=self.event, email='dummy@dummy.test',
+                code='FOO2', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING,
                 datetime=now(), expires=now() + timedelta(days=10),
                 total=Decimal("30"), locale='en'

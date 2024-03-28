@@ -71,7 +71,7 @@ def refund_huf(env):
         date_from=now(), plugins='pretix.plugins.banktransfer,pretix.plugins.paypal'
     )
     order = Order.objects.create(
-        code='1Z3AS', event=event, email='admin@localhost',
+        code='HUFFY', event=event, email='admin@localhost',
         status=Order.STATUS_PAID,
         datetime=now(), expires=now() + timedelta(days=10),
         total=42

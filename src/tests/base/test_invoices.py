@@ -447,7 +447,7 @@ def test_invoice_numbers(env):
     order2.fees.create(fee_type=OrderFee.FEE_TYPE_PAYMENT, value=Decimal('0.25'), tax_rate=Decimal('0.00'),
                        tax_value=Decimal('0.00'))
     testorder = Order.objects.create(
-        code='BAR', event=event, email='dummy2@dummy.test',
+        code='TESTBAR', event=event, email='dummy2@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=0, testmode=True,

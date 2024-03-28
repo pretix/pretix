@@ -280,6 +280,28 @@ def test_order_create(token_client, organizer, event, item, quota, question):
 
 
 @pytest.mark.django_db
+def test_order_create_duplicate_code(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['code'] = 'ABC12'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert resp.data['code'] == 'ABC12'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"code": ["This order code is already in use."]}
+
+
+@pytest.mark.django_db
 def test_order_create_max_size(token_client, organizer, event, item, quota, question):
     quota.size = settings.PRETIX_MAX_ORDER_SIZE * 2
     quota.save()

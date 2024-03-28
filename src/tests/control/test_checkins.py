@@ -105,7 +105,7 @@ def test_dashboard(dashboard_env):
 def test_dashboard_pending_not_count(dashboard_env):
     c = checkin_widget(dashboard_env[0])
     order_pending = Order.objects.create(
-        code='FOO', event=dashboard_env[0], email='dummy@dummy.test',
+        code='BAR', event=dashboard_env[0], email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=23, locale='en'
