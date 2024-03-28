@@ -38,8 +38,8 @@ from django.views.generic.base import RedirectView
 
 from pretix.control.views import (
     auth, checkin, dashboards, discounts, event, geo, global_settings, item,
-    main, oauth, orderimport, orders, organizer, pdf, search, shredder,
-    subevents, typeahead, user, users, vouchers, waitinglist,
+    main, new_dashboard, oauth, orderimport, orders, organizer, pdf, search,
+    shredder, subevents, typeahead, user, users, vouchers, waitinglist,
 )
 
 urlpatterns = [
@@ -239,7 +239,7 @@ urlpatterns = [
     re_path(r'^search/orders/$', search.OrderSearch.as_view(), name='search.orders'),
     re_path(r'^search/payments/$', search.PaymentSearch.as_view(), name='search.payments'),
     re_path(r'^event/(?P<organizer>[^/]+)/(?P<event>[^/]+)/', include([
-        re_path(r'^$', dashboards.event_index, name='event.index'),
+        re_path(r'^$', new_dashboard.IndexView.as_view(), name='event.index'),
         re_path(r'^qrcode.(?P<filetype>(png|jpeg|gif|svg))$', event.EventQRCode.as_view(), name='event.qrcode'),
         re_path(r'^widgets.json$', dashboards.event_index_widgets_lazy, name='event.index.widgets'),
         re_path(r'^logs/embed$', dashboards.event_index_log_lazy, name='event.index.logs'),
