@@ -60,6 +60,7 @@ from pretix.base.auth import get_auth_backends
 from pretix.base.forms.auth import (
     LoginForm, PasswordForgotForm, PasswordRecoverForm, RegistrationForm,
 )
+from pretix.base.metrics import pretix_failed_logins, pretix_successful_logins
 from pretix.base.models import TeamInvite, U2FDevice, User, WebAuthnDevice
 from pretix.base.services.mail import SendMailException
 from pretix.helpers.http import redirect_to_url
@@ -77,6 +78,7 @@ def process_login(request, user, keep_logged_in):
     request.session['pretix_auth_long_session'] = settings.PRETIX_LONG_SESSIONS and keep_logged_in
     next_url = get_auth_backends()[user.auth_backend].get_next_url(request)
     if user.require_2fa:
+        logger.info(f"Backend login redirected to 2FA for user {user.pk}.")
         request.session['pretix_auth_2fa_user'] = user.pk
         request.session['pretix_auth_2fa_time'] = str(int(time.time()))
         twofa_url = reverse('control:auth.login.2fa')
@@ -84,6 +86,8 @@ def process_login(request, user, keep_logged_in):
             twofa_url += '?next=' + quote(next_url)
         return redirect_to_url(twofa_url)
     else:
+        logger.info(f"Backend login successful for user {user.pk}.")
+        pretix_successful_logins.inc(1)
         auth_login(request, user)
         request.session['pretix_auth_login_time'] = int(time.time())
         if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
@@ -284,7 +288,7 @@ class Forgot(TemplateView):
                         rc.setex('pretix_pwreset_%s' % (user.id), 3600 * 24, '1')
 
             except User.DoesNotExist:
-                logger.warning('Password reset for unregistered e-mail \"' + email + '\" requested.')
+                logger.warning('Backend password reset for unregistered e-mail \"' + email + '\" requested.')
 
             except SendMailException:
                 logger.exception('Sending password reset e-mail to \"' + email + '\" failed.')
@@ -411,6 +415,7 @@ class Login2FAView(TemplateView):
                 fail = True
         logintime = int(request.session.get('pretix_auth_2fa_time', '1'))
         if time.time() - logintime > 300:
+            pretix_failed_logins.inc(1, reason="2fa-timeout")
             fail = True
         if fail:
             messages.error(request, _('Please try again.'))
@@ -443,6 +448,7 @@ class Login2FAView(TemplateView):
                     )
                     sign_count = webauthn_assertion_response.new_sign_count
                     if sign_count < credential_current_sign_count:
+                        pretix_failed_logins.inc(1, reason="webauthn-replay")
                         raise Exception("Possible replay attack, sign count not higher")
                 except Exception:
                     if isinstance(d, U2FDevice):
@@ -460,11 +466,13 @@ class Login2FAView(TemplateView):
                             if webauthn_assertion_response.new_sign_count < 1:
                                 raise Exception("Possible replay attack, sign count set")
                         except Exception:
+                            pretix_failed_logins.inc(1, reason="u2f")
                             logger.exception('U2F login failed')
                         else:
                             valid = True
                             break
                     else:
+                        pretix_failed_logins.inc(1, reason="webauthn")
                         logger.exception('Webauthn login failed')
                 else:
                     if isinstance(d, WebAuthnDevice):
@@ -477,6 +485,8 @@ class Login2FAView(TemplateView):
 
         if valid:
             auth_login(request, self.user)
+            logger.info(f"Backend login successful for user {self.user.pk} with 2FA.")
+            pretix_successful_logins.inc(1)
             request.session['pretix_auth_login_time'] = int(time.time())
             del request.session['pretix_auth_2fa_user']
             del request.session['pretix_auth_2fa_time']
@@ -484,6 +494,7 @@ class Login2FAView(TemplateView):
                 return redirect_to_url(request.GET.get("next"))
             return redirect('control:index')
         else:
+            pretix_failed_logins.inc(1, reason="2fa")
             messages.error(request, _('Invalid code, please try again.'))
             return redirect('control:auth.login.2fa')
 

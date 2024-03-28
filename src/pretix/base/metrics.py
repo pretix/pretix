@@ -314,3 +314,5 @@ pretix_task_runs_total = Counter("pretix_task_runs_total", "Total calls to a cel
                                  ["task_name", "status"])
 pretix_task_duration_seconds = Histogram("pretix_task_duration_seconds", "Call time of a celery task",
                                          ["task_name"])
+pretix_successful_logins = Counter("pretix_logins_successful", "Successful logins", [])
+pretix_failed_logins = Counter("pretix_logins_failed", "Failed logins", ["reason"])
