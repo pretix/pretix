@@ -268,7 +268,10 @@ def metric_values():
             dkey = key.decode("utf-8")
             splitted = dkey.split("{", 2)
             value = float(value.decode("utf-8"))
-            metrics[splitted[0]]["{" + splitted[1]] = value
+            if len(splitted) == 1:
+                metrics[splitted[0]][""] = value
+            else:
+                metrics[splitted[0]]["{" + splitted[1]] = value
 
     # Aliases
     aliases = {
