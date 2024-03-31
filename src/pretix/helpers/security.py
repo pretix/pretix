@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import hashlib
+import logging
 import time
 
 from django.conf import settings
@@ -28,6 +29,8 @@ from django.core.cache import cache
 from geoip2.errors import AddressNotFoundError
 
 from pretix.helpers.http import get_client_ip
+
+logger = logging.getLogger(__name__)
 
 
 class SessionInvalid(Exception):
@@ -71,6 +74,8 @@ def assert_session_valid(request):
     if 'User-Agent' in request.headers:
         if 'pinned_user_agent' in request.session:
             if request.session.get('pinned_user_agent') != get_user_agent_hash(request):
+                logger.info(f"Backend session for user {request.user.pk} terminated due to user agent change. "
+                            f"New agent: \"{request.headers['User-Agent']}\"")
                 raise SessionInvalid()
         else:
             request.session['pinned_user_agent'] = get_user_agent_hash(request)
@@ -82,6 +87,8 @@ def assert_session_valid(request):
 
         if 'pinned_country' in request.session:
             if request.session.get('pinned_country') != country:
+                logger.info(f"Backend session for user {request.user.pk} terminated due to country change. "
+                            f"Old country: \"{request.session.get('pinned_countres')}\" New country: \"{country}\"")
                 raise SessionInvalid()
         else:
             request.session['pinned_country'] = country
