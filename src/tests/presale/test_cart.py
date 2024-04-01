@@ -36,6 +36,7 @@ import datetime
 import json
 from datetime import timedelta
 from decimal import Decimal
+from unittest.mock import patch
 
 from bs4 import BeautifulSoup
 from django.conf import settings
@@ -1563,6 +1564,21 @@ class CartTest(CartTestMixin, TestCase):
                                    {'voucher': v.code},
                                    follow=True)
         assert str(error_messages['voucher_item_not_available']) in response.rendered_content
+
+    def test_voucher_hash_check(self):
+        with scopes_disabled():
+            old_count = Voucher.objects.all().count()
+        with patch(
+                "pretix.presale.views.cart.check_voucher_hash",
+                return_value=True,
+        ):
+            self.client.get(
+                '/%s/%s/redeem' % (self.orga.slug, self.event.slug),
+                {'voucher': "S0M3C0D3"},
+            )
+        with scopes_disabled():
+            new_count = Voucher.objects.all().count()
+        assert new_count == old_count + 1
 
     def test_voucher_price(self):
         with scopes_disabled():

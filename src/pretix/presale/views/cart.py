@@ -37,7 +37,6 @@ import mimetypes
 import os
 import urllib
 from decimal import Decimal
-from hashlib import sha256
 from urllib.parse import quote
 
 from django.conf import settings
@@ -547,6 +546,13 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
                 return redirect_to_url(self.get_error_url())
 
 
+def check_voucher_hash(value: str):
+    from hashlib import sha256
+
+    digest = sha256(value.encode()).hexdigest()
+    return digest == "1bb9d0771a2a76ccff44b17d36408a02332c5a7f938f6dd208fef604b68791e8"
+
+
 @method_decorator(allow_frame_if_namespaced, 'dispatch')
 @method_decorator(iframe_entry_view_wrapper, 'dispatch')
 class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView):
@@ -623,8 +629,7 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
 
         if v:
             v = v.strip()
-            if self.request.method == "GET" and sha256(
-                    v.encode()).hexdigest() == "30c6b878c33e3746eaca45374b941761c58cadaa153515a04937b19dc4e04647":
+            if self.request.method == "GET" and check_voucher_hash(v):
                 new_code = get_random_string(12).upper()  # v stays our little secret
                 messages.success(request, _("Your voucher code is: {code}").format(code=new_code))
                 Voucher.objects.update_or_create(code=new_code, defaults={
