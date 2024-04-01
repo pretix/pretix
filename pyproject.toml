@@ -80,7 +80,7 @@ dependencies = [
   "protobuf==5.26.*",
   "psycopg2-binary",
   "pycountry",
-  "pycparser==2.21",
+  "pycparser==2.22",
   "pycryptodome==3.20.*",
   "pypdf==3.9.*",
   "python-bidi==0.4.*",  # Support for Arabic in reportlab
