@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import datetime
+import logging
 import mimetypes
 import os
 from decimal import Decimal
@@ -27,7 +28,7 @@ from zoneinfo import ZoneInfo
 
 import django_filters
 from django.conf import settings
-from django.db import transaction
+from django.db import IntegrityError, transaction
 from django.db.models import (
     Exists, F, OuterRef, Prefetch, Q, Subquery, prefetch_related_objects,
 )
@@ -96,6 +97,8 @@ from pretix.base.signals import (
 )
 from pretix.base.templatetags.money import money_filter
 from pretix.control.signals import order_search_filter_q
+
+logger = logging.getLogger(__name__)
 
 with scopes_disabled():
     class OrderFilter(FilterSet):
@@ -900,7 +903,11 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
             order_modified.send(sender=serializer.instance.event, order=serializer.instance)
 
     def perform_create(self, serializer):
-        serializer.save()
+        try:
+            serializer.save()
+        except IntegrityError:
+            logger.exception("Integrity error while saving order")
+            raise ValidationError("Integrity error, possibly duplicate submission of same order.")
 
     def perform_destroy(self, instance):
         if not instance.testmode:

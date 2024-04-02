@@ -188,6 +188,14 @@ class Order(LockModel, LoggedModel):
         default=False,
     )
     testmode = models.BooleanField(default=False)
+    organizer = models.ForeignKey(
+        # Redundant foreign key, but is required for a uniqueness constraint
+        "Organizer",
+        related_name="orders",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
     event = models.ForeignKey(
         Event,
         verbose_name=_("Event"),
@@ -285,6 +293,9 @@ class Order(LockModel, LoggedModel):
         indexes = [
             models.Index(fields=["datetime", "id"]),
             models.Index(fields=["last_modified", "id"]),
+        ]
+        constraints = [
+            models.UniqueConstraint(fields=["organizer", "code"], name="order_organizer_code_uniq"),
         ]
 
     def __str__(self):
@@ -499,6 +510,10 @@ class Order(LockModel, LoggedModel):
             self.set_expires()
             if 'update_fields' in kwargs:
                 kwargs['update_fields'] = {'expires'}.union(kwargs['update_fields'])
+        if not self.organizer_id:
+            self.organizer_id = self.event.organizer_id
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'organizer'}.union(kwargs['update_fields'])
 
         is_new = not self.pk
         update_fields = kwargs.get('update_fields', [])
@@ -2356,6 +2371,14 @@ class OrderPosition(AbstractPosition):
     """
     positionid = models.PositiveIntegerField(default=1)
 
+    organizer = models.ForeignKey(
+        # Redundant foreign key, but is required for a uniqueness constraint
+        "Organizer",
+        related_name="order_positions",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
     order = models.ForeignKey(
         Order,
         verbose_name=_("Order"),
@@ -2429,6 +2452,9 @@ class OrderPosition(AbstractPosition):
         verbose_name = _("Order position")
         verbose_name_plural = _("Order positions")
         ordering = ("positionid", "id")
+        constraints = [
+            models.UniqueConstraint("organizer", "secret", name="orderposition_organizer_secret_uniq")
+        ]
 
     @cached_property
     def sort_key(self):
@@ -2585,6 +2611,10 @@ class OrderPosition(AbstractPosition):
                 if 'update_fields' in kwargs:
                     kwargs['update_fields'] = {'secret'}.union(kwargs['update_fields'])
 
+        if not self.organizer_id:
+            self.organizer_id = self.order.event.organizer_id
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'organizer'}.union(kwargs['update_fields'])
         if not self.blocked and self.blocked is not None:
             self.blocked = None
             if 'update_fields' in kwargs:
