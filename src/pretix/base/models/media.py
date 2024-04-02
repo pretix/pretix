@@ -122,7 +122,6 @@ class ReusableMedium(LoggedModel):
     class Meta:
         unique_together = (("identifier", "type", "organizer"),)
         indexes = [
-            models.Index(fields=("identifier", "type", "organizer")),
             models.Index(fields=("updated", "id")),
         ]
         ordering = "identifier", "type", "organizer"
