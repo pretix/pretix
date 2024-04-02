@@ -44,6 +44,7 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.contenttypes.models import ContentType
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.crypto import get_random_string
@@ -323,6 +324,15 @@ class User2FAMainView(RecentAuthenticationRequiredMixin, TemplateView):
                     obj.devicetype = 'webauthn'
             ctx['devices'] += objs
 
+        ctx['obligatory'] = None
+        if settings.PRETIX_OBLIGATORY_2FA is True:
+            ctx['obligatory'] = 'system'
+        elif settings.PRETIX_OBLIGATORY_2FA == "staff" and self.request.user.is_staff:
+            ctx['obligatory'] = 'staff'
+        elif teams := self.request.user.teams.filter(require_2fa=True).select_related('organizer'):
+            ctx['obligatory'] = 'team'
+            ctx['obligatory_teams'] = teams
+
         return ctx
 
 
@@ -555,6 +565,28 @@ class User2FADeviceConfirmTOTPView(RecentAuthenticationRequiredMixin, TemplateVi
             return redirect(reverse('control:user.settings.2fa.confirm.totp', kwargs={
                 'device': self.device.pk
             }))
+
+
+class User2FALeaveTeamsView(RecentAuthenticationRequiredMixin, TemplateView):
+    template_name = 'pretixcontrol/user/2fa_leaveteams.html'
+
+    @transaction.atomic
+    def post(self, request, *args, **kwargs):
+        for team in self.request.user.teams.filter(require_2fa=True).select_related('organizer'):
+            team.members.remove(self.request.user)
+            team.log_action(
+                'pretix.team.member.removed', user=self.request.user, data={
+                    'email': self.request.user.email,
+                    'user': self.request.user.pk
+                }
+            )
+        messages.success(request, _('You have left all teams that require two-factor authentication.'))
+        return redirect(reverse('control:user.settings.2fa'))
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx['obligatory_teams'] = self.request.user.teams.filter(require_2fa=True).select_related('organizer')
+        return ctx
 
 
 class User2FAEnableView(RecentAuthenticationRequiredMixin, TemplateView):

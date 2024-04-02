@@ -48,7 +48,8 @@ from pretix.base.models import Event, Organizer
 from pretix.base.models.auth import SuperuserPermissionSet, User
 from pretix.helpers.http import redirect_to_url
 from pretix.helpers.security import (
-    SessionInvalid, SessionReauthRequired, assert_session_valid,
+    Session2FASetupRequired, SessionInvalid, SessionPasswordChangeRequired,
+    SessionReauthRequired, assert_session_valid,
 )
 
 
@@ -84,6 +85,7 @@ class PermissionMiddleware:
         "user.settings.2fa.confirm.totp",
         "user.settings.2fa.confirm.webauthn",
         "user.settings.2fa.delete",
+        "user.settings.2fa.leaveteams",
         "auth.logout",
         "user.reauth"
     )
@@ -135,13 +137,12 @@ class PermissionMiddleware:
         except SessionReauthRequired:
             if url_name not in ('user.reauth', 'auth.logout'):
                 return redirect_to_url(reverse('control:user.reauth') + '?next=' + quote(request.get_full_path()))
-
-        if request.user.needs_password_change and url_name not in self.EXCEPTIONS_FORCED_PW_CHANGE:
-            return redirect_to_url(reverse('control:user.settings') + '?next=' + quote(request.get_full_path()))
-
-        if not request.user.require_2fa and settings.PRETIX_OBLIGATORY_2FA \
-                and url_name not in self.EXCEPTIONS_2FA and not request.user.needs_password_change:
-            return redirect_to_url(reverse('control:user.settings.2fa'))
+        except SessionPasswordChangeRequired:
+            if url_name not in self.EXCEPTIONS_FORCED_PW_CHANGE:
+                return redirect_to_url(reverse('control:user.settings') + '?next=' + quote(request.get_full_path()))
+        except Session2FASetupRequired:
+            if url_name not in self.EXCEPTIONS_2FA:
+                return redirect_to_url(reverse('control:user.settings.2fa'))
 
         if 'event' in url.kwargs and 'organizer' in url.kwargs:
             if url.kwargs['organizer'] == '-' and url.kwargs['event'] == '-':

@@ -22,6 +22,8 @@ id                                    integer                    Internal ID of 
 name                                  string                     Team name
 all_events                            boolean                    Whether this team has access to all events
 limit_events                          list                       List of event slugs this team has access to
+require_2fa                           boolean                    Whether members of this team are required to use
+                                                                 two-factor authentication
 can_create_events                     boolean
 can_change_teams                      boolean
 can_change_organizer_settings         boolean
@@ -122,6 +124,7 @@ Team endpoints
             "name": "Admin team",
             "all_events": true,
             "limit_events": [],
+            "require_2fa": true,
             "can_create_events": true,
             ...
           }
@@ -159,6 +162,7 @@ Team endpoints
         "name": "Admin team",
         "all_events": true,
         "limit_events": [],
+        "require_2fa": true,
         "can_create_events": true,
         ...
       }
@@ -186,6 +190,7 @@ Team endpoints
         "name": "Admin team",
         "all_events": true,
         "limit_events": [],
+        "require_2fa": true,
         "can_create_events": true,
         ...
       }
@@ -203,6 +208,7 @@ Team endpoints
         "name": "Admin team",
         "all_events": true,
         "limit_events": [],
+        "require_2fa": true,
         "can_create_events": true,
         ...
       }
@@ -246,6 +252,7 @@ Team endpoints
         "name": "Admin team",
         "all_events": true,
         "limit_events": [],
+        "require_2fa": true,
         "can_create_events": true,
         ...
       }

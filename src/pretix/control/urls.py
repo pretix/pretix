@@ -95,6 +95,7 @@ urlpatterns = [
     re_path(r'^settings/oauth/apps/(?P<pk>\d+)/roll$', oauth.OAuthApplicationRollView.as_view(),
             name='user.settings.oauth.app.roll'),
     re_path(r'^settings/2fa/$', user.User2FAMainView.as_view(), name='user.settings.2fa'),
+    re_path(r'^settings/2fa/leaveteams$', user.User2FALeaveTeamsView.as_view(), name='user.settings.2fa.leaveteams'),
     re_path(r'^settings/2fa/add$', user.User2FADeviceAddView.as_view(), name='user.settings.2fa.add'),
     re_path(r'^settings/2fa/enable', user.User2FAEnableView.as_view(), name='user.settings.2fa.enable'),
     re_path(r'^settings/2fa/disable', user.User2FADisableView.as_view(), name='user.settings.2fa.disable'),
