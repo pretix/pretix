@@ -30,10 +30,12 @@ from django.contrib.auth import (
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
+from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 from django.views import View
 from django.views.generic import ListView, TemplateView
+from django_otp.plugins.otp_static.models import StaticDevice
 from hijack import signals
 
 from pretix.base.auth import get_auth_backends
@@ -144,6 +146,32 @@ class UserResetView(AdministratorPermissionRequiredMixin, RecentAuthenticationRe
         self.object.log_action('pretix.control.auth.user.forgot_password.mail_sent',
                                user=request.user)
         messages.success(request, _('We sent out an e-mail containing further instructions.'))
+        return redirect(self.get_success_url())
+
+    def get_success_url(self):
+        return reverse('control:users.edit', kwargs=self.kwargs)
+
+
+class UserEmergencyTokenView(AdministratorPermissionRequiredMixin, RecentAuthenticationRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        return redirect(reverse('control:users.edit', kwargs=self.kwargs))
+
+    def post(self, request, *args, **kwargs):
+        self.object = get_object_or_404(User, pk=self.kwargs.get("id"))
+
+        d, __ = StaticDevice.objects.get_or_create(user=self.object, name='emergency')
+        token = d.token_set.create(token=get_random_string(length=12, allowed_chars='1234567890'))
+        self.object.log_action('pretix.user.settings.2fa.emergency', user=self.request.user)
+
+        messages.success(request, _(
+            'The emergency token for this user is "{token}". It can only be used once. The previously known emergency '
+            'token for this user remain active. Please make sure to transmit this code only over an authenticated '
+            'channel (other than email, if possible).'
+        ).format(
+            token=token.token
+        ))
+
         return redirect(self.get_success_url())
 
     def get_success_url(self):

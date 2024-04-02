@@ -71,6 +71,8 @@ superuser_urls = [
     "users/1/",
     "users/1/impersonate",
     "users/1/reset",
+    "users/1/anonymize",
+    "users/1/emergencytoken",
     "sudo/sessions/",
 ]
 
