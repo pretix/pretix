@@ -59,6 +59,7 @@ class LoginForm(forms.Form):
     username/password logins.
     """
     keep_logged_in = forms.BooleanField(label=_("Keep me logged in"), required=False)
+    origin = forms.CharField(widget=forms.HiddenInput, required=False)
 
     error_messages = {
         'invalid_login': _("This combination of credentials is not known to our system."),

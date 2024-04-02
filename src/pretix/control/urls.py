@@ -45,6 +45,7 @@ from pretix.control.views import (
 urlpatterns = [
     re_path(r'^logout$', auth.logout, name='auth.logout'),
     re_path(r'^login$', auth.login, name='auth.login'),
+    re_path(r'^login/bad_origin$', auth.bad_origin_report, name='auth.bad_origin_report'),
     re_path(r'^login/2fa$', auth.Login2FAView.as_view(), name='auth.login.2fa'),
     re_path(r'^register$', auth.register, name='auth.register'),
     re_path(r'^invite/(?P<token>[a-zA-Z0-9]+)$', auth.invite, name='auth.invite'),

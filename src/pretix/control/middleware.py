@@ -67,6 +67,7 @@ class PermissionMiddleware:
         "auth.forgot.recover",
         "auth.invite",
         "user.settings.notifications.off",
+        "auth.bad_origin_report",
     )
 
     EXCEPTIONS_FORCED_PW_CHANGE = (

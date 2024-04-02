@@ -36,7 +36,7 @@ import base64
 import json
 import logging
 import time
-from urllib.parse import quote, urlparse
+from urllib.parse import quote, urljoin, urlparse
 
 import webauthn
 from django.conf import settings
@@ -47,11 +47,14 @@ from django.contrib.auth import (
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
 from django_otp import match_token
 from webauthn.helpers import generate_challenge
@@ -63,7 +66,7 @@ from pretix.base.forms.auth import (
 from pretix.base.metrics import pretix_failed_logins, pretix_successful_logins
 from pretix.base.models import TeamInvite, U2FDevice, User, WebAuthnDevice
 from pretix.base.services.mail import SendMailException
-from pretix.helpers.http import redirect_to_url
+from pretix.helpers.http import get_client_ip, redirect_to_url
 
 logger = logging.getLogger(__name__)
 
@@ -109,6 +112,9 @@ def login(request):
             return process_login(request, u, False)
         b.url = b.authentication_url(request)
 
+    # Login should only happen on configured main domain
+    good_origin = urlparse(settings.SITE_URL).scheme + '://' + urlparse(settings.SITE_URL).hostname
+
     backend = backenddict.get(request.GET.get('backend', 'native'), backends[0])
     if not backend.visible:
         backend = [b for b in backends if b.visible][0]
@@ -119,7 +125,23 @@ def login(request):
         return redirect(reverse('control:index'))
     if request.method == 'POST':
         form = LoginForm(backend=backend, data=request.POST, request=request)
-        if form.is_valid() and form.user_cache and form.user_cache.auth_backend == backend.identifier:
+        is_valid = form.is_valid() and form.user_cache and form.user_cache.auth_backend == backend.identifier
+
+        if form.cleaned_data.get("origin"):
+            form_origin = form.cleaned_data.get("origin")
+            if good_origin != form_origin:
+                logger.warning(
+                    f"Received login form submission with unexpected origin value. "
+                    f"Origin sent from JavaScript: {form_origin} / "
+                    f"Expected origin from configuration: {good_origin} / "
+                    f"HTTP Host header: {request.headers.get('Host')} / "
+                    f"HTTP origin header: {request.headers.get('Origin')} / "
+                    f"HTTP referer header: {request.headers.get('Referer')} / "
+                    f"IP address: {get_client_ip(request)} / "
+                    f"Login result: {is_valid}"
+                )
+
+        if is_valid:
             return process_login(request, form.user_cache, form.cleaned_data.get('keep_logged_in', False))
     else:
         form = LoginForm(backend=backend, request=request)
@@ -128,7 +150,33 @@ def login(request):
     ctx['can_reset'] = settings.PRETIX_PASSWORD_RESET
     ctx['backends'] = backends
     ctx['backend'] = backend
+    ctx['good_origin'] = good_origin[::-1]  # minimal obfuscation against standard link rewriting
+    ctx['bad_origin_report_url'] = urljoin(
+        # as an additional safeguard always use SITE_URL, not anything derived from request
+        settings.SITE_URL,
+        reverse('control:auth.bad_origin_report')
+    )[::-1]
     return render(request, 'pretixcontrol/auth/login.html', ctx)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def bad_origin_report(request):
+    good_origin = urlparse(settings.SITE_URL).scheme + '://' + urlparse(settings.SITE_URL).hostname
+    form_origin = request.POST.get("origin")
+    if good_origin != form_origin:
+        logger.warning(
+            f"Received report of unexpected origin value. "
+            f"Origin sent from JavaScript: {form_origin} / "
+            f"Expected origin from configuration: {good_origin} / "
+            f"HTTP Host header: {request.headers.get('Host')} / "
+            f"HTTP origin header: {request.headers.get('Origin')} / "
+            f"HTTP referer header: {request.headers.get('Referer')} / "
+            f"IP address: {get_client_ip(request)}"
+        )
+    resp = HttpResponse()
+    resp['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 
 def logout(request):
