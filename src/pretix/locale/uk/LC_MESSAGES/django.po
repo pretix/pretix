@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-03-26 13:36+0000\n"
+"POT-Creation-Date: 2024-04-02 15:53+0000\n"
 "PO-Revision-Date: 2022-05-23 01:00+0000\n"
 "Last-Translator: Ola Ola <olge.to@gmail.com>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -195,7 +195,7 @@ msgid "Limit to events"
 msgstr "Обмежитися заходами"
 
 #: pretix/api/models.py:120 pretix/base/exporters/orderlist.py:283
-#: pretix/base/exporters/orderlist.py:1049 pretix/base/models/orders.py:231
+#: pretix/base/exporters/orderlist.py:1049 pretix/base/models/orders.py:239
 #: pretix/base/models/vouchers.py:292 pretix/base/orderimport.py:752
 #: pretix/control/forms/filter.py:555
 #: pretix/control/templates/pretixcontrol/order/index.html:904
@@ -395,22 +395,22 @@ msgid ""
 "account."
 msgstr "Додаток \"{application_name}\" дозволило увійти в свій профіль."
 
-#: pretix/api/views/order.py:583 pretix/control/views/orders.py:1570
+#: pretix/api/views/order.py:586 pretix/control/views/orders.py:1570
 #: pretix/presale/views/order.py:743 pretix/presale/views/order.py:816
 msgid "You cannot generate an invoice for this order."
 msgstr "Ви не можете створити рахунок-фактуру для цього замовлення."
 
-#: pretix/api/views/order.py:588 pretix/control/views/orders.py:1572
+#: pretix/api/views/order.py:591 pretix/control/views/orders.py:1572
 #: pretix/presale/views/order.py:745 pretix/presale/views/order.py:818
 msgid "An invoice for this order already exists."
 msgstr "Рахунок-фактура для цього замовлення вже існує."
 
-#: pretix/api/views/order.py:614 pretix/control/views/orders.py:1696
+#: pretix/api/views/order.py:617 pretix/control/views/orders.py:1696
 #: pretix/control/views/users.py:141
 msgid "There was an error sending the mail. Please try again later."
 msgstr "Помилка відправки пошти. Будь ласка, спробуйте ще раз пізніше."
 
-#: pretix/api/views/order.py:692 pretix/base/services/cart.py:215
+#: pretix/api/views/order.py:695 pretix/base/services/cart.py:215
 #: pretix/base/services/orders.py:186 pretix/presale/views/order.py:800
 msgid "One of the selected products is not available in the selected country."
 msgstr "Один з обраних продуктів не є доступним в обраній країні."
@@ -607,8 +607,8 @@ msgid "Customer account anonymized"
 msgstr "Обліковий запис клієнта"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
-#: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:941
-#: pretix/base/forms/questions.py:972 pretix/base/payment.py:97
+#: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:952
+#: pretix/base/forms/questions.py:983 pretix/base/payment.py:97
 #: pretix/control/forms/event.py:786 pretix/control/forms/event.py:792
 #: pretix/control/forms/event.py:836 pretix/control/forms/event.py:1426
 #: pretix/control/forms/mailsetup.py:76 pretix/control/forms/mailsetup.py:118
@@ -632,9 +632,9 @@ msgid "{system} User"
 msgstr "{system} Користувач"
 
 #: pretix/base/auth.py:152 pretix/base/exporters/customers.py:67
-#: pretix/base/forms/auth.py:246 pretix/base/models/auth.py:243
+#: pretix/base/forms/auth.py:257 pretix/base/models/auth.py:243
 #: pretix/base/models/customers.py:94 pretix/base/models/notifications.py:46
-#: pretix/base/models/orders.py:206 pretix/control/navigation.py:81
+#: pretix/base/models/orders.py:214 pretix/control/navigation.py:81
 #: pretix/control/navigation.py:494
 #: pretix/control/templates/pretixcontrol/event/settings.html:69
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:48
@@ -648,8 +648,8 @@ msgstr "{system} Користувач"
 msgid "E-mail"
 msgstr "Електронна пошта"
 
-#: pretix/base/auth.py:154 pretix/base/forms/auth.py:153
-#: pretix/base/forms/auth.py:207 pretix/base/models/customers.py:96
+#: pretix/base/auth.py:154 pretix/base/forms/auth.py:164
+#: pretix/base/forms/auth.py:218 pretix/base/models/customers.py:96
 #: pretix/control/forms/mailsetup.py:55 pretix/presale/forms/customer.py:59
 #: pretix/presale/forms/customer.py:284
 msgid "Password"
@@ -841,7 +841,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:561
 #: pretix/base/exporters/waitinglist.py:110 pretix/base/models/customers.py:95
 #: pretix/base/models/customers.py:385 pretix/base/models/items.py:1563
-#: pretix/base/models/orders.py:210 pretix/base/models/waitinglist.py:80
+#: pretix/base/models/orders.py:218 pretix/base/models/waitinglist.py:80
 #: pretix/base/orderimport.py:164 pretix/base/pdf.py:321
 #: pretix/control/templates/pretixcontrol/order/index.html:256
 #: pretix/control/templates/pretixcontrol/waitinglist/index.html:152
@@ -854,7 +854,7 @@ msgid "Phone number"
 msgstr "Номер телефону"
 
 #: pretix/base/exporters/customers.py:69 pretix/base/models/auth.py:245
-#: pretix/base/models/customers.py:97 pretix/base/models/orders.py:3051
+#: pretix/base/models/customers.py:97 pretix/base/models/orders.py:3081
 #: pretix/base/settings.py:3569 pretix/base/settings.py:3581
 #: pretix/control/templates/pretixcontrol/users/index.html:47
 msgid "Full name"
@@ -863,7 +863,7 @@ msgstr "Повне ім'я"
 #: pretix/base/exporters/customers.py:74 pretix/base/exporters/invoices.py:206
 #: pretix/base/exporters/invoices.py:214 pretix/base/exporters/invoices.py:332
 #: pretix/base/exporters/invoices.py:340 pretix/base/exporters/orderlist.py:261
-#: pretix/base/exporters/waitinglist.py:108 pretix/base/forms/questions.py:1099
+#: pretix/base/exporters/waitinglist.py:108 pretix/base/forms/questions.py:1110
 #: pretix/base/models/devices.py:66 pretix/base/models/devices.py:128
 #: pretix/base/models/event.py:1420 pretix/base/models/event.py:1657
 #: pretix/base/models/items.py:1947 pretix/base/models/items.py:2120
@@ -962,7 +962,7 @@ msgstr ""
 #: pretix/base/exporters/orderlist.py:742
 #: pretix/base/exporters/orderlist.py:770
 #: pretix/base/exporters/orderlist.py:1353
-#: pretix/base/exporters/reusablemedia.py:63 pretix/base/models/orders.py:1315
+#: pretix/base/exporters/reusablemedia.py:63 pretix/base/models/orders.py:1330
 #: pretix/control/forms/filter.py:170 pretix/control/forms/filter.py:518
 #: pretix/control/forms/item.py:545 pretix/control/forms/subevents.py:118
 #: pretix/control/views/item.py:715 pretix/control/views/vouchers.py:138
@@ -985,7 +985,7 @@ msgstr "Так"
 #: pretix/base/exporters/orderlist.py:742
 #: pretix/base/exporters/orderlist.py:770
 #: pretix/base/exporters/orderlist.py:1353
-#: pretix/base/exporters/reusablemedia.py:63 pretix/base/models/orders.py:1317
+#: pretix/base/exporters/reusablemedia.py:63 pretix/base/models/orders.py:1332
 #: pretix/control/forms/filter.py:170 pretix/control/forms/filter.py:519
 #: pretix/control/forms/item.py:546 pretix/control/forms/subevents.py:119
 #: pretix/control/views/item.py:715 pretix/control/views/vouchers.py:138
@@ -1145,8 +1145,8 @@ msgstr "Довгота"
 msgid "Internal comment"
 msgstr "Внутрішній коментар"
 
-#: pretix/base/exporters/invoices.py:82 pretix/base/models/orders.py:1667
-#: pretix/base/models/orders.py:2076 pretix/control/forms/filter.py:203
+#: pretix/base/exporters/invoices.py:82 pretix/base/models/orders.py:1682
+#: pretix/base/models/orders.py:2091 pretix/control/forms/filter.py:203
 #: pretix/control/forms/filter.py:944 pretix/control/forms/filter.py:2208
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:9
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:14
@@ -1217,8 +1217,8 @@ msgstr "Номер накладної"
 #: pretix/base/exporters/orderlist.py:1186
 #: pretix/base/exporters/orderlist.py:1231
 #: pretix/base/exporters/waitinglist.py:107 pretix/base/forms/widgets.py:212
-#: pretix/base/models/items.py:1559 pretix/base/models/orders.py:218
-#: pretix/base/models/orders.py:2787 pretix/base/models/orders.py:2893
+#: pretix/base/models/items.py:1559 pretix/base/models/orders.py:226
+#: pretix/base/models/orders.py:2817 pretix/base/models/orders.py:2923
 #: pretix/control/templates/pretixcontrol/order/transactions.html:19
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:72
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:17
@@ -1287,9 +1287,9 @@ msgstr "Відправник рахунка-фактури:"
 #: pretix/base/exporters/invoices.py:207 pretix/base/exporters/invoices.py:333
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:461
-#: pretix/base/exporters/orderlist.py:587 pretix/base/forms/questions.py:668
-#: pretix/base/models/customers.py:300 pretix/base/models/orders.py:1453
-#: pretix/base/models/orders.py:3053 pretix/base/orderimport.py:352
+#: pretix/base/exporters/orderlist.py:587 pretix/base/forms/questions.py:679
+#: pretix/base/models/customers.py:300 pretix/base/models/orders.py:1468
+#: pretix/base/models/orders.py:3083 pretix/base/orderimport.py:352
 #: pretix/base/orderimport.py:498 pretix/control/forms/filter.py:627
 #: pretix/control/forms/filter.py:658
 #: pretix/control/templates/pretixcontrol/order/index.html:955
@@ -1305,9 +1305,9 @@ msgstr "Адреса"
 #: pretix/base/exporters/invoices.py:334 pretix/base/exporters/invoices.py:342
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:461
-#: pretix/base/exporters/orderlist.py:588 pretix/base/forms/questions.py:679
-#: pretix/base/models/customers.py:301 pretix/base/models/orders.py:1454
-#: pretix/base/models/orders.py:3054 pretix/base/orderimport.py:363
+#: pretix/base/exporters/orderlist.py:588 pretix/base/forms/questions.py:690
+#: pretix/base/models/customers.py:301 pretix/base/models/orders.py:1469
+#: pretix/base/models/orders.py:3084 pretix/base/orderimport.py:363
 #: pretix/base/orderimport.py:509 pretix/base/settings.py:1107
 #: pretix/control/forms/filter.py:631 pretix/control/forms/filter.py:662
 #: pretix/control/views/item.py:479
@@ -1320,9 +1320,9 @@ msgstr "Поштовий індекс"
 #: pretix/base/exporters/invoices.py:335 pretix/base/exporters/invoices.py:343
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:461
-#: pretix/base/exporters/orderlist.py:589 pretix/base/forms/questions.py:687
-#: pretix/base/models/customers.py:302 pretix/base/models/orders.py:1455
-#: pretix/base/models/orders.py:3055 pretix/base/orderimport.py:374
+#: pretix/base/exporters/orderlist.py:589 pretix/base/forms/questions.py:698
+#: pretix/base/models/customers.py:302 pretix/base/models/orders.py:1470
+#: pretix/base/models/orders.py:3085 pretix/base/orderimport.py:374
 #: pretix/base/orderimport.py:520 pretix/base/settings.py:1119
 #: pretix/control/forms/filter.py:636 pretix/control/forms/filter.py:667
 #: pretix/control/views/item.py:489
@@ -1335,9 +1335,9 @@ msgstr "Місто"
 #: pretix/base/exporters/invoices.py:336 pretix/base/exporters/invoices.py:344
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:461
-#: pretix/base/exporters/orderlist.py:590 pretix/base/forms/questions.py:699
-#: pretix/base/models/customers.py:303 pretix/base/models/orders.py:1456
-#: pretix/base/models/orders.py:3056 pretix/base/models/orders.py:3057
+#: pretix/base/exporters/orderlist.py:590 pretix/base/forms/questions.py:710
+#: pretix/base/models/customers.py:303 pretix/base/models/orders.py:1471
+#: pretix/base/models/orders.py:3086 pretix/base/models/orders.py:3087
 #: pretix/base/orderimport.py:390 pretix/base/orderimport.py:536
 #: pretix/base/settings.py:1128 pretix/control/forms/filter.py:641
 #: pretix/control/forms/filter.py:672
@@ -1360,7 +1360,7 @@ msgstr "Податковий індетифікаційний номер"
 #: pretix/base/exporters/invoices.py:338 pretix/base/exporters/invoices.py:346
 #: pretix/base/exporters/orderlist.py:269
 #: pretix/base/exporters/orderlist.py:461
-#: pretix/base/exporters/orderlist.py:633 pretix/base/models/orders.py:3060
+#: pretix/base/exporters/orderlist.py:633 pretix/base/models/orders.py:3090
 #: pretix/base/orderimport.py:434
 #: pretix/control/templates/pretixcontrol/order/index.html:966
 #: pretix/plugins/reports/exporters.py:844
@@ -1387,7 +1387,7 @@ msgstr "Одержувач рахунка-фактури:"
 #: pretix/base/exporters/orderlist.py:261
 #: pretix/base/exporters/orderlist.py:453
 #: pretix/base/exporters/orderlist.py:586
-#: pretix/base/exporters/orderlist.py:623 pretix/base/forms/questions.py:660
+#: pretix/base/exporters/orderlist.py:623 pretix/base/forms/questions.py:671
 #: pretix/base/orderimport.py:322 pretix/base/orderimport.py:487
 #: pretix/control/forms/filter.py:619 pretix/control/forms/filter.py:654
 #: pretix/control/templates/pretixcontrol/order/index.html:951
@@ -1407,9 +1407,9 @@ msgstr "Адреса: вулиця і номер будинку"
 #: pretix/base/exporters/invoices.py:219 pretix/base/exporters/invoices.py:345
 #: pretix/base/exporters/orderlist.py:268
 #: pretix/base/exporters/orderlist.py:461
-#: pretix/base/exporters/orderlist.py:591 pretix/base/forms/questions.py:723
-#: pretix/base/forms/questions.py:1065 pretix/base/models/customers.py:304
-#: pretix/base/models/orders.py:1457 pretix/base/models/orders.py:3059
+#: pretix/base/exporters/orderlist.py:591 pretix/base/forms/questions.py:734
+#: pretix/base/forms/questions.py:1076 pretix/base/models/customers.py:304
+#: pretix/base/models/orders.py:1472 pretix/base/models/orders.py:3089
 #: pretix/base/orderimport.py:409
 #: pretix/control/templates/pretixcontrol/order/index.html:962
 #: pretix/plugins/checkinlists/exporters.py:523
@@ -1421,13 +1421,13 @@ msgid "State"
 msgstr "Штат"
 
 #: pretix/base/exporters/invoices.py:221 pretix/base/exporters/invoices.py:347
-#: pretix/base/models/orders.py:3069 pretix/base/models/orders.py:3104
+#: pretix/base/models/orders.py:3099 pretix/base/models/orders.py:3134
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:107
 msgid "Beneficiary"
 msgstr "Отримувач"
 
 #: pretix/base/exporters/invoices.py:222 pretix/base/exporters/invoices.py:348
-#: pretix/base/models/orders.py:3064 pretix/base/orderimport.py:445
+#: pretix/base/models/orders.py:3094 pretix/base/orderimport.py:445
 #: pretix/control/templates/pretixcontrol/order/index.html:986
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:115
 msgid "Internal reference"
@@ -1496,16 +1496,16 @@ msgstr "Ціна нетто"
 
 #: pretix/base/exporters/invoices.py:323 pretix/base/exporters/orderlist.py:452
 #: pretix/base/exporters/orderlist.py:577
-#: pretix/base/exporters/orderlist.py:876 pretix/base/models/orders.py:2234
-#: pretix/base/models/orders.py:2381 pretix/base/models/orders.py:2829
+#: pretix/base/exporters/orderlist.py:876 pretix/base/models/orders.py:2249
+#: pretix/base/models/orders.py:2404 pretix/base/models/orders.py:2859
 msgid "Tax value"
 msgstr "Вартість податку"
 
 #: pretix/base/exporters/invoices.py:324 pretix/base/exporters/orderlist.py:450
 #: pretix/base/exporters/orderlist.py:575
-#: pretix/base/exporters/orderlist.py:873 pretix/base/models/orders.py:2225
-#: pretix/base/models/orders.py:2372 pretix/base/models/orders.py:2820
-#: pretix/base/models/orders.py:2903 pretix/base/models/tax.py:183
+#: pretix/base/exporters/orderlist.py:873 pretix/base/models/orders.py:2240
+#: pretix/base/models/orders.py:2395 pretix/base/models/orders.py:2850
+#: pretix/base/models/orders.py:2933 pretix/base/models/tax.py:183
 #: pretix/control/templates/pretixcontrol/order/transactions.html:21
 #: pretix/plugins/reports/accountingreport.py:315
 #: pretix/plugins/reports/exporters.py:793
@@ -1573,7 +1573,7 @@ msgstr "Назва елементy"
 #: pretix/base/exporters/items.py:69 pretix/base/exporters/orderlist.py:572
 #: pretix/base/exporters/orderlist.py:865
 #: pretix/base/exporters/waitinglist.py:112 pretix/base/models/items.py:1058
-#: pretix/base/models/orders.py:1409 pretix/base/models/orders.py:2805
+#: pretix/base/models/orders.py:1424 pretix/base/models/orders.py:2835
 #: pretix/plugins/checkinlists/exporters.py:684
 msgid "Variation"
 msgstr "Варіанти"
@@ -1705,14 +1705,14 @@ msgstr "Максимальна сума замовлення"
 
 #: pretix/base/exporters/items.py:90 pretix/base/exporters/orderlist.py:281
 #: pretix/base/models/items.py:582 pretix/base/models/items.py:1147
-#: pretix/base/models/orders.py:241
+#: pretix/base/models/orders.py:249
 #: pretix/plugins/checkinlists/exporters.py:508
 msgid "Requires special attention"
 msgstr "Потребує особливої уваги"
 
 #: pretix/base/exporters/items.py:91 pretix/base/exporters/orderlist.py:282
 #: pretix/base/models/items.py:589 pretix/base/models/items.py:1154
-#: pretix/base/models/orders.py:248
+#: pretix/base/models/orders.py:256
 #, fuzzy
 #| msgid "Check-in list"
 msgid "Check-in text"
@@ -1771,7 +1771,7 @@ msgid ""
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
 
-#: pretix/base/exporters/orderlist.py:99 pretix/base/models/orders.py:283
+#: pretix/base/exporters/orderlist.py:99 pretix/base/models/orders.py:291
 #: pretix/control/navigation.py:253 pretix/control/navigation.py:360
 #: pretix/control/templates/pretixcontrol/orders/index.html:7
 #: pretix/control/templates/pretixcontrol/orders/index.html:9
@@ -1783,7 +1783,7 @@ msgstr ""
 msgid "Orders"
 msgstr "Замовлення"
 
-#: pretix/base/exporters/orderlist.py:100 pretix/base/models/orders.py:2430
+#: pretix/base/exporters/orderlist.py:100 pretix/base/models/orders.py:2453
 #: pretix/base/notifications.py:205
 msgid "Order positions"
 msgstr "Позиції замовлення"
@@ -1982,7 +1982,7 @@ msgid "Sales channel"
 msgstr "Канал продажу"
 
 #: pretix/base/exporters/orderlist.py:284
-#: pretix/base/exporters/orderlist.py:604 pretix/base/models/orders.py:236
+#: pretix/base/exporters/orderlist.py:604 pretix/base/models/orders.py:244
 #: pretix/control/forms/filter.py:239
 msgid "Follow-up date"
 msgstr "Дата подальшого спостереження"
@@ -1995,7 +1995,7 @@ msgid "Positions"
 msgstr "Позиції"
 
 #: pretix/base/exporters/orderlist.py:286
-#: pretix/base/exporters/orderlist.py:637 pretix/base/models/orders.py:272
+#: pretix/base/exporters/orderlist.py:637 pretix/base/models/orders.py:280
 #: pretix/control/forms/filter.py:565
 msgid "E-mail address verified"
 msgstr "Адреса електронної пошти підтверджена"
@@ -2019,8 +2019,8 @@ msgstr "Тип комісії"
 
 #: pretix/base/exporters/orderlist.py:449
 #: pretix/base/exporters/orderlist.py:574
-#: pretix/base/exporters/orderlist.py:872 pretix/base/models/orders.py:1414
-#: pretix/base/models/orders.py:2816 pretix/base/orderimport.py:577
+#: pretix/base/exporters/orderlist.py:872 pretix/base/models/orders.py:1429
+#: pretix/base/models/orders.py:2846 pretix/base/orderimport.py:577
 #: pretix/base/pdf.py:159
 #: pretix/control/templates/pretixcontrol/item/index.html:146
 #: pretix/control/templates/pretixcontrol/order/change.html:188
@@ -2064,8 +2064,8 @@ msgstr "ID позиції"
 #: pretix/base/exporters/orderlist.py:566
 #: pretix/base/exporters/orderlist.py:870
 #: pretix/base/exporters/orderlist.py:1110 pretix/base/models/checkin.py:59
-#: pretix/base/models/items.py:1943 pretix/base/models/orders.py:1399
-#: pretix/base/models/orders.py:2812 pretix/base/models/vouchers.py:187
+#: pretix/base/models/items.py:1943 pretix/base/models/orders.py:1414
+#: pretix/base/models/orders.py:2842 pretix/base/models/vouchers.py:187
 #: pretix/base/models/waitinglist.py:61 pretix/control/forms/event.py:1530
 #: pretix/control/forms/filter.py:423 pretix/control/forms/filter.py:1829
 #: pretix/control/forms/filter.py:2053 pretix/control/forms/filter.py:2168
@@ -2097,8 +2097,8 @@ msgstr "Дата"
 
 #: pretix/base/exporters/orderlist.py:567
 #: pretix/base/exporters/orderlist.py:1111
-#: pretix/base/exporters/waitinglist.py:116 pretix/base/forms/questions.py:617
-#: pretix/base/forms/questions.py:625 pretix/base/models/memberships.py:145
+#: pretix/base/exporters/waitinglist.py:116 pretix/base/forms/questions.py:625
+#: pretix/base/forms/questions.py:634 pretix/base/models/memberships.py:145
 #: pretix/control/forms/rrule.py:49
 #: pretix/control/templates/pretixcontrol/events/index.html:78
 #: pretix/control/templates/pretixcontrol/order/index.html:746
@@ -2157,8 +2157,8 @@ msgid "Product"
 msgstr "Продукт"
 
 #: pretix/base/exporters/orderlist.py:578
-#: pretix/base/exporters/orderlist.py:583 pretix/base/forms/questions.py:643
-#: pretix/base/models/customers.py:289 pretix/base/models/orders.py:1418
+#: pretix/base/exporters/orderlist.py:583 pretix/base/forms/questions.py:654
+#: pretix/base/models/customers.py:289 pretix/base/models/orders.py:1433
 #: pretix/base/orderimport.py:459 pretix/base/pdf.py:173
 #: pretix/control/forms/filter.py:646 pretix/control/forms/organizer.py:921
 #: pretix/control/templates/pretixcontrol/order/index.html:520
@@ -2175,8 +2175,8 @@ msgstr "Продукт"
 msgid "Attendee name"
 msgstr "Ім'я учасника"
 
-#: pretix/base/exporters/orderlist.py:585 pretix/base/forms/questions.py:649
-#: pretix/base/models/customers.py:296 pretix/base/models/orders.py:1426
+#: pretix/base/exporters/orderlist.py:585 pretix/base/forms/questions.py:660
+#: pretix/base/models/customers.py:296 pretix/base/models/orders.py:1441
 #: pretix/base/pdf.py:215
 #: pretix/control/templates/pretixcontrol/order/index.html:525
 #: pretix/control/views/item.py:445
@@ -2236,7 +2236,7 @@ msgstr "Номер місця"
 msgid "Blocked"
 msgstr "Заблоковано"
 
-#: pretix/base/exporters/orderlist.py:601 pretix/base/models/orders.py:2397
+#: pretix/base/exporters/orderlist.py:601 pretix/base/models/orders.py:2420
 #: pretix/base/orderimport.py:654
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:116
 #: pretix/plugins/checkinlists/exporters.py:516
@@ -2246,7 +2246,7 @@ msgstr "Заблоковано"
 msgid "Valid from"
 msgstr "Діє з"
 
-#: pretix/base/exporters/orderlist.py:602 pretix/base/models/orders.py:2402
+#: pretix/base/exporters/orderlist.py:602 pretix/base/models/orders.py:2425
 #: pretix/base/models/vouchers.py:221 pretix/base/orderimport.py:677
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:117
 #: pretix/control/views/vouchers.py:118
@@ -2304,7 +2304,7 @@ msgstr "Враховувати лише замовлення, створені �
 
 #: pretix/base/exporters/orderlist.py:847 pretix/base/models/event.py:638
 #: pretix/base/models/items.py:400 pretix/base/models/items.py:1936
-#: pretix/base/models/orders.py:193 pretix/base/models/orders.py:2885
+#: pretix/base/models/orders.py:201 pretix/base/models/orders.py:2915
 #: pretix/base/models/vouchers.py:181 pretix/base/models/waitinglist.py:55
 #: pretix/base/notifications.py:187 pretix/control/forms/filter.py:914
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:204
@@ -2434,10 +2434,10 @@ msgstr "Стан повернення"
 
 #: pretix/base/exporters/orderlist.py:1048
 #: pretix/base/exporters/orderlist.py:1189
-#: pretix/base/exporters/orderlist.py:1231 pretix/base/models/orders.py:282
-#: pretix/base/models/orders.py:1654 pretix/base/models/orders.py:2057
-#: pretix/base/models/orders.py:2214 pretix/base/models/orders.py:2361
-#: pretix/base/models/orders.py:2778
+#: pretix/base/exporters/orderlist.py:1231 pretix/base/models/orders.py:290
+#: pretix/base/models/orders.py:1669 pretix/base/models/orders.py:2072
+#: pretix/base/models/orders.py:2229 pretix/base/models/orders.py:2384
+#: pretix/base/models/orders.py:2808
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:118
 #: pretix/control/templates/pretixcontrol/search/payments.html:78
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:15
@@ -2472,8 +2472,8 @@ msgstr "Код статусу"
 
 #: pretix/base/exporters/orderlist.py:1049
 #: pretix/base/exporters/orderlist.py:1187
-#: pretix/base/exporters/orderlist.py:1231 pretix/base/models/orders.py:1650
-#: pretix/base/models/orders.py:2053 pretix/control/forms/filter.py:971
+#: pretix/base/exporters/orderlist.py:1231 pretix/base/models/orders.py:1665
+#: pretix/base/models/orders.py:2068 pretix/control/forms/filter.py:971
 #: pretix/control/forms/filter.py:974
 #: pretix/control/templates/pretixcontrol/order/index.html:750
 #: pretix/control/templates/pretixcontrol/order/index.html:846
@@ -2632,7 +2632,7 @@ msgstr "Організатор"
 #: pretix/control/templates/pretixcontrol/search/orders.html:77
 #: pretix/control/templates/pretixcontrol/search/payments.html:119
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:67
-#: pretix/presale/forms/checkout.py:256
+#: pretix/presale/forms/checkout.py:258
 #: pretix/presale/templates/pretixpresale/event/order.html:68
 #: pretix/presale/templates/pretixpresale/event/position.html:14
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:59
@@ -2791,7 +2791,7 @@ msgid "Identifier"
 msgstr "Внутрішній ідентифікатор"
 
 #: pretix/base/exporters/reusablemedia.py:49 pretix/base/models/media.py:81
-#: pretix/base/models/orders.py:224 pretix/base/models/orders.py:2897
+#: pretix/base/models/orders.py:232 pretix/base/models/orders.py:2927
 #: pretix/control/forms/orders.py:73
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:138
 msgid "Expiration date"
@@ -2898,42 +2898,42 @@ msgstr ""
 "Через технічні причини ви не можете встановити вхідні дані, які потрібно "
 "замаскувати (наприклад, паролі), на %(value)s."
 
-#: pretix/base/forms/auth.py:57 pretix/base/forms/auth.py:168
+#: pretix/base/forms/auth.py:61 pretix/base/forms/auth.py:179
 msgid "Keep me logged in"
 msgstr "Не виходити із системи"
 
-#: pretix/base/forms/auth.py:60 pretix/base/forms/auth.py:261
+#: pretix/base/forms/auth.py:65 pretix/base/forms/auth.py:272
 msgid "This combination of credentials is not known to our system."
 msgstr "Ця комбінація облікових даних не відома нашій системі."
 
-#: pretix/base/forms/auth.py:61 pretix/base/forms/user.py:57
+#: pretix/base/forms/auth.py:66 pretix/base/forms/user.py:57
 #: pretix/presale/forms/customer.py:366 pretix/presale/forms/customer.py:438
 msgid "For security reasons, please wait 5 minutes before you try again."
 msgstr "З міркувань безпеки зачекайте 5 хвилин, перш ніж повторити спробу."
 
-#: pretix/base/forms/auth.py:62 pretix/base/forms/auth.py:262
+#: pretix/base/forms/auth.py:67 pretix/base/forms/auth.py:273
 msgid "This account is inactive."
 msgstr "Цей обліковий запис неактивний."
 
-#: pretix/base/forms/auth.py:145
+#: pretix/base/forms/auth.py:156
 msgid ""
 "You already registered with that email address, please use the login form."
 msgstr ""
 "Ви вже зареєструвалися з цією адресою електронної пошти, будь ласка, "
 "скористайтеся формою входу (login)."
 
-#: pretix/base/forms/auth.py:146 pretix/base/forms/auth.py:204
+#: pretix/base/forms/auth.py:157 pretix/base/forms/auth.py:215
 #: pretix/base/forms/user.py:56 pretix/control/forms/users.py:45
 #: pretix/presale/forms/customer.py:277 pretix/presale/forms/customer.py:365
 msgid "Please enter the same password twice"
 msgstr "Будь ласка, двічі введіть той самий пароль"
 
-#: pretix/base/forms/auth.py:149
+#: pretix/base/forms/auth.py:160
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:134
 msgid "Email address"
 msgstr "Адреса електронної пошти"
 
-#: pretix/base/forms/auth.py:161 pretix/base/forms/auth.py:213
+#: pretix/base/forms/auth.py:172 pretix/base/forms/auth.py:224
 #: pretix/presale/forms/customer.py:290 pretix/presale/forms/customer.py:384
 msgid "Repeat password"
 msgstr "Повторіть пароль"
@@ -2984,22 +2984,22 @@ msgstr ""
 "Завантажте дійсне зображення. Файл, який ви завантажили, не був зображенням "
 "або був пошкодженим."
 
-#: pretix/base/forms/questions.py:618 pretix/base/forms/questions.py:626
+#: pretix/base/forms/questions.py:626 pretix/base/forms/questions.py:635
 msgid ""
 "If you keep this empty, the ticket will be valid starting at the time of "
 "purchase."
 msgstr ""
 
-#: pretix/base/forms/questions.py:671 pretix/base/forms/questions.py:995
+#: pretix/base/forms/questions.py:682 pretix/base/forms/questions.py:1006
 msgid "Street and Number"
 msgstr "Вулиця та номер будинку"
 
-#: pretix/base/forms/questions.py:705 pretix/base/forms/questions.py:1047
+#: pretix/base/forms/questions.py:716 pretix/base/forms/questions.py:1058
 msgctxt "address"
 msgid "Select state"
 msgstr "Вибрати штат/країну"
 
-#: pretix/base/forms/questions.py:1034
+#: pretix/base/forms/questions.py:1045
 msgid ""
 "Optional, but depending on the country you reside in we might need to charge "
 "you additional taxes if you do not enter it."
@@ -3007,13 +3007,13 @@ msgstr ""
 "Необов’язково, але залежно від країни, в якій ви проживаєте, нам може "
 "знадобитися стягнути з вас додаткові податки, якщо ви не введете його."
 
-#: pretix/base/forms/questions.py:1036 pretix/base/forms/questions.py:1042
+#: pretix/base/forms/questions.py:1047 pretix/base/forms/questions.py:1053
 msgid "If you are registered in Switzerland, you can enter your UID instead."
 msgstr ""
 "Якщо ви зареєстровані в Швейцарії, ви альтенативно можете ввести ваш "
 "ідентифікаційний номер підприємця."
 
-#: pretix/base/forms/questions.py:1040
+#: pretix/base/forms/questions.py:1051
 msgid ""
 "Optional, but it might be required for you to claim tax benefits on your "
 "invoice depending on your and the seller’s country of residence."
@@ -3022,11 +3022,11 @@ msgstr ""
 "вашому рахунку-фактурі залежно від вашої країни та країни проживання "
 "продавця."
 
-#: pretix/base/forms/questions.py:1132
+#: pretix/base/forms/questions.py:1143
 msgid "You need to provide a company name."
 msgstr "Вам потрібно вказати назву компанії."
 
-#: pretix/base/forms/questions.py:1134
+#: pretix/base/forms/questions.py:1145
 msgid "You need to provide your name."
 msgstr "Вам потрібно вказати своє ім’я."
 
@@ -3652,13 +3652,13 @@ msgid ""
 "underscores. It must start and end with a letter or number."
 msgstr ""
 
-#: pretix/base/models/customers.py:299 pretix/base/models/orders.py:1452
-#: pretix/base/models/orders.py:3050 pretix/base/settings.py:1095
+#: pretix/base/models/customers.py:299 pretix/base/models/orders.py:1467
+#: pretix/base/models/orders.py:3080 pretix/base/settings.py:1095
 msgid "Company name"
 msgstr "Назва компанії"
 
-#: pretix/base/models/customers.py:303 pretix/base/models/orders.py:1456
-#: pretix/base/models/orders.py:3057 pretix/base/settings.py:81
+#: pretix/base/models/customers.py:303 pretix/base/models/orders.py:1471
+#: pretix/base/models/orders.py:3087 pretix/base/settings.py:81
 #: pretix/plugins/stripe/payment.py:270
 msgid "Select country"
 msgstr "Виберіть країну"
@@ -4158,12 +4158,12 @@ msgstr ""
 "Властивість може бути обов’язковою або мати значення за замовчуванням, але "
 "не обидва."
 
-#: pretix/base/models/event.py:1772 pretix/base/models/organizer.py:488
+#: pretix/base/models/event.py:1772 pretix/base/models/organizer.py:494
 #, fuzzy
 msgid "Link text"
 msgstr "Інфо текст"
 
-#: pretix/base/models/event.py:1775 pretix/base/models/organizer.py:491
+#: pretix/base/models/event.py:1775 pretix/base/models/organizer.py:497
 #, fuzzy
 msgid "Link URL"
 msgstr "Вставити URL"
@@ -5171,8 +5171,8 @@ msgstr "Загальна місткість"
 msgid "Leave empty for an unlimited number of tickets."
 msgstr "Залиште порожнім для необмеженої кількості квитків."
 
-#: pretix/base/models/items.py:1956 pretix/base/models/orders.py:1403
-#: pretix/base/models/orders.py:2799
+#: pretix/base/models/items.py:1956 pretix/base/models/orders.py:1418
+#: pretix/base/models/orders.py:2829
 #: pretix/control/templates/pretixcontrol/checkin/index.html:97
 msgid "Item"
 msgstr "Предмет"
@@ -5407,22 +5407,22 @@ msgstr "оплачено"
 msgid "expired"
 msgstr "термін придатності закінчився"
 
-#: pretix/base/models/orders.py:199 pretix/base/orderimport.py:832
+#: pretix/base/models/orders.py:207 pretix/base/orderimport.py:832
 #: pretix/control/forms/orders.py:640 pretix/control/forms/organizer.py:779
 msgid "Customer"
 msgstr "Клієнт"
 
-#: pretix/base/models/orders.py:214 pretix/control/forms/filter.py:559
+#: pretix/base/models/orders.py:222 pretix/control/forms/filter.py:559
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:63
 msgid "Locale"
 msgstr "Мова клієнта"
 
-#: pretix/base/models/orders.py:228 pretix/control/forms/filter.py:570
+#: pretix/base/models/orders.py:236 pretix/control/forms/filter.py:570
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/refund_export.html:57
 msgid "Total amount"
 msgstr "Загальна сума"
 
-#: pretix/base/models/orders.py:232 pretix/base/models/vouchers.py:293
+#: pretix/base/models/orders.py:240 pretix/base/models/vouchers.py:293
 msgid ""
 "The text entered in this field will not be visible to the user and is "
 "available for your convenience."
@@ -5430,11 +5430,11 @@ msgstr ""
 "Текст, введений у це поле, не буде видимим для користувача і доступний для "
 "вашої зручності."
 
-#: pretix/base/models/orders.py:237
+#: pretix/base/models/orders.py:245
 msgid "We'll show you this order to be due for a follow-up on this day."
 msgstr "Ми покажемо вам це замовлення, яке має бути виконано в цей день."
 
-#: pretix/base/models/orders.py:243
+#: pretix/base/models/orders.py:251
 msgid ""
 "If you set this, the check-in app will show a visible warning that tickets "
 "of this order require special attention. This will not show any details or "
@@ -5447,7 +5447,7 @@ msgstr ""
 "потрібно проінформувати свій персонал, який здійснює реєстрацію, як "
 "поводитися з такими випадками."
 
-#: pretix/base/models/orders.py:250
+#: pretix/base/models/orders.py:258
 #, fuzzy
 #| msgid ""
 #| "This text will be shown above the invoice address form during checkout."
@@ -5458,29 +5458,29 @@ msgstr ""
 "Цей текст буде відображатись над адресою рахунку під час оформлення "
 "замовлення."
 
-#: pretix/base/models/orders.py:260 pretix/base/models/orders.py:1440
+#: pretix/base/models/orders.py:268 pretix/base/models/orders.py:1455
 msgid "Meta information"
 msgstr "Метаінформація"
 
-#: pretix/base/models/orders.py:342 pretix/plugins/sendmail/forms.py:231
+#: pretix/base/models/orders.py:353 pretix/plugins/sendmail/forms.py:231
 #: pretix/plugins/sendmail/forms.py:385 pretix/plugins/sendmail/views.py:270
 msgid "approval pending"
 msgstr "В очікуванні затвердження"
 
-#: pretix/base/models/orders.py:344
+#: pretix/base/models/orders.py:355
 #, fuzzy
 #| msgid "Pending (overdue)"
 msgctxt "order state"
 msgid "pending (confirmed)"
 msgstr "Очікується (прострочений)"
 
-#: pretix/base/models/orders.py:346
+#: pretix/base/models/orders.py:357
 #, fuzzy
 #| msgid "Canceled (paid fee)"
 msgid "canceled (paid fee)"
 msgstr "Скасовано (оплачено комісію)"
 
-#: pretix/base/models/orders.py:952
+#: pretix/base/models/orders.py:967
 msgid ""
 "The payment can not be accepted as the last date of payments configured in "
 "the payment settings is over."
@@ -5488,7 +5488,7 @@ msgstr ""
 "Платіж не може бути прийнятий, оскільки закінчилася остання дата платежів, "
 "налаштована в налаштуваннях платежу."
 
-#: pretix/base/models/orders.py:954
+#: pretix/base/models/orders.py:969
 msgid ""
 "The payment can not be accepted as the order is expired and you configured "
 "that no late payments should be accepted in the payment settings."
@@ -5497,124 +5497,124 @@ msgstr ""
 "ви налаштували, що в налаштуваннях платежів не прийматимуться прострочені "
 "платежі."
 
-#: pretix/base/models/orders.py:956
+#: pretix/base/models/orders.py:971
 msgid "This order is not yet approved by the event organizer."
 msgstr "Це замовлення ще не затверджене організаторами події."
 
-#: pretix/base/models/orders.py:981
+#: pretix/base/models/orders.py:996
 #, python-brace-format
 msgid "The ordered product \"{item}\" is no longer available."
 msgstr "Замовлений товар \"{item}\" більше не доступний."
 
-#: pretix/base/models/orders.py:982
+#: pretix/base/models/orders.py:997
 #, python-brace-format
 msgid "The seat \"{seat}\" is no longer available."
 msgstr "Місце \"{seat}\" більше недоступне."
 
-#: pretix/base/models/orders.py:983
+#: pretix/base/models/orders.py:998
 #, python-brace-format
 msgid "The voucher \"{voucher}\" no longer has sufficient budget."
 msgstr "Ваучер \"{voucher}\" більше не має достатнього бюджету."
 
-#: pretix/base/models/orders.py:984
+#: pretix/base/models/orders.py:999
 #, python-brace-format
 msgid "The voucher \"{voucher}\" has been used in the meantime."
 msgstr "Тим часом ваучер \"{voucher}\" було використано."
 
-#: pretix/base/models/orders.py:1319
+#: pretix/base/models/orders.py:1334
 msgid "<file>"
 msgstr "<file>"
 
-#: pretix/base/models/orders.py:1420 pretix/base/models/orders.py:1428
+#: pretix/base/models/orders.py:1435 pretix/base/models/orders.py:1443
 msgid "Empty, if this product is not an admission ticket"
 msgstr "Порожньо, якщо цей продукт не є вхідним квитком"
 
-#: pretix/base/models/orders.py:1637
+#: pretix/base/models/orders.py:1652
 msgctxt "payment_state"
 msgid "created"
 msgstr "створено"
 
-#: pretix/base/models/orders.py:1638
+#: pretix/base/models/orders.py:1653
 msgctxt "payment_state"
 msgid "pending"
 msgstr "в очікуванні"
 
-#: pretix/base/models/orders.py:1639
+#: pretix/base/models/orders.py:1654
 msgctxt "payment_state"
 msgid "confirmed"
 msgstr "підтверджено"
 
-#: pretix/base/models/orders.py:1640
+#: pretix/base/models/orders.py:1655
 msgctxt "payment_state"
 msgid "canceled"
 msgstr "скасовано"
 
-#: pretix/base/models/orders.py:1641
+#: pretix/base/models/orders.py:1656
 msgctxt "payment_state"
 msgid "failed"
 msgstr "не вдалось"
 
-#: pretix/base/models/orders.py:1642
+#: pretix/base/models/orders.py:1657
 msgctxt "payment_state"
 msgid "refunded"
 msgstr "відшкодовано"
 
-#: pretix/base/models/orders.py:1670 pretix/base/models/orders.py:2084
+#: pretix/base/models/orders.py:1685 pretix/base/models/orders.py:2099
 #: pretix/base/shredder.py:629
 msgid "Payment information"
 msgstr "Інформація про оплату"
 
-#: pretix/base/models/orders.py:2025
+#: pretix/base/models/orders.py:2040
 msgctxt "refund_state"
 msgid "started externally"
 msgstr "розпочато зовнішньо"
 
-#: pretix/base/models/orders.py:2026
+#: pretix/base/models/orders.py:2041
 msgctxt "refund_state"
 msgid "created"
 msgstr "створено"
 
-#: pretix/base/models/orders.py:2027
+#: pretix/base/models/orders.py:2042
 msgctxt "refund_state"
 msgid "in transit"
 msgstr "в дорозі"
 
-#: pretix/base/models/orders.py:2028
+#: pretix/base/models/orders.py:2043
 msgctxt "refund_state"
 msgid "done"
 msgstr "виконано"
 
-#: pretix/base/models/orders.py:2029
+#: pretix/base/models/orders.py:2044
 msgctxt "refund_state"
 msgid "failed"
 msgstr "не вдалось"
 
-#: pretix/base/models/orders.py:2031
+#: pretix/base/models/orders.py:2046
 msgctxt "refund_state"
 msgid "canceled"
 msgstr "скасовано"
 
-#: pretix/base/models/orders.py:2039
+#: pretix/base/models/orders.py:2054
 msgctxt "refund_source"
 msgid "Organizer"
 msgstr "Організатор"
 
-#: pretix/base/models/orders.py:2040
+#: pretix/base/models/orders.py:2055
 msgctxt "refund_source"
 msgid "Customer"
 msgstr "Клієнт"
 
-#: pretix/base/models/orders.py:2041
+#: pretix/base/models/orders.py:2056
 msgctxt "refund_source"
 msgid "External"
 msgstr "Зовнішній"
 
-#: pretix/base/models/orders.py:2079
+#: pretix/base/models/orders.py:2094
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:197
 msgid "Refund reason"
 msgstr "Причина повернення коштів"
 
-#: pretix/base/models/orders.py:2080
+#: pretix/base/models/orders.py:2095
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:198
 #: pretix/control/templates/pretixcontrol/order/refund_choose.html:200
 msgid ""
@@ -5623,32 +5623,32 @@ msgstr ""
 "Може бути показаний кінцевому користувачеві або використаний, наприклад, як "
 "частина довідки про оплату."
 
-#: pretix/base/models/orders.py:2199
+#: pretix/base/models/orders.py:2214
 msgid "Payment fee"
 msgstr "Комісія за оплату"
 
-#: pretix/base/models/orders.py:2200
+#: pretix/base/models/orders.py:2215
 msgid "Shipping fee"
 msgstr "Вартість доставки"
 
-#: pretix/base/models/orders.py:2201
+#: pretix/base/models/orders.py:2216
 msgid "Service fee"
 msgstr "Плата за послуги"
 
-#: pretix/base/models/orders.py:2202
+#: pretix/base/models/orders.py:2217
 #: pretix/control/templates/pretixcontrol/order/index.html:156
 msgid "Cancellation fee"
 msgstr "Плата за скасування"
 
-#: pretix/base/models/orders.py:2203
+#: pretix/base/models/orders.py:2218
 msgid "Insurance fee"
 msgstr "Страховий збір"
 
-#: pretix/base/models/orders.py:2204
+#: pretix/base/models/orders.py:2219
 msgid "Other fees"
 msgstr "Інші платежі"
 
-#: pretix/base/models/orders.py:2205 pretix/base/payment.py:1310
+#: pretix/base/models/orders.py:2220 pretix/base/payment.py:1310
 #: pretix/base/payment.py:1314 pretix/base/settings.py:977
 #: pretix/control/forms/organizer.py:765
 #: pretix/control/templates/pretixcontrol/items/index.html:90
@@ -5659,7 +5659,7 @@ msgstr "Інші платежі"
 msgid "Gift card"
 msgstr "Подарунковий сертифікат"
 
-#: pretix/base/models/orders.py:2210
+#: pretix/base/models/orders.py:2225
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:74
 #: pretix/control/templates/pretixcontrol/organizers/giftcard.html:115
 #: pretix/control/views/vouchers.py:119
@@ -5667,27 +5667,27 @@ msgstr "Подарунковий сертифікат"
 msgid "Value"
 msgstr "Вартість"
 
-#: pretix/base/models/orders.py:2429
+#: pretix/base/models/orders.py:2452
 msgid "Order position"
 msgstr "Позиція замовлення"
 
-#: pretix/base/models/orders.py:2890
+#: pretix/base/models/orders.py:2920
 msgid "Cart ID (e.g. session key)"
 msgstr "Ідентифікатор кошика (наприклад, ідентифікаційний номер сесії)"
 
-#: pretix/base/models/orders.py:2927
+#: pretix/base/models/orders.py:2957
 msgid "Cart position"
 msgstr "Позиція кошика"
 
-#: pretix/base/models/orders.py:2928
+#: pretix/base/models/orders.py:2958
 msgid "Cart positions"
 msgstr "Позиції кошика"
 
-#: pretix/base/models/orders.py:3049
+#: pretix/base/models/orders.py:3079
 msgid "Business customer"
 msgstr "Бізнес клієнт"
 
-#: pretix/base/models/orders.py:3065
+#: pretix/base/models/orders.py:3095
 msgid "This reference will be printed on your invoice for your convenience."
 msgstr ""
 "Це посилання буде надруковано на вашому рахунку-фактурі для вашої зручності."
@@ -5719,19 +5719,30 @@ msgstr "Назва команди"
 msgid "Team members"
 msgstr "Учасники команди"
 
-#: pretix/base/models/organizer.py:269
+#: pretix/base/models/organizer.py:267
+msgid "Require all members of this team to use two-factor authentication"
+msgstr ""
+
+#: pretix/base/models/organizer.py:268
+msgid ""
+"If you turn this on, all members of the team will be required to either set "
+"up two-factor authentication or leave the team. The setting may take a few "
+"minutes to become effective for all users."
+msgstr ""
+
+#: pretix/base/models/organizer.py:275
 msgid "Can create events"
 msgstr "Може створювати події"
 
-#: pretix/base/models/organizer.py:273
+#: pretix/base/models/organizer.py:279
 msgid "Can change teams and permissions"
 msgstr "Можна змінювати команди та дозволи"
 
-#: pretix/base/models/organizer.py:277
+#: pretix/base/models/organizer.py:283
 msgid "Can change organizer settings"
 msgstr "Можe змінити налаштування організатора"
 
-#: pretix/base/models/organizer.py:278
+#: pretix/base/models/organizer.py:284
 msgid ""
 "Someone with this setting can get access to most data of all of your events, "
 "i.e. via privacy reports, so be careful who you add to this team!"
@@ -5740,41 +5751,41 @@ msgstr ""
 "ваших подій,наприклад, до звітів про конфіденційність, тому будьте обережні, "
 "кого ви додаєте до цієї команди!"
 
-#: pretix/base/models/organizer.py:283
+#: pretix/base/models/organizer.py:289
 msgid "Can manage customer accounts"
 msgstr "Може керувати обліковими записами клієнтів"
 
-#: pretix/base/models/organizer.py:287
+#: pretix/base/models/organizer.py:293
 #, fuzzy
 #| msgid "Can manage customer accounts"
 msgid "Can manage reusable media"
 msgstr "Може керувати обліковими записами клієнтів"
 
-#: pretix/base/models/organizer.py:291
+#: pretix/base/models/organizer.py:297
 msgid "Can manage gift cards"
 msgstr "Може керувати подарунковими сертифікатами"
 
-#: pretix/base/models/organizer.py:295
+#: pretix/base/models/organizer.py:301
 msgid "Can change event settings"
 msgstr "Можна змінювати налаштування події"
 
-#: pretix/base/models/organizer.py:299
+#: pretix/base/models/organizer.py:305
 msgid "Can change product settings"
 msgstr "Можна змінювати налаштування продукту"
 
-#: pretix/base/models/organizer.py:303
+#: pretix/base/models/organizer.py:309
 msgid "Can view orders"
 msgstr "Може переглядати замовлення"
 
-#: pretix/base/models/organizer.py:307
+#: pretix/base/models/organizer.py:313
 msgid "Can change orders"
 msgstr "Можe змінювати замовлення"
 
-#: pretix/base/models/organizer.py:311
+#: pretix/base/models/organizer.py:317
 msgid "Can perform check-ins"
 msgstr "Може проводити реєстрацію"
 
-#: pretix/base/models/organizer.py:312
+#: pretix/base/models/organizer.py:318
 msgid ""
 "This includes searching for attendees, which can be used to obtain personal "
 "information about attendees. Users with \"can change orders\" can also "
@@ -5784,36 +5795,36 @@ msgstr ""
 "особистої інформації про учасників. Користувачі з \"можe змінювати "
 "замовлення\" також можуть виконувати реєстрацію."
 
-#: pretix/base/models/organizer.py:317
+#: pretix/base/models/organizer.py:323
 msgid "Can view vouchers"
 msgstr "Можe переглядати ваучери"
 
-#: pretix/base/models/organizer.py:321
+#: pretix/base/models/organizer.py:327
 msgid "Can change vouchers"
 msgstr "Може змінювати ваучери"
 
-#: pretix/base/models/organizer.py:325
+#: pretix/base/models/organizer.py:331
 #, python-format
 msgid "%(name)s on %(object)s"
 msgstr "%(name)s на %(object)s"
 
-#: pretix/base/models/organizer.py:357
+#: pretix/base/models/organizer.py:363
 #: pretix/control/templates/pretixcontrol/events/create_basics.html:61
 msgid "Team"
 msgstr "Команда"
 
-#: pretix/base/models/organizer.py:358 pretix/control/navigation.py:513
+#: pretix/base/models/organizer.py:364 pretix/control/navigation.py:513
 #: pretix/control/templates/pretixcontrol/organizers/teams.html:6
 msgid "Teams"
 msgstr "Команди"
 
-#: pretix/base/models/organizer.py:378
+#: pretix/base/models/organizer.py:384
 #, python-brace-format
 msgid "Invite to team '{team}' for '{email}'"
 msgstr "Запросити в команду '{team}' для '{email}'"
 
 #: pretix/base/models/seating.py:45 pretix/base/models/tax.py:148
-#: pretix/base/pdf.py:1165
+#: pretix/base/pdf.py:1166
 msgid "Your layout file is not a valid JSON file."
 msgstr "Ваш файл макета не є дійсним файлом JSON."
 
@@ -7286,14 +7297,14 @@ msgstr "Пояснення адреси рахунку"
 msgid "Invoice address name: {part}"
 msgstr "Ім’я на адресі рахунка-фактури: {part}"
 
-#: pretix/base/pdf.py:1046 pretix/control/forms/organizer.py:716
+#: pretix/base/pdf.py:1047 pretix/control/forms/organizer.py:716
 #: pretix/control/forms/organizer.py:752
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:113
 msgid "Ticket"
 msgstr "Квиток"
 
-#: pretix/base/pdf.py:1174
+#: pretix/base/pdf.py:1175
 #, fuzzy
 #| msgid "Your layout file is not a valid seating plan. Error message: {}"
 msgid "Your layout file is not a valid layout. Error message: {}"
@@ -8080,7 +8091,7 @@ msgctxt "attachment_filename"
 msgid "Calendar invite"
 msgstr "Запрошення в календарі"
 
-#: pretix/base/services/memberships.py:106
+#: pretix/base/services/memberships.py:108
 #, python-brace-format
 msgid ""
 "You selected a membership for the product \"{product}\" which does not "
@@ -8089,23 +8100,23 @@ msgstr ""
 "Ви вибрали членство для продукту \"{product}\", для якого не потрібно "
 "членство."
 
-#: pretix/base/services/memberships.py:114
+#: pretix/base/services/memberships.py:116
 #, python-brace-format
 msgid ""
 "You selected the product \"{product}\" which requires an active membership "
 "to be selected."
 msgstr "Ви вибрали продукт \"{product}\", який вимагає активного членства."
 
-#: pretix/base/services/memberships.py:147
+#: pretix/base/services/memberships.py:149
 msgid ""
 "You selected a membership that is connected to a different customer account."
 msgstr "Ви вибрали членство, пов’язане з іншим обліковим записом клієнта."
 
-#: pretix/base/services/memberships.py:152
+#: pretix/base/services/memberships.py:154
 msgid "You selected membership that has been canceled."
 msgstr "Ви вибрали членство, яке було скасовано."
 
-#: pretix/base/services/memberships.py:157
+#: pretix/base/services/memberships.py:159
 #, fuzzy
 #| msgid "You can only use a test mode membership for test mode tickets."
 msgid ""
@@ -8114,7 +8125,7 @@ msgstr ""
 "Ви можете використовувати лише членство в тестовому режимі для квитків на "
 "тестовий режим."
 
-#: pretix/base/services/memberships.py:161
+#: pretix/base/services/memberships.py:163
 #, fuzzy
 #| msgid "You can only use a test mode membership for test mode tickets."
 msgid ""
@@ -8124,7 +8135,19 @@ msgstr ""
 "Ви можете використовувати лише членство в тестовому режимі для квитків на "
 "тестовий режим."
 
-#: pretix/base/services/memberships.py:168
+#: pretix/base/services/memberships.py:179
+#, fuzzy, python-brace-format
+#| msgid ""
+#| "You selected a membership that is valid from {start} to {end}, but "
+#| "selected an event taking place at {date}."
+msgid ""
+"You selected a membership that is valid from {start} to {end}, but selected "
+"a ticket that starts to be valid on {date}."
+msgstr ""
+"Ви вибрали членство, яке діє з {start} до {end}, але вибрали подію, що "
+"відбудеться {date}."
+
+#: pretix/base/services/memberships.py:188
 #, python-brace-format
 msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
@@ -8133,7 +8156,7 @@ msgstr ""
 "Ви вибрали членство, яке діє з {start} до {end}, але вибрали подію, що "
 "відбудеться {date}."
 
-#: pretix/base/services/memberships.py:183
+#: pretix/base/services/memberships.py:203
 #, python-brace-format
 msgid ""
 "You selected a membership of type \"{type}\", which is not allowed for the "
@@ -8142,7 +8165,7 @@ msgstr ""
 "Ви вибрали членство типу \"{type}\", яке не дозволено для продукту "
 "\"{product}\"."
 
-#: pretix/base/services/memberships.py:192
+#: pretix/base/services/memberships.py:212
 #, python-brace-format
 msgid ""
 "You are trying to use a membership of type \"{type}\" more than {number} "
@@ -8151,7 +8174,7 @@ msgstr ""
 "Ви намагаєтеся використати членство типу \"{type}\" більше {number} разів, "
 "що є максимальною кількістю."
 
-#: pretix/base/services/memberships.py:215
+#: pretix/base/services/memberships.py:227
 #, fuzzy, python-brace-format
 #| msgid ""
 #| "You are trying to use a membership of type \"{type}\" for an event taking "
@@ -8167,21 +8190,21 @@ msgstr ""
 "відбудеться {date}, однак ви вже використовували те саме членство для іншого "
 "квитка одночасно."
 
-#: pretix/base/services/memberships.py:219
-#: pretix/base/services/memberships.py:221
+#: pretix/base/services/memberships.py:231
+#: pretix/base/services/memberships.py:233
 #, fuzzy
 #| msgid "Start date"
 msgid "start"
 msgstr "Дата початку"
 
-#: pretix/base/services/memberships.py:220
-#: pretix/base/services/memberships.py:222
+#: pretix/base/services/memberships.py:232
+#: pretix/base/services/memberships.py:234
 #, fuzzy
 #| msgid "Event end"
 msgid "open end"
 msgstr "Кінець події"
 
-#: pretix/base/services/memberships.py:232
+#: pretix/base/services/memberships.py:244
 #, python-brace-format
 msgid ""
 "You are trying to use a membership of type \"{type}\" for an event taking "
@@ -12460,50 +12483,57 @@ msgctxt "timeline"
 msgid "Customers can no longer cancel paid orders"
 msgstr "Клієнти більше не можуть скасовувати оплачені замовлення"
 
-#: pretix/base/timeline.py:169
+#: pretix/base/timeline.py:167
+#, fuzzy
+#| msgid "Waiting list entry"
+msgctxt "timeline"
+msgid "Waiting list is disabled"
+msgstr "Запис в список очікування"
+
+#: pretix/base/timeline.py:181
 msgctxt "timeline"
 msgid "Download reminders are being sent out"
 msgstr "Нагадування про завантаження розсилаються"
 
-#: pretix/base/timeline.py:182 pretix/base/timeline.py:205
-#: pretix/base/timeline.py:255
+#: pretix/base/timeline.py:194 pretix/base/timeline.py:217
+#: pretix/base/timeline.py:267
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes available"
 msgstr "Продукт \"{name}\" стає доступним"
 
-#: pretix/base/timeline.py:193 pretix/base/timeline.py:217
-#: pretix/base/timeline.py:266
+#: pretix/base/timeline.py:205 pretix/base/timeline.py:229
+#: pretix/base/timeline.py:278
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product \"{name}\" becomes unavailable"
 msgstr "Продукт \"{name}\" стає недоступним"
 
-#: pretix/base/timeline.py:231
+#: pretix/base/timeline.py:243
 #, python-brace-format
 msgctxt "timeline"
 msgid "Discount \"{name}\" becomes active"
 msgstr ""
 
-#: pretix/base/timeline.py:242
+#: pretix/base/timeline.py:254
 #, python-brace-format
 msgctxt "timeline"
 msgid "Discount \"{name}\" becomes inactive"
 msgstr "Знижка \"{name}\" стає неактивною"
 
-#: pretix/base/timeline.py:282
+#: pretix/base/timeline.py:294
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes available"
 msgstr "Варіація продукту \"{product} – {variation}\" стає доступною"
 
-#: pretix/base/timeline.py:296
+#: pretix/base/timeline.py:308
 #, python-brace-format
 msgctxt "timeline"
 msgid "Product variation \"{product} – {variation}\" becomes unavailable"
 msgstr "Варіація продукту \"{product} – {variation}\" стає недоступною"
 
-#: pretix/base/timeline.py:327
+#: pretix/base/timeline.py:339
 #, python-brace-format
 msgctxt "timeline"
 msgid "Payment provider \"{name}\" can no longer be selected"
@@ -14495,7 +14525,7 @@ msgstr "Місце"
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership.html:9
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:5
 #: pretix/control/templates/pretixcontrol/organizers/customer_membership_delete.html:9
-#: pretix/presale/forms/checkout.py:235
+#: pretix/presale/forms/checkout.py:237
 msgid "Membership"
 msgstr "Членство"
 
@@ -15034,7 +15064,7 @@ msgstr "Доступно до"
 msgid "Exclude these dates instead of adding them."
 msgstr "Не враховувати ці дати замість того, щоб додавати їх."
 
-#: pretix/control/forms/users.py:122 pretix/control/views/user.py:230
+#: pretix/control/forms/users.py:122 pretix/control/views/user.py:231
 msgid "Your changes could not be saved. See below for details."
 msgstr "Ваші зміни не вдалося зберегти. Подробиці дивіться нижче."
 
@@ -15997,17 +16027,17 @@ msgstr "Помилка повернення коштів {local_id}."
 msgid "The user has been created."
 msgstr "Користувача створено."
 
-#: pretix/control/logdisplay.py:458 pretix/control/views/user.py:479
-#: pretix/control/views/user.py:539 pretix/control/views/user.py:576
+#: pretix/control/logdisplay.py:458 pretix/control/views/user.py:489
+#: pretix/control/views/user.py:549 pretix/control/views/user.py:608
 msgid "Two-factor authentication has been enabled."
 msgstr "Увімкнено двофакторну аутентифікацію."
 
-#: pretix/control/logdisplay.py:459 pretix/control/views/user.py:382
-#: pretix/control/views/user.py:592
+#: pretix/control/logdisplay.py:459 pretix/control/views/user.py:392
+#: pretix/control/views/user.py:624
 msgid "Two-factor authentication has been disabled."
 msgstr "Двофакторну автентифікацію вимкнено."
 
-#: pretix/control/logdisplay.py:460 pretix/control/views/user.py:609
+#: pretix/control/logdisplay.py:460 pretix/control/views/user.py:641
 msgid "Your two-factor emergency codes have been regenerated."
 msgstr "Ваші двофакторні коди екстреної допомоги відновлено."
 
@@ -16540,12 +16570,12 @@ msgstr "Токен\"{name}\" було відізвано."
 msgid "Your account settings have been changed."
 msgstr "Налаштування Вашого аккауту було змінено."
 
-#: pretix/control/logdisplay.py:690 pretix/control/views/user.py:251
+#: pretix/control/logdisplay.py:690 pretix/control/views/user.py:252
 #, python-brace-format
 msgid "Your email address has been changed to {email}."
 msgstr "Ваша електронна адреса була змінена на {email}."
 
-#: pretix/control/logdisplay.py:692 pretix/control/views/user.py:248
+#: pretix/control/logdisplay.py:692 pretix/control/views/user.py:249
 msgid "Your password has been changed."
 msgstr "Ваш пароль було змінено."
 
@@ -16575,13 +16605,13 @@ msgstr "Заблоковані місця"
 msgid "Blocked because of an API integration"
 msgstr ""
 
-#: pretix/control/middleware.py:151 pretix/control/middleware.py:165
+#: pretix/control/middleware.py:153 pretix/control/middleware.py:167
 msgid ""
 "The selected event was not found or you have no permission to administrate "
 "it."
 msgstr "Обраний захід не знайдено, або Ви не маєте права управляти ним."
 
-#: pretix/control/middleware.py:178 pretix/control/middleware.py:188
+#: pretix/control/middleware.py:180 pretix/control/middleware.py:190
 msgid ""
 "The selected organizer was not found or you have no permission to "
 "administrate it."
@@ -16979,7 +17009,7 @@ msgstr "Встановити новий пароль"
 #: pretix/control/templates/pretixcontrol/event/tickets.html:73
 #: pretix/control/templates/pretixcontrol/global_settings.html:12
 #: pretix/control/templates/pretixcontrol/global_update.html:86
-#: pretix/control/templates/pretixcontrol/item/index.html:293
+#: pretix/control/templates/pretixcontrol/item/index.html:294
 #: pretix/control/templates/pretixcontrol/items/category.html:37
 #: pretix/control/templates/pretixcontrol/items/discount.html:76
 #: pretix/control/templates/pretixcontrol/items/question_edit.html:153
@@ -17008,7 +17038,7 @@ msgstr "Встановити новий пароль"
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium_edit.html:28
 #: pretix/control/templates/pretixcontrol/organizers/ssoclient_edit.html:15
 #: pretix/control/templates/pretixcontrol/organizers/ssoprovider_edit.html:28
-#: pretix/control/templates/pretixcontrol/organizers/team_edit.html:46
+#: pretix/control/templates/pretixcontrol/organizers/team_edit.html:47
 #: pretix/control/templates/pretixcontrol/organizers/webhook_edit.html:21
 #: pretix/control/templates/pretixcontrol/pdf/index.html:471
 #: pretix/control/templates/pretixcontrol/subevents/bulk.html:630
@@ -17387,6 +17417,7 @@ msgstr[2] ""
 #: pretix/control/templates/pretixcontrol/user/2fa_delete.html:18
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:17
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:18
+#: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html:23
 #: pretix/control/templates/pretixcontrol/user/2fa_regenemergency.html:17
 #: pretix/control/templates/pretixcontrol/vouchers/delete.html:12
 #: pretix/control/templates/pretixcontrol/vouchers/delete_bulk.html:33
@@ -18837,7 +18868,7 @@ msgstr ""
 #: pretix/control/views/organizer.py:2921
 #: pretix/control/views/organizer.py:3017
 #: pretix/control/views/organizer.py:3045 pretix/control/views/subevents.py:525
-#: pretix/control/views/subevents.py:1589 pretix/control/views/user.py:234
+#: pretix/control/views/subevents.py:1589 pretix/control/views/user.py:235
 #: pretix/control/views/users.py:110 pretix/control/views/vouchers.py:304
 #: pretix/plugins/badges/views.py:154 pretix/plugins/sendmail/views.py:668
 #: pretix/plugins/stripe/views.py:677
@@ -18865,14 +18896,15 @@ msgstr "Недоступнo"
 #: pretix/control/templates/pretixcontrol/event/plugins.html:72
 #: pretix/control/templates/pretixcontrol/oauth/app_delete.html:15
 #: pretix/control/templates/pretixcontrol/user/2fa_disable.html:20
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:40
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:79
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:83
 #: pretix/control/templates/pretixcontrol/user/notifications.html:14
 msgid "Disable"
 msgstr "Вимкнути"
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:77
 #: pretix/control/templates/pretixcontrol/user/2fa_enable.html:21
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:56
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:99
 #: pretix/control/templates/pretixcontrol/user/notifications.html:23
 #: pretix/control/templates/pretixcontrol/user/settings.html:55
 msgid "Enable"
@@ -19988,7 +20020,7 @@ msgstr "Додаткові налаштування"
 msgid "Membership duration after purchase"
 msgstr "Термін членства після покупки"
 
-#: pretix/control/templates/pretixcontrol/item/index.html:301
+#: pretix/control/templates/pretixcontrol/item/index.html:302
 msgid "Product history"
 msgstr "Історія продукту"
 
@@ -23089,11 +23121,11 @@ msgstr "Створити нову команду"
 msgid "You will be able to add team members in the next step."
 msgstr "Ви зможете додати членів команди у наступному кроці."
 
-#: pretix/control/templates/pretixcontrol/organizers/team_edit.html:23
+#: pretix/control/templates/pretixcontrol/organizers/team_edit.html:24
 msgid "Organizer permissions"
 msgstr "Дозволи для організатора"
 
-#: pretix/control/templates/pretixcontrol/organizers/team_edit.html:32
+#: pretix/control/templates/pretixcontrol/organizers/team_edit.html:33
 msgid "Event permissions"
 msgstr "Дозволи для події"
 
@@ -24078,10 +24110,33 @@ msgid ""
 "a safe place."
 msgstr ""
 
+#: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:4
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:6
 #: pretix/control/templates/pretixcontrol/user/settings.html:45
 msgid "Two-factor authentication"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html:6
+msgid "Leave teams that require two-factor authentication"
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html:10
+#, fuzzy
+#| msgid ""
+#| "Do you really want to delete the following address from your account?"
+msgid "Do you really want to leave the following teams?"
+msgstr "Чи виточно хочете видалити адресу з вашого облікового запису?"
+
+#: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html:15
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:38
+#: pretix/control/templates/pretixcontrol/users/form.html:64
+#, python-format
+msgid "Team \"%(team)s\" of organizer \"%(organizer)s\""
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html:26
+msgid "Leave"
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:8
@@ -24092,52 +24147,73 @@ msgid ""
 "smartphone or a hardware token generator and that changes on a regular basis."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:17
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:19
 msgid "Obligatory usage of two-factor authentication"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:21
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:25
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:73
 msgid "This system enforces the usage of two-factor authentication!"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:24
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:29
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:75
+msgid "As an administrator, you need to use two-factor authentication."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:33
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:77
+msgid ""
+"You are part of one or more organizer teams that require you to use two-"
+"factor authentication."
+msgstr ""
+
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:47
 msgid "Please set up at least one device below."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:26
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:49
 msgid "Please activate two-factor authentication using the button below."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:35
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:51
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:53
+#, python-format
+msgid "Leave team instead"
+msgid_plural "Leave %(count)s teams instead"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:67
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:94
 msgid "Two-factor status"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:44
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:87
 msgid "Two-factor authentication is currently enabled."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:60
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:103
 msgid "Two-factor authentication is currently disabled."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:63
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:106
 msgid "To enable it, you need to configure at least one device below."
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:70
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:113
 msgid "Registered devices"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:93
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:136
 msgid "Add a new device"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:100
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:143
 msgid "Emergency tokens"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:104
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:147
 msgid ""
 "If you lose access to your devices, you can use one of the following keys to "
 "log in. We recommend to store them in a safe place, e.g. printed out or in a "
@@ -24148,11 +24224,11 @@ msgstr ""
 "безпечному місці, наприклад, роздруковані або в менеджері паролів. Кожен "
 "маркер можна використати не більше одного разу."
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:106
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:149
 msgid "Unused tokens:"
 msgstr ""
 
-#: pretix/control/templates/pretixcontrol/user/2fa_main.html:114
+#: pretix/control/templates/pretixcontrol/user/2fa_main.html:157
 msgid "Generate new emergency tokens"
 msgstr ""
 
@@ -24345,11 +24421,6 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:59
 msgid "Team memberships"
-msgstr ""
-
-#: pretix/control/templates/pretixcontrol/users/form.html:64
-#, python-format
-msgid "Team \"%(team)s\" of organizer \"%(organizer)s\""
 msgstr ""
 
 #: pretix/control/templates/pretixcontrol/users/form.html:83
@@ -24766,28 +24837,28 @@ msgstr ""
 msgid "That page number is less than 1"
 msgstr ""
 
-#: pretix/control/views/auth.py:190
+#: pretix/control/views/auth.py:242
 msgid ""
 "You used an invalid link. Please copy the link from your email to the "
 "address bar and make sure it is correct and that the link has not been used "
 "before."
 msgstr ""
 
-#: pretix/control/views/auth.py:196
+#: pretix/control/views/auth.py:248
 msgid ""
 "You cannot accept the invitation for \"{}\" as you already are part of this "
 "team."
 msgstr ""
 
-#: pretix/control/views/auth.py:210
+#: pretix/control/views/auth.py:262
 msgid "You are now part of the team \"{}\"."
 msgstr ""
 
-#: pretix/control/views/auth.py:240
+#: pretix/control/views/auth.py:292
 msgid "Welcome to pretix! You are now part of the team \"{}\"."
 msgstr ""
 
-#: pretix/control/views/auth.py:301
+#: pretix/control/views/auth.py:353
 msgid ""
 "If the address is registered to valid account, then we have sent you an e-"
 "mail containing further instructions. Please note that we will send at most "
@@ -24797,32 +24868,32 @@ msgstr ""
 "електронний лист із подальшими інструкціями. Зверніть увагу, що ми "
 "надсилатимемо щонайбільше один електронний лист кожні 24 години."
 
-#: pretix/control/views/auth.py:304
+#: pretix/control/views/auth.py:356
 msgid ""
 "If the address is registered to valid account, then we have sent you an e-"
 "mail containing further instructions."
 msgstr ""
 
-#: pretix/control/views/auth.py:324
+#: pretix/control/views/auth.py:376
 msgid ""
 "You clicked on an invalid link. Please check that you copied the full web "
 "address into your address bar. Please note that the link is only valid for "
 "three days and that the link can only be used once."
 msgstr ""
 
-#: pretix/control/views/auth.py:327
+#: pretix/control/views/auth.py:379
 msgid "We were unable to find the user you requested a new password for."
 msgstr ""
 
-#: pretix/control/views/auth.py:365
+#: pretix/control/views/auth.py:417
 msgid "You can now login using your new password."
 msgstr ""
 
-#: pretix/control/views/auth.py:416
+#: pretix/control/views/auth.py:469
 msgid "Please try again."
 msgstr ""
 
-#: pretix/control/views/auth.py:487
+#: pretix/control/views/auth.py:546
 msgid "Invalid code, please try again."
 msgstr ""
 
@@ -24856,7 +24927,7 @@ msgstr ""
 #: pretix/control/views/organizer.py:263 pretix/control/views/organizer.py:291
 #: pretix/control/views/organizer.py:1155 pretix/control/views/subevents.py:504
 #: pretix/control/views/subevents.py:630 pretix/control/views/subevents.py:1033
-#: pretix/control/views/subevents.py:1491 pretix/control/views/user.py:347
+#: pretix/control/views/subevents.py:1491 pretix/control/views/user.py:357
 #: pretix/control/views/vouchers.py:276 pretix/control/views/vouchers.py:350
 #: pretix/control/views/vouchers.py:533 pretix/control/views/waitinglist.py:413
 #: pretix/plugins/badges/views.py:114 pretix/plugins/sendmail/views.py:597
@@ -26197,80 +26268,84 @@ msgstr ""
 msgid "Voucher {}"
 msgstr ""
 
-#: pretix/control/views/user.py:161
+#: pretix/control/views/user.py:162
 msgid "The password you entered was invalid, please try again."
 msgstr ""
 
-#: pretix/control/views/user.py:339
+#: pretix/control/views/user.py:349
 msgid "Security devices are only available if pretix is served via HTTPS."
 msgstr ""
 
-#: pretix/control/views/user.py:376
+#: pretix/control/views/user.py:386
 msgid "A two-factor authentication device has been removed from your account."
 msgstr ""
 
-#: pretix/control/views/user.py:387
+#: pretix/control/views/user.py:397
 msgid "The device has been removed."
 msgstr ""
 
-#: pretix/control/views/user.py:452
+#: pretix/control/views/user.py:462
 msgid "This security device is already registered."
 msgstr ""
 
-#: pretix/control/views/user.py:471 pretix/control/views/user.py:532
+#: pretix/control/views/user.py:481 pretix/control/views/user.py:542
 msgid "A new two-factor authentication device has been added to your account."
 msgstr ""
 
-#: pretix/control/views/user.py:487 pretix/control/views/user.py:547
+#: pretix/control/views/user.py:497 pretix/control/views/user.py:557
 msgid ""
 "Please note that you still need to enable two-factor authentication for your "
 "account using the buttons below to make a second factor required for logging "
 "into your account."
 msgstr ""
 
-#: pretix/control/views/user.py:490 pretix/control/views/user.py:550
+#: pretix/control/views/user.py:500 pretix/control/views/user.py:560
 msgid "The device has been verified and can now be used."
 msgstr ""
 
-#: pretix/control/views/user.py:493
+#: pretix/control/views/user.py:503
 msgid "The registration could not be completed. Please try again."
 msgstr ""
 
-#: pretix/control/views/user.py:553
+#: pretix/control/views/user.py:563
 msgid ""
 "The code you entered was not valid. If this problem persists, please check "
 "that the date and time of your phone are configured correctly."
 msgstr ""
 
-#: pretix/control/views/user.py:565
+#: pretix/control/views/user.py:583
+msgid "You have left all teams that require two-factor authentication."
+msgstr ""
+
+#: pretix/control/views/user.py:597
 msgid ""
 "Please configure at least one device before enabling two-factor "
 "authentication."
 msgstr ""
 
-#: pretix/control/views/user.py:574
+#: pretix/control/views/user.py:606
 msgid "Two-factor authentication is now enabled for your account."
 msgstr ""
 
-#: pretix/control/views/user.py:590
+#: pretix/control/views/user.py:622
 msgid "Two-factor authentication is now disabled for your account."
 msgstr ""
 
-#: pretix/control/views/user.py:613
+#: pretix/control/views/user.py:645
 msgid ""
 "Your emergency codes have been newly generated. Remember to store them in a "
 "safe place in case you lose access to your devices."
 msgstr ""
 
-#: pretix/control/views/user.py:629
+#: pretix/control/views/user.py:661
 msgid "Your notifications have been disabled."
 msgstr ""
 
-#: pretix/control/views/user.py:678 pretix/control/views/user.py:718
+#: pretix/control/views/user.py:710 pretix/control/views/user.py:750
 msgid "Your notification settings have been saved."
 msgstr ""
 
-#: pretix/control/views/user.py:796
+#: pretix/control/views/user.py:828
 msgid "Your comment has been saved."
 msgstr ""
 
@@ -33060,19 +33135,19 @@ msgstr "Обрана дата не існує у цій серії подій."
 msgid "from %(start_date)s"
 msgstr "від %(start_date)s"
 
-#: pretix/settings.py:717
+#: pretix/settings.py:725
 msgid "User profile only"
 msgstr "Тільки профіль користувача"
 
-#: pretix/settings.py:718
+#: pretix/settings.py:726
 msgid "Read access"
 msgstr "Доступ для читання"
 
-#: pretix/settings.py:719
+#: pretix/settings.py:727
 msgid "Write access"
 msgstr "Доступ до запису"
 
-#: pretix/settings.py:730
+#: pretix/settings.py:738
 msgid "Kosovo"
 msgstr "Косово"
 
