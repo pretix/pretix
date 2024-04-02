@@ -23,7 +23,7 @@ import time
 
 import pytest
 from bs4 import BeautifulSoup
-from django.test import Client
+from django.test import Client, override_settings
 from tests.base import extract_form_fields
 
 from pretix.base.models import Organizer
@@ -61,6 +61,25 @@ def test_session_auth_relative_timeout(client, user, team):
     session['pretix_auth_login_time'] = int(time.time()) - 3600 * 6
     session['pretix_auth_last_used'] = int(time.time()) - 3600 * 3 - 60
     session.save()
+
+    resp = client.get('/api/v1/organizers/')
+    assert resp.status_code == 403
+
+
+@pytest.mark.django_db
+def test_session_auth_password_change_required(client, user, team):
+    client.login(email=user.email, password='dummy')
+    user.needs_password_change = True
+    user.save()
+
+    resp = client.get('/api/v1/organizers/')
+    assert resp.status_code == 403
+
+
+@pytest.mark.django_db
+@override_settings(PRETIX_OBLIGATORY_2FA=True)
+def test_session_auth_2fa_setup_required(client, user, team):
+    client.login(email=user.email, password='dummy')
 
     resp = client.get('/api/v1/organizers/')
     assert resp.status_code == 403

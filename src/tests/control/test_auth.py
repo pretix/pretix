@@ -49,7 +49,7 @@ from webauthn.authentication.verify_authentication_response import (
     VerifiedAuthentication,
 )
 
-from pretix.base.models import U2FDevice, User, Organizer, Team
+from pretix.base.models import Organizer, Team, U2FDevice, User
 from pretix.helpers import security
 
 

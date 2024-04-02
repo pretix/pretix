@@ -67,6 +67,10 @@ class EventPermission(BasePermission):
                 return False
             except SessionReauthRequired:
                 return False
+            except Session2FASetupRequired:
+                return False
+            except SessionPasswordChangeRequired:
+                return False
 
         perm_holder = (request.auth if isinstance(request.auth, (Device, TeamAPIToken))
                        else request.user)
