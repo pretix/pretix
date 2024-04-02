@@ -67,6 +67,7 @@ from pretix.base.metrics import pretix_failed_logins, pretix_successful_logins
 from pretix.base.models import TeamInvite, U2FDevice, User, WebAuthnDevice
 from pretix.base.services.mail import SendMailException
 from pretix.helpers.http import get_client_ip, redirect_to_url
+from pretix.helpers.security import handle_login_source
 
 logger = logging.getLogger(__name__)
 
@@ -91,6 +92,7 @@ def process_login(request, user, keep_logged_in):
     else:
         logger.info(f"Backend login successful for user {user.pk}.")
         pretix_successful_logins.inc(1)
+        handle_login_source(user, request)
         auth_login(request, user)
         request.session['pretix_auth_login_time'] = int(time.time())
         if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
@@ -532,9 +534,10 @@ class Login2FAView(TemplateView):
             valid = match_token(self.user, token)
 
         if valid:
-            auth_login(request, self.user)
             logger.info(f"Backend login successful for user {self.user.pk} with 2FA.")
             pretix_successful_logins.inc(1)
+            handle_login_source(self.user, request)
+            auth_login(request, self.user)
             request.session['pretix_auth_login_time'] = int(time.time())
             del request.session['pretix_auth_2fa_user']
             del request.session['pretix_auth_2fa_time']

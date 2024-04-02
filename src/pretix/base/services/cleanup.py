@@ -31,6 +31,7 @@ from pretix.base.models import CachedCombinedTicket, CachedTicket
 from pretix.base.models.customers import CustomerSSOGrant
 
 from ..models import CachedFile, CartPosition, InvoiceAddress
+from ..models.auth import UserKnownLoginSource
 from ..signals import periodic_task
 
 
@@ -75,3 +76,9 @@ def clearsessions(sender, **kwargs):
 @scopes_disabled()
 def clear_oidc_data(sender, **kwargs):
     CustomerSSOGrant.objects.filter(expires__lt=now() - timedelta(days=14)).delete()
+
+
+@receiver(signal=periodic_task)
+@scopes_disabled()
+def clear_old_login_sources(sender, **kwargs):
+    UserKnownLoginSource.objects.filter(last_seen__lt=now() - timedelta(days=365)).delete()
