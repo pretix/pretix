@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-02 15:53+0000\n"
-"PO-Revision-Date: 2024-03-26 15:50+0000\n"
+"PO-Revision-Date: 2024-04-02 16:31+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.2\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -5624,10 +5624,9 @@ msgid "Team members"
 msgstr "Team-Mitglieder"
 
 #: pretix/base/models/organizer.py:267
-#, fuzzy
-#| msgid "Do you really want to disable two-factor authentication?"
 msgid "Require all members of this team to use two-factor authentication"
-msgstr "Willst du Zwei-Faktor-Authentifizierung wirklich deaktivieren?"
+msgstr ""
+"Alle Mitglieder dieses Teams müssen Zwei-Faktor-Authentifizierung nutzen"
 
 #: pretix/base/models/organizer.py:268
 msgid ""
@@ -5635,6 +5634,9 @@ msgid ""
 "up two-factor authentication or leave the team. The setting may take a few "
 "minutes to become effective for all users."
 msgstr ""
+"Wenn du dies anschaltest, müssen alle Mitglieder entweder Zwei-Faktor-"
+"Authentifizierung einrichten oder das Team verlassen. Die Einstellung kann "
+"ein paar Minuten benötigen um für alle Benutzer aktiv zu werden."
 
 #: pretix/base/models/organizer.py:275
 msgid "Can create events"
@@ -7974,16 +7976,13 @@ msgid ""
 msgstr "Du benötigst eine Testmodus-Mitgliedschaft für Testmodus-Tickets."
 
 #: pretix/base/services/memberships.py:179
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "You selected a membership that is valid from {start} to {end}, but "
-#| "selected an event taking place at {date}."
+#, python-brace-format
 msgid ""
 "You selected a membership that is valid from {start} to {end}, but selected "
 "a ticket that starts to be valid on {date}."
 msgstr ""
 "Du hast eine Mitgliedschaft ausgewählt, die vom {start} bis zum {end} läuft, "
-"aber hast eine Veranstaltung am {date} ausgewählt."
+"aber das ausgewählte Ticket gilt ab {date}."
 
 #: pretix/base/services/memberships.py:188
 #, python-brace-format
@@ -12268,11 +12267,9 @@ msgid "Customers can no longer cancel paid orders"
 msgstr "Kunden können bezahlte Bestellungen nicht mehr stornieren"
 
 #: pretix/base/timeline.py:167
-#, fuzzy
-#| msgid "Waiting list entry deleted"
 msgctxt "timeline"
 msgid "Waiting list is disabled"
-msgstr "Wartelisten-Eintrag gelöscht"
+msgstr "Warteliste ist deaktiviert"
 
 #: pretix/base/timeline.py:181
 msgctxt "timeline"
@@ -24166,16 +24163,12 @@ msgid "Two-factor authentication"
 msgstr "Zwei-Faktor-Authentifizierung"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html:6
-#, fuzzy
-#| msgid "Delete a two-factor authentication device"
 msgid "Leave teams that require two-factor authentication"
-msgstr "Gerät löschen"
+msgstr "Teams mit verpflichtender Zwei-Faktor-Authentifizierung verlassen"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html:10
-#, fuzzy
-#| msgid "Are you sure you want to delete the following dates?"
 msgid "Do you really want to leave the following teams?"
-msgstr "Möchtest du die folgenden Termine wirklich löschen?"
+msgstr "Möchtest du die folgenden Teams wirklich verlassen?"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html:15
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:38
@@ -24186,7 +24179,7 @@ msgstr "Team \"%(team)s\" von Veranstalter \"%(organizer)s\""
 
 #: pretix/control/templates/pretixcontrol/user/2fa_leaveteams.html:26
 msgid "Leave"
-msgstr ""
+msgstr "Verlassen"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:8
 msgid ""
@@ -24213,10 +24206,8 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:29
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:75
-#, fuzzy
-#| msgid "Obligatory usage of two-factor authentication"
 msgid "As an administrator, you need to use two-factor authentication."
-msgstr "Pflicht zur Zwei-Faktor-Authentifizierung"
+msgstr "Als Administrator musst du Zwei-Faktor-Authentifizierung verwenden."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:33
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:77
@@ -24224,6 +24215,8 @@ msgid ""
 "You are part of one or more organizer teams that require you to use two-"
 "factor authentication."
 msgstr ""
+"Du bist Teil von einem oder mehreren Veranstalterteams in denen es "
+"verpflichtend ist, Zwei-Faktor-Authentifizierung zu verwenden."
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:47
 msgid "Please set up at least one device below."
@@ -24238,8 +24231,8 @@ msgstr ""
 #, python-format
 msgid "Leave team instead"
 msgid_plural "Leave %(count)s teams instead"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Stattdessen Team verlassen"
+msgstr[1] "Stattdessen %(count)s Teams verlassen"
 
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:67
 #: pretix/control/templates/pretixcontrol/user/2fa_main.html:94
@@ -26585,10 +26578,9 @@ msgstr ""
 "bitte ob Datum und Uhrzeit deines Telefons korrekt eingestellt sind."
 
 #: pretix/control/views/user.py:583
-#, fuzzy
-#| msgid "Do you really want to enable two-factor authentication?"
 msgid "You have left all teams that require two-factor authentication."
-msgstr "Willst du Zwei-Faktor-Authentifizierung wirklich aktivieren?"
+msgstr ""
+"Du hast alle Teams verlassen, die Zwei-Faktor-Authentifizierung erfordern."
 
 #: pretix/control/views/user.py:597
 msgid ""
