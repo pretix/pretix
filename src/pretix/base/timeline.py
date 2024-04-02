@@ -159,6 +159,18 @@ def timeline_for_event(event, subevent=None):
             })
         ))
 
+    rd = event.settings.get('waiting_list_auto_disable', as_type=RelativeDateWrapper)
+    if rd and event.settings.waiting_list_enabled:
+        tl.append(TimelineEvent(
+            event=event, subevent=subevent,
+            datetime=rd.datetime(ev),
+            description=pgettext_lazy('timeline', 'Waiting list is disabled'),
+            edit_url=reverse('control:event.settings', kwargs={
+                'event': event.slug,
+                'organizer': event.organizer.slug
+            }) + '#waiting-list-open'
+        ))
+
     if not event.has_subevents:
         days = event.settings.get('mail_days_download_reminder', as_type=int)
         if days is not None and event.settings.ticket_download:
