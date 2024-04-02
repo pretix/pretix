@@ -41,6 +41,14 @@ class SessionReauthRequired(Exception):
     pass
 
 
+class Session2FASetupRequired(Exception):
+    pass
+
+
+class SessionPasswordChangeRequired(Exception):
+    pass
+
+
 def get_user_agent_hash(request):
     return hashlib.sha256(request.headers['User-Agent'].encode()).hexdigest()
 
@@ -94,4 +102,20 @@ def assert_session_valid(request):
             request.session['pinned_country'] = country
 
     request.session['pretix_auth_last_used'] = int(time.time())
+
+    if request.user.needs_password_change:
+        raise SessionPasswordChangeRequired()
+
+    force_2fa = not request.user.require_2fa and (
+        settings.PRETIX_OBLIGATORY_2FA is True or
+        (settings.PRETIX_OBLIGATORY_2FA == "staff" and request.user.is_staff) or
+        cache.get_or_set(
+            f'user_2fa_team_{request.user.pk}',
+            lambda: request.user.teams.filter(require_2fa=True).exists(),
+            timeout=300
+        )
+    )
+    if force_2fa:
+        raise Session2FASetupRequired()
+
     return True

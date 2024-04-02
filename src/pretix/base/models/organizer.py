@@ -263,6 +263,12 @@ class Team(LoggedModel):
     members = models.ManyToManyField(User, related_name="teams", verbose_name=_("Team members"))
     all_events = models.BooleanField(default=False, verbose_name=_("All events (including newly created ones)"))
     limit_events = models.ManyToManyField('Event', verbose_name=_("Limit to events"), blank=True)
+    require_2fa = models.BooleanField(
+        default=False, verbose_name=_("Require all members of this team to use two-factor authentication"),
+        help_text=_("If you turn this on, all members of the team will be required to either set up two-factor "
+                    "authentication or leave the team. The setting may take a few minutes to become effective for "
+                    "all users.")
+    )
 
     can_create_events = models.BooleanField(
         default=False,

@@ -97,8 +97,9 @@ Example::
     Defaults to ``off``.
 
 ``obligatory_2fa``
-    Enables or disables obligatory usage of Two-Factor Authentication for users of the pretix backend.
-    Defaults to ``False``
+    Enables or disables obligatory usage of two-factor authentication for users of the pretix backend.
+    Can be ``True`` to make two-factor authentication obligatory for all users or ``staff`` to make it only
+    obligatory to users with admin permissions. Defaults to ``False``.
 
 ``trust_x_forwarded_for``
     Specifies whether the ``X-Forwarded-For`` header can be trusted. Only set to ``on`` if you have a reverse

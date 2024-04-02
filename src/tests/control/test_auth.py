@@ -49,7 +49,7 @@ from webauthn.authentication.verify_authentication_response import (
     VerifiedAuthentication,
 )
 
-from pretix.base.models import U2FDevice, User
+from pretix.base.models import Organizer, Team, U2FDevice, User
 from pretix.helpers import security
 
 
@@ -935,18 +935,19 @@ def test_staff_session_require_staff(user, client):
     assert response.status_code == 403
 
 
-@override_settings(PRETIX_OBLIGATORY_2FA=True)
 class Obligatory2FATest(TestCase):
     def setUp(self):
         super().setUp()
         self.user = User.objects.create_user('demo@demo.dummy', 'demo')
         self.client.login(email='demo@demo.dummy', password='demo')
 
+    @override_settings(PRETIX_OBLIGATORY_2FA=True)
     def test_enabled_2fa_not_setup(self):
         response = self.client.get('/control/events/')
         assert response.status_code == 302
         assert response.url == '/control/settings/2fa/'
 
+    @override_settings(PRETIX_OBLIGATORY_2FA=True)
     def test_enabled_2fa_setup_not_enabled(self):
         U2FDevice.objects.create(user=self.user, name='test', json_data="{}", confirmed=True)
         self.user.require_2fa = False
@@ -956,10 +957,55 @@ class Obligatory2FATest(TestCase):
         assert response.status_code == 302
         assert response.url == '/control/settings/2fa/'
 
+    @override_settings(PRETIX_OBLIGATORY_2FA=True)
     def test_enabled_2fa_setup_enabled(self):
         U2FDevice.objects.create(user=self.user, name='test', json_data="{}", confirmed=True)
         self.user.require_2fa = True
         self.user.save()
+
+        response = self.client.get('/control/events/')
+        assert response.status_code == 200
+
+    @override_settings(PRETIX_OBLIGATORY_2FA="staff")
+    def test_staff_only(self):
+        self.user.require_2fa = False
+        self.user.save()
+        response = self.client.get('/control/events/')
+        assert response.status_code == 200
+
+        self.user.is_staff = True
+        self.user.save()
+
+        response = self.client.get('/control/events/')
+        assert response.status_code == 302
+        assert response.url == '/control/settings/2fa/'
+
+    @override_settings(PRETIX_OBLIGATORY_2FA=False)
+    def test_by_team(self):
+        session = self.client.session
+        session['pretix_auth_long_session'] = True
+        session['pretix_auth_login_time'] = int(time.time())
+        session['pretix_auth_last_used'] = int(time.time())
+        session.save()
+
+        organizer = Organizer.objects.create(name='Dummy', slug='dummy')
+        team = Team.objects.create(organizer=organizer, can_change_teams=True, name='Admin team')
+        team.members.add(self.user)
+        self.user.require_2fa = False
+        self.user.save()
+        response = self.client.get('/control/events/')
+        assert response.status_code == 200
+
+        team.require_2fa = True
+        team.save()
+
+        response = self.client.get('/control/events/')
+        assert response.status_code == 302
+        assert response.url == '/control/settings/2fa/'
+
+        response = self.client.post('/control/settings/2fa/leaveteams')
+        assert response.status_code == 302
+        assert team.members.count() == 0
 
         response = self.client.get('/control/events/')
         assert response.status_code == 200

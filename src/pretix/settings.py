@@ -181,7 +181,15 @@ PRETIX_REGISTRATION = config.getboolean('pretix', 'registration', fallback=False
 PRETIX_PASSWORD_RESET = config.getboolean('pretix', 'password_reset', fallback=True)
 PRETIX_LONG_SESSIONS = config.getboolean('pretix', 'long_sessions', fallback=True)
 PRETIX_ADMIN_AUDIT_COMMENTS = config.getboolean('pretix', 'audit_comments', fallback=False)
-PRETIX_OBLIGATORY_2FA = config.getboolean('pretix', 'obligatory_2fa', fallback=False)
+
+_obligatory_2fa = config.get('pretix', 'obligatory_2fa', fallback="False")
+_mapping = {'1': True, 'yes': True, 'true': True, 'on': True, '0': False, 'no': False, 'false': False, 'off': False, 'staff': 'staff'}
+if _obligatory_2fa.lower() not in _mapping:
+    raise ImproperlyConfigured(
+        f"Value '{_obligatory_2fa}' not allowed for configuration key pretix.obligatory_2fa."
+    )
+PRETIX_OBLIGATORY_2FA = _mapping[_obligatory_2fa.lower()]
+
 PRETIX_SESSION_TIMEOUT_RELATIVE = 3600 * 3
 PRETIX_SESSION_TIMEOUT_ABSOLUTE = 3600 * 12
 

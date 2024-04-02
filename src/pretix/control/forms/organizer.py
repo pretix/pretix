@@ -257,7 +257,7 @@ class TeamForm(forms.ModelForm):
 
     class Meta:
         model = Team
-        fields = ['name', 'all_events', 'limit_events', 'can_create_events',
+        fields = ['name', 'require_2fa', 'all_events', 'limit_events', 'can_create_events',
                   'can_change_teams', 'can_change_organizer_settings',
                   'can_manage_gift_cards', 'can_manage_customers',
                   'can_manage_reusable_media',

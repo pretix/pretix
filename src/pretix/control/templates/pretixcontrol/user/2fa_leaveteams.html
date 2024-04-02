@@ -1,0 +1,30 @@
+{% extends "pretixcontrol/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Two-factor authentication" %}{% endblock %}
+{% block content %}
+    <h1>{% trans "Leave teams that require two-factor authentication" %}</h1>
+    <form action="" method="post" class="form-horizontal">
+        {% csrf_token %}
+        <p>
+            <strong>{% trans "Do you really want to leave the following teams?" %}</strong>
+        </p>
+        <ul>
+            {% for t in obligatory_teams %}
+                <li>
+                    {% blocktrans trimmed with team=t.name organizer=t.organizer.name %}
+                        Team "{{ team }}" of organizer "{{ organizer }}"
+                    {% endblocktrans %}
+                </li>
+            {% endfor %}
+        </ul>
+        <div class="form-group submit-group">
+            <a href="{% url "control:user.settings.2fa" %}" class="btn btn-default btn-cancel">
+                {% trans "Cancel" %}
+            </a>
+            <button type="submit" class="btn btn-danger btn-save">
+                {% trans "Leave" %}
+            </button>
+        </div>
+    </form>
+{% endblock %}
