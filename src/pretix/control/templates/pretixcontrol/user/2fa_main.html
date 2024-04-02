@@ -48,7 +48,15 @@
                     {% elif not user.require_2fa %}
                         {% trans "Please activate two-factor authentication using the button below." %}
                     {% endif %}
-                    <a href="{% url "control:user.settings.2fa.leaveteams" %}">{% trans "Leave team(s) instead" %}</a>
+                    {% if obligatory == "team" %}
+                        <a href="{% url "control:user.settings.2fa.leaveteams" %}">
+                            {% blocktrans trimmed count count=obligatory_teams|length %}
+                                Leave team instead
+                            {% plural %}
+                                Leave {{ count }} teams instead
+                            {% endblocktrans %}
+                        </a>
+                    {% endif %}
                 </p>
             </div>
         </div>
