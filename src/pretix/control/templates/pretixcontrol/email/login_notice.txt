@@ -4,7 +4,7 @@ a login to your {{ instance }} account was detected. The login was performed usi
 
 If this was you, you can safely ignore this email.
 
-If this was not you, we recommend that you change your password immediately in your account settings:
+If this was not you, we recommend that you change your password in your account settings:
 
 {{ url }}
 
