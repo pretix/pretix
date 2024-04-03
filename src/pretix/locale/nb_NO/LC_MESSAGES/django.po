@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 09:22+0000\n"
+"POT-Creation-Date: 2024-04-03 10:43+0000\n"
 "PO-Revision-Date: 2024-03-11 20:00+0000\n"
 "Last-Translator: fyksen <fredrik@fyksen.me>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
@@ -2918,7 +2918,7 @@ msgstr ""
 "Filen du lastet opp har et veldig stort antall piksler. Last opp et bilde "
 "som ikke er større enn 10000 x 10000 piksler."
 
-#: pretix/base/forms/questions.py:484
+#: pretix/base/forms/questions.py:484 pretix/helpers/images.py:75
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
@@ -26883,6 +26883,36 @@ msgstr "Dette er ikke en arrangementsserie."
 #: pretix/control/views/waitinglist.py:403
 msgid "The waitinglist entry has been transferred."
 msgstr "Dine endringer er lagret."
+
+#: pretix/helpers/daterange.py:97
+#, python-brace-format
+msgid "{date_from} – {date_to}"
+msgstr ""
+
+#: pretix/helpers/images.py:61 pretix/helpers/images.py:67
+#: pretix/helpers/images.py:85
+#, fuzzy
+#| msgid ""
+#| "The file you uploaded has a very large number of pixels, please upload an "
+#| "image no larger than 10000 x 10000 pixels."
+msgid ""
+"The file you uploaded has a very large number of pixels, please upload a "
+"picture with smaller dimensions."
+msgstr ""
+"Filen du lastet opp har et veldig stort antall piksler. Last opp et bilde "
+"som ikke er større enn 10000 x 10000 piksler."
+
+#: pretix/helpers/security.py:166
+#, fuzzy
+#| msgid "No order code detected"
+msgid "Login from new source detected"
+msgstr "Ingen ordrekode oppdaget."
+
+#: pretix/helpers/security.py:170
+#, fuzzy
+#| msgid "Unknown country code."
+msgid "Unknown country"
+msgstr "Ukjent landskode."
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"

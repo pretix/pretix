@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 09:22+0000\n"
+"POT-Creation-Date: 2024-04-03 10:43+0000\n"
 "PO-Revision-Date: 2023-10-06 03:00+0000\n"
 "Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
@@ -2948,7 +2948,7 @@ msgstr ""
 "Le fichier que vous avez téléchargé contient un très grand nombre de pixels, "
 "merci de télécharger une image ne dépassant pas 10000 x 10000 pixels."
 
-#: pretix/base/forms/questions.py:484
+#: pretix/base/forms/questions.py:484 pretix/helpers/images.py:75
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
@@ -27173,6 +27173,36 @@ msgstr "Il ne s’agit pas d’une série d’événements."
 #: pretix/control/views/waitinglist.py:403
 msgid "The waitinglist entry has been transferred."
 msgstr "L’entrée de la liste d’attente a été transférée."
+
+#: pretix/helpers/daterange.py:97
+#, python-brace-format
+msgid "{date_from} – {date_to}"
+msgstr ""
+
+#: pretix/helpers/images.py:61 pretix/helpers/images.py:67
+#: pretix/helpers/images.py:85
+#, fuzzy
+#| msgid ""
+#| "The file you uploaded has a very large number of pixels, please upload an "
+#| "image no larger than 10000 x 10000 pixels."
+msgid ""
+"The file you uploaded has a very large number of pixels, please upload a "
+"picture with smaller dimensions."
+msgstr ""
+"Le fichier que vous avez téléchargé contient un très grand nombre de pixels, "
+"merci de télécharger une image ne dépassant pas 10000 x 10000 pixels."
+
+#: pretix/helpers/security.py:166
+#, fuzzy
+#| msgid "No order code detected"
+msgid "Login from new source detected"
+msgstr "Aucun code de commande détecté"
+
+#: pretix/helpers/security.py:170
+#, fuzzy
+#| msgid "Unknown country code."
+msgid "Unknown country"
+msgstr "Code de pays inconnu."
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"

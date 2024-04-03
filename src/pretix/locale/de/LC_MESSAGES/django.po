@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 09:22+0000\n"
+"POT-Creation-Date: 2024-04-03 10:43+0000\n"
 "PO-Revision-Date: 2024-04-03 09:37+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
@@ -2927,7 +2927,7 @@ msgstr ""
 "Die hochgeladene Bilddatei hat sehr viele Pixel. Maximal zulässig sind 10000 "
 "x 10000 Pixel."
 
-#: pretix/base/forms/questions.py:484
+#: pretix/base/forms/questions.py:484 pretix/helpers/images.py:75
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
@@ -3585,7 +3585,8 @@ msgstr "Kontingent"
 
 #: pretix/base/modelimport_vouchers.py:246
 msgid "You cannot specify a quota if you specified a product."
-msgstr "Sie können nicht gleichzeitig ein Kontingent und ein Produkt auswählen."
+msgstr ""
+"Sie können nicht gleichzeitig ein Kontingent und ein Produkt auswählen."
 
 #: pretix/base/modelimport_vouchers.py:275 pretix/base/models/vouchers.py:494
 msgid "You need to choose a date if you select a seat."
@@ -26787,8 +26788,8 @@ msgid ""
 "remain active."
 msgstr ""
 "Der Notfall-Token für diesen Benutzer ist \"{token}\". Der Token kann nur "
-"einmal verwendet werden und sollte nur über einen authentifizierten Kanal ("
-"idealerweise nicht E-Mail) übertragen werden. Vorher bereits generierte "
+"einmal verwendet werden und sollte nur über einen authentifizierten Kanal "
+"(idealerweise nicht E-Mail) übertragen werden. Vorher bereits generierte "
 "Token bleiben aktiv."
 
 #: pretix/control/views/users.py:312
@@ -26894,6 +26895,36 @@ msgstr "Dies ist keine Veranstaltungsreihe."
 #: pretix/control/views/waitinglist.py:403
 msgid "The waitinglist entry has been transferred."
 msgstr "Der Eintrag wurde auf einen anderen Termin übertragen."
+
+#: pretix/helpers/daterange.py:97
+#, python-brace-format
+msgid "{date_from} – {date_to}"
+msgstr ""
+
+#: pretix/helpers/images.py:61 pretix/helpers/images.py:67
+#: pretix/helpers/images.py:85
+#, fuzzy
+#| msgid ""
+#| "The file you uploaded has a very large number of pixels, please upload an "
+#| "image no larger than 10000 x 10000 pixels."
+msgid ""
+"The file you uploaded has a very large number of pixels, please upload a "
+"picture with smaller dimensions."
+msgstr ""
+"Die hochgeladene Bilddatei hat sehr viele Pixel. Maximal zulässig sind 10000 "
+"x 10000 Pixel."
+
+#: pretix/helpers/security.py:166
+#, fuzzy
+#| msgid "No order code detected"
+msgid "Login from new source detected"
+msgstr "Keine Bestellnummer erkannt"
+
+#: pretix/helpers/security.py:170
+#, fuzzy
+#| msgid "Unknown country code."
+msgid "Unknown country"
+msgstr "Unbekanntes Länderkürzel."
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"

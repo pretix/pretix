@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 09:22+0000\n"
+"POT-Creation-Date: 2024-04-03 10:43+0000\n"
 "PO-Revision-Date: 2023-11-03 22:00+0000\n"
 "Last-Translator: Jāzeps Benjamins Baško <jazeps.basko@gmail.com>\n"
 "Language-Team: Latvian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -2978,7 +2978,7 @@ msgstr ""
 "Jūsu augšuplādētajam failam ir pārāk liels skaits pikseļu, lūdzu imantojiet "
 "bildes ne liekākas kā 10000 X 10000 pikseļi."
 
-#: pretix/base/forms/questions.py:484
+#: pretix/base/forms/questions.py:484 pretix/helpers/images.py:75
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
@@ -25105,6 +25105,36 @@ msgstr "Šī nav pasākumu sērija."
 #| msgid "The transaction has been reversed."
 msgid "The waitinglist entry has been transferred."
 msgstr "Transakcija tika atgriezta."
+
+#: pretix/helpers/daterange.py:97
+#, python-brace-format
+msgid "{date_from} – {date_to}"
+msgstr ""
+
+#: pretix/helpers/images.py:61 pretix/helpers/images.py:67
+#: pretix/helpers/images.py:85
+#, fuzzy
+#| msgid ""
+#| "The file you uploaded has a very large number of pixels, please upload an "
+#| "image no larger than 10000 x 10000 pixels."
+msgid ""
+"The file you uploaded has a very large number of pixels, please upload a "
+"picture with smaller dimensions."
+msgstr ""
+"Jūsu augšuplādētajam failam ir pārāk liels skaits pikseļu, lūdzu imantojiet "
+"bildes ne liekākas kā 10000 X 10000 pikseļi."
+
+#: pretix/helpers/security.py:166
+#, fuzzy
+#| msgid "No order code detected"
+msgid "Login from new source detected"
+msgstr "Netika atrasts pasūtījuma numurs"
+
+#: pretix/helpers/security.py:170
+#, fuzzy
+#| msgid "Unknown country code."
+msgid "Unknown country"
+msgstr "Nezināms valsts kods."
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"

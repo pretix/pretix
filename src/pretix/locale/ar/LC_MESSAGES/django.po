@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 09:22+0000\n"
+"POT-Creation-Date: 2024-04-03 10:43+0000\n"
 "PO-Revision-Date: 2022-06-06 18:00+0000\n"
 "Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
@@ -3020,7 +3020,7 @@ msgstr ""
 "يحتوي الملف الذي قمت بتحميله على عدد كبير جدا من وحدات البكسل ، يرجى تحميل "
 "صورة لا يزيد حجمها عن 10000 × 10000 بكسل."
 
-#: pretix/base/forms/questions.py:484
+#: pretix/base/forms/questions.py:484 pretix/helpers/images.py:75
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
@@ -27160,6 +27160,36 @@ msgstr "هذه ليست سلسلة فعالية."
 #| msgid "The waiting list entry has been moved to the top."
 msgid "The waitinglist entry has been transferred."
 msgstr "تم نقل إدخال قائمة الانتظار إلى الأعلى."
+
+#: pretix/helpers/daterange.py:97
+#, python-brace-format
+msgid "{date_from} – {date_to}"
+msgstr ""
+
+#: pretix/helpers/images.py:61 pretix/helpers/images.py:67
+#: pretix/helpers/images.py:85
+#, fuzzy
+#| msgid ""
+#| "The file you uploaded has a very large number of pixels, please upload an "
+#| "image no larger than 10000 x 10000 pixels."
+msgid ""
+"The file you uploaded has a very large number of pixels, please upload a "
+"picture with smaller dimensions."
+msgstr ""
+"يحتوي الملف الذي قمت بتحميله على عدد كبير جدا من وحدات البكسل ، يرجى تحميل "
+"صورة لا يزيد حجمها عن 10000 × 10000 بكسل."
+
+#: pretix/helpers/security.py:166
+#, fuzzy
+#| msgid "No order code detected"
+msgid "Login from new source detected"
+msgstr "لم يتم الكشف عن أي رمز طلب"
+
+#: pretix/helpers/security.py:170
+#, fuzzy
+#| msgid "Unknown country code."
+msgid "Unknown country"
+msgstr "رمز الدولة غير معروف."
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"

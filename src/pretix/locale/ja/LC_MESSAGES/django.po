@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 09:22+0000\n"
+"POT-Creation-Date: 2024-04-03 10:43+0000\n"
 "PO-Revision-Date: 2024-01-26 23:00+0000\n"
 "Last-Translator: Ryo <saremba@rami.io>\n"
 "Language-Team: Japanese <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -2943,7 +2943,7 @@ msgid ""
 "image no larger than 10000 x 10000 pixels."
 msgstr ""
 
-#: pretix/base/forms/questions.py:484
+#: pretix/base/forms/questions.py:484 pretix/helpers/images.py:75
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
@@ -23995,6 +23995,26 @@ msgstr ""
 #| msgid "The amount has been charged to your card."
 msgid "The waitinglist entry has been transferred."
 msgstr "その金額がカードに請求されました。"
+
+#: pretix/helpers/daterange.py:97
+#, python-brace-format
+msgid "{date_from} – {date_to}"
+msgstr ""
+
+#: pretix/helpers/images.py:61 pretix/helpers/images.py:67
+#: pretix/helpers/images.py:85
+msgid ""
+"The file you uploaded has a very large number of pixels, please upload a "
+"picture with smaller dimensions."
+msgstr ""
+
+#: pretix/helpers/security.py:166
+msgid "Login from new source detected"
+msgstr ""
+
+#: pretix/helpers/security.py:170
+msgid "Unknown country"
+msgstr ""
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"

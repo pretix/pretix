@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 09:22+0000\n"
+"POT-Creation-Date: 2024-04-03 10:43+0000\n"
 "PO-Revision-Date: 2024-02-21 00:00+0000\n"
 "Last-Translator: Marco Addario <marco74@gmail.com>\n"
 "Language-Team: Italian <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -2937,7 +2937,7 @@ msgstr ""
 "Il file che hai caricato ha un numero molto elevato di pixel, per favore "
 "carica un'immagine che abbia 10000 x 10000 pixel."
 
-#: pretix/base/forms/questions.py:484
+#: pretix/base/forms/questions.py:484 pretix/helpers/images.py:75
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
@@ -24772,6 +24772,33 @@ msgstr "Questa non è una serie di eventi."
 #, fuzzy
 msgid "The waitinglist entry has been transferred."
 msgstr "Ordine modificato"
+
+#: pretix/helpers/daterange.py:97
+#, python-brace-format
+msgid "{date_from} – {date_to}"
+msgstr ""
+
+#: pretix/helpers/images.py:61 pretix/helpers/images.py:67
+#: pretix/helpers/images.py:85
+#, fuzzy
+#| msgid ""
+#| "The file you uploaded has a very large number of pixels, please upload an "
+#| "image no larger than 10000 x 10000 pixels."
+msgid ""
+"The file you uploaded has a very large number of pixels, please upload a "
+"picture with smaller dimensions."
+msgstr ""
+"Il file che hai caricato ha un numero molto elevato di pixel, per favore "
+"carica un'immagine che abbia 10000 x 10000 pixel."
+
+#: pretix/helpers/security.py:166
+msgid "Login from new source detected"
+msgstr ""
+
+#: pretix/helpers/security.py:170
+#, fuzzy
+msgid "Unknown country"
+msgstr "Biglietto sconosciuto"
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"

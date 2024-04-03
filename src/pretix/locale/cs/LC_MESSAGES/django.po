@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 09:22+0000\n"
+"POT-Creation-Date: 2024-04-03 10:43+0000\n"
 "PO-Revision-Date: 2023-09-15 15:21+0000\n"
 "Last-Translator: Michael <michael.happl@gmx.at>\n"
 "Language-Team: Czech <https://translate.pretix.eu/projects/pretix/pretix/cs/"
@@ -2917,7 +2917,7 @@ msgstr ""
 "Soubor, který jste nahráli, má velmi velký počet pixelů, nahrajte prosím "
 "obrázek o velikosti nejvýše 10 000 x 10 000 pixelů."
 
-#: pretix/base/forms/questions.py:484
+#: pretix/base/forms/questions.py:484 pretix/helpers/images.py:75
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
@@ -25782,6 +25782,34 @@ msgstr ""
 #: pretix/control/views/waitinglist.py:403
 msgid "The waitinglist entry has been transferred."
 msgstr "Zápis na čekací listině byl přenesen."
+
+#: pretix/helpers/daterange.py:97
+#, python-brace-format
+msgid "{date_from} – {date_to}"
+msgstr ""
+
+#: pretix/helpers/images.py:61 pretix/helpers/images.py:67
+#: pretix/helpers/images.py:85
+#, fuzzy
+#| msgid ""
+#| "The file you uploaded has a very large number of pixels, please upload an "
+#| "image no larger than 10000 x 10000 pixels."
+msgid ""
+"The file you uploaded has a very large number of pixels, please upload a "
+"picture with smaller dimensions."
+msgstr ""
+"Soubor, který jste nahráli, má velmi velký počet pixelů, nahrajte prosím "
+"obrázek o velikosti nejvýše 10 000 x 10 000 pixelů."
+
+#: pretix/helpers/security.py:166
+msgid "Login from new source detected"
+msgstr ""
+
+#: pretix/helpers/security.py:170
+#, fuzzy
+#| msgid "Unknown country code."
+msgid "Unknown country"
+msgstr "Neznámý kód země."
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"

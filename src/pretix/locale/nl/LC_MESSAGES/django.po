@@ -6,7 +6,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-03 09:22+0000\n"
+"POT-Creation-Date: 2024-04-03 10:43+0000\n"
 "PO-Revision-Date: 2024-03-01 19:00+0000\n"
 "Last-Translator: Dean Wyns <dean.wyns@outlook.com>\n"
 "Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
@@ -2919,7 +2919,7 @@ msgstr ""
 "Het bestand dat u uploadde heeft een te hoge resolutie. De maximale "
 "toegestane resolutie is 10000 x 10000 pixels."
 
-#: pretix/base/forms/questions.py:484
+#: pretix/base/forms/questions.py:484 pretix/helpers/images.py:75
 msgid ""
 "Upload a valid image. The file you uploaded was either not an image or a "
 "corrupted image."
@@ -27589,6 +27589,36 @@ msgstr "Dit is geen evenementenreeks."
 #| msgid "The waiting list entry has been moved to the top."
 msgid "The waitinglist entry has been transferred."
 msgstr "De wachtlijstinschrijving is verplaatst naar het begin van de lijst."
+
+#: pretix/helpers/daterange.py:97
+#, python-brace-format
+msgid "{date_from} – {date_to}"
+msgstr ""
+
+#: pretix/helpers/images.py:61 pretix/helpers/images.py:67
+#: pretix/helpers/images.py:85
+#, fuzzy
+#| msgid ""
+#| "The file you uploaded has a very large number of pixels, please upload an "
+#| "image no larger than 10000 x 10000 pixels."
+msgid ""
+"The file you uploaded has a very large number of pixels, please upload a "
+"picture with smaller dimensions."
+msgstr ""
+"Het bestand dat u uploadde heeft een te hoge resolutie. De maximale "
+"toegestane resolutie is 10000 x 10000 pixels."
+
+#: pretix/helpers/security.py:166
+#, fuzzy
+#| msgid "No order code detected"
+msgid "Login from new source detected"
+msgstr "Geen bestelcode gevonden"
+
+#: pretix/helpers/security.py:170
+#, fuzzy
+#| msgid "Unknown country code."
+msgid "Unknown country"
+msgstr "Onbekende landcode."
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"
