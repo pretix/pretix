@@ -165,9 +165,9 @@ class UserEmergencyTokenView(AdministratorPermissionRequiredMixin, RecentAuthent
         self.object.log_action('pretix.user.settings.2fa.emergency', user=self.request.user)
 
         messages.success(request, _(
-            'The emergency token for this user is "{token}". It can only be used once. The previously known emergency '
-            'token for this user remain active. Please make sure to transmit this code only over an authenticated '
-            'channel (other than email, if possible).'
+            'The emergency token for this user is "{token}". It can only be used once. Please make sure to transmit '
+            'this code only over an authenticated channel (other than email, if possible). Any previous emergency '
+            'tokens for this user remain active.'
         ).format(
             token=token.token
         ))
