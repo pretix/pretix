@@ -142,6 +142,8 @@ if USE_DATABASE_TLS or USE_DATABASE_MTLS:
 
     db_options.update(tls_config)
 
+db_disable_server_side_cursors = db_backend == 'postgresql' and config.getboolean('database', 'disable_server_side_cursors', fallback=False)
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.' + db_backend,
@@ -152,6 +154,7 @@ DATABASES = {
         'PORT': config.get('database', 'port', fallback=''),
         'CONN_MAX_AGE': 0 if db_backend == 'sqlite3' else 120,
         'CONN_HEALTH_CHECKS': db_backend != 'sqlite3',  # Will only be used from Django 4.1 onwards
+        'DISABLE_SERVER_SIDE_CURSORS': db_disable_server_side_cursors,
         'OPTIONS': db_options,
         'TEST': {}
     }
