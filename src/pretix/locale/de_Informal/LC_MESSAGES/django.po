@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-03 10:43+0000\n"
-"PO-Revision-Date: 2024-04-03 09:37+0000\n"
+"PO-Revision-Date: 2024-04-03 11:10+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -26850,32 +26850,24 @@ msgstr "Der Eintrag wurde auf einen anderen Termin übertragen."
 #: pretix/helpers/daterange.py:97
 #, python-brace-format
 msgid "{date_from} – {date_to}"
-msgstr ""
+msgstr "{date_from} – {date_to}"
 
 #: pretix/helpers/images.py:61 pretix/helpers/images.py:67
 #: pretix/helpers/images.py:85
-#, fuzzy
-#| msgid ""
-#| "The file you uploaded has a very large number of pixels, please upload an "
-#| "image no larger than 10000 x 10000 pixels."
 msgid ""
 "The file you uploaded has a very large number of pixels, please upload a "
 "picture with smaller dimensions."
 msgstr ""
-"Die hochgeladene Bilddatei hat sehr viele Pixel. Maximal zulässig sind 10000 "
-"x 10000 Pixel."
+"Die hochgeladene Bilddatei hat sehr viele Pixel, bitte lade ein Bild mit "
+"kleineren Abmessungen hoch."
 
 #: pretix/helpers/security.py:166
-#, fuzzy
-#| msgid "No order code detected"
 msgid "Login from new source detected"
-msgstr "Keine Bestellnummer erkannt"
+msgstr "Login aus neuer Quelle erkannt"
 
 #: pretix/helpers/security.py:170
-#, fuzzy
-#| msgid "Unknown country code."
 msgid "Unknown country"
-msgstr "Unbekanntes Länderkürzel."
+msgstr "Unbekanntes Land"
 
 #: pretix/multidomain/models.py:36
 msgid "Known domain"
