@@ -2524,7 +2524,8 @@ class OrderPosition(AbstractPosition):
             op = OrderPosition(order=order)
             for f in AbstractPosition._meta.fields:
                 if f.name == 'addon_to':
-                    setattr(op, f.name, cp_mapping.get(cartpos.addon_to_id))
+                    if cartpos.addon_to_id:
+                        setattr(op, f.name, cp_mapping[cartpos.addon_to_id])
                 else:
                     setattr(op, f.name, getattr(cartpos, f.name))
             op._calculate_tax()
