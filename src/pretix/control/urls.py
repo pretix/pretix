@@ -38,7 +38,7 @@ from django.views.generic.base import RedirectView
 
 from pretix.control.views import (
     auth, checkin, dashboards, discounts, event, geo, global_settings, item,
-    main, oauth, orderimport, orders, organizer, pdf, search, shredder,
+    main, modelimport, oauth, orders, organizer, pdf, search, shredder,
     subevents, typeahead, user, users, vouchers, waitinglist,
 )
 
@@ -349,6 +349,8 @@ urlpatterns = [
         re_path(r'^vouchers/bulk_add$', vouchers.VoucherBulkCreate.as_view(), name='event.vouchers.bulk'),
         re_path(r'^vouchers/bulk_add/mail_preview$', vouchers.VoucherBulkMailPreview.as_view(), name='event.vouchers.bulk.mail_preview'),
         re_path(r'^vouchers/bulk_action$', vouchers.VoucherBulkAction.as_view(), name='event.vouchers.bulkaction'),
+        re_path(r'^vouchers/import/$', modelimport.VoucherImportView.as_view(), name='event.vouchers.import'),
+        re_path(r'^vouchers/import/(?P<file>[^/]+)/$', modelimport.VoucherProcessView.as_view(), name='event.vouchers.import.process'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/transition$', orders.OrderTransition.as_view(),
                 name='event.order.transition'),
         re_path(r'^orders/(?P<code>[0-9A-Z]+)/resend$', orders.OrderResendLink.as_view(),
@@ -415,8 +417,8 @@ urlpatterns = [
         re_path(r'^invoice/(?P<invoice>[^/]+)$', orders.InvoiceDownload.as_view(),
                 name='event.invoice.download'),
         re_path(r'^orders/overview/$', orders.OverView.as_view(), name='event.orders.overview'),
-        re_path(r'^orders/import/$', orderimport.ImportView.as_view(), name='event.orders.import'),
-        re_path(r'^orders/import/(?P<file>[^/]+)/$', orderimport.ProcessView.as_view(), name='event.orders.import.process'),
+        re_path(r'^orders/import/$', modelimport.OrderImportView.as_view(), name='event.orders.import'),
+        re_path(r'^orders/import/(?P<file>[^/]+)/$', modelimport.OrderProcessView.as_view(), name='event.orders.import.process'),
         re_path(r'^orders/export/$', orders.ExportView.as_view(), name='event.orders.export'),
         re_path(r'^orders/export/(?P<pk>[^/]+)/run$', orders.RunScheduledExportView.as_view(), name='event.orders.export.scheduled.run'),
         re_path(r'^orders/export/(?P<pk>[^/]+)/delete$', orders.DeleteScheduledExportView.as_view(), name='event.orders.export.scheduled.delete'),

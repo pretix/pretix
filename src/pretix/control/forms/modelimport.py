@@ -22,10 +22,54 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.services.orderimport import get_all_columns
+from pretix.base.modelimport_orders import get_order_import_columns
+from pretix.base.modelimport_vouchers import get_voucher_import_columns
 
 
 class ProcessForm(forms.Form):
+
+    def __init__(self, *args, **kwargs):
+        headers = kwargs.pop('headers')
+        initital = kwargs.pop('initial', {}) or {}
+        kwargs['initial'] = initital
+        columns = self.get_columns()
+        column_keys = {c.identifier for c in columns}
+
+        if not initital or all(k not in column_keys for k in initital.keys()):
+            for c in columns:
+                initital.setdefault(c.identifier, c.initial)
+                for h in headers:
+                    if h == c.identifier or h == str(c.verbose_name):
+                        initital[c.identifier] = 'csv:{}'.format(h)
+                        break
+
+        super().__init__(*args, **kwargs)
+
+        header_choices = [
+            ('csv:{}'.format(h), _('CSV column: "{name}"').format(name=h)) for h in headers
+        ]
+
+        for c in columns:
+            choices = []
+            if c.default_value:
+                choices.append((c.default_value, c.default_label))
+            choices += header_choices
+            for k, v in c.static_choices():
+                choices.append(('static:{}'.format(k), v))
+
+            self.fields[c.identifier] = forms.ChoiceField(
+                label=str(c.verbose_name),
+                choices=choices,
+                widget=forms.Select(
+                    attrs={'data-static': 'true'}
+                )
+            )
+
+    def get_columns(self):
+        raise NotImplementedError()  # noqa
+
+
+class OrdersProcessForm(ProcessForm):
     orders = forms.ChoiceField(
         label=_('Import mode'),
         choices=(
@@ -46,29 +90,21 @@ class ProcessForm(forms.Form):
     )
 
     def __init__(self, *args, **kwargs):
-        headers = kwargs.pop('headers')
-        initital = kwargs.pop('initial', {})
         self.event = kwargs.pop('event')
+        initital = kwargs.pop('initial', {})
         initital['testmode'] = self.event.testmode
         kwargs['initial'] = initital
         super().__init__(*args, **kwargs)
 
-        header_choices = [
-            ('csv:{}'.format(h), _('CSV column: "{name}"').format(name=h)) for h in headers
-        ]
+    def get_columns(self):
+        return get_order_import_columns(self.event)
 
-        for c in get_all_columns(self.event):
-            choices = []
-            if c.default_value:
-                choices.append((c.default_value, c.default_label))
-            choices += header_choices
-            for k, v in c.static_choices():
-                choices.append(('static:{}'.format(k), v))
 
-            self.fields[c.identifier] = forms.ChoiceField(
-                label=str(c.verbose_name),
-                choices=choices,
-                widget=forms.Select(
-                    attrs={'data-static': 'true'}
-                )
-            )
+class VouchersProcessForm(ProcessForm):
+
+    def __init__(self, *args, **kwargs):
+        self.event = kwargs.pop('event')
+        super().__init__(*args, **kwargs)
+
+    def get_columns(self):
+        return get_voucher_import_columns(self.event)
