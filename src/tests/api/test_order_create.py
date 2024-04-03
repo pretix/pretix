@@ -2460,6 +2460,31 @@ def test_order_create_auto_validity_with_requested_start_limitation(token_client
 
 
 @pytest.mark.django_db
+def test_order_create_auto_validity_with_requested_start_in_past(token_client, organizer, event, item, quota, question):
+    item.validity_mode = 'dynamic'
+    item.validity_dynamic_duration_minutes = 30
+    item.validity_dynamic_start_choice = True
+    item.validity_dynamic_start_choice_day_limit = 24
+    item.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['requested_valid_from'] = (now() - datetime.timedelta(days=30)).isoformat()
+    del res['positions'][0]['price']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p = o.positions.first()
+    assert now() - datetime.timedelta(days=31) < p.valid_from <= now() - datetime.timedelta(days=29)
+    assert p.valid_until == p.valid_from + datetime.timedelta(minutes=30)
+
+
+@pytest.mark.django_db
 def test_order_create_auto_pricing(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['positions'][0]['item'] = item.pk
