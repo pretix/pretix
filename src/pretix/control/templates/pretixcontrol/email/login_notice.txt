@@ -1,6 +1,6 @@
 {% load i18n %}{% blocktrans with url=url|safe os=source.os_type agent=source.agent_type %}Hello,
 
-a login to your {{ instance }} account was detected. The login was performed using {{ agent }} on {{ os }} from {{ country }}.
+a login to your {{ instance }} account from an unusual or new location was detected. The login was performed using {{ agent }} on {{ os }} from {{ country }}.
 
 If this was you, you can safely ignore this email.
 
