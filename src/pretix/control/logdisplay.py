@@ -458,6 +458,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.user.settings.2fa.enabled': _('Two-factor authentication has been enabled.'),
         'pretix.user.settings.2fa.disabled': _('Two-factor authentication has been disabled.'),
         'pretix.user.settings.2fa.regenemergency': _('Your two-factor emergency codes have been regenerated.'),
+        'pretix.user.settings.2fa.emergency': _('A two-factor emergency code has been generated.'),
         'pretix.user.settings.2fa.device.added': _('A new two-factor authentication device "{name}" has been added to '
                                                    'your account.'),
         'pretix.user.settings.2fa.device.deleted': _('The two-factor authentication device "{name}" has been removed '
