@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-03 09:22+0000\n"
-"PO-Revision-Date: 2024-04-02 16:36+0000\n"
+"PO-Revision-Date: 2024-04-03 09:37+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -3345,10 +3345,9 @@ msgid "Invalid setting for column \"{header}\"."
 msgstr "Ungültige Einstellung für Spalte \"{header}\"."
 
 #: pretix/base/modelimport.py:199
-#, fuzzy, python-brace-format
-#| msgid "Could not parse {value} as a date and time."
+#, python-brace-format
 msgid "Could not parse {value} as a yes/no value."
-msgstr "Konnte {value} nicht als Datum und Zeit erkennen."
+msgstr "Konnte {value} nicht als Ja/Nein-Wert erkennen."
 
 #: pretix/base/modelimport.py:216
 #, python-brace-format
@@ -3563,10 +3562,11 @@ msgid "Price mode"
 msgstr "Preisberechnung"
 
 #: pretix/base/modelimport_vouchers.py:143
-#, fuzzy, python-brace-format
-#| msgid "Could not parse {value} as a date and time."
+#, python-brace-format
 msgid "Could not parse {value} as a price mode, use one of {options}."
-msgstr "Konnte {value} nicht als Datum und Zeit erkennen."
+msgstr ""
+"Konnte {value} nicht als Preis-Modus erkennen, verfügbare Optionen: "
+"{options}."
 
 #: pretix/base/modelimport_vouchers.py:153 pretix/base/models/vouchers.py:245
 msgid "Voucher value"
@@ -3574,7 +3574,7 @@ msgstr "Gutscheinwert"
 
 #: pretix/base/modelimport_vouchers.py:158
 msgid "It is pointless to set a value without a price mode."
-msgstr ""
+msgstr "Es ist widersprüchlich, einen Wert ohne einen Preis-Modus zu setzen."
 
 #: pretix/base/modelimport_vouchers.py:230 pretix/base/models/items.py:1997
 #: pretix/base/models/vouchers.py:272
@@ -3584,8 +3584,6 @@ msgid "Quota"
 msgstr "Kontingent"
 
 #: pretix/base/modelimport_vouchers.py:246
-#, fuzzy
-#| msgid "You cannot select a quota and a specific product at the same time."
 msgid "You cannot specify a quota if you specified a product."
 msgstr "Du kannst nicht gleichzeitig ein Kontingent und ein Produkt auswählen."
 
@@ -15784,6 +15782,8 @@ msgid ""
 "A first login using {agent_type} on {os_type} from {country} has been "
 "detected."
 msgstr ""
+"Ein erster Login mit {agent_type} auf {os_type} aus {country} wurde "
+"detektiert."
 
 #: pretix/control/logdisplay.py:460 pretix/control/views/user.py:489
 #: pretix/control/views/user.py:549 pretix/control/views/user.py:608
@@ -15800,10 +15800,8 @@ msgid "Your two-factor emergency codes have been regenerated."
 msgstr "Deine Zwei-Faktor-Notfall-Tokens wurden neu generiert."
 
 #: pretix/control/logdisplay.py:463
-#, fuzzy
-#| msgid "Your two-factor emergency codes have been regenerated."
 msgid "A two-factor emergency code has been generated."
-msgstr "Deine Zwei-Faktor-Notfall-Tokens wurden neu generiert."
+msgstr "Ein Zwei-Faktor-Notfall-Token wurde generiert."
 
 #: pretix/control/logdisplay.py:464
 #, python-brace-format
@@ -17800,6 +17798,21 @@ msgid ""
 "Best regards,  \n"
 "Your %(instance)s team\n"
 msgstr ""
+"Hallo,\n"
+"\n"
+"wir haben einen Login in deinen %(instance)s-Account von einer neuen oder "
+"ungewöhnlichen Quelle festgestellt. Der Login wurde mit %(agent)s auf %(os)s "
+"in %(country)s durchgeführt.\n"
+"\n"
+"Wenn du das warst, kannst du diese E-Mail ignorieren.\n"
+"\n"
+"Wenn du das nicht warst, empfehlen wir, dass du dein Passwort in den "
+"Kontoeinstellungen änderst:\n"
+"\n"
+"%(url)s\n"
+"\n"
+"Viele Grüße  \n"
+"Das %(instance)s-Team\n"
 
 #: pretix/control/templates/pretixcontrol/email/security_notice.txt:1
 #, python-format
@@ -24554,10 +24567,8 @@ msgid "Send password reset email"
 msgstr "Passwort-Reset-Link per E-Mail verschicken"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:17
-#, fuzzy
-#| msgid "Generate new emergency tokens"
 msgid "Generate 2FA emergency token"
-msgstr "Neue Notfall-Tokens erzeugen"
+msgstr "Zwei-Faktor-Notfall-Token erzeugen"
 
 #: pretix/control/templates/pretixcontrol/users/form.html:22
 msgid "Impersonate user"
@@ -24724,10 +24735,8 @@ msgstr "Gutschein-Verlauf"
 #: pretix/control/templates/pretixcontrol/vouchers/import_start.html:6
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:81
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:94
-#, fuzzy
-#| msgid "Import mode"
 msgid "Import vouchers"
-msgstr "Import-Modus"
+msgstr "Gutscheine importieren"
 
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:10
 msgid ""
@@ -26729,6 +26738,10 @@ msgid ""
 "(other than email, if possible). Any previous emergency tokens for this user "
 "remain active."
 msgstr ""
+"Der Notfall-Token für diesen Benutzer ist \"{token}\". Der Token kann nur "
+"einmal verwendet werden und sollte nur über einen authentifizierten Kanal ("
+"idealerweise nicht E-Mail) übertragen werden. Vorher bereits generierte "
+"Token bleiben aktiv."
 
 #: pretix/control/views/users.py:312
 msgid "The new user has been created."
