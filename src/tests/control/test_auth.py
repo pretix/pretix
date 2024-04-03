@@ -195,6 +195,68 @@ class LoginFormTest(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertIn('/control/events/', response['Location'])
 
+    @override_settings(HAS_GEOIP=True)
+    def test_login_notice(self):
+        class FakeGeoIp:
+            def country(self, ip):
+                if ip == '1.2.3.4':
+                    return {'country_code': 'DE'}
+                return {'country_code': 'US'}
+
+        security._geoip = FakeGeoIp()
+        self.client.defaults['REMOTE_ADDR'] = '1.2.3.4'
+
+        djmail.outbox = []
+
+        # No notice sent on first login
+        response = self.client.post('/control/login?next=/control/events/', {
+            'email': 'dummy@dummy.dummy',
+            'password': 'dummy',
+        }, HTTP_USER_AGENT='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) '
+                           'Chrome/41.0.2272.104 Safari/537.36')
+        self.assertEqual(response.status_code, 302)
+
+        assert len(djmail.outbox) == 0
+
+        response = self.client.get('/control/logout')
+        self.assertEqual(response.status_code, 302)
+
+        # No notice sent on subsequent login with same user agent
+        response = self.client.post('/control/login?next=/control/events/', {
+            'email': 'dummy@dummy.dummy',
+            'password': 'dummy',
+        }, HTTP_USER_AGENT='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) '
+                           'Chrome/41.0.2272.104 Safari/537.36')
+        self.assertEqual(response.status_code, 302)
+
+        assert len(djmail.outbox) == 0
+
+        response = self.client.get('/control/logout')
+        self.assertEqual(response.status_code, 302)
+
+        # Notice sent on subsequent login with other user agent
+        response = self.client.post('/control/login?next=/control/events/', {
+            'email': 'dummy@dummy.dummy',
+            'password': 'dummy',
+        }, HTTP_USER_AGENT='Mozilla/5.0 (X11; Linux x86_64; rv:124.0) Gecko/20100101 Firefox/124.0')
+        self.assertEqual(response.status_code, 302)
+
+        assert len(djmail.outbox) == 1
+
+        response = self.client.get('/control/logout')
+        self.assertEqual(response.status_code, 302)
+
+        # Notice sent on subsequent login with other country
+        self.client.defaults['REMOTE_ADDR'] = '4.3.2.1'
+        response = self.client.post('/control/login?next=/control/events/', {
+            'email': 'dummy@dummy.dummy',
+            'password': 'dummy',
+        }, HTTP_USER_AGENT='Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_4) AppleWebKit/537.36 (KHTML, like Gecko) '
+                           'Chrome/41.0.2272.104 Safari/537.36')
+        self.assertEqual(response.status_code, 302)
+
+        assert len(djmail.outbox) == 2
+
 
 class RegistrationFormTest(TestCase):
 
