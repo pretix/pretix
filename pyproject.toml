@@ -96,7 +96,7 @@ dependencies = [
   "sepaxml==2.6.*",
   "slimit",
   "static3==0.7.*",
-  "stripe==7.9.*",
+  "stripe==8.9.*",
   "text-unidecode==1.*",
   "tlds>=2020041600",
   "tqdm==4.*",
