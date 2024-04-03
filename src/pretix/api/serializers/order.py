@@ -1315,7 +1315,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             if 'valid_from' not in pos_data and 'valid_until' not in pos_data:
                 valid_from, valid_until = pos_data['item'].compute_validity(
                     requested_start=(
-                        max(requested_valid_from, now())
+                        requested_valid_from
                         if requested_valid_from and pos_data['item'].validity_dynamic_start_choice
                         else now()
                     ),
