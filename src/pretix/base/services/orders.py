@@ -66,7 +66,6 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_email_context
 from pretix.base.i18n import get_language_without_region, language
 from pretix.base.media import MEDIA_TYPES
-from pretix.base.middleware.timemachine import time_machine_now
 from pretix.base.models import (
     CartPosition, Device, Event, GiftCard, Item, ItemVariation, Membership,
     Order, OrderPayment, OrderPosition, Quota, Seat, SeatCategoryMapping, User,
@@ -103,6 +102,7 @@ from pretix.base.signals import (
     order_fee_calculation, order_paid, order_placed, order_split,
     order_valid_if_pending, periodic_task, validate_order,
 )
+from pretix.base.timemachine import time_machine_now
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
 from pretix.helpers.models import modelcopy

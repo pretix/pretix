@@ -27,11 +27,11 @@ from django.core.exceptions import ValidationError
 from django.utils.formats import date_format
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.middleware.timemachine import time_machine_now
 from pretix.base.models import (
     AbstractPosition, CartPosition, Customer, Event, Item, Membership, Order,
     OrderPosition, SubEvent,
 )
+from pretix.base.timemachine import time_machine_now
 from pretix.helpers import OF_SELF
 
 
