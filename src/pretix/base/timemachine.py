@@ -48,6 +48,7 @@ class TimeMachineMiddleware:
     def __call__(self, request):
         if hasattr(request, 'event') and hasattr(request, '_namespace') and request._namespace == 'presale' and \
                 'timemachine_now_dt' in request.session and \
+                request.event.testmode and \
                 request.user.has_event_permission(request.organizer, request.event, 'can_change_event_settings', request):
             request.now_dt = parse(request.session['timemachine_now_dt'])
             request.now_dt_is_fake = True
