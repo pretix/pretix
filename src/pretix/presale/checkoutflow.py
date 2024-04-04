@@ -73,6 +73,7 @@ from pretix.base.signals import validate_cart_addons
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.phone_format import phone_format
 from pretix.base.templatetags.rich_text import rich_text_snippet
+from pretix.base.timemachine import time_machine_now
 from pretix.base.views.tasks import AsyncAction
 from pretix.celery_app import app
 from pretix.helpers.http import redirect_to_url
@@ -706,7 +707,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
         return self.do(self.request.event.id, data, get_or_create_cart_id(self.request),
                        invoice_address=self.invoice_address.pk, locale=get_language(),
-                       sales_channel=request.sales_channel.identifier)
+                       sales_channel=request.sales_channel.identifier, override_now_dt=time_machine_now(default=None))
 
 
 class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
@@ -1548,6 +1549,7 @@ class ConfirmStep(CartMixin, AsyncAction, TemplateFlowStep):
             sales_channel=request.sales_channel.identifier,
             shown_total=self.cart_session.get('shown_total'),
             customer=self.cart_session.get('customer'),
+            override_now_dt=time_machine_now(default=None),
         )
 
     def get_success_message(self, value):

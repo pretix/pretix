@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import threading
+from contextlib import contextmanager
 
 from dateutil.parser import parse
 from django.utils.timezone import now
@@ -64,5 +65,16 @@ class TimeMachineMiddleware:
             TimeMachineMiddleware.tls.now_dt = None
 
 
-def time_machine_now(now_dt=None):
-    return getattr(TimeMachineMiddleware.tls, 'now_dt', None) or now_dt or now()
+def time_machine_now(default=False):
+    if default is False:
+        default = now()
+    return getattr(TimeMachineMiddleware.tls, 'now_dt', None) or default
+
+
+@contextmanager
+def time_machine_now_assigned(now_dt):
+    try:
+        TimeMachineMiddleware.tls.now_dt = now_dt
+        yield
+    finally:
+        TimeMachineMiddleware.tls.now_dt = None

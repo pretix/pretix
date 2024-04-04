@@ -102,7 +102,7 @@ from pretix.base.signals import (
     order_fee_calculation, order_paid, order_placed, order_split,
     order_valid_if_pending, periodic_task, validate_order,
 )
-from pretix.base.timemachine import time_machine_now
+from pretix.base.timemachine import time_machine_now, time_machine_now_assigned
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
 from pretix.helpers.models import modelcopy
@@ -2853,8 +2853,8 @@ class OrderChangeManager:
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def perform_order(self, event: Event, payments: List[dict], positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None,
-                  sales_channel: str='web', shown_total=None, customer=None):
-    with language(locale):
+                  sales_channel: str='web', shown_total=None, customer=None, override_now_dt: datetime=None):
+    with language(locale), time_machine_now_assigned(override_now_dt):
         try:
             try:
                 return _perform_order(event, payments, positions, email, locale, address, meta_info,

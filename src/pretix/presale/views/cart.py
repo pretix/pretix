@@ -63,6 +63,7 @@ from pretix.base.services.cart import (
     CartError, add_items_to_cart, apply_voucher, clear_cart, error_messages,
     remove_cart_position,
 )
+from pretix.base.timemachine import time_machine_now
 from pretix.base.views.tasks import AsyncAction
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
@@ -429,7 +430,8 @@ class CartApplyVoucher(EventViewMixin, CartActionMixin, AsyncAction, View):
     def post(self, request, *args, **kwargs):
         if 'voucher' in request.POST:
             return self.do(self.request.event.id, request.POST.get('voucher'), get_or_create_cart_id(self.request),
-                           translation.get_language(), request.sales_channel.identifier)
+                           translation.get_language(), request.sales_channel.identifier,
+                           time_machine_now(default=None))
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
@@ -455,7 +457,8 @@ class CartRemove(EventViewMixin, CartActionMixin, AsyncAction, View):
         if 'id' in request.POST:
             try:
                 return self.do(self.request.event.id, int(request.POST.get('id')), get_or_create_cart_id(self.request),
-                               translation.get_language(), request.sales_channel.identifier)
+                               translation.get_language(), request.sales_channel.identifier,
+                               time_machine_now(default=None))
             except ValueError:
                 return redirect_to_url(self.get_error_url())
         else:
@@ -478,7 +481,7 @@ class CartClear(EventViewMixin, CartActionMixin, AsyncAction, View):
 
     def post(self, request, *args, **kwargs):
         return self.do(self.request.event.id, get_or_create_cart_id(self.request), translation.get_language(),
-                       request.sales_channel.identifier)
+                       request.sales_channel.identifier, time_machine_now(default=None))
 
 
 @method_decorator(allow_cors_if_namespaced, 'dispatch')
@@ -534,7 +537,8 @@ class CartAdd(EventViewMixin, CartActionMixin, AsyncAction, View):
         items = self._items_from_post_data()
         if items:
             return self.do(self.request.event.id, items, cart_id, translation.get_language(),
-                           self.invoice_address.pk, widget_data, self.request.sales_channel.identifier)
+                           self.invoice_address.pk, widget_data, self.request.sales_channel.identifier,
+                           time_machine_now(default=None))
         else:
             if 'ajax' in self.request.GET or 'ajax' in self.request.POST:
                 return JsonResponse({
