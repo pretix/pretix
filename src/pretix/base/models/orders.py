@@ -2545,6 +2545,17 @@ class OrderPosition(AbstractPosition):
                 op.valid_from = valid_from
                 op.valid_until = valid_until
 
+            if op.is_bundled and not op.addon_to_id:
+                logger.info(
+                    "Triggered bug that causes unattached bundle products. Dumping cart state in original order: " +
+                    repr([{k.name: getattr(c, k.name) for k in CartPosition._meta.fields} for c in cp])
+                )
+                logger.info(
+                    "Sorted order with sort key was: " +
+                    repr([(c.pk, c.sort_key) for c in sorted(cp, key=lambda c: c.sort_key)])
+                )
+                raise ValueError("Bundled cart position without parent does not make sense.")
+
             op.positionid = i + 1
             op.save()
             ops.append(op)
