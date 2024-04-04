@@ -21,7 +21,7 @@
 #
 from django_scopes.state import scopes_disabled
 
-from pretix.base.models import User, Team
+from pretix.base.models import Team, User
 
 
 class TimemachineTestMixin:

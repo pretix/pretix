@@ -56,6 +56,7 @@ from pretix.base.services.tax import VATIDFinalError, VATIDTemporaryError
 from pretix.base.timemachine import time_machine_now_assigned
 from pretix.testutils.scope import classscope
 from pretix.testutils.sessions import get_cart_session_key
+
 from .test_timemachine import TimemachineTestMixin
 
 

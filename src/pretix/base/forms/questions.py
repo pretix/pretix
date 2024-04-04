@@ -57,7 +57,7 @@ from django.forms.widgets import FILE_INPUT_CONTRADICTION
 from django.utils.formats import date_format
 from django.utils.html import escape
 from django.utils.safestring import mark_safe
-from django.utils.timezone import get_current_timezone, now
+from django.utils.timezone import get_current_timezone
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries import countries
 from django_countries.fields import Country, CountryField

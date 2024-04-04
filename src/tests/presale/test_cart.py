@@ -49,7 +49,7 @@ from pretix.base.decimal import round_decimal
 from pretix.base.models import (
     CartPosition, Discount, Event, InvoiceAddress, Item, ItemCategory,
     ItemVariation, Organizer, Question, QuestionAnswer, Quota, SeatingPlan,
-    Team, User, Voucher,
+    Voucher,
 )
 from pretix.base.models.items import (
     ItemAddOn, ItemBundle, SubEventItem, SubEventItemVariation,
@@ -57,7 +57,9 @@ from pretix.base.models.items import (
 from pretix.base.services.cart import CartError, CartManager, error_messages
 from pretix.testutils.scope import classscope
 from pretix.testutils.sessions import get_cart_session_key
+
 from .test_timemachine import TimemachineTestMixin
+
 
 class CartTestMixin:
     @scopes_disabled()
