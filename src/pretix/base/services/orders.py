@@ -66,6 +66,7 @@ from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_email_context
 from pretix.base.i18n import get_language_without_region, language
 from pretix.base.media import MEDIA_TYPES
+from pretix.base.middleware.timemachine import time_machine_now
 from pretix.base.models import (
     CartPosition, Device, Event, GiftCard, Item, ItemVariation, Membership,
     Order, OrderPayment, OrderPosition, Quota, Seat, SeatCategoryMapping, User,
@@ -106,7 +107,6 @@ from pretix.celery_app import app
 from pretix.helpers import OF_SELF
 from pretix.helpers.models import modelcopy
 from pretix.helpers.periodic import minimum_interval
-from pretix.presale.timemachine import time_machine_now
 from pretix.testutils.middleware import debugflags_var
 
 

@@ -65,7 +65,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
-from django.utils.timezone import now, get_current_timezone
+from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext, gettext_lazy as _, gettext_noop
 from django.views.generic import FormView, ListView
 from django.views.generic.base import TemplateView, View
@@ -93,11 +93,13 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
-from pretix.multidomain.urlreverse import build_absolute_uri, get_event_domain, eventreverse
+from pretix.multidomain.urlreverse import (
+    build_absolute_uri, eventreverse, get_event_domain,
+)
 from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
-from ...base.forms.widgets import SplitDateTimePickerWidget
 
+from ...base.forms.widgets import SplitDateTimePickerWidget
 from ...base.i18n import language
 from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
@@ -969,7 +971,10 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
         super().setup(request, *args, **kwargs)
         self.timemachine_form = TimemachineForm(
             data=request.method == 'POST' and request.POST or None,
-            initial={'now_dt':parser.parse(request.session.get('timemachine_now_dt', None))} if request.session.get('timemachine_now_dt', None) else {}
+            initial=(
+                {'now_dt': parser.parse(request.session.get('timemachine_now_dt', None))}
+                if request.session.get('timemachine_now_dt', None) else {}
+            )
         )
 
     def get_context_data(self, **kwargs):

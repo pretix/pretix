@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import threading
+
 from dateutil.parser import parse
 from django.utils.timezone import now
 
@@ -64,4 +65,3 @@ class TimeMachineMiddleware:
 
 def time_machine_now():
     return getattr(TimeMachineMiddleware.tls, 'now_dt', None) or now()
-

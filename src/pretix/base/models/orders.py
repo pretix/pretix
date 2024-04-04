@@ -76,6 +76,7 @@ from pretix.base.banlist import banned
 from pretix.base.decimal import round_decimal
 from pretix.base.email import get_email_context
 from pretix.base.i18n import language
+from pretix.base.middleware.timemachine import time_machine_now
 from pretix.base.models import Customer, User
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.settings import PERSON_NAME_SCHEMES
@@ -85,7 +86,6 @@ from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
 from ...helpers.format import format_map
 from ...helpers.names import build_name
-from ...presale.timemachine import time_machine_now
 from ...testutils.middleware import debugflags_var
 from ._transactions import (
     _fail, _transactions_mark_order_clean, _transactions_mark_order_dirty,

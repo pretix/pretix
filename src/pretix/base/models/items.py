@@ -61,6 +61,7 @@ from django_countries.fields import Country
 from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
 
+from pretix.base.middleware.timemachine import time_machine_now
 from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
@@ -69,7 +70,6 @@ from pretix.base.models.tax import TaxedPrice
 from ...helpers.images import ImageSizeValidator
 from ..media import MEDIA_TYPES
 from .event import Event, SubEvent
-from pretix.presale.timemachine import time_machine_now
 
 
 class ItemCategory(LoggedModel):

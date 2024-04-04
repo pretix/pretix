@@ -79,4 +79,3 @@ class EventMiddleware:
                 response = response.render()
 
         return response
-
