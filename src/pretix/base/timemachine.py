@@ -57,12 +57,12 @@ class TimeMachineMiddleware:
             request.now_dt_is_fake = False
 
         try:
-            TimeMachineMiddleware.tls.now_dt = request.now_dt
+            TimeMachineMiddleware.tls.now_dt = request.now_dt if request.now_dt_is_fake else None
 
             return self.get_response(request)
         finally:
             TimeMachineMiddleware.tls.now_dt = None
 
 
-def time_machine_now():
-    return getattr(TimeMachineMiddleware.tls, 'now_dt', None) or now()
+def time_machine_now(now_dt=None):
+    return getattr(TimeMachineMiddleware.tls, 'now_dt', None) or now_dt or now()
