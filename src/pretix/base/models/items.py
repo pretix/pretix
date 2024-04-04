@@ -958,11 +958,11 @@ class Item(LoggedModel):
             return self.validity_fixed_from, self.validity_fixed_until
         elif self.validity_mode == Item.VALIDITY_MODE_DYNAMIC:
             tz = override_tz or self.event.timezone
-            requested_start = requested_start or now()
+            requested_start = requested_start or time_machine_now()
             if enforce_start_limit and not self.validity_dynamic_start_choice:
-                requested_start = now()
+                requested_start = time_machine_now()
             if enforce_start_limit and self.validity_dynamic_start_choice_day_limit is not None:
-                requested_start = min(requested_start, now() + timedelta(days=self.validity_dynamic_start_choice_day_limit))
+                requested_start = min(requested_start, time_machine_now() + timedelta(days=self.validity_dynamic_start_choice_day_limit))
 
             valid_until = requested_start.astimezone(tz)
 

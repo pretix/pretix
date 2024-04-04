@@ -86,6 +86,7 @@ from pretix.base.settings import (
     PERSON_NAME_SCHEMES, PERSON_NAME_TITLE_GROUPS,
 )
 from pretix.base.templatetags.rich_text import rich_text
+from pretix.base.timemachine import time_machine_now
 from pretix.control.forms import (
     ExtFileField, ExtValidationMixin, SizeValidationMixin, SplitDateTimeField,
 )
@@ -606,13 +607,13 @@ class BaseQuestionsForm(forms.Form):
 
         if cartpos and item.validity_mode == Item.VALIDITY_MODE_DYNAMIC and item.validity_dynamic_start_choice:
             if item.validity_dynamic_start_choice_day_limit:
-                max_date = now().astimezone(event.timezone) + timedelta(days=item.validity_dynamic_start_choice_day_limit)
+                max_date = time_machine_now().astimezone(event.timezone) + timedelta(days=item.validity_dynamic_start_choice_day_limit)
             else:
                 max_date = None
-            min_date = now()
+            min_date = time_machine_now()
             initial = None
             if (item.require_membership or (pos.variation and pos.variation.require_membership)) and pos.used_membership:
-                if pos.used_membership.date_start >= now():
+                if pos.used_membership.date_start >= time_machine_now():
                     initial = min_date = pos.used_membership.date_start
                 max_date = min(max_date, pos.used_membership.date_end) if max_date else pos.used_membership.date_end
             if item.validity_dynamic_duration_months or item.validity_dynamic_duration_days:
