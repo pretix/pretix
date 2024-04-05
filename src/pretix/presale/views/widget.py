@@ -100,6 +100,7 @@ def widget_css(request, **kwargs):
         try:
             resp = FileResponse(default_storage.open(o.settings.presale_widget_css_file),
                                 content_type='text/css')
+            resp['Access-Control-Allow-Origin'] = '*'
             return resp
         except FileNotFoundError:
             pass
@@ -108,6 +109,7 @@ def widget_css(request, **kwargs):
     f = finders.find(et)
     resp = FileResponse(open(f, 'rb'), content_type='text/css')
     resp._csp_ignore = True
+    resp['Access-Control-Allow-Origin'] = '*'
     return resp
 
 
@@ -199,6 +201,7 @@ def widget_js(request, lang, **kwargs):
             cache.set('widget_js_data_{}'.format(lang), data, 3600 * 4)
         resp = HttpResponse(data, content_type='text/javascript')
     resp._csp_ignore = True
+    resp['Access-Control-Allow-Origin'] = '*'
     return resp
 
 
