@@ -149,7 +149,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - Secure Remote Commerce: ✗
 # - Link: ✓ (PaymentRequestButton)
 # - Cash App Pay: ✗
-# - PayPal: ✗
+# - PayPal: ✓ (No settings UI yet)
 # - MobilePay: ✗
 # - Alipay: ✓
 # - WeChat Pay: ✓
@@ -468,6 +468,14 @@ class StripeSettingsHolder(BasePaymentProvider):
                      ]),
                      required=False,
                  )),
+                # Disabled for now, since we still need to figure out how to make this work on our connect platform
+                # ('method_paypal',
+                #  forms.BooleanField(
+                #      label=_('PayPal'),
+                #      disabled=self.event.currency not in [
+                #          'EUR', 'GBP', 'USD', 'CHF', 'CZK', 'DKK', 'NOK', 'PLN', 'SEK', 'AUD', 'CAD', 'HKD', 'NZD', 'SGD'
+                #      ]
+                #  )),
             ] + extra_fields + list(super().settings_form_fields.items()) + moto_settings
         )
         if not self.settings.connect_client_id or self.settings.secret_key:
@@ -1892,3 +1900,10 @@ class StripeWeChatPay(StripeRedirectMethod):
                 },
             }
         }
+
+
+class StripePayPal(StripeRedirectMethod):
+    identifier = 'stripe_paypal'
+    verbose_name = _('PayPal via Stripe')
+    public_name = _('PayPal')
+    method = 'paypal'
