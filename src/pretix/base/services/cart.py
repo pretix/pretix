@@ -1358,7 +1358,7 @@ class CartManager:
         return err
 
     def recompute_final_prices_and_taxes(self):
-        positions = sorted(list(self.positions), key=lambda op: -(op.addon_to_id or 0))
+        positions = sorted(list(self.positions), key=lambda cp: (-(cp.addon_to_id or 0), cp.pk))
         diff = Decimal('0.00')
         for cp in positions:
             if cp.listed_price is None:

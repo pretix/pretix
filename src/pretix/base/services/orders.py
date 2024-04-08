@@ -665,7 +665,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             deleted_positions.add(cp.pk)
             cp.delete()
 
-    sorted_positions = sorted(positions, key=lambda s: -int(s.is_bundled))
+    sorted_positions = sorted(positions, key=lambda c: (-int(c.is_bundled), c.pk))
 
     for cp in sorted_positions:
         cp._cached_quotas = list(cp.quotas)
@@ -876,6 +876,13 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             cp.discount = discount
             cp.save(update_fields=['price', 'discount'])
 
+    # After applying discounts, add-on positions might still have a reference to the *old* version of the
+    # parent position, which can screw up ordering later since the system sees inconsistent data.
+    by_id = {cp.pk: cp for cp in sorted_positions}
+    for cp in sorted_positions:
+        if cp.addon_to_id:
+            cp.addon_to = by_id[cp.addon_to_id]
+
     new_total = sum(cp.price for cp in sorted_positions)
     if old_total != new_total:
         err = err or error_messages['price_changed']
@@ -884,7 +891,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
     for cp in sorted_positions:
         cp.expires = now_dt + timedelta(
             minutes=event.settings.get('reservation_time', as_type=int))
-        cp.save()
+        cp.save(update_fields=['expires'])
 
     if err:
         raise OrderError(err)
@@ -1144,7 +1151,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         positions = list(
             positions.select_related('item', 'variation', 'subevent', 'seat', 'addon_to').prefetch_related('addons')
         )
-        positions.sort(key=lambda k: position_ids.index(k.pk))
+        positions.sort(key=lambda c: c.sort_key)
         if len(positions) == 0:
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):

@@ -2546,14 +2546,6 @@ class OrderPosition(AbstractPosition):
                 op.valid_until = valid_until
 
             if op.is_bundled and not op.addon_to_id:
-                logger.info(
-                    "Triggered bug that causes unattached bundle products. Dumping cart state in original order: " +
-                    repr([{k.name: getattr(c, k.name) for k in CartPosition._meta.fields} for c in cp])
-                )
-                logger.info(
-                    "Sorted order with sort key was: " +
-                    repr([(c.pk, c.sort_key) for c in sorted(cp, key=lambda c: c.sort_key)])
-                )
                 raise ValueError("Bundled cart position without parent does not make sense.")
 
             op.positionid = i + 1
@@ -2973,6 +2965,14 @@ class CartPosition(AbstractPosition):
         return '<CartPosition: item %d, variation %d for cart %s>' % (
             self.item.id, self.variation.id if self.variation else 0, self.cart_id
         )
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # invalidate cached values of cached properties that likely have changed
+        try:
+            del self.sort_key
+        except AttributeError:
+            pass
 
     @property
     def tax_value(self):
