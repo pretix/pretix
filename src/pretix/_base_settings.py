@@ -235,7 +235,12 @@ COMPRESS_FILTERS = {
     )
 }
 
-CURRENCIES = list(currencies)
+CURRENCIES = [
+    c for c in currencies
+    if c.alpha_3 not in {
+        'XAF', 'XAG', 'XAU', 'XBA', 'XBB', 'XBC', 'XBD', 'XDR', 'XOF', 'XPD', 'XPF', 'XPT', 'XSU', 'XTS', 'XUA',
+    }
+]
 CURRENCY_PLACES = {
     # default is 2
     'BIF': 0,

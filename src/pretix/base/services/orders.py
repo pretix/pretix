@@ -199,6 +199,7 @@ error_messages = {
     ),
     'addon_no_multi': gettext_lazy('You can select every add-on from the category %(cat)s for the product %(base)s at most once.'),
     'addon_already_checked_in': gettext_lazy('You cannot remove the position %(addon)s since it has already been checked in.'),
+    'currency_XXX': gettext_lazy('Paid products not supported without a valid currency.'),
 }
 
 logger = logging.getLogger(__name__)
@@ -1128,6 +1129,9 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
     ).filter(
         id__in=position_ids, event=event
     )
+
+    if shown_total is not None and Decimal(shown_total) > Decimal("0.00") and event.currency == "XXX":
+        raise OrderError(error_messages['currency_XXX'])
 
     validate_order.send(
         event,
@@ -2125,6 +2129,9 @@ class OrderChangeManager:
                     )
 
     def _check_paid_to_free(self):
+        if self.event.currency == 'XXX' and self.order.total + self._totaldiff > Decimal("0.00"):
+            raise OrderError(error_messages['currency_XXX'])
+
         if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)) and not self.order.require_approval:
             if not self.order.fees.exists() and not self.order.positions.exists():
                 # The order is completely empty now, so we cancel it.

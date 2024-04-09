@@ -1586,6 +1586,9 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         if order.total == Decimal('0.00') and validated_data.get('status') == Order.STATUS_PAID and not payment_provider:
             payment_provider = 'free'
 
+        if order.total != Decimal('0.00') and order.event.currency == "XXX":
+            raise ValidationError('Paid products not supported without a valid currency.')
+
         if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID and not validated_data.get('require_approval'):
             order.status = Order.STATUS_PAID
             order.save()
