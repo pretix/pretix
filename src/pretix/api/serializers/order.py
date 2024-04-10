@@ -1439,6 +1439,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     if not pos.item.tax_rule or pos.item.tax_rule.price_includes_tax:
                         price_after_voucher = max(pos.price, pos.voucher.calculate_price(listed_price))
                     else:
+                        pos._calculate_tax(invoice_address=ia)
                         price_after_voucher = max(pos.price - pos.tax_value, pos.voucher.calculate_price(listed_price))
                 else:
                     price_after_voucher = listed_price
@@ -1466,7 +1467,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             answers_data = pos_data.pop('answers', [])
             use_reusable_medium = pos_data.pop('use_reusable_medium', None)
             pos = pos_data['__instance']
-            pos._calculate_tax()
+            pos._calculate_tax(invoice_address=ia)
 
             if simulate:
                 pos = WrappedModel(pos)
