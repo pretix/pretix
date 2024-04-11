@@ -247,6 +247,7 @@ urlpatterns = [
         re_path(r'^widgets.json$', dashboards.event_index_widgets_lazy, name='event.index.widgets'),
         re_path(r'^logs/embed$', dashboards.event_index_log_lazy, name='event.index.logs'),
         re_path(r'^live/$', event.EventLive.as_view(), name='event.live'),
+        re_path(r'^transfer_session/$', event.EventTransferSession.as_view(), name='event.transfer_session'),
         re_path(r'^logs/$', event.EventLog.as_view(), name='event.log'),
         re_path(r'^delete/$', event.EventDelete.as_view(), name='event.delete'),
         re_path(r'^comment/$', event.EventComment.as_view(),

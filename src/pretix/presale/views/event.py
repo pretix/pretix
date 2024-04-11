@@ -42,18 +42,21 @@ from importlib import import_module
 from urllib.parse import urlencode
 
 import isoweek
+from dateutil import parser
+from django import forms
 from django.conf import settings
+from django.contrib import messages
 from django.core.exceptions import PermissionDenied
 from django.db.models import (
     Count, Exists, IntegerField, OuterRef, Prefetch, Q, Value,
 )
 from django.db.models.lookups import Exact
 from django.http import Http404, HttpResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.formats import get_format
 from django.utils.functional import SimpleLazyObject
-from django.utils.timezone import now
+from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
 from django.views.decorators.csrf import csrf_exempt
@@ -78,6 +81,8 @@ from pretix.presale.views.organizer import (
     filter_qs_by_attr, has_before_after, weeks_for_template,
 )
 
+from ...base.forms.widgets import SplitDateTimePickerWidget
+from ...control.permissions import EventPermissionRequiredMixin
 from ...helpers.formats.en.formats import SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT
 from ...helpers.http import redirect_to_url
 from . import (
@@ -918,3 +923,43 @@ class EventAuth(View):
 
         request.session['pretix_event_access_{}'.format(request.event.pk)] = parent
         return redirect_to_url(eventreverse(request.event, 'presale:event.index'))
+
+
+class TimemachineForm(forms.Form):
+    now_dt = forms.SplitDateTimeField(
+        label=_('Fake date time'),
+        widget=SplitDateTimePickerWidget(),
+        initial=lambda: now().astimezone(get_current_timezone())
+    )
+
+
+class EventTimeMachine(EventViewMixin, EventPermissionRequiredMixin, TemplateView):
+    permission = 'can_change_event_settings'
+    template_name = 'pretixpresale/event/timemachine.html'
+
+    def setup(self, request, *args, **kwargs):
+        super().setup(request, *args, **kwargs)
+        self.timemachine_form = TimemachineForm(
+            data=request.method == 'POST' and request.POST or None,
+            initial=(
+                {'now_dt': parser.parse(request.session.get('timemachine_now_dt', None))}
+                if request.session.get('timemachine_now_dt', None) else {}
+            )
+        )
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx['timemachine_form'] = self.timemachine_form
+        return ctx
+
+    def post(self, request, *args, **kwargs):
+        if request.POST.get("timemachine_disable"):
+            del request.session['timemachine_now_dt']
+            messages.success(self.request, _('Time machine disabled!'))
+            return redirect(self.get_success_url())
+        elif self.timemachine_form.is_valid():
+            request.session['timemachine_now_dt'] = str(self.timemachine_form.cleaned_data['now_dt'])
+            return redirect(eventreverse(request.event, "presale:event.index"))
+
+    def get_success_url(self) -> str:
+        return eventreverse(self.request.event, 'presale:event.timemachine')

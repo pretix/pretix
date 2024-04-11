@@ -38,6 +38,9 @@ from importlib import import_module
 from urllib.parse import urljoin
 
 from django.conf import settings
+from django.contrib.auth import (
+    BACKEND_SESSION_KEY, SESSION_KEY, get_user_model, load_backend,
+)
 from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden
 from django.middleware.csrf import rotate_token
@@ -218,6 +221,15 @@ def customer_logout(request):
     request._cached_customer = None
 
 
+def _apply_user_from_session_data(request, sessiondata):
+    user_id = get_user_model()._meta.pk.to_python(sessiondata[SESSION_KEY])
+    backend_path = sessiondata[BACKEND_SESSION_KEY]
+    if backend_path in settings.AUTHENTICATION_BACKENDS:
+        backend = load_backend(backend_path)
+        user = backend.get_user(user_id)
+        request.user = user
+
+
 @scope(organizer=None)
 def _detect_event(request, require_live=True, require_plugin=None):
 
@@ -303,7 +315,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
             # Restrict locales to the ones available for this event
             LocaleMiddleware(NotImplementedError).process_request(request)
 
-            if require_live and not request.event.live:
+            if require_live and (request.event.testmode or not request.event.live):
                 can_access = (
                     url.url_name == 'event.auth'
                     or (
@@ -320,8 +332,10 @@ def _detect_event(request, require_live=True, require_plugin=None):
                         pass
                     else:
                         can_access = 'event_access' in parentdata
+                        if can_access:
+                            _apply_user_from_session_data(request, parentdata)
 
-                if not can_access:
+                if not can_access and not request.event.live:
                     # Directly construct view instead of just calling `raise` since this case is so common that we
                     # don't want it to show in our log files.
                     template = loader.get_template("pretixpresale/event/offline.html")

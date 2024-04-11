@@ -38,10 +38,10 @@
             <div class="container">
                 <span class="fa fa-clock-o" aria-hidden="true"></span>
                 {% trans "You are currently using the time machine. The ticket shop is rendered as if it were" %} {{ request.now_dt }}
-                <a href="{{ site_url }}{% url "control:event.live" event=event.slug organizer=event.organizer.slug %}" class="btn-link">
+                <a href="{% eventurl event "presale:event.timemachine" %}" class="btn-link">
                     {% trans "Change" %}
                 </a>
-                <form action="{{ site_url }}{% url "control:event.live" event=event.slug organizer=event.organizer.slug %}" method="post" class="download-btn-form">
+                <form action="{% eventurl event "presale:event.timemachine" %}" method="post" class="download-btn-form">
                     {% csrf_token %}
                     <button type="submit" class="btn-link" value="true" name="timemachine_disable">{% trans "Go back to current time" %}</button>
                 </form>
@@ -126,6 +126,15 @@
     {% if request.event.testmode %}
         {% if request.sales_channel.testmode_supported %}
             <div class="alert alert-warning">
+                {% if request.user.is_authenticated %}
+                    <a href="{% eventurl event "presale:event.timemachine" %}" class="btn btn-default pull-right" title="{% trans "Enable time machine" %}">
+                        <span class="fa fa-clock-o" aria-hidden="true"></span>
+                    </a>
+                {% elif request.event_domain or request.organizer_domain %}
+                    <a href="{% url "control:event.transfer_session" event=event.slug organizer=event.organizer.slug %}" class="btn btn-default pull-right" title="{% trans "Enable time machine" %}">
+                        <span class="fa fa-clock-o" aria-hidden="true"></span>
+                    </a>
+                {% endif %}
                 <p><strong><span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
                     {% trans "This ticket shop is currently in test mode. Please do not perform any real purchases as your order might be deleted without notice." %}
                 </strong></p>
@@ -137,6 +146,8 @@
                 </strong></p>
             </div>
         {% endif %}
+
+
     {% endif %}
     {% if messages %}
         {% for message in messages %}

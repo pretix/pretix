@@ -106,7 +106,7 @@ def _default_context(request):
         else:
             ctx['complain_testmode_orders'] = False
 
-        if not request.event.live and ctx['has_domain']:
+        if (request.event.testmode or not request.event.live) and ctx['has_domain']:
             child_sess = request.session.get('child_session_{}'.format(request.event.pk))
             s = SessionStore()
             if not child_sess or not s.exists(child_sess):
