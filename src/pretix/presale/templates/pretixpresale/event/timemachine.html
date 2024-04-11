@@ -21,16 +21,20 @@
 
                 <p>{% trans "Test your shop as if it were a different date and time." %}</p>
 
-                {% bootstrap_field timemachine_form.now_dt layout="control" show_label=False field_class="col-md-6" %}
-                <div class="text-right">
-                    <button type="submit" class="btn btn-default btn-lg btn-save">
-                        {% if request.session.timemachine_now_dt %}{% trans "Change" %}{% else %}{% trans "Enable time machine" %}{% endif %}
-                    </button>
-                    {% if request.session.timemachine_now_dt %}
-                    <button name="timemachine_disable" value="true" type="submit" class="btn btn-default btn-lg btn-save">
-                        {% trans "Disable" %}
-                    </button>
-                    {% endif %}
+                <div class="row">
+                    <div class="col-md-6">
+                        {% bootstrap_field timemachine_form.now_dt layout="inline" show_label=False  %}
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button type="submit" class="btn btn-default btn-lg btn-save">
+                            {% if request.session.timemachine_now_dt %}{% trans "Change" %}{% else %}{% trans "Enable time machine" %}{% endif %}
+                        </button>
+                        {% if request.session.timemachine_now_dt %}
+                        <button name="timemachine_disable" value="true" type="submit" class="btn btn-default btn-lg btn-save">
+                            {% trans "Disable" %}
+                        </button>
+                        {% endif %}
+                    </div>
                 </div>
             </form>
 
