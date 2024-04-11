@@ -55,6 +55,7 @@ from django_scopes import scope
 
 from pretix.base.middleware import LocaleMiddleware
 from pretix.base.models import Customer, Event, Organizer
+from pretix.base.timemachine import time_machine_now_assigned_from_request
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import (
     get_event_domain, get_organizer_domain,
@@ -407,7 +408,8 @@ def _event_view(function=None, require_live=True, require_plugin=None):
             if ret:
                 return ret
             else:
-                with scope(organizer=getattr(request, 'organizer', None)):
+                with scope(organizer=getattr(request, 'organizer', None)), \
+                     time_machine_now_assigned_from_request(request):
                     response = func(request=request, *args, **kwargs)
                     if getattr(request, 'event', None):
                         for receiver, r in process_response.send(request.event, request=request, response=response):

@@ -26,43 +26,39 @@ from contextlib import contextmanager
 from dateutil.parser import parse
 from django.utils.timezone import now
 
+tls = threading.local()
 
-class TimeMachineMiddleware:
-    tls = threading.local()
 
-    def __init__(self, get_response=None):
-        self.get_response = get_response
-        super().__init__()
+@contextmanager
+def time_machine_now_assigned_from_request(request):
+    print("time_machine_now_assigned_from_request")
+    if hasattr(request, 'event') and 'timemachine_now_dt' in request.session and \
+            request.event.testmode and request.user.is_authenticated and \
+            request.user.has_event_permission(request.organizer, request.event, 'can_change_event_settings', request):
+        request.now_dt = parse(request.session['timemachine_now_dt'])
+        request.now_dt_is_fake = True
+    else:
+        request.now_dt = now()
+        request.now_dt_is_fake = False
 
-    def __call__(self, request):
-        if hasattr(request, 'event') and hasattr(request, '_namespace') and hasattr(request, '_event_detected') and \
-                'timemachine_now_dt' in request.session and \
-                request.event.testmode and request.user.is_authenticated and \
-                request.user.has_event_permission(request.organizer, request.event, 'can_change_event_settings', request):
-            request.now_dt = parse(request.session['timemachine_now_dt'])
-            request.now_dt_is_fake = True
-        else:
-            request.now_dt = now()
-            request.now_dt_is_fake = False
+    try:
+        tls.now_dt = request.now_dt if request.now_dt_is_fake else None
 
-        try:
-            TimeMachineMiddleware.tls.now_dt = request.now_dt if request.now_dt_is_fake else None
-
-            return self.get_response(request)
-        finally:
-            TimeMachineMiddleware.tls.now_dt = None
+        yield
+    finally:
+        tls.now_dt = None
 
 
 def time_machine_now(default=False):
     if default is False:
         default = now()
-    return getattr(TimeMachineMiddleware.tls, 'now_dt', None) or default
+    return getattr(tls, 'now_dt', None) or default
 
 
 @contextmanager
 def time_machine_now_assigned(now_dt):
     try:
-        TimeMachineMiddleware.tls.now_dt = now_dt
+        tls.now_dt = now_dt
         yield
     finally:
-        TimeMachineMiddleware.tls.now_dt = None
+        tls.now_dt = None

@@ -37,6 +37,7 @@ from django.urls import resolve
 from django_scopes import scope
 
 from pretix.base.channels import WebshopSalesChannel
+from pretix.base.timemachine import time_machine_now_assigned_from_request
 from pretix.presale.signals import process_response
 
 from .utils import _detect_event
@@ -68,7 +69,8 @@ class EventMiddleware:
             if redirect:
                 return redirect
 
-        with scope(organizer=getattr(request, 'organizer', None)):
+        with scope(organizer=getattr(request, 'organizer', None)), \
+             time_machine_now_assigned_from_request(request):
             response = self.get_response(request)
 
             if hasattr(request, '_namespace') and request._namespace == 'presale' and hasattr(request, 'event'):
