@@ -35,6 +35,12 @@ $(function () {
         'cardinality': 2,
       },
     },
+    'enum_entry_status': {
+      '==': {
+        'label': gettext('='),
+        'cardinality': 2,
+      },
+    },
     'int_by_datetime': {
       '<': {
         'label': '<',
@@ -109,6 +115,10 @@ $(function () {
       'label': gettext('Current day of the week (1 = Monday, 7 = Sunday)'),
       'type': 'int',
     },
+    'entry_status': {
+      'label': gettext('Current entry status'),
+      'type': 'enum_entry_status',
+    },
     'entries_number': {
       'label': gettext('Number of previous entries'),
       'type': 'int',
@@ -180,6 +190,8 @@ $(function () {
           condition_add: gettext('Add condition'),
           minutes: gettext('minutes'),
           duplicate: gettext('Duplicate'),
+          status_present: pgettext('entry_status', 'present'),
+          status_absent: pgettext('entry_status', 'absent'),
         },
         hasRules: false,
       };

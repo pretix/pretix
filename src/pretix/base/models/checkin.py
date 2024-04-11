@@ -285,7 +285,7 @@ class CheckinList(LoggedModel):
         }
         allowed_vars = {
             'product', 'variation', 'now', 'now_isoweekday', 'entries_number', 'entries_today', 'entries_days',
-            'minutes_since_last_entry', 'minutes_since_first_entry', 'gate',
+            'minutes_since_last_entry', 'minutes_since_first_entry', 'gate', 'entry_status',
         }
         if not rules or not isinstance(rules, dict):
             return rules
