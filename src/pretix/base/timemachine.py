@@ -20,18 +20,6 @@
 # <https://www.gnu.org/licenses/>.
 #
 
-# This file is based on an earlier version of pretix which was released under the Apache License 2.0. The full text of
-# the Apache License 2.0 can be obtained at <http://www.apache.org/licenses/LICENSE-2.0>.
-#
-# This file may have since been changed and any changes are released under the terms of AGPLv3 as described above. A
-# full history of changes and contributors is available at <https://github.com/pretix/pretix>.
-#
-# This file contains Apache-licensed contributions copyrighted by: Tobias Kunze
-#
-# Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
-# distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
-# License for the specific language governing permissions and limitations under the License.
-
 import threading
 from contextlib import contextmanager
 
@@ -47,7 +35,7 @@ class TimeMachineMiddleware:
         super().__init__()
 
     def __call__(self, request):
-        if hasattr(request, 'event') and hasattr(request, '_namespace') and request._namespace == 'presale' and \
+        if hasattr(request, 'event') and hasattr(request, '_namespace') and hasattr(request, '_event_detected') and \
                 'timemachine_now_dt' in request.session and \
                 request.event.testmode and request.user.is_authenticated and \
                 request.user.has_event_permission(request.organizer, request.event, 'can_change_event_settings', request):

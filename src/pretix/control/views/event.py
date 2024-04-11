@@ -91,9 +91,7 @@ from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.views.mailsetup import MailSettingsSetupView
 from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
-from pretix.multidomain.urlreverse import (
-    build_absolute_uri, get_event_domain,
-)
+from pretix.multidomain.urlreverse import build_absolute_uri, get_event_domain
 from pretix.plugins.stripe.payment import StripeSettingsHolder
 from pretix.presale.style import regenerate_css
 

@@ -504,7 +504,7 @@ class Order(LockModel, LoggedModel):
             if 'update_fields' in kwargs:
                 kwargs['update_fields'] = {'code'}.union(kwargs['update_fields'])
         if not self.datetime:
-            self.datetime = time_machine_now()
+            self.datetime = now()
             if 'update_fields' in kwargs:
                 kwargs['update_fields'] = {'datetime'}.union(kwargs['update_fields'])
         if not self.expires:
@@ -541,7 +541,7 @@ class Order(LockModel, LoggedModel):
         self.save(update_fields=['last_modified'])
 
     def set_expires(self, now_dt=None, subevents=None):
-        now_dt = now_dt or time_machine_now()
+        now_dt = now_dt or now()
         tz = ZoneInfo(self.event.settings.timezone)
         mode = self.event.settings.get('payment_term_mode')
         if mode == 'days':

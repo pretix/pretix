@@ -37,10 +37,10 @@
         <div class="timemachine-banner">
             <div class="container">
                 <span class="fa fa-clock-o" aria-hidden="true"></span>
-                {% trans "You are currently using the time machine. The ticket shop is rendered as if it were" %} {{ request.now_dt }}
-                <a href="{% eventurl event "presale:event.timemachine" %}" class="btn-link">
-                    {% trans "Change" %}
-                </a>
+                {% blocktrans trimmed with datetime=request.now_dt|date:"SHORT_DATETIME_FORMAT" %}
+                You are currently using the time machine. The ticket shop is rendered as if it were {{ datetime }}.
+                {% endblocktrans %}
+                <a href="{% eventurl event "presale:event.timemachine" %}" class="btn-link">{% trans "Change" %}</a>
                 <form action="{% eventurl event "presale:event.timemachine" %}" method="post" class="download-btn-form">
                     {% csrf_token %}
                     <button type="submit" class="btn-link" value="true" name="timemachine_disable">{% trans "Go back to current time" %}</button>
