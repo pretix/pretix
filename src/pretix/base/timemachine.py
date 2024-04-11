@@ -19,14 +19,13 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-
-import threading
+import contextvars
 from contextlib import contextmanager
 
 from dateutil.parser import parse
 from django.utils.timezone import now
 
-tls = threading.local()
+timemachine_now_var = contextvars.ContextVar('timemachine_now', default=None)
 
 
 @contextmanager
@@ -42,23 +41,23 @@ def time_machine_now_assigned_from_request(request):
         request.now_dt_is_fake = False
 
     try:
-        tls.now_dt = request.now_dt if request.now_dt_is_fake else None
+        timemachine_now_var.set(request.now_dt if request.now_dt_is_fake else None)
 
         yield
     finally:
-        tls.now_dt = None
+        timemachine_now_var.set(None)
 
 
 def time_machine_now(default=False):
     if default is False:
         default = now()
-    return getattr(tls, 'now_dt', None) or default
+    return timemachine_now_var.get() or default
 
 
 @contextmanager
 def time_machine_now_assigned(now_dt):
     try:
-        tls.now_dt = now_dt
+        timemachine_now_var.set(now_dt)
         yield
     finally:
-        tls.now_dt = None
+        timemachine_now_var.set(None)
