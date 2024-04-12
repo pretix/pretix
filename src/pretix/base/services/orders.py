@@ -413,7 +413,9 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
                     'pretix.event.order.email.order_approved', user,
                     attach_tickets=True,
                     attach_ical=order.event.settings.mail_attach_ical and (
-                        not order.event.settings.mail_attach_ical_paid_only or order.total == Decimal('0.00')
+                        not order.event.settings.mail_attach_ical_paid_only or
+                        order.total == Decimal('0.00') or
+                        order.valid_if_pending
                     ),
                     invoices=[invoice] if invoice and order.event.settings.invoice_email_attachment else []
                 )
@@ -1055,7 +1057,11 @@ def _order_placed_email(event: Event, order: Order, email_template, subject_temp
             log_entry,
             invoices=[invoice] if invoice and event.settings.invoice_email_attachment else [],
             attach_tickets=True,
-            attach_ical=event.settings.mail_attach_ical and (not event.settings.mail_attach_ical_paid_only or is_free),
+            attach_ical=event.settings.mail_attach_ical and (
+                not event.settings.mail_attach_ical_paid_only or
+                is_free or
+                order.valid_if_pending
+            ),
             attach_other_files=[a for a in [
                 event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
             ] if a],
@@ -1074,7 +1080,11 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
             log_entry,
             invoices=[],
             attach_tickets=True,
-            attach_ical=event.settings.mail_attach_ical and (not event.settings.mail_attach_ical_paid_only or is_free),
+            attach_ical=event.settings.mail_attach_ical and (
+                not event.settings.mail_attach_ical_paid_only or
+                is_free or
+                order.valid_if_pending
+            ),
             attach_other_files=[a for a in [
                 event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
             ] if a],
