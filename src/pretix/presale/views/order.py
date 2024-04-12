@@ -84,6 +84,7 @@ from pretix.base.signals import order_modified, register_ticket_outputs
 from pretix.base.templatetags.money import money_filter
 from pretix.base.views.mixins import OrderQuestionsViewMixin
 from pretix.base.views.tasks import AsyncAction
+from pretix.helpers import OF_SELF
 from pretix.helpers.http import redirect_to_url
 from pretix.helpers.safedownload import check_token
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
@@ -450,20 +451,22 @@ class OrderPaymentConfirm(EventViewMixin, OrderDetailMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         try:
-            i = self.order.invoices.filter(is_cancellation=False).last()
-            has_active_invoice = i and not i.canceled
-            if (not has_active_invoice or self.order.invoice_dirty) and invoice_qualified(self.order):
-                if self.request.event.settings.get('invoice_generate') == 'True' or (
-                        self.request.event.settings.get('invoice_generate') == 'paid' and self.payment.payment_provider.requires_invoice_immediately):
-                    if has_active_invoice:
-                        generate_cancellation(i)
-                    i = generate_invoice(self.order)
-                    self.order.log_action('pretix.event.order.invoice.generated', data={
-                        'invoice': i.pk
-                    })
-                    messages.success(self.request, _('An invoice has been generated.'))
-            self.payment.process_initiated = True
-            self.payment.save(update_fields=['process_initiated'])
+            with transaction.atomic():
+                order = Order.objects.select_for_update(of=OF_SELF).get(pk=self.order.pk)
+                i = order.invoices.filter(is_cancellation=False).last()
+                has_active_invoice = i and not i.canceled
+                if (not has_active_invoice or order.invoice_dirty) and invoice_qualified(order):
+                    if self.request.event.settings.get('invoice_generate') == 'True' or (
+                            self.request.event.settings.get('invoice_generate') == 'paid' and self.payment.payment_provider.requires_invoice_immediately):
+                        if has_active_invoice:
+                            generate_cancellation(i)
+                        i = generate_invoice(order)
+                        order.log_action('pretix.event.order.invoice.generated', data={
+                            'invoice': i.pk
+                        })
+                        messages.success(self.request, _('An invoice has been generated.'))
+                self.payment.process_initiated = True
+                self.payment.save(update_fields=['process_initiated'])
             resp = self.payment.payment_provider.execute_payment(request, self.payment)
         except PaymentException as e:
             messages.error(request, str(e))
