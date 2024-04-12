@@ -412,6 +412,9 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
                     email_subject, email_template, email_context,
                     'pretix.event.order.email.order_approved', user,
                     attach_tickets=True,
+                    attach_ical=order.event.settings.mail_attach_ical and (
+                        not order.event.settings.mail_attach_ical_paid_only or order.total == Decimal('0.00')
+                    ),
                     invoices=[invoice] if invoice and order.event.settings.invoice_email_attachment else []
                 )
             except SendMailException:
