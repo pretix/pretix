@@ -30,7 +30,6 @@ timemachine_now_var = contextvars.ContextVar('timemachine_now', default=None)
 
 @contextmanager
 def time_machine_now_assigned_from_request(request):
-    print("time_machine_now_assigned_from_request")
     if hasattr(request, 'event') and 'timemachine_now_dt' in request.session and \
             request.event.testmode and request.user.is_authenticated and \
             request.user.has_event_permission(request.organizer, request.event, 'can_change_event_settings', request):
