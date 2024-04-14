@@ -16,4 +16,5 @@ wanting to use pretix to sell tickets.
    events/giftcards
    faq
    markdown
+   android-version-support
    glossary
