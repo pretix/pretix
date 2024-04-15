@@ -514,7 +514,7 @@ def base_placeholders(sender, **kwargs):
     ph.append(SimpleFunctionalTextPlaceholder(
         "name_for_salutation", ["waiting_list_entry"],
         lambda waiting_list_entry: concatenation_for_salutation(waiting_list_entry.name_parts),
-        _("Mr Doe"),
+        lambda event: concatenation_for_salutation(name_scheme['sample']),
     ))
     ph.append(SimpleFunctionalTextPlaceholder(
         "name", ["waiting_list_entry"],
@@ -524,7 +524,7 @@ def base_placeholders(sender, **kwargs):
     ph.append(SimpleFunctionalTextPlaceholder(
         "name_for_salutation", ["position_or_address"],
         lambda position_or_address: concatenation_for_salutation(get_best_name(position_or_address, parts=True)),
-        _("Mr Doe"),
+        lambda event: concatenation_for_salutation(name_scheme['sample']),
     ))
 
     for f, l, w in name_scheme['fields']:
