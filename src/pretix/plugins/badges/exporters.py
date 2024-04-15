@@ -50,7 +50,7 @@ from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.db import DataError, models
-from django.db.models import Case, Exists, OuterRef, Q, Subquery, When, Value
+from django.db.models import Case, Exists, OuterRef, Q, Subquery, Value, When
 from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy

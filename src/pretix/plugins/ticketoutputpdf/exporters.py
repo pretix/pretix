@@ -39,7 +39,7 @@ from io import BytesIO
 from django import forms
 from django.core.files.base import ContentFile
 from django.db import DataError, models
-from django.db.models import Case, OuterRef, Q, Subquery, When, Value
+from django.db.models import Case, OuterRef, Q, Subquery, Value, When
 from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import now
 from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
