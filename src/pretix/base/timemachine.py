@@ -60,6 +60,11 @@ def time_machine_now(default=False):
 
 @contextmanager
 def time_machine_now_assigned(now_dt):
+    """
+    Use this context manager to assign current datetime for time machine mode. Useful e.g. for background tasks.
+
+    :param now_dt: The datetime value to assign. May be `None` to disable time machine.
+    """
     try:
         timemachine_now_var.set(now_dt)
         yield

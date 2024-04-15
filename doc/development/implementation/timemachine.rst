@@ -10,6 +10,8 @@ product can be bought, you should use :py:meth:`time_machine_now`.
 
 .. autofunction:: pretix.base.timemachine.time_machine_now
 
+.. autofunction:: pretix.base.timemachine.time_machine_now_assigned
+
 Background tasks
 ----------------
 
