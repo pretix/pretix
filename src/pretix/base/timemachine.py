@@ -47,6 +47,12 @@ def time_machine_now_assigned_from_request(request):
 
 
 def time_machine_now(default=False):
+    """
+    Return the datetime to use as current datetime for checking order restrictions in event
+    index and checkout flow.
+
+    :param default:   Value to return if time machine mode is disabled. By default the current datetime is used.
+    """
     if default is False:
         default = now()
     return timemachine_now_var.get() or default
