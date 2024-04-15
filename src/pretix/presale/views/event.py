@@ -63,6 +63,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from pretix.base.channels import get_all_sales_channels
+from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
     ItemVariation, Quota, SeatCategoryMapping, Voucher,
 )
@@ -72,7 +73,12 @@ from pretix.base.models.items import (
 )
 from pretix.base.services.placeholders import PlaceholderContext
 from pretix.base.services.quotas import QuotaAvailability
+from pretix.base.timemachine import has_time_machine_permission
 from pretix.helpers.compat import date_fromisocalendar
+from pretix.helpers.formats.en.formats import (
+    SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT,
+)
+from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import eventreverse
 from pretix.presale.ical import get_public_ical
 from pretix.presale.signals import item_description
@@ -81,10 +87,6 @@ from pretix.presale.views.organizer import (
     filter_qs_by_attr, has_before_after, weeks_for_template,
 )
 
-from ...base.forms.widgets import SplitDateTimePickerWidget
-from ...control.permissions import EventPermissionRequiredMixin
-from ...helpers.formats.en.formats import SHORT_MONTH_DAY_FORMAT, WEEK_FORMAT
-from ...helpers.http import redirect_to_url
 from . import (
     CartMixin, EventViewMixin, allow_frame_if_namespaced, get_cart,
     iframe_entry_view_wrapper,
@@ -918,7 +920,7 @@ class EventAuth(View):
         except:
             raise PermissionDenied(_('Please go back and try again.'))
         else:
-            if 'event_access' not in parentdata:
+            if 'child_session_{}'.format(request.event.pk) not in parentdata:
                 raise PermissionDenied(_('Please go back and try again.'))
 
         request.session['pretix_event_access_{}'.format(request.event.pk)] = parent
@@ -933,12 +935,13 @@ class TimemachineForm(forms.Form):
     )
 
 
-class EventTimeMachine(EventViewMixin, EventPermissionRequiredMixin, TemplateView):
-    permission = 'can_change_event_settings'
+class EventTimeMachine(EventViewMixin, TemplateView):
     template_name = 'pretixpresale/event/timemachine.html'
 
     def setup(self, request, *args, **kwargs):
         super().setup(request, *args, **kwargs)
+        if not has_time_machine_permission(request, request.event):
+            raise PermissionDenied(_('You are not allowed to access time machine mode.'))
         self.timemachine_form = TimemachineForm(
             data=request.method == 'POST' and request.POST or None,
             initial=(

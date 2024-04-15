@@ -222,13 +222,13 @@ def customer_logout(request):
     request._cached_customer = None
 
 
-def _apply_user_from_session_data(request, sessiondata):
+def _get_user_from_session_data(sessiondata):
     user_id = get_user_model()._meta.pk.to_python(sessiondata[SESSION_KEY])
     backend_path = sessiondata[BACKEND_SESSION_KEY]
     if backend_path in settings.AUTHENTICATION_BACKENDS:
         backend = load_backend(backend_path)
         user = backend.get_user(user_id)
-        request.user = user
+        return user
 
 
 @scope(organizer=None)
@@ -323,7 +323,6 @@ def _detect_event(request, require_live=True, require_plugin=None):
                         request.user.is_authenticated
                         and request.user.has_event_permission(request.organizer, request.event, request=request)
                     )
-
                 )
                 if not can_access and 'pretix_event_access_{}'.format(request.event.pk) in request.session:
                     sparent = SessionStore(request.session.get('pretix_event_access_{}'.format(request.event.pk)))
@@ -332,9 +331,10 @@ def _detect_event(request, require_live=True, require_plugin=None):
                     except:
                         pass
                     else:
-                        can_access = 'event_access' in parentdata
-                        if can_access:
-                            _apply_user_from_session_data(request, parentdata)
+                        user = _get_user_from_session_data(parentdata)
+                        if user.is_authenticated and user.has_event_permission(request.organizer, request.event, request=request):
+                            can_access = True
+                            request.event_access_user = user
 
                 if not can_access and not request.event.live:
                     # Directly construct view instead of just calling `raise` since this case is so common that we

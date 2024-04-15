@@ -31,8 +31,7 @@ timemachine_now_var = contextvars.ContextVar('timemachine_now', default=None)
 @contextmanager
 def time_machine_now_assigned_from_request(request):
     if hasattr(request, 'event') and 'timemachine_now_dt' in request.session and \
-            request.event.testmode and request.user.is_authenticated and \
-            request.user.has_event_permission(request.organizer, request.event, 'can_change_event_settings', request):
+            request.event.testmode and has_time_machine_permission(request, request.event):
         request.now_dt = parse(request.session['timemachine_now_dt'])
         request.now_dt_is_fake = True
     else:
@@ -60,3 +59,16 @@ def time_machine_now_assigned(now_dt):
         yield
     finally:
         timemachine_now_var.set(None)
+
+
+def has_time_machine_permission(request, event):
+    permission = 'can_change_event_settings'
+
+    return (
+        request.user.is_authenticated and
+        request.user.has_event_permission(request.organizer, request.event, permission, request=request)
+    ) or (
+        getattr(request, 'event_access_user', None) and
+        request.event_access_user.is_authenticated and
+        request.event_access_user.has_event_permission(request.organizer, request.event, permission, request=request)
+    )
