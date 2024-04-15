@@ -57,7 +57,9 @@ from django_scopes import scopes_disabled
 
 from pretix.base.models import Customer, Membership, Order
 from pretix.base.models.items import Question
-from pretix.base.models.orders import InvoiceAddress, OrderPayment, QuestionAnswer
+from pretix.base.models.orders import (
+    InvoiceAddress, OrderPayment, QuestionAnswer,
+)
 from pretix.base.models.tax import TaxedPrice, TaxRule
 from pretix.base.services.cart import (
     CartError, CartManager, add_payment_to_cart, error_messages, get_fees,
