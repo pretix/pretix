@@ -37,7 +37,7 @@ dependencies = [
   "defusedcsv>=1.1.0",
   "dj-static",
   "Django==4.2.*",
-  "django-bootstrap3==23.6.*",
+  "django-bootstrap3==24.1",
   "django-compressor==4.4",
   "django-countries==7.6.*",
   "django-filter==24.2",
