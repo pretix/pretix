@@ -73,6 +73,11 @@ class MaxUsagesColumn(IntegerColumnMixin, ImportColumn):
             ("1", "1")
         ]
 
+    def clean(self, value, previous_values):
+        if value is None:
+            raise ValidationError(_('The maximum number of usages must be set.'))
+        return super().clean(value, previous_values)
+
     def assign(self, value, obj: Voucher, **kwargs):
         obj.max_usages = value if value is not None else 1
 
