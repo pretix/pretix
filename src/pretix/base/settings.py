@@ -3419,7 +3419,7 @@ def concatenation_for_salutation(d):
         salutation = pgettext("person_name_salutation", salutation)
         given_name = None
 
-    return " ".join(filter(None, (salutation, title, given_name, family_name)))
+    return " ".join(str(p) for p in filter(None, (salutation, title, given_name, family_name)))
 
 
 def get_name_parts_localized(name_parts, key):
