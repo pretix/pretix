@@ -747,6 +747,33 @@ def test_rules_scan_days(event, position, clist):
 
 
 @pytest.mark.django_db
+def test_rules_scan_entry_status(position, clist):
+    # Ticket is valid three times
+    clist.allow_multiple_entries = True
+    clist.rules = {
+        "or": [
+            {"==": [{"var": "entry_status"}, "absent"]},
+            {"<": [{"var": "entries_number"}, 1]}
+        ]
+    }
+    clist.save()
+
+    assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+    perform_checkin(position, clist, {})
+
+    assert not OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+    with pytest.raises(CheckInError) as excinfo:
+        perform_checkin(position, clist, {})
+    assert excinfo.value.code == 'rules'
+    assert "Attendee is already checked in." in str(excinfo.value)
+
+    perform_checkin(position, clist, {}, type=Checkin.TYPE_EXIT)
+
+    assert OrderPosition.objects.filter(SQLLogic(clist).apply(clist.rules), pk=position.pk).exists()
+    perform_checkin(position, clist, {})
+
+
+@pytest.mark.django_db
 def test_rules_entries_since(event, position, clist):
     # Ticket is valid once before X and once after X
     event.settings.timezone = 'Europe/Berlin'

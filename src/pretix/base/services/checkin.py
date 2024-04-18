@@ -42,8 +42,8 @@ from dateutil.tz import datetime_exists
 from django.core.files import File
 from django.db import IntegrityError, transaction
 from django.db.models import (
-    BooleanField, Count, ExpressionWrapper, F, IntegerField, Max, Min,
-    OuterRef, Q, Subquery, Value,
+    BooleanField, Case, Count, ExpressionWrapper, F, IntegerField, Max, Min,
+    OuterRef, Q, Subquery, TextField, Value, When,
 )
 from django.db.models.functions import Coalesce, TruncDate
 from django.dispatch import receiver
@@ -273,6 +273,14 @@ def _logic_explain(rules, ev, rule_data, now_dt=None):
                 var_texts[vname] = _('Only allowed before {datetime}').format(datetime=compare_to_text)
             elif operator == 'isAfter':
                 var_texts[vname] = _('Only allowed after {datetime}').format(datetime=compare_to_text)
+        elif var == 'entry_status':
+            var_weights[vname] = (20, 0)
+            if operator == '==' and rhs[0] == 'present':
+                var_texts[vname] = _('Attendee is checked out')
+            elif operator == '==' and rhs[0] == 'absent':
+                var_texts[vname] = _('Attendee is already checked in')
+            else:
+                var_texts[vname] = f'{var} not {operator} {rhs}'
         elif var == 'product' or var == 'variation':
             var_weights[vname] = (1000, 0)
             var_texts[vname] = _('Ticket type not allowed')
@@ -508,6 +516,13 @@ class LazyRuleVars:
             ).values('day').distinct().count()
 
     @cached_property
+    def entry_status(self):
+        last_checkin = self._position.checkins.filter(list=self._clist).order_by('datetime').last()
+        if not last_checkin or last_checkin.type == Checkin.TYPE_EXIT:
+            return "absent"
+        return "present"
+
+    @cached_property
     def minutes_since_last_entry(self):
         tz = self._clist.event.timezone
         with override(tz):
@@ -569,6 +584,8 @@ class SQLLogic:
                                'entries_days_since', 'entries_days_before'}
 
     def operation_to_expression(self, rule):
+        if isinstance(rule, str):
+            return Value(rule)
         if not isinstance(rule, dict):
             return rule
 
@@ -769,6 +786,25 @@ class SQLLogic:
                     MinutesSince(sq_last_entry),
                     Value(-1),
                     output_field=IntegerField()
+                )
+            elif values[0] == 'entry_status':
+                sq_last_checkin = Subquery(
+                    Checkin.objects.filter(
+                        position_id=OuterRef('pk'),
+                        list_id=self.list.pk,
+                    ).order_by('-datetime').values('type')[:1]
+                )
+
+                return Case(
+                    When(
+                        condition=Equal(
+                            sq_last_checkin,
+                            Value(Checkin.TYPE_ENTRY)
+                        ),
+                        then=Value("present"),
+                    ),
+                    default=Value("absent"),
+                    output_field=TextField()
                 )
         else:
             raise ValueError(f'Unknown operator {operator}')

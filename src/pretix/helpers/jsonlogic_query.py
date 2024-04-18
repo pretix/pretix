@@ -34,6 +34,7 @@ class Equal(Func):
     arg_joiner = ' = '
     arity = 2
     function = ''
+    conditional = True
 
 
 class GreaterThan(Func):
