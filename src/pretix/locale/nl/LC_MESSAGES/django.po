@@ -7,16 +7,16 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-03 10:43+0000\n"
-"PO-Revision-Date: 2024-03-01 19:00+0000\n"
-"Last-Translator: Dean Wyns <dean.wyns@outlook.com>\n"
-"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/"
-">\n"
+"PO-Revision-Date: 2024-04-19 23:00+0000\n"
+"Last-Translator: Christiaan de Die le Clercq <contact@techwolf12.nl>\n"
+"Language-Team: Dutch <https://translate.pretix.eu/projects/pretix/pretix/nl/>"
+"\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.2\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -3568,7 +3568,7 @@ msgstr "Voucherwaarde"
 
 #: pretix/base/modelimport_vouchers.py:158
 msgid "It is pointless to set a value without a price mode."
-msgstr ""
+msgstr "Het is zinloos om een waarde toe te kennen zonder prijs modus."
 
 #: pretix/base/modelimport_vouchers.py:230 pretix/base/models/items.py:1997
 #: pretix/base/models/vouchers.py:272
@@ -5906,6 +5906,10 @@ msgid ""
 "up two-factor authentication or leave the team. The setting may take a few "
 "minutes to become effective for all users."
 msgstr ""
+"Wanneer je dit aanzet zullen alle leden van het team verplicht worden om "
+"twee-factor authenticatie aan te zetten of het team te verlaten. Het kan een "
+"paar minuten duren voordat deze instelling beschikbaar is voor alle "
+"gebruikers."
 
 #: pretix/base/models/organizer.py:275
 msgid "Can create events"
@@ -9690,6 +9694,11 @@ msgid ""
 "still people on the waiting list. Vouchers that have already been sent "
 "remain active."
 msgstr ""
+"De wachtlijst zal volledig worden uitgeschakeld na deze datum. Hierdoor kan "
+"niemand meer aan de wachtlijst worden toegevoegd en zullen kaartjes weer "
+"beschikbaar zijn voor verkoop als het quota dit toestaat, zelfs als er nog "
+"mensen op de wachtlijst staan. Waardebonnen die al verstuurd zijn zullen "
+"actief blijven."
 
 #: pretix/base/settings.py:1419
 msgid "Ask for a name"
@@ -16273,6 +16282,7 @@ msgid ""
 "A first login using {agent_type} on {os_type} from {country} has been "
 "detected."
 msgstr ""
+"Een eerste login met {agent_type} op {os_type} van {country} is gedetecteerd."
 
 #: pretix/control/logdisplay.py:460 pretix/control/views/user.py:489
 #: pretix/control/views/user.py:549 pretix/control/views/user.py:608
@@ -23393,7 +23403,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:210
 msgid "Barcode media"
-msgstr ""
+msgstr "Barcode medium"
 
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:214
 msgid ""
@@ -23440,7 +23450,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/organizers/export.html:64
 msgid "Run export now and download result"
-msgstr ""
+msgstr "Nu export draaien en het resultaat downloaden"
 
 #: pretix/control/templates/pretixcontrol/organizers/gate_delete.html:5
 msgid "Delete gate:"
