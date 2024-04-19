@@ -539,7 +539,7 @@ class BadgeExporter(BaseExporter):
                 resolved_company=Case(
                     When(company__ne='', then='company'),
                     When(addon_to__company__isnull=False, addon_to__company__ne='',
-                         then='addon_to__company_cached'),
+                         then='addon_to__company'),
                     default=Value(""),
                 )
             ).order_by('resolved_company', 'order__code')
