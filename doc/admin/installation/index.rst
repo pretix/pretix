@@ -14,3 +14,4 @@ for your needs.
    manual_smallscale
    dev_version
    enterprise
+   community
