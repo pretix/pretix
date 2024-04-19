@@ -104,6 +104,7 @@ TEST_SUBEVENT_RES = {
     "geo_lon": None,
     'is_public': True,
     'item_price_overrides': [],
+    'comment': None,
     'meta_data': {'type': 'Workshop'}
 }
 

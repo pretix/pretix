@@ -1440,6 +1440,7 @@ class SubEventBulkEdit(SubEventQueryMixin, EventPermissionRequiredMixin, FormVie
             'name',
             'location',
             'frontpage_text',
+            'comment',
             'geo_lat',
             'geo_lon',
             'is_public',

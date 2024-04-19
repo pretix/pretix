@@ -68,6 +68,7 @@ class SubEventForm(I18nModelForm):
             'presale_end',
             'location',
             'frontpage_text',
+            'comment',
             'geo_lat',
             'geo_lon',
         ]
@@ -128,7 +129,7 @@ class SubEventBulkEditForm(I18nModelForm):
         super().__init__(*args, **kwargs)
         self.fields['location'].widget.attrs['rows'] = '3'
 
-        for k in ('name', 'location', 'frontpage_text'):
+        for k in ('name', 'location', 'frontpage_text', 'comment'):
             # i18n fields
             if k in self.mixed_values:
                 self.fields[k].widget.attrs['placeholder'] = '[{}]'.format(_('Selection contains various values'))
@@ -166,6 +167,7 @@ class SubEventBulkEditForm(I18nModelForm):
             'name',
             'location',
             'frontpage_text',
+            'comment',
             'geo_lat',
             'geo_lon',
             'is_public',

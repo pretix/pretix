@@ -138,6 +138,9 @@
                                             <small class="text-muted">&middot; {{ k }}: {{ v }}</small>
                                         {% endif %}
                                     {% endfor %}
+                                    {% if s.comment %}
+                                        <br>{{ s.comment|linebreaksbr }}
+                                    {% endif %}
                                 </small>
                             </td>
                             <td>
