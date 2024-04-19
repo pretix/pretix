@@ -470,7 +470,8 @@ def mail_send_task(self, *args, to: List[str], subject: str, body: str, html: st
                         # just "ABC-123.pdf", but we only do so if our currently selected language allows to do this
                         # as ASCII text. For example, we would not want a "فاتورة_" prefix for our filename since this
                         # has shown to cause deliverability problems of the email and deliverability wins.
-                        filename = pgettext('invoice', 'Invoice {num}').format(num=inv.number).replace(' ', '_') + '.pdf'
+                        with language(order.locale if order else inv.locale, event.settings.region if event else None):
+                            filename = pgettext('invoice', 'Invoice {num}').format(num=inv.number).replace(' ', '_') + '.pdf'
                         if not re.match("^[a-zA-Z0-9-_%./,&:# ]+$", filename):
                             filename = inv.number.replace(' ', '_') + '.pdf'
                         filename = re.sub("[^a-zA-Z0-9-_.]+", "_", filename)
