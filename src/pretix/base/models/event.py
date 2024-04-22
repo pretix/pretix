@@ -1465,6 +1465,10 @@ class SubEvent(EventMixin, LoggedModel):
 
     items = models.ManyToManyField('Item', through='SubEventItem')
     variations = models.ManyToManyField('ItemVariation', through='SubEventItemVariation')
+    comment = models.TextField(
+        verbose_name=_("Internal comment"),
+        null=True, blank=True
+    )
 
     last_modified = models.DateTimeField(
         auto_now=True, db_index=True

@@ -1231,7 +1231,7 @@ class SubEventFilterForm(FilterForm):
         if fdata.get('query'):
             query = fdata.get('query')
             qs = qs.filter(
-                Q(name__icontains=i18ncomp(query)) | Q(location__icontains=query)
+                Q(name__icontains=i18ncomp(query)) | Q(location__icontains=query) | Q(comment__icontains=query)
             )
 
         if fdata.get('date_until'):
