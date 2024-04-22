@@ -238,7 +238,7 @@ COMPRESS_FILTERS = {
 CURRENCIES = [
     c for c in currencies
     if c.alpha_3 not in {
-        'XAF', 'XAG', 'XAU', 'XBA', 'XBB', 'XBC', 'XBD', 'XDR', 'XOF', 'XPD', 'XPF', 'XPT', 'XSU', 'XTS', 'XUA',
+        'XAG', 'XAU', 'XBA', 'XBB', 'XBC', 'XBD', 'XDR', 'XPD', 'XPT', 'XSU', 'XTS', 'XUA',
     }
 ]
 CURRENCY_PLACES = {

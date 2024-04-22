@@ -7,7 +7,7 @@ def change_currencies(apps, schema_editor):
     Event = apps.get_model("pretixbase", "Event")
     Event.objects.filter(
         currency__in={
-            'XAF', 'XAG', 'XAU', 'XBA', 'XBB', 'XBC', 'XBD', 'XDR', 'XOF', 'XPD', 'XPF', 'XPT', 'XSU', 'XTS', 'XUA',
+            'XAG', 'XAU', 'XBA', 'XBB', 'XBC', 'XBD', 'XDR', 'XPD', 'XPT', 'XSU', 'XTS', 'XUA',
         }
     ).update(currency='XXX')
 
