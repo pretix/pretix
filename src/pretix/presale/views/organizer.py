@@ -561,6 +561,13 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
     for se in qs:
         if se.presale_is_running:
             quotas_to_compute += se.active_quotas
+            for q in se.active_quotas:
+                # save database lookups later
+                q.subevent = se
+                if event is not None:
+                    q.event = event
+                else:
+                    q.event = se.event
 
     qcache = {}
     if quotas_to_compute:
@@ -572,6 +579,8 @@ def add_subevents_for_days(qs, before, after, ebd, timezones, event=None, cart_n
     for se in qs:
         if qcache:
             se._quota_cache = qcache
+        if event is not None:  # save database lookup later
+            se.event = event
         kwargs = {'subevent': se.pk}
         if cart_namespace:
             kwargs['cart_namespace'] = cart_namespace
