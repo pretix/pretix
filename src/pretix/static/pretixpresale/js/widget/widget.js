@@ -843,7 +843,7 @@ var shared_lightbox_fragment = (
         + '</div>'
         + '<div class="pretix-widget-lightbox-inner" @click.stop="">'
             + '<figure class="pretix-widget-lightbox-image">'
-                + '<img :src="$root.lightbox.image" :alt="$root.lightbox.description" @load="lightboxLoaded" ref="lightboxImage">'
+                + '<img :src="$root.lightbox.image" :alt="$root.lightbox.description" @load="lightboxLoaded" ref="lightboxImage" crossorigin>'
                 + '<figcaption v-if="$root.lightbox.description">{{$root.lightbox.description}}</figcaption>'
             + '</figure>'
             + '<button type="button" class="pretix-widget-lightbox-close" @click="lightboxClose" aria-label="'+strings.close+'">'
@@ -1947,6 +1947,10 @@ var shared_root_computed = {
         return target;
     },
     useIframe: function () {
+        if (window.crossOriginIsolated === true) {
+            console.warn("pretix Widget cannot use iframe due to Cross-Origin-Embed-Policy")
+            return false;
+        }
         return !this.disable_iframe && (this.skip_ssl || site_is_secure());
     },
     showPrices: function () {

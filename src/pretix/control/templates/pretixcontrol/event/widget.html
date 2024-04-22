@@ -19,8 +19,8 @@
                 section of your website:
             {% endblocktrans %}
         </p>
-        <pre>&lt;link rel="stylesheet" type="text/css" href="{% abseventurl request.event "presale:event.widget.css" %}"&gt;
-&lt;script type="text/javascript" src="{{ urlprefix }}{% url "presale:widget.js" lang=form.cleaned_data.language %}" async&gt;&lt;/script&gt;</pre>
+        <pre>&lt;link rel="stylesheet" type="text/css" href="{% abseventurl request.event "presale:event.widget.css" %}" crossorigin&gt;
+&lt;script type="text/javascript" src="{{ urlprefix }}{% url "presale:widget.js" lang=form.cleaned_data.language %}" async crossorigin&gt;&lt;/script&gt;</pre>
         <p>
             {% blocktrans trimmed %}
                 Then, copy the following code to the place of your website where you want the widget to show up:
