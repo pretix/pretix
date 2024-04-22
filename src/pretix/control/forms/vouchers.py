@@ -45,7 +45,9 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelChoiceField
 
 from pretix.base.email import get_available_placeholders
-from pretix.base.forms import I18nModelForm, PlaceholderValidator
+from pretix.base.forms import (
+    I18nModelForm, MarkdownTextarea, PlaceholderValidator,
+)
 from pretix.base.forms.widgets import format_placeholders_help_text
 from pretix.base.models import Item, Voucher
 from pretix.control.forms import SplitDateTimeField, SplitDateTimePickerWidget
@@ -271,7 +273,7 @@ class VoucherBulkForm(VoucherForm):
     )
     send_message = forms.CharField(
         label=_("Message"),
-        widget=forms.Textarea(attrs={'data-display-dependency': '#id_send'}),
+        widget=MarkdownTextarea(attrs={'data-display-dependency': '#id_send'}),
         required=False,
         initial=_('Hello,\n\n'
                   'with this email, we\'re sending you one or more vouchers for {event}:\n\n{voucher_list}\n\n'

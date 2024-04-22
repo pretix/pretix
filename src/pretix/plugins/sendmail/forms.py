@@ -39,9 +39,9 @@ from django.core.exceptions import ValidationError
 from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelMultipleChoiceField
-from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
+from i18nfield.forms import I18nFormField, I18nTextInput
 
-from pretix.base.forms import I18nModelForm
+from pretix.base.forms import I18nMarkdownTextarea, I18nModelForm
 from pretix.base.forms.widgets import (
     SplitDateTimePickerWidget, TimePickerWidget,
 )
@@ -76,7 +76,7 @@ class BaseMailForm(FormPlaceholderMixin, forms.Form):
         )
         self.fields['message'] = I18nFormField(
             label=_('Message'),
-            widget=I18nTextarea, required=True,
+            widget=I18nMarkdownTextarea, required=True,
             locales=event.settings.get('locales'),
         )
         self._set_field_placeholders('subject', context_parameters)
@@ -317,6 +317,7 @@ class RuleForm(FormPlaceholderMixin, I18nModelForm):
             ),
             'send_to': forms.RadioSelect,
             'checked_in_status': forms.RadioSelect,
+            'template': I18nMarkdownTextarea,
         }
 
     def __init__(self, *args, **kwargs):

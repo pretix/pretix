@@ -147,8 +147,27 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
   padding: 5px 0;
 }
 
+.i18n-form-group .i18n-field-markdown-note {
+  border: 1px solid $input-border;
+  color: $text-muted;
+  font-size: 0.8em;
+  padding: 0.2em;
+  &::before {
+    display: inline-block;
+    height: 0.6em;
+    width: 1.5em;
+    position: relative;
+    top: 0.1em;
+    left: 0.1em;
+    opacity: 50%;
+    margin-right: 0.5em;
+    content: url(static('pretixcontrol/img/icons/markdown-mark-solid.svg'));
+  }
+}
+
 .i18n-form-group input,
-.i18n-form-group textarea {
+.i18n-form-group textarea,
+.i18n-form-group .i18n-field-markdown-note {
   @include border-top-radius(0px);
   @include border-bottom-radius(0px);
   border-top-width: 0;
@@ -159,6 +178,20 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
   }
   &:last-child {
     @include border-bottom-radius($input-border-radius);
+  }
+}
+
+.i18n-field-markdown {
+  position: relative;
+
+  &:before {
+    position:absolute;
+    display:block;
+    right:10px;
+    bottom:0;
+    width:30px;
+    height:30px;
+    content: url(static('pretixcontrol/img/icons/markdown-mark-solid.svg'));
   }
 }
 

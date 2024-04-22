@@ -48,7 +48,7 @@ from django.utils.safestring import mark_safe
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelChoiceField
 from i18nfield.forms import (
-    I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
+    I18nForm, I18nFormField, I18nFormSetMixin, I18nTextInput,
 )
 from phonenumber_field.formfields import PhoneNumberField
 from pytz import common_timezones
@@ -56,7 +56,9 @@ from pytz import common_timezones
 from pretix.api.models import WebHook
 from pretix.api.webhooks import get_all_webhook_events
 from pretix.base.customersso.oidc import oidc_validate_and_complete_config
-from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
+from pretix.base.forms import (
+    I18nMarkdownTextarea, I18nModelForm, PlaceholderValidator, SettingsForm,
+)
 from pretix.base.forms.questions import (
     NamePartsFormField, WrappedPhoneNumberPrefixWidget, get_country_by_locale,
     get_phone_prefix,
@@ -524,7 +526,7 @@ class MailSettingsForm(SettingsForm):
     mail_text_signature = I18nFormField(
         label=_("Signature"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
         help_text=_("This will be attached to every email."),
         validators=[PlaceholderValidator([])],
         widget_kwargs={'attrs': {
@@ -543,7 +545,7 @@ class MailSettingsForm(SettingsForm):
     mail_text_customer_registration = I18nFormField(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_subject_customer_email_change = I18nFormField(
         label=_("Subject"),
@@ -553,7 +555,7 @@ class MailSettingsForm(SettingsForm):
     mail_text_customer_email_change = I18nFormField(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_subject_customer_reset = I18nFormField(
         label=_("Subject"),
@@ -563,7 +565,7 @@ class MailSettingsForm(SettingsForm):
     mail_text_customer_reset = I18nFormField(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
 
     base_context = {
