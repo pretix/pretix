@@ -16,7 +16,7 @@ def change_currencies(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0261_userknownloginsource"),
+        ("pretixbase", "0262_subevent_comment"),
     ]
 
     operations = [
