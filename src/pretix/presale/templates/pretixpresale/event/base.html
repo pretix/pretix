@@ -127,12 +127,12 @@
         {% if request.sales_channel.testmode_supported %}
             <div class="alert alert-warning">
                 {% if request.user.is_authenticated or request.event_access_user.is_authenticated %}
-                    <a href="{% eventurl event "presale:event.timemachine" %}" class="btn btn-default pull-right" title="{% trans "Enable time machine" %}">
-                        <span class="fa fa-clock-o" aria-hidden="true"></span>
+                    <a href="{% eventurl event "presale:event.timemachine" %}" class="btn btn-default pull-right" title="{% trans "Test your shop as if it were a different date and time." %}">
+                        <span class="fa fa-clock-o" aria-hidden="true"></span> {% trans "Time machine" %}
                     </a>
                 {% elif request.event_domain or request.organizer_domain %}
-                    <a href="{% url "control:event.transfer_session" event=event.slug organizer=event.organizer.slug %}" class="btn btn-default pull-right" title="{% trans "Enable time machine" %}">
-                        <span class="fa fa-clock-o" aria-hidden="true"></span>
+                    <a href="{% url "control:event.transfer_session" event=event.slug organizer=event.organizer.slug %}" class="btn btn-default pull-right" title="{% trans "Test your shop as if it were a different date and time." %}">
+                        <span class="fa fa-clock-o" aria-hidden="true"></span> {% trans "Time machine" %}
                     </a>
                 {% endif %}
                 <p><strong><span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>

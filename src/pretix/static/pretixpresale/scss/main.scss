@@ -514,6 +514,10 @@ h2 .label {
     user-select: none;
 }
 
+.alert > .btn.pull-right {
+    margin-left: 10px;
+}
+
 @for $i from 0 through 100 {
     .progress-bar-#{$i} { width: 1% * $i; }
 }
