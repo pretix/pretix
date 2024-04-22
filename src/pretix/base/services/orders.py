@@ -298,6 +298,7 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_p
                 auth=auth,
                 data={
                     'expires': order.expires,
+                    'force': force,
                     'state_change': was_expired
                 }
             )
