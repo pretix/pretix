@@ -455,7 +455,7 @@ Working with Cross-Origin-Embedder-Policy
 The pretix widget is unfortunately not compatible with ``Cross-Origin-Embedder-Policy: require-corp``. If you include
 the ``crossorigin`` attributes on the ``<script>`` and ``<link>`` tag as shown above, the widget can show a calendar
 or product list, but will not be able to open the checkout process in an iframe. If you also set
-``Cross-Origin-Embedder-Policy: require-corp``, the widget can auto-detect that it is running in an isolated enviroment
+``Cross-Origin-Opener-Policy: same-origin``, the widget can auto-detect that it is running in an isolated enviroment
 and will instead open the checkout process in a new tab.
 
 .. _Let's Encrypt: https://letsencrypt.org/
