@@ -11,6 +11,9 @@ In many places of your shop, like frontpage texts, product descriptions and emai
 since it is way easier to learn than languages like HTML but allows all basic formatting options required
 for text in those places.
 
+.. note:: Some fields that are used in one-line context only allow formatting that refers to individual words
+          (such as bold or italic font or a link) but do not allow block-level formatting like lists or headlines.
+
 Formatting rules
 ----------------
 

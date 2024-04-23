@@ -1461,7 +1461,7 @@ class SubEvent(EventMixin, LoggedModel):
     )
     frontpage_text = I18nTextField(
         null=True, blank=True,
-        verbose_name=_("Frontpage text")
+        verbose_name=_("Frontpage text"),
     )
     seating_plan = models.ForeignKey('SeatingPlan', on_delete=models.PROTECT, null=True, blank=True,
                                      related_name='subevents', verbose_name=_('Seating plan'))

@@ -47,11 +47,14 @@ from django.utils.translation import (
     gettext_lazy as _, gettext_noop, pgettext_lazy,
 )
 from django_scopes.forms import SafeModelChoiceField
-from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
+from i18nfield.forms import I18nFormField, I18nTextInput
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.email import get_available_placeholders
-from pretix.base.forms import I18nModelForm, PlaceholderValidator
+from pretix.base.forms import (
+    I18nMarkdownTextarea, I18nModelForm, MarkdownTextarea,
+    PlaceholderValidator,
+)
 from pretix.base.forms.questions import WrappedPhoneNumberPrefixWidget
 from pretix.base.forms.widgets import (
     DatePickerWidget, SplitDateTimePickerWidget, format_placeholders_help_text,
@@ -699,7 +702,7 @@ class OrderMailForm(forms.Form):
         self.fields['message'] = forms.CharField(
             label=_("Message"),
             required=True,
-            widget=forms.Textarea,
+            widget=MarkdownTextarea,
             initial=order.event.settings.mail_text_order_custom_mail.localize(order.locale),
         )
         self.fields['attach_invoices'].queryset = order.invoices.all()
@@ -716,7 +719,7 @@ class OrderPositionMailForm(OrderMailForm):
         self.fields['message'] = forms.CharField(
             label=_("Message"),
             required=True,
-            widget=forms.Textarea,
+            widget=MarkdownTextarea,
             initial=self.order.event.settings.mail_text_order_custom_mail.localize(self.order.locale),
         )
         self._set_field_placeholders('message', ['event', 'order', 'position'])
@@ -883,7 +886,7 @@ class EventCancelForm(FormPlaceholderMixin, forms.Form):
         )
         self.fields['send_message'] = I18nFormField(
             label=_('Message'),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             required=True,
             widget_kwargs={'attrs': {'data-display-dependency': '#id_send'}},
             locales=self.event.settings.get('locales'),
@@ -910,7 +913,7 @@ class EventCancelForm(FormPlaceholderMixin, forms.Form):
         )
         self.fields['send_waitinglist_message'] = I18nFormField(
             label=_('Message'),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             required=True,
             locales=self.event.settings.get('locales'),
             widget_kwargs={'attrs': {'data-display-dependency': '#id_send_waitinglist'}},
