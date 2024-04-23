@@ -1315,7 +1315,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             if 'valid_from' not in pos_data and 'valid_until' not in pos_data:
                 valid_from, valid_until = pos_data['item'].compute_validity(
                     requested_start=(
-                        max(requested_valid_from, now())
+                        requested_valid_from
                         if requested_valid_from and pos_data['item'].validity_dynamic_start_choice
                         else now()
                     ),
@@ -1439,6 +1439,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     if not pos.item.tax_rule or pos.item.tax_rule.price_includes_tax:
                         price_after_voucher = max(pos.price, pos.voucher.calculate_price(listed_price))
                     else:
+                        pos._calculate_tax(invoice_address=ia)
                         price_after_voucher = max(pos.price - pos.tax_value, pos.voucher.calculate_price(listed_price))
                 else:
                     price_after_voucher = listed_price
@@ -1466,7 +1467,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             answers_data = pos_data.pop('answers', [])
             use_reusable_medium = pos_data.pop('use_reusable_medium', None)
             pos = pos_data['__instance']
-            pos._calculate_tax()
+            pos._calculate_tax(invoice_address=ia)
 
             if simulate:
                 pos = WrappedModel(pos)
@@ -1585,7 +1586,10 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         if order.total == Decimal('0.00') and validated_data.get('status') == Order.STATUS_PAID and not payment_provider:
             payment_provider = 'free'
 
-        if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID:
+        if order.total != Decimal('0.00') and order.event.currency == "XXX":
+            raise ValidationError('Paid products not supported without a valid currency.')
+
+        if order.total == Decimal('0.00') and validated_data.get('status') != Order.STATUS_PAID and not validated_data.get('require_approval'):
             order.status = Order.STATUS_PAID
             order.save()
             order.payments.create(
@@ -1597,6 +1601,8 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         elif validated_data.get('status') == Order.STATUS_PAID:
             if not payment_provider:
                 raise ValidationError('You cannot create a paid order without a payment provider.')
+            if validated_data.get('require_approval'):
+                raise ValidationError('You cannot create a paid order that requires approval.')
             order.payments.create(
                 amount=order.total,
                 provider=payment_provider,

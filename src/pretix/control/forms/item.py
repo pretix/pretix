@@ -56,7 +56,7 @@ from django_scopes.forms import (
 from i18nfield.forms import I18nFormField, I18nTextarea
 
 from pretix.base.channels import get_all_sales_channels
-from pretix.base.forms import I18nFormSet, I18nModelForm
+from pretix.base.forms import I18nFormSet, I18nMarkdownTextarea, I18nModelForm
 from pretix.base.forms.widgets import DatePickerWidget
 from pretix.base.models import (
     Item, ItemCategory, ItemVariation, Question, QuestionOption, Quota,
@@ -82,6 +82,9 @@ class CategoryForm(I18nModelForm):
             'description',
             'is_addon'
         ]
+        widgets = {
+            'description': I18nMarkdownTextarea,
+        }
 
 
 class QuestionForm(I18nModelForm):
@@ -188,6 +191,7 @@ class QuestionForm(I18nModelForm):
                 attrs={'class': 'scrolling-multiple-choice'}
             ),
             'dependency_values': forms.SelectMultiple,
+            'help_text': I18nMarkdownTextarea,
         }
         field_classes = {
             'valid_datetime_min': SplitDateTimeField,
@@ -823,6 +827,7 @@ class ItemUpdateForm(I18nModelForm):
             'max_per_order': forms.widgets.NumberInput(attrs={'min': 0}),
             'min_per_order': forms.widgets.NumberInput(attrs={'min': 0}),
             'checkin_text': forms.TextInput(),
+            'description': I18nMarkdownTextarea,
         }
 
 

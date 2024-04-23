@@ -100,6 +100,7 @@ def widget_css(request, **kwargs):
         try:
             resp = FileResponse(default_storage.open(o.settings.presale_widget_css_file),
                                 content_type='text/css')
+            resp['Access-Control-Allow-Origin'] = '*'
             return resp
         except FileNotFoundError:
             pass
@@ -108,6 +109,7 @@ def widget_css(request, **kwargs):
     f = finders.find(et)
     resp = FileResponse(open(f, 'rb'), content_type='text/css')
     resp._csp_ignore = True
+    resp['Access-Control-Allow-Origin'] = '*'
     return resp
 
 
@@ -199,6 +201,7 @@ def widget_js(request, lang, **kwargs):
             cache.set('widget_js_data_{}'.format(lang), data, 3600 * 4)
         resp = HttpResponse(data, content_type='text/javascript')
     resp._csp_ignore = True
+    resp['Access-Control-Allow-Origin'] = '*'
     return resp
 
 
@@ -390,7 +393,7 @@ class WidgetAPIProductList(EventListMixin, View):
                     else:
                         availability['text'] = gettext('Book now')
                     availability['reason'] = 'ok'
-            elif event.settings.waiting_list_enabled and (ev.best_availability_state is not None and ev.best_availability_state >= 0):
+            elif event.waiting_list_active and (ev.best_availability_state is not None and ev.best_availability_state >= 0):
                 availability['color'] = 'orange'
                 availability['text'] = gettext('Waiting list')
                 availability['reason'] = 'waitinglist'
@@ -690,7 +693,7 @@ class WidgetAPIProductList(EventListMixin, View):
             'display_net_prices': request.event.settings.display_net_prices,
             'use_native_spinners': request.event.settings.widget_use_native_spinners,
             'show_variations_expanded': request.event.settings.show_variations_expanded,
-            'waiting_list_enabled': request.event.settings.waiting_list_enabled,
+            'waiting_list_enabled': request.event.waiting_list_active,
             'voucher_explanation_text': str(rich_text(request.event.settings.voucher_explanation_text, safelinks=False)),
             'error': None,
             'cart_exists': False
@@ -775,7 +778,7 @@ class WidgetAPIProductList(EventListMixin, View):
 
         data['has_seating_plan'] = ev.seating_plan is not None
         data['has_seating_plan_waitinglist'] = False
-        if request.event.settings.waiting_list_enabled and ev.presale_is_running:
+        if ev.waiting_list_active and ev.presale_is_running:
             for i in items:
                 if not i.allow_waitinglist or not i.requires_seat:
                     continue

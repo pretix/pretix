@@ -689,6 +689,9 @@ var shared_methods = {
             } else {
                 url = url + '?iframe=1&locale=' + lang + '&take_cart_id=' + this.$root.cart_id;
             }
+            if (this.$root.additionalURLParams) {
+                url += '&' + this.$root.additionalURLParams;
+            }
             if (data.success === false) {
                 url = url.replace(/checkout\/start/g, "");
                 this.$root.overlay.error_message = data.message;
@@ -715,11 +718,26 @@ var shared_methods = {
         if (this.$root.useIframe) {
             event.preventDefault();
         } else {
+            if (this.$root.additionalURLParams) {
+                var params = new URLSearchParams(this.$root.additionalURLParams);
+                for (var [key, value] of params.entries()) {
+                    if (!event.target.form.elements[key]) {
+                        var input = document.createElement("input");
+                        input.type = "hidden";
+                        input.name = key;
+                        input.value = value;
+                        event.target.form.appendChild(input);
+                    }
+                }
+            }
             return;
         }
         var redirect_url = this.$root.voucherFormTarget + '&voucher=' + encodeURIComponent(this.voucher) + '&subevent=' + this.$root.subevent;
         if (this.$root.widget_data) {
             redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
+        }
+        if (this.$root.additionalURLParams) {
+            redirect_url += '&' + this.$root.additionalURLParams;
         }
         var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
         this.$root.overlay.frame_loading = true;
@@ -730,6 +748,9 @@ var shared_methods = {
         redirect_url = this.$root.voucherFormTarget + '&voucher=' + encodeURIComponent(voucher);
         if (this.$root.widget_data) {
             redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
+        }
+        if (this.$root.additionalURLParams) {
+            redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
             var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
@@ -752,6 +773,9 @@ var shared_methods = {
         }
         if (this.$root.widget_data) {
             redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
+        }
+        if (this.$root.additionalURLParams) {
+            redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
             var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
@@ -819,7 +843,7 @@ var shared_lightbox_fragment = (
         + '</div>'
         + '<div class="pretix-widget-lightbox-inner" @click.stop="">'
             + '<figure class="pretix-widget-lightbox-image">'
-                + '<img :src="$root.lightbox.image" :alt="$root.lightbox.description" @load="lightboxLoaded" ref="lightboxImage">'
+                + '<img :src="$root.lightbox.image" :alt="$root.lightbox.description" @load="lightboxLoaded" ref="lightboxImage" crossorigin>'
                 + '<figcaption v-if="$root.lightbox.description">{{$root.lightbox.description}}</figcaption>'
             + '</figure>'
             + '<button type="button" class="pretix-widget-lightbox-close" @click="lightboxClose" aria-label="'+strings.close+'">'
@@ -1634,9 +1658,16 @@ Vue.component('pretix-button', {
 
 var shared_root_methods = {
     open_link_in_frame: function (event) {
+        var url = event.target.attributes.href.value;
+        if (this.$root.additionalURLParams) {
+            if (url.indexOf('?')) {
+                url += '&' + this.$root.additionalURLParams;
+            } else {
+                url += '?' + this.$root.additionalURLParams;
+            }
+        }
         if (this.$root.useIframe) {
             event.preventDefault();
-            var url = event.target.attributes.href.value;
             if (url.indexOf('?')) {
                 url += '&iframe=1';
             } else {
@@ -1645,6 +1676,7 @@ var shared_root_methods = {
             this.$root.overlay.$children[0].$refs['frame-container'].children[0].src = url;
             this.$root.overlay.frame_loading = true;
         } else {
+            event.target.href = url;
             return;
         }
     },
@@ -1801,6 +1833,9 @@ var shared_root_methods = {
         if (this.$root.subevent){
             redirect_url += '&subevent=' + this.$root.subevent;
         }
+        if (this.$root.additionalURLParams) {
+            redirect_url += '&' + this.$root.additionalURLParams;
+        }
         if (this.$root.useIframe) {
             var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
             this.$root.overlay.frame_loading = true;
@@ -1823,6 +1858,9 @@ var shared_root_methods = {
         }
         if (this.$root.widget_data) {
             redirect_url += '&widget_data=' + encodeURIComponent(this.$root.widget_data_json);
+        }
+        if (this.$root.additionalURLParams) {
+            redirect_url += '&' + this.$root.additionalURLParams;
         }
         if (this.$root.useIframe) {
             var iframe = this.$root.overlay.$children[0].$refs['frame-container'].children[0];
@@ -1868,6 +1906,9 @@ var shared_root_computed = {
         if (this.subevent) {
             form_target += "&subevent=" + this.subevent;
         }
+        if (this.$root.additionalURLParams) {
+            form_target += '&' + this.$root.additionalURLParams;
+        }
         return form_target;
     },
     formMethod: function () {
@@ -1888,6 +1929,9 @@ var shared_root_computed = {
         if (!this.$root.cart_exists) {
             checkout_url += "checkout/start";
         }
+        if (this.$root.additionalURLParams) {
+            checkout_url += '?' + this.$root.additionalURLParams;
+        }
         var form_target = this.target_url + 'w/' + widget_id + '/cart/add?iframe=1&next=' + encodeURIComponent(checkout_url);
         var cookie = getCookie(this.cookieName);
         if (cookie) {
@@ -1903,6 +1947,10 @@ var shared_root_computed = {
         return target;
     },
     useIframe: function () {
+        if (window.crossOriginIsolated === true) {
+            console.warn("pretix Widget cannot use iframe due to Cross-Origin-Embed-Policy")
+            return false;
+        }
         return !this.disable_iframe && (this.skip_ssl || site_is_secure());
     },
     showPrices: function () {
@@ -1924,7 +1972,19 @@ var shared_root_computed = {
     },
     widget_data_json: function () {
         return JSON.stringify(this.widget_data);
-    }
+    },
+    additionalURLParams: function () {
+        if (!window.location.search.indexOf('utm_')) {
+            return '';
+        }
+        var params = new URLSearchParams(window.location.search);
+        for (var [key, value] of params.entries()) {
+            if (!key.startsWith('utm_')) {
+                params.delete(key);
+            }
+        }
+        return params.toString();
+    },
 };
 
 var create_overlay = function (app) {

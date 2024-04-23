@@ -64,7 +64,7 @@ from pretix.api.serializers.fields import (
     ListMultipleChoiceField, UploadedFileField,
 )
 from pretix.api.serializers.i18n import I18nField, I18nURLField
-from pretix.base.forms import I18nURLFormField
+from pretix.base.forms import I18nMarkdownTextarea, I18nURLFormField
 from pretix.base.models.tax import VAT_ID_COUNTRIES, TaxRule
 from pretix.base.reldate import (
     RelativeDateField, RelativeDateTimeField, RelativeDateWrapper,
@@ -89,7 +89,7 @@ def primary_font_kwargs():
 
     choices = [('Open Sans', 'Open Sans')]
     choices += sorted([
-        (a, {"title": a, "data": v}) for a, v in get_fonts().items() if not v.get('pdf_only', False)
+        (a, {"title": a, "data": v}) for a, v in get_fonts(pdf_support_required=False).items()
     ], key=lambda a: a[0])
     return {
         'choices': choices,
@@ -602,7 +602,7 @@ DEFAULTS = {
         'serializer_class': I18nField,
         'form_kwargs': dict(
             label=_("Invoice address explanation"),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {'rows': '2'}},
             help_text=_("This text will be shown above the invoice address form during checkout.")
         )
@@ -801,7 +801,7 @@ DEFAULTS = {
         'serializer_class': I18nField,
         'form_kwargs': dict(
             label=_("End of presale text"),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {'rows': '2'}},
             help_text=_("This text will be shown above the ticket shop once the designated sales timeframe for this event "
                         "is over. You can use it to describe other options to get a ticket, such as a box office.")
@@ -813,7 +813,7 @@ DEFAULTS = {
         'form_class': I18nFormField,
         'serializer_class': I18nField,
         'form_kwargs': dict(
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {
                 'rows': 3,
             }},
@@ -1397,6 +1397,19 @@ DEFAULTS = {
             widget=forms.NumberInput(),
         )
     },
+    'waiting_list_auto_disable': {
+        'default': None,
+        'type': RelativeDateWrapper,
+        'form_class': RelativeDateTimeField,
+        'serializer_class': SerializerRelativeDateTimeField,
+        'form_kwargs': dict(
+            label=_("Disable waiting list"),
+            help_text=_("The waiting list will be fully disabled after this date. This means that nobody can add "
+                        "themselves to the waiting list any more, but also that tickets will be available for sale "
+                        "again if quota permits, even if there are still people on the waiting list. Vouchers that "
+                        "have already been sent remain active."),
+        )
+    },
     'waiting_list_names_asked': {
         'default': 'False',
         'type': bool,
@@ -1446,7 +1459,7 @@ DEFAULTS = {
         'serializer_class': I18nField,
         'form_kwargs': dict(
             label=_("Phone number explanation"),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {'rows': '2'}},
             help_text=_("If you ask for a phone number, explain why you do so and what you will use the phone number for.")
         )
@@ -1863,7 +1876,7 @@ DEFAULTS = {
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Voluntary lower refund explanation"),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {'rows': '2'}},
             help_text=_("This text will be shown in between the explanation of how the refunds work and the slider "
                         "which your customers can use to choose the amount they would like to receive. You can use it "
@@ -1945,7 +1958,7 @@ DEFAULTS = {
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Terms of cancellation"),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {'rows': '2'}},
             help_text=_("This text will be shown when cancellation is allowed for a paid order. Leave empty if you "
                         "want pretix to automatically generate the terms of cancellation based on your settings.")
@@ -1958,7 +1971,7 @@ DEFAULTS = {
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Terms of cancellation"),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {'rows': '2'}},
             help_text=_("This text will be shown when cancellation is allowed for an unpaid or free order. Leave empty "
                         "if you want pretix to automatically generate the terms of cancellation based on your settings.")
@@ -2047,7 +2060,7 @@ DEFAULTS = {
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Event description"),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             help_text=_(
                 "You can use this to share information with your attendees, such as travel information or the link to a digital event. "
                 "If you keep it empty, we will put a link to the event shop, the admission time, and your organizer name in there. "
@@ -2978,7 +2991,7 @@ Your {organizer} team"""))  # noqa: W291
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Frontpage text"),
-            widget=I18nTextarea
+            widget=I18nMarkdownTextarea,
         )
     },
     'event_info_text': {
@@ -3000,7 +3013,7 @@ Your {organizer} team"""))  # noqa: W291
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Banner text (top)"),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {'rows': '2'}},
             help_text=_("This text will be shown above every page of your shop. Please only use this for "
                         "very important messages.")
@@ -3013,7 +3026,7 @@ Your {organizer} team"""))  # noqa: W291
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Banner text (bottom)"),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {'rows': '2'}},
             help_text=_("This text will be shown below every page of your shop. Please only use this for "
                         "very important messages.")
@@ -3026,7 +3039,7 @@ Your {organizer} team"""))  # noqa: W291
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Voucher explanation"),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {'rows': '2'}},
             help_text=_("This text will be shown next to the input for a voucher code. You can use it e.g. to explain "
                         "how to obtain a voucher code.")
@@ -3039,7 +3052,7 @@ Your {organizer} team"""))  # noqa: W291
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Attendee data explanation"),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {'rows': '2'}},
             help_text=_("This text will be shown above the questions asked for every personalized product. You can use it e.g. to explain "
                         "why you need information from them.")
@@ -3055,7 +3068,7 @@ Your {organizer} team"""))  # noqa: W291
             help_text=_("This message will be shown after an order has been created successfully. It will be shown in additional "
                         "to the default text."),
             widget_kwargs={'attrs': {'rows': '2'}},
-            widget=I18nTextarea
+            widget=I18nMarkdownTextarea,
         )
     },
     'checkout_phone_helptext': {
@@ -3066,7 +3079,7 @@ Your {organizer} team"""))  # noqa: W291
         'form_kwargs': dict(
             label=_("Help text of the phone number field"),
             widget_kwargs={'attrs': {'rows': '2'}},
-            widget=I18nTextarea
+            widget=I18nMarkdownTextarea,
         )
     },
     'checkout_email_helptext': {
@@ -3080,7 +3093,7 @@ Your {organizer} team"""))  # noqa: W291
         'form_kwargs': dict(
             label=_("Help text of the email field"),
             widget_kwargs={'attrs': {'rows': '2'}},
-            widget=I18nTextarea
+            widget=I18nMarkdownTextarea,
         )
     },
     'order_import_settings': {
@@ -3210,7 +3223,7 @@ Your {organizer} team"""))  # noqa: W291
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_('Homepage text'),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             help_text=_('This will be displayed on the organizer homepage.')
         )
     },
@@ -3267,7 +3280,7 @@ Your {organizer} team"""))  # noqa: W291
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Dialog text"),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {'rows': '3', 'data-display-dependency': '#id_settings-cookie_consent'}},
         )
     },
@@ -3282,7 +3295,7 @@ Your {organizer} team"""))  # noqa: W291
         'form_class': I18nFormField,
         'form_kwargs': dict(
             label=_("Secondary dialog text"),
-            widget=I18nTextarea,
+            widget=I18nMarkdownTextarea,
             widget_kwargs={'attrs': {'rows': '3', 'data-display-dependency': '#id_settings-cookie_consent'}},
         )
     },
@@ -3406,7 +3419,7 @@ def concatenation_for_salutation(d):
         salutation = pgettext("person_name_salutation", salutation)
         given_name = None
 
-    return " ".join(filter(None, (salutation, title, given_name, family_name)))
+    return " ".join(str(p) for p in filter(None, (salutation, title, given_name, family_name)))
 
 
 def get_name_parts_localized(name_parts, key):

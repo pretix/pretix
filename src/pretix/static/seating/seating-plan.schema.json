@@ -106,6 +106,7 @@
       "properties": {
         "seat_guid": {
           "type": "string",
+          "pattern": "^[^ ].*[^ ]$",
           "description": "Seat global ID by which it can be identified. It should be globally unique (not just per row). It doesn't have to be pretty since it won't be shown to the user."
         },
         "seat_number": {

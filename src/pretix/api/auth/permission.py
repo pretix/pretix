@@ -39,7 +39,8 @@ from pretix.base.models import Device, Event, User
 from pretix.base.models.auth import SuperuserPermissionSet
 from pretix.base.models.organizer import TeamAPIToken
 from pretix.helpers.security import (
-    SessionInvalid, SessionReauthRequired, assert_session_valid,
+    Session2FASetupRequired, SessionInvalid, SessionPasswordChangeRequired,
+    SessionReauthRequired, assert_session_valid,
 )
 
 
@@ -65,6 +66,10 @@ class EventPermission(BasePermission):
             except SessionInvalid:
                 return False
             except SessionReauthRequired:
+                return False
+            except Session2FASetupRequired:
+                return False
+            except SessionPasswordChangeRequired:
                 return False
 
         perm_holder = (request.auth if isinstance(request.auth, (Device, TeamAPIToken))
@@ -144,6 +149,10 @@ class ProfilePermission(BasePermission):
                 return False
             except SessionReauthRequired:
                 return False
+            except Session2FASetupRequired:
+                return False
+            except SessionPasswordChangeRequired:
+                return False
 
         if isinstance(request.auth, OAuthAccessToken):
             if not (request.auth.allow_scopes(['read']) or request.auth.allow_scopes(['profile'])) and request.method in SAFE_METHODS:
@@ -165,6 +174,10 @@ class AnyAuthenticatedClientPermission(BasePermission):
             except SessionInvalid:
                 return False
             except SessionReauthRequired:
+                return False
+            except Session2FASetupRequired:
+                return False
+            except SessionPasswordChangeRequired:
                 return False
 
         return True

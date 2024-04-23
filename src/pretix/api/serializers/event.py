@@ -472,7 +472,8 @@ class SubEventSerializer(I18nAwareModelSerializer):
         fields = ('id', 'name', 'date_from', 'date_to', 'active', 'date_admission',
                   'presale_start', 'presale_end', 'location', 'geo_lat', 'geo_lon', 'event', 'is_public',
                   'frontpage_text', 'seating_plan', 'item_price_overrides', 'variation_price_overrides',
-                  'meta_data', 'seat_category_mapping', 'last_modified', 'best_availability_state')
+                  'meta_data', 'seat_category_mapping', 'last_modified', 'best_availability_state',
+                  'comment')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -687,6 +688,7 @@ class EventSettingsSerializer(SettingsSerializer):
         'allow_modifications_after_checkin',
         'show_quota_left',
         'waiting_list_enabled',
+        'waiting_list_auto_disable',
         'waiting_list_hours',
         'waiting_list_auto',
         'waiting_list_names_asked',

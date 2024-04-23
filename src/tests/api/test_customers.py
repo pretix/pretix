@@ -29,6 +29,7 @@ def customer(organizer, event):
     return organizer.customers.create(
         identifier="8WSAJCJ",
         email="foo@example.org",
+        phone="+493012345678",
         name_parts={"_legacy": "Foo"},
         name_cached="Foo",
         is_verified=False,
@@ -39,6 +40,7 @@ TEST_CUSTOMER_RES = {
     "identifier": "8WSAJCJ",
     "external_identifier": None,
     "email": "foo@example.org",
+    "phone": "+493012345678",
     "name": "Foo",
     "name_parts": {
         "_legacy": "Foo",

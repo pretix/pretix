@@ -17,8 +17,8 @@ and then click "Generate widget code".
 You will obtain two code snippets that look *roughly* like the following. The first should be embedded into the
 ``<head>`` part of your website, if possible. If this inconvenient, you can put it in the ``<body>`` part as well::
 
-    <link rel="stylesheet" type="text/css" href="https://pretix.eu/demo/democon/widget/v1.css">
-    <script type="text/javascript" src="https://pretix.eu/widget/v1.en.js" async></script>
+    <link rel="stylesheet" type="text/css" href="https://pretix.eu/demo/democon/widget/v1.css" crossorigin>
+    <script type="text/javascript" src="https://pretix.eu/widget/v1.en.js" async crossorigin></script>
 
 The second snippet should be embedded at the position where the widget should show up::
 
@@ -448,6 +448,15 @@ telling your payment provider the domain name and (for Apple Pay) placing an
 Further reading:
 
 * `Stripe Payment Method Domain registration`_
+
+Working with Cross-Origin-Embedder-Policy
+-----------------------------------------
+
+The pretix widget is unfortunately not compatible with ``Cross-Origin-Embedder-Policy: require-corp``. If you include
+the ``crossorigin`` attributes on the ``<script>`` and ``<link>`` tag as shown above, the widget can show a calendar
+or product list, but will not be able to open the checkout process in an iframe. If you also set
+``Cross-Origin-Opener-Policy: same-origin``, the widget can auto-detect that it is running in an isolated enviroment
+and will instead open the checkout process in a new tab.
 
 .. _Let's Encrypt: https://letsencrypt.org/
 .. _Stripe Payment Method Domain registration: https://stripe.com/docs/payments/payment-methods/pmd-registration

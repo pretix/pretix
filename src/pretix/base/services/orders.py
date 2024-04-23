@@ -199,6 +199,7 @@ error_messages = {
     ),
     'addon_no_multi': gettext_lazy('You can select every add-on from the category %(cat)s for the product %(base)s at most once.'),
     'addon_already_checked_in': gettext_lazy('You cannot remove the position %(addon)s since it has already been checked in.'),
+    'currency_XXX': gettext_lazy('Paid products not supported without a valid currency.'),
 }
 
 logger = logging.getLogger(__name__)
@@ -297,6 +298,7 @@ def extend_order(order: Order, new_date: datetime, force: bool=False, valid_if_p
                 auth=auth,
                 data={
                     'expires': order.expires,
+                    'force': force,
                     'state_change': was_expired
                 }
             )
@@ -412,6 +414,11 @@ def approve_order(order, user=None, send_mail: bool=True, auth=None, force=False
                     email_subject, email_template, email_context,
                     'pretix.event.order.email.order_approved', user,
                     attach_tickets=True,
+                    attach_ical=order.event.settings.mail_attach_ical and (
+                        not order.event.settings.mail_attach_ical_paid_only or
+                        order.total == Decimal('0.00') or
+                        order.valid_if_pending
+                    ),
                     invoices=[invoice] if invoice and order.event.settings.invoice_email_attachment else []
                 )
             except SendMailException:
@@ -665,7 +672,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             deleted_positions.add(cp.pk)
             cp.delete()
 
-    sorted_positions = sorted(positions, key=lambda s: -int(s.is_bundled))
+    sorted_positions = sorted(positions, key=lambda c: (-int(c.is_bundled), c.pk))
 
     for cp in sorted_positions:
         cp._cached_quotas = list(cp.quotas)
@@ -876,6 +883,13 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             cp.discount = discount
             cp.save(update_fields=['price', 'discount'])
 
+    # After applying discounts, add-on positions might still have a reference to the *old* version of the
+    # parent position, which can screw up ordering later since the system sees inconsistent data.
+    by_id = {cp.pk: cp for cp in sorted_positions}
+    for cp in sorted_positions:
+        if cp.addon_to_id:
+            cp.addon_to = by_id[cp.addon_to_id]
+
     new_total = sum(cp.price for cp in sorted_positions)
     if old_total != new_total:
         err = err or error_messages['price_changed']
@@ -884,7 +898,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
     for cp in sorted_positions:
         cp.expires = now_dt + timedelta(
             minutes=event.settings.get('reservation_time', as_type=int))
-        cp.save()
+        cp.save(update_fields=['expires'])
 
     if err:
         raise OrderError(err)
@@ -1045,7 +1059,11 @@ def _order_placed_email(event: Event, order: Order, email_template, subject_temp
             log_entry,
             invoices=[invoice] if invoice and event.settings.invoice_email_attachment else [],
             attach_tickets=True,
-            attach_ical=event.settings.mail_attach_ical and (not event.settings.mail_attach_ical_paid_only or is_free),
+            attach_ical=event.settings.mail_attach_ical and (
+                not event.settings.mail_attach_ical_paid_only or
+                is_free or
+                order.valid_if_pending
+            ),
             attach_other_files=[a for a in [
                 event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
             ] if a],
@@ -1064,7 +1082,11 @@ def _order_placed_email_attendee(event: Event, order: Order, position: OrderPosi
             log_entry,
             invoices=[],
             attach_tickets=True,
-            attach_ical=event.settings.mail_attach_ical and (not event.settings.mail_attach_ical_paid_only or is_free),
+            attach_ical=event.settings.mail_attach_ical and (
+                not event.settings.mail_attach_ical_paid_only or
+                is_free or
+                order.valid_if_pending
+            ),
             attach_other_files=[a for a in [
                 event.settings.get('mail_attachment_new_order', as_type=str, default='')[len('file://'):]
             ] if a],
@@ -1109,6 +1131,9 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         id__in=position_ids, event=event
     )
 
+    if shown_total is not None and Decimal(shown_total) > Decimal("0.00") and event.currency == "XXX":
+        raise OrderError(error_messages['currency_XXX'])
+
     validate_order.send(
         event,
         payment_provider=payment_requests[0]['provider'] if payment_requests else None,  # only for backwards compatibility
@@ -1144,7 +1169,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         positions = list(
             positions.select_related('item', 'variation', 'subevent', 'seat', 'addon_to').prefetch_related('addons')
         )
-        positions.sort(key=lambda k: position_ids.index(k.pk))
+        positions.sort(key=lambda c: c.sort_key)
         if len(positions) == 0:
             raise OrderError(error_messages['empty'])
         if len(position_ids) != len(positions):
@@ -2105,6 +2130,9 @@ class OrderChangeManager:
                     )
 
     def _check_paid_to_free(self):
+        if self.event.currency == 'XXX' and self.order.total + self._totaldiff > Decimal("0.00"):
+            raise OrderError(error_messages['currency_XXX'])
+
         if self.order.total == 0 and (self._totaldiff < 0 or (self.split_order and self.split_order.total > 0)) and not self.order.require_approval:
             if not self.order.fees.exists() and not self.order.positions.exists():
                 # The order is completely empty now, so we cancel it.

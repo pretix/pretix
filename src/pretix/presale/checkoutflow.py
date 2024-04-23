@@ -56,7 +56,10 @@ from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
 
 from pretix.base.models import Customer, Membership, Order
-from pretix.base.models.orders import InvoiceAddress, OrderPayment
+from pretix.base.models.items import Question
+from pretix.base.models.orders import (
+    InvoiceAddress, OrderPayment, QuestionAnswer,
+)
 from pretix.base.models.tax import TaxedPrice, TaxRule
 from pretix.base.services.cart import (
     CartError, CartManager, add_payment_to_cart, error_messages, get_fees,
@@ -1140,9 +1143,14 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                     data[k] = str(v)
 
                 for a in p.answers:
+                    value = a.get('value')
+                    if a["question_type"] == "CC":
+                        answer = QuestionAnswer(question=Question(type=a.get('question_type')), answer=str(value))
+                        value = {value: str(answer)}
+
                     data[a["field_name"]] = {
                         "label": a["field_label"],
-                        "value": a["value"],
+                        "value": value,
                         "identifier": a["question_identifier"],
                         "type": a["question_type"],
                     }

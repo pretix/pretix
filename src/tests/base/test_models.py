@@ -437,6 +437,25 @@ class QuotaTestCase(BaseQuotaTestCase):
         self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
 
     @classscope(attr='o')
+    def test_waitinglist_auto_disable(self):
+        self.event.settings.waiting_list_auto_disable = RelativeDateWrapper(
+            RelativeDate(days=0, time=None, base_date_name='date_from', minutes=20, is_after=True)
+        )
+        self.quota.items.add(self.item1)
+        self.quota.size = 1
+        self.quota.save()
+        WaitingListEntry.objects.create(
+            event=self.event, item=self.item1, email='foo@bar.com'
+        )
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_ORDERED, 0))
+        self.assertEqual(self.item1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+        self.event.settings.waiting_list_auto_disable = RelativeDateWrapper(
+            RelativeDate(days=0, time=None, base_date_name='date_from', minutes=20, is_after=False)
+        )
+        self.assertEqual(self.item1.check_quotas(), (Quota.AVAILABILITY_OK, 1))
+        self.assertEqual(self.item1.check_quotas(count_waitinglist=False), (Quota.AVAILABILITY_OK, 1))
+
+    @classscope(attr='o')
     def test_waitinglist_item_active(self):
         self.quota.items.add(self.item1)
         self.quota.size = 1
@@ -2562,7 +2581,7 @@ class CheckinListTestCase(TestCase):
             )
             self.cl_tickets.limit_products.add(self.item1)
             o = Order.objects.create(
-                code='FOO', event=self.event, email='dummy@dummy.test',
+                code='FOO1', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_PAID,
                 datetime=now(), expires=now() + timedelta(days=10),
                 total=Decimal("30"), locale='en'
@@ -2589,7 +2608,7 @@ class CheckinListTestCase(TestCase):
             op3.checkins.create(list=self.cl_both)
 
             o = Order.objects.create(
-                code='FOO', event=self.event, email='dummy@dummy.test',
+                code='FOO2', event=self.event, email='dummy@dummy.test',
                 status=Order.STATUS_PENDING,
                 datetime=now(), expires=now() + timedelta(days=10),
                 total=Decimal("30"), locale='en'

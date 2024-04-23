@@ -446,6 +446,11 @@ class QuotaAvailability:
                         self.results[q] = Quota.AVAILABILITY_RESERVED, 0
 
     def _compute_waitinglist(self, quotas, q_items, q_vars, size_left):
+        quotas = [
+            q for q in quotas
+            if not q.event.settings.waiting_list_auto_disable or q.event.settings.waiting_list_auto_disable.datetime(q.subevent or q.event) > now()
+        ]
+
         events = {q.event_id for q in quotas}
         subevents = {q.subevent_id for q in quotas}
         quota_ids = {q.pk for q in quotas}

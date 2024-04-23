@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-28 13:11+0000\n"
+"POT-Creation-Date: 2024-04-23 12:41+0000\n"
 "PO-Revision-Date: 2022-03-03 07:00+0000\n"
 "Last-Translator: MaLund13 <mart.lund13@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix-"
@@ -434,112 +434,130 @@ msgstr "är före"
 msgid "is after"
 msgstr "är efter"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:93
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
+msgid "="
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Product"
 msgstr "Produkt"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:97
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Product variation"
 msgstr "Produktvarianter"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
 msgid "Current date and time"
 msgstr "Aktuellt datum och tid"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:109
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
 msgid "Current day of the week (1 = Monday, 7 = Sunday)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:113
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
+msgid "Current entry status"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
 msgid "Number of previous entries"
 msgstr "Antal tidigare poster"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:117
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
 msgid "Number of previous entries since midnight"
 msgstr "Antal tidigare poster sedan midnatt"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
 #, fuzzy
 #| msgid "Number of previous entries"
 msgid "Number of previous entries since"
 msgstr "Antal tidigare poster"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:125
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
 #, fuzzy
 #| msgid "Number of previous entries"
 msgid "Number of previous entries before"
 msgstr "Antal tidigare poster"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:129
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
 msgid "Number of days with a previous entry"
 msgstr "Antal dagar med en tidigare postning"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:133
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
 #, fuzzy
 #| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry since"
 msgstr "Antal dagar med en tidigare postning"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:137
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
 #, fuzzy
 #| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry before"
 msgstr "Antal dagar med en tidigare postning"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:141
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
 msgid "Minutes since last entry (-1 on first entry)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:145
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
 msgid "Minutes since first entry (-1 on first entry)"
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:172
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
 msgid "All of the conditions below (AND)"
 msgstr "Alla villkor nedan (AND)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:173
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
 msgid "At least one of the conditions below (OR)"
 msgstr "Minst ett av villkoren nedan (OR)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:174
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
 msgid "Event start"
 msgstr "Evenemanget börjar"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:175
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
 msgid "Event end"
 msgstr "Evenemanget slutar"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:176
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
 msgid "Event admission"
 msgstr "Tillträde till evenemang"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:177
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
 msgid "custom date and time"
 msgstr "anpassat datum och tid"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:178
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
 msgid "custom time"
 msgstr "anpassad tid"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:179
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
 msgid "Tolerance (minutes)"
 msgstr "Tolerans (minuter)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:180
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
 msgid "Add condition"
 msgstr "Lägg till villkor"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:181
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
 msgid "minutes"
 msgstr "minuter"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
 msgid "Duplicate"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
+msgctxt "entry_status"
+msgid "present"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
+msgctxt "entry_status"
+msgid "absent"
 msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:72
@@ -603,15 +621,15 @@ msgstr "Skapar meddelanden …"
 msgid "Unknown error."
 msgstr "Okänt fel."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:311
+#: pretix/static/pretixcontrol/js/ui/main.js:313
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Din färg har hög kontrast och är väldigt lätt att läsa!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:315
+#: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr "Din färg har tillräcklig kontrast och är troligtvis läsbar!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:319
+#: pretix/static/pretixcontrol/js/ui/main.js:321
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -619,40 +637,40 @@ msgstr ""
 "Din färg har dålig kontrast för text på vit bakgrund, var god välj en "
 "mörkare nyans."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:473
-#: pretix/static/pretixcontrol/js/ui/main.js:493
+#: pretix/static/pretixcontrol/js/ui/main.js:475
+#: pretix/static/pretixcontrol/js/ui/main.js:495
 msgid "Search query"
 msgstr "Sökterm"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:491
+#: pretix/static/pretixcontrol/js/ui/main.js:493
 msgid "All"
 msgstr "Alla"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:492
+#: pretix/static/pretixcontrol/js/ui/main.js:494
 msgid "None"
 msgstr "Ingen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:496
+#: pretix/static/pretixcontrol/js/ui/main.js:498
 msgid "Selected only"
 msgstr "Endast valda"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:791
+#: pretix/static/pretixcontrol/js/ui/main.js:794
 msgid "Enter page number between 1 and %(max)s."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:794
+#: pretix/static/pretixcontrol/js/ui/main.js:797
 msgid "Invalid page number."
 msgstr ""
 
-#: pretix/static/pretixcontrol/js/ui/main.js:952
+#: pretix/static/pretixcontrol/js/ui/main.js:955
 msgid "Use a different name internally"
 msgstr "Använd ett annat namn internt"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:992
+#: pretix/static/pretixcontrol/js/ui/main.js:995
 msgid "Click to close"
 msgstr "Klicka för att stänga"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1067
+#: pretix/static/pretixcontrol/js/ui/main.js:1070
 msgid "You have unsaved changes!"
 msgstr "Du har osparade ändringar!"
 
@@ -692,32 +710,32 @@ msgid_plural "The items in your cart are reserved for you for {num} minutes."
 msgstr[0] "Artiklarna i din varukorg är reserverade för dig i en minut."
 msgstr[1] "Artiklarna i din varukorg är reserverade för dig i {num} minuter."
 
-#: pretix/static/pretixpresale/js/ui/main.js:171
+#: pretix/static/pretixpresale/js/ui/main.js:203
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "Arrangören behåller %(amount)s %(currency)s"
 
-#: pretix/static/pretixpresale/js/ui/main.js:179
+#: pretix/static/pretixpresale/js/ui/main.js:211
 msgid "You get %(currency)s %(amount)s back"
 msgstr "Du får %(amount)s %(currency)s tillbaka"
 
-#: pretix/static/pretixpresale/js/ui/main.js:195
+#: pretix/static/pretixpresale/js/ui/main.js:227
 msgid "Please enter the amount the organizer can keep."
 msgstr "Vänligen ange det belopp som arrangören kan behålla."
 
-#: pretix/static/pretixpresale/js/ui/main.js:412
+#: pretix/static/pretixpresale/js/ui/main.js:444
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Vänligen ange en kvantitet för en av biljettyperna."
 
-#: pretix/static/pretixpresale/js/ui/main.js:448
+#: pretix/static/pretixpresale/js/ui/main.js:480
 msgid "required"
 msgstr "obligatorisk"
 
-#: pretix/static/pretixpresale/js/ui/main.js:551
-#: pretix/static/pretixpresale/js/ui/main.js:570
+#: pretix/static/pretixpresale/js/ui/main.js:583
+#: pretix/static/pretixpresale/js/ui/main.js:602
 msgid "Time zone:"
 msgstr "Tidszon:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:561
+#: pretix/static/pretixpresale/js/ui/main.js:593
 msgid "Your local time:"
 msgstr "Din lokala tid:"
 

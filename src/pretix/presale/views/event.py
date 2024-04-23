@@ -35,7 +35,6 @@
 import calendar
 import hashlib
 import sys
-import urllib.parse
 from collections import defaultdict
 from datetime import date, datetime, timedelta
 from decimal import Decimal
@@ -154,13 +153,13 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
             Prefetch('quotas',
                      to_attr='_subevent_quotas',
                      queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(
-                         subevent=subevent))
+                         subevent=subevent).select_related("subevent"))
         ).distinct()
     )
     prefetch_quotas = Prefetch(
         'quotas',
         to_attr='_subevent_quotas',
-        queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent)
+        queryset=event.quotas.using(settings.DATABASE_REPLICA).filter(subevent=subevent).select_related("subevent")
     )
     prefetch_bundles = Prefetch(
         'bundles',
@@ -483,17 +482,19 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
         from pretix.presale.views.cart import get_or_create_cart_id
 
         self.subevent = None
+        utm_params = {k: v for k, v in request.GET.items() if k.startswith("utm_")}
         if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
             # User has clicked "Open in a new tab" link in widget
             get_or_create_cart_id(request)
-            return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs))
+            return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urlencode(utm_params))
         elif request.GET.get('iframe', '') == '1' and 'take_cart_id' in request.GET:
             # Widget just opened, a cart already exists. Let's to a stupid redirect to check if cookies are disabled
             get_or_create_cart_id(request)
-            return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urllib.parse.urlencode({
+            return redirect_to_url(eventreverse(request.event, 'presale:event.index', kwargs=kwargs) + '?' + urlencode({
                 'require_cookie': 'true',
                 'cart_id': request.GET.get('take_cart_id'),
                 **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
+                **utm_params,
             }))
         elif request.GET.get('iframe', '') == '1' and len(self.request.GET.get('widget_data', '{}')) > 3:
             # We've been passed data from a widget, we need to create a cart session to store it.
@@ -504,10 +505,11 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             r = render(request, 'pretixpresale/event/cookies.html', {
                 'url': eventreverse(
                     request.event, "presale:event.index", kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''}
-                ) + "?" + urllib.parse.urlencode({
+                ) + "?" + urlencode({
                     "src": "widget",
                     **({"locale": request.GET.get('locale')} if request.GET.get('locale') else {}),
                     **({"take_cart_id": request.GET.get('cart_id')} if request.GET.get('cart_id') else {}),
+                    **utm_params,
                 })
             })
             r._csp_ignore = True
@@ -526,7 +528,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
                 return super().get(request, *args, **kwargs)
         else:
             if 'subevent' in kwargs:
-                return redirect_to_url(self.get_index_url())
+                return redirect_to_url(self.get_index_url() + '?' + urlencode(utm_params))
             else:
                 return super().get(request, *args, **kwargs)
 
@@ -546,7 +548,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             context['ev'].presale_is_running
         )
 
-        context['allow_waitinglist'] = self.request.event.settings.waiting_list_enabled and context['ev'].presale_is_running
+        context['allow_waitinglist'] = context['ev'].waiting_list_active and context['ev'].presale_is_running
 
         if not self.request.event.has_subevents or self.subevent:
             # Fetch all items
@@ -802,16 +804,19 @@ class SeatingPlanView(EventViewMixin, TemplateView):
         from pretix.presale.views.cart import get_or_create_cart_id
 
         self.subevent = None
+        utm_params = {k: v for k, v in request.GET.items() if k.startswith("utm_")}
         if request.GET.get('src', '') == 'widget' and 'take_cart_id' in request.GET:
             # User has clicked "Open in a new tab" link in widget
             get_or_create_cart_id(request)
-            return redirect_to_url(eventreverse(request.event, 'presale:event.seatingplan', kwargs=kwargs))
+            return redirect_to_url(eventreverse(request.event, 'presale:event.seatingplan', kwargs=kwargs) + '?' + urlencode(utm_params))
         elif request.GET.get('iframe', '') == '1' and 'take_cart_id' in request.GET:
             # Widget just opened, a cart already exists. Let's to a stupid redirect to check if cookies are disabled
             get_or_create_cart_id(request)
-            return redirect_to_url(eventreverse(request.event, 'presale:event.seatingplan', kwargs=kwargs) + '?require_cookie=true&cart_id={}'.format(
-                request.GET.get('take_cart_id')
-            ))
+            return redirect_to_url(eventreverse(request.event, 'presale:event.seatingplan', kwargs=kwargs) + '?' + urlencode({
+                **utm_params,
+                'require_cookie': 'true',
+                'cart_id': request.GET.get('take_cart_id'),
+            }))
         elif request.GET.get('iframe', '') == '1' and len(self.request.GET.get('widget_data', '{}')) > 3:
             # We've been passed data from a widget, we need to create a cart session to store it.
             get_or_create_cart_id(request)
@@ -837,6 +842,10 @@ class SeatingPlanView(EventViewMixin, TemplateView):
                                                 kwargs={'cart_namespace': kwargs.get('cart_namespace') or ''})
         if context['cart_redirect'].startswith('https:'):
             context['cart_redirect'] = '/' + context['cart_redirect'].split('/', 3)[3]
+
+        utm_params = {k: v for k, v in self.request.GET.items() if k.startswith("utm_")}
+        if utm_params:
+            context['cart_redirect'] += '?' + urlencode(utm_params)
 
         v = self.request.GET.get('voucher')
         if v:

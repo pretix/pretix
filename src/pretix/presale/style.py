@@ -41,6 +41,7 @@ from pretix.base.models import Event, Event_SettingsStore, Organizer
 from pretix.base.services.tasks import (
     TransactionAwareProfiledEventTask, TransactionAwareTask,
 )
+from pretix.base.signals import EventPluginSignal
 from pretix.celery_app import app
 from pretix.multidomain.urlreverse import (
     get_event_domain, get_organizer_domain,
@@ -86,7 +87,7 @@ def compile_scss(object, file="main.scss", fonts=True):
 
     font = object.settings.get('primary_font')
     if font != 'Open Sans' and fonts:
-        sassrules.append(get_font_stylesheet(font))
+        sassrules.append(get_font_stylesheet(font, event=object if isinstance(object, Event) else None))
         sassrules.append(
             '$font-family-sans-serif: "{}", "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif '
             '!default'.format(
@@ -202,7 +203,8 @@ def regenerate_organizer_css(organizer_id: int, regenerate_events=True):
 
 register_fonts = Signal()
 """
-Return a dictionaries of the following structure. Paths should be relative to static root.
+Return a dictionaries of the following structure. Paths should be relative to static root or an absolute URL. In the
+latter case, the fonts won't be available for PDF-rendering.
 
 {
     "font name": {
@@ -225,17 +227,71 @@ Return a dictionaries of the following structure. Paths should be relative to st
 }
 """
 
+register_event_fonts = EventPluginSignal()
+"""
+Return a dictionaries of the following structure. Paths should be relative to static root or an absolute URL. In the
+latter case, the fonts won't be available for PDF-rendering.
+As with all plugin signals, the ``sender`` keyword argument will contain the event.
 
-def get_fonts():
+{
+    "font name": {
+        "regular": {
+            "truetype": "….ttf",
+            "woff": "…",
+            "woff2": "…"
+        },
+        "bold": {
+            ...
+        },
+        "italic": {
+            ...
+        },
+        "bolditalic": {
+            ...
+        },
+        "pdf_only": False,   # if True, font is not usable on the web,
+    }
+}
+"""
+
+
+def get_fonts(event: Event = None, pdf_support_required=False):
+    def nested_dict_values(d):
+        for v in d.values():
+            if isinstance(v, dict):
+                yield from nested_dict_values(v)
+            else:
+                if isinstance(v, str):
+                    yield v
+
     f = {}
+    received_fonts = {}
+
     for recv, value in register_fonts.send(0):
-        f.update(value)
+        received_fonts.update(value)
+
+    # When deleting an event, the function is still getting called with an event.
+    # We check specifically if there is a PK present to make sure the event actually exists.
+    if event and event.pk:
+        for recv, value in register_event_fonts.send(event):
+            received_fonts.update(value)
+
+    for font, payload in received_fonts.items():
+        if pdf_support_required:
+            if any('//' in v for v in list(nested_dict_values(payload))):
+                continue
+            f.update({font: payload})
+        else:
+            if payload.get('pdf_only', False):
+                continue
+            f.update({font: payload})
+
     return f
 
 
-def get_font_stylesheet(font_name):
+def get_font_stylesheet(font_name, event: Event = None):
     stylesheet = []
-    font = get_fonts()[font_name]
+    font = get_fonts(event)[font_name]
     for sty, formats in font.items():
         if sty == 'sample':
             continue
@@ -251,12 +307,12 @@ def get_font_stylesheet(font_name):
             stylesheet.append("font-weight: normal;")
 
         srcs = []
-        if "woff2" in formats:
-            srcs.append("url(static('{}')) format('woff2')".format(formats['woff2']))
-        if "woff" in formats:
-            srcs.append("url(static('{}')) format('woff')".format(formats['woff']))
-        if "truetype" in formats:
-            srcs.append("url(static('{}')) format('truetype')".format(formats['truetype']))
+        for f in ["woff2", "woff", "truetype"]:
+            if f in formats:
+                if formats[f].startswith('https'):
+                    srcs.append(f"url('{formats[f]}') format('{f}')")
+                else:
+                    srcs.append(f"url(static('{formats[f]}')) format('{f}')")
         stylesheet.append("src: {};".format(", ".join(srcs)))
         stylesheet.append("font-display: swap;")
         stylesheet.append("}")

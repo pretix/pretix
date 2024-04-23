@@ -1,0 +1,13 @@
+{% load i18n %}{% blocktrans with url=url|safe os=source.os_type agent=source.agent_type %}Hello,
+
+a login to your {{ instance }} account from an unusual or new location was detected. The login was performed using {{ agent }} on {{ os }} from {{ country }}.
+
+If this was you, you can safely ignore this email.
+
+If this was not you, we recommend that you change your password in your account settings:
+
+{{ url }}
+
+Best regards,  
+Your {{ instance }} team
+{% endblocktrans %}

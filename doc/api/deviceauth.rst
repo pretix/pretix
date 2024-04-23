@@ -249,7 +249,10 @@ You can get three response codes:
    Content-Type: application/json
 
    {
-      "event": "democon",
+      "event": {
+        "name": "Demo Conference",
+        "slug": "democon"
+      },
       "subevent": 23,
       "checkinlist": 5
    }

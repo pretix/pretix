@@ -11,6 +11,12 @@
                 <button class="btn btn-default">{% trans "Send password reset email" %}</button>
             </form>
         {% endif %}
+        {% if user.require_2fa %}
+            <form action="{% url "control:users.emergencytoken" id=user.pk %}" method="post" class="form-inline helper-display-inline">
+                {% csrf_token %}
+                <button class="btn btn-default">{% trans "Generate 2FA emergency token" %}</button>
+            </form>
+        {% endif %}
         <form action="{% url "control:users.impersonate" id=user.pk %}" method="post" class="form-inline helper-display-inline">
             {% csrf_token %}
             <button class="btn btn-default">{% trans "Impersonate user" %}</button>

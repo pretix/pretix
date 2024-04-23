@@ -55,12 +55,14 @@ from django.utils.timezone import get_current_timezone_name
 from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
 from django_countries.fields import LazyTypedChoiceField
 from i18nfield.forms import (
-    I18nForm, I18nFormField, I18nFormSetMixin, I18nTextarea, I18nTextInput,
+    I18nForm, I18nFormField, I18nFormSetMixin, I18nTextInput,
 )
 from pytz import common_timezones
 
 from pretix.base.channels import get_all_sales_channels
-from pretix.base.forms import I18nModelForm, PlaceholderValidator, SettingsForm
+from pretix.base.forms import (
+    I18nMarkdownTextarea, I18nModelForm, PlaceholderValidator, SettingsForm,
+)
 from pretix.base.models import Event, Organizer, TaxRule, Team
 from pretix.base.models.event import EventFooterLink, EventMetaValue, SubEvent
 from pretix.base.reldate import RelativeDateField, RelativeDateTimeField
@@ -79,6 +81,7 @@ from pretix.helpers.countries import CachedCountries
 from pretix.multidomain.models import KnownDomain
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.plugins.banktransfer.payment import BankTransfer
+from pretix.presale.style import get_fonts
 
 
 class EventWizardFoundationForm(forms.Form):
@@ -538,6 +541,7 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
         'region',
         'show_quota_left',
         'waiting_list_enabled',
+        'waiting_list_auto_disable',
         'waiting_list_hours',
         'waiting_list_auto',
         'waiting_list_names_asked',
@@ -651,6 +655,9 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
             del self.fields['event_list_available_only']
             del self.fields['event_list_filters']
             del self.fields['event_calendar_future_only']
+        self.fields['primary_font'].choices += [
+            (a, {"title": a, "data": v}) for a, v in get_fonts(self.event, pdf_support_required=False).items()
+        ]
 
         # create "virtual" fields for better UX when editing <name>_asked and <name>_required fields
         self.virtual_keys = []
@@ -931,6 +938,9 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
             )
         )
         self.fields['invoice_generate'].choices = generate_choices
+        self.fields['invoice_renderer_font'].choices += [
+            (a, a) for a in get_fonts(event, pdf_support_required=True).keys()
+        ]
 
 
 def contains_web_channel_validate(val):
@@ -980,7 +990,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_signature = I18nFormField(
         label=_("Signature"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
         help_text=_("This will be attached to every email. Available placeholders: {event}"),
         validators=[PlaceholderValidator(['{event}'])],
         widget_kwargs={'attrs': {
@@ -1003,7 +1013,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_placed = I18nFormField(
         label=_("Text sent to order contact address"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_send_order_placed_attendee = forms.BooleanField(
         label=_("Send an email to attendees"),
@@ -1019,7 +1029,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_placed_attendee = I18nFormField(
         label=_("Text sent to attendees"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
 
     mail_subject_order_paid = I18nFormField(
@@ -1030,7 +1040,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_paid = I18nFormField(
         label=_("Text sent to order contact address"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_send_order_paid_attendee = forms.BooleanField(
         label=_("Send an email to attendees"),
@@ -1046,7 +1056,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_paid_attendee = I18nFormField(
         label=_("Text sent to attendees"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
 
     mail_subject_order_free = I18nFormField(
@@ -1057,7 +1067,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_free = I18nFormField(
         label=_("Text sent to order contact address"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_send_order_free_attendee = forms.BooleanField(
         label=_("Send an email to attendees"),
@@ -1073,7 +1083,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_free_attendee = I18nFormField(
         label=_("Text sent to attendees"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
 
     mail_subject_order_changed = I18nFormField(
@@ -1084,7 +1094,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_changed = I18nFormField(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_subject_resend_link = I18nFormField(
         label=_("Subject (sent by admin)"),
@@ -1099,7 +1109,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_resend_link = I18nFormField(
         label=_("Text (sent by admin)"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_subject_resend_all_links = I18nFormField(
         label=_("Subject (requested by user)"),
@@ -1109,7 +1119,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_resend_all_links = I18nFormField(
         label=_("Text (requested by user)"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_days_order_expire_warning = forms.IntegerField(
         label=_("Number of days"),
@@ -1121,7 +1131,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_expire_warning = I18nFormField(
         label=_("Text (if order will expire automatically)"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_subject_order_expire_warning = I18nFormField(
         label=_("Subject (if order will expire automatically)"),
@@ -1131,7 +1141,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_pending_warning = I18nFormField(
         label=_("Text (if order will not expire automatically)"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_subject_order_pending_warning = I18nFormField(
         label=_("Subject (if order will not expire automatically)"),
@@ -1146,7 +1156,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_incomplete_payment = I18nFormField(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
         help_text=_("This email only applies to payment methods that can receive incomplete payments, "
                     "such as bank transfer."),
     )
@@ -1158,7 +1168,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_payment_failed = I18nFormField(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_subject_waiting_list = I18nFormField(
         label=_("Subject"),
@@ -1168,7 +1178,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_waiting_list = I18nFormField(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_subject_order_canceled = I18nFormField(
         label=_("Subject"),
@@ -1178,12 +1188,12 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_canceled = I18nFormField(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_text_order_custom_mail = I18nFormField(
         label=_("Text"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_subject_download_reminder = I18nFormField(
         label=_("Subject sent to order contact address"),
@@ -1193,7 +1203,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_download_reminder = I18nFormField(
         label=_("Text sent to order contact address"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_send_download_reminder_attendee = forms.BooleanField(
         label=_("Send an email to attendees"),
@@ -1209,7 +1219,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_download_reminder_attendee = I18nFormField(
         label=_("Text sent to attendees"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_days_download_reminder = forms.IntegerField(
         label=_("Number of days"),
@@ -1226,7 +1236,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_placed_require_approval = I18nFormField(
         label=_("Text for received order"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     mail_subject_order_approved = I18nFormField(
         label=_("Subject for approved order"),
@@ -1236,7 +1246,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_approved = I18nFormField(
         label=_("Text for approved order"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
         help_text=_("This will only be sent out for non-free orders. Free orders will receive the free order "
                     "template from below instead."),
     )
@@ -1254,7 +1264,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_approved_attendee = I18nFormField(
         label=_("Text sent to attendees"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
         help_text=_("This will only be sent out for non-free orders. Free orders will receive the free order "
                     "template from below instead."),
     )
@@ -1266,7 +1276,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_approved_free = I18nFormField(
         label=_("Text for approved free order"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
         help_text=_("This will only be sent out for free orders. Non-free orders will receive the non-free order "
                     "template from above instead."),
     )
@@ -1284,7 +1294,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_approved_free_attendee = I18nFormField(
         label=_("Text sent to attendees"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
         help_text=_("This will only be sent out for free orders. Non-free orders will receive the non-free order "
                     "template from above instead."),
     )
@@ -1296,7 +1306,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     mail_text_order_denied = I18nFormField(
         label=_("Text for denied order"),
         required=False,
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
     )
     base_context = {
         'mail_text_order_placed': ['event', 'order', 'payments'],
@@ -1729,7 +1739,7 @@ class ItemMetaPropertyForm(forms.ModelForm):
 
 class ConfirmTextForm(I18nForm):
     text = I18nFormField(
-        widget=I18nTextarea,
+        widget=I18nMarkdownTextarea,
         widget_kwargs={'attrs': {'rows': '2'}},
     )
 

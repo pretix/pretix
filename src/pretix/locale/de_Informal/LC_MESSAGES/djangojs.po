@@ -7,9 +7,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-02-28 13:11+0000\n"
-"PO-Revision-Date: 2024-02-10 00:00+0000\n"
-"Last-Translator: Phin Wolkwitz <wolkwitz@rami.io>\n"
+"POT-Creation-Date: 2024-04-23 12:41+0000\n"
+"PO-Revision-Date: 2024-03-15 18:00+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix-js/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4.2\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -432,109 +432,123 @@ msgstr "ist vor"
 msgid "is after"
 msgstr "ist nach"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:93
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
+msgid "="
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Product"
 msgstr "Produkt"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:97
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:103
 msgid "Product variation"
 msgstr "Variante"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:101
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
 msgid "Gate"
 msgstr "Station"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:105
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
 msgid "Current date and time"
 msgstr "Aktueller Zeitpunkt"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:109
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:115
 msgid "Current day of the week (1 = Monday, 7 = Sunday)"
 msgstr "Aktueller Wochentag (1 = Montag, 7 = Sonntag)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:113
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
+msgid "Current entry status"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
 msgid "Number of previous entries"
 msgstr "Anzahl bisheriger Eintritte"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:117
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
 msgid "Number of previous entries since midnight"
 msgstr "Anzahl bisheriger Eintritte seit Mitternacht"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:121
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
 msgid "Number of previous entries since"
 msgstr "Anzahl bisheriger Eintritte seit"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:125
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
 msgid "Number of previous entries before"
 msgstr "Anzahl bisheriger Eintritte vor"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:129
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
 msgid "Number of days with a previous entry"
 msgstr "Anzahl an Tagen mit vorherigem Eintritt"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:133
-#, fuzzy
-#| msgid "Number of days with a previous entry"
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
 msgid "Number of days with a previous entry since"
-msgstr "Anzahl an Tagen mit vorherigem Eintritt"
+msgstr "Anzahl an Tagen mit vorherigem Eintritt seit"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:137
-#, fuzzy
-#| msgid "Number of days with a previous entry"
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
 msgid "Number of days with a previous entry before"
-msgstr "Anzahl an Tagen mit vorherigem Eintritt"
+msgstr "Anzahl an Tagen mit vorherigem Eintritt vor"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:141
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
 msgid "Minutes since last entry (-1 on first entry)"
 msgstr "Minuten seit vorherigem Zutritt (-1 beim erstem Zutritt)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:145
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
 msgid "Minutes since first entry (-1 on first entry)"
 msgstr "Minuten seit erstem Zutritt (-1 bei erstem Zutritt)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:172
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
 msgid "All of the conditions below (AND)"
 msgstr "Alle der folgenden Bedingungen (UND)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:173
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:183
 msgid "At least one of the conditions below (OR)"
 msgstr "Mindestens eine der folgenden Bedingungen (ODER)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:174
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
 msgid "Event start"
 msgstr "Veranstaltungsbeginn"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:175
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
 msgid "Event end"
 msgstr "Veranstaltungsende"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:176
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
 msgid "Event admission"
 msgstr "Einlass"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:177
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
 msgid "custom date and time"
 msgstr "Fester Zeitpunkt"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:178
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
 msgid "custom time"
 msgstr "Feste Uhrzeit"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:179
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
 msgid "Tolerance (minutes)"
 msgstr "Toleranz (Minuten)"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:180
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
 msgid "Add condition"
 msgstr "Bedingung hinzufügen"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:181
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
 msgid "minutes"
 msgstr "Minuten"
 
-#: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
 msgid "Duplicate"
 msgstr "Duplizieren"
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
+msgctxt "entry_status"
+msgid "present"
+msgstr ""
+
+#: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
+msgctxt "entry_status"
+msgid "absent"
+msgstr ""
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:72
 msgid "Check-in QR"
@@ -599,17 +613,17 @@ msgstr "Generiere Nachrichten…"
 msgid "Unknown error."
 msgstr "Unbekannter Fehler."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:311
+#: pretix/static/pretixcontrol/js/ui/main.js:313
 msgid "Your color has great contrast and is very easy to read!"
 msgstr "Diese Farbe hat einen sehr guten Kontrast und ist sehr gut zu lesen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:315
+#: pretix/static/pretixcontrol/js/ui/main.js:317
 msgid "Your color has decent contrast and is probably good-enough to read!"
 msgstr ""
 "Diese Farbe hat einen ausreichenden Kontrast und ist wahrscheinlich gut zu "
 "lesen!"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:319
+#: pretix/static/pretixcontrol/js/ui/main.js:321
 msgid ""
 "Your color has bad contrast for text on white background, please choose a "
 "darker shade."
@@ -617,40 +631,40 @@ msgstr ""
 "Diese Farbe hat einen schlechten Kontrast für Text auf einem weißen "
 "Hintergrund. Bitte wähle eine dunklere Farbe."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:473
-#: pretix/static/pretixcontrol/js/ui/main.js:493
+#: pretix/static/pretixcontrol/js/ui/main.js:475
+#: pretix/static/pretixcontrol/js/ui/main.js:495
 msgid "Search query"
 msgstr "Suchbegriff"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:491
+#: pretix/static/pretixcontrol/js/ui/main.js:493
 msgid "All"
 msgstr "Alle"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:492
+#: pretix/static/pretixcontrol/js/ui/main.js:494
 msgid "None"
 msgstr "Keine"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:496
+#: pretix/static/pretixcontrol/js/ui/main.js:498
 msgid "Selected only"
 msgstr "Nur ausgewählte"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:791
+#: pretix/static/pretixcontrol/js/ui/main.js:794
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Gib eine Seitenzahl zwischen 1 und %(max)s ein."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:794
+#: pretix/static/pretixcontrol/js/ui/main.js:797
 msgid "Invalid page number."
 msgstr "Ungültige Seitenzahl."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:952
+#: pretix/static/pretixcontrol/js/ui/main.js:955
 msgid "Use a different name internally"
 msgstr "Intern einen anderen Namen verwenden"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:992
+#: pretix/static/pretixcontrol/js/ui/main.js:995
 msgid "Click to close"
 msgstr "Klicken zum Schließen"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1067
+#: pretix/static/pretixcontrol/js/ui/main.js:1070
 msgid "You have unsaved changes!"
 msgstr "Du hast ungespeicherte Änderungen!"
 
@@ -693,32 +707,32 @@ msgstr[0] ""
 msgstr[1] ""
 "Die Produkte in deinem Warenkorb sind noch {num} Minuten für dich reserviert."
 
-#: pretix/static/pretixpresale/js/ui/main.js:171
+#: pretix/static/pretixpresale/js/ui/main.js:203
 msgid "The organizer keeps %(currency)s %(amount)s"
 msgstr "Der Veranstalter behält %(currency)s %(amount)s ein"
 
-#: pretix/static/pretixpresale/js/ui/main.js:179
+#: pretix/static/pretixpresale/js/ui/main.js:211
 msgid "You get %(currency)s %(amount)s back"
 msgstr "Du erhältst %(currency)s %(amount)s zurück"
 
-#: pretix/static/pretixpresale/js/ui/main.js:195
+#: pretix/static/pretixpresale/js/ui/main.js:227
 msgid "Please enter the amount the organizer can keep."
 msgstr "Bitte gib den Betrag ein, den der Veranstalter einbehalten darf."
 
-#: pretix/static/pretixpresale/js/ui/main.js:412
+#: pretix/static/pretixpresale/js/ui/main.js:444
 msgid "Please enter a quantity for one of the ticket types."
 msgstr "Bitte trage eine Menge für eines der Produkte ein."
 
-#: pretix/static/pretixpresale/js/ui/main.js:448
+#: pretix/static/pretixpresale/js/ui/main.js:480
 msgid "required"
 msgstr "verpflichtend"
 
-#: pretix/static/pretixpresale/js/ui/main.js:551
-#: pretix/static/pretixpresale/js/ui/main.js:570
+#: pretix/static/pretixpresale/js/ui/main.js:583
+#: pretix/static/pretixpresale/js/ui/main.js:602
 msgid "Time zone:"
 msgstr "Zeitzone:"
 
-#: pretix/static/pretixpresale/js/ui/main.js:561
+#: pretix/static/pretixpresale/js/ui/main.js:593
 msgid "Your local time:"
 msgstr "Deine lokale Zeit:"
 

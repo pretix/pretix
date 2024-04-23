@@ -111,6 +111,7 @@ LANGUAGES_RTL = {
 LANGUAGES_INCUBATING = {
     'fi', 'pt-br', 'gl',
 }
+LANGUAGES = ALL_LANGUAGES
 LOCALE_PATHS = [
     os.path.join(os.path.dirname(__file__), 'locale'),
 ]
@@ -234,7 +235,12 @@ COMPRESS_FILTERS = {
     )
 }
 
-CURRENCIES = list(currencies)
+CURRENCIES = [
+    c for c in currencies
+    if c.alpha_3 not in {
+        'XAG', 'XAU', 'XBA', 'XBB', 'XBC', 'XBD', 'XDR', 'XPD', 'XPT', 'XSU', 'XTS', 'XUA',
+    }
+]
 CURRENCY_PLACES = {
     # default is 2
     'BIF': 0,

@@ -188,6 +188,14 @@ class Order(LockModel, LoggedModel):
         default=False,
     )
     testmode = models.BooleanField(default=False)
+    organizer = models.ForeignKey(
+        # Redundant foreign key, but is required for a uniqueness constraint
+        "Organizer",
+        related_name="orders",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
     event = models.ForeignKey(
         Event,
         verbose_name=_("Event"),
@@ -285,6 +293,9 @@ class Order(LockModel, LoggedModel):
         indexes = [
             models.Index(fields=["datetime", "id"]),
             models.Index(fields=["last_modified", "id"]),
+        ]
+        constraints = [
+            models.UniqueConstraint(fields=["organizer", "code"], name="order_organizer_code_uniq"),
         ]
 
     def __str__(self):
@@ -451,9 +462,9 @@ class Order(LockModel, LoggedModel):
         if results:
             qs = qs.annotate(
                 is_overpaid=Case(
-                    When(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=-1e-8),
+                    When(~Q(status__in=(Order.STATUS_CANCELED, Order.STATUS_EXPIRED)) & Q(pending_sum_t__lt=-1e-8),
                          then=Value(1)),
-                    When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=-1e-8),
+                    When(Q(status__in=(Order.STATUS_CANCELED, Order.STATUS_EXPIRED)) & Q(pending_sum_rc__lt=-1e-8),
                          then=Value(1)),
                     default=Value(0),
                     output_field=models.IntegerField()
@@ -468,7 +479,7 @@ class Order(LockModel, LoggedModel):
                 is_underpaid=Case(
                     When(Q(status=Order.STATUS_PAID) & Q(pending_sum_t__gt=1e-8),
                          then=Value(1)),
-                    When(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__gt=1e-8),
+                    When(Q(status__in=(Order.STATUS_CANCELED, Order.STATUS_EXPIRED)) & Q(pending_sum_rc__gt=1e-8),
                          then=Value(1)),
                     default=Value(0),
                     output_field=models.IntegerField()
@@ -499,6 +510,10 @@ class Order(LockModel, LoggedModel):
             self.set_expires()
             if 'update_fields' in kwargs:
                 kwargs['update_fields'] = {'expires'}.union(kwargs['update_fields'])
+        if not self.organizer_id:
+            self.organizer_id = self.event.organizer_id
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'organizer'}.union(kwargs['update_fields'])
 
         is_new = not self.pk
         update_fields = kwargs.get('update_fields', [])
@@ -2356,6 +2371,14 @@ class OrderPosition(AbstractPosition):
     """
     positionid = models.PositiveIntegerField(default=1)
 
+    organizer = models.ForeignKey(
+        # Redundant foreign key, but is required for a uniqueness constraint
+        "Organizer",
+        related_name="order_positions",
+        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+    )
     order = models.ForeignKey(
         Order,
         verbose_name=_("Order"),
@@ -2429,6 +2452,9 @@ class OrderPosition(AbstractPosition):
         verbose_name = _("Order position")
         verbose_name_plural = _("Order positions")
         ordering = ("positionid", "id")
+        constraints = [
+            models.UniqueConstraint("organizer", "secret", name="orderposition_organizer_secret_uniq")
+        ]
 
     @cached_property
     def sort_key(self):
@@ -2498,7 +2524,8 @@ class OrderPosition(AbstractPosition):
             op = OrderPosition(order=order)
             for f in AbstractPosition._meta.fields:
                 if f.name == 'addon_to':
-                    setattr(op, f.name, cp_mapping.get(cartpos.addon_to_id))
+                    if cartpos.addon_to_id:
+                        setattr(op, f.name, cp_mapping[cartpos.addon_to_id])
                 else:
                     setattr(op, f.name, getattr(cartpos, f.name))
             op._calculate_tax()
@@ -2517,6 +2544,9 @@ class OrderPosition(AbstractPosition):
                 )
                 op.valid_from = valid_from
                 op.valid_until = valid_until
+
+            if op.is_bundled and not op.addon_to_id:
+                raise ValueError("Bundled cart position without parent does not make sense.")
 
             op.positionid = i + 1
             op.save()
@@ -2552,10 +2582,10 @@ class OrderPosition(AbstractPosition):
             self.item.id, self.variation.id if self.variation else 0, self.order_id
         )
 
-    def _calculate_tax(self, tax_rule=None):
+    def _calculate_tax(self, tax_rule=None, invoice_address=None):
         self.tax_rule = tax_rule or self.item.tax_rule
         try:
-            ia = self.order.invoice_address
+            ia = invoice_address or self.order.invoice_address
         except InvoiceAddress.DoesNotExist:
             ia = None
         if self.tax_rule:
@@ -2585,6 +2615,10 @@ class OrderPosition(AbstractPosition):
                 if 'update_fields' in kwargs:
                     kwargs['update_fields'] = {'secret'}.union(kwargs['update_fields'])
 
+        if not self.organizer_id:
+            self.organizer_id = self.order.event.organizer_id
+            if 'update_fields' in kwargs:
+                kwargs['update_fields'] = {'organizer'}.union(kwargs['update_fields'])
         if not self.blocked and self.blocked is not None:
             self.blocked = None
             if 'update_fields' in kwargs:
@@ -2931,6 +2965,14 @@ class CartPosition(AbstractPosition):
         return '<CartPosition: item %d, variation %d for cart %s>' % (
             self.item.id, self.variation.id if self.variation else 0, self.cart_id
         )
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        # invalidate cached values of cached properties that likely have changed
+        try:
+            del self.sort_key
+        except AttributeError:
+            pass
 
     @property
     def tax_value(self):

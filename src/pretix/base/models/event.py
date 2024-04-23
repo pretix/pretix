@@ -230,6 +230,14 @@ class EventMixin:
             return self.presale_end
 
     @property
+    def waiting_list_active(self):
+        if not self.settings.waiting_list_enabled:
+            return False
+        if self.settings.waiting_list_auto_disable:
+            return self.settings.waiting_list_auto_disable.datetime(self) > now()
+        return True
+
+    @property
     def presale_has_ended(self):
         """
         Is true, when ``presale_end`` is set and in the past.
@@ -1229,6 +1237,9 @@ class Event(EventMixin, LoggedModel):
         if self.has_paid_things and not self.has_payment_provider:
             issues.append(_('You have configured at least one paid product but have not enabled any payment methods.'))
 
+        if self.has_paid_things and self.currency == "XXX":
+            issues.append(_('You have configured at least one paid product but have not configured a currency.'))
+
         if not self.quotas.exists():
             issues.append(_('You need to configure at least one quota to sell anything.'))
 
@@ -1450,13 +1461,17 @@ class SubEvent(EventMixin, LoggedModel):
     )
     frontpage_text = I18nTextField(
         null=True, blank=True,
-        verbose_name=_("Frontpage text")
+        verbose_name=_("Frontpage text"),
     )
     seating_plan = models.ForeignKey('SeatingPlan', on_delete=models.PROTECT, null=True, blank=True,
                                      related_name='subevents', verbose_name=_('Seating plan'))
 
     items = models.ManyToManyField('Item', through='SubEventItem')
     variations = models.ManyToManyField('ItemVariation', through='SubEventItemVariation')
+    comment = models.TextField(
+        verbose_name=_("Internal comment"),
+        null=True, blank=True
+    )
 
     last_modified = models.DateTimeField(
         auto_now=True, db_index=True

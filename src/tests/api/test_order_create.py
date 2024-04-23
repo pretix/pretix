@@ -280,6 +280,28 @@ def test_order_create(token_client, organizer, event, item, quota, question):
 
 
 @pytest.mark.django_db
+def test_order_create_duplicate_code(token_client, organizer, event, item, quota, question):
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['code'] = 'ABC12'
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    assert resp.data['code'] == 'ABC12'
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 400
+    assert resp.data == {"code": ["This order code is already in use."]}
+
+
+@pytest.mark.django_db
 def test_order_create_max_size(token_client, organizer, event, item, quota, question):
     quota.size = settings.PRETIX_MAX_ORDER_SIZE * 2
     quota.save()
@@ -547,12 +569,14 @@ def test_order_create_autocheckin(token_client, organizer, event, item, quota, q
 
 
 @pytest.mark.django_db
-def test_order_create_require_approval(token_client, organizer, event, item, quota, question):
+def test_order_create_require_approval_free(token_client, organizer, event, item, quota, question):
     res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
     res['require_approval'] = True
     res['send_email'] = True
     res['positions'][0]['item'] = item.pk
     res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['price'] = '0.00'
+    res['fees'] = []
     djmail.outbox = []
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/orders/'.format(
@@ -563,6 +587,7 @@ def test_order_create_require_approval(token_client, organizer, event, item, quo
     with scopes_disabled():
         o = Order.objects.get(code=resp.data['code'])
         assert o.require_approval
+        assert o.status == Order.STATUS_PENDING
     assert len(djmail.outbox) == 1
     assert djmail.outbox[0].subject == "Your order: {}".format(resp.data['code'])
     assert "approval" in djmail.outbox[0].body
@@ -2166,6 +2191,33 @@ def test_order_create_with_seat_consumed_from_cart(token_client, organizer, even
 
 
 @pytest.mark.django_db
+def test_order_create_with_voucher_and_price_set(token_client, organizer, event, item, quota, question):
+    with scopes_disabled():
+        voucher = event.vouchers.create(code="FOOBAR", item=item, price_mode="set", value=0, max_usages=3)
+        item.tax_rule = event.tax_rules.create(rate=19, price_includes_tax=False)
+        item.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['voucher'] = voucher.code
+    res['positions'][0]['price'] = '0.00'
+    res['positions'][0].pop("tax_rate", None)
+    res['positions'][0].pop("tax_rule", None)
+    res['positions'][0].pop("tax_value", None)
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p = o.positions.first()
+    assert p.voucher == voucher
+    assert p.price == Decimal("0.00")
+
+
+@pytest.mark.django_db
 def test_order_create_with_voucher_consumed_from_cart(token_client, organizer, event, item, quota, question):
     with scopes_disabled():
         voucher = event.vouchers.create(code="FOOBAR", item=item, max_usages=3, redeemed=2)
@@ -2431,6 +2483,31 @@ def test_order_create_auto_validity_with_requested_start_limitation(token_client
         o = Order.objects.get(code=resp.data['code'])
         p = o.positions.first()
     assert now() + datetime.timedelta(days=23) < p.valid_from <= now() + datetime.timedelta(days=26)
+    assert p.valid_until == p.valid_from + datetime.timedelta(minutes=30)
+
+
+@pytest.mark.django_db
+def test_order_create_auto_validity_with_requested_start_in_past(token_client, organizer, event, item, quota, question):
+    item.validity_mode = 'dynamic'
+    item.validity_dynamic_duration_minutes = 30
+    item.validity_dynamic_start_choice = True
+    item.validity_dynamic_start_choice_day_limit = 24
+    item.save()
+    res = copy.deepcopy(ORDER_CREATE_PAYLOAD)
+    res['positions'][0]['item'] = item.pk
+    res['positions'][0]['answers'][0]['question'] = question.pk
+    res['positions'][0]['requested_valid_from'] = (now() - datetime.timedelta(days=30)).isoformat()
+    del res['positions'][0]['price']
+    resp = token_client.post(
+        '/api/v1/organizers/{}/events/{}/orders/'.format(
+            organizer.slug, event.slug
+        ), format='json', data=res
+    )
+    assert resp.status_code == 201
+    with scopes_disabled():
+        o = Order.objects.get(code=resp.data['code'])
+        p = o.positions.first()
+    assert now() - datetime.timedelta(days=31) < p.valid_from <= now() - datetime.timedelta(days=29)
     assert p.valid_until == p.valid_from + datetime.timedelta(minutes=30)
 
 

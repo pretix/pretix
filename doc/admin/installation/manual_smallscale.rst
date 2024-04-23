@@ -120,6 +120,7 @@ Now we will install pretix itself. The following steps are to be executed as the
 actually install pretix, we will create a virtual environment to isolate the python packages from your global
 python installation::
 
+    # sudo -u pretix -s
     $ python3 -m venv /var/pretix/venv
     $ source /var/pretix/venv/bin/activate
     (venv)$ pip3 install -U pip setuptools wheel
@@ -279,6 +280,7 @@ Updates
 
 To upgrade to a new pretix release, pull the latest code changes and run the following commands::
 
+    # sudo -u pretix -s
     $ source /var/pretix/venv/bin/activate
     (venv)$ pip3 install -U --upgrade-strategy eager pretix gunicorn
     (venv)$ python -m pretix migrate

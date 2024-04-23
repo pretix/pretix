@@ -93,6 +93,8 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
     :param lock: Whether to place a SELECT FOR UPDATE lock on the selected memberships
     :param ignored_order: An order that should be ignored for usage counting
     :param testmode: If ``True``, only test mode memberships are allowed. If ``False``, test mode memberships are not allowed.
+    :param valid_from_not_chosen: Set to ``True`` to indicate that the customer is in an early step of the checkout flow
+                                  where the valid_from date is not selected yet. In this case, the valid_from date is not checked.
     """
     tz = event.timezone
     applicable_positions = [
@@ -163,15 +165,33 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
 
         ev = p.subevent or event
 
-        if not m.is_valid(ev):
-            raise ValidationError(
-                _('You selected a membership that is valid from {start} to {end}, but selected an event '
-                  'taking place at {date}.').format(
-                    start=date_format(m.date_start.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
-                    end=date_format(m.date_end.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
-                    date=date_format(ev.date_from.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+        if isinstance(p, (OrderPosition, CartPosition)):
+            # override_ variants are for usage of fake cart in OrderChangeManager
+            valid_from = getattr(p, 'override_valid_from', p.valid_from)
+            valid_until = getattr(p, 'override_valid_until', p.valid_until)
+        else:  # future safety, not technically defined on AbstractPosition
+            valid_from = None
+            valid_until = None
+
+        if not m.is_valid(ev, valid_from, valid_from_not_chosen=p.item.validity_dynamic_start_choice and valid_from_not_chosen):
+            if valid_from:
+                raise ValidationError(
+                    _('You selected a membership that is valid from {start} to {end}, but selected a ticket that '
+                      'starts to be valid on {date}.').format(
+                        start=date_format(m.date_start.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+                        end=date_format(m.date_end.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+                        date=date_format(valid_from.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+                    )
                 )
-            )
+            else:
+                raise ValidationError(
+                    _('You selected a membership that is valid from {start} to {end}, but selected an event '
+                      'taking place at {date}.').format(
+                        start=date_format(m.date_start.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+                        end=date_format(m.date_end.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+                        date=date_format(ev.date_from.astimezone(tz), 'SHORT_DATETIME_FORMAT'),
+                    )
+                )
 
         if p.variation and p.variation.require_membership:
             types = p.variation.require_membership_types.all()
@@ -197,14 +217,6 @@ def validate_memberships_in_order(customer: Customer, positions: List[AbstractPo
             m.usages += 1
 
         if not m.membership_type.allow_parallel_usage:
-            if isinstance(p, (OrderPosition, CartPosition)):
-                # override_ variants are for usage of fake cart in OrderChangeManager
-                valid_from = getattr(p, 'override_valid_from', p.valid_from)
-                valid_until = getattr(p, 'override_valid_until', p.valid_until)
-            else:  # future safety, not technically defined on AbstractPosition
-                valid_from = None
-                valid_until = None
-
             if (valid_from or valid_until) and not (p.item.validity_dynamic_start_choice and valid_from_not_chosen):
                 for used_range in m._used_for_ranges:
                     if valid_from and valid_from > used_range[1]:

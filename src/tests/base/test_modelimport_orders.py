@@ -35,7 +35,7 @@ from pretix.base.models import (
     CachedFile, Event, Item, Order, OrderPayment, OrderPosition, Organizer,
     Question, QuestionAnswer, User,
 )
-from pretix.base.services.orderimport import DataImportError, import_orders
+from pretix.base.services.modelimport import DataImportError, import_orders
 
 
 @pytest.fixture

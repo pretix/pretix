@@ -35,6 +35,7 @@
 
 import hashlib
 import ipaddress
+import logging
 
 from django import forms
 from django.conf import settings
@@ -44,9 +45,12 @@ from django.contrib.auth.password_validation import (
 from django.utils.functional import cached_property
 from django.utils.translation import gettext_lazy as _
 
+from pretix.base.metrics import pretix_failed_logins
 from pretix.base.models import User
 from pretix.helpers.dicts import move_to_end
 from pretix.helpers.http import get_client_ip
+
+logger = logging.getLogger(__name__)
 
 
 class LoginForm(forms.Form):
@@ -55,6 +59,7 @@ class LoginForm(forms.Form):
     username/password logins.
     """
     keep_logged_in = forms.BooleanField(label=_("Keep me logged in"), required=False)
+    origin = forms.CharField(widget=forms.HiddenInput, required=False)
 
     error_messages = {
         'invalid_login': _("This combination of credentials is not known to our system."),
@@ -104,12 +109,16 @@ class LoginForm(forms.Form):
                 rc = get_redis_connection("redis")
                 cnt = rc.get(self.ratelimit_key)
                 if cnt and int(cnt) > 10:
+                    pretix_failed_logins.inc(1, reason="ratelimit")
+                    logger.info("Backend login rejected due to rate limit.")
                     raise forms.ValidationError(self.error_messages['rate_limit'], code='rate_limit')
             self.user_cache = self.backend.form_authenticate(self.request, self.cleaned_data)
             if self.user_cache is None:
                 if self.ratelimit_key:
                     rc.incr(self.ratelimit_key)
                     rc.expire(self.ratelimit_key, 300)
+                logger.info("Backend login invalid.")
+                pretix_failed_logins.inc(1, reason="invalid")
                 raise forms.ValidationError(
                     self.error_messages['invalid_login'],
                     code='invalid_login'
@@ -131,6 +140,8 @@ class LoginForm(forms.Form):
         If the given user may log in, this method should return None.
         """
         if not user.is_active:
+            logger.info("Backend login rejected due to user inactive.")
+            pretix_failed_logins.inc(1, reason="inactive")
             raise forms.ValidationError(
                 self.error_messages['inactive'],
                 code='inactive',

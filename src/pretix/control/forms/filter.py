@@ -309,11 +309,8 @@ class OrderFilterForm(FilterForm):
             elif s in ('p', 'n', 'e', 'c', 'r'):
                 qs = qs.filter(status=s)
             elif s == 'overpaid':
-                qs = Order.annotate_overpayments(qs, refunds=False, results=False, sums=True)
-                qs = qs.filter(
-                    Q(~Q(status=Order.STATUS_CANCELED) & Q(pending_sum_t__lt=0))
-                    | Q(Q(status=Order.STATUS_CANCELED) & Q(pending_sum_rc__lt=0))
-                )
+                qs = Order.annotate_overpayments(qs, refunds=False, results=True, sums=False)
+                qs = qs.filter(is_overpaid=True)
             elif s == 'rc':
                 qs = qs.filter(
                     cancellation_requests__isnull=False
@@ -1234,7 +1231,7 @@ class SubEventFilterForm(FilterForm):
         if fdata.get('query'):
             query = fdata.get('query')
             qs = qs.filter(
-                Q(name__icontains=i18ncomp(query)) | Q(location__icontains=query)
+                Q(name__icontains=i18ncomp(query)) | Q(location__icontains=query) | Q(comment__icontains=query)
             )
 
         if fdata.get('date_until'):

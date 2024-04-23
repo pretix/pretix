@@ -22,9 +22,9 @@
 import logging
 
 from django import template
-from django.core.files import File
 from django.core.files.storage import default_storage
 
+from pretix import settings
 from pretix.helpers.thumb import get_thumbnail
 
 register = template.Library()
@@ -33,10 +33,16 @@ logger = logging.getLogger(__name__)
 
 @register.filter
 def thumb(source, arg):
-    if isinstance(source, File):
-        source = source.name
     try:
-        return get_thumbnail(source, arg).thumb.url
+        formats = list(set().union(
+            settings.PILLOW_FORMATS_IMAGE,
+            settings.PILLOW_FORMATS_QUESTIONS_FAVICON,
+            settings.PILLOW_FORMATS_QUESTIONS_IMAGE
+        ))
+        return get_thumbnail(source, arg, formats=formats).thumb.url
     except:
         logger.exception(f'Failed to create thumbnail of {source}')
-        return default_storage.url(source)
+        # HACK: source.url works for some types of files (e.g. FieldFile), and for all files retrieved from Hierarkey,
+        # default_storage.url works for all files in NanoCDNStorage. For others, this may return an invalid URL.
+        # But for a fallback, this can probably be accepted.
+        return source.url if hasattr(source, 'url') else default_storage.url(str(source))

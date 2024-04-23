@@ -7,7 +7,7 @@
 {% block title %}{% trans "General settings" %}{% endblock %}
 {% block custom_header %}
     {{ block.super }}
-    <link type="text/css" rel="stylesheet" href="{% url "control:pdf.css" %}">
+    <link type="text/css" rel="stylesheet" href="{% url "control:pdf.css" organizer=request.organizer.slug event=request.event.slug %}">
 {% endblock %}
 {% block inside %}
     <h1>{% trans "General settings" %}</h1>
@@ -335,7 +335,7 @@
                 {% bootstrap_field sform.max_items_per_order layout="control" %}
                 {% bootstrap_field sform.redirect_to_checkout_directly layout="control" %}
             </fieldset>
-            <fieldset>
+            <fieldset id="waiting-list">
                 <legend>{% trans "Waiting list" %}</legend>
                 <div class="alert alert-info">
                     {% blocktrans trimmed %}
@@ -361,6 +361,7 @@
                 {% bootstrap_field sform.waiting_list_enabled layout="control" %}
                 {% bootstrap_field sform.waiting_list_auto layout="control" %}
                 {% bootstrap_field sform.waiting_list_hours layout="control" %}
+                {% bootstrap_field sform.waiting_list_auto_disable layout="control" %}
                 {% bootstrap_field sform.waiting_list_names_asked_required layout="control" %}
                 {% bootstrap_field sform.waiting_list_phones_asked_required layout="control" %}
                 {% bootstrap_field sform.waiting_list_phones_explanation_text layout="control" %}

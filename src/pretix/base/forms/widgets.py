@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import os
-from datetime import date
+from datetime import datetime
 
 from django import forms
 from django.utils.formats import get_format
@@ -188,11 +188,11 @@ class SplitDateTimePickerWidget(forms.SplitDateTimeWidget):
         time_attrs['autocomplete'] = 'off'
         if min_date:
             date_attrs['data-min'] = (
-                min_date if isinstance(min_date, date) else min_date.astimezone(get_current_timezone()).date()
+                min_date if not isinstance(min_date, datetime) else min_date.astimezone(get_current_timezone()).date()
             ).isoformat()
         if max_date:
             date_attrs['data-max'] = (
-                max_date if isinstance(max_date, date) else max_date.astimezone(get_current_timezone()).date()
+                max_date if not isinstance(max_date, datetime) else max_date.astimezone(get_current_timezone()).date()
             ).isoformat()
 
         def date_placeholder():

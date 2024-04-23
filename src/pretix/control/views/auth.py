@@ -36,7 +36,7 @@ import base64
 import json
 import logging
 import time
-from urllib.parse import quote, urlparse
+from urllib.parse import quote, urljoin, urlparse
 
 import webauthn
 from django.conf import settings
@@ -47,11 +47,14 @@ from django.contrib.auth import (
 from django.contrib.auth.tokens import default_token_generator
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 from django.urls import reverse
 from django.utils.functional import cached_property
 from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.translation import gettext_lazy as _
+from django.views.decorators.csrf import csrf_exempt
+from django.views.decorators.http import require_http_methods
 from django.views.generic import TemplateView
 from django_otp import match_token
 from webauthn.helpers import generate_challenge
@@ -60,9 +63,11 @@ from pretix.base.auth import get_auth_backends
 from pretix.base.forms.auth import (
     LoginForm, PasswordForgotForm, PasswordRecoverForm, RegistrationForm,
 )
+from pretix.base.metrics import pretix_failed_logins, pretix_successful_logins
 from pretix.base.models import TeamInvite, U2FDevice, User, WebAuthnDevice
 from pretix.base.services.mail import SendMailException
-from pretix.helpers.http import redirect_to_url
+from pretix.helpers.http import get_client_ip, redirect_to_url
+from pretix.helpers.security import handle_login_source
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +82,7 @@ def process_login(request, user, keep_logged_in):
     request.session['pretix_auth_long_session'] = settings.PRETIX_LONG_SESSIONS and keep_logged_in
     next_url = get_auth_backends()[user.auth_backend].get_next_url(request)
     if user.require_2fa:
+        logger.info(f"Backend login redirected to 2FA for user {user.pk}.")
         request.session['pretix_auth_2fa_user'] = user.pk
         request.session['pretix_auth_2fa_time'] = str(int(time.time()))
         twofa_url = reverse('control:auth.login.2fa')
@@ -84,6 +90,9 @@ def process_login(request, user, keep_logged_in):
             twofa_url += '?next=' + quote(next_url)
         return redirect_to_url(twofa_url)
     else:
+        logger.info(f"Backend login successful for user {user.pk}.")
+        pretix_successful_logins.inc(1)
+        handle_login_source(user, request)
         auth_login(request, user)
         request.session['pretix_auth_login_time'] = int(time.time())
         if next_url and url_has_allowed_host_and_scheme(next_url, allowed_hosts=None):
@@ -105,6 +114,9 @@ def login(request):
             return process_login(request, u, False)
         b.url = b.authentication_url(request)
 
+    # Login should only happen on configured main domain
+    good_origin = urlparse(settings.SITE_URL).scheme + '://' + urlparse(settings.SITE_URL).hostname
+
     backend = backenddict.get(request.GET.get('backend', 'native'), backends[0])
     if not backend.visible:
         backend = [b for b in backends if b.visible][0]
@@ -115,7 +127,23 @@ def login(request):
         return redirect(reverse('control:index'))
     if request.method == 'POST':
         form = LoginForm(backend=backend, data=request.POST, request=request)
-        if form.is_valid() and form.user_cache and form.user_cache.auth_backend == backend.identifier:
+        is_valid = form.is_valid() and form.user_cache and form.user_cache.auth_backend == backend.identifier
+
+        if form.cleaned_data.get("origin"):
+            form_origin = form.cleaned_data.get("origin")
+            if good_origin != form_origin:
+                logger.warning(
+                    f"Received login form submission with unexpected origin value. "
+                    f"Origin sent from JavaScript: {form_origin} / "
+                    f"Expected origin from configuration: {good_origin} / "
+                    f"HTTP Host header: {request.headers.get('Host')} / "
+                    f"HTTP origin header: {request.headers.get('Origin')} / "
+                    f"HTTP referer header: {request.headers.get('Referer')} / "
+                    f"IP address: {get_client_ip(request)} / "
+                    f"Login result: {is_valid}"
+                )
+
+        if is_valid:
             return process_login(request, form.user_cache, form.cleaned_data.get('keep_logged_in', False))
     else:
         form = LoginForm(backend=backend, request=request)
@@ -124,7 +152,33 @@ def login(request):
     ctx['can_reset'] = settings.PRETIX_PASSWORD_RESET
     ctx['backends'] = backends
     ctx['backend'] = backend
+    ctx['good_origin'] = good_origin[::-1]  # minimal obfuscation against standard link rewriting
+    ctx['bad_origin_report_url'] = urljoin(
+        # as an additional safeguard always use SITE_URL, not anything derived from request
+        settings.SITE_URL,
+        reverse('control:auth.bad_origin_report')
+    )[::-1]
     return render(request, 'pretixcontrol/auth/login.html', ctx)
+
+
+@csrf_exempt
+@require_http_methods(["POST"])
+def bad_origin_report(request):
+    good_origin = urlparse(settings.SITE_URL).scheme + '://' + urlparse(settings.SITE_URL).hostname
+    form_origin = request.POST.get("origin")
+    if good_origin != form_origin:
+        logger.warning(
+            f"Received report of unexpected origin value. "
+            f"Origin sent from JavaScript: {form_origin} / "
+            f"Expected origin from configuration: {good_origin} / "
+            f"HTTP Host header: {request.headers.get('Host')} / "
+            f"HTTP origin header: {request.headers.get('Origin')} / "
+            f"HTTP referer header: {request.headers.get('Referer')} / "
+            f"IP address: {get_client_ip(request)}"
+        )
+    resp = HttpResponse()
+    resp['Access-Control-Allow-Origin'] = '*'
+    return resp
 
 
 def logout(request):
@@ -284,7 +338,7 @@ class Forgot(TemplateView):
                         rc.setex('pretix_pwreset_%s' % (user.id), 3600 * 24, '1')
 
             except User.DoesNotExist:
-                logger.warning('Password reset for unregistered e-mail \"' + email + '\" requested.')
+                logger.warning('Backend password reset for unregistered e-mail \"' + email + '\" requested.')
 
             except SendMailException:
                 logger.exception('Sending password reset e-mail to \"' + email + '\" failed.')
@@ -411,6 +465,7 @@ class Login2FAView(TemplateView):
                 fail = True
         logintime = int(request.session.get('pretix_auth_2fa_time', '1'))
         if time.time() - logintime > 300:
+            pretix_failed_logins.inc(1, reason="2fa-timeout")
             fail = True
         if fail:
             messages.error(request, _('Please try again.'))
@@ -443,6 +498,7 @@ class Login2FAView(TemplateView):
                     )
                     sign_count = webauthn_assertion_response.new_sign_count
                     if sign_count < credential_current_sign_count:
+                        pretix_failed_logins.inc(1, reason="webauthn-replay")
                         raise Exception("Possible replay attack, sign count not higher")
                 except Exception:
                     if isinstance(d, U2FDevice):
@@ -460,11 +516,13 @@ class Login2FAView(TemplateView):
                             if webauthn_assertion_response.new_sign_count < 1:
                                 raise Exception("Possible replay attack, sign count set")
                         except Exception:
+                            pretix_failed_logins.inc(1, reason="u2f")
                             logger.exception('U2F login failed')
                         else:
                             valid = True
                             break
                     else:
+                        pretix_failed_logins.inc(1, reason="webauthn")
                         logger.exception('Webauthn login failed')
                 else:
                     if isinstance(d, WebAuthnDevice):
@@ -476,6 +534,9 @@ class Login2FAView(TemplateView):
             valid = match_token(self.user, token)
 
         if valid:
+            logger.info(f"Backend login successful for user {self.user.pk} with 2FA.")
+            pretix_successful_logins.inc(1)
+            handle_login_source(self.user, request)
             auth_login(request, self.user)
             request.session['pretix_auth_login_time'] = int(time.time())
             del request.session['pretix_auth_2fa_user']
@@ -484,6 +545,7 @@ class Login2FAView(TemplateView):
                 return redirect_to_url(request.GET.get("next"))
             return redirect('control:index')
         else:
+            pretix_failed_logins.inc(1, reason="2fa")
             messages.error(request, _('Invalid code, please try again.'))
             return redirect('control:auth.login.2fa')
 

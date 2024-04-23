@@ -20,14 +20,23 @@
 # <https://www.gnu.org/licenses/>.
 #
 import hashlib
+import logging
 import time
 
 from django.conf import settings
 from django.contrib.gis.geoip2 import GeoIP2
 from django.core.cache import cache
+from django.utils.timezone import now
+from django.utils.translation import gettext_lazy as _
+from django_countries.fields import Country
 from geoip2.errors import AddressNotFoundError
 
+from pretix.base.i18n import language
+from pretix.base.services.mail import SendMailException, mail
 from pretix.helpers.http import get_client_ip
+from pretix.helpers.urls import build_absolute_uri
+
+logger = logging.getLogger(__name__)
 
 
 class SessionInvalid(Exception):
@@ -35,6 +44,14 @@ class SessionInvalid(Exception):
 
 
 class SessionReauthRequired(Exception):
+    pass
+
+
+class Session2FASetupRequired(Exception):
+    pass
+
+
+class SessionPasswordChangeRequired(Exception):
     pass
 
 
@@ -71,6 +88,8 @@ def assert_session_valid(request):
     if 'User-Agent' in request.headers:
         if 'pinned_user_agent' in request.session:
             if request.session.get('pinned_user_agent') != get_user_agent_hash(request):
+                logger.info(f"Backend session for user {request.user.pk} terminated due to user agent change. "
+                            f"New agent: \"{request.headers['User-Agent']}\"")
                 raise SessionInvalid()
         else:
             request.session['pinned_user_agent'] = get_user_agent_hash(request)
@@ -82,9 +101,79 @@ def assert_session_valid(request):
 
         if 'pinned_country' in request.session:
             if request.session.get('pinned_country') != country:
+                logger.info(f"Backend session for user {request.user.pk} terminated due to country change. "
+                            f"Old country: \"{request.session.get('pinned_countres')}\" New country: \"{country}\"")
                 raise SessionInvalid()
         else:
             request.session['pinned_country'] = country
 
     request.session['pretix_auth_last_used'] = int(time.time())
+
+    if request.user.needs_password_change:
+        raise SessionPasswordChangeRequired()
+
+    force_2fa = not request.user.require_2fa and (
+        settings.PRETIX_OBLIGATORY_2FA is True or
+        (settings.PRETIX_OBLIGATORY_2FA == "staff" and request.user.is_staff) or
+        cache.get_or_set(
+            f'user_2fa_team_{request.user.pk}',
+            lambda: request.user.teams.filter(require_2fa=True).exists(),
+            timeout=300
+        )
+    )
+    if force_2fa:
+        raise Session2FASetupRequired()
+
     return True
+
+
+def handle_login_source(user, request):
+    from ua_parser import user_agent_parser
+
+    parsed_string = user_agent_parser.Parse(request.headers.get("User-Agent", ""))
+    country = None
+
+    if settings.HAS_GEOIP:
+        client_ip = get_client_ip(request)
+        hashed_client_ip = hashlib.sha256(client_ip.encode()).hexdigest()
+        country = cache.get_or_set(f'geoip_country_{hashed_client_ip}', lambda: _get_country(request), timeout=300)
+        if country == "None":
+            country = None
+
+    src, created = user.known_login_sources.update_or_create(
+        agent_type=parsed_string.get("user_agent").get("family"),
+        os_type=parsed_string.get("os").get("family"),
+        device_type=parsed_string.get("device").get("family"),
+        country=country,
+        defaults={
+            "last_seen": now(),
+        }
+    )
+
+    if created:
+        user.log_action('pretix.control.auth.user.new_source', user=user, data={
+            "agent_type": src.agent_type,
+            "os_type": src.os_type,
+            "device_type": src.device_type,
+            "country": str(src.country) if src.country else "?",
+        })
+        if user.known_login_sources.count() > 1:
+            # Do not send on first login or first login after introduction of this feature:
+            try:
+                with language(user.locale):
+                    mail(
+                        user.email,
+                        _('Login from new source detected'),
+                        'pretixcontrol/email/login_notice.txt',
+                        {
+                            'source': src,
+                            'country': Country(str(country)).name if country else _('Unknown country'),
+                            'instance': settings.PRETIX_INSTANCE_NAME,
+                            'url': build_absolute_uri('control:user.settings')
+                        },
+                        event=None,
+                        user=user,
+                        locale=user.locale
+                    )
+            except SendMailException:
+                pass  # Not much we can do

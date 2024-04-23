@@ -68,6 +68,7 @@ class SubEventForm(I18nModelForm):
             'presale_end',
             'location',
             'frontpage_text',
+            'comment',
             'geo_lat',
             'geo_lon',
         ]
@@ -136,7 +137,7 @@ class SubEventBulkEditForm(I18nModelForm):
                 self.fields[k].widget.attrs['placeholder'] = ''
             self.fields[k].one_required = False
 
-        for k in ('geo_lat', 'geo_lon'):
+        for k in ('geo_lat', 'geo_lon', 'comment'):
             # scalar fields
             if k in self.mixed_values:
                 self.fields[k].widget.attrs['placeholder'] = '[{}]'.format(_('Selection contains various values'))
@@ -166,6 +167,7 @@ class SubEventBulkEditForm(I18nModelForm):
             'name',
             'location',
             'frontpage_text',
+            'comment',
             'geo_lat',
             'geo_lon',
             'is_public',

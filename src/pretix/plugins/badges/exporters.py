@@ -50,7 +50,7 @@ from django.contrib.staticfiles import finders
 from django.core.files import File
 from django.core.files.storage import default_storage
 from django.db import DataError, models
-from django.db.models import Case, Exists, OuterRef, Q, Subquery, When
+from django.db.models import Case, Exists, OuterRef, Q, Subquery, Value, When
 from django.db.models.functions import Cast, Coalesce
 from django.utils.timezone import make_aware
 from django.utils.translation import gettext as _, gettext_lazy, pgettext_lazy
@@ -471,6 +471,7 @@ class BadgeExporter(BaseExporter):
                      label=_('Sort by'),
                      choices=[
                          ('name', _('Attendee name')),
+                         ('company', _('Attendee company')),
                          ('code', _('Order code')),
                          ('date', _('Event date')),
                      ] + ([
@@ -525,7 +526,23 @@ class BadgeExporter(BaseExporter):
             qs = qs.filter(Q(subevent__date_from__lt=dt) | Q(subevent__isnull=True, order__event__date_from__lt=dt))
 
         if form_data.get('order_by') == 'name':
-            qs = qs.order_by('attendee_name_cached', 'order__code')
+            qs = qs.annotate(
+                resolved_name=Case(
+                    When(attendee_name_cached__ne='', then='attendee_name_cached'),
+                    When(addon_to__attendee_name_cached__isnull=False, addon_to__attendee_name_cached__ne='',
+                         then='addon_to__attendee_name_cached'),
+                    default=Value(""),
+                )
+            ).order_by('resolved_name', 'order__code')
+        elif form_data.get('order_by') == 'company':
+            qs = qs.annotate(
+                resolved_company=Case(
+                    When(company__ne='', then='company'),
+                    When(addon_to__company__isnull=False, addon_to__company__ne='',
+                         then='addon_to__company'),
+                    default=Value(""),
+                )
+            ).order_by('resolved_company', 'order__code')
         elif form_data.get('order_by') == 'code':
             qs = qs.order_by('order__code')
         elif form_data.get('order_by') == 'date':

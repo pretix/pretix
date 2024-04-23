@@ -79,8 +79,8 @@ class CustomerSerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = Customer
-        fields = ('identifier', 'external_identifier', 'email', 'name', 'name_parts', 'is_active', 'is_verified', 'last_login', 'date_joined',
-                  'locale', 'last_modified', 'notes')
+        fields = ('identifier', 'external_identifier', 'email', 'phone', 'name', 'name_parts', 'is_active',
+                  'is_verified', 'last_login', 'date_joined', 'locale', 'last_modified', 'notes')
 
     def update(self, instance, validated_data):
         if instance and instance.provider_id:
@@ -239,7 +239,7 @@ class TeamSerializer(serializers.ModelSerializer):
     class Meta:
         model = Team
         fields = (
-            'id', 'name', 'all_events', 'limit_events', 'can_create_events', 'can_change_teams',
+            'id', 'name', 'require_2fa', 'all_events', 'limit_events', 'can_create_events', 'can_change_teams',
             'can_change_organizer_settings', 'can_manage_gift_cards', 'can_change_event_settings',
             'can_change_items', 'can_view_orders', 'can_change_orders', 'can_view_vouchers',
             'can_change_vouchers', 'can_checkin_orders', 'can_manage_customers', 'can_manage_reusable_media'

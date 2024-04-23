@@ -56,6 +56,7 @@ from webauthn.helpers.structs import PublicKeyCredentialDescriptor
 from pretix.base.i18n import language
 from pretix.helpers.urls import build_absolute_uri
 
+from ...helpers.countries import FastCountryField
 from ...helpers.u2f import pub_key_from_der, websafe_decode
 from .base import LoggingMixin
 
@@ -577,6 +578,15 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
     def update_session_token(self):
         self.session_token = generate_session_token()
         self.save(update_fields=['session_token'])
+
+
+class UserKnownLoginSource(models.Model):
+    user = models.ForeignKey('User', on_delete=models.CASCADE, related_name="known_login_sources")
+    agent_type = models.CharField(max_length=255, null=True, blank=True)
+    device_type = models.CharField(max_length=255, null=True, blank=True)
+    os_type = models.CharField(max_length=255, null=True, blank=True)
+    country = FastCountryField(null=True, blank=True)
+    last_seen = models.DateTimeField()
 
 
 class StaffSession(models.Model):

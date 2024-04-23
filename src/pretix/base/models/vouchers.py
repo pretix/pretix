@@ -517,9 +517,6 @@ class Voucher(LoggedModel):
         if item and seat.product != item:
             raise ValidationError(_('You need to choose the product "{prod}" for this seat.').format(prod=seat.product))
 
-        if not seat.is_available(ignore_voucher_id=pk):
-            raise ValidationError(_('The seat "{id}" is already sold or currently blocked.').format(id=seat.seat_guid))
-
         return seat
 
     def save(self, *args, **kwargs):

@@ -1,0 +1,4 @@
+{
+  "ignore_dirs": ["node_modules", "data", "pretix/static", "pretix/locale", "pretix/static.dist"]
+}
+

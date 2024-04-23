@@ -57,7 +57,7 @@ from i18nfield.forms import I18nFormField, I18nTextarea, I18nTextInput
 from i18nfield.strings import LazyI18nString
 
 from pretix.base.channels import get_all_sales_channels
-from pretix.base.forms import PlaceholderValidator
+from pretix.base.forms import I18nMarkdownTextarea, PlaceholderValidator
 from pretix.base.models import (
     CartPosition, Event, GiftCard, InvoiceAddress, Order, OrderPayment,
     OrderRefund, Quota, TaxRule,
@@ -1185,14 +1185,14 @@ class ManualPayment(BasePaymentProvider):
                     label=_('Payment process description during checkout'),
                     help_text=_('This text will be shown during checkout when the user selects this payment method. '
                                 'It should give a short explanation on this payment method.'),
-                    widget=I18nTextarea,
+                    widget=I18nMarkdownTextarea,
                 )),
                 ('email_instructions', I18nFormField(
                     label=_('Payment process description in order confirmation emails'),
                     help_text=_('This text will be included for the {payment_info} placeholder in order confirmation '
                                 'mails. It should instruct the user on how to proceed with the payment. You can use '
                                 'the placeholders {order}, {amount}, {currency} and {amount_with_currency}.'),
-                    widget=I18nTextarea,
+                    widget=I18nMarkdownTextarea,
                     validators=[PlaceholderValidator(['{order}', '{amount}', '{currency}', '{amount_with_currency}'])],
                 )),
                 ('pending_description', I18nFormField(
@@ -1200,7 +1200,7 @@ class ManualPayment(BasePaymentProvider):
                     help_text=_('This text will be shown on the order confirmation page for pending orders. '
                                 'It should instruct the user on how to proceed with the payment. You can use '
                                 'the placeholders {order}, {amount}, {currency} and {amount_with_currency}.'),
-                    widget=I18nTextarea,
+                    widget=I18nMarkdownTextarea,
                     validators=[PlaceholderValidator(['{order}', '{amount}', '{currency}', '{amount_with_currency}'])],
                 )),
                 ('invoice_immediately',
@@ -1325,7 +1325,7 @@ class GiftCardPayment(BasePaymentProvider):
             (
                 "public_description",
                 I18nFormField(
-                    label=_("Payment method description"), widget=I18nTextarea, required=False
+                    label=_("Payment method description"), widget=I18nMarkdownTextarea, required=False
                 ),
             ),
         ]

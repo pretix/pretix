@@ -11,23 +11,55 @@
             smartphone or a hardware token generator and that changes on a regular basis.
         {% endblocktrans %}
     </p>
-    {% if settings.PRETIX_OBLIGATORY_2FA %}
+    {% if obligatory and not user.require_2fa %}
         <div class="panel panel-warning">
             <div class="panel-heading">
-                <h3 class="panel-title">{% trans "Obligatory usage of two-factor authentication" %}</h3>
+                <h3 class="panel-title">
+                    <span class="fa fa-warning"></span>
+                    {% trans "Obligatory usage of two-factor authentication" %}
+                </h3>
             </div>
             <div class="panel-body">
+                {% if obligatory == "system" %}
+                    <p>
+                        <strong>{% trans "This system enforces the usage of two-factor authentication!" %}</strong>
+                    </p>
+                {% elif obligatory == "staff" %}
+                    <p>
+                        <strong>{% trans "As an administrator, you need to use two-factor authentication." %}</strong>
+                    </p>
+                {% elif obligatory == "team" %}
+                    <p>
+                        <strong>{% trans "You are part of one or more organizer teams that require you to use two-factor authentication." %}</strong>
+                    </p>
+                    <ul>
+                        {% for t in obligatory_teams %}
+                            <li>
+                                {% blocktrans trimmed with team=t.name organizer=t.organizer.name %}
+                                    Team "{{ team }}" of organizer "{{ organizer }}"
+                                {% endblocktrans %}
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
                 <p>
-                    <strong>{% trans "This system enforces the usage of two-factor authentication!" %}</strong>
+                    {% if not devices %}
+                        {% trans "Please set up at least one device below." %}
+                    {% elif not user.require_2fa %}
+                        {% trans "Please activate two-factor authentication using the button below." %}
+                    {% endif %}
+                    {% if obligatory == "team" %}
+                        <a href="{% url "control:user.settings.2fa.leaveteams" %}">
+                            {% blocktrans trimmed count count=obligatory_teams|length %}
+                                Leave team instead
+                            {% plural %}
+                                Leave {{ count }} teams instead
+                            {% endblocktrans %}
+                        </a>
+                    {% endif %}
                 </p>
-            {% if not devices %}
-                <p>{% trans "Please set up at least one device below." %}</p>
-            {% elif not user.require_2fa %}
-                <p>{% trans "Please activate two-factor authentication using the button below." %}</p>
-            {% endif %}
             </div>
         </div>
-
     {% endif %}
     {% if user.require_2fa %}
         <div class="panel panel-success">
@@ -35,7 +67,18 @@
                 <h3 class="panel-title">{% trans "Two-factor status" %}</h3>
             </div>
             <div class="panel-body">
-                {% if not settings.PRETIX_OBLIGATORY_2FA %}
+                {% if obligatory %}
+                    <button disabled class="btn btn-primary pull-right flip" data-toggle="tooltip"
+                            title="{% spaceless %}{% if obligatory == "system" %}
+                                {% trans "This system enforces the usage of two-factor authentication!" %}
+                        {% elif obligatory == "staff" %}
+                                {% trans "As an administrator, you need to use two-factor authentication." %}
+                        {% elif obligatory == "team" %}
+                                {% trans "You are part of one or more organizer teams that require you to use two-factor authentication." %}
+                        {% endif %}{% endspaceless %}">
+                        {% trans "Disable" %}
+                    </button>
+                {% else %}
                     <a href="{% url "control:user.settings.2fa.disable" %}" class="btn btn-primary pull-right flip">
                         {% trans "Disable" %}
                     </a>
@@ -73,7 +116,7 @@
             {% for d in devices %}
                 <li class="list-group-item">
                     <a class="btn btn-danger btn-xs pull-right flip"
-                            href="{% url "control:user.settings.2fa.delete" devicetype=d.devicetype device=d.pk %}">
+                       href="{% url "control:user.settings.2fa.delete" devicetype=d.devicetype device=d.pk %}">
                         Delete
                     </a>
                     {% if d.devicetype == "totp" %}
