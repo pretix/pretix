@@ -280,7 +280,7 @@ Updates
 
 To upgrade to a new pretix release, pull the latest code changes and run the following commands::
 
-    $ sudo su pretix
+    # sudo -u pretix -s
     $ source /var/pretix/venv/bin/activate
     (venv)$ pip3 install -U --upgrade-strategy eager pretix gunicorn
     (venv)$ python -m pretix migrate
