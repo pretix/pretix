@@ -113,7 +113,7 @@ class I18nMarkdownTextarea(i18nfield.forms.I18nTextarea):
 
 class I18nMarkdownTextInput(i18nfield.forms.I18nTextInput):
     def format_output(self, rendered_widgets) -> str:
-        rendered_widgets = [
+        rendered_widgets = rendered_widgets + [
             '<div class="i18n-field-markdown-note">%s</div>' % (
                 _("You can use {markup_name} in this field.").format(
                     markup_name='<a href="https://docs.pretix.eu/en/latest/user/markdown.html" target="_blank">Markdown</a>'
