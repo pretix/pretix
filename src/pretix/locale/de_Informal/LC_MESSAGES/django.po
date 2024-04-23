@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-23 12:41+0000\n"
-"PO-Revision-Date: 2024-04-23 01:00+0000\n"
-"Last-Translator: Mira <weller@rami.io>\n"
+"PO-Revision-Date: 2024-04-23 12:57+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
 "Language: de_Informal\n"
@@ -2845,7 +2845,7 @@ msgstr "Gutscheincode"
 #: pretix/base/forms/__init__.py:118
 #, python-brace-format
 msgid "You can use {markup_name} in this field."
-msgstr ""
+msgstr "Du kannst in diesem Feld {markup_name} verwenden."
 
 #: pretix/base/forms/__init__.py:178
 #, python-format
@@ -3548,10 +3548,8 @@ msgid "Maximum usages"
 msgstr "Maximale Nutzungen"
 
 #: pretix/base/modelimport_vouchers.py:78
-#, fuzzy
-#| msgid "Maximum number of items per order"
 msgid "The maximum number of usages must be set."
-msgstr "Maximale Anzahl von Produkten pro Bestellung"
+msgstr "Die maximale Anzahl Verwendungen muss definiert sein."
 
 #: pretix/base/modelimport_vouchers.py:87 pretix/base/models/vouchers.py:205
 msgid "Minimum usages"
@@ -4251,16 +4249,12 @@ msgstr ""
 "keine Zahlungsmethoden aktiviert."
 
 #: pretix/base/models/event.py:1241
-#, fuzzy
-#| msgid ""
-#| "You have configured at least one paid product but have not enabled any "
-#| "payment methods."
 msgid ""
 "You have configured at least one paid product but have not configured a "
 "currency."
 msgstr ""
-"Du hast mindestens ein kostenpflichtiges Produkt konfiguriert, aber noch "
-"keine Zahlungsmethoden aktiviert."
+"Du hast mindestens ein kostenpflichtiges Produkt konfiguriert, aber keine "
+"Währung."
 
 #: pretix/base/models/event.py:1244
 msgid "You need to configure at least one quota to sell anything."
@@ -7706,16 +7700,12 @@ msgid "Only allowed after {datetime}"
 msgstr "Erst erlaubt ab {datetime}"
 
 #: pretix/base/services/checkin.py:279
-#, fuzzy
-#| msgid "Attendee street"
 msgid "Attendee is checked out"
-msgstr "Teilnehmer*innen-Straße"
+msgstr "Teilnehmer ist ausgecheckt"
 
 #: pretix/base/services/checkin.py:281
-#, fuzzy
-#| msgid "Automatically checked in"
 msgid "Attendee is already checked in"
-msgstr "Automatisch eingecheckt"
+msgstr "Teilnehmer ist bereits eingecheckt"
 
 #: pretix/base/services/checkin.py:286
 msgid "Ticket type not allowed"
@@ -8289,10 +8279,8 @@ msgstr ""
 "eingecheckt wurde."
 
 #: pretix/base/services/orders.py:202
-#, fuzzy
-#| msgid "This gift card does not support this currency."
 msgid "Paid products not supported without a valid currency."
-msgstr "Dieser Wertgutschein unterstützt diese Währung nicht."
+msgstr "Bezahlte Produkte werden ohne gültige Währung nicht unterstützt."
 
 #: pretix/base/services/orders.py:218
 msgid "The order was not canceled."
@@ -17063,10 +17051,8 @@ msgid "Card type"
 msgstr "Kartentyp"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:37
-#, fuzzy
-#| msgid "unknown"
 msgid "Unknown"
-msgstr "unbekannt"
+msgstr "Unbekannt"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:40
 msgctxt "terminal_zvt"
@@ -30220,10 +30206,8 @@ msgstr ""
 "Verfügung. Bitte halte deine Zugangsdaten bereit."
 
 #: pretix/plugins/stripe/payment.py:1907
-#, fuzzy
-#| msgid "Payment via Stripe"
 msgid "PayPal via Stripe"
-msgstr "Zahlung über Stripe"
+msgstr "PayPal über Stripe"
 
 #: pretix/plugins/stripe/signals.py:91
 msgid "Charge succeeded."
