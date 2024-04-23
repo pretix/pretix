@@ -181,20 +181,6 @@ div[data-formset-body], div[data-formset-form], div[data-nested-formset-form], d
   }
 }
 
-.i18n-field-markdown {
-  position: relative;
-
-  &:before {
-    position:absolute;
-    display:block;
-    right:10px;
-    bottom:0;
-    width:30px;
-    height:30px;
-    content: url(static('pretixcontrol/img/icons/markdown-mark-solid.svg'));
-  }
-}
-
 @media (min-width: $screen-sm-min) {
   .variation-matrix > tbody > tr > td {
     line-height: 34px;
