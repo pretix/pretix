@@ -120,7 +120,7 @@ Now we will install pretix itself. The following steps are to be executed as the
 actually install pretix, we will create a virtual environment to isolate the python packages from your global
 python installation::
 
-    $ sudo su pretix
+    # sudo -u pretix -s
     $ python3 -m venv /var/pretix/venv
     $ source /var/pretix/venv/bin/activate
     (venv)$ pip3 install -U pip setuptools wheel
