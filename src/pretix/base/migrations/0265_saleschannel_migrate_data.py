@@ -46,7 +46,7 @@ def create_sales_channels(apps, schema_editor):
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0258_saleschannel_and_more"),
+        ("pretixbase", "0264_saleschannel_and_more"),
     ]
 
     operations = [
