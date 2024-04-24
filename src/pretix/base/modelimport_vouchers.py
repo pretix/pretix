@@ -66,6 +66,7 @@ class SubeventColumn(ImportColumn):
 class MaxUsagesColumn(IntegerColumnMixin, ImportColumn):
     identifier = 'max_usages'
     verbose_name = gettext_lazy('Maximum usages')
+    default_value = None
     initial = "static:1"
 
     def static_choices(self):
@@ -85,6 +86,7 @@ class MaxUsagesColumn(IntegerColumnMixin, ImportColumn):
 class MinUsagesColumn(IntegerColumnMixin, ImportColumn):
     identifier = 'min_usages'
     verbose_name = gettext_lazy('Minimum usages')
+    default_value = None
     initial = "static:1"
 
     def static_choices(self):
