@@ -102,7 +102,7 @@ def assert_session_valid(request):
         if 'pinned_country' in request.session:
             if request.session.get('pinned_country') != country:
                 logger.info(f"Backend session for user {request.user.pk} terminated due to country change. "
-                            f"Old country: \"{request.session.get('pinned_countres')}\" New country: \"{country}\"")
+                            f"Old country: \"{request.session.get('pinned_country')}\" New country: \"{country}\"")
                 raise SessionInvalid()
         else:
             request.session['pinned_country'] = country
