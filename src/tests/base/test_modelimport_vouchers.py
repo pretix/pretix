@@ -180,3 +180,18 @@ def test_price_mode_validation(event, item, user):
     v = event.vouchers.get(code="ABCDE123")
     assert v.price_mode == "percent"
     assert v.value == Decimal("1.00")
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_quota(event, item, user):
+    settings = dict(DEFAULT_SETTINGS)
+    settings['quota'] = 'csv:B'
+    settings['item'] = 'empty'
+    q = event.quotas.create(name="Ticket", size=100)
+    import_vouchers.apply(
+        args=(event.pk, inputfile_factory().id, settings, 'en', user.pk)
+    ).get()
+    assert event.vouchers.count() == 2
+    v = event.vouchers.get(code="ABCDE123")
+    assert v.quota == q

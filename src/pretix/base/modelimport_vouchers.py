@@ -251,7 +251,7 @@ class QuotaColumn(ImportColumn):
                 raise ValidationError(_("You cannot specify a quota if you specified a product."))
             matches = [
                 q for q in self.quotas
-                if str(q.pk) == value or any((v and v == value) for v in i18n_flat(q.name))
+                if str(q.pk) == value or q.name == value
             ]
             if len(matches) == 0:
                 raise ValidationError(_("No matching variation was found."))
