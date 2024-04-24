@@ -20,6 +20,7 @@
 # <https://www.gnu.org/licenses/>.
 #
 import logging
+import warnings
 from collections import OrderedDict
 
 from django.dispatch import receiver
@@ -131,6 +132,13 @@ def get_all_sales_channel_types():
     return _ALL_CHANNEL_TYPES
 
 
+def get_all_sales_channels():
+    # TODO: remove me
+    warnings.warn('Using get_all_sales_channels() is no longer appropriate, use get_al_sales_channel_types() instead.',
+                  DeprecationWarning, stacklevel=2)
+    return get_all_sales_channel_types()
+
+
 class WebshopSalesChannelType(SalesChannelType):
     identifier = "web"
     verbose_name = _('Online shop')
@@ -143,6 +151,9 @@ class ApiSalesChannelType(SalesChannelType):
     icon = "exchange"
     default_created = False
     multiple_allowed = True
+
+
+SalesChannel = SalesChannelType  # TODO: remove me
 
 
 @receiver(register_sales_channel_types, dispatch_uid="base_register_default_sales_channel_types")

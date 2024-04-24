@@ -51,7 +51,7 @@ from .orders import (
     generate_secret,
 )
 from .organizer import (
-    Organizer, Organizer_SettingsStore, Team, TeamAPIToken, TeamInvite,
+    Organizer, Organizer_SettingsStore, SalesChannel, Team, TeamAPIToken, TeamInvite,
 )
 from .seating import Seat, SeatCategoryMapping, SeatingPlan
 from .tax import TaxRule

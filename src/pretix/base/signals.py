@@ -301,6 +301,9 @@ instance of a subclass of ``pretix.base.channels.SalesChannelType`` or a list of
 instances.
 """
 
+
+register_sales_channels = register_sales_channel_types  # TODO: remove me
+
 register_data_exporters = EventPluginSignal()
 """
 This signal is sent out to get all known data exporters. Receivers should return a

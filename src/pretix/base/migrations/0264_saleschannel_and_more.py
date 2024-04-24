@@ -9,7 +9,7 @@ import pretix.base.models.fields
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("pretixbase", "0257_item_default_price_not_null"),
+        ("pretixbase", "0263_auto_20240409_0732"),
     ]
 
     operations = [

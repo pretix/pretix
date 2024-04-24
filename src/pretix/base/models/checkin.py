@@ -105,7 +105,7 @@ class CheckinList(LoggedModel):
         help_text=_('All items on this check-in list will be automatically marked as checked-in when purchased through '
                     'any of the selected sales channels. This option can be useful when tickets sold at the box office '
                     'are not checked again before entry and should be considered validated directly upon purchase.'),
-        blank=False,
+        blank=True,
     )
     rules = models.JSONField(default=dict, blank=True)
 

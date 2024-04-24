@@ -27,12 +27,19 @@ from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.media import MEDIA_TYPES
-from pretix.base.models import Checkin, CheckinList
+from pretix.base.models import Checkin, CheckinList, SalesChannel
 
 
 class CheckinListSerializer(I18nAwareModelSerializer):
     checkin_count = serializers.IntegerField(read_only=True)
     position_count = serializers.IntegerField(read_only=True)
+    auto_checkin_sales_channels = serializers.SlugRelatedField(
+        slug_field="identifier",
+        queryset=SalesChannel.objects.none(),
+        required=False,
+        allow_empty=True,
+        many=True,
+    )
 
     class Meta:
         model = CheckinList
@@ -42,6 +49,8 @@ class CheckinListSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+
+        self.fields['auto_checkin_sales_channels'].queryset = self.context['event'].organizer.sales_channels.all()
 
         if 'subevent' in self.context['request'].query_params.getlist('expand'):
             self.fields['subevent'] = SubEventSerializer(read_only=True)
