@@ -223,6 +223,7 @@ def customer_logout(request):
 
 
 def _get_user_from_session_data(sessiondata):
+    if SESSION_KEY not in sessiondata: return None
     user_id = get_user_model()._meta.pk.to_python(sessiondata[SESSION_KEY])
     backend_path = sessiondata[BACKEND_SESSION_KEY]
     if backend_path in settings.AUTHENTICATION_BACKENDS:
@@ -332,7 +333,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
                         pass
                     else:
                         user = _get_user_from_session_data(parentdata)
-                        if user.is_authenticated and user.has_event_permission(request.organizer, request.event, request=request):
+                        if user and user.is_authenticated and user.has_event_permission(request.organizer, request.event, request=request):
                             can_access = True
                             request.event_access_user = user
 
