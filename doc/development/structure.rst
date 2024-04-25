@@ -31,7 +31,7 @@ pretix/
         Additional code implementing our customized :ref:`URL handling <urlconf>`.
 
     static/
-        Contains all static files (CSS/SASS, JavaScript, images) of pretix' core
+        Contains all static files (CSS/SASS, JavaScript, images) of pretix' core.
         We use libsass as a preprocessor for CSS. Our own sass code is built in the same
         step as Bootstrap and FontAwesome, so their mixins etc. are fully available.
 
