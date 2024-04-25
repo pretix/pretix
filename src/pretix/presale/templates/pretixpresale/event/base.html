@@ -33,21 +33,6 @@
             </div>
         </div>
     {% endif %}
-    {% if request.now_dt_is_fake %}
-        <div class="timemachine-banner">
-            <div class="container">
-                <span class="fa fa-clock-o" aria-hidden="true"></span>
-                {% blocktrans trimmed with datetime=request.now_dt|date:"SHORT_DATETIME_FORMAT" %}
-                You are currently using the time machine. The ticket shop is rendered as if it were {{ datetime }}.
-                {% endblocktrans %}
-                <a href="{% eventurl event "presale:event.timemachine" %}" class="btn-link">{% trans "Change" %}</a>
-                <form action="{% eventurl event "presale:event.timemachine" %}" method="post" class="download-btn-form">
-                    {% csrf_token %}
-                    <button type="submit" class="btn-link" value="true" name="timemachine_disable">{% trans "Go back to current time" %}</button>
-                </form>
-            </div>
-        </div>
-    {% endif %}
     <div class="container page-header-links {% if event.settings.theme_color_background|upper != "#FFFFFF" or event_logo_image_large %}page-header-links-outside{% endif %}">
         {% if event.settings.locales|length > 1 or request.organizer.settings.customer_accounts %}
             {% if event.settings.theme_color_background|upper != "#FFFFFF" or event_logo_image_large %}
@@ -126,18 +111,37 @@
     {% if request.event.testmode %}
         {% if request.sales_channel.testmode_supported %}
             <div class="alert alert-warning">
-                {% if request.user.is_authenticated or request.event_access_user.is_authenticated %}
-                    <a href="{% eventurl event "presale:event.timemachine" %}" class="btn btn-default pull-right" title="{% trans "Test your shop as if it were a different date and time." %}">
-                        <span class="fa fa-clock-o" aria-hidden="true"></span> {% trans "Time machine" %}
-                    </a>
-                {% elif request.event_domain or request.organizer_domain %}
-                    <a href="{% url "control:event.transfer_session" event=event.slug organizer=event.organizer.slug %}" class="btn btn-default pull-right" title="{% trans "Test your shop as if it were a different date and time." %}">
-                        <span class="fa fa-clock-o" aria-hidden="true"></span> {% trans "Time machine" %}
-                    </a>
-                {% endif %}
-                <p><strong><span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
-                    {% trans "This ticket shop is currently in test mode. Please do not perform any real purchases as your order might be deleted without notice." %}
+                <p><strong>
+                    <span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
+                    {% trans "This ticket shop is currently in test mode." %}
                 </strong></p>
+                <p>
+                    {% trans "Please do not perform any real purchases as your order might be deleted without notice." %}
+                </p>
+                {% if request.now_dt_is_fake %}
+                    <p>
+                        {% blocktrans trimmed with datetime=request.now_dt|date:"SHORT_DATETIME_FORMAT" %}
+                        You are currently using the time machine. The ticket shop is rendered as if it were {{ datetime }}.
+                        {% endblocktrans %}
+                        <a href="{% eventurl event "presale:event.timemachine" %}" class="stealth"><span class="fa fa-clock-o" aria-hidden="true"></span> <u>{% trans "Change" %}</u></a>
+                    </p>
+                {% elif request.user.is_authenticated or request.event_access_user.is_authenticated %}
+                    <p>
+                        {% eventurl event "presale:event.timemachine" as time_machine_link %}
+                        {% blocktrans trimmed with time_machine_link=time_machine_link %}
+                            To view your shop at different points in time, you can enable
+                            <a href="{{ time_machine_link }}" class="stealth"><span class="fa fa-clock-o" aria-hidden="true"></span> <u>time machine</u></a>.
+                        {% endblocktrans %}
+                    </p>
+                {% elif request.event_domain or request.organizer_domain %}
+                    <p>
+                        {% url "control:event.transfer_session" event=event.slug organizer=event.organizer.slug as time_machine_link %}
+                        {% blocktrans trimmed with time_machine_link=time_machine_link %}
+                            To view your shop at different points in time, you can enable
+                            <a href="{{ time_machine_link }}" class="stealth"><span class="fa fa-clock-o" aria-hidden="true"></span> <u>time machine</u></a>.
+                        {% endblocktrans %}
+                    </p>
+                {% endif %}
             </div>
         {% else %}
             <div class="alert alert-danger">
@@ -178,9 +182,13 @@
     {% if request.event.testmode %}
         {% if request.sales_channel.testmode_supported %}
             <div class="alert alert-testmode alert-warning">
-                <p><strong><span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
-                    {% trans "This ticket shop is currently in test mode. Please do not perform any real purchases as your order might be deleted without notice." %}
+                <p><strong>
+                    <span class="sr-only">{% trans "Warning" context "alert-messages" %}:</span>
+                    {% trans "This ticket shop is currently in test mode." %}
                 </strong></p>
+                <p>
+                    {% trans "Please do not perform any real purchases as your order might be deleted without notice." %}
+                </p>
             </div>
         {% else %}
             <div class="alert alert-testmode alert-danger">
