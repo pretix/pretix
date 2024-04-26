@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 09:26+0000\n"
-"PO-Revision-Date: 2024-04-23 12:57+0000\n"
+"PO-Revision-Date: 2024-04-26 11:24+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -3538,11 +3538,8 @@ msgid "No matching customer was found."
 msgstr "Kein passender Kunde wurde gefunden."
 
 #: pretix/base/modelimport_vouchers.py:48
-#, fuzzy
-#| msgid "A voucher can not be deleted if it already has been redeemed."
 msgid "A voucher cannot be created without a code."
-msgstr ""
-"Der Gutschein kann nicht gelöscht werden, da er bereits eingelöst wurde."
+msgstr "Ein Gutschein kann ohne Code nicht erzeugt werden."
 
 #: pretix/base/modelimport_vouchers.py:52 pretix/base/models/vouchers.py:487
 msgid "A voucher with this code already exists."
