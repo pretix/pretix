@@ -746,6 +746,20 @@ def test_event_update(token_client, organizer, event, item, meta_prop):
             name="Foo"
         ).exists()
 
+    # Noop does not write log
+    cnt = event.all_logentries().count()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/'.format(organizer.slug, event.slug),
+        {
+            "date_from": "2018-12-27T10:00:00Z",
+            "date_to": "2018-12-28T10:00:00Z",
+            "currency": "DKK",
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert cnt == event.all_logentries().count()
+
 
 @pytest.mark.django_db
 def test_event_test_mode(token_client, organizer, event):
@@ -1252,7 +1266,25 @@ def test_patch_event_settings(token_client, organizer, event):
         event.settings.flush()
         assert event.settings.imprint_url == 'https://example.com'
         assert not event.settings.reusable_media_active
+        assert event.all_logentries().filter(action_type="pretix.event.settings").count() == 1
         mocked.assert_not_called()
+
+        # The same settings again do not create a new log entry
+        resp = token_client.patch(
+            '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+            {
+                'imprint_url': 'https://example.com',
+                'confirm_texts': [
+                    {
+                        'de': 'Ich bin mit den AGB einverstanden.'
+                    }
+                ],
+                'reusable_media_active': True,  # readonly, ignored
+            },
+            format='json'
+        )
+        assert resp.status_code == 200
+        assert event.all_logentries().filter(action_type="pretix.event.settings").count() == 1
 
         resp = token_client.patch(
             '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
@@ -1266,6 +1298,7 @@ def test_patch_event_settings(token_client, organizer, event):
         event.settings.flush()
         mocked.assert_any_call(args=(event.pk,))
         assert event.settings.primary_color == '#ff0000'
+        assert event.all_logentries().filter(action_type="pretix.event.settings").count() == 2
 
         resp = token_client.patch(
             '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),

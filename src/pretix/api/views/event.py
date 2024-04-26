@@ -190,13 +190,21 @@ class EventViewSet(viewsets.ModelViewSet):
         serializer = self.get_serializer(page, many=True)
         return self.get_paginated_response(serializer.data)
 
+    @transaction.atomic()
     def perform_update(self, serializer):
+        original_data = self.get_serializer(instance=serializer.instance).data
+
         current_live_value = serializer.instance.live
         updated_live_value = serializer.validated_data.get('live', None)
         current_plugins_value = serializer.instance.get_plugins()
         updated_plugins_value = serializer.validated_data.get('plugins', None)
 
         super().perform_update(serializer)
+
+        if serializer.data == original_data:
+            # Performance optimization: If nothing was changed, we do not need to save or log anything.
+            # This costs us a few cycles on save, but avoids thousands of lines in our log.
+            return
 
         if updated_live_value is not None and updated_live_value != current_live_value:
             log_action = 'pretix.event.live.activated' if updated_live_value else 'pretix.event.live.deactivated'
@@ -622,11 +630,12 @@ class EventSettingsView(views.APIView):
         s.is_valid(raise_exception=True)
         with transaction.atomic():
             s.save()
-            self.request.event.log_action(
-                'pretix.event.settings', user=self.request.user, auth=self.request.auth, data={
-                    k: v for k, v in s.validated_data.items()
-                }
-            )
+            if s.changed_data:
+                self.request.event.log_action(
+                    'pretix.event.settings', user=self.request.user, auth=self.request.auth, data={
+                        k: v for k, v in s.validated_data.items()
+                    }
+                )
         if any(p in s.changed_data for p in SETTINGS_AFFECTING_CSS):
             regenerate_css.apply_async(args=(request.event.pk,))
         s = EventSettingsSerializer(

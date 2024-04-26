@@ -89,6 +89,7 @@ class SettingsSerializer(serializers.Serializer):
                         except OSError:  # pragma: no cover
                             logger.error('Deleting file %s failed.' % fname.name)
                     instance.delete(attr)
+                    self.changed_data.append(attr)
                 else:
                     # file is unchanged
                     continue
