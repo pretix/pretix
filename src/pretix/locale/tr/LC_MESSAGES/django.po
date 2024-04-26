@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-23 12:41+0000\n"
+"POT-Creation-Date: 2024-04-26 09:26+0000\n"
 "PO-Revision-Date: 2023-11-16 04:00+0000\n"
 "Last-Translator: Ramazan Sancar <ramazansancar4545@gmail.com>\n"
 "Language-Team: Turkish <https://translate.pretix.eu/projects/pretix/pretix/"
@@ -200,7 +200,7 @@ msgstr "Sınırlı Etkinlikler"
 #: pretix/api/models.py:120 pretix/base/exporters/orderlist.py:283
 #: pretix/base/exporters/orderlist.py:1049
 #: pretix/base/modelimport_orders.py:566
-#: pretix/base/modelimport_vouchers.py:324 pretix/base/models/orders.py:239
+#: pretix/base/modelimport_vouchers.py:328 pretix/base/models/orders.py:239
 #: pretix/base/models/vouchers.py:292 pretix/control/forms/filter.py:555
 #: pretix/control/templates/pretixcontrol/order/index.html:904
 #: pretix/control/templates/pretixcontrol/organizers/webhooks.html:38
@@ -2286,7 +2286,7 @@ msgstr "Bitiş Tarihi"
 
 #: pretix/base/exporters/orderlist.py:570
 #: pretix/base/exporters/orderlist.py:863 pretix/base/modelimport_orders.py:108
-#: pretix/base/modelimport_vouchers.py:172 pretix/base/models/items.py:715
+#: pretix/base/modelimport_vouchers.py:176 pretix/base/models/items.py:715
 #: pretix/base/models/vouchers.py:250 pretix/base/models/waitinglist.py:91
 #: pretix/control/forms/filter.py:2059 pretix/control/forms/filter.py:2314
 #: pretix/control/forms/orders.py:321 pretix/control/forms/vouchers.py:66
@@ -2359,7 +2359,7 @@ msgid "Ticket secret"
 msgstr "Gizli bilet"
 
 #: pretix/base/exporters/orderlist.py:595 pretix/base/modelimport_orders.py:534
-#: pretix/base/modelimport_vouchers.py:270
+#: pretix/base/modelimport_vouchers.py:274
 #: pretix/plugins/checkinlists/exporters.py:510
 msgid "Seat ID"
 msgstr "Koltuk ID"
@@ -2414,7 +2414,7 @@ msgid "Valid from"
 msgstr "Geçerli"
 
 #: pretix/base/exporters/orderlist.py:602 pretix/base/modelimport_orders.py:506
-#: pretix/base/modelimport_vouchers.py:109 pretix/base/models/orders.py:2425
+#: pretix/base/modelimport_vouchers.py:113 pretix/base/models/orders.py:2425
 #: pretix/base/models/vouchers.py:221
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:117
 #: pretix/control/views/vouchers.py:118
@@ -3092,7 +3092,7 @@ msgid "Product name"
 msgstr "Ürün adı"
 
 #: pretix/base/exporters/waitinglist.py:115
-#: pretix/base/modelimport_orders.py:94 pretix/base/modelimport_vouchers.py:60
+#: pretix/base/modelimport_orders.py:94 pretix/base/modelimport_vouchers.py:62
 #: pretix/control/templates/pretixcontrol/checkin/index.html:100
 #, fuzzy
 #| msgid "Date"
@@ -3705,36 +3705,36 @@ msgid "You need to select a date."
 msgstr "Bir tarih seçmeniz gerekiyor."
 
 #: pretix/base/modelimport_orders.py:127
-#: pretix/base/modelimport_vouchers.py:192
+#: pretix/base/modelimport_vouchers.py:196
 #, fuzzy
 #| msgid "No matching answers found."
 msgid "No matching product was found."
 msgstr "Eşleşen yanıt bulunamadı."
 
 #: pretix/base/modelimport_orders.py:129
-#: pretix/base/modelimport_vouchers.py:194
+#: pretix/base/modelimport_vouchers.py:198
 #, fuzzy
 #| msgid "No matching answers found."
 msgid "Multiple matching products were found."
 msgstr "Eşleşen yanıt bulunamadı."
 
 #: pretix/base/modelimport_orders.py:138
-#: pretix/base/modelimport_vouchers.py:203 pretix/base/models/items.py:1162
+#: pretix/base/modelimport_vouchers.py:207 pretix/base/models/items.py:1162
 #: pretix/base/models/vouchers.py:263 pretix/base/models/waitinglist.py:99
 msgid "Product variation"
 msgstr "Ürün varyasyonu"
 
 #: pretix/base/modelimport_orders.py:158
-#: pretix/base/modelimport_vouchers.py:223
-#: pretix/base/modelimport_vouchers.py:257
+#: pretix/base/modelimport_vouchers.py:227
+#: pretix/base/modelimport_vouchers.py:261
 #, fuzzy
 #| msgid "No matching answers found."
 msgid "No matching variation was found."
 msgstr "Eşleşen yanıt bulunamadı."
 
 #: pretix/base/modelimport_orders.py:160
-#: pretix/base/modelimport_vouchers.py:225
-#: pretix/base/modelimport_vouchers.py:259
+#: pretix/base/modelimport_vouchers.py:229
+#: pretix/base/modelimport_vouchers.py:263
 #, fuzzy
 #| msgid "No matching answers found."
 msgid "Multiple matching variations were found."
@@ -3840,21 +3840,21 @@ msgid "Please enter a valid sales channel."
 msgstr "Geçerli bir e-posta adresi giriniz."
 
 #: pretix/base/modelimport_orders.py:549
-#: pretix/base/modelimport_vouchers.py:289
+#: pretix/base/modelimport_vouchers.py:293
 #, fuzzy
 #| msgid "No matching answers found."
 msgid "Multiple matching seats were found."
 msgstr "Eşleşen yanıt bulunamadı."
 
 #: pretix/base/modelimport_orders.py:551
-#: pretix/base/modelimport_vouchers.py:291
+#: pretix/base/modelimport_vouchers.py:295
 #, fuzzy
 #| msgid "No matching answers found."
 msgid "No matching seat was found."
 msgstr "Eşleşen yanıt bulunamadı."
 
 #: pretix/base/modelimport_orders.py:554
-#: pretix/base/modelimport_vouchers.py:294 pretix/base/services/cart.py:212
+#: pretix/base/modelimport_vouchers.py:298 pretix/base/services/cart.py:212
 #: pretix/base/services/modelimport.py:134
 #: pretix/base/services/modelimport.py:244
 #, fuzzy
@@ -3903,116 +3903,122 @@ msgstr "Müşteri"
 msgid "No matching customer was found."
 msgstr "Eşleşen yanıt bulunamadı."
 
-#: pretix/base/modelimport_vouchers.py:50 pretix/base/models/vouchers.py:487
+#: pretix/base/modelimport_vouchers.py:48
+#, fuzzy
+#| msgid "A voucher can not be deleted if it already has been redeemed."
+msgid "A voucher cannot be created without a code."
+msgstr "Bir kupon, zaten kullanılmışsa silinemez."
+
+#: pretix/base/modelimport_vouchers.py:52 pretix/base/models/vouchers.py:487
 msgid "A voucher with this code already exists."
 msgstr "Bu kodla bir kupon zaten mevcut."
 
-#: pretix/base/modelimport_vouchers.py:68 pretix/base/models/memberships.py:57
+#: pretix/base/modelimport_vouchers.py:70 pretix/base/models/memberships.py:57
 #: pretix/base/models/vouchers.py:196 pretix/control/views/vouchers.py:119
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:28
 msgid "Maximum usages"
 msgstr "Maksimum kullanım"
 
-#: pretix/base/modelimport_vouchers.py:78
+#: pretix/base/modelimport_vouchers.py:81
 #, fuzzy
 #| msgid "Maximum number of items per order"
 msgid "The maximum number of usages must be set."
 msgstr "Sipariş başına maksimum öğe sayısı"
 
-#: pretix/base/modelimport_vouchers.py:87 pretix/base/models/vouchers.py:205
+#: pretix/base/modelimport_vouchers.py:90 pretix/base/models/vouchers.py:205
 #, fuzzy
 #| msgid "Maximum usages"
 msgid "Minimum usages"
 msgstr "Maksimum kullanım"
 
-#: pretix/base/modelimport_vouchers.py:101 pretix/base/models/vouchers.py:213
+#: pretix/base/modelimport_vouchers.py:105 pretix/base/models/vouchers.py:213
 #, fuzzy
 #| msgid "Maximum amount per order"
 msgid "Maximum discount budget"
 msgstr "Sipariş başına maksimum miktar"
 
-#: pretix/base/modelimport_vouchers.py:117 pretix/base/models/vouchers.py:225
+#: pretix/base/modelimport_vouchers.py:121 pretix/base/models/vouchers.py:225
 #: pretix/control/forms/filter.py:2032
 msgid "Reserve ticket from quota"
 msgstr "Kotadan rezervasyon bileti"
 
-#: pretix/base/modelimport_vouchers.py:125 pretix/base/models/vouchers.py:233
+#: pretix/base/modelimport_vouchers.py:129 pretix/base/models/vouchers.py:233
 msgid "Allow to bypass quota"
 msgstr "Kotayı atlamaya izin ver"
 
-#: pretix/base/modelimport_vouchers.py:133 pretix/base/models/vouchers.py:239
+#: pretix/base/modelimport_vouchers.py:137 pretix/base/models/vouchers.py:239
 msgid "Price mode"
 msgstr "Fiyat modu"
 
-#: pretix/base/modelimport_vouchers.py:148
+#: pretix/base/modelimport_vouchers.py:152
 #, python-brace-format
 msgid "Could not parse {value} as a price mode, use one of {options}."
 msgstr ""
 
-#: pretix/base/modelimport_vouchers.py:158 pretix/base/models/vouchers.py:245
+#: pretix/base/modelimport_vouchers.py:162 pretix/base/models/vouchers.py:245
 msgid "Voucher value"
 msgstr "Kupon değeri"
 
-#: pretix/base/modelimport_vouchers.py:163
+#: pretix/base/modelimport_vouchers.py:167
 msgid "It is pointless to set a value without a price mode."
 msgstr ""
 
-#: pretix/base/modelimport_vouchers.py:235 pretix/base/models/items.py:1997
+#: pretix/base/modelimport_vouchers.py:239 pretix/base/models/items.py:1997
 #: pretix/base/models/vouchers.py:272
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:8
 #: pretix/control/templates/pretixcontrol/items/quota_edit.html:15
 msgid "Quota"
 msgstr "Kota"
 
-#: pretix/base/modelimport_vouchers.py:251
+#: pretix/base/modelimport_vouchers.py:255
 #, fuzzy
 #| msgid "You cannot select a quota and a specific product at the same time."
 msgid "You cannot specify a quota if you specified a product."
 msgstr "Bir kotayı ve belirli bir ürünü aynı anda seçemezsiniz."
 
-#: pretix/base/modelimport_vouchers.py:280 pretix/base/models/vouchers.py:494
+#: pretix/base/modelimport_vouchers.py:284 pretix/base/models/vouchers.py:494
 #, fuzzy
 #| msgctxt "subevent"
 #| msgid "You need to select a date."
 msgid "You need to choose a date if you select a seat."
 msgstr "Bir tarih seçmeniz gerekiyor."
 
-#: pretix/base/modelimport_vouchers.py:297 pretix/base/models/vouchers.py:512
+#: pretix/base/modelimport_vouchers.py:301 pretix/base/models/vouchers.py:512
 #, fuzzy
 #| msgctxt "subevent"
 #| msgid "You need to select a date."
 msgid "You need to choose a specific product if you select a seat."
 msgstr "Bir tarih seçmeniz gerekiyor."
 
-#: pretix/base/modelimport_vouchers.py:300 pretix/base/models/vouchers.py:515
+#: pretix/base/modelimport_vouchers.py:304 pretix/base/models/vouchers.py:515
 #, fuzzy
 #| msgid "This refund can not be processed at the moment."
 msgid "Seat-specific vouchers can only be used once."
 msgstr "Bu geri ödeme şu anda işleme alınamaz."
 
-#: pretix/base/modelimport_vouchers.py:304 pretix/base/models/vouchers.py:518
+#: pretix/base/modelimport_vouchers.py:308 pretix/base/models/vouchers.py:518
 #, fuzzy, python-brace-format
 #| msgid "You need to choose exactly one option from this category."
 #| msgid_plural "You need to choose %(min_count)s options from this category."
 msgid "You need to choose the product \"{prod}\" for this seat."
 msgstr "Bu kategoriden tam olarak bir seçenek seçmeniz gerekiyor."
 
-#: pretix/base/modelimport_vouchers.py:316 pretix/base/models/vouchers.py:285
+#: pretix/base/modelimport_vouchers.py:320 pretix/base/models/vouchers.py:285
 #: pretix/control/templates/pretixcontrol/vouchers/index.html:129
 #: pretix/control/templates/pretixcontrol/vouchers/tags.html:42
 #: pretix/control/views/vouchers.py:119
 msgid "Tag"
 msgstr "Etiket"
 
-#: pretix/base/modelimport_vouchers.py:332 pretix/base/models/vouchers.py:297
+#: pretix/base/modelimport_vouchers.py:336 pretix/base/models/vouchers.py:297
 msgid "Shows hidden products that match this voucher"
 msgstr ""
 
-#: pretix/base/modelimport_vouchers.py:341 pretix/base/models/vouchers.py:301
+#: pretix/base/modelimport_vouchers.py:345 pretix/base/models/vouchers.py:301
 msgid "Offer all add-on products for free when redeeming this voucher"
 msgstr ""
 
-#: pretix/base/modelimport_vouchers.py:349 pretix/base/models/vouchers.py:305
+#: pretix/base/modelimport_vouchers.py:353 pretix/base/models/vouchers.py:305
 msgid ""
 "Include all bundled products without a designated price when redeeming this "
 "voucher"
