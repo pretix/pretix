@@ -766,7 +766,20 @@ function setup_basics(el) {
     });
     el.find("div.collapsed").removeClass("collapsed").addClass("collapse");
     el.find(".has-error").each(function () {
-        $(this).closest("div.panel-collapse").collapse("show");
+        var $panel = $(this).closest("div.panel-collapse").collapse("show");
+        var alert = el.find(".alert-danger").get(0);
+        var input = $("input", this).get(0);
+        if (!alert || !input) {
+            return;
+        }
+
+        $('<li><a href="#' + input.id + '">' + $("label", this).text() + '</a> – ' + $(".help-block", this).first().text() + '</li>')
+            .appendTo(alert.querySelector("ul") || $("<ul>").appendTo(alert))
+            .find("a").on("click", function(e) {
+                $panel.collapse("show");
+                $(".nav-tabs a[href='#" + input.closest(".tab-pane").id + "']").click();
+                input.focus();
+            });
     });
 
     el.find('[data-toggle="tooltip"]').tooltip();
