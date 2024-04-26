@@ -42,10 +42,14 @@ pretixPOS
 =========================== ==========================================================
 Android Version             Support schedule
 =========================== ==========================================================
-Android 14                  Support planned until at least 12/2029.
-Android 13                  Support planned until at least 12/2028.
-Android 12                  Support planned until at least 12/2027.
-Android 11                  Support planned until at least 12/2026.
+Android 14                  | Support planned until at least 12/2029.
+                            | Limited support for Swissbit microSD TSE (only tested devices).
+Android 13                  | Support planned until at least 12/2028.
+                            | Limited support for Swissbit microSD TSE (only tested devices).
+Android 12                  | Support planned until at least 12/2027.
+                            | Limited support for Swissbit microSD TSE (only tested devices).
+Android 11                  | Support planned until at least 12/2026.
+                            | No support for Swissbit microSD TSE.
 Android 10                  Support planned until at least 12/2025.
 Android 9                   Support planned until at least 12/2025.
 Android 8                   | Support planned until at least 12/2025.
