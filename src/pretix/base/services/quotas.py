@@ -28,7 +28,8 @@ import django_redis
 from django.conf import settings
 from django.db import models
 from django.db.models import (
-    Case, Count, F, Func, Max, OuterRef, Q, Subquery, Sum, Value, When, prefetch_related_objects,
+    Case, Count, F, Func, Max, OuterRef, Q, Subquery, Sum, Value, When,
+    prefetch_related_objects,
 )
 from django.utils.timezone import now
 
