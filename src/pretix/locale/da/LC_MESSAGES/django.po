@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 09:26+0000\n"
-"PO-Revision-Date: 2024-02-08 04:00+0000\n"
-"Last-Translator: Mie Frydensbjerg <mif@aarhus.dk>\n"
+"PO-Revision-Date: 2024-04-30 01:00+0000\n"
+"Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
 "Language: da\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.3.1\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -578,12 +578,11 @@ msgstr "Ventelistepladser"
 #: pretix/api/webhooks.py:371
 #, fuzzy
 msgid "Customer account created"
-msgstr "Kundehandlinger"
+msgstr "Kundekonto er blevet oprettet!"
 
 #: pretix/api/webhooks.py:375
-#, fuzzy
 msgid "Customer account changed"
-msgstr "Kundehandlinger"
+msgstr "Kundekonto er blevet ændret!"
 
 #: pretix/api/webhooks.py:379
 #, fuzzy
@@ -4972,7 +4971,7 @@ msgstr ""
 
 #: pretix/base/models/items.py:675
 msgid "Months"
-msgstr ""
+msgstr "Måneder"
 
 #: pretix/base/models/items.py:678
 #, fuzzy
@@ -11175,9 +11174,8 @@ msgstr ""
 #: pretix/base/settings.py:3528 pretix/base/settings.py:3542
 #: pretix/base/settings.py:3595 pretix/base/settings.py:3616
 #: pretix/base/settings.py:3638
-#, fuzzy
 msgid "Given name"
-msgstr "Navn"
+msgstr "Fornavn"
 
 #: pretix/base/settings.py:3437 pretix/base/settings.py:3450
 #: pretix/base/settings.py:3466 pretix/base/settings.py:3482
@@ -29757,7 +29755,7 @@ msgstr ""
 #, fuzzy
 msgctxt "checkoutflow"
 msgid "Customer account"
-msgstr "Kundehandlinger"
+msgstr "Kundekonto"
 
 #: pretix/presale/checkoutflow.py:334
 #, fuzzy
@@ -30323,14 +30321,18 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:122
 #, fuzzy
 msgid "Continue as a guest"
-msgstr "Opret gruppe"
+msgstr "Fortsæt som gæst"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:130
+#, fuzzy
 msgid ""
 "You are not required to create an account. If you proceed as a guest, you "
 "will be able to access the details and status of your order any time through "
 "the secret link we will send you via email once the order is complete."
 msgstr ""
+"Du behøver ikke at oprette en konto. Hvis du fortsætter som gæst, vil du "
+"altid have mulighed for at tilgå informationer og status  for din bestilling "
+"via det link, som du får tilsendt per mail."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:6
 #, fuzzy
@@ -32049,7 +32051,7 @@ msgstr "Uge"
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:17
 #: pretix/presale/templates/pretixpresale/organizers/calendar.html:25
 msgid "Month"
-msgstr ""
+msgstr "Måned"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar_nav.html:27
 msgid "iCal"
@@ -32080,7 +32082,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:5
 #, fuzzy
 msgid "customer account"
-msgstr "Kundehandlinger"
+msgstr "Kundekonto"
 
 #: pretix/presale/templates/pretixpresale/fragment_login_status.html:8
 #, fuzzy
