@@ -778,7 +778,7 @@ function setup_basics(el) {
             description = $this.text();
             scrollTarget = $this.closest('.panel').get(0);
             if (!scrollTarget.id) {
-                scrollTarget.id = "panel_" + $("input", scrollTarget).attr("id")
+                scrollTarget.id = "panel_" + $("input", scrollTarget).attr("id");
             }
         } else {
             label = $("label", this).first().text();
