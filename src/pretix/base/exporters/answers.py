@@ -39,10 +39,12 @@ from zipfile import ZipFile
 
 from django import forms
 from django.dispatch import receiver
+from django.urls import reverse
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.models import QuestionAnswer
 
+from ...control.forms.widgets import Select2
 from ..exporter import BaseExporter
 from ..signals import register_data_exporters
 
@@ -56,7 +58,7 @@ class AnswerFilesExporter(BaseExporter):
 
     @property
     def export_form_fields(self):
-        return OrderedDict(
+        d = OrderedDict(
             [
                 ('questions',
                  forms.ModelMultipleChoiceField(
@@ -69,11 +71,32 @@ class AnswerFilesExporter(BaseExporter):
                  )),
             ]
         )
+        if self.event.has_subevents:
+            d['subevent'] = forms.ModelChoiceField(
+                label=pgettext_lazy('subevent', 'Date'),
+                queryset=self.event.subevents.all(),
+                required=False,
+                empty_label=pgettext_lazy('subevent', 'All dates')
+            )
+            d['subevent'].widget = Select2(
+                attrs={
+                    'data-model-select2': 'event',
+                    'data-select2-url': reverse('control:event.subevents.select2', kwargs={
+                        'event': self.event.slug,
+                        'organizer': self.event.organizer.slug,
+                    }),
+                    'data-placeholder': pgettext_lazy('subevent', 'All dates')
+                }
+            )
+            d['subevent'].widget.choices = d['subevent'].choices
+        return d
 
     def render(self, form_data: dict):
         qs = QuestionAnswer.objects.filter(
             orderposition__order__event=self.event,
         ).select_related('orderposition', 'orderposition__order', 'question')
+        if form_data.get('subevent'):
+            qs = qs.filter(orderposition__subevent=form_data.get('subevent'))
         if form_data.get('questions'):
             qs = qs.filter(question__in=form_data['questions'])
         with tempfile.TemporaryDirectory() as d:
