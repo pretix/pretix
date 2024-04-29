@@ -44,9 +44,9 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.models import QuestionAnswer
 
+from ...control.forms.widgets import Select2
 from ..exporter import BaseExporter
 from ..signals import register_data_exporters
-from ...control.forms.widgets import Select2
 
 
 class AnswerFilesExporter(BaseExporter):
