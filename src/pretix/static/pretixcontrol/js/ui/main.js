@@ -798,6 +798,7 @@ function setup_basics(el) {
                 if (tab) {
                     $(".nav-tabs a[href='#" + tab.id + "']").click();
                 }
+                scrollTarget.scrollIntoView();
                 scrollTarget.focus();
             });
     });
