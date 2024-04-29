@@ -75,7 +75,7 @@ class AnswerFilesExporter(BaseExporter):
             d['subevent'] = forms.ModelChoiceField(
                 label=pgettext_lazy('subevent', 'Date'),
                 queryset=self.event.subevents.all(),
-                required=True,
+                required=False,
                 empty_label=pgettext_lazy('subevent', 'All dates')
             )
             d['subevent'].widget = Select2(
