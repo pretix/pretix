@@ -8,19 +8,19 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-23 12:41+0000\n"
-"PO-Revision-Date: 2022-05-10 02:00+0000\n"
-"Last-Translator: Iryna N <in380@nyu.edu>\n"
-"Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix-"
-"js/uk/>\n"
+"PO-Revision-Date: 2024-04-30 01:00+0000\n"
+"Last-Translator: Serhii Horichenko <m@sgg.im>\n"
+"Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/"
+"pretix-js/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
-"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
-"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
-"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
-"X-Generator: Weblate 4.12\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
+"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
+"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
+"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -71,7 +71,7 @@ msgstr "SEPA Прямий дебет"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:43
 msgid "Bancontact"
-msgstr "Банкконтакт"
+msgstr "Bancontact"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:44
 msgid "giropay"
@@ -82,10 +82,8 @@ msgid "SOFORT"
 msgstr "SOFORT"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:46
-#, fuzzy
-#| msgid "Yes"
 msgid "eps"
-msgstr "Так"
+msgstr "eps"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:47
 msgid "MyBank"
@@ -93,47 +91,47 @@ msgstr "MyBank"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:48
 msgid "Przelewy24"
-msgstr ""
+msgstr "Przelewy24"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:49
 msgid "Verkkopankki"
-msgstr ""
+msgstr "Verkkopankki"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:50
 msgid "PayU"
-msgstr ""
+msgstr "PayU"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:51
 msgid "BLIK"
-msgstr ""
+msgstr "BLIK"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:52
 msgid "Trustly"
-msgstr ""
+msgstr "Trustly"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:53
 msgid "Zimpler"
-msgstr ""
+msgstr "Zimpler"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:54
 msgid "Maxima"
-msgstr ""
+msgstr "Maxima"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:55
 msgid "OXXO"
-msgstr ""
+msgstr "OXXO"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:56
 msgid "Boleto"
-msgstr ""
+msgstr "Boleto"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:57
 msgid "WeChat Pay"
-msgstr ""
+msgstr "WeChat Pay"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:58
 msgid "Mercado Pago"
-msgstr ""
+msgstr "Mercado Pago"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:167
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:48
@@ -151,7 +149,7 @@ msgstr "Підтверджується ваш платіж…"
 
 #: pretix/plugins/paypal2/static/pretixplugins/paypal2/pretix-paypal.js:254
 msgid "Payment method unavailable"
-msgstr ""
+msgstr "Спосіб оплати недоступний"
 
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:15
 #: pretix/plugins/statistics/static/pretixplugins/statistics/statistics.js:39
@@ -169,15 +167,15 @@ msgstr "Загальний прибуток"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:15
 msgid "Contacting Stripe …"
-msgstr "Налаштовується зв'язок з Stripe…"
+msgstr "З'єднуємося зі Stripe…"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:72
 msgid "Total"
-msgstr "Всього"
+msgstr "Загалом"
 
 #: pretix/plugins/stripe/static/pretixplugins/stripe/pretix-stripe.js:291
 msgid "Contacting your bank …"
-msgstr "Встановлюється зв’язок з Вашим банком …"
+msgstr "З'єднуємося з Вашим банком …"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:30
 msgid "Select a check-in list"
@@ -294,16 +292,12 @@ msgid "Ticket code revoked/changed"
 msgstr "Код квитка скасовано/змінено"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:61
-#, fuzzy
-#| msgid "Ticket not paid"
 msgid "Ticket blocked"
-msgstr "Квиток не оплачено"
+msgstr "Квиток заблокований"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:62
-#, fuzzy
-#| msgid "Ticket not paid"
 msgid "Ticket not valid at this time"
-msgstr "Квиток не оплачено"
+msgstr "Квиток зараз не дійсний"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:63
 msgid "Order canceled"
@@ -311,11 +305,11 @@ msgstr "Замовлення скасовано"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:64
 msgid "Ticket code is ambiguous on list"
-msgstr ""
+msgstr "Код квитка у списку не однозначний"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:65
 msgid "Order not approved"
-msgstr ""
+msgstr "Замовлення не узгоджене"
 
 #: pretix/plugins/webcheckin/static/pretixplugins/webcheckin/main.js:66
 msgid "Checked-in Tickets"
@@ -441,7 +435,7 @@ msgstr "є після"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:40
 msgid "="
-msgstr ""
+msgstr "="
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:99
 msgid "Product"
@@ -452,8 +446,9 @@ msgid "Product variation"
 msgstr "Варіанти продукту"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:107
+#, fuzzy
 msgid "Gate"
-msgstr ""
+msgstr "Шлях"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:111
 msgid "Current date and time"
@@ -465,51 +460,43 @@ msgstr "Поточний день тижня (1 = понеділок, 7 = нед
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:119
 msgid "Current entry status"
-msgstr ""
+msgstr "Поточний стан запису"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:123
 msgid "Number of previous entries"
-msgstr "Кількість попередніх записів"
+msgstr "Кількість попередніх входів"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:127
 msgid "Number of previous entries since midnight"
-msgstr "Кількість попередніх записів з опівночі"
+msgstr "Кількість попередніх входів з опівночі"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:131
-#, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries since"
-msgstr "Кількість попередніх записів"
+msgstr "Кількість попередніх входів з"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:135
-#, fuzzy
-#| msgid "Number of previous entries"
 msgid "Number of previous entries before"
-msgstr "Кількість попередніх записів"
+msgstr "Кількість попередніх входів до"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:139
 msgid "Number of days with a previous entry"
-msgstr "Кількість днів із попереднім записом"
+msgstr "Кількість днів із попереднім входом"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:143
-#, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry since"
-msgstr "Кількість днів із попереднім записом"
+msgstr "Кількість днів із попереднім входом з"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:147
-#, fuzzy
-#| msgid "Number of days with a previous entry"
 msgid "Number of days with a previous entry before"
-msgstr "Кількість днів із попереднім записом"
+msgstr "Кількість днів із попереднім входом до"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:151
 msgid "Minutes since last entry (-1 on first entry)"
-msgstr "Хвилин після останнього запису (-1 при першому записі)"
+msgstr "Хвилин з останнього входу (-1 при першому вході)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:155
 msgid "Minutes since first entry (-1 on first entry)"
-msgstr ""
+msgstr "Хвилин з першого входу (-1 при першому вході)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:182
 msgid "All of the conditions below (AND)"
@@ -521,53 +508,54 @@ msgstr "Принаймні одна з наведених нижче умов (�
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:184
 msgid "Event start"
-msgstr ""
+msgstr "Початок події"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:185
 msgid "Event end"
-msgstr ""
+msgstr "Завершення події"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:186
 msgid "Event admission"
-msgstr ""
+msgstr "Вхід до події"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:187
 msgid "custom date and time"
-msgstr ""
+msgstr "власні дата та час"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:188
 msgid "custom time"
-msgstr ""
+msgstr "власний час"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:189
 msgid "Tolerance (minutes)"
-msgstr ""
+msgstr "Відхилення (хвил.)"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:190
 msgid "Add condition"
-msgstr ""
+msgstr "Додайте умову"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
+#, fuzzy
 msgid "minutes"
-msgstr ""
+msgstr "хвилин"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
 msgid "Duplicate"
-msgstr ""
+msgstr "Дублювати"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:193
 msgctxt "entry_status"
 msgid "present"
-msgstr ""
+msgstr "присутній"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:194
 msgctxt "entry_status"
 msgid "absent"
-msgstr ""
+msgstr "відсутній"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:72
 msgid "Check-in QR"
-msgstr ""
+msgstr "Реєстрація з QR"
 
 #: pretix/static/pretixcontrol/js/ui/editor.js:387
 msgid "The PDF background file could not be loaded for the following reason:"
@@ -663,15 +651,15 @@ msgstr "Тільки вибрані"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:794
 msgid "Enter page number between 1 and %(max)s."
-msgstr ""
+msgstr "Вкажіть номер сторінки між 1 та %(max)s."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:797
 msgid "Invalid page number."
-msgstr ""
+msgstr "Недійсний номер сторінки."
 
 #: pretix/static/pretixcontrol/js/ui/main.js:955
 msgid "Use a different name internally"
-msgstr ""
+msgstr "Використайте іншу внутрішню назву"
 
 #: pretix/static/pretixcontrol/js/ui/main.js:995
 msgid "Click to close"
@@ -694,10 +682,13 @@ msgid "Count"
 msgstr "Підрахувати"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:111
+#, fuzzy
 msgid "(one more date)"
 msgid_plural "({num} more dates)"
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "(додати дату)"
+msgstr[1] "(додати {num} дати)"
+msgstr[2] "(додати {num} дат)"
+msgstr[3] "(додати {num} дат)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:43
 msgid ""
