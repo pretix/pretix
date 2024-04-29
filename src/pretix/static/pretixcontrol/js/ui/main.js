@@ -773,7 +773,7 @@ function setup_basics(el) {
         var description = "";
         var scrollTarget = null;
         if ($this.hasClass('alert-danger')) {
-            // just a general error messages without a concrete input
+            // just a general error messages without a actual errorenous input
             label = $this.closest('.panel').find('.panel-title').contents().filter(function() { return this.nodeType == Node.TEXT_NODE; }).text()
             description = $this.text();
             scrollTarget = $this.closest('.panel').get(0);
