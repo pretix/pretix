@@ -29,6 +29,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models import (
     Case, Count, F, Func, Max, OuterRef, Q, Subquery, Sum, Value, When,
+    prefetch_related_objects,
 )
 from django.utils.timezone import now
 
@@ -446,6 +447,7 @@ class QuotaAvailability:
                         self.results[q] = Quota.AVAILABILITY_RESERVED, 0
 
     def _compute_waitinglist(self, quotas, q_items, q_vars, size_left):
+        prefetch_related_objects(quotas, "event", "event__organizer")
         quotas = [
             q for q in quotas
             if not q.event.settings.waiting_list_auto_disable or q.event.settings.waiting_list_auto_disable.datetime(q.subevent or q.event) > now()
