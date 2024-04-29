@@ -2013,6 +2013,20 @@ class OrderChangeManager:
                     for a in current_addons[cp][k][:current_num - input_num]:
                         if a.canceled:
                             continue
+                        is_unavailable = (
+                            # If an item is no longer available due to time, it should usually also be no longer
+                            # user-removable, because e.g. the stock has already been ordered.
+                            # We always pass has_voucher=True because if a product now requires a voucher, it usually does
+                            # not mean it should be unremovable for others.
+                            # This also prevents accidental removal through the UI because a hidden product will no longer
+                            # be part of the input.
+                            (a.variation and a.variation.unavailability_reason(has_voucher=True, subevent=a.subevent))
+                            or (a.variation and self.order.sales_channel not in a.variation.sales_channels)
+                            or a.item.unavailability_reason(has_voucher=True, subevent=a.subevent)
+                            or self.order.sales_channel not in item.sales_channels
+                        )
+                        if is_unavailable:
+                            continue
                         if a.checkins.filter(list__consider_tickets_used=True).exists():
                             raise OrderError(
                                 error_messages['addon_already_checked_in'] % {
