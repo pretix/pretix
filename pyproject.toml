@@ -127,7 +127,7 @@ dev = [
   "pytest-rerunfailures==14.*",
   "pytest-sugar",
   "pytest-xdist==3.5.*",
-  "pytest==8.1.*",
+  "pytest==8.2.*",
   "responses",
 ]
 
