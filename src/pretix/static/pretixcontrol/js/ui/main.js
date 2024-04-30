@@ -790,7 +790,7 @@ function setup_basics(el) {
             return;
         }
 
-        $('<li><a href="#' + scrollTarget.id + '">' + label + '</a> – ' + description + '</li>')
+        $('<li><a href="#' + scrollTarget.id + '">' + $.trim(label) + '</a> – ' + description + '</li>')
             .appendTo(alert.querySelector("ul") || $("<ul>").appendTo(alert))
             .find("a").on("click", function(e) {
                 $panel.collapse("show");
