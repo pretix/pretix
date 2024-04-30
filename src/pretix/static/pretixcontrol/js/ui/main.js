@@ -765,8 +765,42 @@ function setup_basics(el) {
         $($(this).attr("data-target")).collapse('show');
     });
     el.find("div.collapsed").removeClass("collapsed").addClass("collapse");
-    el.find(".has-error").each(function () {
-        $(this).closest("div.panel-collapse").collapse("show");
+    el.find(".has-error, .panel-body .alert-danger:not(:has(.has-error))").each(function () {
+        var $this = $(this);
+        var $panel = $this.closest("div.panel-collapse").collapse("show");
+        var alert = el.find(".alert-danger").get(0);
+        var label = "";
+        var description = "";
+        var scrollTarget = null;
+        if ($this.hasClass('alert-danger')) {
+            // just a general error messages without a actual errorenous input
+            label = $this.closest('.panel').find('.panel-title').contents().filter(function() { return this.nodeType == Node.TEXT_NODE; }).text()
+            description = $this.text();
+            scrollTarget = $this.closest('.panel').get(0);
+            if (!scrollTarget.id) {
+                scrollTarget.id = "panel_" + $("input", scrollTarget).attr("id");
+            }
+        } else {
+            label = $("label", this).first().text();
+            description = $(".help-block", this).first().text();
+            scrollTarget = $(":input", this).get(0);
+        }
+
+        if (!alert || !scrollTarget) {
+            return;
+        }
+
+        $('<li><a href="#' + scrollTarget.id + '">' + $.trim(label) + '</a> – ' + description + '</li>')
+            .appendTo(alert.querySelector("ul") || $("<ul>").appendTo(alert))
+            .find("a").on("click", function(e) {
+                $panel.collapse("show");
+                var tab = scrollTarget.closest(".tab-pane");
+                if (tab) {
+                    $(".nav-tabs a[href='#" + tab.id + "']").click();
+                }
+                scrollTarget.scrollIntoView();
+                scrollTarget.focus();
+            });
     });
 
     el.find('[data-toggle="tooltip"]').tooltip();
