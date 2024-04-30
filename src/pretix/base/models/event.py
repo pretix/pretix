@@ -235,7 +235,7 @@ class EventMixin:
         if not self.settings.waiting_list_enabled:
             return False
         if self.settings.waiting_list_auto_disable:
-            return self.settings.waiting_list_auto_disable.datetime(self) > now()
+            return self.settings.waiting_list_auto_disable.datetime(self) > time_machine_now()
         return True
 
     @property
