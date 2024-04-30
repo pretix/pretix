@@ -947,8 +947,8 @@ class EventTimeMachine(EventViewMixin, TemplateView):
         self.timemachine_form = TimemachineForm(
             data=request.method == 'POST' and request.POST or None,
             initial=(
-                {'now_dt': parser.parse(request.session.get('timemachine_now_dt', None))}
-                if request.session.get('timemachine_now_dt', None) else {}
+                {'now_dt': parser.parse(request.session.get(f'timemachine_now_dt:{request.event.pk}', None))}
+                if request.session.get(f'timemachine_now_dt:{request.event.pk}', None) else {}
             )
         )
 
@@ -959,11 +959,11 @@ class EventTimeMachine(EventViewMixin, TemplateView):
 
     def post(self, request, *args, **kwargs):
         if request.POST.get("timemachine_disable"):
-            del request.session['timemachine_now_dt']
+            del request.session[f'timemachine_now_dt:{request.event.pk}']
             messages.success(self.request, _('Time machine disabled!'))
             return redirect(self.get_success_url())
         elif self.timemachine_form.is_valid():
-            request.session['timemachine_now_dt'] = str(self.timemachine_form.cleaned_data['now_dt'])
+            request.session[f'timemachine_now_dt:{request.event.pk}'] = str(self.timemachine_form.cleaned_data['now_dt'])
             return redirect(eventreverse(request.event, "presale:event.index"))
         else:
             return self.get(request)

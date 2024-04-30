@@ -35,7 +35,7 @@ class TimemachineTestMixin:
 
     def _set_time_machine_now(self, dt):
         session = self.client.session
-        session['timemachine_now_dt'] = str(dt)
+        session[f'timemachine_now_dt:{self.event.pk}'] = str(dt)
         session.save()
 
     def _enable_test_mode(self):
