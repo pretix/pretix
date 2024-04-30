@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-23 12:41+0000\n"
-"PO-Revision-Date: 2024-04-30 01:00+0000\n"
+"PO-Revision-Date: 2024-05-01 01:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/uk/>\n"
@@ -537,7 +537,7 @@ msgstr "Додайте умову"
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:191
 #, fuzzy
 msgid "minutes"
-msgstr "хвилин"
+msgstr "хвилини"
 
 #: pretix/static/pretixcontrol/js/ui/checkinrules.js:192
 msgid "Duplicate"
@@ -688,7 +688,7 @@ msgid_plural "({num} more dates)"
 msgstr[0] "(додати дату)"
 msgstr[1] "(додати {num} дати)"
 msgstr[2] "(додати {num} дат)"
-msgstr[3] "(додати {num} дат)"
+msgstr[3] "(додати {num} дати)"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:43
 msgid ""
@@ -703,22 +703,25 @@ msgid "Cart expired"
 msgstr "Термін дії кошика закінчився"
 
 #: pretix/static/pretixpresale/js/ui/cart.js:50
+#, fuzzy
 msgid "The items in your cart are reserved for you for one minute."
 msgid_plural "The items in your cart are reserved for you for {num} minutes."
-msgstr[0] ""
-msgstr[1] ""
+msgstr[0] "Товари у Вашому кошику зарезервовані для Вас на одну хвилину."
+msgstr[1] "Товари у Вашому кошику зарезервовані для Вас на {num} хвилини."
+msgstr[2] "Товари у Вашому кошику зарезервовані для Вас на {num} хвилин."
+msgstr[3] "Товари у Вашому кошику зарезервовані для Вас на {num} хвилин."
 
 #: pretix/static/pretixpresale/js/ui/main.js:203
 msgid "The organizer keeps %(currency)s %(amount)s"
-msgstr ""
+msgstr "Організатор утримує %(amount)s %(currency)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:211
 msgid "You get %(currency)s %(amount)s back"
-msgstr ""
+msgstr "Ви отримаєте в поверненні %(amount)s %(currency)s"
 
 #: pretix/static/pretixpresale/js/ui/main.js:227
 msgid "Please enter the amount the organizer can keep."
-msgstr ""
+msgstr "Введіть суму, яку може залишити організатор."
 
 #: pretix/static/pretixpresale/js/ui/main.js:444
 msgid "Please enter a quantity for one of the ticket types."
@@ -738,52 +741,45 @@ msgid "Your local time:"
 msgstr "Ваш місцевий час:"
 
 #: pretix/static/pretixpresale/js/walletdetection.js:39
-#, fuzzy
-#| msgid "Apple Pay"
 msgid "Google Pay"
-msgstr "Apple Pay"
+msgstr "Google Pay"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:16
 msgctxt "widget"
 msgid "Quantity"
-msgstr ""
+msgstr "Кількість"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:17
 msgctxt "widget"
 msgid "Decrease quantity"
-msgstr ""
+msgstr "Зменшити кількість"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:18
 msgctxt "widget"
 msgid "Increase quantity"
-msgstr ""
+msgstr "Збільшити кількість"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:19
 msgctxt "widget"
 msgid "Price"
-msgstr ""
+msgstr "Ціна"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:20
-#, fuzzy
-#| msgid "Selected only"
 msgctxt "widget"
 msgid "Select"
-msgstr "Тільки вибрані"
+msgstr "Виберіть"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:21
-#, fuzzy, javascript-format
-#| msgid "Selected only"
+#, javascript-format
 msgctxt "widget"
 msgid "Select %s"
-msgstr "Тільки вибрані"
+msgstr "Виберіть %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:22
-#, fuzzy, javascript-format
-#| msgctxt "widget"
-#| msgid "See variations"
+#, javascript-format
 msgctxt "widget"
 msgid "Select variant %s"
-msgstr "Переглянути варіанти"
+msgstr "Виберіть варіант %s"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
@@ -847,25 +843,19 @@ msgid "Only available with a voucher"
 msgstr "Доступно лише з ваучером"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:35
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "currently available: %s"
 msgctxt "widget"
 msgid "Not yet available"
-msgstr "доступно зараз: %s"
+msgstr "Зараз не доступно"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:36
 msgctxt "widget"
 msgid "Not available anymore"
-msgstr ""
+msgstr "Більше не доступно"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:37
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "currently available: %s"
 msgctxt "widget"
 msgid "Currently not available"
-msgstr "доступно зараз: %s"
+msgstr "Зараз недоступно"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:38
 #, javascript-format
@@ -889,11 +879,13 @@ msgid ""
 "There are currently a lot of users in this ticket shop. Please open the shop "
 "in a new tab to continue."
 msgstr ""
+"Зараз у цій касі багато користувачів. Щоб продовжити, відкрийте вікно "
+"квитків у новій вкладці."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:43
 msgctxt "widget"
 msgid "Open ticket shop"
-msgstr ""
+msgstr "Відкрити касу"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:44
 msgctxt "widget"
@@ -955,20 +947,14 @@ msgid "Continue"
 msgstr "Продовжити"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:56
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "See variations"
 msgctxt "widget"
 msgid "Show variants"
-msgstr "Переглянути варіанти"
+msgstr "Показати варіанти"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:57
-#, fuzzy
-#| msgctxt "widget"
-#| msgid "See variations"
 msgctxt "widget"
 msgid "Hide variants"
-msgstr "Переглянути варіанти"
+msgstr "Сховати варіанти"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:58
 msgctxt "widget"
@@ -1017,6 +1003,9 @@ msgid ""
 "add yourself to the waiting list. We will then notify if seats are available "
 "again."
 msgstr ""
+"Деякі або всі категорії квитків зараз розпродані. Якщо хочете, можете "
+"додатися до списку очікування. Тоді ми Вам повідомимо, коли місця знову "
+"будуть вільні."
 
 #: pretix/static/pretixpresale/js/widget/widget.js:67
 msgctxt "widget"
