@@ -17,7 +17,7 @@
         <div class="panel-body">
             <form action="" method="post" class="">
                 {% csrf_token %}
-                {% bootstrap_form_errors timemachine_form %}
+                {% bootstrap_form_errors timemachine_form "all" %}
 
                 <p>{% trans "Test your shop as if it were a different date and time." %}</p>
 
@@ -30,14 +30,17 @@
                             {% if request.session.timemachine_now_dt %}{% trans "Change" %}{% else %}{% trans "Enable time machine" %}{% endif %}
                         </button>
                         {% if request.session.timemachine_now_dt %}
-                        <button name="timemachine_disable" value="true" type="submit" class="btn btn-default btn-lg btn-save">
+                        <button form="disable_form" type="submit" class="btn btn-default btn-lg btn-save">
                             {% trans "Disable" %}
                         </button>
                         {% endif %}
                     </div>
                 </div>
             </form>
-
+            <form action="" method="post" class="" id="disable_form">
+                {% csrf_token %}
+                <input type="hidden" name="timemachine_disable" value="true">
+            </form>
             <div class="clear"></div>
         </div>
     </div>

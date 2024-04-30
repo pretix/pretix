@@ -931,7 +931,7 @@ class TimemachineForm(forms.Form):
     now_dt = forms.SplitDateTimeField(
         label=_('Fake date time'),
         widget=SplitDateTimePickerWidget(),
-        initial=lambda: now().astimezone(get_current_timezone())
+        initial=lambda: now().astimezone(get_current_timezone()),
     )
 
 
@@ -965,6 +965,8 @@ class EventTimeMachine(EventViewMixin, TemplateView):
         elif self.timemachine_form.is_valid():
             request.session['timemachine_now_dt'] = str(self.timemachine_form.cleaned_data['now_dt'])
             return redirect(eventreverse(request.event, "presale:event.index"))
+        else:
+            return self.get(request)
 
     def get_success_url(self) -> str:
         return eventreverse(self.request.event, 'presale:event.timemachine')
