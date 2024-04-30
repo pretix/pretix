@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 09:26+0000\n"
-"PO-Revision-Date: 2024-04-30 01:00+0000\n"
+"PO-Revision-Date: 2024-05-01 01:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -30298,12 +30298,15 @@ msgid ""
 "connect your order to your account. This will allow you to see all your "
 "orders in one place and access them at any time."
 msgstr ""
+"Hvis du allerede har oprettet en konto hos %(org)s, kan du  tilmelde dig nu "
+"og knytte din bestilling til din konto. På denne måde vil du kunne se alle "
+"dine bestillinger ét sted, hvor du kan tilgå dem til enhver tid."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:60
 #: pretix/presale/templates/pretixpresale/organizers/customer_login.html:44
 #, fuzzy
 msgid "Reset password"
-msgstr "Gentag adgangskode"
+msgstr "Nulstil adgangskode"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:92
 #, fuzzy
@@ -30317,6 +30320,11 @@ msgid ""
 "password, so you can use the account for future orders at %(org)s. You can "
 "still go ahead with this purchase before you received the email."
 msgstr ""
+"Vi sender dig en mail med et link, som du kan bruge til at aktivere din "
+"konto, hvorefter du kan vælge en adgangskode. Derefter kan du bruge din "
+"konto til alle dine bestillinger hos %(org)s i fremtiden. Du kan stadig "
+"fortsætte med at afslutte denne bestilling, selvom du ikke har modtaget "
+"mailen."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:122
 #, fuzzy
@@ -30324,24 +30332,23 @@ msgid "Continue as a guest"
 msgstr "Fortsæt som gæst"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:130
-#, fuzzy
 msgid ""
 "You are not required to create an account. If you proceed as a guest, you "
 "will be able to access the details and status of your order any time through "
 "the secret link we will send you via email once the order is complete."
 msgstr ""
 "Du behøver ikke at oprette en konto. Hvis du fortsætter som gæst, vil du "
-"altid have mulighed for at tilgå informationer og status  for din bestilling "
-"via det link, som du får tilsendt per mail."
+"altid have mulighed for at tilgå informationer og status for din bestilling "
+"via det link, som du får tilsendt per mail, når du har afsluttet din "
+"bestilling."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:6
-#, fuzzy
 msgid ""
 "Some of the products in your cart can only be purchased if there is an "
 "active membership on your account."
 msgstr ""
-"Du har tilføjet ordrer, hvor det er muligt at lave yderligere indstillinger "
-"før du forsætter."
+"Nogle af posterne i din indkøbskurv kan kun købes, hvis du har et aktivt "
+"medlemskab på din konto."
 
 #: pretix/presale/templates/pretixpresale/event/checkout_membership.html:37
 #: pretix/presale/templates/pretixpresale/event/checkout_questions.html:114
@@ -30870,10 +30877,10 @@ msgid "incl. %(tax_sum)s taxes"
 msgstr "inkl. %(rate)s%% %(taxname)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:482
-#, python-format
+#, fuzzy, python-format
 msgid "The items in your cart are reserved for you for %(minutes)s minutes."
 msgstr ""
-"Bookingerne i din indkøbskurv er reserveret til dig i %(minutes)s minutter."
+"Posterne i din indkøbskurv er reserveret til dig i %(minutes)s minutter."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:486
 msgid ""
