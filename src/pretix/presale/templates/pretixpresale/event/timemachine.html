@@ -26,7 +26,7 @@
                         {% bootstrap_field timemachine_form.now_dt layout="inline" show_label=False  %}
                     </div>
                     <div class="col-md-6 text-right">
-                        <button type="submit" class="btn btn-default btn-lg btn-save">
+                        <button type="submit" class="btn btn-primary btn-lg btn-save">
                             {% if request.session.timemachine_now_dt %}{% trans "Change" %}{% else %}{% trans "Enable time machine" %}{% endif %}
                         </button>
                         {% if request.session.timemachine_now_dt %}

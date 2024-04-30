@@ -3,7 +3,7 @@ Time machine mode
 
 In test mode, pretix provides a "time machine" feature which allows event organizers
 to test their shop as if it were a different date and time. To enable this feature, they can
-click on the clock icon in the test mode warning box.
+click on the "time machine"-link in the test mode warning box on the event page.
 
 Internally, this time machine mode is implemented by calling our custom :py:meth:`time_machine_now()`
 function instead of :py:meth:`django.utils.timezone.now()` in all places where the fake time should be

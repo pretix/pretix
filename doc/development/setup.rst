@@ -214,7 +214,8 @@ whenever you change a source file.
 Working with frontend assets
 ----------------------------
 
-To update the frontent styles, run the following commands inside your virtual environment.::
+To update the frontend styles of shops with a custom styling, run the following commands inside
+your virtual environment.::
 
     python -m pretix collectstatic --noinput
     python -m pretix updatestyles
