@@ -1911,12 +1911,12 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
     @transaction.atomic()
     def reissue(self, request, **kwargs):
         inv = self.get_object()
-        order = Order.objects.select_for_update(of=OF_SELF).get(pk=inv.order_id)
         if inv.canceled:
             raise ValidationError('The invoice has already been canceled.')
         elif inv.shredded:
             raise PermissionDenied('The invoice file is no longer stored on the server.')
         else:
+            order = Order.objects.select_for_update(of=OF_SELF).get(pk=inv.order_id)
             c = generate_cancellation(inv)
             if inv.order.status != Order.STATUS_CANCELED:
                 inv = generate_invoice(order)
