@@ -954,9 +954,6 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
     permission = 'can_change_event_settings'
     template_name = 'pretixcontrol/event/live.html'
 
-    def setup(self, request, *args, **kwargs):
-        super().setup(request, *args, **kwargs)
-
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['issues'] = self.request.event.live_issues

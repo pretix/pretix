@@ -123,14 +123,14 @@
                         {% blocktrans trimmed with datetime=request.now_dt|date:"SHORT_DATETIME_FORMAT" %}
                         You are currently using the time machine. The ticket shop is rendered as if it were {{ datetime }}.
                         {% endblocktrans %}
-                        <a href="{% eventurl event "presale:event.timemachine" %}" class="stealth"><span class="fa fa-clock-o" aria-hidden="true"></span> <u>{% trans "Change" %}</u></a>
+                        <a href="{% eventurl event "presale:event.timemachine" %}"><span class="fa fa-clock-o" aria-hidden="true"></span>{% trans "Change" %}</a>
                     </p>
                 {% elif request.user.is_authenticated or request.event_access_user.is_authenticated %}
                     <p>
                         {% eventurl event "presale:event.timemachine" as time_machine_link %}
                         {% blocktrans trimmed with time_machine_link=time_machine_link %}
                             To view your shop at different points in time, you can enable
-                            <a href="{{ time_machine_link }}" class="stealth"><span class="fa fa-clock-o" aria-hidden="true"></span> <u>time machine</u></a>.
+                            <a href="{{ time_machine_link }}"><span class="fa fa-clock-o" aria-hidden="true"></span>time machine</a>.
                         {% endblocktrans %}
                     </p>
                 {% elif request.event_domain or request.organizer_domain %}
@@ -138,7 +138,7 @@
                         {% url "control:event.transfer_session" event=event.slug organizer=event.organizer.slug as time_machine_link %}
                         {% blocktrans trimmed with time_machine_link=time_machine_link %}
                             To view your shop at different points in time, you can enable
-                            <a href="{{ time_machine_link }}" class="stealth"><span class="fa fa-clock-o" aria-hidden="true"></span> <u>time machine</u></a>.
+                            <a href="{{ time_machine_link }}"><span class="fa fa-clock-o" aria-hidden="true"></span>time machine</a>.
                         {% endblocktrans %}
                     </p>
                 {% endif %}

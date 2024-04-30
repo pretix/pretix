@@ -942,6 +942,8 @@ class EventTimeMachine(EventViewMixin, TemplateView):
         super().setup(request, *args, **kwargs)
         if not has_time_machine_permission(request, request.event):
             raise PermissionDenied(_('You are not allowed to access time machine mode.'))
+        if not request.event.testmode:
+            raise PermissionDenied(_('This feature is only available in test mode.'))
         self.timemachine_form = TimemachineForm(
             data=request.method == 'POST' and request.POST or None,
             initial=(
