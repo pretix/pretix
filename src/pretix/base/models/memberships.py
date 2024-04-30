@@ -31,6 +31,7 @@ from i18nfield.fields import I18nCharField
 from pretix.base.models import Customer
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.organizer import Organizer
+from pretix.base.timemachine import time_machine_now
 from pretix.helpers.names import build_name
 
 
@@ -165,13 +166,13 @@ class Membership(models.Model):
 
     def is_valid(self, ev=None, ticket_valid_from=None, valid_from_not_chosen=False):
         if valid_from_not_chosen:
-            return not self.canceled and self.date_end >= now()
+            return not self.canceled and self.date_end >= time_machine_now()
         elif ticket_valid_from:
             dt = ticket_valid_from
         elif ev:
             dt = ev.date_from
         else:
-            dt = now()
+            dt = time_machine_now()
 
         return not self.canceled and dt >= self.date_start and dt <= self.date_end
 
