@@ -129,6 +129,7 @@ from pretix.control.forms.rrule import RRuleForm
 from pretix.control.permissions import EventPermissionRequiredMixin
 from pretix.control.signals import order_search_forms
 from pretix.control.views import PaginationMixin
+from pretix.helpers import OF_SELF
 from pretix.helpers.compat import CompatDeleteView
 from pretix.helpers.format import format_map
 from pretix.helpers.safedownload import check_token
@@ -1562,20 +1563,22 @@ class OrderInvoiceCreate(OrderView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        has_inv = self.order.invoices.exists() and not (
-            self.order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
-            and self.order.invoices.filter(is_cancellation=True).count() >= self.order.invoices.filter(is_cancellation=False).count()
-        )
-        if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'True') or not invoice_qualified(self.order):
-            messages.error(self.request, _('You cannot generate an invoice for this order.'))
-        elif has_inv:
-            messages.error(self.request, _('An invoice for this order already exists.'))
-        else:
-            inv = generate_invoice(self.order)
-            self.order.log_action('pretix.event.order.invoice.generated', user=self.request.user, data={
-                'invoice': inv.pk
-            })
-            messages.success(self.request, _('The invoice has been generated.'))
+        with transaction.atomic():
+            order = Order.objects.select_for_update(of=OF_SELF).get(pk=self.order.pk)
+            has_inv = order.invoices.exists() and not (
+                order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
+                and order.invoices.filter(is_cancellation=True).count() >= order.invoices.filter(is_cancellation=False).count()
+            )
+            if self.request.event.settings.get('invoice_generate') not in ('admin', 'user', 'paid', 'True') or not invoice_qualified(order):
+                messages.error(self.request, _('You cannot generate an invoice for this order.'))
+            elif has_inv:
+                messages.error(self.request, _('An invoice for this order already exists.'))
+            else:
+                inv = generate_invoice(order)
+                order.log_action('pretix.event.order.invoice.generated', user=self.request.user, data={
+                    'invoice': inv.pk
+                })
+                messages.success(self.request, _('The invoice has been generated.'))
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):
@@ -1657,25 +1660,27 @@ class OrderInvoiceReissue(OrderView):
     permission = 'can_change_orders'
 
     def post(self, *args, **kwargs):
-        try:
-            inv = self.order.invoices.get(pk=kwargs.get('id'))
-        except Invoice.DoesNotExist:
-            messages.error(self.request, _('Unknown invoice.'))
-        else:
-            if inv.canceled:
-                messages.error(self.request, _('The invoice has already been canceled.'))
-            elif inv.shredded:
-                messages.error(self.request, _('The invoice has been cleaned of personal data.'))
+        with transaction.atomic():
+            order = Order.objects.select_for_update(of=OF_SELF).get(pk=self.order.pk)
+            try:
+                inv = order.invoices.get(pk=kwargs.get('id'))
+            except Invoice.DoesNotExist:
+                messages.error(self.request, _('Unknown invoice.'))
             else:
-                c = generate_cancellation(inv)
-                if self.order.status not in (Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
-                    inv = generate_invoice(self.order)
+                if inv.canceled:
+                    messages.error(self.request, _('The invoice has already been canceled.'))
+                elif inv.shredded:
+                    messages.error(self.request, _('The invoice has been cleaned of personal data.'))
                 else:
-                    inv = c
-                self.order.log_action('pretix.event.order.invoice.reissued', user=self.request.user, data={
-                    'invoice': inv.pk
-                })
-                messages.success(self.request, _('The invoice has been reissued.'))
+                    c = generate_cancellation(inv)
+                    if order.status not in (Order.STATUS_CANCELED, Order.STATUS_EXPIRED):
+                        inv = generate_invoice(order)
+                    else:
+                        inv = c
+                    order.log_action('pretix.event.order.invoice.reissued', user=self.request.user, data={
+                        'invoice': inv.pk
+                    })
+                    messages.success(self.request, _('The invoice has been reissued.'))
         return redirect(self.get_order_url())
 
     def get(self, *args, **kwargs):  # NOQA

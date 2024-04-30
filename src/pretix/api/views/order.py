@@ -97,6 +97,7 @@ from pretix.base.signals import (
 )
 from pretix.base.templatetags.money import money_filter
 from pretix.control.signals import order_search_filter_q
+from pretix.helpers import OF_SELF
 
 logger = logging.getLogger(__name__)
 
@@ -575,8 +576,10 @@ class EventOrderViewSet(OrderViewSetMixin, viewsets.ModelViewSet):
         return self.retrieve(request, [], **kwargs)
 
     @action(detail=True, methods=['POST'])
+    @transaction.atomic()
     def create_invoice(self, request, **kwargs):
         order = self.get_object()
+        order = Order.objects.select_for_update(of=OF_SELF).get(pk=order.pk)
         has_inv = order.invoices.exists() and not (
             order.status in (Order.STATUS_PAID, Order.STATUS_PENDING)
             and order.invoices.filter(is_cancellation=True).count() >= order.invoices.filter(is_cancellation=False).count()
@@ -1905,6 +1908,7 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
             return Response(status=204)
 
     @action(detail=True, methods=['POST'])
+    @transaction.atomic()
     def reissue(self, request, **kwargs):
         inv = self.get_object()
         if inv.canceled:
@@ -1912,9 +1916,10 @@ class InvoiceViewSet(viewsets.ReadOnlyModelViewSet):
         elif inv.shredded:
             raise PermissionDenied('The invoice file is no longer stored on the server.')
         else:
+            order = Order.objects.select_for_update(of=OF_SELF).get(pk=inv.order_id)
             c = generate_cancellation(inv)
             if inv.order.status != Order.STATUS_CANCELED:
-                inv = generate_invoice(inv.order)
+                inv = generate_invoice(order)
             else:
                 inv = c
             inv.order.log_action(
