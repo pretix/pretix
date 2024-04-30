@@ -23,7 +23,6 @@ from django.db import models
 from django.db.models import Count, OuterRef, Subquery, Value
 from django.db.models.functions import Coalesce
 from django.utils.formats import date_format
-from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _
 from django_scopes import ScopedManager, scopes_disabled
 from i18nfield.fields import I18nCharField

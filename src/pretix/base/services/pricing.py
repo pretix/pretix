@@ -25,7 +25,6 @@ from typing import List, Optional, Tuple
 
 from django import forms
 from django.db.models import Q
-from django.utils.timezone import now
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
