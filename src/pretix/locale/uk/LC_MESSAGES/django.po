@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 09:26+0000\n"
-"PO-Revision-Date: 2024-04-30 01:00+0000\n"
+"PO-Revision-Date: 2024-05-01 01:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -647,7 +647,7 @@ msgstr "{system} Користувач"
 #: pretix/presale/templates/pretixpresale/event/order.html:299
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:26
 msgid "E-mail"
-msgstr "Електронна пошта"
+msgstr "Ел.пошта"
 
 #: pretix/base/auth.py:154 pretix/base/forms/auth.py:164
 #: pretix/base/forms/auth.py:218 pretix/base/models/customers.py:96
@@ -1853,8 +1853,9 @@ msgstr "Коротка назва події"
 #: pretix/plugins/reports/exporters.py:561
 #: pretix/plugins/reports/exporters.py:886
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:73
+#, fuzzy
 msgid "Order total"
-msgstr "Все замовлення"
+msgstr "Сума замовлення"
 
 #: pretix/base/exporters/orderlist.py:260
 #: pretix/base/exporters/orderlist.py:442
@@ -2053,7 +2054,7 @@ msgstr "Правило оподаткування"
 #: pretix/base/exporters/orderlist.py:624
 #: pretix/base/exporters/orderlist.py:628 pretix/base/pdf.py:331
 msgid "Invoice address name"
-msgstr "Ім’я в рахунку-фактурі"
+msgstr "Платіжна адреса: Ім'я"
 
 #: pretix/base/exporters/orderlist.py:479
 #: pretix/base/exporters/orderlist.py:661 pretix/base/models/orders.py:173
@@ -3781,7 +3782,7 @@ msgstr "Усі продукти (включаючи новостворені)"
 #: pretix/base/models/checkin.py:57 pretix/plugins/badges/exporters.py:428
 #: pretix/plugins/checkinlists/exporters.py:833
 msgid "Limit to products"
-msgstr "Обмежити до продуктів"
+msgstr "Обмеження продуктів"
 
 #: pretix/base/models/checkin.py:61
 msgid ""
@@ -7164,7 +7165,7 @@ msgstr "Випадкове місто"
 
 #: pretix/base/pdf.py:336
 msgid "Invoice address company"
-msgstr "Адреса рахунків-фактур компанії"
+msgstr "Платіжна адреса: Компанія"
 
 #: pretix/base/pdf.py:342
 msgid "Sesame Street 42"
@@ -9536,7 +9537,7 @@ msgstr "напр., цим документом ми надсилаємо вам 
 
 #: pretix/base/settings.py:1162
 msgid "Introductory text"
-msgstr "вступний текст"
+msgstr "Вступний текст"
 
 #: pretix/base/settings.py:1163
 msgid "Will be printed on every invoice above the invoice rows."
@@ -25726,7 +25727,8 @@ msgstr[2] ""
 #: pretix/presale/views/order.py:1203 pretix/presale/views/order.py:1586
 #: pretix/presale/views/order.py:1617
 msgid "Unknown order code or not authorized to access this order."
-msgstr "Невідомий код замовлення або доступ до цього замовлення не дозволений."
+msgstr ""
+"Невідомий код замовлення або доступ до цього замовлення отримати неможливо."
 
 #: pretix/control/views/orders.py:674 pretix/presale/views/order.py:1035
 msgid "Ticket download is not enabled for this product."
