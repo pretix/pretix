@@ -189,6 +189,14 @@ OPTIONS = OrderedDict([
         'offsets': [46 * mm, 46 * mm],
         'pagesize': pagesizes.A4,
     }),
+    ('herma_88.9x33.87', {
+        'name': 'HERMA 88,9 x 33,87 mm (4515)',
+        'cols': 2,
+        'rows': 8,
+        'margins': [13.03 * mm, 12.29 * mm, 13.03 * mm, 12.29 * mm],
+        'offsets': [96.52 * mm, 33.87 * mm],
+        'pagesize': pagesizes.A4,
+    }),
     ('lyreco_70x36', {
         'name': 'Lyreco 70 x 36 mm (143.344)',
         'cols': 3,
