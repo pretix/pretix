@@ -277,7 +277,6 @@ class Discount(LoggedModel):
             n_groups = min(len(condition_idx_group) // self.condition_min_count, ceil(len(benefit_idx_group) / self.benefit_only_apply_to_cheapest_n_matches))
             consume_idx = condition_idx_group[:n_groups * self.condition_min_count]
             benefit_idx = benefit_idx_group[:n_groups * self.benefit_only_apply_to_cheapest_n_matches]
-            print("n_groups", n_groups, "consume", self.condition_min_count, consume_idx, "benefit", self.benefit_only_apply_to_cheapest_n_matches, benefit_idx)
         else:
             consume_idx = condition_idx_group
             benefit_idx = benefit_idx_group
