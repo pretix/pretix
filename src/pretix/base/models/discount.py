@@ -23,6 +23,7 @@
 from collections import defaultdict
 from decimal import Decimal
 from itertools import groupby
+from math import ceil
 from typing import Dict, Optional, Tuple
 
 from django.core.exceptions import ValidationError
@@ -272,7 +273,7 @@ class Discount(LoggedModel):
 
             # Prevent over-consuming of items, i.e. if our discount is "buy 2, get 1 free", we only
             # want to match multiples of 3
-            n_groups = min(len(condition_idx_group) // self.condition_min_count, len(benefit_idx_group))
+            n_groups = min(len(condition_idx_group) // self.condition_min_count, ceil(len(benefit_idx_group) / self.benefit_only_apply_to_cheapest_n_matches))
             consume_idx = condition_idx_group[:n_groups * self.condition_min_count]
             benefit_idx = benefit_idx_group[:n_groups * self.benefit_only_apply_to_cheapest_n_matches]
         else:
