@@ -258,7 +258,6 @@ class Discount(LoggedModel):
             result[idx] = new_price
 
     def _apply_min_count(self, positions, condition_idx_group, benefit_idx_group, result):
-        print("_apply_min_count", self)
         if len(condition_idx_group) < self.condition_min_count:
             return
 
