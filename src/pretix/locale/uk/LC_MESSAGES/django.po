@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 09:26+0000\n"
-"PO-Revision-Date: 2024-05-01 01:00+0000\n"
+"PO-Revision-Date: 2024-05-03 01:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -2540,7 +2540,7 @@ msgstr "Загальна квота"
 #: pretix/control/templates/pretixcontrol/event/cancel.html:20
 #: pretix/control/views/item.py:949
 msgid "Paid orders"
-msgstr "Оплачені замовлення"
+msgstr "Сплачені замовлення"
 
 #: pretix/base/exporters/orderlist.py:1106 pretix/control/views/item.py:954
 msgid "Pending orders"
@@ -8455,16 +8455,11 @@ msgstr ""
 "вашого кошика."
 
 #: pretix/base/services/orders.py:201
-#, fuzzy, python-format
-#| msgid ""
-#| "You cannot delete the product <strong>%(item)s</strong> because it "
-#| "already has been ordered."
+#, python-format
 msgid ""
 "You cannot remove the position %(addon)s since it has already been checked "
 "in."
-msgstr ""
-"Ви не можете видалити продукт <strong>%(item)s</strong>, оскільки він уже "
-"замовлений."
+msgstr "Ви не можете вилучити позицію %(addon)s, оскільки вона вже замовлена."
 
 #: pretix/base/services/orders.py:202
 #, fuzzy
@@ -12289,11 +12284,9 @@ msgstr ""
 #: pretix/base/timeframes.py:71 pretix/base/timeframes.py:80
 #: pretix/base/timeframes.py:89 pretix/base/timeframes.py:98
 #: pretix/base/timeframes.py:107
-#, fuzzy
-#| msgid "Orders by day"
 msgctxt "reporting_timeframe"
 msgid "by day"
-msgstr "Замовлення по днях"
+msgstr "по днях"
 
 #: pretix/base/timeframes.py:58
 msgctxt "reporting_timeframe"
@@ -18424,9 +18417,9 @@ msgid ""
 "event and only retain the financial information such as the number and type "
 "of tickets sold."
 msgstr ""
-"Ви можете видалити особисті дані, такі як імена та адреси електронної пошти, "
-"зі своєї події та зберегти лише фінансову інформацію, як-от кількість і тип "
-"проданих квитків."
+"Ви можете вилучити особисті дані, такі як імена та адреси електронної пошти, "
+"зі своєї події та зберегти лише таку фінансову інформацію, як кількість та "
+"тип проданих квитків."
 
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:76
 #: pretix/control/templates/pretixcontrol/event/dangerzone.html:89
@@ -19000,7 +18993,7 @@ msgstr ""
 #: pretix/plugins/ticketoutputpdf/views.py:172
 #: pretix/presale/views/customer.py:476 pretix/presale/views/customer.py:528
 msgid "Your changes have been saved."
-msgstr "Ваші зміни збережено."
+msgstr "Ваші зміни були збережені."
 
 #: pretix/control/templates/pretixcontrol/event/plugins.html:36
 msgid "Top recommendation"
@@ -20819,9 +20812,9 @@ msgid ""
 "informed automatically, but you will have the option to email them "
 "individually in the next step."
 msgstr ""
-"Ви дійсно хочете видалити цей запит на скасування? Користувач не буде "
-"проінформований автоматично, але ви матимете можливість надіслати їм "
-"електронний лист окремо на наступному кроці."
+"Ви дійсно хочете вилучити цей запит на скасування? Користувачі не будуть "
+"проінформовані автоматично, але у Вас буде можливість надіслати окремі "
+"електронні листи на наступному кроці."
 
 #: pretix/control/templates/pretixcontrol/order/cancellation_request_delete.html:26
 msgid "Yes, delete request"
@@ -22903,7 +22896,7 @@ msgstr "Необмеженo"
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:67
 #: pretix/control/templates/pretixcontrol/organizers/team_members.html:113
 msgid "Remove"
-msgstr "Видалити"
+msgstr "Вилучити"
 
 #: pretix/control/templates/pretixcontrol/organizers/giftcard_acceptance_list.html:66
 msgid "Accept"
@@ -23465,7 +23458,7 @@ msgstr "Вставити"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:39
 msgid "Undo"
-msgstr "Скасувати"
+msgstr "Скасувати дію"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:43
 msgid "Redo"
@@ -25086,7 +25079,7 @@ msgstr ""
 #: pretix/plugins/sendmail/views.py:674 pretix/plugins/stripe/views.py:680
 #: pretix/plugins/ticketoutputpdf/views.py:132
 msgid "We could not save your changes. See below for details."
-msgstr "Нам не вдалося зберегти ваші зміни. Подробиці - нижче."
+msgstr "Нам не вдалося зберегти Ваші зміни. Подробиці дивіться нижче."
 
 #: pretix/control/views/checkin.py:416 pretix/control/views/checkin.py:453
 msgid "The requested list does not exist."
@@ -30777,7 +30770,7 @@ msgstr "Будь ласка, зачекайте, ми завершуємо ва�
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:22
 msgid "Add or remove tickets"
-msgstr "Додати або видалити квитки"
+msgstr "Додати або вилучити квитки"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:44
 msgid "Modify payment"
@@ -31395,7 +31388,7 @@ msgstr "Домовились, ми його замінимо…"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:288
 #, python-format
 msgid "Remove %(item)s from your cart"
-msgstr "Видалити %(item)s з вашого кошика"
+msgstr "Вилучити %(item)s з Вашого кошика"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:291
 #, python-format
@@ -31408,7 +31401,7 @@ msgid ""
 "Remove one %(item)s from your cart. You currently have %(count)s in your "
 "cart."
 msgstr ""
-"Видалити один %(item)s з вашого кошика. У Вашому кошику залишилось %(count)s."
+"Вилучити один %(item)s з Вашого кошика. У Вашому кошику залишилось %(count)s."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:301
 msgid "We're trying to reserve another one for you!"
@@ -31512,23 +31505,19 @@ msgid "Change summary"
 msgstr "Змінити підсумок"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:19
-#, fuzzy, python-format
-#| msgid ""
-#| "Change position #%(positionid)s from \"%(old_item)s – %(old_variation)s "
-#| "\" to \"%(new_item)s – %(new_variation)s\""
+#, python-format
 msgid ""
 "Change position #%(positionid)s from \"%(old_item)s – %(old_variation)s\" to "
 "\"%(new_item)s – %(new_variation)s\""
 msgstr ""
-"Змінити розміщення #%(positionid)s від \"%(old_item)s – %(old_variation)s \" "
-"до \"%(new_item)s – %(new_variation)s\""
+"Змінити позицію #%(positionid)s з \"%(old_item)s – %(old_variation)s \" на \""
+"%(new_item)s – %(new_variation)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:23
 #, python-format
 msgid ""
 "Change position #%(positionid)s from \"%(old_item)s\" to \"%(new_item)s\""
-msgstr ""
-"Змінити розміщення #%(positionid)s від \"%(old_item)s\" до \"%(new_item)s\""
+msgstr "Змінити позицію #%(positionid)s з \"%(old_item)s\" на \"%(new_item)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:30
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:56
@@ -31542,32 +31531,32 @@ msgstr "Додатково до позиції #%(posid)s"
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:40
 #, python-format
 msgid "Change date of position #%(positionid)s from \"%(old)s\" to \"%(new)s\""
-msgstr "Змінити дати розміщення #%(positionid)s від \"%(old)s\" до \"%(new)s\""
+msgstr "Змінити дати позиції #%(positionid)s з \"%(old)s\" на \"%(new)s\""
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:50
 #, python-format
 msgid "Change price of position #%(positionid)s from %(old)s to %(new)s"
-msgstr "Змінити ціну розміщення #%(positionid)s від %(old)s до %(new)s"
+msgstr "Змінити ціну позиції #%(positionid)s з %(old)s на %(new)s"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:70
 #, python-format
 msgid "Add position (%(item)s – %(variation)s)"
-msgstr "Додати розміщення (%(item)s – %(variation)s)"
+msgstr "Додати позицію (%(item)s – %(variation)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:74
 #, python-format
 msgid "Add position (%(item)s)"
-msgstr "Додати розміщення (%(item)s)"
+msgstr "Додати позицію (%(item)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:95
 #, python-format
 msgid "Remove position #%(positionid)s (%(item)s – %(variation)s)"
-msgstr "Видалити розміщення #%(positionid)s (%(item)s – %(variation)s)"
+msgstr "Вилучити позицію #%(positionid)s (%(item)s – %(variation)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:99
 #, python-format
 msgid "Remove position #%(positionid)s (%(item)s)"
-msgstr "Видалити розміщення #%(positionid)s (%(item)s)"
+msgstr "Вилучити позицію #%(positionid)s (%(item)s)"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_change_confirm.html:121
 msgid "Total price change"
@@ -32664,7 +32653,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/waitinglist_remove.html:16
 msgctxt "waitinglist"
 msgid "Yes, remove my ticket"
-msgstr "Так, видалити мій квиток"
+msgstr "Так, вилучити мій квиток"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:6
 msgid "Calendar"
