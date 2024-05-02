@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 09:26+0000\n"
-"PO-Revision-Date: 2023-10-06 03:00+0000\n"
-"Last-Translator: Ronan LE MEILLAT <ronan.le_meillat@highcanfly.club>\n"
+"PO-Revision-Date: 2024-05-02 14:27+0000\n"
+"Last-Translator: Raphaël Deux <github@raphael-deux.fr>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.0.2\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -3218,7 +3218,7 @@ msgstr "Facture TVA"
 #: pretix/base/invoice.py:597
 msgctxt "invoice"
 msgid "Invoice"
-msgstr "FactureFacture"
+msgstr "Facture"
 
 #: pretix/base/invoice.py:598
 #: pretix/control/templates/pretixcontrol/order/index.html:271
@@ -3336,7 +3336,7 @@ msgstr ""
 
 #: pretix/base/invoice.py:858
 msgid "Default invoice renderer (European-style letter)"
-msgstr ""
+msgstr "Rendu de la facture par défaut (lettre européenne)"
 
 #: pretix/base/invoice.py:947
 msgctxt "invoice"
@@ -3345,14 +3345,13 @@ msgstr "(Veuillez mettre entre guillemets systématiquement.)"
 
 #: pretix/base/invoice.py:994
 msgid "Simplified invoice renderer"
-msgstr ""
+msgstr "Rendu simplifié de la facture"
 
 #: pretix/base/invoice.py:1013
-#, fuzzy, python-brace-format
-#| msgid "Event date range"
+#, python-brace-format
 msgctxt "invoice"
 msgid "Event date: {date_range}"
-msgstr "Plage de dates de l'événement"
+msgstr "Plage de dates de l'événement : {date_range}"
 
 #: pretix/base/media.py:61
 msgid "Barcode / QR-Code"
@@ -3581,10 +3580,8 @@ msgid "Maximum usages"
 msgstr "Utilisation maximale"
 
 #: pretix/base/modelimport_vouchers.py:81
-#, fuzzy
-#| msgid "Maximum number of items per order"
 msgid "The maximum number of usages must be set."
-msgstr "Nombre maximum d'articles par commande"
+msgstr "Le nombre maximum d'utilisations doit être fixé."
 
 #: pretix/base/modelimport_vouchers.py:90 pretix/base/models/vouchers.py:205
 msgid "Minimum usages"
