@@ -52,6 +52,11 @@ def item2(event):
 
 
 @pytest.fixture
+def item3(event):
+    return event.items.create(name='Ticket III', default_price=Decimal('42.00'))
+
+
+@pytest.fixture
 def voucher(event):
     return event.vouchers.create()
 
@@ -1334,6 +1339,69 @@ def test_multiple_discounts_with_benefit_condition_overlap(event, item, item2):
         # two remain full price
         Decimal('23.00'),
         Decimal('23.00'),
+    )
+
+    new_prices = [p for p, d in apply_discounts(event, 'web', positions)]
+    assert sorted(new_prices) == sorted(expected)
+
+
+@pytest.mark.django_db
+@scopes_disabled()
+def test_multiple_discounts_with_same_condition(event, item, item2, item3):
+    # "For every 1 item1, you get three item2 for 10 % off." + "For every 1 item1, you get five item3 for 10 % off."
+    d1 = Discount(
+        event=event,
+        condition_min_count=1,
+        condition_all_products=False,
+        benefit_only_apply_to_cheapest_n_matches=3,
+        benefit_discount_matching_percent=10,
+        benefit_same_products=False,
+        position=1,
+    )
+    d1.save()
+    d1.condition_limit_products.add(item)
+    d1.benefit_limit_products.add(item2)
+
+    d2 = Discount(
+        event=event,
+        condition_min_count=1,
+        condition_all_products=False,
+        benefit_only_apply_to_cheapest_n_matches=5,
+        benefit_discount_matching_percent=10,
+        benefit_same_products=False,
+        position=2,
+    )
+    d2.save()
+    d2.condition_limit_products.add(item)
+    d2.benefit_limit_products.add(item3)
+
+    positions = (
+        (item3.pk, None, Decimal('42.00'), False, False, Decimal('0.00')),
+        (item3.pk, None, Decimal('42.00'), False, False, Decimal('0.00')),
+        (item3.pk, None, Decimal('42.00'), False, False, Decimal('0.00')),
+        (item3.pk, None, Decimal('42.00'), False, False, Decimal('0.00')),
+        (item3.pk, None, Decimal('42.00'), False, False, Decimal('0.00')),
+        (item3.pk, None, Decimal('42.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('50.00'), False, False, Decimal('0.00')),
+        (item2.pk, None, Decimal('50.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('23.00'), False, False, Decimal('0.00')),
+        (item.pk, None, Decimal('23.00'), False, False, Decimal('0.00')),
+    )
+    expected = (
+        # both item1 remain full price
+        Decimal('23.00'),
+        Decimal('23.00'),
+        # 5 item3 discounted
+        Decimal('37.80'),
+        Decimal('37.80'),
+        Decimal('37.80'),
+        Decimal('37.80'),
+        Decimal('37.80'),
+        # 2 item2 discounted
+        Decimal('45.00'),
+        Decimal('45.00'),
+        # 1 item3 remains untouched
+        Decimal('42.00'),
     )
 
     new_prices = [p for p, d in apply_discounts(event, 'web', positions)]
