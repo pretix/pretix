@@ -213,6 +213,8 @@ def import_vouchers(event: Event, fileid: str, settings: dict, locale: str, user
                 voucher = Voucher(event=event)
                 vouchers.append(voucher)
 
+                if not record.get("code"):
+                    raise ValidationError(_('A voucher cannot be created without a code.'))
                 Voucher.clean_item_properties(
                     record,
                     event,
