@@ -75,7 +75,7 @@ class MaxUsagesColumn(IntegerColumnMixin, ImportColumn):
         ]
 
     def clean(self, value, previous_values):
-        if value is None:
+        if value is None and previous_values.get("code"):
             raise ValidationError(_('The maximum number of usages must be set.'))
         return super().clean(value, previous_values)
 

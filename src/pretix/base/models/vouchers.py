@@ -370,10 +370,11 @@ class Voucher(LoggedModel):
                     'redeemed': redeemed
                 }
             )
-        if data.get('max_usages', 1) < data.get('min_usages', 1):
-            raise ValidationError(
-                _('The maximum number of usages may not be lower than the minimum number of usages.'),
-            )
+        if data.get('min_usages') is not None:
+            if data.get('max_usages', 1) < data.get('min_usages', 1):
+                raise ValidationError(
+                    _('The maximum number of usages may not be lower than the minimum number of usages.'),
+                )
 
     @staticmethod
     def clean_subevent(data, event):
