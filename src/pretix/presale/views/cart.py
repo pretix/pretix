@@ -154,17 +154,25 @@ class CartActionMixin:
         if value.strip() == '' or '_' not in key:
             return
 
+        subevent = None
+        if key.startswith('subevent_'):
+            try:
+                parts = key.split('_', 2)
+                subevent = int(parts[1])
+                key = parts[2]
+            except ValueError:
+                pass
+        elif 'subevent' in self.request.POST:
+            try:
+                subevent = int(self.request.POST.get('subevent'))
+            except ValueError:
+                pass
+
         if not key.startswith('item_') and not key.startswith('variation_') and not key.startswith('seat_'):
             return
 
         parts = key.split("_")
         price = self.request.POST.get('price_' + "_".join(parts[1:]), "")
-        subevent = None
-        if 'subevent' in self.request.POST:
-            try:
-                subevent = int(self.request.POST.get('subevent'))
-            except ValueError:
-                pass
 
         if key.startswith('seat_'):
             try:
