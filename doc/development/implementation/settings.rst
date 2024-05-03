@@ -15,7 +15,7 @@ includes serializers for serializing the following types:
 * Built-in types: ``int``, ``float``, ``decimal.Decimal``, ``dict``, ``list``, ``bool``
 * ``datetime.date``, ``datetime.datetime``, ``datetime.time``
 * ``LazyI18nString``
-* References to Django ``File`` objects that are already stored in a storage backend
+* References to Django ``File`` objects that are already stored in a storage backend [#f1]_
 * References to model instances
 
 In code, we recommend to always use the ``.get()`` method on the settings object to access a value, but for
@@ -55,6 +55,9 @@ You can simply use it like this:
                        "preserve his reservation."),
        )
 
+
+.. _settings-defaults-in-plugins:
+
 Defaults in plugins
 -------------------
 
@@ -70,3 +73,9 @@ Make sure that you include this code in a module that is imported at app loading
 
 .. _django-hierarkey: https://github.com/raphaelm/django-hierarkey
 .. _documentation: https://django-hierarkey.readthedocs.io/en/latest/
+
+.. rubric:: Footnotes
+
+.. [#f1] If you store ``File`` instances in per-event settings, make sure to always register them with ``add_default``
+         as described above in :ref:`settings-defaults-in-plugins`. Otherwise, the file won't get copied properly if the
+         user copies the settings of an existing event to a new one.
