@@ -5,17 +5,17 @@
 {% load thumb %}
 {% load eventsignal %}
 {% load rich_text %}
-{% for tup in items_by_category %}
-    <section {% if tup.0 %}aria-labelledby="{{ tup.2 }}category-{{ tup.0.id }}"{% else %}aria-label="{% trans "Uncategorized items" %}"{% endif %}{% if tup.0.description %} aria-describedby="{{ tup.2 }}category-info-{{ tup.0.id }}"{% endif %}>
-        {% if tup.0 %}
-            <h3 id="{{ tup.2 }}category-{{ tup.0.id }}">{{ tup.0.name }}</h3>
-            {% if tup.0.description %}
-                <div id="{{ tup.2 }}category-info-{{ tup.0.id }}">{{ tup.0.description|localize|rich_text }}</div>
+{% for tup in items_by_category %}{% with category=tup.0 items=tup.1 id_prefix=tup.2 %}
+    <section {% if category %}aria-labelledby="{{ id_prefix }}category-{{ category.id }}"{% else %}aria-label="{% trans "Uncategorized items" %}"{% endif %}{% if category.description %} aria-describedby="{{ id_prefix }}category-info-{{ category.id }}"{% endif %}>
+        {% if category %}
+            <h3 id="{{ id_prefix }}category-{{ category.id }}">{{ category.name }}</h3>
+            {% if category.description %}
+                <div id="{{ id_prefix }}category-info-{{ category.id }}">{{ category.description|localize|rich_text }}</div>
             {% endif %}
         {% endif %}
-        {% for item in tup.1 %}
+        {% for item in items %}
             {% if item.has_variations %}
-                <article aria-labelledby="{{ tup.2 }}item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="{{ tup.2 }}item-{{ item.pk }}-description"{% endif %} class="item-with-variations{% if event.settings.show_variations_expanded %} details-open{% endif %}" id="{{ tup.2 }}item-{{ item.pk }}">
+                <article aria-labelledby="{{ id_prefix }}item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="{{ id_prefix }}item-{{ item.pk }}-description"{% endif %} class="item-with-variations{% if event.settings.show_variations_expanded %} details-open{% endif %}" id="{{ id_prefix }}item-{{ item.pk }}">
                     <div class="row product-row headline">
                         <div class="col-md-8 col-sm-6 col-xs-12">
                             {% if item.picture %}
@@ -29,9 +29,9 @@
                                 </a>
                             {% endif %}
                             <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                                <h4 id="{{ tup.2 }}item-{{ item.pk }}-legend">{{ item.name }}</h4>
+                                <h4 id="{{ id_prefix }}item-{{ item.pk }}-legend">{{ item.name }}</h4>
                                 {% if item.description %}
-                                    <div id="{{ tup.2 }}item-{{ item.pk }}-description" class="product-description">
+                                    <div id="{{ id_prefix }}item-{{ item.pk }}-description" class="product-description">
                                         {{ item.description|localize|rich_text }}
                                     </div>
                                 {% endif %}
@@ -98,14 +98,14 @@
                     </div>
                     <div class="variations {% if not event.settings.show_variations_expanded %}variations-collapsed{% endif %}">
                         {% for var in item.available_variations %}
-                            <article aria-labelledby="{{ tup.2 }}item-{{ item.pk }}-{{ var.pk }}-legend"{% if var.description %} aria-describedby="{{ tup.2 }}item-{{ item.pk }}-{{ var.pk }}-description"{% endif %} class="row product-row variation" id="{{ tup.2 }}item-{{ item.pk }}-{{ var.pk }}"
+                            <article aria-labelledby="{{ id_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend"{% if var.description %} aria-describedby="{{ id_prefix }}item-{{ item.pk }}-{{ var.pk }}-description"{% endif %} class="row product-row variation" id="{{ id_prefix }}item-{{ item.pk }}-{{ var.pk }}"
                             {% if not item.free_price %}
                                 data-price="{% if event.settings.display_net_prices %}{{ var.display_price.net|unlocalize }}{% else %}{{ var.display_price.gross|unlocalize }}{% endif %}"
                             {% endif %}>
                                 <div class="col-md-8 col-sm-6 col-xs-12">
-                                    <h5 id="{{ tup.2 }}item-{{ item.pk }}-{{ var.pk }}-legend">{{ var }}</h5>
+                                    <h5 id="{{ id_prefix }}item-{{ item.pk }}-{{ var.pk }}-legend">{{ var }}</h5>
                                     {% if var.description %}
-                                        <div id="{{ tup.2 }}item-{{ item.pk }}-{{ var.pk }}-description" class="variation-description">
+                                        <div id="{{ id_prefix }}item-{{ item.pk }}-{{ var.pk }}-description" class="variation-description">
                                             {{ var.description|localize|rich_text }}
                                         </div>
                                     {% endif %}
@@ -136,11 +136,11 @@
                                         <div class="input-group input-group-price">
                                             <span class="input-group-addon">{{ event.currency }}</span>
                                             <input type="number" class="form-control input-item-price"
-                                                   id="{{ tup.2 }}price-variation-{{ item.pk }}-{{ var.pk }}"
+                                                   id="{{ id_prefix }}price-variation-{{ item.pk }}-{{ var.pk }}"
                                                    {% if not ev.presale_is_running %}disabled{% endif %}
                                                    placeholder="0"
                                                    min="{% if event.settings.display_net_prices %}{{ var.display_price.net|money_numberfield:event.currency }}{% else %}{{ var.display_price.gross|money_numberfield:event.currency }}{% endif %}"
-                                                   name="{{ tup.2 }}price_{{ item.id }}_{{ var.id }}"
+                                                   name="{{ id_prefix }}price_{{ item.id }}_{{ var.id }}"
                                                    {% if var.suggested_price.gross != var.display_price.gross %}
                                                        {% if event.settings.display_net_prices %}
                                                            title="{% blocktrans trimmed with item=var.value price=var.display_price.net|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
@@ -197,16 +197,16 @@
                                                        data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
                                                     {% endif %}
                                                        {% if not ev.presale_is_running %}disabled{% endif %}
-                                                       id="{{ tup.2 }}variation_{{ item.id }}_{{ var.id }}"
-                                                       name="{{ tup.2 }}variation_{{ item.id }}_{{ var.id }}"
+                                                       id="{{ id_prefix }}variation_{{ item.id }}_{{ var.id }}"
+                                                       name="{{ id_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                        aria-label="{% blocktrans with item=item.name var=var %}Add {{ item }}, {{ var }} to cart{% endblocktrans %}"
-                                                       {% if var.description %} aria-describedby="{{ tup.2 }}item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
+                                                       {% if var.description %} aria-describedby="{{ id_prefix }}item-{{ item.pk }}-{{ var.pk }}-description"{% endif %}>
                                                 <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                                 {% trans "Select" context "checkbox" %}
                                             </label>
                                         {% else %}
                                             <div class="input-item-count-group">
-                                                <button type="button" data-step="-1" data-controls="{{ tup.2 }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}"
+                                                <button type="button" data-step="-1" data-controls="{{ id_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}"
                                                     {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
                                                 <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                                        {% if not ev.presale_is_running %}disabled{% endif %}
@@ -214,10 +214,10 @@
                                                            data-checked-onchange="price-variation-{{ item.pk }}-{{ var.pk }}"
                                                         {% endif %}
                                                        max="{{ var.order_max }}"
-                                                       id="{{ tup.2 }}variation_{{ item.id }}_{{ var.id }}"
-                                                       name="{{ tup.2 }}variation_{{ item.id }}_{{ var.id }}"
+                                                       id="{{ id_prefix }}variation_{{ item.id }}_{{ var.id }}"
+                                                       name="{{ id_prefix }}variation_{{ item.id }}_{{ var.id }}"
                                                        aria-label="{% blocktrans with item=item.name var=var.name %}Quantity of {{ item }}, {{ var }} to order{% endblocktrans %}">
-                                                <button type="button" data-step="1" data-controls="{{ tup.2 }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}"
+                                                <button type="button" data-step="1" data-controls="{{ id_prefix }}variation_{{ item.id }}_{{ var.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}"
                                                     {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
                                             </div>
                                         {% endif %}
@@ -231,7 +231,7 @@
                     </div>
                 </article>
             {% else %}
-                <article aria-labelledby="{{ tup.2 }}item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="{{ tup.2 }}item-{{ item.pk }}-description"{% endif %} class="row product-row simple" id="{{ tup.2 }}item-{{ item.pk }}"
+                <article aria-labelledby="{{ id_prefix }}item-{{ item.pk }}-legend"{% if item.description %} aria-describedby="{{ id_prefix }}item-{{ item.pk }}-description"{% endif %} class="row product-row simple" id="{{ id_prefix }}item-{{ item.pk }}"
                 {% if not item.free_price %}
                     data-price="{% if event.settings.display_net_prices %}{{ item.display_price.net|unlocalize }}{% else %}{{ item.display_price.gross|unlocalize }}{% endif %}"
                 {% endif %}>
@@ -247,9 +247,9 @@
                             </a>
                         {% endif %}
                         <div class="product-description {% if item.picture %}with-picture{% endif %}">
-                            <h4 id="{{ tup.2 }}item-{{ item.pk }}-legend">{{ item.name }}</h4>
+                            <h4 id="{{ id_prefix }}item-{{ item.pk }}-legend">{{ item.name }}</h4>
                             {% if item.description %}
-                                <div id="{{ tup.2 }}item-{{ item.pk }}-description" class="product-description">
+                                <div id="{{ id_prefix }}item-{{ item.pk }}-description" class="product-description">
                                     {{ item.description|localize|rich_text }}
                                 </div>
                             {% endif %}
@@ -290,10 +290,10 @@
                                 <label class="sr-only" for="price-item-{{ item.pk }}">{% blocktrans trimmed with item=item.name currency=event.currency %}Set price in {{ currency }} for {{ item }}{% endblocktrans %}</label>
                                 <span class="input-group-addon" aria-hidden="true">{{ event.currency }}</span>
                                 <input type="number" class="form-control input-item-price" placeholder="0"
-                                       id="{{ tup.2 }}price-item-{{ item.pk }}"
+                                       id="{{ id_prefix }}price-item-{{ item.pk }}"
                                        {% if not ev.presale_is_running %}disabled{% endif %}
                                        min="{% if event.settings.display_net_prices %}{{ item.display_price.net|money_numberfield:event.currency }}{% else %}{{ item.display_price.gross|money_numberfield:event.currency }}{% endif %}"
-                                       name="{{ tup.2 }}price_{{ item.id }}"
+                                       name="{{ id_prefix }}price_{{ item.id }}"
                                        {% if item.suggested_price.gross != item.display_price.gross %}
                                            {% if event.settings.display_net_prices %}
                                                 title="{% blocktrans trimmed with item=item.name price=item.display_price.net|money:event.currency %}Modify price for {{ item }}, at least {{ price }}{% endblocktrans %}"
@@ -349,15 +349,15 @@
                                            data-checked-onchange="price-item-{{ item.pk }}"
                                         {% endif %}
                                            {% if not ev.presale_is_running %}disabled{% endif %}
-                                           name="{{ tup.2 }}item_{{ item.id }}" id="{{ tup.2 }}item_{{ item.id }}"
+                                           name="{{ id_prefix }}item_{{ item.id }}" id="{{ id_prefix }}item_{{ item.id }}"
                                            aria-label="{% blocktrans with item=item.name %}Add {{ item }} to cart{% endblocktrans %}"
-                                           {% if item.description %} aria-describedby="{{ tup.2 }}item-{{ item.id }}-description"{% endif %}>
+                                           {% if item.description %} aria-describedby="{{ id_prefix }}item-{{ item.id }}-description"{% endif %}>
                                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                         {% trans "Select" context "checkbox" %}
                                 </label>
                             {% else %}
                                 <div class="input-item-count-group">
-                                    <button type="button" data-step="-1" data-controls="{{ tup.2 }}item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}"
+                                    <button type="button" data-step="-1" data-controls="{{ id_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-dec" aria-label="{% trans "Decrease quantity" %}"
                                         {% if not ev.presale_is_running %}disabled{% endif %}>-</button>
                                     <input type="number" class="form-control input-item-count" placeholder="0" min="0"
                                            {% if not ev.presale_is_running %}disabled{% endif %}
@@ -366,11 +366,11 @@
                                                data-checked-onchange="price-item-{{ item.pk }}"
                                             {% endif %}
                                            max="{{ item.order_max }}"
-                                           name="{{ tup.2 }}item_{{ item.id }}"
-                                           id="{{ tup.2 }}item_{{ item.id }}"
+                                           name="{{ id_prefix }}item_{{ item.id }}"
+                                           id="{{ id_prefix }}item_{{ item.id }}"
                                            aria-label="{% blocktrans with item=item.name %}Quantity of {{ item }} to order{% endblocktrans %}"
-                                           {% if item.description %} aria-describedby="{{ tup.2 }}item-{{ item.id }}-description"{% endif %}>
-                                    <button type="button" data-step="1" data-controls="{{ tup.2 }}item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}"
+                                           {% if item.description %} aria-describedby="{{ id_prefix }}item-{{ item.id }}-description"{% endif %}>
+                                    <button type="button" data-step="1" data-controls="{{ id_prefix }}item_{{ item.id }}" class="btn btn-default input-item-count-inc" aria-label="{% trans "Increase quantity" %}"
                                         {% if not ev.presale_is_running %}disabled{% endif %}>+</button>
                                 </div>
                             {% endif %}
@@ -383,4 +383,4 @@
             {% endif %}
         {% endfor %}
     </section>
-{% endfor %}
+{% endwith %}{% endfor %}
