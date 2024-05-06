@@ -228,14 +228,14 @@ class VoucherForm(I18nModelForm):
         )
         Voucher.clean_max_usages(data, self.instance.redeemed)
         check_quota = Voucher.clean_quota_needs_checking(
-            data, self.initial_instance_data,
+            data, self.initial_instance_data if self.initial_instance_data.pk else None,
             item_changed=data.get('itemvar') != self.initial.get('itemvar'),
             creating=not self.instance.pk
         )
         if check_quota:
             Voucher.clean_quota_check(
-                data, cnt, self.initial_instance_data, self.instance.event,
-                self.instance.quota, self.instance.item, self.instance.variation
+                data, cnt, self.initial_instance_data if self.initial_instance_data.pk else None,
+                self.instance.event, self.instance.quota, self.instance.item, self.instance.variation
             )
         Voucher.clean_voucher_code(data, self.instance.event, self.instance.pk)
         if 'seat' in self.fields and data.get('seat'):
