@@ -173,7 +173,10 @@ def widget_js(request, lang, **kwargs):
 
     cached_js = cache.get('widget_js_data_{}'.format(lang))
     if cached_js and not settings.DEBUG:
-        return HttpResponse(cached_js, content_type='text/javascript')
+        resp = HttpResponse(cached_js, content_type='text/javascript')
+        resp._csp_ignore = True
+        resp['Access-Control-Allow-Origin'] = '*'
+        return resp
 
     gs = GlobalSettingsObject()
     fname = gs.settings.get('widget_file_{}'.format(lang))
