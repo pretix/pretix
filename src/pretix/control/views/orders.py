@@ -49,7 +49,7 @@ from django.core.exceptions import PermissionDenied, ValidationError
 from django.core.files import File
 from django.db import transaction
 from django.db.models import (
-    Count, Exists, F, IntegerField, OuterRef, Prefetch, ProtectedError, Q,
+    Count, Exists, F, IntegerField, Max, OuterRef, Prefetch, ProtectedError, Q,
     QuerySet, Subquery, Sum,
 )
 from django.forms import formset_factory
@@ -1104,249 +1104,9 @@ class OrderRefundView(OrderView):
             p.propose_refund = proposals.get(p, 0)
 
         if 'perform' in self.request.POST:
-            refund_selected = Decimal('0.00')
-            refunds = []
-
-            is_valid = True
-            manual_value = self.request.POST.get('refund-manual', '0') or '0'
-            manual_value = formats.sanitize_separators(manual_value)
-            try:
-                manual_value = Decimal(manual_value)
-            except (DecimalException, TypeError):
-                messages.error(self.request, _('You entered an invalid number.'))
-                is_valid = False
-            else:
-                refund_selected += manual_value
-                if manual_value:
-                    refunds.append(OrderRefund(
-                        order=self.order,
-                        payment=None,
-                        source=OrderRefund.REFUND_SOURCE_ADMIN,
-                        state=(
-                            OrderRefund.REFUND_STATE_DONE
-                            if self.request.POST.get('manual_state') == 'done'
-                            else OrderRefund.REFUND_STATE_CREATED
-                        ),
-                        execution_date=(
-                            now()
-                            if self.request.POST.get('manual_state') == 'done'
-                            else None
-                        ),
-                        amount=manual_value,
-                        comment=comment,
-                        provider='manual'
-                    ))
-
-            giftcard_value = self.request.POST.get('refund-new-giftcard', '0') or '0'
-            giftcard_value = formats.sanitize_separators(giftcard_value)
-            try:
-                giftcard_value = Decimal(giftcard_value)
-            except (DecimalException, TypeError):
-                messages.error(self.request, _('You entered an invalid number.'))
-                is_valid = False
-            else:
-                if giftcard_value:
-                    refund_selected += giftcard_value
-
-                    if self.request.POST.get('giftcard-expires'):
-                        try:
-                            expires = forms.DateField().to_python(self.request.POST.get('giftcard-expires'))
-                            expires = make_aware(datetime.combine(
-                                expires,
-                                time(hour=23, minute=59, second=59)
-                            ), self.request.event.timezone)
-                        except ValidationError as e:
-                            messages.error(self.request, e.message)
-                            is_valid = False
-                    else:
-                        expires = None
-
-                    giftcard = self.request.organizer.issued_gift_cards.create(
-                        expires=expires,
-                        currency=self.request.event.currency,
-                        testmode=self.order.testmode
-                    )
-                    giftcard.log_action('pretix.giftcards.created', user=self.request.user, data={})
-                    refunds.append(OrderRefund(
-                        order=self.order,
-                        payment=None,
-                        source=OrderRefund.REFUND_SOURCE_ADMIN,
-                        state=OrderRefund.REFUND_STATE_CREATED,
-                        execution_date=now(),
-                        amount=giftcard_value,
-                        provider='giftcard',
-                        comment=comment,
-                        info=json.dumps({
-                            'gift_card': giftcard.pk
-                        })
-                    ))
-
-            offsetting_value = self.request.POST.get('refund-offsetting', '0') or '0'
-            offsetting_value = formats.sanitize_separators(offsetting_value)
-            try:
-                offsetting_value = Decimal(offsetting_value)
-            except (DecimalException, TypeError):
-                messages.error(self.request, _('You entered an invalid number.'))
-                is_valid = False
-            else:
-                if offsetting_value:
-                    refund_selected += offsetting_value
-                    try:
-                        order = Order.objects.get(code=self.request.POST.get('order-offsetting'),
-                                                  event__organizer=self.request.organizer)
-                    except Order.DoesNotExist:
-                        messages.error(self.request, _('You entered an order that could not be found.'))
-                        is_valid = False
-                    else:
-                        if order.event.currency != self.request.event.currency:
-                            messages.error(self.request, _('You entered an order in an event with a different currency.'))
-                            is_valid = False
-                        refunds.append(OrderRefund(
-                            order=self.order,
-                            payment=None,
-                            source=OrderRefund.REFUND_SOURCE_ADMIN,
-                            state=OrderRefund.REFUND_STATE_DONE,
-                            execution_date=now(),
-                            amount=offsetting_value,
-                            provider='offsetting',
-                            comment=comment,
-                            info=json.dumps({
-                                'orders': [order.code]
-                            })
-                        ))
-
-            for identifier, prov in self.request.event.get_payment_providers().items():
-                prof_value = self.request.POST.get(f'newrefund-{identifier}', '0') or '0'
-                prof_value = formats.sanitize_separators(prof_value)
-                try:
-                    prof_value = Decimal(prof_value)
-                except (DecimalException, TypeError):
-                    messages.error(self.request, _('You entered an invalid number.'))
-                    is_valid = False
-                    continue
-                if prof_value > Decimal('0.00'):
-                    try:
-                        refund = prov.new_refund_control_form_process(self.request, prof_value, self.order)
-                    except ValidationError as e:
-                        for err in e:
-                            messages.error(self.request, err)
-                        is_valid = False
-                        continue
-                    if refund:
-                        refund_selected += refund.amount
-                        refund.comment = comment
-                        refund.source = OrderRefund.REFUND_SOURCE_ADMIN
-                        refunds.append(refund)
-
-            for p in payments:
-                value = self.request.POST.get('refund-{}'.format(p.pk), '0') or '0'
-                value = formats.sanitize_separators(value)
-                try:
-                    value = Decimal(value)
-                except (DecimalException, TypeError):
-                    messages.error(self.request, _('You entered an invalid number.'))
-                    is_valid = False
-                else:
-                    if value == 0:
-                        continue
-                    elif value > p.available_amount:
-                        messages.error(self.request, _('You can not refund more than the amount of a '
-                                                       'payment that is not yet refunded.'))
-                        is_valid = False
-                        break
-                    elif value != p.amount and not p.partial_refund_possible:
-                        messages.error(self.request, _('You selected a partial refund for a payment method that '
-                                                       'only supports full refunds.'))
-                        is_valid = False
-                        break
-                    elif (p.partial_refund_possible or p.full_refund_possible) and value > 0:
-                        refund_selected += value
-                        refunds.append(OrderRefund(
-                            order=self.order,
-                            payment=p,
-                            source=OrderRefund.REFUND_SOURCE_ADMIN,
-                            state=OrderRefund.REFUND_STATE_CREATED,
-                            amount=value,
-                            comment=comment,
-                            provider=p.provider
-                        ))
-
-            any_success = False
-            if refund_selected == full_refund and is_valid:
-                for r in refunds:
-                    r.save()
-                    self.order.log_action('pretix.event.order.refund.created', {
-                        'local_id': r.local_id,
-                        'provider': r.provider,
-                    }, user=self.request.user)
-                    if r.provider != "manual":
-                        try:
-                            r.payment_provider.execute_refund(r)
-                        except PaymentException as e:
-                            r.state = OrderRefund.REFUND_STATE_FAILED
-                            r.save()
-                            messages.error(self.request, _('One of the refunds failed to be processed. You should '
-                                                           'retry to refund in a different way. The error message '
-                                                           'was: {}').format(str(e)))
-                        else:
-                            any_success = True
-                            if r.state == OrderRefund.REFUND_STATE_DONE:
-                                messages.success(self.request, _('A refund of {} has been processed.').format(
-                                    money_filter(r.amount, self.request.event.currency)
-                                ))
-                            elif r.state == OrderRefund.REFUND_STATE_CREATED:
-                                messages.info(self.request, _('A refund of {} has been saved, but not yet '
-                                                              'fully executed. You can mark it as complete '
-                                                              'below.').format(
-                                    money_filter(r.amount, self.request.event.currency)
-                                ))
-                    else:
-                        any_success = True
-
-                        if r.state == OrderRefund.REFUND_STATE_DONE:
-                            self.order.log_action('pretix.event.order.refund.done', {
-                                'local_id': r.local_id,
-                                'provider': r.provider,
-                            }, user=self.request.user)
-
-                if any_success:
-                    if self.start_form.cleaned_data.get('action') == 'mark_refunded':
-                        if self.order.cancel_allowed():
-                            mark_order_refunded(self.order, user=self.request.user)
-                    elif self.start_form.cleaned_data.get('action') == 'mark_pending':
-                        if not (self.order.status == Order.STATUS_PAID and self.order.pending_sum <= 0):
-                            self.order.status = Order.STATUS_PENDING
-                            self.order.set_expires(
-                                now(),
-                                self.order.event.subevents.filter(
-                                    id__in=self.order.positions.values_list('subevent_id', flat=True))
-                            )
-                            self.order.save(update_fields=['status', 'expires'])
-
-                    if giftcard_value and self.order.email:
-                        messages.success(self.request, _('A new gift card was created. You can now send the user their '
-                                                         'gift card code.'))
-                        with language(self.order.locale, self.request.event.settings.region):
-                            return redirect(reverse('control:event.order.sendmail', kwargs={
-                                'event': self.request.event.slug,
-                                'organizer': self.request.event.organizer.slug,
-                                'code': self.order.code
-                            }) + '?' + urlencode({
-                                'subject': gettext('Your gift card code'),
-                                'message': gettext(
-                                    'Hello,\n\nwe have refunded you {amount} for your order.\n\nYou can use the gift '
-                                    'card code {giftcard} to pay for future ticket purchases in our shop.\n\n'
-                                    'Your {event} team'
-                                ).format(
-                                    event="{event}",
-                                    amount=money_filter(giftcard_value, self.request.event.currency),
-                                    giftcard=giftcard.secret,
-                                )
-                            }))
-                return redirect(self.get_order_url())
-            else:
-                messages.error(self.request, _('The refunds you selected do not match the selected total refund '
-                                               'amount.'))
+            r = self.perform_refund(comment, full_refund, payments)
+            if r:
+                return r
 
         new_refunds = []
         for identifier, prov in self.request.event.get_payment_providers().items():
@@ -1376,8 +1136,263 @@ class OrderRefundView(OrderView):
                 self.request.POST.get('start-partial_amount') if self.request.method == 'POST'
                 else self.request.GET.get('start-partial_amount')
             ),
-            'start_form': self.start_form
+            'start_form': self.start_form,
+            'last_known_refund_id': self.order.refunds.aggregate(m=Max("id"))["m"] or 0,
         })
+
+    @transaction.atomic()
+    def perform_refund(self, comment, full_refund, payments):
+        order = Order.objects.select_for_update(of=OF_SELF).get(pk=self.order.pk)
+
+        if self.request.POST.get("last_known_refund_id", "0") != str(self.order.refunds.aggregate(m=Max("id"))["m"] or 0):
+            messages.error(self.request, _('The refund was prevented due to a refund already being processed at the '
+                                           'same time. Please have a look at the order details and check if your '
+                                           'refund is still necessary.'))
+            return redirect(self.get_order_url())
+
+        refund_selected = Decimal('0.00')
+        refunds = []
+
+        is_valid = True
+        manual_value = self.request.POST.get('refund-manual', '0') or '0'
+        manual_value = formats.sanitize_separators(manual_value)
+        try:
+            manual_value = Decimal(manual_value)
+        except (DecimalException, TypeError):
+            messages.error(self.request, _('You entered an invalid number.'))
+            is_valid = False
+        else:
+            refund_selected += manual_value
+            if manual_value:
+                refunds.append(OrderRefund(
+                    order=order,
+                    payment=None,
+                    source=OrderRefund.REFUND_SOURCE_ADMIN,
+                    state=(
+                        OrderRefund.REFUND_STATE_DONE
+                        if self.request.POST.get('manual_state') == 'done'
+                        else OrderRefund.REFUND_STATE_CREATED
+                    ),
+                    execution_date=(
+                        now()
+                        if self.request.POST.get('manual_state') == 'done'
+                        else None
+                    ),
+                    amount=manual_value,
+                    comment=comment,
+                    provider='manual'
+                ))
+
+        giftcard_value = self.request.POST.get('refund-new-giftcard', '0') or '0'
+        giftcard_value = formats.sanitize_separators(giftcard_value)
+        try:
+            giftcard_value = Decimal(giftcard_value)
+        except (DecimalException, TypeError):
+            messages.error(self.request, _('You entered an invalid number.'))
+            is_valid = False
+        else:
+            if giftcard_value:
+                refund_selected += giftcard_value
+
+                if self.request.POST.get('giftcard-expires'):
+                    try:
+                        expires = forms.DateField().to_python(self.request.POST.get('giftcard-expires'))
+                        expires = make_aware(datetime.combine(
+                            expires,
+                            time(hour=23, minute=59, second=59)
+                        ), self.request.event.timezone)
+                    except ValidationError as e:
+                        messages.error(self.request, e.message)
+                        is_valid = False
+                else:
+                    expires = None
+
+                giftcard = self.request.organizer.issued_gift_cards.create(
+                    expires=expires,
+                    currency=self.request.event.currency,
+                    testmode=order.testmode
+                )
+                giftcard.log_action('pretix.giftcards.created', user=self.request.user, data={})
+                refunds.append(OrderRefund(
+                    order=order,
+                    payment=None,
+                    source=OrderRefund.REFUND_SOURCE_ADMIN,
+                    state=OrderRefund.REFUND_STATE_CREATED,
+                    execution_date=now(),
+                    amount=giftcard_value,
+                    provider='giftcard',
+                    comment=comment,
+                    info=json.dumps({
+                        'gift_card': giftcard.pk
+                    })
+                ))
+
+        offsetting_value = self.request.POST.get('refund-offsetting', '0') or '0'
+        offsetting_value = formats.sanitize_separators(offsetting_value)
+        try:
+            offsetting_value = Decimal(offsetting_value)
+        except (DecimalException, TypeError):
+            messages.error(self.request, _('You entered an invalid number.'))
+            is_valid = False
+        else:
+            if offsetting_value:
+                refund_selected += offsetting_value
+                try:
+                    offset_order = Order.objects.get(code=self.request.POST.get('order-offsetting'),
+                                                     event__organizer=self.request.organizer)
+                except Order.DoesNotExist:
+                    messages.error(self.request, _('You entered an order that could not be found.'))
+                    is_valid = False
+                else:
+                    if offset_order.event.currency != self.request.event.currency:
+                        messages.error(self.request, _('You entered an order in an event with a different currency.'))
+                        is_valid = False
+                    refunds.append(OrderRefund(
+                        order=order,
+                        payment=None,
+                        source=OrderRefund.REFUND_SOURCE_ADMIN,
+                        state=OrderRefund.REFUND_STATE_DONE,
+                        execution_date=now(),
+                        amount=offsetting_value,
+                        provider='offsetting',
+                        comment=comment,
+                        info=json.dumps({
+                            'orders': [offset_order.code]
+                        })
+                    ))
+
+        for identifier, prov in self.request.event.get_payment_providers().items():
+            prof_value = self.request.POST.get(f'newrefund-{identifier}', '0') or '0'
+            prof_value = formats.sanitize_separators(prof_value)
+            try:
+                prof_value = Decimal(prof_value)
+            except (DecimalException, TypeError):
+                messages.error(self.request, _('You entered an invalid number.'))
+                is_valid = False
+                continue
+            if prof_value > Decimal('0.00'):
+                try:
+                    refund = prov.new_refund_control_form_process(self.request, prof_value, order)
+                except ValidationError as e:
+                    for err in e:
+                        messages.error(self.request, err)
+                    is_valid = False
+                    continue
+                if refund:
+                    refund_selected += refund.amount
+                    refund.comment = comment
+                    refund.source = OrderRefund.REFUND_SOURCE_ADMIN
+                    refunds.append(refund)
+
+        for p in payments:
+            value = self.request.POST.get('refund-{}'.format(p.pk), '0') or '0'
+            value = formats.sanitize_separators(value)
+            try:
+                value = Decimal(value)
+            except (DecimalException, TypeError):
+                messages.error(self.request, _('You entered an invalid number.'))
+                is_valid = False
+            else:
+                if value == 0:
+                    continue
+                elif value > p.available_amount:
+                    messages.error(self.request, _('You can not refund more than the amount of a '
+                                                   'payment that is not yet refunded.'))
+                    is_valid = False
+                    break
+                elif value != p.amount and not p.partial_refund_possible:
+                    messages.error(self.request, _('You selected a partial refund for a payment method that '
+                                                   'only supports full refunds.'))
+                    is_valid = False
+                    break
+                elif (p.partial_refund_possible or p.full_refund_possible) and value > 0:
+                    refund_selected += value
+                    refunds.append(OrderRefund(
+                        order=order,
+                        payment=p,
+                        source=OrderRefund.REFUND_SOURCE_ADMIN,
+                        state=OrderRefund.REFUND_STATE_CREATED,
+                        amount=value,
+                        comment=comment,
+                        provider=p.provider
+                    ))
+
+        any_success = False
+        if refund_selected == full_refund and is_valid:
+            for r in refunds:
+                r.save()
+                order.log_action('pretix.event.order.refund.created', {
+                    'local_id': r.local_id,
+                    'provider': r.provider,
+                }, user=self.request.user)
+                if r.provider != "manual":
+                    try:
+                        r.payment_provider.execute_refund(r)
+                    except PaymentException as e:
+                        r.state = OrderRefund.REFUND_STATE_FAILED
+                        r.save()
+                        messages.error(self.request, _('One of the refunds failed to be processed. You should '
+                                                       'retry to refund in a different way. The error message '
+                                                       'was: {}').format(str(e)))
+                    else:
+                        any_success = True
+                        if r.state == OrderRefund.REFUND_STATE_DONE:
+                            messages.success(self.request, _('A refund of {} has been processed.').format(
+                                money_filter(r.amount, self.request.event.currency)
+                            ))
+                        elif r.state == OrderRefund.REFUND_STATE_CREATED:
+                            messages.info(self.request, _('A refund of {} has been saved, but not yet '
+                                                          'fully executed. You can mark it as complete '
+                                                          'below.').format(
+                                money_filter(r.amount, self.request.event.currency)
+                            ))
+                else:
+                    any_success = True
+
+                    if r.state == OrderRefund.REFUND_STATE_DONE:
+                        order.log_action('pretix.event.order.refund.done', {
+                            'local_id': r.local_id,
+                            'provider': r.provider,
+                        }, user=self.request.user)
+
+            if any_success:
+                if self.start_form.cleaned_data.get('action') == 'mark_refunded':
+                    if order.cancel_allowed():
+                        mark_order_refunded(order, user=self.request.user)
+                elif self.start_form.cleaned_data.get('action') == 'mark_pending':
+                    if not (order.status == Order.STATUS_PAID and self.order.pending_sum <= 0):
+                        order.status = Order.STATUS_PENDING
+                        order.set_expires(
+                            now(),
+                            order.event.subevents.filter(
+                                id__in=order.positions.values_list('subevent_id', flat=True))
+                        )
+                        order.save(update_fields=['status', 'expires'])
+
+                if giftcard_value and order.email:
+                    messages.success(self.request, _('A new gift card was created. You can now send the user their '
+                                                     'gift card code.'))
+                    with language(order.locale, self.request.event.settings.region):
+                        return redirect(reverse('control:event.order.sendmail', kwargs={
+                            'event': self.request.event.slug,
+                            'organizer': self.request.event.organizer.slug,
+                            'code': order.code
+                        }) + '?' + urlencode({
+                            'subject': gettext('Your gift card code'),
+                            'message': gettext(
+                                'Hello,\n\nwe have refunded you {amount} for your order.\n\nYou can use the gift '
+                                'card code {giftcard} to pay for future ticket purchases in our shop.\n\n'
+                                'Your {event} team'
+                            ).format(
+                                event="{event}",
+                                amount=money_filter(giftcard_value, self.request.event.currency),
+                                giftcard=giftcard.secret,
+                            )
+                        }))
+            return redirect(self.get_order_url())
+        else:
+            messages.error(self.request, _('The refunds you selected do not match the selected total refund '
+                                           'amount.'))
 
     def post(self, *args, **kwargs):
         if self.start_form.is_valid():
