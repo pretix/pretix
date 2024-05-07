@@ -90,8 +90,10 @@ class VoucherForm(I18nModelForm):
     def __init__(self, *args, **kwargs):
         instance = kwargs.get('instance')
         initial = kwargs.get('initial')
+        self.initial_instance_data = None
         if instance:
-            self.initial_instance_data = modelcopy(instance)
+            if instance.pk:
+                self.initial_instance_data = modelcopy(instance)
             try:
                 if instance.variation:
                     initial['itemvar'] = '%d-%d' % (instance.item.pk, instance.variation.pk)
@@ -101,8 +103,6 @@ class VoucherForm(I18nModelForm):
                     initial['itemvar'] = 'q-%d' % instance.quota.pk
             except Item.DoesNotExist:
                 pass
-        else:
-            self.initial_instance_data = None
         super().__init__(*args, **kwargs)
 
         if instance.event.has_subevents:
@@ -234,8 +234,8 @@ class VoucherForm(I18nModelForm):
         )
         if check_quota:
             Voucher.clean_quota_check(
-                data, cnt, self.initial_instance_data, self.instance.event,
-                self.instance.quota, self.instance.item, self.instance.variation
+                data, cnt, self.initial_instance_data,
+                self.instance.event, self.instance.quota, self.instance.item, self.instance.variation
             )
         Voucher.clean_voucher_code(data, self.instance.event, self.instance.pk)
         if 'seat' in self.fields and data.get('seat'):
