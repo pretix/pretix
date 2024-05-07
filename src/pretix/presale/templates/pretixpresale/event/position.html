@@ -29,6 +29,11 @@
         <div class="panel-heading">
             <h3 class="panel-title">
                 {% trans "Your items" %}
+                {% if position.can_modify_answers %}
+                    <a href="{% eventurl event "presale:event.order.position.modify" secret=position.web_secret position=position.positionid order=order.code %}" aria-label="{% trans "Change ordered items" %}" class="h6">
+                        <span class="fa fa-edit" aria-hidden="true"></span>{% trans "Change details" %}
+                    </a>
+                {% endif %}
             </h3>
         </div>
         <div class="panel-body">

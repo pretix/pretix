@@ -924,7 +924,7 @@ class OrderPositionModify(EventViewMixin, OrderPositionDetailMixin, OrderQuestio
         self.kwargs = kwargs
         if not self.position:
             raise Http404(_('Unknown order code or not authorized to access this order.'))
-        if not self.order.can_modify_answers:
+        if not self.position.can_modify_answers:
             messages.error(request, _('You cannot modify this order'))
             return redirect(self.get_order_url())
         return super().dispatch(request, *args, **kwargs)

@@ -850,6 +850,9 @@ class Order(LockModel, LoggedModel):
         if self.status not in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED):
             return False
 
+        if self.event.settings.allow_modifications not in ("order", "attendee"):
+            return False
+
         modify_deadline = self.modify_deadline
         if modify_deadline is not None and now() > modify_deadline:
             return False
@@ -2512,6 +2515,43 @@ class OrderPosition(AbstractPosition):
             else:
                 reasons[b] = b
         return reasons
+
+    @property
+    def can_modify_answers(self) -> bool:
+        """
+        ``True`` if the user can change the question answers / attendee names that are
+        related to the position. This checks order status and modification deadlines. It also
+        returns ``False`` if there are no questions that can be answered.
+        """
+        from .checkin import Checkin
+
+        if self.order.status not in (Order.STATUS_PENDING, Order.STATUS_PAID, Order.STATUS_EXPIRED):
+            return False
+
+        if self.event.settings.allow_modifications != "attendee":
+            return False
+
+        modify_deadline = self.order.modify_deadline
+        if modify_deadline is not None and now() > modify_deadline:
+            return False
+
+        positions = list(
+            self.order.positions.all().annotate(
+                has_checkin=Exists(Checkin.objects.filter(position_id=OuterRef('pk'), list__consider_tickets_used=True))
+            ).select_related('item').prefetch_related('item__questions')
+        )
+        if not self.event.settings.allow_modifications_after_checkin:
+            for cp in positions:
+                if cp.has_checkin:
+                    return False
+
+        ask_names = self.event.settings.get('attendee_names_asked', as_type=bool)
+        for cp in positions:
+            if cp.pk == self.pk or cp.addon_to_id == self.pk:
+                if (cp.item.ask_attendee_data and ask_names) or cp.item.questions.all():
+                    return True
+
+        return False  # nothing there to modify
 
     @classmethod
     def transform_cart_positions(cls, cp: List, order) -> list:

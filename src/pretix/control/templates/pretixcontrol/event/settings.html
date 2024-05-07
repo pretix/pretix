@@ -113,10 +113,15 @@
                 </div>
                 {% bootstrap_field sform.attendee_data_explanation_text layout="control" %}
 
-                <h4>{% trans "Other settings" %}</h4>
+                <h4>{% trans "Form settings" %}</h4>
                 {% bootstrap_field sform.name_scheme layout="control" %}
                 {% bootstrap_field sform.name_scheme_titles layout="control" %}
                 {% bootstrap_field sform.checkout_show_copy_answers_button layout="control" %}
+
+                <h4>{% trans "Changes to existing orders" %}</h4>
+                {% bootstrap_field sform.allow_modifications layout="control" %}
+                {% bootstrap_field sform.last_order_modification_date layout="control" %}
+                {% bootstrap_field sform.allow_modifications_after_checkin layout="control" %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Texts" %}</legend>
@@ -225,21 +230,47 @@
                 {% bootstrap_field sform.presale_start_show_date layout="control" %}
                 {% bootstrap_field form.presale_end layout="control" %}
                 {% bootstrap_field sform.show_items_outside_presale_period layout="control" %}
-                {% bootstrap_field sform.last_order_modification_date layout="control" %}
-                {% bootstrap_field sform.allow_modifications_after_checkin layout="control" %}
-                {% bootstrap_field sform.show_checkin_number_user layout="control" %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Display" %}</legend>
+                <h4>{% trans "Date and time" %}</h4>
                 {% bootstrap_field sform.show_dates_on_frontpage layout="control" %}
                 {% bootstrap_field sform.show_date_to layout="control" %}
                 {% bootstrap_field sform.show_times layout="control" %}
+                <h4>{% trans "Product list" %}</h4>
                 {% bootstrap_field sform.show_quota_left layout="control" %}
                 {% bootstrap_field sform.display_net_prices layout="control" %}
-                {% bootstrap_field sform.hide_prices_from_attendees layout="control" %}
                 {% bootstrap_field sform.show_variations_expanded layout="control" %}
                 {% bootstrap_field sform.hide_sold_out layout="control" %}
 
+                <h4>{% trans "Calendar and list views" context "subevents" %}</h4>
+                {% if sform.frontpage_subevent_ordering %}
+                    {% bootstrap_field sform.frontpage_subevent_ordering layout="control" %}
+                {% endif %}
+                {% if sform.event_list_type %}
+                    {% bootstrap_field sform.event_list_type layout="control" %}
+                {% endif %}
+                {% if sform.event_list_available_only %}
+                    {% bootstrap_field sform.event_list_available_only layout="control" %}
+                {% endif %}
+                {% if sform.event_list_filters %}
+                    {% bootstrap_field sform.event_list_filters layout="control" %}
+                {% endif %}
+                {% if sform.event_calendar_future_only %}
+                    {% bootstrap_field sform.event_calendar_future_only layout="control" %}
+                {% endif %}
+                {% bootstrap_field sform.low_availability_percentage layout="control" addon_after="%" %}
+
+
+                <h4>{% trans "Order details" %}</h4>
+                {% bootstrap_field sform.hide_prices_from_attendees layout="control" %}
+                {% bootstrap_field sform.show_checkin_number_user layout="control" %}
+
+                <h4>{% trans "Other settings" %}</h4>
+                {% url "control:organizer.edit" organizer=request.organizer.slug as org_url %}
+                {% propagated request.event org_url "meta_noindex" %}
+                    {% bootstrap_field sform.meta_noindex layout="control" %}
+                {% endpropagated %}
                 <div class="form-group">
                     <label class="col-md-3 control-label">
                         {% trans "Footer links" %}<br>
@@ -306,28 +337,6 @@
                         </div>
                     </div>
                 </div>
-                
-                {% if sform.frontpage_subevent_ordering %}
-                    {% bootstrap_field sform.frontpage_subevent_ordering layout="control" %}
-                {% endif %}
-                {% if sform.event_list_type %}
-                    {% bootstrap_field sform.event_list_type layout="control" %}
-                {% endif %}
-                {% if sform.event_list_available_only %}
-                    {% bootstrap_field sform.event_list_available_only layout="control" %}
-                {% endif %}
-                {% if sform.event_list_filters %}
-                    {% bootstrap_field sform.event_list_filters layout="control" %}
-                {% endif %}
-                {% if sform.event_calendar_future_only %}
-                    {% bootstrap_field sform.event_calendar_future_only layout="control" %}
-                {% endif %}
-                {% bootstrap_field sform.low_availability_percentage layout="control" addon_after="%" %}
-
-                {% url "control:organizer.edit" organizer=request.organizer.slug as org_url %}
-                {% propagated request.event org_url "meta_noindex" %}
-                    {% bootstrap_field sform.meta_noindex layout="control" %}
-                {% endpropagated %}
             </fieldset>
             <fieldset>
                 <legend>{% trans "Cart" %}</legend>

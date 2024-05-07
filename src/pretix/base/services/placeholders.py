@@ -338,6 +338,39 @@ def base_placeholders(sender, **kwargs):
             ),
         ),
         SimpleFunctionalTextPlaceholder(
+            'url_info_change', ['position', 'event'], lambda position, event: build_absolute_uri(
+                event,
+                'presale:event.order.position.modify', kwargs={
+                    'order': position.order.code,
+                    'secret': position.web_secret,
+                    'position': position.positionid
+                }
+            ), lambda event: build_absolute_uri(
+                event,
+                'presale:event.order.position.modify', kwargs={
+                    'order': 'F8VVL',
+                    'secret': '6zzjnumtsx136ddy',
+                }
+            ),
+        ),
+        SimpleFunctionalTextPlaceholder(
+            'url_products_change', ['position', 'event'], lambda position, event: build_absolute_uri(
+                event,
+                'presale:event.order.position.change', kwargs={
+                    'order': position.order.code,
+                    'secret': position.web_secret,
+                    'position': position.positionid
+                }
+            ), lambda event: build_absolute_uri(
+                event,
+                'presale:event.order.position.change', kwargs={
+                    'order': 'F8VVL',
+                    'secret': '6zzjnumtsx136ddy',
+                    'position': '123'
+                }
+            ),
+        ),
+        SimpleFunctionalTextPlaceholder(
             'order_modification_deadline_date_and_time', ['order', 'event'],
             lambda order, event:
             date_format(order.modify_deadline.astimezone(event.timezone), 'SHORT_DATETIME_FORMAT')
