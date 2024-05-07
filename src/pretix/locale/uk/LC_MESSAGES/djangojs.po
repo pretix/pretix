@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-23 12:41+0000\n"
-"PO-Revision-Date: 2024-05-01 01:00+0000\n"
+"PO-Revision-Date: 2024-05-07 22:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/uk/>\n"
@@ -679,7 +679,7 @@ msgstr "Інше"
 
 #: pretix/static/pretixcontrol/js/ui/question.js:82
 msgid "Count"
-msgstr "Підрахувати"
+msgstr "Кількість"
 
 #: pretix/static/pretixcontrol/js/ui/subevent.js:111
 #, fuzzy
@@ -784,7 +784,7 @@ msgstr "Виберіть варіант %s"
 #: pretix/static/pretixpresale/js/widget/widget.js:23
 msgctxt "widget"
 msgid "Sold out"
-msgstr "Продано"
+msgstr "Розпродано"
 
 #: pretix/static/pretixpresale/js/widget/widget.js:24
 msgctxt "widget"
