@@ -137,6 +137,7 @@
                     <p>
                         {% url "control:event.transfer_session" event=event.slug organizer=event.organizer.slug as time_machine_link %}
                         {% blocktrans trimmed with time_machine_link=time_machine_link %}
+                        {% absmainurl "control:event.transfer_session" event=event.slug organizer=event.organizer.slug as time_machine_link %}
                             To view your shop at different points in time, you can enable
                             <a href="{{ time_machine_link }}"><span class="fa fa-clock-o" aria-hidden="true"></span>time machine</a>.
                         {% endblocktrans %}
