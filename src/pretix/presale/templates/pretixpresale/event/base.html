@@ -135,12 +135,14 @@
                     </p>
                 {% elif request.event_domain or request.organizer_domain %}
                     <p>
-                        {% url "control:event.transfer_session" event=event.slug organizer=event.organizer.slug as time_machine_link %}
-                        {% blocktrans trimmed with time_machine_link=time_machine_link %}
-                        {% absmainurl "control:event.transfer_session" event=event.slug organizer=event.organizer.slug as time_machine_link %}
-                            To view your shop at different points in time, you can enable
-                            <a href="{{ time_machine_link }}"><span class="fa fa-clock-o" aria-hidden="true"></span>time machine</a>.
-                        {% endblocktrans %}
+                        {% absmainurl "control:event.transfer_session" event=event.slug organizer=event.organizer.slug as transfer_session_link %}
+                        {% eventurl event "presale:event.timemachine" as time_machine_link %}
+                        {% with time_machine_link_encoded=time_machine_link|urlencode %}
+                            {% blocktrans trimmed with time_machine_link=transfer_session_link|add:"?next="|add:time_machine_link_encoded %}
+                                To view your shop at different points in time, you can enable
+                                <a href="{{ time_machine_link }}"><span class="fa fa-clock-o" aria-hidden="true"></span>time machine</a>.
+                            {% endblocktrans %}
+                        {% endwith %}
                     </p>
                 {% endif %}
             </div>

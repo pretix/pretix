@@ -56,6 +56,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils.decorators import method_decorator
 from django.utils.formats import get_format
 from django.utils.functional import SimpleLazyObject
+from django.utils.http import url_has_allowed_host_and_scheme
 from django.utils.timezone import get_current_timezone, now
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django.views import View
@@ -924,7 +925,12 @@ class EventAuth(View):
                 raise PermissionDenied(_('Please go back and try again.'))
 
         request.session['pretix_event_access_{}'.format(request.event.pk)] = parent
-        return redirect_to_url(eventreverse(request.event, 'presale:event.index'))
+
+        if "next" in self.request.GET and url_has_allowed_host_and_scheme(
+                url=self.request.GET.get("next"), allowed_hosts=request.host, require_https=True):
+            return redirect_to_url(self.request.GET.get('next'))
+        else:
+            return redirect_to_url(eventreverse(request.event, 'presale:event.index'))
 
 
 class TimemachineForm(forms.Form):
