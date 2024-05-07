@@ -1225,7 +1225,8 @@ class Order(LockModel, LoggedModel):
 
     @staticmethod
     def get_with_secret_check(code, received_secret, tag, secret_length=64, qs=None):
-        if not qs: qs = Order.objects
+        if not qs:
+            qs = Order.objects
         dummy = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"[:secret_length]
         try:
             order = qs.get(code=code)
