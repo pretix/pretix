@@ -69,9 +69,15 @@ class EventURLNode(URLNode):
 
 def multidomainurl(parser, token, has_event, absolute):
     """
-    Similar to {% url %} in the same way that eventreverse() is similar to reverse().
+    Similar to {% url %}, but multidomain-aware. Used by eventurl, abseventurl and absmainurl.
 
-    Takes an event or organizer object, an url name and optional keyword arguments
+    If has_event=True, takes an event or organizer object as first template tag parameter.
+    Always takes an url name and optional keyword arguments after that.
+
+    Returns an absolute URL in the following cases:
+    - absolute=True
+    - has_event=True and the event has a custom domain
+    Returns a relative URL otherwise.
     """
     bits = token.split_contents()
     tagname = bits[0]
