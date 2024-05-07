@@ -1,0 +1,55 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+{% load rich_text %}
+{% block title %}{% trans "Modify ticket" %}{% endblock %}
+{% block content %}
+    <h2>
+        {% blocktrans trimmed %}
+            Modify ticket
+        {% endblocktrans %}
+    </h2>
+    <form class="form-horizontal" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="panel-group" id="questions_accordion">
+            {% for pos, forms in formgroups %}
+                <details class="panel panel-default" open>
+                    <summary class="panel-heading">
+                        <h4 class="panel-title">
+                            <strong>{{ pos.item.name }}{% if pos.variation %}
+                                – {{ pos.variation }}
+                            {% endif %}</strong>
+                        </h4>
+                    </summary>
+                    <div id="cp{{ pos.id }}">
+                        <div class="panel-body questions-form">
+                            {% for form in forms %}
+                                {% if form.pos.item != pos.item %}
+                                    {# Add-Ons #}
+                                    <legend>+ {{ form.pos.item.name }}{% if form.pos.variation %}
+                                    – {{ form.pos.variation.value }}
+                                    {% endif %}</legend>
+                                {% endif %}
+                                {% bootstrap_form form layout="checkout" %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                </details>
+            {% endfor %}
+        </div>
+        <div class="row checkout-button-row">
+            <div class="col-md-4">
+                <a class="btn btn-block btn-default btn-lg"
+                        href="{{ view.get_position_url }}">
+                    {% trans "Cancel" %}
+                </a>
+            </div>
+            <div class="col-md-4 col-md-offset-4">
+                <button class="btn btn-block btn-primary btn-lg" type="submit">
+                    {% trans "Save changes" %}
+                </button>
+            </div>
+            <div class="clearfix"></div>
+        </div>
+    </form>
+{% endblock %}
