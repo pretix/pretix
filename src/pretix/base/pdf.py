@@ -400,6 +400,14 @@ DEFAULT_VARIABLES = OrderedDict((
             "SHORT_DATETIME_FORMAT"
         )
     }),
+    ("now_time", {
+        "label": _("Printing time"),
+        "editor_sample": _("19:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            now().astimezone(ev.timezone),
+            "TIME_FORMAT"
+        )
+    }),
     ("purchase_date", {
         "label": _("Purchase date"),
         "editor_sample": _("2017-05-31"),
@@ -416,11 +424,11 @@ DEFAULT_VARIABLES = OrderedDict((
             "SHORT_DATETIME_FORMAT"
         )
     }),
-    ("now_time", {
-        "label": _("Printing time"),
+    ("purchase_time", {
+        "label": _("Purchase time"),
         "editor_sample": _("19:00"),
         "evaluate": lambda op, order, ev: date_format(
-            now().astimezone(ev.timezone),
+            order.datetime.astimezone(ev.timezone),
             "TIME_FORMAT"
         )
     }),
