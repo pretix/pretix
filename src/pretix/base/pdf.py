@@ -408,6 +408,30 @@ DEFAULT_VARIABLES = OrderedDict((
             "TIME_FORMAT"
         )
     }),
+    ("purchase_date", {
+        "label": _("Purchase date"),
+        "editor_sample": _("2017-05-31"),
+        "evaluate": lambda op, order, ev: date_format(
+            order.datetime.astimezone(ev.timezone),
+            "SHORT_DATE_FORMAT"
+        )
+    }),
+    ("purchase_datetime", {
+        "label": _("Purchase date and time"),
+        "editor_sample": _("2017-05-31 19:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            order.datetime.astimezone(ev.timezone),
+            "SHORT_DATETIME_FORMAT"
+        )
+    }),
+    ("purchase_time", {
+        "label": _("Purchase time"),
+        "editor_sample": _("19:00"),
+        "evaluate": lambda op, order, ev: date_format(
+            order.datetime.astimezone(ev.timezone),
+            "TIME_FORMAT"
+        )
+    }),
     ("valid_from_date", {
         "label": _("Validity start date"),
         "editor_sample": _("2017-05-31"),
