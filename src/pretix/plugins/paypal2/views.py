@@ -31,7 +31,6 @@
 # Unless required by applicable law or agreed to in writing, software distributed under the Apache License 2.0 is
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
-import hashlib
 import json
 import logging
 from decimal import Decimal
@@ -81,15 +80,12 @@ logger = logging.getLogger('pretix.plugins.paypal2')
 class PaypalOrderView:
     def dispatch(self, request, *args, **kwargs):
         try:
-            self.order = request.event.orders.get(code=kwargs['order'])
-            if hashlib.sha1(self.order.secret.lower().encode()).hexdigest() != kwargs['hash'].lower():
-                raise Http404('Unknown order')
+            self.order = Order.get_with_secret_check(
+                qs=request.event.orders, code=kwargs['order'], received_secret=kwargs['hash'].lower(),
+                tag='plugins:paypal2:pay'
+            )
         except Order.DoesNotExist:
-            # Do a hash comparison as well to harden timing attacks
-            if 'abcdefghijklmnopq'.lower() == hashlib.sha1('abcdefghijklmnopq'.encode()).hexdigest():
-                raise Http404('Unknown order')
-            else:
-                raise Http404('Unknown order')
+            raise Http404('Unknown order')
         return super().dispatch(request, *args, **kwargs)
 
     @cached_property

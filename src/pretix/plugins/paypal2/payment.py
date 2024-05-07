@@ -19,7 +19,6 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
-import hashlib
 import json
 import logging
 import urllib.parse
@@ -1096,5 +1095,5 @@ class PaypalAPM(PaypalMethod):
         return eventreverse(self.event, 'plugins:paypal2:pay', kwargs={
             'order': payment.order.code,
             'payment': payment.pk,
-            'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+            'hash': payment.order.tagged_secret('plugins:paypal2:pay'),
         })
