@@ -460,7 +460,7 @@ class Voucher(LoggedModel):
             new_quotas = set(
                 Quota.objects.filter(
                     pk__in=Quota.variations.through.objects.filter(
-                        itemvariation__item=old_instance.item,
+                        itemvariation__item=item,
                         quota__subevent=data.get('subevent'),
                     ).values('quota_id')
                 )
