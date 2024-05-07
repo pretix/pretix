@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 09:26+0000\n"
-"PO-Revision-Date: 2023-12-09 11:40+0000\n"
-"Last-Translator: c0de-bender <code-bender@mailbox.org>\n"
+"PO-Revision-Date: 2024-05-07 22:00+0000\n"
+"Last-Translator: Adam Kaput <adamkaput@gmail.com>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -3865,10 +3865,8 @@ msgid "Ticket blocked"
 msgstr "Bilet zablokowany"
 
 #: pretix/base/models/checkin.py:370
-#, fuzzy
-#| msgid "Order approved"
 msgid "Order not approved"
-msgstr "Zamówienie zatwierdzone"
+msgstr "Zamówienie niezaakceptowane"
 
 #: pretix/base/models/checkin.py:371
 msgid "Ticket not valid at this time"
@@ -3892,7 +3890,7 @@ msgid ""
 "You can enter any value here to make it easier to match the data with other "
 "sources. If you do not input one, we will generate one automatically."
 msgstr ""
-"Dowolna wartości ktora upraszcza korelację z innymi źródłami danych. Jeśli "
+"Dowolna wartości która upraszcza korelację z innymi źródłami danych. Jeśli "
 "niewprowadzone, zostanie użyty losowy identyfikator."
 
 #: pretix/base/models/customers.py:90
