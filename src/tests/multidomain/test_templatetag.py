@@ -41,6 +41,8 @@ def env():
 
 TEMPLATE_FRONT_PAGE = Template("{% load eventurl %} {% eventurl event 'presale:event.index' %}")
 TEMPLATE_KWARGS = Template("{% load eventurl %} {% eventurl event 'presale:event.checkout' step='payment' %}")
+TEMPLATE_ABSEVENTURL = Template("{% load eventurl %} {% abseventurl event 'presale:event.checkout' step='payment' %}")
+TEMPLATE_ABSMAINURL = Template("{% load eventurl %} {% absmainurl 'control:event.settings' organizer=event.organizer.slug event=event.slug %}")
 
 
 @pytest.mark.django_db
@@ -75,6 +77,40 @@ def test_event_custom_domain_kwargs(env):
         'event': env[1]
     })).strip()
     assert rendered == 'http://foobar/2015/checkout/payment/'
+
+
+@pytest.mark.django_db
+def test_abseventurl_event_main_domain(env):
+    rendered = TEMPLATE_ABSEVENTURL.render(Context({
+        'event': env[1]
+    })).strip()
+    assert rendered == 'http://example.com/mrmcd/2015/checkout/payment/'
+
+
+@pytest.mark.django_db
+def test_abseventurl_event_custom_domain(env):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    rendered = TEMPLATE_ABSEVENTURL.render(Context({
+        'event': env[1]
+    })).strip()
+    assert rendered == 'http://foobar/2015/checkout/payment/'
+
+
+@pytest.mark.django_db
+def test_absmainurl_main_domain(env):
+    rendered = TEMPLATE_ABSMAINURL.render(Context({
+        'event': env[1]
+    })).strip()
+    assert rendered == 'http://example.com/control/event/mrmcd/2015/settings/'
+
+
+@pytest.mark.django_db
+def test_absmainurl_custom_domain(env):
+    KnownDomain.objects.create(domainname='foobar', organizer=env[0])
+    rendered = TEMPLATE_ABSMAINURL.render(Context({
+        'event': env[1]
+    })).strip()
+    assert rendered == 'http://example.com/control/event/mrmcd/2015/settings/'
 
 
 @pytest.mark.django_db

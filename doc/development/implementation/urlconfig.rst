@@ -93,7 +93,7 @@ as its first argument and can be used like this::
 To generate absolute URLs on the main domain, you can use the ``absurl`` template tag::
 
     {% load eventurl %}
-    <a href="{% absmainurl "control:event.settings" organizer=request.event.organizer event=request.event %}">Event settings</a>
+    <a href="{% absmainurl "control:event.settings" organizer=request.event.organizer.slug event=request.event.slug %}">Event settings</a>
 
 Implementation details
 ----------------------
