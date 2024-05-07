@@ -1890,6 +1890,7 @@ def test_refund_paid_order_fully_mark_as_refunded(client, env):
         'start-action': 'mark_refunded',
         'refund-manual': '14.00',
         'manual_state': 'done',
+        'last_known_refund_id': 0,
         'perform': 'on'
     }, follow=True)
     p.refresh_from_db()
@@ -1918,6 +1919,7 @@ def test_refund_paid_order_fully_mark_as_pending(client, env):
         'start-action': 'mark_pending',
         'refund-manual': '14.00',
         'manual_state': 'pending',
+        'last_known_refund_id': 0,
         'perform': 'on'
     }, follow=True)
     p.refresh_from_db()
@@ -1951,6 +1953,7 @@ def test_refund_paid_order_partially_mark_as_pending(client, env):
         'start-action': 'mark_pending',
         'refund-manual': '7.00',
         'manual_state': 'pending',
+        'last_known_refund_id': 0,
         'perform': 'on'
     }, follow=True)
     p.refresh_from_db()
@@ -2040,6 +2043,7 @@ def test_refund_amount_does_not_match_or_invalid(client, env):
         'refund-manual': '4.00',
         'refund-{}'.format(p.pk): '4.00',
         'manual_state': 'pending',
+        'last_known_refund_id': 0,
         'perform': 'on'
     }, follow=True)
     assert b'alert-danger' in resp.content
@@ -2051,6 +2055,7 @@ def test_refund_amount_does_not_match_or_invalid(client, env):
         'refund-manual': '0.00',
         'refund-{}'.format(p.pk): '15.00',
         'manual_state': 'pending',
+        'last_known_refund_id': 0,
         'perform': 'on'
     }, follow=True)
     assert b'alert-danger' in resp.content
@@ -2062,6 +2067,7 @@ def test_refund_amount_does_not_match_or_invalid(client, env):
         'refund-manual': '-3.00',
         'refund-{}'.format(p.pk): '10.00',
         'manual_state': 'pending',
+        'last_known_refund_id': 0,
         'perform': 'on'
     }, follow=True)
     assert b'alert-danger' in resp.content
@@ -2073,6 +2079,7 @@ def test_refund_amount_does_not_match_or_invalid(client, env):
         'refund-manual': 'AA',
         'refund-{}'.format(p.pk): '10.00',
         'manual_state': 'pending',
+        'last_known_refund_id': 0,
         'perform': 'on'
     }, follow=True)
     assert b'alert-danger' in resp.content
@@ -2109,6 +2116,7 @@ def test_refund_paid_order_automatically_failed(client, env, monkeypatch):
         'start-action': 'mark_pending',
         'refund-{}'.format(p.pk): '7.00',
         'manual_state': 'pending',
+        'last_known_refund_id': 0,
         'perform': 'on'
     }, follow=True)
     assert b'This failed.' in r.content
@@ -2156,6 +2164,7 @@ def test_refund_paid_order_automatically(client, env, monkeypatch):
         'start-action': 'mark_pending',
         'refund-{}'.format(p.pk): '7.00',
         'manual_state': 'pending',
+        'last_known_refund_id': 0,
         'perform': 'on'
     }, follow=True)
     p.refresh_from_db()
@@ -2183,6 +2192,7 @@ def test_refund_paid_order_offsetting_to_unknown(client, env):
         'refund-offsetting': '5.00',
         'order-offsetting': 'BAZ',
         'manual_state': 'pending',
+        'last_known_refund_id': 0,
         'perform': 'on'
     }, follow=True)
     assert b'alert-danger' in r.content
@@ -2217,6 +2227,7 @@ def test_refund_paid_order_offsetting_to_wrong_currency(client, env):
         'refund-offsetting': '5.00',
         'order-offsetting': 'BAZ',
         'manual_state': 'pending',
+        'last_known_refund_id': 0,
         'perform': 'on'
     }, follow=True)
     assert b'alert-danger' in r.content
@@ -2243,6 +2254,7 @@ def test_refund_paid_order_offsetting(client, env):
         'refund-offsetting': '5.00',
         'order-offsetting': 'BAZ',
         'manual_state': 'pending',
+        'last_known_refund_id': 0,
         'perform': 'on'
     }, follow=True)
     p.refresh_from_db()
@@ -2263,6 +2275,35 @@ def test_refund_paid_order_offsetting(client, env):
 
 
 @pytest.mark.django_db
+def test_refund_prevent_duplicate_submit(client, env):
+    with scopes_disabled():
+        p = env[2].payments.last()
+        p.confirm()
+        client.login(email='dummy@dummy.dummy', password='dummy')
+        Order.objects.create(
+            code='BAZ', event=env[0], email='dummy@dummy.test',
+            status=Order.STATUS_PENDING,
+            datetime=now(), expires=now() + timedelta(days=10),
+            total=5, locale='en'
+        )
+        env[2].refunds.create(provider="manual", amount=Decimal("2.00"), state=OrderRefund.REFUND_STATE_CREATED)
+
+    r = client.post('/control/event/dummy/dummy/orders/FOO/refund', {
+        'start-partial_amount': '5.00',
+        'start-mode': 'partial',
+        'start-action': 'mark_pending',
+        'refund-offsetting': '5.00',
+        'order-offsetting': 'BAZ',
+        'manual_state': 'pending',
+        'last_known_refund_id': 0,
+        'perform': 'on'
+    }, follow=True)
+    assert b'alert-danger' in r.content
+    with scopes_disabled():
+        assert env[2].refunds.count() == 1
+
+
+@pytest.mark.django_db
 def test_refund_paid_order_giftcard(client, env):
     with scopes_disabled():
         p = env[2].payments.last()
@@ -2275,6 +2316,7 @@ def test_refund_paid_order_giftcard(client, env):
         'start-action': 'mark_pending',
         'refund-new-giftcard': '5.00',
         'manual_state': 'pending',
+        'last_known_refund_id': 0,
         'perform': 'on'
     }, follow=True)
     p.refresh_from_db()

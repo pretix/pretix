@@ -72,6 +72,7 @@ def test_perform_refund(client, env):
     r = client.post(url, {
         f"refund-{payment.id}": "23.00",
         "start-mode": "full",
+        "last_known_refund_id": 0,
         "perform": True,
     })
     assert r.status_code == 302
@@ -102,6 +103,7 @@ def test_cannot_perform_refund_with_invalid_iban(client, env):
     r = client.post(url, {
         f"refund-{payment.id}": "23.00",
         "start-mode": "full",
+        "last_known_refund_id": 0,
         "perform": True,
     })
     assert r.status_code == 200  # no successfull POST

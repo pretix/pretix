@@ -192,6 +192,7 @@
         <input type="hidden" name="start-action" value="{{ start_form.cleaned_data.action }}">
         <input type="hidden" name="start-mode" value="{{ start_form.cleaned_data.mode }}">
         <input type="hidden" name="start-partial_amount" value="{{ partial_amount }}">
+        <input type="hidden" name="last_known_refund_id" value="{{ last_known_refund_id }}">
 
         <div class="form-group">
             <label class="control-label" for="id_comment">{% trans "Refund reason" %}</label>
