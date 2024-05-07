@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 09:26+0000\n"
-"PO-Revision-Date: 2024-05-03 01:00+0000\n"
+"PO-Revision-Date: 2024-05-07 22:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -2160,7 +2160,7 @@ msgstr "Дата закінчення"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:45
 msgid "Product"
-msgstr "Продукт"
+msgstr "Товар"
 
 #: pretix/base/exporters/orderlist.py:578
 #: pretix/base/exporters/orderlist.py:583 pretix/base/forms/questions.py:654
@@ -2369,11 +2369,9 @@ msgid "Internal fee type"
 msgstr "Внутрішнє посилання"
 
 #: pretix/base/exporters/orderlist.py:869
-#, fuzzy
-#| msgid "Date"
 msgctxt "subevent"
 msgid "Date ID"
-msgstr "Дата"
+msgstr "Ідентифікатор дати"
 
 #: pretix/base/exporters/orderlist.py:874
 #, fuzzy
@@ -13616,13 +13614,13 @@ msgstr "Попередній продаж закінчено"
 #: pretix/control/forms/filter.py:2265
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:84
 msgid "Date from"
-msgstr "Дата від"
+msgstr "Дата з"
 
 #: pretix/control/forms/filter.py:1137 pretix/control/forms/filter.py:1140
 #: pretix/control/forms/filter.py:1636 pretix/control/forms/filter.py:1639
 #: pretix/control/forms/filter.py:2270
 msgid "Date until"
-msgstr "Дата до"
+msgstr "Дата по"
 
 #: pretix/control/forms/filter.py:1144
 msgid "Start time from"
@@ -13883,7 +13881,7 @@ msgstr "Кінець"
 #: pretix/plugins/checkinlists/exporters.py:743
 #: pretix/plugins/checkinlists/exporters.py:825
 msgid "Check-in list"
-msgstr "Список реєстрації"
+msgstr "Список реєстрацій"
 
 #: pretix/control/forms/filter.py:2537
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:82
@@ -18822,7 +18820,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:97
 #: pretix/control/templates/pretixcontrol/vouchers/bulk.html:120
 msgid "Preview"
-msgstr ""
+msgstr "Перегляд"
 
 #: pretix/control/templates/pretixcontrol/event/mail.html:87
 #: pretix/control/templates/pretixcontrol/organizers/mail.html:58
@@ -20314,7 +20312,7 @@ msgstr "Повністю зарезервовано"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:108
 #: pretix/presale/views/widget.py:407
 msgid "Sold out"
-msgstr "Продано"
+msgstr "Розпродано"
 
 #: pretix/control/templates/pretixcontrol/items/index.html:7
 msgid ""
@@ -21377,7 +21375,7 @@ msgstr "Податки"
 #: pretix/plugins/reports/exporters.py:957
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:449
 msgid "Total"
-msgstr "Всього"
+msgstr "Загалом"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:712
 #: pretix/presale/templates/pretixpresale/event/order.html:209
@@ -22330,8 +22328,8 @@ msgid ""
 "If you select a single date, fees will not be listed here as it might not be "
 "clear which date they belong to."
 msgstr ""
-"Якщо ви виберете одну дату, збори не будуть перераховані тут, оскільки може "
-"бути неясно, до якої дати вони належать."
+"Якщо обираєте окрему дату, податки показані не будуть, оскільки невідомо до "
+"якої дати їх відносити."
 
 #: pretix/control/templates/pretixcontrol/orders/overview.html:80
 #: pretix/plugins/reports/exporters.py:382
@@ -28623,7 +28621,7 @@ msgstr ""
 #: pretix/plugins/reports/exporters.py:846
 #: pretix/plugins/reports/exporters.py:887
 msgid "Gross"
-msgstr "Брутто"
+msgstr "Усього"
 
 #: pretix/plugins/reports/exporters.py:565
 #: pretix/plugins/reports/exporters.py:795
@@ -29323,7 +29321,7 @@ msgstr "Mінімальна ціна"
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:109
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:111
 msgid "Available"
-msgstr "Доступнo"
+msgstr "Доступно"
 
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:116
 msgid "On Sale"
@@ -31306,7 +31304,7 @@ msgstr "РОЗПРОДАНО"
 #: pretix/presale/templates/pretixpresale/organizers/index.html:105
 #: pretix/presale/views/widget.py:402
 msgid "Reserved"
-msgstr "Заброньовано"
+msgstr "В резерві"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_availability.html:35
 msgid "All remaining products are reserved but might become available again."
