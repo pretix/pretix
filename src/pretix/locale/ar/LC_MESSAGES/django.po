@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-04-26 09:26+0000\n"
-"PO-Revision-Date: 2022-06-06 18:00+0000\n"
-"Last-Translator: Abdullah <abdullah.gumaijan@gmail.com>\n"
+"PO-Revision-Date: 2024-05-08 07:07+0000\n"
+"Last-Translator: AbdelatifAitBara <aitbaraabdelatif@outlook.com>\n"
 "Language-Team: Arabic <https://translate.pretix.eu/projects/pretix/pretix/ar/"
 ">\n"
 "Language: ar\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=6; plural=n==0 ? 0 : n==1 ? 1 : n==2 ? 2 : n%100>=3 "
 "&& n%100<=10 ? 3 : n%100>=11 ? 4 : 5;\n"
-"X-Generator: Weblate 4.12.2\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -46,7 +46,7 @@ msgstr ""
 
 #: pretix/_base_settings.py:84
 msgid "Czech"
-msgstr ""
+msgstr "التشيكية"
 
 #: pretix/_base_settings.py:85
 msgid "Danish"
@@ -78,7 +78,7 @@ msgstr "اليونانية"
 
 #: pretix/_base_settings.py:92
 msgid "Indonesian"
-msgstr ""
+msgstr "الأندونيسية"
 
 #: pretix/_base_settings.py:93
 msgid "Italian"
@@ -162,7 +162,7 @@ msgstr "روابط إعادة التوجيه"
 
 #: pretix/api/models.py:43 pretix/base/models/customers.py:411
 msgid "Allowed URIs list, space separated"
-msgstr "قائمة العناوين المسموح بها، مفصولة بمسافة"
+msgstr "قائمة العناوين المسموح بها, مفصولة بمسافة"
 
 #: pretix/api/models.py:47
 #, fuzzy
@@ -34258,22 +34258,17 @@ msgid ""
 msgstr "لا يمكن أن تضيف نفسك إلى قائمة الانتظار حيث أن هذا المنتج متاح حاليا."
 
 #: pretix/presale/views/waiting.py:141
-#, fuzzy, python-brace-format
-#| msgid ""
-#| "We've added you to the waiting list. You will receive an email as soon as "
-#| "tickets get available again."
+#, python-brace-format
 msgid ""
 "We've added you to the waiting list. We will send an email to {email} as "
 "soon as this product gets available again."
 msgstr ""
-"لقد أضفناك إلى قائمة الانتظار. ستتلقى رسالة بريد إلكتروني بمجرد توفر التذاكر "
-"مرة أخرى."
+"لقد أضفناك إلى قائمة الانتظار. ستتلقى رسالة بريد إلكتروني على مستوى {email} "
+"بمجرد توفر التذاكر مرة أخرى."
 
 #: pretix/presale/views/waiting.py:169
-#, fuzzy
-#| msgid "Send information to waiting list"
 msgid "We could not find you on our waiting list."
-msgstr "أرسم المعلومات إلى قائمة الإنتظار"
+msgstr "لم نستطع العثور عليك في قائمة الإنتظار الخاصة بنا."
 
 #: pretix/presale/views/waiting.py:173
 msgid ""
