@@ -478,8 +478,8 @@ class OrdersTest(BaseOrdersTest):
                                                self.ticket_pos.positionid, self.ticket_pos.web_secret)
         )
         self.assertRedirects(response,
-                             '/%s/%s/order/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
-                                                      self.order.secret),
+                             '/%s/%s/ticket/%s/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.ticket_pos.positionid, self.ticket_pos.web_secret),
                              target_status_code=200)
         with scopes_disabled():
             self.ticket_pos = OrderPosition.objects.get(id=self.ticket_pos.id)
