@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2024-04-26 11:24+0000\n"
+"PO-Revision-Date: 2024-05-08 15:19+0000\n"
 "Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German (informal) <https://translate.pretix.eu/projects/"
 "pretix/pretix/de_Informal/>\n"
@@ -7167,16 +7167,12 @@ msgid "Purchase date"
 msgstr "Kaufdatum"
 
 #: pretix/base/pdf.py:420
-#, fuzzy
-#| msgid "Purchase date"
 msgid "Purchase date and time"
-msgstr "Kaufdatum"
+msgstr "Kaufdatum und -uhrzeit"
 
 #: pretix/base/pdf.py:428
-#, fuzzy
-#| msgid "Purchase date"
 msgid "Purchase time"
-msgstr "Kaufdatum"
+msgstr "Kaufuhrzeit"
 
 #: pretix/base/pdf.py:436
 msgid "Validity start date"
@@ -9846,25 +9842,21 @@ msgstr "Alle vergangenen Termine im Kalender verstecken"
 
 #: pretix/base/settings.py:1663 pretix/base/settings.py:1672
 msgid "No modifications after order was submitted"
-msgstr ""
+msgstr "Keine Änderungen an bestehenden Bestellungen"
 
 #: pretix/base/settings.py:1664 pretix/base/settings.py:1673
-#, fuzzy
-#| msgid "Only pending or paid orders can be changed."
 msgid "Only the person who ordered can make changes"
-msgstr "Nur ausstehende oder bezahlte Bestellungen können verändert werden."
+msgstr ""
+"Nur die Person, die die Bestellung aufgegeben hat, kann Änderungen vornehmen"
 
 #: pretix/base/settings.py:1665 pretix/base/settings.py:1674
 msgid "Both the attendee and the person who ordered can make changes"
 msgstr ""
+"Sowohl Besteller*in als auch Teilnehmer*innen können Änderungen vornehmen"
 
 #: pretix/base/settings.py:1669
-#, fuzzy
-#| msgid "Allow customers to modify their information after they checked in."
 msgid "Allow customers to modify their information"
-msgstr ""
-"Erlaube Kunden, ihre Informationen auch zu ändern, nachdem sie eingecheckt "
-"wurden."
+msgstr "Erlaube Kunden, ihre Informationen zu ändern"
 
 #: pretix/base/settings.py:1684
 msgid "Allow customers to modify their information after they checked in."
@@ -9877,6 +9869,8 @@ msgid ""
 "By default, no more modifications are possible for an order as soon as one "
 "of the tickets in the order has been checked in."
 msgstr ""
+"Standardmäßig sind keine Änderungen an einer Bestellung mehr möglich, sobald "
+"eines der Tickets in der Bestellung eingecheckt wurde."
 
 #: pretix/base/settings.py:1695
 msgid "Last date of modifications"
@@ -19036,16 +19030,12 @@ msgid "Manage questions"
 msgstr "Fragen verwalten"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:116
-#, fuzzy
-#| msgid "Import settings"
 msgid "Form settings"
-msgstr "Import-Einstellungen"
+msgstr "Formular-Einstellungen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:121
-#, fuzzy
-#| msgid "Changes to pretix"
 msgid "Changes to existing orders"
-msgstr "Änderungen an pretix"
+msgstr "Änderungen an bestehenden Bestellungen"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:129
 msgid "Texts"
@@ -19090,17 +19080,13 @@ msgid "Display"
 msgstr "Anzeige"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:242
-#, fuzzy
-#| msgid "Product history"
 msgid "Product list"
-msgstr "Produkt-Verlauf"
+msgstr "Produktliste"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:248
-#, fuzzy
-#| msgid "Calendar invites"
 msgctxt "subevents"
 msgid "Calendar and list views"
-msgstr "Kalender-Einladungen"
+msgstr "Kalender- und Listenansichten"
 
 #: pretix/control/templates/pretixcontrol/event/settings.html:267
 #: pretix/control/templates/pretixcontrol/order/index.html:175
@@ -24187,10 +24173,8 @@ msgid "Begin"
 msgstr "Beginn"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:176
-#, fuzzy
-#| msgid "Show more"
 msgid "Show orders"
-msgstr "Mehr anzeigen"
+msgstr "Bestellungen anzeigen"
 
 #: pretix/control/templates/pretixcontrol/subevents/index.html:187
 msgctxt "subevent"
@@ -26103,6 +26087,9 @@ msgid ""
 "time. Please have a look at the order details and check if your refund is "
 "still necessary."
 msgstr ""
+"Diese Erstattung wurde verhindert, da gleichzeitig eine andere Erstattung "
+"verarbeitet wurde. Bitte prüfe in den Details der Bestellung, ob die "
+"Erstattung noch notwendig ist."
 
 #: pretix/control/views/orders.py:1248
 msgid "You entered an order in an event with a different currency."
@@ -32959,10 +32946,8 @@ msgstr "Bitte bestätige die folgenden Änderungen an deinem Ticket."
 
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:5
 #: pretix/presale/templates/pretixpresale/event/position_modify.html:8
-#, fuzzy
-#| msgid "Buy tickets"
 msgid "Modify ticket"
-msgstr "Tickets kaufen"
+msgstr "Ticketdaten bearbeiten"
 
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:4
 #: pretix/presale/templates/pretixpresale/event/resend_link.html:11
