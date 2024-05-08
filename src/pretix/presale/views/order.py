@@ -859,6 +859,78 @@ class OrderModify(EventViewMixin, OrderDetailMixin, OrderQuestionsViewMixin, Tem
 
 
 @method_decorator(xframe_options_exempt, 'dispatch')
+class OrderPositionModify(EventViewMixin, OrderPositionDetailMixin, OrderQuestionsViewMixin, TemplateView):
+    form_class = QuestionsForm
+    invoice_form_class = None
+    template_name = "pretixpresale/event/position_modify.html"
+
+    @cached_property
+    def invoice_form(self):
+        return None
+
+    @cached_property
+    def positions(self):
+        return [p for p in super().positions if p.pk == self.position.pk or p.addon_to_id == self.position.pk]
+
+    def get_question_override_sets(self, order_position, index):
+        override_sets = [
+            resp for recv, resp in question_form_fields_overrides.send(
+                self.request.event,
+                position=order_position,
+                request=self.request
+            )
+        ]
+        for override in override_sets:
+            for k in override:
+                # We don't want initial values to be modified, they should come from the order directly
+                override[k].pop('initial', None)
+
+        if order_position.used_membership and not order_position.used_membership.membership_type.transferable:
+            override_sets.append({
+                'attendee_name_parts': {
+                    'disabled': True
+                }
+            })
+
+        return override_sets
+
+    def post(self, request, *args, **kwargs):
+        failed = not self.save()
+        if failed:
+            messages.error(self.request,
+                           _("We had difficulties processing your input. Please review the errors below."))
+            return self.get(request, *args, **kwargs)
+        self.order.log_action('pretix.event.order.modified', {
+            'by_ticket_holder': True,
+            'data': [{
+                k: (f.cleaned_data.get(k).name
+                    if isinstance(f.cleaned_data.get(k), File)
+                    else f.cleaned_data.get(k))
+                for k in f.changed_data
+            } for f in self.forms]
+        })
+        order_modified.send(sender=self.request.event, order=self.order)
+
+        invalidate_cache.apply_async(kwargs={'event': self.request.event.pk, 'order': self.order.pk})
+        CachedTicket.objects.filter(order_position__order=self.order).delete()
+        CachedCombinedTicket.objects.filter(order=self.order).delete()
+        return redirect(self.get_position_url())
+
+    def get(self, request, *args, **kwargs):
+        return super().get(request, *args, **kwargs)
+
+    def dispatch(self, request, *args, **kwargs):
+        self.request = request
+        self.kwargs = kwargs
+        if not self.position:
+            raise Http404(_('Unknown order code or not authorized to access this order.'))
+        if not self.position.can_modify_answers:
+            messages.error(request, _('You cannot modify this order'))
+            return redirect(self.get_position_url())
+        return super().dispatch(request, *args, **kwargs)
+
+
+@method_decorator(xframe_options_exempt, 'dispatch')
 class OrderCancel(EventViewMixin, OrderDetailMixin, TemplateView):
     template_name = "pretixpresale/event/order_cancel.html"
 

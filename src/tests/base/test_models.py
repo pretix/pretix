@@ -1263,22 +1263,34 @@ class OrderTestCase(BaseQuotaTestCase):
         self.event.settings.set('invoice_address_asked', False)
         self.event.settings.set('attendee_names_asked', True)
         assert self.order.can_modify_answers
+        assert not self.op1.can_modify_answers
+
+        self.event.settings.set('allow_modifications', 'attendee')
+        assert self.op1.can_modify_answers
+
         self.event.settings.set('attendee_names_asked', False)
         assert not self.order.can_modify_answers
+        assert not self.op1.can_modify_answers
         self.event.settings.set('invoice_address_asked', True)
         assert self.order.can_modify_answers
+        assert not self.op1.can_modify_answers
         self.event.settings.set('invoice_address_asked', False)
         self.event.settings.set('invoice_name_required', True)
         assert self.order.can_modify_answers
+        assert not self.op1.can_modify_answers
         q = Question.objects.create(question='Foo', type=Question.TYPE_BOOLEAN, event=self.event)
         self.item1.questions.add(q)
         assert self.order.can_modify_answers
+        assert self.op1.can_modify_answers
         self.order.status = Order.STATUS_CANCELED
         assert not self.order.can_modify_answers
+        assert not self.op1.can_modify_answers
         self.order.status = Order.STATUS_PAID
         assert self.order.can_modify_answers
+        assert self.op1.can_modify_answers
         self.event.settings.set('last_order_modification_date', now() - timedelta(days=1))
         assert not self.order.can_modify_answers
+        assert not self.op1.can_modify_answers
 
     @classscope(attr='o')
     def test_can_modify_answers_subevent(self):

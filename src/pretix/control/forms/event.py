@@ -580,6 +580,7 @@ class EventSettingsForm(EventSettingsValidationMixin, FormPlaceholderMixin, Sett
         'banner_text',
         'banner_text_bottom',
         'order_email_asked_twice',
+        'allow_modifications',
         'last_order_modification_date',
         'allow_modifications_after_checkin',
         'checkout_show_copy_answers_button',

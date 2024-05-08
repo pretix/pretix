@@ -191,6 +191,24 @@ class OrdersTest(BaseOrdersTest):
                                          self.deleted_pos.positionid, self.deleted_pos.web_secret)
         )
         assert response.status_code == 404
+        response = self.client.get(
+            '/%s/%s/ticket/%s/1/123/modify' % (self.orga.slug, self.event.slug, self.not_my_order.code)
+        )
+        assert response.status_code == 404
+        response = self.client.get(
+            '/%s/%s/ticket/%s/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code,
+                                               self.deleted_pos.positionid, self.deleted_pos.web_secret)
+        )
+        assert response.status_code == 404
+        response = self.client.get(
+            '/%s/%s/ticket/%s/1/123/change' % (self.orga.slug, self.event.slug, self.not_my_order.code)
+        )
+        assert response.status_code == 404
+        response = self.client.get(
+            '/%s/%s/ticket/%s/%s/%s/change' % (self.orga.slug, self.event.slug, self.order.code,
+                                               self.deleted_pos.positionid, self.deleted_pos.web_secret)
+        )
+        assert response.status_code == 404
 
     def test_orders_confirm_email(self):
         response = self.client.get(
@@ -423,6 +441,49 @@ class OrdersTest(BaseOrdersTest):
                              target_status_code=200)
         with scopes_disabled():
             assert self.order.invoices.count() == 3
+
+    def test_orders_attendee_modify_invalid(self):
+        self.order.status = Order.STATUS_CANCELED
+        self.order.save()
+        self.event.settings.set('allow_modifications', 'attendee')
+        r = self.client.get(
+            '/%s/%s/ticket/%s/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code,
+                                               self.ticket_pos.positionid, self.ticket_pos.web_secret)
+        )
+        assert r.status_code == 302
+
+    def test_orders_attendee_modify_forbidden(self):
+        self.event.settings.set('allow_modifications', 'order')
+        r = self.client.get(
+            '/%s/%s/ticket/%s/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code,
+                                               self.ticket_pos.positionid, self.ticket_pos.web_secret)
+        )
+        assert r.status_code == 302
+
+    def test_orders_attendee_modify_attendee_optional(self):
+        self.event.settings.set('allow_modifications', 'attendee')
+        self.event.settings.set('attendee_names_asked', True)
+        self.event.settings.set('attendee_names_required', False)
+
+        response = self.client.get(
+            '/%s/%s/ticket/%s/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code,
+                                               self.ticket_pos.positionid, self.ticket_pos.web_secret)
+        )
+        doc = BeautifulSoup(response.content.decode(), "lxml")
+        self.assertEqual(len(doc.select('input[name="%s-attendee_name_parts_0"]' % self.ticket_pos.id)), 1)
+
+        # Not all fields filled out, expect success
+        response = self.client.post(
+            '/%s/%s/ticket/%s/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code,
+                                               self.ticket_pos.positionid, self.ticket_pos.web_secret)
+        )
+        self.assertRedirects(response,
+                             '/%s/%s/ticket/%s/%s/%s/' % (self.orga.slug, self.event.slug, self.order.code,
+                                                          self.ticket_pos.positionid, self.ticket_pos.web_secret),
+                             target_status_code=200)
+        with scopes_disabled():
+            self.ticket_pos = OrderPosition.objects.get(id=self.ticket_pos.id)
+        assert self.ticket_pos.attendee_name in (None, '')
 
     def test_orders_cancel_invalid(self):
         self.order.status = Order.STATUS_PAID
