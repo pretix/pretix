@@ -7,19 +7,19 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-04-23 12:41+0000\n"
+"POT-Creation-Date: 2024-05-08 13:19+0000\n"
 "PO-Revision-Date: 2024-05-07 22:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
-"Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/"
-"pretix-js/uk/>\n"
+"Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix-"
+"js/uk/>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != 11 "
-"? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
-"14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
-"100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
+"Plural-Forms: nplurals=4; plural=(n % 1 == 0 && n % 10 == 1 && n % 100 != "
+"11 ? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % "
+"100 > 14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || "
+"(n % 100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
 "X-Generator: Weblate 5.4.3\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
@@ -649,23 +649,23 @@ msgstr "Жодного"
 msgid "Selected only"
 msgstr "Тільки вибрані"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:794
+#: pretix/static/pretixcontrol/js/ui/main.js:828
 msgid "Enter page number between 1 and %(max)s."
 msgstr "Вкажіть номер сторінки між 1 та %(max)s."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:797
+#: pretix/static/pretixcontrol/js/ui/main.js:831
 msgid "Invalid page number."
 msgstr "Недійсний номер сторінки."
 
-#: pretix/static/pretixcontrol/js/ui/main.js:955
+#: pretix/static/pretixcontrol/js/ui/main.js:989
 msgid "Use a different name internally"
 msgstr "Використайте іншу внутрішню назву"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:995
+#: pretix/static/pretixcontrol/js/ui/main.js:1029
 msgid "Click to close"
 msgstr "Натисніть, щоб закрити"
 
-#: pretix/static/pretixcontrol/js/ui/main.js:1070
+#: pretix/static/pretixcontrol/js/ui/main.js:1104
 msgid "You have unsaved changes!"
 msgstr "У вас є незбережені зміни!"
 
