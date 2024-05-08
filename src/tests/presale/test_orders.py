@@ -443,6 +443,8 @@ class OrdersTest(BaseOrdersTest):
             assert self.order.invoices.count() == 3
 
     def test_orders_attendee_modify_invalid(self):
+        self.order.status = Order.STATUS_CANCELED
+        self.order.save()
         self.event.settings.set('allow_modifications', 'attendee')
         r = self.client.get(
             '/%s/%s/ticket/%s/%s/%s/modify' % (self.orga.slug, self.event.slug, self.order.code,
