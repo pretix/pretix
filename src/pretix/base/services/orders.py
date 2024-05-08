@@ -99,8 +99,8 @@ from pretix.base.services.quotas import QuotaAvailability
 from pretix.base.services.tasks import ProfiledEventTask, ProfiledTask
 from pretix.base.signals import (
     order_approved, order_canceled, order_changed, order_denied, order_expired,
-    order_fee_calculation, order_paid, order_placed, order_split,
-    order_valid_if_pending, periodic_task, validate_order,
+    order_fee_calculation, order_paid, order_placed, order_reactivated,
+    order_split, order_valid_if_pending, periodic_task, validate_order,
 )
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
@@ -253,7 +253,7 @@ def reactivate_order(order: Order, force: bool=False, user: User=None, auth=None
         else:
             raise OrderError(is_available)
 
-    order_approved.send(order.event, order=order)
+    order_reactivated.send(order.event, order=order)
     if order.status == Order.STATUS_PAID:
         order_paid.send(order.event, order=order)
 
