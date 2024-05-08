@@ -45,6 +45,7 @@ from zoneinfo import ZoneInfo
 import pytz_deprecation_shim
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.files import File
 from django.core.files.storage import default_storage
 from django.core.mail import get_connection
 from django.core.validators import (
@@ -1025,7 +1026,7 @@ class Event(EventMixin, LoggedModel):
 
             s.object = self
             s.pk = None
-            if s.value.startswith('file://'):
+            if s.value.startswith('file://') and settings_hierarkey.get_declared_type(s.key) == File:
                 fi = default_storage.open(s.value[len('file://'):], 'rb')
                 nonce = get_random_string(length=8)
                 fname_base = clean_filename(os.path.basename(s.value))
