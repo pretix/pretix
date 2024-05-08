@@ -350,6 +350,7 @@ def base_placeholders(sender, **kwargs):
                 'presale:event.order.position.modify', kwargs={
                     'order': 'F8VVL',
                     'secret': '6zzjnumtsx136ddy',
+                    'position': '123',
                 }
             ),
         ),
