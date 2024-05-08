@@ -19,6 +19,7 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import datetime
 from collections import defaultdict
 
 import pycountry
@@ -26,6 +27,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import EmailValidator
 from django.db.models import Q
+from django.utils import formats
 from django.utils.functional import cached_property
 from django.utils.translation import (
     gettext as _, gettext_lazy, pgettext, pgettext_lazy,
@@ -509,6 +511,30 @@ class ValidUntil(DatetimeColumnMixin, ImportColumn):
         position.valid_until = value
 
 
+class Expires(DatetimeColumnMixin, ImportColumn):
+    identifier = 'expires'
+    verbose_name = gettext_lazy('Expiry date')
+
+    def clean(self, value, previous_values):
+        if not value:
+            return
+
+        input_formats = formats.get_format('DATE_INPUT_FORMATS', use_l10n=True)
+        for format in input_formats:
+            try:
+                d = datetime.datetime.strptime(value, format)
+                d = d.replace(tzinfo=self.timezone, hour=23, minute=59, second=59)
+                return d
+            except (ValueError, TypeError):
+                pass
+        else:
+            return super().clean(value, previous_values)  # parse date
+
+    def assign(self, value, order, position, invoice_address, **kwargs):
+        if value:
+            order.expires = value
+
+
 class Saleschannel(ImportColumn):
     identifier = 'sales_channel'
     verbose_name = gettext_lazy('Sales channel')
@@ -702,12 +728,13 @@ def get_order_import_columns(event):
         AttendeeState(event),
         Price(event),
         Secret(event),
-        Locale(event),
-        Saleschannel(event),
         SeatColumn(event),
-        Comment(event),
         ValidFrom(event),
         ValidUntil(event),
+        Locale(event),
+        Saleschannel(event),
+        Expires(event),
+        Comment(event),
     ]
     for q in event.questions.prefetch_related('options').exclude(type=Question.TYPE_FILE):
         default.append(QuestionColumn(event, q))
