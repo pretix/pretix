@@ -48,6 +48,7 @@ from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext_lazy as _
 from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField
+from i18nfield.strings import LazyI18nString
 
 from pretix.base.models.base import LoggedModel
 from pretix.base.validators import OrganizerSlugBanlistValidator
@@ -105,6 +106,7 @@ class Organizer(LoggedModel):
         if is_new:
             kwargs.pop('update_fields', None)  # does not make sense here
             self.set_defaults()
+            self.create_default_sales_channels()
         else:
             self.get_cache().clear()
         return obj
@@ -212,6 +214,21 @@ class Organizer(LoggedModel):
                                   fail_silently=False, timeout=timeout)
         else:
             return get_connection(fail_silently=False)
+
+    def create_default_sales_channels(self):
+        from pretix.base.channels import get_all_sales_channel_types
+
+        for channel in get_all_sales_channel_types().values():
+            if not channel.default_created:
+                continue
+
+            self.sales_channels.get_or_create(
+                identifier=channel.identifier,
+                defaults={
+                    'label': LazyI18nString.from_gettext(channel.verbose_name),
+                    'type': channel.identifier,
+                }
+            )
 
 
 def generate_invite_token():
@@ -533,6 +550,7 @@ class SalesChannel(LoggedModel):
 
     class Meta:
         ordering = ("type", "identifier")
+        unique_together = ("organizer", "identifier")
 
     def __str__(self):
         return str(self.label)
