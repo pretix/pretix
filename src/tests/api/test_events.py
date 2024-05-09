@@ -121,7 +121,9 @@ TEST_EVENT_RES = {
     'item_meta_properties': {
         'day': 'Monday',
     },
-    'sales_channels': ['web', 'bar', 'baz'],
+    'sales_channels': ['bar', 'baz', 'web'],
+    'all_sales_channels': True,
+    'limit_sales_channels': [],
     'public_url': 'http://example.com/dummy/dummy/'
 }
 

@@ -315,14 +315,14 @@ class EventMixin:
 
         q_variation = (
             Q(active=True)
-            & Q(sales_channels__contains=channel)
+            & Q(Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=channel))
             & Q(Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()))
             & Q(Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()))
             & Q(item__active=True)
             & Q(Q(item__available_from__isnull=True) | Q(item__available_from__lte=time_machine_now()))
             & Q(Q(item__available_until__isnull=True) | Q(item__available_until__gte=time_machine_now()))
             & Q(Q(item__category__isnull=True) | Q(item__category__is_addon=False))
-            & Q(item__sales_channels__contains=channel)
+            & Q(Q(item__all_sales_channels=True) | Q(item__limit_sales_channels__identifier=channel))
             & Q(item__require_bundling=False)
             & Q(quotas__pk=OuterRef('pk'))
         )
@@ -808,9 +808,12 @@ class Event(EventMixin, LoggedModel):
         if other.date_admission:
             self.date_admission = self.date_from + (other.date_admission - other.date_from)
         self.testmode = other.testmode
-        self.sales_channels = other.sales_channels
+        self.all_sales_channels = other.all_sales_channels
         self.save()
         self.log_action('pretix.object.cloned', data={'source': other.slug, 'source_id': other.pk})
+
+        if not self.all_sales_channels:
+            self.limit_sales_channels.set(other.limit_sales_channels.all())
 
         if not skip_meta_data:
             for emv in EventMetaValue.objects.filter(event=other):

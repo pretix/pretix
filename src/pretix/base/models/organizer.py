@@ -46,7 +46,7 @@ from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
 from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext_lazy as _
-from django_scopes import ScopedManager
+from django_scopes import ScopedManager, scope
 from i18nfield.fields import I18nCharField
 from i18nfield.strings import LazyI18nString
 
@@ -106,7 +106,8 @@ class Organizer(LoggedModel):
         if is_new:
             kwargs.pop('update_fields', None)  # does not make sense here
             self.set_defaults()
-            self.create_default_sales_channels()
+            with scope(organizer=self):
+                self.create_default_sales_channels()
         else:
             self.get_cache().clear()
         return obj
@@ -556,7 +557,7 @@ class SalesChannel(LoggedModel):
         return str(self.label)
 
     @cached_property
-    def _type(self):
+    def type_instance(self):
         from ..channels import get_all_sales_channel_types
 
         types = get_all_sales_channel_types()

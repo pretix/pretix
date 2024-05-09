@@ -25,7 +25,6 @@ from rest_framework.exceptions import ValidationError
 
 from pretix.api.serializers.event import SubEventSerializer
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
-from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.media import MEDIA_TYPES
 from pretix.base.models import Checkin, CheckinList, SalesChannel
 
@@ -50,7 +49,7 @@ class CheckinListSerializer(I18nAwareModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
-        self.fields['auto_checkin_sales_channels'].queryset = self.context['event'].organizer.sales_channels.all()
+        self.fields['auto_checkin_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
 
         if 'subevent' in self.context['request'].query_params.getlist('expand'):
             self.fields['subevent'] = SubEventSerializer(read_only=True)
@@ -80,10 +79,6 @@ class CheckinListSerializer(I18nAwareModelSerializer):
         else:
             if full_data.get('subevent'):
                 raise ValidationError(_('The subevent does not belong to this event.'))
-
-        for channel in full_data.get('auto_checkin_sales_channels') or []:
-            if channel not in get_all_sales_channel_types():
-                raise ValidationError(_('Unknown sales channel.'))
 
         CheckinList.validate_rules(data.get('rules'))
 

@@ -21,6 +21,7 @@
 #
 import json
 
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 
 
@@ -60,4 +61,58 @@ class CompatibleJSONField(serializers.JSONField):
     def to_representation(self, value):
         if value:
             return json.loads(value)
+        return value
+
+
+class SalesChannelMigrationMixin:
+    """
+    Translates between the old field "sales_channels" and the new field combo "all_sales_channels"/"limit_sales_channels".
+    """
+
+    @property
+    def organizer(self):
+        if "organizer" in self.context:
+            return self.context["organizer"]
+        elif "event" in self.context:
+            return self.context["event"].organizer
+        else:
+            raise ValueError("organizer not in context")
+
+    def to_internal_value(self, data):
+        if "sales_channels" in data:
+            all_channels = {
+                s.identifier for s in
+                self.organizer.sales_channels.all()
+            }
+
+            if data.get("all_sales_channels") and set(data["sales_channels"]) != all_channels:
+                raise ValidationError(
+                    "If 'all_sales_channels' is set, the legacy attribute 'sales_channels' must not be set or set to "
+                    "the list of all sales channels."
+                )
+
+            if data.get("limit_sales_channels") and set(data["sales_channels"]) != set(data["limit_sales_channels"]):
+                raise ValidationError(
+                    "If 'limit_sales_channels' is set, the legacy attribute 'sales_channels' must not be set or set to "
+                    "the same list."
+                )
+
+            if data["sales_channels"] == all_channels:
+                data["all_sales_channels"] = True
+                data["limit_sales_channels"] = []
+            else:
+                data["all_sales_channels"] = False
+                data["limit_sales_channels"] = data["sales_channels"]
+            del data["sales_channels"]
+        return super().to_internal_value(data)
+
+    def to_representation(self, value):
+        value = super().to_representation(value)
+        if value.get("all_sales_channels"):
+            value["sales_channels"] = sorted([
+                s.identifier for s in
+                self.organizer.sales_channels.all()
+            ])
+        else:
+            value["sales_channels"] = value["limit_sales_channels"]
         return value

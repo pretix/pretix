@@ -46,13 +46,12 @@ from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.item import (
     InlineItemVariationSerializer, ItemSerializer, QuestionSerializer,
 )
-from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.decimal import round_decimal
 from pretix.base.i18n import language
 from pretix.base.models import (
     CachedFile, Checkin, Customer, Invoice, InvoiceAddress, InvoiceLine, Item,
     ItemVariation, Order, OrderPosition, Question, QuestionAnswer,
-    ReusableMedium, Seat, SubEvent, TaxRule, Voucher,
+    ReusableMedium, SalesChannel, Seat, SubEvent, TaxRule, Voucher,
 )
 from pretix.base.models.orders import (
     BlockedTicketSecret, CartPosition, OrderFee, OrderPayment, OrderRefund,
@@ -714,6 +713,11 @@ class OrderSerializer(I18nAwareModelSerializer):
     payment_provider = OrderPaymentTypeField(source='*', read_only=True)
     url = OrderURLField(source='*', read_only=True)
     customer = serializers.SlugRelatedField(slug_field='identifier', read_only=True)
+    sales_channel = serializers.SlugRelatedField(
+        slug_field='identifier',
+        queryset=SalesChannel.objects.none(),
+        required=False,
+    )
 
     class Meta:
         model = Order
@@ -732,6 +736,7 @@ class OrderSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["sales_channel"].queryset = self.context["event"].organizer.sales_channels.all()
         if not self.context['pdf_data']:
             self.fields['positions'].child.fields.pop('pdf_data', None)
 
@@ -1033,12 +1038,18 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     require_approval = serializers.BooleanField(default=False, required=False)
     simulate = serializers.BooleanField(default=False, required=False)
     customer = serializers.SlugRelatedField(slug_field='identifier', queryset=Customer.objects.none(), required=False)
+    sales_channel = serializers.SlugRelatedField(
+        slug_field='identifier',
+        queryset=SalesChannel.objects.none(),
+        required=False,
+    )
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['positions'].child.fields['voucher'].queryset = self.context['event'].vouchers.all()
         self.fields['customer'].queryset = self.context['event'].organizer.customers.all()
         self.fields['expires'].required = False
+        self.fields["sales_channel"].queryset = self.context["event"].organizer.sales_channels.all()
 
     class Meta:
         model = Order
@@ -1058,11 +1069,6 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         if expires < now():
             raise ValidationError('Expiration date must be in the future.')
         return expires
-
-    def validate_sales_channel(self, channel):
-        if channel not in get_all_sales_channel_types():
-            raise ValidationError('Unknown sales channel.')
-        return channel
 
     def validate_code(self, code):
         if code and Order.objects.filter(event__organizer=self.context['event'].organizer, code=code).exists():
@@ -1128,9 +1134,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
     def validate_testmode(self, testmode):
         if 'sales_channel' in self.initial_data:
             try:
-                sales_channel = get_all_sales_channel_types()[self.initial_data['sales_channel']]
-
-                if testmode and not sales_channel.testmode_supported:
+                if testmode and not self.initial_data["sales_channel"].type_instance.testmode_supported:
                     raise ValidationError('This sales channel does not provide support for test mode.')
             except KeyError:
                 # We do not need to raise a ValidationError here, since there is another check to validate the
@@ -1149,7 +1153,11 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         simulate = validated_data.pop('simulate', False)
         self._send_mail = validated_data.pop('send_email', False)
         if self._send_mail is None:
-            self._send_mail = validated_data.get('sales_channel') in self.context['event'].settings.mail_sales_channel_placed_paid
+            sales_channel = validated_data.get('sales_channel')
+            if sales_channel:
+                self._send_mail = sales_channel.identifier in self.context['event'].settings.mail_sales_channel_placed_paid
+            else:
+                self._send_mail = "web" in self.context['event'].settings.mail_sales_channel_placed_paid
 
         if 'invoice_address' in validated_data:
             iadata = validated_data.pop('invoice_address')
@@ -1309,7 +1317,11 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     errs[i]['seat'] = ['The specified seat does not exist.']
                 else:
                     seat_usage[seat] += 1
-                    if (seat_usage[seat] > 0 and not seat.is_available(sales_channel=validated_data.get('sales_channel', 'web'))) or seat_usage[seat] > 1:
+                    if validated_data.get('sales_channel'):
+                        sales_channel_id = validated_data['sales_channel'].identifier
+                    else:
+                        sales_channel_id = "web"
+                    if (seat_usage[seat] > 0 and not seat.is_available(sales_channel=sales_channel_id)) or seat_usage[seat] > 1:
                         errs[i]['seat'] = [gettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name)]
             elif seated:
                 errs[i]['seat'] = ['The specified product requires to choose a seat.']

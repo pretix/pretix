@@ -42,19 +42,27 @@ from django.utils.functional import cached_property, lazy
 from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 
+from pretix.api.serializers import SalesChannelMigrationMixin
 from pretix.api.serializers.event import MetaDataField
 from pretix.api.serializers.fields import UploadedFileField
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.base.models import (
     Item, ItemAddOn, ItemBundle, ItemCategory, ItemMetaValue, ItemVariation,
-    ItemVariationMetaValue, Question, QuestionOption, Quota,
+    ItemVariationMetaValue, Question, QuestionOption, Quota, SalesChannel,
 )
 
 
-class InlineItemVariationSerializer(I18nAwareModelSerializer):
+class InlineItemVariationSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     price = serializers.DecimalField(read_only=True, decimal_places=2, max_digits=13,
                                      coerce_to_string=True)
     meta_data = MetaDataField(required=False, source='*')
+    limit_sales_channels = serializers.SlugRelatedField(
+        slug_field="identifier",
+        queryset=SalesChannel.objects.none(),
+        required=False,
+        allow_empty=True,
+        many=True,
+    )
 
     class Meta:
         model = ItemVariation
@@ -68,6 +76,7 @@ class InlineItemVariationSerializer(I18nAwareModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['require_membership_types'].queryset = lazy(lambda: self.context['event'].organizer.membership_types.all(), QuerySet)
+        self.fields['limit_sales_channels'].child_relation.queryset = lazy(lambda: self.context['event'].organizer.sales_channels.all(), QuerySet)
 
     def validate_meta_data(self, value):
         for key in value['meta_data'].keys():
@@ -76,10 +85,17 @@ class InlineItemVariationSerializer(I18nAwareModelSerializer):
         return value
 
 
-class ItemVariationSerializer(I18nAwareModelSerializer):
+class ItemVariationSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     price = serializers.DecimalField(read_only=True, decimal_places=2, max_digits=13,
                                      coerce_to_string=True)
     meta_data = MetaDataField(required=False, source='*')
+    limit_sales_channels = serializers.SlugRelatedField(
+        slug_field="identifier",
+        queryset=SalesChannel.objects.none(),
+        required=False,
+        allow_empty=True,
+        many=True,
+    )
 
     class Meta:
         model = ItemVariation
@@ -93,6 +109,7 @@ class ItemVariationSerializer(I18nAwareModelSerializer):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['require_membership_types'].queryset = self.context['event'].organizer.membership_types.all()
+        self.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
 
     @transaction.atomic
     def create(self, validated_data):
@@ -223,7 +240,7 @@ class ItemTaxRateField(serializers.Field):
             return str(Decimal('0.00'))
 
 
-class ItemSerializer(I18nAwareModelSerializer):
+class ItemSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     addons = InlineItemAddOnSerializer(many=True, required=False)
     bundles = InlineItemBundleSerializer(many=True, required=False)
     variations = InlineItemVariationSerializer(many=True, required=False)
@@ -232,6 +249,13 @@ class ItemSerializer(I18nAwareModelSerializer):
     picture = UploadedFileField(required=False, allow_null=True, allowed_types=(
         'image/png', 'image/jpeg', 'image/gif'
     ), max_size=settings.FILE_UPLOAD_MAX_SIZE_IMAGE)
+    limit_sales_channels = serializers.SlugRelatedField(
+        slug_field="identifier",
+        queryset=SalesChannel.objects.none(),
+        required=False,
+        allow_empty=True,
+        many=True,
+    )
 
     class Meta:
         model = Item
@@ -259,6 +283,7 @@ class ItemSerializer(I18nAwareModelSerializer):
         if not self.read_only:
             self.fields['require_membership_types'].queryset = self.context['event'].organizer.membership_types.all()
             self.fields['grant_membership_type'].queryset = self.context['event'].organizer.membership_types.all()
+            self.fields['limit_sales_channels'].child_relation.queryset = self.context['event'].organizer.sales_channels.all()
 
     def validate(self, data):
         data = super().validate(data)
@@ -335,7 +360,10 @@ class ItemSerializer(I18nAwareModelSerializer):
         meta_data = validated_data.pop('meta_data', None)
         picture = validated_data.pop('picture', None)
         require_membership_types = validated_data.pop('require_membership_types', [])
+        limit_sales_channels = validated_data.pop('limit_sales_channels', [])
         item = Item.objects.create(**validated_data)
+        if limit_sales_channels:
+            item.limit_sales_channels.add(*limit_sales_channels)
         if picture:
             item.picture.save(os.path.basename(picture.name), picture)
         if require_membership_types:

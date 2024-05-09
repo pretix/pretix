@@ -335,7 +335,7 @@ def test_list_create(token_client, organizer, event, item, item_on_wrong_event):
         assert cl.name == "VIP"
         assert cl.limit_products.count() == 1
         assert not cl.all_products
-        assert "web" in cl.auto_checkin_sales_channels
+        assert cl.auto_checkin_sales_channels.filter(identifier="web").exists()
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
@@ -381,7 +381,7 @@ def test_list_create_with_subevent(token_client, organizer, event, event3, item,
     assert resp.status_code == 201
     with scopes_disabled():
         cl = CheckinList.objects.get(pk=resp.data['id'])
-        assert "web" in cl.auto_checkin_sales_channels
+        assert cl.auto_checkin_sales_channels.filter(identifier="web").exists()
 
     resp = token_client.post(
         '/api/v1/organizers/{}/events/{}/checkinlists/'.format(organizer.slug, event.slug),
@@ -448,7 +448,7 @@ def test_list_update(token_client, organizer, event, clist):
     assert resp.status_code == 200
     with scopes_disabled():
         cl = CheckinList.objects.get(pk=resp.data['id'])
-        assert "web" in cl.auto_checkin_sales_channels
+        assert cl.auto_checkin_sales_channels.filter(identifier="web").exists()
 
 
 @pytest.mark.django_db

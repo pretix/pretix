@@ -113,7 +113,10 @@ with scopes_disabled():
                 return queryset.exclude(expr)
 
         def sales_channel_qs(self, queryset, name, value):
-            return queryset.filter(sales_channels__contains=value)
+            return queryset.filter(
+                Q(all_sales_channels=True) |
+                Q(limit_sales_channels__identifier=value)
+            )
 
         def search_qs(self, queryset, name, value):
             return queryset.filter(
@@ -134,6 +137,12 @@ class EventViewSet(viewsets.ModelViewSet):
     ordering = ('slug',)
     ordering_fields = ('date_from', 'slug')
     filterset_class = EventFilter
+
+    def get_serializer_context(self):
+        return {
+            **super().get_serializer_context(),
+            "organizer": self.request.organizer,
+        }
 
     def get_copy_from_queryset(self):
         if isinstance(self.request.auth, (TeamAPIToken, Device)):
@@ -268,8 +277,6 @@ class EventViewSet(viewsets.ModelViewSet):
                 new_event.is_public = serializer.validated_data['is_public']
             if 'testmode' in serializer.validated_data:
                 new_event.testmode = serializer.validated_data['testmode']
-            if 'sales_channels' in serializer.validated_data:
-                new_event.sales_channels = serializer.validated_data['sales_channels']
             if 'has_subevents' in serializer.validated_data:
                 new_event.has_subevents = serializer.validated_data['has_subevents']
             if 'date_admission' in serializer.validated_data:
@@ -277,6 +284,10 @@ class EventViewSet(viewsets.ModelViewSet):
             new_event.save()
             if 'timezone' in serializer.validated_data:
                 new_event.settings.timezone = serializer.validated_data['timezone']
+
+            if 'all_sales_channels' in serializer.validated_data and 'sales_channels' in serializer.validated_data:
+                new_event.all_sales_channels = serializer.validated_data['all_sales_channels']
+                new_event.limit_sales_channels.set(serializer.validated_data['limit_sales_channels'])
         else:
             serializer.instance.set_defaults()
 
@@ -379,7 +390,10 @@ with scopes_disabled():
                 return queryset.exclude(expr)
 
         def sales_channel_qs(self, queryset, name, value):
-            return queryset.filter(event__sales_channels__contains=value)
+            return queryset.filter(
+                Q(event__all_sales_channels=True) |
+                Q(event__limit_sales_channels__identifier=value)
+            )
 
         def search_qs(self, queryset, name, value):
             return queryset.filter(

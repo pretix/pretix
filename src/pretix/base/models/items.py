@@ -275,7 +275,8 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
         Q(active=True)
         & Q(Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()) | Q(available_from_mode='info'))
         & Q(Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()) | Q(available_until_mode='info'))
-        & Q(sales_channels__contains=channel) & Q(require_bundling=False)
+        & Q(Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=channel))
+        & Q(require_bundling=False)
     )
     if not allow_addons:
         q &= Q(Q(category__isnull=True) | Q(category__is_addon=False))

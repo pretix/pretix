@@ -46,10 +46,14 @@ from rest_framework import serializers
 from rest_framework.fields import ChoiceField, Field
 from rest_framework.relations import SlugRelatedField
 
-from pretix.api.serializers import CompatibleJSONField
+from pretix.api.serializers import (
+    CompatibleJSONField, SalesChannelMigrationMixin,
+)
 from pretix.api.serializers.i18n import I18nAwareModelSerializer
 from pretix.api.serializers.settings import SettingsSerializer
-from pretix.base.models import Device, Event, TaxRule, TeamAPIToken
+from pretix.base.models import (
+    Device, Event, SalesChannel, TaxRule, TeamAPIToken,
+)
 from pretix.base.models.event import SubEvent
 from pretix.base.models.items import (
     ItemMetaProperty, SubEventItem, SubEventItemVariation,
@@ -161,7 +165,7 @@ class ValidKeysField(Field):
         }
 
 
-class EventSerializer(I18nAwareModelSerializer):
+class EventSerializer(SalesChannelMigrationMixin, I18nAwareModelSerializer):
     meta_data = MetaDataField(required=False, source='*')
     item_meta_properties = MetaPropertyField(required=False, source='*')
     plugins = PluginsField(required=False, source='*')
@@ -170,6 +174,13 @@ class EventSerializer(I18nAwareModelSerializer):
     valid_keys = ValidKeysField(source='*', read_only=True)
     best_availability_state = serializers.IntegerField(allow_null=True, read_only=True)
     public_url = serializers.SerializerMethodField('get_event_url', read_only=True)
+    limit_sales_channels = serializers.SlugRelatedField(
+        slug_field="identifier",
+        queryset=SalesChannel.objects.none(),
+        required=False,
+        allow_empty=True,
+        many=True,
+    )
 
     def get_event_url(self, event):
         return build_absolute_uri(event, 'presale:event.index')
@@ -188,6 +199,7 @@ class EventSerializer(I18nAwareModelSerializer):
             self.fields.pop('valid_keys')
         if not self.context.get('request') or 'with_availability_for' not in self.context['request'].GET:
             self.fields.pop('best_availability_state')
+        self.fields['limit_sales_channels'].child_relation.queryset = self.context['organizer'].sales_channels.all()
 
     def validate(self, data):
         data = super().validate(data)
