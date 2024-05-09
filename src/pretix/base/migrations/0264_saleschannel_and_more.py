@@ -101,4 +101,8 @@ class Migration(migrations.Migration):
                 to="pretixbase.saleschannel",
             ),
         ),
+        migrations.AlterUniqueTogether(
+            name="saleschannel",
+            unique_together={("organizer", "identifier")},
+        ),
     ]
