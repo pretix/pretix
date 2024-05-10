@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2024-05-07 22:00+0000\n"
+"PO-Revision-Date: 2024-05-10 15:47+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -1599,9 +1599,8 @@ msgstr ""
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:571
 #: pretix/base/exporters/orderlist.py:862
-#, fuzzy
 msgid "Product ID"
-msgstr "Продукт"
+msgstr "ID Продукту"
 
 #: pretix/base/exporters/items.py:59 pretix/base/exporters/orderlist.py:573
 #: pretix/base/exporters/orderlist.py:864
@@ -2178,7 +2177,7 @@ msgstr "Дата закінчення"
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:11
 #: pretix/presale/templates/pretixpresale/organizers/customer_membership.html:45
 msgid "Product"
-msgstr "Товар"
+msgstr "Продукт"
 
 #: pretix/base/exporters/orderlist.py:578
 #: pretix/base/exporters/orderlist.py:583 pretix/base/forms/questions.py:654
@@ -7022,7 +7021,7 @@ msgstr "Ціна з урахуванням доповнень"
 #: pretix/base/services/placeholders.py:529
 #: pretix/base/services/placeholders.py:538 pretix/control/views/event.py:797
 msgid "John Doe"
-msgstr "John Doe (\"Джон До\")"
+msgstr "Петро Коваль"
 
 #: pretix/base/pdf.py:178
 #: pretix/control/templates/pretixcontrol/order/index.html:549
@@ -7050,7 +7049,7 @@ msgid ""
 "12345 Any City\n"
 "Atlantis"
 msgstr ""
-"Петро Козачук\n"
+"Петро Коваль\n"
 "Зразок компанії\n"
 "Вулиця Степана Бандери 42\n"
 "12345 Будь-яке місто\n"
@@ -7373,7 +7372,7 @@ msgstr "Ім'я учасника: {part}"
 #: pretix/base/services/placeholders.py:556
 #: pretix/control/forms/organizer.py:598
 msgid "Mr Doe"
-msgstr "Пане Петренко"
+msgstr "Пане Ковалю"
 
 #: pretix/base/pdf.py:656 pretix/base/pdf.py:663
 #: pretix/plugins/badges/exporters.py:486
@@ -11820,7 +11819,7 @@ msgstr "Джон"
 #: pretix/base/settings.py:3654 pretix/base/settings.py:3685
 msgctxt "person_name_sample"
 msgid "Doe"
-msgstr "До"
+msgstr "Коваль"
 
 #: pretix/base/settings.py:3472 pretix/base/settings.py:3488
 #: pretix/base/settings.py:3520 pretix/base/settings.py:3639
@@ -11848,7 +11847,7 @@ msgstr "Середнє ім'я"
 #: pretix/control/forms/organizer.py:592
 msgctxt "person_name_sample"
 msgid "John Doe"
-msgstr "Джон До"
+msgstr "Петро Коваль"
 
 #: pretix/base/settings.py:3592
 msgid "Calling name"
