@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2024-03-11 20:00+0000\n"
-"Last-Translator: fyksen <fredrik@fyksen.me>\n"
+"PO-Revision-Date: 2024-05-10 15:47+0000\n"
+"Last-Translator: Martin Gross <gross@rami.io>\n"
 "Language-Team: Norwegian Bokmål <https://translate.pretix.eu/projects/pretix/"
 "pretix/nb_NO/>\n"
 "Language: nb_NO\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.4.2\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -21323,9 +21323,7 @@ msgstr "Generer faktura"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:360
 msgid "Change answers"
-msgstr ""
-"Got it, I will modify my responses accordingly. Please proceed with sending "
-"your messages for translation."
+msgstr "Endre svar"
 
 #: pretix/control/templates/pretixcontrol/order/index.html:364
 msgid "Change products"
@@ -31344,13 +31342,7 @@ msgstr "Endre betalingen"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:80
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:129
 msgid "Modify"
-msgstr ""
-"Sure, I will modify my approach as per your request. I will wait for your "
-"incoming ENGLISH messages and provide translations into NORWEGIAN. I will "
-"maintain the original formatting for any untranslatable portions. I will "
-"strictly refrain from answering questions or offering explanations, and "
-"solely focus on delivering accurate translations. Please proceed with "
-"sending your messages for translation."
+msgstr "Endre"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:79
 msgid "Modify invoice information"
@@ -32725,9 +32717,7 @@ msgstr "Endre bestilte varer"
 #: pretix/presale/templates/pretixpresale/event/order.html:290
 #: pretix/presale/templates/pretixpresale/event/position.html:34
 msgid "Change details"
-msgstr ""
-"Got it, I will modify the information accordingly. Please proceed with "
-"sending the messages for translation."
+msgstr "Endre detaljer"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:262
 msgid ""
