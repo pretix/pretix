@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2024-05-10 15:47+0000\n"
+"PO-Revision-Date: 2024-05-12 06:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -2244,7 +2244,7 @@ msgstr "Зона сидіння"
 #: pretix/base/exporters/orderlist.py:598
 #: pretix/plugins/checkinlists/exporters.py:513
 msgid "Seat row"
-msgstr "Ряд"
+msgstr "Ряд місця"
 
 #: pretix/base/exporters/orderlist.py:599
 #: pretix/plugins/checkinlists/exporters.py:514
@@ -5939,7 +5939,7 @@ msgstr "Вартість доставки"
 
 #: pretix/base/models/orders.py:2219
 msgid "Service fee"
-msgstr "Плата за послуги"
+msgstr "Сервісний збір"
 
 #: pretix/base/models/orders.py:2220
 #: pretix/control/templates/pretixcontrol/order/index.html:156
@@ -7321,7 +7321,7 @@ msgstr "Партер, ряд 3, місце 4"
 #: pretix/base/pdf.py:492 pretix/base/pdf.py:498
 #: pretix/control/forms/orders.py:330
 msgid "General admission"
-msgstr "Загальний допуск"
+msgstr "Вільне місце"
 
 #: pretix/base/pdf.py:495
 msgid "Seat: zone"
