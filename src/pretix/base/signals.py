@@ -302,7 +302,7 @@ instances.
 """
 
 
-register_sales_channels = register_sales_channel_types  # TODO: remove me
+register_sales_channels = DeprecatedSignal()  # TODO: remove me
 
 register_data_exporters = EventPluginSignal()
 """

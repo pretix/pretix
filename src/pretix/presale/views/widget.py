@@ -372,7 +372,7 @@ class WidgetAPIProductList(EventListMixin, View):
                 'error': gettext('This ticket shop is currently disabled.')
             })
 
-        if request.sales_channel.identifier not in request.event.sales_channels:
+        if not request.event.all_sales_channels and request.sales_channel.identifier not in (s.identifier for s in request.event.limit_sales_channels.all()):
             return self.response({
                 'error': gettext('Tickets for this event cannot be purchased on this sales channel.')
             })
@@ -546,7 +546,8 @@ class WidgetAPIProductList(EventListMixin, View):
                 add_subevents_for_days(
                     filter_qs_by_attr(
                         self.request.event.subevents_annotated('web').filter(
-                            event__sales_channels__contains=self.request.sales_channel.identifier
+                            Q(event__all_sales_channels=True) |
+                            Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
                         ), self.request
                     ),
                     limit_before, after, ebd, set(), self.request.event,
@@ -558,16 +559,17 @@ class WidgetAPIProductList(EventListMixin, View):
                     self.request,
                     filter_qs_by_attr(
                         Event.annotated(self.request.organizer.events, 'web').filter(
-                            sales_channels__contains=self.request.sales_channel.identifier
+                            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=self.request.sales_channel.identifier),
                         ), self.request
                     ),
                     limit_before, after, ebd, timezones
                 )
                 add_subevents_for_days(filter_qs_by_attr(SubEvent.annotated(SubEvent.objects.filter(
+                    Q(event__all_sales_channels=True) |
+                    Q(event__limit_sales_channels__identifier=self.request.sales_channel.identifier),
                     event__organizer=self.request.organizer,
                     event__is_public=True,
                     event__live=True,
-                    event__sales_channels__contains=self.request.sales_channel.identifier
                 ).prefetch_related(
                     'event___settings_objects', 'event__organizer___settings_objects'
                 )), self.request), limit_before, after, ebd, timezones)

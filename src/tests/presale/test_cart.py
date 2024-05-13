@@ -71,7 +71,6 @@ class CartTestMixin:
             date_from=datetime.datetime(now().year + 1, 12, 26, tzinfo=datetime.timezone.utc),
             live=True,
             plugins="pretix.plugins.banktransfer",
-            sales_channels=['web', 'bar']
         )
         self.tr19 = self.event.tax_rules.create(rate=Decimal('19.00'))
         self.category = ItemCategory.objects.create(event=self.event, name="Everything", position=0)
@@ -914,8 +913,10 @@ class CartTest(CartTestMixin, TestCase):
             self.assertFalse(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).exists())
 
     def test_wrong_sales_channel(self):
-        self.ticket.sales_channels = ['bar']
-        self.ticket.save()
+        with scopes_disabled():
+            self.ticket.all_sales_channels = False
+            self.ticket.limit_sales_channels.add(self.orga.sales_channels.get(identifier="bar"))
+            self.ticket.save()
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
         }, follow=True)
@@ -923,17 +924,22 @@ class CartTest(CartTestMixin, TestCase):
             self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
 
     def test_variation_wrong_sales_channel(self):
-        self.shirt_blue.sales_channels = ['bar']
-        self.shirt_blue.save()
+        with scopes_disabled():
+            self.shirt_blue.all_sales_channels = False
+            self.shirt_blue.limit_sales_channels.add(self.orga.sales_channels.get(identifier="bar"))
+            self.shirt_blue.save()
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_blue.id): '1',
         }, follow=True)
         with scopes_disabled():
             self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
-        self.shirt_blue.sales_channels = ['bar', 'web']
-        self.shirt_blue.save()
-        self.shirt.sales_channels = ['bar']
-        self.shirt.save()
+            self.shirt_blue.all_sales_channels = False
+            self.shirt_blue.limit_sales_channels.add(self.orga.sales_channels.get(identifier="bar"))
+            self.shirt_blue.limit_sales_channels.add(self.orga.sales_channels.get(identifier="web"))
+            self.shirt_blue.save()
+            self.shirt.all_sales_channels = False
+            self.shirt.limit_sales_channels.add(self.orga.sales_channels.get(identifier="bar"))
+            self.shirt.save()
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'variation_%d_%d' % (self.shirt.id, self.shirt_blue.id): '1',
         }, follow=True)
@@ -941,8 +947,10 @@ class CartTest(CartTestMixin, TestCase):
             self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)
 
     def test_other_sales_channel(self):
-        self.ticket.sales_channels = ['bar']
-        self.ticket.save()
+        with scopes_disabled():
+            self.ticket.all_sales_channels = False
+            self.ticket.limit_sales_channels.add(self.orga.sales_channels.get(identifier="bar"))
+            self.ticket.save()
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
         }, follow=True, PRETIX_SALES_CHANNEL=FoobarSalesChannel)
@@ -1026,7 +1034,7 @@ class CartTest(CartTestMixin, TestCase):
         doc = BeautifulSoup(response.rendered_content, "lxml")
         self.assertNotIn('more than', doc.select('.alert-danger')[0].text)
         with scopes_disabled():
-            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 5)
 
     def test_max_per_item_variations_failed(self):
         self.shirt.max_per_order = 1
@@ -2392,7 +2400,8 @@ class CartAddonTest(CartTestMixin, TestCase):
         self.workshopquota.variations.add(self.workshop3a)
         self.workshopquota.variations.add(self.workshop3b)
         self.addon1 = ItemAddOn.objects.create(base_item=self.ticket, addon_category=self.workshopcat)
-        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+        self.cm = CartManager(event=self.event, cart_id=self.session_key,
+                              sales_channel=self.orga.sales_channels.get(identifier="web"))
 
     @classscope(attr='orga')
     def test_cart_set_simple_addon_included(self):
@@ -2715,7 +2724,7 @@ class CartAddonTest(CartTestMixin, TestCase):
         self.addon1.multi_allowed = True
         self.addon1.save()
 
-        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+        self.cm = CartManager(event=self.event, cart_id=self.session_key, sales_channel=self.orga.sales_channels.get(identifier="web"))
         self.cm.set_addons([
             {
                 'addon_to': cp1.pk,
@@ -2729,7 +2738,7 @@ class CartAddonTest(CartTestMixin, TestCase):
         assert cp1.addons.count() == 3
         assert all(a.price == Decimal('24.00') for a in cp1.addons.all())
 
-        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+        self.cm = CartManager(event=self.event, cart_id=self.session_key, sales_channel=self.orga.sales_channels.get(identifier="web"))
         self.cm.set_addons([
             {
                 'addon_to': cp1.pk,
@@ -2763,7 +2772,7 @@ class CartAddonTest(CartTestMixin, TestCase):
         self.cm.commit()
         assert cp1.addons.count() == 3
 
-        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+        self.cm = CartManager(event=self.event, cart_id=self.session_key, sales_channel=self.orga.sales_channels.get(identifier="web"))
         self.cm.set_addons([
             {
                 'addon_to': cp1.pk,
@@ -2775,7 +2784,7 @@ class CartAddonTest(CartTestMixin, TestCase):
         self.cm.commit()
         assert cp1.addons.count() == 4
 
-        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+        self.cm = CartManager(event=self.event, cart_id=self.session_key, sales_channel=self.orga.sales_channels.get(identifier="web"))
         self.cm.set_addons([
             {
                 'addon_to': cp1.pk,
@@ -3117,7 +3126,7 @@ class CartBundleTest(CartTestMixin, TestCase):
             designated_price=1.5,
             count=1
         )
-        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+        self.cm = CartManager(event=self.event, cart_id=self.session_key, sales_channel=self.orga.sales_channels.get(identifier="web"))
 
     @classscope(attr='orga')
     def test_simple_bundle(self):
@@ -3537,7 +3546,7 @@ class CartBundleTest(CartTestMixin, TestCase):
         b = cp.addons.first()
         assert b.item == self.trans
 
-        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+        self.cm = CartManager(event=self.event, cart_id=self.session_key, sales_channel=self.orga.sales_channels.get(identifier="web"))
         self.cm.set_addons([
             {
                 'addon_to': cp.pk,
@@ -4093,7 +4102,7 @@ class CartSeatingTest(CartTestMixin, TestCase):
         self.seat_a1 = self.event.seats.create(seat_number="A1", product=self.ticket, seat_guid="A1")
         self.seat_a2 = self.event.seats.create(seat_number="A2", product=self.ticket, seat_guid="A2")
         self.seat_a3 = self.event.seats.create(seat_number="A3", product=self.ticket, seat_guid="A3")
-        self.cm = CartManager(event=self.event, cart_id=self.session_key)
+        self.cm = CartManager(event=self.event, cart_id=self.session_key, sales_channel=self.orga.sales_channels.get(identifier="web"))
 
     def test_add_with_seat_without_variation(self):
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {

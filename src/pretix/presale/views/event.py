@@ -66,7 +66,7 @@ from django.views.generic import TemplateView
 from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
-    ItemVariation, Quota, SeatCategoryMapping, Voucher,
+    ItemVariation, Quota, SalesChannel, SeatCategoryMapping, Voucher,
 )
 from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.items import (
@@ -113,6 +113,8 @@ def item_group_by_category(items):
 def get_grouped_items(event, subevent=None, voucher=None, channel='web', require_seat=0, base_qs=None, allow_addons=False,
                       quota_cache=None, filter_items=None, filter_categories=None, memberships=None,
                       ignore_hide_sold_out_for_item_ids=None):
+    if isinstance(channel, SalesChannel):
+        channel = channel.identifier
     base_qs_set = base_qs is not None
     base_qs = base_qs if base_qs is not None else event.items
 
@@ -152,8 +154,8 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
             ),
         ).filter(
             variation_q,
+            Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=channel),
             active=True,
-            sales_channels__contains=channel,
             quotas__isnull=False,
             subevent_disabled=False
         ).prefetch_related(
@@ -527,7 +529,7 @@ class EventIndex(EventViewMixin, EventListMixin, CartMixin, TemplateView):
             r._csp_ignore = True
             return r
 
-        if request.sales_channel.identifier not in request.event.sales_channels:
+        if not request.event.all_sales_channels and request.sales_channel.identifier not in (s.identifier for s in request.event.limit_sales_channels.all()):
             raise Http404(_('Tickets for this event cannot be purchased on this sales channel.'))
 
         if request.event.has_subevents:

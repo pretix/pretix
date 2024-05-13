@@ -38,7 +38,6 @@ from i18nfield.strings import LazyI18nString
 from phonenumber_field.phonenumber import to_python
 from phonenumbers import SUPPORTED_REGIONS
 
-from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.forms.questions import guess_country
 from pretix.base.modelimport import (
     DatetimeColumnMixin, DecimalColumnMixin, ImportColumn, SubeventColumnMixin,
@@ -538,18 +537,28 @@ class Expires(DatetimeColumnMixin, ImportColumn):
 class Saleschannel(ImportColumn):
     identifier = 'sales_channel'
     verbose_name = gettext_lazy('Sales channel')
+    default_value = None
+    initial = 'static:web'
+
+    @cached_property
+    def channels(self):
+        return list(self.event.organizer.sales_channels.all())
 
     def static_choices(self):
         return [
-            (sc.identifier, sc.verbose_name) for sc in get_all_sales_channel_types().values()
+            (c.identifier, str(c.label)) for c in self.channels
         ]
 
     def clean(self, value, previous_values):
-        if not value:
-            value = 'web'
-        if value not in get_all_sales_channel_types():
+        matches = [
+            p for p in self.channels
+            if p.identifier == value or any((v and v == value) for v in i18n_flat(p.label))
+        ]
+        if len(matches) == 0:
             raise ValidationError(_("Please enter a valid sales channel."))
-        return value
+        if len(matches) > 1:
+            raise ValidationError(_("Please enter a valid sales channel."))
+        return matches[0]
 
     def assign(self, value, order, position, invoice_address, **kwargs):
         order.sales_channel = value

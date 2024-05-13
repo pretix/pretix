@@ -1468,7 +1468,7 @@ class QuickSetupView(FormView):
                 admission=True,
                 personalized=True,
                 position=i,
-                sales_channels=list(get_all_sales_channel_types().keys())
+                all_sales_channels=True,
             )
             item.log_action('pretix.event.item.added', user=self.request.user, data=dict(f.cleaned_data))
             if f.cleaned_data['quota'] or not form.cleaned_data['total_quota']:

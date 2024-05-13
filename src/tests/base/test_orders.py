@@ -84,6 +84,7 @@ def test_expiry_days(event):
     event.settings.set('payment_term_days', 5)
     event.settings.set('payment_term_weekdays', False)
     order = _create_order(event, email='dummy@example.org', positions=[],
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           now_dt=today,
                           payment_requests=[{
                               "id": "test0",
@@ -105,6 +106,7 @@ def test_expiry_weekdays(event):
     event.settings.set('payment_term_weekdays', True)
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today,
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           payment_requests=[{
                               "id": "test0",
                               "provider": "free",
@@ -121,6 +123,7 @@ def test_expiry_weekdays(event):
     today = make_aware(datetime(2016, 9, 19, 15, 0, 0, 0))
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today,
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           payment_requests=[{
                               "id": "test0",
                               "provider": "free",
@@ -144,6 +147,7 @@ def test_expiry_minutes(event):
     event.settings.set('payment_term_weekdays', False)
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today,
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           payment_requests=[{
                               "id": "test0",
                               "provider": "free",
@@ -165,6 +169,7 @@ def test_expiry_last(event):
     event.settings.set('payment_term_weekdays', False)
     event.settings.set('payment_term_last', now() + timedelta(days=3))
     order = _create_order(event, email='dummy@example.org', positions=[],
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           now_dt=today,
                           payment_requests=[{
                               "id": "test0",
@@ -179,6 +184,7 @@ def test_expiry_last(event):
     assert (order.expires - today).days == 3
     event.settings.set('payment_term_last', now() + timedelta(days=7))
     order = _create_order(event, email='dummy@example.org', positions=[],
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           now_dt=today,
                           payment_requests=[{
                               "id": "test0",
@@ -205,6 +211,7 @@ def test_expiry_last_relative(event):
     ))
     order = _create_order(event, email='dummy@example.org', positions=[],
                           now_dt=today,
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           payment_requests=[{
                               "id": "test0",
                               "provider": "free",
@@ -245,6 +252,7 @@ def test_expiry_last_relative_subevents(event):
     ))
     order = _create_order(event, email='dummy@example.org', positions=[cp1, cp2],
                           now_dt=today,
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           payment_requests=[{
                               "id": "test0",
                               "provider": "free",
@@ -265,6 +273,7 @@ def test_expiry_dst(event):
     utc = ZoneInfo('UTC')
     today = datetime(2016, 10, 29, 12, 0, 0, tzinfo=tz).astimezone(utc)
     order = _create_order(event, email='dummy@example.org', positions=[],
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           now_dt=today,
                           payment_requests=[{
                               "id": "test0",
@@ -287,12 +296,14 @@ def test_expiring(event):
         status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() + timedelta(days=10),
         total=0,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     o2 = Order.objects.create(
         code='FO2', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() - timedelta(days=10),
         total=12,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
                                  default_price=Decimal('23.00'), admission=True)
@@ -326,6 +337,7 @@ def test_expiring_paid_invoice(event):
         status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() - timedelta(days=10),
         total=12,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
                                  default_price=Decimal('12.00'), admission=True)
@@ -359,6 +371,7 @@ def test_expire_twice(event):
         status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() - timedelta(days=10),
         total=12,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     generate_invoice(o2)
     expire_orders(None)
@@ -381,6 +394,7 @@ def test_expire_skipped_if_canceled_with_fee(event):
         status=Order.STATUS_PENDING, locale='en',
         datetime=now(), expires=now() - timedelta(days=10),
         total=12,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     o2.fees.create(fee_type=OrderFee.FEE_TYPE_CANCELLATION, value=12)
     generate_invoice(o2)
@@ -397,12 +411,14 @@ def test_expiring_auto_disabled(event):
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=0,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     o2 = Order.objects.create(
         code='FO2', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() - timedelta(days=10),
         total=0,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     expire_orders(None)
     o1 = Order.objects.get(id=o1.id)
@@ -423,6 +439,7 @@ def test_expiring_auto_delayed(event):
         datetime=datetime(2023, 6, 22, 12, 13, 14, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
         expires=datetime(2023, 6, 30, 23, 59, 59, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
         total=0,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     o2 = Order.objects.create(
         code='FO2', event=event, email='dummy@dummy.test',
@@ -430,6 +447,7 @@ def test_expiring_auto_delayed(event):
         datetime=datetime(2023, 6, 22, 12, 13, 14, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
         expires=datetime(2023, 6, 28, 23, 59, 59, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
         total=0,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     assert o1.payment_term_expire_date == o1.expires + timedelta(days=2)  # limited by term_last
     assert o2.payment_term_expire_date == o2.expires + timedelta(days=3)
@@ -473,6 +491,7 @@ def test_expiring_auto_delayed_weekdays(event):
         datetime=datetime(2023, 6, 22, 12, 13, 14, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
         expires=datetime(2023, 6, 30, 23, 59, 59, tzinfo=zoneinfo.ZoneInfo("Europe/Berlin")),
         total=0,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     assert o1.payment_term_expire_date == o1.expires + timedelta(days=3)
 
@@ -483,13 +502,15 @@ def test_do_not_expire_if_approval_pending(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() - timedelta(days=10),
-        total=0, require_approval=True
+        total=0, require_approval=True,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     o2 = Order.objects.create(
         code='FO2', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() - timedelta(days=10),
         total=0,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     expire_orders(None)
     o1 = Order.objects.get(id=o1.id)
@@ -506,7 +527,8 @@ def test_approve(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() - timedelta(days=10),
-        total=10, require_approval=True, locale='en'
+        total=10, require_approval=True, locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
                                  default_price=Decimal('23.00'), admission=True)
@@ -537,7 +559,8 @@ def test_approve_send_to_attendees(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() - timedelta(days=10),
-        total=10, require_approval=True, locale='en'
+        total=10, require_approval=True, locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     ticket = Item.objects.create(event=event, name='Early-bird ticket',
                                  default_price=Decimal('23.00'), admission=True)
@@ -565,7 +588,8 @@ def test_approve_free(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() - timedelta(days=10),
-        total=0, require_approval=True
+        total=0, require_approval=True,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     approve_order(o1)
     o1.refresh_from_db()
@@ -587,7 +611,8 @@ def test_approve_free_send_to_attendees(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() - timedelta(days=10),
-        total=0, require_approval=True
+        total=0, require_approval=True,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     ticket = Item.objects.create(event=event, name='Free ticket',
                                  default_price=Decimal('0.00'), admission=True)
@@ -618,7 +643,8 @@ def test_approve_free_after_last_payment_date(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() - timedelta(days=10),
-        total=0, require_approval=True
+        total=0, require_approval=True,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     approve_order(o1)
     o1.refresh_from_db()
@@ -637,7 +663,8 @@ def test_deny(event):
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() - timedelta(days=10),
-        total=10, require_approval=True, locale='en'
+        total=10, require_approval=True, locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     generate_invoice(o1)
     deny_order(o1)
@@ -666,6 +693,7 @@ class PaymentReminderTests(TestCase):
                 datetime=now() - timedelta(hours=4),
                 expires=now().replace(hour=12, minute=0, second=0) + timedelta(days=10),
                 total=Decimal('46.00'),
+                sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             )
             self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                               default_price=Decimal('23.00'), admission=True)
@@ -789,6 +817,7 @@ class PaymentFailedTests(TestCase):
                 datetime=now() - timedelta(hours=4),
                 expires=now() - timedelta(hours=4) + timedelta(days=10),
                 total=Decimal('46.00'),
+                sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             )
             self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                               default_price=Decimal('23.00'), admission=True)
@@ -830,6 +859,7 @@ class DownloadReminderTests(TestCase):
                 datetime=now() - timedelta(days=4),
                 expires=now() - timedelta(hours=4) + timedelta(days=10),
                 total=Decimal('46.00'),
+                sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             )
             self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                               default_price=Decimal('23.00'), admission=True)
@@ -1022,6 +1052,7 @@ class OrderCancelTests(TestCase):
                 status=Order.STATUS_PENDING, locale='en',
                 datetime=now(), expires=now() + timedelta(days=10),
                 total=Decimal('46.00'),
+                sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             )
             self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                               default_price=Decimal('23.00'), admission=True)
@@ -1228,6 +1259,7 @@ class OrderChangeManagerTests(TestCase):
                 status=Order.STATUS_PENDING, locale='en',
                 datetime=now(), expires=now() + timedelta(days=10),
                 total=Decimal('46.00'),
+                sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             )
             self.order.payments.create(
                 provider='banktransfer', state=OrderPayment.PAYMENT_STATE_CREATED, amount=self.order.total
@@ -3406,6 +3438,7 @@ def test_autocheckin(clist_autocheckin, event):
     )
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=today,
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           payment_requests=[{
                               "id": "test0",
                               "provider": "free",
@@ -3426,6 +3459,7 @@ def test_autocheckin(clist_autocheckin, event):
     )
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=today,
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           payment_requests=[{
                               "id": "test0",
                               "provider": "free",
@@ -3451,6 +3485,7 @@ def test_saleschannel_testmode_restriction(event):
     )
 
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           now_dt=today,
                           payment_requests=[{
                               "id": "test0",
@@ -3461,7 +3496,7 @@ def test_saleschannel_testmode_restriction(event):
                               "info_data": {},
                               "pprov": FreeOrderProvider(event),
                           }],
-                          locale='de', sales_channel='web')[0]
+                          locale='de')[0]
     assert not order.testmode
 
     cp1 = CartPosition.objects.create(
@@ -3469,6 +3504,7 @@ def test_saleschannel_testmode_restriction(event):
     )
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=today,
+                          sales_channel=event.organizer.sales_channels.get(identifier=FoobazSalesChannel.identifier),
                           payment_requests=[{
                               "id": "test0",
                               "provider": "free",
@@ -3478,7 +3514,7 @@ def test_saleschannel_testmode_restriction(event):
                               "info_data": {},
                               "pprov": FreeOrderProvider(event),
                           }],
-                          locale='de', sales_channel=FoobazSalesChannel.identifier)[0]
+                          locale='de')[0]
     assert not order.testmode
 
     cp1 = CartPosition.objects.create(
@@ -3487,6 +3523,7 @@ def test_saleschannel_testmode_restriction(event):
     event.testmode = True
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=today,
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           payment_requests=[{
                               "id": "test0",
                               "provider": "free",
@@ -3496,7 +3533,7 @@ def test_saleschannel_testmode_restriction(event):
                               "info_data": {},
                               "pprov": FreeOrderProvider(event),
                           }],
-                          locale='de', sales_channel='web')[0]
+                          locale='de')[0]
     assert order.testmode
 
     cp1 = CartPosition.objects.create(
@@ -3504,6 +3541,7 @@ def test_saleschannel_testmode_restriction(event):
     )
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=today,
+                          sales_channel=event.organizer.sales_channels.get(identifier=FoobazSalesChannel.identifier),
                           payment_requests=[{
                               "id": "test0",
                               "provider": "free",
@@ -3513,7 +3551,7 @@ def test_saleschannel_testmode_restriction(event):
                               "info_data": {},
                               "pprov": FreeOrderProvider(event),
                           }],
-                          locale='de', sales_channel=FoobazSalesChannel.identifier)[0]
+                          locale='de')[0]
     assert not order.testmode
 
 
@@ -3530,6 +3568,7 @@ def test_giftcard_multiple(event):
     gc2.transactions.create(value=12, acceptor=event.organizer)
     order = _create_order(
         event, email='dummy@example.org', positions=[cp1],
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         now_dt=now(),
         payment_requests=[
             {
@@ -3580,6 +3619,7 @@ def test_giftcard_partial(event):
     gc1.transactions.create(value=12, acceptor=event.organizer)
     order = _create_order(
         event, email='dummy@example.org', positions=[cp1],
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         now_dt=now(),
         payment_requests=[
             {
@@ -3627,6 +3667,7 @@ def test_giftcard_payment_fee(event):
     gc1.transactions.create(value=12, acceptor=event.organizer)
     order = _create_order(
         event, email='dummy@example.org', positions=[cp1],
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         now_dt=now(),
         payment_requests=[
             {
@@ -3673,6 +3714,7 @@ def test_giftcard_invalid_currency(event):
     gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         now_dt=now(),
         payment_requests=[
             {
@@ -3715,6 +3757,7 @@ def test_giftcard_invalid_organizer(event):
     gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         now_dt=now(),
         payment_requests=[
             {
@@ -3756,6 +3799,7 @@ def test_giftcard_test_mode_invalid(event):
     gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         now_dt=now(),
         payment_requests=[
             {
@@ -3799,6 +3843,7 @@ def test_giftcard_test_mode_event(event):
     gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         now_dt=now(),
         payment_requests=[
             {
@@ -3840,6 +3885,7 @@ def test_giftcard_swap(event):
     gc1.transactions.create(value=12, acceptor=event.organizer)
     _create_order(
         event, email='dummy@example.org', positions=[cp1],
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         now_dt=now(),
         payment_requests=[
             {
@@ -3881,6 +3927,7 @@ def test_issue_when_paid_and_changed(event):
     q.items.add(ticket)
     order = _create_order(
         event, email='dummy@example.org', positions=[cp1],
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         now_dt=now(),
         payment_requests=[
             {
@@ -3930,6 +3977,7 @@ class OrderReactivateTest(TestCase):
                 datetime=now(), expires=now() + timedelta(days=1),
                 cancellation_date=now(),
                 total=Decimal('46.00'),
+                sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             )
             self.ticket = Item.objects.create(event=self.event, name='Early-bird ticket',
                                               default_price=Decimal('23.00'), admission=True)
@@ -4066,6 +4114,7 @@ def test_autocreate_medium(event):
     q.items.add(ticket)
     order = _create_order(
         event, email='dummy@example.org', positions=[cp1],
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
         now_dt=now(),
         payment_requests=[
             {

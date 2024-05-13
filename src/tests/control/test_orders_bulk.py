@@ -73,6 +73,7 @@ def order1(env):
         code='FOO', event=env[0], email='foo@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
+        sales_channel=env[0].organizer.sales_channels.get(identifier="web"),
         total=14, locale='en'
     )
     o.payments.create(

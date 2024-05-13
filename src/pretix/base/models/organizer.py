@@ -565,4 +565,4 @@ class SalesChannel(LoggedModel):
 
     @property
     def icon(self):
-        return self._type.icon
+        return self.type_instance.icon

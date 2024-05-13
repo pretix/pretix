@@ -439,8 +439,6 @@ class ItemCreateForm(I18nModelForm):
             )
             for f in fields:
                 setattr(self.instance, f, getattr(src, f))
-            if not self.instance.all_sales_channels:
-                self.instance.limit_sales_channels.set(src.limit_sales_channels.all())
 
             if src.picture:
                 self.instance.picture.save(os.path.basename(src.picture.name), src.picture)
@@ -472,6 +470,8 @@ class ItemCreateForm(I18nModelForm):
                 })
 
         if self.cleaned_data.get('copy_from'):
+            if not self.instance.all_sales_channels:
+                self.instance.limit_sales_channels.set(self.cleaned_data['copy_from'].limit_sales_channels.all())
             self.instance.require_membership_types.set(
                 self.cleaned_data['copy_from'].require_membership_types.all()
             )

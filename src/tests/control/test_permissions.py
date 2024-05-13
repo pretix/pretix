@@ -55,6 +55,7 @@ def env():
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
         total=0,
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     Team.objects.create(pk=1, organizer=o)
     return event, user, o

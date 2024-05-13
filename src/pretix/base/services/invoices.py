@@ -443,8 +443,11 @@ def build_preview_invoice_pdf(event):
         locale = event.settings.locale
 
     with rolledback_transaction(), language(locale, event.settings.region):
-        order = event.orders.create(status=Order.STATUS_PENDING, datetime=timezone.now(),
-                                    expires=timezone.now(), code="PREVIEW", total=100 * event.tax_rules.count())
+        order = event.orders.create(
+            status=Order.STATUS_PENDING, datetime=timezone.now(),
+            expires=timezone.now(), code="PREVIEW", total=100 * event.tax_rules.count(),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
+        )
         invoice = Invoice(
             order=order, event=event, invoice_no="PREVIEW",
             date=timezone.now().date(), locale=locale, organizer=event.organizer

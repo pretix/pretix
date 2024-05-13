@@ -306,6 +306,7 @@ class EventMixin:
     def annotated(cls, qs, channel='web', voucher=None):
         from pretix.base.models import Item, ItemVariation, Quota
 
+        assert isinstance(channel, str)
         sq_active_item = Item.objects.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher).filter(
             Q(variations__isnull=True)
             & Q(quotas__pk=OuterRef('pk'))

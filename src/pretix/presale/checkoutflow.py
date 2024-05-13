@@ -935,7 +935,7 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                     event=self.request.event,
                     cart_id=get_or_create_cart_id(request),
                     invoice_address=addr,
-                    sales_channel=request.sales_channel.identifier,
+                    sales_channel=request.sales_channel,
                 )
                 diff = cm.recompute_final_prices_and_taxes()
             except TaxRule.SaleNotAllowed:

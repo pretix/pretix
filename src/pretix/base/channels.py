@@ -26,7 +26,9 @@ from collections import OrderedDict
 from django.dispatch import receiver
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.signals import register_sales_channel_types
+from pretix.base.signals import (
+    register_sales_channel_types, register_sales_channels,
+)
 
 logger = logging.getLogger(__name__)
 _ALL_CHANNEL_TYPES = None
@@ -121,6 +123,11 @@ def get_all_sales_channel_types():
 
     channels = []
     for recv, ret in register_sales_channel_types.send(None):
+        if isinstance(ret, (list, tuple)):
+            channels += ret
+        else:
+            channels.append(ret)
+    for recv, ret in register_sales_channels.send(None):  # todo: remove me
         if isinstance(ret, (list, tuple)):
             channels += ret
         else:

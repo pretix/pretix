@@ -74,7 +74,8 @@ def env():
         code='FOO', event=event, email='dummy@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
-        total=14, locale='en'
+        total=14, locale='en',
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     o.payments.create(
         amount=o.total, provider='banktransfer', state=OrderPayment.PAYMENT_STATE_PENDING
@@ -873,6 +874,7 @@ def test_order_extend_expired_seat_taken(client, env):
             code='BAR', event=env[0], email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=env[0].organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
         OrderPosition.objects.create(
@@ -1103,6 +1105,7 @@ def test_order_mark_paid_expired_seat_taken(client, env):
             code='BAR', event=env[0], email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=env[0].organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
         OrderPosition.objects.create(
@@ -1263,6 +1266,7 @@ class OrderChangeTests(SoupTest):
             code='FOO', event=self.event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=self.event.organizer.sales_channels.get(identifier="web"),
             total=Decimal('46.00'),
         )
         self.tr7 = self.event.tax_rules.create(rate=Decimal('7.00'))
@@ -2216,6 +2220,7 @@ def test_refund_paid_order_offsetting_to_wrong_currency(client, env):
             code='BAZ', event=event2, email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=event2.organizer.sales_channels.get(identifier="web"),
             total=5, locale='en'
         )
         o.positions.create(price=5, item=ticket2)
@@ -2244,6 +2249,7 @@ def test_refund_paid_order_offsetting(client, env):
             code='BAZ', event=env[0], email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=env[0].organizer.sales_channels.get(identifier="web"),
             total=5, locale='en'
         )
 

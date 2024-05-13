@@ -998,17 +998,20 @@ def test_limit_products_subevents_distinct(event, item, item2):
 @pytest.mark.django_db
 @scopes_disabled()
 def test_sales_channels(event, item):
-    d1 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=20, sales_channels=['resellers'])
+    d1 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=20, all_sales_channels=False)
     d1.save()
-    d2 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=50, sales_channels=['web', 'resellers'])
+    d1.limit_sales_channels.add(event.organizer.sales_channels.get(identifier="bar"))
+    d2 = Discount(event=event, condition_min_count=2, benefit_discount_matching_percent=50, all_sales_channels=False)
     d2.save()
+    d2.limit_sales_channels.add(event.organizer.sales_channels.get(identifier="web"))
+    d2.limit_sales_channels.add(event.organizer.sales_channels.get(identifier="bar"))
 
     positions = (
         (item.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
         (item.pk, None, Decimal('100.00'), False, False, Decimal('0.00')),
     )
 
-    assert sorted([p for p, d in apply_discounts(event, 'resellers', positions)]) == [Decimal('80.00'), Decimal('80.00')]
+    assert sorted([p for p, d in apply_discounts(event, 'bar', positions)]) == [Decimal('80.00'), Decimal('80.00')]
     assert sorted([p for p, d in apply_discounts(event, 'web', positions)]) == [Decimal('50.00'), Decimal('50.00')]
 
 

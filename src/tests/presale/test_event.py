@@ -65,7 +65,7 @@ class EventTestMixin:
         self.event = Event.objects.create(
             organizer=self.orga, name='30C3', slug='30c3',
             date_from=datetime.datetime(now().year + 1, 12, 26, 14, 0, tzinfo=datetime.timezone.utc),
-            live=True, sales_channels=['web', 'bar']
+            live=True,
         )
         self.user = User.objects.create_user('dummy@dummy.dummy', 'dummy')
         t = Team.objects.create(organizer=self.orga, can_change_event_settings=True)
@@ -153,7 +153,8 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
         with scopes_disabled():
             q = Quota.objects.create(event=self.event, name='Quota', size=2)
             item = Item.objects.create(event=self.event, name='Early-bird ticket', default_price=0, active=True,
-                                       sales_channels=['bar'])
+                                       all_sales_channels=False)
+            item.limit_sales_channels.add(self.orga.sales_channels.get(identifier="bar"))
             q.items.add(item)
         html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertNotIn("Early-bird", html)
@@ -550,7 +551,8 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
             q = Quota.objects.create(event=self.event, name='Quota', size=None)
             item = Item.objects.create(event=self.event, name='Early-bird ticket', category=c, default_price=0)
             var1 = ItemVariation.objects.create(item=item, value='Red')
-            var2 = ItemVariation.objects.create(item=item, value='Blue', sales_channels=['foobar'])
+            var2 = ItemVariation.objects.create(item=item, value='Blue', all_sales_channels=False)
+            var2.limit_sales_channels.add(self.orga.sales_channels.get(identifier='bar'))
         q.items.add(item)
         q.variations.add(var1)
         q.variations.add(var2)
@@ -1278,7 +1280,7 @@ class DeadlineTest(EventTestMixin, TestCase):
     def test_saleschannel_disabled(self):
         self.event.presale_start = None
         self.event.presale_end = None
-        self.event.sales_channels = []
+        self.event.all_sales_channels = False
         self.event.save()
         response = self.client.get(
             '/%s/%s/' % (self.orga.slug, self.event.slug)
@@ -1325,6 +1327,7 @@ class TestResendLink(EventTestMixin, SoupTest):
             Order.objects.create(
                 code='DUMMY1', status=Order.STATUS_PENDING, event=self.event,
                 email='dummy@dummy.dummy', datetime=now(), expires=now(),
+                sales_channel=self.orga.sales_channels.get(identifier="web"),
                 total=0,
             )
         mail.outbox = []
@@ -1339,6 +1342,7 @@ class TestResendLink(EventTestMixin, SoupTest):
             Order.objects.create(
                 code='DUMMY1', status=Order.STATUS_PENDING, event=self.event,
                 email='dummy@dummy.dummy', datetime=now(), expires=now(),
+                sales_channel=self.orga.sales_channels.get(identifier="web"),
                 total=0,
             )
         mail.outbox = []
@@ -1354,11 +1358,13 @@ class TestResendLink(EventTestMixin, SoupTest):
             Order.objects.create(
                 code='DUMMY1', status=Order.STATUS_PENDING, event=self.event,
                 email='dummy@dummy.dummy', datetime=now(), expires=now(),
+                sales_channel=self.orga.sales_channels.get(identifier="web"),
                 total=0,
             )
             Order.objects.create(
                 code='DUMMY2', status=Order.STATUS_PENDING, event=self.event,
                 email='dummy@dummy.dummy', datetime=now(), expires=now(),
+                sales_channel=self.orga.sales_channels.get(identifier="web"),
                 total=0,
             )
         mail.outbox = []

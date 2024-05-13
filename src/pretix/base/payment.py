@@ -853,7 +853,7 @@ class BasePaymentProvider:
                 if str(ia.country) != '' and str(ia.country) not in restricted_countries:
                     return False
 
-        if order.sales_channel not in self.settings.get('_restrict_to_sales_channels', as_type=list, default=['web']):
+        if order.sales_channel.identifier not in self.settings.get('_restrict_to_sales_channels', as_type=list, default=['web']):
             return False
 
         return self._is_available_by_time(order=order)

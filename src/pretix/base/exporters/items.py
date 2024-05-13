@@ -27,7 +27,6 @@ from openpyxl.styles import Alignment
 from openpyxl.utils import get_column_letter
 
 from ...helpers.safe_openpyxl import SafeCell
-from ..channels import get_all_sales_channel_types
 from ..exporter import ListExporter
 from ..models import ItemMetaValue, ItemVariation, ItemVariationMetaValue
 from ..signals import register_data_exporters
@@ -53,7 +52,7 @@ class ItemDataExporter(ListExporter):
 
     def iterate_list(self, form_data):
         locales = self.event.settings.locales
-        scs = get_all_sales_channel_types()
+        scs = self.organizer.sales_channels.all()
         header = [
             _("Product ID"),
             _("Variation ID"),
@@ -141,9 +140,15 @@ class ItemDataExporter(ListExporter):
                         row.append(i.name.localize(l))
                     for l in locales:
                         row.append(v.value.localize(l))
+
+                    sales_channels = list(scs)
+                    if not i.all_sales_channels:
+                        sales_channels = [s for s in sales_channels if s.identifier in (p.identifier for p in i.limit_sales_channels.all())]
+                    if not v.all_sales_channels:
+                        sales_channels = [s for s in sales_channels if s.identifier in (p.identifier for p in v.limit_sales_channels.all())]
                     row += [
                         _("Yes") if i.active and v.active else "",
-                        ", ".join([str(sn.verbose_name) for s, sn in scs.items() if s in i.sales_channels and s in v.sales_channels]),
+                        ", ".join([str(sn.label) for sn in sales_channels]),
                         v.default_price or i.default_price,
                         _("Yes") if i.free_price else "",
                         str(i.tax_rule) if i.tax_rule else "",
@@ -186,9 +191,12 @@ class ItemDataExporter(ListExporter):
                     row.append(i.name.localize(l))
                 for l in locales:
                     row.append("")
+                sales_channels = list(scs)
+                if not i.all_sales_channels:
+                    sales_channels = [s for s in sales_channels if s.identifier in (p.identifier for p in i.limit_sales_channels.all())]
                 row += [
                     _("Yes") if i.active else "",
-                    ", ".join([str(sn.verbose_name) for s, sn in scs.items() if s in i.sales_channels]),
+                    ", ".join([str(sn.label) for sn in sales_channels]),
                     i.default_price,
                     _("Yes") if i.free_price else "",
                     str(i.tax_rule) if i.tax_rule else "",

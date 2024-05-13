@@ -366,6 +366,7 @@ def test_validate_membership_max_usages(event, customer, membership, requiring_t
         datetime=now() - timedelta(days=3),
         expires=now() + timedelta(days=11),
         total=Decimal("23"),
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     OrderPosition.objects.create(
         order=o1,
@@ -446,6 +447,7 @@ def test_validate_membership_parallel(event, customer, membership, subevent, req
         datetime=now() - timedelta(days=3),
         expires=now() + timedelta(days=11),
         total=Decimal("23"),
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     OrderPosition.objects.create(
         order=o1,
@@ -549,6 +551,7 @@ def test_validate_membership_parallel_validity_dynamic(event, customer, membersh
         datetime=now() - timedelta(days=3),
         expires=now() + timedelta(days=11),
         total=Decimal("23"),
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     OrderPosition.objects.create(
         order=o1,
@@ -664,6 +667,7 @@ def test_validate_membership_parallel_validity_fixed(event, customer, membership
         datetime=now() - timedelta(days=3),
         expires=now() + timedelta(days=11),
         total=Decimal("23"),
+        sales_channel=event.organizer.sales_channels.get(identifier="web"),
     )
     OrderPosition.objects.create(
         order=o1,
@@ -743,6 +747,7 @@ def test_use_membership(event, customer, membership, requiring_ticket):
     )
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=now(),
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           payment_requests=[{
                               "id": "test0",
                               "provider": "banktransfer",
@@ -790,6 +795,7 @@ def test_grant_when_paid_and_changed(event, customer, granting_ticket):
     q.items.add(granting_ticket)
     order = _create_order(event, email='dummy@example.org', positions=[cp1],
                           now_dt=now(),
+                          sales_channel=event.organizer.sales_channels.get(identifier="web"),
                           payment_requests=[{
                               "id": "test0",
                               "provider": "banktransfer",

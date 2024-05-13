@@ -71,7 +71,6 @@ from django.views.generic import (
 from pretix.api.models import ApiCall, WebHook
 from pretix.api.webhooks import manually_retry_all_calls
 from pretix.base.auth import get_auth_backends
-from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.exporter import (
     MultiSheetListExporter, OrganizerLevelExportMixin,
 )
@@ -2643,7 +2642,7 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             q |= Q(email__iexact=self.customer.email)
         qs = Order.objects.filter(
             q
-        ).select_related('event').order_by('-datetime', 'pk')
+        ).select_related('event').prefetch_related('sales_channel').order_by('-datetime', 'pk')
         return qs
 
     @cached_property
@@ -2720,7 +2719,6 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             )
         }
 
-        scs = get_all_sales_channel_types()
         for o in ctx['orders']:
             if o.pk not in annotated:
                 continue
@@ -2733,7 +2731,6 @@ class CustomerDetailView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMi
             o.has_cancellation_request = annotated.get(o.pk)['has_cancellation_request']
             o.computed_payment_refund_sum = annotated.get(o.pk)['computed_payment_refund_sum']
             o.icnt = annotated.get(o.pk)['icnt']
-            o.sales_channel_obj = scs[o.sales_channel]
 
         ctx["lifetime_spending"] = (
             self.get_queryset()
