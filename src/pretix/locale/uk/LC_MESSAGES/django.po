@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2024-05-12 06:00+0000\n"
+"PO-Revision-Date: 2024-05-13 21:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -30136,10 +30136,8 @@ msgid "Do you really want to disconnect your Stripe account?"
 msgstr "Чи виточно хочете видалити адресу з вашого облікового запису?"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:16
-#, fuzzy
-#| msgid "Discounts"
 msgid "Disconnect"
-msgstr "Знижка"
+msgstr "Від'єднати"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:4
 msgid ""
@@ -32749,10 +32747,8 @@ msgstr "Календар"
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:49
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:65
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:37
-#, fuzzy
-#| msgid "Continue"
 msgid "(continued)"
-msgstr "Продовжити"
+msgstr "(подовжено)"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:58
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:46
@@ -33228,7 +33224,7 @@ msgstr "Будь ласка, поверніться назад та спробу
 #: pretix/presale/views/order.py:373 pretix/presale/views/order.py:438
 #: pretix/presale/views/order.py:519
 msgid "The payment for this order cannot be continued."
-msgstr "Оплата за це замовлення не може бути продовжена."
+msgstr "Оплата за це замовлення не може бути подовжена."
 
 #: pretix/presale/views/order.py:378 pretix/presale/views/order.py:447
 #: pretix/presale/views/order.py:528 pretix/presale/views/order.py:569
