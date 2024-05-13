@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2022-09-15 21:00+0000\n"
-"Last-Translator: Svyatoslav <slava@digitalarthouse.eu>\n"
+"PO-Revision-Date: 2024-05-13 21:00+0000\n"
+"Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Russian <https://translate.pretix.eu/projects/pretix/pretix/"
 "ru/>\n"
 "Language: ru\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 4.14\n"
+"X-Generator: Weblate 5.4.3\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -32391,10 +32391,8 @@ msgstr "Добавить в календарь"
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:49
 #: pretix/presale/templates/pretixpresale/fragment_day_calendar.html:65
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:37
-#, fuzzy
-#| msgid "Continue"
 msgid "(continued)"
-msgstr "Продолжить"
+msgstr "(продлено)"
 
 #: pretix/presale/templates/pretixpresale/fragment_calendar.html:58
 #: pretix/presale/templates/pretixpresale/fragment_week_calendar.html:46
