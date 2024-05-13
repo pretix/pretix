@@ -169,6 +169,7 @@ class EventViewSet(viewsets.ModelViewSet):
             'meta_values',
             'meta_values__property',
             'item_meta_properties',
+            'limit_sales_channels',
             Prefetch(
                 'seat_category_mappings',
                 to_attr='_seat_category_mappings',

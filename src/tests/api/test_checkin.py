@@ -65,7 +65,8 @@ def order(event, item, other_item, taxrule):
             status=Order.STATUS_PAID, secret="k24fiuwvu8kxz3y1",
             datetime=datetime.datetime(2017, 12, 1, 10, 0, 0, tzinfo=datetime.timezone.utc),
             expires=datetime.datetime(2017, 12, 10, 10, 0, 0, tzinfo=datetime.timezone.utc),
-            total=46, locale='en'
+            total=46, locale='en',
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
         )
         InvoiceAddress.objects.create(order=o, company="Sample company", country=Country('NZ'))
         op1 = OrderPosition.objects.create(

@@ -73,7 +73,8 @@ def event():
 
 @pytest.fixture
 def clist_autocheckin(event):
-    c = event.checkin_lists.create(name="Default", all_products=True, auto_checkin_sales_channels=['web'])
+    c = event.checkin_lists.create(name="Default", all_products=True)
+    c.auto_checkin_sales_channels.add(event.organizer.sales_channels.get(identifier="web"))
     return c
 
 
@@ -3415,11 +3416,10 @@ def test_autocheckin(clist_autocheckin, event):
                               "pprov": FreeOrderProvider(event),
                           }],
                           locale='de')[0]
-    assert "web" in clist_autocheckin.auto_checkin_sales_channels
+    assert clist_autocheckin.auto_checkin_sales_channels.contains(event.organizer.sales_channels.get(identifier="web"))
     assert order.positions.first().checkins.first().auto_checked_in
 
-    clist_autocheckin.auto_checkin_sales_channels = []
-    clist_autocheckin.save()
+    clist_autocheckin.auto_checkin_sales_channels.clear()
 
     cp1 = CartPosition.objects.create(
         item=ticket, price=23, expires=now() + timedelta(days=1), event=event, cart_id="123"
@@ -3436,7 +3436,7 @@ def test_autocheckin(clist_autocheckin, event):
                               "pprov": FreeOrderProvider(event),
                           }],
                           locale='de')[0]
-    assert clist_autocheckin.auto_checkin_sales_channels == []
+    assert clist_autocheckin.auto_checkin_sales_channels.count() == 0
     assert order.positions.first().checkins.count() == 0
 
 

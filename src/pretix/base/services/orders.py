@@ -1272,7 +1272,7 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
             email_attendees_template = event.settings.mail_text_order_placed_attendee
             subject_attendees_template = event.settings.mail_subject_order_placed_attendee
 
-        if sales_channel in event.settings.mail_sales_channel_placed_paid:
+        if sales_channel.identifier in event.settings.mail_sales_channel_placed_paid:
             _order_placed_email(event, order, email_template, subject_template, log_entry, invoice, payment_objs,
                                 is_free=free_order_flow)
             if email_attendees:

@@ -94,6 +94,7 @@ def order2(env):
         code='BAR', event=env[0], email='bar@dummy.test',
         status=Order.STATUS_PENDING,
         datetime=now(), expires=now() + timedelta(days=10),
+        sales_channel=env[0].organizer.sales_channels.get(identifier="web"),
         total=14, locale='en'
     )
     o.payments.create(

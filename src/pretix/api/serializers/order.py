@@ -736,7 +736,10 @@ class OrderSerializer(I18nAwareModelSerializer):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.fields["sales_channel"].queryset = self.context["event"].organizer.sales_channels.all()
+        if "organizer" in self.context:
+            self.fields["sales_channel"].queryset = self.context["organizer"].sales_channels.all()
+        else:
+            self.fields["sales_channel"].queryset = self.context["event"].organizer.sales_channels.all()
         if not self.context['pdf_data']:
             self.fields['positions'].child.fields.pop('pdf_data', None)
 
@@ -1131,18 +1134,6 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
             raise ValidationError(errs)
         return data
 
-    def validate_testmode(self, testmode):
-        if 'sales_channel' in self.initial_data:
-            try:
-                if testmode and not self.initial_data["sales_channel"].type_instance.testmode_supported:
-                    raise ValidationError('This sales channel does not provide support for test mode.')
-            except KeyError:
-                # We do not need to raise a ValidationError here, since there is another check to validate the
-                # sales_channel
-                pass
-
-        return testmode
-
     def create(self, validated_data):
         fees_data = validated_data.pop('fees') if 'fees' in validated_data else []
         positions_data = validated_data.pop('positions') if 'positions' in validated_data else []
@@ -1151,13 +1142,16 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
         payment_date = validated_data.pop('payment_date', now())
         force = validated_data.pop('force', False)
         simulate = validated_data.pop('simulate', False)
+
+        if not validated_data.get("sales_channel"):
+            validated_data["sales_channel"] = self.context['event'].organizer.sales_channels.get(identifier="web")
+
+        if validated_data.get("testmode") and not validated_data["sales_channel"].type_instance.testmode_supported:
+            raise ValidationError({"testmode": ["This sales channel does not provide support for test mode."]})
+
         self._send_mail = validated_data.pop('send_email', False)
         if self._send_mail is None:
-            sales_channel = validated_data.get('sales_channel')
-            if sales_channel:
-                self._send_mail = sales_channel.identifier in self.context['event'].settings.mail_sales_channel_placed_paid
-            else:
-                self._send_mail = "web" in self.context['event'].settings.mail_sales_channel_placed_paid
+            self._send_mail = validated_data["sales_channel"].identifier in self.context['event'].settings.mail_sales_channel_placed_paid
 
         if 'invoice_address' in validated_data:
             iadata = validated_data.pop('invoice_address')
@@ -1317,10 +1311,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
                     errs[i]['seat'] = ['The specified seat does not exist.']
                 else:
                     seat_usage[seat] += 1
-                    if validated_data.get('sales_channel'):
-                        sales_channel_id = validated_data['sales_channel'].identifier
-                    else:
-                        sales_channel_id = "web"
+                    sales_channel_id = validated_data['sales_channel'].identifier
                     if (seat_usage[seat] > 0 and not seat.is_available(sales_channel=sales_channel_id)) or seat_usage[seat] > 1:
                         errs[i]['seat'] = [gettext_lazy('The selected seat "{seat}" is not available.').format(seat=seat.name)]
             elif seated:
@@ -1380,6 +1371,7 @@ class OrderCreateSerializer(I18nAwareModelSerializer):
 
         if validated_data.get('locale', None) is None:
             validated_data['locale'] = self.context['event'].settings.locale
+
         order = Order(event=self.context['event'], **validated_data)
         if not validated_data.get('expires'):
             order.set_expires(subevents=[p.get('subevent') for p in positions_data])

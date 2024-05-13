@@ -169,7 +169,7 @@ def apply_discounts(event: Event, sales_channel: str,
     discount_qs = event.discounts.filter(
         Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()),
         Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()),
-        sales_channels__contains=sales_channel,
+        Q(all_sales_channels=True) | Q(limit_sales_channels__identifier=sales_channel),
         active=True,
     ).prefetch_related('condition_limit_products', 'benefit_limit_products').order_by('position', 'pk')
     for discount in discount_qs:

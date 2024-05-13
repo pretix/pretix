@@ -103,6 +103,7 @@ def test_giftcard_detail_expand(token_client, organizer, event, giftcard):
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
         ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
@@ -196,6 +197,7 @@ def test_giftcard_patch_owner_by_id(token_client, organizer, event, giftcard):
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
         ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
@@ -220,6 +222,7 @@ def test_giftcard_patch_owner_by_secret(token_client, organizer, event, giftcard
         o = Order.objects.create(
             code='FOO', event=event, email='dummy@dummy.test',
             status=Order.STATUS_PENDING, datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=event.organizer.sales_channels.get(identifier="web"),
             total=14, locale='en'
         )
         ticket = event.items.create(name='Early-bird ticket', category=None, default_price=23, admission=True,
