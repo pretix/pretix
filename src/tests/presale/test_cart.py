@@ -953,7 +953,7 @@ class CartTest(CartTestMixin, TestCase):
             self.ticket.save()
         self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '1',
-        }, follow=True, PRETIX_SALES_CHANNEL=FoobarSalesChannel)
+        }, follow=True, PRETIX_SALES_CHANNEL=FoobarSalesChannel.identifier)
         with scopes_disabled():
             self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
 
@@ -1028,7 +1028,7 @@ class CartTest(CartTestMixin, TestCase):
         self.event.settings.max_items_per_order = 5
         response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
             'item_%d' % self.ticket.id: '5',
-        }, follow=True, PRETIX_SALES_CHANNEL=FoobarSalesChannel)
+        }, follow=True, PRETIX_SALES_CHANNEL=FoobarSalesChannel.identifier)
         self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
                              target_status_code=200)
         doc = BeautifulSoup(response.rendered_content, "lxml")

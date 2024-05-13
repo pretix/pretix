@@ -43,7 +43,6 @@ from pretix.control.permissions import (
 )
 from pretix.helpers.models import modelcopy
 
-from ...base.channels import get_all_sales_channel_types
 from ...helpers.compat import CompatDeleteView
 from . import CreateView, PaginationMixin, UpdateView
 
@@ -190,11 +189,14 @@ class DiscountList(PaginationMixin, ListView):
     template_name = 'pretixcontrol/items/discounts.html'
 
     def get_queryset(self):
-        return self.request.event.discounts.prefetch_related('condition_limit_products')
+        return self.request.event.discounts.prefetch_related('condition_limit_products', 'limit_sales_channels')
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
-        ctx['sales_channels'] = get_all_sales_channel_types()
+        ctx['sales_channels'] = [
+            c for c in self.request.organizer.sales_channels.all()
+            if c.type_instance.discounts_supported
+        ]
         return ctx
 
 

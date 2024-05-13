@@ -36,6 +36,7 @@ import logging
 import os
 import string
 import uuid
+import warnings
 from collections import Counter, OrderedDict, defaultdict
 from datetime import datetime, time, timedelta
 from operator import attrgetter
@@ -467,6 +468,7 @@ class EventMixin:
         return best_state_found, num_tickets_found, num_tickets_possible
 
     def free_seats(self, ignore_voucher=None, sales_channel='web', include_blocked=False):
+        assert isinstance(sales_channel, str)
         qs_annotated = self._seats(ignore_voucher=ignore_voucher)
 
         qs = qs_annotated.filter(has_order=False, has_cart=False, has_voucher=False)
@@ -495,8 +497,10 @@ class EventMixin:
         return qs.filter(q)
 
 
-def default_sales_channels():
+def default_sales_channels():  # kept for legacy migration
     from ..channels import get_all_sales_channel_types
+
+    warnings.warn('Method should not be used in new code.', DeprecationWarning)
 
     return list(get_all_sales_channel_types().keys())
 

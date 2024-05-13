@@ -50,15 +50,14 @@ from django.utils.timezone import get_current_timezone, make_aware, now
 from django.utils.translation import gettext, gettext_lazy as _, pgettext_lazy
 from django_scopes.forms import SafeModelChoiceField
 
-from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.forms.widgets import (
     DatePickerWidget, SplitDateTimePickerWidget, TimePickerWidget,
 )
 from pretix.base.models import (
     Checkin, CheckinList, Device, Event, EventMetaProperty, EventMetaValue,
     Gate, Invoice, InvoiceAddress, Item, Order, OrderPayment, OrderPosition,
-    OrderRefund, Organizer, Question, QuestionAnswer, Quota, SubEvent,
-    SubEventMetaValue, Team, TeamAPIToken, TeamInvite, Voucher,
+    OrderRefund, Organizer, Question, QuestionAnswer, Quota, SalesChannel,
+    SubEvent, SubEventMetaValue, Team, TeamAPIToken, TeamInvite, Voucher,
 )
 from pretix.base.signals import register_payment_providers
 from pretix.control.forms.widgets import Select2, Select2ItemVarQuota
@@ -579,9 +578,11 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
         required=False,
         label=_('Maximal sum of payments and refunds'),
     )
-    sales_channel = forms.ChoiceField(
+    sales_channel = SafeModelChoiceField(
         label=_('Sales channel'),
         required=False,
+        queryset=SalesChannel.objects.none(),
+        to_field_name="identifier",
     )
     has_checkin = forms.NullBooleanField(
         required=False,
@@ -604,9 +605,7 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
             del self.fields['subevents_from']
             del self.fields['subevents_to']
 
-        self.fields['sales_channel'].choices = [('', '')] + [
-            (k, v.verbose_name) for k, v in get_all_sales_channel_types().items()
-        ]
+        self.fields['sales_channel'].queryset = self.event.organizer.sales_channels.all()
 
         locale_names = dict(settings.LANGUAGES)
         self.fields['locale'].choices = [('', '')] + [(a, locale_names[a]) for a in self.event.settings.locales]
@@ -719,7 +718,7 @@ class EventOrderExpertFilterForm(EventOrderFilterForm):
         if fdata.get('comment'):
             qs = qs.filter(comment__icontains=fdata.get('comment'))
         if fdata.get('sales_channel'):
-            qs = qs.filter(sales_channel=fdata.get('sales_channel'))
+            qs = qs.filter(sales_channel__identifier=fdata.get('sales_channel').identifier)
         if fdata.get('total'):
             qs = qs.filter(total=fdata.get('total'))
         if fdata.get('email_known_to_work') is not None:

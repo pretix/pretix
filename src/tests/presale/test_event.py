@@ -158,7 +158,10 @@ class ItemDisplayTest(EventTestMixin, SoupTest):
             q.items.add(item)
         html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug)).rendered_content
         self.assertNotIn("Early-bird", html)
-        html = self.client.get('/%s/%s/' % (self.orga.slug, self.event.slug), PRETIX_SALES_CHANNEL=FoobarSalesChannel).rendered_content
+        html = self.client.get(
+            '/%s/%s/' % (self.orga.slug, self.event.slug),
+            PRETIX_SALES_CHANNEL=FoobarSalesChannel.identifier
+        ).rendered_content
         self.assertIn("Early-bird", html)
 
     def test_timely_available(self):

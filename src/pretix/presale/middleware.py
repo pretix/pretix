@@ -36,7 +36,6 @@ from django.template.response import TemplateResponse
 from django.urls import resolve
 from django_scopes import scope
 
-from pretix.base.channels import WebshopSalesChannelType
 from pretix.base.timemachine import time_machine_now_assigned_from_request
 from pretix.presale.signals import process_response
 
@@ -57,10 +56,6 @@ class EventMiddleware:
         url = resolve(request.path_info)
         request._namespace = url.namespace
 
-        if not hasattr(request, 'sales_channel'):
-            # The environ lookup is only relevant during unit testing
-            request.sales_channel = request.environ.get('PRETIX_SALES_CHANNEL', WebshopSalesChannelType())
-
         if url.namespace != 'presale':
             return self.get_response(request)
 
@@ -71,6 +66,12 @@ class EventMiddleware:
 
         with scope(organizer=getattr(request, 'organizer', None)), \
              time_machine_now_assigned_from_request(request):
+            if not hasattr(request, 'sales_channel') and hasattr(request, 'organizer'):
+                # The environ lookup is only relevant during unit testing
+                request.sales_channel = request.organizer.sales_channels.get(
+                    identifier=request.environ.get('PRETIX_SALES_CHANNEL', 'web')
+                )
+
             response = self.get_response(request)
 
             if hasattr(request, '_namespace') and request._namespace == 'presale' and hasattr(request, 'event'):

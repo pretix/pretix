@@ -58,7 +58,6 @@ from i18nfield.forms import (
 )
 from pytz import common_timezones
 
-from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.forms import (
     I18nMarkdownTextarea, I18nModelForm, PlaceholderValidator, SettingsForm,
 )
@@ -909,7 +908,7 @@ class InvoiceSettingsForm(EventSettingsValidationMixin, SettingsForm):
         locale_names = dict(settings.LANGUAGES)
         self.fields['invoice_language'].choices = [('__user__', _('The user\'s language'))] + [(a, locale_names[a]) for a in event.settings.locales]
         self.fields['invoice_generate_sales_channels'].choices = (
-            (c.identifier, c.verbose_name) for c in get_all_sales_channel_types().values()
+            (c.identifier, c.label) for c in event.organizer.sales_channels.all()
         )
         self.fields['invoice_numbers_counter_length'].validators.append(MaxValueValidator(15))
 
@@ -955,7 +954,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     ]
 
     mail_sales_channel_placed_paid = forms.MultipleChoiceField(
-        choices=lambda: [(ident, sc.verbose_name) for ident, sc in get_all_sales_channel_types().items()],
+        choices=[],
         label=_('Sales channels for checkout emails'),
         help_text=_('The order placed and paid emails will only be send to orders from these sales channels. '
                     'The online shop must be enabled.'),
@@ -966,7 +965,7 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
     )
 
     mail_sales_channel_download_reminder = forms.MultipleChoiceField(
-        choices=lambda: [(ident, sc.verbose_name) for ident, sc in get_all_sales_channel_types().items()],
+        choices=[],
         label=_('Sales channels'),
         help_text=_('This email will only be send to orders from these sales channels. The online shop must be enabled.'),
         widget=forms.CheckboxSelectMultiple(
@@ -1361,6 +1360,12 @@ class MailSettingsForm(FormPlaceholderMixin, SettingsForm):
         self.fields['mail_html_renderer'].choices = [
             (r.identifier, r.verbose_name) for r in event.get_html_mail_renderers().values()
         ]
+        self.fields['mail_sales_channel_placed_paid'].choices = (
+            (c.identifier, c.label) for c in event.organizer.sales_channels.all()
+        )
+        self.fields['mail_sales_channel_download_reminder'].choices = (
+            (c.identifier, c.label) for c in event.organizer.sales_channels.all()
+        )
 
         prefetch_related_objects([self.event.organizer], Prefetch('meta_properties'))
         self.event.meta_values_cached = self.event.meta_values.select_related('property').all()

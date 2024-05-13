@@ -36,6 +36,7 @@
 import calendar
 import sys
 import uuid
+import warnings
 from collections import Counter, OrderedDict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
@@ -1039,8 +1040,11 @@ class Item(LoggedModel):
             return None, None
 
 
-def _all_sales_channels_identifiers():
+def _all_sales_channels_identifiers():  # kept for legacy migrations
     from pretix.base.channels import get_all_sales_channel_types
+
+    warnings.warn('Method should not be used in new code.', DeprecationWarning)
+
     return list(get_all_sales_channel_types().keys())
 
 

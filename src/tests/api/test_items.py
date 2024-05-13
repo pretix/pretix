@@ -44,7 +44,6 @@ from django_countries.fields import Country
 from django_scopes import scopes_disabled
 from tests.const import SAMPLE_PNG
 
-from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.models import (
     CartPosition, InvoiceAddress, Item, ItemAddOn, ItemBundle, ItemCategory,
     ItemVariation, Order, OrderPosition, Question, QuestionOption, Quota,
@@ -386,34 +385,34 @@ def test_item_detail(token_client, organizer, event, team, item):
 def test_item_detail_variations(token_client, organizer, event, team, item):
     with scopes_disabled():
         var = item.variations.create(value="Children")
-    res = dict(TEST_ITEM_RES)
-    res["id"] = item.pk
-    res["variations"] = [{
-        "id": var.pk,
-        "value": {"en": "Children"},
-        "default_price": None,
-        "free_price_suggestion": None,
-        "price": "23.00",
-        "active": True,
-        "description": None,
-        "position": 0,
-        "checkin_attention": False,
-        "checkin_text": None,
-        "require_approval": False,
-        "require_membership": False,
-        "require_membership_hidden": False,
-        "require_membership_types": [],
-        "sales_channels": sorted(get_all_sales_channel_types().keys()),
-        "all_sales_channels": True,
-        "limit_sales_channels": [],
-        "available_from": None,
-        "available_until": None,
-        "available_from_mode": "hide",
-        "available_until_mode": "hide",
-        "hide_without_voucher": False,
-        "original_price": None,
-        "meta_data": {}
-    }]
+        res = dict(TEST_ITEM_RES)
+        res["id"] = item.pk
+        res["variations"] = [{
+            "id": var.pk,
+            "value": {"en": "Children"},
+            "default_price": None,
+            "free_price_suggestion": None,
+            "price": "23.00",
+            "active": True,
+            "description": None,
+            "position": 0,
+            "checkin_attention": False,
+            "checkin_text": None,
+            "require_approval": False,
+            "require_membership": False,
+            "require_membership_hidden": False,
+            "require_membership_types": [],
+            "sales_channels": sorted(organizer.sales_channels.values_list("identifier", flat=True)),
+            "all_sales_channels": True,
+            "limit_sales_channels": [],
+            "available_from": None,
+            "available_until": None,
+            "available_from_mode": "hide",
+            "available_until_mode": "hide",
+            "hide_without_voucher": False,
+            "original_price": None,
+            "meta_data": {}
+        }]
     res["has_variations"] = True
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/'.format(organizer.slug, event.slug,
                                                                                item.pk))
@@ -1338,7 +1337,6 @@ TEST_VARIATIONS_RES = {
     "require_membership": False,
     "require_membership_hidden": False,
     "require_membership_types": [],
-    "sales_channels": sorted(list(get_all_sales_channel_types().keys())),
     "all_sales_channels": True,
     "limit_sales_channels": [],
     "available_from": None,
@@ -1383,6 +1381,8 @@ TEST_VARIATIONS_UPDATE = {
 def test_variations_list(token_client, organizer, event, item, variation):
     res = dict(TEST_VARIATIONS_RES)
     res["id"] = variation.pk
+    with scopes_disabled():
+        res["sales_channels"] = sorted(organizer.sales_channels.values_list("identifier", flat=True))
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/variations/'.format(organizer.slug, event.slug, item.pk))
     assert resp.status_code == 200
     assert res['value'] == resp.data['results'][0]['value']
@@ -1394,6 +1394,8 @@ def test_variations_list(token_client, organizer, event, item, variation):
 def test_variations_detail(token_client, organizer, event, item, variation):
     res = dict(TEST_VARIATIONS_RES)
     res["id"] = variation.pk
+    with scopes_disabled():
+        res["sales_channels"] = sorted(organizer.sales_channels.values_list("identifier", flat=True))
     resp = token_client.get('/api/v1/organizers/{}/events/{}/items/{}/variations/{}/'.format(organizer.slug, event.slug, item.pk, variation.pk))
     assert resp.status_code == 200
     assert res == resp.data

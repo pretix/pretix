@@ -564,9 +564,9 @@ class RedeemView(NoSearchIndexViewMixin, EventViewMixin, CartMixin, TemplateView
         # Fetch all items
         items, display_add_to_cart = get_grouped_items(
             self.request.event,
-            self.subevent,
+            subevent=self.subevent,
             voucher=self.voucher,
-            channel=self.request.sales_channel.identifier,
+            channel=self.request.sales_channel,
             memberships=(
                 self.request.customer.usable_memberships(
                     for_event=self.subevent or self.request.event,
