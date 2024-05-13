@@ -311,6 +311,7 @@ class EventMixin:
 
         assert isinstance(channel, (SalesChannel, str))
 
+        assert isinstance(channel, str)
         sq_active_item = Item.objects.using(settings.DATABASE_REPLICA).filter_available(channel=channel, voucher=voucher).filter(
             Q(variations__isnull=True)
             & Q(quotas__pk=OuterRef('pk'))
