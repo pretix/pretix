@@ -2290,6 +2290,7 @@ def test_refund_prevent_duplicate_submit(client, env):
             code='BAZ', event=env[0], email='dummy@dummy.test',
             status=Order.STATUS_PENDING,
             datetime=now(), expires=now() + timedelta(days=10),
+            sales_channel=env[0].organizer.sales_channels.get(identifier="web"),
             total=5, locale='en'
         )
         env[2].refunds.create(provider="manual", amount=Decimal("2.00"), state=OrderRefund.REFUND_STATE_CREATED)
