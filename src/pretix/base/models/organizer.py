@@ -545,12 +545,16 @@ class SalesChannel(LoggedModel):
         verbose_name=_("Type"),
         max_length=200,
     )
+    position = models.PositiveIntegerField(
+        default=0,
+        verbose_name=_("Position")
+    )
     configuration = models.JSONField(default=dict)
 
     objects = ScopedManager(organizer="organizer")
 
     class Meta:
-        ordering = ("type", "identifier")
+        ordering = ("position", "type", "identifier", "id")
         unique_together = ("organizer", "identifier")
 
     def __str__(self):

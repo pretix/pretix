@@ -13,11 +13,12 @@ def create_sales_channels(apps, schema_editor):
 
     Organizer = apps.get_model("pretixbase", "Organizer")
     for o in Organizer.objects.all():
-        for t in channel_types.values():
+        for i, t in enumerate(channel_types.values()):
             if not t.default_created:
                 continue
             type_to_channel[t.identifier, o.pk] = o.sales_channels.get_or_create(
                 type=t.identifier,
+                position=i,
                 defaults=dict(
                     identifier=t.identifier,
                     label=LazyI18nString.from_gettext(t.verbose_name),
