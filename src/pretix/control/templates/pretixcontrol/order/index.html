@@ -436,7 +436,7 @@
                                 {% endif %}
                                 {% if line.used_membership %}
                                     <br /><span class="fa fa-id-card fa-fw" aria-hidden="true"></span>
-                                    <a href="{% url "control:organizer.customer.membership.edit" organizer=request.organizer.slug customer=order.customer.identifier id=line.used_membership.pk %}">
+                                    <a href="{% url "control:organizer.customer.membership.edit" organizer=request.organizer.slug customer=line.used_membership.customer.identifier id=line.used_membership.pk %}">
                                         {{ line.used_membership }}
                                     </a>
                                 {% endif %}
