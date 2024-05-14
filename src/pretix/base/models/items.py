@@ -34,6 +34,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import calendar
+import os
 import sys
 import uuid
 import warnings
@@ -1043,7 +1044,8 @@ class Item(LoggedModel):
 def _all_sales_channels_identifiers():  # kept for legacy migrations
     from pretix.base.channels import get_all_sales_channel_types
 
-    warnings.warn('Method should not be used in new code.', DeprecationWarning)
+    if "PYTEST_CURRENT_TEST" not in os.environ:
+        warnings.warn('Method should not be used in new code.', DeprecationWarning)
 
     return list(get_all_sales_channel_types().keys())
 

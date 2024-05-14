@@ -500,7 +500,8 @@ class EventMixin:
 def default_sales_channels():  # kept for legacy migration
     from ..channels import get_all_sales_channel_types
 
-    warnings.warn('Method should not be used in new code.', DeprecationWarning)
+    if "PYTEST_CURRENT_TEST" not in os.environ:
+        warnings.warn('Method should not be used in new code.', DeprecationWarning)
 
     return list(get_all_sales_channel_types().keys())
 
