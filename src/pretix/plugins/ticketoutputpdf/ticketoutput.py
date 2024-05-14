@@ -75,8 +75,8 @@ class PdfTicketOutput(BaseTicketOutput):
     def layout_map(self):
         if not hasattr(self.event, '_ticketoutputpdf_cache_layoutmap'):
             self.event._ticketoutputpdf_cache_layoutmap = {
-                (bi.item_id, bi.sales_channel): bi.layout
-                for bi in TicketLayoutItem.objects.select_related('layout').filter(item__event=self.event)
+                (bi.item_id, bi.sales_channel.identifier): bi.layout
+                for bi in TicketLayoutItem.objects.select_related('layout', 'sales_channel').filter(item__event=self.event)
             }
         return self.event._ticketoutputpdf_cache_layoutmap
 
@@ -118,7 +118,7 @@ class PdfTicketOutput(BaseTicketOutput):
             for op in self.get_tickets_to_print(order):
                 layout = override_layout.send_chained(
                     order.event, 'layout', orderposition=op, layout=self.layout_map.get(
-                        (op.item_id, self.override_channel or order.sales_channel),
+                        (op.item_id, self.override_channel or order.sales_channel.identifier),
                         self.layout_map.get(
                             (op.item_id, 'web'),
                             self.default_layout
@@ -139,7 +139,7 @@ class PdfTicketOutput(BaseTicketOutput):
 
         layout = override_layout.send_chained(
             order.event, 'layout', orderposition=op, layout=self.layout_map.get(
-                (op.item_id, self.override_channel or order.sales_channel),
+                (op.item_id, self.override_channel or order.sales_channel.identifier),
                 self.layout_map.get(
                     (op.item_id, 'web'),
                     self.default_layout

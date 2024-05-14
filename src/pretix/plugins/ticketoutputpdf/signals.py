@@ -28,7 +28,6 @@ from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.models import Event
 from pretix.base.signals import (  # NOQA: legacy import
     EventPluginSignal, event_copy_data, item_copy_data, layout_text_variables,
@@ -67,25 +66,25 @@ def register_multievent_data(sender, **kwargs):
 def control_item_forms(sender, request, item, **kwargs):
     forms = []
     queryset = sender.ticket_layouts.all()
-    for k, v in sorted(list(get_all_sales_channel_types().items()), key=lambda a: (int(a[0] != 'web'), a[0])):
+    for sc in sorted(list(sender.organizer.sales_channels.all()), key=lambda a: (int(a.identifier != 'web'), a.identifier)):
         try:
-            inst = TicketLayoutItem.objects.get(item=item, sales_channel=k)
+            inst = TicketLayoutItem.objects.get(item=item, sales_channel=sc)
         except TicketLayoutItem.DoesNotExist:
             inst = TicketLayoutItem(item=item)
         forms.append(TicketLayoutItemForm(
             instance=inst,
             event=sender,
-            sales_channel=v,
+            sales_channel=sc,
             queryset=queryset,
             data=(request.POST if request.method == "POST" else None),
-            prefix="ticketlayoutitem_{}".format(k)
+            prefix="ticketlayoutitem_{}".format(sc.identifier)
         ))
     return forms
 
 
 @receiver(item_copy_data, dispatch_uid="pretix_ticketoutputpdf_item_copy")
 def copy_item(sender, source, target, **kwargs):
-    for tli in TicketLayoutItem.objects.filter(item=source):
+    for tli in TicketLayoutItem.objects.filter(item=source).select_related("sales_channel"):
         TicketLayoutItem.objects.create(item=target, layout=tli.layout, sales_channel=tli.sales_channel)
 
 
@@ -122,7 +121,7 @@ def pdf_event_copy_data_receiver(sender, other, item_map, question_map, **kwargs
 
         layout_map[oldid] = bl
 
-    for bi in TicketLayoutItem.objects.filter(item__event=other):
+    for bi in TicketLayoutItem.objects.filter(item__event=other).select_related("sales_channel"):
         TicketLayoutItem.objects.create(item=item_map.get(bi.item_id), layout=layout_map.get(bi.layout_id),
                                         sales_channel=bi.sales_channel)
     return layout_map
@@ -167,7 +166,7 @@ def _ticket_layouts_for_item(request, item):
         request._ticket_layouts_for_item = {}
     if item.pk not in request._ticket_layouts_for_item:
         request._ticket_layouts_for_item[item.pk] = {
-            tli.sales_channel: tli.layout
+            tli.sales_channel.identifier: tli.layout
             for tli in item.ticketlayout_assignments.select_related('layout')
         }
         if request._ticket_layouts_for_item[item.pk] and 'web' not in request._ticket_layouts_for_item[item.pk]:
@@ -184,10 +183,10 @@ def control_order_position_info(sender: Event, position, request, order, **kwarg
     layouts = []
     seen = set()
     lm = _ticket_layouts_for_item(request, position.item)
-    if order.sales_channel in lm:
+    if order.sales_channel.identifier in lm:
         seen.add(lm[order.sales_channel])
     for k, l in lm.items():
-        if k == order.sales_channel or l in seen:
+        if k == order.sales_channel.identifier or l in seen:
             continue
         layouts.append({
             'label': str(l.name),
