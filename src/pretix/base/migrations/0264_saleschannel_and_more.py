@@ -26,6 +26,7 @@ class Migration(migrations.Migration):
                 ("label", i18nfield.fields.I18nCharField(max_length=200)),
                 ("identifier", models.CharField(max_length=200)),
                 ("type", models.CharField(max_length=200)),
+                ("position", models.PositiveIntegerField(default=0)),
                 ("configuration", models.JSONField(default=dict)),
             ],
         ),
