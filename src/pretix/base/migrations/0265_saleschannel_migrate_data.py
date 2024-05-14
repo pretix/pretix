@@ -9,8 +9,9 @@ from pretix.base.channels import get_all_sales_channel_types
 def create_sales_channels(apps, schema_editor):
     channel_types = get_all_sales_channel_types()
     type_to_channel = dict()
+    full_discount_set = set()
 
-    Organizer = apps.get_model('pretixbase', 'Organizer')
+    Organizer = apps.get_model("pretixbase", "Organizer")
     for o in Organizer.objects.all():
         for t in channel_types.values():
             if not t.default_created:
@@ -22,10 +23,12 @@ def create_sales_channels(apps, schema_editor):
                     label=LazyI18nString.from_gettext(t.verbose_name),
                 ),
             )[0]
+            if t.discounts_supported:
+                full_discount_set.add(t.identifier)
     full_set = set(type_to_channel.keys())
 
     for model in ("Discount", "Event", "Item", "ItemVariation"):
-        M = apps.get_model('pretixbase', model)
+        M = apps.get_model("pretixbase", model)
         for d in M.objects.all():
             if set(d.sales_channels) != full_set:
                 d.all_sales_channels = False
@@ -33,12 +36,20 @@ def create_sales_channels(apps, schema_editor):
                 for s in d.sales_channels:
                     d.limit_sales_channels.add(type_to_channel[s])
 
-    CheckinList = apps.get_model('pretixbase', 'CheckinList')
+    Discount = apps.get_model("pretixbase", "Discount")
+    for d in Discount.objects.all():
+        if set(d.sales_channels) != full_discount_set:
+            d.all_sales_channels = False
+            d.save()
+            for s in d.sales_channels:
+                d.limit_sales_channels.add(type_to_channel[s])
+
+    CheckinList = apps.get_model("pretixbase", "CheckinList")
     for c in CheckinList.objects.all():
         for s in c.auto_checkin_sales_channel_types:
             c.auto_checkin_sales_channels.add(type_to_channel[s])
 
-    Order = apps.get_model('pretixbase', 'Order')
+    Order = apps.get_model("pretixbase", "Order")
     for k, v in type_to_channel.items():
         Order.objects.filter(sales_channel_type=k, sales_channel__isnull=True).update(sales_channel=v)
 
