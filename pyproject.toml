@@ -82,7 +82,7 @@ dependencies = [
   "pycountry",
   "pycparser==2.22",
   "pycryptodome==3.20.*",
-  "pypdf==4.2.*",
+  "pypdf==3.9.*",
   "python-bidi==0.4.*",  # Support for Arabic in reportlab
   "python-dateutil==2.9.*",
   "pytz",
