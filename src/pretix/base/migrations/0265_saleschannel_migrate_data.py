@@ -16,7 +16,7 @@ def create_sales_channels(apps, schema_editor):
         for t in channel_types.values():
             if not t.default_created:
                 continue
-            type_to_channel[t.identifier] = o.sales_channels.get_or_create(
+            type_to_channel[t.identifier, o.pk] = o.sales_channels.get_or_create(
                 type=t.identifier,
                 defaults=dict(
                     identifier=t.identifier,
@@ -27,27 +27,42 @@ def create_sales_channels(apps, schema_editor):
                 full_discount_set.add(t.identifier)
     full_set = set(type_to_channel.keys())
 
-    for model in ("Discount", "Event", "Item", "ItemVariation"):
-        M = apps.get_model("pretixbase", model)
-        for d in M.objects.all():
-            if set(d.sales_channels) != full_set:
-                d.all_sales_channels = False
-                d.save()
-                for s in d.sales_channels:
-                    d.limit_sales_channels.add(type_to_channel[s])
+    Event = apps.get_model("pretixbase", "Event")
+    for d in Event.objects.all():
+        if set(d.sales_channels) != full_set:
+            d.all_sales_channels = False
+            d.save()
+            for s in d.sales_channels:
+                d.limit_sales_channels.add(type_to_channel[s, d.organizer_id])
+
+    Item = apps.get_model("pretixbase", "Item")
+    for d in Item.objects.select_related("event"):
+        if set(d.sales_channels) != full_set:
+            d.all_sales_channels = False
+            d.save()
+            for s in d.sales_channels:
+                d.limit_sales_channels.add(type_to_channel[s, d.event.organizer_id])
+
+    ItemVariation = apps.get_model("pretixbase", "ItemVariation")
+    for d in ItemVariation.objects.select_related("item__event"):
+        if set(d.sales_channels) != full_set:
+            d.all_sales_channels = False
+            d.save()
+            for s in d.sales_channels:
+                d.limit_sales_channels.add(type_to_channel[s, d.item.event.organizer_id])
 
     Discount = apps.get_model("pretixbase", "Discount")
-    for d in Discount.objects.all():
+    for d in Discount.objects.select_related("event"):
         if set(d.sales_channels) != full_discount_set:
             d.all_sales_channels = False
             d.save()
             for s in d.sales_channels:
-                d.limit_sales_channels.add(type_to_channel[s])
+                d.limit_sales_channels.add(type_to_channel[s, d.event.organizer_id])
 
     CheckinList = apps.get_model("pretixbase", "CheckinList")
-    for c in CheckinList.objects.all():
+    for c in CheckinList.objects.select_related("event"):
         for s in c.auto_checkin_sales_channel_types:
-            c.auto_checkin_sales_channels.add(type_to_channel[s])
+            c.auto_checkin_sales_channels.add(type_to_channel[s, d.event.organizer_id])
 
     Order = apps.get_model("pretixbase", "Order")
     for k, v in type_to_channel.items():
