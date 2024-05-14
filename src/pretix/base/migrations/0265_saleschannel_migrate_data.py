@@ -65,8 +65,10 @@ def create_sales_channels(apps, schema_editor):
             c.auto_checkin_sales_channels.add(type_to_channel[s, d.event.organizer_id])
 
     Order = apps.get_model("pretixbase", "Order")
-    for k, v in type_to_channel.items():
-        Order.objects.filter(sales_channel_type=k, sales_channel__isnull=True).update(sales_channel=v)
+    for (k, orgid), v in type_to_channel.items():
+        Order.objects.filter(sales_channel_type=k, event__organizer_id=orgid, sales_channel__isnull=True).update(
+            sales_channel=v
+        )
 
 
 class Migration(migrations.Migration):
