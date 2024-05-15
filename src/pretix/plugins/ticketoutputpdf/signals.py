@@ -28,7 +28,7 @@ from django.urls import reverse
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
-from pretix.base.models import Event
+from pretix.base.models import Event, SalesChannel
 from pretix.base.signals import (  # NOQA: legacy import
     EventPluginSignal, event_copy_data, item_copy_data, layout_text_variables,
     logentry_display, logentry_object_link, register_data_exporters,
@@ -122,8 +122,15 @@ def pdf_event_copy_data_receiver(sender, other, item_map, question_map, **kwargs
         layout_map[oldid] = bl
 
     for bi in TicketLayoutItem.objects.filter(item__event=other).select_related("sales_channel"):
+        if sender.organizer != other.organizer:
+            try:
+                sc = sender.organizer.sales_channels.get(identifier=bi.sales_channel.identifier)
+            except SalesChannel.DoesNotExist:
+                continue
+        else:
+            sc = bi.sales_channel
         TicketLayoutItem.objects.create(item=item_map.get(bi.item_id), layout=layout_map.get(bi.layout_id),
-                                        sales_channel=bi.sales_channel)
+                                        sales_channel=sc)
     return layout_map
 
 
