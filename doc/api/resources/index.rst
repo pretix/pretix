@@ -30,6 +30,7 @@ at :ref:`plugin-docs`.
    checkinlists
    waitinglist
    customers
+   saleschannels
    membershiptypes
    memberships
    giftcards

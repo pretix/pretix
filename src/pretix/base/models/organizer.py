@@ -219,6 +219,7 @@ class Organizer(LoggedModel):
     def create_default_sales_channels(self):
         from pretix.base.channels import get_all_sales_channel_types
 
+        i = 0
         for channel in get_all_sales_channel_types().values():
             if not channel.default_created:
                 continue
@@ -228,8 +229,10 @@ class Organizer(LoggedModel):
                 defaults={
                     'label': LazyI18nString.from_gettext(channel.verbose_name),
                     'type': channel.identifier,
-                }
+                },
+                position=i
             )
+            i += 1
 
 
 def generate_invite_token():
