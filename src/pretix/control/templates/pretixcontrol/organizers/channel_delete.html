@@ -11,12 +11,12 @@
                     Are you sure you want to delete this sales channel?
                 {% endblocktrans %}
         {% else %}
-            <p>
+            <div class="alert alert-danger">
                 {% blocktrans trimmed %}
                     This sales channel cannot be deleted since it has already been used to sell orders or because it is
                     a core element of the system.
                 {% endblocktrans %}
-            </p>
+            </div>
         {% endif %}
         <div class="form-group submit-group">
             <a href="{% url "control:organizer.channels" organizer=request.organizer.slug %}"

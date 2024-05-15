@@ -3083,6 +3083,13 @@ class ChannelCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
         except KeyError:
             return None
 
+    def post(self, request, *args, **kwargs):
+        if not self.selected_type:
+            return render(request, "pretixcontrol/organizers/channel_add_choice.html", {
+                "types": self.allowed_types.values()
+            })
+        return super().post(request, *args, **kwargs)
+
     def get(self, request, *args, **kwargs):
         if not self.selected_type:
             return render(request, "pretixcontrol/organizers/channel_add_choice.html", {
