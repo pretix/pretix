@@ -53,6 +53,13 @@ class SalesChannelType:
         raise NotImplementedError()  # NOQA
 
     @property
+    def description(self) -> str:
+        """
+        A human-readable description of this sales channel type.
+        """
+        return ""
+
+    @property
     def icon(self) -> str:
         """
         The name of a Font Awesome icon to represent this channel type
@@ -154,7 +161,8 @@ class WebshopSalesChannelType(SalesChannelType):
 
 class ApiSalesChannelType(SalesChannelType):
     identifier = "api"
-    verbose_name = _('Online shop')
+    verbose_name = _('API')
+    description = _('API sales channels come with no built-in functionality, but may be used for custom integrations.')
     icon = "exchange"
     default_created = False
     multiple_allowed = True
@@ -167,4 +175,5 @@ SalesChannel = SalesChannelType  # TODO: remove me
 def base_sales_channels(sender, **kwargs):
     return (
         WebshopSalesChannelType(),
+        ApiSalesChannelType(),
     )

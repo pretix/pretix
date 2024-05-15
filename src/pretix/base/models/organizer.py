@@ -532,7 +532,7 @@ class SalesChannel(LoggedModel):
         verbose_name=_("Name"),
     )
     identifier = models.CharField(
-        verbose_name=_("Internal identifier"),
+        verbose_name=_("Identifier"),
         max_length=200,
         validators=[
             RegexValidator(

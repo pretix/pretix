@@ -56,7 +56,7 @@ from django.forms import DecimalField
 from django.http import (
     Http404, HttpResponse, HttpResponseBadRequest, JsonResponse,
 )
-from django.shortcuts import get_object_or_404, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
@@ -71,6 +71,7 @@ from django.views.generic import (
 from pretix.api.models import ApiCall, WebHook
 from pretix.api.webhooks import manually_retry_all_calls
 from pretix.base.auth import get_auth_backends
+from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.exporter import (
     MultiSheetListExporter, OrganizerLevelExportMixin,
 )
@@ -86,7 +87,7 @@ from pretix.base.models.giftcards import (
     GiftCardAcceptance, GiftCardTransaction, gen_giftcard_secret,
 )
 from pretix.base.models.orders import CancellationRequest
-from pretix.base.models.organizer import TeamAPIToken, SalesChannel
+from pretix.base.models.organizer import SalesChannel, TeamAPIToken
 from pretix.base.payment import PaymentException
 from pretix.base.services.export import multiexport, scheduled_organizer_export
 from pretix.base.services.mail import SendMailException, mail
@@ -106,8 +107,8 @@ from pretix.control.forms.organizer import (
     MailSettingsForm, MembershipTypeForm, MembershipUpdateForm,
     OrganizerDeleteForm, OrganizerFooterLinkFormset, OrganizerForm,
     OrganizerSettingsForm, OrganizerUpdateForm, ReusableMediumCreateForm,
-    ReusableMediumUpdateForm, SSOClientForm, SSOProviderForm, TeamForm,
-    WebHookForm, SalesChannelForm,
+    ReusableMediumUpdateForm, SalesChannelForm, SSOClientForm, SSOProviderForm,
+    TeamForm, WebHookForm,
 )
 from pretix.control.forms.rrule import RRuleForm
 from pretix.control.logdisplay import OVERVIEW_BANLIST
@@ -3050,7 +3051,6 @@ class ChannelListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin
 
 
 class ChannelEditorMixin:
-    template_name = 'pretixcontrol/organizers/channel_edit.html'
     form_class = SalesChannelForm
 
     def get_form_kwargs(self):
@@ -3063,6 +3063,7 @@ class ChannelEditorMixin:
 class ChannelCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ChannelEditorMixin, CreateView):
     model = SalesChannel
     permission = 'can_change_organizer_settings'
+    template_name = 'pretixcontrol/organizers/channel_add.html'
 
     def get_object(self, queryset=None):
         return SalesChannel()
@@ -3070,28 +3071,48 @@ class ChannelCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
     @property
     def allowed_types(self):
         existing_types = set(self.request.organizer.sales_channels.values_list("type", flat=True))
-        return [
-            t for t in get_all_sales_channel_types().values()
-            if t.multiple_allowed or t not in existing_types
-        ]
+        return {
+            k: t for k, t in get_all_sales_channel_types().items()
+            if t.multiple_allowed or t.identifier not in existing_types
+        }
+
+    @cached_property
+    def selected_type(self):
+        try:
+            return self.allowed_types[self.request.GET.get("type")]
+        except KeyError:
+            return None
 
     def get(self, request, *args, **kwargs):
-        if "type" not in request.GET:
+        if not self.selected_type:
             return render(request, "pretixcontrol/organizers/channel_add_choice.html", {
-                "types": self.allowed_types
+                "types": self.allowed_types.values()
             })
+        return super().get(request, *args, **kwargs)
 
     def get_success_url(self):
         return reverse('control:organizer.channels', kwargs={
             'organizer': self.request.organizer.slug,
         })
 
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["type"] = self.selected_type
+        if self.selected_type.multiple_allowed:
+            ctx["identifier_prefix"] = self.selected_type.identifier + "."
+        return ctx
+
+    def get_form_kwargs(self):
+        return {
+            **super().get_form_kwargs(),
+            "type": self.selected_type,
+        }
+
     def form_valid(self, form):
         messages.success(self.request, _('The sales channel has been created.'))
         form.instance.organizer = self.request.organizer
-        form.instance.choices = [
-            f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
-        ]
+        form.instance.type = self.selected_type.identifier
+        form.instance.position = (self.request.organizer.sales_channels.aggregate(m=Max("position"))["m"] or 0) + 1
         ret = super().form_valid(form)
         form.instance.log_action('pretix.saleschannel.created', user=self.request.user, data={
             k: getattr(self.object, k) for k in form.changed_data
@@ -3107,6 +3128,7 @@ class ChannelUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
     model = SalesChannel
     permission = 'can_change_organizer_settings'
     context_object_name = 'channel'
+    template_name = 'pretixcontrol/organizers/channel_edit.html'
 
     def get_object(self, queryset=None):
         return get_object_or_404(SalesChannel, organizer=self.request.organizer, identifier=self.kwargs.get('channel'))
@@ -3115,6 +3137,21 @@ class ChannelUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
         return reverse('control:organizer.channels', kwargs={
             'organizer': self.request.organizer.slug,
         })
+
+    @cached_property
+    def type(self):
+        return get_all_sales_channel_types()[self.object.type]
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data(**kwargs)
+        ctx["type"] = self.type
+        return ctx
+
+    def get_form_kwargs(self):
+        return {
+            **super().get_form_kwargs(),
+            "type": self.type,
+        }
 
     def form_valid(self, form):
         if form.has_changed() or self.formset.has_changed():
@@ -3143,6 +3180,11 @@ class ChannelDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMix
         return reverse('control:organizer.channels', kwargs={
             'organizer': self.request.organizer.slug,
         })
+
+    def get_context_data(self, **kwargs):
+        ctx = super().get_context_data()
+        ctx["is_allowed"] = self.get_object().allow_delete
+        return ctx
 
     @transaction.atomic
     def delete(self, request, *args, **kwargs):

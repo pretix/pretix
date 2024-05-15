@@ -4,12 +4,14 @@
 {% block inner %}
     <h1>{% trans "Add sales channel" %}</h1>
     <div class="list-group large-link-group">
-        {% for view in views %}
-            <a class="list-group-item" href="{{ view.url }}">
-                <h4>{{ view.title }}</h4>
-                <p>
-                    {{ view.description }}
-                </p>
+        {% for t in types %}
+            <a class="list-group-item" href="?type={{ t.identifier }}">
+                <h4>{{ t.verbose_name }}</h4>
+                {% if t.description %}
+                    <p>
+                        {{ t.description }}
+                    </p>
+                {% endif %}
             </a>
         {% endfor %}
     </div>
