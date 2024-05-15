@@ -10,6 +10,7 @@ def create_sales_channels(apps, schema_editor):
     channel_types = get_all_sales_channel_types()
     type_to_channel = dict()
     full_discount_set = set()
+    full_set = set()
 
     Organizer = apps.get_model("pretixbase", "Organizer")
     for o in Organizer.objects.all():
@@ -24,9 +25,9 @@ def create_sales_channels(apps, schema_editor):
                     label=LazyI18nString.from_gettext(t.verbose_name),
                 ),
             )[0]
+            full_set.add(t.identifier)
             if t.discounts_supported:
                 full_discount_set.add(t.identifier)
-    full_set = set(type_to_channel.keys())
 
     Event = apps.get_model("pretixbase", "Event")
     for d in Event.objects.all():
