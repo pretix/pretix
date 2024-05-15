@@ -971,7 +971,8 @@ DEFAULTS = {
     },
     'payment_giftcard__enabled': {
         'default': 'True',
-        'type': bool
+        'type': bool,
+        'serializer_class': serializers.BooleanField,
     },
     'payment_giftcard_public_name': {
         'default': LazyI18nString.from_gettext(gettext_noop('Gift card')),
