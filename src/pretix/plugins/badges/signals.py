@@ -128,8 +128,8 @@ def register_pdf(sender, **kwargs):
 
 
 def _cached_rendermap(event):
-    if hasattr(event, '_cached_renderermap'):
-        return event._cached_renderermap
+    if hasattr(event, '_badges_cached_renderermap'):
+        return event._badges_cached_renderermap
     renderermap = {
         bi.item_id: bi.layout_id
         for bi in BadgeItem.objects.select_related('layout').filter(item__event=event)
@@ -138,9 +138,9 @@ def _cached_rendermap(event):
         default_renderer = event.badge_layouts.get(default=True).pk
     except BadgeLayout.DoesNotExist:
         default_renderer = None
-    event._cached_renderermap = defaultdict(lambda: default_renderer)
-    event._cached_renderermap.update(renderermap)
-    return event._cached_renderermap
+    event._badges_cached_renderermap = defaultdict(lambda: default_renderer)
+    event._badges_cached_renderermap.update(renderermap)
+    return event._badges_cached_renderermap
 
 
 @receiver(order_position_buttons, dispatch_uid="badges_control_order_buttons")
