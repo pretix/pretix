@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2024-05-13 21:00+0000\n"
+"PO-Revision-Date: 2024-05-15 18:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.5.3\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -874,7 +874,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/checkout_customer.html:40
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:20
 msgid "Customer ID"
-msgstr "ID клієнта"
+msgstr "ID Покупця"
 
 #: pretix/base/exporters/customers.py:65
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:31
@@ -2110,7 +2110,7 @@ msgstr "Платіжна адреса: Ім'я"
 #: pretix/base/exporters/orderlist.py:479
 #: pretix/base/exporters/orderlist.py:661 pretix/base/models/orders.py:173
 msgid "canceled"
-msgstr "cкасовано"
+msgstr "скасовано"
 
 #: pretix/base/exporters/orderlist.py:558
 #: pretix/base/exporters/orderlist.py:859
@@ -2223,7 +2223,7 @@ msgstr "ID псевдонімізації"
 #: pretix/base/exporters/orderlist.py:594 pretix/control/forms/filter.py:676
 #: pretix/control/templates/pretixcontrol/order/change.html:262
 msgid "Ticket secret"
-msgstr "Kод квитка"
+msgstr "Пароль квитка"
 
 #: pretix/base/exporters/orderlist.py:595 pretix/base/modelimport_orders.py:560
 #: pretix/base/modelimport_vouchers.py:272
@@ -2718,7 +2718,7 @@ msgstr "Все"
 
 #: pretix/base/exporters/orderlist.py:1278 pretix/control/forms/filter.py:1343
 msgid "Live"
-msgstr "Live"
+msgstr "Наживо"
 
 #: pretix/base/exporters/orderlist.py:1287 pretix/control/forms/filter.py:1351
 #: pretix/control/templates/pretixcontrol/pdf/index.html:252
@@ -3912,7 +3912,7 @@ msgstr "Відхилено за встановленим правилом"
 
 #: pretix/base/models/checkin.py:363
 msgid "Ticket code revoked/changed"
-msgstr "Код квитка скасовано/змінено"
+msgstr "Код квитка відкликаний/змінений"
 
 #: pretix/base/models/checkin.py:364
 msgid "Information required"
@@ -3935,10 +3935,8 @@ msgid "Server error"
 msgstr "Помилка сервера"
 
 #: pretix/base/models/checkin.py:369
-#, fuzzy
-#| msgid "Ticket code"
 msgid "Ticket blocked"
-msgstr "Kод квитка"
+msgstr "Квиток заблокований"
 
 #: pretix/base/models/checkin.py:370
 #, fuzzy
@@ -7478,8 +7476,8 @@ msgid ""
 "We were not able to process your request completely as the server was too "
 "busy. Please try again."
 msgstr ""
-"Нам не вдалося повністю обробити ваш запит, оскільки сервер був занадто "
-"зайнятий. Будь ласка спробуйте ще раз."
+"Нам не вдалося обробити Ваш запит повністю, оскільки сервер був зайнятий. "
+"Спробуйте, будь ласка, ще раз."
 
 #: pretix/base/services/cart.py:104 pretix/presale/views/cart.py:248
 msgid "You did not select any products."
@@ -12431,11 +12429,9 @@ msgid "by month"
 msgstr "місяців"
 
 #: pretix/base/timeframes.py:157
-#, fuzzy
-#| msgid "Creation date"
 msgctxt "reporting_timeframe"
 msgid "Current month to date"
-msgstr "Дата створення"
+msgstr "Поточний місяць до сьогодні"
 
 #: pretix/base/timeframes.py:166
 msgctxt "reporting_timeframe"
@@ -14662,10 +14658,8 @@ msgid "New price (gross)"
 msgstr "Нова ціна (брутто)"
 
 #: pretix/control/forms/orders.py:471
-#, fuzzy
-#| msgid "Ticket secret"
 msgid "Ticket is blocked"
-msgstr "Kод квитка"
+msgstr "Квиток заблокований"
 
 #: pretix/control/forms/orders.py:476
 msgid "Validity start"
@@ -15520,8 +15514,8 @@ msgid ""
 "Scan scan of revoked code \"{barcode}…\" at {datetime} for list \"{list}\", "
 "type \"{type}\", was uploaded."
 msgstr ""
-"Було завантажено сканування відсканованого коду \"{barcode}...\" о "
-"{datetime} для списку \"{list}\", типу \"{type}\"."
+"Був завантажений скан відкликаного коду \"{barcode}...\" о {datetime} для "
+"списку \"{list}\", типу \"{type}\"."
 
 #: pretix/control/logdisplay.py:256
 #, python-brace-format
@@ -16583,7 +16577,7 @@ msgstr "Пристрій змінено."
 
 #: pretix/control/logdisplay.py:564
 msgid "Access of the device has been revoked."
-msgstr "Доступ до пристрою скасовано."
+msgstr "Доступ до пристрою відкликаний."
 
 #: pretix/control/logdisplay.py:565
 msgid "The device has been initialized."
@@ -16682,7 +16676,7 @@ msgstr "Запрошення для користувача {user} надісла
 #: pretix/control/logdisplay.py:682
 #, python-brace-format
 msgid "The invite for {user} has been revoked."
-msgstr "Запрошення для користувача {user} скасовано."
+msgstr "Запрошення для користувача {user} відкликане."
 
 #: pretix/control/logdisplay.py:685
 #, python-brace-format
@@ -16692,7 +16686,7 @@ msgstr "Токен \"{name}\" було створено."
 #: pretix/control/logdisplay.py:688
 #, python-brace-format
 msgid "The token \"{name}\" has been revoked."
-msgstr "Токен\"{name}\" було відізвано."
+msgstr "Токен\"{name}\" був відкликаний."
 
 #: pretix/control/logdisplay.py:691
 msgid "Your account settings have been changed."
@@ -17341,7 +17335,7 @@ msgstr "Ідентифікатор квитанції"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:11
 msgid "ID"
-msgstr "ідентифікатор"
+msgstr "ID"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:15
 msgid "ZVT Terminal"
@@ -17459,7 +17453,7 @@ msgstr ""
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:100
 msgid "Terminal ID"
-msgstr ""
+msgstr "ID Терміналу"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:104
 #, fuzzy
@@ -21001,10 +20995,8 @@ msgid "including all taxes"
 msgstr "з урахуванням усіх податків"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:208
-#, fuzzy
-#| msgid "Ticket code"
 msgid "Ticket block"
-msgstr "Kод квитка"
+msgstr "Блокування квитка"
 
 #: pretix/control/templates/pretixcontrol/order/change.html:214
 msgid "Blocked due to external constraints"
@@ -22711,7 +22703,7 @@ msgstr "Ще не ініціалізовано"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:142
 msgid "Revoked"
-msgstr "Скасовано"
+msgstr "Відкликано"
 
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:164
 msgid "Connect"
@@ -25198,7 +25190,7 @@ msgstr ""
 
 #: pretix/control/views/dashboards.py:270
 msgid "live"
-msgstr ""
+msgstr "наживо"
 
 #: pretix/control/views/dashboards.py:271
 msgid "live and in test mode"
@@ -25746,7 +25738,7 @@ msgstr ""
 
 #: pretix/control/views/oauth.py:169
 msgid "Access for the selected application has been revoked."
-msgstr ""
+msgstr "Доступ для обраної програми відкликаний."
 
 #: pretix/control/views/orders.py:241
 #, python-brace-format
@@ -26250,7 +26242,7 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:796
 msgid "The invite has been revoked."
-msgstr ""
+msgstr "Запрошення відкликане."
 
 #: pretix/control/views/organizer.py:812
 msgid "The invite has been resent."
@@ -26262,7 +26254,7 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:829
 msgid "The token has been revoked."
-msgstr ""
+msgstr "Токен відкликаний."
 
 #: pretix/control/views/organizer.py:841
 msgid "Users need to have a pretix account before they can be invited."
@@ -26293,7 +26285,7 @@ msgstr ""
 
 #: pretix/control/views/organizer.py:1214
 msgid "Access for this device has been revoked."
-msgstr ""
+msgstr "Доступ для цього пристрою відкликаний."
 
 #: pretix/control/views/organizer.py:1333
 msgid ""
@@ -27982,7 +27974,7 @@ msgstr "Натисніть тут, щоб отримати інструкцію,
 #: pretix/plugins/paypal/payment.py:129 pretix/plugins/paypal2/payment.py:125
 #: pretix/plugins/stripe/payment.py:256
 msgid "Endpoint"
-msgstr "Kінцевий пункт"
+msgstr "Кінцева точка"
 
 #: pretix/plugins/paypal/payment.py:141 pretix/plugins/paypal2/payment.py:199
 msgid "Reference prefix"
@@ -28128,7 +28120,8 @@ msgstr "Процес оплати розпочався в новому вікн�
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:20
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
-msgstr "Вікно для введення платіжних даних не було відкрито або було закрито?"
+msgstr ""
+"Вікно для введення платіжних даних було закрито чи ніколи не відкривалося?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:25
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25
@@ -28173,9 +28166,8 @@ msgstr ""
 "PayPal. З цієї причини цей спосіб оплати завжди активний."
 
 #: pretix/plugins/paypal2/payment.py:148
-#, fuzzy
 msgid "Alternative Payment Methods"
-msgstr "Спосіб оплати"
+msgstr "Альтернативні способи оплати"
 
 #: pretix/plugins/paypal2/payment.py:150
 msgid ""
@@ -28295,14 +28287,12 @@ msgid "You may need to enable JavaScript for PayPal payments."
 msgstr "Вам потрібно вибрати варіант цього продукту."
 
 #: pretix/plugins/paypal2/payment.py:1071
-#, fuzzy
 msgid "PayPal APM"
-msgstr "PayPal"
+msgstr "PayPal APM"
 
 #: pretix/plugins/paypal2/payment.py:1072
-#, fuzzy
 msgid "PayPal Alternative Payment Methods"
-msgstr "Спосіб оплати"
+msgstr "Альтернативні способи оплати PayPal"
 
 #: pretix/plugins/paypal2/signals.py:59
 msgid "Payment completed."
@@ -29514,12 +29504,12 @@ msgstr ""
 #: pretix/plugins/stripe/payment.py:259
 msgctxt "stripe"
 msgid "Live"
-msgstr "Дійсний"
+msgstr "Наживо"
 
 #: pretix/plugins/stripe/payment.py:260
 msgctxt "stripe"
 msgid "Testing"
-msgstr "В режимі тестування"
+msgstr "Тестування"
 
 #: pretix/plugins/stripe/payment.py:262
 msgid ""
@@ -29587,7 +29577,7 @@ msgstr "Оплата кредитними картками"
 
 #: pretix/plugins/stripe/payment.py:340 pretix/plugins/stripe/payment.py:1584
 msgid "giropay"
-msgstr ""
+msgstr "giropay"
 
 #: pretix/plugins/stripe/payment.py:342 pretix/plugins/stripe/payment.py:350
 #: pretix/plugins/stripe/payment.py:358 pretix/plugins/stripe/payment.py:366
@@ -29601,7 +29591,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:348 pretix/plugins/stripe/payment.py:1620
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:356 pretix/plugins/stripe/payment.py:1645
 msgid "Alipay"
@@ -29609,11 +29599,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:364 pretix/plugins/stripe/payment.py:1657
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:372
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "Прямий дебет SEPA"
 
 #: pretix/plugins/stripe/payment.py:375
 msgid ""
@@ -29641,7 +29631,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:399
 msgid "SOFORT"
-msgstr ""
+msgstr "SOFORT"
 
 #: pretix/plugins/stripe/payment.py:402
 msgid ""
@@ -29659,7 +29649,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:414 pretix/plugins/stripe/payment.py:1760
 msgid "EPS"
-msgstr ""
+msgstr "EPS"
 
 #: pretix/plugins/stripe/payment.py:422 pretix/plugins/stripe/payment.py:1792
 msgid "Multibanco"
@@ -29952,7 +29942,7 @@ msgstr "Очікується стягнення плати"
 
 #: pretix/plugins/stripe/signals.py:95
 msgid "Payment authorized."
-msgstr "Оплата авторизована."
+msgstr "Платіж авторизовано."
 
 #: pretix/plugins/stripe/signals.py:96
 msgid "Payment authorization canceled."
@@ -30144,6 +30134,8 @@ msgid ""
 "We're waiting for an answer from the payment provider regarding your "
 "payment. Please contact us if this takes more than a few days."
 msgstr ""
+"Ми чекаємо відповідь щодо Вашого платежу від платіжного провайдера. Зв’"
+"яжіться з нами, якщо це займе більше кількох днів."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:9
 msgid ""
@@ -30164,7 +30156,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:29
 msgid ""
 "The payment transaction could not be completed for the following reason:"
-msgstr ""
+msgstr "Платіжну операцію не вдалося завершити з наступної причини:"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:22
 #, python-format
@@ -30200,6 +30192,8 @@ msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
+"На жаль, під час оплати сталася помилка. Для продовження, перевірте, будь "
+"ласка, посилання у своїх електронних листах."
 
 #: pretix/plugins/stripe/views.py:567
 msgid ""
@@ -30278,7 +30272,7 @@ msgstr "Створити квитки"
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:8
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/edit.html:15
 msgid "Ticket layout"
-msgstr ""
+msgstr "Шаблон квитка"
 
 #: pretix/plugins/ticketoutputpdf/templates/pretixplugins/ticketoutputpdf/delete.html:9
 #, python-format
@@ -31418,11 +31412,8 @@ msgid "Membership:"
 msgstr "Членство:"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:127
-#, fuzzy
-#| msgid "This ticket has been used once."
-#| msgid_plural "This ticket has been used %(count)s times."
 msgid "This ticket is blocked."
-msgstr "Цей квиток було використано один раз."
+msgstr "Цей квиток заблокований."
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:134
 msgctxt "ticket_checkins"
@@ -32200,7 +32191,7 @@ msgstr ""
 
 #: pretix/presale/templates/pretixpresale/event/order.html:150
 msgid "Print"
-msgstr "Друкувати"
+msgstr "Друк"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:152
 #, python-format
@@ -32814,9 +32805,8 @@ msgid "View user profile"
 msgstr "Переглянути профіль користувача"
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:15
-#, fuzzy
 msgid "We've started the requested process in a new window."
-msgstr "Процес оплати розпочався в новому вікні."
+msgstr "Ми розпочали запитаний процес у новому вікні."
 
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:18
 msgid "If you do not see the new window, we can help you launch it again."
