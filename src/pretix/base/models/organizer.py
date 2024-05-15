@@ -570,3 +570,11 @@ class SalesChannel(LoggedModel):
     @property
     def icon(self):
         return self.type_instance.icon
+
+    def allow_delete(self):
+        from . import Order
+
+        if self.type_instance.default_created:
+            return False
+
+        return not Order.objects.filter(sales_channel=self).exists()

@@ -86,7 +86,7 @@ from pretix.base.models.giftcards import (
     GiftCardAcceptance, GiftCardTransaction, gen_giftcard_secret,
 )
 from pretix.base.models.orders import CancellationRequest
-from pretix.base.models.organizer import TeamAPIToken
+from pretix.base.models.organizer import TeamAPIToken, SalesChannel
 from pretix.base.payment import PaymentException
 from pretix.base.services.export import multiexport, scheduled_organizer_export
 from pretix.base.services.mail import SendMailException, mail
@@ -107,7 +107,7 @@ from pretix.control.forms.organizer import (
     OrganizerDeleteForm, OrganizerFooterLinkFormset, OrganizerForm,
     OrganizerSettingsForm, OrganizerUpdateForm, ReusableMediumCreateForm,
     ReusableMediumUpdateForm, SSOClientForm, SSOProviderForm, TeamForm,
-    WebHookForm,
+    WebHookForm, SalesChannelForm,
 )
 from pretix.control.forms.rrule import RRuleForm
 from pretix.control.logdisplay import OVERVIEW_BANLIST
@@ -2205,7 +2205,7 @@ def meta_property_move_down(request, organizer, property):
 
 
 @transaction.atomic
-@organizer_permission_required("can_change_items")
+@organizer_permission_required("can_change_organizer_settings")
 @require_http_methods(["POST"])
 def reorder_meta_properties(request, organizer):
     try:
@@ -3037,3 +3037,194 @@ class ReusableMediumUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequ
             'organizer': self.request.organizer.slug,
             'pk': self.object.pk,
         })
+
+
+class ChannelListView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ListView):
+    model = SalesChannel
+    template_name = 'pretixcontrol/organizers/channels.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'channels'
+
+    def get_queryset(self):
+        return self.request.organizer.sales_channels.all()
+
+
+class ChannelEditorMixin:
+    template_name = 'pretixcontrol/organizers/channel_edit.html'
+    form_class = SalesChannelForm
+
+    def get_form_kwargs(self):
+        return {
+            **super().get_form_kwargs(),
+            'event': self.request.organizer,
+        }
+
+
+class ChannelCreateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ChannelEditorMixin, CreateView):
+    model = SalesChannel
+    permission = 'can_change_organizer_settings'
+
+    def get_object(self, queryset=None):
+        return SalesChannel()
+
+    @property
+    def allowed_types(self):
+        existing_types = set(self.request.organizer.sales_channels.values_list("type", flat=True))
+        return [
+            t for t in get_all_sales_channel_types().values()
+            if t.multiple_allowed or t not in existing_types
+        ]
+
+    def get(self, request, *args, **kwargs):
+        if "type" not in request.GET:
+            return render(request, "pretixcontrol/organizers/channel_add_choice.html", {
+                "types": self.allowed_types
+            })
+
+    def get_success_url(self):
+        return reverse('control:organizer.channels', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def form_valid(self, form):
+        messages.success(self.request, _('The sales channel has been created.'))
+        form.instance.organizer = self.request.organizer
+        form.instance.choices = [
+            f.cleaned_data for f in self.formset.ordered_forms if f not in self.formset.deleted_forms
+        ]
+        ret = super().form_valid(form)
+        form.instance.log_action('pretix.saleschannel.created', user=self.request.user, data={
+            k: getattr(self.object, k) for k in form.changed_data
+        })
+        return ret
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class ChannelUpdateView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, ChannelEditorMixin, UpdateView):
+    model = SalesChannel
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'channel'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(SalesChannel, organizer=self.request.organizer, identifier=self.kwargs.get('channel'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.channels', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    def form_valid(self, form):
+        if form.has_changed() or self.formset.has_changed():
+            self.object.log_action('pretix.saleschannel.changed', user=self.request.user, data={
+                k: getattr(self.object, k)
+                for k in form.changed_data
+            })
+        messages.success(self.request, _('Your changes have been saved.'))
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        messages.error(self.request, _('Your changes could not be saved.'))
+        return super().form_invalid(form)
+
+
+class ChannelDeleteView(OrganizerDetailViewMixin, OrganizerPermissionRequiredMixin, CompatDeleteView):
+    model = SalesChannel
+    template_name = 'pretixcontrol/organizers/channel_delete.html'
+    permission = 'can_change_organizer_settings'
+    context_object_name = 'channel'
+
+    def get_object(self, queryset=None):
+        return get_object_or_404(SalesChannel, organizer=self.request.organizer, identifier=self.kwargs.get('channel'))
+
+    def get_success_url(self):
+        return reverse('control:organizer.channels', kwargs={
+            'organizer': self.request.organizer.slug,
+        })
+
+    @transaction.atomic
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        if not self.object.allow_delete():
+            messages.error(self.request, _('This channel can not be deleted.'))
+            return redirect(success_url)
+        try:
+            self.object.log_action('pretix.saleschannel.deleted', user=self.request.user)
+            self.object.delete()
+            messages.success(request, _('The selected sales channel has been deleted.'))
+        except ProtectedError:
+            messages.error(self.request, _('The channel could not be deleted as some constraints (e.g. data created by '
+                                           'plug-ins) did not allow it.'))
+        return redirect(success_url)
+
+
+def channel_move(request, channel, up=True):
+    channel = get_object_or_404(request.organizer.sales_channels, identifier=channel)
+    channels = list(request.organizer.sales_channels.order_by("position"))
+
+    index = channels.index(channel)
+    if index != 0 and up:
+        channels[index - 1], channels[index] = channels[index], channels[index - 1]
+    elif index != len(channels) - 1 and not up:
+        channels[index + 1], channels[index] = channels[index], channels[index + 1]
+
+    for i, prop in enumerate(channels):
+        if prop.position != i:
+            prop.position = i
+            prop.save()
+            prop.log_action(
+                'pretix.saleschannel.reordered', user=request.user, data={
+                    'position': i,
+                }
+            )
+    messages.success(request, _('The order of sales channels has been updated.'))
+
+
+@organizer_permission_required("can_change_organizer_settings")
+@require_http_methods(["POST"])
+def channel_move_up(request, organizer, channel):
+    channel_move(request, channel, up=True)
+    return redirect('control:organizer.channels',
+                    organizer=request.organizer.slug)
+
+
+@organizer_permission_required("can_change_organizer_settings")
+@require_http_methods(["POST"])
+def channel_move_down(request, organizer, channel):
+    channel_move(request, channel, up=False)
+    return redirect('control:organizer.channels',
+                    organizer=request.organizer.slug)
+
+
+@transaction.atomic
+@organizer_permission_required("can_change_organizer_settings")
+@require_http_methods(["POST"])
+def reorder_channels(request, organizer):
+    try:
+        ids = json.loads(request.body.decode('utf-8'))['ids']
+    except (JSONDecodeError, KeyError, ValueError):
+        return HttpResponseBadRequest("expected JSON: {ids:[]}")
+
+    input_channels = list(request.organizer.sales_channels.filter(id__in=[i for i in ids if i.isdigit()]))
+
+    if len(input_channels) != len(ids):
+        raise Http404(_("Some of the provided object ids are invalid."))
+
+    if len(input_channels) != request.organizer.sales_channels.count():
+        raise Http404(_("Not all objects have been selected."))
+
+    for c in input_channels:
+        pos = ids.index(str(c.pk))
+        if pos != c.position:  # Save unneccessary UPDATE queries
+            c.position = pos
+            c.save(update_fields=['position'])
+            c.log_action(
+                'pretix.saleschannel.reordered', user=request.user, data={
+                    'position': pos,
+                }
+            )
+
+    return HttpResponse()

@@ -69,6 +69,7 @@ from pretix.base.forms.widgets import (
 from pretix.base.models import (
     Customer, Device, EventMetaProperty, Gate, GiftCard, GiftCardAcceptance,
     Membership, MembershipType, OrderPosition, Organizer, ReusableMedium, Team,
+    SalesChannel
 )
 from pretix.base.models.customers import CustomerSSOClient, CustomerSSOProvider
 from pretix.base.models.organizer import OrganizerFooterLink
@@ -1090,3 +1091,16 @@ class GiftCardAcceptanceInviteForm(forms.Form):
         if self.organizer.gift_card_acceptor_acceptance.filter(acceptor=acceptor).exists():
             raise ValidationError(_('The selected organizer has already been invited.'))
         return acceptor
+
+
+class SalesChannelForm(I18nModelForm):
+    class Meta:
+        model = SalesChannel
+        fields = ['label', 'identifier', 'type']
+        widgets = {
+            'default': forms.TextInput(),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # self.fields['public_label'].widget.attrs['data-display-dependency'] = '#id_filter_public'
