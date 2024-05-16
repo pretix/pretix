@@ -27,7 +27,7 @@ import pytest
 from django.utils.timezone import now
 from django_scopes import scope
 
-from pretix.base.models import Event, Order, OrderPosition, Organizer
+from pretix.base.models import Event, Order, OrderPosition, Organizer, generate_secret
 
 
 @pytest.fixture(scope='function')
@@ -124,3 +124,43 @@ def test_order_untagged_secret_doesnt_allow_legacy_hashes(order):
 
     with pytest.raises(Order.DoesNotExist):
         Order.objects.get_with_secret_check(order.code, legacy_hash, tag=None)
+
+
+@pytest.mark.django_db
+def test_order_tagged_secret_independent(order):
+    tagged_secret = order.tagged_secret('my_tag_123')
+
+    found = Order.objects.get_with_secret_check(order.code, tagged_secret, tag='my_tag_123')
+    assert found.code == order.code
+
+    # a) still valid after order.secret change
+    order.secret = generate_secret()
+    order.save()
+
+    found = Order.objects.get_with_secret_check(order.code, tagged_secret, tag='my_tag_123')
+    assert found.code == order.code
+
+    # b) invalidated after order.internal_secret change
+    order.internal_secret = generate_secret()
+    order.save()
+
+    with pytest.raises(Order.DoesNotExist):
+        Order.objects.get_with_secret_check(order.code, tagged_secret, tag='my_tag_123')
+
+
+@pytest.mark.django_db
+def test_order_tagged_secret_uses_regular_secret_if_internal_secret_missing(order):
+    order.internal_secret = None
+    order.save()
+
+    tagged_secret = order.tagged_secret('my_tag_123')
+
+    found = Order.objects.get_with_secret_check(order.code, tagged_secret, tag='my_tag_123')
+    assert found.code == order.code
+
+    order.secret = generate_secret()
+    order.save()
+
+    with pytest.raises(Order.DoesNotExist):
+        Order.objects.get_with_secret_check(order.code, tagged_secret, tag='my_tag_123')
+
