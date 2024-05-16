@@ -134,12 +134,6 @@ class OrderQuerySet(models.QuerySet):
                 raise Order.DoesNotExist
 
 
-class OrderQuerySetManager(ScopedManager(organizer='event__organizer').__class__):
-    def __init__(self):
-        super().__init__()
-        self._queryset_class = OrderQuerySet
-
-
 class Order(LockModel, LoggedModel):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
@@ -321,7 +315,7 @@ class Order(LockModel, LoggedModel):
         default=False,
     )
 
-    objects = OrderQuerySetManager
+    objects = ScopedManager(OrderQuerySet.as_manager().__class__, organizer='event__organizer')
 
     class Meta:
         verbose_name = _("Order")
