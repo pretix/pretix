@@ -133,7 +133,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - Zip: ✗
 #
 # Real-time payments
-# - Swish: ✗
+# - Swish: ✓
 # - PayNow: ✗
 # - PromptPay: ✗
 # - Pix: ✗
@@ -437,6 +437,14 @@ class StripeSettingsHolder(BasePaymentProvider):
                  forms.BooleanField(
                      label=_('WeChat Pay'),
                      disabled=self.event.currency not in ['AUD', 'CAD', 'EUR', 'GBP', 'HKD', 'JPY', 'SGD', 'USD'],
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before they work properly.'),
+                     required=False,
+                 )),
+                ('method_swish',
+                 forms.BooleanField(
+                     label=_('Swish'),
+                     disabled=self.event.currency != 'SEK',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
                                  'before they work properly.'),
                      required=False,
@@ -1907,3 +1915,27 @@ class StripePayPal(StripeRedirectMethod):
     verbose_name = _('PayPal via Stripe')
     public_name = _('PayPal')
     method = 'paypal'
+
+
+class StripeSwish(StripeRedirectMethod):
+    identifier = 'stripe_swish'
+    verbose_name = _('Swish via Stripe')
+    public_name = _('Swish')
+    method = 'swish'
+    confirmation_method = 'automatic'
+    explanation = _(
+        'This payment method is available to users of the Swedish apps Swish and BankID. Please keep your app '
+        'ready.'
+    )
+
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            "payment_method_data": {
+                "type": "swish",
+            },
+            "payment_method_options": {
+                "swish": {
+                    "reference": payment.order.full_code,
+                },
+            }
+        }
