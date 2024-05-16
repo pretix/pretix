@@ -223,6 +223,7 @@ class Order(LockModel, LoggedModel):
         verbose_name=_('Locale')
     )
     secret = models.CharField(max_length=32, default=generate_secret)
+    internal_secret = models.CharField(null=True, blank=True, max_length=32, default=generate_secret)
     datetime = models.DateTimeField(
         verbose_name=_("Date"), db_index=False
     )
@@ -1221,7 +1222,8 @@ class Order(LockModel, LoggedModel):
         return create
 
     def tagged_secret(self, tag, secret_length=64):
-        return salted_hmac(key_salt=tag, value=self.secret, algorithm="sha256").hexdigest()[:secret_length]
+        return salted_hmac(value=tag, key_salt=b"", algorithm="sha256",
+                           secret=self.internal_secret or self.secret).hexdigest()[:secret_length]
 
     @staticmethod
     def get_with_secret_check(code, received_secret, tag, secret_length=64, qs=None):
@@ -1245,7 +1247,8 @@ class Order(LockModel, LoggedModel):
         except Order.DoesNotExist:
             # Do a hash comparison as well to harden against timing attacks
             if hmac.compare_digest(
-                salted_hmac(key_salt=tag, value=dummy, algorithm="sha256").hexdigest()[:secret_length],
+                salted_hmac(key_salt=b"", value=tag, algorithm="sha256",
+                            secret=dummy).hexdigest()[:secret_length],
                 received_secret[:secret_length]
             ):
                 raise Order.DoesNotExist
