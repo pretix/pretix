@@ -105,6 +105,41 @@ def generate_position_secret():
     raise TypeError("Function no longer exists, use secret generators")
 
 
+class OrderQuerySet(models.QuerySet):
+    def get_with_secret_check(self, code, received_secret, tag, secret_length=64):
+        dummy = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"[:secret_length]
+        try:
+            order = self.get(code=code)
+            if not hmac.compare_digest(
+                order.tagged_secret(tag, secret_length) if tag else order.secret,
+                received_secret[:secret_length].lower() if tag else received_secret.lower()
+            ) and not (
+                    # TODO: remove this clause after a while (compatibility with old secrets currently in flight)
+                    tag and hmac.compare_digest(
+                        hashlib.sha1(order.secret.lower().encode()).hexdigest(),
+                        received_secret.lower()
+                    )
+            ):
+                raise Order.DoesNotExist
+            return order
+        except Order.DoesNotExist:
+            # Do a hash comparison as well to harden against timing attacks
+            if hmac.compare_digest(
+                salted_hmac(key_salt=b"", value=tag, algorithm="sha256",
+                            secret=dummy).hexdigest()[:secret_length],
+                received_secret[:secret_length]
+            ):
+                raise Order.DoesNotExist
+            else:
+                raise Order.DoesNotExist
+
+
+class OrderQuerySetManager(ScopedManager(organizer='event__organizer').__class__):
+    def __init__(self):
+        super().__init__()
+        self._queryset_class = OrderQuerySet
+
+
 class Order(LockModel, LoggedModel):
     """
     An order is created when a user clicks 'buy' on his cart. It holds
@@ -286,7 +321,7 @@ class Order(LockModel, LoggedModel):
         default=False,
     )
 
-    objects = ScopedManager(organizer='event__organizer')
+    objects = OrderQuerySetManager
 
     class Meta:
         verbose_name = _("Order")
@@ -1224,36 +1259,6 @@ class Order(LockModel, LoggedModel):
     def tagged_secret(self, tag, secret_length=64):
         return salted_hmac(value=tag, key_salt=b"", algorithm="sha256",
                            secret=self.internal_secret or self.secret).hexdigest()[:secret_length]
-
-    @staticmethod
-    def get_with_secret_check(code, received_secret, tag, secret_length=64, qs=None):
-        if not qs:
-            qs = Order.objects
-        dummy = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"[:secret_length]
-        try:
-            order = qs.get(code=code)
-            if not hmac.compare_digest(
-                order.tagged_secret(tag, secret_length) if tag else order.secret,
-                received_secret[:secret_length].lower() if tag else received_secret.lower()
-            ) and not (
-                    # TODO: remove this clause after a while (compatibility with old secrets currently in flight)
-                    tag and hmac.compare_digest(
-                        hashlib.sha1(order.secret.lower().encode()).hexdigest(),
-                        received_secret.lower()
-                    )
-            ):
-                raise Order.DoesNotExist
-            return order
-        except Order.DoesNotExist:
-            # Do a hash comparison as well to harden against timing attacks
-            if hmac.compare_digest(
-                salted_hmac(key_salt=b"", value=tag, algorithm="sha256",
-                            secret=dummy).hexdigest()[:secret_length],
-                received_secret[:secret_length]
-            ):
-                raise Order.DoesNotExist
-            else:
-                raise Order.DoesNotExist
 
 
 def answerfile_name(instance, filename: str) -> str:

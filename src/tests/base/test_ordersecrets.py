@@ -70,34 +70,34 @@ def order(event, item):
 
 @pytest.mark.django_db
 def test_order_untagged_secret_compare(order):
-    found = Order.get_with_secret_check(order.code, order.secret, tag=None)
+    found = Order.objects.get_with_secret_check(order.code, order.secret, tag=None)
     assert found.code == order.code
 
-    found = Order.get_with_secret_check(order.code, order.secret.upper(), tag=None)
+    found = Order.objects.get_with_secret_check(order.code, order.secret.upper(), tag=None)
     assert found.code == order.code
 
     with pytest.raises(Order.DoesNotExist):
-        Order.get_with_secret_check(order.code, order.secret + "X", tag=None)
+        Order.objects.get_with_secret_check(order.code, order.secret + "X", tag=None)
 
     with pytest.raises(Order.DoesNotExist):
-        Order.get_with_secret_check(order.code, order.secret, tag='foo')
+        Order.objects.get_with_secret_check(order.code, order.secret, tag='foo')
 
 
 @pytest.mark.django_db
 def test_order_tagged_secret_compare(order):
     tagged_secret = order.tagged_secret('my_tag_123')
 
-    found = Order.get_with_secret_check(order.code, tagged_secret, tag='my_tag_123')
+    found = Order.objects.get_with_secret_check(order.code, tagged_secret, tag='my_tag_123')
     assert found.code == order.code
 
     with pytest.raises(Order.DoesNotExist):
-        Order.get_with_secret_check(order.code, 'X' + tagged_secret, tag='my_tag_123')
+        Order.objects.get_with_secret_check(order.code, 'X' + tagged_secret, tag='my_tag_123')
 
     with pytest.raises(Order.DoesNotExist):
-        Order.get_with_secret_check(order.code, tagged_secret, tag=None)
+        Order.objects.get_with_secret_check(order.code, tagged_secret, tag=None)
 
     with pytest.raises(Order.DoesNotExist):
-        Order.get_with_secret_check(order.code, tagged_secret, tag='some_other_tag')
+        Order.objects.get_with_secret_check(order.code, tagged_secret, tag='some_other_tag')
 
 
 @pytest.mark.django_db
@@ -105,7 +105,7 @@ def test_order_tagged_secret_allows_legacy_hashes(order):
     # TODO: remove this test when support for legacy hashes is removed, and enable the test below
     legacy_hash = hashlib.sha1(order.secret.encode('utf-8')).hexdigest()
 
-    found = Order.get_with_secret_check(order.code, legacy_hash, tag='my_tag_123')
+    found = Order.objects.get_with_secret_check(order.code, legacy_hash, tag='my_tag_123')
     assert found.code == order.code
 
 
@@ -115,7 +115,7 @@ def test_order_tagged_secret_doesnt_allow_legacy_hashes(order):
     legacy_hash = hashlib.sha1(order.secret.encode('utf-8')).hexdigest()
 
     with pytest.raises(Order.DoesNotExist):
-        Order.get_with_secret_check(order.code, legacy_hash, tag='my_tag_123')
+        Order.objects.get_with_secret_check(order.code, legacy_hash, tag='my_tag_123')
 
 
 @pytest.mark.django_db
@@ -123,4 +123,4 @@ def test_order_untagged_secret_doesnt_allow_legacy_hashes(order):
     legacy_hash = hashlib.sha1(order.secret.encode('utf-8')).hexdigest()
 
     with pytest.raises(Order.DoesNotExist):
-        Order.get_with_secret_check(order.code, legacy_hash, tag=None)
+        Order.objects.get_with_secret_check(order.code, legacy_hash, tag=None)

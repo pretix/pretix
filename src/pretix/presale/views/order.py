@@ -104,9 +104,8 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
     @cached_property
     def order(self):
         try:
-            return Order.get_with_secret_check(
+            return self.request.event.orders.filter().select_related('event').get_with_secret_check(
                 code=self.kwargs['order'], received_secret=self.kwargs['secret'], tag=None,
-                qs=self.request.event.orders.filter().select_related('event')
             )
         except Order.DoesNotExist:
             return None

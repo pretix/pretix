@@ -485,9 +485,8 @@ def oauth_disconnect(request, **kwargs):
 class StripeOrderView:
     def dispatch(self, request, *args, **kwargs):
         try:
-            self.order = Order.get_with_secret_check(
-                qs=request.event.orders, code=kwargs['order'], received_secret=kwargs['hash'].lower(),
-                tag='plugins:stripe'
+            self.order = request.event.orders.get_with_secret_check(
+                code=kwargs['order'], received_secret=kwargs['hash'].lower(), tag='plugins:stripe'
             )
         except Order.DoesNotExist:
             raise Http404('Unknown order')
