@@ -599,7 +599,8 @@ class ScaView(StripeOrderView, View):
             return self._redirect_to_order()
 
         if intent.status == 'requires_action' and intent.next_action.type in [
-            'use_stripe_sdk', 'redirect_to_url', 'alipay_handle_redirect', 'wechat_pay_display_qr_code'
+            'use_stripe_sdk', 'redirect_to_url', 'alipay_handle_redirect', 'wechat_pay_display_qr_code',
+            'swish_handle_redirect_or_display_qr_code',
         ]:
             ctx = {
                 'order': self.order,
@@ -611,6 +612,9 @@ class ScaView(StripeOrderView, View):
             elif intent.next_action.type == 'redirect_to_url':
                 ctx['payment_intent_next_action_redirect_url'] = intent.next_action.redirect_to_url['url']
                 ctx['payment_intent_redirect_action_handling'] = prov.redirect_action_handling
+            elif intent.next_action.type == 'swish_handle_redirect_or_display_qr_code':
+                ctx['payment_intent_next_action_redirect_url'] = intent.next_action.swish_handle_redirect_or_display_qr_code['hosted_instructions_url']
+                ctx['payment_intent_redirect_action_handling'] = 'iframe'
 
             r = render(request, 'pretixplugins/stripe/sca.html', ctx)
             r._csp_ignore = True
