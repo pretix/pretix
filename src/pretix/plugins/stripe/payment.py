@@ -1924,7 +1924,7 @@ class StripeSwish(StripeRedirectMethod):
     method = 'swish'
     confirmation_method = 'automatic'
     explanation = _(
-        'This payment method is available to users of the Swedish apps Swish and BankID. Please keep your app '
+        'This payment method is available to users of the Swedish apps Swish and BankID. Please have your app '
         'ready.'
     )
 
