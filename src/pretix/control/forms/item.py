@@ -63,7 +63,8 @@ from pretix.base.models import (
 from pretix.base.models.items import ItemAddOn, ItemBundle, ItemMetaValue
 from pretix.base.signals import item_copy_data
 from pretix.control.forms import (
-    ButtonGroupRadioSelect, ItemMultipleChoiceField, SizeValidationMixin,
+    ButtonGroupRadioSelect, ItemMultipleChoiceField,
+    SalesChannelCheckboxSelectMultiple, SizeValidationMixin,
     SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2, Select2ItemVarMulti
@@ -573,6 +574,9 @@ class ItemUpdateForm(I18nModelForm):
             self.fields['tax_rule'].required = True
         self.fields['description'].widget.attrs['rows'] = '4'
         self.fields['limit_sales_channels'].queryset = self.event.organizer.sales_channels.all()
+        self.fields['limit_sales_channels'].widget = SalesChannelCheckboxSelectMultiple(self.event, attrs={
+            'data-inverse-dependency': '<[name$=all_sales_channels]',
+        }, choices=self.fields['limit_sales_channels'].widget.choices)
         change_decimal_field(self.fields['default_price'], self.event.currency)
 
         self.fields['available_from_mode'].widget = ButtonGroupRadioSelect(
@@ -837,9 +841,6 @@ class ItemUpdateForm(I18nModelForm):
             'min_per_order': forms.widgets.NumberInput(attrs={'min': 0}),
             'checkin_text': forms.TextInput(),
             'description': I18nMarkdownTextarea,
-            'limit_sales_channels': forms.CheckboxSelectMultiple(attrs={
-                'data-inverse-dependency': '<[name$=all_sales_channels]'
-            }),
         }
 
 
@@ -897,6 +898,9 @@ class ItemVariationForm(I18nModelForm):
         super().__init__(*args, **kwargs)
         change_decimal_field(self.fields['default_price'], self.event.currency)
         self.fields['limit_sales_channels'].queryset = self.event.organizer.sales_channels.all()
+        self.fields['limit_sales_channels'].widget = SalesChannelCheckboxSelectMultiple(self.event, attrs={
+            'data-inverse-dependency': '<[name$=all_sales_channels]',
+        }, choices=self.fields['limit_sales_channels'].widget.choices)
 
         self.fields['description'].widget.attrs['rows'] = 3
         if qs:
@@ -984,9 +988,6 @@ class ItemVariationForm(I18nModelForm):
                 'class': 'scrolling-multiple-choice'
             }),
             'checkin_text': forms.TextInput(),
-            'limit_sales_channels': forms.CheckboxSelectMultiple(attrs={
-                'data-inverse-dependency': '<[name$=all_sales_channels]'
-            }),
         }
 
     def clean(self):

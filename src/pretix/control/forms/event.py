@@ -71,8 +71,8 @@ from pretix.base.settings import (
 )
 from pretix.base.validators import multimail_validate
 from pretix.control.forms import (
-    MultipleLanguagesWidget, SlugWidget, SplitDateTimeField,
-    SplitDateTimePickerWidget,
+    MultipleLanguagesWidget, SalesChannelCheckboxSelectMultiple, SlugWidget,
+    SplitDateTimeField, SplitDateTimePickerWidget,
 )
 from pretix.control.forms.widgets import Select2
 from pretix.helpers.countries import CachedCountries
@@ -377,6 +377,9 @@ class EventUpdateForm(I18nModelForm):
                 help_text=_('You need to configure the custom domain in the webserver beforehand.')
             )
         self.fields['limit_sales_channels'].queryset = self.event.organizer.sales_channels.all()
+        self.fields['limit_sales_channels'].widget = SalesChannelCheckboxSelectMultiple(self.event, attrs={
+            'data-inverse-dependency': '<[name$=all_sales_channels]',
+        }, choices=self.fields['limit_sales_channels'].widget.choices)
 
     def clean_domain(self):
         d = self.cleaned_data['domain']
@@ -450,9 +453,6 @@ class EventUpdateForm(I18nModelForm):
             'date_admission': SplitDateTimePickerWidget(attrs={'data-date-default': '#id_date_from_0'}),
             'presale_start': SplitDateTimePickerWidget(),
             'presale_end': SplitDateTimePickerWidget(attrs={'data-date-after': '#id_presale_start_0'}),
-            'limit_sales_channels': forms.CheckboxSelectMultiple(attrs={
-                'data-inverse-dependency': '<[name$=all_sales_channels]'
-            }),
         }
 
 

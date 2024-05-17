@@ -120,6 +120,13 @@ class SalesChannelType:
         """
         return True
 
+    @property
+    def required_event_plugin(self) -> str:
+        """
+        Name of an event plugin that is required for this sales channel to be useful. Defaults to ``None``.
+        """
+        return
+
 
 def get_all_sales_channel_types():
     from pretix.base.signals import register_sales_channel_types

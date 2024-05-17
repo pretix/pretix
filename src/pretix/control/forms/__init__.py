@@ -438,3 +438,20 @@ class ButtonGroupRadioSelect(forms.RadioSelect):
         attrs['icon'] = self.option_icons[value]
         opt = super().create_option(name, value, label, selected, index, subindex, attrs)
         return opt
+
+
+class SalesChannelCheckboxSelectMultiple(forms.CheckboxSelectMultiple):
+    option_template_name = 'pretixbase/forms/widgets/checkbox_sales_channel_option.html'
+
+    def __init__(self, event, attrs=None, choices=()):
+        self.event = event
+        super().__init__(attrs, choices)
+
+    def create_option(
+        self, name, value, label, selected, index, subindex=None, attrs=None
+    ):
+        plugin = value.instance.type_instance.required_event_plugin
+        return {
+            **super().create_option(name, value, label, selected, index, subindex, attrs),
+            "plugin_missing": plugin and plugin not in self.event.get_plugins(),
+        }

@@ -28,7 +28,10 @@ from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.forms import I18nModelForm
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import Discount
-from pretix.control.forms import ItemMultipleChoiceField, SplitDateTimeField
+from pretix.control.forms import (
+    ItemMultipleChoiceField, SalesChannelCheckboxSelectMultiple,
+    SplitDateTimeField,
+)
 
 
 class DiscountForm(I18nModelForm):
@@ -74,9 +77,6 @@ class DiscountForm(I18nModelForm):
             'benefit_limit_products': forms.CheckboxSelectMultiple(attrs={
                 'class': 'scrolling-multiple-choice',
             }),
-            'limit_sales_channels': forms.CheckboxSelectMultiple(attrs={
-                'data-inverse-dependency': '<[name$=all_sales_channels]',
-            }),
             'benefit_only_apply_to_cheapest_n_matches': forms.NumberInput(
                 attrs={
                     'data-display-dependency': '#id_condition_min_count',
@@ -91,6 +91,9 @@ class DiscountForm(I18nModelForm):
         self.fields['limit_sales_channels'].queryset = self.event.organizer.sales_channels.filter(
             type__in=[k for k, v in get_all_sales_channel_types().items() if v.discounts_supported]
         )
+        self.fields['limit_sales_channels'].widget = SalesChannelCheckboxSelectMultiple(self.event, attrs={
+            'data-inverse-dependency': '<[name$=all_sales_channels]',
+        }, choices=self.fields['limit_sales_channels'].widget.choices)
         self.fields['condition_limit_products'].queryset = self.event.items.all()
         self.fields['benefit_limit_products'].queryset = self.event.items.all()
         self.fields['condition_min_count'].required = False
