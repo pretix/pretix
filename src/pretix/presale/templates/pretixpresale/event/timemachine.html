@@ -10,7 +10,7 @@
 {% block title %}{% trans "Time machine" %}{% endblock %}
 
 {% block content %}
-    <div class="panel {% if request.session.timemachine_now_dt %}panel-success{% else %}panel-default{% endif %}">
+    <div class="panel {% if request.now_dt_is_fake %}panel-success{% else %}panel-default{% endif %}">
         <div class="panel-heading">
             {% trans "Time machine" %}
         </div>
@@ -27,9 +27,9 @@
                     </div>
                     <div class="col-md-6 text-right">
                         <button type="submit" class="btn btn-primary btn-lg btn-save">
-                            {% if request.session.timemachine_now_dt %}{% trans "Change" %}{% else %}{% trans "Enable time machine" %}{% endif %}
+                            {% if request.now_dt_is_fake %}{% trans "Change" %}{% else %}{% trans "Enable time machine" %}{% endif %}
                         </button>
-                        {% if request.session.timemachine_now_dt %}
+                        {% if request.now_dt_is_fake %}
                         <button form="disable_form" type="submit" class="btn btn-default btn-lg btn-save">
                             {% trans "Disable" %}
                         </button>
