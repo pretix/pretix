@@ -80,6 +80,7 @@ from pretix.base.models import Customer, User
 from pretix.base.reldate import RelativeDateWrapper
 from pretix.base.settings import PERSON_NAME_SCHEMES
 from pretix.base.signals import allow_ticket_download, order_gracefully_delete
+from pretix.base.timemachine import time_machine_now
 
 from ...helpers import OF_SELF
 from ...helpers.countries import CachedCountries, FastCountryField
@@ -681,7 +682,7 @@ class Order(LockModel, LoggedModel):
         for op in positions:
             if op.issued_gift_cards.all():
                 return False
-        if self.user_change_deadline and now() > self.user_change_deadline:
+        if self.user_change_deadline and time_machine_now() > self.user_change_deadline:
             return False
 
         return (
@@ -713,7 +714,7 @@ class Order(LockModel, LoggedModel):
                     return False
             if op.granted_memberships.with_usages().filter(usages__gt=0):
                 return False
-        if self.user_cancel_deadline and now() > self.user_cancel_deadline:
+        if self.user_cancel_deadline and time_machine_now() > self.user_cancel_deadline:
             return False
 
         if self.status == Order.STATUS_PAID:
@@ -854,7 +855,7 @@ class Order(LockModel, LoggedModel):
             return False
 
         modify_deadline = self.modify_deadline
-        if modify_deadline is not None and now() > modify_deadline:
+        if modify_deadline is not None and time_machine_now() > modify_deadline:
             return False
 
         positions = list(
@@ -906,7 +907,7 @@ class Order(LockModel, LoggedModel):
         return self.event.settings.ticket_download and (
             self.event.settings.ticket_download_date is None
             or self.ticket_download_date is None
-            or now() > self.ticket_download_date
+            or time_machine_now() > self.ticket_download_date
         ) and (
             self.status == Order.STATUS_PAID
             or (
@@ -978,7 +979,7 @@ class Order(LockModel, LoggedModel):
                 return error_messages['require_approval']
             term_last = self.payment_term_last
             if term_last and not ignore_date:
-                if now() > term_last:
+                if time_machine_now() > term_last:
                     return error_messages['late_lastdate']
 
         if self.status == self.STATUS_PENDING:
@@ -1001,7 +1002,7 @@ class Order(LockModel, LoggedModel):
             'voucher_budget': _('The voucher "{voucher}" no longer has sufficient budget.'),
             'voucher_usages': _('The voucher "{voucher}" has been used in the meantime.'),
         }
-        now_dt = now_dt or now()
+        now_dt = now_dt or time_machine_now()
         positions = list(self.positions.all().select_related('item', 'variation', 'seat', 'voucher'))
         quota_cache = {}
         v_budget = {}
@@ -2575,9 +2576,9 @@ class OrderPosition(AbstractPosition):
             if cartpos.item.validity_mode:
                 valid_from, valid_until = cartpos.item.compute_validity(
                     requested_start=(
-                        max(cartpos.requested_valid_from, now())
+                        max(cartpos.requested_valid_from, time_machine_now())
                         if cartpos.requested_valid_from and cartpos.item.validity_dynamic_start_choice
-                        else now()
+                        else time_machine_now()
                     ),
                     enforce_start_limit=True,
                     override_tz=order.event.timezone,
@@ -3103,9 +3104,9 @@ class CartPosition(AbstractPosition):
     def predicted_validity(self):
         return self.item.compute_validity(
             requested_start=(
-                max(self.requested_valid_from, now())
+                max(self.requested_valid_from, time_machine_now())
                 if self.requested_valid_from and self.item.validity_dynamic_start_choice
-                else now()
+                else time_machine_now()
             ),
             override_tz=self.event.timezone,
         )

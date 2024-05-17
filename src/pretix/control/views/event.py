@@ -1017,6 +1017,11 @@ class EventLive(EventPermissionRequiredMixin, TemplateView):
         })
 
 
+class EventTransferSession(EventPermissionRequiredMixin, TemplateView):
+    permission = 'can_change_event_settings'
+    template_name = 'pretixcontrol/event/transfer_session.html'
+
+
 class EventDelete(RecentAuthenticationRequiredMixin, EventPermissionRequiredMixin, FormView):
     permission = 'can_change_event_settings'
     template_name = 'pretixcontrol/event/delete.html'

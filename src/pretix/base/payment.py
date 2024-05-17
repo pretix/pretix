@@ -67,6 +67,7 @@ from pretix.base.settings import SettingsSandbox
 from pretix.base.signals import register_payment_providers
 from pretix.base.templatetags.money import money_filter
 from pretix.base.templatetags.rich_text import rich_text
+from pretix.base.timemachine import time_machine_now
 from pretix.helpers import OF_SELF
 from pretix.helpers.countries import CachedCountries
 from pretix.helpers.format import format_map
@@ -1441,7 +1442,7 @@ class GiftCardPayment(BasePaymentProvider):
             if not gc.testmode and self.event.testmode:
                 messages.error(request, _("Only test gift cards can be used in test mode."))
                 return
-            if gc.expires and gc.expires < now():
+            if gc.expires and gc.expires < time_machine_now():
                 messages.error(request, _("This gift card is no longer valid."))
                 return
             if gc.value <= Decimal("0.00"):
@@ -1491,7 +1492,7 @@ class GiftCardPayment(BasePaymentProvider):
             if not gc.testmode and payment.order.testmode:
                 messages.error(request, _("Only test gift cards can be used in test mode."))
                 return
-            if gc.expires and gc.expires < now():
+            if gc.expires and gc.expires < time_machine_now():
                 messages.error(request, _("This gift card is no longer valid."))
                 return
             if gc.value <= Decimal("0.00"):
@@ -1539,7 +1540,7 @@ class GiftCardPayment(BasePaymentProvider):
                     raise PaymentException(_("This gift card can only be used in test mode."))
                 if not gc.testmode and payment.order.testmode:
                     raise PaymentException(_("Only test gift cards can be used in test mode."))
-                if gc.expires and gc.expires < now():
+                if gc.expires and gc.expires < time_machine_now():
                     raise PaymentException(_("This gift card is no longer valid."))
 
                 trans = gc.transactions.create(

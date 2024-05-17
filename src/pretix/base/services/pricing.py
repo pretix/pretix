@@ -25,7 +25,6 @@ from typing import List, Optional, Tuple
 
 from django import forms
 from django.db.models import Q
-from django.utils.timezone import now
 
 from pretix.base.decimal import round_decimal
 from pretix.base.models import (
@@ -33,6 +32,7 @@ from pretix.base.models import (
 )
 from pretix.base.models.event import Event, SubEvent
 from pretix.base.models.tax import TAXED_ZERO, TaxedPrice, TaxRule
+from pretix.base.timemachine import time_machine_now
 
 
 def get_price(item: Item, variation: ItemVariation = None,
@@ -167,8 +167,8 @@ def apply_discounts(event: Event, sales_channel: str,
     new_prices = {}
 
     discount_qs = event.discounts.filter(
-        Q(available_from__isnull=True) | Q(available_from__lte=now()),
-        Q(available_until__isnull=True) | Q(available_until__gte=now()),
+        Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()),
+        Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()),
         sales_channels__contains=sales_channel,
         active=True,
     ).prefetch_related('condition_limit_products', 'benefit_limit_products').order_by('position', 'pk')

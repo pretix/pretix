@@ -58,6 +58,8 @@ from pretix.base.services.cart import CartError, CartManager, error_messages
 from pretix.testutils.scope import classscope
 from pretix.testutils.sessions import get_cart_session_key
 
+from .test_timemachine import TimemachineTestMixin
+
 
 class CartTestMixin:
     @scopes_disabled()
@@ -4274,3 +4276,89 @@ class CartSeatingTest(CartTestMixin, TestCase):
             self.cm.commit()
 
         assert not CartPosition.objects.filter(cart_id=self.session_key).exists()
+
+
+class CartTimemachineTest(CartTestMixin, TimemachineTestMixin, TestCase):
+    def test_before_presale_timemachine(self):
+        self._login_with_permission(self.orga)
+        self.event.presale_start = now() + timedelta(days=1)
+        self.event.testmode = True
+        self.event.save()
+        self._set_time_machine_now(now() + timedelta(days=2))
+
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'alert-success' in response.rendered_content
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+        self.assertLessEqual(objs[0].expires, now() + timedelta(
+            minutes=self.event.settings.get('reservation_time', as_type=int)))
+
+    def test_after_presale_timemachine(self):
+        self._login_with_permission(self.orga)
+        self.event.presale_end = now() - timedelta(days=1)
+        self.event.testmode = True
+        self.event.save()
+        self._set_time_machine_now(now() - timedelta(days=2))
+
+        response = self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1'
+        }, follow=True)
+        self.assertRedirects(response, '/%s/%s/?require_cookie=true' % (self.orga.slug, self.event.slug),
+                             target_status_code=200)
+        assert 'alert-success' in response.rendered_content
+        with scopes_disabled():
+            objs = list(CartPosition.objects.filter(cart_id=self.session_key, event=self.event))
+        self.assertEqual(len(objs), 1)
+        self.assertEqual(objs[0].item, self.ticket)
+        self.assertIsNone(objs[0].variation)
+        self.assertEqual(objs[0].price, 23)
+        self.assertLessEqual(objs[0].expires, now() + timedelta(
+            minutes=self.event.settings.get('reservation_time', as_type=int)))
+
+    def test_not_yet_available_with_timemachine_in_time(self):
+        self._login_with_permission(self.orga)
+        self._enable_test_mode()
+        self.ticket.available_from = now() + timedelta(days=2)
+        self.ticket.available_until = now() + timedelta(days=4)
+        self.ticket.save()
+        self._set_time_machine_now(now() + timedelta(days=3))
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'item_%d' % self.ticket.id: '1',
+        }, follow=True)
+        with scopes_disabled():
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
+
+    def test_variation_no_longer_available_with_timemachine_in_time(self):
+        self._login_with_permission(self.orga)
+        self._enable_test_mode()
+        self.shirt_blue.available_from = now() - timedelta(days=4)
+        self.shirt_blue.available_until = now() - timedelta(days=2)
+        self.shirt_blue.save()
+        self._set_time_machine_now(now() - timedelta(days=3))
+
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_blue.id): '1',
+        }, follow=True)
+        with scopes_disabled():
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 1)
+
+    def test_variation_no_longer_available_with_timemachine_before(self):
+        self._login_with_permission(self.orga)
+        self._enable_test_mode()
+        self.shirt_blue.available_from = now() - timedelta(days=4)
+        self.shirt_blue.available_until = now() - timedelta(days=2)
+        self.shirt_blue.save()
+        self._set_time_machine_now(now() - timedelta(days=5))
+        self.client.post('/%s/%s/cart/add' % (self.orga.slug, self.event.slug), {
+            'variation_%d_%d' % (self.shirt.id, self.shirt_blue.id): '1',
+        }, follow=True)
+        with scopes_disabled():
+            self.assertEqual(CartPosition.objects.filter(cart_id=self.session_key, event=self.event).count(), 0)

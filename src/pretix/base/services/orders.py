@@ -102,6 +102,7 @@ from pretix.base.signals import (
     order_fee_calculation, order_paid, order_placed, order_reactivated,
     order_split, order_valid_if_pending, periodic_task, validate_order,
 )
+from pretix.base.timemachine import time_machine_now, time_machine_now_assigned
 from pretix.celery_app import app
 from pretix.helpers import OF_SELF
 from pretix.helpers.models import modelcopy
@@ -648,10 +649,11 @@ def _check_date(event: Event, now_dt: datetime):
                 raise OrderError(error_messages['ended'])
 
 
-def _check_positions(event: Event, now_dt: datetime, positions: List[CartPosition], address: InvoiceAddress=None,
+def _check_positions(event: Event, now_dt: datetime, time_machine_now_dt: datetime, positions: List[CartPosition],
+                     address: InvoiceAddress = None,
                      sales_channel='web', customer=None):
     err = None
-    _check_date(event, now_dt)
+    _check_date(event, time_machine_now_dt)
 
     products_seen = Counter()
     q_avail = Counter()
@@ -729,7 +731,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                 delete(cp)
                 continue
 
-        if cp.subevent and cp.subevent.presale_start and now_dt < cp.subevent.presale_start:
+        if cp.subevent and cp.subevent.presale_start and time_machine_now_dt < cp.subevent.presale_start:
             err = err or error_messages['some_subevent_not_started']
             delete(cp)
             break
@@ -741,7 +743,7 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
                     tlv.datetime(cp.subevent).date(),
                     time(hour=23, minute=59, second=59)
                 ), event.timezone)
-                if term_last < now_dt:
+                if term_last < time_machine_now_dt:
                     err = err or error_messages['some_subevent_ended']
                     delete(cp)
                     break
@@ -787,19 +789,19 @@ def _check_positions(event: Event, now_dt: datetime, positions: List[CartPositio
             delete(cp)
             continue
 
-        if cp.subevent and cp.item.pk in cp.subevent.item_overrides and not cp.subevent.item_overrides[cp.item.pk].is_available(now_dt):
+        if cp.subevent and cp.item.pk in cp.subevent.item_overrides and not cp.subevent.item_overrides[cp.item.pk].is_available(time_machine_now_dt):
             err = err or error_messages['unavailable']
             delete(cp)
             continue
 
         if cp.subevent and cp.variation and cp.variation.pk in cp.subevent.var_overrides and \
-                not cp.subevent.var_overrides[cp.variation.pk].is_available(now_dt):
+                not cp.subevent.var_overrides[cp.variation.pk].is_available(time_machine_now_dt):
             err = err or error_messages['unavailable']
             delete(cp)
             continue
 
         if cp.voucher:
-            if cp.voucher.valid_until and cp.voucher.valid_until < now_dt:
+            if cp.voucher.valid_until and cp.voucher.valid_until < time_machine_now_dt:
                 err = err or error_messages['voucher_expired']
                 delete(cp)
                 continue
@@ -1163,7 +1165,8 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
     warnings = []
     any_payment_failed = False
 
-    now_dt = now()
+    real_now_dt = now()
+    time_machine_now_dt = time_machine_now(real_now_dt)
     err_out = None
     with transaction.atomic(durable=True):
         positions = list(
@@ -1175,14 +1178,15 @@ def _perform_order(event: Event, payment_requests: List[dict], position_ids: Lis
         if len(position_ids) != len(positions):
             raise OrderError(error_messages['internal'])
         try:
-            _check_positions(event, now_dt, positions, address=addr, sales_channel=sales_channel, customer=customer)
+            _check_positions(event, real_now_dt, time_machine_now_dt, positions,
+                             address=addr, sales_channel=sales_channel, customer=customer)
         except OrderError as e:
             err_out = e  # Don't raise directly to make sure transaction is committed, as it might have deleted things
         else:
             if 'sleep-after-quota-check' in debugflags_var.get():
                 sleep(2)
 
-            order, payment_objs = _create_order(event, email, positions, now_dt, payment_requests,
+            order, payment_objs = _create_order(event, email, positions, real_now_dt, payment_requests,
                                                 locale=locale, address=addr, meta_info=meta_info, sales_channel=sales_channel,
                                                 shown_total=shown_total, customer=customer, valid_if_pending=valid_if_pending)
 
@@ -2849,8 +2853,8 @@ class OrderChangeManager:
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(OrderError,))
 def perform_order(self, event: Event, payments: List[dict], positions: List[str],
                   email: str=None, locale: str=None, address: int=None, meta_info: dict=None,
-                  sales_channel: str='web', shown_total=None, customer=None):
-    with language(locale):
+                  sales_channel: str='web', shown_total=None, customer=None, override_now_dt: datetime=None):
+    with language(locale), time_machine_now_assigned(override_now_dt):
         try:
             try:
                 return _perform_order(event, payments, positions, email, locale, address, meta_info,

@@ -19,3 +19,4 @@ Contents:
    permissions
    logging
    locking
+   timemachine

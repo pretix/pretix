@@ -1,0 +1,47 @@
+{% extends "pretixpresale/event/base.html" %}
+{% load i18n %}
+{% load l10n %}
+{% load money %}
+{% load eventurl %}
+{% load eventsignal %}
+{% load thumb %}
+{% load rich_text %}
+{% load bootstrap3 %}
+{% block title %}{% trans "Time machine" %}{% endblock %}
+
+{% block content %}
+    <div class="panel {% if request.session.timemachine_now_dt %}panel-success{% else %}panel-default{% endif %}">
+        <div class="panel-heading">
+            {% trans "Time machine" %}
+        </div>
+        <div class="panel-body">
+            <form action="" method="post" class="">
+                {% csrf_token %}
+                {% bootstrap_form_errors timemachine_form "all" %}
+
+                <p>{% trans "Test your shop as if it were a different date and time." %}</p>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        {% bootstrap_field timemachine_form.now_dt layout="inline" show_label=False  %}
+                    </div>
+                    <div class="col-md-6 text-right">
+                        <button type="submit" class="btn btn-primary btn-lg btn-save">
+                            {% if request.session.timemachine_now_dt %}{% trans "Change" %}{% else %}{% trans "Enable time machine" %}{% endif %}
+                        </button>
+                        {% if request.session.timemachine_now_dt %}
+                        <button form="disable_form" type="submit" class="btn btn-default btn-lg btn-save">
+                            {% trans "Disable" %}
+                        </button>
+                        {% endif %}
+                    </div>
+                </div>
+            </form>
+            <form action="" method="post" class="" id="disable_form">
+                {% csrf_token %}
+                <input type="hidden" name="timemachine_disable" value="true">
+            </form>
+            <div class="clear"></div>
+        </div>
+    </div>
+{% endblock %}

@@ -55,7 +55,7 @@ from django.db.models import Q
 from django.utils import formats
 from django.utils.crypto import get_random_string
 from django.utils.functional import cached_property
-from django.utils.timezone import is_naive, make_aware, now
+from django.utils.timezone import is_naive, make_aware
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries.fields import Country
 from django_scopes import ScopedManager
@@ -65,6 +65,7 @@ from pretix.base.models import fields
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
 from pretix.base.models.tax import TaxedPrice
+from pretix.base.timemachine import time_machine_now
 
 from ...helpers.images import ImageSizeValidator
 from ..media import MEDIA_TYPES
@@ -192,7 +193,7 @@ class SubEventItem(models.Model):
             self.subevent.event.cache.clear()
 
     def is_available(self, now_dt: datetime=None) -> bool:
-        now_dt = now_dt or now()
+        now_dt = now_dt or time_machine_now()
         if self.disabled:
             return False
         if self.available_from and self.available_from > now_dt:
@@ -248,7 +249,7 @@ class SubEventItemVariation(models.Model):
             self.subevent.event.cache.clear()
 
     def is_available(self, now_dt: datetime=None) -> bool:
-        now_dt = now_dt or now()
+        now_dt = now_dt or time_machine_now()
         if self.disabled:
             return False
         if self.available_from and self.available_from > now_dt:
@@ -263,8 +264,8 @@ def filter_available(qs, channel='web', voucher=None, allow_addons=False):
         # IMPORTANT: If this is updated, also update the ItemVariation query
         # in models/event.py: EventMixin.annotated()
         Q(active=True)
-        & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()) | Q(available_from_mode='info'))
-        & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()) | Q(available_until_mode='info'))
+        & Q(Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()) | Q(available_from_mode='info'))
+        & Q(Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()) | Q(available_until_mode='info'))
         & Q(sales_channels__contains=channel) & Q(require_bundling=False)
     )
     if not allow_addons:
@@ -782,7 +783,7 @@ class Item(LoggedModel):
         return t
 
     def is_available_by_time(self, now_dt: datetime=None) -> bool:
-        now_dt = now_dt or now()
+        now_dt = now_dt or time_machine_now()
         if self.available_from and self.available_from > now_dt:
             return False
         if self.available_until and self.available_until < now_dt:
@@ -794,13 +795,13 @@ class Item(LoggedModel):
         Returns whether this item is available according to its ``active`` flag
         and its ``available_from`` and ``available_until`` fields
         """
-        now_dt = now_dt or now()
+        now_dt = now_dt or time_machine_now()
         if not self.active or not self.is_available_by_time(now_dt):
             return False
         return True
 
     def unavailability_reason(self, now_dt: datetime=None, has_voucher=False, subevent=None) -> Optional[str]:
-        now_dt = now_dt or now()
+        now_dt = now_dt or time_machine_now()
         subevent_item = subevent and subevent.item_overrides.get(self.pk)
         if not self.active:
             return 'active'
@@ -957,11 +958,11 @@ class Item(LoggedModel):
             return self.validity_fixed_from, self.validity_fixed_until
         elif self.validity_mode == Item.VALIDITY_MODE_DYNAMIC:
             tz = override_tz or self.event.timezone
-            requested_start = requested_start or now()
+            requested_start = requested_start or time_machine_now()
             if enforce_start_limit and not self.validity_dynamic_start_choice:
-                requested_start = now()
+                requested_start = time_machine_now()
             if enforce_start_limit and self.validity_dynamic_start_choice_day_limit is not None:
-                requested_start = min(requested_start, now() + timedelta(days=self.validity_dynamic_start_choice_day_limit))
+                requested_start = min(requested_start, time_machine_now() + timedelta(days=self.validity_dynamic_start_choice_day_limit))
 
             valid_until = requested_start.astimezone(tz)
 
@@ -1290,7 +1291,7 @@ class ItemVariation(models.Model):
         return ItemVariation.objects.filter(item=self.item).count() == 1
 
     def is_available_by_time(self, now_dt: datetime=None) -> bool:
-        now_dt = now_dt or now()
+        now_dt = now_dt or time_machine_now()
         if self.available_from and self.available_from > now_dt:
             return False
         if self.available_until and self.available_until < now_dt:
@@ -1302,13 +1303,13 @@ class ItemVariation(models.Model):
         Returns whether this item is available according to its ``active`` flag
         and its ``available_from`` and ``available_until`` fields
         """
-        now_dt = now_dt or now()
+        now_dt = now_dt or time_machine_now()
         if not self.active or not self.is_available_by_time(now_dt):
             return False
         return True
 
     def unavailability_reason(self, now_dt: datetime=None, has_voucher=False, subevent=None) -> Optional[str]:
-        now_dt = now_dt or now()
+        now_dt = now_dt or time_machine_now()
         subevent_var = subevent and subevent.var_overrides.get(self.pk)
         if not self.active:
             return 'active'

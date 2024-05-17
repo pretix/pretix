@@ -68,6 +68,7 @@ from i18nfield.fields import I18nCharField, I18nTextField
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
 from pretix.base.reldate import RelativeDateWrapper
+from pretix.base.timemachine import time_machine_now
 from pretix.base.validators import EventSlugBanlistValidator
 from pretix.helpers.database import GroupConcat
 from pretix.helpers.daterange import daterange
@@ -235,7 +236,7 @@ class EventMixin:
         if not self.settings.waiting_list_enabled:
             return False
         if self.settings.waiting_list_auto_disable:
-            return self.settings.waiting_list_auto_disable.datetime(self) > now()
+            return self.settings.waiting_list_auto_disable.datetime(self) > time_machine_now()
         return True
 
     @property
@@ -244,11 +245,11 @@ class EventMixin:
         Is true, when ``presale_end`` is set and in the past.
         """
         if self.effective_presale_end:
-            return now() > self.effective_presale_end
+            return time_machine_now() > self.effective_presale_end
         elif self.date_to:
-            return now() > self.date_to
+            return time_machine_now() > self.date_to
         else:
-            return now().astimezone(self.timezone).date() > self.date_from.astimezone(self.timezone).date()
+            return time_machine_now().astimezone(self.timezone).date() > self.date_from.astimezone(self.timezone).date()
 
     @property
     def effective_presale_start(self):
@@ -268,7 +269,7 @@ class EventMixin:
         Is true, when ``presale_end`` is not set or in the future and ``presale_start`` is not
         set or in the past.
         """
-        if self.effective_presale_start and now() < self.effective_presale_start:
+        if self.effective_presale_start and time_machine_now() < self.effective_presale_start:
             return False
         return not self.presale_has_ended
 
@@ -316,11 +317,11 @@ class EventMixin:
         q_variation = (
             Q(active=True)
             & Q(sales_channels__contains=channel)
-            & Q(Q(available_from__isnull=True) | Q(available_from__lte=now()))
-            & Q(Q(available_until__isnull=True) | Q(available_until__gte=now()))
+            & Q(Q(available_from__isnull=True) | Q(available_from__lte=time_machine_now()))
+            & Q(Q(available_until__isnull=True) | Q(available_until__gte=time_machine_now()))
             & Q(item__active=True)
-            & Q(Q(item__available_from__isnull=True) | Q(item__available_from__lte=now()))
-            & Q(Q(item__available_until__isnull=True) | Q(item__available_until__gte=now()))
+            & Q(Q(item__available_from__isnull=True) | Q(item__available_from__lte=time_machine_now()))
+            & Q(Q(item__available_until__isnull=True) | Q(item__available_until__gte=time_machine_now()))
             & Q(Q(item__category__isnull=True) | Q(item__category__is_addon=False))
             & Q(item__sales_channels__contains=channel)
             & Q(item__require_bundling=False)
@@ -695,7 +696,7 @@ class Event(EventMixin, LoggedModel):
     @property
     def presale_has_ended(self):
         if self.has_subevents:
-            return self.presale_end and now() > self.presale_end
+            return self.presale_end and time_machine_now() > self.presale_end
         else:
             return super().presale_has_ended
 
@@ -1188,8 +1189,8 @@ class Event(EventMixin, LoggedModel):
             )
         ).filter(
             Q(active=True) & Q(is_public=True) & (
-                Q(Q(date_to__isnull=True) & Q(date_from__gte=now() - timedelta(hours=24)))
-                | Q(date_to__gte=now() - timedelta(hours=24))
+                Q(Q(date_to__isnull=True) & Q(date_from__gte=time_machine_now() - timedelta(hours=24)))
+                | Q(date_to__gte=time_machine_now() - timedelta(hours=24))
             )
         )  # order_by doesn't make sense with I18nField
         if ordering in ("date_ascending", "date_descending"):
@@ -1509,7 +1510,7 @@ class SubEvent(EventMixin, LoggedModel):
             disabled_items=Coalesce(
                 Subquery(
                     SubEventItem.objects.filter(
-                        Q(disabled=True) | Q(available_from__gt=now()) | Q(available_until__lt=now()),
+                        Q(disabled=True) | Q(available_from__gt=time_machine_now()) | Q(available_until__lt=time_machine_now()),
                         subevent=OuterRef('pk'),
                     ).order_by().values('subevent').annotate(items=GroupConcat('item_id', delimiter=',')).values('items'),
                     output_field=models.TextField(),
@@ -1520,7 +1521,7 @@ class SubEvent(EventMixin, LoggedModel):
             disabled_vars=Coalesce(
                 Subquery(
                     SubEventItemVariation.objects.filter(
-                        Q(disabled=True) | Q(available_from__gt=now()) | Q(available_until__lt=now()),
+                        Q(disabled=True) | Q(available_from__gt=time_machine_now()) | Q(available_until__lt=time_machine_now()),
                         subevent=OuterRef('pk'),
                     ).order_by().values('subevent').annotate(items=GroupConcat('variation_id', delimiter=',')).values('items'),
                     output_field=models.TextField(),

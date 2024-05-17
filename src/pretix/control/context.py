@@ -46,11 +46,11 @@ from pretix.base.settings import GlobalSettingsObject
 from pretix.control.navigation import (
     get_event_navigation, get_global_navigation, get_organizer_navigation,
 )
-
-from ..helpers.i18n import (
+from pretix.helpers.i18n import (
     get_javascript_format, get_javascript_output_format, get_moment_locale,
 )
-from ..multidomain.urlreverse import get_event_domain
+from pretix.multidomain.urlreverse import get_event_domain
+
 from .signals import html_head, nav_topbar
 
 SessionStore = import_module(settings.SESSION_ENGINE).SessionStore
@@ -106,7 +106,7 @@ def _default_context(request):
         else:
             ctx['complain_testmode_orders'] = False
 
-        if not request.event.live and ctx['has_domain']:
+        if (request.event.testmode or not request.event.live) and ctx['has_domain']:
             child_sess = request.session.get('child_session_{}'.format(request.event.pk))
             s = SessionStore()
             if not child_sess or not s.exists(child_sess):
@@ -114,10 +114,8 @@ def _default_context(request):
                 s.create()
                 ctx['new_session'] = s.session_key
                 request.session['child_session_{}'.format(request.event.pk)] = s.session_key
-                request.session['event_access'] = True
             else:
                 ctx['new_session'] = child_sess
-                request.session['event_access'] = True
 
         if request.GET.get('subevent', ''):
             # Do not use .get() for lazy evaluation

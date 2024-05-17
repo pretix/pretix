@@ -1,0 +1,9 @@
+{% load eventurl %}
+{% load static %}
+<form action="{% eventurl request.event "presale:event.auth" %}{% if request.GET.next %}?next={{ request.GET.next }}{% endif %}" method="post">
+    <input type="hidden" value="{{ new_session }}" name="session">
+    <button type="submit">
+        Continue
+    </button>
+</form>
+<script src="{% static "pretixcontrol/js/send_form.js" %}"></script>

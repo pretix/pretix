@@ -38,6 +38,9 @@ from importlib import import_module
 from urllib.parse import urljoin
 
 from django.conf import settings
+from django.contrib.auth import (
+    BACKEND_SESSION_KEY, SESSION_KEY, get_user_model, load_backend,
+)
 from django.db.models import Q
 from django.http import Http404, HttpResponseForbidden
 from django.middleware.csrf import rotate_token
@@ -52,6 +55,7 @@ from django_scopes import scope
 
 from pretix.base.middleware import LocaleMiddleware
 from pretix.base.models import Customer, Event, Organizer
+from pretix.base.timemachine import time_machine_now_assigned_from_request
 from pretix.helpers.http import redirect_to_url
 from pretix.multidomain.urlreverse import (
     get_event_domain, get_organizer_domain,
@@ -218,6 +222,17 @@ def customer_logout(request):
     request._cached_customer = None
 
 
+def _get_user_from_session_data(sessiondata):
+    if SESSION_KEY not in sessiondata:
+        return None
+    user_id = get_user_model()._meta.pk.to_python(sessiondata[SESSION_KEY])
+    backend_path = sessiondata[BACKEND_SESSION_KEY]
+    if backend_path in settings.AUTHENTICATION_BACKENDS:
+        backend = load_backend(backend_path)
+        user = backend.get_user(user_id)
+        return user
+
+
 @scope(organizer=None)
 def _detect_event(request, require_live=True, require_plugin=None):
 
@@ -303,14 +318,13 @@ def _detect_event(request, require_live=True, require_plugin=None):
             # Restrict locales to the ones available for this event
             LocaleMiddleware(NotImplementedError).process_request(request)
 
-            if require_live and not request.event.live:
+            if require_live and (request.event.testmode or not request.event.live):
                 can_access = (
                     url.url_name == 'event.auth'
                     or (
                         request.user.is_authenticated
                         and request.user.has_event_permission(request.organizer, request.event, request=request)
                     )
-
                 )
                 if not can_access and 'pretix_event_access_{}'.format(request.event.pk) in request.session:
                     sparent = SessionStore(request.session.get('pretix_event_access_{}'.format(request.event.pk)))
@@ -319,9 +333,12 @@ def _detect_event(request, require_live=True, require_plugin=None):
                     except:
                         pass
                     else:
-                        can_access = 'event_access' in parentdata
+                        user = _get_user_from_session_data(parentdata)
+                        if user and user.is_authenticated and user.has_event_permission(request.organizer, request.event, request=request):
+                            can_access = True
+                            request.event_access_user = user
 
-                if not can_access:
+                if not can_access and not request.event.live:
                     # Directly construct view instead of just calling `raise` since this case is so common that we
                     # don't want it to show in our log files.
                     template = loader.get_template("pretixpresale/event/offline.html")
@@ -393,7 +410,8 @@ def _event_view(function=None, require_live=True, require_plugin=None):
             if ret:
                 return ret
             else:
-                with scope(organizer=getattr(request, 'organizer', None)):
+                with scope(organizer=getattr(request, 'organizer', None)), \
+                     time_machine_now_assigned_from_request(request):
                     response = func(request=request, *args, **kwargs)
                     if getattr(request, 'event', None):
                         for receiver, r in process_response.send(request.event, request=request, response=response):

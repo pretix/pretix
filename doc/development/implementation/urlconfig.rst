@@ -90,6 +90,10 @@ as its first argument and can be used like this::
     <a href="{% eventurl request.event "presale:event.checkout" step="payment" %}">Pay</a>
     <a href="{% abseventurl request.event "presale:event.checkout" step="payment" %}">Pay</a>
 
+To generate absolute URLs on the main domain, you can use the ``absurl`` template tag::
+
+    {% load eventurl %}
+    <a href="{% absmainurl "control:event.settings" organizer=request.event.organizer.slug event=request.event.slug %}">Event settings</a>
 
 Implementation details
 ----------------------

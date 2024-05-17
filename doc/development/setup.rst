@@ -211,5 +211,15 @@ with the documentation a lot, you might find it useful to use sphinx-autobuild::
 Then, go to http://localhost:8081 for a version of the documentation that automatically re-builds
 whenever you change a source file.
 
+Working with frontend assets
+----------------------------
+
+To update the frontend styles of shops with a custom styling, run the following commands inside
+your virtual environment.::
+
+    python -m pretix collectstatic --noinput
+    python -m pretix updatestyles
+
+
 .. _Django's documentation: https://docs.djangoproject.com/en/1.11/ref/django-admin/#runserver
 .. _pretixdroid: https://github.com/pretix/pretixdroid
