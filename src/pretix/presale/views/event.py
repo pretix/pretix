@@ -63,7 +63,6 @@ from django.views import View
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
-from pretix.base.channels import get_all_sales_channel_types
 from pretix.base.forms.widgets import SplitDateTimePickerWidget
 from pretix.base.models import (
     ItemVariation, Quota, SalesChannel, SeatCategoryMapping, Voucher,
