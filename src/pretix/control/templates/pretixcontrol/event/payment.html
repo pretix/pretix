@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/event/settings_base.html" %}
 {% load i18n %}
+{% load static %}
 {% load bootstrap3 %}
 {% block inside %}
     <h1>{% trans "Payment settings" %}</h1>
@@ -30,8 +31,13 @@
                             </td>
                             <td class="iconcol">
                                 {% for channel in provider.sales_channels %}
-                                    <span class="fa fa-{{ channel.icon }} text-muted"
-                                          data-toggle="tooltip" title="{{ channel.label }}"></span>
+                                    {% if "." in channel.icon %}
+                                        <img src="{% static channel.icon %}" class="fa-like-image"
+                                             data-toggle="tooltip" title="{{ channel.label }}">
+                                    {% else %}
+                                        <span class="fa fa-{{ channel.icon }} text-muted"
+                                              data-toggle="tooltip" title="{{ channel.label }}"></span>
+                                    {% endif %}
                                 {% endfor %}
                             </td>
                             <td class="text-right flip">

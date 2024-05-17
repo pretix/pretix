@@ -1,6 +1,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load formset_tags %}
+{% load static %}
 {% load getitem %}
 <div class="formset" data-formset data-formset-prefix="{{ formset.prefix }}" id="item_variations">
     {{ formset.management_form }}
@@ -41,8 +42,13 @@
                         </div>
                         <div class="col-md-2 col-xs-6">
                             {% for c in sales_channels %}
-                                <span class="fa fa-fw fa-{{ c.icon }} text-muted variation-channel-{{ c.id }} variation-icon-hidden"
-                                      data-toggle="tooltip" title="{{ c.label }}"></span>
+                                {% if "." in c.icon %}
+                                    <img src="{% static c.icon %}" class="fa-like-image variation-channel-{{ c.id }} variation-icon-hidden"
+                                         data-toggle="tooltip" title="{{ c.label }}">
+                                {% else %}
+                                    <span class="fa fa-fw fa-{{ c.icon }} text-muted variation-channel-{{ c.id }} variation-icon-hidden"
+                                          data-toggle="tooltip" title="{{ c.label }}"></span>
+                                {% endif %}
                             {% endfor %}
                         </div>
                         <div class="col-md-1 col-xs-6 text-right flip variation-price">
@@ -150,8 +156,13 @@
                         </div>
                         <div class="col-md-2 col-xs-6">
                             {% for c in sales_channels %}
-                                <span class="fa fa-fw fa-{{ c.icon }} text-muted variation-channel-{{ c.id }} variation-icon-hidden"
-                                      data-toggle="tooltip" title="{{ c.label }}"></span>
+                                {% if "." in c.icon %}
+                                    <img src="{% static c.icon %}" class="fa-like-image variation-channel-{{ c.id }} variation-icon-hidden"
+                                         data-toggle="tooltip" title="{{ c.label }}">
+                                {% else %}
+                                    <span class="fa fa-fw fa-{{ c.icon }} text-muted variation-channel-{{ c.id }} variation-icon-hidden"
+                                          data-toggle="tooltip" title="{{ c.label }}"></span>
+                                {% endif %}
                             {% endfor %}
                         </div>
                         <div class="col-md-1 col-xs-6 text-right flip variation-price">

@@ -1,5 +1,6 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
+{% load static %}
 {% block title %}{% trans "Automatic discounts" %}{% endblock %}
 {% block inside %}
     <h1>{% trans "Automatic discounts" %}</h1>
@@ -80,8 +81,13 @@
                             <td>
                                 {% for c in sales_channels %}
                                     {% if d.all_sales_channels or c in d.limit_sales_channels.all %}
-                                        <span class="fa fa-fw fa-{{ c.icon }} text-muted"
-                                              data-toggle="tooltip" title="{{ c.label }}"></span>
+                                        {% if "." in c.icon %}
+                                            <img src="{% static c.icon %}" class="fa-like-image"
+                                                 data-toggle="tooltip" title="{{ c.label }}">
+                                        {% else %}
+                                            <span class="fa fa-fw fa-{{ c.icon }} text-muted"
+                                                  data-toggle="tooltip" title="{{ c.label }}"></span>
+                                        {% endif %}
                                     {% else %}
                                     {% endif %}
                                 {% endfor %}

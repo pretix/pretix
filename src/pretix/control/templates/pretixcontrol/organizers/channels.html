@@ -1,6 +1,7 @@
 {% extends "pretixcontrol/organizers/base.html" %}
 {% load i18n %}
 {% load bootstrap3 %}
+{% load static %}
 {% block inner %}
     <h1>{% trans "Sales channels" %}</h1>
     <p>
@@ -37,7 +38,11 @@
                         <code>{{ c.identifier }}</code>
                     </td>
                     <td>
-                        <span class="fa fa-fw fa-{{ c.type_instance.icon }} text-muted"></span>
+                        {% if "." in c.type_instance.icon %}
+                            <img class="fa-like-image" src="{% static c.icon %}" alt="">
+                        {% else %}
+                            <span class="fa fa-fw fa-{{ c.type_instance.icon }} text-muted"></span>
+                        {% endif %}
                         {{ c.type_instance.verbose_name }}
                     </td>
                     <td>

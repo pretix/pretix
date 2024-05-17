@@ -2,6 +2,7 @@
 {% load i18n %}
 {% load bootstrap3 %}
 {% load money %}
+{% load static %}
 {% block title %}
     {% blocktrans trimmed with id=customer.identifier %}
         Customer #{{ id }}
@@ -225,8 +226,13 @@
                                 {{ o.event }}
                             </td>
                             <td>
-                            <span class="fa fa-{{ o.sales_channel.icon }} text-muted"
-                                    data-toggle="tooltip" title="{{ o.sales_channel.label }}"></span>
+                                {% if "." in o.sales_channel.icon %}
+                                    <img src="{% static o.sales_channel.icon %}" class="fa-like-image"
+                                          data-toggle="tooltip" title="{{ o.sales_channel.label }}">
+                                {% else %}
+                                    <span class="fa fa-{{ o.sales_channel.icon }} text-muted"
+                                          data-toggle="tooltip" title="{{ o.sales_channel.label }}"></span>
+                                {% endif %}
                                 {{ o.datetime|date:"SHORT_DATETIME_FORMAT" }}
                                 {% if o.customer_id != customer.pk %}
                                     <span class="fa fa-link text-muted"
