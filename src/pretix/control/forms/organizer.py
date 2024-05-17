@@ -50,6 +50,7 @@ from django_scopes.forms import SafeModelChoiceField
 from i18nfield.forms import (
     I18nForm, I18nFormField, I18nFormSetMixin, I18nTextInput,
 )
+from i18nfield.strings import LazyI18nString
 from phonenumber_field.formfields import PhoneNumberField
 from pytz import common_timezones
 
@@ -1108,6 +1109,7 @@ class SalesChannelForm(I18nModelForm):
         if not self.type.multiple_allowed or (self.instance and self.instance.pk):
             self.fields["identifier"].initial = self.type.identifier
             self.fields["identifier"].disabled = True
+            self.fields["label"].initial = LazyI18nString.from_gettext(self.type.verbose_name)
 
     def clean(self):
         d = super().clean()
