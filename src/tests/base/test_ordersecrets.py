@@ -27,7 +27,9 @@ import pytest
 from django.utils.timezone import now
 from django_scopes import scope
 
-from pretix.base.models import Event, Order, OrderPosition, Organizer, generate_secret
+from pretix.base.models import (
+    Event, Order, OrderPosition, Organizer, generate_secret,
+)
 
 
 @pytest.fixture(scope='function')
@@ -163,4 +165,3 @@ def test_order_tagged_secret_uses_regular_secret_if_internal_secret_missing(orde
 
     with pytest.raises(Order.DoesNotExist):
         Order.objects.get_with_secret_check(order.code, tagged_secret, tag='my_tag_123')
-
