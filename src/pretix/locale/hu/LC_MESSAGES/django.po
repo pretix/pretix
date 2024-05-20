@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2022-02-01 22:00+0000\n"
-"Last-Translator: Jozsef Ebenspanger <j.ebenspanger@mso-mg.de>\n"
+"PO-Revision-Date: 2024-05-20 20:00+0000\n"
+"Last-Translator: Krisztián Henrik Papp <pkh@henky.me>\n"
 "Language-Team: Hungarian <https://translate.pretix.eu/projects/pretix/pretix/"
 "hu/>\n"
 "Language: hu\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 4.8\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -33,7 +33,7 @@ msgstr "német (informális)"
 
 #: pretix/_base_settings.py:81
 msgid "Arabic"
-msgstr ""
+msgstr "arab"
 
 #: pretix/_base_settings.py:82
 msgid "Chinese (simplified)"
@@ -41,11 +41,11 @@ msgstr "kínai (egyszerűsített)"
 
 #: pretix/_base_settings.py:83
 msgid "Chinese (traditional)"
-msgstr ""
+msgstr "kínai (tradicionális)"
 
 #: pretix/_base_settings.py:84
 msgid "Czech"
-msgstr ""
+msgstr "cseh"
 
 #: pretix/_base_settings.py:85
 msgid "Danish"
@@ -64,14 +64,12 @@ msgid "French"
 msgstr "francia"
 
 #: pretix/_base_settings.py:89
-#, fuzzy
-#| msgid "Danish"
 msgid "Finnish"
-msgstr "dán"
+msgstr "finn"
 
 #: pretix/_base_settings.py:90
 msgid "Galician"
-msgstr ""
+msgstr "galíciai"
 
 #: pretix/_base_settings.py:91
 msgid "Greek"
@@ -79,7 +77,7 @@ msgstr "görög"
 
 #: pretix/_base_settings.py:92
 msgid "Indonesian"
-msgstr ""
+msgstr "indonéz"
 
 #: pretix/_base_settings.py:93
 msgid "Italian"
@@ -91,25 +89,23 @@ msgstr "lett"
 
 #: pretix/_base_settings.py:95
 msgid "Norwegian Bokmål"
-msgstr ""
+msgstr "norvég bokmål"
 
 #: pretix/_base_settings.py:96
 msgid "Polish"
 msgstr "lengyel"
 
 #: pretix/_base_settings.py:97
-#, fuzzy
-#| msgid "Portuguese (Brazil)"
 msgid "Portuguese (Portugal)"
-msgstr "portugál (brazil)"
+msgstr "portugál (Portugália)"
 
 #: pretix/_base_settings.py:98
 msgid "Portuguese (Brazil)"
-msgstr "portugál (brazil)"
+msgstr "portugál (Brazília)"
 
 #: pretix/_base_settings.py:99
 msgid "Romanian"
-msgstr ""
+msgstr "román"
 
 #: pretix/_base_settings.py:100
 msgid "Russian"
@@ -125,7 +121,7 @@ msgstr "török"
 
 #: pretix/_base_settings.py:103
 msgid "Ukrainian"
-msgstr ""
+msgstr "ukrán"
 
 #: pretix/api/auth/devicesecurity.py:31
 msgid ""
@@ -136,7 +132,6 @@ msgstr ""
 "módosítása, termékek és beállítások beolvasása)"
 
 #: pretix/api/auth/devicesecurity.py:53
-#, fuzzy
 msgid "pretixSCAN"
 msgstr "pretixSCAN"
 
@@ -149,7 +144,6 @@ msgid "pretixSCAN (online only, no order sync)"
 msgstr "pretixSCAN (csak online, nincs rendelés szinkronizálás)"
 
 #: pretix/api/auth/devicesecurity.py:159
-#, fuzzy
 msgid "pretixPOS"
 msgstr "pretixPOS"
 
@@ -166,10 +160,8 @@ msgid "Allowed URIs list, space separated"
 msgstr "Engedélyezett URI lista, szóközzel elválasztva"
 
 #: pretix/api/models.py:47
-#, fuzzy
-#| msgid "Allowed URIs list, space separated"
 msgid "Allowed Post Logout URIs list, space separated"
-msgstr "Engedélyezett URI lista, szóközzel elválasztva"
+msgstr "Engedélyezett kijelentkezés utáni URI lista, szóközzel elválasztva"
 
 #: pretix/api/models.py:51 pretix/base/models/customers.py:395
 #: pretix/plugins/paypal/payment.py:113 pretix/plugins/paypal2/payment.py:109
@@ -211,7 +203,7 @@ msgstr "Események limitje"
 #: pretix/plugins/banktransfer/refund_export.py:46
 #: pretix/plugins/checkinlists/exporters.py:509
 msgid "Comment"
-msgstr ""
+msgstr "Komment"
 
 #: pretix/api/serializers/cart.py:168 pretix/api/serializers/order.py:1349
 msgid "The product \"{}\" is not assigned to a quota."
@@ -226,7 +218,7 @@ msgstr "Egy vagy több tétel nem ehhez az eseményhez tartozik."
 #: pretix/base/models/items.py:2090 pretix/base/models/items.py:2093
 #: pretix/base/models/waitinglist.py:305 pretix/base/models/waitinglist.py:308
 msgid "The subevent does not belong to this event."
-msgstr "Az eseményhez nem tartozik részesemény."
+msgstr "A részesemény nem ehhez az eseményhez tartozik."
 
 #: pretix/api/serializers/checkin.py:77
 msgid "Unknown sales channel."
@@ -237,13 +229,13 @@ msgid ""
 "Events cannot be created as 'live'. Quotas and payment must be added to the "
 "event before sales can go live."
 msgstr ""
-"Az eseményt nem lehet aktiválni. A kvóták és fizetés hozzáadása kötelező az "
-"eseményhez, az árusítás megkezdése előtt."
+"Az eseményt nem lehet \"élő\"-ként létrehozni. A kvóták és fizetés "
+"hozzáadása kötelező az eseményhez, az értékesítés megkezdése előtt."
 
 #: pretix/api/serializers/event.py:232 pretix/api/serializers/event.py:531
 #, python-brace-format
 msgid "Meta data property '{name}' does not exist."
-msgstr "A {name} meta adat tulajdonsága nem létezik."
+msgstr "A {name} meta adat tulajdonság nem létezik."
 
 #: pretix/api/serializers/event.py:235 pretix/api/serializers/event.py:534
 #, python-brace-format
@@ -257,10 +249,9 @@ msgstr "Ismeretlen plugin: '{name}'."
 
 #: pretix/api/serializers/item.py:75 pretix/api/serializers/item.py:125
 #: pretix/api/serializers/item.py:327
-#, fuzzy, python-brace-format
-#| msgid "Meta data property '{name}' does not exist."
+#, python-brace-format
 msgid "Item meta data property '{name}' does not exist."
-msgstr "A {name} meta adat tulajdonsága nem létezik."
+msgstr "A {name} elem meta adat tulajdonság nem létezik."
 
 #: pretix/api/serializers/item.py:184 pretix/control/forms/item.py:1207
 msgid "The bundled item must not be the same item as the bundling one."
@@ -268,49 +259,55 @@ msgstr "A csomag-termék nem lehet azonos a csomagba való termékkel."
 
 #: pretix/api/serializers/item.py:187 pretix/control/forms/item.py:1209
 msgid "The bundled item must not have bundles on its own."
-msgstr "A csomag-termék nem tartalmazhat csomag-terméket."
+msgstr "A csomag-termék nem tartalmazhat csomagokat."
 
 #: pretix/api/serializers/item.py:266
 msgid ""
 "Updating add-ons, bundles, or variations via PATCH/PUT is not supported. "
 "Please use the dedicated nested endpoint."
 msgstr ""
+"A kiegészítők, csomagok vagy variációk frissítése PATCH/PUT használatával "
+"nem támogatott. Kérem használja a dedikált beágyazott végpontot."
 
 #: pretix/api/serializers/item.py:274
 msgid "Only admission products can currently be personalized."
-msgstr ""
+msgstr "Jelenleg csak a belépési termékeket lehet személyre szabni."
 
 #: pretix/api/serializers/item.py:285
 msgid ""
 "Gift card products should not be associated with non-zero tax rates since "
 "sales tax will be applied when the gift card is redeemed."
 msgstr ""
+"Ajándékkártya termékeket nem lehet nem-nulla adókulcshoz kapcsolni, mivel az "
+"ajándékkártya beváltásakor az ÁFA alkalmazva lesz."
 
 #: pretix/api/serializers/item.py:290 pretix/control/forms/item.py:705
 msgid "Gift card products should not be admission products at the same time."
-msgstr ""
+msgstr "Ajándékkártya termékek nem lehetnek egyszerre belépési termékek is."
 
 #: pretix/api/serializers/item.py:466
 msgid ""
 "Updating options via PATCH/PUT is not supported. Please use the dedicated "
 "nested endpoint."
 msgstr ""
+"Az opciók frissítése PATCH/PUT használatával nem támogatott. Kérem használja "
+"a dedikált beágyazott végpontot."
 
 #: pretix/api/serializers/item.py:480 pretix/control/forms/item.py:121
 msgid "Question cannot depend on a question asked during check-in."
-msgstr ""
+msgstr "A kérdés nem függhet a becsekkolás során kérdezett kérdésen."
 
 #: pretix/api/serializers/item.py:485 pretix/control/forms/item.py:126
 msgid "Circular dependency between questions detected."
-msgstr ""
+msgstr "Körkörös függőség észlelve a kérdések között."
 
 #: pretix/api/serializers/item.py:490 pretix/control/forms/item.py:135
 msgid "This type of question cannot be asked during check-in."
-msgstr ""
+msgstr "Ezt a fajta kérdést nem lehet kérdezni becsekkolás közben."
 
 #: pretix/api/serializers/item.py:493 pretix/control/forms/item.py:143
 msgid "This type of question cannot be shown during check-in."
-msgstr ""
+msgstr "Ezt a fajta kérdést nem lehet megmutatni becsekkolás közben."
 
 #: pretix/api/serializers/media.py:108
 msgid ""
