@@ -418,18 +418,21 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         else:
             return set()
 
-    def has_event_permission(self, organizer, event, perm_name=None, request=None) -> bool:
+    def has_event_permission(self, organizer, event, perm_name=None, request=None, session_key=None) -> bool:
         """
         Checks if this user is part of any team that grants access of type ``perm_name``
         to the event ``event``.
 
+        Either ``request`` or ``session_key`` are required to detect staff sessions properly.
+
         :param organizer: The organizer of the event
         :param event: The event to check
         :param perm_name: The permission, e.g. ``can_change_teams``
-        :param request: The current request (optional). Required to detect staff sessions properly.
+        :param request: The current request (optional)
+        :param session_key: The current session key (optional)
         :return: bool
         """
-        if request and self.has_active_staff_session(request.session.session_key):
+        if (session_key or request) and self.has_active_staff_session(session_key or request.session.session_key):
             return True
         teams = self._get_teams_for_event(organizer, event)
         if teams:
