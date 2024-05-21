@@ -432,6 +432,7 @@ class User(AbstractBaseUser, PermissionsMixin, LoggingMixin):
         :param session_key: The current session key (optional)
         :return: bool
         """
+        assert not (session_key and request)
         if (session_key or request) and self.has_active_staff_session(session_key or request.session.session_key):
             return True
         teams = self._get_teams_for_event(organizer, event)
