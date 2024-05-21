@@ -191,7 +191,7 @@ def control_order_position_info(sender: Event, position, request, order, **kwarg
     seen = set()
     lm = _ticket_layouts_for_item(request, position.item)
     if order.sales_channel.identifier in lm:
-        seen.add(lm[order.sales_channel])
+        seen.add(lm[order.sales_channel.identifier])
     for k, l in lm.items():
         if k == order.sales_channel.identifier or l in seen:
             continue
