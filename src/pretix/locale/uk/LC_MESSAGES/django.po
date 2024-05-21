@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2024-05-15 18:00+0000\n"
+"PO-Revision-Date: 2024-05-21 20:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
 "n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.5.3\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -6874,10 +6874,8 @@ msgid "Balanced against orders: %s"
 msgstr "Збалансовано щодо замовлень: %s"
 
 #: pretix/base/payment.py:1328
-#, fuzzy
-#| msgid "Payment method name"
 msgid "Payment method description"
-msgstr "Назва способу оплати"
+msgstr "Опис способу оплати"
 
 #: pretix/base/payment.py:1345
 msgid "In test mode, only test cards will work."
@@ -19139,6 +19137,9 @@ msgid ""
 "connect an account there. Once you completed this, you will be taken back to "
 "pretix."
 msgstr ""
+"Після збереження цієї сторінки ми перенаправимо Вас до Stripe для створення "
+"або під'єднання облікового запису. Після завершення, Ви повернетеся назад до "
+"pretix."
 
 #: pretix/control/templates/pretixcontrol/event/quick_setup.html:188
 msgid "Getting in touch with you"
@@ -27022,7 +27023,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:50
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:24
 msgid "IBAN"
-msgstr ""
+msgstr "IBAN"
 
 #: pretix/plugins/banktransfer/payment.py:113
 #: pretix/plugins/banktransfer/payment.py:465
@@ -27185,7 +27186,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:47
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:55
 msgid "Bank"
-msgstr ""
+msgstr "Банк"
 
 #: pretix/plugins/banktransfer/payment.py:546
 msgid "Invalid IBAN/BIC"
@@ -28070,9 +28071,9 @@ msgid ""
 "payment details. You will then be redirected back here to review and confirm "
 "your order."
 msgstr ""
-"Після того, як ви натиснули кнопку «Продовжити», ми перенаправимо вас на "
-"PayPal, щоб заповнити свої платіжні дані. Потім ви будете перенаправлені "
-"назад сюди, щоб переглянути та підтвердити своє замовлення."
+"Після того, як Ви натиснете \"Продовжити\", ми перенаправимо Вас до PayPal "
+"для заповнення платіжних даних. Потім, для перегляду та підтвердження "
+"замовлення, Ви будете перенаправлені назад сюди."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/control.html:7
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/control.html:6
@@ -28114,7 +28115,7 @@ msgstr ""
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:17
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:17
 msgid "The payment process has started in a new window."
-msgstr "Процес оплати розпочався в новому вікні."
+msgstr "Процес оплати розпочався у новому вікні."
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:20
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:20
@@ -28447,7 +28448,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:5
 #: pretix/presale/templates/pretixpresale/event/order_pay_confirm.html:5
 msgid "Pay order"
-msgstr ""
+msgstr "Оплатити замовлення"
 
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/pay.html:16
 #: pretix/presale/templates/pretixpresale/event/order_pay.html:8
@@ -29698,10 +29699,13 @@ msgid ""
 ">many test cards</a> to perform a transaction. No money will actually be "
 "transferred."
 msgstr ""
+"Плагін Stripe працює у тестовому режимі. Ви можете використовувати для "
+"транзакцій будь-яку з <a {args}>багатьох тестових карток</a>. Фактично гроші "
+"не будуть перераховані."
 
 #: pretix/plugins/stripe/payment.py:706
 msgid "No payment information found."
-msgstr "Інформацію про платіж не знайдено."
+msgstr "Інформації про платіж не знайдено."
 
 #: pretix/plugins/stripe/payment.py:744
 msgid ""
@@ -29855,10 +29859,8 @@ msgid "SOFORT via Stripe"
 msgstr "SOFORT через Stripe"
 
 #: pretix/plugins/stripe/payment.py:1689
-#, fuzzy
-#| msgid "Payment by bank transfer"
 msgid "SOFORT (instant bank transfer)"
-msgstr "Оплата через банківський платіж"
+msgstr "SOFORT (миттєвий банківський переказ)"
 
 #: pretix/plugins/stripe/payment.py:1707
 msgid "Country of your bank"
@@ -30002,7 +30004,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:4
 msgid "The total amount will be withdrawn from your credit card."
-msgstr ""
+msgstr "Загальна сума буде списана з Вашої кредитної картки."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:8
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:29
@@ -30041,6 +30043,9 @@ msgid ""
 "provider to complete your payment. You will then be redirected back here to "
 "get your tickets."
 msgstr ""
+"Після завершення замовлення ми перенаправимо Вас до постачальника платіжних "
+"послуг для здійснення оплати. Потім, для отримання квитків, Ви будете "
+"перенаправлені назад сюди."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:9
 msgid ""
@@ -30116,7 +30121,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:64
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:67
 msgid "Payer name"
-msgstr ""
+msgstr "Ім'я платника"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/oauth_disconnect.html:12
 #, fuzzy
@@ -30142,10 +30147,12 @@ msgid ""
 "You need to confirm your payment. Please click the link below to do so or "
 "start a new payment."
 msgstr ""
+"Вам потрібно підтвердити платіж. Для підтвердження клацніть посилання нижче "
+"або розпочніть новий платіж."
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:15
 msgid "Confirm payment"
-msgstr ""
+msgstr "Підтвердити платіж"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/pending.html:21
 msgid ""
@@ -30161,7 +30168,7 @@ msgstr "Платіжну операцію не вдалося завершити
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca.html:22
 #, python-format
 msgid "Confirm payment: %(code)s"
-msgstr ""
+msgstr "Підтвердіть оплату: %(code)s"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/sca_return.html:20
 msgid "Confirming your payment…"
@@ -30192,7 +30199,7 @@ msgid ""
 "Sorry, there was an error in the payment process. Please check the link in "
 "your emails to continue."
 msgstr ""
-"На жаль, під час оплати сталася помилка. Для продовження, перевірте, будь "
+"На жаль, під час оплати виникла помилка. Для продовження, перевірте, будь "
 "ласка, посилання у своїх електронних листах."
 
 #: pretix/plugins/stripe/views.py:567
@@ -30203,7 +30210,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/views.py:595 pretix/plugins/stripe/views.py:598
 msgid "Sorry, there was an error in the payment process."
-msgstr ""
+msgstr "На жаль, під час оплати виникла помилка."
 
 #: pretix/plugins/ticketoutputpdf/apps.py:44
 #: pretix/plugins/ticketoutputpdf/apps.py:47
@@ -31388,7 +31395,7 @@ msgstr "Вартість за одиницю"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:18
 msgid "Price total"
-msgstr "Загальна вартість"
+msgstr "Ціна разом"
 
 #: pretix/presale/templates/pretixpresale/event/fragment_cart.html:42
 msgid "Seat:"
