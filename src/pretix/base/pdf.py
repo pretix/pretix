@@ -1093,7 +1093,7 @@ class Renderer:
             output = PdfWriter()
 
             for i, page in enumerate(new_pdf.pages):
-                bg_page = copy.deepcopy(self.bg_pdf.pages[i])
+                bg_page = self.bg_pdf.pages[i]
                 bg_rotation = bg_page.get('/Rotate')
                 if bg_rotation:
                     # /Rotate is clockwise, transformation.rotate is counter-clockwise
@@ -1117,8 +1117,8 @@ class Renderer:
                     elif bg_rotation == 180:
                         t = t.translate(w, h)
                     page.add_transformation(t)
-                bg_page.merge_page(page)
-                output.add_page(bg_page)
+                page.merge_page(bg_page, over=False)
+                output.add_page(page)
 
             output.add_metadata({
                 '/Title': str(title),
@@ -1175,8 +1175,8 @@ def merge_background(fg_pdf, bg_pdf, out_file, compress):
                 elif bg_rotation == 180:
                     t = t.translate(w, h)
                 page.add_transformation(t)
-            bg_page.merge_page(page)
-            output.add_page(bg_page)
+            page.merge_page(bg_page, over=False)
+            output.add_page(page)
         output.write(out_file)
 
 
