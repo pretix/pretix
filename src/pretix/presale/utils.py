@@ -327,14 +327,16 @@ def _detect_event(request, require_live=True, require_plugin=None):
                     )
                 )
                 if not can_access and 'pretix_event_access_{}'.format(request.event.pk) in request.session:
-                    sparent = SessionStore(request.session.get('pretix_event_access_{}'.format(request.event.pk)))
+                    parent_session_key = request.session.get('pretix_event_access_{}'.format(request.event.pk))
+                    sparent = SessionStore(parent_session_key)
                     try:
                         parentdata = sparent.load()
                     except:
                         pass
                     else:
                         user = _get_user_from_session_data(parentdata)
-                        if user and user.is_authenticated and user.has_event_permission(request.organizer, request.event, request=request):
+                        if user and user.is_authenticated and user.has_event_permission(
+                                request.organizer, request.event, session_key=parent_session_key):
                             can_access = True
                             request.event_access_user = user
 
