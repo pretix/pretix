@@ -68,8 +68,8 @@ class CheckinListForm(forms.ModelForm):
         super().__init__(**kwargs)
         self.fields['limit_products'].queryset = self.event.items.all()
         self.fields['auto_checkin_sales_channels'].queryset = self.event.organizer.sales_channels.all()
-        self.fields['limit_sales_channels'].widget = SalesChannelCheckboxSelectMultiple(
-            self.event, choices=self.fields['limit_sales_channels'].widget.choices
+        self.fields['auto_checkin_sales_channels'].widget = SalesChannelCheckboxSelectMultiple(
+            self.event, choices=self.fields['auto_checkin_sales_channels'].widget.choices
         )
 
         if not self.event.organizer.gates.exists():
