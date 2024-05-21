@@ -339,6 +339,7 @@ def _detect_event(request, require_live=True, require_plugin=None):
                                 request.organizer, request.event, session_key=parent_session_key):
                             can_access = True
                             request.event_access_user = user
+                            request.event_access_parent_session_key = parent_session_key
 
                 if not can_access and not request.event.live:
                     # Directly construct view instead of just calling `raise` since this case is so common that we
