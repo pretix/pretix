@@ -415,6 +415,12 @@ def _event_view(function=None, require_live=True, require_plugin=None):
             else:
                 with scope(organizer=getattr(request, 'organizer', None)), \
                      time_machine_now_assigned_from_request(request):
+                    if not hasattr(request, 'sales_channel') and hasattr(request, 'organizer'):
+                        # The environ lookup is only relevant during unit testing
+                        request.sales_channel = request.organizer.sales_channels.get(
+                            identifier=request.environ.get('PRETIX_SALES_CHANNEL', 'web')
+                        )
+
                     response = func(request=request, *args, **kwargs)
                     if getattr(request, 'event', None):
                         for receiver, r in process_response.send(request.event, request=request, response=response):
