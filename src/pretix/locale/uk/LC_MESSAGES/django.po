@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2024-05-22 16:00+0000\n"
+"PO-Revision-Date: 2024-05-23 05:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -3135,13 +3135,12 @@ msgid ""
 "Invalid placeholder syntax: You used a different number of \"{\" than of "
 "\"}\"."
 msgstr ""
-"Недійсний синтаксис заповнювача: ви використали іншу кількість \"{\" than of "
-"\"}\"."
+"Недійсний синтаксис загальних символів: У Вас різна кількість \"{\" та \"}\"."
 
 #: pretix/base/forms/validators.py:73
 #, python-format
 msgid "Invalid placeholder(s): %(value)s"
-msgstr "Недійсні заповнювачі: %(value)s"
+msgstr "Недійсні символи заповнення: %(value)s"
 
 #: pretix/base/forms/widgets.py:67
 #, fuzzy, python-format
@@ -3152,7 +3151,7 @@ msgstr "Зразок міста"
 #: pretix/base/forms/widgets.py:70
 #, python-brace-format
 msgid "Available placeholders: {list}"
-msgstr "Доступні заповнювачі: {list}"
+msgstr "Доступні символи заповнення: {list}"
 
 #: pretix/base/forms/widgets.py:213 pretix/base/models/items.py:1560
 #: pretix/base/reldate.py:201 pretix/plugins/checkinlists/exporters.py:742
@@ -20147,7 +20146,7 @@ msgstr "Додати нову варіацію"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:154
 msgid "Availability"
-msgstr "Наявність"
+msgstr "Доступність"
 
 #: pretix/control/templates/pretixcontrol/item/index.html:185
 #, fuzzy
@@ -27635,7 +27634,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/sepa_export.html:34
 msgid "Download"
-msgstr ""
+msgstr "Звантажити"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/transaction_list.html:12
 msgid "Payer and reference"
