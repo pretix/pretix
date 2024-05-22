@@ -1098,8 +1098,8 @@ class Renderer:
                 if bg_rotation:
                     # /Rotate is clockwise, transformation.rotate is counter-clockwise
                     t = Transformation().rotate(bg_rotation)
-                    w = float(page.mediabox.getWidth())
-                    h = float(page.mediabox.getHeight())
+                    w = float(page.mediabox.width)
+                    h = float(page.mediabox.height)
                     if bg_rotation in (90, 270):
                         # offset due to rotation base
                         if bg_rotation == 90:
@@ -1156,8 +1156,8 @@ def merge_background(fg_pdf, bg_pdf, out_file, compress):
             if bg_rotation:
                 # /Rotate is clockwise, transformation.rotate is counter-clockwise
                 t = Transformation().rotate(bg_rotation)
-                w = float(page.mediabox.getWidth())
-                h = float(page.mediabox.getHeight())
+                w = float(page.mediabox.width)
+                h = float(page.mediabox.height)
                 if bg_rotation in (90, 270):
                     # offset due to rotation base
                     if bg_rotation == 90:
