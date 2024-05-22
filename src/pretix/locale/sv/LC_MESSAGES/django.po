@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2023-12-16 06:00+0000\n"
-"Last-Translator: Mattias Axell <mattias@libertador.es>\n"
+"PO-Revision-Date: 2024-05-22 07:02+0000\n"
+"Last-Translator: Charlie Lundberg <charlieblundberg@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
 "Language: sv\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n != 1;\n"
-"X-Generator: Weblate 5.2.1\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -548,6 +548,8 @@ msgid ""
 "Product changed (including product added or deleted and including changes to "
 "nested objects like variations or bundles)"
 msgstr ""
+"Produkt ändrad (inklusive produkt som lagts till eller tagits bort och "
+"inklusive ändringar av kapslade objekt som varianter eller paket)"
 
 #: pretix/api/webhooks.py:339
 #, fuzzy
@@ -629,7 +631,7 @@ msgstr "Det här fältet är obligatoriskt."
 
 #: pretix/base/addressvalidation.py:213
 msgid "Enter a postal code in the format XXX."
-msgstr ""
+msgstr "Ange ett postnummer i formatet XXXXX."
 
 #: pretix/base/addressvalidation.py:222 pretix/base/addressvalidation.py:224
 msgid "Enter a postal code in the format XXXX."
@@ -692,13 +694,15 @@ msgstr "Konfigurationsalternativet \"{name}\" saknas."
 msgid ""
 "Unable to retrieve configuration from \"{url}\". Error message: \"{error}\"."
 msgstr ""
+"Det gick inte att hämta konfigurationen från \"{url}\". Felmeddelande: \""
+"{error}\"."
 
 #: pretix/base/customersso/oidc.py:78 pretix/base/customersso/oidc.py:83
 #: pretix/base/customersso/oidc.py:88 pretix/base/customersso/oidc.py:93
 #: pretix/base/customersso/oidc.py:98 pretix/base/customersso/oidc.py:103
 #, python-brace-format
 msgid "Incompatible SSO provider: \"{error}\"."
-msgstr ""
+msgstr "Inkompatibel SSO-leverantör: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:109
 #, fuzzy, python-brace-format
@@ -4028,10 +4032,8 @@ msgid "Ticket blocked"
 msgstr "Biljetten är incheckad"
 
 #: pretix/base/models/checkin.py:370
-#, fuzzy
-#| msgid "Order approved"
 msgid "Order not approved"
-msgstr "Beställningen har godkänts"
+msgstr "Beställning ej godkänd"
 
 #: pretix/base/models/checkin.py:371
 #, fuzzy
@@ -4150,9 +4152,8 @@ msgstr "Den här identifieraren är redan använd i en annan fråga."
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:67
 #: pretix/control/templates/pretixcontrol/organizers/gates.html:16
 #: pretix/plugins/checkinlists/exporters.py:754
-#, fuzzy
 msgid "Gate"
-msgstr "port"
+msgstr "Port"
 
 #: pretix/base/models/devices.py:132
 #: pretix/control/templates/pretixcontrol/organizers/devices.html:83
@@ -27223,7 +27224,7 @@ msgstr ""
 #: pretix/plugins/paypal2/payment.py:137 pretix/plugins/paypal2/payment.py:1064
 #: pretix/plugins/paypal2/payment.py:1065 pretix/plugins/stripe/payment.py:1908
 msgid "PayPal"
-msgstr ""
+msgstr "PayPal"
 
 #: pretix/plugins/paypal/apps.py:53
 msgid ""
@@ -28819,8 +28820,9 @@ msgid ""
 msgstr ""
 
 #: pretix/plugins/stripe/payment.py:348 pretix/plugins/stripe/payment.py:1620
+#, fuzzy
 msgid "iDEAL"
-msgstr ""
+msgstr "iDEAL"
 
 #: pretix/plugins/stripe/payment.py:356 pretix/plugins/stripe/payment.py:1645
 msgid "Alipay"
@@ -28828,11 +28830,11 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:364 pretix/plugins/stripe/payment.py:1657
 msgid "Bancontact"
-msgstr ""
+msgstr "Bancontact"
 
 #: pretix/plugins/stripe/payment.py:372
 msgid "SEPA Direct Debit"
-msgstr ""
+msgstr "SEPA autogiro"
 
 #: pretix/plugins/stripe/payment.py:375
 msgid ""
