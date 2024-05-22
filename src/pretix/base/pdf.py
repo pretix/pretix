@@ -1151,7 +1151,7 @@ def merge_background(fg_pdf, bg_pdf, out_file, compress):
     else:
         output = PdfWriter()
         for i, page in enumerate(fg_pdf.pages):
-            bg_page = copy.deepcopy(bg_pdf.pages[i])
+            bg_page = bg_pdf.pages[i]
             bg_rotation = bg_page.get('/Rotate')
             if bg_rotation:
                 # /Rotate is clockwise, transformation.rotate is counter-clockwise
