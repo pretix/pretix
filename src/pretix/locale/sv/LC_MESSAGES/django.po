@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2024-05-22 07:02+0000\n"
+"PO-Revision-Date: 2024-05-22 16:00+0000\n"
 "Last-Translator: Charlie Lundberg <charlieblundberg@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -723,6 +723,7 @@ msgid ""
 "You are requesting field \"{field}\" but provider only supports these: "
 "{fields}."
 msgstr ""
+"Du begär fältet \"{field}\" men leverantören stöder endast dessa: {fields}."
 
 #: pretix/base/customersso/oidc.py:171 pretix/base/customersso/oidc.py:178
 #: pretix/base/customersso/oidc.py:197 pretix/base/customersso/oidc.py:214
@@ -731,13 +732,15 @@ msgstr ""
 #: pretix/presale/views/customer.py:811
 #, python-brace-format
 msgid "Login was not successful. Error message: \"{error}\"."
-msgstr ""
+msgstr "Inloggningen lyckades inte. Felmeddelande: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:204
 msgid ""
 "The email address on this account is not yet verified. Please first confirm "
 "the email address in your customer account."
 msgstr ""
+"E-postadressen på det här kontot är ännu inte verifierad. Vänligen bekräfta "
+"först e-postadressen i ditt kundkonto."
 
 #: pretix/base/email.py:199 pretix/base/exporters/items.py:152
 #: pretix/base/exporters/items.py:197 pretix/control/views/main.py:311
@@ -802,6 +805,8 @@ msgid ""
 "Download a ZIP file including all files that have been uploaded by your "
 "customers while creating an order."
 msgstr ""
+"Ladda ner en ZIP-fil inklusive alla filer som har laddats upp av dina kunder "
+"när beställningarna skapades."
 
 #: pretix/base/exporters/answers.py:66 pretix/base/models/items.py:1671
 #: pretix/control/navigation.py:182
@@ -1137,6 +1142,8 @@ msgid ""
 "Download a spreadsheet with information on all events in this organizer "
 "account."
 msgstr ""
+"Ladda ner ett kalkylblad med information om alla evenemang i detta "
+"arrangörskonto."
 
 #: pretix/base/exporters/events.py:57 pretix/base/exporters/orderlist.py:260
 #: pretix/base/exporters/orderlist.py:440
@@ -1261,6 +1268,7 @@ msgstr "Alla fakturor"
 #: pretix/base/exporters/invoices.py:127
 msgid "Download all invoices created by the system as a ZIP file of PDF files."
 msgstr ""
+"Ladda ner alla fakturor som skapats av systemet som en ZIP-fil med PDF-filer."
 
 #: pretix/base/exporters/invoices.py:178
 msgid "Invoice data"
@@ -1272,6 +1280,9 @@ msgid ""
 "The spreadsheet includes two sheets, one with a line for every invoice, and "
 "one with a line for every position of every invoice."
 msgstr ""
+"Ladda ner ett kalkylblad med data för alla fakturor som skapats av systemet. "
+"Kalkylarket innehåller två ark, ett med en rad för varje faktura och ett med "
+"en rad för varje position på varje faktura."
 
 #: pretix/base/exporters/invoices.py:191 pretix/base/shredder.py:576
 #: pretix/control/templates/pretixcontrol/order/index.html:267
@@ -1618,6 +1629,7 @@ msgstr "Produkt namn"
 #: pretix/base/exporters/items.py:52
 msgid "Download a spreadsheet with details about all products and variations."
 msgstr ""
+"Ladda ner ett kalkylblad med information om alla produkter och varianter."
 
 #: pretix/base/exporters/items.py:58 pretix/base/exporters/orderlist.py:571
 #: pretix/base/exporters/orderlist.py:862
@@ -1829,6 +1841,8 @@ msgid ""
 "Download a structured JSON representation of all orders. This might be "
 "useful for the import in third-party systems."
 msgstr ""
+"Ladda ner en strukturerad JSON-representation av alla beställningar. Detta "
+"kan vara användbart för import i tredjepartssystem."
 
 #: pretix/base/exporters/mail.py:52
 msgid "Email addresses (text file)"
@@ -1839,6 +1853,8 @@ msgid ""
 "Download a text file with all email addresses collected either from buyers "
 "or from ticket holders."
 msgstr ""
+"Ladda ner en textfil med alla e-postadresser som samlats in antingen från "
+"köpare eller från biljettinnehavare."
 
 #: pretix/base/exporters/mail.py:76 pretix/plugins/reports/exporters.py:487
 #: pretix/plugins/reports/exporters.py:669
@@ -1851,6 +1867,10 @@ msgid ""
 "sheets, one with a line for every order, one with a line for every order "
 "position, and one with a line for every additional fee charged in an order."
 msgstr ""
+"Ladda ner ett kalkylblad med alla beställningar. Kalkylarket kommer att "
+"innehålla tre ark, ett med en rad för varje order, ett med en rad för varje "
+"orderposition och ett med en rad för varje extra avgift som tas ut i en "
+"order."
 
 #: pretix/base/exporters/orderlist.py:99 pretix/base/models/orders.py:291
 #: pretix/control/navigation.py:253 pretix/control/navigation.py:360
@@ -2284,7 +2304,7 @@ msgstr "Stol nummer"
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:108
 #: pretix/plugins/statistics/templates/pretixplugins/statistics/index.html:110
 msgid "Blocked"
-msgstr ""
+msgstr "Blockad"
 
 #: pretix/base/exporters/orderlist.py:601 pretix/base/modelimport_orders.py:500
 #: pretix/base/models/orders.py:2423
@@ -2328,7 +2348,7 @@ msgstr "Fakturor"
 
 #: pretix/base/exporters/orderlist.py:630 pretix/base/pdf.py:351
 msgid "Invoice address city"
-msgstr ""
+msgstr "Fakturaadress stad"
 
 #: pretix/base/exporters/orderlist.py:631 pretix/base/pdf.py:361
 #, fuzzy
@@ -2355,6 +2375,10 @@ msgid ""
 "changes to products, prices or tax rates. The information is only accurate "
 "for changes made with pretix versions released after October 2021."
 msgstr ""
+"Ladda ner ett kalkylblad med alla väsentliga ändringar av beställningar, "
+"d.v.s. alla ändringar av produkter, priser eller skattesatser. Informationen "
+"är endast korrekt för ändringar gjorda med pretix-versioner som släppts "
+"efter oktober 2021."
 
 #: pretix/base/exporters/orderlist.py:812
 #, fuzzy
@@ -2453,10 +2477,12 @@ msgid ""
 "This value is supplied for informational purposes, it is not part of the "
 "original transaction data and might have changed since the transaction."
 msgstr ""
+"Detta värde tillhandahålls i informationssyfte, det är inte en del av den "
+"ursprungliga transaktionsdatan och kan ha ändrats sedan transaktionen."
 
 #: pretix/base/exporters/orderlist.py:911
 msgid "Converted from legacy version"
-msgstr ""
+msgstr "Konverterat från äldre version"
 
 #: pretix/base/exporters/orderlist.py:973
 #, fuzzy
@@ -2467,6 +2493,8 @@ msgstr "Orderbetalningar och återbud"
 #: pretix/base/exporters/orderlist.py:975
 msgid "Download a spreadsheet of all payments or refunds of every order."
 msgstr ""
+"Ladda ner ett kalkylblad med alla betalningar eller återbetalningar för "
+"varje beställning."
 
 #: pretix/base/exporters/orderlist.py:984
 #, fuzzy
@@ -3376,7 +3404,7 @@ msgstr "Belopp"
 #, python-brace-format
 msgctxt "invoice"
 msgid "Single price: {net_price} net / {gross_price} gross"
-msgstr ""
+msgstr "Enkelpris: {net_price} netto / {gross_price} brutto"
 
 #: pretix/base/invoice.py:659
 #, fuzzy, python-brace-format
@@ -3475,7 +3503,7 @@ msgstr "Ange en giltig epost."
 
 #: pretix/base/invoice.py:994
 msgid "Simplified invoice renderer"
-msgstr ""
+msgstr "Förenklad fakturaåtergivning"
 
 #: pretix/base/invoice.py:1013
 #, fuzzy, python-brace-format
@@ -3487,12 +3515,12 @@ msgstr "Datum för evenemangserie har ändrats"
 
 #: pretix/base/media.py:61
 msgid "Barcode / QR-Code"
-msgstr ""
+msgstr "Streckkod / QR-kod"
 
 #: pretix/base/media.py:77
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:237
 msgid "NFC UID-based"
-msgstr ""
+msgstr "NFC UID-baserad"
 
 #: pretix/base/migrations/0077_auto_20171124_1629.py:33
 #: pretix/base/migrations/0077_auto_20171124_1629_squashed_0088_auto_20180328_1217.py:35
@@ -3501,28 +3529,28 @@ msgstr "Standardlista"
 
 #: pretix/base/modelimport.py:112
 msgid "Keep empty"
-msgstr ""
+msgstr "Håll tomt"
 
 #: pretix/base/modelimport.py:139
 #, python-brace-format
 msgid "Invalid setting for column \"{header}\"."
-msgstr ""
+msgstr "Ogiltig inställning för kolumnen \"{header}\"."
 
 #: pretix/base/modelimport.py:199
 #, python-brace-format
 msgid "Could not parse {value} as a yes/no value."
-msgstr ""
+msgstr "Det gick inte att analysera {value} som ett ja/nej-värde."
 
 #: pretix/base/modelimport.py:216
 #, python-brace-format
 msgid "Could not parse {value} as a date and time."
-msgstr ""
+msgstr "Det gick inte att analysera {value} som datum och tid."
 
 #: pretix/base/modelimport.py:226 pretix/control/views/orders.py:1162
 #: pretix/control/views/orders.py:1191 pretix/control/views/orders.py:1235
 #: pretix/control/views/orders.py:1270 pretix/control/views/orders.py:1293
 msgid "You entered an invalid number."
-msgstr ""
+msgstr "Du angav ett ogiltigt nummer."
 
 #: pretix/base/modelimport.py:270 pretix/base/modelimport.py:282
 msgctxt "subevent"
@@ -3640,15 +3668,15 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/index.html:111
 #: pretix/control/templates/pretixcontrol/order/index.html:497
 msgid "Ticket code"
-msgstr ""
+msgstr "Biljettkod"
 
 #: pretix/base/modelimport_orders.py:451
 msgid "Generate automatically"
-msgstr ""
+msgstr "Generera automatiskt"
 
 #: pretix/base/modelimport_orders.py:460
 msgid "You cannot assign a position secret that already exists."
-msgstr ""
+msgstr "Du kan inte tilldela en positionshemlighet som redan finns."
 
 #: pretix/base/modelimport_orders.py:491
 #, fuzzy
@@ -3665,12 +3693,12 @@ msgstr "Ange en giltig epost."
 #: pretix/base/modelimport_orders.py:575
 #: pretix/base/modelimport_vouchers.py:291
 msgid "Multiple matching seats were found."
-msgstr ""
+msgstr "Flera matchande platser hittades."
 
 #: pretix/base/modelimport_orders.py:577
 #: pretix/base/modelimport_vouchers.py:293
 msgid "No matching seat was found."
-msgstr ""
+msgstr "Ingen matchande plats hittades."
 
 #: pretix/base/modelimport_orders.py:580
 #: pretix/base/modelimport_vouchers.py:296 pretix/base/services/cart.py:212
@@ -3678,11 +3706,11 @@ msgstr ""
 #: pretix/base/services/modelimport.py:246
 msgid ""
 "The seat you selected has already been taken. Please select a different seat."
-msgstr ""
+msgstr "Platsen du valde har redan tagits. Välj en annan plats."
 
 #: pretix/base/modelimport_orders.py:583 pretix/base/services/cart.py:209
 msgid "You need to select a specific seat."
-msgstr ""
+msgstr "Du måste välja en specifik plats."
 
 #: pretix/base/modelimport_orders.py:621 pretix/base/models/items.py:1575
 #: pretix/base/models/items.py:1670 pretix/control/forms/item.py:92
@@ -3699,7 +3727,7 @@ msgstr "Ogiltigt alternativ valt."
 
 #: pretix/base/modelimport_orders.py:633 pretix/base/modelimport_orders.py:641
 msgid "Ambiguous option selected."
-msgstr ""
+msgstr "Mångtydigt alternativ valt."
 
 #: pretix/base/modelimport_orders.py:672 pretix/base/models/orders.py:207
 #: pretix/control/forms/orders.py:643 pretix/control/forms/organizer.py:781
@@ -3811,13 +3839,15 @@ msgstr "Visa gömda produkter som matchar denna kampanjkod"
 
 #: pretix/base/modelimport_vouchers.py:343 pretix/base/models/vouchers.py:301
 msgid "Offer all add-on products for free when redeeming this voucher"
-msgstr ""
+msgstr "Erbjud alla tilläggsprodukter gratis när någon löser in denna kupong"
 
 #: pretix/base/modelimport_vouchers.py:351 pretix/base/models/vouchers.py:305
 msgid ""
 "Include all bundled products without a designated price when redeeming this "
 "voucher"
 msgstr ""
+"Inkludera alla paketerade produkter utan ett angivet pris när någon löser in "
+"denna kupong"
 
 #: pretix/base/models/auth.py:248
 msgid "Is active"
@@ -3889,22 +3919,28 @@ msgid ""
 "and valid for check-in regardless of which date they are purchased for. You "
 "can limit their validity through the advanced check-in rules, though."
 msgstr ""
+"Om du väljer \"alla datum\" kommer biljetter att betraktas som en del av "
+"denna lista och giltiga för incheckning oavsett vilket datum de köps för. Du "
+"kan dock begränsa deras giltighet genom de avancerade incheckningsreglerna."
 
 #: pretix/base/models/checkin.py:66
 msgctxt "checkin"
 msgid "Ignore check-ins on this list in statistics"
-msgstr ""
+msgstr "Ignorera incheckningar på den här listan i statistiken"
 
 #: pretix/base/models/checkin.py:70
 msgctxt "checkin"
 msgid "Tickets with a check-in on this list should be considered \"used\""
 msgstr ""
+"Biljetter med incheckning på denna lista ska betraktas som \"förbrukade\""
 
 #: pretix/base/models/checkin.py:71
 msgid ""
 "This is relevant in various situations, e.g. for deciding if a ticket can "
 "still be canceled by the customer."
 msgstr ""
+"Detta är relevant i flera situationer, t.ex. för att avgöra om en biljett "
+"fortfarande kan avbokas av kunden."
 
 #: pretix/base/models/checkin.py:75
 msgctxt "checkin"
@@ -4228,14 +4264,18 @@ msgid ""
 "use a voucher only to e.g. unlock a hidden product or gain access to sold-"
 "out quota will still be considered."
 msgstr ""
+"Om det här alternativet är markerat kommer produkter som redan fått rabatt "
+"via en kupong inte att beaktas för denna rabatt. Produkter som använder en "
+"kupong endast för att t.ex. låsa upp en dold produkt eller få tillgång till "
+"slutsåld kvot kommer fortfarande att tillämpas."
 
 #: pretix/base/models/discount.py:114
 msgid "Minimum number of matching products"
-msgstr ""
+msgstr "Minsta antal matchande produkter"
 
 #: pretix/base/models/discount.py:118
 msgid "Minimum gross value of matching products"
-msgstr ""
+msgstr "Minsta bruttovärde för matchande produkter"
 
 #: pretix/base/models/discount.py:126
 #, fuzzy
