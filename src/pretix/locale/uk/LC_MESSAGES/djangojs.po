@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:19+0000\n"
-"PO-Revision-Date: 2024-05-15 18:00+0000\n"
+"PO-Revision-Date: 2024-05-22 16:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/"
 "pretix-js/uk/>\n"
@@ -20,7 +20,7 @@ msgstr ""
 "? 0 : n % 1 == 0 && n % 10 >= 2 && n % 10 <= 4 && (n % 100 < 12 || n % 100 > "
 "14) ? 1 : n % 1 == 0 && (n % 10 ==0 || (n % 10 >=5 && n % 10 <=9) || (n % "
 "100 >=11 && n % 100 <=14 )) ? 2: 3);\n"
-"X-Generator: Weblate 5.5.3\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:56
 #: pretix/plugins/banktransfer/static/pretixplugins/banktransfer/ui.js:62
@@ -729,7 +729,7 @@ msgstr "Будь ласка, введіть кількість для одног
 
 #: pretix/static/pretixpresale/js/ui/main.js:480
 msgid "required"
-msgstr "обов'язково"
+msgstr "обов'язкове"
 
 #: pretix/static/pretixpresale/js/ui/main.js:583
 #: pretix/static/pretixpresale/js/ui/main.js:602
