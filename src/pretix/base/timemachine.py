@@ -81,5 +81,6 @@ def has_time_machine_permission(request, event):
     ) or (
         getattr(request, 'event_access_user', None) and
         request.event_access_user.is_authenticated and
-        request.event_access_user.has_event_permission(request.organizer, request.event, permission, request=request)
+        request.event_access_user.has_event_permission(request.organizer, request.event, permission,
+                                                       session_key=request.event_access_parent_session_key)
     )
