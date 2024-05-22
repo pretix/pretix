@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2024-05-21 20:00+0000\n"
+"PO-Revision-Date: 2024-05-22 16:00+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -991,7 +991,7 @@ msgstr "Мова"
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:71
 #: pretix/control/templates/pretixcontrol/organizers/reusable_medium.html:68
 msgid "Notes"
-msgstr ""
+msgstr "Нотатки"
 
 #: pretix/base/exporters/customers.py:100
 #: pretix/base/exporters/customers.py:101 pretix/base/exporters/events.py:83
@@ -3116,7 +3116,7 @@ msgstr ""
 
 #: pretix/base/forms/user.py:175
 msgid "Device name"
-msgstr "Ім'я пристрою"
+msgstr "Назва пристрою"
 
 #: pretix/base/forms/user.py:176
 msgid "Device type"
@@ -7073,7 +7073,7 @@ msgstr "Країна учасника"
 
 #: pretix/base/pdf.py:220
 msgid "Pseudonymization ID (lead scanning)"
-msgstr "Надання псевдоніму  ID (веде сканування)"
+msgstr "ID псевдонімізації (сканування відвідувачів)"
 
 #: pretix/base/pdf.py:226 pretix/base/pdf.py:231
 msgid "Sample event name"
@@ -23751,7 +23751,7 @@ msgstr "QR код для реєстрації"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:438
 msgid "QR code for Lead Scanning"
-msgstr ""
+msgstr "QR-код для Сканування відвідувачів"
 
 #: pretix/control/templates/pretixcontrol/pdf/index.html:444
 msgid "Other QR code"
@@ -27340,7 +27340,7 @@ msgstr "Рахунок для"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:14
 msgid "Account"
-msgstr ""
+msgstr "Обліковий запис"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:28
 msgid "Transfer amount"
@@ -30652,7 +30652,7 @@ msgstr "з помилками"
 #: pretix/presale/templates/pretixpresale/event/fragment_voucher_form.html:14
 msgctxt "form"
 msgid "required"
-msgstr "обов'язково"
+msgstr "обов'язкове"
 
 #: pretix/presale/ical.py:85 pretix/presale/ical.py:141
 #, python-brace-format
@@ -30755,7 +30755,7 @@ msgstr "Зв'язатися з організатором події"
 #: pretix/presale/templates/pretixpresale/fragment_modals.html:129
 #: pretix/presale/templates/pretixpresale/organizers/base.html:91
 msgid "Privacy policy"
-msgstr "Політика приватності"
+msgstr "Політика захисту даних"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:176
 #: pretix/presale/templates/pretixpresale/organizers/base.html:94
