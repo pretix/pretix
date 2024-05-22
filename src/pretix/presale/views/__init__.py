@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 import copy
 from collections import defaultdict
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 from decimal import Decimal
 from functools import wraps
 from itertools import groupby
@@ -493,7 +493,7 @@ def iframe_entry_view_wrapper(view_func):
                 settings.LANGUAGE_COOKIE_NAME,
                 locale,
                 max_age=max_age,
-                expires=(datetime.now(UTC) + timedelta(seconds=max_age)).strftime('%a, %d-%b-%Y %H:%M:%S GMT'),
+                expires=(datetime.utcnow() + timedelta(seconds=max_age)).strftime('%a, %d-%b-%Y %H:%M:%S GMT'),
             )
             return resp
 

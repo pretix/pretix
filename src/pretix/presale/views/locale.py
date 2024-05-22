@@ -32,7 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from datetime import UTC, datetime, timedelta
+from datetime import datetime, timedelta
 
 from django.conf import settings
 from django.http import HttpResponseRedirect
@@ -60,7 +60,7 @@ class LocaleSet(NoSearchIndexViewMixin, View):
                 settings.LANGUAGE_COOKIE_NAME,
                 locale,
                 max_age=max_age,
-                expires=(datetime.now(UTC) + timedelta(seconds=max_age)).strftime(
+                expires=(datetime.utcnow() + timedelta(seconds=max_age)).strftime(
                     '%a, %d-%b-%Y %H:%M:%S GMT'),
             )
 
