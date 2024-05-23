@@ -45,6 +45,7 @@ allow_voucher_access                  boolean                    Enables access 
 lead_scanning_scope_by_device         string                     Enables lead scanning to be handled as one lead per attendee
                                                                  per scanning device, instead of only per exhibitor.
 comment                               string                     Internal comment, not shown to exhibitor
+exhibitor_tags                        list of strings            Internal tags to categorize exhibitors, not shown to exhibitor.
 ===================================== ========================== =======================================================
 
 You can also access the scanned leads through the API which contains the following public fields:
@@ -119,7 +120,8 @@ Endpoints
             "allow_lead_scanning": true,
             "allow_lead_access": true,
             "allow_voucher_access": true,
-            "comment": ""
+            "comment": "",
+            "exhibitor_tags": []
           }
         ]
       }
@@ -173,7 +175,8 @@ Endpoints
         "allow_lead_scanning": true,
         "allow_lead_access": true,
         "allow_voucher_access": true,
-        "comment": ""
+        "comment": "",
+        "exhibitor_tags": []
       }
 
    :param organizer: The ``slug`` field of the organizer to fetch
@@ -374,7 +377,10 @@ Endpoints
         "allow_lead_scanning": true,
         "allow_lead_access": true,
         "allow_voucher_access": true,
-        "comment": ""
+        "comment": "",
+        "exhibitor_tags": [
+          "Gold Sponsor"
+        ]
       }
 
    **Example response**:
@@ -407,7 +413,10 @@ Endpoints
         "allow_lead_scanning": true,
         "allow_lead_access": true,
         "allow_voucher_access": true,
-        "comment": ""
+        "comment": "",
+        "exhibitor_tags": [
+          "Gold Sponsor"
+        ]
       }
 
    :param organizer: The ``slug`` field of the organizer to create new exhibitor for
@@ -468,7 +477,10 @@ Endpoints
         "allow_lead_scanning": true,
         "allow_lead_access": true,
         "allow_voucher_access": true,
-        "comment": ""
+        "comment": "",
+        "exhibitor_tags": [
+          "Gold Sponsor"
+        ]
       }
 
    :param organizer: The ``slug`` field of the organizer to modify
