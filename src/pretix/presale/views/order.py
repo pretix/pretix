@@ -33,6 +33,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 import copy
+import hmac
 import inspect
 import json
 import mimetypes
@@ -102,18 +103,12 @@ class OrderDetailMixin(NoSearchIndexViewMixin):
 
     @cached_property
     def order(self):
-        order = self.request.event.orders.filter(code=self.kwargs['order']).select_related('event').first()
-        if order:
-            if order.secret.lower() == self.kwargs['secret'].lower():
-                return order
-            else:
-                return None
-        else:
-            # Do a comparison as well to harden timing attacks
-            if 'abcdefghijklmnopq'.lower() == self.kwargs['secret'].lower():
-                return None
-            else:
-                return None
+        try:
+            return self.request.event.orders.filter().select_related('event').get_with_secret_check(
+                code=self.kwargs['order'], received_secret=self.kwargs['secret'], tag=None,
+            )
+        except Order.DoesNotExist:
+            return None
 
     def get_order_url(self):
         return eventreverse(self.request.event, 'presale:event.order', kwargs={
@@ -133,13 +128,13 @@ class OrderPositionDetailMixin(NoSearchIndexViewMixin):
         ).select_related('order', 'order__event')
         p = qs.first()
         if p:
-            if p.web_secret.lower() == self.kwargs['secret'].lower():
+            if hmac.compare_digest(p.web_secret.lower(), self.kwargs['secret'].lower()):
                 return p
             else:
                 return None
         else:
             # Do a comparison as well to harden timing attacks
-            if 'abcdefghijklmnopq'.lower() == self.kwargs['secret'].lower():
+            if hmac.compare_digest('abcdefghijklmnopq'.lower(), self.kwargs['secret'].lower()):
                 return None
             else:
                 return None

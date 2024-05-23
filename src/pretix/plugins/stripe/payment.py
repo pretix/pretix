@@ -32,7 +32,6 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-import hashlib
 import json
 import logging
 import re
@@ -636,7 +635,7 @@ class StripeMethod(BasePaymentProvider):
             'order': payment.order,
             'payment': payment,
             'payment_info': payment_info,
-            'payment_hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest()
+            'payment_hash': payment.order.tagged_secret('plugins:stripe')
         }
         return template.render(ctx)
 
@@ -890,7 +889,7 @@ class StripeMethod(BasePaymentProvider):
                     return_url=build_absolute_uri(self.event, 'plugins:stripe:sca.return', kwargs={
                         'order': payment.order.code,
                         'payment': payment.pk,
-                        'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+                        'hash': payment.order.tagged_secret('plugins:stripe'),
                     }),
                     expand=['latest_charge'],
                     **params
@@ -988,7 +987,7 @@ class StripeMethod(BasePaymentProvider):
         url = build_absolute_uri(self.event, 'plugins:stripe:sca', kwargs={
             'order': payment.order.code,
             'payment': payment.pk,
-            'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+            'hash': payment.order.tagged_secret('plugins:stripe'),
         })
         if not self.redirect_in_widget_allowed and request.session.get('iframe_session', False):
             return build_absolute_uri(self.event, 'plugins:stripe:redirect') + '?data=' + signing.dumps({
@@ -1009,7 +1008,7 @@ class StripeMethod(BasePaymentProvider):
                 return_url=build_absolute_uri(self.event, 'plugins:stripe:sca.return', kwargs={
                     'order': payment.order.code,
                     'payment': payment.pk,
-                    'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+                    'hash': payment.order.tagged_secret('plugins:stripe'),
                 }),
                 expand=["latest_charge"],
                 **self.api_kwargs
@@ -1829,7 +1828,7 @@ class StripeMultibanco(StripeSourceMethod):
                 'return_url': build_absolute_uri(self.event, 'plugins:stripe:return', kwargs={
                     'order': payment.order.code,
                     'payment': payment.pk,
-                    'hash': hashlib.sha1(payment.order.secret.lower().encode()).hexdigest(),
+                    'hash': payment.order.tagged_secret('plugins:stripe'),
                 })
             },
             **self.api_kwargs

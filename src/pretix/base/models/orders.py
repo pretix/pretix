@@ -35,6 +35,7 @@
 
 import copy
 import hashlib
+import hmac
 import json
 import logging
 import operator
@@ -59,7 +60,7 @@ from django.db.models.functions import Coalesce, Greatest
 from django.db.models.signals import post_delete
 from django.dispatch import receiver
 from django.urls import reverse
-from django.utils.crypto import get_random_string
+from django.utils.crypto import get_random_string, salted_hmac
 from django.utils.encoding import escape_uri_path
 from django.utils.formats import date_format
 from django.utils.functional import cached_property
@@ -103,6 +104,35 @@ def generate_secret():
 
 def generate_position_secret():
     raise TypeError("Function no longer exists, use secret generators")
+
+
+class OrderQuerySet(models.QuerySet):
+    def get_with_secret_check(self, code, received_secret, tag, secret_length=64):
+        dummy = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"[:secret_length]
+        try:
+            order = self.get(code=code)
+            if not hmac.compare_digest(
+                order.tagged_secret(tag, secret_length) if tag else order.secret,
+                received_secret[:secret_length].lower() if tag else received_secret.lower()
+            ) and not (
+                    # TODO: remove this clause after a while (compatibility with old secrets currently in flight)
+                    tag and hmac.compare_digest(
+                        hashlib.sha1(order.secret.lower().encode()).hexdigest(),
+                        received_secret.lower()
+                    )
+            ):
+                raise Order.DoesNotExist
+            return order
+        except Order.DoesNotExist:
+            # Do a hash comparison as well to harden against timing attacks
+            if hmac.compare_digest(
+                salted_hmac(key_salt=b"", value=tag, algorithm="sha256",
+                            secret=dummy).hexdigest()[:secret_length],
+                received_secret[:secret_length]
+            ):
+                raise Order.DoesNotExist
+            else:
+                raise Order.DoesNotExist
 
 
 class Order(LockModel, LoggedModel):
@@ -223,6 +253,7 @@ class Order(LockModel, LoggedModel):
         verbose_name=_('Locale')
     )
     secret = models.CharField(max_length=32, default=generate_secret)
+    internal_secret = models.CharField(null=True, blank=True, max_length=32, default=generate_secret)
     datetime = models.DateTimeField(
         verbose_name=_("Date"), db_index=False
     )
@@ -285,7 +316,7 @@ class Order(LockModel, LoggedModel):
         default=False,
     )
 
-    objects = ScopedManager(organizer='event__organizer')
+    objects = ScopedManager(OrderQuerySet.as_manager().__class__, organizer='event__organizer')
 
     class Meta:
         verbose_name = _("Order")
@@ -1222,6 +1253,10 @@ class Order(LockModel, LoggedModel):
         self._transaction_key_reset()
         _transactions_mark_order_clean(self.pk)
         return create
+
+    def tagged_secret(self, tag, secret_length=64):
+        return salted_hmac(value=tag, key_salt=b"", algorithm="sha256",
+                           secret=self.internal_secret or self.secret).hexdigest()[:secret_length]
 
 
 def answerfile_name(instance, filename: str) -> str:
