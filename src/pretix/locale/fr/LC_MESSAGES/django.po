@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2024-05-02 14:27+0000\n"
-"Last-Translator: Raphaël Deux <github@raphael-deux.fr>\n"
+"PO-Revision-Date: 2024-05-23 14:03+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=n > 1;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -11767,7 +11767,7 @@ msgstr "M."
 #: pretix/base/settings.py:3428
 msgctxt "person_name_salutation"
 msgid "Mx"
-msgstr "Ms."
+msgstr "Mx"
 
 #: pretix/base/settings.py:3460 pretix/base/settings.py:3473
 #: pretix/base/settings.py:3489 pretix/base/settings.py:3539
