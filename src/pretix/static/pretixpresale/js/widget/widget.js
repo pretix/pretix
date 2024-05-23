@@ -986,7 +986,7 @@ Vue.component('pretix-widget-event-form', {
 
         // Seating plan
         + '<div class="pretix-widget-seating-link-wrapper" v-if="this.$root.has_seating_plan">'
-        + '<button class="pretix-widget-seating-link" @click.prevent.stop="$root.startseating">'
+        + '<button class="pretix-widget-seating-link" type="button" @click.prevent.stop="$root.startseating">'
         + strings['show_seating']
         + '</button>'
         + '</div>'
