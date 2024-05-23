@@ -1035,7 +1035,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
         self.all_optional = kwargs.pop('all_optional', False)
 
         kwargs.setdefault('initial', {})
-        if not kwargs.get('instance') or not kwargs['instance'].country:
+        if (not kwargs.get('instance') or not kwargs['instance'].country) and not kwargs["initial"].get("country"):
             kwargs['initial']['country'] = guess_country_from_request(self.request, self.event)
 
         super().__init__(*args, **kwargs)
