@@ -827,6 +827,9 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
                 'zipcode': wd.get('invoice-address-zipcode', ''),
                 'city': wd.get('invoice-address-city', ''),
                 'country': wd.get('invoice-address-country', ''),
+                'internal_reference': wd.get('invoice-address-internal-reference', ''),
+                'custom_field': wd.get('invoice-address-custom-field', ''),
+                'vat_id': wd.get('invoice-address-vat-id', ''),
             }
         else:
             wd_initial = {
@@ -893,6 +896,15 @@ class QuestionsStep(QuestionsViewMixin, CartMixin, TemplateFlowStep):
         if failed:
             messages.error(request,
                            _("We had difficulties processing your input. Please review the errors below."))
+            if "vat_id" in self.invoice_form.errors:
+                # If an invalid VAT ID was given through the widget together with data-fix="true", let's un-block
+                # the field to prevent a deadlock.
+                widget_data = self.cart_session.get('widget_data', {})
+                if "invoice-address-vat-id" in widget_data:
+                    vat_id = widget_data.pop("invoice-address-vat-id", None)
+                    self.invoice_form.data["vat_id"] = vat_id
+                    self.invoice_form.fields["vat_id"].disabled = False
+                    self.cart_session['widget_data'] = widget_data
             return self.render()
         self.cart_session['email'] = self.contact_form.cleaned_data['email']
         d = dict(self.contact_form.cleaned_data)

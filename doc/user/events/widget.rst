@@ -339,9 +339,9 @@ Currently, the following attributes are understood by pretix itself:
   ``data-attendee-name``, which will pre-fill the last part of the name, whatever that is.
 
 * ``data-invoice-address-FIELD`` will  pre-fill the corresponding field of the invoice address. Possible values for
-  ``FIELD`` are ``company``, ``street``, ``zipcode``, ``city`` and ``country``, as well as fields specified by the
-  naming scheme such as ``name-title`` or ``name-given-name`` (see above). ``country`` expects a two-character
-  country code.
+  ``FIELD`` are ``company``, ``street``, ``zipcode``, ``city``, ``country``, ``internal-reference``, ``vat-id``, and
+  ``custom-field``, as well as fields specified by the naming scheme such as ``name-title`` or ``name-given-name``
+  (see above). ``country`` expects a two-character country code.
 
 * If ``data-fix="true"`` is given, the user will not be able to change the other given values later. This currently
   only works for the order email address as well as the invoice address. Attendee-level fields and questions can

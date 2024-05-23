@@ -1171,7 +1171,7 @@ class BaseInvoiceAddressForm(forms.ModelForm):
                     self.instance.vat_id_validated = False
                     messages.warning(self.request, e.message)
                 else:
-                    raise ValidationError(e.message)
+                    raise ValidationError({"vat_id": e.message})
             except VATIDTemporaryError as e:
                 self.instance.vat_id_validated = False
                 if self.request and self.vat_warning:
