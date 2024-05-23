@@ -507,7 +507,10 @@ def webhook(request, *args, **kwargs):
                     pass
         elif sale['status'] == 'APPROVED':
             request.session['payment_paypal_oid'] = payment.info_data['id']
-            payment.payment_provider.execute_payment(request, payment)
+            try:
+                payment.payment_provider.execute_payment(request, payment)
+            except PaymentException as e:
+                logger.exception('PayPal2 - Could not capture/execute_payment from Webhook: {}'.format(str(e)))
 
     return HttpResponse(status=200)
 
