@@ -62,8 +62,7 @@ from django.utils.html import conditional_escape
 from django.utils.timezone import now
 from django.utils.translation import gettext_lazy as _, pgettext
 from i18nfield.strings import LazyI18nString
-from pypdf import PdfReader, PdfWriter, Transformation
-from pypdf.generic import RectangleObject
+from pypdf import PdfReader, PdfWriter
 from reportlab.graphics import renderPDF
 from reportlab.graphics.barcode.qr import QrCodeWidget
 from reportlab.graphics.shapes import Drawing
@@ -1094,30 +1093,8 @@ class Renderer:
 
             for i, page in enumerate(new_pdf.pages):
                 bg_page = self.bg_pdf.pages[i]
-                bg_rotation = bg_page.get('/Rotate')
-                if bg_rotation:
-                    # page.merge_page loses /Rotate on page2 so we need to manually add it as a transformation
-                    # /Rotate is clockwise, transformation.rotate is counter-clockwise
-                    t = Transformation()
-                    w = bg_page.mediabox.width
-                    h = bg_page.mediabox.height
-                    if bg_rotation in (90, 270):
-                        # offset due to rotation base
-                        if bg_rotation == 90:
-                            t = t.rotate(270).translate(0, w)
-                        else:
-                            t = t.rotate(90).translate(h, 0)
-                        # rotate mediabox as well
-                        bg_page.mediabox = RectangleObject((
-                            bg_page.mediabox.left.as_numeric(),
-                            bg_page.mediabox.bottom.as_numeric(),
-                            bg_page.mediabox.top.as_numeric(),
-                            bg_page.mediabox.right.as_numeric(),
-                        ))
-                        bg_page.trimbox = bg_page.mediabox
-                    elif bg_rotation == 180:
-                        t = t.rotate(180).translate(w, h)
-                    bg_page.add_transformation(t)
+                if bg_page.rotation != 0:
+                    bg_page.transfer_rotation_to_content()
                 page.merge_page(bg_page, over=False)
                 output.add_page(page)
 
@@ -1153,30 +1130,8 @@ def merge_background(fg_pdf, bg_pdf, out_file, compress):
         output = PdfWriter()
         for i, page in enumerate(fg_pdf.pages):
             bg_page = bg_pdf.pages[i]
-            bg_rotation = bg_page.get('/Rotate')
-            if bg_rotation:
-                # page.merge_page loses /Rotate on page2 so we need to manually add it as a transformation
-                # /Rotate is clockwise, transformation.rotate is counter-clockwise
-                t = Transformation()
-                w = bg_page.mediabox.width
-                h = bg_page.mediabox.height
-                if bg_rotation in (90, 270):
-                    # offset due to rotation base
-                    if bg_rotation == 90:
-                        t = t.rotate(270).translate(0, w)
-                    else:
-                        t = t.rotate(90).translate(h, 0)
-                    # rotate mediabox as well
-                    bg_page.mediabox = RectangleObject((
-                        bg_page.mediabox.left.as_numeric(),
-                        bg_page.mediabox.bottom.as_numeric(),
-                        bg_page.mediabox.top.as_numeric(),
-                        bg_page.mediabox.right.as_numeric(),
-                    ))
-                    bg_page.trimbox = bg_page.mediabox
-                elif bg_rotation == 180:
-                    t = t.rotate(180).translate(w, h)
-                bg_page.add_transformation(t)
+            if bg_page.rotation != 0:
+                bg_page.transfer_rotation_to_content()
             page.merge_page(bg_page, over=False)
             output.add_page(page)
         output.write(out_file)
