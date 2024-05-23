@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-08 13:18+0000\n"
-"PO-Revision-Date: 2024-05-23 05:00+0000\n"
+"PO-Revision-Date: 2024-05-23 14:03+0000\n"
 "Last-Translator: Serhii Horichenko <m@sgg.im>\n"
 "Language-Team: Ukrainian <https://translate.pretix.eu/projects/pretix/pretix/"
 "uk/>\n"
@@ -17446,16 +17446,15 @@ msgstr "Транзакції"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/control.html:32
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:33
 msgid "Reference"
-msgstr ""
+msgstr "Призначення"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:100
 msgid "Terminal ID"
 msgstr "ID Терміналу"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:104
-#, fuzzy
 msgid "Card holder"
-msgstr "Номер картки"
+msgstr "Власник картки"
 
 #: pretix/control/templates/pretixcontrol/boxoffice/payment.html:108
 #, fuzzy
@@ -26968,7 +26967,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/signals.py:47
 #: pretix/plugins/banktransfer/signals.py:84
 msgid "Bank transfer"
-msgstr ""
+msgstr "Банківський переказ"
 
 #: pretix/plugins/banktransfer/apps.py:39
 msgid ""
@@ -27031,7 +27030,7 @@ msgstr "IBAN"
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_assign.html:66
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:25
 msgid "BIC"
-msgstr ""
+msgstr "BIC"
 
 #: pretix/plugins/banktransfer/payment.py:123
 msgid "Name of bank"
@@ -27161,7 +27160,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/payment.py:455
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:15
 msgid "Please transfer the full amount to the following bank account:"
-msgstr ""
+msgstr "Перекажіть, будь ласка, повну суму на вказаний банківський рахунок:"
 
 #: pretix/plugins/banktransfer/payment.py:463
 #: pretix/plugins/banktransfer/payment.py:647
@@ -27173,7 +27172,7 @@ msgstr ""
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:32
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:35
 msgid "Account holder"
-msgstr ""
+msgstr "Власник рахунку"
 
 #: pretix/plugins/banktransfer/payment.py:466
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:17
@@ -27309,7 +27308,7 @@ msgstr ""
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:26
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:39
 msgid "Reference code (important):"
-msgstr ""
+msgstr "Код призначення (важливо):"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_confirm.html:31
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/checkout_payment_form.html:31
@@ -27477,7 +27476,7 @@ msgstr ""
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:38
 msgid "Amount:"
-msgstr ""
+msgstr "Сума:"
 
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/pending.html:42
 msgid "There is no further action required on this website."
@@ -29432,8 +29431,8 @@ msgid ""
 "The provided key \"%(value)s\" does not look valid. It should start with "
 "\"%(prefix)s\"."
 msgstr ""
-"Наданий ключ \"%(value)s\" виглядає недійсним. Він має починатися з "
-"\"%(prefix)s\"."
+"Наданий ключ \"%(value)s\" виглядає недійсним. Він повинен починатися з \""
+"%(prefix)s\"."
 
 #: pretix/plugins/stripe/forms.py:51 pretix/plugins/stripe/signals.py:158
 msgid "Stripe Connect: App fee (percent)"
@@ -29716,7 +29715,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/payment.py:748
 msgid "Stripe returned an error"
-msgstr "Stripe надіслав помилку"
+msgstr "Stripe повернув помилку"
 
 #: pretix/plugins/stripe/payment.py:820
 msgid "You may need to enable JavaScript for Stripe payments."
@@ -30009,7 +30008,7 @@ msgstr "Загальна сума буде списана з Вашої кред
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_form_card.html:29
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/control.html:12
 msgid "Card type"
-msgstr ""
+msgstr "Тип картки"
 
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/checkout_payment_confirm.html:14
 #, fuzzy
@@ -30180,7 +30179,7 @@ msgstr ""
 
 #: pretix/plugins/stripe/views.py:158 pretix/plugins/stripe/views.py:160
 msgid "Stripe returned an error: {}"
-msgstr ""
+msgstr "Stripe повернув помилку: {}"
 
 #: pretix/plugins/stripe/views.py:163
 msgid ""
