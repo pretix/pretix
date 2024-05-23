@@ -1098,6 +1098,9 @@ class Renderer:
                 page.merge_page(bg_page, over=False)
                 output.add_page(page)
 
+            if float(self.bg_pdf.pdf_header[5:]) > float(new_pdf.pdf_header[5:]):
+                output.pdf_header = self.bg_pdf.pdf_header
+
             output.add_metadata({
                 '/Title': str(title),
                 '/Creator': 'pretix',
@@ -1134,6 +1137,10 @@ def merge_background(fg_pdf, bg_pdf, out_file, compress):
                 bg_page.transfer_rotation_to_content()
             page.merge_page(bg_page, over=False)
             output.add_page(page)
+
+        if float(bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
+            output.pdf_header = bg_pdf.pdf_header
+
         output.write(out_file)
 
 
