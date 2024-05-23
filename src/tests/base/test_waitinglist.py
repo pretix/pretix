@@ -194,6 +194,26 @@ class WaitingListTestCase(TestCase):
             assert WaitingListEntry.objects.filter(voucher__isnull=True).count() == 10
             assert Voucher.objects.count() == 10
 
+    def test_send_auto_no_seat(self):
+        with scope(organizer=self.o):
+            self.quota.items.add(self.item1)
+            self.quota.size = 10
+            self.quota.save()
+            self.event.seat_category_mappings.create(
+                layout_category='Stalls', product=self.item1
+            )
+            self.event.seats.create(seat_number="Foo", product=self.item1, seat_guid="Foo", blocked=True)
+            self.event.seats.create(seat_number="Bar", product=self.item1, seat_guid="Bar", blocked=True)
+            self.event.seats.create(seat_number="Baz", product=self.item1, seat_guid="Baz", blocked=True)
+            WaitingListEntry.objects.create(
+                event=self.event, item=self.item1, email='foo@bar.com'
+            )
+            assign_automatically.apply(args=(self.event.pk,))
+            assert Voucher.objects.count() == 0
+            self.event.seats.create(seat_number="Baz", product=self.item1, seat_guid="Baz", blocked=False)
+            assign_automatically.apply(args=(self.event.pk,))
+            assert Voucher.objects.count() == 1
+
     def test_send_periodic_event_over(self):
         self.event.settings.set('waiting_list_enabled', True)
         self.event.settings.set('waiting_list_auto', True)
