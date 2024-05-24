@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-05-17 02:00+0000\n"
-"Last-Translator: Richard Schreiber <schreiber@rami.io>\n"
+"PO-Revision-Date: 2024-05-24 08:53+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -30074,7 +30074,7 @@ msgstr "WeChat Pay"
 
 #: pretix/plugins/stripe/payment.py:445 pretix/plugins/stripe/payment.py:1922
 msgid "Swish"
-msgstr ""
+msgstr "Swish"
 
 #: pretix/plugins/stripe/payment.py:453 pretix/plugins/stripe/payment.py:1429
 msgid "Affirm"
@@ -30347,22 +30347,16 @@ msgid "PayPal via Stripe"
 msgstr "PayPal über Stripe"
 
 #: pretix/plugins/stripe/payment.py:1921
-#, fuzzy
-#| msgid "EPS via Stripe"
 msgid "Swish via Stripe"
-msgstr "EPS über Stripe"
+msgstr "Swish über Stripe"
 
 #: pretix/plugins/stripe/payment.py:1926
-#, fuzzy
-#| msgid ""
-#| "This payment method is available to users of the Chinese app WeChat. "
-#| "Please keep your login information available."
 msgid ""
 "This payment method is available to users of the Swedish apps Swish and "
 "BankID. Please have your app ready."
 msgstr ""
-"Diese Zahlungsmethode steht den Nutzern der chinesischen App WeChat zur "
-"Verfügung. Bitte halten Sie Ihre Zugangsdaten bereit."
+"Diese Zahlungsmethode steht den Nutzern der schwedischen Apps Swish und "
+"BankID zur Verfügung. Bitte halten Sie Ihre Zugangsdaten bereit."
 
 #: pretix/plugins/stripe/signals.py:91
 msgid "Charge succeeded."
@@ -31175,23 +31169,17 @@ msgstr "Warnung"
 
 #: pretix/presale/templates/pretixpresale/event/base.html:116
 #: pretix/presale/templates/pretixpresale/event/base.html:190
-#, fuzzy
-#| msgid "This ticket shop is currently turned off."
 msgid "This ticket shop is currently in test mode."
-msgstr "Dieser Ticket-Shop ist im Moment nicht aktiv."
+msgstr "Dieser Ticket-Shop ist momentan im Testmodus."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:119
 #: pretix/presale/templates/pretixpresale/event/base.html:193
-#, fuzzy
-#| msgid ""
-#| "This ticket shop is currently in test mode. Please do not perform any "
-#| "real purchases as your order might be deleted without notice."
 msgid ""
 "Please do not perform any real purchases as your order might be deleted "
 "without notice."
 msgstr ""
-"Der Ticketshop ist momentan im Testmodus. Bitte führen Sie keine echten "
-"Käufe durch, Ihre Bestellung kann jederzeit ohne Warnung gelöscht werden."
+"Bitte führen Sie keine echten Käufe durch, Ihre Bestellung kann jederzeit "
+"ohne Warnung gelöscht werden."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:123
 #, python-format
@@ -31199,6 +31187,8 @@ msgid ""
 "You are currently using the time machine. The ticket shop is rendered as if "
 "it were %(datetime)s."
 msgstr ""
+"Sie benutzen derzeit die Zeitmaschine. Der Ticketshop wird dargestellt, als "
+"wäre es %(datetime)s."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:131
 #: pretix/presale/templates/pretixpresale/event/base.html:141
@@ -31208,6 +31198,9 @@ msgid ""
 "href=\"%(time_machine_link)s\"><span class=\"fa fa-clock-o\" aria-"
 "hidden=\"true\"></span>time machine</a>."
 msgstr ""
+"Um Ihren Shop zu unterschiedlichen Zeitpunkten zu testen, können Sie die <a "
+"href=\"%(time_machine_link)s\"><span class=\"fa fa-clock-o\" aria-hidden="
+"\"true\"></span>Zeitmaschine</a> aktivieren."
 
 #: pretix/presale/templates/pretixpresale/event/base.html:152
 #: pretix/presale/templates/pretixpresale/event/base.html:199
@@ -33085,20 +33078,16 @@ msgstr "Links senden"
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html:10
 #: pretix/presale/templates/pretixpresale/event/timemachine.html:15
-#, fuzzy
-#| msgid "Timeline"
 msgid "Time machine"
-msgstr "Ablauf"
+msgstr "Zeitmaschine"
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html:22
 msgid "Test your shop as if it were a different date and time."
-msgstr ""
+msgstr "Testen Sie Ihren Ticketshop, als wenn ein anderer Zeitpunkt wäre."
 
 #: pretix/presale/templates/pretixpresale/event/timemachine.html:30
-#, fuzzy
-#| msgid "Enable test mode"
 msgid "Enable time machine"
-msgstr "Testmodus aktivieren"
+msgstr "Zeitmaschine aktivieren"
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:9
 #: pretix/presale/templates/pretixpresale/event/voucher.html:17
@@ -33706,28 +33695,20 @@ msgid "Please go back and try again."
 msgstr "Bitte gehen Sie einen Schritt zurück und versuchen es erneut."
 
 #: pretix/presale/views/event.py:938
-#, fuzzy
-#| msgid "Purchase date and time"
 msgid "Fake date time"
-msgstr "Kaufdatum und -uhrzeit"
+msgstr "Simulierter Zeitpunkt"
 
 #: pretix/presale/views/event.py:950
-#, fuzzy
-#| msgid "You do not have access to this page."
 msgid "You are not allowed to access time machine mode."
-msgstr "Sie haben keine Berechtigung, diese Inhalte aufzurufen."
+msgstr "Sie haben keine Berechtigung, die Zeitmaschine zu verwenden."
 
 #: pretix/presale/views/event.py:952
-#, fuzzy
-#| msgid "This gift card can only be used in test mode."
 msgid "This feature is only available in test mode."
-msgstr "Dieser Wertgutschein kann nur im Testmodus verwendet werden."
+msgstr "Diese Funktion ist nur im Testmodus verfügbar."
 
 #: pretix/presale/views/event.py:969
-#, fuzzy
-#| msgid "This account is disabled."
 msgid "Time machine disabled!"
-msgstr "Dieses Konto ist deaktiviert."
+msgstr "Zeitmaschine deaktiviert!"
 
 #: pretix/presale/views/order.py:368 pretix/presale/views/order.py:433
 #: pretix/presale/views/order.py:514
