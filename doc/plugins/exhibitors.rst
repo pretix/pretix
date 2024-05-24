@@ -46,6 +46,7 @@ lead_scanning_scope_by_device         string                     Enables lead sc
                                                                  per scanning device, instead of only per exhibitor.
 comment                               string                     Internal comment, not shown to exhibitor
 exhibitor_tags                        list of strings            Internal tags to categorize exhibitors, not shown to exhibitor.
+                                                                 The tags need to be created through the web interface currently.
 ===================================== ========================== =======================================================
 
 You can also access the scanned leads through the API which contains the following public fields:
