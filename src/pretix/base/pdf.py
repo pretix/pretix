@@ -1082,8 +1082,8 @@ class Renderer:
                     f.write(buffer.read())
                 # pdf_header is a string like "%pdf-X.X"
                 if float(self.bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
-                    # To fix issues with pdftk and background-PDF using pdf-version greater 
-                    # than foreground-PDF, we stamp front onto back instead. 
+                    # To fix issues with pdftk and background-PDF using pdf-version greater
+                    # than foreground-PDF, we stamp front onto back instead.
                     # Just changing PDF-version in front.pdf to match the version of
                     # back.pdf as we do with pypdf, does not work with pdftk.
                     #
@@ -1142,6 +1142,7 @@ class Renderer:
             outbuffer.seek(0)
             return outbuffer
 
+
 # note: fg_pdf and bg_pdf are PdfWriter, not PdfReader!
 def merge_background(fg_pdf, bg_pdf, out_file, compress):
     if settings.PDFTK:
@@ -1151,8 +1152,8 @@ def merge_background(fg_pdf, bg_pdf, out_file, compress):
 
             # pdf_header is a string like "%pdf-X.X"
             if float(bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
-                # To fix issues with pdftk and background-PDF using pdf-version greater 
-                # than foreground-PDF, we stamp front onto back instead. 
+                # To fix issues with pdftk and background-PDF using pdf-version greater
+                # than foreground-PDF, we stamp front onto back instead.
                 # Just changing PDF-version in front.pdf to match the version of
                 # back.pdf as we do with pypdf, does not work with pdftk.
                 #
