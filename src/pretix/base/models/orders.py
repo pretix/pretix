@@ -111,28 +111,27 @@ class OrderQuerySet(models.QuerySet):
         dummy = "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"[:secret_length]
         try:
             order = self.get(code=code)
-            if not hmac.compare_digest(
-                order.tagged_secret(tag, secret_length) if tag else order.secret,
-                received_secret[:secret_length].lower() if tag else received_secret.lower()
-            ) and not (
-                    # TODO: remove this clause after a while (compatibility with old secrets currently in flight)
-                    tag and hmac.compare_digest(
-                        hashlib.sha1(order.secret.lower().encode()).hexdigest(),
-                        received_secret.lower()
-                    )
-            ):
-                raise Order.DoesNotExist
-            return order
         except Order.DoesNotExist:
             # Do a hash comparison as well to harden against timing attacks
-            if hmac.compare_digest(
+            hmac.compare_digest(
                 salted_hmac(key_salt=b"", value=tag, algorithm="sha256",
                             secret=dummy).hexdigest()[:secret_length],
                 received_secret[:secret_length]
-            ):
-                raise Order.DoesNotExist
-            else:
-                raise Order.DoesNotExist
+            )
+            raise Order.DoesNotExist
+
+        if not hmac.compare_digest(
+            order.tagged_secret(tag, secret_length) if tag else order.secret,
+            received_secret[:secret_length].lower() if tag else received_secret.lower()
+        ) and not (
+                # TODO: remove this clause after a while (compatibility with old secrets currently in flight)
+                tag and hmac.compare_digest(
+                    hashlib.sha1(order.secret.lower().encode()).hexdigest(),
+                    received_secret.lower()
+                )
+        ):
+            raise Order.DoesNotExist
+        return order
 
 
 class Order(LockModel, LoggedModel):
