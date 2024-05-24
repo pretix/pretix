@@ -629,13 +629,14 @@ LOGGING = {
 
 SENTRY_ENABLED = False
 if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell', 'shell_scoped', 'shell_plus')):
+    import django.db.models.signals
     import sentry_sdk
     from sentry_sdk.integrations.celery import CeleryIntegration
     from sentry_sdk.integrations.logging import (
         LoggingIntegration, ignore_logger,
     )
 
-    from .sentry import PretixSentryIntegration, setup_custom_filters
+    from .sentry import PretixSentryIntegration, PretixEventScrubber, setup_custom_filters
 
     SENTRY_TOKEN = config.get('sentry', 'traces_sample_token', fallback='')
 
@@ -649,7 +650,12 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
     sentry_sdk.init(
         dsn=config.get('sentry', 'dsn'),
         integrations=[
-            PretixSentryIntegration(),
+            PretixSentryIntegration(
+                signals_denylist=[
+                    django.db.models.signals.pre_init,
+                    django.db.models.signals.post_init,
+                ]
+            ),
             CeleryIntegration(),
             LoggingIntegration(
                 level=logging.INFO,
@@ -659,6 +665,7 @@ if config.has_option('sentry', 'dsn') and not any(c in sys.argv for c in ('shell
         traces_sampler=traces_sampler,
         environment=urlparse(SITE_URL).netloc,
         release=__version__,
+        event_scrubber=PretixEventScrubber(),
         send_default_pii=False,
         propagate_traces=False,  # see https://github.com/getsentry/sentry-python/issues/1717
     )
