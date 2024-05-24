@@ -14,6 +14,7 @@ automatical
 availabilities
 backend
 Bancontact
+BankID
 barcode
 barcodes
 Bcc
@@ -136,6 +137,7 @@ SSL
 SSO
 STARTTLS
 Su
+Swish
 subevent
 substracted
 timeframe

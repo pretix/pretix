@@ -33,6 +33,7 @@ Backend
 Badge
 Badges
 Bancontact
+BankID
 Banking
 barcodes
 Bcc
@@ -301,6 +302,7 @@ Strg
 Stripe
 Stripes
 Strong
+Swish
 systemweiten
 Tab
 tag
