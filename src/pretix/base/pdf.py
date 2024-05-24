@@ -1080,7 +1080,7 @@ class Renderer:
                 buffer.seek(0)
                 with open(fg_filename, 'wb') as f:
                     f.write(buffer.read())
-
+                # pdf_header is a string like "%pdf-X.X"
                 if float(self.bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
                     # To fix issues with pdftk and background-PDF using pdf-version greater 
                     # than foreground-PDF, we stamp front onto back instead. 
@@ -1128,6 +1128,7 @@ class Renderer:
                 page.merge_page(bg_page, over=False)
                 output.add_page(page)
 
+            # pdf_header is a string like "%pdf-X.X"
             if float(self.bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
                 output.pdf_header = self.bg_pdf.pdf_header
 
@@ -1147,6 +1148,7 @@ def merge_background(fg_pdf, bg_pdf, out_file, compress):
             fg_filename = os.path.join(d, 'fg.pdf')
             bg_filename = os.path.join(d, 'bg.pdf')
 
+            # pdf_header is a string like "%pdf-X.X"
             if float(bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
                 # To fix issues with pdftk and background-PDF using pdf-version greater 
                 # than foreground-PDF, we stamp front onto back instead. 
@@ -1188,6 +1190,7 @@ def merge_background(fg_pdf, bg_pdf, out_file, compress):
                 bg_page.transfer_rotation_to_content()
             page.merge_page(bg_page, over=False)
 
+        # pdf_header is a string like "%pdf-X.X"
         if float(bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
             fg_pdf.pdf_header = bg_pdf.pdf_header
 
