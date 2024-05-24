@@ -1090,9 +1090,10 @@ class Renderer:
                     # Make sure that back.pdf matches the number of pages of front.pdf
                     # note: self.bg_pdf is a PdfReader(), not a PdfWriter()
                     bg_pdf_to_merge = PdfWriter()
+                    bg_pdf_to_merge.append(self.bg_pdf)
                     front_num_pages = fg_pdf.get_num_pages()
                     while (bg_pdf_to_merge.get_num_pages() < front_num_pages):
-                        bg_pdf_to_merge.append(self.bg_pdf)
+                        bg_pdf_to_merge.append(bg_pdf_to_merge)
                     if bg_pdf_to_merge.get_num_pages() > front_num_pages:
                         bg_pdf_to_merge.pages = bg_pdf_to_merge.pages[:front_num_pages]
                     bg_pdf_to_merge.write(bg_filename)
