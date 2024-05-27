@@ -1084,10 +1084,10 @@ class Renderer:
                 if float(self.bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
                     # To fix issues with pdftk and background-PDF using pdf-version greater
                     # than foreground-PDF, we stamp front onto back instead.
-                    # Just changing PDF-version in front.pdf to match the version of
-                    # back.pdf as we do with pypdf, does not work with pdftk.
+                    # Just changing PDF-version in fg.pdf to match the version of
+                    # bg.pdf as we do with pypdf, does not work with pdftk.
                     #
-                    # Make sure that back.pdf matches the number of pages of front.pdf
+                    # Make sure that bg.pdf matches the number of pages of fg.pdf
                     # note: self.bg_pdf is a PdfReader(), not a PdfWriter()
                     bg_pdf_to_merge = PdfWriter()
                     bg_pdf_to_merge.append(self.bg_pdf)
@@ -1153,8 +1153,8 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
             if float(bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
                 # To fix issues with pdftk and background-PDF using pdf-version greater
                 # than foreground-PDF, we stamp front onto back instead.
-                # Just changing PDF-version in front.pdf to match the version of
-                # back.pdf as we do with pypdf, does not work with pdftk.
+                # Just changing PDF-version in fg.pdf to match the version of
+                # bg.pdf as we do with pypdf, does not work with pdftk.
 
                 # Make sure that bg.pdf matches the number of pages of fg.pdf
                 front_num_pages = fg_pdf.get_num_pages()
