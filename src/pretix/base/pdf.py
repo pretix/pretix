@@ -1089,13 +1089,14 @@ class Renderer:
                     #
                     # Make sure that bg.pdf matches the number of pages of fg.pdf
                     # note: self.bg_pdf is a PdfReader(), not a PdfWriter()
+                    fg_num_pages = fg_pdf.get_num_pages()
+                    bg_num_pages = self.bg_pdf.get_num_pages()
                     bg_pdf_to_merge = PdfWriter()
-                    bg_pdf_to_merge.append(self.bg_pdf)
-                    front_num_pages = fg_pdf.get_num_pages()
-                    while (bg_pdf_to_merge.get_num_pages() < front_num_pages):
-                        bg_pdf_to_merge.append(bg_pdf_to_merge)
-                    if bg_pdf_to_merge.get_num_pages() > front_num_pages:
-                        bg_pdf_to_merge.pages = bg_pdf_to_merge.pages[:front_num_pages]
+                    bg_pdf_to_merge.append(self.bg_pdf, pages = (0, min(bg_num_pages, fg_num_pages)))
+                    while bg_num_pages < fg_num_pages:
+                        max_page_to_merge = min(bg_num_pages, fg_num_pages - bg_num_pages)
+                        bg_pdf_to_merge.append(bg_pdf_to_merge, pages = (0, max_page_to_merge))
+                        bg_num_pages = bg_pdf_to_merge.get_num_pages()
                     bg_pdf_to_merge.write(bg_filename)
 
                     pdftk_cmd = [
@@ -1157,11 +1158,13 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
                 # bg.pdf as we do with pypdf, does not work with pdftk.
 
                 # Make sure that bg.pdf matches the number of pages of fg.pdf
-                front_num_pages = fg_pdf.get_num_pages()
-                while (bg_pdf.get_num_pages() < front_num_pages):
-                    bg_pdf.append(bg_pdf)
-                if bg_pdf.get_num_pages() > front_num_pages:
-                    bg_pdf.pages = bg_pdf.pages[:front_num_pages]
+                fg_num_pages = fg_pdf.get_num_pages()
+                bg_num_pages = bg_pdf.get_num_pages()
+                while bg_num_pages < fg_num_pages:
+                    max_page_to_merge = min(bg_num_pages, fg_num_pages - bg_num_pages)
+                    bg_pdf_to_merge.append(bg_pdf_to_merge, pages = (0, max_page_to_merge))
+                    bg_num_pages = bg_pdf_to_merge.get_num_pages()
+                bg_pdf_to_merge.write(bg_filename)
 
                 pdftk_cmd = [
                     settings.PDFTK,
