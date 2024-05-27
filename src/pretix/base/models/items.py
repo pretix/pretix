@@ -111,6 +111,31 @@ class ItemCategory(LoggedModel):
                     'only be bought in combination with a product that has this category configured as a possible '
                     'source for add-ons.')
     )
+    CROSS_SELLING_MODES = (
+        (None, _('Normal category')),
+        ('both', _('Combined category')),
+        ('only', _('Cross-selling category')),
+    )
+    cross_selling_mode = models.CharField(
+        choices=CROSS_SELLING_MODES,
+        null=True,
+    )
+    CROSS_SELLING_CONDITION = (
+        ('always', _('Always show in cross-selling step')),
+        ('products', _('Only if the cart contains one of these products')),
+        ('discounts', _('Only show products affected by discount rules')),
+    )
+    cross_selling_condition = models.CharField(
+        verbose_name=_("Cross-selling condition"),
+        choices=CROSS_SELLING_CONDITION,
+        null=True,
+    )
+    cross_selling_match_products = models.ManyToManyField(
+        'pretixbase.Item',
+        blank=True,
+        verbose_name=_("Cross-selling condition products"),
+        related_name="matched_by_cross_selling_categories",
+    )
 
     class Meta:
         verbose_name = _("Product category")

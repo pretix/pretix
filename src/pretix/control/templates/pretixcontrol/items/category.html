@@ -16,7 +16,9 @@
                         {% bootstrap_field form.internal_name layout="control" %}
                     </div>
                     {% bootstrap_field form.description layout="control" %}
-                    {% bootstrap_field form.is_addon layout="control" %}
+                    {% bootstrap_field form.category_type layout="control" %}
+                    {% bootstrap_field form.cross_selling_condition layout="control" %}
+                    {% bootstrap_field form.cross_selling_match_products layout="control" %}
                 </fieldset>
             </div>
             {% if category %}

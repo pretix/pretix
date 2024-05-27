@@ -41,6 +41,7 @@ from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db.models import Max
+from django.forms import ChoiceField, RadioSelect
 from django.forms.formsets import DELETION_FIELD_NAME
 from django.urls import reverse
 from django.utils.functional import cached_property
@@ -79,11 +80,63 @@ class CategoryForm(I18nModelForm):
             'name',
             'internal_name',
             'description',
-            'is_addon'
+            #'is_addon'
+            'cross_selling_condition',
+            'cross_selling_match_products',
         ]
         widgets = {
             'description': I18nMarkdownTextarea,
+            'cross_selling_condition': RadioSelect,
+            #'is_addon': BooleanRadio(
+            #    'normal', _('Normal category'),
+            #    'addon', _('Products in this category are add-on products'),
+            #)
         }
+        field_classes = {
+            'cross_selling_match_products': SafeModelMultipleChoiceField,
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        #self.fields['is_addon'].label = _('Category type')
+        self.fields['category_type'] = ChoiceField(widget=RadioSelect, choices=(
+            ('normal',  mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(_('Normal category'), _('Products in this category are regular products displayed on the front page.'))),),
+            ('addon',  mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(_('Add-on product category'), _('Products in this category are add-on products and can only be bought as add-ons.'))),),
+            ('only',  mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(_('Cross-selling category'), _('Products in this category are regular products, but are only shown in the cross-selling step, according to the configuration below.'))),),
+            ('both',  mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(_('Combined category'), _('Products in this category are regular products displayed on the front page, but are additionally shown in the cross-selling step, according to the configuration below.'))),),
+        ))
+        self.fields['category_type'].initial = 'addon' if self.instance.is_addon else (self.instance.cross_selling_mode or 'normal')
+        #self.fields['show_in_cross_selling'] = BooleanField(widget=CheckboxInput(attrs={
+        #    'data-display-dependency': '#id_category_type_0',
+        #}),
+        #    help_text='Products are additionally shown in the cross-selling step, according to the configuration below')
+        self.fields['cross_selling_condition'].widget.attrs['data-display-dependency'] = '#id_category_type_2,#id_category_type_3'
+        self.fields['cross_selling_condition'].widget.attrs['data-disable-dependent'] = 'true'
+        self.fields['cross_selling_condition'].widget.choices = self.fields['cross_selling_condition'].widget.choices[1:]
+        self.fields['cross_selling_condition'].required = False
+
+        self.fields['cross_selling_match_products'].widget = forms.CheckboxSelectMultiple(
+            attrs={
+                'class': 'scrolling-multiple-choice',
+                'data-display-dependency': '#id_cross_selling_condition_1'
+            }
+        )
+        self.fields['cross_selling_match_products'].queryset = self.event.items.all()
+
+    def clean(self):
+        d = super().clean()
+        if d.get('category_type') == 'only' or d.get('category_type') == 'both':
+            if not d.get('cross_selling_condition'):
+                raise ValidationError({'cross_selling_condition': [_('This field is required')]})
+            self.instance.cross_selling_mode = d.get('category_type')
+        else:
+            self.instance.cross_selling_mode = None
+        if d.get('category_type') == 'only' or d.get('category_type') == 'both' or d.get('category_type') == 'normal':
+            self.instance.is_addon = False
+        elif d.get('category_type') == 'addon':
+            self.instance.is_addon = True
+            d['category_type'] = 'normal'
+        return d
 
 
 class QuestionForm(I18nModelForm):

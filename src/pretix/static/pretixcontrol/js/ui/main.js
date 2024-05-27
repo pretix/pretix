@@ -381,6 +381,9 @@ var form_handlers = function (el) {
                     enabled = !enabled;
                 }
                 var $toggling = dependent;
+                if (dependent.attr("data-disable-dependent")) {
+                    $toggling.attr('disabled', !enabled);
+                }
                 if (dependent.get(0).tagName.toLowerCase() !== "div") {
                     $toggling = dependent.closest('.form-group');
                 }
@@ -395,8 +398,10 @@ var form_handlers = function (el) {
                 }
             };
         update();
-        dependency.closest('.form-group').find('[name=' + dependency.attr("name") + ']').on("change", update);
-        dependency.closest('.form-group').find('[name=' + dependency.attr("name") + ']').on("dp.change", update);
+        dependency.each(function() {
+            $(this).closest('.form-group').find('[name=' + $(this).attr("name") + ']').on("change", update);
+            $(this).closest('.form-group').find('[name=' + $(this).attr("name") + ']').on("dp.change", update);
+        })
     });
 
     el.find("input[data-required-if], select[data-required-if], textarea[data-required-if]").each(function () {

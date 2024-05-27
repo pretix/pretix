@@ -441,7 +441,7 @@ class ItemCategorySerializer(I18nAwareModelSerializer):
 
     class Meta:
         model = ItemCategory
-        fields = ('id', 'name', 'internal_name', 'description', 'position', 'is_addon')
+        fields = ('id', 'name', 'internal_name', 'description', 'position', 'is_addon', 'cross_selling_mode', 'cross_selling_condition')
 
 
 class QuestionOptionSerializer(I18nAwareModelSerializer):
