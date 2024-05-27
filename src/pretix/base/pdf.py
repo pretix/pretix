@@ -1155,8 +1155,8 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
                 # than foreground-PDF, we stamp front onto back instead.
                 # Just changing PDF-version in front.pdf to match the version of
                 # back.pdf as we do with pypdf, does not work with pdftk.
-                #
-                # Make sure that back.pdf matches the number of pages of front.pdf
+
+                # Make sure that bg.pdf matches the number of pages of fg.pdf
                 front_num_pages = fg_pdf.get_num_pages()
                 while (bg_pdf.get_num_pages() < front_num_pages):
                     bg_pdf.append(bg_pdf)
