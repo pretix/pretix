@@ -1143,8 +1143,7 @@ class Renderer:
             return outbuffer
 
 
-# note: fg_pdf and bg_pdf are PdfWriter, not PdfReader!
-def merge_background(fg_pdf, bg_pdf, out_file, compress):
+def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
     if settings.PDFTK:
         with tempfile.TemporaryDirectory() as d:
             fg_filename = os.path.join(d, 'fg.pdf')
