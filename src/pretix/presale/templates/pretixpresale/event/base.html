@@ -68,6 +68,14 @@
 {% block page %}
     <div class="page-header{% if event_logo %} pager-header-with-logo{% endif %}{% if event_logo and event_logo_image_large %} logo-large{% endif %}">
         <div class="{% if not event_logo or not event_logo_image_large %}pull-left flip{% endif %}">
+            {% if event_logo %}
+                <h1 class="sr-only">
+                    {{ event.name }}
+                    {% if request.event.settings.show_dates_on_frontpage and not event.has_subevents %}
+                        <small>{{ event.get_date_range_display_as_html }}</small>
+                    {% endif %}
+                </h1>
+            {% endif %}
             {% if event_logo and event_logo_image_large %}
                 <a href="{% eventurl event "presale:event.index" cart_namespace=cart_namespace|default_if_none:"" %}"
                    aria-label="{% trans 'Homepage' %}" title="{% trans 'Homepage' %}">
