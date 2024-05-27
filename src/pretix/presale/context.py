@@ -85,7 +85,6 @@ def _default_context(request):
     else:
         pretix_settings = GlobalSettingsObject().settings
 
-    ctx['google_site_verification'] = pretix_settings.get('google_site_verification', as_type=str)
     text = pretix_settings.get('footer_text', as_type=LazyI18nString)
     link = pretix_settings.get('footer_link', as_type=LazyI18nString)
 

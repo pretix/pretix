@@ -19,8 +19,8 @@
     {% if social_image %}
         <meta property="og:image" content="{{ social_image }}" />
     {% endif %}
-    {% if google_site_verification %}
-        <meta name="google-site-verification" content="{{ google_site_verification }}" />
+    {% if event.settings.google_site_verification %}
+        <meta name="google-site-verification" content="{{ event.settings.google_site_verification }}" />
     {% endif %}
     {{ block.super }}
 {% endblock %}

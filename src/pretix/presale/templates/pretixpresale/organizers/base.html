@@ -12,6 +12,10 @@
         <meta name="robots" content="noindex, nofollow">
     {% endif %}
     <meta property="og:type" content="website" />
+
+    {% if organizer.settings.google_site_verification %}
+        <meta name="google-site-verification" content="{{ organizer.settings.google_site_verification }}" />
+    {% endif %}
     {{ block.super }}
 {% endblock %}
 {% block above %}
