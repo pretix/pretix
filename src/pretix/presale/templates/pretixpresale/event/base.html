@@ -71,7 +71,7 @@
 {% block page %}
     <div class="page-header{% if event_logo %} pager-header-with-logo{% endif %}{% if event_logo and event_logo_image_large %} logo-large{% endif %}">
         <div class="{% if not event_logo or not event_logo_image_large %}pull-left flip{% endif %}">
-            {% if event_logo %}
+            {% if event_logo and not event_logo_show_title %}
                 <h1 class="sr-only">
                     {{ event.name }}
                     {% if request.event.settings.show_dates_on_frontpage and not event.has_subevents %}
