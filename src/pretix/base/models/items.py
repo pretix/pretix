@@ -158,6 +158,8 @@ class ItemCategory(LoggedModel):
         name = self.internal_name or self.name
         if self.is_addon:
             return _('{category} (Add-On products)').format(category=str(name))
+        if self.cross_selling_mode is not None:
+            return _('{category} ({category_type})').format(category=str(name), category_type=self.get_cross_selling_mode_display())
         return str(name)
 
     def get_category_type_display(self):
