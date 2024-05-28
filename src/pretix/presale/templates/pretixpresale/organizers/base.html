@@ -12,6 +12,10 @@
         <meta name="robots" content="noindex, nofollow">
     {% endif %}
     <meta property="og:type" content="website" />
+
+    {% if organizer.settings.google_site_verification %}
+        <meta name="google-site-verification" content="{{ organizer.settings.google_site_verification }}" />
+    {% endif %}
     {{ block.super }}
 {% endblock %}
 {% block above %}
@@ -39,6 +43,11 @@
 {% block page %}
     <div class="page-header{% if organizer_logo %} pager-header-with-logo{% endif %}{% if organizer_logo and organizer.settings.organizer_logo_image_large %} logo-large{% endif %}">
         <div class="{% if not organizer_logo or not organizer.settings.organizer_logo_image_large %}pull-left flip{% endif %}">
+            {% if organizer_logo %}
+                <h1 class="sr-only">
+                    {{ organizer.name }}
+                </h1>
+            {% endif %}
             {% if organizer_logo and organizer.settings.organizer_logo_image_large %}
                 <a href="{% eventurl organizer "presale:organizer.index" %}" title="{{ organizer.name }}">
                     <img src="{{ organizer_logo|thumb:'1170x5000' }}" alt="{{ organizer.name }}"
