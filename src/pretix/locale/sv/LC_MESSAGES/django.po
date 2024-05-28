@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-05-23 14:03+0000\n"
+"PO-Revision-Date: 2024-05-28 16:00+0000\n"
 "Last-Translator: Charlie Lundberg <charlieblundberg@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -4346,12 +4346,16 @@ msgid ""
 "You need to either set a minimum number of matching products or a minimum "
 "value."
 msgstr ""
+"Du kan antingen ställa in ett minsta antal matchande produkter eller ett "
+"lägsta värde, inte båda."
 
 #: pretix/base/models/discount.py:206
 msgid ""
 "You cannot apply the discount only to some of the matched products if you "
 "are matching on a minimum value."
 msgstr ""
+"Du kan inte tillämpa rabatten endast på vissa av de matchade produkterna om "
+"du matchar på ett minimivärde."
 
 #: pretix/base/models/discount.py:212
 msgid ""
@@ -4608,7 +4612,7 @@ msgstr "Fullständigt namn"
 #: pretix/base/models/event.py:1690
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
 msgid "Can be used for filtering"
-msgstr ""
+msgstr "Kan användas för filtrering"
 
 #: pretix/base/models/event.py:1691
 msgid ""
@@ -4616,6 +4620,9 @@ msgid ""
 "can also be used for hidden filter parameters in the frontend (e.g. using "
 "the widget)."
 msgstr ""
+"Det här fältet kommer att visas för att filtrera händelser eller rapporter i "
+"backend, och det kan också användas för dolda filterparametrar i frontend ("
+"t.ex. med hjälp av widgeten)."
 
 #: pretix/base/models/event.py:1701
 msgid "A property can either be required or have a default value, not both."
@@ -4630,7 +4637,7 @@ msgstr "Text (flera rader)"
 
 #: pretix/base/models/event.py:1784 pretix/base/models/organizer.py:497
 msgid "Link URL"
-msgstr ""
+msgstr "Länk-URL"
 
 #: pretix/base/models/exports.py:42 pretix/control/navigation.py:227
 #: pretix/control/navigation.py:636
@@ -4677,7 +4684,7 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:58 pretix/plugins/sendmail/forms.py:78
 #: pretix/plugins/sendmail/models.py:233
 msgid "Message"
-msgstr ""
+msgstr "Meddelande"
 
 #: pretix/base/models/exports.py:85
 #, fuzzy
@@ -4687,7 +4694,7 @@ msgstr "events start tid"
 
 #: pretix/base/models/exports.py:86
 msgid "The actual start time might be delayed depending on system load."
-msgstr ""
+msgstr "Den faktiska starttiden kan vara försenad beroende på systembelastning."
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
@@ -4713,7 +4720,7 @@ msgstr "Speciella villkor"
 
 #: pretix/base/models/giftcards.py:219 pretix/base/models/giftcards.py:223
 msgid "Manual transaction"
-msgstr ""
+msgstr "Manuell transaktion"
 
 #: pretix/base/models/invoices.py:185
 #, python-format
@@ -4796,7 +4803,7 @@ msgstr "Kund"
 
 #: pretix/base/models/items.py:375
 msgid "Dynamic validity"
-msgstr ""
+msgstr "Dynamisk giltighet"
 
 #: pretix/base/models/items.py:381 pretix/control/forms/item.py:605
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:3
@@ -4808,7 +4815,7 @@ msgstr "Denna produkt är just nu inte tillgänglig."
 #: pretix/base/models/items.py:382
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
 msgid "Show info text if unavailable"
-msgstr ""
+msgstr "Visa infotext om den inte är tillgänglig"
 
 #: pretix/base/models/items.py:389 pretix/base/models/items.py:703
 msgid "Don't use re-usable media, use regular one-off tickets"
@@ -4816,15 +4823,15 @@ msgstr ""
 
 #: pretix/base/models/items.py:390
 msgid "Require an existing medium to be re-used"
-msgstr ""
+msgstr "Kräv att ett befintligt medium återanvänds"
 
 #: pretix/base/models/items.py:391
 msgid "Require a previously unknown medium to be newly added"
-msgstr ""
+msgstr "Kräv att ett tidigare okänt medium läggs till nyligen"
 
 #: pretix/base/models/items.py:392
 msgid "Require either an existing or a new medium to be used"
-msgstr ""
+msgstr "Kräv att antingen ett befintligt eller ett nytt medium ska användas"
 
 #: pretix/base/models/items.py:408 pretix/base/models/items.py:1363
 #: pretix/control/templates/pretixcontrol/items/index.html:40
@@ -4878,6 +4885,9 @@ msgid ""
 "can choose a lower value, but not lower than the price this product would "
 "have without the free price option."
 msgstr ""
+"Detta pris kommer att användas som standardvärde för inmatningsfältet. "
+"Användaren kan välja ett lägre värde, men inte lägre än det pris som denna "
+"produkt skulle ha utan det fria prisalternativet."
 
 #: pretix/base/models/items.py:459
 #, fuzzy
@@ -5055,6 +5065,8 @@ msgid ""
 "This text will be shown by the check-in app if a ticket of this type is "
 "scanned."
 msgstr ""
+"Denna text kommer att visas av incheckningsappen om en biljett av denna typ "
+"skannas."
 
 #: pretix/base/models/items.py:598 pretix/base/models/items.py:1083
 msgid ""
@@ -5124,6 +5136,15 @@ msgid ""
 "change the settings here later, existing tickets will not be affected by the "
 "change but keep their current validity."
 msgstr ""
+"När du ställer in en vanlig händelse, eller en händelseserie med tidsluckor, "
+"behöver du vanligtvis INTE ändra detta värde. Standardinställningen innebär "
+"att giltighetstiden för biljetter inte bestäms av produkten, utan av "
+"evenemanget och incheckningskonfigurationen. Använd bara de andra "
+"alternativen om du behöver dem för att realisera t.ex. en bokning av en "
+"årsbiljett med ett dynamiskt startdatum. Observera att giltigheten kommer "
+"att lagras med biljetten, så om du ändrar inställningarna här senare kommer "
+"befintliga biljetter inte att påverkas av ändringen utan behålla sin "
+"nuvarande giltighet."
 
 #: pretix/base/models/items.py:660 pretix/control/forms/item.py:668
 #, fuzzy
@@ -5145,23 +5166,23 @@ msgstr "minuter"
 
 #: pretix/base/models/items.py:668
 msgid "Hours"
-msgstr ""
+msgstr "Timmar"
 
 #: pretix/base/models/items.py:672
 msgid "Days"
-msgstr ""
+msgstr "Dagar"
 
 #: pretix/base/models/items.py:676
 msgid "Months"
-msgstr ""
+msgstr "Månader"
 
 #: pretix/base/models/items.py:679
 msgid "Customers can select the validity start date"
-msgstr ""
+msgstr "Kunder kan välja startdatum för giltigheten"
 
 #: pretix/base/models/items.py:680
 msgid "If not selected, the validity always starts at the time of purchase."
-msgstr ""
+msgstr "Om ej valt börjar giltigheten alltid vid köptillfället."
 
 #: pretix/base/models/items.py:685
 #, fuzzy
@@ -5171,11 +5192,11 @@ msgstr "Maximalt antal"
 
 #: pretix/base/models/items.py:686
 msgid "The selected start date may only be this many days in the future."
-msgstr ""
+msgstr "Det valda startdatumet kan bara vara så här många dagar i framtiden."
 
 #: pretix/base/models/items.py:692
 msgid "Reusable media policy"
-msgstr ""
+msgstr "Återanvändbar mediepolicy"
 
 #: pretix/base/models/items.py:694
 msgid ""
@@ -5186,6 +5207,12 @@ msgid ""
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
+"Om denna produkt ska lagras på ett återanvändbart fysiskt medium kan du "
+"bifoga en policy för fysiskt media. Detta krävs inte för vanliga biljetter, "
+"som bara använder en engångs-streckkod, utan endast för produkter som "
+"förnybara säsongsbiljetter eller laddningsbara presentkort-armband. Detta är "
+"en avancerad funktion som också kräver specifik konfiguration av biljett- "
+"och utskriftsinställningar."
 
 #: pretix/base/models/items.py:704
 msgid "Reusable media type"
