@@ -40,7 +40,8 @@ from urllib.parse import urlencode
 from django import forms
 from django.conf import settings
 from django.core.exceptions import ValidationError
-from django.db.models import Max
+from django.core.files.uploadedfile import UploadedFile
+from django.db.models import Max, Q
 from django.forms import ChoiceField, RadioSelect
 from django.forms.formsets import DELETION_FIELD_NAME
 from django.urls import reverse
@@ -121,7 +122,12 @@ class CategoryForm(I18nModelForm):
                 'data-display-dependency': '#id_cross_selling_condition_1'
             }
         )
-        self.fields['cross_selling_match_products'].queryset = self.event.items.all()
+        self.fields['cross_selling_match_products'].queryset = self.event.items.filter(
+            # don't show products which are only visible in addon/cross-sell step themselves
+            Q(category__isnull=True) | Q(
+                Q(category__is_addon=False) & Q(Q(category__cross_selling_mode='both') | Q(category__cross_selling_mode__isnull=True))
+            )
+        )
 
     def clean(self):
         d = super().clean()

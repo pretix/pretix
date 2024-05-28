@@ -93,7 +93,7 @@ from pretix.presale.views import (
     CartMixin, get_cart, get_cart_is_free, get_cart_total,
 )
 from pretix.presale.views.cart import (
-    cart_session, create_empty_cart_id, get_or_create_cart_id,
+    cart_session, create_empty_cart_id, get_or_create_cart_id, _items_from_post_data,
 )
 from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.questions import QuestionsViewMixin
@@ -488,8 +488,16 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
     def is_applicable(self, request):
         if not hasattr(request, '_checkoutflow_addons_applicable'):
-            request._checkoutflow_addons_applicable = get_cart(request).filter(item__addons__isnull=False).exists()
+            cart = get_cart(request)
+            self.request = request
+            request._checkoutflow_addons_applicable = (cart.filter(item__addons__isnull=False).exists()
+               or any(self.cross_selling_applicable_rules))
         return request._checkoutflow_addons_applicable
+
+    @cached_property
+    def cross_selling_applicable_rules(self):
+        cart = self.get_cart(self.request)
+        return [c for c in self.request.event.categories.filter(cross_selling_mode__isnull=False) if c.cross_sell_visible(cart['positions'])]
 
     def is_completed(self, request, warn=False):
         if getattr(self, '_completed', None) is not None:
@@ -605,9 +613,48 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 formset.append(formsetentry)
         return formset
 
+    def get_cross_selling_data(self, ctx):
+        class DummyCategory:
+            def __init__(self, rule, subevent=None):
+                self.id = rule.id
+                self.name = rule.name + (f" ({subevent})" if subevent else "")
+                self.description = rule.description
+
+        if self.event.has_subevents:
+            return [
+                (DummyCategory(rule, subevent), self._items_from_rule(rule, subevent), f'subevent_{subevent.pk}_')
+                for rule in self.cross_selling_applicable_rules
+                for subevent in set(pos.subevent for pos in ctx['cart']['positions'])
+            ]
+        else:
+            return [
+                (rule, self._items_from_rule(rule, None))
+                for rule in self.cross_selling_applicable_rules
+            ]
+
+    def _items_from_rule(self, rule, subevent):
+        items, _btn = get_grouped_items(
+            self.request.event,
+            subevent=subevent,
+            voucher=None,
+            channel=self.request.sales_channel.identifier,
+            base_qs=rule.items.all(),
+            allow_addons=True,
+            allow_cross_sell=True,
+            memberships=(
+                self.request.customer.usable_memberships(
+                    for_event=self.request.event,  #p.subevent or self.request.event,
+                    testmode=self.request.event.testmode
+                )
+                if self.request.customer else None
+            ),
+        )
+        return items
+
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['forms'] = self.forms
+        ctx['cross_selling_data'] = self.get_cross_selling_data(ctx)
         ctx['cart'] = self.get_cart()
         return ctx
 
@@ -687,7 +734,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
     def post(self, request, *args, **kwargs):
         self.request = request
-        data = []
+        addons = []
         for f in self.forms:
             for c in f['categories']:
                 try:
@@ -697,7 +744,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                     return self.get(request, *args, **kwargs)
 
                 for (i, v), (c, price) in selected.items():
-                    data.append({
+                    addons.append({
                         'addon_to': f['pos'].pk,
                         'item': i.pk,
                         'variation': v.pk if v else None,
@@ -705,7 +752,9 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                         'price': price,
                     })
 
-        return self.do(self.request.event.id, data, get_or_create_cart_id(self.request),
+        add_to_cart_items = _items_from_post_data(self.request)
+
+        return self.do(self.request.event.id, addons, add_to_cart_items, get_or_create_cart_id(self.request),
                        invoice_address=self.invoice_address.pk, locale=get_language(),
                        sales_channel=request.sales_channel.identifier, override_now_dt=time_machine_now(default=None))
 

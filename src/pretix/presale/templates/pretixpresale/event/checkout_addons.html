@@ -46,6 +46,9 @@
                 </details>
             {% endfor %}
         </div>
+
+        {% include "pretixpresale/event/fragment_product_list.html" with items_by_category=cross_selling_data ev=event %}
+
         <div class="row checkout-button-row">
             <div class="col-md-4 col-sm-6">
                 <a class="btn btn-block btn-default btn-lg"

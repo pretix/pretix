@@ -1610,7 +1610,7 @@ def clear_cart(self, event: Event, cart_id: str=None, locale='en', sales_channel
 
 
 @app.task(base=ProfiledEventTask, bind=True, max_retries=5, default_retry_delay=1, throws=(CartError,))
-def set_cart_addons(self, event: Event, addons: List[dict], cart_id: str=None, locale='en',
+def set_cart_addons(self, event: Event, addons: List[dict], add_to_cart_items: List[dict], cart_id: str=None, locale='en',
                     invoice_address: int=None, sales_channel='web', override_now_dt: datetime=None) -> None:
     """
     Assigns addons to eligible products in a user's cart, adding and removing the addon products as necessary to
@@ -1635,6 +1635,7 @@ def set_cart_addons(self, event: Event, addons: List[dict], cart_id: str=None, l
             try:
                 cm = CartManager(event=event, cart_id=cart_id, invoice_address=ia, sales_channel=sales_channel)
                 cm.set_addons(addons)
+                cm.add_new_items(add_to_cart_items)
                 cm.commit()
             except LockTimeoutException:
                 self.retry()
