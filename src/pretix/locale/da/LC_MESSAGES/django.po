@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-05-29 10:58+0000\n"
+"PO-Revision-Date: 2024-05-29 20:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -844,7 +844,7 @@ msgstr ""
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:20
 #, fuzzy
 msgid "Customer ID"
-msgstr "Kundehandlinger"
+msgstr "Kunde ID"
 
 #: pretix/base/exporters/customers.py:65
 #: pretix/control/templates/pretixcontrol/organizers/customer.html:31
@@ -2816,7 +2816,7 @@ msgstr "Udløbsdato"
 #: pretix/presale/templates/pretixpresale/event/checkout_confirm.html:136
 #, fuzzy
 msgid "Customer account"
-msgstr "Kundehandlinger"
+msgstr "Kundekonto"
 
 #: pretix/base/exporters/reusablemedia.py:51 pretix/base/models/media.py:97
 #, fuzzy
@@ -8316,7 +8316,7 @@ msgstr "Produkterne er lagt i kurven."
 
 #: pretix/base/services/placeholders.py:525
 msgid "Please transfer money to this bank account: 9999-9999-9999-9999"
-msgstr ""
+msgstr "Overfør venligst beløbet til denne bankkonto: 9999-9999-9999-9999"
 
 #: pretix/base/services/seating.py:61 pretix/base/services/seating.py:128
 #, python-format
@@ -29545,8 +29545,9 @@ msgid "Save address in my customer account for future purchases"
 msgstr ""
 
 #: pretix/presale/forms/checkout.py:158
+#, fuzzy
 msgid "Save answers to my customer profiles for future purchases"
-msgstr ""
+msgstr "Gem mine svar i min kundekonto, for at genbruge dem i fremtiden."
 
 #: pretix/presale/forms/checkout.py:165
 #, fuzzy
@@ -31902,7 +31903,7 @@ msgstr "Er du sikker på at du vil slette gruppen?"
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:15
 #, fuzzy
 msgid "Account information"
-msgstr "Kontoindstillinger ændret"
+msgstr "Kontoinformationer"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_info.html:11
 #, fuzzy
@@ -31944,7 +31945,7 @@ msgstr "Angiv ny adgangskode"
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:10
 #, fuzzy
 msgid "Your account"
-msgstr "Din kurv"
+msgstr "Din konto"
 
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:23
 #, fuzzy
