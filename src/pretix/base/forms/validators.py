@@ -39,6 +39,8 @@ from django.core.validators import BaseValidator
 from django.utils.translation import gettext_lazy as _
 from i18nfield.strings import LazyI18nString
 
+from pretix.helpers.format import SafeFormatter
+
 
 class PlaceholderValidator(BaseValidator):
     """
@@ -57,7 +59,9 @@ class PlaceholderValidator(BaseValidator):
                 self.__call__(v)
             return
 
-        if value.count('{') != value.count('}'):
+        try:
+            SafeFormatter(None).parse(value)
+        except ValueError:
             raise ValidationError(
                 _('Invalid placeholder syntax: You used a different number of "{" than of "}".'),
                 code='invalid_placeholder_syntax',

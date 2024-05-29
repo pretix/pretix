@@ -758,12 +758,15 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                 idx = matched.group('idx')
                 if idx in self.supported_locale:
                     with language(self.supported_locale[idx], self.request.event.settings.region):
-                        if k.startswith('mail_subject_'):
-                            msgs[self.supported_locale[idx]] = format_map(bleach.clean(v), self.placeholders(preview_item))
-                        else:
-                            msgs[self.supported_locale[idx]] = markdown_compile_email(
-                                format_map(v, self.placeholders(preview_item))
-                            )
+                        try:
+                            if k.startswith('mail_subject_'):
+                                msgs[self.supported_locale[idx]] = format_map(bleach.clean(v), self.placeholders(preview_item))
+                            else:
+                                msgs[self.supported_locale[idx]] = markdown_compile_email(
+                                    format_map(v, self.placeholders(preview_item))
+                                )
+                        except ValueError:
+                            msgs[self.supported_locale[idx]] = _('Invalid placeholder syntax: You used a different number of "{" than of "}".')
 
         return JsonResponse({
             'item': preview_item,
