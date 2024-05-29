@@ -749,21 +749,40 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
         if preview_item not in MailSettingsForm.base_context:
             return HttpResponseBadRequest(_('invalid item'))
 
-        regex = r"^" + re.escape(preview_item) + r"_(?P<idx>[\d]+)$"
+        re_escape_single_bracket = r"((\{)[^\}]+\{|\}[^\{]+(\})|(\{)[^\}]*$|^[^\{]*(\}))"
         msgs = {}
         for k, v in request.POST.items():
             # only accept allowed fields
-            matched = re.search(regex, k)
-            if matched is not None:
-                idx = matched.group('idx')
-                if idx in self.supported_locale:
-                    with language(self.supported_locale[idx], self.request.event.settings.region):
-                        if k.startswith('mail_subject_'):
-                            msgs[self.supported_locale[idx]] = format_map(bleach.clean(v), self.placeholders(preview_item))
-                        else:
-                            msgs[self.supported_locale[idx]] = markdown_compile_email(
-                                format_map(v, self.placeholders(preview_item))
-                            )
+            if not k.startswith(preview_item + "_"):
+                continue
+            idx = k[len(preview_item)+1:]
+            if idx in self.supported_locale:
+                cleaned_v = ""
+                test_v = v.replace("{{", "__").replace("}}", "__")
+                while True:
+                    match = re.search(re_escape_single_bracket, test_v)
+                    if not match:
+                        cleaned_v += v
+                        break
+                    if "{" in match.groups():
+                        # replace first occurrence of { with {{, but keep trailing { in testing string
+                        match_end = match.end()-1
+                        cleaned_v += v[:match_end].replace("{", "{{", 1)
+                    else:
+                        # replace last occurrence of } with }}
+                        match_end = match.end()
+                        cleaned_v += "}}".join(v[:match_end].rsplit("}", 1))
+
+                    v = v[match_end:]
+                    test_v = test_v[match_end:]
+
+                with language(self.supported_locale[idx], self.request.event.settings.region):
+                    if k.startswith('mail_subject_'):
+                        msgs[self.supported_locale[idx]] = format_map(bleach.clean(cleaned_v), self.placeholders(preview_item))
+                    else:
+                        msgs[self.supported_locale[idx]] = markdown_compile_email(
+                            format_map(cleaned_v, self.placeholders(preview_item))
+                        )
 
         return JsonResponse({
             'item': preview_item,
