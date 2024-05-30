@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-05-29 20:00+0000\n"
+"PO-Revision-Date: 2024-05-30 17:00+0000\n"
 "Last-Translator: Nikolai <nikolai@lengefeldt.de>\n"
 "Language-Team: Danish <https://translate.pretix.eu/projects/pretix/pretix/da/"
 ">\n"
@@ -11791,7 +11791,6 @@ msgid "All time"
 msgstr "Alle"
 
 #: pretix/base/timeline.py:60
-#, fuzzy
 msgctxt "timeline"
 msgid "Your event starts"
 msgstr "Arrangements starttidspunkt"
@@ -11814,7 +11813,6 @@ msgid "Start of ticket sales"
 msgstr "Start af forsalg"
 
 #: pretix/base/timeline.py:95
-#, fuzzy
 msgctxt "timeline"
 msgid "End of ticket sales"
 msgstr "Slut af forsalg"
@@ -12830,9 +12828,8 @@ msgstr "Forsalg slut"
 #: pretix/control/forms/filter.py:1629 pretix/control/forms/filter.py:1632
 #: pretix/control/forms/filter.py:2265
 #: pretix/plugins/banktransfer/templates/pretixplugins/banktransfer/import_form.html:84
-#, fuzzy
 msgid "Date from"
-msgstr "Dato"
+msgstr "Dato fra"
 
 #: pretix/control/forms/filter.py:1137 pretix/control/forms/filter.py:1140
 #: pretix/control/forms/filter.py:1636 pretix/control/forms/filter.py:1639
@@ -15981,9 +15978,8 @@ msgid "Payments"
 msgstr "Betaling"
 
 #: pretix/control/navigation.py:374
-#, fuzzy
 msgid "User settings"
-msgstr "Basisindstillinger"
+msgstr "Brugerindstillinger"
 
 #: pretix/control/navigation.py:385
 #: pretix/control/templates/pretixcontrol/user/settings.html:16
@@ -15995,9 +15991,8 @@ msgid "2FA"
 msgstr ""
 
 #: pretix/control/navigation.py:395
-#, fuzzy
 msgid "Authorized apps"
-msgstr "Kundehandlinger"
+msgstr "Autoriserede apps"
 
 #: pretix/control/navigation.py:400
 #: pretix/control/templates/pretixcontrol/user/history.html:4
@@ -17116,7 +17111,7 @@ msgstr "Gå til arrangement"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:15
 msgid "Your upcoming events"
-msgstr ""
+msgstr "Dine kommende arrangementer"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:20
 #: pretix/control/templates/pretixcontrol/events/create_base.html:4
@@ -17130,15 +17125,15 @@ msgstr "Opret arrangement"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:39
 msgid "View all upcoming events"
-msgstr ""
+msgstr "Vis alle kommende arrangementer"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:44
 msgid "Your most recent events"
-msgstr ""
+msgstr "Dine fornylig afsluttede arrangementer"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:60
 msgid "View all recent events"
-msgstr ""
+msgstr "Vis alle afsluttede arrangementer"
 
 #: pretix/control/templates/pretixcontrol/dashboard.html:65
 msgid "Your event series"
@@ -18716,8 +18711,8 @@ msgid ""
 "The list below shows all events you have administrative access to. Click on "
 "the event name to access event details."
 msgstr ""
-"Listen vises alle arrangementer som du har administratoradgang til. Klik på "
-"navnet for at se detaljer."
+"I listen vises alle arrangementer, som du har administratoradgang til. Klik "
+"på navnet for at se flere informationer."
 
 #: pretix/control/templates/pretixcontrol/events/index.html:12
 #: pretix/control/templates/pretixcontrol/organizers/detail.html:18
@@ -19823,13 +19818,12 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:4
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:6
 #: pretix/control/templates/pretixcontrol/user/settings.html:61
-#, fuzzy
 msgid "Authorized applications"
-msgstr "Kundehandlinger"
+msgstr "Autoriserede applikationer"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:9
 msgid "Manage your own apps"
-msgstr ""
+msgstr "Styr dine egne apps"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:18
 msgid "Permissions"
@@ -19837,7 +19831,7 @@ msgstr "Tilladelser"
 
 #: pretix/control/templates/pretixcontrol/oauth/authorized.html:59
 msgid "No applications have access to your pretix account."
-msgstr ""
+msgstr "Der er ingen applikationer, der har adgang til din Pretix-konto."
 
 #: pretix/control/templates/pretixcontrol/order/approve.html:4
 #: pretix/control/templates/pretixcontrol/order/approve.html:8
@@ -23496,9 +23490,8 @@ msgid "Change two-factor settings"
 msgstr "Ændr tofaktor-indstillinger"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:65
-#, fuzzy
 msgid "Show applications"
-msgstr "Vis information"
+msgstr "Vis applikationer"
 
 #: pretix/control/templates/pretixcontrol/user/settings.html:74
 msgid "Show account history"
@@ -29861,9 +29854,8 @@ msgid "Cart expired"
 msgstr "Kurv udløbet"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:36
-#, fuzzy
 msgid "Show full cart"
-msgstr "Vis information"
+msgstr "Vis hele indkøbskurven"
 
 #: pretix/presale/templates/pretixpresale/event/checkout_base.html:48
 #: pretix/presale/templates/pretixpresale/event/index.html:78
@@ -31242,7 +31234,6 @@ msgid "Request invoice"
 msgstr "Anmod om faktura"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:286
-#, fuzzy
 msgid "Your information"
 msgstr "Dine oplysninger"
 
@@ -31266,7 +31257,6 @@ msgid "Change your order"
 msgstr "Ret din ordre"
 
 #: pretix/presale/templates/pretixpresale/event/order.html:353
-#, fuzzy
 msgctxt "action"
 msgid "Cancel your order"
 msgstr "Annuller bestilling"
