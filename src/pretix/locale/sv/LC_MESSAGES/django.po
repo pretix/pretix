@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-05-28 16:00+0000\n"
+"PO-Revision-Date: 2024-05-31 15:52+0000\n"
 "Last-Translator: Charlie Lundberg <charlieblundberg@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -6739,7 +6739,7 @@ msgstr ""
 #: pretix/base/notifications.py:288
 #, python-brace-format
 msgid "Order {order.code} has been overpaid."
-msgstr ""
+msgstr "Order {order.code} har blivit överbetald."
 
 #: pretix/base/notifications.py:294
 #, python-brace-format
@@ -6748,36 +6748,39 @@ msgstr ""
 
 #: pretix/base/notifications.py:299
 msgid "Refund requested"
-msgstr ""
+msgstr "Återbetalning begärd"
 
 #: pretix/base/notifications.py:300
 #, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr ""
+msgstr "Du har blivit ombedd att utfärda en återbetalning för {order.code}."
 
 #: pretix/base/payment.py:87
 msgctxt "payment"
 msgid "Apple Pay"
-msgstr ""
+msgstr "Apple Pay"
 
 #: pretix/base/payment.py:88
+#, fuzzy
 msgctxt "payment"
 msgid "Google Pay"
-msgstr ""
+msgstr "Google Pay"
 
 #: pretix/base/payment.py:257
 #: pretix/presale/templates/pretixpresale/event/order.html:115
 msgid "Pay now"
-msgstr ""
+msgstr "Betala nu"
 
 #: pretix/base/payment.py:331
 msgid "Enable payment method"
-msgstr ""
+msgstr "Aktivera betalningsmetod"
 
 #: pretix/base/payment.py:337
 msgid ""
 "Users will not be able to choose this payment provider after the given date."
 msgstr ""
+"Användare kommer inte att kunna välja denna betalningsleverantör efter det "
+"angivna datumet."
 
 #: pretix/base/payment.py:343
 #, fuzzy
@@ -6788,7 +6791,7 @@ msgstr "Den här produkten kommer inte säljas innan angivet datum."
 
 #: pretix/base/payment.py:348
 msgid "Minimum order total"
-msgstr ""
+msgstr "Minsta ordersumma"
 
 #: pretix/base/payment.py:349
 msgid ""
@@ -6796,10 +6799,14 @@ msgid ""
 "exceeds the given value. The order total for this purpose may be computed "
 "without taking the fees imposed by this payment method into account."
 msgstr ""
+"Denna betalning kommer endast att vara tillgänglig om ordersumman är lika "
+"med eller överstiger det angivna värdet. Ordersumman för detta ändamål kan "
+"komma att beräknas utan att ta hänsyn till de avgifter som tas ut av denna "
+"betalningsmetod."
 
 #: pretix/base/payment.py:359
 msgid "Maximum order total"
-msgstr ""
+msgstr "Maximal ordersumma"
 
 #: pretix/base/payment.py:360
 msgid ""
@@ -6807,22 +6814,26 @@ msgid ""
 "the given value. The order total for this purpose may be computed without "
 "taking the fees imposed by this payment method into account."
 msgstr ""
+"Denna betalning kommer endast att vara tillgänglig om ordersumman är lika "
+"med eller under det angivna värdet. Ordersumman för detta ändamål kan komma "
+"att beräknas utan att ta hänsyn till de avgifter som tas ut av denna "
+"betalningsmetod."
 
 #: pretix/base/payment.py:370 pretix/base/payment.py:379
 msgid "Additional fee"
-msgstr ""
+msgstr "Extra avgift"
 
 #: pretix/base/payment.py:371
 msgid "Absolute value"
-msgstr ""
+msgstr "Absolutvärde"
 
 #: pretix/base/payment.py:380
 msgid "Percentage of the order total."
-msgstr ""
+msgstr "Andel av ordersumman."
 
 #: pretix/base/payment.py:386
 msgid "Calculate the fee from the total value including the fee."
-msgstr ""
+msgstr "Beräkna avgiften från det totala värdet inklusive avgiften."
 
 #: pretix/base/payment.py:387
 #, python-brace-format
@@ -6832,10 +6843,14 @@ msgid ""
 "rel=\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
+"Vi rekommenderar att du aktiverar detta om du vill att dina användare ska "
+"betala betalningsavgifterna från din betalningsleverantör. <a href=\""
+"{docs_url}\" target=\"_blank\" rel=\"noopener\">Klicka här för detaljerad "
+"information om vad detta gör.</a> Glöm inte att ange rätt avgifter ovan!"
 
 #: pretix/base/payment.py:395
 msgid "Text on invoices"
-msgstr ""
+msgstr "Text på fakturor"
 
 #: pretix/base/payment.py:396
 msgid ""
@@ -6844,10 +6859,14 @@ msgid ""
 "order is paid. If the invoice is generated later, it will show a text "
 "stating that it has already been paid."
 msgstr ""
+"Kommer att skrivas ut precis under betalningssiffrorna och ovanför "
+"sluttexten på fakturor. Detta kommer endast att användas om fakturan "
+"genereras innan beställningen betalas. Om fakturan genereras senare kommer "
+"den att visa en text om att den redan är betald."
 
 #: pretix/base/payment.py:405
 msgid "Restrict to countries"
-msgstr ""
+msgstr "Begränsa till länder"
 
 #: pretix/base/payment.py:407
 msgid ""
@@ -6967,6 +6986,10 @@ msgid ""
 "It should instruct the user on how to proceed with the payment. You can use "
 "the placeholders {order}, {amount}, {currency} and {amount_with_currency}."
 msgstr ""
+"Denna text kommer att visas på orderbekräftelsesidan för väntande "
+"beställningar. Den bör instruera användaren om hur man går vidare med "
+"betalningen. Du kan använda platshållarna {order}, {amount}, {currency} och "
+"{amount_with_currency}."
 
 #: pretix/base/payment.py:1209 pretix/plugins/banktransfer/payment.py:151
 msgid ""
