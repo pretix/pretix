@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-05-30 17:00+0000\n"
+"PO-Revision-Date: 2024-06-01 01:00+0000\n"
 "Last-Translator: Luan Thien <vanthienluan@gmail.com>\n"
 "Language-Team: Vietnamese <https://translate.pretix.eu/projects/pretix/"
 "pretix/vi/>\n"
@@ -212,7 +212,7 @@ msgstr "Mặt hàng \"{}\" chưa được chỉ định số hàng tồn."
 #: pretix/api/serializers/checkin.py:66 pretix/base/models/event.py:1622
 #: pretix/base/models/items.py:1822 pretix/base/models/items.py:2080
 msgid "One or more items do not belong to this event."
-msgstr ""
+msgstr "Một hoặc một vài mục không thuộc sự kiện này."
 
 #: pretix/api/serializers/checkin.py:70 pretix/api/serializers/checkin.py:73
 #: pretix/base/models/items.py:2091 pretix/base/models/items.py:2094
