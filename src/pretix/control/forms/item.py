@@ -698,6 +698,14 @@ class ItemUpdateForm(I18nModelForm):
                     'tax_rule',
                     _("Gift card products should use a tax rule with a rate of 0 percent since sales tax will be applied when the gift card is redeemed.")
                 )
+            if d.get('validity_mode'):
+                self.add_error(
+                    'validity_mode',
+                    _(
+                        "Do not set a specific validity for gift card products as it will not restrict the validity "
+                        "of the gift card. A validity of gift cards can be set in your organizer settings."
+                    )
+                )
             if d.get('admission'):
                 self.add_error(
                     'admission',
