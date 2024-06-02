@@ -200,7 +200,7 @@ div.mail-preview {
   border-radius: 3px;
 
   .placeholder {
-    background: transparentize($brand-warning, 0.6);
+    background: var(--pretix-brand-warning-transparent-60);
   }
 }
 

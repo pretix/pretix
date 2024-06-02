@@ -47,7 +47,7 @@ if [ "$1" == "taskworker" ]; then
 fi
 
 if [ "$1" == "upgrade" ]; then
-    exec python3 -m pretix updatestyles
+    exec python3 -m pretix updateassets
 fi
 
 exec python3 -m pretix "$@"

@@ -176,6 +176,8 @@ event_patterns = [
     re_path(r'^(?P<subevent>\d+)/widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='event.widget.productlist'),
 
+    re_path(r'^theme.css$', pretix.presale.views.theme.theme_css, name='event.theme.css'),
+
     re_path(r'timemachine/$', pretix.presale.views.event.EventTimeMachine.as_view(), name='event.timemachine'),
 
     # Account management is done on org level, but we at least need a logout
@@ -194,6 +196,8 @@ organizer_patterns = [
     re_path(r'^widget/product_list$', pretix.presale.views.widget.WidgetAPIProductList.as_view(),
             name='organizer.widget.productlist'),
     re_path(r'^widget/v1.css$', pretix.presale.views.widget.widget_css, name='organizer.widget.css'),
+
+    re_path(r'^theme.css$', pretix.presale.views.theme.theme_css, name='organizer.theme.css'),
 
     re_path(r'^account/login/(?P<provider>[0-9]+)/$', pretix.presale.views.customer.SSOLoginView.as_view(), name='organizer.customer.login'),
     re_path(r'^account/login/(?P<provider>[0-9]+)/return$', pretix.presale.views.customer.SSOLoginReturnView.as_view(), name='organizer.customer.login.return'),

@@ -1,4 +1,5 @@
 @import "../../pretixbase/scss/_variables.scss";
+@import "../../pretixbase/scss/_bootstrap_vars.scss";
 @import "../../bootstrap/scss/_bootstrap.scss";
 @import "../../fontawesome/scss/font-awesome.scss";
 @import "../../pretixbase/scss/_theme.scss";
@@ -587,7 +588,7 @@ td > p:last-child,
         text-align: center;
     }
     &.availability .progress-bar-success {
-        background: lighten($brand-success, 20%);
+        background: var(--pretix-brand-success-lighten-20);
     }
 }
 .quotabox-more {

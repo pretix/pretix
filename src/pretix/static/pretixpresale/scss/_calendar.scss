@@ -14,11 +14,11 @@
   }
   a.event {
     display: block;
-    background: lighten($brand-primary, 48%);
+    background: var(--pretix-brand-primary-lighten-48);
     color: $brand-primary;
     border-radius: $border-radius-base;
     border-style: solid;
-    border-color: lighten($brand-primary, 30%);
+    border-color: var(--pretix-brand-primary-lighten-30);
     border-width: 1px 1px 1px 12px;
     border-left-color: inherit;
 
@@ -29,7 +29,7 @@
     text-decoration: none;
 
     &:hover {
-      background: lighten($brand-primary, 50%);
+      background: var(--pretix-brand-primary-lighten-50);
       border-color: $brand-primary;
     }
     &:focus {
@@ -48,28 +48,28 @@
     }
 
     &.soon {
-      background: lighten($brand-primary, 53%);
-      border-color: lighten($brand-primary, 40%);
-      border-left-color: lighten($brand-primary, 20%);
-      color: lighten($brand-primary, 5%);
+      background: var(--brand-primary-lighten-53);
+      border-color: var(--brand-primary-lighten-40);
+      border-left-color: var(--brand-primary-lighten-20);
+      color: var(--brand-primary-lighten-5);
       &:hover {
-        background: lighten($brand-primary, 55%);
-        border-color: lighten($brand-primary, 20%);
+        background: var(--brand-primary-lighten-55);
+        border-color: var(--brand-primary-lighten-20);
       }
     }
 
     &.available {
-      background: lighten($brand-success, 48%);
-      border-color: lighten($brand-success, 30%);
+      background: var(--brand-success-lighten-48);
+      border-color: var(--brand-success-lighten-30);
       border-left-color: $brand-success;
-      color: darken($brand-success, 12%);
+      color: var(--brand-success-darken-12);
 
       &.low {
-        border-left-color: lighten($brand-warning, 12%);
+        border-left-color: var(--brand-warning-lighten-12);
       }
 
       &:hover {
-        background: lighten($brand-success, 50%);
+        background: var(--brand-success-lighten-50);
         border-color: $brand-success;
 
         &.low {
@@ -79,26 +79,26 @@
     }
 
     &.waitinglist {
-      background: lighten($brand-warning, 41%);
-      border-color: lighten($brand-warning, 30%);
-      border-left-color: lighten($brand-warning, 12%);
+      background: var(--brand-warning-lighten-41);
+      border-color: var(--brand-warning-lighten-31);
+      border-left-color: var(--brand-warning-lighten-12);
       color: #963;
 
       &:hover {
-        background: lighten($brand-warning, 43%);
+        background: var(--brand-warning-lighten-43);
         border-color: $brand-warning;
       }
     }
 
     &.reserved, &.soldout, {
-      background: lighten($brand-danger, 43%);
-      border-color: lighten($brand-danger, 30%);
-      border-left-color: lighten($brand-danger, 30%);
-      color: darken($brand-danger, 5%);
+      background: var(--brand-danger-lighten-43);
+      border-color: var(--brand-danger-lighten-30);
+      border-left-color: var(--brand-danger-lighten-30);
+      color: var(--brand-danger-darken-5);
 
       &:hover {
-        background: lighten($brand-danger, 45%);
-        border-color: lighten($brand-danger, 25%);
+        background: var(--brand-danger-lighten-45);
+        border-color: var(--brand-danger-lighten-25);
       }
     }
 
@@ -481,7 +481,7 @@ if concurrency is higher than 9, JavaScript (currently in pretixpresale/js/ui/ma
     color: white;
   }
   .table-calendar td.day.has-events:hover {
-    background: darken($brand-primary, 15%);
+    background: var(--brand-primary-darken-15);
   }
 }
 #monthselform .row {

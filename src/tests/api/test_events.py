@@ -49,7 +49,6 @@ from pretix.base.models import (
     Event, InvoiceAddress, Order, OrderPosition, Organizer, SeatingPlan,
 )
 from pretix.base.models.orders import OrderFee
-from pretix.testutils.mock import mocker_context
 
 
 @pytest.fixture
@@ -1244,121 +1243,117 @@ def test_get_event_settings(token_client, organizer, event):
 
 @pytest.mark.django_db
 def test_patch_event_settings(token_client, organizer, event):
-    with mocker_context() as mocker:
-        mocked = mocker.patch('pretix.presale.style.regenerate_css.apply_async')
-        organizer.settings.imprint_url = 'https://example.org'
-        resp = token_client.patch(
-            '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
-            {
-                'imprint_url': 'https://example.com',
-                'confirm_texts': [
-                    {
-                        'de': 'Ich bin mit den AGB einverstanden.'
-                    }
-                ],
-                'reusable_media_active': True,  # readonly, ignored
-            },
-            format='json'
-        )
-        assert resp.status_code == 200
-        assert resp.data['imprint_url'] == "https://example.com"
-        assert not resp.data['reusable_media_active']
-        event.settings.flush()
-        assert event.settings.imprint_url == 'https://example.com'
-        assert not event.settings.reusable_media_active
-        assert event.all_logentries().filter(action_type="pretix.event.settings").count() == 1
-        mocked.assert_not_called()
+    organizer.settings.imprint_url = 'https://example.org'
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'imprint_url': 'https://example.com',
+            'confirm_texts': [
+                {
+                    'de': 'Ich bin mit den AGB einverstanden.'
+                }
+            ],
+            'reusable_media_active': True,  # readonly, ignored
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data['imprint_url'] == "https://example.com"
+    assert not resp.data['reusable_media_active']
+    event.settings.flush()
+    assert event.settings.imprint_url == 'https://example.com'
+    assert not event.settings.reusable_media_active
+    assert event.all_logentries().filter(action_type="pretix.event.settings").count() == 1
 
-        # The same settings again do not create a new log entry
-        resp = token_client.patch(
-            '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
-            {
-                'imprint_url': 'https://example.com',
-                'confirm_texts': [
-                    {
-                        'de': 'Ich bin mit den AGB einverstanden.'
-                    }
-                ],
-                'reusable_media_active': True,  # readonly, ignored
-            },
-            format='json'
-        )
-        assert resp.status_code == 200
-        assert event.all_logentries().filter(action_type="pretix.event.settings").count() == 1
+    # The same settings again do not create a new log entry
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'imprint_url': 'https://example.com',
+            'confirm_texts': [
+                {
+                    'de': 'Ich bin mit den AGB einverstanden.'
+                }
+            ],
+            'reusable_media_active': True,  # readonly, ignored
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert event.all_logentries().filter(action_type="pretix.event.settings").count() == 1
 
-        resp = token_client.patch(
-            '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
-            {
-                'primary_color': '#ff0000',
-                'theme_color_background': '#ff0000',
-            },
-            format='json'
-        )
-        assert resp.status_code == 200
-        event.settings.flush()
-        mocked.assert_any_call(args=(event.pk,))
-        assert event.settings.primary_color == '#ff0000'
-        assert event.all_logentries().filter(action_type="pretix.event.settings").count() == 2
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'primary_color': '#ff0000',
+            'theme_color_background': '#ff0000',
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.settings.flush()
+    assert event.settings.primary_color == '#ff0000'
+    assert event.all_logentries().filter(action_type="pretix.event.settings").count() == 2
 
-        resp = token_client.patch(
-            '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
-            {
-                'primary_color': None,
-                'theme_color_background': None,
-            },
-            format='json'
-        )
-        assert resp.status_code == 200
-        event.settings.flush()
-        assert event.settings.primary_color != '#ff0000'
-        assert 'primary_color' not in event.settings._cache()
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'primary_color': None,
+            'theme_color_background': None,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    event.settings.flush()
+    assert event.settings.primary_color != '#ff0000'
+    assert 'primary_color' not in event.settings._cache()
 
-        resp = token_client.patch(
-            '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
-            {
-                'imprint_url': None,
-            },
-            format='json'
-        )
-        assert resp.status_code == 200
-        assert resp.data['imprint_url'] == "https://example.org"
-        event.settings.flush()
-        assert event.settings.imprint_url == 'https://example.org'
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'imprint_url': None,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert resp.data['imprint_url'] == "https://example.org"
+    event.settings.flush()
+    assert event.settings.imprint_url == 'https://example.org'
 
-        resp = token_client.put(
-            '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
-            {
-                'imprint_url': 'invalid'
-            },
-            format='json'
-        )
-        assert resp.status_code == 405
+    resp = token_client.put(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'imprint_url': 'invalid'
+        },
+        format='json'
+    )
+    assert resp.status_code == 405
 
-        locales = event.settings.locales
+    locales = event.settings.locales
 
-        resp = token_client.patch(
-            '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
-            {
-                'locales': event.settings.locales + ['de', 'de-informal'],
-            },
-            format='json'
-        )
-        assert resp.status_code == 200
-        assert set(resp.data['locales']) == set(locales + ['de', 'de-informal'])
-        event.settings.flush()
-        assert set(event.settings.locales) == set(locales + ['de', 'de-informal'])
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'locales': event.settings.locales + ['de', 'de-informal'],
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert set(resp.data['locales']) == set(locales + ['de', 'de-informal'])
+    event.settings.flush()
+    assert set(event.settings.locales) == set(locales + ['de', 'de-informal'])
 
-        resp = token_client.patch(
-            '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
-            {
-                'locales': locales,
-            },
-            format='json'
-        )
-        assert resp.status_code == 200
-        assert set(resp.data['locales']) == set(locales)
-        event.settings.flush()
-        assert set(event.settings.locales) == set(locales)
+    resp = token_client.patch(
+        '/api/v1/organizers/{}/events/{}/settings/'.format(organizer.slug, event.slug),
+        {
+            'locales': locales,
+        },
+        format='json'
+    )
+    assert resp.status_code == 200
+    assert set(resp.data['locales']) == set(locales)
+    event.settings.flush()
+    assert set(event.settings.locales) == set(locales)
 
 
 @pytest.mark.django_db

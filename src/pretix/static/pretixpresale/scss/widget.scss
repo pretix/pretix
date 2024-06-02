@@ -1,4 +1,5 @@
-@import "../../pretixbase/scss/_variables.scss";
+// not included, will be dynamically prepended @import "../../pretixbase/scss/_variables.scss";
+@import "../../pretixbase/scss/_bootstrap_vars.scss";
 @import "../../bootstrap/scss/bootstrap/variables";
 @import "../../bootstrap/scss/bootstrap/mixins";
 
@@ -47,7 +48,7 @@
     text-decoration: none;
     @include button-size($padding-base-vertical, $padding-base-horizontal, $font-size-base, $line-height-base, $btn-border-radius-base);
     @include user-select(none);
-    @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border);
+    @include button-variant($btn-primary-color, $btn-primary-bg, $btn-primary-border, $btn-primary-background-active, $btn-primary-border-active, $btn-primary-border-hover);
 
     &,
     &:active,
@@ -66,11 +67,11 @@
       @include box-shadow(none);
     }
     &.pretix-widget-btn-default {
-      @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border);
+      @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border, darken($btn-default-bg, 10%), darken($btn-default-border, 25%), darken($btn-default-border, 12%));
     }
   }
   label.pretix-widget-btn-checkbox {
-    @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border);
+    @include button-variant($btn-default-color, $btn-default-bg, $btn-default-border, darken($btn-default-bg, 10%), darken($btn-default-border, 25%), darken($btn-default-border, 12%));
     border-width: 1px;
     border-style: solid;
     position: relative;

@@ -93,13 +93,12 @@ from pretix.control.views.user import RecentAuthenticationRequiredMixin
 from pretix.helpers.database import rolledback_transaction
 from pretix.multidomain.urlreverse import build_absolute_uri, get_event_domain
 from pretix.plugins.stripe.payment import StripeSettingsHolder
-from pretix.presale.style import regenerate_css
 
 from ...base.i18n import language
 from ...base.models.items import (
     Item, ItemCategory, ItemMetaProperty, Question, Quota,
 )
-from ...base.settings import SETTINGS_AFFECTING_CSS, LazyI18nStringList
+from ...base.settings import LazyI18nStringList
 from ...helpers.compat import CompatDeleteView
 from ...helpers.format import format_map
 from ..logdisplay import OVERVIEW_BANLIST
@@ -201,19 +200,17 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
     def form_valid(self, form):
         self._save_decoupled(self.sform)
         self.sform.save()
+        self.object.cache.clear()
         self.save_meta()
         self.save_item_meta_property_formset(self.object)
         self.save_confirm_texts_formset(self.object)
         self.save_footer_links_formset(self.object)
-        change_css = False
 
         if self.sform.has_changed() or self.confirm_texts_formset.has_changed():
             data = {k: self.request.event.settings.get(k) for k in self.sform.changed_data}
             if self.confirm_texts_formset.has_changed():
                 data.update(confirm_texts=self.confirm_texts_formset.cleaned_data)
             self.request.event.log_action('pretix.event.settings', user=self.request.user, data=data)
-            if any(p in self.sform.changed_data for p in SETTINGS_AFFECTING_CSS):
-                change_css = True
         if self.footer_links_formset.has_changed():
             self.request.event.log_action('pretix.event.footerlinks.changed', user=self.request.user, data={
                 'data': self.footer_links_formset.cleaned_data
@@ -227,13 +224,7 @@ class EventUpdate(DecoupleMixin, EventSettingsViewMixin, EventPermissionRequired
             })
 
         tickets.invalidate_cache.apply_async(kwargs={'event': self.request.event.pk})
-        if change_css:
-            regenerate_css.apply_async(args=(self.request.event.pk,))
-            messages.success(self.request, _('Your changes have been saved. Please note that it can '
-                                             'take a short period of time until your changes become '
-                                             'active.'))
-        else:
-            messages.success(self.request, _('Your changes have been saved.'))
+        messages.success(self.request, _('Your changes have been saved.'))
         return super().form_valid(form)
 
     def get_success_url(self) -> str:

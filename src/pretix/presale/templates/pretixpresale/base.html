@@ -8,12 +8,11 @@
 <html{% if rtl %} dir="rtl" class="rtl"{% endif %} lang="{{ html_locale }}">
 <head>
     <title>{% block thetitle %}{% endblock %}</title>
-    {% if css_file %}
-        <link rel="stylesheet" type="text/css" href="{{ css_file }}" />
-    {% else %}
-        {% compress css %}
-            <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}"/>
-        {% endcompress %}
+    {% compress css %}
+        <link rel="stylesheet" type="text/x-scss" href="{% static "pretixpresale/scss/main.scss" %}"/>
+    {% endcompress %}
+    {% if css_theme %}
+        <link rel="stylesheet" type="text/css" href="{{ css_theme }}" />
     {% endif %}
 
     {% include "pretixpresale/fragment_js.html" %}

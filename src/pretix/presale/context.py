@@ -32,9 +32,9 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 import logging
+import time
 
 from django.conf import settings
-from django.core.files.storage import default_storage
 from django.utils import translation
 from django.utils.translation import get_language_info
 from django_scopes import get_scope
@@ -46,12 +46,14 @@ from pretix.helpers.i18n import (
 )
 
 from ..base.i18n import get_language_without_region
+from ..multidomain.urlreverse import eventreverse
 from .cookies import get_cookie_providers
 from .signals import (
     footer_link, global_footer_link, global_html_footer, global_html_head,
     global_html_page_header, html_footer, html_head, html_page_header,
 )
 from .views.cart import cart_session, get_or_create_cart_id
+from .views.theme import _get_source_cache_key
 
 logger = logging.getLogger(__name__)
 
@@ -70,7 +72,6 @@ def _default_context(request):
         return {}
 
     ctx = {
-        'css_file': None,
         'DEBUG': settings.DEBUG,
     }
     _html_head = []
@@ -80,10 +81,22 @@ def _default_context(request):
 
     if hasattr(request, 'event') and request.event:
         pretix_settings = request.event.settings
+
+        # This makes sure a new version of the theme is loaded whenever settings or the source files have changed
+        theme_css_version = (f'{_get_source_cache_key()}-'
+                             f'{request.organizer.cache.get_or_set("css_version", default=lambda: time.time())}-'
+                             f'{request.event.cache.get_or_set("css_version", default=lambda: time.time())}')
+        ctx['css_theme'] = eventreverse(request.event, "presale:event.theme.css") + "?version=" + theme_css_version
+
     elif hasattr(request, 'organizer') and request.organizer:
         pretix_settings = request.organizer.settings
+
+        # This makes sure a new version of the theme is loaded whenever settings or the source files have changed
+        theme_css_version = f'{_get_source_cache_key()}-{request.organizer.cache.get_or_set("css_version", default=lambda: time.time())}'
+        ctx['css_theme'] = eventreverse(request.organizer, "presale:organizer.theme.css") + "?version=" + theme_css_version
     else:
         pretix_settings = GlobalSettingsObject().settings
+        ctx['css_theme'] = None
 
     text = pretix_settings.get('footer_text', as_type=LazyI18nString)
     link = pretix_settings.get('footer_link', as_type=LazyI18nString)
@@ -124,9 +137,6 @@ def _default_context(request):
             for fl in request.event.footer_links.all()
         ], timeout=300)
 
-        if request.event.settings.presale_css_file:
-            ctx['css_file'] = default_storage.url(request.event.settings.presale_css_file)
-
         ctx['event_logo'] = request.event.settings.get('logo_image', as_type=str, default='')[7:]
         ctx['event_logo_image_large'] = request.event.settings.logo_image_large
         ctx['event_logo_show_title'] = request.event.settings.logo_show_title
@@ -158,8 +168,6 @@ def _default_context(request):
         ctx['languages'] = [get_language_info(code) for code in request.organizer.settings.locales]
 
     if request.resolver_match and hasattr(request, 'organizer'):
-        if request.organizer.settings.presale_css_file and not hasattr(request, 'event'):
-            ctx['css_file'] = default_storage.url(request.organizer.settings.presale_css_file)
         ctx['organizer_logo'] = request.organizer.settings.get('organizer_logo_image', as_type=str, default='')[7:]
         ctx['organizer_homepage_text'] = request.organizer.settings.get('organizer_homepage_text', as_type=LazyI18nString)
         ctx['organizer'] = request.organizer

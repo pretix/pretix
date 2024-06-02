@@ -19,9 +19,29 @@
 # You should have received a copy of the GNU Affero General Public License along with this program.  If not, see
 # <https://www.gnu.org/licenses/>.
 #
+import hashlib
+import time
+
+from django.contrib.staticfiles import finders
 from django.http import HttpResponse
 from django.templatetags.static import static
+from django.utils.http import http_date
 from django.views.decorators.cache import cache_page
+from django.views.decorators.gzip import gzip_page
+from django.views.decorators.http import condition
+
+from pretix.presale.style import get_theme_vars_css
+
+# we never change static source without restart, so we can cache this thread-wise
+_source_cache_key = None
+
+
+def _get_source_cache_key():
+    global _source_cache_key
+    if not _source_cache_key:
+        with open(finders.find("pretixbase/scss/_variables.scss"), "r") as f:
+            _source_cache_key = hashlib.sha256(f.read().encode()).hexdigest()[:12]
+    return _source_cache_key
 
 
 @cache_page(3600)
@@ -69,3 +89,16 @@ def webmanifest(request):
             static('pretixbase/img/icons/android-chrome-512x512.png'),
         ), content_type='text/json'
     )
+
+
+@gzip_page
+@condition(etag_func=lambda request, **kwargs: request.GET.get("version"))
+def theme_css(request, **kwargs):
+    obj = getattr(request, "event", request.organizer)
+    css = get_theme_vars_css(obj, widget=False)
+    resp = HttpResponse(css, content_type="text/css")
+    resp._csp_ignore = True
+    resp["Access-Control-Allow-Origin"] = "*"
+    if "version" in request.GET:
+        resp["Expires"] = http_date(time.time() + 3600 * 24 * 30)
+    return resp

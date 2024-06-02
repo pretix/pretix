@@ -285,7 +285,7 @@ To upgrade to a new pretix release, pull the latest code changes and run the fol
     (venv)$ pip3 install -U --upgrade-strategy eager pretix gunicorn
     (venv)$ python -m pretix migrate
     (venv)$ python -m pretix rebuild
-    (venv)$ python -m pretix updatestyles
+    (venv)$ python -m pretix updateassets
     # systemctl restart pretix-web pretix-worker
 
 Make sure to also read :ref:`update_notes` and the release notes of the version you are updating to. Pay special
@@ -325,7 +325,7 @@ Then, proceed like after any plugin installation::
 
     (venv)$ python -m pretix migrate
     (venv)$ python -m pretix rebuild
-    (venv)$ python -m pretix updatestyles
+    (venv)$ python -m pretix updateassets
     # systemctl restart pretix-web pretix-worker
 
 .. _Postfix: https://www.digitalocean.com/community/tutorials/how-to-install-and-configure-postfix-as-a-send-only-smtp-server-on-ubuntu-22-04

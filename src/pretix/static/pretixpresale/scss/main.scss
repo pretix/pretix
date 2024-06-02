@@ -1,8 +1,9 @@
-/* before variables.scss because it only affects presale, not control */
+// before variables.scss because it only affects presale, not control
 $body-bg: #f5f5f5 !default;
 
 /* imports */
 @import "../../pretixbase/scss/_variables.scss";
+@import "../../pretixbase/scss/bootstrap_vars.scss";
 @import "../../bootstrap/scss/_bootstrap_reduced.scss";
 @import "../../pretixbase/scss/_theme.scss";
 @import "../../lightbox/css/lightbox.scss";
@@ -111,8 +112,8 @@ footer nav .btn-link {
     font-size: 40px;
 }
 a:hover .panel-primary > .panel-heading {
-    background-color: darken($btn-primary-bg, 10%);
-    border-color: darken($btn-primary-border, 12%);
+    background-color: var(--pretix-brand-primary-darken-10);
+    border-color: var(--pretix-brand-primary-darken-17);
 }
 
 .thank-you {
@@ -394,7 +395,7 @@ details.details-open .panel-title::before {
 }
 
 .panel-primary .panel-title a[data-toggle="collapse"]:hover {
-    background-color: darken($btn-primary-bg, 10%);
+    background-color: var(--pretix-brand-primary-darken-10);
 }
 
 .panel-title a.h6 {
@@ -496,7 +497,7 @@ h2 .label {
         text-align: center;
     }
     &.availability .progress-bar-success {
-        background: lighten($brand-success, 20%);
+        background: var(--brand-success-lighten-20);
     }
 }
 

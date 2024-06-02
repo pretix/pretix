@@ -393,7 +393,7 @@ table.dataTable thead .sorting:after {
     a {
         color: $brand-success;
         &:hover {
-            color: darken($brand-success, 15%);
+            color: var(--pretix-brand-success-darken-15);
         }
     }
 }
@@ -408,7 +408,7 @@ table.dataTable thead .sorting:after {
     a {
         color: $brand-danger;
         &:hover {
-            color: darken($brand-danger, 15%);
+            color: var(--pretix-brand-danger-darken-15);
         }
     }
 }
@@ -423,7 +423,7 @@ table.dataTable thead .sorting:after {
     a {
         color: $brand-warning;
         &:hover {
-            color: darken($brand-warning, 15%);
+            color: var(--pretix-brand-warning-darken-15);
         }
     }
 }

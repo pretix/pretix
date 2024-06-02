@@ -19,7 +19,7 @@ You can use ``pip`` to update pretix directly to the development branch. Then, u
     (venv)$ pip3 install -U "git+https://github.com/pretix/pretix.git#egg=pretix"
     (venv)$ python -m pretix migrate
     (venv)$ python -m pretix rebuild
-    (venv)$ python -m pretix updatestyles
+    (venv)$ python -m pretix updateassets
     # systemctl restart pretix-web pretix-worker
 
 Docker installation

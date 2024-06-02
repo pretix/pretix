@@ -23,6 +23,7 @@ import calendar
 import hashlib
 import json
 import logging
+import time
 from collections import defaultdict
 from datetime import date, datetime, timedelta
 from urllib.parse import urljoin
@@ -65,6 +66,7 @@ from pretix.helpers.daterange import daterange
 from pretix.helpers.thumb import get_thumbnail
 from pretix.multidomain.urlreverse import build_absolute_uri
 from pretix.presale.forms.organizer import meta_filtersets
+from pretix.presale.style import get_theme_vars_css
 from pretix.presale.views.cart import get_or_create_cart_id
 from pretix.presale.views.event import (
     get_grouped_items, item_group_by_category,
@@ -76,14 +78,35 @@ from pretix.presale.views.organizer import (
 
 logger = logging.getLogger(__name__)
 
+# we never change static source without restart, so we can cache this thread-wise
+_source_cache_key = None
+
+
+def _get_source_cache_key():
+    global _source_cache_key
+    checksum = hashlib.sha256()
+    if not _source_cache_key:
+        with open(finders.find("pretixbase/scss/_variables.scss"), "r") as f:
+            checksum.update(f.read().encode())
+        tpl = get_template('pretixpresale/widget_dummy.html')
+        et = html.fromstring(tpl.render({})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
+        checksum.update(et.encode())
+        _source_cache_key = checksum.hexdigest()[:12]
+    return _source_cache_key
+
 
 def indent(s):
     return s.replace('\n', '\n  ')
 
 
 def widget_css_etag(request, **kwargs):
-    o = getattr(request, 'event', request.organizer)
-    return o.settings.presale_widget_css_checksum or o.settings.presale_widget_css_checksum
+    # This makes sure a new version of the theme is loaded whenever settings or the source files have changed
+    if hasattr(request, 'event'):
+        return (f'{_get_source_cache_key()}-'
+                f'{request.organizer.cache.get_or_set("css_version", default=lambda: time.time())}-'
+                f'{request.event.cache.get_or_set("css_version", default=lambda: time.time())}')
+    else:
+        return f'{_get_source_cache_key()}-{request.organizer.cache.get_or_set("css_version", default=lambda: time.time())}'
 
 
 def widget_js_etag(request, lang, **kwargs):
@@ -96,18 +119,16 @@ def widget_js_etag(request, lang, **kwargs):
 @cache_page(60)
 def widget_css(request, **kwargs):
     o = getattr(request, 'event', request.organizer)
-    if o.settings.presale_widget_css_file:
-        try:
-            resp = FileResponse(default_storage.open(o.settings.presale_widget_css_file),
-                                content_type='text/css')
-            resp['Access-Control-Allow-Origin'] = '*'
-            return resp
-        except FileNotFoundError:
-            pass
+
     tpl = get_template('pretixpresale/widget_dummy.html')
     et = html.fromstring(tpl.render({})).xpath('/html/head/link')[0].attrib['href'].replace(settings.STATIC_URL, '')
-    f = finders.find(et)
-    resp = FileResponse(open(f, 'rb'), content_type='text/css')
+    with open(finders.find(et), 'r') as f:
+        widget_css = f.read()
+
+    theme_css = get_theme_vars_css(o, widget=True)
+    css = theme_css + widget_css
+
+    resp = FileResponse(css, content_type='text/css')
     resp._csp_ignore = True
     resp['Access-Control-Allow-Origin'] = '*'
     return resp

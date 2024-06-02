@@ -31,7 +31,6 @@ from django_scopes import scopes_disabled
 from freezegun import freeze_time
 
 from pretix.base.models import Order, OrderPosition
-from pretix.presale.style import regenerate_css, regenerate_organizer_css
 
 from .test_cart import CartTestMixin
 
@@ -549,7 +548,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert '#34c34c' not in c
 
         self.orga.settings.primary_color = "#33c33c"
-        regenerate_organizer_css.apply(args=(self.orga.pk,))
+        self.orga.cache.clear()
         response = self.client.get('/%s/%s/widget/v1.css' % (self.orga.slug, self.event.slug))
         c = b"".join(response.streaming_content).decode()
         assert '#7f5a91' not in c
@@ -557,7 +556,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         assert '#34c34c' not in c
 
         self.event.settings.primary_color = "#34c34c"
-        regenerate_css.apply(args=(self.event.pk,))
+        self.event.cache.clear()
         response = self.client.get('/%s/%s/widget/v1.css' % (self.orga.slug, self.event.slug))
         c = b"".join(response.streaming_content).decode()
         assert '#7f5a91' not in c

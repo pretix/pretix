@@ -155,11 +155,11 @@ th {
 // inheritance to nested tables.
 
 // Generate the contextual variants
-@include table-row-variant('active', $table-bg-active);
-@include table-row-variant('success', $state-success-bg);
-@include table-row-variant('info', $state-info-bg);
-@include table-row-variant('warning', $state-warning-bg);
-@include table-row-variant('danger', $state-danger-bg);
+@include table-row-variant('active', $table-bg-active, $table-bg-active-hover);
+@include table-row-variant('success', $state-success-bg, $state-success-bg-hover);
+@include table-row-variant('info', $state-info-bg, $state-info-bg-hover);
+@include table-row-variant('warning', $state-warning-bg, $state-warning-bg-hover);
+@include table-row-variant('danger', $state-danger-bg, $state-danger-bg-hover);
 
 
 // Responsive tables
