@@ -543,7 +543,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
     def test_css_customized(self):
         response = self.client.get('/%s/%s/widget/v1.css' % (self.orga.slug, self.event.slug))
         c = b"".join(response.streaming_content).decode()
-        assert '#7f5a91' in c
+        assert '#8E44B3' in c
         assert '#33c33c' not in c
         assert '#34c34c' not in c
 
@@ -551,7 +551,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         self.orga.cache.clear()
         response = self.client.get('/%s/%s/widget/v1.css' % (self.orga.slug, self.event.slug))
         c = b"".join(response.streaming_content).decode()
-        assert '#7f5a91' not in c
+        assert '#8E44B3' not in c
         assert '#33c33c' in c
         assert '#34c34c' not in c
 
@@ -559,7 +559,7 @@ class WidgetCartTest(CartTestMixin, TestCase):
         self.event.cache.clear()
         response = self.client.get('/%s/%s/widget/v1.css' % (self.orga.slug, self.event.slug))
         c = b"".join(response.streaming_content).decode()
-        assert '#7f5a91' not in c
+        assert '#8E44B3' not in c
         assert '#33c33c' not in c
         assert '#34c34c' in c
 
