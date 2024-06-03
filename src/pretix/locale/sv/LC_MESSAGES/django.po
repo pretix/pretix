@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-06-03 10:33+0000\n"
+"PO-Revision-Date: 2024-06-03 21:00+0000\n"
 "Last-Translator: Charlie Lundberg <charlieblundberg@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -7570,7 +7570,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:113
 msgid "Ticket"
-msgstr ""
+msgstr "Biljett"
 
 #: pretix/base/pdf.py:1156
 #, fuzzy
@@ -7592,45 +7592,47 @@ msgstr "Tillträde till evenemang"
 
 #: pretix/base/reldate.py:38
 msgid "Presale start"
-msgstr ""
+msgstr "Förköpsperiod startar"
 
 #: pretix/base/reldate.py:39
 msgid "Presale end"
-msgstr ""
+msgstr "Förköpsperiod slutar"
 
 #: pretix/base/reldate.py:183
 msgid "before"
-msgstr ""
+msgstr "före"
 
 #: pretix/base/reldate.py:184
 msgid "after"
-msgstr ""
+msgstr "efter"
 
 #: pretix/base/reldate.py:231 pretix/base/reldate.py:359
 msgid "Fixed date:"
-msgstr ""
+msgstr "Fixerat datum:"
 
 #: pretix/base/reldate.py:232 pretix/base/reldate.py:360
 msgid "Relative date:"
-msgstr ""
+msgstr "Relativt datum:"
 
 #: pretix/base/reldate.py:233
 msgid "Relative time:"
-msgstr ""
+msgstr "Relativ tid:"
 
 #: pretix/base/reldate.py:241 pretix/base/reldate.py:363
 msgid "Not set"
-msgstr ""
+msgstr "Inte inställt"
 
 #: pretix/base/secrets.py:119
 msgid "Random (default, works with all pretix apps)"
-msgstr ""
+msgstr "Slumpmässig (standard, fungerar med alla pretix-appar)"
 
 #: pretix/base/secrets.py:150
 msgid ""
 "pretix signature scheme 1 (for very large events, changes semantics of "
 "offline scanning – please refer to documentation or support for details)"
 msgstr ""
+"pretix signaturschema 1 (för mycket stora events, ändrar semantik för "
+"offline-skanning – se dokumentation eller support för detaljer)"
 
 #: pretix/base/services/cancelevent.py:229
 #: pretix/base/services/cancelevent.py:287
@@ -7751,24 +7753,28 @@ msgid ""
 "The booking period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
+"Bokningsperioden för detta evenemang har ännu inte börjat. De berörda "
+"produkterna har tagits bort från din kundvagn."
 
 #: pretix/base/services/cart.py:152 pretix/base/services/orders.py:182
 msgid ""
 "The booking period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
+"Bokningsperioden för ett av evenemangen i din varukorg har gått ut. De "
+"berörda platserna har tagits bort från din kundvagn."
 
 #: pretix/base/services/cart.py:154
 msgid "The entered price is not a number."
-msgstr ""
+msgstr "Det angivna priset är inte en siffra."
 
 #: pretix/base/services/cart.py:155
 msgid "The entered price is to high."
-msgstr ""
+msgstr "Det angivna priset är för högt."
 
 #: pretix/base/services/cart.py:156
 msgid "This voucher code is not known in our database."
-msgstr ""
+msgstr "Denna kupongkod är inte känd i vår databas."
 
 #: pretix/base/services/cart.py:158 pretix/base/services/orders.py:157
 #, python-format
@@ -7779,7 +7785,11 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
+"Verifikationskoden \"%(voucher)s\" kan endast användas om du väljer minst "
+"%(number)s matchande produkter."
 msgstr[1] ""
+"Verifikationskoderna \"%(voucher)s\" kan endast användas om du väljer minst "
+"%(number)s matchande produkter."
 
 #: pretix/base/services/cart.py:163
 #, python-format
@@ -7792,12 +7802,18 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
+"Verifikationskoden \"%(voucher)s\" kan endast användas om du väljer minst "
+"%(number)s matchande produkter. Vi har därför tagit bort några positioner "
+"från din varukorg som inte längre går att köpa så här."
 msgstr[1] ""
+"Verifikationskoderna \"%(voucher)s\" kan endast användas om du väljer minst "
+"%(number)s matchande produkter. Vi har därför tagit bort några positioner "
+"från din varukorg som inte längre går att köpa så här."
 
 #: pretix/base/services/cart.py:169
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
-msgstr ""
+msgstr "Denna kupongkod har redan använts det maximala antalet tillåtna gånger."
 
 #: pretix/base/services/cart.py:171
 #, python-format
@@ -7807,6 +7823,10 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"Denna kupongkod är för närvarande låst eftersom den redan finns i en "
+"kundvagn. Det kan betyda att någon annan löser in den här kupongen just nu, "
+"eller att du försökte lösa in den tidigare men inte slutförde "
+"utcheckningsprocessen. Du kan försöka använda den igen om %d minuter."
 
 #: pretix/base/services/cart.py:176
 #, python-format
