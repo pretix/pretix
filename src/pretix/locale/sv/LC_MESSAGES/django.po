@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-05-31 15:52+0000\n"
+"PO-Revision-Date: 2024-06-03 10:33+0000\n"
 "Last-Translator: Charlie Lundberg <charlieblundberg@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -6999,16 +6999,16 @@ msgstr ""
 
 #: pretix/base/payment.py:1260
 msgid "Offsetting"
-msgstr ""
+msgstr "Förskjutning"
 
 #: pretix/base/payment.py:1274 pretix/control/views/orders.py:1244
 msgid "You entered an order that could not be found."
-msgstr ""
+msgstr "Du angav en beställning som inte kunde hittas."
 
 #: pretix/base/payment.py:1303
 #, python-format
 msgid "Balanced against orders: %s"
-msgstr ""
+msgstr "Balanserat mot order: %s"
 
 #: pretix/base/payment.py:1329
 #, fuzzy
@@ -7018,27 +7018,27 @@ msgstr "Betalnings metod"
 
 #: pretix/base/payment.py:1346
 msgid "In test mode, only test cards will work."
-msgstr ""
+msgstr "I testläge fungerar endast testkort."
 
 #: pretix/base/payment.py:1428 pretix/base/payment.py:1479
 #: pretix/base/payment.py:1522
 msgid "You cannot pay with gift cards when buying a gift card."
-msgstr ""
+msgstr "Du kan inte betala med presentkort vid köp av presentkort."
 
 #: pretix/base/payment.py:1437 pretix/base/payment.py:1487
 #: pretix/base/payment.py:1532 pretix/base/payment.py:1534
 msgid "This gift card does not support this currency."
-msgstr ""
+msgstr "Detta presentkort stöder inte denna valuta."
 
 #: pretix/base/payment.py:1440 pretix/base/payment.py:1490
 #: pretix/base/payment.py:1540
 msgid "This gift card can only be used in test mode."
-msgstr ""
+msgstr "Detta presentkort kan endast användas i testläge."
 
 #: pretix/base/payment.py:1443 pretix/base/payment.py:1493
 #: pretix/base/payment.py:1542
 msgid "Only test gift cards can be used in test mode."
-msgstr ""
+msgstr "Endast testpresentkort kan användas i testläge."
 
 #: pretix/base/payment.py:1446 pretix/base/payment.py:1496
 #: pretix/base/payment.py:1544
@@ -7049,31 +7049,35 @@ msgstr "Dina ändringar har sparats."
 
 #: pretix/base/payment.py:1449 pretix/base/payment.py:1499
 msgid "All credit on this gift card has been used."
-msgstr ""
+msgstr "All kredit på detta presentkort har använts."
 
 #: pretix/base/payment.py:1454
 msgid "This gift card is already used for your payment."
-msgstr ""
+msgstr "Detta presentkort används redan för din betalning."
 
 #: pretix/base/payment.py:1469 pretix/base/payment.py:1512
 msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
 msgstr ""
+"Du angav en kupong istället för ett presentkort. Kuponger kan endast anges "
+"på första sidan i butiken under produkturvalet."
 
 #: pretix/base/payment.py:1472 pretix/base/payment.py:1515
 msgid "This gift card is not known."
-msgstr ""
+msgstr "Detta presentkort är inte känt."
 
 #: pretix/base/payment.py:1474 pretix/base/payment.py:1517
 msgid ""
 "This gift card can not be redeemed since its code is not unique. Please "
 "contact the organizer of this event."
 msgstr ""
+"Detta presentkort kan inte lösas in eftersom dess kod inte är unik. Kontakta "
+"arrangören av detta evenemang."
 
 #: pretix/base/payment.py:1536
 msgid "This gift card is not accepted by this event organizer."
-msgstr ""
+msgstr "Detta presentkort accepteras inte av denna arrangör."
 
 #: pretix/base/payment.py:1538
 #, fuzzy
@@ -7086,11 +7090,11 @@ msgstr ""
 
 #: pretix/base/pdf.py:96
 msgid "Ticket code (barcode content)"
-msgstr ""
+msgstr "Biljettkod (streckkodsinnehåll)"
 
 #: pretix/base/pdf.py:108
 msgid "Order position number"
-msgstr ""
+msgstr "Orderpositionsnummer"
 
 #: pretix/base/pdf.py:116
 #, fuzzy
@@ -7101,11 +7105,11 @@ msgstr "Beställningsrad"
 #: pretix/base/pdf.py:122 pretix/base/services/tickets.py:100
 #: pretix/control/views/event.py:795 pretix/control/views/pdf.py:94
 msgid "Sample product"
-msgstr ""
+msgstr "Exempelprodukt"
 
 #: pretix/base/pdf.py:126
 msgid "Variation name"
-msgstr ""
+msgstr "Variationsnamn"
 
 #: pretix/base/pdf.py:127
 msgid "Sample variation"
@@ -7259,16 +7263,18 @@ msgstr ""
 #: pretix/base/pdf.py:253 pretix/base/pdf.py:279 pretix/base/pdf.py:388
 #: pretix/base/pdf.py:412 pretix/base/pdf.py:436 pretix/base/pdf.py:460
 #: pretix/base/pdf.py:517 pretix/base/pdf.py:522
+#, fuzzy
 msgid "2017-05-31"
-msgstr ""
+msgstr "2017-05-31"
 
 #: pretix/base/pdf.py:260
 msgid "Event begin time"
-msgstr ""
+msgstr "Eventets starttid"
 
 #: pretix/base/pdf.py:261
+#, fuzzy
 msgid "20:00"
-msgstr ""
+msgstr "20:00"
 
 #: pretix/base/pdf.py:265
 #, fuzzy
@@ -7279,19 +7285,20 @@ msgstr "Evenemangets slutdatum"
 #: pretix/base/pdf.py:266 pretix/base/pdf.py:295
 #: pretix/base/services/checkin.py:362 pretix/control/forms/filter.py:1160
 msgid "Friday"
-msgstr ""
+msgstr "Fredag"
 
 #: pretix/base/pdf.py:270
 msgid "Event end date and time"
-msgstr ""
+msgstr "Eventets slutdatum och tid"
 
 #: pretix/base/pdf.py:271
 msgid "2017-05-31 22:00"
-msgstr ""
+msgstr "2017-05-31 22:00"
 
 #: pretix/base/pdf.py:287
+#, fuzzy
 msgid "22:00"
-msgstr ""
+msgstr "22:00"
 
 #: pretix/base/pdf.py:294
 #, fuzzy
@@ -7301,45 +7308,49 @@ msgstr "Evenemangets slutdatum"
 
 #: pretix/base/pdf.py:299
 msgid "Event admission date and time"
-msgstr ""
+msgstr "Datum och tid för tillträde till evenemanget"
 
 #: pretix/base/pdf.py:300 pretix/base/pdf.py:396 pretix/base/pdf.py:420
 #: pretix/base/pdf.py:444 pretix/base/pdf.py:468 pretix/base/pdf.py:511
+#, fuzzy
 msgid "2017-05-31 19:00"
-msgstr ""
+msgstr "2017-05-31 19:00"
 
 #: pretix/base/pdf.py:307
 msgid "Event admission time"
-msgstr ""
+msgstr "Tillträdestid för evenemang"
 
 #: pretix/base/pdf.py:308 pretix/base/pdf.py:404 pretix/base/pdf.py:428
 #: pretix/base/pdf.py:452 pretix/base/pdf.py:476
+#, fuzzy
 msgid "19:00"
-msgstr ""
+msgstr "19:00"
 
 #: pretix/base/pdf.py:315
 msgid "Event location"
-msgstr ""
+msgstr "Eventplats"
 
 #: pretix/base/pdf.py:316 pretix/base/settings.py:1118
 msgid "Random City"
-msgstr ""
+msgstr "Slumpmässig stad"
 
 #: pretix/base/pdf.py:335
 msgid "Invoice address company"
-msgstr ""
+msgstr "Fakturaadress företag"
 
 #: pretix/base/pdf.py:341
+#, fuzzy
 msgid "Sesame Street 42"
-msgstr ""
+msgstr "Sesame Street 42"
 
 #: pretix/base/pdf.py:346
+#, fuzzy
 msgid "12345"
-msgstr ""
+msgstr "12345"
 
 #: pretix/base/pdf.py:351 pretix/base/services/invoices.py:473
 msgid "Sample city"
-msgstr ""
+msgstr "Teststad"
 
 #: pretix/base/pdf.py:355
 #, fuzzy
@@ -7355,18 +7366,21 @@ msgid "Sample State"
 msgstr "Välj region"
 
 #: pretix/base/pdf.py:361
+#, fuzzy
 msgid "Atlantis"
-msgstr ""
+msgstr "Atlantis"
 
 #: pretix/base/pdf.py:365
 msgid "List of Add-Ons"
-msgstr ""
+msgstr "Lista över tillägg"
 
 #: pretix/base/pdf.py:366
 msgid ""
 "Add-on 1\n"
 "2x Add-on 2"
 msgstr ""
+"Tillägg 1\n"
+"2x tillägg 2"
 
 #: pretix/base/pdf.py:372 pretix/control/forms/filter.py:1301
 #: pretix/control/forms/filter.py:1303
