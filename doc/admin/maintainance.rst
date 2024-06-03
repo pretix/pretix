@@ -103,10 +103,10 @@ pretix_celery_tasks_queued_count
 pretix_celery_tasks_queued_age_seconds
     The age of the longest-waiting in the worker queue in seconds, labeled with ``queue``.
 
-pretix_successful_logins
+pretix_logins_successful
     Counter. The number of successful backend logins.
 
-pretix_failed_logins
+pretix_logins_failed
     Counter. The number of failed backend logins, labeled with ``reason``.
 
 .. _metric types: https://prometheus.io/docs/concepts/metric_types/
