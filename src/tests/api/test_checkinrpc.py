@@ -144,6 +144,8 @@ TEST_ORDERPOSITION1_RES = {
     "id": 1,
     "require_attention": False,
     "order__status": "p",
+    "order__require_approval": False,
+    "order__valid_if_pending": False,
     "order": "FOO",
     "positionid": 1,
     "item": 1,

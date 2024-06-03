@@ -564,6 +564,8 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
     attendee_name = AttendeeNameField(source='*')
     attendee_name_parts = AttendeeNamePartsField(source='*')
     order__status = serializers.SlugRelatedField(read_only=True, slug_field='status', source='order')
+    order__valid_if_pending = serializers.SlugRelatedField(read_only=True, slug_field='valid_if_pending', source='order')
+    order__require_approval = serializers.SlugRelatedField(read_only=True, slug_field='require_approval', source='order')
 
     class Meta:
         model = OrderPosition
@@ -571,7 +573,8 @@ class CheckinListOrderPositionSerializer(OrderPositionSerializer):
                   'company', 'street', 'zipcode', 'city', 'country', 'state',
                   'attendee_email', 'voucher', 'tax_rate', 'tax_value', 'secret', 'addon_to', 'subevent', 'checkins',
                   'downloads', 'answers', 'tax_rule', 'pseudonymization_id', 'pdf_data', 'seat', 'require_attention',
-                  'order__status', 'valid_from', 'valid_until', 'blocked')
+                  'order__status', 'order__valid_if_pending', 'order__require_approval', 'valid_from', 'valid_until',
+                  'blocked')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
