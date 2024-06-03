@@ -187,7 +187,9 @@ class BankTransfer(BasePaymentProvider):
                 help_text=_('Put one IBAN or IBAN prefix per line. The system will not attempt to send refunds to any '
                             'of these IBANs. Useful e.g. if you receive a lot of "forwarded payments" by a third-party payment '
                             'provider. You can also list country codes such as "GB" if you never want to send refunds to '
-                            'IBANs from a specific country.')
+                            'IBANs from a specific country. The check digits will be ignored for comparison, so you '
+                            'can e.g. ban DE0012345 to ban all German IBANs with the bank identifier starting with '
+                            '12345.')
             )),
         ])
 
@@ -591,7 +593,12 @@ class BankTransfer(BasePaymentProvider):
         except ValidationError:
             return False
         else:
-            return not any(iban.startswith(b) for b in (self.settings.refund_iban_blocklist or '').splitlines() if b)
+            def _compare(iban, prefix):  # Compare IBAN with pretix ignoring the check digits
+                iban = iban[:2] + "XX" + iban[4:]
+                prefix = prefix[:2] + "XX" + prefix[4:]
+                return iban.startswith(prefix)
+
+            return not any(_compare(iban, b) for b in (self.settings.refund_iban_blocklist or '').splitlines() if b)
 
     def payment_partial_refund_supported(self, payment: OrderPayment) -> bool:
         return self.payment_refund_supported(payment)
