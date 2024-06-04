@@ -34,10 +34,7 @@ class SafeFormatter(Formatter):
         self.context = context
 
     def get_field(self, field_name, args, kwargs):
-        if '.' in field_name or '[' in field_name:
-            logger.warning(f'Ignored invalid field name "{field_name}"')
-            return ('{' + str(field_name) + '}', field_name)
-        return super().get_field(field_name, args, kwargs)
+        return self.get_value(field_name, args, kwargs), field_name
 
     def get_value(self, key, args, kwargs):
         if key not in self.context:
