@@ -43,6 +43,8 @@ window.vapp = new Vue({
             'status.n': gettext('Unpaid'),
             'status.c': gettext('Canceled'),
             'status.e': gettext('Canceled'),
+            'status.pending_valid': gettext('Confirmed'),
+            'status.require_approval': gettext('Approval pending'),
             'status.redeemed': gettext('Redeemed'),
             'modal.cancel': gettext('Cancel'),
             'modal.continue': gettext('Continue'),
