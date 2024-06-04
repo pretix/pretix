@@ -756,10 +756,12 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                     with language(self.supported_locale[idx], self.request.event.settings.region):
                         try:
                             if k.startswith('mail_subject_'):
-                                msgs[self.supported_locale[idx]] = format_map(bleach.clean(v), self.placeholders(preview_item), ignore_missing_keys=False)
+                                msgs[self.supported_locale[idx]] = format_map(
+                                    bleach.clean(v), self.placeholders(preview_item), raise_on_missing=True
+                                )
                             else:
                                 msgs[self.supported_locale[idx]] = markdown_compile_email(
-                                    format_map(v, self.placeholders(preview_item), ignore_missing_keys=False)
+                                    format_map(v, self.placeholders(preview_item), raise_on_missing=True)
                                 )
                         except ValueError:
                             msgs[self.supported_locale[idx]] = '<div class="alert alert-danger">{}</div>'.format(

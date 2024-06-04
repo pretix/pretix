@@ -66,7 +66,7 @@ class PlaceholderValidator(BaseValidator):
             return
 
         try:
-            format_map(value, {key.strip('{}'): "" for key in self.limit_value}, ignore_missing_keys=False)
+            format_map(value, {key.strip('{}'): "" for key in self.limit_value}, raise_on_missing=True)
         except ValueError:
             raise ValidationError(self.error_message, code='invalid_placeholder_syntax')
         except KeyError as e:
