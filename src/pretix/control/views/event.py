@@ -73,6 +73,7 @@ from i18nfield.utils import I18nJSONEncoder
 
 from pretix.base.channels import get_all_sales_channels
 from pretix.base.email import get_available_placeholders
+from pretix.base.forms import PlaceholderValidator
 from pretix.base.models import Event, LogEntry, Order, TaxRule, Voucher
 from pretix.base.models.event import EventMetaValue
 from pretix.base.services import tickets
@@ -713,11 +714,6 @@ class MailSettingsSetup(EventPermissionRequiredMixin, MailSettingsSetupView):
 class MailSettingsPreview(EventPermissionRequiredMixin, View):
     permission = 'can_change_event_settings'
 
-    # return the origin text if key is missing in dict
-    class SafeDict(dict):
-        def __missing__(self, key):
-            return '{' + key + '}'
-
     # create index-language mapping
     @cached_property
     def supported_locale(self):
@@ -742,7 +738,7 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                     _('This value will be replaced based on dynamic parameters.'),
                     s
                 )
-        return self.SafeDict(ctx)
+        return ctx
 
     def post(self, request, *args, **kwargs):
         preview_item = request.POST.get('item', '')
@@ -760,13 +756,17 @@ class MailSettingsPreview(EventPermissionRequiredMixin, View):
                     with language(self.supported_locale[idx], self.request.event.settings.region):
                         try:
                             if k.startswith('mail_subject_'):
-                                msgs[self.supported_locale[idx]] = format_map(bleach.clean(v), self.placeholders(preview_item))
+                                msgs[self.supported_locale[idx]] = format_map(bleach.clean(v), self.placeholders(preview_item), ignore_missing_keys=False)
                             else:
                                 msgs[self.supported_locale[idx]] = markdown_compile_email(
-                                    format_map(v, self.placeholders(preview_item))
+                                    format_map(v, self.placeholders(preview_item), ignore_missing_keys=False)
                                 )
                         except ValueError:
-                            msgs[self.supported_locale[idx]] = _('Invalid placeholder syntax: You used a different number of "{" than of "}".')
+                            msgs[self.supported_locale[idx]] = '<div class="alert alert-danger">{}</div>'.format(
+                                PlaceholderValidator.error_message)
+                        except KeyError as e:
+                            msgs[self.supported_locale[idx]] = '<div class="alert alert-danger">{}</div>'.format(
+                                _('Invalid placeholder: {%(value)s}') % {'value': e.args[0]})
 
         return JsonResponse({
             'item': preview_item,

@@ -39,7 +39,7 @@ from django.core.validators import BaseValidator
 from django.utils.translation import gettext_lazy as _
 from i18nfield.strings import LazyI18nString
 
-from pretix.helpers.format import SafeFormatter
+from pretix.helpers.format import format_map
 
 
 class PlaceholderValidator(BaseValidator):
@@ -48,6 +48,12 @@ class PlaceholderValidator(BaseValidator):
     validates form field by checking for placeholders,
     which are not presented in taken list.
     """
+
+    error_message = _(
+        'There is an error with your placeholder syntax. Please check that the opening "{" and closing "}" curly '
+        'brackets on your placeholders match up. '
+        'Please note: to use literal "{" or "}", you need to double them as "{{" and "}}".'
+    )
 
     def __init__(self, limit_value):
         super().__init__(limit_value)
@@ -60,23 +66,14 @@ class PlaceholderValidator(BaseValidator):
             return
 
         try:
-            SafeFormatter(None).parse(value)
+            format_map(value, {key.strip('{}'): "" for key in self.limit_value}, ignore_missing_keys=False)
         except ValueError:
+            raise ValidationError(self.error_message, code='invalid_placeholder_syntax')
+        except KeyError as e:
             raise ValidationError(
-                _('Invalid placeholder syntax: You used a different number of "{" than of "}".'),
-                code='invalid_placeholder_syntax',
-            )
-
-        data_placeholders = list(re.findall(r'({[^}]*})', value, re.X))
-        invalid_placeholders = []
-        for placeholder in data_placeholders:
-            if placeholder not in self.limit_value:
-                invalid_placeholders.append(placeholder)
-        if invalid_placeholders:
-            raise ValidationError(
-                _('Invalid placeholder(s): %(value)s'),
+                _('Invalid placeholder: {%(value)s}'),
                 code='invalid_placeholders',
-                params={'value': ", ".join(invalid_placeholders,)})
+                params={'value': e.args[0]})
 
     def clean(self, x):
         return x
