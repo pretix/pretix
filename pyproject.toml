@@ -44,7 +44,7 @@ dependencies = [
   "django-formset-js-improved==0.5.0.3",
   "django-formtools==2.5.1",
   "django-hierarkey==1.2.*",
-  "django-hijack==3.4.*",
+  "django-hijack==3.5.*",
   "django-i18nfield==1.9.*,>=1.9.4",
   "django-libsass==0.9",
   "django-localflavor==4.0",
