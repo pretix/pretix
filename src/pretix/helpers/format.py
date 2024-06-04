@@ -30,14 +30,15 @@ class SafeFormatter(Formatter):
     Customized version of ``str.format`` that (a) behaves just like ``str.format_map`` and
     (b) does not allow any unwanted shenanigans like attribute access or format specifiers.
     """
-    def __init__(self, context):
+    def __init__(self, context, ignore_missing_keys=True):
         self.context = context
+        self.ignore_missing_keys = ignore_missing_keys
 
     def get_field(self, field_name, args, kwargs):
         return self.get_value(field_name, args, kwargs), field_name
 
     def get_value(self, key, args, kwargs):
-        if key not in self.context:
+        if self.ignore_missing_keys and key not in self.context:
             return '{' + str(key) + '}'
         return self.context[key]
 
@@ -46,7 +47,7 @@ class SafeFormatter(Formatter):
         return super().format_field(value, '')
 
 
-def format_map(template, context):
+def format_map(template, context, ignore_missing_keys=True):
     if not isinstance(template, str):
         template = str(template)
-    return SafeFormatter(context).format(template)
+    return SafeFormatter(context, ignore_missing_keys).format(template)
