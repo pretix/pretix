@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-06-03 21:00+0000\n"
+"PO-Revision-Date: 2024-06-05 15:00+0000\n"
 "Last-Translator: Charlie Lundberg <charlieblundberg@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -7882,15 +7882,15 @@ msgstr ""
 #: pretix/base/services/cart.py:194
 msgctxt "subevent"
 msgid "The selected event date is not active."
-msgstr ""
+msgstr "Det valda händelsedatumet är inte aktivt."
 
 #: pretix/base/services/cart.py:195 pretix/base/services/orders.py:189
 msgid "You can not select an add-on for the selected product."
-msgstr ""
+msgstr "Du kan inte välja ett tillägg för den valda produkten."
 
 #: pretix/base/services/cart.py:196 pretix/base/services/orders.py:190
 msgid "You can not select two variations of the same add-on product."
-msgstr ""
+msgstr "Du kan inte välja två varianter av samma tilläggsprodukt."
 
 #: pretix/base/services/cart.py:198 pretix/base/services/orders.py:192
 #, python-format
@@ -7901,7 +7901,11 @@ msgid_plural ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr[0] ""
+"Du kan välja högst %(max)s tillägg från kategorin %(cat)s för produkten "
+"%(base)s."
 msgstr[1] ""
+"Du kan välja högst %(max)s tillägg från kategorin %(cat)s för produkterna "
+"%(base)s."
 
 #: pretix/base/services/cart.py:203 pretix/base/services/orders.py:197
 #, fuzzy, python-format
@@ -7937,15 +7941,15 @@ msgstr ""
 
 #: pretix/base/services/cart.py:209
 msgid "One of the products you selected can only be bought part of a bundle."
-msgstr ""
+msgstr "En av de produkter du valt kan endast köpas som en del av ett paket."
 
 #: pretix/base/services/cart.py:211
 msgid "Please select a valid seat."
-msgstr ""
+msgstr "Välj en giltig plats."
 
 #: pretix/base/services/cart.py:212
 msgid "You can not select a seat for this position."
-msgstr ""
+msgstr "Du kan inte välja en plats för denna plats."
 
 #: pretix/base/services/cart.py:214
 msgid "You can not select the same seat multiple times."
@@ -7996,7 +8000,7 @@ msgstr "Försäljningen har inte påbörjats"
 
 #: pretix/base/services/checkin.py:289
 msgid "Wrong entrance gate"
-msgstr ""
+msgstr "Fel ingång/entre"
 
 #: pretix/base/services/checkin.py:313
 #, fuzzy
