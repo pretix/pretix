@@ -92,7 +92,7 @@ def _default_context(request):
         pretix_settings = request.organizer.settings
 
         # This makes sure a new version of the theme is loaded whenever settings or the source files have changed
-        theme_css_version = f'{_get_source_cache_key()}-{request.organizer.cache.get_or_set("css_version", default=lambda: time.time())}'
+        theme_css_version = f'{_get_source_cache_key()}-{request.organizer.cache.get_or_set("css_version", default=lambda: int(time.time()))}'
         ctx['css_theme'] = eventreverse(request.organizer, "presale:organizer.theme.css") + "?version=" + theme_css_version
     else:
         pretix_settings = GlobalSettingsObject().settings
