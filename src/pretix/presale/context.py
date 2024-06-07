@@ -84,8 +84,8 @@ def _default_context(request):
 
         # This makes sure a new version of the theme is loaded whenever settings or the source files have changed
         theme_css_version = (f'{_get_source_cache_key()}-'
-                             f'{request.organizer.cache.get_or_set("css_version", default=lambda: time.time())}-'
-                             f'{request.event.cache.get_or_set("css_version", default=lambda: time.time())}')
+                             f'{request.organizer.cache.get_or_set("css_version", default=lambda: int(time.time()))}-'
+                             f'{request.event.cache.get_or_set("css_version", default=lambda: int(time.time()))}')
         ctx['css_theme'] = eventreverse(request.event, "presale:event.theme.css") + "?version=" + theme_css_version
 
     elif hasattr(request, 'organizer') and request.organizer:
