@@ -103,10 +103,10 @@ def widget_css_etag(request, **kwargs):
     # This makes sure a new version of the theme is loaded whenever settings or the source files have changed
     if hasattr(request, 'event'):
         return (f'{_get_source_cache_key()}-'
-                f'{request.organizer.cache.get_or_set("css_version", default=lambda: time.time())}-'
-                f'{request.event.cache.get_or_set("css_version", default=lambda: time.time())}')
+                f'{request.organizer.cache.get_or_set("css_version", default=lambda: int(time.time()))}-'
+                f'{request.event.cache.get_or_set("css_version", default=lambda: int(time.time()))}')
     else:
-        return f'{_get_source_cache_key()}-{request.organizer.cache.get_or_set("css_version", default=lambda: time.time())}'
+        return f'{_get_source_cache_key()}-{request.organizer.cache.get_or_set("css_version", default=lambda: int(time.time()))}'
 
 
 def widget_js_etag(request, lang, **kwargs):
