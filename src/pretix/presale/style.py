@@ -198,8 +198,7 @@ def get_theme_vars_css(obj, widget=False):
             absolute=False,
         ))
         sassrules.append(
-            '$in-font-family-sans-serif: "{}", "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif '
-            '!default'.format(
+            '$in-font-family-sans-serif: "{}", "Open Sans", "OpenSans", "Helvetica Neue", Helvetica, Arial, sans-serif'.format(
                 font
             )
         )
