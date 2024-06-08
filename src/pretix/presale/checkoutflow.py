@@ -656,6 +656,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 if self.request.customer else None
             ),
         )
+        # TODO calculate discounted price
+        # TODO set item.order_max for benefit_only_apply_to_cheapest_n_matches discounted items
         return items
 
     def get_context_data(self, **kwargs):

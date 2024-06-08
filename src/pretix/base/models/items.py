@@ -168,6 +168,7 @@ class ItemCategory(LoggedModel):
             )
             print("potential_discounts_dict", potential_discounts_dict)
             potential_discounts = {info for lst in potential_discounts_dict.values() for info in lst}
+            # TODO sum up the max_counts and pass them on (also pass on the discount_rules so we can calculate actual discounted prices later)
             potential_discount_items = {item.pk for (discount_rule, max_count, i) in potential_discounts for item in discount_rule.benefit_limit_products.all()}
             return self.items.filter(pk__in=potential_discount_items)
 
