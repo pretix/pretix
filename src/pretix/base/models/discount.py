@@ -295,13 +295,13 @@ class Discount(LoggedModel):
                     benefit_idx_group):
                 # "angebrochener" discount ("for each 1 ticket you buy, get 50% on 2 t-shirts", cart content: 1 ticket but only 1 t-shirt) -> 1 shirt definitiv potential discount
                 for idx in consume_idx:
-                    collect_potential_discounts[idx] += [(self, n_groups * self.benefit_only_apply_to_cheapest_n_matches - len(benefit_idx_group), -1)]
+                    collect_potential_discounts[idx] = [(self, n_groups * self.benefit_only_apply_to_cheapest_n_matches - len(benefit_idx_group), -1)]
 
             if collect_potential_discounts is not None and possible_applications_cond * self.benefit_only_apply_to_cheapest_n_matches > len(
                     benefit_idx_group):
                 # "ungenutzter" discount ("for each 1 ticket you buy, get 50% on 2 t-shirts", cart content: 1 ticket but 0 t-shirts) -> 2 shirt maybe potential discount (if the 1 ticket is not consumed by a later discount)
                 for i, idx in enumerate(condition_idx_group[n_groups * self.condition_min_count:]):
-                    collect_potential_discounts[idx] = [
+                    collect_potential_discounts[idx] += [
                         (self, self.benefit_only_apply_to_cheapest_n_matches, i // self.condition_min_count)
                     ]
 
