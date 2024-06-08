@@ -490,14 +490,21 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         if not hasattr(request, '_checkoutflow_addons_applicable'):
             cart = get_cart(request)
             self.request = request
-            request._checkoutflow_addons_applicable = (cart.filter(item__addons__isnull=False).exists()
-               or any(self.cross_selling_applicable_rules))
+            request._checkoutflow_addons_applicable =('/addons/' in request.path_info or cart.filter(item__addons__isnull=False).exists()
+               or any(self.cross_selling_applicable_categories))
         return request._checkoutflow_addons_applicable
 
     @cached_property
-    def cross_selling_applicable_rules(self):
-        cart = self.get_cart(self.request)
-        return [c for c in self.request.event.categories.filter(cross_selling_mode__isnull=False) if c.cross_sell_visible(cart['positions'])]
+    def cross_selling_applicable_categories(self):
+        cart = get_cart(self.request)
+        return [
+            (c, products) for (c, products) in
+            (
+                (c, c.cross_sell_visible(cart, self.request.event, self.request.sales_channel.identifier))
+                for c in self.request.event.categories.filter(cross_selling_mode__isnull=False)
+            )
+            if len(products) > 0
+        ]
 
     def is_completed(self, request, warn=False):
         if getattr(self, '_completed', None) is not None:
@@ -622,23 +629,23 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
         if self.event.has_subevents:
             return [
-                (DummyCategory(rule, subevent), self._items_from_rule(rule, subevent), f'subevent_{subevent.pk}_')
-                for rule in self.cross_selling_applicable_rules
+                (DummyCategory(category, subevent), self._items_for_cross_selling(subevent, items), f'subevent_{subevent.pk}_')
+                for (category, items) in self.cross_selling_applicable_categories
                 for subevent in set(pos.subevent for pos in ctx['cart']['positions'])
             ]
         else:
             return [
-                (rule, self._items_from_rule(rule, None))
-                for rule in self.cross_selling_applicable_rules
+                (category, self._items_for_cross_selling(None, items))
+                for (category, items) in self.cross_selling_applicable_categories
             ]
 
-    def _items_from_rule(self, rule, subevent):
+    def _items_for_cross_selling(self, subevent, items):
         items, _btn = get_grouped_items(
             self.request.event,
             subevent=subevent,
             voucher=None,
             channel=self.request.sales_channel.identifier,
-            base_qs=rule.items.all(),
+            base_qs=items,
             allow_addons=True,
             allow_cross_sell=True,
             memberships=(
@@ -752,7 +759,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                         'price': price,
                     })
 
-        add_to_cart_items = _items_from_post_data(self.request)
+        add_to_cart_items = _items_from_post_data(self.request, warn_if_empty=False)
 
         return self.do(self.request.event.id, addons, add_to_cart_items, get_or_create_cart_id(self.request),
                        invoice_address=self.invoice_address.pk, locale=get_language(),

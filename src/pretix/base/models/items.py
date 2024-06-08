@@ -38,7 +38,7 @@ import os
 import sys
 import uuid
 import warnings
-from collections import Counter, OrderedDict
+from collections import Counter, OrderedDict, defaultdict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
 from typing import Optional, Tuple
@@ -142,17 +142,34 @@ class ItemCategory(LoggedModel):
         verbose_name_plural = _("Product categories")
         ordering = ('position', 'id')
 
-    def cross_sell_visible(self, cart_positions):
+    def cross_sell_visible(self, cart, event, sales_channel):
         if self.cross_selling_mode is None:
-            return False
+            return []
         if self.cross_selling_condition == 'always':
-            return True
+            return self.items.all()
         if self.cross_selling_condition == 'products':
             match = set(match.pk for match in self.cross_selling_match_products.only('pk')) # TODO prefetch this
-            return any(pos.item.pk in match for pos in cart_positions)
+            return self.items.all() if any(pos.item.pk in match for pos in cart) else []
         if self.cross_selling_condition == 'discounts':
-            # TODO not sure how to do this yet
-            return False
+            # aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarrrrgggghhhhhh
+
+            from ..services.pricing import apply_discounts
+
+            potential_discounts_dict = defaultdict(list)
+            discount_results = apply_discounts(
+                event,
+                sales_channel,
+                [
+                    (cp.item_id, cp.subevent_id, cp.line_price_gross, bool(cp.addon_to), cp.is_bundled,
+                     cp.listed_price - cp.price_after_voucher)
+                    for cp in cart
+                ],
+                collect_potential_discounts=potential_discounts_dict
+            )
+            print("potential_discounts_dict", potential_discounts_dict)
+            potential_discounts = {info for lst in potential_discounts_dict.values() for info in lst}
+            potential_discount_items = {item.pk for (discount_rule, max_count, i) in potential_discounts for item in discount_rule.benefit_limit_products.all()}
+            return self.items.filter(pk__in=potential_discount_items)
 
     def __str__(self):
         name = self.internal_name or self.name
