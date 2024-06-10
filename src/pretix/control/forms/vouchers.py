@@ -373,7 +373,7 @@ class VoucherBulkForm(VoucherForm):
                     res.append(self.Recipient(
                         name=row.get('name', ''),
                         email=row['email'].strip(),
-                        number=int(row.get('number', 1)),
+                        number=int(row.get('number', 1) or ""),
                         tag=row.get('tag', None)
                     ))
                 except ValueError as err:
