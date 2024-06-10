@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-06-05 15:00+0000\n"
-"Last-Translator: Charlie Lundberg <charlieblundberg@gmail.com>\n"
+"PO-Revision-Date: 2024-06-10 21:00+0000\n"
+"Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
 "Language: sv\n"
@@ -384,7 +384,7 @@ msgstr "Kampanjkoden \"{voucher}\" har använts under tiden."
 
 #: pretix/api/views/checkin.py:604 pretix/api/views/checkin.py:611
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "Medium ansluten till andra event"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:472
 #, python-brace-format
@@ -716,6 +716,7 @@ msgid ""
 "You are requesting scope \"{scope}\" but provider only supports these: "
 "{scopes}."
 msgstr ""
+"Du begär omfattning \"{scope}\" men leverantören stöder bara dessa: {scopes}."
 
 #: pretix/base/customersso/oidc.py:125
 #, python-brace-format
@@ -865,7 +866,7 @@ msgstr "Datum"
 #: pretix/plugins/sendmail/forms.py:346
 msgctxt "subevent"
 msgid "All dates"
-msgstr ""
+msgstr "Alla datum"
 
 #: pretix/base/exporters/customers.py:49 pretix/control/navigation.py:592
 #: pretix/control/templates/pretixcontrol/organizers/edit.html:132
