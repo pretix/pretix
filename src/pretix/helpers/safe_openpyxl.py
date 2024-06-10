@@ -72,9 +72,13 @@ def remove_invalid_excel_chars(val):
     return val
 
 
-def SafeCell(*args, value=None, **kwargs):
+def SafeCell(worksheet, row=None, column=None, value=None, **kwargs):
     value = remove_invalid_excel_chars(value)
-    c = Cell(*args, value=value, **kwargs)
+    if not column:
+        column = 1
+    if not row:
+        row = 1
+    c = Cell(worksheet, row=row, column=column, value=value, **kwargs)
     if c.data_type == TYPE_FORMULA:
         c.data_type = TYPE_STRING
     return c
