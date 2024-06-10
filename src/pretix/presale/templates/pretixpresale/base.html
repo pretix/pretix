@@ -46,6 +46,22 @@
 <body class="nojs" data-locale="{{ request.LANGUAGE_CODE }}" data-now="{% now "U.u" %}" data-datetimeformat="{{ js_datetime_format }}" data-timeformat="{{ js_time_format }}" data-dateformat="{{ js_date_format }}" data-datetimelocale="{{ js_locale }}" data-currency="{{ request.event.currency }}">
 {{ html_page_header|safe }}
 <header>
+{% if ie_deprecation_warning %}
+    <div class="old-browser-warning">
+        <span class="fa fa-internet-explorer"></span>
+        {% blocktrans trimmed %}
+            We've detected that you are using <strong>Microsoft Internet Explorer</strong>.
+        {% endblocktrans %}
+        {% blocktrans trimmed %}
+            Internet Explorer is an old browser that does not support lots of recent web-based
+            technologies and is no longer supported by this website.
+        {% endblocktrans %}
+        {% blocktrans trimmed %}
+            We kindly ask you to move to one of our supported browsers, such as Microsoft Edge,
+            Mozilla Firefox, Google Chrome, or Safari.
+        {% endblocktrans %}
+    </div>
+{% endif %}
 {% block above %}
 {% endblock %}
 </header>
