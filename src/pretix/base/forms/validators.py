@@ -32,8 +32,6 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-import re
-
 from django.core.exceptions import ValidationError
 from django.core.validators import BaseValidator
 from django.utils.translation import gettext_lazy as _
