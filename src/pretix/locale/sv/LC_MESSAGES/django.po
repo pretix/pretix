@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-05-23 14:03+0000\n"
+"PO-Revision-Date: 2024-06-05 15:00+0000\n"
 "Last-Translator: Charlie Lundberg <charlieblundberg@gmail.com>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -4346,12 +4346,16 @@ msgid ""
 "You need to either set a minimum number of matching products or a minimum "
 "value."
 msgstr ""
+"Du kan antingen ställa in ett minsta antal matchande produkter eller ett "
+"lägsta värde, inte båda."
 
 #: pretix/base/models/discount.py:206
 msgid ""
 "You cannot apply the discount only to some of the matched products if you "
 "are matching on a minimum value."
 msgstr ""
+"Du kan inte tillämpa rabatten endast på vissa av de matchade produkterna om "
+"du matchar på ett minimivärde."
 
 #: pretix/base/models/discount.py:212
 msgid ""
@@ -4608,7 +4612,7 @@ msgstr "Fullständigt namn"
 #: pretix/base/models/event.py:1690
 #: pretix/control/templates/pretixcontrol/organizers/properties.html:40
 msgid "Can be used for filtering"
-msgstr ""
+msgstr "Kan användas för filtrering"
 
 #: pretix/base/models/event.py:1691
 msgid ""
@@ -4616,6 +4620,9 @@ msgid ""
 "can also be used for hidden filter parameters in the frontend (e.g. using "
 "the widget)."
 msgstr ""
+"Det här fältet kommer att visas för att filtrera händelser eller rapporter i "
+"backend, och det kan också användas för dolda filterparametrar i frontend ("
+"t.ex. med hjälp av widgeten)."
 
 #: pretix/base/models/event.py:1701
 msgid "A property can either be required or have a default value, not both."
@@ -4630,7 +4637,7 @@ msgstr "Text (flera rader)"
 
 #: pretix/base/models/event.py:1784 pretix/base/models/organizer.py:497
 msgid "Link URL"
-msgstr ""
+msgstr "Länk-URL"
 
 #: pretix/base/models/exports.py:42 pretix/control/navigation.py:227
 #: pretix/control/navigation.py:636
@@ -4677,7 +4684,7 @@ msgstr ""
 #: pretix/plugins/sendmail/forms.py:58 pretix/plugins/sendmail/forms.py:78
 #: pretix/plugins/sendmail/models.py:233
 msgid "Message"
-msgstr ""
+msgstr "Meddelande"
 
 #: pretix/base/models/exports.py:85
 #, fuzzy
@@ -4687,7 +4694,7 @@ msgstr "events start tid"
 
 #: pretix/base/models/exports.py:86
 msgid "The actual start time might be delayed depending on system load."
-msgstr ""
+msgstr "Den faktiska starttiden kan vara försenad beroende på systembelastning."
 
 #: pretix/base/models/fields.py:33
 msgid "No value can contain the delimiter character."
@@ -4713,7 +4720,7 @@ msgstr "Speciella villkor"
 
 #: pretix/base/models/giftcards.py:219 pretix/base/models/giftcards.py:223
 msgid "Manual transaction"
-msgstr ""
+msgstr "Manuell transaktion"
 
 #: pretix/base/models/invoices.py:185
 #, python-format
@@ -4796,7 +4803,7 @@ msgstr "Kund"
 
 #: pretix/base/models/items.py:375
 msgid "Dynamic validity"
-msgstr ""
+msgstr "Dynamisk giltighet"
 
 #: pretix/base/models/items.py:381 pretix/control/forms/item.py:605
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:3
@@ -4808,7 +4815,7 @@ msgstr "Denna produkt är just nu inte tillgänglig."
 #: pretix/base/models/items.py:382
 #: pretix/control/templates/pretixcontrol/subevents/fragment_unavail_mode_indicator.html:5
 msgid "Show info text if unavailable"
-msgstr ""
+msgstr "Visa infotext om den inte är tillgänglig"
 
 #: pretix/base/models/items.py:389 pretix/base/models/items.py:703
 msgid "Don't use re-usable media, use regular one-off tickets"
@@ -4816,15 +4823,15 @@ msgstr ""
 
 #: pretix/base/models/items.py:390
 msgid "Require an existing medium to be re-used"
-msgstr ""
+msgstr "Kräv att ett befintligt medium återanvänds"
 
 #: pretix/base/models/items.py:391
 msgid "Require a previously unknown medium to be newly added"
-msgstr ""
+msgstr "Kräv att ett tidigare okänt medium läggs till nyligen"
 
 #: pretix/base/models/items.py:392
 msgid "Require either an existing or a new medium to be used"
-msgstr ""
+msgstr "Kräv att antingen ett befintligt eller ett nytt medium ska användas"
 
 #: pretix/base/models/items.py:408 pretix/base/models/items.py:1363
 #: pretix/control/templates/pretixcontrol/items/index.html:40
@@ -4878,6 +4885,9 @@ msgid ""
 "can choose a lower value, but not lower than the price this product would "
 "have without the free price option."
 msgstr ""
+"Detta pris kommer att användas som standardvärde för inmatningsfältet. "
+"Användaren kan välja ett lägre värde, men inte lägre än det pris som denna "
+"produkt skulle ha utan det fria prisalternativet."
 
 #: pretix/base/models/items.py:459
 #, fuzzy
@@ -5055,6 +5065,8 @@ msgid ""
 "This text will be shown by the check-in app if a ticket of this type is "
 "scanned."
 msgstr ""
+"Denna text kommer att visas av incheckningsappen om en biljett av denna typ "
+"skannas."
 
 #: pretix/base/models/items.py:598 pretix/base/models/items.py:1083
 msgid ""
@@ -5124,6 +5136,15 @@ msgid ""
 "change the settings here later, existing tickets will not be affected by the "
 "change but keep their current validity."
 msgstr ""
+"När du ställer in en vanlig händelse, eller en händelseserie med tidsluckor, "
+"behöver du vanligtvis INTE ändra detta värde. Standardinställningen innebär "
+"att giltighetstiden för biljetter inte bestäms av produkten, utan av "
+"evenemanget och incheckningskonfigurationen. Använd bara de andra "
+"alternativen om du behöver dem för att realisera t.ex. en bokning av en "
+"årsbiljett med ett dynamiskt startdatum. Observera att giltigheten kommer "
+"att lagras med biljetten, så om du ändrar inställningarna här senare kommer "
+"befintliga biljetter inte att påverkas av ändringen utan behålla sin "
+"nuvarande giltighet."
 
 #: pretix/base/models/items.py:660 pretix/control/forms/item.py:668
 #, fuzzy
@@ -5145,23 +5166,23 @@ msgstr "minuter"
 
 #: pretix/base/models/items.py:668
 msgid "Hours"
-msgstr ""
+msgstr "Timmar"
 
 #: pretix/base/models/items.py:672
 msgid "Days"
-msgstr ""
+msgstr "Dagar"
 
 #: pretix/base/models/items.py:676
 msgid "Months"
-msgstr ""
+msgstr "Månader"
 
 #: pretix/base/models/items.py:679
 msgid "Customers can select the validity start date"
-msgstr ""
+msgstr "Kunder kan välja startdatum för giltigheten"
 
 #: pretix/base/models/items.py:680
 msgid "If not selected, the validity always starts at the time of purchase."
-msgstr ""
+msgstr "Om ej valt börjar giltigheten alltid vid köptillfället."
 
 #: pretix/base/models/items.py:685
 #, fuzzy
@@ -5171,11 +5192,11 @@ msgstr "Maximalt antal"
 
 #: pretix/base/models/items.py:686
 msgid "The selected start date may only be this many days in the future."
-msgstr ""
+msgstr "Det valda startdatumet kan bara vara så här många dagar i framtiden."
 
 #: pretix/base/models/items.py:692
 msgid "Reusable media policy"
-msgstr ""
+msgstr "Återanvändbar mediepolicy"
 
 #: pretix/base/models/items.py:694
 msgid ""
@@ -5186,6 +5207,12 @@ msgid ""
 "feature that also requires specific configuration of ticketing and printing "
 "settings."
 msgstr ""
+"Om denna produkt ska lagras på ett återanvändbart fysiskt medium kan du "
+"bifoga en policy för fysiskt media. Detta krävs inte för vanliga biljetter, "
+"som bara använder en engångs-streckkod, utan endast för produkter som "
+"förnybara säsongsbiljetter eller laddningsbara presentkort-armband. Detta är "
+"en avancerad funktion som också kräver specifik konfiguration av biljett- "
+"och utskriftsinställningar."
 
 #: pretix/base/models/items.py:704
 msgid "Reusable media type"
@@ -6712,7 +6739,7 @@ msgstr ""
 #: pretix/base/notifications.py:288
 #, python-brace-format
 msgid "Order {order.code} has been overpaid."
-msgstr ""
+msgstr "Order {order.code} har blivit överbetald."
 
 #: pretix/base/notifications.py:294
 #, python-brace-format
@@ -6721,36 +6748,39 @@ msgstr ""
 
 #: pretix/base/notifications.py:299
 msgid "Refund requested"
-msgstr ""
+msgstr "Återbetalning begärd"
 
 #: pretix/base/notifications.py:300
 #, python-brace-format
 msgid "You have been requested to issue a refund for {order.code}."
-msgstr ""
+msgstr "Du har blivit ombedd att utfärda en återbetalning för {order.code}."
 
 #: pretix/base/payment.py:87
 msgctxt "payment"
 msgid "Apple Pay"
-msgstr ""
+msgstr "Apple Pay"
 
 #: pretix/base/payment.py:88
+#, fuzzy
 msgctxt "payment"
 msgid "Google Pay"
-msgstr ""
+msgstr "Google Pay"
 
 #: pretix/base/payment.py:257
 #: pretix/presale/templates/pretixpresale/event/order.html:115
 msgid "Pay now"
-msgstr ""
+msgstr "Betala nu"
 
 #: pretix/base/payment.py:331
 msgid "Enable payment method"
-msgstr ""
+msgstr "Aktivera betalningsmetod"
 
 #: pretix/base/payment.py:337
 msgid ""
 "Users will not be able to choose this payment provider after the given date."
 msgstr ""
+"Användare kommer inte att kunna välja denna betalningsleverantör efter det "
+"angivna datumet."
 
 #: pretix/base/payment.py:343
 #, fuzzy
@@ -6761,7 +6791,7 @@ msgstr "Den här produkten kommer inte säljas innan angivet datum."
 
 #: pretix/base/payment.py:348
 msgid "Minimum order total"
-msgstr ""
+msgstr "Minsta ordersumma"
 
 #: pretix/base/payment.py:349
 msgid ""
@@ -6769,10 +6799,14 @@ msgid ""
 "exceeds the given value. The order total for this purpose may be computed "
 "without taking the fees imposed by this payment method into account."
 msgstr ""
+"Denna betalning kommer endast att vara tillgänglig om ordersumman är lika "
+"med eller överstiger det angivna värdet. Ordersumman för detta ändamål kan "
+"komma att beräknas utan att ta hänsyn till de avgifter som tas ut av denna "
+"betalningsmetod."
 
 #: pretix/base/payment.py:359
 msgid "Maximum order total"
-msgstr ""
+msgstr "Maximal ordersumma"
 
 #: pretix/base/payment.py:360
 msgid ""
@@ -6780,22 +6814,26 @@ msgid ""
 "the given value. The order total for this purpose may be computed without "
 "taking the fees imposed by this payment method into account."
 msgstr ""
+"Denna betalning kommer endast att vara tillgänglig om ordersumman är lika "
+"med eller under det angivna värdet. Ordersumman för detta ändamål kan komma "
+"att beräknas utan att ta hänsyn till de avgifter som tas ut av denna "
+"betalningsmetod."
 
 #: pretix/base/payment.py:370 pretix/base/payment.py:379
 msgid "Additional fee"
-msgstr ""
+msgstr "Extra avgift"
 
 #: pretix/base/payment.py:371
 msgid "Absolute value"
-msgstr ""
+msgstr "Absolutvärde"
 
 #: pretix/base/payment.py:380
 msgid "Percentage of the order total."
-msgstr ""
+msgstr "Andel av ordersumman."
 
 #: pretix/base/payment.py:386
 msgid "Calculate the fee from the total value including the fee."
-msgstr ""
+msgstr "Beräkna avgiften från det totala värdet inklusive avgiften."
 
 #: pretix/base/payment.py:387
 #, python-brace-format
@@ -6805,10 +6843,14 @@ msgid ""
 "rel=\"noopener\">Click here for detailed information on what this does.</a> "
 "Don't forget to set the correct fees above!"
 msgstr ""
+"Vi rekommenderar att du aktiverar detta om du vill att dina användare ska "
+"betala betalningsavgifterna från din betalningsleverantör. <a href=\""
+"{docs_url}\" target=\"_blank\" rel=\"noopener\">Klicka här för detaljerad "
+"information om vad detta gör.</a> Glöm inte att ange rätt avgifter ovan!"
 
 #: pretix/base/payment.py:395
 msgid "Text on invoices"
-msgstr ""
+msgstr "Text på fakturor"
 
 #: pretix/base/payment.py:396
 msgid ""
@@ -6817,10 +6859,14 @@ msgid ""
 "order is paid. If the invoice is generated later, it will show a text "
 "stating that it has already been paid."
 msgstr ""
+"Kommer att skrivas ut precis under betalningssiffrorna och ovanför "
+"sluttexten på fakturor. Detta kommer endast att användas om fakturan "
+"genereras innan beställningen betalas. Om fakturan genereras senare kommer "
+"den att visa en text om att den redan är betald."
 
 #: pretix/base/payment.py:405
 msgid "Restrict to countries"
-msgstr ""
+msgstr "Begränsa till länder"
 
 #: pretix/base/payment.py:407
 msgid ""
@@ -6940,6 +6986,10 @@ msgid ""
 "It should instruct the user on how to proceed with the payment. You can use "
 "the placeholders {order}, {amount}, {currency} and {amount_with_currency}."
 msgstr ""
+"Denna text kommer att visas på orderbekräftelsesidan för väntande "
+"beställningar. Den bör instruera användaren om hur man går vidare med "
+"betalningen. Du kan använda platshållarna {order}, {amount}, {currency} och "
+"{amount_with_currency}."
 
 #: pretix/base/payment.py:1209 pretix/plugins/banktransfer/payment.py:151
 msgid ""
@@ -6949,16 +6999,16 @@ msgstr ""
 
 #: pretix/base/payment.py:1260
 msgid "Offsetting"
-msgstr ""
+msgstr "Förskjutning"
 
 #: pretix/base/payment.py:1274 pretix/control/views/orders.py:1244
 msgid "You entered an order that could not be found."
-msgstr ""
+msgstr "Du angav en beställning som inte kunde hittas."
 
 #: pretix/base/payment.py:1303
 #, python-format
 msgid "Balanced against orders: %s"
-msgstr ""
+msgstr "Balanserat mot order: %s"
 
 #: pretix/base/payment.py:1329
 #, fuzzy
@@ -6968,27 +7018,27 @@ msgstr "Betalnings metod"
 
 #: pretix/base/payment.py:1346
 msgid "In test mode, only test cards will work."
-msgstr ""
+msgstr "I testläge fungerar endast testkort."
 
 #: pretix/base/payment.py:1428 pretix/base/payment.py:1479
 #: pretix/base/payment.py:1522
 msgid "You cannot pay with gift cards when buying a gift card."
-msgstr ""
+msgstr "Du kan inte betala med presentkort vid köp av presentkort."
 
 #: pretix/base/payment.py:1437 pretix/base/payment.py:1487
 #: pretix/base/payment.py:1532 pretix/base/payment.py:1534
 msgid "This gift card does not support this currency."
-msgstr ""
+msgstr "Detta presentkort stöder inte denna valuta."
 
 #: pretix/base/payment.py:1440 pretix/base/payment.py:1490
 #: pretix/base/payment.py:1540
 msgid "This gift card can only be used in test mode."
-msgstr ""
+msgstr "Detta presentkort kan endast användas i testläge."
 
 #: pretix/base/payment.py:1443 pretix/base/payment.py:1493
 #: pretix/base/payment.py:1542
 msgid "Only test gift cards can be used in test mode."
-msgstr ""
+msgstr "Endast testpresentkort kan användas i testläge."
 
 #: pretix/base/payment.py:1446 pretix/base/payment.py:1496
 #: pretix/base/payment.py:1544
@@ -6999,31 +7049,35 @@ msgstr "Dina ändringar har sparats."
 
 #: pretix/base/payment.py:1449 pretix/base/payment.py:1499
 msgid "All credit on this gift card has been used."
-msgstr ""
+msgstr "All kredit på detta presentkort har använts."
 
 #: pretix/base/payment.py:1454
 msgid "This gift card is already used for your payment."
-msgstr ""
+msgstr "Detta presentkort används redan för din betalning."
 
 #: pretix/base/payment.py:1469 pretix/base/payment.py:1512
 msgid ""
 "You entered a voucher instead of a gift card. Vouchers can only be entered "
 "on the first page of the shop below the product selection."
 msgstr ""
+"Du angav en kupong istället för ett presentkort. Kuponger kan endast anges "
+"på första sidan i butiken under produkturvalet."
 
 #: pretix/base/payment.py:1472 pretix/base/payment.py:1515
 msgid "This gift card is not known."
-msgstr ""
+msgstr "Detta presentkort är inte känt."
 
 #: pretix/base/payment.py:1474 pretix/base/payment.py:1517
 msgid ""
 "This gift card can not be redeemed since its code is not unique. Please "
 "contact the organizer of this event."
 msgstr ""
+"Detta presentkort kan inte lösas in eftersom dess kod inte är unik. Kontakta "
+"arrangören av detta evenemang."
 
 #: pretix/base/payment.py:1536
 msgid "This gift card is not accepted by this event organizer."
-msgstr ""
+msgstr "Detta presentkort accepteras inte av denna arrangör."
 
 #: pretix/base/payment.py:1538
 #, fuzzy
@@ -7036,11 +7090,11 @@ msgstr ""
 
 #: pretix/base/pdf.py:96
 msgid "Ticket code (barcode content)"
-msgstr ""
+msgstr "Biljettkod (streckkodsinnehåll)"
 
 #: pretix/base/pdf.py:108
 msgid "Order position number"
-msgstr ""
+msgstr "Orderpositionsnummer"
 
 #: pretix/base/pdf.py:116
 #, fuzzy
@@ -7051,11 +7105,11 @@ msgstr "Beställningsrad"
 #: pretix/base/pdf.py:122 pretix/base/services/tickets.py:100
 #: pretix/control/views/event.py:795 pretix/control/views/pdf.py:94
 msgid "Sample product"
-msgstr ""
+msgstr "Exempelprodukt"
 
 #: pretix/base/pdf.py:126
 msgid "Variation name"
-msgstr ""
+msgstr "Variationsnamn"
 
 #: pretix/base/pdf.py:127
 msgid "Sample variation"
@@ -7209,16 +7263,18 @@ msgstr ""
 #: pretix/base/pdf.py:253 pretix/base/pdf.py:279 pretix/base/pdf.py:388
 #: pretix/base/pdf.py:412 pretix/base/pdf.py:436 pretix/base/pdf.py:460
 #: pretix/base/pdf.py:517 pretix/base/pdf.py:522
+#, fuzzy
 msgid "2017-05-31"
-msgstr ""
+msgstr "2017-05-31"
 
 #: pretix/base/pdf.py:260
 msgid "Event begin time"
-msgstr ""
+msgstr "Eventets starttid"
 
 #: pretix/base/pdf.py:261
+#, fuzzy
 msgid "20:00"
-msgstr ""
+msgstr "20:00"
 
 #: pretix/base/pdf.py:265
 #, fuzzy
@@ -7229,19 +7285,20 @@ msgstr "Evenemangets slutdatum"
 #: pretix/base/pdf.py:266 pretix/base/pdf.py:295
 #: pretix/base/services/checkin.py:362 pretix/control/forms/filter.py:1160
 msgid "Friday"
-msgstr ""
+msgstr "Fredag"
 
 #: pretix/base/pdf.py:270
 msgid "Event end date and time"
-msgstr ""
+msgstr "Eventets slutdatum och tid"
 
 #: pretix/base/pdf.py:271
 msgid "2017-05-31 22:00"
-msgstr ""
+msgstr "2017-05-31 22:00"
 
 #: pretix/base/pdf.py:287
+#, fuzzy
 msgid "22:00"
-msgstr ""
+msgstr "22:00"
 
 #: pretix/base/pdf.py:294
 #, fuzzy
@@ -7251,45 +7308,49 @@ msgstr "Evenemangets slutdatum"
 
 #: pretix/base/pdf.py:299
 msgid "Event admission date and time"
-msgstr ""
+msgstr "Datum och tid för tillträde till evenemanget"
 
 #: pretix/base/pdf.py:300 pretix/base/pdf.py:396 pretix/base/pdf.py:420
 #: pretix/base/pdf.py:444 pretix/base/pdf.py:468 pretix/base/pdf.py:511
+#, fuzzy
 msgid "2017-05-31 19:00"
-msgstr ""
+msgstr "2017-05-31 19:00"
 
 #: pretix/base/pdf.py:307
 msgid "Event admission time"
-msgstr ""
+msgstr "Tillträdestid för evenemang"
 
 #: pretix/base/pdf.py:308 pretix/base/pdf.py:404 pretix/base/pdf.py:428
 #: pretix/base/pdf.py:452 pretix/base/pdf.py:476
+#, fuzzy
 msgid "19:00"
-msgstr ""
+msgstr "19:00"
 
 #: pretix/base/pdf.py:315
 msgid "Event location"
-msgstr ""
+msgstr "Eventplats"
 
 #: pretix/base/pdf.py:316 pretix/base/settings.py:1118
 msgid "Random City"
-msgstr ""
+msgstr "Slumpmässig stad"
 
 #: pretix/base/pdf.py:335
 msgid "Invoice address company"
-msgstr ""
+msgstr "Fakturaadress företag"
 
 #: pretix/base/pdf.py:341
+#, fuzzy
 msgid "Sesame Street 42"
-msgstr ""
+msgstr "Sesame Street 42"
 
 #: pretix/base/pdf.py:346
+#, fuzzy
 msgid "12345"
-msgstr ""
+msgstr "12345"
 
 #: pretix/base/pdf.py:351 pretix/base/services/invoices.py:473
 msgid "Sample city"
-msgstr ""
+msgstr "Teststad"
 
 #: pretix/base/pdf.py:355
 #, fuzzy
@@ -7305,18 +7366,21 @@ msgid "Sample State"
 msgstr "Välj region"
 
 #: pretix/base/pdf.py:361
+#, fuzzy
 msgid "Atlantis"
-msgstr ""
+msgstr "Atlantis"
 
 #: pretix/base/pdf.py:365
 msgid "List of Add-Ons"
-msgstr ""
+msgstr "Lista över tillägg"
 
 #: pretix/base/pdf.py:366
 msgid ""
 "Add-on 1\n"
 "2x Add-on 2"
 msgstr ""
+"Tillägg 1\n"
+"2x tillägg 2"
 
 #: pretix/base/pdf.py:372 pretix/control/forms/filter.py:1301
 #: pretix/control/forms/filter.py:1303
@@ -7506,7 +7570,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/checkin/checkins.html:66
 #: pretix/plugins/ticketoutputpdf/ticketoutput.py:113
 msgid "Ticket"
-msgstr ""
+msgstr "Biljett"
 
 #: pretix/base/pdf.py:1156
 #, fuzzy
@@ -7528,45 +7592,47 @@ msgstr "Tillträde till evenemang"
 
 #: pretix/base/reldate.py:38
 msgid "Presale start"
-msgstr ""
+msgstr "Förköpsperiod startar"
 
 #: pretix/base/reldate.py:39
 msgid "Presale end"
-msgstr ""
+msgstr "Förköpsperiod slutar"
 
 #: pretix/base/reldate.py:183
 msgid "before"
-msgstr ""
+msgstr "före"
 
 #: pretix/base/reldate.py:184
 msgid "after"
-msgstr ""
+msgstr "efter"
 
 #: pretix/base/reldate.py:231 pretix/base/reldate.py:359
 msgid "Fixed date:"
-msgstr ""
+msgstr "Fixerat datum:"
 
 #: pretix/base/reldate.py:232 pretix/base/reldate.py:360
 msgid "Relative date:"
-msgstr ""
+msgstr "Relativt datum:"
 
 #: pretix/base/reldate.py:233
 msgid "Relative time:"
-msgstr ""
+msgstr "Relativ tid:"
 
 #: pretix/base/reldate.py:241 pretix/base/reldate.py:363
 msgid "Not set"
-msgstr ""
+msgstr "Inte inställt"
 
 #: pretix/base/secrets.py:119
 msgid "Random (default, works with all pretix apps)"
-msgstr ""
+msgstr "Slumpmässig (standard, fungerar med alla pretix-appar)"
 
 #: pretix/base/secrets.py:150
 msgid ""
 "pretix signature scheme 1 (for very large events, changes semantics of "
 "offline scanning – please refer to documentation or support for details)"
 msgstr ""
+"pretix signaturschema 1 (för mycket stora events, ändrar semantik för "
+"offline-skanning – se dokumentation eller support för detaljer)"
 
 #: pretix/base/services/cancelevent.py:229
 #: pretix/base/services/cancelevent.py:287
@@ -7687,24 +7753,28 @@ msgid ""
 "The booking period for this event has not yet started. The affected "
 "positions have been removed from your cart."
 msgstr ""
+"Bokningsperioden för detta evenemang har ännu inte börjat. De berörda "
+"produkterna har tagits bort från din kundvagn."
 
 #: pretix/base/services/cart.py:152 pretix/base/services/orders.py:182
 msgid ""
 "The booking period for one of the events in your cart has ended. The "
 "affected positions have been removed from your cart."
 msgstr ""
+"Bokningsperioden för ett av evenemangen i din varukorg har gått ut. De "
+"berörda platserna har tagits bort från din kundvagn."
 
 #: pretix/base/services/cart.py:154
 msgid "The entered price is not a number."
-msgstr ""
+msgstr "Det angivna priset är inte en siffra."
 
 #: pretix/base/services/cart.py:155
 msgid "The entered price is to high."
-msgstr ""
+msgstr "Det angivna priset är för högt."
 
 #: pretix/base/services/cart.py:156
 msgid "This voucher code is not known in our database."
-msgstr ""
+msgstr "Denna kupongkod är inte känd i vår databas."
 
 #: pretix/base/services/cart.py:158 pretix/base/services/orders.py:157
 #, python-format
@@ -7715,7 +7785,11 @@ msgid_plural ""
 "The voucher code \"%(voucher)s\" can only be used if you select at least "
 "%(number)s matching products."
 msgstr[0] ""
+"Verifikationskoden \"%(voucher)s\" kan endast användas om du väljer minst "
+"%(number)s matchande produkter."
 msgstr[1] ""
+"Verifikationskoderna \"%(voucher)s\" kan endast användas om du väljer minst "
+"%(number)s matchande produkter."
 
 #: pretix/base/services/cart.py:163
 #, python-format
@@ -7728,12 +7802,18 @@ msgid_plural ""
 "%(number)s matching products. We have therefore removed some positions from "
 "your cart that can no longer be purchased like this."
 msgstr[0] ""
+"Verifikationskoden \"%(voucher)s\" kan endast användas om du väljer minst "
+"%(number)s matchande produkter. Vi har därför tagit bort några positioner "
+"från din varukorg som inte längre går att köpa så här."
 msgstr[1] ""
+"Verifikationskoderna \"%(voucher)s\" kan endast användas om du väljer minst "
+"%(number)s matchande produkter. Vi har därför tagit bort några positioner "
+"från din varukorg som inte längre går att köpa så här."
 
 #: pretix/base/services/cart.py:169
 msgid ""
 "This voucher code has already been used the maximum number of times allowed."
-msgstr ""
+msgstr "Denna kupongkod har redan använts det maximala antalet tillåtna gånger."
 
 #: pretix/base/services/cart.py:171
 #, python-format
@@ -7743,6 +7823,10 @@ msgid ""
 "or that you tried to redeem it before but did not complete the checkout "
 "process. You can try to use it again in %d minutes."
 msgstr ""
+"Denna kupongkod är för närvarande låst eftersom den redan finns i en "
+"kundvagn. Det kan betyda att någon annan löser in den här kupongen just nu, "
+"eller att du försökte lösa in den tidigare men inte slutförde "
+"utcheckningsprocessen. Du kan försöka använda den igen om %d minuter."
 
 #: pretix/base/services/cart.py:176
 #, python-format
@@ -7798,15 +7882,15 @@ msgstr ""
 #: pretix/base/services/cart.py:194
 msgctxt "subevent"
 msgid "The selected event date is not active."
-msgstr ""
+msgstr "Det valda händelsedatumet är inte aktivt."
 
 #: pretix/base/services/cart.py:195 pretix/base/services/orders.py:189
 msgid "You can not select an add-on for the selected product."
-msgstr ""
+msgstr "Du kan inte välja ett tillägg för den valda produkten."
 
 #: pretix/base/services/cart.py:196 pretix/base/services/orders.py:190
 msgid "You can not select two variations of the same add-on product."
-msgstr ""
+msgstr "Du kan inte välja två varianter av samma tilläggsprodukt."
 
 #: pretix/base/services/cart.py:198 pretix/base/services/orders.py:192
 #, python-format
@@ -7817,7 +7901,11 @@ msgid_plural ""
 "You can select at most %(max)s add-ons from the category %(cat)s for the "
 "product %(base)s."
 msgstr[0] ""
+"Du kan välja högst %(max)s tillägg från kategorin %(cat)s för produkten "
+"%(base)s."
 msgstr[1] ""
+"Du kan välja högst %(max)s tillägg från kategorin %(cat)s för produkterna "
+"%(base)s."
 
 #: pretix/base/services/cart.py:203 pretix/base/services/orders.py:197
 #, fuzzy, python-format
@@ -7853,15 +7941,15 @@ msgstr ""
 
 #: pretix/base/services/cart.py:209
 msgid "One of the products you selected can only be bought part of a bundle."
-msgstr ""
+msgstr "En av de produkter du valt kan endast köpas som en del av ett paket."
 
 #: pretix/base/services/cart.py:211
 msgid "Please select a valid seat."
-msgstr ""
+msgstr "Välj en giltig plats."
 
 #: pretix/base/services/cart.py:212
 msgid "You can not select a seat for this position."
-msgstr ""
+msgstr "Du kan inte välja en plats för denna plats."
 
 #: pretix/base/services/cart.py:214
 msgid "You can not select the same seat multiple times."
@@ -7912,7 +8000,7 @@ msgstr "Försäljningen har inte påbörjats"
 
 #: pretix/base/services/checkin.py:289
 msgid "Wrong entrance gate"
-msgstr ""
+msgstr "Fel ingång/entre"
 
 #: pretix/base/services/checkin.py:313
 #, fuzzy

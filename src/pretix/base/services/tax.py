@@ -62,7 +62,10 @@ class VATIDTemporaryError(VATIDError):
 
 def _validate_vat_id_NO(vat_id, country_code):
     # Inspired by vat_moss library
-    vat_id = vat_moss.id.normalize(vat_id)
+    try:
+        vat_id = vat_moss.id.normalize(vat_id)
+    except ValueError:
+        raise VATIDFinalError(error_messages['invalid'])
 
     if not vat_id or len(vat_id) < 3 or not re.match('^\\d{9}MVA$', vat_id[2:]):
         raise VATIDFinalError(error_messages['invalid'])

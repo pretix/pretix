@@ -74,10 +74,10 @@ a.searchresult {
     align-items: center;
     font-size: 140%;
 
-    &.status-p {
+    &.status-p, &.status-pending_valid {
       background: $brand-success;
     }
-    &.status-c, &.status-e, &.status-n {
+    &.status-c, &.status-e, &.status-n, &.status-require_approval {
       background: $brand-danger;
     }
     &.status-redeemed {

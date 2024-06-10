@@ -21,6 +21,8 @@ export default {
   computed: {
     status() {
       if (this.position.checkins.length) return 'redeemed';
+      if (this.position.order__status === 'n' && this.position.order__valid_if_pending) return 'pending_valid';
+      if (this.position.order__status === 'n' && this.position.order__require_approval) return 'require_approval';
       return this.position.order__status
     },
     itemvar() {

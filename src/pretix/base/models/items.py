@@ -444,7 +444,8 @@ class Item(LoggedModel):
     free_price_suggestion = models.DecimalField(
         verbose_name=_("Suggested price"),
         help_text=_("This price will be used as the default value of the input field. The user can choose a lower "
-                    "value, but not lower than the price this product would have without the free price option."),
+                    "value, but not lower than the price this product would have without the free price option. This "
+                    "will be ignored if a voucher is used that lowers the price."),
         max_digits=13, decimal_places=2, null=True, blank=True,
     )
     tax_rule = models.ForeignKey(
@@ -1086,7 +1087,8 @@ class ItemVariation(models.Model):
     free_price_suggestion = models.DecimalField(
         verbose_name=_("Suggested price"),
         help_text=_("This price will be used as the default value of the input field. The user can choose a lower "
-                    "value, but not lower than the price this product would have without the free price option."),
+                    "value, but not lower than the price this product would have without the free price option. This "
+                    "will be ignored if a voucher is used that lowers the price."),
         max_digits=13, decimal_places=2, null=True, blank=True,
     )
     require_approval = models.BooleanField(

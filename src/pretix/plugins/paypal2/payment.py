@@ -30,6 +30,7 @@ from django import forms
 from django.conf import settings
 from django.contrib import messages
 from django.core.cache import cache
+from django.db import transaction
 from django.http import HttpRequest
 from django.template.loader import get_template
 from django.templatetags.static import static
@@ -54,6 +55,7 @@ from pretix.base.models import Event, Order, OrderPayment, OrderRefund, Quota
 from pretix.base.payment import BasePaymentProvider, PaymentException
 from pretix.base.services.mail import SendMailException
 from pretix.base.settings import SettingsSandbox
+from pretix.helpers import OF_SELF
 from pretix.helpers.urls import build_absolute_uri as build_global_uri
 from pretix.multidomain.urlreverse import build_absolute_uri, eventreverse
 from pretix.plugins.paypal2.client.core.environment import (
@@ -522,10 +524,13 @@ class PaypalMethod(BasePaymentProvider):
             kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
 
         # ISU
-        if request.event.settings.payment_paypal_isu_merchant_id:
-            payee = {
-                "merchant_id": request.event.settings.payment_paypal_isu_merchant_id,
-            }
+        if self.settings.connect_client_id and self.settings.connect_secret_key and not self.settings.secret:
+            if request.event.settings.payment_paypal_isu_merchant_id:
+                payee = {
+                    "merchant_id": request.event.settings.payment_paypal_isu_merchant_id,
+                }
+            else:
+                raise PaymentException('Payment method misconfigured')
         # Manual API integration
         else:
             payee = {}
@@ -585,6 +590,9 @@ class PaypalMethod(BasePaymentProvider):
                 },
             })
             response = self.client.execute(paymentreq)
+
+            if payment:
+                ReferencedPayPalObject.objects.get_or_create(order=payment.order, payment=payment, reference=response.result.id)
         except IOError as e:
             if "RESOURCE_NOT_FOUND" in str(e):
                 messages.error(request, _('Your payment has failed due to a known issue within PayPal. Please try '
@@ -617,7 +625,13 @@ class PaypalMethod(BasePaymentProvider):
         }
         return template.render(ctx)
 
+    @transaction.atomic
     def execute_payment(self, request: HttpRequest, payment: OrderPayment):
+        payment = OrderPayment.objects.select_for_update(of=OF_SELF).get(pk=payment.pk)
+        if payment.state == OrderPayment.PAYMENT_STATE_CONFIRMED:
+            logger.warning('payment is already confirmed; possible return-view/webhook race-condition')
+            return
+
         try:
             if request.session.get('payment_paypal_oid', '') == '':
                 raise PaymentException(_('We were unable to process your payment. See below for details on how to '
@@ -1089,6 +1103,8 @@ class PaypalAPM(PaypalMethod):
         payment.save(update_fields=["provider"])
 
         paypal_order = self._create_paypal_order(request, payment, None)
+        if not paypal_order:
+            raise PaymentException(_('We had trouble communicating with PayPal'))
         payment.info = json.dumps(paypal_order.dict())
         payment.save(update_fields=['info'])
 

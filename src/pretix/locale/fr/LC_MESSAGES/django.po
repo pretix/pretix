@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-05-23 14:03+0000\n"
-"Last-Translator: Raphael Michel <michel@rami.io>\n"
+"PO-Revision-Date: 2024-06-08 18:00+0000\n"
+"Last-Translator: alemairebe <adrien@alemaire.be>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -28861,8 +28861,8 @@ msgstr "Le processus de paiement a commencé dans une nouvelle fenêtre."
 #: pretix/plugins/stripe/templates/pretixplugins/stripe/redirect.html:20
 msgid "The window to enter your payment data was not opened or was closed?"
 msgstr ""
-"La fenêtre de saisie de vos données de paiement n’a pas été ouverte ou a été "
-"fermée ?"
+"La fenêtre de saisie de vos données de paiement a-t-elle été fermée ou ne "
+"s'est pas ouverte ?"
 
 #: pretix/plugins/paypal/templates/pretixplugins/paypal/redirect.html:25
 #: pretix/plugins/paypal2/templates/pretixplugins/paypal2/redirect.html:25

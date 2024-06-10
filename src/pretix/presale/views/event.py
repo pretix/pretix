@@ -348,15 +348,17 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
             )
 
             original_price = item_price_override.get(item.pk, item.default_price)
+            voucher_reduced = False
             if voucher:
                 price = voucher.calculate_price(original_price)
+                voucher_reduced = price < original_price
                 include_bundled = not voucher.all_bundles_included
             else:
                 price = original_price
                 include_bundled = True
 
             item.display_price = item.tax(price, currency=event.currency, include_bundled=include_bundled)
-            if item.free_price and item.free_price_suggestion is not None:
+            if item.free_price and item.free_price_suggestion is not None and not voucher_reduced:
                 item.suggested_price = item.tax(max(price, item.free_price_suggestion), currency=event.currency, include_bundled=include_bundled)
             else:
                 item.suggested_price = item.display_price
@@ -399,8 +401,10 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
                 )
 
                 original_price = var_price_override.get(var.pk, var.price)
+                voucher_reduced = False
                 if voucher:
                     price = voucher.calculate_price(original_price)
+                    voucher_reduced = price < original_price
                     include_bundled = not voucher.all_bundles_included
                 else:
                     price = original_price
@@ -408,10 +412,10 @@ def get_grouped_items(event, subevent=None, voucher=None, channel='web', require
 
                 var.display_price = var.tax(price, currency=event.currency, include_bundled=include_bundled)
 
-                if item.free_price and var.free_price_suggestion is not None:
+                if item.free_price and var.free_price_suggestion is not None and not voucher_reduced:
                     var.suggested_price = item.tax(max(price, var.free_price_suggestion), currency=event.currency,
                                                    include_bundled=include_bundled)
-                elif item.free_price and item.free_price_suggestion is not None:
+                elif item.free_price and item.free_price_suggestion is not None and not voucher_reduced:
                     var.suggested_price = item.tax(max(price, item.free_price_suggestion), currency=event.currency,
                                                    include_bundled=include_bundled)
                 else:

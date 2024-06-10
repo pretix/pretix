@@ -1,29 +1,30 @@
-before_script:
 tests:
+    image:
+        name: pretix/ci-image
     stage: test
+    before_script:
+        - pip install -U pip uv
+        - uv pip install --system -U wheel setuptools
     script:
-        - virtualenv env
-        - source env/bin/activate
-        - pip install -U pip wheel setuptools
-        - XDG_CACHE_HOME=/cache pip3 install -e ".[dev]"
+        - uv pip install --system -e ".[dev]"
         - cd src
         - python manage.py check
         - make all compress
-        - py.test --reruns 3 -n 3 tests
-    tags:
-        - python3
+        - PRETIX_CONFIG_FILE=tests/travis_sqlite.cfg py.test --reruns 3 -n 3 tests --maxfail=100
     except:
         - pypi
 pypi:
     stage: release
+    image:
+        name: pretix/ci-image
+    before_script:
+        - cat $PYPIRC > ~/.pypirc
+        - pip install -U pip uv
+        - uv pip install --system -U wheel setuptools twine build pretix-plugin-build check-manifest
     script:
-        - cp /keys/.pypirc ~/.pypirc
-        - virtualenv env
-        - source env/bin/activate
-        - pip install -U pip wheel setuptools check-manifest twine
-        - XDG_CACHE_HOME=/cache pip3 install -e ".[dev]"
+        - uv pip install --system -e ".[dev]"
         - python setup.py sdist
-        - pip install dist/pretix-*.tar.gz
+        - uv pip install --system dist/pretix-*.tar.gz
         - python -m pretix migrate
         - python -m pretix check
         - cd src
@@ -33,13 +34,12 @@ pypi:
         - python -m build
         - twine check dist/*
         - twine upload dist/*
-    tags:
-        - python3
     only:
         - pypi
     artifacts:
         paths:
             - src/dist/
+
 stages:
     - test
     - build

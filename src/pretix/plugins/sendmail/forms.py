@@ -225,6 +225,11 @@ class OrderMailForm(BaseMailForm):
             ]
         self.fields['recipients'].choices = recp_choices
 
+        if not self.event.settings.mail_attach_tickets:
+            self.fields['attach_tickets'].disabled = True
+            self.fields['attach_tickets'].help_text = _("Attachment of tickets is disabled in this event's email "
+                                                        "settings.")
+
         choices = [(e, l) for e, l in Order.STATUS_CHOICE if e != 'n']
         choices.insert(0, ('valid_if_pending', _('payment pending but already confirmed')))
         choices.insert(0, ('na', _('payment pending (except unapproved or already confirmed)')))
