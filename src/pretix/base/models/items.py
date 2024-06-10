@@ -34,6 +34,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import calendar
+import functools
 import os
 import sys
 import uuid
@@ -41,6 +42,7 @@ import warnings
 from collections import Counter, OrderedDict, defaultdict
 from datetime import date, datetime, time, timedelta
 from decimal import Decimal, DecimalException
+from itertools import groupby
 from typing import Optional, Tuple
 from zoneinfo import ZoneInfo
 
@@ -142,14 +144,22 @@ class ItemCategory(LoggedModel):
         verbose_name_plural = _("Product categories")
         ordering = ('position', 'id')
 
-    def cross_sell_visible(self, cart, event, sales_channel):
+    def cross_sell_visible(self, cart, sales_channel):
+        """
+        If this category should be visible in the cross-selling step for a given cart and sales_channel, this method
+        returns a dict describing the items that should be displayed.
+
+        :returns: dict {item: (max_count, discount_rule)}
+            max_count is None if the item should not be limited
+            discount_rule is None if the item will not be discounted
+        """
         if self.cross_selling_mode is None:
             return []
         if self.cross_selling_condition == 'always':
-            return self.items.all()
+            return {item: (None, None) for item in self.items.all()}
         if self.cross_selling_condition == 'products':
             match = set(match.pk for match in self.cross_selling_match_products.only('pk')) # TODO prefetch this
-            return self.items.all() if any(pos.item.pk in match for pos in cart) else []
+            return {item: (None, None) for item in self.items.all()} if any(pos.item.pk in match for pos in cart) else []
         if self.cross_selling_condition == 'discounts':
             # aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarrrrgggghhhhhh
 
@@ -157,7 +167,7 @@ class ItemCategory(LoggedModel):
 
             potential_discounts_dict = defaultdict(list)
             discount_results = apply_discounts(
-                event,
+                self.event,
                 sales_channel,
                 [
                     (cp.item_id, cp.subevent_id, cp.line_price_gross, bool(cp.addon_to), cp.is_bundled,
@@ -167,10 +177,38 @@ class ItemCategory(LoggedModel):
                 collect_potential_discounts=potential_discounts_dict
             )
             print("potential_discounts_dict", potential_discounts_dict)
-            potential_discounts = {info for lst in potential_discounts_dict.values() for info in lst}
-            # TODO sum up the max_counts and pass them on (also pass on the discount_rules so we can calculate actual discounted prices later)
-            potential_discount_items = {item.pk for (discount_rule, max_count, i) in potential_discounts for item in discount_rule.benefit_limit_products.all()}
-            return self.items.filter(pk__in=potential_discount_items)
+            potential_discount_infos = dict.fromkeys(info for lst in potential_discounts_dict.values() for info in lst)
+
+            # sum up the max_counts and pass them on (also pass on the discount_rules so we can calculate actual discounted prices later):
+            # group by benefit product
+            # - max_count for product: sum up max_counts
+            # - discount_rule for product: take first discount_rule
+
+            grouped_by_item = [
+                (item, list(infos_for_item)) for item, infos_for_item in
+                groupby(
+                    sorted(
+                        (
+                            (item, discount_rule, max_count, i)
+                            for (discount_rule, max_count, i) in potential_discount_infos.keys()
+                            for item in discount_rule.benefit_limit_products.all()
+                        ),
+                        key=lambda tup: tup[0].pk
+                    ),
+                    lambda tup: tup[0])
+            ]
+
+            def sum_or_none(iter):
+                return functools.reduce(lambda x,y: None if x is None or y is None else x + y, iter, 0)
+
+            my_item_pks = self.items.values_list('pk', flat=True)
+            print("grouped:",grouped_by_item)
+            potential_discount_items = {item: (sum_or_none(max_count for (item, discount_rule, max_count, i) in infos_for_item), next(discount_rule for (item, discount_rule, max_count, i) in infos_for_item))
+                                        for item, infos_for_item in grouped_by_item
+                                        if item.pk in my_item_pks}
+
+            #potential_discount_items = {item.pk for (discount_rule, max_count, i) in potential_discount_infos.keys() for item in discount_rule.benefit_limit_products.all()}
+            return potential_discount_items
 
     def __str__(self):
         name = self.internal_name or self.name

@@ -55,6 +55,7 @@ from django.utils.translation import (
 from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
 
+from pretix.base.decimal import round_decimal
 from pretix.base.models import Customer, Membership, Order
 from pretix.base.models.items import Question
 from pretix.base.models.orders import (
@@ -500,7 +501,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         return [
             (c, products) for (c, products) in
             (
-                (c, c.cross_sell_visible(cart, self.request.event, self.request.sales_channel.identifier))
+                (c, c.cross_sell_visible(cart, self.request.sales_channel.identifier))
                 for c in self.request.event.categories.filter(cross_selling_mode__isnull=False)
             )
             if len(products) > 0
@@ -639,13 +640,13 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 for (category, items) in self.cross_selling_applicable_categories
             ]
 
-    def _items_for_cross_selling(self, subevent, items):
+    def _items_for_cross_selling(self, subevent, cross_sell_item_info):
         items, _btn = get_grouped_items(
             self.request.event,
             subevent=subevent,
             voucher=None,
             channel=self.request.sales_channel.identifier,
-            base_qs=items,
+            base_qs=cross_sell_item_info.keys(),
             allow_addons=True,
             allow_cross_sell=True,
             memberships=(
@@ -656,8 +657,24 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 if self.request.customer else None
             ),
         )
-        # TODO calculate discounted price
-        # TODO set item.order_max for benefit_only_apply_to_cheapest_n_matches discounted items
+
+        for item in items:
+            (max_count, discount_rule) = cross_sell_item_info[item]
+
+            # set item.order_max for benefit_only_apply_to_cheapest_n_matches discounted items
+            if max_count:
+                item.order_max = min(item.order_max, max_count)
+
+            # calculate discounted price
+            if discount_rule:
+                item.original_price = item.original_price or item.display_price
+                previous_price = item.display_price
+                new_price = round_decimal(
+                    previous_price * (Decimal('100.00') - discount_rule.benefit_discount_matching_percent) / Decimal('100.00'),
+                    self.event.currency,
+                )
+                item.display_price = new_price
+
         return items
 
     def get_context_data(self, **kwargs):

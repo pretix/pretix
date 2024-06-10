@@ -186,6 +186,8 @@ def apply_discounts(event: Event, sales_channel: str,
         }, collect_potential_discounts)
         for k in result.keys():
             result[k] = (result[k], discount)
+        if collect_potential_discounts is not None:
+            print("   ->",collect_potential_discounts)
         new_prices.update(result)
 
     return [new_prices.get(idx, (p[2], None)) for idx, p in enumerate(positions)]
