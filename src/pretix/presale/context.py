@@ -182,4 +182,6 @@ def _default_context(request):
     ctx['settings'] = pretix_settings
     ctx['django_settings'] = settings
 
+    ctx['ie_deprecation_warning'] = 'MSIE' in request.headers.get('User-Agent', '') or 'Trident/' in request.headers.get('User-Agent', '')
+
     return ctx
