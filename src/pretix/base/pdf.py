@@ -1093,10 +1093,10 @@ class Renderer:
                     bg_num_pages = self.bg_pdf.get_num_pages()
                     bg_pdf_to_merge = PdfWriter()
                     bg_pdf_to_merge.append(self.bg_pdf, pages=(0, min(bg_num_pages, fg_num_pages)))
-                    while bg_num_pages < fg_num_pages:
-                        max_page_to_merge = min(bg_num_pages, fg_num_pages - bg_num_pages)
-                        bg_pdf_to_merge.append(bg_pdf_to_merge, pages=(0, max_page_to_merge))
-                        bg_num_pages = bg_pdf_to_merge.get_num_pages()
+                    if fg_num_pages > bg_num_pages:
+                        # repeat last page in bg_pdf to match fg_pdf
+                        bg_pdf_to_merge.append(bg_pdf_to_merge, pages=[bg_num_pages-1] * (fg_num_pages - bg_num_pages))
+
                     bg_pdf_to_merge.write(bg_filename)
 
                     pdftk_cmd = [
@@ -1160,10 +1160,10 @@ def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
                 # Make sure that bg.pdf matches the number of pages of fg.pdf
                 fg_num_pages = fg_pdf.get_num_pages()
                 bg_num_pages = bg_pdf.get_num_pages()
-                while bg_num_pages < fg_num_pages:
-                    max_page_to_merge = min(bg_num_pages, fg_num_pages - bg_num_pages)
-                    bg_pdf.append(bg_pdf, pages=(0, max_page_to_merge))
-                    bg_num_pages = bg_pdf.get_num_pages()
+                if fg_num_pages > bg_num_pages:
+                    # repeat last page in bg_pdf to match fg_pdf
+                    bg_pdf.append(bg_pdf, pages=[bg_num_pages-1] * (fg_num_pages - bg_num_pages))
+
                 bg_pdf.write(bg_filename)
 
                 pdftk_cmd = [
