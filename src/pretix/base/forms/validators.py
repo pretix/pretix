@@ -32,12 +32,12 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-import re
-
 from django.core.exceptions import ValidationError
 from django.core.validators import BaseValidator
 from django.utils.translation import gettext_lazy as _
 from i18nfield.strings import LazyI18nString
+
+from pretix.helpers.format import format_map
 
 
 class PlaceholderValidator(BaseValidator):
@@ -46,6 +46,12 @@ class PlaceholderValidator(BaseValidator):
     validates form field by checking for placeholders,
     which are not presented in taken list.
     """
+
+    error_message = _(
+        'There is an error with your placeholder syntax. Please check that the opening "{" and closing "}" curly '
+        'brackets on your placeholders match up. '
+        'Please note: to use literal "{" or "}", you need to double them as "{{" and "}}".'
+    )
 
     def __init__(self, limit_value):
         super().__init__(limit_value)
@@ -57,22 +63,15 @@ class PlaceholderValidator(BaseValidator):
                 self.__call__(v)
             return
 
-        if value.count('{') != value.count('}'):
+        try:
+            format_map(value, {key.strip('{}'): "" for key in self.limit_value}, raise_on_missing=True)
+        except ValueError:
+            raise ValidationError(self.error_message, code='invalid_placeholder_syntax')
+        except KeyError as e:
             raise ValidationError(
-                _('Invalid placeholder syntax: You used a different number of "{" than of "}".'),
-                code='invalid_placeholder_syntax',
-            )
-
-        data_placeholders = list(re.findall(r'({[^}]*})', value, re.X))
-        invalid_placeholders = []
-        for placeholder in data_placeholders:
-            if placeholder not in self.limit_value:
-                invalid_placeholders.append(placeholder)
-        if invalid_placeholders:
-            raise ValidationError(
-                _('Invalid placeholder(s): %(value)s'),
+                _('Invalid placeholder: {%(value)s}'),
                 code='invalid_placeholders',
-                params={'value': ", ".join(invalid_placeholders,)})
+                params={'value': e.args[0]})
 
     def clean(self, x):
         return x
