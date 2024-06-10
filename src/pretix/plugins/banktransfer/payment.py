@@ -594,8 +594,8 @@ class BankTransfer(BasePaymentProvider):
             return False
         else:
             def _compare(iban, prefix):  # Compare IBAN with pretix ignoring the check digits
-                iban = iban[:2] + "XX" + iban[4:]
-                prefix = prefix[:2] + "XX" + prefix[4:]
+                iban = iban[:2] + iban[4:]
+                prefix = prefix[:2] + prefix[4:]
                 return iban.startswith(prefix)
 
             return not any(_compare(iban, b) for b in (self.settings.refund_iban_blocklist or '').splitlines() if b)
