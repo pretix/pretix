@@ -524,10 +524,13 @@ class PaypalMethod(BasePaymentProvider):
             kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
 
         # ISU
-        if request.event.settings.payment_paypal_isu_merchant_id:
-            payee = {
-                "merchant_id": request.event.settings.payment_paypal_isu_merchant_id,
-            }
+        if self.settings.connect_client_id and self.settings.connect_secret_key and not self.settings.secret:
+            if request.event.settings.payment_paypal_isu_merchant_id:
+                payee = {
+                    "merchant_id": request.event.settings.payment_paypal_isu_merchant_id,
+                }
+            else:
+                raise PaymentException('Payment method misconfigured')
         # Manual API integration
         else:
             payee = {}
