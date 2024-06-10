@@ -149,17 +149,17 @@ class ItemCategory(LoggedModel):
         If this category should be visible in the cross-selling step for a given cart and sales_channel, this method
         returns a dict describing the items that should be displayed.
 
-        :returns: dict {item: (max_count, discount_rule)}
+        :returns: (QuerySet<Item>, dict<item_pk: (max_count, discount_rule)>)
             max_count is None if the item should not be limited
             discount_rule is None if the item will not be discounted
         """
         if self.cross_selling_mode is None:
-            return []
+            return [], {}
         if self.cross_selling_condition == 'always':
-            return {item: (None, None) for item in self.items.all()}
+            return self.items.all(), {}
         if self.cross_selling_condition == 'products':
             match = set(match.pk for match in self.cross_selling_match_products.only('pk')) # TODO prefetch this
-            return {item: (None, None) for item in self.items.all()} if any(pos.item.pk in match for pos in cart) else []
+            return (self.items.all(), {}) if any(pos.item.pk in match for pos in cart) else ([], {})
         if self.cross_selling_condition == 'discounts':
             # aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarrrrgggghhhhhh
 
@@ -203,12 +203,12 @@ class ItemCategory(LoggedModel):
 
             my_item_pks = self.items.values_list('pk', flat=True)
             print("grouped:",grouped_by_item)
-            potential_discount_items = {item: (sum_or_none(max_count for (item, discount_rule, max_count, i) in infos_for_item), next(discount_rule for (item, discount_rule, max_count, i) in infos_for_item))
+            potential_discount_items = {item.pk: (sum_or_none(max_count for (item, discount_rule, max_count, i) in infos_for_item), next(discount_rule for (item, discount_rule, max_count, i) in infos_for_item))
                                         for item, infos_for_item in grouped_by_item
                                         if item.pk in my_item_pks}
 
             #potential_discount_items = {item.pk for (discount_rule, max_count, i) in potential_discount_infos.keys() for item in discount_rule.benefit_limit_products.all()}
-            return potential_discount_items
+            return self.items.filter(pk__in=potential_discount_items), potential_discount_items
 
     def __str__(self):
         name = self.internal_name or self.name

@@ -499,12 +499,12 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     def cross_selling_applicable_categories(self):
         cart = get_cart(self.request)
         return [
-            (c, products) for (c, products) in
+            (c, products_qs, discount_info) for (c, products_qs, discount_info) in
             (
-                (c, c.cross_sell_visible(cart, self.request.sales_channel.identifier))
+                (c, *c.cross_sell_visible(cart, self.request.sales_channel.identifier))
                 for c in self.request.event.categories.filter(cross_selling_mode__isnull=False)
             )
-            if len(products) > 0
+            if len(products_qs) > 0
         ]
 
     def is_completed(self, request, warn=False):
@@ -630,23 +630,23 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
 
         if self.event.has_subevents:
             return [
-                (DummyCategory(category, subevent), self._items_for_cross_selling(subevent, items), f'subevent_{subevent.pk}_')
-                for (category, items) in self.cross_selling_applicable_categories
+                (DummyCategory(category, subevent), self._items_for_cross_selling(subevent, items_qs, discount_info), f'subevent_{subevent.pk}_')
+                for (category, items_qs, discount_info) in self.cross_selling_applicable_categories
                 for subevent in set(pos.subevent for pos in ctx['cart']['positions'])
             ]
         else:
             return [
-                (category, self._items_for_cross_selling(None, items))
-                for (category, items) in self.cross_selling_applicable_categories
+                (category, self._items_for_cross_selling(None, items_qs, discount_info))
+                for (category, items_qs, discount_info) in self.cross_selling_applicable_categories
             ]
 
-    def _items_for_cross_selling(self, subevent, cross_sell_item_info):
+    def _items_for_cross_selling(self, subevent, items_qs, discount_info):
         items, _btn = get_grouped_items(
             self.request.event,
             subevent=subevent,
             voucher=None,
             channel=self.request.sales_channel.identifier,
-            base_qs=cross_sell_item_info.keys(),
+            base_qs=items_qs,
             allow_addons=True,
             allow_cross_sell=True,
             memberships=(
@@ -659,21 +659,22 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         )
 
         for item in items:
-            (max_count, discount_rule) = cross_sell_item_info[item]
+            print("-> discount info: ",item, discount_info.get(item.pk))
+            if item.pk in discount_info:
+                (max_count, discount_rule) = discount_info[item.pk]
 
-            # set item.order_max for benefit_only_apply_to_cheapest_n_matches discounted items
-            if max_count:
-                item.order_max = min(item.order_max, max_count)
+                # set item.order_max for benefit_only_apply_to_cheapest_n_matches discounted items
+                if max_count:
+                    item.order_max = min(item.order_max, max_count)
 
-            # calculate discounted price
-            if discount_rule:
-                item.original_price = item.original_price or item.display_price
-                previous_price = item.display_price
-                new_price = round_decimal(
-                    previous_price * (Decimal('100.00') - discount_rule.benefit_discount_matching_percent) / Decimal('100.00'),
-                    self.event.currency,
-                )
-                item.display_price = new_price
+                # calculate discounted price
+                if discount_rule:
+                    item.original_price = item.original_price or item.display_price
+                    previous_price = item.display_price
+                    new_price = (
+                        previous_price * ((Decimal('100.00') - discount_rule.benefit_discount_matching_percent) / Decimal('100.00'))
+                    )
+                    item.display_price = new_price
 
         return items
 
