@@ -1100,6 +1100,8 @@ class PaypalAPM(PaypalMethod):
         payment.save(update_fields=["provider"])
 
         paypal_order = self._create_paypal_order(request, payment, None)
+        if not paypal_order:
+            raise PaymentException(_('We had trouble communicating with PayPal'))
         payment.info = json.dumps(paypal_order.dict())
         payment.save(update_fields=['info'])
 
