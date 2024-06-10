@@ -24,17 +24,7 @@ import weakref
 from celery.exceptions import Retry
 from sentry_sdk import Hub
 from sentry_sdk.integrations import django as djangosentry
-from sentry_sdk.scrubber import EventScrubber
 from sentry_sdk.utils import capture_internal_exceptions
-
-
-class PretixEventScrubber(EventScrubber):
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.denylist += [
-            "access_token",
-            "sentry_dsn",
-        ]
 
 
 def _make_event_processor(weak_request, integration):
