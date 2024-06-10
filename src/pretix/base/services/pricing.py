@@ -177,8 +177,6 @@ def apply_discounts(event: Event, sales_channel: str,
         active=True,
     ).prefetch_related('condition_limit_products', 'benefit_limit_products').order_by('position', 'pk')
     for discount in discount_qs:
-        if collect_potential_discounts is not None:
-            print("checking discount",discount)
         result = discount.apply({
             idx: (item_id, subevent_id, line_price_gross, is_addon_to, voucher_discount)
             for idx, (item_id, subevent_id, line_price_gross, is_addon_to, is_bundled, voucher_discount) in enumerate(positions)
@@ -186,8 +184,6 @@ def apply_discounts(event: Event, sales_channel: str,
         }, collect_potential_discounts)
         for k in result.keys():
             result[k] = (result[k], discount)
-        if collect_potential_discounts is not None:
-            print("   ->",collect_potential_discounts)
         new_prices.update(result)
 
     return [new_prices.get(idx, (p[2], None)) for idx, p in enumerate(positions)]

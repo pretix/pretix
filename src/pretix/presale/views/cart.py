@@ -227,6 +227,7 @@ def _item_from_post_value(request, key, value, voucher=None, voucher_ignore_if_r
         except ValueError:
             raise CartError(_('Please enter numbers only.'))
 
+
 def _items_from_post_data(request, warn_if_empty=True):
     """
     Parses the POST data and returns a list of dictionaries
@@ -247,7 +248,7 @@ def _items_from_post_data(request, warn_if_empty=True):
         for value in values:
             try:
                 item = _item_from_post_value(request, key, value, request.POST.get('_voucher_code'),
-                                                  voucher_ignore_if_redeemed=request.POST.get('_voucher_ignore_if_redeemed') == 'on')
+                                             voucher_ignore_if_redeemed=request.POST.get('_voucher_ignore_if_redeemed') == 'on')
             except CartError as e:
                 messages.error(request, str(e))
                 return

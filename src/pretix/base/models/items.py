@@ -121,6 +121,7 @@ class ItemCategory(LoggedModel):
     cross_selling_mode = models.CharField(
         choices=CROSS_SELLING_MODES,
         null=True,
+        max_length=5
     )
     CROSS_SELLING_CONDITION = (
         ('always', _('Always show in cross-selling step')),
@@ -131,6 +132,7 @@ class ItemCategory(LoggedModel):
         verbose_name=_("Cross-selling condition"),
         choices=CROSS_SELLING_CONDITION,
         null=True,
+        max_length=10,
     )
     cross_selling_match_products = models.ManyToManyField(
         'pretixbase.Item',
@@ -158,15 +160,13 @@ class ItemCategory(LoggedModel):
         if self.cross_selling_condition == 'always':
             return self.items.all(), {}
         if self.cross_selling_condition == 'products':
-            match = set(match.pk for match in self.cross_selling_match_products.only('pk')) # TODO prefetch this
+            match = set(match.pk for match in self.cross_selling_match_products.only('pk'))  # TODO prefetch this
             return (self.items.all(), {}) if any(pos.item.pk in match for pos in cart) else ([], {})
         if self.cross_selling_condition == 'discounts':
-            # aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaarrrrgggghhhhhh
+            potential_discounts_dict = defaultdict(list)
 
             from ..services.pricing import apply_discounts
-
-            potential_discounts_dict = defaultdict(list)
-            discount_results = apply_discounts(
+            apply_discounts(
                 self.event,
                 sales_channel,
                 [
@@ -176,7 +176,6 @@ class ItemCategory(LoggedModel):
                 ],
                 collect_potential_discounts=potential_discounts_dict
             )
-            print("potential_discounts_dict", potential_discounts_dict)
             potential_discount_infos = dict.fromkeys(info for lst in potential_discounts_dict.values() for info in lst)
 
             # sum up the max_counts and pass them on (also pass on the discount_rules so we can calculate actual discounted prices later):
@@ -199,15 +198,18 @@ class ItemCategory(LoggedModel):
             ]
 
             def sum_or_none(iter):
-                return functools.reduce(lambda x,y: None if x is None or y is None else x + y, iter, 0)
+                return functools.reduce(lambda x, y: None if x is None or y is None else x + y, iter, 0)
 
             my_item_pks = self.items.values_list('pk', flat=True)
-            print("grouped:",grouped_by_item)
-            potential_discount_items = {item.pk: (sum_or_none(max_count for (item, discount_rule, max_count, i) in infos_for_item), next(discount_rule for (item, discount_rule, max_count, i) in infos_for_item))
-                                        for item, infos_for_item in grouped_by_item
-                                        if item.pk in my_item_pks}
+            potential_discount_items = {
+                item.pk: (
+                    sum_or_none(max_count for (item, discount_rule, max_count, i) in infos_for_item),
+                    next(discount_rule for (item, discount_rule, max_count, i) in infos_for_item)
+                )
+                for item, infos_for_item in grouped_by_item
+                if item.pk in my_item_pks
+            }
 
-            #potential_discount_items = {item.pk for (discount_rule, max_count, i) in potential_discount_infos.keys() for item in discount_rule.benefit_limit_products.all()}
             return self.items.filter(pk__in=potential_discount_items), potential_discount_items
 
     def __str__(self):

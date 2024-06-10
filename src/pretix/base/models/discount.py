@@ -42,6 +42,7 @@ LINE_PRICE_GROSS = 2
 IS_ADDON_TO = 3
 VOUCHER_DISCOUNT = 4
 
+
 class Discount(LoggedModel):
     SUBEVENT_MODE_MIXED = 'mixed'
     SUBEVENT_MODE_SAME = 'same'
@@ -280,30 +281,39 @@ class Discount(LoggedModel):
             if not self.condition_min_count:
                 raise ValueError('Validation invariant violated.')
 
-            condition_idx_group = sorted(condition_idx_group, key=lambda idx: (positions[idx][LINE_PRICE_GROSS], -idx))  # sort by line_price
-            benefit_idx_group = sorted(benefit_idx_group, key=lambda idx: (positions[idx][LINE_PRICE_GROSS], -idx))  # sort by line_price
+            # sort by line_price
+            condition_idx_group = sorted(condition_idx_group, key=lambda idx: (positions[idx][LINE_PRICE_GROSS], -idx))
+            benefit_idx_group = sorted(benefit_idx_group, key=lambda idx: (positions[idx][LINE_PRICE_GROSS], -idx))
 
             # Prevent over-consuming of items, i.e. if our discount is "buy 2, get 1 free", we only
             # want to match multiples of 3
-            possible_applications_cond = len(condition_idx_group) // self.condition_min_count  # how many discount applications are allowed according to condition products in cart
-            possible_applications_benefit = ceil(len(benefit_idx_group) / self.benefit_only_apply_to_cheapest_n_matches)  # how many discount applications are possible according to benefitting products in cart
+
+            # how many discount applications are allowed according to condition products in cart
+            possible_applications_cond = len(condition_idx_group) // self.condition_min_count
+
+            # how many discount applications are possible according to benefitting products in cart
+            possible_applications_benefit = ceil(len(benefit_idx_group) / self.benefit_only_apply_to_cheapest_n_matches)
+
             n_groups = min(possible_applications_cond, possible_applications_benefit)
             consume_idx = condition_idx_group[:n_groups * self.condition_min_count]
             benefit_idx = benefit_idx_group[:n_groups * self.benefit_only_apply_to_cheapest_n_matches]
 
-            if collect_potential_discounts is not None and n_groups * self.benefit_only_apply_to_cheapest_n_matches > len(
-                    benefit_idx_group):
-                # "angebrochener" discount ("for each 1 ticket you buy, get 50% on 2 t-shirts", cart content: 1 ticket but only 1 t-shirt) -> 1 shirt definitiv potential discount
-                for idx in consume_idx:
-                    collect_potential_discounts[idx] = [(self, n_groups * self.benefit_only_apply_to_cheapest_n_matches - len(benefit_idx_group), -1)]
+            if collect_potential_discounts is not None:
+                if n_groups * self.benefit_only_apply_to_cheapest_n_matches > len(benefit_idx_group):
+                    # "angebrochener" discount ("for each 1 ticket you buy, get 50% on 2 t-shirts", cart content: 1 ticket
+                    # but only 1 t-shirt) -> 1 shirt definitiv potential discount
+                    for idx in consume_idx:
+                        collect_potential_discounts[idx] = [
+                            (self, n_groups * self.benefit_only_apply_to_cheapest_n_matches - len(benefit_idx_group), -1)
+                        ]
 
-            if collect_potential_discounts is not None and possible_applications_cond * self.benefit_only_apply_to_cheapest_n_matches > len(
-                    benefit_idx_group):
-                # "ungenutzter" discount ("for each 1 ticket you buy, get 50% on 2 t-shirts", cart content: 1 ticket but 0 t-shirts) -> 2 shirt maybe potential discount (if the 1 ticket is not consumed by a later discount)
-                for i, idx in enumerate(condition_idx_group[n_groups * self.condition_min_count:]):
-                    collect_potential_discounts[idx] += [
-                        (self, self.benefit_only_apply_to_cheapest_n_matches, i // self.condition_min_count)
-                    ]
+                if possible_applications_cond * self.benefit_only_apply_to_cheapest_n_matches > len(benefit_idx_group):
+                    # "ungenutzter" discount ("for each 1 ticket you buy, get 50% on 2 t-shirts", cart content: 1 ticket
+                    # but 0 t-shirts) -> 2 shirt maybe potential discount (if the 1 ticket is not consumed by a later discount)
+                    for i, idx in enumerate(condition_idx_group[n_groups * self.condition_min_count:]):
+                        collect_potential_discounts[idx] += [
+                            (self, self.benefit_only_apply_to_cheapest_n_matches, i // self.condition_min_count)
+                        ]
 
         else:
             consume_idx = condition_idx_group
@@ -324,7 +334,8 @@ class Discount(LoggedModel):
         for idx in consume_idx:
             result.setdefault(idx, positions[idx][LINE_PRICE_GROSS])
 
-    def apply(self, positions: Dict[int, Tuple[int, Optional[int], Decimal, bool, Decimal]], collect_potential_discounts=None) -> Dict[int, Decimal]:
+    def apply(self, positions: Dict[int, Tuple[int, Optional[int], Decimal, bool, Decimal]],
+              collect_potential_discounts=None) -> Dict[int, Decimal]:
         """
         Tries to apply this discount to a cart
 

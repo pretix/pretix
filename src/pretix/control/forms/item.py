@@ -81,17 +81,12 @@ class CategoryForm(I18nModelForm):
             'name',
             'internal_name',
             'description',
-            #'is_addon'
             'cross_selling_condition',
             'cross_selling_match_products',
         ]
         widgets = {
             'description': I18nMarkdownTextarea,
             'cross_selling_condition': RadioSelect,
-            #'is_addon': BooleanRadio(
-            #    'normal', _('Normal category'),
-            #    'addon', _('Products in this category are add-on products'),
-            #)
         }
         field_classes = {
             'cross_selling_match_products': SafeModelMultipleChoiceField,
@@ -99,18 +94,20 @@ class CategoryForm(I18nModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        #self.fields['is_addon'].label = _('Category type')
         self.fields['category_type'] = ChoiceField(widget=RadioSelect, choices=(
-            ('normal',  mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(_('Normal category'), _('Products in this category are regular products displayed on the front page.'))),),
-            ('addon',  mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(_('Add-on product category'), _('Products in this category are add-on products and can only be bought as add-ons.'))),),
-            ('only',  mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(_('Cross-selling category'), _('Products in this category are regular products, but are only shown in the cross-selling step, according to the configuration below.'))),),
-            ('both',  mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(_('Combined category'), _('Products in this category are regular products displayed on the front page, but are additionally shown in the cross-selling step, according to the configuration below.'))),),
+            ('normal', mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(
+                _('Normal category'), _('Products in this category are regular products displayed on the front page.'))),),
+            ('addon', mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(
+                _('Add-on product category'), _('Products in this category are add-on products and can only be bought as add-ons.'))),),
+            ('only', mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(
+                _('Cross-selling category'), _('Products in this category are regular products, but are only shown '
+                                               'in the cross-selling step, according to the configuration below.'))),),
+            ('both', mark_safe('{} &nbsp; <span class="text-muted">{}</span>'.format(
+                _('Combined category'), _('Products in this category are regular products displayed on the front page, '
+                                          'but are additionally shown in the cross-selling step, according to the configuration below.'))),),
         ))
         self.fields['category_type'].initial = 'addon' if self.instance.is_addon else (self.instance.cross_selling_mode or 'normal')
-        #self.fields['show_in_cross_selling'] = BooleanField(widget=CheckboxInput(attrs={
-        #    'data-display-dependency': '#id_category_type_0',
-        #}),
-        #    help_text='Products are additionally shown in the cross-selling step, according to the configuration below')
+
         self.fields['cross_selling_condition'].widget.attrs['data-display-dependency'] = '#id_category_type_2,#id_category_type_3'
         self.fields['cross_selling_condition'].widget.attrs['data-disable-dependent'] = 'true'
         self.fields['cross_selling_condition'].widget.choices = self.fields['cross_selling_condition'].widget.choices[1:]

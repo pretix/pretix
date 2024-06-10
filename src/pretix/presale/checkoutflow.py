@@ -55,7 +55,6 @@ from django.utils.translation import (
 from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
 
-from pretix.base.decimal import round_decimal
 from pretix.base.models import Customer, Membership, Order
 from pretix.base.models.items import Question
 from pretix.base.models.orders import (
@@ -94,7 +93,8 @@ from pretix.presale.views import (
     CartMixin, get_cart, get_cart_is_free, get_cart_total,
 )
 from pretix.presale.views.cart import (
-    cart_session, create_empty_cart_id, get_or_create_cart_id, _items_from_post_data,
+    _items_from_post_data, cart_session, create_empty_cart_id,
+    get_or_create_cart_id,
 )
 from pretix.presale.views.event import get_grouped_items
 from pretix.presale.views.questions import QuestionsViewMixin
@@ -491,8 +491,10 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         if not hasattr(request, '_checkoutflow_addons_applicable'):
             cart = get_cart(request)
             self.request = request
-            request._checkoutflow_addons_applicable =('/addons/' in request.path_info or cart.filter(item__addons__isnull=False).exists()
-               or any(self.cross_selling_applicable_categories))
+            request._checkoutflow_addons_applicable = (
+                '/addons/' in request.path_info
+                or cart.filter(item__addons__isnull=False).exists()
+                or any(self.cross_selling_applicable_categories))
         return request._checkoutflow_addons_applicable
 
     @cached_property
@@ -651,7 +653,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
             allow_cross_sell=True,
             memberships=(
                 self.request.customer.usable_memberships(
-                    for_event=self.request.event,  #p.subevent or self.request.event,
+                    for_event=subevent or self.request.event,
                     testmode=self.request.event.testmode
                 )
                 if self.request.customer else None
@@ -659,7 +661,6 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
         )
 
         for item in items:
-            print("-> discount info: ",item, discount_info.get(item.pk))
             if item.pk in discount_info:
                 (max_count, discount_rule) = discount_info[item.pk]
 
