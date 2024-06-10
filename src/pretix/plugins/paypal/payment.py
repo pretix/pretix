@@ -229,7 +229,10 @@ class Paypal(BasePaymentProvider):
             kwargs['cart_namespace'] = request.resolver_match.kwargs['cart_namespace']
 
         try:
-            if request.event.settings.payment_paypal_connect_user_id:
+            if self.settings.connect_client_id and not self.settings.secret:
+                if not request.event.settings.payment_paypal_connect_user_id:
+                    raise PaymentException('Payment method misconfigured')
+
                 try:
                     tokeninfo = Tokeninfo.create_with_refresh_token(request.event.settings.payment_paypal_connect_refresh_token)
                 except BadRequest as ex:
