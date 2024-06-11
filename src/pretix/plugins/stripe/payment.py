@@ -116,6 +116,7 @@ logger = logging.getLogger('pretix.plugins.stripe')
 # - PayNow: ✗
 # - UPI: ✗
 # - Netbanking: ✗
+# - TWINT: ✓
 #
 # Bank transfers
 # - ACH Bank Transfer: ✗
@@ -444,6 +445,14 @@ class StripeSettingsHolder(BasePaymentProvider):
                  forms.BooleanField(
                      label=_('Swish'),
                      disabled=self.event.currency != 'SEK',
+                     help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
+                                 'before they work properly.'),
+                     required=False,
+                 )),
+                ('method_twint',
+                 forms.BooleanField(
+                     label='TWINT',
+                     disabled=self.event.currency != 'CHF',
                      help_text=_('Some payment methods might need to be enabled in the settings of your Stripe account '
                                  'before they work properly.'),
                      required=False,
@@ -1937,4 +1946,26 @@ class StripeSwish(StripeRedirectMethod):
                     "reference": payment.order.full_code,
                 },
             }
+        }
+
+
+class StripeTwint(StripeRedirectMethod):
+    identifier = 'stripe_twint'
+    verbose_name = _('TWINT via Stripe')
+    public_name = 'TWINT'
+    method = 'twint'
+    confirmation_method = 'automatic'
+    explanation = _(
+        'This payment method is available to users of the Swiss app TWINT. Please have your app '
+        'ready.'
+    )
+
+    def is_allowed(self, request: HttpRequest, total: Decimal=None) -> bool:
+        return super().is_allowed(request, total) and request.event.currency == "CHF" and total < Decimal("5000.00")
+
+    def _payment_intent_kwargs(self, request, payment):
+        return {
+            "payment_method_data": {
+                "type": "twint",
+            },
         }
