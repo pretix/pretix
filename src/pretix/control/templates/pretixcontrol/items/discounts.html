@@ -56,8 +56,7 @@
                         <th>{% trans "Internal name" %}</th>
                         <th></th>
                         <th></th>
-                        <th>{% trans "Products" %}</th>
-                        <th class="action-col-2"></th>
+                        <th colspan="2">{% trans "Products" %}</th>
                         <th class="action-col-2"></th>
                     </tr>
                     </thead>
@@ -102,9 +101,10 @@
                                     {% endif %}
                                 {% endif %}
                             </td>
-                            <td>
+                            <td {% if d.benefit_same_products %}colspan="2"{% endif %}>
+                                {% if not d.benefit_same_products %}{% trans "Condition:" %}{% endif %}
                                 {% if d.condition_all_products %}
-                                    <em>{% trans "All" %}</em>
+                                    <ul><li><em>{% trans "All" %}</em></li></ul>
                                 {% else %}
                                     <ul>
                                         {% for item in d.condition_limit_products.all %}
@@ -115,7 +115,19 @@
                                     </ul>
                                 {% endif %}
                             </td>
-                            <td>
+                            {% if not d.benefit_same_products %}
+                                <td>
+                                    {% trans "Applies to:" %}
+                                    <ul>
+                                        {% for item in d.benefit_limit_products.all %}
+                                            <li>
+                                                <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=item.id %}">{{ item }}</a>
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                            {% endif %}
+                            <td class="text-right flip">
                                 <button formaction="{% url "control:event.items.discounts.up" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
                                         class="btn btn-default btn-sm sortable-up"
                                         {% if forloop.counter0 == 0 and not page_obj.has_previous %}
@@ -125,8 +137,6 @@
                                         {% if forloop.revcounter0 == 0 and not page_obj.has_next %} disabled{% endif %}>
                                     <i class="fa fa-arrow-down"></i></button>
                                 <span class="dnd-container"></span>
-                            </td>
-                            <td class="text-right flip">
                                 <a href="{% url "control:event.items.discounts.edit" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
                                    class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                 <a href="{% url "control:event.items.discounts.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ d.id }}"

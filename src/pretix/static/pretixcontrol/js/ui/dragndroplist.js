@@ -6,7 +6,8 @@ $(function () {
             handle = $('<span class="btn btn-default btn-sm dnd-sort-handle"><i class="fa fa-arrows"></i></span>');
 
         container.find(".dnd-container").append(handle);
-        if (container.find("[data-dnd-id]").length < 2) {
+        container.find(".sortable-up, .sortable-down").hide();
+        if (container.find("[data-dnd-id]").length < 2 && !container.data("dnd-group")) {
             handle.addClass("disabled");
             return;
         }
@@ -14,6 +15,7 @@ $(function () {
         Sortable.create(container.get(0), {
             filter: ".sortable-disabled",
             handle: ".dnd-sort-handle",
+            group: container.data("dnd-group"),
             onMove: function (evt) {
                 return evt.related.className.indexOf('sortable-disabled') === -1;
             },
@@ -24,24 +26,11 @@ $(function () {
             onEnd: function (evt) {
                 container.removeClass("sortable-dragarea");
                 container.parent().removeClass("sortable-sorting");
-
-                var disabledUp = container.find(".sortable-up:disabled"),
-                    firstUp = container.find(">tr[data-dnd-id] .sortable-up").first();
-                if (disabledUp.length && disabledUp.get(0) !== firstUp.get(0)) {
-                    disabledUp.prop("disabled", false);
-                    firstUp.prop("disabled", true);
-                }
-
-                var disabledDown = container.find(".sortable-down:disabled"),
-                    lastDown = container.find(">tr[data-dnd-id] .sortable-down").last();
-                if (disabledDown.length && disabledDown.get(0) !== lastDown.get(0)) {
-                    disabledDown.prop("disabled", false);
-                    lastDown.prop("disabled", true);
-                }
             },
             onSort: function (evt){
-                var container = $(evt.to),
-                    ids = container.find("[data-dnd-id]").toArray().map(function (e) { return e.dataset.dndId; });
+                if (evt.target !== evt.to) return;
+
+                var ids = container.find("[data-dnd-id]").toArray().map(function (e) { return e.dataset.dndId; });
 
                 $.ajax(
                     {

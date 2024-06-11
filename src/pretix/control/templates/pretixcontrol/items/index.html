@@ -1,7 +1,9 @@
 {% extends "pretixcontrol/items/base.html" %}
 {% load i18n %}
+{% load money %}
 {% block title %}{% trans "Products" %}{% endblock %}
 {% block inside %}
+    {% blocktrans asvar s_taxes %}taxes{% endblocktrans %}
     <h1>{% trans "Products" %}</h1>
     <p>
         {% blocktrans trimmed %}
@@ -29,7 +31,7 @@
         <form method="post">
             {% csrf_token %}
         <div class="table-responsive">
-            <table class="table table-condensed table-hover">
+            <table class="table table-condensed table-hover table-items">
                 <thead>
                 <tr>
                     <th>{% trans "Product name" %}</th>
@@ -37,16 +39,23 @@
                     <th class="iconcol"></th>
                     <th class="iconcol"></th>
                     <th class="iconcol"></th>
-                    <th>{% trans "Category" %}</th>
-                    <th class="action-col-2"><span class="sr-only">Move</span></th>
+                    <th class="text-right flip">{% trans "Default price" %}</th>
                     <th class="action-col-2"><span class="sr-only">Edit</span></th>
                 </tr>
                 </thead>
-                {% regroup items by category as cat_list %}
-                {% for c in cat_list %}
-                    <tbody data-dnd-url="{% url "control:event.items.reorder" organizer=request.event.organizer.slug event=request.event.slug %}">
-                    {% for i in c.list %}
-                        {% if forloop.counter0 == 0 and i.category %}<tr class="sortable-disabled"><th colspan="8" scope="colgroup" class="text-muted">{{ i.category }}</th></tr>{% endif %}
+
+                {% for c, items in cat_list %}
+                    {% if c %}
+                        <tbody>
+                            <tr class="sortable-disabled"><th colspan="9" scope="colgroup" class="text-muted">{{ c }}
+                                <span class="pull-right"><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}"><span class="fa fa-edit"></span></a></span>
+                            </th></tr>
+                        </tbody>
+                    {% endif %}
+                    <tbody data-dnd-url="{% url "control:event.items.reorder" organizer=request.event.organizer.slug event=request.event.slug category=c.id|default:0 %}"
+                        data-dnd-group="items">
+                    {% for i in items %}
+                        {% if forloop.counter0 == 0 and i.category %}{% endif %}
                         <tr data-dnd-id="{{ i.id }}" {% if not i.active %}class="row-muted"{% endif %}>
                             <td><strong>
                                 {% if not i.active %}<strike>{% endif %}
@@ -110,13 +119,26 @@
                                             title="{% trans "Can only be bought using a voucher" %}"></span>
                                 {% endif %}
                             </td>
-                            <td>{% if i.category %}{{ i.category.name }}{% endif %}</td>
-                            <td>
+                            <td class="text-right flip">
+                                {% if i.free_price %}
+                                    <span class="fa fa-edit fa-fw text-muted" data-toggle="tooltip" title="{% trans "Free price input" %}">
+                                    </span>
+                                {% endif %}
+                                {{ i.default_price|money:request.event.currency }}
+                                {% if i.original_price %}<strike class="text-muted">{{ i.original_price|money:request.event.currency }}</strike>{% endif %}
+                                {% if i.tax_rule and i.default_price %}
+                                    <br/>
+                                    <small class="text-muted">
+                                        {% blocktrans trimmed with rate=i.tax_rule.rate|floatformat:-2 taxname=i.tax_rule.name|default:s_taxes %}
+                                            incl. {{ rate }}% {{ taxname }}
+                                        {% endblocktrans %}
+                                    </small>
+                                {% endif %}
+                            </td>
+                            <td class="text-right flip col-actions">
                                 <button formaction="{% url "control:event.items.up" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm sortable-up"{% if forloop.counter0 == 0 %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
                                 <button formaction="{% url "control:event.items.down" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm sortable-down"{% if forloop.revcounter0 == 0 %} disabled{% endif %}><i class="fa fa-arrow-down"></i></button>
                                 <span class="dnd-container"></span>
-                            </td>
-                            <td class="text-right flip col-actions">
                                 <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                 <a href="{% url "control:event.items.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ i.id }}" class="btn btn-default btn-sm" title="{% trans "Clone" %}" data-toggle="tooltip"><i class="fa fa-copy"></i></a>
                                 <a href="{% url "control:event.items.delete" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>

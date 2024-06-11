@@ -841,6 +841,14 @@ h1 .label {
 tbody[data-dnd-url] {
     transition: opacity 1s;
 }
+.table-items tbody + tbody {
+  border-top-width: 1px;
+}
+.table-items tbody[data-dnd-url]:after {
+    content:'';
+    display: table-row;
+    height: 0.5em;
+}
 .sortable-sorting tbody:not(.sortable-dragarea) {
     opacity: .4;
 }
