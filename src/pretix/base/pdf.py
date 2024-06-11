@@ -1068,35 +1068,71 @@ class Renderer:
                 canvas.showPage()
 
     def render_background(self, buffer, title=_('Ticket')):
+        buffer.seek(0)
+        fg_pdf = PdfReader(buffer)
+
         if settings.PDFTK:
-            buffer.seek(0)
             with tempfile.TemporaryDirectory() as d:
-                with open(os.path.join(d, 'back.pdf'), 'wb') as f:
-                    f.write(self.bg_bytes)
-                with open(os.path.join(d, 'front.pdf'), 'wb') as f:
+                fg_filename = os.path.join(d, 'fg.pdf')
+                bg_filename = os.path.join(d, 'bg.pdf')
+                out_filename = os.path.join(d, 'out.pdf')
+
+                buffer.seek(0)
+                with open(fg_filename, 'wb') as f:
                     f.write(buffer.read())
-                subprocess.run([
-                    settings.PDFTK,
-                    os.path.join(d, 'front.pdf'),
-                    'multibackground',
-                    os.path.join(d, 'back.pdf'),
-                    'output',
-                    os.path.join(d, 'out.pdf'),
-                    'compress'
-                ], check=True)
-                with open(os.path.join(d, 'out.pdf'), 'rb') as f:
+                # pdf_header is a string like "%pdf-X.X"
+                if float(self.bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
+                    # To fix issues with pdftk and background-PDF using pdf-version greater
+                    # than foreground-PDF, we stamp front onto back instead.
+                    # Just changing PDF-version in fg.pdf to match the version of
+                    # bg.pdf as we do with pypdf, does not work with pdftk.
+                    #
+                    # Make sure that bg.pdf matches the number of pages of fg.pdf
+                    # note: self.bg_pdf is a PdfReader(), not a PdfWriter()
+                    fg_num_pages = fg_pdf.get_num_pages()
+                    bg_num_pages = self.bg_pdf.get_num_pages()
+                    bg_pdf_to_merge = PdfWriter()
+                    bg_pdf_to_merge.append(self.bg_pdf, pages=(0, min(bg_num_pages, fg_num_pages)))
+                    if fg_num_pages > bg_num_pages:
+                        # repeat last page in bg_pdf to match fg_pdf
+                        bg_pdf_to_merge.append(bg_pdf_to_merge, pages=[bg_num_pages - 1] * (fg_num_pages - bg_num_pages))
+
+                    bg_pdf_to_merge.write(bg_filename)
+
+                    pdftk_cmd = [
+                        settings.PDFTK,
+                        bg_filename,
+                        'multistamp',
+                        fg_filename
+                    ]
+
+                else:
+                    with open(bg_filename, 'wb') as f:
+                        f.write(self.bg_bytes)
+                    pdftk_cmd = [
+                        settings.PDFTK,
+                        fg_filename,
+                        'multibackground',
+                        bg_filename
+                    ]
+
+                pdftk_cmd.extend(('output', out_filename, 'compress'))
+                subprocess.run(pdftk_cmd, check=True)
+                with open(out_filename, 'rb') as f:
                     return BytesIO(f.read())
         else:
-            buffer.seek(0)
-            new_pdf = PdfReader(buffer)
             output = PdfWriter()
 
-            for i, page in enumerate(new_pdf.pages):
+            for i, page in enumerate(fg_pdf.pages):
                 bg_page = self.bg_pdf.pages[i]
                 if bg_page.rotation != 0:
                     bg_page.transfer_rotation_to_content()
                 page.merge_page(bg_page, over=False)
                 output.add_page(page)
+
+            # pdf_header is a string like "%pdf-X.X"
+            if float(self.bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
+                output.pdf_header = self.bg_pdf.pdf_header
 
             output.add_metadata({
                 '/Title': str(title),
@@ -1108,33 +1144,61 @@ class Renderer:
             return outbuffer
 
 
-def merge_background(fg_pdf, bg_pdf, out_file, compress):
+def merge_background(fg_pdf: PdfWriter, bg_pdf: PdfWriter, out_file, compress):
     if settings.PDFTK:
         with tempfile.TemporaryDirectory() as d:
             fg_filename = os.path.join(d, 'fg.pdf')
             bg_filename = os.path.join(d, 'bg.pdf')
-            fg_pdf.write(fg_filename)
-            bg_pdf.write(bg_filename)
-            pdftk_cmd = [
-                settings.PDFTK,
-                fg_filename,
-                'multibackground',
-                bg_filename,
-                'output',
-                '-',
-            ]
+
+            # pdf_header is a string like "%pdf-X.X"
+            if float(bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
+                # To fix issues with pdftk and background-PDF using pdf-version greater
+                # than foreground-PDF, we stamp front onto back instead.
+                # Just changing PDF-version in fg.pdf to match the version of
+                # bg.pdf as we do with pypdf, does not work with pdftk.
+
+                # Make sure that bg.pdf matches the number of pages of fg.pdf
+                fg_num_pages = fg_pdf.get_num_pages()
+                bg_num_pages = bg_pdf.get_num_pages()
+                if fg_num_pages > bg_num_pages:
+                    # repeat last page in bg_pdf to match fg_pdf
+                    bg_pdf.append(bg_pdf, pages=[bg_num_pages - 1] * (fg_num_pages - bg_num_pages))
+
+                bg_pdf.write(bg_filename)
+
+                pdftk_cmd = [
+                    settings.PDFTK,
+                    bg_filename,
+                    'multistamp',
+                    fg_filename,
+                ]
+            else:
+                pdftk_cmd = [
+                    settings.PDFTK,
+                    fg_filename,
+                    'multibackground',
+                    bg_filename
+                ]
+
+            pdftk_cmd.extend(('output', '-'))
             if compress:
                 pdftk_cmd.append('compress')
+
+            fg_pdf.write(fg_filename)
+            bg_pdf.write(bg_filename)
             subprocess.run(pdftk_cmd, check=True, stdout=out_file)
     else:
-        output = PdfWriter()
         for i, page in enumerate(fg_pdf.pages):
             bg_page = bg_pdf.pages[i]
             if bg_page.rotation != 0:
                 bg_page.transfer_rotation_to_content()
             page.merge_page(bg_page, over=False)
-            output.add_page(page)
-        output.write(out_file)
+
+        # pdf_header is a string like "%pdf-X.X"
+        if float(bg_pdf.pdf_header[5:]) > float(fg_pdf.pdf_header[5:]):
+            fg_pdf.pdf_header = bg_pdf.pdf_header
+
+        fg_pdf.write(out_file)
 
 
 @deconstructible
