@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-06-12 03:00+0000\n"
+"PO-Revision-Date: 2024-06-12 18:00+0000\n"
 "Last-Translator: simonD <simon.dalvy@gmail.com>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
@@ -2679,7 +2679,7 @@ msgstr "Tous"
 
 #: pretix/base/exporters/orderlist.py:1278 pretix/control/forms/filter.py:1343
 msgid "Live"
-msgstr "En direct"
+msgstr "En ligne"
 
 #: pretix/base/exporters/orderlist.py:1287 pretix/control/forms/filter.py:1351
 #: pretix/control/templates/pretixcontrol/pdf/index.html:252
@@ -4869,6 +4869,8 @@ msgid ""
 "This text will be shown by the check-in app if a ticket of this type is "
 "scanned."
 msgstr ""
+"Ce texte sera affiché par l'application de \"check-in\" si un billet de ce "
+"type est scanné."
 
 #: pretix/base/models/items.py:598 pretix/base/models/items.py:1083
 msgid ""
@@ -18186,7 +18188,7 @@ msgstr ""
 "Les e-mails seront envoyés via le serveur par défaut du système, mais avec "
 "votre propre adresse d’expéditeur. Cela rendra vos e-mails plus "
 "personnalisés et provenant directement de vous, mais cela pourrait également "
-"nécessiter des étapes supplémentaires pour assurer une bonne délivrabilité."
+"nécessiter des étapes supplémentaires pour assurer une bonne déliverabilité."
 
 #: pretix/control/templates/pretixcontrol/email_setup.html:84
 #: pretix/control/templates/pretixcontrol/email_setup_smtp.html:18
@@ -18719,7 +18721,7 @@ msgstr ""
 #: pretix/control/templates/pretixcontrol/event/live.html:51
 #: pretix/control/templates/pretixcontrol/event/live.html:65
 msgid "Go live"
-msgstr "En direct"
+msgstr "Publier"
 
 #: pretix/control/templates/pretixcontrol/event/live.html:59
 msgid "If you want to, you can publish your ticket shop now."
@@ -25648,7 +25650,7 @@ msgstr "en ligne"
 
 #: pretix/control/views/dashboards.py:271
 msgid "live and in test mode"
-msgstr "en direct et en mode test"
+msgstr "en production et en mode test"
 
 #: pretix/control/views/dashboards.py:272
 msgid "not yet public"
@@ -30229,7 +30231,7 @@ msgstr "Compte Stripe"
 #: pretix/plugins/stripe/payment.py:258
 msgctxt "stripe"
 msgid "Live"
-msgstr "En direct"
+msgstr "En ligne"
 
 #: pretix/plugins/stripe/payment.py:259
 msgctxt "stripe"
