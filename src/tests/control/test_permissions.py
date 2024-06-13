@@ -323,7 +323,7 @@ event_permission_urls = [
     ("can_change_items", "items/add", 200, HTTP_GET),
     ("can_change_items", "items/1/up", 404, HTTP_POST),
     ("can_change_items", "items/1/down", 404, HTTP_POST),
-    ("can_change_items", "items/reorder", 400, HTTP_POST),
+    ("can_change_items", "items/reorder/2", 400, HTTP_POST),
     ("can_change_items", "items/1/delete", 404, HTTP_GET),
     # ("can_change_items", "categories/", 200),
     # We don't have to create categories and similar objects
