@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-06-10 21:00+0000\n"
+"PO-Revision-Date: 2024-06-13 15:08+0000\n"
 "Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
@@ -376,11 +376,9 @@ msgid "This user already has permissions for this team."
 msgstr "Den här användaren har redan behörigheter för detta team."
 
 #: pretix/api/views/cart.py:209
-#, fuzzy
-#| msgid "The voucher \"{voucher}\" has been used in the meantime."
 msgid ""
 "The specified voucher has already been used the maximum number of times."
-msgstr "Kampanjkoden \"{voucher}\" har använts under tiden."
+msgstr "Kampanjkoden \"{voucher}\" har redan använts maximalt antal gånger."
 
 #: pretix/api/views/checkin.py:604 pretix/api/views/checkin.py:611
 msgid "Medium connected to other event"
@@ -443,10 +441,8 @@ msgid "Order expired"
 msgstr "Beställning har löpt ut"
 
 #: pretix/api/webhooks.py:250
-#, fuzzy
-#| msgid "Order information changed"
 msgid "Order expiry date changed"
-msgstr "Beställningsinformationen har uppdaterats"
+msgstr "Utgångsdatumet har ändrats"
 
 #: pretix/api/webhooks.py:254 pretix/base/notifications.py:269
 msgid "Order information changed"
@@ -462,10 +458,8 @@ msgid "Order changed"
 msgstr "Beställningen har uppdaterats"
 
 #: pretix/api/webhooks.py:266
-#, fuzzy
-#| msgid "Please select a payment method."
 msgid "Refund of payment created"
-msgstr "Välj ett betalsätt"
+msgstr "Återbetalning av köp skapad"
 
 #: pretix/api/webhooks.py:270 pretix/base/notifications.py:293
 msgid "External refund of payment"
@@ -476,29 +470,20 @@ msgid "Refund of payment requested by customer"
 msgstr "Återbetalning begärd av kunden"
 
 #: pretix/api/webhooks.py:278
-#, fuzzy
-#| msgid "Please select a payment method."
 msgid "Refund of payment completed"
-msgstr "Välj ett betalsätt"
+msgstr "Återbetalning av köp genomförd"
 
 #: pretix/api/webhooks.py:282
-#, fuzzy
-#| msgid "External refund of payment"
 msgid "Refund of payment canceled"
-msgstr "Extern återbetalning"
+msgstr "Återbetalning  stoppad"
 
 #: pretix/api/webhooks.py:286
-#, fuzzy
-#| msgid "External refund of payment"
 msgid "Refund of payment failed"
-msgstr "Extern återbetalning"
+msgstr "Återbetalning misslyckades"
 
 #: pretix/api/webhooks.py:290
-#, fuzzy
-#| msgctxt "checkoutflow"
-#| msgid "Order confirmed"
 msgid "Payment confirmed"
-msgstr "Beställningen är bekräftad"
+msgstr "Betalningen bekräftad"
 
 #: pretix/api/webhooks.py:294
 msgid "Order approved"
@@ -558,28 +543,20 @@ msgid "Shop taken live"
 msgstr "Shoppen är live"
 
 #: pretix/api/webhooks.py:343
-#, fuzzy
-#| msgid "Shop is live"
 msgid "Shop taken offline"
-msgstr "Shoppen är live"
+msgstr "Shoppen är inte live"
 
 #: pretix/api/webhooks.py:347
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "Test-Mode of shop has been activated"
-msgstr "Denna beställning har avbrutits"
+msgstr "Test-läge är aktiverad"
 
 #: pretix/api/webhooks.py:351
-#, fuzzy
-#| msgid "The order has been canceled."
 msgid "Test-Mode of shop has been deactivated"
-msgstr "Denna beställning har avbrutits"
+msgstr "Test-läget  har avaktiverats"
 
 #: pretix/api/webhooks.py:355
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry added"
-msgstr "Post på väntelistan"
+msgstr "Post i väntelistan har lagts till"
 
 #: pretix/api/webhooks.py:359
 #, fuzzy
