@@ -6,7 +6,7 @@ $(function () {
             handle = $('<span class="btn btn-default btn-sm dnd-sort-handle"><i class="fa fa-arrows"></i></span>');
 
         container.find(".dnd-container").append(handle);
-        container.find(".sortable-up, .sortable-down").hide();
+        container.find(".sortable-up, .sortable-down").addClass("sr-only");
         if (container.find("[data-dnd-id]").length < 2 && !container.data("dnd-group")) {
             handle.addClass("disabled");
             return;
