@@ -56,6 +56,7 @@ urlpatterns = [
     re_path(r'^global/settings/$', global_settings.GlobalSettingsView.as_view(), name='global.settings'),
     re_path(r'^global/update/$', global_settings.UpdateCheckView.as_view(), name='global.update'),
     re_path(r'^global/license/$', global_settings.LicenseCheckView.as_view(), name='global.license'),
+    re_path(r'^global/sysreport/$', global_settings.SysReportView.as_view(), name='global.sysreport'),
     re_path(r'^global/message/$', global_settings.MessageView.as_view(), name='global.message'),
     re_path(r'^logdetail/$', global_settings.LogDetailView.as_view(), name='global.logdetail'),
     re_path(r'^logdetail/payment/$', global_settings.PaymentDetailView.as_view(), name='global.paymentdetail'),

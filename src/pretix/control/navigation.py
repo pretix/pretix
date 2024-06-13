@@ -444,6 +444,11 @@ def get_global_navigation(request):
                     'url': reverse('control:global.license'),
                     'active': (url.url_name == 'global.license'),
                 },
+                {
+                    'label': _('System report'),
+                    'url': reverse('control:global.sysreport'),
+                    'active': (url.url_name == 'global.sysreport'),
+                },
             ]
         })
 

@@ -1,0 +1,35 @@
+{% extends "pretixcontrol/global_settings_base.html" %}
+{% load i18n %}
+{% load bootstrap3 %}
+
+{% block inner %}
+    <p>
+        {% trans "If you have a pretix Enterprise license, this report must be submitted to pretix support when your license renews. It may also be requested by pretix support to aid debugging of problems." %}
+        {% trans "It serves two purposes: Collecting useful information that might help with debugging problems in your pretix installation, and verifying that your usage of pretix is in compliance with the Enterprise license you purchased." %}
+    </p>
+    <form method="post">
+        {% csrf_token %}
+        <p>
+            <label>
+                {% trans "First month of license term:" %}
+                <select name="month" class="form-control">
+                    <option value="1">{% trans "January" %}</option>
+                    <option value="2">{% trans "February" %}</option>
+                    <option value="3">{% trans "March" %}</option>
+                    <option value="4">{% trans "April" %}</option>
+                    <option value="5">{% trans "May" %}</option>
+                    <option value="6">{% trans "June" %}</option>
+                    <option value="7">{% trans "July" %}</option>
+                    <option value="8">{% trans "August" %}</option>
+                    <option value="9">{% trans "September" %}</option>
+                    <option value="10">{% trans "October" %}</option>
+                    <option value="11">{% trans "November" %}</option>
+                    <option value="11">{% trans "December" %}</option>
+                </select>
+            </label>
+        </p>
+        <button type="submit" class="btn btn-primary btn-lg">
+            {% trans "Generate report" %}
+        </button>
+    </form>
+{% endblock %}
