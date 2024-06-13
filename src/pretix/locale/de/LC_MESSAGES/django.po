@@ -5,8 +5,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-06-06 19:00+0000\n"
-"Last-Translator: Mira <weller@rami.io>\n"
+"PO-Revision-Date: 2024-06-13 15:08+0000\n"
+"Last-Translator: Raphael Michel <michel@rami.io>\n"
 "Language-Team: German <https://translate.pretix.eu/projects/pretix/pretix/de/"
 ">\n"
 "Language: de\n"
@@ -6357,7 +6357,7 @@ msgid ""
 "The seat \"{id}\" is currently unavailable (blocked, already sold or a "
 "different voucher)."
 msgstr ""
-"Der Sitzplatz \"{id}\" ist derzeit nicht verfügbar (blockiert, bereits "
+"Der Sitzplatz \"{id}\" ist aktuell nicht verfügbar (blockiert, bereits "
 "verkauft, oder einem anderen Gutschein zugewiesen)."
 
 #: pretix/base/models/waitinglist.py:64
@@ -6390,7 +6390,7 @@ msgstr "Das ausgewählte Produkt ist im Moment nicht verfügbar."
 
 #: pretix/base/models/waitinglist.py:186
 msgid "No seat with this product is currently available."
-msgstr "Es ist derzeit kein Sitzplatz mit diesem Produkt verfügbar."
+msgstr "Es ist aktuell kein Sitzplatz mit diesem Produkt verfügbar."
 
 #: pretix/base/models/waitinglist.py:189
 msgid "A voucher has already been sent to this person."
@@ -33115,7 +33115,7 @@ msgid ""
 "There are currently no products available that can be bought with this "
 "voucher."
 msgstr ""
-"Es sind derzeit keine Produkte verfügbar, die mit diesem Gutschein gebucht "
+"Es sind aktuell keine Produkte verfügbar, die mit diesem Gutschein gebucht "
 "werden können."
 
 #: pretix/presale/templates/pretixpresale/event/voucher.html:52
