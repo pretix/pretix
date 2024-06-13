@@ -54,6 +54,7 @@ from django.utils.translation import (
 )
 from django.views.generic.base import TemplateResponseMixin
 from django_scopes import scopes_disabled
+from math import inf
 
 from pretix.base.models import Customer, Membership, Order
 from pretix.base.models.items import Question
@@ -665,7 +666,7 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 (max_count, discount_rule) = discount_info[item.pk]
 
                 # set item.order_max for benefit_only_apply_to_cheapest_n_matches discounted items
-                if max_count:
+                if max_count and max_count != inf:
                     item.order_max = min(item.order_max, max_count)
 
                 # calculate discounted price

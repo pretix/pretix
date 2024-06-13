@@ -64,6 +64,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 from django_countries.fields import Country
 from django_scopes import ScopedManager
 from i18nfield.fields import I18nCharField, I18nTextField
+from math import inf
 
 from pretix.base.models.base import LoggedModel
 from pretix.base.models.fields import MultiStringField
@@ -160,6 +161,7 @@ class ItemCategory(LoggedModel):
         if self.cross_selling_condition == 'always':
             return self.items.all(), {}
         if self.cross_selling_condition == 'products':
+            # TODO set max_count for products with max_per_order
             match = set(match.pk for match in self.cross_selling_match_products.only('pk'))  # TODO prefetch this
             return (self.items.all(), {}) if any(pos.item.pk in match for pos in cart) else ([], {})
         if self.cross_selling_condition == 'discounts':
@@ -183,8 +185,19 @@ class ItemCategory(LoggedModel):
             # - max_count for product: sum up max_counts
             # - discount_rule for product: take first discount_rule
 
+            def discount_info(item, infos_for_item):
+                infos_for_item = list(infos_for_item)
+                return (
+                    item,
+                    min(
+                        sum(max_count for (item, discount_rule, max_count, i) in infos_for_item),
+                        (item.max_per_order - sum(1 for pos in cart if pos.item_id == item.pk)) if item.max_per_order else inf
+                    ),
+                    next(discount_rule for (item, discount_rule, max_count, i) in infos_for_item)
+                )
+
             grouped_by_item = [
-                (item, list(infos_for_item)) for item, infos_for_item in
+                discount_info(item, infos_for_item) for item, infos_for_item in
                 groupby(
                     sorted(
                         (
@@ -197,17 +210,11 @@ class ItemCategory(LoggedModel):
                     lambda tup: tup[0])
             ]
 
-            def sum_or_none(iter):
-                return functools.reduce(lambda x, y: None if x is None or y is None else x + y, iter, 0)
-
             my_item_pks = self.items.values_list('pk', flat=True)
             potential_discount_items = {
-                item.pk: (
-                    sum_or_none(max_count for (item, discount_rule, max_count, i) in infos_for_item),
-                    next(discount_rule for (item, discount_rule, max_count, i) in infos_for_item)
-                )
-                for item, infos_for_item in grouped_by_item
-                if item.pk in my_item_pks
+                item.pk: (max_count, discount_rule)
+                for item, max_count, discount_rule in grouped_by_item
+                if max_count > 0 and item.pk in my_item_pks and item.is_available()
             }
 
             return self.items.filter(pk__in=potential_discount_items), potential_discount_items

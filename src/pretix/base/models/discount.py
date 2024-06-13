@@ -23,7 +23,7 @@
 from collections import defaultdict
 from decimal import Decimal
 from itertools import groupby
-from math import ceil
+from math import ceil, inf
 from typing import Dict, Optional, Tuple
 
 from django.core.exceptions import ValidationError
@@ -268,7 +268,7 @@ class Discount(LoggedModel):
 
         if collect_potential_discounts is not None:
             for idx in condition_idx_group:
-                collect_potential_discounts[idx] = [(self, None, -1)]
+                collect_potential_discounts[idx] = [(self, inf, -1)]
 
     def _apply_min_count(self, positions, condition_idx_group, benefit_idx_group, result, collect_potential_discounts):
         if len(condition_idx_group) < self.condition_min_count:
@@ -321,7 +321,7 @@ class Discount(LoggedModel):
 
             if collect_potential_discounts is not None:
                 for idx in consume_idx:
-                    collect_potential_discounts[idx] = [(self, None, -1)]
+                    collect_potential_discounts[idx] = [(self, inf, -1)]
 
         for idx in benefit_idx:
             previous_price = positions[idx][LINE_PRICE_GROSS]
