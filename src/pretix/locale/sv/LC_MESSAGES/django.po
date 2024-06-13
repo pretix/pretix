@@ -9,7 +9,7 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
 "PO-Revision-Date: 2024-06-13 15:08+0000\n"
-"Last-Translator: Tinna Sandström <tinna@coeo.events>\n"
+"Last-Translator: Erik Löfman <erik@disruptiveventures.se>\n"
 "Language-Team: Swedish <https://translate.pretix.eu/projects/pretix/pretix/"
 "sv/>\n"
 "Language: sv\n"
@@ -559,40 +559,32 @@ msgid "Waiting list entry added"
 msgstr "Post i väntelistan har lagts till"
 
 #: pretix/api/webhooks.py:359
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry changed"
-msgstr "Post på väntelistan"
+msgstr "Väntelistan är ändrad"
 
 #: pretix/api/webhooks.py:363
-#, fuzzy
-#| msgid "Waiting list entry"
 msgid "Waiting list entry deleted"
-msgstr "Post på väntelistan"
+msgstr "Väntelistan är raderad"
 
 #: pretix/api/webhooks.py:367
 #, fuzzy
 #| msgid "Waiting list entries"
 msgid "Waiting list entry received voucher"
-msgstr "Poster på väntelistan"
+msgstr "Väntelistan har erhållit en kupong"
 
 #: pretix/api/webhooks.py:371
-#, fuzzy
-#| msgid "Confirmations"
 msgid "Customer account created"
-msgstr "Bekräftelser"
+msgstr "Kundkonto skapat"
 
 #: pretix/api/webhooks.py:375
-#, fuzzy
-#| msgid "Account information changed"
 msgid "Customer account changed"
-msgstr "Kontoinformationen har ändrats"
+msgstr "Kundkonto ändrat"
 
 #: pretix/api/webhooks.py:379
 #, fuzzy
 #| msgid "Your changes have been saved."
 msgid "Customer account anonymized"
-msgstr "Dina ändringar har sparats."
+msgstr "Kundkonto anonymiserat"
 
 #: pretix/base/addressvalidation.py:100 pretix/base/addressvalidation.py:103
 #: pretix/base/addressvalidation.py:108 pretix/base/forms/questions.py:953
@@ -682,10 +674,9 @@ msgid "Incompatible SSO provider: \"{error}\"."
 msgstr "Inkompatibel SSO-leverantör: \"{error}\"."
 
 #: pretix/base/customersso/oidc.py:109
-#, fuzzy, python-brace-format
-#| msgid "Your event registration: {code}"
+#, python-brace-format
 msgid "You are not requesting \"{scope}\"."
-msgstr "Din registrering: {code}"
+msgstr "Du begär inte \"{scope}\"."
 
 #: pretix/base/customersso/oidc.py:115
 #, python-brace-format
