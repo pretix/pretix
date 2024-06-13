@@ -6,9 +6,12 @@
 {% load money %}
 {% load thumb %}
 {% block inner %}
-    <p>
-        {% trans "For some of the products in your cart, you can choose additional options before you continue." %}
-    </p>
+
+    {% if forms %}
+        <p>
+            {% trans "For some of the products in your cart, you can choose additional options before you continue." %}
+        </p>
+    {% endif %}
     <form class="form-horizontal" method="post" data-asynctask
             data-asynctask-headline="{% trans "We're now trying to book these add-ons for you!" %}">
         {% csrf_token %}
