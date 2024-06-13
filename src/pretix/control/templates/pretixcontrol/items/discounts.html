@@ -129,14 +129,14 @@
                             {% endif %}
                             <td class="text-right flip">
                                 <button formaction="{% url "control:event.items.discounts.up" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
-                                        class="btn btn-default btn-sm sortable-up"
+                                        class="btn btn-default btn-sm sortable-up" title="{% trans "Move up" %}"
                                         {% if forloop.counter0 == 0 and not page_obj.has_previous %}
                                         disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
                                 <button formaction="{% url "control:event.items.discounts.down" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
-                                        class="btn btn-default btn-sm sortable-down"
+                                        class="btn btn-default btn-sm sortable-down" title="{% trans "Move down" %}"
                                         {% if forloop.revcounter0 == 0 and not page_obj.has_next %} disabled{% endif %}>
                                     <i class="fa fa-arrow-down"></i></button>
-                                <span class="dnd-container"></span>
+                                <span class="dnd-container" title="{% trans "Click and drag this button to reorder. Double click to show buttons for reordering." %}"></span>
                                 <a href="{% url "control:event.items.discounts.edit" organizer=request.event.organizer.slug event=request.event.slug discount=d.id %}"
                                    class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
                                 <a href="{% url "control:event.items.discounts.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ d.id }}"

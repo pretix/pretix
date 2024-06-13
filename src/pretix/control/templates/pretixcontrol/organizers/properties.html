@@ -51,9 +51,9 @@
                         {% endif %}
                     </td>
                     <td>
-                        <button formaction="{% url "control:organizer.property.up" organizer=request.organizer.slug property=p.id %}" class="btn btn-default btn-sm sortable-up"{% if forloop.counter0 == 0 and not page_obj.has_previous %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
-                        <button formaction="{% url "control:organizer.property.down" organizer=request.organizer.slug property=p.id %}" class="btn btn-default btn-sm sortable-down"{% if forloop.revcounter0 == 0 and not page_obj.has_next %} disabled{% endif %}><i class="fa fa-arrow-down"></i></button>
-                        <span class="dnd-container"></span>
+                        <button title="{% trans "Move up" %}" formaction="{% url "control:organizer.property.up" organizer=request.organizer.slug property=p.id %}" class="btn btn-default btn-sm sortable-up"{% if forloop.counter0 == 0 and not page_obj.has_previous %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
+                        <button title="{% trans "Move down" %}" formaction="{% url "control:organizer.property.down" organizer=request.organizer.slug property=p.id %}" class="btn btn-default btn-sm sortable-down"{% if forloop.revcounter0 == 0 and not page_obj.has_next %} disabled{% endif %}><i class="fa fa-arrow-down"></i></button>
+                        <span class="dnd-container" title="{% trans "Click and drag this button to reorder. Double click to show buttons for reordering." %}"></span>
                     </td>
                     <td class="text-right flip">
                         <a href="{% url "control:organizer.property.edit" organizer=request.organizer.slug property=p.id %}"
