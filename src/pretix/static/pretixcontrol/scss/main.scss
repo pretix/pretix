@@ -852,6 +852,9 @@ tbody[data-dnd-url] {
 .sortable-sorting tbody:not(.sortable-dragarea) {
     opacity: .4;
 }
+th span.not-bold {
+    font-weight: normal;
+}
 tbody th {
     background: $table-bg-hover;
 }

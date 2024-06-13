@@ -47,8 +47,9 @@
                 {% for c, items in cat_list %}
                     {% if c %}
                         <tbody>
-                            <tr class="sortable-disabled"><th colspan="9" scope="colgroup" class="text-muted">{{ c }}
-                                <span class="pull-right"><a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}"><span class="fa fa-edit"></span></a></span>
+                            <tr class="sortable-disabled"><th colspan="9" scope="colgroup" class="text-muted">
+                                {{ c.name }}{% if c.category_type != "normal" %} <span class="not-bold">({{ c.get_category_type_display }})</span>{% endif %}
+                                <a href="{% url "control:event.items.categories.edit" organizer=request.event.organizer.slug event=request.event.slug category=c.id %}" title="{% trans "Edit" %}"><span class="fa fa-edit fa-fw"></span></a>
                             </th></tr>
                         </tbody>
                     {% endif %}
@@ -101,15 +102,15 @@
                             </td>
                             <td>
                                 {% if i.var_count %}
-                                    <span class="fa fa-th-large fa-fw text-muted" data-toggle="tooltip" title="{% trans "Product with variations" %}"></span>
+                                    <span class="fa fa-bars fa-fw text-muted" data-toggle="tooltip" title="{% trans "Product with variations" %}"></span>
                                 {% endif %}
                             </td>
                             <td>
                                 {% if i.category.is_addon %}
-                                    <span class="fa fa-puzzle-piece fa-fw text-muted" data-toggle="tooltip"
+                                    <span class="fa fa-plus-square fa-fw text-muted" data-toggle="tooltip"
                                             title="{% trans "Only available as an add-on product" %}"></span>
                                 {% elif i.require_bundling %}
-                                    <span class="fa fa-puzzle-piece fa-fw text-muted" data-toggle="tooltip"
+                                    <span class="fa fa-plus-square fa-fw text-muted" data-toggle="tooltip"
                                           title="{% trans "Only available as part of a bundle" %}"></span>
                                 {% elif i.hide_without_voucher %}
                                     <span class="fa fa-tags fa-fw text-muted" data-toggle="tooltip"
@@ -139,9 +140,9 @@
                                 <button title="{% trans "Move up" %}" formaction="{% url "control:event.items.up" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm sortable-up"{% if forloop.counter0 == 0 %} disabled{% endif %}><i class="fa fa-arrow-up"></i></button>
                                 <button title="{% trans "Move down" %}" formaction="{% url "control:event.items.down" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm sortable-down"{% if forloop.revcounter0 == 0 %} disabled{% endif %}><i class="fa fa-arrow-down"></i></button>
                                 <span class="dnd-container" title="{% trans "Click and drag this button to reorder. Double click to show buttons for reordering." %}"></span>
-                                <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{% url "control:event.item" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-default btn-sm" title="{% trans "Edit" %}"><i class="fa fa-edit"></i></a>
                                 <a href="{% url "control:event.items.add" organizer=request.event.organizer.slug event=request.event.slug %}?copy_from={{ i.id }}" class="btn btn-default btn-sm" title="{% trans "Clone" %}" data-toggle="tooltip"><i class="fa fa-copy"></i></a>
-                                <a href="{% url "control:event.items.delete" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{% url "control:event.items.delete" organizer=request.event.organizer.slug event=request.event.slug item=i.id %}" class="btn btn-danger btn-sm" title="{% trans "Delete" %}"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                     {% endfor %}
