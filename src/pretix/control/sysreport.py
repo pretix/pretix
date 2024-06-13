@@ -177,7 +177,11 @@ class SysReport(ReportlabExportMixin):
             )
         )
 
-        year_first = orders_q.aggregate(m=Min("datetime__year"))["m"] or now().year
+        year_first = orders_q.aggregate(m=Min("datetime__year"))["m"]
+        if not year_first:
+            year_first = now().year
+        elif datetime.now().month - 1 <= self.start_month:
+            year_first -= 1
         year_last = now().year
         tdata = [
             [
