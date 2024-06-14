@@ -488,27 +488,33 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     label = pgettext_lazy('checkoutflow', 'Add-on products')
     icon = 'puzzle-piece'
 
+    def _check_is_applicable(self, request):
+        self.request = request
+
+        # check whether addons are applicable
+        if get_cart(request).filter(item__addons__isnull=False).exists():
+            return True
+
+        # don't re-check whether cross-selling is applicable if we're already past the AddOnsStep
+        cur_step_identifier = request.resolver_match.kwargs.get('step')
+        is_past_this_step = any(step.identifier == cur_step_identifier for step in request._checkout_flow[request._checkout_flow.index(self) + 1:])
+        if is_past_this_step:
+            applicable = self.cart_session.get('_checkoutflow_addons_applicable', None)
+            if applicable is not None:
+                return applicable
+
+        # check whether cross-selling is applicable
+        applicable = self.cross_selling_is_applicable
+        self.cart_session['_checkoutflow_addons_applicable'] = applicable
+        return applicable
+
     def is_applicable(self, request):
         if not hasattr(request, '_checkoutflow_addons_applicable'):
-            cart = get_cart(request)
-            self.request = request
-            request._checkoutflow_addons_applicable = (
-                '/addons/' in request.path_info
-                or cart.filter(item__addons__isnull=False).exists()
-                or any(self.cross_selling_applicable_categories))
+            cur_step_identifier = request.resolver_match.kwargs.get('step')
+            request._checkoutflow_addons_applicable = self._check_is_applicable(request) or cur_step_identifier == self.identifier
+
         return request._checkoutflow_addons_applicable
 
-    @cached_property
-    def cross_selling_applicable_categories(self):
-        cart = get_cart(self.request)
-        return [
-            (c, products_qs, discount_info) for (c, products_qs, discount_info) in
-            (
-                (c, *c.cross_sell_visible(cart, self.request.sales_channel.identifier))
-                for c in self.request.event.categories.filter(cross_selling_mode__isnull=False)
-            )
-            if len(products_qs) > 0
-        ]
 
     def is_completed(self, request, warn=False):
         if getattr(self, '_completed', None) is not None:
@@ -624,24 +630,44 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 formset.append(formsetentry)
         return formset
 
-    def get_cross_selling_data(self, ctx):
+    @property
+    def cross_selling_applicable_categories(self):
+        cart = self.positions
+        return [
+            (c, products_qs, discount_info) for (c, products_qs, discount_info) in
+            (
+                (c, *c.cross_sell_visible(cart, self.request.sales_channel.identifier))
+                for c in self.request.event.categories.filter(cross_selling_mode__isnull=False)
+            )
+            if products_qs is not None
+        ]
+
+    @cached_property
+    def cross_selling_is_applicable(self):
+        return any(len(items) > 0 for (category, items) in self.cross_selling_data)
+
+    @cached_property
+    def cross_selling_data(self):
         class DummyCategory:
             def __init__(self, rule, subevent=None):
                 self.id = rule.id
                 self.name = rule.name + (f" ({subevent})" if subevent else "")
                 self.description = rule.description
 
+        categories = self.cross_selling_applicable_categories
         if self.event.has_subevents:
-            return [
+            subevents = set(pos.subevent for pos in self.positions)
+            result = (
                 (DummyCategory(category, subevent), self._items_for_cross_selling(subevent, items_qs, discount_info), f'subevent_{subevent.pk}_')
-                for (category, items_qs, discount_info) in self.cross_selling_applicable_categories
-                for subevent in set(pos.subevent for pos in ctx['cart']['positions'])
-            ]
+                for (category, items_qs, discount_info) in categories
+                for subevent in subevents
+            )
         else:
-            return [
+            result = (
                 (category, self._items_for_cross_selling(None, items_qs, discount_info))
-                for (category, items_qs, discount_info) in self.cross_selling_applicable_categories
-            ]
+                for (category, items_qs, discount_info) in categories
+            )
+        return [(category, items) for (category, items) in result if len(items) > 0]
 
     def _items_for_cross_selling(self, subevent, items_qs, discount_info):
         items, _btn = get_grouped_items(
@@ -666,8 +692,12 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 (max_count, discount_rule) = discount_info[item.pk]
 
                 # set item.order_max for benefit_only_apply_to_cheapest_n_matches discounted items
-                if max_count and max_count != inf:
-                    item.order_max = min(item.order_max, max_count)
+                if not max_count:
+                    max_count = inf
+                item.order_max = min(
+                    item.order_max - sum(1 for pos in self.positions if pos.item_id == item.pk),
+                    max_count
+                )
 
                 # calculate discounted price
                 if discount_rule:
@@ -683,8 +713,8 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)
         ctx['forms'] = self.forms
-        ctx['cross_selling_data'] = self.get_cross_selling_data(ctx)
         ctx['cart'] = self.get_cart()
+        ctx['cross_selling_data'] = self.cross_selling_data
         return ctx
 
     def get_success_message(self, value):

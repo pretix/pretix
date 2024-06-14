@@ -150,20 +150,20 @@ class ItemCategory(LoggedModel):
     def cross_sell_visible(self, cart, sales_channel):
         """
         If this category should be visible in the cross-selling step for a given cart and sales_channel, this method
-        returns a dict describing the items that should be displayed.
+        returns a queryset of the items that should be displayed, as well as a dict giving additional information on them.
 
         :returns: (QuerySet<Item>, dict<item_pk: (max_count, discount_rule)>)
-            max_count is None if the item should not be limited
+            max_count is `inf` if the item should not be limited
             discount_rule is None if the item will not be discounted
         """
         if self.cross_selling_mode is None:
-            return [], {}
+            return None, {}
         if self.cross_selling_condition == 'always':
             return self.items.all(), {}
         if self.cross_selling_condition == 'products':
             # TODO set max_count for products with max_per_order
             match = set(match.pk for match in self.cross_selling_match_products.only('pk'))  # TODO prefetch this
-            return (self.items.all(), {}) if any(pos.item.pk in match for pos in cart) else ([], {})
+            return (self.items.all(), {}) if any(pos.item.pk in match for pos in cart) else (None, {})
         if self.cross_selling_condition == 'discounts':
             potential_discounts_dict = defaultdict(list)
 
@@ -189,10 +189,7 @@ class ItemCategory(LoggedModel):
                 infos_for_item = list(infos_for_item)
                 return (
                     item,
-                    min(
-                        sum(max_count for (item, discount_rule, max_count, i) in infos_for_item),
-                        (item.max_per_order - sum(1 for pos in cart if pos.item_id == item.pk)) if item.max_per_order else inf
-                    ),
+                    sum(max_count for (item, discount_rule, max_count, i) in infos_for_item),
                     next(discount_rule for (item, discount_rule, max_count, i) in infos_for_item)
                 )
 
