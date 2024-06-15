@@ -4,8 +4,8 @@ msgstr ""
 "Project-Id-Version: 1\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-06-12 18:00+0000\n"
-"Last-Translator: simonD <simon.dalvy@gmail.com>\n"
+"PO-Revision-Date: 2024-06-16 03:00+0000\n"
+"Last-Translator: alemairebe <adrien@alemaire.be>\n"
 "Language-Team: French <https://translate.pretix.eu/projects/pretix/pretix/fr/"
 ">\n"
 "Language: fr\n"
@@ -1919,7 +1919,7 @@ msgstr "Total de la commande"
 #: pretix/presale/templates/pretixpresale/organizers/customer_profile.html:75
 #: pretix/presale/templates/pretixpresale/organizers/index.html:47
 msgid "Status"
-msgstr "Statut"
+msgstr "État"
 
 #: pretix/base/exporters/orderlist.py:260
 #: pretix/base/exporters/orderlist.py:443
