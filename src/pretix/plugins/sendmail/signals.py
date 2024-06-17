@@ -47,12 +47,15 @@ from django.utils.translation import gettext_lazy as _
 from django_scopes import scope, scopes_disabled
 
 from pretix.base.models import SubEvent
+from pretix.base.models.log import (
+    EventLogEntryType, OrderLogEntryType, log_entry_types,
+)
 from pretix.base.signals import (
-    EventPluginSignal, event_copy_data, logentry_display, periodic_task,
+    EventPluginSignal, event_copy_data, periodic_task,
 )
 from pretix.control.signals import nav_event
 from pretix.helpers import OF_SELF
-from pretix.plugins.sendmail.models import ScheduledMail
+from pretix.plugins.sendmail.models import Rule, ScheduledMail
 from pretix.plugins.sendmail.views import OrderSendView, WaitinglistSendView
 
 logger = logging.getLogger(__name__)
@@ -116,21 +119,40 @@ def control_nav_import(sender, request=None, **kwargs):
     ]
 
 
-@receiver(signal=logentry_display)
-def pretixcontrol_logentry_display(sender, logentry, **kwargs):
-    plains = {
-        'pretix.plugins.sendmail.sent': _('Mass email was sent to customers or attendees.'),
-        'pretix.plugins.sendmail.sent.waitinglist': _('Mass email was sent to waiting list entries.'),
-        'pretix.plugins.sendmail.order.email.sent': _('The order received a mass email.'),
-        'pretix.plugins.sendmail.order.email.sent.attendee': _('A ticket holder of this order received a mass email.'),
-        'pretix.plugins.sendmail.rule.added': _('An email rule was created'),
-        'pretix.plugins.sendmail.rule.changed': _('An email rule was updated'),
-        'pretix.plugins.sendmail.rule.order.email.sent': _('A scheduled email was sent to the order'),
-        'pretix.plugins.sendmail.rule.order.position.email.sent': _('A scheduled email was sent to a ticket holder'),
-        'pretix.plugins.sendmail.rule.deleted': _('An email rule was deleted'),
-    }
-    if logentry.action_type in plains:
-        return plains[logentry.action_type]
+class SendmailPluginLogEntryType(EventLogEntryType):
+    pass
+
+
+log_entry_types.register(*SendmailPluginLogEntryType.derive_plains({
+    'pretix.plugins.sendmail.sent': _('Mass email was sent to customers or attendees.'),
+    'pretix.plugins.sendmail.sent.waitinglist': _('Mass email was sent to waiting list entries.'),
+}))
+
+
+class SendmailPluginOrderLogEntryType(OrderLogEntryType):
+    pass
+
+
+log_entry_types.register(*SendmailPluginOrderLogEntryType.derive_plains({
+    'pretix.plugins.sendmail.order.email.sent': _('The order received a mass email.'),
+    'pretix.plugins.sendmail.order.email.sent.attendee': _('A ticket holder of this order received a mass email.'),
+}))
+
+
+class SendmailPluginRuleLogEntryType(EventLogEntryType):
+    object_type = Rule
+    object_link_wrapper = _('Mail rule {val}')
+    object_link_viewname = 'plugins:sendmail:rule.update'
+    object_link_argname = 'rule'
+
+
+log_entry_types.register(*SendmailPluginRuleLogEntryType.derive_plains({
+    'pretix.plugins.sendmail.rule.added': _('An email rule was created'),
+    'pretix.plugins.sendmail.rule.changed': _('An email rule was updated'),
+    'pretix.plugins.sendmail.rule.order.email.sent': _('A scheduled email was sent to the order'),
+    'pretix.plugins.sendmail.rule.order.position.email.sent': _('A scheduled email was sent to a ticket holder'),
+    'pretix.plugins.sendmail.rule.deleted': _('An email rule was deleted'),
+}))
 
 
 @receiver(periodic_task)

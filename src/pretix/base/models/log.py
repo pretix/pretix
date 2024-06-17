@@ -33,6 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import json
+from collections import defaultdict
 
 from django.contrib.contenttypes.fields import GenericForeignKey
 from django.contrib.contenttypes.models import ContentType
@@ -130,8 +131,8 @@ class LogEntry(models.Model):
     @cached_property
     def display_object(self):
         from . import (
-            Discount, Event, Item, ItemCategory, Order, Question, Quota,
-            SubEvent, TaxRule, Voucher,
+            Discount, Event, Item, Order, Question, Quota,
+            SubEvent, Voucher,
         )
 
         try:
@@ -204,16 +205,6 @@ class LogEntry(models.Model):
                 }),
                 'val': escape(co.internal_name),
             }
-        elif isinstance(co, ItemCategory):
-            a_text = _('Category {val}')
-            a_map = {
-                'href': reverse('control:event.items.categories.edit', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'category': co.id
-                }),
-                'val': escape(co.name),
-            }
         elif isinstance(co, Question):
             a_text = _('Question {val}')
             a_map = {
@@ -223,16 +214,6 @@ class LogEntry(models.Model):
                     'question': co.id
                 }),
                 'val': escape(co.question),
-            }
-        elif isinstance(co, TaxRule):
-            a_text = _('Tax rule {val}')
-            a_map = {
-                'href': reverse('control:event.settings.tax.edit', kwargs={
-                    'event': self.event.slug,
-                    'organizer': self.event.organizer.slug,
-                    'rule': co.id
-                }),
-                'val': escape(co.name),
             }
 
         if a_text and a_map:
@@ -298,7 +279,12 @@ log_entry_types = Registry({'action_type': lambda o: getattr(o, 'action_type')})
 class LogEntryType:
     def display(self, logentry):
         if hasattr(self, 'plain'):
-            return self.plain
+            plain = str(self.plain)
+            if '{' in plain:
+                data = defaultdict(lambda: '?', logentry.parsed_data)
+                return plain.format_map(data)
+            else:
+                return plain
 
     def get_object_link_info(self, logentry) -> dict:
         pass
@@ -312,7 +298,7 @@ class LogEntryType:
     object_link_wrapper = '{val}'
 
     def shred_pii(self, logentry):
-        raise NotImplemented
+        raise NotImplementedError
 
     @classmethod
     def derive_plains(cls, plains):
@@ -363,24 +349,6 @@ class VoucherLogEntryType(EventLogEntryType):
         return order.code[:6]
 
 
-@log_entry_types.register_instance()
-class VoucherRedeemedLogEntryType(VoucherLogEntryType):
-    action_type = 'pretix.voucher.redeemed'
-    plain = _('The voucher has been redeemed in order {order_code}.')
-
-    def display(self, logentry):
-        data = json.loads(logentry.data)
-        data = defaultdict(lambda: '?', data)
-        url = reverse('control:event.order', kwargs={
-            'event': logentry.event.slug,
-            'organizer': logentry.event.organizer.slug,
-            'code': data['order_code']
-        })
-        return mark_safe(self.plain.format(
-            order_code='<a href="{}">{}</a>'.format(url, data['order_code']),
-        ))
-
-
 class ItemLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Product {val}')
     object_link_viewname = 'control:event.item'
@@ -411,14 +379,6 @@ class ItemCategoryLogEntryType(EventLogEntryType):
     object_link_argname = 'category'
 
 
-log_entry_types.register(*ItemCategoryLogEntryType.derive_plains({
-    'pretix.event.category.added': _('The category has been added.'),
-    'pretix.event.category.deleted': _('The category has been deleted.'),
-    'pretix.event.category.changed': _('The category has been changed.'),
-    'pretix.event.category.reordered': _('The category has been reordered.'),
-}))
-
-
 class QuestionLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Question {val}')
     object_link_viewname = 'control:event.items.questions.show'
@@ -429,11 +389,3 @@ class TaxRuleLogEntryType(EventLogEntryType):
     object_link_wrapper = _('Tax rule {val}')
     object_link_viewname = 'control:event.settings.tax.edit'
     object_link_argname = 'rule'
-
-
-log_entry_types.register(*TaxRuleLogEntryType.derive_plains({
-    'pretix.event.taxrule.added': _('The tax rule has been added.'),
-    'pretix.event.taxrule.deleted': _('The tax rule has been deleted.'),
-    'pretix.event.taxrule.changed': _('The tax rule has been changed.'),
-}))
-
