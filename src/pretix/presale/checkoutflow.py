@@ -686,18 +686,15 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                 if self.request.customer else None
             ),
         )
-
+        new_items = list()
         for item in items:
+            max_count = inf
             if item.pk in discount_info:
                 (max_count, discount_rule) = discount_info[item.pk]
 
-                # set item.order_max for benefit_only_apply_to_cheapest_n_matches discounted items
+                # only benefit_only_apply_to_cheapest_n_matches discounted items have a max_count, all others get 'inf'
                 if not max_count:
                     max_count = inf
-                item.order_max = min(
-                    item.order_max - sum(1 for pos in self.positions if pos.item_id == item.pk),
-                    max_count
-                )
 
                 # calculate discounted price
                 if discount_rule:
@@ -708,7 +705,15 @@ class AddOnsStep(CartMixin, AsyncAction, TemplateFlowStep):
                     )
                     item.display_price = new_price
 
-        return items
+            # reduce order_max by number of items already in cart (prevent recommending a product the user can't add anyway)
+            item.order_max = min(
+                item.order_max - sum(1 for pos in self.positions if pos.item_id == item.pk),
+                max_count
+            )
+            if item.order_max > 0:
+                new_items.append(item)
+
+        return new_items
 
     def get_context_data(self, **kwargs):
         ctx = super().get_context_data(**kwargs)

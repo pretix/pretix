@@ -161,7 +161,6 @@ class ItemCategory(LoggedModel):
         if self.cross_selling_condition == 'always':
             return self.items.all(), {}
         if self.cross_selling_condition == 'products':
-            # TODO set max_count for products with max_per_order
             match = set(match.pk for match in self.cross_selling_match_products.only('pk'))  # TODO prefetch this
             return (self.items.all(), {}) if any(pos.item.pk in match for pos in cart) else (None, {})
         if self.cross_selling_condition == 'discounts':
