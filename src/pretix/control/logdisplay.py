@@ -573,9 +573,8 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         'pretix.giftcards.transaction.manual': _('A manual transaction has been performed.'),
     }
 
-    data = json.loads(logentry.data)
-
     if logentry.action_type.startswith('pretix.event.item.variation'):
+        data = logentry.parsed_data
         if 'value' not in data:
             # Backwards compatibility
             var = ItemVariation.objects.filter(id=data['id']).first()
@@ -587,7 +586,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             data['value'] = LazyI18nString(data['value'])
 
     if logentry.action_type == "pretix.voucher.redeemed":
-        data = defaultdict(lambda: '?', data)
+        data = defaultdict(lambda: '?', logentry.parsed_data)
         url = reverse('control:event.order', kwargs={
             'event': logentry.event.slug,
             'organizer': logentry.event.organizer.slug,
@@ -598,7 +597,7 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
         ))
 
     if logentry.action_type in plains:
-        data = defaultdict(lambda: '?', data)
+        data = defaultdict(lambda: '?', logentry.parsed_data)
         return plains[logentry.action_type].format_map(data)
 
     if logentry.action_type.startswith('pretix.event.order.changed'):
@@ -623,16 +622,16 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
             return _('The order has been canceled.')
 
     if logentry.action_type in ('pretix.control.views.checkin.reverted', 'pretix.event.checkin.reverted'):
-        if 'list' in data:
+        if 'list' in logentry.parsed_data:
             try:
-                checkin_list = sender.checkin_lists.get(pk=data.get('list')).name
+                checkin_list = sender.checkin_lists.get(pk=logentry.parsed_data.get('list')).name
             except CheckinList.DoesNotExist:
                 checkin_list = _("(unknown)")
         else:
             checkin_list = _("(unknown)")
 
         return _('The check-in of position #{posid} on list "{list}" has been reverted.').format(
-            posid=data.get('positionid'),
+            posid=logentry.parsed_data.get('positionid'),
             list=checkin_list,
         )
 
@@ -641,72 +640,72 @@ def pretixcontrol_logentry_display(sender: Event, logentry: LogEntry, **kwargs):
 
     if logentry.action_type == 'pretix.control.views.checkin':
         # deprecated
-        dt = dateutil.parser.parse(data.get('datetime'))
+        dt = dateutil.parser.parse(logentry.parsed_data.get('datetime'))
         tz = sender.timezone
         dt_formatted = date_format(dt.astimezone(tz), "SHORT_DATETIME_FORMAT")
-        if 'list' in data:
+        if 'list' in logentry.parsed_data:
             try:
-                checkin_list = sender.checkin_lists.get(pk=data.get('list')).name
+                checkin_list = sender.checkin_lists.get(pk=logentry.parsed_data.get('list')).name
             except CheckinList.DoesNotExist:
                 checkin_list = _("(unknown)")
         else:
             checkin_list = _("(unknown)")
 
-        if data.get('first'):
+        if logentry.parsed_data.get('first'):
             return _('Position #{posid} has been checked in manually at {datetime} on list "{list}".').format(
-                posid=data.get('positionid'),
+                posid=logentry.parsed_data.get('positionid'),
                 datetime=dt_formatted,
                 list=checkin_list,
             )
         return _('Position #{posid} has been checked in again at {datetime} on list "{list}".').format(
-            posid=data.get('positionid'),
+            posid=logentry.parsed_data.get('positionid'),
             datetime=dt_formatted,
             list=checkin_list
         )
 
     if logentry.action_type == 'pretix.team.member.added':
-        return _('{user} has been added to the team.').format(user=data.get('email'))
+        return _('{user} has been added to the team.').format(user=logentry.parsed_data.get('email'))
 
     if logentry.action_type == 'pretix.team.member.removed':
-        return _('{user} has been removed from the team.').format(user=data.get('email'))
+        return _('{user} has been removed from the team.').format(user=logentry.parsed_data.get('email'))
 
     if logentry.action_type == 'pretix.team.member.joined':
         return _('{user} has joined the team using the invite sent to {email}.').format(
-            user=data.get('email'), email=data.get('invite_email')
+            user=logentry.parsed_data.get('email'), email=logentry.parsed_data.get('invite_email')
         )
 
     if logentry.action_type == 'pretix.team.invite.created':
-        return _('{user} has been invited to the team.').format(user=data.get('email'))
+        return _('{user} has been invited to the team.').format(user=logentry.parsed_data.get('email'))
 
     if logentry.action_type == 'pretix.team.invite.resent':
-        return _('Invite for {user} has been resent.').format(user=data.get('email'))
+        return _('Invite for {user} has been resent.').format(user=logentry.parsed_data.get('email'))
 
     if logentry.action_type == 'pretix.team.invite.deleted':
-        return _('The invite for {user} has been revoked.').format(user=data.get('email'))
+        return _('The invite for {user} has been revoked.').format(user=logentry.parsed_data.get('email'))
 
     if logentry.action_type == 'pretix.team.token.created':
-        return _('The token "{name}" has been created.').format(name=data.get('name'))
+        return _('The token "{name}" has been created.').format(name=logentry.parsed_data.get('name'))
 
     if logentry.action_type == 'pretix.team.token.deleted':
-        return _('The token "{name}" has been revoked.').format(name=data.get('name'))
+        return _('The token "{name}" has been revoked.').format(name=logentry.parsed_data.get('name'))
 
     if logentry.action_type == 'pretix.user.settings.changed':
         text = str(_('Your account settings have been changed.'))
-        if 'email' in data:
-            text = text + ' ' + str(_('Your email address has been changed to {email}.').format(email=data['email']))
-        if 'new_pw' in data:
+        if 'email' in logentry.parsed_data:
+            text = text + ' ' + str(_('Your email address has been changed to {email}.').format(email=logentry.parsed_data['email']))
+        if 'new_pw' in logentry.parsed_data:
             text = text + ' ' + str(_('Your password has been changed.'))
-        if data.get('is_active') is True:
+        if logentry.parsed_data.get('is_active') is True:
             text = text + ' ' + str(_('Your account has been enabled.'))
-        elif data.get('is_active') is False:
+        elif logentry.parsed_data.get('is_active') is False:
             text = text + ' ' + str(_('Your account has been disabled.'))
         return text
 
     if logentry.action_type == 'pretix.control.auth.user.impersonated':
-        return str(_('You impersonated {}.')).format(data['other_email'])
+        return str(_('You impersonated {}.')).format(logentry.parsed_data['other_email'])
 
     if logentry.action_type == 'pretix.control.auth.user.impersonate_stopped':
-        return str(_('You stopped impersonating {}.')).format(data['other_email'])
+        return str(_('You stopped impersonating {}.')).format(logentry.parsed_data['other_email'])
 
 
 @receiver(signal=orderposition_blocked_display, dispatch_uid="pretixcontrol_orderposition_blocked_display")
