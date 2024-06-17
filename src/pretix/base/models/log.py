@@ -92,6 +92,10 @@ class LogEntry(models.Model):
         indexes = [models.Index(fields=["datetime", "id"])]
 
     def display(self):
+        log_entry_type = log_entry_types.find(action_type=self.action_type)
+        if log_entry_type:
+            return log_entry_type.display(self)
+
         from ..signals import logentry_display
 
         for receiver, response in logentry_display.send(self.event, logentry=self):
@@ -237,6 +241,10 @@ class LogEntry(models.Model):
         elif a_text:
             return a_text
         else:
+            log_entry_type = log_entry_types.find(action_type=self.action_type)
+            if log_entry_type:
+                return log_entry_type.get_object_link(self)
+
             for receiver, response in logentry_object_link.send(self.event, logentry=self):
                 if response:
                     return response
@@ -261,3 +269,77 @@ class LogEntry(models.Model):
         to_wh = [o.id for o in objects if o.webhook_type]
         if to_wh:
             notify_webhooks.apply_async(args=(to_wh,))
+
+
+class Registry:
+    def __init__(self, keys):
+        self.registered_items = list()
+        self.keys = keys
+        self.by_key = {key: {} for key in self.keys.keys()}
+
+    def register(self, *objs):
+        for obj in objs:
+            self.registered_items.append(obj)
+            for key, accessor in self.keys.items():
+                self.by_key[key][accessor(obj)] = obj
+
+    def register_instance(self, *args, **kwargs):
+        def reg(clz):
+            obj = clz(*args, **kwargs)
+            self.register(obj)
+        return reg
+
+    def find(self, **kwargs):
+        (key, value), = kwargs.items()
+        return self.by_key.get(key).get(value)
+
+
+log_entry_types = Registry({'action_type': lambda o: getattr(o, 'action_type')})
+
+
+class LogEntryType:
+    def display(self, logentry):
+        if hasattr(self, 'plain'):
+            return self.plain
+
+    def get_object_link_info(self, logentry) -> dict:
+        pass
+
+    def get_object_link(self, logentry):
+        a_map = self.get_object_link_info(logentry)
+        if a_map:
+            a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
+            return self.object_link_wrapper.format_map(a_map)
+
+    object_link_wrapper = '{val}'
+
+    def shred_pii(self, logentry):
+        raise NotImplemented
+
+    @classmethod
+    def derive_plains(cls, plains):
+        for action_type, plain_display in plains.items():
+            obj = cls()
+            obj.action_type = action_type
+            obj.plain = plain_display
+            yield obj
+
+
+class EventLogEntryType(LogEntryType):
+    def get_object_link_info(self, logentry) -> dict:
+        if hasattr(self, 'object_link_viewname') and hasattr(self, 'object_link_argname') and logentry.content_object:
+            return {
+                'href': reverse(self.object_link_viewname, kwargs={
+                    'event': logentry.event.slug,
+                    'organizer': logentry.event.organizer.slug,
+                    self.object_link_argname: self.object_link_argvalue(logentry.content_object),
+                }),
+                'val': escape(self.object_link_display_name(logentry.content_object)),
+            }
+
+    def object_link_argvalue(self, content_object):
+        return content_object.id
+
+    def object_link_display_name(self, content_object):
+        return str(content_object)
+
