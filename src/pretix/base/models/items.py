@@ -164,7 +164,7 @@ class ItemCategory(LoggedModel):
             match = set(match.pk for match in self.cross_selling_match_products.only('pk'))  # TODO prefetch this
             return (self.items.all(), {}) if any(pos.item.pk in match for pos in cart) else (None, {})
         if self.cross_selling_condition == 'discounts':
-            potential_discounts_dict = defaultdict(list)
+            potential_discounts_by_cartpos = defaultdict(list)
 
             from ..services.pricing import apply_discounts
             apply_discounts(
@@ -175,9 +175,11 @@ class ItemCategory(LoggedModel):
                      cp.listed_price - cp.price_after_voucher)
                     for cp in cart
                 ],
-                collect_potential_discounts=potential_discounts_dict
+                collect_potential_discounts=potential_discounts_by_cartpos
             )
-            potential_discount_infos = dict.fromkeys(info for lst in potential_discounts_dict.values() for info in lst)
+
+            # technically, this is a dict, but we use it as an OrderedSet here
+            potential_discount_set = dict.fromkeys(info for lst in potential_discounts_by_cartpos.values() for info in lst)
 
             # sum up the max_counts and pass them on (also pass on the discount_rules so we can calculate actual discounted prices later):
             # group by benefit product
@@ -198,7 +200,7 @@ class ItemCategory(LoggedModel):
                     sorted(
                         (
                             (item, discount_rule, max_count, i)
-                            for (discount_rule, max_count, i) in potential_discount_infos.keys()
+                            for (discount_rule, max_count, i) in potential_discount_set.keys()
                             for item in discount_rule.benefit_limit_products.all()
                         ),
                         key=lambda tup: tup[0].pk
