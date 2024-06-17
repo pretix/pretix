@@ -70,18 +70,20 @@ class EventPluginSignal(django.dispatch.Signal):
 
         # Find the Django application this belongs to
         searchpath = receiver.__module__
-        core_module = any([searchpath.startswith(cm) for cm in settings.CORE_MODULES])
-        app = None
-        if not core_module:
-            while True:
-                app = app_cache.get(searchpath)
-                if "." not in searchpath or app:
-                    break
-                searchpath, _ = searchpath.rsplit(".", 1)
+
+        # Core modules are always active
+        if any(searchpath.startswith(cm) for cm in settings.CORE_MODULES):
+            return True
+
+        while True:
+            app = app_cache.get(searchpath)
+            if "." not in searchpath or app:
+                break
+            searchpath, _ = searchpath.rsplit(".", 1)
 
         # Only fire receivers from active plugins and core modules
         excluded = settings.PRETIX_PLUGINS_EXCLUDE
-        if core_module or (sender and app and app.name in sender.get_plugins() and app.name not in excluded):
+        if sender and app and app.name in sender.get_plugins() and app.name not in excluded:
             if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
                 return True
         return False
