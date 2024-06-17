@@ -32,7 +32,7 @@
 # distributed on an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
 # License for the specific language governing permissions and limitations under the License.
 
-from collections import OrderedDict
+from collections import OrderedDict, defaultdict
 from decimal import Decimal
 from zoneinfo import ZoneInfo
 
@@ -605,10 +605,9 @@ class OrderListExporter(MultiSheetListExporter):
         ]
 
         questions = list(Question.objects.filter(event__in=self.events))
-        options = {}
+        options = defaultdict(list)
         for q in questions:
             if q.type == Question.TYPE_CHOICE_MULTIPLE:
-                options[q.pk] = []
                 if form_data['group_multiple_choice']:
                     for o in q.options.all():
                         options[q.pk].append(o)
@@ -618,6 +617,9 @@ class OrderListExporter(MultiSheetListExporter):
                         headers.append(str(q.question) + ' – ' + str(o.answer))
                         options[q.pk].append(o)
             else:
+                if q.type == Question.TYPE_CHOICE:
+                    for o in q.options.all():
+                        options[q.pk].append(o)
                 headers.append(str(q.question))
         headers += [
             _('Company'),
@@ -727,7 +729,7 @@ class OrderListExporter(MultiSheetListExporter):
                 for a in op.answers.all():
                     # We do not want to localize Date, Time and Datetime question answers, as those can lead
                     # to difficulties parsing the data (for example 2019-02-01 may become Février, 2019 01 in French).
-                    if a.question.type == Question.TYPE_CHOICE_MULTIPLE:
+                    if a.question.type in (Question.TYPE_CHOICE_MULTIPLE, Question.TYPE_CHOICE):
                         acache[a.question_id] = set(o.pk for o in a.options.all())
                     elif a.question.type in Question.UNLOCALIZED_TYPES:
                         acache[a.question_id] = a.answer
@@ -740,6 +742,10 @@ class OrderListExporter(MultiSheetListExporter):
                         else:
                             for o in options[q.pk]:
                                 row.append(_('Yes') if o.pk in acache.get(q.pk, set()) else _('No'))
+                    elif q.type == Question.TYPE_CHOICE:
+                        # Join is only necessary if the question type was modified but also keeps the code simpler here
+                        # as we'd otherwise need some [0] and existance checks
+                        row.append(", ".join(str(o.answer) for o in options[q.pk] if o.pk in acache.get(q.pk, set())))
                     else:
                         row.append(acache.get(q.pk, ''))
 
