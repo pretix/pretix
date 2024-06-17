@@ -238,8 +238,6 @@ class LogEntry(models.Model):
         if a_text and a_map:
             a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
             return a_text.format_map(a_map)
-        elif a_text:
-            return a_text
         else:
             log_entry_type = log_entry_types.find(action_type=self.action_type)
             if log_entry_type:
@@ -342,4 +340,100 @@ class EventLogEntryType(LogEntryType):
 
     def object_link_display_name(self, content_object):
         return str(content_object)
+
+
+class OrderLogEntryType(EventLogEntryType):
+    object_link_wrapper = _('Order {val}')
+    object_link_viewname = 'control:event.order'
+    object_link_argname = 'code'
+
+    def object_link_argvalue(self, order):
+        return order.code
+
+    def object_link_display_name(self, order):
+        return order.code
+
+
+class VoucherLogEntryType(EventLogEntryType):
+    object_link_wrapper = _('Voucher {val}…')
+    object_link_viewname = 'control:event.voucher'
+    object_link_argname = 'voucher'
+
+    def object_link_display_name(self, order):
+        return order.code[:6]
+
+
+@log_entry_types.register_instance()
+class VoucherRedeemedLogEntryType(VoucherLogEntryType):
+    action_type = 'pretix.voucher.redeemed'
+    plain = _('The voucher has been redeemed in order {order_code}.')
+
+    def display(self, logentry):
+        data = json.loads(logentry.data)
+        data = defaultdict(lambda: '?', data)
+        url = reverse('control:event.order', kwargs={
+            'event': logentry.event.slug,
+            'organizer': logentry.event.organizer.slug,
+            'code': data['order_code']
+        })
+        return mark_safe(self.plain.format(
+            order_code='<a href="{}">{}</a>'.format(url, data['order_code']),
+        ))
+
+
+class ItemLogEntryType(EventLogEntryType):
+    object_link_wrapper = _('Product {val}')
+    object_link_viewname = 'control:event.item'
+    object_link_argname = 'item'
+
+
+class SubEventLogEntryType(EventLogEntryType):
+    object_link_wrapper = pgettext_lazy('subevent', 'Date {val}')
+    object_link_viewname = 'control:event.subevent'
+    object_link_argname = 'subevent'
+
+
+class QuotaLogEntryType(EventLogEntryType):
+    object_link_wrapper = _('Quota {val}')
+    object_link_viewname = 'control:event.items.quotas.show'
+    object_link_argname = 'quota'
+
+
+class DiscountLogEntryType(EventLogEntryType):
+    object_link_wrapper = _('Discount {val}')
+    object_link_viewname = 'control:event.items.discounts.edit'
+    object_link_argname = 'discount'
+
+
+class ItemCategoryLogEntryType(EventLogEntryType):
+    object_link_wrapper = _('Category {val}')
+    object_link_viewname = 'control:event.items.categories.edit'
+    object_link_argname = 'category'
+
+
+log_entry_types.register(*ItemCategoryLogEntryType.derive_plains({
+    'pretix.event.category.added': _('The category has been added.'),
+    'pretix.event.category.deleted': _('The category has been deleted.'),
+    'pretix.event.category.changed': _('The category has been changed.'),
+    'pretix.event.category.reordered': _('The category has been reordered.'),
+}))
+
+
+class QuestionLogEntryType(EventLogEntryType):
+    object_link_wrapper = _('Question {val}')
+    object_link_viewname = 'control:event.items.questions.show'
+    object_link_argname = 'question'
+
+
+class TaxRuleLogEntryType(EventLogEntryType):
+    object_link_wrapper = _('Tax rule {val}')
+    object_link_viewname = 'control:event.settings.tax.edit'
+    object_link_argname = 'rule'
+
+
+log_entry_types.register(*TaxRuleLogEntryType.derive_plains({
+    'pretix.event.taxrule.added': _('The tax rule has been added.'),
+    'pretix.event.taxrule.deleted': _('The tax rule has been deleted.'),
+    'pretix.event.taxrule.changed': _('The tax rule has been changed.'),
+}))
 
