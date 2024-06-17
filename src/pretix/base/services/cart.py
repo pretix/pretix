@@ -275,7 +275,7 @@ class CartManager:
     }
 
     def __init__(self, event: Event, cart_id: str, sales_channel: SalesChannel,
-                 invoice_address: InvoiceAddress=None, widget_data=None):
+                 invoice_address: InvoiceAddress=None, widget_data=None, expiry=None):
         self.event = event
         self.cart_id = cart_id
         self.real_now_dt = now()
@@ -287,6 +287,7 @@ class CartManager:
         self._variations_cache = {}
         self._seated_cache = {}
         self._expiry = None
+        self._explicit_expiry = expiry
         self.invoice_address = invoice_address
         self._widget_data = widget_data or {}
         self._sales_channel = sales_channel
@@ -305,7 +306,12 @@ class CartManager:
         return self._seated_cache[item, subevent]
 
     def _calculate_expiry(self):
-        self._expiry = self.real_now_dt + timedelta(minutes=self.event.settings.get('reservation_time', as_type=int))
+        if self._explicit_expiry:
+            self._expiry = self._explicit_expiry
+        else:
+            self._expiry = self.real_now_dt + timedelta(
+                minutes=self.event.settings.get('reservation_time', as_type=int)
+            )
 
     def _check_presale_dates(self):
         if self.event.presale_start and time_machine_now(self.real_now_dt) < self.event.presale_start:
