@@ -1326,7 +1326,8 @@ class ItemUpdateGeneral(ItemDetailMixin, EventPermissionRequiredMixin, MetaDataE
             if isinstance(resp, (list, tuple)):
                 forms.extend(resp)
             else:
-                forms.append(resp)
+                if resp:
+                    forms.append(resp)
 
         for form in forms:
             if has_truthy_attr(form, "title") and has_truthy_attr(form, "is_layout"):
