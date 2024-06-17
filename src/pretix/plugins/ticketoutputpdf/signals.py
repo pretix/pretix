@@ -24,11 +24,10 @@ import json
 
 from django.dispatch import receiver
 from django.template.loader import get_template
-from django.urls import reverse
-from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _
 
 from pretix.base.models import Event, SalesChannel
+from pretix.base.models.log import EventLogEntryType, log_entry_types
 from pretix.base.signals import (  # NOQA: legacy import
     EventPluginSignal, event_copy_data, item_copy_data, layout_text_variables,
     logentry_display, logentry_object_link, register_data_exporters,
@@ -134,38 +133,18 @@ def pdf_event_copy_data_receiver(sender, other, item_map, question_map, **kwargs
     return layout_map
 
 
-@receiver(signal=logentry_display, dispatch_uid="pretix_ticketoutputpdf_logentry_display")
-def pdf_logentry_display(sender, logentry, **kwargs):
-    if not logentry.action_type.startswith('pretix.plugins.ticketoutputpdf'):
-        return
-
-    plains = {
-        'pretix.plugins.ticketoutputpdf.layout.added': _('Ticket layout created.'),
-        'pretix.plugins.ticketoutputpdf.layout.deleted': _('Ticket layout deleted.'),
-        'pretix.plugins.ticketoutputpdf.layout.changed': _('Ticket layout changed.'),
-    }
-
-    if logentry.action_type in plains:
-        return plains[logentry.action_type]
+class PdfTicketLayoutLogEntryType(EventLogEntryType):
+    object_type = TicketLayout
+    object_link_wrapper = _('Ticket layout {val}')
+    object_link_viewname = 'plugins:ticketoutputpdf:edit'
+    object_link_argname = 'layout'
 
 
-@receiver(signal=logentry_object_link, dispatch_uid="pretix_ticketoutputpdf_logentry_object_link")
-def pdf_logentry_object_link(sender, logentry, **kwargs):
-    if not logentry.action_type.startswith('pretix.plugins.ticketoutputpdf.layout') or not isinstance(
-            logentry.content_object, TicketLayout):
-        return
-
-    a_text = _('Ticket layout {val}')
-    a_map = {
-        'href': reverse('plugins:ticketoutputpdf:edit', kwargs={
-            'event': sender.slug,
-            'organizer': sender.organizer.slug,
-            'layout': logentry.content_object.id
-        }),
-        'val': escape(logentry.content_object.name),
-    }
-    a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
-    return a_text.format_map(a_map)
+log_entry_types.register(*PdfTicketLayoutLogEntryType.derive_plains({
+    'pretix.plugins.ticketoutputpdf.layout.added': _('Ticket layout created.'),
+    'pretix.plugins.ticketoutputpdf.layout.deleted': _('Ticket layout deleted.'),
+    'pretix.plugins.ticketoutputpdf.layout.changed': _('Ticket layout changed.'),
+}))
 
 
 def _ticket_layouts_for_item(request, item):
