@@ -76,7 +76,7 @@ class GroupConcat(Aggregate):
 
     def as_postgresql(self, compiler, connection, **extra_context):
         if self.ordered:
-            template = "%(function)s(%(distinct)s%(field)s::text, '%(separator)s' ORDER BY %(field)s ASC)"
+            template = "%(function)s(%(distinct)s%(field)s::text, '%(separator)s' ORDER BY %(field)s::text ASC)"
         else:
             template = "%(function)s(%(distinct)s%(field)s::text, '%(separator)s')"
         return super().as_sql(
