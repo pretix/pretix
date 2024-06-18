@@ -44,7 +44,7 @@ from django.utils.functional import cached_property
 from django.utils.html import escape
 from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
-from pretix.base.signals import logentry_object_link, EventPluginRegistry
+from pretix.base.signals import logentry_object_link, EventPluginRegistry, is_app_active
 
 
 class VisibleOnlyManager(models.Manager):
@@ -52,21 +52,21 @@ class VisibleOnlyManager(models.Manager):
         return super().get_queryset().filter(visible=True)
 
 
-def make_link(a_map, wrapper, is_active=True, event=None):
+def make_link(a_map, wrapper, is_active=True, event=None, plugin_name=None):
     if a_map:
         if is_active:
             a_map['val'] = '<a href="{href}">{val}</a>'.format_map(a_map)
-        elif event:
-            a_map['val'] = '<i>{val}</i> <a href="{plugin_href}"><span data-tooltip title="{errmes}" class="fa fa-warning fa-fw"></span></a>'.format_map({
+        elif event and plugin_name:
+            a_map['val'] = '<i>{val}</i> <a href="{plugin_href}"><span data-toggle="tooltip" title="{errmes}" class="fa fa-warning fa-fw"></span></a>'.format_map({
                 **a_map,
                 "errmes": _("The relevant plugin is currently not active. To activate it, click here to go to the plugin settings."),
                 "plugin_href": reverse('control:event.settings.plugins', kwargs={
                     'organizer': event.organizer.slug,
                     'event': event.slug,
-                }),
+                }) + '#plugin_' + plugin_name,
             })
         else:
-            a_map['val'] = '<i>{val}</i> <span data-tooltip title="{errmes}" class="fa fa-warning fa-fw"></span>'.format_map({
+            a_map['val'] = '<i>{val}</i> <span data-toggle="tooltip" title="{errmes}" class="fa fa-warning fa-fw"></span>'.format_map({
                 **a_map,
                 "errmes": _("The relevant plugin is currently not active."),
             })
@@ -157,6 +157,15 @@ class LogEntry(models.Model):
             SubEvent, Voucher,
         )
 
+        log_entry_type, meta = log_entry_types.find(action_type=self.action_type)
+        if log_entry_type:
+            link_info = log_entry_type.get_object_link_info(self)
+            if is_app_active(self.event, meta['plugin']):
+                return make_link(link_info, log_entry_type.object_link_wrapper)
+            else:
+                return make_link(link_info, log_entry_type.object_link_wrapper, is_active=False,
+                                 event=self.event, plugin_name=meta['plugin'] and getattr(meta['plugin'], 'name'))
+
         try:
             if self.content_type.model_class() is Event:
                 return ''
@@ -164,10 +173,6 @@ class LogEntry(models.Model):
             co = self.content_object
         except:
             return ''
-
-        log_entry_type, meta = log_entry_types.find(action_type=self.action_type)
-        if log_entry_type:
-            return log_entry_type.get_object_link(self, is_active=meta['plugin'] == 'CORE' or (meta['plugin'] and meta['plugin'] in self.event.get_plugins()))
 
         for receiver, response in logentry_object_link.send(self.event, logentry=self):
             if response:
@@ -228,9 +233,9 @@ class LogEntryType:
     def get_object_link_info(self, logentry) -> dict:
         pass
 
-    def get_object_link(self, logentry, is_active):
+    def get_object_link(self, logentry):
         a_map = self.get_object_link_info(logentry)
-        return make_link(a_map, self.object_link_wrapper, is_active, logentry.event)
+        return make_link(a_map, self.object_link_wrapper)
 
     object_link_wrapper = '{val}'
 

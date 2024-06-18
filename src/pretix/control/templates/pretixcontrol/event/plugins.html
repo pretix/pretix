@@ -23,7 +23,7 @@
                     <legend>{{ catlabel }}</legend>
                     <div class="plugin-list">
                         {% for plugin in plist %}
-                            <div class="plugin-container {% if plugin.featured %}featured-plugin{% endif %}">
+                            <div class="plugin-container {% if plugin.featured %}featured-plugin{% endif %}" id="plugin_{{ plugin.module }}">
                             {% if plugin.featured %}
                                <div class="panel panel-default">
                                     <div class="panel-body">

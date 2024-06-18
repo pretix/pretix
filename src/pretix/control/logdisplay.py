@@ -57,7 +57,7 @@ from pretix.base.models.log import (
     QuotaLogEntryType, TaxRuleLogEntryType, VoucherLogEntryType,
     log_entry_types,
 )
-from pretix.base.signals import logentry_display, orderposition_blocked_display
+from pretix.base.signals import logentry_display, orderposition_blocked_display, app_cache
 from pretix.base.templatetags.money import money_filter
 
 OVERVIEW_BANLIST = [
@@ -674,6 +674,7 @@ class CoreUserImpersonatedLogEntryType(UserImpersonatedLogEntryType):
 class CoreLogEntryType(LogEntryType):
     pass
 
+
 @log_entry_types.new_from_dict({
     'pretix.event.item_meta_property.added': _('A meta property has been added to this event.'),
     'pretix.event.item_meta_property.deleted': _('A meta property has been removed from this event.'),
@@ -684,8 +685,6 @@ class CoreLogEntryType(LogEntryType):
     'pretix.event.checkinlist.changed': _('The check-in list has been changed.'),
     'pretix.event.settings': _('The event settings have been changed.'),
     'pretix.event.tickets.settings': _('The ticket download settings have been changed.'),
-    'pretix.event.plugins.enabled': _('A plugin has been enabled.'),
-    'pretix.event.plugins.disabled': _('A plugin has been disabled.'),
     'pretix.event.live.activated': _('The shop has been taken live.'),
     'pretix.event.live.deactivated': _('The shop has been taken offline.'),
     'pretix.event.testmode.activated': _('The shop has been taken into test mode.'),
@@ -703,6 +702,27 @@ class CoreLogEntryType(LogEntryType):
 })
 class CoreEventLogEntryType(EventLogEntryType):
     pass
+
+
+@log_entry_types.new_from_dict({
+    'pretix.event.plugins.enabled': _('The plugin has been enabled.'),
+    'pretix.event.plugins.disabled': _('The plugin has been disabled.'),
+})
+class EventPluginStateLogEntryType(EventLogEntryType):
+    object_link_wrapper = _('Plugin {val}')
+
+    def get_object_link_info(self, logentry) -> dict:
+        if 'plugin' in logentry.parsed_data:
+            app = app_cache.get(logentry.parsed_data['plugin'])
+            if app and hasattr(app, 'PretixPluginMeta'):
+                return {
+                    'href': reverse('control:event.settings.plugins', kwargs={
+                        'organizer': logentry.event.organizer.slug,
+                        'event': logentry.event.slug,
+                    }) + '#plugin_' + logentry.parsed_data['plugin'],
+                    'val': app.PretixPluginMeta.name
+                }
+
 
 @log_entry_types.new_from_dict({
     'pretix.event.item.added': _('The product has been created.'),
@@ -736,7 +756,7 @@ class VariationLogEntryType(ItemLogEntryType):
                 logentry.parsed_data['value'] = '?'
         else:
             logentry.parsed_data['value'] = LazyI18nString(logentry.parsed_data['value'])
-        return super().display(logentry_display)
+        return super().display(logentry)
 
 
 @log_entry_types.new_from_dict({
