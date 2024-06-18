@@ -8,8 +8,8 @@ msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2024-05-24 08:47+0000\n"
-"PO-Revision-Date: 2024-05-07 22:00+0000\n"
-"Last-Translator: Adam Kaput <adamkaput@gmail.com>\n"
+"PO-Revision-Date: 2024-06-18 20:00+0000\n"
+"Last-Translator: Anarion Dunedain <anarion@go2.pl>\n"
 "Language-Team: Polish <https://translate.pretix.eu/projects/pretix/pretix/pl/"
 ">\n"
 "Language: pl\n"
@@ -18,7 +18,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
 "|| n%100>=20) ? 1 : 2;\n"
-"X-Generator: Weblate 5.4.3\n"
+"X-Generator: Weblate 5.5.5\n"
 
 #: pretix/_base_settings.py:78
 msgid "English"
@@ -382,7 +382,7 @@ msgstr "Użyty voucher został już wykorzystany maksymalną ilość razy."
 
 #: pretix/api/views/checkin.py:604 pretix/api/views/checkin.py:611
 msgid "Medium connected to other event"
-msgstr ""
+msgstr "Nośnik podpięty do innego wydarzenia"
 
 #: pretix/api/views/oauth.py:107 pretix/control/logdisplay.py:472
 #, python-brace-format
@@ -2741,7 +2741,7 @@ msgstr "Data ostatniej faktury zamówienia"
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:6
 #: pretix/control/templates/pretixcontrol/organizers/reusable_media.html:9
 msgid "Reusable media"
-msgstr ""
+msgstr "Nośnik wielokrotnego użytku"
 
 #: pretix/base/exporters/reusablemedia.py:35
 #, fuzzy
@@ -2872,7 +2872,7 @@ msgstr "Kod vouchera"
 #: pretix/base/forms/__init__.py:118
 #, python-brace-format
 msgid "You can use {markup_name} in this field."
-msgstr ""
+msgstr "W tym polu możesz użyć {markup_name}."
 
 #: pretix/base/forms/__init__.py:178
 #, python-format
@@ -3334,7 +3334,7 @@ msgstr ""
 
 #: pretix/base/invoice.py:858
 msgid "Default invoice renderer (European-style letter)"
-msgstr ""
+msgstr "Domyślny renderer faktur (styl europejski)"
 
 #: pretix/base/invoice.py:947
 msgctxt "invoice"
@@ -3343,7 +3343,7 @@ msgstr "(Proszę, cytuj przez cały czas.)"
 
 #: pretix/base/invoice.py:994
 msgid "Simplified invoice renderer"
-msgstr ""
+msgstr "Uproszczony renderer faktur"
 
 #: pretix/base/invoice.py:1013
 #, fuzzy, python-brace-format
@@ -3372,17 +3372,17 @@ msgstr "Zachowaj puste"
 #: pretix/base/modelimport.py:139
 #, python-brace-format
 msgid "Invalid setting for column \"{header}\"."
-msgstr ""
+msgstr "Niepoprawne ustawienie dla kolumny \"{header}\"."
 
 #: pretix/base/modelimport.py:199
 #, python-brace-format
 msgid "Could not parse {value} as a yes/no value."
-msgstr ""
+msgstr "Nie udało się odczytać  {value} jako wartości tak/nie."
 
 #: pretix/base/modelimport.py:216
 #, python-brace-format
 msgid "Could not parse {value} as a date and time."
-msgstr ""
+msgstr "Nie udało się odczytać {value} jako daty i czasu."
 
 #: pretix/base/modelimport.py:226 pretix/control/views/orders.py:1162
 #: pretix/control/views/orders.py:1191 pretix/control/views/orders.py:1235
@@ -3487,7 +3487,7 @@ msgstr "Państwo"
 
 #: pretix/base/modelimport_orders.py:433
 msgid "Calculate from product"
-msgstr ""
+msgstr "Oblicz z produktu"
 
 #: pretix/base/modelimport_orders.py:450
 #: pretix/control/templates/pretixcontrol/checkin/index.html:111
