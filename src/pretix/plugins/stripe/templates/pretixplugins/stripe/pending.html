@@ -1,10 +1,43 @@
 {% load i18n %}
 {% load eventurl %}
+{% load money %}
 {% if payment.state == "pending" %}
-    <p>{% blocktrans trimmed %}
-        We're waiting for an answer from the payment provider regarding your payment. Please contact us if this
-        takes more than a few days.
-    {% endblocktrans %}</p>
+    {% if payment_info.next_action.type == "multibanco_display_details" %}
+        <p><strong>{% trans "Payment instructions" %}:</strong></p>
+        <ol>
+            <li>
+                {% blocktrans trimmed %}
+                    In your online bank account or from an ATM, choose “Payment and other services”.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    Click “Payments of services/shopping”.
+                {% endblocktrans %}
+            </li>
+            <li>
+                {% blocktrans trimmed %}
+                    Enter the entity number, reference number, and amount.
+                {% endblocktrans %}
+            </li>
+        </ol>
+        <dl class="dl-inline">
+            <dt>{% trans "Entity number:" %}</dt> <dd>{{ payment_info.next_action.multibanco_display_details.entity }}</dd><br>
+            <dt>{% trans "Reference number:" %}</dt> <dd>{{ payment_info.next_action.multibanco_display_details.reference }}</dd><br>
+            <dt>{% trans "Amount:" %}</dt> <dd>{{ payment.amount|money:event.currency }}</dd>
+        </dl>
+        <p class="text-muted">
+            {% trans "There is no further action required on this website." %}
+            {% trans "We will send you an email as soon as we received your payment." %}
+        </p>
+    {% else %}
+        <p>
+            {% blocktrans trimmed %}
+                We're waiting for an answer from the payment provider regarding your payment. Please contact us if this
+                takes more than a few days.
+            {% endblocktrans %}
+        </p>
+    {% endif %}
 {% elif payment.state == "created" and payment_info.status == "requires_action" %}
     <p>{% blocktrans trimmed %}
         You need to confirm your payment. Please click the link below to do so or start a new payment.

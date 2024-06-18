@@ -595,7 +595,7 @@ class ScaView(StripeOrderView, View):
 
         if intent.status == 'requires_action' and intent.next_action.type in [
             'use_stripe_sdk', 'redirect_to_url', 'alipay_handle_redirect', 'wechat_pay_display_qr_code',
-            'swish_handle_redirect_or_display_qr_code',
+            'swish_handle_redirect_or_display_qr_code', 'multibanco_display_details',
         ]:
             ctx = {
                 'order': self.order,
@@ -609,6 +609,9 @@ class ScaView(StripeOrderView, View):
                 ctx['payment_intent_redirect_action_handling'] = prov.redirect_action_handling
             elif intent.next_action.type == 'swish_handle_redirect_or_display_qr_code':
                 ctx['payment_intent_next_action_redirect_url'] = intent.next_action.swish_handle_redirect_or_display_qr_code['hosted_instructions_url']
+                ctx['payment_intent_redirect_action_handling'] = 'iframe'
+            elif intent.next_action.type == 'multibanco_display_details':
+                ctx['payment_intent_next_action_redirect_url'] = intent.next_action.multibanco_display_details['hosted_voucher_url']
                 ctx['payment_intent_redirect_action_handling'] = 'iframe'
 
             r = render(request, 'pretixplugins/stripe/sca.html', ctx)
