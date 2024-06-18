@@ -52,28 +52,56 @@ def _populate_app_cache():
         app_cache[ac.name] = ac
 
 
+def get_defining_app(o):
+    # If sentry packed this in a wrapper, unpack that
+    if "sentry" in o.__module__:
+        o = o.__wrapped__
+
+    # Find the Django application this belongs to
+    searchpath = o.__module__
+
+    # Core modules are always active
+    if any(searchpath.startswith(cm) for cm in settings.CORE_MODULES):
+        return 'CORE'
+
+    if not app_cache:
+        _populate_app_cache()
+
+    while True:
+        app = app_cache.get(searchpath)
+        if "." not in searchpath or app:
+            break
+        searchpath, _ = searchpath.rsplit(".", 1)
+    return app
+
+
+def is_app_active(sender, app):
+    if app == 'CORE':
+        return True
+
+    excluded = settings.PRETIX_PLUGINS_EXCLUDE
+    if sender and app and app.name in sender.get_plugins() and app.name not in excluded:
+        if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
+            return True
+    return False
+
+
+def is_receiver_active(sender, receiver):
+    if sender is None:
+        # Send to all events!
+        return True
+
+    app = get_defining_app(receiver)
+
+    return is_app_active(sender, app)
+
+
 class EventPluginSignal(django.dispatch.Signal):
     """
     This is an extension to Django's built-in signals which differs in a way that it sends
     out it's events only to receivers which belong to plugins that are enabled for the given
     Event.
     """
-
-    def _is_active(self, sender, receiver):
-        if sender is None:
-            # Send to all events!
-            return True
-
-        name, app = get_defining_app(receiver)
-        if app == 'CORE':
-            return True
-
-        # Only fire receivers from active plugins and core modules
-        excluded = settings.PRETIX_PLUGINS_EXCLUDE
-        if sender and app and app.name in sender.get_plugins() and app.name not in excluded:
-            if not hasattr(app, 'compatibility_errors') or not app.compatibility_errors:
-                return True
-        return False
 
     def send(self, sender: Event, **named) -> List[Tuple[Callable, Any]]:
         """
@@ -93,7 +121,7 @@ class EventPluginSignal(django.dispatch.Signal):
             _populate_app_cache()
 
         for receiver in self._sorted_receivers(sender):
-            if self._is_active(sender, receiver):
+            if is_receiver_active(sender, receiver):
                 response = receiver(signal=self, sender=sender, **named)
                 responses.append((receiver, response))
         return responses
@@ -117,7 +145,7 @@ class EventPluginSignal(django.dispatch.Signal):
             _populate_app_cache()
 
         for receiver in self._sorted_receivers(sender):
-            if self._is_active(sender, receiver):
+            if is_receiver_active(sender, receiver):
                 named[chain_kwarg_name] = response
                 response = receiver(signal=self, sender=sender, **named)
         return response
@@ -144,7 +172,7 @@ class EventPluginSignal(django.dispatch.Signal):
             _populate_app_cache()
 
         for receiver in self._sorted_receivers(sender):
-            if self._is_active(sender, receiver):
+            if is_receiver_active(sender, receiver):
                 try:
                     response = receiver(signal=self, sender=sender, **named)
                 except Exception as err:
@@ -217,32 +245,9 @@ class Registry:
         return self.by_key.get(key).get(value, (None, None))
 
 
-def get_defining_app(o) -> Tuple[Optional[str], Optional["django.apps.AppConfig"]]:
-    # If sentry packed this in a wrapper, unpack that
-    if "sentry" in o.__module__:
-        o = o.__wrapped__
-
-    # Find the Django application this belongs to
-    searchpath = o.__module__
-
-    # Core modules are always active
-    if any(searchpath.startswith(cm) for cm in settings.CORE_MODULES):
-        return 'CORE', 'CORE'
-
-    if not app_cache:
-        _populate_app_cache()
-
-    while True:
-        app = app_cache.get(searchpath)
-        if "." not in searchpath or app:
-            break
-        searchpath, _ = searchpath.rsplit(".", 1)
-    return app and app.name, app
-
-
 class EventPluginRegistry(Registry):
     def __init__(self, keys):
-        super().__init__({"plugin": lambda o: get_defining_app(o)[0], **keys})
+        super().__init__({"plugin": lambda o: get_defining_app(o), **keys})
 
 
 event_live_issues = EventPluginSignal()
