@@ -118,7 +118,7 @@ def html_head_presale(sender, request=None, **kwargs):
         return ""
 
 
-@log_entry_types.register_instance()
+@log_entry_types.new()
 class BanktransferOrderEmailInvoiceLogEntryType(OrderLogEntryType):
     action_type = 'pretix.plugins.banktransfer.order.email.invoice'
     plain = _('The invoice was sent to the designated email address.')

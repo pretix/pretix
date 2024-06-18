@@ -33,7 +33,7 @@
 # License for the specific language governing permissions and limitations under the License.
 
 import warnings
-from typing import Any, Callable, List, Tuple
+from typing import Any, Callable, List, Tuple, Optional
 
 import django.dispatch
 from django.apps import apps
@@ -64,22 +64,9 @@ class EventPluginSignal(django.dispatch.Signal):
             # Send to all events!
             return True
 
-        # If sentry packed this in a wrapper, unpack that
-        if "sentry" in receiver.__module__:
-            receiver = receiver.__wrapped__
-
-        # Find the Django application this belongs to
-        searchpath = receiver.__module__
-
-        # Core modules are always active
-        if any(searchpath.startswith(cm) for cm in settings.CORE_MODULES):
+        name, app = get_defining_app(receiver)
+        if app == 'CORE':
             return True
-
-        while True:
-            app = app_cache.get(searchpath)
-            if "." not in searchpath or app:
-                break
-            searchpath, _ = searchpath.rsplit(".", 1)
 
         # Only fire receivers from active plugins and core modules
         excluded = settings.PRETIX_PLUGINS_EXCLUDE
@@ -202,6 +189,60 @@ class DeprecatedSignal(django.dispatch.Signal):
     def connect(self, receiver, sender=None, weak=True, dispatch_uid=None):
         warnings.warn('This signal is deprecated and will soon be removed', stacklevel=3)
         super().connect(receiver, sender=None, weak=True, dispatch_uid=None)
+
+
+class Registry:
+    def __init__(self, keys):
+        self.registered_items = list()
+        self.keys = keys
+        self.by_key = {key: {} for key in self.keys.keys()}
+
+    def register(self, *objs):
+        for obj in objs:
+            meta = {k: accessor(obj) for k, accessor in self.keys.items()}
+            tup = (obj, meta)
+            for key, accessor in self.keys.items():
+                self.by_key[key][accessor(obj)] = tup
+            self.registered_items.append(tup)
+
+    def new(self, *args, **kwargs):
+        def reg(clz):
+            obj = clz(*args, **kwargs)
+            self.register(obj)
+            return clz
+        return reg
+
+    def find(self, **kwargs):
+        (key, value), = kwargs.items()
+        return self.by_key.get(key).get(value, (None, None))
+
+
+def get_defining_app(o) -> Tuple[Optional[str], Optional["django.apps.AppConfig"]]:
+    # If sentry packed this in a wrapper, unpack that
+    if "sentry" in o.__module__:
+        o = o.__wrapped__
+
+    # Find the Django application this belongs to
+    searchpath = o.__module__
+
+    # Core modules are always active
+    if any(searchpath.startswith(cm) for cm in settings.CORE_MODULES):
+        return 'CORE', 'CORE'
+
+    if not app_cache:
+        _populate_app_cache()
+
+    while True:
+        app = app_cache.get(searchpath)
+        if "." not in searchpath or app:
+            break
+        searchpath, _ = searchpath.rsplit(".", 1)
+    return app and app.name, app
+
+
+class EventPluginRegistry(Registry):
+    def __init__(self, keys):
+        super().__init__({"plugin": lambda o: get_defining_app(o)[0], **keys})
 
 
 event_live_issues = EventPluginSignal()

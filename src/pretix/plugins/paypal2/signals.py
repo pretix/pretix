@@ -32,7 +32,7 @@ from django.utils.translation import gettext_lazy as _, pgettext_lazy
 
 from pretix.base.forms import SecretKeySettingsField
 from pretix.base.middleware import _merge_csp, _parse_csp, _render_csp
-from pretix.base.models.log import EventLogEntryType
+from pretix.base.models.log import EventLogEntryType, log_entry_types
 from pretix.base.settings import settings_hierarkey
 from pretix.base.signals import (
     register_global_settings, register_payment_providers,
@@ -47,6 +47,7 @@ def register_payment_provider(sender, **kwargs):
     return [PaypalSettingsHolder, PaypalWallet, PaypalAPM]
 
 
+@log_entry_types.new()
 class PaypalEventLogEntryType(EventLogEntryType):
     action_type = 'pretix.plugins.paypal.event'
 
